@@ -1,0 +1,6 @@
+node_modules/
+dist/
+awesome-codex-skills/
+*.local
+.env
+.env.*

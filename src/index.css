@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+/*
+  K2 Jimzon — "Premium Italian import store" palette
+  White 70% · Italian Red 20% (CTAs, prices, key actions)
+  Italian Green 7% (trust, authenticity, stock) · Philippine Blue 3% (wholesale/B2B only)
+*/
+@theme {
+  --color-cream: #ffffff; /* dominant canvas */
+  --color-paper: #ffffff;
+  --color-shell: #f8f7f5; /* soft alternate section */
+  --color-shell-deep: #f1f0ec;
+  --color-navy: #23262c; /* ink — near-black neutral text */
+  --color-navy-soft: #5c616b;
+  --color-navy-faint: #9b9fa8;
+  --color-crimson: #c62828; /* Italian red */
+  --color-crimson-deep: #a32020;
+  --color-forest: #2e7d32; /* Italian green */
+  --color-forest-wash: #ecf5ec;
+  --color-blue: #0d47a1; /* Philippine blue — wholesale/B2B only */
+  --color-blue-wash: #e9eff9;
+  --color-line: #ebe9e4;
+  --color-gold: #b98a2f;
+
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Archivo", "Segoe UI", system-ui, sans-serif;
+
+  --shadow-card: 0 1px 2px rgb(35 38 44 / 0.04), 0 8px 24px -16px rgb(35 38 44 / 0.16);
+  --shadow-float: 0 8px 18px rgb(35 38 44 / 0.08), 0 22px 46px -20px rgb(35 38 44 / 0.24);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-navy);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+}
+
+::selection {
+  background: var(--color-crimson);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-crimson);
+  outline-offset: 2px;
+}
+
+/* Brand motif: a thin Italian-red rule. Quiet, editorial, never flag-like. */
+.tricolor {
+  height: 2px;
+  background: var(--color-crimson);
+}
+
+.section-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.font-serif {
+  font-optical-sizing: auto;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Subtle paper grain for imagery panels */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Horizontal discovery shelves */
+.shelf {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+  scroll-snap-type: x mandatory;
+}
+.shelf > * {
+  scroll-snap-align: start;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise {
+  animation: rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: none; }
+  html { scroll-behavior: auto; }
+}

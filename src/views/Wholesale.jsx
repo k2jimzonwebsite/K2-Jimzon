@@ -1,0 +1,127 @@
+import { useState } from 'react'
+import { useStore } from '../context/StoreContext'
+import { LIFESTYLE } from '../data/site'
+import { BizBadge, RedButton, Wordmark } from '../components/ui/bits'
+import { CheckIcon, PlaneIcon } from '../components/ui/icons'
+
+// Wholesale / B2B — the one zone where Philippine blue leads.
+export default function Wholesale() {
+  const { setIsWholesale, go, isWholesale } = useStore()
+  const [email, setEmail] = useState('orders@bellavitatrading.ph')
+  const [password, setPassword] = useState('••••••••••')
+
+  const signIn = (e) => {
+    e.preventDefault()
+    setIsWholesale(true)
+    go('home')
+  }
+
+  return (
+    <main className="grid min-h-[calc(100vh-40px)] pb-20 md:grid-cols-2 md:pb-0">
+      {/* Business panel */}
+      <section className="relative flex flex-col justify-between overflow-hidden bg-blue p-6 text-white md:p-12">
+        <img
+          src={LIFESTYLE.venice}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-25 mix-blend-luminosity"
+        />
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-blue via-blue/60 to-blue/30" />
+        <p className="relative flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/70">
+          <PlaneIcon size={14} /> Wholesale · direct consignment
+        </p>
+        <div className="relative py-8 md:py-0">
+          <h1 className="font-serif text-3xl font-semibold leading-[1.08] tracking-tight md:text-5xl">
+            Stop waiting for a
+            <br />
+            reply on Viber.
+          </h1>
+          <p className="mt-4 max-w-sm text-[14.5px] leading-relaxed text-white/75">
+            The wholesale portal shows the same live warehouse counts we see — your
+            tier prices, case quantities, and instant self-serve ordering. If it's
+            in stock here, it's yours.
+          </p>
+          <ul className="mt-6 hidden space-y-2.5 text-[13.5px] text-white/85 md:block">
+            {[
+              'Live stock, straight from the Manila warehouse count',
+              'Your negotiated wholesale tier, applied automatically',
+              'Order at 11pm — it packs at 7am',
+              'Recurring supply for cafés, restos, and resellers',
+            ].map((line) => (
+              <li key={line} className="flex items-start gap-2.5">
+                <CheckIcon size={15} className="mt-0.5 shrink-0 text-white/70" />
+                {line}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className="hidden text-[11.5px] text-white/40 md:block">
+          Supplying coffee shops, restaurants & resellers · since 2021
+        </p>
+      </section>
+
+      {/* Login form on white */}
+      <section className="flex items-center justify-center bg-white px-4 py-12 md:px-12">
+        <div className="w-full max-w-sm">
+          <Wordmark />
+          <div className="mt-8 flex items-center gap-2.5">
+            <h2 className="font-serif text-2xl font-semibold tracking-tight">Wholesale sign in</h2>
+            <BizBadge>B2B</BizBadge>
+          </div>
+          <p className="mt-1.5 text-[13px] text-navy-soft">
+            For accredited coffee shops, restaurants, and resellers.
+          </p>
+
+          {isWholesale ? (
+            <div className="mt-8 rounded-lg border border-line bg-white p-5 shadow-card">
+              <BizBadge>Signed in · Bella Vita Trading</BizBadge>
+              <p className="mt-3 text-[13.5px] leading-relaxed text-navy-soft">
+                Wholesale pricing is active across the store. Browse the catalog to
+                see your tier prices next to retail.
+              </p>
+              <RedButton className="mt-4 w-full" onClick={() => go('home')}>
+                Browse wholesale catalog
+              </RedButton>
+            </div>
+          ) : (
+            <form onSubmit={signIn} className="mt-8 space-y-4">
+              <Field label="Business email" type="email" value={email} onChange={setEmail} />
+              <Field label="Password" type="password" value={password} onChange={setPassword} />
+              <button
+                type="submit"
+                className="w-full rounded-md bg-blue px-5 py-4 text-[15px] font-semibold text-white shadow-card transition-all hover:-translate-y-px hover:bg-blue/90 hover:shadow-float"
+              >
+                Sign in
+              </button>
+              <p className="text-center text-[12px] text-navy-soft">
+                Not accredited yet?{' '}
+                <button type="button" className="font-medium text-blue underline underline-offset-2">
+                  Apply for a wholesale account
+                </button>
+              </p>
+            </form>
+          )}
+
+          <p className="mt-10 border-t border-line pt-4 text-[11.5px] leading-relaxed text-navy-faint">
+            Demo note: any credentials work. Signing in switches the whole store
+            into wholesale tier pricing.
+          </p>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function Field({ label, type, value, onChange }) {
+  return (
+    <label className="block">
+      <span className="mb-1.5 block text-[12.5px] font-semibold">{label}</span>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded-md border border-line bg-white px-4 py-3 text-[14px] shadow-card placeholder:text-navy-faint focus:border-blue/60 focus:outline-none"
+      />
+    </label>
+  )
+}
