@@ -12,15 +12,20 @@
   --color-shell-deep: #f1f0ec;
   --color-navy: #23262c; /* ink — near-black neutral text */
   --color-navy-soft: #5c616b;
-  --color-navy-faint: #9b9fa8;
-  --color-crimson: #c62828; /* Italian red */
-  --color-crimson-deep: #a32020;
-  --color-forest: #2e7d32; /* Italian green */
+  --color-navy-faint: #6f747d; /* WCAG AA on white (4.7:1) — still the lightest text tier */
+  --color-crimson: #c62828; /* Italian red — action */
+  --color-crimson-deep: #a32020; /* action, pressed */
+  --color-crimson-wash: #fdf2f3; /* red surface tint — urgent / danger states */
+  --color-oxblood: #6f1d1d; /* deep Italian red — committed color surfaces (hero) */
+  --color-forest: #2e7d32; /* Italian green — trust / stock */
   --color-forest-wash: #ecf5ec;
   --color-blue: #0d47a1; /* Philippine blue — wholesale/B2B only */
   --color-blue-wash: #e9eff9;
+  --color-amber: #92400e; /* warning — low stock, advisories */
+  --color-amber-wash: #fdf0dc; /* warning surface tint */
   --color-line: #ebe9e4;
   --color-gold: #b98a2f;
+  --color-champagne: #e7c98a; /* warm accent for use on dark/oxblood surfaces */
 
   --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
   --font-sans: "Archivo", "Segoe UI", system-ui, sans-serif;

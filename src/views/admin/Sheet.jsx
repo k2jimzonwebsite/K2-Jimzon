@@ -89,7 +89,7 @@ export default function Sheet() {
                       (selected.row === i && selected.col === 2
                         ? 'border-[2px] border-[#1a73e8]'
                         : 'border-[#e0e4ea]') +
-                      (low ? ' bg-[#fdf2f3]' : '')
+                      (low ? ' bg-crimson-wash' : '')
                     }
                   >
                     <input

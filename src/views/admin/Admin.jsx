@@ -48,7 +48,7 @@ export default function Admin() {
         </nav>
         <div className="border-t border-white/10 px-5 py-4 text-[11px] text-white/50">
           <p className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 pulse-dot" />
+            <span className="h-1.5 w-1.5 rounded-full bg-forest pulse-dot" />
             Supabase · live
           </p>
           <p className="mt-1">Shopee sync: 2 min ago</p>
@@ -57,7 +57,7 @@ export default function Admin() {
 
       <div className="min-w-0 flex-1">
         {/* Mobile advisory */}
-        <div className="flex items-center gap-2 border-b border-amber-300/50 bg-amber-50 px-4 py-2 text-[12px] text-amber-800 lg:hidden">
+        <div className="flex items-center gap-2 border-b border-amber/30 bg-amber-wash px-4 py-2 text-[12px] text-amber lg:hidden">
           <AlertIcon size={14} />
           Admin is designed for desktop. Mobile view is read-only.
         </div>
@@ -108,7 +108,7 @@ function KpiRow() {
   return (
     <div className="grid grid-cols-2 gap-px border-b border-line bg-line lg:grid-cols-4">
       {KPIS.map((k) => (
-        <div key={k.label} className={'px-4 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-[#fdf2f3]' : 'bg-paper')}>
+        <div key={k.label} className={'px-4 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-crimson-wash' : 'bg-paper')}>
           <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-navy-soft">{k.label}</p>
           <p
             className={

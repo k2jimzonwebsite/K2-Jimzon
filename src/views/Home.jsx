@@ -39,29 +39,37 @@ function Hero() {
     products.find((p) => p.id === id),
   )
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-6 pt-10 md:pb-12 md:pt-16">
+    <section className="px-4 pt-6 md:pt-8">
+      <div className="grain mx-auto max-w-6xl overflow-hidden rounded-3xl bg-oxblood px-6 py-10 shadow-float md:px-14 md:py-16">
       <div className="grid items-center gap-10 md:grid-cols-[1.05fr_1fr]">
         <div>
-          <p className="rise flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-navy-soft">
-            <PlaneIcon size={14} className="text-crimson" /> Milano → Manila · monthly consignment
+          <p className="rise flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-champagne">
+            <PlaneIcon size={14} className="text-champagne" /> Milano → Manila · monthly consignment
           </p>
-          <h1 className="rise mt-4 font-serif text-[2.6rem] font-semibold leading-[1.05] tracking-tight md:text-6xl" style={{ animationDelay: '80ms' }}>
-            Authentic Italian,
+          <h1 className="rise mt-4 font-serif text-[2.7rem] font-semibold leading-[1.02] tracking-tight text-balance text-white md:text-[4rem]" style={{ animationDelay: '80ms' }}>
+            Bought in Italy.
             <br />
-            <em className="font-normal text-crimson">direct to your door.</em>
+            <span className="text-champagne">Flown home monthly.</span>
           </h1>
-          <p className="rise mt-5 max-w-md text-[15px] leading-relaxed text-navy-soft" style={{ animationDelay: '160ms' }}>
-            We source in Italy ourselves and import straight to the Philippines —
-            products you can't find locally, at prices marketplaces can't match.
+          <p className="rise mt-5 max-w-md text-[15px] leading-relaxed text-white/85" style={{ animationDelay: '160ms' }}>
+            We buy every product ourselves off Italian shelves and fly it in on
+            our own monthly consignment — batch-dated, live-stocked, and priced
+            under the marketplaces.
           </p>
-          <div className="rise mt-8 flex flex-wrap items-center gap-4" style={{ animationDelay: '240ms' }}>
-            <RedButton onClick={() => openProduct('pistachio-cream')}>
+          <div className="rise mt-8 flex flex-col gap-4 sm:flex-row sm:items-center" style={{ animationDelay: '240ms' }}>
+            <button
+              onClick={() => openProduct('pistachio-cream')}
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-6 py-3.5 text-[15px] font-semibold text-oxblood shadow-float transition-all duration-200 hover:-translate-y-px hover:bg-champagne"
+            >
               Shop this month's shipment
-            </RedButton>
-            <span className="flex items-center gap-1.5 text-[13px] text-navy-soft">
-              <StarIcon className="text-gold" />
-              4.9 · 3,000+ ratings · 5 years importing
-            </span>
+            </button>
+            <p className="flex items-center gap-2 text-[13px] text-white/80">
+              <StarIcon className="text-champagne" />
+              <span>
+                <strong className="font-semibold text-white tabular">4.9★</strong> · 3,000+ ratings ·{' '}
+                <strong className="font-semibold text-white">5 years</strong> importing
+              </span>
+            </p>
           </div>
         </div>
 
@@ -89,6 +97,7 @@ function Hero() {
             </span>
           </button>
         </div>
+      </div>
       </div>
     </section>
   )

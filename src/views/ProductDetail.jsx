@@ -56,14 +56,14 @@ export default function ProductDetail() {
           </div>
 
           {/* The two blueprint questions, answered on every product */}
-          <div className="mt-6 space-y-3 border-l-2 border-crimson pl-4">
+          <div className="mt-6 space-y-4 rounded-lg bg-shell p-5">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-navy-faint">Why buy this</p>
-              <p className="mt-0.5 text-[14px] leading-relaxed text-navy-soft">{product.whyBuy}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-navy-soft">Why buy this</p>
+              <p className="mt-1 text-[14px] leading-relaxed text-navy-soft">{product.whyBuy}</p>
             </div>
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-navy-faint">Why you won't find it elsewhere</p>
-              <p className="mt-0.5 text-[14px] leading-relaxed text-navy-soft">{product.whyRare}</p>
+            <div className="border-t border-line pt-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-navy-soft">Why you won't find it elsewhere</p>
+              <p className="mt-1 text-[14px] leading-relaxed text-navy-soft">{product.whyRare}</p>
             </div>
           </div>
 

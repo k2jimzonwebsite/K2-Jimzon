@@ -45,11 +45,11 @@ const COLUMNS = [
 ]
 
 const STATUS_TONE = {
-  'To pack': 'bg-[#fdf2f3] text-crimson',
-  'Paid · to pack': 'bg-[#fdf2f3] text-crimson',
+  'To pack': 'bg-crimson-wash text-crimson',
+  'Paid · to pack': 'bg-crimson-wash text-crimson',
   Packed: 'bg-forest-wash text-forest',
   'With courier': 'bg-navy/8 text-navy-soft',
-  'Awaiting pickup': 'bg-amber-100 text-amber-800',
+  'Awaiting pickup': 'bg-amber-wash text-amber',
 }
 
 export default function Kanban() {
