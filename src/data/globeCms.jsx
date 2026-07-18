@@ -5,16 +5,28 @@ import { supabase, isSupabaseConfigured } from '../lib/supabaseClient'
 
 const CMS_PRODUCTS_KEY = 'k2_globe_products'
 const CMS_REVIEWS_KEY = 'k2_globe_reviews'
+const CMS_VERSION_KEY = 'k2_globe_version'
+const CMS_VERSION = '3' // bump to clear stale localStorage on deploy
 
 const GlobeCmsContext = createContext(null)
 
-// Seed globe product entries from existing catalog
+// Only these product IDs have real customer reviews and should appear on the globe
+const GLOBE_PRODUCT_IDS = [
+  'rio-mare',
+  'lavazza-dek',
+  'lindt-bianco',
+  'suddenly-fragrance',
+  'lotus-biscoff',
+  'pringles-paprika',
+]
+
+// Seed globe product entries — only enable products that have real reviews
 function buildDefaultGlobeProducts() {
   return products.map((p) => ({
     productId: p.id,
-    enabled: true,
+    enabled: GLOBE_PRODUCT_IDS.includes(p.id),
     heroImage: p.img, // use the product catalog image by default
-    displayOrder: 0,
+    displayOrder: GLOBE_PRODUCT_IDS.indexOf(p.id),
   }))
 }
 
@@ -32,13 +44,19 @@ function buildDefaultReviews() {
   }))
 }
 
-// Best-effort map existing reviews to product IDs
+// Map review item labels to product IDs
 function matchReviewToProduct(review) {
   const map = {
+    'Rio Mare tuna': 'rio-mare',
+    'Lavazza Suerte': 'lavazza-dek',
+    'Lavazza Dek': 'lavazza-dek',
+    'Lindt Bianco': 'lindt-bianco',
+    'Suddenly Fragrance': 'suddenly-fragrance',
+    'Pringles Paprika': 'pringles-paprika',
+    // Legacy mappings kept for backward compat
     'Nutella Biscuits': 'nutella-biscuits',
     'Lavazza Qualità Oro': 'lavazza-oro',
-    'Pasabuy request': null,
-    'Pistì pistachio cream': 'pistachio-cream',
+    'Biscoff crunchy': 'lotus-biscoff',
   }
   return map[review.item] ?? null
 }
@@ -256,7 +274,20 @@ function loadFromStorage(key, defaultFn) {
   return defaultFn()
 }
 
+function clearStaleLocalStorage() {
+  try {
+    if (localStorage.getItem(CMS_VERSION_KEY) !== CMS_VERSION) {
+      localStorage.removeItem(CMS_PRODUCTS_KEY)
+      localStorage.removeItem(CMS_REVIEWS_KEY)
+      localStorage.setItem(CMS_VERSION_KEY, CMS_VERSION)
+    }
+  } catch { /* ignore */ }
+}
+
 function LocalGlobeCmsProvider({ children }) {
+  // Clear stale cache whenever CMS_VERSION bumps
+  clearStaleLocalStorage()
+
   const [globeProducts, setGlobeProducts] = useState(() =>
     loadFromStorage(CMS_PRODUCTS_KEY, buildDefaultGlobeProducts)
   )

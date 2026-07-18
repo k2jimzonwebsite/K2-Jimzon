@@ -4,13 +4,12 @@ import { useStore } from '../../context/StoreContext'
 import { useGlobeCms } from '../../data/globeCms'
 import { peso } from '../../data/products'
 import ProductVisual from '../ProductVisual'
-import { RedButton, StockPill, TrustBadge } from '../ui/bits'
+import { RedButton, TrustBadge, GhostButton } from '../ui/bits'
 import { StarIcon } from '../ui/icons'
 
 export default function GlobeOverlay({ product, onClose }) {
   const { openProduct, addToCart, setCartOpen, isWholesale } = useStore()
   const { getProductReviews } = useGlobeCms()
-  const [qty, setQty] = useState(1)
 
   if (!product) return null
 
@@ -18,7 +17,7 @@ export default function GlobeOverlay({ product, onClose }) {
   const reviews = getProductReviews(product.id)
 
   const handleAddToCart = () => {
-    addToCart(product.id, qty)
+    addToCart(product.id, 1)
     setCartOpen(true)
     onClose()
   }
@@ -37,14 +36,14 @@ export default function GlobeOverlay({ product, onClose }) {
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-navy/30 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-navy/40 backdrop-blur-md" onClick={onClose} />
 
       <motion.div
-        initial={{ scale: 0.85, opacity: 0, y: 24 }}
+        initial={{ scale: 0.9, opacity: 0, y: 30 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.85, opacity: 0, y: 24 }}
+        exit={{ scale: 0.9, opacity: 0, y: 30 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl bg-cream/95 backdrop-blur-xl shadow-float flex flex-col md:flex-row"
+        className="relative z-10 w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-3xl bg-cream/95 backdrop-blur-xl shadow-float flex flex-col md:flex-row"
       >
         {/* Close button */}
         <button
@@ -58,109 +57,66 @@ export default function GlobeOverlay({ product, onClose }) {
           </svg>
         </button>
 
-        {/* Image column */}
-        <div className="w-full md:w-[45%] bg-shell flex-shrink-0 relative overflow-hidden">
-          <div className="aspect-square md:aspect-auto md:h-full">
-            <ProductVisual product={product} className="h-full w-full" pad="p-8" />
+        {/* Product Visual Column */}
+        <div className="w-full md:w-[40%] bg-shell flex-shrink-0 relative overflow-hidden flex flex-col">
+          <div className="flex-1 min-h-[300px] relative">
+            <ProductVisual product={product} className="absolute inset-0 h-full w-full" pad="p-12" />
           </div>
-          {/* Tricolor accent */}
-          <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-crimson" />
+          <div className="p-6 bg-shell/80 border-t border-line/50 backdrop-blur-md relative z-10 flex flex-col items-center text-center">
+            <TrustBadge className="mb-3">100% authentic · {product.origin}</TrustBadge>
+            <h3 className="font-serif text-xl font-semibold text-navy">{product.name}</h3>
+            <div className="mt-4 flex flex-col w-full gap-2">
+              <RedButton className="w-full py-3" onClick={handleAddToCart}>
+                Add to cart — {peso(price)}
+              </RedButton>
+              <GhostButton className="w-full py-3" onClick={handleViewDetails}>
+                View full details
+              </GhostButton>
+            </div>
+          </div>
         </div>
 
-        {/* Info column */}
-        <div className="flex-1 overflow-y-auto p-6 md:p-10">
-          {/* Trust + Stock */}
-          <div className="flex flex-wrap items-center gap-2">
-            <TrustBadge>100% authentic · {product.origin}</TrustBadge>
-            <StockPill stock={product.stock} />
+        {/* Reviews Column */}
+        <div className="flex-1 overflow-y-auto p-6 md:p-12 bg-white/50">
+          <div className="mb-8">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson mb-2">Customer Feedback</p>
+            <h2 className="font-serif text-3xl md:text-4xl font-semibold text-navy tracking-tight">
+              What people are saying about {product.name}
+            </h2>
           </div>
 
-          {/* Product name */}
-          <h2 className="mt-3 font-serif text-2xl font-semibold leading-tight tracking-tight md:text-3xl text-navy">
-            {product.name}
-          </h2>
-          <p className="mt-1.5 text-sm text-navy-soft">
-            {product.size} · {product.origin}
-          </p>
-
-          {/* Price */}
-          <div className="mt-5 flex items-baseline gap-3">
-            <span className="text-2xl font-bold text-crimson tabular">{peso(price)}</span>
-            {isWholesale && (
-              <span className="text-base text-navy-faint line-through tabular">{peso(product.retail)}</span>
-            )}
-          </div>
-
-          {/* Why buy / Why rare */}
-          {(product.whyBuy || product.whyRare) && (
-            <div className="mt-5 space-y-3 rounded-lg bg-shell/60 p-4">
-              {product.whyBuy && (
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-navy-soft">Why buy this</p>
-                  <p className="mt-1 text-sm leading-relaxed text-navy-soft">{product.whyBuy}</p>
-                </div>
-              )}
-              {product.whyRare && (
-                <div className="border-t border-line pt-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-navy-soft">Why rare</p>
-                  <p className="mt-1 text-sm leading-relaxed text-navy-soft">{product.whyRare}</p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Actions */}
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <RedButton className="flex-1 py-3.5 text-base" onClick={handleAddToCart}>
-              Add to cart — {peso(price * qty)}
-            </RedButton>
-            <button
-              onClick={handleViewDetails}
-              className="flex-1 rounded-lg border border-navy/20 py-3.5 text-base font-semibold text-navy transition-colors hover:bg-shell"
-            >
-              View full details
-            </button>
-          </div>
-
-          {/* Reviews section */}
-          {reviews.length > 0 && (
-            <div className="mt-8 border-t border-line pt-6">
-              <div className="flex items-center gap-2 mb-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-crimson">Customer reviews</p>
-                <span className="text-sm text-navy-faint">({reviews.length})</span>
-              </div>
-              <div className="space-y-4">
-                {reviews.slice(0, 3).map((r) => (
-                  <blockquote key={r.id} className="rounded-xl bg-shell/50 p-4">
-                    <div className="flex gap-0.5 text-gold">
-                      {Array.from({ length: r.stars }).map((_, i) => (
-                        <StarIcon key={i} size={12} />
-                      ))}
+          {reviews.length > 0 ? (
+            <div className="space-y-6">
+              {reviews.map((r, i) => (
+                <blockquote 
+                  key={r.id} 
+                  className={`relative rounded-2xl bg-cream p-6 md:p-8 shadow-sm border border-line transition-all hover:shadow-card ${i === 0 ? 'border-l-4 border-l-crimson' : ''}`}
+                >
+                  <div className="flex gap-1 text-gold mb-4" aria-label={`${r.stars} out of 5 stars`}>
+                    {Array.from({ length: r.stars }).map((_, idx) => (
+                      <StarIcon key={idx} size={16} />
+                    ))}
+                  </div>
+                  <p className="font-serif text-lg md:text-xl leading-relaxed text-navy mb-6">
+                    “{r.text}”
+                  </p>
+                  <footer className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-shell border border-line flex items-center justify-center font-serif font-bold text-navy-soft">
+                      {r.name.charAt(0)}
                     </div>
-                    <p className="mt-2 text-sm leading-relaxed text-navy-soft">"{r.text}"</p>
-                    <footer className="mt-3 flex items-center gap-2">
+                    <div>
                       <p className="text-sm font-semibold text-navy">{r.name}</p>
-                      <span className="text-xs text-navy-faint">· {r.channel}</span>
-                    </footer>
-                  </blockquote>
-                ))}
-              </div>
+                      <p className="text-xs text-navy-faint">{r.channel}</p>
+                    </div>
+                  </footer>
+                </blockquote>
+              ))}
             </div>
-          )}
-
-          {/* Filipino pairings */}
-          {product.pairings && product.pairings.length > 0 && (
-            <div className="mt-6 border-t border-line pt-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-navy-faint">
-                How Filipinos enjoy it
-              </p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {product.pairings.map((p) => (
-                  <span key={p} className="rounded-full bg-shell px-3 py-1.5 text-xs font-medium text-navy-soft">
-                    {p}
-                  </span>
-                ))}
-              </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-64 text-center rounded-2xl border border-dashed border-line/80 bg-shell/30">
+              <StarIcon size={32} className="text-line mb-4" />
+              <p className="font-serif text-xl text-navy-soft">No reviews yet.</p>
+              <p className="text-sm text-navy-faint mt-1 max-w-xs">Be the first to leave a review for this product after purchasing.</p>
             </div>
           )}
         </div>

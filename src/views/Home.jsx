@@ -30,7 +30,6 @@ export default function Home() {
       
       {/* Brought back the remaining sections */}
       <StorySection />
-      <Testimonials />
       <PasabuyBanner />
       <WholesaleStrip />
       <FaqSection />
@@ -337,42 +336,6 @@ function StorySection() {
             </figcaption>
           </figure>
         ))}
-      </div>
-    </section>
-  )
-}
-
-/* ---------- Testimonials ---------- */
-
-function Testimonials() {
-  return (
-    <section className="border-y border-line bg-shell/40 backdrop-blur-sm py-14">
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <Kicker>Customer reviews</Kicker>
-            <h2 className="mt-1.5 font-serif text-2xl font-semibold tracking-tight md:text-3xl">
-              4.9★ across 3,000+ ratings
-            </h2>
-          </div>
-          <TrustBadge>Preferred seller · 5 years</TrustBadge>
-        </div>
-        <div className="shelf mt-7 flex gap-4 overflow-x-auto pb-4 md:grid md:grid-cols-4 md:gap-6">
-          {REVIEWS.map((r) => (
-            <blockquote key={r.name} className="flex w-80 shrink-0 flex-col rounded-3xl bg-cream/90 backdrop-blur-md shadow-card p-8 transition-shadow hover:shadow-float md:w-auto scroll-scale">
-              <div className="flex gap-0.5 text-gold" aria-label={`${r.stars} out of 5 stars`}>
-                {Array.from({ length: r.stars }).map((_, i) => (
-                  <StarIcon key={i} size={15} />
-                ))}
-              </div>
-              <p className="mt-5 flex-1 font-serif text-lg leading-relaxed text-navy">“{r.text}”</p>
-              <footer className="mt-8">
-                <p className="text-sm font-semibold text-navy">{r.name}</p>
-                <p className="text-xs text-navy-faint">{r.channel} · {r.item}</p>
-              </footer>
-            </blockquote>
-          ))}
-        </div>
       </div>
     </section>
   )
