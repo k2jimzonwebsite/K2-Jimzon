@@ -1,16 +1,19 @@
+import { lazy, Suspense } from 'react'
 import { StoreProvider, useStore } from './context/StoreContext'
+import { GlobeCmsProvider } from './data/globeCms'
 import DemoRail from './components/nav/DemoRail'
 import StoreHeader from './components/StoreHeader'
 import CartDrawer from './components/CartDrawer'
 import ChatFab from './components/ChatFab'
 import Footer from './components/Footer'
-import Home from './views/Home'
-import ProductDetail from './views/ProductDetail'
-import Pasabuy from './views/Pasabuy'
-import Checkout from './views/Checkout'
-import Confirmation from './views/Confirmation'
-import Wholesale from './views/Wholesale'
-import Admin from './views/admin/Admin'
+
+const Home = lazy(() => import('./views/Home'))
+const ProductDetail = lazy(() => import('./views/ProductDetail'))
+const Pasabuy = lazy(() => import('./views/Pasabuy'))
+const Checkout = lazy(() => import('./views/Checkout'))
+const Confirmation = lazy(() => import('./views/Confirmation'))
+const Wholesale = lazy(() => import('./views/Wholesale'))
+const Admin = lazy(() => import('./views/admin/Admin'))
 
 const VIEWS = {
   home: Home,
@@ -34,7 +37,9 @@ function Shell() {
     <div className="min-h-screen">
       <DemoRail />
       {isStorefront && <StoreHeader />}
-      <View key={view} />
+      <Suspense fallback={<div className="min-h-screen bg-cream animate-pulse" />}>
+        <View key={view} />
+      </Suspense>
       {isStorefront && (
         <>
           <CartDrawer />
@@ -48,8 +53,10 @@ function Shell() {
 
 export default function App() {
   return (
-    <StoreProvider>
-      <Shell />
-    </StoreProvider>
+    <GlobeCmsProvider>
+      <StoreProvider>
+        <Shell />
+      </StoreProvider>
+    </GlobeCmsProvider>
   )
 }

@@ -1,7 +1,7 @@
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 import ProductVisual from '../components/ProductVisual'
-import { CrimsonButton, GhostButton, TrustBadge, Tricolor } from '../components/ui/bits'
+import { CrimsonButton, GhostButton, TrustBadge, TuscanCard } from '../components/ui/bits'
 import { CheckIcon, SyncIcon } from '../components/ui/icons'
 
 const SHIPPING = 85
@@ -13,7 +13,7 @@ export default function Checkout() {
     return (
       <main className="mx-auto max-w-lg px-4 py-20 text-center">
         <h1 className="font-serif text-2xl font-semibold">Nothing to check out yet</h1>
-        <p className="mt-2 text-[14px] text-navy-soft">Your cart is empty — the shipment table is full, though.</p>
+        <p className="mt-2 text-base text-navy-soft">Your cart is empty — the shipment table is full, though.</p>
         <GhostButton className="mt-6" onClick={() => go('home')}>Back to the shop</GhostButton>
       </main>
     )
@@ -24,26 +24,25 @@ export default function Checkout() {
   return (
     <main className="mx-auto max-w-5xl px-4 pb-24 pt-8 md:pb-16">
       <h1 className="rise font-serif text-3xl font-semibold tracking-tight">Checkout</h1>
-      <p className="rise mt-1 text-[13px] text-navy-soft">No screenshots, no "sent na po" — payment confirms itself.</p>
+      <p className="rise mt-1 text-sm text-navy-soft">Payment detects automatically — no screenshots or 'sent na po' needed.</p>
 
       <div className="mt-8 grid gap-6 md:grid-cols-[1.1fr_1fr] md:gap-10">
-        {/* Order summary */}
-        <section className="rise rounded-lg border border-line bg-paper p-5 shadow-card md:p-7" style={{ animationDelay: '80ms' }}>
+        <TuscanCard className="rise p-5 md:p-7 bg-cream/90 backdrop-blur-md" style={{ animationDelay: '80ms' }}>
           <h2 className="font-serif text-lg font-semibold">Order summary</h2>
           <div className="mt-4 divide-y divide-line">
             {lines.map(({ product, qty, unit }) => (
               <div key={product.id} className="flex items-center gap-3 py-3.5">
                 <ProductVisual product={product} className="h-12 w-12 shrink-0 rounded-md border border-line" pad="p-1" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-serif text-[14.5px] font-medium">{product.name}</p>
-                  <p className="text-[12px] text-navy-soft">Qty {qty} · {peso(unit)} each</p>
+                  <p className="truncate font-serif text-base font-medium">{product.name}</p>
+                  <p className="text-sm text-navy-soft">Qty {qty} · {peso(unit)} each</p>
                 </div>
-                <span className="text-[14px] font-semibold tabular">{peso(unit * qty)}</span>
+                <span className="text-base font-semibold tabular">{peso(unit * qty)}</span>
               </div>
             ))}
           </div>
 
-          <div className="mt-2 space-y-2 border-t border-line pt-4 text-[13.5px]">
+          <div className="mt-2 space-y-2 border-t border-line pt-4 text-sm">
             {isWholesale && wholesaleSavings > 0 && (
               <p className="flex justify-between font-semibold text-blue">
                 <span className="flex items-center gap-1.5"><CheckIcon size={13} /> Wholesale discount applied</span>
@@ -56,42 +55,41 @@ export default function Checkout() {
             <p className="flex justify-between text-navy-soft">
               <span>Metro Manila delivery</span><span className="tabular">{peso(SHIPPING)}</span>
             </p>
-            <p className="flex justify-between border-t border-line pt-3 text-[16px] font-bold">
+            <p className="flex justify-between border-t border-line pt-3 text-lg font-bold">
               <span>Total</span><span className="tabular">{peso(total)}</span>
             </p>
           </div>
-        </section>
+        </TuscanCard>
 
         {/* Payment */}
-        <section className="rise h-fit rounded-lg border border-line bg-paper shadow-card" style={{ animationDelay: '160ms' }}>
-          <Tricolor />
+        <TuscanCard tricolor className="rise h-fit bg-cream/90 backdrop-blur-md" style={{ animationDelay: '160ms' }}>
           <div className="p-5 md:p-7">
             <div className="flex items-center justify-between">
               <h2 className="font-serif text-lg font-semibold">Payment</h2>
               <TrustBadge>100% secure checkout</TrustBadge>
             </div>
 
-            <div className="mt-5 rounded-lg bg-shell p-5 text-center">
+            <div className="mt-5 rounded-2xl bg-shell p-5 text-center">
               <QrMock />
-              <p className="mt-3 text-[13px] font-semibold">Scan with any QR Ph app</p>
-              <p className="text-[12px] text-navy-soft">GCash · Maya · UnionBank · BPI</p>
+              <p className="mt-3 text-sm font-semibold">Scan with any QR Ph app</p>
+              <p className="text-sm text-navy-soft">GCash · Maya · UnionBank · BPI</p>
             </div>
 
-            <p className="mt-4 flex items-center justify-center gap-2 text-[12px] text-navy-soft">
+            <p className="mt-4 flex items-center justify-center gap-2 text-sm text-navy-soft">
               <SyncIcon size={14} className="text-forest" />
               Payment is detected automatically — no screenshot verification, ever.
             </p>
 
             <p className="mt-5 flex items-baseline justify-between">
-              <span className="text-[13px] text-navy-soft">Amount due</span>
+              <span className="text-sm text-navy-soft">Amount due</span>
               <span className="text-2xl font-bold text-navy tabular">{peso(total)}</span>
             </p>
 
-            <CrimsonButton className="mt-4 w-full py-4 text-[15px]" onClick={placeOrder}>
+            <CrimsonButton className="mt-4 w-full py-4 text-base" onClick={placeOrder}>
               Confirm payment
             </CrimsonButton>
           </div>
-        </section>
+        </TuscanCard>
       </div>
     </main>
   )
@@ -116,7 +114,7 @@ function QrMock() {
     </g>
   )
   return (
-    <svg viewBox="-1 -1 23 23" className="mx-auto h-36 w-36 rounded-md bg-white p-1.5 shadow-card" role="img" aria-label="QR Ph payment code (mock)">
+    <svg viewBox="-1 -1 23 23" className="mx-auto h-36 w-36 rounded-md bg-cream/90 backdrop-blur-sm p-1.5 shadow-card" role="img" aria-label="QR Ph payment code (mock)">
       {cells.map(([x, y]) => (
         <rect key={`${x}.${y}`} x={x} y={y} width="1" height="1" fill="#23262c" />
       ))}

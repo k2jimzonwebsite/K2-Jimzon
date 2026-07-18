@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import BeforeAfterSlider from '../components/BeforeAfterSlider'
 import ProductVisual from '../components/ProductVisual'
-import { RedButton, StockPill, TrustBadge, Tricolor } from '../components/ui/bits'
-import { MinusIcon, PlusIcon, StarIcon } from '../components/ui/icons'
+import ProductCard from '../components/ProductCard'
+import { RedButton, StockPill, TrustBadge, Kicker, QuantityStepper, TuscanCard } from '../components/ui/bits'
+import { StarIcon } from '../components/ui/icons'
 import { useStore } from '../context/StoreContext'
 import { getProduct, peso, products } from '../data/products'
 
@@ -25,7 +26,7 @@ export default function ProductDetail() {
         {/* Image / slider column */}
         <div className="rise">
           <BeforeAfterSlider product={product} />
-          <p className="mt-2.5 text-center text-[12px] text-navy-faint">
+          <p className="mt-2.5 text-center text-sm text-navy-faint">
             Drag the handle — see exactly what arrives in the box.
           </p>
         </div>
@@ -39,7 +40,7 @@ export default function ProductDetail() {
           <h1 className="mt-3 font-serif text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
             {product.name}
           </h1>
-          <p className="mt-2 flex items-center gap-2 text-[13px] text-navy-soft">
+          <p className="mt-2 flex items-center gap-2 text-sm text-navy-soft">
             <StarIcon className="text-gold" /> 4.9 · 812 sold across our channels · {product.size}
           </p>
 
@@ -47,8 +48,8 @@ export default function ProductDetail() {
             <span className="text-3xl font-bold text-crimson tabular">{peso(price)}</span>
             {isWholesale && (
               <>
-                <span className="text-[15px] text-navy-faint line-through tabular">{peso(product.retail)}</span>
-                <span className="rounded-full bg-blue-wash px-2 py-0.5 text-[11px] font-semibold text-blue">
+                <span className="text-base text-navy-faint line-through tabular">{peso(product.retail)}</span>
+                <span className="rounded-full bg-blue-wash px-2 py-0.5 text-xs font-semibold text-blue">
                   Wholesale tier
                 </span>
               </>
@@ -56,39 +57,26 @@ export default function ProductDetail() {
           </div>
 
           {/* The two blueprint questions, answered on every product */}
-          <div className="mt-6 space-y-4 rounded-lg bg-shell p-5">
+          <div className="mt-6 space-y-4 rounded-2xl bg-shell p-5">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-navy-soft">Why buy this</p>
-              <p className="mt-1 text-[14px] leading-relaxed text-navy-soft">{product.whyBuy}</p>
+              <Kicker className="text-navy-soft">Why buy this</Kicker>
+              <p className="mt-1 text-base leading-relaxed text-navy-soft">{product.whyBuy}</p>
             </div>
             <div className="border-t border-line pt-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-navy-soft">Why you won't find it elsewhere</p>
-              <p className="mt-1 text-[14px] leading-relaxed text-navy-soft">{product.whyRare}</p>
+              <Kicker className="text-navy-soft">Why you won't find it elsewhere</Kicker>
+              <p className="mt-1 text-base leading-relaxed text-navy-soft">{product.whyRare}</p>
             </div>
           </div>
 
           <div className="mt-7 flex items-center gap-3">
-            <div className="flex items-center rounded-md border border-navy/20">
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-3 text-navy-soft hover:text-navy" aria-label="Decrease quantity">
-                <MinusIcon size={15} />
-              </button>
-              <span className="w-9 text-center text-[15px] font-semibold tabular">{qty}</span>
-              <button
-                onClick={() => setQty((q) => Math.min(remaining, q + 1))}
-                disabled={!canAdd || qty >= remaining}
-                className="p-3 text-navy-soft hover:text-navy disabled:cursor-not-allowed disabled:opacity-35"
-                aria-label={qty >= remaining ? 'Maximum available stock reached' : 'Increase quantity'}
-              >
-                <PlusIcon size={15} />
-              </button>
-            </div>
-            <span className="text-[12.5px] text-navy-soft">
+            <QuantityStepper value={qty} onChange={setQty} max={remaining} size="md" />
+            <span className="text-sm text-navy-soft">
               {canAdd ? product.inside : 'All available stock is already in your cart.'}
             </span>
           </div>
 
           <RedButton
-            className="mt-4 w-full py-4 text-[15px]"
+            className="mt-4 w-full py-4 text-base"
             onClick={() => { addToCart(product.id, qty); setCartOpen(true) }}
             disabled={!canAdd}
           >
@@ -97,19 +85,19 @@ export default function ProductDetail() {
 
           {/* Filipino pairings — the AI-generated context from the blueprint */}
           <div className="mt-6 border-t border-line pt-5">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-navy-faint">
+            <Kicker className="text-navy-faint">
               How Filipinos enjoy it
-            </p>
+            </Kicker>
             <div className="mt-2.5 flex flex-wrap gap-2">
               {product.pairings.map((p) => (
-                <span key={p} className="rounded-full bg-shell px-3 py-1.5 text-[12px] font-medium text-navy-soft">
+                <span key={p} className="rounded-full bg-shell px-3 py-1.5 text-sm font-medium text-navy-soft">
                   {p}
                 </span>
               ))}
             </div>
           </div>
 
-          <ul className="mt-5 space-y-2 text-[13px] text-navy-soft">
+          <ul className="mt-5 space-y-2 text-sm text-navy-soft">
             <li>· Ships from our Manila warehouse in 24 hours</li>
             <li>· Batch and best-before printed on every listing</li>
             <li>· Same live stock across Shopee, Lazada, and this store</li>
@@ -132,39 +120,38 @@ function UsageGuide({ product }) {
     setCartOpen(true)
   }
   return (
-    <section className="mt-16 overflow-hidden rounded-lg border border-line bg-white shadow-card">
-      <Tricolor />
+    <TuscanCard className="mt-16" tricolor>
       <div className="grid gap-8 p-6 md:grid-cols-[1fr_auto] md:items-center md:p-10">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-navy-soft">
+          <Kicker className="text-navy-soft">
             How we'd serve it
-          </p>
+          </Kicker>
           <h2 className="mt-2 font-serif text-2xl font-semibold tracking-tight md:text-3xl">
             {guide.title}
           </h2>
           <ol className="mt-6 space-y-4">
             {guide.steps.map((step, i) => (
               <li key={i} className="flex gap-4">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-navy font-serif text-[13px] font-semibold text-white">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-forest/10 font-serif text-sm font-semibold text-forest">
                   {i + 1}
                 </span>
-                <p className="pt-1 text-[14px] leading-relaxed text-navy-soft">{step}</p>
+                <p className="pt-1 text-base leading-relaxed text-navy-soft">{step}</p>
               </li>
             ))}
           </ol>
         </div>
-        <div className="rounded-lg bg-shell p-5 text-center md:w-64">
+        <div className="rounded-2xl bg-shell p-6 text-center md:w-64">
           <p className="font-serif text-lg font-semibold leading-snug">
             {guide.bundle.label.split(' — ')[1] ?? guide.bundle.label}
           </p>
-          <p className="mt-1 text-[12px] text-navy-soft">Everything in this recipe, one box.</p>
+          <p className="mt-1 text-sm text-navy-soft">Everything in this recipe, one box.</p>
           <p className="mt-3 text-2xl font-bold text-crimson tabular">{peso(guide.bundle.price)}</p>
           <RedButton className="mt-4 w-full" onClick={buyBundle}>
             Buy the bundle
           </RedButton>
         </div>
       </div>
-    </section>
+    </TuscanCard>
   )
 }
 
@@ -177,20 +164,12 @@ function RelatedShelf({ current }) {
   if (related.length === 0) return null
   return (
     <section className="mt-14">
-      <h2 className="font-serif text-xl font-semibold tracking-tight">Usually bought together with this</h2>
+      <h2 className="font-serif text-xl font-semibold tracking-tight">Frequently bought together</h2>
       <div className="shelf mt-4 flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-4 md:gap-5">
         {related.map((p) => (
-          <button
-            key={p.id}
-            onClick={() => openProduct(p.id)}
-            className="group w-36 shrink-0 overflow-hidden rounded-lg border border-line bg-white text-left shadow-card transition-shadow hover:shadow-float md:w-auto"
-          >
-            <ProductVisual product={p} className="aspect-square w-full transition-transform duration-300 group-hover:scale-[1.02]" />
-            <div className="p-3">
-              <p className="font-serif text-[13.5px] font-medium leading-snug">{p.short}</p>
-              <p className="mt-1 text-[13px] font-bold text-crimson tabular">{peso(p.retail)}</p>
-            </div>
-          </button>
+          <div key={p.id} className="w-40 shrink-0 md:w-auto h-[240px] md:h-[300px]">
+            <ProductCard product={p} compact />
+          </div>
         ))}
       </div>
     </section>

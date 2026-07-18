@@ -4,13 +4,13 @@ import { products } from '../../data/products'
 // Sheet Mode: a Google-Sheets-style dense grid for rapid manual entry.
 // One master stock number fans out to every channel — edit it once.
 
-const EXTRA = [
+export const EXTRA = [
   { id: 'milano-12', name: 'Milano № 12 eau de parfum — inspired 85ml', retail: 549, wholesale: 419 },
   { id: 'kinder-card', name: 'Kinder Cards biscuits 128g', retail: 189, wholesale: 148 },
   { id: 'mulino-cookies', name: 'Mulino Bianco Baiocchi 168g', retail: 249, wholesale: 196 },
 ]
 
-const seedStock = () => {
+export const seedStock = () => {
   let seed = 7
   const rand = (max) => {
     seed = (seed * 73 + 41) % 211
@@ -27,8 +27,7 @@ const seedStock = () => {
 
 const COLS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
-export default function Sheet() {
-  const [rows, setRows] = useState(seedStock)
+export default function Sheet({ rows, setRows }) {
   const [selected, setSelected] = useState({ row: 0, col: 2 })
 
   const setStock = (index, value) => {
@@ -39,33 +38,33 @@ export default function Sheet() {
   const active = rows[selected.row]
 
   return (
-    <div className="overflow-hidden rounded-lg border border-[#c6cdd8] bg-white shadow-card">
+    <div className="overflow-hidden rounded-lg border border-line bg-cream shadow-card">
       {/* Formula bar */}
-      <div className="flex items-center gap-2 border-b border-[#e0e4ea] bg-[#f8f9fb] px-3 py-1.5 text-[12px]">
-        <span className="rounded border border-[#d5dae2] bg-white px-2 py-0.5 font-semibold tabular">
+      <div className="flex items-center gap-2 border-b border-line bg-paper px-3 py-1.5 text-sm">
+        <span className="rounded border border-[#d5dae2] bg-cream px-2 py-0.5 font-semibold tabular">
           {COLS[selected.col]}{selected.row + 2}
         </span>
         <span className="italic text-navy-faint">fx</span>
         <span className="truncate text-navy-soft">{active ? `${active.name} — master stock ${active.stock}` : ''}</span>
-        <span className="ml-auto hidden items-center gap-1.5 text-[11px] font-medium text-forest md:flex">
+        <span className="ml-auto hidden items-center gap-1.5 text-xs font-medium text-forest md:flex">
           <span className="h-1.5 w-1.5 rounded-full bg-forest pulse-dot" />
           Edits push to Shopee, Lazada + website in ~30s
         </span>
       </div>
 
       <div className="max-h-[520px] overflow-auto">
-        <table className="w-full min-w-[860px] border-collapse text-[12.5px]">
+        <table className="w-full min-w-[860px] border-collapse text-sm">
           <thead className="sticky top-0 z-10">
-            <tr className="bg-[#eef1f5] text-[10.5px] text-navy-soft">
-              <th className="w-8 border border-[#e0e4ea] py-1 font-medium"> </th>
+            <tr className="bg-shell text-xs text-navy-soft">
+              <th className="w-8 border border-line py-1 font-medium"> </th>
               {COLS.map((c) => (
-                <th key={c} className="border border-[#e0e4ea] py-1 font-medium">{c}</th>
+                <th key={c} className="border border-line py-1 font-medium">{c}</th>
               ))}
             </tr>
-            <tr className="bg-[#23262c] text-left text-[11px] font-semibold text-white">
-              <th className="border border-[#33445e] px-2 py-1.5 text-center tabular">1</th>
+            <tr className="bg-navy text-left text-xs font-semibold text-white">
+              <th className="border border-navy-soft px-2 py-1.5 text-center tabular">1</th>
               {['SKU', 'Product', 'Master stock', 'Shopee', 'Lazada', 'Retail ₱', 'Wholesale ₱'].map((h) => (
-                <th key={h} className="border border-[#33445e] px-2.5 py-1.5">{h}</th>
+                <th key={h} className="border border-navy-soft px-2.5 py-1.5">{h}</th>
               ))}
             </tr>
           </thead>
@@ -73,8 +72,8 @@ export default function Sheet() {
             {rows.map((r, i) => {
               const low = r.stock <= 5
               return (
-                <tr key={r.sku} className="hover:bg-[#f4f7fb]">
-                  <td className="border border-[#e0e4ea] bg-[#eef1f5] px-1 text-center text-[10.5px] text-navy-soft tabular">
+                <tr key={r.sku} className="hover:bg-shell">
+                  <td className="border border-line bg-shell px-1 text-center text-xs text-navy-soft tabular">
                     {i + 2}
                   </td>
                   <Cell onSelect={() => setSelected({ row: i, col: 0 })} selected={selected.row === i && selected.col === 0} className="font-medium tabular">
@@ -87,8 +86,8 @@ export default function Sheet() {
                     className={
                       'border px-0 tabular ' +
                       (selected.row === i && selected.col === 2
-                        ? 'border-[2px] border-[#1a73e8]'
-                        : 'border-[#e0e4ea]') +
+                        ? 'border-[2px] border-blue'
+                        : 'border-line') +
                       (low ? ' bg-crimson-wash' : '')
                     }
                   >
@@ -123,7 +122,7 @@ export default function Sheet() {
         </table>
       </div>
 
-      <div className="flex items-center gap-4 border-t border-[#e0e4ea] bg-[#f8f9fb] px-3 py-1.5 text-[11px] text-navy-soft">
+      <div className="flex items-center gap-4 border-t border-line bg-paper px-3 py-1.5 text-xs text-navy-soft">
         <span className="border-b-2 border-forest pb-0.5 font-semibold text-navy">Master inventory</span>
         <span>Reorder list</span>
         <span>Incoming — Milan flight 22 Jul</span>
@@ -139,7 +138,7 @@ function Cell({ children, selected, onSelect, className = '' }) {
       onClick={onSelect}
       className={
         'cursor-cell border px-2.5 py-1.5 ' +
-        (selected ? 'border-[2px] border-[#1a73e8] ' : 'border-[#e0e4ea] ') +
+        (selected ? 'border-[2px] border-blue ' : 'border-line ') +
         className
       }
     >

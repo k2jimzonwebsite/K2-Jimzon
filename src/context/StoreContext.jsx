@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { getProduct } from '../data/products'
 
 const StoreContext = createContext(null)
@@ -27,15 +28,35 @@ export function StoreProvider({ children }) {
   const [requests, setRequests] = useState(INITIAL_REQUESTS)
 
   const openProduct = (id) => {
-    setProductId(id)
-    setView('product')
-    window.scrollTo(0, 0)
+    if (!document.startViewTransition) {
+      setProductId(id)
+      setView('product')
+      window.scrollTo(0, 0)
+      return
+    }
+    document.startViewTransition(() => {
+      flushSync(() => {
+        setProductId(id)
+        setView('product')
+        window.scrollTo(0, 0)
+      })
+    })
   }
 
   const go = (v) => {
-    setView(v)
-    setCartOpen(false)
-    window.scrollTo(0, 0)
+    if (!document.startViewTransition) {
+      setView(v)
+      setCartOpen(false)
+      window.scrollTo(0, 0)
+      return
+    }
+    document.startViewTransition(() => {
+      flushSync(() => {
+        setView(v)
+        setCartOpen(false)
+        window.scrollTo(0, 0)
+      })
+    })
   }
 
   const addToCart = (id, qty = 1) =>
@@ -92,13 +113,24 @@ export function StoreProvider({ children }) {
 
   const placeOrder = () => {
     const id = 'K2-' + String(Math.floor(20000 + Math.random() * 70000))
-    setOrder({ id, total: totals.subtotal, count: totals.count, wholesale: isWholesale })
-    setCart([])
-    setView('confirmation')
-    window.scrollTo(0, 0)
+    if (!document.startViewTransition) {
+      setOrder({ id, total: totals.subtotal, count: totals.count, wholesale: isWholesale })
+      setCart([])
+      setView('confirmation')
+      window.scrollTo(0, 0)
+      return
+    }
+    document.startViewTransition(() => {
+      flushSync(() => {
+        setOrder({ id, total: totals.subtotal, count: totals.count, wholesale: isWholesale })
+        setCart([])
+        setView('confirmation')
+        window.scrollTo(0, 0)
+      })
+    })
   }
 
-  const value = {
+  const value = useMemo(() => ({
     view,
     go,
     productId,
@@ -119,7 +151,7 @@ export function StoreProvider({ children }) {
     requests,
     addRequest,
     ...totals,
-  }
+  }), [view, productId, cart, cartOpen, isWholesale, order, query, category, requests, totals])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

@@ -7,7 +7,7 @@ export default function ProductVisual({ product, className = '', pad = 'p-4' }) 
     return <ProductArt product={product} className={className} />
   }
   return (
-    <div className={'relative flex items-center justify-center overflow-hidden bg-white ' + className}>
+    <div className={'relative flex items-center justify-center overflow-hidden bg-transparent ' + className}>
       <img
         src={product.img}
         alt={product.name}

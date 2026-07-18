@@ -9,7 +9,7 @@ export default function Confirmation() {
   if (!order) {
     return (
       <main className="mx-auto max-w-lg px-4 py-20 text-center">
-        <p className="text-[14px] text-navy-soft">No recent order — place one from checkout.</p>
+        <p className="text-base text-navy-soft">Your pantry is missing out on all the Italian goodness. Let's fix that.</p>
         <GhostButton className="mt-6" onClick={() => go('home')}>Back to the shop</GhostButton>
       </main>
     )
@@ -17,23 +17,24 @@ export default function Confirmation() {
 
   return (
     <main className="mx-auto max-w-lg px-4 pb-24 pt-14 text-center md:pb-16">
-      <div className="rise mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-forest text-white shadow-float">
-        <CheckIcon size={30} />
+      <div className="rise mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-forest text-white shadow-float relative before:absolute before:inset-0 before:animate-ping before:rounded-full before:bg-forest/40">
+        <CheckIcon size={30} className="relative z-10" />
       </div>
       <h1 className="rise mt-5 font-serif text-3xl font-semibold tracking-tight" style={{ animationDelay: '80ms' }}>
         Payment received
       </h1>
-      <p className="rise mt-2 text-[14px] text-navy-soft" style={{ animationDelay: '140ms' }}>
+      <p className="rise mt-2 text-base text-navy-soft" style={{ animationDelay: '140ms' }}>
         Order <span className="font-semibold text-navy">{order.id}</span> · {order.count}{' '}
         {order.count === 1 ? 'item' : 'items'} · {peso(order.total)}
         {order.wholesale && ' · wholesale'}
       </p>
 
-      <div className="rise mt-8 rounded-lg border border-line bg-paper p-6 text-left shadow-card" style={{ animationDelay: '200ms' }}>
-        <p className="flex items-center gap-2 text-[12.5px] font-semibold text-forest">
+      <div className="rise mt-8 rounded-3xl border border-line bg-cream/90 backdrop-blur-md p-6 text-left shadow-card" style={{ animationDelay: '200ms' }}>
+        <h2 className="font-serif text-base font-semibold">Your order</h2>
+        <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-forest">
           <SyncIcon size={15} /> Stock updated across every channel
         </p>
-        <p className="mt-1.5 text-[12.5px] leading-relaxed text-navy-soft">
+        <p className="mt-1.5 text-sm leading-relaxed text-navy-soft">
           Shopee, Lazada, the website, and the wholesale portal now show the same
           counts. Nobody had to edit a spreadsheet.
         </p>
@@ -55,8 +56,8 @@ export default function Confirmation() {
                 }
               />
               <div>
-                <p className={'text-[14px] font-semibold ' + (active ? '' : 'text-navy-soft')}>{label}</p>
-                <p className="text-[12px] text-navy-faint">{when}</p>
+                <p className={'text-base font-semibold ' + (active ? '' : 'text-navy-soft')}>{label}</p>
+                <p className="text-sm text-navy-faint">{when}</p>
               </div>
             </li>
           ))}

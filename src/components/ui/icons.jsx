@@ -79,3 +79,11 @@ export const MinusIcon = (p) => <Icon {...p} d="M5 12h14" />
 export const PlusIcon = (p) => <Icon {...p} d="M12 5v14M5 12h14" />
 
 export const ArrowIcon = (p) => <Icon {...p} d="M4 12h16m-6-6 6 6-6 6" />
+
+export const GlobeIcon = (p) => (
+  <Icon {...p} d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 0c2.5 2.5 4 6 4 10s-1.5 7.5-4 10m0-20c-2.5 2.5-4 6-4 10s1.5 7.5 4 10M2 12h20" />
+)
+
+export const InboxIcon = (p) => (
+  <Icon {...p} d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM22 6l-10 7L2 6" />
+)

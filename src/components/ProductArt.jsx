@@ -22,13 +22,13 @@ export default function ProductArt({ product, mode = 'sealed', className = '' })
       {mode === 'sealed' ? (
         <div className="relative w-[62%] rotate-[-2deg] border border-navy/15 bg-paper px-4 py-5 text-center shadow-card">
           <div className="tricolor absolute inset-x-0 top-0" />
-          <p className="text-[8px] font-semibold uppercase tracking-[0.3em] text-navy-soft">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-navy-soft">
             Prodotto d'Italia
           </p>
           <p className="mt-2 font-serif text-lg font-semibold leading-tight text-navy">
             {short}
           </p>
-          <p className="mt-1 text-[10px] text-navy-soft">
+          <p className="mt-1 text-xs text-navy-soft">
             {origin} · {size}
           </p>
           <div className="mx-auto mt-3 flex h-5 w-24 items-end justify-center gap-[2px]" aria-hidden="true">
@@ -46,7 +46,7 @@ export default function ProductArt({ product, mode = 'sealed', className = '' })
             }}
             aria-hidden="true"
           />
-          <p className="max-w-[220px] text-[12px] font-medium leading-snug" style={{ color: deep }}>
+          <p className="max-w-[220px] text-sm font-medium leading-snug" style={{ color: deep }}>
             {product.inside}
           </p>
         </div>

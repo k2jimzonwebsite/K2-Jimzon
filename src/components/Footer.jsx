@@ -14,19 +14,19 @@ export default function Footer() {
   }
 
   return (
-    <footer className="border-t border-line bg-shell pb-28 pt-12 md:pb-12">
+    <footer className="border-t border-line bg-shell/60 backdrop-blur-sm pb-28 pt-12 md:pb-12">
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <Wordmark />
-            <p className="mt-4 max-w-xs text-[12.5px] leading-relaxed text-navy-soft">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-navy-soft">
               We discover, import, and deliver authentic Italian products for the
               Philippine market — sourced by our own buyers in Italy, flown monthly,
               stocked in Manila.
             </p>
             <div className="mt-5 flex flex-wrap gap-1.5">
               {PAYMENTS.map((p) => (
-                <span key={p} className="rounded border border-line bg-white px-2 py-1 text-[10.5px] font-semibold text-navy-soft">
+                <span key={p} className="rounded border border-line bg-cream/80 px-2 py-1 text-xs font-semibold text-navy-soft">
                   {p}
                 </span>
               ))}
@@ -54,7 +54,7 @@ export default function Footer() {
           </FooterCol>
         </div>
 
-        <div className="mt-10 border-t border-line pt-5 text-center text-[11px] leading-relaxed text-navy-faint">
+        <div className="mt-10 border-t border-line pt-5 text-center text-xs leading-relaxed text-navy-faint">
           <p>
             Concept prototype — products, prices, and reviews are illustrative mock data.
             Product photography via Open Food Facts (CC-BY-SA) · lifestyle photography via Unsplash.
@@ -69,7 +69,7 @@ export default function Footer() {
 function FooterCol({ title, children }) {
   return (
     <div>
-      <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] text-navy">{title}</h3>
+      <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-navy">{title}</h3>
       <ul className="mt-3 space-y-2">{children}</ul>
     </div>
   )
@@ -80,7 +80,7 @@ function FooterLink({ children, onClick }) {
     <li>
       <button
         onClick={onClick}
-        className={'text-left text-[12.5px] text-navy-soft ' + (onClick ? 'hover:text-crimson hover:underline underline-offset-2' : 'cursor-default')}
+        className={'text-left text-sm text-navy-soft ' + (onClick ? 'hover:text-crimson hover:underline underline-offset-2' : 'cursor-default')}
       >
         {children}
       </button>

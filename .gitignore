@@ -4,3 +4,11 @@ awesome-codex-skills/
 *.local
 .env
 .env.*
+
+.vercel
+.agents/
+.claude/
+.codex/
+.impeccable/
+agentic-awesome-skills/
+antigravity-skills/

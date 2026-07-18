@@ -15,7 +15,7 @@ function SearchBox({ className = '' }) {
           if (view !== 'home') go('home')
         }}
         placeholder='Try "Lavazza", "Biscoff", "pesto"…'
-        className="w-full rounded-full border border-line bg-shell py-2.5 pl-9 pr-4 text-[13px] placeholder:text-navy-faint focus:border-navy/40 focus:bg-white focus:outline-none"
+        className="w-full rounded-full border border-line bg-shell py-2.5 pl-9 pr-4 text-sm placeholder:text-navy-faint focus:border-navy/40 focus:bg-white focus:outline-none"
       />
     </label>
   )
@@ -25,15 +25,15 @@ export default function StoreHeader() {
   const { go, count, setCartOpen, isWholesale, setIsWholesale } = useStore()
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur md:top-10">
-      <div className="bg-navy px-4 py-1.5 text-center text-[11px] font-medium text-white/90">
-        ✈ Next Milan consignment lands <span className="font-bold text-white">22 July</span> · Free Metro Manila delivery over ₱2,500
+    <header className="sticky top-0 z-40 border-b border-line bg-cream/85 backdrop-blur-xl md:top-10">
+      <div className="bg-shell/50 backdrop-blur-sm border-b border-line px-4 py-1.5 text-center text-xs font-medium text-navy-soft">
+        ✈ Next Milan consignment lands <span className="font-bold text-navy">22 July</span> · Free Metro Manila delivery over ₱2,500
       </div>
       {isWholesale && (
-        <div className="flex items-center justify-center gap-3 bg-blue px-4 py-1.5 text-[11.5px] font-medium text-white">
-          <span className="inline-flex h-1.5 w-1.5 rounded-full bg-white/70 pulse-dot" />
+        <div className="flex items-center justify-center gap-3 bg-forest-wash border-b border-line px-4 py-1.5 text-xs font-medium text-forest">
+          <span className="inline-flex h-1.5 w-1.5 rounded-full bg-forest/70 pulse-dot" />
           Wholesale pricing active — Bella Vita Trading
-          <button onClick={() => setIsWholesale(false)} className="underline decoration-white/40 underline-offset-2 hover:decoration-white">
+          <button onClick={() => setIsWholesale(false)} className="underline decoration-forest/40 underline-offset-2 hover:decoration-forest">
             Sign out
           </button>
         </div>
@@ -45,7 +45,7 @@ export default function StoreHeader() {
 
         <button
           onClick={() => go('wholesale')}
-          className="ml-auto whitespace-nowrap rounded-md px-2 py-1 text-[12.5px] font-semibold text-blue transition-colors hover:bg-blue-wash md:ml-0"
+          className="ml-auto whitespace-nowrap rounded-md px-2 py-1 text-sm font-semibold text-blue transition-colors hover:bg-blue-wash md:ml-0"
         >
           {isWholesale ? 'Wholesale portal' : 'Wholesale login'}
         </button>
@@ -57,7 +57,7 @@ export default function StoreHeader() {
         >
           <BagIcon size={21} />
           {count > 0 && (
-            <span className="absolute -right-0.5 -top-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-crimson px-1 text-[10px] font-bold text-white tabular">
+            <span className="absolute -right-0.5 -top-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-crimson px-1 text-xs font-bold text-white tabular">
               {count}
             </span>
           )}
