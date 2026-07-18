@@ -62,9 +62,11 @@ function matchReviewToProduct(review) {
 }
 
 // Computed: enabled products enriched with catalog data
+// Only GLOBE_PRODUCT_IDS are ever allowed on the globe — hard-whitelist
 function buildEnabledGlobeProducts(globeProducts) {
   return globeProducts
-    .filter((gp) => gp.enabled)
+    .filter((gp) => gp.enabled && GLOBE_PRODUCT_IDS.includes(gp.productId))
+    .sort((a, b) => GLOBE_PRODUCT_IDS.indexOf(a.productId) - GLOBE_PRODUCT_IDS.indexOf(b.productId))
     .map((gp) => {
       const product = products.find((p) => p.id === gp.productId)
       return product ? { ...product, heroImage: gp.heroImage || product.img } : null
