@@ -162,11 +162,16 @@ function TrustRow() {
 /* ---------- Category navigation (Marketplace style) ---------- */
 
 const CATEGORY_TILES = [
-  { cat: 'Coffee & beverages', icon: '☕', note: 'Beans & pods' },
-  { cat: 'Sweets & spreads', icon: '🍫', note: 'Jars & creams' },
-  { cat: 'Biscuits & snacks', icon: '🍪', note: 'Italian biscuits' },
-  { cat: 'Pantry', icon: '🍝', note: 'Pasta & pesto' },
-  { cat: 'Shopee Imports', icon: '🛒', note: 'Shopee store' },
+  { cat: 'Seasoning, Staple Foods & Baking Ingredients', icon: '🧂', note: 'Pantry essentials' },
+  { cat: 'Snack & Sweets', icon: '🍫', note: 'Biscuits & treats' },
+  { cat: 'Beverages', icon: '☕', note: 'Coffee & drinks' },
+  { cat: 'Breakfast Food', icon: '🥞', note: 'Morning starts' },
+  { cat: 'Bath & Body', icon: '🛁', note: 'Body wash & soap' },
+  { cat: 'Fragrances', icon: '✨', note: 'Perfumes & scents' },
+  { cat: 'Hair Care', icon: '💇', note: 'Shampoo & treatments' },
+  { cat: 'Skin Care', icon: '🧴', note: 'Lotions & creams' },
+  { cat: 'Slimming', icon: '🏃', note: 'Health & wellness' },
+  { cat: 'Whitening', icon: '🌟', note: 'Beauty care' },
   { cat: 'Pasabuy', icon: '✈️', note: 'Request anything' },
 ]
 
