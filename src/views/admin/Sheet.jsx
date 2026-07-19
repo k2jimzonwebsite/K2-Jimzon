@@ -326,6 +326,15 @@ export default function Sheet() {
 
       <div className="flex items-center gap-4 border-t border-line bg-paper px-3 py-1.5 text-xs text-navy-soft">
         <span className="border-b-2 border-forest pb-0.5 font-semibold text-navy">Master inventory</span>
+        <button 
+          onClick={handleAddRow}
+          className="ml-4 flex items-center gap-1 rounded bg-navy/5 px-2 py-1 font-medium text-navy hover:bg-navy/10 transition-colors"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          Add Blank Row
+        </button>
         <span className="ml-auto tabular">{rows.filter((r) => r.total_stock <= 5).length} low-stock rows highlighted</span>
       </div>
       {photoModalProduct && (
