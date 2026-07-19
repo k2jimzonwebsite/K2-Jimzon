@@ -46,7 +46,6 @@ export default function ProductCard({ product, index = 0, compact = false, featu
               <span className="rounded-full bg-crimson px-2.5 py-1 text-xs font-bold uppercase tracking-widest text-white shadow-sm">
                 {product.tag}
               </span>
-            )}
           </div>
         )}
         <button onClick={() => openProduct(product.sku)} className="text-left mb-2 sm:mb-3">

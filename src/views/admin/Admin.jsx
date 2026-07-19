@@ -6,20 +6,34 @@ import GlobeCms from './GlobeCms'
 import AiDrafts from './AiDrafts'
 import Inbox from './Inbox'
 import Customers from './Customers'
+import CommandPalette from './CommandPalette'
+import Overview from './Overview'
+import Suppliers from './Suppliers'
+import PurchaseOrders from './PurchaseOrders'
 import { supabase } from '../../lib/supabaseClient'
 
-const NAV = [
-  { id: 'overview', label: 'Overview', icon: GridIcon },
-  { id: 'inbox', label: 'Unified Inbox (AI)', icon: InboxIcon },
-  { id: 'sourcing', label: 'Sourcing (Drafts)', icon: SyncIcon },
-  { id: 'inventory', label: 'Master Inventory', icon: BoxIcon },
+const NAV_COMMERCE = [
+  { id: 'overview', label: 'Executive Overview', icon: GridIcon },
+  { id: 'kanban', label: 'Fulfillment Board', icon: BoxIcon },
   { id: 'wholesale', label: 'Customer CRM', icon: UserIcon },
-  { id: 'globe', label: 'Globe & Reviews', icon: GlobeIcon },
+  { id: 'inbox', label: 'Unified Inbox', icon: InboxIcon },
+]
+
+const NAV_SUPPLY = [
+  { id: 'inventory', label: 'Master Inventory', icon: BoxIcon },
+  { id: 'suppliers', label: 'Italian Suppliers', icon: GlobeIcon },
+  { id: 'pos', label: 'Purchase Orders', icon: SyncIcon },
+]
+
+const NAV_INTELLIGENCE = [
+  { id: 'sourcing', label: 'AI Draft Queue', icon: SyncIcon },
+  { id: 'globe', label: 'Globe Settings', icon: GlobeIcon },
 ]
 
 export default function Admin() {
   const [section, setSection] = useState('overview')
   const [sheetMode, setSheetMode] = useState(false)
+  const [paletteOpen, setPaletteOpen] = useState(false)
   
   // KPI States
   const [activeSkus, setActiveSkus] = useState(0)
@@ -55,35 +69,87 @@ export default function Admin() {
   const showSheet = sheetMode || section === 'inventory'
 
   return (
-    <div className="flex min-h-[calc(100vh-40px)] bg-shell pb-20 text-navy md:pb-0">
+    <div className="flex min-h-[calc(100vh-40px)] bg-[#0A101D] pb-20 text-white/90 md:pb-0 font-sans selection:bg-blue/30 selection:text-white">
+      <CommandPalette isOpen={paletteOpen} setIsOpen={setPaletteOpen} setSection={setSection} />
+      
       {/* Sidebar */}
-      <aside className="hidden w-52 shrink-0 flex-col border-r border-line bg-navy text-white lg:flex">
-        <div className="px-5 py-5">
-          <p className="font-serif text-lg font-semibold text-white">K2 Jimzon</p>
-          <p className="text-xs uppercase tracking-[0.22em] text-white/45">Operations</p>
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-white/10 bg-[#05080f] text-white lg:flex">
+        <div className="flex items-center justify-between px-5 py-5">
+          <div>
+            <p className="font-serif text-lg font-semibold text-white">K2 Jimzon <span className="text-blue ml-1">BOS</span></p>
+            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Mission Control</p>
+          </div>
+          <button 
+            onClick={() => setPaletteOpen(true)}
+            className="flex items-center justify-center rounded bg-white/5 p-1.5 text-white/40 hover:bg-white/10 hover:text-white transition-colors border border-white/5"
+            title="Search (Ctrl+K)"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
         </div>
-        <nav className="mt-2 flex-1 space-y-0.5 px-2.5">
-          {NAV.map((item) => {
-            const Ico = item.icon
-            const on = section === item.id
-            return (
-              <button
-                key={item.id}
-                onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
-                className={
-                  'flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ' +
-                  (on ? 'bg-white/12 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white')
-                }
-              >
-                <Ico size={16} />
-                {item.label}
-                {item.id === 'inventory' && (
-                  <span className="ml-auto rounded bg-white/15 px-1.5 text-xs tabular">{activeSkus}</span>
-                )}
-              </button>
-            )
-          })}
-        </nav>
+        <div className="flex-1 overflow-y-auto mt-4 px-2.5 space-y-6">
+          
+          <div>
+            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Commerce</p>
+            <div className="space-y-0.5">
+              {NAV_COMMERCE.map(item => {
+                const Ico = item.icon
+                const on = section === item.id
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
+                    className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${on ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                  >
+                    <Ico size={16} /> {item.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <div>
+            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Supply Chain</p>
+            <div className="space-y-0.5">
+              {NAV_SUPPLY.map(item => {
+                const Ico = item.icon
+                const on = section === item.id
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
+                    className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${on ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                  >
+                    <Ico size={16} /> {item.label}
+                    {item.id === 'inventory' && <span className="ml-auto rounded bg-white/10 px-1.5 text-xs tabular">{activeSkus}</span>}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <div>
+            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Intelligence</p>
+            <div className="space-y-0.5">
+              {NAV_INTELLIGENCE.map(item => {
+                const Ico = item.icon
+                const on = section === item.id
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
+                    className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${on ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                  >
+                    <Ico size={16} /> {item.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+        </div>
         <div className="border-t border-white/10 px-5 py-4 text-xs text-white/50">
           <p className="flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-forest pulse-dot" />
@@ -100,12 +166,12 @@ export default function Admin() {
           Admin is designed for desktop. Mobile view is read-only.
         </div>
 
-        <header className="flex flex-wrap items-center gap-3 border-b border-line bg-paper px-4 py-3.5 md:px-6">
+        <header className="flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#0A101D] px-4 py-3.5 md:px-6">
           <div>
-            <h1 className="font-serif text-xl font-semibold tracking-tight">
-              {section === 'globe' ? 'Globe & Reviews' : section === 'wholesale' ? 'Customer CRM' : section === 'sourcing' ? 'AI Sourcing Queue' : section === 'inbox' ? 'Unified Inbox' : showSheet ? 'Master inventory' : 'Fulfillment overview'}
+            <h1 className="font-serif text-xl font-semibold tracking-tight text-white">
+              {section === 'globe' ? 'Globe & Reviews' : section === 'wholesale' ? 'Customer CRM' : section === 'sourcing' ? 'AI Sourcing Queue' : section === 'inbox' ? 'Unified Inbox' : showSheet ? 'Master inventory' : section === 'suppliers' ? 'Supplier Workspace' : section === 'pos' ? 'Purchase Orders' : section === 'kanban' ? 'Fulfillment Board' : 'Executive Overview'}
             </h1>
-            <p className="text-sm text-navy-soft">
+            <p className="text-xs font-mono text-white/50 mt-1">
               {section === 'globe'
                 ? 'Manage which products appear on the 3D globe and customer reviews'
                 : section === 'wholesale'
@@ -114,30 +180,52 @@ export default function Admin() {
                 ? 'Review product drafts parsed by the vision AI before pushing to live inventory'
                 : section === 'inbox'
                 ? 'Manage messages from WhatsApp, Facebook, and Viber. AI Copilot is active.'
-                : 'Thursday, 10 July · cut-off for today\'s courier pickup: 3:00 pm'}
+                : section === 'suppliers'
+                ? 'Manage vendor relationships and track lead times.'
+                : section === 'pos'
+                ? 'Procure goods and auto-restock inventory upon delivery.'
+                : 'SYSTEM_STATUS: NOMINAL | Last Sync: Just now'}
             </p>
           </div>
-          {section !== 'globe' && section !== 'sourcing' && section !== 'inbox' && section !== 'wholesale' && (
-            <label className="ml-auto flex cursor-pointer items-center gap-2.5 text-sm font-medium">
-              Sheet Mode
-              <button
-                role="switch"
-                aria-checked={sheetMode}
-                onClick={() => setSheetMode((s) => !s)}
-                className={
-                  'relative h-6 w-11 rounded-full transition-colors ' +
-                  (sheetMode ? 'bg-forest' : 'bg-navy/20')
-                }
-              >
-                <span
+          <div className="ml-auto flex items-center gap-4">
+            
+            {/* Notification Bell */}
+            <button className="relative flex items-center justify-center h-9 w-9 rounded-full bg-white/5 border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition-colors">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+              {/* Fake unread badge */}
+              <span className="absolute top-1.5 right-2 h-2 w-2 rounded-full bg-crimson" />
+            </button>
+
+            <button 
+              onClick={() => setPaletteOpen(true)}
+              className="hidden lg:flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/50 hover:bg-white/10 hover:text-white transition-colors"
+            >
+              Search Command <kbd className="ml-1 rounded border border-white/20 bg-black/50 px-1 font-sans text-[10px]">Ctrl K</kbd>
+            </button>
+            {section === 'inventory' && (
+              <label className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-white/70">
+                Sheet Mode
+                <button
+                  role="switch"
+                  aria-checked={sheetMode}
+                  onClick={() => setSheetMode((s) => !s)}
                   className={
-                    'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ' +
-                    (sheetMode ? 'left-[22px]' : 'left-0.5')
+                    'relative h-6 w-11 rounded-full transition-colors ' +
+                    (sheetMode ? 'bg-blue' : 'bg-white/10')
                   }
-                />
-              </button>
-            </label>
-          )}
+                >
+                  <span
+                    className={
+                      'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ' +
+                      (sheetMode ? 'left-[22px]' : 'left-0.5')
+                    }
+                  />
+                </button>
+              </label>
+            )}
+          </div>
         </header>
 
         {section !== 'globe' && section !== 'sourcing' && section !== 'inbox' && section !== 'wholesale' && (
@@ -149,7 +237,10 @@ export default function Admin() {
            : section === 'inbox' ? <Inbox />
            : section === 'sourcing' ? <AiDrafts />
            : section === 'wholesale' ? <Customers />
+           : section === 'suppliers' ? <Suppliers />
+           : section === 'pos' ? <PurchaseOrders />
            : showSheet ? <Sheet /> 
+           : section === 'overview' ? <Overview setSection={setSection} />
            : <Kanban />}
         </div>
       </div>
@@ -165,19 +256,19 @@ function KpiRow({ skus, lowStock, pending }) {
     { label: 'Today across channels', value: '₱41,260', sub: 'Live estimate', tone: 'good' },
   ]
   return (
-    <div className="grid grid-cols-2 gap-px border-b border-line bg-line lg:grid-cols-4 shrink-0">
+    <div className="grid grid-cols-2 gap-px border-b border-white/10 bg-white/10 lg:grid-cols-4 shrink-0">
       {KPIS.map((k) => (
-        <div key={k.label} className={'px-4 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-crimson-wash' : 'bg-paper')}>
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-navy-soft">{k.label}</p>
+        <div key={k.label} className={'px-4 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-crimson/10' : 'bg-[#05080f]')}>
+          <p className="text-[10px] font-mono uppercase tracking-widest text-white/50">{k.label}</p>
           <p
             className={
-              'mt-1 text-2xl font-bold tabular ' +
-              (k.tone === 'danger' ? 'text-crimson' : k.tone === 'good' ? 'text-forest' : 'text-navy')
+              'mt-1 text-2xl font-bold tabular tracking-tight ' +
+              (k.tone === 'danger' ? 'text-crimson' : k.tone === 'good' ? 'text-forest' : 'text-white')
             }
           >
             {k.value}
           </p>
-          <p className="text-xs text-navy-faint">{k.sub}</p>
+          <p className="text-xs text-white/30 mt-1">{k.sub}</p>
         </div>
       ))}
     </div>
