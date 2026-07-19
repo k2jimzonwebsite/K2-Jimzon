@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { CheckIcon } from '../../components/ui/icons'
 import { peso } from '../../data/products'
-import { Html5QrcodeScanner } from 'html5-qrcode'
+import { Html5Qrcode } from 'html5-qrcode'
 
 function ScannerModal({ po, onClose, onComplete }) {
   const [lines, setLines] = useState([])
@@ -34,42 +34,52 @@ function ScannerModal({ po, onClose, onComplete }) {
   useEffect(() => {
     if (loading) return;
     
-    // Slight delay to ensure DOM is ready
     const timer = setTimeout(() => {
       if (!document.getElementById("qr-reader")) return;
       
-      const scanner = new Html5QrcodeScanner("qr-reader", { 
-        qrbox: { width: 250, height: 150 }, 
-        fps: 5,
-        aspectRatio: 1.0
-      }, false)
+      const html5QrCode = new Html5Qrcode("qr-reader")
+      scannerRef.current = html5QrCode
 
-      scanner.render((decodedText) => {
-        // Debounce or just update state functionally
-        setLines(prev => {
-          const matchIndex = prev.findIndex(l => l.sku === decodedText)
-          if (matchIndex === -1) return prev // SKU not in this PO
-          
-          const match = prev[matchIndex]
-          if (match.scanned >= match.quantity) return prev // Already fully scanned
-          
-          const newLines = [...prev]
-          newLines[matchIndex] = { ...match, scanned: match.scanned + 1 }
-          
-          // Optional: vibrate phone on success
-          if (navigator.vibrate) navigator.vibrate(50)
-          
-          return newLines
-        })
-      }, undefined)
-
-      scannerRef.current = scanner
-    }, 100)
+      html5QrCode.start(
+        { facingMode: "environment" },
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 150 },
+          aspectRatio: 1.0
+        },
+        (decodedText) => {
+          // Debounce or just update state functionally
+          setLines(prev => {
+            const matchIndex = prev.findIndex(l => l.sku === decodedText)
+            if (matchIndex === -1) return prev // SKU not in this PO
+            
+            const match = prev[matchIndex]
+            if (match.scanned >= match.quantity) return prev // Already fully scanned
+            
+            const newLines = [...prev]
+            newLines[matchIndex] = { ...match, scanned: match.scanned + 1 }
+            
+            // Optional: vibrate phone on success
+            if (navigator.vibrate) navigator.vibrate(50)
+            
+            return newLines
+          })
+        },
+        (errorMessage) => {
+          // Ignore frequent parse errors
+        }
+      ).catch((err) => {
+        console.error("Failed to start scanner:", err)
+        alert("Camera access denied. Please allow camera permissions.")
+      })
+    }, 300)
 
     return () => {
       clearTimeout(timer)
       if (scannerRef.current) {
-        scannerRef.current.clear().catch(console.error)
+        scannerRef.current.stop().then(() => {
+          scannerRef.current.clear()
+        }).catch(console.error)
       }
     }
   }, [loading])

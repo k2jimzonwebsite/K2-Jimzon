@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
-import { Html5QrcodeScanner } from 'html5-qrcode'
+import { Html5Qrcode } from 'html5-qrcode'
 
 export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
   const [step, setStep] = useState('scan') // 'scan', 'result'
@@ -13,41 +13,52 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
       const timer = setTimeout(() => {
         if (!document.getElementById("ai-qr-reader")) return;
         
-        const scanner = new Html5QrcodeScanner("ai-qr-reader", { 
-          qrbox: { width: 250, height: 150 }, 
-          fps: 5,
-          aspectRatio: 1.0
-        }, false)
-  
-        scanner.render(async (decodedText) => {
-          if (scannerRef.current) {
-            scannerRef.current.clear().catch(console.error)
-            scannerRef.current = null
-          }
-          
-          if (navigator.vibrate) navigator.vibrate(50)
-          
-          // Check if SKU already exists
-          const { data } = await supabase.from('products').select('sku').eq('sku', decodedText).single()
-          
-          if (data) {
-            alert(`Product with barcode ${decodedText} already exists in inventory!`)
-            onClose()
-            return
-          }
+        const html5QrCode = new Html5Qrcode("ai-qr-reader")
+        scannerRef.current = html5QrCode
+        
+        html5QrCode.start(
+          { facingMode: "environment" },
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 150 },
+            aspectRatio: 1.0
+          },
+          async (decodedText) => {
+            if (scannerRef.current) {
+              scannerRef.current.stop().then(() => {
+                scannerRef.current.clear()
+              }).catch(console.error)
+            }
+            
+            if (navigator.vibrate) navigator.vibrate(50)
+            
+            // Check if SKU already exists
+            const { data } = await supabase.from('products').select('sku').eq('sku', decodedText).single()
+            
+            if (data) {
+              alert(`Product with barcode ${decodedText} already exists in inventory!`)
+              onClose()
+              return
+            }
 
-          setSku(decodedText)
-          setStep('result')
-        }, undefined)
-  
-        scannerRef.current = scanner
-      }, 100)
+            setSku(decodedText)
+            setStep('result')
+          },
+          (errorMessage) => {
+            // parse errors are frequent, ignore them
+          }
+        ).catch((err) => {
+          console.error("Failed to start camera", err)
+          alert("Camera access denied or unavailable. Please ensure permissions are granted.")
+        })
+      }, 300)
   
       return () => {
         clearTimeout(timer)
         if (scannerRef.current) {
-          scannerRef.current.clear().catch(console.error)
-          scannerRef.current = null
+          scannerRef.current.stop().then(() => {
+            scannerRef.current.clear()
+          }).catch(console.error)
         }
       }
     }
