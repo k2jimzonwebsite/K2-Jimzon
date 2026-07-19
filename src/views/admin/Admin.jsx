@@ -17,7 +17,7 @@ import { supabase } from '../../lib/supabaseClient'
 
 const NAV_COMMERCE = [
   { id: 'overview', label: 'Home Dashboard', icon: GridIcon },
-  { id: 'kanban', label: 'Pack & Ship Orders', icon: BoxIcon },
+  { id: 'kanban', label: 'Global Logistics', icon: BoxIcon },
   { id: 'wholesale', label: 'VIP Customers', icon: UserIcon },
   { id: 'inbox', label: 'Messages', icon: InboxIcon },
 ]
@@ -25,8 +25,6 @@ const NAV_COMMERCE = [
 const NAV_SUPPLY = [
   { id: 'inventory', label: 'All Products', icon: BoxIcon },
   { id: 'suppliers', label: 'Our Suppliers', icon: GlobeIcon },
-  { id: 'pos', label: 'Incoming Deliveries', icon: SyncIcon },
-  { id: 'outbound', label: 'Pack a Box (Italy)', icon: BoxIcon },
 ]
 
 const NAV_INTELLIGENCE = [
