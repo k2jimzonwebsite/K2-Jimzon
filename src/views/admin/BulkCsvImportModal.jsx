@@ -42,17 +42,20 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
     setImporting(true)
     setError(null)
 
-    // Map the CSV headers to our database schema
+    // Map the CSV headers to our database schema, including Shopee export columns
     const rowsToInsert = parsedData.map(row => {
+      const isShopee = 'Product Name' in row || 'SKU Reference No.' in row
+
       return {
-        sku: row.sku || `MANUAL-CSV-${Math.floor(Math.random() * 100000)}`,
-        title: row.title || 'Untitled Product',
-        description: row.description || '',
+        sku: row.sku || row['SKU Reference No.'] || row['Parent SKU'] || row['Product ID'] || `MANUAL-CSV-${Math.floor(Math.random() * 100000)}`,
+        title: row.title || row['Product Name'] || 'Untitled Product',
+        description: row.description || row['Product Description'] || '',
         usage_instructions: row.usage_instructions || '',
-        retail_price: Number(row.retail_price) || 0,
+        retail_price: Number(row.retail_price || row['Price']) || 0,
         vip_price: Number(row.wholesale_price) || 0,
-        total_stock: Number(row.stock) || 0,
-        status: row.status || 'Draft'
+        total_stock: Number(row.stock || row['Stock']) || 0,
+        status: row.status || (isShopee ? 'Active' : 'Draft'),
+        origin: row.origin || (isShopee ? 'Shopee' : 'Manual')
       }
     })
 

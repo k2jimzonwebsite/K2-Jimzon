@@ -593,6 +593,7 @@ export const CATEGORIES = [
   'Pantry',
   'Fragrance',
   'Bath & body',
+  'Shopee Imports',
 ]
 
 export const getProduct = (id) => products.find((p) => p.id === id) ?? products[0]

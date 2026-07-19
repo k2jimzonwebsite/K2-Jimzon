@@ -92,6 +92,7 @@ export function StoreProvider({ children }) {
 
       return {
         ...localP, // spread the rich UI data
+        category: dbP.origin === 'Shopee' ? 'Shopee Imports' : localP.category,
         sku: dbP.sku,
         id: dbP.sku, // alias for legacy components
         title: dbP.title,

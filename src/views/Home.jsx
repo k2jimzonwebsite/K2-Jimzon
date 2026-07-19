@@ -166,6 +166,7 @@ const CATEGORY_TILES = [
   { cat: 'Sweets & spreads', icon: '🍫', note: 'Jars & creams' },
   { cat: 'Biscuits & snacks', icon: '🍪', note: 'Italian biscuits' },
   { cat: 'Pantry', icon: '🍝', note: 'Pasta & pesto' },
+  { cat: 'Shopee Imports', icon: '🛒', note: 'Shopee store' },
   { cat: 'Pasabuy', icon: '✈️', note: 'Request anything' },
 ]
 
@@ -173,7 +174,7 @@ function CategoryTiles() {
   const { setCategory, setQuery, go } = useStore()
   return (
     <section className="mx-auto max-w-7xl px-4 pt-8">
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 md:gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 md:gap-4">
         {CATEGORY_TILES.map(({ cat, icon, note }, i) => {
           return (
             <button
