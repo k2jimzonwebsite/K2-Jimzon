@@ -98,7 +98,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
       return
     }
 
-    if (onProductAdded) onProductAdded()
+    if (onProductAdded) onProductAdded(parsedProduct.sku)
     onClose()
   }
 

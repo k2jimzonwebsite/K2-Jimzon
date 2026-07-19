@@ -11,6 +11,7 @@ import CommandPalette from './CommandPalette'
 import Overview from './Overview'
 import Suppliers from './Suppliers'
 import PurchaseOrders from './PurchaseOrders'
+import OutboundSourcing from './OutboundSourcing'
 import BulkCsvImportModal from './BulkCsvImportModal'
 import { supabase } from '../../lib/supabaseClient'
 
@@ -25,6 +26,7 @@ const NAV_SUPPLY = [
   { id: 'inventory', label: 'All Products', icon: BoxIcon },
   { id: 'suppliers', label: 'Our Suppliers', icon: GlobeIcon },
   { id: 'pos', label: 'Incoming Deliveries', icon: SyncIcon },
+  { id: 'outbound', label: 'Pack a Box (Italy)', icon: BoxIcon },
 ]
 
 const NAV_INTELLIGENCE = [
@@ -339,6 +341,7 @@ export default function Admin() {
         <div className="p-4 md:p-6 overflow-y-auto flex-1">
           {section === 'globe' ? <GlobeCms /> 
            : section === 'inbox' ? <Inbox />
+           : section === 'outbound' ? <OutboundSourcing />
            : section === 'sourcing' ? <AiDrafts />
            : section === 'wholesale' ? <Customers />
            : section === 'suppliers' ? <Suppliers />
