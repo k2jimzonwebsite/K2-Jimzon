@@ -71,16 +71,23 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
       return
     }
 
+    let finalImageUrl = parsedProduct.image_url || ''
+    // Clean up if AI hallucinates a markdown link like [url](url)
+    if (finalImageUrl.includes('](')) {
+      const match = finalImageUrl.match(/\((.*?)\)/)
+      if (match) finalImageUrl = match[1]
+    }
+
     const { error: insertError } = await supabase.from('products').insert([
       {
         sku: parsedProduct.sku,
         title: parsedProduct.title,
         description: parsedProduct.description || '',
-        price: parsedProduct.retail_price || 0,
-        wholesale_price: parsedProduct.wholesale_price || 0,
+        retail_price: Number(parsedProduct.retail_price) || 0,
+        vip_price: Number(parsedProduct.wholesale_price) || 0,
         why_buy: parsedProduct.why_buy || '',
-        image_url: parsedProduct.image_url || '',
-        total_stock: 0,
+        image_url: finalImageUrl,
+        status: 'Draft'
       }
     ])
 
@@ -152,55 +159,74 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                 Paste valid JSON to see preview
               </div>
             ) : (
-              <div className="space-y-6 pb-20">
-                <div className="bg-[#05080f] rounded-xl border border-white/10 overflow-hidden shadow-xl">
-                  {parsedProduct.image_url && (
-                    <img src={parsedProduct.image_url} alt="Product" className="w-full h-48 object-cover bg-white/5" onError={(e) => e.target.style.display = 'none'} />
-                  )}
-                  <div className="p-5">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-serif text-lg">{parsedProduct.title}</h3>
-                      <span className="text-xs font-mono bg-white/10 px-2 py-1 rounded text-white/60">{parsedProduct.sku}</span>
+              <div className="flex-1 bg-[#10141d] p-6 flex flex-col items-center justify-center overflow-y-auto">
+              <div className="max-w-sm w-full space-y-6 animate-in zoom-in-95">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider text-white/50">Preview & Edit</h3>
+                  <span className="text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-1 rounded">SKU: {parsedProduct.sku}</span>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs text-white/40 block mb-1">Title</label>
+                    <input 
+                      type="text"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-purple-500"
+                      value={parsedProduct.title}
+                      onChange={(e) => setParsedProduct({...parsedProduct, title: e.target.value})}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs text-white/40 block mb-1">Retail Price (₱)</label>
+                      <input 
+                        type="number"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-purple-500"
+                        value={parsedProduct.retail_price}
+                        onChange={(e) => setParsedProduct({...parsedProduct, retail_price: e.target.value})}
+                      />
                     </div>
-                    <p className="text-sm text-white/60 mb-4">{parsedProduct.description}</p>
-                    
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="bg-black/30 p-3 rounded-lg border border-white/5">
-                        <p className="text-xs text-white/40 mb-1">Retail Price</p>
-                        <p className="font-mono text-forest font-bold">₱{Number(parsedProduct.retail_price || 0).toLocaleString()}</p>
-                      </div>
-                      <div className="bg-black/30 p-3 rounded-lg border border-white/5">
-                        <p className="text-xs text-white/40 mb-1">Wholesale</p>
-                        <p className="font-mono text-blue font-bold">₱{Number(parsedProduct.wholesale_price || 0).toLocaleString()}</p>
-                      </div>
+                    <div>
+                      <label className="text-xs text-white/40 block mb-1">Wholesale Price (₱)</label>
+                      <input 
+                        type="number"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-purple-500"
+                        value={parsedProduct.wholesale_price}
+                        onChange={(e) => setParsedProduct({...parsedProduct, wholesale_price: e.target.value})}
+                      />
                     </div>
+                  </div>
 
-                    {parsedProduct.why_buy && (
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-widest text-white/30 mb-2">Why Buy</p>
-                        <ul className="text-sm text-white/70 space-y-1">
-                          {parsedProduct.why_buy.split('\n').map((line, i) => line.trim() && (
-                            <li key={i} className="flex gap-2"><span className="text-blue">•</span> {line.replace(/^-/,'').trim()}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                  <div>
+                    <label className="text-xs text-white/40 block mb-1">Description</label>
+                    <textarea 
+                      className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-purple-500 h-24 resize-none"
+                      value={parsedProduct.description}
+                      onChange={(e) => setParsedProduct({...parsedProduct, description: e.target.value})}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-white/40 block mb-1">Image URL</label>
+                    <input 
+                      type="text"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white text-xs font-mono focus:outline-none focus:border-purple-500"
+                      value={parsedProduct.image_url}
+                      onChange={(e) => setParsedProduct({...parsedProduct, image_url: e.target.value})}
+                    />
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* Sticky Action Footer */}
-            {parsedProduct && (
-              <div className="absolute bottom-6 left-6 right-6">
                 <button 
                   onClick={handleSave}
                   disabled={saving}
-                  className="w-full bg-forest text-white font-bold py-3.5 rounded-lg transition-colors shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:bg-forest/90 disabled:opacity-50"
+                  className="w-full bg-forest text-navy font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(205,250,119,0.2)] transition-all hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100 flex justify-center items-center gap-2 mt-6"
                 >
                   {saving ? 'Saving...' : 'Save to Inventory'}
                 </button>
               </div>
+            </div>
             )}
           </div>
 

@@ -70,7 +70,7 @@ Required JSON structure:
   "retail_price": number (leave as 0 if unknown),
   "wholesale_price": number (leave as 0 if unknown),
   "why_buy": "string (3 punchy marketing bullet points separated by \\n)",
-  "image_url": "string (a high quality unsplash image URL that closely matches the product)"
+  "image_url": "string (MUST BE A RAW HTTPS URL. DO NOT WRAP IN MARKDOWN BRACKETS OR PARENTHESES. RAW URL ONLY!)"
 }
 
 Optional Directions:
