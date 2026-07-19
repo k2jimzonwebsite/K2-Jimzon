@@ -276,7 +276,7 @@ export default function Sheet() {
                         onFocus={() => setSelected({ row: i, col: 10 })}
                         className={'w-full h-full bg-transparent px-2 py-1.5 text-xs outline-none cursor-pointer appearance-none text-center ' + (isDraft ? 'text-amber font-bold' : 'text-forest font-bold')}
                       >
-                        <option value="Active">Active</option>
+                        <option value="Live">Live</option>
                         <option value="Draft">Draft</option>
                       </select>
                     </Cell>

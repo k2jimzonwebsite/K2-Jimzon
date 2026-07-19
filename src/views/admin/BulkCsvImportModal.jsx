@@ -55,7 +55,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
         retail_price: Number(row.retail_price || row['Price']) || 0,
         vip_price: Number(row.wholesale_price) || 0,
         total_stock: Number(row.stock || row['Stock']) || 0,
-        status: row.status || (isShopee ? 'Active' : 'Draft'),
+        status: row.status || (isShopee ? 'Live' : 'Draft'),
         origin: row.origin || (isShopee ? `Shopee|${shopeeCategory}` : 'Manual')
       }
     })
