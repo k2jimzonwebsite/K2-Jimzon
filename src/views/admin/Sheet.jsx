@@ -287,10 +287,10 @@ export default function Sheet() {
       {showAiScanner && (
         <ScanToAiModal 
           onClose={() => setShowAiScanner(false)} 
-          onProductAdded={() => {
-            fetchProducts()
+          onOpenSmartPaste={() => {
             setShowAiScanner(false)
-          }} 
+            setShowSmartPaste(true)
+          }}
         />
       )}
 

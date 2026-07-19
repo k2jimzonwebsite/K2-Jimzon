@@ -133,10 +133,10 @@ export default function InventoryGrid() {
       {showAiScanner && (
         <ScanToAiModal 
           onClose={() => setShowAiScanner(false)} 
-          onProductAdded={() => {
-            fetchProducts()
+          onOpenSmartPaste={() => {
             setShowAiScanner(false)
-          }} 
+            setShowSmartPaste(true)
+          }}
         />
       )}
 
