@@ -77,20 +77,22 @@ function ScannerModal({ po, onClose, onComplete }) {
   const handleComplete = async () => {
     setProcessing(true)
     
-    // Process increments manually from frontend since we don't have the RPC
-    const scannedItems = lines.filter(l => l.scanned > 0)
+    const scannedItems = lines.filter(l => l.scanned > 0).map(l => ({
+      sku: l.sku,
+      scanned_qty: l.scanned
+    }))
     
     if (po.id.startsWith('po-')) { // Actual DB
-      // We must increment stock. 
-      // Supabase RPC is best, but we will fetch current stock and add to avoid permissions block for now.
-      for (const item of scannedItems) {
-        const { data: prod } = await supabase.from('products').select('total_stock').eq('sku', item.sku).single()
-        if (prod) {
-          await supabase.from('products').update({ total_stock: prod.total_stock + item.scanned }).eq('sku', item.sku)
-        }
-      }
+      const { error } = await supabase.rpc('receive_po_scanned', { 
+        p_po_id: po.id, 
+        p_scanned: scannedItems 
+      })
       
-      await supabase.from('purchase_orders').update({ status: 'Received' }).eq('id', po.id)
+      if (error) {
+        alert("Error updating inventory: " + error.message)
+        setProcessing(false)
+        return
+      }
     }
 
     onComplete(po.id)
