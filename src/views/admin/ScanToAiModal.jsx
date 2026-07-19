@@ -70,7 +70,8 @@ Required JSON structure:
   "retail_price": number (leave as 0 if unknown),
   "wholesale_price": number (leave as 0 if unknown),
   "why_buy": "string (3 punchy marketing bullet points separated by \\n)",
-  "usage_instructions": "string (clear steps on how to use or instructions, separated by \\n, or leave empty if not applicable)"
+  "usage_instructions": "string (clear steps on how to use or instructions, separated by \\n, or leave empty if not applicable)",
+  "photo_guidelines": "string (Give instructions to our photographer. Primary photo MUST be 'Luxury studio with white background'. After-use photo MUST depend on the product, e.g. if it's pasta, the after-image is a cooked pasta dish.)"
 }
 
 Optional Directions:

@@ -217,6 +217,20 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                   <div className="space-y-4 pt-4 border-t border-white/10">
                     <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest">Product Photos</h4>
                     
+                    {parsedProduct.photo_guidelines && (
+                      <div className="bg-blue/10 border border-blue/20 rounded-lg p-3">
+                        <h5 className="text-xs font-bold text-blue mb-1 flex items-center gap-1.5">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          AI Photographer Guidelines
+                        </h5>
+                        <p className="text-xs text-blue-light/80 leading-relaxed">
+                          {parsedProduct.photo_guidelines}
+                        </p>
+                      </div>
+                    )}
+
                     <ImageUploadDropzone 
                       label="Primary Luxury Photo" 
                       multiple={false}
