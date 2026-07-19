@@ -216,7 +216,7 @@ function NewArrivals() {
   const activeProduct = arrivals[activeIndex]
 
   return (
-    <section className="bg-shell/60 backdrop-blur-sm px-4 py-16 md:py-24 relative overflow-hidden">
+    <section className="bg-shell/60 backdrop-blur-sm px-4 py-12 md:py-24 relative overflow-hidden">
       
       {/* Abstract Wood/Amber Background Sweeps */}
       <div className="absolute top-0 left-[10%] w-[40%] h-[100%] bg-[#9A6A45] rounded-[100%] mix-blend-multiply filter blur-[140px] opacity-[0.08] -rotate-12 pointer-events-none"></div>
@@ -312,7 +312,7 @@ const STORY_STEPS = [
 
 function StorySection() {
   return (
-    <section className="relative mx-auto max-w-6xl px-4 py-16 md:py-24 glow-terracotta">
+    <section className="relative mx-auto max-w-6xl px-4 py-12 md:py-24 glow-terracotta">
       <Kicker className="text-crimson">How it gets to you</Kicker>
       <h2 className="mt-2 w-full font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-medium tracking-tight text-navy">
         From an Italian shelf to your door, with nothing lost in between.

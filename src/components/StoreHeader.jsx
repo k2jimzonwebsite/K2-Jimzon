@@ -25,9 +25,9 @@ export default function StoreHeader() {
   const { go, count, setCartOpen, isWholesale, setIsWholesale } = useStore()
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-cream/85 backdrop-blur-xl md:top-10">
-      <div className="bg-shell/50 backdrop-blur-sm border-b border-line px-4 py-1.5 text-center text-xs font-medium text-navy-soft">
-        ✈ Next Milan consignment lands <span className="font-bold text-navy">22 July</span> · Free Metro Manila delivery over ₱2,500
+    <header className="sticky top-0 z-40 border-b border-line bg-cream/95 md:bg-cream/85 md:backdrop-blur-xl md:top-10">
+      <div className="bg-shell/95 md:bg-shell/50 md:backdrop-blur-sm border-b border-line px-4 py-1.5 text-center text-xs font-medium text-navy-soft">
+        ✈ Next Milan consignment lands <span className="font-bold text-navy">22 July</span><span className="hidden sm:inline"> · Free Metro Manila delivery over ₱2,500</span>
       </div>
       {isWholesale && (
         <div className="flex items-center justify-center gap-3 bg-forest-wash border-b border-line px-4 py-1.5 text-xs font-medium text-forest">

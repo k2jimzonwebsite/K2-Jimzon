@@ -12,8 +12,9 @@ const VIEWS = [
 
 // Prototype view switcher — quiet chrome, distinct from the product UI.
 export default function DemoRail() {
-  const { view, go, isWholesale } = useStore()
+  const { view, go, isWholesale, lines = [] } = useStore()
   const active = view === 'confirmation' ? 'checkout' : view
+  const cartCount = lines.reduce((acc, line) => acc + line.qty, 0)
 
   return (
     <>
@@ -66,7 +67,14 @@ export default function DemoRail() {
                 }
               >
                 <span className={'h-[2px] w-7 rounded-full ' + (on ? 'bg-crimson' : 'bg-transparent')} />
-                <Ico size={18} />
+                <div className="relative">
+                  <Ico size={18} />
+                  {v.id === 'checkout' && cartCount > 0 && (
+                    <span className="absolute -right-2 -top-1.5 flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-crimson px-1 text-[9px] font-bold text-white ring-2 ring-cream">
+                      {cartCount}
+                    </span>
+                  )}
+                </div>
                 {v.label}
               </button>
             )
