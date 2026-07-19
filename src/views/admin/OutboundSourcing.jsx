@@ -11,7 +11,7 @@ export default function OutboundSourcing() {
   const [manifest, setManifest] = useState([]) // Array of {sku, title, quantity}
   const [supplierName, setSupplierName] = useState("Italy Warehouse")
   
-  const scanHistory = useRef({ sku: null, time: 0 })
+  const [triggerActive, setTriggerActive] = useState(false)
   const [lastScan, setLastScan] = useState(null)
   const scannerRef = useRef(null)
   const [scannerActive, setScannerActive] = useState(false)
@@ -57,11 +57,9 @@ export default function OutboundSourcing() {
   }
 
   const handleScan = async (sku) => {
-    const now = Date.now()
-    if (scanHistory.current.sku === sku && now - scanHistory.current.time < 2000) {
-      return // Ignore rapid duplicate scans
-    }
-    scanHistory.current = { sku, time: now }
+    // Only process scan if the manual trigger was pressed
+    if (!triggerActive) return
+    setTriggerActive(false) // consume the trigger
     
     // Check if it exists in DB
     const { data: product, error } = await supabase.from('products').select('sku, title').eq('sku', sku).single()
@@ -231,14 +229,35 @@ export default function OutboundSourcing() {
                 <p className="text-sm text-white/40 mt-1">Tap to resume scanning</p>
               </div>
             ) : (
-              <div className="flex-1 w-full bg-black relative">
-                <div id="outbound-qr-reader" className="absolute inset-0 object-cover"></div>
-                <button 
-                  onClick={stopScanner}
-                  className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white/80 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-black/80 hover:text-white"
-                >
-                  Pause Camera
-                </button>
+              <div className="flex-1 w-full bg-black relative flex flex-col">
+                <div className="flex-1 relative">
+                  <div id="outbound-qr-reader" className="absolute inset-0 object-cover"></div>
+                  <button 
+                    onClick={stopScanner}
+                    className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white/80 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-black/80 hover:text-white z-10"
+                  >
+                    Stop Scanning
+                  </button>
+                  
+                  {triggerActive && (
+                    <div className="absolute inset-0 border-4 border-forest/50 animate-pulse pointer-events-none z-10" />
+                  )}
+                </div>
+                
+                {/* Manual Trigger Button */}
+                <div className="bg-black p-4 shrink-0 border-t border-white/10 relative z-20">
+                  <button
+                    onClick={() => setTriggerActive(true)}
+                    className={`w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${
+                      triggerActive 
+                        ? 'bg-amber text-black animate-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]' 
+                        : 'bg-forest text-navy shadow-[0_0_20px_rgba(205,250,119,0.3)] hover:scale-[1.02] active:scale-95'
+                    }`}
+                  >
+                    <GridIcon size={24} />
+                    {triggerActive ? 'Aim at Barcode...' : 'Trigger Scan'}
+                  </button>
+                </div>
               </div>
             )}
           </div>

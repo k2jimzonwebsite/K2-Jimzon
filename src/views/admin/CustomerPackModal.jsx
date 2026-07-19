@@ -7,7 +7,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
   const [scanned, setScanned] = useState(0)
   const [lastScan, setLastScan] = useState(null)
   
-  const scanHistory = useRef({ sku: null, time: 0 })
+  const [triggerActive, setTriggerActive] = useState(false)
   const scannerRef = useRef(null)
   const [scannerActive, setScannerActive] = useState(false)
 
@@ -49,12 +49,8 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
   }
 
   const handleScan = (sku) => {
-    if (isComplete) return
-    const now = Date.now()
-    if (scanHistory.current.sku === sku && now - scanHistory.current.time < 2000) {
-      return // Ignore rapid duplicate scans
-    }
-    scanHistory.current = { sku, time: now }
+    if (isComplete || !triggerActive) return
+    setTriggerActive(false) // Consume trigger
 
     if (navigator.vibrate) navigator.vibrate(50)
 
@@ -122,14 +118,34 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                    <p className="text-forest text-sm mt-1">All items verified.</p>
                  </div>
               ) : (
-                <div className="flex-1 w-full h-full relative">
-                  <div id="customer-qr-reader" className="absolute inset-0 object-cover w-full h-full"></div>
-                  <button 
-                    onClick={stopScanner}
-                    className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white/80 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-black/80 hover:text-white"
-                  >
-                    Pause Camera
-                  </button>
+                <div className="flex-1 w-full h-full relative flex flex-col">
+                  <div className="flex-1 relative">
+                    <div id="customer-qr-reader" className="absolute inset-0 object-cover w-full h-full"></div>
+                    <button 
+                      onClick={stopScanner}
+                      className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white/80 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-black/80 hover:text-white z-10"
+                    >
+                      Stop Scanning
+                    </button>
+                    {triggerActive && (
+                      <div className="absolute inset-0 border-4 border-blue/50 animate-pulse pointer-events-none z-10" />
+                    )}
+                  </div>
+                  
+                  {/* Manual Trigger Button */}
+                  <div className="bg-black p-4 shrink-0 border-t border-white/10 relative z-20">
+                    <button
+                      onClick={() => setTriggerActive(true)}
+                      className={`w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${
+                        triggerActive 
+                          ? 'bg-amber text-black animate-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]' 
+                          : 'bg-blue text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:scale-[1.02] active:scale-95'
+                      }`}
+                    >
+                      <GridIcon size={24} />
+                      {triggerActive ? 'Aim at Barcode...' : 'Trigger Scan'}
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
