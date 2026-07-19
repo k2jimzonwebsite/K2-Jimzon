@@ -59,6 +59,34 @@ export default function Sheet() {
     }
   }
 
+  const handleAddRow = async () => {
+    const newSku = `MANUAL-${Math.floor(Math.random() * 10000)}`
+    const newProduct = {
+      sku: newSku,
+      title: '',
+      why_buy: '',
+      image_url: '',
+      retail_price: 0,
+      vip_price: 0,
+      total_stock: 0,
+      status: 'Draft'
+    }
+
+    // Optimistic insert
+    setRows(prev => [...prev, newProduct])
+    
+    // Push to Supabase
+    const { error } = await supabase.from('products').insert([newProduct])
+    
+    if (error) {
+      console.error('Failed to add new row:', error)
+      fetchProducts()
+    } else {
+      // Focus the new row's title cell (it will be at the bottom)
+      setSelected({ row: rows.length, col: 1 })
+    }
+  }
+
   const active = rows[selected.row]
 
   return (
@@ -212,6 +240,17 @@ export default function Sheet() {
             </tbody>
           </table>
         )}
+        <div className="p-2 border-t border-line border-dashed">
+          <button 
+            onClick={handleAddRow}
+            className="flex items-center gap-2 text-xs font-semibold text-blue hover:text-navy transition-colors px-2 py-1"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Row
+          </button>
+        </div>
       </div>
 
       <div className="flex items-center gap-4 border-t border-line bg-paper px-3 py-1.5 text-xs text-navy-soft">

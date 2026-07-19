@@ -5,6 +5,7 @@ export default function InventoryGrid() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [editingProduct, setEditingProduct] = useState(null)
+  const [isAdding, setIsAdding] = useState(false)
 
   useEffect(() => {
     fetchProducts()
@@ -41,26 +42,58 @@ export default function InventoryGrid() {
 
     const { sku, title, why_buy, image_url, retail_price, vip_price, total_stock, status } = editingProduct
     
-    // Optimistic UI update
-    setProducts((prev) => prev.map(p => p.sku === sku ? editingProduct : p))
-    setEditingProduct(null)
-
-    // Push to Supabase
-    const { error } = await supabase
-      .from('products')
-      .update({ title, why_buy, image_url, retail_price, vip_price, total_stock, status })
-      .eq('sku', sku)
+    if (isAdding) {
+      if (!sku) {
+        alert("SKU is required for new products.");
+        return;
+      }
+      // Optimistic UI update
+      setProducts(prev => [editingProduct, ...prev]);
       
-    if (error) {
-      console.error('Failed to update product:', error)
-      fetchProducts() // Revert on failure
+      const { error } = await supabase
+        .from('products')
+        .insert([{ sku, title, why_buy, image_url, retail_price, vip_price, total_stock, status }]);
+        
+      if (error) {
+        console.error('Failed to add product:', error);
+        fetchProducts(); // Revert on failure
+      }
+    } else {
+      // Optimistic UI update
+      setProducts((prev) => prev.map(p => p.sku === sku ? editingProduct : p))
+      
+      // Push to Supabase
+      const { error } = await supabase
+        .from('products')
+        .update({ title, why_buy, image_url, retail_price, vip_price, total_stock, status })
+        .eq('sku', sku)
+        
+      if (error) {
+        console.error('Failed to update product:', error)
+        fetchProducts() // Revert on failure
+      }
     }
+    
+    setEditingProduct(null)
+    setIsAdding(false)
   }
 
   return (
     <div className="animate-in fade-in duration-500 relative min-h-full">
-      <div className="mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <p className="text-sm text-white/50">Manage your inventory visually. Click Edit to update product details.</p>
+        <button 
+          onClick={() => {
+            setIsAdding(true);
+            setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random()*10000)}`, title: '', why_buy: '', image_url: '', retail_price: 0, vip_price: 0, total_stock: 0, status: 'Draft' });
+          }}
+          className="flex items-center gap-2 rounded bg-blue/20 text-blue hover:bg-blue hover:text-white transition-colors px-3 py-1.5 text-xs font-semibold"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          Add New Product
+        </button>
       </div>
 
       {loading && products.length === 0 ? (
@@ -109,13 +142,26 @@ export default function InventoryGrid() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in">
           <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0A101D] shadow-2xl overflow-hidden">
             <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between bg-white/5">
-              <h3 className="font-serif text-lg font-semibold text-white">Edit Product</h3>
-              <button onClick={() => setEditingProduct(null)} className="text-white/40 hover:text-white transition-colors">
+              <h3 className="font-serif text-lg font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
+              <button onClick={() => { setEditingProduct(null); setIsAdding(false); }} className="text-white/40 hover:text-white transition-colors">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
             
             <form onSubmit={handleSave} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+              {isAdding && (
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">SKU</label>
+                  <input 
+                    type="text" 
+                    value={editingProduct.sku || ''}
+                    onChange={(e) => setEditingProduct({...editingProduct, sku: e.target.value})}
+                    className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none"
+                    required
+                  />
+                </div>
+              )}
+              
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Product Title</label>
                 <input 
@@ -196,7 +242,7 @@ export default function InventoryGrid() {
               <div className="mt-6 pt-4 border-t border-white/10 flex justify-end gap-3">
                 <button 
                   type="button" 
-                  onClick={() => setEditingProduct(null)}
+                  onClick={() => { setEditingProduct(null); setIsAdding(false); }}
                   className="px-4 py-2 rounded-lg text-sm font-semibold text-white/70 hover:text-white transition-colors"
                 >
                   Cancel
@@ -205,7 +251,7 @@ export default function InventoryGrid() {
                   type="submit" 
                   className="px-6 py-2 rounded-lg text-sm font-semibold bg-blue text-white hover:bg-blue/90 transition-colors shadow-lg shadow-blue/20"
                 >
-                  Save Changes
+                  {isAdding ? 'Create Product' : 'Save Changes'}
                 </button>
               </div>
             </form>
