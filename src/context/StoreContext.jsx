@@ -26,18 +26,26 @@ export function StoreProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') === 'dark'
+      try {
+        return localStorage.getItem('theme') === 'dark'
+      } catch (e) {
+        return false
+      }
     }
     return false
   })
 
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark')
-      localStorage.setItem('theme', 'dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-      localStorage.setItem('theme', 'light')
+    try {
+      if (isDark) {
+        document.documentElement.classList.add('dark')
+        localStorage.setItem('theme', 'dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+        localStorage.setItem('theme', 'light')
+      }
+    } catch (e) {
+      // Ignore localStorage errors in restricted browsers
     }
   }, [isDark])
 
