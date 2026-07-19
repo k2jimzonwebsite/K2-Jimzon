@@ -87,7 +87,7 @@ export default function Inbox() {
       {/* Channels List (Left Pane) */}
       <div className="w-1/3 max-w-[320px] border-r border-white/10 flex flex-col bg-[#020408]">
         <div className="p-4 border-b border-white/10 flex items-center justify-between">
-          <h2 className="font-serif font-semibold text-white">Unified Inbox</h2>
+          <h2 className="font-serif font-semibold text-white">Customer Messages</h2>
           <span className="bg-crimson text-white text-[10px] font-bold px-2 py-0.5 rounded-full pulse-dot">1 NEW</span>
         </div>
         <div className="overflow-y-auto flex-1 p-2 space-y-1">
@@ -168,12 +168,12 @@ export default function Inbox() {
         
         <div className="p-4 border-b border-white/10 flex items-center gap-2 bg-white/5">
           <div className="h-2 w-2 rounded-full bg-blue pulse-dot" />
-          <h3 className="font-serif font-semibold text-sm text-white">AI Copilot</h3>
+          <h3 className="font-serif font-semibold text-sm text-white">AI Chat Assistant</h3>
         </div>
         
         <div className="p-5 flex-1 flex flex-col items-start overflow-y-auto">
           <p className="text-xs text-white/50 mb-6">
-            Copilot automatically reads incoming messages and queries the Supabase database to draft accurate replies.
+            The AI automatically reads incoming messages and queries the database to draft accurate replies for you.
           </p>
 
           <button 
@@ -186,7 +186,7 @@ export default function Inbox() {
                 <svg className="animate-spin h-4 w-4 text-blue" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 Querying Database...
               </span>
-            ) : 'Draft Reply with AI'}
+            ) : 'Ask AI to help reply'}
           </button>
           
           {dbResults && (

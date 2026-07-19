@@ -50,11 +50,11 @@ export default function PurchaseOrders() {
       
       <div className="flex items-center justify-between border-b border-white/10 pb-4">
         <div>
-          <h2 className="text-lg font-serif text-white">Purchase Orders</h2>
-          <p className="text-sm text-white/50 mt-1">Manage wholesale procurement and auto-restock inventory.</p>
+          <h2 className="text-lg font-serif text-white">Incoming Deliveries</h2>
+          <p className="text-sm text-white/50 mt-1">Manage incoming stock and auto-update inventory when it arrives.</p>
         </div>
         <button className="rounded bg-forest px-4 py-2 text-sm font-semibold text-white hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20">
-          + Create PO
+          + New Delivery
         </button>
       </div>
 
@@ -72,9 +72,9 @@ export default function PurchaseOrders() {
           </thead>
           <tbody className="divide-y divide-white/5">
             {loading ? (
-              <tr><td colSpan="6" className="px-6 py-8 text-center text-white/40">Loading POs...</td></tr>
+              <tr><td colSpan="6" className="px-6 py-8 text-center text-white/40">Loading deliveries...</td></tr>
             ) : pos.length === 0 ? (
-              <tr><td colSpan="6" className="px-6 py-8 text-center text-white/40">No purchase orders found.</td></tr>
+              <tr><td colSpan="6" className="px-6 py-8 text-center text-white/40">No incoming deliveries found.</td></tr>
             ) : pos.map((po) => (
               <tr key={po.id} className="hover:bg-white/5 transition-colors">
                 <td className="px-6 py-4 font-mono text-white">{po.po_number}</td>
@@ -95,7 +95,7 @@ export default function PurchaseOrders() {
                       onClick={() => handleReceive(po)}
                       className="rounded border border-blue bg-blue/10 px-3 py-1.5 text-xs font-medium text-blue hover:bg-blue/20 transition-colors"
                     >
-                      Receive Goods
+                      Mark as Arrived (Auto-Restock)
                     </button>
                   ) : po.status === 'Received' ? (
                     <span className="flex items-center justify-end gap-1 text-xs text-forest">

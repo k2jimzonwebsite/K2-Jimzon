@@ -76,10 +76,10 @@ export default function Overview({ setSection }) {
       
       {/* Health Monitors */}
       <div className="grid grid-cols-4 gap-4">
-        <HealthWidget label="Cashflow" status="good" />
-        <HealthWidget label="Inventory Health" status="warning" />
-        <HealthWidget label="Fulfillment Speed" status="good" />
-        <HealthWidget label="AI Sourcing Queue" status="good" />
+        <HealthWidget label="Today's Sales" status="good" />
+        <HealthWidget label="Stock Levels" status="warning" />
+        <HealthWidget label="Packing Speed" status="good" />
+        <HealthWidget label="AI Suggestions Waiting" status="good" />
       </div>
 
       {/* Main Grid */}
@@ -114,7 +114,7 @@ export default function Overview({ setSection }) {
 
           <div className="rounded-xl border border-white/10 bg-[#05080f] overflow-hidden">
             <div className="border-b border-white/10 px-5 py-3 bg-white/5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-white/50">Top Movers (Last 24h)</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-white/50">Best Sellers (Last 24h)</h3>
             </div>
             <div className="divide-y divide-white/5 p-2">
               {topMovers.map((tm, i) => (
@@ -132,7 +132,7 @@ export default function Overview({ setSection }) {
         <div className="space-y-6">
           <div className="rounded-xl border border-crimson/20 bg-crimson/5 overflow-hidden">
             <div className="border-b border-crimson/20 px-5 py-3 flex items-center justify-between bg-crimson/10">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-crimson">Critical Alerts</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-crimson">Needs Attention!</h3>
             </div>
             <div className="divide-y divide-crimson/10">
               {alerts.map(alert => (
@@ -146,7 +146,7 @@ export default function Overview({ setSection }) {
 
           <div className="rounded-xl border border-white/10 bg-[#05080f] overflow-hidden">
             <div className="border-b border-white/10 px-5 py-3 flex items-center justify-between bg-white/5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-white/50">AI Sourcing Queue</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-white/50">Pending AI Products</h3>
               <span className="flex h-5 items-center justify-center rounded bg-blue/20 px-2 text-[10px] font-bold text-blue">{draftsCount} Pending</span>
             </div>
             <div className="divide-y divide-white/5">

@@ -13,14 +13,14 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
 
   // Base static commands
   const COMMANDS = [
-    { id: 'nav-overview', type: 'Navigation', label: 'Go to Executive Overview', action: () => setSection('overview') },
-    { id: 'nav-kanban', type: 'Navigation', label: 'Open Fulfillment Board', action: () => setSection('kanban') },
-    { id: 'nav-inventory', type: 'Navigation', label: 'Open Master Inventory', action: () => setSection('inventory') },
-    { id: 'nav-inbox', type: 'Navigation', label: 'Check Unified Inbox', action: () => setSection('inbox') },
-    { id: 'nav-sourcing', type: 'Navigation', label: 'Review AI Drafts', action: () => setSection('sourcing') },
-    { id: 'nav-crm', type: 'Navigation', label: 'Open Customer CRM', action: () => setSection('wholesale') },
-    { id: 'nav-suppliers', type: 'Navigation', label: 'Manage Italian Suppliers', action: () => setSection('suppliers') },
-    { id: 'nav-pos', type: 'Navigation', label: 'View Purchase Orders', action: () => setSection('pos') },
+    { id: 'nav-overview', type: 'Navigation', label: 'Go to Home Dashboard', action: () => setSection('overview') },
+    { id: 'nav-kanban', type: 'Navigation', label: 'Open Pack & Ship Orders', action: () => setSection('kanban') },
+    { id: 'nav-inventory', type: 'Navigation', label: 'Open All Products', action: () => setSection('inventory') },
+    { id: 'nav-inbox', type: 'Navigation', label: 'Check Messages', action: () => setSection('inbox') },
+    { id: 'nav-sourcing', type: 'Navigation', label: 'Review AI Suggestions', action: () => setSection('sourcing') },
+    { id: 'nav-crm', type: 'Navigation', label: 'Open VIP Customers', action: () => setSection('wholesale') },
+    { id: 'nav-suppliers', type: 'Navigation', label: 'Manage Our Suppliers', action: () => setSection('suppliers') },
+    { id: 'nav-pos', type: 'Navigation', label: 'View Incoming Deliveries', action: () => setSection('pos') },
     { id: 'nav-storefront', type: 'Navigation', label: 'View Live Storefront', action: () => go('home') },
   ]
 

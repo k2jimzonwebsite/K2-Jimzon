@@ -31,7 +31,7 @@ export default function Suppliers() {
     <div className="space-y-6 animate-in fade-in duration-500">
       
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-serif text-white">Italian Vendors</h2>
+        <h2 className="text-lg font-serif text-white">Our Suppliers</h2>
         <button className="rounded bg-blue px-4 py-2 text-sm font-semibold text-white hover:bg-blue/90 transition-colors">
           + Add Supplier
         </button>

@@ -13,21 +13,21 @@ import PurchaseOrders from './PurchaseOrders'
 import { supabase } from '../../lib/supabaseClient'
 
 const NAV_COMMERCE = [
-  { id: 'overview', label: 'Executive Overview', icon: GridIcon },
-  { id: 'kanban', label: 'Fulfillment Board', icon: BoxIcon },
-  { id: 'wholesale', label: 'Customer CRM', icon: UserIcon },
-  { id: 'inbox', label: 'Unified Inbox', icon: InboxIcon },
+  { id: 'overview', label: 'Home Dashboard', icon: GridIcon },
+  { id: 'kanban', label: 'Pack & Ship Orders', icon: BoxIcon },
+  { id: 'wholesale', label: 'VIP Customers', icon: UserIcon },
+  { id: 'inbox', label: 'Messages', icon: InboxIcon },
 ]
 
 const NAV_SUPPLY = [
-  { id: 'inventory', label: 'Master Inventory', icon: BoxIcon },
-  { id: 'suppliers', label: 'Italian Suppliers', icon: GlobeIcon },
-  { id: 'pos', label: 'Purchase Orders', icon: SyncIcon },
+  { id: 'inventory', label: 'All Products', icon: BoxIcon },
+  { id: 'suppliers', label: 'Our Suppliers', icon: GlobeIcon },
+  { id: 'pos', label: 'Incoming Deliveries', icon: SyncIcon },
 ]
 
 const NAV_INTELLIGENCE = [
-  { id: 'sourcing', label: 'AI Draft Queue', icon: SyncIcon },
-  { id: 'globe', label: 'Globe Settings', icon: GlobeIcon },
+  { id: 'sourcing', label: 'Pending AI Products', icon: SyncIcon },
+  { id: 'globe', label: '3D Map Settings', icon: GlobeIcon },
 ]
 
 export default function Admin() {
@@ -92,7 +92,7 @@ export default function Admin() {
         <div className="flex-1 overflow-y-auto mt-4 px-2.5 space-y-6">
           
           <div>
-            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Commerce</p>
+            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Sales & Orders</p>
             <div className="space-y-0.5">
               {NAV_COMMERCE.map(item => {
                 const Ico = item.icon
@@ -111,7 +111,7 @@ export default function Admin() {
           </div>
 
           <div>
-            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Supply Chain</p>
+            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Stock & Buying</p>
             <div className="space-y-0.5">
               {NAV_SUPPLY.map(item => {
                 const Ico = item.icon
@@ -131,7 +131,7 @@ export default function Admin() {
           </div>
 
           <div>
-            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Intelligence</p>
+            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">AI Tools</p>
             <div className="space-y-0.5">
               {NAV_INTELLIGENCE.map(item => {
                 const Ico = item.icon
@@ -169,21 +169,21 @@ export default function Admin() {
         <header className="flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#0A101D] px-4 py-3.5 md:px-6">
           <div>
             <h1 className="font-serif text-xl font-semibold tracking-tight text-white">
-              {section === 'globe' ? 'Globe & Reviews' : section === 'wholesale' ? 'Customer CRM' : section === 'sourcing' ? 'AI Sourcing Queue' : section === 'inbox' ? 'Unified Inbox' : showSheet ? 'Master inventory' : section === 'suppliers' ? 'Supplier Workspace' : section === 'pos' ? 'Purchase Orders' : section === 'kanban' ? 'Fulfillment Board' : 'Executive Overview'}
+              {section === 'globe' ? '3D Map Settings' : section === 'wholesale' ? 'VIP Customers' : section === 'sourcing' ? 'Pending AI Products' : section === 'inbox' ? 'Customer Messages' : showSheet ? 'All Products' : section === 'suppliers' ? 'Supplier Contacts' : section === 'pos' ? 'Incoming Deliveries' : section === 'kanban' ? 'Pack & Ship Orders' : 'Home Dashboard'}
             </h1>
             <p className="text-xs font-mono text-white/50 mt-1">
               {section === 'globe'
-                ? 'Manage which products appear on the 3D globe and customer reviews'
+                ? 'Manage which products appear on the 3D map.'
                 : section === 'wholesale'
-                ? 'Approve VIP roles for wholesale buyers'
+                ? 'Approve VIP roles for wholesale buyers.'
                 : section === 'sourcing'
-                ? 'Review product drafts parsed by the vision AI before pushing to live inventory'
+                ? 'Review products parsed by the AI before pushing to live inventory.'
                 : section === 'inbox'
                 ? 'Manage messages from WhatsApp, Facebook, and Viber. AI Copilot is active.'
                 : section === 'suppliers'
                 ? 'Manage vendor relationships and track lead times.'
                 : section === 'pos'
-                ? 'Procure goods and auto-restock inventory upon delivery.'
+                ? 'Track deliveries and auto-restock inventory.'
                 : 'SYSTEM_STATUS: NOMINAL | Last Sync: Just now'}
             </p>
           </div>
