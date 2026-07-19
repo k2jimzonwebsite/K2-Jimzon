@@ -48,7 +48,7 @@ export default function Sheet() {
     setLoading(false)
   }
 
-  const updateField = async (index, field, value) => {
+  const updateField = async (index, field, value, oldSku = null) => {
     const product = rows[index]
     let finalValue = value
     if (field === 'retail_price' || field === 'vip_price' || field === 'total_stock') {
@@ -60,11 +60,14 @@ export default function Sheet() {
     
     if (!supabase) return;
 
+    // Use oldSku for the query if we are updating the SKU primary key itself
+    const targetSku = oldSku || product.sku
+
     // Push to Supabase
     const { error } = await supabase
       .from('products')
       .update({ [field]: finalValue })
-      .eq('sku', product.sku)
+      .eq('sku', targetSku)
       
     if (error) {
       console.error(`Failed to update ${field}:`, error)
@@ -150,8 +153,18 @@ export default function Sheet() {
                     <td className="border border-line bg-shell px-1 text-center text-xs text-navy-soft tabular">
                       {i + 2}
                     </td>
-                    <Cell onSelect={() => setSelected({ row: i, col: 0 })} selected={selected.row === i && selected.col === 0} className="font-medium tabular">
-                      {r.sku}
+                    <Cell onSelect={() => setSelected({ row: i, col: 0 })} selected={selected.row === i && selected.col === 0} className="font-medium tabular p-0 max-w-48">
+                      <input 
+                        type="text" 
+                        defaultValue={r.sku || ''} 
+                        onBlur={(e) => {
+                          if (e.target.value !== r.sku) {
+                            updateField(i, 'sku', e.target.value, r.sku)
+                          }
+                        }}
+                        onFocus={() => setSelected({ row: i, col: 0 })}
+                        className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-blue font-bold"
+                      />
                     </Cell>
                     <Cell onSelect={() => setSelected({ row: i, col: 1 })} selected={selected.row === i && selected.col === 1} className="max-w-64 p-0">
                       <input 
