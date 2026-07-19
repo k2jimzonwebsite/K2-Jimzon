@@ -24,21 +24,34 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
             aspectRatio: 1.0
           },
           async (decodedText) => {
-            if (scannerRef.current) {
-              scannerRef.current.stop().then(() => {
-                scannerRef.current.clear()
-              }).catch(console.error)
+            // Prevent double-stop by grabbing reference and nullifying it
+            const scanner = scannerRef.current
+            scannerRef.current = null
+            
+            try {
+              if (scanner) {
+                await scanner.stop()
+                scanner.clear()
+              }
+            } catch (e) {
+              console.error("Error stopping scanner", e)
             }
             
             if (navigator.vibrate) navigator.vibrate(50)
             
-            // Check if SKU already exists
-            const { data } = await supabase.from('products').select('sku').eq('sku', decodedText).single()
-            
-            if (data) {
-              alert(`Product with barcode ${decodedText} already exists in inventory!`)
-              onClose()
-              return
+            try {
+              if (supabase) {
+                // Check if SKU already exists
+                const { data } = await supabase.from('products').select('sku').eq('sku', decodedText).single()
+                
+                if (data) {
+                  alert(`Product with barcode ${decodedText} already exists in inventory!`)
+                  onClose()
+                  return
+                }
+              }
+            } catch (e) {
+              console.error("Supabase check error", e)
             }
 
             setSku(decodedText)
