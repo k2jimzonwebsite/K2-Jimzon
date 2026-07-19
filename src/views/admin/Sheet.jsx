@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
+import PhotoManagerModal from './PhotoManagerModal'
 
-const COLS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+const COLS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
 
 export default function Sheet() {
   const [rows, setRows] = useState([])
@@ -11,6 +12,7 @@ export default function Sheet() {
   const [loading, setLoading] = useState(true)
   const [showAiScanner, setShowAiScanner] = useState(false)
   const [showSmartPaste, setShowSmartPaste] = useState(false)
+  const [photoModalProduct, setPhotoModalProduct] = useState(null)
 
   useEffect(() => {
     if (!supabase) return;
@@ -76,7 +78,10 @@ export default function Sheet() {
       sku: newSku,
       title: '',
       why_buy: '',
-      image_url: '',
+      usage_instructions: '',
+      primary_image_url: null,
+      after_use_image_url: null,
+      sample_image_urls: [],
       retail_price: 0,
       vip_price: 0,
       total_stock: 0,
@@ -131,7 +136,7 @@ export default function Sheet() {
               </tr>
               <tr className="bg-navy text-left text-xs font-semibold text-white">
                 <th className="border border-navy-soft px-2 py-1.5 text-center tabular">1</th>
-                {['SKU', 'Product', 'Description', 'Image URL', 'Master stock', 'Retail ₱', 'Wholesale ₱', 'Status'].map((h) => (
+                {['SKU', 'Product', 'Description', 'Usage', 'Primary Photo', 'After-Use', 'Samples', 'Master stock', 'Retail ₱', 'Wholesale ₱', 'Status'].map((h) => (
                   <th key={h} className="border border-navy-soft px-2.5 py-1.5">{h}</th>
                 ))}
               </tr>
@@ -176,20 +181,35 @@ export default function Sheet() {
                     <Cell onSelect={() => setSelected({ row: i, col: 3 })} selected={selected.row === i && selected.col === 3} className="max-w-48 p-0">
                       <input 
                         type="text" 
-                        value={r.image_url || ''} 
+                        value={r.usage_instructions || ''} 
                         onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, image_url: e.target.value } : row))
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, usage_instructions: e.target.value } : row))
                         }}
-                        onBlur={(e) => updateField(i, 'image_url', e.target.value)}
+                        onBlur={(e) => updateField(i, 'usage_instructions', e.target.value)}
                         onFocus={() => setSelected({ row: i, col: 3 })}
                         className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
-                        placeholder="URL..."
+                        placeholder="Usage..."
                       />
+                    </Cell>
+                    <Cell onSelect={() => setPhotoModalProduct(r)} selected={false} className="text-center p-0 cursor-pointer hover:bg-black/5 transition-colors">
+                      <div className="w-full h-full flex items-center justify-center p-1" onClick={() => setPhotoModalProduct(r)}>
+                        {r.primary_image_url ? <span className="text-forest text-xs font-bold" title="Uploaded">✅</span> : <span className="text-crimson text-xs font-bold" title="Missing">❌</span>}
+                      </div>
+                    </Cell>
+                    <Cell onSelect={() => setPhotoModalProduct(r)} selected={false} className="text-center p-0 cursor-pointer hover:bg-black/5 transition-colors">
+                      <div className="w-full h-full flex items-center justify-center p-1" onClick={() => setPhotoModalProduct(r)}>
+                        {r.after_use_image_url ? <span className="text-forest text-xs font-bold" title="Uploaded">✅</span> : <span className="text-crimson text-xs font-bold" title="Missing">❌</span>}
+                      </div>
+                    </Cell>
+                    <Cell onSelect={() => setPhotoModalProduct(r)} selected={false} className="text-center p-0 cursor-pointer hover:bg-black/5 transition-colors">
+                      <div className="w-full h-full flex items-center justify-center p-1 text-[10px] font-bold text-navy/60" onClick={() => setPhotoModalProduct(r)}>
+                        {r.sample_image_urls?.length || 0}/5
+                      </div>
                     </Cell>
                     <td
                       className={
                         'border px-0 tabular ' +
-                        (selected.row === i && selected.col === 4
+                        (selected.row === i && selected.col === 7
                           ? 'border-[2px] border-blue'
                           : 'border-line') +
                         (low ? ' bg-crimson-wash' : '')
@@ -199,7 +219,7 @@ export default function Sheet() {
                         type="number"
                         value={r.total_stock}
                         min={0}
-                        onFocus={() => setSelected({ row: i, col: 4 })}
+                        onFocus={() => setSelected({ row: i, col: 7 })}
                         onChange={(e) => {
                           setRows(prev => prev.map((row, idx) => idx === i ? { ...row, total_stock: e.target.value } : row))
                         }}
@@ -210,12 +230,12 @@ export default function Sheet() {
                         }
                       />
                     </td>
-                    <Cell onSelect={() => setSelected({ row: i, col: 5 })} selected={selected.row === i && selected.col === 5} className="text-right tabular p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 8 })} selected={selected.row === i && selected.col === 8} className="text-right tabular p-0">
                       <input
                         type="number"
                         value={r.retail_price}
                         min={0}
-                        onFocus={() => setSelected({ row: i, col: 5 })}
+                        onFocus={() => setSelected({ row: i, col: 8 })}
                         onChange={(e) => {
                           setRows(prev => prev.map((row, idx) => idx === i ? { ...row, retail_price: e.target.value } : row))
                         }}
@@ -223,12 +243,12 @@ export default function Sheet() {
                         className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-navy"
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 6 })} selected={selected.row === i && selected.col === 6} className="text-right text-blue tabular p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 9 })} selected={selected.row === i && selected.col === 9} className="text-right text-blue tabular p-0">
                       <input
                         type="number"
                         value={r.vip_price}
                         min={0}
-                        onFocus={() => setSelected({ row: i, col: 6 })}
+                        onFocus={() => setSelected({ row: i, col: 9 })}
                         onChange={(e) => {
                           setRows(prev => prev.map((row, idx) => idx === i ? { ...row, vip_price: e.target.value } : row))
                         }}
@@ -236,11 +256,11 @@ export default function Sheet() {
                         className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-blue"
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 7 })} selected={selected.row === i && selected.col === 7} className="text-center font-medium p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 10 })} selected={selected.row === i && selected.col === 10} className="text-center font-medium p-0">
                       <select 
                         value={r.status}
                         onChange={(e) => updateField(i, 'status', e.target.value)}
-                        onFocus={() => setSelected({ row: i, col: 7 })}
+                        onFocus={() => setSelected({ row: i, col: 10 })}
                         className={'w-full h-full bg-transparent px-2 py-1.5 text-xs outline-none cursor-pointer appearance-none text-center ' + (isDraft ? 'text-amber font-bold' : 'text-forest font-bold')}
                       >
                         <option value="Active">Active</option>
@@ -308,6 +328,13 @@ export default function Sheet() {
         <span className="border-b-2 border-forest pb-0.5 font-semibold text-navy">Master inventory</span>
         <span className="ml-auto tabular">{rows.filter((r) => r.total_stock <= 5).length} low-stock rows highlighted</span>
       </div>
+      {photoModalProduct && (
+        <PhotoManagerModal 
+          product={photoModalProduct} 
+          onClose={() => setPhotoModalProduct(null)} 
+          onSave={() => fetchProducts()}
+        />
+      )}
     </div>
   )
 }

@@ -80,6 +80,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
         retail_price: Number(parsedProduct.retail_price) || 0,
         vip_price: Number(parsedProduct.wholesale_price) || 0,
         why_buy: parsedProduct.why_buy || '',
+        usage_instructions: parsedProduct.usage_instructions || '',
         primary_image_url: parsedProduct.primary_image_url || null,
         after_use_image_url: parsedProduct.after_use_image_url || null,
         sample_image_urls: parsedProduct.sample_image_urls || [],
@@ -200,6 +201,16 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                       className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-purple-500 h-24 resize-none"
                       value={parsedProduct.description}
                       onChange={(e) => setParsedProduct({...parsedProduct, description: e.target.value})}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-white/40 block mb-1">Usage / Instructions</label>
+                    <textarea 
+                      className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-purple-500 h-24 resize-none"
+                      value={parsedProduct.usage_instructions || ''}
+                      onChange={(e) => setParsedProduct({...parsedProduct, usage_instructions: e.target.value})}
+                      placeholder="e.g. 1. Apply to face. 2. Wash off after 10 mins."
                     />
                   </div>
                   

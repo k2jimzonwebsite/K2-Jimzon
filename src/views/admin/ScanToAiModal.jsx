@@ -69,7 +69,8 @@ Required JSON structure:
   "description": "string (SEO optimized, engaging, 3-4 sentences)",
   "retail_price": number (leave as 0 if unknown),
   "wholesale_price": number (leave as 0 if unknown),
-  "why_buy": "string (3 punchy marketing bullet points separated by \\n)"
+  "why_buy": "string (3 punchy marketing bullet points separated by \\n)",
+  "usage_instructions": "string (clear steps on how to use or instructions, separated by \\n, or leave empty if not applicable)"
 }
 
 Optional Directions:
