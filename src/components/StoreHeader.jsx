@@ -1,6 +1,6 @@
 import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
-import { BagIcon, SearchIcon } from './ui/icons'
+import { BagIcon, SearchIcon, MoonIcon, SunIcon } from './ui/icons'
 
 function SearchBox({ className = '' }) {
   const { query, setQuery, go, view } = useStore()
@@ -22,7 +22,7 @@ function SearchBox({ className = '' }) {
 }
 
 export default function StoreHeader() {
-  const { go, count, setCartOpen, isWholesale, setIsWholesale } = useStore()
+  const { go, count, setCartOpen, isWholesale, setIsWholesale, isDark, toggleDarkMode } = useStore()
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/95 md:bg-cream/85 md:backdrop-blur-xl md:top-10">
@@ -61,6 +61,14 @@ export default function StoreHeader() {
               {count}
             </span>
           )}
+        </button>
+
+        <button
+          onClick={toggleDarkMode}
+          className="relative rounded-md p-2.5 text-navy transition-colors hover:bg-shell"
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {isDark ? <SunIcon size={20} /> : <MoonIcon size={20} />}
         </button>
       </div>
 

@@ -24,6 +24,24 @@ export function StoreProvider({ children }) {
   const [requests, setRequests] = useState(INITIAL_REQUESTS)
   const [dbProducts, setDbProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') === 'dark'
+    }
+    return false
+  })
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    }
+  }, [isDark])
+
+  const toggleDarkMode = () => setIsDark(!isDark)
 
   useEffect(() => {
     fetchProducts()
@@ -274,8 +292,10 @@ export function StoreProvider({ children }) {
     products, // Now serving the merged rich + live data
     loading,
     getProduct,
+    isDark,
+    toggleDarkMode,
     ...totals,
-  }), [view, productId, cart, cartOpen, isWholesale, user, order, query, category, requests, products, loading, totals])
+  }), [view, productId, cart, cartOpen, isWholesale, user, order, query, category, requests, products, loading, totals, isDark])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }
