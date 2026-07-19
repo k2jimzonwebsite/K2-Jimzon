@@ -62,6 +62,10 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
 
   const handleSave = async () => {
     if (!parsedProduct) return
+    if (!parsedProduct.sku) {
+      alert("SKU is required! Please type it into the SKU box if the AI forgot it.")
+      return
+    }
     setSaving(true)
 
     // Check if SKU exists
@@ -160,7 +164,16 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
               <div className="max-w-sm w-full space-y-6 animate-in zoom-in-95">
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-sm font-semibold uppercase tracking-wider text-white/50">Preview & Edit</h3>
-                  <span className="text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-1 rounded">SKU: {parsedProduct.sku}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-white/40">SKU:</span>
+                    <input 
+                      type="text"
+                      className="text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-1 rounded w-32 focus:outline-none focus:ring-1 focus:ring-purple-400"
+                      value={parsedProduct.sku || ''}
+                      onChange={(e) => setParsedProduct({...parsedProduct, sku: e.target.value})}
+                      placeholder="Enter SKU..."
+                    />
+                  </div>
                 </div>
                 
                 <div className="space-y-4">
