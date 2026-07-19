@@ -1,6 +1,7 @@
 import { useState, useEffect, Suspense, lazy } from 'react'
 import { AlertIcon, BoxIcon, GlobeIcon, GridIcon, SyncIcon, UserIcon, InboxIcon } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
+import CommandPalette from './CommandPalette'
 
 // Lazy loaded heavy components to reduce initial bundle lag
 const Kanban = lazy(() => import('./Kanban'))
