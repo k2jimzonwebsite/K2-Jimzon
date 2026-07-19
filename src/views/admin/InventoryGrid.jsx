@@ -39,7 +39,7 @@ export default function InventoryGrid() {
     e.preventDefault()
     if (!editingProduct) return
 
-    const { sku, title, description, image_url, retail_price, vip_price, total_stock, status } = editingProduct
+    const { sku, title, why_buy, image_url, retail_price, vip_price, total_stock, status } = editingProduct
     
     // Optimistic UI update
     setProducts((prev) => prev.map(p => p.sku === sku ? editingProduct : p))
@@ -48,7 +48,7 @@ export default function InventoryGrid() {
     // Push to Supabase
     const { error } = await supabase
       .from('products')
-      .update({ title, description, image_url, retail_price, vip_price, total_stock, status })
+      .update({ title, why_buy, image_url, retail_price, vip_price, total_stock, status })
       .eq('sku', sku)
       
     if (error) {
@@ -130,8 +130,8 @@ export default function InventoryGrid() {
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Description (For Storefront)</label>
                 <textarea 
-                  value={editingProduct.description || ''}
-                  onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})}
+                  value={editingProduct.why_buy || ''}
+                  onChange={(e) => setEditingProduct({...editingProduct, why_buy: e.target.value})}
                   className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none resize-none h-20"
                 />
               </div>

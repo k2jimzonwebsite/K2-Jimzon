@@ -122,11 +122,11 @@ export default function Sheet() {
                     <Cell onSelect={() => setSelected({ row: i, col: 2 })} selected={selected.row === i && selected.col === 2} className="max-w-64 p-0">
                       <input 
                         type="text" 
-                        value={r.description || ''} 
+                        value={r.why_buy || ''} 
                         onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, description: e.target.value } : row))
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, why_buy: e.target.value } : row))
                         }}
-                        onBlur={(e) => updateField(i, 'description', e.target.value)}
+                        onBlur={(e) => updateField(i, 'why_buy', e.target.value)}
                         onFocus={() => setSelected({ row: i, col: 2 })}
                         className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
                         placeholder="Description..."
