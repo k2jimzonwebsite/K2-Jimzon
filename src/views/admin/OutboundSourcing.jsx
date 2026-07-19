@@ -11,6 +11,7 @@ export default function OutboundSourcing() {
   const [manifest, setManifest] = useState([]) // Array of {sku, title, quantity}
   const [supplierName, setSupplierName] = useState("Italy Warehouse")
   
+  const scanHistory = useRef({ sku: null, time: 0 })
   const [lastScan, setLastScan] = useState(null)
   const scannerRef = useRef(null)
   const [scannerActive, setScannerActive] = useState(false)
@@ -56,19 +57,24 @@ export default function OutboundSourcing() {
   }
 
   const handleScan = async (sku) => {
-    if (navigator.vibrate) navigator.vibrate(50)
-    stopScanner() // Pause scanner to process
+    const now = Date.now()
+    if (scanHistory.current.sku === sku && now - scanHistory.current.time < 2000) {
+      return // Ignore rapid duplicate scans
+    }
+    scanHistory.current = { sku, time: now }
     
     // Check if it exists in DB
     const { data: product, error } = await supabase.from('products').select('sku, title').eq('sku', sku).single()
     
     if (product) {
+      if (navigator.vibrate) navigator.vibrate(50)
       // Exists! Add to manifest
       addToManifest(product.sku, product.title)
       setLastScan({ type: 'success', message: `Added: ${product.title}` })
       setTimeout(() => setLastScan(null), 3000)
-      startScanner() // Resume
     } else {
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100])
+      stopScanner() // Pause scanner to process AI flow
       // Does not exist! Launch AI flow
       setLastScan({ type: 'error', message: `Unknown SKU: ${sku}. Creating new product...` })
       setMissingSku(sku)

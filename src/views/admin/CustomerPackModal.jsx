@@ -7,6 +7,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
   const [scanned, setScanned] = useState(0)
   const [lastScan, setLastScan] = useState(null)
   
+  const scanHistory = useRef({ sku: null, time: 0 })
   const scannerRef = useRef(null)
   const [scannerActive, setScannerActive] = useState(false)
 
@@ -49,6 +50,12 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
 
   const handleScan = (sku) => {
     if (isComplete) return
+    const now = Date.now()
+    if (scanHistory.current.sku === sku && now - scanHistory.current.time < 2000) {
+      return // Ignore rapid duplicate scans
+    }
+    scanHistory.current = { sku, time: now }
+
     if (navigator.vibrate) navigator.vibrate(50)
 
     if (sku === order.sku) {
