@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import ScanToAiModal from './ScanToAiModal'
 
 const COLS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
 export default function Sheet() {
   const [rows, setRows] = useState([])
-  const [selected, setSelected] = useState({ row: 0, col: 2 })
+  const [selected, setSelected] = useState({ row: -1, col: -1 })
   const [loading, setLoading] = useState(true)
+  const [showAiScanner, setShowAiScanner] = useState(false)
 
   useEffect(() => {
     if (!supabase) return;
@@ -249,7 +251,7 @@ export default function Sheet() {
             </tbody>
           </table>
         )}
-        <div className="p-2 border-t border-line border-dashed">
+        <div className="p-2 border-t border-line border-dashed flex items-center gap-3">
           <button 
             onClick={handleAddRow}
             className="flex items-center gap-2 text-xs font-semibold text-blue hover:text-navy transition-colors px-2 py-1"
@@ -259,8 +261,27 @@ export default function Sheet() {
             </svg>
             Add New Row
           </button>
+          <button 
+            onClick={() => setShowAiScanner(true)}
+            className="flex items-center gap-2 text-xs font-semibold text-forest hover:text-forest/80 transition-colors px-2 py-1"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+            </svg>
+            Scan & Generate with AI
+          </button>
         </div>
       </div>
+
+      {showAiScanner && (
+        <ScanToAiModal 
+          onClose={() => setShowAiScanner(false)} 
+          onProductAdded={() => {
+            fetchProducts()
+            setShowAiScanner(false)
+          }} 
+        />
+      )}
 
       <div className="flex items-center gap-4 border-t border-line bg-paper px-3 py-1.5 text-xs text-navy-soft">
         <span className="border-b-2 border-forest pb-0.5 font-semibold text-navy">Master inventory</span>

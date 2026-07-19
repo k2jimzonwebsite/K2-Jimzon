@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import ScanToAiModal from './ScanToAiModal'
 
 export default function InventoryGrid() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [editingProduct, setEditingProduct] = useState(null)
   const [isAdding, setIsAdding] = useState(false)
+  const [showAiScanner, setShowAiScanner] = useState(false)
 
   useEffect(() => {
     if (!supabase) return;
@@ -89,19 +91,42 @@ export default function InventoryGrid() {
     <div className="animate-in fade-in duration-500 relative min-h-full">
       <div className="mb-6 flex items-center justify-between">
         <p className="text-sm text-white/50">Manage your inventory visually. Click Edit to update product details.</p>
-        <button 
-          onClick={() => {
-            setIsAdding(true);
-            setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random()*10000)}`, title: '', why_buy: '', image_url: '', retail_price: 0, vip_price: 0, total_stock: 0, status: 'Draft' });
-          }}
-          className="flex items-center gap-2 rounded bg-blue/20 text-blue hover:bg-blue hover:text-white transition-colors px-3 py-1.5 text-xs font-semibold"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Add New Product
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setShowAiScanner(true)}
+            className="flex items-center gap-2 rounded bg-forest/20 text-forest hover:bg-forest hover:text-white transition-colors px-3 py-1.5 text-xs font-semibold"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            Scan & Generate
+          </button>
+          
+          <button 
+            onClick={() => {
+              setIsAdding(true);
+              setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random()*10000)}`, title: '', why_buy: '', image_url: '', retail_price: 0, vip_price: 0, total_stock: 0, status: 'Draft' });
+            }}
+            className="flex items-center gap-2 rounded bg-blue/20 text-blue hover:bg-blue hover:text-white transition-colors px-3 py-1.5 text-xs font-semibold"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Manual Add
+          </button>
+        </div>
       </div>
+
+      {showAiScanner && (
+        <ScanToAiModal 
+          onClose={() => setShowAiScanner(false)} 
+          onProductAdded={() => {
+            fetchProducts()
+            setShowAiScanner(false)
+          }} 
+        />
+      )}
 
       {loading && products.length === 0 ? (
         <div className="flex h-64 items-center justify-center text-white/40">Loading products...</div>
