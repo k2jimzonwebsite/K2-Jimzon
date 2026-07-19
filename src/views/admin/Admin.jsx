@@ -11,6 +11,7 @@ import CommandPalette from './CommandPalette'
 import Overview from './Overview'
 import Suppliers from './Suppliers'
 import PurchaseOrders from './PurchaseOrders'
+import BulkCsvImportModal from './BulkCsvImportModal'
 import { supabase } from '../../lib/supabaseClient'
 
 const NAV_COMMERCE = [
@@ -36,6 +37,7 @@ export default function Admin() {
   const [sheetMode, setSheetMode] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showCsvImport, setShowCsvImport] = useState(false)
   
   // KPI States
   const [activeSkus, setActiveSkus] = useState(0)
@@ -296,8 +298,18 @@ export default function Admin() {
               Search Command <kbd className="ml-1 rounded border border-white/20 bg-black/50 px-1 font-sans text-[10px]">Ctrl K</kbd>
             </button>
             {section === 'inventory' && (
-              <label className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-white/70">
-                Sheet Mode
+              <div className="flex items-center gap-4 border-l border-white/10 pl-4">
+                <button
+                  onClick={() => setShowCsvImport(true)}
+                  className="hidden md:flex items-center gap-2 rounded-md bg-forest/10 border border-forest/30 px-3 py-1.5 text-xs font-medium text-forest hover:bg-forest/20 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                  Upload CSV
+                </button>
+                <label className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-white/70">
+                  Sheet Mode
                 <button
                   role="switch"
                   aria-checked={sheetMode}
@@ -315,6 +327,7 @@ export default function Admin() {
                   />
                 </button>
               </label>
+              </div>
             )}
           </div>
         </header>
