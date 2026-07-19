@@ -5,19 +5,20 @@ import CatalogGrid from '../components/CatalogGrid'
 import { RedButton, StockPill, TrustBadge, Kicker, QuantityStepper } from '../components/ui/bits'
 import { StarIcon, ArrowIcon } from '../components/ui/icons'
 import { useStore } from '../context/StoreContext'
-import { getProduct, peso, products } from '../data/products'
+import { peso } from '../data/products'
 
 export default function ProductDetail() {
-  const { productId } = useStore()
+  const { productId, products, getProduct } = useStore()
   
   // Determine which products to show in the carousel
   const slideshowProducts = useMemo(() => {
     const withGuide = products.filter(p => p.guide)
     if (productId && !withGuide.find(p => p.id === productId)) {
-      return [getProduct(productId), ...withGuide]
+      const active = getProduct(productId)
+      return active ? [active, ...withGuide] : withGuide
     }
     return withGuide
-  }, [productId])
+  }, [productId, products, getProduct])
 
   const [activeIndex, setActiveIndex] = useState(() => {
     return Math.max(0, slideshowProducts.findIndex(p => p.id === productId))
@@ -53,6 +54,14 @@ export default function ProductDetail() {
   }
 
   const activeProduct = slideshowProducts[activeIndex]
+
+  if (!activeProduct) {
+    return (
+      <main className="min-h-screen bg-cream flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-t-navy border-r-navy border-b-transparent border-l-transparent animate-spin" />
+      </main>
+    )
+  }
 
   return (
     <main className="mx-auto max-w-6xl px-4 pb-24 pt-6 md:pb-16 md:pt-10">
