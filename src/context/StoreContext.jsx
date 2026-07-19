@@ -29,6 +29,8 @@ export function StoreProvider({ children }) {
     fetchProducts()
     checkUser()
 
+    if (!supabase) return;
+
     const channel = supabase
       .channel('public:products:store')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
@@ -40,11 +42,16 @@ export function StoreProvider({ children }) {
 
     return () => {
       supabase.removeChannel(channel)
-      subscription.unsubscribe()
+      subscription?.unsubscribe()
     }
   }, [])
 
   const checkUser = async (authUser = null) => {
+    if (!supabase) {
+      setUser(null)
+      setIsWholesale(false)
+      return
+    }
     const u = authUser || (await supabase.auth.getUser()).data?.user
     setUser(u)
     if (u) {
@@ -60,6 +67,7 @@ export function StoreProvider({ children }) {
   }
 
   const fetchProducts = async () => {
+    if (!supabase) return;
     const { data, error } = await supabase
       .from('products')
       .select('*')
@@ -198,6 +206,13 @@ export function StoreProvider({ children }) {
       payment_status: 'Unpaid'
     }))
 
+    if (!supabase) {
+      alert("Checkout failed: Supabase is not configured.");
+      return;
+    }
+    
+    // Simulate complex transaction by updating stock & inserting orders
+    let success = true
     for (const line of orderLines) {
       const { error: lockError } = await supabase.rpc('decrement_stock', { p_sku: line.sku, p_quantity: line.quantity })
       if (lockError) {

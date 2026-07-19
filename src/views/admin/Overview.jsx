@@ -18,6 +18,7 @@ export default function Overview({ setSection }) {
   ]
 
   useEffect(() => {
+    if (!supabase) return;
     fetchData()
 
     const channel = supabase.channel('overview_updates')
@@ -29,6 +30,7 @@ export default function Overview({ setSection }) {
   }, [])
 
   const fetchData = async () => {
+    if (!supabase) return;
     // 1. Pending Orders
     const { count: pCount } = await supabase.from('orders')
       .select('*', { count: 'exact', head: true })

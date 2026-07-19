@@ -7,6 +7,7 @@ export default function Customers() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!supabase) return;
     fetchCustomers()
 
     const channel = supabase
@@ -22,6 +23,10 @@ export default function Customers() {
   }, [])
 
   const fetchCustomers = async () => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
     const { data, error } = await supabase
       .from('user_profiles')
       .select('*')
@@ -34,6 +39,7 @@ export default function Customers() {
   }
 
   const toggleRole = async (id, currentRole) => {
+    if (!supabase) return;
     const nextRole = currentRole === 'VIP' ? 'Customer' : 'VIP'
     
     // Optimistic UI

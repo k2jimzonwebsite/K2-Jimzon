@@ -8,6 +8,7 @@ export default function InventoryGrid() {
   const [isAdding, setIsAdding] = useState(false)
 
   useEffect(() => {
+    if (!supabase) return;
     fetchProducts()
     
     // Subscribe to real-time changes
@@ -24,6 +25,10 @@ export default function InventoryGrid() {
   }, [])
 
   const fetchProducts = async () => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
     setLoading(true)
     const { data, error } = await supabase
       .from('products')
@@ -42,6 +47,8 @@ export default function InventoryGrid() {
 
     const { sku, title, why_buy, image_url, retail_price, vip_price, total_stock, status } = editingProduct
     
+    if (!supabase) return;
+
     if (isAdding) {
       if (!sku) {
         alert("SKU is required for new products.");

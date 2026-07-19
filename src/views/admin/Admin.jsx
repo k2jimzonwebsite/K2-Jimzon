@@ -42,6 +42,7 @@ export default function Admin() {
   const [pendingOrders, setPendingOrders] = useState(0)
 
   useEffect(() => {
+    if (!supabase) return;
     fetchKpis()
 
     // Listen to all changes across products and orders to keep KPIs fresh
@@ -57,6 +58,7 @@ export default function Admin() {
   }, [])
 
   const fetchKpis = async () => {
+    if (!supabase) return;
     const { data: prodData } = await supabase.from('products').select('total_stock')
     if (prodData) {
       setActiveSkus(prodData.length)

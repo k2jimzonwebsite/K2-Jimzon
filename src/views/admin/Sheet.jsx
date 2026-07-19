@@ -9,6 +9,7 @@ export default function Sheet() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!supabase) return;
     fetchProducts()
     
     // Subscribe to real-time changes
@@ -25,6 +26,10 @@ export default function Sheet() {
   }, [])
 
   const fetchProducts = async () => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
     setLoading(true)
     const { data, error } = await supabase
       .from('products')
@@ -47,6 +52,8 @@ export default function Sheet() {
     // Optimistic UI update
     setRows((prev) => prev.map((r, i) => (i === index ? { ...r, [field]: finalValue } : r)))
     
+    if (!supabase) return;
+
     // Push to Supabase
     const { error } = await supabase
       .from('products')
@@ -75,6 +82,8 @@ export default function Sheet() {
     // Optimistic insert
     setRows(prev => [...prev, newProduct])
     
+    if (!supabase) return;
+
     // Push to Supabase
     const { error } = await supabase.from('products').insert([newProduct])
     

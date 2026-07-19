@@ -25,6 +25,7 @@ export default function Kanban() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!supabase) return;
     fetchOrders()
 
     const channel = supabase
@@ -40,6 +41,10 @@ export default function Kanban() {
   }, [])
 
   const fetchOrders = async () => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
     const { data, error } = await supabase
       .from('orders')
       .select('*, products(title, retail_price, vip_price)')
@@ -53,7 +58,7 @@ export default function Kanban() {
 
   const updateOrderStatus = async (id, currentStatus) => {
     const nextStatus = currentStatus === 'Pending' ? 'Packed' : currentStatus === 'Packed' ? 'Shipped' : null;
-    if (!nextStatus) return;
+    if (!nextStatus || !supabase) return;
 
     // Optimistic update
     setOrders(prev => prev.map(o => o.id === id ? { ...o, order_status: nextStatus } : o))
