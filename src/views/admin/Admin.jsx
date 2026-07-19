@@ -267,8 +267,8 @@ export default function Admin() {
         )}
 
         <header className="flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#0A101D] px-4 py-3.5 md:px-6">
-          <div>
-            <h1 className="font-serif text-xl font-semibold tracking-tight text-white">
+          <div className="flex-1 min-w-0">
+            <h1 className="font-serif text-xl font-semibold tracking-tight text-white truncate">
               {section === 'globe' ? '3D Map Settings' : section === 'wholesale' ? 'VIP Customers' : section === 'sourcing' ? 'Pending AI Products' : section === 'inbox' ? 'Customer Messages' : section === 'inventory' ? 'All Products' : section === 'suppliers' ? 'Supplier Contacts' : section === 'pos' ? 'Incoming Deliveries' : section === 'kanban' ? 'Pack & Ship Orders' : 'Home Dashboard'}
             </h1>
             <p className="text-xs font-mono text-white/50 mt-1">
@@ -377,16 +377,16 @@ function KpiRow({ skus, lowStock, pending }) {
     <div className="grid grid-cols-2 gap-px border-b border-white/10 bg-white/10 md:grid-cols-4 shrink-0">
       {KPIS.map((k) => (
         <div key={k.label} className={'px-4 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-crimson/10' : 'bg-[#05080f]')}>
-          <p className="text-[10px] font-mono uppercase tracking-widest text-white/50">{k.label}</p>
+          <p className="text-[10px] font-mono uppercase tracking-widest text-white/50 truncate pr-2">{k.label}</p>
           <p
             className={
-              'mt-1 text-2xl font-bold tabular tracking-tight ' +
+              'mt-2 text-xl md:text-2xl font-bold tabular tracking-tight ' +
               (k.tone === 'danger' ? 'text-crimson' : k.tone === 'good' ? 'text-forest' : 'text-white')
             }
           >
             {k.value}
           </p>
-          <p className="text-xs text-white/30 mt-1">{k.sub}</p>
+          <p className="text-xs text-white/30 mt-1 truncate pr-2">{k.sub}</p>
         </div>
       ))}
     </div>

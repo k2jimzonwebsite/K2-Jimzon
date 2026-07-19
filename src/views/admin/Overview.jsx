@@ -77,7 +77,7 @@ export default function Overview({ setSection }) {
     <div className="space-y-6 animate-in fade-in duration-500">
       
       {/* Health Monitors */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <HealthWidget label="Today's Sales" status="good" />
         <HealthWidget label="Stock Levels" status="warning" />
         <HealthWidget label="Packing Speed" status="good" />
@@ -172,9 +172,9 @@ export default function Overview({ setSection }) {
 function HealthWidget({ label, status }) {
   const isGood = status === 'good'
   return (
-    <div className="flex items-center justify-between rounded-xl border border-white/10 bg-[#05080f] px-4 py-3">
-      <span className="text-xs font-medium text-white/60">{label}</span>
-      <div className={`flex h-4 w-4 items-center justify-center rounded-full ${isGood ? 'bg-forest/20' : 'bg-amber/20'}`}>
+    <div className="flex items-center justify-between rounded-xl border border-white/10 bg-[#05080f] px-4 py-3 min-w-0">
+      <span className="text-xs font-medium text-white/60 truncate pr-2 flex-1">{label}</span>
+      <div className={`shrink-0 flex h-4 w-4 items-center justify-center rounded-full ${isGood ? 'bg-forest/20' : 'bg-amber/20'}`}>
         <div className={`h-2 w-2 rounded-full ${isGood ? 'bg-forest' : 'bg-amber'}`} />
       </div>
     </div>
