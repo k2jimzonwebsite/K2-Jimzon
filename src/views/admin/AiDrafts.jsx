@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { CheckIcon, InboxIcon, AlertIcon } from '../../components/ui/icons'
 import { peso } from '../../data/products'
+import { supabase } from '../../lib/supabaseClient'
 
 // Mock incoming payloads from the Italian operator using the Custom GPT/Gemini AI
 const INITIAL_DRAFTS = [
@@ -15,13 +16,26 @@ const INITIAL_DRAFTS = [
       wholesale: 390,
       stock: 24,
       origin: 'Milan, IT',
+      size: '304g jar',
+      hue: 45,
+      tag: 'ITALY EXCLUSIVE',
+      why_buy: 'A crisp, golden biscuit hugging a creamy heart of authentic Nutella. It’s the ultimate Italian morning ritual.',
+      why_rare: 'Often sold out in Rome; imported directly to avoid third-party markups.',
+      inside: '1 x 304g resealable bag',
+      pairings: ['Espresso', 'Latte Macchiato']
     },
     rawJson: `{
   "item": "Nutella Biscuits",
   "weight": "304g",
   "suggested_retail": 499,
   "suggested_wholesale": 390,
-  "count": 24
+  "count": 24,
+  "hue": 45,
+  "tag": "ITALY EXCLUSIVE",
+  "why_buy": "A crisp, golden biscuit hugging a creamy heart...",
+  "why_rare": "Often sold out in Rome...",
+  "inside": "1 x 304g resealable bag",
+  "pairings": ["Espresso", "Latte Macchiato"]
 }`
   },
   {
@@ -34,6 +48,13 @@ const INITIAL_DRAFTS = [
       wholesale: 1450,
       stock: 12,
       origin: 'Rome, IT',
+      size: '1kg bag',
+      hue: 40,
+      tag: 'RESTOCKED',
+      why_buy: 'A unique combination of 6 varieties of Arabica beans from among the finest of Central and South America.',
+      why_rare: 'The true Italian roast profile, distinct from local adaptations.',
+      inside: '1 x 1kg whole bean bag',
+      pairings: ['Biscotti', 'Tiramisu']
     },
     rawJson: `{
   "item": "Lavazza Oro Beans",
@@ -41,6 +62,12 @@ const INITIAL_DRAFTS = [
   "suggested_retail": 1850,
   "suggested_wholesale": 1450,
   "count": 12,
+  "hue": 40,
+  "tag": "RESTOCKED",
+  "why_buy": "A unique combination of 6 varieties of Arabica beans...",
+  "why_rare": "The true Italian roast profile...",
+  "inside": "1 x 1kg whole bean bag",
+  "pairings": ["Biscotti", "Tiramisu"],
   "note": "Low confidence on retail price vs PH market"
 }`
   }
@@ -49,15 +76,29 @@ const INITIAL_DRAFTS = [
 export default function AiDrafts({ onApprove }) {
   const [drafts, setDrafts] = useState(INITIAL_DRAFTS)
 
-  const handleApprove = (draft) => {
-    // Pass to parent (Admin.jsx -> Sheet.jsx)
-    onApprove({
+  const handleApprove = async (draft) => {
+    // Push directly to Supabase products table
+    const { error } = await supabase.from('products').insert([{
       sku: draft.sku,
-      name: draft.name,
-      stock: draft.parsedData.stock,
-      retail: draft.parsedData.retail,
-      wholesale: draft.parsedData.wholesale,
-    })
+      title: draft.name,
+      total_stock: draft.parsedData.stock,
+      retail_price: draft.parsedData.retail,
+      vip_price: draft.parsedData.wholesale,
+      origin: draft.parsedData.origin,
+      size: draft.parsedData.size,
+      hue: draft.parsedData.hue,
+      tag: draft.parsedData.tag,
+      why_buy: draft.parsedData.why_buy,
+      why_rare: draft.parsedData.why_rare,
+      inside: draft.parsedData.inside,
+      pairings: draft.parsedData.pairings,
+      status: 'Live'
+    }])
+
+    if (error) {
+      alert("Failed to push to database: " + error.message)
+      return
+    }
     
     // Remove from local queue
     setDrafts(prev => prev.filter(d => d.id !== draft.id))

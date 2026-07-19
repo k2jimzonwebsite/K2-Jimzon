@@ -2,7 +2,7 @@ import { useMemo, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useStore } from '../context/StoreContext'
 import { useGlobeCms } from '../data/globeCms'
-import { byCollection, CATEGORIES, COLLECTIONS, peso, products } from '../data/products'
+import { byCollection, CATEGORIES, COLLECTIONS, peso } from '../data/products'
 import { FAQS, LIFESTYLE, REVIEWS } from '../data/site'
 import ProductGlobe from '../components/globe/ProductGlobe'
 import GlobeOverlay from '../components/globe/GlobeOverlay'
@@ -207,6 +207,7 @@ function CategoryTiles() {
 /* ---------- Minimalist New Arrivals Showcase ---------- */
 
 function NewArrivals() {
+  const { products } = useStore()
   const arrivals = products.slice(0, 5)
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -270,18 +271,22 @@ function NewArrivals() {
       </div>
 
       <div className="relative h-[500px] md:h-[500px] w-full">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeProduct.id}
-            initial={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
-            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute inset-0 h-full w-full"
-          >
-            <ProductCard product={activeProduct} index={0} featured={true} />
-          </motion.div>
-        </AnimatePresence>
+        {activeProduct ? (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeProduct.sku}
+              initial={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
+              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0 h-full w-full"
+            >
+              <ProductCard product={activeProduct} index={0} featured={true} />
+            </motion.div>
+          </AnimatePresence>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-navy-soft">Loading New Arrivals...</div>
+        )}
       </div>
       </div>
     </section>

@@ -6,7 +6,7 @@ import { TrustBadge, StockPill } from './ui/bits'
 
 export default function ProductCard({ product, index = 0, compact = false, featured = false }) {
   const { openProduct, addToCart, setCartOpen, isWholesale } = useStore()
-  const price = isWholesale ? product.wholesale : product.retail
+  const price = isWholesale ? product.vip_price : product.retail_price
 
   return (
     <article
@@ -19,7 +19,7 @@ export default function ProductCard({ product, index = 0, compact = false, featu
           </div>
         </div>
       ) : (
-        <button onClick={() => openProduct(product.id)} className="relative text-left flex flex-col flex-1">
+        <button onClick={() => openProduct(product.sku)} className="relative text-left flex flex-col flex-1">
           <div className="relative w-full overflow-hidden bg-transparent flex items-center justify-center aspect-[4/5] p-6">
             {/* Museum Cabinet Glow */}
             <div 
@@ -49,24 +49,24 @@ export default function ProductCard({ product, index = 0, compact = false, featu
             )}
           </div>
         )}
-        <button onClick={() => openProduct(product.id)} className="text-left mb-2 sm:mb-3">
+        <button onClick={() => openProduct(product.sku)} className="text-left mb-2 sm:mb-3">
           <h3 className={`font-serif font-medium leading-snug transition-colors group-hover:text-crimson line-clamp-2 ${featured ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl text-navy' : 'text-sm sm:text-base text-navy'}`}>
-            {compact ? product.short : product.name}
+            {product.title}
           </h3>
         </button>
         {!compact && (
-          <p className={`font-light truncate ${featured ? 'text-sm sm:text-base mb-4 sm:mb-8 text-navy-soft' : 'text-xs mb-3 text-navy-faint'}`}>{product.size}</p>
+          <p className={`font-light truncate ${featured ? 'text-sm sm:text-base mb-4 sm:mb-8 text-navy-soft' : 'text-xs mb-3 text-navy-faint'}`}></p>
         )}
         <div className="mb-auto" />
         <div className={`border-t border-line flex items-center justify-between ${featured ? 'mt-4 sm:mt-6 md:mt-8 pt-4 sm:pt-6' : 'mt-auto pt-2.5 sm:pt-4'}`}>
           <div>
             <p className={`font-bold tabular text-crimson ${featured ? 'text-lg sm:text-xl md:text-2xl' : 'text-sm sm:text-base lg:text-lg'}`}>{peso(price)}</p>
             {isWholesale && (
-              <p className="text-xs line-through tabular text-navy-faint">{peso(product.retail)}</p>
+              <p className="text-xs line-through tabular text-navy-faint">{peso(product.retail_price)}</p>
             )}
           </div>
           <button
-            onClick={() => { addToCart(product.id); setCartOpen(true) }}
+            onClick={() => { addToCart(product.sku); setCartOpen(true) }}
             className={`rounded-lg bg-crimson font-semibold text-white transition-all hover:bg-crimson-deep active:scale-95 shadow-card ${featured ? 'px-5 sm:px-8 py-2.5 sm:py-3.5 text-sm' : 'px-3 py-1.5 text-xs sm:text-sm sm:px-4 sm:py-2.5'}`}
           >
             Add

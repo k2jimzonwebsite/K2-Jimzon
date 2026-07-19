@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import { useStore } from '../../context/StoreContext'
+import { supabase } from '../../lib/supabaseClient'
 import { BagIcon, BoxIcon, GridIcon, PlaneIcon, ShieldIcon, UserIcon } from '../ui/icons'
+import { motion, AnimatePresence } from 'motion/react'
 
 const VIEWS = [
   { id: 'home', label: 'Home', icon: GridIcon },
@@ -10,11 +13,33 @@ const VIEWS = [
   { id: 'admin', label: 'Admin', icon: ShieldIcon },
 ]
 
-// Prototype view switcher — quiet chrome, distinct from the product UI.
 export default function DemoRail() {
-  const { view, go, isWholesale, lines = [] } = useStore()
+  const { view, go, isWholesale, user, lines = [] } = useStore()
   const active = view === 'confirmation' ? 'checkout' : view
   const cartCount = lines.reduce((acc, line) => acc + line.qty, 0)
+  
+  const [showAuth, setShowAuth] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      alert("Login failed: " + error.message)
+    } else {
+      setShowAuth(false)
+      setEmail('')
+      setPassword('')
+    }
+    setLoading(false)
+  }
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+  }
 
   return (
     <>
@@ -41,10 +66,21 @@ export default function DemoRail() {
               )}
             </button>
           ))}
-          <span className="ml-auto flex items-center gap-2 text-xs text-navy-faint">
-            <span className={'h-1.5 w-1.5 rounded-full pulse-dot ' + (isWholesale ? 'bg-blue' : 'bg-forest')} />
-            {isWholesale ? 'Wholesale account' : 'Retail customer'}
-          </span>
+          <div className="ml-auto flex items-center gap-3">
+            <span className="flex items-center gap-2 text-xs text-navy-faint">
+              <span className={'h-1.5 w-1.5 rounded-full pulse-dot ' + (isWholesale ? 'bg-blue' : 'bg-forest')} />
+              {isWholesale ? 'Wholesale VIP' : 'Retail customer'}
+            </span>
+            {user ? (
+              <button onClick={handleLogout} className="text-xs font-semibold text-navy hover:underline">
+                Sign Out
+              </button>
+            ) : (
+              <button onClick={() => setShowAuth(true)} className="text-xs font-semibold text-blue hover:underline">
+                VIP Login
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -81,6 +117,56 @@ export default function DemoRail() {
           })}
         </div>
       </nav>
+
+      {/* Auth Modal */}
+      <AnimatePresence>
+        {showAuth && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-navy/60 backdrop-blur-sm" onClick={() => setShowAuth(false)} />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-sm overflow-hidden rounded-xl bg-white shadow-float"
+            >
+              <div className="border-b border-line bg-shell px-6 py-4">
+                <h3 className="font-serif text-lg font-semibold text-navy">VIP Portal Login</h3>
+                <p className="text-sm text-navy-soft">Authenticate to unlock tier pricing.</p>
+              </div>
+              <form onSubmit={handleLogin} className="p-6 space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-navy-soft mb-1">Email</label>
+                  <input 
+                    type="email" 
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    className="w-full rounded-md border border-line px-3 py-2 text-sm focus:border-navy focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-navy-soft mb-1">Password</label>
+                  <input 
+                    type="password" 
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    className="w-full rounded-md border border-line px-3 py-2 text-sm focus:border-navy focus:outline-none"
+                  />
+                </div>
+                <div className="pt-2 flex justify-end gap-2">
+                  <button type="button" onClick={() => setShowAuth(false)} className="px-4 py-2 text-sm font-semibold text-navy-soft hover:text-navy">
+                    Cancel
+                  </button>
+                  <button type="submit" disabled={loading} className="rounded-md bg-navy px-5 py-2 text-sm font-semibold text-white hover:bg-navy/90">
+                    {loading ? 'Authenticating...' : 'Log In'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

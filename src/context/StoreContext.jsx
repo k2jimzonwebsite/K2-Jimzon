@@ -1,31 +1,104 @@
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useContext, useMemo, useState, useEffect } from 'react'
 import { flushSync } from 'react-dom'
-import { getProduct } from '../data/products'
+import { supabase } from '../lib/supabaseClient'
+import { products as localProducts } from '../data/products'
 
 const StoreContext = createContext(null)
-
-// Seeded so the checkout demo works immediately without clicking around first.
-const INITIAL_CART = [
-  { id: 'nutella-biscuits', qty: 1 },
-  { id: 'barilla-pesto', qty: 2 },
-]
 
 const INITIAL_REQUESTS = [
   { id: 'PB-1042', item: 'Mulino Bianco Pan di Stelle, 2 boxes', status: 'Buying in Italy', eta: 'Flies 22 Jul' },
   { id: 'PB-1039', item: 'Acqua di Parma shower gel', status: 'Quoted — ₱1,850', eta: 'Awaiting your go' },
-  { id: 'PB-1031', item: 'Caffè Borbone Miscela Blu pods ×100', status: 'In Manila warehouse', eta: 'Delivers tomorrow' },
 ]
 
 export function StoreProvider({ children }) {
   const [view, setView] = useState('home')
-  const [productId, setProductId] = useState('pistachio-cream')
-  const [cart, setCart] = useState(INITIAL_CART)
+  const [productId, setProductId] = useState(null)
+  const [cart, setCart] = useState([])
   const [isWholesale, setIsWholesale] = useState(false)
+  const [user, setUser] = useState(null)
+  
   const [cartOpen, setCartOpen] = useState(false)
   const [order, setOrder] = useState(null)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('All')
   const [requests, setRequests] = useState(INITIAL_REQUESTS)
+  const [dbProducts, setDbProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchProducts()
+    checkUser()
+
+    const channel = supabase
+      .channel('public:products:store')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
+      .subscribe()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      checkUser(session?.user)
+    })
+
+    return () => {
+      supabase.removeChannel(channel)
+      subscription.unsubscribe()
+    }
+  }, [])
+
+  const checkUser = async (authUser = null) => {
+    const u = authUser || (await supabase.auth.getUser()).data?.user
+    setUser(u)
+    if (u) {
+      const { data } = await supabase.from('user_profiles').select('role').eq('id', u.id).single()
+      if (data && (data.role === 'VIP' || data.role === 'Admin')) {
+        setIsWholesale(true)
+      } else {
+        setIsWholesale(false)
+      }
+    } else {
+      setIsWholesale(false)
+    }
+  }
+
+  const fetchProducts = async () => {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('status', 'Live')
+    
+    if (!error && data) {
+      setDbProducts(data)
+    }
+    setLoading(false)
+  }
+
+  // Merge the rich local data (images, hue, guide) with the live pricing and stock from Supabase
+  const products = useMemo(() => {
+    if (dbProducts.length === 0) return []
+    return dbProducts.map(dbP => {
+      // Find matching local product for rich UI assets (if any)
+      // First try by sku, then try matching the names if sku doesn't match perfectly
+      let localP = localProducts.find(lp => lp.id.toLowerCase() === dbP.sku.toLowerCase() || lp.name.includes(dbP.title))
+      
+      // If we don't have a specific local match, use a generic fallback for UI stability
+      if (!localP) localP = localProducts[0]
+
+      return {
+        ...localP, // spread the rich UI data
+        sku: dbP.sku,
+        id: dbP.sku, // alias for legacy components
+        title: dbP.title,
+        name: dbP.title, // alias for legacy components
+        retail_price: Number(dbP.retail_price),
+        retail: Number(dbP.retail_price), // alias
+        vip_price: Number(dbP.vip_price),
+        wholesale: Number(dbP.vip_price), // alias
+        total_stock: dbP.total_stock,
+        stock: dbP.total_stock, // alias
+      }
+    })
+  }, [dbProducts])
+
+  const getProduct = (id) => products.find(p => p.id === id || p.sku === id)
 
   const openProduct = (id) => {
     if (!document.startViewTransition) {
@@ -62,6 +135,7 @@ export function StoreProvider({ children }) {
   const addToCart = (id, qty = 1) =>
     setCart((prev) => {
       const product = getProduct(id)
+      if (!product) return prev
       const safeQty = Math.max(1, Math.min(qty, product.stock))
       const existing = prev.find((line) => line.id === id)
       if (existing) {
@@ -81,6 +155,7 @@ export function StoreProvider({ children }) {
         : prev.map((line) => {
             if (line.id !== id) return line
             const product = getProduct(id)
+            if (!product) return line
             return { ...line, qty: Math.min(qty, product.stock) }
           }),
     )
@@ -99,9 +174,11 @@ export function StoreProvider({ children }) {
   const totals = useMemo(() => {
     const lines = cart.map((line) => {
       const product = getProduct(line.id)
+      if (!product) return null
       const unit = isWholesale ? product.wholesale : product.retail
       return { ...line, product, unit, amount: unit * line.qty }
-    })
+    }).filter(Boolean)
+
     const retailTotal = lines.reduce(
       (sum, l) => sum + l.product.retail * l.qty,
       0,
@@ -109,12 +186,37 @@ export function StoreProvider({ children }) {
     const subtotal = lines.reduce((sum, l) => sum + l.amount, 0)
     const count = lines.reduce((sum, l) => sum + l.qty, 0)
     return { lines, subtotal, count, wholesaleSavings: retailTotal - subtotal }
-  }, [cart, isWholesale])
+  }, [cart, isWholesale, products])
 
-  const placeOrder = () => {
-    const id = 'K2-' + String(Math.floor(20000 + Math.random() * 70000))
+  const placeOrder = async () => {
+    const orderLines = totals.lines.map(l => ({
+      sku: l.id,
+      quantity: l.qty,
+      channel_source: isWholesale ? 'website_vip' : 'website_retail',
+      fulfillment_method: isWholesale ? 'Lalamove / Freight' : 'Standard Courier',
+      order_status: 'Pending',
+      payment_status: 'Unpaid'
+    }))
+
+    for (const line of orderLines) {
+      const { error: lockError } = await supabase.rpc('decrement_stock', { p_sku: line.sku, p_quantity: line.quantity })
+      if (lockError) {
+        alert("Sorry, " + line.sku + " ran out of stock while you were checking out!")
+        return 
+      }
+    }
+
+    const { data: insertedOrders, error: insertError } = await supabase.from('orders').insert(orderLines).select()
+    
+    if (insertError) {
+      alert("Something went wrong saving your order.")
+      return
+    }
+
+    const firstOrderId = insertedOrders?.[0]?.id?.split('-')[0] || String(Math.floor(20000 + Math.random() * 70000))
+
     if (!document.startViewTransition) {
-      setOrder({ id, total: totals.subtotal, count: totals.count, wholesale: isWholesale })
+      setOrder({ id: 'K2-' + firstOrderId, total: totals.subtotal, count: totals.count, wholesale: isWholesale })
       setCart([])
       setView('confirmation')
       window.scrollTo(0, 0)
@@ -122,7 +224,7 @@ export function StoreProvider({ children }) {
     }
     document.startViewTransition(() => {
       flushSync(() => {
-        setOrder({ id, total: totals.subtotal, count: totals.count, wholesale: isWholesale })
+        setOrder({ id: 'K2-' + firstOrderId, total: totals.subtotal, count: totals.count, wholesale: isWholesale })
         setCart([])
         setView('confirmation')
         window.scrollTo(0, 0)
@@ -142,6 +244,7 @@ export function StoreProvider({ children }) {
     setCartOpen,
     isWholesale,
     setIsWholesale,
+    user,
     order,
     placeOrder,
     query,
@@ -150,8 +253,11 @@ export function StoreProvider({ children }) {
     setCategory,
     requests,
     addRequest,
+    products, // Now serving the merged rich + live data
+    loading,
+    getProduct,
     ...totals,
-  }), [view, productId, cart, cartOpen, isWholesale, order, query, category, requests, totals])
+  }), [view, productId, cart, cartOpen, isWholesale, user, order, query, category, requests, products, loading, totals])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }
