@@ -4,14 +4,15 @@ import { BoxIcon, CheckIcon, AlertIcon, GridIcon } from '../../components/ui/ico
 import { Html5Qrcode } from 'html5-qrcode'
 
 export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
-  const [scanned, setScanned] = useState(0)
+  const [scannedItems, setScannedItems] = useState({})
   const [lastScan, setLastScan] = useState(null)
   
   const [triggerActive, setTriggerActive] = useState(false)
   const scannerRef = useRef(null)
   const [scannerActive, setScannerActive] = useState(false)
 
-  const isComplete = scanned >= order.quantity
+  // Calculate if all items are fully scanned
+  const isComplete = order.items.every(item => (scannedItems[item.sku] || 0) >= item.quantity)
 
   const startScanner = () => {
     if (scannerActive) return
@@ -54,16 +55,28 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
 
     if (navigator.vibrate) navigator.vibrate(50)
 
-    if (sku === order.sku) {
+    const targetItem = order.items.find(i => i.sku === sku)
+
+    if (targetItem) {
       // Match!
-      setScanned(prev => {
-        const next = prev + 1
-        if (next >= order.quantity) {
-          stopScanner() // Stop scanner if complete
+      setScannedItems(prev => {
+        const currentCount = prev[sku] || 0
+        if (currentCount >= targetItem.quantity) {
+          setLastScan({ type: 'error', message: `Already fully scanned: ${targetItem.product?.title || sku}` })
+          if (navigator.vibrate) navigator.vibrate([100, 50, 100])
+          return prev
         }
+        const next = { ...prev, [sku]: currentCount + 1 }
+        
+        // Check if this was the last item needed overall
+        const willBeComplete = order.items.every(item => (next[item.sku] || 0) >= item.quantity)
+        if (willBeComplete) {
+          stopScanner()
+        }
+        
+        setLastScan({ type: 'success', message: `Matched! ${targetItem.product?.title || sku}` })
         return next
       })
-      setLastScan({ type: 'success', message: `Matched! ${order.products?.title || order.sku}` })
     } else {
       // Wrong item
       if (navigator.vibrate) navigator.vibrate([100, 50, 100])
@@ -85,8 +98,8 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/20 shrink-0">
           <div>
-            <h2 className="font-serif text-xl font-semibold text-white">Pack Order #{order.id.split('-')[0]}</h2>
-            <p className="text-sm text-white/50 mt-1">Scan items to pack this parcel.</p>
+            <h2 className="font-serif text-xl font-semibold text-white">Pack Shipment #{order.id.split('_')[0].slice(-5)}</h2>
+            <p className="text-sm text-white/50 mt-1">Scan items to verify parcel contents.</p>
           </div>
           <button 
             onClick={onClose}
@@ -138,68 +151,74 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                       onClick={() => setTriggerActive(true)}
                       className={`w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${
                         triggerActive 
-                          ? 'bg-amber text-black animate-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]' 
-                          : 'bg-blue text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:scale-[1.02] active:scale-95'
+                          ? 'bg-blue text-white shadow-[0_0_20px_rgba(37,99,235,0.5)]' 
+                          : 'bg-white/10 text-white/80 hover:bg-white/20'
                       }`}
                     >
                       <GridIcon size={24} />
-                      {triggerActive ? 'Aim at Barcode...' : 'Trigger Scan'}
+                      {triggerActive ? 'Hold barcode in frame...' : 'Tap to Trigger Scanner'}
                     </button>
+                    <p className="text-center mt-2 text-xs text-white/30">Required for accuracy verification</p>
                   </div>
                 </div>
               )}
             </div>
-
-            {/* Feedback Toast */}
-            <div className="absolute bottom-10 left-0 w-full flex justify-center px-6">
-              <AnimatePresence>
-                {lastScan && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                    className={`rounded-xl px-6 py-3 text-sm font-bold flex items-center gap-3 shadow-2xl ${
-                      lastScan.type === 'success' 
-                        ? 'bg-forest text-navy border border-forest/30' 
-                        : 'bg-crimson text-white border border-crimson/50'
-                    }`}
-                  >
-                    {lastScan.type === 'success' ? <CheckIcon size={20} /> : <AlertIcon size={20} />}
-                    {lastScan.message}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            
+            <AnimatePresence>
+              {lastScan && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  className={`absolute top-10 left-10 right-10 p-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md ${
+                    lastScan.type === 'success' ? 'bg-forest/90 text-white border border-forest-light/50' : 'bg-crimson/90 text-white border border-crimson-light/50'
+                  }`}
+                >
+                  {lastScan.type === 'success' ? <CheckIcon size={24} /> : <AlertIcon size={24} />}
+                  <span className="font-medium">{lastScan.message}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* Right Side: Order Manifest */}
-          <div className="w-full md:w-96 flex flex-col bg-[#05080f]">
+          {/* Right Side: Order Info */}
+          <div className="w-full md:w-80 bg-[#05080f] flex flex-col shrink-0">
             <div className="p-6 flex-1 overflow-y-auto">
-              <h3 className="font-semibold text-white/80 uppercase tracking-widest text-xs mb-4">Packing Checklist</h3>
-              
-              <div className={`rounded-xl border ${isComplete ? 'border-forest bg-forest/10' : 'border-white/10 bg-white/5'} p-4 flex gap-4 items-center transition-colors`}>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-white leading-tight mb-1">{order.products?.title || order.sku}</p>
-                  <p className="text-xs font-mono text-white/50">{order.sku}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs text-white/50 uppercase font-bold tracking-wider mb-1">Status</p>
-                  <div className="text-2xl font-black tabular">
-                    <span className={scanned >= order.quantity ? 'text-forest' : 'text-white'}>{scanned}</span>
-                    <span className="text-white/30"> / {order.quantity}</span>
-                  </div>
-                </div>
+              <h3 className="text-sm font-bold text-white/50 uppercase tracking-widest mb-4">Items to Pack</h3>
+              <div className="space-y-4">
+                {order.items.map(item => {
+                  const qtyScanned = scannedItems[item.sku] || 0
+                  const isItemComplete = qtyScanned >= item.quantity
+                  return (
+                    <div key={item.sku} className={`p-3 rounded-lg border ${isItemComplete ? 'border-forest/30 bg-forest/10' : 'border-white/10 bg-white/5'} flex items-start gap-3 transition-colors`}>
+                      <div className={`shrink-0 mt-0.5 ${isItemComplete ? 'text-forest' : 'text-white/20'}`}>
+                        {isItemComplete ? <CheckIcon size={18} /> : <BoxIcon size={18} />}
+                      </div>
+                      <div>
+                        <p className={`font-medium text-sm line-clamp-2 ${isItemComplete ? 'text-forest-light' : 'text-white/90'}`}>
+                          {item.product?.title || item.sku}
+                        </p>
+                        <p className="text-xs font-mono text-white/40 mt-1">
+                          Scanned: {qtyScanned} / {item.quantity}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
-
-            <div className="p-6 border-t border-white/10 bg-black/40 shrink-0">
-              <button 
-                onClick={onConfirmPacked}
+            
+            <div className="p-6 border-t border-white/10 bg-black/20">
+              <button
+                onClick={() => onConfirmPacked(order.id, order.order_status, order.items)}
                 disabled={!isComplete}
-                className="w-full bg-blue text-white font-bold py-4 rounded-xl transition-all hover:bg-blue/90 active:scale-95 disabled:opacity-50 disabled:active:scale-100 flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+                className={`w-full py-4 rounded-xl font-bold text-lg transition-all shadow-lg ${
+                  isComplete 
+                    ? 'bg-blue hover:bg-blue-light text-white shadow-blue/20' 
+                    : 'bg-white/5 text-white/30 cursor-not-allowed'
+                }`}
               >
-                <BoxIcon size={22} />
-                Confirm Parcel is Packed
+                Mark as Packed
               </button>
             </div>
           </div>

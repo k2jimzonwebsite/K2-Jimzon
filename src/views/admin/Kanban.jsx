@@ -53,23 +53,47 @@ export default function Kanban() {
       .order('created_at', { ascending: false })
 
     if (!error && data) {
-      setOrders(data)
+      // Group rows by created_at and channel_source to form multi-item shipments
+      const grouped = {}
+      for (const row of data) {
+        const groupId = `${row.created_at}_${row.channel_source}`
+        if (!grouped[groupId]) {
+          grouped[groupId] = {
+            id: groupId,
+            channel_source: row.channel_source,
+            order_status: row.order_status,
+            payment_status: row.payment_status,
+            created_at: row.created_at,
+            items: []
+          }
+        }
+        grouped[groupId].items.push({
+          row_id: row.id,
+          sku: row.sku,
+          quantity: row.quantity,
+          product: row.products
+        })
+        // If any item is pending, the whole shipment is pending
+        if (row.order_status === 'Pending') grouped[groupId].order_status = 'Pending'
+      }
+      setOrders(Object.values(grouped).sort((a,b) => new Date(b.created_at) - new Date(a.created_at)))
     }
     setLoading(false)
   }
 
-  const handleConfirmPacked = async (id, currentStatus) => {
+  const handleConfirmPacked = async (groupId, currentStatus, items) => {
     const nextStatus = currentStatus === 'Pending' ? 'Packed' : currentStatus === 'Packed' ? 'Shipped' : null;
     if (!nextStatus || !supabase) return;
 
     // Optimistic update
-    setOrders(prev => prev.map(o => o.id === id ? { ...o, order_status: nextStatus } : o))
+    setOrders(prev => prev.map(o => o.id === groupId ? { ...o, order_status: nextStatus } : o))
     setPackingOrder(null)
 
+    const rowIds = items.map(i => i.row_id)
     const { error } = await supabase
       .from('orders')
       .update({ order_status: nextStatus })
-      .eq('id', id)
+      .in('id', rowIds)
 
     if (error) {
       console.error("Failed to update status", error)
@@ -157,42 +181,38 @@ export default function Kanban() {
                       </span>
                     </header>
                     <div className="space-y-2.5">
-                      {col.orders.map((o) => {
-                        const title = o.products?.title || o.sku
-                        const price = o.channel_source === 'website_vip' ? o.products?.vip_price : o.products?.retail_price
-                        const total = (price || 0) * o.quantity
-
-                        return (
-                          <article
-                            key={o.id}
-                            onClick={() => {
-                              if (o.order_status === 'Pending') {
-                                setPackingOrder(o)
-                              } else {
-                                handleConfirmPacked(o.id, o.order_status)
-                              }
-                            }}
-                            className="cursor-pointer rounded-lg border border-white/10 bg-[#05080f] p-3 shadow-lg transition-transform hover:-translate-y-1 hover:border-white/20 hover:shadow-xl"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm font-bold tabular truncate pr-2 text-white/90">#{o.id.split('-')[0]}</span>
-                              <span className={'shrink-0 rounded px-1.5 py-0.5 text-xs font-bold ' + (STATUS_TONE[o.order_status] ?? '')}>
+                      {col.orders.map(o => (
+                        <button
+                          key={o.id}
+                          onClick={() => setPackingOrder(o)}
+                          className="w-full text-left bg-[#101623] hover:bg-[#151c2b] border border-white/5 rounded-md p-3 mb-2 shadow-sm transition-all focus:outline-none focus:ring-1 focus:ring-white/20 relative group overflow-hidden"
+                        >
+                          <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: col.accent }}></div>
+                          <div className="pl-3">
+                            <div className="flex justify-between items-start mb-2">
+                              <p className="font-mono text-xs text-white/50">{new Date(o.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} · {o.items.length} items</p>
+                              <span className={`text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider font-bold ${STATUS_TONE[o.order_status]}`}>
                                 {o.order_status}
                               </span>
                             </div>
-                            <p className="mt-1.5 text-sm font-medium text-white">{o.fulfillment_method || 'Standard Courier'}</p>
-                            <p className="mt-0.5 line-clamp-2 text-xs leading-snug text-white/50">{title} ×{o.quantity}</p>
-                            <div className="mt-2 flex items-center justify-between border-t border-white/10 pt-2">
-                              <span className="text-sm font-bold tabular text-white/90">
-                                ₱{total.toLocaleString('en-PH')}
-                              </span>
-                              <span className={'text-xs font-bold uppercase tracking-wider ' + (o.payment_status === 'Paid' ? 'text-forest' : 'text-crimson')}>
-                                {o.payment_status}
-                              </span>
+                            <div className="space-y-1">
+                              {o.items.slice(0, 3).map((item, i) => (
+                                <div key={i} className="flex justify-between text-sm">
+                                  <span className="text-white/90 truncate mr-2">{item.product?.title || item.sku}</span>
+                                  <span className="text-white/40 font-mono shrink-0">x{item.quantity}</span>
+                                </div>
+                              ))}
+                              {o.items.length > 3 && (
+                                <p className="text-xs text-white/40 italic pt-1">+ {o.items.length - 3} more items...</p>
+                              )}
                             </div>
-                          </article>
-                        )
-                      })}
+                            <div className="mt-3 pt-3 border-t border-white/5 flex justify-between items-center">
+                              <span className="text-xs text-white/40">{o.payment_status}</span>
+                              <span className="text-xs font-semibold text-blue group-hover:text-blue-light transition-colors">Pack & Verify →</span>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
                       {col.orders.length > 0 && (
                         <button className="w-full rounded-lg border border-dashed border-white/20 bg-white/5 py-2 text-xs font-medium text-white/60 hover:border-white/40 hover:text-white transition-colors">
                           Print {col.orders.length} waybills
