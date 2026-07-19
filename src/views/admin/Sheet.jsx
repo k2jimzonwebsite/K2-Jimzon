@@ -37,21 +37,24 @@ export default function Sheet() {
     setLoading(false)
   }
 
-  const setStock = async (index, value) => {
-    const stock = Math.max(0, Number(value) || 0)
+  const updateField = async (index, field, value) => {
     const product = rows[index]
-    
+    let finalValue = value
+    if (field === 'retail_price' || field === 'vip_price' || field === 'total_stock') {
+      finalValue = Math.max(0, Number(value) || 0)
+    }
+
     // Optimistic UI update
-    setRows((prev) => prev.map((r, i) => (i === index ? { ...r, total_stock: stock } : r)))
+    setRows((prev) => prev.map((r, i) => (i === index ? { ...r, [field]: finalValue } : r)))
     
     // Push to Supabase
     const { error } = await supabase
       .from('products')
-      .update({ total_stock: stock })
+      .update({ [field]: finalValue })
       .eq('sku', product.sku)
       
     if (error) {
-      console.error('Failed to update stock:', error)
+      console.error(`Failed to update ${field}:`, error)
       fetchProducts() // Revert on failure
     }
   }
@@ -104,8 +107,17 @@ export default function Sheet() {
                     <Cell onSelect={() => setSelected({ row: i, col: 0 })} selected={selected.row === i && selected.col === 0} className="font-medium tabular">
                       {r.sku}
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 1 })} selected={selected.row === i && selected.col === 1} className="max-w-64 truncate">
-                      {r.title}
+                    <Cell onSelect={() => setSelected({ row: i, col: 1 })} selected={selected.row === i && selected.col === 1} className="max-w-64 p-0">
+                      <input 
+                        type="text" 
+                        value={r.title} 
+                        onChange={(e) => {
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, title: e.target.value } : row))
+                        }}
+                        onBlur={(e) => updateField(i, 'title', e.target.value)}
+                        onFocus={() => setSelected({ row: i, col: 1 })}
+                        className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
+                      />
                     </Cell>
                     <td
                       className={
@@ -121,23 +133,52 @@ export default function Sheet() {
                         value={r.total_stock}
                         min={0}
                         onFocus={() => setSelected({ row: i, col: 2 })}
-                        onChange={(e) => setStock(i, e.target.value)}
+                        onChange={(e) => {
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, total_stock: e.target.value } : row))
+                        }}
+                        onBlur={(e) => updateField(i, 'total_stock', e.target.value)}
                         className={
-                          'w-full bg-transparent px-2.5 py-1.5 text-right font-semibold outline-none tabular ' +
-                          (low ? 'text-crimson' : '')
+                          'w-full h-full bg-transparent px-2.5 py-1.5 text-right font-semibold outline-none tabular ' +
+                          (low ? 'text-crimson' : 'text-navy')
                         }
                       />
                     </td>
-                    <Cell onSelect={() => setSelected({ row: i, col: 3 })} selected={selected.row === i && selected.col === 3} className="text-right tabular">
-                      {Number(r.retail_price).toLocaleString('en-PH')}
+                    <Cell onSelect={() => setSelected({ row: i, col: 3 })} selected={selected.row === i && selected.col === 3} className="text-right tabular p-0">
+                      <input
+                        type="number"
+                        value={r.retail_price}
+                        min={0}
+                        onFocus={() => setSelected({ row: i, col: 3 })}
+                        onChange={(e) => {
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, retail_price: e.target.value } : row))
+                        }}
+                        onBlur={(e) => updateField(i, 'retail_price', e.target.value)}
+                        className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-navy"
+                      />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 4 })} selected={selected.row === i && selected.col === 4} className="text-right text-blue tabular">
-                      {Number(r.vip_price).toLocaleString('en-PH')}
+                    <Cell onSelect={() => setSelected({ row: i, col: 4 })} selected={selected.row === i && selected.col === 4} className="text-right text-blue tabular p-0">
+                      <input
+                        type="number"
+                        value={r.vip_price}
+                        min={0}
+                        onFocus={() => setSelected({ row: i, col: 4 })}
+                        onChange={(e) => {
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, vip_price: e.target.value } : row))
+                        }}
+                        onBlur={(e) => updateField(i, 'vip_price', e.target.value)}
+                        className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-blue"
+                      />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 5 })} selected={selected.row === i && selected.col === 5} className="text-center font-medium">
-                      <span className={'px-2 py-0.5 rounded text-xs ' + (isDraft ? 'bg-amber-wash text-amber' : 'bg-forest-wash text-forest')}>
-                        {r.status}
-                      </span>
+                    <Cell onSelect={() => setSelected({ row: i, col: 5 })} selected={selected.row === i && selected.col === 5} className="text-center font-medium p-0">
+                      <select 
+                        value={r.status}
+                        onChange={(e) => updateField(i, 'status', e.target.value)}
+                        onFocus={() => setSelected({ row: i, col: 5 })}
+                        className={'w-full h-full bg-transparent px-2 py-1.5 text-xs outline-none cursor-pointer appearance-none text-center ' + (isDraft ? 'text-amber font-bold' : 'text-forest font-bold')}
+                      >
+                        <option value="Active">Active</option>
+                        <option value="Draft">Draft</option>
+                      </select>
                     </Cell>
                   </tr>
                 )

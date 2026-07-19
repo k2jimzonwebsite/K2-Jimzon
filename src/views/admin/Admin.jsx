@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { AlertIcon, BoxIcon, GlobeIcon, GridIcon, SyncIcon, UserIcon, InboxIcon } from '../../components/ui/icons'
 import Kanban from './Kanban'
 import Sheet from './Sheet'
+import InventoryGrid from './InventoryGrid'
 import GlobeCms from './GlobeCms'
 import AiDrafts from './AiDrafts'
 import Inbox from './Inbox'
@@ -66,7 +67,8 @@ export default function Admin() {
     if (count !== null) setPendingOrders(count)
   }
 
-  const showSheet = sheetMode || section === 'inventory'
+  const showSheet = sheetMode && section === 'inventory'
+  const showGrid = !sheetMode && section === 'inventory'
 
   return (
     <div className="flex min-h-[calc(100vh-40px)] bg-[#0A101D] pb-20 text-white/90 md:pb-0 font-sans selection:bg-blue/30 selection:text-white">
@@ -169,7 +171,7 @@ export default function Admin() {
         <header className="flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#0A101D] px-4 py-3.5 md:px-6">
           <div>
             <h1 className="font-serif text-xl font-semibold tracking-tight text-white">
-              {section === 'globe' ? '3D Map Settings' : section === 'wholesale' ? 'VIP Customers' : section === 'sourcing' ? 'Pending AI Products' : section === 'inbox' ? 'Customer Messages' : showSheet ? 'All Products' : section === 'suppliers' ? 'Supplier Contacts' : section === 'pos' ? 'Incoming Deliveries' : section === 'kanban' ? 'Pack & Ship Orders' : 'Home Dashboard'}
+              {section === 'globe' ? '3D Map Settings' : section === 'wholesale' ? 'VIP Customers' : section === 'sourcing' ? 'Pending AI Products' : section === 'inbox' ? 'Customer Messages' : section === 'inventory' ? 'All Products' : section === 'suppliers' ? 'Supplier Contacts' : section === 'pos' ? 'Incoming Deliveries' : section === 'kanban' ? 'Pack & Ship Orders' : 'Home Dashboard'}
             </h1>
             <p className="text-xs font-mono text-white/50 mt-1">
               {section === 'globe'
@@ -240,6 +242,7 @@ export default function Admin() {
            : section === 'suppliers' ? <Suppliers />
            : section === 'pos' ? <PurchaseOrders />
            : showSheet ? <Sheet /> 
+           : showGrid ? <InventoryGrid />
            : section === 'overview' ? <Overview setSection={setSection} />
            : <Kanban />}
         </div>
