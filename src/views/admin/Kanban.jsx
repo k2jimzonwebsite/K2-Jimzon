@@ -123,22 +123,22 @@ export default function Kanban() {
       </div>
 
       {/* Global Logistics Sub-Views */}
-      <div className="flex-1 overflow-hidden relative">
+      <div className="mt-4">
         {activeTab === 'outbound' && (
-          <div className="absolute inset-0 overflow-y-auto">
+          <div className="w-full">
             <OutboundSourcing />
           </div>
         )}
 
         {activeTab === 'inbound' && (
-          <div className="absolute inset-0 overflow-y-auto">
+          <div className="w-full">
             <PurchaseOrders />
           </div>
         )}
 
         {activeTab === 'kanban' && (
-          <div className="absolute inset-0 overflow-y-auto">
-            <div className="flex gap-4 min-h-[500px]">
+          <div className="w-full">
+            <div className="flex gap-4 overflow-x-auto min-h-[500px]">
               {loading && orders.length === 0 ? (
                 <div className="w-full text-center py-10 text-sm text-white/40">Loading customer orders...</div>
               ) : (
