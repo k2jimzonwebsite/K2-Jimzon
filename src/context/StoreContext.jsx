@@ -97,8 +97,8 @@ export function StoreProvider({ children }) {
         id: dbP.sku, // alias for legacy components
         title: dbP.title,
         name: dbP.title, // alias for legacy components
-        img: dbP.primary_image_url || dbP.image_url || (localPMatch ? localPMatch.img : null),
-        afterImage: dbP.after_use_image_url || (localPMatch ? localPMatch.afterImage : null),
+        img: dbP.primary_image_url || dbP.image_url || localP.img,
+        afterImage: dbP.after_use_image_url || localP.afterImage,
         retail_price: Number(dbP.retail_price),
         retail: Number(dbP.retail_price), // alias
         vip_price: Number(dbP.vip_price),
