@@ -39,7 +39,7 @@ export default function InventoryGrid() {
     e.preventDefault()
     if (!editingProduct) return
 
-    const { sku, title, retail_price, vip_price, total_stock, status } = editingProduct
+    const { sku, title, description, image_url, retail_price, vip_price, total_stock, status } = editingProduct
     
     // Optimistic UI update
     setProducts((prev) => prev.map(p => p.sku === sku ? editingProduct : p))
@@ -48,7 +48,7 @@ export default function InventoryGrid() {
     // Push to Supabase
     const { error } = await supabase
       .from('products')
-      .update({ title, retail_price, vip_price, total_stock, status })
+      .update({ title, description, image_url, retail_price, vip_price, total_stock, status })
       .eq('sku', sku)
       
     if (error) {
@@ -115,15 +115,34 @@ export default function InventoryGrid() {
               </button>
             </div>
             
-            <form onSubmit={handleSave} className="p-6 space-y-4">
+            <form onSubmit={handleSave} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Product Title</label>
                 <input 
                   type="text" 
-                  value={editingProduct.title}
+                  value={editingProduct.title || ''}
                   onChange={(e) => setEditingProduct({...editingProduct, title: e.target.value})}
                   className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none"
                   required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Description (For Storefront)</label>
+                <textarea 
+                  value={editingProduct.description || ''}
+                  onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})}
+                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none resize-none h-20"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Primary Photo URL</label>
+                <input 
+                  type="url" 
+                  value={editingProduct.image_url || ''}
+                  onChange={(e) => setEditingProduct({...editingProduct, image_url: e.target.value})}
+                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none"
                 />
               </div>
               

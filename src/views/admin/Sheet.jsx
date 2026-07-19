@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 
-const COLS = ['A', 'B', 'C', 'D', 'E', 'F']
+const COLS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
 export default function Sheet() {
   const [rows, setRows] = useState([])
@@ -90,7 +90,7 @@ export default function Sheet() {
               </tr>
               <tr className="bg-navy text-left text-xs font-semibold text-white">
                 <th className="border border-navy-soft px-2 py-1.5 text-center tabular">1</th>
-                {['SKU', 'Product', 'Master stock', 'Retail ₱', 'Wholesale ₱', 'Status'].map((h) => (
+                {['SKU', 'Product', 'Description', 'Image URL', 'Master stock', 'Retail ₱', 'Wholesale ₱', 'Status'].map((h) => (
                   <th key={h} className="border border-navy-soft px-2.5 py-1.5">{h}</th>
                 ))}
               </tr>
@@ -110,7 +110,7 @@ export default function Sheet() {
                     <Cell onSelect={() => setSelected({ row: i, col: 1 })} selected={selected.row === i && selected.col === 1} className="max-w-64 p-0">
                       <input 
                         type="text" 
-                        value={r.title} 
+                        value={r.title || ''} 
                         onChange={(e) => {
                           setRows(prev => prev.map((row, idx) => idx === i ? { ...row, title: e.target.value } : row))
                         }}
@@ -119,10 +119,36 @@ export default function Sheet() {
                         className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
                       />
                     </Cell>
+                    <Cell onSelect={() => setSelected({ row: i, col: 2 })} selected={selected.row === i && selected.col === 2} className="max-w-64 p-0">
+                      <input 
+                        type="text" 
+                        value={r.description || ''} 
+                        onChange={(e) => {
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, description: e.target.value } : row))
+                        }}
+                        onBlur={(e) => updateField(i, 'description', e.target.value)}
+                        onFocus={() => setSelected({ row: i, col: 2 })}
+                        className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
+                        placeholder="Description..."
+                      />
+                    </Cell>
+                    <Cell onSelect={() => setSelected({ row: i, col: 3 })} selected={selected.row === i && selected.col === 3} className="max-w-48 p-0">
+                      <input 
+                        type="text" 
+                        value={r.image_url || ''} 
+                        onChange={(e) => {
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, image_url: e.target.value } : row))
+                        }}
+                        onBlur={(e) => updateField(i, 'image_url', e.target.value)}
+                        onFocus={() => setSelected({ row: i, col: 3 })}
+                        className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
+                        placeholder="URL..."
+                      />
+                    </Cell>
                     <td
                       className={
                         'border px-0 tabular ' +
-                        (selected.row === i && selected.col === 2
+                        (selected.row === i && selected.col === 4
                           ? 'border-[2px] border-blue'
                           : 'border-line') +
                         (low ? ' bg-crimson-wash' : '')
@@ -132,7 +158,7 @@ export default function Sheet() {
                         type="number"
                         value={r.total_stock}
                         min={0}
-                        onFocus={() => setSelected({ row: i, col: 2 })}
+                        onFocus={() => setSelected({ row: i, col: 4 })}
                         onChange={(e) => {
                           setRows(prev => prev.map((row, idx) => idx === i ? { ...row, total_stock: e.target.value } : row))
                         }}
@@ -143,12 +169,12 @@ export default function Sheet() {
                         }
                       />
                     </td>
-                    <Cell onSelect={() => setSelected({ row: i, col: 3 })} selected={selected.row === i && selected.col === 3} className="text-right tabular p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 5 })} selected={selected.row === i && selected.col === 5} className="text-right tabular p-0">
                       <input
                         type="number"
                         value={r.retail_price}
                         min={0}
-                        onFocus={() => setSelected({ row: i, col: 3 })}
+                        onFocus={() => setSelected({ row: i, col: 5 })}
                         onChange={(e) => {
                           setRows(prev => prev.map((row, idx) => idx === i ? { ...row, retail_price: e.target.value } : row))
                         }}
@@ -156,12 +182,12 @@ export default function Sheet() {
                         className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-navy"
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 4 })} selected={selected.row === i && selected.col === 4} className="text-right text-blue tabular p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 6 })} selected={selected.row === i && selected.col === 6} className="text-right text-blue tabular p-0">
                       <input
                         type="number"
                         value={r.vip_price}
                         min={0}
-                        onFocus={() => setSelected({ row: i, col: 4 })}
+                        onFocus={() => setSelected({ row: i, col: 6 })}
                         onChange={(e) => {
                           setRows(prev => prev.map((row, idx) => idx === i ? { ...row, vip_price: e.target.value } : row))
                         }}
@@ -169,11 +195,11 @@ export default function Sheet() {
                         className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-blue"
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 5 })} selected={selected.row === i && selected.col === 5} className="text-center font-medium p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 7 })} selected={selected.row === i && selected.col === 7} className="text-center font-medium p-0">
                       <select 
                         value={r.status}
                         onChange={(e) => updateField(i, 'status', e.target.value)}
-                        onFocus={() => setSelected({ row: i, col: 5 })}
+                        onFocus={() => setSelected({ row: i, col: 7 })}
                         className={'w-full h-full bg-transparent px-2 py-1.5 text-xs outline-none cursor-pointer appearance-none text-center ' + (isDraft ? 'text-amber font-bold' : 'text-forest font-bold')}
                       >
                         <option value="Active">Active</option>
