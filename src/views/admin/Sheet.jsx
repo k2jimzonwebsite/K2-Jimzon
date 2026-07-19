@@ -111,7 +111,7 @@ export default function Sheet() {
   const active = rows[selected.row]
 
   return (
-    <div className="overflow-hidden rounded-lg border border-line bg-cream shadow-card">
+    <div className="overflow-hidden rounded-lg border border-line bg-cream shadow-card flex flex-col h-[calc(100vh-180px)]">
       {/* Formula bar */}
       <div className="flex items-center gap-2 border-b border-line bg-paper px-3 py-1.5 text-sm">
         <span className="rounded border border-[#d5dae2] bg-cream px-2 py-0.5 font-semibold tabular">
@@ -125,12 +125,12 @@ export default function Sheet() {
         </span>
       </div>
 
-      <div className="max-h-[520px] overflow-auto">
+      <div className="flex-1 overflow-auto">
         {loading && rows.length === 0 ? (
           <div className="p-8 text-center text-sm text-navy-soft">Loading Master Inventory...</div>
         ) : (
-          <table className="w-full min-w-[860px] border-collapse text-sm">
-            <thead className="sticky top-0 z-10">
+          <table className="w-max min-w-full border-collapse text-sm">
+            <thead className="sticky top-0 z-10 shadow-sm">
               <tr className="bg-shell text-xs text-navy-soft">
                 <th className="w-8 border border-line py-1 font-medium"> </th>
                 {COLS.map((c) => (
@@ -153,7 +153,7 @@ export default function Sheet() {
                     <td className="border border-line bg-shell px-1 text-center text-xs text-navy-soft tabular">
                       {i + 2}
                     </td>
-                    <Cell onSelect={() => setSelected({ row: i, col: 0 })} selected={selected.row === i && selected.col === 0} className="font-medium tabular p-0 max-w-48">
+                    <Cell onSelect={() => setSelected({ row: i, col: 0 })} selected={selected.row === i && selected.col === 0} className="font-medium tabular p-0 min-w-[150px]">
                       <input 
                         type="text" 
                         defaultValue={r.sku || ''} 
@@ -166,7 +166,7 @@ export default function Sheet() {
                         className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-blue font-bold"
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 1 })} selected={selected.row === i && selected.col === 1} className="max-w-64 p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 1 })} selected={selected.row === i && selected.col === 1} className="min-w-[300px] p-0">
                       <input 
                         type="text" 
                         value={r.title || ''} 
@@ -178,7 +178,7 @@ export default function Sheet() {
                         className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 2 })} selected={selected.row === i && selected.col === 2} className="max-w-64 p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 2 })} selected={selected.row === i && selected.col === 2} className="min-w-[400px] p-0">
                       <input 
                         type="text" 
                         value={r.why_buy || ''} 
@@ -191,7 +191,7 @@ export default function Sheet() {
                         placeholder="Description..."
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 3 })} selected={selected.row === i && selected.col === 3} className="max-w-48 p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 3 })} selected={selected.row === i && selected.col === 3} className="min-w-[250px] p-0">
                       <input 
                         type="text" 
                         value={r.usage_instructions || ''} 
@@ -221,7 +221,7 @@ export default function Sheet() {
                     </Cell>
                     <td
                       className={
-                        'border px-0 tabular ' +
+                        'border px-0 tabular min-w-[100px] ' +
                         (selected.row === i && selected.col === 7
                           ? 'border-[2px] border-blue'
                           : 'border-line') +
@@ -243,7 +243,7 @@ export default function Sheet() {
                         }
                       />
                     </td>
-                    <Cell onSelect={() => setSelected({ row: i, col: 8 })} selected={selected.row === i && selected.col === 8} className="text-right tabular p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 8 })} selected={selected.row === i && selected.col === 8} className="text-right tabular p-0 min-w-[100px]">
                       <input
                         type="number"
                         value={r.retail_price}
@@ -256,7 +256,7 @@ export default function Sheet() {
                         className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-navy"
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 9 })} selected={selected.row === i && selected.col === 9} className="text-right text-blue tabular p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 9 })} selected={selected.row === i && selected.col === 9} className="text-right text-blue tabular p-0 min-w-[100px]">
                       <input
                         type="number"
                         value={r.vip_price}
@@ -269,7 +269,7 @@ export default function Sheet() {
                         className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-blue"
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 10 })} selected={selected.row === i && selected.col === 10} className="text-center font-medium p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 10 })} selected={selected.row === i && selected.col === 10} className="text-center font-medium p-0 min-w-[120px]">
                       <select 
                         value={r.status}
                         onChange={(e) => updateField(i, 'status', e.target.value)}
