@@ -82,13 +82,13 @@ export function StoreProvider({ children }) {
   // Merge the rich local data (images, hue, guide) with the live pricing and stock from Supabase
   const products = useMemo(() => {
     if (dbProducts.length === 0) return []
-    return dbProducts.map(dbP => {
+    return dbProducts.map((dbP, i) => {
       // Find matching local product for rich UI assets (if any)
       // First try by sku, then try matching the names if sku doesn't match perfectly
       let localPMatch = localProducts.find(lp => lp.id.toLowerCase() === dbP.sku.toLowerCase() || lp.name.includes(dbP.title))
       
-      // If we don't have a specific local match, use a generic fallback for UI stability
-      let localP = localPMatch || localProducts[0]
+      // If we don't have a specific local match, dynamically cycle through our beautiful mockups!
+      let localP = localPMatch || localProducts[i % localProducts.length]
 
       return {
         ...localP, // spread the rich UI data
