@@ -26,6 +26,12 @@ export const products = [
     pairings: ['Spread on warm pandesal', 'Swirled into halo-halo', 'Filling for mamón'],
     guide: {
       title: 'The pistachio cornetto, at home',
+      ingredients: [
+        { name: 'Pistì pistachio cream', inBundle: true },
+        { name: 'Lavazza Oro Espresso', inBundle: true },
+        { name: 'Fresh brioche buns or pandesal', inBundle: false },
+        { name: 'Flaky sea salt', inBundle: false }
+      ],
       steps: [
         'Warm a brioche bun or pandesal for 40 seconds — the cream loosens against warm bread.',
         'Spread two generous spoons inside while the bread is still warm.',
@@ -55,6 +61,11 @@ export const products = [
     pairings: ['Kapeng barako drinkers, meet your upgrade', 'Espresso base for iced latte', 'Affogato over ube ice cream'],
     guide: {
       title: 'Moka pot, the Torino way',
+      ingredients: [
+        { name: 'Lavazza Oro whole beans', inBundle: true },
+        { name: 'Pistì pistachio cream', inBundle: true },
+        { name: 'Filtered water', inBundle: false }
+      ],
       steps: [
         'Grind fine but not powder — one notch coarser than espresso.',
         'Fill the base with hot (not cold) water up to the valve, grounds loose, never tamped.',
@@ -84,6 +95,11 @@ export const products = [
     pairings: ['Pasalubong that survives the balikbayan box', 'With hot tsokolate', 'Crushed over leche flan'],
     guide: {
       title: 'Merienda, upgraded',
+      ingredients: [
+        { name: 'Nutella Biscuits', inBundle: true },
+        { name: 'Nutella hazelnut spread (400g)', inBundle: true },
+        { name: 'Hot black coffee', inBundle: false }
+      ],
       steps: [
         'Chill the pouch for 20 minutes — the centre turns fudgy.',
         'Serve with strong coffee to cut the sweetness.',
@@ -133,6 +149,12 @@ export const products = [
     pairings: ['Ten-minute tonno pasta', 'Upgrade for pan de sal sandwiches', 'Rice bowls with calamansi'],
     guide: {
       title: 'Ten-minute tonno pasta',
+      ingredients: [
+        { name: 'Rio Mare tuna in olive oil', inBundle: true },
+        { name: 'Barilla Spaghetti N°5', inBundle: true },
+        { name: 'Fresh garlic & chili', inBundle: false },
+        { name: 'Parsley', inBundle: false }
+      ],
       steps: [
         'Boil spaghetti; save a cup of the pasta water.',
         'Flake the tuna with its oil, garlic, and chili into a warm pan.',
@@ -154,6 +176,7 @@ export const products = [
     tag: null,
     hue: 110,
     img: `${OFF}/807/680/951/3340/front_en.3.400.jpg`,
+    afterImage: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800&q=80',
     collections: ['justImported'],
     inside: 'Basil, cashew, Grana Padano DOP',
     whyBuy: 'Fresh basil pesto with real Grana Padano — the jar Italians keep for weeknights.',
@@ -161,6 +184,11 @@ export const products = [
     pairings: ['Pesto pasta in 12 minutes', 'Spread for grilled cheese', 'Marinade for inihaw na manok'],
     guide: {
       title: 'Pesto that tastes like Liguria',
+      ingredients: [
+        { name: 'Barilla pesto alla Genovese', inBundle: true },
+        { name: 'Barilla Spaghetti N°5', inBundle: true },
+        { name: 'Parmigiano Reggiano', inBundle: false }
+      ],
       steps: [
         'Never heat pesto in the pan — it goes bitter.',
         'Loosen two spoonfuls with pasta water in the serving bowl.',
@@ -182,11 +210,27 @@ export const products = [
     tag: null,
     hue: 55,
     img: `${OFF}/807/680/019/5057/front_en.3809.400.jpg`,
+    afterImage: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=800&q=80',
     collections: ['justImported'],
     inside: 'Bronze-line durum wheat, the blue box itself',
     whyBuy: 'The world’s benchmark spaghetti — al dente forgiveness no local pasta matches.',
     whyRare: 'EU-milled durum batch, not the softer licensed production sold regionally.',
     pairings: ['Tonno pasta with Rio Mare', 'Filipino-style sweet spaghetti, elevated', 'Aglio e olio at midnight'],
+    guide: {
+      title: 'The perfect al dente bite',
+      ingredients: [
+        { name: 'Barilla Spaghetti N°5', inBundle: true },
+        { name: 'Barilla pesto alla Genovese', inBundle: true },
+        { name: 'Coarse sea salt', inBundle: false },
+        { name: 'Pasta water', inBundle: false }
+      ],
+      steps: [
+        'Boil a large pot of water. Salt it heavily until it tastes like the sea.',
+        'Drop the spaghetti in and stir immediately to prevent sticking. Do not break the pasta.',
+        'Cook for exactly 9 minutes for authentic Italian al dente, or 11 minutes if you prefer it softer.',
+      ],
+      bundle: { label: 'Pasta bundle — Spaghetti N°5 + Barilla Pesto', price: 478, partner: 'barilla-pesto' },
+    },
   },
   {
     id: 'mutti-passata',
@@ -201,11 +245,27 @@ export const products = [
     tag: 'New arrival',
     hue: 12,
     img: `${OFF}/800/511/063/0408/front_en.79.400.jpg`,
+    afterImage: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=80',
     collections: ['justImported'],
     inside: '100% Italian tomatoes, nothing else',
     whyBuy: 'The tomato base every Italian nonna actually uses — sweet, bright, no tin taste.',
     whyRare: 'Real passata is a specialty-store item here at twice this price.',
     pairings: ['Sunday-sauce base', 'Menudo and afritada upgrade', 'Two-ingredient pizza sauce'],
+    guide: {
+      title: 'The five-minute authentic pizza sauce',
+      ingredients: [
+        { name: 'Mutti passata di pomodoro', inBundle: true },
+        { name: 'Fiorfiore taralli pugliesi', inBundle: true },
+        { name: 'Extra virgin olive oil', inBundle: false },
+        { name: 'Fresh basil & salt', inBundle: false }
+      ],
+      steps: [
+        'Pour the passata into a bowl. Do not cook it — real Neapolitan pizza uses raw sauce.',
+        'Stir in a pinch of salt, a drizzle of good olive oil, and torn fresh basil if you have it.',
+        'Spread lightly on your dough and bake. The oven will cook it perfectly.',
+      ],
+      bundle: { label: 'Pizza bundle — Mutti Passata + Taralli', price: 508, partner: 'taralli' },
+    },
   },
   {
     id: 'rana-sfogliavelo',
@@ -220,6 +280,7 @@ export const products = [
     tag: 'Low stock',
     hue: 46,
     img: `${OFF}/800/166/501/1419/front_it.29.400.jpg`,
+    afterImage: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=800&q=80',
     collections: ['justImported', 'hiddenGems'],
     inside: 'Thin-rolled fresh egg pasta filled with cured prosciutto',
     whyBuy: 'Fresh filled pasta that cooks in 3 minutes — restaurant dinner, weeknight effort.',
@@ -227,6 +288,11 @@ export const products = [
     pairings: ['In chicken tinola broth', 'Brown butter and sage', 'With Mutti passata, 10 minutes flat'],
     guide: {
       title: 'Fresh pasta, the 3-minute dinner',
+      ingredients: [
+        { name: 'Giovanni Rana Sfogliavelo', inBundle: true },
+        { name: 'Mutti passata di pomodoro', inBundle: true },
+        { name: 'Grated hard cheese', inBundle: false }
+      ],
       steps: [
         'Simmer in good chicken broth, not plain water, for 3 minutes.',
         'They are done the moment they float.',
@@ -248,6 +314,7 @@ export const products = [
     tag: 'New arrival',
     hue: 60,
     img: `${OFF}/800/112/087/2128/front_en.54.400.jpg`,
+    afterImage: 'https://images.unsplash.com/photo-1572551525042-491c29668bdc?w=800&q=80',
     collections: ['hiddenGems', 'justImported'],
     inside: 'Crisp cracker rings baked with extra-virgin olive oil',
     whyBuy: 'The southern-Italian answer to chips — savory, crumbly, dangerously snackable.',
@@ -255,6 +322,12 @@ export const products = [
     pairings: ['With cured meats and cheese', 'Beer match: pale lager', 'Dip in Barilla pesto'],
     guide: {
       title: 'Build the five-minute aperitivo',
+      ingredients: [
+        { name: 'Fiorfiore taralli pugliesi', inBundle: true },
+        { name: 'Rio Mare tuna in olive oil', inBundle: true },
+        { name: 'Cured meats & cheese', inBundle: false },
+        { name: 'Cold beer or wine', inBundle: false }
+      ],
       steps: [
         'Tip taralli into a bowl — never serve from the bag, it matters.',
         'Add anything cured or pickled you have on hand.',
@@ -352,6 +425,7 @@ export const products = [
     tag: 'Customer favorite',
     hue: 30,
     img: `${OFF}/541/012/671/6870/front_en.23.400.jpg`,
+    afterImage: 'https://images.unsplash.com/photo-1563805042-7684c8a9e9cb?w=800&q=80',
     collections: ['justImported', 'cafe'],
     inside: 'Caramelised biscuit spread with biscuit chunks',
     whyBuy: 'The most-requested pasabuy item in our order history — now stocked, no waiting.',
@@ -359,6 +433,12 @@ export const products = [
     pairings: ['Biscoff-graham icebox cake', 'Warm on suman', 'Milkshake base'],
     guide: {
       title: 'Three ways before the jar empties',
+      ingredients: [
+        { name: 'Lotus Biscoff crunchy spread', inBundle: true },
+        { name: 'Nutella Biscuits', inBundle: true },
+        { name: 'Vanilla ice cream', inBundle: false },
+        { name: 'Graham crackers', inBundle: false }
+      ],
       steps: [
         'Microwave two spoons for 15 seconds and pour over vanilla ice cream.',
         'Layer with crushed graham and cream for a no-bake icebox cake.',
@@ -380,6 +460,7 @@ export const products = [
     tag: 'Bestseller',
     hue: 330,
     img: null,
+    afterImage: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=800&q=80',
     collections: ['trending'],
     inside: 'Honest "smells-like" alternative · bergamot, iris, musk',
     whyBuy: 'Our most-repurchased fragrance — sold honestly as an inspired scent, never a fake original.',
@@ -387,6 +468,11 @@ export const products = [
     pairings: ['Office-safe daily wear', 'Layers well with vanilla lotions', 'Gift-ready boxed bottle'],
     guide: {
       title: 'Make an inspired scent last',
+      ingredients: [
+        { name: 'Milano № 21 eau de parfum', inBundle: true },
+        { name: 'Perlier honey bath cream', inBundle: true },
+        { name: 'Unscented body lotion', inBundle: false }
+      ],
       steps: [
         'Spray on pulse points right after a shower, onto slightly damp skin.',
         'Do not rub your wrists together — it crushes the top notes.',

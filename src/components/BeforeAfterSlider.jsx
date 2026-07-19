@@ -17,6 +17,7 @@ export default function BeforeAfterSlider({ product }) {
   }, [])
 
   const onPointerDown = (e) => {
+    e.stopPropagation()
     dragging.current = true
     e.currentTarget.setPointerCapture(e.pointerId)
     moveTo(e.clientX)
@@ -48,7 +49,11 @@ export default function BeforeAfterSlider({ product }) {
       onKeyDown={onKeyDown}
     >
       {/* After layer (base): opened */}
-      <ProductArt product={product} mode="open" className="absolute inset-0" />
+      {product.afterImage ? (
+        <img src={product.afterImage} alt="What's inside" className="absolute inset-0 h-full w-full object-cover" />
+      ) : (
+        <ProductArt product={product} mode="open" className="absolute inset-0" />
+      )}
 
       {/* Before layer (clipped): the real sealed packaging when we have a photo */}
       <div

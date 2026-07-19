@@ -16,7 +16,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-line bg-shell/60 backdrop-blur-sm pb-28 pt-12 md:pb-12">
       <div className="mx-auto max-w-6xl px-4">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="grid gap-8 grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <Wordmark />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-navy-soft">
@@ -80,7 +80,7 @@ function FooterLink({ children, onClick }) {
     <li>
       <button
         onClick={onClick}
-        className={'text-left text-sm text-navy-soft ' + (onClick ? 'hover:text-crimson hover:underline underline-offset-2' : 'cursor-default')}
+        className={'text-left py-1 text-sm text-navy-soft ' + (onClick ? 'hover:text-crimson hover:underline underline-offset-2' : 'cursor-default')}
       >
         {children}
       </button>

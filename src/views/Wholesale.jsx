@@ -31,7 +31,7 @@ export default function Wholesale() {
           <PlaneIcon size={14} /> Wholesale · direct consignment
         </p>
         <div className="relative py-8 md:py-0">
-          <h1 className="font-serif text-3xl font-semibold leading-[1.08] tracking-tight md:text-5xl text-navy">
+          <h1 className="font-serif text-2xl sm:text-3xl font-semibold leading-[1.08] tracking-tight md:text-5xl text-navy">
             Stop waiting for a
             <br />
             reply on Viber.
@@ -95,7 +95,7 @@ export default function Wholesale() {
               </button>
               <p className="text-center text-xs text-navy-soft">
                 Not accredited yet?{' '}
-                <button type="button" className="font-medium text-forest underline underline-offset-2">
+                <button type="button" className="px-2 py-1 -mx-2 font-medium text-forest underline underline-offset-2">
                   Apply for a wholesale account
                 </button>
               </p>

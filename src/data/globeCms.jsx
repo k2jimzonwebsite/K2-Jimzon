@@ -6,7 +6,7 @@ import { supabase, isSupabaseConfigured } from '../lib/supabaseClient'
 const CMS_PRODUCTS_KEY = 'k2_globe_products'
 const CMS_REVIEWS_KEY = 'k2_globe_reviews'
 const CMS_VERSION_KEY = 'k2_globe_version'
-const CMS_VERSION = '3' // bump to clear stale localStorage on deploy
+const CMS_VERSION = '4' // bump to clear stale localStorage on deploy
 
 const GlobeCmsContext = createContext(null)
 

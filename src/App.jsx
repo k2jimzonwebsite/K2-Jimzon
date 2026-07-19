@@ -34,7 +34,7 @@ function Shell() {
   const isStorefront = STOREFRONT.has(view)
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <DemoRail />
       {isStorefront && <StoreHeader />}
       <Suspense fallback={<div className="min-h-screen bg-cream animate-pulse" />}>

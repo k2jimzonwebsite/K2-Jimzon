@@ -12,7 +12,7 @@ export default function ProductVisual({ product, className = '', pad = 'p-4' }) 
         src={product.img}
         alt={product.name}
         loading="lazy"
-        className={'h-full w-full object-contain ' + pad}
+        className={'h-full w-full object-contain mix-blend-multiply ' + pad}
       />
     </div>
   )

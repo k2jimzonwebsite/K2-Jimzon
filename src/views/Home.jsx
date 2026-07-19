@@ -47,7 +47,7 @@ function Hero() {
 
   return (
     <section className="bg-transparent">
-      <div className="flex flex-col lg:flex-row min-h-[550px] md:min-h-[650px]">
+      <div className="flex flex-col lg:flex-row min-h-[400px] md:min-h-[550px] lg:min-h-[650px]">
         {/* Left: Promotions / Deals Carousel */}
         <div className="grain relative flex flex-col justify-center overflow-hidden bg-cream/80 backdrop-blur-xl p-8 lg:w-[40%] xl:w-[35%] lg:p-10 xl:p-14 border-r border-line">
           <Tricolor className="absolute inset-x-0 top-0 z-10" />
@@ -74,7 +74,7 @@ function Hero() {
                 hidden: { opacity: 0, y: 15 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
               }}
-              className="mt-6 font-serif text-6xl font-medium leading-[0.95] tracking-tight text-navy lg:text-7xl xl:text-[5.5rem]"
+              className="mt-6 font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-medium leading-[0.95] tracking-tight text-navy"
             >
               The Milano <br/> Consignment.
             </motion.h1>
@@ -105,7 +105,7 @@ function Hero() {
         </div>
 
         {/* Right: Featured 3D Product (Globe) */}
-        <div className="relative flex flex-col overflow-hidden bg-shell/70 backdrop-blur-xl lg:flex-1 min-h-[450px] md:min-h-[auto]">
+        <div className="relative flex flex-col overflow-hidden bg-shell/70 backdrop-blur-xl lg:flex-1 min-h-[300px] md:min-h-[450px]">
           
           {/* Abstract Wood & Terracotta Depth */}
           <div className="absolute -top-[10%] -right-[10%] w-[60%] h-[60%] bg-[#9A6A45] rounded-full mix-blend-multiply filter blur-[100px] opacity-20"></div>
@@ -123,7 +123,7 @@ function Hero() {
 
           <div className="absolute top-6 left-6 z-20">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-cream/90 backdrop-blur-md px-3.5 py-2 text-xs font-bold uppercase tracking-[0.15em] text-navy shadow-card">
-              <CheckIcon size={12} className="text-forest" /> Featured Import
+              <StarIcon size={12} className="text-gold" /> Customer Review
             </span>
           </div>
           {enabledGlobeProducts.length > 0 && (
@@ -173,7 +173,7 @@ function CategoryTiles() {
   const { setCategory, setQuery, go } = useStore()
   return (
     <section className="mx-auto max-w-7xl px-4 pt-8">
-      <div className="grid grid-cols-5 gap-2 md:gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 md:gap-4">
         {CATEGORY_TILES.map(({ cat, icon, note }, i) => {
           return (
             <button
@@ -183,16 +183,17 @@ function CategoryTiles() {
                   go('pasabuy')
                 } else {
                   setQuery(''); setCategory(cat) 
+                  go('product')
                 }
               }}
               className="rise group flex flex-col items-center gap-2 rounded-xl bg-cream/90 backdrop-blur-md p-3 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-float hover:bg-cream"
               style={{ animationDelay: `${i * 50}ms` }}
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-shell text-2xl transition-colors group-hover:bg-crimson group-hover:text-white shadow-sm">
+              <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-shell text-2xl transition-colors group-hover:bg-crimson group-hover:text-white shadow-sm">
                 {icon}
               </div>
               <div>
-                <p className="font-serif text-sm font-semibold leading-tight text-navy transition-colors group-hover:text-crimson">{cat}</p>
+                <p className="font-serif text-xs sm:text-sm font-semibold leading-tight text-navy transition-colors group-hover:text-crimson">{cat}</p>
                 <p className="hidden text-xs text-navy-faint md:block">{note}</p>
               </div>
             </button>
@@ -268,7 +269,7 @@ function NewArrivals() {
         </motion.div>
       </div>
 
-      <div className="relative h-[700px] md:h-[500px] w-full">
+      <div className="relative h-[500px] md:h-[500px] w-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeProduct.id}
@@ -313,7 +314,7 @@ function StorySection() {
   return (
     <section className="relative mx-auto max-w-6xl px-4 py-16 md:py-24 glow-terracotta">
       <Kicker className="text-crimson">How it gets to you</Kicker>
-      <h2 className="mt-2 w-full font-serif text-4xl font-medium tracking-tight text-navy md:text-5xl lg:text-6xl">
+      <h2 className="mt-2 w-full font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-medium tracking-tight text-navy">
         From an Italian shelf to your door, with nothing lost in between.
       </h2>
       <div className="mt-12 grid gap-5 md:grid-cols-3 md:gap-8">

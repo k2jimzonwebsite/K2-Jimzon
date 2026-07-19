@@ -12,7 +12,7 @@ function SearchBox({ className = '' }) {
         value={query}
         onChange={(e) => {
           setQuery(e.target.value)
-          if (view !== 'home') go('home')
+          if (view !== 'product') go('product')
         }}
         placeholder='Try "Lavazza", "Biscoff", "pesto"…'
         className="w-full rounded-full border border-line bg-shell py-2.5 pl-9 pr-4 text-sm placeholder:text-navy-faint focus:border-navy/40 focus:bg-white focus:outline-none"
@@ -33,7 +33,7 @@ export default function StoreHeader() {
         <div className="flex items-center justify-center gap-3 bg-forest-wash border-b border-line px-4 py-1.5 text-xs font-medium text-forest">
           <span className="inline-flex h-1.5 w-1.5 rounded-full bg-forest/70 pulse-dot" />
           Wholesale pricing active — Bella Vita Trading
-          <button onClick={() => setIsWholesale(false)} className="underline decoration-forest/40 underline-offset-2 hover:decoration-forest">
+          <button onClick={() => setIsWholesale(false)} className="px-2 py-1 -mx-2 underline decoration-forest/40 underline-offset-2 hover:decoration-forest">
             Sign out
           </button>
         </div>
@@ -45,14 +45,14 @@ export default function StoreHeader() {
 
         <button
           onClick={() => go('wholesale')}
-          className="ml-auto whitespace-nowrap rounded-md px-2 py-1 text-sm font-semibold text-blue transition-colors hover:bg-blue-wash md:ml-0"
+          className="ml-auto whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-semibold text-blue transition-colors hover:bg-blue-wash md:ml-0"
         >
           {isWholesale ? 'Wholesale portal' : 'Wholesale login'}
         </button>
 
         <button
           onClick={() => setCartOpen(true)}
-          className="relative rounded-md p-2 text-navy transition-colors hover:bg-shell"
+          className="relative rounded-md p-2.5 text-navy transition-colors hover:bg-shell"
           aria-label={`Open cart, ${count} items`}
         >
           <BagIcon size={21} />

@@ -32,7 +32,7 @@ export default function Pasabuy() {
           <Kicker className="rise flex items-center gap-2">
             <PlaneIcon size={14} /> Customer-requested imports
           </Kicker>
-          <h1 className="rise mt-3 font-serif text-4xl font-semibold leading-[1.06] tracking-tight md:text-5xl" style={{ animationDelay: '80ms' }}>
+          <h1 className="rise mt-3 font-serif text-2xl sm:text-3xl md:text-5xl font-semibold leading-[1.06] tracking-tight" style={{ animationDelay: '80ms' }}>
             Pasabuy,
             <br />
             <em className="font-normal">without the group chat.</em>

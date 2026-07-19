@@ -35,7 +35,7 @@ export default function CartDrawer() {
               </h2>
               <button
                 onClick={() => setCartOpen(false)}
-                className="rounded-md p-1.5 text-navy-soft hover:bg-navy/5 hover:text-navy"
+                className="rounded-md p-2 text-navy-soft hover:bg-navy/5 hover:text-navy"
                 aria-label="Close"
               >
                 <XIcon />

@@ -5,20 +5,22 @@ import { generateFibonacciSphere } from './math'
 import ProductCard3D from './ProductCard3D'
 
 const GLOBE_RADIUS = 6.0
-const TOTAL_CARDS = 48
 
 export default function GlobeCore({ products, rotationState, velocityState, isDragging, lastInteraction, onSelect, onHover, onHoverOut }) {
   const groupRef = useRef(null)
 
-  // Create card data: distribute products across the sphere, repeating if needed
   const cardData = useMemo(() => {
     if (!products || products.length === 0) return []
 
-    const rawPositions = generateFibonacciSphere(TOTAL_CARDS, GLOBE_RADIUS)
+    // Ensure there are enough cards to form a dense sphere.
+    // If the CMS has fewer than 48 items, repeat them. If more, it scales dynamically!
+    const targetCount = Math.max(48, products.length)
+
+    const rawPositions = generateFibonacciSphere(targetCount, GLOBE_RADIUS)
     return rawPositions.map((pos, i) => ({
       position: pos,
       scale: 0.6 + Math.random() * 0.7,
-      product: products[i % products.length], // cycle through products
+      product: products[i % products.length], 
     }))
   }, [products])
 

@@ -40,7 +40,7 @@ export function Wordmark({ size = 'text-2xl', onClick, light = false }) {
   return (
     <button
       onClick={onClick}
-      className={'group text-left leading-none ' + (onClick ? 'cursor-pointer' : 'cursor-default')}
+      className={'group text-left leading-none py-1 ' + (onClick ? 'cursor-pointer' : 'cursor-default')}
     >
       <span className={'font-serif font-semibold tracking-tight text-crimson ' + size}>
         K2 Jimzon
@@ -119,8 +119,8 @@ export function Kicker({ children, className = '' }) {
 // Reusable stepper for cart/quantity inputs
 export function QuantityStepper({ value, onChange, max, size = 'sm', className = '' }) {
   const isSm = size === 'sm'
-  const btnPad = isSm ? 'p-1.5' : 'p-3'
-  const iconSize = isSm ? 13 : 15
+  const btnPad = isSm ? 'p-2' : 'p-3'
+  const iconSize = isSm ? 14 : 16
   const width = isSm ? 'w-7 text-sm' : 'w-9 text-base'
   const atLimit = value >= max
 

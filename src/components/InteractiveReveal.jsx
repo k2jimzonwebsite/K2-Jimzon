@@ -53,7 +53,7 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
           src={beforeImage} 
           alt="Product Package" 
           loading="lazy"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover mix-blend-multiply"
           draggable={false}
         />
       </div>
@@ -68,7 +68,7 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
             src={afterImage} 
             alt="Product Revealed" 
             loading="lazy"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover mix-blend-multiply"
             draggable={false}
           />
         </div>

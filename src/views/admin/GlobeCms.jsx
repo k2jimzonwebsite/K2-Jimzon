@@ -145,7 +145,7 @@ function GlobeProductsPanel() {
         <div>
           <h3 className="font-serif text-lg font-semibold">Products on Globe</h3>
           <p className="text-sm text-navy-faint">
-            {enabledCount} of {globeProducts.length} products enabled · Cards will cycle to fill 48 globe slots
+            {enabledCount} of {globeProducts.length} products enabled · These will be distributed across the globe
           </p>
         </div>
       </div>
