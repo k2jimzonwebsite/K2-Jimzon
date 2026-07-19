@@ -68,7 +68,7 @@ export default function Customers() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-line bg-white shadow-card">
+      <div className="overflow-hidden rounded-lg border border-line bg-white shadow-card overflow-x-auto">
         {loading && customers.length === 0 ? (
           <div className="p-8 text-center text-sm text-navy-soft">Loading customers...</div>
         ) : customers.length === 0 ? (

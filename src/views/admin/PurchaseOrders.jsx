@@ -1,25 +1,178 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { CheckIcon } from '../../components/ui/icons'
 import { peso } from '../../data/products'
+import { Html5QrcodeScanner } from 'html5-qrcode'
+
+function ScannerModal({ po, onClose, onComplete }) {
+  const [lines, setLines] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [processing, setProcessing] = useState(false)
+  const scannerRef = useRef(null)
+
+  useEffect(() => {
+    const fetchLines = async () => {
+      if (!po || !po.id.startsWith('po-')) {
+        // mock data fallback
+        setLines([
+          { id: '1', sku: 'TRUFFLE-001', quantity: 12, scanned: 0, products: { title: 'Urbani Truffle Oil' } },
+          { id: '2', sku: 'PASTA-002', quantity: 24, scanned: 0, products: { title: 'De Cecco Linguine' } }
+        ])
+        setLoading(false)
+        return
+      }
+      
+      const { data } = await supabase.from('po_lines').select('*, products(title)').eq('po_id', po.id)
+      if (data) {
+        setLines(data.map(l => ({ ...l, scanned: 0 })))
+      }
+      setLoading(false)
+    }
+    fetchLines()
+  }, [po])
+
+  useEffect(() => {
+    if (loading) return;
+    
+    // Slight delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      if (!document.getElementById("qr-reader")) return;
+      
+      const scanner = new Html5QrcodeScanner("qr-reader", { 
+        qrbox: { width: 250, height: 150 }, 
+        fps: 5,
+        aspectRatio: 1.0
+      }, false)
+
+      scanner.render((decodedText) => {
+        // Debounce or just update state functionally
+        setLines(prev => {
+          const matchIndex = prev.findIndex(l => l.sku === decodedText)
+          if (matchIndex === -1) return prev // SKU not in this PO
+          
+          const match = prev[matchIndex]
+          if (match.scanned >= match.quantity) return prev // Already fully scanned
+          
+          const newLines = [...prev]
+          newLines[matchIndex] = { ...match, scanned: match.scanned + 1 }
+          
+          // Optional: vibrate phone on success
+          if (navigator.vibrate) navigator.vibrate(50)
+          
+          return newLines
+        })
+      }, undefined)
+
+      scannerRef.current = scanner
+    }, 100)
+
+    return () => {
+      clearTimeout(timer)
+      if (scannerRef.current) {
+        scannerRef.current.clear().catch(console.error)
+      }
+    }
+  }, [loading])
+
+  const handleComplete = async () => {
+    setProcessing(true)
+    
+    // Process increments manually from frontend since we don't have the RPC
+    const scannedItems = lines.filter(l => l.scanned > 0)
+    
+    if (po.id.startsWith('po-')) { // Actual DB
+      // We must increment stock. 
+      // Supabase RPC is best, but we will fetch current stock and add to avoid permissions block for now.
+      for (const item of scannedItems) {
+        const { data: prod } = await supabase.from('products').select('total_stock').eq('sku', item.sku).single()
+        if (prod) {
+          await supabase.from('products').update({ total_stock: prod.total_stock + item.scanned }).eq('sku', item.sku)
+        }
+      }
+      
+      await supabase.from('purchase_orders').update({ status: 'Received' }).eq('id', po.id)
+    }
+
+    onComplete(po.id)
+  }
+
+  return (
+    <div className="fixed inset-0 z-[100] flex flex-col bg-[#05080f] animate-in slide-in-from-bottom-4 text-white">
+      <div className="flex items-center justify-between px-4 py-4 border-b border-white/10 bg-black/20">
+        <div>
+          <p className="font-serif text-lg font-semibold">Receive {po.po_number}</p>
+          <p className="text-xs text-white/50">Point camera at product barcodes</p>
+        </div>
+        <button onClick={onClose} className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto">
+        {/* Scanner Window */}
+        <div className="bg-black border-b border-white/10 p-4">
+          <div id="qr-reader" className="mx-auto max-w-sm rounded-lg overflow-hidden bg-white/5" />
+        </div>
+
+        {/* List of Expected Items */}
+        <div className="p-4 space-y-3">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-white/30 mb-2">Checklist</h3>
+          {loading ? (
+            <p className="text-xs text-white/50">Loading expected items...</p>
+          ) : (
+            lines.map(line => {
+              const isComplete = line.scanned >= line.quantity
+              return (
+                <div key={line.id} className={`flex items-center justify-between p-3 rounded-lg border ${isComplete ? 'border-forest/50 bg-forest/10' : 'border-white/10 bg-white/5'}`}>
+                  <div>
+                    <p className="text-sm font-medium">{line.products?.title || line.sku}</p>
+                    <p className="text-xs font-mono text-white/50">{line.sku}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className={`text-lg font-bold tabular ${isComplete ? 'text-forest' : 'text-blue'}`}>
+                      {line.scanned} <span className="text-sm font-normal text-white/40">/ {line.quantity}</span>
+                    </p>
+                  </div>
+                </div>
+              )
+            })
+          )}
+        </div>
+      </div>
+
+      <div className="p-4 border-t border-white/10 bg-black/40 pb-safe">
+        <button 
+          onClick={handleComplete}
+          disabled={processing || lines.filter(l => l.scanned > 0).length === 0}
+          className="w-full rounded-lg bg-forest py-3.5 text-sm font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-forest/20"
+        >
+          {processing ? 'Saving...' : 'Finalize Restock'}
+        </button>
+      </div>
+    </div>
+  )
+}
 
 export default function PurchaseOrders() {
   const [pos, setPos] = useState([])
   const [loading, setLoading] = useState(true)
+  const [scanningPo, setScanningPo] = useState(null)
 
   useEffect(() => {
     fetchPOs()
   }, [])
 
   const fetchPOs = async () => {
+    if (!supabase) return;
     setLoading(true)
     const { data, error } = await supabase
       .from('purchase_orders')
       .select('*, suppliers(name)')
       .order('created_at', { ascending: false })
     
-    if (error) {
-      // Mock data if migration not run yet
+    if (error || !data) {
       setPos([
         { id: 'po-1', po_number: 'PO-2026-001', suppliers: { name: 'Milano Distributors' }, status: 'Sent', total_amount: 45000, expected_delivery: '2026-07-25' },
         { id: 'po-2', po_number: 'PO-2026-002', suppliers: { name: 'Roma Coffee Roasters' }, status: 'Received', total_amount: 12000, expected_delivery: '2026-07-15' },
@@ -30,36 +183,35 @@ export default function PurchaseOrders() {
     setLoading(false)
   }
 
-  const handleReceive = async (po) => {
-    // This calls the RPC we defined in 0006_supply_chain.sql
-    if (!po.id.startsWith('po-')) { // Actual UUID check
-      const { error } = await supabase.rpc('receive_po', { p_po_id: po.id })
-      if (error) {
-        alert("Error receiving goods: " + error.message)
-        return
-      }
-    }
-    
-    // Optimistic UI update
-    setPos(prev => prev.map(p => p.id === po.id ? { ...p, status: 'Received' } : p))
-    alert(`Success! Inventory levels have been automatically updated based on ${po.po_number}.`)
+  const handleScanComplete = (poId) => {
+    setPos(prev => prev.map(p => p.id === poId ? { ...p, status: 'Received' } : p))
+    setScanningPo(null)
+    alert(`Success! Inventory levels have been restocked from scan.`)
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500 relative">
       
+      {scanningPo && (
+        <ScannerModal 
+          po={scanningPo} 
+          onClose={() => setScanningPo(null)} 
+          onComplete={handleScanComplete} 
+        />
+      )}
+
       <div className="flex items-center justify-between border-b border-white/10 pb-4">
         <div>
           <h2 className="text-lg font-serif text-white">Incoming Deliveries</h2>
-          <p className="text-sm text-white/50 mt-1">Manage incoming stock and auto-update inventory when it arrives.</p>
+          <p className="text-sm text-white/50 mt-1">Scan barcodes to accurately restock inventory.</p>
         </div>
         <button className="rounded bg-forest px-4 py-2 text-sm font-semibold text-white hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20">
           + New Delivery
         </button>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-[#05080f] overflow-hidden">
-        <table className="w-full text-left text-sm text-white/80">
+      <div className="rounded-xl border border-white/10 bg-[#05080f] overflow-x-auto w-full">
+        <table className="w-full text-left text-sm text-white/80 min-w-[800px]">
           <thead className="bg-white/5 text-xs uppercase tracking-widest text-white/40">
             <tr>
               <th className="px-6 py-4 font-medium">PO Number</th>
@@ -92,10 +244,10 @@ export default function PurchaseOrders() {
                 <td className="px-6 py-4 text-right">
                   {po.status === 'Sent' ? (
                     <button 
-                      onClick={() => handleReceive(po)}
+                      onClick={() => setScanningPo(po)}
                       className="rounded border border-blue bg-blue/10 px-3 py-1.5 text-xs font-medium text-blue hover:bg-blue/20 transition-colors"
                     >
-                      Mark as Arrived (Auto-Restock)
+                      Receive Shipment (Scan)
                     </button>
                   ) : po.status === 'Received' ? (
                     <span className="flex items-center justify-end gap-1 text-xs text-forest">

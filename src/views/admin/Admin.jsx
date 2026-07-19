@@ -35,6 +35,7 @@ export default function Admin() {
   const [section, setSection] = useState('overview')
   const [sheetMode, setSheetMode] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   // KPI States
   const [activeSkus, setActiveSkus] = useState(0)
@@ -164,11 +165,97 @@ export default function Admin() {
       </aside>
 
       <div className="min-w-0 flex-1 flex flex-col h-full overflow-hidden">
-        {/* Mobile advisory */}
-        <div className="flex items-center gap-2 border-b border-amber/30 bg-amber-wash px-4 py-2 text-sm text-amber lg:hidden">
-          <AlertIcon size={14} />
-          Admin is designed for desktop. Mobile view is read-only.
+        {/* Mobile Header */}
+        <div className="flex items-center justify-between px-4 py-3 bg-[#05080f] border-b border-white/10 shrink-0 w-full lg:hidden">
+          <div>
+            <p className="font-serif text-lg font-semibold text-white">K2 Jimzon <span className="text-blue ml-1">BOS</span></p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setPaletteOpen(true)} className="p-2 text-white/50 hover:text-white">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+            <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 text-white/50 hover:text-white">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu Drawer */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 flex lg:hidden">
+            <div className="fixed inset-0 bg-black/60" onClick={() => setIsMobileMenuOpen(false)} />
+            <div className="relative flex w-64 flex-col bg-[#05080f] border-r border-white/10 overflow-y-auto pt-4 pb-20">
+              <div className="flex items-center justify-between px-5 mb-4">
+                <p className="font-serif text-lg font-semibold text-white">Menu</p>
+                <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 text-white/50 hover:text-white">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="px-2.5 space-y-6">
+                <div>
+                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Sales & Orders</p>
+                  <div className="space-y-0.5">
+                    {NAV_COMMERCE.map(item => {
+                      const Ico = item.icon
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
+                          className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                        >
+                          <Ico size={16} /> {item.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Stock & Buying</p>
+                  <div className="space-y-0.5">
+                    {NAV_SUPPLY.map(item => {
+                      const Ico = item.icon
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
+                          className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                        >
+                          <Ico size={16} /> {item.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+                
+                <div>
+                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">AI Tools</p>
+                  <div className="space-y-0.5">
+                    {NAV_INTELLIGENCE.map(item => {
+                      const Ico = item.icon
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
+                          className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                        >
+                          <Ico size={16} /> {item.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <header className="flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#0A101D] px-4 py-3.5 md:px-6">
           <div>
