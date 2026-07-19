@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useStore } from '../context/StoreContext'
-import { CATEGORIES, products } from '../data/products'
+import { CATEGORIES } from '../data/products'
 import ProductCard from './ProductCard'
 import { CheckIcon } from './ui/icons'
 
 export default function CatalogGrid() {
-  const { query, category, setCategory } = useStore()
+  const { query, category, setCategory, products } = useStore()
   const [sortBy, setSortBy] = useState('popular') // popular, latest, price_asc, price_desc
 
   // Filter products based on search query and category
@@ -14,12 +14,12 @@ export default function CatalogGrid() {
     let result = products
     if (category !== 'All') {
       // Handle the fact that our category data might not exactly match
-      result = result.filter(p => p.category === category || (category === 'Snacks' && p.category.includes('Biscuits')))
+      result = result.filter(p => p.category === category || (category === 'Snacks' && p.category?.includes('Biscuits')))
     }
     
     if (query.trim().length > 0) {
       const q = query.toLowerCase()
-      result = result.filter(p => p.name.toLowerCase().includes(q) || p.short.toLowerCase().includes(q) || (p.tag && p.tag.toLowerCase().includes(q)))
+      result = result.filter(p => p.name?.toLowerCase().includes(q) || p.short?.toLowerCase().includes(q) || (p.tag && p.tag.toLowerCase().includes(q)))
     }
 
     // Sort
