@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import ScanToAiModal from './ScanToAiModal'
+import SmartPasteModal from './SmartPasteModal'
 
 export default function InventoryGrid() {
   const [products, setProducts] = useState([])
@@ -8,6 +9,7 @@ export default function InventoryGrid() {
   const [editingProduct, setEditingProduct] = useState(null)
   const [isAdding, setIsAdding] = useState(false)
   const [showAiScanner, setShowAiScanner] = useState(false)
+  const [showSmartPaste, setShowSmartPaste] = useState(false)
 
   useEffect(() => {
     if (!supabase) return;
@@ -100,7 +102,17 @@ export default function InventoryGrid() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            Scan & Generate
+            Scan Box
+          </button>
+          
+          <button 
+            onClick={() => setShowSmartPaste(true)}
+            className="flex items-center gap-2 rounded bg-purple-500/20 text-purple-400 hover:bg-purple-500 hover:text-white transition-colors px-3 py-1.5 text-xs font-semibold"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Smart Paste AI
           </button>
           
           <button 
@@ -124,6 +136,16 @@ export default function InventoryGrid() {
           onProductAdded={() => {
             fetchProducts()
             setShowAiScanner(false)
+          }} 
+        />
+      )}
+
+      {showSmartPaste && (
+        <SmartPasteModal 
+          onClose={() => setShowSmartPaste(false)} 
+          onProductAdded={() => {
+            fetchProducts()
+            setShowSmartPaste(false)
           }} 
         />
       )}
