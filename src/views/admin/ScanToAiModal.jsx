@@ -69,8 +69,7 @@ Required JSON structure:
   "description": "string (SEO optimized, engaging, 3-4 sentences)",
   "retail_price": number (leave as 0 if unknown),
   "wholesale_price": number (leave as 0 if unknown),
-  "why_buy": "string (3 punchy marketing bullet points separated by \\n)",
-  "image_url": "string (MUST BE A RAW HTTPS URL. DO NOT WRAP IN MARKDOWN BRACKETS OR PARENTHESES. RAW URL ONLY!)"
+  "why_buy": "string (3 punchy marketing bullet points separated by \\n)"
 }
 
 Optional Directions:

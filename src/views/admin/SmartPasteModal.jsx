@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import ImageUploadDropzone from '../../components/ui/ImageUploadDropzone'
 
 const SYSTEM_PROMPT = `Act as an expert e-commerce copywriter and pricing analyst.
 I will give you a basic product name and SKU. You will generate a rich product profile and output it strictly as a raw JSON object (do not wrap in markdown or backticks).
@@ -71,13 +72,6 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
       return
     }
 
-    let finalImageUrl = parsedProduct.image_url || ''
-    // Clean up if AI hallucinates a markdown link like [url](url)
-    if (finalImageUrl.includes('](')) {
-      const match = finalImageUrl.match(/\((.*?)\)/)
-      if (match) finalImageUrl = match[1]
-    }
-
     const { error: insertError } = await supabase.from('products').insert([
       {
         sku: parsedProduct.sku,
@@ -86,7 +80,9 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
         retail_price: Number(parsedProduct.retail_price) || 0,
         vip_price: Number(parsedProduct.wholesale_price) || 0,
         why_buy: parsedProduct.why_buy || '',
-        image_url: finalImageUrl,
+        primary_image_url: parsedProduct.primary_image_url || null,
+        after_use_image_url: parsedProduct.after_use_image_url || null,
+        sample_image_urls: parsedProduct.sample_image_urls || [],
         status: 'Draft'
       }
     ])
@@ -206,14 +202,27 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                       onChange={(e) => setParsedProduct({...parsedProduct, description: e.target.value})}
                     />
                   </div>
+                  
+                  <div className="space-y-4 pt-4 border-t border-white/10">
+                    <h4 className="text-xs font-semibold text-white/50 uppercase tracking-widest">Product Photos</h4>
+                    
+                    <ImageUploadDropzone 
+                      label="Primary Luxury Photo" 
+                      multiple={false}
+                      onUploadComplete={(url) => setParsedProduct({...parsedProduct, primary_image_url: url})}
+                    />
 
-                  <div>
-                    <label className="text-xs text-white/40 block mb-1">Image URL</label>
-                    <input 
-                      type="text"
-                      className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white text-xs font-mono focus:outline-none focus:border-purple-500"
-                      value={parsedProduct.image_url}
-                      onChange={(e) => setParsedProduct({...parsedProduct, image_url: e.target.value})}
+                    <ImageUploadDropzone 
+                      label="After-Use Photo" 
+                      multiple={false}
+                      onUploadComplete={(url) => setParsedProduct({...parsedProduct, after_use_image_url: url})}
+                    />
+
+                    <ImageUploadDropzone 
+                      label="Sample Photos (Up to 5)" 
+                      multiple={true}
+                      maxFiles={5}
+                      onUploadComplete={(urls) => setParsedProduct({...parsedProduct, sample_image_urls: urls})}
                     />
                   </div>
                 </div>
