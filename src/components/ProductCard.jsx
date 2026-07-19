@@ -15,7 +15,11 @@ export default function ProductCard({ product, index = 0, compact = false, featu
       {featured ? (
         <div className="relative text-left h-[280px] sm:h-[350px] md:h-[400px] md:h-full md:w-[55%] flex-shrink-0">
           <div className="w-full overflow-hidden bg-transparent flex items-center justify-center h-full aspect-auto">
-            <InteractiveReveal beforeImage={product.img} afterImage={product.afterImage} />
+            {product.afterImage ? (
+              <InteractiveReveal beforeImage={product.img} afterImage={product.afterImage} />
+            ) : (
+              <ProductVisual product={product} className="h-full w-full object-contain" pad="p-4 md:p-8" />
+            )}
           </div>
         </div>
       ) : (

@@ -85,10 +85,10 @@ export function StoreProvider({ children }) {
     return dbProducts.map(dbP => {
       // Find matching local product for rich UI assets (if any)
       // First try by sku, then try matching the names if sku doesn't match perfectly
-      let localP = localProducts.find(lp => lp.id.toLowerCase() === dbP.sku.toLowerCase() || lp.name.includes(dbP.title))
+      let localPMatch = localProducts.find(lp => lp.id.toLowerCase() === dbP.sku.toLowerCase() || lp.name.includes(dbP.title))
       
       // If we don't have a specific local match, use a generic fallback for UI stability
-      if (!localP) localP = localProducts[0]
+      let localP = localPMatch || localProducts[0]
 
       return {
         ...localP, // spread the rich UI data
@@ -97,6 +97,8 @@ export function StoreProvider({ children }) {
         id: dbP.sku, // alias for legacy components
         title: dbP.title,
         name: dbP.title, // alias for legacy components
+        img: dbP.primary_image_url || dbP.image_url || (localPMatch ? localPMatch.img : null),
+        afterImage: dbP.after_use_image_url || (localPMatch ? localPMatch.afterImage : null),
         retail_price: Number(dbP.retail_price),
         retail: Number(dbP.retail_price), // alias
         vip_price: Number(dbP.vip_price),
