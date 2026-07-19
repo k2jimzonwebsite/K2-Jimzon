@@ -95,7 +95,7 @@ export default function InventoryGrid() {
               
               <button 
                 onClick={() => setEditingProduct(p)}
-                className="absolute top-2 right-2 rounded bg-black/50 backdrop-blur px-3 py-1 text-xs font-semibold text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue"
+                className="absolute top-2 right-2 rounded bg-blue/90 backdrop-blur px-3 py-1 text-xs font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
               >
                 Edit
               </button>
