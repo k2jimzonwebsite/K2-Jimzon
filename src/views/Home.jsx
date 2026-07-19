@@ -532,9 +532,9 @@ function HomeCatalog() {
   return (
     <section id="catalog" className="mx-auto max-w-7xl px-4 py-16 scroll-reveal">
       <div className="flex flex-col items-center justify-center text-center mb-12">
-        <Kicker className="mb-2 text-crimson">Full Collection</Kicker>
+        <Kicker className="mb-2 text-crimson">The Pantry</Kicker>
         <h2 className="font-serif text-3xl font-medium tracking-tight text-navy md:text-4xl">
-          {category === 'All' ? 'Our Entire Italian Catalog' : category}
+          {category === 'All' ? 'Curated Italian Imports' : category}
         </h2>
         {query && <p className="mt-2 text-navy-soft">Searching for "{query}"</p>}
       </div>
