@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import { AlertIcon, BoxIcon, GlobeIcon, GridIcon, SyncIcon, UserIcon, InboxIcon } from '../../components/ui/icons'
-import Kanban from './Kanban'
-import Sheet from './Sheet'
-import InventoryGrid from './InventoryGrid'
-import GlobeCms from './GlobeCms'
-import AiDrafts from './AiDrafts'
-import Inbox from './Inbox'
-import Customers from './Customers'
-import CommandPalette from './CommandPalette'
-import Overview from './Overview'
-import Suppliers from './Suppliers'
-import PurchaseOrders from './PurchaseOrders'
-import OutboundSourcing from './OutboundSourcing'
-import BulkCsvImportModal from './BulkCsvImportModal'
 import { supabase } from '../../lib/supabaseClient'
+
+// Lazy loaded heavy components to reduce initial bundle lag
+const Kanban = lazy(() => import('./Kanban'))
+const Sheet = lazy(() => import('./Sheet'))
+const InventoryGrid = lazy(() => import('./InventoryGrid'))
+const GlobeCms = lazy(() => import('./GlobeCms'))
+const AiDrafts = lazy(() => import('./AiDrafts'))
+const Inbox = lazy(() => import('./Inbox'))
+const Customers = lazy(() => import('./Customers'))
+const Overview = lazy(() => import('./Overview'))
+const Suppliers = lazy(() => import('./Suppliers'))
+const BulkCsvImportModal = lazy(() => import('./BulkCsvImportModal'))
 
 const NAV_COMMERCE = [
   { id: 'overview', label: 'Home Dashboard', icon: GridIcon },
@@ -62,14 +61,21 @@ export default function Admin() {
 
   const fetchKpis = async () => {
     if (!supabase) return;
-    const { data: prodData } = await supabase.from('products').select('total_stock')
-    if (prodData) {
-      setActiveSkus(prodData.length)
-      setLowStock(prodData.filter(p => p.total_stock <= 5).length)
-    }
+    
+    // Use parallel count queries to eliminate transferring large payloads on mobile networks
+    const [
+      { count: activeCount }, 
+      { count: lowStockCount }, 
+      { count: pendingCount }
+    ] = await Promise.all([
+      supabase.from('products').select('*', { count: 'exact', head: true }),
+      supabase.from('products').select('*', { count: 'exact', head: true }).lte('total_stock', 5),
+      supabase.from('orders').select('*', { count: 'exact', head: true }).eq('order_status', 'Pending')
+    ])
 
-    const { count } = await supabase.from('orders').select('*', { count: 'exact', head: true }).eq('order_status', 'Pending')
-    if (count !== null) setPendingOrders(count)
+    if (activeCount !== null) setActiveSkus(activeCount)
+    if (lowStockCount !== null) setLowStock(lowStockCount)
+    if (pendingCount !== null) setPendingOrders(pendingCount)
   }
 
   const showSheet = sheetMode && section === 'inventory'
@@ -337,17 +343,22 @@ export default function Admin() {
         )}
 
         <div className="p-4 md:p-6 overflow-y-auto flex-1">
-          {section === 'globe' ? <GlobeCms /> 
-           : section === 'inbox' ? <Inbox />
-           : section === 'outbound' ? <OutboundSourcing />
-           : section === 'sourcing' ? <AiDrafts />
-           : section === 'wholesale' ? <Customers />
-           : section === 'suppliers' ? <Suppliers />
-           : section === 'pos' ? <PurchaseOrders />
-           : showSheet ? <Sheet /> 
-           : showGrid ? <InventoryGrid />
-           : section === 'overview' ? <Overview setSection={setSection} />
-           : <Kanban />}
+          <Suspense fallback={
+            <div className="w-full h-full flex flex-col items-center justify-center text-white/50 space-y-4">
+              <div className="w-8 h-8 rounded-full border-2 border-t-blue border-r-blue border-b-transparent border-l-transparent animate-spin" />
+              <p className="text-sm font-medium animate-pulse">Loading workspace...</p>
+            </div>
+          }>
+            {section === 'globe' ? <GlobeCms /> 
+             : section === 'inbox' ? <Inbox />
+             : section === 'sourcing' ? <AiDrafts />
+             : section === 'wholesale' ? <Customers />
+             : section === 'suppliers' ? <Suppliers />
+             : showSheet ? <Sheet /> 
+             : showGrid ? <InventoryGrid />
+             : section === 'overview' ? <Overview setSection={setSection} />
+             : <Kanban />}
+          </Suspense>
         </div>
       </div>
     </div>
@@ -362,7 +373,7 @@ function KpiRow({ skus, lowStock, pending }) {
     { label: 'Today across channels', value: '₱41,260', sub: 'Live estimate', tone: 'good' },
   ]
   return (
-    <div className="grid grid-cols-2 gap-px border-b border-white/10 bg-white/10 lg:grid-cols-4 shrink-0">
+    <div className="grid grid-cols-2 gap-px border-b border-white/10 bg-white/10 md:grid-cols-4 shrink-0">
       {KPIS.map((k) => (
         <div key={k.label} className={'px-4 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-crimson/10' : 'bg-[#05080f]')}>
           <p className="text-[10px] font-mono uppercase tracking-widest text-white/50">{k.label}</p>

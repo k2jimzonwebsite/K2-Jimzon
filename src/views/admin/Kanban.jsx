@@ -92,10 +92,10 @@ export default function Kanban() {
           <p className="text-sm text-white/50">Command center for scanning and shipping physical boxes.</p>
         </div>
         
-        <div className="flex bg-[#05080f] rounded-lg p-1 border border-white/10">
+        <div className="flex bg-[#05080f] rounded-lg p-1 border border-white/10 overflow-x-auto whitespace-nowrap hide-scrollbar">
           <button 
             onClick={() => setActiveTab('kanban')}
-            className={`px-4 py-2 text-sm font-semibold rounded-md flex items-center gap-2 transition-all ${
+            className={`px-4 py-2 text-sm font-semibold rounded-md flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'kanban' ? 'bg-blue text-white shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
             }`}
           >
@@ -104,7 +104,7 @@ export default function Kanban() {
           
           <button 
             onClick={() => setActiveTab('outbound')}
-            className={`px-4 py-2 text-sm font-semibold rounded-md flex items-center gap-2 transition-all ${
+            className={`px-4 py-2 text-sm font-semibold rounded-md flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'outbound' ? 'bg-forest text-navy shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
             }`}
           >
@@ -113,7 +113,7 @@ export default function Kanban() {
 
           <button 
             onClick={() => setActiveTab('inbound')}
-            className={`px-4 py-2 text-sm font-semibold rounded-md flex items-center gap-2 transition-all ${
+            className={`px-4 py-2 text-sm font-semibold rounded-md flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'inbound' ? 'bg-forest text-navy shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
             }`}
           >
