@@ -357,11 +357,17 @@ export default function Admin() {
              : section === 'suppliers' ? <Suppliers />
              : showSheet ? <Sheet /> 
              : showGrid ? <InventoryGrid />
-             : section === 'overview' ? <Overview setSection={setSection} />
+              : section === 'overview' ? <Overview setSection={setSection} />
              : <Kanban />}
           </Suspense>
         </div>
       </div>
+
+      {showCsvImport && (
+        <Suspense fallback={null}>
+          <BulkCsvImportModal onClose={() => setShowCsvImport(false)} />
+        </Suspense>
+      )}
     </div>
   )
 }
