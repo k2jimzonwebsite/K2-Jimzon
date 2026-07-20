@@ -8,15 +8,19 @@ import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 
 export default function ProductDetail() {
-  const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, setView } = useStore()
+  const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, setView, products } = useStore()
   const [qty, setQty] = useState(1)
-
-  const product = getProduct(productId)
 
   useEffect(() => {
     setQty(1)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [productId])
+
+  let product = getProduct(productId)
+
+  if (!product && products.length > 0) {
+    product = products[0]
+  }
 
   if (!product) {
     return (

@@ -12,7 +12,7 @@ function SearchBox({ className = '' }) {
         value={query}
         onChange={(e) => {
           setQuery(e.target.value)
-          if (view !== 'product') go('product')
+          if (view !== 'home' && view !== 'product') go('home')
         }}
         placeholder='Try "Lavazza", "Biscoff", "pesto"…'
         className="w-full rounded-full border border-line bg-shell py-2.5 pl-9 pr-4 text-sm placeholder:text-navy-faint focus:border-navy/40 focus:bg-paper focus:outline-none"
