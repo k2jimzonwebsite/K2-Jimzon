@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabaseClient'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import PhotoManagerModal from './PhotoManagerModal'
+import BulkCsvImportModal from './BulkCsvImportModal'
 
 const DOMAINS = [
   { name: 'Identity', cols: ['SKU', 'Barcode', 'Product Name', 'Short Name', 'Manufacturer', 'Brand', 'Category', 'Subcategory', 'Origin', 'Net Weight', 'Unit', 'Package Type', 'Case Qty'] },
@@ -55,6 +56,7 @@ export default function Sheet() {
   const [loading, setLoading] = useState(true)
   const [showAiScanner, setShowAiScanner] = useState(false)
   const [showSmartPaste, setShowSmartPaste] = useState(false)
+  const [showCsvImport, setShowCsvImport] = useState(false)
 
   useEffect(() => {
     if (!supabase) return;
@@ -117,6 +119,9 @@ export default function Sheet() {
           <span className="text-forest text-lg leading-none">+</span> Add New Row
         </button>
         <div className="h-6 w-px bg-white/10" />
+        <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded border border-white/10 px-3 py-1.5 text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
+          <span className="text-lg leading-none">📂</span> Upload CSV
+        </button>
         <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded border border-white/10 px-3 py-1.5 text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
           <span className="text-forest text-lg leading-none">⌂</span> Scan Box
         </button>
@@ -213,6 +218,7 @@ export default function Sheet() {
       </div>
       {showAiScanner && <ScanToAiModal onClose={() => setShowAiScanner(false)} />}
       {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} />}
+      {showCsvImport && <BulkCsvImportModal onClose={() => setShowCsvImport(false)} />}
     </div>
   )
 }
