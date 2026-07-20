@@ -61,8 +61,43 @@ test.describe('Buyer POV', () => {
     }
     
     // Note: this assumes there is a "Complete Order" button
-    // Note: this assumes there is a "Complete Order" button
     const completeBtn = page.getByRole('button', { name: 'Confirm payment' });
     await expect(completeBtn).toBeVisible();
+  });
+
+  test('Search and filter catalog', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(1000);
+    
+    // Type in search bar
+    const searchInput = page.getByPlaceholder(/Search/i);
+    if (await searchInput.isVisible()) {
+        await searchInput.fill('Milano');
+        await page.waitForTimeout(500); // let debounce or filter process
+        // Verify results
+        const cards = await page.getByTestId('product-card').all();
+        expect(cards.length).toBeGreaterThan(0);
+    }
+    
+    // Click category
+    const categoryBtn = page.getByRole('button', { name: /Pasta/i }).first();
+    if (await categoryBtn.isVisible()) {
+        await categoryBtn.click();
+        await page.waitForTimeout(500);
+        // Expect only pasta products... just check if at least one card is visible
+        await expect(page.getByTestId('product-card').first()).toBeVisible();
+    }
+  });
+
+  test('Navigate to Wholesale page', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: /Wholesale/i, exact: true }).first().click();
+    await expect(page.getByRole('heading', { name: /B2B/i }).first().or(page.getByText(/Partner with/i).first())).toBeVisible({ timeout: 10000 });
+  });
+
+  test('Navigate to Pasabuy page', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: /Pasabuy/i, exact: true }).first().click();
+    await expect(page.getByRole('heading', { name: /Pasabuy/i }).first().or(page.getByText(/Personal Shopper/i).first())).toBeVisible({ timeout: 10000 });
   });
 });

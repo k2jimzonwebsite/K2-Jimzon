@@ -78,4 +78,42 @@ test.describe('Admin POV', () => {
     await expect(page.getByRole('heading', { name: /Bulk CSV Import/i }).or(page.getByText(/Bulk CSV Import/i)).first()).toBeVisible();
     await clickCloseBtn();
   });
+
+  test('Interact with Product Master grid', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Admin', exact: true }).click();
+    await page.waitForTimeout(1000);
+    const productMasterBtn = page.getByRole('button', { name: /Product Master/i });
+    await productMasterBtn.waitFor();
+    await productMasterBtn.click();
+    
+    // Check Preview Button logic
+    // Usually it's an EyeIcon. Find the first row's preview button.
+    const previewBtn = page.getByRole('button', { name: /Preview|View/i }).first();
+    if (await previewBtn.isVisible()) {
+        await previewBtn.click();
+        // Since it sets view to 'home' and productId, we should be on the product page
+        await expect(page.getByRole('button', { name: /Add to cart|Request via Pasabuy/i }).first()).toBeVisible({ timeout: 10000 });
+        // Go back to admin
+        await page.goto('/');
+        await page.getByRole('button', { name: 'Admin', exact: true }).click();
+        await page.getByRole('button', { name: /Product Master/i }).click();
+    }
+  });
+
+  test('Global Logistics specific checks', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Admin', exact: true }).click();
+    await page.waitForTimeout(1000);
+    
+    const kanbanBtn = page.getByText('Global Logistics', { exact: true });
+    await kanbanBtn.waitFor();
+    await kanbanBtn.click();
+    
+    // Ensure the 4 columns exist
+    // Ensure the 4 columns exist
+    await expect(page.getByText('Shopee A').first()).toBeVisible();
+    await expect(page.getByText('Shopee B').first()).toBeVisible();
+    await expect(page.getByText('Website').first()).toBeVisible();
+  });
 });
