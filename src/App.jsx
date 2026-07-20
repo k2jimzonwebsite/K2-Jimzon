@@ -8,7 +8,6 @@ import ChatFab from './components/ChatFab'
 import Footer from './components/Footer'
 
 const Home = lazy(() => import('./views/Home'))
-const ProductsLanding = lazy(() => import('./views/ProductsLanding'))
 const ProductDetail = lazy(() => import('./views/ProductDetail'))
 const Pasabuy = lazy(() => import('./views/Pasabuy'))
 const Checkout = lazy(() => import('./views/Checkout'))
@@ -18,7 +17,6 @@ const Admin = lazy(() => import('./views/admin/Admin'))
 
 const VIEWS = {
   home: Home,
-  catalog: ProductsLanding,
   product: ProductDetail,
   pasabuy: Pasabuy,
   checkout: Checkout,
@@ -28,7 +26,7 @@ const VIEWS = {
 }
 
 // Storefront chrome (header, cart, chat) wraps shopper-facing views only.
-const STOREFRONT = new Set(['home', 'catalog', 'product', 'pasabuy', 'checkout', 'confirmation'])
+const STOREFRONT = new Set(['home', 'product', 'pasabuy', 'checkout', 'confirmation'])
 
 function Shell() {
   const { view } = useStore()

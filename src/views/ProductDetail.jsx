@@ -10,11 +10,9 @@ import { peso } from '../data/products'
 export default function ProductDetail() {
   const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, setView, products } = useStore()
   const [qty, setQty] = useState(1)
-  const [showRecipe, setShowRecipe] = useState(false)
 
   useEffect(() => {
     setQty(1)
-    setShowRecipe(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [productId])
 
@@ -39,12 +37,6 @@ export default function ProductDetail() {
   const remaining = Math.max(0, totalStock - inCart)
   const canAdd = remaining > 0
   const isOutOfStock = totalStock <= 0
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
-    exit: { opacity: 0, y: -10, transition: { duration: 0.2 } }
-  }
 
   return (
     <main className="mx-auto max-w-6xl px-4 pb-24 pt-6 md:pb-16 md:pt-10">
@@ -86,49 +78,31 @@ export default function ProductDetail() {
                     )}
                   </div>
                 </div>
-                
-                {product.guide ? (
-                  <button
-                    onClick={() => setShowRecipe(!showRecipe)}
-                    className="mt-4 md:mt-8 w-full max-w-[600px] rounded-2xl border p-4 text-left transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-between shadow-sm"
-                    style={{ 
-                      borderColor: `hsl(${product.hue || 220} 50% 85%)`,
-                      backgroundColor: `hsl(${product.hue || 220} 50% 96%)`
+
+                {product.guide && (
+                  <button 
+                    onClick={() => {
+                      document.getElementById('usage-guide')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     }}
+                    className="mt-6 w-full max-w-[600px] flex items-center justify-between p-4 rounded-2xl bg-shell border border-line/50 transition-all hover:-translate-y-0.5 hover:shadow-md group"
                   >
-                    <div>
-                      <p className="font-serif font-bold text-navy text-lg">{showRecipe ? 'Back to details' : 'View Masterclass'}</p>
-                      <p className="text-sm font-medium mt-0.5" style={{ color: `hsl(${product.hue || 220} 60% 40%)` }}>
-                        {showRecipe ? 'Return to product specifications' : 'Cooking instructions & ingredients'}
-                      </p>
+                    <div className="text-left">
+                      <p className="font-serif font-bold text-navy text-base">Preparation & Cooking</p>
+                      <p className="text-xs font-medium text-navy-soft mt-0.5">Jump to instructions and ingredients</p>
                     </div>
-                    <div 
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white shadow-sm transition-transform duration-300"
-                      style={{ color: `hsl(${product.hue || 220} 60% 40%)` }}
-                    >
-                      <ArrowIcon size={16} className={showRecipe ? 'rotate-180' : ''} />
+                    <div className="w-8 h-8 rounded-full bg-navy flex items-center justify-center text-white transition-transform group-hover:scale-110">
+                      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                      </svg>
                     </div>
                   </button>
-                ) : (
-                  <p className="mt-6 text-center text-sm font-medium tracking-wide text-navy-faint uppercase">
-                    Drag the handle to reveal inside
-                  </p>
                 )}
               </div>
 
               {/* Right Column (Dynamic) */}
               <div className="relative min-h-[400px] lg:min-h-0 flex flex-col">
-                <AnimatePresence mode="wait">
-                  {!showRecipe ? (
-                    <motion.div 
-                      key="details"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex flex-col justify-start flex-1"
-                    >
-                      <div className="flex flex-wrap items-center gap-2 mt-4 lg:mt-0 shrink-0 mb-4">
+                <div className="flex flex-col justify-start flex-1">
+                  <div className="flex flex-wrap items-center gap-2 mt-4 lg:mt-0 shrink-0 mb-4">
                     <TrustBadge>100% authentic · {product.country_of_origin || product.origin || 'Imported'}</TrustBadge>
                     <StockPill stock={product.stock_available || product.stock} />
                     {(product.subcategory || product.category_id) && (
@@ -285,103 +259,14 @@ export default function ProductDetail() {
                           )}
                         </div>
                       </div>
-                    </motion.div>
-                  ) : (
-                    <motion.div 
-                      key="recipe"
-                      variants={itemVariants}
-                      initial="hidden"
-                      animate="show"
-                      exit="exit"
-                      className="flex flex-col h-full overflow-hidden lg:absolute lg:inset-0 w-full"
-                    >
-                      <div className="mb-6 mt-4 lg:mt-0 shrink-0">
-                        <Kicker style={{ color: `hsl(${product.hue || 220} 60% 30%)` }} className="mb-1 text-xs">
-                          Preparation & Cooking
-                        </Kicker>
-                        <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-navy lg:text-3xl">
-                          {product.guide.title}
-                        </h3>
-                      </div>
+                    </div> {/* Closes flex-col justify-start */}
+                </div> {/* Closes Right Column */}
+              </div> {/* Closes Grid */}
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
-                      {/* Steps - Scrollable Container */}
-                      <div className="flex-1 overflow-y-auto custom-scrollbar pr-4 mb-4 pb-6">
-                        <ol className="space-y-6">
-                          {product.guide.steps.map((step, i) => (
-                            <li key={i} className="flex gap-4 group">
-                              <span 
-                                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-serif text-sm font-bold text-white shadow-sm transition-transform group-hover:scale-110"
-                                style={{ backgroundColor: `hsl(${product.hue || 220} 50% 45%)` }}
-                              >
-                                {i + 1}
-                              </span>
-                              <p className="pt-0.5 text-[15px] leading-relaxed text-navy-soft">{step}</p>
-                            </li>
-                          ))}
-                        </ol>
-                      </div>
-
-                      {/* Ingredients & Bundle - Sticky Footer */}
-                      <div className="mt-auto shrink-0 rounded-2xl bg-shell border border-line/60 p-5 relative overflow-hidden flex flex-col xl:flex-row justify-between xl:items-center gap-5 shadow-card">
-                        <div 
-                          className="absolute top-0 left-0 w-1.5 h-full" 
-                          style={{ backgroundColor: `hsl(${product.hue || 220} 50% 45%)` }} 
-                        />
-                        
-                        <div className="flex-1 ml-3 w-full">
-                          <Kicker style={{ color: `hsl(${product.hue || 220} 60% 30%)` }} className="mb-2.5 text-[11px]">
-                            Ingredients
-                          </Kicker>
-                          {product.guide.ingredients && (
-                            <ul className="space-y-2">
-                              {product.guide.ingredients.map((ing, i) => (
-                                <li key={i} className="flex items-start gap-2">
-                                  {ing.inBundle ? (
-                                    <>
-                                      <svg className="w-4 h-4 shrink-0 mt-0.5" style={{ color: `hsl(${product.hue || 220} 50% 45%)` }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                                      </svg>
-                                      <span className="text-[13px] font-bold" style={{ color: `hsl(${product.hue || 220} 60% 25%)` }}>{ing.name}</span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <svg className="w-4 h-4 shrink-0 mt-0.5 text-navy-faint" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                      </svg>
-                                      <span className="text-[13px] text-navy-soft">
-                                        {ing.name} <span className="text-[11px] text-navy-faint ml-1">(pantry)</span>
-                                      </span>
-                                    </>
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-
-                        <div className="pl-3 xl:border-l border-line/50 flex flex-col items-start xl:items-end xl:text-right shrink-0 w-full xl:w-auto mt-2 xl:mt-0 pt-4 xl:pt-0 border-t xl:border-t-0">
-                          <p className="font-serif text-sm font-bold text-navy">{product.guide.bundle.label.split(' — ')[1] ?? product.guide.bundle.label}</p>
-                          <p className="text-xl font-bold text-navy tabular">{peso(product.guide.bundle.price)}</p>
-                          <RedButton 
-                            className="px-6 py-2.5 text-sm font-semibold shadow-sm mt-3 w-full sm:w-auto" 
-                            onClick={() => {
-                              addToCart(product.id)
-                              if (product.guide.bundle.partner) addToCart(product.guide.bundle.partner)
-                              setCartOpen(true)
-                            }}
-                          >
-                            Buy bundle
-                          </RedButton>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div> {/* Closes Right Column */}
-            </div> {/* Closes Grid */}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      {product.guide && <UsageGuide product={product} />}
 
       <div className="mt-24 border-t border-line pt-12">
         <div className="mb-10 text-center">
@@ -391,5 +276,84 @@ export default function ProductDetail() {
         <CatalogGrid />
       </div>
     </main>
+  )
+}
+
+function UsageGuide({ product }) {
+  const { guide } = product
+  const { addToCart, setCartOpen } = useStore()
+  const buyBundle = () => {
+    addToCart(product.id)
+    if (guide.bundle.partner) addToCart(guide.bundle.partner)
+    setCartOpen(true)
+  }
+  return (
+    <section id="usage-guide" className="mt-16 overflow-hidden rounded-lg border border-line bg-white shadow-card">
+      <Tricolor />
+      <div className="grid gap-8 p-6 lg:grid-cols-[1fr_350px] lg:items-start md:p-10">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-navy-soft">
+            Preparation & Cooking
+          </p>
+          <h2 className="mt-2 font-serif text-2xl font-semibold tracking-tight md:text-3xl text-navy">
+            {guide.title}
+          </h2>
+          <ol className="mt-8 space-y-5">
+            {guide.steps.map((step, i) => (
+              <li key={i} className="flex gap-4">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-navy font-serif text-[13px] font-semibold text-white mt-0.5">
+                  {i + 1}
+                </span>
+                <p className="text-[15px] leading-relaxed text-navy-soft">{step}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+        
+        <div className="rounded-lg bg-shell p-6 border border-line/50 flex flex-col h-full">
+          {guide.ingredients && (
+            <div className="mb-6">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-navy-soft mb-4">
+                Ingredients Needed
+              </p>
+              <ul className="space-y-3">
+                {guide.ingredients.map((ing, i) => (
+                  <li key={i} className="flex items-start gap-2.5">
+                    {ing.inBundle ? (
+                      <>
+                        <svg className="w-4 h-4 shrink-0 mt-0.5 text-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-[14px] font-bold text-navy">{ing.name}</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4 shrink-0 mt-0.5 text-navy-faint" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        <span className="text-[14px] text-navy-soft">
+                          {ing.name} <span className="text-[12px] text-navy-faint ml-1">(pantry)</span>
+                        </span>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="mt-auto pt-5 border-t border-line/50 text-center">
+            <p className="font-serif text-lg font-semibold leading-snug text-navy">
+              {guide.bundle.label.split(' — ')[1] ?? guide.bundle.label}
+            </p>
+            <p className="mt-1 text-[13px] text-navy-soft">Everything in this recipe, one box.</p>
+            <p className="mt-3 text-2xl font-bold text-crimson tabular">{peso(guide.bundle.price)}</p>
+            <RedButton className="mt-5 w-full py-3 shadow-md" onClick={buyBundle}>
+              Buy the bundle
+            </RedButton>
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }

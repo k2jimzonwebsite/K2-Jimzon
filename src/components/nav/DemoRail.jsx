@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'motion/react'
 
 const VIEWS = [
   { id: 'home', label: 'Home', icon: GridIcon },
-  { id: 'catalog', label: 'Product', icon: BoxIcon },
+  { id: 'product', label: 'Product', icon: BoxIcon },
   { id: 'pasabuy', label: 'Pasabuy', icon: PlaneIcon },
   { id: 'checkout', label: 'Checkout', icon: BagIcon },
   { id: 'wholesale', label: 'Wholesale', icon: UserIcon },
