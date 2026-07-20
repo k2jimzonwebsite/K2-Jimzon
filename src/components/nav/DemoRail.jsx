@@ -158,8 +158,8 @@ export default function DemoRail() {
                   <button type="button" onClick={() => setShowAuth(false)} className="px-4 py-2 text-sm font-semibold text-navy-soft hover:text-navy">
                     Cancel
                   </button>
-                  <button type="submit" disabled={loading} className="rounded-md bg-navy px-5 py-2 text-sm font-semibold text-white hover:bg-navy/90">
-                    {loading ? 'Authenticating...' : 'Log In'}
+                  <button type="submit" disabled={loading} className="rounded-md bg-navy px-5 py-2 text-sm font-semibold text-cream hover:bg-navy/90">
+                    {loading ? 'Authenticating...' : 'Sign in'}
                   </button>
                 </div>
               </form>

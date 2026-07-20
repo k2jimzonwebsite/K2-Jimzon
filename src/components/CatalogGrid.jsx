@@ -77,14 +77,14 @@ export default function CatalogGrid() {
                 <button
                   key={type}
                   onClick={() => setSortBy(type)}
-                  className={`px-4 py-2 rounded-lg capitalize transition-colors ${sortBy === type ? 'bg-navy text-white shadow-sm' : 'bg-transparent text-navy hover:bg-line/50'}`}
+                  className={`px-4 py-2 rounded-lg capitalize transition-colors ${sortBy === type ? 'bg-navy text-cream shadow-sm' : 'bg-transparent text-navy hover:bg-line/50'}`}
                 >
                   {type}
                 </button>
               ))}
               <div className="relative">
                 <select 
-                  className={`appearance-none bg-transparent pl-4 pr-8 py-2 rounded-lg transition-colors cursor-pointer border-none outline-none ${sortBy.includes('price') ? 'bg-navy text-white shadow-sm' : 'text-navy hover:bg-line/50'}`}
+                  className={`appearance-none bg-transparent pl-4 pr-8 py-2 rounded-lg transition-colors cursor-pointer border-none outline-none ${sortBy.includes('price') ? 'bg-navy text-cream shadow-sm' : 'text-navy hover:bg-line/50'}`}
                   value={sortBy.includes('price') ? sortBy : 'price'}
                   onChange={(e) => setSortBy(e.target.value)}
                 >
@@ -92,7 +92,7 @@ export default function CatalogGrid() {
                   <option value="price_asc" className="text-navy bg-paper">Low to High</option>
                   <option value="price_desc" className="text-navy bg-paper">High to Low</option>
                 </select>
-                <svg className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none w-4 h-4 ${sortBy.includes('price') ? 'text-white' : 'text-navy-faint'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                <svg className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none w-4 h-4 ${sortBy.includes('price') ? 'text-cream' : 'text-navy-faint'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
               </div>
             </div>
             <div className="text-sm text-navy-faint tabular-nums">

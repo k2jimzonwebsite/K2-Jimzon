@@ -90,8 +90,13 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
       
       {/* Helper Badges */}
       <div className="absolute top-5 left-5 z-30 pointer-events-none transition-opacity duration-300" style={{ opacity: pos > 20 ? 1 : 0 }}>
-        <span className="bg-navy/80 backdrop-blur-md text-white text-xs font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-lg">
+        <span className="bg-navy/80 backdrop-blur-md text-cream text-xs font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-lg">
           Packaging
+        </span>
+      </div>
+      <div className="absolute inset-x-0 bottom-4 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <span className="bg-navy/80 backdrop-blur-md text-cream text-xs font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-lg">
+          Interactive • Drag to view
         </span>
       </div>
       <div className="absolute top-5 right-5 z-30 pointer-events-none transition-opacity duration-300" style={{ opacity: pos < 80 ? 1 : 0 }}>

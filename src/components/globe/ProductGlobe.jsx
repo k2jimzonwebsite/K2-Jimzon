@@ -95,7 +95,7 @@ export default function ProductGlobe({ products, onSelect }) {
       {tooltipInfo && (
         <div
           ref={tooltipRef}
-          className="pointer-events-none fixed top-0 left-0 z-50 bg-navy text-white px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap shadow-float"
+          className="pointer-events-none fixed top-0 left-0 z-50 bg-navy text-cream px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap shadow-float"
           style={{
             borderRadius: '32px',
             willChange: 'transform',
