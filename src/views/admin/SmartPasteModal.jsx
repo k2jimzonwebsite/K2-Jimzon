@@ -16,8 +16,7 @@ function mapAiToDb(p, images) {
     barcode:                  p.barcode || null,
     name:                     p.name || p.product_name || '',
     short:                    p.short || null,
-    brand_id:                 p.brand_id || p.brand || null,
-    category_id:              p.category || null,
+    // brand_id and category_id are UUID FK columns — set manually in PIM Sheet after saving
     origin:                   p.origin || null,
     net_weight:               p.net_weight || null,
     package_type:             p.package_type || null,
