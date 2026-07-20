@@ -110,30 +110,46 @@ export default function Inbox() {
         </div>
 
         {chat.intent === 'pasabuy_request' && chat.metadata && (
-          <div className="bg-purple-900/20 border-b border-purple-500/20 p-4 shrink-0 shadow-inner">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-purple-400 bg-purple-500/20 px-2 py-0.5 rounded">Active Sourcing Contract</span>
-              <span className="text-xs text-white/50">{chat.id}</span>
-            </div>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-white/40 text-xs">Requested Item</p>
-                <p className="font-semibold text-white/90">{chat.metadata.item}</p>
+          <div className="p-4 shrink-0 border-b border-white/10 bg-black/20 flex justify-center">
+            {/* Sticky Note */}
+            <div className="relative w-full max-w-lg bg-[#fef9c3] text-black p-5 shadow-lg transform rotate-[-1deg] rounded-sm rounded-br-3xl border border-[#fde047]">
+              {/* Tape effect */}
+              <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-24 h-5 bg-white/40 backdrop-blur-md border border-white/20 rotate-[2deg] shadow-sm z-10" />
+              
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-black/60 bg-black/5 px-2 py-0.5 rounded border border-black/10">Pasabuy Request</span>
+                <span className="text-[10px] font-mono text-black/30">{chat.id}</span>
               </div>
-              <div>
-                <p className="text-white/40 text-xs">Target Budget</p>
-                <p className="font-semibold text-white/90">{chat.metadata.budget ? `₱${chat.metadata.budget}` : 'Open'}</p>
+              
+              <div className="space-y-4">
+                <div>
+                  <p className="text-black/40 text-[10px] uppercase font-bold tracking-widest">Requested Item</p>
+                  <p className="font-serif font-semibold text-lg text-black/90 leading-tight">{chat.metadata.item}</p>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-black/40 text-[10px] uppercase font-bold tracking-widest">Target Budget</p>
+                    <p className="font-semibold text-black/80">{chat.metadata.budget ? `₱${chat.metadata.budget}` : 'Open'}</p>
+                  </div>
+                  <div>
+                    <p className="text-black/40 text-[10px] uppercase font-bold tracking-widest">Quantity & Shipping</p>
+                    <p className="font-semibold text-black/80">{chat.metadata.qty} · {chat.metadata.shipping === 'air' ? 'Air Freight' : 'Sea Cargo'}</p>
+                  </div>
+                </div>
+                
+                {chat.metadata.url && (
+                  <div>
+                    <p className="text-black/40 text-[10px] uppercase font-bold tracking-widest">Reference URL</p>
+                    <a href={chat.metadata.url} target="_blank" rel="noreferrer" className="text-blue-700 font-semibold hover:underline text-sm truncate block w-full max-w-sm">
+                      {chat.metadata.url}
+                    </a>
+                  </div>
+                )}
               </div>
-              <div>
-                <p className="text-white/40 text-xs">Quantity / Shipping</p>
-                <p className="font-semibold text-white/90">{chat.metadata.qty} · {chat.metadata.shipping === 'air' ? 'Air Freight' : 'Sea Cargo'}</p>
-              </div>
-              <div>
-                <p className="text-white/40 text-xs">Reference URL</p>
-                <p className="font-semibold text-blue hover:underline">
-                  {chat.metadata.url ? <a href={chat.metadata.url} target="_blank" rel="noreferrer" className="truncate block max-w-[200px]">View Link</a> : <span className="text-white/50">None</span>}
-                </p>
-              </div>
+              
+              {/* Folded corner curl effect */}
+              <div className="absolute bottom-0 right-0 w-8 h-8 bg-gradient-to-tl from-black/5 to-transparent rounded-tl-xl border-l border-t border-black/5" />
             </div>
           </div>
         )}
