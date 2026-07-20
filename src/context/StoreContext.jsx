@@ -130,6 +130,10 @@ export function StoreProvider({ children }) {
         wholesale: Number(dbP.wholesale_price), // alias
         stock_available: dbP.stock_available,
         stock: dbP.stock_available, // alias
+        why_buy: dbP.why_buy || localP.whyBuy,
+        usage_instructions: dbP.usage_instructions,
+        guide: localP.guide,
+        pairings: localP.pairings || [],
       }
     })
   }, [dbProducts])

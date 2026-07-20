@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import BeforeAfterSlider from '../components/BeforeAfterSlider'
 import CatalogGrid from '../components/CatalogGrid'
-import { RedButton, StockPill, TrustBadge, Kicker, QuantityStepper } from '../components/ui/bits'
+import { RedButton, StockPill, TrustBadge, Kicker, QuantityStepper, Tricolor } from '../components/ui/bits'
 import { StarIcon, ArrowIcon } from '../components/ui/icons'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
@@ -44,7 +44,7 @@ export default function ProductDetail() {
       {/* Breadcrumbs / Back */}
       <div className="mb-8 border-b border-line pb-6">
         <nav className="flex items-center gap-2 text-sm text-navy-faint font-medium">
-          <a href="#" className="hover:text-navy transition-colors" onClick={(e) => { e.preventDefault(); window.history.back() }}>Home</a>
+          <button className="hover:text-navy transition-colors cursor-pointer" onClick={() => go('home')}>Home</button>
           <span>/</span>
           <span className="text-navy">{product.name}</span>
         </nav>
@@ -182,13 +182,13 @@ export default function ProductDetail() {
                         </div>
 
                         {/* SEO Keywords / Pairings */}
-                        {product.seo_keywords && product.seo_keywords.length > 0 && (
+                        {(product.pairings?.length > 0 || product.seo_keywords?.length > 0) && (
                           <div className="mt-6 md:mt-10 border-t border-line/60 pt-6">
                             <Kicker className="text-navy-faint mb-4">
-                              Keywords & Tags
+                              How Filipinos enjoy it
                             </Kicker>
                             <div className="flex flex-wrap gap-2.5">
-                              {product.seo_keywords.map((p) => (
+                              {(product.pairings?.length > 0 ? product.pairings : product.seo_keywords).map((p) => (
                                 <span key={p} className="rounded-full bg-shell border border-line/50 px-4 py-2 text-sm font-medium text-navy-soft transition-colors hover:bg-cream">
                                   {p}
                                 </span>
@@ -247,6 +247,8 @@ export default function ProductDetail() {
           </AnimatePresence>
         </div>
 
+      {product.guide && <UsageGuide product={product} />}
+
       <div className="mt-24 border-t border-line pt-12">
         <div className="mb-10 text-center">
           <Kicker className="mb-3 text-navy-soft">Also Available</Kicker>
@@ -255,5 +257,50 @@ export default function ProductDetail() {
         <CatalogGrid />
       </div>
     </main>
+  )
+}
+
+function UsageGuide({ product }) {
+  const { guide } = product
+  const { addToCart, setCartOpen } = useStore()
+  const buyBundle = () => {
+    addToCart(product.id)
+    if (guide.bundle.partner) addToCart(guide.bundle.partner)
+    setCartOpen(true)
+  }
+  return (
+    <section className="mt-16 overflow-hidden rounded-lg border border-line bg-white shadow-card">
+      <Tricolor />
+      <div className="grid gap-8 p-6 md:grid-cols-[1fr_auto] md:items-center md:p-10">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-navy-soft">
+            How we'd serve it
+          </p>
+          <h2 className="mt-2 font-serif text-2xl font-semibold tracking-tight md:text-3xl text-navy">
+            {guide.title}
+          </h2>
+          <ol className="mt-6 space-y-4">
+            {guide.steps.map((step, i) => (
+              <li key={i} className="flex gap-4">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-navy font-serif text-[13px] font-semibold text-white">
+                  {i + 1}
+                </span>
+                <p className="pt-1 text-[14px] leading-relaxed text-navy-soft">{step}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="rounded-lg bg-shell p-5 text-center md:w-64 border border-line/50">
+          <p className="font-serif text-lg font-semibold leading-snug text-navy">
+            {guide.bundle.label.split(' — ')[1] ?? guide.bundle.label}
+          </p>
+          <p className="mt-1 text-[12px] text-navy-soft">Everything in this recipe, one box.</p>
+          <p className="mt-3 text-2xl font-bold text-crimson tabular">{peso(guide.bundle.price)}</p>
+          <RedButton className="mt-4 w-full" onClick={buyBundle}>
+            Buy the bundle
+          </RedButton>
+        </div>
+      </div>
+    </section>
   )
 }
