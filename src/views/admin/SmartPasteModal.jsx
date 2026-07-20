@@ -4,6 +4,13 @@ import ImageUploadDropzone from '../../components/ui/ImageUploadDropzone'
 
 // ─── Field mapping: Project 1 AI output → Supabase columns ───────────────────
 function mapAiToDb(p, images) {
+  // Combine after-use + gallery into lifestyle_images array
+  // after image goes first so the product page can use index 0 as the "after" slot
+  const lifestyleArr = [
+    images.after || null,
+    ...images.gallery.filter(Boolean)
+  ].filter(Boolean)
+
   return {
     sku:                      p.id || p.sku || null,
     barcode:                  p.barcode || null,
@@ -17,16 +24,13 @@ function mapAiToDb(p, images) {
     size:                     p.size || null,
     description:              p.inside || p.description || '',
     why_buy:                  p.whyBuy || p.why_buy || '',
-    why_rare:                 p.whyRare || null,
     usage_instructions:       p.usage_instructions || p.usage || '',
     storage_instructions:     p.storage_instructions || p.storage || '',
     ingredients:              p.ingredients || '',
     allergens:                p.allergens || '',
     finished_product_details: p.finished_product_details || p.finished_product || '',
-    pairings:                 Array.isArray(p.pairings) ? p.pairings : [],
     primary_image_url:        images.primary || null,
-    after_image_url:          images.after || null,
-    lifestyle_images:         images.gallery.filter(Boolean),
+    lifestyle_images:         lifestyleArr,
     is_ai_generated:          true,
     status:                   'Draft',
   }
