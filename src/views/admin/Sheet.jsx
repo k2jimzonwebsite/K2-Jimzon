@@ -6,48 +6,42 @@ import PhotoManagerModal from './PhotoManagerModal'
 import BulkCsvImportModal from './BulkCsvImportModal'
 
 const DOMAINS = [
-  { name: 'Identity', cols: ['SKU', 'Barcode', 'Product Name', 'Short Name', 'Manufacturer', 'Brand', 'Category', 'Subcategory', 'Origin', 'Net Weight', 'Unit', 'Package Type', 'Case Qty'] },
-  { name: 'Content', cols: ['Short Desc', 'Why Buy', 'Usage', 'Storage', 'Ingredients', 'Allergens', 'Finished Product'] },
-  { name: 'Pricing', cols: ['Cost ₱', 'SRP ₱', 'Wholesale ₱', 'Dealer ₱', 'Promo ₱', 'VAT %', 'Discount %'] },
-  { name: 'Inventory', cols: ['Available', 'Reserved', 'Incoming', 'Reorder Lvl', 'Supplier', 'Warehouse', 'Shelf'] },
-  { name: 'Web & SEO', cols: ['Slug', 'Meta Title', 'SEO Keywords', 'Display Order', 'Featured', 'Published'] },
-  { name: 'Media', cols: ['Video URL', 'Lifestyle Images', 'Documents', 'Certificates'] },
-  { name: 'AI & Ops', cols: ['AI Gen', 'Human Reviewed', 'Last Review', 'Internal Notes', 'Status'] }
+  { name: 'Product', cols: ['SKU', 'Barcode', 'Product Name', 'Brand', 'Category', 'Subcategory', 'Origin', 'Net Weight', 'Package Type'] },
+  { name: 'Content', cols: ['Description', 'Why Buy', 'Usage', 'Storage', 'Ingredients', 'Allergens', 'Finished Product'] },
+  { name: 'Pricing', cols: ['Cost ₱', 'SRP ₱', 'Wholesale ₱', 'Dealer ₱'] },
+  { name: 'Inventory', cols: ['Available', 'Reorder Level', 'Supplier', 'Warehouse'] },
+  { name: 'Website', cols: ['Slug', 'SEO Keywords', 'Featured', 'Published'] },
+  { name: 'Media', cols: ['Primary Image', 'Lifestyle Images', 'Video URL'] },
+  { name: 'Management', cols: ['Status', 'Internal Notes'] }
 ]
 
 const ALL_COLS = DOMAINS.flatMap(d => d.cols)
 
 const FIELD_MAP = {
-  // Identity
-  'SKU': 'sku', 'Barcode': 'barcode', 'Product Name': 'name', 'Short Name': 'short_name', 
-  'Manufacturer': 'manufacturer', 'Brand': 'brand_id', 'Category': 'category_id', 'Subcategory': 'subcategory',
-  'Origin': 'country_of_origin', 'Net Weight': 'net_weight', 'Unit': 'unit_of_measure', 
-  'Package Type': 'package_type', 'Case Qty': 'case_quantity',
+  // Product
+  'SKU': 'sku', 'Barcode': 'barcode', 'Product Name': 'name', 
+  'Brand': 'brand_id', 'Category': 'category_id', 'Subcategory': 'subcategory',
+  'Origin': 'country_of_origin', 'Net Weight': 'net_weight', 'Package Type': 'package_type',
   
   // Content
-  'Short Desc': 'short_description', 'Why Buy': 'why_buy', 'Usage': 'usage_instructions',
+  'Description': 'description', 'Why Buy': 'why_buy', 'Usage': 'usage_instructions',
   'Storage': 'storage_instructions', 'Ingredients': 'ingredients', 'Allergens': 'allergens',
   'Finished Product': 'finished_product_details',
   
   // Pricing
   'Cost ₱': 'cost_price', 'SRP ₱': 'srp', 'Wholesale ₱': 'wholesale_price', 'Dealer ₱': 'dealer_price',
-  'Promo ₱': 'promo_price', 'VAT %': 'vat_percent', 'Discount %': 'discount_percent',
   
   // Inventory
-  'Available': 'stock_available', 'Reserved': 'stock_reserved', 'Incoming': 'stock_incoming',
-  'Reorder Lvl': 'reorder_level', 'Supplier': 'supplier_id', 'Warehouse': 'warehouse_id', 'Shelf': 'shelf_location',
+  'Available': 'stock_available', 'Reorder Level': 'reorder_level', 'Supplier': 'supplier_id', 'Warehouse': 'warehouse_id',
   
-  // Web & SEO
-  'Slug': 'slug', 'Meta Title': 'meta_title', 'SEO Keywords': 'seo_keywords', 
-  'Display Order': 'display_order', 'Featured': 'is_featured', 'Published': 'published',
+  // Website
+  'Slug': 'slug', 'SEO Keywords': 'seo_keywords', 'Featured': 'is_featured', 'Published': 'published',
   
   // Media
-  'Video URL': 'product_video_url', 'Lifestyle Images': 'lifestyle_images', 
-  'Documents': 'documents', 'Certificates': 'certificates',
+  'Primary Image': 'primary_image_url', 'Lifestyle Images': 'lifestyle_images', 'Video URL': 'product_video_url',
   
-  // AI & Ops
-  'AI Gen': 'is_ai_generated', 'Human Reviewed': 'is_human_reviewed', 'Last Review': 'last_human_review_date',
-  'Internal Notes': 'internal_notes', 'Status': 'status'
+  // Management
+  'Status': 'status', 'Internal Notes': 'internal_notes'
 }
 
 export default function Sheet() {
