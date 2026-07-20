@@ -2,41 +2,11 @@ import { useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import ImageUploadDropzone from '../../components/ui/ImageUploadDropzone'
 
-const SYSTEM_PROMPT = `Act as an expert e-commerce copywriter for K2 Jimzon (premium Italian imports).
-I will give you a basic product name, SKU, and a photo of the product. 
-You will generate a rich product profile and output it strictly as a raw JSON object (do not wrap in markdown or backticks).
-
-Required JSON structure:
-{
-  "name": "string",
-  "brand": "string",
-  "category": "string",
-  "subcategory": "string",
-  "origin": "string (e.g. 'Italy')",
-  "description": "string (SEO optimized, engaging, 3-4 sentences)",
-  "why_buy": "string (3 punchy marketing bullet points separated by \\n)",
-  "usage": "string (how to use it)",
-  "storage": "string (how to store it)",
-  "ingredients": "string (list of ingredients)",
-  "allergens": "string (list of allergens)",
-  "finished_product": "string (what the final dish looks/tastes like)",
-  "seo_keywords": "string (comma separated list)",
-  "primary_photo_prompt": "string (AI image gen prompt for product shot)",
-  "after_use_photo_prompt": "string (AI image gen prompt for lifestyle shot)"
-}`
-
 export default function SmartPasteModal({ onClose, onProductAdded }) {
   const [pasteData, setPasteData] = useState('')
   const [parsedProduct, setParsedProduct] = useState(null)
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
-  const [copied, setCopied] = useState(false)
-
-  const handleCopyPrompt = () => {
-    navigator.clipboard.writeText(SYSTEM_PROMPT)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
 
   const handlePasteChange = (e) => {
     const value = e.target.value
@@ -58,8 +28,8 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
       const parsed = JSON.parse(cleanValue)
       
       // Basic validation
-      if (!parsed.name) {
-        setError('Missing required field (name) in JSON.')
+      if (!parsed.product_name) {
+        setError('Missing required field (product_name) in JSON.')
         return
       }
       
@@ -85,20 +55,17 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
       return
     }
 
-    // Split keywords into array
-    let keywordsArray = []
-    if (parsedProduct.seo_keywords) {
-       keywordsArray = parsedProduct.seo_keywords.split(',').map(s => s.trim()).filter(Boolean)
-    }
-
     const { error: insertError } = await supabase.from('products').insert([
       {
         sku: parsedProduct.sku,
-        name: parsedProduct.name,
+        barcode: parsedProduct.barcode || null,
+        name: parsedProduct.product_name,
         brand_id: parsedProduct.brand || null,
         category_id: parsedProduct.category || null,
         subcategory: parsedProduct.subcategory || null,
         country_of_origin: parsedProduct.origin || null,
+        net_weight: parsedProduct.net_weight || null,
+        package_type: parsedProduct.package_type || null,
         description: parsedProduct.description || '',
         why_buy: parsedProduct.why_buy || '',
         usage_instructions: parsedProduct.usage || '',
@@ -106,9 +73,9 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
         ingredients: parsedProduct.ingredients || '',
         allergens: parsedProduct.allergens || '',
         finished_product_details: parsedProduct.finished_product || '',
-        seo_keywords: keywordsArray,
-        primary_image_url: parsedProduct.primary_image_url || null,
-        lifestyle_images: parsedProduct.lifestyle_images ? [parsedProduct.lifestyle_images] : [],
+        seo_keywords: Array.isArray(parsedProduct.seo_keywords) ? parsedProduct.seo_keywords : [],
+        primary_image_url: parsedProduct.primary_image_url || null, // from Dropzone
+        lifestyle_images: parsedProduct.lifestyle_images ? [parsedProduct.lifestyle_images] : [], // from Dropzone
         is_ai_generated: true,
         status: 'Draft'
       }
@@ -134,15 +101,6 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
             <p className="text-sm text-white/50 mt-1">Paste your AI generated product profile directly here.</p>
           </div>
           <div className="flex items-center gap-3">
-            <button 
-              onClick={handleCopyPrompt}
-              className="flex items-center gap-2 rounded-lg bg-blue/10 border border-blue/20 px-4 py-2 text-sm font-medium text-blue hover:bg-blue/20 transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-              {copied ? 'Copied Prompt!' : 'Copy AI Prompt'}
-            </button>
             <button onClick={onClose} className="rounded-full bg-white/5 p-2 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -158,7 +116,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
             <textarea
               autoFocus
               className="flex-1 w-full bg-black/40 border border-white/10 rounded-xl p-4 font-mono text-xs text-blue-300 placeholder-white/20 focus:outline-none focus:border-blue resize-none transition-colors"
-              placeholder={'{\n  "name": "Ferrero Rocher",\n  "brand": "Ferrero",\n  ...\n}'}
+              placeholder={'{\n  "sku": "FER-001",\n  "product_name": "Ferrero Rocher",\n  ...\n}'}
               value={pasteData}
               onChange={handlePasteChange}
               spellCheck={false}
@@ -205,8 +163,8 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                       <input 
                         type="text"
                         className="w-full bg-white/5 border border-white/10 rounded p-2 text-white text-sm focus:border-blue outline-none"
-                        value={parsedProduct.name || ''}
-                        onChange={(e) => setParsedProduct({...parsedProduct, name: e.target.value})}
+                        value={parsedProduct.product_name || ''}
+                        onChange={(e) => setParsedProduct({...parsedProduct, product_name: e.target.value})}
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -304,13 +262,25 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                   <h4 className="text-xs font-bold text-purple-400 tracking-widest uppercase mb-4">Photos & Prompts</h4>
                   
                   {parsedProduct.primary_photo_prompt && (
-                    <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-3">
+                    <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-3 mb-2">
                       <h5 className="text-xs font-bold text-purple-400 mb-1 flex items-center gap-1.5">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        AI Primary Photo Prompt
+                        Primary Photo Prompt
                       </h5>
                       <p className="text-xs text-purple-300/80 leading-relaxed font-mono">
                         {parsedProduct.primary_photo_prompt}
+                      </p>
+                    </div>
+                  )}
+
+                  {parsedProduct.after_use_photo_prompt && (
+                    <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-3">
+                      <h5 className="text-xs font-bold text-purple-400 mb-1 flex items-center gap-1.5">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        After-Use Photo Prompt
+                      </h5>
+                      <p className="text-xs text-purple-300/80 leading-relaxed font-mono">
+                        {parsedProduct.after_use_photo_prompt}
                       </p>
                     </div>
                   )}
