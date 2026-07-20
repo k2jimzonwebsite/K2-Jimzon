@@ -6,7 +6,7 @@ import { TrustBadge, StockPill } from './ui/bits'
 
 export default function ProductCard({ product, index = 0, compact = false, featured = false }) {
   const { openProduct, addToCart, setCartOpen, isWholesale } = useStore()
-  const price = isWholesale ? product.vip_price : product.retail_price
+  const price = isWholesale ? product.wholesale_price : product.srp
 
   return (
     <article
@@ -54,7 +54,7 @@ export default function ProductCard({ product, index = 0, compact = false, featu
         )}
         <button onClick={() => openProduct(product.sku)} className="text-left mb-2 sm:mb-3">
           <h3 className={`font-serif font-medium leading-snug transition-colors group-hover:text-crimson line-clamp-2 ${featured ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl text-navy' : 'text-sm sm:text-base text-navy'}`}>
-            {product.title}
+            {product.name}
           </h3>
         </button>
         {!compact && (
@@ -65,7 +65,7 @@ export default function ProductCard({ product, index = 0, compact = false, featu
           <div>
             <p className={`font-bold tabular text-crimson ${featured ? 'text-lg sm:text-xl md:text-2xl' : 'text-sm sm:text-base lg:text-lg'}`}>{peso(price)}</p>
             {isWholesale && (
-              <p className="text-xs line-through tabular text-navy-faint">{peso(product.retail_price)}</p>
+              <p className="text-xs line-through tabular text-navy-faint">{peso(product.srp)}</p>
             )}
           </div>
           <button

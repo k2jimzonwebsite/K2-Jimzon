@@ -70,7 +70,7 @@ export default function Admin() {
       { count: pendingCount }
     ] = await Promise.all([
       supabase.from('products').select('*', { count: 'exact', head: true }),
-      supabase.from('products').select('*', { count: 'exact', head: true }).lte('total_stock', 5),
+      supabase.from('products').select('*', { count: 'exact', head: true }).lte('stock_available', 5),
       supabase.from('orders').select('*', { count: 'exact', head: true }).eq('order_status', 'Pending')
     ])
 

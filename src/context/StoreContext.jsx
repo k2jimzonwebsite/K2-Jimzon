@@ -125,11 +125,11 @@ export function StoreProvider({ children }) {
         name: dbP.title, // alias for legacy components
         img: dbP.primary_image_url || dbP.image_url || localP.img,
         afterImage: dbP.after_use_image_url || localP.afterImage,
-        retail_price: Number(dbP.retail_price),
+        srp: Number(dbP.retail_price),
         retail: Number(dbP.retail_price), // alias
-        vip_price: Number(dbP.vip_price),
+        wholesale_price: Number(dbP.vip_price),
         wholesale: Number(dbP.vip_price), // alias
-        total_stock: dbP.total_stock,
+        stock_available: dbP.total_stock,
         stock: dbP.total_stock, // alias
       }
     })

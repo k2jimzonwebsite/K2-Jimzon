@@ -21,7 +21,7 @@ function HomeCatalog() {
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const matchCat = category === 'All' || p.category === category
-      const matchQuery = !query || p.title?.toLowerCase().includes(query.toLowerCase())
+      const matchQuery = !query || p.name?.toLowerCase().includes(query.toLowerCase())
       return matchCat && matchQuery
     })
   }, [products, category, query])

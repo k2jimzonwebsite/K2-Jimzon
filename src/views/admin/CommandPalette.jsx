@@ -74,7 +74,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
       const prodMatches = (prodData || []).map(p => ({
         id: p.sku,
         type: 'Product',
-        label: p.title,
+        label: p.name,
         sub: p.sku,
         action: () => {
           setSection('inventory')

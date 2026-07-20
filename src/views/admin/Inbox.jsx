@@ -49,7 +49,7 @@ export default function Inbox() {
         setReplyText("Hi Maria! Yes, we currently have 4 units of the KIKO Milano 3D Hydra Lipgloss (Shade 05) in stock in Manila. It's ₱750. Would you like me to reserve one for you?")
         setDbResults({
           query: "SELECT stock, retail_price FROM products WHERE title ILIKE '%KIKO%Hydra%05%'",
-          result: "[ { stock: 4, retail_price: 750 } ]"
+          result: "[ { stock: 4, srp: 750 } ]"
         })
       } else {
         setReplyText("Absolutely. We have a consignment leaving Milan on the 22nd. Let me know exactly which brand of truffle oil you need and I'll quote you the landed price.")

@@ -51,7 +51,7 @@ export default function Sheet() {
   const updateField = async (index, field, value, oldSku = null) => {
     const product = rows[index]
     let finalValue = value
-    if (field === 'retail_price' || field === 'vip_price' || field === 'total_stock') {
+    if (field === 'srp' || field === 'wholesale_price' || field === 'stock_available') {
       finalValue = Math.max(0, Number(value) || 0)
     }
 
@@ -94,15 +94,14 @@ export default function Sheet() {
     const newSku = `MANUAL-${Math.floor(Math.random() * 10000)}`
     const newProduct = {
       sku: newSku,
-      title: '',
-      why_buy: '',
+      name: '', why_buy: '',
       usage_instructions: '',
       primary_image_url: null,
       after_use_image_url: null,
       sample_image_urls: [],
-      retail_price: 0,
-      vip_price: 0,
-      total_stock: 0,
+      srp: 0,
+      wholesale_price: 0,
+      stock_available: 0,
       status: 'Draft'
     }
 
@@ -133,7 +132,7 @@ export default function Sheet() {
           {COLS[selected.col]}{selected.row + 2}
         </span>
         <span className="italic text-navy-faint">fx</span>
-        <span className="truncate text-navy-soft">{active ? `${active.title} — master stock ${active.total_stock}` : ''}</span>
+        <span className="truncate text-navy-soft">{active ? `${active.name} — master stock ${active.stock_available}` : ''}</span>
         <span className="ml-auto hidden items-center gap-1.5 text-xs font-medium text-forest md:flex">
           <span className="h-1.5 w-1.5 rounded-full bg-forest pulse-dot" />
           Edits push to live database instantly
@@ -163,7 +162,7 @@ export default function Sheet() {
             </thead>
             <tbody>
               {rows.map((r, i) => {
-                const low = r.total_stock <= 5
+                const low = r.stock_available <= 5
                 const isDraft = r.status === 'Draft'
                 return (
                   <tr key={r.sku} className="hover:bg-shell">
@@ -186,7 +185,7 @@ export default function Sheet() {
                     <Cell onSelect={() => setSelected({ row: i, col: 1 })} selected={selected.row === i && selected.col === 1} className="min-w-[300px] p-0">
                       <input 
                         type="text" 
-                        value={r.title || ''} 
+                        value={r.name || ''} 
                         onChange={(e) => {
                           setRows(prev => prev.map((row, idx) => idx === i ? { ...row, title: e.target.value } : row))
                         }}
@@ -247,13 +246,13 @@ export default function Sheet() {
                     >
                       <input
                         type="number"
-                        value={r.total_stock}
+                        value={r.stock_available}
                         min={0}
                         onFocus={() => setSelected({ row: i, col: 7 })}
                         onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, total_stock: e.target.value } : row))
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, stock_available: e.target.value } : row))
                         }}
-                        onBlur={(e) => updateField(i, 'total_stock', e.target.value)}
+                        onBlur={(e) => updateField(i, 'stock_available', e.target.value)}
                         className={
                           'w-full h-full bg-transparent px-2.5 py-1.5 text-right font-semibold outline-none tabular ' +
                           (low ? 'text-crimson' : 'text-navy')
@@ -263,26 +262,26 @@ export default function Sheet() {
                     <Cell onSelect={() => setSelected({ row: i, col: 8 })} selected={selected.row === i && selected.col === 8} className="text-right tabular p-0 min-w-[100px]">
                       <input
                         type="number"
-                        value={r.retail_price}
+                        value={r.srp}
                         min={0}
                         onFocus={() => setSelected({ row: i, col: 8 })}
                         onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, retail_price: e.target.value } : row))
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, srp: e.target.value } : row))
                         }}
-                        onBlur={(e) => updateField(i, 'retail_price', e.target.value)}
+                        onBlur={(e) => updateField(i, 'srp', e.target.value)}
                         className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-navy"
                       />
                     </Cell>
                     <Cell onSelect={() => setSelected({ row: i, col: 9 })} selected={selected.row === i && selected.col === 9} className="text-right text-blue tabular p-0 min-w-[100px]">
                       <input
                         type="number"
-                        value={r.vip_price}
+                        value={r.wholesale_price}
                         min={0}
                         onFocus={() => setSelected({ row: i, col: 9 })}
                         onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, vip_price: e.target.value } : row))
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, wholesale_price: e.target.value } : row))
                         }}
-                        onBlur={(e) => updateField(i, 'vip_price', e.target.value)}
+                        onBlur={(e) => updateField(i, 'wholesale_price', e.target.value)}
                         className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-blue"
                       />
                     </Cell>
@@ -367,7 +366,7 @@ export default function Sheet() {
             Smart Paste AI
           </button>
         </div>
-        <span className="ml-auto tabular">{rows.filter((r) => r.total_stock <= 5).length} low-stock rows highlighted</span>
+        <span className="ml-auto tabular">{rows.filter((r) => r.stock_available <= 5).length} low-stock rows highlighted</span>
       </div>
       {photoModalProduct && (
         <PhotoManagerModal 

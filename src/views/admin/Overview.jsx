@@ -40,7 +40,7 @@ export default function Overview({ setSection }) {
     // 2. Low Stock Count
     const { count: lCount } = await supabase.from('products')
       .select('*', { count: 'exact', head: true })
-      .lte('total_stock', 5)
+      .lte('stock_available', 5)
     if (lCount !== null) setLowStockCount(lCount)
 
     // 3. Fake "Today's Sales" (calculating real revenue requires join, we'll mock a calculation for the demo based on orders)
@@ -67,7 +67,7 @@ export default function Overview({ setSection }) {
     }
 
     // 4. Top Movers (Mocked logic for speed: just show products with highest retail price for now, ideally group by orders)
-    const { data: prods } = await supabase.from('products').select('sku, title, total_stock').order('retail_price', { ascending: false }).limit(3)
+    const { data: prods } = await supabase.from('products').select('sku, title, total_stock').order('srp', { ascending: false }).limit(3)
     if (prods) {
       setTopMovers(prods)
     }

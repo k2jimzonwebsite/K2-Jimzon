@@ -10,7 +10,7 @@ Required JSON structure:
   "sku": "string",
   "title": "string",
   "description": "string (SEO optimized, 3-4 sentences)",
-  "retail_price": number,
+  "srp": number,
   "wholesale_price": number,
   "why_buy": "string (bullet points separated by \\n)",
   "image_url": "string (placeholder url or stock photo)"
@@ -81,8 +81,8 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
         sku: parsedProduct.sku,
         title: parsedProduct.title,
         description: parsedProduct.description || '',
-        retail_price: Number(parsedProduct.retail_price) || 0,
-        vip_price: Number(parsedProduct.wholesale_price) || 0,
+        srp: Number(parsedProduct.retail_price) || 0,
+        wholesale_price: Number(parsedProduct.wholesale_price) || 0,
         why_buy: parsedProduct.why_buy || '',
         usage_instructions: parsedProduct.usage_instructions || '',
         primary_image_url: parsedProduct.primary_image_url || null,
@@ -194,7 +194,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                         type="number"
                         className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-purple-500"
                         value={parsedProduct.retail_price}
-                        onChange={(e) => setParsedProduct({...parsedProduct, retail_price: e.target.value})}
+                        onChange={(e) => setParsedProduct({...parsedProduct, srp: e.target.value})}
                       />
                     </div>
                     <div>

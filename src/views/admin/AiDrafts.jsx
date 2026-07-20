@@ -81,9 +81,9 @@ export default function AiDrafts({ onApprove }) {
     const { error } = await supabase.from('products').insert([{
       sku: draft.sku,
       title: draft.name,
-      total_stock: draft.parsedData.stock,
-      retail_price: draft.parsedData.retail,
-      vip_price: draft.parsedData.wholesale,
+      stock_available: draft.parsedData.stock,
+      srp: draft.parsedData.retail,
+      wholesale_price: draft.parsedData.wholesale,
       origin: draft.parsedData.origin,
       size: draft.parsedData.size,
       hue: draft.parsedData.hue,

@@ -67,8 +67,8 @@ export default function OutboundSourcing() {
     if (product) {
       if (navigator.vibrate) navigator.vibrate(50)
       // Exists! Add to manifest
-      addToManifest(product.sku, product.title)
-      setLastScan({ type: 'success', message: `Added: ${product.title}` })
+      addToManifest(product.sku, product.name)
+      setLastScan({ type: 'success', message: `Added: ${product.name}` })
       setTimeout(() => setLastScan(null), 3000)
     } else {
       if (navigator.vibrate) navigator.vibrate([100, 50, 100])
@@ -104,8 +104,8 @@ export default function OutboundSourcing() {
 
     const { data: product } = await supabase.from('products').select('sku, title').eq('sku', newSku).single()
     if (product) {
-      addToManifest(product.sku, product.title)
-      setLastScan({ type: 'success', message: `Created & Added: ${product.title}` })
+      addToManifest(product.sku, product.name)
+      setLastScan({ type: 'success', message: `Created & Added: ${product.name}` })
     }
     setTimeout(() => setLastScan(null), 3000)
     startScanner() // Resume scanning
@@ -302,7 +302,7 @@ export default function OutboundSourcing() {
               manifest.map((item, idx) => (
                 <div key={idx} className="bg-white/5 border border-white/10 rounded-lg p-3 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-white line-clamp-1">{item.title}</p>
+                    <p className="text-sm font-medium text-white line-clamp-1">{item.name}</p>
                     <p className="text-xs text-white/50 font-mono mt-0.5">{item.sku}</p>
                   </div>
                   <div className="bg-forest/20 text-forest px-3 py-1 rounded font-bold tabular">

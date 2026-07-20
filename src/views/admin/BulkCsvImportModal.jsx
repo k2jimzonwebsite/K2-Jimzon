@@ -49,12 +49,12 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
 
       return {
         sku: row.sku || row['SKU Reference No.'] || row['Parent SKU'] || row['Product ID'] || `MANUAL-CSV-${Math.floor(Math.random() * 100000)}`,
-        title: row.title || row['Product Name'] || 'Untitled Product',
+        title: row.name || row['Product Name'] || 'Untitled Product',
         description: row.description || row['Product Description'] || '',
         usage_instructions: row.usage_instructions || '',
-        retail_price: Number(row.retail_price || row['Price']) || 0,
-        vip_price: Number(row.wholesale_price) || 0,
-        total_stock: Number(row.stock || row['Stock']) || 0,
+        srp: Number(row.srp || row['Price']) || 0,
+        wholesale_price: Number(row.wholesale_price) || 0,
+        stock_available: Number(row.stock || row['Stock']) || 0,
         status: row.status || (isShopee ? 'Live' : 'Draft'),
         origin: row.origin || (isShopee ? `Shopee|${shopeeCategory}` : 'Manual')
       }
@@ -95,7 +95,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
           <div className="bg-blue/10 border border-blue/20 rounded-lg p-4">
             <h4 className="text-sm font-semibold text-blue mb-2">Required CSV Column Headers:</h4>
             <div className="flex flex-wrap gap-2">
-              {['sku', 'title', 'description', 'usage_instructions', 'retail_price', 'wholesale_price', 'stock'].map(h => (
+              {['sku', 'title', 'description', 'usage_instructions', 'srp', 'wholesale_price', 'stock'].map(h => (
                 <span key={h} className="text-xs font-mono bg-black/40 text-blue-300 px-2 py-1 rounded border border-blue/20">{h}</span>
               ))}
             </div>
@@ -145,9 +145,9 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
                     {parsedData.slice(0, 3).map((row, i) => (
                       <tr key={i} className="hover:bg-white/5">
                         <td className="px-3 py-2">{row.sku}</td>
-                        <td className="px-3 py-2 truncate max-w-[150px]">{row.title}</td>
+                        <td className="px-3 py-2 truncate max-w-[150px]">{row.name}</td>
                         <td className="px-3 py-2">{row.stock}</td>
-                        <td className="px-3 py-2">{row.retail_price}</td>
+                        <td className="px-3 py-2">{row.srp}</td>
                       </tr>
                     ))}
                   </tbody>

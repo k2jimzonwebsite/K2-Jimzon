@@ -118,7 +118,7 @@ export default function InventoryGrid() {
           <button 
             onClick={() => {
               setIsAdding(true);
-              setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random()*10000)}`, title: '', why_buy: '', image_url: '', retail_price: 0, vip_price: 0, total_stock: 0, status: 'Draft' });
+              setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random()*10000)}`, name: '', why_buy: '', image_url: '', srp: 0, wholesale_price: 0, stock_available: 0, status: 'Draft' });
             }}
             className="flex items-center gap-2 rounded bg-blue/20 text-blue hover:bg-blue hover:text-white transition-colors px-3 py-1.5 text-xs font-semibold"
           >
@@ -157,7 +157,7 @@ export default function InventoryGrid() {
           {products.map(p => (
             <div key={p.sku} className="group relative rounded-xl border border-white/10 bg-[#05080f] overflow-hidden flex flex-col hover:border-blue/50 transition-colors">
               <div className="aspect-square bg-white/5 flex items-center justify-center p-4">
-                <img src={p.image_url || '/placeholder.png'} alt={p.title} className="max-h-full max-w-full object-contain drop-shadow-lg" />
+                <img src={p.image_url || '/placeholder.png'} alt={p.name} className="max-h-full max-w-full object-contain drop-shadow-lg" />
               </div>
               <div className="p-4 flex-1 flex flex-col">
                 <div className="flex items-start justify-between gap-2 mb-2">
@@ -166,16 +166,16 @@ export default function InventoryGrid() {
                     {p.status}
                   </span>
                 </div>
-                <h3 className="text-sm font-semibold text-white/90 line-clamp-2 mb-3">{p.title}</h3>
+                <h3 className="text-sm font-semibold text-white/90 line-clamp-2 mb-3">{p.name}</h3>
                 
                 <div className="mt-auto grid grid-cols-2 gap-2 text-xs">
                   <div>
                     <p className="text-white/30 uppercase text-[9px] tracking-wider mb-0.5">Stock</p>
-                    <p className={`font-semibold ${p.total_stock <= 5 ? 'text-crimson' : 'text-white'}`}>{p.total_stock}</p>
+                    <p className={`font-semibold ${p.stock_available <= 5 ? 'text-crimson' : 'text-white'}`}>{p.stock_available}</p>
                   </div>
                   <div>
                     <p className="text-white/30 uppercase text-[9px] tracking-wider mb-0.5">Retail</p>
-                    <p className="font-semibold text-white tabular-nums">₱{Number(p.retail_price).toLocaleString('en-PH')}</p>
+                    <p className="font-semibold text-white tabular-nums">₱{Number(p.srp).toLocaleString('en-PH')}</p>
                   </div>
                 </div>
               </div>
@@ -221,7 +221,7 @@ export default function InventoryGrid() {
                 <input 
                   type="text" 
                   value={editingProduct.title || ''}
-                  onChange={(e) => setEditingProduct({...editingProduct, title: e.target.value})}
+                  onChange={(e) => setEditingProduct({...editingProduct, name: e.target.value})}
                   className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none"
                   required
                 />
@@ -252,7 +252,7 @@ export default function InventoryGrid() {
                   <input 
                     type="number" 
                     value={editingProduct.retail_price}
-                    onChange={(e) => setEditingProduct({...editingProduct, retail_price: Math.max(0, Number(e.target.value))})}
+                    onChange={(e) => setEditingProduct({...editingProduct, srp: Math.max(0, Number(e.target.value))})}
                     className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none tabular-nums"
                     required
                   />
@@ -262,7 +262,7 @@ export default function InventoryGrid() {
                   <input 
                     type="number" 
                     value={editingProduct.vip_price}
-                    onChange={(e) => setEditingProduct({...editingProduct, vip_price: Math.max(0, Number(e.target.value))})}
+                    onChange={(e) => setEditingProduct({...editingProduct, wholesale_price: Math.max(0, Number(e.target.value))})}
                     className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none tabular-nums"
                     required
                   />
@@ -275,7 +275,7 @@ export default function InventoryGrid() {
                   <input 
                     type="number" 
                     value={editingProduct.total_stock}
-                    onChange={(e) => setEditingProduct({...editingProduct, total_stock: Math.max(0, Number(e.target.value))})}
+                    onChange={(e) => setEditingProduct({...editingProduct, stock_available: Math.max(0, Number(e.target.value))})}
                     className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none tabular-nums"
                     required
                   />
