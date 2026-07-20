@@ -6,6 +6,9 @@
   Italian Green 7% (trust, authenticity, stock) · Philippine Blue 3% (wholesale/B2B only)
 */
 @theme {
+  /* Manual dark mode class */
+  @custom-variant dark (&:where(.dark, .dark *));
+
   /* Tuscan Landscape Palette (OKLCH) */
   --color-cream: oklch(98% 0.01 45); /* Background / Warm White */
   --color-paper: oklch(96% 0.015 45); /* Card — warm off-white, NOT pure #FFF */
