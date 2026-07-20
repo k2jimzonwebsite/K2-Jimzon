@@ -95,3 +95,6 @@ export const MoonIcon = (p) => (
 export const SunIcon = (p) => (
   <Icon {...p} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.36-7.36l-.71.71M6.34 17.66l-.71.71m12.02 0l-.71-.71M6.34 6.34l-.71-.71M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
 )
+
+export const EyeIcon = (p) => <Icon {...p} d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"><circle cx="12" cy="12" r="3" /></Icon>
+export const BarcodeIcon = (p) => <Icon {...p} d="M3 5v14M7 5v14M11 5v14M15 5v14M19 5v14M23 5v14" />

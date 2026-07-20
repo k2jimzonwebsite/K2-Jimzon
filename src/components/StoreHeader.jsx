@@ -15,7 +15,7 @@ function SearchBox({ className = '' }) {
           if (view !== 'product') go('product')
         }}
         placeholder='Try "Lavazza", "Biscoff", "pesto"…'
-        className="w-full rounded-full border border-line bg-shell py-2.5 pl-9 pr-4 text-sm placeholder:text-navy-faint focus:border-navy/40 focus:bg-white focus:outline-none"
+        className="w-full rounded-full border border-line bg-shell py-2.5 pl-9 pr-4 text-sm placeholder:text-navy-faint focus:border-navy/40 focus:bg-paper focus:outline-none"
       />
     </label>
   )

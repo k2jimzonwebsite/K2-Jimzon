@@ -89,8 +89,8 @@ export default function CatalogGrid() {
                   onChange={(e) => setSortBy(e.target.value)}
                 >
                   <option value="price" disabled hidden>Price</option>
-                  <option value="price_asc" className="text-navy bg-white">Low to High</option>
-                  <option value="price_desc" className="text-navy bg-white">High to Low</option>
+                  <option value="price_asc" className="text-navy bg-paper">Low to High</option>
+                  <option value="price_desc" className="text-navy bg-paper">High to Low</option>
                 </select>
                 <svg className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none w-4 h-4 ${sortBy.includes('price') ? 'text-white' : 'text-navy-faint'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
               </div>

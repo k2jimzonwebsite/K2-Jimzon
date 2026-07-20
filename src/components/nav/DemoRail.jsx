@@ -127,7 +127,7 @@ export default function DemoRail() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-sm overflow-hidden rounded-xl bg-white shadow-float"
+              className="relative w-full max-w-sm overflow-hidden rounded-xl bg-paper shadow-float"
             >
               <div className="border-b border-line bg-shell px-6 py-4">
                 <h3 className="font-serif text-lg font-semibold text-navy">VIP Portal Login</h3>

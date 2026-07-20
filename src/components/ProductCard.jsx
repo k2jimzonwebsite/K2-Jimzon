@@ -10,6 +10,7 @@ export default function ProductCard({ product, index = 0, compact = false, featu
 
   return (
     <article
+      data-testid="product-card"
       className={`group flex w-full h-full overflow-hidden rounded-3xl bg-cream/95 md:bg-cream/90 md:backdrop-blur-md shadow-card transition-all duration-300 hover:shadow-float hover:-translate-y-1 hover:bg-cream ${featured ? 'flex-col md:flex-row' : 'flex-col'}`}
     >
       {featured ? (
@@ -23,7 +24,7 @@ export default function ProductCard({ product, index = 0, compact = false, featu
           </div>
         </div>
       ) : (
-        <button onClick={() => openProduct(product.sku)} className="relative text-left flex flex-col flex-1">
+        <button onClick={() => openProduct(product.sku)} data-testid="product-image-btn" className="relative text-left flex flex-col flex-1">
           <div className="relative w-full overflow-hidden bg-transparent flex items-center justify-center aspect-[4/5] p-6">
             {/* Museum Cabinet Glow */}
             <div 

@@ -4,6 +4,9 @@ import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import PhotoManagerModal from './PhotoManagerModal'
 import BulkCsvImportModal from './BulkCsvImportModal'
+import { useStore } from '../../context/StoreContext'
+import Barcode from 'react-barcode'
+import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
 
 const DOMAINS = [
   { name: 'Product', cols: ['SKU', 'Barcode', 'Product Name', 'Brand', 'Category', 'Subcategory', 'Origin', 'Net Weight', 'Package Type'] },
@@ -45,12 +48,14 @@ const FIELD_MAP = {
 }
 
 export default function Sheet() {
+  const { openProduct, isDark } = useStore()
   const [rows, setRows] = useState([])
   const [selected, setSelected] = useState({ row: -1, col: -1 })
   const [loading, setLoading] = useState(true)
   const [showAiScanner, setShowAiScanner] = useState(false)
   const [showSmartPaste, setShowSmartPaste] = useState(false)
   const [showCsvImport, setShowCsvImport] = useState(false)
+  const [showBarcode, setShowBarcode] = useState(null)
 
   useEffect(() => {
     if (!supabase) return;
@@ -200,8 +205,16 @@ export default function Sheet() {
                         </Cell>
                       )
                     })}
-                    <td className="border border-line px-2 text-center bg-white group-hover:bg-blue-wash">
-                      <button onClick={() => handleDeleteRow(r.sku)} className="text-crimson/50 hover:text-crimson hover:bg-crimson/10 rounded w-6 h-6 flex items-center justify-center mx-auto transition-colors" title="Delete Row">×</button>
+                    <td className="border border-line px-2 text-center bg-paper group-hover:bg-blue-wash">
+                      <div className="flex items-center justify-center gap-1.5">
+                        <button onClick={() => openProduct(r.sku)} className="text-navy-soft hover:text-navy hover:bg-shell rounded w-6 h-6 flex items-center justify-center transition-colors" title="Preview Product">
+                          <EyeIcon size={14} />
+                        </button>
+                        <button onClick={() => setShowBarcode(r.barcode || r.sku)} className="text-navy-soft hover:text-navy hover:bg-shell rounded w-6 h-6 flex items-center justify-center transition-colors" title="View Barcode">
+                          <BarcodeIcon size={14} />
+                        </button>
+                        <button onClick={() => handleDeleteRow(r.sku)} className="text-crimson/50 hover:text-crimson hover:bg-crimson/10 rounded w-6 h-6 flex items-center justify-center transition-colors" title="Delete Row">×</button>
+                      </div>
                     </td>
                   </tr>
                 )
@@ -213,6 +226,29 @@ export default function Sheet() {
       {showAiScanner && <ScanToAiModal onClose={() => setShowAiScanner(false)} />}
       {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} />}
       {showCsvImport && <BulkCsvImportModal onClose={() => setShowCsvImport(false)} />}
+      
+      {showBarcode && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy/20 backdrop-blur-md">
+          <div className="relative w-full max-w-sm rounded-3xl bg-cream p-8 shadow-float text-center">
+            <button onClick={() => setShowBarcode(null)} className="absolute right-4 top-4 text-navy-soft hover:text-navy hover:bg-shell rounded p-1 transition-colors">
+              <XIcon size={20} />
+            </button>
+            <h3 className="font-serif text-xl font-medium tracking-tight text-navy mb-6">Product Barcode</h3>
+            <div className="bg-white p-4 rounded-xl flex items-center justify-center overflow-hidden">
+              <Barcode 
+                value={showBarcode} 
+                background="#ffffff"
+                lineColor="#000000"
+                width={2}
+                height={80}
+                fontSize={16}
+                margin={0}
+              />
+            </div>
+            <p className="mt-6 text-sm text-navy-soft">Scan directly from screen, or right-click to save and print.</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

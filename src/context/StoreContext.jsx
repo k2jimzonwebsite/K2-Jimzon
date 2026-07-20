@@ -122,7 +122,6 @@ export function StoreProvider({ children }) {
         sku: dbP.sku,
         id: dbP.sku, // alias for legacy components
         name: dbP.name,
-        name: dbP.name, // alias for legacy components
         img: dbP.primary_image_url || dbP.image_url || localP.img,
         afterImage: dbP.after_use_image_url || localP.afterImage,
         srp: Number(dbP.srp),

@@ -77,10 +77,10 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
       {/* Handle Line */}
       {afterImage && (
         <div
-          className="absolute inset-y-0 z-20 w-0.5 bg-white shadow-[0_0_10px_rgba(0,0,0,0.5)] transition-transform duration-75 ease-out"
+          className="absolute inset-y-0 z-20 w-0.5 bg-paper shadow-[0_0_10px_rgba(0,0,0,0.5)] transition-transform duration-75 ease-out"
           style={{ left: `${pos}%`, transform: 'translateX(-50%)' }}
         >
-          <div className="absolute top-1/2 left-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-navy shadow-float transition-transform group-hover:scale-110">
+          <div className="absolute top-1/2 left-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-paper text-navy shadow-float transition-transform group-hover:scale-110">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M8 7l-5 5 5 5M16 7l5 5-5 5" />
             </svg>
@@ -95,7 +95,7 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
         </span>
       </div>
       <div className="absolute top-5 right-5 z-30 pointer-events-none transition-opacity duration-300" style={{ opacity: pos < 80 ? 1 : 0 }}>
-        <span className="bg-white/90 backdrop-blur-md text-navy text-xs font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-lg">
+        <span className="bg-paper/90 backdrop-blur-md text-navy text-xs font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-lg">
           Lifestyle
         </span>
       </div>

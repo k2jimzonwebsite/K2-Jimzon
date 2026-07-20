@@ -9,11 +9,18 @@ import { PasabuyBanner, WholesaleStrip } from '../components/home/Banners'
 import FaqSection from '../components/home/FaqSection'
 import Newsletter from '../components/home/Newsletter'
 
+import { Helmet } from 'react-helmet-async'
+
 export default function Home() {
   const { query, category } = useStore()
 
   return (
     <main className="pb-24 md:pb-12">
+      <Helmet>
+        <title>K2 Jimzon | Premium Italian Imported Food & Ingredients in the Philippines</title>
+        <meta name="description" content="Discover K2 Jimzon, the premier importer of authentic Italian ingredients, espresso, and wholesale food in the Philippines. Shop our exclusive collection today." />
+        <meta name="keywords" content="Premium Italian imported food Philippines, Wholesale Italian ingredients Manila, Italian espresso, Authentic Italian groceries" />
+      </Helmet>
       <Hero />
       <TrustRow />
       <CategoryTiles />
