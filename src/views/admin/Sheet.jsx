@@ -129,11 +129,11 @@ export default function Sheet() {
         </button>
       </div>
 
-      <div className="flex-1 overflow-auto custom-scrollbar relative bg-cream pb-32">
+      <div className="flex-1 overflow-auto custom-scrollbar relative bg-cream dark:bg-[#05080f] pb-32">
         {loading ? (
-          <div className="flex items-center justify-center h-64 text-navy-soft animate-pulse">Loading PIM Data...</div>
+          <div className="flex items-center justify-center h-64 text-navy-soft dark:text-white/40 animate-pulse">Loading PIM Data...</div>
         ) : (
-          <table className="w-max min-w-full border-collapse text-sm bg-white">
+          <table className="w-max min-w-full border-collapse text-sm bg-white dark:bg-[#0A101D]">
             <thead className="sticky top-0 z-20 shadow-sm">
               <tr className="bg-navy text-xs text-white">
                 <th className="w-8 border border-white/20 py-1.5 font-medium sticky left-0 z-30 bg-navy"></th>
@@ -144,20 +144,20 @@ export default function Sheet() {
                 ))}
                 <th className="w-8 border border-white/20 py-1.5 font-medium"></th>
               </tr>
-              <tr className="bg-shell text-left text-xs font-semibold text-navy">
-                <th className="border border-line px-2 py-2 text-center sticky left-0 z-30 bg-shell shadow-[1px_0_0_0_#e5e7eb]">#</th>
+              <tr className="bg-shell dark:bg-[#10141d] text-left text-xs font-semibold text-navy dark:text-white/70">
+                <th className="border border-line dark:border-white/10 px-2 py-2 text-center sticky left-0 z-30 bg-shell dark:bg-[#10141d] shadow-[1px_0_0_0_#e5e7eb] dark:shadow-[1px_0_0_0_rgba(255,255,255,0.1)]">#</th>
                 {ALL_COLS.map(h => (
-                  <th key={h} className="border border-line px-2.5 py-2 whitespace-nowrap">{h}</th>
+                  <th key={h} className="border border-line dark:border-white/10 px-2.5 py-2 whitespace-nowrap">{h}</th>
                 ))}
-                <th className="border border-line px-2 py-2 text-center">Action</th>
+                <th className="border border-line dark:border-white/10 px-2 py-2 text-center">Action</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r, i) => {
                 const isDraft = r.status === 'Draft'
                 return (
-                  <tr key={r.sku} className="hover:bg-blue-wash transition-colors group">
-                    <td className="border border-line bg-shell group-hover:bg-blue-wash px-1 text-center text-xs text-navy-soft tabular sticky left-0 z-10 shadow-[1px_0_0_0_#e5e7eb]">
+                  <tr key={r.sku} className="hover:bg-blue-wash dark:hover:bg-blue/10 transition-colors group">
+                    <td className="border border-line dark:border-white/10 bg-shell dark:bg-[#0A101D] group-hover:bg-blue-wash dark:group-hover:bg-blue/10 px-1 text-center text-xs text-navy-soft dark:text-white/30 tabular sticky left-0 z-10 shadow-[1px_0_0_0_#e5e7eb] dark:shadow-[1px_0_0_0_rgba(255,255,255,0.05)]">
                       {i + 1}
                     </td>
                     {ALL_COLS.map((col, colIdx) => {
@@ -199,13 +199,13 @@ export default function Sheet() {
                             onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, [field]: e.target.value } : row))}
                             onBlur={(e) => updateField(i, col, e.target.value, col === 'SKU' ? r.sku : null)}
                             onFocus={() => setSelected({ row: i, col: colIdx })}
-                            className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-xs ${col === 'SKU' ? 'font-bold text-blue' : 'text-navy'}`}
+                            className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-xs ${col === 'SKU' ? 'font-bold text-blue' : 'text-navy dark:text-white/80'}`}
                             placeholder={col}
                           />
                         </Cell>
                       )
                     })}
-                    <td className="border border-line px-2 text-center bg-paper group-hover:bg-blue-wash">
+                    <td className="border border-line dark:border-white/10 px-2 text-center bg-paper dark:bg-[#0A101D] group-hover:bg-blue-wash dark:group-hover:bg-blue/10">
                       <div className="flex items-center justify-center gap-1.5">
                         <button onClick={() => openProduct(r.sku)} className="text-navy-soft hover:text-navy hover:bg-shell rounded w-6 h-6 flex items-center justify-center transition-colors" title="Preview Product">
                           <EyeIcon size={14} />
@@ -255,7 +255,7 @@ export default function Sheet() {
 
 function Cell({ children, selected, onSelect, className = '' }) {
   return (
-    <td onClick={onSelect} className={`border transition-colors ${selected ? 'border-[2px] border-blue bg-blue/5' : 'border-line'} ${className}`}>
+    <td onClick={onSelect} className={`border transition-colors ${selected ? 'border-[2px] border-blue bg-blue/5 dark:bg-blue/10' : 'border-line dark:border-white/10'} ${className}`}>
       {children}
     </td>
   )

@@ -194,117 +194,153 @@ export default function InventoryGrid() {
       {/* Edit Modal */}
       {editingProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0A101D] shadow-2xl overflow-hidden">
-            <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between bg-white/5">
-              <h3 className="font-serif text-lg font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
+          <div className="w-full max-w-2xl rounded-2xl border border-white/10 bg-[#0A101D] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between bg-white/5 shrink-0">
+              <div>
+                <h3 className="font-serif text-lg font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
+                <p className="text-xs text-white/40 mt-0.5">{editingProduct.sku}</p>
+              </div>
               <button onClick={() => { setEditingProduct(null); setIsAdding(false); }} className="text-white/40 hover:text-white transition-colors">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
             
-            <form onSubmit={handleSave} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
-              {isAdding && (
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">SKU</label>
-                  <input 
-                    type="text" 
-                    value={editingProduct.sku || ''}
-                    onChange={(e) => setEditingProduct({...editingProduct, sku: e.target.value})}
-                    className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none"
-                    required
-                  />
-                </div>
-              )}
-              
+            <form onSubmit={handleSave} className="p-6 space-y-5 overflow-y-auto flex-1">
+
+              {/* Identity */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Product Title</label>
-                <input 
-                  type="text" 
-                  value={editingProduct.title || ''}
-                  onChange={(e) => setEditingProduct({...editingProduct, name: e.target.value})}
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none"
-                  required
-                />
+                <p className="text-[10px] font-bold text-blue uppercase tracking-widest mb-3">Identity</p>
+                <div className="space-y-3">
+                  {isAdding && (
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">SKU / ID</label>
+                      <input type="text" value={editingProduct.sku || ''} onChange={(e) => setEditingProduct({...editingProduct, sku: e.target.value})}
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono focus:border-blue outline-none" required />
+                    </div>
+                  )}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Full Product Name</label>
+                      <input type="text" value={editingProduct.name || ''} onChange={(e) => setEditingProduct({...editingProduct, name: e.target.value})}
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none" required />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Short Name (UI Card)</label>
+                      <input type="text" value={editingProduct.short || ''} onChange={(e) => setEditingProduct({...editingProduct, short: e.target.value})}
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Origin</label>
+                      <input type="text" value={editingProduct.origin || ''} onChange={(e) => setEditingProduct({...editingProduct, origin: e.target.value})}
+                        placeholder="e.g. Sicilia, Italy"
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Size</label>
+                      <input type="text" value={editingProduct.size || ''} onChange={(e) => setEditingProduct({...editingProduct, size: e.target.value})}
+                        placeholder="e.g. 400g jar"
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none" />
+                    </div>
+                  </div>
+                </div>
               </div>
 
+              {/* Copywriting */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Description (For Storefront)</label>
-                <textarea 
-                  value={editingProduct.why_buy || ''}
-                  onChange={(e) => setEditingProduct({...editingProduct, why_buy: e.target.value})}
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none resize-none h-20"
-                />
+                <p className="text-[10px] font-bold text-amber uppercase tracking-widest mb-3">Copywriting</p>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Description (3 sentences)</label>
+                    <textarea value={editingProduct.description || ''} onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})}
+                      className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-amber outline-none resize-none h-20" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Why Buy</label>
+                      <textarea value={editingProduct.why_buy || ''} onChange={(e) => setEditingProduct({...editingProduct, why_buy: e.target.value})}
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-amber outline-none resize-none h-16" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Why Rare in PH</label>
+                      <textarea value={editingProduct.why_rare || ''} onChange={(e) => setEditingProduct({...editingProduct, why_rare: e.target.value})}
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-amber outline-none resize-none h-16" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Pairings (comma-separated)</label>
+                    <input type="text" 
+                      value={Array.isArray(editingProduct.pairings) ? editingProduct.pairings.join(', ') : (editingProduct.pairings || '')} 
+                      onChange={(e) => setEditingProduct({...editingProduct, pairings: e.target.value.split(',').map(s => s.trim()).filter(Boolean)})}
+                      placeholder="Spread on warm pandesal, Stir into espresso, …"
+                      className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-amber outline-none" />
+                  </div>
+                </div>
               </div>
 
+              {/* Specs */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Primary Photo URL</label>
-                <input 
-                  type="url" 
-                  value={editingProduct.image_url || ''}
-                  onChange={(e) => setEditingProduct({...editingProduct, image_url: e.target.value})}
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none"
-                />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Retail Price (₱)</label>
-                  <input 
-                    type="number" 
-                    value={editingProduct.srp}
-                    onChange={(e) => setEditingProduct({...editingProduct, srp: Math.max(0, Number(e.target.value))})}
-                    className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none tabular-nums"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Wholesale Price (₱)</label>
-                  <input 
-                    type="number" 
-                    value={editingProduct.wholesale_price}
-                    onChange={(e) => setEditingProduct({...editingProduct, wholesale_price: Math.max(0, Number(e.target.value))})}
-                    className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none tabular-nums"
-                    required
-                  />
+                <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-3">Specs</p>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Ingredients</label>
+                    <textarea value={editingProduct.ingredients || ''} onChange={(e) => setEditingProduct({...editingProduct, ingredients: e.target.value})}
+                      className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-white/30 outline-none resize-none h-16" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Allergens</label>
+                      <input type="text" value={editingProduct.allergens || ''} onChange={(e) => setEditingProduct({...editingProduct, allergens: e.target.value})}
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-white/30 outline-none" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Net Weight</label>
+                      <input type="text" value={editingProduct.net_weight || ''} onChange={(e) => setEditingProduct({...editingProduct, net_weight: e.target.value})}
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-white/30 outline-none" />
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Total Stock</label>
-                  <input 
-                    type="number" 
-                    value={editingProduct.stock_available}
-                    onChange={(e) => setEditingProduct({...editingProduct, stock_available: Math.max(0, Number(e.target.value))})}
-                    className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none tabular-nums"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Status</label>
-                  <select 
-                    value={editingProduct.status}
-                    onChange={(e) => setEditingProduct({...editingProduct, status: e.target.value})}
-                    className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none cursor-pointer"
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Draft">Draft</option>
-                  </select>
+              {/* Pricing & Stock */}
+              <div>
+                <p className="text-[10px] font-bold text-forest uppercase tracking-widest mb-3">Pricing & Stock</p>
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Retail ₱</label>
+                    <input type="number" value={editingProduct.srp || 0} onChange={(e) => setEditingProduct({...editingProduct, srp: Math.max(0, Number(e.target.value))})}
+                      className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-forest outline-none tabular-nums" required />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Wholesale ₱</label>
+                    <input type="number" value={editingProduct.wholesale_price || 0} onChange={(e) => setEditingProduct({...editingProduct, wholesale_price: Math.max(0, Number(e.target.value))})}
+                      className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-forest outline-none tabular-nums" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Stock</label>
+                    <input type="number" value={editingProduct.stock_available || 0} onChange={(e) => setEditingProduct({...editingProduct, stock_available: Math.max(0, Number(e.target.value))})}
+                      className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-forest outline-none tabular-nums" />
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-white/10 flex justify-end gap-3">
-                <button 
-                  type="button" 
-                  onClick={() => { setEditingProduct(null); setIsAdding(false); }}
-                  className="px-4 py-2 rounded-lg text-sm font-semibold text-white/70 hover:text-white transition-colors"
-                >
+              {/* Status */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Status</label>
+                <select value={editingProduct.status || 'Draft'} onChange={(e) => setEditingProduct({...editingProduct, status: e.target.value})}
+                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none cursor-pointer">
+                  <option value="Active">Active</option>
+                  <option value="Draft">Draft</option>
+                  <option value="Discontinued">Discontinued</option>
+                </select>
+              </div>
+
+              <div className="pt-4 border-t border-white/10 flex justify-end gap-3">
+                <button type="button" onClick={() => { setEditingProduct(null); setIsAdding(false); }}
+                  className="px-4 py-2 rounded-lg text-sm font-semibold text-white/70 hover:text-white transition-colors">
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
-                  className="px-6 py-2 rounded-lg text-sm font-semibold bg-blue text-white hover:bg-blue/90 transition-colors shadow-lg shadow-blue/20"
-                >
+                <button type="submit"
+                  className="px-6 py-2 rounded-lg text-sm font-semibold bg-blue text-white hover:bg-blue/90 transition-colors shadow-lg shadow-blue/20">
                   {isAdding ? 'Create Product' : 'Save Changes'}
                 </button>
               </div>
