@@ -65,7 +65,7 @@ export default function Pasabuy() {
           <Kicker className="rise flex items-center gap-2">
             <PlaneIcon size={14} /> Customer-requested imports
           </Kicker>
-          <h1 className="rise mt-3 font-serif text-3xl sm:text-4xl md:text-5xl font-semibold leading-[1.06] tracking-tight text-navy dark:text-cream" style={{ animationDelay: '80ms' }}>
+          <h1 className="rise mt-3 font-serif text-3xl sm:text-4xl md:text-5xl font-semibold leading-[1.06] tracking-tight text-navy" style={{ animationDelay: '80ms' }}>
             Pasabuy,
             <br />
             <em className="font-normal text-crimson dark:text-rose-400">without the group chat.</em>
@@ -79,31 +79,31 @@ export default function Pasabuy() {
           <form onSubmit={submit} className="rise mt-8 bg-cream/50 dark:bg-shell/30 backdrop-blur-sm p-6 rounded-2xl border border-line dark:border-line/30 shadow-sm" style={{ animationDelay: '240ms' }}>
             <div className="space-y-4">
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-navy dark:text-cream">What exactly are you looking for?</label>
+                <label className="mb-1.5 block text-sm font-semibold text-navy">What exactly are you looking for?</label>
                 <textarea
                   value={formData.item}
                   onChange={(e) => setFormData({ ...formData, item: e.target.value })}
                   rows={2}
                   required
                   placeholder={'e.g. "Pan di Stelle biscuits", brand names, specific flavors...'}
-                  className="w-full resize-none rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep px-4 py-3 text-sm text-navy dark:text-cream placeholder:text-navy-faint dark:placeholder:text-navy-soft focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
+                  className="w-full resize-none rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep px-4 py-3 text-sm text-navy placeholder:text-navy-faint dark:placeholder:text-navy-soft focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
                 />
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-navy dark:text-cream">Reference Link <span className="text-navy-faint dark:text-navy-soft font-normal">(Optional)</span></label>
+                <label className="mb-1.5 block text-sm font-semibold text-navy">Reference Link <span className="text-navy-faint dark:text-navy-soft font-normal">(Optional)</span></label>
                 <input
                   type="url"
                   value={formData.url}
                   onChange={(e) => setFormData({ ...formData, url: e.target.value })}
                   placeholder="Link to Amazon IT, official store, etc."
-                  className="w-full rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep px-4 py-2.5 text-sm text-navy dark:text-cream placeholder:text-navy-faint dark:placeholder:text-navy-soft focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
+                  className="w-full rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep px-4 py-2.5 text-sm text-navy placeholder:text-navy-faint dark:placeholder:text-navy-soft focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
                 />
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-navy dark:text-cream">Target Budget</label>
+                  <label className="mb-1.5 block text-sm font-semibold text-navy">Target Budget</label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-navy-soft dark:text-navy-faint">₱</span>
                     <input
@@ -111,29 +111,29 @@ export default function Pasabuy() {
                       value={formData.budget}
                       onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                       placeholder="Max price"
-                      className="w-full rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep pl-8 pr-4 py-2.5 text-sm text-navy dark:text-cream placeholder:text-navy-faint dark:placeholder:text-navy-soft focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
+                      className="w-full rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep pl-8 pr-4 py-2.5 text-sm text-navy placeholder:text-navy-faint dark:placeholder:text-navy-soft focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-navy dark:text-cream">Quantity</label>
+                  <label className="mb-1.5 block text-sm font-semibold text-navy">Quantity</label>
                   <input
                     type="number"
                     min="1"
                     value={formData.qty}
                     onChange={(e) => setFormData({ ...formData, qty: parseInt(e.target.value) || 1 })}
-                    className="w-full rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep px-4 py-2.5 text-sm text-navy dark:text-cream focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
+                    className="w-full rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep px-4 py-2.5 text-sm text-navy focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-navy dark:text-cream">Shipping Preference</label>
+                <label className="mb-1.5 block text-sm font-semibold text-navy">Shipping Preference</label>
                 <div className="flex bg-shell dark:bg-shell-deep rounded-lg p-1 border border-line dark:border-line/50">
-                  <button type="button" onClick={() => setFormData({ ...formData, shipping: 'sea' })} className={`flex-1 text-xs py-2 rounded-md font-medium transition-colors ${formData.shipping === 'sea' ? 'bg-white dark:bg-shell shadow-sm text-navy dark:text-cream' : 'text-navy-soft dark:text-navy-faint hover:text-navy dark:hover:text-cream'}`}>
+                  <button type="button" onClick={() => setFormData({ ...formData, shipping: 'sea' })} className={`flex-1 text-xs py-2 rounded-md font-medium transition-colors ${formData.shipping === 'sea' ? 'bg-white dark:bg-shell shadow-sm text-navy' : 'text-navy-soft dark:text-navy-faint hover:text-navy'}`}>
                     Sea Cargo (~45d)
                   </button>
-                  <button type="button" onClick={() => setFormData({ ...formData, shipping: 'air' })} className={`flex-1 text-xs py-2 rounded-md font-medium transition-colors ${formData.shipping === 'air' ? 'bg-white dark:bg-shell shadow-sm text-navy dark:text-cream' : 'text-navy-soft dark:text-navy-faint hover:text-navy dark:hover:text-cream'}`}>
+                  <button type="button" onClick={() => setFormData({ ...formData, shipping: 'air' })} className={`flex-1 text-xs py-2 rounded-md font-medium transition-colors ${formData.shipping === 'air' ? 'bg-white dark:bg-shell shadow-sm text-navy' : 'text-navy-soft dark:text-navy-faint hover:text-navy'}`}>
                     Air Freight (~14d)
                   </button>
                 </div>
@@ -141,13 +141,13 @@ export default function Pasabuy() {
 
               <div className="flex items-center justify-between border border-line dark:border-line/50 rounded-xl px-4 py-3 bg-white dark:bg-shell-deep">
                 <div>
-                  <p className="text-sm font-semibold text-navy dark:text-cream">Reference Photo</p>
+                  <p className="text-sm font-semibold text-navy">Reference Photo</p>
                   <p className="text-[11px] text-navy-faint dark:text-navy-soft">{formData.image ? formData.image.name : 'Upload screenshot or photo'}</p>
                 </div>
                 <button 
                   type="button" 
                   onClick={() => fileInputRef.current?.click()}
-                  className="px-3 py-1.5 text-xs font-semibold bg-shell dark:bg-shell/50 hover:bg-line/50 dark:hover:bg-line/20 transition-colors rounded-lg text-navy dark:text-cream"
+                  className="px-3 py-1.5 text-xs font-semibold bg-shell dark:bg-shell/50 hover:bg-line/50 dark:hover:bg-line/20 transition-colors rounded-lg text-navy"
                 >
                   {formData.image ? 'Change' : 'Upload'}
                 </button>
@@ -192,7 +192,7 @@ export default function Pasabuy() {
         <div className="space-y-6">
           <TuscanCard tricolor className="rise" style={{ animationDelay: '200ms' }}>
             <div className="p-6">
-              <h2 className="font-serif text-lg font-semibold text-navy dark:text-cream">How it works</h2>
+              <h2 className="font-serif text-lg font-semibold text-navy">How it works</h2>
               <ol className="mt-4 space-y-4">
                 {[
                   ['You request', 'Name the product, paste a link, or describe it from memory.'],
@@ -205,7 +205,7 @@ export default function Pasabuy() {
                       {i + 1}
                     </span>
                     <div>
-                      <p className="text-base font-semibold text-navy dark:text-cream">{title}</p>
+                      <p className="text-base font-semibold text-navy">{title}</p>
                       <p className="text-sm leading-relaxed text-navy-soft dark:text-navy-faint">{body}</p>
                     </div>
                   </li>
@@ -216,7 +216,7 @@ export default function Pasabuy() {
 
           <TuscanCard className="rise p-6" style={{ animationDelay: '280ms' }}>
             <div className="flex items-baseline justify-between">
-              <h2 className="font-serif text-lg font-semibold text-navy dark:text-cream">Your open requests</h2>
+              <h2 className="font-serif text-lg font-semibold text-navy">Your open requests</h2>
               <span className="text-xs text-navy-faint dark:text-navy-soft">Next flight: 22 Jul, Milan</span>
             </div>
             <ul className="mt-4 divide-y divide-line dark:divide-line/30">
@@ -233,7 +233,7 @@ export default function Pasabuy() {
                     className={`flex items-center gap-3 cursor-pointer p-2 -mx-2 rounded-xl hover:bg-shell/50 dark:hover:bg-shell-deep/50 transition-colors ${activeChatId === r.id ? 'bg-shell dark:bg-shell-deep' : ''}`}
                   >
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-navy dark:text-cream flex items-center gap-2">
+                      <p className="truncate text-sm font-medium text-navy flex items-center gap-2">
                         {r.item}
                         {hasNewMessage && activeChatId !== r.id && (
                           <span className="w-2 h-2 rounded-full bg-crimson dark:bg-rose-500 pulse-dot"></span>
