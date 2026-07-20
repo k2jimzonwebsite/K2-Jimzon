@@ -49,7 +49,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
 
       return {
         sku: row.sku || row['SKU Reference No.'] || row['Parent SKU'] || row['Product ID'] || `MANUAL-CSV-${Math.floor(Math.random() * 100000)}`,
-        title: row.name || row['Product Name'] || 'Untitled Product',
+        name: row.name || row['Product Name'] || 'Untitled Product',
         description: row.description || row['Product Description'] || '',
         usage_instructions: row.usage_instructions || '',
         srp: Number(row.srp || row['Price']) || 0,
@@ -95,7 +95,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
           <div className="bg-blue/10 border border-blue/20 rounded-lg p-4">
             <h4 className="text-sm font-semibold text-blue mb-2">Required CSV Column Headers:</h4>
             <div className="flex flex-wrap gap-2">
-              {['sku', 'title', 'description', 'usage_instructions', 'srp', 'wholesale_price', 'stock'].map(h => (
+              {['sku', 'name', 'description', 'usage_instructions', 'srp', 'wholesale_price', 'stock'].map(h => (
                 <span key={h} className="text-xs font-mono bg-black/40 text-blue-300 px-2 py-1 rounded border border-blue/20">{h}</span>
               ))}
             </div>
@@ -138,7 +138,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
                       <th className="px-3 py-2 border-b border-white/10">sku</th>
                       <th className="px-3 py-2 border-b border-white/10">title</th>
                       <th className="px-3 py-2 border-b border-white/10">stock</th>
-                      <th className="px-3 py-2 border-b border-white/10">retail_price</th>
+                      <th className="px-3 py-2 border-b border-white/10">srp</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/10 text-white/80">

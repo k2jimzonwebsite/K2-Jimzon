@@ -44,14 +44,14 @@ export default function Overview({ setSection }) {
     if (lCount !== null) setLowStockCount(lCount)
 
     // 3. Fake "Today's Sales" (calculating real revenue requires join, we'll mock a calculation for the demo based on orders)
-    const { data: allOrders } = await supabase.from('orders').select('quantity, sku, products(retail_price, vip_price), channel_source')
+    const { data: allOrders } = await supabase.from('orders').select('quantity, sku, products(srp, wholesale_price), channel_source')
     
     if (allOrders) {
       let revenue = 0
       let vipRecents = []
       
       allOrders.forEach(o => {
-        const price = o.channel_source === 'website_vip' ? o.products?.vip_price : o.products?.retail_price
+        const price = o.channel_source === 'website_vip' ? o.products?.wholesale_price : o.products?.srp
         if (price) revenue += (price * o.quantity)
 
         if (o.channel_source === 'website_vip') {
@@ -67,7 +67,7 @@ export default function Overview({ setSection }) {
     }
 
     // 4. Top Movers (Mocked logic for speed: just show products with highest retail price for now, ideally group by orders)
-    const { data: prods } = await supabase.from('products').select('sku, title, total_stock').order('srp', { ascending: false }).limit(3)
+    const { data: prods } = await supabase.from('products').select('sku, title, stock_available').order('srp', { ascending: false }).limit(3)
     if (prods) {
       setTopMovers(prods)
     }

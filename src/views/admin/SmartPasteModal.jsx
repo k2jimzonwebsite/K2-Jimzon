@@ -8,7 +8,7 @@ I will give you a basic product name and SKU. You will generate a rich product p
 Required JSON structure:
 {
   "sku": "string",
-  "title": "string",
+  'name': "string",
   "description": "string (SEO optimized, 3-4 sentences)",
   "srp": number,
   "wholesale_price": number,
@@ -79,9 +79,9 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
     const { error: insertError } = await supabase.from('products').insert([
       {
         sku: parsedProduct.sku,
-        title: parsedProduct.title,
+        name: parsedProduct.title,
         description: parsedProduct.description || '',
-        srp: Number(parsedProduct.retail_price) || 0,
+        srp: Number(parsedProduct.srp) || 0,
         wholesale_price: Number(parsedProduct.wholesale_price) || 0,
         why_buy: parsedProduct.why_buy || '',
         usage_instructions: parsedProduct.usage_instructions || '',
@@ -136,7 +136,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
             <textarea
               autoFocus
               className="flex-1 w-full bg-black/40 border border-white/10 rounded-xl p-4 font-mono text-sm text-blue-300 placeholder-white/20 focus:outline-none focus:border-blue resize-none transition-colors"
-              placeholder={'{\n  "sku": "123",\n  "title": "Example Product",\n  ...\n}'}
+              placeholder={'{\n  "sku": "123",\n  "name": "Example Product",\n  ...\n}'}
               value={pasteData}
               onChange={handlePasteChange}
               spellCheck={false}
@@ -183,7 +183,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                       type="text"
                       className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-purple-500"
                       value={parsedProduct.title}
-                      onChange={(e) => setParsedProduct({...parsedProduct, title: e.target.value})}
+                      onChange={(e) => setParsedProduct({...parsedProduct, name: e.target.value})}
                     />
                   </div>
                   
@@ -193,7 +193,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                       <input 
                         type="number"
                         className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-purple-500"
-                        value={parsedProduct.retail_price}
+                        value={parsedProduct.srp}
                         onChange={(e) => setParsedProduct({...parsedProduct, srp: e.target.value})}
                       />
                     </div>

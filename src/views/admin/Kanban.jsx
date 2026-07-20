@@ -49,7 +49,7 @@ export default function Kanban() {
     }
     const { data, error } = await supabase
       .from('orders')
-      .select('*, products(title, retail_price, vip_price)')
+      .select('*, products(title, srp, wholesale_price)')
       .order('created_at', { ascending: false })
 
     if (!error && data) {

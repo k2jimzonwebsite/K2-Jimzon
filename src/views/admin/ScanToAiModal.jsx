@@ -65,7 +65,7 @@ Generate a rich product profile and output it strictly as a raw JSON object (do 
 Required JSON structure:
 {
   "sku": "${decodedText}",
-  "title": "string",
+  'name': "string",
   "description": "string (SEO optimized, engaging, 3-4 sentences)",
   "srp": number (leave as 0 if unknown),
   "wholesale_price": number (leave as 0 if unknown),

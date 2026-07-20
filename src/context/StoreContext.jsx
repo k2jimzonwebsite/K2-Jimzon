@@ -121,16 +121,16 @@ export function StoreProvider({ children }) {
         category: dbP.origin?.startsWith('Shopee|') ? dbP.origin.split('|')[1] : (dbP.origin === 'Shopee' ? 'Shopee Imports' : localP.category),
         sku: dbP.sku,
         id: dbP.sku, // alias for legacy components
-        title: dbP.title,
-        name: dbP.title, // alias for legacy components
+        name: dbP.name,
+        name: dbP.name, // alias for legacy components
         img: dbP.primary_image_url || dbP.image_url || localP.img,
         afterImage: dbP.after_use_image_url || localP.afterImage,
-        srp: Number(dbP.retail_price),
-        retail: Number(dbP.retail_price), // alias
-        wholesale_price: Number(dbP.vip_price),
-        wholesale: Number(dbP.vip_price), // alias
-        stock_available: dbP.total_stock,
-        stock: dbP.total_stock, // alias
+        srp: Number(dbP.srp),
+        retail: Number(dbP.srp), // alias
+        wholesale_price: Number(dbP.wholesale_price),
+        wholesale: Number(dbP.wholesale_price), // alias
+        stock_available: dbP.stock_available,
+        stock: dbP.stock_available, // alias
       }
     })
   }, [dbProducts])

@@ -15,8 +15,8 @@ function ScannerModal({ po, onClose, onComplete }) {
       if (!po || !po.id.startsWith('po-')) {
         // mock data fallback
         setLines([
-          { id: '1', sku: 'TRUFFLE-001', quantity: 12, scanned: 0, products: { title: 'Urbani Truffle Oil' } },
-          { id: '2', sku: 'PASTA-002', quantity: 24, scanned: 0, products: { title: 'De Cecco Linguine' } }
+          { id: '1', sku: 'TRUFFLE-001', quantity: 12, scanned: 0, products: { name: 'Urbani Truffle Oil' } },
+          { id: '2', sku: 'PASTA-002', quantity: 24, scanned: 0, products: { name: 'De Cecco Linguine' } }
         ])
         setLoading(false)
         return

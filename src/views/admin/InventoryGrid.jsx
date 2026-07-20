@@ -49,7 +49,7 @@ export default function InventoryGrid() {
     e.preventDefault()
     if (!editingProduct) return
 
-    const { sku, title, why_buy, image_url, retail_price, vip_price, total_stock, status } = editingProduct
+    const { sku, title, why_buy, image_url, srp, wholesale_price, stock_available, status } = editingProduct
     
     if (!supabase) return;
 
@@ -63,7 +63,7 @@ export default function InventoryGrid() {
       
       const { error } = await supabase
         .from('products')
-        .insert([{ sku, title, why_buy, image_url, retail_price, vip_price, total_stock, status }]);
+        .insert([{ sku, title, why_buy, image_url, srp, wholesale_price, stock_available, status }]);
         
       if (error) {
         console.error('Failed to add product:', error);
@@ -76,7 +76,7 @@ export default function InventoryGrid() {
       // Push to Supabase
       const { error } = await supabase
         .from('products')
-        .update({ title, why_buy, image_url, retail_price, vip_price, total_stock, status })
+        .update({ title, why_buy, image_url, srp, wholesale_price, stock_available, status })
         .eq('sku', sku)
         
       if (error) {
@@ -251,7 +251,7 @@ export default function InventoryGrid() {
                   <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Retail Price (₱)</label>
                   <input 
                     type="number" 
-                    value={editingProduct.retail_price}
+                    value={editingProduct.srp}
                     onChange={(e) => setEditingProduct({...editingProduct, srp: Math.max(0, Number(e.target.value))})}
                     className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none tabular-nums"
                     required
@@ -261,7 +261,7 @@ export default function InventoryGrid() {
                   <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Wholesale Price (₱)</label>
                   <input 
                     type="number" 
-                    value={editingProduct.vip_price}
+                    value={editingProduct.wholesale_price}
                     onChange={(e) => setEditingProduct({...editingProduct, wholesale_price: Math.max(0, Number(e.target.value))})}
                     className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none tabular-nums"
                     required
@@ -274,7 +274,7 @@ export default function InventoryGrid() {
                   <label className="block text-xs font-bold uppercase tracking-wider text-white/50 mb-1">Total Stock</label>
                   <input 
                     type="number" 
-                    value={editingProduct.total_stock}
+                    value={editingProduct.stock_available}
                     onChange={(e) => setEditingProduct({...editingProduct, stock_available: Math.max(0, Number(e.target.value))})}
                     className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none tabular-nums"
                     required

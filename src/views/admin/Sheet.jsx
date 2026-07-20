@@ -154,7 +154,7 @@ export default function Sheet() {
               </tr>
               <tr className="bg-navy text-left text-xs font-semibold text-white">
                 <th className="border border-navy-soft px-2 py-1.5 text-center tabular">1</th>
-                {['SKU', 'Product', 'Description', 'Usage', 'Primary Photo', 'After-Use', 'Samples', 'Master stock', 'Retail ₱', 'Wholesale ₱', 'Status'].map((h) => (
+                {['SKU', 'Product', 'Description', 'Usage', 'Primary Photo', 'After-Use', 'Samples', 'Stock', 'SRP ₱', 'Wholesale ₱', 'Status'].map((h) => (
                   <th key={h} className="border border-navy-soft px-2.5 py-1.5">{h}</th>
                 ))}
                 <th className="border border-navy-soft px-2 py-1.5 text-center">Action</th>
@@ -187,9 +187,9 @@ export default function Sheet() {
                         type="text" 
                         value={r.name || ''} 
                         onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, title: e.target.value } : row))
+                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, name: e.target.value } : row))
                         }}
-                        onBlur={(e) => updateField(i, 'title', e.target.value)}
+                        onBlur={(e) => updateField(i, 'name', e.target.value)}
                         onFocus={() => setSelected({ row: i, col: 1 })}
                         className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
                       />

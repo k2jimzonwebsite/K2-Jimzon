@@ -68,7 +68,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
       const { data: prodData } = await supabase
         .from('products')
         .select('sku, title')
-        .ilike('title', `%${q}%`)
+        .ilike('name', `%${q}%`)
         .limit(3)
       
       const prodMatches = (prodData || []).map(p => ({
