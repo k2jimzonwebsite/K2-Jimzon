@@ -75,6 +75,21 @@ export default function Sheet() {
     }
   }
 
+  const handleDeleteRow = async (sku) => {
+    if (!window.confirm(`Are you sure you want to delete product ${sku}?`)) return
+    
+    // Optimistic UI update
+    setRows((prev) => prev.filter(r => r.sku !== sku))
+    
+    if (!supabase) return;
+    
+    const { error } = await supabase.from('products').delete().eq('sku', sku)
+    if (error) {
+      console.error('Failed to delete row:', error)
+      fetchProducts() // Revert on failure
+    }
+  }
+
   const handleAddRow = async () => {
     const newSku = `MANUAL-${Math.floor(Math.random() * 10000)}`
     const newProduct = {
@@ -136,12 +151,14 @@ export default function Sheet() {
                 {COLS.map((c) => (
                   <th key={c} className="border border-line py-1 font-medium">{c}</th>
                 ))}
+                <th className="w-8 border border-line py-1 font-medium">L</th>
               </tr>
               <tr className="bg-navy text-left text-xs font-semibold text-white">
                 <th className="border border-navy-soft px-2 py-1.5 text-center tabular">1</th>
                 {['SKU', 'Product', 'Description', 'Usage', 'Primary Photo', 'After-Use', 'Samples', 'Master stock', 'Retail ₱', 'Wholesale ₱', 'Status'].map((h) => (
                   <th key={h} className="border border-navy-soft px-2.5 py-1.5">{h}</th>
                 ))}
+                <th className="border border-navy-soft px-2 py-1.5 text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -280,41 +297,23 @@ export default function Sheet() {
                         <option value="Draft">Draft</option>
                       </select>
                     </Cell>
+                    <Cell onSelect={() => setSelected({ row: i, col: 11 })} selected={selected.row === i && selected.col === 11} className="text-center p-0">
+                      <button 
+                        onClick={() => handleDeleteRow(r.sku)}
+                        className="w-full h-full flex items-center justify-center p-2 text-crimson hover:bg-crimson/10 transition-colors cursor-pointer"
+                        title="Delete product"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </Cell>
                   </tr>
                 )
               })}
             </tbody>
           </table>
         )}
-        <div className="p-2 border-t border-line border-dashed flex items-center gap-3">
-          <button 
-            onClick={handleAddRow}
-            className="flex items-center gap-2 text-xs font-semibold text-blue hover:text-navy transition-colors px-2 py-1"
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Add New Row
-          </button>
-          <button 
-            onClick={() => setShowAiScanner(true)}
-            className="flex items-center gap-2 text-xs font-semibold text-forest hover:text-forest/80 transition-colors px-2 py-1"
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-            </svg>
-            Scan Box
-          </button>
-          <button 
-            onClick={() => setShowSmartPaste(true)}
-            className="flex items-center gap-2 text-xs font-semibold text-purple-400 hover:text-purple-300 transition-colors px-2 py-1"
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-            Smart Paste AI
-          </button>
-        </div>
       </div>
 
       {showAiScanner && (
@@ -339,15 +338,35 @@ export default function Sheet() {
 
       <div className="flex items-center gap-4 border-t border-line bg-paper px-3 py-1.5 text-xs text-navy-soft">
         <span className="border-b-2 border-forest pb-0.5 font-semibold text-navy">Master inventory</span>
-        <button 
-          onClick={handleAddRow}
-          className="ml-4 flex items-center gap-1 rounded bg-navy/5 px-2 py-1 font-medium text-navy hover:bg-navy/10 transition-colors"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Add Blank Row
-        </button>
+        <div className="flex items-center gap-2 ml-4">
+          <button 
+            onClick={handleAddRow}
+            className="flex items-center gap-2 text-xs font-semibold text-blue hover:text-blue-600 transition-colors px-3 py-1.5 rounded-md hover:bg-blue/5 border border-blue/20 bg-blue/5 shadow-sm"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Row
+          </button>
+          <button 
+            onClick={() => setShowAiScanner(true)}
+            className="flex items-center gap-2 text-xs font-semibold text-forest hover:text-forest-600 transition-colors px-3 py-1.5 rounded-md hover:bg-forest/5 border border-forest/20 bg-forest/5 shadow-sm"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+            </svg>
+            Scan Box
+          </button>
+          <button 
+            onClick={() => setShowSmartPaste(true)}
+            className="flex items-center gap-2 text-xs font-semibold text-purple-600 hover:text-purple-700 transition-colors px-3 py-1.5 rounded-md hover:bg-purple-100 border border-purple-200 bg-purple-50 shadow-sm"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Smart Paste AI
+          </button>
+        </div>
         <span className="ml-auto tabular">{rows.filter((r) => r.total_stock <= 5).length} low-stock rows highlighted</span>
       </div>
       {photoModalProduct && (
