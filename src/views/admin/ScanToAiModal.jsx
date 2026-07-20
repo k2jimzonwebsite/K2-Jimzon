@@ -56,26 +56,41 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
             }
 
             setSku(decodedText)
-            setPromptText(`Act as an expert e-commerce copywriter. 
-I am adding a new product to my inventory.
-SKU: ${decodedText}
+            setPromptText(`Analyze and enrich the attached product according to the **K2 Jimzon Product Intelligence AI** project instructions.
 
-Generate a rich product profile and output it strictly as a raw JSON object (do not wrap in markdown or backticks).
+## Input
 
-Required JSON structure:
-{
-  "sku": "${decodedText}",
-  'name': "string",
-  "description": "string (SEO optimized, engaging, 3-4 sentences)",
-  "srp": number (leave as 0 if unknown),
-  "wholesale_price": number (leave as 0 if unknown),
-  "why_buy": "string (3 punchy marketing bullet points separated by \\n)",
-  "usage_instructions": "string (clear steps on how to use or instructions, separated by \\n, or leave empty if not applicable)",
-  "photo_guidelines": "string (Give instructions to our photographer. Primary photo MUST be 'Luxury studio with white background'. After-use photo MUST depend on the product, e.g. if it's pasta, the after-image is a cooked pasta dish.)"
-}
+SKU:
+${decodedText}
 
-Optional Directions:
-- `)
+Barcode:
+${decodedText}
+
+(Optional)
+Product Name:
+
+
+Attached:
+* Product packaging image(s)
+* OCR text (if available)
+
+## Mandatory Rules
+
+1. Treat the attached product packaging image as the PRIMARY source of truth.
+2. Use visible packaging text to verify all factual information.
+3. Use OCR text only as supporting information.
+4. Use the SKU and barcode to verify product identity when necessary.
+5. Use reliable public sources only to confirm or complete missing information.
+6. Never fabricate, assume, or invent factual information.
+7. If any factual information cannot be verified with confidence, return an empty value for that field.
+8. Determine the correct **Finished Product** based on the intended preparation or consumption of the product.
+9. Generate a **Primary Product Photo Prompt** showing ONLY the original unopened retail packaging on a seamless luxury white studio background.
+10. Generate an **After-Use Photo Prompt** showing ONLY the correctly prepared or intended finished product. Never include the retail packaging in this image.
+11. Ensure the Finished Product, Usage Instructions, and After-Use Photo Prompt are logically consistent with one another.
+12. Return every required field defined by this project's JSON schema.
+13. Return **ONLY** a single valid raw JSON object.
+14. Do **NOT** include explanations, notes, Markdown, code fences, comments, or additional text before or after the JSON.
+15. Before responding, internally validate that the JSON is complete, syntactically valid, and fully compliant with all project instructions.`)
             setStep('result')
           },
           (errorMessage) => {
