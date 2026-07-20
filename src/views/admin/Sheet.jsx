@@ -4,7 +4,14 @@ import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import PhotoManagerModal from './PhotoManagerModal'
 
-const COLS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
+// Extended columns for PIM
+const COL_HEADERS = [
+  'SKU', 'Barcode', 'Product Name', 'Short Desc', 'Cost ₱', 'SRP ₱', 'Wholesale ₱',
+  'Available', 'Reserved', 'Incoming', 'Reorder Lvl', 
+  'SEO Keywords', 'AI Gen', 'Reviewed', 'Status'
+]
+
+const COLS = Array.from({length: COL_HEADERS.length}, (_, i) => String.fromCharCode(65 + i))
 
 export default function Sheet() {
   const [rows, setRows] = useState([])
@@ -18,11 +25,10 @@ export default function Sheet() {
     if (!supabase) return;
     fetchProducts()
     
-    // Subscribe to real-time changes
     const channel = supabase
       .channel('public:products')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, payload => {
-        fetchProducts() // Re-fetch to ensure order and consistency
+        fetchProducts()
       })
       .subscribe()
 
@@ -51,19 +57,30 @@ export default function Sheet() {
   const updateField = async (index, field, value, oldSku = null) => {
     const product = rows[index]
     let finalValue = value
-    if (field === 'srp' || field === 'wholesale_price' || field === 'stock_available') {
+    
+    // Numeric fields
+    if (['srp', 'wholesale_price', 'cost_price', 'stock_available', 'stock_reserved', 'stock_incoming', 'reorder_level'].includes(field)) {
       finalValue = Math.max(0, Number(value) || 0)
     }
+    
+    // Boolean fields
+    if (['is_ai_generated', 'is_human_reviewed'].includes(field)) {
+      finalValue = Boolean(value)
+    }
+    
+    // Array fields (SEO)
+    if (field === 'seo_keywords') {
+      if (typeof value === 'string') {
+        finalValue = value.split(',').map(s => s.trim()).filter(Boolean)
+      }
+    }
 
-    // Optimistic UI update
     setRows((prev) => prev.map((r, i) => (i === index ? { ...r, [field]: finalValue } : r)))
     
     if (!supabase) return;
 
-    // Use oldSku for the query if we are updating the SKU primary key itself
     const targetSku = oldSku || product.sku
 
-    // Push to Supabase
     const { error } = await supabase
       .from('products')
       .update({ [field]: finalValue })
@@ -71,77 +88,79 @@ export default function Sheet() {
       
     if (error) {
       console.error(`Failed to update ${field}:`, error)
-      fetchProducts() // Revert on failure
+      fetchProducts()
     }
   }
 
   const handleDeleteRow = async (sku) => {
-    if (!window.confirm(`Are you sure you want to delete product ${sku}?`)) return
+    if (!confirm('Are you sure you want to permanently delete this product?')) return;
     
-    // Optimistic UI update
-    setRows((prev) => prev.filter(r => r.sku !== sku))
+    setRows(prev => prev.filter(r => r.sku !== sku))
     
     if (!supabase) return;
-    
     const { error } = await supabase.from('products').delete().eq('sku', sku)
     if (error) {
       console.error('Failed to delete row:', error)
-      fetchProducts() // Revert on failure
+      fetchProducts()
     }
   }
 
   const handleAddRow = async () => {
-    const newSku = `MANUAL-${Math.floor(Math.random() * 10000)}`
-    const newProduct = {
-      sku: newSku,
-      name: '', why_buy: '',
-      usage_instructions: '',
-      primary_image_url: null,
-      after_use_image_url: null,
-      sample_image_urls: [],
-      srp: 0,
-      wholesale_price: 0,
+    const newSku = `NEW-${Math.random().toString(36).substring(2, 6).toUpperCase()}`
+    const newRow = { 
+      sku: newSku, 
+      name: '', 
+      status: 'Draft', 
+      srp: 0, 
+      wholesale_price: 0, 
       stock_available: 0,
-      status: 'Draft'
+      is_ai_generated: false,
+      is_human_reviewed: false
     }
-
-    // Optimistic insert
-    setRows(prev => [...prev, newProduct])
+    
+    setRows(prev => [newRow, ...prev])
+    setSelected({ row: 0, col: 0 })
     
     if (!supabase) return;
-
-    // Push to Supabase
-    const { error } = await supabase.from('products').insert([newProduct])
-    
+    const { error } = await supabase.from('products').insert([newRow])
     if (error) {
-      console.error('Failed to add new row:', error)
+      console.error('Failed to add row:', error)
       fetchProducts()
-    } else {
-      // Focus the new row's title cell (it will be at the bottom)
-      setSelected({ row: rows.length, col: 1 })
     }
   }
 
-  const active = rows[selected.row]
-
   return (
-    <div className="overflow-hidden rounded-lg border border-line bg-cream shadow-card flex flex-col h-[calc(100vh-180px)]">
-      {/* Formula bar */}
-      <div className="flex items-center gap-2 border-b border-line bg-paper px-3 py-1.5 text-sm">
-        <span className="rounded border border-[#d5dae2] bg-cream px-2 py-0.5 font-semibold tabular">
-          {COLS[selected.col]}{selected.row + 2}
-        </span>
-        <span className="italic text-navy-faint">fx</span>
-        <span className="truncate text-navy-soft">{active ? `${active.name} — master stock ${active.stock_available}` : ''}</span>
-        <span className="ml-auto hidden items-center gap-1.5 text-xs font-medium text-forest md:flex">
-          <span className="h-1.5 w-1.5 rounded-full bg-forest pulse-dot" />
-          Edits push to live database instantly
-        </span>
+    <div className="flex flex-col h-full bg-[#05080f]">
+      {/* Tools Header */}
+      <div className="flex items-center gap-4 border-b border-white/10 px-6 py-4 bg-[#0A101D] overflow-x-auto shrink-0">
+        <button 
+          onClick={handleAddRow}
+          className="flex shrink-0 items-center gap-2 rounded bg-white/10 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
+        >
+          <span className="text-forest text-lg leading-none">+</span> Add New Row
+        </button>
+        <div className="h-6 w-px bg-white/10" />
+        <button 
+          onClick={() => setShowAiScanner(true)}
+          className="flex shrink-0 items-center gap-2 rounded border border-white/10 px-3 py-1.5 text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white"
+        >
+          <span className="text-forest text-lg leading-none">⌂</span> Scan Box
+        </button>
+        <button 
+          onClick={() => setShowSmartPaste(true)}
+          className="flex shrink-0 items-center gap-2 rounded border border-blue/30 bg-blue/10 px-3 py-1.5 text-sm font-medium text-blue transition hover:bg-blue/20"
+        >
+          <span className="text-lg leading-none">✨</span> Smart Paste AI
+        </button>
+        <div className="ml-auto text-xs font-mono text-white/40 tabular">
+          {rows.filter(r => r.stock_available <= 5).length} low-stock rows highlighted
+        </div>
       </div>
 
-      <div className="flex-1 overflow-auto">
-        {loading && rows.length === 0 ? (
-          <div className="p-8 text-center text-sm text-navy-soft">Loading Master Inventory...</div>
+      {/* Spreadsheet Container */}
+      <div className="flex-1 overflow-auto custom-scrollbar relative bg-cream">
+        {loading ? (
+          <div className="flex items-center justify-center h-64 text-navy-soft animate-pulse">Loading PIM Data...</div>
         ) : (
           <table className="w-max min-w-full border-collapse text-sm">
             <thead className="sticky top-0 z-10 shadow-sm">
@@ -150,12 +169,12 @@ export default function Sheet() {
                 {COLS.map((c) => (
                   <th key={c} className="border border-line py-1 font-medium">{c}</th>
                 ))}
-                <th className="w-8 border border-line py-1 font-medium">L</th>
+                <th className="w-8 border border-line py-1 font-medium"></th>
               </tr>
               <tr className="bg-navy text-left text-xs font-semibold text-white">
                 <th className="border border-navy-soft px-2 py-1.5 text-center tabular">1</th>
-                {['SKU', 'Product', 'Description', 'Usage', 'Primary Photo', 'After-Use', 'Samples', 'Stock', 'SRP ₱', 'Wholesale ₱', 'Status'].map((h) => (
-                  <th key={h} className="border border-navy-soft px-2.5 py-1.5">{h}</th>
+                {COL_HEADERS.map((h) => (
+                  <th key={h} className="border border-navy-soft px-2.5 py-1.5 whitespace-nowrap">{h}</th>
                 ))}
                 <th className="border border-navy-soft px-2 py-1.5 text-center">Action</th>
               </tr>
@@ -166,145 +185,104 @@ export default function Sheet() {
                 const isDraft = r.status === 'Draft'
                 return (
                   <tr key={r.sku} className="hover:bg-shell">
-                    <td className="border border-line bg-shell px-1 text-center text-xs text-navy-soft tabular">
+                    <td className="border border-line bg-shell px-1 text-center text-xs text-navy-soft tabular sticky left-0 z-10">
                       {i + 2}
                     </td>
-                    <Cell onSelect={() => setSelected({ row: i, col: 0 })} selected={selected.row === i && selected.col === 0} className="font-medium tabular p-0 min-w-[150px]">
+                    <Cell onSelect={() => setSelected({ row: i, col: 0 })} selected={selected.row === i && selected.col === 0} className="font-medium tabular p-0 min-w-[120px]">
                       <input 
                         type="text" 
                         defaultValue={r.sku || ''} 
-                        onBlur={(e) => {
-                          if (e.target.value !== r.sku) {
-                            updateField(i, 'sku', e.target.value, r.sku)
-                          }
-                        }}
+                        onBlur={(e) => { if (e.target.value !== r.sku) updateField(i, 'sku', e.target.value, r.sku) }}
                         onFocus={() => setSelected({ row: i, col: 0 })}
                         className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-blue font-bold"
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 1 })} selected={selected.row === i && selected.col === 1} className="min-w-[300px] p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 1 })} selected={selected.row === i && selected.col === 1} className="p-0 min-w-[120px]">
+                      <input 
+                        type="text" 
+                        value={r.barcode || ''} 
+                        onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, barcode: e.target.value } : row))}
+                        onBlur={(e) => updateField(i, 'barcode', e.target.value)}
+                        onFocus={() => setSelected({ row: i, col: 1 })}
+                        className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy font-mono text-xs"
+                      />
+                    </Cell>
+                    <Cell onSelect={() => setSelected({ row: i, col: 2 })} selected={selected.row === i && selected.col === 2} className="min-w-[250px] p-0">
                       <input 
                         type="text" 
                         value={r.name || ''} 
-                        onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, name: e.target.value } : row))
-                        }}
+                        onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, name: e.target.value } : row))}
                         onBlur={(e) => updateField(i, 'name', e.target.value)}
-                        onFocus={() => setSelected({ row: i, col: 1 })}
-                        className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
-                      />
-                    </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 2 })} selected={selected.row === i && selected.col === 2} className="min-w-[400px] p-0">
-                      <input 
-                        type="text" 
-                        value={r.why_buy || ''} 
-                        onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, why_buy: e.target.value } : row))
-                        }}
-                        onBlur={(e) => updateField(i, 'why_buy', e.target.value)}
                         onFocus={() => setSelected({ row: i, col: 2 })}
                         className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
-                        placeholder="Description..."
                       />
                     </Cell>
                     <Cell onSelect={() => setSelected({ row: i, col: 3 })} selected={selected.row === i && selected.col === 3} className="min-w-[250px] p-0">
                       <input 
                         type="text" 
-                        value={r.usage_instructions || ''} 
-                        onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, usage_instructions: e.target.value } : row))
-                        }}
-                        onBlur={(e) => updateField(i, 'usage_instructions', e.target.value)}
+                        value={r.short_description || ''} 
+                        onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, short_description: e.target.value } : row))}
+                        onBlur={(e) => updateField(i, 'short_description', e.target.value)}
                         onFocus={() => setSelected({ row: i, col: 3 })}
                         className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy"
-                        placeholder="Usage..."
                       />
                     </Cell>
-                    <Cell onSelect={() => setPhotoModalProduct(r)} selected={false} className="text-center p-0 cursor-pointer hover:bg-black/5 transition-colors">
-                      <div className="w-full h-full flex items-center justify-center p-1" onClick={() => setPhotoModalProduct(r)}>
-                        {r.primary_image_url ? <span className="text-forest text-xs font-bold" title="Uploaded">✅</span> : <span className="text-crimson text-xs font-bold" title="Missing">❌</span>}
-                      </div>
+                    <Cell onSelect={() => setSelected({ row: i, col: 4 })} selected={selected.row === i && selected.col === 4} className="text-right p-0 min-w-[80px]">
+                      <input type="number" value={r.cost_price ?? ''} onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, cost_price: e.target.value } : row))} onBlur={(e) => updateField(i, 'cost_price', e.target.value)} onFocus={() => setSelected({ row: i, col: 4 })} className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-navy-soft" />
                     </Cell>
-                    <Cell onSelect={() => setPhotoModalProduct(r)} selected={false} className="text-center p-0 cursor-pointer hover:bg-black/5 transition-colors">
-                      <div className="w-full h-full flex items-center justify-center p-1" onClick={() => setPhotoModalProduct(r)}>
-                        {r.after_use_image_url ? <span className="text-forest text-xs font-bold" title="Uploaded">✅</span> : <span className="text-crimson text-xs font-bold" title="Missing">❌</span>}
-                      </div>
+                    <Cell onSelect={() => setSelected({ row: i, col: 5 })} selected={selected.row === i && selected.col === 5} className="text-right p-0 min-w-[80px]">
+                      <input type="number" value={r.srp ?? ''} onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, srp: e.target.value } : row))} onBlur={(e) => updateField(i, 'srp', e.target.value)} onFocus={() => setSelected({ row: i, col: 5 })} className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-navy font-medium" />
                     </Cell>
-                    <Cell onSelect={() => setPhotoModalProduct(r)} selected={false} className="text-center p-0 cursor-pointer hover:bg-black/5 transition-colors">
-                      <div className="w-full h-full flex items-center justify-center p-1 text-[10px] font-bold text-navy/60" onClick={() => setPhotoModalProduct(r)}>
-                        {r.sample_image_urls?.length || 0}/5
-                      </div>
+                    <Cell onSelect={() => setSelected({ row: i, col: 6 })} selected={selected.row === i && selected.col === 6} className="text-right p-0 min-w-[80px]">
+                      <input type="number" value={r.wholesale_price ?? ''} onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, wholesale_price: e.target.value } : row))} onBlur={(e) => updateField(i, 'wholesale_price', e.target.value)} onFocus={() => setSelected({ row: i, col: 6 })} className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-blue font-medium" />
                     </Cell>
-                    <td
-                      className={
-                        'border px-0 tabular min-w-[100px] ' +
-                        (selected.row === i && selected.col === 7
-                          ? 'border-[2px] border-blue'
-                          : 'border-line') +
-                        (low ? ' bg-crimson-wash' : '')
-                      }
-                    >
-                      <input
-                        type="number"
-                        value={r.stock_available}
-                        min={0}
-                        onFocus={() => setSelected({ row: i, col: 7 })}
-                        onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, stock_available: e.target.value } : row))
-                        }}
-                        onBlur={(e) => updateField(i, 'stock_available', e.target.value)}
-                        className={
-                          'w-full h-full bg-transparent px-2.5 py-1.5 text-right font-semibold outline-none tabular ' +
-                          (low ? 'text-crimson' : 'text-navy')
-                        }
-                      />
+                    
+                    <td className={`border px-0 tabular min-w-[80px] ${selected.row === i && selected.col === 7 ? 'border-[2px] border-blue' : 'border-line'} ${low ? 'bg-crimson-wash' : ''}`}>
+                      <input type="number" value={r.stock_available ?? ''} onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, stock_available: e.target.value } : row))} onBlur={(e) => updateField(i, 'stock_available', e.target.value)} onFocus={() => setSelected({ row: i, col: 7 })} className={`w-full h-full bg-transparent px-2.5 py-1.5 text-right font-semibold outline-none tabular ${low ? 'text-crimson' : 'text-navy'}`} />
                     </td>
-                    <Cell onSelect={() => setSelected({ row: i, col: 8 })} selected={selected.row === i && selected.col === 8} className="text-right tabular p-0 min-w-[100px]">
-                      <input
-                        type="number"
-                        value={r.srp}
-                        min={0}
-                        onFocus={() => setSelected({ row: i, col: 8 })}
-                        onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, srp: e.target.value } : row))
-                        }}
-                        onBlur={(e) => updateField(i, 'srp', e.target.value)}
-                        className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-navy"
+                    <Cell onSelect={() => setSelected({ row: i, col: 8 })} selected={selected.row === i && selected.col === 8} className="text-right p-0 min-w-[80px]">
+                      <input type="number" value={r.stock_reserved ?? ''} onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, stock_reserved: e.target.value } : row))} onBlur={(e) => updateField(i, 'stock_reserved', e.target.value)} onFocus={() => setSelected({ row: i, col: 8 })} className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-navy-soft" />
+                    </Cell>
+                    <Cell onSelect={() => setSelected({ row: i, col: 9 })} selected={selected.row === i && selected.col === 9} className="text-right p-0 min-w-[80px]">
+                      <input type="number" value={r.stock_incoming ?? ''} onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, stock_incoming: e.target.value } : row))} onBlur={(e) => updateField(i, 'stock_incoming', e.target.value)} onFocus={() => setSelected({ row: i, col: 9 })} className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-forest" />
+                    </Cell>
+                    <Cell onSelect={() => setSelected({ row: i, col: 10 })} selected={selected.row === i && selected.col === 10} className="text-right p-0 min-w-[80px]">
+                      <input type="number" value={r.reorder_level ?? ''} onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, reorder_level: e.target.value } : row))} onBlur={(e) => updateField(i, 'reorder_level', e.target.value)} onFocus={() => setSelected({ row: i, col: 10 })} className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-navy-soft" />
+                    </Cell>
+                    <Cell onSelect={() => setSelected({ row: i, col: 11 })} selected={selected.row === i && selected.col === 11} className="min-w-[200px] p-0">
+                      <input 
+                        type="text" 
+                        value={Array.isArray(r.seo_keywords) ? r.seo_keywords.join(', ') : ''} 
+                        onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, seo_keywords: e.target.value } : row))}
+                        onBlur={(e) => updateField(i, 'seo_keywords', e.target.value)}
+                        onFocus={() => setSelected({ row: i, col: 11 })}
+                        className="w-full h-full bg-transparent px-2.5 py-1.5 outline-none text-navy font-mono text-xs"
                       />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 9 })} selected={selected.row === i && selected.col === 9} className="text-right text-blue tabular p-0 min-w-[100px]">
-                      <input
-                        type="number"
-                        value={r.wholesale_price}
-                        min={0}
-                        onFocus={() => setSelected({ row: i, col: 9 })}
-                        onChange={(e) => {
-                          setRows(prev => prev.map((row, idx) => idx === i ? { ...row, wholesale_price: e.target.value } : row))
-                        }}
-                        onBlur={(e) => updateField(i, 'wholesale_price', e.target.value)}
-                        className="w-full h-full bg-transparent px-2.5 py-1.5 text-right outline-none tabular text-blue"
-                      />
+                    <Cell onSelect={() => setSelected({ row: i, col: 12 })} selected={selected.row === i && selected.col === 12} className="text-center p-0">
+                      <input type="checkbox" checked={r.is_ai_generated || false} onChange={(e) => updateField(i, 'is_ai_generated', e.target.checked)} className="cursor-pointer mx-auto block w-4 h-4 text-blue" />
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 10 })} selected={selected.row === i && selected.col === 10} className="text-center font-medium p-0 min-w-[120px]">
+                    <Cell onSelect={() => setSelected({ row: i, col: 13 })} selected={selected.row === i && selected.col === 13} className="text-center p-0">
+                      <input type="checkbox" checked={r.is_human_reviewed || false} onChange={(e) => updateField(i, 'is_human_reviewed', e.target.checked)} className="cursor-pointer mx-auto block w-4 h-4 text-blue" />
+                    </Cell>
+                    <Cell onSelect={() => setSelected({ row: i, col: 14 })} selected={selected.row === i && selected.col === 14} className="text-center font-medium p-0 min-w-[100px]">
                       <select 
                         value={r.status}
                         onChange={(e) => updateField(i, 'status', e.target.value)}
-                        onFocus={() => setSelected({ row: i, col: 10 })}
+                        onFocus={() => setSelected({ row: i, col: 14 })}
                         className={'w-full h-full bg-transparent px-2 py-1.5 text-xs outline-none cursor-pointer appearance-none text-center ' + (isDraft ? 'text-amber font-bold' : 'text-forest font-bold')}
                       >
                         <option value="Live">Live</option>
                         <option value="Draft">Draft</option>
                       </select>
                     </Cell>
-                    <Cell onSelect={() => setSelected({ row: i, col: 11 })} selected={selected.row === i && selected.col === 11} className="text-center p-0">
+                    <Cell onSelect={() => setSelected({ row: i, col: 15 })} selected={selected.row === i && selected.col === 15} className="text-center p-0">
                       <button 
                         onClick={() => handleDeleteRow(r.sku)}
-                        className="w-full h-full flex items-center justify-center p-2 text-crimson hover:bg-crimson/10 transition-colors cursor-pointer"
-                        title="Delete product"
+                        className="text-crimson/50 hover:text-crimson hover:bg-crimson/10 rounded w-6 h-6 flex items-center justify-center mx-auto transition-colors"
+                        title="Delete Row"
                       >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                        ×
                       </button>
                     </Cell>
                   </tr>
@@ -315,64 +293,13 @@ export default function Sheet() {
         )}
       </div>
 
-      {showAiScanner && (
-        <ScanToAiModal 
-          onClose={() => setShowAiScanner(false)} 
-          onOpenSmartPaste={() => {
-            setShowAiScanner(false)
-            setShowSmartPaste(true)
-          }}
-        />
-      )}
-
-      {showSmartPaste && (
-        <SmartPasteModal 
-          onClose={() => setShowSmartPaste(false)} 
-          onProductAdded={() => {
-            fetchProducts()
-            setShowSmartPaste(false)
-          }} 
-        />
-      )}
-
-      <div className="flex items-center gap-4 border-t border-line bg-paper px-3 py-1.5 text-xs text-navy-soft">
-        <span className="border-b-2 border-forest pb-0.5 font-semibold text-navy">Master inventory</span>
-        <div className="flex items-center gap-2 ml-4">
-          <button 
-            onClick={handleAddRow}
-            className="flex items-center gap-2 text-xs font-semibold text-blue hover:text-blue-600 transition-colors px-3 py-1.5 rounded-md hover:bg-blue/5 border border-blue/20 bg-blue/5 shadow-sm"
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Add New Row
-          </button>
-          <button 
-            onClick={() => setShowAiScanner(true)}
-            className="flex items-center gap-2 text-xs font-semibold text-forest hover:text-forest-600 transition-colors px-3 py-1.5 rounded-md hover:bg-forest/5 border border-forest/20 bg-forest/5 shadow-sm"
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-            </svg>
-            Scan Box
-          </button>
-          <button 
-            onClick={() => setShowSmartPaste(true)}
-            className="flex items-center gap-2 text-xs font-semibold text-purple-600 hover:text-purple-700 transition-colors px-3 py-1.5 rounded-md hover:bg-purple-100 border border-purple-200 bg-purple-50 shadow-sm"
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-            Smart Paste AI
-          </button>
-        </div>
-        <span className="ml-auto tabular">{rows.filter((r) => r.stock_available <= 5).length} low-stock rows highlighted</span>
-      </div>
+      {showAiScanner && <ScanToAiModal onClose={() => setShowAiScanner(false)} />}
+      {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} />}
       {photoModalProduct && (
         <PhotoManagerModal 
           product={photoModalProduct} 
-          onClose={() => setPhotoModalProduct(null)} 
-          onSave={() => fetchProducts()}
+          onClose={() => setPhotoModalProduct(null)}
+          onUpdate={() => fetchProducts()}
         />
       )}
     </div>
@@ -381,13 +308,9 @@ export default function Sheet() {
 
 function Cell({ children, selected, onSelect, className = '' }) {
   return (
-    <td
+    <td 
       onClick={onSelect}
-      className={
-        'cursor-cell border px-2.5 py-1.5 ' +
-        (selected ? 'border-[2px] border-blue ' : 'border-line ') +
-        className
-      }
+      className={`border transition-colors ${selected ? 'border-[2px] border-blue bg-blue/5' : 'border-line'} ${className}`}
     >
       {children}
     </td>

@@ -23,7 +23,7 @@ const NAV_COMMERCE = [
 ]
 
 const NAV_SUPPLY = [
-  { id: 'inventory', label: 'All Products', icon: BoxIcon },
+  { id: 'inventory', label: 'Product Master', icon: BoxIcon },
   { id: 'suppliers', label: 'Our Suppliers', icon: GlobeIcon },
 ]
 
