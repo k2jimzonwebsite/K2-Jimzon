@@ -10,6 +10,40 @@ const INITIAL_REQUESTS = [
   { id: 'PB-1039', item: 'Acqua di Parma shower gel', status: 'Quoted — ₱1,850', eta: 'Awaiting your go' },
 ]
 
+const INITIAL_CONVERSATIONS = [
+  {
+    id: 'c1',
+    customer: 'Maria Santos',
+    channel: 'WhatsApp',
+    time: '10:42 AM',
+    unread: true,
+    messages: [
+      { sender: 'customer', text: 'Hi! Do you have the KIKO Milano 3D Hydra Lipgloss in shade 05?' },
+    ],
+    intent: 'stock_check'
+  },
+  {
+    id: 'PB-1042',
+    customer: 'Cafe Roma (Wholesale)',
+    channel: 'Viber',
+    time: '9:15 AM',
+    unread: false,
+    messages: [
+      { sender: 'customer', text: 'Buongiorno, need 10 cases of Lavazza Oro beans by Friday.' },
+      { sender: 'agent', text: 'Hi Marco, yes we have 14 cases in the Manila warehouse. Sending the invoice now.' },
+      { sender: 'customer', text: 'Grazie! Can I also pasabuy some truffle oil next month?' }
+    ],
+    intent: 'pasabuy_request',
+    metadata: {
+      item: 'Lavazza Oro beans, 10 cases',
+      qty: 10,
+      budget: 'Open',
+      url: 'https://lavazza.it',
+      shipping: 'sea'
+    }
+  }
+]
+
 export function StoreProvider({ children }) {
   const [view, setView] = useState('home')
   const [productId, setProductId] = useState(null)
@@ -22,6 +56,7 @@ export function StoreProvider({ children }) {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('All')
   const [requests, setRequests] = useState(INITIAL_REQUESTS)
+  const [conversations, setConversations] = useState(INITIAL_CONVERSATIONS)
   const [dbProducts, setDbProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [isDark, setIsDark] = useState(() => {
@@ -132,6 +167,16 @@ export function StoreProvider({ children }) {
         stock: dbP.stock_available, // alias
         why_buy: dbP.why_buy || localP.whyBuy,
         usage_instructions: dbP.usage_instructions,
+        ingredients: dbP.ingredients || localP.ingredients,
+        allergens: dbP.allergens || localP.allergens,
+        net_weight: dbP.net_weight || localP.net_weight,
+        package_type: dbP.package_type || localP.package_type,
+        storage_instructions: dbP.storage_instructions || localP.storage_instructions,
+        finished_product_details: dbP.finished_product_details || localP.finished_product_details,
+        brand_id: dbP.brand_id || localP.brand_id,
+        country_of_origin: dbP.country_of_origin || localP.country_of_origin,
+        barcode: dbP.barcode || localP.barcode,
+        product_video_url: dbP.product_video_url || localP.product_video_url,
         guide: localP.guide,
         pairings: localP.pairings || [],
       }
@@ -143,14 +188,14 @@ export function StoreProvider({ children }) {
   const openProduct = (id) => {
     if (!document.startViewTransition) {
       setProductId(id)
-      setView('product')
+      setView('master_product')
       window.scrollTo(0, 0)
       return
     }
     document.startViewTransition(() => {
       flushSync(() => {
         setProductId(id)
-        setView('product')
+        setView('master_product')
         window.scrollTo(0, 0)
       })
     })
@@ -200,16 +245,64 @@ export function StoreProvider({ children }) {
           }),
     )
 
-  const addRequest = (item) =>
+  const sendMessage = (convoId, text, sender) => {
+    setConversations(prev => prev.map(c => {
+      if (c.id === convoId) {
+        return {
+          ...c,
+          unread: sender === 'customer',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          messages: [...c.messages, { sender, text }]
+        }
+      }
+      return c
+    }))
+  }
+
+  const createConversation = (customer, channel, text, intent = 'general', metadata = null, providedId = null) => {
+    const id = providedId || ('c' + Date.now())
+    setConversations(prev => [
+      {
+        id,
+        customer,
+        channel,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        unread: true,
+        messages: [{ sender: 'customer', text }],
+        intent,
+        metadata
+      },
+      ...prev
+    ])
+    return id
+  }
+
+  const addRequest = (payload) => {
+    // legacy support if string is passed
+    const data = typeof payload === 'string' ? { item: payload, qty: 1 } : payload;
+    const reqId = 'PB-' + String(1043 + requests.length)
+    
     setRequests((prev) => [
       {
-        id: 'PB-' + String(1043 + prev.length),
-        item,
+        id: reqId,
+        item: data.item,
         status: 'Request received',
-        eta: 'Quote within 24h',
+        eta: data.shipping === 'air' ? 'Quote within 12h' : 'Quote within 24h',
       },
       ...prev,
     ])
+
+    const text = `New Pasabuy Sourcing Request:
+• Item: ${data.item}
+• Quantity: ${data.qty || 1}
+• Target Budget: ${data.budget ? '₱' + data.budget : 'None specified'}
+• Reference URL: ${data.url || 'None'}
+• Shipping: ${data.shipping === 'air' ? 'Air Freight (~14 days)' : 'Sea Cargo (~45 days)'}
+• Alternatives OK: ${data.alternatives ? 'Yes' : 'No'}
+• Attachments: ${data.image ? data.image.name : 'None'}`
+
+    createConversation('Pasabuy Client', 'Pasabuy', text, 'pasabuy_request', data, reqId)
+  }
 
   const totals = useMemo(() => {
     const lines = cart.map((line) => {
@@ -300,13 +393,16 @@ export function StoreProvider({ children }) {
     setCategory,
     requests,
     addRequest,
+    conversations,
+    sendMessage,
+    createConversation,
     products, // Now serving the merged rich + live data
     loading,
     getProduct,
     isDark,
     toggleDarkMode,
     ...totals,
-  }), [view, productId, cart, cartOpen, isWholesale, user, order, query, category, requests, products, loading, totals, isDark])
+  }), [view, productId, cart, cartOpen, isWholesale, user, order, query, category, requests, conversations, products, loading, totals, isDark])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

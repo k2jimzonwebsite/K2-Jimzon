@@ -29,8 +29,7 @@ export default function Home() {
       <div className="w-full h-px bg-line max-w-7xl mx-auto mt-6" />
       <NewArrivals />
       
-      {/* SEO-Friendly Full Catalog */}
-      <HomeCatalog />
+      {/* Removed HomeCatalog as requested */}
 
       <div className="w-full flex justify-center py-10"><Tricolor className="w-16" /></div>
       

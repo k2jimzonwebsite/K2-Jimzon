@@ -40,8 +40,7 @@ function CategoryTiles() {
                   go('pasabuy')
                 } else {
                   setQuery(''); setCategory(cat) 
-                  const el = document.getElementById('catalog')
-                  if (el) el.scrollIntoView({ behavior: 'smooth' })
+                  go('catalog')
                 }
               }}
               className="rise group flex flex-col items-center gap-2 rounded-xl bg-cream/90 backdrop-blur-md p-3 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-float hover:bg-cream"

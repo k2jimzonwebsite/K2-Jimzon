@@ -14,19 +14,23 @@ const Checkout = lazy(() => import('./views/Checkout'))
 const Confirmation = lazy(() => import('./views/Confirmation'))
 const Wholesale = lazy(() => import('./views/Wholesale'))
 const Admin = lazy(() => import('./views/admin/Admin'))
+const MasterProduct = lazy(() => import('./views/MasterProduct'))
+const Catalog = lazy(() => import('./views/Catalog'))
 
 const VIEWS = {
   home: Home,
   product: ProductDetail,
+  master_product: MasterProduct,
   pasabuy: Pasabuy,
   checkout: Checkout,
   confirmation: Confirmation,
   wholesale: Wholesale,
   admin: Admin,
+  catalog: Catalog,
 }
 
 // Storefront chrome (header, cart, chat) wraps shopper-facing views only.
-const STOREFRONT = new Set(['home', 'product', 'pasabuy', 'checkout', 'confirmation'])
+const STOREFRONT = new Set(['home', 'product', 'master_product', 'catalog', 'pasabuy', 'checkout', 'confirmation'])
 
 function Shell() {
   const { view } = useStore()

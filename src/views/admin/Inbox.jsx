@@ -1,45 +1,23 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
-
-// Mock incoming conversations if DB isn't populated
-const MOCK_CONVERSATIONS = [
-  {
-    id: 'c1',
-    customer: 'Maria Santos',
-    channel: 'WhatsApp',
-    time: '10:42 AM',
-    unread: true,
-    messages: [
-      { sender: 'customer', text: 'Hi! Do you have the KIKO Milano 3D Hydra Lipgloss in shade 05?' },
-    ],
-    intent: 'stock_check'
-  },
-  {
-    id: 'c2',
-    customer: 'Cafe Roma (Wholesale)',
-    channel: 'Viber',
-    time: '9:15 AM',
-    unread: false,
-    messages: [
-      { sender: 'customer', text: 'Buongiorno, need 10 cases of Lavazza Oro beans by Friday.' },
-      { sender: 'agent', text: 'Hi Marco, yes we have 14 cases in the Manila warehouse. Sending the invoice now.' },
-      { sender: 'customer', text: 'Grazie! Can I also pasabuy some truffle oil next month?' }
-    ],
-    intent: 'pasabuy_request'
-  }
-]
+import { useStore } from '../../context/StoreContext'
 
 export default function Inbox() {
-  const [conversations, setConversations] = useState(MOCK_CONVERSATIONS)
-  const [activeId, setActiveId] = useState(MOCK_CONVERSATIONS[0].id)
+  const { conversations, sendMessage } = useStore()
+  const [activeId, setActiveId] = useState(conversations[0]?.id)
   
+  // If activeId was deleted or missing, default to the first
+  useEffect(() => {
+    if (!conversations.find(c => c.id === activeId) && conversations.length > 0) {
+      setActiveId(conversations[0].id)
+    }
+  }, [conversations, activeId])
+
   const chat = conversations.find(c => c.id === activeId)
   
   const [replyText, setReplyText] = useState('')
   const [aiDrafting, setAiDrafting] = useState(false)
   const [dbResults, setDbResults] = useState(null)
-
-  // In a real app, we'd fetch from supabase conversations & messages table here
 
   const handleDraftAI = () => {
     setAiDrafting(true)
@@ -52,7 +30,7 @@ export default function Inbox() {
           result: "[ { stock: 4, srp: 750 } ]"
         })
       } else {
-        setReplyText("Absolutely. We have a consignment leaving Milan on the 22nd. Let me know exactly which brand of truffle oil you need and I'll quote you the landed price.")
+        setReplyText("Absolutely. We have a consignment leaving Milan on the 22nd. Let me know exactly which brand you need and I'll quote you the landed price.")
         setDbResults({
           query: "SELECT expected_delivery FROM purchase_orders WHERE status = 'Sent'",
           result: "[ { expected_delivery: '2026-07-22' } ]"
@@ -62,23 +40,20 @@ export default function Inbox() {
   }
 
   const handleSend = () => {
-    if (!replyText.trim()) return
-    
-    // Optimistic update
-    const updated = conversations.map(c => {
-      if (c.id === activeId) {
-        return {
-          ...c,
-          unread: false,
-          messages: [...c.messages, { sender: 'agent', text: replyText }]
-        }
-      }
-      return c
-    })
-    
-    setConversations(updated)
+    if (!replyText.trim() || !chat) return
+    sendMessage(chat.id, replyText, 'agent')
     setReplyText('')
     setDbResults(null)
+  }
+
+  const unreadCount = conversations.filter(c => c.unread).length
+
+  if (!chat) {
+    return (
+      <div className="flex h-[calc(100vh-140px)] rounded-xl border border-white/10 bg-[#05080f] shadow-2xl overflow-hidden items-center justify-center text-white/50">
+        No active conversations.
+      </div>
+    )
   }
 
   return (
@@ -88,7 +63,11 @@ export default function Inbox() {
       <div className="w-1/3 max-w-[320px] border-r border-white/10 flex flex-col bg-[#020408]">
         <div className="p-4 border-b border-white/10 flex items-center justify-between">
           <h2 className="font-serif font-semibold text-white">Customer Messages</h2>
-          <span className="bg-crimson text-white text-[10px] font-bold px-2 py-0.5 rounded-full pulse-dot">1 NEW</span>
+          {unreadCount > 0 && (
+            <span className="bg-crimson text-white text-[10px] font-bold px-2 py-0.5 rounded-full pulse-dot">
+              {unreadCount} NEW
+            </span>
+          )}
         </div>
         <div className="overflow-y-auto flex-1 p-2 space-y-1">
           {conversations.map(c => (
@@ -122,13 +101,42 @@ export default function Inbox() {
 
       {/* Chat Pane (Middle) */}
       <div className="flex-1 flex flex-col bg-[#0A101D] relative">
-        <div className="p-4 border-b border-white/10 flex justify-between items-center shadow-sm z-10 bg-white/5 backdrop-blur-md">
+        <div className="p-4 border-b border-white/10 flex justify-between items-center shadow-sm z-10 bg-white/5 backdrop-blur-md shrink-0">
           <div>
             <h3 className="font-bold text-white">{chat.customer}</h3>
             <p className="text-xs text-white/50">via {chat.channel} Webhook</p>
           </div>
           <button className="text-xs font-semibold text-blue hover:text-blue/80 transition-colors">View CRM Profile</button>
         </div>
+
+        {chat.intent === 'pasabuy_request' && chat.metadata && (
+          <div className="bg-purple-900/20 border-b border-purple-500/20 p-4 shrink-0 shadow-inner">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-purple-400 bg-purple-500/20 px-2 py-0.5 rounded">Active Sourcing Contract</span>
+              <span className="text-xs text-white/50">{chat.id}</span>
+            </div>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-white/40 text-xs">Requested Item</p>
+                <p className="font-semibold text-white/90">{chat.metadata.item}</p>
+              </div>
+              <div>
+                <p className="text-white/40 text-xs">Target Budget</p>
+                <p className="font-semibold text-white/90">{chat.metadata.budget ? `₱${chat.metadata.budget}` : 'Open'}</p>
+              </div>
+              <div>
+                <p className="text-white/40 text-xs">Quantity / Shipping</p>
+                <p className="font-semibold text-white/90">{chat.metadata.qty} · {chat.metadata.shipping === 'air' ? 'Air Freight' : 'Sea Cargo'}</p>
+              </div>
+              <div>
+                <p className="text-white/40 text-xs">Reference URL</p>
+                <p className="font-semibold text-blue hover:underline">
+                  {chat.metadata.url ? <a href={chat.metadata.url} target="_blank" rel="noreferrer" className="truncate block max-w-[200px]">View Link</a> : <span className="text-white/50">None</span>}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {chat.messages.map((m, i) => (

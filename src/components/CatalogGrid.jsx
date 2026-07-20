@@ -6,7 +6,7 @@ import ProductCard from './ProductCard'
 import { CheckIcon } from './ui/icons'
 
 export default function CatalogGrid() {
-  const { query, category, setCategory, products } = useStore()
+  const { query, setQuery, category, setCategory, products } = useStore()
   const [sortBy, setSortBy] = useState('popular') // popular, latest, price_asc, price_desc
 
   // Filter products based on search query and category
@@ -70,33 +70,48 @@ export default function CatalogGrid() {
         {/* Right Area: Grid and Sorting */}
         <div className="flex-1 min-w-0">
           {/* Top Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8 bg-cream/90 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-line">
-            <div className="flex flex-wrap items-center gap-2 text-sm">
-              <span className="text-navy-faint font-medium mr-2">Sort by:</span>
-              {['popular', 'latest'].map(type => (
-                <button
-                  key={type}
-                  onClick={() => setSortBy(type)}
-                  className={`px-4 py-2 rounded-lg capitalize transition-colors ${sortBy === type ? 'bg-navy text-cream shadow-sm' : 'bg-transparent text-navy hover:bg-line/50'}`}
-                >
-                  {type}
-                </button>
-              ))}
-              <div className="relative">
-                <select 
-                  className={`appearance-none bg-transparent pl-4 pr-8 py-2 rounded-lg transition-colors cursor-pointer border-none outline-none ${sortBy.includes('price') ? 'bg-navy text-cream shadow-sm' : 'text-navy hover:bg-line/50'}`}
-                  value={sortBy.includes('price') ? sortBy : 'price'}
-                  onChange={(e) => setSortBy(e.target.value)}
-                >
-                  <option value="price" disabled hidden>Price</option>
-                  <option value="price_asc" className="text-navy bg-paper">Low to High</option>
-                  <option value="price_desc" className="text-navy bg-paper">High to Low</option>
-                </select>
-                <svg className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none w-4 h-4 ${sortBy.includes('price') ? 'text-cream' : 'text-navy-faint'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-              </div>
+          <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-4 mb-8 bg-cream/90 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-line">
+            
+            {/* Inline Search */}
+            <div className="relative w-full sm:max-w-xs shrink-0">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-navy-faint" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search products..."
+                className="w-full rounded-xl border border-line bg-shell py-2 pl-9 pr-4 text-sm placeholder:text-navy-faint focus:border-navy/40 focus:bg-paper focus:outline-none transition-colors"
+              />
             </div>
-            <div className="text-sm text-navy-faint tabular-nums">
-              <span className="font-semibold text-navy">{filteredProducts.length}</span> items
+
+            <div className="flex flex-wrap items-center gap-4 text-sm ml-auto">
+              <div className="flex items-center gap-2">
+                <span className="text-navy-faint font-medium mr-1 hidden lg:inline">Sort by:</span>
+                {['popular', 'latest'].map(type => (
+                  <button
+                    key={type}
+                    onClick={() => setSortBy(type)}
+                    className={`px-3 py-1.5 rounded-lg capitalize transition-colors ${sortBy === type ? 'bg-navy text-cream shadow-sm' : 'bg-transparent text-navy hover:bg-line/50'}`}
+                  >
+                    {type}
+                  </button>
+                ))}
+                <div className="relative">
+                  <select 
+                    className={`appearance-none bg-transparent pl-3 pr-8 py-1.5 rounded-lg transition-colors cursor-pointer border-none outline-none ${sortBy.includes('price') ? 'bg-navy text-cream shadow-sm' : 'text-navy hover:bg-line/50'}`}
+                    value={sortBy.includes('price') ? sortBy : 'price'}
+                    onChange={(e) => setSortBy(e.target.value)}
+                  >
+                    <option value="price" disabled hidden>Price</option>
+                    <option value="price_asc" className="text-navy bg-paper">Low to High</option>
+                    <option value="price_desc" className="text-navy bg-paper">High to Low</option>
+                  </select>
+                  <svg className={`absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none w-3.5 h-3.5 ${sortBy.includes('price') ? 'text-cream' : 'text-navy-faint'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+              </div>
+              <div className="text-sm text-navy-faint tabular-nums border-l border-line/50 pl-4 hidden sm:block">
+                <span className="font-semibold text-navy">{filteredProducts.length}</span> items
+              </div>
             </div>
           </div>
 

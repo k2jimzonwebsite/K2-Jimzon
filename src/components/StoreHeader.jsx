@@ -11,8 +11,16 @@ function SearchBox({ className = '' }) {
         type="search"
         value={query}
         onChange={(e) => {
-          setQuery(e.target.value)
-          if (view !== 'home' && view !== 'product') go('home')
+          const val = e.target.value
+          setQuery(val)
+          
+          if (val.trim().length > 0) {
+            if (view !== 'catalog') go('catalog')
+          } else {
+            // Optional: If they clear the search while on the catalog page, they stay there.
+            // But if they were not on catalog when they started typing, maybe return them?
+            // For now, if they clear it, they just stay on the catalog seeing all items.
+          }
         }}
         placeholder='Try "Lavazza", "Biscoff", "pesto"…'
         className="w-full rounded-full border border-line bg-shell py-2.5 pl-9 pr-4 text-sm placeholder:text-navy-faint focus:border-navy/40 focus:bg-paper focus:outline-none"
