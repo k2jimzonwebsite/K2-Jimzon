@@ -5,6 +5,7 @@ import SmartPasteModal from './SmartPasteModal'
 import PhotoManagerModal from './PhotoManagerModal'
 import BulkCsvImportModal from './BulkCsvImportModal'
 import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
+import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 import { useStore } from '../../context/StoreContext'
 import Barcode from 'react-barcode'
 import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
@@ -58,6 +59,7 @@ export default function Sheet() {
   const [showCsvImport, setShowCsvImport] = useState(false)
   const [showBarcode, setShowBarcode] = useState(null)
   const [batchProduct, setBatchProduct] = useState(null)
+  const [enrichProduct, setEnrichProduct] = useState(null)
 
   useEffect(() => {
     if (!supabase) return;
@@ -137,6 +139,9 @@ export default function Sheet() {
           </button>
           <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-blue/30 bg-blue/10 px-3 py-2.5 min-h-[44px] text-xs font-medium text-blue transition hover:bg-blue/20">
             <span>✨</span> Smart Paste AI
+          </button>
+          <button onClick={() => rows.length > 0 && setEnrichProduct(rows[0])} className="flex shrink-0 items-center gap-2 rounded-lg border border-amber/30 bg-amber/10 px-3 py-2.5 min-h-[44px] text-xs font-medium text-amber transition hover:bg-amber/20">
+            <span>✨</span> AI Spec Enricher
           </button>
         </div>
 
@@ -278,8 +283,11 @@ export default function Sheet() {
                       )
                     })}
                     <td className="border border-line dark:border-white/10 px-2 text-center bg-paper dark:bg-[#0A101D] group-hover:bg-blue-wash dark:group-hover:bg-blue/10">
-                      <div className="flex items-center justify-center gap-1.5">
-                        <button onClick={() => openProduct(r.sku)} className="text-navy-soft hover:text-navy hover:bg-shell rounded w-6 h-6 flex items-center justify-center transition-colors" title="Preview Product">
+                      <div className="flex items-center justify-center gap-1">
+                        <button onClick={() => setEnrichProduct(r)} className="text-amber/70 hover:text-amber hover:bg-amber/10 rounded w-6 h-6 flex items-center justify-center transition-colors text-xs font-bold" title="Enrich Product Specs with AI">
+                          ✨
+                        </button>
+                        <button onClick={() => openProduct(r.sku)} className="text-navy-soft hover:text-navy hover:bg-shell rounded w-6 h-6 flex items-center justify-center transition-colors" title="View Store Page">
                           <EyeIcon size={14} />
                         </button>
                         <button onClick={() => setShowBarcode(r.barcode || r.sku)} className="text-navy-soft hover:text-navy hover:bg-shell rounded w-6 h-6 flex items-center justify-center transition-colors" title="View Barcode">
@@ -335,6 +343,13 @@ export default function Sheet() {
           }}
         />
       )}
+
+      <ProductAiEnrichmentModal
+        product={enrichProduct}
+        isOpen={!!enrichProduct}
+        onClose={() => setEnrichProduct(null)}
+        onEnriched={() => fetchProducts()}
+      />
     </div>
   )
 }

@@ -4,6 +4,7 @@ import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
 import StaffAllocationModal from './StaffAllocationModal'
+import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 
 // ── Shared input/textarea styles ──────────────────────────────────────────────
 const inp = 'w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none transition-colors'
@@ -142,6 +143,7 @@ export default function InventoryGrid() {
   const [saving, setSaving]           = useState(false)
   const [showAiScanner, setShowAiScanner] = useState(false)
   const [showSmartPaste, setShowSmartPaste] = useState(false)
+  const [enrichProduct, setEnrichProduct] = useState(null)
 
   useEffect(() => {
     if (!supabase) return
@@ -328,6 +330,13 @@ export default function InventoryGrid() {
                         👤 Staff Custody
                       </button>
                     </div>
+
+                    <button
+                      onClick={() => setEnrichProduct(p)}
+                      className="w-full text-[10px] font-mono font-bold bg-amber/15 hover:bg-amber/25 text-amber py-1.5 rounded border border-amber/30 transition-all text-center flex items-center justify-center gap-1"
+                    >
+                      ✨ Enrich Specs with AI
+                    </button>
                   </div>
                 </div>
 
@@ -340,6 +349,13 @@ export default function InventoryGrid() {
           })}
         </div>
       )}
+
+      <ProductAiEnrichmentModal
+        product={enrichProduct}
+        isOpen={!!enrichProduct}
+        onClose={() => setEnrichProduct(null)}
+        onEnriched={() => fetchProducts()}
+      />
 
       {/* ── FULL EDIT MODAL ─────────────────────────────────────────────────── */}
       {editingProduct && (
