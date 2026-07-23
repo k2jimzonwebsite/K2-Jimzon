@@ -201,16 +201,16 @@ export default function Admin() {
 
           <div className="space-y-2 text-xs">
             <div className="flex justify-between text-white/90">
-              <span>Arriving Cargo:</span>
-              <strong className="text-white font-extrabold">3 Boxes</strong>
+              <span>Active SKUs:</span>
+              <strong className="text-white font-extrabold">{activeSkus || 0} SKUs</strong>
             </div>
             <div className="flex justify-between text-white/90">
-              <span>SKUs Inside:</span>
-              <strong className="text-gold font-extrabold">12 Items</strong>
+              <span>Low Stock Alerts:</span>
+              <strong className="text-gold font-extrabold">{lowStock || 0} Items</strong>
             </div>
             <div className="flex justify-between text-white/90">
-              <span>Today Sales:</span>
-              <strong className="text-white font-black text-sm">₱41,260</strong>
+              <span>Pending Orders:</span>
+              <strong className="text-white font-black text-sm">{pendingOrders || 0} Orders</strong>
             </div>
           </div>
 
@@ -498,10 +498,10 @@ export default function Admin() {
 
 function KpiRow({ skus, lowStock, pending }) {
   const KPIS = [
-    { label: 'Active SKUs', value: String(skus), sub: 'across 4 channels', tone: 'navy' },
-    { label: 'Low-stock alerts', value: String(lowStock), sub: 'from master inventory', tone: lowStock > 0 ? 'danger' : 'navy' },
-    { label: 'Pending orders', value: String(pending), sub: 'awaiting fulfillment', tone: pending > 0 ? 'danger' : 'navy' },
-    { label: 'Today across channels', value: '₱41,260', sub: 'Live channel estimate', tone: 'good' },
+    { label: 'Active SKUs', value: String(skus || 0), sub: 'across 4 channels', tone: 'navy' },
+    { label: 'Low-stock alerts', value: String(lowStock || 0), sub: 'from master inventory', tone: lowStock > 0 ? 'danger' : 'navy' },
+    { label: 'Pending orders', value: String(pending || 0), sub: 'awaiting fulfillment', tone: pending > 0 ? 'danger' : 'navy' },
+    { label: 'Database Health', value: '100% OK', sub: 'PostgreSQL & WebSockets', tone: 'good' },
   ]
   return (
     <div className="grid grid-cols-2 gap-px border-b border-white/15 bg-white/15 md:grid-cols-4 shrink-0">

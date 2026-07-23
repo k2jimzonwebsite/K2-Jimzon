@@ -87,20 +87,52 @@ export default function OmniOperationsHub() {
   
   const [activeRole, setActiveRole] = useState('manila_warehouse')
   const [activeStaff, setActiveStaff] = useState('Elena Guerrero')
-  const [cargoBoxes, setCargoBoxes] = useState(INITIAL_CARGO_BOXES)
-  const [orders, setOrders] = useState(MOCK_PICK_ORDERS)
-  
+  const [cargoBoxes, setCargoBoxes] = useState(() => {
+    try {
+      const saved = localStorage.getItem('k2_cargo_boxes')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
+  })
+  const [orders, setOrders] = useState([])
   const [scanBarcode, setScanBarcode] = useState('')
   const [scanMessage, setScanMessage] = useState(null)
-  const [packedCount, setPackedCount] = useState(14)
+  const [packedCount, setPackedCount] = useState(0)
   const [printSlipOrder, setPrintSlipOrder] = useState(null)
   const [showStaffPinModal, setShowStaffPinModal] = useState(false)
 
   useEffect(() => {
-    if (currentStaff?.name) {
-      setActiveStaff(currentStaff.name)
+    if (!supabase) return;
+    fetchLiveOrders()
+  }, [])
+
+  const fetchLiveOrders = async () => {
+    if (!supabase) return;
+    try {
+      const { data } = await supabase.from('orders').select('*').order('created_at', { ascending: false })
+      if (data && data.length > 0) {
+        const formatted = data.map(o => ({
+          id: o.id?.split('-')[0] || ('ORD-' + o.sku),
+          channel: o.channel_source === 'website_vip' ? 'Website VIP' : (o.origin || 'Storefront'),
+          channelColor: o.channel_source === 'website_vip' ? '#D4AF37' : '#2563EB',
+          customer: o.customer_name || 'Customer',
+          assignedStaff: activeStaff,
+          items: [{ sku: o.sku, title: o.sku, qty: o.quantity || 1, bin: 'Fulfillment Shelf' }],
+          status: o.order_status || 'Ready to Pack',
+          courier: 'J&T Express / Lalamove',
+          tracking: 'TRK-' + String(o.id || Math.floor(Math.random() * 10000))
+        }))
+        setOrders(formatted)
+        setPackedCount(formatted.filter(f => f.status.includes('Packed')).length)
+      } else {
+        setOrders([])
+        setPackedCount(0)
+      }
+    } catch (e) {
+      console.warn("OmniOperationsHub live order fetch warning:", e)
     }
-  }, [currentStaff])
+  }
 
   const handleClaimBoxCustody = (boxCode) => {
     setCargoBoxes(prev => prev.map(b => {
