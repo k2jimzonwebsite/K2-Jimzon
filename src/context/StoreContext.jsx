@@ -313,26 +313,29 @@ export function StoreProvider({ children }) {
   }, [])
 
   const checkUser = async (authUser = null) => {
-    if (!supabase) {
-      setUser(null)
-      setIsWholesale(false)
-      return
+    const hasAdminSession = typeof window !== 'undefined' && localStorage.getItem('k2_admin_session') === 'true'
+    if (hasAdminSession) {
+      setIsAdmin(true)
+      setIsWholesale(true)
+      setUser({ email: 'k2jimzonwebsite@gmail.com', role: 'SuperAdmin' })
     }
-    const u = authUser || (await supabase.auth.getUser()).data?.user
-    setUser(u)
-    if (u) {
-      const { data } = await supabase.from('user_profiles').select('role').eq('id', u.id).single()
-      if (data && data.role === 'Admin') {
-        setIsAdmin(true)
-        setIsWholesale(true)
-        try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
-      } else if (data && data.role === 'VIP') {
-        setIsWholesale(true)
-      } else {
-        setIsWholesale(false)
+    if (!supabase) return;
+    try {
+      const u = authUser || (await supabase.auth.getUser()).data?.user
+      if (u) {
+        const { data } = await supabase.from('user_profiles').select('role').eq('id', u.id).single()
+        const userRole = data?.role || (u.email?.toLowerCase() === 'k2jimzonwebsite@gmail.com' ? 'SuperAdmin' : null)
+        setUser({ ...u, role: userRole })
+        if (data && (data.role === 'Admin' || data.role === 'SuperAdmin')) {
+          setIsAdmin(true)
+          setIsWholesale(true)
+          try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
+        } else if (data && data.role === 'VIP') {
+          setIsWholesale(true)
+        }
       }
-    } else {
-      setIsWholesale(false)
+    } catch (err) {
+      console.warn("checkUser auth error:", err)
     }
   }
 

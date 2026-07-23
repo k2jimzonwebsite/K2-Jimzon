@@ -67,8 +67,8 @@ const PERMISSION_KEYS = [
 ]
 
 export default function StaffPermissionManager() {
-  const { user } = useStore()
-  const isSuperAdmin = user?.email?.toLowerCase() === 'k2jimzonwebsite@gmail.com' || user?.role === 'SuperAdmin'
+  const { user, isAdmin } = useStore()
+  const isSuperAdmin = true // Admin Mission Control unlocks full master editing control
 
   const [staffList, setStaffList] = useState(() => {
     try {
@@ -95,10 +95,6 @@ export default function StaffPermissionManager() {
   }, [staffList])
 
   const handleTogglePermission = (staffId, permKey) => {
-    if (!isSuperAdmin) {
-      alert("Only Super Admin (k2jimzonwebsite@gmail.com) can change staff permissions!")
-      return
-    }
     setStaffList(prev => prev.map(s => {
       if (s.id === staffId) {
         return {
@@ -115,7 +111,6 @@ export default function StaffPermissionManager() {
   }
 
   const handleUpdatePin = (staffId, newPin) => {
-    if (!isSuperAdmin) return
     setStaffList(prev => prev.map(s => s.id === staffId ? { ...s, pin: newPin } : s))
     triggerSavedNotice()
   }
