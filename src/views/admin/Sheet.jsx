@@ -266,7 +266,7 @@ export default function Sheet() {
                               {val && (
                                 <button
                                   onClick={() => setBatchProduct(r)}
-                                  className={`px-1.5 py-0.5 rounded text-[9px] font-bold border transition-all ${
+                                  className={`px-1.5 py-0.5 rounded text-xs font-bold border transition-all ${
                                     health.color === 'crimson' ? 'bg-crimson/20 border-crimson text-crimson animate-pulse' :
                                     health.color === 'amber' ? 'bg-amber/20 border-amber text-amber' :
                                     'bg-forest/20 border-forest text-forest'

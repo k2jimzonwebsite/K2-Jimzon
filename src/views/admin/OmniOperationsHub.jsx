@@ -199,7 +199,7 @@ export default function OmniOperationsHub() {
             </span>
             <span className="text-sm text-neutral-300 font-medium">Multi-Staff Custody & Italy Cargo Box Allocation</span>
           </div>
-          <h1 className="font-sans text-2xl font-black text-white mt-1">Staff Operations & Italy Box Handover Station</h1>
+          <h1 className="font-serif text-2xl font-black text-white mt-1">Staff Operations & Italy Box Handover Station</h1>
           <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
             Each staff member receives specific Italy shipment boxes containing assigned SKUs. Staff can only ship orders out of their claimed box custody.
           </p>
@@ -371,7 +371,7 @@ export default function OmniOperationsHub() {
                 <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
                   NAIA Cargo Box Handover & Custody Claim
                 </span>
-                <h2 className="font-sans text-2xl font-black text-white mt-2">Italy Flight Box Arrivals & Staff Inventory Handover</h2>
+                <h2 className="font-serif text-2xl font-black text-white mt-2">Italy Flight Box Arrivals & Staff Inventory Handover</h2>
                 <p className="text-sm text-neutral-300 font-medium mt-1">Transfer specific flight boxes to staff members and claim SKU custody into local hubs.</p>
               </div>
 
@@ -457,7 +457,7 @@ export default function OmniOperationsHub() {
               <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
                 Inter-Staff Custody Re-allocation
               </span>
-              <h2 className="font-sans text-2xl font-black text-white mt-2">1-Click Inter-Staff Stock Transfer Station</h2>
+              <h2 className="font-serif text-2xl font-black text-white mt-2">1-Click Inter-Staff Stock Transfer Station</h2>
               <p className="text-sm text-neutral-300 font-medium mt-1">Transfer SKU inventory between staff members instantly with one click.</p>
             </div>
 

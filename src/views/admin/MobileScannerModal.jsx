@@ -104,7 +104,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
       {/* Progress & Live Stat Banner */}
       <div className="bg-[#020408] border-b border-white/10 px-4 py-3 flex items-center justify-between shrink-0">
         <div>
-          <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Shipment Progress</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/40">Shipment Progress</p>
           <p className="text-base font-bold text-white">
             <span className="text-forest">{totalScanned}</span> / <span className="text-neutral-400">{totalPacked} units</span>
           </p>
@@ -131,7 +131,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
         {/* Reticle Guide Overlay */}
         <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
           <div className="w-64 h-44 border-2 border-dashed border-forest/60 rounded-xl flex items-center justify-center bg-black/10 backdrop-blur-[1px]">
-            <span className="text-[10px] font-mono text-forest bg-black/60 px-2 py-1 rounded tracking-widest uppercase animate-pulse">
+            <span className="text-xs font-mono text-forest bg-black/60 px-2 py-1 rounded tracking-widest uppercase animate-pulse">
               Align Barcode
             </span>
           </div>
@@ -173,7 +173,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
 
         {/* Quick Tap SKU Tiles */}
         <div>
-          <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mb-2">Quick Tap to Increment (+1)</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/40 mb-2">Quick Tap to Increment (+1)</p>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
             {items.map(item => (
               <button
@@ -182,7 +182,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
                 className="shrink-0 bg-white/5 border border-white/10 hover:border-forest p-2 rounded-lg text-left transition-all active:scale-95"
               >
                 <p className="text-sm font-semibold text-neutral-200 truncate max-w-[120px]">{item.sku}</p>
-                <p className="text-[10px] text-white/50">
+                <p className="text-xs text-white/50">
                   Scanned: <span className="text-forest font-bold">{item.manila_scanned_qty}</span> / {item.italy_packed_qty}
                 </p>
               </button>

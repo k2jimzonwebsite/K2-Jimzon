@@ -218,9 +218,9 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
               <div className="bg-black/40 px-4 py-3 flex items-center justify-between border-b border-white/10 shrink-0">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold text-white/50 uppercase tracking-widest">Project 1 Prompt</span>
-                  <span className="text-[10px] font-bold bg-blue/20 text-blue px-2 py-0.5 rounded-full border border-blue/30">K2 Jimzon Product Intelligence AI</span>
+                  <span className="text-xs font-bold bg-blue/20 text-blue px-2 py-0.5 rounded-full border border-blue/30">K2 Jimzon Product Intelligence AI</span>
                 </div>
-                <span className="text-[10px] font-bold bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">EDITABLE</span>
+                <span className="text-xs font-bold bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">EDITABLE</span>
               </div>
               <textarea
                 value={promptText}
@@ -232,7 +232,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
 
             {/* How-to steps */}
             <div className="bg-black/20 border border-white/5 rounded-xl p-4 space-y-2.5">
-              <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-3">What to do next</p>
+              <p className="text-xs font-bold text-white/30 uppercase tracking-widest mb-3">What to do next</p>
               {[
                 ['Copy the prompt below', 'Hit the white button to copy it to your clipboard.'],
                 ['Open ChatGPT → Project 1', 'Go to your K2 Jimzon Product Intelligence project.'],
@@ -241,7 +241,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
                 ['Smart Paste the result', 'Copy the Section 1 JSON, then click the purple button below.'],
               ].map(([title, body], i) => (
                 <div key={i} className="flex gap-3 items-start">
-                  <span className="w-5 h-5 rounded-full bg-blue/20 text-blue text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
+                  <span className="w-5 h-5 rounded-full bg-blue/20 text-blue text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
                   <p className="text-sm text-white/50"><span className="text-neutral-300 font-semibold">{title}</span> — {body}</p>
                 </div>
               ))}

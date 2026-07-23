@@ -81,8 +81,8 @@ export default function Suppliers() {
           <div className="flex items-center gap-2 border-b border-white/10 pb-3">
             <span className="text-lg">🕸️</span>
             <div>
-              <h3 className="font-bold text-white text-base font-sans">Italy Supermarket & Boutique Price Scraper</h3>
-              <p className="text-white/50 text-[11px]">Auto-scrapes live EUR price (€) from Esselunga, Carrefour & KIKO Milan</p>
+              <h3 className="font-bold text-white text-base font-serif">Italy Supermarket & Boutique Price Scraper</h3>
+              <p className="text-white/50 text-xs">Auto-scrapes live EUR price (€) from Esselunga, Carrefour & KIKO Milan</p>
             </div>
           </div>
 
@@ -109,8 +109,8 @@ export default function Suppliers() {
                 <span>✓ {scrapeResult.title}</span>
                 <span>€{scrapeResult.price_eur}</span>
               </div>
-              <p className="text-white/60 text-[11px]">Landed Cost Manila: <span className="text-amber font-bold">₱{scrapeResult.landed_php}</span> (Air Freight + Duty Tax included)</p>
-              <p className="text-white/40 text-[10px]">Source: {scrapeResult.store} · Scraped at {scrapeResult.scraped_at}</p>
+              <p className="text-white/60 text-xs">Landed Cost Manila: <span className="text-amber font-bold">₱{scrapeResult.landed_php}</span> (Air Freight + Duty Tax included)</p>
+              <p className="text-white/40 text-xs">Source: {scrapeResult.store} · Scraped at {scrapeResult.scraped_at}</p>
             </div>
           )}
         </div>
@@ -120,8 +120,8 @@ export default function Suppliers() {
           <div className="flex items-center gap-2 border-b border-white/10 pb-3">
             <span className="text-lg">📊</span>
             <div>
-              <h3 className="font-bold text-white text-base font-sans">Plain-English AI Data & Inventory Query Agent</h3>
-              <p className="text-white/50 text-[11px]">Ask plain-English questions about sales, profits, or stock levels</p>
+              <h3 className="font-bold text-white text-base font-serif">Plain-English AI Data & Inventory Query Agent</h3>
+              <p className="text-white/50 text-xs">Ask plain-English questions about sales, profits, or stock levels</p>
             </div>
           </div>
 
@@ -144,7 +144,7 @@ export default function Suppliers() {
           {dataAnswer && (
             <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 text-white space-y-2 animate-in fade-in">
               <p className="font-bold text-neutral-200">{dataAnswer.answer}</p>
-              <p className="text-[10px] text-white/40 font-mono bg-black/40 p-2 rounded border border-white/5">{dataAnswer.sql}</p>
+              <p className="text-xs text-white/40 font-mono bg-black/40 p-2 rounded border border-white/5">{dataAnswer.sql}</p>
             </div>
           )}
         </div>

@@ -154,7 +154,7 @@ export default function MilanPackingScannerModal({
       <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#0A101D] shrink-0">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-crimson/20 text-crimson px-2 py-0.5 rounded border border-crimson/30">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest bg-crimson/20 text-crimson px-2 py-0.5 rounded border border-crimson/30">
               Milan Packing POV
             </span>
             <span className="text-sm text-white/50">Milan, Italy</span>
@@ -173,7 +173,7 @@ export default function MilanPackingScannerModal({
       {/* Progress Banner */}
       <div className="bg-[#020408] border-b border-white/10 px-4 py-3 flex items-center justify-between shrink-0">
         <div>
-          <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Milan Box Units Packed</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/40">Milan Box Units Packed</p>
           <p className="text-base font-bold text-white">
             <span className="text-crimson font-mono text-lg">{totalPacked}</span> units packed into Flight Consignment
           </p>
@@ -199,7 +199,7 @@ export default function MilanPackingScannerModal({
         {/* Camera Overlay Guide */}
         <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
           <div className="w-64 h-44 border-2 border-dashed border-crimson/60 rounded-xl flex items-center justify-center bg-black/10 backdrop-blur-[1px]">
-            <span className="text-[10px] font-mono text-crimson bg-black/60 px-2 py-1 rounded tracking-widest uppercase animate-pulse">
+            <span className="text-xs font-mono text-crimson bg-black/60 px-2 py-1 rounded tracking-widest uppercase animate-pulse">
               Pack & Scan Item (Milan)
             </span>
           </div>
@@ -241,7 +241,7 @@ export default function MilanPackingScannerModal({
 
         {/* Quick Tap SKU Tiles for Italy */}
         <div>
-          <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mb-2">Tap to Increment Milan Box (+1)</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/40 mb-2">Tap to Increment Milan Box (+1)</p>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
             {items.map(item => (
               <button
@@ -250,7 +250,7 @@ export default function MilanPackingScannerModal({
                 className="shrink-0 bg-white/5 border border-white/10 hover:border-crimson p-2 rounded-lg text-left transition-all active:scale-95"
               >
                 <p className="text-sm font-semibold text-neutral-200 truncate max-w-[120px]">{item.sku}</p>
-                <p className="text-[10px] text-white/50">
+                <p className="text-xs text-white/50">
                   Packed: <span className="text-crimson font-bold">{item.italy_packed_qty}</span>
                 </p>
               </button>
@@ -289,7 +289,7 @@ export default function MilanPackingScannerModal({
                   <p className="font-extrabold text-base text-white flex items-center gap-1.5">
                     ⚡ Instant 1-Tap Draft & Pack (+1)
                   </p>
-                  <p className="text-[11px] text-neutral-300 font-normal mt-0.5">
+                  <p className="text-xs text-neutral-300 font-normal mt-0.5">
                     Registers SKU in inventory immediately & packs box (+1) without stopping scanner
                   </p>
                 </div>
@@ -306,7 +306,7 @@ export default function MilanPackingScannerModal({
               >
                 <div>
                   <p className="font-bold text-base text-white group-hover:text-blue">📷 Use AI Scan Box / Smart Paste</p>
-                  <p className="text-[11px] text-white/50 font-normal mt-0.5">Stream packaging photos to AI vision model to generate full product JSON & specs</p>
+                  <p className="text-xs text-white/50 font-normal mt-0.5">Stream packaging photos to AI vision model to generate full product JSON & specs</p>
                 </div>
                 <span className="text-xl">→</span>
               </button>
@@ -317,7 +317,7 @@ export default function MilanPackingScannerModal({
 
                 <form onSubmit={handleQuickSubmit} className="space-y-2.5">
                   <div>
-                    <label className="block text-[10px] font-mono text-white/50 uppercase">Product Title</label>
+                    <label className="block text-xs font-mono text-white/50 uppercase">Product Title</label>
                     <input
                       type="text"
                       value={quickTitle}
@@ -330,7 +330,7 @@ export default function MilanPackingScannerModal({
 
                   <div className="grid grid-cols-3 gap-2">
                     <div>
-                      <label className="block text-[10px] font-mono text-white/50 uppercase">SRP (₱)</label>
+                      <label className="block text-xs font-mono text-white/50 uppercase">SRP (₱)</label>
                       <input
                         type="number"
                         value={quickSrp}
@@ -339,7 +339,7 @@ export default function MilanPackingScannerModal({
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-mono text-white/50 uppercase">Batch Code</label>
+                      <label className="block text-xs font-mono text-white/50 uppercase">Batch Code</label>
                       <input
                         type="text"
                         value={quickBatch}
@@ -348,7 +348,7 @@ export default function MilanPackingScannerModal({
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-mono text-white/50 uppercase">Best Before</label>
+                      <label className="block text-xs font-mono text-white/50 uppercase">Best Before</label>
                       <input
                         type="date"
                         value={quickBestBefore}

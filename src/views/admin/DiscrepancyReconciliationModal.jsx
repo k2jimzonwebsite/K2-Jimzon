@@ -30,7 +30,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
         <div className="p-6 border-b border-white/10 bg-[#09090b] flex justify-between items-center shrink-0">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-forest bg-forest/20 px-2 py-0.5 rounded">
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-forest bg-forest/20 px-2 py-0.5 rounded">
                 Manila Customs & Warehouse Check
               </span>
               <span className="text-sm text-white/40 font-mono">{consignment.manifest_code}</span>
@@ -43,15 +43,15 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
         {/* Stats Summary Bar */}
         <div className="grid grid-cols-3 gap-px bg-white/10 border-b border-white/10 text-center shrink-0">
           <div className="bg-[#09090b] p-4">
-            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Italy Packed Box Qty</p>
+            <p className="text-xs font-mono uppercase tracking-widest text-white/40">Italy Packed Box Qty</p>
             <p className="text-xl font-bold text-white mt-1">{totalPacked} units</p>
           </div>
           <div className="bg-[#09090b] p-4">
-            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Manila Scanned Qty</p>
+            <p className="text-xs font-mono uppercase tracking-widest text-white/40">Manila Scanned Qty</p>
             <p className="text-xl font-bold text-forest mt-1">{totalScanned} units</p>
           </div>
           <div className="bg-[#09090b] p-4">
-            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Variance</p>
+            <p className="text-xs font-mono uppercase tracking-widest text-white/40">Variance</p>
             <p className={`text-xl font-bold mt-1 ${varianceTotal === 0 ? 'text-forest' : varianceTotal < 0 ? 'text-crimson' : 'text-amber'}`}>
               {varianceTotal > 0 ? `+${varianceTotal}` : varianceTotal} units
             </p>
@@ -82,7 +82,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
                   <tr key={item.sku} className="hover:bg-white/5 transition-colors">
                     <td className="py-3 px-3">
                       <p className="font-bold text-white">{item.sku}</p>
-                      <p className="text-[11px] text-white/50">{item.name || 'Authentic Italian Product'}</p>
+                      <p className="text-xs text-white/50">{item.name || 'Authentic Italian Product'}</p>
                     </td>
                     <td className="py-3 px-3 text-center font-mono text-neutral-400">{item.batch_code}</td>
                     <td className="py-3 px-3 text-center font-mono text-neutral-400">{item.best_before_date}</td>
@@ -92,7 +92,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
                       {variance > 0 ? `+${variance}` : variance}
                     </td>
                     <td className="py-3 px-3 text-right">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                      <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider ${
                         isMatched ? 'bg-forest/20 text-forest' : isShort ? 'bg-crimson/20 text-crimson' : 'bg-amber/20 text-amber'
                       }`}>
                         {isMatched ? 'Matched 🟢' : isShort ? 'Shortage 🔴' : 'Surplus 🟡'}

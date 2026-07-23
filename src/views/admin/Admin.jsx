@@ -338,7 +338,7 @@ export default function Admin() {
 
         <header className="flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#0A101D] px-4 py-4 md:px-6">
           <div className="flex-1 min-w-0">
-            <h1 className="font-sans text-2xl font-black tracking-tight text-white truncate">
+            <h1 className="font-serif text-2xl font-black tracking-tight text-white truncate">
               {section === 'integrations' ? 'Marketplace API Keys & Vault' :
                section === 'globe' ? '3D Globe Map Settings' :
                section === 'wholesale' ? 'Customer Directory & VIP Accounts' :
@@ -389,7 +389,7 @@ export default function Admin() {
               onClick={() => setPaletteOpen(true)}
               className="hidden lg:flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2.5 text-sm font-bold text-white hover:bg-white/20 transition-all shadow-sm"
             >
-              Search Command <kbd className="ml-1 rounded border border-white/30 bg-black/60 px-1.5 py-0.5 font-mono text-[10px] text-gold font-bold">Ctrl K</kbd>
+              Search Command <kbd className="ml-1 rounded border border-white/30 bg-black/60 px-1.5 py-0.5 font-mono text-xs text-gold font-bold">Ctrl K</kbd>
             </button>
 
             {section === 'inventory' && (

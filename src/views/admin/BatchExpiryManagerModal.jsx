@@ -102,7 +102,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold bg-forest/20 text-forest px-2 py-0.5 rounded border border-forest/30 uppercase">
+              <span className="text-xs font-mono font-bold bg-forest/20 text-forest px-2 py-0.5 rounded border border-forest/30 uppercase">
                 FEFO Multi-Batch & Item Expiration Editor
               </span>
               <span className="text-sm text-white/50">SKU: {product?.sku || product?.id || 'N/A'}</span>
@@ -125,7 +125,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
             <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50">
               Active Shipment Boxes & Expiration Dates (Editable)
             </h3>
-            <span className="text-[10px] font-mono text-amber">📌 Click Pin to priority-highlight specific batch</span>
+            <span className="text-xs font-mono text-amber">📌 Click Pin to priority-highlight specific batch</span>
           </div>
 
           <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
@@ -143,18 +143,18 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                       <button
                         type="button"
                         onClick={() => handleTogglePin(b.id)}
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-all ${
+                        className={`px-2 py-0.5 rounded text-xs font-bold border transition-all ${
                           b.is_pinned ? 'bg-amber text-navy border-amber font-extrabold' : 'bg-white/5 border-white/10 text-white/40 hover:text-white'
                         }`}
                         title="Pin this batch to priority top"
                       >
                         {b.is_pinned ? '📌 Pinned Priority' : '📌 Pin Batch'}
                       </button>
-                      <span className="text-white/40 text-[10px]">ID: {b.id}</span>
+                      <span className="text-white/40 text-xs">ID: {b.id}</span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold border ${
+                      <span className={`px-2.5 py-0.5 rounded text-xs font-bold border ${
                         health.color === 'crimson' ? 'bg-crimson/20 border-crimson/40 text-crimson animate-pulse' :
                         health.color === 'amber' ? 'bg-amber/20 border-amber/40 text-amber' :
                         'bg-forest/20 border-forest/40 text-forest'
@@ -176,7 +176,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                   {/* Inline Editable Fields for this specific batch */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-[9px] text-white/40 uppercase mb-1">Cargo Box Code</label>
+                      <label className="block text-xs text-white/40 uppercase mb-1">Cargo Box Code</label>
                       <input
                         type="text"
                         value={b.box_code}
@@ -186,7 +186,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                     </div>
 
                     <div>
-                      <label className="block text-[9px] text-white/40 uppercase mb-1">Quantity (Pcs)</label>
+                      <label className="block text-xs text-white/40 uppercase mb-1">Quantity (Pcs)</label>
                       <input
                         type="number"
                         value={b.qty}
@@ -196,7 +196,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                     </div>
 
                     <div>
-                      <label className="block text-[9px] text-white/40 uppercase mb-1">Expiration Date</label>
+                      <label className="block text-xs text-white/40 uppercase mb-1">Expiration Date</label>
                       <input
                         type="date"
                         value={b.expiry_date}
@@ -216,7 +216,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
           <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Add New Incoming Shipment Box Batch</h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm font-mono">
             <div>
-              <label className="block text-[10px] text-white/40 mb-1">Box / Cargo Code</label>
+              <label className="block text-xs text-white/40 mb-1">Box / Cargo Code</label>
               <input
                 type="text"
                 value={newBoxCode}
@@ -227,7 +227,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
             </div>
 
             <div>
-              <label className="block text-[10px] text-white/40 mb-1">Box Quantity (Pcs)</label>
+              <label className="block text-xs text-white/40 mb-1">Box Quantity (Pcs)</label>
               <input
                 type="number"
                 value={newQty}
@@ -237,7 +237,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
             </div>
 
             <div>
-              <label className="block text-[10px] text-white/40 mb-1">Batch Expiration Date</label>
+              <label className="block text-xs text-white/40 mb-1">Batch Expiration Date</label>
               <input
                 type="date"
                 required

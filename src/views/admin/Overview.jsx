@@ -101,36 +101,36 @@ export default function Overview({ setSection }) {
             <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Master Financial P&L Cockpit
             </span>
-            <h2 className="font-sans text-2xl font-black text-white mt-2">Today's Landed Revenue & Profit</h2>
+            <h2 className="font-serif text-2xl font-black text-white mt-2">Today's Landed Revenue & Profit</h2>
           </div>
           <div className="text-right">
             <p className="text-sm text-neutral-300 font-bold uppercase">Net Cash Revenue</p>
-            <p className="font-mono text-3xl font-black text-gold">{formattedRevenue}</p>
+            <p className="font-mono tabular-nums text-3xl font-black text-gold">{formattedRevenue}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-base font-mono">
           <div className="bg-[#27272a] p-4 rounded-xl border border-white/10">
             <p className="text-gold text-sm uppercase font-extrabold">Gross Revenue</p>
-            <p className="text-white text-xl font-black mt-1">{formattedRevenue}</p>
+            <p className="text-white text-xl font-black tabular-nums mt-1">{formattedRevenue}</p>
             <p className="text-neutral-300 text-sm mt-1 font-sans">Live Channel Total</p>
           </div>
 
           <div className="bg-[#27272a] p-4 rounded-xl border border-white/10">
             <p className="text-gold text-sm uppercase font-extrabold">Sourcing COGS</p>
-            <p className="text-crimson text-xl font-black mt-1">-{estimatedCost}</p>
+            <p className="text-crimson text-xl font-black tabular-nums mt-1">-{estimatedCost}</p>
             <p className="text-neutral-300 text-sm mt-1 font-sans">Est. Italy Landed Cost</p>
           </div>
 
           <div className="bg-[#27272a] p-4 rounded-xl border border-white/10">
             <p className="text-gold text-sm uppercase font-extrabold">Pending Orders</p>
-            <p className="text-white text-xl font-black mt-1">{pendingOrders} Orders</p>
+            <p className="text-white text-xl font-black tabular-nums mt-1">{pendingOrders} Orders</p>
             <p className="text-neutral-300 text-sm mt-1 font-sans">Awaiting Packing</p>
           </div>
 
           <div className="bg-blue/20 p-4 rounded-xl border border-blue text-white shadow-md">
             <p className="text-blue text-sm uppercase font-black">Net Cash Profit</p>
-            <p className="text-white text-xl font-black mt-1">{estimatedProfit}</p>
+            <p className="text-white text-xl font-black tabular-nums mt-1">{estimatedProfit}</p>
             <p className="text-neutral-200 text-sm mt-1 font-sans font-bold">Clear Cash Flow</p>
           </div>
         </div>
@@ -242,7 +242,7 @@ function HealthWidget({ label, status, val }) {
   return (
     <div className="rounded-xl border border-white/20 bg-[#18181b] p-4 text-white shadow-md flex items-center justify-between">
       <div>
-        <p className="text-[11px] font-extrabold uppercase text-gold truncate">{label}</p>
+        <p className="text-xs font-extrabold uppercase text-gold truncate">{label}</p>
         <p className="text-xl font-black mt-1">{val || 'Operational'}</p>
       </div>
       <span className={`h-3 w-3 rounded-full ${status === 'good' ? 'bg-blue pulse-dot' : 'bg-gold pulse-dot'}`} />

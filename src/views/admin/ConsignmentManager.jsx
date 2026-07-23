@@ -247,7 +247,7 @@ export default function ConsignmentManager() {
             </span>
             <span className="text-sm font-mono text-gold font-bold">{consignment.manifest_code}</span>
           </div>
-          <h1 className="font-sans text-2xl font-black text-white">{consignment.flight_number}</h1>
+          <h1 className="font-serif text-2xl font-black text-white">{consignment.flight_number}</h1>
           <p className="text-sm text-neutral-300 font-bold mt-1">
             Packed in Milan: <span className="text-white font-black font-mono">{consignment.packed_at}</span> · Status:{' '}
             <span className="font-black text-blue">{consignment.status}</span>
@@ -287,20 +287,20 @@ export default function ConsignmentManager() {
       {/* Discrepancy & Receiving Dashboard Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl">
-          <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Milan Packed Total</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/40">Milan Packed Total</p>
           <p className="text-2xl font-bold text-white mt-1">{totalItalyPacked} <span className="text-sm font-normal text-white/50">units</span></p>
           <p className="text-sm text-white/40 mt-1">Boxed and sealed in Italy</p>
         </div>
 
         <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl">
-          <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Manila Scanned Total</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/40">Manila Scanned Total</p>
           <p className="text-2xl font-bold text-forest mt-1">{totalManilaScanned} <span className="text-sm font-normal text-white/50">units</span></p>
           <p className="text-sm text-white/40 mt-1">Counted via phone scanner</p>
         </div>
 
         <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl flex flex-col justify-between">
           <div>
-            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Box Discrepancy Status</p>
+            <p className="text-xs font-mono uppercase tracking-widest text-white/40">Box Discrepancy Status</p>
             <p className={`text-xl font-bold mt-1 ${totalManilaScanned === totalItalyPacked ? 'text-forest' : 'text-crimson'}`}>
               {totalManilaScanned === totalItalyPacked ? '100% Matched 🟢' : `${totalItalyPacked - totalManilaScanned} Units Pending 🔴`}
             </p>
@@ -410,7 +410,7 @@ export default function ConsignmentManager() {
             <h3 className="font-serif font-bold text-xl text-white">Pack New Item Box (Milan)</h3>
             <form onSubmit={handleAddPackingItem} className="space-y-3">
               <div>
-                <label className="block text-[10px] font-mono uppercase text-white/50 mb-1">Select SKU</label>
+                <label className="block text-xs font-mono uppercase text-white/50 mb-1">Select SKU</label>
                 <select
                   value={selectedSku}
                   onChange={(e) => setSelectedSku(e.target.value)}
@@ -425,7 +425,7 @@ export default function ConsignmentManager() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-mono uppercase text-white/50 mb-1">Italy Box Packed Quantity</label>
+                <label className="block text-xs font-mono uppercase text-white/50 mb-1">Italy Box Packed Quantity</label>
                 <input
                   type="number"
                   min="1"
@@ -436,7 +436,7 @@ export default function ConsignmentManager() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-mono uppercase text-white/50 mb-1">Batch / Lot Code</label>
+                <label className="block text-xs font-mono uppercase text-white/50 mb-1">Batch / Lot Code</label>
                 <input
                   type="text"
                   value={batchCode}
@@ -446,7 +446,7 @@ export default function ConsignmentManager() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-mono uppercase text-white/50 mb-1">Best-Before Date</label>
+                <label className="block text-xs font-mono uppercase text-white/50 mb-1">Best-Before Date</label>
                 <input
                   type="date"
                   value={bestBeforeDate}

@@ -236,7 +236,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                 onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, ''))}
                 placeholder="202688"
                 required
-                className="w-full text-center tracking-[0.4em] font-mono text-2xl font-extrabold rounded-xl border border-blue/40 bg-black/50 px-4 py-3.5 text-blue placeholder:text-white/20 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue transition-all"
+                className="w-full text-center tracking-[0.4em] font-mono text-2xl font-extrabold rounded-xl border border-blue/40 bg-black/50 px-4 py-3.5 text-blue placeholder:text-neutral-500 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue transition-all"
               />
               <p className="text-sm text-gold mt-2 text-center font-semibold">
                 Valid 2FA Code: <span className="text-white font-mono font-bold">202688</span> or <span className="text-white font-mono font-bold">123456</span>

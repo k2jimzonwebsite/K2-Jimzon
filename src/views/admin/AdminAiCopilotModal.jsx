@@ -112,11 +112,11 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-serif font-bold text-base text-white">BOS AI Chat Copilot</h2>
-                <span className="text-[9px] font-mono font-bold bg-forest/20 text-forest px-1.5 py-0.5 rounded border border-forest/30 uppercase">
+                <span className="text-xs font-mono font-bold bg-forest/20 text-forest px-1.5 py-0.5 rounded border border-forest/30 uppercase">
                   Connected to Supabase
                 </span>
               </div>
-              <p className="text-[10px] text-white/50">Instant Natural Language Database & Action Agent</p>
+              <p className="text-xs text-white/50">Instant Natural Language Database & Action Agent</p>
             </div>
           </div>
 
@@ -132,19 +132,19 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
         <div className="p-3 bg-[#09090b]/50 border-b border-white/10 flex gap-2 overflow-x-auto shrink-0 scrollbar-none">
           <button
             onClick={() => handleSendQuery('Who holds stock for KIKO Lipgloss Shade 05?')}
-            className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-400 hover:text-white shrink-0 text-[11px] transition-all"
+            className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-400 hover:text-white shrink-0 text-xs transition-all"
           >
             📦 Staff Custody Stock
           </button>
           <button
             onClick={() => handleSendQuery('What is todays net profit across all channels?')}
-            className="px-3 py-1.5 rounded-lg bg-forest/10 hover:bg-forest/20 border border-forest/30 text-forest shrink-0 text-[11px] transition-all"
+            className="px-3 py-1.5 rounded-lg bg-forest/10 hover:bg-forest/20 border border-forest/30 text-forest shrink-0 text-xs transition-all"
           >
             💰 Today Net Profit
           </button>
           <button
             onClick={() => handleSendQuery('Are there incoming flight boxes at NAIA Customs?')}
-            className="px-3 py-1.5 rounded-lg bg-amber/10 hover:bg-amber/20 border border-amber/30 text-amber shrink-0 text-[11px] transition-all"
+            className="px-3 py-1.5 rounded-lg bg-amber/10 hover:bg-amber/20 border border-amber/30 text-amber shrink-0 text-xs transition-all"
           >
             🛬 Flight Boxes
           </button>
@@ -157,7 +157,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
               key={idx}
               className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'} space-y-1`}
             >
-              <div className="flex items-center gap-2 text-[10px] text-white/40 px-1">
+              <div className="flex items-center gap-2 text-xs text-white/40 px-1">
                 <span>{msg.sender === 'user' ? 'You (Admin)' : 'AI Copilot'}</span>
                 <span>•</span>
                 <span>{msg.timestamp}</span>
@@ -174,15 +174,15 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
 
                 {/* SQL Code Block */}
                 {msg.sql && (
-                  <div className="bg-black/60 p-2.5 rounded-xl border border-white/10 text-[10px] text-amber font-mono overflow-x-auto">
-                    <span className="text-white/40 block text-[9px] uppercase mb-1">Generated Supabase Query:</span>
+                  <div className="bg-black/60 p-2.5 rounded-xl border border-white/10 text-xs text-amber font-mono overflow-x-auto">
+                    <span className="text-white/40 block text-xs uppercase mb-1">Generated Supabase Query:</span>
                     <code>{msg.sql}</code>
                   </div>
                 )}
 
                 {/* Structured Data Table */}
                 {msg.data && (
-                  <div className="bg-white/5 rounded-xl border border-white/10 p-2 space-y-1 text-[11px]">
+                  <div className="bg-white/5 rounded-xl border border-white/10 p-2 space-y-1 text-xs">
                     {msg.data.map((row, rIdx) => (
                       <div key={rIdx} className="flex items-center justify-between p-1.5 rounded hover:bg-white/5">
                         <span className="font-bold text-neutral-200">{row.staff || row.metric || row.box || row.sku}</span>

@@ -65,7 +65,7 @@ function PhotoSlot({ label, value, onChange, bucket = 'product-images' }) {
             </div>
           </>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-white/20 hover:text-white/40 transition-colors">
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-neutral-500 hover:text-white/40 transition-colors">
             {uploading ? (
               <div className="w-5 h-5 border-2 border-blue border-t-transparent rounded-full animate-spin" />
             ) : (
@@ -73,7 +73,7 @@ function PhotoSlot({ label, value, onChange, bucket = 'product-images' }) {
                 <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <p className="text-[10px] font-semibold uppercase tracking-wider">Upload</p>
+                <p className="text-xs font-semibold uppercase tracking-wider">Upload</p>
               </>
             )}
           </div>
@@ -84,7 +84,7 @@ function PhotoSlot({ label, value, onChange, bucket = 'product-images' }) {
       {/* Also allow pasting a URL directly */}
       <input type="url" value={value || ''} onChange={(e) => onChange(e.target.value)}
         placeholder="…or paste image URL"
-        className="mt-1.5 w-full rounded-lg border border-white/10 bg-transparent px-2 py-1.5 text-[11px] text-white/50 placeholder-white/20 focus:border-blue outline-none" />
+        className="mt-1.5 w-full rounded-lg border border-white/10 bg-transparent px-2 py-1.5 text-xs text-white/50 placeholder-white/20 focus:border-blue outline-none" />
     </div>
   )
 }
@@ -116,12 +116,12 @@ function GallerySlots({ value = [], onChange, max = 5 }) {
           <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-white/10 group">
             <img src={url} alt={`gallery-${i}`} className="w-full h-full object-cover" />
             <button type="button" onClick={() => remove(i)}
-              className="absolute top-0.5 right-0.5 bg-crimson/90 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">×</button>
+              className="absolute top-0.5 right-0.5 bg-crimson/90 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">×</button>
           </div>
         ))}
         {value.length < max && (
           <button type="button" onClick={() => fileRef.current?.click()}
-            className="aspect-square rounded-lg border-2 border-dashed border-white/10 hover:border-blue/50 hover:bg-blue/5 transition-colors flex items-center justify-center text-white/20 hover:text-white/50">
+            className="aspect-square rounded-lg border-2 border-dashed border-white/10 hover:border-blue/50 hover:bg-blue/5 transition-colors flex items-center justify-center text-neutral-500 hover:text-white/50">
             {uploading ? <div className="w-4 h-4 border-2 border-blue border-t-transparent rounded-full animate-spin" /> : <span className="text-xl leading-none">+</span>}
           </button>
         )}

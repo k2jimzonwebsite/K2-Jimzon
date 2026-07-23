@@ -148,7 +148,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
           <div>
             <h2 className="text-xl font-black text-white flex items-center gap-2">
               System Architecture & Interactive Process Flowchart
-              <span className="text-[10px] font-mono font-black bg-gold text-navy px-2.5 py-0.5 rounded-full uppercase">
+              <span className="text-xs font-mono font-black bg-gold text-navy px-2.5 py-0.5 rounded-full uppercase">
                 Visual Flowchart Canvas
               </span>
             </h2>
@@ -190,7 +190,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
           ))}
         </div>
 
-        <div className="flex items-center gap-4 text-[11px] font-bold">
+        <div className="flex items-center gap-4 text-xs font-bold">
           <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-blue" /> Demand</span>
           <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-gold" /> Logic / Decision</span>
           <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> Supply Chain</span>
@@ -319,7 +319,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
           {/* Telemetry Inputs & Outputs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm font-mono">
             <div className="bg-black/40 p-4 rounded-xl border border-white/10 space-y-2">
-              <p className="text-gold font-bold uppercase text-[11px]">System Data Inputs:</p>
+              <p className="text-gold font-bold uppercase text-xs">System Data Inputs:</p>
               <ul className="space-y-1 text-neutral-300 font-sans">
                 {activeNode.inputs.map((inp, idx) => (
                   <li key={idx} className="flex items-center gap-2">
@@ -331,7 +331,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
             </div>
 
             <div className="bg-black/40 p-4 rounded-xl border border-white/10 space-y-2">
-              <p className="text-gold font-bold uppercase text-[11px]">System Data Output Stream:</p>
+              <p className="text-gold font-bold uppercase text-xs">System Data Output Stream:</p>
               <ul className="space-y-1 text-neutral-300 font-sans">
                 {activeNode.outputs.map((out, idx) => (
                   <li key={idx} className="flex items-center gap-2">
@@ -377,24 +377,24 @@ function Flowcard({ node, isSelected, onClick, isDecision = false }) {
       <div className="flex items-center justify-between w-full mb-2">
         <span className="text-2xl">{node.icon}</span>
         {isDecision ? (
-          <span className="text-[9px] font-mono font-black px-2 py-0.5 rounded bg-gold text-navy font-bold uppercase">
+          <span className="text-xs font-mono font-black px-2 py-0.5 rounded bg-gold text-navy font-bold uppercase">
             DECISION
           </span>
         ) : (
-          <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-white/10 text-neutral-300">
+          <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-white/10 text-neutral-300">
             {node.category}
           </span>
         )}
       </div>
 
       <h4 className="text-sm font-black text-white leading-snug">{node.label}</h4>
-      <p className="text-[10px] text-gold font-mono font-bold mt-1.5 leading-tight truncate">
+      <p className="text-xs text-gold font-mono font-bold mt-1.5 leading-tight truncate">
         {node.sub}
       </p>
 
       {/* Selection Glow Indicator */}
       {isSelected && (
-        <div className="mt-3 pt-2 border-t border-gold/30 flex items-center justify-between text-[10px] font-mono text-gold font-bold">
+        <div className="mt-3 pt-2 border-t border-gold/30 flex items-center justify-between text-xs font-mono text-gold font-bold">
           <span>ACTIVE PATH</span>
           <span>➔</span>
         </div>

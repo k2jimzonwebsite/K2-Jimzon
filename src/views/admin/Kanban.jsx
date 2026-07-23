@@ -111,7 +111,7 @@ export default function Kanban() {
       <div className="flex flex-col xl:flex-row gap-4 border-b border-white/10 pb-4 shrink-0">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2 py-0.5 rounded">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2 py-0.5 rounded">
               Unified Supply Chain Hub
             </span>
           </div>
@@ -209,7 +209,7 @@ export default function Kanban() {
                           <div className="pl-3">
                             <div className="flex justify-between items-start mb-2">
                               <p className="font-mono text-sm text-white/50">{new Date(o.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} · {o.items.length} items</p>
-                              <span className={`text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider font-bold ${STATUS_TONE[o.order_status]}`}>
+                              <span className={`text-xs px-1.5 py-0.5 rounded uppercase tracking-wider font-bold ${STATUS_TONE[o.order_status]}`}>
                                 {o.order_status}
                               </span>
                             </div>

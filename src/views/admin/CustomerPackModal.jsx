@@ -191,7 +191,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                   const isItemComplete = qtyScanned >= item.quantity
                   return (
                     <div key={item.sku} className={`p-3 rounded-lg border ${isItemComplete ? 'border-forest/30 bg-forest/10' : 'border-white/10 bg-white/5'} flex items-start gap-3 transition-colors`}>
-                      <div className={`shrink-0 mt-0.5 ${isItemComplete ? 'text-forest' : 'text-white/20'}`}>
+                      <div className={`shrink-0 mt-0.5 ${isItemComplete ? 'text-forest' : 'text-neutral-500'}`}>
                         {isItemComplete ? <CheckIcon size={18} /> : <BoxIcon size={18} />}
                       </div>
                       <div>

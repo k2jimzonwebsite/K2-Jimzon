@@ -65,7 +65,7 @@ export default function Inbox() {
         <div className="p-4 border-b border-white/10 flex items-center justify-between">
           <h2 className="font-serif font-semibold text-white">Customer Messages</h2>
           {unreadCount > 0 && (
-            <span className="bg-crimson text-white text-[10px] font-bold px-2 py-0.5 rounded-full pulse-dot">
+            <span className="bg-crimson text-white text-xs font-bold px-2 py-0.5 rounded-full pulse-dot">
               {unreadCount} NEW
             </span>
           )}
@@ -89,7 +89,7 @@ export default function Inbox() {
                 <span className={`text-sm line-clamp-1 flex-1 pr-2 ${c.unread ? 'text-neutral-300' : 'text-white/40'}`}>
                   {c.messages[c.messages.length - 1].text}
                 </span>
-                <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                <span className={`text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
                   c.channel === 'WhatsApp' ? 'bg-forest/20 text-forest' : 'bg-purple-900/40 text-purple-400'
                 }`}>
                   {c.channel}
@@ -106,7 +106,7 @@ export default function Inbox() {
           <div>
             <div className="flex items-center gap-2">
               <h3 className="font-bold text-white">{chat.customer}</h3>
-              <span className="text-[10px] font-mono font-bold text-forest bg-forest/20 px-2 py-0.5 rounded border border-forest/30">
+              <span className="text-xs font-mono font-bold text-forest bg-forest/20 px-2 py-0.5 rounded border border-forest/30">
                 via {chat.channel} Webhook
               </span>
             </div>
@@ -116,7 +116,7 @@ export default function Inbox() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setAutoWebhookBot(prev => !prev)}
-              className={`text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 ${
+              className={`text-xs font-mono font-bold px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 ${
                 autoWebhookBot ? 'bg-forest/20 text-forest border-forest/40' : 'bg-white/5 text-white/40 border-white/10'
               }`}
             >
@@ -134,30 +134,30 @@ export default function Inbox() {
               <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-24 h-5 bg-white/40 backdrop-blur-md border border-white/20 rotate-[2deg] shadow-sm z-10" />
               
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-black/60 bg-black/5 px-2 py-0.5 rounded border border-black/10">Pasabuy Request</span>
-                <span className="text-[10px] font-mono text-black/30">{chat.id}</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-black/60 bg-black/5 px-2 py-0.5 rounded border border-black/10">Pasabuy Request</span>
+                <span className="text-xs font-mono text-black/30">{chat.id}</span>
               </div>
               
               <div className="space-y-4">
                 <div>
-                  <p className="text-black/40 text-[10px] uppercase font-bold tracking-widest">Requested Item</p>
+                  <p className="text-black/40 text-xs uppercase font-bold tracking-widest">Requested Item</p>
                   <p className="font-serif font-semibold text-xl text-black/90 leading-tight">{chat.metadata.item}</p>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-black/40 text-[10px] uppercase font-bold tracking-widest">Target Budget</p>
+                    <p className="text-black/40 text-xs uppercase font-bold tracking-widest">Target Budget</p>
                     <p className="font-semibold text-black/80">{chat.metadata.budget ? `₱${chat.metadata.budget}` : 'Open'}</p>
                   </div>
                   <div>
-                    <p className="text-black/40 text-[10px] uppercase font-bold tracking-widest">Quantity & Shipping</p>
+                    <p className="text-black/40 text-xs uppercase font-bold tracking-widest">Quantity & Shipping</p>
                     <p className="font-semibold text-black/80">{chat.metadata.qty} · {chat.metadata.shipping === 'air' ? 'Air Freight' : 'Sea Cargo'}</p>
                   </div>
                 </div>
                 
                 {chat.metadata.url && (
                   <div>
-                    <p className="text-black/40 text-[10px] uppercase font-bold tracking-widest">Reference URL</p>
+                    <p className="text-black/40 text-xs uppercase font-bold tracking-widest">Reference URL</p>
                     <a href={chat.metadata.url} target="_blank" rel="noreferrer" className="text-blue-700 font-semibold hover:underline text-base truncate block w-full max-w-sm">
                       {chat.metadata.url}
                     </a>
@@ -232,8 +232,8 @@ export default function Inbox() {
           
           {dbResults && (
             <div className="w-full animate-in slide-in-from-bottom-4 duration-300">
-               <p className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-2">Live Database Context</p>
-               <div className="bg-black/50 border border-white/5 p-3 rounded-lg text-[11px] font-mono leading-relaxed text-neutral-400 mb-4 overflow-x-auto">
+               <p className="text-xs uppercase tracking-widest text-white/40 font-bold mb-2">Live Database Context</p>
+               <div className="bg-black/50 border border-white/5 p-3 rounded-lg text-xs font-mono leading-relaxed text-neutral-400 mb-4 overflow-x-auto">
                  <span className="text-purple-400">Query Executed:</span><br/>
                  <span className="text-blue-300">{dbResults.query}</span><br/><br/>
                  <span className="text-forest">Result:</span><br/>

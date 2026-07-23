@@ -38,7 +38,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2 py-0.5 rounded border border-forest/30">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2 py-0.5 rounded border border-forest/30">
               Staff Station Login
             </span>
             <h2 className="font-serif text-xl font-bold text-white mt-1">Select Staff Account & PIN</h2>
@@ -54,7 +54,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
 
         {/* Staff Profile Selection Cards */}
         <div className="space-y-2">
-          <p className="text-[10px] text-white/40 uppercase font-bold">1. Select Staff Profile:</p>
+          <p className="text-xs text-white/40 uppercase font-bold">1. Select Staff Profile:</p>
           <div className="grid grid-cols-3 gap-2">
             {STAFF_PROFILES.map((staff) => (
               <button
@@ -68,8 +68,8 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
                 }`}
               >
                 <span className="text-xl block mb-1">{staff.icon}</span>
-                <span className="block text-[11px] truncate font-semibold">{staff.name.split(' ')[0]}</span>
-                <span className="block text-[9px] text-white/40">{staff.location.split(' ')[0]}</span>
+                <span className="block text-xs truncate font-semibold">{staff.name.split(' ')[0]}</span>
+                <span className="block text-xs text-white/40">{staff.location.split(' ')[0]}</span>
               </button>
             ))}
           </div>
@@ -78,7 +78,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
         {/* PIN Entry Form */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-[10px] text-white/40 uppercase font-bold mb-1.5">
+            <label className="block text-xs text-white/40 uppercase font-bold mb-1.5">
               2. Enter 4-Digit PIN Code for {selectedStaff.name}:
             </label>
             <input
@@ -93,7 +93,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
           </div>
 
           {error && (
-            <div className="p-3 rounded-xl bg-crimson/20 border border-crimson/40 text-crimson text-[11px]">
+            <div className="p-3 rounded-xl bg-crimson/20 border border-crimson/40 text-crimson text-xs">
               {error}
             </div>
           )}
@@ -106,7 +106,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
           </button>
         </form>
 
-        <div className="text-[10px] text-white/30 text-center border-t border-white/10 pt-3">
+        <div className="text-xs text-white/30 text-center border-t border-white/10 pt-3">
           K2 Jimzon BOS · Quick PIN Authentication Active
         </div>
 

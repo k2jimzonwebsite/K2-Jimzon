@@ -204,7 +204,7 @@ export default function CustomerCrmBroadcast() {
       <div className="bg-[#09090b] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-blue/20 text-blue px-2 py-0.5 rounded border border-blue/30">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest bg-blue/20 text-blue px-2 py-0.5 rounded border border-blue/30">
               Omnichannel Customer CRM & Marketing Engine
             </span>
             <span className="text-sm text-white/50">Customer Records, Orders & Broadcast Campaigns</span>
@@ -273,7 +273,7 @@ export default function CustomerCrmBroadcast() {
           <div className="bg-[#09090b] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm font-mono">
-                <thead className="bg-white/5 text-white/40 uppercase text-[10px] tracking-wider border-b border-white/10">
+                <thead className="bg-white/5 text-white/40 uppercase text-xs tracking-wider border-b border-white/10">
                   <tr>
                     <th className="px-5 py-3.5">Customer / Contact</th>
                     <th className="px-5 py-3.5">Channel & Role</th>
@@ -288,14 +288,14 @@ export default function CustomerCrmBroadcast() {
                     <tr key={cust.id} className="hover:bg-white/5 transition-colors">
                       <td className="px-5 py-4">
                         <p className="font-bold text-white text-base">{cust.name}</p>
-                        <p className="text-white/40 text-[11px] mt-0.5">{cust.email} · {cust.phone}</p>
+                        <p className="text-white/40 text-xs mt-0.5">{cust.email} · {cust.phone}</p>
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-2">
-                          <span className="bg-white/10 text-neutral-300 px-2 py-0.5 rounded text-[10px]">{cust.channel}</span>
+                          <span className="bg-white/10 text-neutral-300 px-2 py-0.5 rounded text-xs">{cust.channel}</span>
                           <button
                             onClick={() => toggleRole(cust.id)}
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-all ${
+                            className={`px-2 py-0.5 rounded text-xs font-bold border transition-all ${
                               cust.role === 'VIP' ? 'bg-amber/20 text-amber border-amber/30' : 'bg-white/5 text-white/40 border-white/10'
                             }`}
                           >
@@ -312,7 +312,7 @@ export default function CustomerCrmBroadcast() {
                       <td className="px-5 py-4">
                         <div className="flex flex-wrap gap-1">
                           {cust.tags.map((t, idx) => (
-                            <span key={idx} className="bg-blue/10 text-blue border border-blue/20 px-2 py-0.5 rounded text-[10px]">
+                            <span key={idx} className="bg-blue/10 text-blue border border-blue/20 px-2 py-0.5 rounded text-xs">
                               {t}
                             </span>
                           ))}
@@ -321,7 +321,7 @@ export default function CustomerCrmBroadcast() {
                       <td className="px-5 py-4 text-right space-x-2">
                         <button
                           onClick={() => alert(`Direct Messaging ${cust.name} via ${cust.channel} (${cust.phone})...`)}
-                          className="bg-white/10 hover:bg-white/20 text-white font-bold px-3 py-1.5 rounded-lg text-[11px] transition-all"
+                          className="bg-white/10 hover:bg-white/20 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition-all"
                         >
                           💬 Chat
                         </button>
@@ -362,7 +362,7 @@ export default function CustomerCrmBroadcast() {
                     }`}
                   >
                     <span>{aud.label}</span>
-                    <span className="bg-white/10 px-2 py-0.5 rounded text-[10px]">{aud.count} recipients</span>
+                    <span className="bg-white/10 px-2 py-0.5 rounded text-xs">{aud.count} recipients</span>
                   </button>
                 ))}
               </div>
@@ -382,7 +382,7 @@ export default function CustomerCrmBroadcast() {
                     }`}
                   >
                     <p className="text-sm font-bold text-white">{tpl.name}</p>
-                    <p className="text-[10px] font-mono text-white/40 truncate mt-0.5">{tpl.subject}</p>
+                    <p className="text-xs font-mono text-white/40 truncate mt-0.5">{tpl.subject}</p>
                   </button>
                 ))}
               </div>
@@ -405,7 +405,7 @@ export default function CustomerCrmBroadcast() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-mono uppercase text-white/40 mb-1">Email / Notification Subject Line</label>
+                <label className="block text-xs font-mono uppercase text-white/40 mb-1">Email / Notification Subject Line</label>
                 <input
                   type="text"
                   value={customSubject}
@@ -415,7 +415,7 @@ export default function CustomerCrmBroadcast() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-mono uppercase text-white/40 mb-1">Message Body (Supports dynamic tags: {"{{name}}"})</label>
+                <label className="block text-xs font-mono uppercase text-white/40 mb-1">Message Body (Supports dynamic tags: {"{{name}}"})</label>
                 <textarea
                   rows={8}
                   value={customBody}
@@ -451,7 +451,7 @@ export default function CustomerCrmBroadcast() {
                 <div className="p-4 rounded-xl bg-forest/20 border border-forest/40 text-forest text-sm font-mono space-y-1 animate-in fade-in">
                   <p className="font-bold text-base">✓ Campaign Broadcast Successfully Sent!</p>
                   <p className="text-neutral-200">Sent to <strong>{broadcastLog.count} customer contacts</strong>. Delivery rate: {broadcastLog.deliveryRate}.</p>
-                  <p className="text-white/50 text-[10px]">Subject: "{broadcastLog.subject}"</p>
+                  <p className="text-white/50 text-xs">Subject: "{broadcastLog.subject}"</p>
                 </div>
               )}
 

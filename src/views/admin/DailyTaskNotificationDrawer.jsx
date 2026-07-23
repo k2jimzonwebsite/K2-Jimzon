@@ -75,7 +75,7 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
         <div className="p-5 border-b border-white/10 flex items-center justify-between bg-[#09090b]">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold bg-amber/20 text-amber px-2 py-0.5 rounded border border-amber/30 uppercase">
+              <span className="text-xs font-mono font-bold bg-amber/20 text-amber px-2 py-0.5 rounded border border-amber/30 uppercase">
                 Daily Operations Center
               </span>
               <span className="text-sm font-mono text-white/50">{activeTasks.length} Pending Tasks</span>
@@ -104,7 +104,7 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
             <div className="text-center py-12 space-y-3">
               <span className="text-3xl">🎉</span>
               <p className="font-bold text-white">All Daily Tasks Complete!</p>
-              <p className="text-white/50 text-[11px]">No urgent expirations or pending cargo box handovers today.</p>
+              <p className="text-white/50 text-xs">No urgent expirations or pending cargo box handovers today.</p>
             </div>
           ) : (
             activeTasks.map((task) => (
@@ -115,18 +115,18 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded border ${
+                  <span className={`text-xs font-bold uppercase px-2 py-0.5 rounded border ${
                     task.priority === 'high' ? 'bg-crimson/20 text-crimson border-crimson/30' : 'bg-amber/20 text-amber border-amber/30'
                   }`}>
                     {task.priority === 'high' ? 'High Priority' : 'Action Required'}
                   </span>
-                  <span className="text-[10px] text-white/40">{task.id}</span>
+                  <span className="text-xs text-white/40">{task.id}</span>
                 </div>
 
                 <div>
                   <h3 className="font-bold text-white text-base">{task.title}</h3>
                   <p className="text-neutral-400 font-semibold mt-0.5">{task.subtitle}</p>
-                  <p className="text-white/40 text-[11px] mt-1">{task.details}</p>
+                  <p className="text-white/40 text-xs mt-1">{task.details}</p>
                 </div>
 
                 <button
@@ -141,7 +141,7 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-white/10 bg-[#09090b] text-[11px] font-mono text-white/40 text-center">
+        <div className="p-4 border-t border-white/10 bg-[#09090b] text-xs font-mono text-white/40 text-center">
           K2 Jimzon BOS · Automated Task Engine Active
         </div>
 

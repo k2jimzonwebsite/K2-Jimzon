@@ -188,7 +188,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
                         <div className="text-base font-medium">{item.label}</div>
                         {item.sub && <div className="text-sm text-white/40 mt-0.5">{item.sub}</div>}
                       </div>
-                      <span className={'text-[10px] uppercase tracking-wider ' + (isSelected ? 'text-blue' : 'text-white/30')}>
+                      <span className={'text-xs uppercase tracking-wider ' + (isSelected ? 'text-blue' : 'text-white/30')}>
                         {item.type}
                       </span>
                     </button>

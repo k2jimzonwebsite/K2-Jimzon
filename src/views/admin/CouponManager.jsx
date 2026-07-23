@@ -70,7 +70,7 @@ export default function CouponManager() {
             </span>
             <span className="text-sm text-neutral-300 font-bold">Voucher Creation & Secret Hunt Drops</span>
           </div>
-          <h1 className="font-sans text-2xl font-black text-white">Coupons & Voucher Hunt Manager</h1>
+          <h1 className="font-serif text-2xl font-black text-white">Coupons & Voucher Hunt Manager</h1>
           <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
             Create discount codes, set min spend rules, and deploy secret "Voucher Hunt" drops for your social media audience to discover and claim!
           </p>
@@ -108,7 +108,7 @@ export default function CouponManager() {
       {/* Coupons Table */}
       <div className="bg-[#18181b] border border-white/20 rounded-2xl overflow-hidden shadow-xl">
         <div className="p-5 border-b border-white/10 flex items-center justify-between bg-white/10">
-          <h2 className="font-sans font-black text-xl text-white">All Promotional Vouchers & Hunts</h2>
+          <h2 className="font-serif font-black text-xl text-white">All Promotional Vouchers & Hunts</h2>
           <span className="text-sm font-mono font-bold text-gold">{coupons.length} Total Coupons</span>
         </div>
 
@@ -139,7 +139,7 @@ export default function CouponManager() {
                     </div>
                     <p className="text-sm text-neutral-300 font-medium mt-1">{c.description}</p>
                     {c.isHunt && c.clue && (
-                      <p className="text-[10px] text-amber/80 italic mt-1 font-sans">"{c.clue}"</p>
+                      <p className="text-xs text-amber/80 italic mt-1 font-sans">"{c.clue}"</p>
                     )}
                   </td>
 
@@ -168,7 +168,7 @@ export default function CouponManager() {
                   <td className="p-4">
                     <button
                       onClick={() => toggleCouponStatus(c.id)}
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all ${
+                      className={`px-2.5 py-1 rounded-full text-xs font-bold border transition-all ${
                         c.isActive
                           ? 'bg-forest/20 text-forest border-forest/40 hover:bg-forest/30'
                           : 'bg-white/10 text-white/40 border-white/10 hover:bg-white/20'
@@ -184,7 +184,7 @@ export default function CouponManager() {
                         setBroadcastCode(c)
                         handleCopyBroadcast(c)
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-blue/20 hover:bg-blue/30 text-blue border border-blue/30 font-bold transition-all text-[11px]"
+                      className="px-3 py-1.5 rounded-lg bg-blue/20 hover:bg-blue/30 text-blue border border-blue/30 font-bold transition-all text-xs"
                       title="Copy Social Media Broadcast Text"
                     >
                       📢 Broadcast
@@ -192,7 +192,7 @@ export default function CouponManager() {
 
                     <button
                       onClick={() => deleteCoupon(c.id)}
-                      className="px-2.5 py-1.5 rounded-lg bg-crimson/20 hover:bg-crimson/30 text-crimson border border-crimson/30 transition-all text-[11px]"
+                      className="px-2.5 py-1.5 rounded-lg bg-crimson/20 hover:bg-crimson/30 text-crimson border border-crimson/30 transition-all text-xs"
                     >
                       🗑️
                     </button>
@@ -232,7 +232,7 @@ export default function CouponManager() {
             <form onSubmit={handleCreate} className="space-y-4 text-sm font-mono">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[10px] text-white/40 uppercase font-bold mb-1">Coupon Code *</label>
+                  <label className="block text-xs text-white/40 uppercase font-bold mb-1">Coupon Code *</label>
                   <input
                     type="text"
                     required
@@ -244,7 +244,7 @@ export default function CouponManager() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] text-white/40 uppercase font-bold mb-1">Discount Type</label>
+                  <label className="block text-xs text-white/40 uppercase font-bold mb-1">Discount Type</label>
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value)}
@@ -257,7 +257,7 @@ export default function CouponManager() {
               </div>
 
               <div>
-                <label className="block text-[10px] text-white/40 uppercase font-bold mb-1">Description</label>
+                <label className="block text-xs text-white/40 uppercase font-bold mb-1">Description</label>
                 <input
                   type="text"
                   value={description}
@@ -269,7 +269,7 @@ export default function CouponManager() {
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-[10px] text-white/40 uppercase font-bold mb-1">
+                  <label className="block text-xs text-white/40 uppercase font-bold mb-1">
                     Value ({type === 'percentage' ? '%' : '₱'})
                   </label>
                   <input
@@ -283,7 +283,7 @@ export default function CouponManager() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] text-white/40 uppercase font-bold mb-1">Min Spend (₱)</label>
+                  <label className="block text-xs text-white/40 uppercase font-bold mb-1">Min Spend (₱)</label>
                   <input
                     type="number"
                     min={0}
@@ -294,7 +294,7 @@ export default function CouponManager() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] text-white/40 uppercase font-bold mb-1">Max Uses</label>
+                  <label className="block text-xs text-white/40 uppercase font-bold mb-1">Max Uses</label>
                   <input
                     type="number"
                     min={1}
@@ -316,13 +316,13 @@ export default function CouponManager() {
                   />
                   <span className="font-bold text-forest text-sm">Enable Secret "Voucher Hunt" Mode</span>
                 </label>
-                <p className="text-[11px] text-white/60 font-sans">
+                <p className="text-xs text-white/60 font-sans">
                   Hides the code from standard list until customers solve the clue or type the secret code in the Voucher Hunt Center!
                 </p>
 
                 {isHunt && (
                   <div className="pt-2">
-                    <label className="block text-[10px] text-white/40 uppercase font-bold mb-1">Secret Clue for Social Media</label>
+                    <label className="block text-xs text-white/40 uppercase font-bold mb-1">Secret Clue for Social Media</label>
                     <textarea
                       rows={2}
                       value={clue}

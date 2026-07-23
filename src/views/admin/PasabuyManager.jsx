@@ -145,7 +145,7 @@ export default function PasabuyManager() {
       <div className="bg-[#09090b] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-amber/20 text-amber px-2 py-0.5 rounded border border-amber/30">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest bg-amber/20 text-amber px-2 py-0.5 rounded border border-amber/30">
               Italy Pasabuy Command Center
             </span>
             <span className="text-sm text-white/50">Custom Shopper Request & Quotation Engine</span>
@@ -186,7 +186,7 @@ export default function PasabuyManager() {
         
         {/* Left Column: Request List */}
         <div className="lg:col-span-1 space-y-3">
-          <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-white/40 px-1">Customer Item Submissions</p>
+          <p className="text-xs font-mono font-bold uppercase tracking-widest text-white/40 px-1">Customer Item Submissions</p>
 
           {filteredRequests.map(req => {
             const isSelected = selectedReq?.id === req.id
@@ -199,10 +199,10 @@ export default function PasabuyManager() {
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-mono font-bold text-amber bg-amber/10 px-2 py-0.5 rounded border border-amber/20">
+                  <span className="text-xs font-mono font-bold text-amber bg-amber/10 px-2 py-0.5 rounded border border-amber/20">
                     {req.id}
                   </span>
-                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                  <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
                     req.status === 'Pending Quote' ? 'bg-crimson/20 text-crimson border border-crimson/30' :
                     req.status === 'Quoted' ? 'bg-blue/20 text-blue border border-blue/30' :
                     'bg-forest/20 text-forest border border-forest/30'
@@ -212,9 +212,9 @@ export default function PasabuyManager() {
                 </div>
 
                 <h3 className="text-sm font-bold text-white truncate">{req.item_title}</h3>
-                <p className="text-[11px] text-white/50 mt-1 truncate">Customer: {req.customer_name} ({req.channel})</p>
+                <p className="text-xs text-white/50 mt-1 truncate">Customer: {req.customer_name} ({req.channel})</p>
 
-                <div className="flex items-center justify-between mt-3 pt-2 border-t border-white/5 text-[11px] font-mono">
+                <div className="flex items-center justify-between mt-3 pt-2 border-t border-white/5 text-xs font-mono">
                   <span className="text-white/40">Qty: {req.quantity} pcs</span>
                   <span className="text-forest font-bold">
                     {req.quoted_price_php ? peso(req.quoted_price_php) : 'Needs Quote'}
@@ -233,7 +233,7 @@ export default function PasabuyManager() {
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[10px] font-mono font-bold text-amber bg-amber/20 px-2 py-0.5 rounded">
+                    <span className="text-xs font-mono font-bold text-amber bg-amber/20 px-2 py-0.5 rounded">
                       {selectedReq.id}
                     </span>
                     <span className="text-sm text-white/40">Requested on {selectedReq.created_at}</span>
@@ -261,14 +261,14 @@ export default function PasabuyManager() {
               {/* Customer Notes Card */}
               {selectedReq.notes && (
                 <div className="bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-neutral-300">
-                  <p className="text-[10px] font-mono uppercase text-white/40 font-bold mb-1">Customer Special Instructions:</p>
+                  <p className="text-xs font-mono uppercase text-white/40 font-bold mb-1">Customer Special Instructions:</p>
                   <p className="italic">"{selectedReq.notes}"</p>
                   {selectedReq.reference_url && (
                     <a
                       href={selectedReq.reference_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block mt-2 text-blue text-[11px] hover:underline"
+                      className="inline-block mt-2 text-blue text-xs hover:underline"
                     >
                       🔗 Open Customer Reference Link →
                     </a>
@@ -282,12 +282,12 @@ export default function PasabuyManager() {
                   <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">
                     🇮🇹 Italy Landed Cost & Pricing Engine
                   </h3>
-                  <span className="text-[10px] font-mono text-forest">Auto-Calculates Cargo & Customs</span>
+                  <span className="text-xs font-mono text-forest">Auto-Calculates Cargo & Customs</span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-[10px] font-mono uppercase text-white/40 mb-1">Cost in Italy (€ EUR)</label>
+                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Cost in Italy (€ EUR)</label>
                     <input
                       type="number"
                       step="0.1"
@@ -298,7 +298,7 @@ export default function PasabuyManager() {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-mono uppercase text-white/40 mb-1">Item Weight (KG)</label>
+                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Item Weight (KG)</label>
                     <input
                       type="number"
                       step="0.05"
@@ -309,7 +309,7 @@ export default function PasabuyManager() {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-mono uppercase text-white/40 mb-1">Shipping Route</label>
+                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Shipping Route</label>
                     <select
                       value={shippingMethod}
                       onChange={(e) => setShippingMethod(e.target.value)}
@@ -344,7 +344,7 @@ export default function PasabuyManager() {
                 {/* Final Quote Input */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                   <div>
-                    <label className="block text-[10px] font-mono uppercase text-white/40 mb-1">Target Margin %</label>
+                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Target Margin %</label>
                     <div className="flex items-center gap-2">
                       <input
                         type="range"
@@ -359,7 +359,7 @@ export default function PasabuyManager() {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-mono uppercase text-white/40 mb-1">Final Customer Quote (PHP)</label>
+                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Final Customer Quote (PHP)</label>
                     <input
                       type="number"
                       value={finalPricePhp}

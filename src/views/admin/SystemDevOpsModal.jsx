@@ -60,7 +60,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
                 <span>{qps}</span>
                 <span className="text-sm font-sans font-bold text-neutral-300">queries/sec</span>
               </p>
-              <p className="text-[11px] text-neutral-300 mt-1 font-sans font-medium">Vercel Edge Network</p>
+              <p className="text-xs text-neutral-300 mt-1 font-sans font-medium">Vercel Edge Network</p>
             </div>
 
             <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
@@ -69,19 +69,19 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
                 <span>{latency}</span>
                 <span className="text-sm font-sans font-bold text-neutral-300">ms</span>
               </p>
-              <p className="text-[11px] text-neutral-300 mt-1 font-sans font-medium">PH NAIA Edge Pop</p>
+              <p className="text-xs text-neutral-300 mt-1 font-sans font-medium">PH NAIA Edge Pop</p>
             </div>
 
             <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Database Engine</p>
               <p className="text-xl font-black text-white mt-1">Supabase</p>
-              <p className="text-[11px] text-neutral-300 mt-1 font-sans font-extrabold text-blue">PostgreSQL + RPC Locks</p>
+              <p className="text-xs text-neutral-300 mt-1 font-sans font-extrabold text-blue">PostgreSQL + RPC Locks</p>
             </div>
 
             <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Realtime WebSockets</p>
               <p className="text-xl font-black text-white mt-1">Active</p>
-              <p className="text-[11px] text-neutral-300 mt-1 font-sans font-medium">{wsStatus}</p>
+              <p className="text-xs text-neutral-300 mt-1 font-sans font-medium">{wsStatus}</p>
             </div>
           </div>
 
@@ -158,7 +158,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
                 <div key={log.id} className="flex items-start justify-between p-3 rounded-xl bg-black/40 border border-white/10">
                   <div className="flex items-start gap-3">
                     <span className="text-gold font-bold">{log.time}</span>
-                    <span className={`px-2 py-0.5 rounded font-black text-[10px] ${
+                    <span className={`px-2 py-0.5 rounded font-black text-xs ${
                       log.level === 'SECURITY' ? 'bg-gold text-navy' :
                       log.level === 'SUCCESS' ? 'bg-blue text-white' : 'bg-white/20 text-white'
                     }`}>
@@ -166,7 +166,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
                     </span>
                     <span className="text-white font-medium">{log.msg}</span>
                   </div>
-                  <span className="text-white/60 text-[10px]">VERIFIED</span>
+                  <span className="text-white/60 text-xs">VERIFIED</span>
                 </div>
               ))}
             </div>

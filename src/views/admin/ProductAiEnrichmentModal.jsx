@@ -118,7 +118,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-serif font-bold text-xl text-white">AI Product Spec Enricher</h2>
-                <span className="text-[9px] font-mono font-bold bg-amber/20 text-amber px-1.5 py-0.5 rounded border border-amber/30 uppercase">
+                <span className="text-xs font-mono font-bold bg-amber/20 text-amber px-1.5 py-0.5 rounded border border-amber/30 uppercase">
                   Shopee / Channel Connector
                 </span>
               </div>
@@ -137,7 +137,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
         {/* Selected Product Banner */}
         <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono text-amber uppercase font-bold">Target SKU: {product.sku || product.id}</span>
+            <span className="text-xs font-mono text-amber uppercase font-bold">Target SKU: {product.sku || product.id}</span>
             <h3 className="font-serif font-bold text-lg text-white">{product.name || product.title}</h3>
             <p className="text-sm text-white/50">Current Price: ₱{(product.srp || product.retail || 0).toLocaleString()}</p>
           </div>
@@ -145,7 +145,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 
         {/* Missing Fields Audit */}
         <div className="space-y-2">
-          <label className="block text-[10px] font-mono uppercase text-white/40 font-bold">
+          <label className="block text-xs font-mono uppercase text-white/40 font-bold">
             Spec Audit ({missingSpecs.length} Incomplete Fields):
           </label>
           <div className="flex flex-wrap gap-1.5">
@@ -155,7 +155,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
               </span>
             ) : (
               missingSpecs.map((m, idx) => (
-                <span key={idx} className="text-[11px] font-mono text-amber bg-amber/15 border border-amber/30 px-2.5 py-1 rounded-lg">
+                <span key={idx} className="text-xs font-mono text-amber bg-amber/15 border border-amber/30 px-2.5 py-1 rounded-lg">
                   ⚠️ {m}
                 </span>
               ))
@@ -172,7 +172,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
               <div className="flex items-center gap-1.5 text-blue font-bold mb-1">
                 <span>📋</span> Option A: Copy AI Prompt
               </div>
-              <p className="text-white/60 text-[11px] font-sans">
+              <p className="text-white/60 text-xs font-sans">
                 Generates a structured prompt tailored for ChatGPT / Gemini to research Italian origin & specs.
               </p>
             </div>
@@ -191,7 +191,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
               <div className="flex items-center gap-1.5 text-forest font-bold mb-1">
                 <span>⚡</span> Option B: 1-Click Auto-Enrich
               </div>
-              <p className="text-white/60 text-[11px] font-sans">
+              <p className="text-white/60 text-xs font-sans">
                 Runs instant in-app AI research to auto-fill missing Italian specs in 2 seconds!
               </p>
             </div>
@@ -212,10 +212,10 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
           <div className="p-4 rounded-xl bg-white/5 border border-forest/40 space-y-3 font-mono text-sm animate-in fade-in">
             <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <span className="text-forest font-bold text-base font-sans">✓ Enriched Product Master Preview:</span>
-              <span className="text-[10px] text-white/40">Ready to Save</span>
+              <span className="text-xs text-white/40">Ready to Save</span>
             </div>
 
-            <div className="space-y-2 text-[11px]">
+            <div className="space-y-2 text-xs">
               <p><strong className="text-amber">Origin:</strong> {enrichedData.origin}</p>
               <p><strong className="text-neutral-400">Description:</strong> {enrichedData.description}</p>
               <p><strong className="text-neutral-400">Usage Instructions:</strong> {enrichedData.usage_instructions}</p>
