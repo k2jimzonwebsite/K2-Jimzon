@@ -10,7 +10,6 @@ const VIEWS = [
   { id: 'pasabuy', label: 'Pasabuy', icon: PlaneIcon },
   { id: 'checkout', label: 'Checkout', icon: BagIcon },
   { id: 'wholesale', label: 'Wholesale', icon: UserIcon },
-  { id: 'admin', label: 'Admin', icon: ShieldIcon },
 ]
 
 export default function DemoRail() {
