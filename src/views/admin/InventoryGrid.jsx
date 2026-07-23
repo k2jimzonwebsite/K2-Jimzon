@@ -284,11 +284,11 @@ export default function InventoryGrid() {
                   {primaryExpiryDate && (
                     <button
                       onClick={(e) => { e.stopPropagation(); setBatchProduct(p) }}
-                      className={`absolute bottom-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded border transition-all ${
-                        pinnedBatch ? 'bg-amber text-navy font-extrabold border-amber shadow-md' :
-                        expiryHealth.color === 'crimson' ? 'bg-crimson/90 border-crimson text-white font-bold' :
-                        expiryHealth.color === 'amber' ? 'bg-amber/90 border-amber text-navy font-extrabold' :
-                        'bg-forest/90 border-forest text-white'
+                      className={`absolute bottom-2 left-2 text-xs font-bold px-2 py-0.5 rounded border transition-all ${
+                        pinnedBatch ? 'bg-gold text-navy font-extrabold border-gold shadow-md' :
+                        expiryHealth.color === 'crimson' ? 'bg-crimson border-crimson text-white font-bold' :
+                        expiryHealth.color === 'amber' ? 'bg-gold border-gold text-navy font-extrabold' :
+                        'bg-blue border-blue text-white font-bold'
                       }`}
                     >
                       {pinnedBatch ? `📌 Pinned: ${pinnedBatch.box_code} (${pinnedBatch.expiry_date})` : expiryHealth.text}
@@ -297,44 +297,44 @@ export default function InventoryGrid() {
                 </div>
                 <div className="p-4 flex-1 flex flex-col">
                   <div className="flex items-start justify-between gap-2 mb-2">
-                    <span className="text-[10px] font-mono text-white/40 uppercase truncate">{p.sku}</span>
-                    <span className={`shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${p.status === 'Draft' ? 'bg-amber-wash text-amber' : p.status === 'Discontinued' ? 'bg-crimson/20 text-crimson' : 'bg-forest-wash text-forest'}`}>
+                    <span className="text-xs font-mono text-white/70 font-semibold uppercase truncate">{p.sku}</span>
+                    <span className={`shrink-0 px-2 py-0.5 rounded text-xs font-extrabold uppercase tracking-wider ${p.status === 'Draft' ? 'bg-gold/20 text-gold border border-gold/30' : p.status === 'Discontinued' ? 'bg-crimson/20 text-crimson border border-crimson/30' : 'bg-blue/20 text-blue border border-blue/30'}`}>
                       {p.status}
                     </span>
                   </div>
-                  <h3 className="text-sm font-semibold text-white/90 line-clamp-2 mb-1">{p.name}</h3>
-                  {p.origin && <p className="text-[10px] text-white/30 mb-2">{p.origin}</p>}
+                  <h3 className="text-base font-semibold text-white line-clamp-2 mb-1.5">{p.name}</h3>
+                  {p.origin && <p className="text-xs text-gold font-medium mb-2">🇮🇹 {p.origin}</p>}
                   
-                  <div className="mt-auto space-y-2">
-                    <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="mt-auto space-y-2.5">
+                    <div className="grid grid-cols-2 gap-2 text-sm bg-white/5 p-2.5 rounded-lg border border-white/10">
                       <div>
-                        <p className="text-white/30 uppercase text-[9px] tracking-wider mb-0.5">Stock</p>
-                        <p className={`font-semibold ${(p.stock_available ?? 0) <= 5 ? 'text-crimson' : 'text-white'}`}>{p.stock_available ?? 0}</p>
+                        <p className="text-white/60 uppercase text-xs font-bold tracking-wider mb-0.5">Stock</p>
+                        <p className={`font-extrabold text-base ${(p.stock_available ?? 0) <= 5 ? 'text-crimson' : 'text-white'}`}>{p.stock_available ?? 0}</p>
                       </div>
                       <div>
-                        <p className="text-white/30 uppercase text-[9px] tracking-wider mb-0.5">Retail</p>
-                        <p className="font-semibold text-white tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</p>
+                        <p className="text-white/60 uppercase text-xs font-bold tracking-wider mb-0.5">Retail SRP</p>
+                        <p className="font-extrabold text-base text-gold tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-1.5 pt-1">
                       <button
                         onClick={() => setBatchProduct(p)}
-                        className="text-[10px] font-mono font-bold bg-white/5 hover:bg-white/10 text-white/70 py-1.5 rounded border border-white/10 transition-colors text-center"
+                        className="text-xs font-sans font-bold bg-white/10 hover:bg-white/15 text-white/90 py-2 rounded-lg border border-white/15 transition-colors text-center"
                       >
                         📦 Batches ({p.batches?.length || 1})
                       </button>
                       <button
                         onClick={() => setAllocatingProduct(p)}
-                        className="text-[10px] font-mono font-bold bg-blue/10 hover:bg-blue/20 text-blue py-1.5 rounded border border-blue/30 transition-colors text-center"
+                        className="text-xs font-sans font-bold bg-blue/15 hover:bg-blue/25 text-blue py-2 rounded-lg border border-blue/30 transition-colors text-center"
                       >
-                        👤 Staff Custody
+                        👤 Custody
                       </button>
                     </div>
 
                     <button
                       onClick={() => setEnrichProduct(p)}
-                      className="w-full text-[10px] font-mono font-bold bg-amber/15 hover:bg-amber/25 text-amber py-1.5 rounded border border-amber/30 transition-all text-center flex items-center justify-center gap-1"
+                      className="w-full text-xs font-sans font-bold bg-gold/15 hover:bg-gold/25 text-gold py-2 rounded-lg border border-gold/30 transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       ✨ Enrich Specs with AI
                     </button>
@@ -342,7 +342,7 @@ export default function InventoryGrid() {
                 </div>
 
                 <button onClick={() => { setIsAdding(false); setEditingProduct(p) }}
-                  className="absolute top-2 right-2 rounded bg-blue/90 backdrop-blur px-3 py-1 text-xs font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
+                  className="absolute top-2 right-2 rounded-lg bg-blue hover:bg-blue/90 px-3.5 py-1.5 text-xs font-extrabold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
                   Edit
                 </button>
               </div>

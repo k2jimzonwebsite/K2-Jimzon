@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
-  K2 Jimzon — Strict 4-Color Luxury Palette Strategy (OKLCH)
+  K2 Jimzon — Strict 4-Color Luxury Palette Strategy & Typographic Legibility (OKLCH & Impeccable Rules)
   1. Obsidian Black / Charcoal Base (#090C15 / #0E121E)
   2. Champagne Gold / Amber (#D4AF37 / #F59E0B)
   3. Crimson Red Accent (#EF4444 / #DC2626)
@@ -13,6 +13,22 @@
 @layer base {
   :root {
     --bg-blend: multiply;
+    font-size: 15px; /* Bumped base font size for crisp legibility */
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: #F3F4F6;
+    background-color: #090C15;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4 {
+    letter-spacing: -0.025em; /* Impeccable rule: letter-spacing floor >= -0.04em */
+    text-wrap: balance;
   }
 }
 
@@ -36,24 +52,24 @@
   /* 2. Crimson Red Accent */
   --color-crimson: #EF4444;
   --color-crimson-deep: #DC2626;
-  --color-crimson-wash: rgba(239, 68, 68, 0.12);
+  --color-crimson-wash: rgba(239, 68, 68, 0.14);
   --color-oxblood: #B91C1C;
   
   /* 3. Sapphire Blue Accent */
   --color-blue: #3B82F6;
   --color-blue-deep: #2563EB;
-  --color-blue-wash: rgba(59, 130, 246, 0.12);
+  --color-blue-wash: rgba(59, 130, 246, 0.14);
   
   /* 4. Champagne Gold / Amber Accent */
   --color-gold: #D4AF37;
   --color-gold-deep: #B59226;
-  --color-gold-wash: rgba(212, 175, 55, 0.15);
+  --color-gold-wash: rgba(212, 175, 55, 0.18);
   
   --color-amber: #F59E0B;
-  --color-amber-wash: rgba(245, 158, 11, 0.12);
+  --color-amber-wash: rgba(245, 158, 11, 0.14);
   
-  --color-forest: #3B82F6; /* Standardized to Sapphire Blue for unified 4-color palette */
-  --color-forest-wash: rgba(59, 130, 246, 0.12);
+  --color-forest: #3B82F6;
+  --color-forest-wash: rgba(59, 130, 246, 0.14);
   
   --color-line: #E5E7EB;
   --color-champagne: #FDE68A;
@@ -62,8 +78,8 @@
   --font-sans: "Archivo", "Segoe UI", system-ui, sans-serif;
 
   /* Crisp Shadows */
-  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-float: 0 20px 32px rgba(0, 0, 0, 0.18);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-float: 0 20px 32px rgba(0, 0, 0, 0.22);
 
   /* Premium Easing Curves */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -81,16 +97,16 @@
 
 /* Custom Scrollbars */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.3);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.3);
+  background: rgba(212, 175, 55, 0.4);
   border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 175, 55, 0.6);
+  background: rgba(212, 175, 55, 0.7);
 }
