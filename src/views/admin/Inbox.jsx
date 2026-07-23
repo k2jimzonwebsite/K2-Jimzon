@@ -83,10 +83,10 @@ export default function Inbox() {
             >
               <div className="flex justify-between items-baseline mb-1">
                 <span className={`font-semibold text-base ${c.unread ? 'text-white' : 'text-white/60'}`}>{c.customer}</span>
-                <span className="text-sm text-white/30">{c.time}</span>
+                <span className="text-sm text-white/55">{c.time}</span>
               </div>
               <div className="flex justify-between items-center mt-1">
-                <span className={`text-sm line-clamp-1 flex-1 pr-2 ${c.unread ? 'text-neutral-300' : 'text-white/40'}`}>
+                <span className={`text-sm line-clamp-1 flex-1 pr-2 ${c.unread ? 'text-neutral-300' : 'text-white/60'}`}>
                   {c.messages[c.messages.length - 1].text}
                 </span>
                 <span className={`text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
@@ -117,7 +117,7 @@ export default function Inbox() {
             <button
               onClick={() => setAutoWebhookBot(prev => !prev)}
               className={`text-xs font-mono font-bold px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 ${
-                autoWebhookBot ? 'bg-forest/20 text-forest border-forest/40' : 'bg-white/5 text-white/40 border-white/10'
+                autoWebhookBot ? 'bg-forest/20 text-forest border-forest/40' : 'bg-white/5 text-white/60 border-white/10'
               }`}
             >
               <span>⚡</span> Bot Auto-Reply: {autoWebhookBot ? 'ACTIVE (100% Automated)' : 'PAUSED'}
@@ -191,7 +191,7 @@ export default function Inbox() {
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               placeholder="Type a reply or use AI Copilot..."
-              className="flex-1 resize-none h-[60px] rounded-lg border border-white/10 bg-[#09090b] p-3 text-base text-white placeholder:text-white/30 focus:border-blue focus:ring-1 focus:ring-blue outline-none transition-all"
+              className="flex-1 resize-none h-[60px] rounded-lg border border-white/10 bg-[#09090b] p-3 text-base text-white placeholder:text-white/55 focus:border-blue focus:ring-1 focus:ring-blue outline-none transition-all"
             />
             <button 
               onClick={handleSend}
@@ -232,8 +232,8 @@ export default function Inbox() {
           
           {dbResults && (
             <div className="w-full animate-in slide-in-from-bottom-4 duration-300">
-               <p className="text-xs uppercase tracking-widest text-white/40 font-bold mb-2">Live Database Context</p>
-               <div className="bg-black/50 border border-white/5 p-3 rounded-lg text-xs font-mono leading-relaxed text-neutral-400 mb-4 overflow-x-auto">
+               <p className="text-xs uppercase tracking-widest text-white/60 font-bold mb-2">Live Database Context</p>
+               <div className="bg-black/50 border border-white/5 p-3 rounded-lg text-xs font-mono leading-relaxed text-neutral-300 mb-4 overflow-x-auto">
                  <span className="text-purple-400">Query Executed:</span><br/>
                  <span className="text-blue-300">{dbResults.query}</span><br/><br/>
                  <span className="text-forest">Result:</span><br/>
@@ -242,7 +242,7 @@ export default function Inbox() {
                
                <div className="bg-blue/5 border border-blue/20 p-3 rounded-lg">
                  <p className="text-sm text-blue mb-1 font-semibold">Suggested Action</p>
-                 <p className="text-sm text-neutral-400">The drafted reply has been placed in your text box. Review it and click Send to confirm.</p>
+                 <p className="text-sm text-neutral-300">The drafted reply has been placed in your text box. Review it and click Send to confirm.</p>
                </div>
             </div>
           )}

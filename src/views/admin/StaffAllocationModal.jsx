@@ -129,18 +129,18 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
           </button>
         </div>
 
-        {/* ⚡ 1-Click Inter-Staff Stock Transfer Station */}
+        {/* ⚡ Transfer stock between staff */}
         <form onSubmit={handleExecute1ClickTransfer} className="bg-[#09090b] border border-amber/40 p-4 rounded-xl space-y-3 shadow-lg">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-amber flex items-center gap-1.5">
               <span>⚡</span> 1-Click Inter-Staff Stock Transfer Engine
             </h3>
-            <span className="text-xs font-mono text-white/40">Re-assign custody in 1 click</span>
+            <span className="text-xs font-mono text-white/60">Re-assign custody in 1 click</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm font-mono">
             <div>
-              <label className="block text-xs text-white/40 mb-1">Transfer FROM (Source Staff)</label>
+              <label className="block text-xs text-white/60 mb-1">Transfer FROM (Source Staff)</label>
               <select
                 value={transferFromId}
                 onChange={(e) => setTransferFromId(e.target.value)}
@@ -155,7 +155,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
             </div>
 
             <div>
-              <label className="block text-xs text-white/40 mb-1">Transfer TO (Destination Staff)</label>
+              <label className="block text-xs text-white/60 mb-1">Transfer TO (Destination Staff)</label>
               <select
                 value={transferToId}
                 onChange={(e) => setTransferToId(e.target.value)}
@@ -170,7 +170,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
             </div>
 
             <div>
-              <label className="block text-xs text-white/40 mb-1">Transfer Qty (Units)</label>
+              <label className="block text-xs text-white/60 mb-1">Transfer Qty (Units)</label>
               <div className="flex gap-2">
                 <input
                   type="number"
@@ -214,7 +214,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                     </span>
                     <div>
                       <p className="font-bold text-white text-base">{alloc.staff_name}</p>
-                      <p className="text-white/40 text-xs">{alloc.location} · {alloc.staff_id}</p>
+                      <p className="text-white/60 text-xs">{alloc.location} · {alloc.staff_id}</p>
                     </div>
                   </div>
 
@@ -228,7 +228,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                     <button
                       type="button"
                       onClick={() => handleDeleteAllocation(alloc.id)}
-                      className="text-white/30 hover:text-crimson transition-colors p-1"
+                      className="text-white/55 hover:text-crimson transition-colors p-1"
                       title="Remove Staff Allocation"
                     >
                       🗑️
@@ -239,7 +239,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                 {/* Inline Quantity & Bin Editing */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-white/5">
                   <div>
-                    <label className="block text-xs text-white/40 uppercase mb-1">Staff Custody Stock (Units)</label>
+                    <label className="block text-xs text-white/60 uppercase mb-1">Staff Custody Stock (Units)</label>
                     <input
                       type="number"
                       min="0"
@@ -250,7 +250,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                   </div>
 
                   <div>
-                    <label className="block text-xs text-white/40 uppercase mb-1">Staff Shelf / Bin Location</label>
+                    <label className="block text-xs text-white/60 uppercase mb-1">Staff Shelf / Bin Location</label>
                     <input
                       type="text"
                       value={alloc.bin}
@@ -267,10 +267,10 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
 
         {/* Add New Staff Allocation Form */}
         <form onSubmit={handleAddAllocation} className="bg-[#09090b] border border-white/10 p-4 rounded-xl space-y-3">
-          <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Assign Stock to New Staff Member / Location</h4>
+          <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Assign stock to staff</h4>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-sm font-mono">
             <div>
-              <label className="block text-xs text-white/40 mb-1">Staff Name</label>
+              <label className="block text-xs text-white/60 mb-1">Staff Name</label>
               <input
                 type="text"
                 required
@@ -282,7 +282,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
             </div>
 
             <div>
-              <label className="block text-xs text-white/40 mb-1">Location / Hub</label>
+              <label className="block text-xs text-white/60 mb-1">Location / Hub</label>
               <input
                 type="text"
                 required
@@ -294,7 +294,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
             </div>
 
             <div>
-              <label className="block text-xs text-white/40 mb-1">Assigned Units</label>
+              <label className="block text-xs text-white/60 mb-1">Assigned Units</label>
               <input
                 type="number"
                 min="1"
@@ -305,7 +305,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
             </div>
 
             <div>
-              <label className="block text-xs text-white/40 mb-1">Bin / Shelf</label>
+              <label className="block text-xs text-white/60 mb-1">Bin / Shelf</label>
               <input
                 type="text"
                 value={newBin}
@@ -329,7 +329,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-neutral-400 hover:bg-white/10"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-neutral-300 hover:bg-white/10"
           >
             Cancel
           </button>

@@ -209,7 +209,7 @@ export default function CustomerCrmBroadcast() {
             </span>
             <span className="text-sm text-white/50">Customer Records, Orders & Broadcast Campaigns</span>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Customer Database & Mass Campaign Broadcasts</h1>
+          <h1 className="font-serif text-2xl font-bold text-white">Customers & broadcasts</h1>
           <p className="text-sm text-white/60 mt-1 max-w-2xl">
             Maintain complete customer records, track total spending and order history, and launch instant targeted email & SMS broadcasts for new arrivals, trending products, and flight arrivals.
           </p>
@@ -247,7 +247,7 @@ export default function CustomerCrmBroadcast() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search customers by name, email, or phone number..."
-                className="w-full max-w-md rounded-xl border border-white/10 bg-[#0A101D] px-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-blue"
+                className="w-full max-w-md rounded-xl border border-white/10 bg-[#0A101D] px-4 py-2.5 text-sm text-white placeholder:text-white/55 outline-none focus:border-blue"
               />
 
               <select
@@ -273,7 +273,7 @@ export default function CustomerCrmBroadcast() {
           <div className="bg-[#09090b] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm font-mono">
-                <thead className="bg-white/5 text-white/40 uppercase text-xs tracking-wider border-b border-white/10">
+                <thead className="bg-white/5 text-white/60 uppercase text-xs tracking-wider border-b border-white/10">
                   <tr>
                     <th className="px-5 py-3.5">Customer / Contact</th>
                     <th className="px-5 py-3.5">Channel & Role</th>
@@ -288,7 +288,7 @@ export default function CustomerCrmBroadcast() {
                     <tr key={cust.id} className="hover:bg-white/5 transition-colors">
                       <td className="px-5 py-4">
                         <p className="font-bold text-white text-base">{cust.name}</p>
-                        <p className="text-white/40 text-xs mt-0.5">{cust.email} · {cust.phone}</p>
+                        <p className="text-white/60 text-xs mt-0.5">{cust.email} · {cust.phone}</p>
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-2">
@@ -296,7 +296,7 @@ export default function CustomerCrmBroadcast() {
                           <button
                             onClick={() => toggleRole(cust.id)}
                             className={`px-2 py-0.5 rounded text-xs font-bold border transition-all ${
-                              cust.role === 'VIP' ? 'bg-amber/20 text-amber border-amber/30' : 'bg-white/5 text-white/40 border-white/10'
+                              cust.role === 'VIP' ? 'bg-amber/20 text-amber border-amber/30' : 'bg-white/5 text-white/60 border-white/10'
                             }`}
                           >
                             {cust.role === 'VIP' ? '★ VIP Wholesale' : 'Retail'}
@@ -345,7 +345,7 @@ export default function CustomerCrmBroadcast() {
             
             {/* Target Audience Selector */}
             <div className="bg-[#09090b] border border-white/10 rounded-2xl p-5 shadow-xl space-y-3">
-              <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">1. Select Target Customer Audience</h3>
+              <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">1. Choose who to send to</h3>
               
               <div className="space-y-2 text-sm font-mono">
                 {[
@@ -370,7 +370,7 @@ export default function CustomerCrmBroadcast() {
 
             {/* Campaign Template Selector */}
             <div className="bg-[#09090b] border border-white/10 rounded-2xl p-5 shadow-xl space-y-3">
-              <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">2. Choose Campaign Template</h3>
+              <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">2. Pick a template</h3>
               
               <div className="space-y-2">
                 {CAMPAIGN_TEMPLATES.map(tpl => (
@@ -382,7 +382,7 @@ export default function CustomerCrmBroadcast() {
                     }`}
                   >
                     <p className="text-sm font-bold text-white">{tpl.name}</p>
-                    <p className="text-xs font-mono text-white/40 truncate mt-0.5">{tpl.subject}</p>
+                    <p className="text-xs font-mono text-white/60 truncate mt-0.5">{tpl.subject}</p>
                   </button>
                 ))}
               </div>
@@ -395,7 +395,7 @@ export default function CustomerCrmBroadcast() {
             <div className="bg-[#09090b] border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div>
-                  <h2 className="font-serif text-xl font-bold text-white">Campaign Email & SMS Composer</h2>
+                  <h2 className="font-serif text-xl font-bold text-white">Compose a broadcast</h2>
                   <p className="text-sm text-white/50">Personalize message template tags before launching mass broadcast</p>
                 </div>
 
@@ -405,7 +405,7 @@ export default function CustomerCrmBroadcast() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-white/40 mb-1">Email / Notification Subject Line</label>
+                <label className="block text-xs font-mono uppercase text-white/60 mb-1">Email / Notification Subject Line</label>
                 <input
                   type="text"
                   value={customSubject}
@@ -415,7 +415,7 @@ export default function CustomerCrmBroadcast() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-white/40 mb-1">Message Body (Supports dynamic tags: {"{{name}}"})</label>
+                <label className="block text-xs font-mono uppercase text-white/60 mb-1">Message Body (Supports dynamic tags: {"{{name}}"})</label>
                 <textarea
                   rows={8}
                   value={customBody}
@@ -506,7 +506,7 @@ export default function CustomerCrmBroadcast() {
                 <button
                   type="button"
                   onClick={() => setShowAddCustomer(false)}
-                  className="flex-1 py-2 rounded-lg border border-white/10 bg-white/5 text-neutral-400"
+                  className="flex-1 py-2 rounded-lg border border-white/10 bg-white/5 text-neutral-300"
                 >
                   Cancel
                 </button>

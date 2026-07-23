@@ -118,9 +118,9 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                   onClick={startScanner}
                   className="flex-1 flex flex-col items-center justify-center text-center p-6 cursor-pointer hover:bg-white/5 transition-colors"
                 >
-                  <GridIcon className="text-white/30 mb-3" size={40} />
+                  <GridIcon className="text-white/55 mb-3" size={40} />
                   <p className="text-white font-medium">Camera Paused</p>
-                  <p className="text-base text-white/40 mt-1">Tap to resume scanning</p>
+                  <p className="text-base text-white/60 mt-1">Tap to resume scanning</p>
                 </div>
               ) : isComplete ? (
                  <div className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-forest/10">
@@ -158,7 +158,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                       <GridIcon size={24} />
                       {triggerActive ? 'Hold barcode in frame...' : 'Tap to Trigger Scanner'}
                     </button>
-                    <p className="text-center mt-2 text-sm text-white/30">Required for accuracy verification</p>
+                    <p className="text-center mt-2 text-sm text-white/55">Required for accuracy verification</p>
                   </div>
                 </div>
               )}
@@ -191,14 +191,14 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                   const isItemComplete = qtyScanned >= item.quantity
                   return (
                     <div key={item.sku} className={`p-3 rounded-lg border ${isItemComplete ? 'border-forest/30 bg-forest/10' : 'border-white/10 bg-white/5'} flex items-start gap-3 transition-colors`}>
-                      <div className={`shrink-0 mt-0.5 ${isItemComplete ? 'text-forest' : 'text-neutral-500'}`}>
+                      <div className={`shrink-0 mt-0.5 ${isItemComplete ? 'text-forest' : 'text-neutral-300'}`}>
                         {isItemComplete ? <CheckIcon size={18} /> : <BoxIcon size={18} />}
                       </div>
                       <div>
                         <p className={`font-medium text-base line-clamp-2 ${isItemComplete ? 'text-forest-light' : 'text-neutral-200'}`}>
                           {item.product?.title || item.sku}
                         </p>
-                        <p className="text-sm font-mono text-white/40 mt-1">
+                        <p className="text-sm font-mono text-white/60 mt-1">
                           Scanned: {qtyScanned} / {item.quantity}
                         </p>
                       </div>
@@ -215,7 +215,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                 className={`w-full py-4 rounded-xl font-bold text-xl transition-all shadow-lg ${
                   isComplete 
                     ? 'bg-blue hover:bg-blue-light text-white shadow-blue/20' 
-                    : 'bg-white/5 text-white/30 cursor-not-allowed'
+                    : 'bg-white/5 text-white/55 cursor-not-allowed'
                 }`}
               >
                 Mark as Packed

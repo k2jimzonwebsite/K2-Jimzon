@@ -65,7 +65,7 @@ function PhotoSlot({ label, value, onChange, bucket = 'product-images' }) {
             </div>
           </>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-neutral-500 hover:text-white/40 transition-colors">
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-neutral-300 hover:text-white/60 transition-colors">
             {uploading ? (
               <div className="w-5 h-5 border-2 border-blue border-t-transparent rounded-full animate-spin" />
             ) : (
@@ -121,7 +121,7 @@ function GallerySlots({ value = [], onChange, max = 5 }) {
         ))}
         {value.length < max && (
           <button type="button" onClick={() => fileRef.current?.click()}
-            className="aspect-square rounded-lg border-2 border-dashed border-white/10 hover:border-blue/50 hover:bg-blue/5 transition-colors flex items-center justify-center text-neutral-500 hover:text-white/50">
+            className="aspect-square rounded-lg border-2 border-dashed border-white/10 hover:border-blue/50 hover:bg-blue/5 transition-colors flex items-center justify-center text-neutral-300 hover:text-white/50">
             {uploading ? <div className="w-4 h-4 border-2 border-blue border-t-transparent rounded-full animate-spin" /> : <span className="text-xl leading-none">+</span>}
           </button>
         )}
@@ -266,7 +266,7 @@ export default function InventoryGrid() {
 
       {/* Product cards */}
       {loading && products.length === 0 ? (
-        <div className="flex h-64 items-center justify-center text-white/40">Loading products...</div>
+        <div className="flex h-64 items-center justify-center text-white/60">Loading products...</div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-12">
           {products.map(p => {
@@ -297,7 +297,7 @@ export default function InventoryGrid() {
                 </div>
                 <div className="p-4 flex-1 flex flex-col">
                   <div className="flex items-start justify-between gap-2 mb-2">
-                    <span className="text-sm font-mono text-neutral-400 font-semibold uppercase truncate">{p.sku}</span>
+                    <span className="text-sm font-mono text-neutral-300 font-semibold uppercase truncate">{p.sku}</span>
                     <span className={`shrink-0 px-2 py-0.5 rounded text-sm font-extrabold uppercase tracking-wider ${p.status === 'Draft' ? 'bg-gold/20 text-gold border border-gold/30' : p.status === 'Discontinued' ? 'bg-crimson/20 text-crimson border border-crimson/30' : 'bg-blue/20 text-blue border border-blue/30'}`}>
                       {p.status}
                     </span>
@@ -367,9 +367,9 @@ export default function InventoryGrid() {
             <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5">
               <div>
                 <h3 className="font-serif text-xl font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
-                <p className="text-sm text-white/40 font-mono mt-0.5">{editingProduct.sku}</p>
+                <p className="text-sm text-white/60 font-mono mt-0.5">{editingProduct.sku}</p>
               </div>
-              <button onClick={() => { setEditingProduct(null); setIsAdding(false) }} className="text-white/40 hover:text-white transition-colors">
+              <button onClick={() => { setEditingProduct(null); setIsAdding(false) }} className="text-white/60 hover:text-white transition-colors">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -551,7 +551,7 @@ export default function InventoryGrid() {
                         <label key={field} className="flex items-center gap-2 cursor-pointer">
                           <input type="checkbox" checked={Boolean(editingProduct[field])} onChange={e => set(field, e.target.checked)}
                             className="w-4 h-4 rounded border border-white/20 bg-[#09090b] text-blue cursor-pointer" />
-                          <span className="text-base text-neutral-400">{lbl}</span>
+                          <span className="text-base text-neutral-300">{lbl}</span>
                         </label>
                       ))}
                     </div>
@@ -577,7 +577,7 @@ export default function InventoryGrid() {
 
               {/* Footer */}
               <div className="shrink-0 px-6 py-4 border-t border-white/10 bg-black/20 flex items-center justify-between">
-                <p className="text-sm text-white/30 italic">All changes save directly to Supabase.</p>
+                <p className="text-sm text-white/55 italic">All changes save directly to Supabase.</p>
                 <div className="flex gap-3">
                   <button type="button" onClick={() => { setEditingProduct(null); setIsAdding(false) }}
                     className="px-4 py-2 rounded-lg text-base font-semibold text-white/60 hover:text-white transition-colors">

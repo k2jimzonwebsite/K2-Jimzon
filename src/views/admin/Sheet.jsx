@@ -158,10 +158,10 @@ export default function Sheet() {
           <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-lg bg-forest text-white px-3.5 py-2.5 min-h-[44px] text-sm font-bold transition hover:bg-forest/90 shadow-md">
             <span className="text-lg leading-none">+</span> Add Row
           </button>
-          <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-neutral-400 transition hover:bg-white/5 hover:text-white">
+          <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
             <span>📂</span> CSV Import
           </button>
-          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-neutral-400 transition hover:bg-white/5 hover:text-white">
+          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
             <span>⌂</span> Scan Box
           </button>
           <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-blue/30 bg-blue/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-blue transition hover:bg-blue/20">
@@ -175,16 +175,16 @@ export default function Sheet() {
         {/* Sticky Viewport Horizontal Domain Jump Controls */}
         <div className="flex items-center gap-2 text-sm font-mono">
           <span className="text-gold font-extrabold uppercase hidden md:inline">Domain Jump:</span>
-          <button onClick={() => handleScrollToDomain(0)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-gold hover:bg-gold-deep text-navy font-black transition-all shadow">
+          <button onClick={() => handleScrollToDomain(0)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-gold hover:bg-gold-deep text-navy font-bold transition-all shadow">
             📋 Product & Content
           </button>
-          <button onClick={() => handleScrollToDomain(600)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-gold hover:bg-gold-deep text-navy font-black transition-all shadow">
+          <button onClick={() => handleScrollToDomain(600)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-gold hover:bg-gold-deep text-navy font-bold transition-all shadow">
             💰 Pricing
           </button>
-          <button onClick={() => handleScrollToDomain(1200)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-blue hover:bg-blue-deep text-white font-black transition-all shadow">
+          <button onClick={() => handleScrollToDomain(1200)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-blue hover:bg-blue-deep text-white font-bold transition-all shadow">
             📦 Stock & FEFO
           </button>
-          <button onClick={() => handleScrollToDomain(2000)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-white/20 hover:bg-white/30 text-white font-black transition-all border border-white/20 shadow">
+          <button onClick={() => handleScrollToDomain(2000)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold transition-all border border-white/20 shadow">
             ▶ End
           </button>
         </div>
@@ -198,15 +198,15 @@ export default function Sheet() {
           <table className="w-max min-w-full border-collapse text-base bg-[#18181b]">
             <thead className="sticky top-0 z-30 shadow-lg">
               <tr className="bg-[#09090b] text-sm text-white">
-                <th className="w-10 border border-white/20 py-3 font-black sticky left-0 z-40 bg-[#09090b] text-gold">#</th>
+                <th className="w-10 border border-white/20 py-3 font-bold sticky left-0 z-40 bg-[#09090b] text-gold">#</th>
                 {DOMAINS.map((d, i) => (
-                  <th key={d.name} colSpan={d.cols.length} className={`border border-white/20 py-3 px-4 font-black uppercase tracking-wider text-center text-sm ${['bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white'][i % 7]}`}>
+                  <th key={d.name} colSpan={d.cols.length} className={`border border-white/20 py-3 px-4 font-bold uppercase tracking-wider text-center text-sm ${['bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white'][i % 7]}`}>
                     {d.name}
                   </th>
                 ))}
-                <th className="w-20 border border-white/20 py-3 font-black text-sm text-gold">Action</th>
+                <th className="w-20 border border-white/20 py-3 font-bold text-sm text-gold">Action</th>
               </tr>
-              <tr className="bg-[#27272a] text-left text-sm font-black text-white">
+              <tr className="bg-[#27272a] text-left text-sm font-bold text-white">
                 <th className="border border-white/20 px-2 py-3 text-center sticky left-0 z-40 bg-[#27272a] text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]">#</th>
                 {ALL_COLS.map((h, colIdx) => (
                   <th
@@ -226,7 +226,7 @@ export default function Sheet() {
                 const isDraft = r.status === 'Draft'
                 return (
                   <tr key={r.sku} className="hover:bg-blue/10 transition-colors group">
-                    <td className="border border-white/10 bg-[#0A101D] group-hover:bg-blue/10 px-2 py-1.5 text-center text-sm text-white/40 font-mono sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
+                    <td className="border border-white/10 bg-[#0A101D] group-hover:bg-blue/10 px-2 py-1.5 text-center text-sm text-white/60 font-mono sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
                       {i + 1}
                     </td>
                     {ALL_COLS.map((col, colIdx) => {

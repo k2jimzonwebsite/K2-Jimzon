@@ -44,18 +44,18 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
           {/* Top Carrier Header */}
           <div className="flex items-center justify-between border-b-2 border-slate-900 pb-3">
             <div className="flex items-center gap-3">
-              <span className="font-serif text-xl font-black tracking-tight text-slate-900">J&T <span className="text-red-600">EXPRESS</span></span>
+              <span className="font-serif text-xl font-bold tracking-tight text-slate-900">J&T <span className="text-red-600">EXPRESS</span></span>
               <span className="text-xs font-bold bg-slate-900 text-white px-2 py-0.5 rounded uppercase">STANDARD DELIVERY</span>
             </div>
             <div className="text-right">
               <p className="text-xs font-bold text-slate-500">WAYBILL NO.</p>
-              <p className="font-black text-base text-slate-900">JT-PH-88941092</p>
+              <p className="font-bold text-base text-slate-900">JT-PH-88941092</p>
             </div>
           </div>
 
           {/* Barcode Simulation */}
           <div className="text-center py-2 bg-slate-50 border border-slate-200 rounded">
-            <div className="font-mono text-2xl tracking-[0.3em] font-black text-slate-900">||||| ||||||| |||| |||||||| |||||</div>
+            <div className="font-mono text-2xl tracking-[0.3em] font-bold text-slate-900">||||| ||||||| |||| |||||||| |||||</div>
             <p className="text-xs font-bold text-slate-500 mt-1">TRACKING BARCODE: *JT88941092PH*</p>
           </div>
 

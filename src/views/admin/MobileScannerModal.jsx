@@ -90,7 +90,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
       {/* Top Mobile Bar */}
       <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#0A101D] shrink-0">
         <div>
-          <h2 className="font-serif font-semibold text-xl text-white">Manila Receiving Camera Scanner</h2>
+          <h2 className="font-serif font-semibold text-xl text-white">Scan boxes on arrival</h2>
           <p className="text-sm text-white/50">Point phone camera at item barcode · +1 per scan</p>
         </div>
         <button
@@ -104,9 +104,9 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
       {/* Progress & Live Stat Banner */}
       <div className="bg-[#020408] border-b border-white/10 px-4 py-3 flex items-center justify-between shrink-0">
         <div>
-          <p className="text-xs font-mono uppercase tracking-widest text-white/40">Shipment Progress</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/60">Shipment Progress</p>
           <p className="text-base font-bold text-white">
-            <span className="text-forest">{totalScanned}</span> / <span className="text-neutral-400">{totalPacked} units</span>
+            <span className="text-forest">{totalScanned}</span> / <span className="text-neutral-300">{totalPacked} units</span>
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -173,7 +173,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
 
         {/* Quick Tap SKU Tiles */}
         <div>
-          <p className="text-xs font-mono uppercase tracking-widest text-white/40 mb-2">Quick Tap to Increment (+1)</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/60 mb-2">Quick Tap to Increment (+1)</p>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
             {items.map(item => (
               <button

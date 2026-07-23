@@ -110,7 +110,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           <p className="font-serif text-xl font-semibold">
             {step === 'result' ? '✓ Prompt Ready' : '📦 Scan Box'}
           </p>
-          <p className="text-sm text-white/40 mt-0.5">
+          <p className="text-sm text-white/60 mt-0.5">
             {step === 'scan'   && 'Point camera at the product barcode'}
             {step === 'manual' && 'Type the barcode or product name manually'}
             {step === 'result' && 'Copy this prompt → open ChatGPT Project 1 → attach photo → send'}
@@ -147,7 +147,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
         {step === 'scan' && (
           <div className="w-full max-w-sm mx-auto flex flex-col gap-6 justify-center flex-1 pb-16">
             <div id="ai-qr-reader" className="w-full rounded-2xl overflow-hidden bg-white/5 border border-white/10" />
-            <p className="text-center text-base text-white/40">Align the barcode inside the frame</p>
+            <p className="text-center text-base text-white/60">Align the barcode inside the frame</p>
             {checking && (
               <div className="flex items-center justify-center gap-2 text-base text-white/50">
                 <div className="w-4 h-4 border-2 border-blue border-t-transparent rounded-full animate-spin" />
@@ -162,11 +162,11 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           <div className="w-full max-w-sm mx-auto flex flex-col gap-6 justify-center flex-1 pb-16">
             <div className="text-center space-y-1 mb-2">
               <p className="font-semibold text-white">Enter Product Details</p>
-              <p className="text-sm text-white/40">Barcode and/or product name will be included in the AI prompt</p>
+              <p className="text-sm text-white/60">Barcode and/or product name will be included in the AI prompt</p>
             </div>
             <form onSubmit={handleManualSubmit} className="space-y-4">
               <div>
-                <label className="text-sm text-white/40 block mb-1.5 uppercase tracking-widest">Barcode / EAN</label>
+                <label className="text-sm text-white/60 block mb-1.5 uppercase tracking-widest">Barcode / EAN</label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -178,7 +178,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
                 />
               </div>
               <div>
-                <label className="text-sm text-white/40 block mb-1.5 uppercase tracking-widest">Product Name <span className="normal-case font-normal">(optional)</span></label>
+                <label className="text-sm text-white/60 block mb-1.5 uppercase tracking-widest">Product Name <span className="normal-case font-normal">(optional)</span></label>
                 <input
                   type="text"
                   value={productName}
@@ -207,9 +207,9 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
               <span className="text-forest text-xl">✓</span>
               <div>
                 <p className="text-base font-semibold text-white">
-                  {productName || 'Product'} {barcode && <span className="font-mono text-sm text-white/40 ml-1">· {barcode}</span>}
+                  {productName || 'Product'} {barcode && <span className="font-mono text-sm text-white/60 ml-1">· {barcode}</span>}
                 </p>
-                <p className="text-sm text-white/40 mt-0.5">Not in inventory — ready to process</p>
+                <p className="text-sm text-white/60 mt-0.5">Not in inventory — ready to process</p>
               </div>
             </div>
 
@@ -232,7 +232,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
 
             {/* How-to steps */}
             <div className="bg-black/20 border border-white/5 rounded-xl p-4 space-y-2.5">
-              <p className="text-xs font-bold text-white/30 uppercase tracking-widest mb-3">What to do next</p>
+              <p className="text-xs font-bold text-white/55 uppercase tracking-widest mb-3">What to do next</p>
               {[
                 ['Copy the prompt below', 'Hit the white button to copy it to your clipboard.'],
                 ['Open ChatGPT → Project 1', 'Go to your K2 Jimzon Product Intelligence project.'],
@@ -277,7 +277,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
 
               <button
                 onClick={() => { setStep('scan'); setBarcode(''); setProductName(''); setManualBarcode('') }}
-                className="w-full text-white/30 hover:text-white/60 text-base py-2 transition-colors"
+                className="w-full text-white/55 hover:text-white/60 text-base py-2 transition-colors"
               >
                 ← Scan another product
               </button>

@@ -111,7 +111,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-serif font-bold text-base text-white">BOS AI Chat Copilot</h2>
+                <h2 className="font-serif font-bold text-base text-white">AI Assistant</h2>
                 <span className="text-xs font-mono font-bold bg-forest/20 text-forest px-1.5 py-0.5 rounded border border-forest/30 uppercase">
                   Connected to Supabase
                 </span>
@@ -132,7 +132,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
         <div className="p-3 bg-[#09090b]/50 border-b border-white/10 flex gap-2 overflow-x-auto shrink-0 scrollbar-none">
           <button
             onClick={() => handleSendQuery('Who holds stock for KIKO Lipgloss Shade 05?')}
-            className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-400 hover:text-white shrink-0 text-xs transition-all"
+            className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white shrink-0 text-xs transition-all"
           >
             📦 Staff Custody Stock
           </button>
@@ -157,7 +157,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
               key={idx}
               className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'} space-y-1`}
             >
-              <div className="flex items-center gap-2 text-xs text-white/40 px-1">
+              <div className="flex items-center gap-2 text-xs text-white/60 px-1">
                 <span>{msg.sender === 'user' ? 'You (Admin)' : 'AI Copilot'}</span>
                 <span>•</span>
                 <span>{msg.timestamp}</span>
@@ -175,7 +175,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
                 {/* SQL Code Block */}
                 {msg.sql && (
                   <div className="bg-black/60 p-2.5 rounded-xl border border-white/10 text-xs text-amber font-mono overflow-x-auto">
-                    <span className="text-white/40 block text-xs uppercase mb-1">Generated Supabase Query:</span>
+                    <span className="text-white/60 block text-xs uppercase mb-1">Generated Supabase Query:</span>
                     <code>{msg.sql}</code>
                   </div>
                 )}
@@ -231,7 +231,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             placeholder="Ask AI Copilot (e.g. Who has stock for KIKO?)..."
-            className="flex-1 rounded-xl border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none min-h-[44px]"
+            className="flex-1 rounded-xl border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-sm text-white placeholder:text-white/55 focus:border-blue outline-none min-h-[44px]"
           />
           <button
             type="submit"

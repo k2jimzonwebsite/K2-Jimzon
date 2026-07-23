@@ -150,7 +150,7 @@ export default function PasabuyManager() {
             </span>
             <span className="text-sm text-white/50">Custom Shopper Request & Quotation Engine</span>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Pasabuy Requests & Landed Cost Calculator</h1>
+          <h1 className="font-serif text-2xl font-bold text-white">Pasabuy requests & pricing</h1>
           <p className="text-sm text-white/60 mt-1 max-w-2xl">
             Review custom Pasabuy item requests submitted by shoppers, calculate exact landed costs in Manila (EuroFX + Air Freight + Customs Duty), and push quotes to Viber/WhatsApp.
           </p>
@@ -158,10 +158,10 @@ export default function PasabuyManager() {
 
         <div className="flex items-center gap-3">
           <div className="bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl text-sm font-mono">
-            <span className="text-white/40">EUR/PHP FX:</span> <span className="text-forest font-bold">₱62.50</span>
+            <span className="text-white/60">EUR/PHP FX:</span> <span className="text-forest font-bold">₱62.50</span>
           </div>
           <div className="bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl text-sm font-mono">
-            <span className="text-white/40">Air Cargo Rate:</span> <span className="text-blue font-bold">€14.00 / kg</span>
+            <span className="text-white/60">Air Cargo Rate:</span> <span className="text-blue font-bold">€14.00 / kg</span>
           </div>
         </div>
       </div>
@@ -186,7 +186,7 @@ export default function PasabuyManager() {
         
         {/* Left Column: Request List */}
         <div className="lg:col-span-1 space-y-3">
-          <p className="text-xs font-mono font-bold uppercase tracking-widest text-white/40 px-1">Customer Item Submissions</p>
+          <p className="text-xs font-mono font-bold uppercase tracking-widest text-white/60 px-1">Customer Item Submissions</p>
 
           {filteredRequests.map(req => {
             const isSelected = selectedReq?.id === req.id
@@ -215,7 +215,7 @@ export default function PasabuyManager() {
                 <p className="text-xs text-white/50 mt-1 truncate">Customer: {req.customer_name} ({req.channel})</p>
 
                 <div className="flex items-center justify-between mt-3 pt-2 border-t border-white/5 text-xs font-mono">
-                  <span className="text-white/40">Qty: {req.quantity} pcs</span>
+                  <span className="text-white/60">Qty: {req.quantity} pcs</span>
                   <span className="text-forest font-bold">
                     {req.quoted_price_php ? peso(req.quoted_price_php) : 'Needs Quote'}
                   </span>
@@ -236,7 +236,7 @@ export default function PasabuyManager() {
                     <span className="text-xs font-mono font-bold text-amber bg-amber/20 px-2 py-0.5 rounded">
                       {selectedReq.id}
                     </span>
-                    <span className="text-sm text-white/40">Requested on {selectedReq.created_at}</span>
+                    <span className="text-sm text-white/60">Requested on {selectedReq.created_at}</span>
                   </div>
                   <h2 className="font-serif text-xl font-bold text-white">{selectedReq.item_title}</h2>
                   <p className="text-sm text-white/60 mt-0.5">Requester: {selectedReq.customer_name} ({selectedReq.contact_number} · {selectedReq.channel})</p>
@@ -261,7 +261,7 @@ export default function PasabuyManager() {
               {/* Customer Notes Card */}
               {selectedReq.notes && (
                 <div className="bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-neutral-300">
-                  <p className="text-xs font-mono uppercase text-white/40 font-bold mb-1">Customer Special Instructions:</p>
+                  <p className="text-xs font-mono uppercase text-white/60 font-bold mb-1">Customer Special Instructions:</p>
                   <p className="italic">"{selectedReq.notes}"</p>
                   {selectedReq.reference_url && (
                     <a
@@ -287,7 +287,7 @@ export default function PasabuyManager() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Cost in Italy (€ EUR)</label>
+                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Cost in Italy (€ EUR)</label>
                     <input
                       type="number"
                       step="0.1"
@@ -298,7 +298,7 @@ export default function PasabuyManager() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Item Weight (KG)</label>
+                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Item Weight (KG)</label>
                     <input
                       type="number"
                       step="0.05"
@@ -309,7 +309,7 @@ export default function PasabuyManager() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Shipping Route</label>
+                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Shipping Route</label>
                     <select
                       value={shippingMethod}
                       onChange={(e) => setShippingMethod(e.target.value)}
@@ -344,7 +344,7 @@ export default function PasabuyManager() {
                 {/* Final Quote Input */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                   <div>
-                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Target Margin %</label>
+                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Target Margin %</label>
                     <div className="flex items-center gap-2">
                       <input
                         type="range"
@@ -359,7 +359,7 @@ export default function PasabuyManager() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Final Customer Quote (PHP)</label>
+                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Final Customer Quote (PHP)</label>
                     <input
                       type="number"
                       value={finalPricePhp}
@@ -395,7 +395,7 @@ export default function PasabuyManager() {
 
             </div>
           ) : (
-            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-12 text-center text-white/40 font-mono text-sm">
+            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-12 text-center text-white/60 font-mono text-sm">
               👈 Select a Pasabuy request from the left panel to open the Landed Cost Quotation Engine.
             </div>
           )}

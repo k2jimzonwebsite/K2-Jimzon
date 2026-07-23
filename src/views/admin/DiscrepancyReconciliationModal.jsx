@@ -33,25 +33,25 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
               <span className="text-xs font-mono font-bold uppercase tracking-widest text-forest bg-forest/20 px-2 py-0.5 rounded">
                 Manila Customs & Warehouse Check
               </span>
-              <span className="text-sm text-white/40 font-mono">{consignment.manifest_code}</span>
+              <span className="text-sm text-white/60 font-mono">{consignment.manifest_code}</span>
             </div>
-            <h2 className="font-serif text-xl font-bold text-white mt-1">Box Checking Discrepancy Reconciliation</h2>
+            <h2 className="font-serif text-xl font-bold text-white mt-1">Fix box count mismatches</h2>
           </div>
-          <button onClick={onClose} className="text-white/40 hover:text-white text-xl">✕</button>
+          <button onClick={onClose} className="text-white/60 hover:text-white text-xl">✕</button>
         </div>
 
         {/* Stats Summary Bar */}
         <div className="grid grid-cols-3 gap-px bg-white/10 border-b border-white/10 text-center shrink-0">
           <div className="bg-[#09090b] p-4">
-            <p className="text-xs font-mono uppercase tracking-widest text-white/40">Italy Packed Box Qty</p>
+            <p className="text-xs font-mono uppercase tracking-widest text-white/60">Italy Packed Box Qty</p>
             <p className="text-xl font-bold text-white mt-1">{totalPacked} units</p>
           </div>
           <div className="bg-[#09090b] p-4">
-            <p className="text-xs font-mono uppercase tracking-widest text-white/40">Manila Scanned Qty</p>
+            <p className="text-xs font-mono uppercase tracking-widest text-white/60">Manila Scanned Qty</p>
             <p className="text-xl font-bold text-forest mt-1">{totalScanned} units</p>
           </div>
           <div className="bg-[#09090b] p-4">
-            <p className="text-xs font-mono uppercase tracking-widest text-white/40">Variance</p>
+            <p className="text-xs font-mono uppercase tracking-widest text-white/60">Variance</p>
             <p className={`text-xl font-bold mt-1 ${varianceTotal === 0 ? 'text-forest' : varianceTotal < 0 ? 'text-crimson' : 'text-amber'}`}>
               {varianceTotal > 0 ? `+${varianceTotal}` : varianceTotal} units
             </p>
@@ -62,7 +62,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           <table className="w-full text-left text-sm border-collapse">
             <thead>
-              <tr className="border-b border-white/10 text-white/40 uppercase tracking-wider font-mono">
+              <tr className="border-b border-white/10 text-white/60 uppercase tracking-wider font-mono">
                 <th className="py-2.5 px-3">SKU & Item Details</th>
                 <th className="py-2.5 px-3 text-center">Batch Code</th>
                 <th className="py-2.5 px-3 text-center">Best Before</th>
@@ -84,11 +84,11 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
                       <p className="font-bold text-white">{item.sku}</p>
                       <p className="text-xs text-white/50">{item.name || 'Authentic Italian Product'}</p>
                     </td>
-                    <td className="py-3 px-3 text-center font-mono text-neutral-400">{item.batch_code}</td>
-                    <td className="py-3 px-3 text-center font-mono text-neutral-400">{item.best_before_date}</td>
+                    <td className="py-3 px-3 text-center font-mono text-neutral-300">{item.batch_code}</td>
+                    <td className="py-3 px-3 text-center font-mono text-neutral-300">{item.best_before_date}</td>
                     <td className="py-3 px-3 text-center font-mono font-bold text-neutral-300">{item.italy_packed_qty}</td>
                     <td className="py-3 px-3 text-center font-mono font-bold text-forest">{item.manila_scanned_qty}</td>
-                    <td className={`py-3 px-3 text-center font-mono font-bold ${isMatched ? 'text-white/40' : isShort ? 'text-crimson' : 'text-amber'}`}>
+                    <td className={`py-3 px-3 text-center font-mono font-bold ${isMatched ? 'text-white/60' : isShort ? 'text-crimson' : 'text-amber'}`}>
                       {variance > 0 ? `+${variance}` : variance}
                     </td>
                     <td className="py-3 px-3 text-right">
@@ -122,7 +122,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
         <div className="p-4 border-t border-white/10 bg-[#09090b] flex justify-end gap-3 shrink-0">
           <button
             onClick={onClose}
-            className="rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-neutral-400 hover:bg-white/10"
+            className="rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-neutral-300 hover:bg-white/10"
           >
             Back to Scanning
           </button>

@@ -242,22 +242,22 @@ export default function ConsignmentManager() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#18181b] p-6 rounded-2xl border border-white/20 shadow-2xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
+            <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Italy ✈ Philippines Flight Consignment
             </span>
             <span className="text-sm font-mono text-gold font-bold">{consignment.manifest_code}</span>
           </div>
-          <h1 className="font-serif text-2xl font-black text-white">{consignment.flight_number}</h1>
+          <h1 className="font-serif text-2xl font-bold text-white">{consignment.flight_number}</h1>
           <p className="text-sm text-neutral-300 font-bold mt-1">
-            Packed in Milan: <span className="text-white font-black font-mono">{consignment.packed_at}</span> · Status:{' '}
-            <span className="font-black text-blue">{consignment.status}</span>
+            Packed in Milan: <span className="text-white font-bold font-mono">{consignment.packed_at}</span> · Status:{' '}
+            <span className="font-bold text-blue">{consignment.status}</span>
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={() => setIsMilanScannerOpen(true)}
-            className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
+            className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -267,14 +267,14 @@ export default function ConsignmentManager() {
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="bg-gold hover:bg-gold-deep text-navy font-black text-sm px-5 py-3 rounded-xl shadow-lg transition-all"
+            className="bg-gold hover:bg-gold-deep text-navy font-bold text-sm px-5 py-3 rounded-xl shadow-lg transition-all"
           >
             + Pack New Box (Milan)
           </button>
 
           <button
             onClick={() => setIsScannerOpen(true)}
-            className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
+            className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -287,20 +287,20 @@ export default function ConsignmentManager() {
       {/* Discrepancy & Receiving Dashboard Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl">
-          <p className="text-xs font-mono uppercase tracking-widest text-white/40">Milan Packed Total</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/60">Milan Packed Total</p>
           <p className="text-2xl font-bold text-white mt-1">{totalItalyPacked} <span className="text-sm font-normal text-white/50">units</span></p>
-          <p className="text-sm text-white/40 mt-1">Boxed and sealed in Italy</p>
+          <p className="text-sm text-white/60 mt-1">Boxed and sealed in Italy</p>
         </div>
 
         <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl">
-          <p className="text-xs font-mono uppercase tracking-widest text-white/40">Manila Scanned Total</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/60">Manila Scanned Total</p>
           <p className="text-2xl font-bold text-forest mt-1">{totalManilaScanned} <span className="text-sm font-normal text-white/50">units</span></p>
-          <p className="text-sm text-white/40 mt-1">Counted via phone scanner</p>
+          <p className="text-sm text-white/60 mt-1">Counted via phone scanner</p>
         </div>
 
         <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl flex flex-col justify-between">
           <div>
-            <p className="text-xs font-mono uppercase tracking-widest text-white/40">Box Discrepancy Status</p>
+            <p className="text-xs font-mono uppercase tracking-widest text-white/60">Box Discrepancy Status</p>
             <p className={`text-xl font-bold mt-1 ${totalManilaScanned === totalItalyPacked ? 'text-forest' : 'text-crimson'}`}>
               {totalManilaScanned === totalItalyPacked ? '100% Matched 🟢' : `${totalItalyPacked - totalManilaScanned} Units Pending 🔴`}
             </p>
@@ -324,7 +324,7 @@ export default function ConsignmentManager() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm border-collapse">
             <thead>
-              <tr className="border-b border-white/10 text-white/40 font-mono uppercase tracking-wider bg-white/5">
+              <tr className="border-b border-white/10 text-white/60 font-mono uppercase tracking-wider bg-white/5">
                 <th className="py-3 px-4">SKU</th>
                 <th className="py-3 px-4">Item Name</th>
                 <th className="py-3 px-4">Batch Code</th>

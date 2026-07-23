@@ -33,17 +33,17 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-white/10 bg-[#27272a] px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-blue flex items-center justify-center text-white text-xl font-black shadow">
+            <div className="h-10 w-10 rounded-xl bg-blue flex items-center justify-center text-white text-xl font-bold shadow">
               ⚡
             </div>
             <div>
-              <h2 className="text-xl font-black text-white">System Architecture & DevOps Mission Control</h2>
+              <h2 className="text-xl font-bold text-white">System & developer tools</h2>
               <p className="text-sm text-gold font-mono font-bold">Live QPS · Cloud Edge CDN · Database RPC Locks · AES-256 Vault</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all font-black text-lg"
+            className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all font-bold text-lg"
           >
             ✕
           </button>
@@ -56,7 +56,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono">
             <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Throughput (QPS)</p>
-              <p className="text-2xl font-black text-white mt-1 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mt-1 flex items-center gap-2">
                 <span>{qps}</span>
                 <span className="text-sm font-sans font-bold text-neutral-300">queries/sec</span>
               </p>
@@ -65,7 +65,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
 
             <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Edge Latency</p>
-              <p className="text-2xl font-black text-white mt-1 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mt-1 flex items-center gap-2">
                 <span>{latency}</span>
                 <span className="text-sm font-sans font-bold text-neutral-300">ms</span>
               </p>
@@ -74,13 +74,13 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
 
             <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Database Engine</p>
-              <p className="text-xl font-black text-white mt-1">Supabase</p>
+              <p className="text-xl font-bold text-white mt-1">Supabase</p>
               <p className="text-xs text-neutral-300 mt-1 font-sans font-extrabold text-blue">PostgreSQL + RPC Locks</p>
             </div>
 
             <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Realtime WebSockets</p>
-              <p className="text-xl font-black text-white mt-1">Active</p>
+              <p className="text-xl font-bold text-white mt-1">Active</p>
               <p className="text-xs text-neutral-300 mt-1 font-sans font-medium">{wsStatus}</p>
             </div>
           </div>
@@ -91,10 +91,10 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
             {/* AES-256 Vault Status */}
             <div className="bg-[#27272a] p-5 rounded-2xl border border-white/10 space-y-3">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <h3 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
                   🔒 AES-256 Security Vault Health
                 </h3>
-                <span className="text-sm font-mono bg-gold text-navy font-black px-2.5 py-0.5 rounded-full shadow">ENCRYPTED</span>
+                <span className="text-sm font-mono bg-gold text-navy font-bold px-2.5 py-0.5 rounded-full shadow">ENCRYPTED</span>
               </div>
               <div className="space-y-2 text-sm font-mono">
                 <div className="flex justify-between text-neutral-200">
@@ -119,10 +119,10 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
             {/* Rate Limiting & Concurrency Guard */}
             <div className="bg-[#27272a] p-5 rounded-2xl border border-white/10 space-y-3">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <h3 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
                   🛡️ Anti-Abuse Rate Limiting Throttles
                 </h3>
-                <span className="text-sm font-mono bg-blue text-white font-black px-2.5 py-0.5 rounded-full shadow">PROTECTED</span>
+                <span className="text-sm font-mono bg-blue text-white font-bold px-2.5 py-0.5 rounded-full shadow">PROTECTED</span>
               </div>
               <div className="space-y-2 text-sm font-mono">
                 <div className="flex justify-between text-neutral-200">
@@ -148,7 +148,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           {/* System Error & Audit Trail Stream */}
           <div className="bg-[#27272a] p-5 rounded-2xl border border-white/10 space-y-3">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <h3 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
                 📋 Production System Log & Audit Stream
               </h3>
               <span className="text-sm font-mono text-neutral-300 font-bold">4 Recent Log Events</span>
@@ -158,7 +158,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
                 <div key={log.id} className="flex items-start justify-between p-3 rounded-xl bg-black/40 border border-white/10">
                   <div className="flex items-start gap-3">
                     <span className="text-gold font-bold">{log.time}</span>
-                    <span className={`px-2 py-0.5 rounded font-black text-xs ${
+                    <span className={`px-2 py-0.5 rounded font-bold text-xs ${
                       log.level === 'SECURITY' ? 'bg-gold text-navy' :
                       log.level === 'SUCCESS' ? 'bg-blue text-white' : 'bg-white/20 text-white'
                     }`}>
@@ -181,9 +181,9 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           </p>
           <button
             onClick={onClose}
-            className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-6 py-2.5 rounded-xl shadow transition-all"
+            className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-6 py-2.5 rounded-xl shadow transition-all"
           >
-            Close Mission Control Audit
+            Close
           </button>
         </div>
 

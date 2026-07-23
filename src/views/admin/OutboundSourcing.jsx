@@ -181,7 +181,7 @@ export default function OutboundSourcing() {
           <div className="mx-auto w-20 h-20 bg-forest/20 rounded-full flex items-center justify-center mb-6">
             <BoxIcon className="text-forest" size={40} />
           </div>
-          <h2 className="text-2xl font-serif text-white mb-2">Outbound Sourcing (Italy)</h2>
+          <h2 className="text-2xl font-serif text-white mb-2">Italy sourcing</h2>
           <p className="text-white/60 mb-8 leading-relaxed">
             Scan items as you pack them into the box. Unknown items will be automatically cataloged by the AI. When finished, seal the box to notify the Philippines warehouse.
           </p>
@@ -224,9 +224,9 @@ export default function OutboundSourcing() {
                 onClick={startScanner}
                 className="flex-1 flex flex-col items-center justify-center text-center p-6 cursor-pointer hover:bg-white/5 transition-colors"
               >
-                <GridIcon className="text-white/30 mb-3" size={40} />
+                <GridIcon className="text-white/55 mb-3" size={40} />
                 <p className="text-white font-medium">Camera Paused</p>
-                <p className="text-base text-white/40 mt-1">Tap to resume scanning</p>
+                <p className="text-base text-white/60 mt-1">Tap to resume scanning</p>
               </div>
             ) : (
               <div className="flex-1 w-full bg-black relative flex flex-col">

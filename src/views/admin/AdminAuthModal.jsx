@@ -73,7 +73,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
         
         <div className="mb-6 text-center">
           <h2 className="text-2xl font-extrabold tracking-tight text-white">
-            K2 Jimzon <span className="text-blue font-black font-mono">BOS</span>
+            K2 Jimzon <span className="text-blue font-bold font-mono">BOS</span>
           </h2>
           <div className="flex items-center justify-center gap-2 mt-2">
             <span className="text-sm font-mono font-bold uppercase tracking-widest bg-gold/15 text-gold px-3 py-1 rounded-full border border-gold/30 shadow-sm">
@@ -87,7 +87,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
           <span className={`px-3 py-1.5 rounded-lg font-bold transition-colors ${step === 1 ? 'bg-blue text-white shadow' : 'text-white/60'}`}>
             1. Master Passcode
           </span>
-          <span className="text-white/40 font-bold">→</span>
+          <span className="text-white/60 font-bold">→</span>
           <span className={`px-3 py-1.5 rounded-lg font-bold transition-colors ${step === 2 ? 'bg-blue text-white shadow' : 'text-white/60'}`}>
             2. 2FA Authenticator
           </span>
@@ -138,7 +138,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                   onChange={(e) => setPasscode(e.target.value)}
                   placeholder="Enter passcode (e.g. 202688)"
                   required
-                  className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-lg text-white font-mono placeholder:text-white/40 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
+                  className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-lg text-white font-mono placeholder:text-white/60 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
                 />
                 <p className="text-sm text-gold mt-2 font-medium">
                   Valid Master Passcodes: <span className="font-mono font-bold text-white">202688</span>, <span className="font-mono font-bold text-white">123456</span>, <span className="font-mono font-bold text-white">K2ADMIN2026</span>
@@ -156,7 +156,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="k2jimzonwebsite@gmail.com"
                     required
-                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-base text-white placeholder:text-white/40 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
+                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-base text-white placeholder:text-white/60 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
                   />
                 </div>
                 <div>
@@ -169,7 +169,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
                     required
-                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-base text-white placeholder:text-white/40 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
+                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-base text-white placeholder:text-white/60 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
                   />
                 </div>
               </>
@@ -236,7 +236,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                 onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, ''))}
                 placeholder="202688"
                 required
-                className="w-full text-center tracking-[0.4em] font-mono text-2xl font-extrabold rounded-xl border border-blue/40 bg-black/50 px-4 py-3.5 text-blue placeholder:text-neutral-500 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue transition-all"
+                className="w-full text-center tracking-[0.4em] font-mono text-2xl font-extrabold rounded-xl border border-blue/40 bg-black/50 px-4 py-3.5 text-blue placeholder:text-neutral-300 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue transition-all"
               />
               <p className="text-sm text-gold mt-2 text-center font-semibold">
                 Valid 2FA Code: <span className="text-white font-mono font-bold">202688</span> or <span className="text-white font-mono font-bold">123456</span>

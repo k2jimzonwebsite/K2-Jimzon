@@ -65,12 +65,12 @@ export default function CouponManager() {
       <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
+            <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Promotions & Social Engagement Engine
             </span>
             <span className="text-sm text-neutral-300 font-bold">Voucher Creation & Secret Hunt Drops</span>
           </div>
-          <h1 className="font-serif text-2xl font-black text-white">Coupons & Voucher Hunt Manager</h1>
+          <h1 className="font-serif text-2xl font-bold text-white">Coupons & vouchers</h1>
           <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
             Create discount codes, set min spend rules, and deploy secret "Voucher Hunt" drops for your social media audience to discover and claim!
           </p>
@@ -78,9 +78,9 @@ export default function CouponManager() {
 
         <button
           onClick={() => setShowCreateModal(true)}
-          className="bg-gold hover:bg-gold-deep text-navy font-black text-sm px-5 py-3 rounded-xl transition-all shadow-lg shrink-0 flex items-center gap-2 min-h-[44px]"
+          className="bg-gold hover:bg-gold-deep text-navy font-bold text-sm px-5 py-3 rounded-xl transition-all shadow-lg shrink-0 flex items-center gap-2 min-h-[44px]"
         >
-          <span>🎟️</span> + Create New Coupon / Secret Drop
+          <span>🎟️</span> + Create a coupon
         </button>
       </div>
 
@@ -88,19 +88,19 @@ export default function CouponManager() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-[#18181b] border border-white/20 p-5 rounded-2xl shadow-md">
           <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Active Coupons</p>
-          <p className="text-3xl font-black text-white mt-1">{activeCount} Coupons</p>
+          <p className="text-3xl font-bold text-white mt-1">{activeCount} Coupons</p>
           <p className="text-sm text-neutral-300 font-medium mt-1">Ready for storefront & checkout redemption</p>
         </div>
 
         <div className="bg-[#18181b] border border-white/20 p-5 rounded-2xl shadow-md">
           <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Secret Voucher Hunts</p>
-          <p className="text-3xl font-black text-blue mt-1">{huntCount} Active Drops</p>
+          <p className="text-3xl font-bold text-blue mt-1">{huntCount} Active Drops</p>
           <p className="text-sm text-neutral-300 font-medium mt-1">Interactive clues for FB/IG/TikTok followers</p>
         </div>
 
         <div className="bg-[#18181b] border border-white/20 p-5 rounded-2xl shadow-md">
           <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Total Redemptions</p>
-          <p className="text-3xl font-black text-gold mt-1">{totalRedemptions} Used</p>
+          <p className="text-3xl font-bold text-gold mt-1">{totalRedemptions} Used</p>
           <p className="text-sm text-neutral-300 font-medium mt-1">Successful customer checkouts applied</p>
         </div>
       </div>
@@ -108,7 +108,7 @@ export default function CouponManager() {
       {/* Coupons Table */}
       <div className="bg-[#18181b] border border-white/20 rounded-2xl overflow-hidden shadow-xl">
         <div className="p-5 border-b border-white/10 flex items-center justify-between bg-white/10">
-          <h2 className="font-serif font-black text-xl text-white">All Promotional Vouchers & Hunts</h2>
+          <h2 className="font-serif font-bold text-xl text-white">All coupons & vouchers</h2>
           <span className="text-sm font-mono font-bold text-gold">{coupons.length} Total Coupons</span>
         </div>
 
@@ -130,9 +130,9 @@ export default function CouponManager() {
                 <tr key={c.id} className="hover:bg-white/10 transition-colors">
                   <td className="p-4">
                     <div className="flex items-center gap-2">
-                      <span className="font-black text-gold text-lg font-mono tracking-wide">{c.code}</span>
+                      <span className="font-bold text-gold text-lg font-mono tracking-wide">{c.code}</span>
                       {c.isHunt && (
-                        <span className="text-sm bg-blue text-white px-2 py-0.5 rounded font-black shadow">
+                        <span className="text-sm bg-blue text-white px-2 py-0.5 rounded font-bold shadow">
                           🔍 SECRET HUNT
                         </span>
                       )}
@@ -171,7 +171,7 @@ export default function CouponManager() {
                       className={`px-2.5 py-1 rounded-full text-xs font-bold border transition-all ${
                         c.isActive
                           ? 'bg-forest/20 text-forest border-forest/40 hover:bg-forest/30'
-                          : 'bg-white/10 text-white/40 border-white/10 hover:bg-white/20'
+                          : 'bg-white/10 text-white/60 border-white/10 hover:bg-white/20'
                       }`}
                     >
                       {c.isActive ? '● ACTIVE' : '○ PAUSED'}
@@ -218,12 +218,12 @@ export default function CouponManager() {
             
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div>
-                <h3 className="font-serif font-bold text-xl text-white">Create New Coupon / Secret Drop</h3>
+                <h3 className="font-serif font-bold text-xl text-white">Create a coupon</h3>
                 <p className="text-sm text-white/50 font-mono">Configure discount parameters and hunt clues</p>
               </div>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="text-white/40 hover:text-white text-xl p-2"
+                className="text-white/60 hover:text-white text-xl p-2"
               >
                 ✕
               </button>
@@ -232,19 +232,19 @@ export default function CouponManager() {
             <form onSubmit={handleCreate} className="space-y-4 text-sm font-mono">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-white/40 uppercase font-bold mb-1">Coupon Code *</label>
+                  <label className="block text-xs text-white/60 uppercase font-bold mb-1">Coupon Code *</label>
                   <input
                     type="text"
                     required
                     value={code}
                     onChange={(e) => setCode(e.target.value.toUpperCase())}
                     placeholder="e.g. MILAN20 or HUNT500"
-                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-amber outline-none min-h-[44px]"
+                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white placeholder:text-white/55 focus:border-amber outline-none min-h-[44px]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-white/40 uppercase font-bold mb-1">Discount Type</label>
+                  <label className="block text-xs text-white/60 uppercase font-bold mb-1">Discount Type</label>
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value)}
@@ -257,19 +257,19 @@ export default function CouponManager() {
               </div>
 
               <div>
-                <label className="block text-xs text-white/40 uppercase font-bold mb-1">Description</label>
+                <label className="block text-xs text-white/60 uppercase font-bold mb-1">Description</label>
                 <input
                   type="text"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="e.g. 10% OFF authentic Italy chocolates & skincare"
-                  className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-amber outline-none min-h-[44px]"
+                  className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white placeholder:text-white/55 focus:border-amber outline-none min-h-[44px]"
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs text-white/40 uppercase font-bold mb-1">
+                  <label className="block text-xs text-white/60 uppercase font-bold mb-1">
                     Value ({type === 'percentage' ? '%' : '₱'})
                   </label>
                   <input
@@ -283,7 +283,7 @@ export default function CouponManager() {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-white/40 uppercase font-bold mb-1">Min Spend (₱)</label>
+                  <label className="block text-xs text-white/60 uppercase font-bold mb-1">Min Spend (₱)</label>
                   <input
                     type="number"
                     min={0}
@@ -294,7 +294,7 @@ export default function CouponManager() {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-white/40 uppercase font-bold mb-1">Max Uses</label>
+                  <label className="block text-xs text-white/60 uppercase font-bold mb-1">Max Uses</label>
                   <input
                     type="number"
                     min={1}
@@ -322,7 +322,7 @@ export default function CouponManager() {
 
                 {isHunt && (
                   <div className="pt-2">
-                    <label className="block text-xs text-white/40 uppercase font-bold mb-1">Secret Clue for Social Media</label>
+                    <label className="block text-xs text-white/60 uppercase font-bold mb-1">Secret Clue for Social Media</label>
                     <textarea
                       rows={2}
                       value={clue}

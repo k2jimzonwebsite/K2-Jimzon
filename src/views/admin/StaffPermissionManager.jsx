@@ -191,8 +191,8 @@ export default function StaffPermissionManager() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#18181b] border border-white/20 shadow-xl">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-serif text-2xl font-black text-white">Staff Roles & Permissions Manager</h1>
-            <span className="text-sm font-mono font-black px-3 py-1 rounded-full uppercase border shadow-sm bg-gold text-navy border-gold">
+            <h1 className="font-serif text-2xl font-bold text-white">Staff roles & permissions</h1>
+            <span className="text-sm font-mono font-bold px-3 py-1 rounded-full uppercase border shadow-sm bg-gold text-navy border-gold">
               👑 Super Admin Master Mode
             </span>
           </div>
@@ -203,14 +203,14 @@ export default function StaffPermissionManager() {
 
         <button
           onClick={() => setShowAddModal(true)}
-          className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-5 py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 min-h-[44px] shrink-0"
+          className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-5 py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 min-h-[44px] shrink-0"
         >
           <span>+</span> Add New Staff Member
         </button>
       </div>
 
       {savedMessage && (
-        <div className="p-4 rounded-xl bg-blue/20 border border-blue text-white text-sm font-black animate-in fade-in shadow">
+        <div className="p-4 rounded-xl bg-blue/20 border border-blue text-white text-sm font-bold animate-in fade-in shadow">
           {savedMessage}
         </div>
       )}
@@ -224,7 +224,7 @@ export default function StaffPermissionManager() {
             <div>
               <div className="flex items-start justify-between">
                 <div className="min-w-0 pr-2">
-                  <h3 className="font-serif font-black text-xl text-white truncate">{s.name}</h3>
+                  <h3 className="font-serif font-bold text-xl text-white truncate">{s.name}</h3>
                   <p className="text-sm text-gold font-mono font-bold truncate mt-0.5">{s.email}</p>
                 </div>
                 <button
@@ -239,9 +239,9 @@ export default function StaffPermissionManager() {
               <div className="flex items-center justify-between mt-3 bg-[#27272a] p-2.5 rounded-xl border border-white/10">
                 <div>
                   <p className="text-xs font-bold text-neutral-300 uppercase">Assigned Hub</p>
-                  <p className="text-sm font-black text-white">{s.hub}</p>
+                  <p className="text-sm font-bold text-white">{s.hub}</p>
                 </div>
-                <span className="text-sm font-mono bg-gold text-navy border border-gold px-2.5 py-0.5 rounded-md font-black">
+                <span className="text-sm font-mono bg-gold text-navy border border-gold px-2.5 py-0.5 rounded-md font-bold">
                   {s.role.split('/')[0]}
                 </span>
               </div>
@@ -250,14 +250,14 @@ export default function StaffPermissionManager() {
               <div className="mt-3 p-3 rounded-xl bg-white/10 border border-white/20 flex items-center justify-between">
                 <div>
                   <span className="text-sm font-extrabold text-neutral-200 block">Station PIN / Password:</span>
-                  <span className="text-xs text-neutral-400 font-mono">Password: {s.password || '••••••••'}</span>
+                  <span className="text-xs text-neutral-300 font-mono">Password: {s.password || '••••••••'}</span>
                 </div>
                 <input
                   type="text"
                   maxLength={4}
                   value={s.pin}
                   onChange={(e) => handleUpdatePin(s.id, e.target.value)}
-                  className="w-20 text-center font-mono font-black text-gold bg-black/60 border border-gold rounded-lg px-2 py-1 text-lg outline-none shadow-sm"
+                  className="w-20 text-center font-mono font-bold text-gold bg-black/60 border border-gold rounded-lg px-2 py-1 text-lg outline-none shadow-sm"
                   title="Click to edit 4-digit Station PIN"
                 />
               </div>
@@ -278,18 +278,18 @@ export default function StaffPermissionManager() {
                     className={`p-3 rounded-xl border flex items-center justify-between transition-all cursor-pointer ${
                       isActive
                         ? 'bg-[#27272a] border-white/20 text-white font-bold hover:bg-white/10'
-                        : 'bg-[#18181b] border-white/5 text-neutral-500 hover:bg-white/5'
+                        : 'bg-[#18181b] border-white/5 text-neutral-300 hover:bg-white/5'
                     }`}
                   >
                     <div>
                       <p className="text-sm font-bold font-sans">{p.label}</p>
-                      <p className="text-xs text-neutral-400 font-sans">{p.desc}</p>
+                      <p className="text-xs text-neutral-300 font-sans">{p.desc}</p>
                     </div>
 
                     <span className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded border ${
                       isActive 
                         ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50' 
-                        : 'bg-white/5 text-neutral-500 border-white/10'
+                        : 'bg-white/5 text-neutral-300 border-white/10'
                     }`}>
                       {isActive ? 'ENABLED' : 'LOCKED'}
                     </span>
@@ -308,10 +308,10 @@ export default function StaffPermissionManager() {
           <form onSubmit={handleSaveEditedStaff} className="w-full max-w-lg bg-[#18181b] border border-white/20 rounded-2xl p-6 shadow-2xl space-y-4 text-white">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
-                <h2 className="font-serif font-black text-xl text-white">Edit Staff Credentials & Profile</h2>
+                <h2 className="font-serif font-bold text-xl text-white">Edit staff profile</h2>
                 <p className="text-sm text-gold font-mono font-bold">Update Name, Email, Station PIN, Password & Hub</p>
               </div>
-              <button type="button" onClick={() => setEditingStaff(null)} className="text-neutral-300 hover:text-white font-black text-xl">✕</button>
+              <button type="button" onClick={() => setEditingStaff(null)} className="text-neutral-300 hover:text-white font-bold text-xl">✕</button>
             </div>
 
             <div>
@@ -358,7 +358,7 @@ export default function StaffPermissionManager() {
                   required
                   value={editingStaff.pin}
                   onChange={e => setEditingStaff({ ...editingStaff, pin: e.target.value })}
-                  className="w-full text-center font-mono font-black text-gold rounded-xl bg-black/60 border border-gold px-3.5 py-2.5 text-lg outline-none shadow-sm"
+                  className="w-full text-center font-mono font-bold text-gold rounded-xl bg-black/60 border border-gold px-3.5 py-2.5 text-lg outline-none shadow-sm"
                 />
               </div>
 
@@ -398,7 +398,7 @@ export default function StaffPermissionManager() {
 
               <button
                 type="submit"
-                className="flex-1 bg-blue hover:bg-blue-deep text-white font-black text-sm py-3 rounded-xl transition-all shadow-lg min-h-[44px]"
+                className="flex-1 bg-blue hover:bg-blue-deep text-white font-bold text-sm py-3 rounded-xl transition-all shadow-lg min-h-[44px]"
               >
                 ✓ Save Staff Changes & Credentials
               </button>
@@ -413,10 +413,10 @@ export default function StaffPermissionManager() {
           <form onSubmit={handleAddStaff} className="w-full max-w-lg bg-[#18181b] border border-white/20 rounded-2xl p-6 shadow-2xl space-y-4 text-white">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
-                <h2 className="font-serif font-black text-xl text-white">Add New Staff Member</h2>
+                <h2 className="font-serif font-bold text-xl text-white">Add New Staff Member</h2>
                 <p className="text-sm text-gold font-mono font-bold">Create login email, station PIN, password & permissions</p>
               </div>
-              <button type="button" onClick={() => setShowAddModal(false)} className="text-neutral-300 hover:text-white font-black text-xl">✕</button>
+              <button type="button" onClick={() => setShowAddModal(false)} className="text-neutral-300 hover:text-white font-bold text-xl">✕</button>
             </div>
 
             <div>
@@ -465,7 +465,7 @@ export default function StaffPermissionManager() {
                   maxLength={4}
                   value={newStaff.pin}
                   onChange={e => setNewStaff({ ...newStaff, pin: e.target.value })}
-                  className="w-full text-center font-mono font-black text-gold rounded-xl bg-black/60 border border-gold px-3.5 py-2.5 text-lg outline-none shadow-sm"
+                  className="w-full text-center font-mono font-bold text-gold rounded-xl bg-black/60 border border-gold px-3.5 py-2.5 text-lg outline-none shadow-sm"
                 />
               </div>
 
@@ -486,7 +486,7 @@ export default function StaffPermissionManager() {
 
             <button
               type="submit"
-              className="w-full bg-blue hover:bg-blue-deep text-white font-black text-sm py-3 rounded-xl transition-all shadow-lg min-h-[44px] mt-2"
+              className="w-full bg-blue hover:bg-blue-deep text-white font-bold text-sm py-3 rounded-xl transition-all shadow-lg min-h-[44px] mt-2"
             >
               ✓ Create Staff Account & Enable Default Access
             </button>

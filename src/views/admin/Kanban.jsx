@@ -115,14 +115,14 @@ export default function Kanban() {
               Unified Supply Chain Hub
             </span>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Global Logistics & Manifest Command</h1>
+          <h1 className="font-serif text-2xl font-bold text-white">Flight consignments & cargo boxes</h1>
           <p className="text-base text-white/50">Manage Milan flight consignments, box scanning receiving (+1), supplier POs, and PH customer order fulfillment in one place.</p>
         </div>
         
         <div className="flex bg-[#18181b] rounded-xl p-2 border border-white/20 overflow-x-auto whitespace-nowrap hide-scrollbar items-center gap-2">
           <button 
             onClick={() => setActiveTab('consignment')}
-            className={`px-4 py-2.5 text-sm font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-4 py-2.5 text-sm font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'consignment' ? 'bg-crimson text-white shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -131,7 +131,7 @@ export default function Kanban() {
 
           <button 
             onClick={() => setActiveTab('kanban')}
-            className={`px-4 py-2.5 text-sm font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-4 py-2.5 text-sm font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'kanban' ? 'bg-blue text-white shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -140,7 +140,7 @@ export default function Kanban() {
 
           <button 
             onClick={() => setActiveTab('inbound')}
-            className={`px-4 py-2.5 text-sm font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-4 py-2.5 text-sm font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'inbound' ? 'bg-gold text-navy shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -149,7 +149,7 @@ export default function Kanban() {
           
           <button 
             onClick={() => setActiveTab('outbound')}
-            className={`px-4 py-2.5 text-sm font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-4 py-2.5 text-sm font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'outbound' ? 'bg-blue text-white shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -188,13 +188,13 @@ export default function Kanban() {
                   <section key={col.id} className="w-72 shrink-0 md:w-[calc(25%-12px)] md:min-w-64">
                     <header className="mb-2.5 flex items-start justify-between px-1">
                       <div>
-                        <h2 className="flex items-center gap-2 text-base font-black text-white">
+                        <h2 className="flex items-center gap-2 text-base font-bold text-white">
                           <span className="h-2.5 w-2.5 rounded-full" style={{ background: col.accent }} />
                           {col.name}
                         </h2>
                         <p className="ml-4 text-sm font-bold text-gold">{col.meta}</p>
                       </div>
-                      <span className="rounded-full bg-gold text-navy px-2.5 py-0.5 text-sm font-black tabular shadow">
+                      <span className="rounded-full bg-gold text-navy px-2.5 py-0.5 text-sm font-bold tabular shadow">
                         {col.orders.length}
                       </span>
                     </header>
@@ -217,15 +217,15 @@ export default function Kanban() {
                               {o.items.slice(0, 3).map((item, i) => (
                                 <div key={i} className="flex justify-between text-base">
                                   <span className="text-neutral-200 truncate mr-2">{item.product?.title || item.sku}</span>
-                                  <span className="text-white/40 font-mono shrink-0">x{item.quantity}</span>
+                                  <span className="text-white/60 font-mono shrink-0">x{item.quantity}</span>
                                 </div>
                               ))}
                               {o.items.length > 3 && (
-                                <p className="text-sm text-white/40 italic pt-1">+ {o.items.length - 3} more items...</p>
+                                <p className="text-sm text-white/60 italic pt-1">+ {o.items.length - 3} more items...</p>
                               )}
                             </div>
                             <div className="mt-3 pt-3 border-t border-white/5 flex justify-between items-center">
-                              <span className="text-sm text-white/40">{o.payment_status}</span>
+                              <span className="text-sm text-white/60">{o.payment_status}</span>
                               <span className="text-sm font-semibold text-blue group-hover:text-blue-light transition-colors">Pack & Verify →</span>
                             </div>
                           </div>

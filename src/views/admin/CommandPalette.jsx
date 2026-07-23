@@ -23,7 +23,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
     { id: 'nav-pasabuy-mgr', type: 'Navigation', label: 'Manage Pasabuy Requests & Quotations', action: () => setSection('pasabuy_manager') },
     { id: 'nav-integrations', type: 'Navigation', label: 'Manage Channel & API Keys (Shopee, Lazada, TikTok, Meta)', action: () => setSection('integrations') },
     { id: 'nav-suppliers', type: 'Navigation', label: 'Manage Our Suppliers', action: () => setSection('suppliers') },
-    { id: 'nav-pos', type: 'Navigation', label: 'View Incoming Deliveries', action: () => setSection('pos') },
+    { id: 'nav-pos', type: 'Navigation', label: 'View Incoming Deliveries', action: () => setSection('kanban') },
     { id: 'nav-storefront', type: 'Navigation', label: 'View Live Storefront', action: () => go('home') },
   ]
 
@@ -71,13 +71,13 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
       const { data: prodData } = await supabase
         .from('products')
         .select('sku, title')
-        .ilike('name', `%${q}%`)
+        .ilike('title', `%${q}%`)
         .limit(3)
       
       const prodMatches = (prodData || []).map(p => ({
         id: p.sku,
         type: 'Product',
-        label: p.name,
+        label: p.title,
         sub: p.sku,
         action: () => {
           setSection('inventory')
@@ -146,7 +146,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
             className="relative w-full max-w-2xl overflow-hidden rounded-xl border border-white/10 bg-[#0A101D] shadow-2xl"
           >
             <div className="flex items-center border-b border-white/10 px-4 py-3">
-              <svg className="mr-3 h-5 w-5 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="mr-3 h-5 w-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
@@ -158,14 +158,14 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
                 placeholder="Search products, customers, or commands..."
                 className="w-full bg-transparent text-xl text-white placeholder-white/30 outline-none"
               />
-              <span className="ml-2 flex shrink-0 items-center gap-1 rounded bg-white/5 px-2 py-1 text-sm text-white/40 border border-white/10">
+              <span className="ml-2 flex shrink-0 items-center gap-1 rounded bg-white/5 px-2 py-1 text-sm text-white/60 border border-white/10">
                 ESC
               </span>
             </div>
 
             <div className="max-h-[60vh] overflow-y-auto p-2">
               {results.length === 0 ? (
-                <div className="py-14 text-center text-base text-white/40">
+                <div className="py-14 text-center text-base text-white/60">
                   No results found for "{query}"
                 </div>
               ) : (
@@ -181,14 +181,14 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
                       onMouseEnter={() => setSelectedIndex(idx)}
                       className={
                         'flex w-full items-center justify-between rounded-lg px-4 py-3 text-left transition-colors ' +
-                        (isSelected ? 'bg-blue/20 text-white' : 'text-neutral-400 hover:bg-white/5')
+                        (isSelected ? 'bg-blue/20 text-white' : 'text-neutral-300 hover:bg-white/5')
                       }
                     >
                       <div>
                         <div className="text-base font-medium">{item.label}</div>
-                        {item.sub && <div className="text-sm text-white/40 mt-0.5">{item.sub}</div>}
+                        {item.sub && <div className="text-sm text-white/60 mt-0.5">{item.sub}</div>}
                       </div>
-                      <span className={'text-xs uppercase tracking-wider ' + (isSelected ? 'text-blue' : 'text-white/30')}>
+                      <span className={'text-xs uppercase tracking-wider ' + (isSelected ? 'text-blue' : 'text-white/55')}>
                         {item.type}
                       </span>
                     </button>
@@ -196,10 +196,10 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
                 })
               )}
             </div>
-            <div className="border-t border-white/10 bg-white/5 px-4 py-2 text-sm text-white/40 flex items-center justify-between">
+            <div className="border-t border-white/10 bg-white/5 px-4 py-2 text-sm text-white/60 flex items-center justify-between">
               <div className="flex gap-4">
-                <span><kbd className="font-sans font-semibold text-neutral-400">↑↓</kbd> to navigate</span>
-                <span><kbd className="font-sans font-semibold text-neutral-400">Enter</kbd> to select</span>
+                <span><kbd className="font-sans font-semibold text-neutral-300">↑↓</kbd> to navigate</span>
+                <span><kbd className="font-sans font-semibold text-neutral-300">Enter</kbd> to select</span>
               </div>
               <div>K2 Jimzon BOS</div>
             </div>

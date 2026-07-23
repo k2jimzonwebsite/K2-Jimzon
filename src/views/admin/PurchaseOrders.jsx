@@ -130,7 +130,7 @@ function ScannerModal({ po, onClose, onComplete }) {
 
         {/* List of Expected Items */}
         <div className="p-4 space-y-3">
-          <h3 className="text-base font-bold uppercase tracking-widest text-white/30 mb-2">Checklist</h3>
+          <h3 className="text-base font-bold uppercase tracking-widest text-white/55 mb-2">Checklist</h3>
           {loading ? (
             <p className="text-sm text-white/50">Loading expected items...</p>
           ) : (
@@ -144,7 +144,7 @@ function ScannerModal({ po, onClose, onComplete }) {
                   </div>
                   <div className="text-right">
                     <p className={`text-xl font-bold tabular ${isComplete ? 'text-forest' : 'text-blue'}`}>
-                      {line.scanned} <span className="text-base font-normal text-white/40">/ {line.quantity}</span>
+                      {line.scanned} <span className="text-base font-normal text-white/60">/ {line.quantity}</span>
                     </p>
                   </div>
                 </div>
@@ -224,7 +224,7 @@ export default function PurchaseOrders() {
 
       <div className="rounded-xl border border-white/10 bg-[#09090b] overflow-x-auto w-full">
         <table className="w-full text-left text-base text-neutral-300 min-w-[800px]">
-          <thead className="bg-white/5 text-sm uppercase tracking-widest text-white/40">
+          <thead className="bg-white/5 text-sm uppercase tracking-widest text-white/60">
             <tr>
               <th className="px-6 py-4 font-medium">PO Number</th>
               <th className="px-6 py-4 font-medium">Supplier</th>
@@ -236,9 +236,9 @@ export default function PurchaseOrders() {
           </thead>
           <tbody className="divide-y divide-white/5">
             {loading ? (
-              <tr><td colSpan="6" className="px-6 py-8 text-center text-white/40">Loading deliveries...</td></tr>
+              <tr><td colSpan="6" className="px-6 py-8 text-center text-white/60">Loading deliveries...</td></tr>
             ) : pos.length === 0 ? (
-              <tr><td colSpan="6" className="px-6 py-8 text-center text-white/40">No incoming deliveries found.</td></tr>
+              <tr><td colSpan="6" className="px-6 py-8 text-center text-white/60">No incoming deliveries found.</td></tr>
             ) : pos.map((po) => (
               <tr key={po.id} className="hover:bg-white/5 transition-colors">
                 <td className="px-6 py-4 font-mono text-white">{po.po_number}</td>

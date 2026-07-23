@@ -144,13 +144,13 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                         type="button"
                         onClick={() => handleTogglePin(b.id)}
                         className={`px-2 py-0.5 rounded text-xs font-bold border transition-all ${
-                          b.is_pinned ? 'bg-amber text-navy border-amber font-extrabold' : 'bg-white/5 border-white/10 text-white/40 hover:text-white'
+                          b.is_pinned ? 'bg-amber text-navy border-amber font-extrabold' : 'bg-white/5 border-white/10 text-white/60 hover:text-white'
                         }`}
                         title="Pin this batch to priority top"
                       >
                         {b.is_pinned ? '📌 Pinned Priority' : '📌 Pin Batch'}
                       </button>
-                      <span className="text-white/40 text-xs">ID: {b.id}</span>
+                      <span className="text-white/60 text-xs">ID: {b.id}</span>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -165,7 +165,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                       <button
                         type="button"
                         onClick={() => handleDeleteBatch(b.id)}
-                        className="text-white/30 hover:text-crimson transition-colors p-1"
+                        className="text-white/55 hover:text-crimson transition-colors p-1"
                         title="Remove Batch"
                       >
                         🗑️
@@ -176,7 +176,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                   {/* Inline Editable Fields for this specific batch */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs text-white/40 uppercase mb-1">Cargo Box Code</label>
+                      <label className="block text-xs text-white/60 uppercase mb-1">Cargo Box Code</label>
                       <input
                         type="text"
                         value={b.box_code}
@@ -186,7 +186,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                     </div>
 
                     <div>
-                      <label className="block text-xs text-white/40 uppercase mb-1">Quantity (Pcs)</label>
+                      <label className="block text-xs text-white/60 uppercase mb-1">Quantity (Pcs)</label>
                       <input
                         type="number"
                         value={b.qty}
@@ -196,7 +196,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                     </div>
 
                     <div>
-                      <label className="block text-xs text-white/40 uppercase mb-1">Expiration Date</label>
+                      <label className="block text-xs text-white/60 uppercase mb-1">Expiration Date</label>
                       <input
                         type="date"
                         value={b.expiry_date}
@@ -213,10 +213,10 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
 
         {/* Add New Batch Box Form */}
         <form onSubmit={handleAddBatch} className="bg-[#09090b] border border-white/10 p-4 rounded-xl space-y-3">
-          <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Add New Incoming Shipment Box Batch</h4>
+          <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Add an incoming box batch</h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm font-mono">
             <div>
-              <label className="block text-xs text-white/40 mb-1">Box / Cargo Code</label>
+              <label className="block text-xs text-white/60 mb-1">Box / Cargo Code</label>
               <input
                 type="text"
                 value={newBoxCode}
@@ -227,7 +227,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
             </div>
 
             <div>
-              <label className="block text-xs text-white/40 mb-1">Box Quantity (Pcs)</label>
+              <label className="block text-xs text-white/60 mb-1">Box Quantity (Pcs)</label>
               <input
                 type="number"
                 value={newQty}
@@ -237,7 +237,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
             </div>
 
             <div>
-              <label className="block text-xs text-white/40 mb-1">Batch Expiration Date</label>
+              <label className="block text-xs text-white/60 mb-1">Batch Expiration Date</label>
               <input
                 type="date"
                 required
@@ -261,7 +261,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-neutral-400 hover:bg-white/10"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-neutral-300 hover:bg-white/10"
           >
             Cancel
           </button>

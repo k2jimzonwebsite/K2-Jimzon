@@ -220,12 +220,12 @@ export default function ChannelIntegrations() {
       <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
+            <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Omnichannel Integration Hub
             </span>
             <span className="text-sm text-neutral-300 font-bold">Marketplaces & Social API Manager</span>
           </div>
-          <h1 className="font-serif text-2xl font-black text-white">Marketplace & Social Media API Keys</h1>
+          <h1 className="font-serif text-2xl font-bold text-white">Marketplace & social API keys</h1>
           <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
             Input your Shopee, Lazada, TikTok Shop, Meta, and WhatsApp API credentials. These keys power automatic order fetching into Global Logistics and real-time inventory sync across all sales channels.
           </p>
@@ -233,7 +233,7 @@ export default function ChannelIntegrations() {
 
         <button
           onClick={handleSave}
-          className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-6 py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 shrink-0"
+          className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 shrink-0"
         >
           {savedSuccess ? '✓ Credentials Saved!' : '💾 Save API Credentials'}
         </button>
@@ -268,7 +268,7 @@ export default function ChannelIntegrations() {
                     <p className="text-sm font-mono text-neutral-300 font-bold truncate">{ch.badge}</p>
                   </div>
                 </div>
-                <span className={`text-sm font-mono font-black px-2.5 py-1 rounded-lg shrink-0 shadow ${
+                <span className={`text-sm font-mono font-bold px-2.5 py-1 rounded-lg shrink-0 shadow ${
                   ch.status === 'Connected' ? 'bg-blue text-white border border-blue' : 'bg-gold text-navy border border-gold'
                 }`}>
                   {ch.status === 'Connected' ? '🟢 Live' : '🟡 Auth'}
@@ -286,13 +286,13 @@ export default function ChannelIntegrations() {
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
                 <div 
-                  className="w-12 h-12 rounded-xl flex items-center justify-center font-black text-white text-xl shadow-md"
+                  className="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-white text-xl shadow-md"
                   style={{ backgroundColor: activeChannel.color }}
                 >
                   {activeChannel.name.charAt(0)}
                 </div>
                 <div>
-                  <h2 className="font-serif text-xl font-black text-white">{activeChannel.name}</h2>
+                  <h2 className="font-serif text-xl font-bold text-white">{activeChannel.name}</h2>
                   <p className="text-sm font-mono text-gold font-bold">{activeChannel.badge} · Last synced: {activeChannel.lastSync}</p>
                 </div>
               </div>
@@ -301,7 +301,7 @@ export default function ChannelIntegrations() {
                 <button
                   onClick={() => handleTestConnection(activeTab)}
                   disabled={testingChannel === activeTab}
-                  className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 shadow"
+                  className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 shadow"
                 >
                   {testingChannel === activeTab ? (
                     <>
@@ -316,7 +316,7 @@ export default function ChannelIntegrations() {
                 {isVaultUnlocked ? (
                   <button
                     onClick={() => setIsVaultUnlocked(false)}
-                    className="bg-crimson hover:bg-crimson-deep text-white font-black text-sm px-3.5 py-2.5 rounded-xl border border-crimson/50 transition-all flex items-center gap-1.5 shadow"
+                    className="bg-crimson hover:bg-crimson-deep text-white font-bold text-sm px-3.5 py-2.5 rounded-xl border border-crimson/50 transition-all flex items-center gap-1.5 shadow"
                   >
                     🔒 Relock Vault
                   </button>
@@ -330,7 +330,7 @@ export default function ChannelIntegrations() {
                 )}
 
                 <label className="flex items-center gap-2 cursor-pointer bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
-                  <span className="text-sm text-neutral-400 font-semibold">Enable Channel</span>
+                  <span className="text-sm text-neutral-300 font-semibold">Enable Channel</span>
                   <input
                     type="checkbox"
                     checked={activeChannel.enabled}
@@ -367,7 +367,7 @@ export default function ChannelIntegrations() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono uppercase text-white/40 mb-1">Partner ID / App ID</label>
+                  <label className="block text-xs font-mono uppercase text-white/60 mb-1">Partner ID / App ID</label>
                   <input
                     type="text"
                     value={activeChannel.partnerId}
@@ -378,7 +378,7 @@ export default function ChannelIntegrations() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono uppercase text-white/40 mb-1">App Key / Client ID</label>
+                  <label className="block text-xs font-mono uppercase text-white/60 mb-1">App Key / Client ID</label>
                   <input
                     type="text"
                     value={activeChannel.appKey}
@@ -389,7 +389,7 @@ export default function ChannelIntegrations() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono uppercase text-white/40 mb-1">App Secret / Client Secret</label>
+                  <label className="block text-xs font-mono uppercase text-white/60 mb-1">App Secret / Client Secret</label>
                   <input
                     type={isVaultUnlocked ? 'text' : 'password'}
                     value={isVaultUnlocked ? decryptSecret(activeChannel.appSecret) : maskSecret(activeChannel.appSecret)}
@@ -397,13 +397,13 @@ export default function ChannelIntegrations() {
                     disabled={!isVaultUnlocked}
                     placeholder="Enter App Secret..."
                     className={`w-full rounded-lg border px-3.5 py-2.5 text-sm font-mono outline-none ${
-                      isVaultUnlocked ? 'bg-[#0A101D] border-forest text-white' : 'bg-black/50 border-white/10 text-white/40 cursor-not-allowed'
+                      isVaultUnlocked ? 'bg-[#0A101D] border-forest text-white' : 'bg-black/50 border-white/10 text-white/60 cursor-not-allowed'
                     }`}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono uppercase text-white/40 mb-1">Shop ID / Seller Cipher</label>
+                  <label className="block text-xs font-mono uppercase text-white/60 mb-1">Shop ID / Seller Cipher</label>
                   <input
                     type="text"
                     value={activeChannel.shopId}
@@ -415,7 +415,7 @@ export default function ChannelIntegrations() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-white/40 mb-1">OAuth Access Token / Bearer Token</label>
+                <label className="block text-xs font-mono uppercase text-white/60 mb-1">OAuth Access Token / Bearer Token</label>
                 <input
                   type={isVaultUnlocked ? 'text' : 'password'}
                   value={isVaultUnlocked ? decryptSecret(activeChannel.accessToken) : maskSecret(activeChannel.accessToken)}
@@ -423,17 +423,17 @@ export default function ChannelIntegrations() {
                   disabled={!isVaultUnlocked}
                   placeholder="Paste OAuth Access Token..."
                   className={`w-full rounded-lg border px-3.5 py-2.5 text-sm font-mono outline-none ${
-                    isVaultUnlocked ? 'bg-[#0A101D] border-forest text-white' : 'bg-black/50 border-white/10 text-white/40 cursor-not-allowed'
+                    isVaultUnlocked ? 'bg-[#0A101D] border-forest text-white' : 'bg-black/50 border-white/10 text-white/60 cursor-not-allowed'
                   }`}
                 />
               </div>
 
               {/* Webhook Endpoint Config */}
               <div className="pt-2">
-                <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50 mb-3">Webhook Integration Endpoint</h3>
+                <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50 mb-3">Webhook URL</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="md:col-span-2">
-                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Incoming Webhook Callback URL</label>
+                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Incoming Webhook Callback URL</label>
                     <div className="flex gap-2">
                       <input
                         type="text"
@@ -451,7 +451,7 @@ export default function ChannelIntegrations() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono uppercase text-white/40 mb-1">Webhook Secret Verification Key</label>
+                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Webhook Secret Verification Key</label>
                     <input
                       type="text"
                       value={activeChannel.webhookSecret}
@@ -465,13 +465,13 @@ export default function ChannelIntegrations() {
 
               {/* Automation Sync Toggles */}
               <div className="pt-4 border-t border-white/10">
-                <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50 mb-3">Automation & Synchronization Rules</h3>
+                <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50 mb-3">Sync & automation rules</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   
                   <div className="bg-[#0A101D] border border-white/10 p-4 rounded-xl flex items-center justify-between">
                     <div>
                       <p className="text-sm font-bold text-white">Auto Sync Stock</p>
-                      <p className="text-xs text-white/40 mt-0.5">Decrement channel stock when sold</p>
+                      <p className="text-xs text-white/60 mt-0.5">Decrement channel stock when sold</p>
                     </div>
                     <input
                       type="checkbox"
@@ -484,7 +484,7 @@ export default function ChannelIntegrations() {
                   <div className="bg-[#0A101D] border border-white/10 p-4 rounded-xl flex items-center justify-between">
                     <div>
                       <p className="text-sm font-bold text-white">Auto Pull Orders</p>
-                      <p className="text-xs text-white/40 mt-0.5">Push orders to Global Logistics</p>
+                      <p className="text-xs text-white/60 mt-0.5">Push orders to Global Logistics</p>
                     </div>
                     <input
                       type="checkbox"
@@ -497,7 +497,7 @@ export default function ChannelIntegrations() {
                   <div className="bg-[#0A101D] border border-white/10 p-4 rounded-xl flex items-center justify-between">
                     <div>
                       <p className="text-sm font-bold text-white">Push Price Updates</p>
-                      <p className="text-xs text-white/40 mt-0.5">Sync master SRP changes live</p>
+                      <p className="text-xs text-white/60 mt-0.5">Sync master SRP changes live</p>
                     </div>
                     <input
                       type="checkbox"
@@ -516,17 +516,17 @@ export default function ChannelIntegrations() {
           {/* Sync Activity Log Footer Card */}
           <div className="bg-[#09090b] border border-white/10 rounded-2xl p-5 shadow-xl">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50">Recent Omnichannel Sync Activity</h3>
+              <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50">Recent channel sync activity</h3>
               <span className="text-xs font-mono text-forest">Live Monitor Active</span>
             </div>
             <div className="space-y-2 text-sm font-mono">
               <div className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5">
                 <span className="text-neutral-300">Shopee Webhook Order #260722-SHP01 received $\rightarrow$ Pushed to Global Logistics</span>
-                <span className="text-white/40 text-xs">2 mins ago</span>
+                <span className="text-white/60 text-xs">2 mins ago</span>
               </div>
               <div className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5">
                 <span className="text-neutral-300">Inventory Auto-Deducted: KIKO-3D-05 (-2 units) across Shopee, Lazada & Website</span>
-                <span className="text-white/40 text-xs">5 mins ago</span>
+                <span className="text-white/60 text-xs">5 mins ago</span>
               </div>
             </div>
           </div>
@@ -543,7 +543,7 @@ export default function ChannelIntegrations() {
               <div className="w-12 h-12 rounded-full bg-forest/20 text-forest font-bold text-2xl flex items-center justify-center mx-auto border border-forest/30 mb-2">
                 🔐
               </div>
-              <h3 className="font-serif text-xl font-bold text-white">Unlock AES-256 Vault</h3>
+              <h3 className="font-serif text-xl font-bold text-white">Unlock secure vault</h3>
               <p className="text-sm text-white/60 mt-1 font-mono">
                 Enter 6-digit TOTP code to view and edit decrypted App Secrets.
               </p>
@@ -565,9 +565,9 @@ export default function ChannelIntegrations() {
                   placeholder="202688"
                   autoFocus
                   required
-                  className="w-full text-center tracking-[0.4em] font-mono text-2xl font-bold rounded-xl border border-forest/50 bg-black/50 px-4 py-3 text-forest placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-forest"
+                  className="w-full text-center tracking-[0.4em] font-mono text-2xl font-bold rounded-xl border border-forest/50 bg-black/50 px-4 py-3 text-forest placeholder:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-forest"
                 />
-                <p className="text-xs text-white/40 mt-1.5 text-center font-mono">
+                <p className="text-xs text-white/60 mt-1.5 text-center font-mono">
                   Demo 2FA code: <span className="text-forest font-bold">202688</span> or <span className="text-forest font-bold">123456</span>
                 </p>
               </div>
@@ -576,7 +576,7 @@ export default function ChannelIntegrations() {
                 <button
                   type="button"
                   onClick={() => setShowUnlockModal(false)}
-                  className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 text-sm font-semibold text-neutral-400 hover:bg-white/10 transition-all"
+                  className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 text-sm font-semibold text-neutral-300 hover:bg-white/10 transition-all"
                 >
                   Cancel
                 </button>

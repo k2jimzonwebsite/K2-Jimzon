@@ -3,249 +3,143 @@ import { supabase } from '../../lib/supabaseClient'
 import { peso } from '../../data/products'
 import AdminVisualWorkflowGraph from './AdminVisualWorkflowGraph'
 
-export default function Overview({ setSection }) {
+export default function Overview({ setSection, skus = 0, lowStock = 0, pending = 0 }) {
   const [salesToday, setSalesToday] = useState(0)
-  const [pendingOrders, setPendingOrders] = useState(0)
-  const [lowStockCount, setLowStockCount] = useState(0)
-  const [activeProductsCount, setActiveProductsCount] = useState(0)
-  const [recentVipOrders, setRecentVipOrders] = useState([])
-  const [topMovers, setTopMovers] = useState([])
 
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase) return
     fetchData()
-
     const channel = supabase.channel('overview_updates')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, fetchData)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchData)
       .subscribe()
-
     return () => supabase.removeChannel(channel)
   }, [])
 
   const fetchData = async () => {
-    if (!supabase) return;
+    if (!supabase) return
     try {
-      const { count: pCount } = await supabase.from('orders')
-        .select('*', { count: 'exact', head: true })
-        .eq('order_status', 'Pending')
-      if (pCount !== null && pCount !== undefined) setPendingOrders(pCount)
-
-      const { count: lCount } = await supabase.from('products')
-        .select('*', { count: 'exact', head: true })
-        .lte('stock_available', 5)
-      if (lCount !== null && lCount !== undefined) setLowStockCount(lCount)
-
-      const { count: prodCount } = await supabase.from('products')
-        .select('*', { count: 'exact', head: true })
-      if (prodCount !== null && prodCount !== undefined) setActiveProductsCount(prodCount)
-
-      const { data: allOrders } = await supabase.from('orders').select('quantity, sku, products(srp, wholesale_price), channel_source')
-      
-      if (allOrders && Array.isArray(allOrders) && allOrders.length > 0) {
+      const { data: allOrders } = await supabase.from('orders')
+        .select('quantity, sku, products(srp, wholesale_price), channel_source')
+      if (Array.isArray(allOrders) && allOrders.length > 0) {
         let revenue = 0
-        let vipRecents = []
-        
         allOrders.forEach(o => {
           const prodObj = Array.isArray(o.products) ? o.products[0] : o.products
           const price = o.channel_source === 'website_vip' ? prodObj?.wholesale_price : prodObj?.srp
-          if (price) revenue += (price * (o.quantity || 1))
-
-          if (o.channel_source === 'website_vip') {
-            vipRecents.push({
-              id: o.sku,
-              user: 'VIP Customer',
-              amount: (price || 0) * (o.quantity || 1)
-            })
-          }
+          if (price) revenue += price * (o.quantity || 1)
         })
         setSalesToday(revenue)
-        setRecentVipOrders(vipRecents.slice(0, 5))
       } else {
         setSalesToday(0)
-        setRecentVipOrders([])
-      }
-
-      const { data: prods } = await supabase.from('products').select('sku, title, stock_available').order('srp', { ascending: false }).limit(3)
-      if (prods && Array.isArray(prods)) {
-        setTopMovers(prods)
       }
     } catch (err) {
-      console.warn("Overview fetchData warning:", err)
+      console.warn('Overview fetchData warning:', err)
     }
   }
 
-  // Calculate real metrics or zero states
-  const formattedRevenue = salesToday > 0 ? peso(salesToday) : '₱0'
-  const estimatedCost = salesToday > 0 ? peso(salesToday * 0.5) : '₱0'
-  const estimatedProfit = salesToday > 0 ? peso(salesToday * 0.35) : '₱0'
+  const revenue = salesToday > 0 ? peso(salesToday) : '₱0'
+  const cogs = salesToday > 0 ? peso(salesToday * 0.5) : '₱0'
+  const profit = salesToday > 0 ? peso(salesToday * 0.35) : '₱0'
+
+  const metrics = [
+    { label: "Today's sales", value: revenue, tone: 'default' },
+    { label: 'Pending fulfillment', value: String(pending), tone: pending > 0 ? 'warn' : 'default' },
+    { label: 'Low-stock alerts', value: String(lowStock), tone: lowStock > 0 ? 'danger' : 'default' },
+    { label: 'Active SKUs', value: String(skus), tone: 'default' },
+  ]
+
+  const actions = [
+    { label: 'Inventory', sub: 'Catalog & stock', target: 'inventory' },
+    { label: 'Fulfillment', sub: 'Pack & handover', target: 'omni_hub' },
+    { label: 'Pasabuy', sub: 'Custom quotes', target: 'pasabuy_manager' },
+    { label: 'Staff & roles', sub: 'PINs & access', target: 'staff_permissions' },
+  ]
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300 font-sans">
-      
-      {/* Health Monitors */}
+    <div className="space-y-6 animate-in fade-in duration-300 font-sans w-full">
+
+      {/* Metrics — single canonical KPI row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <HealthWidget label="Today's Sales" status={salesToday > 0 ? "good text-gold" : "good text-white"} val={formattedRevenue} />
-        <HealthWidget label="Low Stock Alerts" status={lowStockCount > 0 ? "warning" : "good"} val={String(lowStockCount)} />
-        <HealthWidget label="Pending Fulfillment" status={pendingOrders > 0 ? "warning" : "good"} val={String(pendingOrders)} />
-        <HealthWidget label="Active SKUs" status="good" val={String(activeProductsCount || 18)} />
+        {metrics.map(m => (
+          <div key={m.label} className="rounded-xl border border-white/10 bg-[#12161F] px-4 py-3.5">
+            <p className="text-xs text-white/60">{m.label}</p>
+            <p className={
+              'mt-1.5 text-2xl font-semibold tabular-nums ' +
+              (m.tone === 'danger' ? 'text-crimson' : m.tone === 'warn' ? 'text-amber' : 'text-white')
+            }>
+              {m.value}
+            </p>
+          </div>
+        ))}
       </div>
 
-      {/* 🔀 Visual Operational Workflow DAG Graph (Single Clear Flowchart) */}
+      {/* Operational workflow map */}
       <AdminVisualWorkflowGraph onNavigate={setSection} />
 
-      {/* 💰 Master Metrics Financial Landed P&L Summary */}
-      <div className="bg-[#18181b] border border-white/20 rounded-2xl p-6 shadow-xl space-y-4 text-white">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-          <div>
-            <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
-              Master Financial P&L Cockpit
-            </span>
-            <h2 className="font-serif text-2xl font-black text-white mt-2">Today's Landed Revenue & Profit</h2>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+
+        {/* Financial summary */}
+        <div className="lg:col-span-2 rounded-xl border border-white/10 bg-[#12161F] p-5">
+          <div className="flex items-baseline justify-between mb-4">
+            <h2 className="text-sm font-semibold text-white">Today's landed P&amp;L</h2>
+            <span className="text-xs text-white/60">estimated</span>
           </div>
-          <div className="text-right">
-            <p className="text-sm text-neutral-300 font-bold uppercase">Net Cash Revenue</p>
-            <p className="font-mono tabular-nums text-3xl font-black text-gold">{formattedRevenue}</p>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <p className="text-xs text-white/60">Gross revenue</p>
+              <p className="mt-1 text-xl font-semibold tabular-nums text-white">{revenue}</p>
+            </div>
+            <div>
+              <p className="text-xs text-white/60">Sourcing COGS</p>
+              <p className="mt-1 text-xl font-semibold tabular-nums text-white/70">-{cogs}</p>
+            </div>
+            <div>
+              <p className="text-xs text-white/60">Net profit</p>
+              <p className="mt-1 text-xl font-semibold tabular-nums text-blue">{profit}</p>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-base font-mono">
-          <div className="bg-[#27272a] p-4 rounded-xl border border-white/10">
-            <p className="text-gold text-sm uppercase font-extrabold">Gross Revenue</p>
-            <p className="text-white text-xl font-black tabular-nums mt-1">{formattedRevenue}</p>
-            <p className="text-neutral-300 text-sm mt-1 font-sans">Live Channel Total</p>
-          </div>
-
-          <div className="bg-[#27272a] p-4 rounded-xl border border-white/10">
-            <p className="text-gold text-sm uppercase font-extrabold">Sourcing COGS</p>
-            <p className="text-crimson text-xl font-black tabular-nums mt-1">-{estimatedCost}</p>
-            <p className="text-neutral-300 text-sm mt-1 font-sans">Est. Italy Landed Cost</p>
-          </div>
-
-          <div className="bg-[#27272a] p-4 rounded-xl border border-white/10">
-            <p className="text-gold text-sm uppercase font-extrabold">Pending Orders</p>
-            <p className="text-white text-xl font-black tabular-nums mt-1">{pendingOrders} Orders</p>
-            <p className="text-neutral-300 text-sm mt-1 font-sans">Awaiting Packing</p>
-          </div>
-
-          <div className="bg-blue/20 p-4 rounded-xl border border-blue text-white shadow-md">
-            <p className="text-blue text-sm uppercase font-black">Net Cash Profit</p>
-            <p className="text-white text-xl font-black tabular-nums mt-1">{estimatedProfit}</p>
-            <p className="text-neutral-200 text-sm mt-1 font-sans font-bold">Clear Cash Flow</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        
-        {/* Left Column - Commerce */}
-        <div className="space-y-6">
-          
-          {/* 🛬 Real-Time Flight Cargo Box Arrival & Handover Feed */}
-          <div className="rounded-2xl border border-white/20 bg-[#18181b] overflow-hidden text-white shadow-xl">
-            <div className="border-b border-white/10 px-5 py-4 flex items-center justify-between bg-blue/20">
-              <h3 className="text-base font-black uppercase tracking-wider text-white flex items-center gap-2">
-                <span>🛬</span> Air Cargo Flight Arrival Feed
-              </h3>
-              <span className="text-sm font-mono text-white bg-blue px-2.5 py-1 rounded-full font-black shadow">Live Feed</span>
-            </div>
-            <div className="p-4 space-y-3 font-sans text-sm">
-              <div className="p-4 rounded-xl bg-[#27272a] border border-white/10 space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="font-extrabold text-white text-base">🛬 Flight AZ-772 (Malpensa MXP → NAIA)</span>
-                  <span className="text-sm text-gold font-bold">Air Cargo Operational</span>
-                </div>
-                <p className="text-neutral-200 text-sm font-medium">Custody verification active. Staff station PIN claims enabled.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Low Stock Warning Box */}
-          {lowStockCount > 0 ? (
-            <div className="rounded-2xl border border-crimson/50 bg-crimson/15 p-5 text-white shadow-xl space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="font-black text-crimson text-base uppercase flex items-center gap-2">
-                  <span>⚠️</span> {lowStockCount} Low-Stock Alert Items
-                </h3>
-                <button
-                  onClick={() => setSection && setSection('inventory')}
-                  className="text-sm font-bold bg-crimson hover:bg-crimson-deep text-white px-3 py-1.5 rounded-lg shadow"
-                >
-                  Manage Stock ➔
-                </button>
-              </div>
-              <p className="text-sm text-neutral-200 font-medium">
-                Some inventory items have dropped below 5 units. Reorder or create Pasabuy sourcing requests.
-              </p>
-            </div>
+        {/* Status + quick actions */}
+        <div className="space-y-4">
+          {lowStock > 0 ? (
+            <button
+              onClick={() => setSection && setSection('inventory')}
+              className="w-full text-left rounded-xl border border-crimson/30 bg-crimson/10 p-4 hover:bg-crimson/15 transition-colors"
+            >
+              <p className="text-sm font-medium text-crimson">{lowStock} items low on stock</p>
+              <p className="text-xs text-white/50 mt-0.5">Reorder or create a Pasabuy sourcing request →</p>
+            </button>
           ) : (
-            <div className="rounded-2xl border border-white/10 bg-[#18181b] p-5 text-white shadow-xl">
-              <div className="flex items-center justify-between">
-                <h3 className="font-black text-gold text-base uppercase flex items-center gap-2">
-                  <span>✓</span> Stock Levels Healthy
-                </h3>
-                <span className="text-sm font-mono text-neutral-300">0 Critical Stock Warnings</span>
-              </div>
+            <div className="rounded-xl border border-white/10 bg-[#12161F] p-4">
+              <p className="text-sm text-white/70">Stock levels healthy</p>
+              <p className="text-xs text-white/60 mt-0.5">No critical stock warnings.</p>
             </div>
           )}
 
-        </div>
-
-        {/* Right Column - Quick Actions */}
-        <div className="space-y-6">
-          <div className="rounded-2xl border border-white/20 bg-[#18181b] p-6 space-y-4 shadow-xl">
-            <h3 className="text-base font-black uppercase text-gold">Quick Jump Operations</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => setSection('inventory')}
-                className="p-4 rounded-xl bg-[#27272a] hover:bg-blue/20 border border-white/10 hover:border-blue text-left transition-all group"
-              >
-                <span className="text-2xl block mb-1">📊</span>
-                <span className="text-sm font-black text-white group-hover:text-blue">Sheet Mode & Inventory</span>
-              </button>
-
-              <button
-                onClick={() => setSection('omni_hub')}
-                className="p-4 rounded-xl bg-[#27272a] hover:bg-gold/20 border border-white/10 hover:border-gold text-left transition-all group"
-              >
-                <span className="text-2xl block mb-1">📦</span>
-                <span className="text-sm font-black text-white group-hover:text-gold">Staff Handover & Pack</span>
-              </button>
-
-              <button
-                onClick={() => setSection('pasabuy')}
-                className="p-4 rounded-xl bg-[#27272a] hover:bg-forest/20 border border-white/10 hover:border-forest text-left transition-all group"
-              >
-                <span className="text-2xl block mb-1">✈️</span>
-                <span className="text-sm font-black text-white group-hover:text-forest">Pasabuy Sourcing</span>
-              </button>
-
-              <button
-                onClick={() => setSection('staff_permissions')}
-                className="p-4 rounded-xl bg-[#27272a] hover:bg-crimson/20 border border-white/10 hover:border-crimson text-left transition-all group"
-              >
-                <span className="text-2xl block mb-1">🔒</span>
-                <span className="text-sm font-black text-white group-hover:text-crimson">Staff PINs & Roles</span>
-              </button>
-            </div>
+          <div className="rounded-xl border border-white/10 bg-[#12161F] p-4">
+            <p className="text-sm text-white/70">Flight AZ-772 · MXP → NAIA</p>
+            <p className="text-xs text-white/60 mt-0.5">Custody verification active · staff PIN claims enabled.</p>
           </div>
         </div>
-
       </div>
 
-    </div>
-  )
-}
-
-function HealthWidget({ label, status, val }) {
-  return (
-    <div className="rounded-xl border border-white/20 bg-[#18181b] p-4 text-white shadow-md flex items-center justify-between">
+      {/* Quick jump */}
       <div>
-        <p className="text-xs font-extrabold uppercase text-gold truncate">{label}</p>
-        <p className="text-xl font-black mt-1">{val || 'Operational'}</p>
+        <p className="text-xs text-white/60 mb-2">Quick jump</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {actions.map(a => (
+            <button
+              key={a.target}
+              onClick={() => setSection(a.target)}
+              className="text-left rounded-xl border border-white/10 bg-[#12161F] p-4 hover:border-blue/40 hover:bg-blue/[0.06] transition-colors"
+            >
+              <p className="text-sm font-medium text-white">{a.label}</p>
+              <p className="text-xs text-white/60 mt-0.5">{a.sub}</p>
+            </button>
+          ))}
+        </div>
       </div>
-      <span className={`h-3 w-3 rounded-full ${status === 'good' ? 'bg-blue pulse-dot' : 'bg-gold pulse-dot'}`} />
+
     </div>
   )
 }

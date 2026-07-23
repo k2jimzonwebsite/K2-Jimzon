@@ -52,7 +52,7 @@ function Shell() {
 
   return (
     <div className="min-h-screen overflow-x-hidden">
-      {isDevOrDemoHash && <DemoRail />}
+      {isDevOrDemoHash && activeViewKey !== 'admin' && <DemoRail />}
       {isStorefront && <StoreHeader />}
       <ErrorBoundary key={activeViewKey}>
         <Suspense fallback={<div className="min-h-screen bg-cream animate-pulse flex items-center justify-center text-navy/40 font-mono text-xs">Loading K2 Jimzon...</div>}>

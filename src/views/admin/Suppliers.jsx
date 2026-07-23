@@ -81,7 +81,7 @@ export default function Suppliers() {
           <div className="flex items-center gap-2 border-b border-white/10 pb-3">
             <span className="text-lg">🕸️</span>
             <div>
-              <h3 className="font-bold text-white text-base font-serif">Italy Supermarket & Boutique Price Scraper</h3>
+              <h3 className="font-bold text-white text-base font-serif">Italy price finder</h3>
               <p className="text-white/50 text-xs">Auto-scrapes live EUR price (€) from Esselunga, Carrefour & KIKO Milan</p>
             </div>
           </div>
@@ -92,7 +92,7 @@ export default function Suppliers() {
               value={scrapeUrl}
               onChange={(e) => setScrapeUrl(e.target.value)}
               placeholder="Paste URL (e.g. https://www.kikocosmetics.com/it-it/...)"
-              className="flex-1 rounded-xl border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-blue outline-none min-h-[44px]"
+              className="flex-1 rounded-xl border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-white placeholder:text-white/55 focus:border-blue outline-none min-h-[44px]"
             />
             <button
               type="submit"
@@ -110,7 +110,7 @@ export default function Suppliers() {
                 <span>€{scrapeResult.price_eur}</span>
               </div>
               <p className="text-white/60 text-xs">Landed Cost Manila: <span className="text-amber font-bold">₱{scrapeResult.landed_php}</span> (Air Freight + Duty Tax included)</p>
-              <p className="text-white/40 text-xs">Source: {scrapeResult.store} · Scraped at {scrapeResult.scraped_at}</p>
+              <p className="text-white/60 text-xs">Source: {scrapeResult.store} · Scraped at {scrapeResult.scraped_at}</p>
             </div>
           )}
         </div>
@@ -120,7 +120,7 @@ export default function Suppliers() {
           <div className="flex items-center gap-2 border-b border-white/10 pb-3">
             <span className="text-lg">📊</span>
             <div>
-              <h3 className="font-bold text-white text-base font-serif">Plain-English AI Data & Inventory Query Agent</h3>
+              <h3 className="font-bold text-white text-base font-serif">Ask about your data</h3>
               <p className="text-white/50 text-xs">Ask plain-English questions about sales, profits, or stock levels</p>
             </div>
           </div>
@@ -131,7 +131,7 @@ export default function Suppliers() {
               value={dataQuery}
               onChange={(e) => setDataQuery(e.target.value)}
               placeholder="Ask: Which items have low stock? or What is profit today?"
-              className="flex-1 rounded-xl border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-forest outline-none min-h-[44px]"
+              className="flex-1 rounded-xl border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-white placeholder:text-white/55 focus:border-forest outline-none min-h-[44px]"
             />
             <button
               type="submit"
@@ -144,7 +144,7 @@ export default function Suppliers() {
           {dataAnswer && (
             <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 text-white space-y-2 animate-in fade-in">
               <p className="font-bold text-neutral-200">{dataAnswer.answer}</p>
-              <p className="text-xs text-white/40 font-mono bg-black/40 p-2 rounded border border-white/5">{dataAnswer.sql}</p>
+              <p className="text-xs text-white/60 font-mono bg-black/40 p-2 rounded border border-white/5">{dataAnswer.sql}</p>
             </div>
           )}
         </div>
@@ -173,11 +173,11 @@ export default function Suppliers() {
               
               <div className="p-5 grid grid-cols-2 gap-4 flex-1">
                 <div>
-                  <p className="text-sm font-mono uppercase tracking-widest text-white/40">Lead Time</p>
+                  <p className="text-sm font-mono uppercase tracking-widest text-white/60">Lead Time</p>
                   <p className="mt-1 text-xl font-bold text-neutral-200">{sup.lead_time_days} days</p>
                 </div>
                 <div>
-                  <p className="text-sm font-mono uppercase tracking-widest text-white/40">Perf Score</p>
+                  <p className="text-sm font-mono uppercase tracking-widest text-white/60">Perf Score</p>
                   <div className="mt-1 flex items-center gap-2">
                     <span className={`text-xl font-bold ${sup.performance_score >= 90 ? 'text-forest' : sup.performance_score >= 70 ? 'text-amber' : 'text-crimson'}`}>
                       {sup.performance_score}/100
@@ -185,13 +185,13 @@ export default function Suppliers() {
                   </div>
                 </div>
                 <div className="col-span-2">
-                  <p className="text-sm font-mono uppercase tracking-widest text-white/40">Balance</p>
+                  <p className="text-sm font-mono uppercase tracking-widest text-white/60">Balance</p>
                   <p className="mt-1 text-xl font-bold text-amber">{peso(sup.outstanding_balance)}</p>
                 </div>
               </div>
               
               <div className="p-3 border-t border-white/10 bg-white/5 grid grid-cols-2 gap-2">
-                <button className="rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm font-medium text-neutral-400 hover:bg-white/10 transition-colors min-h-[40px]">Edit Profile</button>
+                <button className="rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm font-medium text-neutral-300 hover:bg-white/10 transition-colors min-h-[40px]">Edit Profile</button>
                 <button className="rounded-lg border border-blue bg-blue/10 px-3 py-2 text-sm font-medium text-blue hover:bg-blue/20 transition-colors min-h-[40px]">Draft PO</button>
               </div>
             </div>

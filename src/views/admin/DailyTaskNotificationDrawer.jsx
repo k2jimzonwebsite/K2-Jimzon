@@ -80,7 +80,7 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
               </span>
               <span className="text-sm font-mono text-white/50">{activeTasks.length} Pending Tasks</span>
             </div>
-            <h2 className="font-serif text-xl font-bold text-white mt-1">Today's Actionable Tasks</h2>
+            <h2 className="font-serif text-xl font-bold text-white mt-1">Today's tasks</h2>
           </div>
 
           <button
@@ -120,13 +120,13 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
                   }`}>
                     {task.priority === 'high' ? 'High Priority' : 'Action Required'}
                   </span>
-                  <span className="text-xs text-white/40">{task.id}</span>
+                  <span className="text-xs text-white/60">{task.id}</span>
                 </div>
 
                 <div>
                   <h3 className="font-bold text-white text-base">{task.title}</h3>
-                  <p className="text-neutral-400 font-semibold mt-0.5">{task.subtitle}</p>
-                  <p className="text-white/40 text-xs mt-1">{task.details}</p>
+                  <p className="text-neutral-300 font-semibold mt-0.5">{task.subtitle}</p>
+                  <p className="text-white/60 text-xs mt-1">{task.details}</p>
                 </div>
 
                 <button
@@ -141,7 +141,7 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-white/10 bg-[#09090b] text-xs font-mono text-white/40 text-center">
+        <div className="p-4 border-t border-white/10 bg-[#09090b] text-xs font-mono text-white/60 text-center">
           K2 Jimzon BOS · Automated Task Engine Active
         </div>
 

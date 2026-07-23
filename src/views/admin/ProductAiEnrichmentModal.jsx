@@ -117,7 +117,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
             <span className="text-2xl leading-none">✨</span>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-serif font-bold text-xl text-white">AI Product Spec Enricher</h2>
+                <h2 className="font-serif font-bold text-xl text-white">AI product details helper</h2>
                 <span className="text-xs font-mono font-bold bg-amber/20 text-amber px-1.5 py-0.5 rounded border border-amber/30 uppercase">
                   Shopee / Channel Connector
                 </span>
@@ -145,7 +145,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 
         {/* Missing Fields Audit */}
         <div className="space-y-2">
-          <label className="block text-xs font-mono uppercase text-white/40 font-bold">
+          <label className="block text-xs font-mono uppercase text-white/60 font-bold">
             Spec Audit ({missingSpecs.length} Incomplete Fields):
           </label>
           <div className="flex flex-wrap gap-1.5">
@@ -212,15 +212,15 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
           <div className="p-4 rounded-xl bg-white/5 border border-forest/40 space-y-3 font-mono text-sm animate-in fade-in">
             <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <span className="text-forest font-bold text-base font-sans">✓ Enriched Product Master Preview:</span>
-              <span className="text-xs text-white/40">Ready to Save</span>
+              <span className="text-xs text-white/60">Ready to Save</span>
             </div>
 
             <div className="space-y-2 text-xs">
               <p><strong className="text-amber">Origin:</strong> {enrichedData.origin}</p>
-              <p><strong className="text-neutral-400">Description:</strong> {enrichedData.description}</p>
-              <p><strong className="text-neutral-400">Usage Instructions:</strong> {enrichedData.usage_instructions}</p>
-              <p><strong className="text-neutral-400">Storage & FEFO:</strong> {enrichedData.storage_instructions}</p>
-              <p><strong className="text-neutral-400">Wholesale Price:</strong> ₱{enrichedData.wholesale_price.toLocaleString()}</p>
+              <p><strong className="text-neutral-300">Description:</strong> {enrichedData.description}</p>
+              <p><strong className="text-neutral-300">Usage Instructions:</strong> {enrichedData.usage_instructions}</p>
+              <p><strong className="text-neutral-300">Storage & FEFO:</strong> {enrichedData.storage_instructions}</p>
+              <p><strong className="text-neutral-300">Wholesale Price:</strong> ₱{enrichedData.wholesale_price.toLocaleString()}</p>
             </div>
 
             <button

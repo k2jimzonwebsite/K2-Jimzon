@@ -54,7 +54,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
 
         {/* Staff Profile Selection Cards */}
         <div className="space-y-2">
-          <p className="text-xs text-white/40 uppercase font-bold">1. Select Staff Profile:</p>
+          <p className="text-xs text-white/60 uppercase font-bold">1. Select Staff Profile:</p>
           <div className="grid grid-cols-3 gap-2">
             {STAFF_PROFILES.map((staff) => (
               <button
@@ -69,7 +69,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
               >
                 <span className="text-xl block mb-1">{staff.icon}</span>
                 <span className="block text-xs truncate font-semibold">{staff.name.split(' ')[0]}</span>
-                <span className="block text-xs text-white/40">{staff.location.split(' ')[0]}</span>
+                <span className="block text-xs text-white/60">{staff.location.split(' ')[0]}</span>
               </button>
             ))}
           </div>
@@ -78,7 +78,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
         {/* PIN Entry Form */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs text-white/40 uppercase font-bold mb-1.5">
+            <label className="block text-xs text-white/60 uppercase font-bold mb-1.5">
               2. Enter 4-Digit PIN Code for {selectedStaff.name}:
             </label>
             <input
@@ -106,7 +106,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
           </button>
         </form>
 
-        <div className="text-xs text-white/30 text-center border-t border-white/10 pt-3">
+        <div className="text-xs text-white/55 text-center border-t border-white/10 pt-3">
           K2 Jimzon BOS · Quick PIN Authentication Active
         </div>
 

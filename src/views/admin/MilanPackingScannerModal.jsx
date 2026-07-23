@@ -159,7 +159,7 @@ export default function MilanPackingScannerModal({
             </span>
             <span className="text-sm text-white/50">Milan, Italy</span>
           </div>
-          <h2 className="font-serif font-semibold text-xl text-white">Flight Box Packing Scanner</h2>
+          <h2 className="font-serif font-semibold text-xl text-white">Pack a flight box</h2>
         </div>
         <button
           onClick={onClose}
@@ -173,7 +173,7 @@ export default function MilanPackingScannerModal({
       {/* Progress Banner */}
       <div className="bg-[#020408] border-b border-white/10 px-4 py-3 flex items-center justify-between shrink-0">
         <div>
-          <p className="text-xs font-mono uppercase tracking-widest text-white/40">Milan Box Units Packed</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/60">Milan Box Units Packed</p>
           <p className="text-base font-bold text-white">
             <span className="text-crimson font-mono text-lg">{totalPacked}</span> units packed into Flight Consignment
           </p>
@@ -241,7 +241,7 @@ export default function MilanPackingScannerModal({
 
         {/* Quick Tap SKU Tiles for Italy */}
         <div>
-          <p className="text-xs font-mono uppercase tracking-widest text-white/40 mb-2">Tap to Increment Milan Box (+1)</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-white/60 mb-2">Tap to Increment Milan Box (+1)</p>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
             {items.map(item => (
               <button
@@ -268,7 +268,7 @@ export default function MilanPackingScannerModal({
               <span className="text-sm font-mono font-bold uppercase tracking-wider bg-amber/20 text-amber px-2.5 py-1 rounded">
                 Unrecognized Italian Item Barcode
               </span>
-              <span className="text-sm font-mono text-white/40">{unrecognizedCode}</span>
+              <span className="text-sm font-mono text-white/60">{unrecognizedCode}</span>
             </div>
 
             <div>
