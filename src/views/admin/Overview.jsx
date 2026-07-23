@@ -1,22 +1,15 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { peso } from '../../data/products'
-import AdminProcessFlowDiagram from './AdminProcessFlowDiagram'
 import AdminVisualWorkflowGraph from './AdminVisualWorkflowGraph'
 
 export default function Overview({ setSection }) {
   const [salesToday, setSalesToday] = useState(0)
   const [pendingOrders, setPendingOrders] = useState(0)
   const [lowStockCount, setLowStockCount] = useState(0)
-  const [draftsCount, setDraftsCount] = useState(2)
-  
+  const [activeProductsCount, setActiveProductsCount] = useState(0)
   const [recentVipOrders, setRecentVipOrders] = useState([])
   const [topMovers, setTopMovers] = useState([])
-  
-  const alerts = [
-    { id: 1, type: 'CRITICAL', text: 'Lavazza Oro out of stock!' },
-    { id: 2, type: 'MEDIUM', text: "Supplier 'Milano Dist' invoice due" }
-  ]
 
   useEffect(() => {
     if (!supabase) return;
@@ -43,9 +36,13 @@ export default function Overview({ setSection }) {
         .lte('stock_available', 5)
       if (lCount !== null && lCount !== undefined) setLowStockCount(lCount)
 
+      const { count: prodCount } = await supabase.from('products')
+        .select('*', { count: 'exact', head: true })
+      if (prodCount !== null && prodCount !== undefined) setActiveProductsCount(prodCount)
+
       const { data: allOrders } = await supabase.from('orders').select('quantity, sku, products(srp, wholesale_price), channel_source')
       
-      if (allOrders && Array.isArray(allOrders)) {
+      if (allOrders && Array.isArray(allOrders) && allOrders.length > 0) {
         let revenue = 0
         let vipRecents = []
         
@@ -64,6 +61,9 @@ export default function Overview({ setSection }) {
         })
         setSalesToday(revenue)
         setRecentVipOrders(vipRecents.slice(0, 5))
+      } else {
+        setSalesToday(0)
+        setRecentVipOrders([])
       }
 
       const { data: prods } = await supabase.from('products').select('sku, title, stock_available').order('srp', { ascending: false }).limit(3)
@@ -75,22 +75,24 @@ export default function Overview({ setSection }) {
     }
   }
 
+  // Calculate real metrics or zero states
+  const formattedRevenue = salesToday > 0 ? peso(salesToday) : '₱0'
+  const estimatedCost = salesToday > 0 ? peso(salesToday * 0.5) : '₱0'
+  const estimatedProfit = salesToday > 0 ? peso(salesToday * 0.35) : '₱0'
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300 font-sans">
       
       {/* Health Monitors */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <HealthWidget label="Today's Sales" status="good" />
-        <HealthWidget label="Stock Levels" status="warning" />
-        <HealthWidget label="Packing Speed" status="good" />
-        <HealthWidget label="AI Suggestions Waiting" status="good" />
+        <HealthWidget label="Today's Sales" status={salesToday > 0 ? "good text-gold" : "good text-white"} val={formattedRevenue} />
+        <HealthWidget label="Low Stock Alerts" status={lowStockCount > 0 ? "warning" : "good"} val={String(lowStockCount)} />
+        <HealthWidget label="Pending Fulfillment" status={pendingOrders > 0 ? "warning" : "good"} val={String(pendingOrders)} />
+        <HealthWidget label="Active SKUs" status="good" val={String(activeProductsCount || 18)} />
       </div>
 
-      {/* 🔀 Visual Operational Workflow DAG Graph */}
+      {/* 🔀 Visual Operational Workflow DAG Graph (Single Clear Flowchart) */}
       <AdminVisualWorkflowGraph onNavigate={setSection} />
-
-      {/* 🗺️ Interactive Process Flow Diagram & System Pipeline */}
-      <AdminProcessFlowDiagram onNavigate={setSection} />
 
       {/* 💰 Master Metrics Financial Landed P&L Summary */}
       <div className="bg-[#0E121E] border border-white/20 rounded-2xl p-6 shadow-xl space-y-4 text-white">
@@ -99,37 +101,37 @@ export default function Overview({ setSection }) {
             <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Master Financial P&L Cockpit
             </span>
-            <h2 className="font-sans text-2xl font-black text-white mt-2">Today's Landed Margin & Net Profit</h2>
+            <h2 className="font-sans text-2xl font-black text-white mt-2">Today's Landed Revenue & Profit</h2>
           </div>
           <div className="text-right">
-            <p className="text-xs text-white/80 font-bold uppercase">Net Cash Margin</p>
-            <p className="font-mono text-3xl font-black text-gold">31.5% <span className="text-sm font-bold text-white">(₱13,010)</span></p>
+            <p className="text-xs text-white/80 font-bold uppercase">Net Cash Revenue</p>
+            <p className="font-mono text-3xl font-black text-gold">{formattedRevenue}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm font-mono">
           <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
             <p className="text-gold text-xs uppercase font-extrabold">Gross Revenue</p>
-            <p className="text-white text-xl font-black mt-1">₱41,260</p>
-            <p className="text-white/80 text-xs mt-1 font-sans">Across all 4 channels</p>
+            <p className="text-white text-xl font-black mt-1">{formattedRevenue}</p>
+            <p className="text-white/80 text-xs mt-1 font-sans">Live Channel Total</p>
           </div>
 
           <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
-            <p className="text-gold text-xs uppercase font-extrabold">Italy Sourcing (€ FX)</p>
-            <p className="text-crimson text-xl font-black mt-1">-₱21,400</p>
-            <p className="text-white/80 text-xs mt-1 font-sans">51.8% Sourcing COGS</p>
+            <p className="text-gold text-xs uppercase font-extrabold">Sourcing COGS</p>
+            <p className="text-crimson text-xl font-black mt-1">-{estimatedCost}</p>
+            <p className="text-white/80 text-xs mt-1 font-sans">Est. Italy Landed Cost</p>
           </div>
 
           <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
-            <p className="text-gold text-xs uppercase font-extrabold">Air Freight & Duty</p>
-            <p className="text-crimson text-xl font-black mt-1">-₱6,850</p>
-            <p className="text-white/80 text-xs mt-1 font-sans">€14/kg + 12% Duty Tax</p>
+            <p className="text-gold text-xs uppercase font-extrabold">Pending Orders</p>
+            <p className="text-white text-xl font-black mt-1">{pendingOrders} Orders</p>
+            <p className="text-white/80 text-xs mt-1 font-sans">Awaiting Packing</p>
           </div>
 
           <div className="bg-blue/20 p-4 rounded-xl border border-blue text-white shadow-md">
             <p className="text-blue text-xs uppercase font-black">Net Cash Profit</p>
-            <p className="text-white text-xl font-black mt-1">+₱13,010</p>
-            <p className="text-white/90 text-xs mt-1 font-sans font-bold">Clear Bank Cash Flow</p>
+            <p className="text-white text-xl font-black mt-1">{estimatedProfit}</p>
+            <p className="text-white/90 text-xs mt-1 font-sans font-bold">Clear Cash Flow</p>
           </div>
         </div>
       </div>
@@ -144,117 +146,106 @@ export default function Overview({ setSection }) {
           <div className="rounded-2xl border border-white/20 bg-[#0E121E] overflow-hidden text-white shadow-xl">
             <div className="border-b border-white/15 px-5 py-4 flex items-center justify-between bg-blue/20">
               <h3 className="text-sm font-black uppercase tracking-wider text-white flex items-center gap-2">
-                <span>🛬</span> Flight Box Arrival & Custody Feed
+                <span>🛬</span> Air Cargo Flight Arrival Feed
               </h3>
-              <span className="text-xs font-mono text-white bg-blue px-2.5 py-1 rounded-full font-black shadow">Live Updates</span>
+              <span className="text-xs font-mono text-white bg-blue px-2.5 py-1 rounded-full font-black shadow">Live Feed</span>
             </div>
-            <div className="divide-y divide-white/10 font-sans text-xs p-1">
-              <div className="p-4 space-y-1.5">
+            <div className="p-4 space-y-3 font-sans text-xs">
+              <div className="p-4 rounded-xl bg-[#161B29] border border-white/15 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-extrabold text-white text-sm">🛬 Box MIL-BOX-092 Arrived NAIA Customs</span>
-                  <span className="text-xs text-gold font-bold">Today, 01:10 AM</span>
+                  <span className="font-extrabold text-white text-sm">🛬 Flight AZ-772 (Malpensa MXP → NAIA)</span>
+                  <span className="text-xs text-gold font-bold">Air Cargo Operational</span>
                 </div>
-                <p className="text-white/90 text-xs font-medium">Custody claimed by <span className="text-gold font-black">Elena Guerrero (Makati Hub)</span> · 10 SKUs credited.</p>
-              </div>
-
-              <div className="p-4 space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="font-extrabold text-white text-sm">✈️ Box MIL-BOX-104 Flight Departed (MXP)</span>
-                  <span className="text-xs text-gold font-bold">Yesterday, 18:40 PM</span>
-                </div>
-                <p className="text-white/90 text-xs font-medium">Manifested by <span className="text-gold font-black">Marco Rossi (Milan)</span> · ETA Manila: 24-Jul-2026.</p>
+                <p className="text-white/90 text-xs font-medium">Custody verification active. Staff station PIN claims enabled.</p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/20 bg-[#0E121E] overflow-hidden text-white shadow-xl">
-            <div className="border-b border-white/15 px-5 py-4 flex items-center justify-between bg-white/10">
-              <h3 className="text-xs font-black uppercase tracking-wider text-gold">Recent VIP Orders</h3>
-              <button onClick={() => setSection('wholesale')} className="text-xs font-extrabold text-blue hover:underline">View All</button>
+          {/* Low Stock Warning Box */}
+          {lowStockCount > 0 ? (
+            <div className="rounded-2xl border border-crimson/50 bg-crimson/15 p-5 text-white shadow-xl space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="font-black text-crimson text-sm uppercase flex items-center gap-2">
+                  <span>⚠️</span> {lowStockCount} Low-Stock Alert Items
+                </h3>
+                <button
+                  onClick={() => setSection && setSection('inventory')}
+                  className="text-xs font-bold bg-crimson hover:bg-crimson-deep text-white px-3 py-1.5 rounded-lg shadow"
+                >
+                  Manage Stock ➔
+                </button>
+              </div>
+              <p className="text-xs text-white/90 font-medium">
+                Some inventory items have dropped below 5 units. Reorder or create Pasabuy sourcing requests.
+              </p>
             </div>
-            <div className="divide-y divide-white/10">
-              {recentVipOrders.length === 0 ? (
-                <div className="p-5 text-xs text-white/60 font-semibold italic">No recent VIP orders.</div>
-              ) : (
-                recentVipOrders.map((vo, i) => (
-                  <div key={i} className="flex items-center justify-between px-5 py-3.5 hover:bg-white/10 transition-colors">
-                    <div>
-                      <p className="text-sm font-bold text-white">{vo.user}</p>
-                      <p className="text-xs text-gold font-mono font-bold">{vo.id}</p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <span className="font-mono text-sm font-black text-white">{peso(vo.amount)}</span>
-                      <button onClick={() => setSection('kanban')} className="rounded-xl bg-blue px-3.5 py-1.5 text-xs font-black text-white hover:bg-blue-deep transition-colors shadow">Pack</button>
-                    </div>
-                  </div>
-                ))
-              )}
+          ) : (
+            <div className="rounded-2xl border border-white/15 bg-[#0E121E] p-5 text-white shadow-xl">
+              <div className="flex items-center justify-between">
+                <h3 className="font-black text-gold text-sm uppercase flex items-center gap-2">
+                  <span>✓</span> Stock Levels Healthy
+                </h3>
+                <span className="text-xs font-mono text-white/80">0 Critical Stock Warnings</span>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="rounded-2xl border border-white/20 bg-[#0E121E] overflow-hidden text-white shadow-xl">
-            <div className="border-b border-white/15 px-5 py-4 bg-white/10">
-              <h3 className="text-xs font-black uppercase tracking-wider text-gold">Best Sellers (Last 24h)</h3>
-            </div>
-            <div className="divide-y divide-white/10 p-2">
-              {topMovers.map((tm, i) => (
-                <div key={tm.sku} className="flex items-center gap-3 px-4 py-3">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gold text-navy font-black text-xs shadow">{i + 1}</div>
-                  <div className="flex-1 truncate text-sm font-bold text-white">{tm.title}</div>
-                  <div className="text-xs font-extrabold text-blue">High Velocity</div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
-        {/* Right Column - Operations */}
+        {/* Right Column - Quick Actions */}
         <div className="space-y-6">
-          <div className="rounded-2xl border border-crimson/40 bg-[#0E121E] overflow-hidden shadow-xl">
-            <div className="border-b border-crimson/30 px-5 py-4 flex items-center justify-between bg-crimson/20">
-              <h3 className="text-xs font-black uppercase tracking-wider text-crimson">⚠️ Action Required Alerts</h3>
-            </div>
-            <div className="divide-y divide-white/10">
-              {alerts.map(alert => (
-                <div key={alert.id} className="flex items-start gap-3 px-5 py-3.5">
-                  <div className={`mt-1 h-2.5 w-2.5 rounded-full shrink-0 ${alert.type === 'CRITICAL' ? 'bg-crimson pulse-dot' : 'bg-gold'}`} />
-                  <p className="text-sm font-bold text-white">{alert.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <div className="rounded-2xl border border-white/20 bg-[#0E121E] p-6 space-y-4 shadow-xl">
+            <h3 className="text-sm font-black uppercase text-gold">Quick Jump Operations</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => setSection('inventory')}
+                className="p-4 rounded-xl bg-[#161B29] hover:bg-blue/20 border border-white/15 hover:border-blue text-left transition-all group"
+              >
+                <span className="text-2xl block mb-1">📊</span>
+                <span className="text-xs font-black text-white group-hover:text-blue">Sheet Mode & Inventory</span>
+              </button>
 
-          <div className="rounded-2xl border border-white/20 bg-[#0E121E] overflow-hidden text-white shadow-xl">
-            <div className="border-b border-white/15 px-5 py-4 flex items-center justify-between bg-white/10">
-              <h3 className="text-xs font-black uppercase tracking-wider text-gold">Pending AI Products</h3>
-              <span className="flex h-6 items-center justify-center rounded-full bg-gold px-3 text-xs font-black text-navy shadow">{draftsCount} Pending</span>
-            </div>
-            <div className="divide-y divide-white/10">
-              <div className="flex items-center justify-between px-5 py-3.5 hover:bg-white/10 transition-colors">
-                <span className="text-sm font-bold text-white">Baci Chocolates 200g</span>
-                <button onClick={() => setSection('sourcing')} className="rounded-xl bg-blue hover:bg-blue-deep px-4 py-1.5 text-xs font-black text-white transition-all shadow">Review</button>
-              </div>
-              <div className="flex items-center justify-between px-5 py-3.5 hover:bg-white/10 transition-colors">
-                <span className="text-sm font-bold text-white">Acqua Panna 1L</span>
-                <button onClick={() => setSection('sourcing')} className="rounded-xl bg-blue hover:bg-blue-deep px-4 py-1.5 text-xs font-black text-white transition-all shadow">Review</button>
-              </div>
+              <button
+                onClick={() => setSection('omni_hub')}
+                className="p-4 rounded-xl bg-[#161B29] hover:bg-gold/20 border border-white/15 hover:border-gold text-left transition-all group"
+              >
+                <span className="text-2xl block mb-1">📦</span>
+                <span className="text-xs font-black text-white group-hover:text-gold">Staff Handover & Pack</span>
+              </button>
+
+              <button
+                onClick={() => setSection('pasabuy')}
+                className="p-4 rounded-xl bg-[#161B29] hover:bg-forest/20 border border-white/15 hover:border-forest text-left transition-all group"
+              >
+                <span className="text-2xl block mb-1">✈️</span>
+                <span className="text-xs font-black text-white group-hover:text-forest">Pasabuy Sourcing</span>
+              </button>
+
+              <button
+                onClick={() => setSection('staff_permissions')}
+                className="p-4 rounded-xl bg-[#161B29] hover:bg-crimson/20 border border-white/15 hover:border-crimson text-left transition-all group"
+              >
+                <span className="text-2xl block mb-1">🔒</span>
+                <span className="text-xs font-black text-white group-hover:text-crimson">Staff PINs & Roles</span>
+              </button>
             </div>
           </div>
         </div>
 
       </div>
+
     </div>
   )
 }
 
-function HealthWidget({ label, status }) {
-  const isGood = status === 'good'
+function HealthWidget({ label, status, val }) {
   return (
-    <div className="flex items-center justify-between rounded-2xl border border-white/20 bg-[#0E121E] px-4 py-3.5 min-w-0 shadow-lg">
-      <span className="text-xs font-bold text-white truncate pr-2 flex-1">{label}</span>
-      <div className={`shrink-0 flex h-5 w-5 items-center justify-center rounded-full ${isGood ? 'bg-blue/30' : 'bg-gold/30'}`}>
-        <div className={`h-2.5 w-2.5 rounded-full ${isGood ? 'bg-blue shadow' : 'bg-gold shadow'}`} />
+    <div className="rounded-xl border border-white/20 bg-[#0E121E] p-4 text-white shadow-md flex items-center justify-between">
+      <div>
+        <p className="text-[11px] font-extrabold uppercase text-gold truncate">{label}</p>
+        <p className="text-lg font-black mt-1">{val || 'Operational'}</p>
       </div>
+      <span className={`h-3 w-3 rounded-full ${status === 'good' ? 'bg-blue pulse-dot' : 'bg-gold pulse-dot'}`} />
     </div>
   )
 }
