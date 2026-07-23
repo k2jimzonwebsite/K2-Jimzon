@@ -3,6 +3,7 @@ import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
 import { BagIcon, SearchIcon, MoonIcon, SunIcon } from './ui/icons'
 import VoucherHuntCenterModal from './VoucherHuntCenterModal'
+import CustomerProfileModal from './CustomerProfileModal'
 
 function SearchBox({ className = '' }) {
   const { query, setQuery, go, view } = useStore()
@@ -15,13 +16,8 @@ function SearchBox({ className = '' }) {
         onChange={(e) => {
           const val = e.target.value
           setQuery(val)
-          
           if (val.trim().length > 0) {
             if (view !== 'catalog') go('catalog')
-          } else {
-            // Optional: If they clear the search while on the catalog page, they stay there.
-            // But if they were not on catalog when they started typing, maybe return them?
-            // For now, if they clear it, they just stay on the catalog seeing all items.
           }
         }}
         placeholder='Try "Lavazza", "Biscoff", "pesto"…'
@@ -34,6 +30,7 @@ function SearchBox({ className = '' }) {
 export default function StoreHeader() {
   const { go, view, count, setCartOpen, isWholesale, setIsWholesale, isDark, toggleDarkMode } = useStore()
   const [showVoucherHunt, setShowVoucherHunt] = useState(false)
+  const [showProfileModal, setShowProfileModal] = useState(false)
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/95 backdrop-blur-xl transition-colors">
@@ -71,6 +68,15 @@ export default function StoreHeader() {
         >
           <span>🎁</span>
           <span>Voucher Hunt</span>
+        </button>
+
+        <button
+          onClick={() => setShowProfileModal(true)}
+          className="whitespace-nowrap rounded-lg px-3 py-2 text-xs font-bold text-navy hover:bg-shell border border-line flex items-center gap-1.5 transition-colors"
+          title="Account Profile & Delivery Settings"
+        >
+          <span>👤</span>
+          <span className="hidden sm:inline">My Account</span>
         </button>
 
         <button
@@ -168,6 +174,11 @@ export default function StoreHeader() {
       <VoucherHuntCenterModal
         isOpen={showVoucherHunt}
         onClose={() => setShowVoucherHunt(false)}
+      />
+
+      <CustomerProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
       />
     </header>
   )
