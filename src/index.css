@@ -1,10 +1,13 @@
 @import "tailwindcss";
 
 /*
-  K2 Jimzon — "Premium Italian import store" palette
-  White 70% · Italian Red 20% (CTAs, prices, key actions)
-  Italian Green 7% (trust, authenticity, stock) · Philippine Blue 3% (wholesale/B2B only)
+  K2 Jimzon — Strict 4-Color Luxury Palette Strategy (OKLCH)
+  1. Obsidian Black / Charcoal Base (#090C15 / #0E121E)
+  2. Champagne Gold / Amber (#D4AF37 / #F59E0B)
+  3. Crimson Red Accent (#EF4444 / #DC2626)
+  4. Sapphire Blue Accent (#3B82F6 / #2563EB)
 */
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
@@ -15,302 +18,79 @@
 
 @theme {
 
-  /* Tuscan Landscape Palette (OKLCH) */
-  --color-cream: oklch(98% 0.01 45); /* Background / Warm White */
-  --color-paper: oklch(96% 0.015 45); /* Card — warm off-white, NOT pure #FFF */
-  --color-shell: oklch(93% 0.02 45); /* Section Alternate */
-  --color-shell-deep: oklch(90% 0.02 45);
+  /* 1. Black & Charcoal Surface System */
+  --color-cream: #F8F9FA;
+  --color-paper: #FFFFFF;
+  --color-shell: #F3F4F6;
+  --color-shell-deep: #E5E7EB;
   
-  /* Tinted Neutrals (Hue 35 - Terracotta) */
-  --color-navy: oklch(25% 0.015 35); /* Text */
-  --color-navy-soft: oklch(45% 0.015 35);
-  --color-navy-faint: oklch(65% 0.01 35);
+  --color-dark-bg: #090C15;
+  --color-dark-card: #0E121E;
+  --color-dark-hover: #161B29;
   
-  /* Primary - Terracotta (Hue 35) */
-  --color-crimson: oklch(55% 0.15 35);
-  --color-crimson-deep: oklch(45% 0.13 35);
-  --color-crimson-wash: oklch(95% 0.02 35);
+  /* Text Neutrals */
+  --color-navy: #111827;
+  --color-navy-soft: #4B5563;
+  --color-navy-faint: #9CA3AF;
   
-  --color-oxblood: oklch(55% 0.15 35);
+  /* 2. Crimson Red Accent */
+  --color-crimson: #EF4444;
+  --color-crimson-deep: #DC2626;
+  --color-crimson-wash: rgba(239, 68, 68, 0.12);
+  --color-oxblood: #B91C1C;
   
-  /* Secondary - Olive (Hue 135) */
-  --color-forest: oklch(55% 0.08 135);
-  --color-forest-wash: oklch(95% 0.02 135);
+  /* 3. Sapphire Blue Accent */
+  --color-blue: #3B82F6;
+  --color-blue-deep: #2563EB;
+  --color-blue-wash: rgba(59, 130, 246, 0.12);
   
-  --color-blue: oklch(55% 0.08 135); /* Harmonizing wholesale blue to Olive */
-  --color-blue-wash: oklch(95% 0.02 135);
+  /* 4. Champagne Gold / Amber Accent */
+  --color-gold: #D4AF37;
+  --color-gold-deep: #B59226;
+  --color-gold-wash: rgba(212, 175, 55, 0.15);
   
-  /* Amber (Wood accents - Hue 65) */
-  --color-amber: oklch(55% 0.12 65);
-  --color-amber-wash: oklch(95% 0.02 65);
+  --color-amber: #F59E0B;
+  --color-amber-wash: rgba(245, 158, 11, 0.12);
   
-  --color-line: oklch(88% 0.015 45); /* Border */
-  --color-gold: oklch(70% 0.12 75); /* Accent */
-  --color-champagne: oklch(92% 0.03 75); 
+  --color-forest: #3B82F6; /* Standardized to Sapphire Blue for unified 4-color palette */
+  --color-forest-wash: rgba(59, 130, 246, 0.12);
+  
+  --color-line: #E5E7EB;
+  --color-champagne: #FDE68A;
 
   --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
   --font-sans: "Archivo", "Segoe UI", system-ui, sans-serif;
 
-  /* Warm Organic Shadows (using OKLCH with alpha) */
-  --shadow-card: 0 4px 12px oklch(55% 0.12 65 / 0.06), 0 16px 32px -8px oklch(55% 0.12 65 / 0.18);
-  --shadow-float: 0 20px 32px oklch(55% 0.12 65 / 0.12), 0 44px 74px -12px oklch(55% 0.15 35 / 0.25);
+  /* Crisp Shadows */
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-float: 0 20px 32px rgba(0, 0, 0, 0.18);
 
   /* Premium Easing Curves */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@layer base {
-  .dark {
-    --bg-blend: soft-light;
-
-    /* Dark Tuscan Landscape */
-    --color-cream: oklch(22% 0.01 250); 
-    --color-paper: oklch(25% 0.015 250); 
-    --color-shell: oklch(28% 0.02 250); 
-    --color-shell-deep: oklch(31% 0.02 250);
-    
-    /* Inverted Neutrals */
-    --color-navy: oklch(96% 0.01 35); 
-    --color-navy-soft: oklch(80% 0.015 35);
-    --color-navy-faint: oklch(65% 0.01 35);
-    
-    --color-line: oklch(35% 0.015 250); 
-    
-    /* Muted Washes for Dark Mode */
-    --color-crimson-wash: oklch(30% 0.05 35);
-    --color-forest-wash: oklch(30% 0.03 135);
-    --color-blue-wash: oklch(30% 0.03 135);
-    --color-amber-wash: oklch(30% 0.03 65);
-  }
-}
-
-html {
-  scroll-behavior: smooth;
-  font-size: 100%;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 112.5%;
-  }
-}
-@media (min-width: 1024px) {
-  html {
-    font-size: 125%;
-  }
-}
-
-body {
-  background-color: var(--color-cream);
-  color: var(--color-navy);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  font-size: 1rem;
-}
-
-@media (min-width: 768px) {
-  body {
-    background-image:
-      /* Terracotta warmth — top right corner */
-      radial-gradient(ellipse 60% 50% at 85% 15%, oklch(55% 0.15 35 / 0.07) 0%, transparent 70%),
-      /* Olive coolness — bottom left */
-      radial-gradient(ellipse 50% 60% at 10% 85%, oklch(55% 0.08 135 / 0.06) 0%, transparent 70%),
-      /* Amber glow — center strip */
-      radial-gradient(ellipse 80% 40% at 50% 50%, oklch(55% 0.12 65 / 0.05) 0%, transparent 60%),
-      /* Gold warmth — top left */
-      radial-gradient(ellipse 40% 40% at 15% 20%, oklch(70% 0.12 75 / 0.04) 0%, transparent 60%),
-      /* Wood grain texture */
-      url('/wood-bg.jpg');
-    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, cover;
-    background-attachment: scroll;
-    background-position: center;
-    background-blend-mode: normal, normal, normal, normal, var(--bg-blend);
-  }
-}
-
-body {
-  
-  /* Handle mobile hardware safe areas (notches/home indicators) */
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-}
-
-.pb-safe {
-  padding-bottom: max(1rem, env(safe-area-inset-bottom));
-}
-
-::selection {
-  background: var(--color-crimson);
-  color: #fff;
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-crimson);
-  outline-offset: 2px;
-}
-
-/* Brand motif: a thin Italian-red rule. Quiet, editorial, never flag-like. */
-.tricolor {
-  height: 2px;
-  background: var(--color-crimson);
-}
-
-.section-kicker {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.font-serif {
-  font-optical-sizing: auto;
-}
-
-.tabular {
-  font-variant-numeric: tabular-nums;
-}
-
-/* Subtle paper grain for imagery panels */
-.grain {
-  position: relative;
-}
-.grain::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.4;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* Horizontal discovery shelves */
-.shelf {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-line) transparent;
-  scroll-snap-type: x mandatory;
-}
-.shelf > * {
-  scroll-snap-align: start;
-}
-
-/* Custom Scrollbar for inner dynamic containers */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-navy-faint) transparent;
-}
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--color-navy-faint);
-  border-radius: 10px;
-}
-
-
-
-@keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.rise {
-  animation: rise 0.55s var(--ease-out-quint) both;
 }
 
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
 }
+
 .pulse-dot {
-  animation: pulse-dot 2s ease-in-out infinite;
+  animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .rise { animation: none; }
-  html { scroll-behavior: auto; }
+/* Custom Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-
-/* Ambient section glows — subtle positioned color washes for Tuscan warmth */
-.glow-terracotta::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse 70% 60% at 80% 30%, oklch(55% 0.15 35 / 0.06) 0%, transparent 70%);
-  z-index: 0;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
 }
-.glow-olive::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse 60% 70% at 20% 70%, oklch(55% 0.08 135 / 0.05) 0%, transparent 70%);
-  z-index: 0;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.3);
+  border-radius: 4px;
 }
-.glow-amber::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse 80% 50% at 50% 50%, oklch(55% 0.12 65 / 0.04) 0%, transparent 60%);
-  z-index: 0;
-}
-
-/* ⚡ OVERDRIVE: Scroll-driven animations */
-@supports (animation-timeline: scroll()) {
-  .scroll-parallax {
-    animation: scroll-parallax linear both;
-    animation-timeline: scroll(root block);
-  }
-  .scroll-reveal {
-    animation: scroll-reveal linear both;
-    animation-timeline: view();
-    animation-range: entry 5% cover 35%;
-  }
-  .scroll-scale {
-    animation: scroll-scale linear both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 50%;
-  }
-}
-
-@keyframes scroll-parallax {
-  0% { transform: translateY(-5%); }
-  100% { transform: translateY(15%); }
-}
-
-@keyframes scroll-reveal {
-  0% { opacity: 0; transform: translateY(60px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes scroll-scale {
-  0% { opacity: 0; transform: scale(0.9); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-/* ⚡ OVERDRIVE: Cinematic View Transitions */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.5s;
-  animation-timing-function: var(--ease-out-quint);
-}
-::view-transition-new(root) {
-  animation-name: fade-in-up;
-}
-::view-transition-old(root) {
-  animation-name: fade-out;
-}
-
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.6);
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { products as localProducts } from '../../data/products'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import PhotoManagerModal from './PhotoManagerModal'
@@ -72,9 +73,35 @@ export default function Sheet() {
   }, [])
 
   const fetchProducts = async () => {
-    if (!supabase) { setLoading(false); return; }
-    const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false })
-    if (!error && data) setRows(data)
+    setLoading(true)
+    let fetched = []
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false })
+        if (!error && data && data.length > 0) fetched = data
+      } catch (e) {
+        console.warn("Sheet Supabase fetch warning:", e)
+      }
+    }
+
+    if (fetched.length === 0) {
+      fetched = localProducts.map(p => ({
+        sku: p.id,
+        barcode: p.barcode || '8050031123456',
+        name: p.name,
+        short: p.short,
+        origin: p.origin,
+        category_id: p.category,
+        srp: p.retail,
+        wholesale_price: p.wholesale,
+        stock_available: p.stock,
+        primary_image_url: p.img,
+        description: p.inside,
+        usage_instructions: p.guide?.steps ? p.guide.steps.join(' ') : 'Store in a cool dry place.',
+        status: 'Active'
+      }))
+    }
+    setRows(fetched)
     setLoading(false)
   }
 

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { products as localProducts } from '../../data/products'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
@@ -16,16 +17,16 @@ function Label({ children }) {
 
 function Section({ color = 'blue', title, children }) {
   const colors = {
-    blue:   'text-blue   border-blue/20',
-    amber:  'text-amber  border-amber/20',
-    forest: 'text-forest border-forest/20',
-    purple: 'text-purple-400 border-purple-400/20',
+    blue:   'text-blue border-blue/20',
+    amber:  'text-gold border-gold/20',
+    forest: 'text-blue border-blue/20',
+    purple: 'text-gold border-gold/20',
     crimson:'text-crimson border-crimson/20',
     slate:  'text-white/40 border-white/10',
   }
   return (
-    <div className={`border-l-2 pl-4 space-y-3 ${colors[color]}`}>
-      <p className={`text-[10px] font-bold uppercase tracking-widest ${colors[color].split(' ')[0]}`}>{title}</p>
+    <div className={`border-l-2 pl-4 space-y-3 ${colors[color] || colors.blue}`}>
+      <p className={`text-[10px] font-bold uppercase tracking-widest ${colors[color]?.split(' ')[0] || 'text-blue'}`}>{title}</p>
       {children}
     </div>
   )
