@@ -7,6 +7,7 @@ import AdminAuthModal from './AdminAuthModal'
 import ErrorBoundary from '../../components/ui/ErrorBoundary'
 import DailyTaskNotificationDrawer from './DailyTaskNotificationDrawer'
 import AdminAiCopilotModal from './AdminAiCopilotModal'
+import SystemDevOpsModal from './SystemDevOpsModal'
 
 // Lazy loaded heavy components to reduce initial bundle lag
 const Kanban = lazy(() => import('./Kanban'))
@@ -66,6 +67,7 @@ export default function Admin() {
   const [activeSkus, setActiveSkus] = useState(0)
   const [lowStock, setLowStock] = useState(0)
   const [pendingOrders, setPendingOrders] = useState(0)
+  const [showDevOpsModal, setShowDevOpsModal] = useState(false)
 
   useEffect(() => {
     if (!supabase) return;
@@ -221,13 +223,17 @@ export default function Admin() {
         </div>
 
         <div className="border-t border-white/15 px-5 py-3.5 text-xs text-white/80 space-y-2 shrink-0 bg-[#05080f]">
-          <div className="flex items-center justify-between">
-            <p className="flex items-center gap-1.5 font-bold text-white">
+          <button 
+            onClick={() => setShowDevOpsModal(true)}
+            className="w-full flex items-center justify-between p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all border border-white/15"
+            title="Open DevOps & System Architecture Cockpit"
+          >
+            <p className="flex items-center gap-1.5 font-extrabold text-white text-xs">
               <span className="h-2 w-2 rounded-full bg-blue pulse-dot" />
-              Supabase · Connected
+              ⚡ DevOps & QPS
             </p>
             <span className="text-xs font-mono bg-gold text-navy font-black px-2 py-0.5 rounded">SUPER ADMIN</span>
-          </div>
+          </button>
           <button 
             onClick={logoutAdmin}
             className="w-full mt-2 py-2 px-3 rounded-xl bg-crimson hover:bg-crimson-deep text-white text-xs font-extrabold transition-all border border-crimson/50 flex items-center justify-center gap-1.5 shadow-md"
@@ -471,6 +477,11 @@ export default function Admin() {
         isOpen={showAiCopilot}
         onClose={() => setShowAiCopilot(false)}
         onNavigate={(targetSec) => setSection(targetSec)}
+      />
+
+      <SystemDevOpsModal
+        isOpen={showDevOpsModal}
+        onClose={() => setShowDevOpsModal(false)}
       />
 
       {/* Floating Instant AI Copilot Button */}
