@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { peso } from '../../data/products'
 import AdminProcessFlowDiagram from './AdminProcessFlowDiagram'
+import AdminVisualWorkflowGraph from './AdminVisualWorkflowGraph'
 
 export default function Overview({ setSection }) {
   const [salesToday, setSalesToday] = useState(0)
@@ -84,6 +85,9 @@ export default function Overview({ setSection }) {
         <HealthWidget label="Packing Speed" status="good" />
         <HealthWidget label="AI Suggestions Waiting" status="good" />
       </div>
+
+      {/* 🔀 Visual Operational Workflow DAG Graph */}
+      <AdminVisualWorkflowGraph onNavigate={setSection} />
 
       {/* 🗺️ Interactive Process Flow Diagram & System Pipeline */}
       <AdminProcessFlowDiagram onNavigate={setSection} />
