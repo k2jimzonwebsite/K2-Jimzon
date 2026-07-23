@@ -239,6 +239,26 @@ export function StoreProvider({ children }) {
 
   const toggleDarkMode = () => setIsDark(!isDark)
 
+  const loginWithGoogle = async () => {
+    if (!supabase) {
+      alert("Supabase client is not active. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel environment variables.")
+      return false
+    }
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      })
+      if (error) throw error
+      return true
+    } catch (err) {
+      alert("Google OAuth Sign-In Error: " + (err.message || 'Failed to initialize Google Auth.'))
+      return false
+    }
+  }
+
   const loginAdmin = async ({ email, password, passcode }) => {
     // Read local staff registry for station PINs and credentials
     let staffList = []
@@ -747,6 +767,7 @@ export function StoreProvider({ children }) {
     setIsWholesale,
     isAdmin,
     loginAdmin,
+    loginWithGoogle,
     logoutAdmin,
     user,
     order,
