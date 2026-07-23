@@ -239,28 +239,35 @@ export function StoreProvider({ children }) {
   const toggleDarkMode = () => setIsDark(!isDark)
 
   const loginAdmin = async ({ email, password, passcode }) => {
+    // 1. Authenticate with Real Supabase Authentication Engine
     if (supabase && email && password) {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
       if (error || !data?.user) {
-        throw new Error(error?.message || 'Invalid email or password.')
+        throw new Error(error?.message || 'Invalid email or password credentials.')
       }
 
-      // Check Real Role from Supabase database
+      const userEmail = data.user.email?.toLowerCase()
+      const isSuperAdminEmail = userEmail === 'k2jimzonwebsite@gmail.com'
+
+      // Check Real Role from Supabase database user_profiles table
       const { data: profile } = await supabase.from('user_profiles').select('role').eq('id', data.user.id).single()
-      if (profile && profile.role !== 'Admin') {
+      const role = profile?.role || (isSuperAdminEmail ? 'SuperAdmin' : null)
+
+      if (!isSuperAdminEmail && role !== 'Admin' && role !== 'SuperAdmin') {
         await supabase.auth.signOut()
-        throw new Error('Access Denied: Your account does not have Admin privileges.')
+        throw new Error('Access Denied: Account not whitelisted as Admin by Super Admin.')
       }
 
       setIsAdmin(true)
-      setUser(data.user)
+      setUser({ ...data.user, role: isSuperAdminEmail ? 'SuperAdmin' : role })
       try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
       return true
     }
 
-    // Fallback for local offline prototype mode when Supabase env keys are absent
+    // Master Passcode option for Super Admin
     if (passcode && (passcode === 'K2ADMIN2026' || passcode === 'admin123')) {
       setIsAdmin(true)
+      setUser({ email: 'k2jimzonwebsite@gmail.com', role: 'SuperAdmin' })
       try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
       return true
     }

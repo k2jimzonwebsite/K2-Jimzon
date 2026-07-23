@@ -5,9 +5,9 @@ import { verify2faCode } from '../../lib/securityVault'
 export default function AdminAuthModal({ isOpen, onClose }) {
   const { loginAdmin } = useStore()
   const [step, setStep] = useState(1) // 1: Credentials, 2: 2FA TOTP
-  const [mode, setMode] = useState('passcode') // 'passcode' | 'email'
+  const [mode, setMode] = useState('email') // 'email' | 'passcode'
   const [passcode, setPasscode] = useState('')
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('k2jimzonwebsite@gmail.com')
   const [password, setPassword] = useState('')
   const [totpCode, setTotpCode] = useState('')
   const [error, setError] = useState('')
