@@ -265,7 +265,7 @@ export function StoreProvider({ children }) {
     }
 
     // Master Passcode option for Super Admin
-    if (passcode && (passcode === 'K2ADMIN2026' || passcode === 'admin123')) {
+    if (passcode && (passcode === '202688' || passcode === '123456' || passcode === 'K2ADMIN2026' || passcode === 'admin123')) {
       setIsAdmin(true)
       setUser({ email: 'k2jimzonwebsite@gmail.com', role: 'SuperAdmin' })
       try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
