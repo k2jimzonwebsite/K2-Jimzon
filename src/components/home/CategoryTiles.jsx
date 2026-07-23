@@ -43,14 +43,14 @@ function CategoryTiles() {
                   go('catalog')
                 }
               }}
-              className="rise group flex flex-col items-center gap-2 rounded-xl bg-cream/90 backdrop-blur-md p-3 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-float hover:bg-cream"
+              className="rise group flex flex-col items-center gap-2 rounded-xl border border-line bg-cream/90 backdrop-blur-md p-3.5 text-center shadow-sm transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-float hover:border-crimson/40 hover:bg-cream active:scale-[0.97]"
               style={{ animationDelay: `${i * 50}ms` }}
             >
-              <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-shell text-2xl transition-colors group-hover:bg-crimson group-hover:text-white shadow-sm">
+              <div className="flex h-11 w-11 md:h-12 md:w-12 items-center justify-center rounded-full bg-shell text-2xl transition-colors group-hover:bg-crimson group-hover:text-white shadow-sm">
                 {icon}
               </div>
               <div>
-                <p className="font-serif text-xs sm:text-sm font-semibold leading-tight text-navy transition-colors group-hover:text-crimson">{cat}</p>
+                <p className="font-serif text-sm sm:text-base font-semibold leading-tight text-navy transition-colors group-hover:text-crimson">{cat}</p>
                 <p className="hidden text-xs text-navy-faint md:block">{note}</p>
               </div>
             </button>
