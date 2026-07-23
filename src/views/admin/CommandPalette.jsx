@@ -14,11 +14,14 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
   // Base static commands
   const COMMANDS = [
     { id: 'nav-overview', type: 'Navigation', label: 'Go to Home Dashboard', action: () => setSection('overview') },
-    { id: 'nav-kanban', type: 'Navigation', label: 'Open Pack & Ship Orders', action: () => setSection('kanban') },
+    { id: 'nav-kanban', type: 'Navigation', label: 'Open Global Logistics & Consignments', action: () => setSection('kanban') },
+    { id: 'nav-omni-hub', type: 'Navigation', label: 'Open Staff Operations & Fulfillment Hub', action: () => setSection('omni_hub') },
     { id: 'nav-inventory', type: 'Navigation', label: 'Open All Products', action: () => setSection('inventory') },
     { id: 'nav-inbox', type: 'Navigation', label: 'Check Messages', action: () => setSection('inbox') },
     { id: 'nav-sourcing', type: 'Navigation', label: 'Review AI Suggestions', action: () => setSection('sourcing') },
-    { id: 'nav-crm', type: 'Navigation', label: 'Open VIP Customers', action: () => setSection('wholesale') },
+    { id: 'nav-crm', type: 'Navigation', label: 'Open Customer CRM & Mass Campaign Broadcasts', action: () => setSection('wholesale') },
+    { id: 'nav-pasabuy-mgr', type: 'Navigation', label: 'Manage Pasabuy Requests & Quotations', action: () => setSection('pasabuy_manager') },
+    { id: 'nav-integrations', type: 'Navigation', label: 'Manage Channel & API Keys (Shopee, Lazada, TikTok, Meta)', action: () => setSection('integrations') },
     { id: 'nav-suppliers', type: 'Navigation', label: 'Manage Our Suppliers', action: () => setSection('suppliers') },
     { id: 'nav-pos', type: 'Navigation', label: 'View Incoming Deliveries', action: () => setSection('pos') },
     { id: 'nav-storefront', type: 'Navigation', label: 'View Live Storefront', action: () => go('home') },

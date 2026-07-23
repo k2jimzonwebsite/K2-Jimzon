@@ -14,11 +14,11 @@ import { ArrowIcon, CheckIcon, PlaneIcon, PlusIcon, StarIcon, MinusIcon } from '
 
 function NewArrivals() {
   const { products } = useStore()
-  const arrivals = products.slice(0, 5)
+  const arrivals = useMemo(() => (products || []).slice(0, 5), [products])
   const [activeIndex, setActiveIndex] = useState(0)
 
-  const next = () => setActiveIndex((prev) => (prev + 1) % arrivals.length)
-  const prev = () => setActiveIndex((prev) => (prev - 1 + arrivals.length) % arrivals.length)
+  const next = () => setActiveIndex((prev) => (arrivals.length > 0 ? (prev + 1) % arrivals.length : 0))
+  const prev = () => setActiveIndex((prev) => (arrivals.length > 0 ? (prev - 1 + arrivals.length) % arrivals.length : 0))
 
   const activeProduct = arrivals[activeIndex]
 
@@ -57,7 +57,7 @@ function NewArrivals() {
           className="flex items-center gap-4"
         >
           <span className="text-sm font-bold tabular text-navy-faint">
-            <span className="text-navy">0{activeIndex + 1}</span> / 0{arrivals.length}
+            <span className="text-navy">0{arrivals.length > 0 ? activeIndex + 1 : 0}</span> / 0{arrivals.length}
           </span>
           <div className="flex gap-2">
             <button 
@@ -80,7 +80,7 @@ function NewArrivals() {
         {activeProduct ? (
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeProduct.sku}
+              key={activeProduct.sku || activeProduct.id || activeIndex}
               initial={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
               animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
               exit={{ opacity: 0, scale: 1.02, filter: 'blur(4px)' }}

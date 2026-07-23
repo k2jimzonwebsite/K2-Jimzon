@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import PhotoManagerModal from './PhotoManagerModal'
 import BulkCsvImportModal from './BulkCsvImportModal'
+import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
 import { useStore } from '../../context/StoreContext'
 import Barcode from 'react-barcode'
 import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
@@ -12,7 +13,7 @@ const DOMAINS = [
   { name: 'Product', cols: ['SKU', 'Barcode', 'Product Name', 'Brand', 'Category', 'Subcategory', 'Origin', 'Net Weight', 'Package Type'] },
   { name: 'Content', cols: ['Description', 'Why Buy', 'Usage', 'Storage', 'Ingredients', 'Allergens', 'Finished Product'] },
   { name: 'Pricing', cols: ['Cost ₱', 'SRP ₱', 'Wholesale ₱', 'Dealer ₱'] },
-  { name: 'Inventory', cols: ['Available', 'Reorder Level', 'Supplier', 'Warehouse'] },
+  { name: 'Inventory', cols: ['Available', 'Reorder Level', 'Expiry Date', 'Supplier', 'Warehouse'] },
   { name: 'Website', cols: ['Slug', 'SEO Keywords', 'Featured', 'Published'] },
   { name: 'Media', cols: ['Primary Image', 'Lifestyle Images', 'Video URL'] },
   { name: 'Management', cols: ['Status', 'Internal Notes'] }
@@ -35,7 +36,7 @@ const FIELD_MAP = {
   'Cost ₱': 'cost_price', 'SRP ₱': 'srp', 'Wholesale ₱': 'wholesale_price', 'Dealer ₱': 'dealer_price',
   
   // Inventory
-  'Available': 'stock_available', 'Reorder Level': 'reorder_level', 'Supplier': 'supplier_id', 'Warehouse': 'warehouse_id',
+  'Available': 'stock_available', 'Reorder Level': 'reorder_level', 'Expiry Date': 'expiry_date', 'Supplier': 'supplier_id', 'Warehouse': 'warehouse_id',
   
   // Website
   'Slug': 'slug', 'SEO Keywords': 'seo_keywords', 'Featured': 'is_featured', 'Published': 'published',
@@ -56,6 +57,7 @@ export default function Sheet() {
   const [showSmartPaste, setShowSmartPaste] = useState(false)
   const [showCsvImport, setShowCsvImport] = useState(false)
   const [showBarcode, setShowBarcode] = useState(null)
+  const [batchProduct, setBatchProduct] = useState(null)
 
   useEffect(() => {
     if (!supabase) return;
@@ -111,53 +113,88 @@ export default function Sheet() {
     if (supabase) await supabase.from('products').insert([newRow])
   }
 
+  const tableContainerRef = useRef(null)
+
+  const handleScrollToDomain = (pixelOffset) => {
+    if (tableContainerRef.current) {
+      tableContainerRef.current.scrollTo({ left: pixelOffset, behavior: 'smooth' })
+    }
+  }
+
   return (
     <div className="flex flex-col h-full bg-[#05080f]">
-      <div className="flex items-center gap-4 border-b border-white/10 px-6 py-4 bg-[#0A101D] overflow-x-auto shrink-0">
-        <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded bg-white/10 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-white/20">
-          <span className="text-forest text-lg leading-none">+</span> Add New Row
-        </button>
-        <div className="h-6 w-px bg-white/10" />
-        <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded border border-white/10 px-3 py-1.5 text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
-          <span className="text-lg leading-none">📂</span> Upload CSV
-        </button>
-        <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded border border-white/10 px-3 py-1.5 text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
-          <span className="text-forest text-lg leading-none">⌂</span> Scan Box
-        </button>
-        <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded border border-blue/30 bg-blue/10 px-3 py-1.5 text-sm font-medium text-blue transition hover:bg-blue/20">
-          <span className="text-lg leading-none">✨</span> Smart Paste AI
-        </button>
+      {/* Top Action & Horizontal Navigation Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-6 py-3.5 bg-[#0A101D] shrink-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-lg bg-forest text-white px-3.5 py-2.5 min-h-[44px] text-xs font-bold transition hover:bg-forest/90 shadow-md">
+            <span className="text-base leading-none">+</span> Add Row
+          </button>
+          <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-xs font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
+            <span>📂</span> CSV Import
+          </button>
+          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-xs font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
+            <span>⌂</span> Scan Box
+          </button>
+          <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-blue/30 bg-blue/10 px-3 py-2.5 min-h-[44px] text-xs font-medium text-blue transition hover:bg-blue/20">
+            <span>✨</span> Smart Paste AI
+          </button>
+        </div>
+
+        {/* Sticky Viewport Horizontal Domain Jump Controls */}
+        <div className="flex flex-wrap items-center gap-1.5 bg-white/5 p-1 rounded-lg border border-white/10 text-xs font-mono">
+          <span className="text-white/40 text-[10px] uppercase font-bold px-1.5">Jump:</span>
+          <button onClick={() => handleScrollToDomain(0)} className="px-2.5 py-2 min-h-[38px] rounded bg-white/10 hover:bg-white/20 text-white font-bold transition-all">
+            ◀ SKU
+          </button>
+          <button onClick={() => handleScrollToDomain(600)} className="px-2.5 py-2 min-h-[38px] rounded bg-amber/20 hover:bg-amber/30 text-amber font-bold transition-all">
+            💰 Pricing
+          </button>
+          <button onClick={() => handleScrollToDomain(1200)} className="px-2.5 py-2 min-h-[38px] rounded bg-forest/20 hover:bg-forest/30 text-forest font-bold transition-all">
+            📦 Stock & FEFO
+          </button>
+          <button onClick={() => handleScrollToDomain(2000)} className="px-2.5 py-2 min-h-[38px] rounded bg-white/10 hover:bg-white/20 text-white font-bold transition-all">
+            ▶ End
+          </button>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-auto custom-scrollbar relative bg-cream dark:bg-[#05080f] pb-32">
+      {/* Viewport Frame Constrained Scroll Container */}
+      <div ref={tableContainerRef} className="flex-1 max-h-[calc(100vh-210px)] overflow-x-auto overflow-y-auto custom-scrollbar relative bg-[#05080f] border-t border-white/10">
         {loading ? (
-          <div className="flex items-center justify-center h-64 text-navy-soft dark:text-white/40 animate-pulse">Loading PIM Data...</div>
+          <div className="flex items-center justify-center h-64 text-white/40 animate-pulse font-mono text-xs">Loading PIM Data...</div>
         ) : (
-          <table className="w-max min-w-full border-collapse text-sm bg-white dark:bg-[#0A101D]">
-            <thead className="sticky top-0 z-20 shadow-sm">
-              <tr className="bg-navy text-xs text-white">
-                <th className="w-8 border border-white/20 py-1.5 font-medium sticky left-0 z-30 bg-navy"></th>
+          <table className="w-max min-w-full border-collapse text-sm bg-[#0A101D]">
+            <thead className="sticky top-0 z-30 shadow-md">
+              <tr className="bg-[#05080f] text-xs text-white">
+                <th className="w-8 border border-white/20 py-2 font-medium sticky left-0 z-40 bg-[#05080f]">#</th>
                 {DOMAINS.map((d, i) => (
-                  <th key={d.name} colSpan={d.cols.length} className={`border border-white/20 py-1.5 px-4 font-bold uppercase tracking-wider text-center ${['bg-blue/20', 'bg-forest/20', 'bg-amber/20', 'bg-crimson/20', 'bg-purple-900/40', 'bg-pink-900/40', 'bg-slate-700'][i % 7]}`}>
+                  <th key={d.name} colSpan={d.cols.length} className={`border border-white/20 py-2 px-4 font-bold uppercase tracking-wider text-center ${['bg-blue/20 text-blue', 'bg-forest/20 text-forest', 'bg-amber/20 text-amber', 'bg-crimson/20 text-crimson', 'bg-purple-900/40 text-purple-300', 'bg-pink-900/40 text-pink-300', 'bg-slate-700 text-white/80'][i % 7]}`}>
                     {d.name}
                   </th>
                 ))}
-                <th className="w-8 border border-white/20 py-1.5 font-medium"></th>
+                <th className="w-12 border border-white/20 py-2 font-medium">Action</th>
               </tr>
-              <tr className="bg-shell dark:bg-[#10141d] text-left text-xs font-semibold text-navy dark:text-white/70">
-                <th className="border border-line dark:border-white/10 px-2 py-2 text-center sticky left-0 z-30 bg-shell dark:bg-[#10141d] shadow-[1px_0_0_0_#e5e7eb] dark:shadow-[1px_0_0_0_rgba(255,255,255,0.1)]">#</th>
-                {ALL_COLS.map(h => (
-                  <th key={h} className="border border-line dark:border-white/10 px-2.5 py-2 whitespace-nowrap">{h}</th>
+              <tr className="bg-[#0A101D] text-left text-xs font-semibold text-white/70">
+                <th className="border border-white/10 px-2 py-2 text-center sticky left-0 z-40 bg-[#0A101D] shadow-[2px_0_5px_rgba(0,0,0,0.5)]">#</th>
+                {ALL_COLS.map((h, colIdx) => (
+                  <th
+                    key={h}
+                    className={`border border-white/10 px-3 py-2.5 whitespace-nowrap font-mono text-[11px] ${
+                      h === 'SKU' ? 'sticky left-8 z-40 bg-[#0A101D] font-bold text-blue shadow-[2px_0_5px_rgba(0,0,0,0.5)]' : ''
+                    }`}
+                  >
+                    {h}
+                  </th>
                 ))}
-                <th className="border border-line dark:border-white/10 px-2 py-2 text-center">Action</th>
+                <th className="border border-white/10 px-2 py-2 text-center">Action</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r, i) => {
                 const isDraft = r.status === 'Draft'
                 return (
-                  <tr key={r.sku} className="hover:bg-blue-wash dark:hover:bg-blue/10 transition-colors group">
-                    <td className="border border-line dark:border-white/10 bg-shell dark:bg-[#0A101D] group-hover:bg-blue-wash dark:group-hover:bg-blue/10 px-1 text-center text-xs text-navy-soft dark:text-white/30 tabular sticky left-0 z-10 shadow-[1px_0_0_0_#e5e7eb] dark:shadow-[1px_0_0_0_rgba(255,255,255,0.05)]">
+                  <tr key={r.sku} className="hover:bg-blue/10 transition-colors group">
+                    <td className="border border-white/10 bg-[#0A101D] group-hover:bg-blue/10 px-2 py-1.5 text-center text-xs text-white/40 font-mono sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
                       {i + 1}
                     </td>
                     {ALL_COLS.map((col, colIdx) => {
@@ -183,6 +220,34 @@ export default function Sheet() {
                         )
                       }
                       
+                      if (col === 'Expiry Date') {
+                        const health = getExpiryHealth(val)
+                        return (
+                          <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="p-1 min-w-[150px]">
+                            <div className="flex items-center gap-1.5">
+                              <input 
+                                type="date"
+                                value={val || ''}
+                                onChange={(e) => updateField(i, col, e.target.value, r.sku)}
+                                className="bg-transparent text-xs font-mono text-white outline-none w-24"
+                              />
+                              {val && (
+                                <button
+                                  onClick={() => setBatchProduct(r)}
+                                  className={`px-1.5 py-0.5 rounded text-[9px] font-bold border transition-all ${
+                                    health.color === 'crimson' ? 'bg-crimson/20 border-crimson text-crimson animate-pulse' :
+                                    health.color === 'amber' ? 'bg-amber/20 border-amber text-amber' :
+                                    'bg-forest/20 border-forest text-forest'
+                                  }`}
+                                >
+                                  {health.text}
+                                </button>
+                              )}
+                            </div>
+                          </Cell>
+                        )
+                      }
+                      
                       if (isBool) {
                         return (
                           <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="text-center p-0 min-w-[60px]">
@@ -192,7 +257,14 @@ export default function Sheet() {
                       }
 
                       return (
-                        <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="p-0 min-w-[120px]">
+                        <Cell
+                          key={colIdx}
+                          onSelect={() => setSelected({ row: i, col: colIdx })}
+                          selected={selected.row === i && selected.col === colIdx}
+                          className={`p-0 min-w-[120px] ${
+                            col === 'SKU' ? 'sticky left-8 z-20 bg-[#0A101D] group-hover:bg-[#0A101D] shadow-[2px_0_5px_rgba(0,0,0,0.5)]' : ''
+                          }`}
+                        >
                           <input 
                             type={typeof val === 'number' ? 'number' : 'text'}
                             value={displayVal}
@@ -248,6 +320,20 @@ export default function Sheet() {
             <p className="mt-6 text-sm text-navy-soft">Scan directly from screen, or right-click to save and print.</p>
           </div>
         </div>
+      )}
+
+      {batchProduct && (
+        <BatchExpiryManagerModal
+          product={batchProduct}
+          onClose={() => setBatchProduct(null)}
+          onSaveBatches={(sku, updatedBatches) => {
+            setRows(prev => prev.map(r => r.sku === sku ? {
+              ...r,
+              batches: updatedBatches,
+              expiry_date: updatedBatches.sort((a, b) => new Date(a.expiry_date) - new Date(b.expiry_date))[0]?.expiry_date || r.expiry_date
+            } : r))
+          }}
+        />
       )}
     </div>
   )

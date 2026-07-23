@@ -1,7 +1,12 @@
 import { useState, useEffect, Suspense, lazy } from 'react'
 import { AlertIcon, BoxIcon, GlobeIcon, GridIcon, SyncIcon, UserIcon, InboxIcon } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
+import { useStore } from '../../context/StoreContext'
 import CommandPalette from './CommandPalette'
+import AdminAuthModal from './AdminAuthModal'
+import ErrorBoundary from '../../components/ui/ErrorBoundary'
+import DailyTaskNotificationDrawer from './DailyTaskNotificationDrawer'
+import AdminAiCopilotModal from './AdminAiCopilotModal'
 
 // Lazy loaded heavy components to reduce initial bundle lag
 const Kanban = lazy(() => import('./Kanban'))
@@ -10,34 +15,48 @@ const InventoryGrid = lazy(() => import('./InventoryGrid'))
 const GlobeCms = lazy(() => import('./GlobeCms'))
 const AiDrafts = lazy(() => import('./AiDrafts'))
 const Inbox = lazy(() => import('./Inbox'))
-const Customers = lazy(() => import('./Customers'))
+const Customers = lazy(() => import('./CustomerCrmBroadcast'))
 const Overview = lazy(() => import('./Overview'))
 const Suppliers = lazy(() => import('./Suppliers'))
+const ConsignmentManager = lazy(() => import('./ConsignmentManager'))
 const BulkCsvImportModal = lazy(() => import('./BulkCsvImportModal'))
+const ChannelIntegrations = lazy(() => import('./ChannelIntegrations'))
+const PasabuyManager = lazy(() => import('./PasabuyManager'))
+const OmniOperationsHub = lazy(() => import('./OmniOperationsHub'))
 
 const NAV_COMMERCE = [
-  { id: 'overview', label: 'Home Dashboard', icon: GridIcon },
-  { id: 'kanban', label: 'Global Logistics', icon: BoxIcon },
-  { id: 'wholesale', label: 'VIP Customers', icon: UserIcon },
-  { id: 'inbox', label: 'Messages', icon: InboxIcon },
+  { id: 'overview', label: 'Home & Daily Overview', icon: GridIcon },
+  { id: 'omni_hub', label: 'Fulfillment & Staff Stations', icon: BoxIcon },
+  { id: 'kanban', label: 'Italy Flight Consignments', icon: BoxIcon },
+  { id: 'pasabuy_manager', label: 'Custom Pasabuy Quotes', icon: BoxIcon },
+  { id: 'wholesale', label: 'Customer Directory & VIPs', icon: UserIcon },
+  { id: 'inbox', label: 'Messages (WhatsApp/Viber)', icon: InboxIcon },
 ]
 
 const NAV_SUPPLY = [
-  { id: 'inventory', label: 'Product Master', icon: BoxIcon },
-  { id: 'suppliers', label: 'Our Suppliers', icon: GlobeIcon },
+  { id: 'inventory', label: 'Product Catalog & Stock', icon: BoxIcon },
+  { id: 'suppliers', label: 'Supplier Contacts & Orders', icon: GlobeIcon },
 ]
 
 const NAV_INTELLIGENCE = [
-  { id: 'sourcing', label: 'Pending AI Products', icon: SyncIcon },
-  { id: 'globe', label: '3D Map Settings', icon: GlobeIcon },
+  { id: 'integrations', label: 'Marketplace API Keys', icon: GlobeIcon },
+  { id: 'sourcing', label: 'AI Import Suggestions', icon: SyncIcon },
+  { id: 'globe', label: '3D Map Display Settings', icon: GlobeIcon },
 ]
 
 export default function Admin() {
+  const { isAdmin, logoutAdmin, go } = useStore()
   const [section, setSection] = useState('overview')
   const [sheetMode, setSheetMode] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showCsvImport, setShowCsvImport] = useState(false)
+  const [showDailyTasks, setShowDailyTasks] = useState(false)
+  const [showAiCopilot, setShowAiCopilot] = useState(false)
+  
+  if (!isAdmin) {
+    return <AdminAuthModal isOpen={true} onClose={() => go('home')} />
+  }
   
   // KPI States
   const [activeSkus, setActiveSkus] = useState(0)
@@ -164,12 +183,54 @@ export default function Admin() {
           </div>
 
         </div>
-        <div className="border-t border-white/10 px-5 py-4 text-xs text-white/50">
-          <p className="flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-forest pulse-dot" />
-            Supabase · live
-          </p>
-          <p className="mt-1">Shopee sync: Auto</p>
+
+        {/* Left Sidebar Operations & Cargo Box Intelligence Widget */}
+        <div className="mx-3 my-3 p-3.5 rounded-2xl bg-[#0A101D] border border-white/10 space-y-3 font-mono text-xs shadow-xl shrink-0">
+          <div className="flex items-center justify-between border-b border-white/10 pb-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-amber flex items-center gap-1">
+              <span>🇮🇹</span> Italy Box Pulse
+            </span>
+            <span className="text-[9px] bg-forest/20 text-forest px-1.5 py-0.5 rounded font-bold">LIVE</span>
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="flex justify-between text-white/70 text-[11px]">
+              <span>Arriving Flight Boxes:</span>
+              <strong className="text-white font-bold">3 Boxes</strong>
+            </div>
+            <div className="flex justify-between text-white/70 text-[11px]">
+              <span>SKUs Inside Cargo:</span>
+              <strong className="text-amber font-bold">12 Items</strong>
+            </div>
+            <div className="flex justify-between text-white/70 text-[11px]">
+              <span>Today Sales (Channels):</span>
+              <strong className="text-forest font-bold">₱41,260</strong>
+            </div>
+          </div>
+
+          <button
+            onClick={() => { setSection('omni_hub'); setSheetMode(false); }}
+            className="w-full py-2 rounded-xl bg-amber/20 hover:bg-amber/30 text-amber font-bold text-[11px] transition-all border border-amber/30 flex items-center justify-center gap-1 shadow-sm"
+          >
+            ⚡ Open Staff Box Handover
+          </button>
+        </div>
+
+        <div className="border-t border-white/10 px-5 py-3 text-xs text-white/50 space-y-2 shrink-0">
+          <div className="flex items-center justify-between">
+            <p className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-forest" />
+              Supabase · Live
+            </p>
+            <span className="text-[10px] font-mono bg-crimson/20 text-crimson font-bold px-1.5 py-0.5 rounded">ADMIN</span>
+          </div>
+          <p className="text-[11px] text-white/40">Shopee & Channel sync: Active</p>
+          <button 
+            onClick={logoutAdmin}
+            className="w-full mt-1.5 py-1.5 px-3 rounded-xl bg-white/5 hover:bg-crimson/20 hover:text-crimson text-white/70 text-xs font-semibold transition-all border border-white/10 flex items-center justify-center gap-1.5"
+          >
+            Lock / Exit Admin
+          </button>
         </div>
       </aside>
 
@@ -217,9 +278,9 @@ export default function Admin() {
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white font-bold' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
                         >
-                          <Ico size={16} /> {item.label}
+                          <Ico size={18} /> {item.label}
                         </button>
                       )
                     })}
@@ -228,16 +289,16 @@ export default function Admin() {
 
                 <div>
                   <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Stock & Buying</p>
-                  <div className="space-y-0.5">
+                  <div className="space-y-1">
                     {NAV_SUPPLY.map(item => {
                       const Ico = item.icon
                       return (
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white font-bold' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
                         >
-                          <Ico size={16} /> {item.label}
+                          <Ico size={18} /> {item.label}
                         </button>
                       )
                     })}
@@ -246,16 +307,16 @@ export default function Admin() {
                 
                 <div>
                   <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">AI Tools</p>
-                  <div className="space-y-0.5">
+                  <div className="space-y-1">
                     {NAV_INTELLIGENCE.map(item => {
                       const Ico = item.icon
                       return (
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white font-bold' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
                         >
-                          <Ico size={16} /> {item.label}
+                          <Ico size={18} /> {item.label}
                         </button>
                       )
                     })}
@@ -269,33 +330,50 @@ export default function Admin() {
         <header className="flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#0A101D] px-4 py-3.5 md:px-6">
           <div className="flex-1 min-w-0">
             <h1 className="font-serif text-xl font-semibold tracking-tight text-white truncate">
-              {section === 'globe' ? '3D Map Settings' : section === 'wholesale' ? 'VIP Customers' : section === 'sourcing' ? 'Pending AI Products' : section === 'inbox' ? 'Customer Messages' : section === 'inventory' ? 'All Products' : section === 'suppliers' ? 'Supplier Contacts' : section === 'pos' ? 'Incoming Deliveries' : section === 'kanban' ? 'Pack & Ship Orders' : 'Home Dashboard'}
+              {section === 'integrations' ? 'Marketplace API Keys & Vault' :
+               section === 'globe' ? '3D Globe Map Settings' :
+               section === 'wholesale' ? 'Customer Directory & VIP Accounts' :
+               section === 'sourcing' ? 'AI Import Product Suggestions' :
+               section === 'inbox' ? 'Customer Messages (WhatsApp / Viber)' :
+               section === 'inventory' ? 'Product Catalog & Stock Master' :
+               section === 'suppliers' ? 'Supplier Contacts & Purchase Orders' :
+               section === 'pasabuy_manager' ? 'Custom Pasabuy Customer Quotes' :
+               section === 'omni_hub' ? 'Fulfillment & Staff Operations Hub' :
+               section === 'kanban' ? 'Italy Flight Consignments & Box Tracker' :
+               'Home & Daily Operational Summary'}
             </h1>
             <p className="text-xs font-mono text-white/50 mt-1">
-              {section === 'globe'
-                ? 'Manage which products appear on the 3D map.'
+              {section === 'integrations'
+                ? 'Manage API keys, OAuth tokens, and webhooks for Shopee, Lazada, TikTok Shop, and Meta.'
+                : section === 'globe'
+                ? 'Control which products appear on the interactive 3D map.'
                 : section === 'wholesale'
-                ? 'Approve VIP roles for wholesale buyers.'
+                ? 'Customer order histories, lifetime spending, VIP wholesale approvals, and mass marketing.'
                 : section === 'sourcing'
-                ? 'Review products parsed by the AI before pushing to live inventory.'
+                ? 'Review products parsed by AI before publishing to live inventory.'
                 : section === 'inbox'
-                ? 'Manage messages from WhatsApp, Facebook, and Viber. AI Copilot is active.'
+                ? 'Manage messages from WhatsApp, Facebook, and Viber with AI Copilot support.'
                 : section === 'suppliers'
-                ? 'Manage vendor relationships and track lead times.'
-                : section === 'pos'
-                ? 'Track deliveries and auto-restock inventory.'
-                : 'SYSTEM_STATUS: NOMINAL | Last Sync: Just now'}
+                ? 'Manage vendor relationships and purchase order deliveries.'
+                : section === 'pasabuy_manager'
+                ? 'Process custom Pasabuy shopper requests and calculate Italy landed costs.'
+                : section === 'omni_hub'
+                ? 'Staff barcode pack-to-ship verification and Italy cargo box custody claims.'
+                : section === 'kanban'
+                ? 'Track flight cargo consignments from Malpensa MXP → Manila NAIA.'
+                : 'Live channel revenue, active cargo boxes, and stock alerts.'}
             </p>
           </div>
           <div className="ml-auto flex items-center gap-4">
             
-            {/* Notification Bell */}
-            <button className="relative flex items-center justify-center h-9 w-9 rounded-full bg-white/5 border border-white/10 text-white/50 hover:text-white hover:bg-white/10 transition-colors">
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-              {/* Fake unread badge */}
-              <span className="absolute top-1.5 right-2 h-2 w-2 rounded-full bg-crimson" />
+            {/* Daily Task & Expiration Notification Bell */}
+            <button
+              onClick={() => setShowDailyTasks(true)}
+              className="relative flex items-center justify-center min-h-[44px] min-w-[44px] rounded-xl bg-amber/20 border border-amber/40 text-amber font-mono font-bold text-xs px-3 hover:bg-amber/30 transition-all shadow-md gap-1.5"
+              title="Daily Actionable Tasks & Expirations"
+            >
+              <span>🔔</span>
+              <span>4</span>
             </button>
 
             <button 
@@ -339,27 +417,34 @@ export default function Admin() {
           </div>
         </header>
 
-        {section !== 'globe' && section !== 'sourcing' && section !== 'inbox' && section !== 'wholesale' && (
+        {/* Master KPI Row rendered ONLY on Home & Daily Overview (Master Metrics Page) */}
+        {section === 'overview' && (
           <KpiRow skus={activeSkus} lowStock={lowStock} pending={pendingOrders} />
         )}
 
         <div className="p-4 md:p-6 overflow-y-auto flex-1">
-          <Suspense fallback={
-            <div className="w-full h-full flex flex-col items-center justify-center text-white/50 space-y-4">
-              <div className="w-8 h-8 rounded-full border-2 border-t-blue border-r-blue border-b-transparent border-l-transparent animate-spin" />
-              <p className="text-sm font-medium animate-pulse">Loading workspace...</p>
-            </div>
-          }>
-            {section === 'globe' ? <GlobeCms /> 
-             : section === 'inbox' ? <Inbox />
-             : section === 'sourcing' ? <AiDrafts />
-             : section === 'wholesale' ? <Customers />
-             : section === 'suppliers' ? <Suppliers />
-             : showSheet ? <Sheet /> 
-             : showGrid ? <InventoryGrid />
-              : section === 'overview' ? <Overview setSection={setSection} />
-             : <Kanban />}
-          </Suspense>
+          <ErrorBoundary key={section}>
+            <Suspense fallback={
+              <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center text-white/50 space-y-4">
+                <div className="w-8 h-8 rounded-full border-2 border-t-blue border-r-blue border-b-transparent border-l-transparent animate-spin" />
+                <p className="text-sm font-medium animate-pulse">Loading workspace...</p>
+              </div>
+            }>
+              {section === 'omni_hub' ? <OmniOperationsHub />
+               : section === 'pasabuy_manager' ? <PasabuyManager />
+               : section === 'integrations' ? <ChannelIntegrations />
+               : section === 'globe' ? <GlobeCms /> 
+               : section === 'inbox' ? <Inbox />
+               : section === 'sourcing' ? <AiDrafts />
+               : section === 'wholesale' ? <Customers />
+               : section === 'suppliers' ? <Suppliers />
+               : section === 'consignment' ? <ConsignmentManager />
+               : showSheet ? <Sheet /> 
+               : showGrid ? <InventoryGrid />
+               : section === 'overview' ? <Overview setSection={setSection} />
+               : <Kanban />}
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </div>
 
@@ -368,6 +453,27 @@ export default function Admin() {
           <BulkCsvImportModal onClose={() => setShowCsvImport(false)} />
         </Suspense>
       )}
+
+      <DailyTaskNotificationDrawer
+        isOpen={showDailyTasks}
+        onClose={() => setShowDailyTasks(false)}
+        onNavigate={(targetSec) => setSection(targetSec)}
+      />
+
+      <AdminAiCopilotModal
+        isOpen={showAiCopilot}
+        onClose={() => setShowAiCopilot(false)}
+        onNavigate={(targetSec) => setSection(targetSec)}
+      />
+
+      {/* Floating Instant AI Copilot Button */}
+      <button
+        onClick={() => setShowAiCopilot(true)}
+        className="fixed bottom-5 right-5 z-40 bg-blue hover:bg-blue/90 text-white font-mono font-bold text-xs px-4 py-3 rounded-2xl shadow-2xl transition-all border border-blue/40 flex items-center gap-2 min-h-[44px] hover:scale-105 active:scale-95"
+      >
+        <span className="text-base leading-none">🤖</span>
+        <span>AI Assistant</span>
+      </button>
     </div>
   )
 }

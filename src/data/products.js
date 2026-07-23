@@ -622,4 +622,4 @@ export const getProduct = (id) => products.find((p) => p.id === id) ?? products[
 export const byCollection = (id) => products.filter((p) => p.collections.includes(id))
 
 export const peso = (n) =>
-  '₱' + n.toLocaleString('en-PH', { maximumFractionDigits: 0 })
+  '₱' + (Number(n) || 0).toLocaleString('en-PH', { maximumFractionDigits: 0 })

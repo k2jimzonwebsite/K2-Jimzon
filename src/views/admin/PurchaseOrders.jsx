@@ -244,7 +244,7 @@ export default function PurchaseOrders() {
                 <td className="px-6 py-4 font-mono text-white">{po.po_number}</td>
                 <td className="px-6 py-4">{po.suppliers?.name || 'Unknown'}</td>
                 <td className="px-6 py-4">{po.expected_delivery || '-'}</td>
-                <td className="px-6 py-4 font-mono text-forest">{peso}{Number(po.total_amount).toLocaleString()}</td>
+                <td className="px-6 py-4 font-mono text-forest">{peso(po.total_amount)}</td>
                 <td className="px-6 py-4">
                   <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
                     po.status === 'Received' ? 'bg-forest/20 text-forest' : 

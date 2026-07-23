@@ -18,6 +18,7 @@ export default function Inbox() {
   const [replyText, setReplyText] = useState('')
   const [aiDrafting, setAiDrafting] = useState(false)
   const [dbResults, setDbResults] = useState(null)
+  const [autoWebhookBot, setAutoWebhookBot] = useState(true)
 
   const handleDraftAI = () => {
     setAiDrafting(true)
@@ -101,12 +102,28 @@ export default function Inbox() {
 
       {/* Chat Pane (Middle) */}
       <div className="flex-1 flex flex-col bg-[#0A101D] relative">
-        <div className="p-4 border-b border-white/10 flex justify-between items-center shadow-sm z-10 bg-white/5 backdrop-blur-md shrink-0">
+        <div className="p-4 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 shadow-sm z-10 bg-white/5 backdrop-blur-md shrink-0">
           <div>
-            <h3 className="font-bold text-white">{chat.customer}</h3>
-            <p className="text-xs text-white/50">via {chat.channel} Webhook</p>
+            <div className="flex items-center gap-2">
+              <h3 className="font-bold text-white">{chat.customer}</h3>
+              <span className="text-[10px] font-mono font-bold text-forest bg-forest/20 px-2 py-0.5 rounded border border-forest/30">
+                via {chat.channel} Webhook
+              </span>
+            </div>
+            <p className="text-xs text-white/50">Unified Customer Messaging Channel</p>
           </div>
-          <button className="text-xs font-semibold text-blue hover:text-blue/80 transition-colors">View CRM Profile</button>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setAutoWebhookBot(prev => !prev)}
+              className={`text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 ${
+                autoWebhookBot ? 'bg-forest/20 text-forest border-forest/40' : 'bg-white/5 text-white/40 border-white/10'
+              }`}
+            >
+              <span>⚡</span> Bot Auto-Reply: {autoWebhookBot ? 'ACTIVE (100% Automated)' : 'PAUSED'}
+            </button>
+            <button className="text-xs font-semibold text-blue hover:text-blue/80 transition-colors">View CRM Profile</button>
+          </div>
         </div>
 
         {chat.intent === 'pasabuy_request' && chat.metadata && (

@@ -50,6 +50,16 @@ export function StoreProvider({ children }) {
   const [cart, setCart] = useState([])
   const [isWholesale, setIsWholesale] = useState(false)
   const [user, setUser] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return localStorage.getItem('k2_admin_session') === 'true'
+      } catch (e) {
+        return false
+      }
+    }
+    return false
+  })
   
   const [cartOpen, setCartOpen] = useState(false)
   const [order, setOrder] = useState(null)
@@ -86,15 +96,60 @@ export function StoreProvider({ children }) {
 
   const toggleDarkMode = () => setIsDark(!isDark)
 
+  const loginAdmin = async ({ email, password, passcode }) => {
+    if (supabase && email && password) {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error || !data?.user) {
+        throw new Error(error?.message || 'Invalid email or password.')
+      }
+
+      // Check Real Role from Supabase database
+      const { data: profile } = await supabase.from('user_profiles').select('role').eq('id', data.user.id).single()
+      if (profile && profile.role !== 'Admin') {
+        await supabase.auth.signOut()
+        throw new Error('Access Denied: Your account does not have Admin privileges.')
+      }
+
+      setIsAdmin(true)
+      setUser(data.user)
+      try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
+      return true
+    }
+
+    // Fallback for local offline prototype mode when Supabase env keys are absent
+    if (passcode && (passcode === 'K2ADMIN2026' || passcode === 'admin123')) {
+      setIsAdmin(true)
+      try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
+      return true
+    }
+
+    return false
+  }
+
+  const logoutAdmin = async () => {
+    setIsAdmin(false)
+    try { localStorage.removeItem('k2_admin_session') } catch (e) {}
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
+  }
+
   useEffect(() => {
     fetchProducts()
+    fetchConversations()
     checkUser()
 
     if (!supabase) return;
 
-    const channel = supabase
+    const productsChannel = supabase
       .channel('public:products:store')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
+      .subscribe()
+
+    const convosChannel = supabase
+      .channel('public:conversations:store')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'conversations' }, fetchConversations)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, fetchConversations)
       .subscribe()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -102,7 +157,8 @@ export function StoreProvider({ children }) {
     })
 
     return () => {
-      supabase.removeChannel(channel)
+      supabase.removeChannel(productsChannel)
+      supabase.removeChannel(convosChannel)
       subscription?.unsubscribe()
     }
   }, [])
@@ -117,7 +173,11 @@ export function StoreProvider({ children }) {
     setUser(u)
     if (u) {
       const { data } = await supabase.from('user_profiles').select('role').eq('id', u.id).single()
-      if (data && (data.role === 'VIP' || data.role === 'Admin')) {
+      if (data && data.role === 'Admin') {
+        setIsAdmin(true)
+        setIsWholesale(true)
+        try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
+      } else if (data && data.role === 'VIP') {
         setIsWholesale(true)
       } else {
         setIsWholesale(false)
@@ -140,9 +200,53 @@ export function StoreProvider({ children }) {
     setLoading(false)
   }
 
+  const fetchConversations = async () => {
+    if (!supabase) return;
+    try {
+      const { data, error } = await supabase
+        .from('conversations')
+        .select(`
+          id,
+          customer_name,
+          platform,
+          status,
+          last_message_at,
+          messages (
+            id,
+            sender_type,
+            content,
+            is_draft,
+            created_at
+          )
+        `)
+        .order('last_message_at', { ascending: false })
+
+      if (!error && data && data.length > 0) {
+        const formatted = data.map(c => ({
+          id: c.id,
+          customer: c.customer_name,
+          channel: c.platform,
+          time: c.last_message_at ? new Date(c.last_message_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Now',
+          unread: c.status === 'Open',
+          messages: (c.messages || [])
+            .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+            .map(m => ({
+              sender: m.sender_type === 'Customer' ? 'customer' : 'agent',
+              text: m.content,
+              is_draft: m.is_draft
+            })),
+          intent: 'general'
+        }))
+        setConversations(formatted)
+      }
+    } catch (e) {
+      console.warn("Failed to fetch conversations from Supabase:", e)
+    }
+  }
+
   // Merge the rich local data (images, hue, guide) with the live pricing and stock from Supabase
   const products = useMemo(() => {
-    if (dbProducts.length === 0) return []
+    if (dbProducts.length === 0) return localProducts
     return dbProducts.map((dbP, i) => {
       // Find matching local product for rich UI assets (if any)
       // First try by sku, then try matching the names if sku doesn't match perfectly
@@ -245,7 +349,7 @@ export function StoreProvider({ children }) {
           }),
     )
 
-  const sendMessage = (convoId, text, sender) => {
+  const sendMessage = async (convoId, text, sender) => {
     setConversations(prev => prev.map(c => {
       if (c.id === convoId) {
         return {
@@ -257,9 +361,27 @@ export function StoreProvider({ children }) {
       }
       return c
     }))
+
+    if (supabase) {
+      try {
+        const isUuid = typeof convoId === 'string' && convoId.includes('-') && convoId.length > 10;
+        if (isUuid) {
+          await supabase.from('messages').insert({
+            conversation_id: convoId,
+            sender_type: sender === 'customer' ? 'Customer' : 'Admin',
+            content: text
+          })
+          await supabase.from('conversations').update({
+            last_message_at: new Date().toISOString()
+          }).eq('id', convoId)
+        }
+      } catch (err) {
+        console.warn("Supabase message insert warning:", err)
+      }
+    }
   }
 
-  const createConversation = (customer, channel, text, intent = 'general', metadata = null, providedId = null) => {
+  const createConversation = async (customer, channel, text, intent = 'general', metadata = null, providedId = null) => {
     const id = providedId || ('c' + Date.now())
     setConversations(prev => [
       {
@@ -274,6 +396,34 @@ export function StoreProvider({ children }) {
       },
       ...prev
     ])
+
+    if (supabase) {
+      try {
+        const validPlatforms = ['WhatsApp', 'Viber', 'Messenger', 'Instagram', 'TikTok', 'Shopee', 'Lazada', 'Website', 'Pasabuy']
+        const platform = validPlatforms.includes(channel) ? channel : 'Website'
+
+        const { data: newConvo, error: cErr } = await supabase
+          .from('conversations')
+          .insert({
+            customer_name: customer,
+            platform,
+            status: 'Open'
+          })
+          .select()
+          .single()
+
+        if (!cErr && newConvo) {
+          await supabase.from('messages').insert({
+            conversation_id: newConvo.id,
+            sender_type: 'Customer',
+            content: text
+          })
+        }
+      } catch (err) {
+        console.warn("Supabase create conversation warning:", err)
+      }
+    }
+
     return id
   }
 
@@ -384,6 +534,9 @@ export function StoreProvider({ children }) {
     setCartOpen,
     isWholesale,
     setIsWholesale,
+    isAdmin,
+    loginAdmin,
+    logoutAdmin,
     user,
     order,
     placeOrder,
@@ -402,7 +555,7 @@ export function StoreProvider({ children }) {
     isDark,
     toggleDarkMode,
     ...totals,
-  }), [view, productId, cart, cartOpen, isWholesale, user, order, query, category, requests, conversations, products, loading, totals, isDark])
+  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, user, order, query, category, requests, conversations, products, loading, totals, isDark])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

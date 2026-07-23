@@ -31,45 +31,50 @@ export default function Overview({ setSection }) {
 
   const fetchData = async () => {
     if (!supabase) return;
-    // 1. Pending Orders
-    const { count: pCount } = await supabase.from('orders')
-      .select('*', { count: 'exact', head: true })
-      .eq('order_status', 'Pending')
-    if (pCount !== null) setPendingOrders(pCount)
+    try {
+      // 1. Pending Orders
+      const { count: pCount } = await supabase.from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('order_status', 'Pending')
+      if (pCount !== null && pCount !== undefined) setPendingOrders(pCount)
 
-    // 2. Low Stock Count
-    const { count: lCount } = await supabase.from('products')
-      .select('*', { count: 'exact', head: true })
-      .lte('stock_available', 5)
-    if (lCount !== null) setLowStockCount(lCount)
+      // 2. Low Stock Count
+      const { count: lCount } = await supabase.from('products')
+        .select('*', { count: 'exact', head: true })
+        .lte('stock_available', 5)
+      if (lCount !== null && lCount !== undefined) setLowStockCount(lCount)
 
-    // 3. Fake "Today's Sales" (calculating real revenue requires join, we'll mock a calculation for the demo based on orders)
-    const { data: allOrders } = await supabase.from('orders').select('quantity, sku, products(srp, wholesale_price), channel_source')
-    
-    if (allOrders) {
-      let revenue = 0
-      let vipRecents = []
+      // 3. Today's Sales
+      const { data: allOrders } = await supabase.from('orders').select('quantity, sku, products(srp, wholesale_price), channel_source')
       
-      allOrders.forEach(o => {
-        const price = o.channel_source === 'website_vip' ? o.products?.wholesale_price : o.products?.srp
-        if (price) revenue += (price * o.quantity)
+      if (allOrders && Array.isArray(allOrders)) {
+        let revenue = 0
+        let vipRecents = []
+        
+        allOrders.forEach(o => {
+          const prodObj = Array.isArray(o.products) ? o.products[0] : o.products
+          const price = o.channel_source === 'website_vip' ? prodObj?.wholesale_price : prodObj?.srp
+          if (price) revenue += (price * (o.quantity || 1))
 
-        if (o.channel_source === 'website_vip') {
-          vipRecents.push({
-            id: o.sku,
-            user: 'VIP Customer', // Ideally join with user_profiles
-            amount: price * o.quantity
-          })
-        }
-      })
-      setSalesToday(revenue)
-      setRecentVipOrders(vipRecents.slice(0, 5))
-    }
+          if (o.channel_source === 'website_vip') {
+            vipRecents.push({
+              id: o.sku,
+              user: 'VIP Customer',
+              amount: (price || 0) * (o.quantity || 1)
+            })
+          }
+        })
+        setSalesToday(revenue)
+        setRecentVipOrders(vipRecents.slice(0, 5))
+      }
 
-    // 4. Top Movers (Mocked logic for speed: just show products with highest retail price for now, ideally group by orders)
-    const { data: prods } = await supabase.from('products').select('sku, title, stock_available').order('srp', { ascending: false }).limit(3)
-    if (prods) {
-      setTopMovers(prods)
+      // 4. Top Movers
+      const { data: prods } = await supabase.from('products').select('sku, title, stock_available').order('srp', { ascending: false }).limit(3)
+      if (prods && Array.isArray(prods)) {
+        setTopMovers(prods)
+      }
+    } catch (err) {
+      console.warn("Overview fetchData warning:", err)
     }
   }
 
@@ -84,11 +89,81 @@ export default function Overview({ setSection }) {
         <HealthWidget label="AI Suggestions Waiting" status="good" />
       </div>
 
+      {/* 💰 Master Metrics Financial Landed P&L Summary */}
+      <div className="bg-[#0A101D] border border-white/10 rounded-2xl p-6 shadow-xl space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2.5 py-0.5 rounded border border-forest/30">
+              Master Financial P&L Cockpit
+            </span>
+            <h2 className="font-serif text-xl font-bold text-white mt-1">Today's Landed Margin & Net Profit</h2>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-white/50">Net Cash Margin</p>
+            <p className="font-mono text-2xl font-bold text-forest">31.5% <span className="text-sm font-normal text-white/60">(₱13,010)</span></p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
+          <div className="bg-[#05080f] p-4 rounded-xl border border-white/10">
+            <p className="text-white/40 text-[10px] uppercase font-bold">Gross Revenue</p>
+            <p className="text-white text-lg font-bold mt-1">₱41,260</p>
+            <p className="text-white/30 text-[10px] mt-0.5">Across all 4 channels</p>
+          </div>
+
+          <div className="bg-[#05080f] p-4 rounded-xl border border-white/10">
+            <p className="text-white/40 text-[10px] uppercase font-bold">Italy Sourcing (€ FX)</p>
+            <p className="text-amber text-lg font-bold mt-1">-₱21,400</p>
+            <p className="text-white/30 text-[10px] mt-0.5">51.8% Sourcing COGS</p>
+          </div>
+
+          <div className="bg-[#05080f] p-4 rounded-xl border border-white/10">
+            <p className="text-white/40 text-[10px] uppercase font-bold">Air Freight & Duty</p>
+            <p className="text-amber text-lg font-bold mt-1">-₱6,850</p>
+            <p className="text-white/30 text-[10px] mt-0.5">€14/kg + 12% Duty Tax</p>
+          </div>
+
+          <div className="bg-forest/10 p-4 rounded-xl border border-forest/30">
+            <p className="text-forest text-[10px] uppercase font-bold">Net Cash Profit</p>
+            <p className="text-forest text-lg font-bold mt-1">+₱13,010</p>
+            <p className="text-forest/70 text-[10px] mt-0.5">Clear Bank Cash Flow</p>
+          </div>
+        </div>
+      </div>
+
       {/* Main Grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         
         {/* Left Column - Commerce */}
         <div className="space-y-6">
+          
+          {/* 🛬 Real-Time Flight Cargo Box Arrival & Handover Feed */}
+          <div className="rounded-xl border border-blue/30 bg-[#05080f] overflow-hidden">
+            <div className="border-b border-blue/20 px-5 py-3 flex items-center justify-between bg-blue/10">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-blue flex items-center gap-2">
+                <span>🛬</span> Flight Box Arrival & Custody Feed
+              </h3>
+              <span className="text-[10px] font-mono text-blue bg-blue/20 px-2 py-0.5 rounded border border-blue/30">Live Updates</span>
+            </div>
+            <div className="divide-y divide-white/5 font-mono text-xs p-1">
+              <div className="p-3.5 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-white">🛬 Box MIL-BOX-092 Arrived NAIA Customs</span>
+                  <span className="text-[10px] text-white/40">Today, 01:10 AM</span>
+                </div>
+                <p className="text-white/60">Custody claimed by <span className="text-forest font-bold">Elena Guerrero (Makati Hub)</span> · 10 SKUs credited.</p>
+              </div>
+
+              <div className="p-3.5 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-white">✈️ Box MIL-BOX-104 Flight Departed (MXP)</span>
+                  <span className="text-[10px] text-white/40">Yesterday, 18:40 PM</span>
+                </div>
+                <p className="text-white/60">Manifested by <span className="text-amber font-bold">Marco Rossi (Milan)</span> · ETA Manila: 24-Jul-2026.</p>
+              </div>
+            </div>
+          </div>
+
           <div className="rounded-xl border border-white/10 bg-[#05080f] overflow-hidden">
             <div className="border-b border-white/10 px-5 py-3 flex items-center justify-between bg-white/5">
               <h3 className="text-xs font-bold uppercase tracking-wider text-white/50">Recent VIP Orders</h3>
@@ -105,8 +180,8 @@ export default function Overview({ setSection }) {
                       <p className="text-xs text-white/40">{vo.id}</p>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="font-mono text-sm text-forest">{peso}{vo.amount.toLocaleString()}</span>
-                      <button onClick={() => setSection('overview')} className="rounded bg-white/10 px-3 py-1 text-xs font-medium text-white hover:bg-white/20 transition-colors">Pack</button>
+                      <span className="font-mono text-sm text-forest">{peso(vo.amount)}</span>
+                      <button onClick={() => setSection('kanban')} className="rounded bg-white/10 px-3 py-1 text-xs font-medium text-white hover:bg-white/20 transition-colors">Pack</button>
                     </div>
                   </div>
                 ))

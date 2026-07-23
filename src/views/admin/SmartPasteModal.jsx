@@ -132,7 +132,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                 2 · Review + Photos
               </button>
             </div>
-            <button onClick={onClose} className="rounded-full bg-white/5 p-2 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
+            <button onClick={onClose} aria-label="Close modal" className="rounded-full bg-white/5 p-2 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>

@@ -82,7 +82,7 @@ A sunlit Tuscan palette grounded by warm whites and punctuated by natural Italia
 - **Headline** (Fraunces 600, ~1.5rem): Section titles ("Word of mouth", "How it gets to you").
 - **Title** (Fraunces 600, ~1.125rem): Card titles, product names, step headings.
 - **Body** (Archivo 400, 15px): Paragraph copy in Navy Soft. Cap measure at 65–75ch.
-- **Label** (Archivo 700, 11px, uppercase, 0.24em tracking): Section kickers and eyebrows.
+- **Label** (Archivo 700, 9px, 10px, 11px, 12px, 13px uppercase/mono): Section kickers, eyebrows, code badges, and dense table micro-labels.
 
 ### Named Rules
 **The Serif-Says-Story Rule.** Fraunces carries voice — headlines, product names, editorial moments. Archivo carries fact — prices, stock, buttons, forms. Don't blur the line by setting UI in the serif.

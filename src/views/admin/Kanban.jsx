@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { BoxIcon, SyncIcon } from '../../components/ui/icons'
+import { BoxIcon, SyncIcon, GlobeIcon, PlaneIcon } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
 import CustomerPackModal from './CustomerPackModal'
 import OutboundSourcing from './OutboundSourcing'
 import PurchaseOrders from './PurchaseOrders'
+import ConsignmentManager from './ConsignmentManager'
 
 const COLUMNS_DEF = [
   { id: 'shopee_account_1', name: 'Shopee A — Pasabuy Europe', meta: 'Preferred seller · 4.9★', accent: '#ee4d2d' },
@@ -20,7 +21,7 @@ const STATUS_TONE = {
 }
 
 export default function Kanban() {
-  const [activeTab, setActiveTab] = useState('kanban') // 'kanban' | 'inbound' | 'outbound'
+  const [activeTab, setActiveTab] = useState('consignment') // 'consignment' | 'kanban' | 'inbound' | 'outbound'
   
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
@@ -53,7 +54,6 @@ export default function Kanban() {
       .order('created_at', { ascending: false })
 
     if (!error && data) {
-      // Group rows by created_at and channel_source to form multi-item shipments
       const grouped = {}
       for (const row of data) {
         const groupId = `${row.created_at}_${row.channel_source}`
@@ -73,7 +73,6 @@ export default function Kanban() {
           quantity: row.quantity,
           product: row.products
         })
-        // If any item is pending, the whole shipment is pending
         if (row.order_status === 'Pending') grouped[groupId].order_status = 'Pending'
       }
       setOrders(Object.values(grouped).sort((a,b) => new Date(b.created_at) - new Date(a.created_at)))
@@ -85,7 +84,6 @@ export default function Kanban() {
     const nextStatus = currentStatus === 'Pending' ? 'Packed' : currentStatus === 'Packed' ? 'Shipped' : null;
     if (!nextStatus || !supabase) return;
 
-    // Optimistic update
     setOrders(prev => prev.map(o => o.id === groupId ? { ...o, order_status: nextStatus } : o))
     setPackingOrder(null)
 
@@ -97,7 +95,7 @@ export default function Kanban() {
 
     if (error) {
       console.error("Failed to update status", error)
-      fetchOrders() // revert
+      fetchOrders()
     }
   }
 
@@ -110,44 +108,64 @@ export default function Kanban() {
     <div className="space-y-6 flex flex-col h-full animate-in fade-in duration-500">
       
       {/* Global Logistics Unified Header Tabs */}
-      <div className="flex flex-col sm:flex-row gap-4 border-b border-white/10 pb-4 shrink-0">
+      <div className="flex flex-col xl:flex-row gap-4 border-b border-white/10 pb-4 shrink-0">
         <div className="flex-1">
-          <h1 className="font-serif text-2xl font-bold text-white mb-2">Global Logistics</h1>
-          <p className="text-sm text-white/50">Command center for scanning and shipping physical boxes.</p>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2 py-0.5 rounded">
+              Unified Supply Chain Hub
+            </span>
+          </div>
+          <h1 className="font-serif text-2xl font-bold text-white">Global Logistics & Manifest Command</h1>
+          <p className="text-sm text-white/50">Manage Milan flight consignments, box scanning receiving (+1), supplier POs, and PH customer order fulfillment in one place.</p>
         </div>
         
-        <div className="flex bg-[#05080f] rounded-lg p-1 border border-white/10 overflow-x-auto whitespace-nowrap hide-scrollbar">
+        <div className="flex bg-[#05080f] rounded-xl p-1.5 border border-white/10 overflow-x-auto whitespace-nowrap hide-scrollbar items-center gap-1">
+          <button 
+            onClick={() => setActiveTab('consignment')}
+            className={`px-4 py-2.5 text-xs font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+              activeTab === 'consignment' ? 'bg-crimson text-white shadow-lg shadow-crimson/20' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
+            }`}
+          >
+            <PlaneIcon size={16} /> Italy ✈ Manila Manifests (+1 Scanner)
+          </button>
+
           <button 
             onClick={() => setActiveTab('kanban')}
-            className={`px-4 py-2 text-sm font-semibold rounded-md flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-4 py-2.5 text-xs font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'kanban' ? 'bg-blue text-white shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
             }`}
           >
             <BoxIcon size={16} /> Customer Orders (PH)
           </button>
-          
-          <button 
-            onClick={() => setActiveTab('outbound')}
-            className={`px-4 py-2 text-sm font-semibold rounded-md flex items-center gap-2 transition-all shrink-0 ${
-              activeTab === 'outbound' ? 'bg-forest text-navy shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
-            }`}
-          >
-            <BoxIcon size={16} /> Pack Supply (Italy)
-          </button>
 
           <button 
             onClick={() => setActiveTab('inbound')}
-            className={`px-4 py-2 text-sm font-semibold rounded-md flex items-center gap-2 transition-all shrink-0 ${
-              activeTab === 'inbound' ? 'bg-forest text-navy shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
+            className={`px-4 py-2.5 text-xs font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+              activeTab === 'inbound' ? 'bg-forest text-white shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
             }`}
           >
-            <SyncIcon size={16} /> Receive Supply (PH)
+            <GlobeIcon size={16} /> Purchase Orders
+          </button>
+          
+          <button 
+            onClick={() => setActiveTab('outbound')}
+            className={`px-4 py-2.5 text-xs font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+              activeTab === 'outbound' ? 'bg-purple-900/40 text-purple-300 shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
+            }`}
+          >
+            <SyncIcon size={16} /> AI Outbound Sourcing
           </button>
         </div>
       </div>
 
       {/* Global Logistics Sub-Views */}
-      <div className="mt-4">
+      <div className="mt-2 flex-1">
+        {activeTab === 'consignment' && (
+          <div className="w-full">
+            <ConsignmentManager />
+          </div>
+        )}
+
         {activeTab === 'outbound' && (
           <div className="w-full">
             <OutboundSourcing />

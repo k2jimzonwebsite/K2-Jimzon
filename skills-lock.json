@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "skills": {
+    "commit-archaeologist": {
+      "source": "Shubhamsaboo/awesome-llm-apps",
+      "ref": "main",
+      "sourceType": "github",
+      "skillPath": "agent_skills/commit-archaeologist/SKILL.md",
+      "computedHash": "adcdc024326df8f5f61946a136ac26d2fd7adf9175908985e8ba14786a18016d"
+    },
+    "project-graveyard": {
+      "source": "Shubhamsaboo/awesome-llm-apps",
+      "ref": "main",
+      "sourceType": "github",
+      "skillPath": "agent_skills/project-graveyard/SKILL.md",
+      "computedHash": "2357dc9db75c4fc2d4226b47d21859eaea9d87b4a961251209bc97e186c9d00b"
+    },
+    "scope-creep-detector": {
+      "source": "Shubhamsaboo/awesome-llm-apps",
+      "ref": "main",
+      "sourceType": "github",
+      "skillPath": "agent_skills/scope-creep-detector/SKILL.md",
+      "computedHash": "5d09cae4760131fa245aa8a1655374ed5d64b801f3205d65c38671bca210471f"
+    }
+  }
+}

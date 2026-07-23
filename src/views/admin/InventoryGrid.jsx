@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
+import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
+import StaffAllocationModal from './StaffAllocationModal'
 
 // ── Shared input/textarea styles ──────────────────────────────────────────────
 const inp = 'w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none transition-colors'
@@ -134,6 +136,8 @@ export default function InventoryGrid() {
   const [products, setProducts]       = useState([])
   const [loading, setLoading]         = useState(true)
   const [editingProduct, setEditingProduct] = useState(null)
+  const [batchProduct, setBatchProduct]   = useState(null)
+  const [allocatingProduct, setAllocatingProduct] = useState(null)
   const [isAdding, setIsAdding]       = useState(false)
   const [saving, setSaving]           = useState(false)
   const [showAiScanner, setShowAiScanner] = useState(false)
@@ -262,43 +266,78 @@ export default function InventoryGrid() {
         <div className="flex h-64 items-center justify-center text-white/40">Loading products...</div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-12">
-          {products.map(p => (
-            <div key={p.sku} className="group relative rounded-xl border border-white/10 bg-[#05080f] overflow-hidden flex flex-col hover:border-blue/50 transition-colors">
-              <div className="aspect-square bg-white/5 flex items-center justify-center p-4 relative">
-                <img src={p.primary_image_url || p.image_url || '/placeholder.png'} alt={p.name}
-                  className="max-h-full max-w-full object-contain drop-shadow-lg" />
-                {p.expiry_date && (
-                  <span className="absolute bottom-2 left-2 text-[9px] font-bold bg-crimson/80 text-white px-1.5 py-0.5 rounded">
-                    EXP {new Date(p.expiry_date).toLocaleDateString('en-PH', { month: 'short', year: 'numeric' })}
-                  </span>
-                )}
-              </div>
-              <div className="p-4 flex-1 flex flex-col">
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <span className="text-[10px] font-mono text-white/40 uppercase truncate">{p.sku}</span>
-                  <span className={`shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${p.status === 'Draft' ? 'bg-amber-wash text-amber' : p.status === 'Discontinued' ? 'bg-crimson/20 text-crimson' : 'bg-forest-wash text-forest'}`}>
-                    {p.status}
-                  </span>
+          {products.map(p => {
+            const pinnedBatch = p.batches?.find(b => b.is_pinned)
+            const primaryExpiryDate = pinnedBatch?.expiry_date || p.expiry_date || (p.batches && p.batches[0]?.expiry_date)
+            const expiryHealth = getExpiryHealth(primaryExpiryDate)
+
+            return (
+              <div key={p.sku} className="group relative rounded-xl border border-white/10 bg-[#05080f] overflow-hidden flex flex-col hover:border-blue/50 transition-colors">
+                <div className="aspect-square bg-white/5 flex items-center justify-center p-4 relative">
+                  <img src={p.primary_image_url || p.image_url || '/placeholder.png'} alt={p.name}
+                    className="max-h-full max-w-full object-contain drop-shadow-lg" />
+                  
+                  {/* FEFO Color-Coded Expiration & Pinned Batch Badge */}
+                  {primaryExpiryDate && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setBatchProduct(p) }}
+                      className={`absolute bottom-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded border transition-all ${
+                        pinnedBatch ? 'bg-amber text-navy font-extrabold border-amber shadow-md' :
+                        expiryHealth.color === 'crimson' ? 'bg-crimson/90 border-crimson text-white font-bold' :
+                        expiryHealth.color === 'amber' ? 'bg-amber/90 border-amber text-navy font-extrabold' :
+                        'bg-forest/90 border-forest text-white'
+                      }`}
+                    >
+                      {pinnedBatch ? `📌 Pinned: ${pinnedBatch.box_code} (${pinnedBatch.expiry_date})` : expiryHealth.text}
+                    </button>
+                  )}
                 </div>
-                <h3 className="text-sm font-semibold text-white/90 line-clamp-2 mb-1">{p.name}</h3>
-                {p.origin && <p className="text-[10px] text-white/30 mb-2">{p.origin}</p>}
-                <div className="mt-auto grid grid-cols-2 gap-2 text-xs">
-                  <div>
-                    <p className="text-white/30 uppercase text-[9px] tracking-wider mb-0.5">Stock</p>
-                    <p className={`font-semibold ${(p.stock_available ?? 0) <= 5 ? 'text-crimson' : 'text-white'}`}>{p.stock_available ?? 0}</p>
+                <div className="p-4 flex-1 flex flex-col">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <span className="text-[10px] font-mono text-white/40 uppercase truncate">{p.sku}</span>
+                    <span className={`shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${p.status === 'Draft' ? 'bg-amber-wash text-amber' : p.status === 'Discontinued' ? 'bg-crimson/20 text-crimson' : 'bg-forest-wash text-forest'}`}>
+                      {p.status}
+                    </span>
                   </div>
-                  <div>
-                    <p className="text-white/30 uppercase text-[9px] tracking-wider mb-0.5">Retail</p>
-                    <p className="font-semibold text-white tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</p>
+                  <h3 className="text-sm font-semibold text-white/90 line-clamp-2 mb-1">{p.name}</h3>
+                  {p.origin && <p className="text-[10px] text-white/30 mb-2">{p.origin}</p>}
+                  
+                  <div className="mt-auto space-y-2">
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <p className="text-white/30 uppercase text-[9px] tracking-wider mb-0.5">Stock</p>
+                        <p className={`font-semibold ${(p.stock_available ?? 0) <= 5 ? 'text-crimson' : 'text-white'}`}>{p.stock_available ?? 0}</p>
+                      </div>
+                      <div>
+                        <p className="text-white/30 uppercase text-[9px] tracking-wider mb-0.5">Retail</p>
+                        <p className="font-semibold text-white tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5 pt-1">
+                      <button
+                        onClick={() => setBatchProduct(p)}
+                        className="text-[10px] font-mono font-bold bg-white/5 hover:bg-white/10 text-white/70 py-1.5 rounded border border-white/10 transition-colors text-center"
+                      >
+                        📦 Batches ({p.batches?.length || 1})
+                      </button>
+                      <button
+                        onClick={() => setAllocatingProduct(p)}
+                        className="text-[10px] font-mono font-bold bg-blue/10 hover:bg-blue/20 text-blue py-1.5 rounded border border-blue/30 transition-colors text-center"
+                      >
+                        👤 Staff Custody
+                      </button>
+                    </div>
                   </div>
                 </div>
+
+                <button onClick={() => { setIsAdding(false); setEditingProduct(p) }}
+                  className="absolute top-2 right-2 rounded bg-blue/90 backdrop-blur px-3 py-1 text-xs font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
+                  Edit
+                </button>
               </div>
-              <button onClick={() => { setIsAdding(false); setEditingProduct(p) }}
-                className="absolute top-2 right-2 rounded bg-blue/90 backdrop-blur px-3 py-1 text-xs font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
-                Edit
-              </button>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 
@@ -537,6 +576,33 @@ export default function InventoryGrid() {
             </form>
           </div>
         </div>
+      )}
+
+      {batchProduct && (
+        <BatchExpiryManagerModal
+          product={batchProduct}
+          onClose={() => setBatchProduct(null)}
+          onSaveBatches={(sku, updatedBatches) => {
+            setProducts(prev => prev.map(p => (p.sku === sku || p.id === sku) ? {
+              ...p,
+              batches: updatedBatches,
+              expiry_date: updatedBatches.sort((a, b) => new Date(a.expiry_date) - new Date(b.expiry_date))[0]?.expiry_date || p.expiry_date
+            } : p))
+          }}
+        />
+      )}
+
+      {allocatingProduct && (
+        <StaffAllocationModal
+          product={allocatingProduct}
+          onClose={() => setAllocatingProduct(null)}
+          onSaveAllocations={(sku, updatedAllocations) => {
+            setProducts(prev => prev.map(p => (p.sku === sku || p.id === sku) ? {
+              ...p,
+              staff_allocations: updatedAllocations
+            } : p))
+          }}
+        />
       )}
     </div>
   )

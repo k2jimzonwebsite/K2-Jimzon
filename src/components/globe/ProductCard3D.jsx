@@ -10,6 +10,8 @@ export default function ProductCard3D({ index, position, scale = 1, product, onS
   const [hovered, setHovered] = useState(false)
   const [texture, setTexture] = useState(null)
 
+  const safeProduct = product || { name: 'Italian Item', short: 'Italian Item', hue: 20, image: '', price: 500 }
+
   // Load product image as texture
   useEffect(() => {
     let active = true
@@ -20,7 +22,7 @@ export default function ProductCard3D({ index, position, scale = 1, product, onS
     canvas.height = 500
     const ctx = canvas.getContext('2d')
     if (ctx) {
-      const hue = product.hue ?? 0
+      const hue = safeProduct.hue ?? 0
       ctx.fillStyle = `hsl(${hue}, 12%, 90%)`
       ctx.fillRect(0, 0, 400, 500)
       // Draw product name as text on placeholder
@@ -28,7 +30,7 @@ export default function ProductCard3D({ index, position, scale = 1, product, onS
       ctx.font = 'bold 24px sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
-      const words = (product.short || product.name).split(' ')
+      const words = (safeProduct.short || safeProduct.name || 'Italian Item').split(' ')
       words.forEach((word, i) => {
         ctx.fillText(word, 200, 200 + i * 32)
       })
@@ -39,7 +41,7 @@ export default function ProductCard3D({ index, position, scale = 1, product, onS
     setTexture(initialTex)
 
     // Load the actual product image
-    const imgSrc = product.heroImage || product.img
+    const imgSrc = safeProduct?.heroImage || safeProduct?.img || safeProduct?.image
     if (imgSrc) {
       const loader = new THREE.TextureLoader()
       loader.setCrossOrigin('anonymous')
@@ -54,13 +56,13 @@ export default function ProductCard3D({ index, position, scale = 1, product, onS
         undefined,
         () => {
           // Image failed to load — keep placeholder
-          console.warn('Failed to load image for', product.id)
+          console.warn('Failed to load image for', safeProduct?.id || 'product')
         }
       )
     }
 
     return () => { active = false }
-  }, [product])
+  }, [safeProduct])
 
   // Orient the card so it faces outward from the globe center
   const rotationQuaternion = useMemo(() => {
