@@ -55,6 +55,9 @@ USING (
 );
 
 -- 4. Atomic Stock Decrement RPC Function with Mutex Locking
+DROP FUNCTION IF EXISTS decrement_stock(text, integer);
+DROP FUNCTION IF EXISTS decrement_stock(text, int);
+
 CREATE OR REPLACE FUNCTION decrement_stock(p_sku TEXT, p_quantity INT)
 RETURNS VOID AS $$
 BEGIN
