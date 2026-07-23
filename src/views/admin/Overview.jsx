@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { peso } from '../../data/products'
+import AdminProcessFlowDiagram from './AdminProcessFlowDiagram'
 
 export default function Overview({ setSection }) {
   const [salesToday, setSalesToday] = useState(0)
@@ -83,6 +84,9 @@ export default function Overview({ setSection }) {
         <HealthWidget label="Packing Speed" status="good" />
         <HealthWidget label="AI Suggestions Waiting" status="good" />
       </div>
+
+      {/* 🗺️ Interactive Process Flow Diagram & System Pipeline */}
+      <AdminProcessFlowDiagram onNavigate={setSection} />
 
       {/* 💰 Master Metrics Financial Landed P&L Summary */}
       <div className="bg-[#0E121E] border border-white/20 rounded-2xl p-6 shadow-xl space-y-4 text-white">
