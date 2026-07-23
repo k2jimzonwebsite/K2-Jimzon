@@ -85,12 +85,12 @@ export default function VoucherHuntCenterModal({ isOpen, onClose }) {
         )}
 
         {/* 🕵️ Secret Voucher Hunt Input Box */}
-        <div className="bg-navy text-white p-4.5 rounded-2xl shadow-xl space-y-3 font-mono">
-          <div className="flex items-center gap-2 border-b border-white/10 pb-2">
+        <div className="bg-shell border border-gold/40 text-navy p-4.5 rounded-2xl shadow-sm space-y-3">
+          <div className="flex items-center gap-2 border-b border-line pb-2">
             <span className="text-base">🔍</span>
             <div>
-              <h3 className="font-bold text-sm text-amber font-sans">Have a Secret Clue or Promo Code?</h3>
-              <p className="text-white/60 text-[11px]">Enter codes from our IG/FB Live, Viber, or TikTok drops!</p>
+              <h3 className="font-bold text-sm text-gold-deep">Have a Secret Clue or Promo Code?</h3>
+              <p className="text-navy-soft text-[11px]">Enter codes from our IG/FB Live, Viber, or TikTok drops!</p>
             </div>
           </div>
 
@@ -100,7 +100,7 @@ export default function VoucherHuntCenterModal({ isOpen, onClose }) {
               value={huntInput}
               onChange={(e) => setHuntInput(e.target.value)}
               placeholder="e.g. HUNT500 or PASABUY200"
-              className="flex-1 rounded-xl border border-white/20 bg-black/40 px-3.5 py-2.5 text-xs text-white placeholder:text-white/30 focus:border-amber outline-none min-h-[44px] tracking-wider uppercase font-bold"
+              className="flex-1 rounded-xl border border-line bg-paper px-3.5 py-2.5 text-xs text-navy placeholder:text-navy-faint focus:border-gold outline-none min-h-[44px] tracking-wider uppercase font-bold"
             />
             <button
               type="submit"
@@ -112,10 +112,10 @@ export default function VoucherHuntCenterModal({ isOpen, onClose }) {
 
           {/* Active Secret Clues Hint Carousel */}
           {huntVouchers.length > 0 && (
-            <div className="pt-1 border-t border-white/10 space-y-1.5">
-              <p className="text-[10px] text-amber font-bold uppercase tracking-wider">💡 Active Secret Clues:</p>
+            <div className="pt-1 border-t border-line space-y-1.5">
+              <p className="text-[10px] text-gold-deep font-bold uppercase tracking-wider">💡 Active Secret Clues:</p>
               {huntVouchers.map((hv) => (
-                <div key={hv.id} className="text-[11px] text-white/80 bg-white/5 p-2 rounded-lg border border-white/10 italic">
+                <div key={hv.id} className="text-[11px] text-navy-soft bg-cream p-2 rounded-lg border border-line italic">
                   {hv.clue || `Hunt Code: "${hv.code}" (${hv.type === 'percentage' ? hv.value + '%' : '₱' + hv.value} OFF)`}
                 </div>
               ))}
