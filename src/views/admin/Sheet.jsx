@@ -173,52 +173,52 @@ export default function Sheet() {
         </div>
 
         {/* Sticky Viewport Horizontal Domain Jump Controls */}
-        <div className="flex flex-wrap items-center gap-1.5 bg-white/5 p-1.5 rounded-lg border border-white/10 text-xs font-mono">
-          <span className="text-gold text-xs uppercase font-bold px-1.5">Jump:</span>
-          <button onClick={() => handleScrollToDomain(0)} className="px-3 py-2 min-h-[38px] rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold transition-all">
-            ◀ SKU
+        <div className="flex items-center gap-2 text-xs font-mono">
+          <span className="text-gold font-extrabold uppercase hidden md:inline">Domain Jump:</span>
+          <button onClick={() => handleScrollToDomain(0)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-gold hover:bg-gold-deep text-navy font-black transition-all shadow">
+            📋 Product & Content
           </button>
-          <button onClick={() => handleScrollToDomain(600)} className="px-3 py-2 min-h-[38px] rounded-lg bg-gold/20 hover:bg-gold/30 text-gold font-bold transition-all">
+          <button onClick={() => handleScrollToDomain(600)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-gold hover:bg-gold-deep text-navy font-black transition-all shadow">
             💰 Pricing
           </button>
-          <button onClick={() => handleScrollToDomain(1200)} className="px-3 py-2 min-h-[38px] rounded-lg bg-blue/20 hover:bg-blue/30 text-blue font-bold transition-all">
+          <button onClick={() => handleScrollToDomain(1200)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-blue hover:bg-blue-deep text-white font-black transition-all shadow">
             📦 Stock & FEFO
           </button>
-          <button onClick={() => handleScrollToDomain(2000)} className="px-3 py-2 min-h-[38px] rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold transition-all">
+          <button onClick={() => handleScrollToDomain(2000)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-white/20 hover:bg-white/30 text-white font-black transition-all border border-white/20 shadow">
             ▶ End
           </button>
         </div>
       </div>
 
       {/* Viewport Frame Constrained Scroll Container */}
-      <div ref={tableContainerRef} className="flex-1 max-h-[calc(100vh-210px)] overflow-x-auto overflow-y-auto custom-scrollbar relative bg-[#05080f] border-t border-white/10">
+      <div ref={tableContainerRef} className="flex-1 max-h-[calc(100vh-210px)] overflow-x-auto overflow-y-auto custom-scrollbar relative bg-[#05080f] border-t border-white/20">
         {loading ? (
-          <div className="flex items-center justify-center h-64 text-white/70 animate-pulse font-mono text-sm">Loading Product Masters...</div>
+          <div className="flex items-center justify-center h-64 text-white font-extrabold animate-pulse font-sans text-base">Loading Product Masters...</div>
         ) : (
-          <table className="w-max min-w-full border-collapse text-sm bg-[#0A101D]">
-            <thead className="sticky top-0 z-30 shadow-md">
+          <table className="w-max min-w-full border-collapse text-sm bg-[#0E121E]">
+            <thead className="sticky top-0 z-30 shadow-lg">
               <tr className="bg-[#05080f] text-xs text-white">
-                <th className="w-8 border border-white/20 py-2.5 font-bold sticky left-0 z-40 bg-[#05080f]">#</th>
+                <th className="w-10 border border-white/20 py-3 font-black sticky left-0 z-40 bg-[#05080f] text-gold">#</th>
                 {DOMAINS.map((d, i) => (
-                  <th key={d.name} colSpan={d.cols.length} className={`border border-white/20 py-2.5 px-4 font-bold uppercase tracking-wider text-center text-xs ${['bg-blue/20 text-blue', 'bg-gold/20 text-gold', 'bg-crimson/20 text-crimson', 'bg-blue/20 text-blue', 'bg-gold/20 text-gold', 'bg-crimson/20 text-crimson', 'bg-blue/20 text-blue'][i % 7]}`}>
+                  <th key={d.name} colSpan={d.cols.length} className={`border border-white/20 py-3 px-4 font-black uppercase tracking-wider text-center text-xs ${['bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white'][i % 7]}`}>
                     {d.name}
                   </th>
                 ))}
-                <th className="w-16 border border-white/20 py-2.5 font-bold text-xs">Action</th>
+                <th className="w-20 border border-white/20 py-3 font-black text-xs text-gold">Action</th>
               </tr>
-              <tr className="bg-[#0A101D] text-left text-xs font-semibold text-white/90">
-                <th className="border border-white/10 px-2 py-2.5 text-center sticky left-0 z-40 bg-[#0A101D] shadow-[2px_0_5px_rgba(0,0,0,0.5)]">#</th>
+              <tr className="bg-[#161B29] text-left text-xs font-black text-white">
+                <th className="border border-white/20 px-2 py-3 text-center sticky left-0 z-40 bg-[#161B29] text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]">#</th>
                 {ALL_COLS.map((h, colIdx) => (
                   <th
                     key={h}
-                    className={`border border-white/10 px-3.5 py-2.5 whitespace-nowrap font-mono text-xs font-bold ${
-                      h === 'SKU' ? 'sticky left-8 z-40 bg-[#0A101D] text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]' : 'text-white/80'
+                    className={`border border-white/20 px-4 py-3 whitespace-nowrap font-mono text-xs font-extrabold ${
+                      h === 'SKU' ? 'sticky left-10 z-40 bg-[#161B29] text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]' : 'text-white'
                     }`}
                   >
                     {h}
                   </th>
                 ))}
-                <th className="border border-white/10 px-2 py-2 text-center">Action</th>
+                <th className="border border-white/20 px-3 py-3 text-center text-gold">Action</th>
               </tr>
             </thead>
             <tbody>

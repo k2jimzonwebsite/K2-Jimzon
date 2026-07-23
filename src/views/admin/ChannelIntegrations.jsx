@@ -217,23 +217,23 @@ export default function ChannelIntegrations() {
     <div className="space-y-6 max-w-6xl mx-auto pb-12 animate-in fade-in duration-300">
       
       {/* Header Banner */}
-      <div className="bg-[#05080f] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-blue/20 text-blue px-2 py-0.5 rounded border border-blue/30">
+            <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Omnichannel Integration Hub
             </span>
-            <span className="text-xs text-white/50">Marketplaces & Social API Manager</span>
+            <span className="text-xs text-white/80 font-bold">Marketplaces & Social API Manager</span>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Marketplace & Social Media API Keys</h1>
-          <p className="text-xs text-white/60 mt-1 max-w-2xl">
+          <h1 className="font-sans text-2xl font-black text-white">Marketplace & Social Media API Keys</h1>
+          <p className="text-xs text-white/80 font-medium mt-1 max-w-2xl">
             Input your Shopee, Lazada, TikTok Shop, Meta, and WhatsApp API credentials. These keys power automatic order fetching into Global Logistics and real-time inventory sync across all sales channels.
           </p>
         </div>
 
         <button
           onClick={handleSave}
-          className="bg-forest hover:bg-forest/90 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-forest/20 transition-all flex items-center justify-center gap-2 shrink-0"
+          className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-6 py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 shrink-0"
         >
           {savedSuccess ? '✓ Credentials Saved!' : '💾 Save API Credentials'}
         </button>
@@ -244,7 +244,7 @@ export default function ChannelIntegrations() {
         
         {/* Left Column: Channel Switcher Navigation */}
         <div className="lg:col-span-1 space-y-2">
-          <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-white/40 px-2 mb-1">Sales & Social Channels</p>
+          <p className="text-xs font-extrabold uppercase tracking-wider text-gold px-2 mb-2">Sales & Social Channels</p>
           {Object.keys(channels).map(key => {
             const ch = channels[key]
             const isSelected = activeTab === key
@@ -252,24 +252,24 @@ export default function ChannelIntegrations() {
               <button
                 key={key}
                 onClick={() => { setActiveTab(key); setTestResult(null) }}
-                className={`w-full flex items-center justify-between p-3.5 rounded-xl border text-left transition-all ${
+                className={`w-full flex items-center justify-between p-4 rounded-xl border text-left transition-all ${
                   isSelected 
-                    ? 'bg-[#0A101D] border-blue/50 shadow-lg text-white' 
-                    : 'bg-[#05080f] border-white/10 text-white/60 hover:text-white hover:bg-white/5'
+                    ? 'bg-[#161B29] border-gold shadow-lg text-white' 
+                    : 'bg-[#0E121E] border-white/20 text-white/80 hover:text-white hover:bg-white/10'
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div 
-                    className="w-3 h-3 rounded-full shrink-0 shadow-sm"
+                    className="w-3.5 h-3.5 rounded-full shrink-0 shadow"
                     style={{ backgroundColor: ch.color }}
                   />
                   <div className="min-w-0">
-                    <p className="text-xs font-bold truncate text-white">{ch.name}</p>
-                    <p className="text-[10px] font-mono text-white/40 truncate">{ch.badge}</p>
+                    <p className="text-sm font-extrabold truncate text-white">{ch.name}</p>
+                    <p className="text-xs font-mono text-white/80 font-bold truncate">{ch.badge}</p>
                   </div>
                 </div>
-                <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded shrink-0 ${
-                  ch.status === 'Connected' ? 'bg-forest/20 text-forest border border-forest/30' : 'bg-amber/20 text-amber border border-amber/30'
+                <span className={`text-xs font-mono font-black px-2.5 py-1 rounded-lg shrink-0 shadow ${
+                  ch.status === 'Connected' ? 'bg-blue text-white border border-blue' : 'bg-gold text-navy border border-gold'
                 }`}>
                   {ch.status === 'Connected' ? '🟢 Live' : '🟡 Auth'}
                 </span>
@@ -282,18 +282,18 @@ export default function ChannelIntegrations() {
         <div className="lg:col-span-3 space-y-6">
           
           {/* Active Channel Card Header */}
-          <div className="bg-[#05080f] border border-white/10 rounded-2xl p-6 shadow-xl space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div className="bg-[#0E121E] border border-white/20 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
               <div className="flex items-center gap-3">
                 <div 
-                  className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white text-lg shadow-md"
+                  className="w-12 h-12 rounded-xl flex items-center justify-center font-black text-white text-xl shadow-md"
                   style={{ backgroundColor: activeChannel.color }}
                 >
                   {activeChannel.name.charAt(0)}
                 </div>
                 <div>
-                  <h2 className="font-serif text-lg font-bold text-white">{activeChannel.name}</h2>
-                  <p className="text-xs font-mono text-white/40">{activeChannel.badge} · Last synced: {activeChannel.lastSync}</p>
+                  <h2 className="font-sans text-xl font-black text-white">{activeChannel.name}</h2>
+                  <p className="text-xs font-mono text-gold font-bold">{activeChannel.badge} · Last synced: {activeChannel.lastSync}</p>
                 </div>
               </div>
 
@@ -301,11 +301,11 @@ export default function ChannelIntegrations() {
                 <button
                   onClick={() => handleTestConnection(activeTab)}
                   disabled={testingChannel === activeTab}
-                  className="bg-blue/20 hover:bg-blue/30 text-blue font-bold text-xs px-4 py-2 rounded-lg border border-blue/40 transition-all flex items-center gap-2"
+                  className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 shadow"
                 >
                   {testingChannel === activeTab ? (
                     <>
-                      <div className="w-3 h-3 rounded-full border-2 border-t-blue border-transparent animate-spin" />
+                      <div className="w-3.5 h-3.5 rounded-full border-2 border-t-white border-transparent animate-spin" />
                       Testing API Ping...
                     </>
                   ) : (
@@ -316,7 +316,7 @@ export default function ChannelIntegrations() {
                 {isVaultUnlocked ? (
                   <button
                     onClick={() => setIsVaultUnlocked(false)}
-                    className="bg-crimson/20 hover:bg-crimson/30 text-crimson font-bold text-xs px-3 py-2 rounded-lg border border-crimson/30 transition-all flex items-center gap-1.5"
+                    className="bg-crimson hover:bg-crimson-deep text-white font-black text-xs px-3.5 py-2.5 rounded-xl border border-crimson/50 transition-all flex items-center gap-1.5 shadow"
                   >
                     🔒 Relock Vault
                   </button>

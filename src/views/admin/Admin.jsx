@@ -273,15 +273,15 @@ export default function Admin() {
               
               <div className="px-2.5 space-y-6">
                 <div>
-                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Sales & Orders</p>
-                  <div className="space-y-0.5">
+                  <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">Sales & Orders</p>
+                  <div className="space-y-1">
                     {NAV_COMMERCE.map(item => {
                       const Ico = item.icon
                       return (
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white font-bold' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                         >
                           <Ico size={18} /> {item.label}
                         </button>
@@ -291,7 +291,7 @@ export default function Admin() {
                 </div>
 
                 <div>
-                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Stock & Buying</p>
+                  <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">Stock & Buying</p>
                   <div className="space-y-1">
                     {NAV_SUPPLY.map(item => {
                       const Ico = item.icon
@@ -299,7 +299,7 @@ export default function Admin() {
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white font-bold' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                         >
                           <Ico size={18} /> {item.label}
                         </button>
@@ -309,7 +309,7 @@ export default function Admin() {
                 </div>
                 
                 <div>
-                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">AI Tools</p>
+                  <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">AI & Operations</p>
                   <div className="space-y-1">
                     {NAV_INTELLIGENCE.map(item => {
                       const Ico = item.icon
@@ -317,7 +317,7 @@ export default function Admin() {
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-medium transition-colors ${section === item.id ? 'bg-blue/20 text-white font-bold' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                         >
                           <Ico size={18} /> {item.label}
                         </button>
@@ -490,22 +490,22 @@ function KpiRow({ skus, lowStock, pending }) {
     { label: 'Active SKUs', value: String(skus), sub: 'across 4 channels', tone: 'navy' },
     { label: 'Low-stock alerts', value: String(lowStock), sub: 'from master inventory', tone: lowStock > 0 ? 'danger' : 'navy' },
     { label: 'Pending orders', value: String(pending), sub: 'awaiting fulfillment', tone: pending > 0 ? 'danger' : 'navy' },
-    { label: 'Today across channels', value: '₱41,260', sub: 'Live estimate', tone: 'good' },
+    { label: 'Today across channels', value: '₱41,260', sub: 'Live channel estimate', tone: 'good' },
   ]
   return (
-    <div className="grid grid-cols-2 gap-px border-b border-white/10 bg-white/10 md:grid-cols-4 shrink-0">
+    <div className="grid grid-cols-2 gap-px border-b border-white/15 bg-white/15 md:grid-cols-4 shrink-0">
       {KPIS.map((k) => (
-        <div key={k.label} className={'px-4 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-crimson/10' : 'bg-[#05080f]')}>
-          <p className="text-[10px] font-mono uppercase tracking-widest text-white/50 truncate pr-2">{k.label}</p>
+        <div key={k.label} className={'px-5 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-crimson/20' : 'bg-[#0E121E]')}>
+          <p className="text-xs font-extrabold uppercase tracking-wider text-gold truncate pr-2">{k.label}</p>
           <p
             className={
-              'mt-2 text-xl md:text-2xl font-bold tabular tracking-tight ' +
-              (k.tone === 'danger' ? 'text-crimson' : k.tone === 'good' ? 'text-forest' : 'text-white')
+              'mt-2 text-2xl md:text-3xl font-black tabular tracking-tight ' +
+              (k.tone === 'danger' ? 'text-crimson' : k.tone === 'good' ? 'text-blue' : 'text-white')
             }
           >
             {k.value}
           </p>
-          <p className="text-xs text-white/30 mt-1 truncate pr-2">{k.sub}</p>
+          <p className="text-xs text-white/80 font-medium mt-1 truncate pr-2">{k.sub}</p>
         </div>
       ))}
     </div>

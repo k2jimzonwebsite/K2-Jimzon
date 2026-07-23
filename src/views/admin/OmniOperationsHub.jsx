@@ -48,75 +48,92 @@ const MOCK_PICK_ORDERS = [
     assignedStaff: 'Elena Guerrero',
     items: [
       { sku: 'KIKO-3D-05', title: 'KIKO Milano 3D Lipgloss Shade 05', qty: 2, bin: 'Shelf A-02' },
-      { sku: 'MUL-PAN-500', title: 'Mulino Bianco Pan di Stelle 500g', qty: 1, bin: 'Shelf B-14' }
+      { sku: 'MUL-PAN-500', title: 'Mulino Bianco Pan di Stelle 500g', qty: 1, bin: 'Shelf B-11' }
     ],
-    status: 'Ready to Pick',
+    status: 'Ready to Pack',
     courier: 'J&T Express',
-    tracking: 'JT9921400291'
+    tracking: 'JT991024881'
   },
   {
-    id: 'ORD-LAZ-4920',
+    id: 'ORD-LZD-4412',
     channel: 'Lazada',
     channelColor: '#0f146d',
-    customer: 'Sofia Gonzalez',
+    customer: 'Maria Santos',
+    assignedStaff: 'Elena Guerrero',
+    items: [
+      { sku: 'MUL-PAN-500', title: 'Mulino Bianco Pan di Stelle 500g', qty: 3, bin: 'Shelf B-11' }
+    ],
+    status: 'Ready to Pack',
+    courier: 'Lazada Logistics',
+    tracking: 'LZD00192841'
+  },
+  {
+    id: 'ORD-VIP-9901',
+    channel: 'Website VIP',
+    channelColor: '#D4AF37',
+    customer: 'Boutique Caffe Manila',
     assignedStaff: 'Juan Dela Cruz',
     items: [
-      { sku: 'LAV-ORO-250', title: 'Lavazza Qualità Oro Beans 250g', qty: 3, bin: 'Shelf C-05' }
+      { sku: 'LAV-ORO-250', title: 'Lavazza Qualità Oro Beans 250g', qty: 10, bin: 'Bulk Pallet 4' }
     ],
-    status: 'Ready to Pick',
-    courier: 'Lazada Express (LEX)',
-    tracking: 'LEXPH8829104'
+    status: 'Ready to Pack',
+    courier: 'Lalamove Cargo',
+    tracking: 'LLM-MNL-552'
   }
 ]
 
 export default function OmniOperationsHub() {
-  const [activeRole, setActiveRole] = useState('manila_warehouse') // 'manila_warehouse' | 'box_handover' | 'milan_buyer'
+  const { currentStaff, setStaffPinModalOpen } = useStore()
+  
+  const [activeRole, setActiveRole] = useState('manila_warehouse')
   const [activeStaff, setActiveStaff] = useState('Elena Guerrero')
-  const [cargoBoxes, setCargoBoxes] = useState(() => {
-    const saved = localStorage.getItem('k2_cargo_boxes')
-    return saved ? JSON.parse(saved) : INITIAL_CARGO_BOXES
-  })
+  const [cargoBoxes, setCargoBoxes] = useState(INITIAL_CARGO_BOXES)
   const [orders, setOrders] = useState(MOCK_PICK_ORDERS)
+  
   const [scanBarcode, setScanBarcode] = useState('')
   const [scanMessage, setScanMessage] = useState(null)
+  const [packedCount, setPackedCount] = useState(14)
   const [printSlipOrder, setPrintSlipOrder] = useState(null)
   const [showStaffPinModal, setShowStaffPinModal] = useState(false)
-  const [packedCount, setPackedCount] = useState(14)
 
   useEffect(() => {
-    localStorage.setItem('k2_cargo_boxes', JSON.stringify(cargoBoxes))
-  }, [cargoBoxes])
+    if (currentStaff?.name) {
+      setActiveStaff(currentStaff.name)
+    }
+  }, [currentStaff])
 
-  // Handle Box Re-assignment to another staff member
-  const handleReassignBoxStaff = (boxCode, newStaffName) => {
-    setCargoBoxes(prev => prev.map(b => b.box_code === boxCode ? { ...b, assigned_staff: newStaffName } : b))
-  }
-
-  // Handle Unpacking Cargo Box & Claiming Custody
   const handleClaimBoxCustody = (boxCode) => {
     setCargoBoxes(prev => prev.map(b => {
       if (b.box_code === boxCode) {
-        return { ...b, status: `Unpacked & Claimed by ${b.assigned_staff} ✓` }
+        return {
+          ...b,
+          assigned_staff: activeStaff,
+          status: `Claimed by ${activeStaff} ✓`
+        }
       }
       return b
     }))
-    setScanMessage({
-      success: true,
-      text: `✓ Box ${boxCode} unpacked! SKU items officially credited into ${activeStaff}'s personal custody stock.`
-    })
-    setTimeout(() => setScanMessage(null), 4000)
+    alert(`✓ Box [${boxCode}] custody claimed by ${activeStaff}! SKUs transferred to ${activeStaff}'s local warehouse inventory balance.`)
   }
 
-  // Barcode Verification Simulator
+  const handleReassignBoxStaff = (boxCode, newStaff) => {
+    setCargoBoxes(prev => prev.map(b => {
+      if (b.box_code === boxCode) {
+        return { ...b, assigned_staff: newStaff }
+      }
+      return b
+    }))
+  }
+
   const handleVerifyScan = (e) => {
     e.preventDefault()
-    if (!scanBarcode) return
+    if (!scanBarcode.trim()) return
 
     const match = scanBarcode.trim().toUpperCase()
     let found = false
 
     const updatedOrders = orders.map(ord => {
-      const itemMatch = ord.items.find(i => i.sku.toUpperCase() === match || match.includes(i.sku.toUpperCase()))
+      const itemMatch = ord.items.some(it => it.sku.toUpperCase() === match || it.title.toUpperCase().includes(match))
       if (itemMatch) {
         found = true
         return { ...ord, status: 'Packed & Verified ✓' }
@@ -139,30 +156,30 @@ export default function OmniOperationsHub() {
   const staffBoxes = cargoBoxes.filter(b => b.assigned_staff === activeStaff)
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 font-sans text-white">
       
       {/* Header Banner & Active Staff Profile Switcher */}
-      <div className="bg-[#05080f] border border-white/10 p-6 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2 py-0.5 rounded border border-forest/30">
+            <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Staff Operations & Cargo Box Handover Hub
             </span>
-            <span className="text-xs text-white/50">Multi-Staff Custody & Italy Cargo Box Allocation</span>
+            <span className="text-xs text-white/80 font-medium">Multi-Staff Custody & Italy Cargo Box Allocation</span>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Staff Operations & Italy Box Handover Station</h1>
-          <p className="text-xs text-white/60 mt-1 max-w-2xl">
+          <h1 className="font-sans text-2xl font-black text-white mt-1">Staff Operations & Italy Box Handover Station</h1>
+          <p className="text-xs text-white/80 font-medium mt-1 max-w-2xl">
             Each staff member receives specific Italy shipment boxes containing assigned SKUs. Staff can only ship orders out of their claimed box custody.
           </p>
         </div>
 
         {/* Active Staff Member Station Selector & Quick PIN Login */}
-        <div className="bg-[#0A101D] border border-white/10 p-3 rounded-xl space-y-2 shrink-0">
+        <div className="bg-[#161B29] border border-white/20 p-3.5 rounded-xl space-y-2 shrink-0 shadow-md">
           <div className="flex items-center justify-between gap-2">
-            <label className="block text-[10px] font-mono uppercase text-white/40 font-bold">Active Staff Station:</label>
+            <label className="block text-xs font-extrabold uppercase text-gold">Active Staff Station:</label>
             <button
               onClick={() => setShowStaffPinModal(true)}
-              className="text-[10px] font-mono font-bold text-forest bg-forest/20 px-2 py-0.5 rounded border border-forest/40 hover:bg-forest/30 transition-all flex items-center gap-1"
+              className="text-xs font-bold text-navy bg-gold px-2.5 py-1 rounded-lg hover:bg-gold-deep transition-all flex items-center gap-1 shadow"
             >
               🔑 PIN Login
             </button>
@@ -170,7 +187,7 @@ export default function OmniOperationsHub() {
           <select
             value={activeStaff}
             onChange={(e) => setActiveStaff(e.target.value)}
-            className="w-full bg-[#05080f] border border-forest/40 text-xs font-mono font-bold text-forest rounded-lg px-3 py-2 outline-none"
+            className="w-full bg-[#0E121E] border border-gold text-xs font-bold text-white rounded-lg px-3 py-2 outline-none"
           >
             <option value="Elena Guerrero">👤 Elena Guerrero (Makati Hub)</option>
             <option value="Juan Dela Cruz">👤 Juan Dela Cruz (Quezon City Hub)</option>
@@ -180,27 +197,27 @@ export default function OmniOperationsHub() {
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex overflow-x-auto max-w-full bg-[#0A101D] border border-white/10 p-1.5 rounded-xl text-xs font-semibold scrollbar-none">
+      <div className="flex overflow-x-auto max-w-full bg-[#0E121E] border border-white/20 p-2 rounded-xl text-xs font-bold scrollbar-none gap-2">
         <button
           onClick={() => setActiveRole('manila_warehouse')}
-          className={`px-4 py-2.5 min-h-[44px] rounded-lg transition-all flex items-center gap-2 shrink-0 ${
-            activeRole === 'manila_warehouse' ? 'bg-forest text-white font-bold shadow-md' : 'text-white/60 hover:text-white'
+          className={`px-5 py-3 min-h-[44px] rounded-xl transition-all flex items-center gap-2 shrink-0 ${
+            activeRole === 'manila_warehouse' ? 'bg-blue text-white font-black shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'
           }`}
         >
           📦 {activeStaff}'s Order Pack & Ship Queue
         </button>
         <button
           onClick={() => setActiveRole('box_handover')}
-          className={`px-4 py-2.5 min-h-[44px] rounded-lg transition-all flex items-center gap-2 shrink-0 ${
-            activeRole === 'box_handover' ? 'bg-amber text-navy-dark font-bold shadow-md' : 'text-white/60 hover:text-white'
+          className={`px-5 py-3 min-h-[44px] rounded-xl transition-all flex items-center gap-2 shrink-0 ${
+            activeRole === 'box_handover' ? 'bg-gold text-navy font-black shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'
           }`}
         >
           🛬 Italy Cargo Box Handover ({staffBoxes.length} Boxes)
         </button>
         <button
           onClick={() => setActiveRole('inter_staff_transfer')}
-          className={`px-4 py-2.5 min-h-[44px] rounded-lg transition-all flex items-center gap-2 shrink-0 ${
-            activeRole === 'inter_staff_transfer' ? 'bg-blue text-white font-bold shadow-md' : 'text-white/60 hover:text-white'
+          className={`px-5 py-3 min-h-[44px] rounded-xl transition-all flex items-center gap-2 shrink-0 ${
+            activeRole === 'inter_staff_transfer' ? 'bg-blue text-white font-black shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'
           }`}
         >
           ⚡ 1-Click Inter-Staff Transfer
@@ -212,41 +229,41 @@ export default function OmniOperationsHub() {
         <div className="space-y-6">
           
           {/* Barcode Verification Scanner Header */}
-          <div className="bg-[#05080f] border border-forest/40 p-5 rounded-2xl shadow-xl space-y-3">
+          <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl shadow-xl space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <span className="text-lg">📦</span>
+                <span className="text-xl">📦</span>
                 <div>
-                  <h3 className="text-sm font-bold text-white">{activeStaff}'s Pack-to-Ship Verification Station</h3>
-                  <p className="text-xs text-white/50">Point barcode scanner to verify item before sealing polybag</p>
+                  <h3 className="text-base font-black text-white">{activeStaff}'s Pack-to-Ship Verification Station</h3>
+                  <p className="text-xs text-white/80 font-medium">Point barcode scanner to verify item before sealing polybag</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 text-xs font-mono">
-                <span className="text-white/50">Shift Packed:</span>
-                <span className="text-forest font-bold text-base bg-forest/10 px-3 py-1 rounded-lg border border-forest/30">{packedCount} orders</span>
+                <span className="text-white/80 font-bold">Shift Packed:</span>
+                <span className="text-white font-black text-sm bg-blue px-3.5 py-1.5 rounded-xl border border-blue/50 shadow">{packedCount} orders</span>
               </div>
             </div>
 
-            <form onSubmit={handleVerifyScan} className="flex flex-col sm:flex-row gap-2">
+            <form onSubmit={handleVerifyScan} className="flex flex-col sm:flex-row gap-3">
               <input
                 type="text"
                 value={scanBarcode}
                 onChange={(e) => setScanBarcode(e.target.value)}
                 placeholder="Scan barcode or SKU (e.g. KIKO-3D-05)..."
-                className="flex-1 rounded-xl border border-white/20 bg-[#0A101D] px-4 py-3 text-sm text-white font-mono placeholder:text-white/30 focus:border-forest outline-none min-h-[44px]"
+                className="flex-1 rounded-xl border border-white/20 bg-[#161B29] px-4 py-3 text-sm text-white font-mono placeholder:text-white/40 focus:border-gold outline-none min-h-[44px]"
               />
               <button
                 type="submit"
-                className="bg-forest hover:bg-forest/90 text-white font-bold text-xs px-6 py-3 rounded-xl transition-all shadow-lg shadow-forest/20 shrink-0 min-h-[44px] flex items-center justify-center"
+                className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-6 py-3 rounded-xl transition-all shadow-lg shrink-0 min-h-[44px] flex items-center justify-center"
               >
                 Scan & Verify (+1)
               </button>
             </form>
 
             {scanMessage && (
-              <div className={`p-3 rounded-xl border text-xs font-mono flex items-center gap-2 ${
-                scanMessage.success ? 'bg-forest/20 border-forest/40 text-forest' : 'bg-crimson/20 border-crimson/40 text-crimson'
+              <div className={`p-3.5 rounded-xl border text-xs font-bold flex items-center gap-2 ${
+                scanMessage.success ? 'bg-blue/20 border-blue text-white' : 'bg-crimson/20 border-crimson text-white'
               }`}>
                 <span>{scanMessage.text}</span>
               </div>
@@ -255,53 +272,53 @@ export default function OmniOperationsHub() {
 
           {/* Orders Queue for Active Staff Member */}
           <div className="space-y-4">
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white/60">
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-gold">
               {activeStaff}'s Assigned Shipping Queue
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {orders.map(ord => (
-                <div key={ord.id} className="bg-[#05080f] border border-white/10 rounded-2xl p-5 shadow-xl space-y-4 flex flex-col justify-between">
+                <div key={ord.id} className="bg-[#0E121E] border border-white/20 rounded-2xl p-5 shadow-xl space-y-4 flex flex-col justify-between hover:border-gold/40 transition-all">
                   <div>
                     <div className="flex items-center justify-between mb-3">
                       <span 
-                        className="text-[10px] font-mono font-bold text-white px-2.5 py-1 rounded shadow-sm"
+                        className="text-xs font-black text-white px-3 py-1 rounded-lg shadow"
                         style={{ backgroundColor: ord.channelColor }}
                       >
                         {ord.channel}
                       </span>
-                      <span className="text-xs font-mono text-white/40">{ord.id}</span>
+                      <span className="text-xs font-mono text-gold font-bold">{ord.id}</span>
                     </div>
 
-                    <p className="text-sm font-bold text-white">{ord.customer}</p>
-                    <p className="text-xs font-mono text-white/40 mt-0.5">{ord.courier} · {ord.tracking}</p>
+                    <p className="text-base font-black text-white">{ord.customer}</p>
+                    <p className="text-xs text-white/80 font-mono mt-1 font-semibold">{ord.courier} · {ord.tracking}</p>
 
-                    <div className="mt-4 pt-3 border-t border-white/10 space-y-2">
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 font-bold">Pick Items from {activeStaff}'s Custody Stock:</p>
+                    <div className="mt-4 pt-3 border-t border-white/15 space-y-2">
+                      <p className="text-xs font-extrabold uppercase tracking-wider text-gold">Pick Items from {activeStaff}'s Custody Stock:</p>
                       {ord.items.map((it, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-white/5 text-xs font-mono">
+                        <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/10 text-xs font-bold">
                           <div>
-                            <p className="font-bold text-white/90">{it.title}</p>
-                            <p className="text-[10px] text-amber">{it.bin}</p>
+                            <p className="font-bold text-white text-sm">{it.title}</p>
+                            <p className="text-xs text-gold font-mono">{it.bin}</p>
                           </div>
-                          <span className="text-forest font-bold bg-forest/10 px-2 py-0.5 rounded">x{it.qty}</span>
+                          <span className="text-white font-black bg-blue px-2.5 py-1 rounded-lg shadow">x{it.qty}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-white/10 flex items-center justify-between">
-                    <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded ${
-                      ord.status.includes('Packed') ? 'bg-forest/20 text-forest border border-forest/30' : 'bg-amber/20 text-amber border border-amber/30'
+                  <div className="pt-3 border-t border-white/15 flex items-center justify-between">
+                    <span className={`text-xs font-black px-3 py-1 rounded-lg shadow ${
+                      ord.status.includes('Packed') ? 'bg-blue text-white border border-blue' : 'bg-gold text-navy border border-gold'
                     }`}>
                       {ord.status}
                     </span>
 
                     <button
                       onClick={() => setPrintSlipOrder(ord)}
-                      className="bg-forest hover:bg-forest/90 text-white font-bold text-xs px-3.5 py-2 rounded-lg border border-forest/40 transition-all shadow-md flex items-center gap-1.5 min-h-[40px]"
+                      className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 min-h-[40px]"
                     >
-                      🖨️ Print Shopee/Lazada Slip
+                      🖨️ Print Shipping Slip
                     </button>
                   </div>
                 </div>
@@ -316,17 +333,17 @@ export default function OmniOperationsHub() {
       {activeRole === 'box_handover' && (
         <div className="space-y-6">
           
-          <div className="bg-[#05080f] border border-amber/40 p-6 rounded-2xl shadow-xl space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl shadow-xl space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
               <div>
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-amber/20 text-amber px-2 py-0.5 rounded border border-amber/30">
+                <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
                   NAIA Cargo Box Handover & Custody Claim
                 </span>
-                <h2 className="font-serif text-xl font-bold text-white mt-1">Italy Flight Box Arrivals & Staff Inventory Handover</h2>
-                <p className="text-xs text-white/50">Transfer specific flight boxes to staff members and claim SKU custody into local hubs.</p>
+                <h2 className="font-sans text-2xl font-black text-white mt-2">Italy Flight Box Arrivals & Staff Inventory Handover</h2>
+                <p className="text-xs text-white/80 font-medium mt-1">Transfer specific flight boxes to staff members and claim SKU custody into local hubs.</p>
               </div>
 
-              <span className="text-xs font-mono text-white/60">Active Custodian: <strong className="text-amber">{activeStaff}</strong></span>
+              <span className="text-xs font-bold text-white">Active Custodian: <strong className="text-gold font-extrabold text-sm">{activeStaff}</strong></span>
             </div>
 
             {/* Cargo Box Cards */}
@@ -339,22 +356,22 @@ export default function OmniOperationsHub() {
                   <div
                     key={box.box_code}
                     className={`p-5 rounded-2xl border transition-all space-y-4 ${
-                      isAssignedToActive ? 'bg-[#0A101D] border-amber/50 shadow-xl' : 'bg-[#05080f] border-white/10 opacity-75'
+                      isAssignedToActive ? 'bg-[#161B29] border-gold shadow-xl' : 'bg-[#0E121E] border-white/10 opacity-75'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-bold text-amber bg-amber/10 px-2.5 py-1 rounded border border-amber/30">
+                      <span className="text-xs font-mono font-black text-gold bg-black/60 px-3 py-1 rounded-lg border border-gold">
                         {box.box_code}
                       </span>
-                      <span className="text-[10px] font-mono text-white/40">{box.flight_num}</span>
+                      <span className="text-xs font-mono text-white/80 font-bold">{box.flight_num}</span>
                     </div>
 
                     <div>
-                      <label className="block text-[9px] font-mono uppercase text-white/40 mb-1 font-bold">Assigned Staff Custodian:</label>
+                      <label className="block text-xs font-extrabold uppercase text-gold mb-1">Assigned Staff Custodian:</label>
                       <select
                         value={box.assigned_staff}
                         onChange={(e) => handleReassignBoxStaff(box.box_code, e.target.value)}
-                        className="w-full bg-[#05080f] border border-white/20 text-xs font-mono text-white rounded-lg px-2.5 py-1.5 outline-none focus:border-amber"
+                        className="w-full bg-[#0E121E] border border-white/20 text-xs font-bold text-white rounded-lg px-3 py-2 outline-none focus:border-gold"
                       >
                         <option value="Elena Guerrero">Elena Guerrero (Makati Hub)</option>
                         <option value="Juan Dela Cruz">Juan Dela Cruz (Quezon City Hub)</option>
@@ -363,20 +380,20 @@ export default function OmniOperationsHub() {
                     </div>
 
                     {/* Box SKUs Contents */}
-                    <div className="bg-white/5 border border-white/10 p-3 rounded-xl space-y-2 text-xs font-mono">
-                      <p className="text-[10px] text-white/40 uppercase font-bold">Box SKU Breakdown:</p>
+                    <div className="bg-white/10 border border-white/15 p-3.5 rounded-xl space-y-2 text-xs font-bold">
+                      <p className="text-xs text-gold uppercase font-extrabold">Box SKU Breakdown:</p>
                       {box.items.map((it, idx) => (
-                        <div key={idx} className="flex justify-between text-white/90">
+                        <div key={idx} className="flex justify-between text-white">
                           <span>{it.title}</span>
-                          <span className="text-forest font-bold">x{it.qty} pcs</span>
+                          <span className="text-gold font-black">x{it.qty} pcs</span>
                         </div>
                       ))}
                     </div>
 
                     {/* Handover Claim Action */}
-                    <div className="pt-2 border-t border-white/10 flex items-center justify-between">
-                      <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
-                        isClaimed ? 'bg-forest/20 text-forest border border-forest/30' : 'bg-amber/20 text-amber border border-amber/30'
+                    <div className="pt-2 border-t border-white/15 flex items-center justify-between">
+                      <span className={`text-xs font-black px-3 py-1 rounded-lg shadow ${
+                        isClaimed ? 'bg-blue text-white border border-blue' : 'bg-gold text-navy border border-gold'
                       }`}>
                         {box.status}
                       </span>
@@ -384,7 +401,7 @@ export default function OmniOperationsHub() {
                       {!isClaimed && isAssignedToActive && (
                         <button
                           onClick={() => handleClaimBoxCustody(box.box_code)}
-                          className="bg-forest hover:bg-forest/90 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow-md transition-all"
+                          className="bg-gold hover:bg-gold-deep text-navy font-black text-xs px-4 py-2 rounded-xl shadow-md transition-all"
                         >
                           ⚡ Claim Custody Stock
                         </button>
@@ -402,17 +419,17 @@ export default function OmniOperationsHub() {
 
       {/* MODE 3: 1-CLICK INTER-STAFF STOCK TRANSFER STATION */}
       {activeRole === 'inter_staff_transfer' && (
-        <div className="bg-[#05080f] border border-blue/40 p-6 rounded-2xl shadow-xl space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+        <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl shadow-xl space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
             <div>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-blue/20 text-blue px-2 py-0.5 rounded border border-blue/30">
+              <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
                 Inter-Staff Custody Re-allocation
               </span>
-              <h2 className="font-serif text-xl font-bold text-white mt-1">1-Click Inter-Staff Stock Transfer Station</h2>
-              <p className="text-xs text-white/50">Transfer SKU inventory between staff members instantly with one click.</p>
+              <h2 className="font-sans text-2xl font-black text-white mt-2">1-Click Inter-Staff Stock Transfer Station</h2>
+              <p className="text-xs text-white/80 font-medium mt-1">Transfer SKU inventory between staff members instantly with one click.</p>
             </div>
 
-            <span className="text-xs font-mono text-forest">Audit Trail Logged</span>
+            <span className="text-xs font-black text-blue">Audit Trail Logged</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -421,22 +438,22 @@ export default function OmniOperationsHub() {
               { sku: 'MUL-PAN-500', title: 'Mulino Bianco Pan di Stelle 500g', from: 'Elena Guerrero (6 units)', to: 'Maria Santos (0 units)', defaultQty: 3 },
               { sku: 'LAV-ORO-250', title: 'Lavazza Qualità Oro Beans 250g', from: 'Juan Dela Cruz (10 units)', to: 'Elena Guerrero (1 unit)', defaultQty: 5 }
             ].map((trf, idx) => (
-              <div key={idx} className="bg-[#0A101D] border border-white/10 p-5 rounded-2xl space-y-4 shadow-md">
+              <div key={idx} className="bg-[#161B29] border border-white/20 p-5 rounded-2xl space-y-4 shadow-md">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-mono font-bold text-blue bg-blue/10 px-2 py-0.5 rounded border border-blue/30">{trf.sku}</span>
-                  <span className="text-xs font-mono text-white/40">Instant 1-Click</span>
+                  <span className="text-xs font-mono font-black text-gold bg-black/60 px-3 py-1 rounded-lg border border-gold">{trf.sku}</span>
+                  <span className="text-xs font-bold text-white/80">Instant 1-Click</span>
                 </div>
 
-                <h3 className="text-sm font-bold text-white">{trf.title}</h3>
+                <h3 className="text-base font-black text-white">{trf.title}</h3>
                 
-                <div className="space-y-1 text-xs font-mono text-white/60 bg-white/5 p-3 rounded-xl border border-white/5">
-                  <p>FROM: <strong className="text-crimson">{trf.from}</strong></p>
-                  <p>TO: <strong className="text-forest">{trf.to}</strong></p>
+                <div className="space-y-1 text-xs font-bold text-white/90 bg-white/10 p-3.5 rounded-xl border border-white/10">
+                  <p>FROM: <strong className="text-crimson font-black">{trf.from}</strong></p>
+                  <p>TO: <strong className="text-gold font-black">{trf.to}</strong></p>
                 </div>
 
                 <button
                   onClick={() => alert(`⚡ 1-Click Transfer Success! Transferred ${trf.defaultQty} units of ${trf.sku} to ${trf.to.split(' ')[0]}!`)}
-                  className="w-full bg-blue hover:bg-blue/90 text-white font-bold text-xs py-2.5 rounded-xl shadow-lg shadow-blue/20 transition-all"
+                  className="w-full bg-blue hover:bg-blue-deep text-white font-black text-xs py-3 rounded-xl shadow-lg transition-all"
                 >
                   ⚡ Transfer {trf.defaultQty} Units in 1-Click
                 </button>

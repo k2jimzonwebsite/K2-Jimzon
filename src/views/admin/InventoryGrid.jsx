@@ -8,25 +8,25 @@ import StaffAllocationModal from './StaffAllocationModal'
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 
 // ── Shared input/textarea styles ──────────────────────────────────────────────
-const inp = 'w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white focus:border-blue outline-none transition-colors'
+const inp = 'w-full rounded-xl border border-white/20 bg-[#161B29] px-3.5 py-2.5 text-sm text-white font-semibold focus:border-gold outline-none transition-colors shadow-sm'
 const ta  = `${inp} resize-none`
 
 function Label({ children }) {
-  return <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-1">{children}</label>
+  return <label className="block text-xs font-extrabold uppercase tracking-wider text-gold mb-1.5">{children}</label>
 }
 
 function Section({ color = 'blue', title, children }) {
   const colors = {
-    blue:   'text-blue border-blue/20',
-    amber:  'text-gold border-gold/20',
-    forest: 'text-blue border-blue/20',
-    purple: 'text-gold border-gold/20',
-    crimson:'text-crimson border-crimson/20',
-    slate:  'text-white/40 border-white/10',
+    blue:   'text-white border-blue',
+    amber:  'text-gold border-gold',
+    forest: 'text-white border-blue',
+    purple: 'text-gold border-gold',
+    crimson:'text-crimson border-crimson',
+    slate:  'text-white border-white/30',
   }
   return (
-    <div className={`border-l-2 pl-4 space-y-3 ${colors[color] || colors.blue}`}>
-      <p className={`text-[10px] font-bold uppercase tracking-widest ${colors[color]?.split(' ')[0] || 'text-blue'}`}>{title}</p>
+    <div className={`border-l-4 pl-4 space-y-3 ${colors[color] || colors.blue}`}>
+      <p className="text-xs font-extrabold uppercase tracking-wider text-gold">{title}</p>
       {children}
     </div>
   )

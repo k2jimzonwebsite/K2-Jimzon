@@ -236,28 +236,28 @@ export default function ConsignmentManager() {
   const totalManilaScanned = consignment.items.reduce((sum, i) => sum + i.manila_scanned_qty, 0)
 
   return (
-    <div className="p-6 max-w-7xl mx-auto text-white space-y-6 animate-in fade-in duration-300">
+    <div className="p-6 max-w-7xl mx-auto text-white space-y-6 animate-in fade-in duration-300 font-sans">
       
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#05080f] p-6 rounded-2xl border border-white/10 shadow-2xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0E121E] p-6 rounded-2xl border border-white/20 shadow-2xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-crimson/20 text-crimson px-2.5 py-0.5 rounded border border-crimson/30">
-              Italy $\rightarrow$ Philippines Flight Consignment
+            <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
+              Italy ✈ Philippines Flight Consignment
             </span>
-            <span className="text-xs font-mono text-white/50">{consignment.manifest_code}</span>
+            <span className="text-xs font-mono text-gold font-bold">{consignment.manifest_code}</span>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">{consignment.flight_number}</h1>
-          <p className="text-xs text-white/50 mt-1">
-            Packed in Milan: <span className="text-white/80 font-mono">{consignment.packed_at}</span> · Status:{' '}
-            <span className="font-bold text-forest">{consignment.status}</span>
+          <h1 className="font-sans text-2xl font-black text-white">{consignment.flight_number}</h1>
+          <p className="text-xs text-white/80 font-bold mt-1">
+            Packed in Milan: <span className="text-white font-black font-mono">{consignment.packed_at}</span> · Status:{' '}
+            <span className="font-black text-blue">{consignment.status}</span>
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={() => setIsMilanScannerOpen(true)}
-            className="bg-blue hover:bg-blue/90 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-blue/20 transition-all flex items-center gap-2"
+            className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -267,14 +267,14 @@ export default function ConsignmentManager() {
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="bg-white/10 hover:bg-white/20 text-white font-semibold text-xs px-4 py-2.5 rounded-xl border border-white/10 transition-all"
+            className="bg-gold hover:bg-gold-deep text-navy font-black text-xs px-5 py-3 rounded-xl shadow-lg transition-all"
           >
             + Pack New Box (Milan)
           </button>
 
           <button
             onClick={() => setIsScannerOpen(true)}
-            className="bg-crimson hover:bg-crimson/90 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-crimson/20 transition-all flex items-center gap-2"
+            className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />

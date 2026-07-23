@@ -6,12 +6,11 @@ export default function Overview({ setSection }) {
   const [salesToday, setSalesToday] = useState(0)
   const [pendingOrders, setPendingOrders] = useState(0)
   const [lowStockCount, setLowStockCount] = useState(0)
-  const [draftsCount, setDraftsCount] = useState(2) // Mocking AI drafts queue
+  const [draftsCount, setDraftsCount] = useState(2)
   
   const [recentVipOrders, setRecentVipOrders] = useState([])
   const [topMovers, setTopMovers] = useState([])
   
-  // Fake alerts for the wireframe effect
   const alerts = [
     { id: 1, type: 'CRITICAL', text: 'Lavazza Oro out of stock!' },
     { id: 2, type: 'MEDIUM', text: "Supplier 'Milano Dist' invoice due" }
@@ -32,19 +31,16 @@ export default function Overview({ setSection }) {
   const fetchData = async () => {
     if (!supabase) return;
     try {
-      // 1. Pending Orders
       const { count: pCount } = await supabase.from('orders')
         .select('*', { count: 'exact', head: true })
         .eq('order_status', 'Pending')
       if (pCount !== null && pCount !== undefined) setPendingOrders(pCount)
 
-      // 2. Low Stock Count
       const { count: lCount } = await supabase.from('products')
         .select('*', { count: 'exact', head: true })
         .lte('stock_available', 5)
       if (lCount !== null && lCount !== undefined) setLowStockCount(lCount)
 
-      // 3. Today's Sales
       const { data: allOrders } = await supabase.from('orders').select('quantity, sku, products(srp, wholesale_price), channel_source')
       
       if (allOrders && Array.isArray(allOrders)) {
@@ -68,7 +64,6 @@ export default function Overview({ setSection }) {
         setRecentVipOrders(vipRecents.slice(0, 5))
       }
 
-      // 4. Top Movers
       const { data: prods } = await supabase.from('products').select('sku, title, stock_available').order('srp', { ascending: false }).limit(3)
       if (prods && Array.isArray(prods)) {
         setTopMovers(prods)
@@ -79,7 +74,7 @@ export default function Overview({ setSection }) {
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-300 font-sans">
       
       {/* Health Monitors */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -90,43 +85,43 @@ export default function Overview({ setSection }) {
       </div>
 
       {/* 💰 Master Metrics Financial Landed P&L Summary */}
-      <div className="bg-[#0A101D] border border-white/10 rounded-2xl p-6 shadow-xl space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+      <div className="bg-[#0E121E] border border-white/20 rounded-2xl p-6 shadow-xl space-y-4 text-white">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-4">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2.5 py-0.5 rounded border border-forest/30">
+            <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Master Financial P&L Cockpit
             </span>
-            <h2 className="font-serif text-xl font-bold text-white mt-1">Today's Landed Margin & Net Profit</h2>
+            <h2 className="font-sans text-2xl font-black text-white mt-2">Today's Landed Margin & Net Profit</h2>
           </div>
           <div className="text-right">
-            <p className="text-xs text-white/50">Net Cash Margin</p>
-            <p className="font-mono text-2xl font-bold text-forest">31.5% <span className="text-sm font-normal text-white/60">(₱13,010)</span></p>
+            <p className="text-xs text-white/80 font-bold uppercase">Net Cash Margin</p>
+            <p className="font-mono text-3xl font-black text-gold">31.5% <span className="text-sm font-bold text-white">(₱13,010)</span></p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
-          <div className="bg-[#05080f] p-4 rounded-xl border border-white/10">
-            <p className="text-white/40 text-[10px] uppercase font-bold">Gross Revenue</p>
-            <p className="text-white text-lg font-bold mt-1">₱41,260</p>
-            <p className="text-white/30 text-[10px] mt-0.5">Across all 4 channels</p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm font-mono">
+          <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
+            <p className="text-gold text-xs uppercase font-extrabold">Gross Revenue</p>
+            <p className="text-white text-xl font-black mt-1">₱41,260</p>
+            <p className="text-white/80 text-xs mt-1 font-sans">Across all 4 channels</p>
           </div>
 
-          <div className="bg-[#05080f] p-4 rounded-xl border border-white/10">
-            <p className="text-white/40 text-[10px] uppercase font-bold">Italy Sourcing (€ FX)</p>
-            <p className="text-amber text-lg font-bold mt-1">-₱21,400</p>
-            <p className="text-white/30 text-[10px] mt-0.5">51.8% Sourcing COGS</p>
+          <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
+            <p className="text-gold text-xs uppercase font-extrabold">Italy Sourcing (€ FX)</p>
+            <p className="text-crimson text-xl font-black mt-1">-₱21,400</p>
+            <p className="text-white/80 text-xs mt-1 font-sans">51.8% Sourcing COGS</p>
           </div>
 
-          <div className="bg-[#05080f] p-4 rounded-xl border border-white/10">
-            <p className="text-white/40 text-[10px] uppercase font-bold">Air Freight & Duty</p>
-            <p className="text-amber text-lg font-bold mt-1">-₱6,850</p>
-            <p className="text-white/30 text-[10px] mt-0.5">€14/kg + 12% Duty Tax</p>
+          <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
+            <p className="text-gold text-xs uppercase font-extrabold">Air Freight & Duty</p>
+            <p className="text-crimson text-xl font-black mt-1">-₱6,850</p>
+            <p className="text-white/80 text-xs mt-1 font-sans">€14/kg + 12% Duty Tax</p>
           </div>
 
-          <div className="bg-forest/10 p-4 rounded-xl border border-forest/30">
-            <p className="text-forest text-[10px] uppercase font-bold">Net Cash Profit</p>
-            <p className="text-forest text-lg font-bold mt-1">+₱13,010</p>
-            <p className="text-forest/70 text-[10px] mt-0.5">Clear Bank Cash Flow</p>
+          <div className="bg-blue/20 p-4 rounded-xl border border-blue text-white shadow-md">
+            <p className="text-blue text-xs uppercase font-black">Net Cash Profit</p>
+            <p className="text-white text-xl font-black mt-1">+₱13,010</p>
+            <p className="text-white/90 text-xs mt-1 font-sans font-bold">Clear Bank Cash Flow</p>
           </div>
         </div>
       </div>
@@ -138,50 +133,50 @@ export default function Overview({ setSection }) {
         <div className="space-y-6">
           
           {/* 🛬 Real-Time Flight Cargo Box Arrival & Handover Feed */}
-          <div className="rounded-xl border border-blue/30 bg-[#05080f] overflow-hidden">
-            <div className="border-b border-blue/20 px-5 py-3 flex items-center justify-between bg-blue/10">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-blue flex items-center gap-2">
+          <div className="rounded-2xl border border-white/20 bg-[#0E121E] overflow-hidden text-white shadow-xl">
+            <div className="border-b border-white/15 px-5 py-4 flex items-center justify-between bg-blue/20">
+              <h3 className="text-sm font-black uppercase tracking-wider text-white flex items-center gap-2">
                 <span>🛬</span> Flight Box Arrival & Custody Feed
               </h3>
-              <span className="text-[10px] font-mono text-blue bg-blue/20 px-2 py-0.5 rounded border border-blue/30">Live Updates</span>
+              <span className="text-xs font-mono text-white bg-blue px-2.5 py-1 rounded-full font-black shadow">Live Updates</span>
             </div>
-            <div className="divide-y divide-white/5 font-mono text-xs p-1">
-              <div className="p-3.5 space-y-1">
+            <div className="divide-y divide-white/10 font-sans text-xs p-1">
+              <div className="p-4 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-white">🛬 Box MIL-BOX-092 Arrived NAIA Customs</span>
-                  <span className="text-[10px] text-white/40">Today, 01:10 AM</span>
+                  <span className="font-extrabold text-white text-sm">🛬 Box MIL-BOX-092 Arrived NAIA Customs</span>
+                  <span className="text-xs text-gold font-bold">Today, 01:10 AM</span>
                 </div>
-                <p className="text-white/60">Custody claimed by <span className="text-forest font-bold">Elena Guerrero (Makati Hub)</span> · 10 SKUs credited.</p>
+                <p className="text-white/90 text-xs font-medium">Custody claimed by <span className="text-gold font-black">Elena Guerrero (Makati Hub)</span> · 10 SKUs credited.</p>
               </div>
 
-              <div className="p-3.5 space-y-1">
+              <div className="p-4 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-white">✈️ Box MIL-BOX-104 Flight Departed (MXP)</span>
-                  <span className="text-[10px] text-white/40">Yesterday, 18:40 PM</span>
+                  <span className="font-extrabold text-white text-sm">✈️ Box MIL-BOX-104 Flight Departed (MXP)</span>
+                  <span className="text-xs text-gold font-bold">Yesterday, 18:40 PM</span>
                 </div>
-                <p className="text-white/60">Manifested by <span className="text-amber font-bold">Marco Rossi (Milan)</span> · ETA Manila: 24-Jul-2026.</p>
+                <p className="text-white/90 text-xs font-medium">Manifested by <span className="text-gold font-black">Marco Rossi (Milan)</span> · ETA Manila: 24-Jul-2026.</p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-[#05080f] overflow-hidden">
-            <div className="border-b border-white/10 px-5 py-3 flex items-center justify-between bg-white/5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-white/50">Recent VIP Orders</h3>
-              <button onClick={() => setSection('wholesale')} className="text-xs text-blue hover:text-blue/80 transition-colors">View All</button>
+          <div className="rounded-2xl border border-white/20 bg-[#0E121E] overflow-hidden text-white shadow-xl">
+            <div className="border-b border-white/15 px-5 py-4 flex items-center justify-between bg-white/10">
+              <h3 className="text-xs font-black uppercase tracking-wider text-gold">Recent VIP Orders</h3>
+              <button onClick={() => setSection('wholesale')} className="text-xs font-extrabold text-blue hover:underline">View All</button>
             </div>
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-white/10">
               {recentVipOrders.length === 0 ? (
-                <div className="p-5 text-sm text-white/30 italic">No recent VIP orders.</div>
+                <div className="p-5 text-xs text-white/60 font-semibold italic">No recent VIP orders.</div>
               ) : (
                 recentVipOrders.map((vo, i) => (
-                  <div key={i} className="flex items-center justify-between px-5 py-3 hover:bg-white/5 transition-colors">
+                  <div key={i} className="flex items-center justify-between px-5 py-3.5 hover:bg-white/10 transition-colors">
                     <div>
-                      <p className="text-sm font-medium text-white/90">{vo.user}</p>
-                      <p className="text-xs text-white/40">{vo.id}</p>
+                      <p className="text-sm font-bold text-white">{vo.user}</p>
+                      <p className="text-xs text-gold font-mono font-bold">{vo.id}</p>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="font-mono text-sm text-forest">{peso(vo.amount)}</span>
-                      <button onClick={() => setSection('kanban')} className="rounded bg-white/10 px-3 py-1 text-xs font-medium text-white hover:bg-white/20 transition-colors">Pack</button>
+                      <span className="font-mono text-sm font-black text-white">{peso(vo.amount)}</span>
+                      <button onClick={() => setSection('kanban')} className="rounded-xl bg-blue px-3.5 py-1.5 text-xs font-black text-white hover:bg-blue-deep transition-colors shadow">Pack</button>
                     </div>
                   </div>
                 ))
@@ -189,16 +184,16 @@ export default function Overview({ setSection }) {
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-[#05080f] overflow-hidden">
-            <div className="border-b border-white/10 px-5 py-3 bg-white/5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-white/50">Best Sellers (Last 24h)</h3>
+          <div className="rounded-2xl border border-white/20 bg-[#0E121E] overflow-hidden text-white shadow-xl">
+            <div className="border-b border-white/15 px-5 py-4 bg-white/10">
+              <h3 className="text-xs font-black uppercase tracking-wider text-gold">Best Sellers (Last 24h)</h3>
             </div>
-            <div className="divide-y divide-white/5 p-2">
+            <div className="divide-y divide-white/10 p-2">
               {topMovers.map((tm, i) => (
-                <div key={tm.sku} className="flex items-center gap-3 px-3 py-2">
-                  <div className="flex h-6 w-6 items-center justify-center rounded bg-white/5 text-xs font-bold text-white/50">{i + 1}</div>
-                  <div className="flex-1 truncate text-sm font-medium text-white/80">{tm.title}</div>
-                  <div className="text-xs text-forest">High velocity</div>
+                <div key={tm.sku} className="flex items-center gap-3 px-4 py-3">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gold text-navy font-black text-xs shadow">{i + 1}</div>
+                  <div className="flex-1 truncate text-sm font-bold text-white">{tm.title}</div>
+                  <div className="text-xs font-extrabold text-blue">High Velocity</div>
                 </div>
               ))}
             </div>
@@ -207,33 +202,33 @@ export default function Overview({ setSection }) {
 
         {/* Right Column - Operations */}
         <div className="space-y-6">
-          <div className="rounded-xl border border-crimson/20 bg-crimson/5 overflow-hidden">
-            <div className="border-b border-crimson/20 px-5 py-3 flex items-center justify-between bg-crimson/10">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-crimson">Needs Attention!</h3>
+          <div className="rounded-2xl border border-crimson/40 bg-[#0E121E] overflow-hidden shadow-xl">
+            <div className="border-b border-crimson/30 px-5 py-4 flex items-center justify-between bg-crimson/20">
+              <h3 className="text-xs font-black uppercase tracking-wider text-crimson">⚠️ Action Required Alerts</h3>
             </div>
-            <div className="divide-y divide-crimson/10">
+            <div className="divide-y divide-white/10">
               {alerts.map(alert => (
-                <div key={alert.id} className="flex items-start gap-3 px-5 py-3">
-                  <div className={`mt-0.5 h-2 w-2 rounded-full shrink-0 ${alert.type === 'CRITICAL' ? 'bg-crimson pulse-dot' : 'bg-amber'}`} />
-                  <p className="text-sm text-white/80">{alert.text}</p>
+                <div key={alert.id} className="flex items-start gap-3 px-5 py-3.5">
+                  <div className={`mt-1 h-2.5 w-2.5 rounded-full shrink-0 ${alert.type === 'CRITICAL' ? 'bg-crimson pulse-dot' : 'bg-gold'}`} />
+                  <p className="text-sm font-bold text-white">{alert.text}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-[#05080f] overflow-hidden">
-            <div className="border-b border-white/10 px-5 py-3 flex items-center justify-between bg-white/5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-white/50">Pending AI Products</h3>
-              <span className="flex h-5 items-center justify-center rounded bg-blue/20 px-2 text-[10px] font-bold text-blue">{draftsCount} Pending</span>
+          <div className="rounded-2xl border border-white/20 bg-[#0E121E] overflow-hidden text-white shadow-xl">
+            <div className="border-b border-white/15 px-5 py-4 flex items-center justify-between bg-white/10">
+              <h3 className="text-xs font-black uppercase tracking-wider text-gold">Pending AI Products</h3>
+              <span className="flex h-6 items-center justify-center rounded-full bg-gold px-3 text-xs font-black text-navy shadow">{draftsCount} Pending</span>
             </div>
-            <div className="divide-y divide-white/5">
-              <div className="flex items-center justify-between px-5 py-3 hover:bg-white/5 transition-colors">
-                <span className="text-sm text-white/80">Baci Chocolates 200g</span>
-                <button onClick={() => setSection('sourcing')} className="rounded bg-blue/20 px-3 py-1 text-xs font-medium text-blue hover:bg-blue/30 transition-colors">Review</button>
+            <div className="divide-y divide-white/10">
+              <div className="flex items-center justify-between px-5 py-3.5 hover:bg-white/10 transition-colors">
+                <span className="text-sm font-bold text-white">Baci Chocolates 200g</span>
+                <button onClick={() => setSection('sourcing')} className="rounded-xl bg-blue hover:bg-blue-deep px-4 py-1.5 text-xs font-black text-white transition-all shadow">Review</button>
               </div>
-              <div className="flex items-center justify-between px-5 py-3 hover:bg-white/5 transition-colors">
-                <span className="text-sm text-white/80">Acqua Panna 1L</span>
-                <button onClick={() => setSection('sourcing')} className="rounded bg-blue/20 px-3 py-1 text-xs font-medium text-blue hover:bg-blue/30 transition-colors">Review</button>
+              <div className="flex items-center justify-between px-5 py-3.5 hover:bg-white/10 transition-colors">
+                <span className="text-sm font-bold text-white">Acqua Panna 1L</span>
+                <button onClick={() => setSection('sourcing')} className="rounded-xl bg-blue hover:bg-blue-deep px-4 py-1.5 text-xs font-black text-white transition-all shadow">Review</button>
               </div>
             </div>
           </div>
@@ -247,10 +242,10 @@ export default function Overview({ setSection }) {
 function HealthWidget({ label, status }) {
   const isGood = status === 'good'
   return (
-    <div className="flex items-center justify-between rounded-xl border border-white/10 bg-[#05080f] px-4 py-3 min-w-0">
-      <span className="text-xs font-medium text-white/60 truncate pr-2 flex-1">{label}</span>
-      <div className={`shrink-0 flex h-4 w-4 items-center justify-center rounded-full ${isGood ? 'bg-forest/20' : 'bg-amber/20'}`}>
-        <div className={`h-2 w-2 rounded-full ${isGood ? 'bg-forest' : 'bg-amber'}`} />
+    <div className="flex items-center justify-between rounded-2xl border border-white/20 bg-[#0E121E] px-4 py-3.5 min-w-0 shadow-lg">
+      <span className="text-xs font-bold text-white truncate pr-2 flex-1">{label}</span>
+      <div className={`shrink-0 flex h-5 w-5 items-center justify-center rounded-full ${isGood ? 'bg-blue/30' : 'bg-gold/30'}`}>
+        <div className={`h-2.5 w-2.5 rounded-full ${isGood ? 'bg-blue shadow' : 'bg-gold shadow'}`} />
       </div>
     </div>
   )

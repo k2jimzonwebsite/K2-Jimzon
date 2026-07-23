@@ -59,26 +59,26 @@ export default function CouponManager() {
   const totalRedemptions = coupons.reduce((sum, c) => sum + (c.usedCount || 0), 0)
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 font-sans text-white/90">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 font-sans text-white">
       
       {/* Header Banner */}
-      <div className="bg-[#05080f] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-amber/20 text-amber px-2 py-0.5 rounded border border-amber/30">
+            <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Promotions & Social Engagement Engine
             </span>
-            <span className="text-xs text-white/50">Voucher Creation & Secret Hunt Drops</span>
+            <span className="text-xs text-white/80 font-bold">Voucher Creation & Secret Hunt Drops</span>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Coupons & Voucher Hunt Manager</h1>
-          <p className="text-xs text-white/60 mt-1 max-w-2xl">
+          <h1 className="font-sans text-2xl font-black text-white">Coupons & Voucher Hunt Manager</h1>
+          <p className="text-xs text-white/80 font-medium mt-1 max-w-2xl">
             Create discount codes, set min spend rules, and deploy secret "Voucher Hunt" drops for your social media audience to discover and claim!
           </p>
         </div>
 
         <button
           onClick={() => setShowCreateModal(true)}
-          className="bg-amber hover:bg-amber/90 text-navy font-bold text-xs px-5 py-3 rounded-xl transition-all shadow-lg shadow-amber/20 shrink-0 flex items-center gap-2 min-h-[44px]"
+          className="bg-gold hover:bg-gold-deep text-navy font-black text-xs px-5 py-3 rounded-xl transition-all shadow-lg shrink-0 flex items-center gap-2 min-h-[44px]"
         >
           <span>🎟️</span> + Create New Coupon / Secret Drop
         </button>
@@ -86,35 +86,35 @@ export default function CouponManager() {
 
       {/* Analytics KPI Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-[#05080f] border border-white/10 p-5 rounded-2xl shadow-md">
-          <p className="text-xs font-mono uppercase tracking-wider text-white/40">Active Coupons</p>
-          <p className="text-2xl font-serif font-bold text-amber mt-1">{activeCount} Coupons</p>
-          <p className="text-[11px] text-white/50 mt-1">Ready for storefront & checkout redemption</p>
+        <div className="bg-[#0E121E] border border-white/20 p-5 rounded-2xl shadow-md">
+          <p className="text-xs font-extrabold uppercase tracking-wider text-gold">Active Coupons</p>
+          <p className="text-3xl font-black text-white mt-1">{activeCount} Coupons</p>
+          <p className="text-xs text-white/80 font-medium mt-1">Ready for storefront & checkout redemption</p>
         </div>
 
-        <div className="bg-[#05080f] border border-white/10 p-5 rounded-2xl shadow-md">
-          <p className="text-xs font-mono uppercase tracking-wider text-white/40">Secret Voucher Hunts</p>
-          <p className="text-2xl font-serif font-bold text-forest mt-1">{huntCount} Active Drops</p>
-          <p className="text-[11px] text-white/50 mt-1">Interactive clues for FB/IG/TikTok followers</p>
+        <div className="bg-[#0E121E] border border-white/20 p-5 rounded-2xl shadow-md">
+          <p className="text-xs font-extrabold uppercase tracking-wider text-gold">Secret Voucher Hunts</p>
+          <p className="text-3xl font-black text-blue mt-1">{huntCount} Active Drops</p>
+          <p className="text-xs text-white/80 font-medium mt-1">Interactive clues for FB/IG/TikTok followers</p>
         </div>
 
-        <div className="bg-[#05080f] border border-white/10 p-5 rounded-2xl shadow-md">
-          <p className="text-xs font-mono uppercase tracking-wider text-white/40">Total Redemptions</p>
-          <p className="text-2xl font-serif font-bold text-blue mt-1">{totalRedemptions} Used</p>
-          <p className="text-[11px] text-white/50 mt-1">Successful customer checkouts applied</p>
+        <div className="bg-[#0E121E] border border-white/20 p-5 rounded-2xl shadow-md">
+          <p className="text-xs font-extrabold uppercase tracking-wider text-gold">Total Redemptions</p>
+          <p className="text-3xl font-black text-gold mt-1">{totalRedemptions} Used</p>
+          <p className="text-xs text-white/80 font-medium mt-1">Successful customer checkouts applied</p>
         </div>
       </div>
 
       {/* Coupons Table */}
-      <div className="bg-[#05080f] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
-        <div className="p-5 border-b border-white/10 flex items-center justify-between">
-          <h2 className="font-serif font-bold text-lg text-white">All Promotional Vouchers & Hunts</h2>
-          <span className="text-xs font-mono text-white/40">{coupons.length} Total Coupons</span>
+      <div className="bg-[#0E121E] border border-white/20 rounded-2xl overflow-hidden shadow-xl">
+        <div className="p-5 border-b border-white/15 flex items-center justify-between bg-white/10">
+          <h2 className="font-sans font-black text-xl text-white">All Promotional Vouchers & Hunts</h2>
+          <span className="text-xs font-mono font-bold text-gold">{coupons.length} Total Coupons</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-white/5 text-white/40 uppercase tracking-wider text-[10px] border-b border-white/10">
+          <table className="w-full text-left text-xs font-sans">
+            <thead className="bg-[#161B29] text-gold uppercase tracking-wider text-xs font-extrabold border-b border-white/15">
               <tr>
                 <th className="p-4">Code / Campaign</th>
                 <th className="p-4">Type & Value</th>
@@ -127,17 +127,17 @@ export default function CouponManager() {
             </thead>
             <tbody className="divide-y divide-white/10">
               {coupons.map((c) => (
-                <tr key={c.id} className="hover:bg-white/5 transition-colors">
+                <tr key={c.id} className="hover:bg-white/10 transition-colors">
                   <td className="p-4">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-amber text-sm font-sans tracking-wide">{c.code}</span>
+                      <span className="font-black text-gold text-base font-mono tracking-wide">{c.code}</span>
                       {c.isHunt && (
-                        <span className="text-[9px] bg-forest/20 text-forest border border-forest/40 px-1.5 py-0.5 rounded font-bold">
+                        <span className="text-xs bg-blue text-white px-2 py-0.5 rounded font-black shadow">
                           🔍 SECRET HUNT
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] text-white/60 font-sans mt-0.5">{c.description}</p>
+                    <p className="text-xs text-white/80 font-medium mt-1">{c.description}</p>
                     {c.isHunt && c.clue && (
                       <p className="text-[10px] text-amber/80 italic mt-1 font-sans">"{c.clue}"</p>
                     )}

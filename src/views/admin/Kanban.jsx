@@ -119,11 +119,11 @@ export default function Kanban() {
           <p className="text-sm text-white/50">Manage Milan flight consignments, box scanning receiving (+1), supplier POs, and PH customer order fulfillment in one place.</p>
         </div>
         
-        <div className="flex bg-[#05080f] rounded-xl p-1.5 border border-white/10 overflow-x-auto whitespace-nowrap hide-scrollbar items-center gap-1">
+        <div className="flex bg-[#0E121E] rounded-xl p-2 border border-white/20 overflow-x-auto whitespace-nowrap hide-scrollbar items-center gap-2">
           <button 
             onClick={() => setActiveTab('consignment')}
-            className={`px-4 py-2.5 text-xs font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
-              activeTab === 'consignment' ? 'bg-crimson text-white shadow-lg shadow-crimson/20' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
+            className={`px-4 py-2.5 text-xs font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+              activeTab === 'consignment' ? 'bg-crimson text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'
             }`}
           >
             <PlaneIcon size={16} /> Italy ✈ Manila Manifests (+1 Scanner)
@@ -131,8 +131,8 @@ export default function Kanban() {
 
           <button 
             onClick={() => setActiveTab('kanban')}
-            className={`px-4 py-2.5 text-xs font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
-              activeTab === 'kanban' ? 'bg-blue text-white shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
+            className={`px-4 py-2.5 text-xs font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+              activeTab === 'kanban' ? 'bg-blue text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'
             }`}
           >
             <BoxIcon size={16} /> Customer Orders (PH)
@@ -140,8 +140,8 @@ export default function Kanban() {
 
           <button 
             onClick={() => setActiveTab('inbound')}
-            className={`px-4 py-2.5 text-xs font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
-              activeTab === 'inbound' ? 'bg-forest text-white shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
+            className={`px-4 py-2.5 text-xs font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+              activeTab === 'inbound' ? 'bg-gold text-navy shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'
             }`}
           >
             <GlobeIcon size={16} /> Purchase Orders
@@ -149,8 +149,8 @@ export default function Kanban() {
           
           <button 
             onClick={() => setActiveTab('outbound')}
-            className={`px-4 py-2.5 text-xs font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
-              activeTab === 'outbound' ? 'bg-purple-900/40 text-purple-300 shadow-lg' : 'text-white/40 hover:text-white/80 hover:bg-white/5'
+            className={`px-4 py-2.5 text-xs font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+              activeTab === 'outbound' ? 'bg-blue text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'
             }`}
           >
             <SyncIcon size={16} /> AI Outbound Sourcing
@@ -182,19 +182,19 @@ export default function Kanban() {
           <div className="w-full">
             <div className="flex gap-4 overflow-x-auto min-h-[500px]">
               {loading && orders.length === 0 ? (
-                <div className="w-full text-center py-10 text-sm text-white/40">Loading customer orders...</div>
+                <div className="w-full text-center py-10 text-sm font-extrabold text-white animate-pulse">Loading customer orders...</div>
               ) : (
                 columns.map((col) => (
                   <section key={col.id} className="w-72 shrink-0 md:w-[calc(25%-12px)] md:min-w-64">
                     <header className="mb-2.5 flex items-start justify-between px-1">
                       <div>
-                        <h2 className="flex items-center gap-2 text-sm font-bold text-white/90">
-                          <span className="h-2 w-2 rounded-full" style={{ background: col.accent }} />
+                        <h2 className="flex items-center gap-2 text-sm font-black text-white">
+                          <span className="h-2.5 w-2.5 rounded-full" style={{ background: col.accent }} />
                           {col.name}
                         </h2>
-                        <p className="ml-4 text-xs text-white/40">{col.meta}</p>
+                        <p className="ml-4 text-xs font-bold text-gold">{col.meta}</p>
                       </div>
-                      <span className="rounded bg-white/5 px-1.5 py-0.5 text-xs font-semibold tabular text-white/60">
+                      <span className="rounded-full bg-gold text-navy px-2.5 py-0.5 text-xs font-black tabular shadow">
                         {col.orders.length}
                       </span>
                     </header>
