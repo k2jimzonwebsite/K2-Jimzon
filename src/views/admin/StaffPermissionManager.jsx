@@ -1,0 +1,333 @@
+import { useState, useEffect } from 'react'
+import { useStore } from '../../context/StoreContext'
+import { supabase } from '../../lib/supabaseClient'
+
+const INITIAL_STAFF = [
+  {
+    id: 'staff_1',
+    name: 'Elena Rostova',
+    email: 'elena@k2jimzon.com',
+    pin: '1111',
+    hub: 'Makati Fulfillment Hub',
+    role: 'Generalist / Fulfillment Lead',
+    permissions: {
+      can_edit_inventory: true,
+      can_manage_coupons: true,
+      can_print_waybills: true,
+      can_manage_inbox: true,
+      can_view_financials: false,
+      can_transfer_stock: true,
+      can_manage_pasabuy: true
+    }
+  },
+  {
+    id: 'staff_2',
+    name: 'Juan Cruz',
+    email: 'juan@k2jimzon.com',
+    pin: '2222',
+    hub: 'QC Distribution Center',
+    role: 'Generalist / Logistics Specialist',
+    permissions: {
+      can_edit_inventory: true,
+      can_manage_coupons: true,
+      can_print_waybills: true,
+      can_manage_inbox: true,
+      can_view_financials: false,
+      can_transfer_stock: true,
+      can_manage_pasabuy: true
+    }
+  },
+  {
+    id: 'staff_3',
+    name: 'Marco Rossi',
+    email: 'marco@k2jimzon.com',
+    pin: '3333',
+    hub: 'Milan Sourcing Boutique',
+    role: 'Italy Sourcing Specialist',
+    permissions: {
+      can_edit_inventory: true,
+      can_manage_coupons: false,
+      can_print_waybills: false,
+      can_manage_inbox: true,
+      can_view_financials: true,
+      can_transfer_stock: true,
+      can_manage_pasabuy: true
+    }
+  }
+]
+
+const PERMISSION_KEYS = [
+  { key: 'can_edit_inventory', label: '📦 Edit Catalog & Stock', desc: 'Add/edit products, stock counts, and prices' },
+  { key: 'can_manage_coupons', label: '🏷️ Create Coupons & Hunts', desc: 'Create promo codes and secret voucher drops' },
+  { key: 'can_print_waybills', label: '🖨️ Print Waybills & Slips', desc: 'Generate Shopee/Lazada packing slips & barcodes' },
+  { key: 'can_manage_inbox', label: '💬 Customer Messaging', desc: 'Reply to Viber, WhatsApp, and Storefront chats' },
+  { key: 'can_transfer_stock', label: '👤 Transfer Stock Custody', desc: 'Reallocate stock between staff members and hubs' },
+  { key: 'can_manage_pasabuy', label: '✈ Manage Pasabuy Quotes', desc: 'Calculate landed costs and dispatch quotes' },
+  { key: 'can_view_financials', label: '💰 View Master P&L & COGS', desc: 'Access net cash profit metrics & COGS breakdowns' },
+]
+
+export default function StaffPermissionManager() {
+  const { user } = useStore()
+  const isSuperAdmin = user?.email?.toLowerCase() === 'k2jimzonwebsite@gmail.com' || user?.role === 'SuperAdmin'
+
+  const [staffList, setStaffList] = useState(() => {
+    try {
+      const saved = localStorage.getItem('k2_staff_permissions')
+      return saved ? JSON.parse(saved) : INITIAL_STAFF
+    } catch {
+      return INITIAL_STAFF
+    }
+  })
+
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [newStaff, setNewStaff] = useState({
+    name: '',
+    email: '',
+    pin: '4444',
+    hub: 'Makati Fulfillment Hub',
+    role: 'Generalist Staff'
+  })
+
+  const [savedMessage, setSavedMessage] = useState('')
+
+  useEffect(() => {
+    localStorage.setItem('k2_staff_permissions', JSON.stringify(staffList))
+  }, [staffList])
+
+  const handleTogglePermission = (staffId, permKey) => {
+    if (!isSuperAdmin) {
+      alert("Only Super Admin (k2jimzonwebsite@gmail.com) can change staff permissions!")
+      return
+    }
+    setStaffList(prev => prev.map(s => {
+      if (s.id === staffId) {
+        return {
+          ...s,
+          permissions: {
+            ...s.permissions,
+            [permKey]: !s.permissions[permKey]
+          }
+        }
+      }
+      return s
+    }))
+    triggerSavedNotice()
+  }
+
+  const handleUpdatePin = (staffId, newPin) => {
+    if (!isSuperAdmin) return
+    setStaffList(prev => prev.map(s => s.id === staffId ? { ...s, pin: newPin } : s))
+    triggerSavedNotice()
+  }
+
+  const handleAddStaff = (e) => {
+    e.preventDefault()
+    if (!newStaff.name || !newStaff.email) return
+
+    const created = {
+      id: `staff_${Date.now()}`,
+      name: newStaff.name,
+      email: newStaff.email,
+      pin: newStaff.pin || '5555',
+      hub: newStaff.hub,
+      role: newStaff.role,
+      permissions: {
+        can_edit_inventory: true,
+        can_manage_coupons: true,
+        can_print_waybills: true,
+        can_manage_inbox: true,
+        can_view_financials: false,
+        can_transfer_stock: true,
+        can_manage_pasabuy: true
+      }
+    }
+
+    setStaffList(prev => [...prev, created])
+    setShowAddModal(false)
+    setNewStaff({ name: '', email: '', pin: '4444', hub: 'Makati Fulfillment Hub', role: 'Generalist Staff' })
+    triggerSavedNotice()
+  }
+
+  const triggerSavedNotice = () => {
+    setSavedMessage('✓ Permissions updated live!')
+    setTimeout(() => setSavedMessage(''), 2000)
+  }
+
+  return (
+    <div className="space-y-6 text-white font-sans">
+      
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-[#0A101D] border border-white/10 shadow-xl">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="font-serif text-2xl font-bold text-white">Staff Roles & Permissions Manager</h1>
+            <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border uppercase ${isSuperAdmin ? 'bg-amber/20 text-amber border-amber/40' : 'bg-blue/20 text-blue border-blue/40'}`}>
+              {isSuperAdmin ? '👑 Super Admin Master Mode' : '👁️ General Staff View'}
+            </span>
+          </div>
+          <p className="text-xs text-white/50 mt-1">
+            Manage station 4-digit PIN logins and granular access controls for all team members.
+          </p>
+        </div>
+
+        {isSuperAdmin && (
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="bg-forest hover:bg-forest/90 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 min-h-[44px]"
+          >
+            <span>+</span> Add New Staff Member
+          </button>
+        )}
+      </div>
+
+      {savedMessage && (
+        <div className="p-3 rounded-xl bg-forest/20 border border-forest/40 text-forest text-xs font-mono font-bold animate-in fade-in">
+          {savedMessage}
+        </div>
+      )}
+
+      {/* Staff Cards Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {staffList.map((s) => (
+          <div key={s.id} className="bg-[#0A101D] border border-white/10 rounded-2xl p-5 space-y-4 shadow-xl flex flex-col justify-between hover:border-blue/30 transition-all">
+            
+            {/* Profile Info */}
+            <div>
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="font-serif font-bold text-lg text-white">{s.name}</h3>
+                  <p className="text-xs text-white/50 font-mono">{s.email}</p>
+                </div>
+                <span className="text-[10px] font-mono bg-blue/15 text-blue border border-blue/30 px-2 py-0.5 rounded font-bold">
+                  {s.hub}
+                </span>
+              </div>
+
+              <p className="text-xs text-amber font-mono mt-2 font-medium">Role: {s.role}</p>
+
+              {/* Station 4-Digit PIN Editor */}
+              <div className="mt-3 p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                <span className="text-xs font-mono text-white/60">Station 4-Digit PIN:</span>
+                {isSuperAdmin ? (
+                  <input
+                    type="text"
+                    maxLength={4}
+                    value={s.pin}
+                    onChange={(e) => handleUpdatePin(s.id, e.target.value)}
+                    className="w-16 text-center font-mono font-bold text-amber bg-black/50 border border-amber/40 rounded px-2 py-1 text-sm outline-none focus:border-amber"
+                  />
+                ) : (
+                  <span className="font-mono font-bold text-amber">{s.pin}</span>
+                )}
+              </div>
+            </div>
+
+            {/* Permissions Toggles */}
+            <div className="border-t border-white/10 pt-4 space-y-2.5">
+              <label className="block text-[10px] font-mono uppercase text-white/40 font-bold">
+                Access Permissions:
+              </label>
+
+              {PERMISSION_KEYS.map((p) => {
+                const isActive = s.permissions?.[p.key] ?? true
+                return (
+                  <div
+                    key={p.key}
+                    onClick={() => isSuperAdmin && handleTogglePermission(s.id, p.key)}
+                    className={`p-2.5 rounded-xl border flex items-center justify-between transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-forest/10 border-forest/30 text-white'
+                        : 'bg-white/5 border-white/10 text-white/40'
+                    }`}
+                  >
+                    <div>
+                      <p className="text-xs font-bold font-sans">{p.label}</p>
+                      <p className="text-[10px] text-white/40 font-sans">{p.desc}</p>
+                    </div>
+
+                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                      isActive ? 'bg-forest text-white' : 'bg-white/10 text-white/40'
+                    }`}>
+                      {isActive ? 'ENABLED' : 'LOCKED'}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+
+          </div>
+        ))}
+      </div>
+
+      {/* Add Staff Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in">
+          <form onSubmit={handleAddStaff} className="w-full max-w-md bg-[#0A101D] border border-white/10 rounded-2xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <h2 className="font-serif font-bold text-lg text-white">Add New Staff Member</h2>
+              <button type="button" onClick={() => setShowAddModal(false)} className="text-white/40 hover:text-white">✕</button>
+            </div>
+
+            <div>
+              <label className="block text-xs text-white/60 mb-1">Staff Full Name</label>
+              <input
+                type="text"
+                required
+                value={newStaff.name}
+                onChange={e => setNewStaff({ ...newStaff, name: e.target.value })}
+                placeholder="e.g. Sarah Conners"
+                className="w-full rounded-xl bg-black/40 border border-white/10 px-3.5 py-2.5 text-sm text-white focus:border-blue outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs text-white/60 mb-1">Staff Email</label>
+              <input
+                type="email"
+                required
+                value={newStaff.email}
+                onChange={e => setNewStaff({ ...newStaff, email: e.target.value })}
+                placeholder="sarah@k2jimzon.com"
+                className="w-full rounded-xl bg-black/40 border border-white/10 px-3.5 py-2.5 text-sm text-white focus:border-blue outline-none"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs text-white/60 mb-1">4-Digit Station PIN</label>
+                <input
+                  type="text"
+                  maxLength={4}
+                  value={newStaff.pin}
+                  onChange={e => setNewStaff({ ...newStaff, pin: e.target.value })}
+                  className="w-full text-center font-mono font-bold text-amber rounded-xl bg-black/40 border border-amber/40 px-3.5 py-2.5 text-sm outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs text-white/60 mb-1">Assigned Hub</label>
+                <select
+                  value={newStaff.hub}
+                  onChange={e => setNewStaff({ ...newStaff, hub: e.target.value })}
+                  className="w-full rounded-xl bg-black/40 border border-white/10 px-3 py-2.5 text-xs text-white outline-none"
+                >
+                  <option value="Makati Fulfillment Hub">Makati Hub</option>
+                  <option value="QC Distribution Center">QC Hub</option>
+                  <option value="Milan Sourcing Boutique">Milan Hub</option>
+                </select>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-forest hover:bg-forest/90 text-white font-bold py-3 rounded-xl transition-all shadow-lg min-h-[44px] mt-2"
+            >
+              ✓ Create Staff Account & Enable Default Access
+            </button>
+          </form>
+        </div>
+      )}
+
+    </div>
+  )
+}
