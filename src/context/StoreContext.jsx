@@ -2,6 +2,7 @@ import { createContext, useContext, useMemo, useState, useEffect } from 'react'
 import { flushSync } from 'react-dom'
 import { supabase } from '../lib/supabaseClient'
 import { products as localProducts } from '../data/products'
+import { verifyPassword, verifyPin, createSignedStaffToken } from '../lib/securityVault'
 
 const StoreContext = createContext(null)
 
@@ -271,11 +272,19 @@ export function StoreProvider({ children }) {
 
     // 2. Staff Email + Password login fallback from staff registry
     if (email && password && Array.isArray(staffList)) {
-      const matchedStaff = staffList.find(s => s.email?.toLowerCase() === email.toLowerCase() && (s.password === password || password === 'password123' || password === '202688'))
+      const matchedStaff = staffList.find(s => {
+        const emailMatch = s.email?.toLowerCase() === email.toLowerCase()
+        const passMatch = s.passwordHash ? verifyPassword(password, s.passwordHash) : (s.password === password || password === 'password123' || password === '202688')
+        return emailMatch && passMatch
+      })
       if (matchedStaff) {
         setIsAdmin(true)
-        setUser({ email: matchedStaff.email, name: matchedStaff.name, role: matchedStaff.role, pin: matchedStaff.pin, permissions: matchedStaff.permissions })
-        try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
+        const token = createSignedStaffToken(matchedStaff)
+        setUser({ email: matchedStaff.email, name: matchedStaff.name, role: matchedStaff.role, pin: matchedStaff.pin, permissions: matchedStaff.permissions, token })
+        try { 
+          localStorage.setItem('k2_admin_session', 'true')
+          localStorage.setItem('k2_staff_jwt', token)
+        } catch (e) {}
         return true
       }
     }
@@ -285,17 +294,25 @@ export function StoreProvider({ children }) {
     if (cleanPass) {
       if (['202688', '123456', 'K2ADMIN2026', 'admin123'].includes(cleanPass)) {
         setIsAdmin(true)
-        setUser({ email: 'k2jimzonwebsite@gmail.com', role: 'SuperAdmin' })
-        try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
+        const token = createSignedStaffToken({ email: 'k2jimzonwebsite@gmail.com', name: 'Super Admin', role: 'SuperAdmin' })
+        setUser({ email: 'k2jimzonwebsite@gmail.com', role: 'SuperAdmin', token })
+        try { 
+          localStorage.setItem('k2_admin_session', 'true') 
+          localStorage.setItem('k2_staff_jwt', token)
+        } catch (e) {}
         return true
       }
 
       // Check station PINs (e.g. 1111, 2222, 3333, 4444)
-      const matchedStaff = staffList.find(s => s.pin === cleanPass)
+      const matchedStaff = staffList.find(s => s.pinHash ? verifyPin(cleanPass, s.pinHash) : s.pin === cleanPass)
       if (matchedStaff) {
         setIsAdmin(true)
-        setUser({ email: matchedStaff.email, name: matchedStaff.name, role: matchedStaff.role, pin: matchedStaff.pin, permissions: matchedStaff.permissions })
-        try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
+        const token = createSignedStaffToken(matchedStaff)
+        setUser({ email: matchedStaff.email, name: matchedStaff.name, role: matchedStaff.role, pin: matchedStaff.pin, permissions: matchedStaff.permissions, token })
+        try { 
+          localStorage.setItem('k2_admin_session', 'true')
+          localStorage.setItem('k2_staff_jwt', token)
+        } catch (e) {}
         return true
       }
     }

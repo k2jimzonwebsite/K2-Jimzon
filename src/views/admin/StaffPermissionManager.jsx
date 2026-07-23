@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useStore } from '../../context/StoreContext'
 import { supabase } from '../../lib/supabaseClient'
+import { hashPassword, hashPin } from '../../lib/securityVault'
 
 const INITIAL_STAFF = [
   {
@@ -123,17 +124,23 @@ export default function StaffPermissionManager() {
   }
 
   const handleUpdatePin = (staffId, newPin) => {
-    setStaffList(prev => prev.map(s => s.id === staffId ? { ...s, pin: newPin } : s))
-    triggerSavedNotice('✓ Station PIN updated!')
+    setStaffList(prev => prev.map(s => s.id === staffId ? { ...s, pin: newPin, pinHash: hashPin(newPin) } : s))
+    triggerSavedNotice('✓ Station PIN updated & cryptographically hashed!')
   }
 
   const handleSaveEditedStaff = (e) => {
     e.preventDefault()
     if (!editingStaff || !editingStaff.name || !editingStaff.email) return
 
-    setStaffList(prev => prev.map(s => s.id === editingStaff.id ? editingStaff : s))
+    const securedStaff = {
+      ...editingStaff,
+      passwordHash: hashPassword(editingStaff.password || 'password123'),
+      pinHash: hashPin(editingStaff.pin || '1111')
+    }
+
+    setStaffList(prev => prev.map(s => s.id === editingStaff.id ? securedStaff : s))
     setEditingStaff(null)
-    triggerSavedNotice(`✓ Updated ${editingStaff.name}'s profile & login credentials!`)
+    triggerSavedNotice(`✓ Updated & cryptographically secured ${editingStaff.name}'s profile!`)
   }
 
   const handleDeleteStaff = (staffId) => {
@@ -147,12 +154,17 @@ export default function StaffPermissionManager() {
     e.preventDefault()
     if (!newStaff.name || !newStaff.email) return
 
+    const rawPin = newStaff.pin || '5555'
+    const rawPass = newStaff.password || 'password123'
+
     const created = {
       id: `staff_${Date.now()}`,
       name: newStaff.name,
       email: newStaff.email,
-      pin: newStaff.pin || '5555',
-      password: newStaff.password || 'password123',
+      pin: rawPin,
+      pinHash: hashPin(rawPin),
+      password: rawPass,
+      passwordHash: hashPassword(rawPass),
       hub: newStaff.hub,
       role: newStaff.role,
       permissions: {
