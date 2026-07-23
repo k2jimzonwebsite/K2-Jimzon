@@ -176,7 +176,7 @@ export default function Checkout() {
 
             <p className="mt-5 flex items-baseline justify-between">
               <span className="text-sm text-navy-soft">Amount due</span>
-              <span className="text-2xl font-bold text-navy tabular">{peso(total)}</span>
+              <span className="text-2xl font-bold text-navy tabular">{peso(grandTotal)}</span>
             </p>
 
             <CrimsonButton className="mt-4 w-full py-4 text-base" onClick={placeOrder}>

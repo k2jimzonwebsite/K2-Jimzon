@@ -139,7 +139,7 @@ function ScannerModal({ po, onClose, onComplete }) {
               return (
                 <div key={line.id} className={`flex items-center justify-between p-3 rounded-lg border ${isComplete ? 'border-forest/50 bg-forest/10' : 'border-white/10 bg-white/5'}`}>
                   <div>
-                    <p className="text-base font-medium">{line.products?.title || line.sku}</p>
+                    <p className="text-base font-medium">{line.products?.name || line.sku}</p>
                     <p className="text-sm font-mono text-white/50">{line.sku}</p>
                   </div>
                   <div className="text-right">

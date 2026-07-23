@@ -139,11 +139,11 @@ export default function ConsignmentManager() {
     if (supabase) {
       supabase.from('products').insert({
         sku: newP.sku,
-        title: newP.name,
-        retail_price: newP.srp,
-        total_stock: 0,
+        name: newP.name,
+        srp: newP.srp || 0,
+        stock_available: 0,
         status: 'Draft'
-      }).then(() => {})
+      }).then(({ error }) => { if (error) console.warn('Quick create product failed:', error.message) })
     }
 
     setConsignment(prev => ({

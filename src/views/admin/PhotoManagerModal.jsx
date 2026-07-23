@@ -5,20 +5,20 @@ import ImageUploadDropzone from '../../components/ui/ImageUploadDropzone'
 export default function PhotoManagerModal({ product, onClose, onSave }) {
   const [saving, setSaving] = useState(false)
   
-  // Local state for edits
+  // Local state for edits (mapped to the real product image columns)
   const [primary, setPrimary] = useState(product.primary_image_url || null)
-  const [afterUse, setAfterUse] = useState(product.after_use_image_url || null)
-  const [samples, setSamples] = useState(product.sample_image_urls || [])
+  const [afterUse, setAfterUse] = useState(product.lifestyle_images?.[0] || null)
+  const [samples, setSamples] = useState(product.secondary_images || [])
 
   const handleSave = async () => {
     setSaving(true)
-    
+
     const { error } = await supabase
       .from('products')
       .update({
         primary_image_url: primary,
-        after_use_image_url: afterUse,
-        sample_image_urls: samples
+        lifestyle_images: afterUse ? [afterUse] : [],
+        secondary_images: samples
       })
       .eq('sku', product.sku)
 

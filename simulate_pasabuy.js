@@ -25,11 +25,11 @@ async function runSimulation() {
   // 2. Draft Products (using why_buy instead of description to map to existing schema)
   console.log("Inserting Draft Products...");
   const products = [
-    { sku: 'PAS-TRF-001', title: 'White Truffle Oil 250ml', why_buy: null, image_url: null, retail_price: 1500, vip_price: 1200, total_stock: 0, status: 'Draft' },
-    { sku: 'PAS-TRF-002', title: 'Black Truffle Slices 50g', why_buy: null, image_url: null, retail_price: 2000, vip_price: 1600, total_stock: 0, status: 'Draft' },
-    { sku: 'PAS-TRF-003', title: 'Truffle Salt 100g', why_buy: null, image_url: null, retail_price: 800, vip_price: 650, total_stock: 0, status: 'Draft' },
-    { sku: 'PAS-TRF-004', title: 'Truffle Honey 150g', why_buy: null, image_url: null, retail_price: 1200, vip_price: 950, total_stock: 0, status: 'Draft' },
-    { sku: 'PAS-TRF-005', title: 'Truffle Butter 200g', why_buy: null, image_url: null, retail_price: 1400, vip_price: 1100, total_stock: 0, status: 'Draft' }
+    { sku: 'PAS-TRF-001', name: 'White Truffle Oil 250ml', why_buy: null, primary_image_url: null, srp: 1500, wholesale_price: 1200, stock_available: 0, status: 'Draft' },
+    { sku: 'PAS-TRF-002', name: 'Black Truffle Slices 50g', why_buy: null, primary_image_url: null, srp: 2000, wholesale_price: 1600, stock_available: 0, status: 'Draft' },
+    { sku: 'PAS-TRF-003', name: 'Truffle Salt 100g', why_buy: null, primary_image_url: null, srp: 800, wholesale_price: 650, stock_available: 0, status: 'Draft' },
+    { sku: 'PAS-TRF-004', name: 'Truffle Honey 150g', why_buy: null, primary_image_url: null, srp: 1200, wholesale_price: 950, stock_available: 0, status: 'Draft' },
+    { sku: 'PAS-TRF-005', name: 'Truffle Butter 200g', why_buy: null, primary_image_url: null, srp: 1400, wholesale_price: 1100, stock_available: 0, status: 'Draft' }
   ];
   await supabase.from('products').upsert(products, { onConflict: 'sku' });
 

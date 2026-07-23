@@ -83,7 +83,8 @@ export default function CustomerProfileModal({ isOpen, onClose }) {
           {[
             { id: 'profile', label: '👤 Profile & Delivery', icon: '👤' },
             { id: 'security', label: '🔐 Password & Security', icon: '🔐' },
-            { id: 'orders', label: '📦 My Orders (2)', icon: '📦' },
+            // TODO(pre-deploy): re-enable once real order history is wired to Supabase (orders now carry customer_email)
+            // { id: 'orders', label: '📦 My Orders', icon: '📦' },
             { id: 'rewards', label: '🎁 Voucher Wallet', icon: '🎁' },
           ].map(tab => (
             <button

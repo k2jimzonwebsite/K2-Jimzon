@@ -17,15 +17,15 @@ export default function ChatFab() {
     }
   }, [chat?.messages, open])
 
-  const handleStart = () => {
-    const id = createConversation('Storefront Visitor', 'Live Chat', 'Hi! I have a question.', 'general')
+  const handleStart = async () => {
+    const id = await createConversation('Storefront Visitor', 'Live Chat', 'Hi! I have a question.', 'general')
     setChatId(id)
   }
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!text.trim()) return
     if (!chatId) {
-      const id = createConversation('Storefront Visitor', 'Live Chat', text, 'general')
+      const id = await createConversation('Storefront Visitor', 'Live Chat', text, 'general')
       setChatId(id)
     } else {
       sendMessage(chatId, text, 'customer')

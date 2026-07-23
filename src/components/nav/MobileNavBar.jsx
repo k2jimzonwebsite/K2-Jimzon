@@ -1,9 +1,9 @@
 import { useStore } from '../../context/StoreContext'
 
 export default function MobileNavBar() {
-  const { view, setView, cart, setIsCartOpen } = useStore()
+  const { view, setView, cart, setCartOpen } = useStore()
 
-  const cartItemCount = cart ? cart.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0
+  const cartItemCount = cart ? cart.reduce((sum, item) => sum + (item.qty || 1), 0) : 0
 
   const navItems = [
     { key: 'home', label: 'Home', icon: '🏠' },
@@ -22,7 +22,7 @@ export default function MobileNavBar() {
             return (
               <button
                 key={item.key}
-                onClick={() => setIsCartOpen(true)}
+                onClick={() => setCartOpen(true)}
                 className="relative flex flex-col items-center justify-center min-h-[44px] min-w-[56px] px-2 py-1 text-white/70 hover:text-white transition-all active:scale-95"
               >
                 <div className="relative">

@@ -196,9 +196,11 @@ export function StoreProvider({ children }) {
     if (!found) {
       return { success: false, message: 'Invalid or expired promo code!' }
     }
-    const currentSubtotal = cart.reduce((sum, item) => {
-      const price = isWholesale ? (item.product.wholesale_srp || item.product.srp) : item.product.srp
-      return sum + price * item.quantity
+    const currentSubtotal = cart.reduce((sum, line) => {
+      const product = getProduct(line.id)
+      if (!product) return sum
+      const price = isWholesale ? product.wholesale : product.retail
+      return sum + price * line.qty
     }, 0)
 
     if (currentSubtotal < found.minSpend) {
@@ -463,11 +465,24 @@ export function StoreProvider({ children }) {
 
   // Merge the rich local data (images, hue, guide) with the live pricing and stock from Supabase
   const products = useMemo(() => {
-    if (dbProducts.length === 0) return localProducts
+    // No live data yet: serve local mockups, but normalize them to the same
+    // field shape DB products use so every consumer works either way.
+    if (dbProducts.length === 0) {
+      return localProducts.map(lp => ({
+        ...lp,
+        sku: lp.id,
+        srp: lp.retail,
+        retail: lp.retail,
+        wholesale_price: lp.wholesale,
+        wholesale: lp.wholesale,
+        stock_available: lp.stock,
+        stock: lp.stock,
+      }))
+    }
     return dbProducts.map((dbP, i) => {
       // Find matching local product for rich UI assets (if any)
       // First try by sku, then try matching the names if sku doesn't match perfectly
-      let localPMatch = localProducts.find(lp => lp.id.toLowerCase() === dbP.sku.toLowerCase() || lp.name.includes(dbP.title))
+      let localPMatch = localProducts.find(lp => lp.id.toLowerCase() === dbP.sku.toLowerCase() || (dbP.name && lp.name.includes(dbP.name)))
       
       // If we don't have a specific local match, dynamically cycle through our beautiful mockups!
       let localP = localPMatch || localProducts[i % localProducts.length]
@@ -478,8 +493,9 @@ export function StoreProvider({ children }) {
         sku: dbP.sku,
         id: dbP.sku, // alias for legacy components
         name: dbP.name,
-        img: dbP.primary_image_url || dbP.image_url || localP.img,
-        afterImage: dbP.after_use_image_url || localP.afterImage,
+        img: dbP.primary_image_url || dbP.secondary_images?.[0] || localP.img,
+        afterImage: dbP.lifestyle_images?.[0] || dbP.secondary_images?.[1] || localP.afterImage,
+        gallery: (dbP.secondary_images?.length ? dbP.secondary_images : null) || localP.gallery,
         srp: Number(dbP.srp),
         retail: Number(dbP.srp), // alias
         wholesale_price: Number(dbP.wholesale_price),
@@ -499,7 +515,12 @@ export function StoreProvider({ children }) {
         barcode: dbP.barcode || localP.barcode,
         product_video_url: dbP.product_video_url || localP.product_video_url,
         guide: localP.guide,
-        pairings: localP.pairings || [],
+        pairings: (dbP.pairings?.length ? dbP.pairings : localP.pairings) || [],
+        description: dbP.description || dbP.short_description || localP.description,
+        short_description: dbP.short_description,
+        subcategory: dbP.subcategory,
+        seo_keywords: dbP.seo_keywords || [],
+        why_rare: dbP.why_rare || localP.whyRare,
       }
     })
   }, [dbProducts])
@@ -701,13 +722,18 @@ export function StoreProvider({ children }) {
   }, [cart, isWholesale, products, appliedCoupon])
 
   const placeOrder = async () => {
+    // Best available buyer identity: profile name → account name → email handle → guest
+    const buyerName = user?.user_metadata?.full_name || user?.name || (user?.email ? user.email.split('@')[0] : 'Website Guest')
     const orderLines = totals.lines.map(l => ({
       sku: l.id,
       quantity: l.qty,
       channel_source: isWholesale ? 'website_vip' : 'website_retail',
       fulfillment_method: isWholesale ? 'Lalamove / Freight' : 'Standard Courier',
       order_status: 'Pending',
-      payment_status: 'Unpaid'
+      payment_status: 'Unpaid',
+      customer_name: buyerName,
+      customer_email: user?.email || null,
+      total_amount: l.amount,
     }))
 
     if (!supabase) {
