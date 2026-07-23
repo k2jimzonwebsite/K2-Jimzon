@@ -23,9 +23,11 @@ const BulkCsvImportModal = lazy(() => import('./BulkCsvImportModal'))
 const ChannelIntegrations = lazy(() => import('./ChannelIntegrations'))
 const PasabuyManager = lazy(() => import('./PasabuyManager'))
 const OmniOperationsHub = lazy(() => import('./OmniOperationsHub'))
+const CouponManager = lazy(() => import('./CouponManager'))
 
 const NAV_COMMERCE = [
   { id: 'overview', label: 'Home & Daily Overview', icon: GridIcon },
+  { id: 'coupons', label: 'Coupons & Voucher Hunts', icon: BoxIcon },
   { id: 'omni_hub', label: 'Fulfillment & Staff Stations', icon: BoxIcon },
   { id: 'kanban', label: 'Italy Flight Consignments', icon: BoxIcon },
   { id: 'pasabuy_manager', label: 'Custom Pasabuy Quotes', icon: BoxIcon },
@@ -430,7 +432,8 @@ export default function Admin() {
                 <p className="text-sm font-medium animate-pulse">Loading workspace...</p>
               </div>
             }>
-              {section === 'omni_hub' ? <OmniOperationsHub />
+              {section === 'coupons' ? <CouponManager />
+               : section === 'omni_hub' ? <OmniOperationsHub />
                : section === 'pasabuy_manager' ? <PasabuyManager />
                : section === 'integrations' ? <ChannelIntegrations />
                : section === 'globe' ? <GlobeCms /> 

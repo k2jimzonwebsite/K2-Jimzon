@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 import ProductVisual from '../components/ProductVisual'
@@ -7,7 +8,10 @@ import { CheckIcon, SyncIcon } from '../components/ui/icons'
 const SHIPPING = 85
 
 export default function Checkout() {
-  const { lines, subtotal, wholesaleSavings, isWholesale, placeOrder, go } = useStore()
+  const { lines, subtotal, wholesaleSavings, isWholesale, couponDiscount, finalTotal, appliedCoupon, applyCoupon, removeCoupon, claimedVouchers, coupons, placeOrder, go } = useStore()
+
+  const [promoInput, setPromoInput] = useState('')
+  const [promoFeedback, setPromoFeedback] = useState(null)
 
   if (lines.length === 0) {
     return (
@@ -19,10 +23,23 @@ export default function Checkout() {
     )
   }
 
-  const total = subtotal + SHIPPING
+  const grandTotal = (finalTotal !== undefined ? finalTotal : subtotal) + SHIPPING
+
+  const handleApplyCode = (e) => {
+    e.preventDefault()
+    if (!promoInput.trim()) return
+
+    const res = applyCoupon(promoInput)
+    if (res.success) {
+      setPromoFeedback({ type: 'success', message: res.message })
+      setPromoInput('')
+    } else {
+      setPromoFeedback({ type: 'error', message: res.message })
+    }
+  }
 
   return (
-    <main className="mx-auto max-w-5xl px-4 pb-24 pt-8 md:pb-16">
+    <main className="mx-auto max-w-5xl px-4 pb-24 pt-8 md:pb-16 font-sans">
       <h1 className="rise font-serif text-3xl font-semibold tracking-tight">Checkout</h1>
       <p className="rise mt-1 text-sm text-navy-soft">Payment detects automatically — no screenshots or 'sent na po' needed.</p>
 
@@ -42,21 +59,98 @@ export default function Checkout() {
             ))}
           </div>
 
-          <div className="mt-2 space-y-2 border-t border-line pt-4 text-sm">
+          {/* 🎟️ Promo Code & Voucher Section */}
+          <div className="mt-4 pt-4 border-t border-line space-y-3">
+            <label className="block font-serif text-xs font-bold uppercase tracking-wider text-navy">
+              Promo Code / Voucher Discount
+            </label>
+
+            {appliedCoupon ? (
+              <div className="flex items-center justify-between p-3 rounded-xl bg-forest/10 border border-forest/30 text-forest text-xs font-mono">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold">✓ {appliedCoupon.code}</span>
+                  <span className="text-[11px] font-sans opacity-80">
+                    ({appliedCoupon.type === 'percentage' ? appliedCoupon.value + '%' : '₱' + appliedCoupon.value} OFF)
+                  </span>
+                </div>
+                <button
+                  onClick={removeCoupon}
+                  className="text-crimson hover:underline font-bold text-[11px]"
+                >
+                  Remove
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleApplyCode} className="flex gap-2">
+                <input
+                  type="text"
+                  value={promoInput}
+                  onChange={(e) => setPromoInput(e.target.value)}
+                  placeholder="Enter Promo Code (e.g. MILAN10)"
+                  className="flex-1 rounded-xl border border-line bg-shell px-3.5 py-2 text-xs text-navy placeholder:text-navy-faint uppercase font-mono font-bold focus:outline-none focus:border-amber"
+                />
+                <button
+                  type="submit"
+                  className="bg-amber hover:bg-amber/90 text-navy font-bold text-xs px-4 py-2 rounded-xl transition-all shadow-sm shrink-0"
+                >
+                  Apply
+                </button>
+              </form>
+            )}
+
+            {promoFeedback && !appliedCoupon && (
+              <p className={`text-[11px] font-mono font-bold ${promoFeedback.type === 'success' ? 'text-forest' : 'text-crimson'}`}>
+                {promoFeedback.message}
+              </p>
+            )}
+
+            {/* Claimed Vouchers Quick Apply Pills */}
+            {!appliedCoupon && claimedVouchers.length > 0 && (
+              <div className="pt-1 flex items-center gap-1.5 overflow-x-auto text-[11px] font-mono scrollbar-none">
+                <span className="text-navy-soft shrink-0">Wallet:</span>
+                {claimedVouchers.map(vCode => (
+                  <button
+                    key={vCode}
+                    type="button"
+                    onClick={() => {
+                      const res = applyCoupon(vCode)
+                      if (res.success) setPromoFeedback({ type: 'success', message: res.message })
+                      else setPromoFeedback({ type: 'error', message: res.message })
+                    }}
+                    className="px-2.5 py-1 rounded-lg bg-amber/15 hover:bg-amber/30 text-navy border border-amber/30 font-bold shrink-0 transition-all"
+                  >
+                    + {vCode}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="mt-4 space-y-2 border-t border-line pt-4 text-sm">
             {isWholesale && wholesaleSavings > 0 && (
               <p className="flex justify-between font-semibold text-blue">
                 <span className="flex items-center gap-1.5"><CheckIcon size={13} /> Wholesale discount applied</span>
                 <span className="tabular">−{peso(wholesaleSavings)}</span>
               </p>
             )}
+
             <p className="flex justify-between text-navy-soft">
               <span>Subtotal</span><span className="tabular">{peso(subtotal)}</span>
             </p>
+
+            {couponDiscount > 0 && (
+              <p className="flex justify-between font-bold text-forest">
+                <span className="flex items-center gap-1.5">🎟️ Promo Discount ({appliedCoupon?.code})</span>
+                <span className="tabular">−{peso(couponDiscount)}</span>
+              </p>
+            )}
+
             <p className="flex justify-between text-navy-soft">
               <span>Metro Manila delivery</span><span className="tabular">{peso(SHIPPING)}</span>
             </p>
+
             <p className="flex justify-between border-t border-line pt-3 text-lg font-bold">
-              <span>Total</span><span className="tabular">{peso(total)}</span>
+              <span>Total</span><span className="tabular">{peso(grandTotal)}</span>
             </p>
           </div>
         </TuscanCard>

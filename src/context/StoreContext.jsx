@@ -10,6 +10,51 @@ const INITIAL_REQUESTS = [
   { id: 'PB-1039', item: 'Acqua di Parma shower gel', status: 'Quoted — ₱1,850', eta: 'Awaiting your go' },
 ]
 
+const INITIAL_COUPONS = [
+  {
+    id: 'c1',
+    code: 'MILAN10',
+    description: '10% OFF your entire order of authentic Italian goods',
+    type: 'percentage',
+    value: 10,
+    minSpend: 1000,
+    maxUses: 100,
+    usedCount: 14,
+    expiryDate: '2026-12-31',
+    isHunt: false,
+    clue: '',
+    isActive: true,
+  },
+  {
+    id: 'c2',
+    code: 'PASABUY200',
+    description: '₱200 Flat Discount on all Italy Pasabuy & luxury items',
+    type: 'fixed',
+    value: 200,
+    minSpend: 2500,
+    maxUses: 50,
+    usedCount: 22,
+    expiryDate: '2026-12-31',
+    isHunt: false,
+    clue: '',
+    isActive: true,
+  },
+  {
+    id: 'c3',
+    code: 'HUNT500',
+    description: '🔍 Secret Italy Flight Drop: ₱500 OFF orders over ₱3,000!',
+    type: 'fixed',
+    value: 500,
+    minSpend: 3000,
+    maxUses: 20,
+    usedCount: 5,
+    expiryDate: '2026-08-30',
+    isHunt: true,
+    clue: 'Clue: What airport in Milan does Cousin Marco fly out of? (Malpensa code = HUNT500)',
+    isActive: true,
+  }
+]
+
 const INITIAL_CONVERSATIONS = [
   {
     id: 'c1',
@@ -69,6 +114,103 @@ export function StoreProvider({ children }) {
   const [conversations, setConversations] = useState(INITIAL_CONVERSATIONS)
   const [dbProducts, setDbProducts] = useState([])
   const [loading, setLoading] = useState(true)
+
+  // Coupons & Voucher Hunt state
+  const [coupons, setCoupons] = useState(() => {
+    try {
+      const saved = localStorage.getItem('k2_coupons')
+      return saved ? JSON.parse(saved) : INITIAL_COUPONS
+    } catch (e) {
+      return INITIAL_COUPONS
+    }
+  })
+
+  const [appliedCoupon, setAppliedCoupon] = useState(null)
+  const [claimedVouchers, setClaimedVouchers] = useState(() => {
+    try {
+      const saved = localStorage.getItem('k2_claimed_vouchers')
+      return saved ? JSON.parse(saved) : ['MILAN10']
+    } catch (e) {
+      return ['MILAN10']
+    }
+  })
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('k2_coupons', JSON.stringify(coupons))
+    } catch (e) {}
+  }, [coupons])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('k2_claimed_vouchers', JSON.stringify(claimedVouchers))
+    } catch (e) {}
+  }, [claimedVouchers])
+
+  const createCoupon = (newCouponData) => {
+    const coupon = {
+      id: 'c_' + Date.now(),
+      code: newCouponData.code.toUpperCase().trim(),
+      description: newCouponData.description || 'Exclusive Promotional Voucher',
+      type: newCouponData.type || 'percentage',
+      value: Number(newCouponData.value) || 10,
+      minSpend: Number(newCouponData.minSpend) || 0,
+      maxUses: Number(newCouponData.maxUses) || 100,
+      usedCount: 0,
+      expiryDate: newCouponData.expiryDate || '2026-12-31',
+      isHunt: Boolean(newCouponData.isHunt),
+      clue: newCouponData.clue || '',
+      isActive: true,
+    }
+    setCoupons(prev => [coupon, ...prev])
+    return coupon
+  }
+
+  const toggleCouponStatus = (couponId) => {
+    setCoupons(prev => prev.map(c => c.id === couponId ? { ...c, isActive: !c.isActive } : c))
+  }
+
+  const deleteCoupon = (couponId) => {
+    setCoupons(prev => prev.filter(c => c.id !== couponId))
+    if (appliedCoupon && appliedCoupon.id === couponId) {
+      setAppliedCoupon(null)
+    }
+  }
+
+  const claimCoupon = (codeStr) => {
+    const cleanCode = codeStr.toUpperCase().trim()
+    const found = coupons.find(c => c.code === cleanCode && c.isActive)
+    if (!found) {
+      return { success: false, message: 'Invalid or expired coupon code!' }
+    }
+    if (!claimedVouchers.includes(cleanCode)) {
+      setClaimedVouchers(prev => [...prev, cleanCode])
+    }
+    return { success: true, message: `🎉 Voucher ${cleanCode} claimed into your wallet!`, coupon: found }
+  }
+
+  const applyCoupon = (codeStr) => {
+    const cleanCode = codeStr.toUpperCase().trim()
+    const found = coupons.find(c => c.code === cleanCode && c.isActive)
+    if (!found) {
+      return { success: false, message: 'Invalid or expired promo code!' }
+    }
+    const currentSubtotal = cart.reduce((sum, item) => {
+      const price = isWholesale ? (item.product.wholesale_srp || item.product.srp) : item.product.srp
+      return sum + price * item.quantity
+    }, 0)
+
+    if (currentSubtotal < found.minSpend) {
+      return { success: false, message: `Minimum spend of ₱${found.minSpend.toLocaleString()} required for ${cleanCode}!` }
+    }
+    setAppliedCoupon(found)
+    return { success: true, message: `✓ Applied ${found.code} (${found.type === 'percentage' ? found.value + '%' : '₱' + found.value} OFF)!`, coupon: found }
+  }
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null)
+  }
+
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -468,8 +610,20 @@ export function StoreProvider({ children }) {
     )
     const subtotal = lines.reduce((sum, l) => sum + l.amount, 0)
     const count = lines.reduce((sum, l) => sum + l.qty, 0)
-    return { lines, subtotal, count, wholesaleSavings: retailTotal - subtotal }
-  }, [cart, isWholesale, products])
+
+    let couponDiscount = 0
+    if (appliedCoupon && subtotal >= (appliedCoupon.minSpend || 0)) {
+      if (appliedCoupon.type === 'percentage') {
+        couponDiscount = Math.round((subtotal * appliedCoupon.value) / 100)
+      } else {
+        couponDiscount = Math.min(appliedCoupon.value, subtotal)
+      }
+    }
+
+    const finalTotal = Math.max(0, subtotal - couponDiscount)
+
+    return { lines, subtotal, count, wholesaleSavings: retailTotal - subtotal, couponDiscount, finalTotal }
+  }, [cart, isWholesale, products, appliedCoupon])
 
   const placeOrder = async () => {
     const orderLines = totals.lines.map(l => ({
@@ -506,16 +660,18 @@ export function StoreProvider({ children }) {
     const firstOrderId = insertedOrders?.[0]?.id?.split('-')[0] || String(Math.floor(20000 + Math.random() * 70000))
 
     if (!document.startViewTransition) {
-      setOrder({ id: 'K2-' + firstOrderId, total: totals.subtotal, count: totals.count, wholesale: isWholesale })
+      setOrder({ id: 'K2-' + firstOrderId, total: totals.finalTotal || totals.subtotal, count: totals.count, wholesale: isWholesale, coupon: appliedCoupon })
       setCart([])
+      setAppliedCoupon(null)
       setView('confirmation')
       window.scrollTo(0, 0)
       return
     }
     document.startViewTransition(() => {
       flushSync(() => {
-        setOrder({ id: 'K2-' + firstOrderId, total: totals.subtotal, count: totals.count, wholesale: isWholesale })
+        setOrder({ id: 'K2-' + firstOrderId, total: totals.finalTotal || totals.subtotal, count: totals.count, wholesale: isWholesale, coupon: appliedCoupon })
         setCart([])
+        setAppliedCoupon(null)
         setView('confirmation')
         window.scrollTo(0, 0)
       })
@@ -554,8 +710,17 @@ export function StoreProvider({ children }) {
     getProduct,
     isDark,
     toggleDarkMode,
+    coupons,
+    appliedCoupon,
+    claimedVouchers,
+    createCoupon,
+    toggleCouponStatus,
+    deleteCoupon,
+    claimCoupon,
+    applyCoupon,
+    removeCoupon,
     ...totals,
-  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, user, order, query, category, requests, conversations, products, loading, totals, isDark])
+  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, user, order, query, category, requests, conversations, products, loading, totals, isDark, coupons, appliedCoupon, claimedVouchers])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

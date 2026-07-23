@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
 import { BagIcon, SearchIcon, MoonIcon, SunIcon } from './ui/icons'
+import VoucherHuntCenterModal from './VoucherHuntCenterModal'
 
 function SearchBox({ className = '' }) {
   const { query, setQuery, go, view } = useStore()
@@ -31,11 +33,19 @@ function SearchBox({ className = '' }) {
 
 export default function StoreHeader() {
   const { go, count, setCartOpen, isWholesale, setIsWholesale, isDark, toggleDarkMode } = useStore()
+  const [showVoucherHunt, setShowVoucherHunt] = useState(false)
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/95 md:bg-cream/85 md:backdrop-blur-xl md:top-10">
-      <div className="bg-shell/95 md:bg-shell/50 md:backdrop-blur-sm border-b border-line px-4 py-1.5 text-center text-xs font-medium text-navy-soft">
-        ✈ Next Milan consignment lands <span className="font-bold text-navy">22 July</span><span className="hidden sm:inline"> · Free Metro Manila delivery over ₱2,500</span>
+      <div className="bg-shell/95 md:bg-shell/50 md:backdrop-blur-sm border-b border-line px-4 py-1.5 text-center text-xs font-medium text-navy-soft flex items-center justify-center gap-2">
+        <span>✈ Next Milan consignment lands <span className="font-bold text-navy">22 July</span></span>
+        <span className="hidden sm:inline">· Free Metro Manila delivery over ₱2,500</span>
+        <button
+          onClick={() => setShowVoucherHunt(true)}
+          className="ml-2 bg-amber/20 hover:bg-amber/30 text-navy font-bold px-2 py-0.5 rounded border border-amber/40 transition-all text-[11px]"
+        >
+          🎁 Voucher Hunt
+        </button>
       </div>
       {isWholesale && (
         <div className="flex items-center justify-center gap-3 bg-forest-wash border-b border-line px-4 py-1.5 text-xs font-medium text-forest">
@@ -52,8 +62,16 @@ export default function StoreHeader() {
         <SearchBox className="ml-auto hidden max-w-sm flex-1 md:block" />
 
         <button
+          onClick={() => setShowVoucherHunt(true)}
+          className="ml-auto hidden sm:flex items-center gap-1.5 bg-amber/15 hover:bg-amber/25 text-navy font-bold text-xs px-3 py-2 rounded-full border border-amber/30 transition-all active:scale-95 shadow-sm"
+        >
+          <span>🎁</span>
+          <span>Voucher Hunt</span>
+        </button>
+
+        <button
           onClick={() => go('wholesale')}
-          className="ml-auto whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-semibold text-blue transition-colors hover:bg-blue-wash md:ml-0"
+          className="whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-semibold text-blue transition-colors hover:bg-blue-wash"
         >
           {isWholesale ? 'Wholesale portal' : 'Wholesale login'}
         </button>
@@ -84,6 +102,11 @@ export default function StoreHeader() {
       <div className="px-4 pb-3 md:hidden">
         <SearchBox />
       </div>
+
+      <VoucherHuntCenterModal
+        isOpen={showVoucherHunt}
+        onClose={() => setShowVoucherHunt(false)}
+      />
     </header>
   )
 }
