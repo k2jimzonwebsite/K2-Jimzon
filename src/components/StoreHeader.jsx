@@ -32,11 +32,12 @@ function SearchBox({ className = '' }) {
 }
 
 export default function StoreHeader() {
-  const { go, count, setCartOpen, isWholesale, setIsWholesale, isDark, toggleDarkMode } = useStore()
+  const { go, view, count, setCartOpen, isWholesale, setIsWholesale, isDark, toggleDarkMode } = useStore()
   const [showVoucherHunt, setShowVoucherHunt] = useState(false)
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/95 backdrop-blur-xl transition-colors">
+      {/* Announcement Banner */}
       <div className="bg-shell/80 border-b border-line px-4 py-1.5 text-center text-xs font-semibold text-navy-soft flex items-center justify-center gap-2">
         <span>✈ Next Milan consignment lands <span className="font-extrabold text-gold">22 July</span></span>
         <span className="hidden sm:inline">· Free Metro Manila delivery over ₱2,500</span>
@@ -47,6 +48,7 @@ export default function StoreHeader() {
           🎁 Voucher Hunt
         </button>
       </div>
+
       {isWholesale && (
         <div className="flex items-center justify-center gap-3 bg-blue/15 border-b border-line px-4 py-1.5 text-xs font-semibold text-blue">
           <span className="inline-flex h-2 w-2 rounded-full bg-blue pulse-dot" />
@@ -56,6 +58,8 @@ export default function StoreHeader() {
           </button>
         </div>
       )}
+
+      {/* Main Header Bar */}
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3.5 md:gap-6">
         <Wordmark onClick={() => go('home')} />
 
@@ -99,8 +103,65 @@ export default function StoreHeader() {
         </button>
       </div>
 
+      {/* Primary Navigation Tabs */}
+      <div className="border-t border-line bg-shell/40 px-4 py-2">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 overflow-x-auto custom-scrollbar">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <button
+              onClick={() => go('home')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+                view === 'home'
+                  ? 'bg-navy text-cream shadow-sm'
+                  : 'text-navy-soft hover:text-navy hover:bg-shell'
+              }`}
+            >
+              <span>🏠</span> Home
+            </button>
+
+            <button
+              onClick={() => go('catalog')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+                view === 'catalog'
+                  ? 'bg-navy text-cream shadow-sm'
+                  : 'text-navy-soft hover:text-navy hover:bg-shell'
+              }`}
+            >
+              <span>📦</span> Inventory & Catalog
+            </button>
+
+            <button
+              onClick={() => go('pasabuy')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+                view === 'pasabuy'
+                  ? 'bg-navy text-cream shadow-sm'
+                  : 'text-navy-soft hover:text-navy hover:bg-shell'
+              }`}
+            >
+              <span>✈️</span> Pasabuy Sourcing
+            </button>
+
+            <button
+              onClick={() => go('wholesale')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+                view === 'wholesale'
+                  ? 'bg-navy text-cream shadow-sm'
+                  : 'text-navy-soft hover:text-navy hover:bg-shell'
+              }`}
+            >
+              <span>💼</span> Wholesale Portal
+            </button>
+          </div>
+
+          <div className="hidden lg:flex items-center gap-3 text-xs font-semibold text-navy-faint">
+            <span>🇮🇹 Direct Milan Imports</span>
+            <span>•</span>
+            <span>⚡ 24h Pasabuy Quotes</span>
+          </div>
+        </div>
+      </div>
+
       {/* Mobile search */}
-      <div className="px-4 pb-3 md:hidden">
+      <div className="px-4 pb-3 pt-2 md:hidden">
         <SearchBox />
       </div>
 

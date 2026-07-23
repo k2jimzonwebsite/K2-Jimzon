@@ -1,11 +1,9 @@
 @import "tailwindcss";
 
 /*
-  K2 Jimzon — Strict 4-Color Luxury Palette Strategy & Dark Mode Tokens (OKLCH & Impeccable Rules)
-  1. Obsidian Black / Charcoal Base (#090C15 / #0E121E)
-  2. Champagne Gold / Amber (#D4AF37 / #F59E0B)
-  3. Crimson Red Accent (#EF4444 / #DC2626)
-  4. Sapphire Blue Accent (#3B82F6 / #2563EB)
+  K2 Jimzon — Strict 4-Color Luxury Palette Strategy & Warm Tuscan Linen Light/Dark Mode (OKLCH & Impeccable Rules)
+  Light Mode: Soft Tuscan Warm Cream & Linen Grain (#FAF7F2 / #FFFDF9) — Soft on the eyes, zero glare!
+  Dark Mode: Obsidian Black & Deep Charcoal (#090C15 / #0E121E)
 */
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -17,19 +15,19 @@
     line-height: 1.55;
     letter-spacing: -0.01em;
 
-    /* Light Theme Variables */
-    --color-cream: #F8F9FA;
-    --color-paper: #FFFFFF;
-    --color-shell: #F3F4F6;
-    --color-shell-deep: #E5E7EB;
+    /* Warm Tuscan Linen Light Theme Variables (Soft, zero harsh glare) */
+    --color-cream: #FAF7F2;
+    --color-paper: #FFFDF9;
+    --color-shell: #F2ECDF;
+    --color-shell-deep: #E6DCC8;
     
-    --color-navy: #111827;
-    --color-navy-soft: #4B5563;
-    --color-navy-faint: #9CA3AF;
-    --color-line: #E5E7EB;
+    --color-navy: #1C1917;
+    --color-navy-soft: #44403C;
+    --color-navy-faint: #78716C;
+    --color-line: #E5DEC9;
   }
 
-  /* Luxury Dark Mode Tokens Override */
+  /* Luxury Obsidian Dark Mode Tokens Override */
   .dark {
     --color-cream: #090C15;
     --color-paper: #0E121E;
@@ -49,6 +47,12 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  body:not(.dark) {
+    background-color: #FAF7F2;
+    background-image: radial-gradient(#E2D9C8 0.75px, transparent 0.75px);
+    background-size: 16px 16px;
   }
 
   h1, h2, h3, h4 {
@@ -103,8 +107,8 @@
   --font-sans: "Archivo", "Segoe UI", system-ui, sans-serif;
 
   /* Crisp Shadows */
-  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --shadow-float: 0 20px 32px rgba(0, 0, 0, 0.22);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-float: 0 20px 32px rgba(0, 0, 0, 0.18);
 
   /* Premium Easing Curves */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -126,7 +130,7 @@
   height: 7px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.1);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(212, 175, 55, 0.4);
