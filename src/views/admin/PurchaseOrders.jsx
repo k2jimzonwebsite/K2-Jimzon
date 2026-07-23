@@ -109,7 +109,7 @@ function ScannerModal({ po, onClose, onComplete }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-[#05080f] animate-in slide-in-from-bottom-4 text-white">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-[#09090b] animate-in slide-in-from-bottom-4 text-white">
       <div className="flex items-center justify-between px-4 py-4 border-b border-white/10 bg-black/20">
         <div>
           <p className="font-serif text-xl font-semibold">Receive {po.po_number}</p>
@@ -222,8 +222,8 @@ export default function PurchaseOrders() {
         </button>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-[#05080f] overflow-x-auto w-full">
-        <table className="w-full text-left text-base text-white/80 min-w-[800px]">
+      <div className="rounded-xl border border-white/10 bg-[#09090b] overflow-x-auto w-full">
+        <table className="w-full text-left text-base text-neutral-300 min-w-[800px]">
           <thead className="bg-white/5 text-sm uppercase tracking-widest text-white/40">
             <tr>
               <th className="px-6 py-4 font-medium">PO Number</th>

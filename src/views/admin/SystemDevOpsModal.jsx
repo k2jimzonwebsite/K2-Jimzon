@@ -28,10 +28,10 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-4xl rounded-2xl bg-[#0E121E] border border-white/20 shadow-2xl overflow-hidden font-sans text-white flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-4xl rounded-2xl bg-[#18181b] border border-white/20 shadow-2xl overflow-hidden font-sans text-white flex flex-col max-h-[90vh]">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-white/15 bg-[#161B29] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-white/10 bg-[#27272a] px-6 py-4">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-blue flex items-center justify-center text-white text-xl font-black shadow">
               ⚡
@@ -54,34 +54,34 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           
           {/* Real-time Performance & Throughput Row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono">
-            <div className="bg-[#161B29] p-4 rounded-xl border border-white/15 shadow">
+            <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Throughput (QPS)</p>
               <p className="text-2xl font-black text-white mt-1 flex items-center gap-2">
                 <span>{qps}</span>
-                <span className="text-sm font-sans font-bold text-white/80">queries/sec</span>
+                <span className="text-sm font-sans font-bold text-neutral-300">queries/sec</span>
               </p>
-              <p className="text-[11px] text-white/80 mt-1 font-sans font-medium">Vercel Edge Network</p>
+              <p className="text-[11px] text-neutral-300 mt-1 font-sans font-medium">Vercel Edge Network</p>
             </div>
 
-            <div className="bg-[#161B29] p-4 rounded-xl border border-white/15 shadow">
+            <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Edge Latency</p>
               <p className="text-2xl font-black text-white mt-1 flex items-center gap-2">
                 <span>{latency}</span>
-                <span className="text-sm font-sans font-bold text-white/80">ms</span>
+                <span className="text-sm font-sans font-bold text-neutral-300">ms</span>
               </p>
-              <p className="text-[11px] text-white/80 mt-1 font-sans font-medium">PH NAIA Edge Pop</p>
+              <p className="text-[11px] text-neutral-300 mt-1 font-sans font-medium">PH NAIA Edge Pop</p>
             </div>
 
-            <div className="bg-[#161B29] p-4 rounded-xl border border-white/15 shadow">
+            <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Database Engine</p>
               <p className="text-xl font-black text-white mt-1">Supabase</p>
-              <p className="text-[11px] text-white/80 mt-1 font-sans font-extrabold text-blue">PostgreSQL + RPC Locks</p>
+              <p className="text-[11px] text-neutral-300 mt-1 font-sans font-extrabold text-blue">PostgreSQL + RPC Locks</p>
             </div>
 
-            <div className="bg-[#161B29] p-4 rounded-xl border border-white/15 shadow">
+            <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Realtime WebSockets</p>
               <p className="text-xl font-black text-white mt-1">Active</p>
-              <p className="text-[11px] text-white/80 mt-1 font-sans font-medium">{wsStatus}</p>
+              <p className="text-[11px] text-neutral-300 mt-1 font-sans font-medium">{wsStatus}</p>
             </div>
           </div>
 
@@ -89,27 +89,27 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* AES-256 Vault Status */}
-            <div className="bg-[#161B29] p-5 rounded-2xl border border-white/15 space-y-3">
-              <div className="flex items-center justify-between border-b border-white/15 pb-3">
+            <div className="bg-[#27272a] p-5 rounded-2xl border border-white/10 space-y-3">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <h3 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
                   🔒 AES-256 Security Vault Health
                 </h3>
                 <span className="text-sm font-mono bg-gold text-navy font-black px-2.5 py-0.5 rounded-full shadow">ENCRYPTED</span>
               </div>
               <div className="space-y-2 text-sm font-mono">
-                <div className="flex justify-between text-white/90">
+                <div className="flex justify-between text-neutral-200">
                   <span>Vault Storage Algorithm:</span>
                   <strong className="text-gold">AES-256-GCM / Web Crypto</strong>
                 </div>
-                <div className="flex justify-between text-white/90">
+                <div className="flex justify-between text-neutral-200">
                   <span>Shopee Marketplace Keys:</span>
                   <strong className="text-white">Encrypted ✓</strong>
                 </div>
-                <div className="flex justify-between text-white/90">
+                <div className="flex justify-between text-neutral-200">
                   <span>Lazada Platform Secret:</span>
                   <strong className="text-white">Encrypted ✓</strong>
                 </div>
-                <div className="flex justify-between text-white/90">
+                <div className="flex justify-between text-neutral-200">
                   <span>2FA Master Passcode Guard:</span>
                   <strong className="text-white">Active (202688) ✓</strong>
                 </div>
@@ -117,27 +117,27 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
             </div>
 
             {/* Rate Limiting & Concurrency Guard */}
-            <div className="bg-[#161B29] p-5 rounded-2xl border border-white/15 space-y-3">
-              <div className="flex items-center justify-between border-b border-white/15 pb-3">
+            <div className="bg-[#27272a] p-5 rounded-2xl border border-white/10 space-y-3">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <h3 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
                   🛡️ Anti-Abuse Rate Limiting Throttles
                 </h3>
                 <span className="text-sm font-mono bg-blue text-white font-black px-2.5 py-0.5 rounded-full shadow">PROTECTED</span>
               </div>
               <div className="space-y-2 text-sm font-mono">
-                <div className="flex justify-between text-white/90">
+                <div className="flex justify-between text-neutral-200">
                   <span>Passcode 2FA Attempt Limit:</span>
                   <strong className="text-white">5 Attempts / min</strong>
                 </div>
-                <div className="flex justify-between text-white/90">
+                <div className="flex justify-between text-neutral-200">
                   <span>AI Vision Parsing Limit:</span>
                   <strong className="text-white">10 Calls / min</strong>
                 </div>
-                <div className="flex justify-between text-white/90">
+                <div className="flex justify-between text-neutral-200">
                   <span>Checkout Stock Lock (RPC):</span>
                   <strong className="text-gold font-bold">Atomic Mutex Lock</strong>
                 </div>
-                <div className="flex justify-between text-white/90">
+                <div className="flex justify-between text-neutral-200">
                   <span>CDN Rate Limiter (WAF):</span>
                   <strong className="text-white">Active (100 req/sec)</strong>
                 </div>
@@ -146,12 +146,12 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           </div>
 
           {/* System Error & Audit Trail Stream */}
-          <div className="bg-[#161B29] p-5 rounded-2xl border border-white/15 space-y-3">
-            <div className="flex items-center justify-between border-b border-white/15 pb-3">
+          <div className="bg-[#27272a] p-5 rounded-2xl border border-white/10 space-y-3">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <h3 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
                 📋 Production System Log & Audit Stream
               </h3>
-              <span className="text-sm font-mono text-white/80 font-bold">4 Recent Log Events</span>
+              <span className="text-sm font-mono text-neutral-300 font-bold">4 Recent Log Events</span>
             </div>
             <div className="space-y-2 font-mono text-sm">
               {errorLogs.map(log => (
@@ -175,8 +175,8 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
         </div>
 
         {/* Modal Footer */}
-        <div className="border-t border-white/15 bg-[#161B29] px-6 py-4 flex items-center justify-between">
-          <p className="text-sm font-mono text-white/80 font-semibold">
+        <div className="border-t border-white/10 bg-[#27272a] px-6 py-4 flex items-center justify-between">
+          <p className="text-sm font-mono text-neutral-300 font-semibold">
             Vercel Production Deployment · Supabase BaaS Cloud Status: <strong className="text-gold">100% Operational</strong>
           </p>
           <button

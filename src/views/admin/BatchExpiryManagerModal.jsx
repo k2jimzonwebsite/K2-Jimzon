@@ -212,7 +212,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
         </div>
 
         {/* Add New Batch Box Form */}
-        <form onSubmit={handleAddBatch} className="bg-[#05080f] border border-white/10 p-4 rounded-xl space-y-3">
+        <form onSubmit={handleAddBatch} className="bg-[#09090b] border border-white/10 p-4 rounded-xl space-y-3">
           <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Add New Incoming Shipment Box Batch</h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm font-mono">
             <div>
@@ -261,7 +261,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-white/70 hover:bg-white/10"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-neutral-400 hover:bg-white/10"
           >
             Cancel
           </button>

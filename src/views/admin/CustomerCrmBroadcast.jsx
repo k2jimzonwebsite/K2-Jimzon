@@ -201,7 +201,7 @@ export default function CustomerCrmBroadcast() {
     <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       
       {/* Header Banner */}
-      <div className="bg-[#05080f] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-[#09090b] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-blue/20 text-blue px-2 py-0.5 rounded border border-blue/30">
@@ -240,7 +240,7 @@ export default function CustomerCrmBroadcast() {
         <div className="space-y-6">
           
           {/* Controls Bar */}
-          <div className="bg-[#05080f] border border-white/10 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-[#09090b] border border-white/10 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex flex-1 items-center gap-3 w-full">
               <input
                 type="text"
@@ -270,7 +270,7 @@ export default function CustomerCrmBroadcast() {
           </div>
 
           {/* Customer Table */}
-          <div className="bg-[#05080f] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+          <div className="bg-[#09090b] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm font-mono">
                 <thead className="bg-white/5 text-white/40 uppercase text-[10px] tracking-wider border-b border-white/10">
@@ -292,7 +292,7 @@ export default function CustomerCrmBroadcast() {
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-2">
-                          <span className="bg-white/10 text-white/80 px-2 py-0.5 rounded text-[10px]">{cust.channel}</span>
+                          <span className="bg-white/10 text-neutral-300 px-2 py-0.5 rounded text-[10px]">{cust.channel}</span>
                           <button
                             onClick={() => toggleRole(cust.id)}
                             className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-all ${
@@ -303,7 +303,7 @@ export default function CustomerCrmBroadcast() {
                           </button>
                         </div>
                       </td>
-                      <td className="px-5 py-4 text-white/80 font-bold">
+                      <td className="px-5 py-4 text-neutral-300 font-bold">
                         {cust.orders_count} orders
                       </td>
                       <td className="px-5 py-4 font-bold text-forest text-base">
@@ -344,7 +344,7 @@ export default function CustomerCrmBroadcast() {
           <div className="lg:col-span-1 space-y-6">
             
             {/* Target Audience Selector */}
-            <div className="bg-[#05080f] border border-white/10 rounded-2xl p-5 shadow-xl space-y-3">
+            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-5 shadow-xl space-y-3">
               <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">1. Select Target Customer Audience</h3>
               
               <div className="space-y-2 text-sm font-mono">
@@ -369,7 +369,7 @@ export default function CustomerCrmBroadcast() {
             </div>
 
             {/* Campaign Template Selector */}
-            <div className="bg-[#05080f] border border-white/10 rounded-2xl p-5 shadow-xl space-y-3">
+            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-5 shadow-xl space-y-3">
               <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">2. Choose Campaign Template</h3>
               
               <div className="space-y-2">
@@ -392,7 +392,7 @@ export default function CustomerCrmBroadcast() {
 
           {/* Right Column: Email/SMS Live Composer & Broadcast Launcher */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-[#05080f] border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
+            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div>
                   <h2 className="font-serif text-xl font-bold text-white">Campaign Email & SMS Composer</h2>
@@ -450,7 +450,7 @@ export default function CustomerCrmBroadcast() {
               {broadcastLog && (
                 <div className="p-4 rounded-xl bg-forest/20 border border-forest/40 text-forest text-sm font-mono space-y-1 animate-in fade-in">
                   <p className="font-bold text-base">✓ Campaign Broadcast Successfully Sent!</p>
-                  <p className="text-white/90">Sent to <strong>{broadcastLog.count} customer contacts</strong>. Delivery rate: {broadcastLog.deliveryRate}.</p>
+                  <p className="text-neutral-200">Sent to <strong>{broadcastLog.count} customer contacts</strong>. Delivery rate: {broadcastLog.deliveryRate}.</p>
                   <p className="text-white/50 text-[10px]">Subject: "{broadcastLog.subject}"</p>
                 </div>
               )}
@@ -506,7 +506,7 @@ export default function CustomerCrmBroadcast() {
                 <button
                   type="button"
                   onClick={() => setShowAddCustomer(false)}
-                  className="flex-1 py-2 rounded-lg border border-white/10 bg-white/5 text-white/70"
+                  className="flex-1 py-2 rounded-lg border border-white/10 bg-white/5 text-neutral-400"
                 >
                   Cancel
                 </button>

@@ -148,7 +148,7 @@ export default function MilanPackingScannerModal({
   const totalPacked = items.reduce((sum, item) => sum + (item.italy_packed_qty || 0), 0)
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#05080f] text-white animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#09090b] text-white animate-in fade-in duration-300">
       
       {/* Header Bar */}
       <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#0A101D] shrink-0">
@@ -164,7 +164,7 @@ export default function MilanPackingScannerModal({
         <button
           onClick={onClose}
           aria-label="Close Milan Packing Scanner"
-          className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold text-white/80 hover:bg-white/20 transition-all"
+          className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold text-neutral-300 hover:bg-white/20 transition-all"
         >
           Close
         </button>
@@ -209,7 +209,7 @@ export default function MilanPackingScannerModal({
         {lastPacked && !unrecognizedCode && (
           <div className="absolute bottom-4 left-4 right-4 bg-crimson/90 backdrop-blur-md text-white p-3.5 rounded-xl shadow-2xl flex items-center justify-between animate-in slide-in-from-bottom-2 duration-200">
             <div>
-              <p className="text-sm font-bold font-mono text-white/80">+1 PACKED IN MILAN</p>
+              <p className="text-sm font-bold font-mono text-neutral-300">+1 PACKED IN MILAN</p>
               <p className="text-base font-semibold truncate max-w-[220px]">{lastPacked.name}</p>
             </div>
             <div className="text-right">
@@ -249,7 +249,7 @@ export default function MilanPackingScannerModal({
                 onClick={() => handleProcessScan(item.sku)}
                 className="shrink-0 bg-white/5 border border-white/10 hover:border-crimson p-2 rounded-lg text-left transition-all active:scale-95"
               >
-                <p className="text-sm font-semibold text-white/90 truncate max-w-[120px]">{item.sku}</p>
+                <p className="text-sm font-semibold text-neutral-200 truncate max-w-[120px]">{item.sku}</p>
                 <p className="text-[10px] text-white/50">
                   Packed: <span className="text-crimson font-bold">{item.italy_packed_qty}</span>
                 </p>
@@ -289,7 +289,7 @@ export default function MilanPackingScannerModal({
                   <p className="font-extrabold text-base text-white flex items-center gap-1.5">
                     ⚡ Instant 1-Tap Draft & Pack (+1)
                   </p>
-                  <p className="text-[11px] text-white/80 font-normal mt-0.5">
+                  <p className="text-[11px] text-neutral-300 font-normal mt-0.5">
                     Registers SKU in inventory immediately & packs box (+1) without stopping scanner
                   </p>
                 </div>
@@ -324,7 +324,7 @@ export default function MilanPackingScannerModal({
                       onChange={(e) => setQuickTitle(e.target.value)}
                       placeholder="e.g. Barilla Pesto Genovese 190g"
                       required
-                      className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white"
+                      className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white"
                     />
                   </div>
 
@@ -335,7 +335,7 @@ export default function MilanPackingScannerModal({
                         type="number"
                         value={quickSrp}
                         onChange={(e) => setQuickSrp(e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
+                        className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
                       />
                     </div>
                     <div>
@@ -344,7 +344,7 @@ export default function MilanPackingScannerModal({
                         type="text"
                         value={quickBatch}
                         onChange={(e) => setQuickBatch(e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
+                        className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
                       />
                     </div>
                     <div>
@@ -353,7 +353,7 @@ export default function MilanPackingScannerModal({
                         type="date"
                         value={quickBestBefore}
                         onChange={(e) => setQuickBestBefore(e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
+                        className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
                       />
                     </div>
                   </div>

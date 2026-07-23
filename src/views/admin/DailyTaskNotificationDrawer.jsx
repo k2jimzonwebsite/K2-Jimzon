@@ -72,7 +72,7 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
       <div className="w-full max-w-md bg-[#0A101D] border-l border-white/10 h-full flex flex-col shadow-2xl text-white">
         
         {/* Header */}
-        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-[#05080f]">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-[#09090b]">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-mono font-bold bg-amber/20 text-amber px-2 py-0.5 rounded border border-amber/30 uppercase">
@@ -111,7 +111,7 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
               <div
                 key={task.id}
                 className={`p-4 rounded-xl border space-y-3 transition-all ${
-                  task.priority === 'high' ? 'bg-[#05080f] border-crimson/40 shadow-lg' : 'bg-[#05080f] border-amber/30'
+                  task.priority === 'high' ? 'bg-[#09090b] border-crimson/40 shadow-lg' : 'bg-[#09090b] border-amber/30'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -125,7 +125,7 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
 
                 <div>
                   <h3 className="font-bold text-white text-base">{task.title}</h3>
-                  <p className="text-white/70 font-semibold mt-0.5">{task.subtitle}</p>
+                  <p className="text-neutral-400 font-semibold mt-0.5">{task.subtitle}</p>
                   <p className="text-white/40 text-[11px] mt-1">{task.details}</p>
                 </div>
 
@@ -141,7 +141,7 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-white/10 bg-[#05080f] text-[11px] font-mono text-white/40 text-center">
+        <div className="p-4 border-t border-white/10 bg-[#09090b] text-[11px] font-mono text-white/40 text-center">
           K2 Jimzon BOS · Automated Task Engine Active
         </div>
 

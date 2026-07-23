@@ -66,7 +66,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-md rounded-2xl border border-white/20 bg-[#0E121E] p-6 text-white shadow-2xl relative overflow-hidden font-sans">
+      <div className="w-full max-w-md rounded-2xl border border-white/20 bg-[#18181b] p-6 text-white shadow-2xl relative overflow-hidden font-sans">
         
         {/* Ambient Glow */}
         <div className="absolute -top-12 -right-12 h-36 w-36 rounded-full bg-blue/20 blur-3xl pointer-events-none" />
@@ -102,7 +102,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
             )}
 
             {/* Mode Switcher */}
-            <div className="flex border-b border-white/15 mb-4 text-sm font-bold">
+            <div className="flex border-b border-white/10 mb-4 text-sm font-bold">
               <button
                 type="button"
                 onClick={() => { setMode('passcode'); setError('') }}
@@ -129,7 +129,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
 
             {mode === 'passcode' ? (
               <div>
-                <label className="block text-sm font-bold uppercase tracking-wider text-white/80 mb-2">
+                <label className="block text-sm font-bold uppercase tracking-wider text-neutral-300 mb-2">
                   Admin Security Passcode
                 </label>
                 <input
@@ -147,7 +147,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
             ) : (
               <>
                 <div>
-                  <label className="block text-sm font-bold uppercase tracking-wider text-white/80 mb-2">
+                  <label className="block text-sm font-bold uppercase tracking-wider text-neutral-300 mb-2">
                     Super Admin Email
                   </label>
                   <input
@@ -160,7 +160,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold uppercase tracking-wider text-white/80 mb-2">
+                  <label className="block text-sm font-bold uppercase tracking-wider text-neutral-300 mb-2">
                     Password
                   </label>
                   <input
@@ -179,7 +179,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-bold text-white/80 hover:bg-white/15 hover:text-white transition-all"
+                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-bold text-neutral-300 hover:bg-white/15 hover:text-white transition-all"
               >
                 Back to Store
               </button>
@@ -220,13 +220,13 @@ export default function AdminAuthModal({ isOpen, onClose }) {
               <p className="font-bold text-blue flex items-center gap-1.5 text-base">
                 <span>🔐</span> 2-Factor Authenticator Code Required
               </p>
-              <p className="text-white/80 text-sm">
+              <p className="text-neutral-300 text-sm">
                 Enter your 6-digit TOTP code from your Google Authenticator or Master Key.
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-bold uppercase tracking-wider text-white/80 mb-2">
+              <label className="block text-sm font-bold uppercase tracking-wider text-neutral-300 mb-2">
                 6-Digit Authenticator Code
               </label>
               <input
@@ -247,7 +247,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-bold text-white/80 hover:bg-white/15 hover:text-white transition-all"
+                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-bold text-neutral-300 hover:bg-white/15 hover:text-white transition-all"
               >
                 ← Back
               </button>

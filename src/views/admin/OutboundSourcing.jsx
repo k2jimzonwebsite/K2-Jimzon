@@ -234,7 +234,7 @@ export default function OutboundSourcing() {
                   <div id="outbound-qr-reader" className="absolute inset-0 object-cover"></div>
                   <button 
                     onClick={stopScanner}
-                    className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white/80 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-black/80 hover:text-white z-10"
+                    className="absolute top-4 right-4 bg-black/60 backdrop-blur text-neutral-300 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-black/80 hover:text-white z-10"
                   >
                     Stop Scanning
                   </button>
@@ -287,7 +287,7 @@ export default function OutboundSourcing() {
         {/* Right Side: Manifest Checklist */}
         <div className="flex-1 flex flex-col bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-lg">
           <div className="bg-white/5 px-4 py-3 border-b border-white/10 flex justify-between items-center shrink-0">
-            <h3 className="font-semibold text-white/90">Current Box Manifest</h3>
+            <h3 className="font-semibold text-neutral-200">Current Box Manifest</h3>
             <span className="bg-forest/20 text-forest text-sm font-bold px-2 py-0.5 rounded-full">{manifest.length} Unique SKUs</span>
           </div>
           

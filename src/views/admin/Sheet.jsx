@@ -151,17 +151,17 @@ export default function Sheet() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#05080f]">
+    <div className="flex flex-col h-full bg-[#09090b]">
       {/* Top Action & Horizontal Navigation Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-6 py-3.5 bg-[#0A101D] shrink-0">
         <div className="flex flex-wrap items-center gap-2">
           <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-lg bg-forest text-white px-3.5 py-2.5 min-h-[44px] text-sm font-bold transition hover:bg-forest/90 shadow-md">
             <span className="text-lg leading-none">+</span> Add Row
           </button>
-          <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
+          <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-neutral-400 transition hover:bg-white/5 hover:text-white">
             <span>📂</span> CSV Import
           </button>
-          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
+          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-neutral-400 transition hover:bg-white/5 hover:text-white">
             <span>⌂</span> Scan Box
           </button>
           <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-blue/30 bg-blue/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-blue transition hover:bg-blue/20">
@@ -191,14 +191,14 @@ export default function Sheet() {
       </div>
 
       {/* Viewport Frame Constrained Scroll Container */}
-      <div ref={tableContainerRef} className="flex-1 max-h-[calc(100vh-210px)] overflow-x-auto overflow-y-auto custom-scrollbar relative bg-[#05080f] border-t border-white/20">
+      <div ref={tableContainerRef} className="flex-1 max-h-[calc(100vh-210px)] overflow-x-auto overflow-y-auto custom-scrollbar relative bg-[#09090b] border-t border-white/20">
         {loading ? (
           <div className="flex items-center justify-center h-64 text-white font-extrabold animate-pulse font-sans text-lg">Loading Product Masters...</div>
         ) : (
-          <table className="w-max min-w-full border-collapse text-base bg-[#0E121E]">
+          <table className="w-max min-w-full border-collapse text-base bg-[#18181b]">
             <thead className="sticky top-0 z-30 shadow-lg">
-              <tr className="bg-[#05080f] text-sm text-white">
-                <th className="w-10 border border-white/20 py-3 font-black sticky left-0 z-40 bg-[#05080f] text-gold">#</th>
+              <tr className="bg-[#09090b] text-sm text-white">
+                <th className="w-10 border border-white/20 py-3 font-black sticky left-0 z-40 bg-[#09090b] text-gold">#</th>
                 {DOMAINS.map((d, i) => (
                   <th key={d.name} colSpan={d.cols.length} className={`border border-white/20 py-3 px-4 font-black uppercase tracking-wider text-center text-sm ${['bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white'][i % 7]}`}>
                     {d.name}
@@ -206,13 +206,13 @@ export default function Sheet() {
                 ))}
                 <th className="w-20 border border-white/20 py-3 font-black text-sm text-gold">Action</th>
               </tr>
-              <tr className="bg-[#161B29] text-left text-sm font-black text-white">
-                <th className="border border-white/20 px-2 py-3 text-center sticky left-0 z-40 bg-[#161B29] text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]">#</th>
+              <tr className="bg-[#27272a] text-left text-sm font-black text-white">
+                <th className="border border-white/20 px-2 py-3 text-center sticky left-0 z-40 bg-[#27272a] text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]">#</th>
                 {ALL_COLS.map((h, colIdx) => (
                   <th
                     key={h}
                     className={`border border-white/20 px-4 py-3 whitespace-nowrap font-mono text-sm font-extrabold ${
-                      h === 'SKU' ? 'sticky left-10 z-40 bg-[#161B29] text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]' : 'text-white'
+                      h === 'SKU' ? 'sticky left-10 z-40 bg-[#27272a] text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]' : 'text-white'
                     }`}
                   >
                     {h}
@@ -303,7 +303,7 @@ export default function Sheet() {
                             onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, [field]: e.target.value } : row))}
                             onBlur={(e) => updateField(i, col, e.target.value, col === 'SKU' ? r.sku : null)}
                             onFocus={() => setSelected({ row: i, col: colIdx })}
-                            className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-sm ${col === 'SKU' ? 'font-bold text-blue' : 'text-navy dark:text-white/80'}`}
+                            className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-sm ${col === 'SKU' ? 'font-bold text-blue' : 'text-navy dark:text-neutral-300'}`}
                             placeholder={col}
                           />
                         </Cell>

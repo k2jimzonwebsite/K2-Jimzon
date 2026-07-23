@@ -95,8 +95,8 @@ export default function Overview({ setSection }) {
       <AdminVisualWorkflowGraph onNavigate={setSection} />
 
       {/* 💰 Master Metrics Financial Landed P&L Summary */}
-      <div className="bg-[#0E121E] border border-white/20 rounded-2xl p-6 shadow-xl space-y-4 text-white">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-4">
+      <div className="bg-[#18181b] border border-white/20 rounded-2xl p-6 shadow-xl space-y-4 text-white">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
           <div>
             <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Master Financial P&L Cockpit
@@ -104,34 +104,34 @@ export default function Overview({ setSection }) {
             <h2 className="font-sans text-2xl font-black text-white mt-2">Today's Landed Revenue & Profit</h2>
           </div>
           <div className="text-right">
-            <p className="text-sm text-white/80 font-bold uppercase">Net Cash Revenue</p>
+            <p className="text-sm text-neutral-300 font-bold uppercase">Net Cash Revenue</p>
             <p className="font-mono text-3xl font-black text-gold">{formattedRevenue}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-base font-mono">
-          <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
+          <div className="bg-[#27272a] p-4 rounded-xl border border-white/10">
             <p className="text-gold text-sm uppercase font-extrabold">Gross Revenue</p>
             <p className="text-white text-xl font-black mt-1">{formattedRevenue}</p>
-            <p className="text-white/80 text-sm mt-1 font-sans">Live Channel Total</p>
+            <p className="text-neutral-300 text-sm mt-1 font-sans">Live Channel Total</p>
           </div>
 
-          <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
+          <div className="bg-[#27272a] p-4 rounded-xl border border-white/10">
             <p className="text-gold text-sm uppercase font-extrabold">Sourcing COGS</p>
             <p className="text-crimson text-xl font-black mt-1">-{estimatedCost}</p>
-            <p className="text-white/80 text-sm mt-1 font-sans">Est. Italy Landed Cost</p>
+            <p className="text-neutral-300 text-sm mt-1 font-sans">Est. Italy Landed Cost</p>
           </div>
 
-          <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
+          <div className="bg-[#27272a] p-4 rounded-xl border border-white/10">
             <p className="text-gold text-sm uppercase font-extrabold">Pending Orders</p>
             <p className="text-white text-xl font-black mt-1">{pendingOrders} Orders</p>
-            <p className="text-white/80 text-sm mt-1 font-sans">Awaiting Packing</p>
+            <p className="text-neutral-300 text-sm mt-1 font-sans">Awaiting Packing</p>
           </div>
 
           <div className="bg-blue/20 p-4 rounded-xl border border-blue text-white shadow-md">
             <p className="text-blue text-sm uppercase font-black">Net Cash Profit</p>
             <p className="text-white text-xl font-black mt-1">{estimatedProfit}</p>
-            <p className="text-white/90 text-sm mt-1 font-sans font-bold">Clear Cash Flow</p>
+            <p className="text-neutral-200 text-sm mt-1 font-sans font-bold">Clear Cash Flow</p>
           </div>
         </div>
       </div>
@@ -143,20 +143,20 @@ export default function Overview({ setSection }) {
         <div className="space-y-6">
           
           {/* 🛬 Real-Time Flight Cargo Box Arrival & Handover Feed */}
-          <div className="rounded-2xl border border-white/20 bg-[#0E121E] overflow-hidden text-white shadow-xl">
-            <div className="border-b border-white/15 px-5 py-4 flex items-center justify-between bg-blue/20">
+          <div className="rounded-2xl border border-white/20 bg-[#18181b] overflow-hidden text-white shadow-xl">
+            <div className="border-b border-white/10 px-5 py-4 flex items-center justify-between bg-blue/20">
               <h3 className="text-base font-black uppercase tracking-wider text-white flex items-center gap-2">
                 <span>🛬</span> Air Cargo Flight Arrival Feed
               </h3>
               <span className="text-sm font-mono text-white bg-blue px-2.5 py-1 rounded-full font-black shadow">Live Feed</span>
             </div>
             <div className="p-4 space-y-3 font-sans text-sm">
-              <div className="p-4 rounded-xl bg-[#161B29] border border-white/15 space-y-1.5">
+              <div className="p-4 rounded-xl bg-[#27272a] border border-white/10 space-y-1.5">
                 <div className="flex items-center justify-between">
                   <span className="font-extrabold text-white text-base">🛬 Flight AZ-772 (Malpensa MXP → NAIA)</span>
                   <span className="text-sm text-gold font-bold">Air Cargo Operational</span>
                 </div>
-                <p className="text-white/90 text-sm font-medium">Custody verification active. Staff station PIN claims enabled.</p>
+                <p className="text-neutral-200 text-sm font-medium">Custody verification active. Staff station PIN claims enabled.</p>
               </div>
             </div>
           </div>
@@ -175,17 +175,17 @@ export default function Overview({ setSection }) {
                   Manage Stock ➔
                 </button>
               </div>
-              <p className="text-sm text-white/90 font-medium">
+              <p className="text-sm text-neutral-200 font-medium">
                 Some inventory items have dropped below 5 units. Reorder or create Pasabuy sourcing requests.
               </p>
             </div>
           ) : (
-            <div className="rounded-2xl border border-white/15 bg-[#0E121E] p-5 text-white shadow-xl">
+            <div className="rounded-2xl border border-white/10 bg-[#18181b] p-5 text-white shadow-xl">
               <div className="flex items-center justify-between">
                 <h3 className="font-black text-gold text-base uppercase flex items-center gap-2">
                   <span>✓</span> Stock Levels Healthy
                 </h3>
-                <span className="text-sm font-mono text-white/80">0 Critical Stock Warnings</span>
+                <span className="text-sm font-mono text-neutral-300">0 Critical Stock Warnings</span>
               </div>
             </div>
           )}
@@ -194,12 +194,12 @@ export default function Overview({ setSection }) {
 
         {/* Right Column - Quick Actions */}
         <div className="space-y-6">
-          <div className="rounded-2xl border border-white/20 bg-[#0E121E] p-6 space-y-4 shadow-xl">
+          <div className="rounded-2xl border border-white/20 bg-[#18181b] p-6 space-y-4 shadow-xl">
             <h3 className="text-base font-black uppercase text-gold">Quick Jump Operations</h3>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setSection('inventory')}
-                className="p-4 rounded-xl bg-[#161B29] hover:bg-blue/20 border border-white/15 hover:border-blue text-left transition-all group"
+                className="p-4 rounded-xl bg-[#27272a] hover:bg-blue/20 border border-white/10 hover:border-blue text-left transition-all group"
               >
                 <span className="text-2xl block mb-1">📊</span>
                 <span className="text-sm font-black text-white group-hover:text-blue">Sheet Mode & Inventory</span>
@@ -207,7 +207,7 @@ export default function Overview({ setSection }) {
 
               <button
                 onClick={() => setSection('omni_hub')}
-                className="p-4 rounded-xl bg-[#161B29] hover:bg-gold/20 border border-white/15 hover:border-gold text-left transition-all group"
+                className="p-4 rounded-xl bg-[#27272a] hover:bg-gold/20 border border-white/10 hover:border-gold text-left transition-all group"
               >
                 <span className="text-2xl block mb-1">📦</span>
                 <span className="text-sm font-black text-white group-hover:text-gold">Staff Handover & Pack</span>
@@ -215,7 +215,7 @@ export default function Overview({ setSection }) {
 
               <button
                 onClick={() => setSection('pasabuy')}
-                className="p-4 rounded-xl bg-[#161B29] hover:bg-forest/20 border border-white/15 hover:border-forest text-left transition-all group"
+                className="p-4 rounded-xl bg-[#27272a] hover:bg-forest/20 border border-white/10 hover:border-forest text-left transition-all group"
               >
                 <span className="text-2xl block mb-1">✈️</span>
                 <span className="text-sm font-black text-white group-hover:text-forest">Pasabuy Sourcing</span>
@@ -223,7 +223,7 @@ export default function Overview({ setSection }) {
 
               <button
                 onClick={() => setSection('staff_permissions')}
-                className="p-4 rounded-xl bg-[#161B29] hover:bg-crimson/20 border border-white/15 hover:border-crimson text-left transition-all group"
+                className="p-4 rounded-xl bg-[#27272a] hover:bg-crimson/20 border border-white/10 hover:border-crimson text-left transition-all group"
               >
                 <span className="text-2xl block mb-1">🔒</span>
                 <span className="text-sm font-black text-white group-hover:text-crimson">Staff PINs & Roles</span>
@@ -240,7 +240,7 @@ export default function Overview({ setSection }) {
 
 function HealthWidget({ label, status, val }) {
   return (
-    <div className="rounded-xl border border-white/20 bg-[#0E121E] p-4 text-white shadow-md flex items-center justify-between">
+    <div className="rounded-xl border border-white/20 bg-[#18181b] p-4 text-white shadow-md flex items-center justify-between">
       <div>
         <p className="text-[11px] font-extrabold uppercase text-gold truncate">{label}</p>
         <p className="text-xl font-black mt-1">{val || 'Operational'}</p>

@@ -8,7 +8,7 @@ import StaffAllocationModal from './StaffAllocationModal'
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 
 // ── Shared input/textarea styles ──────────────────────────────────────────────
-const inp = 'w-full rounded-xl border border-white/20 bg-[#161B29] px-3.5 py-2.5 text-base text-white font-semibold focus:border-gold outline-none transition-colors shadow-sm'
+const inp = 'w-full rounded-xl border border-white/20 bg-[#27272a] px-3.5 py-2.5 text-base text-white font-semibold focus:border-gold outline-none transition-colors shadow-sm'
 const ta  = `${inp} resize-none`
 
 function Label({ children }) {
@@ -53,7 +53,7 @@ function PhotoSlot({ label, value, onChange, bucket = 'product-images' }) {
     <div>
       <Label>{label}</Label>
       <div
-        className="relative rounded-xl border border-white/10 bg-[#05080f] overflow-hidden cursor-pointer group"
+        className="relative rounded-xl border border-white/10 bg-[#09090b] overflow-hidden cursor-pointer group"
         style={{ aspectRatio: '1 / 1' }}
         onClick={() => fileRef.current?.click()}
       >
@@ -121,7 +121,7 @@ function GallerySlots({ value = [], onChange, max = 5 }) {
         ))}
         {value.length < max && (
           <button type="button" onClick={() => fileRef.current?.click()}
-            className="aspect-square rounded-lg border-2 border-dashed border-white/15 hover:border-blue/50 hover:bg-blue/5 transition-colors flex items-center justify-center text-white/20 hover:text-white/50">
+            className="aspect-square rounded-lg border-2 border-dashed border-white/10 hover:border-blue/50 hover:bg-blue/5 transition-colors flex items-center justify-center text-white/20 hover:text-white/50">
             {uploading ? <div className="w-4 h-4 border-2 border-blue border-t-transparent rounded-full animate-spin" /> : <span className="text-xl leading-none">+</span>}
           </button>
         )}
@@ -275,7 +275,7 @@ export default function InventoryGrid() {
             const expiryHealth = getExpiryHealth(primaryExpiryDate)
 
             return (
-              <div key={p.sku} className="group relative rounded-xl border border-white/10 bg-[#05080f] overflow-hidden flex flex-col hover:border-blue/50 transition-colors">
+              <div key={p.sku} className="group relative rounded-xl border border-white/10 bg-[#09090b] overflow-hidden flex flex-col hover:border-blue/50 transition-colors">
                 <div className="aspect-square bg-white/5 flex items-center justify-center p-4 relative">
                   <img src={p.primary_image_url || p.image_url || '/placeholder.png'} alt={p.name}
                     className="max-h-full max-w-full object-contain drop-shadow-lg" />
@@ -297,7 +297,7 @@ export default function InventoryGrid() {
                 </div>
                 <div className="p-4 flex-1 flex flex-col">
                   <div className="flex items-start justify-between gap-2 mb-2">
-                    <span className="text-sm font-mono text-white/70 font-semibold uppercase truncate">{p.sku}</span>
+                    <span className="text-sm font-mono text-neutral-400 font-semibold uppercase truncate">{p.sku}</span>
                     <span className={`shrink-0 px-2 py-0.5 rounded text-sm font-extrabold uppercase tracking-wider ${p.status === 'Draft' ? 'bg-gold/20 text-gold border border-gold/30' : p.status === 'Discontinued' ? 'bg-crimson/20 text-crimson border border-crimson/30' : 'bg-blue/20 text-blue border border-blue/30'}`}>
                       {p.status}
                     </span>
@@ -320,7 +320,7 @@ export default function InventoryGrid() {
                     <div className="grid grid-cols-2 gap-1.5 pt-1">
                       <button
                         onClick={() => setBatchProduct(p)}
-                        className="text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-white/90 py-2 rounded-lg border border-white/15 transition-colors text-center"
+                        className="text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-lg border border-white/10 transition-colors text-center"
                       >
                         📦 Batches ({p.batches?.length || 1})
                       </button>
@@ -454,7 +454,7 @@ export default function InventoryGrid() {
                       <div>
                         <Label>Expiry Date</Label>
                         <input type="date" value={editingProduct.expiry_date || ''} onChange={e => set('expiry_date', e.target.value)}
-                          className={`${inp} text-white/80`} />
+                          className={`${inp} text-neutral-300`} />
                       </div>
                     </div>
                   </Section>
@@ -550,8 +550,8 @@ export default function InventoryGrid() {
                       {[['Featured', 'is_featured'], ['Published', 'published']].map(([lbl, field]) => (
                         <label key={field} className="flex items-center gap-2 cursor-pointer">
                           <input type="checkbox" checked={Boolean(editingProduct[field])} onChange={e => set(field, e.target.checked)}
-                            className="w-4 h-4 rounded border border-white/20 bg-[#05080f] text-blue cursor-pointer" />
-                          <span className="text-base text-white/70">{lbl}</span>
+                            className="w-4 h-4 rounded border border-white/20 bg-[#09090b] text-blue cursor-pointer" />
+                          <span className="text-base text-neutral-400">{lbl}</span>
                         </label>
                       ))}
                     </div>

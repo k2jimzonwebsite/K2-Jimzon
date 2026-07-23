@@ -137,10 +137,10 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
   const activeNode = NODES.find(n => n.id === selectedNode) || NODES[7]
 
   const diagramMarkup = (
-    <div className={`bg-[#0E121E] text-white font-sans space-y-6 ${isFullScreen ? 'p-8 min-h-screen overflow-y-auto' : 'p-6 border border-white/20 rounded-2xl shadow-2xl'}`}>
+    <div className={`bg-[#18181b] text-white font-sans space-y-6 ${isFullScreen ? 'p-8 min-h-screen overflow-y-auto' : 'p-6 border border-white/20 rounded-2xl shadow-2xl'}`}>
       
       {/* Flowchart Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/15 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-blue flex items-center justify-center text-white text-xl font-black shadow">
             🔀
@@ -152,7 +152,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
                 Visual Flowchart Canvas
               </span>
             </h2>
-            <p className="text-sm text-white/80 font-medium mt-1">
+            <p className="text-sm text-neutral-300 font-medium mt-1">
               Visualizing bi-directional connections, decision diamonds, manual SKU bypasses, and security auth gates.
             </p>
           </div>
@@ -169,7 +169,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
       </div>
 
       {/* FILTER & LEGEND ROW */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#161B29] p-3 rounded-xl border border-white/15 text-sm font-mono">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#27272a] p-3 rounded-xl border border-white/10 text-sm font-mono">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-white/60 font-bold">Filter View:</span>
           {[
@@ -182,7 +182,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
               key={f.id}
               onClick={() => setActiveFilter(f.id)}
               className={`px-3 py-1.5 rounded-lg font-black transition-all ${
-                activeFilter === f.id ? 'bg-blue text-white shadow' : 'text-white/70 hover:text-white hover:bg-white/10'
+                activeFilter === f.id ? 'bg-blue text-white shadow' : 'text-neutral-400 hover:text-white hover:bg-white/10'
               }`}
             >
               {f.label}
@@ -199,7 +199,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
       </div>
 
       {/* STUNNING VISUAL SVG FLOWCHART DIAGRAM CANVAS */}
-      <div className="relative bg-[#05080f] border border-white/20 rounded-2xl p-8 min-h-[460px] overflow-x-auto shadow-2xl custom-scrollbar flex flex-col justify-between">
+      <div className="relative bg-[#09090b] border border-white/20 rounded-2xl p-8 min-h-[460px] overflow-x-auto shadow-2xl custom-scrollbar flex flex-col justify-between">
         
         {/* SVG Directed Curves & Arrowheads Layer */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 min-w-[1000px]">
@@ -285,8 +285,8 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
 
       {/* SELECTED NODE OPERATIONAL BREAKDOWN & JUMP BUTTON */}
       {activeNode && (
-        <div className="bg-[#161B29] border border-white/20 rounded-2xl p-6 space-y-5 animate-in fade-in duration-200 shadow-2xl">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/15 pb-4 gap-4">
+        <div className="bg-[#27272a] border border-white/20 rounded-2xl p-6 space-y-5 animate-in fade-in duration-200 shadow-2xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/10 pb-4 gap-4">
             <div className="flex items-center gap-3">
               <span className="text-3xl p-3 rounded-2xl bg-black/60 border border-white/20 shadow-md">{activeNode.icon}</span>
               <div>
@@ -312,7 +312,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
             </button>
           </div>
 
-          <p className="text-base text-white/90 font-medium leading-relaxed font-sans">
+          <p className="text-base text-neutral-200 font-medium leading-relaxed font-sans">
             {activeNode.desc}
           </p>
 
@@ -320,7 +320,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm font-mono">
             <div className="bg-black/40 p-4 rounded-xl border border-white/10 space-y-2">
               <p className="text-gold font-bold uppercase text-[11px]">System Data Inputs:</p>
-              <ul className="space-y-1 text-white/80 font-sans">
+              <ul className="space-y-1 text-neutral-300 font-sans">
                 {activeNode.inputs.map((inp, idx) => (
                   <li key={idx} className="flex items-center gap-2">
                     <span className="text-blue font-bold">✓</span>
@@ -332,7 +332,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
 
             <div className="bg-black/40 p-4 rounded-xl border border-white/10 space-y-2">
               <p className="text-gold font-bold uppercase text-[11px]">System Data Output Stream:</p>
-              <ul className="space-y-1 text-white/80 font-sans">
+              <ul className="space-y-1 text-neutral-300 font-sans">
                 {activeNode.outputs.map((out, idx) => (
                   <li key={idx} className="flex items-center gap-2">
                     <span className="text-gold font-bold">⚡</span>
@@ -370,8 +370,8 @@ function Flowcard({ node, isSelected, onClick, isDecision = false }) {
         isDecision
           ? 'bg-[#1A180E] border-gold ring-2 ring-gold/40'
           : isSelected
-          ? 'bg-[#161B29] border-gold ring-2 ring-gold/60 scale-[1.04] z-20'
-          : 'bg-[#0E121E] border-white/20 hover:border-white/40 hover:bg-white/10'
+          ? 'bg-[#27272a] border-gold ring-2 ring-gold/60 scale-[1.04] z-20'
+          : 'bg-[#18181b] border-white/20 hover:border-white/40 hover:bg-white/10'
       }`}
     >
       <div className="flex items-center justify-between w-full mb-2">
@@ -381,7 +381,7 @@ function Flowcard({ node, isSelected, onClick, isDecision = false }) {
             DECISION
           </span>
         ) : (
-          <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-white/10 text-white/80">
+          <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-white/10 text-neutral-300">
             {node.category}
           </span>
         )}

@@ -167,7 +167,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
           {/* Option A: Copy Prompt */}
-          <div className="bg-[#05080f] border border-blue/30 p-4 rounded-xl space-y-3 font-mono text-sm flex flex-col justify-between">
+          <div className="bg-[#09090b] border border-blue/30 p-4 rounded-xl space-y-3 font-mono text-sm flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-1.5 text-blue font-bold mb-1">
                 <span>📋</span> Option A: Copy AI Prompt
@@ -186,7 +186,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
           </div>
 
           {/* Option B: In-App Auto Enrich */}
-          <div className="bg-[#05080f] border border-forest/30 p-4 rounded-xl space-y-3 font-mono text-sm flex flex-col justify-between">
+          <div className="bg-[#09090b] border border-forest/30 p-4 rounded-xl space-y-3 font-mono text-sm flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-1.5 text-forest font-bold mb-1">
                 <span>⚡</span> Option B: 1-Click Auto-Enrich
@@ -217,10 +217,10 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 
             <div className="space-y-2 text-[11px]">
               <p><strong className="text-amber">Origin:</strong> {enrichedData.origin}</p>
-              <p><strong className="text-white/70">Description:</strong> {enrichedData.description}</p>
-              <p><strong className="text-white/70">Usage Instructions:</strong> {enrichedData.usage_instructions}</p>
-              <p><strong className="text-white/70">Storage & FEFO:</strong> {enrichedData.storage_instructions}</p>
-              <p><strong className="text-white/70">Wholesale Price:</strong> ₱{enrichedData.wholesale_price.toLocaleString()}</p>
+              <p><strong className="text-neutral-400">Description:</strong> {enrichedData.description}</p>
+              <p><strong className="text-neutral-400">Usage Instructions:</strong> {enrichedData.usage_instructions}</p>
+              <p><strong className="text-neutral-400">Storage & FEFO:</strong> {enrichedData.storage_instructions}</p>
+              <p><strong className="text-neutral-400">Wholesale Price:</strong> ₱{enrichedData.wholesale_price.toLocaleString()}</p>
             </div>
 
             <button

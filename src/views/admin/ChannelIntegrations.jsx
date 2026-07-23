@@ -217,16 +217,16 @@ export default function ChannelIntegrations() {
     <div className="space-y-6 max-w-6xl mx-auto pb-12 animate-in fade-in duration-300">
       
       {/* Header Banner */}
-      <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Omnichannel Integration Hub
             </span>
-            <span className="text-sm text-white/80 font-bold">Marketplaces & Social API Manager</span>
+            <span className="text-sm text-neutral-300 font-bold">Marketplaces & Social API Manager</span>
           </div>
           <h1 className="font-sans text-2xl font-black text-white">Marketplace & Social Media API Keys</h1>
-          <p className="text-sm text-white/80 font-medium mt-1 max-w-2xl">
+          <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
             Input your Shopee, Lazada, TikTok Shop, Meta, and WhatsApp API credentials. These keys power automatic order fetching into Global Logistics and real-time inventory sync across all sales channels.
           </p>
         </div>
@@ -254,8 +254,8 @@ export default function ChannelIntegrations() {
                 onClick={() => { setActiveTab(key); setTestResult(null) }}
                 className={`w-full flex items-center justify-between p-4 rounded-xl border text-left transition-all ${
                   isSelected 
-                    ? 'bg-[#161B29] border-gold shadow-lg text-white' 
-                    : 'bg-[#0E121E] border-white/20 text-white/80 hover:text-white hover:bg-white/10'
+                    ? 'bg-[#27272a] border-gold shadow-lg text-white' 
+                    : 'bg-[#18181b] border-white/20 text-neutral-300 hover:text-white hover:bg-white/10'
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -265,7 +265,7 @@ export default function ChannelIntegrations() {
                   />
                   <div className="min-w-0">
                     <p className="text-base font-extrabold truncate text-white">{ch.name}</p>
-                    <p className="text-sm font-mono text-white/80 font-bold truncate">{ch.badge}</p>
+                    <p className="text-sm font-mono text-neutral-300 font-bold truncate">{ch.badge}</p>
                   </div>
                 </div>
                 <span className={`text-sm font-mono font-black px-2.5 py-1 rounded-lg shrink-0 shadow ${
@@ -282,8 +282,8 @@ export default function ChannelIntegrations() {
         <div className="lg:col-span-3 space-y-6">
           
           {/* Active Channel Card Header */}
-          <div className="bg-[#0E121E] border border-white/20 rounded-2xl p-6 shadow-xl space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
+          <div className="bg-[#18181b] border border-white/20 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center font-black text-white text-xl shadow-md"
@@ -330,7 +330,7 @@ export default function ChannelIntegrations() {
                 )}
 
                 <label className="flex items-center gap-2 cursor-pointer bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
-                  <span className="text-sm text-white/70 font-semibold">Enable Channel</span>
+                  <span className="text-sm text-neutral-400 font-semibold">Enable Channel</span>
                   <input
                     type="checkbox"
                     checked={activeChannel.enabled}
@@ -349,7 +349,7 @@ export default function ChannelIntegrations() {
                 <span className="text-lg">{testResult.success ? '🟢' : '🟡'}</span>
                 <div>
                   <p className="font-bold">{testResult.success ? 'API Handshake Successful' : 'Connection Warning'}</p>
-                  <p className="text-white/80 mt-0.5">{testResult.message}</p>
+                  <p className="text-neutral-300 mt-0.5">{testResult.message}</p>
                 </div>
               </div>
             )}
@@ -439,7 +439,7 @@ export default function ChannelIntegrations() {
                         type="text"
                         readOnly
                         value={activeChannel.webhookUrl}
-                        className="flex-1 rounded-lg border border-white/10 bg-black/40 px-3.5 py-2.5 text-sm text-white/80 font-mono outline-none"
+                        className="flex-1 rounded-lg border border-white/10 bg-black/40 px-3.5 py-2.5 text-sm text-neutral-300 font-mono outline-none"
                       />
                       <button
                         onClick={() => handleCopyWebhook(activeChannel.webhookUrl)}
@@ -514,18 +514,18 @@ export default function ChannelIntegrations() {
           </div>
 
           {/* Sync Activity Log Footer Card */}
-          <div className="bg-[#05080f] border border-white/10 rounded-2xl p-5 shadow-xl">
+          <div className="bg-[#09090b] border border-white/10 rounded-2xl p-5 shadow-xl">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50">Recent Omnichannel Sync Activity</h3>
               <span className="text-[10px] font-mono text-forest">Live Monitor Active</span>
             </div>
             <div className="space-y-2 text-sm font-mono">
               <div className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5">
-                <span className="text-white/80">Shopee Webhook Order #260722-SHP01 received $\rightarrow$ Pushed to Global Logistics</span>
+                <span className="text-neutral-300">Shopee Webhook Order #260722-SHP01 received $\rightarrow$ Pushed to Global Logistics</span>
                 <span className="text-white/40 text-[10px]">2 mins ago</span>
               </div>
               <div className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5">
-                <span className="text-white/80">Inventory Auto-Deducted: KIKO-3D-05 (-2 units) across Shopee, Lazada & Website</span>
+                <span className="text-neutral-300">Inventory Auto-Deducted: KIKO-3D-05 (-2 units) across Shopee, Lazada & Website</span>
                 <span className="text-white/40 text-[10px]">5 mins ago</span>
               </div>
             </div>
@@ -576,7 +576,7 @@ export default function ChannelIntegrations() {
                 <button
                   type="button"
                   onClick={() => setShowUnlockModal(false)}
-                  className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 text-sm font-semibold text-white/70 hover:bg-white/10 transition-all"
+                  className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 text-sm font-semibold text-neutral-400 hover:bg-white/10 transition-all"
                 >
                   Cancel
                 </button>

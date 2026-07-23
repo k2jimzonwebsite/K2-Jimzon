@@ -85,7 +85,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
   const totalScanned = items.reduce((sum, item) => sum + (item.manila_scanned_qty || 0), 0)
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#05080f] text-white animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#09090b] text-white animate-in fade-in duration-300">
       
       {/* Top Mobile Bar */}
       <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#0A101D] shrink-0">
@@ -95,7 +95,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
         </div>
         <button
           onClick={onClose}
-          className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold text-white/80 hover:bg-white/20 transition-all"
+          className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold text-neutral-300 hover:bg-white/20 transition-all"
         >
           Close
         </button>
@@ -106,7 +106,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
         <div>
           <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Shipment Progress</p>
           <p className="text-base font-bold text-white">
-            <span className="text-forest">{totalScanned}</span> / <span className="text-white/70">{totalPacked} units</span>
+            <span className="text-forest">{totalScanned}</span> / <span className="text-neutral-400">{totalPacked} units</span>
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -141,7 +141,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
         {lastScanned && (
           <div className="absolute bottom-4 left-4 right-4 bg-forest/90 backdrop-blur-md text-white p-3.5 rounded-xl shadow-2xl flex items-center justify-between animate-in slide-in-from-bottom-2 duration-200">
             <div>
-              <p className="text-sm font-bold font-mono text-white/80">+1 INCREMENTED</p>
+              <p className="text-sm font-bold font-mono text-neutral-300">+1 INCREMENTED</p>
               <p className="text-base font-semibold truncate max-w-[220px]">{lastScanned.name}</p>
             </div>
             <div className="text-right">
@@ -181,7 +181,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
                 onClick={() => handleIncrement(item.sku)}
                 className="shrink-0 bg-white/5 border border-white/10 hover:border-forest p-2 rounded-lg text-left transition-all active:scale-95"
               >
-                <p className="text-sm font-semibold text-white/90 truncate max-w-[120px]">{item.sku}</p>
+                <p className="text-sm font-semibold text-neutral-200 truncate max-w-[120px]">{item.sku}</p>
                 <p className="text-[10px] text-white/50">
                   Scanned: <span className="text-forest font-bold">{item.manila_scanned_qty}</span> / {item.italy_packed_qty}
                 </p>

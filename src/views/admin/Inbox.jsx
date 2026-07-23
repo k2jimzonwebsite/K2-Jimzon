@@ -51,14 +51,14 @@ export default function Inbox() {
 
   if (!chat) {
     return (
-      <div className="flex h-[calc(100vh-140px)] rounded-xl border border-white/10 bg-[#05080f] shadow-2xl overflow-hidden items-center justify-center text-white/50">
+      <div className="flex h-[calc(100vh-140px)] rounded-xl border border-white/10 bg-[#09090b] shadow-2xl overflow-hidden items-center justify-center text-white/50">
         No active conversations.
       </div>
     )
   }
 
   return (
-    <div className="flex h-[calc(100vh-140px)] rounded-xl border border-white/10 bg-[#05080f] shadow-2xl overflow-hidden animate-in fade-in duration-500">
+    <div className="flex h-[calc(100vh-140px)] rounded-xl border border-white/10 bg-[#09090b] shadow-2xl overflow-hidden animate-in fade-in duration-500">
       
       {/* Channels List (Left Pane) */}
       <div className="w-1/3 max-w-[320px] border-r border-white/10 flex flex-col bg-[#020408]">
@@ -86,7 +86,7 @@ export default function Inbox() {
                 <span className="text-sm text-white/30">{c.time}</span>
               </div>
               <div className="flex justify-between items-center mt-1">
-                <span className={`text-sm line-clamp-1 flex-1 pr-2 ${c.unread ? 'text-white/80' : 'text-white/40'}`}>
+                <span className={`text-sm line-clamp-1 flex-1 pr-2 ${c.unread ? 'text-neutral-300' : 'text-white/40'}`}>
                   {c.messages[c.messages.length - 1].text}
                 </span>
                 <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
@@ -177,7 +177,7 @@ export default function Inbox() {
               <div className={`max-w-[75%] p-3 text-base shadow-md ${
                 m.sender === 'agent' 
                   ? 'bg-blue text-white rounded-2xl rounded-tr-sm' 
-                  : 'bg-white/10 text-white/90 border border-white/5 rounded-2xl rounded-tl-sm'
+                  : 'bg-white/10 text-neutral-200 border border-white/5 rounded-2xl rounded-tl-sm'
               }`}>
                 {m.text}
               </div>
@@ -191,7 +191,7 @@ export default function Inbox() {
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               placeholder="Type a reply or use AI Copilot..."
-              className="flex-1 resize-none h-[60px] rounded-lg border border-white/10 bg-[#05080f] p-3 text-base text-white placeholder:text-white/30 focus:border-blue focus:ring-1 focus:ring-blue outline-none transition-all"
+              className="flex-1 resize-none h-[60px] rounded-lg border border-white/10 bg-[#09090b] p-3 text-base text-white placeholder:text-white/30 focus:border-blue focus:ring-1 focus:ring-blue outline-none transition-all"
             />
             <button 
               onClick={handleSend}
@@ -233,16 +233,16 @@ export default function Inbox() {
           {dbResults && (
             <div className="w-full animate-in slide-in-from-bottom-4 duration-300">
                <p className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-2">Live Database Context</p>
-               <div className="bg-black/50 border border-white/5 p-3 rounded-lg text-[11px] font-mono leading-relaxed text-white/70 mb-4 overflow-x-auto">
+               <div className="bg-black/50 border border-white/5 p-3 rounded-lg text-[11px] font-mono leading-relaxed text-neutral-400 mb-4 overflow-x-auto">
                  <span className="text-purple-400">Query Executed:</span><br/>
                  <span className="text-blue-300">{dbResults.query}</span><br/><br/>
                  <span className="text-forest">Result:</span><br/>
-                 <span className="text-white/90">{dbResults.result}</span>
+                 <span className="text-neutral-200">{dbResults.result}</span>
                </div>
                
                <div className="bg-blue/5 border border-blue/20 p-3 rounded-lg">
                  <p className="text-sm text-blue mb-1 font-semibold">Suggested Action</p>
-                 <p className="text-sm text-white/70">The drafted reply has been placed in your text box. Review it and click Send to confirm.</p>
+                 <p className="text-sm text-neutral-400">The drafted reply has been placed in your text box. Review it and click Send to confirm.</p>
                </div>
             </div>
           )}

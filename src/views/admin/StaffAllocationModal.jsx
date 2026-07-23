@@ -130,7 +130,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
         </div>
 
         {/* ⚡ 1-Click Inter-Staff Stock Transfer Station */}
-        <form onSubmit={handleExecute1ClickTransfer} className="bg-[#05080f] border border-amber/40 p-4 rounded-xl space-y-3 shadow-lg">
+        <form onSubmit={handleExecute1ClickTransfer} className="bg-[#09090b] border border-amber/40 p-4 rounded-xl space-y-3 shadow-lg">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-amber flex items-center gap-1.5">
               <span>⚡</span> 1-Click Inter-Staff Stock Transfer Engine
@@ -266,7 +266,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
         </div>
 
         {/* Add New Staff Allocation Form */}
-        <form onSubmit={handleAddAllocation} className="bg-[#05080f] border border-white/10 p-4 rounded-xl space-y-3">
+        <form onSubmit={handleAddAllocation} className="bg-[#09090b] border border-white/10 p-4 rounded-xl space-y-3">
           <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Assign Stock to New Staff Member / Location</h4>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-sm font-mono">
             <div>
@@ -329,7 +329,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-white/70 hover:bg-white/10"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-neutral-400 hover:bg-white/10"
           >
             Cancel
           </button>

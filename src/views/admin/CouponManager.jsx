@@ -62,16 +62,16 @@ export default function CouponManager() {
     <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 font-sans text-white">
       
       {/* Header Banner */}
-      <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Promotions & Social Engagement Engine
             </span>
-            <span className="text-sm text-white/80 font-bold">Voucher Creation & Secret Hunt Drops</span>
+            <span className="text-sm text-neutral-300 font-bold">Voucher Creation & Secret Hunt Drops</span>
           </div>
           <h1 className="font-sans text-2xl font-black text-white">Coupons & Voucher Hunt Manager</h1>
-          <p className="text-sm text-white/80 font-medium mt-1 max-w-2xl">
+          <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
             Create discount codes, set min spend rules, and deploy secret "Voucher Hunt" drops for your social media audience to discover and claim!
           </p>
         </div>
@@ -86,35 +86,35 @@ export default function CouponManager() {
 
       {/* Analytics KPI Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-[#0E121E] border border-white/20 p-5 rounded-2xl shadow-md">
+        <div className="bg-[#18181b] border border-white/20 p-5 rounded-2xl shadow-md">
           <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Active Coupons</p>
           <p className="text-3xl font-black text-white mt-1">{activeCount} Coupons</p>
-          <p className="text-sm text-white/80 font-medium mt-1">Ready for storefront & checkout redemption</p>
+          <p className="text-sm text-neutral-300 font-medium mt-1">Ready for storefront & checkout redemption</p>
         </div>
 
-        <div className="bg-[#0E121E] border border-white/20 p-5 rounded-2xl shadow-md">
+        <div className="bg-[#18181b] border border-white/20 p-5 rounded-2xl shadow-md">
           <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Secret Voucher Hunts</p>
           <p className="text-3xl font-black text-blue mt-1">{huntCount} Active Drops</p>
-          <p className="text-sm text-white/80 font-medium mt-1">Interactive clues for FB/IG/TikTok followers</p>
+          <p className="text-sm text-neutral-300 font-medium mt-1">Interactive clues for FB/IG/TikTok followers</p>
         </div>
 
-        <div className="bg-[#0E121E] border border-white/20 p-5 rounded-2xl shadow-md">
+        <div className="bg-[#18181b] border border-white/20 p-5 rounded-2xl shadow-md">
           <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Total Redemptions</p>
           <p className="text-3xl font-black text-gold mt-1">{totalRedemptions} Used</p>
-          <p className="text-sm text-white/80 font-medium mt-1">Successful customer checkouts applied</p>
+          <p className="text-sm text-neutral-300 font-medium mt-1">Successful customer checkouts applied</p>
         </div>
       </div>
 
       {/* Coupons Table */}
-      <div className="bg-[#0E121E] border border-white/20 rounded-2xl overflow-hidden shadow-xl">
-        <div className="p-5 border-b border-white/15 flex items-center justify-between bg-white/10">
+      <div className="bg-[#18181b] border border-white/20 rounded-2xl overflow-hidden shadow-xl">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-white/10">
           <h2 className="font-sans font-black text-xl text-white">All Promotional Vouchers & Hunts</h2>
           <span className="text-sm font-mono font-bold text-gold">{coupons.length} Total Coupons</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm font-sans">
-            <thead className="bg-[#161B29] text-gold uppercase tracking-wider text-sm font-extrabold border-b border-white/15">
+            <thead className="bg-[#27272a] text-gold uppercase tracking-wider text-sm font-extrabold border-b border-white/10">
               <tr>
                 <th className="p-4">Code / Campaign</th>
                 <th className="p-4">Type & Value</th>
@@ -137,7 +137,7 @@ export default function CouponManager() {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-white/80 font-medium mt-1">{c.description}</p>
+                    <p className="text-sm text-neutral-300 font-medium mt-1">{c.description}</p>
                     {c.isHunt && c.clue && (
                       <p className="text-[10px] text-amber/80 italic mt-1 font-sans">"{c.clue}"</p>
                     )}
@@ -149,7 +149,7 @@ export default function CouponManager() {
                     </span>
                   </td>
 
-                  <td className="p-4 text-white/80">
+                  <td className="p-4 text-neutral-300">
                     {c.minSpend > 0 ? `₱${c.minSpend.toLocaleString()}` : 'No Min'}
                   </td>
 
@@ -239,7 +239,7 @@ export default function CouponManager() {
                     value={code}
                     onChange={(e) => setCode(e.target.value.toUpperCase())}
                     placeholder="e.g. MILAN20 or HUNT500"
-                    className="w-full rounded-xl border border-white/15 bg-[#05080f] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-amber outline-none min-h-[44px]"
+                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-amber outline-none min-h-[44px]"
                   />
                 </div>
 
@@ -248,7 +248,7 @@ export default function CouponManager() {
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value)}
-                    className="w-full rounded-xl border border-white/15 bg-[#05080f] px-3.5 py-2.5 text-white outline-none min-h-[44px]"
+                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white outline-none min-h-[44px]"
                   >
                     <option value="percentage">Percentage OFF (%)</option>
                     <option value="fixed">Fixed Amount OFF (₱)</option>
@@ -263,7 +263,7 @@ export default function CouponManager() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="e.g. 10% OFF authentic Italy chocolates & skincare"
-                  className="w-full rounded-xl border border-white/15 bg-[#05080f] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-amber outline-none min-h-[44px]"
+                  className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-amber outline-none min-h-[44px]"
                 />
               </div>
 
@@ -278,7 +278,7 @@ export default function CouponManager() {
                     min={1}
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    className="w-full rounded-xl border border-white/15 bg-[#05080f] px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
+                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
                   />
                 </div>
 
@@ -289,7 +289,7 @@ export default function CouponManager() {
                     min={0}
                     value={minSpend}
                     onChange={(e) => setMinSpend(e.target.value)}
-                    className="w-full rounded-xl border border-white/15 bg-[#05080f] px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
+                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
                   />
                 </div>
 
@@ -300,7 +300,7 @@ export default function CouponManager() {
                     min={1}
                     value={maxUses}
                     onChange={(e) => setMaxUses(e.target.value)}
-                    className="w-full rounded-xl border border-white/15 bg-[#05080f] px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
+                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
                   />
                 </div>
               </div>
@@ -328,7 +328,7 @@ export default function CouponManager() {
                       value={clue}
                       onChange={(e) => setClue(e.target.value)}
                       placeholder="e.g. Clue: What Milan airport code equals 500 pesos off? Code = HUNT500"
-                      className="w-full rounded-xl border border-white/15 bg-[#05080f] p-2.5 text-white font-sans text-sm focus:border-forest outline-none"
+                      className="w-full rounded-xl border border-white/10 bg-[#09090b] p-2.5 text-white font-sans text-sm focus:border-forest outline-none"
                     />
                   </div>
                 )}
@@ -338,7 +338,7 @@ export default function CouponManager() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 rounded-xl border border-white/15 py-3 font-bold text-white/60 hover:bg-white/5 transition-all"
+                  className="flex-1 rounded-xl border border-white/10 py-3 font-bold text-white/60 hover:bg-white/5 transition-all"
                 >
                   Cancel
                 </button>

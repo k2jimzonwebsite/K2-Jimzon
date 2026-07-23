@@ -181,7 +181,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
                       onMouseEnter={() => setSelectedIndex(idx)}
                       className={
                         'flex w-full items-center justify-between rounded-lg px-4 py-3 text-left transition-colors ' +
-                        (isSelected ? 'bg-blue/20 text-white' : 'text-white/70 hover:bg-white/5')
+                        (isSelected ? 'bg-blue/20 text-white' : 'text-neutral-400 hover:bg-white/5')
                       }
                     >
                       <div>
@@ -198,8 +198,8 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
             </div>
             <div className="border-t border-white/10 bg-white/5 px-4 py-2 text-sm text-white/40 flex items-center justify-between">
               <div className="flex gap-4">
-                <span><kbd className="font-sans font-semibold text-white/70">↑↓</kbd> to navigate</span>
-                <span><kbd className="font-sans font-semibold text-white/70">Enter</kbd> to select</span>
+                <span><kbd className="font-sans font-semibold text-neutral-400">↑↓</kbd> to navigate</span>
+                <span><kbd className="font-sans font-semibold text-neutral-400">Enter</kbd> to select</span>
               </div>
               <div>K2 Jimzon BOS</div>
             </div>

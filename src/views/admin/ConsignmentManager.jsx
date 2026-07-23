@@ -239,7 +239,7 @@ export default function ConsignmentManager() {
     <div className="p-6 max-w-7xl mx-auto text-white space-y-6 animate-in fade-in duration-300 font-sans">
       
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0E121E] p-6 rounded-2xl border border-white/20 shadow-2xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#18181b] p-6 rounded-2xl border border-white/20 shadow-2xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
@@ -248,7 +248,7 @@ export default function ConsignmentManager() {
             <span className="text-sm font-mono text-gold font-bold">{consignment.manifest_code}</span>
           </div>
           <h1 className="font-sans text-2xl font-black text-white">{consignment.flight_number}</h1>
-          <p className="text-sm text-white/80 font-bold mt-1">
+          <p className="text-sm text-neutral-300 font-bold mt-1">
             Packed in Milan: <span className="text-white font-black font-mono">{consignment.packed_at}</span> · Status:{' '}
             <span className="font-black text-blue">{consignment.status}</span>
           </p>
@@ -316,7 +316,7 @@ export default function ConsignmentManager() {
 
       {/* Live Manifest Item Grid */}
       <div className="bg-[#0A101D] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
-        <div className="p-4 border-b border-white/10 bg-[#05080f] flex justify-between items-center">
+        <div className="p-4 border-b border-white/10 bg-[#09090b] flex justify-between items-center">
           <h3 className="font-serif font-semibold text-white text-lg">Box Inventory Manifest (Milan $\rightarrow$ Manila)</h3>
           <span className="text-sm font-mono text-white/50">{consignment.items.length} SKUs Linked</span>
         </div>
@@ -338,7 +338,7 @@ export default function ConsignmentManager() {
               {consignment.items.map(item => (
                 <tr key={item.sku} className="hover:bg-white/5 transition-colors">
                   <td className="py-3 px-4 font-mono font-bold text-white">{item.sku}</td>
-                  <td className="py-3 px-4 font-medium text-white/90">{item.name}</td>
+                  <td className="py-3 px-4 font-medium text-neutral-200">{item.name}</td>
                   <td className="py-3 px-4 font-mono text-white/60">{item.batch_code}</td>
                   <td className="py-3 px-4 font-mono text-white/60">{item.best_before_date}</td>
                   <td className="py-3 px-4 text-center font-mono font-bold text-white">{item.italy_packed_qty}</td>
@@ -346,7 +346,7 @@ export default function ConsignmentManager() {
                   <td className="py-3 px-4 text-right">
                     <button
                       onClick={() => handleScanItem(item.sku)}
-                      className="bg-white/10 hover:bg-forest hover:text-white text-white/80 px-3 py-1 rounded text-sm font-bold transition-all"
+                      className="bg-white/10 hover:bg-forest hover:text-white text-neutral-300 px-3 py-1 rounded text-sm font-bold transition-all"
                     >
                       +1 Scan
                     </button>
@@ -415,7 +415,7 @@ export default function ConsignmentManager() {
                   value={selectedSku}
                   onChange={(e) => setSelectedSku(e.target.value)}
                   required
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white"
+                  className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white"
                 >
                   <option value="">Select a product SKU...</option>
                   {(products || []).map(p => (
@@ -431,7 +431,7 @@ export default function ConsignmentManager() {
                   min="1"
                   value={packedQty}
                   onChange={(e) => setPackedQty(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
+                  className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
                 />
               </div>
 
@@ -441,7 +441,7 @@ export default function ConsignmentManager() {
                   type="text"
                   value={batchCode}
                   onChange={(e) => setBatchCode(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
+                  className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
                 />
               </div>
 
@@ -451,7 +451,7 @@ export default function ConsignmentManager() {
                   type="date"
                   value={bestBeforeDate}
                   onChange={(e) => setBestBeforeDate(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
+                  className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
                 />
               </div>
 

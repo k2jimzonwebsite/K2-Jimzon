@@ -92,7 +92,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#05080f]/95 backdrop-blur-sm animate-in fade-in p-4 md:p-8">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#09090b]/95 backdrop-blur-sm animate-in fade-in p-4 md:p-8">
       <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col bg-[#0A101D] border border-white/10 rounded-2xl overflow-hidden shadow-2xl relative">
         
         {/* Header */}
@@ -136,7 +136,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                     <div id="customer-qr-reader" className="absolute inset-0 object-cover w-full h-full"></div>
                     <button 
                       onClick={stopScanner}
-                      className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white/80 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-black/80 hover:text-white z-10"
+                      className="absolute top-4 right-4 bg-black/60 backdrop-blur text-neutral-300 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-black/80 hover:text-white z-10"
                     >
                       Stop Scanning
                     </button>
@@ -152,7 +152,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                       className={`w-full py-4 rounded-xl font-bold text-xl transition-all flex items-center justify-center gap-2 ${
                         triggerActive 
                           ? 'bg-blue text-white shadow-[0_0_20px_rgba(37,99,235,0.5)]' 
-                          : 'bg-white/10 text-white/80 hover:bg-white/20'
+                          : 'bg-white/10 text-neutral-300 hover:bg-white/20'
                       }`}
                     >
                       <GridIcon size={24} />
@@ -182,7 +182,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
           </div>
 
           {/* Right Side: Order Info */}
-          <div className="w-full md:w-80 bg-[#05080f] flex flex-col shrink-0">
+          <div className="w-full md:w-80 bg-[#09090b] flex flex-col shrink-0">
             <div className="p-6 flex-1 overflow-y-auto">
               <h3 className="text-base font-bold text-white/50 uppercase tracking-widest mb-4">Items to Pack</h3>
               <div className="space-y-4">
@@ -195,7 +195,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                         {isItemComplete ? <CheckIcon size={18} /> : <BoxIcon size={18} />}
                       </div>
                       <div>
-                        <p className={`font-medium text-base line-clamp-2 ${isItemComplete ? 'text-forest-light' : 'text-white/90'}`}>
+                        <p className={`font-medium text-base line-clamp-2 ${isItemComplete ? 'text-forest-light' : 'text-neutral-200'}`}>
                           {item.product?.title || item.sku}
                         </p>
                         <p className="text-sm font-mono text-white/40 mt-1">

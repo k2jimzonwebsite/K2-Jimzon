@@ -188,7 +188,7 @@ export default function StaffPermissionManager() {
     <div className="space-y-6 text-white font-sans">
       
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#0E121E] border border-white/20 shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#18181b] border border-white/20 shadow-xl">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="font-sans text-2xl font-black text-white">Staff Roles & Permissions Manager</h1>
@@ -196,7 +196,7 @@ export default function StaffPermissionManager() {
               👑 Super Admin Master Mode
             </span>
           </div>
-          <p className="text-sm text-white/80 font-medium mt-1">
+          <p className="text-sm text-neutral-300 font-medium mt-1">
             Edit staff names, login emails, station 4-digit PINs, passwords, assigned hubs, and granular module permissions.
           </p>
         </div>
@@ -218,7 +218,7 @@ export default function StaffPermissionManager() {
       {/* Staff Cards Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {staffList.map((s) => (
-          <div key={s.id} className="bg-[#0E121E] border border-white/20 rounded-2xl p-5 space-y-4 shadow-xl flex flex-col justify-between hover:border-gold/50 transition-all">
+          <div key={s.id} className="bg-[#18181b] border border-white/20 rounded-2xl p-5 space-y-4 shadow-xl flex flex-col justify-between hover:border-gold/50 transition-all">
             
             {/* Profile Info */}
             <div>
@@ -236,9 +236,9 @@ export default function StaffPermissionManager() {
                 </button>
               </div>
 
-              <div className="flex items-center justify-between mt-3 bg-[#161B29] p-2.5 rounded-xl border border-white/15">
+              <div className="flex items-center justify-between mt-3 bg-[#27272a] p-2.5 rounded-xl border border-white/10">
                 <div>
-                  <p className="text-[11px] font-bold text-white/80 uppercase">Assigned Hub</p>
+                  <p className="text-[11px] font-bold text-neutral-300 uppercase">Assigned Hub</p>
                   <p className="text-sm font-black text-white">{s.hub}</p>
                 </div>
                 <span className="text-sm font-mono bg-gold text-navy border border-gold px-2.5 py-0.5 rounded-md font-black">
@@ -249,8 +249,8 @@ export default function StaffPermissionManager() {
               {/* Station 4-Digit PIN & Password Status */}
               <div className="mt-3 p-3 rounded-xl bg-white/10 border border-white/20 flex items-center justify-between">
                 <div>
-                  <span className="text-sm font-extrabold text-white/90 block">Station PIN / Password:</span>
-                  <span className="text-[10px] text-white/70 font-mono">Password: {s.password || '••••••••'}</span>
+                  <span className="text-sm font-extrabold text-neutral-200 block">Station PIN / Password:</span>
+                  <span className="text-[10px] text-neutral-400 font-mono">Password: {s.password || '••••••••'}</span>
                 </div>
                 <input
                   type="text"
@@ -264,7 +264,7 @@ export default function StaffPermissionManager() {
             </div>
 
             {/* Permissions Toggles */}
-            <div className="border-t border-white/15 pt-4 space-y-2.5">
+            <div className="border-t border-white/10 pt-4 space-y-2.5">
               <label className="block text-sm font-extrabold uppercase text-gold">
                 Access Permissions:
               </label>
@@ -277,17 +277,19 @@ export default function StaffPermissionManager() {
                     onClick={() => handleTogglePermission(s.id, p.key)}
                     className={`p-3 rounded-xl border flex items-center justify-between transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-blue/20 border-blue text-white font-bold'
-                        : 'bg-white/5 border-white/10 text-white/40'
+                        ? 'bg-[#27272a] border-white/20 text-white font-bold hover:bg-white/10'
+                        : 'bg-[#18181b] border-white/5 text-neutral-500 hover:bg-white/5'
                     }`}
                   >
                     <div>
                       <p className="text-sm font-bold font-sans">{p.label}</p>
-                      <p className="text-[10px] text-white/70 font-sans">{p.desc}</p>
+                      <p className="text-[10px] text-neutral-400 font-sans">{p.desc}</p>
                     </div>
 
-                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
-                      isActive ? 'bg-blue text-white' : 'bg-white/10 text-white/40'
+                    <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded border ${
+                      isActive 
+                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50' 
+                        : 'bg-white/5 text-neutral-500 border-white/10'
                     }`}>
                       {isActive ? 'ENABLED' : 'LOCKED'}
                     </span>
@@ -303,13 +305,13 @@ export default function StaffPermissionManager() {
       {/* EDIT STAFF PROFILE & CREDENTIALS MODAL */}
       {editingStaff && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in">
-          <form onSubmit={handleSaveEditedStaff} className="w-full max-w-lg bg-[#0E121E] border border-white/20 rounded-2xl p-6 shadow-2xl space-y-4 text-white">
-            <div className="flex items-center justify-between border-b border-white/15 pb-3">
+          <form onSubmit={handleSaveEditedStaff} className="w-full max-w-lg bg-[#18181b] border border-white/20 rounded-2xl p-6 shadow-2xl space-y-4 text-white">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
                 <h2 className="font-sans font-black text-xl text-white">Edit Staff Credentials & Profile</h2>
                 <p className="text-sm text-gold font-mono font-bold">Update Name, Email, Station PIN, Password & Hub</p>
               </div>
-              <button type="button" onClick={() => setEditingStaff(null)} className="text-white/80 hover:text-white font-black text-xl">✕</button>
+              <button type="button" onClick={() => setEditingStaff(null)} className="text-neutral-300 hover:text-white font-black text-xl">✕</button>
             </div>
 
             <div>
@@ -319,7 +321,7 @@ export default function StaffPermissionManager() {
                 required
                 value={editingStaff.name}
                 onChange={e => setEditingStaff({ ...editingStaff, name: e.target.value })}
-                className="w-full rounded-xl bg-[#161B29] border border-white/20 px-3.5 py-2.5 text-base text-white font-bold focus:border-gold outline-none"
+                className="w-full rounded-xl bg-[#27272a] border border-white/20 px-3.5 py-2.5 text-base text-white font-bold focus:border-gold outline-none"
               />
             </div>
 
@@ -331,7 +333,7 @@ export default function StaffPermissionManager() {
                   required
                   value={editingStaff.email}
                   onChange={e => setEditingStaff({ ...editingStaff, email: e.target.value })}
-                  className="w-full rounded-xl bg-[#161B29] border border-white/20 px-3.5 py-2.5 text-base text-white font-mono font-bold focus:border-gold outline-none"
+                  className="w-full rounded-xl bg-[#27272a] border border-white/20 px-3.5 py-2.5 text-base text-white font-mono font-bold focus:border-gold outline-none"
                 />
               </div>
 
@@ -342,7 +344,7 @@ export default function StaffPermissionManager() {
                   required
                   value={editingStaff.password || 'password123'}
                   onChange={e => setEditingStaff({ ...editingStaff, password: e.target.value })}
-                  className="w-full rounded-xl bg-[#161B29] border border-white/20 px-3.5 py-2.5 text-base text-white font-mono font-bold focus:border-gold outline-none"
+                  className="w-full rounded-xl bg-[#27272a] border border-white/20 px-3.5 py-2.5 text-base text-white font-mono font-bold focus:border-gold outline-none"
                 />
               </div>
             </div>
@@ -365,7 +367,7 @@ export default function StaffPermissionManager() {
                 <select
                   value={editingStaff.hub}
                   onChange={e => setEditingStaff({ ...editingStaff, hub: e.target.value })}
-                  className="w-full rounded-xl bg-[#161B29] border border-white/20 px-3 py-3 text-sm text-white font-bold outline-none"
+                  className="w-full rounded-xl bg-[#27272a] border border-white/20 px-3 py-3 text-sm text-white font-bold outline-none"
                 >
                   <option value="Makati Fulfillment Hub">Makati Hub</option>
                   <option value="QC Distribution Center">QC Hub</option>
@@ -381,11 +383,11 @@ export default function StaffPermissionManager() {
                 type="text"
                 value={editingStaff.role}
                 onChange={e => setEditingStaff({ ...editingStaff, role: e.target.value })}
-                className="w-full rounded-xl bg-[#161B29] border border-white/20 px-3.5 py-2.5 text-base text-white font-semibold focus:border-gold outline-none"
+                className="w-full rounded-xl bg-[#27272a] border border-white/20 px-3.5 py-2.5 text-base text-white font-semibold focus:border-gold outline-none"
               />
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-white/15 gap-3">
+            <div className="flex items-center justify-between pt-3 border-t border-white/10 gap-3">
               <button
                 type="button"
                 onClick={() => handleDeleteStaff(editingStaff.id)}
@@ -408,13 +410,13 @@ export default function StaffPermissionManager() {
       {/* ADD NEW STAFF MEMBER MODAL */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in">
-          <form onSubmit={handleAddStaff} className="w-full max-w-lg bg-[#0E121E] border border-white/20 rounded-2xl p-6 shadow-2xl space-y-4 text-white">
-            <div className="flex items-center justify-between border-b border-white/15 pb-3">
+          <form onSubmit={handleAddStaff} className="w-full max-w-lg bg-[#18181b] border border-white/20 rounded-2xl p-6 shadow-2xl space-y-4 text-white">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
                 <h2 className="font-sans font-black text-xl text-white">Add New Staff Member</h2>
                 <p className="text-sm text-gold font-mono font-bold">Create login email, station PIN, password & permissions</p>
               </div>
-              <button type="button" onClick={() => setShowAddModal(false)} className="text-white/80 hover:text-white font-black text-xl">✕</button>
+              <button type="button" onClick={() => setShowAddModal(false)} className="text-neutral-300 hover:text-white font-black text-xl">✕</button>
             </div>
 
             <div>
@@ -425,7 +427,7 @@ export default function StaffPermissionManager() {
                 value={newStaff.name}
                 onChange={e => setNewStaff({ ...newStaff, name: e.target.value })}
                 placeholder="e.g. Sarah Conners"
-                className="w-full rounded-xl bg-[#161B29] border border-white/20 px-3.5 py-2.5 text-base text-white font-bold focus:border-gold outline-none"
+                className="w-full rounded-xl bg-[#27272a] border border-white/20 px-3.5 py-2.5 text-base text-white font-bold focus:border-gold outline-none"
               />
             </div>
 
@@ -438,7 +440,7 @@ export default function StaffPermissionManager() {
                   value={newStaff.email}
                   onChange={e => setNewStaff({ ...newStaff, email: e.target.value })}
                   placeholder="sarah@k2jimzon.com"
-                  className="w-full rounded-xl bg-[#161B29] border border-white/20 px-3.5 py-2.5 text-base text-white font-mono font-bold focus:border-gold outline-none"
+                  className="w-full rounded-xl bg-[#27272a] border border-white/20 px-3.5 py-2.5 text-base text-white font-mono font-bold focus:border-gold outline-none"
                 />
               </div>
 
@@ -450,7 +452,7 @@ export default function StaffPermissionManager() {
                   value={newStaff.password}
                   onChange={e => setNewStaff({ ...newStaff, password: e.target.value })}
                   placeholder="password123"
-                  className="w-full rounded-xl bg-[#161B29] border border-white/20 px-3.5 py-2.5 text-base text-white font-mono font-bold focus:border-gold outline-none"
+                  className="w-full rounded-xl bg-[#27272a] border border-white/20 px-3.5 py-2.5 text-base text-white font-mono font-bold focus:border-gold outline-none"
                 />
               </div>
             </div>
@@ -472,7 +474,7 @@ export default function StaffPermissionManager() {
                 <select
                   value={newStaff.hub}
                   onChange={e => setNewStaff({ ...newStaff, hub: e.target.value })}
-                  className="w-full rounded-xl bg-[#161B29] border border-white/20 px-3 py-3 text-sm text-white font-bold outline-none"
+                  className="w-full rounded-xl bg-[#27272a] border border-white/20 px-3 py-3 text-sm text-white font-bold outline-none"
                 >
                   <option value="Makati Fulfillment Hub">Makati Hub</option>
                   <option value="QC Distribution Center">QC Hub</option>

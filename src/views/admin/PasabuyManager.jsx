@@ -142,7 +142,7 @@ export default function PasabuyManager() {
     <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       
       {/* Header Banner */}
-      <div className="bg-[#05080f] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-[#09090b] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-amber/20 text-amber px-2 py-0.5 rounded border border-amber/30">
@@ -195,7 +195,7 @@ export default function PasabuyManager() {
                 key={req.id}
                 onClick={() => setSelectedReq(req)}
                 className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                  isSelected ? 'bg-[#0A101D] border-amber/50 shadow-xl' : 'bg-[#05080f] border-white/10 hover:border-white/20'
+                  isSelected ? 'bg-[#0A101D] border-amber/50 shadow-xl' : 'bg-[#09090b] border-white/10 hover:border-white/20'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -228,7 +228,7 @@ export default function PasabuyManager() {
         {/* Right Column: Interactive Quotation & Landed Cost Calculator */}
         <div className="lg:col-span-2 space-y-6">
           {selectedReq ? (
-            <div className="bg-[#05080f] border border-white/10 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-6 shadow-xl space-y-6">
               
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
                 <div>
@@ -260,7 +260,7 @@ export default function PasabuyManager() {
 
               {/* Customer Notes Card */}
               {selectedReq.notes && (
-                <div className="bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white/80">
+                <div className="bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-neutral-300">
                   <p className="text-[10px] font-mono uppercase text-white/40 font-bold mb-1">Customer Special Instructions:</p>
                   <p className="italic">"{selectedReq.notes}"</p>
                   {selectedReq.reference_url && (
@@ -336,7 +336,7 @@ export default function PasabuyManager() {
                     <span className="text-white">{peso(customsTaxPhp)}</span>
                   </div>
                   <div className="flex justify-between font-bold border-t border-white/10 pt-2 text-base">
-                    <span className="text-white/80">Total Manila Landed Cost:</span>
+                    <span className="text-neutral-300">Total Manila Landed Cost:</span>
                     <span className="text-amber">{peso(totalLandedCostPhp)}</span>
                   </div>
                 </div>
@@ -395,7 +395,7 @@ export default function PasabuyManager() {
 
             </div>
           ) : (
-            <div className="bg-[#05080f] border border-white/10 rounded-2xl p-12 text-center text-white/40 font-mono text-sm">
+            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-12 text-center text-white/40 font-mono text-sm">
               👈 Select a Pasabuy request from the left panel to open the Landed Cost Quotation Engine.
             </div>
           )}

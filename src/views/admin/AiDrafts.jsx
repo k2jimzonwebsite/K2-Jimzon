@@ -224,7 +224,7 @@ function DraftCard({ draft, onApprove }) {
         {/* Raw AI Output context */}
         <div className="w-full bg-navy p-5 text-white md:w-[320px]">
           <p className="mb-3 text-sm font-bold uppercase tracking-widest text-white/50">Raw AI Sourcing Output</p>
-          <pre className="overflow-x-auto whitespace-pre-wrap text-sm font-mono leading-relaxed text-white/80">
+          <pre className="overflow-x-auto whitespace-pre-wrap text-sm font-mono leading-relaxed text-neutral-300">
             {draft.rawJson}
           </pre>
         </div>

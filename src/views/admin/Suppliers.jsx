@@ -77,7 +77,7 @@ export default function Suppliers() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Scraper Box */}
-        <div className="bg-[#05080f] border border-blue/30 p-5 rounded-2xl shadow-xl space-y-4 font-mono text-sm">
+        <div className="bg-[#09090b] border border-blue/30 p-5 rounded-2xl shadow-xl space-y-4 font-mono text-sm">
           <div className="flex items-center gap-2 border-b border-white/10 pb-3">
             <span className="text-lg">🕸️</span>
             <div>
@@ -92,7 +92,7 @@ export default function Suppliers() {
               value={scrapeUrl}
               onChange={(e) => setScrapeUrl(e.target.value)}
               placeholder="Paste URL (e.g. https://www.kikocosmetics.com/it-it/...)"
-              className="flex-1 rounded-xl border border-white/15 bg-[#0A101D] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-blue outline-none min-h-[44px]"
+              className="flex-1 rounded-xl border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-blue outline-none min-h-[44px]"
             />
             <button
               type="submit"
@@ -116,7 +116,7 @@ export default function Suppliers() {
         </div>
 
         {/* AI Data Analysis Agent Box */}
-        <div className="bg-[#05080f] border border-forest/30 p-5 rounded-2xl shadow-xl space-y-4 font-mono text-sm">
+        <div className="bg-[#09090b] border border-forest/30 p-5 rounded-2xl shadow-xl space-y-4 font-mono text-sm">
           <div className="flex items-center gap-2 border-b border-white/10 pb-3">
             <span className="text-lg">📊</span>
             <div>
@@ -131,7 +131,7 @@ export default function Suppliers() {
               value={dataQuery}
               onChange={(e) => setDataQuery(e.target.value)}
               placeholder="Ask: Which items have low stock? or What is profit today?"
-              className="flex-1 rounded-xl border border-white/15 bg-[#0A101D] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-forest outline-none min-h-[44px]"
+              className="flex-1 rounded-xl border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-white placeholder:text-white/30 focus:border-forest outline-none min-h-[44px]"
             />
             <button
               type="submit"
@@ -143,7 +143,7 @@ export default function Suppliers() {
 
           {dataAnswer && (
             <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 text-white space-y-2 animate-in fade-in">
-              <p className="font-bold text-white/90">{dataAnswer.answer}</p>
+              <p className="font-bold text-neutral-200">{dataAnswer.answer}</p>
               <p className="text-[10px] text-white/40 font-mono bg-black/40 p-2 rounded border border-white/5">{dataAnswer.sql}</p>
             </div>
           )}
@@ -165,7 +165,7 @@ export default function Suppliers() {
           <div className="text-white/50">No suppliers found.</div>
         ) : (
           suppliers.map(sup => (
-            <div key={sup.id} className="rounded-xl border border-white/10 bg-[#05080f] overflow-hidden flex flex-col">
+            <div key={sup.id} className="rounded-xl border border-white/10 bg-[#09090b] overflow-hidden flex flex-col">
               <div className="p-5 border-b border-white/10 bg-white/5">
                 <h3 className="font-semibold text-white text-xl">{sup.name}</h3>
                 <p className="text-base text-white/50">{sup.contact_email}</p>
@@ -174,7 +174,7 @@ export default function Suppliers() {
               <div className="p-5 grid grid-cols-2 gap-4 flex-1">
                 <div>
                   <p className="text-sm font-mono uppercase tracking-widest text-white/40">Lead Time</p>
-                  <p className="mt-1 text-xl font-bold text-white/90">{sup.lead_time_days} days</p>
+                  <p className="mt-1 text-xl font-bold text-neutral-200">{sup.lead_time_days} days</p>
                 </div>
                 <div>
                   <p className="text-sm font-mono uppercase tracking-widest text-white/40">Perf Score</p>
@@ -191,7 +191,7 @@ export default function Suppliers() {
               </div>
               
               <div className="p-3 border-t border-white/10 bg-white/5 grid grid-cols-2 gap-2">
-                <button className="rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 transition-colors min-h-[40px]">Edit Profile</button>
+                <button className="rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm font-medium text-neutral-400 hover:bg-white/10 transition-colors min-h-[40px]">Edit Profile</button>
                 <button className="rounded-lg border border-blue bg-blue/10 px-3 py-2 text-sm font-medium text-blue hover:bg-blue/20 transition-colors min-h-[40px]">Draft PO</button>
               </div>
             </div>

@@ -119,11 +119,11 @@ export default function Kanban() {
           <p className="text-base text-white/50">Manage Milan flight consignments, box scanning receiving (+1), supplier POs, and PH customer order fulfillment in one place.</p>
         </div>
         
-        <div className="flex bg-[#0E121E] rounded-xl p-2 border border-white/20 overflow-x-auto whitespace-nowrap hide-scrollbar items-center gap-2">
+        <div className="flex bg-[#18181b] rounded-xl p-2 border border-white/20 overflow-x-auto whitespace-nowrap hide-scrollbar items-center gap-2">
           <button 
             onClick={() => setActiveTab('consignment')}
             className={`px-4 py-2.5 text-sm font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
-              activeTab === 'consignment' ? 'bg-crimson text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'
+              activeTab === 'consignment' ? 'bg-crimson text-white shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
             <PlaneIcon size={16} /> Italy ✈ Manila Manifests (+1 Scanner)
@@ -132,7 +132,7 @@ export default function Kanban() {
           <button 
             onClick={() => setActiveTab('kanban')}
             className={`px-4 py-2.5 text-sm font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
-              activeTab === 'kanban' ? 'bg-blue text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'
+              activeTab === 'kanban' ? 'bg-blue text-white shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
             <BoxIcon size={16} /> Customer Orders (PH)
@@ -141,7 +141,7 @@ export default function Kanban() {
           <button 
             onClick={() => setActiveTab('inbound')}
             className={`px-4 py-2.5 text-sm font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
-              activeTab === 'inbound' ? 'bg-gold text-navy shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'
+              activeTab === 'inbound' ? 'bg-gold text-navy shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
             <GlobeIcon size={16} /> Purchase Orders
@@ -150,7 +150,7 @@ export default function Kanban() {
           <button 
             onClick={() => setActiveTab('outbound')}
             className={`px-4 py-2.5 text-sm font-black rounded-lg flex items-center gap-2 transition-all shrink-0 ${
-              activeTab === 'outbound' ? 'bg-blue text-white shadow-lg' : 'text-white/80 hover:text-white hover:bg-white/10'
+              activeTab === 'outbound' ? 'bg-blue text-white shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
             <SyncIcon size={16} /> AI Outbound Sourcing
@@ -216,7 +216,7 @@ export default function Kanban() {
                             <div className="space-y-1">
                               {o.items.slice(0, 3).map((item, i) => (
                                 <div key={i} className="flex justify-between text-base">
-                                  <span className="text-white/90 truncate mr-2">{item.product?.title || item.sku}</span>
+                                  <span className="text-neutral-200 truncate mr-2">{item.product?.title || item.sku}</span>
                                   <span className="text-white/40 font-mono shrink-0">x{item.quantity}</span>
                                 </div>
                               ))}

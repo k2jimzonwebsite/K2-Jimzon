@@ -87,7 +87,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
               value={pinInput}
               onChange={(e) => setPinInput(e.target.value)}
               placeholder="•••• (Default: 1111)"
-              className="w-full text-center tracking-[0.5em] font-mono text-xl rounded-xl border border-white/20 bg-[#05080f] py-3 text-white focus:border-forest outline-none min-h-[48px]"
+              className="w-full text-center tracking-[0.5em] font-mono text-xl rounded-xl border border-white/20 bg-[#09090b] py-3 text-white focus:border-forest outline-none min-h-[48px]"
               autoFocus
             />
           </div>

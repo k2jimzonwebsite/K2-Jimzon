@@ -108,19 +108,19 @@ export default function Admin() {
   const showGrid = !sheetMode && section === 'inventory'
 
   return (
-    <div className="flex min-h-[calc(100vh-40px)] bg-[#0A101D] pb-20 text-white/90 md:pb-0 font-sans selection:bg-blue/30 selection:text-white">
+    <div className="flex min-h-[calc(100vh-40px)] bg-[#0A101D] pb-20 text-neutral-200 md:pb-0 font-sans selection:bg-blue/30 selection:text-white">
       <CommandPalette isOpen={paletteOpen} setIsOpen={setPaletteOpen} setSection={setSection} />
       
       {/* Sidebar */}
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-white/15 bg-[#05080f] text-white lg:flex">
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-white/10 bg-[#09090b] text-white lg:flex">
         <div className="flex items-center justify-between px-5 py-5 border-b border-white/10">
           <div>
             <p className="font-sans text-xl font-black text-white tracking-tight">K2 Jimzon <span className="text-gold ml-1">BOS</span></p>
-            <p className="text-sm font-mono uppercase tracking-widest text-white/80 font-bold">Mission Control</p>
+            <p className="text-sm font-mono uppercase tracking-widest text-neutral-300 font-bold">Mission Control</p>
           </div>
           <button 
             onClick={() => setPaletteOpen(true)}
-            className="flex items-center justify-center rounded-lg bg-white/10 p-2 text-white/80 hover:bg-white/20 hover:text-white transition-colors border border-white/20"
+            className="flex items-center justify-center rounded-lg bg-white/10 p-2 text-neutral-300 hover:bg-white/20 hover:text-white transition-colors border border-white/20"
             title="Search (Ctrl+K)"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -140,7 +140,7 @@ export default function Admin() {
                   <button
                     key={item.id}
                     onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
-                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-base font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-base font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'}`}
                   >
                     <Ico size={17} /> {item.label}
                   </button>
@@ -159,7 +159,7 @@ export default function Admin() {
                   <button
                     key={item.id}
                     onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
-                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-base font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-base font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'}`}
                   >
                     <Ico size={17} /> {item.label}
                     {item.id === 'inventory' && <span className="ml-auto rounded-full bg-gold text-navy font-black text-sm px-2 py-0.5 shadow">{activeSkus}</span>}
@@ -179,7 +179,7 @@ export default function Admin() {
                   <button
                     key={item.id}
                     onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
-                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-base font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-base font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'}`}
                   >
                     <Ico size={17} /> {item.label}
                   </button>
@@ -191,8 +191,8 @@ export default function Admin() {
         </div>
 
         {/* Left Sidebar Operations & Cargo Box Intelligence Widget */}
-        <div className="mx-3 my-3 p-3.5 rounded-2xl bg-[#0E121E] border border-white/20 space-y-3 font-sans text-sm shadow-xl shrink-0">
-          <div className="flex items-center justify-between border-b border-white/15 pb-2">
+        <div className="mx-3 my-3 p-3.5 rounded-2xl bg-[#18181b] border border-white/20 space-y-3 font-sans text-sm shadow-xl shrink-0">
+          <div className="flex items-center justify-between border-b border-white/10 pb-2">
             <span className="text-sm font-extrabold uppercase tracking-wider text-gold flex items-center gap-1">
               <span>🇮🇹</span> Italy Box Pulse
             </span>
@@ -200,15 +200,15 @@ export default function Admin() {
           </div>
 
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between text-white/90">
+            <div className="flex justify-between text-neutral-200">
               <span>Active SKUs:</span>
               <strong className="text-white font-extrabold">{activeSkus || 0} SKUs</strong>
             </div>
-            <div className="flex justify-between text-white/90">
+            <div className="flex justify-between text-neutral-200">
               <span>Low Stock Alerts:</span>
               <strong className="text-gold font-extrabold">{lowStock || 0} Items</strong>
             </div>
-            <div className="flex justify-between text-white/90">
+            <div className="flex justify-between text-neutral-200">
               <span>Pending Orders:</span>
               <strong className="text-white font-black text-base">{pendingOrders || 0} Orders</strong>
             </div>
@@ -222,10 +222,10 @@ export default function Admin() {
           </button>
         </div>
 
-        <div className="border-t border-white/15 px-5 py-3.5 text-sm text-white/80 space-y-2 shrink-0 bg-[#05080f]">
+        <div className="border-t border-white/10 px-5 py-3.5 text-sm text-neutral-300 space-y-2 shrink-0 bg-[#09090b]">
           <button 
             onClick={() => setShowDevOpsModal(true)}
-            className="w-full flex items-center justify-between p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all border border-white/15"
+            className="w-full flex items-center justify-between p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all border border-white/10"
             title="Open DevOps & System Architecture Cockpit"
           >
             <p className="flex items-center gap-1.5 font-extrabold text-white text-sm">
@@ -245,7 +245,7 @@ export default function Admin() {
 
       <div className="min-w-0 flex-1 flex flex-col h-full overflow-hidden">
         {/* Mobile Header */}
-        <div className="flex items-center justify-between px-4 py-3 bg-[#05080f] border-b border-white/10 shrink-0 w-full lg:hidden">
+        <div className="flex items-center justify-between px-4 py-3 bg-[#09090b] border-b border-white/10 shrink-0 w-full lg:hidden">
           <div>
             <p className="font-serif text-xl font-semibold text-white">K2 Jimzon <span className="text-blue ml-1">BOS</span></p>
           </div>
@@ -267,7 +267,7 @@ export default function Admin() {
         {isMobileMenuOpen && (
           <div className="fixed inset-0 z-50 flex lg:hidden">
             <div className="fixed inset-0 bg-black/60" onClick={() => setIsMobileMenuOpen(false)} />
-            <div className="relative flex w-64 flex-col bg-[#05080f] border-r border-white/10 overflow-y-auto pt-4 pb-20">
+            <div className="relative flex w-64 flex-col bg-[#09090b] border-r border-white/10 overflow-y-auto pt-4 pb-20">
               <div className="flex items-center justify-between px-5 mb-4">
                 <p className="font-serif text-xl font-semibold text-white">Menu</p>
                 <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 text-white/50 hover:text-white">
@@ -287,7 +287,7 @@ export default function Admin() {
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-base font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-base font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-neutral-300 hover:bg-white/10 hover:text-white'}`}
                         >
                           <Ico size={18} /> {item.label}
                         </button>
@@ -305,7 +305,7 @@ export default function Admin() {
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-base font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-base font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-neutral-300 hover:bg-white/10 hover:text-white'}`}
                         >
                           <Ico size={18} /> {item.label}
                         </button>
@@ -323,7 +323,7 @@ export default function Admin() {
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-base font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-base font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-neutral-300 hover:bg-white/10 hover:text-white'}`}
                         >
                           <Ico size={18} /> {item.label}
                         </button>
@@ -336,7 +336,7 @@ export default function Admin() {
           </div>
         )}
 
-        <header className="flex flex-wrap items-center gap-4 border-b border-white/15 bg-[#0A101D] px-4 py-4 md:px-6">
+        <header className="flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#0A101D] px-4 py-4 md:px-6">
           <div className="flex-1 min-w-0">
             <h1 className="font-sans text-2xl font-black tracking-tight text-white truncate">
               {section === 'integrations' ? 'Marketplace API Keys & Vault' :
@@ -351,7 +351,7 @@ export default function Admin() {
                section === 'kanban' ? 'Italy Flight Consignments & Box Tracker' :
                'Home & Daily Operational Summary'}
             </h1>
-            <p className="text-sm font-semibold text-white/80 mt-1">
+            <p className="text-sm font-semibold text-neutral-300 mt-1">
               {section === 'integrations'
                 ? 'Manage API keys, OAuth tokens, and webhooks for Shopee, Lazada, TikTok Shop, and Meta.'
                 : section === 'globe'
@@ -393,7 +393,7 @@ export default function Admin() {
             </button>
 
             {section === 'inventory' && (
-              <div className="flex items-center gap-3 border-l border-white/15 pl-3">
+              <div className="flex items-center gap-3 border-l border-white/10 pl-3">
                 <button
                   onClick={() => setShowCsvImport(true)}
                   className="flex items-center gap-2 rounded-xl bg-blue hover:bg-blue-deep px-3.5 py-2.5 text-sm font-black text-white transition-all shadow-md"
@@ -504,9 +504,9 @@ function KpiRow({ skus, lowStock, pending }) {
     { label: 'Database Health', value: '100% OK', sub: 'PostgreSQL & WebSockets', tone: 'good' },
   ]
   return (
-    <div className="grid grid-cols-2 gap-px border-b border-white/15 bg-white/15 md:grid-cols-4 shrink-0">
+    <div className="grid grid-cols-2 gap-px border-b border-white/10 bg-white/15 md:grid-cols-4 shrink-0">
       {KPIS.map((k) => (
-        <div key={k.label} className={'px-5 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-crimson/20' : 'bg-[#0E121E]')}>
+        <div key={k.label} className={'px-5 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-crimson/20' : 'bg-[#18181b]')}>
           <p className="text-sm font-extrabold uppercase tracking-wider text-gold truncate pr-2">{k.label}</p>
           <p
             className={
@@ -516,7 +516,7 @@ function KpiRow({ skus, lowStock, pending }) {
           >
             {k.value}
           </p>
-          <p className="text-sm text-white/80 font-medium mt-1 truncate pr-2">{k.sub}</p>
+          <p className="text-sm text-neutral-300 font-medium mt-1 truncate pr-2">{k.sub}</p>
         </div>
       ))}
     </div>

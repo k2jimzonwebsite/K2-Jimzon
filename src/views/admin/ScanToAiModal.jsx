@@ -102,7 +102,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-[#05080f] animate-in slide-in-from-bottom-4 text-white">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-[#09090b] animate-in slide-in-from-bottom-4 text-white">
 
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-black/30 shrink-0">
@@ -242,7 +242,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
               ].map(([title, body], i) => (
                 <div key={i} className="flex gap-3 items-start">
                   <span className="w-5 h-5 rounded-full bg-blue/20 text-blue text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
-                  <p className="text-sm text-white/50"><span className="text-white/80 font-semibold">{title}</span> — {body}</p>
+                  <p className="text-sm text-white/50"><span className="text-neutral-300 font-semibold">{title}</span> — {body}</p>
                 </div>
               ))}
             </div>

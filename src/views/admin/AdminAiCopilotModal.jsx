@@ -104,7 +104,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
       <div className="w-full max-w-lg bg-[#0A101D] border-l border-white/10 h-full flex flex-col shadow-2xl text-white font-mono text-sm">
         
         {/* Header */}
-        <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#05080f] shrink-0">
+        <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#09090b] shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="h-8 w-8 rounded-xl bg-blue/20 border border-blue/40 flex items-center justify-center text-blue text-lg">
               🤖
@@ -129,10 +129,10 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
         </div>
 
         {/* Quick Query Pills */}
-        <div className="p-3 bg-[#05080f]/50 border-b border-white/10 flex gap-2 overflow-x-auto shrink-0 scrollbar-none">
+        <div className="p-3 bg-[#09090b]/50 border-b border-white/10 flex gap-2 overflow-x-auto shrink-0 scrollbar-none">
           <button
             onClick={() => handleSendQuery('Who holds stock for KIKO Lipgloss Shade 05?')}
-            className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white shrink-0 text-[11px] transition-all"
+            className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-400 hover:text-white shrink-0 text-[11px] transition-all"
           >
             📦 Staff Custody Stock
           </button>
@@ -167,7 +167,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
                 className={`p-3.5 rounded-2xl max-w-[90%] space-y-2.5 ${
                   msg.sender === 'user'
                     ? 'bg-blue text-white rounded-tr-none'
-                    : 'bg-[#05080f] border border-white/10 text-white rounded-tl-none shadow-md'
+                    : 'bg-[#09090b] border border-white/10 text-white rounded-tl-none shadow-md'
                 }`}
               >
                 <p className="leading-relaxed text-sm">{msg.text}</p>
@@ -185,7 +185,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
                   <div className="bg-white/5 rounded-xl border border-white/10 p-2 space-y-1 text-[11px]">
                     {msg.data.map((row, rIdx) => (
                       <div key={rIdx} className="flex items-center justify-between p-1.5 rounded hover:bg-white/5">
-                        <span className="font-bold text-white/90">{row.staff || row.metric || row.box || row.sku}</span>
+                        <span className="font-bold text-neutral-200">{row.staff || row.metric || row.box || row.sku}</span>
                         <span className="text-forest font-bold">{row.stock || row.value || row.status}</span>
                       </div>
                     ))}
@@ -224,14 +224,14 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
             e.preventDefault()
             handleSendQuery()
           }}
-          className="p-3 bg-[#05080f] border-t border-white/10 flex gap-2 shrink-0"
+          className="p-3 bg-[#09090b] border-t border-white/10 flex gap-2 shrink-0"
         >
           <input
             type="text"
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             placeholder="Ask AI Copilot (e.g. Who has stock for KIKO?)..."
-            className="flex-1 rounded-xl border border-white/15 bg-[#0A101D] px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none min-h-[44px]"
+            className="flex-1 rounded-xl border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none min-h-[44px]"
           />
           <button
             type="submit"
