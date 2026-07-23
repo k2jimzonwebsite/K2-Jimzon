@@ -101,17 +101,17 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-[#0A101D] border-l border-white/10 h-full flex flex-col shadow-2xl text-white font-mono text-xs">
+      <div className="w-full max-w-lg bg-[#0A101D] border-l border-white/10 h-full flex flex-col shadow-2xl text-white font-mono text-sm">
         
         {/* Header */}
         <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#05080f] shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-xl bg-blue/20 border border-blue/40 flex items-center justify-center text-blue text-base">
+            <div className="h-8 w-8 rounded-xl bg-blue/20 border border-blue/40 flex items-center justify-center text-blue text-lg">
               🤖
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-serif font-bold text-sm text-white">BOS AI Chat Copilot</h2>
+                <h2 className="font-serif font-bold text-base text-white">BOS AI Chat Copilot</h2>
                 <span className="text-[9px] font-mono font-bold bg-forest/20 text-forest px-1.5 py-0.5 rounded border border-forest/30 uppercase">
                   Connected to Supabase
                 </span>
@@ -170,7 +170,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
                     : 'bg-[#05080f] border border-white/10 text-white rounded-tl-none shadow-md'
                 }`}
               >
-                <p className="leading-relaxed text-xs">{msg.text}</p>
+                <p className="leading-relaxed text-sm">{msg.text}</p>
 
                 {/* SQL Code Block */}
                 {msg.sql && (
@@ -199,7 +199,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
                       if (onNavigate && msg.targetSection) onNavigate(msg.targetSection)
                       onClose()
                     }}
-                    className="w-full mt-2 bg-forest hover:bg-forest/90 text-white font-bold text-xs py-2 rounded-lg transition-all shadow-md flex items-center justify-center gap-1.5 min-h-[38px]"
+                    className="w-full mt-2 bg-forest hover:bg-forest/90 text-white font-bold text-sm py-2 rounded-lg transition-all shadow-md flex items-center justify-center gap-1.5 min-h-[38px]"
                   >
                     {msg.actionLabel}
                   </button>
@@ -209,7 +209,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
           ))}
 
           {loading && (
-            <div className="flex items-center gap-2 text-white/50 text-xs p-2 animate-pulse">
+            <div className="flex items-center gap-2 text-white/50 text-sm p-2 animate-pulse">
               <span className="h-2 w-2 rounded-full bg-blue animate-ping" />
               AI Copilot is querying Supabase database...
             </div>
@@ -231,12 +231,12 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             placeholder="Ask AI Copilot (e.g. Who has stock for KIKO?)..."
-            className="flex-1 rounded-xl border border-white/15 bg-[#0A101D] px-3.5 py-2.5 text-xs text-white placeholder:text-white/30 focus:border-blue outline-none min-h-[44px]"
+            className="flex-1 rounded-xl border border-white/15 bg-[#0A101D] px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none min-h-[44px]"
           />
           <button
             type="submit"
             disabled={!inputQuery.trim()}
-            className="bg-blue hover:bg-blue/90 disabled:opacity-50 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition-all shadow-md shrink-0 min-h-[44px]"
+            className="bg-blue hover:bg-blue/90 disabled:opacity-50 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all shadow-md shrink-0 min-h-[44px]"
           >
             Ask
           </button>

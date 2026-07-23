@@ -194,13 +194,13 @@ export default function OmniOperationsHub() {
       <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
+            <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Staff Operations & Cargo Box Handover Hub
             </span>
-            <span className="text-xs text-white/80 font-medium">Multi-Staff Custody & Italy Cargo Box Allocation</span>
+            <span className="text-sm text-white/80 font-medium">Multi-Staff Custody & Italy Cargo Box Allocation</span>
           </div>
           <h1 className="font-sans text-2xl font-black text-white mt-1">Staff Operations & Italy Box Handover Station</h1>
-          <p className="text-xs text-white/80 font-medium mt-1 max-w-2xl">
+          <p className="text-sm text-white/80 font-medium mt-1 max-w-2xl">
             Each staff member receives specific Italy shipment boxes containing assigned SKUs. Staff can only ship orders out of their claimed box custody.
           </p>
         </div>
@@ -208,10 +208,10 @@ export default function OmniOperationsHub() {
         {/* Active Staff Member Station Selector & Quick PIN Login */}
         <div className="bg-[#161B29] border border-white/20 p-3.5 rounded-xl space-y-2 shrink-0 shadow-md">
           <div className="flex items-center justify-between gap-2">
-            <label className="block text-xs font-extrabold uppercase text-gold">Active Staff Station:</label>
+            <label className="block text-sm font-extrabold uppercase text-gold">Active Staff Station:</label>
             <button
               onClick={() => setShowStaffPinModal(true)}
-              className="text-xs font-bold text-navy bg-gold px-2.5 py-1 rounded-lg hover:bg-gold-deep transition-all flex items-center gap-1 shadow"
+              className="text-sm font-bold text-navy bg-gold px-2.5 py-1 rounded-lg hover:bg-gold-deep transition-all flex items-center gap-1 shadow"
             >
               🔑 PIN Login
             </button>
@@ -219,7 +219,7 @@ export default function OmniOperationsHub() {
           <select
             value={activeStaff}
             onChange={(e) => setActiveStaff(e.target.value)}
-            className="w-full bg-[#0E121E] border border-gold text-xs font-bold text-white rounded-lg px-3 py-2 outline-none"
+            className="w-full bg-[#0E121E] border border-gold text-sm font-bold text-white rounded-lg px-3 py-2 outline-none"
           >
             <option value="Elena Guerrero">👤 Elena Guerrero (Makati Hub)</option>
             <option value="Juan Dela Cruz">👤 Juan Dela Cruz (Quezon City Hub)</option>
@@ -229,7 +229,7 @@ export default function OmniOperationsHub() {
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex overflow-x-auto max-w-full bg-[#0E121E] border border-white/20 p-2 rounded-xl text-xs font-bold scrollbar-none gap-2">
+      <div className="flex overflow-x-auto max-w-full bg-[#0E121E] border border-white/20 p-2 rounded-xl text-sm font-bold scrollbar-none gap-2">
         <button
           onClick={() => setActiveRole('manila_warehouse')}
           className={`px-5 py-3 min-h-[44px] rounded-xl transition-all flex items-center gap-2 shrink-0 ${
@@ -266,14 +266,14 @@ export default function OmniOperationsHub() {
               <div className="flex items-center gap-2">
                 <span className="text-xl">📦</span>
                 <div>
-                  <h3 className="text-base font-black text-white">{activeStaff}'s Pack-to-Ship Verification Station</h3>
-                  <p className="text-xs text-white/80 font-medium">Point barcode scanner to verify item before sealing polybag</p>
+                  <h3 className="text-lg font-black text-white">{activeStaff}'s Pack-to-Ship Verification Station</h3>
+                  <p className="text-sm text-white/80 font-medium">Point barcode scanner to verify item before sealing polybag</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 text-xs font-mono">
+              <div className="flex items-center gap-3 text-sm font-mono">
                 <span className="text-white/80 font-bold">Shift Packed:</span>
-                <span className="text-white font-black text-sm bg-blue px-3.5 py-1.5 rounded-xl border border-blue/50 shadow">{packedCount} orders</span>
+                <span className="text-white font-black text-base bg-blue px-3.5 py-1.5 rounded-xl border border-blue/50 shadow">{packedCount} orders</span>
               </div>
             </div>
 
@@ -283,18 +283,18 @@ export default function OmniOperationsHub() {
                 value={scanBarcode}
                 onChange={(e) => setScanBarcode(e.target.value)}
                 placeholder="Scan barcode or SKU (e.g. KIKO-3D-05)..."
-                className="flex-1 rounded-xl border border-white/20 bg-[#161B29] px-4 py-3 text-sm text-white font-mono placeholder:text-white/40 focus:border-gold outline-none min-h-[44px]"
+                className="flex-1 rounded-xl border border-white/20 bg-[#161B29] px-4 py-3 text-base text-white font-mono placeholder:text-white/40 focus:border-gold outline-none min-h-[44px]"
               />
               <button
                 type="submit"
-                className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-6 py-3 rounded-xl transition-all shadow-lg shrink-0 min-h-[44px] flex items-center justify-center"
+                className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-6 py-3 rounded-xl transition-all shadow-lg shrink-0 min-h-[44px] flex items-center justify-center"
               >
                 Scan & Verify (+1)
               </button>
             </form>
 
             {scanMessage && (
-              <div className={`p-3.5 rounded-xl border text-xs font-bold flex items-center gap-2 ${
+              <div className={`p-3.5 rounded-xl border text-sm font-bold flex items-center gap-2 ${
                 scanMessage.success ? 'bg-blue/20 border-blue text-white' : 'bg-crimson/20 border-crimson text-white'
               }`}>
                 <span>{scanMessage.text}</span>
@@ -304,7 +304,7 @@ export default function OmniOperationsHub() {
 
           {/* Orders Queue for Active Staff Member */}
           <div className="space-y-4">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-gold">
+            <h3 className="text-sm font-extrabold uppercase tracking-wider text-gold">
               {activeStaff}'s Assigned Shipping Queue
             </h3>
 
@@ -314,24 +314,24 @@ export default function OmniOperationsHub() {
                   <div>
                     <div className="flex items-center justify-between mb-3">
                       <span 
-                        className="text-xs font-black text-white px-3 py-1 rounded-lg shadow"
+                        className="text-sm font-black text-white px-3 py-1 rounded-lg shadow"
                         style={{ backgroundColor: ord.channelColor }}
                       >
                         {ord.channel}
                       </span>
-                      <span className="text-xs font-mono text-gold font-bold">{ord.id}</span>
+                      <span className="text-sm font-mono text-gold font-bold">{ord.id}</span>
                     </div>
 
-                    <p className="text-base font-black text-white">{ord.customer}</p>
-                    <p className="text-xs text-white/80 font-mono mt-1 font-semibold">{ord.courier} · {ord.tracking}</p>
+                    <p className="text-lg font-black text-white">{ord.customer}</p>
+                    <p className="text-sm text-white/80 font-mono mt-1 font-semibold">{ord.courier} · {ord.tracking}</p>
 
                     <div className="mt-4 pt-3 border-t border-white/15 space-y-2">
-                      <p className="text-xs font-extrabold uppercase tracking-wider text-gold">Pick Items from {activeStaff}'s Custody Stock:</p>
+                      <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Pick Items from {activeStaff}'s Custody Stock:</p>
                       {ord.items.map((it, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/10 text-xs font-bold">
+                        <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/10 text-sm font-bold">
                           <div>
-                            <p className="font-bold text-white text-sm">{it.title}</p>
-                            <p className="text-xs text-gold font-mono">{it.bin}</p>
+                            <p className="font-bold text-white text-base">{it.title}</p>
+                            <p className="text-sm text-gold font-mono">{it.bin}</p>
                           </div>
                           <span className="text-white font-black bg-blue px-2.5 py-1 rounded-lg shadow">x{it.qty}</span>
                         </div>
@@ -340,7 +340,7 @@ export default function OmniOperationsHub() {
                   </div>
 
                   <div className="pt-3 border-t border-white/15 flex items-center justify-between">
-                    <span className={`text-xs font-black px-3 py-1 rounded-lg shadow ${
+                    <span className={`text-sm font-black px-3 py-1 rounded-lg shadow ${
                       ord.status.includes('Packed') ? 'bg-blue text-white border border-blue' : 'bg-gold text-navy border border-gold'
                     }`}>
                       {ord.status}
@@ -348,7 +348,7 @@ export default function OmniOperationsHub() {
 
                     <button
                       onClick={() => setPrintSlipOrder(ord)}
-                      className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 min-h-[40px]"
+                      className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 min-h-[40px]"
                     >
                       🖨️ Print Shipping Slip
                     </button>
@@ -368,14 +368,14 @@ export default function OmniOperationsHub() {
           <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl shadow-xl space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
               <div>
-                <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
+                <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
                   NAIA Cargo Box Handover & Custody Claim
                 </span>
                 <h2 className="font-sans text-2xl font-black text-white mt-2">Italy Flight Box Arrivals & Staff Inventory Handover</h2>
-                <p className="text-xs text-white/80 font-medium mt-1">Transfer specific flight boxes to staff members and claim SKU custody into local hubs.</p>
+                <p className="text-sm text-white/80 font-medium mt-1">Transfer specific flight boxes to staff members and claim SKU custody into local hubs.</p>
               </div>
 
-              <span className="text-xs font-bold text-white">Active Custodian: <strong className="text-gold font-extrabold text-sm">{activeStaff}</strong></span>
+              <span className="text-sm font-bold text-white">Active Custodian: <strong className="text-gold font-extrabold text-base">{activeStaff}</strong></span>
             </div>
 
             {/* Cargo Box Cards */}
@@ -392,18 +392,18 @@ export default function OmniOperationsHub() {
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-black text-gold bg-black/60 px-3 py-1 rounded-lg border border-gold">
+                      <span className="text-sm font-mono font-black text-gold bg-black/60 px-3 py-1 rounded-lg border border-gold">
                         {box.box_code}
                       </span>
-                      <span className="text-xs font-mono text-white/80 font-bold">{box.flight_num}</span>
+                      <span className="text-sm font-mono text-white/80 font-bold">{box.flight_num}</span>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-extrabold uppercase text-gold mb-1">Assigned Staff Custodian:</label>
+                      <label className="block text-sm font-extrabold uppercase text-gold mb-1">Assigned Staff Custodian:</label>
                       <select
                         value={box.assigned_staff}
                         onChange={(e) => handleReassignBoxStaff(box.box_code, e.target.value)}
-                        className="w-full bg-[#0E121E] border border-white/20 text-xs font-bold text-white rounded-lg px-3 py-2 outline-none focus:border-gold"
+                        className="w-full bg-[#0E121E] border border-white/20 text-sm font-bold text-white rounded-lg px-3 py-2 outline-none focus:border-gold"
                       >
                         <option value="Elena Guerrero">Elena Guerrero (Makati Hub)</option>
                         <option value="Juan Dela Cruz">Juan Dela Cruz (Quezon City Hub)</option>
@@ -412,8 +412,8 @@ export default function OmniOperationsHub() {
                     </div>
 
                     {/* Box SKUs Contents */}
-                    <div className="bg-white/10 border border-white/15 p-3.5 rounded-xl space-y-2 text-xs font-bold">
-                      <p className="text-xs text-gold uppercase font-extrabold">Box SKU Breakdown:</p>
+                    <div className="bg-white/10 border border-white/15 p-3.5 rounded-xl space-y-2 text-sm font-bold">
+                      <p className="text-sm text-gold uppercase font-extrabold">Box SKU Breakdown:</p>
                       {box.items.map((it, idx) => (
                         <div key={idx} className="flex justify-between text-white">
                           <span>{it.title}</span>
@@ -424,7 +424,7 @@ export default function OmniOperationsHub() {
 
                     {/* Handover Claim Action */}
                     <div className="pt-2 border-t border-white/15 flex items-center justify-between">
-                      <span className={`text-xs font-black px-3 py-1 rounded-lg shadow ${
+                      <span className={`text-sm font-black px-3 py-1 rounded-lg shadow ${
                         isClaimed ? 'bg-blue text-white border border-blue' : 'bg-gold text-navy border border-gold'
                       }`}>
                         {box.status}
@@ -433,7 +433,7 @@ export default function OmniOperationsHub() {
                       {!isClaimed && isAssignedToActive && (
                         <button
                           onClick={() => handleClaimBoxCustody(box.box_code)}
-                          className="bg-gold hover:bg-gold-deep text-navy font-black text-xs px-4 py-2 rounded-xl shadow-md transition-all"
+                          className="bg-gold hover:bg-gold-deep text-navy font-black text-sm px-4 py-2 rounded-xl shadow-md transition-all"
                         >
                           ⚡ Claim Custody Stock
                         </button>
@@ -454,14 +454,14 @@ export default function OmniOperationsHub() {
         <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl shadow-xl space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
             <div>
-              <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
+              <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
                 Inter-Staff Custody Re-allocation
               </span>
               <h2 className="font-sans text-2xl font-black text-white mt-2">1-Click Inter-Staff Stock Transfer Station</h2>
-              <p className="text-xs text-white/80 font-medium mt-1">Transfer SKU inventory between staff members instantly with one click.</p>
+              <p className="text-sm text-white/80 font-medium mt-1">Transfer SKU inventory between staff members instantly with one click.</p>
             </div>
 
-            <span className="text-xs font-black text-blue">Audit Trail Logged</span>
+            <span className="text-sm font-black text-blue">Audit Trail Logged</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -472,20 +472,20 @@ export default function OmniOperationsHub() {
             ].map((trf, idx) => (
               <div key={idx} className="bg-[#161B29] border border-white/20 p-5 rounded-2xl space-y-4 shadow-md">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-mono font-black text-gold bg-black/60 px-3 py-1 rounded-lg border border-gold">{trf.sku}</span>
-                  <span className="text-xs font-bold text-white/80">Instant 1-Click</span>
+                  <span className="text-sm font-mono font-black text-gold bg-black/60 px-3 py-1 rounded-lg border border-gold">{trf.sku}</span>
+                  <span className="text-sm font-bold text-white/80">Instant 1-Click</span>
                 </div>
 
-                <h3 className="text-base font-black text-white">{trf.title}</h3>
+                <h3 className="text-lg font-black text-white">{trf.title}</h3>
                 
-                <div className="space-y-1 text-xs font-bold text-white/90 bg-white/10 p-3.5 rounded-xl border border-white/10">
+                <div className="space-y-1 text-sm font-bold text-white/90 bg-white/10 p-3.5 rounded-xl border border-white/10">
                   <p>FROM: <strong className="text-crimson font-black">{trf.from}</strong></p>
                   <p>TO: <strong className="text-gold font-black">{trf.to}</strong></p>
                 </div>
 
                 <button
                   onClick={() => alert(`⚡ 1-Click Transfer Success! Transferred ${trf.defaultQty} units of ${trf.sku} to ${trf.to.split(' ')[0]}!`)}
-                  className="w-full bg-blue hover:bg-blue-deep text-white font-black text-xs py-3 rounded-xl shadow-lg transition-all"
+                  className="w-full bg-blue hover:bg-blue-deep text-white font-black text-sm py-3 rounded-xl shadow-lg transition-all"
                 >
                   ⚡ Transfer {trf.defaultQty} Units in 1-Click
                 </button>

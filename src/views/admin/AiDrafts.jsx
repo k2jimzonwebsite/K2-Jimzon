@@ -110,8 +110,8 @@ export default function AiDrafts({ onApprove }) {
         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-forest-wash text-forest">
           <CheckIcon size={24} />
         </div>
-        <h3 className="mt-4 font-serif text-lg font-semibold text-navy">Queue is clear</h3>
-        <p className="mt-1 max-w-sm text-sm text-navy-soft">
+        <h3 className="mt-4 font-serif text-xl font-semibold text-navy">Queue is clear</h3>
+        <p className="mt-1 max-w-sm text-base text-navy-soft">
           All AI sourcing drafts from Italy have been reviewed and pushed to live inventory.
         </p>
       </div>
@@ -155,17 +155,17 @@ function DraftCard({ draft, onApprove }) {
             <InboxIcon size={14} />
           </span>
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-navy-soft">New Draft from Italy</p>
-            <p className="font-serif text-base font-semibold text-navy">{draft.name}</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-navy-soft">New Draft from Italy</p>
+            <p className="font-serif text-lg font-semibold text-navy">{draft.name}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {needsReview && (
-            <span className="flex items-center gap-1 rounded bg-amber-wash px-2 py-1 text-xs font-bold uppercase tracking-wide text-amber">
+            <span className="flex items-center gap-1 rounded bg-amber-wash px-2 py-1 text-sm font-bold uppercase tracking-wide text-amber">
               <AlertIcon size={12} /> Low Confidence AI Match
             </span>
           )}
-          <span className="rounded bg-white border border-line px-2.5 py-1 text-xs font-mono text-navy-faint">
+          <span className="rounded bg-white border border-line px-2.5 py-1 text-sm font-mono text-navy-faint">
             {draft.sku}
           </span>
         </div>
@@ -174,10 +174,10 @@ function DraftCard({ draft, onApprove }) {
       <div className="flex flex-col md:flex-row">
         {/* Editor (Human-in-the-loop) */}
         <div className="flex-1 p-5 md:border-r border-line">
-          <p className="mb-4 text-sm font-medium text-navy-soft">Review pricing and stock before pushing live:</p>
+          <p className="mb-4 text-base font-medium text-navy-soft">Review pricing and stock before pushing live:</p>
           
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-            <label className="flex flex-col gap-1.5 text-sm font-semibold text-navy">
+            <label className="flex flex-col gap-1.5 text-base font-semibold text-navy">
               Retail Price (₱)
               <input 
                 type="number"
@@ -186,7 +186,7 @@ function DraftCard({ draft, onApprove }) {
                 className="rounded-md border border-line bg-shell px-3 py-2 text-navy focus:border-navy focus:bg-white focus:outline-none"
               />
             </label>
-            <label className="flex flex-col gap-1.5 text-sm font-semibold text-navy">
+            <label className="flex flex-col gap-1.5 text-base font-semibold text-navy">
               Wholesale Price (₱)
               <input 
                 type="number"
@@ -195,7 +195,7 @@ function DraftCard({ draft, onApprove }) {
                 className="rounded-md border border-line bg-shell px-3 py-2 text-navy focus:border-navy focus:bg-white focus:outline-none"
               />
             </label>
-            <label className="flex flex-col gap-1.5 text-sm font-semibold text-navy">
+            <label className="flex flex-col gap-1.5 text-base font-semibold text-navy">
               Physical Stock Count
               <input 
                 type="number"
@@ -210,7 +210,7 @@ function DraftCard({ draft, onApprove }) {
             <button
               onClick={handleGoLive}
               disabled={approving}
-              className="flex items-center gap-2 rounded-lg bg-forest px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-forest/90 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg bg-forest px-5 py-2.5 text-base font-semibold text-white transition-colors hover:bg-forest/90 disabled:opacity-50"
             >
               {approving ? (
                 <>Pushing to Supabase...</>
@@ -223,8 +223,8 @@ function DraftCard({ draft, onApprove }) {
 
         {/* Raw AI Output context */}
         <div className="w-full bg-navy p-5 text-white md:w-[320px]">
-          <p className="mb-3 text-xs font-bold uppercase tracking-widest text-white/50">Raw AI Sourcing Output</p>
-          <pre className="overflow-x-auto whitespace-pre-wrap text-xs font-mono leading-relaxed text-white/80">
+          <p className="mb-3 text-sm font-bold uppercase tracking-widest text-white/50">Raw AI Sourcing Output</p>
+          <pre className="overflow-x-auto whitespace-pre-wrap text-sm font-mono leading-relaxed text-white/80">
             {draft.rawJson}
           </pre>
         </div>

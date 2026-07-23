@@ -78,9 +78,9 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
               <span className="text-[10px] font-mono font-bold bg-amber/20 text-amber px-2 py-0.5 rounded border border-amber/30 uppercase">
                 Daily Operations Center
               </span>
-              <span className="text-xs font-mono text-white/50">{activeTasks.length} Pending Tasks</span>
+              <span className="text-sm font-mono text-white/50">{activeTasks.length} Pending Tasks</span>
             </div>
-            <h2 className="font-serif text-lg font-bold text-white mt-1">Today's Actionable Tasks</h2>
+            <h2 className="font-serif text-xl font-bold text-white mt-1">Today's Actionable Tasks</h2>
           </div>
 
           <button
@@ -92,10 +92,10 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
         </div>
 
         {/* Task List */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-4 font-mono text-xs">
+        <div className="flex-1 overflow-y-auto p-5 space-y-4 font-mono text-sm">
           
           {message && (
-            <div className="p-3 rounded-xl bg-forest/20 border border-forest/40 text-forest text-xs font-mono animate-in fade-in">
+            <div className="p-3 rounded-xl bg-forest/20 border border-forest/40 text-forest text-sm font-mono animate-in fade-in">
               {message.text}
             </div>
           )}
@@ -124,14 +124,14 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-white text-sm">{task.title}</h3>
+                  <h3 className="font-bold text-white text-base">{task.title}</h3>
                   <p className="text-white/70 font-semibold mt-0.5">{task.subtitle}</p>
                   <p className="text-white/40 text-[11px] mt-1">{task.details}</p>
                 </div>
 
                 <button
                   onClick={() => handleExecuteTask(task)}
-                  className="w-full bg-forest hover:bg-forest/90 text-white font-bold text-xs py-2.5 rounded-lg transition-all shadow-md min-h-[44px] flex items-center justify-center gap-1.5"
+                  className="w-full bg-forest hover:bg-forest/90 text-white font-bold text-sm py-2.5 rounded-lg transition-all shadow-md min-h-[44px] flex items-center justify-center gap-1.5"
                 >
                   {task.actionLabel}
                 </button>

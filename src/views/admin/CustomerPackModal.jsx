@@ -99,7 +99,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/20 shrink-0">
           <div>
             <h2 className="font-serif text-xl font-semibold text-white">Pack Shipment #{order.id.split('_')[0].slice(-5)}</h2>
-            <p className="text-sm text-white/50 mt-1">Scan items to verify parcel contents.</p>
+            <p className="text-base text-white/50 mt-1">Scan items to verify parcel contents.</p>
           </div>
           <button 
             onClick={onClose}
@@ -120,15 +120,15 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                 >
                   <GridIcon className="text-white/30 mb-3" size={40} />
                   <p className="text-white font-medium">Camera Paused</p>
-                  <p className="text-sm text-white/40 mt-1">Tap to resume scanning</p>
+                  <p className="text-base text-white/40 mt-1">Tap to resume scanning</p>
                 </div>
               ) : isComplete ? (
                  <div className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-forest/10">
                    <div className="w-16 h-16 bg-forest/20 text-forest rounded-full flex items-center justify-center mb-4">
                      <CheckIcon size={32} />
                    </div>
-                   <p className="text-white font-bold text-lg">Order Fully Packed</p>
-                   <p className="text-forest text-sm mt-1">All items verified.</p>
+                   <p className="text-white font-bold text-xl">Order Fully Packed</p>
+                   <p className="text-forest text-base mt-1">All items verified.</p>
                  </div>
               ) : (
                 <div className="flex-1 w-full h-full relative flex flex-col">
@@ -136,7 +136,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                     <div id="customer-qr-reader" className="absolute inset-0 object-cover w-full h-full"></div>
                     <button 
                       onClick={stopScanner}
-                      className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white/80 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-black/80 hover:text-white z-10"
+                      className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white/80 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-black/80 hover:text-white z-10"
                     >
                       Stop Scanning
                     </button>
@@ -149,7 +149,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                   <div className="bg-black p-4 shrink-0 border-t border-white/10 relative z-20">
                     <button
                       onClick={() => setTriggerActive(true)}
-                      className={`w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${
+                      className={`w-full py-4 rounded-xl font-bold text-xl transition-all flex items-center justify-center gap-2 ${
                         triggerActive 
                           ? 'bg-blue text-white shadow-[0_0_20px_rgba(37,99,235,0.5)]' 
                           : 'bg-white/10 text-white/80 hover:bg-white/20'
@@ -158,7 +158,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                       <GridIcon size={24} />
                       {triggerActive ? 'Hold barcode in frame...' : 'Tap to Trigger Scanner'}
                     </button>
-                    <p className="text-center mt-2 text-xs text-white/30">Required for accuracy verification</p>
+                    <p className="text-center mt-2 text-sm text-white/30">Required for accuracy verification</p>
                   </div>
                 </div>
               )}
@@ -184,7 +184,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
           {/* Right Side: Order Info */}
           <div className="w-full md:w-80 bg-[#05080f] flex flex-col shrink-0">
             <div className="p-6 flex-1 overflow-y-auto">
-              <h3 className="text-sm font-bold text-white/50 uppercase tracking-widest mb-4">Items to Pack</h3>
+              <h3 className="text-base font-bold text-white/50 uppercase tracking-widest mb-4">Items to Pack</h3>
               <div className="space-y-4">
                 {order.items.map(item => {
                   const qtyScanned = scannedItems[item.sku] || 0
@@ -195,10 +195,10 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                         {isItemComplete ? <CheckIcon size={18} /> : <BoxIcon size={18} />}
                       </div>
                       <div>
-                        <p className={`font-medium text-sm line-clamp-2 ${isItemComplete ? 'text-forest-light' : 'text-white/90'}`}>
+                        <p className={`font-medium text-base line-clamp-2 ${isItemComplete ? 'text-forest-light' : 'text-white/90'}`}>
                           {item.product?.title || item.sku}
                         </p>
-                        <p className="text-xs font-mono text-white/40 mt-1">
+                        <p className="text-sm font-mono text-white/40 mt-1">
                           Scanned: {qtyScanned} / {item.quantity}
                         </p>
                       </div>
@@ -212,7 +212,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
               <button
                 onClick={() => onConfirmPacked(order.id, order.order_status, order.items)}
                 disabled={!isComplete}
-                className={`w-full py-4 rounded-xl font-bold text-lg transition-all shadow-lg ${
+                className={`w-full py-4 rounded-xl font-bold text-xl transition-all shadow-lg ${
                   isComplete 
                     ? 'bg-blue hover:bg-blue-light text-white shadow-blue/20' 
                     : 'bg-white/5 text-white/30 cursor-not-allowed'

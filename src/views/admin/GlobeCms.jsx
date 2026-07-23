@@ -16,7 +16,7 @@ export default function GlobeCms() {
     <div>
       {/* Storage mode banner */}
       <div
-        className={`mb-4 flex items-center justify-between rounded-lg border px-4 py-2.5 text-sm ${
+        className={`mb-4 flex items-center justify-between rounded-lg border px-4 py-2.5 text-base ${
           isRemote ? 'border-forest/30 bg-forest-wash/40 text-navy' : 'border-gold/40 bg-gold/10 text-navy'
         }`}
       >
@@ -28,7 +28,7 @@ export default function GlobeCms() {
         {isRemote && (
           <button
             onClick={signOutAdmin}
-            className="rounded-md border border-line bg-white px-3 py-1 text-xs font-medium text-navy-soft hover:bg-shell transition-colors"
+            className="rounded-md border border-line bg-white px-3 py-1 text-sm font-medium text-navy-soft hover:bg-shell transition-colors"
           >
             Sign out
           </button>
@@ -36,13 +36,13 @@ export default function GlobeCms() {
       </div>
 
       {cmsError && (
-        <div className="mb-4 rounded-lg border border-crimson/30 bg-crimson-wash px-4 py-2.5 text-sm text-crimson">
+        <div className="mb-4 rounded-lg border border-crimson/30 bg-crimson-wash px-4 py-2.5 text-base text-crimson">
           {cmsError}
         </div>
       )}
 
       {isLoading && (
-        <div className="mb-4 rounded-lg border border-line bg-shell px-4 py-2.5 text-sm text-navy-faint">
+        <div className="mb-4 rounded-lg border border-line bg-shell px-4 py-2.5 text-base text-navy-faint">
           Loading CMS data…
         </div>
       )}
@@ -51,7 +51,7 @@ export default function GlobeCms() {
       <div className="mb-6 flex gap-1 rounded-lg bg-shell p-1">
         <button
           onClick={() => setTab('products')}
-          className={`flex-1 rounded-md px-4 py-2.5 text-sm font-semibold transition-colors ${
+          className={`flex-1 rounded-md px-4 py-2.5 text-base font-semibold transition-colors ${
             tab === 'products' ? 'bg-white text-navy shadow-card' : 'text-navy-soft hover:text-navy'
           }`}
         >
@@ -59,7 +59,7 @@ export default function GlobeCms() {
         </button>
         <button
           onClick={() => setTab('reviews')}
-          className={`flex-1 rounded-md px-4 py-2.5 text-sm font-semibold transition-colors ${
+          className={`flex-1 rounded-md px-4 py-2.5 text-base font-semibold transition-colors ${
             tab === 'reviews' ? 'bg-white text-navy shadow-card' : 'text-navy-soft hover:text-navy'
           }`}
         >
@@ -96,34 +96,34 @@ function AdminSignIn() {
 
   return (
     <div className="mx-auto max-w-sm rounded-xl border border-line bg-white p-6">
-      <h3 className="font-serif text-lg font-semibold">Admin sign in</h3>
-      <p className="mt-1 text-sm text-navy-faint">
+      <h3 className="font-serif text-xl font-semibold">Admin sign in</h3>
+      <p className="mt-1 text-base text-navy-faint">
         The globe CMS is live on Supabase. Sign in with your admin account to manage products and reviews.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-5 space-y-4">
         <div>
-          <label className="text-xs font-semibold uppercase tracking-[0.1em] text-navy-soft">Email</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Email</label>
           <input
             type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username"
-            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
           />
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-[0.1em] text-navy-soft">Password</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Password</label>
           <input
             type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password"
-            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
           />
         </div>
 
         {error && (
-          <p className="rounded-lg border border-crimson/30 bg-crimson-wash px-3 py-2 text-sm text-crimson">{error}</p>
+          <p className="rounded-lg border border-crimson/30 bg-crimson-wash px-3 py-2 text-base text-crimson">{error}</p>
         )}
 
         <button
           type="submit" disabled={isSubmitting}
-          className="w-full rounded-lg bg-crimson px-5 py-2.5 text-sm font-semibold text-white hover:bg-crimson-deep transition-colors disabled:opacity-60"
+          className="w-full rounded-lg bg-crimson px-5 py-2.5 text-base font-semibold text-white hover:bg-crimson-deep transition-colors disabled:opacity-60"
         >
           {isSubmitting ? 'Signing in…' : 'Sign in'}
         </button>
@@ -143,8 +143,8 @@ function GlobeProductsPanel() {
     <div>
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="font-serif text-lg font-semibold">Products on Globe</h3>
-          <p className="text-sm text-navy-faint">
+          <h3 className="font-serif text-xl font-semibold">Products on Globe</h3>
+          <p className="text-base text-navy-faint">
             {enabledCount} of {globeProducts.length} products enabled · These will be distributed across the globe
           </p>
         </div>
@@ -167,7 +167,7 @@ function GlobeProductsPanel() {
                   <img src={product.img} alt={product.name} className="h-full w-full object-contain p-1" />
                 ) : (
                   <div
-                    className="flex h-full w-full items-center justify-center text-xs font-bold text-navy-faint"
+                    className="flex h-full w-full items-center justify-center text-sm font-bold text-navy-faint"
                     style={{ backgroundColor: `hsl(${product.hue}, 12%, 92%)` }}
                   >
                     {product.short?.substring(0, 3)}
@@ -176,8 +176,8 @@ function GlobeProductsPanel() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="font-serif text-base font-semibold leading-snug truncate">{product.short || product.name}</p>
-                <p className="text-xs text-navy-faint">{product.category} · {product.origin}</p>
+                <p className="font-serif text-lg font-semibold leading-snug truncate">{product.short || product.name}</p>
+                <p className="text-sm text-navy-faint">{product.category} · {product.origin}</p>
               </div>
 
               {/* Toggle switch */}
@@ -213,12 +213,12 @@ function ReviewsPanel() {
     <div>
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="font-serif text-lg font-semibold">Customer Reviews</h3>
-          <p className="text-sm text-navy-faint">{reviews.length} reviews · Shown on product globe cards</p>
+          <h3 className="font-serif text-xl font-semibold">Customer Reviews</h3>
+          <p className="text-base text-navy-faint">{reviews.length} reviews · Shown on product globe cards</p>
         </div>
         <button
           onClick={() => setIsAdding(true)}
-          className="rounded-lg bg-crimson px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-crimson-deep"
+          className="rounded-lg bg-crimson px-4 py-2 text-base font-semibold text-white transition-colors hover:bg-crimson-deep"
         >
           + Add Review
         </button>
@@ -251,27 +251,27 @@ function ReviewsPanel() {
                         <StarIcon key={i} size={11} />
                       ))}
                     </div>
-                    <span className="text-xs text-navy-faint">{r.date}</span>
+                    <span className="text-sm text-navy-faint">{r.date}</span>
                   </div>
-                  <p className="mt-1.5 text-sm leading-relaxed text-navy-soft">"{r.text}"</p>
+                  <p className="mt-1.5 text-base leading-relaxed text-navy-soft">"{r.text}"</p>
                   <div className="mt-2 flex items-center gap-2">
-                    <span className="text-sm font-semibold text-navy">{r.name}</span>
-                    <span className="text-xs text-navy-faint">· {r.channel}</span>
+                    <span className="text-base font-semibold text-navy">{r.name}</span>
+                    <span className="text-sm text-navy-faint">· {r.channel}</span>
                     {r.item && (
-                      <span className="rounded-full bg-shell px-2 py-0.5 text-xs font-medium text-navy-faint">{r.item}</span>
+                      <span className="rounded-full bg-shell px-2 py-0.5 text-sm font-medium text-navy-faint">{r.item}</span>
                     )}
                   </div>
                 </div>
                 <div className="flex gap-2 flex-shrink-0">
                   <button
                     onClick={() => setEditingId(r.id)}
-                    className="rounded-md border border-line px-3 py-1.5 text-xs font-medium text-navy-soft hover:bg-shell transition-colors"
+                    className="rounded-md border border-line px-3 py-1.5 text-sm font-medium text-navy-soft hover:bg-shell transition-colors"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => deleteReview(r.id)}
-                    className="rounded-md border border-crimson/20 px-3 py-1.5 text-xs font-medium text-crimson hover:bg-crimson-wash transition-colors"
+                    className="rounded-md border border-crimson/20 px-3 py-1.5 text-sm font-medium text-crimson hover:bg-crimson-wash transition-colors"
                   >
                     Delete
                   </button>
@@ -305,17 +305,17 @@ function ReviewForm({ initial, onSave, onCancel }) {
     <form onSubmit={handleSubmit} className="mb-4 rounded-xl border border-crimson/20 bg-crimson-wash/30 p-5 space-y-4">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-semibold uppercase tracking-[0.1em] text-navy-soft">Reviewer Name</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Reviewer Name</label>
           <input
             type="text" value={name} onChange={(e) => setName(e.target.value)} required
-            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
           />
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-[0.1em] text-navy-soft">Channel</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Channel</label>
           <input
             type="text" value={channel} onChange={(e) => setChannel(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
             placeholder="Shopee · verified"
           />
         </div>
@@ -323,10 +323,10 @@ function ReviewForm({ initial, onSave, onCancel }) {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-semibold uppercase tracking-[0.1em] text-navy-soft">Product</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Product</label>
           <select
             value={productId} onChange={(e) => setProductId(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
           >
             <option value="">— General review —</option>
             {products.map((p) => (
@@ -335,17 +335,17 @@ function ReviewForm({ initial, onSave, onCancel }) {
           </select>
         </div>
         <div>
-          <label className="text-xs font-semibold uppercase tracking-[0.1em] text-navy-soft">Item label</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Item label</label>
           <input
             type="text" value={item} onChange={(e) => setItem(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
             placeholder="e.g. Nutella Biscuits"
           />
         </div>
       </div>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-[0.1em] text-navy-soft">Rating</label>
+        <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Rating</label>
         <div className="mt-1 flex gap-1">
           {[1, 2, 3, 4, 5].map((s) => (
             <button
@@ -361,10 +361,10 @@ function ReviewForm({ initial, onSave, onCancel }) {
       </div>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-[0.1em] text-navy-soft">Review text</label>
+        <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Review text</label>
         <textarea
           value={text} onChange={(e) => setText(e.target.value)} required rows={3}
-          className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm leading-relaxed focus:border-crimson focus:outline-none resize-none"
+          className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-base leading-relaxed focus:border-crimson focus:outline-none resize-none"
           placeholder="What did the customer say?"
         />
       </div>
@@ -372,13 +372,13 @@ function ReviewForm({ initial, onSave, onCancel }) {
       <div className="flex gap-3 pt-1">
         <button
           type="submit"
-          className="rounded-lg bg-crimson px-5 py-2.5 text-sm font-semibold text-white hover:bg-crimson-deep transition-colors"
+          className="rounded-lg bg-crimson px-5 py-2.5 text-base font-semibold text-white hover:bg-crimson-deep transition-colors"
         >
           {initial ? 'Save Changes' : 'Add Review'}
         </button>
         <button
           type="button" onClick={onCancel}
-          className="rounded-lg border border-line px-5 py-2.5 text-sm font-medium text-navy-soft hover:bg-shell transition-colors"
+          className="rounded-lg border border-line px-5 py-2.5 text-base font-medium text-navy-soft hover:bg-shell transition-colors"
         >
           Cancel
         </button>

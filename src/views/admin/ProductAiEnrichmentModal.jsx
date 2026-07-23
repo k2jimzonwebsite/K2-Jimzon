@@ -117,12 +117,12 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
             <span className="text-2xl leading-none">✨</span>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-serif font-bold text-lg text-white">AI Product Spec Enricher</h2>
+                <h2 className="font-serif font-bold text-xl text-white">AI Product Spec Enricher</h2>
                 <span className="text-[9px] font-mono font-bold bg-amber/20 text-amber px-1.5 py-0.5 rounded border border-amber/30 uppercase">
                   Shopee / Channel Connector
                 </span>
               </div>
-              <p className="text-xs text-white/50 font-mono">Transform basic Shopee listings into luxury product masters</p>
+              <p className="text-sm text-white/50 font-mono">Transform basic Shopee listings into luxury product masters</p>
             </div>
           </div>
 
@@ -138,8 +138,8 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
         <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
           <div>
             <span className="text-[10px] font-mono text-amber uppercase font-bold">Target SKU: {product.sku || product.id}</span>
-            <h3 className="font-serif font-bold text-base text-white">{product.name || product.title}</h3>
-            <p className="text-xs text-white/50">Current Price: ₱{(product.srp || product.retail || 0).toLocaleString()}</p>
+            <h3 className="font-serif font-bold text-lg text-white">{product.name || product.title}</h3>
+            <p className="text-sm text-white/50">Current Price: ₱{(product.srp || product.retail || 0).toLocaleString()}</p>
           </div>
         </div>
 
@@ -150,7 +150,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
           </label>
           <div className="flex flex-wrap gap-1.5">
             {missingSpecs.length === 0 ? (
-              <span className="text-xs font-mono text-forest bg-forest/15 border border-forest/30 px-3 py-1 rounded-lg">
+              <span className="text-sm font-mono text-forest bg-forest/15 border border-forest/30 px-3 py-1 rounded-lg">
                 ✓ All Product Specifications Complete!
               </span>
             ) : (
@@ -167,7 +167,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
           {/* Option A: Copy Prompt */}
-          <div className="bg-[#05080f] border border-blue/30 p-4 rounded-xl space-y-3 font-mono text-xs flex flex-col justify-between">
+          <div className="bg-[#05080f] border border-blue/30 p-4 rounded-xl space-y-3 font-mono text-sm flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-1.5 text-blue font-bold mb-1">
                 <span>📋</span> Option A: Copy AI Prompt
@@ -186,7 +186,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
           </div>
 
           {/* Option B: In-App Auto Enrich */}
-          <div className="bg-[#05080f] border border-forest/30 p-4 rounded-xl space-y-3 font-mono text-xs flex flex-col justify-between">
+          <div className="bg-[#05080f] border border-forest/30 p-4 rounded-xl space-y-3 font-mono text-sm flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-1.5 text-forest font-bold mb-1">
                 <span>⚡</span> Option B: 1-Click Auto-Enrich
@@ -209,9 +209,9 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 
         {/* Enriched Result Preview & Save */}
         {enrichedData && (
-          <div className="p-4 rounded-xl bg-white/5 border border-forest/40 space-y-3 font-mono text-xs animate-in fade-in">
+          <div className="p-4 rounded-xl bg-white/5 border border-forest/40 space-y-3 font-mono text-sm animate-in fade-in">
             <div className="flex items-center justify-between border-b border-white/10 pb-2">
-              <span className="text-forest font-bold text-sm font-sans">✓ Enriched Product Master Preview:</span>
+              <span className="text-forest font-bold text-base font-sans">✓ Enriched Product Master Preview:</span>
               <span className="text-[10px] text-white/40">Ready to Save</span>
             </div>
 

@@ -242,13 +242,13 @@ export default function ConsignmentManager() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0E121E] p-6 rounded-2xl border border-white/20 shadow-2xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
+            <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Italy ✈ Philippines Flight Consignment
             </span>
-            <span className="text-xs font-mono text-gold font-bold">{consignment.manifest_code}</span>
+            <span className="text-sm font-mono text-gold font-bold">{consignment.manifest_code}</span>
           </div>
           <h1 className="font-sans text-2xl font-black text-white">{consignment.flight_number}</h1>
-          <p className="text-xs text-white/80 font-bold mt-1">
+          <p className="text-sm text-white/80 font-bold mt-1">
             Packed in Milan: <span className="text-white font-black font-mono">{consignment.packed_at}</span> · Status:{' '}
             <span className="font-black text-blue">{consignment.status}</span>
           </p>
@@ -257,7 +257,7 @@ export default function ConsignmentManager() {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={() => setIsMilanScannerOpen(true)}
-            className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
+            className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -267,14 +267,14 @@ export default function ConsignmentManager() {
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="bg-gold hover:bg-gold-deep text-navy font-black text-xs px-5 py-3 rounded-xl shadow-lg transition-all"
+            className="bg-gold hover:bg-gold-deep text-navy font-black text-sm px-5 py-3 rounded-xl shadow-lg transition-all"
           >
             + Pack New Box (Milan)
           </button>
 
           <button
             onClick={() => setIsScannerOpen(true)}
-            className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
+            className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -288,14 +288,14 @@ export default function ConsignmentManager() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl">
           <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Milan Packed Total</p>
-          <p className="text-2xl font-bold text-white mt-1">{totalItalyPacked} <span className="text-xs font-normal text-white/50">units</span></p>
-          <p className="text-xs text-white/40 mt-1">Boxed and sealed in Italy</p>
+          <p className="text-2xl font-bold text-white mt-1">{totalItalyPacked} <span className="text-sm font-normal text-white/50">units</span></p>
+          <p className="text-sm text-white/40 mt-1">Boxed and sealed in Italy</p>
         </div>
 
         <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl">
           <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Manila Scanned Total</p>
-          <p className="text-2xl font-bold text-forest mt-1">{totalManilaScanned} <span className="text-xs font-normal text-white/50">units</span></p>
-          <p className="text-xs text-white/40 mt-1">Counted via phone scanner</p>
+          <p className="text-2xl font-bold text-forest mt-1">{totalManilaScanned} <span className="text-sm font-normal text-white/50">units</span></p>
+          <p className="text-sm text-white/40 mt-1">Counted via phone scanner</p>
         </div>
 
         <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl flex flex-col justify-between">
@@ -307,7 +307,7 @@ export default function ConsignmentManager() {
           </div>
           <button
             onClick={() => setIsReconcileOpen(true)}
-            className="mt-3 text-xs font-bold text-blue hover:underline text-left"
+            className="mt-3 text-sm font-bold text-blue hover:underline text-left"
           >
             Open Side-by-Side Reconciliation Matrix →
           </button>
@@ -317,12 +317,12 @@ export default function ConsignmentManager() {
       {/* Live Manifest Item Grid */}
       <div className="bg-[#0A101D] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
         <div className="p-4 border-b border-white/10 bg-[#05080f] flex justify-between items-center">
-          <h3 className="font-serif font-semibold text-white text-base">Box Inventory Manifest (Milan $\rightarrow$ Manila)</h3>
-          <span className="text-xs font-mono text-white/50">{consignment.items.length} SKUs Linked</span>
+          <h3 className="font-serif font-semibold text-white text-lg">Box Inventory Manifest (Milan $\rightarrow$ Manila)</h3>
+          <span className="text-sm font-mono text-white/50">{consignment.items.length} SKUs Linked</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+          <table className="w-full text-left text-sm border-collapse">
             <thead>
               <tr className="border-b border-white/10 text-white/40 font-mono uppercase tracking-wider bg-white/5">
                 <th className="py-3 px-4">SKU</th>
@@ -346,7 +346,7 @@ export default function ConsignmentManager() {
                   <td className="py-3 px-4 text-right">
                     <button
                       onClick={() => handleScanItem(item.sku)}
-                      className="bg-white/10 hover:bg-forest hover:text-white text-white/80 px-3 py-1 rounded text-xs font-bold transition-all"
+                      className="bg-white/10 hover:bg-forest hover:text-white text-white/80 px-3 py-1 rounded text-sm font-bold transition-all"
                     >
                       +1 Scan
                     </button>
@@ -407,7 +407,7 @@ export default function ConsignmentManager() {
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
           <div className="w-full max-w-md bg-[#0A101D] border border-white/10 rounded-2xl p-6 text-white shadow-2xl space-y-4">
-            <h3 className="font-serif font-bold text-lg text-white">Pack New Item Box (Milan)</h3>
+            <h3 className="font-serif font-bold text-xl text-white">Pack New Item Box (Milan)</h3>
             <form onSubmit={handleAddPackingItem} className="space-y-3">
               <div>
                 <label className="block text-[10px] font-mono uppercase text-white/50 mb-1">Select SKU</label>
@@ -415,7 +415,7 @@ export default function ConsignmentManager() {
                   value={selectedSku}
                   onChange={(e) => setSelectedSku(e.target.value)}
                   required
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-xs text-white"
+                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white"
                 >
                   <option value="">Select a product SKU...</option>
                   {(products || []).map(p => (
@@ -431,7 +431,7 @@ export default function ConsignmentManager() {
                   min="1"
                   value={packedQty}
                   onChange={(e) => setPackedQty(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-xs text-white font-mono"
+                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
                 />
               </div>
 
@@ -441,7 +441,7 @@ export default function ConsignmentManager() {
                   type="text"
                   value={batchCode}
                   onChange={(e) => setBatchCode(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-xs text-white font-mono"
+                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
                 />
               </div>
 
@@ -451,7 +451,7 @@ export default function ConsignmentManager() {
                   type="date"
                   value={bestBeforeDate}
                   onChange={(e) => setBestBeforeDate(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-xs text-white font-mono"
+                  className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
                 />
               </div>
 
@@ -459,13 +459,13 @@ export default function ConsignmentManager() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 py-2 rounded-lg bg-white/10 text-xs font-semibold"
+                  className="flex-1 py-2 rounded-lg bg-white/10 text-sm font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-lg bg-crimson text-xs font-bold text-white shadow-lg shadow-crimson/20"
+                  className="flex-1 py-2 rounded-lg bg-crimson text-sm font-bold text-white shadow-lg shadow-crimson/20"
                 >
                   Add to Manifest
                 </button>

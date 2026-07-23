@@ -152,7 +152,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
                 Visual Flowchart Canvas
               </span>
             </h2>
-            <p className="text-xs text-white/80 font-medium mt-1">
+            <p className="text-sm text-white/80 font-medium mt-1">
               Visualizing bi-directional connections, decision diamonds, manual SKU bypasses, and security auth gates.
             </p>
           </div>
@@ -161,7 +161,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsFullScreen(!isFullScreen)}
-            className="bg-gold hover:bg-gold-deep text-navy font-black text-xs px-5 py-2.5 rounded-xl border border-gold transition-all shadow-lg flex items-center gap-2"
+            className="bg-gold hover:bg-gold-deep text-navy font-black text-sm px-5 py-2.5 rounded-xl border border-gold transition-all shadow-lg flex items-center gap-2"
           >
             <span>{isFullScreen ? '↙️ Exit Full Screen' : '🔍 Open Full Screen Canvas'}</span>
           </button>
@@ -169,7 +169,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
       </div>
 
       {/* FILTER & LEGEND ROW */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#161B29] p-3 rounded-xl border border-white/15 text-xs font-mono">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#161B29] p-3 rounded-xl border border-white/15 text-sm font-mono">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-white/60 font-bold">Filter View:</span>
           {[
@@ -291,8 +291,8 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
               <span className="text-3xl p-3 rounded-2xl bg-black/60 border border-white/20 shadow-md">{activeNode.icon}</span>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-gold font-bold">{activeNode.category} Node</span>
-                  <span className="text-xs font-mono font-black px-2.5 py-0.5 rounded bg-blue text-white">
+                  <span className="text-sm font-mono text-gold font-bold">{activeNode.category} Node</span>
+                  <span className="text-sm font-mono font-black px-2.5 py-0.5 rounded bg-blue text-white">
                     {activeNode.sub}
                   </span>
                 </div>
@@ -305,19 +305,19 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
                 if (isFullScreen) setIsFullScreen(false)
                 if (onNavigate) onNavigate(activeNode.targetSection)
               }}
-              className="bg-gold hover:bg-gold-deep text-navy font-black text-xs px-6 py-3.5 rounded-xl transition-all shadow-xl flex items-center justify-center gap-2 min-h-[44px] shrink-0"
+              className="bg-gold hover:bg-gold-deep text-navy font-black text-sm px-6 py-3.5 rounded-xl transition-all shadow-xl flex items-center justify-center gap-2 min-h-[44px] shrink-0"
             >
               <span>Jump to {activeNode.label} Module</span>
               <span>➔</span>
             </button>
           </div>
 
-          <p className="text-sm text-white/90 font-medium leading-relaxed font-sans">
+          <p className="text-base text-white/90 font-medium leading-relaxed font-sans">
             {activeNode.desc}
           </p>
 
           {/* Telemetry Inputs & Outputs */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm font-mono">
             <div className="bg-black/40 p-4 rounded-xl border border-white/10 space-y-2">
               <p className="text-gold font-bold uppercase text-[11px]">System Data Inputs:</p>
               <ul className="space-y-1 text-white/80 font-sans">
@@ -387,7 +387,7 @@ function Flowcard({ node, isSelected, onClick, isDecision = false }) {
         )}
       </div>
 
-      <h4 className="text-xs font-black text-white leading-snug">{node.label}</h4>
+      <h4 className="text-sm font-black text-white leading-snug">{node.label}</h4>
       <p className="text-[10px] text-gold font-mono font-bold mt-1.5 leading-tight truncate">
         {node.sub}
       </p>

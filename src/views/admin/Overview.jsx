@@ -98,40 +98,40 @@ export default function Overview({ setSection }) {
       <div className="bg-[#0E121E] border border-white/20 rounded-2xl p-6 shadow-xl space-y-4 text-white">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-4">
           <div>
-            <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
+            <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Master Financial P&L Cockpit
             </span>
             <h2 className="font-sans text-2xl font-black text-white mt-2">Today's Landed Revenue & Profit</h2>
           </div>
           <div className="text-right">
-            <p className="text-xs text-white/80 font-bold uppercase">Net Cash Revenue</p>
+            <p className="text-sm text-white/80 font-bold uppercase">Net Cash Revenue</p>
             <p className="font-mono text-3xl font-black text-gold">{formattedRevenue}</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm font-mono">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-base font-mono">
           <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
-            <p className="text-gold text-xs uppercase font-extrabold">Gross Revenue</p>
+            <p className="text-gold text-sm uppercase font-extrabold">Gross Revenue</p>
             <p className="text-white text-xl font-black mt-1">{formattedRevenue}</p>
-            <p className="text-white/80 text-xs mt-1 font-sans">Live Channel Total</p>
+            <p className="text-white/80 text-sm mt-1 font-sans">Live Channel Total</p>
           </div>
 
           <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
-            <p className="text-gold text-xs uppercase font-extrabold">Sourcing COGS</p>
+            <p className="text-gold text-sm uppercase font-extrabold">Sourcing COGS</p>
             <p className="text-crimson text-xl font-black mt-1">-{estimatedCost}</p>
-            <p className="text-white/80 text-xs mt-1 font-sans">Est. Italy Landed Cost</p>
+            <p className="text-white/80 text-sm mt-1 font-sans">Est. Italy Landed Cost</p>
           </div>
 
           <div className="bg-[#161B29] p-4 rounded-xl border border-white/15">
-            <p className="text-gold text-xs uppercase font-extrabold">Pending Orders</p>
+            <p className="text-gold text-sm uppercase font-extrabold">Pending Orders</p>
             <p className="text-white text-xl font-black mt-1">{pendingOrders} Orders</p>
-            <p className="text-white/80 text-xs mt-1 font-sans">Awaiting Packing</p>
+            <p className="text-white/80 text-sm mt-1 font-sans">Awaiting Packing</p>
           </div>
 
           <div className="bg-blue/20 p-4 rounded-xl border border-blue text-white shadow-md">
-            <p className="text-blue text-xs uppercase font-black">Net Cash Profit</p>
+            <p className="text-blue text-sm uppercase font-black">Net Cash Profit</p>
             <p className="text-white text-xl font-black mt-1">{estimatedProfit}</p>
-            <p className="text-white/90 text-xs mt-1 font-sans font-bold">Clear Cash Flow</p>
+            <p className="text-white/90 text-sm mt-1 font-sans font-bold">Clear Cash Flow</p>
           </div>
         </div>
       </div>
@@ -145,18 +145,18 @@ export default function Overview({ setSection }) {
           {/* 🛬 Real-Time Flight Cargo Box Arrival & Handover Feed */}
           <div className="rounded-2xl border border-white/20 bg-[#0E121E] overflow-hidden text-white shadow-xl">
             <div className="border-b border-white/15 px-5 py-4 flex items-center justify-between bg-blue/20">
-              <h3 className="text-sm font-black uppercase tracking-wider text-white flex items-center gap-2">
+              <h3 className="text-base font-black uppercase tracking-wider text-white flex items-center gap-2">
                 <span>🛬</span> Air Cargo Flight Arrival Feed
               </h3>
-              <span className="text-xs font-mono text-white bg-blue px-2.5 py-1 rounded-full font-black shadow">Live Feed</span>
+              <span className="text-sm font-mono text-white bg-blue px-2.5 py-1 rounded-full font-black shadow">Live Feed</span>
             </div>
-            <div className="p-4 space-y-3 font-sans text-xs">
+            <div className="p-4 space-y-3 font-sans text-sm">
               <div className="p-4 rounded-xl bg-[#161B29] border border-white/15 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-extrabold text-white text-sm">🛬 Flight AZ-772 (Malpensa MXP → NAIA)</span>
-                  <span className="text-xs text-gold font-bold">Air Cargo Operational</span>
+                  <span className="font-extrabold text-white text-base">🛬 Flight AZ-772 (Malpensa MXP → NAIA)</span>
+                  <span className="text-sm text-gold font-bold">Air Cargo Operational</span>
                 </div>
-                <p className="text-white/90 text-xs font-medium">Custody verification active. Staff station PIN claims enabled.</p>
+                <p className="text-white/90 text-sm font-medium">Custody verification active. Staff station PIN claims enabled.</p>
               </div>
             </div>
           </div>
@@ -165,27 +165,27 @@ export default function Overview({ setSection }) {
           {lowStockCount > 0 ? (
             <div className="rounded-2xl border border-crimson/50 bg-crimson/15 p-5 text-white shadow-xl space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="font-black text-crimson text-sm uppercase flex items-center gap-2">
+                <h3 className="font-black text-crimson text-base uppercase flex items-center gap-2">
                   <span>⚠️</span> {lowStockCount} Low-Stock Alert Items
                 </h3>
                 <button
                   onClick={() => setSection && setSection('inventory')}
-                  className="text-xs font-bold bg-crimson hover:bg-crimson-deep text-white px-3 py-1.5 rounded-lg shadow"
+                  className="text-sm font-bold bg-crimson hover:bg-crimson-deep text-white px-3 py-1.5 rounded-lg shadow"
                 >
                   Manage Stock ➔
                 </button>
               </div>
-              <p className="text-xs text-white/90 font-medium">
+              <p className="text-sm text-white/90 font-medium">
                 Some inventory items have dropped below 5 units. Reorder or create Pasabuy sourcing requests.
               </p>
             </div>
           ) : (
             <div className="rounded-2xl border border-white/15 bg-[#0E121E] p-5 text-white shadow-xl">
               <div className="flex items-center justify-between">
-                <h3 className="font-black text-gold text-sm uppercase flex items-center gap-2">
+                <h3 className="font-black text-gold text-base uppercase flex items-center gap-2">
                   <span>✓</span> Stock Levels Healthy
                 </h3>
-                <span className="text-xs font-mono text-white/80">0 Critical Stock Warnings</span>
+                <span className="text-sm font-mono text-white/80">0 Critical Stock Warnings</span>
               </div>
             </div>
           )}
@@ -195,14 +195,14 @@ export default function Overview({ setSection }) {
         {/* Right Column - Quick Actions */}
         <div className="space-y-6">
           <div className="rounded-2xl border border-white/20 bg-[#0E121E] p-6 space-y-4 shadow-xl">
-            <h3 className="text-sm font-black uppercase text-gold">Quick Jump Operations</h3>
+            <h3 className="text-base font-black uppercase text-gold">Quick Jump Operations</h3>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setSection('inventory')}
                 className="p-4 rounded-xl bg-[#161B29] hover:bg-blue/20 border border-white/15 hover:border-blue text-left transition-all group"
               >
                 <span className="text-2xl block mb-1">📊</span>
-                <span className="text-xs font-black text-white group-hover:text-blue">Sheet Mode & Inventory</span>
+                <span className="text-sm font-black text-white group-hover:text-blue">Sheet Mode & Inventory</span>
               </button>
 
               <button
@@ -210,7 +210,7 @@ export default function Overview({ setSection }) {
                 className="p-4 rounded-xl bg-[#161B29] hover:bg-gold/20 border border-white/15 hover:border-gold text-left transition-all group"
               >
                 <span className="text-2xl block mb-1">📦</span>
-                <span className="text-xs font-black text-white group-hover:text-gold">Staff Handover & Pack</span>
+                <span className="text-sm font-black text-white group-hover:text-gold">Staff Handover & Pack</span>
               </button>
 
               <button
@@ -218,7 +218,7 @@ export default function Overview({ setSection }) {
                 className="p-4 rounded-xl bg-[#161B29] hover:bg-forest/20 border border-white/15 hover:border-forest text-left transition-all group"
               >
                 <span className="text-2xl block mb-1">✈️</span>
-                <span className="text-xs font-black text-white group-hover:text-forest">Pasabuy Sourcing</span>
+                <span className="text-sm font-black text-white group-hover:text-forest">Pasabuy Sourcing</span>
               </button>
 
               <button
@@ -226,7 +226,7 @@ export default function Overview({ setSection }) {
                 className="p-4 rounded-xl bg-[#161B29] hover:bg-crimson/20 border border-white/15 hover:border-crimson text-left transition-all group"
               >
                 <span className="text-2xl block mb-1">🔒</span>
-                <span className="text-xs font-black text-white group-hover:text-crimson">Staff PINs & Roles</span>
+                <span className="text-sm font-black text-white group-hover:text-crimson">Staff PINs & Roles</span>
               </button>
             </div>
           </div>
@@ -243,7 +243,7 @@ function HealthWidget({ label, status, val }) {
     <div className="rounded-xl border border-white/20 bg-[#0E121E] p-4 text-white shadow-md flex items-center justify-between">
       <div>
         <p className="text-[11px] font-extrabold uppercase text-gold truncate">{label}</p>
-        <p className="text-lg font-black mt-1">{val || 'Operational'}</p>
+        <p className="text-xl font-black mt-1">{val || 'Operational'}</p>
       </div>
       <span className={`h-3 w-3 rounded-full ${status === 'good' ? 'bg-blue pulse-dot' : 'bg-gold pulse-dot'}`} />
     </div>

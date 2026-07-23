@@ -38,12 +38,12 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
             </div>
             <div>
               <h2 className="text-xl font-black text-white">System Architecture & DevOps Mission Control</h2>
-              <p className="text-xs text-gold font-mono font-bold">Live QPS · Cloud Edge CDN · Database RPC Locks · AES-256 Vault</p>
+              <p className="text-sm text-gold font-mono font-bold">Live QPS · Cloud Edge CDN · Database RPC Locks · AES-256 Vault</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all font-black text-base"
+            className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all font-black text-lg"
           >
             ✕
           </button>
@@ -55,32 +55,32 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           {/* Real-time Performance & Throughput Row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono">
             <div className="bg-[#161B29] p-4 rounded-xl border border-white/15 shadow">
-              <p className="text-gold text-xs font-extrabold uppercase">Throughput (QPS)</p>
+              <p className="text-gold text-sm font-extrabold uppercase">Throughput (QPS)</p>
               <p className="text-2xl font-black text-white mt-1 flex items-center gap-2">
                 <span>{qps}</span>
-                <span className="text-xs font-sans font-bold text-white/80">queries/sec</span>
+                <span className="text-sm font-sans font-bold text-white/80">queries/sec</span>
               </p>
               <p className="text-[11px] text-white/80 mt-1 font-sans font-medium">Vercel Edge Network</p>
             </div>
 
             <div className="bg-[#161B29] p-4 rounded-xl border border-white/15 shadow">
-              <p className="text-gold text-xs font-extrabold uppercase">Edge Latency</p>
+              <p className="text-gold text-sm font-extrabold uppercase">Edge Latency</p>
               <p className="text-2xl font-black text-white mt-1 flex items-center gap-2">
                 <span>{latency}</span>
-                <span className="text-xs font-sans font-bold text-white/80">ms</span>
+                <span className="text-sm font-sans font-bold text-white/80">ms</span>
               </p>
               <p className="text-[11px] text-white/80 mt-1 font-sans font-medium">PH NAIA Edge Pop</p>
             </div>
 
             <div className="bg-[#161B29] p-4 rounded-xl border border-white/15 shadow">
-              <p className="text-gold text-xs font-extrabold uppercase">Database Engine</p>
-              <p className="text-lg font-black text-white mt-1">Supabase</p>
+              <p className="text-gold text-sm font-extrabold uppercase">Database Engine</p>
+              <p className="text-xl font-black text-white mt-1">Supabase</p>
               <p className="text-[11px] text-white/80 mt-1 font-sans font-extrabold text-blue">PostgreSQL + RPC Locks</p>
             </div>
 
             <div className="bg-[#161B29] p-4 rounded-xl border border-white/15 shadow">
-              <p className="text-gold text-xs font-extrabold uppercase">Realtime WebSockets</p>
-              <p className="text-lg font-black text-white mt-1">Active</p>
+              <p className="text-gold text-sm font-extrabold uppercase">Realtime WebSockets</p>
+              <p className="text-xl font-black text-white mt-1">Active</p>
               <p className="text-[11px] text-white/80 mt-1 font-sans font-medium">{wsStatus}</p>
             </div>
           </div>
@@ -91,12 +91,12 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
             {/* AES-256 Vault Status */}
             <div className="bg-[#161B29] p-5 rounded-2xl border border-white/15 space-y-3">
               <div className="flex items-center justify-between border-b border-white/15 pb-3">
-                <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
                   🔒 AES-256 Security Vault Health
                 </h3>
-                <span className="text-xs font-mono bg-gold text-navy font-black px-2.5 py-0.5 rounded-full shadow">ENCRYPTED</span>
+                <span className="text-sm font-mono bg-gold text-navy font-black px-2.5 py-0.5 rounded-full shadow">ENCRYPTED</span>
               </div>
-              <div className="space-y-2 text-xs font-mono">
+              <div className="space-y-2 text-sm font-mono">
                 <div className="flex justify-between text-white/90">
                   <span>Vault Storage Algorithm:</span>
                   <strong className="text-gold">AES-256-GCM / Web Crypto</strong>
@@ -119,12 +119,12 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
             {/* Rate Limiting & Concurrency Guard */}
             <div className="bg-[#161B29] p-5 rounded-2xl border border-white/15 space-y-3">
               <div className="flex items-center justify-between border-b border-white/15 pb-3">
-                <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
                   🛡️ Anti-Abuse Rate Limiting Throttles
                 </h3>
-                <span className="text-xs font-mono bg-blue text-white font-black px-2.5 py-0.5 rounded-full shadow">PROTECTED</span>
+                <span className="text-sm font-mono bg-blue text-white font-black px-2.5 py-0.5 rounded-full shadow">PROTECTED</span>
               </div>
-              <div className="space-y-2 text-xs font-mono">
+              <div className="space-y-2 text-sm font-mono">
                 <div className="flex justify-between text-white/90">
                   <span>Passcode 2FA Attempt Limit:</span>
                   <strong className="text-white">5 Attempts / min</strong>
@@ -148,12 +148,12 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           {/* System Error & Audit Trail Stream */}
           <div className="bg-[#161B29] p-5 rounded-2xl border border-white/15 space-y-3">
             <div className="flex items-center justify-between border-b border-white/15 pb-3">
-              <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
                 📋 Production System Log & Audit Stream
               </h3>
-              <span className="text-xs font-mono text-white/80 font-bold">4 Recent Log Events</span>
+              <span className="text-sm font-mono text-white/80 font-bold">4 Recent Log Events</span>
             </div>
-            <div className="space-y-2 font-mono text-xs">
+            <div className="space-y-2 font-mono text-sm">
               {errorLogs.map(log => (
                 <div key={log.id} className="flex items-start justify-between p-3 rounded-xl bg-black/40 border border-white/10">
                   <div className="flex items-start gap-3">
@@ -176,12 +176,12 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
 
         {/* Modal Footer */}
         <div className="border-t border-white/15 bg-[#161B29] px-6 py-4 flex items-center justify-between">
-          <p className="text-xs font-mono text-white/80 font-semibold">
+          <p className="text-sm font-mono text-white/80 font-semibold">
             Vercel Production Deployment · Supabase BaaS Cloud Status: <strong className="text-gold">100% Operational</strong>
           </p>
           <button
             onClick={onClose}
-            className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-6 py-2.5 rounded-xl shadow transition-all"
+            className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-6 py-2.5 rounded-xl shadow transition-all"
           >
             Close Mission Control Audit
           </button>

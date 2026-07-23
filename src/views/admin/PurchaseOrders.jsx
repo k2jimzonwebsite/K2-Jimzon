@@ -112,8 +112,8 @@ function ScannerModal({ po, onClose, onComplete }) {
     <div className="fixed inset-0 z-[100] flex flex-col bg-[#05080f] animate-in slide-in-from-bottom-4 text-white">
       <div className="flex items-center justify-between px-4 py-4 border-b border-white/10 bg-black/20">
         <div>
-          <p className="font-serif text-lg font-semibold">Receive {po.po_number}</p>
-          <p className="text-xs text-white/50">Point camera at product barcodes</p>
+          <p className="font-serif text-xl font-semibold">Receive {po.po_number}</p>
+          <p className="text-sm text-white/50">Point camera at product barcodes</p>
         </div>
         <button onClick={onClose} className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,21 +130,21 @@ function ScannerModal({ po, onClose, onComplete }) {
 
         {/* List of Expected Items */}
         <div className="p-4 space-y-3">
-          <h3 className="text-sm font-bold uppercase tracking-widest text-white/30 mb-2">Checklist</h3>
+          <h3 className="text-base font-bold uppercase tracking-widest text-white/30 mb-2">Checklist</h3>
           {loading ? (
-            <p className="text-xs text-white/50">Loading expected items...</p>
+            <p className="text-sm text-white/50">Loading expected items...</p>
           ) : (
             lines.map(line => {
               const isComplete = line.scanned >= line.quantity
               return (
                 <div key={line.id} className={`flex items-center justify-between p-3 rounded-lg border ${isComplete ? 'border-forest/50 bg-forest/10' : 'border-white/10 bg-white/5'}`}>
                   <div>
-                    <p className="text-sm font-medium">{line.products?.title || line.sku}</p>
-                    <p className="text-xs font-mono text-white/50">{line.sku}</p>
+                    <p className="text-base font-medium">{line.products?.title || line.sku}</p>
+                    <p className="text-sm font-mono text-white/50">{line.sku}</p>
                   </div>
                   <div className="text-right">
-                    <p className={`text-lg font-bold tabular ${isComplete ? 'text-forest' : 'text-blue'}`}>
-                      {line.scanned} <span className="text-sm font-normal text-white/40">/ {line.quantity}</span>
+                    <p className={`text-xl font-bold tabular ${isComplete ? 'text-forest' : 'text-blue'}`}>
+                      {line.scanned} <span className="text-base font-normal text-white/40">/ {line.quantity}</span>
                     </p>
                   </div>
                 </div>
@@ -158,7 +158,7 @@ function ScannerModal({ po, onClose, onComplete }) {
         <button 
           onClick={handleComplete}
           disabled={processing || lines.filter(l => l.scanned > 0).length === 0}
-          className="w-full rounded-lg bg-forest py-3.5 text-sm font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-forest/20"
+          className="w-full rounded-lg bg-forest py-3.5 text-base font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-forest/20"
         >
           {processing ? 'Saving...' : 'Finalize Restock'}
         </button>
@@ -214,17 +214,17 @@ export default function PurchaseOrders() {
 
       <div className="flex items-center justify-between border-b border-white/10 pb-4">
         <div>
-          <h2 className="text-lg font-serif text-white">Incoming Deliveries</h2>
-          <p className="text-sm text-white/50 mt-1">Scan barcodes to accurately restock inventory.</p>
+          <h2 className="text-xl font-serif text-white">Incoming Deliveries</h2>
+          <p className="text-base text-white/50 mt-1">Scan barcodes to accurately restock inventory.</p>
         </div>
-        <button className="rounded bg-forest px-4 py-2 text-sm font-semibold text-white hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20">
+        <button className="rounded bg-forest px-4 py-2 text-base font-semibold text-white hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20">
           + New Delivery
         </button>
       </div>
 
       <div className="rounded-xl border border-white/10 bg-[#05080f] overflow-x-auto w-full">
-        <table className="w-full text-left text-sm text-white/80 min-w-[800px]">
-          <thead className="bg-white/5 text-xs uppercase tracking-widest text-white/40">
+        <table className="w-full text-left text-base text-white/80 min-w-[800px]">
+          <thead className="bg-white/5 text-sm uppercase tracking-widest text-white/40">
             <tr>
               <th className="px-6 py-4 font-medium">PO Number</th>
               <th className="px-6 py-4 font-medium">Supplier</th>
@@ -246,7 +246,7 @@ export default function PurchaseOrders() {
                 <td className="px-6 py-4">{po.expected_delivery || '-'}</td>
                 <td className="px-6 py-4 font-mono text-forest">{peso(po.total_amount)}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+                  <span className={`px-2.5 py-1 rounded-full text-sm font-bold ${
                     po.status === 'Received' ? 'bg-forest/20 text-forest' : 
                     po.status === 'Sent' ? 'bg-blue/20 text-blue' : 'bg-white/10 text-white/60'
                   }`}>
@@ -257,16 +257,16 @@ export default function PurchaseOrders() {
                   {po.status === 'Sent' ? (
                     <button 
                       onClick={() => setScanningPo(po)}
-                      className="rounded border border-blue bg-blue/10 px-3 py-1.5 text-xs font-medium text-blue hover:bg-blue/20 transition-colors"
+                      className="rounded border border-blue bg-blue/10 px-3 py-1.5 text-sm font-medium text-blue hover:bg-blue/20 transition-colors"
                     >
                       Receive Shipment (Scan)
                     </button>
                   ) : po.status === 'Received' ? (
-                    <span className="flex items-center justify-end gap-1 text-xs text-forest">
+                    <span className="flex items-center justify-end gap-1 text-sm text-forest">
                       <CheckIcon size={14} /> Restocked
                     </span>
                   ) : (
-                    <button className="text-xs text-blue hover:underline">Edit Draft</button>
+                    <button className="text-sm text-blue hover:underline">Edit Draft</button>
                   )}
                 </td>
               </tr>

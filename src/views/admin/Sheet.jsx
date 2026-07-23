@@ -155,25 +155,25 @@ export default function Sheet() {
       {/* Top Action & Horizontal Navigation Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-6 py-3.5 bg-[#0A101D] shrink-0">
         <div className="flex flex-wrap items-center gap-2">
-          <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-lg bg-forest text-white px-3.5 py-2.5 min-h-[44px] text-xs font-bold transition hover:bg-forest/90 shadow-md">
-            <span className="text-base leading-none">+</span> Add Row
+          <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-lg bg-forest text-white px-3.5 py-2.5 min-h-[44px] text-sm font-bold transition hover:bg-forest/90 shadow-md">
+            <span className="text-lg leading-none">+</span> Add Row
           </button>
-          <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-xs font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
+          <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
             <span>📂</span> CSV Import
           </button>
-          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-xs font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
+          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white">
             <span>⌂</span> Scan Box
           </button>
-          <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-blue/30 bg-blue/10 px-3 py-2.5 min-h-[44px] text-xs font-medium text-blue transition hover:bg-blue/20">
+          <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-lg border border-blue/30 bg-blue/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-blue transition hover:bg-blue/20">
             <span>✨</span> Smart Paste AI
           </button>
-          <button onClick={() => rows.length > 0 && setEnrichProduct(rows[0])} className="flex shrink-0 items-center gap-2 rounded-lg border border-amber/30 bg-amber/10 px-3 py-2.5 min-h-[44px] text-xs font-medium text-amber transition hover:bg-amber/20">
+          <button onClick={() => rows.length > 0 && setEnrichProduct(rows[0])} className="flex shrink-0 items-center gap-2 rounded-lg border border-amber/30 bg-amber/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-amber transition hover:bg-amber/20">
             <span>✨</span> AI Spec Enricher
           </button>
         </div>
 
         {/* Sticky Viewport Horizontal Domain Jump Controls */}
-        <div className="flex items-center gap-2 text-xs font-mono">
+        <div className="flex items-center gap-2 text-sm font-mono">
           <span className="text-gold font-extrabold uppercase hidden md:inline">Domain Jump:</span>
           <button onClick={() => handleScrollToDomain(0)} className="px-3.5 py-2 min-h-[38px] rounded-xl bg-gold hover:bg-gold-deep text-navy font-black transition-all shadow">
             📋 Product & Content
@@ -193,25 +193,25 @@ export default function Sheet() {
       {/* Viewport Frame Constrained Scroll Container */}
       <div ref={tableContainerRef} className="flex-1 max-h-[calc(100vh-210px)] overflow-x-auto overflow-y-auto custom-scrollbar relative bg-[#05080f] border-t border-white/20">
         {loading ? (
-          <div className="flex items-center justify-center h-64 text-white font-extrabold animate-pulse font-sans text-base">Loading Product Masters...</div>
+          <div className="flex items-center justify-center h-64 text-white font-extrabold animate-pulse font-sans text-lg">Loading Product Masters...</div>
         ) : (
-          <table className="w-max min-w-full border-collapse text-sm bg-[#0E121E]">
+          <table className="w-max min-w-full border-collapse text-base bg-[#0E121E]">
             <thead className="sticky top-0 z-30 shadow-lg">
-              <tr className="bg-[#05080f] text-xs text-white">
+              <tr className="bg-[#05080f] text-sm text-white">
                 <th className="w-10 border border-white/20 py-3 font-black sticky left-0 z-40 bg-[#05080f] text-gold">#</th>
                 {DOMAINS.map((d, i) => (
-                  <th key={d.name} colSpan={d.cols.length} className={`border border-white/20 py-3 px-4 font-black uppercase tracking-wider text-center text-xs ${['bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white'][i % 7]}`}>
+                  <th key={d.name} colSpan={d.cols.length} className={`border border-white/20 py-3 px-4 font-black uppercase tracking-wider text-center text-sm ${['bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white'][i % 7]}`}>
                     {d.name}
                   </th>
                 ))}
-                <th className="w-20 border border-white/20 py-3 font-black text-xs text-gold">Action</th>
+                <th className="w-20 border border-white/20 py-3 font-black text-sm text-gold">Action</th>
               </tr>
-              <tr className="bg-[#161B29] text-left text-xs font-black text-white">
+              <tr className="bg-[#161B29] text-left text-sm font-black text-white">
                 <th className="border border-white/20 px-2 py-3 text-center sticky left-0 z-40 bg-[#161B29] text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]">#</th>
                 {ALL_COLS.map((h, colIdx) => (
                   <th
                     key={h}
-                    className={`border border-white/20 px-4 py-3 whitespace-nowrap font-mono text-xs font-extrabold ${
+                    className={`border border-white/20 px-4 py-3 whitespace-nowrap font-mono text-sm font-extrabold ${
                       h === 'SKU' ? 'sticky left-10 z-40 bg-[#161B29] text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]' : 'text-white'
                     }`}
                   >
@@ -226,7 +226,7 @@ export default function Sheet() {
                 const isDraft = r.status === 'Draft'
                 return (
                   <tr key={r.sku} className="hover:bg-blue/10 transition-colors group">
-                    <td className="border border-white/10 bg-[#0A101D] group-hover:bg-blue/10 px-2 py-1.5 text-center text-xs text-white/40 font-mono sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
+                    <td className="border border-white/10 bg-[#0A101D] group-hover:bg-blue/10 px-2 py-1.5 text-center text-sm text-white/40 font-mono sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
                       {i + 1}
                     </td>
                     {ALL_COLS.map((col, colIdx) => {
@@ -242,7 +242,7 @@ export default function Sheet() {
                             <select 
                               value={r.status || 'Draft'}
                               onChange={(e) => updateField(i, col, e.target.value)}
-                              className={`w-full h-full bg-transparent px-2 py-1.5 text-xs outline-none cursor-pointer appearance-none text-center font-bold ${isDraft ? 'text-amber' : 'text-forest'}`}
+                              className={`w-full h-full bg-transparent px-2 py-1.5 text-sm outline-none cursor-pointer appearance-none text-center font-bold ${isDraft ? 'text-amber' : 'text-forest'}`}
                             >
                               <option value="Live">Live</option>
                               <option value="Draft">Draft</option>
@@ -261,7 +261,7 @@ export default function Sheet() {
                                 type="date"
                                 value={val || ''}
                                 onChange={(e) => updateField(i, col, e.target.value, r.sku)}
-                                className="bg-transparent text-xs font-mono text-white outline-none w-24"
+                                className="bg-transparent text-sm font-mono text-white outline-none w-24"
                               />
                               {val && (
                                 <button
@@ -303,7 +303,7 @@ export default function Sheet() {
                             onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, [field]: e.target.value } : row))}
                             onBlur={(e) => updateField(i, col, e.target.value, col === 'SKU' ? r.sku : null)}
                             onFocus={() => setSelected({ row: i, col: colIdx })}
-                            className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-xs ${col === 'SKU' ? 'font-bold text-blue' : 'text-navy dark:text-white/80'}`}
+                            className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-sm ${col === 'SKU' ? 'font-bold text-blue' : 'text-navy dark:text-white/80'}`}
                             placeholder={col}
                           />
                         </Cell>
@@ -311,7 +311,7 @@ export default function Sheet() {
                     })}
                     <td className="border border-line dark:border-white/10 px-2 text-center bg-paper dark:bg-[#0A101D] group-hover:bg-blue-wash dark:group-hover:bg-blue/10">
                       <div className="flex items-center justify-center gap-1">
-                        <button onClick={() => setEnrichProduct(r)} className="text-amber/70 hover:text-amber hover:bg-amber/10 rounded w-6 h-6 flex items-center justify-center transition-colors text-xs font-bold" title="Enrich Product Specs with AI">
+                        <button onClick={() => setEnrichProduct(r)} className="text-amber/70 hover:text-amber hover:bg-amber/10 rounded w-6 h-6 flex items-center justify-center transition-colors text-sm font-bold" title="Enrich Product Specs with AI">
                           ✨
                         </button>
                         <button onClick={() => openProduct(r.sku)} className="text-navy-soft hover:text-navy hover:bg-shell rounded w-6 h-6 flex items-center justify-center transition-colors" title="View Store Page">
@@ -352,7 +352,7 @@ export default function Sheet() {
                 margin={0}
               />
             </div>
-            <p className="mt-6 text-sm text-navy-soft">Scan directly from screen, or right-click to save and print.</p>
+            <p className="mt-6 text-base text-navy-soft">Scan directly from screen, or right-click to save and print.</p>
           </div>
         </div>
       )}

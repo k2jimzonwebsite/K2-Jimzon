@@ -90,12 +90,12 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
       {/* Top Mobile Bar */}
       <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#0A101D] shrink-0">
         <div>
-          <h2 className="font-serif font-semibold text-lg text-white">Manila Receiving Camera Scanner</h2>
-          <p className="text-xs text-white/50">Point phone camera at item barcode · +1 per scan</p>
+          <h2 className="font-serif font-semibold text-xl text-white">Manila Receiving Camera Scanner</h2>
+          <p className="text-sm text-white/50">Point phone camera at item barcode · +1 per scan</p>
         </div>
         <button
           onClick={onClose}
-          className="rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/20 transition-all"
+          className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold text-white/80 hover:bg-white/20 transition-all"
         >
           Close
         </button>
@@ -105,14 +105,14 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
       <div className="bg-[#020408] border-b border-white/10 px-4 py-3 flex items-center justify-between shrink-0">
         <div>
           <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Shipment Progress</p>
-          <p className="text-sm font-bold text-white">
+          <p className="text-base font-bold text-white">
             <span className="text-forest">{totalScanned}</span> / <span className="text-white/70">{totalPacked} units</span>
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={onFinishScanning}
-            className="bg-forest hover:bg-forest/90 text-white px-4 py-2 rounded-lg font-bold text-xs shadow-lg shadow-forest/20 transition-all"
+            className="bg-forest hover:bg-forest/90 text-white px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-forest/20 transition-all"
           >
             Review Discrepancies & Sync →
           </button>
@@ -141,11 +141,11 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
         {lastScanned && (
           <div className="absolute bottom-4 left-4 right-4 bg-forest/90 backdrop-blur-md text-white p-3.5 rounded-xl shadow-2xl flex items-center justify-between animate-in slide-in-from-bottom-2 duration-200">
             <div>
-              <p className="text-xs font-bold font-mono text-white/80">+1 INCREMENTED</p>
-              <p className="text-sm font-semibold truncate max-w-[220px]">{lastScanned.name}</p>
+              <p className="text-sm font-bold font-mono text-white/80">+1 INCREMENTED</p>
+              <p className="text-base font-semibold truncate max-w-[220px]">{lastScanned.name}</p>
             </div>
             <div className="text-right">
-              <span className="bg-white/20 text-white font-mono font-bold text-sm px-2.5 py-1 rounded">
+              <span className="bg-white/20 text-white font-mono font-bold text-base px-2.5 py-1 rounded">
                 {lastScanned.count} / {lastScanned.target}
               </span>
             </div>
@@ -161,11 +161,11 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
             value={manualCode}
             onChange={(e) => setManualCode(e.target.value)}
             placeholder="Manual SKU or Barcode entry (+1)..."
-            className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/30 outline-none focus:border-forest"
+            className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-forest"
           />
           <button
             type="submit"
-            className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold"
+            className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-bold"
           >
             +1 Scan
           </button>
@@ -181,7 +181,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
                 onClick={() => handleIncrement(item.sku)}
                 className="shrink-0 bg-white/5 border border-white/10 hover:border-forest p-2 rounded-lg text-left transition-all active:scale-95"
               >
-                <p className="text-xs font-semibold text-white/90 truncate max-w-[120px]">{item.sku}</p>
+                <p className="text-sm font-semibold text-white/90 truncate max-w-[120px]">{item.sku}</p>
                 <p className="text-[10px] text-white/50">
                   Scanned: <span className="text-forest font-bold">{item.manila_scanned_qty}</span> / {item.italy_packed_qty}
                 </p>

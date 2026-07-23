@@ -38,8 +38,8 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
       <div className="bg-[#10141d] border border-white/10 rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40">
           <div>
-            <h3 className="font-serif text-lg font-semibold text-white">Manage Photos</h3>
-            <p className="text-xs text-purple-400 font-mono">SKU: {product.sku}</p>
+            <h3 className="font-serif text-xl font-semibold text-white">Manage Photos</h3>
+            <p className="text-sm text-purple-400 font-mono">SKU: {product.sku}</p>
           </div>
           <button onClick={onClose} className="text-white/50 hover:text-white transition-colors">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

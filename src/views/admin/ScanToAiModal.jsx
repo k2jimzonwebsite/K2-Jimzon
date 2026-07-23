@@ -107,10 +107,10 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-black/30 shrink-0">
         <div>
-          <p className="font-serif text-lg font-semibold">
+          <p className="font-serif text-xl font-semibold">
             {step === 'result' ? '✓ Prompt Ready' : '📦 Scan Box'}
           </p>
-          <p className="text-xs text-white/40 mt-0.5">
+          <p className="text-sm text-white/40 mt-0.5">
             {step === 'scan'   && 'Point camera at the product barcode'}
             {step === 'manual' && 'Type the barcode or product name manually'}
             {step === 'result' && 'Copy this prompt → open ChatGPT Project 1 → attach photo → send'}
@@ -120,7 +120,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           {step === 'scan' && (
             <button
               onClick={() => setStep('manual')}
-              className="text-xs font-semibold text-white/50 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full transition-colors"
+              className="text-sm font-semibold text-white/50 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full transition-colors"
             >
               Type manually
             </button>
@@ -128,7 +128,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           {step === 'manual' && (
             <button
               onClick={() => setStep('scan')}
-              className="text-xs font-semibold text-white/50 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full transition-colors"
+              className="text-sm font-semibold text-white/50 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full transition-colors"
             >
               Use camera
             </button>
@@ -147,9 +147,9 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
         {step === 'scan' && (
           <div className="w-full max-w-sm mx-auto flex flex-col gap-6 justify-center flex-1 pb-16">
             <div id="ai-qr-reader" className="w-full rounded-2xl overflow-hidden bg-white/5 border border-white/10" />
-            <p className="text-center text-sm text-white/40">Align the barcode inside the frame</p>
+            <p className="text-center text-base text-white/40">Align the barcode inside the frame</p>
             {checking && (
-              <div className="flex items-center justify-center gap-2 text-sm text-white/50">
+              <div className="flex items-center justify-center gap-2 text-base text-white/50">
                 <div className="w-4 h-4 border-2 border-blue border-t-transparent rounded-full animate-spin" />
                 Checking inventory…
               </div>
@@ -162,11 +162,11 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           <div className="w-full max-w-sm mx-auto flex flex-col gap-6 justify-center flex-1 pb-16">
             <div className="text-center space-y-1 mb-2">
               <p className="font-semibold text-white">Enter Product Details</p>
-              <p className="text-xs text-white/40">Barcode and/or product name will be included in the AI prompt</p>
+              <p className="text-sm text-white/40">Barcode and/or product name will be included in the AI prompt</p>
             </div>
             <form onSubmit={handleManualSubmit} className="space-y-4">
               <div>
-                <label className="text-xs text-white/40 block mb-1.5 uppercase tracking-widest">Barcode / EAN</label>
+                <label className="text-sm text-white/40 block mb-1.5 uppercase tracking-widest">Barcode / EAN</label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -174,17 +174,17 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
                   value={manualBarcode}
                   onChange={(e) => setManualBarcode(e.target.value)}
                   placeholder="e.g. 8000400289000"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-blue focus:outline-none transition-colors"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-base focus:border-blue focus:outline-none transition-colors"
                 />
               </div>
               <div>
-                <label className="text-xs text-white/40 block mb-1.5 uppercase tracking-widest">Product Name <span className="normal-case font-normal">(optional)</span></label>
+                <label className="text-sm text-white/40 block mb-1.5 uppercase tracking-widest">Product Name <span className="normal-case font-normal">(optional)</span></label>
                 <input
                   type="text"
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
                   placeholder="e.g. Mutti Polpa 400g"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-blue focus:outline-none transition-colors"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-base focus:border-blue focus:outline-none transition-colors"
                 />
               </div>
               <button
@@ -204,12 +204,12 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
 
             {/* Scanned info badge */}
             <div className="flex items-center gap-3 bg-forest/10 border border-forest/30 rounded-xl px-4 py-3">
-              <span className="text-forest text-lg">✓</span>
+              <span className="text-forest text-xl">✓</span>
               <div>
-                <p className="text-sm font-semibold text-white">
-                  {productName || 'Product'} {barcode && <span className="font-mono text-xs text-white/40 ml-1">· {barcode}</span>}
+                <p className="text-base font-semibold text-white">
+                  {productName || 'Product'} {barcode && <span className="font-mono text-sm text-white/40 ml-1">· {barcode}</span>}
                 </p>
-                <p className="text-xs text-white/40 mt-0.5">Not in inventory — ready to process</p>
+                <p className="text-sm text-white/40 mt-0.5">Not in inventory — ready to process</p>
               </div>
             </div>
 
@@ -217,7 +217,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
             <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden flex flex-col flex-1 min-h-[280px]">
               <div className="bg-black/40 px-4 py-3 flex items-center justify-between border-b border-white/10 shrink-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-white/50 uppercase tracking-widest">Project 1 Prompt</span>
+                  <span className="text-sm font-bold text-white/50 uppercase tracking-widest">Project 1 Prompt</span>
                   <span className="text-[10px] font-bold bg-blue/20 text-blue px-2 py-0.5 rounded-full border border-blue/30">K2 Jimzon Product Intelligence AI</span>
                 </div>
                 <span className="text-[10px] font-bold bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">EDITABLE</span>
@@ -225,7 +225,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
               <textarea
                 value={promptText}
                 onChange={(e) => setPromptText(e.target.value)}
-                className="w-full flex-1 bg-transparent text-white p-4 text-xs font-mono resize-none focus:outline-none leading-relaxed"
+                className="w-full flex-1 bg-transparent text-white p-4 text-sm font-mono resize-none focus:outline-none leading-relaxed"
                 spellCheck={false}
               />
             </div>
@@ -242,7 +242,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
               ].map(([title, body], i) => (
                 <div key={i} className="flex gap-3 items-start">
                   <span className="w-5 h-5 rounded-full bg-blue/20 text-blue text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
-                  <p className="text-xs text-white/50"><span className="text-white/80 font-semibold">{title}</span> — {body}</p>
+                  <p className="text-sm text-white/50"><span className="text-white/80 font-semibold">{title}</span> — {body}</p>
                 </div>
               ))}
             </div>
@@ -277,7 +277,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
 
               <button
                 onClick={() => { setStep('scan'); setBarcode(''); setProductName(''); setManualBarcode('') }}
-                className="w-full text-white/30 hover:text-white/60 text-sm py-2 transition-colors"
+                className="w-full text-white/30 hover:text-white/60 text-base py-2 transition-colors"
               >
                 ← Scan another product
               </button>

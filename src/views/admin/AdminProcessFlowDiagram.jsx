@@ -101,14 +101,14 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
               Interactive Flowchart
             </span>
           </div>
-          <p className="text-xs text-white/80 font-medium mt-1">
+          <p className="text-sm text-white/80 font-medium mt-1">
             Click any step below to inspect how data flows through K2 Jimzon Admin Mission Control.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-blue pulse-dot" />
-          <span className="text-xs font-mono font-bold text-gold">Live System Pipeline Active</span>
+          <span className="text-sm font-mono font-bold text-gold">Live System Pipeline Active</span>
         </div>
       </div>
 
@@ -129,7 +129,7 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
                 }`}
               >
                 <div className="flex items-center justify-between w-full mb-2">
-                  <span className="text-xs font-mono font-black text-white/40 group-hover:text-gold">{step.stepNum}</span>
+                  <span className="text-sm font-mono font-black text-white/40 group-hover:text-gold">{step.stepNum}</span>
                   <span
                     className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full shadow-sm"
                     style={{ backgroundColor: step.color + '30', color: step.color, border: `1px solid ${step.color}60` }}
@@ -140,7 +140,7 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
 
                 <div className="my-2">
                   <span className="text-2xl block mb-1">{step.icon}</span>
-                  <h3 className="text-xs font-black text-white leading-tight">{step.title}</h3>
+                  <h3 className="text-sm font-black text-white leading-tight">{step.title}</h3>
                 </div>
 
                 <p className="text-[11px] text-white/70 font-medium mt-1 leading-snug line-clamp-2">
@@ -149,7 +149,7 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
 
                 {/* Connection Arrow Indicator */}
                 {idx < STEPS.length - 1 && (
-                  <div className="hidden md:block absolute -right-3.5 top-1/2 -translate-y-1/2 z-10 text-gold font-mono font-black text-sm">
+                  <div className="hidden md:block absolute -right-3.5 top-1/2 -translate-y-1/2 z-10 text-gold font-mono font-black text-base">
                     ➔
                   </div>
                 )}
@@ -167,25 +167,25 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
               <span className="text-3xl p-2.5 rounded-xl bg-black/40 border border-white/15">{selectedNode.icon}</span>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-gold font-bold">Step {selectedNode.stepNum} Pipeline Node</span>
-                  <span className="text-xs font-mono font-black px-2 py-0.5 rounded bg-blue text-white">
+                  <span className="text-sm font-mono text-gold font-bold">Step {selectedNode.stepNum} Pipeline Node</span>
+                  <span className="text-sm font-mono font-black px-2 py-0.5 rounded bg-blue text-white">
                     {selectedNode.badge}
                   </span>
                 </div>
-                <h3 className="text-lg font-black text-white">{selectedNode.title}</h3>
+                <h3 className="text-xl font-black text-white">{selectedNode.title}</h3>
               </div>
             </div>
 
             <button
               onClick={() => onNavigate && onNavigate(selectedNode.targetSection)}
-              className="bg-blue hover:bg-blue-deep text-white font-black text-xs px-5 py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 min-h-[44px] shrink-0"
+              className="bg-blue hover:bg-blue-deep text-white font-black text-sm px-5 py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 min-h-[44px] shrink-0"
             >
               <span>{selectedNode.details.buttonText}</span>
               <span>➔</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm font-mono">
             <div className="bg-black/40 p-3.5 rounded-xl border border-white/10 space-y-1.5">
               <p className="text-gold font-bold uppercase text-[10px]">Data Inputs & Channels:</p>
               <ul className="space-y-1 text-white/90 font-sans font-medium">
@@ -207,7 +207,7 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
 
             <div className="bg-black/40 p-3.5 rounded-xl border border-white/10 space-y-1.5">
               <p className="text-gold font-bold uppercase text-[10px]">Assigned Lead & Role:</p>
-              <p className="text-white font-bold text-sm font-sans">{selectedNode.details.staffLead}</p>
+              <p className="text-white font-bold text-base font-sans">{selectedNode.details.staffLead}</p>
               <p className="text-[11px] text-white/60 font-sans">Full administrative execution & audit logging active.</p>
             </div>
           </div>

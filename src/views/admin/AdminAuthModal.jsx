@@ -76,14 +76,14 @@ export default function AdminAuthModal({ isOpen, onClose }) {
             K2 Jimzon <span className="text-blue font-black font-mono">BOS</span>
           </h2>
           <div className="flex items-center justify-center gap-2 mt-2">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest bg-gold/15 text-gold px-3 py-1 rounded-full border border-gold/30 shadow-sm">
+            <span className="text-sm font-mono font-bold uppercase tracking-widest bg-gold/15 text-gold px-3 py-1 rounded-full border border-gold/30 shadow-sm">
               🛡️ AES-256 Vault & 2FA Active
             </span>
           </div>
         </div>
 
         {/* Step Indicator */}
-        <div className="flex items-center justify-between mb-6 bg-white/5 p-2 rounded-xl border border-white/10 text-xs font-mono">
+        <div className="flex items-center justify-between mb-6 bg-white/5 p-2 rounded-xl border border-white/10 text-sm font-mono">
           <span className={`px-3 py-1.5 rounded-lg font-bold transition-colors ${step === 1 ? 'bg-blue text-white shadow' : 'text-white/60'}`}>
             1. Master Passcode
           </span>
@@ -96,13 +96,13 @@ export default function AdminAuthModal({ isOpen, onClose }) {
         {step === 1 ? (
           <form onSubmit={handleStep1Submit} className="space-y-4">
             {error && (
-              <div className="p-3.5 rounded-xl border border-crimson/40 bg-crimson/15 text-crimson text-xs font-bold animate-in shake">
+              <div className="p-3.5 rounded-xl border border-crimson/40 bg-crimson/15 text-crimson text-sm font-bold animate-in shake">
                 ⚠️ {error}
               </div>
             )}
 
             {/* Mode Switcher */}
-            <div className="flex border-b border-white/15 mb-4 text-xs font-bold">
+            <div className="flex border-b border-white/15 mb-4 text-sm font-bold">
               <button
                 type="button"
                 onClick={() => { setMode('passcode'); setError('') }}
@@ -129,7 +129,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
 
             {mode === 'passcode' ? (
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-2">
+                <label className="block text-sm font-bold uppercase tracking-wider text-white/80 mb-2">
                   Admin Security Passcode
                 </label>
                 <input
@@ -138,16 +138,16 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                   onChange={(e) => setPasscode(e.target.value)}
                   placeholder="Enter passcode (e.g. 202688)"
                   required
-                  className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-base text-white font-mono placeholder:text-white/40 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
+                  className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-lg text-white font-mono placeholder:text-white/40 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
                 />
-                <p className="text-xs text-gold mt-2 font-medium">
+                <p className="text-sm text-gold mt-2 font-medium">
                   Valid Master Passcodes: <span className="font-mono font-bold text-white">202688</span>, <span className="font-mono font-bold text-white">123456</span>, <span className="font-mono font-bold text-white">K2ADMIN2026</span>
                 </p>
               </div>
             ) : (
               <>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-2">
+                  <label className="block text-sm font-bold uppercase tracking-wider text-white/80 mb-2">
                     Super Admin Email
                   </label>
                   <input
@@ -156,11 +156,11 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="k2jimzonwebsite@gmail.com"
                     required
-                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
+                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-base text-white placeholder:text-white/40 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-2">
+                  <label className="block text-sm font-bold uppercase tracking-wider text-white/80 mb-2">
                     Password
                   </label>
                   <input
@@ -169,7 +169,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
                     required
-                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
+                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-base text-white placeholder:text-white/40 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all"
                   />
                 </div>
               </>
@@ -179,14 +179,14 @@ export default function AdminAuthModal({ isOpen, onClose }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-3 text-xs font-bold text-white/80 hover:bg-white/15 hover:text-white transition-all"
+                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-bold text-white/80 hover:bg-white/15 hover:text-white transition-all"
               >
                 Back to Store
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 rounded-xl bg-blue hover:bg-blue-deep py-3 text-xs font-extrabold text-white shadow-lg transition-transform active:scale-95 disabled:opacity-50"
+                className="flex-1 rounded-xl bg-blue hover:bg-blue-deep py-3 text-sm font-extrabold text-white shadow-lg transition-transform active:scale-95 disabled:opacity-50"
               >
                 {loading ? 'Authenticating...' : 'Continue to 2FA →'}
               </button>
@@ -196,7 +196,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
               <button
                 type="button"
                 onClick={() => loginWithGoogle()}
-                className="w-full mt-2 py-3 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-xs transition-all shadow-md flex items-center justify-center gap-2"
+                className="w-full mt-2 py-3 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-sm transition-all shadow-md flex items-center justify-center gap-2"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -211,22 +211,22 @@ export default function AdminAuthModal({ isOpen, onClose }) {
         ) : (
           <form onSubmit={handleStep2Submit} className="space-y-4 animate-in fade-in duration-200">
             {error && (
-              <div className="p-3.5 rounded-xl border border-crimson/40 bg-crimson/15 text-crimson text-xs font-bold animate-in shake">
+              <div className="p-3.5 rounded-xl border border-crimson/40 bg-crimson/15 text-crimson text-sm font-bold animate-in shake">
                 ⚠️ {error}
               </div>
             )}
 
-            <div className="bg-blue/15 border border-blue/30 p-4 rounded-xl text-xs text-white space-y-1">
-              <p className="font-bold text-blue flex items-center gap-1.5 text-sm">
+            <div className="bg-blue/15 border border-blue/30 p-4 rounded-xl text-sm text-white space-y-1">
+              <p className="font-bold text-blue flex items-center gap-1.5 text-base">
                 <span>🔐</span> 2-Factor Authenticator Code Required
               </p>
-              <p className="text-white/80 text-xs">
+              <p className="text-white/80 text-sm">
                 Enter your 6-digit TOTP code from your Google Authenticator or Master Key.
               </p>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-2">
+              <label className="block text-sm font-bold uppercase tracking-wider text-white/80 mb-2">
                 6-Digit Authenticator Code
               </label>
               <input
@@ -238,7 +238,7 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                 required
                 className="w-full text-center tracking-[0.4em] font-mono text-2xl font-extrabold rounded-xl border border-blue/40 bg-black/50 px-4 py-3.5 text-blue placeholder:text-white/20 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue transition-all"
               />
-              <p className="text-xs text-gold mt-2 text-center font-semibold">
+              <p className="text-sm text-gold mt-2 text-center font-semibold">
                 Valid 2FA Code: <span className="text-white font-mono font-bold">202688</span> or <span className="text-white font-mono font-bold">123456</span>
               </p>
             </div>
@@ -247,14 +247,14 @@ export default function AdminAuthModal({ isOpen, onClose }) {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-3 text-xs font-bold text-white/80 hover:bg-white/15 hover:text-white transition-all"
+                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-bold text-white/80 hover:bg-white/15 hover:text-white transition-all"
               >
                 ← Back
               </button>
               <button
                 type="submit"
                 disabled={loading || totpCode.length < 6}
-                className="flex-1 rounded-xl bg-blue hover:bg-blue-deep py-3 text-xs font-extrabold text-white shadow-lg transition-transform active:scale-95 disabled:opacity-50"
+                className="flex-1 rounded-xl bg-blue hover:bg-blue-deep py-3 text-sm font-extrabold text-white shadow-lg transition-transform active:scale-95 disabled:opacity-50"
               >
                 {loading ? 'Decrypting Vault...' : 'Unlock Admin Vault 🔓'}
               </button>

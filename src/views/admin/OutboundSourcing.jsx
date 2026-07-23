@@ -187,7 +187,7 @@ export default function OutboundSourcing() {
           </p>
           <button 
             onClick={() => { setPacking(true); startScanner(); }}
-            className="w-full rounded-xl bg-forest py-4 text-navy font-bold text-lg shadow-[0_0_30px_rgba(205,250,119,0.3)] transition-all hover:scale-105 active:scale-95"
+            className="w-full rounded-xl bg-forest py-4 text-navy font-bold text-xl shadow-[0_0_30px_rgba(205,250,119,0.3)] transition-all hover:scale-105 active:scale-95"
           >
             Start Packing a Box
           </button>
@@ -202,14 +202,14 @@ export default function OutboundSourcing() {
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/10 pb-4 shrink-0">
         <div>
-          <h2 className="text-lg font-serif text-white flex items-center gap-2">
+          <h2 className="text-xl font-serif text-white flex items-center gap-2">
             <span className="flex h-2 w-2 rounded-full bg-forest pulse-dot"></span>
             Live Packing Session
           </h2>
-          <p className="text-sm text-white/50 mt-1">Scanning items into the outbound box.</p>
+          <p className="text-base text-white/50 mt-1">Scanning items into the outbound box.</p>
         </div>
         <div className="text-right">
-          <p className="text-sm text-white/50">Box Total</p>
+          <p className="text-base text-white/50">Box Total</p>
           <p className="text-xl font-bold text-forest">{totalItems} Units</p>
         </div>
       </div>
@@ -226,7 +226,7 @@ export default function OutboundSourcing() {
               >
                 <GridIcon className="text-white/30 mb-3" size={40} />
                 <p className="text-white font-medium">Camera Paused</p>
-                <p className="text-sm text-white/40 mt-1">Tap to resume scanning</p>
+                <p className="text-base text-white/40 mt-1">Tap to resume scanning</p>
               </div>
             ) : (
               <div className="flex-1 w-full bg-black relative flex flex-col">
@@ -234,7 +234,7 @@ export default function OutboundSourcing() {
                   <div id="outbound-qr-reader" className="absolute inset-0 object-cover"></div>
                   <button 
                     onClick={stopScanner}
-                    className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white/80 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-black/80 hover:text-white z-10"
+                    className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white/80 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-black/80 hover:text-white z-10"
                   >
                     Stop Scanning
                   </button>
@@ -248,7 +248,7 @@ export default function OutboundSourcing() {
                 <div className="bg-black p-4 shrink-0 border-t border-white/10 relative z-20">
                   <button
                     onClick={() => setTriggerActive(true)}
-                    className={`w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${
+                    className={`w-full py-4 rounded-xl font-bold text-xl transition-all flex items-center justify-center gap-2 ${
                       triggerActive 
                         ? 'bg-amber text-black animate-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]' 
                         : 'bg-forest text-navy shadow-[0_0_20px_rgba(205,250,119,0.3)] hover:scale-[1.02] active:scale-95'
@@ -270,7 +270,7 @@ export default function OutboundSourcing() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className={`rounded-xl px-4 py-3 text-sm font-bold flex items-center justify-center gap-2 shadow-lg ${
+                  className={`rounded-xl px-4 py-3 text-base font-bold flex items-center justify-center gap-2 shadow-lg ${
                     lastScan.type === 'success' 
                       ? 'bg-forest/20 text-forest border border-forest/30' 
                       : 'bg-amber/20 text-amber border border-amber/30'
@@ -288,22 +288,22 @@ export default function OutboundSourcing() {
         <div className="flex-1 flex flex-col bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-lg">
           <div className="bg-white/5 px-4 py-3 border-b border-white/10 flex justify-between items-center shrink-0">
             <h3 className="font-semibold text-white/90">Current Box Manifest</h3>
-            <span className="bg-forest/20 text-forest text-xs font-bold px-2 py-0.5 rounded-full">{manifest.length} Unique SKUs</span>
+            <span className="bg-forest/20 text-forest text-sm font-bold px-2 py-0.5 rounded-full">{manifest.length} Unique SKUs</span>
           </div>
           
           <div className="flex-1 overflow-y-auto p-4 space-y-2">
             {manifest.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center opacity-50">
                 <BoxIcon size={32} className="mb-2" />
-                <p className="text-sm">Box is empty.</p>
-                <p className="text-xs mt-1">Scan an item to add it.</p>
+                <p className="text-base">Box is empty.</p>
+                <p className="text-sm mt-1">Scan an item to add it.</p>
               </div>
             ) : (
               manifest.map((item, idx) => (
                 <div key={idx} className="bg-white/5 border border-white/10 rounded-lg p-3 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-white line-clamp-1">{item.name}</p>
-                    <p className="text-xs text-white/50 font-mono mt-0.5">{item.sku}</p>
+                    <p className="text-base font-medium text-white line-clamp-1">{item.name}</p>
+                    <p className="text-sm text-white/50 font-mono mt-0.5">{item.sku}</p>
                   </div>
                   <div className="bg-forest/20 text-forest px-3 py-1 rounded font-bold tabular">
                     x{item.quantity}

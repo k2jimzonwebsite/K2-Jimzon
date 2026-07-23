@@ -77,11 +77,11 @@ export default function Suppliers() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Scraper Box */}
-        <div className="bg-[#05080f] border border-blue/30 p-5 rounded-2xl shadow-xl space-y-4 font-mono text-xs">
+        <div className="bg-[#05080f] border border-blue/30 p-5 rounded-2xl shadow-xl space-y-4 font-mono text-sm">
           <div className="flex items-center gap-2 border-b border-white/10 pb-3">
-            <span className="text-base">🕸️</span>
+            <span className="text-lg">🕸️</span>
             <div>
-              <h3 className="font-bold text-white text-sm font-sans">Italy Supermarket & Boutique Price Scraper</h3>
+              <h3 className="font-bold text-white text-base font-sans">Italy Supermarket & Boutique Price Scraper</h3>
               <p className="text-white/50 text-[11px]">Auto-scrapes live EUR price (€) from Esselunga, Carrefour & KIKO Milan</p>
             </div>
           </div>
@@ -116,11 +116,11 @@ export default function Suppliers() {
         </div>
 
         {/* AI Data Analysis Agent Box */}
-        <div className="bg-[#05080f] border border-forest/30 p-5 rounded-2xl shadow-xl space-y-4 font-mono text-xs">
+        <div className="bg-[#05080f] border border-forest/30 p-5 rounded-2xl shadow-xl space-y-4 font-mono text-sm">
           <div className="flex items-center gap-2 border-b border-white/10 pb-3">
-            <span className="text-base">📊</span>
+            <span className="text-lg">📊</span>
             <div>
-              <h3 className="font-bold text-white text-sm font-sans">Plain-English AI Data & Inventory Query Agent</h3>
+              <h3 className="font-bold text-white text-base font-sans">Plain-English AI Data & Inventory Query Agent</h3>
               <p className="text-white/50 text-[11px]">Ask plain-English questions about sales, profits, or stock levels</p>
             </div>
           </div>
@@ -152,8 +152,8 @@ export default function Suppliers() {
       </div>
 
       <div className="flex items-center justify-between border-t border-white/10 pt-6">
-        <h2 className="text-lg font-serif text-white">Our Italy Suppliers</h2>
-        <button className="rounded-xl bg-blue px-4 py-2.5 text-xs font-bold text-white hover:bg-blue/90 transition-colors shadow-md min-h-[44px]">
+        <h2 className="text-xl font-serif text-white">Our Italy Suppliers</h2>
+        <button className="rounded-xl bg-blue px-4 py-2.5 text-sm font-bold text-white hover:bg-blue/90 transition-colors shadow-md min-h-[44px]">
           + Add Supplier Profile
         </button>
       </div>
@@ -167,32 +167,32 @@ export default function Suppliers() {
           suppliers.map(sup => (
             <div key={sup.id} className="rounded-xl border border-white/10 bg-[#05080f] overflow-hidden flex flex-col">
               <div className="p-5 border-b border-white/10 bg-white/5">
-                <h3 className="font-semibold text-white text-lg">{sup.name}</h3>
-                <p className="text-sm text-white/50">{sup.contact_email}</p>
+                <h3 className="font-semibold text-white text-xl">{sup.name}</h3>
+                <p className="text-base text-white/50">{sup.contact_email}</p>
               </div>
               
               <div className="p-5 grid grid-cols-2 gap-4 flex-1">
                 <div>
-                  <p className="text-xs font-mono uppercase tracking-widest text-white/40">Lead Time</p>
-                  <p className="mt-1 text-lg font-bold text-white/90">{sup.lead_time_days} days</p>
+                  <p className="text-sm font-mono uppercase tracking-widest text-white/40">Lead Time</p>
+                  <p className="mt-1 text-xl font-bold text-white/90">{sup.lead_time_days} days</p>
                 </div>
                 <div>
-                  <p className="text-xs font-mono uppercase tracking-widest text-white/40">Perf Score</p>
+                  <p className="text-sm font-mono uppercase tracking-widest text-white/40">Perf Score</p>
                   <div className="mt-1 flex items-center gap-2">
-                    <span className={`text-lg font-bold ${sup.performance_score >= 90 ? 'text-forest' : sup.performance_score >= 70 ? 'text-amber' : 'text-crimson'}`}>
+                    <span className={`text-xl font-bold ${sup.performance_score >= 90 ? 'text-forest' : sup.performance_score >= 70 ? 'text-amber' : 'text-crimson'}`}>
                       {sup.performance_score}/100
                     </span>
                   </div>
                 </div>
                 <div className="col-span-2">
-                  <p className="text-xs font-mono uppercase tracking-widest text-white/40">Balance</p>
-                  <p className="mt-1 text-lg font-bold text-amber">{peso(sup.outstanding_balance)}</p>
+                  <p className="text-sm font-mono uppercase tracking-widest text-white/40">Balance</p>
+                  <p className="mt-1 text-xl font-bold text-amber">{peso(sup.outstanding_balance)}</p>
                 </div>
               </div>
               
               <div className="p-3 border-t border-white/10 bg-white/5 grid grid-cols-2 gap-2">
-                <button className="rounded-lg border border-white/10 bg-transparent px-3 py-2 text-xs font-medium text-white/70 hover:bg-white/10 transition-colors min-h-[40px]">Edit Profile</button>
-                <button className="rounded-lg border border-blue bg-blue/10 px-3 py-2 text-xs font-medium text-blue hover:bg-blue/20 transition-colors min-h-[40px]">Draft PO</button>
+                <button className="rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm font-medium text-white/70 hover:bg-white/10 transition-colors min-h-[40px]">Edit Profile</button>
+                <button className="rounded-lg border border-blue bg-blue/10 px-3 py-2 text-sm font-medium text-blue hover:bg-blue/20 transition-colors min-h-[40px]">Draft PO</button>
               </div>
             </div>
           ))

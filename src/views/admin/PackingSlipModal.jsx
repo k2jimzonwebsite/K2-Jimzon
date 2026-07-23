@@ -19,13 +19,13 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
             <span className="text-[10px] font-mono font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded border border-amber-300 uppercase">
               Shopee / Lazada Official Air Waybill & Packing Slip
             </span>
-            <span className="text-xs text-slate-500 font-mono">Order #{order.id}</span>
+            <span className="text-sm text-slate-500 font-mono">Order #{order.id}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 py-2 rounded-lg transition-all min-h-[40px] flex items-center gap-1.5"
+              className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-4 py-2 rounded-lg transition-all min-h-[40px] flex items-center gap-1.5"
             >
               <span>🖨️</span> Print Label & Slip
             </button>
@@ -39,7 +39,7 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
         </div>
 
         {/* 📦 OFFICIAL SHOPEE / LAZADA / TIKTOK STYLE AIR WAYBILL STICKER */}
-        <div className="border-2 border-slate-900 rounded-xl p-5 space-y-4 font-mono text-xs bg-white">
+        <div className="border-2 border-slate-900 rounded-xl p-5 space-y-4 font-mono text-sm bg-white">
           
           {/* Top Carrier Header */}
           <div className="flex items-center justify-between border-b-2 border-slate-900 pb-3">
@@ -49,7 +49,7 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold text-slate-500">WAYBILL NO.</p>
-              <p className="font-black text-sm text-slate-900">JT-PH-88941092</p>
+              <p className="font-black text-base text-slate-900">JT-PH-88941092</p>
             </div>
           </div>
 
@@ -79,7 +79,7 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
           {/* Itemized Order Breakdown */}
           <div className="space-y-2">
             <p className="text-[10px] font-bold text-slate-400 uppercase">ITEMIZED PARCEL BREAKDOWN (PACK-VERIFIED):</p>
-            <table className="w-full text-left text-xs border border-slate-200 rounded overflow-hidden">
+            <table className="w-full text-left text-sm border border-slate-200 rounded overflow-hidden">
               <thead className="bg-slate-100 font-bold border-b border-slate-200">
                 <tr>
                   <th className="p-2">SKU</th>

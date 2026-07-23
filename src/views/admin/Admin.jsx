@@ -116,7 +116,7 @@ export default function Admin() {
         <div className="flex items-center justify-between px-5 py-5 border-b border-white/10">
           <div>
             <p className="font-sans text-xl font-black text-white tracking-tight">K2 Jimzon <span className="text-gold ml-1">BOS</span></p>
-            <p className="text-xs font-mono uppercase tracking-widest text-white/80 font-bold">Mission Control</p>
+            <p className="text-sm font-mono uppercase tracking-widest text-white/80 font-bold">Mission Control</p>
           </div>
           <button 
             onClick={() => setPaletteOpen(true)}
@@ -131,7 +131,7 @@ export default function Admin() {
         <div className="flex-1 overflow-y-auto mt-3 px-2.5 space-y-6 custom-scrollbar">
           
           <div>
-            <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">Sales & Orders</p>
+            <p className="px-3 text-sm font-extrabold uppercase tracking-widest text-gold mb-2">Sales & Orders</p>
             <div className="space-y-1">
               {NAV_COMMERCE.map(item => {
                 const Ico = item.icon
@@ -140,7 +140,7 @@ export default function Admin() {
                   <button
                     key={item.id}
                     onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
-                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-base font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                   >
                     <Ico size={17} /> {item.label}
                   </button>
@@ -150,7 +150,7 @@ export default function Admin() {
           </div>
 
           <div>
-            <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">Stock & Buying</p>
+            <p className="px-3 text-sm font-extrabold uppercase tracking-widest text-gold mb-2">Stock & Buying</p>
             <div className="space-y-1">
               {NAV_SUPPLY.map(item => {
                 const Ico = item.icon
@@ -159,10 +159,10 @@ export default function Admin() {
                   <button
                     key={item.id}
                     onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
-                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-base font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                   >
                     <Ico size={17} /> {item.label}
-                    {item.id === 'inventory' && <span className="ml-auto rounded-full bg-gold text-navy font-black text-xs px-2 py-0.5 shadow">{activeSkus}</span>}
+                    {item.id === 'inventory' && <span className="ml-auto rounded-full bg-gold text-navy font-black text-sm px-2 py-0.5 shadow">{activeSkus}</span>}
                   </button>
                 )
               })}
@@ -170,7 +170,7 @@ export default function Admin() {
           </div>
 
           <div>
-            <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">AI & Operations</p>
+            <p className="px-3 text-sm font-extrabold uppercase tracking-widest text-gold mb-2">AI & Operations</p>
             <div className="space-y-1">
               {NAV_INTELLIGENCE.map(item => {
                 const Ico = item.icon
@@ -179,7 +179,7 @@ export default function Admin() {
                   <button
                     key={item.id}
                     onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
-                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-base font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                   >
                     <Ico size={17} /> {item.label}
                   </button>
@@ -191,15 +191,15 @@ export default function Admin() {
         </div>
 
         {/* Left Sidebar Operations & Cargo Box Intelligence Widget */}
-        <div className="mx-3 my-3 p-3.5 rounded-2xl bg-[#0E121E] border border-white/20 space-y-3 font-sans text-xs shadow-xl shrink-0">
+        <div className="mx-3 my-3 p-3.5 rounded-2xl bg-[#0E121E] border border-white/20 space-y-3 font-sans text-sm shadow-xl shrink-0">
           <div className="flex items-center justify-between border-b border-white/15 pb-2">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-gold flex items-center gap-1">
+            <span className="text-sm font-extrabold uppercase tracking-wider text-gold flex items-center gap-1">
               <span>🇮🇹</span> Italy Box Pulse
             </span>
-            <span className="text-xs bg-blue text-white px-2 py-0.5 rounded font-black shadow">LIVE</span>
+            <span className="text-sm bg-blue text-white px-2 py-0.5 rounded font-black shadow">LIVE</span>
           </div>
 
-          <div className="space-y-2 text-xs">
+          <div className="space-y-2 text-sm">
             <div className="flex justify-between text-white/90">
               <span>Active SKUs:</span>
               <strong className="text-white font-extrabold">{activeSkus || 0} SKUs</strong>
@@ -210,33 +210,33 @@ export default function Admin() {
             </div>
             <div className="flex justify-between text-white/90">
               <span>Pending Orders:</span>
-              <strong className="text-white font-black text-sm">{pendingOrders || 0} Orders</strong>
+              <strong className="text-white font-black text-base">{pendingOrders || 0} Orders</strong>
             </div>
           </div>
 
           <button
             onClick={() => { setSection('omni_hub'); setSheetMode(false); }}
-            className="w-full py-2.5 rounded-xl bg-gold hover:bg-gold-deep text-navy font-black text-xs transition-all flex items-center justify-center gap-1 shadow.md"
+            className="w-full py-2.5 rounded-xl bg-gold hover:bg-gold-deep text-navy font-black text-sm transition-all flex items-center justify-center gap-1 shadow.md"
           >
             ⚡ Open Staff Handover
           </button>
         </div>
 
-        <div className="border-t border-white/15 px-5 py-3.5 text-xs text-white/80 space-y-2 shrink-0 bg-[#05080f]">
+        <div className="border-t border-white/15 px-5 py-3.5 text-sm text-white/80 space-y-2 shrink-0 bg-[#05080f]">
           <button 
             onClick={() => setShowDevOpsModal(true)}
             className="w-full flex items-center justify-between p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all border border-white/15"
             title="Open DevOps & System Architecture Cockpit"
           >
-            <p className="flex items-center gap-1.5 font-extrabold text-white text-xs">
+            <p className="flex items-center gap-1.5 font-extrabold text-white text-sm">
               <span className="h-2 w-2 rounded-full bg-blue pulse-dot" />
               ⚡ DevOps & QPS
             </p>
-            <span className="text-xs font-mono bg-gold text-navy font-black px-2 py-0.5 rounded">SUPER ADMIN</span>
+            <span className="text-sm font-mono bg-gold text-navy font-black px-2 py-0.5 rounded">SUPER ADMIN</span>
           </button>
           <button 
             onClick={logoutAdmin}
-            className="w-full mt-2 py-2 px-3 rounded-xl bg-crimson hover:bg-crimson-deep text-white text-xs font-extrabold transition-all border border-crimson/50 flex items-center justify-center gap-1.5 shadow-md"
+            className="w-full mt-2 py-2 px-3 rounded-xl bg-crimson hover:bg-crimson-deep text-white text-sm font-extrabold transition-all border border-crimson/50 flex items-center justify-center gap-1.5 shadow-md"
           >
             🔒 Lock / Exit Admin
           </button>
@@ -247,7 +247,7 @@ export default function Admin() {
         {/* Mobile Header */}
         <div className="flex items-center justify-between px-4 py-3 bg-[#05080f] border-b border-white/10 shrink-0 w-full lg:hidden">
           <div>
-            <p className="font-serif text-lg font-semibold text-white">K2 Jimzon <span className="text-blue ml-1">BOS</span></p>
+            <p className="font-serif text-xl font-semibold text-white">K2 Jimzon <span className="text-blue ml-1">BOS</span></p>
           </div>
           <div className="flex items-center gap-2">
             <button onClick={() => setPaletteOpen(true)} className="p-2 text-white/50 hover:text-white">
@@ -269,7 +269,7 @@ export default function Admin() {
             <div className="fixed inset-0 bg-black/60" onClick={() => setIsMobileMenuOpen(false)} />
             <div className="relative flex w-64 flex-col bg-[#05080f] border-r border-white/10 overflow-y-auto pt-4 pb-20">
               <div className="flex items-center justify-between px-5 mb-4">
-                <p className="font-serif text-lg font-semibold text-white">Menu</p>
+                <p className="font-serif text-xl font-semibold text-white">Menu</p>
                 <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 text-white/50 hover:text-white">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -279,7 +279,7 @@ export default function Admin() {
               
               <div className="px-2.5 space-y-6">
                 <div>
-                  <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">Sales & Orders</p>
+                  <p className="px-3 text-sm font-extrabold uppercase tracking-widest text-gold mb-2">Sales & Orders</p>
                   <div className="space-y-1">
                     {NAV_COMMERCE.map(item => {
                       const Ico = item.icon
@@ -287,7 +287,7 @@ export default function Admin() {
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-base font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                         >
                           <Ico size={18} /> {item.label}
                         </button>
@@ -297,7 +297,7 @@ export default function Admin() {
                 </div>
 
                 <div>
-                  <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">Stock & Buying</p>
+                  <p className="px-3 text-sm font-extrabold uppercase tracking-widest text-gold mb-2">Stock & Buying</p>
                   <div className="space-y-1">
                     {NAV_SUPPLY.map(item => {
                       const Ico = item.icon
@@ -305,7 +305,7 @@ export default function Admin() {
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-base font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                         >
                           <Ico size={18} /> {item.label}
                         </button>
@@ -315,7 +315,7 @@ export default function Admin() {
                 </div>
                 
                 <div>
-                  <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">AI & Operations</p>
+                  <p className="px-3 text-sm font-extrabold uppercase tracking-widest text-gold mb-2">AI & Operations</p>
                   <div className="space-y-1">
                     {NAV_INTELLIGENCE.map(item => {
                       const Ico = item.icon
@@ -323,7 +323,7 @@ export default function Admin() {
                         <button
                           key={item.id}
                           onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory'); setIsMobileMenuOpen(false); }}
-                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-sm font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                          className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 min-h-[44px] text-left text-base font-extrabold transition-all ${section === item.id ? 'bg-blue text-white shadow' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                         >
                           <Ico size={18} /> {item.label}
                         </button>
@@ -351,7 +351,7 @@ export default function Admin() {
                section === 'kanban' ? 'Italy Flight Consignments & Box Tracker' :
                'Home & Daily Operational Summary'}
             </h1>
-            <p className="text-xs font-semibold text-white/80 mt-1">
+            <p className="text-sm font-semibold text-white/80 mt-1">
               {section === 'integrations'
                 ? 'Manage API keys, OAuth tokens, and webhooks for Shopee, Lazada, TikTok Shop, and Meta.'
                 : section === 'globe'
@@ -378,7 +378,7 @@ export default function Admin() {
             {/* Daily Task & Expiration Notification Bell */}
             <button
               onClick={() => setShowDailyTasks(true)}
-              className="relative flex items-center justify-center min-h-[44px] min-w-[44px] rounded-xl bg-gold text-navy font-black text-xs px-3.5 hover:bg-gold-deep transition-all shadow-md gap-1.5"
+              className="relative flex items-center justify-center min-h-[44px] min-w-[44px] rounded-xl bg-gold text-navy font-black text-sm px-3.5 hover:bg-gold-deep transition-all shadow-md gap-1.5"
               title="Daily Actionable Tasks & Expirations"
             >
               <span>🔔</span>
@@ -387,7 +387,7 @@ export default function Admin() {
 
             <button 
               onClick={() => setPaletteOpen(true)}
-              className="hidden lg:flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2.5 text-xs font-bold text-white hover:bg-white/20 transition-all shadow-sm"
+              className="hidden lg:flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2.5 text-sm font-bold text-white hover:bg-white/20 transition-all shadow-sm"
             >
               Search Command <kbd className="ml-1 rounded border border-white/30 bg-black/60 px-1.5 py-0.5 font-mono text-[10px] text-gold font-bold">Ctrl K</kbd>
             </button>
@@ -396,7 +396,7 @@ export default function Admin() {
               <div className="flex items-center gap-3 border-l border-white/15 pl-3">
                 <button
                   onClick={() => setShowCsvImport(true)}
-                  className="flex items-center gap-2 rounded-xl bg-blue hover:bg-blue-deep px-3.5 py-2.5 text-xs font-black text-white transition-all shadow-md"
+                  className="flex items-center gap-2 rounded-xl bg-blue hover:bg-blue-deep px-3.5 py-2.5 text-sm font-black text-white transition-all shadow-md"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -405,7 +405,7 @@ export default function Admin() {
                 </button>
 
                 <div className="flex items-center gap-2 bg-white/10 p-1.5 rounded-xl border border-white/20">
-                  <span className="text-xs font-black text-white px-1">Sheet Mode</span>
+                  <span className="text-sm font-black text-white px-1">Sheet Mode</span>
                   <button
                     role="switch"
                     aria-checked={sheetMode}
@@ -438,7 +438,7 @@ export default function Admin() {
             <Suspense fallback={
               <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center text-white/50 space-y-4">
                 <div className="w-8 h-8 rounded-full border-2 border-t-blue border-r-blue border-b-transparent border-l-transparent animate-spin" />
-                <p className="text-sm font-medium animate-pulse">Loading workspace...</p>
+                <p className="text-base font-medium animate-pulse">Loading workspace...</p>
               </div>
             }>
               {section === 'staff_permissions' ? <StaffPermissionManager />
@@ -487,9 +487,9 @@ export default function Admin() {
       {/* Floating Instant AI Copilot Button */}
       <button
         onClick={() => setShowAiCopilot(true)}
-        className="fixed bottom-5 right-5 z-40 bg-blue hover:bg-blue/90 text-white font-mono font-bold text-xs px-4 py-3 rounded-2xl shadow-2xl transition-all border border-blue/40 flex items-center gap-2 min-h-[44px] hover:scale-105 active:scale-95"
+        className="fixed bottom-5 right-5 z-40 bg-blue hover:bg-blue/90 text-white font-mono font-bold text-sm px-4 py-3 rounded-2xl shadow-2xl transition-all border border-blue/40 flex items-center gap-2 min-h-[44px] hover:scale-105 active:scale-95"
       >
-        <span className="text-base leading-none">🤖</span>
+        <span className="text-lg leading-none">🤖</span>
         <span>AI Assistant</span>
       </button>
     </div>
@@ -507,7 +507,7 @@ function KpiRow({ skus, lowStock, pending }) {
     <div className="grid grid-cols-2 gap-px border-b border-white/15 bg-white/15 md:grid-cols-4 shrink-0">
       {KPIS.map((k) => (
         <div key={k.label} className={'px-5 py-4 md:px-6 ' + (k.tone === 'danger' ? 'bg-crimson/20' : 'bg-[#0E121E]')}>
-          <p className="text-xs font-extrabold uppercase tracking-wider text-gold truncate pr-2">{k.label}</p>
+          <p className="text-sm font-extrabold uppercase tracking-wider text-gold truncate pr-2">{k.label}</p>
           <p
             className={
               'mt-2 text-2xl md:text-3xl font-black tabular tracking-tight ' +
@@ -516,7 +516,7 @@ function KpiRow({ skus, lowStock, pending }) {
           >
             {k.value}
           </p>
-          <p className="text-xs text-white/80 font-medium mt-1 truncate pr-2">{k.sub}</p>
+          <p className="text-sm text-white/80 font-medium mt-1 truncate pr-2">{k.sub}</p>
         </div>
       ))}
     </div>

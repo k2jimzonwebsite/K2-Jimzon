@@ -33,11 +33,11 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
               <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-forest bg-forest/20 px-2 py-0.5 rounded">
                 Manila Customs & Warehouse Check
               </span>
-              <span className="text-xs text-white/40 font-mono">{consignment.manifest_code}</span>
+              <span className="text-sm text-white/40 font-mono">{consignment.manifest_code}</span>
             </div>
             <h2 className="font-serif text-xl font-bold text-white mt-1">Box Checking Discrepancy Reconciliation</h2>
           </div>
-          <button onClick={onClose} className="text-white/40 hover:text-white text-lg">✕</button>
+          <button onClick={onClose} className="text-white/40 hover:text-white text-xl">✕</button>
         </div>
 
         {/* Stats Summary Bar */}
@@ -60,7 +60,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
 
         {/* Comparison Table */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          <table className="w-full text-left text-xs border-collapse">
+          <table className="w-full text-left text-sm border-collapse">
             <thead>
               <tr className="border-b border-white/10 text-white/40 uppercase tracking-wider font-mono">
                 <th className="py-2.5 px-3">SKU & Item Details</th>
@@ -106,14 +106,14 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
 
           {/* Warehouse Discrepancy Note */}
           <div className="pt-4 border-t border-white/10">
-            <label className="block text-xs font-mono uppercase tracking-wider text-white/60 mb-2">
+            <label className="block text-sm font-mono uppercase tracking-wider text-white/60 mb-2">
               Customs / Warehouse Arrival Notes & Audit Comments
             </label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Box #2 outer seal checked at NAIA customs. No damages detected..."
-              className="w-full rounded-lg border border-white/10 bg-[#05080f] p-3 text-xs text-white placeholder-white/30 outline-none focus:border-forest resize-none h-20"
+              className="w-full rounded-lg border border-white/10 bg-[#05080f] p-3 text-sm text-white placeholder-white/30 outline-none focus:border-forest resize-none h-20"
             />
           </div>
         </div>
@@ -122,14 +122,14 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
         <div className="p-4 border-t border-white/10 bg-[#05080f] flex justify-end gap-3 shrink-0">
           <button
             onClick={onClose}
-            className="rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-white/70 hover:bg-white/10"
+            className="rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white/70 hover:bg-white/10"
           >
             Back to Scanning
           </button>
           <button
             onClick={handleFinalize}
             disabled={finalizing}
-            className="rounded-lg bg-forest hover:bg-forest/90 text-white px-6 py-2.5 text-xs font-bold shadow-lg shadow-forest/20 transition-all disabled:opacity-50"
+            className="rounded-lg bg-forest hover:bg-forest/90 text-white px-6 py-2.5 text-sm font-bold shadow-lg shadow-forest/20 transition-all disabled:opacity-50"
           >
             {finalizing ? 'Syncing Master Inventory...' : 'Finalize Arrival & Sync Master Stock 🚀'}
           </button>

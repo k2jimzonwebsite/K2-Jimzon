@@ -113,10 +113,10 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
               <span className="text-[10px] font-mono font-bold bg-blue/20 text-blue px-2 py-0.5 rounded border border-blue/30 uppercase">
                 Staff Custody & Multi-Location Stock Allocation
               </span>
-              <span className="text-xs text-white/50">SKU: {product?.sku || product?.id || 'N/A'}</span>
+              <span className="text-sm text-white/50">SKU: {product?.sku || product?.id || 'N/A'}</span>
             </div>
-            <h2 className="font-serif text-lg font-bold text-white mt-1">{product?.name || product?.title || 'Product Stock Allocation'}</h2>
-            <p className="text-xs text-white/60">
+            <h2 className="font-serif text-xl font-bold text-white mt-1">{product?.name || product?.title || 'Product Stock Allocation'}</h2>
+            <p className="text-sm text-white/60">
               Total Allocated Across Staff: <span className="text-blue font-bold font-mono">{totalAllocatedStock} units</span> across {allocations.length} staff locations.
             </p>
           </div>
@@ -132,13 +132,13 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
         {/* ⚡ 1-Click Inter-Staff Stock Transfer Station */}
         <form onSubmit={handleExecute1ClickTransfer} className="bg-[#05080f] border border-amber/40 p-4 rounded-xl space-y-3 shadow-lg">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-amber flex items-center gap-1.5">
+            <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-amber flex items-center gap-1.5">
               <span>⚡</span> 1-Click Inter-Staff Stock Transfer Engine
             </h3>
             <span className="text-[10px] font-mono text-white/40">Re-assign custody in 1 click</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm font-mono">
             <div>
               <label className="block text-[10px] text-white/40 mb-1">Transfer FROM (Source Staff)</label>
               <select
@@ -181,7 +181,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                 />
                 <button
                   type="submit"
-                  className="flex-1 bg-amber hover:bg-amber/90 text-navy-dark font-extrabold text-xs py-2 rounded-lg transition-all shadow-md"
+                  className="flex-1 bg-amber hover:bg-amber/90 text-navy-dark font-extrabold text-sm py-2 rounded-lg transition-all shadow-md"
                 >
                   ⚡ Execute 1-Click Transfer
                 </button>
@@ -190,7 +190,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
           </div>
 
           {transferMessage && (
-            <div className={`p-2.5 rounded-lg border text-xs font-mono ${
+            <div className={`p-2.5 rounded-lg border text-sm font-mono ${
               transferMessage.error ? 'bg-crimson/20 border-crimson/40 text-crimson' : 'bg-forest/20 border-forest/40 text-forest font-bold'
             }`}>
               {transferMessage.text}
@@ -200,20 +200,20 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
 
         {/* Staff Custody Breakdown List */}
         <div className="space-y-3">
-          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white/50">
+          <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50">
             Assigned Staff Custodians & Location Inventories
           </h3>
 
           <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
             {allocations.map((alloc) => (
-              <div key={alloc.id} className="p-4 rounded-xl bg-white/5 border border-white/10 text-xs font-mono space-y-3">
+              <div key={alloc.id} className="p-4 rounded-xl bg-white/5 border border-white/10 text-sm font-mono space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-full bg-blue/20 text-blue font-bold flex items-center justify-center text-xs">
+                    <span className="w-8 h-8 rounded-full bg-blue/20 text-blue font-bold flex items-center justify-center text-sm">
                       👤
                     </span>
                     <div>
-                      <p className="font-bold text-white text-sm">{alloc.staff_name}</p>
+                      <p className="font-bold text-white text-base">{alloc.staff_name}</p>
                       <p className="text-white/40 text-[10px]">{alloc.location} · {alloc.staff_id}</p>
                     </div>
                   </div>
@@ -267,8 +267,8 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
 
         {/* Add New Staff Allocation Form */}
         <form onSubmit={handleAddAllocation} className="bg-[#05080f] border border-white/10 p-4 rounded-xl space-y-3">
-          <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white/60">+ Assign Stock to New Staff Member / Location</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs font-mono">
+          <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Assign Stock to New Staff Member / Location</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-sm font-mono">
             <div>
               <label className="block text-[10px] text-white/40 mb-1">Staff Name</label>
               <input
@@ -318,7 +318,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
 
           <button
             type="submit"
-            className="w-full bg-blue hover:bg-blue/90 text-white font-bold text-xs py-2 rounded-lg transition-all shadow-md shadow-blue/20"
+            className="w-full bg-blue hover:bg-blue/90 text-white font-bold text-sm py-2 rounded-lg transition-all shadow-md shadow-blue/20"
           >
             + Assign Custody Allocation
           </button>
@@ -329,14 +329,14 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-white/70 hover:bg-white/10"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-white/70 hover:bg-white/10"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="px-6 py-2 rounded-xl bg-blue text-xs font-bold text-white hover:bg-blue/90 shadow-lg shadow-blue/20"
+            className="px-6 py-2 rounded-xl bg-blue text-sm font-bold text-white hover:bg-blue/90 shadow-lg shadow-blue/20"
           >
             💾 Save Staff Inventory Allocations
           </button>

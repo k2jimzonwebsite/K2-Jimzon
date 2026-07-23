@@ -32,7 +32,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200 font-mono text-xs text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200 font-mono text-sm text-white">
       <div className="w-full max-w-md bg-[#0A101D] border border-white/10 rounded-2xl p-6 space-y-6 shadow-2xl">
         
         {/* Header */}
@@ -41,7 +41,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2 py-0.5 rounded border border-forest/30">
               Staff Station Login
             </span>
-            <h2 className="font-serif text-lg font-bold text-white mt-1">Select Staff Account & PIN</h2>
+            <h2 className="font-serif text-xl font-bold text-white mt-1">Select Staff Account & PIN</h2>
           </div>
 
           <button
@@ -87,7 +87,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
               value={pinInput}
               onChange={(e) => setPinInput(e.target.value)}
               placeholder="•••• (Default: 1111)"
-              className="w-full text-center tracking-[0.5em] font-mono text-lg rounded-xl border border-white/20 bg-[#05080f] py-3 text-white focus:border-forest outline-none min-h-[48px]"
+              className="w-full text-center tracking-[0.5em] font-mono text-xl rounded-xl border border-white/20 bg-[#05080f] py-3 text-white focus:border-forest outline-none min-h-[48px]"
               autoFocus
             />
           </div>
@@ -100,7 +100,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
 
           <button
             type="submit"
-            className="w-full bg-forest hover:bg-forest/90 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-lg shadow-forest/20 min-h-[48px] flex items-center justify-center gap-2"
+            className="w-full bg-forest hover:bg-forest/90 text-white font-bold text-sm py-3 rounded-xl transition-all shadow-lg shadow-forest/20 min-h-[48px] flex items-center justify-center gap-2"
           >
             <span>🔓</span> Authenticate {selectedStaff.name.split(' ')[0]} Station
           </button>

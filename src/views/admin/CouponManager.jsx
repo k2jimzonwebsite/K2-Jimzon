@@ -65,20 +65,20 @@ export default function CouponManager() {
       <div className="bg-[#0E121E] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
+            <span className="text-sm font-mono font-black uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
               Promotions & Social Engagement Engine
             </span>
-            <span className="text-xs text-white/80 font-bold">Voucher Creation & Secret Hunt Drops</span>
+            <span className="text-sm text-white/80 font-bold">Voucher Creation & Secret Hunt Drops</span>
           </div>
           <h1 className="font-sans text-2xl font-black text-white">Coupons & Voucher Hunt Manager</h1>
-          <p className="text-xs text-white/80 font-medium mt-1 max-w-2xl">
+          <p className="text-sm text-white/80 font-medium mt-1 max-w-2xl">
             Create discount codes, set min spend rules, and deploy secret "Voucher Hunt" drops for your social media audience to discover and claim!
           </p>
         </div>
 
         <button
           onClick={() => setShowCreateModal(true)}
-          className="bg-gold hover:bg-gold-deep text-navy font-black text-xs px-5 py-3 rounded-xl transition-all shadow-lg shrink-0 flex items-center gap-2 min-h-[44px]"
+          className="bg-gold hover:bg-gold-deep text-navy font-black text-sm px-5 py-3 rounded-xl transition-all shadow-lg shrink-0 flex items-center gap-2 min-h-[44px]"
         >
           <span>🎟️</span> + Create New Coupon / Secret Drop
         </button>
@@ -87,21 +87,21 @@ export default function CouponManager() {
       {/* Analytics KPI Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-[#0E121E] border border-white/20 p-5 rounded-2xl shadow-md">
-          <p className="text-xs font-extrabold uppercase tracking-wider text-gold">Active Coupons</p>
+          <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Active Coupons</p>
           <p className="text-3xl font-black text-white mt-1">{activeCount} Coupons</p>
-          <p className="text-xs text-white/80 font-medium mt-1">Ready for storefront & checkout redemption</p>
+          <p className="text-sm text-white/80 font-medium mt-1">Ready for storefront & checkout redemption</p>
         </div>
 
         <div className="bg-[#0E121E] border border-white/20 p-5 rounded-2xl shadow-md">
-          <p className="text-xs font-extrabold uppercase tracking-wider text-gold">Secret Voucher Hunts</p>
+          <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Secret Voucher Hunts</p>
           <p className="text-3xl font-black text-blue mt-1">{huntCount} Active Drops</p>
-          <p className="text-xs text-white/80 font-medium mt-1">Interactive clues for FB/IG/TikTok followers</p>
+          <p className="text-sm text-white/80 font-medium mt-1">Interactive clues for FB/IG/TikTok followers</p>
         </div>
 
         <div className="bg-[#0E121E] border border-white/20 p-5 rounded-2xl shadow-md">
-          <p className="text-xs font-extrabold uppercase tracking-wider text-gold">Total Redemptions</p>
+          <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Total Redemptions</p>
           <p className="text-3xl font-black text-gold mt-1">{totalRedemptions} Used</p>
-          <p className="text-xs text-white/80 font-medium mt-1">Successful customer checkouts applied</p>
+          <p className="text-sm text-white/80 font-medium mt-1">Successful customer checkouts applied</p>
         </div>
       </div>
 
@@ -109,12 +109,12 @@ export default function CouponManager() {
       <div className="bg-[#0E121E] border border-white/20 rounded-2xl overflow-hidden shadow-xl">
         <div className="p-5 border-b border-white/15 flex items-center justify-between bg-white/10">
           <h2 className="font-sans font-black text-xl text-white">All Promotional Vouchers & Hunts</h2>
-          <span className="text-xs font-mono font-bold text-gold">{coupons.length} Total Coupons</span>
+          <span className="text-sm font-mono font-bold text-gold">{coupons.length} Total Coupons</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-sans">
-            <thead className="bg-[#161B29] text-gold uppercase tracking-wider text-xs font-extrabold border-b border-white/15">
+          <table className="w-full text-left text-sm font-sans">
+            <thead className="bg-[#161B29] text-gold uppercase tracking-wider text-sm font-extrabold border-b border-white/15">
               <tr>
                 <th className="p-4">Code / Campaign</th>
                 <th className="p-4">Type & Value</th>
@@ -130,21 +130,21 @@ export default function CouponManager() {
                 <tr key={c.id} className="hover:bg-white/10 transition-colors">
                   <td className="p-4">
                     <div className="flex items-center gap-2">
-                      <span className="font-black text-gold text-base font-mono tracking-wide">{c.code}</span>
+                      <span className="font-black text-gold text-lg font-mono tracking-wide">{c.code}</span>
                       {c.isHunt && (
-                        <span className="text-xs bg-blue text-white px-2 py-0.5 rounded font-black shadow">
+                        <span className="text-sm bg-blue text-white px-2 py-0.5 rounded font-black shadow">
                           🔍 SECRET HUNT
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-white/80 font-medium mt-1">{c.description}</p>
+                    <p className="text-sm text-white/80 font-medium mt-1">{c.description}</p>
                     {c.isHunt && c.clue && (
                       <p className="text-[10px] text-amber/80 italic mt-1 font-sans">"{c.clue}"</p>
                     )}
                   </td>
 
                   <td className="p-4">
-                    <span className="font-bold text-white font-sans text-sm">
+                    <span className="font-bold text-white font-sans text-base">
                       {c.type === 'percentage' ? `${c.value}% OFF` : `₱${c.value} OFF`}
                     </span>
                   </td>
@@ -206,7 +206,7 @@ export default function CouponManager() {
 
       {/* Broadcast Copied Banner */}
       {copiedText && broadcastCode && (
-        <div className="fixed bottom-6 right-6 z-50 bg-forest text-white font-mono text-xs p-4 rounded-xl shadow-2xl border border-white/20 animate-in fade-in">
+        <div className="fixed bottom-6 right-6 z-50 bg-forest text-white font-mono text-sm p-4 rounded-xl shadow-2xl border border-white/20 animate-in fade-in">
           ✓ Copied Promo Broadcast Text for <strong>{broadcastCode.code}</strong> to clipboard! Paste it directly to FB/IG/TikTok!
         </div>
       )}
@@ -218,18 +218,18 @@ export default function CouponManager() {
             
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div>
-                <h3 className="font-serif font-bold text-lg text-white">Create New Coupon / Secret Drop</h3>
-                <p className="text-xs text-white/50 font-mono">Configure discount parameters and hunt clues</p>
+                <h3 className="font-serif font-bold text-xl text-white">Create New Coupon / Secret Drop</h3>
+                <p className="text-sm text-white/50 font-mono">Configure discount parameters and hunt clues</p>
               </div>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="text-white/40 hover:text-white text-lg p-2"
+                className="text-white/40 hover:text-white text-xl p-2"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleCreate} className="space-y-4 text-xs font-mono">
+            <form onSubmit={handleCreate} className="space-y-4 text-sm font-mono">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[10px] text-white/40 uppercase font-bold mb-1">Coupon Code *</label>
@@ -314,7 +314,7 @@ export default function CouponManager() {
                     onChange={(e) => setIsHunt(e.target.checked)}
                     className="h-4 w-4 rounded accent-forest"
                   />
-                  <span className="font-bold text-forest text-xs">Enable Secret "Voucher Hunt" Mode</span>
+                  <span className="font-bold text-forest text-sm">Enable Secret "Voucher Hunt" Mode</span>
                 </label>
                 <p className="text-[11px] text-white/60 font-sans">
                   Hides the code from standard list until customers solve the clue or type the secret code in the Voucher Hunt Center!
@@ -328,7 +328,7 @@ export default function CouponManager() {
                       value={clue}
                       onChange={(e) => setClue(e.target.value)}
                       placeholder="e.g. Clue: What Milan airport code equals 500 pesos off? Code = HUNT500"
-                      className="w-full rounded-xl border border-white/15 bg-[#05080f] p-2.5 text-white font-sans text-xs focus:border-forest outline-none"
+                      className="w-full rounded-xl border border-white/15 bg-[#05080f] p-2.5 text-white font-sans text-sm focus:border-forest outline-none"
                     />
                   </div>
                 )}

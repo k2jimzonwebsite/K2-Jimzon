@@ -82,11 +82,11 @@ export default function Inbox() {
               }`}
             >
               <div className="flex justify-between items-baseline mb-1">
-                <span className={`font-semibold text-sm ${c.unread ? 'text-white' : 'text-white/60'}`}>{c.customer}</span>
-                <span className="text-xs text-white/30">{c.time}</span>
+                <span className={`font-semibold text-base ${c.unread ? 'text-white' : 'text-white/60'}`}>{c.customer}</span>
+                <span className="text-sm text-white/30">{c.time}</span>
               </div>
               <div className="flex justify-between items-center mt-1">
-                <span className={`text-xs line-clamp-1 flex-1 pr-2 ${c.unread ? 'text-white/80' : 'text-white/40'}`}>
+                <span className={`text-sm line-clamp-1 flex-1 pr-2 ${c.unread ? 'text-white/80' : 'text-white/40'}`}>
                   {c.messages[c.messages.length - 1].text}
                 </span>
                 <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
@@ -110,7 +110,7 @@ export default function Inbox() {
                 via {chat.channel} Webhook
               </span>
             </div>
-            <p className="text-xs text-white/50">Unified Customer Messaging Channel</p>
+            <p className="text-sm text-white/50">Unified Customer Messaging Channel</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -122,7 +122,7 @@ export default function Inbox() {
             >
               <span>⚡</span> Bot Auto-Reply: {autoWebhookBot ? 'ACTIVE (100% Automated)' : 'PAUSED'}
             </button>
-            <button className="text-xs font-semibold text-blue hover:text-blue/80 transition-colors">View CRM Profile</button>
+            <button className="text-sm font-semibold text-blue hover:text-blue/80 transition-colors">View CRM Profile</button>
           </div>
         </div>
 
@@ -141,7 +141,7 @@ export default function Inbox() {
               <div className="space-y-4">
                 <div>
                   <p className="text-black/40 text-[10px] uppercase font-bold tracking-widest">Requested Item</p>
-                  <p className="font-serif font-semibold text-lg text-black/90 leading-tight">{chat.metadata.item}</p>
+                  <p className="font-serif font-semibold text-xl text-black/90 leading-tight">{chat.metadata.item}</p>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
@@ -158,7 +158,7 @@ export default function Inbox() {
                 {chat.metadata.url && (
                   <div>
                     <p className="text-black/40 text-[10px] uppercase font-bold tracking-widest">Reference URL</p>
-                    <a href={chat.metadata.url} target="_blank" rel="noreferrer" className="text-blue-700 font-semibold hover:underline text-sm truncate block w-full max-w-sm">
+                    <a href={chat.metadata.url} target="_blank" rel="noreferrer" className="text-blue-700 font-semibold hover:underline text-base truncate block w-full max-w-sm">
                       {chat.metadata.url}
                     </a>
                   </div>
@@ -174,7 +174,7 @@ export default function Inbox() {
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {chat.messages.map((m, i) => (
             <div key={i} className={`flex ${m.sender === 'agent' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[75%] p-3 text-sm shadow-md ${
+              <div className={`max-w-[75%] p-3 text-base shadow-md ${
                 m.sender === 'agent' 
                   ? 'bg-blue text-white rounded-2xl rounded-tr-sm' 
                   : 'bg-white/10 text-white/90 border border-white/5 rounded-2xl rounded-tl-sm'
@@ -191,12 +191,12 @@ export default function Inbox() {
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               placeholder="Type a reply or use AI Copilot..."
-              className="flex-1 resize-none h-[60px] rounded-lg border border-white/10 bg-[#05080f] p-3 text-sm text-white placeholder:text-white/30 focus:border-blue focus:ring-1 focus:ring-blue outline-none transition-all"
+              className="flex-1 resize-none h-[60px] rounded-lg border border-white/10 bg-[#05080f] p-3 text-base text-white placeholder:text-white/30 focus:border-blue focus:ring-1 focus:ring-blue outline-none transition-all"
             />
             <button 
               onClick={handleSend}
               disabled={!replyText.trim()}
-              className="bg-blue text-white px-6 font-semibold text-sm rounded-lg hover:bg-blue/90 disabled:opacity-50 transition-colors"
+              className="bg-blue text-white px-6 font-semibold text-base rounded-lg hover:bg-blue/90 disabled:opacity-50 transition-colors"
             >
               Send
             </button>
@@ -209,18 +209,18 @@ export default function Inbox() {
         
         <div className="p-4 border-b border-white/10 flex items-center gap-2 bg-white/5">
           <div className="h-2 w-2 rounded-full bg-blue pulse-dot" />
-          <h3 className="font-serif font-semibold text-sm text-white">AI Chat Assistant</h3>
+          <h3 className="font-serif font-semibold text-base text-white">AI Chat Assistant</h3>
         </div>
         
         <div className="p-5 flex-1 flex flex-col items-start overflow-y-auto">
-          <p className="text-xs text-white/50 mb-6">
+          <p className="text-sm text-white/50 mb-6">
             The AI automatically reads incoming messages and queries the database to draft accurate replies for you.
           </p>
 
           <button 
             onClick={handleDraftAI}
             disabled={aiDrafting}
-            className="w-full flex justify-center items-center gap-2 py-2.5 border border-blue bg-blue/10 text-blue font-semibold text-sm rounded-lg transition-all hover:bg-blue/20 active:scale-95 disabled:opacity-50 mb-8"
+            className="w-full flex justify-center items-center gap-2 py-2.5 border border-blue bg-blue/10 text-blue font-semibold text-base rounded-lg transition-all hover:bg-blue/20 active:scale-95 disabled:opacity-50 mb-8"
           >
             {aiDrafting ? (
               <span className="flex items-center gap-2">
@@ -241,8 +241,8 @@ export default function Inbox() {
                </div>
                
                <div className="bg-blue/5 border border-blue/20 p-3 rounded-lg">
-                 <p className="text-xs text-blue mb-1 font-semibold">Suggested Action</p>
-                 <p className="text-xs text-white/70">The drafted reply has been placed in your text box. Review it and click Send to confirm.</p>
+                 <p className="text-sm text-blue mb-1 font-semibold">Suggested Action</p>
+                 <p className="text-sm text-white/70">The drafted reply has been placed in your text box. Review it and click Send to confirm.</p>
                </div>
             </div>
           )}

@@ -60,22 +60,22 @@ export default function Customers() {
     <div className="space-y-4">
       <div className="flex items-center justify-between rounded-lg border border-line bg-white p-4 shadow-sm">
         <div>
-          <h2 className="text-base font-bold text-navy flex items-center gap-2">
+          <h2 className="text-lg font-bold text-navy flex items-center gap-2">
             <UserIcon size={18} />
             Customer CRM & VIP Access
           </h2>
-          <p className="mt-0.5 text-sm text-navy-soft">Approve wholesale accounts to grant them access to VIP pricing on the storefront.</p>
+          <p className="mt-0.5 text-base text-navy-soft">Approve wholesale accounts to grant them access to VIP pricing on the storefront.</p>
         </div>
       </div>
 
       <div className="overflow-hidden rounded-lg border border-line bg-white shadow-card overflow-x-auto">
         {loading && customers.length === 0 ? (
-          <div className="p-8 text-center text-sm text-navy-soft">Loading customers...</div>
+          <div className="p-8 text-center text-base text-navy-soft">Loading customers...</div>
         ) : customers.length === 0 ? (
-          <div className="p-8 text-center text-sm text-navy-soft">No customers registered yet. Send them your VIP login link!</div>
+          <div className="p-8 text-center text-base text-navy-soft">No customers registered yet. Send them your VIP login link!</div>
         ) : (
-          <table className="w-full text-left text-sm">
-            <thead className="bg-shell text-xs text-navy-soft border-b border-line">
+          <table className="w-full text-left text-base">
+            <thead className="bg-shell text-sm text-navy-soft border-b border-line">
               <tr>
                 <th className="px-6 py-3 font-medium">Customer Email</th>
                 <th className="px-6 py-3 font-medium">Role Status</th>
@@ -88,7 +88,7 @@ export default function Customers() {
                 <tr key={c.id} className="hover:bg-shell/50 transition">
                   <td className="px-6 py-4 font-medium text-navy">{c.email || 'Anonymous'}</td>
                   <td className="px-6 py-4">
-                    <span className={'px-2.5 py-1 rounded text-xs font-semibold ' + (c.role === 'VIP' ? 'bg-amber-wash text-amber' : c.role === 'Admin' ? 'bg-navy/10 text-navy' : 'bg-line text-navy-soft')}>
+                    <span className={'px-2.5 py-1 rounded text-sm font-semibold ' + (c.role === 'VIP' ? 'bg-amber-wash text-amber' : c.role === 'Admin' ? 'bg-navy/10 text-navy' : 'bg-line text-navy-soft')}>
                       {c.role}
                     </span>
                   </td>
@@ -99,7 +99,7 @@ export default function Customers() {
                     {c.role !== 'Admin' && (
                       <button
                         onClick={() => toggleRole(c.id, c.role)}
-                        className="text-xs font-bold text-blue hover:underline"
+                        className="text-sm font-bold text-blue hover:underline"
                       >
                         {c.role === 'VIP' ? 'Revoke VIP' : 'Upgrade to VIP'}
                       </button>

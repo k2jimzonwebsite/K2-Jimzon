@@ -8,11 +8,11 @@ import StaffAllocationModal from './StaffAllocationModal'
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 
 // ── Shared input/textarea styles ──────────────────────────────────────────────
-const inp = 'w-full rounded-xl border border-white/20 bg-[#161B29] px-3.5 py-2.5 text-sm text-white font-semibold focus:border-gold outline-none transition-colors shadow-sm'
+const inp = 'w-full rounded-xl border border-white/20 bg-[#161B29] px-3.5 py-2.5 text-base text-white font-semibold focus:border-gold outline-none transition-colors shadow-sm'
 const ta  = `${inp} resize-none`
 
 function Label({ children }) {
-  return <label className="block text-xs font-extrabold uppercase tracking-wider text-gold mb-1.5">{children}</label>
+  return <label className="block text-sm font-extrabold uppercase tracking-wider text-gold mb-1.5">{children}</label>
 }
 
 function Section({ color = 'blue', title, children }) {
@@ -26,7 +26,7 @@ function Section({ color = 'blue', title, children }) {
   }
   return (
     <div className={`border-l-4 pl-4 space-y-3 ${colors[color] || colors.blue}`}>
-      <p className="text-xs font-extrabold uppercase tracking-wider text-gold">{title}</p>
+      <p className="text-sm font-extrabold uppercase tracking-wider text-gold">{title}</p>
       {children}
     </div>
   )
@@ -61,7 +61,7 @@ function PhotoSlot({ label, value, onChange, bucket = 'product-images' }) {
           <>
             <img src={value} alt={label} className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <p className="text-xs font-semibold text-white">Change Photo</p>
+              <p className="text-sm font-semibold text-white">Change Photo</p>
             </div>
           </>
         ) : (
@@ -228,10 +228,10 @@ export default function InventoryGrid() {
     <div className="animate-in fade-in duration-500 relative min-h-full">
       {/* Top bar */}
       <div className="mb-6 flex items-center justify-between">
-        <p className="text-sm text-white/50">Manage your inventory visually. Click Edit to update product details.</p>
+        <p className="text-base text-white/50">Manage your inventory visually. Click Edit to update product details.</p>
         <div className="flex items-center gap-3">
           <button onClick={() => setShowAiScanner(true)}
-            className="flex items-center gap-2 rounded bg-forest/20 text-forest hover:bg-forest hover:text-white transition-colors px-3 py-1.5 text-xs font-semibold">
+            className="flex items-center gap-2 rounded bg-forest/20 text-forest hover:bg-forest hover:text-white transition-colors px-3 py-1.5 text-sm font-semibold">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -239,14 +239,14 @@ export default function InventoryGrid() {
             Scan Box
           </button>
           <button onClick={() => setShowSmartPaste(true)}
-            className="flex items-center gap-2 rounded bg-purple-500/20 text-purple-400 hover:bg-purple-500 hover:text-white transition-colors px-3 py-1.5 text-xs font-semibold">
+            className="flex items-center gap-2 rounded bg-purple-500/20 text-purple-400 hover:bg-purple-500 hover:text-white transition-colors px-3 py-1.5 text-sm font-semibold">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
             Smart Paste AI
           </button>
           <button onClick={() => { setIsAdding(true); setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random()*10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }) }}
-            className="flex items-center gap-2 rounded bg-blue/20 text-blue hover:bg-blue hover:text-white transition-colors px-3 py-1.5 text-xs font-semibold">
+            className="flex items-center gap-2 rounded bg-blue/20 text-blue hover:bg-blue hover:text-white transition-colors px-3 py-1.5 text-sm font-semibold">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
@@ -284,7 +284,7 @@ export default function InventoryGrid() {
                   {primaryExpiryDate && (
                     <button
                       onClick={(e) => { e.stopPropagation(); setBatchProduct(p) }}
-                      className={`absolute bottom-2 left-2 text-xs font-bold px-2 py-0.5 rounded border transition-all ${
+                      className={`absolute bottom-2 left-2 text-sm font-bold px-2 py-0.5 rounded border transition-all ${
                         pinnedBatch ? 'bg-gold text-navy font-extrabold border-gold shadow-md' :
                         expiryHealth.color === 'crimson' ? 'bg-crimson border-crimson text-white font-bold' :
                         expiryHealth.color === 'amber' ? 'bg-gold border-gold text-navy font-extrabold' :
@@ -297,36 +297,36 @@ export default function InventoryGrid() {
                 </div>
                 <div className="p-4 flex-1 flex flex-col">
                   <div className="flex items-start justify-between gap-2 mb-2">
-                    <span className="text-xs font-mono text-white/70 font-semibold uppercase truncate">{p.sku}</span>
-                    <span className={`shrink-0 px-2 py-0.5 rounded text-xs font-extrabold uppercase tracking-wider ${p.status === 'Draft' ? 'bg-gold/20 text-gold border border-gold/30' : p.status === 'Discontinued' ? 'bg-crimson/20 text-crimson border border-crimson/30' : 'bg-blue/20 text-blue border border-blue/30'}`}>
+                    <span className="text-sm font-mono text-white/70 font-semibold uppercase truncate">{p.sku}</span>
+                    <span className={`shrink-0 px-2 py-0.5 rounded text-sm font-extrabold uppercase tracking-wider ${p.status === 'Draft' ? 'bg-gold/20 text-gold border border-gold/30' : p.status === 'Discontinued' ? 'bg-crimson/20 text-crimson border border-crimson/30' : 'bg-blue/20 text-blue border border-blue/30'}`}>
                       {p.status}
                     </span>
                   </div>
-                  <h3 className="text-base font-semibold text-white line-clamp-2 mb-1.5">{p.name}</h3>
-                  {p.origin && <p className="text-xs text-gold font-medium mb-2">🇮🇹 {p.origin}</p>}
+                  <h3 className="text-lg font-semibold text-white line-clamp-2 mb-1.5">{p.name}</h3>
+                  {p.origin && <p className="text-sm text-gold font-medium mb-2">🇮🇹 {p.origin}</p>}
                   
                   <div className="mt-auto space-y-2.5">
-                    <div className="grid grid-cols-2 gap-2 text-sm bg-white/5 p-2.5 rounded-lg border border-white/10">
+                    <div className="grid grid-cols-2 gap-2 text-base bg-white/5 p-2.5 rounded-lg border border-white/10">
                       <div>
-                        <p className="text-white/60 uppercase text-xs font-bold tracking-wider mb-0.5">Stock</p>
-                        <p className={`font-extrabold text-base ${(p.stock_available ?? 0) <= 5 ? 'text-crimson' : 'text-white'}`}>{p.stock_available ?? 0}</p>
+                        <p className="text-white/60 uppercase text-sm font-bold tracking-wider mb-0.5">Stock</p>
+                        <p className={`font-extrabold text-lg ${(p.stock_available ?? 0) <= 5 ? 'text-crimson' : 'text-white'}`}>{p.stock_available ?? 0}</p>
                       </div>
                       <div>
-                        <p className="text-white/60 uppercase text-xs font-bold tracking-wider mb-0.5">Retail SRP</p>
-                        <p className="font-extrabold text-base text-gold tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</p>
+                        <p className="text-white/60 uppercase text-sm font-bold tracking-wider mb-0.5">Retail SRP</p>
+                        <p className="font-extrabold text-lg text-gold tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-1.5 pt-1">
                       <button
                         onClick={() => setBatchProduct(p)}
-                        className="text-xs font-sans font-bold bg-white/10 hover:bg-white/15 text-white/90 py-2 rounded-lg border border-white/15 transition-colors text-center"
+                        className="text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-white/90 py-2 rounded-lg border border-white/15 transition-colors text-center"
                       >
                         📦 Batches ({p.batches?.length || 1})
                       </button>
                       <button
                         onClick={() => setAllocatingProduct(p)}
-                        className="text-xs font-sans font-bold bg-blue/15 hover:bg-blue/25 text-blue py-2 rounded-lg border border-blue/30 transition-colors text-center"
+                        className="text-sm font-sans font-bold bg-blue/15 hover:bg-blue/25 text-blue py-2 rounded-lg border border-blue/30 transition-colors text-center"
                       >
                         👤 Custody
                       </button>
@@ -334,7 +334,7 @@ export default function InventoryGrid() {
 
                     <button
                       onClick={() => setEnrichProduct(p)}
-                      className="w-full text-xs font-sans font-bold bg-gold/15 hover:bg-gold/25 text-gold py-2 rounded-lg border border-gold/30 transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
+                      className="w-full text-sm font-sans font-bold bg-gold/15 hover:bg-gold/25 text-gold py-2 rounded-lg border border-gold/30 transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       ✨ Enrich Specs with AI
                     </button>
@@ -342,7 +342,7 @@ export default function InventoryGrid() {
                 </div>
 
                 <button onClick={() => { setIsAdding(false); setEditingProduct(p) }}
-                  className="absolute top-2 right-2 rounded-lg bg-blue hover:bg-blue/90 px-3.5 py-1.5 text-xs font-extrabold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
+                  className="absolute top-2 right-2 rounded-lg bg-blue hover:bg-blue/90 px-3.5 py-1.5 text-sm font-extrabold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
                   Edit
                 </button>
               </div>
@@ -366,8 +366,8 @@ export default function InventoryGrid() {
             {/* Header */}
             <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5">
               <div>
-                <h3 className="font-serif text-lg font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
-                <p className="text-xs text-white/40 font-mono mt-0.5">{editingProduct.sku}</p>
+                <h3 className="font-serif text-xl font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
+                <p className="text-sm text-white/40 font-mono mt-0.5">{editingProduct.sku}</p>
               </div>
               <button onClick={() => { setEditingProduct(null); setIsAdding(false) }} className="text-white/40 hover:text-white transition-colors">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -551,7 +551,7 @@ export default function InventoryGrid() {
                         <label key={field} className="flex items-center gap-2 cursor-pointer">
                           <input type="checkbox" checked={Boolean(editingProduct[field])} onChange={e => set(field, e.target.checked)}
                             className="w-4 h-4 rounded border border-white/20 bg-[#05080f] text-blue cursor-pointer" />
-                          <span className="text-sm text-white/70">{lbl}</span>
+                          <span className="text-base text-white/70">{lbl}</span>
                         </label>
                       ))}
                     </div>
@@ -577,14 +577,14 @@ export default function InventoryGrid() {
 
               {/* Footer */}
               <div className="shrink-0 px-6 py-4 border-t border-white/10 bg-black/20 flex items-center justify-between">
-                <p className="text-xs text-white/30 italic">All changes save directly to Supabase.</p>
+                <p className="text-sm text-white/30 italic">All changes save directly to Supabase.</p>
                 <div className="flex gap-3">
                   <button type="button" onClick={() => { setEditingProduct(null); setIsAdding(false) }}
-                    className="px-4 py-2 rounded-lg text-sm font-semibold text-white/60 hover:text-white transition-colors">
+                    className="px-4 py-2 rounded-lg text-base font-semibold text-white/60 hover:text-white transition-colors">
                     Cancel
                   </button>
                   <button type="submit" disabled={saving}
-                    className="px-6 py-2 rounded-lg text-sm font-semibold bg-blue text-white hover:bg-blue/90 disabled:opacity-50 transition-colors shadow-lg shadow-blue/20 flex items-center gap-2">
+                    className="px-6 py-2 rounded-lg text-base font-semibold bg-blue text-white hover:bg-blue/90 disabled:opacity-50 transition-colors shadow-lg shadow-blue/20 flex items-center gap-2">
                     {saving && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                     {saving ? 'Saving…' : (isAdding ? 'Create Product' : 'Save Changes')}
                   </button>

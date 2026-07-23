@@ -105,10 +105,10 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
               <span className="text-[10px] font-mono font-bold bg-forest/20 text-forest px-2 py-0.5 rounded border border-forest/30 uppercase">
                 FEFO Multi-Batch & Item Expiration Editor
               </span>
-              <span className="text-xs text-white/50">SKU: {product?.sku || product?.id || 'N/A'}</span>
+              <span className="text-sm text-white/50">SKU: {product?.sku || product?.id || 'N/A'}</span>
             </div>
-            <h2 className="font-serif text-lg font-bold text-white mt-1">{product?.name || product?.title || 'Product Batch Editor'}</h2>
-            <p className="text-xs text-white/60">Total Batch Stock: <span className="text-forest font-bold font-mono">{totalBatchStock} units</span> across {batches.length} box shipment batches.</p>
+            <h2 className="font-serif text-xl font-bold text-white mt-1">{product?.name || product?.title || 'Product Batch Editor'}</h2>
+            <p className="text-sm text-white/60">Total Batch Stock: <span className="text-forest font-bold font-mono">{totalBatchStock} units</span> across {batches.length} box shipment batches.</p>
           </div>
 
           <button
@@ -122,7 +122,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
         {/* Existing Batches List with Inline Editing & Pinning */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white/50">
+            <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50">
               Active Shipment Boxes & Expiration Dates (Editable)
             </h3>
             <span className="text-[10px] font-mono text-amber">📌 Click Pin to priority-highlight specific batch</span>
@@ -134,7 +134,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
               return (
                 <div
                   key={b.id}
-                  className={`p-3.5 rounded-xl border text-xs font-mono transition-all space-y-3 ${
+                  className={`p-3.5 rounded-xl border text-sm font-mono transition-all space-y-3 ${
                     b.is_pinned ? 'bg-amber/10 border-amber/50 shadow-md' : 'bg-white/5 border-white/10'
                   }`}
                 >
@@ -213,8 +213,8 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
 
         {/* Add New Batch Box Form */}
         <form onSubmit={handleAddBatch} className="bg-[#05080f] border border-white/10 p-4 rounded-xl space-y-3">
-          <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white/60">+ Add New Incoming Shipment Box Batch</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+          <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Add New Incoming Shipment Box Batch</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm font-mono">
             <div>
               <label className="block text-[10px] text-white/40 mb-1">Box / Cargo Code</label>
               <input
@@ -250,7 +250,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
 
           <button
             type="submit"
-            className="w-full bg-forest hover:bg-forest/90 text-white font-bold text-xs py-2 rounded-lg transition-all"
+            className="w-full bg-forest hover:bg-forest/90 text-white font-bold text-sm py-2 rounded-lg transition-all"
           >
             + Register Batch Box
           </button>
@@ -261,14 +261,14 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-white/70 hover:bg-white/10"
+            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-white/70 hover:bg-white/10"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="px-6 py-2 rounded-xl bg-forest text-xs font-bold text-white hover:bg-forest/90 shadow-lg shadow-forest/20"
+            className="px-6 py-2 rounded-xl bg-forest text-sm font-bold text-white hover:bg-forest/90 shadow-lg shadow-forest/20"
           >
             💾 Save Multi-Batch Expirations
           </button>

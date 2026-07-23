@@ -157,14 +157,14 @@ export default function MilanPackingScannerModal({
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest bg-crimson/20 text-crimson px-2 py-0.5 rounded border border-crimson/30">
               Milan Packing POV
             </span>
-            <span className="text-xs text-white/50">Milan, Italy</span>
+            <span className="text-sm text-white/50">Milan, Italy</span>
           </div>
-          <h2 className="font-serif font-semibold text-lg text-white">Flight Box Packing Scanner</h2>
+          <h2 className="font-serif font-semibold text-xl text-white">Flight Box Packing Scanner</h2>
         </div>
         <button
           onClick={onClose}
           aria-label="Close Milan Packing Scanner"
-          className="rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/20 transition-all"
+          className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold text-white/80 hover:bg-white/20 transition-all"
         >
           Close
         </button>
@@ -174,14 +174,14 @@ export default function MilanPackingScannerModal({
       <div className="bg-[#020408] border-b border-white/10 px-4 py-3 flex items-center justify-between shrink-0">
         <div>
           <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Milan Box Units Packed</p>
-          <p className="text-sm font-bold text-white">
-            <span className="text-crimson font-mono text-base">{totalPacked}</span> units packed into Flight Consignment
+          <p className="text-base font-bold text-white">
+            <span className="text-crimson font-mono text-lg">{totalPacked}</span> units packed into Flight Consignment
           </p>
         </div>
         <button
           onClick={onClose}
           aria-label="Close Milan Packing Scanner"
-          className="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-lg font-bold text-xs shadow-lg shadow-crimson/20 transition-all"
+          className="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-crimson/20 transition-all"
         >
           Done Packing Box ✓
         </button>
@@ -209,11 +209,11 @@ export default function MilanPackingScannerModal({
         {lastPacked && !unrecognizedCode && (
           <div className="absolute bottom-4 left-4 right-4 bg-crimson/90 backdrop-blur-md text-white p-3.5 rounded-xl shadow-2xl flex items-center justify-between animate-in slide-in-from-bottom-2 duration-200">
             <div>
-              <p className="text-xs font-bold font-mono text-white/80">+1 PACKED IN MILAN</p>
-              <p className="text-sm font-semibold truncate max-w-[220px]">{lastPacked.name}</p>
+              <p className="text-sm font-bold font-mono text-white/80">+1 PACKED IN MILAN</p>
+              <p className="text-base font-semibold truncate max-w-[220px]">{lastPacked.name}</p>
             </div>
             <div className="text-right">
-              <span className="bg-white/20 text-white font-mono font-bold text-sm px-2.5 py-1 rounded">
+              <span className="bg-white/20 text-white font-mono font-bold text-base px-2.5 py-1 rounded">
                 {lastPacked.count} Packed
               </span>
             </div>
@@ -229,11 +229,11 @@ export default function MilanPackingScannerModal({
             value={manualCode}
             onChange={(e) => setManualCode(e.target.value)}
             placeholder="Milan Barcode / SKU entry (+1)..."
-            className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/30 outline-none focus:border-crimson"
+            className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-crimson"
           />
           <button
             type="submit"
-            className="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md shadow-crimson/20"
+            className="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md shadow-crimson/20"
           >
             +1 Pack
           </button>
@@ -249,7 +249,7 @@ export default function MilanPackingScannerModal({
                 onClick={() => handleProcessScan(item.sku)}
                 className="shrink-0 bg-white/5 border border-white/10 hover:border-crimson p-2 rounded-lg text-left transition-all active:scale-95"
               >
-                <p className="text-xs font-semibold text-white/90 truncate max-w-[120px]">{item.sku}</p>
+                <p className="text-sm font-semibold text-white/90 truncate max-w-[120px]">{item.sku}</p>
                 <p className="text-[10px] text-white/50">
                   Packed: <span className="text-crimson font-bold">{item.italy_packed_qty}</span>
                 </p>
@@ -265,15 +265,15 @@ export default function MilanPackingScannerModal({
           <div className="w-full max-w-lg bg-[#0A101D] border border-amber/30 rounded-2xl p-6 text-white shadow-2xl space-y-4">
             
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider bg-amber/20 text-amber px-2.5 py-1 rounded">
+              <span className="text-sm font-mono font-bold uppercase tracking-wider bg-amber/20 text-amber px-2.5 py-1 rounded">
                 Unrecognized Italian Item Barcode
               </span>
-              <span className="text-xs font-mono text-white/40">{unrecognizedCode}</span>
+              <span className="text-sm font-mono text-white/40">{unrecognizedCode}</span>
             </div>
 
             <div>
               <h3 className="font-serif font-bold text-xl text-white">Unknown Barcode Detected</h3>
-              <p className="text-xs text-white/60 mt-1">
+              <p className="text-sm text-white/60 mt-1">
                 Barcode <span className="font-mono text-amber font-bold">{unrecognizedCode}</span> is not in master catalog. Tap below for ultra-fast packing:
               </p>
             </div>
@@ -283,10 +283,10 @@ export default function MilanPackingScannerModal({
               {/* PRIMARY 1-TAP ULTRA-FAST DRAFT BUTTON */}
               <button
                 onClick={handleInstantDraftPack}
-                className="w-full flex items-center justify-between p-4 rounded-xl bg-crimson hover:bg-crimson/90 text-white font-bold text-sm shadow-xl shadow-crimson/30 transition-all transform active:scale-98"
+                className="w-full flex items-center justify-between p-4 rounded-xl bg-crimson hover:bg-crimson/90 text-white font-bold text-base shadow-xl shadow-crimson/30 transition-all transform active:scale-98"
               >
                 <div className="text-left">
-                  <p className="font-extrabold text-sm text-white flex items-center gap-1.5">
+                  <p className="font-extrabold text-base text-white flex items-center gap-1.5">
                     ⚡ Instant 1-Tap Draft & Pack (+1)
                   </p>
                   <p className="text-[11px] text-white/80 font-normal mt-0.5">
@@ -302,18 +302,18 @@ export default function MilanPackingScannerModal({
                   setUnrecognizedCode(null)
                   onUnrecognizedBarcode(code, 'ai')
                 }}
-                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-blue/10 border border-blue/30 text-blue font-bold text-xs hover:bg-blue/20 transition-all text-left group"
+                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-blue/10 border border-blue/30 text-blue font-bold text-sm hover:bg-blue/20 transition-all text-left group"
               >
                 <div>
-                  <p className="font-bold text-sm text-white group-hover:text-blue">📷 Use AI Scan Box / Smart Paste</p>
+                  <p className="font-bold text-base text-white group-hover:text-blue">📷 Use AI Scan Box / Smart Paste</p>
                   <p className="text-[11px] text-white/50 font-normal mt-0.5">Stream packaging photos to AI vision model to generate full product JSON & specs</p>
                 </div>
-                <span className="text-lg">→</span>
+                <span className="text-xl">→</span>
               </button>
 
               {/* Quick Entry Form */}
               <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
-                <p className="text-xs font-bold text-white uppercase tracking-wider font-mono">📝 Quick Create Italian Product</p>
+                <p className="text-sm font-bold text-white uppercase tracking-wider font-mono">📝 Quick Create Italian Product</p>
 
                 <form onSubmit={handleQuickSubmit} className="space-y-2.5">
                   <div>
@@ -324,7 +324,7 @@ export default function MilanPackingScannerModal({
                       onChange={(e) => setQuickTitle(e.target.value)}
                       placeholder="e.g. Barilla Pesto Genovese 190g"
                       required
-                      className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-xs text-white"
+                      className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white"
                     />
                   </div>
 
@@ -335,7 +335,7 @@ export default function MilanPackingScannerModal({
                         type="number"
                         value={quickSrp}
                         onChange={(e) => setQuickSrp(e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-xs text-white font-mono"
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
                       />
                     </div>
                     <div>
@@ -344,7 +344,7 @@ export default function MilanPackingScannerModal({
                         type="text"
                         value={quickBatch}
                         onChange={(e) => setQuickBatch(e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-xs text-white font-mono"
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
                       />
                     </div>
                     <div>
@@ -353,7 +353,7 @@ export default function MilanPackingScannerModal({
                         type="date"
                         value={quickBestBefore}
                         onChange={(e) => setQuickBestBefore(e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-xs text-white font-mono"
+                        className="w-full rounded-lg border border-white/10 bg-[#05080f] px-3 py-2 text-sm text-white font-mono"
                       />
                     </div>
                   </div>
@@ -362,13 +362,13 @@ export default function MilanPackingScannerModal({
                     <button
                       type="button"
                       onClick={() => setUnrecognizedCode(null)}
-                      className="flex-1 py-2 text-xs font-semibold text-white/60 bg-white/5 rounded-lg"
+                      className="flex-1 py-2 text-sm font-semibold text-white/60 bg-white/5 rounded-lg"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 py-2 text-xs font-bold text-white bg-crimson rounded-lg shadow-lg shadow-crimson/20"
+                      className="flex-1 py-2 text-sm font-bold text-white bg-crimson rounded-lg shadow-lg shadow-crimson/20"
                     >
                       Save & Add to Box (+1)
                     </button>
