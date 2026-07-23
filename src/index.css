@@ -49,10 +49,25 @@
     transition: background-color 0.25s ease, color 0.25s ease;
   }
 
+  /* Warm Tuscan wood-grain linen texture — light mode only (soft, multiply-blended, zero glare) */
   body:not(.dark) {
     background-color: #FAF7F2;
-    background-image: radial-gradient(#E2D9C8 0.75px, transparent 0.75px);
-    background-size: 16px 16px;
+    background-image:
+      /* Terracotta warmth — top right */
+      radial-gradient(ellipse 60% 50% at 85% 15%, oklch(55% 0.15 35 / 0.07) 0%, transparent 70%),
+      /* Olive coolness — bottom left */
+      radial-gradient(ellipse 50% 60% at 10% 85%, oklch(55% 0.08 135 / 0.06) 0%, transparent 70%),
+      /* Amber glow — center */
+      radial-gradient(ellipse 80% 40% at 50% 50%, oklch(55% 0.12 65 / 0.05) 0%, transparent 60%),
+      /* Gold warmth — top left */
+      radial-gradient(ellipse 40% 40% at 15% 20%, oklch(70% 0.12 75 / 0.04) 0%, transparent 60%),
+      /* Wood grain texture */
+      url('/wood-bg.jpg');
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: normal, normal, normal, normal, multiply;
   }
 
   h1, h2, h3, h4 {
