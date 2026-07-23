@@ -341,7 +341,7 @@ export function StoreProvider({ children }) {
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .eq('status', 'Live')
+      .in('status', ['Live', 'Active'])
     
     if (!error && data) {
       setDbProducts(data)
