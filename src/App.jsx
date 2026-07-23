@@ -36,11 +36,18 @@ const STOREFRONT = new Set(['home', 'product', 'master_product', 'catalog', 'pas
 function Shell() {
   const { view, setView } = useStore()
   const path = typeof window !== 'undefined' ? window.location.pathname : ''
-  const isDedicatedAdminRoute = path.includes('/admin-portal-k2-secure') || path === '/admin' || view === 'admin'
-
-  const activeViewKey = isDedicatedAdminRoute ? 'admin' : view
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : ''
+  
+  // Environment & Subdomain Detection
+  const isAdminDeployment = import.meta.env.VITE_IS_ADMIN_DEPLOYMENT === 'true' || hostname.startsWith('admin.')
+  
+  // If this is an Admin Deployment, boot directly into Admin view.
+  // If this is a Storefront Deployment, block public route access to admin.
+  const isDedicatedAdminRoute = isAdminDeployment || (path.includes('/admin-portal-k2-secure') && !import.meta.env.PROD)
+  
+  const activeViewKey = isAdminDeployment ? 'admin' : (isDedicatedAdminRoute ? 'admin' : (view === 'admin' ? 'home' : view))
   const View = VIEWS[activeViewKey] ?? Home
-  const isStorefront = !isDedicatedAdminRoute && STOREFRONT.has(activeViewKey)
+  const isStorefront = !isAdminDeployment && !isDedicatedAdminRoute && STOREFRONT.has(activeViewKey)
   const isDevOrDemoHash = import.meta.env.DEV || (typeof window !== 'undefined' && window.location.hash === '#demo')
 
   return (
