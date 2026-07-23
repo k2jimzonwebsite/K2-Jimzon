@@ -6,6 +6,40 @@ const OFF = 'https://images.openfoodfacts.org/images/products'
 
 export const products = [
   {
+    id: 'caffe-milano-gold',
+    name: 'Caffè Milano Special Reserve 1kg Whole Beans 🇮🇹',
+    short: 'Caffè Milano Gold 1kg',
+    size: '1 kg bag',
+    origin: 'Milano',
+    category: 'Beverages',
+    retail: 1899,
+    wholesale: 1450,
+    stock: 25,
+    tag: '✨ New Arrival',
+    hue: 45,
+    img: '/images/mock/luxury_coffee_bag.jpg',
+    afterImage: '/images/mock/luxury_espresso.jpg',
+    gallery: [
+      '/images/mock/luxury_coffee_bag.jpg',
+      '/images/mock/luxury_espresso.jpg'
+    ],
+    collections: ['trending', 'cafe'],
+    inside: 'Single-origin Lombardy roast, 100% Arabica beans sourced directly from Milan',
+    ingredients: '100% Roasted Arabica Coffee Beans',
+    allergens: 'None',
+    net_weight: '1000g',
+    package_type: 'Foil Valve Bag',
+    storage_instructions: 'Keep sealed in a cool, dry place away from direct sunlight.',
+    finished_product_details: 'Rich crema, notes of dark chocolate and toasted hazelnuts.',
+    brand_id: 'Caffè Milano',
+    country_of_origin: 'Italy',
+    barcode: '8050039988776',
+    usage_instructions: 'Grind fresh before brewing. Perfect for espresso machines and Moka pots.',
+    whyBuy: 'Exclusive Milanese boutique roast imported directly via monthly air cargo.',
+    whyRare: 'Small-batch artisan roast not available in Philippine supermarkets.',
+    pairings: ['Espresso shot', 'Pan di Stelle biscuits', 'Pistachio cornetto']
+  },
+  {
     id: 'pistachio-cream',
     name: 'Pistì spreadable pistachio cream',
     short: 'Pistì pistachio cream',
