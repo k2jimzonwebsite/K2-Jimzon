@@ -110,15 +110,15 @@ export default function Admin() {
       <CommandPalette isOpen={paletteOpen} setIsOpen={setPaletteOpen} setSection={setSection} />
       
       {/* Sidebar */}
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-white/10 bg-[#05080f] text-white lg:flex">
-        <div className="flex items-center justify-between px-5 py-5">
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-white/15 bg-[#05080f] text-white lg:flex">
+        <div className="flex items-center justify-between px-5 py-5 border-b border-white/10">
           <div>
-            <p className="font-serif text-lg font-semibold text-white">K2 Jimzon <span className="text-blue ml-1">BOS</span></p>
-            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">Mission Control</p>
+            <p className="font-sans text-xl font-black text-white tracking-tight">K2 Jimzon <span className="text-gold ml-1">BOS</span></p>
+            <p className="text-xs font-mono uppercase tracking-widest text-white/80 font-bold">Mission Control</p>
           </div>
           <button 
             onClick={() => setPaletteOpen(true)}
-            className="flex items-center justify-center rounded bg-white/5 p-1.5 text-white/40 hover:bg-white/10 hover:text-white transition-colors border border-white/5"
+            className="flex items-center justify-center rounded-lg bg-white/10 p-2 text-white/80 hover:bg-white/20 hover:text-white transition-colors border border-white/20"
             title="Search (Ctrl+K)"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -126,11 +126,11 @@ export default function Admin() {
             </svg>
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto mt-4 px-2.5 space-y-6">
+        <div className="flex-1 overflow-y-auto mt-3 px-2.5 space-y-6 custom-scrollbar">
           
           <div>
-            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Sales & Orders</p>
-            <div className="space-y-0.5">
+            <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">Sales & Orders</p>
+            <div className="space-y-1">
               {NAV_COMMERCE.map(item => {
                 const Ico = item.icon
                 const on = section === item.id
@@ -138,9 +138,9 @@ export default function Admin() {
                   <button
                     key={item.id}
                     onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
-                    className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${on ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                   >
-                    <Ico size={16} /> {item.label}
+                    <Ico size={17} /> {item.label}
                   </button>
                 )
               })}
@@ -148,8 +148,8 @@ export default function Admin() {
           </div>
 
           <div>
-            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Stock & Buying</p>
-            <div className="space-y-0.5">
+            <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">Stock & Buying</p>
+            <div className="space-y-1">
               {NAV_SUPPLY.map(item => {
                 const Ico = item.icon
                 const on = section === item.id
@@ -157,10 +157,10 @@ export default function Admin() {
                   <button
                     key={item.id}
                     onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
-                    className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${on ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                   >
-                    <Ico size={16} /> {item.label}
-                    {item.id === 'inventory' && <span className="ml-auto rounded bg-white/10 px-1.5 text-xs tabular">{activeSkus}</span>}
+                    <Ico size={17} /> {item.label}
+                    {item.id === 'inventory' && <span className="ml-auto rounded-full bg-gold text-navy font-black text-xs px-2 py-0.5 shadow">{activeSkus}</span>}
                   </button>
                 )
               })}
@@ -168,8 +168,8 @@ export default function Admin() {
           </div>
 
           <div>
-            <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">AI Tools</p>
-            <div className="space-y-0.5">
+            <p className="px-3 text-xs font-extrabold uppercase tracking-widest text-gold mb-2">AI & Operations</p>
+            <div className="space-y-1">
               {NAV_INTELLIGENCE.map(item => {
                 const Ico = item.icon
                 const on = section === item.id
@@ -177,9 +177,9 @@ export default function Admin() {
                   <button
                     key={item.id}
                     onClick={() => { setSection(item.id); setSheetMode(item.id === 'inventory') }}
-                    className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${on ? 'bg-blue/20 text-white' : 'text-white/55 hover:bg-white/6 hover:text-white'}`}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-extrabold transition-all ${on ? 'bg-blue text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                   >
-                    <Ico size={16} /> {item.label}
+                    <Ico size={17} /> {item.label}
                   </button>
                 )
               })}
@@ -189,51 +189,50 @@ export default function Admin() {
         </div>
 
         {/* Left Sidebar Operations & Cargo Box Intelligence Widget */}
-        <div className="mx-3 my-3 p-3.5 rounded-2xl bg-[#0A101D] border border-white/10 space-y-3 font-mono text-xs shadow-xl shrink-0">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-amber flex items-center gap-1">
+        <div className="mx-3 my-3 p-3.5 rounded-2xl bg-[#0E121E] border border-white/20 space-y-3 font-sans text-xs shadow-xl shrink-0">
+          <div className="flex items-center justify-between border-b border-white/15 pb-2">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-gold flex items-center gap-1">
               <span>🇮🇹</span> Italy Box Pulse
             </span>
-            <span className="text-[9px] bg-forest/20 text-forest px-1.5 py-0.5 rounded font-bold">LIVE</span>
+            <span className="text-xs bg-blue text-white px-2 py-0.5 rounded font-black shadow">LIVE</span>
           </div>
 
-          <div className="space-y-1.5">
-            <div className="flex justify-between text-white/70 text-[11px]">
-              <span>Arriving Flight Boxes:</span>
-              <strong className="text-white font-bold">3 Boxes</strong>
+          <div className="space-y-2 text-xs">
+            <div className="flex justify-between text-white/90">
+              <span>Arriving Cargo:</span>
+              <strong className="text-white font-extrabold">3 Boxes</strong>
             </div>
-            <div className="flex justify-between text-white/70 text-[11px]">
-              <span>SKUs Inside Cargo:</span>
-              <strong className="text-amber font-bold">12 Items</strong>
+            <div className="flex justify-between text-white/90">
+              <span>SKUs Inside:</span>
+              <strong className="text-gold font-extrabold">12 Items</strong>
             </div>
-            <div className="flex justify-between text-white/70 text-[11px]">
-              <span>Today Sales (Channels):</span>
-              <strong className="text-forest font-bold">₱41,260</strong>
+            <div className="flex justify-between text-white/90">
+              <span>Today Sales:</span>
+              <strong className="text-white font-black text-sm">₱41,260</strong>
             </div>
           </div>
 
           <button
             onClick={() => { setSection('omni_hub'); setSheetMode(false); }}
-            className="w-full py-2 rounded-xl bg-amber/20 hover:bg-amber/30 text-amber font-bold text-[11px] transition-all border border-amber/30 flex items-center justify-center gap-1 shadow-sm"
+            className="w-full py-2.5 rounded-xl bg-gold hover:bg-gold-deep text-navy font-black text-xs transition-all flex items-center justify-center gap-1 shadow.md"
           >
-            ⚡ Open Staff Box Handover
+            ⚡ Open Staff Handover
           </button>
         </div>
 
-        <div className="border-t border-white/10 px-5 py-3 text-xs text-white/50 space-y-2 shrink-0">
+        <div className="border-t border-white/15 px-5 py-3.5 text-xs text-white/80 space-y-2 shrink-0 bg-[#05080f]">
           <div className="flex items-center justify-between">
-            <p className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-forest" />
-              Supabase · Live
+            <p className="flex items-center gap-1.5 font-bold text-white">
+              <span className="h-2 w-2 rounded-full bg-blue pulse-dot" />
+              Supabase · Connected
             </p>
-            <span className="text-[10px] font-mono bg-crimson/20 text-crimson font-bold px-1.5 py-0.5 rounded">ADMIN</span>
+            <span className="text-xs font-mono bg-gold text-navy font-black px-2 py-0.5 rounded">SUPER ADMIN</span>
           </div>
-          <p className="text-[11px] text-white/40">Shopee & Channel sync: Active</p>
           <button 
             onClick={logoutAdmin}
-            className="w-full mt-1.5 py-1.5 px-3 rounded-xl bg-white/5 hover:bg-crimson/20 hover:text-crimson text-white/70 text-xs font-semibold transition-all border border-white/10 flex items-center justify-center gap-1.5"
+            className="w-full mt-2 py-2 px-3 rounded-xl bg-crimson hover:bg-crimson-deep text-white text-xs font-extrabold transition-all border border-crimson/50 flex items-center justify-center gap-1.5 shadow-md"
           >
-            Lock / Exit Admin
+            🔒 Lock / Exit Admin
           </button>
         </div>
       </aside>
@@ -331,9 +330,9 @@ export default function Admin() {
           </div>
         )}
 
-        <header className="flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#0A101D] px-4 py-3.5 md:px-6">
+        <header className="flex flex-wrap items-center gap-4 border-b border-white/15 bg-[#0A101D] px-4 py-4 md:px-6">
           <div className="flex-1 min-w-0">
-            <h1 className="font-serif text-xl font-semibold tracking-tight text-white truncate">
+            <h1 className="font-sans text-2xl font-black tracking-tight text-white truncate">
               {section === 'integrations' ? 'Marketplace API Keys & Vault' :
                section === 'globe' ? '3D Globe Map Settings' :
                section === 'wholesale' ? 'Customer Directory & VIP Accounts' :
@@ -346,7 +345,7 @@ export default function Admin() {
                section === 'kanban' ? 'Italy Flight Consignments & Box Tracker' :
                'Home & Daily Operational Summary'}
             </h1>
-            <p className="text-xs font-mono text-white/50 mt-1">
+            <p className="text-xs font-semibold text-white/80 mt-1">
               {section === 'integrations'
                 ? 'Manage API keys, OAuth tokens, and webhooks for Shopee, Lazada, TikTok Shop, and Meta.'
                 : section === 'globe'
@@ -368,54 +367,56 @@ export default function Admin() {
                 : 'Live channel revenue, active cargo boxes, and stock alerts.'}
             </p>
           </div>
-          <div className="ml-auto flex items-center gap-4">
+          <div className="ml-auto flex items-center gap-3">
             
             {/* Daily Task & Expiration Notification Bell */}
             <button
               onClick={() => setShowDailyTasks(true)}
-              className="relative flex items-center justify-center min-h-[44px] min-w-[44px] rounded-xl bg-amber/20 border border-amber/40 text-amber font-mono font-bold text-xs px-3 hover:bg-amber/30 transition-all shadow-md gap-1.5"
+              className="relative flex items-center justify-center min-h-[44px] min-w-[44px] rounded-xl bg-gold text-navy font-black text-xs px-3.5 hover:bg-gold-deep transition-all shadow-md gap-1.5"
               title="Daily Actionable Tasks & Expirations"
             >
               <span>🔔</span>
-              <span>4</span>
+              <span>4 Tasks</span>
             </button>
 
             <button 
               onClick={() => setPaletteOpen(true)}
-              className="hidden lg:flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/50 hover:bg-white/10 hover:text-white transition-colors"
+              className="hidden lg:flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2.5 text-xs font-bold text-white hover:bg-white/20 transition-all shadow-sm"
             >
-              Search Command <kbd className="ml-1 rounded border border-white/20 bg-black/50 px-1 font-sans text-[10px]">Ctrl K</kbd>
+              Search Command <kbd className="ml-1 rounded border border-white/30 bg-black/60 px-1.5 py-0.5 font-mono text-[10px] text-gold font-bold">Ctrl K</kbd>
             </button>
+
             {section === 'inventory' && (
-              <div className="flex items-center gap-4 border-l border-white/10 pl-4">
+              <div className="flex items-center gap-3 border-l border-white/15 pl-3">
                 <button
                   onClick={() => setShowCsvImport(true)}
-                  className="flex items-center gap-2 rounded-md bg-forest/10 border border-forest/30 px-3 py-1.5 text-xs font-medium text-forest hover:bg-forest/20 transition-colors"
+                  className="flex items-center gap-2 rounded-xl bg-blue hover:bg-blue-deep px-3.5 py-2.5 text-xs font-black text-white transition-all shadow-md"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                   </svg>
                   Upload CSV
                 </button>
-                <label className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-white/70">
-                  Sheet Mode
-                <button
-                  role="switch"
-                  aria-checked={sheetMode}
-                  onClick={() => setSheetMode((s) => !s)}
-                  className={
-                    'relative h-6 w-11 rounded-full transition-colors ' +
-                    (sheetMode ? 'bg-blue' : 'bg-white/10')
-                  }
-                >
-                  <span
+
+                <div className="flex items-center gap-2 bg-white/10 p-1.5 rounded-xl border border-white/20">
+                  <span className="text-xs font-black text-white px-1">Sheet Mode</span>
+                  <button
+                    role="switch"
+                    aria-checked={sheetMode}
+                    onClick={() => setSheetMode((s) => !s)}
                     className={
-                      'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ' +
-                      (sheetMode ? 'left-[22px]' : 'left-0.5')
+                      'relative h-6 w-11 rounded-full transition-colors ' +
+                      (sheetMode ? 'bg-gold' : 'bg-white/20')
                     }
-                  />
-                </button>
-              </label>
+                  >
+                    <span
+                      className={
+                        'inline-block h-5 w-5 transform rounded-full bg-white transition-transform ' +
+                        (sheetMode ? 'translate-x-5 shadow-md' : 'translate-x-0.5')
+                      }
+                    />
+                  </button>
+                </div>
               </div>
             )}
           </div>
