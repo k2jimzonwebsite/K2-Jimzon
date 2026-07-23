@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
-  K2 Jimzon — Strict 4-Color Luxury Palette Strategy & Typographic Legibility (OKLCH & Impeccable Rules)
+  K2 Jimzon — Strict 4-Color Luxury Palette Strategy & Dark Mode Tokens (OKLCH & Impeccable Rules)
   1. Obsidian Black / Charcoal Base (#090C15 / #0E121E)
   2. Champagne Gold / Amber (#D4AF37 / #F59E0B)
   3. Crimson Red Accent (#EF4444 / #DC2626)
@@ -13,21 +13,46 @@
 @layer base {
   :root {
     --bg-blend: multiply;
-    font-size: 15px; /* Bumped base font size for crisp legibility */
+    font-size: 15px;
     line-height: 1.55;
     letter-spacing: -0.01em;
+
+    /* Light Theme Variables */
+    --color-cream: #F8F9FA;
+    --color-paper: #FFFFFF;
+    --color-shell: #F3F4F6;
+    --color-shell-deep: #E5E7EB;
+    
+    --color-navy: #111827;
+    --color-navy-soft: #4B5563;
+    --color-navy-faint: #9CA3AF;
+    --color-line: #E5E7EB;
+  }
+
+  /* Luxury Dark Mode Tokens Override */
+  .dark {
+    --color-cream: #090C15;
+    --color-paper: #0E121E;
+    --color-shell: #161B29;
+    --color-shell-deep: #1F2638;
+    
+    --color-navy: #F9FAFB;
+    --color-navy-soft: #E5E7EB;
+    --color-navy-faint: #9CA3AF;
+    --color-line: rgba(255, 255, 255, 0.12);
   }
 
   body {
     font-family: var(--font-sans);
-    color: #F3F4F6;
-    background-color: #090C15;
+    color: var(--color-navy);
+    background-color: var(--color-cream);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   h1, h2, h3, h4 {
-    letter-spacing: -0.025em; /* Impeccable rule: letter-spacing floor >= -0.04em */
+    letter-spacing: -0.025em;
     text-wrap: balance;
   }
 }
@@ -35,19 +60,19 @@
 @theme {
 
   /* 1. Black & Charcoal Surface System */
-  --color-cream: #F8F9FA;
-  --color-paper: #FFFFFF;
-  --color-shell: #F3F4F6;
-  --color-shell-deep: #E5E7EB;
+  --color-cream: var(--color-cream);
+  --color-paper: var(--color-paper);
+  --color-shell: var(--color-shell);
+  --color-shell-deep: var(--color-shell-deep);
   
   --color-dark-bg: #090C15;
   --color-dark-card: #0E121E;
   --color-dark-hover: #161B29;
   
   /* Text Neutrals */
-  --color-navy: #111827;
-  --color-navy-soft: #4B5563;
-  --color-navy-faint: #9CA3AF;
+  --color-navy: var(--color-navy);
+  --color-navy-soft: var(--color-navy-soft);
+  --color-navy-faint: var(--color-navy-faint);
   
   /* 2. Crimson Red Accent */
   --color-crimson: #EF4444;
@@ -71,7 +96,7 @@
   --color-forest: #3B82F6;
   --color-forest-wash: rgba(59, 130, 246, 0.14);
   
-  --color-line: #E5E7EB;
+  --color-line: var(--color-line);
   --color-champagne: #FDE68A;
 
   --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
