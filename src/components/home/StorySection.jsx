@@ -32,7 +32,7 @@ const STORY_STEPS = [
 
 function StorySection() {
   return (
-    <section className="relative mx-auto max-w-6xl px-4 py-12 md:py-24 glow-terracotta">
+    <section className="relative mx-auto max-w-6xl px-4 py-12 md:py-24 glow-terracotta min-h-[100svh] flex flex-col justify-center snap-start md:min-h-0 md:block">
       <Kicker className="text-crimson">How it gets to you</Kicker>
       <h2 className="mt-2 w-full font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-medium tracking-tight text-navy">
         From an Italian shelf to your door, with nothing lost in between.

@@ -69,7 +69,7 @@ export default function ProductGlobe({ products, onSelect }) {
   return (
     <div
       ref={containerRef}
-      className={`w-full h-full relative ${isMouseDown ? 'cursor-grabbing' : 'cursor-grab'}`}
+      className={`w-full h-full relative touch-none select-none ${isMouseDown ? 'cursor-grabbing' : 'cursor-grab'}`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}

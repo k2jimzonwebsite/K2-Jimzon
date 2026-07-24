@@ -22,7 +22,7 @@ function Newsletter() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-16 pt-14">
+    <section className="mx-auto max-w-6xl px-4 pb-16 pt-14 min-h-[100svh] flex flex-col justify-center snap-start md:min-h-0 md:block">
       <div className="relative overflow-hidden rounded-3xl bg-shell px-6 py-12 text-center text-navy md:py-16 shadow-card border border-line">
         
         {/* Abstract Ambient Glows */}

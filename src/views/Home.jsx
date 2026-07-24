@@ -3,6 +3,7 @@ import { Tricolor } from '../components/ui/bits'
 import Hero, { TrustRow } from '../components/home/Hero'
 import CategoryTiles from '../components/home/CategoryTiles'
 import NewArrivals from '../components/home/NewArrivals'
+import GlobeSection from '../components/home/GlobeSection'
 import HomeCatalog from '../components/home/HomeCatalog'
 import StorySection from '../components/home/StorySection'
 import { PasabuyBanner, WholesaleStrip } from '../components/home/Banners'
@@ -28,8 +29,9 @@ export default function Home() {
       {/* Minimalist New Arrivals Section */}
       <div className="w-full h-px bg-line max-w-7xl mx-auto mt-6" />
       <NewArrivals />
-      
-      {/* Removed HomeCatalog as requested */}
+
+      {/* Spin-the-globe customer reviews (social proof) */}
+      <GlobeSection />
 
       <div className="w-full flex justify-center py-10"><Tricolor className="w-16" /></div>
       

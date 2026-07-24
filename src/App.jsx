@@ -51,7 +51,7 @@ function Shell() {
   const isDevOrDemoHash = import.meta.env.DEV || (typeof window !== 'undefined' && window.location.hash === '#demo')
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden snap-y snap-proximity md:snap-none">
       {isDevOrDemoHash && activeViewKey !== 'admin' && <DemoRail />}
       {isStorefront && <StoreHeader />}
       <ErrorBoundary key={activeViewKey}>

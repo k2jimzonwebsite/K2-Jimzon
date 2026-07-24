@@ -11,6 +11,7 @@ import InteractiveReveal from '../InteractiveReveal';
 import { BizBadge, RedButton, StockPill, TrustBadge, Tricolor, GhostButton, Kicker } from '../ui/bits';
 import ProductCard from '../ProductCard';
 import { ArrowIcon, CheckIcon, PlaneIcon, PlusIcon, StarIcon, MinusIcon } from '../ui/icons';
+import { useDominantColor } from '../../lib/useDominantColor';
 
 function NewArrivals() {
   const { products } = useStore()
@@ -22,12 +23,26 @@ function NewArrivals() {
 
   const activeProduct = arrivals[activeIndex]
 
+  // Chameleon: sample the active photo's dominant colour, fall back to the
+  // product's curated hue if the image can't be read (e.g. cross-origin).
+  const dominant = useDominantColor(activeProduct?.img)
+  const hue = activeProduct?.hue ?? 40
+  const wash = (a) => (dominant ? `rgba(${dominant}, ${a})` : `hsla(${hue}, 55%, 55%, ${a})`)
+
   return (
-    <section className="bg-shell/60 backdrop-blur-sm px-4 py-12 md:py-24 relative overflow-hidden">
-      
-      {/* Abstract Wood/Amber Background Sweeps */}
-      <div className="absolute top-0 left-[10%] w-[40%] h-[100%] bg-[#9A6A45] rounded-[100%] mix-blend-multiply filter blur-[140px] opacity-[0.08] -rotate-12 pointer-events-none"></div>
-      <div className="absolute bottom-0 right-[5%] w-[50%] h-[120%] bg-[#B84E3A] rounded-full mix-blend-overlay filter blur-[160px] opacity-[0.05] pointer-events-none"></div>
+    <section className="bg-shell/60 backdrop-blur-sm px-4 py-12 md:py-24 relative overflow-hidden min-h-[100svh] flex flex-col justify-center snap-start md:min-h-0 md:block">
+
+      {/* Chameleon background — an ambient wash that adapts to the active product's colour */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse 75% 60% at 25% 12%, ${wash(0.30)} 0%, transparent 62%),
+                       radial-gradient(ellipse 65% 70% at 82% 92%, ${wash(0.20)} 0%, transparent 62%),
+                       radial-gradient(ellipse 90% 50% at 50% 50%, ${wash(0.10)} 0%, transparent 70%)`,
+          transition: 'background 1100ms ease',
+        }}
+      />
 
       <div className="relative z-10 max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
