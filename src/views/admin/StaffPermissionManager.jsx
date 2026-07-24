@@ -85,7 +85,7 @@ export default function StaffPermissionManager() {
 
       {/* Header */}
       <div className="pt-1">
-        <h1 className="font-serif text-2xl font-bold text-white">Staff &amp; roles</h1>
+        <h1 className="font-serif text-lg sm:text-2xl font-bold text-white">Staff &amp; roles</h1>
         <p className="text-sm text-white/55 mt-1 leading-relaxed">
           Invite people, choose what they can access, and protect your own login with 2FA. Accounts are invite-only — each person sets their own password.
         </p>

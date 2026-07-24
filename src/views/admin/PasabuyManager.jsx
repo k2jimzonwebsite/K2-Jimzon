@@ -141,27 +141,21 @@ export default function PasabuyManager() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       
-      {/* Header Banner */}
-      <div className="bg-[#09090b] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      {/* Header */}
+      <div className="bg-[#09090b] border border-white/10 p-4 sm:p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-lg">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest bg-amber/20 text-amber px-2 py-0.5 rounded border border-amber/30">
-              Italy Pasabuy Command Center
-            </span>
-            <span className="text-sm text-white/50">Custom Shopper Request & Quotation Engine</span>
-          </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Pasabuy requests & pricing</h1>
-          <p className="text-sm text-white/60 mt-1 max-w-2xl">
-            Review custom Pasabuy item requests submitted by shoppers, calculate exact landed costs in Manila (EuroFX + Air Freight + Customs Duty), and push quotes to Viber/WhatsApp.
+          <h1 className="font-serif text-lg sm:text-2xl font-bold text-white">Pasabuy requests &amp; pricing</h1>
+          <p className="text-xs sm:text-sm text-white/55 mt-1 max-w-xl">
+            Review shopper requests, work out the landed cost, and send a quote.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl text-sm font-mono">
-            <span className="text-white/60">EUR/PHP FX:</span> <span className="text-forest font-bold">₱62.50</span>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-xs font-mono">
+            <span className="text-white/50">EUR/PHP</span> <span className="text-forest font-bold">₱62.50</span>
           </div>
-          <div className="bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl text-sm font-mono">
-            <span className="text-white/60">Air Cargo Rate:</span> <span className="text-blue font-bold">€14.00 / kg</span>
+          <div className="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-xs font-mono">
+            <span className="text-white/50">Air cargo</span> <span className="text-blue font-bold">€14/kg</span>
           </div>
         </div>
       </div>

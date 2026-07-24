@@ -209,7 +209,7 @@ export default function CustomerCrmBroadcast() {
             </span>
             <span className="text-sm text-white/50">Customer Records, Orders & Broadcast Campaigns</span>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Customers & broadcasts</h1>
+          <h1 className="font-serif text-lg sm:text-2xl font-bold text-white">Customers & broadcasts</h1>
           <p className="text-sm text-white/60 mt-1 max-w-2xl">
             Maintain complete customer records, track total spending and order history, and launch instant targeted email & SMS broadcasts for new arrivals, trending products, and flight arrivals.
           </p>

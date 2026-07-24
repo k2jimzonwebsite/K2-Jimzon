@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { StoreProvider, useStore } from './context/StoreContext'
 import { GlobeCmsProvider } from './data/globeCms'
 import DemoRail from './components/nav/DemoRail'
+import MobileNavBar from './components/nav/MobileNavBar'
 import StoreHeader from './components/StoreHeader'
 import CartDrawer from './components/CartDrawer'
 import ChatFab from './components/ChatFab'
@@ -31,7 +32,7 @@ const VIEWS = {
 }
 
 // Storefront chrome (header, cart, chat) wraps shopper-facing views only.
-const STOREFRONT = new Set(['home', 'product', 'master_product', 'catalog', 'pasabuy', 'checkout', 'confirmation'])
+const STOREFRONT = new Set(['home', 'product', 'master_product', 'catalog', 'pasabuy', 'wholesale', 'checkout', 'confirmation'])
 
 function Shell() {
   const { view, setView } = useStore()
@@ -66,6 +67,9 @@ function Shell() {
         </>
       )}
       {isStorefront && <Footer />}
+      {/* Space so page content clears the fixed mobile tab bar */}
+      {isStorefront && <div className="h-16 md:hidden" aria-hidden />}
+      {isStorefront && <MobileNavBar />}
     </div>
   )
 }

@@ -115,7 +115,7 @@ export default function Kanban() {
               Unified Supply Chain Hub
             </span>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Flight consignments & cargo boxes</h1>
+          <h1 className="font-serif text-lg sm:text-2xl font-bold text-white">Flight consignments & cargo boxes</h1>
           <p className="text-base text-white/50">Manage Milan flight consignments, box scanning receiving (+1), supplier POs, and PH customer order fulfillment in one place.</p>
         </div>
         

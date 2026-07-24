@@ -236,89 +236,69 @@ export default function ConsignmentManager() {
   const totalManilaScanned = consignment.items.reduce((sum, i) => sum + i.manila_scanned_qty, 0)
 
   return (
-    <div className="p-6 max-w-7xl mx-auto text-white space-y-6 animate-in fade-in duration-300 font-sans">
-      
-      {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#161922] p-6 rounded-2xl border border-white/20 shadow-2xl">
+    <div className="max-w-7xl mx-auto text-white space-y-4 animate-in fade-in duration-300 font-sans">
+
+      {/* Header */}
+      <div className="bg-[#161922] p-4 sm:p-5 rounded-2xl border border-white/10 shadow-lg space-y-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
-              Italy ✈ Philippines Flight Consignment
+          <div className="flex flex-wrap items-center gap-2 mb-1.5">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wide bg-gold text-navy px-2 py-0.5 rounded-full">
+              Italy ✈ PH consignment
             </span>
-            <span className="text-sm font-mono text-gold font-bold">{consignment.manifest_code}</span>
+            <span className="text-[11px] font-mono text-gold font-bold">{consignment.manifest_code}</span>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">{consignment.flight_number}</h1>
-          <p className="text-sm text-neutral-300 font-bold mt-1">
-            Packed in Milan: <span className="text-white font-bold font-mono">{consignment.packed_at}</span> · Status:{' '}
-            <span className="font-bold text-blue">{consignment.status}</span>
+          <h1 className="font-serif text-base sm:text-2xl font-bold text-white leading-snug">{consignment.flight_number}</h1>
+          <p className="text-xs sm:text-sm text-white/55 mt-1">
+            Packed in Milan {consignment.packed_at} · <span className="font-semibold text-blue">{consignment.status}</span>
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={() => setIsMilanScannerOpen(true)}
-            className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-            </svg>
-            Milan Camera Scanner (Italy POV +1)
+        <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-2">
+          <button onClick={() => setIsMilanScannerOpen(true)}
+            className="bg-blue hover:bg-blue-deep text-white font-semibold text-sm px-4 min-h-11 rounded-xl transition-all flex items-center justify-center gap-2">
+            📷 Scan in Milan
           </button>
-
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="bg-gold hover:bg-gold-deep text-navy font-bold text-sm px-5 py-3 rounded-xl shadow-lg transition-all"
-          >
-            + Pack New Box (Milan)
+          <button onClick={() => setShowCreateModal(true)}
+            className="bg-gold hover:bg-gold-deep text-navy font-semibold text-sm px-4 min-h-11 rounded-xl transition-all">
+            + New box
           </button>
-
-          <button
-            onClick={() => setIsScannerOpen(true)}
-            className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-5 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-            </svg>
-            Mobile Camera Scan Manila Arrival (+1)
+          <button onClick={() => setIsScannerOpen(true)}
+            className="bg-white/10 hover:bg-white/15 text-white font-semibold text-sm px-4 min-h-11 rounded-xl transition-all flex items-center justify-center gap-2">
+            📷 Scan Manila arrival
           </button>
         </div>
       </div>
 
-      {/* Discrepancy & Receiving Dashboard Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl">
-          <p className="text-xs font-mono uppercase tracking-widest text-white/60">Milan Packed Total</p>
-          <p className="text-2xl font-bold text-white mt-1">{totalItalyPacked} <span className="text-sm font-normal text-white/50">units</span></p>
-          <p className="text-sm text-white/60 mt-1">Boxed and sealed in Italy</p>
+      {/* Receiving summary */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+        <div className="bg-[#0A101D] border border-white/10 p-3.5 rounded-xl">
+          <p className="text-[11px] font-mono uppercase tracking-wide text-white/50">Milan packed</p>
+          <p className="text-xl font-bold text-white mt-0.5">{totalItalyPacked} <span className="text-xs font-normal text-white/45">units</span></p>
         </div>
 
-        <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl">
-          <p className="text-xs font-mono uppercase tracking-widest text-white/60">Manila Scanned Total</p>
-          <p className="text-2xl font-bold text-forest mt-1">{totalManilaScanned} <span className="text-sm font-normal text-white/50">units</span></p>
-          <p className="text-sm text-white/60 mt-1">Counted via phone scanner</p>
+        <div className="bg-[#0A101D] border border-white/10 p-3.5 rounded-xl">
+          <p className="text-[11px] font-mono uppercase tracking-wide text-white/50">Manila scanned</p>
+          <p className="text-xl font-bold text-forest mt-0.5">{totalManilaScanned} <span className="text-xs font-normal text-white/45">units</span></p>
         </div>
 
-        <div className="bg-[#0A101D] border border-white/10 p-5 rounded-xl flex flex-col justify-between">
+        <div className="col-span-2 sm:col-span-1 bg-[#0A101D] border border-white/10 p-3.5 rounded-xl flex flex-col justify-between gap-2">
           <div>
-            <p className="text-xs font-mono uppercase tracking-widest text-white/60">Box Discrepancy Status</p>
-            <p className={`text-xl font-bold mt-1 ${totalManilaScanned === totalItalyPacked ? 'text-forest' : 'text-crimson'}`}>
-              {totalManilaScanned === totalItalyPacked ? '100% Matched 🟢' : `${totalItalyPacked - totalManilaScanned} Units Pending 🔴`}
+            <p className="text-[11px] font-mono uppercase tracking-wide text-white/50">Match status</p>
+            <p className={`text-base font-bold mt-0.5 ${totalManilaScanned === totalItalyPacked ? 'text-forest' : 'text-crimson'}`}>
+              {totalManilaScanned === totalItalyPacked ? '🟢 All matched' : `🔴 ${totalItalyPacked - totalManilaScanned} pending`}
             </p>
           </div>
-          <button
-            onClick={() => setIsReconcileOpen(true)}
-            className="mt-3 text-sm font-bold text-blue hover:underline text-left"
-          >
-            Open Side-by-Side Reconciliation Matrix →
+          <button onClick={() => setIsReconcileOpen(true)} className="text-[13px] font-semibold text-blue hover:underline text-left">
+            Reconcile →
           </button>
         </div>
       </div>
 
-      {/* Live Manifest Item Grid */}
-      <div className="bg-[#0A101D] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
-        <div className="p-4 border-b border-white/10 bg-[#09090b] flex justify-between items-center">
-          <h3 className="font-serif font-semibold text-white text-lg">Box Inventory Manifest (Milan $\rightarrow$ Manila)</h3>
-          <span className="text-sm font-mono text-white/50">{consignment.items.length} SKUs Linked</span>
+      {/* Manifest */}
+      <div className="bg-[#0A101D] border border-white/10 rounded-2xl overflow-hidden shadow-lg">
+        <div className="px-4 py-3 border-b border-white/10 bg-[#09090b] flex justify-between items-center gap-2">
+          <h3 className="font-serif font-semibold text-white text-[15px]">Box manifest · Milan → Manila</h3>
+          <span className="text-xs font-mono text-white/45 shrink-0">{consignment.items.length} SKUs</span>
         </div>
 
         <div className="overflow-x-auto">

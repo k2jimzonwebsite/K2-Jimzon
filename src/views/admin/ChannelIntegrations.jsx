@@ -87,7 +87,7 @@ export default function ChannelIntegrations() {
             <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full">
               Channel Connections
             </span>
-            <h1 className="font-serif text-2xl font-bold text-white mt-2">Marketplace & chat channels</h1>
+            <h1 className="font-serif text-lg sm:text-2xl font-bold text-white mt-2">Marketplace & chat channels</h1>
             <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
               Each channel goes live the moment its connector starts sending real data. Status here is live — it flips to
               🟢 automatically. API keys are never entered here; they live safely in Supabase on the backend.

@@ -155,6 +155,7 @@ export default function InventoryGrid() {
   const [batchMap, setBatchMap]       = useState({})
   const [loading, setLoading]         = useState(true)
   const [editingProduct, setEditingProduct] = useState(null)
+  const [editTab, setEditTab] = useState('details')
   const [batchProduct, setBatchProduct]   = useState(null)
   const [allocatingProduct, setAllocatingProduct] = useState(null)
   const [isAdding, setIsAdding]       = useState(false)
@@ -285,7 +286,7 @@ export default function InventoryGrid() {
             </svg>
             Smart Paste AI
           </button>
-          <button onClick={() => { setIsAdding(true); setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random()*10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }) }}
+          <button onClick={() => { setIsAdding(true); setEditTab('details'); setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random()*10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }) }}
             className="flex-1 sm:flex-initial flex items-center justify-center gap-2 rounded bg-blue/20 text-blue hover:bg-blue hover:text-white transition-colors px-3.5 py-2.5 text-sm font-semibold min-h-[44px]">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -393,7 +394,7 @@ export default function InventoryGrid() {
                   </div>
                 </div>
 
-                <button onClick={() => { setIsAdding(false); setEditingProduct(p) }}
+                <button onClick={() => { setIsAdding(false); setEditTab('details'); setEditingProduct(p) }}
                   className="absolute top-2 right-2 rounded-lg bg-blue hover:bg-blue/90 px-3.5 py-1.5 text-sm font-extrabold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
                   Edit
                 </button>
@@ -413,7 +414,7 @@ export default function InventoryGrid() {
       {/* ── FULL EDIT MODAL ─────────────────────────────────────────────────── */}
       {editingProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-2 md:p-4 animate-in fade-in">
-          <div className="w-full max-w-5xl rounded-2xl border border-white/10 bg-[#0A101D] shadow-2xl flex flex-col max-h-[96vh]">
+          <div className="w-full max-w-3xl rounded-2xl border border-white/10 bg-[#0A101D] shadow-2xl flex flex-col max-h-[96vh]">
 
             {/* Header */}
             <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5">
@@ -426,11 +427,22 @@ export default function InventoryGrid() {
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="flex-1 overflow-y-auto">
-              <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <form onSubmit={handleSave} className="flex-1 flex flex-col overflow-hidden">
+              {/* Section tabs — edit one focused part at a time */}
+              <div className="flex gap-1 overflow-x-auto border-b border-white/10 px-3 sm:px-4 shrink-0 scrollbar-none">
+                {[['details', 'Details'], ['pricing', 'Pricing & stock'], ['photos', 'Photos']].map(([id, lbl]) => (
+                  <button key={id} type="button" onClick={() => setEditTab(id)}
+                    className={'px-3 py-3 text-sm font-semibold whitespace-nowrap border-b-2 -mb-px transition-colors ' +
+                      (editTab === id ? 'border-blue text-white' : 'border-transparent text-white/50 hover:text-white')}>
+                    {lbl}
+                  </button>
+                ))}
+              </div>
 
-                {/* ── LEFT: Photos ─────────────────────────────────────── */}
-                <div className="space-y-4">
+              <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+
+                {/* ── Photos tab ───────────────────────────────────────── */}
+                <div className={editTab === 'photos' ? 'space-y-4' : 'hidden'}>
                   <Section color="purple" title="Media">
                     <PhotoSlot label="Primary Photo (Studio White)"
                       value={editingProduct.primary_image_url}
@@ -456,8 +468,8 @@ export default function InventoryGrid() {
                   </Section>
                 </div>
 
-                {/* ── MIDDLE: Identity + Content ───────────────────────── */}
-                <div className="space-y-6">
+                {/* ── Details tab: Identity + Content ──────────────────── */}
+                <div className={editTab === 'details' ? 'space-y-6' : 'hidden'}>
 
                   {isAdding && (
                     <Section color="blue" title="SKU">
@@ -556,8 +568,8 @@ export default function InventoryGrid() {
                   </Section>
                 </div>
 
-                {/* ── RIGHT: Pricing, Inventory, Website, Management ───── */}
-                <div className="space-y-6">
+                {/* ── Pricing & stock tab: Pricing, Inventory, Website, Management ── */}
+                <div className={editTab === 'pricing' ? 'space-y-6' : 'hidden'}>
 
                   <Section color="forest" title="Pricing">
                     <div className="grid grid-cols-2 gap-3">

@@ -302,7 +302,7 @@ export default function Admin() {
           </div>
         </header>
 
-        <div className="p-4 md:p-6 overflow-y-auto flex-1">
+        <div className="p-4 md:p-6 pb-24 lg:pb-6 overflow-y-auto flex-1">
           <ErrorBoundary key={section}>
             <Suspense fallback={
               <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center text-white/60 space-y-4">
@@ -329,6 +329,31 @@ export default function Admin() {
           </ErrorBoundary>
         </div>
       </div>
+
+      {/* Mobile bottom tab bar — quick jump between the sections you use most */}
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 flex items-stretch border-t border-white/10 bg-[#0A0C11]/95 backdrop-blur-md" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        {[
+          { id: 'overview', label: 'Home' },
+          { id: 'inventory', label: 'Inventory' },
+          { id: 'omni_hub', label: 'Fulfil' },
+          { id: 'inbox', label: 'Messages' },
+        ].map(({ id, label }) => {
+          const Ico = SECTIONS[id].icon
+          const on = section === id
+          return (
+            <button key={id} onClick={() => selectSection(id)}
+              className={'flex flex-1 flex-col items-center justify-center gap-0.5 py-2 min-h-[58px] transition-colors ' + (on ? 'text-blue' : 'text-white/50 hover:text-white')}>
+              <Ico size={20} className={on ? 'text-blue' : 'text-white/60'} />
+              <span className="text-[10px] font-medium tracking-tight">{label}</span>
+            </button>
+          )
+        })}
+        <button onClick={() => setIsMobileMenuOpen(true)}
+          className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 min-h-[58px] text-white/50 hover:text-white">
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+          <span className="text-[10px] font-medium tracking-tight">More</span>
+        </button>
+      </nav>
 
       {showCsvImport && (
         <Suspense fallback={null}>

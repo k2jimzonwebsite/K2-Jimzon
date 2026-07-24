@@ -61,47 +61,35 @@ export default function CouponManager() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 font-sans text-white">
       
-      {/* Header Banner */}
-      <div className="bg-[#161922] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      {/* Header */}
+      <div className="bg-[#161922] border border-white/10 p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
-              Promotions & Social Engagement Engine
-            </span>
-            <span className="text-sm text-neutral-300 font-bold">Voucher Creation & Secret Hunt Drops</span>
-          </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Coupons & vouchers</h1>
-          <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
-            Create discount codes, set min spend rules, and deploy secret "Voucher Hunt" drops for your social media audience to discover and claim!
+          <h1 className="font-serif text-lg sm:text-2xl font-bold text-white">Coupons &amp; vouchers</h1>
+          <p className="text-xs sm:text-sm text-white/55 mt-1 max-w-xl">
+            Discount codes, min-spend rules, and secret "voucher hunt" drops for social.
           </p>
         </div>
-
         <button
           onClick={() => setShowCreateModal(true)}
-          className="bg-gold hover:bg-gold-deep text-navy font-bold text-sm px-5 py-3 rounded-xl transition-all shadow-lg shrink-0 flex items-center gap-2 min-h-[44px]"
+          className="bg-gold hover:bg-gold-deep text-navy font-bold text-sm px-5 min-h-11 rounded-xl transition-all shadow-lg shrink-0 flex items-center justify-center gap-2"
         >
-          <span>🎟️</span> + Create a coupon
+          🎟️ Create coupon
         </button>
       </div>
 
-      {/* Analytics KPI Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-[#161922] border border-white/10 p-5 rounded-2xl shadow-md">
-          <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Active Coupons</p>
-          <p className="text-3xl font-bold text-white mt-1">{activeCount} Coupons</p>
-          <p className="text-sm text-neutral-300 font-medium mt-1">Ready for storefront & checkout redemption</p>
+      {/* KPIs */}
+      <div className="grid grid-cols-3 gap-2.5">
+        <div className="bg-[#161922] border border-white/10 p-3.5 rounded-2xl">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-gold">Active</p>
+          <p className="text-xl sm:text-2xl font-bold text-white mt-0.5">{activeCount}</p>
         </div>
-
-        <div className="bg-[#161922] border border-white/10 p-5 rounded-2xl shadow-md">
-          <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Secret Voucher Hunts</p>
-          <p className="text-3xl font-bold text-blue mt-1">{huntCount} Active Drops</p>
-          <p className="text-sm text-neutral-300 font-medium mt-1">Interactive clues for FB/IG/TikTok followers</p>
+        <div className="bg-[#161922] border border-white/10 p-3.5 rounded-2xl">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-gold">Hunts</p>
+          <p className="text-xl sm:text-2xl font-bold text-blue mt-0.5">{huntCount}</p>
         </div>
-
-        <div className="bg-[#161922] border border-white/10 p-5 rounded-2xl shadow-md">
-          <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Total Redemptions</p>
-          <p className="text-3xl font-bold text-gold mt-1">{totalRedemptions} Used</p>
-          <p className="text-sm text-neutral-300 font-medium mt-1">Successful customer checkouts applied</p>
+        <div className="bg-[#161922] border border-white/10 p-3.5 rounded-2xl">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-gold">Redeemed</p>
+          <p className="text-xl sm:text-2xl font-bold text-gold mt-0.5">{totalRedemptions}</p>
         </div>
       </div>
 

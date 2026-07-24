@@ -194,15 +194,12 @@ export default function OmniOperationsHub() {
       {/* Header Banner & Active Staff Profile Switcher */}
       <div className="bg-[#161922] border border-white/10 p-4 sm:p-6 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
-              Staff Operations & Cargo Box Handover Hub
-            </span>
-            <span className="text-sm text-neutral-300 font-medium">Multi-Staff Custody & Italy Cargo Box Allocation</span>
-          </div>
-          <h1 className="font-serif text-2xl font-bold text-white mt-1">Staff operations & box handover</h1>
-          <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
-            Each staff member receives specific Italy shipment boxes containing assigned SKUs. Staff can only ship orders out of their claimed box custody.
+          <span className="text-[11px] font-mono font-bold uppercase tracking-wide bg-gold text-navy px-2 py-0.5 rounded-full">
+            Staff operations
+          </span>
+          <h1 className="font-serif text-lg sm:text-2xl font-bold text-white mt-2">Staff operations &amp; box handover</h1>
+          <p className="text-xs sm:text-sm text-white/55 mt-1 max-w-2xl">
+            Each staff member holds specific Italy boxes and ships only from their own claimed custody.
           </p>
         </div>
 
@@ -230,30 +227,30 @@ export default function OmniOperationsHub() {
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex overflow-x-auto max-w-full bg-[#161922] border border-white/10 p-2 rounded-xl text-sm font-bold scrollbar-none gap-2">
+      <div className="flex overflow-x-auto max-w-full bg-[#161922] border border-white/10 p-1.5 rounded-xl text-[13px] font-bold scrollbar-none gap-1.5">
         <button
           onClick={() => setActiveRole('manila_warehouse')}
-          className={`px-5 py-3 min-h-[44px] rounded-xl transition-all flex items-center gap-2 shrink-0 ${
-            activeRole === 'manila_warehouse' ? 'bg-blue text-white font-bold shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'
+          className={`px-3.5 py-2 min-h-11 rounded-lg transition-all flex items-center gap-1.5 shrink-0 ${
+            activeRole === 'manila_warehouse' ? 'bg-blue text-white shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'
           }`}
         >
-          📦 {activeStaff}'s Order Pack & Ship Queue
+          📦 Pack &amp; ship
         </button>
         <button
           onClick={() => setActiveRole('box_handover')}
-          className={`px-5 py-3 min-h-[44px] rounded-xl transition-all flex items-center gap-2 shrink-0 ${
-            activeRole === 'box_handover' ? 'bg-gold text-navy font-bold shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'
+          className={`px-3.5 py-2 min-h-11 rounded-lg transition-all flex items-center gap-1.5 shrink-0 ${
+            activeRole === 'box_handover' ? 'bg-gold text-navy shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'
           }`}
         >
-          🛬 Italy Cargo Box Handover ({staffBoxes.length} Boxes)
+          🛬 Box handover ({staffBoxes.length})
         </button>
         <button
           onClick={() => setActiveRole('inter_staff_transfer')}
-          className={`px-5 py-3 min-h-[44px] rounded-xl transition-all flex items-center gap-2 shrink-0 ${
-            activeRole === 'inter_staff_transfer' ? 'bg-blue text-white font-bold shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'
+          className={`px-3.5 py-2 min-h-11 rounded-lg transition-all flex items-center gap-1.5 shrink-0 ${
+            activeRole === 'inter_staff_transfer' ? 'bg-blue text-white shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'
           }`}
         >
-          ⚡ 1-Click Inter-Staff Transfer
+          ⚡ Transfer
         </button>
       </div>
 
@@ -372,7 +369,7 @@ export default function OmniOperationsHub() {
                 <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
                   NAIA Cargo Box Handover & Custody Claim
                 </span>
-                <h2 className="font-serif text-2xl font-bold text-white mt-2">Italy box arrivals & staff handover</h2>
+                <h2 className="font-serif text-lg sm:text-2xl font-bold text-white mt-2">Italy box arrivals & staff handover</h2>
                 <p className="text-sm text-neutral-300 font-medium mt-1">Transfer specific flight boxes to staff members and claim SKU custody into local hubs.</p>
               </div>
 
@@ -458,7 +455,7 @@ export default function OmniOperationsHub() {
               <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
                 Inter-Staff Custody Re-allocation
               </span>
-              <h2 className="font-serif text-2xl font-bold text-white mt-2">Transfer stock between staff</h2>
+              <h2 className="font-serif text-lg sm:text-2xl font-bold text-white mt-2">Transfer stock between staff</h2>
               <p className="text-sm text-neutral-300 font-medium mt-1">Transfer SKU inventory between staff members instantly with one click.</p>
             </div>
 

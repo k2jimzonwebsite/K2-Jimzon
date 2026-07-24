@@ -3,11 +3,15 @@ import { supabase } from '../../lib/supabaseClient'
 import { useStore } from '../../context/StoreContext'
 import { channelMeta } from '../../lib/channelMeta'
 
+// Mobile-first inbox. On phones you see ONE thing at a time: the list, then
+// (after a tap) the conversation with a Back button. On desktop the list, chat,
+// and AI helper sit side by side. Calm, readable type — nothing oversized.
+
 export default function Inbox() {
   const { conversations, sendMessage } = useStore()
   const [activeId, setActiveId] = useState(conversations[0]?.id)
-  
-  // If activeId was deleted or missing, default to the first
+  const [mobileView, setMobileView] = useState('list') // 'list' | 'chat' (mobile only)
+
   useEffect(() => {
     if (!conversations.find(c => c.id === activeId) && conversations.length > 0) {
       setActiveId(conversations[0].id)
@@ -15,30 +19,25 @@ export default function Inbox() {
   }, [conversations, activeId])
 
   const chat = conversations.find(c => c.id === activeId)
-  
+
   const [replyText, setReplyText] = useState('')
   const [aiDrafting, setAiDrafting] = useState(false)
   const [dbResults, setDbResults] = useState(null)
-  const [autoWebhookBot, setAutoWebhookBot] = useState(true)
+
+  const openChat = (id) => { setActiveId(id); setMobileView('chat'); setDbResults(null) }
 
   const handleDraftAI = () => {
     setAiDrafting(true)
     setTimeout(() => {
       setAiDrafting(false)
-      if (chat.intent === 'stock_check') {
-        setReplyText("Hi Maria! Yes, we currently have 4 units of the KIKO Milano 3D Hydra Lipgloss (Shade 05) in stock in Manila. It's ₱750. Would you like me to reserve one for you?")
-        setDbResults({
-          query: "SELECT stock, srp FROM products WHERE title ILIKE '%KIKO%Hydra%05%'",
-          result: "[ { stock: 4, srp: 750 } ]"
-        })
+      if (chat?.intent === 'stock_check') {
+        setReplyText("Hi! Yes, we currently have 4 units of the KIKO Milano 3D Hydra Lipgloss (Shade 05) in stock in Manila. It's ₱750. Would you like me to reserve one for you?")
+        setDbResults({ query: "SELECT stock, srp FROM products WHERE name ILIKE '%KIKO%Hydra%05%'", result: "[ { stock: 4, srp: 750 } ]" })
       } else {
-        setReplyText("Absolutely. We have a consignment leaving Milan on the 22nd. Let me know exactly which brand you need and I'll quote you the landed price.")
-        setDbResults({
-          query: "SELECT expected_delivery FROM purchase_orders WHERE status = 'Sent'",
-          result: "[ { expected_delivery: '2026-07-22' } ]"
-        })
+        setReplyText("Absolutely. We have a consignment leaving Milan soon. Let me know exactly which brand you need and I'll quote you the landed price.")
+        setDbResults({ query: "SELECT expected_delivery FROM purchase_orders WHERE status = 'Sent'", result: "[ { expected_delivery: '2026-07-22' } ]" })
       }
-    }, 1200)
+    }, 1000)
   }
 
   const handleSend = () => {
@@ -52,134 +51,99 @@ export default function Inbox() {
 
   if (!chat) {
     return (
-      <div className="flex h-[calc(100vh-140px)] rounded-xl border border-white/10 bg-[#09090b] shadow-2xl overflow-hidden items-center justify-center text-white/50">
-        No active conversations.
+      <div className="flex h-[60vh] rounded-2xl border border-white/10 bg-[#0B0E14] items-center justify-center text-white/50 text-sm">
+        No conversations yet.
       </div>
     )
   }
 
   return (
-    <div className="flex h-[calc(100vh-140px)] rounded-xl border border-white/10 bg-[#09090b] shadow-2xl overflow-hidden animate-in fade-in duration-500">
-      
-      {/* Channels List (Left Pane) */}
-      <div className="w-1/3 max-w-[320px] border-r border-white/10 flex flex-col bg-[#020408]">
-        <div className="p-4 border-b border-white/10 flex items-center justify-between">
-          <h2 className="font-serif font-semibold text-white">Customer Messages</h2>
+    <div className="flex h-[calc(100dvh-150px)] min-h-[440px] rounded-2xl border border-white/10 bg-[#0B0E14] overflow-hidden">
+
+      {/* ── Conversation list ─────────────────────────────────────────── */}
+      <div className={`${mobileView === 'chat' ? 'hidden' : 'flex'} lg:flex w-full lg:w-72 xl:w-80 shrink-0 flex-col border-r border-white/10 bg-[#0B0E14]`}>
+        <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
+          <h2 className="font-semibold text-white text-[15px]">Messages</h2>
           {unreadCount > 0 && (
-            <span className="bg-crimson text-white text-xs font-bold px-2 py-0.5 rounded-full pulse-dot">
-              {unreadCount} NEW
-            </span>
+            <span className="bg-crimson text-white text-[11px] font-bold px-2 py-0.5 rounded-full">{unreadCount} new</span>
           )}
         </div>
         <div className="overflow-y-auto flex-1 p-2 space-y-1">
-          {conversations.map(c => (
-            <button 
-              key={c.id} 
-              onClick={() => setActiveId(c.id)}
-              className={`w-full text-left p-3 rounded-lg border transition-all ${
-                activeId === c.id 
-                  ? 'border-blue/50 bg-blue/10' 
-                  : 'border-transparent hover:bg-white/5'
-              }`}
-            >
-              <div className="flex justify-between items-baseline mb-1">
-                <span className={`font-semibold text-base ${c.unread ? 'text-white' : 'text-white/60'}`}>{c.customer}</span>
-                <span className="text-sm text-white/55">{c.time}</span>
-              </div>
-              <div className="flex justify-between items-center mt-1">
-                <span className={`text-sm line-clamp-1 flex-1 pr-2 ${c.unread ? 'text-neutral-300' : 'text-white/60'}`}>
-                  {c.messages[c.messages.length - 1].text}
-                </span>
-                <span
-                  className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
-                  style={{ color: channelMeta(c.channel).color, backgroundColor: channelMeta(c.channel).color + '22' }}
-                >
-                  {channelMeta(c.channel).label}
-                </span>
-              </div>
-            </button>
-          ))}
+          {conversations.map(c => {
+            const meta = channelMeta(c.channel)
+            return (
+              <button key={c.id} onClick={() => openChat(c.id)}
+                className={`w-full text-left px-3 py-2.5 rounded-lg border transition-all ${
+                  activeId === c.id ? 'border-blue/40 bg-blue/10' : 'border-transparent hover:bg-white/5'
+                }`}>
+                <div className="flex justify-between items-baseline gap-2">
+                  <span className={`font-semibold text-sm truncate ${c.unread ? 'text-white' : 'text-white/70'}`}>{c.customer}</span>
+                  <span className="text-[11px] text-white/45 shrink-0">{c.time}</span>
+                </div>
+                <div className="flex justify-between items-center gap-2 mt-1">
+                  <span className={`text-[13px] line-clamp-1 flex-1 ${c.unread ? 'text-white/70' : 'text-white/45'}`}>
+                    {c.messages[c.messages.length - 1].text}
+                  </span>
+                  <span className="text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded shrink-0"
+                    style={{ color: meta.color, backgroundColor: meta.color + '22' }}>
+                    {meta.label}
+                  </span>
+                </div>
+              </button>
+            )
+          })}
         </div>
       </div>
 
-      {/* Chat Pane (Middle) */}
-      <div className="flex-1 flex flex-col bg-[#0A101D] relative">
-        <div className="p-4 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 shadow-sm z-10 bg-white/5 backdrop-blur-md shrink-0">
-          <div>
+      {/* ── Chat pane ─────────────────────────────────────────────────── */}
+      <div className={`${mobileView === 'list' ? 'hidden' : 'flex'} lg:flex flex-1 min-w-0 flex-col bg-[#0A101D]`}>
+        {/* Header */}
+        <div className="px-3 sm:px-4 py-2.5 border-b border-white/10 flex items-center gap-2 bg-white/5 shrink-0">
+          <button onClick={() => setMobileView('list')}
+            className="lg:hidden -ml-1 p-2 rounded-lg text-white/60 hover:bg-white/10 hover:text-white shrink-0" aria-label="Back">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="font-bold text-white">{chat.customer}</h3>
-              <span className="text-xs font-mono font-bold text-forest bg-forest/20 px-2 py-0.5 rounded border border-forest/30">
-                via {chat.channel} Webhook
-              </span>
+              <h3 className="font-semibold text-white text-[15px] truncate">{chat.customer}</h3>
+              <span className="text-[11px] font-medium text-forest bg-forest/15 px-1.5 py-0.5 rounded shrink-0">via {chat.channel}</span>
             </div>
-            <p className="text-sm text-white/50">Unified Customer Messaging Channel</p>
+            <p className="text-[11px] text-white/40 hidden sm:block">Unified customer messaging</p>
           </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setAutoWebhookBot(prev => !prev)}
-              className={`text-xs font-mono font-bold px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 ${
-                autoWebhookBot ? 'bg-forest/20 text-forest border-forest/40' : 'bg-white/5 text-white/60 border-white/10'
-              }`}
-            >
-              <span>⚡</span> Bot Auto-Reply: {autoWebhookBot ? 'ACTIVE (100% Automated)' : 'PAUSED'}
-            </button>
-            <button className="text-sm font-semibold text-blue hover:text-blue/80 transition-colors">View CRM Profile</button>
-          </div>
+          <button className="text-[13px] font-semibold text-blue hover:text-blue/80 shrink-0 hidden sm:block">CRM profile</button>
         </div>
 
+        {/* Pasabuy request note */}
         {chat.intent === 'pasabuy_request' && chat.metadata && (
-          <div className="p-4 shrink-0 border-b border-white/10 bg-black/20 flex justify-center">
-            {/* Sticky Note */}
-            <div className="relative w-full max-w-lg bg-[#fef9c3] text-black p-5 shadow-lg transform rotate-[-1deg] rounded-sm rounded-br-3xl border border-[#fde047]">
-              {/* Tape effect */}
-              <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-24 h-5 bg-white/40 backdrop-blur-md border border-white/20 rotate-[2deg] shadow-sm z-10" />
-              
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-xs font-bold uppercase tracking-widest text-black/60 bg-black/5 px-2 py-0.5 rounded border border-black/10">Pasabuy Request</span>
-                <span className="text-xs font-mono text-black/30">{chat.id}</span>
+          <div className="p-3 shrink-0 border-b border-white/10 bg-black/20">
+            <div className="rounded-xl bg-[#fef9c3] text-black p-4 border border-[#fde047]">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-[11px] font-bold uppercase tracking-widest text-black/60 bg-black/5 px-2 py-0.5 rounded border border-black/10">Pasabuy request</span>
               </div>
-              
-              <div className="space-y-4">
+              <p className="text-black/40 text-[11px] uppercase font-bold tracking-widest">Requested item</p>
+              <p className="font-serif font-semibold text-lg text-black/90 leading-tight mb-3">{chat.metadata.item}</p>
+              <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <p className="text-black/40 text-xs uppercase font-bold tracking-widest">Requested Item</p>
-                  <p className="font-serif font-semibold text-xl text-black/90 leading-tight">{chat.metadata.item}</p>
+                  <p className="text-black/40 text-[11px] uppercase font-bold tracking-widest">Budget</p>
+                  <p className="font-semibold text-black/80">{chat.metadata.budget ? `₱${chat.metadata.budget}` : 'Open'}</p>
                 </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-black/40 text-xs uppercase font-bold tracking-widest">Target Budget</p>
-                    <p className="font-semibold text-black/80">{chat.metadata.budget ? `₱${chat.metadata.budget}` : 'Open'}</p>
-                  </div>
-                  <div>
-                    <p className="text-black/40 text-xs uppercase font-bold tracking-widest">Quantity & Shipping</p>
-                    <p className="font-semibold text-black/80">{chat.metadata.qty} · {chat.metadata.shipping === 'air' ? 'Air Freight' : 'Sea Cargo'}</p>
-                  </div>
+                <div>
+                  <p className="text-black/40 text-[11px] uppercase font-bold tracking-widest">Qty &amp; shipping</p>
+                  <p className="font-semibold text-black/80">{chat.metadata.qty} · {chat.metadata.shipping === 'air' ? 'Air' : 'Sea'}</p>
                 </div>
-                
-                {chat.metadata.url && (
-                  <div>
-                    <p className="text-black/40 text-xs uppercase font-bold tracking-widest">Reference URL</p>
-                    <a href={chat.metadata.url} target="_blank" rel="noreferrer" className="text-blue-700 font-semibold hover:underline text-base truncate block w-full max-w-sm">
-                      {chat.metadata.url}
-                    </a>
-                  </div>
-                )}
               </div>
-              
-              {/* Folded corner curl effect */}
-              <div className="absolute bottom-0 right-0 w-8 h-8 bg-gradient-to-tl from-black/5 to-transparent rounded-tl-xl border-l border-t border-black/5" />
             </div>
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2.5">
           {chat.messages.map((m, i) => (
             <div key={i} className={`flex ${m.sender === 'agent' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[75%] p-3 text-base shadow-md ${
-                m.sender === 'agent' 
-                  ? 'bg-blue text-white rounded-2xl rounded-tr-sm' 
-                  : 'bg-white/10 text-neutral-200 border border-white/5 rounded-2xl rounded-tl-sm'
+              <div className={`max-w-[85%] sm:max-w-[75%] px-3.5 py-2 text-[14px] leading-relaxed ${
+                m.sender === 'agent'
+                  ? 'bg-blue text-white rounded-2xl rounded-tr-sm'
+                  : 'bg-white/10 text-neutral-200 rounded-2xl rounded-tl-sm'
               }`}>
                 {m.text}
               </div>
@@ -187,70 +151,51 @@ export default function Inbox() {
           ))}
         </div>
 
-        <div className="p-4 bg-white/5 border-t border-white/10">
-          <div className="flex gap-2">
-            <textarea 
-              value={replyText}
-              onChange={(e) => setReplyText(e.target.value)}
-              placeholder="Type a reply or use AI Copilot..."
-              className="flex-1 resize-none h-[60px] rounded-lg border border-white/10 bg-[#09090b] p-3 text-base text-white placeholder:text-white/55 focus:border-blue focus:ring-1 focus:ring-blue outline-none transition-all"
-            />
-            <button 
-              onClick={handleSend}
-              disabled={!replyText.trim()}
-              className="bg-blue text-white px-6 font-semibold text-base rounded-lg hover:bg-blue/90 disabled:opacity-50 transition-colors"
-            >
+        {/* Composer */}
+        <div className="p-3 bg-white/5 border-t border-white/10 shrink-0 space-y-2">
+          {/* AI helper — inline on phones/tablets where the side panel is hidden */}
+          <button onClick={handleDraftAI} disabled={aiDrafting}
+            className="xl:hidden w-full flex justify-center items-center gap-2 py-2 border border-blue/40 bg-blue/10 text-blue font-semibold text-[13px] rounded-lg hover:bg-blue/20 disabled:opacity-50">
+            {aiDrafting ? 'Drafting…' : '✨ Draft a reply with AI'}
+          </button>
+          <div className="flex gap-2 items-end">
+            <textarea value={replyText} onChange={(e) => setReplyText(e.target.value)}
+              placeholder="Type a reply…" rows={1}
+              className="flex-1 resize-none max-h-32 min-h-[44px] rounded-xl border border-white/10 bg-[#09090b] px-3 py-2.5 text-[14px] text-white placeholder:text-white/40 focus:border-blue outline-none" />
+            <button onClick={handleSend} disabled={!replyText.trim()}
+              className="bg-blue text-white px-5 min-h-[44px] font-semibold text-sm rounded-xl hover:bg-blue/90 disabled:opacity-50 shrink-0">
               Send
             </button>
           </div>
         </div>
       </div>
 
-      {/* AI Copilot Pane (Right) */}
-      <div className="w-1/4 min-w-[300px] border-l border-white/10 bg-[#020408] flex flex-col relative overflow-hidden">
-        
-        <div className="p-4 border-b border-white/10 flex items-center gap-2 bg-white/5">
-          <div className="h-2 w-2 rounded-full bg-blue pulse-dot" />
-          <h3 className="font-serif font-semibold text-base text-white">AI Chat Assistant</h3>
+      {/* ── AI helper (desktop XL only) ───────────────────────────────── */}
+      <div className="hidden xl:flex w-72 shrink-0 border-l border-white/10 bg-[#0B0E14] flex-col">
+        <div className="px-4 py-3 border-b border-white/10 flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-blue" />
+          <h3 className="font-semibold text-[15px] text-white">AI assistant</h3>
         </div>
-        
-        <div className="p-5 flex-1 flex flex-col items-start overflow-y-auto">
-          <p className="text-sm text-white/50 mb-6">
-            The AI automatically reads incoming messages and queries the database to draft accurate replies for you.
+        <div className="p-4 flex-1 overflow-y-auto">
+          <p className="text-[13px] text-white/50 mb-4 leading-relaxed">
+            Drafts a reply based on the conversation. Review it before sending.
           </p>
-
-          <button 
-            onClick={handleDraftAI}
-            disabled={aiDrafting}
-            className="w-full flex justify-center items-center gap-2 py-2.5 border border-blue bg-blue/10 text-blue font-semibold text-base rounded-lg transition-all hover:bg-blue/20 active:scale-95 disabled:opacity-50 mb-8"
-          >
-            {aiDrafting ? (
-              <span className="flex items-center gap-2">
-                <svg className="animate-spin h-4 w-4 text-blue" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                Querying Database...
-              </span>
-            ) : 'Ask AI to help reply'}
+          <button onClick={handleDraftAI} disabled={aiDrafting}
+            className="w-full flex justify-center items-center gap-2 py-2.5 border border-blue/40 bg-blue/10 text-blue font-semibold text-sm rounded-lg hover:bg-blue/20 active:scale-[.99] disabled:opacity-50 mb-5">
+            {aiDrafting ? 'Drafting…' : 'Draft a reply'}
           </button>
-          
           {dbResults && (
-            <div className="w-full animate-in slide-in-from-bottom-4 duration-300">
-               <p className="text-xs uppercase tracking-widest text-white/60 font-bold mb-2">Live Database Context</p>
-               <div className="bg-black/50 border border-white/5 p-3 rounded-lg text-xs font-mono leading-relaxed text-neutral-300 mb-4 overflow-x-auto">
-                 <span className="text-purple-400">Query Executed:</span><br/>
-                 <span className="text-blue-300">{dbResults.query}</span><br/><br/>
-                 <span className="text-forest">Result:</span><br/>
-                 <span className="text-neutral-200">{dbResults.result}</span>
-               </div>
-               
-               <div className="bg-blue/5 border border-blue/20 p-3 rounded-lg">
-                 <p className="text-sm text-blue mb-1 font-semibold">Suggested Action</p>
-                 <p className="text-sm text-neutral-300">The drafted reply has been placed in your text box. Review it and click Send to confirm.</p>
-               </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-widest text-white/45 font-bold mb-2">Data used</p>
+              <div className="bg-black/40 border border-white/10 p-3 rounded-lg text-[11px] font-mono leading-relaxed text-neutral-300 mb-3 overflow-x-auto">
+                <span className="text-blue-300">{dbResults.query}</span><br /><br />
+                <span className="text-forest">{dbResults.result}</span>
+              </div>
+              <p className="text-[13px] text-white/55">The draft is in your reply box — review and Send.</p>
             </div>
           )}
         </div>
       </div>
-
     </div>
   )
 }

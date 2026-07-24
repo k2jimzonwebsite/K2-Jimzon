@@ -34,7 +34,7 @@ export default function ChatFab() {
   }
 
   return (
-    <div className="fixed bottom-20 right-4 z-50 flex flex-col items-end gap-3 md:bottom-6 md:right-6">
+    <div className="fixed right-4 z-50 flex flex-col items-end gap-3 md:right-6 md:bottom-6 bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))]">
       {open && (
         <div className="rise w-[320px] rounded-2xl border border-line bg-cream/95 backdrop-blur-xl shadow-float flex flex-col overflow-hidden" style={{ height: '420px' }}>
           <div className="bg-navy p-4 text-white flex justify-between items-center shadow-sm z-10">
