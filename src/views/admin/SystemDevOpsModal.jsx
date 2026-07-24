@@ -38,7 +38,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-4xl rounded-2xl bg-[#18181b] border border-white/20 shadow-2xl overflow-hidden font-sans text-white flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-4xl rounded-2xl bg-[#161922] border border-white/10 shadow-2xl overflow-hidden font-sans text-white flex flex-col max-h-[90vh]">
         
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-white/10 bg-[#27272a] px-6 py-4">

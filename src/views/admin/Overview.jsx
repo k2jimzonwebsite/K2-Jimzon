@@ -60,7 +60,7 @@ export default function Overview({ setSection, skus = 0, lowStock = 0, pending =
       {/* Metrics — single canonical KPI row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {metrics.map(m => (
-          <div key={m.label} className="rounded-xl border border-white/10 bg-[#12161F] px-4 py-3.5">
+          <div key={m.label} className="rounded-xl border border-white/10 bg-[#161922] px-4 py-3.5">
             <p className="text-xs text-white/60">{m.label}</p>
             <p className={
               'mt-1.5 text-2xl font-semibold tabular-nums ' +
@@ -78,7 +78,7 @@ export default function Overview({ setSection, skus = 0, lowStock = 0, pending =
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
 
         {/* Financial summary */}
-        <div className="lg:col-span-2 rounded-xl border border-white/10 bg-[#12161F] p-5">
+        <div className="lg:col-span-2 rounded-xl border border-white/10 bg-[#161922] p-5">
           <div className="flex items-baseline justify-between mb-4">
             <h2 className="text-sm font-semibold text-white">Today's landed P&amp;L</h2>
             <span className="text-xs text-white/60">estimated</span>
@@ -110,13 +110,13 @@ export default function Overview({ setSection, skus = 0, lowStock = 0, pending =
               <p className="text-xs text-white/50 mt-0.5">Reorder or create a Pasabuy sourcing request →</p>
             </button>
           ) : (
-            <div className="rounded-xl border border-white/10 bg-[#12161F] p-4">
+            <div className="rounded-xl border border-white/10 bg-[#161922] p-4">
               <p className="text-sm text-white/70">Stock levels healthy</p>
               <p className="text-xs text-white/60 mt-0.5">No critical stock warnings.</p>
             </div>
           )}
 
-          <div className="rounded-xl border border-white/10 bg-[#12161F] p-4">
+          <div className="rounded-xl border border-white/10 bg-[#161922] p-4">
             <p className="text-sm text-white/70">Flight AZ-772 · MXP → NAIA</p>
             <p className="text-xs text-white/60 mt-0.5">Custody verification active · staff PIN claims enabled.</p>
           </div>
@@ -131,7 +131,7 @@ export default function Overview({ setSection, skus = 0, lowStock = 0, pending =
             <button
               key={a.target}
               onClick={() => setSection(a.target)}
-              className="text-left rounded-xl border border-white/10 bg-[#12161F] p-4 hover:border-blue/40 hover:bg-blue/[0.06] transition-colors"
+              className="text-left rounded-xl border border-white/10 bg-[#161922] p-4 hover:border-blue/40 hover:bg-blue/[0.06] transition-colors"
             >
               <p className="text-sm font-medium text-white">{a.label}</p>
               <p className="text-xs text-white/60 mt-0.5">{a.sub}</p>

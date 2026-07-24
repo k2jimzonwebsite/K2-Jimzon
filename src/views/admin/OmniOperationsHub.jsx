@@ -192,7 +192,7 @@ export default function OmniOperationsHub() {
     <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 font-sans text-white">
       
       {/* Header Banner & Active Staff Profile Switcher */}
-      <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-[#161922] border border-white/10 p-4 sm:p-6 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
@@ -220,7 +220,7 @@ export default function OmniOperationsHub() {
           <select
             value={activeStaff}
             onChange={(e) => setActiveStaff(e.target.value)}
-            className="w-full bg-[#18181b] border border-gold text-sm font-bold text-white rounded-lg px-3 py-2 outline-none"
+            className="w-full bg-[#161922] border border-gold text-sm font-bold text-white rounded-lg px-3 py-2 outline-none"
           >
             <option value="Elena Guerrero">👤 Elena Guerrero (Makati Hub)</option>
             <option value="Juan Dela Cruz">👤 Juan Dela Cruz (Quezon City Hub)</option>
@@ -230,7 +230,7 @@ export default function OmniOperationsHub() {
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex overflow-x-auto max-w-full bg-[#18181b] border border-white/20 p-2 rounded-xl text-sm font-bold scrollbar-none gap-2">
+      <div className="flex overflow-x-auto max-w-full bg-[#161922] border border-white/10 p-2 rounded-xl text-sm font-bold scrollbar-none gap-2">
         <button
           onClick={() => setActiveRole('manila_warehouse')}
           className={`px-5 py-3 min-h-[44px] rounded-xl transition-all flex items-center gap-2 shrink-0 ${
@@ -262,7 +262,7 @@ export default function OmniOperationsHub() {
         <div className="space-y-6">
           
           {/* Barcode Verification Scanner Header */}
-          <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl shadow-xl space-y-4">
+          <div className="bg-[#161922] border border-white/10 p-4 sm:p-6 rounded-2xl shadow-xl space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <span className="text-xl">📦</span>
@@ -311,7 +311,7 @@ export default function OmniOperationsHub() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {orders.map(ord => (
-                <div key={ord.id} className="bg-[#18181b] border border-white/20 rounded-2xl p-5 shadow-xl space-y-4 flex flex-col justify-between hover:border-gold/40 transition-all">
+                <div key={ord.id} className="bg-[#161922] border border-white/10 rounded-2xl p-5 shadow-xl space-y-4 flex flex-col justify-between hover:border-gold/40 transition-all">
                   <div>
                     <div className="flex items-center justify-between mb-3">
                       <span 
@@ -366,7 +366,7 @@ export default function OmniOperationsHub() {
       {activeRole === 'box_handover' && (
         <div className="space-y-6">
           
-          <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl shadow-xl space-y-4">
+          <div className="bg-[#161922] border border-white/10 p-4 sm:p-6 rounded-2xl shadow-xl space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
               <div>
                 <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
@@ -389,7 +389,7 @@ export default function OmniOperationsHub() {
                   <div
                     key={box.box_code}
                     className={`p-5 rounded-2xl border transition-all space-y-4 ${
-                      isAssignedToActive ? 'bg-[#27272a] border-gold shadow-xl' : 'bg-[#18181b] border-white/10 opacity-75'
+                      isAssignedToActive ? 'bg-[#27272a] border-gold shadow-xl' : 'bg-[#161922] border-white/10 opacity-75'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -404,7 +404,7 @@ export default function OmniOperationsHub() {
                       <select
                         value={box.assigned_staff}
                         onChange={(e) => handleReassignBoxStaff(box.box_code, e.target.value)}
-                        className="w-full bg-[#18181b] border border-white/20 text-sm font-bold text-white rounded-lg px-3 py-2 outline-none focus:border-gold"
+                        className="w-full bg-[#161922] border border-white/10 text-sm font-bold text-white rounded-lg px-3 py-2 outline-none focus:border-gold"
                       >
                         <option value="Elena Guerrero">Elena Guerrero (Makati Hub)</option>
                         <option value="Juan Dela Cruz">Juan Dela Cruz (Quezon City Hub)</option>
@@ -452,7 +452,7 @@ export default function OmniOperationsHub() {
 
       {/* MODE 3: 1-CLICK INTER-STAFF STOCK TRANSFER STATION */}
       {activeRole === 'inter_staff_transfer' && (
-        <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl shadow-xl space-y-6">
+        <div className="bg-[#161922] border border-white/10 p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
             <div>
               <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">

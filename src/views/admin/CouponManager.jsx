@@ -62,7 +62,7 @@ export default function CouponManager() {
     <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 font-sans text-white">
       
       {/* Header Banner */}
-      <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-[#161922] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
@@ -86,19 +86,19 @@ export default function CouponManager() {
 
       {/* Analytics KPI Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-[#18181b] border border-white/20 p-5 rounded-2xl shadow-md">
+        <div className="bg-[#161922] border border-white/10 p-5 rounded-2xl shadow-md">
           <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Active Coupons</p>
           <p className="text-3xl font-bold text-white mt-1">{activeCount} Coupons</p>
           <p className="text-sm text-neutral-300 font-medium mt-1">Ready for storefront & checkout redemption</p>
         </div>
 
-        <div className="bg-[#18181b] border border-white/20 p-5 rounded-2xl shadow-md">
+        <div className="bg-[#161922] border border-white/10 p-5 rounded-2xl shadow-md">
           <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Secret Voucher Hunts</p>
           <p className="text-3xl font-bold text-blue mt-1">{huntCount} Active Drops</p>
           <p className="text-sm text-neutral-300 font-medium mt-1">Interactive clues for FB/IG/TikTok followers</p>
         </div>
 
-        <div className="bg-[#18181b] border border-white/20 p-5 rounded-2xl shadow-md">
+        <div className="bg-[#161922] border border-white/10 p-5 rounded-2xl shadow-md">
           <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Total Redemptions</p>
           <p className="text-3xl font-bold text-gold mt-1">{totalRedemptions} Used</p>
           <p className="text-sm text-neutral-300 font-medium mt-1">Successful customer checkouts applied</p>
@@ -106,7 +106,7 @@ export default function CouponManager() {
       </div>
 
       {/* Coupons Table */}
-      <div className="bg-[#18181b] border border-white/20 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-[#161922] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
         <div className="p-5 border-b border-white/10 flex items-center justify-between bg-white/10">
           <h2 className="font-serif font-bold text-xl text-white">All coupons & vouchers</h2>
           <span className="text-sm font-mono font-bold text-gold">{coupons.length} Total Coupons</span>
@@ -267,7 +267,7 @@ export default function CouponManager() {
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-xs text-white/60 uppercase font-bold mb-1">
                     Value ({type === 'percentage' ? '%' : '₱'})

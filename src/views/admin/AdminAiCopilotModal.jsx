@@ -69,7 +69,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
           {messages.map((m, i) => (
             <div key={i} className={`flex flex-col ${m.sender === 'user' ? 'items-end' : 'items-start'} space-y-1`}>
               <span className="px-1 text-xs text-white/40">{m.sender === 'user' ? 'You' : 'Guide'}</span>
-              <div className={`max-w-[92%] rounded-2xl p-3.5 ${m.sender === 'user' ? 'rounded-tr-none bg-blue text-white' : 'rounded-tl-none border border-white/10 bg-[#12161F]'}`}>
+              <div className={`max-w-[92%] rounded-2xl p-3.5 ${m.sender === 'user' ? 'rounded-tr-none bg-blue text-white' : 'rounded-tl-none border border-white/10 bg-[#161922]'}`}>
                 {m.topic ? (
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">

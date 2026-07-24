@@ -89,7 +89,7 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
   const selectedNode = STEPS.find(s => s.id === activeStep) || STEPS[1]
 
   return (
-    <div className="bg-[#18181b] border border-white/20 rounded-2xl p-6 shadow-2xl font-sans text-white space-y-6">
+    <div className="bg-[#161922] border border-white/10 rounded-2xl p-6 shadow-2xl font-sans text-white space-y-6">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">

@@ -372,7 +372,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
             <button
               key={n.id}
               onClick={() => nodeClick(n.id)}
-              className="absolute text-left rounded-xl border bg-[#12161F] transition-colors"
+              className="absolute text-left rounded-xl border bg-[#161922] transition-colors"
               style={{
                 left: n.x, top: n.y, width: W, height: H,
                 borderColor: on ? c : 'rgba(255,255,255,0.12)',
@@ -409,7 +409,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
 
   const detail = active && (
     <div>
-      <div className="rounded-xl border border-white/10 bg-[#12161F] p-5">
+      <div className="rounded-xl border border-white/10 bg-[#161922] p-5">
         <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
           <div className="flex items-center gap-3">
             <span className="text-2xl h-11 w-11 flex items-center justify-center rounded-xl bg-black/40 border border-white/10">{active.icon}</span>

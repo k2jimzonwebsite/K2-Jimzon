@@ -195,7 +195,7 @@ export default function Sheet() {
         {loading ? (
           <div className="flex items-center justify-center h-64 text-white font-extrabold animate-pulse font-sans text-lg">Loading Product Masters...</div>
         ) : (
-          <table className="w-max min-w-full border-collapse text-base bg-[#18181b]">
+          <table className="w-max min-w-full border-collapse text-base bg-[#161922]">
             <thead className="sticky top-0 z-30 shadow-lg">
               <tr className="bg-[#09090b] text-sm text-white">
                 <th className="w-10 border border-white/20 py-3 font-bold sticky left-0 z-40 bg-[#09090b] text-gold">#</th>

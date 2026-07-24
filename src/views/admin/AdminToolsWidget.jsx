@@ -121,7 +121,7 @@ export default function AdminToolsWidget() {
         onPointerDown={onDown}
         onClick={handleClick}
         title="Tools (drag to move)"
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-[#12161F] border border-white/15 text-xl text-white shadow-xl hover:bg-[#1A1F2B] active:scale-95 cursor-grab active:cursor-grabbing touch-none"
+        className="flex h-12 w-12 items-center justify-center rounded-full bg-[#161922] border border-white/15 text-xl text-white shadow-xl hover:bg-[#1A1F2B] active:scale-95 cursor-grab active:cursor-grabbing touch-none"
       >
         ⚙️
       </button>

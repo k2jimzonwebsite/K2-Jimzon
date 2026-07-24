@@ -119,7 +119,7 @@ export default function Kanban() {
           <p className="text-base text-white/50">Manage Milan flight consignments, box scanning receiving (+1), supplier POs, and PH customer order fulfillment in one place.</p>
         </div>
         
-        <div className="flex bg-[#18181b] rounded-xl p-2 border border-white/20 overflow-x-auto whitespace-nowrap hide-scrollbar items-center gap-2">
+        <div className="flex bg-[#161922] rounded-xl p-2 border border-white/20 overflow-x-auto whitespace-nowrap hide-scrollbar items-center gap-2">
           <button 
             onClick={() => setActiveTab('consignment')}
             className={`px-4 py-2.5 text-sm font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${

@@ -81,7 +81,7 @@ export default function ChannelIntegrations() {
     <div className="space-y-6 max-w-6xl mx-auto pb-12 animate-in fade-in duration-300">
 
       {/* Header */}
-      <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl shadow-xl">
+      <div className="bg-[#161922] border border-white/10 p-4 sm:p-6 rounded-2xl shadow-lg">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full">
@@ -100,16 +100,18 @@ export default function ChannelIntegrations() {
         </div>
 
         {/* Where the keys go */}
-        <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
-          <span className="text-sm text-white/60 font-semibold">🔑 API keys &amp; connectors go here:</span>
-          <a href={SUPA_SECRETS} target="_blank" rel="noreferrer"
-            className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 py-2 rounded-lg transition-all flex items-center gap-2">
-            Open Supabase → secrets ↗
-          </a>
-          <a href={SUPA_FUNCTIONS} target="_blank" rel="noreferrer"
-            className="bg-white/10 hover:bg-white/15 text-white font-bold text-sm px-4 py-2 rounded-lg border border-white/10 transition-all">
-            Edge Functions ↗
-          </a>
+        <div className="mt-4 border-t border-white/10 pt-4">
+          <span className="block text-sm text-white/60 font-semibold mb-2.5">🔑 API keys &amp; connectors go here:</span>
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2.5">
+            <a href={SUPA_SECRETS} target="_blank" rel="noreferrer"
+              className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 min-h-11 rounded-lg transition-all flex items-center justify-center gap-2">
+              Open Supabase → secrets ↗
+            </a>
+            <a href={SUPA_FUNCTIONS} target="_blank" rel="noreferrer"
+              className="bg-white/10 hover:bg-white/15 text-white font-bold text-sm px-4 min-h-11 rounded-lg border border-white/10 transition-all flex items-center justify-center">
+              Edge Functions ↗
+            </a>
+          </div>
         </div>
       </div>
 
@@ -126,8 +128,8 @@ export default function ChannelIntegrations() {
           const live = isLive(ch.key)
           const row = conns[ch.key]
           return (
-            <div key={ch.key} className={`rounded-2xl border p-5 shadow-lg transition-all ${
-              live ? 'bg-forest/5 border-forest/40' : 'bg-[#18181b] border-white/15'
+            <div key={ch.key} className={`rounded-2xl border p-4 sm:p-5 shadow-lg transition-all ${
+              live ? 'bg-forest/5 border-forest/40' : 'bg-[#161922] border-white/10'
             }`}>
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
@@ -147,24 +149,23 @@ export default function ChannelIntegrations() {
                 </span>
               </div>
 
-              <div className="mt-4 flex items-center justify-between">
+              <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
                 <p className="text-xs font-mono text-white/45">
                   {live
                     ? `Receiving data${row?.last_event_at ? ` · last event ${timeAgo(row.last_event_at)}` : ''}`
                     : (row?.note || 'No data received yet')}
                 </p>
-                {!live && (
+                {!live ? (
                   <button
                     onClick={() => setHowto(ch)}
-                    className="bg-blue hover:bg-blue/90 text-white font-bold text-sm px-4 py-2 rounded-lg transition-all flex items-center gap-1.5"
+                    className="w-full sm:w-auto shrink-0 bg-blue hover:bg-blue/90 text-white font-bold text-sm px-4 min-h-11 rounded-lg transition-all flex items-center justify-center gap-1.5"
                   >
                     📘 How to connect
                   </button>
-                )}
-                {live && (
+                ) : (
                   <button
                     onClick={() => setHowto(ch)}
-                    className="text-sm font-semibold text-white/50 hover:text-white transition-colors"
+                    className="w-full sm:w-auto shrink-0 text-sm font-semibold text-white/50 hover:text-white transition-colors min-h-11"
                   >
                     View setup
                   </button>

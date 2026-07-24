@@ -25,7 +25,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
         <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
           <ol className="space-y-2.5">
             {DAILY_FLOW.map((s, i) => (
-              <li key={i} className="rounded-xl border border-white/10 bg-[#12161F] p-3.5">
+              <li key={i} className="rounded-xl border border-white/10 bg-[#161922] p-3.5">
                 <div className="flex items-start gap-3">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue/15 text-sm font-bold text-blue">{i + 1}</span>
                   <div className="min-w-0 flex-1">

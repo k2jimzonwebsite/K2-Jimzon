@@ -33,18 +33,19 @@ export default function AdminAuthModal({ isOpen, onClose }) {
     setError(res.error || 'Invalid authenticator code.')
   }
 
-  const field = 'w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-base text-white placeholder:text-white/40 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/50 transition-all'
+  const field = 'w-full rounded-xl border border-white/15 bg-black/30 px-4 min-h-12 py-3 text-base text-white placeholder:text-white/35 focus:border-blue focus:outline-none transition-colors'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-md rounded-2xl border border-white/20 bg-[#18181b] p-6 text-white shadow-2xl relative overflow-hidden font-sans">
-        <div className="absolute -top-12 -right-12 h-36 w-36 rounded-full bg-blue/20 blur-3xl pointer-events-none" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
+      <div className="w-full max-w-md my-auto rounded-2xl border border-white/10 bg-[#161922] p-6 sm:p-7 text-white shadow-2xl relative overflow-hidden font-sans">
+        <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-blue/15 blur-3xl pointer-events-none" />
 
-        <div className="mb-6 text-center">
-          <h2 className="text-2xl font-extrabold tracking-tight text-white">
-            K2 Jimzon <span className="text-blue font-bold font-mono">Admin</span>
+        <div className="mb-7 text-center">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue/15 border border-blue/30 text-xl">🔒</div>
+          <h2 className="text-xl font-extrabold tracking-tight text-white">
+            K2 Jimzon <span className="text-blue">Admin</span>
           </h2>
-          <p className="text-sm text-white/55 mt-1">Staff sign-in</p>
+          <p className="text-sm text-white/50 mt-1">Staff sign-in</p>
         </div>
 
         {step === 1 ? (
@@ -54,30 +55,30 @@ export default function AdminAuthModal({ isOpen, onClose }) {
             )}
 
             <div>
-              <label className="block text-sm font-bold uppercase tracking-wider text-neutral-300 mb-2">Email</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-white/45 mb-1.5">Email</label>
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@k2jimzon.com" required autoFocus className={field} />
             </div>
             <div>
-              <label className="block text-sm font-bold uppercase tracking-wider text-neutral-300 mb-2">Password</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-white/45 mb-1.5">Password</label>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••" required className={field} />
             </div>
 
-            <div className="pt-2 flex gap-3">
-              <button type="button" onClick={onClose}
-                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-bold text-neutral-300 hover:bg-white/15 hover:text-white transition-all">
-                Back to store
-              </button>
-              <button type="submit" disabled={loading}
-                className="flex-1 rounded-xl bg-blue hover:bg-blue-deep py-3 text-sm font-extrabold text-white shadow-lg transition-transform active:scale-95 disabled:opacity-50">
-                {loading ? 'Signing in…' : 'Sign in'}
-              </button>
+            <button type="submit" disabled={loading}
+              className="w-full rounded-xl bg-blue hover:bg-blue-deep min-h-12 py-3 text-sm font-extrabold text-white shadow-lg transition-all active:scale-[.99] disabled:opacity-50">
+              {loading ? 'Signing in…' : 'Sign in'}
+            </button>
+
+            <div className="flex items-center gap-3 py-1">
+              <span className="h-px flex-1 bg-white/10" />
+              <span className="text-xs text-white/35 font-medium">or</span>
+              <span className="h-px flex-1 bg-white/10" />
             </div>
 
-            <div className="pt-3 border-t border-white/10">
+            <div>
               <button type="button" onClick={() => loginWithGoogle()}
-                className="w-full py-3 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                className="w-full min-h-12 py-3 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-sm transition-all shadow-md flex items-center justify-center gap-2">
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -90,6 +91,11 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                 No account? Ask your super admin to invite you — accounts are created by invite only.
               </p>
             </div>
+
+            <button type="button" onClick={onClose}
+              className="w-full text-sm font-semibold text-white/45 hover:text-white transition-colors py-1">
+              ← Back to store
+            </button>
           </form>
         ) : (
           <form onSubmit={submitCode} className="space-y-4 animate-in fade-in duration-200">
@@ -103,13 +109,13 @@ export default function AdminAuthModal({ isOpen, onClose }) {
             <input type="text" inputMode="numeric" maxLength={6} value={code} autoFocus
               onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} placeholder="123456" required
               className="w-full text-center tracking-[0.4em] font-mono text-2xl font-extrabold rounded-xl border border-blue/40 bg-black/50 px-4 py-3.5 text-blue placeholder:text-white/30 focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue transition-all" />
-            <div className="pt-2 flex gap-3">
+            <div className="pt-2 flex flex-col-reverse sm:flex-row gap-2.5 sm:gap-3">
               <button type="button" onClick={() => { setStep(1); setError(''); setCode('') }}
-                className="flex-1 rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-bold text-neutral-300 hover:bg-white/15 hover:text-white transition-all">
+                className="flex-1 rounded-xl border border-white/20 bg-white/10 min-h-12 py-3 text-sm font-bold text-neutral-300 hover:bg-white/15 hover:text-white transition-all">
                 ← Back
               </button>
               <button type="submit" disabled={loading || code.length < 6}
-                className="flex-1 rounded-xl bg-blue hover:bg-blue-deep py-3 text-sm font-extrabold text-white shadow-lg transition-transform active:scale-95 disabled:opacity-50">
+                className="flex-1 rounded-xl bg-blue hover:bg-blue-deep min-h-12 py-3 text-sm font-extrabold text-white shadow-lg transition-transform active:scale-95 disabled:opacity-50">
                 {loading ? 'Verifying…' : 'Verify & enter'}
               </button>
             </div>

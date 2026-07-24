@@ -239,7 +239,7 @@ export default function ConsignmentManager() {
     <div className="p-6 max-w-7xl mx-auto text-white space-y-6 animate-in fade-in duration-300 font-sans">
       
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#18181b] p-6 rounded-2xl border border-white/20 shadow-2xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#161922] p-6 rounded-2xl border border-white/20 shadow-2xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
