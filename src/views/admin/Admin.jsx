@@ -11,6 +11,8 @@ import ErrorBoundary from '../../components/ui/ErrorBoundary'
 import DailyTaskNotificationDrawer from './DailyTaskNotificationDrawer'
 import AdminAiCopilotModal from './AdminAiCopilotModal'
 import SystemDevOpsModal from './SystemDevOpsModal'
+import AdminToolsWidget from './AdminToolsWidget'
+import StartHereGuide from './StartHereGuide'
 
 // Lazy loaded heavy components to reduce initial bundle lag
 const Kanban = lazy(() => import('./Kanban'))
@@ -107,6 +109,7 @@ export default function Admin() {
   const [showDailyTasks, setShowDailyTasks] = useState(false)
   const [showAiCopilot, setShowAiCopilot] = useState(false)
   const [showDevOpsModal, setShowDevOpsModal] = useState(false)
+  const [showStartHere, setShowStartHere] = useState(false)
 
   // KPI states (kept here because the sidebar badge + Overview both read them)
   const [activeSkus, setActiveSkus] = useState(0)
@@ -247,6 +250,15 @@ export default function Admin() {
           </div>
           <div className="ml-auto flex items-center gap-2">
             <button
+              onClick={() => setShowStartHere(true)}
+              className="flex items-center gap-1.5 min-h-[40px] rounded-lg border border-gold/40 bg-gold/10 text-gold hover:bg-gold/20 text-sm font-medium px-3 transition-colors"
+              title="How to use this dashboard — start here"
+            >
+              <span>📖</span>
+              <span className="hidden sm:inline">Start here</span>
+            </button>
+
+            <button
               onClick={() => setShowDailyTasks(true)}
               className="relative flex items-center gap-1.5 min-h-[40px] rounded-lg border border-white/10 bg-white/[0.04] text-white/80 hover:bg-white/10 hover:text-white text-sm px-3 transition-colors"
               title="Daily tasks & expirations"
@@ -341,13 +353,22 @@ export default function Admin() {
         onClose={() => setShowDevOpsModal(false)}
       />
 
+      <StartHereGuide
+        isOpen={showStartHere}
+        onClose={() => setShowStartHere(false)}
+        onNavigate={(targetSec) => setSection(targetSec)}
+      />
+
+      {/* Floating, draggable tools gear (calculator, margin, FX, clock, etc.) */}
+      <AdminToolsWidget />
+
       {/* Floating AI Copilot */}
       <button
         onClick={() => setShowAiCopilot(true)}
         className="fixed bottom-5 right-5 z-40 bg-blue hover:bg-blue-deep text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg transition-colors flex items-center gap-2 min-h-[44px]"
       >
-        <span className="text-base leading-none">🤖</span>
-        <span>AI Assistant</span>
+        <span className="text-base leading-none">🧭</span>
+        <span>Guide</span>
       </button>
     </div>
   )

@@ -141,15 +141,15 @@ const NODES = [
     id: 'consignments', title: 'Flight Consignments', icon: '🇮🇹', cat: 'supply',
     badge: 'Sidebar', col: 5, row: 2, section: 'kanban',
     where: 'Sidebar → Flight Consignments.',
-    what: 'Tracks cargo boxes flying Milan (MXP) → Manila (NAIA): what is inside, which flight, and where it is now.',
-    how: ['Marco registers each box and its contents.', 'Follow the box across the board as it moves.', 'Assign the box to a staff hub for arrival.'],
+    what: 'A box is packed in Italy (items scanned in), confirmed shipped, then tracked across the Milan → PH flight to its destination hub.',
+    how: ['In Italy: pack the box and scan each product into it.', 'Confirm it shipped once it is on the plane.', 'Track it to the hub where it will be received.'],
   },
   {
-    id: 'custody', title: 'NAIA Custody Claim', icon: '🛬', cat: 'supply',
+    id: 'custody', title: 'Receive Cargo Box', icon: '🛬', cat: 'supply',
     badge: 'In Fulfillment Hub', col: 6, row: 2, section: 'omni_hub',
-    where: 'Fulfillment Hub → Italy Cargo Box Handover.',
-    what: 'When a box lands, the assigned staff claims it with a 4-digit PIN, and its items become their sellable stock.',
-    how: ['Open the box handover station.', 'Enter your station PIN to claim custody.', 'Items are added to your stock, ready to pack.'],
+    where: 'Fulfilment Hub → Box Handover.',
+    what: 'When a box arrives at your hub, you confirm arrival and scan its items to verify nothing was lost in transit — then they become your custody stock.',
+    how: ['Mark the box as arrived at your hub.', 'Scan each item to check it against the packing list.', 'Verified items become your stock, ready to pack.'],
   },
 
   // ----- SUPPORT / SETTINGS (row 3) -----
