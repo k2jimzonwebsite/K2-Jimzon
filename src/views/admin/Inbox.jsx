@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { useStore } from '../../context/StoreContext'
+import { channelMeta } from '../../lib/channelMeta'
 
 export default function Inbox() {
   const { conversations, sendMessage } = useStore()
@@ -89,10 +90,11 @@ export default function Inbox() {
                 <span className={`text-sm line-clamp-1 flex-1 pr-2 ${c.unread ? 'text-neutral-300' : 'text-white/60'}`}>
                   {c.messages[c.messages.length - 1].text}
                 </span>
-                <span className={`text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
-                  c.channel === 'WhatsApp' ? 'bg-forest/20 text-forest' : 'bg-purple-900/40 text-purple-400'
-                }`}>
-                  {c.channel}
+                <span
+                  className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
+                  style={{ color: channelMeta(c.channel).color, backgroundColor: channelMeta(c.channel).color + '22' }}
+                >
+                  {channelMeta(c.channel).label}
                 </span>
               </div>
             </button>

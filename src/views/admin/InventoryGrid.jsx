@@ -132,10 +132,27 @@ function GallerySlots({ value = [], onChange, max = 5 }) {
   )
 }
 
+// ── Stock breakdown chips (by location / channel / holder) ───────────────────
+function BreakdownRow({ icon, data }) {
+  const entries = Object.entries(data || {}).sort((a, b) => b[1] - a[1])
+  if (!entries.length) return null
+  return (
+    <div className="flex items-center gap-1 flex-wrap">
+      <span className="text-xs shrink-0">{icon}</span>
+      {entries.map(([label, qty]) => (
+        <span key={label} className="text-xs font-mono bg-white/5 border border-white/10 rounded px-1.5 py-0.5 text-neutral-200">
+          {label} <span className="font-bold text-white">{qty}</span>
+        </span>
+      ))}
+    </div>
+  )
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function InventoryGrid() {
   const [products, setProducts]       = useState([])
+  const [batchMap, setBatchMap]       = useState({})
   const [loading, setLoading]         = useState(true)
   const [editingProduct, setEditingProduct] = useState(null)
   const [batchProduct, setBatchProduct]   = useState(null)
@@ -149,8 +166,10 @@ export default function InventoryGrid() {
   useEffect(() => {
     if (!supabase) return
     fetchProducts()
+    fetchBatches()
     const ch = supabase.channel('public:products:grid')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'product_batches' }, fetchBatches)
       .subscribe()
     return () => supabase.removeChannel(ch)
   }, [])
@@ -161,6 +180,27 @@ export default function InventoryGrid() {
     const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false })
     if (!error && data) setProducts(data)
     setLoading(false)
+  }
+
+  // Load every batch once, then roll it up per-SKU: total, count, and the
+  // splits by location (hub), channel, and holder (custodian).
+  const fetchBatches = async () => {
+    if (!supabase) return
+    const { data } = await supabase.from('product_batches').select('sku, quantity, hub, custodian, channel')
+    if (!data) return
+    const map = {}
+    for (const r of data) {
+      const q = Number(r.quantity) || 0
+      if (q <= 0) continue
+      const m = map[r.sku] || (map[r.sku] = { total: 0, count: 0, hub: {}, channel: {}, custodian: {} })
+      m.total += q
+      m.count += 1
+      const hub = r.hub || 'Unassigned', ch = r.channel || 'Unassigned', cu = r.custodian || 'Unassigned'
+      m.hub[hub]        = (m.hub[hub] || 0) + q
+      m.channel[ch]     = (m.channel[ch] || 0) + q
+      m.custodian[cu]   = (m.custodian[cu] || 0) + q
+    }
+    setBatchMap(map)
   }
 
   // ── Build the full payload from editingProduct ─────────────────────────────
@@ -317,12 +357,24 @@ export default function InventoryGrid() {
                       </div>
                     </div>
 
+                    {/* Where it is / which channel — live from the batch bank */}
+                    {batchMap[p.sku] && (
+                      <div className="space-y-1.5 bg-white/5 border border-white/10 rounded-lg p-2">
+                        <p className="text-white/40 uppercase text-[10px] font-bold tracking-wider">
+                          {batchMap[p.sku].total} pcs in {batchMap[p.sku].count} lot{batchMap[p.sku].count !== 1 ? 's' : ''}
+                        </p>
+                        <BreakdownRow icon="📍" data={batchMap[p.sku].hub} />
+                        <BreakdownRow icon="🛒" data={batchMap[p.sku].channel} />
+                        <BreakdownRow icon="🙋" data={batchMap[p.sku].custodian} />
+                      </div>
+                    )}
+
                     <div className="grid grid-cols-2 gap-1.5 pt-1">
                       <button
                         onClick={() => setBatchProduct(p)}
                         className="text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-lg border border-white/10 transition-colors text-center"
                       >
-                        📦 Batches ({p.batches?.length || 1})
+                        📦 Batches ({batchMap[p.sku]?.count ?? p.batches?.length ?? 0})
                       </button>
                       <button
                         onClick={() => setAllocatingProduct(p)}
@@ -605,6 +657,7 @@ export default function InventoryGrid() {
               batches: updatedBatches,
               expiry_date: updatedBatches.sort((a, b) => new Date(a.expiry_date) - new Date(b.expiry_date))[0]?.expiry_date || p.expiry_date
             } : p))
+            fetchBatches()
           }}
         />
       )}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { peso } from '../../data/products'
 import { useStore } from '../../context/StoreContext'
+import { channelMeta } from '../../lib/channelMeta'
 import PackingSlipModal from './PackingSlipModal'
 import StaffLoginModal from './StaffLoginModal'
 
@@ -114,8 +115,8 @@ export default function OmniOperationsHub() {
       if (data && data.length > 0) {
         const formatted = data.map(o => ({
           id: o.id?.split('-')[0] || ('ORD-' + o.sku),
-          channel: o.channel_source === 'website_vip' ? 'Website VIP' : (o.origin || 'Storefront'),
-          channelColor: o.channel_source === 'website_vip' ? '#D4AF37' : '#2563EB',
+          channel: channelMeta(o.channel_source).label,
+          channelColor: channelMeta(o.channel_source).color,
           customer: o.customer_name || 'Customer',
           assignedStaff: activeStaff,
           items: [{ sku: o.sku, title: o.sku, qty: o.quantity || 1, bin: 'Fulfillment Shelf' }],

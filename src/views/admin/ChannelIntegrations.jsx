@@ -1,598 +1,248 @@
 import { useState, useEffect } from 'react'
-import { GlobeIcon, SyncIcon, CheckIcon, AlertIcon } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
-import { encryptSecret, decryptSecret, maskSecret, verify2faCode } from '../../lib/securityVault'
 
-const INITIAL_CHANNELS = {
-  shopee: {
-    name: 'Shopee Seller Center',
-    code: 'shopee',
-    color: '#ee4d2d',
-    badge: 'Official API v2.0',
-    enabled: true,
-    autoSyncStock: true,
-    autoPullOrders: true,
-    priceSync: false,
-    partnerId: '2008451',
-    appKey: 'shp_app_8f93e21a009',
-    appSecret: 'ENC_AES256::b3a0194e_537463657350707041706565706f6853',
-    accessToken: 'ENC_AES256::e491204f_6136333734313239395f6576696c5f6b6f745f706873',
-    shopId: '9841204',
-    webhookUrl: 'https://api.k2jimzon.com/webhooks/shopee/orders',
-    webhookSecret: 'ENC_AES256::c918234a_613931303066333238385f7068735f6365736877',
-    status: 'Connected',
-    lastSync: '2 minutes ago'
+// ── Derive the user's real Supabase dashboard links from the configured URL ──
+const SUPA_URL = import.meta.env.VITE_SUPABASE_URL || ''
+const REF = (SUPA_URL.match(/https?:\/\/([a-z0-9-]+)\.supabase\./i) || [])[1] || ''
+const supaBase      = REF ? `https://supabase.com/dashboard/project/${REF}` : 'https://supabase.com/dashboard'
+const SUPA_SECRETS  = REF ? `${supaBase}/settings/functions` : supaBase   // Edge Function secrets
+const SUPA_FUNCTIONS= REF ? `${supaBase}/functions`          : supaBase   // Edge Functions
+
+// ── Channel catalogue (static reference — NOT secrets) ───────────────────────
+const CHANNELS = [
+  {
+    key: 'shopee', name: 'Shopee Seller Center', color: '#ee4d2d',
+    blurb: 'Auto-pull orders into Fulfilment and keep Shopee stock in sync.',
+    devPortal: 'https://open.shopee.com',
+    secrets: ['SHOPEE_PARTNER_ID', 'SHOPEE_PARTNER_KEY', 'SHOPEE_SHOP_ID'],
   },
-  lazada: {
-    name: 'Lazada Open Platform',
-    code: 'lazada',
-    color: '#0f146d',
-    badge: 'Open API v1.0',
-    enabled: true,
-    autoSyncStock: true,
-    autoPullOrders: true,
-    priceSync: false,
-    partnerId: '109482',
-    appKey: 'laz_app_554823901',
-    appSecret: 'ENC_AES256::b3a0194e_5374636573507070417a614c',
-    accessToken: 'ENC_AES256::e491204f_6538333031323934345f6576696c5f6b6f745f7a616c',
-    shopId: 'PH_SELLER_88301',
-    webhookUrl: 'https://api.k2jimzon.com/webhooks/lazada/orders',
-    webhookSecret: 'ENC_AES256::c918234a_6234346538323931315f7a616c5f6365736877',
-    status: 'Connected',
-    lastSync: '5 minutes ago'
+  {
+    key: 'lazada', name: 'Lazada Open Platform', color: '#0f146d',
+    blurb: 'Fetch Lazada orders and push inventory updates back.',
+    devPortal: 'https://open.lazada.com',
+    secrets: ['LAZADA_APP_KEY', 'LAZADA_APP_SECRET', 'LAZADA_SELLER_ID'],
   },
-  tiktok: {
-    name: 'TikTok Shop Seller API',
-    code: 'tiktok',
-    color: '#00f2fe',
-    badge: 'Seller API 2026',
-    enabled: false,
-    autoSyncStock: true,
-    autoPullOrders: false,
-    priceSync: false,
-    partnerId: '',
-    appKey: '',
-    appSecret: '',
-    accessToken: '',
-    shopId: '',
-    webhookUrl: 'https://api.k2jimzon.com/webhooks/tiktok/orders',
-    webhookSecret: '',
-    status: 'Not Connected',
-    lastSync: 'Never'
+  {
+    key: 'tiktok', name: 'TikTok Shop', color: '#25f4ee',
+    blurb: 'Bring TikTok Shop orders into the same fulfilment queue.',
+    devPortal: 'https://partner.tiktokshop.com',
+    secrets: ['TIKTOK_APP_KEY', 'TIKTOK_APP_SECRET', 'TIKTOK_SHOP_ID'],
   },
-  meta: {
-    name: 'Meta (FB & Instagram Commerce)',
-    code: 'meta',
-    color: '#1877F2',
-    badge: 'Graph API v19.0',
-    enabled: true,
-    autoSyncStock: false,
-    autoPullOrders: true,
-    priceSync: false,
-    partnerId: 'FB_BIZ_8849201',
-    appKey: 'eaag_app_99214002',
-    appSecret: 'ENC_AES256::b3a0194e_7465726365537070416174654d',
-    accessToken: 'ENC_AES256::e491204f_3338385f6576696c5f6e656b6f745f7373656363615f47414145',
-    shopId: 'IG_BIZ_1784140029',
-    webhookUrl: 'https://api.k2jimzon.com/webhooks/facebook/messages',
-    webhookSecret: 'ENC_AES256::c918234a_6334303132383339395f62665f6365736877',
-    status: 'Connected',
-    lastSync: '10 minutes ago'
+  {
+    key: 'meta', name: 'Meta (Facebook & Instagram)', color: '#1877F2',
+    blurb: 'Pull Messenger & Instagram DMs into the unified Inbox.',
+    devPortal: 'https://developers.facebook.com',
+    secrets: ['META_APP_ID', 'META_APP_SECRET', 'META_PAGE_ACCESS_TOKEN'],
   },
-  whatsapp: {
-    name: 'WhatsApp Business & Viber Bot',
-    code: 'whatsapp',
-    color: '#25D366',
-    badge: 'Cloud API & Viber',
-    enabled: true,
-    autoSyncStock: false,
-    autoPullOrders: true,
-    priceSync: false,
-    partnerId: 'WABA_33948102',
-    appKey: 'wa_key_884920192',
-    appSecret: 'ENC_AES256::b3a0194e_7465726365537070414157',
-    accessToken: 'ENC_AES256::e491204f_30313237375f6576696c5f6e656b6f745f57414145',
-    shopId: '+639170002026',
-    webhookUrl: 'https://api.k2jimzon.com/webhooks/whatsapp/inbound',
-    webhookSecret: 'ENC_AES256::c918234a_6430313932383435355f61775f6365736877',
-    status: 'Connected',
-    lastSync: '1 minute ago'
-  }
+  {
+    key: 'whatsapp', name: 'WhatsApp Business & Viber', color: '#25D366',
+    blurb: 'Receive WhatsApp & Viber customer chats in the Inbox.',
+    devPortal: 'https://developers.facebook.com/docs/whatsapp',
+    secrets: ['WHATSAPP_TOKEN', 'WHATSAPP_PHONE_ID', 'WHATSAPP_VERIFY_TOKEN'],
+  },
+]
+
+function timeAgo(iso) {
+  if (!iso) return null
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
+  if (s < 60) return 'just now'
+  if (s < 3600) return `${Math.floor(s / 60)}m ago`
+  if (s < 86400) return `${Math.floor(s / 3600)}h ago`
+  return `${Math.floor(s / 86400)}d ago`
 }
 
 export default function ChannelIntegrations() {
-  const [channels, setChannels] = useState(() => {
-    const saved = localStorage.getItem('k2_channel_credentials')
-    return saved ? JSON.parse(saved) : INITIAL_CHANNELS
-  })
-
-  const [activeTab, setActiveTab] = useState('shopee')
-  const [testingChannel, setTestingChannel] = useState(null)
-  const [testResult, setTestResult] = useState(null)
-  const [savedSuccess, setSavedSuccess] = useState(false)
-  const [copiedKey, setCopiedKey] = useState(null)
-  
-  // 2FA Vault Unlock Modal State
-  const [isVaultUnlocked, setIsVaultUnlocked] = useState(false)
-  const [showUnlockModal, setShowUnlockModal] = useState(false)
-  const [unlockCode, setUnlockCode] = useState('')
-  const [unlockError, setUnlockError] = useState('')
-
-  const activeChannel = channels[activeTab] || channels.shopee
+  const [conns, setConns] = useState({})     // channel -> row
+  const [loading, setLoading] = useState(true)
+  const [tableMissing, setTableMissing] = useState(false)
+  const [howto, setHowto] = useState(null)   // channel object for the guide modal
 
   useEffect(() => {
-    localStorage.setItem('k2_channel_credentials', JSON.stringify(channels))
-  }, [channels])
+    if (!supabase) { setLoading(false); return }
+    fetchStatus()
+    const ch = supabase.channel('public:channel_connections')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'channel_connections' }, fetchStatus)
+      .subscribe()
+    return () => supabase.removeChannel(ch)
+  }, [])
 
-  const handleInputChange = (field, value) => {
-    let finalValue = value
-    // Encrypt sensitive secret fields automatically
-    if (field === 'appSecret' || field === 'accessToken' || field === 'webhookSecret') {
-      finalValue = encryptSecret(value)
-    }
-
-    setChannels(prev => ({
-      ...prev,
-      [activeTab]: {
-        ...prev[activeTab],
-        [field]: finalValue
-      }
-    }))
+  const fetchStatus = async () => {
+    const { data, error } = await supabase.from('channel_connections').select('*')
+    if (error) { setTableMissing(true); setLoading(false); return }
+    const map = {}
+    for (const r of data || []) map[r.channel] = r
+    setConns(map); setTableMissing(false); setLoading(false)
   }
 
-  const handleToggle = (field) => {
-    setChannels(prev => ({
-      ...prev,
-      [activeTab]: {
-        ...prev[activeTab],
-        [field]: !prev[activeTab][field]
-      }
-    }))
-  }
-
-  const handleSave = () => {
-    // Encrypt all channel secrets before saving
-    const encryptedChannels = { ...channels }
-    Object.keys(encryptedChannels).forEach(key => {
-      const ch = encryptedChannels[key]
-      if (ch.appSecret) ch.appSecret = encryptSecret(ch.appSecret)
-      if (ch.accessToken) ch.accessToken = encryptSecret(ch.accessToken)
-      if (ch.webhookSecret) ch.webhookSecret = encryptSecret(ch.webhookSecret)
-    })
-
-    localStorage.setItem('k2_channel_credentials', JSON.stringify(encryptedChannels))
-    setSavedSuccess(true)
-    setTimeout(() => setSavedSuccess(false), 3000)
-  }
-
-  const handleUnlockVault = (e) => {
-    e.preventDefault()
-    setUnlockError('')
-    if (verify2faCode(unlockCode)) {
-      setIsVaultUnlocked(true)
-      setShowUnlockModal(false)
-      setUnlockCode('')
-    } else {
-      setUnlockError('Invalid 2FA Code. (Try demo code: 202688)')
-    }
-  }
-
-  const handleTestConnection = (channelKey) => {
-    setTestingChannel(channelKey)
-    setTestResult(null)
-
-    setTimeout(() => {
-      const ch = channels[channelKey]
-      if (!ch.appKey || !ch.accessToken) {
-        setTestResult({
-          success: false,
-          message: `Missing App Key or Access Token for ${ch.name}. Please enter credentials above.`
-        })
-        setChannels(prev => ({
-          ...prev,
-          [channelKey]: { ...prev[channelKey], status: 'Auth Required' }
-        }))
-      } else {
-        setTestResult({
-          success: true,
-          message: `200 OK — Connected successfully to ${ch.name}! Webhook & auto-sync active.`
-        })
-        setChannels(prev => ({
-          ...prev,
-          [channelKey]: { ...prev[channelKey], status: 'Connected', lastSync: 'Just now' }
-        }))
-      }
-      setTestingChannel(null)
-    }, 1200)
-  }
-
-  const handleCopyWebhook = (url) => {
-    navigator.clipboard.writeText(url)
-    setCopiedKey(url)
-    setTimeout(() => setCopiedKey(null), 2000)
-  }
+  const isLive = (key) => conns[key]?.status === 'live'
+  const liveCount = CHANNELS.filter(c => isLive(c.key)).length
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-12 animate-in fade-in duration-300">
-      
-      {/* Header Banner */}
-      <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
-              Omnichannel Integration Hub
+
+      {/* Header */}
+      <div className="bg-[#18181b] border border-white/20 p-6 rounded-2xl shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full">
+              Channel Connections
             </span>
-            <span className="text-sm text-neutral-300 font-bold">Marketplaces & Social API Manager</span>
+            <h1 className="font-serif text-2xl font-bold text-white mt-2">Marketplace & chat channels</h1>
+            <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
+              Each channel goes live the moment its connector starts sending real data. Status here is live — it flips to
+              🟢 automatically. API keys are never entered here; they live safely in Supabase on the backend.
+            </p>
           </div>
-          <h1 className="font-serif text-2xl font-bold text-white">Marketplace & social API keys</h1>
-          <p className="text-sm text-neutral-300 font-medium mt-1 max-w-2xl">
-            Input your Shopee, Lazada, TikTok Shop, Meta, and WhatsApp API credentials. These keys power automatic order fetching into Global Logistics and real-time inventory sync across all sales channels.
-          </p>
+          <div className="shrink-0 text-center bg-[#0A101D] border border-white/10 rounded-xl px-5 py-3">
+            <p className="text-3xl font-extrabold text-white tabular-nums">{liveCount}<span className="text-white/40 text-xl">/{CHANNELS.length}</span></p>
+            <p className="text-xs uppercase tracking-wider text-white/50 font-bold mt-0.5">Channels live</p>
+          </div>
         </div>
 
-        <button
-          onClick={handleSave}
-          className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 shrink-0"
-        >
-          {savedSuccess ? '✓ Credentials Saved!' : '💾 Save API Credentials'}
-        </button>
+        {/* Where the keys go */}
+        <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
+          <span className="text-sm text-white/60 font-semibold">🔑 API keys &amp; connectors go here:</span>
+          <a href={SUPA_SECRETS} target="_blank" rel="noreferrer"
+            className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 py-2 rounded-lg transition-all flex items-center gap-2">
+            Open Supabase → secrets ↗
+          </a>
+          <a href={SUPA_FUNCTIONS} target="_blank" rel="noreferrer"
+            className="bg-white/10 hover:bg-white/15 text-white font-bold text-sm px-4 py-2 rounded-lg border border-white/10 transition-all">
+            Edge Functions ↗
+          </a>
+        </div>
       </div>
 
-      {/* Main Grid & Tabs */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        
-        {/* Left Column: Channel Switcher Navigation */}
-        <div className="lg:col-span-1 space-y-2">
-          <p className="text-sm font-extrabold uppercase tracking-wider text-gold px-2 mb-2">Sales & Social Channels</p>
-          {Object.keys(channels).map(key => {
-            const ch = channels[key]
-            const isSelected = activeTab === key
-            return (
-              <button
-                key={key}
-                onClick={() => { setActiveTab(key); setTestResult(null) }}
-                className={`w-full flex items-center justify-between p-4 rounded-xl border text-left transition-all ${
-                  isSelected 
-                    ? 'bg-[#27272a] border-gold shadow-lg text-white' 
-                    : 'bg-[#18181b] border-white/20 text-neutral-300 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div 
-                    className="w-3.5 h-3.5 rounded-full shrink-0 shadow"
-                    style={{ backgroundColor: ch.color }}
-                  />
-                  <div className="min-w-0">
-                    <p className="text-base font-extrabold truncate text-white">{ch.name}</p>
-                    <p className="text-sm font-mono text-neutral-300 font-bold truncate">{ch.badge}</p>
-                  </div>
-                </div>
-                <span className={`text-sm font-mono font-bold px-2.5 py-1 rounded-lg shrink-0 shadow ${
-                  ch.status === 'Connected' ? 'bg-blue text-white border border-blue' : 'bg-gold text-navy border border-gold'
-                }`}>
-                  {ch.status === 'Connected' ? '🟢 Live' : '🟡 Auth'}
-                </span>
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Right Column: Credentials Form & Controls */}
-        <div className="lg:col-span-3 space-y-6">
-          
-          {/* Active Channel Card Header */}
-          <div className="bg-[#18181b] border border-white/20 rounded-2xl p-6 shadow-xl space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
-              <div className="flex items-center gap-3">
-                <div 
-                  className="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-white text-xl shadow-md"
-                  style={{ backgroundColor: activeChannel.color }}
-                >
-                  {activeChannel.name.charAt(0)}
-                </div>
-                <div>
-                  <h2 className="font-serif text-xl font-bold text-white">{activeChannel.name}</h2>
-                  <p className="text-sm font-mono text-gold font-bold">{activeChannel.badge} · Last synced: {activeChannel.lastSync}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => handleTestConnection(activeTab)}
-                  disabled={testingChannel === activeTab}
-                  className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 shadow"
-                >
-                  {testingChannel === activeTab ? (
-                    <>
-                      <div className="w-3.5 h-3.5 rounded-full border-2 border-t-white border-transparent animate-spin" />
-                      Testing API Ping...
-                    </>
-                  ) : (
-                    <>⚡ Test Connection</>
-                  )}
-                </button>
-
-                {isVaultUnlocked ? (
-                  <button
-                    onClick={() => setIsVaultUnlocked(false)}
-                    className="bg-crimson hover:bg-crimson-deep text-white font-bold text-sm px-3.5 py-2.5 rounded-xl border border-crimson/50 transition-all flex items-center gap-1.5 shadow"
-                  >
-                    🔒 Relock Vault
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setShowUnlockModal(true)}
-                    className="bg-forest/20 hover:bg-forest/30 text-forest font-bold text-sm px-3 py-2 rounded-lg border border-forest/30 transition-all flex items-center gap-1.5"
-                  >
-                    🔓 Unlock Secrets (2FA)
-                  </button>
-                )}
-
-                <label className="flex items-center gap-2 cursor-pointer bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
-                  <span className="text-sm text-neutral-300 font-semibold">Enable Channel</span>
-                  <input
-                    type="checkbox"
-                    checked={activeChannel.enabled}
-                    onChange={() => handleToggle('enabled')}
-                    className="rounded accent-forest w-4 h-4"
-                  />
-                </label>
-              </div>
-            </div>
-
-            {/* Test Connection Banner Alert */}
-            {testResult && (
-              <div className={`p-4 rounded-xl border text-sm font-mono flex items-start gap-3 ${
-                testResult.success ? 'bg-forest/10 border-forest/30 text-forest' : 'bg-amber/10 border-amber/30 text-amber'
-              }`}>
-                <span className="text-lg">{testResult.success ? '🟢' : '🟡'}</span>
-                <div>
-                  <p className="font-bold">{testResult.success ? 'API Handshake Successful' : 'Connection Warning'}</p>
-                  <p className="text-neutral-300 mt-0.5">{testResult.message}</p>
-                </div>
-              </div>
-            )}
-
-            {/* API Credentials Input Form */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50">App & Developer Keys</h3>
-                <span className={`text-xs font-mono px-2 py-0.5 rounded border ${
-                  isVaultUnlocked ? 'bg-forest/20 text-forest border-forest/30' : 'bg-crimson/20 text-crimson border-crimson/30 font-bold'
-                }`}>
-                  {isVaultUnlocked ? '🔓 Vault Decrypted (Editing Enabled)' : '🔒 AES-256 Encrypted (Locked)'}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-mono uppercase text-white/60 mb-1">Partner ID / App ID</label>
-                  <input
-                    type="text"
-                    value={activeChannel.partnerId}
-                    onChange={(e) => handleInputChange('partnerId', e.target.value)}
-                    placeholder="e.g. 2008451"
-                    className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-sm text-white font-mono placeholder-white/20 outline-none focus:border-blue"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono uppercase text-white/60 mb-1">App Key / Client ID</label>
-                  <input
-                    type="text"
-                    value={activeChannel.appKey}
-                    onChange={(e) => handleInputChange('appKey', e.target.value)}
-                    placeholder="e.g. shp_app_8f93e21a009"
-                    className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-sm text-white font-mono placeholder-white/20 outline-none focus:border-blue"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono uppercase text-white/60 mb-1">App Secret / Client Secret</label>
-                  <input
-                    type={isVaultUnlocked ? 'text' : 'password'}
-                    value={isVaultUnlocked ? decryptSecret(activeChannel.appSecret) : maskSecret(activeChannel.appSecret)}
-                    onChange={(e) => handleInputChange('appSecret', e.target.value)}
-                    disabled={!isVaultUnlocked}
-                    placeholder="Enter App Secret..."
-                    className={`w-full rounded-lg border px-3.5 py-2.5 text-sm font-mono outline-none ${
-                      isVaultUnlocked ? 'bg-[#0A101D] border-forest text-white' : 'bg-black/50 border-white/10 text-white/60 cursor-not-allowed'
-                    }`}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono uppercase text-white/60 mb-1">Shop ID / Seller Cipher</label>
-                  <input
-                    type="text"
-                    value={activeChannel.shopId}
-                    onChange={(e) => handleInputChange('shopId', e.target.value)}
-                    placeholder="e.g. 9841204"
-                    className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-sm text-white font-mono placeholder-white/20 outline-none focus:border-blue"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-mono uppercase text-white/60 mb-1">OAuth Access Token / Bearer Token</label>
-                <input
-                  type={isVaultUnlocked ? 'text' : 'password'}
-                  value={isVaultUnlocked ? decryptSecret(activeChannel.accessToken) : maskSecret(activeChannel.accessToken)}
-                  onChange={(e) => handleInputChange('accessToken', e.target.value)}
-                  disabled={!isVaultUnlocked}
-                  placeholder="Paste OAuth Access Token..."
-                  className={`w-full rounded-lg border px-3.5 py-2.5 text-sm font-mono outline-none ${
-                    isVaultUnlocked ? 'bg-[#0A101D] border-forest text-white' : 'bg-black/50 border-white/10 text-white/60 cursor-not-allowed'
-                  }`}
-                />
-              </div>
-
-              {/* Webhook Endpoint Config */}
-              <div className="pt-2">
-                <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50 mb-3">Webhook URL</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="md:col-span-2">
-                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Incoming Webhook Callback URL</label>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        readOnly
-                        value={activeChannel.webhookUrl}
-                        className="flex-1 rounded-lg border border-white/10 bg-black/40 px-3.5 py-2.5 text-sm text-neutral-300 font-mono outline-none"
-                      />
-                      <button
-                        onClick={() => handleCopyWebhook(activeChannel.webhookUrl)}
-                        className="bg-white/10 hover:bg-white/20 text-white font-bold text-sm px-3.5 py-2.5 rounded-lg border border-white/10 transition-all shrink-0"
-                      >
-                        {copiedKey === activeChannel.webhookUrl ? '✓ Copied!' : 'Copy URL'}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Webhook Secret Verification Key</label>
-                    <input
-                      type="text"
-                      value={activeChannel.webhookSecret}
-                      onChange={(e) => handleInputChange('webhookSecret', e.target.value)}
-                      placeholder="e.g. whsec_shp_8823"
-                      className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-sm text-white font-mono placeholder-white/20 outline-none focus:border-blue"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Automation Sync Toggles */}
-              <div className="pt-4 border-t border-white/10">
-                <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50 mb-3">Sync & automation rules</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  
-                  <div className="bg-[#0A101D] border border-white/10 p-4 rounded-xl flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-bold text-white">Auto Sync Stock</p>
-                      <p className="text-xs text-white/60 mt-0.5">Decrement channel stock when sold</p>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={activeChannel.autoSyncStock}
-                      onChange={() => handleToggle('autoSyncStock')}
-                      className="rounded accent-blue w-4 h-4"
-                    />
-                  </div>
-
-                  <div className="bg-[#0A101D] border border-white/10 p-4 rounded-xl flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-bold text-white">Auto Pull Orders</p>
-                      <p className="text-xs text-white/60 mt-0.5">Push orders to Global Logistics</p>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={activeChannel.autoPullOrders}
-                      onChange={() => handleToggle('autoPullOrders')}
-                      className="rounded accent-blue w-4 h-4"
-                    />
-                  </div>
-
-                  <div className="bg-[#0A101D] border border-white/10 p-4 rounded-xl flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-bold text-white">Push Price Updates</p>
-                      <p className="text-xs text-white/60 mt-0.5">Sync master SRP changes live</p>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={activeChannel.priceSync}
-                      onChange={() => handleToggle('priceSync')}
-                      className="rounded accent-blue w-4 h-4"
-                    />
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Sync Activity Log Footer Card */}
-          <div className="bg-[#09090b] border border-white/10 rounded-2xl p-5 shadow-xl">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50">Recent channel sync activity</h3>
-              <span className="text-xs font-mono text-forest">Live Monitor Active</span>
-            </div>
-            <div className="space-y-2 text-sm font-mono">
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5">
-                <span className="text-neutral-300">Shopee Webhook Order #260722-SHP01 received $\rightarrow$ Pushed to Global Logistics</span>
-                <span className="text-white/60 text-xs">2 mins ago</span>
-              </div>
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 border border-white/5">
-                <span className="text-neutral-300">Inventory Auto-Deducted: KIKO-3D-05 (-2 units) across Shopee, Lazada & Website</span>
-                <span className="text-white/60 text-xs">5 mins ago</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* 2FA Vault Unlock Modal */}
-      {showUnlockModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-sm rounded-2xl border border-forest/40 bg-[#0A101D] p-6 text-white shadow-2xl space-y-4">
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-forest/20 text-forest font-bold text-2xl flex items-center justify-center mx-auto border border-forest/30 mb-2">
-                🔐
-              </div>
-              <h3 className="font-serif text-xl font-bold text-white">Unlock secure vault</h3>
-              <p className="text-sm text-white/60 mt-1 font-mono">
-                Enter 6-digit TOTP code to view and edit decrypted App Secrets.
-              </p>
-            </div>
-
-            <form onSubmit={handleUnlockVault} className="space-y-4">
-              {unlockError && (
-                <div className="p-2.5 rounded-lg border border-crimson/30 bg-crimson/10 text-crimson text-sm font-medium text-center animate-in shake">
-                  {unlockError}
-                </div>
-              )}
-
-              <div>
-                <input
-                  type="text"
-                  maxLength={6}
-                  value={unlockCode}
-                  onChange={(e) => setUnlockCode(e.target.value.replace(/\D/g, ''))}
-                  placeholder="202688"
-                  autoFocus
-                  required
-                  className="w-full text-center tracking-[0.4em] font-mono text-2xl font-bold rounded-xl border border-forest/50 bg-black/50 px-4 py-3 text-forest placeholder:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-forest"
-                />
-                <p className="text-xs text-white/60 mt-1.5 text-center font-mono">
-                  Demo 2FA code: <span className="text-forest font-bold">202688</span> or <span className="text-forest font-bold">123456</span>
-                </p>
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowUnlockModal(false)}
-                  className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2.5 text-sm font-semibold text-neutral-300 hover:bg-white/10 transition-all"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={unlockCode.length < 6}
-                  className="flex-1 rounded-xl bg-forest py-2.5 text-sm font-bold text-white hover:bg-forest/90 transition-all shadow-lg shadow-forest/20 disabled:opacity-50"
-                >
-                  Decrypt Vault 🔓
-                </button>
-              </div>
-            </form>
-          </div>
+      {tableMissing && (
+        <div className="bg-amber/10 border border-amber/30 text-amber rounded-xl p-4 text-sm">
+          <p className="font-bold">One-time setup needed</p>
+          <p className="text-neutral-300 mt-1">Run <span className="font-mono">RUN_THIS_channel_connections.sql</span> in the Supabase SQL editor so this board can read channel status. Until then every channel shows as not connected.</p>
         </div>
       )}
 
+      {/* Channel cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {CHANNELS.map(ch => {
+          const live = isLive(ch.key)
+          const row = conns[ch.key]
+          return (
+            <div key={ch.key} className={`rounded-2xl border p-5 shadow-lg transition-all ${
+              live ? 'bg-forest/5 border-forest/40' : 'bg-[#18181b] border-white/15'
+            }`}>
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-white text-lg shadow-md shrink-0"
+                    style={{ backgroundColor: ch.color }}>
+                    {ch.name.charAt(0)}
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-base font-bold text-white truncate">{ch.name}</h3>
+                    <p className="text-sm text-white/55 truncate">{ch.blurb}</p>
+                  </div>
+                </div>
+                <span className={`shrink-0 text-sm font-mono font-bold px-2.5 py-1 rounded-lg border ${
+                  live ? 'bg-forest/20 text-forest border-forest/40' : 'bg-white/5 text-white/50 border-white/15'
+                }`}>
+                  {live ? '🟢 Live' : '⚪ Not connected'}
+                </span>
+              </div>
+
+              <div className="mt-4 flex items-center justify-between">
+                <p className="text-xs font-mono text-white/45">
+                  {live
+                    ? `Receiving data${row?.last_event_at ? ` · last event ${timeAgo(row.last_event_at)}` : ''}`
+                    : (row?.note || 'No data received yet')}
+                </p>
+                {!live && (
+                  <button
+                    onClick={() => setHowto(ch)}
+                    className="bg-blue hover:bg-blue/90 text-white font-bold text-sm px-4 py-2 rounded-lg transition-all flex items-center gap-1.5"
+                  >
+                    📘 How to connect
+                  </button>
+                )}
+                {live && (
+                  <button
+                    onClick={() => setHowto(ch)}
+                    className="text-sm font-semibold text-white/50 hover:text-white transition-colors"
+                  >
+                    View setup
+                  </button>
+                )}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* How-to guide modal */}
+      {howto && (
+        <ConnectGuide channel={howto} onClose={() => setHowto(null)} />
+      )}
+    </div>
+  )
+}
+
+// ── Step-by-step connect guide (teaches a non-technical helper) ──────────────
+function ConnectGuide({ channel, onClose }) {
+  const steps = [
+    {
+      t: `Get developer access on ${channel.name}`,
+      d: <>Sign in to the {channel.name} developer portal and create an app so it gives you API keys.
+        <a href={channel.devPortal} target="_blank" rel="noreferrer" className="text-blue font-semibold ml-1 underline">{channel.devPortal} ↗</a></>,
+    },
+    {
+      t: 'Copy your keys',
+      d: <>You'll be given values like: <span className="font-mono text-white">{channel.secrets.join(', ')}</span>. Keep them private — treat them like passwords.</>,
+    },
+    {
+      t: 'Paste the keys into Supabase (not here)',
+      d: <>Open Supabase → Edge Function secrets and add each key by name. This is the ONLY safe place for them — never type an API secret into this dashboard or any web page.
+        <a href={SUPA_SECRETS} target="_blank" rel="noreferrer" className="block mt-2 bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 py-2 rounded-lg w-fit">Open Supabase secrets ↗</a></>,
+    },
+    {
+      t: 'Deploy the connector',
+      d: <>Deploy the {channel.name} connector function (the webhook that receives orders/messages) in Supabase → Edge Functions.
+        <a href={SUPA_FUNCTIONS} target="_blank" rel="noreferrer" className="block mt-2 bg-white/10 hover:bg-white/15 text-white font-bold text-sm px-4 py-2 rounded-lg border border-white/10 w-fit">Open Edge Functions ↗</a></>,
+    },
+    {
+      t: 'Point the webhook & go live',
+      d: <>In {channel.name}'s settings, set the webhook URL to your deployed function. As soon as it processes the first real order or message, this card flips to <span className="text-forest font-bold">🟢 Live</span> automatically — no button to press.</>,
+    },
+  ]
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 animate-in fade-in duration-200" onClick={onClose}>
+      <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#0A101D] p-5 sm:p-6 text-white shadow-2xl" onClick={e => e.stopPropagation()}>
+        <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-4 mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white shadow-md" style={{ backgroundColor: channel.color }}>
+              {channel.name.charAt(0)}
+            </div>
+            <div>
+              <h2 className="font-serif text-xl font-bold">Connect {channel.name}</h2>
+              <p className="text-sm text-white/55">Follow these 5 steps. Keys stay on the backend.</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-lg bg-white/5 text-white/50 hover:text-white hover:bg-white/10">✕</button>
+        </div>
+
+        <ol className="space-y-4">
+          {steps.map((s, i) => (
+            <li key={i} className="flex gap-3">
+              <span className="shrink-0 w-7 h-7 rounded-full bg-blue/20 text-blue border border-blue/40 font-bold flex items-center justify-center text-sm">{i + 1}</span>
+              <div>
+                <p className="font-bold text-white">{s.t}</p>
+                <p className="text-sm text-white/70 mt-0.5 leading-relaxed">{s.d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-5 pt-4 border-t border-white/10 bg-amber/5 -mx-5 sm:-mx-6 px-5 sm:px-6 -mb-5 sm:-mb-6 pb-5 rounded-b-2xl">
+          <p className="text-xs text-amber font-semibold">🔒 Safety: API keys are like passwords. They go only into Supabase secrets on the backend — never into this dashboard, chat, or email.</p>
+        </div>
+      </div>
     </div>
   )
 }

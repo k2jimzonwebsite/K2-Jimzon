@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from '../../lib/supabaseClient'
 
 export function getExpiryHealth(dateString) {
   if (!dateString || typeof dateString !== 'string') {
@@ -38,15 +39,44 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
         qty: product?.stock || product?.stock_available || 12,
         expiry_date: product?.expiry_date || '2026-08-15',
         landed_date: '2026-07-02',
+        hub: '',
+        custodian: '',
+        channel: '',
         is_pinned: false
       }
     ]
   })
 
+  // Load this product's real batches from Supabase (falls back to the initial state above)
+  useEffect(() => {
+    if (!supabase || !product?.sku) return
+    let active = true
+    supabase.from('product_batches').select('*').eq('sku', product.sku).order('expiry_date', { ascending: true })
+      .then(({ data }) => {
+        if (active && Array.isArray(data) && data.length > 0) {
+          setBatches(data.map((r) => ({
+            id: r.id,
+            box_code: r.box_code || '',
+            qty: r.quantity ?? 0,
+            expiry_date: r.expiry_date || '',
+            landed_date: r.landed_date || '',
+            hub: r.hub || '',
+            custodian: r.custodian || '',
+            channel: r.channel || '',
+            is_pinned: !!r.is_pinned,
+          })))
+        }
+      })
+    return () => { active = false }
+  }, [product?.sku])
+
   // New Batch Form State
   const [newBoxCode, setNewBoxCode] = useState('')
   const [newQty, setNewQty] = useState(10)
   const [newExpiryDate, setNewExpiryDate] = useState('2026-11-30')
+  const [newHub, setNewHub] = useState('')
+  const [newCustodian, setNewCustodian] = useState('')
+  const [newChannel, setNewChannel] = useState('')
 
   const handleUpdateBatchField = (id, field, value) => {
     setBatches(prev => prev.map(b => b.id === id ? { ...b, [field]: value } : b))
@@ -66,22 +96,45 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
       qty: Number(newQty),
       expiry_date: newExpiryDate,
       landed_date: new Date().toISOString().split('T')[0],
+      hub: newHub,
+      custodian: newCustodian,
+      channel: newChannel,
       is_pinned: false
     }
 
     setBatches(prev => [...prev, newBatch])
     setNewBoxCode('')
     setNewQty(10)
+    setNewHub('')
+    setNewCustodian('')
+    setNewChannel('')
   }
 
   const handleDeleteBatch = (id) => {
     setBatches(prev => prev.filter(b => b.id !== id))
   }
 
-  const handleSave = () => {
-    if (onSaveBatches && product) {
-      onSaveBatches(product.sku || product.id, batches)
+  const handleSave = async () => {
+    const sku = product?.sku || product?.id
+    if (supabase && sku) {
+      // Replace this SKU's batches with the current edited list
+      await supabase.from('product_batches').delete().eq('sku', sku)
+      const rows = batches
+        .filter((b) => Number(b.qty) > 0 || b.expiry_date)
+        .map((b) => ({
+          sku,
+          box_code: b.box_code || null,
+          quantity: Number(b.qty) || 0,
+          expiry_date: b.expiry_date || null,
+          landed_date: b.landed_date || null,
+          hub: b.hub || null,
+          custodian: b.custodian || null,
+          channel: b.channel || null,
+          is_pinned: !!b.is_pinned,
+        }))
+      if (rows.length) await supabase.from('product_batches').insert(rows)
     }
+    if (onSaveBatches && product) onSaveBatches(sku, batches)
     onClose()
   }
 
@@ -205,6 +258,42 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                       />
                     </div>
                   </div>
+
+                  {/* Where it is · Who holds it · Which channel */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs text-white/60 uppercase mb-1">📍 Location / Hub</label>
+                      <input
+                        type="text"
+                        value={b.hub || ''}
+                        placeholder="e.g. Manila Hub"
+                        onChange={(e) => handleUpdateBatchField(b.id, 'hub', e.target.value)}
+                        className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-2.5 py-1.5 text-white font-mono outline-none focus:border-blue"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs text-white/60 uppercase mb-1">🙋 Held By (Staff)</label>
+                      <input
+                        type="text"
+                        value={b.custodian || ''}
+                        placeholder="e.g. Ate Rose"
+                        onChange={(e) => handleUpdateBatchField(b.id, 'custodian', e.target.value)}
+                        className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-2.5 py-1.5 text-white font-mono outline-none focus:border-blue"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs text-white/60 uppercase mb-1">🛒 Channel / Platform</label>
+                      <input
+                        type="text"
+                        value={b.channel || ''}
+                        placeholder="e.g. Shopee"
+                        onChange={(e) => handleUpdateBatchField(b.id, 'channel', e.target.value)}
+                        className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-2.5 py-1.5 text-white font-mono outline-none focus:border-blue"
+                      />
+                    </div>
+                  </div>
                 </div>
               )
             })}
@@ -243,6 +332,39 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                 required
                 value={newExpiryDate}
                 onChange={(e) => setNewExpiryDate(e.target.value)}
+                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-forest"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs text-white/60 mb-1">📍 Location / Hub</label>
+              <input
+                type="text"
+                value={newHub}
+                onChange={(e) => setNewHub(e.target.value)}
+                placeholder="e.g. Manila Hub"
+                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-forest"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs text-white/60 mb-1">🙋 Held By (Staff)</label>
+              <input
+                type="text"
+                value={newCustodian}
+                onChange={(e) => setNewCustodian(e.target.value)}
+                placeholder="e.g. Ate Rose"
+                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-forest"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs text-white/60 mb-1">🛒 Channel / Platform</label>
+              <input
+                type="text"
+                value={newChannel}
+                onChange={(e) => setNewChannel(e.target.value)}
+                placeholder="e.g. Shopee"
                 className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-forest"
               />
             </div>

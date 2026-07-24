@@ -261,10 +261,10 @@ export default function Admin() {
             <button
               onClick={() => setShowDailyTasks(true)}
               className="relative flex items-center gap-1.5 min-h-[40px] rounded-lg border border-white/10 bg-white/[0.04] text-white/80 hover:bg-white/10 hover:text-white text-sm px-3 transition-colors"
-              title="Daily tasks & expirations"
+              title="Expiry alerts"
             >
               <span>🔔</span>
-              <span>4 tasks</span>
+              <span className="hidden sm:inline">Alerts</span>
             </button>
 
             <button

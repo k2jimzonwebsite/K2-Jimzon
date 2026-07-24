@@ -141,15 +141,15 @@ const NODES = [
     id: 'consignments', title: 'Flight Consignments', icon: '🇮🇹', cat: 'supply',
     badge: 'Sidebar', col: 5, row: 2, section: 'kanban',
     where: 'Sidebar → Flight Consignments.',
-    what: 'A box is packed in Italy (items scanned in), confirmed shipped, then tracked across the Milan → PH flight to its destination hub.',
-    how: ['In Italy: pack the box and scan each product into it.', 'Confirm it shipped once it is on the plane.', 'Track it to the hub where it will be received.'],
+    what: "The box's whole journey: packed in Italy (items scanned in), confirmed shipped, then scanned again on arrival in PH to verify nothing was lost.",
+    how: ['In Italy: pack the box and scan each product into it.', 'Confirm it shipped once it is on the plane.', 'On arrival, scan the items to verify against the packing list (discrepancy check).'],
   },
   {
-    id: 'custody', title: 'Receive Cargo Box', icon: '🛬', cat: 'supply',
+    id: 'custody', title: 'Your Custody Stock', icon: '📥', cat: 'supply',
     badge: 'In Fulfillment Hub', col: 6, row: 2, section: 'omni_hub',
     where: 'Fulfilment Hub → Box Handover.',
-    what: 'When a box arrives at your hub, you confirm arrival and scan its items to verify nothing was lost in transit — then they become your custody stock.',
-    how: ['Mark the box as arrived at your hub.', 'Scan each item to check it against the packing list.', 'Verified items become your stock, ready to pack.'],
+    what: 'Once a received box is scan-verified, its items become your custody stock in the Fulfilment Hub — what you personally hold and ship orders from.',
+    how: ['Open Fulfilment Hub → Box Handover to see stock credited to you.', 'Pack customer orders from your custody stock.', 'Transfer to another staff member if needed.'],
   },
 
   // ----- SUPPORT / SETTINGS (row 3) -----
