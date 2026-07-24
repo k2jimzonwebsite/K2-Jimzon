@@ -6,157 +6,104 @@ import { channelMeta } from '../../lib/channelMeta'
 import PackingSlipModal from './PackingSlipModal'
 import StaffLoginModal from './StaffLoginModal'
 
-const INITIAL_CARGO_BOXES = [
-  {
-    box_code: 'MIL-BOX-092',
-    flight_num: 'AZ-772 (Malpensa MXP → MNL)',
-    assigned_staff: 'Elena Guerrero',
-    location: 'Makati Hub',
-    status: 'Arrived at Manila Customs',
-    items: [
-      { sku: 'KIKO-3D-05', title: 'KIKO Milano 3D Lipgloss Shade 05', qty: 4, expiry: '2026-08-15' },
-      { sku: 'MUL-PAN-500', title: 'Mulino Bianco Pan di Stelle 500g', qty: 6, expiry: '2026-10-30' }
-    ]
-  },
-  {
-    box_code: 'MIL-BOX-104',
-    flight_num: 'AZ-772 (Malpensa MXP → MNL)',
-    assigned_staff: 'Juan Dela Cruz',
-    location: 'Quezon City Hub',
-    status: 'Arrived at Manila Customs',
-    items: [
-      { sku: 'KIKO-3D-05', title: 'KIKO Milano 3D Lipgloss Shade 05', qty: 2, expiry: '2026-08-15' },
-      { sku: 'LAV-ORO-250', title: 'Lavazza Qualità Oro Beans 250g', qty: 10, expiry: '2026-12-31' }
-    ]
-  },
-  {
-    box_code: 'MIL-BOX-110',
-    flight_num: 'PR-439 (Milan → Manila)',
-    assigned_staff: 'Maria Santos',
-    location: 'Alabang Hub',
-    status: 'In Flight Transit',
-    items: [
-      { sku: 'URB-TRUF-250', title: 'Urbani White Truffle Oil 250ml', qty: 5, expiry: '2027-02-15' }
-    ]
-  }
-]
-
-const MOCK_PICK_ORDERS = [
-  {
-    id: 'ORD-SHP-8821',
-    channel: 'Shopee',
-    channelColor: '#ee4d2d',
-    customer: 'Juan Dela Cruz',
-    assignedStaff: 'Elena Guerrero',
-    items: [
-      { sku: 'KIKO-3D-05', title: 'KIKO Milano 3D Lipgloss Shade 05', qty: 2, bin: 'Shelf A-02' },
-      { sku: 'MUL-PAN-500', title: 'Mulino Bianco Pan di Stelle 500g', qty: 1, bin: 'Shelf B-11' }
-    ],
-    status: 'Ready to Pack',
-    courier: 'J&T Express',
-    tracking: 'JT991024881'
-  },
-  {
-    id: 'ORD-LZD-4412',
-    channel: 'Lazada',
-    channelColor: '#0f146d',
-    customer: 'Maria Santos',
-    assignedStaff: 'Elena Guerrero',
-    items: [
-      { sku: 'MUL-PAN-500', title: 'Mulino Bianco Pan di Stelle 500g', qty: 3, bin: 'Shelf B-11' }
-    ],
-    status: 'Ready to Pack',
-    courier: 'Lazada Logistics',
-    tracking: 'LZD00192841'
-  },
-  {
-    id: 'ORD-VIP-9901',
-    channel: 'Website VIP',
-    channelColor: '#D4AF37',
-    customer: 'Boutique Caffe Manila',
-    assignedStaff: 'Juan Dela Cruz',
-    items: [
-      { sku: 'LAV-ORO-250', title: 'Lavazza Qualità Oro Beans 250g', qty: 10, bin: 'Bulk Pallet 4' }
-    ],
-    status: 'Ready to Pack',
-    courier: 'Lalamove Cargo',
-    tracking: 'LLM-MNL-552'
-  }
-]
-
 export default function OmniOperationsHub() {
-  const { currentStaff, setStaffPinModalOpen } = useStore()
-  
+  const { products } = useStore()
+
   const [activeRole, setActiveRole] = useState('manila_warehouse')
-  const [activeStaff, setActiveStaff] = useState('Elena Guerrero')
-  const [cargoBoxes, setCargoBoxes] = useState(() => {
-    try {
-      const saved = localStorage.getItem('k2_cargo_boxes')
-      return saved ? JSON.parse(saved) : []
-    } catch {
-      return []
-    }
-  })
+  const [activeStaff, setActiveStaff] = useState('')
+  const [staffList, setStaffList] = useState([])
+
+  // Pull the REAL staff (from Staff & Roles) so this screen shows your actual
+  // accounts, not hardcoded names. Falls back to whatever is set if none exist.
+  useEffect(() => {
+    if (!supabase) return
+    supabase.from('user_profiles').select('email, role').in('role', ['Admin', 'Staff'])
+      .then(({ data }) => {
+        const names = (data || []).map(u => (u.email || '').split('@')[0]).filter(Boolean)
+        if (names.length) { setStaffList(names); setActiveStaff(names[0]) }
+      })
+  }, [])
+  const [cargoBoxes, setCargoBoxes] = useState([])
   const [orders, setOrders] = useState([])
   const [scanBarcode, setScanBarcode] = useState('')
   const [scanMessage, setScanMessage] = useState(null)
   const [packedCount, setPackedCount] = useState(0)
   const [printSlipOrder, setPrintSlipOrder] = useState(null)
   const [showStaffPinModal, setShowStaffPinModal] = useState(false)
+  const [loadingBoxes, setLoadingBoxes] = useState(true)
+  const [loadingOrders, setLoadingOrders] = useState(true)
+  const [transferSku, setTransferSku] = useState('')
+  const [transferTo, setTransferTo] = useState('')
+
+  const nameFor = (sku) => (products || []).find(p => p.sku === sku)?.name || sku
 
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase) { setLoadingBoxes(false); setLoadingOrders(false); return }
     fetchLiveOrders()
+    fetchBoxes()
+    const ch = supabase.channel('omni_hub')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, fetchLiveOrders)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'product_batches' }, fetchBoxes)
+      .subscribe()
+    return () => supabase.removeChannel(ch)
   }, [])
 
+  // Orders queue = real, unshipped orders from the orders table.
   const fetchLiveOrders = async () => {
-    if (!supabase) return;
-    try {
-      const { data } = await supabase.from('orders').select('*').order('created_at', { ascending: false })
-      if (data && data.length > 0) {
-        const formatted = data.map(o => ({
-          id: o.id?.split('-')[0] || ('ORD-' + o.sku),
-          channel: channelMeta(o.channel_source).label,
-          channelColor: channelMeta(o.channel_source).color,
-          customer: o.customer_name || 'Customer',
-          assignedStaff: activeStaff,
-          items: [{ sku: o.sku, title: o.sku, qty: o.quantity || 1, bin: 'Fulfillment Shelf' }],
-          status: o.order_status || 'Ready to Pack',
-          courier: 'J&T Express / Lalamove',
-          tracking: 'TRK-' + String(o.id || Math.floor(Math.random() * 10000))
-        }))
-        setOrders(formatted)
-        setPackedCount(formatted.filter(f => f.status.includes('Packed')).length)
-      } else {
-        setOrders([])
-        setPackedCount(0)
-      }
-    } catch (e) {
-      console.warn("OmniOperationsHub live order fetch warning:", e)
+    setLoadingOrders(true)
+    const { data } = await supabase.from('orders').select('*')
+      .not('order_status', 'in', '("Shipped","Cancelled")')
+      .order('created_at', { ascending: false })
+    const formatted = (data || []).map(o => ({
+      id: o.id,
+      shortId: String(o.id).slice(0, 8),
+      channel: channelMeta(o.channel_source).label,
+      channelColor: channelMeta(o.channel_source).color,
+      customer: o.customer_name || 'Customer',
+      items: [{ sku: o.sku, title: nameFor(o.sku), qty: o.quantity || 1 }],
+      status: o.order_status || 'Pending',
+      courier: o.fulfillment_method || '—',
+    }))
+    setOrders(formatted)
+    setPackedCount(formatted.filter(f => String(f.status).includes('Packed')).length)
+    setLoadingOrders(false)
+  }
+
+  // Cargo boxes = real batches grouped by their box code (custodian = who holds it).
+  const fetchBoxes = async () => {
+    setLoadingBoxes(true)
+    const { data } = await supabase.from('product_batches')
+      .select('box_code, sku, quantity, custodian, hub').gt('quantity', 0)
+    const map = {}
+    for (const r of data || []) {
+      const code = r.box_code || 'No box code'
+      const b = map[code] || (map[code] = { box_code: code, assigned_staff: r.custodian || '', location: r.hub || '', items: [] })
+      if (!b.assigned_staff && r.custodian) b.assigned_staff = r.custodian
+      if (!b.location && r.hub) b.location = r.hub
+      b.items.push({ sku: r.sku, title: nameFor(r.sku), qty: r.quantity })
+    }
+    setCargoBoxes(Object.values(map))
+    setLoadingBoxes(false)
+  }
+
+  // Claim / reassign a box's custody = update the custodian on its batches.
+  const handleReassignBoxStaff = async (boxCode, newStaff) => {
+    setCargoBoxes(prev => prev.map(b => b.box_code === boxCode ? { ...b, assigned_staff: newStaff } : b))
+    if (supabase && boxCode && boxCode !== 'No box code') {
+      await supabase.from('product_batches').update({ custodian: newStaff }).eq('box_code', boxCode)
     }
   }
+  const handleClaimBoxCustody = (boxCode) => handleReassignBoxStaff(boxCode, activeStaff)
 
-  const handleClaimBoxCustody = (boxCode) => {
-    setCargoBoxes(prev => prev.map(b => {
-      if (b.box_code === boxCode) {
-        return {
-          ...b,
-          assigned_staff: activeStaff,
-          status: `Claimed by ${activeStaff} ✓`
-        }
-      }
-      return b
-    }))
-    alert(`✓ Box [${boxCode}] custody claimed by ${activeStaff}! SKUs transferred to ${activeStaff}'s local warehouse inventory balance.`)
-  }
-
-  const handleReassignBoxStaff = (boxCode, newStaff) => {
-    setCargoBoxes(prev => prev.map(b => {
-      if (b.box_code === boxCode) {
-        return { ...b, assigned_staff: newStaff }
-      }
-      return b
-    }))
+  // Real custody transfer: move every unit of a SKU to another staff member.
+  const handleTransfer = async (e) => {
+    e.preventDefault()
+    if (!transferSku || !transferTo || !supabase) return
+    await supabase.from('product_batches').update({ custodian: transferTo }).eq('sku', transferSku)
+    setScanMessage({ success: true, text: `✓ Moved custody of ${nameFor(transferSku)} to ${transferTo}.` })
+    setTransferSku(''); setTransferTo('')
+    fetchBoxes()
+    setTimeout(() => setScanMessage(null), 3500)
   }
 
   const handleVerifyScan = (e) => {
@@ -220,9 +167,9 @@ export default function OmniOperationsHub() {
             onChange={(e) => setActiveStaff(e.target.value)}
             className="w-full bg-[#161922] border border-gold text-sm font-bold text-white rounded-lg px-3 py-2 outline-none"
           >
-            <option value="Elena Guerrero">👤 Elena Guerrero (Makati Hub)</option>
-            <option value="Juan Dela Cruz">👤 Juan Dela Cruz (Quezon City Hub)</option>
-            <option value="Marco Rossi">🇮🇹 Marco Rossi (Milan Sourcing Lead)</option>
+            {(staffList.length ? staffList : [activeStaff]).filter(Boolean).map(n => (
+              <option key={n} value={n}>👤 {n}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -261,19 +208,15 @@ export default function OmniOperationsHub() {
           
           {/* Barcode Verification Scanner Header */}
           <div className="bg-[#161922] border border-white/10 p-4 sm:p-6 rounded-2xl shadow-xl space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">📦</span>
-                <div>
-                  <h3 className="text-lg font-bold text-white">{activeStaff}'s Pack-to-Ship Verification Station</h3>
-                  <p className="text-sm text-neutral-300 font-medium">Point barcode scanner to verify item before sealing polybag</p>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-base">📦</span>
+                <div className="min-w-0">
+                  <h3 className="text-[15px] font-semibold text-white truncate">Pack &amp; ship — {activeStaff}</h3>
+                  <p className="text-xs text-white/50">Scan each item before sealing the polybag.</p>
                 </div>
               </div>
-
-              <div className="flex items-center gap-3 text-sm font-mono">
-                <span className="text-neutral-300 font-bold">Shift Packed:</span>
-                <span className="text-white font-bold text-base bg-blue px-3.5 py-1.5 rounded-xl border border-blue/50 shadow">{packedCount} orders</span>
-              </div>
+              <span className="shrink-0 text-xs font-semibold text-white bg-blue px-2.5 py-1 rounded-lg">{packedCount} packed</span>
             </div>
 
             <form onSubmit={handleVerifyScan} className="flex flex-col sm:flex-row gap-3">
@@ -301,60 +244,57 @@ export default function OmniOperationsHub() {
             )}
           </div>
 
-          {/* Orders Queue for Active Staff Member */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-extrabold uppercase tracking-wider text-gold">
-              {activeStaff}'s Assigned Shipping Queue
-            </h3>
+          {/* Orders Queue — real, unshipped orders */}
+          <div className="space-y-3">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-gold">Shipping queue</h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {orders.map(ord => (
-                <div key={ord.id} className="bg-[#161922] border border-white/10 rounded-2xl p-5 shadow-xl space-y-4 flex flex-col justify-between hover:border-gold/40 transition-all">
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <span 
-                        className="text-sm font-bold text-white px-3 py-1 rounded-lg shadow"
-                        style={{ backgroundColor: ord.channelColor }}
-                      >
-                        {ord.channel}
-                      </span>
-                      <span className="text-sm font-mono text-gold font-bold">{ord.id}</span>
-                    </div>
+            {loadingOrders ? (
+              <p className="text-sm text-white/40 py-8 text-center">Loading orders…</p>
+            ) : orders.length === 0 ? (
+              <div className="rounded-2xl border border-white/10 bg-[#161922] p-8 text-center">
+                <p className="text-sm text-white/60">No orders to pack</p>
+                <p className="text-xs text-white/40 mt-1">New orders from your channels land here automatically.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {orders.map(ord => (
+                  <div key={ord.id} className="bg-[#161922] border border-white/10 rounded-2xl p-4 shadow-lg space-y-3 flex flex-col justify-between hover:border-gold/40 transition-all">
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[11px] font-bold text-white px-2 py-0.5 rounded" style={{ backgroundColor: ord.channelColor }}>
+                          {ord.channel}
+                        </span>
+                        <span className="text-[11px] font-mono text-white/40">#{ord.shortId}</span>
+                      </div>
 
-                    <p className="text-lg font-bold text-white">{ord.customer}</p>
-                    <p className="text-sm text-neutral-300 font-mono mt-1 font-semibold">{ord.courier} · {ord.tracking}</p>
+                      <p className="text-sm font-semibold text-white">{ord.customer}</p>
+                      {ord.courier !== '—' && <p className="text-xs text-white/50 font-mono mt-0.5">{ord.courier}</p>}
 
-                    <div className="mt-4 pt-3 border-t border-white/10 space-y-2">
-                      <p className="text-sm font-extrabold uppercase tracking-wider text-gold">Pick Items from {activeStaff}'s Custody Stock:</p>
-                      {ord.items.map((it, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/10 text-sm font-bold">
-                          <div>
-                            <p className="font-bold text-white text-base">{it.title}</p>
-                            <p className="text-sm text-gold font-mono">{it.bin}</p>
+                      <div className="mt-3 pt-2.5 border-t border-white/10 space-y-1.5">
+                        {ord.items.map((it, idx) => (
+                          <div key={idx} className="flex items-center justify-between gap-2">
+                            <p className="text-[13px] text-white truncate">{it.title}</p>
+                            <span className="text-xs text-white font-semibold bg-blue px-2 py-0.5 rounded shrink-0">x{it.qty}</span>
                           </div>
-                          <span className="text-white font-bold bg-blue px-2.5 py-1 rounded-lg shadow">x{it.qty}</span>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-2.5 border-t border-white/10 flex items-center justify-between gap-2">
+                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded ${
+                        String(ord.status).includes('Packed') ? 'bg-blue text-white' : 'bg-gold text-navy'
+                      }`}>
+                        {ord.status}
+                      </span>
+                      <button onClick={() => setPrintSlipOrder(ord)}
+                        className="bg-white/10 hover:bg-white/15 text-white font-semibold text-xs px-3 min-h-9 rounded-lg transition-all flex items-center gap-1 shrink-0">
+                        🖨️ Slip
+                      </button>
                     </div>
                   </div>
-
-                  <div className="pt-3 border-t border-white/10 flex items-center justify-between">
-                    <span className={`text-sm font-bold px-3 py-1 rounded-lg shadow ${
-                      ord.status.includes('Packed') ? 'bg-blue text-white border border-blue' : 'bg-gold text-navy border border-gold'
-                    }`}>
-                      {ord.status}
-                    </span>
-
-                    <button
-                      onClick={() => setPrintSlipOrder(ord)}
-                      className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 min-h-[40px]"
-                    >
-                      🖨️ Print Shipping Slip
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
         </div>
@@ -365,76 +305,82 @@ export default function OmniOperationsHub() {
         <div className="space-y-6">
           
           <div className="bg-[#161922] border border-white/10 p-4 sm:p-6 rounded-2xl shadow-xl space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
               <div>
-                <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
-                  NAIA Cargo Box Handover & Custody Claim
+                <span className="text-[11px] font-mono font-bold uppercase tracking-wide bg-gold text-navy px-2 py-0.5 rounded-full">
+                  Box handover
                 </span>
-                <h2 className="font-serif text-lg sm:text-2xl font-bold text-white mt-2">Italy box arrivals & staff handover</h2>
-                <p className="text-sm text-neutral-300 font-medium mt-1">Transfer specific flight boxes to staff members and claim SKU custody into local hubs.</p>
+                <h2 className="font-serif text-base sm:text-xl font-bold text-white mt-1.5">Italy box arrivals &amp; handover</h2>
+                <p className="text-xs text-white/50 mt-0.5">Assign flight boxes to staff and claim SKU custody into a hub.</p>
               </div>
-
-              <span className="text-sm font-bold text-white">Active Custodian: <strong className="text-gold font-extrabold text-base">{activeStaff}</strong></span>
+              <span className="text-xs text-white/60">Custodian: <strong className="text-gold">{activeStaff}</strong></span>
             </div>
 
             {/* Cargo Box Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+            {loadingBoxes ? (
+              <p className="text-sm text-white/40 py-8 text-center">Loading boxes…</p>
+            ) : cargoBoxes.length === 0 ? (
+              <div className="rounded-2xl border border-white/10 bg-[#161922] p-8 text-center">
+                <p className="text-sm text-white/60">No boxes yet</p>
+                <p className="text-xs text-white/40 mt-1">Boxes appear here once you record received stock with a box code (Inventory → a product → Batches).</p>
+              </div>
+            ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
               {cargoBoxes.map((box) => {
                 const isAssignedToActive = box.assigned_staff === activeStaff
-                const isClaimed = box.status.includes('Claimed')
 
                 return (
                   <div
                     key={box.box_code}
-                    className={`p-5 rounded-2xl border transition-all space-y-4 ${
-                      isAssignedToActive ? 'bg-[#27272a] border-gold shadow-xl' : 'bg-[#161922] border-white/10 opacity-75'
+                    className={`p-3.5 rounded-2xl border transition-all space-y-3 ${
+                      isAssignedToActive ? 'bg-[#27272a] border-gold shadow-lg' : 'bg-[#161922] border-white/10'
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-mono font-bold text-gold bg-black/60 px-3 py-1 rounded-lg border border-gold">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] font-mono font-bold text-gold bg-black/50 px-2 py-0.5 rounded border border-gold/50">
                         {box.box_code}
                       </span>
-                      <span className="text-sm font-mono text-neutral-300 font-bold">{box.flight_num}</span>
+                      {box.location && <span className="text-[11px] font-mono text-white/50">📍{box.location}</span>}
                     </div>
 
                     <div>
-                      <label className="block text-sm font-extrabold uppercase text-gold mb-1">Assigned Staff Custodian:</label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wide text-gold mb-1">Custodian</label>
                       <select
                         value={box.assigned_staff}
                         onChange={(e) => handleReassignBoxStaff(box.box_code, e.target.value)}
-                        className="w-full bg-[#161922] border border-white/10 text-sm font-bold text-white rounded-lg px-3 py-2 outline-none focus:border-gold"
+                        className="w-full bg-[#161922] border border-white/10 text-sm text-white rounded-lg px-3 min-h-10 py-2 outline-none focus:border-gold"
                       >
-                        <option value="Elena Guerrero">Elena Guerrero (Makati Hub)</option>
-                        <option value="Juan Dela Cruz">Juan Dela Cruz (Quezon City Hub)</option>
-                        <option value="Maria Santos">Maria Santos (Alabang Hub)</option>
+                        {Array.from(new Set([box.assigned_staff, ...staffList])).filter(Boolean).map(n => (
+                          <option key={n} value={n}>{n}</option>
+                        ))}
                       </select>
                     </div>
 
                     {/* Box SKUs Contents */}
-                    <div className="bg-white/10 border border-white/10 p-3.5 rounded-xl space-y-2 text-sm font-bold">
-                      <p className="text-sm text-gold uppercase font-extrabold">Box SKU Breakdown:</p>
+                    <div className="bg-white/5 border border-white/10 p-3 rounded-xl space-y-1.5">
+                      <p className="text-[11px] text-gold uppercase font-bold tracking-wide">Box contents</p>
                       {box.items.map((it, idx) => (
-                        <div key={idx} className="flex justify-between text-white">
-                          <span>{it.title}</span>
-                          <span className="text-gold font-bold">x{it.qty} pcs</span>
+                        <div key={idx} className="flex justify-between gap-2 text-[13px] text-white">
+                          <span className="truncate">{it.title}</span>
+                          <span className="text-gold font-semibold shrink-0">x{it.qty}</span>
                         </div>
                       ))}
                     </div>
 
                     {/* Handover Claim Action */}
-                    <div className="pt-2 border-t border-white/10 flex items-center justify-between">
-                      <span className={`text-sm font-bold px-3 py-1 rounded-lg shadow ${
-                        isClaimed ? 'bg-blue text-white border border-blue' : 'bg-gold text-navy border border-gold'
+                    <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-2">
+                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded ${
+                        box.assigned_staff ? 'bg-blue text-white' : 'bg-white/10 text-white/60'
                       }`}>
-                        {box.status}
+                        {box.assigned_staff ? `Held by ${box.assigned_staff}` : 'Unassigned'}
                       </span>
 
-                      {!isClaimed && isAssignedToActive && (
+                      {!isAssignedToActive && (
                         <button
                           onClick={() => handleClaimBoxCustody(box.box_code)}
-                          className="bg-gold hover:bg-gold-deep text-navy font-bold text-sm px-4 py-2 rounded-xl shadow-md transition-all"
+                          className="bg-gold hover:bg-gold-deep text-navy font-semibold text-xs px-3 min-h-9 rounded-lg transition-all shrink-0"
                         >
-                          ⚡ Claim Custody Stock
+                          ⚡ Claim to me
                         </button>
                       )}
                     </div>
@@ -442,55 +388,52 @@ export default function OmniOperationsHub() {
                 )
               })}
             </div>
+            )}
 
           </div>
 
         </div>
       )}
 
-      {/* MODE 3: 1-CLICK INTER-STAFF STOCK TRANSFER STATION */}
+      {/* MODE 3: REAL INTER-STAFF CUSTODY TRANSFER */}
       {activeRole === 'inter_staff_transfer' && (
-        <div className="bg-[#161922] border border-white/10 p-4 sm:p-6 rounded-2xl shadow-xl space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+        <div className="bg-[#161922] border border-white/10 p-4 sm:p-5 rounded-2xl shadow-lg space-y-4 max-w-xl">
+          <div>
+            <h2 className="font-serif text-base sm:text-xl font-bold text-white">Transfer custody</h2>
+            <p className="text-xs text-white/50 mt-0.5">Move every unit of a product into another staff member's custody.</p>
+          </div>
+
+          <form onSubmit={handleTransfer} className="space-y-3">
             <div>
-              <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full shadow-sm">
-                Inter-Staff Custody Re-allocation
-              </span>
-              <h2 className="font-serif text-lg sm:text-2xl font-bold text-white mt-2">Transfer stock between staff</h2>
-              <p className="text-sm text-neutral-300 font-medium mt-1">Transfer SKU inventory between staff members instantly with one click.</p>
+              <label className="block text-[11px] font-bold uppercase tracking-wide text-gold mb-1">Product</label>
+              <select value={transferSku} onChange={e => setTransferSku(e.target.value)} required
+                className="w-full bg-black/30 border border-white/15 text-sm text-white rounded-lg px-3 min-h-11 py-2 outline-none focus:border-gold">
+                <option value="">Select a product…</option>
+                {Array.from(new Set(cargoBoxes.flatMap(b => b.items.map(i => i.sku)))).map(sku => (
+                  <option key={sku} value={sku}>{nameFor(sku)}</option>
+                ))}
+              </select>
             </div>
+            <div>
+              <label className="block text-[11px] font-bold uppercase tracking-wide text-gold mb-1">Move to</label>
+              <select value={transferTo} onChange={e => setTransferTo(e.target.value)} required
+                className="w-full bg-black/30 border border-white/15 text-sm text-white rounded-lg px-3 min-h-11 py-2 outline-none focus:border-gold">
+                <option value="">Select staff…</option>
+                {staffList.map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </div>
+            <button type="submit" disabled={!transferSku || !transferTo}
+              className="w-full bg-blue hover:bg-blue-deep text-white font-semibold text-sm min-h-11 rounded-xl transition-all disabled:opacity-50">
+              Move custody
+            </button>
+            {cargoBoxes.length === 0 && (
+              <p className="text-xs text-white/40 text-center">No stock in custody yet — record received batches first.</p>
+            )}
+          </form>
 
-            <span className="text-sm font-bold text-blue">Audit Trail Logged</span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { sku: 'KIKO-3D-05', title: 'KIKO Milano 3D Lipgloss Shade 05', from: 'Juan Dela Cruz (4 units)', to: 'Elena Guerrero (0 units)', defaultQty: 2 },
-              { sku: 'MUL-PAN-500', title: 'Mulino Bianco Pan di Stelle 500g', from: 'Elena Guerrero (6 units)', to: 'Maria Santos (0 units)', defaultQty: 3 },
-              { sku: 'LAV-ORO-250', title: 'Lavazza Qualità Oro Beans 250g', from: 'Juan Dela Cruz (10 units)', to: 'Elena Guerrero (1 unit)', defaultQty: 5 }
-            ].map((trf, idx) => (
-              <div key={idx} className="bg-[#27272a] border border-white/20 p-5 rounded-2xl space-y-4 shadow-md">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-mono font-bold text-gold bg-black/60 px-3 py-1 rounded-lg border border-gold">{trf.sku}</span>
-                  <span className="text-sm font-bold text-neutral-300">Instant 1-Click</span>
-                </div>
-
-                <h3 className="text-lg font-bold text-white">{trf.title}</h3>
-                
-                <div className="space-y-1 text-sm font-bold text-neutral-200 bg-white/10 p-3.5 rounded-xl border border-white/10">
-                  <p>FROM: <strong className="text-crimson font-bold">{trf.from}</strong></p>
-                  <p>TO: <strong className="text-gold font-bold">{trf.to}</strong></p>
-                </div>
-
-                <button
-                  onClick={() => alert(`⚡ 1-Click Transfer Success! Transferred ${trf.defaultQty} units of ${trf.sku} to ${trf.to.split(' ')[0]}!`)}
-                  className="w-full bg-blue hover:bg-blue-deep text-white font-bold text-sm py-3 rounded-xl shadow-lg transition-all"
-                >
-                  ⚡ Transfer {trf.defaultQty} Units in 1-Click
-                </button>
-              </div>
-            ))}
-          </div>
+          {scanMessage && (
+            <div className="p-3 rounded-xl border border-forest/40 bg-forest/10 text-forest text-sm font-semibold">{scanMessage.text}</div>
+          )}
         </div>
       )}
 
