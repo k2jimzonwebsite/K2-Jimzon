@@ -261,93 +261,106 @@ export function StoreProvider({ children }) {
     }
   }
 
-  const loginAdmin = async ({ email, password, passcode }) => {
-    // Read local staff registry for station PINs and credentials
-    let staffList = []
+  // ── Real, role-based auth. Admin access = a live Supabase session whose
+  //    user_profiles.role is Admin or Staff. No passcodes, no localStorage
+  //    "admin=true" flag, no password fallbacks — those were security holes.
+  const STAFF_ROLES = ['Admin', 'Staff', 'SuperAdmin']
+  const isStaffRole = (r) => STAFF_ROLES.includes(r)
+
+  const resolveRole = async (u) => {
+    if (!supabase || !u) return null
+    const { data } = await supabase.from('user_profiles').select('role').eq('id', u.id).single()
+    return data?.role || null
+  }
+
+  const applyAdminSession = (u, role) => {
+    setIsAdmin(true)
+    setIsWholesale(true)
+    setUser({ ...u, role })
+  }
+
+  const loginAdmin = async ({ email, password }) => {
+    if (!supabase) return { ok: false, error: 'Backend not configured.' }
+    if (!email || !password) return { ok: false, error: 'Enter your email and password.' }
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error || !data?.user) return { ok: false, error: error?.message || 'Invalid email or password.' }
+
+    // Does this account require a 2FA step-up (aal1 -> aal2)?
     try {
-      const saved = localStorage.getItem('k2_staff_permissions')
-      if (saved) staffList = JSON.parse(saved)
-    } catch (e) {}
-
-    // 1. Authenticate with Real Supabase Authentication Engine
-    if (supabase && email && password) {
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-        if (!error && data?.user) {
-          const userEmail = data.user.email?.toLowerCase()
-          const isSuperAdminEmail = userEmail === 'k2jimzonwebsite@gmail.com'
-
-          const { data: profile } = await supabase.from('user_profiles').select('role').eq('id', data.user.id).single()
-          const role = profile?.role || (isSuperAdminEmail ? 'SuperAdmin' : null)
-
-          if (isSuperAdminEmail || role === 'Admin' || role === 'SuperAdmin') {
-            setIsAdmin(true)
-            setUser({ ...data.user, role: isSuperAdminEmail ? 'SuperAdmin' : role })
-            try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
-            return true
-          }
-        }
-      } catch (err) {
-        console.warn("Supabase auth fallback to staff registry:", err)
+      const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+      if (aal?.nextLevel === 'aal2' && aal.nextLevel !== aal.currentLevel) {
+        return { ok: false, mfaRequired: true }
       }
-    }
+    } catch (e) { /* MFA not available — continue */ }
 
-    // 2. Staff Email + Password login fallback from staff registry
-    if (email && password && Array.isArray(staffList)) {
-      const matchedStaff = staffList.find(s => {
-        const emailMatch = s.email?.toLowerCase() === email.toLowerCase()
-        const passMatch = s.passwordHash ? verifyPassword(password, s.passwordHash) : (s.password === password || password === 'password123' || password === '202688')
-        return emailMatch && passMatch
+    const role = await resolveRole(data.user)
+    if (!isStaffRole(role)) {
+      await supabase.auth.signOut()
+      return { ok: false, error: 'This account has no admin access.' }
+    }
+    applyAdminSession(data.user, role)
+    return { ok: true }
+  }
+
+  // Second factor: verify the 6-digit code from the authenticator app.
+  const challengeMfa = async (code) => {
+    if (!supabase) return { ok: false, error: 'Backend not configured.' }
+    const { data: factors } = await supabase.auth.mfa.listFactors()
+    const totp = factors?.totp?.find((f) => f.status === 'verified') || factors?.totp?.[0]
+    if (!totp) return { ok: false, error: 'No authenticator enrolled on this account.' }
+    const { data: ch, error: cErr } = await supabase.auth.mfa.challenge({ factorId: totp.id })
+    if (cErr) return { ok: false, error: cErr.message }
+    const { error: vErr } = await supabase.auth.mfa.verify({ factorId: totp.id, challengeId: ch.id, code })
+    if (vErr) return { ok: false, error: vErr.message }
+
+    const { data: u } = await supabase.auth.getUser()
+    const role = await resolveRole(u?.user)
+    if (!isStaffRole(role)) { await supabase.auth.signOut(); return { ok: false, error: 'No admin access.' } }
+    applyAdminSession(u.user, role)
+    return { ok: true }
+  }
+
+  // Enroll THIS admin's authenticator (returns a QR to scan).
+  const enrollMfa = async () => {
+    if (!supabase) return { ok: false, error: 'Backend not configured.' }
+    const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp' })
+    if (error) return { ok: false, error: error.message }
+    return { ok: true, factorId: data.id, qr: data.totp?.qr_code, secret: data.totp?.secret }
+  }
+
+  const verifyMfaEnroll = async (factorId, code) => {
+    if (!supabase) return { ok: false, error: 'Backend not configured.' }
+    const { data: ch, error } = await supabase.auth.mfa.challenge({ factorId })
+    if (error) return { ok: false, error: error.message }
+    const { error: vErr } = await supabase.auth.mfa.verify({ factorId, challengeId: ch.id, code })
+    if (vErr) return { ok: false, error: vErr.message }
+    return { ok: true }
+  }
+
+  // Super-admin invites a staff member (backend Edge Function does the work).
+  const inviteStaff = async (email, role = 'Staff') => {
+    if (!supabase) return { ok: false, error: 'Backend not configured.' }
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return { ok: false, error: 'You must be signed in.' }
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invite-staff`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ email, role, redirectTo: window.location.origin }),
       })
-      if (matchedStaff) {
-        setIsAdmin(true)
-        const token = createSignedStaffToken(matchedStaff)
-        setUser({ email: matchedStaff.email, name: matchedStaff.name, role: matchedStaff.role, pin: matchedStaff.pin, permissions: matchedStaff.permissions, token })
-        try { 
-          localStorage.setItem('k2_admin_session', 'true')
-          localStorage.setItem('k2_staff_jwt', token)
-        } catch (e) {}
-        return true
-      }
+      const out = await res.json().catch(() => ({}))
+      if (!res.ok) return { ok: false, error: out.error || 'Invite failed.' }
+      return { ok: true }
+    } catch (e) {
+      return { ok: false, error: e.message || 'Invite failed.' }
     }
-
-    // 3. Master Passcode & Staff Station PIN login option
-    const cleanPass = (passcode || '').trim()
-    if (cleanPass) {
-      if (['202688', '123456', 'K2ADMIN2026', 'admin123'].includes(cleanPass)) {
-        setIsAdmin(true)
-        const token = createSignedStaffToken({ email: 'k2jimzonwebsite@gmail.com', name: 'Super Admin', role: 'SuperAdmin' })
-        setUser({ email: 'k2jimzonwebsite@gmail.com', role: 'SuperAdmin', token })
-        try { 
-          localStorage.setItem('k2_admin_session', 'true') 
-          localStorage.setItem('k2_staff_jwt', token)
-        } catch (e) {}
-        return true
-      }
-
-      // Check station PINs (e.g. 1111, 2222, 3333, 4444)
-      const matchedStaff = staffList.find(s => s.pinHash ? verifyPin(cleanPass, s.pinHash) : s.pin === cleanPass)
-      if (matchedStaff) {
-        setIsAdmin(true)
-        const token = createSignedStaffToken(matchedStaff)
-        setUser({ email: matchedStaff.email, name: matchedStaff.name, role: matchedStaff.role, pin: matchedStaff.pin, permissions: matchedStaff.permissions, token })
-        try { 
-          localStorage.setItem('k2_admin_session', 'true')
-          localStorage.setItem('k2_staff_jwt', token)
-        } catch (e) {}
-        return true
-      }
-    }
-
-    return false
   }
 
   const logoutAdmin = async () => {
     setIsAdmin(false)
-    try { localStorage.removeItem('k2_admin_session') } catch (e) {}
-    if (supabase) {
-      await supabase.auth.signOut()
-    }
+    setUser(null)
+    if (supabase) await supabase.auth.signOut()
   }
 
   useEffect(() => {
@@ -380,29 +393,30 @@ export function StoreProvider({ children }) {
   }, [])
 
   const checkUser = async (authUser = null) => {
-    const hasAdminSession = typeof window !== 'undefined' && localStorage.getItem('k2_admin_session') === 'true'
-    if (hasAdminSession) {
-      setIsAdmin(true)
-      setIsWholesale(true)
-      setUser({ email: 'k2jimzonwebsite@gmail.com', role: 'SuperAdmin' })
-    }
-    if (!supabase) return;
+    if (!supabase) return
     try {
       const u = authUser || (await supabase.auth.getUser()).data?.user
-      if (u) {
-        const { data } = await supabase.from('user_profiles').select('role').eq('id', u.id).single()
-        const userRole = data?.role || (u.email?.toLowerCase() === 'k2jimzonwebsite@gmail.com' ? 'SuperAdmin' : null)
-        setUser({ ...u, role: userRole })
-        if (data && (data.role === 'Admin' || data.role === 'SuperAdmin')) {
-          setIsAdmin(true)
-          setIsWholesale(true)
-          try { localStorage.setItem('k2_admin_session', 'true') } catch (e) {}
-        } else if (data && data.role === 'VIP') {
-          setIsWholesale(true)
-        }
+      if (!u) { setIsAdmin(false); setUser(null); return }
+
+      // If the account has 2FA, admin access requires the aal2 step-up to be done.
+      let mfaSatisfied = true
+      try {
+        const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+        if (aal?.nextLevel === 'aal2' && aal.nextLevel !== aal.currentLevel) mfaSatisfied = false
+      } catch (e) { /* ignore */ }
+
+      const role = await resolveRole(u)
+      setUser({ ...u, role })
+      if (isStaffRole(role) && mfaSatisfied) {
+        setIsAdmin(true)
+        setIsWholesale(true)
+      } else {
+        setIsAdmin(false)
+        if (role === 'VIP') setIsWholesale(true)
       }
     } catch (err) {
-      console.warn("checkUser auth error:", err)
+      console.warn('checkUser auth error:', err)
+      setIsAdmin(false)
     }
   }
 
@@ -809,6 +823,10 @@ export function StoreProvider({ children }) {
     loginAdmin,
     loginWithGoogle,
     logoutAdmin,
+    challengeMfa,
+    enrollMfa,
+    verifyMfaEnroll,
+    inviteStaff,
     user,
     order,
     placeOrder,
