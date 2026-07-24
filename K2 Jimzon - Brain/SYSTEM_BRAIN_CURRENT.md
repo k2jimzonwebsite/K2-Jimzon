@@ -1,6 +1,6 @@
 # K2 Jimzon — System Brain (Current State)
 
-**Living source of truth. Last updated: 24 July 2026.**
+**Living source of truth. Last updated: 24 July 2026 (rev. 2).**
 
 This is the "never get lost" document. It says what the system is, how our real
 workflow maps onto it, everything that's been built, exactly what to run, and
@@ -145,8 +145,25 @@ the numbered migrations `0001`–`0018` and the `20260722/23` RLS files first.
 2. **`RUN_THIS_batch_location_channel.sql`** — adds `channel` to lots + the
    by-hub / by-holder / by-channel views.
 3. **`RUN_THIS_channel_connections.sql`** — the Live/Not-connected status table.
+4. **`RUN_THIS_auth_roles.sql`** — staff logins: `is_admin()`, RLS on
+   `user_profiles`, anti-role-escalation trigger. (Then bootstrap the first
+   admin: sign in once, then `update user_profiles set role='Admin' where
+   email='…'`.)
+5. **`RUN_THIS_product_drafts.sql`** — the AI Sourcing review-queue table.
 
-All three have been run on the live database as of this update.
+All have been run on the live database as of this update.
+
+### Logins, roles & 2FA (secure — no backdoors)
+
+Auth is real Supabase Auth (email+password or Google); passwords are bcrypt-
+hashed and never seen by us. Access = a live session whose `user_profiles.role`
+is Admin or Staff, enforced by RLS. The old localStorage "admin=true" flag,
+master passcodes, and `password123` fallback were REMOVED. Accounts are
+invite-only (super admin invites → person sets their own password → super admin
+sets role in **Staff & Roles**). Admins can enroll TOTP 2FA on their own account.
+Backend Edge Function `invite-staff` performs invites (admin-verified).
+Supabase Auth URL Configuration must point at the two Vercel sites (storefront +
+admin) or OAuth bounces to localhost.
 
 ---
 
@@ -163,6 +180,14 @@ All three have been run on the live database as of this update.
   chunk errors auto-reload.
 - **Scanners** — Milan packing scan, mobile receive scan, discrepancy
   reconciliation, scan-to-AI (all real QR/barcode).
+- **AI Sourcing** — dark, mobile, honest review queue reading real
+  `product_drafts`. Empty "waiting for drafts from Italy" state; Approve writes
+  only real product columns (upsert) and publishes; Reject discards. Backend AI
+  feed writes drafts (not wired yet — same pattern as connectors).
+- **Design consistency** — a shared `src/components/ui/adminKit.jsx` (one card,
+  button, header, alert). All admin panels unified to one surface (`#161922`)
+  and hairline borders; screens are mobile-first (44px targets, 16px inputs,
+  stacked layouts). Data tables scroll horizontally on phones.
 - **Storefront** — mobile-first globe section, real Italy→Manila flight
   animation, chameleon product backgrounds, unified light/dark theme.
 
@@ -194,6 +219,10 @@ cargo workflow, connector data contract, Shopee connector scaffold.
   put it in Supabase secrets → deploy `shopee-webhook`.
 - Finish Shopee **`get_order_detail`** so orders arrive fully populated.
 - Clone the connector for **Lazada, TikTok, Meta, WhatsApp**.
+- Deploy `invite-staff` Edge Function (for the in-app invite button; adding
+  staff via the Supabase dashboard already works without it).
+- Enable **Google** provider in Supabase (needs Google Cloud OAuth credentials).
+- Build the **Italy AI feed** that writes into `product_drafts`.
 
 **Nice-to-have backlog:** auto-create batch rows from the receiving scan; a
 stock-by-location/channel summary panel across all products; harden the Shopee

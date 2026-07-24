@@ -1,232 +1,177 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { CheckIcon, InboxIcon, AlertIcon } from '../../components/ui/icons'
-import { peso } from '../../data/products'
+import { useState, useEffect } from 'react'
+import { motion } from 'motion/react'
 import { supabase } from '../../lib/supabaseClient'
 
-// Mock incoming payloads from the Italian operator using the Custom GPT/Gemini AI
-const INITIAL_DRAFTS = [
-  {
-    id: 'draft-01',
-    sku: 'K2-2051',
-    name: 'Nutella Biscuits 304g',
-    aiConfidence: 0.98,
-    parsedData: {
-      retail: 499,
-      wholesale: 390,
-      stock: 24,
-      origin: 'Milan, IT',
-      size: '304g jar',
-      hue: 45,
-      tag: 'ITALY EXCLUSIVE',
-      why_buy: 'A crisp, golden biscuit hugging a creamy heart of authentic Nutella. It’s the ultimate Italian morning ritual.',
-      why_rare: 'Often sold out in Rome; imported directly to avoid third-party markups.',
-      inside: '1 x 304g resealable bag',
-      pairings: ['Espresso', 'Latte Macchiato']
-    },
-    rawJson: `{
-  "item": "Nutella Biscuits",
-  "weight": "304g",
-  "suggested_retail": 499,
-  "suggested_wholesale": 390,
-  "count": 24,
-  "hue": 45,
-  "tag": "ITALY EXCLUSIVE",
-  "why_buy": "A crisp, golden biscuit hugging a creamy heart...",
-  "why_rare": "Often sold out in Rome...",
-  "inside": "1 x 304g resealable bag",
-  "pairings": ["Espresso", "Latte Macchiato"]
-}`
-  },
-  {
-    id: 'draft-02',
-    sku: 'K2-2052',
-    name: 'Lavazza Qualità Oro Coffee Beans 1kg',
-    aiConfidence: 0.82,
-    parsedData: {
-      retail: 1850,
-      wholesale: 1450,
-      stock: 12,
-      origin: 'Rome, IT',
-      size: '1kg bag',
-      hue: 40,
-      tag: 'RESTOCKED',
-      why_buy: 'A unique combination of 6 varieties of Arabica beans from among the finest of Central and South America.',
-      why_rare: 'The true Italian roast profile, distinct from local adaptations.',
-      inside: '1 x 1kg whole bean bag',
-      pairings: ['Biscotti', 'Tiramisu']
-    },
-    rawJson: `{
-  "item": "Lavazza Oro Beans",
-  "weight": "1kg",
-  "suggested_retail": 1850,
-  "suggested_wholesale": 1450,
-  "count": 12,
-  "hue": 40,
-  "tag": "RESTOCKED",
-  "why_buy": "A unique combination of 6 varieties of Arabica beans...",
-  "why_rare": "The true Italian roast profile...",
-  "inside": "1 x 1kg whole bean bag",
-  "pairings": ["Biscotti", "Tiramisu"],
-  "note": "Low confidence on retail price vs PH market"
-}`
+// AI Sourcing review queue. Reads real drafts from `product_drafts` (written by
+// the Italy AI feed). Staff check price/stock and approve → a real product is
+// created. Honest: empty when no drafts, and approve only writes real columns.
+
+export default function AiDrafts() {
+  const [drafts, setDrafts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [tableMissing, setTableMissing] = useState(false)
+
+  const load = async () => {
+    if (!supabase) { setLoading(false); return }
+    const { data, error } = await supabase.from('product_drafts')
+      .select('*').eq('status', 'pending').order('created_at', { ascending: false })
+    if (error) { setTableMissing(true); setLoading(false); return }
+    setTableMissing(false); setDrafts(data || []); setLoading(false)
   }
-]
 
-export default function AiDrafts({ onApprove }) {
-  const [drafts, setDrafts] = useState(INITIAL_DRAFTS)
+  useEffect(() => {
+    if (!supabase) { setLoading(false); return }
+    load()
+    const ch = supabase.channel('public:product_drafts')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'product_drafts' }, load)
+      .subscribe()
+    return () => supabase.removeChannel(ch)
+  }, [])
 
-  const handleApprove = async (draft) => {
-    // Push directly to Supabase products table
-    const { error } = await supabase.from('products').insert([{
+  const approve = async (draft, edited) => {
+    const { error } = await supabase.from('products').upsert([{
       sku: draft.sku,
       name: draft.name,
-      stock_available: draft.parsedData.stock,
-      srp: draft.parsedData.retail,
-      wholesale_price: draft.parsedData.wholesale,
-      origin: draft.parsedData.origin,
-      size: draft.parsedData.size,
-      hue: draft.parsedData.hue,
-      tag: draft.parsedData.tag,
-      why_buy: draft.parsedData.why_buy,
-      why_rare: draft.parsedData.why_rare,
-      inside: draft.parsedData.inside,
-      pairings: draft.parsedData.pairings,
-      status: 'Live'
-    }])
-
-    if (error) {
-      alert("Failed to push to database: " + error.message)
-      return
-    }
-    
-    // Remove from local queue
+      srp: Number(edited.srp) || 0,
+      wholesale_price: Number(edited.wholesale_price) || 0,
+      stock_available: Number(edited.stock_available) || 0,
+      origin: draft.origin || null,
+      size: draft.size || null,
+      description: draft.description || null,
+      why_buy: draft.why_buy || null,
+      why_rare: draft.why_rare || null,
+      pairings: Array.isArray(draft.pairings) ? draft.pairings : [],
+      status: 'Live',
+    }], { onConflict: 'sku' })
+    if (error) { alert('Could not publish: ' + error.message); return }
+    await supabase.from('product_drafts').update({ status: 'approved' }).eq('id', draft.id)
     setDrafts(prev => prev.filter(d => d.id !== draft.id))
+  }
+
+  const reject = async (draft) => {
+    await supabase.from('product_drafts').update({ status: 'rejected' }).eq('id', draft.id)
+    setDrafts(prev => prev.filter(d => d.id !== draft.id))
+  }
+
+  if (loading) {
+    return <p className="py-16 text-center text-sm text-white/50">Loading drafts…</p>
+  }
+
+  if (tableMissing) {
+    return (
+      <div className="max-w-2xl mx-auto rounded-2xl border border-amber/30 bg-amber/10 p-5 text-sm">
+        <p className="font-bold text-amber">One-time setup needed</p>
+        <p className="text-neutral-300 mt-1">
+          Run <span className="font-mono">RUN_THIS_product_drafts.sql</span> in the Supabase SQL editor so this queue has a table to read from. Until then no drafts can arrive.
+        </p>
+      </div>
+    )
   }
 
   if (drafts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-lg border border-line bg-white p-12 text-center shadow-sm">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-forest-wash text-forest">
-          <CheckIcon size={24} />
-        </div>
-        <h3 className="mt-4 font-serif text-xl font-semibold text-navy">Queue is clear</h3>
-        <p className="mt-1 max-w-sm text-base text-navy-soft">
-          All AI sourcing drafts from Italy have been reviewed and pushed to live inventory.
+      <div className="max-w-2xl mx-auto flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-[#161922] p-12 text-center shadow-lg">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue/15 border border-blue/30 text-2xl">🇮🇹</div>
+        <h3 className="mt-4 font-serif text-xl font-semibold text-white">Waiting for drafts from Italy</h3>
+        <p className="mt-1.5 max-w-sm text-sm text-white/55 leading-relaxed">
+          When the Italy AI feed proposes a new product, it appears here for you to review and publish. Nothing to review right now.
         </p>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-4xl mx-auto space-y-4 pb-12">
       {drafts.map((draft) => (
-        <DraftCard key={draft.id} draft={draft} onApprove={handleApprove} />
+        <DraftCard key={draft.id} draft={draft} onApprove={approve} onReject={reject} />
       ))}
     </div>
   )
 }
 
-function DraftCard({ draft, onApprove }) {
-  const [data, setData] = useState(draft.parsedData)
-  const [approving, setApproving] = useState(false)
+function DraftCard({ draft, onApprove, onReject }) {
+  const [srp, setSrp] = useState(draft.srp ?? 0)
+  const [wholesale, setWholesale] = useState(draft.wholesale_price ?? 0)
+  const [stock, setStock] = useState(draft.stock_available ?? 0)
+  const [busy, setBusy] = useState(false)
+  const [showRaw, setShowRaw] = useState(false)
 
-  const handleGoLive = () => {
-    setApproving(true)
-    setTimeout(() => {
-      onApprove({ ...draft, parsedData: data })
-    }, 600) // fake network delay
+  const confidence = typeof draft.ai_confidence === 'number' ? draft.ai_confidence : null
+  const lowConfidence = confidence != null && confidence < 0.9
+
+  const go = async () => {
+    setBusy(true)
+    await onApprove(draft, { srp, wholesale_price: wholesale, stock_available: stock })
+    setBusy(false)
   }
 
-  const needsReview = draft.aiConfidence < 0.9
+  const num = 'w-full rounded-lg border border-white/15 bg-black/30 px-3 min-h-11 py-2 text-base text-white tabular-nums focus:border-blue outline-none'
 
   return (
-    <motion.div 
-      layout
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      className="overflow-hidden rounded-lg border border-line bg-white shadow-card"
-    >
+    <motion.div layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.97 }}
+      className="overflow-hidden rounded-2xl border border-white/10 bg-[#161922] shadow-lg">
+
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-line bg-shell px-5 py-3">
-        <div className="flex items-center gap-3">
-          <span className="flex h-6 w-6 items-center justify-center rounded bg-blue text-white shadow-sm">
-            <InboxIcon size={14} />
-          </span>
-          <div>
-            <p className="text-sm font-bold uppercase tracking-widest text-navy-soft">New Draft from Italy</p>
-            <p className="font-serif text-lg font-semibold text-navy">{draft.name}</p>
-          </div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-white/10 px-4 sm:px-5 py-3.5">
+        <div className="min-w-0">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-white/45">New draft from Italy 🇮🇹</p>
+          <p className="font-serif text-lg font-semibold text-white truncate">{draft.name || 'Unnamed product'}</p>
         </div>
-        <div className="flex items-center gap-2">
-          {needsReview && (
-            <span className="flex items-center gap-1 rounded bg-amber-wash px-2 py-1 text-sm font-bold uppercase tracking-wide text-amber">
-              <AlertIcon size={12} /> Low Confidence AI Match
-            </span>
+        <div className="flex items-center gap-2 shrink-0">
+          {lowConfidence && (
+            <span className="rounded-lg bg-amber/20 border border-amber/40 px-2 py-1 text-xs font-bold text-amber">⚠ Low AI confidence</span>
           )}
-          <span className="rounded bg-white border border-line px-2.5 py-1 text-sm font-mono text-navy-faint">
-            {draft.sku}
-          </span>
+          {draft.sku && <span className="rounded-lg border border-white/15 bg-white/5 px-2.5 py-1 text-xs font-mono text-white/60">{draft.sku}</span>}
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row">
-        {/* Editor (Human-in-the-loop) */}
-        <div className="flex-1 p-5 md:border-r border-line">
-          <p className="mb-4 text-base font-medium text-navy-soft">Review pricing and stock before pushing live:</p>
-          
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-            <label className="flex flex-col gap-1.5 text-base font-semibold text-navy">
-              Retail Price (₱)
-              <input 
-                type="number"
-                value={data.retail}
-                onChange={e => setData({...data, retail: Number(e.target.value)})}
-                className="rounded-md border border-line bg-shell px-3 py-2 text-navy focus:border-navy focus:bg-white focus:outline-none"
-              />
-            </label>
-            <label className="flex flex-col gap-1.5 text-base font-semibold text-navy">
-              Wholesale Price (₱)
-              <input 
-                type="number"
-                value={data.wholesale}
-                onChange={e => setData({...data, wholesale: Number(e.target.value)})}
-                className="rounded-md border border-line bg-shell px-3 py-2 text-navy focus:border-navy focus:bg-white focus:outline-none"
-              />
-            </label>
-            <label className="flex flex-col gap-1.5 text-base font-semibold text-navy">
-              Physical Stock Count
-              <input 
-                type="number"
-                value={data.stock}
-                onChange={e => setData({...data, stock: Number(e.target.value)})}
-                className="rounded-md border border-line bg-shell px-3 py-2 text-navy focus:border-navy focus:bg-white focus:outline-none"
-              />
-            </label>
-          </div>
+      <div className="p-4 sm:p-5 space-y-4">
+        <p className="text-sm text-white/55">Check the price and stock, then publish it to your live catalog:</p>
 
-          <div className="mt-6 flex items-center justify-end border-t border-line pt-4">
-            <button
-              onClick={handleGoLive}
-              disabled={approving}
-              className="flex items-center gap-2 rounded-lg bg-forest px-5 py-2.5 text-base font-semibold text-white transition-colors hover:bg-forest/90 disabled:opacity-50"
-            >
-              {approving ? (
-                <>Pushing to Supabase...</>
-              ) : (
-                <><CheckIcon size={16} /> Approve & Go Live</>
-              )}
-            </button>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <label className="text-xs font-bold uppercase tracking-wider text-white/45">
+            Retail SRP (₱)
+            <input type="number" min="0" value={srp} onChange={e => setSrp(Number(e.target.value))} className={`${num} mt-1.5`} />
+          </label>
+          <label className="text-xs font-bold uppercase tracking-wider text-white/45">
+            Wholesale (₱)
+            <input type="number" min="0" value={wholesale} onChange={e => setWholesale(Number(e.target.value))} className={`${num} mt-1.5`} />
+          </label>
+          <label className="text-xs font-bold uppercase tracking-wider text-white/45">
+            Stock (pcs)
+            <input type="number" min="0" value={stock} onChange={e => setStock(Number(e.target.value))} className={`${num} mt-1.5`} />
+          </label>
         </div>
 
-        {/* Raw AI Output context */}
-        <div className="w-full bg-navy p-5 text-white md:w-[320px]">
-          <p className="mb-3 text-sm font-bold uppercase tracking-widest text-white/50">Raw AI Sourcing Output</p>
-          <pre className="overflow-x-auto whitespace-pre-wrap text-sm font-mono leading-relaxed text-neutral-300">
-            {draft.rawJson}
-          </pre>
+        {(draft.origin || draft.size || draft.why_buy) && (
+          <div className="text-sm text-white/60 space-y-1">
+            {draft.origin && <p>📍 {draft.origin}{draft.size ? ` · ${draft.size}` : ''}</p>}
+            {draft.why_buy && <p className="text-white/70 leading-relaxed">{draft.why_buy}</p>}
+          </div>
+        )}
+
+        {draft.raw_json && (
+          <div>
+            <button onClick={() => setShowRaw(s => !s)} className="text-xs font-semibold text-white/45 hover:text-white transition-colors">
+              {showRaw ? '▾ Hide raw AI output' : '▸ Show raw AI output'}
+            </button>
+            {showRaw && (
+              <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-xl bg-black/40 border border-white/10 p-3 text-xs font-mono leading-relaxed text-white/60">
+                {typeof draft.raw_json === 'string' ? draft.raw_json : JSON.stringify(draft.raw_json, null, 2)}
+              </pre>
+            )}
+          </div>
+        )}
+
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 border-t border-white/10 pt-4">
+          <button onClick={() => onReject(draft)} disabled={busy}
+            className="rounded-xl border border-white/15 bg-white/5 min-h-12 px-5 text-sm font-semibold text-white/70 hover:bg-white/10 transition-all disabled:opacity-50">
+            Reject
+          </button>
+          <button onClick={go} disabled={busy}
+            className="rounded-xl bg-forest hover:bg-forest/90 min-h-12 px-6 text-sm font-bold text-white shadow-lg transition-all active:scale-[.99] disabled:opacity-50">
+            {busy ? 'Publishing…' : '✓ Approve & publish'}
+          </button>
         </div>
       </div>
     </motion.div>
