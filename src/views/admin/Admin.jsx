@@ -384,17 +384,8 @@ export default function Admin() {
         onNavigate={(targetSec) => setSection(targetSec)}
       />
 
-      {/* Floating, draggable tools gear (calculator, margin, FX, clock, etc.) */}
-      <AdminToolsWidget />
-
-      {/* Floating AI Copilot */}
-      <button
-        onClick={() => setShowAiCopilot(true)}
-        className="fixed bottom-5 right-5 z-40 bg-blue hover:bg-blue-deep text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg transition-colors flex items-center gap-2 min-h-[44px]"
-      >
-        <span className="text-base leading-none">🧭</span>
-        <span>Guide</span>
-      </button>
+      {/* Floating, draggable tools gear — now also holds the Dashboard guide */}
+      <AdminToolsWidget onOpenGuide={() => setShowAiCopilot(true)} />
     </div>
   )
 }

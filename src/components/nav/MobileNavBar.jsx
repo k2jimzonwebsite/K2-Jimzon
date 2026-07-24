@@ -3,7 +3,7 @@ import { useStore } from '../../context/StoreContext'
 // Storefront bottom tab bar (mobile only). Quick-jump between the shopper pages.
 // Cart lives in the header, so it's not repeated here.
 export default function MobileNavBar() {
-  const { view, setView } = useStore()
+  const { view, go } = useStore()
 
   const navItems = [
     { key: 'home', label: 'Home', icon: '🏠' },
@@ -23,7 +23,7 @@ export default function MobileNavBar() {
           return (
             <button
               key={item.key}
-              onClick={() => setView(item.key)}
+              onClick={() => go(item.key)}
               className={`flex flex-col items-center justify-center min-h-[46px] flex-1 px-1 py-1 transition-all active:scale-95 ${
                 isActive ? 'text-amber' : 'text-white/60 hover:text-white'
               }`}

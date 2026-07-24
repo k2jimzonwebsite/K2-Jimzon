@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "check:imports": "node scripts/check-imports.mjs",
+    "prebuild": "node scripts/check-imports.mjs",
     "test": "playwright test",
     "test:smoke": "playwright test tests/smoke.spec.js",
     "test:report": "playwright show-report"

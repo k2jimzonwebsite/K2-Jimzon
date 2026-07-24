@@ -30,7 +30,7 @@ const TOOLS = [
 const field = 'w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none'
 const lbl = 'text-[11px] font-medium uppercase tracking-wide text-white/45'
 
-export default function AdminToolsWidget() {
+export default function AdminToolsWidget({ onOpenGuide }) {
   const [open, setOpen] = useState(false)
   const [pos, setPos] = useState(() => load(LS.pos, { x: null, y: null }))
   const [tool, setTool] = useState(() => load(LS.tool, 'calc'))
@@ -84,6 +84,16 @@ export default function AdminToolsWidget() {
             [openLeft ? 'right' : 'left']: 0,
           }}
         >
+          {/* Dashboard guide (moved here from a separate floating button) */}
+          {onOpenGuide && (
+            <button
+              onClick={() => { onOpenGuide(); setOpen(false) }}
+              className="w-full flex items-center gap-2 border-b border-white/10 bg-blue/15 px-3.5 py-2.5 text-sm font-semibold text-blue hover:bg-blue/25 transition-colors"
+            >
+              🧭 Dashboard guide — what does this do?
+            </button>
+          )}
+
           {/* Pinned strip: clocks + rate */}
           <ClockRate />
 
