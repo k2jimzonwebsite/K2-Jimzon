@@ -53,7 +53,7 @@ export default function StaffPermissionManager() {
     setErr(''); setNotice(''); setInviting(true)
     const res = await inviteStaff(inviteEmail.trim(), inviteRole)
     setInviting(false)
-    if (res.ok) { setNotice(`Invite sent to ${inviteEmail}. They'll set their own password.`); setInviteEmail(''); load() }
+    if (res.ok) { setNotice(res.note || `Invite sent to ${inviteEmail}. They'll set their own password.`); setInviteEmail(''); load() }
     else setErr(res.error || 'Invite failed.')
   }
 

@@ -338,22 +338,45 @@ export function StoreProvider({ children }) {
     return { ok: true }
   }
 
-  // Super-admin invites a staff member (backend Edge Function does the work).
+  // Super-admin invites a staff member (backend Edge Function does the work with fallback).
   const inviteStaff = async (email, role = 'Staff') => {
     if (!supabase) return { ok: false, error: 'Backend not configured.' }
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return { ok: false, error: 'You must be signed in.' }
+
+    const cleanEmail = email.trim().toLowerCase()
+    
+    // Check if the target user profile already exists in user_profiles
+    const { data: existingProf } = await supabase
+      .from('user_profiles')
+      .select('id, email, role')
+      .ilike('email', cleanEmail)
+      .maybeSingle()
+
+    if (existingProf) {
+      const { error: updateErr } = await supabase
+        .from('user_profiles')
+        .update({ role })
+        .eq('id', existingProf.id)
+
+      if (updateErr) return { ok: false, error: updateErr.message }
+      return { ok: true, note: `Updated role for ${cleanEmail} to ${role}.` }
+    }
+
     try {
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invite-staff`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-        body: JSON.stringify({ email, role, redirectTo: window.location.origin }),
+        body: JSON.stringify({ email: cleanEmail, role, redirectTo: window.location.origin }),
       })
       const out = await res.json().catch(() => ({}))
       if (!res.ok) return { ok: false, error: out.error || 'Invite failed.' }
       return { ok: true }
     } catch (e) {
-      return { ok: false, error: e.message || 'Invite failed.' }
+      return { 
+        ok: false, 
+        error: `The 'invite-staff' Edge Function isn't deployed on Supabase yet. Have ${cleanEmail} log in once on the site (or via Google), then click refresh to set their role!` 
+      }
     }
   }
 
