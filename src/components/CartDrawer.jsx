@@ -8,6 +8,15 @@ import { XIcon } from './ui/icons'
 export default function CartDrawer() {
   const { cartOpen, setCartOpen, lines, subtotal, wholesaleSavings, isWholesale, go, count } = useStore()
 
+  useEffect(() => {
+    if (cartOpen) {
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = ''
+      }
+    }
+  }, [cartOpen])
+
   return (
     <AnimatePresence>
       {cartOpen && (
@@ -35,7 +44,7 @@ export default function CartDrawer() {
               </h2>
               <button
                 onClick={() => setCartOpen(false)}
-                className="rounded-md p-2 text-navy-soft hover:bg-navy/5 hover:text-navy"
+                className="rounded-md p-2 text-navy-soft hover:bg-navy/5 hover:text-navy min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Close"
               >
                 <XIcon />

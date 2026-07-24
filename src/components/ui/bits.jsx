@@ -128,7 +128,7 @@ export function QuantityStepper({ value, onChange, max, size = 'sm', className =
     <div className={'flex items-center rounded-xl border border-line bg-cream shadow-sm ' + className}>
       <button 
         onClick={() => onChange(Math.max(1, value - 1))} 
-        className={`${btnPad} text-navy-soft hover:text-navy transition-colors`} 
+        className={`${btnPad} min-h-[44px] min-w-[44px] flex items-center justify-center text-navy-soft hover:text-navy transition-colors`} 
         aria-label="Decrease quantity"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width={iconSize} height={iconSize} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -139,7 +139,7 @@ export function QuantityStepper({ value, onChange, max, size = 'sm', className =
       <button
         onClick={() => onChange(Math.min(max, value + 1))}
         disabled={atLimit}
-        className={`${btnPad} text-navy-soft hover:text-navy disabled:cursor-not-allowed disabled:opacity-35 transition-colors`}
+        className={`${btnPad} min-h-[44px] min-w-[44px] flex items-center justify-center text-navy-soft hover:text-navy disabled:cursor-not-allowed disabled:opacity-35 transition-colors`}
         aria-label={atLimit ? 'Maximum available stock reached' : 'Increase quantity'}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width={iconSize} height={iconSize} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

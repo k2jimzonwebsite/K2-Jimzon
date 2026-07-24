@@ -30,7 +30,7 @@ function CategoryTiles() {
   const { setCategory, setQuery, go } = useStore()
   return (
     <section className="mx-auto max-w-7xl px-4 pt-8">
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 md:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
         {CATEGORY_TILES.map(({ cat, icon, note }, i) => {
           return (
             <button

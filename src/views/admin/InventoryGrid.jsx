@@ -267,11 +267,11 @@ export default function InventoryGrid() {
   return (
     <div className="animate-in fade-in duration-500 relative min-h-full">
       {/* Top bar */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <p className="text-base text-white/50">Manage your inventory visually. Click Edit to update product details.</p>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
           <button onClick={() => setShowAiScanner(true)}
-            className="flex items-center gap-2 rounded bg-forest/20 text-forest hover:bg-forest hover:text-white transition-colors px-3 py-1.5 text-sm font-semibold">
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 rounded bg-forest/20 text-forest hover:bg-forest hover:text-white transition-colors px-3.5 py-2.5 text-sm font-semibold min-h-[44px]">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -279,14 +279,14 @@ export default function InventoryGrid() {
             Scan Box
           </button>
           <button onClick={() => setShowSmartPaste(true)}
-            className="flex items-center gap-2 rounded bg-purple-500/20 text-purple-400 hover:bg-purple-500 hover:text-white transition-colors px-3 py-1.5 text-sm font-semibold">
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 rounded bg-purple-500/20 text-purple-400 hover:bg-purple-500 hover:text-white transition-colors px-3.5 py-2.5 text-sm font-semibold min-h-[44px]">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
             Smart Paste AI
           </button>
           <button onClick={() => { setIsAdding(true); setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random()*10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }) }}
-            className="flex items-center gap-2 rounded bg-blue/20 text-blue hover:bg-blue hover:text-white transition-colors px-3 py-1.5 text-sm font-semibold">
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 rounded bg-blue/20 text-blue hover:bg-blue hover:text-white transition-colors px-3.5 py-2.5 text-sm font-semibold min-h-[44px]">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
@@ -308,7 +308,7 @@ export default function InventoryGrid() {
       {loading && products.length === 0 ? (
         <div className="flex h-64 items-center justify-center text-white/60">Loading products...</div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-12">
           {products.map(p => {
             const pinnedBatch = p.batches?.find(b => b.is_pinned)
             const primaryExpiryDate = pinnedBatch?.expiry_date || p.expiry_date || (p.batches && p.batches[0]?.expiry_date)
@@ -421,7 +421,7 @@ export default function InventoryGrid() {
                 <h3 className="font-serif text-xl font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
                 <p className="text-sm text-white/60 font-mono mt-0.5">{editingProduct.sku}</p>
               </div>
-              <button onClick={() => { setEditingProduct(null); setIsAdding(false) }} className="text-white/60 hover:text-white transition-colors">
+              <button onClick={() => { setEditingProduct(null); setIsAdding(false) }} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg hover:bg-white/10" aria-label="Close modal">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>

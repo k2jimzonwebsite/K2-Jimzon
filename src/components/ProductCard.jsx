@@ -71,7 +71,7 @@ export default function ProductCard({ product, index = 0, compact = false, featu
           </div>
           <button
             onClick={() => { addToCart(product.sku); setCartOpen(true) }}
-            className={`rounded-lg bg-crimson font-semibold text-white transition-all hover:bg-crimson-deep active:scale-95 shadow-card ${featured ? 'px-5 sm:px-8 py-2.5 sm:py-3.5 text-sm' : 'px-4 py-2 text-sm sm:px-5 sm:py-2.5'}`}
+            className={`rounded-lg bg-crimson font-semibold text-white transition-all hover:bg-crimson-deep active:scale-95 shadow-card min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${featured ? 'px-5 sm:px-8 py-2.5 sm:py-3.5 text-sm' : 'px-4 py-2 text-sm sm:px-5 sm:py-2.5'}`}
           >
             Add
           </button>

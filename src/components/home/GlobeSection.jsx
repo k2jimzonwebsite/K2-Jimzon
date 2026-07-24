@@ -14,7 +14,7 @@ export default function GlobeSection() {
   if (!enabledGlobeProducts || enabledGlobeProducts.length === 0) return null
 
   return (
-    <section className="relative overflow-hidden border-y border-line bg-shell/60 px-4 py-12 md:py-20 min-h-[100svh] flex flex-col justify-center snap-start md:min-h-0 md:block">
+    <section className="relative overflow-hidden border-y border-line bg-shell/60 px-4 py-12 md:py-20">
       {/* Warm depth blobs */}
       <div className="pointer-events-none absolute -top-[10%] -right-[10%] h-[60%] w-[60%] rounded-full bg-[#9A6A45] opacity-15 mix-blend-multiply blur-[100px]" />
       <div className="pointer-events-none absolute -bottom-[20%] -left-[10%] h-[60%] w-[60%] rounded-full bg-[#B84E3A] opacity-[0.12] mix-blend-overlay blur-[120px]" />

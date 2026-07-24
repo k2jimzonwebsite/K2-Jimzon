@@ -212,12 +212,12 @@ export default function Admin() {
         <div className="flex items-center justify-between px-4 py-3 bg-[#0A0C11] border-b border-white/10 shrink-0 w-full lg:hidden">
           <p className="text-base font-semibold text-white">K2 Jimzon <span className="text-white/60 font-normal">BOS</span></p>
           <div className="flex items-center gap-1">
-            <button onClick={() => setPaletteOpen(true)} className="p-2 text-white/50 hover:text-white">
+            <button onClick={() => setPaletteOpen(true)} className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-white/50 hover:text-white">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
-            <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 text-white/50 hover:text-white">
+            <button onClick={() => setIsMobileMenuOpen(true)} className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-white/50 hover:text-white">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
@@ -232,7 +232,7 @@ export default function Admin() {
             <div className="relative flex w-64 flex-col bg-[#0A0C11] border-r border-white/10 overflow-y-auto pt-4 pb-20 px-2">
               <div className="flex items-center justify-between px-3 mb-4">
                 <p className="text-base font-semibold text-white">Menu</p>
-                <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 text-white/50 hover:text-white">
+                <button onClick={() => setIsMobileMenuOpen(false)} className="p-2.5 min-h-[44px] min-w-[44px] text-white/50 hover:text-white">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>

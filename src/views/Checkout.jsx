@@ -75,7 +75,7 @@ export default function Checkout() {
                 </div>
                 <button
                   onClick={removeCoupon}
-                  className="text-crimson hover:underline font-bold text-[11px]"
+                  className="text-crimson hover:underline font-bold text-xs min-h-[44px] inline-flex items-center px-2"
                 >
                   Remove
                 </button>
@@ -87,11 +87,11 @@ export default function Checkout() {
                   value={promoInput}
                   onChange={(e) => setPromoInput(e.target.value)}
                   placeholder="Enter Promo Code (e.g. MILAN10)"
-                  className="flex-1 rounded-xl border border-line bg-shell px-3.5 py-2 text-xs text-navy placeholder:text-navy-faint uppercase font-mono font-bold focus:outline-none focus:border-amber"
+                  className="flex-1 rounded-xl border border-line bg-shell px-3.5 py-2.5 text-base md:text-xs text-navy placeholder:text-navy-faint uppercase font-mono font-bold focus:outline-none focus:border-amber min-h-[44px]"
                 />
                 <button
                   type="submit"
-                  className="bg-amber hover:bg-amber/90 text-navy font-bold text-xs px-4 py-2 rounded-xl transition-all shadow-sm shrink-0"
+                  className="bg-amber hover:bg-amber/90 text-navy font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm shrink-0 min-h-[44px] inline-flex items-center justify-center"
                 >
                   Apply
                 </button>
@@ -106,7 +106,7 @@ export default function Checkout() {
 
             {/* Claimed Vouchers Quick Apply Pills */}
             {!appliedCoupon && claimedVouchers.length > 0 && (
-              <div className="pt-1 flex items-center gap-1.5 overflow-x-auto text-[11px] font-mono scrollbar-none">
+              <div className="pt-1 flex items-center gap-1.5 overflow-x-auto text-xs font-mono scrollbar-none py-1">
                 <span className="text-navy-soft shrink-0">Wallet:</span>
                 {claimedVouchers.map(vCode => (
                   <button
@@ -117,7 +117,7 @@ export default function Checkout() {
                       if (res.success) setPromoFeedback({ type: 'success', message: res.message })
                       else setPromoFeedback({ type: 'error', message: res.message })
                     }}
-                    className="px-2.5 py-1 rounded-lg bg-amber/15 hover:bg-amber/30 text-navy border border-amber/30 font-bold shrink-0 transition-all"
+                    className="px-3 py-2 rounded-lg bg-amber/15 hover:bg-amber/30 text-navy border border-amber/30 font-bold shrink-0 transition-all min-h-[44px] inline-flex items-center"
                   >
                     + {vCode}
                   </button>

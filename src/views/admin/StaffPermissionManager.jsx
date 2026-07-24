@@ -122,7 +122,7 @@ export default function StaffPermissionManager() {
                     <p className="text-sm text-white/50 truncate">{r.email} · <span className={`font-bold ${roleClass(r.role)}`}>{r.role}</span></p>
                   </div>
                   <select value={ROLES.includes(r.role) ? r.role : 'Customer'} onChange={e => changeRole(r.id, e.target.value)}
-                    className="shrink-0 rounded-lg border border-white/20 bg-[#0A101D] px-3 py-1.5 text-sm text-white focus:border-blue outline-none cursor-pointer">
+                    className="shrink-0 rounded-lg border border-white/20 bg-[#0A101D] px-3 py-2.5 min-h-[44px] text-sm text-white focus:border-blue outline-none cursor-pointer">
                     {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
                   </select>
                 </div>

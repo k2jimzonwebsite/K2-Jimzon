@@ -21,7 +21,7 @@ function SearchBox({ className = '' }) {
           }
         }}
         placeholder='Try "Lavazza", "Biscoff", "pesto"…'
-        className="w-full rounded-full border border-line bg-shell py-2.5 pl-9 pr-4 text-sm placeholder:text-navy-faint focus:border-navy/40 focus:bg-paper focus:outline-none"
+        className="w-full rounded-full border border-line bg-shell py-2.5 pl-9 pr-4 text-base md:text-sm placeholder:text-navy-faint focus:border-navy/40 focus:bg-paper focus:outline-none"
       />
     </label>
   )
@@ -35,12 +35,12 @@ export default function StoreHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/95 backdrop-blur-xl transition-colors">
       {/* Announcement Banner */}
-      <div className="bg-shell/80 border-b border-line px-4 py-1.5 text-center text-xs font-semibold text-navy-soft flex items-center justify-center gap-2">
+      <div className="bg-shell/80 border-b border-line px-4 py-1.5 text-center text-xs font-semibold text-navy-soft flex items-center justify-center gap-2 flex-wrap sm:flex-nowrap">
         <span>✈ Next Milan consignment lands <span className="font-extrabold text-gold">22 July</span></span>
         <span className="hidden sm:inline">· Free Metro Manila delivery over ₱2,500</span>
         <button
           onClick={() => setShowVoucherHunt(true)}
-          className="ml-2 bg-gold/20 hover:bg-gold/30 text-gold font-bold px-2 py-0.5 rounded border border-gold/40 transition-all text-xs"
+          className="ml-2 bg-gold/20 hover:bg-gold/30 text-gold font-bold px-2.5 py-1 rounded border border-gold/40 transition-all text-xs min-h-[36px] sm:min-h-[44px] inline-flex items-center justify-center"
         >
           🎁 Voucher Hunt
         </button>
@@ -50,7 +50,7 @@ export default function StoreHeader() {
         <div className="flex items-center justify-center gap-3 bg-blue/15 border-b border-line px-4 py-1.5 text-xs font-semibold text-blue">
           <span className="inline-flex h-2 w-2 rounded-full bg-blue pulse-dot" />
           Wholesale pricing active — Bella Vita Trading
-          <button onClick={() => setIsWholesale(false)} className="px-2 py-1 -mx-2 underline decoration-blue/40 underline-offset-2 hover:decoration-blue font-bold">
+          <button onClick={() => setIsWholesale(false)} className="px-2 py-1 -mx-2 underline decoration-blue/40 underline-offset-2 hover:decoration-blue font-bold min-h-[44px] inline-flex items-center">
             Sign out
           </button>
         </div>
@@ -64,7 +64,7 @@ export default function StoreHeader() {
 
         <button
           onClick={() => setShowVoucherHunt(true)}
-          className="ml-auto hidden sm:flex items-center gap-1.5 bg-gold/15 hover:bg-gold/25 text-gold font-bold text-xs px-3.5 py-2 rounded-full border border-gold/30 transition-all active:scale-95 shadow-sm"
+          className="ml-auto hidden sm:flex items-center gap-1.5 bg-gold/15 hover:bg-gold/25 text-gold font-bold text-xs px-3.5 py-2 rounded-full border border-gold/30 transition-all active:scale-95 shadow-sm min-h-[44px]"
         >
           <span>🎁</span>
           <span>Voucher Hunt</span>
@@ -72,7 +72,7 @@ export default function StoreHeader() {
 
         <button
           onClick={() => setShowProfileModal(true)}
-          className="whitespace-nowrap rounded-lg px-3 py-2 text-xs font-bold text-navy hover:bg-shell border border-line flex items-center gap-1.5 transition-colors"
+          className="whitespace-nowrap rounded-lg px-3 py-2 text-xs font-bold text-navy hover:bg-shell border border-line flex items-center gap-1.5 transition-colors min-h-[44px]"
           title="Account Profile & Delivery Settings"
         >
           <span>👤</span>
@@ -81,7 +81,7 @@ export default function StoreHeader() {
 
         <button
           onClick={() => go('wholesale')}
-          className="whitespace-nowrap rounded-lg px-3.5 py-2 text-xs font-bold text-blue transition-colors hover:bg-blue/10 border border-blue/20"
+          className="whitespace-nowrap rounded-lg px-3.5 py-2 text-xs font-bold text-blue transition-colors hover:bg-blue/10 border border-blue/20 min-h-[44px] inline-flex items-center justify-center"
         >
           {isWholesale ? 'Wholesale Portal' : 'Wholesale Login'}
         </button>

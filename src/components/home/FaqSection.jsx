@@ -15,7 +15,7 @@ import { ArrowIcon, CheckIcon, PlaneIcon, PlusIcon, StarIcon, MinusIcon } from '
 function FaqSection() {
   const [open, setOpen] = useState(0)
   return (
-    <section className="relative mx-auto max-w-3xl px-4 py-16 glow-olive scroll-reveal min-h-[100svh] flex flex-col justify-center snap-start md:min-h-0 md:block">
+    <section className="relative mx-auto max-w-3xl px-4 py-16 glow-olive scroll-reveal">
       <h2 className="text-center font-serif text-2xl font-semibold tracking-tight md:text-3xl">
         Questions, answered honestly
       </h2>

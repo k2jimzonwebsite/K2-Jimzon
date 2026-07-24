@@ -32,7 +32,7 @@ function NewArrivals() {
   const wash = (a) => `rgba(${tint}, ${a})`
 
   return (
-    <section className="bg-shell/60 backdrop-blur-sm px-4 py-12 md:py-24 relative overflow-hidden min-h-[100svh] flex flex-col justify-center snap-start md:min-h-0 md:block">
+    <section className="bg-shell/60 backdrop-blur-sm px-4 py-12 md:py-24 relative overflow-hidden">
 
       {/* Chameleon background — adapts to the active product's photo colour. */}
       {/* Flat tint: the whole frame takes on the colour. */}

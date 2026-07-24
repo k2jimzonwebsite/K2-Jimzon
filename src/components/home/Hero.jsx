@@ -19,7 +19,7 @@ function Hero() {
   const [selected, setSelected] = useState(null)
 
   return (
-    <section className="relative overflow-hidden border-b border-line bg-cream/70 backdrop-blur-xl min-h-[100svh] flex flex-col justify-center snap-start md:min-h-0 md:block">
+    <section className="relative overflow-hidden border-b border-line bg-cream/70 backdrop-blur-xl">
       <Tricolor className="absolute inset-x-0 top-0 z-10" />
       <div className="grain relative mx-auto grid max-w-6xl items-center gap-8 px-6 py-14 text-center sm:py-16 md:grid-cols-2 md:gap-10 md:py-24 md:text-left">
         <motion.div

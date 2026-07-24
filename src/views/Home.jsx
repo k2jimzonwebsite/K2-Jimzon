@@ -16,7 +16,7 @@ export default function Home() {
   const { query, category } = useStore()
 
   return (
-    <main className="pb-24 md:pb-12">
+    <main className="pb-[calc(6rem+env(safe-area-inset-bottom,0px))] md:pb-12">
       <Helmet>
         <title>K2 Jimzon | Premium Italian Imported Food & Ingredients in the Philippines</title>
         <meta name="description" content="Discover K2 Jimzon, the premier importer of authentic Italian ingredients, espresso, and wholesale food in the Philippines. Shop our exclusive collection today." />

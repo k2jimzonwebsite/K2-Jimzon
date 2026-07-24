@@ -58,7 +58,7 @@ export default function Overview({ setSection, skus = 0, lowStock = 0, pending =
     <div className="space-y-6 animate-in fade-in duration-300 font-sans w-full">
 
       {/* Metrics — single canonical KPI row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {metrics.map(m => (
           <div key={m.label} className="rounded-xl border border-white/10 bg-[#12161F] px-4 py-3.5">
             <p className="text-xs text-white/60">{m.label}</p>
@@ -83,7 +83,7 @@ export default function Overview({ setSection, skus = 0, lowStock = 0, pending =
             <h2 className="text-sm font-semibold text-white">Today's landed P&amp;L</h2>
             <span className="text-xs text-white/60">estimated</span>
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <p className="text-xs text-white/60">Gross revenue</p>
               <p className="mt-1 text-xl font-semibold tabular-nums text-white">{revenue}</p>
@@ -126,7 +126,7 @@ export default function Overview({ setSection, skus = 0, lowStock = 0, pending =
       {/* Quick jump */}
       <div>
         <p className="text-xs text-white/60 mb-2">Quick jump</p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
           {actions.map(a => (
             <button
               key={a.target}

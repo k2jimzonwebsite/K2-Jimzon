@@ -22,7 +22,7 @@ function Newsletter() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-16 pt-14 min-h-[100svh] flex flex-col justify-center snap-start md:min-h-0 md:block">
+    <section className="mx-auto max-w-6xl px-4 pb-16 pt-14">
       <div className="relative overflow-hidden rounded-3xl bg-shell px-6 py-12 text-center text-navy md:py-16 shadow-card border border-line">
         
         {/* Abstract Ambient Glows */}
@@ -52,7 +52,7 @@ function Newsletter() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@email.com"
-              className="min-w-0 flex-1 rounded-xl border border-line bg-cream/50 backdrop-blur-sm px-4 py-3 text-sm text-navy placeholder:text-navy-faint focus:border-navy focus:outline-none shadow-sm"
+              className="min-w-0 flex-1 rounded-xl border border-line bg-cream/50 backdrop-blur-sm px-4 py-3 text-base md:text-sm text-navy placeholder:text-navy-faint focus:border-navy focus:outline-none shadow-sm min-h-[44px]"
             />
             <RedButton type="submit">Subscribe</RedButton>
           </form>
