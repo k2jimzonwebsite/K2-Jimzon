@@ -39,7 +39,7 @@ function Shell() {
   const hostname = typeof window !== 'undefined' ? window.location.hostname : ''
   
   // Environment & Subdomain Detection
-  const isAdminDeployment = import.meta.env.VITE_IS_ADMIN_DEPLOYMENT === 'true' || hostname.startsWith('admin.')
+  const isAdminDeployment = import.meta.env.VITE_IS_ADMIN_DEPLOYMENT === 'true' || hostname.startsWith('admin.') || (typeof window !== 'undefined' && window.location.port === '5174')
   
   // If this is an Admin Deployment, boot directly into Admin view.
   // If this is a Storefront Deployment, block public route access to admin.
