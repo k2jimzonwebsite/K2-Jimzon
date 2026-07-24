@@ -11,7 +11,7 @@ export default function ProductCard({ product, index = 0, compact = false, featu
   return (
     <article
       data-testid="product-card"
-      className={`group flex w-full h-full overflow-hidden rounded-3xl bg-cream/95 md:bg-cream/90 md:backdrop-blur-md shadow-card transition-all duration-300 hover:shadow-float hover:-translate-y-1 hover:bg-cream ${featured ? 'flex-col md:flex-row' : 'flex-col'}`}
+      className={`group flex w-full h-full overflow-hidden rounded-3xl border border-line bg-cream/95 md:bg-cream/90 md:backdrop-blur-md shadow-card transition-all duration-300 hover:shadow-float hover:-translate-y-1 hover:border-crimson/30 hover:bg-cream ${featured ? 'flex-col md:flex-row' : 'flex-col'}`}
     >
       {featured ? (
         <div className="relative text-left h-[280px] sm:h-[350px] md:h-[400px] md:h-full md:w-[55%] flex-shrink-0">
@@ -71,7 +71,7 @@ export default function ProductCard({ product, index = 0, compact = false, featu
           </div>
           <button
             onClick={() => { addToCart(product.sku); setCartOpen(true) }}
-            className={`rounded-lg bg-crimson font-semibold text-white transition-all hover:bg-crimson-deep active:scale-95 shadow-card ${featured ? 'px-5 sm:px-8 py-2.5 sm:py-3.5 text-sm' : 'px-3 py-1.5 text-xs sm:text-sm sm:px-4 sm:py-2.5'}`}
+            className={`rounded-lg bg-crimson font-semibold text-white transition-all hover:bg-crimson-deep active:scale-95 shadow-card ${featured ? 'px-5 sm:px-8 py-2.5 sm:py-3.5 text-sm' : 'px-4 py-2 text-sm sm:px-5 sm:py-2.5'}`}
           >
             Add
           </button>

@@ -115,10 +115,10 @@ export default function StoreHeader() {
           <div className="flex items-center gap-1.5 sm:gap-2">
             <button
               onClick={() => go('home')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all flex items-center gap-1.5 ${
                 view === 'home'
-                  ? 'bg-navy text-cream shadow-sm'
-                  : 'text-navy-soft hover:text-navy hover:bg-shell'
+                  ? 'bg-navy border-navy text-cream shadow-md'
+                  : 'bg-cream border-line text-navy hover:border-crimson/50 hover:text-crimson hover:-translate-y-0.5 hover:shadow-card'
               }`}
             >
               <span>🏠</span> Home
@@ -126,10 +126,10 @@ export default function StoreHeader() {
 
             <button
               onClick={() => go('catalog')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all flex items-center gap-1.5 ${
                 view === 'catalog'
-                  ? 'bg-navy text-cream shadow-sm'
-                  : 'text-navy-soft hover:text-navy hover:bg-shell'
+                  ? 'bg-navy border-navy text-cream shadow-md'
+                  : 'bg-cream border-line text-navy hover:border-crimson/50 hover:text-crimson hover:-translate-y-0.5 hover:shadow-card'
               }`}
             >
               <span>📦</span> Inventory & Catalog
@@ -137,10 +137,10 @@ export default function StoreHeader() {
 
             <button
               onClick={() => go('pasabuy')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all flex items-center gap-1.5 ${
                 view === 'pasabuy'
-                  ? 'bg-navy text-cream shadow-sm'
-                  : 'text-navy-soft hover:text-navy hover:bg-shell'
+                  ? 'bg-navy border-navy text-cream shadow-md'
+                  : 'bg-cream border-line text-navy hover:border-crimson/50 hover:text-crimson hover:-translate-y-0.5 hover:shadow-card'
               }`}
             >
               <span>✈️</span> Pasabuy Sourcing
@@ -148,10 +148,10 @@ export default function StoreHeader() {
 
             <button
               onClick={() => go('wholesale')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+              className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all flex items-center gap-1.5 ${
                 view === 'wholesale'
-                  ? 'bg-navy text-cream shadow-sm'
-                  : 'text-navy-soft hover:text-navy hover:bg-shell'
+                  ? 'bg-navy border-navy text-cream shadow-md'
+                  : 'bg-cream border-line text-navy hover:border-crimson/50 hover:text-crimson hover:-translate-y-0.5 hover:shadow-card'
               }`}
             >
               <span>💼</span> Wholesale Portal

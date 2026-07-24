@@ -74,6 +74,16 @@
     letter-spacing: -0.025em;
     text-wrap: balance;
   }
+
+  /* Everything interactive shows the hand cursor, so it clearly reads as clickable. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  a,
+  summary,
+  label[for],
+  select {
+    cursor: pointer;
+  }
 }
 
 @theme {
