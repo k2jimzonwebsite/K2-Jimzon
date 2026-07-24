@@ -44,10 +44,15 @@ create policy "profiles_admin_update" on public.user_profiles
 
 -- 3) Anti-privilege-escalation: a normal user may edit their own profile (e.g.
 --    full_name) but may NOT change their own role. Only an admin can change role.
+-- Only block a LOGGED-IN non-admin from changing roles. When auth.uid() is null
+-- (SQL editor / service-role backend) the change is trusted and allowed — this
+-- is what lets you bootstrap the very first admin.
 create or replace function public.guard_role_change()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
-  if NEW.role is distinct from OLD.role and not public.is_admin() then
+  if NEW.role is distinct from OLD.role
+     and auth.uid() is not null
+     and not public.is_admin() then
     raise exception 'Only an admin can change a user role';
   end if;
   return NEW;

@@ -34,7 +34,7 @@ export default function StaffPermissionManager() {
     if (!supabase) { setLoading(false); return }
     setLoading(true); setErr('')
     const { data, error } = await supabase.from('user_profiles')
-      .select('id, email, full_name, role, created_at').order('created_at', { ascending: true })
+      .select('id, email, role, created_at').order('created_at', { ascending: true })
     if (error) setErr(error.message)
     else setRows(data || [])
     setLoading(false)
