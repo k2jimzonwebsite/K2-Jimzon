@@ -149,6 +149,23 @@
   animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Chameleon ambient motion — slow + eased for a luxury feel. */
+@keyframes chameleon-breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.55; }
+  50%      { transform: scale(1.14); opacity: 0.85; }
+}
+@keyframes chameleon-drift {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50%  { transform: translate3d(2%, -1.5%, 0) rotate(5deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+}
+.chameleon-breathe { animation: chameleon-breathe 7s ease-in-out infinite; will-change: transform, opacity; }
+.chameleon-drift   { animation: chameleon-drift 22s ease-in-out infinite;  will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chameleon-breathe, .chameleon-drift { animation: none; }
+}
+
 /* Custom Scrollbars */
 .custom-scrollbar::-webkit-scrollbar {
   width: 7px;

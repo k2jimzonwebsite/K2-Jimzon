@@ -35,18 +35,21 @@ export function useDominantColor(src) {
         ctx.drawImage(img, 0, 0, W, H)
         const { data } = ctx.getImageData(0, 0, W, H)
 
-        let r = 0, g = 0, b = 0, count = 0
+        let r = 0, g = 0, b = 0, wsum = 0
         for (let i = 0; i < data.length; i += 4) {
           const rr = data[i], gg = data[i + 1], bb = data[i + 2], aa = data[i + 3]
           if (aa < 200) continue                         // transparent
           const max = Math.max(rr, gg, bb), min = Math.min(rr, gg, bb)
-          if (max > 245 && min > 238) continue           // near-white background
-          if (max < 20) continue                         // near-black edge
-          r += rr; g += gg; b += bb; count++
+          if (max > 250 && min > 244) continue           // pure-white background
+          if (max < 22) continue                         // near-black edge
+          // Weight vivid (saturated) pixels more so we lock onto the product's
+          // real colour, not a muddy grey average of the whole photo.
+          const wgt = 1 + (max - min) * 0.06
+          r += rr * wgt; g += gg * wgt; b += bb * wgt; wsum += wgt
         }
 
         if (!cancelled) {
-          setColor(count > 0 ? `${Math.round(r / count)}, ${Math.round(g / count)}, ${Math.round(b / count)}` : null)
+          setColor(wsum > 0 ? `${Math.round(r / wsum)}, ${Math.round(g / wsum)}, ${Math.round(b / wsum)}` : null)
         }
       } catch (_) {
         if (!cancelled) setColor(null) // tainted canvas → let caller fall back

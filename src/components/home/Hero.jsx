@@ -10,6 +10,7 @@ import ProductVisual from '../ProductVisual';
 import InteractiveReveal from '../InteractiveReveal';
 import { BizBadge, RedButton, StockPill, TrustBadge, Tricolor, GhostButton, Kicker } from '../ui/bits';
 import ProductCard from '../ProductCard';
+import FlightMap from './FlightMap';
 import { ArrowIcon, CheckIcon, PlaneIcon, PlusIcon, StarIcon, MinusIcon } from '../ui/icons';
 
 function Hero() {
@@ -20,12 +21,12 @@ function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-line bg-cream/70 backdrop-blur-xl min-h-[100svh] flex flex-col justify-center snap-start md:min-h-0 md:block">
       <Tricolor className="absolute inset-x-0 top-0 z-10" />
-      <div className="grain relative mx-auto max-w-6xl px-6 py-14 text-center sm:py-20 md:py-28 md:text-left">
+      <div className="grain relative mx-auto grid max-w-6xl items-center gap-8 px-6 py-14 text-center sm:py-16 md:grid-cols-2 md:gap-10 md:py-24 md:text-left">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={{ visible: { transition: { staggerChildren: 0.1 } }, hidden: {} }}
-          className="mx-auto w-full max-w-2xl md:mx-0"
+          className="mx-auto w-full max-w-xl md:mx-0"
         >
           <motion.span
             variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } } }}
@@ -57,6 +58,11 @@ function Hero() {
             </GhostButton>
           </motion.div>
         </motion.div>
+
+        {/* Milano → Manila flight animation on a real world map fills the right side */}
+        <div className="w-full">
+          <FlightMap />
+        </div>
       </div>
     </section>
   )

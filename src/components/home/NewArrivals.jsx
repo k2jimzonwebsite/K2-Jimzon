@@ -12,6 +12,7 @@ import { BizBadge, RedButton, StockPill, TrustBadge, Tricolor, GhostButton, Kick
 import ProductCard from '../ProductCard';
 import { ArrowIcon, CheckIcon, PlaneIcon, PlusIcon, StarIcon, MinusIcon } from '../ui/icons';
 import { useDominantColor } from '../../lib/useDominantColor';
+import { vividTint } from '../../lib/color';
 
 function NewArrivals() {
   const { products } = useStore()
@@ -27,22 +28,37 @@ function NewArrivals() {
   // product's curated hue if the image can't be read (e.g. cross-origin).
   const dominant = useDominantColor(activeProduct?.img)
   const hue = activeProduct?.hue ?? 40
-  const wash = (a) => (dominant ? `rgba(${dominant}, ${a})` : `hsla(${hue}, 55%, 55%, ${a})`)
+  const tint = vividTint(dominant, hue)                 // vivid "r,g,b" from the photo (or hue)
+  const wash = (a) => `rgba(${tint}, ${a})`
 
   return (
     <section className="bg-shell/60 backdrop-blur-sm px-4 py-12 md:py-24 relative overflow-hidden min-h-[100svh] flex flex-col justify-center snap-start md:min-h-0 md:block">
 
-      {/* Chameleon background — an ambient wash that adapts to the active product's colour */}
+      {/* Chameleon background — adapts to the active product's photo colour. */}
+      {/* Flat tint: the whole frame takes on the colour. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
+        style={{ backgroundColor: wash(0.16), transition: 'background-color 900ms ease' }}
+      />
+      {/* Slowly drifting colour field (oversized so its edges never show). */}
+      <div
+        aria-hidden="true"
+        className="chameleon-drift absolute -inset-[15%] pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse 75% 60% at 25% 12%, ${wash(0.30)} 0%, transparent 62%),
-                       radial-gradient(ellipse 65% 70% at 82% 92%, ${wash(0.20)} 0%, transparent 62%),
-                       radial-gradient(ellipse 90% 50% at 50% 50%, ${wash(0.10)} 0%, transparent 70%)`,
-          transition: 'background 1100ms ease',
+          background: `radial-gradient(ellipse 70% 60% at 45% 30%, ${wash(0.50)} 0%, transparent 66%),
+                       radial-gradient(circle at 15% 85%, ${wash(0.40)} 0%, transparent 55%),
+                       radial-gradient(circle at 85% 80%, ${wash(0.36)} 0%, transparent 55%)`,
+          transition: 'background 900ms ease',
         }}
       />
+      {/* Breathing spotlight halo, centred behind the featured product. */}
+      <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[62%] w-[80%] max-w-3xl -translate-x-1/2 -translate-y-1/2">
+        <div
+          className="chameleon-breathe h-full w-full rounded-full blur-[100px]"
+          style={{ backgroundColor: `rgba(${tint}, 0.5)`, transition: 'background-color 900ms ease' }}
+        />
+      </div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
