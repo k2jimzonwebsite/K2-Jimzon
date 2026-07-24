@@ -377,10 +377,7 @@ export function StoreProvider({ children }) {
       if (!res.ok) return { ok: false, error: out.error || 'Invite failed.' }
       return { ok: true }
     } catch (e) {
-      return { 
-        ok: false, 
-        error: `The 'invite-staff' Edge Function isn't deployed on Supabase yet. Have ${cleanEmail} log in once on the site (or via Google), then click refresh to set their role!` 
-      }
+      return { ok: false, error: e.message || 'Invite failed.' }
     }
   }
 
