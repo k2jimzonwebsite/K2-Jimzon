@@ -7,12 +7,8 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
   const [latency, setLatency] = useState(14)
   const [dbStatus, setDbStatus] = useState('Healthy · Connected')
   const [wsStatus, setWsStatus] = useState('Subscribed (3 Channels)')
-  const [errorLogs, setErrorLogs] = useState([
-    { id: 1, time: '15:45:02', level: 'INFO', msg: 'Vercel Edge Network CDN cache hit (200 OK)' },
-    { id: 2, time: '15:42:18', level: 'SUCCESS', msg: 'RPC decrement_stock executed atomically for ORD-SHP-8821' },
-    { id: 3, time: '15:38:40', level: 'INFO', msg: 'WebSocket channel [overview_updates] heartbeat acknowledged' },
-    { id: 4, time: '15:30:12', level: 'SECURITY', msg: 'AES-256 Security Vault verified 4 marketplace API credentials' }
-  ])
+  const [errors, setErrors] = useState([])
+  const [errLoading, setErrLoading] = useState(false)
 
   // Ticker for live QPS and Latency simulation
   useEffect(() => {
@@ -22,6 +18,20 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
       setLatency(Math.floor(12 + Math.random() * 6))
     }, 2000)
     return () => clearInterval(interval)
+  }, [isOpen])
+
+  // Load real client-side errors from Supabase when the panel opens
+  useEffect(() => {
+    if (!isOpen || !supabase) return
+    let active = true
+    setErrLoading(true)
+    supabase
+      .from('error_reports')
+      .select('id, created_at, message, url, status')
+      .order('created_at', { ascending: false })
+      .limit(25)
+      .then(({ data }) => { if (active) { setErrors(data || []); setErrLoading(false) } })
+    return () => { active = false }
   }, [isOpen])
 
   if (!isOpen) return null
@@ -145,31 +155,36 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
             </div>
           </div>
 
-          {/* System Error & Audit Trail Stream */}
+          {/* Real client-error stream from the error_reports table */}
           <div className="bg-[#27272a] p-5 rounded-2xl border border-white/10 space-y-3">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                📋 Production System Log & Audit Stream
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                📋 Recent errors
               </h3>
-              <span className="text-sm font-mono text-neutral-300 font-bold">4 Recent Log Events</span>
+              <span className="text-sm font-mono text-neutral-300 font-bold">
+                {errLoading ? 'Loading…' : `${errors.length} logged`}
+              </span>
             </div>
-            <div className="space-y-2 font-mono text-sm">
-              {errorLogs.map(log => (
-                <div key={log.id} className="flex items-start justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                  <div className="flex items-start gap-3">
-                    <span className="text-gold font-bold">{log.time}</span>
-                    <span className={`px-2 py-0.5 rounded font-bold text-xs ${
-                      log.level === 'SECURITY' ? 'bg-gold text-navy' :
-                      log.level === 'SUCCESS' ? 'bg-blue text-white' : 'bg-white/20 text-white'
-                    }`}>
-                      {log.level}
-                    </span>
-                    <span className="text-white font-medium">{log.msg}</span>
+
+            {errors.length === 0 && !errLoading ? (
+              <div className="p-4 rounded-xl bg-black/30 border border-white/10 text-center text-sm text-neutral-300">
+                ✓ No errors logged — all clear.
+              </div>
+            ) : (
+              <div className="space-y-2 font-mono text-sm max-h-72 overflow-y-auto custom-scrollbar">
+                {errors.map(e => (
+                  <div key={e.id} className="p-3 rounded-xl bg-black/40 border border-white/10">
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="text-crimson font-medium break-all">{e.message || 'Unknown error'}</span>
+                      <span className="text-white/50 text-xs shrink-0 font-sans">
+                        {e.created_at ? new Date(e.created_at).toLocaleString() : ''}
+                      </span>
+                    </div>
+                    {e.url && <p className="text-white/40 text-xs mt-1 truncate font-sans">{e.url}</p>}
                   </div>
-                  <span className="text-white/60 text-xs">VERIFIED</span>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
         </div>

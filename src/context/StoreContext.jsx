@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState, useEffect } from 'react'
+import { createContext, useContext, useMemo, useState, useEffect, useRef } from 'react'
 import { flushSync } from 'react-dom'
 import { supabase } from '../lib/supabaseClient'
 import { products as localProducts } from '../data/products'
@@ -721,7 +721,21 @@ export function StoreProvider({ children }) {
     return { lines, subtotal, count, wholesaleSavings: retailTotal - subtotal, couponDiscount, finalTotal }
   }, [cart, isWholesale, products, appliedCoupon])
 
+  const placingOrderRef = useRef(false)
+
   const placeOrder = async () => {
+    // Idempotency guard: block double-submit (double-click / slow network) so a
+    // single checkout can't create duplicate orders or double-decrement stock.
+    if (placingOrderRef.current) return
+    placingOrderRef.current = true
+    try {
+      await runPlaceOrder()
+    } finally {
+      placingOrderRef.current = false
+    }
+  }
+
+  const runPlaceOrder = async () => {
     // Best available buyer identity: profile name → account name → email handle → guest
     const buyerName = user?.user_metadata?.full_name || user?.name || (user?.email ? user.email.split('@')[0] : 'Website Guest')
     const orderLines = totals.lines.map(l => ({

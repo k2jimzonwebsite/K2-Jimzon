@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async'
 import './index.css'
 import App from './App.jsx'
+import { installErrorReporting } from './lib/reportError'
+
+// Capture uncaught errors + promise rejections app-wide.
+installErrorReporting()
 
 console.log(
   "%c☕ Ciao! Inspecting the code? You must appreciate the finer things in life, like authentic Italian espresso and beautifully crafted react. Welcome to the manifest.",
