@@ -374,7 +374,16 @@ export function StoreProvider({ children }) {
         body: JSON.stringify({ email: cleanEmail, role, redirectTo: window.location.origin }),
       })
       const out = await res.json().catch(() => ({}))
-      if (!res.ok) return { ok: false, error: out.error || 'Invite failed.' }
+      if (!res.ok) {
+        const errMsg = out.error || 'Invite failed.'
+        if (/rate limit/i.test(errMsg)) {
+          return { 
+            ok: false, 
+            error: `Supabase email sending limit reached for this hour (free tier safety limit). Have ${cleanEmail} click 'Continue with Google' or log in once on the site, then refresh this page to make them Admin!` 
+          }
+        }
+        return { ok: false, error: errMsg }
+      }
       return { ok: true }
     } catch (e) {
       return { ok: false, error: e.message || 'Invite failed.' }
