@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
