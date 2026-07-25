@@ -13,7 +13,7 @@ import ProductCard from '../ProductCard';
 import { ArrowIcon, CheckIcon, PlaneIcon, PlusIcon, StarIcon, MinusIcon } from '../ui/icons';
 
 function HomeCatalog() {
-  const { products, category, query } = useStore()
+  const { listedProducts: products, category, query } = useStore()
   const [page, setPage] = useState(1)
   const PER_PAGE = 24
 

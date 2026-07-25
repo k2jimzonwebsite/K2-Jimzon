@@ -8,7 +8,7 @@ import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 
 export default function ProductDetail() {
-  const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, setView, products, go } = useStore()
+  const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, setView, listedProducts: products, go } = useStore()
   
   const featuredList = useMemo(() => {
     const list = products.filter(p => p.tag === 'Bestseller' || p.collections.includes('trending')).slice(0, 5);

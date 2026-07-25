@@ -7,6 +7,7 @@ import PhotoManagerModal from './PhotoManagerModal'
 import BulkCsvImportModal from './BulkCsvImportModal'
 import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
+import DeleteProductsModal from './DeleteProductsModal'
 import { useStore } from '../../context/StoreContext'
 import Barcode from 'react-barcode'
 import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
@@ -129,11 +130,9 @@ export default function Sheet() {
     await supabase.from('products').update({ [field]: finalValue }).eq('sku', oldSku || product.sku)
   }
 
-  const handleDeleteRow = async (sku) => {
-    if (!confirm('Are you sure you want to permanently delete this product?')) return;
-    setRows(prev => prev.filter(r => r.sku !== sku))
-    if (supabase) await supabase.from('products').delete().eq('sku', sku)
-  }
+  // Deletion goes through the same PIN gate as the card grid — a bare
+  // window.confirm() on a row you might have mis-tapped is not a safeguard.
+  const [deleteTargets, setDeleteTargets] = useState(null)
 
   const handleAddRow = async () => {
     const newSku = `NEW-${Math.random().toString(36).substring(2, 6).toUpperCase()}`
@@ -250,7 +249,6 @@ export default function Sheet() {
             </thead>
             <tbody>
               {rows.map((r, i) => {
-                const isDraft = r.status === 'Draft'
                 return (
                   <tr key={r.sku} className="hover:bg-blue/10 transition-colors group">
                     <td className="hidden sm:table-cell w-10 min-w-10 border border-adm-line bg-adm-surface px-2 py-1.5 text-center text-xs text-white/50 font-mono sticky left-0 z-20">
@@ -269,9 +267,15 @@ export default function Sheet() {
                             <select 
                               value={r.status || 'Draft'}
                               onChange={(e) => updateField(i, col, e.target.value)}
-                              className={`w-full h-full bg-transparent px-2 py-1.5 text-sm outline-none cursor-pointer appearance-none text-center font-bold ${isDraft ? 'text-amber' : 'text-forest'}`}
+                              className={`w-full h-full bg-transparent px-2 py-1.5 text-sm outline-none cursor-pointer appearance-none text-center font-bold ${
+                                r.status === 'Draft' ? 'text-amber'
+                                : r.status === 'Unlisted' ? 'text-blue'
+                                : r.status === 'Discontinued' ? 'text-crimson'
+                                : 'text-forest'
+                              }`}
                             >
                               <option value="Live">Live</option>
+                              <option value="Unlisted">Unlisted</option>
                               <option value="Draft">Draft</option>
                               <option value="Discontinued">Discontinued</option>
                             </select>
@@ -349,7 +353,7 @@ export default function Sheet() {
                         <button onClick={() => setShowBarcode(r.barcode || r.sku)} className="text-white/55 hover:text-white hover:bg-white/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors" title="View Barcode">
                           <BarcodeIcon size={15} />
                         </button>
-                        <button onClick={() => handleDeleteRow(r.sku)} className="text-crimson/60 hover:text-crimson hover:bg-crimson/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors text-lg leading-none" title="Delete Row">×</button>
+                        <button onClick={() => setDeleteTargets([r])} className="text-crimson/60 hover:text-crimson hover:bg-crimson/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors text-lg leading-none" title="Delete Row">×</button>
                       </div>
                     </td>
                   </tr>
@@ -359,6 +363,14 @@ export default function Sheet() {
           </table>
         )}
       </div>
+      {deleteTargets && (
+        <DeleteProductsModal
+          products={deleteTargets}
+          onClose={() => setDeleteTargets(null)}
+          onDeleted={(skus) => { setRows(prev => prev.filter(r => !skus.includes(r.sku))); setDeleteTargets(null) }}
+        />
+      )}
+
       {showAiScanner && <ScanToAiModal onClose={() => setShowAiScanner(false)} />}
       {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} />}
       {showCsvImport && <BulkCsvImportModal onClose={() => setShowCsvImport(false)} />}

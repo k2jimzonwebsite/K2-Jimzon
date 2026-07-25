@@ -15,7 +15,7 @@ import { useDominantColor } from '../../lib/useDominantColor';
 import { vividTint } from '../../lib/color';
 
 function NewArrivals() {
-  const { products } = useStore()
+  const { listedProducts: products } = useStore()
   const arrivals = useMemo(() => (products || []).slice(0, 5), [products])
   const [activeIndex, setActiveIndex] = useState(0)
 

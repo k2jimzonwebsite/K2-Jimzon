@@ -455,11 +455,14 @@ export function StoreProvider({ children }) {
 
   const fetchProducts = async () => {
     if (!supabase) return;
+    // Unlisted is fetched too: it must resolve by direct link even though it
+    // never appears in browse surfaces. `listedProducts` below is what the
+    // catalogue, search and category grids read.
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .in('status', ['Live', 'Active'])
-    
+      .in('status', ['Live', 'Active', 'Unlisted'])
+
     if (!error && data) {
       setDbProducts(data)
     }
@@ -568,9 +571,19 @@ export function StoreProvider({ children }) {
         subcategory: dbP.subcategory,
         seo_keywords: dbP.seo_keywords || [],
         why_rare: dbP.why_rare || localP.whyRare,
+        status: dbP.status,
       }
     })
   }, [dbProducts])
+
+  // Browse set — everything a customer can stumble across by clicking around.
+  // Unlisted products are deliberately absent: reachable only if you already
+  // have the link. `products` stays the full set so getProduct() still resolves
+  // them and existing cart lines keep working.
+  const listedProducts = useMemo(
+    () => products.filter(p => p.status !== 'Unlisted'),
+    [products]
+  )
 
   const getProduct = (id) => products.find(p => p.id === id || p.sku === id)
 
@@ -872,7 +885,8 @@ export function StoreProvider({ children }) {
     conversations,
     sendMessage,
     createConversation,
-    products, // Now serving the merged rich + live data
+    products, // Full set incl. Unlisted — for lookups by id, cart, admin
+    listedProducts, // Browse set — Unlisted removed. Use this for any grid.
     loading,
     getProduct,
     isDark,
@@ -887,7 +901,7 @@ export function StoreProvider({ children }) {
     applyCoupon,
     removeCoupon,
     ...totals,
-  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, user, order, query, category, requests, conversations, products, loading, totals, isDark, coupons, appliedCoupon, claimedVouchers])
+  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, user, order, query, category, requests, conversations, products, listedProducts, loading, totals, isDark, coupons, appliedCoupon, claimedVouchers])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

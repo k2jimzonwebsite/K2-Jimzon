@@ -6,7 +6,7 @@ import ProductCard from './ProductCard'
 import { CheckIcon } from './ui/icons'
 
 export default function CatalogGrid() {
-  const { query, setQuery, category, setCategory, products } = useStore()
+  const { query, setQuery, category, setCategory, listedProducts: products } = useStore()
   const [sortBy, setSortBy] = useState('popular') // popular, latest, price_asc, price_desc
 
   // Filter products based on search query and category

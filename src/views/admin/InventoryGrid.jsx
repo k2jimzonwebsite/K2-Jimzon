@@ -6,6 +6,58 @@ import SmartPasteModal from './SmartPasteModal'
 import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
 import StaffAllocationModal from './StaffAllocationModal'
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
+import DeleteProductsModal from './DeleteProductsModal'
+
+// ── Product lifecycle ─────────────────────────────────────────────────────────
+// Mirrors the products_status_check constraint. 'Active' is a legacy alias for
+// 'Live' and is treated as Live everywhere in the UI.
+const STATUS_OPTIONS = [
+  { value: 'Live',     label: 'Live',     hint: 'In the catalogue, browsable and buyable' },
+  { value: 'Unlisted', label: 'Unlisted', hint: 'Hidden from browse — direct link still works' },
+  { value: 'Draft',    label: 'Draft',    hint: 'Invisible to customers' },
+]
+
+const STATUS_LABEL = {
+  Live: 'Live', Active: 'Live', Unlisted: 'Unlisted', Draft: 'Draft', Discontinued: 'Discontinued',
+}
+
+const STATUS_TONE = {
+  Live:         'bg-forest/20 text-forest border-forest/40',
+  Active:       'bg-forest/20 text-forest border-forest/40',
+  Unlisted:     'bg-blue/20 text-blue border-blue/40',
+  Draft:        'bg-gold/20 text-gold border-gold/40',
+  Discontinued: 'bg-crimson/20 text-crimson border-crimson/40',
+}
+
+const normalizeStatus = (s) => (s === 'Active' ? 'Live' : (s || 'Draft'))
+
+// Segmented lifecycle control — three states always visible, so the current one
+// reads as a position rather than a label you have to open a menu to check.
+function StatusControl({ value, onChange, disabled }) {
+  const current = normalizeStatus(value)
+  return (
+    <div className="grid grid-cols-3 gap-0.5 rounded-adm-sm border border-adm-line bg-adm-sunken p-0.5" role="group" aria-label="Product status">
+      {STATUS_OPTIONS.map(opt => {
+        const on = current === opt.value
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            disabled={disabled}
+            title={opt.hint}
+            aria-pressed={on}
+            onClick={() => !on && onChange(opt.value)}
+            className={`min-h-[36px] rounded-adm-sm text-xs font-bold transition-colors disabled:opacity-50 ${
+              on ? STATUS_TONE[opt.value] + ' border' : 'text-white/50 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            {opt.label}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
 
 // ── Shared input/textarea styles ──────────────────────────────────────────────
 const inp = 'w-full rounded-adm-sm border border-white/20 bg-adm-raised px-3.5 py-2.5 text-base text-white font-semibold focus:border-gold outline-none transition-colors shadow-sm'
@@ -163,6 +215,10 @@ export default function InventoryGrid() {
   const [showAiScanner, setShowAiScanner] = useState(false)
   const [showSmartPaste, setShowSmartPaste] = useState(false)
   const [enrichProduct, setEnrichProduct] = useState(null)
+  const [selected, setSelected] = useState(() => new Set())
+  const [deleteTargets, setDeleteTargets] = useState(null)
+  const [statusBusy, setStatusBusy] = useState(null)
+  const [notice, setNotice] = useState(null)
 
   useEffect(() => {
     if (!supabase) return
@@ -265,6 +321,56 @@ export default function InventoryGrid() {
 
   const set = (field, val) => setEditingProduct(prev => ({ ...prev, [field]: val }))
 
+  // ── Status lifecycle ───────────────────────────────────────────────────────
+  const flash = (text, error = false) => {
+    setNotice({ text, error })
+    setTimeout(() => setNotice(null), 4000)
+  }
+
+  const changeStatus = async (skus, nextStatus) => {
+    if (skus.length === 0) return
+    setStatusBusy(nextStatus)
+
+    // Optimistic — the realtime channel will reconcile if the write fails.
+    setProducts(prev => prev.map(p => (skus.includes(p.sku) ? { ...p, status: nextStatus } : p)))
+
+    if (supabase) {
+      const { error } = await supabase.from('products').update({ status: nextStatus }).in('sku', skus)
+      if (error) {
+        setStatusBusy(null)
+        await fetchProducts()
+        return flash(`Could not update status: ${error.message}`, true)
+      }
+    }
+
+    setStatusBusy(null)
+    flash(
+      skus.length === 1
+        ? `${skus[0]} is now ${STATUS_LABEL[nextStatus]}.`
+        : `${skus.length} products set to ${STATUS_LABEL[nextStatus]}.`
+    )
+  }
+
+  // ── Selection ──────────────────────────────────────────────────────────────
+  const toggleOne = (sku) => setSelected(prev => {
+    const next = new Set(prev)
+    next.has(sku) ? next.delete(sku) : next.add(sku)
+    return next
+  })
+
+  const allSelected = products.length > 0 && selected.size === products.length
+  const toggleAll = () => setSelected(allSelected ? new Set() : new Set(products.map(p => p.sku)))
+  const clearSelection = () => setSelected(new Set())
+
+  const selectedProducts = products.filter(p => selected.has(p.sku))
+
+  const handleDeleted = (skus, deletedCount) => {
+    setProducts(prev => prev.filter(p => !skus.includes(p.sku)))
+    setSelected(new Set())
+    setDeleteTargets(null)
+    flash(`Deleted ${deletedCount} product${deletedCount !== 1 ? 's' : ''}.`)
+  }
+
   return (
     <div className="animate-in fade-in duration-500 relative min-h-full">
       {/* Top bar */}
@@ -305,6 +411,37 @@ export default function InventoryGrid() {
           onProductAdded={() => { fetchProducts(); setShowSmartPaste(false) }} />
       )}
 
+      {notice && (
+        <div className={`mb-3 rounded-adm-sm border p-3 text-sm font-semibold leading-snug ${
+          notice.error ? 'border-crimson/40 bg-crimson/10 text-crimson' : 'border-forest/40 bg-forest/10 text-forest'
+        }`}>
+          {notice.error ? '⚠️' : '✓'} {notice.text}
+        </div>
+      )}
+
+      {/* Select-all row */}
+      {products.length > 0 && (
+        <div className="mb-3 flex items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2">
+          <label className="flex items-center gap-2.5 cursor-pointer select-none min-h-[36px]">
+            <input
+              type="checkbox"
+              checked={allSelected}
+              ref={el => { if (el) el.indeterminate = selected.size > 0 && !allSelected }}
+              onChange={toggleAll}
+              className="h-5 w-5 shrink-0 accent-blue cursor-pointer"
+            />
+            <span className="text-sm font-semibold text-white">
+              {selected.size > 0 ? `${selected.size} selected` : `Select all (${products.length})`}
+            </span>
+          </label>
+          {selected.size > 0 && (
+            <button onClick={clearSelection} className="ml-auto text-xs font-semibold text-white/50 hover:text-white transition-colors min-h-[36px] px-2">
+              Clear
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Product cards */}
       {loading && products.length === 0 ? (
         <div className="flex h-64 items-center justify-center text-white/60">Loading products...</div>
@@ -316,8 +453,20 @@ export default function InventoryGrid() {
             const expiryHealth = getExpiryHealth(primaryExpiryDate)
 
             return (
-              <div key={p.sku} className="group relative rounded-adm-sm border border-adm-line bg-adm-sunken overflow-hidden flex flex-col hover:border-blue/50 transition-colors">
+              <div key={p.sku} className={`group relative rounded-adm-sm border bg-adm-sunken overflow-hidden flex flex-col transition-colors ${
+                selected.has(p.sku) ? 'border-blue ring-1 ring-blue/40' : 'border-adm-line hover:border-blue/50'
+              }`}>
                 <div className="aspect-square bg-white/5 flex items-center justify-center p-4 relative">
+                  {/* Selection checkbox — generous hit area, it sits over art */}
+                  <label className="absolute top-2 left-2 z-10 flex h-10 w-10 items-center justify-center rounded-adm-sm bg-adm-bg/80 backdrop-blur-sm border border-adm-line cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selected.has(p.sku)}
+                      onChange={() => toggleOne(p.sku)}
+                      aria-label={`Select ${p.name || p.sku}`}
+                      className="h-5 w-5 accent-blue cursor-pointer"
+                    />
+                  </label>
                   <img src={p.primary_image_url || p.image_url || '/placeholder.png'} alt={p.name}
                     className="max-h-full max-w-full object-contain drop-shadow-lg" />
                   
@@ -339,8 +488,8 @@ export default function InventoryGrid() {
                 <div className="p-4 flex-1 flex flex-col">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <span className="text-sm font-mono text-neutral-300 font-semibold uppercase truncate">{p.sku}</span>
-                    <span className={`shrink-0 px-2 py-0.5 rounded text-sm font-extrabold uppercase tracking-wider ${p.status === 'Draft' ? 'bg-gold/20 text-gold border border-gold/30' : p.status === 'Discontinued' ? 'bg-crimson/20 text-crimson border border-crimson/30' : 'bg-blue/20 text-blue border border-blue/30'}`}>
-                      {p.status}
+                    <span className={`shrink-0 px-2 py-0.5 rounded text-xs font-extrabold uppercase tracking-wider border ${STATUS_TONE[p.status] || STATUS_TONE.Draft}`}>
+                      {STATUS_LABEL[p.status] || p.status || 'Draft'}
                     </span>
                   </div>
                   <h3 className="text-lg font-semibold text-white line-clamp-2 mb-1.5">{p.name}</h3>
@@ -391,6 +540,22 @@ export default function InventoryGrid() {
                     >
                       ✨ Enrich Specs with AI
                     </button>
+
+                    {/* Lifecycle: three visible states, plus a destructive
+                        action kept deliberately separate from them. */}
+                    <div className="pt-1 space-y-1.5">
+                      <StatusControl
+                        value={p.status}
+                        disabled={!!statusBusy}
+                        onChange={(next) => changeStatus([p.sku], next)}
+                      />
+                      <button
+                        onClick={() => setDeleteTargets([p])}
+                        className="w-full min-h-[36px] text-xs font-bold text-crimson/70 hover:text-crimson hover:bg-crimson/10 rounded-adm-sm border border-transparent hover:border-crimson/30 transition-colors"
+                      >
+                        Delete product
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -402,6 +567,52 @@ export default function InventoryGrid() {
             )
           })}
         </div>
+      )}
+
+      {/* Bulk action bar — floats above the mobile tab bar while a selection
+          is live, so the actions are always in thumb reach. */}
+      {selected.size > 0 && (
+        <div
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-adm-line bg-adm-surface/95 backdrop-blur-md lg:left-60"
+          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 4.25rem)' }}
+        >
+          <div className="mx-auto max-w-5xl px-3 py-2.5 space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-sm font-bold text-white">
+                {selected.size} selected
+              </p>
+              <button onClick={clearSelection} className="text-xs font-semibold text-white/50 hover:text-white min-h-[36px] px-2 transition-colors">
+                Clear
+              </button>
+            </div>
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none">
+              {STATUS_OPTIONS.map(opt => (
+                <button
+                  key={opt.value}
+                  disabled={!!statusBusy}
+                  onClick={() => changeStatus([...selected], opt.value)}
+                  className={`shrink-0 min-h-[44px] px-3.5 rounded-adm-sm text-sm font-bold border transition-colors disabled:opacity-50 ${STATUS_TONE[opt.value]}`}
+                >
+                  {statusBusy === opt.value ? 'Saving…' : `Set ${opt.label}`}
+                </button>
+              ))}
+              <button
+                onClick={() => setDeleteTargets(selectedProducts)}
+                className="shrink-0 min-h-[44px] px-3.5 rounded-adm-sm bg-crimson hover:bg-crimson-deep text-sm font-bold text-white transition-colors"
+              >
+                Delete {selected.size}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteTargets && (
+        <DeleteProductsModal
+          products={deleteTargets}
+          onClose={() => setDeleteTargets(null)}
+          onDeleted={handleDeleted}
+        />
       )}
 
       <ProductAiEnrichmentModal
@@ -624,11 +835,16 @@ export default function InventoryGrid() {
                   <Section color="slate" title="Management">
                     <div>
                       <Label>Status</Label>
-                      <select value={editingProduct.status || 'Draft'} onChange={e => set('status', e.target.value)} className={`${inp} cursor-pointer`}>
-                        <option value="Active">Active</option>
-                        <option value="Draft">Draft</option>
-                        <option value="Discontinued">Discontinued</option>
+                      <select value={normalizeStatus(editingProduct.status)} onChange={e => set('status', e.target.value)} className={`${inp} cursor-pointer`}>
+                        <option value="Live">Live — in the catalogue</option>
+                        <option value="Unlisted">Unlisted — direct link only</option>
+                        <option value="Draft">Draft — hidden</option>
+                        <option value="Discontinued">Discontinued — retired</option>
                       </select>
+                      <p className="mt-1.5 text-xs text-white/45 leading-snug">
+                        {STATUS_OPTIONS.find(o => o.value === normalizeStatus(editingProduct.status))?.hint
+                          || 'Retired product, kept for order history.'}
+                      </p>
                     </div>
                     <div>
                       <Label>Internal Notes</Label>

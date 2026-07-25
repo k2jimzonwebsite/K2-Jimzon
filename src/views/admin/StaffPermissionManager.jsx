@@ -35,6 +35,11 @@ export default function StaffPermissionManager() {
   const [mfaCode, setMfaCode] = useState('')
   const [mfaBusy, setMfaBusy] = useState(false)
 
+  const [pin, setPin] = useState('')
+  const [pinConfirm, setPinConfirm] = useState('')
+  const [pinBusy, setPinBusy] = useState(false)
+  const [hasPin, setHasPin] = useState(null)
+
   const load = async () => {
     if (!supabase) { setLoading(false); return }
     setLoading(true); setErr('')
@@ -45,6 +50,13 @@ export default function StaffPermissionManager() {
     setLoading(false)
   }
   useEffect(() => { load() }, [])
+
+  useEffect(() => {
+    if (!supabase) return
+    supabase.rpc('has_delete_pin').then(({ data, error }) => {
+      if (!error) setHasPin(Boolean(data))
+    })
+  }, [])
 
   const changeRole = async (id, role) => {
     setErr(''); setNotice('')
@@ -79,6 +91,33 @@ export default function StaffPermissionManager() {
   }
 
   const nameFor = (r) => (r.email ? r.email.split('@')[0] : 'User')
+
+  // ── Delete PIN ─────────────────────────────────────────────────────────────
+  // Guards permanent product deletion. Stored server-side as a bcrypt hash via
+  // set_delete_pin(); the raw value never round-trips back to the browser.
+  const savePin = async (e) => {
+    e.preventDefault()
+    setErr(''); setNotice('')
+
+    if (!/^\d{4}$/.test(pin)) return setErr('PIN must be exactly 4 digits.')
+    if (pin !== pinConfirm) return setErr('The two PINs do not match.')
+    if (!supabase) return setErr('No database connection.')
+
+    setPinBusy(true)
+    const { error } = await supabase.rpc('set_delete_pin', { new_pin: pin })
+    setPinBusy(false)
+
+    if (error) {
+      return setErr(
+        error.message.includes('does not exist')
+          ? 'Delete PIN not installed — run migration 20260725_delete_pin_and_product_status.sql in Supabase.'
+          : error.message
+      )
+    }
+
+    setPin(''); setPinConfirm(''); setHasPin(true)
+    setNotice('Delete PIN saved. You will need it to delete products.')
+  }
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-5 px-1 pb-16 animate-in fade-in duration-300">
@@ -115,6 +154,51 @@ export default function StaffPermissionManager() {
           <button type="submit" disabled={inviting}
             className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-50 transition-all active:scale-[.99]">
             {inviting ? 'Sending…' : 'Send invite'}
+          </button>
+        </form>
+      </section>
+
+      {/* Delete PIN */}
+      <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-lg">🔒</span>
+          <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Your delete PIN</h2>
+          {hasPin !== null && (
+            <span className={`ml-auto px-2 py-0.5 rounded-full text-[11px] font-bold border ${
+              hasPin ? 'bg-forest/20 text-forest border-forest/40' : 'bg-amber/20 text-amber border-amber/40'
+            }`}>
+              {hasPin ? 'Set' : 'Not set'}
+            </span>
+          )}
+        </div>
+        <p className="text-xs text-white/45 mb-3 leading-relaxed">
+          Required to delete products. It is yours alone — every deletion is logged
+          against whoever's PIN was used. Stored encrypted; it is never sent back to the browser.
+        </p>
+        <form onSubmit={savePin} className="space-y-3">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-white/45 mb-1.5">
+              {hasPin ? 'New 4-digit PIN' : '4-digit PIN'}
+            </label>
+            <input
+              type="password" inputMode="numeric" autoComplete="new-password" maxLength={4}
+              value={pin} onChange={e => setPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+              placeholder="••••"
+              className={`${inputCls} text-center tracking-[0.5em] font-mono`}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-white/45 mb-1.5">Confirm PIN</label>
+            <input
+              type="password" inputMode="numeric" autoComplete="new-password" maxLength={4}
+              value={pinConfirm} onChange={e => setPinConfirm(e.target.value.replace(/\D/g, '').slice(0, 4))}
+              placeholder="••••"
+              className={`${inputCls} text-center tracking-[0.5em] font-mono`}
+            />
+          </div>
+          <button type="submit" disabled={pinBusy || pin.length !== 4 || pinConfirm.length !== 4}
+            className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-40 transition-all active:scale-[.99]">
+            {pinBusy ? 'Saving…' : hasPin ? 'Change PIN' : 'Set PIN'}
           </button>
         </form>
       </section>
