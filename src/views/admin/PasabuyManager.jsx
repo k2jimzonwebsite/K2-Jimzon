@@ -372,7 +372,7 @@ export default function PasabuyManager() {
                   <div className="flex gap-2">
                     <button
                       onClick={handleSaveQuote}
-                      className="bg-amber hover:bg-amber/90 text-navy-dark font-bold text-sm px-5 py-2.5 rounded-adm-sm shadow-lg transition-all"
+                      className="bg-amber hover:bg-amber/90 text-navy font-bold text-sm px-5 py-2.5 rounded-adm-sm shadow-lg transition-all"
                     >
                       {quoteSuccess ? '✓ Quote Saved & Updated!' : '💾 Save Quotation'}
                     </button>

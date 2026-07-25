@@ -154,7 +154,10 @@ export default function Admin() {
 
   const selectSection = (id) => {
     setSection(id)
-    setSheetMode(id === 'inventory')
+    // Card grid is the default view. Sheet mode is a power-user opt-in — it was
+    // auto-enabling on every Inventory visit, which dropped mobile users
+    // straight into a 30-column spreadsheet.
+    setSheetMode(false)
     setIsMobileMenuOpen(false)
   }
 

@@ -17,7 +17,7 @@ const STATUS_TONE = {
   'Pending': 'bg-crimson-wash text-crimson',
   'Packed': 'bg-amber-wash text-amber',
   'Shipped': 'bg-forest-wash text-forest',
-  'Cancelled': 'bg-navy/8 text-navy-soft',
+  'Cancelled': 'bg-white/10 text-white/60',
 }
 
 export default function Kanban() {

@@ -1,347 +1,428 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { supabase } from '../../lib/supabaseClient'
+
+// ============================================================================
+// Staff custody & multi-location stock allocation.
+//
+// What this screen is actually claiming: "these named people are physically
+// holding this many units of this SKU, in these places." That claim has to be
+// true, so this component:
+//   • loads real staff from user_profiles instead of inventing custodians
+//   • loads real allocations from staff_allocations and writes them back
+//   • reconciles the allocated total against products.stock_available and
+//     shows the variance rather than quietly disagreeing with inventory
+// ============================================================================
+
+const emptyDraft = { staff_name: '', location: '', stock: 1, bin: '' }
 
 export default function StaffAllocationModal({ product, onClose, onSaveAllocations }) {
-  const [allocations, setAllocations] = useState(() => {
-    if (product && product.staff_allocations && Array.isArray(product.staff_allocations) && product.staff_allocations.length > 0) {
-      return product.staff_allocations
-    }
-    // Default initial allocation breakdown fallback
-    const totalStock = product?.stock_available || product?.stock || 9
-    const elenaStock = Math.min(3, totalStock)
-    const juanStock = Math.min(4, Math.max(0, totalStock - elenaStock))
-    const marcoStock = Math.max(0, totalStock - elenaStock - juanStock)
+  const sku = product?.sku || product?.id || null
+  const onHand = Number(product?.stock_available ?? product?.stock ?? 0)
 
-    return [
-      { id: 'ALC-01', staff_id: 'STF-101', staff_name: 'Elena Guerrero', location: 'Makati Hub (South)', stock: elenaStock, bin: 'Bin A-02' },
-      { id: 'ALC-02', staff_id: 'STF-102', staff_name: 'Juan Dela Cruz', location: 'Quezon City Hub (North)', stock: juanStock, bin: 'Bin B-14' },
-      { id: 'ALC-03', staff_id: 'STF-103', staff_name: 'Marco Rossi', location: 'Milan Cargo Transit (Italy)', stock: marcoStock, bin: 'Box MXP-09' }
-    ]
-  })
+  const [allocations, setAllocations] = useState([])
+  const [staffOptions, setStaffOptions] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [loadError, setLoadError] = useState('')
 
-  // 1-Click Transfer State
-  const [transferFromId, setTransferFromId] = useState(allocations[1]?.id || allocations[0]?.id || '')
-  const [transferToId, setTransferToId] = useState(allocations[0]?.id || '')
+  const [transferFromId, setTransferFromId] = useState('')
+  const [transferToId, setTransferToId] = useState('')
   const [transferQty, setTransferQty] = useState(1)
   const [transferMessage, setTransferMessage] = useState(null)
 
-  // New Allocation Form State
-  const [newStaffName, setNewStaffName] = useState('')
-  const [newLocation, setNewLocation] = useState('')
-  const [newStock, setNewStock] = useState(1)
-  const [newBin, setNewBin] = useState('')
+  const [draft, setDraft] = useState(emptyDraft)
 
-  const handleUpdateStock = (id, newQty) => {
-    setAllocations(prev => prev.map(a => a.id === id ? { ...a, stock: Math.max(0, Number(newQty)) } : a))
+  // ── Load real custody records + real staff ─────────────────────────────────
+  useEffect(() => {
+    let cancelled = false
+
+    const load = async () => {
+      setLoading(true)
+      setLoadError('')
+
+      if (!supabase || !sku) {
+        // Offline / preview mode: start empty rather than fabricating people.
+        if (!cancelled) { setAllocations([]); setStaffOptions([]); setLoading(false) }
+        return
+      }
+
+      const [allocRes, staffRes] = await Promise.all([
+        supabase.from('staff_allocations').select('*').eq('sku', sku).order('created_at', { ascending: true }),
+        supabase.from('user_profiles').select('id, email, role').in('role', ['Admin', 'Staff']).order('created_at', { ascending: true }),
+      ])
+
+      if (cancelled) return
+
+      if (allocRes.error) {
+        setLoadError(
+          allocRes.error.message.includes('does not exist')
+            ? 'Custody table missing — run migration 20260725_staff_custody_allocations.sql in Supabase.'
+            : allocRes.error.message
+        )
+        setAllocations([])
+      } else {
+        setAllocations((allocRes.data || []).map(a => ({
+          id: a.id,
+          staff_user_id: a.staff_user_id,
+          staff_name: a.staff_name,
+          location: a.location || '',
+          bin: a.bin || '',
+          stock: Number(a.stock) || 0,
+        })))
+      }
+
+      setStaffOptions(staffRes.error ? [] : (staffRes.data || []))
+      setLoading(false)
+    }
+
+    load()
+    return () => { cancelled = true }
+  }, [sku])
+
+  // Keep the transfer selects pointed at rows that still exist. Previously
+  // these were seeded once from allocations[0]/[1] and went stale the moment a
+  // custodian was removed, making the transfer button a silent no-op.
+  useEffect(() => {
+    const ids = allocations.map(a => a.id)
+    if (!ids.includes(transferFromId)) setTransferFromId(ids[0] || '')
+    if (!ids.includes(transferToId)) setTransferToId(ids[1] || ids[0] || '')
+  }, [allocations]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const totalAllocated = useMemo(
+    () => allocations.reduce((sum, a) => sum + (Number(a.stock) || 0), 0),
+    [allocations]
+  )
+  const variance = onHand - totalAllocated
+
+  const flash = (error, text, ms = 4000) => {
+    setTransferMessage({ error, text })
+    setTimeout(() => setTransferMessage(null), ms)
   }
 
-  const handleUpdateBin = (id, newBinVal) => {
-    setAllocations(prev => prev.map(a => a.id === id ? { ...a, bin: newBinVal } : a))
-  }
+  const handleUpdate = (id, patch) =>
+    setAllocations(prev => prev.map(a => (a.id === id ? { ...a, ...patch } : a)))
 
-  // 1-Click Stock Transfer Execution
-  const handleExecute1ClickTransfer = (e) => {
+  // ── Transfer custody between two staff ─────────────────────────────────────
+  const handleTransfer = (e) => {
     e.preventDefault()
-    if (!transferFromId || !transferToId || transferFromId === transferToId || transferQty <= 0) return
+    const qty = Number(transferQty)
 
-    const sourceAlloc = allocations.find(a => a.id === transferFromId)
-    const destAlloc = allocations.find(a => a.id === transferToId)
+    if (!transferFromId || !transferToId) return flash(true, '⚠️ Pick both a source and a destination custodian.')
+    if (transferFromId === transferToId) return flash(true, '⚠️ Source and destination are the same person.')
+    if (!Number.isFinite(qty) || qty <= 0) return flash(true, '⚠️ Transfer quantity must be at least 1.')
 
-    if (!sourceAlloc || sourceAlloc.stock < transferQty) {
-      setTransferMessage({ error: true, text: `⚠️ ${sourceAlloc?.staff_name || 'Source'} only has ${sourceAlloc?.stock || 0} units. Cannot transfer ${transferQty} units.` })
-      setTimeout(() => setTransferMessage(null), 3500)
-      return
+    const source = allocations.find(a => a.id === transferFromId)
+    const dest = allocations.find(a => a.id === transferToId)
+    if (!source || !dest) return flash(true, '⚠️ That custodian is no longer on this SKU.')
+
+    if (source.stock < qty) {
+      return flash(true, `⚠️ ${source.staff_name} only holds ${source.stock} unit(s). Cannot transfer ${qty}.`)
     }
 
     setAllocations(prev => prev.map(a => {
-      if (a.id === transferFromId) {
-        return { ...a, stock: a.stock - Number(transferQty) }
-      }
-      if (a.id === transferToId) {
-        return { ...a, stock: a.stock + Number(transferQty) }
-      }
+      if (a.id === transferFromId) return { ...a, stock: a.stock - qty }
+      if (a.id === transferToId) return { ...a, stock: a.stock + qty }
       return a
     }))
-
-    setTransferMessage({
-      error: false,
-      text: `⚡ 1-Click Transfer Success! Transferred ${transferQty} unit(s) from ${sourceAlloc.staff_name} → ${destAlloc.staff_name}.`
-    })
-    setTimeout(() => setTransferMessage(null), 4000)
+    flash(false, `⚡ Moved ${qty} unit(s): ${source.staff_name} → ${dest.staff_name}. Save to commit.`)
   }
 
-  const handleAddAllocation = (e) => {
+  // ── Add a custodian ────────────────────────────────────────────────────────
+  const handleAdd = (e) => {
     e.preventDefault()
-    if (!newStaffName || !newLocation || newStock <= 0) return
+    const name = draft.staff_name.trim()
+    const qty = Number(draft.stock)
 
-    const newAlloc = {
-      id: `ALC-${Date.now().toString().slice(-4)}`,
-      staff_id: `STF-${Math.floor(100 + Math.random() * 900)}`,
-      staff_name: newStaffName,
-      location: newLocation,
-      stock: Number(newStock),
-      bin: newBin || 'General Shelf'
+    if (!name) return flash(true, '⚠️ Pick a staff member.')
+    if (!Number.isFinite(qty) || qty <= 0) return flash(true, '⚠️ Assigned units must be at least 1.')
+    if (allocations.some(a => a.staff_name === name)) {
+      return flash(true, `⚠️ ${name} already holds custody of this SKU — edit their row instead.`)
+    }
+    if (totalAllocated + qty > onHand && onHand > 0) {
+      return flash(true, `⚠️ That would allocate ${totalAllocated + qty} of ${onHand} on hand.`)
     }
 
-    setAllocations(prev => [...prev, newAlloc])
-    setNewStaffName('')
-    setNewLocation('')
-    setNewStock(1)
-    setNewBin('')
+    const match = staffOptions.find(s => s.email === name)
+    setAllocations(prev => [...prev, {
+      id: (crypto?.randomUUID?.() || `tmp-${Date.now()}`),
+      staff_user_id: match?.id || null,
+      staff_name: name,
+      location: draft.location.trim(),
+      bin: draft.bin.trim() || 'General Shelf',
+      stock: qty,
+      _new: true,
+    }])
+    setDraft(emptyDraft)
   }
 
-  const handleDeleteAllocation = (id) => {
-    setAllocations(prev => prev.filter(a => a.id !== id))
-  }
+  const handleDelete = (id) => setAllocations(prev => prev.filter(a => a.id !== id))
 
-  const handleSave = () => {
-    if (onSaveAllocations && product) {
-      onSaveAllocations(product.sku || product.id, allocations)
+  // ── Persist ────────────────────────────────────────────────────────────────
+  const handleSave = async () => {
+    if (!sku) return
+    setSaving(true)
+
+    if (supabase) {
+      // Replace this SKU's custody set in one shot — simplest correct sync.
+      const del = await supabase.from('staff_allocations').delete().eq('sku', sku)
+      if (del.error) {
+        setSaving(false)
+        return flash(true, `⚠️ Save failed: ${del.error.message}`, 6000)
+      }
+
+      if (allocations.length > 0) {
+        const ins = await supabase.from('staff_allocations').insert(
+          allocations.map(a => ({
+            sku,
+            staff_user_id: a.staff_user_id || null,
+            staff_name: a.staff_name,
+            location: a.location || null,
+            bin: a.bin || null,
+            stock: Number(a.stock) || 0,
+          }))
+        )
+        if (ins.error) {
+          setSaving(false)
+          return flash(true, `⚠️ Save failed: ${ins.error.message}`, 6000)
+        }
+      }
     }
+
+    setSaving(false)
+    onSaveAllocations?.(sku, allocations)
     onClose()
   }
 
-  const totalAllocatedStock = allocations.reduce((sum, a) => sum + (Number(a.stock) || 0), 0)
+  const fieldCls = 'w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 min-h-[44px] text-base text-white outline-none focus:border-blue'
+  const labelCls = 'block text-xs text-white/60 mb-1'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-6 text-white space-y-6 shadow-2xl">
-        
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-adm-line pb-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold bg-blue/20 text-blue px-2 py-0.5 rounded border border-blue/30 uppercase">
-                Staff Custody & Multi-Location Stock Allocation
-              </span>
-              <span className="text-sm text-white/50">SKU: {product?.sku || product?.id || 'N/A'}</span>
-            </div>
-            <h2 className="font-serif text-xl font-bold text-white mt-1">{product?.name || product?.title || 'Product Stock Allocation'}</h2>
-            <p className="text-sm text-white/60">
-              Total Allocated Across Staff: <span className="text-blue font-bold font-mono">{totalAllocatedStock} units</span> across {allocations.length} staff locations.
-            </p>
-          </div>
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/85 backdrop-blur-md sm:p-4">
+      <div className="flex w-full sm:max-w-3xl max-h-[92dvh] flex-col overflow-hidden bg-adm-surface border border-adm-line rounded-t-adm sm:rounded-adm text-white shadow-adm-float">
 
-          <button
-            onClick={onClose}
-            className="p-2 rounded-adm-sm bg-white/5 text-white/50 hover:text-white hover:bg-white/10 transition-all"
-          >
-            ✕
-          </button>
+        {/* Header */}
+        <div className="flex shrink-0 items-start justify-between gap-3 border-b border-adm-line bg-adm-sunken px-3.5 py-3">
+          <div className="min-w-0">
+            <p className="text-xs font-mono font-bold text-blue uppercase tracking-wide">Staff custody & locations</p>
+            <h2 className="text-base font-bold text-white mt-0.5 truncate">{product?.name || product?.title || 'Product Stock Allocation'}</h2>
+            <p className="text-xs text-white/50 font-mono truncate">SKU: {sku || 'N/A'}</p>
+          </div>
+          <button onClick={onClose} aria-label="Close" className="shrink-0 -mr-1 flex h-11 w-11 items-center justify-center rounded-adm-sm text-white/50 hover:text-white hover:bg-white/10 transition-colors">✕</button>
         </div>
 
-        {/* ⚡ Transfer stock between staff */}
-        <form onSubmit={handleExecute1ClickTransfer} className="bg-adm-sunken border border-amber/40 p-4 rounded-adm-sm space-y-3 shadow-lg">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-amber flex items-center gap-1.5">
-              <span>⚡</span> 1-Click Inter-Staff Stock Transfer Engine
-            </h3>
-            <span className="text-xs font-mono text-white/60">Re-assign custody in 1 click</span>
+        {/* Reconciliation strip — allocated vs. on hand, always visible */}
+        <div className="shrink-0 grid grid-cols-3 divide-x divide-adm-line border-b border-adm-line bg-adm-sunken text-center">
+          <div className="px-2 py-2">
+            <p className="text-[11px] uppercase tracking-wide text-white/45">On hand</p>
+            <p className="text-base font-bold font-mono tabular-nums text-white">{onHand}</p>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm font-mono">
-            <div>
-              <label className="block text-xs text-white/60 mb-1">Transfer FROM (Source Staff)</label>
-              <select
-                value={transferFromId}
-                onChange={(e) => setTransferFromId(e.target.value)}
-                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-amber"
-              >
-                {allocations.map(a => (
-                  <option key={a.id} value={a.id}>
-                    {a.staff_name} ({a.stock} units available)
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs text-white/60 mb-1">Transfer TO (Destination Staff)</label>
-              <select
-                value={transferToId}
-                onChange={(e) => setTransferToId(e.target.value)}
-                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-amber"
-              >
-                {allocations.map(a => (
-                  <option key={a.id} value={a.id}>
-                    {a.staff_name} ({a.stock} units currently)
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs text-white/60 mb-1">Transfer Qty (Units)</label>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  min="1"
-                  value={transferQty}
-                  onChange={(e) => setTransferQty(Number(e.target.value))}
-                  className="w-20 rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-amber"
-                />
-                <button
-                  type="submit"
-                  className="flex-1 bg-amber hover:bg-amber/90 text-navy-dark font-extrabold text-sm py-2 rounded-adm-sm transition-all shadow-md"
-                >
-                  ⚡ Execute 1-Click Transfer
-                </button>
-              </div>
-            </div>
+          <div className="px-2 py-2">
+            <p className="text-[11px] uppercase tracking-wide text-white/45">Allocated</p>
+            <p className="text-base font-bold font-mono tabular-nums text-blue">{totalAllocated}</p>
           </div>
+          <div className="px-2 py-2">
+            <p className="text-[11px] uppercase tracking-wide text-white/45">
+              {variance === 0 ? 'Balanced' : variance > 0 ? 'Unassigned' : 'Over-allocated'}
+            </p>
+            <p className={`text-base font-bold font-mono tabular-nums ${
+              variance === 0 ? 'text-forest' : variance > 0 ? 'text-amber' : 'text-crimson'
+            }`}>{variance > 0 ? `+${variance}` : variance}</p>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-3.5 space-y-4">
+
+          {loadError && (
+            <div className="rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm text-crimson font-semibold leading-snug">
+              ⚠️ {loadError}
+            </div>
+          )}
+          {variance < 0 && (
+            <div className="rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm text-crimson leading-snug">
+              ⚠️ Staff are holding {Math.abs(variance)} more unit(s) than inventory says exist. Recount before saving.
+            </div>
+          )}
 
           {transferMessage && (
-            <div className={`p-2.5 rounded-adm-sm border text-sm font-mono ${
-              transferMessage.error ? 'bg-crimson/20 border-crimson/40 text-crimson' : 'bg-forest/20 border-forest/40 text-forest font-bold'
+            <div className={`rounded-adm-sm border p-3 text-sm font-mono leading-snug ${
+              transferMessage.error
+                ? 'bg-crimson/15 border-crimson/40 text-crimson'
+                : 'bg-forest/15 border-forest/40 text-forest font-bold'
             }`}>
               {transferMessage.text}
             </div>
           )}
-        </form>
 
-        {/* Staff Custody Breakdown List */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50">
-            Assigned Staff Custodians & Location Inventories
-          </h3>
-
-          <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
-            {allocations.map((alloc) => (
-              <div key={alloc.id} className="p-4 rounded-adm-sm bg-white/5 border border-adm-line text-sm font-mono space-y-3">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-full bg-blue/20 text-blue font-bold flex items-center justify-center text-sm">
-                      👤
-                    </span>
+          {loading ? (
+            <p className="py-8 text-center text-sm text-white/50">Loading custody records…</p>
+          ) : (
+            <>
+              {/* Transfer between custodians */}
+              {allocations.length >= 2 && (
+                <form onSubmit={handleTransfer} className="rounded-adm-sm border border-amber/40 bg-adm-sunken p-3 space-y-2.5">
+                  <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-amber">⚡ Re-assign custody</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <div>
-                      <p className="font-bold text-white text-base">{alloc.staff_name}</p>
-                      <p className="text-white/60 text-xs">{alloc.location} · {alloc.staff_id}</p>
+                      <label className={labelCls}>From</label>
+                      <select value={transferFromId} onChange={e => setTransferFromId(e.target.value)} className={fieldCls}>
+                        {allocations.map(a => <option key={a.id} value={a.id}>{a.staff_name} ({a.stock} held)</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className={labelCls}>To</label>
+                      <select value={transferToId} onChange={e => setTransferToId(e.target.value)} className={fieldCls}>
+                        {allocations.map(a => <option key={a.id} value={a.id}>{a.staff_name} ({a.stock} held)</option>)}
+                      </select>
                     </div>
                   </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className={`px-2.5 py-1 rounded-adm-sm text-xs font-bold border ${
-                      alloc.stock > 0 ? 'bg-forest/20 border-forest/40 text-forest' : 'bg-crimson/20 border-crimson/40 text-crimson'
-                    }`}>
-                      {alloc.stock > 0 ? `${alloc.stock} Units Available` : 'Out of Stock'}
-                    </span>
-
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteAllocation(alloc.id)}
-                      className="text-white/55 hover:text-crimson transition-colors p-1"
-                      title="Remove Staff Allocation"
-                    >
-                      🗑️
+                  <div className="flex gap-2">
+                    <input
+                      type="number" min="1" inputMode="numeric"
+                      value={transferQty}
+                      onChange={e => setTransferQty(e.target.value)}
+                      className={`${fieldCls} w-20 shrink-0`}
+                      aria-label="Transfer quantity"
+                    />
+                    <button type="submit" className="flex-1 min-h-[44px] rounded-adm-sm bg-amber hover:bg-amber/90 text-navy font-extrabold text-sm transition-colors">
+                      Transfer
                     </button>
                   </div>
-                </div>
+                </form>
+              )}
 
-                {/* Inline Quantity & Bin Editing */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-white/5">
-                  <div>
-                    <label className="block text-xs text-white/60 uppercase mb-1">Staff Custody Stock (Units)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      value={alloc.stock}
-                      onChange={(e) => handleUpdateStock(alloc.id, e.target.value)}
-                      className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-1.5 text-white font-mono outline-none focus:border-blue"
-                    />
+              {/* Custodian list */}
+              <div className="space-y-2.5">
+                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white/45">
+                  Custodians ({allocations.length})
+                </h3>
+
+                {allocations.length === 0 && (
+                  <div className="rounded-adm-sm border border-adm-line bg-adm-sunken p-5 text-center">
+                    <p className="text-sm font-semibold text-white">No custody assigned</p>
+                    <p className="mt-1 text-xs text-white/45 leading-relaxed">
+                      All {onHand} unit(s) are unassigned. Add a custodian below.
+                    </p>
                   </div>
+                )}
 
-                  <div>
-                    <label className="block text-xs text-white/60 uppercase mb-1">Staff Shelf / Bin Location</label>
+                {allocations.map(alloc => (
+                  <div key={alloc.id} className="rounded-adm-sm border border-adm-line bg-white/5 p-3 space-y-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="font-bold text-white text-sm truncate">{alloc.staff_name}</p>
+                        <p className="text-white/50 text-xs truncate">{alloc.location || 'No location set'}</p>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <span className={`px-2 py-1 rounded-adm-sm text-[11px] font-bold border ${
+                          alloc.stock > 0 ? 'bg-forest/20 border-forest/40 text-forest' : 'bg-crimson/20 border-crimson/40 text-crimson'
+                        }`}>
+                          {alloc.stock > 0 ? `${alloc.stock} units` : 'Empty'}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(alloc.id)}
+                          title={`Remove ${alloc.staff_name}`}
+                          className="flex h-11 w-11 items-center justify-center rounded-adm-sm text-white/45 hover:text-crimson hover:bg-crimson/10 transition-colors"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-white/5">
+                      <div>
+                        <label className={labelCls}>Units held</label>
+                        <input
+                          type="number" min="0" inputMode="numeric"
+                          value={alloc.stock}
+                          onChange={e => handleUpdate(alloc.id, { stock: Math.max(0, Number(e.target.value) || 0) })}
+                          className={fieldCls}
+                        />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Bin / shelf</label>
+                        <input
+                          type="text"
+                          value={alloc.bin}
+                          onChange={e => handleUpdate(alloc.id, { bin: e.target.value })}
+                          placeholder="e.g. A-02"
+                          className={fieldCls}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add custodian — staff come from user_profiles, not from a
+                  hardcoded list of invented names. */}
+              <form onSubmit={handleAdd} className="rounded-adm-sm border border-adm-line bg-adm-sunken p-3 space-y-2.5">
+                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white/55">+ Assign custody</h4>
+
+                <div>
+                  <label className={labelCls}>Staff member</label>
+                  {staffOptions.length > 0 ? (
+                    <select
+                      value={draft.staff_name}
+                      onChange={e => setDraft(d => ({ ...d, staff_name: e.target.value }))}
+                      className={fieldCls}
+                    >
+                      <option value="">Select staff…</option>
+                      {staffOptions
+                        .filter(s => !allocations.some(a => a.staff_name === s.email))
+                        .map(s => <option key={s.id} value={s.email}>{s.email} · {s.role}</option>)}
+                    </select>
+                  ) : (
                     <input
                       type="text"
-                      value={alloc.bin}
-                      onChange={(e) => handleUpdateBin(alloc.id, e.target.value)}
-                      placeholder="e.g. Shelf A-02"
-                      className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-1.5 text-white font-mono outline-none focus:border-blue"
+                      value={draft.staff_name}
+                      onChange={e => setDraft(d => ({ ...d, staff_name: e.target.value }))}
+                      placeholder="Staff name"
+                      className={fieldCls}
                     />
+                  )}
+                  {staffOptions.length === 0 && !loading && (
+                    <p className="mt-1 text-xs text-white/35">No staff accounts found — invite them under Staff &amp; Roles.</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className={labelCls}>Location / hub</label>
+                    <input type="text" value={draft.location} onChange={e => setDraft(d => ({ ...d, location: e.target.value }))} placeholder="e.g. Makati Hub" className={fieldCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Units</label>
+                    <input type="number" min="1" inputMode="numeric" value={draft.stock} onChange={e => setDraft(d => ({ ...d, stock: e.target.value }))} className={fieldCls} />
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+
+                <button type="submit" className="w-full min-h-[44px] rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold text-sm transition-colors">
+                  + Assign custody
+                </button>
+              </form>
+            </>
+          )}
         </div>
 
-        {/* Add New Staff Allocation Form */}
-        <form onSubmit={handleAddAllocation} className="bg-adm-sunken border border-adm-line p-4 rounded-adm-sm space-y-3">
-          <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Assign stock to staff</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-sm font-mono">
-            <div>
-              <label className="block text-xs text-white/60 mb-1">Staff Name</label>
-              <input
-                type="text"
-                required
-                value={newStaffName}
-                onChange={(e) => setNewStaffName(e.target.value)}
-                placeholder="e.g. Maria Santos"
-                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-blue"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs text-white/60 mb-1">Location / Hub</label>
-              <input
-                type="text"
-                required
-                value={newLocation}
-                onChange={(e) => setNewLocation(e.target.value)}
-                placeholder="e.g. Alabang Hub"
-                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-blue"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs text-white/60 mb-1">Assigned Units</label>
-              <input
-                type="number"
-                min="1"
-                value={newStock}
-                onChange={(e) => setNewStock(Number(e.target.value))}
-                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-blue"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs text-white/60 mb-1">Bin / Shelf</label>
-              <input
-                type="text"
-                value={newBin}
-                onChange={(e) => setNewBin(e.target.value)}
-                placeholder="e.g. Bin C-01"
-                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-blue"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue hover:bg-blue/90 text-white font-bold text-sm py-2 rounded-adm-sm transition-all shadow-md shadow-blue/20"
-          >
-            + Assign Custody Allocation
-          </button>
-        </form>
-
-        {/* Actions */}
-        <div className="flex justify-end gap-3 pt-2 border-t border-adm-line">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 rounded-adm-sm bg-white/5 border border-adm-line text-sm font-semibold text-neutral-300 hover:bg-white/10"
-          >
+        {/* Sticky footer */}
+        <div
+          className="flex shrink-0 items-center gap-2 border-t border-adm-line bg-adm-sunken px-3.5 py-3"
+          style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+        >
+          <button type="button" onClick={onClose} className="min-h-[44px] px-4 rounded-adm-sm bg-white/5 border border-adm-line text-sm font-semibold text-neutral-300 hover:bg-white/10 transition-colors">
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="px-6 py-2 rounded-adm-sm bg-blue text-sm font-bold text-white hover:bg-blue/90 shadow-lg shadow-blue/20"
+            disabled={saving || loading || !!loadError}
+            className="flex-1 min-h-[44px] rounded-adm-sm bg-blue hover:bg-blue-deep text-sm font-bold text-white transition-colors disabled:opacity-40"
           >
-            💾 Save Staff Inventory Allocations
+            {saving ? 'Saving…' : 'Save custody'}
           </button>
         </div>
-
       </div>
     </div>
   )

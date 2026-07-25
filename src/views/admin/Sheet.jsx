@@ -143,82 +143,109 @@ export default function Sheet() {
   }
 
   const tableContainerRef = useRef(null)
+  const domainRefs = useRef({})
 
-  const handleScrollToDomain = (pixelOffset) => {
-    if (tableContainerRef.current) {
-      tableContainerRef.current.scrollTo({ left: pixelOffset, behavior: 'smooth' })
-    }
+  // Jump to a domain by measuring the real header cell instead of guessing a
+  // pixel offset — the old hardcoded 0/600/1200/2000 drifted the moment a
+  // column width changed, and only covered 4 of the 7 domains.
+  const handleScrollToDomain = (name) => {
+    const el = domainRefs.current[name]
+    const container = tableContainerRef.current
+    if (!el || !container) return
+    const stickyGutter = window.innerWidth < 640 ? 8 : 88
+    container.scrollTo({ left: Math.max(0, el.offsetLeft - stickyGutter), behavior: 'smooth' })
+  }
+
+  const DOMAIN_TONE = {
+    Product: 'bg-gold text-navy',
+    Content: 'bg-gold text-navy',
+    Pricing: 'bg-gold text-navy',
+    Inventory: 'bg-blue text-white',
+    Website: 'bg-white/15 text-white border border-white/20',
+    Media: 'bg-white/15 text-white border border-white/20',
+    Management: 'bg-white/15 text-white border border-white/20',
   }
 
   return (
     <div className="flex flex-col h-full bg-adm-sunken">
-      {/* Top Action & Horizontal Navigation Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-adm-line px-6 py-3.5 bg-adm-surface shrink-0">
-        <div className="flex flex-wrap items-center gap-2">
-          <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-adm-sm bg-forest text-white px-3.5 py-2.5 min-h-[44px] text-sm font-bold transition hover:bg-forest/90 shadow-md">
+      {/* Toolbar — two single-line rails that scroll sideways on mobile instead
+          of wrapping into a four-row wall that eats half the viewport. */}
+      <div className="shrink-0 border-b border-adm-line bg-adm-surface">
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none px-3 py-2 lg:px-6 lg:py-3">
+          <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-adm-sm bg-forest text-white px-3.5 min-h-[44px] text-sm font-bold transition hover:bg-forest/90">
             <span className="text-lg leading-none">+</span> Add Row
           </button>
-          <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 py-2.5 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
+          <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
             <span>📂</span> CSV Import
           </button>
-          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 py-2.5 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
+          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
             <span>⌂</span> Scan Box
           </button>
-          <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-blue/30 bg-blue/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-blue transition hover:bg-blue/20">
+          <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-blue/30 bg-blue/10 px-3 min-h-[44px] text-sm font-medium text-blue transition hover:bg-blue/20">
             <span>✨</span> Smart Paste AI
           </button>
-          <button onClick={() => rows.length > 0 && setEnrichProduct(rows[0])} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-amber/30 bg-amber/10 px-3 py-2.5 min-h-[44px] text-sm font-medium text-amber transition hover:bg-amber/20">
+          <button
+            onClick={() => rows.length > 0 && setEnrichProduct(rows[0])}
+            disabled={rows.length === 0}
+            className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-amber/30 bg-amber/10 px-3 min-h-[44px] text-sm font-medium text-amber transition hover:bg-amber/20 disabled:opacity-40"
+          >
             <span>✨</span> AI Spec Enricher
           </button>
         </div>
 
-        {/* Sticky Viewport Horizontal Domain Jump Controls */}
-        <div className="flex items-center gap-2 text-sm font-mono">
-          <span className="text-gold font-extrabold uppercase hidden md:inline">Domain Jump:</span>
-          <button onClick={() => handleScrollToDomain(0)} className="px-3.5 py-2 min-h-[38px] rounded-adm-sm bg-gold hover:bg-gold-deep text-navy font-bold transition-all shadow">
-            📋 Product & Content
-          </button>
-          <button onClick={() => handleScrollToDomain(600)} className="px-3.5 py-2 min-h-[38px] rounded-adm-sm bg-gold hover:bg-gold-deep text-navy font-bold transition-all shadow">
-            💰 Pricing
-          </button>
-          <button onClick={() => handleScrollToDomain(1200)} className="px-3.5 py-2 min-h-[38px] rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold transition-all shadow">
-            📦 Stock & FEFO
-          </button>
-          <button onClick={() => handleScrollToDomain(2000)} className="px-3.5 py-2 min-h-[38px] rounded-adm-sm bg-white/20 hover:bg-white/30 text-white font-bold transition-all border border-white/20 shadow">
-            ▶ End
-          </button>
+        {/* Domain jump rail — generated from DOMAINS so all 7 are reachable. */}
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none border-t border-adm-line px-3 py-2 lg:px-6">
+          <span className="shrink-0 text-xs font-mono font-extrabold uppercase text-gold hidden lg:inline">Jump:</span>
+          {DOMAINS.map(d => (
+            <button
+              key={d.name}
+              onClick={() => handleScrollToDomain(d.name)}
+              className={`shrink-0 px-3 min-h-[38px] rounded-adm-sm text-xs font-bold font-mono transition-all ${DOMAIN_TONE[d.name] || 'bg-white/15 text-white'}`}
+            >
+              {d.name}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Viewport Frame Constrained Scroll Container */}
-      <div ref={tableContainerRef} className="flex-1 max-h-[calc(100vh-210px)] overflow-x-auto overflow-y-auto custom-scrollbar relative bg-adm-sunken border-t border-white/20">
+      {/* Scroll container — dvh so the mobile URL bar can't crop the last row. */}
+      <div ref={tableContainerRef} className="flex-1 min-h-0 overflow-x-auto overflow-y-auto custom-scrollbar relative bg-adm-sunken">
         {loading ? (
           <div className="flex items-center justify-center h-64 text-white font-extrabold animate-pulse font-sans text-lg">Loading Product Masters...</div>
         ) : (
           <table className="w-max min-w-full border-collapse text-base bg-adm-surface">
-            <thead className="sticky top-0 z-30 shadow-lg">
+            <thead className="sticky top-0 z-30">
               <tr className="bg-adm-sunken text-sm text-white">
-                <th className="w-10 border border-white/20 py-3 font-bold sticky left-0 z-40 bg-adm-sunken text-gold">#</th>
-                {DOMAINS.map((d, i) => (
-                  <th key={d.name} colSpan={d.cols.length} className={`border border-white/20 py-3 px-4 font-bold uppercase tracking-wider text-center text-sm ${['bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white', 'bg-gold text-navy', 'bg-blue text-white'][i % 7]}`}>
+                {/* Row-number gutter is pure chrome — dropped below sm so the
+                    390px viewport spends its width on SKU, not on "1, 2, 3". */}
+                <th className="hidden sm:table-cell w-10 min-w-10 border border-adm-line py-2.5 font-bold sticky left-0 z-40 bg-adm-sunken text-gold">#</th>
+                {DOMAINS.map((d) => (
+                  <th
+                    key={d.name}
+                    ref={(el) => { domainRefs.current[d.name] = el }}
+                    colSpan={d.cols.length}
+                    className={`border border-adm-line py-2.5 px-4 font-bold uppercase tracking-wider text-center text-xs ${DOMAIN_TONE[d.name] || 'bg-white/15 text-white'}`}
+                  >
                     {d.name}
                   </th>
                 ))}
-                <th className="w-20 border border-white/20 py-3 font-bold text-sm text-gold">Action</th>
+                <th className="w-20 border border-adm-line py-2.5 font-bold text-xs text-gold">Action</th>
               </tr>
               <tr className="bg-adm-raised text-left text-sm font-bold text-white">
-                <th className="border border-white/20 px-2 py-3 text-center sticky left-0 z-40 bg-adm-raised text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]">#</th>
-                {ALL_COLS.map((h, colIdx) => (
+                <th className="hidden sm:table-cell w-10 min-w-10 border border-adm-line px-2 py-2.5 text-center sticky left-0 z-40 bg-adm-raised text-gold">#</th>
+                {ALL_COLS.map((h) => (
                   <th
                     key={h}
-                    className={`border border-white/20 px-4 py-3 whitespace-nowrap font-mono text-sm font-extrabold ${
-                      h === 'SKU' ? 'sticky left-10 z-40 bg-adm-raised text-gold shadow-[2px_0_5px_rgba(0,0,0,0.5)]' : 'text-white'
+                    className={`border border-adm-line px-3 py-2.5 whitespace-nowrap font-mono text-xs font-extrabold ${
+                      h === 'SKU'
+                        ? 'sticky left-0 sm:left-10 z-40 bg-adm-raised text-gold shadow-[2px_0_6px_rgba(0,0,0,0.6)]'
+                        : 'text-white'
                     }`}
                   >
                     {h}
                   </th>
                 ))}
-                <th className="border border-white/20 px-3 py-3 text-center text-gold">Action</th>
+                <th className="border border-adm-line px-3 py-2.5 text-center text-gold">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -226,7 +253,7 @@ export default function Sheet() {
                 const isDraft = r.status === 'Draft'
                 return (
                   <tr key={r.sku} className="hover:bg-blue/10 transition-colors group">
-                    <td className="border border-adm-line bg-adm-surface group-hover:bg-blue/10 px-2 py-1.5 text-center text-sm text-white/60 font-mono sticky left-0 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.5)]">
+                    <td className="hidden sm:table-cell w-10 min-w-10 border border-adm-line bg-adm-surface px-2 py-1.5 text-center text-xs text-white/50 font-mono sticky left-0 z-20">
                       {i + 1}
                     </td>
                     {ALL_COLS.map((col, colIdx) => {
@@ -294,33 +321,35 @@ export default function Sheet() {
                           onSelect={() => setSelected({ row: i, col: colIdx })}
                           selected={selected.row === i && selected.col === colIdx}
                           className={`p-0 min-w-[120px] ${
-                            col === 'SKU' ? 'sticky left-8 z-20 bg-adm-surface group-hover:bg-adm-surface shadow-[2px_0_5px_rgba(0,0,0,0.5)]' : ''
+                            /* was left-8 while the header sat at left-10 — the
+                               2-column offset is what slid Barcode under SKU */
+                            col === 'SKU' ? 'sticky left-0 sm:left-10 z-20 bg-adm-surface shadow-[2px_0_6px_rgba(0,0,0,0.6)]' : ''
                           }`}
                         >
-                          <input 
+                          <input
                             type={typeof val === 'number' ? 'number' : 'text'}
                             value={displayVal}
                             onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, [field]: e.target.value } : row))}
                             onBlur={(e) => updateField(i, col, e.target.value, col === 'SKU' ? r.sku : null)}
                             onFocus={() => setSelected({ row: i, col: colIdx })}
-                            className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-sm ${col === 'SKU' ? 'font-bold text-blue' : 'text-navy dark:text-neutral-300'}`}
+                            className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-sm ${col === 'SKU' ? 'font-bold text-blue' : 'text-neutral-200'}`}
                             placeholder={col}
                           />
                         </Cell>
                       )
                     })}
-                    <td className="border border-line dark:border-adm-line px-2 text-center bg-paper dark:bg-adm-surface group-hover:bg-blue-wash dark:group-hover:bg-blue/10">
-                      <div className="flex items-center justify-center gap-1">
-                        <button onClick={() => setEnrichProduct(r)} className="text-amber/70 hover:text-amber hover:bg-amber/10 rounded w-6 h-6 flex items-center justify-center transition-colors text-sm font-bold" title="Enrich Product Specs with AI">
+                    <td className="border border-adm-line px-2 text-center bg-adm-surface group-hover:bg-blue/10">
+                      <div className="flex items-center justify-center gap-0.5">
+                        <button onClick={() => setEnrichProduct(r)} className="text-amber/70 hover:text-amber hover:bg-amber/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors text-sm font-bold" title="Enrich Product Specs with AI">
                           ✨
                         </button>
-                        <button onClick={() => openProduct(r.sku)} className="text-navy-soft hover:text-navy hover:bg-shell rounded w-6 h-6 flex items-center justify-center transition-colors" title="View Store Page">
-                          <EyeIcon size={14} />
+                        <button onClick={() => openProduct(r.sku)} className="text-white/55 hover:text-white hover:bg-white/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors" title="View Store Page">
+                          <EyeIcon size={15} />
                         </button>
-                        <button onClick={() => setShowBarcode(r.barcode || r.sku)} className="text-navy-soft hover:text-navy hover:bg-shell rounded w-6 h-6 flex items-center justify-center transition-colors" title="View Barcode">
-                          <BarcodeIcon size={14} />
+                        <button onClick={() => setShowBarcode(r.barcode || r.sku)} className="text-white/55 hover:text-white hover:bg-white/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors" title="View Barcode">
+                          <BarcodeIcon size={15} />
                         </button>
-                        <button onClick={() => handleDeleteRow(r.sku)} className="text-crimson/50 hover:text-crimson hover:bg-crimson/10 rounded w-6 h-6 flex items-center justify-center transition-colors" title="Delete Row">×</button>
+                        <button onClick={() => handleDeleteRow(r.sku)} className="text-crimson/60 hover:text-crimson hover:bg-crimson/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors text-lg leading-none" title="Delete Row">×</button>
                       </div>
                     </td>
                   </tr>
@@ -383,7 +412,7 @@ export default function Sheet() {
 
 function Cell({ children, selected, onSelect, className = '' }) {
   return (
-    <td onClick={onSelect} className={`border transition-colors ${selected ? 'border-[2px] border-blue bg-blue/5 dark:bg-blue/10' : 'border-line dark:border-adm-line'} ${className}`}>
+    <td onClick={onSelect} className={`border transition-colors ${selected ? 'border-blue bg-blue/10' : 'border-adm-line'} ${className}`}>
       {children}
     </td>
   )

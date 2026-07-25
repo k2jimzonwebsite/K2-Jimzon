@@ -17,7 +17,7 @@ export default function GlobeCms() {
       {/* Storage mode banner */}
       <div
         className={`mb-4 flex items-center justify-between rounded-adm-sm border px-4 py-2.5 text-base ${
-          isRemote ? 'border-forest/30 bg-forest-wash/40 text-navy' : 'border-gold/40 bg-gold/10 text-navy'
+          isRemote ? 'border-forest/30 bg-forest/10 text-forest' : 'border-gold/40 bg-gold/10 text-gold'
         }`}
       >
         <span>
@@ -28,7 +28,7 @@ export default function GlobeCms() {
         {isRemote && (
           <button
             onClick={signOutAdmin}
-            className="rounded-adm-sm border border-line bg-white px-3 py-1 text-sm font-medium text-navy-soft hover:bg-shell transition-colors"
+            className="rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-1 text-sm font-medium text-white/70 hover:bg-adm-raised transition-colors"
           >
             Sign out
           </button>
@@ -36,23 +36,23 @@ export default function GlobeCms() {
       </div>
 
       {cmsError && (
-        <div className="mb-4 rounded-adm-sm border border-crimson/30 bg-crimson-wash px-4 py-2.5 text-base text-crimson">
+        <div className="mb-4 rounded-adm-sm border border-crimson/30 bg-crimson/10 px-4 py-2.5 text-base text-crimson">
           {cmsError}
         </div>
       )}
 
       {isLoading && (
-        <div className="mb-4 rounded-adm-sm border border-line bg-shell px-4 py-2.5 text-base text-navy-faint">
+        <div className="mb-4 rounded-adm-sm border border-adm-line bg-adm-raised px-4 py-2.5 text-base text-white/45">
           Loading CMS data…
         </div>
       )}
 
       {/* Sub-tabs */}
-      <div className="mb-6 flex gap-1 rounded-adm-sm bg-shell p-1">
+      <div className="mb-6 flex gap-1 rounded-adm-sm bg-adm-sunken border border-adm-line p-1">
         <button
           onClick={() => setTab('products')}
           className={`flex-1 rounded-adm-sm px-4 py-2.5 text-base font-semibold transition-colors ${
-            tab === 'products' ? 'bg-white text-navy shadow-card' : 'text-navy-soft hover:text-navy'
+            tab === 'products' ? 'bg-adm-raised text-white' : 'text-white/70 hover:text-white'
           }`}
         >
           Globe Products
@@ -60,7 +60,7 @@ export default function GlobeCms() {
         <button
           onClick={() => setTab('reviews')}
           className={`flex-1 rounded-adm-sm px-4 py-2.5 text-base font-semibold transition-colors ${
-            tab === 'reviews' ? 'bg-white text-navy shadow-card' : 'text-navy-soft hover:text-navy'
+            tab === 'reviews' ? 'bg-adm-raised text-white' : 'text-white/70 hover:text-white'
           }`}
         >
           Reviews Manager
@@ -95,30 +95,30 @@ function AdminSignIn() {
   }
 
   return (
-    <div className="mx-auto max-w-sm rounded-adm-sm border border-line bg-white p-6">
+    <div className="mx-auto max-w-sm rounded-adm-sm border border-adm-line bg-adm-surface p-6">
       <h3 className="font-serif text-xl font-semibold">Admin sign in</h3>
-      <p className="mt-1 text-base text-navy-faint">
+      <p className="mt-1 text-base text-white/45">
         The globe CMS is live on Supabase. Sign in with your admin account to manage products and reviews.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-5 space-y-4">
         <div>
-          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Email</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-white/70">Email</label>
           <input
             type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username"
-            className="mt-1 w-full rounded-adm-sm border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 min-h-[44px] text-base text-white focus:border-blue focus:outline-none"
           />
         </div>
         <div>
-          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Password</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-white/70">Password</label>
           <input
             type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password"
-            className="mt-1 w-full rounded-adm-sm border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 min-h-[44px] text-base text-white focus:border-blue focus:outline-none"
           />
         </div>
 
         {error && (
-          <p className="rounded-adm-sm border border-crimson/30 bg-crimson-wash px-3 py-2 text-base text-crimson">{error}</p>
+          <p className="rounded-adm-sm border border-crimson/30 bg-crimson/10 px-3 py-2 text-base text-crimson">{error}</p>
         )}
 
         <button
@@ -144,7 +144,7 @@ function GlobeProductsPanel() {
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h3 className="font-serif text-xl font-semibold">Products on Globe</h3>
-          <p className="text-base text-navy-faint">
+          <p className="text-base text-white/45">
             {enabledCount} of {globeProducts.length} products enabled · These will be distributed across the globe
           </p>
         </div>
@@ -158,16 +158,16 @@ function GlobeProductsPanel() {
             <div
               key={gp.productId}
               className={`flex items-center gap-4 rounded-adm-sm border p-4 transition-colors ${
-                gp.enabled ? 'border-forest/30 bg-forest-wash/30' : 'border-line bg-white opacity-60'
+                gp.enabled ? 'border-forest/30 bg-forest/10' : 'border-adm-line bg-adm-surface opacity-60'
               }`}
             >
               {/* Product image thumbnail */}
-              <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-adm-sm bg-shell">
+              <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-adm-sm bg-adm-raised">
                 {product.img ? (
                   <img src={product.img} alt={product.name} className="h-full w-full object-contain p-1" />
                 ) : (
                   <div
-                    className="flex h-full w-full items-center justify-center text-sm font-bold text-navy-faint"
+                    className="flex h-full w-full items-center justify-center text-sm font-bold text-white/45"
                     style={{ backgroundColor: `hsl(${product.hue}, 12%, 92%)` }}
                   >
                     {product.short?.substring(0, 3)}
@@ -177,7 +177,7 @@ function GlobeProductsPanel() {
 
               <div className="flex-1 min-w-0">
                 <p className="font-serif text-lg font-semibold leading-snug truncate">{product.short || product.name}</p>
-                <p className="text-sm text-navy-faint">{product.category} · {product.origin}</p>
+                <p className="text-sm text-white/45">{product.category} · {product.origin}</p>
               </div>
 
               {/* Toggle switch */}
@@ -189,7 +189,7 @@ function GlobeProductsPanel() {
                 aria-label={gp.enabled ? 'Disable on globe' : 'Enable on globe'}
               >
                 <span
-                  className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow-card transition-all ${
+                  className={`absolute top-0.5 h-6 w-6 rounded-full bg-adm-surface shadow-adm transition-all ${
                     gp.enabled ? 'left-[22px]' : 'left-0.5'
                   }`}
                 />
@@ -214,7 +214,7 @@ function ReviewsPanel() {
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h3 className="font-serif text-xl font-semibold">Customer Reviews</h3>
-          <p className="text-base text-navy-faint">{reviews.length} reviews · Shown on product globe cards</p>
+          <p className="text-base text-white/45">{reviews.length} reviews · Shown on product globe cards</p>
         </div>
         <button
           onClick={() => setIsAdding(true)}
@@ -243,7 +243,7 @@ function ReviewsPanel() {
                 onCancel={() => setEditingId(null)}
               />
             ) : (
-              <div className="flex items-start gap-4 rounded-adm-sm border border-line bg-white p-4">
+              <div className="flex items-start gap-4 rounded-adm-sm border border-adm-line bg-adm-surface p-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <div className="flex gap-0.5 text-gold">
@@ -251,27 +251,27 @@ function ReviewsPanel() {
                         <StarIcon key={i} size={11} />
                       ))}
                     </div>
-                    <span className="text-sm text-navy-faint">{r.date}</span>
+                    <span className="text-sm text-white/45">{r.date}</span>
                   </div>
-                  <p className="mt-1.5 text-base leading-relaxed text-navy-soft">"{r.text}"</p>
+                  <p className="mt-1.5 text-base leading-relaxed text-white/70">"{r.text}"</p>
                   <div className="mt-2 flex items-center gap-2">
-                    <span className="text-base font-semibold text-navy">{r.name}</span>
-                    <span className="text-sm text-navy-faint">· {r.channel}</span>
+                    <span className="text-base font-semibold text-white">{r.name}</span>
+                    <span className="text-sm text-white/45">· {r.channel}</span>
                     {r.item && (
-                      <span className="rounded-full bg-shell px-2 py-0.5 text-sm font-medium text-navy-faint">{r.item}</span>
+                      <span className="rounded-full bg-adm-raised px-2 py-0.5 text-sm font-medium text-white/45">{r.item}</span>
                     )}
                   </div>
                 </div>
                 <div className="flex gap-2 flex-shrink-0">
                   <button
                     onClick={() => setEditingId(r.id)}
-                    className="rounded-adm-sm border border-line px-3 py-1.5 text-sm font-medium text-navy-soft hover:bg-shell transition-colors"
+                    className="rounded-adm-sm border border-adm-line px-3 py-1.5 text-sm font-medium text-white/70 hover:bg-adm-raised transition-colors"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => deleteReview(r.id)}
-                    className="rounded-adm-sm border border-crimson/20 px-3 py-1.5 text-sm font-medium text-crimson hover:bg-crimson-wash transition-colors"
+                    className="rounded-adm-sm border border-crimson/20 px-3 py-1.5 text-sm font-medium text-crimson hover:bg-crimson/10 transition-colors"
                   >
                     Delete
                   </button>
@@ -302,20 +302,20 @@ function ReviewForm({ initial, onSave, onCancel }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4 rounded-adm-sm border border-crimson/20 bg-crimson-wash/30 p-5 space-y-4">
+    <form onSubmit={handleSubmit} className="mb-4 rounded-adm-sm border border-crimson/20 bg-crimson/10/30 p-5 space-y-4">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Reviewer Name</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-white/70">Reviewer Name</label>
           <input
             type="text" value={name} onChange={(e) => setName(e.target.value)} required
-            className="mt-1 w-full rounded-adm-sm border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 min-h-[44px] text-base text-white focus:border-blue focus:outline-none"
           />
         </div>
         <div>
-          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Channel</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-white/70">Channel</label>
           <input
             type="text" value={channel} onChange={(e) => setChannel(e.target.value)}
-            className="mt-1 w-full rounded-adm-sm border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 min-h-[44px] text-base text-white focus:border-blue focus:outline-none"
             placeholder="Shopee · verified"
           />
         </div>
@@ -323,10 +323,10 @@ function ReviewForm({ initial, onSave, onCancel }) {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Product</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-white/70">Product</label>
           <select
             value={productId} onChange={(e) => setProductId(e.target.value)}
-            className="mt-1 w-full rounded-adm-sm border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 min-h-[44px] text-base text-white focus:border-blue focus:outline-none"
           >
             <option value="">— General review —</option>
             {products.map((p) => (
@@ -335,23 +335,23 @@ function ReviewForm({ initial, onSave, onCancel }) {
           </select>
         </div>
         <div>
-          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Item label</label>
+          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-white/70">Item label</label>
           <input
             type="text" value={item} onChange={(e) => setItem(e.target.value)}
-            className="mt-1 w-full rounded-adm-sm border border-line bg-white px-3 py-2 text-base focus:border-crimson focus:outline-none"
+            className="mt-1 w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 min-h-[44px] text-base text-white focus:border-blue focus:outline-none"
             placeholder="e.g. Nutella Biscuits"
           />
         </div>
       </div>
 
       <div>
-        <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Rating</label>
+        <label className="text-sm font-semibold uppercase tracking-[0.1em] text-white/70">Rating</label>
         <div className="mt-1 flex gap-1">
           {[1, 2, 3, 4, 5].map((s) => (
             <button
               key={s} type="button" onClick={() => setStars(s)}
               className={`flex h-9 w-9 items-center justify-center rounded-adm-sm border transition-colors ${
-                s <= stars ? 'border-gold bg-gold/10 text-gold' : 'border-line bg-white text-navy-faint'
+                s <= stars ? 'border-gold bg-gold/10 text-gold' : 'border-adm-line bg-adm-surface text-white/45'
               }`}
             >
               <StarIcon size={16} />
@@ -361,10 +361,10 @@ function ReviewForm({ initial, onSave, onCancel }) {
       </div>
 
       <div>
-        <label className="text-sm font-semibold uppercase tracking-[0.1em] text-navy-soft">Review text</label>
+        <label className="text-sm font-semibold uppercase tracking-[0.1em] text-white/70">Review text</label>
         <textarea
           value={text} onChange={(e) => setText(e.target.value)} required rows={3}
-          className="mt-1 w-full rounded-adm-sm border border-line bg-white px-3 py-2 text-base leading-relaxed focus:border-crimson focus:outline-none resize-none"
+          className="mt-1 w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 py-2.5 text-base text-white leading-relaxed focus:border-blue focus:outline-none resize-none"
           placeholder="What did the customer say?"
         />
       </div>
@@ -378,7 +378,7 @@ function ReviewForm({ initial, onSave, onCancel }) {
         </button>
         <button
           type="button" onClick={onCancel}
-          className="rounded-adm-sm border border-line px-5 py-2.5 text-base font-medium text-navy-soft hover:bg-shell transition-colors"
+          className="rounded-adm-sm border border-adm-line px-5 py-2.5 text-base font-medium text-white/70 hover:bg-adm-raised transition-colors"
         >
           Cancel
         </button>
