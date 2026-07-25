@@ -109,8 +109,8 @@ function ScannerModal({ po, onClose, onComplete }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-[#09090b] animate-in slide-in-from-bottom-4 text-white">
-      <div className="flex items-center justify-between px-4 py-4 border-b border-white/10 bg-black/20">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-adm-sunken animate-in slide-in-from-bottom-4 text-white">
+      <div className="flex items-center justify-between px-4 py-4 border-b border-adm-line bg-black/20">
         <div>
           <p className="font-serif text-xl font-semibold">Receive {po.po_number}</p>
           <p className="text-sm text-white/50">Point camera at product barcodes</p>
@@ -124,8 +124,8 @@ function ScannerModal({ po, onClose, onComplete }) {
 
       <div className="flex-1 overflow-y-auto">
         {/* Scanner Window */}
-        <div className="bg-black border-b border-white/10 p-4">
-          <div id="qr-reader" className="mx-auto max-w-sm rounded-lg overflow-hidden bg-white/5" />
+        <div className="bg-black border-b border-adm-line p-4">
+          <div id="qr-reader" className="mx-auto max-w-sm rounded-adm-sm overflow-hidden bg-white/5" />
         </div>
 
         {/* List of Expected Items */}
@@ -137,7 +137,7 @@ function ScannerModal({ po, onClose, onComplete }) {
             lines.map(line => {
               const isComplete = line.scanned >= line.quantity
               return (
-                <div key={line.id} className={`flex items-center justify-between p-3 rounded-lg border ${isComplete ? 'border-forest/50 bg-forest/10' : 'border-white/10 bg-white/5'}`}>
+                <div key={line.id} className={`flex items-center justify-between p-3 rounded-adm-sm border ${isComplete ? 'border-forest/50 bg-forest/10' : 'border-adm-line bg-white/5'}`}>
                   <div>
                     <p className="text-base font-medium">{line.products?.name || line.sku}</p>
                     <p className="text-sm font-mono text-white/50">{line.sku}</p>
@@ -154,11 +154,11 @@ function ScannerModal({ po, onClose, onComplete }) {
         </div>
       </div>
 
-      <div className="p-4 border-t border-white/10 bg-black/40 pb-safe">
+      <div className="p-4 border-t border-adm-line bg-black/40 pb-safe">
         <button 
           onClick={handleComplete}
           disabled={processing || lines.filter(l => l.scanned > 0).length === 0}
-          className="w-full rounded-lg bg-forest py-3.5 text-base font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-forest/20"
+          className="w-full rounded-adm-sm bg-forest py-3.5 text-base font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-forest/20"
         >
           {processing ? 'Saving...' : 'Finalize Restock'}
         </button>
@@ -212,7 +212,7 @@ export default function PurchaseOrders() {
         />
       )}
 
-      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+      <div className="flex items-center justify-between border-b border-adm-line pb-4">
         <div>
           <h2 className="text-xl font-serif text-white">Incoming Deliveries</h2>
           <p className="text-base text-white/50 mt-1">Scan barcodes to accurately restock inventory.</p>
@@ -222,7 +222,7 @@ export default function PurchaseOrders() {
         </button>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-[#09090b] overflow-x-auto w-full">
+      <div className="rounded-adm-sm border border-adm-line bg-adm-sunken overflow-x-auto w-full">
         <table className="w-full text-left text-base text-neutral-300 min-w-[800px]">
           <thead className="bg-white/5 text-sm uppercase tracking-widest text-white/60">
             <tr>

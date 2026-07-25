@@ -81,7 +81,7 @@ export default function ChannelIntegrations() {
     <div className="space-y-6 max-w-6xl mx-auto pb-12 animate-in fade-in duration-300">
 
       {/* Header */}
-      <div className="bg-[#161922] border border-white/10 p-4 sm:p-6 rounded-2xl shadow-lg">
+      <div className="bg-adm-surface border border-adm-line p-4 sm:p-6 rounded-adm shadow-lg">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <span className="text-sm font-mono font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-full">
@@ -93,22 +93,22 @@ export default function ChannelIntegrations() {
               🟢 automatically. API keys are never entered here; they live safely in Supabase on the backend.
             </p>
           </div>
-          <div className="shrink-0 text-center bg-[#0A101D] border border-white/10 rounded-xl px-5 py-3">
+          <div className="shrink-0 text-center bg-adm-surface border border-adm-line rounded-adm-sm px-5 py-3">
             <p className="text-3xl font-extrabold text-white tabular-nums">{liveCount}<span className="text-white/40 text-xl">/{CHANNELS.length}</span></p>
             <p className="text-xs uppercase tracking-wider text-white/50 font-bold mt-0.5">Channels live</p>
           </div>
         </div>
 
         {/* Where the keys go */}
-        <div className="mt-4 border-t border-white/10 pt-4">
+        <div className="mt-4 border-t border-adm-line pt-4">
           <span className="block text-sm text-white/60 font-semibold mb-2.5">🔑 API keys &amp; connectors go here:</span>
           <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2.5">
             <a href={SUPA_SECRETS} target="_blank" rel="noreferrer"
-              className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 min-h-11 rounded-lg transition-all flex items-center justify-center gap-2">
+              className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 min-h-11 rounded-adm-sm transition-all flex items-center justify-center gap-2">
               Open Supabase → secrets ↗
             </a>
             <a href={SUPA_FUNCTIONS} target="_blank" rel="noreferrer"
-              className="bg-white/10 hover:bg-white/15 text-white font-bold text-sm px-4 min-h-11 rounded-lg border border-white/10 transition-all flex items-center justify-center">
+              className="bg-white/10 hover:bg-white/15 text-white font-bold text-sm px-4 min-h-11 rounded-adm-sm border border-adm-line transition-all flex items-center justify-center">
               Edge Functions ↗
             </a>
           </div>
@@ -116,7 +116,7 @@ export default function ChannelIntegrations() {
       </div>
 
       {tableMissing && (
-        <div className="bg-amber/10 border border-amber/30 text-amber rounded-xl p-4 text-sm">
+        <div className="bg-amber/10 border border-amber/30 text-amber rounded-adm-sm p-4 text-sm">
           <p className="font-bold">One-time setup needed</p>
           <p className="text-neutral-300 mt-1">Run <span className="font-mono">RUN_THIS_channel_connections.sql</span> in the Supabase SQL editor so this board can read channel status. Until then every channel shows as not connected.</p>
         </div>
@@ -128,12 +128,12 @@ export default function ChannelIntegrations() {
           const live = isLive(ch.key)
           const row = conns[ch.key]
           return (
-            <div key={ch.key} className={`rounded-2xl border p-4 sm:p-5 shadow-lg transition-all ${
-              live ? 'bg-forest/5 border-forest/40' : 'bg-[#161922] border-white/10'
+            <div key={ch.key} className={`rounded-adm border p-4 sm:p-5 shadow-lg transition-all ${
+              live ? 'bg-forest/5 border-forest/40' : 'bg-adm-surface border-adm-line'
             }`}>
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-white text-lg shadow-md shrink-0"
+                  <div className="w-11 h-11 rounded-adm-sm flex items-center justify-center font-bold text-white text-lg shadow-md shrink-0"
                     style={{ backgroundColor: ch.color }}>
                     {ch.name.charAt(0)}
                   </div>
@@ -142,7 +142,7 @@ export default function ChannelIntegrations() {
                     <p className="text-sm text-white/55 truncate">{ch.blurb}</p>
                   </div>
                 </div>
-                <span className={`shrink-0 text-sm font-mono font-bold px-2.5 py-1 rounded-lg border ${
+                <span className={`shrink-0 text-sm font-mono font-bold px-2.5 py-1 rounded-adm-sm border ${
                   live ? 'bg-forest/20 text-forest border-forest/40' : 'bg-white/5 text-white/50 border-white/15'
                 }`}>
                   {live ? '🟢 Live' : '⚪ Not connected'}
@@ -158,7 +158,7 @@ export default function ChannelIntegrations() {
                 {!live ? (
                   <button
                     onClick={() => setHowto(ch)}
-                    className="w-full sm:w-auto shrink-0 bg-blue hover:bg-blue/90 text-white font-bold text-sm px-4 min-h-11 rounded-lg transition-all flex items-center justify-center gap-1.5"
+                    className="w-full sm:w-auto shrink-0 bg-blue hover:bg-blue/90 text-white font-bold text-sm px-4 min-h-11 rounded-adm-sm transition-all flex items-center justify-center gap-1.5"
                   >
                     📘 How to connect
                   </button>
@@ -199,12 +199,12 @@ function ConnectGuide({ channel, onClose }) {
     {
       t: 'Paste the keys into Supabase (not here)',
       d: <>Open Supabase → Edge Function secrets and add each key by name. This is the ONLY safe place for them — never type an API secret into this dashboard or any web page.
-        <a href={SUPA_SECRETS} target="_blank" rel="noreferrer" className="block mt-2 bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 py-2 rounded-lg w-fit">Open Supabase secrets ↗</a></>,
+        <a href={SUPA_SECRETS} target="_blank" rel="noreferrer" className="block mt-2 bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 py-2 rounded-adm-sm w-fit">Open Supabase secrets ↗</a></>,
     },
     {
       t: 'Deploy the connector',
       d: <>Deploy the {channel.name} connector function (the webhook that receives orders/messages) in Supabase → Edge Functions.
-        <a href={SUPA_FUNCTIONS} target="_blank" rel="noreferrer" className="block mt-2 bg-white/10 hover:bg-white/15 text-white font-bold text-sm px-4 py-2 rounded-lg border border-white/10 w-fit">Open Edge Functions ↗</a></>,
+        <a href={SUPA_FUNCTIONS} target="_blank" rel="noreferrer" className="block mt-2 bg-white/10 hover:bg-white/15 text-white font-bold text-sm px-4 py-2 rounded-adm-sm border border-adm-line w-fit">Open Edge Functions ↗</a></>,
     },
     {
       t: 'Point the webhook & go live',
@@ -214,10 +214,10 @@ function ConnectGuide({ channel, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 animate-in fade-in duration-200" onClick={onClose}>
-      <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#0A101D] p-5 sm:p-6 text-white shadow-2xl" onClick={e => e.stopPropagation()}>
-        <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-4 mb-4">
+      <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 sm:p-6 text-white shadow-2xl" onClick={e => e.stopPropagation()}>
+        <div className="flex items-start justify-between gap-3 border-b border-adm-line pb-4 mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white shadow-md" style={{ backgroundColor: channel.color }}>
+            <div className="w-10 h-10 rounded-adm-sm flex items-center justify-center font-bold text-white shadow-md" style={{ backgroundColor: channel.color }}>
               {channel.name.charAt(0)}
             </div>
             <div>
@@ -225,7 +225,7 @@ function ConnectGuide({ channel, onClose }) {
               <p className="text-sm text-white/55">Follow these 5 steps. Keys stay on the backend.</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg bg-white/5 text-white/50 hover:text-white hover:bg-white/10">✕</button>
+          <button onClick={onClose} className="p-2 rounded-adm-sm bg-white/5 text-white/50 hover:text-white hover:bg-white/10">✕</button>
         </div>
 
         <ol className="space-y-4">
@@ -240,7 +240,7 @@ function ConnectGuide({ channel, onClose }) {
           ))}
         </ol>
 
-        <div className="mt-5 pt-4 border-t border-white/10 bg-amber/5 -mx-5 sm:-mx-6 px-5 sm:px-6 -mb-5 sm:-mb-6 pb-5 rounded-b-2xl">
+        <div className="mt-5 pt-4 border-t border-adm-line bg-amber/5 -mx-5 sm:-mx-6 px-5 sm:px-6 -mb-5 sm:-mb-6 pb-5 rounded-b-adm">
           <p className="text-xs text-amber font-semibold">🔒 Safety: API keys are like passwords. They go only into Supabase secrets on the backend — never into this dashboard, chat, or email.</p>
         </div>
       </div>

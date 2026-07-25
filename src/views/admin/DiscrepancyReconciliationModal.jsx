@@ -24,10 +24,10 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-300">
-      <div className="w-full max-w-4xl max-h-[90vh] rounded-2xl border border-white/10 bg-[#0A101D] text-white shadow-2xl flex flex-col overflow-hidden">
+      <div className="w-full max-w-4xl max-h-[90vh] rounded-adm border border-adm-line bg-adm-surface text-white shadow-2xl flex flex-col overflow-hidden">
         
         {/* Header */}
-        <div className="p-6 border-b border-white/10 bg-[#09090b] flex justify-between items-center shrink-0">
+        <div className="p-6 border-b border-adm-line bg-adm-sunken flex justify-between items-center shrink-0">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono font-bold uppercase tracking-widest text-forest bg-forest/20 px-2 py-0.5 rounded">
@@ -37,20 +37,20 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
             </div>
             <h2 className="font-serif text-xl font-bold text-white mt-1">Fix box count mismatches</h2>
           </div>
-          <button onClick={onClose} className="text-white/60 hover:text-white text-xl min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg hover:bg-white/10" aria-label="Close modal">✕</button>
+          <button onClick={onClose} className="text-white/60 hover:text-white text-xl min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10" aria-label="Close modal">✕</button>
         </div>
 
         {/* Stats Summary Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-white/10 border-b border-white/10 text-center shrink-0">
-          <div className="bg-[#09090b] p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-white/10 border-b border-adm-line text-center shrink-0">
+          <div className="bg-adm-sunken p-4">
             <p className="text-xs font-mono uppercase tracking-widest text-white/60">Italy Packed Box Qty</p>
             <p className="text-xl font-bold text-white mt-1">{totalPacked} units</p>
           </div>
-          <div className="bg-[#09090b] p-4">
+          <div className="bg-adm-sunken p-4">
             <p className="text-xs font-mono uppercase tracking-widest text-white/60">Manila Scanned Qty</p>
             <p className="text-xl font-bold text-forest mt-1">{totalScanned} units</p>
           </div>
-          <div className="bg-[#09090b] p-4">
+          <div className="bg-adm-sunken p-4">
             <p className="text-xs font-mono uppercase tracking-widest text-white/60">Variance</p>
             <p className={`text-xl font-bold mt-1 ${varianceTotal === 0 ? 'text-forest' : varianceTotal < 0 ? 'text-crimson' : 'text-amber'}`}>
               {varianceTotal > 0 ? `+${varianceTotal}` : varianceTotal} units
@@ -63,7 +63,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm border-collapse min-w-[500px]">
             <thead>
-              <tr className="border-b border-white/10 text-white/60 uppercase tracking-wider font-mono">
+              <tr className="border-b border-adm-line text-white/60 uppercase tracking-wider font-mono">
                 <th className="py-2.5 px-3">SKU & Item Details</th>
                 <th className="py-2.5 px-3 text-center">Batch Code</th>
                 <th className="py-2.5 px-3 text-center">Best Before</th>
@@ -107,7 +107,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
           </div>
 
           {/* Warehouse Discrepancy Note */}
-          <div className="pt-4 border-t border-white/10">
+          <div className="pt-4 border-t border-adm-line">
             <label className="block text-sm font-mono uppercase tracking-wider text-white/60 mb-2">
               Customs / Warehouse Arrival Notes & Audit Comments
             </label>
@@ -115,23 +115,23 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Box #2 outer seal checked at NAIA customs. No damages detected..."
-              className="w-full rounded-lg border border-white/10 bg-[#09090b] p-3 text-sm text-white placeholder-white/30 outline-none focus:border-forest resize-none h-20"
+              className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken p-3 text-sm text-white placeholder-white/30 outline-none focus:border-forest resize-none h-20"
             />
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-white/10 bg-[#09090b] flex justify-end gap-3 shrink-0">
+        <div className="p-4 border-t border-adm-line bg-adm-sunken flex justify-end gap-3 shrink-0">
           <button
             onClick={onClose}
-            className="rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-neutral-300 hover:bg-white/10"
+            className="rounded-adm-sm border border-adm-line bg-white/5 px-4 py-2.5 text-sm font-semibold text-neutral-300 hover:bg-white/10"
           >
             Back to Scanning
           </button>
           <button
             onClick={handleFinalize}
             disabled={finalizing}
-            className="rounded-lg bg-forest hover:bg-forest/90 text-white px-6 py-2.5 text-sm font-bold shadow-lg shadow-forest/20 transition-all disabled:opacity-50"
+            className="rounded-adm-sm bg-forest hover:bg-forest/90 text-white px-6 py-2.5 text-sm font-bold shadow-lg shadow-forest/20 transition-all disabled:opacity-50"
           >
             {finalizing ? 'Syncing Master Inventory...' : 'Finalize Arrival & Sync Master Stock 🚀'}
           </button>

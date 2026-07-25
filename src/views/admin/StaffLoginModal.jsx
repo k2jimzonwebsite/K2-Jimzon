@@ -33,10 +33,10 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200 font-mono text-sm text-white">
-      <div className="w-full max-w-md bg-[#0A101D] border border-white/10 rounded-2xl p-6 space-y-6 shadow-2xl">
+      <div className="w-full max-w-md bg-adm-surface border border-adm-line rounded-adm p-6 space-y-6 shadow-2xl">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="flex items-center justify-between border-b border-adm-line pb-4">
           <div>
             <span className="text-xs font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2 py-0.5 rounded border border-forest/30">
               Staff Station Login
@@ -46,7 +46,7 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
 
           <button
             onClick={onClose}
-            className="p-2 rounded-lg bg-white/5 text-white/50 hover:text-white hover:bg-white/10 transition-all min-h-[40px] min-w-[40px]"
+            className="p-2 rounded-adm-sm bg-white/5 text-white/50 hover:text-white hover:bg-white/10 transition-all min-h-[40px] min-w-[40px]"
           >
             ✕
           </button>
@@ -61,10 +61,10 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
                 key={staff.id}
                 type="button"
                 onClick={() => handleQuickSelect(staff)}
-                className={`p-3 rounded-xl border text-center transition-all ${
+                className={`p-3 rounded-adm-sm border text-center transition-all ${
                   selectedStaff.id === staff.id
                     ? 'bg-forest/20 border-forest text-white font-bold shadow-lg shadow-forest/20'
-                    : 'bg-white/5 border-white/10 text-white/60 hover:text-white hover:bg-white/10'
+                    : 'bg-white/5 border-adm-line text-white/60 hover:text-white hover:bg-white/10'
                 }`}
               >
                 <span className="text-xl block mb-1">{staff.icon}</span>
@@ -87,26 +87,26 @@ export default function StaffLoginModal({ isOpen, onClose, onStaffAuthenticated 
               value={pinInput}
               onChange={(e) => setPinInput(e.target.value)}
               placeholder="•••• (Default: 1111)"
-              className="w-full text-center tracking-[0.5em] font-mono text-xl rounded-xl border border-white/20 bg-[#09090b] py-3 text-white focus:border-forest outline-none min-h-[48px]"
+              className="w-full text-center tracking-[0.5em] font-mono text-xl rounded-adm-sm border border-white/20 bg-adm-sunken py-3 text-white focus:border-forest outline-none min-h-[48px]"
               autoFocus
             />
           </div>
 
           {error && (
-            <div className="p-3 rounded-xl bg-crimson/20 border border-crimson/40 text-crimson text-xs">
+            <div className="p-3 rounded-adm-sm bg-crimson/20 border border-crimson/40 text-crimson text-xs">
               {error}
             </div>
           )}
 
           <button
             type="submit"
-            className="w-full bg-forest hover:bg-forest/90 text-white font-bold text-sm py-3 rounded-xl transition-all shadow-lg shadow-forest/20 min-h-[48px] flex items-center justify-center gap-2"
+            className="w-full bg-forest hover:bg-forest/90 text-white font-bold text-sm py-3 rounded-adm-sm transition-all shadow-lg shadow-forest/20 min-h-[48px] flex items-center justify-center gap-2"
           >
             <span>🔓</span> Authenticate {selectedStaff.name.split(' ')[0]} Station
           </button>
         </form>
 
-        <div className="text-xs text-white/55 text-center border-t border-white/10 pt-3">
+        <div className="text-xs text-white/55 text-center border-t border-adm-line pt-3">
           K2 Jimzon BOS · Quick PIN Authentication Active
         </div>
 

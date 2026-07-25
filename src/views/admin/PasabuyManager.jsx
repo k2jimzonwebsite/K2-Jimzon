@@ -142,7 +142,7 @@ export default function PasabuyManager() {
     <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       
       {/* Header */}
-      <div className="bg-[#09090b] border border-white/10 p-4 sm:p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-lg">
+      <div className="bg-adm-sunken border border-adm-line p-4 sm:p-5 rounded-adm flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-lg">
         <div>
           <h1 className="font-serif text-lg sm:text-2xl font-bold text-white">Pasabuy requests &amp; pricing</h1>
           <p className="text-xs sm:text-sm text-white/55 mt-1 max-w-xl">
@@ -151,23 +151,23 @@ export default function PasabuyManager() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-xs font-mono">
+          <div className="bg-white/5 border border-adm-line px-3 py-2 rounded-adm-sm text-xs font-mono">
             <span className="text-white/50">EUR/PHP</span> <span className="text-forest font-bold">₱62.50</span>
           </div>
-          <div className="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-xs font-mono">
+          <div className="bg-white/5 border border-adm-line px-3 py-2 rounded-adm-sm text-xs font-mono">
             <span className="text-white/50">Air cargo</span> <span className="text-blue font-bold">€14/kg</span>
           </div>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex gap-2 border-b border-white/10 pb-3 overflow-x-auto text-sm font-mono">
+      <div className="flex gap-2 border-b border-adm-line pb-3 overflow-x-auto text-sm font-mono">
         {['All', 'Pending Quote', 'Quoted', 'Approved', 'Buying in Italy', 'In Flight'].map(st => (
           <button
             key={st}
             onClick={() => setFilterStatus(st)}
-            className={`px-3.5 py-1.5 rounded-lg border transition-all whitespace-nowrap ${
-              filterStatus === st ? 'bg-amber/20 border-amber/40 text-amber font-bold' : 'bg-white/5 border-white/10 text-white/60 hover:text-white'
+            className={`px-3.5 py-1.5 rounded-adm-sm border transition-all whitespace-nowrap ${
+              filterStatus === st ? 'bg-amber/20 border-amber/40 text-amber font-bold' : 'bg-white/5 border-adm-line text-white/60 hover:text-white'
             }`}
           >
             {st} {st !== 'All' && `(${requests.filter(r => r.status === st).length})`}
@@ -188,8 +188,8 @@ export default function PasabuyManager() {
               <div
                 key={req.id}
                 onClick={() => setSelectedReq(req)}
-                className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                  isSelected ? 'bg-[#0A101D] border-amber/50 shadow-xl' : 'bg-[#09090b] border-white/10 hover:border-white/20'
+                className={`p-4 rounded-adm-sm border cursor-pointer transition-all ${
+                  isSelected ? 'bg-adm-surface border-amber/50 shadow-xl' : 'bg-adm-sunken border-adm-line hover:border-white/20'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -222,9 +222,9 @@ export default function PasabuyManager() {
         {/* Right Column: Interactive Quotation & Landed Cost Calculator */}
         <div className="lg:col-span-2 space-y-6">
           {selectedReq ? (
-            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="bg-adm-sunken border border-adm-line rounded-adm p-6 shadow-xl space-y-6">
               
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-adm-line pb-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-xs font-mono font-bold text-amber bg-amber/20 px-2 py-0.5 rounded">
@@ -240,7 +240,7 @@ export default function PasabuyManager() {
                   <select
                     value={selectedReq.status}
                     onChange={(e) => handleUpdateStatus(selectedReq.id, e.target.value)}
-                    className="bg-[#0A101D] border border-white/20 text-sm font-mono text-white rounded-lg px-3 py-2 outline-none"
+                    className="bg-adm-surface border border-white/20 text-sm font-mono text-white rounded-adm-sm px-3 py-2 outline-none"
                   >
                     <option value="Pending Quote">Pending Quote</option>
                     <option value="Quoted">Quoted</option>
@@ -254,7 +254,7 @@ export default function PasabuyManager() {
 
               {/* Customer Notes Card */}
               {selectedReq.notes && (
-                <div className="bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-neutral-300">
+                <div className="bg-white/5 border border-adm-line p-3.5 rounded-adm-sm text-sm text-neutral-300">
                   <p className="text-xs font-mono uppercase text-white/60 font-bold mb-1">Customer Special Instructions:</p>
                   <p className="italic">"{selectedReq.notes}"</p>
                   {selectedReq.reference_url && (
@@ -272,7 +272,7 @@ export default function PasabuyManager() {
 
               {/* Quotation & Landed Cost Breakdown Engine */}
               <div className="space-y-4 pt-2">
-                <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <div className="flex items-center justify-between border-b border-adm-line pb-2">
                   <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">
                     🇮🇹 Italy Landed Cost & Pricing Engine
                   </h3>
@@ -287,7 +287,7 @@ export default function PasabuyManager() {
                       step="0.1"
                       value={costEur}
                       onChange={(e) => setCostEur(Number(e.target.value))}
-                      className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-sm text-white font-mono outline-none focus:border-amber"
+                      className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-sm text-white font-mono outline-none focus:border-amber"
                     />
                   </div>
 
@@ -298,7 +298,7 @@ export default function PasabuyManager() {
                       step="0.05"
                       value={weightKg}
                       onChange={(e) => setWeightKg(Number(e.target.value))}
-                      className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-sm text-white font-mono outline-none focus:border-amber"
+                      className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-sm text-white font-mono outline-none focus:border-amber"
                     />
                   </div>
 
@@ -307,7 +307,7 @@ export default function PasabuyManager() {
                     <select
                       value={shippingMethod}
                       onChange={(e) => setShippingMethod(e.target.value)}
-                      className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-sm text-white font-mono outline-none focus:border-amber"
+                      className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-sm text-white font-mono outline-none focus:border-amber"
                     >
                       <option value="air">✈️ Air Express (€14/kg)</option>
                       <option value="sea">🚢 Sea Cargo (€4/kg)</option>
@@ -316,7 +316,7 @@ export default function PasabuyManager() {
                 </div>
 
                 {/* Calculation Summary Card */}
-                <div className="bg-[#0A101D] border border-white/10 p-4 rounded-xl space-y-2 text-sm font-mono">
+                <div className="bg-adm-surface border border-adm-line p-4 rounded-adm-sm space-y-2 text-sm font-mono">
                   <div className="flex justify-between text-white/60">
                     <span>Base Item Price (€{costEur} × ₱{exchangeRate}):</span>
                     <span className="text-white">{peso(itemCostPhp)}</span>
@@ -329,7 +329,7 @@ export default function PasabuyManager() {
                     <span>Manila Customs & Import Tax (12%):</span>
                     <span className="text-white">{peso(customsTaxPhp)}</span>
                   </div>
-                  <div className="flex justify-between font-bold border-t border-white/10 pt-2 text-base">
+                  <div className="flex justify-between font-bold border-t border-adm-line pt-2 text-base">
                     <span className="text-neutral-300">Total Manila Landed Cost:</span>
                     <span className="text-amber">{peso(totalLandedCostPhp)}</span>
                   </div>
@@ -358,13 +358,13 @@ export default function PasabuyManager() {
                       type="number"
                       value={finalPricePhp}
                       onChange={(e) => setCustomPricePhp(e.target.value)}
-                      className="w-full rounded-lg border border-forest/50 bg-forest/10 px-3 py-2 text-base text-forest font-bold font-mono outline-none"
+                      className="w-full rounded-adm-sm border border-forest/50 bg-forest/10 px-3 py-2 text-base text-forest font-bold font-mono outline-none"
                     />
                   </div>
                 </div>
 
                 {/* Action Controls */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10">
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-adm-line">
                   <div className="text-sm font-mono text-white/50">
                     Calculated Margin: <span className="text-forest font-bold">{calculatedMarginPercent}%</span>
                   </div>
@@ -372,13 +372,13 @@ export default function PasabuyManager() {
                   <div className="flex gap-2">
                     <button
                       onClick={handleSaveQuote}
-                      className="bg-amber hover:bg-amber/90 text-navy-dark font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg transition-all"
+                      className="bg-amber hover:bg-amber/90 text-navy-dark font-bold text-sm px-5 py-2.5 rounded-adm-sm shadow-lg transition-all"
                     >
                       {quoteSuccess ? '✓ Quote Saved & Updated!' : '💾 Save Quotation'}
                     </button>
                     <button
                       onClick={() => alert(`Quote for ${selectedReq.item_title}: ${peso(finalPricePhp)} pushed to ${selectedReq.customer_name} via ${selectedReq.channel}!`)}
-                      className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-all"
+                      className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 py-2.5 rounded-adm-sm transition-all"
                     >
                       📱 Send Quote via {selectedReq.channel}
                     </button>
@@ -389,7 +389,7 @@ export default function PasabuyManager() {
 
             </div>
           ) : (
-            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-12 text-center text-white/60 font-mono text-sm">
+            <div className="bg-adm-sunken border border-adm-line rounded-adm p-12 text-center text-white/60 font-mono text-sm">
               👈 Select a Pasabuy request from the left panel to open the Landed Cost Quotation Engine.
             </div>
           )}

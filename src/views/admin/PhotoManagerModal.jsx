@@ -35,8 +35,8 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in p-4">
-      <div className="bg-[#10141d] border border-white/10 rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40">
+      <div className="bg-adm-surface border border-adm-line rounded-adm w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/40">
           <div>
             <h3 className="font-serif text-xl font-semibold text-white">Manage Photos</h3>
             <p className="text-sm text-purple-400 font-mono">SKU: {product.sku}</p>
@@ -72,11 +72,11 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
           />
         </div>
 
-        <div className="p-4 border-t border-white/10 bg-black/40">
+        <div className="p-4 border-t border-adm-line bg-black/40">
           <button 
             onClick={handleSave}
             disabled={saving}
-            className="w-full bg-forest text-navy font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(205,250,119,0.2)] transition-all hover:scale-[1.02] disabled:opacity-50 flex justify-center items-center gap-2"
+            className="w-full bg-forest text-navy font-bold py-4 rounded-adm-sm shadow-[0_0_20px_rgba(205,250,119,0.2)] transition-all hover:scale-[1.02] disabled:opacity-50 flex justify-center items-center gap-2"
           >
             {saving ? 'Saving...' : 'Save Photos'}
           </button>

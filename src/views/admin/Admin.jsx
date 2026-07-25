@@ -78,7 +78,7 @@ function NavList({ section, onSelect, activeSkus }) {
                   key={id}
                   onClick={() => onSelect(id)}
                   className={
-                    'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ' +
+                    'flex w-full items-center gap-3 rounded-adm-sm px-3 py-2 text-left text-sm transition-colors ' +
                     (on
                       ? 'bg-white/[0.08] text-white font-medium'
                       : 'text-white/55 hover:text-white hover:bg-white/[0.04]')
@@ -149,7 +149,7 @@ export default function Admin() {
   }
 
   if (!isAdmin) {
-    return <AdminAuthModal isOpen={true} onClose={() => go('home')} />
+    return <div className="admin-ui"><AdminAuthModal isOpen={true} onClose={() => go('home')} /></div>
   }
 
   const selectSection = (id) => {
@@ -163,12 +163,12 @@ export default function Admin() {
   const meta = SECTIONS[section] || SECTIONS.overview
 
   return (
-    <div className="flex min-h-screen bg-[#0B0E14] pb-20 text-white/80 md:pb-0 font-sans selection:bg-blue/30 selection:text-white">
+    <div className="admin-ui flex min-h-screen bg-adm-bg pb-20 text-white/80 md:pb-0 font-sans selection:bg-blue/30 selection:text-white">
       <CommandPalette isOpen={paletteOpen} setIsOpen={setPaletteOpen} setSection={setSection} />
 
       {/* Sidebar */}
-      <aside className="hidden w-60 shrink-0 flex-col border-r border-white/10 bg-[#0A0C11] lg:flex">
-        <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
+      <aside className="hidden w-60 shrink-0 flex-col border-r border-adm-line bg-adm-sunken lg:flex">
+        <div className="flex items-center justify-between px-4 py-4 border-b border-adm-line">
           <div>
             <p className="text-base font-semibold text-white tracking-tight">
               K2 Jimzon <span className="text-white/60 font-normal">BOS</span>
@@ -176,7 +176,7 @@ export default function Admin() {
           </div>
           <button
             onClick={() => setPaletteOpen(true)}
-            className="flex items-center justify-center rounded-md p-1.5 text-white/50 hover:bg-white/10 hover:text-white transition-colors"
+            className="flex items-center justify-center rounded-adm-sm p-1.5 text-white/50 hover:bg-white/10 hover:text-white transition-colors"
             title="Search (Ctrl+K)"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -189,10 +189,10 @@ export default function Admin() {
           <NavList section={section} onSelect={selectSection} activeSkus={activeSkus} />
         </div>
 
-        <div className="border-t border-white/10 px-3 py-3 space-y-1 shrink-0">
+        <div className="border-t border-adm-line px-3 py-3 space-y-1 shrink-0">
           <button
             onClick={() => setShowDevOpsModal(true)}
-            className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/50 hover:text-white hover:bg-white/[0.04] transition-colors"
+            className="w-full flex items-center gap-2 rounded-adm-sm px-3 py-2 text-sm text-white/50 hover:text-white hover:bg-white/[0.04] transition-colors"
             title="DevOps & System Architecture"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-blue pulse-dot" />
@@ -200,7 +200,7 @@ export default function Admin() {
           </button>
           <button
             onClick={logoutAdmin}
-            className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/50 hover:text-crimson hover:bg-crimson/10 transition-colors"
+            className="w-full flex items-center gap-2 rounded-adm-sm px-3 py-2 text-sm text-white/50 hover:text-crimson hover:bg-crimson/10 transition-colors"
           >
             <ShieldIcon size={15} /> Lock / Exit Admin
           </button>
@@ -209,9 +209,11 @@ export default function Admin() {
 
       <div className="min-w-0 flex-1 flex flex-col h-full overflow-hidden">
         {/* Mobile Header */}
-        <div className="flex items-center justify-between px-4 py-3 bg-[#0A0C11] border-b border-white/10 shrink-0 w-full lg:hidden">
-          <p className="text-base font-semibold text-white">K2 Jimzon <span className="text-white/60 font-normal">BOS</span></p>
-          <div className="flex items-center gap-1">
+        {/* Mobile top bar doubles as the page title, so the section header below
+            can drop its own title row instead of stacking two headers. */}
+        <div className="flex items-center justify-between gap-2 px-3 py-2 bg-adm-sunken border-b border-adm-line shrink-0 w-full lg:hidden">
+          <p className="text-base font-semibold text-white truncate min-w-0">{meta.title}</p>
+          <div className="flex items-center gap-0.5 shrink-0">
             <button onClick={() => setPaletteOpen(true)} className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-white/50 hover:text-white">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -229,7 +231,7 @@ export default function Admin() {
         {isMobileMenuOpen && (
           <div className="fixed inset-0 z-50 flex lg:hidden">
             <div className="fixed inset-0 bg-black/60" onClick={() => setIsMobileMenuOpen(false)} />
-            <div className="relative flex w-64 flex-col bg-[#0A0C11] border-r border-white/10 overflow-y-auto pt-4 pb-20 px-2">
+            <div className="relative flex w-64 flex-col bg-adm-sunken border-r border-adm-line overflow-y-auto pt-4 pb-20 px-2">
               <div className="flex items-center justify-between px-3 mb-4">
                 <p className="text-base font-semibold text-white">Menu</p>
                 <button onClick={() => setIsMobileMenuOpen(false)} className="p-2.5 min-h-[44px] min-w-[44px] text-white/50 hover:text-white">
@@ -243,15 +245,15 @@ export default function Admin() {
           </div>
         )}
 
-        <header className="flex flex-wrap items-center gap-4 border-b border-white/10 bg-[#0B0E14] px-4 py-4 md:px-6">
-          <div className="flex-1 min-w-0">
+        <header className="flex items-center gap-2 border-b border-adm-line bg-adm-bg px-3 py-2 lg:gap-4 lg:px-6 lg:py-4">
+          <div className="hidden lg:block flex-1 min-w-0">
             <h1 className="text-lg font-semibold tracking-tight text-white truncate">{meta.title}</h1>
             <p className="text-sm text-white/60 mt-0.5 truncate">{meta.desc}</p>
           </div>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-2 overflow-x-auto scrollbar-none">
             <button
               onClick={() => setShowStartHere(true)}
-              className="flex items-center gap-1.5 min-h-[40px] rounded-lg border border-gold/40 bg-gold/10 text-gold hover:bg-gold/20 text-sm font-medium px-3 transition-colors"
+              className="flex items-center gap-1.5 min-h-[40px] rounded-adm-sm border border-gold/40 bg-gold/10 text-gold hover:bg-gold/20 text-sm font-medium px-3 transition-colors"
               title="How to use this dashboard — start here"
             >
               <span>📖</span>
@@ -260,7 +262,7 @@ export default function Admin() {
 
             <button
               onClick={() => setShowDailyTasks(true)}
-              className="relative flex items-center gap-1.5 min-h-[40px] rounded-lg border border-white/10 bg-white/[0.04] text-white/80 hover:bg-white/10 hover:text-white text-sm px-3 transition-colors"
+              className="relative flex items-center gap-1.5 min-h-[40px] rounded-adm-sm border border-adm-line bg-white/[0.04] text-white/80 hover:bg-white/10 hover:text-white text-sm px-3 transition-colors"
               title="Expiry alerts"
             >
               <span>🔔</span>
@@ -269,16 +271,16 @@ export default function Admin() {
 
             <button
               onClick={() => setPaletteOpen(true)}
-              className="hidden lg:flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+              className="hidden lg:flex items-center gap-2 rounded-adm-sm border border-adm-line bg-white/[0.04] px-3 py-2 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-colors"
             >
               Search <kbd className="rounded border border-white/15 bg-black/40 px-1.5 py-0.5 font-mono text-[11px] text-white/50">Ctrl K</kbd>
             </button>
 
             {section === 'inventory' && (
-              <div className="flex items-center gap-2 border-l border-white/10 pl-2">
+              <div className="flex items-center gap-2 border-l border-adm-line pl-2">
                 <button
                   onClick={() => setShowCsvImport(true)}
-                  className="flex items-center gap-1.5 rounded-lg bg-blue hover:bg-blue-deep px-3 py-2 text-sm font-medium text-white transition-colors"
+                  className="flex items-center gap-1.5 rounded-adm-sm bg-blue hover:bg-blue-deep px-3 py-2 text-sm font-medium text-white transition-colors"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -286,8 +288,9 @@ export default function Admin() {
                   Upload CSV
                 </button>
 
-                <div className="flex items-center gap-2 bg-white/[0.04] border border-white/10 px-2.5 py-1.5 rounded-lg">
-                  <span className="text-sm text-white/70">Sheet mode</span>
+                <div className="flex items-center gap-2 bg-white/[0.04] border border-adm-line px-2.5 py-1.5 rounded-adm-sm">
+                  <span className="hidden sm:inline text-sm text-white/70">Sheet mode</span>
+                  <span className="sm:hidden text-sm text-white/70">Sheet</span>
                   <button
                     role="switch"
                     aria-checked={sheetMode}
@@ -302,7 +305,7 @@ export default function Admin() {
           </div>
         </header>
 
-        <div className="p-4 md:p-6 pb-24 lg:pb-6 overflow-y-auto flex-1">
+        <div className="p-3 sm:p-4 lg:p-6 pb-24 lg:pb-6 overflow-y-auto flex-1">
           <ErrorBoundary key={section}>
             <Suspense fallback={
               <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center text-white/60 space-y-4">
@@ -331,7 +334,7 @@ export default function Admin() {
       </div>
 
       {/* Mobile bottom tab bar — quick jump between the sections you use most */}
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 flex items-stretch border-t border-white/10 bg-[#0A0C11]/95 backdrop-blur-md" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 flex items-stretch border-t border-adm-line bg-adm-sunken/95 backdrop-blur-md" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {[
           { id: 'overview', label: 'Home' },
           { id: 'inventory', label: 'Inventory' },

@@ -77,9 +77,9 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in p-4">
-      <div className="bg-[#10141d] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div className="bg-adm-surface border border-adm-line rounded-adm w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/40">
           <div>
             <h2 className="font-serif text-xl font-semibold text-white">Bulk CSV Import</h2>
             <p className="text-sm text-white/50 mt-1">Upload an Excel/CSV spreadsheet to update inventory</p>
@@ -92,7 +92,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
         </div>
 
         <div className="p-6 overflow-y-auto flex-1 space-y-6">
-          <div className="bg-blue/10 border border-blue/20 rounded-lg p-4">
+          <div className="bg-blue/10 border border-blue/20 rounded-adm-sm p-4">
             <h4 className="text-base font-semibold text-blue mb-2">Required CSV Column Headers:</h4>
             <div className="flex flex-wrap gap-2">
               {['sku', 'name', 'description', 'usage_instructions', 'srp', 'wholesale_price', 'stock'].map(h => (
@@ -103,7 +103,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
 
           <div 
             onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-white/20 rounded-xl p-10 text-center cursor-pointer hover:border-purple-500 hover:bg-white/5 transition-colors flex flex-col items-center justify-center"
+            className="border-2 border-dashed border-white/20 rounded-adm-sm p-10 text-center cursor-pointer hover:border-purple-500 hover:bg-white/5 transition-colors flex flex-col items-center justify-center"
           >
             <input 
               type="file" 
@@ -120,7 +120,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
           </div>
 
           {error && (
-            <div className="bg-crimson/10 border border-crimson/30 rounded-lg p-3 text-base text-crimson">
+            <div className="bg-crimson/10 border border-crimson/30 rounded-adm-sm p-3 text-base text-crimson">
               {error}
             </div>
           )}
@@ -131,17 +131,17 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
                 Preview ({parsedData.length} rows detected)
                 <span className="text-sm text-white/60 font-normal">Showing first 3 rows</span>
               </p>
-              <div className="overflow-x-auto border border-white/10 rounded-lg">
+              <div className="overflow-x-auto border border-adm-line rounded-adm-sm">
                 <table className="w-full text-left text-sm whitespace-nowrap">
                   <thead className="bg-white/5 text-white/50 uppercase">
                     <tr>
-                      <th className="px-3 py-2 border-b border-white/10">sku</th>
-                      <th className="px-3 py-2 border-b border-white/10">title</th>
-                      <th className="px-3 py-2 border-b border-white/10">stock</th>
-                      <th className="px-3 py-2 border-b border-white/10">srp</th>
+                      <th className="px-3 py-2 border-b border-adm-line">sku</th>
+                      <th className="px-3 py-2 border-b border-adm-line">title</th>
+                      <th className="px-3 py-2 border-b border-adm-line">stock</th>
+                      <th className="px-3 py-2 border-b border-adm-line">srp</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/10 text-neutral-300">
+                  <tbody className="divide-y divide-adm-line text-neutral-300">
                     {parsedData.slice(0, 3).map((row, i) => (
                       <tr key={i} className="hover:bg-white/5">
                         <td className="px-3 py-2">{row.sku}</td>
@@ -157,17 +157,17 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
           )}
         </div>
 
-        <div className="p-6 border-t border-white/10 bg-black/40 flex justify-end gap-3">
+        <div className="p-6 border-t border-adm-line bg-black/40 flex justify-end gap-3">
           <button 
             onClick={onClose}
-            className="px-6 py-2 rounded-lg text-base font-medium text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+            className="px-6 py-2 rounded-adm-sm text-base font-medium text-white/60 hover:text-white hover:bg-white/10 transition-colors"
           >
             Cancel
           </button>
           <button 
             onClick={handleImport}
             disabled={importing || parsedData.length === 0}
-            className="px-6 py-2 rounded-lg text-base font-medium bg-forest text-navy hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center gap-2"
+            className="px-6 py-2 rounded-adm-sm text-base font-medium bg-forest text-navy hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center gap-2"
           >
             {importing ? 'Importing...' : `Import ${parsedData.length} Rows`}
           </button>

@@ -27,7 +27,7 @@ const TOOLS = [
   { id: 'notes', label: 'Scratchpad', icon: '📝' },
 ]
 
-const field = 'w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none'
+const field = 'w-full rounded-adm-sm border border-adm-line bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none'
 const lbl = 'text-[11px] font-medium uppercase tracking-wide text-white/45'
 
 export default function AdminToolsWidget({ onOpenGuide }) {
@@ -78,7 +78,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
     <div className="fixed z-[70]" style={{ left: pos.x, top: pos.y }}>
       {open && (
         <div
-          className="absolute w-80 rounded-2xl border border-white/12 bg-[#0E121E] shadow-2xl overflow-hidden"
+          className="absolute w-80 rounded-adm border border-white/12 bg-adm-surface shadow-2xl overflow-hidden"
           style={{
             [openUp ? 'bottom' : 'top']: 60,
             [openLeft ? 'right' : 'left']: 0,
@@ -88,7 +88,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
           {onOpenGuide && (
             <button
               onClick={() => { onOpenGuide(); setOpen(false) }}
-              className="w-full flex items-center gap-2 border-b border-white/10 bg-blue/15 px-3.5 py-2.5 text-sm font-semibold text-blue hover:bg-blue/25 transition-colors"
+              className="w-full flex items-center gap-2 border-b border-adm-line bg-blue/15 px-3.5 py-2.5 text-sm font-semibold text-blue hover:bg-blue/25 transition-colors"
             >
               🧭 Dashboard guide — what does this do?
             </button>
@@ -98,13 +98,13 @@ export default function AdminToolsWidget({ onOpenGuide }) {
           <ClockRate />
 
           {/* Tool picker */}
-          <div className="flex flex-wrap gap-1 border-b border-white/10 bg-black/20 px-2 py-2">
+          <div className="flex flex-wrap gap-1 border-b border-adm-line bg-black/20 px-2 py-2">
             {TOOLS.map((t) => (
               <button
                 key={t.id}
                 onClick={() => setTool(t.id)}
                 title={t.label}
-                className={'flex h-8 w-8 items-center justify-center rounded-lg text-base transition-colors ' +
+                className={'flex h-8 w-8 items-center justify-center rounded-adm-sm text-base transition-colors ' +
                   (tool === t.id ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}
               >
                 {t.icon}
@@ -131,7 +131,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
         onPointerDown={onDown}
         onClick={handleClick}
         title="Tools (drag to move)"
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-[#161922] border border-white/15 text-xl text-white shadow-xl hover:bg-[#1A1F2B] active:scale-95 cursor-grab active:cursor-grabbing touch-none"
+        className="flex h-12 w-12 items-center justify-center rounded-full bg-adm-surface border border-white/15 text-xl text-white shadow-xl hover:bg-adm-raised active:scale-95 cursor-grab active:cursor-grabbing touch-none"
       >
         ⚙️
       </button>
@@ -152,7 +152,7 @@ function ClockRate() {
   const php = eur !== '' ? (parseFloat(eur) * r) : null
 
   return (
-    <div className="border-b border-white/10 bg-black/20 px-3.5 py-2.5 space-y-2">
+    <div className="border-b border-adm-line bg-black/20 px-3.5 py-2.5 space-y-2">
       <div className="flex items-center justify-between text-sm">
         <span className="text-white/80">🇮🇹 Milan <strong className="text-white tabular-nums ml-1">{time('Europe/Rome')}</strong></span>
         <span className="text-white/80"><strong className="text-white tabular-nums mr-1">{time('Asia/Manila')}</strong> Manila 🇵🇭</span>
@@ -160,9 +160,9 @@ function ClockRate() {
       <div className="flex items-center gap-2">
         <span className="text-white/60 text-sm shrink-0">€1 = ₱</span>
         <input value={rate} onChange={(e) => setRate(e.target.value)} inputMode="decimal"
-          className="w-16 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-sm text-white tabular-nums outline-none focus:border-gold" />
+          className="w-16 rounded-adm-sm border border-adm-line bg-black/40 px-2 py-1 text-sm text-white tabular-nums outline-none focus:border-gold" />
         <input value={eur} onChange={(e) => setEur(e.target.value)} inputMode="decimal" placeholder="€ amount"
-          className="flex-1 min-w-0 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-sm text-white placeholder:text-white/30 outline-none focus:border-gold" />
+          className="flex-1 min-w-0 rounded-adm-sm border border-adm-line bg-black/40 px-2 py-1 text-sm text-white placeholder:text-white/30 outline-none focus:border-gold" />
         <span className="text-gold text-sm font-semibold tabular-nums shrink-0">{php != null ? '₱' + php.toLocaleString(undefined, { maximumFractionDigits: 2 }) : '—'}</span>
       </div>
     </div>
@@ -190,11 +190,11 @@ function Calculator() {
   const pct = () => { setDisplay((s) => String(parseFloat(s) / 100)); setOverwrite(true) }
 
   const Btn = ({ children, onClick, cls = '' }) => (
-    <button onClick={onClick} className={'h-10 rounded-lg text-sm font-semibold transition-colors ' + (cls || 'bg-white/5 text-white hover:bg-white/10')}>{children}</button>
+    <button onClick={onClick} className={'h-10 rounded-adm-sm text-sm font-semibold transition-colors ' + (cls || 'bg-white/5 text-white hover:bg-white/10')}>{children}</button>
   )
   return (
     <div className="space-y-2">
-      <div className="rounded-lg bg-black/40 px-3 py-3 text-right text-2xl font-semibold text-white tabular-nums truncate">{display}</div>
+      <div className="rounded-adm-sm bg-black/40 px-3 py-3 text-right text-2xl font-semibold text-white tabular-nums truncate">{display}</div>
       <div className="grid grid-cols-4 gap-1.5">
         <Btn onClick={clear} cls="bg-crimson/20 text-crimson hover:bg-crimson/30">C</Btn>
         <Btn onClick={pct}>%</Btn>
@@ -277,18 +277,18 @@ function Units() {
       <div className="flex gap-1">
         {Object.keys(CATS).map((c) => (
           <button key={c} onClick={() => { setCat(c); setFrom(Object.keys(CATS[c])[1] || Object.keys(CATS[c])[0]) }}
-            className={'flex-1 rounded-lg py-1.5 text-sm font-medium ' + (cat === c ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>{c}</button>
+            className={'flex-1 rounded-adm-sm py-1.5 text-sm font-medium ' + (cat === c ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>{c}</button>
         ))}
       </div>
       <div className="flex gap-2">
         <input className={field + ' flex-1'} inputMode="decimal" value={val} onChange={(e) => setVal(e.target.value)} />
-        <select value={from} onChange={(e) => setFrom(e.target.value)} className="rounded-lg border border-white/10 bg-black/40 px-2 text-sm text-white outline-none">
+        <select value={from} onChange={(e) => setFrom(e.target.value)} className="rounded-adm-sm border border-adm-line bg-black/40 px-2 text-sm text-white outline-none">
           {Object.keys(units).map((u) => <option key={u} value={u}>{u}</option>)}
         </select>
       </div>
       <div className="space-y-1">
         {Object.keys(units).filter((u) => u !== from).map((u) => (
-          <div key={u} className="flex justify-between rounded-lg bg-black/30 px-3 py-1.5 text-sm">
+          <div key={u} className="flex justify-between rounded-adm-sm bg-black/30 px-3 py-1.5 text-sm">
             <span className="text-white/50">{u}</span>
             <span className="text-white tabular-nums">{(base / units[u]).toLocaleString(undefined, { maximumFractionDigits: 4 })}</span>
           </div>
@@ -309,8 +309,8 @@ function Vat() {
   return (
     <div className="space-y-3 text-white">
       <div className="flex gap-1">
-        <button onClick={() => setMode('add')} className={'flex-1 rounded-lg py-1.5 text-sm font-medium ' + (mode === 'add' ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>Add VAT</button>
-        <button onClick={() => setMode('remove')} className={'flex-1 rounded-lg py-1.5 text-sm font-medium ' + (mode === 'remove' ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>Remove VAT</button>
+        <button onClick={() => setMode('add')} className={'flex-1 rounded-adm-sm py-1.5 text-sm font-medium ' + (mode === 'add' ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>Add VAT</button>
+        <button onClick={() => setMode('remove')} className={'flex-1 rounded-adm-sm py-1.5 text-sm font-medium ' + (mode === 'remove' ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>Remove VAT</button>
       </div>
       <div><p className={lbl}>{mode === 'add' ? 'Net amount (₱)' : 'Gross amount (₱)'}</p><input className={field} inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" /></div>
       <div className="grid grid-cols-3 gap-2 pt-1">
@@ -337,7 +337,7 @@ function Expiry() {
     <div className="space-y-3 text-white">
       <div><p className={lbl}>Expiry date</p><input type="date" className={field + ' [color-scheme:dark]'} value={date} onChange={(e) => setDate(e.target.value)} /></div>
       {days != null && (
-        <div className={'rounded-lg px-3 py-3 text-center text-sm font-semibold ' +
+        <div className={'rounded-adm-sm px-3 py-3 text-center text-sm font-semibold ' +
           (tone === 'bad' ? 'bg-crimson/15 text-crimson' : tone === 'warn' ? 'bg-amber/15 text-amber' : 'bg-blue/15 text-blue')}>
           {text}
         </div>
@@ -352,14 +352,14 @@ function Scratchpad() {
   useEffect(() => save(LS.notes, notes), [notes])
   return (
     <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Quick notes for your shift… (saved automatically)"
-      className="h-44 w-full resize-none rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none focus:border-blue" />
+      className="h-44 w-full resize-none rounded-adm-sm border border-adm-line bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none focus:border-blue" />
   )
 }
 
 /* -------------------------------- Helpers -------------------------------- */
 function Stat({ label, value, tone }) {
   return (
-    <div className="rounded-lg bg-black/30 px-2 py-2 text-center">
+    <div className="rounded-adm-sm bg-black/30 px-2 py-2 text-center">
       <p className="text-[10px] uppercase tracking-wide text-white/40">{label}</p>
       <p className={'mt-0.5 text-sm font-semibold tabular-nums ' + (tone === 'good' ? 'text-gold' : tone === 'bad' ? 'text-crimson' : tone === 'warn' ? 'text-amber' : 'text-white')}>{value}</p>
     </div>

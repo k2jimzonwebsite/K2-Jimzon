@@ -149,10 +149,10 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-[#0A101D] border border-white/10 rounded-2xl p-4 sm:p-6 text-white space-y-6 shadow-2xl">
+      <div className="w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-6 text-white space-y-6 shadow-2xl">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="flex items-center justify-between border-b border-adm-line pb-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono font-bold bg-forest/20 text-forest px-2 py-0.5 rounded border border-forest/30 uppercase">
@@ -166,7 +166,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
 
           <button
             onClick={onClose}
-            className="p-2 rounded-lg bg-white/5 text-white/50 hover:text-white hover:bg-white/10 transition-all"
+            className="p-2 rounded-adm-sm bg-white/5 text-white/50 hover:text-white hover:bg-white/10 transition-all"
           >
             ✕
           </button>
@@ -187,17 +187,17 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
               return (
                 <div
                   key={b.id}
-                  className={`p-3.5 rounded-xl border text-sm font-mono transition-all space-y-3 ${
-                    b.is_pinned ? 'bg-amber/10 border-amber/50 shadow-md' : 'bg-white/5 border-white/10'
+                  className={`p-3.5 rounded-adm-sm border text-sm font-mono transition-all space-y-3 ${
+                    b.is_pinned ? 'bg-amber/10 border-amber/50 shadow-md' : 'bg-white/5 border-adm-line'
                   }`}
                 >
-                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-2">
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-adm-line pb-2">
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={() => handleTogglePin(b.id)}
                         className={`px-2 py-0.5 rounded text-xs font-bold border transition-all ${
-                          b.is_pinned ? 'bg-amber text-navy border-amber font-extrabold' : 'bg-white/5 border-white/10 text-white/60 hover:text-white'
+                          b.is_pinned ? 'bg-amber text-navy border-amber font-extrabold' : 'bg-white/5 border-adm-line text-white/60 hover:text-white'
                         }`}
                         title="Pin this batch to priority top"
                       >
@@ -234,7 +234,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                         type="text"
                         value={b.box_code}
                         onChange={(e) => handleUpdateBatchField(b.id, 'box_code', e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-2.5 py-1.5 text-white font-mono outline-none focus:border-amber"
+                        className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-2.5 py-1.5 text-white font-mono outline-none focus:border-amber"
                       />
                     </div>
 
@@ -244,7 +244,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                         type="number"
                         value={b.qty}
                         onChange={(e) => handleUpdateBatchField(b.id, 'qty', Number(e.target.value))}
-                        className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-2.5 py-1.5 text-white font-mono outline-none focus:border-amber"
+                        className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-2.5 py-1.5 text-white font-mono outline-none focus:border-amber"
                       />
                     </div>
 
@@ -254,7 +254,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                         type="date"
                         value={b.expiry_date}
                         onChange={(e) => handleUpdateBatchField(b.id, 'expiry_date', e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-2.5 py-1.5 text-white font-mono outline-none focus:border-amber"
+                        className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-2.5 py-1.5 text-white font-mono outline-none focus:border-amber"
                       />
                     </div>
                   </div>
@@ -268,7 +268,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                         value={b.hub || ''}
                         placeholder="e.g. Manila Hub"
                         onChange={(e) => handleUpdateBatchField(b.id, 'hub', e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-2.5 py-1.5 text-white font-mono outline-none focus:border-blue"
+                        className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-2.5 py-1.5 text-white font-mono outline-none focus:border-blue"
                       />
                     </div>
 
@@ -279,7 +279,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                         value={b.custodian || ''}
                         placeholder="e.g. Ate Rose"
                         onChange={(e) => handleUpdateBatchField(b.id, 'custodian', e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-2.5 py-1.5 text-white font-mono outline-none focus:border-blue"
+                        className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-2.5 py-1.5 text-white font-mono outline-none focus:border-blue"
                       />
                     </div>
 
@@ -290,7 +290,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                         value={b.channel || ''}
                         placeholder="e.g. Shopee"
                         onChange={(e) => handleUpdateBatchField(b.id, 'channel', e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-2.5 py-1.5 text-white font-mono outline-none focus:border-blue"
+                        className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-2.5 py-1.5 text-white font-mono outline-none focus:border-blue"
                       />
                     </div>
                   </div>
@@ -301,7 +301,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
         </div>
 
         {/* Add New Batch Box Form */}
-        <form onSubmit={handleAddBatch} className="bg-[#09090b] border border-white/10 p-4 rounded-xl space-y-3">
+        <form onSubmit={handleAddBatch} className="bg-adm-sunken border border-adm-line p-4 rounded-adm-sm space-y-3">
           <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Add an incoming box batch</h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm font-mono">
             <div>
@@ -311,7 +311,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                 value={newBoxCode}
                 onChange={(e) => setNewBoxCode(e.target.value)}
                 placeholder="e.g. MIL-BOX-104"
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-forest"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-forest"
               />
             </div>
 
@@ -321,7 +321,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                 type="number"
                 value={newQty}
                 onChange={(e) => setNewQty(Number(e.target.value))}
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-forest"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-forest"
               />
             </div>
 
@@ -332,7 +332,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                 required
                 value={newExpiryDate}
                 onChange={(e) => setNewExpiryDate(e.target.value)}
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-forest"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-forest"
               />
             </div>
 
@@ -343,7 +343,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                 value={newHub}
                 onChange={(e) => setNewHub(e.target.value)}
                 placeholder="e.g. Manila Hub"
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-forest"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-forest"
               />
             </div>
 
@@ -354,7 +354,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                 value={newCustodian}
                 onChange={(e) => setNewCustodian(e.target.value)}
                 placeholder="e.g. Ate Rose"
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-forest"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-forest"
               />
             </div>
 
@@ -365,32 +365,32 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                 value={newChannel}
                 onChange={(e) => setNewChannel(e.target.value)}
                 placeholder="e.g. Shopee"
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-forest"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-forest"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-forest hover:bg-forest/90 text-white font-bold text-sm py-2 rounded-lg transition-all"
+            className="w-full bg-forest hover:bg-forest/90 text-white font-bold text-sm py-2 rounded-adm-sm transition-all"
           >
             + Register Batch Box
           </button>
         </form>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-2 border-t border-white/10">
+        <div className="flex justify-end gap-3 pt-2 border-t border-adm-line">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-neutral-300 hover:bg-white/10"
+            className="px-4 py-2 rounded-adm-sm bg-white/5 border border-adm-line text-sm font-semibold text-neutral-300 hover:bg-white/10"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="px-6 py-2 rounded-xl bg-forest text-sm font-bold text-white hover:bg-forest/90 shadow-lg shadow-forest/20"
+            className="px-6 py-2 rounded-adm-sm bg-forest text-sm font-bold text-white hover:bg-forest/90 shadow-lg shadow-forest/20"
           >
             💾 Save Multi-Batch Expirations
           </button>

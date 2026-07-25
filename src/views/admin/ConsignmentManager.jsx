@@ -239,7 +239,7 @@ export default function ConsignmentManager() {
     <div className="max-w-7xl mx-auto text-white space-y-4 animate-in fade-in duration-300 font-sans">
 
       {/* Header */}
-      <div className="bg-[#161922] p-4 sm:p-5 rounded-2xl border border-white/10 shadow-lg space-y-4">
+      <div className="bg-adm-surface p-4 sm:p-5 rounded-adm border border-adm-line shadow-lg space-y-4">
         <div>
           <div className="flex flex-wrap items-center gap-2 mb-1.5">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wide bg-gold text-navy px-2 py-0.5 rounded-full">
@@ -255,15 +255,15 @@ export default function ConsignmentManager() {
 
         <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-2">
           <button onClick={() => setIsMilanScannerOpen(true)}
-            className="bg-blue hover:bg-blue-deep text-white font-semibold text-sm px-4 min-h-11 rounded-xl transition-all flex items-center justify-center gap-2">
+            className="bg-blue hover:bg-blue-deep text-white font-semibold text-sm px-4 min-h-11 rounded-adm-sm transition-all flex items-center justify-center gap-2">
             📷 Scan in Milan
           </button>
           <button onClick={() => setShowCreateModal(true)}
-            className="bg-gold hover:bg-gold-deep text-navy font-semibold text-sm px-4 min-h-11 rounded-xl transition-all">
+            className="bg-gold hover:bg-gold-deep text-navy font-semibold text-sm px-4 min-h-11 rounded-adm-sm transition-all">
             + New box
           </button>
           <button onClick={() => setIsScannerOpen(true)}
-            className="bg-white/10 hover:bg-white/15 text-white font-semibold text-sm px-4 min-h-11 rounded-xl transition-all flex items-center justify-center gap-2">
+            className="bg-white/10 hover:bg-white/15 text-white font-semibold text-sm px-4 min-h-11 rounded-adm-sm transition-all flex items-center justify-center gap-2">
             📷 Scan Manila arrival
           </button>
         </div>
@@ -271,17 +271,17 @@ export default function ConsignmentManager() {
 
       {/* Receiving summary */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-        <div className="bg-[#0A101D] border border-white/10 p-3.5 rounded-xl">
+        <div className="bg-adm-surface border border-adm-line p-3.5 rounded-adm-sm">
           <p className="text-[11px] font-mono uppercase tracking-wide text-white/50">Milan packed</p>
           <p className="text-xl font-bold text-white mt-0.5">{totalItalyPacked} <span className="text-xs font-normal text-white/45">units</span></p>
         </div>
 
-        <div className="bg-[#0A101D] border border-white/10 p-3.5 rounded-xl">
+        <div className="bg-adm-surface border border-adm-line p-3.5 rounded-adm-sm">
           <p className="text-[11px] font-mono uppercase tracking-wide text-white/50">Manila scanned</p>
           <p className="text-xl font-bold text-forest mt-0.5">{totalManilaScanned} <span className="text-xs font-normal text-white/45">units</span></p>
         </div>
 
-        <div className="col-span-2 sm:col-span-1 bg-[#0A101D] border border-white/10 p-3.5 rounded-xl flex flex-col justify-between gap-2">
+        <div className="col-span-2 sm:col-span-1 bg-adm-surface border border-adm-line p-3.5 rounded-adm-sm flex flex-col justify-between gap-2">
           <div>
             <p className="text-[11px] font-mono uppercase tracking-wide text-white/50">Match status</p>
             <p className={`text-base font-bold mt-0.5 ${totalManilaScanned === totalItalyPacked ? 'text-forest' : 'text-crimson'}`}>
@@ -295,8 +295,8 @@ export default function ConsignmentManager() {
       </div>
 
       {/* Manifest */}
-      <div className="bg-[#0A101D] border border-white/10 rounded-2xl overflow-hidden shadow-lg">
-        <div className="px-4 py-3 border-b border-white/10 bg-[#09090b] flex justify-between items-center gap-2">
+      <div className="bg-adm-surface border border-adm-line rounded-adm overflow-hidden shadow-lg">
+        <div className="px-4 py-3 border-b border-adm-line bg-adm-sunken flex justify-between items-center gap-2">
           <h3 className="font-serif font-semibold text-white text-[15px]">Box manifest · Milan → Manila</h3>
           <span className="text-xs font-mono text-white/45 shrink-0">{consignment.items.length} SKUs</span>
         </div>
@@ -304,7 +304,7 @@ export default function ConsignmentManager() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm border-collapse">
             <thead>
-              <tr className="border-b border-white/10 text-white/60 font-mono uppercase tracking-wider bg-white/5">
+              <tr className="border-b border-adm-line text-white/60 font-mono uppercase tracking-wider bg-white/5">
                 <th className="py-3 px-4">SKU</th>
                 <th className="py-3 px-4">Item Name</th>
                 <th className="py-3 px-4">Batch Code</th>
@@ -386,7 +386,7 @@ export default function ConsignmentManager() {
       {/* Create New Box Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-          <div className="w-full max-w-md bg-[#0A101D] border border-white/10 rounded-2xl p-6 text-white shadow-2xl space-y-4">
+          <div className="w-full max-w-md bg-adm-surface border border-adm-line rounded-adm p-6 text-white shadow-2xl space-y-4">
             <h3 className="font-serif font-bold text-xl text-white">Pack New Item Box (Milan)</h3>
             <form onSubmit={handleAddPackingItem} className="space-y-3">
               <div>
@@ -395,7 +395,7 @@ export default function ConsignmentManager() {
                   value={selectedSku}
                   onChange={(e) => setSelectedSku(e.target.value)}
                   required
-                  className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white"
+                  className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white"
                 >
                   <option value="">Select a product SKU...</option>
                   {(products || []).map(p => (
@@ -411,7 +411,7 @@ export default function ConsignmentManager() {
                   min="1"
                   value={packedQty}
                   onChange={(e) => setPackedQty(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
+                  className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white font-mono"
                 />
               </div>
 
@@ -421,7 +421,7 @@ export default function ConsignmentManager() {
                   type="text"
                   value={batchCode}
                   onChange={(e) => setBatchCode(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
+                  className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white font-mono"
                 />
               </div>
 
@@ -431,7 +431,7 @@ export default function ConsignmentManager() {
                   type="date"
                   value={bestBeforeDate}
                   onChange={(e) => setBestBeforeDate(e.target.value)}
-                  className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
+                  className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white font-mono"
                 />
               </div>
 
@@ -439,13 +439,13 @@ export default function ConsignmentManager() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 py-2 rounded-lg bg-white/10 text-sm font-semibold"
+                  className="flex-1 py-2 rounded-adm-sm bg-white/10 text-sm font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-lg bg-crimson text-sm font-bold text-white shadow-lg shadow-crimson/20"
+                  className="flex-1 py-2 rounded-adm-sm bg-crimson text-sm font-bold text-white shadow-lg shadow-crimson/20"
                 >
                   Add to Manifest
                 </button>

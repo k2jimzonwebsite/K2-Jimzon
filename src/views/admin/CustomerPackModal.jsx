@@ -92,11 +92,11 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#09090b]/95 backdrop-blur-sm animate-in fade-in p-4 md:p-8">
-      <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col bg-[#0A101D] border border-white/10 rounded-2xl overflow-hidden shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex flex-col bg-adm-sunken/95 backdrop-blur-sm animate-in fade-in p-4 md:p-8">
+      <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col bg-adm-surface border border-adm-line rounded-adm overflow-hidden shadow-2xl relative">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/20 shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/20 shrink-0">
           <div>
             <h2 className="font-serif text-xl font-semibold text-white">Pack Shipment #{order.id.split('_')[0].slice(-5)}</h2>
             <p className="text-base text-white/50 mt-1">Scan items to verify parcel contents.</p>
@@ -111,8 +111,8 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
 
         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
           {/* Left Side: Camera Scanner */}
-          <div className="flex-1 flex flex-col p-6 border-r border-white/10 bg-black/20 relative">
-            <div className="relative rounded-2xl overflow-hidden bg-black/60 border border-white/10 shadow-inner flex-1 flex flex-col min-h-[300px]">
+          <div className="flex-1 flex flex-col p-6 border-r border-adm-line bg-black/20 relative">
+            <div className="relative rounded-adm overflow-hidden bg-black/60 border border-adm-line shadow-inner flex-1 flex flex-col min-h-[300px]">
               {!scannerActive && !isComplete ? (
                 <div 
                   onClick={startScanner}
@@ -136,7 +136,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                     <div id="customer-qr-reader" className="absolute inset-0 object-cover w-full h-full"></div>
                     <button 
                       onClick={stopScanner}
-                      className="absolute top-4 right-4 bg-black/60 backdrop-blur text-neutral-300 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-black/80 hover:text-white z-10"
+                      className="absolute top-4 right-4 bg-black/60 backdrop-blur text-neutral-300 rounded-adm-sm px-3 py-1.5 text-sm font-medium hover:bg-black/80 hover:text-white z-10"
                     >
                       Stop Scanning
                     </button>
@@ -146,10 +146,10 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                   </div>
                   
                   {/* Manual Trigger Button */}
-                  <div className="bg-black p-4 shrink-0 border-t border-white/10 relative z-20">
+                  <div className="bg-black p-4 shrink-0 border-t border-adm-line relative z-20">
                     <button
                       onClick={() => setTriggerActive(true)}
-                      className={`w-full py-4 rounded-xl font-bold text-xl transition-all flex items-center justify-center gap-2 ${
+                      className={`w-full py-4 rounded-adm-sm font-bold text-xl transition-all flex items-center justify-center gap-2 ${
                         triggerActive 
                           ? 'bg-blue text-white shadow-[0_0_20px_rgba(37,99,235,0.5)]' 
                           : 'bg-white/10 text-neutral-300 hover:bg-white/20'
@@ -170,7 +170,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  className={`absolute top-10 left-10 right-10 p-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md ${
+                  className={`absolute top-10 left-10 right-10 p-4 rounded-adm-sm shadow-2xl flex items-center gap-3 backdrop-blur-md ${
                     lastScan.type === 'success' ? 'bg-forest/90 text-white border border-forest-light/50' : 'bg-crimson/90 text-white border border-crimson-light/50'
                   }`}
                 >
@@ -182,7 +182,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
           </div>
 
           {/* Right Side: Order Info */}
-          <div className="w-full md:w-80 bg-[#09090b] flex flex-col shrink-0">
+          <div className="w-full md:w-80 bg-adm-sunken flex flex-col shrink-0">
             <div className="p-6 flex-1 overflow-y-auto">
               <h3 className="text-base font-bold text-white/50 uppercase tracking-widest mb-4">Items to Pack</h3>
               <div className="space-y-4">
@@ -190,7 +190,7 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
                   const qtyScanned = scannedItems[item.sku] || 0
                   const isItemComplete = qtyScanned >= item.quantity
                   return (
-                    <div key={item.sku} className={`p-3 rounded-lg border ${isItemComplete ? 'border-forest/30 bg-forest/10' : 'border-white/10 bg-white/5'} flex items-start gap-3 transition-colors`}>
+                    <div key={item.sku} className={`p-3 rounded-adm-sm border ${isItemComplete ? 'border-forest/30 bg-forest/10' : 'border-adm-line bg-white/5'} flex items-start gap-3 transition-colors`}>
                       <div className={`shrink-0 mt-0.5 ${isItemComplete ? 'text-forest' : 'text-neutral-300'}`}>
                         {isItemComplete ? <CheckIcon size={18} /> : <BoxIcon size={18} />}
                       </div>
@@ -208,11 +208,11 @@ export default function CustomerPackModal({ order, onClose, onConfirmPacked }) {
               </div>
             </div>
             
-            <div className="p-6 border-t border-white/10 bg-black/20">
+            <div className="p-6 border-t border-adm-line bg-black/20">
               <button
                 onClick={() => onConfirmPacked(order.id, order.order_status, order.items)}
                 disabled={!isComplete}
-                className={`w-full py-4 rounded-xl font-bold text-xl transition-all shadow-lg ${
+                className={`w-full py-4 rounded-adm-sm font-bold text-xl transition-all shadow-lg ${
                   isComplete 
                     ? 'bg-blue hover:bg-blue-light text-white shadow-blue/20' 
                     : 'bg-white/5 text-white/55 cursor-not-allowed'

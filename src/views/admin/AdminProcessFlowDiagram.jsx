@@ -89,10 +89,10 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
   const selectedNode = STEPS.find(s => s.id === activeStep) || STEPS[1]
 
   return (
-    <div className="bg-[#161922] border border-white/10 rounded-2xl p-6 shadow-2xl font-sans text-white space-y-6">
+    <div className="bg-adm-surface border border-adm-line rounded-adm p-6 shadow-2xl font-sans text-white space-y-6">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-adm-line pb-4">
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xl">🗺️</span>
@@ -122,10 +122,10 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
               {/* Flowchart Node Card */}
               <button
                 onClick={() => setActiveStep(step.id)}
-                className={`w-full p-4 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between h-full relative group ${
+                className={`w-full p-4 rounded-adm border text-left transition-all duration-200 flex flex-col justify-between h-full relative group ${
                   isSelected
-                    ? 'bg-[#27272a] border-gold ring-2 ring-gold/40 shadow-xl scale-[1.02]'
-                    : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30'
+                    ? 'bg-adm-raised border-gold ring-2 ring-gold/40 shadow-xl scale-[1.02]'
+                    : 'bg-white/5 border-adm-line hover:bg-white/10 hover:border-white/30'
                 }`}
               >
                 <div className="flex items-center justify-between w-full mb-2">
@@ -161,10 +161,10 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
 
       {/* Expanded Node Operational Detail Panel */}
       {selectedNode && (
-        <div className="bg-[#27272a] border border-white/20 rounded-2xl p-5 space-y-4 animate-in fade-in duration-200">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/10 pb-3 gap-3">
+        <div className="bg-adm-raised border border-white/20 rounded-adm p-5 space-y-4 animate-in fade-in duration-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-adm-line pb-3 gap-3">
             <div className="flex items-center gap-3">
-              <span className="text-3xl p-2.5 rounded-xl bg-black/40 border border-white/10">{selectedNode.icon}</span>
+              <span className="text-3xl p-2.5 rounded-adm-sm bg-black/40 border border-adm-line">{selectedNode.icon}</span>
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-mono text-gold font-bold">Step {selectedNode.stepNum} Pipeline Node</span>
@@ -178,7 +178,7 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
 
             <button
               onClick={() => onNavigate && onNavigate(selectedNode.targetSection)}
-              className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-5 py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 min-h-[44px] shrink-0"
+              className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-5 py-3 rounded-adm-sm transition-all shadow-lg flex items-center justify-center gap-2 min-h-[44px] shrink-0"
             >
               <span>{selectedNode.details.buttonText}</span>
               <span>➔</span>
@@ -186,7 +186,7 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm font-mono">
-            <div className="bg-black/40 p-3.5 rounded-xl border border-white/10 space-y-1.5">
+            <div className="bg-black/40 p-3.5 rounded-adm-sm border border-adm-line space-y-1.5">
               <p className="text-gold font-bold uppercase text-xs">Data Inputs & Channels:</p>
               <ul className="space-y-1 text-neutral-200 font-sans font-medium">
                 {selectedNode.details.inputs.map((inp, idx) => (
@@ -198,14 +198,14 @@ export default function AdminProcessFlowDiagram({ onNavigate }) {
               </ul>
             </div>
 
-            <div className="bg-black/40 p-3.5 rounded-xl border border-white/10 space-y-1.5">
+            <div className="bg-black/40 p-3.5 rounded-adm-sm border border-adm-line space-y-1.5">
               <p className="text-gold font-bold uppercase text-xs">System Execution Engine:</p>
               <p className="text-neutral-200 font-sans font-medium leading-relaxed">
                 {selectedNode.details.action}
               </p>
             </div>
 
-            <div className="bg-black/40 p-3.5 rounded-xl border border-white/10 space-y-1.5">
+            <div className="bg-black/40 p-3.5 rounded-adm-sm border border-adm-line space-y-1.5">
               <p className="text-gold font-bold uppercase text-xs">Assigned Lead & Role:</p>
               <p className="text-white font-bold text-base font-sans">{selectedNode.details.staffLead}</p>
               <p className="text-xs text-white/60 font-sans">Full administrative execution & audit logging active.</p>

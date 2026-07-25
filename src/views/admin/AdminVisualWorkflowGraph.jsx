@@ -317,7 +317,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
       onPointerUp={onUp}
       onPointerLeave={onUp}
       onWheel={onWheel}
-      className={`relative overflow-hidden bg-[#080A10] cursor-grab active:cursor-grabbing select-none touch-none ${full ? 'flex-1' : 'h-[540px] rounded-xl border border-white/10'}`}
+      className={`relative overflow-hidden bg-adm-sunken cursor-grab active:cursor-grabbing select-none touch-none ${full ? 'flex-1' : 'h-[540px] rounded-adm-sm border border-adm-line'}`}
       style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '26px 26px' }}
     >
       <div ref={canvasRef} className="absolute top-0 left-0 origin-top-left" style={{ width: CANVAS_W, height: CANVAS_H }}>
@@ -372,7 +372,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
             <button
               key={n.id}
               onClick={() => nodeClick(n.id)}
-              className="absolute text-left rounded-xl border bg-[#161922] transition-colors"
+              className="absolute text-left rounded-adm-sm border bg-adm-surface transition-colors"
               style={{
                 left: n.x, top: n.y, width: W, height: H,
                 borderColor: on ? c : 'rgba(255,255,255,0.12)',
@@ -393,7 +393,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
       </div>
 
       {/* Zoom controls */}
-      <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-lg border border-white/10 bg-black/70 backdrop-blur px-1 py-1">
+      <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-adm-sm border border-adm-line bg-black/70 backdrop-blur px-1 py-1">
         <button onClick={() => zoom(-1)} className="w-7 h-7 rounded text-white/70 hover:bg-white/10 hover:text-white text-lg leading-none">−</button>
         <span className="text-xs text-white/50 w-10 text-center tabular-nums">{scalePct}%</span>
         <button onClick={() => zoom(1)} className="w-7 h-7 rounded text-white/70 hover:bg-white/10 hover:text-white text-lg leading-none">+</button>
@@ -409,10 +409,10 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
 
   const detail = active && (
     <div>
-      <div className="rounded-xl border border-white/10 bg-[#161922] p-5">
-        <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
+      <div className="rounded-adm-sm border border-adm-line bg-adm-surface p-5">
+        <div className="flex items-start justify-between gap-4 border-b border-adm-line pb-4">
           <div className="flex items-center gap-3">
-            <span className="text-2xl h-11 w-11 flex items-center justify-center rounded-xl bg-black/40 border border-white/10">{active.icon}</span>
+            <span className="text-2xl h-11 w-11 flex items-center justify-center rounded-adm-sm bg-black/40 border border-adm-line">{active.icon}</span>
             <div>
               <span className="text-[11px] font-medium px-1.5 py-0.5 rounded" style={{ color: CAT[active.cat], background: `${CAT[active.cat]}1A` }}>{active.badge}</span>
               <h3 className="text-lg font-semibold text-white mt-1">{active.title}</h3>
@@ -421,7 +421,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
           {active.section && (
             <button
               onClick={() => { if (isFullScreen) setIsFullScreen(false); onNavigate?.(active.section) }}
-              className="shrink-0 rounded-lg bg-blue hover:bg-blue-deep text-white text-sm font-medium px-4 py-2 transition-colors flex items-center gap-1.5"
+              className="shrink-0 rounded-adm-sm bg-blue hover:bg-blue-deep text-white text-sm font-medium px-4 py-2 transition-colors flex items-center gap-1.5"
             >
               Open <span aria-hidden>→</span>
             </button>
@@ -466,7 +466,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
         </div>
         <button
           onClick={() => setIsFullScreen(f => !f)}
-          className="rounded-lg border border-white/10 bg-white/[0.04] hover:bg-white/10 text-white/80 hover:text-white text-sm px-3 py-2 transition-colors flex items-center gap-1.5"
+          className="rounded-adm-sm border border-adm-line bg-white/[0.04] hover:bg-white/10 text-white/80 hover:text-white text-sm px-3 py-2 transition-colors flex items-center gap-1.5"
         >
           {isFullScreen ? 'Exit full screen' : 'Full screen'}
         </button>
@@ -476,7 +476,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
 
   if (isFullScreen) {
     return (
-      <div className="fixed inset-0 z-50 bg-[#0B0E14] flex flex-col p-4 md:p-5 animate-in fade-in duration-200">
+      <div className="fixed inset-0 z-50 bg-adm-bg flex flex-col p-4 md:p-5 animate-in fade-in duration-200">
         <div className="shrink-0 mb-3">{header}</div>
         {canvas(true)}
         {active && (
@@ -487,7 +487,7 @@ export default function AdminVisualWorkflowGraph({ onNavigate }) {
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#0E121E] p-5 space-y-4">
+    <div className="rounded-adm border border-adm-line bg-adm-surface p-5 space-y-4">
       {header}
       {canvas(false)}
       {detail}

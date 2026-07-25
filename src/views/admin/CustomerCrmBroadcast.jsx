@@ -201,7 +201,7 @@ export default function CustomerCrmBroadcast() {
     <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       
       {/* Header Banner */}
-      <div className="bg-[#09090b] border border-white/10 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-adm-sunken border border-adm-line p-6 rounded-adm flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-mono font-bold uppercase tracking-widest bg-blue/20 text-blue px-2 py-0.5 rounded border border-blue/30">
@@ -218,7 +218,7 @@ export default function CustomerCrmBroadcast() {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
           <button
             onClick={() => setActiveTab('crm')}
-            className={`px-4 py-2.5 min-h-[44px] rounded-xl font-bold text-sm transition-all ${
+            className={`px-4 py-2.5 min-h-[44px] rounded-adm-sm font-bold text-sm transition-all ${
               activeTab === 'crm' ? 'bg-blue text-white shadow-lg shadow-blue/20' : 'bg-white/5 text-white/60 hover:text-white'
             }`}
           >
@@ -226,7 +226,7 @@ export default function CustomerCrmBroadcast() {
           </button>
           <button
             onClick={() => setActiveTab('broadcast')}
-            className={`px-4 py-2.5 min-h-[44px] rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5 ${
+            className={`px-4 py-2.5 min-h-[44px] rounded-adm-sm font-bold text-sm transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'broadcast' ? 'bg-forest text-white shadow-lg shadow-forest/20' : 'bg-white/5 text-white/60 hover:text-white'
             }`}
           >
@@ -240,20 +240,20 @@ export default function CustomerCrmBroadcast() {
         <div className="space-y-6">
           
           {/* Controls Bar */}
-          <div className="bg-[#09090b] border border-white/10 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-adm-sunken border border-adm-line p-4 rounded-adm flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex flex-1 items-center gap-3 w-full">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search customers by name, email, or phone number..."
-                className="w-full max-w-md rounded-xl border border-white/10 bg-[#0A101D] px-4 py-2.5 text-sm text-white placeholder:text-white/55 outline-none focus:border-blue"
+                className="w-full max-w-md rounded-adm-sm border border-adm-line bg-adm-surface px-4 py-2.5 text-sm text-white placeholder:text-white/55 outline-none focus:border-blue"
               />
 
               <select
                 value={filterRole}
                 onChange={(e) => setFilterRole(e.target.value)}
-                className="bg-[#0A101D] border border-white/10 text-sm font-mono text-white rounded-xl px-3.5 py-2.5 outline-none"
+                className="bg-adm-surface border border-adm-line text-sm font-mono text-white rounded-adm-sm px-3.5 py-2.5 outline-none"
               >
                 <option value="All">All Customer Roles</option>
                 <option value="VIP">VIP Wholesale Only</option>
@@ -263,17 +263,17 @@ export default function CustomerCrmBroadcast() {
 
             <button
               onClick={() => setShowAddCustomer(true)}
-              className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-all shadow-lg shadow-forest/20 shrink-0"
+              className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 py-2.5 rounded-adm-sm transition-all shadow-lg shadow-forest/20 shrink-0"
             >
               + Add Customer Contact
             </button>
           </div>
 
           {/* Customer Table */}
-          <div className="bg-[#09090b] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+          <div className="bg-adm-sunken border border-adm-line rounded-adm overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm font-mono">
-                <thead className="bg-white/5 text-white/60 uppercase text-xs tracking-wider border-b border-white/10">
+                <thead className="bg-white/5 text-white/60 uppercase text-xs tracking-wider border-b border-adm-line">
                   <tr>
                     <th className="px-5 py-3.5">Customer / Contact</th>
                     <th className="px-5 py-3.5">Channel & Role</th>
@@ -296,7 +296,7 @@ export default function CustomerCrmBroadcast() {
                           <button
                             onClick={() => toggleRole(cust.id)}
                             className={`px-2 py-0.5 rounded text-xs font-bold border transition-all ${
-                              cust.role === 'VIP' ? 'bg-amber/20 text-amber border-amber/30' : 'bg-white/5 text-white/60 border-white/10'
+                              cust.role === 'VIP' ? 'bg-amber/20 text-amber border-amber/30' : 'bg-white/5 text-white/60 border-adm-line'
                             }`}
                           >
                             {cust.role === 'VIP' ? '★ VIP Wholesale' : 'Retail'}
@@ -321,7 +321,7 @@ export default function CustomerCrmBroadcast() {
                       <td className="px-5 py-4 text-right space-x-2">
                         <button
                           onClick={() => alert(`Direct Messaging ${cust.name} via ${cust.channel} (${cust.phone})...`)}
-                          className="bg-white/10 hover:bg-white/20 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition-all"
+                          className="bg-white/10 hover:bg-white/20 text-white font-bold px-3 py-1.5 rounded-adm-sm text-xs transition-all"
                         >
                           💬 Chat
                         </button>
@@ -344,7 +344,7 @@ export default function CustomerCrmBroadcast() {
           <div className="lg:col-span-1 space-y-6">
             
             {/* Target Audience Selector */}
-            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-5 shadow-xl space-y-3">
+            <div className="bg-adm-sunken border border-adm-line rounded-adm p-5 shadow-xl space-y-3">
               <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">1. Choose who to send to</h3>
               
               <div className="space-y-2 text-sm font-mono">
@@ -357,8 +357,8 @@ export default function CustomerCrmBroadcast() {
                   <button
                     key={aud.id}
                     onClick={() => setSelectedAudience(aud.id)}
-                    className={`w-full flex items-center justify-between p-3 rounded-xl border text-left transition-all ${
-                      selectedAudience === aud.id ? 'bg-forest/20 border-forest/50 text-white font-bold' : 'bg-white/5 border-white/10 text-white/60 hover:text-white'
+                    className={`w-full flex items-center justify-between p-3 rounded-adm-sm border text-left transition-all ${
+                      selectedAudience === aud.id ? 'bg-forest/20 border-forest/50 text-white font-bold' : 'bg-white/5 border-adm-line text-white/60 hover:text-white'
                     }`}
                   >
                     <span>{aud.label}</span>
@@ -369,7 +369,7 @@ export default function CustomerCrmBroadcast() {
             </div>
 
             {/* Campaign Template Selector */}
-            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-5 shadow-xl space-y-3">
+            <div className="bg-adm-sunken border border-adm-line rounded-adm p-5 shadow-xl space-y-3">
               <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">2. Pick a template</h3>
               
               <div className="space-y-2">
@@ -377,8 +377,8 @@ export default function CustomerCrmBroadcast() {
                   <button
                     key={tpl.id}
                     onClick={() => handleSelectTemplate(tpl)}
-                    className={`w-full text-left p-3.5 rounded-xl border transition-all ${
-                      selectedTemplate.id === tpl.id ? 'bg-[#0A101D] border-blue/50 text-white shadow-md' : 'bg-white/5 border-white/10 text-white/60 hover:text-white'
+                    className={`w-full text-left p-3.5 rounded-adm-sm border transition-all ${
+                      selectedTemplate.id === tpl.id ? 'bg-adm-surface border-blue/50 text-white shadow-md' : 'bg-white/5 border-adm-line text-white/60 hover:text-white'
                     }`}
                   >
                     <p className="text-sm font-bold text-white">{tpl.name}</p>
@@ -392,14 +392,14 @@ export default function CustomerCrmBroadcast() {
 
           {/* Right Column: Email/SMS Live Composer & Broadcast Launcher */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-[#09090b] border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="bg-adm-sunken border border-adm-line rounded-adm p-6 shadow-xl space-y-5">
+              <div className="flex items-center justify-between border-b border-adm-line pb-4">
                 <div>
                   <h2 className="font-serif text-xl font-bold text-white">Compose a broadcast</h2>
                   <p className="text-sm text-white/50">Personalize message template tags before launching mass broadcast</p>
                 </div>
 
-                <span className="text-sm font-mono text-forest bg-forest/10 px-3 py-1 rounded-lg border border-forest/30 font-bold">
+                <span className="text-sm font-mono text-forest bg-forest/10 px-3 py-1 rounded-adm-sm border border-forest/30 font-bold">
                   Targeting: {selectedAudience.toUpperCase()}
                 </span>
               </div>
@@ -410,7 +410,7 @@ export default function CustomerCrmBroadcast() {
                   type="text"
                   value={customSubject}
                   onChange={(e) => setCustomSubject(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-[#0A101D] px-4 py-2.5 text-sm text-white font-mono outline-none focus:border-forest"
+                  className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-4 py-2.5 text-sm text-white font-mono outline-none focus:border-forest"
                 />
               </div>
 
@@ -420,12 +420,12 @@ export default function CustomerCrmBroadcast() {
                   rows={8}
                   value={customBody}
                   onChange={(e) => setCustomBody(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-[#0A101D] p-4 text-sm text-white font-mono outline-none focus:border-forest leading-relaxed"
+                  className="w-full rounded-adm-sm border border-adm-line bg-adm-surface p-4 text-sm text-white font-mono outline-none focus:border-forest leading-relaxed"
                 />
               </div>
 
               {/* Broadcast Launch Button */}
-              <div className="pt-2 flex items-center justify-between border-t border-white/10">
+              <div className="pt-2 flex items-center justify-between border-t border-adm-line">
                 <div className="text-sm font-mono text-white/50">
                   Ready to send via Email, SMS & WhatsApp Broadcast
                 </div>
@@ -433,7 +433,7 @@ export default function CustomerCrmBroadcast() {
                 <button
                   onClick={handleLaunchBroadcast}
                   disabled={isSending}
-                  className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg shadow-forest/20 transition-all flex items-center gap-2 disabled:opacity-50"
+                  className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-6 py-3 rounded-adm-sm shadow-lg shadow-forest/20 transition-all flex items-center gap-2 disabled:opacity-50"
                 >
                   {isSending ? (
                     <>
@@ -448,7 +448,7 @@ export default function CustomerCrmBroadcast() {
 
               {/* Broadcast Delivery Log Alert */}
               {broadcastLog && (
-                <div className="p-4 rounded-xl bg-forest/20 border border-forest/40 text-forest text-sm font-mono space-y-1 animate-in fade-in">
+                <div className="p-4 rounded-adm-sm bg-forest/20 border border-forest/40 text-forest text-sm font-mono space-y-1 animate-in fade-in">
                   <p className="font-bold text-base">✓ Campaign Broadcast Successfully Sent!</p>
                   <p className="text-neutral-200">Sent to <strong>{broadcastLog.count} customer contacts</strong>. Delivery rate: {broadcastLog.deliveryRate}.</p>
                   <p className="text-white/50 text-xs">Subject: "{broadcastLog.subject}"</p>
@@ -464,7 +464,7 @@ export default function CustomerCrmBroadcast() {
       {/* Add Customer Modal */}
       {showAddCustomer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-          <div className="w-full max-w-md bg-[#0A101D] border border-white/10 rounded-2xl p-6 text-white space-y-4 shadow-2xl">
+          <div className="w-full max-w-md bg-adm-surface border border-adm-line rounded-adm p-6 text-white space-y-4 shadow-2xl">
             <h3 className="font-serif text-xl font-bold">Add Customer Record</h3>
             <form onSubmit={handleAddCustomer} className="space-y-3 text-sm">
               <div>
@@ -475,7 +475,7 @@ export default function CustomerCrmBroadcast() {
                   value={newCustName}
                   onChange={(e) => setNewCustName(e.target.value)}
                   placeholder="e.g. Maria Santos"
-                  className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white outline-none"
+                  className="w-full rounded-adm-sm bg-white/5 border border-adm-line px-3 py-2 text-white outline-none"
                 />
               </div>
 
@@ -487,7 +487,7 @@ export default function CustomerCrmBroadcast() {
                   value={newCustEmail}
                   onChange={(e) => setNewCustEmail(e.target.value)}
                   placeholder="maria@example.com"
-                  className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white outline-none"
+                  className="w-full rounded-adm-sm bg-white/5 border border-adm-line px-3 py-2 text-white outline-none"
                 />
               </div>
 
@@ -498,7 +498,7 @@ export default function CustomerCrmBroadcast() {
                   value={newCustPhone}
                   onChange={(e) => setNewCustPhone(e.target.value)}
                   placeholder="+63 917 000 0000"
-                  className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white outline-none font-mono"
+                  className="w-full rounded-adm-sm bg-white/5 border border-adm-line px-3 py-2 text-white outline-none font-mono"
                 />
               </div>
 
@@ -506,13 +506,13 @@ export default function CustomerCrmBroadcast() {
                 <button
                   type="button"
                   onClick={() => setShowAddCustomer(false)}
-                  className="flex-1 py-2 rounded-lg border border-white/10 bg-white/5 text-neutral-300"
+                  className="flex-1 py-2 rounded-adm-sm border border-adm-line bg-white/5 text-neutral-300"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-lg bg-forest text-white font-bold"
+                  className="flex-1 py-2 rounded-adm-sm bg-forest text-white font-bold"
                 >
                   Save Record
                 </button>

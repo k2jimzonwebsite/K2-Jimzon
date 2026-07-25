@@ -102,10 +102,10 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-[#09090b] animate-in slide-in-from-bottom-4 text-white">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-adm-sunken animate-in slide-in-from-bottom-4 text-white">
 
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-black/30 shrink-0">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-adm-line bg-black/30 shrink-0">
         <div>
           <p className="font-serif text-xl font-semibold">
             {step === 'result' ? '✓ Prompt Ready' : '📦 Scan Box'}
@@ -146,7 +146,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
         {/* ── SCAN: Camera ── */}
         {step === 'scan' && (
           <div className="w-full max-w-sm mx-auto flex flex-col gap-6 justify-center flex-1 pb-16">
-            <div id="ai-qr-reader" className="w-full rounded-2xl overflow-hidden bg-white/5 border border-white/10" />
+            <div id="ai-qr-reader" className="w-full rounded-adm overflow-hidden bg-white/5 border border-adm-line" />
             <p className="text-center text-base text-white/60">Align the barcode inside the frame</p>
             {checking && (
               <div className="flex items-center justify-center gap-2 text-base text-white/50">
@@ -174,7 +174,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
                   value={manualBarcode}
                   onChange={(e) => setManualBarcode(e.target.value)}
                   placeholder="e.g. 8000400289000"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-base focus:border-blue focus:outline-none transition-colors"
+                  className="w-full bg-white/5 border border-adm-line rounded-adm-sm px-4 py-3 text-white font-mono text-base focus:border-blue focus:outline-none transition-colors"
                 />
               </div>
               <div>
@@ -184,13 +184,13 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
                   placeholder="e.g. Mutti Polpa 400g"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-base focus:border-blue focus:outline-none transition-colors"
+                  className="w-full bg-white/5 border border-adm-line rounded-adm-sm px-4 py-3 text-white text-base focus:border-blue focus:outline-none transition-colors"
                 />
               </div>
               <button
                 type="submit"
                 disabled={!manualBarcode.trim() && !productName.trim()}
-                className="w-full bg-blue text-navy font-bold py-3.5 rounded-xl hover:opacity-90 disabled:opacity-30 transition-all"
+                className="w-full bg-blue text-navy font-bold py-3.5 rounded-adm-sm hover:opacity-90 disabled:opacity-30 transition-all"
               >
                 Generate AI Prompt →
               </button>
@@ -203,7 +203,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full pb-6 gap-5">
 
             {/* Scanned info badge */}
-            <div className="flex items-center gap-3 bg-forest/10 border border-forest/30 rounded-xl px-4 py-3">
+            <div className="flex items-center gap-3 bg-forest/10 border border-forest/30 rounded-adm-sm px-4 py-3">
               <span className="text-forest text-xl">✓</span>
               <div>
                 <p className="text-base font-semibold text-white">
@@ -214,8 +214,8 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
             </div>
 
             {/* Prompt Box */}
-            <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden flex flex-col flex-1 min-h-[280px]">
-              <div className="bg-black/40 px-4 py-3 flex items-center justify-between border-b border-white/10 shrink-0">
+            <div className="bg-white/5 border border-adm-line rounded-adm-sm overflow-hidden flex flex-col flex-1 min-h-[280px]">
+              <div className="bg-black/40 px-4 py-3 flex items-center justify-between border-b border-adm-line shrink-0">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold text-white/50 uppercase tracking-widest">Project 1 Prompt</span>
                   <span className="text-xs font-bold bg-blue/20 text-blue px-2 py-0.5 rounded-full border border-blue/30">K2 Jimzon Product Intelligence AI</span>
@@ -231,7 +231,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
             </div>
 
             {/* How-to steps */}
-            <div className="bg-black/20 border border-white/5 rounded-xl p-4 space-y-2.5">
+            <div className="bg-black/20 border border-white/5 rounded-adm-sm p-4 space-y-2.5">
               <p className="text-xs font-bold text-white/55 uppercase tracking-widest mb-3">What to do next</p>
               {[
                 ['Copy the prompt below', 'Hit the white button to copy it to your clipboard.'],
@@ -251,7 +251,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
             <div className="space-y-3">
               <button
                 onClick={handleCopy}
-                className="w-full bg-white text-black font-bold py-3.5 rounded-xl hover:bg-white/90 transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-white text-black font-bold py-3.5 rounded-adm-sm hover:bg-white/90 transition-colors flex items-center justify-center gap-2"
               >
                 {copied ? (
                   <><span className="text-green-600">✓</span> Copied to Clipboard!</>
@@ -267,7 +267,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
 
               <button
                 onClick={handleOpenSmartPaste}
-                className="w-full bg-purple-600 text-white font-bold py-4 rounded-xl shadow-[0_0_24px_rgba(168,85,247,0.25)] hover:bg-purple-500 transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-purple-600 text-white font-bold py-4 rounded-adm-sm shadow-[0_0_24px_rgba(168,85,247,0.25)] hover:bg-purple-500 transition-colors flex items-center justify-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />

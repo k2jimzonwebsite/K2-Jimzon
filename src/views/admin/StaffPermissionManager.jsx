@@ -18,7 +18,7 @@ const roleChip = (r) =>
   : 'bg-white/10 text-white/60 border-white/20'
 
 // 16px inputs prevent iOS zoom; min-h-12 = comfy thumb target.
-const inputCls = 'w-full rounded-xl border border-white/20 bg-black/40 px-4 min-h-12 py-3 text-base text-white placeholder:text-white/40 focus:border-blue outline-none'
+const inputCls = 'w-full rounded-adm-sm border border-white/20 bg-black/40 px-4 min-h-12 py-3 text-base text-white placeholder:text-white/40 focus:border-blue outline-none'
 
 export default function StaffPermissionManager() {
   const { user, inviteStaff, enrollMfa, verifyMfaEnroll } = useStore()
@@ -92,11 +92,11 @@ export default function StaffPermissionManager() {
       </div>
 
       {/* Alerts */}
-      {err && <div className="p-3.5 rounded-xl border border-crimson/40 bg-crimson/10 text-crimson text-sm font-semibold">⚠️ {err}</div>}
-      {notice && <div className="p-3.5 rounded-xl border border-forest/40 bg-forest/10 text-forest text-sm font-semibold">✓ {notice}</div>}
+      {err && <div className="p-3.5 rounded-adm-sm border border-crimson/40 bg-crimson/10 text-crimson text-sm font-semibold">⚠️ {err}</div>}
+      {notice && <div className="p-3.5 rounded-adm-sm border border-forest/40 bg-forest/10 text-forest text-sm font-semibold">✓ {notice}</div>}
 
       {/* Invite */}
-      <section className="bg-[#161922] border border-white/10 rounded-2xl p-4 sm:p-5 shadow-lg">
+      <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg">✉️</span>
           <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Invite a staff member</h2>
@@ -113,14 +113,14 @@ export default function StaffPermissionManager() {
             <p className="text-xs text-white/45 mt-1.5 leading-relaxed">{ROLE_BLURB[inviteRole]}</p>
           </div>
           <button type="submit" disabled={inviting}
-            className="w-full rounded-xl bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-50 transition-all active:scale-[.99]">
+            className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-50 transition-all active:scale-[.99]">
             {inviting ? 'Sending…' : 'Send invite'}
           </button>
         </form>
       </section>
 
       {/* People */}
-      <section className="bg-[#161922] border border-white/10 rounded-2xl p-4 sm:p-5 shadow-lg">
+      <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <span className="text-lg">👥</span>
@@ -139,7 +139,7 @@ export default function StaffPermissionManager() {
               const isSelf = user?.id === r.id
               const role = ROLES.includes(r.role) ? r.role : 'Customer'
               return (
-                <div key={r.id} className="rounded-xl border border-white/10 bg-white/5 p-3.5">
+                <div key={r.id} className="rounded-adm-sm border border-adm-line bg-white/5 p-3.5">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 shrink-0 rounded-full bg-blue/20 text-blue font-bold flex items-center justify-center uppercase">
                       {nameFor(r).charAt(0)}
@@ -150,12 +150,12 @@ export default function StaffPermissionManager() {
                       </p>
                       <p className="text-xs text-white/45 truncate">{r.email}</p>
                     </div>
-                    <span className={`shrink-0 text-xs font-bold px-2 py-1 rounded-lg border ${roleChip(role)}`}>{role}</span>
+                    <span className={`shrink-0 text-xs font-bold px-2 py-1 rounded-adm-sm border ${roleChip(role)}`}>{role}</span>
                   </div>
                   <label className="block mt-3">
                     <span className="block text-[11px] font-bold uppercase tracking-wider text-white/40 mb-1">Change role</span>
                     <select value={role} onChange={e => changeRole(r.id, e.target.value)}
-                      className="w-full rounded-lg border border-white/20 bg-[#0A101D] px-3 min-h-11 py-2.5 text-base text-white focus:border-blue outline-none cursor-pointer appearance-none">
+                      className="w-full rounded-adm-sm border border-white/20 bg-adm-surface px-3 min-h-11 py-2.5 text-base text-white focus:border-blue outline-none cursor-pointer appearance-none">
                       {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
                     </select>
                   </label>
@@ -167,7 +167,7 @@ export default function StaffPermissionManager() {
       </section>
 
       {/* Your 2FA */}
-      <section className="bg-[#161922] border border-white/10 rounded-2xl p-4 sm:p-5 shadow-lg">
+      <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-lg">🔐</span>
           <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Your two-factor security</h2>
@@ -178,14 +178,14 @@ export default function StaffPermissionManager() {
 
         {!mfa ? (
           <button onClick={startMfa} disabled={mfaBusy}
-            className="w-full sm:w-auto rounded-xl bg-forest hover:bg-forest/90 text-white font-bold px-6 min-h-12 py-3 disabled:opacity-50 transition-all active:scale-[.99]">
+            className="w-full sm:w-auto rounded-adm-sm bg-forest hover:bg-forest/90 text-white font-bold px-6 min-h-12 py-3 disabled:opacity-50 transition-all active:scale-[.99]">
             {mfaBusy ? 'Starting…' : '🔐 Turn on 2FA'}
           </button>
         ) : (
           <form onSubmit={confirmMfa} className="space-y-4">
             {mfa.qr && (
               <div className="flex justify-center">
-                <img src={mfa.qr} alt="Scan this QR in your authenticator app" className="w-48 h-48 rounded-xl bg-white p-2.5" />
+                <img src={mfa.qr} alt="Scan this QR in your authenticator app" className="w-48 h-48 rounded-adm-sm bg-white p-2.5" />
               </div>
             )}
             <ol className="text-sm text-white/70 space-y-2 leading-relaxed">
@@ -197,14 +197,14 @@ export default function StaffPermissionManager() {
             </ol>
             <input type="text" inputMode="numeric" maxLength={6} value={mfaCode} autoFocus
               onChange={e => setMfaCode(e.target.value.replace(/\D/g, ''))} placeholder="123456"
-              className="w-full text-center tracking-[0.4em] font-mono text-2xl rounded-xl border border-forest/50 bg-black/50 px-3 min-h-14 py-3 text-forest outline-none focus:border-forest" />
+              className="w-full text-center tracking-[0.4em] font-mono text-2xl rounded-adm-sm border border-forest/50 bg-black/50 px-3 min-h-14 py-3 text-forest outline-none focus:border-forest" />
             <div className="flex flex-col sm:flex-row gap-2.5">
               <button type="submit" disabled={mfaBusy || mfaCode.length < 6}
-                className="flex-1 rounded-xl bg-forest text-white font-bold min-h-12 py-3 disabled:opacity-50 order-1 sm:order-2 active:scale-[.99]">
+                className="flex-1 rounded-adm-sm bg-forest text-white font-bold min-h-12 py-3 disabled:opacity-50 order-1 sm:order-2 active:scale-[.99]">
                 {mfaBusy ? 'Verifying…' : 'Confirm 2FA'}
               </button>
               <button type="button" onClick={() => { setMfa(null); setMfaCode('') }}
-                className="flex-1 rounded-xl border border-white/15 bg-white/5 min-h-12 py-3 text-sm font-semibold text-white/70 hover:bg-white/10 order-2 sm:order-1">
+                className="flex-1 rounded-adm-sm border border-white/15 bg-white/5 min-h-12 py-3 text-sm font-semibold text-white/70 hover:bg-white/10 order-2 sm:order-1">
                 Cancel
               </button>
             </div>

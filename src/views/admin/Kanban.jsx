@@ -108,7 +108,7 @@ export default function Kanban() {
     <div className="space-y-6 flex flex-col h-full animate-in fade-in duration-500">
       
       {/* Global Logistics Unified Header Tabs */}
-      <div className="flex flex-col xl:flex-row gap-4 border-b border-white/10 pb-4 shrink-0">
+      <div className="flex flex-col xl:flex-row gap-4 border-b border-adm-line pb-4 shrink-0">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-mono font-bold uppercase tracking-widest bg-forest/20 text-forest px-2 py-0.5 rounded">
@@ -119,10 +119,10 @@ export default function Kanban() {
           <p className="text-base text-white/50">Manage Milan flight consignments, box scanning receiving (+1), supplier POs, and PH customer order fulfillment in one place.</p>
         </div>
         
-        <div className="flex bg-[#161922] rounded-xl p-2 border border-white/20 overflow-x-auto whitespace-nowrap hide-scrollbar items-center gap-2">
+        <div className="flex bg-adm-surface rounded-adm-sm p-2 border border-white/20 overflow-x-auto whitespace-nowrap hide-scrollbar items-center gap-2">
           <button 
             onClick={() => setActiveTab('consignment')}
-            className={`px-4 py-2.5 text-sm font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-4 py-2.5 text-sm font-bold rounded-adm-sm flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'consignment' ? 'bg-crimson text-white shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -131,7 +131,7 @@ export default function Kanban() {
 
           <button 
             onClick={() => setActiveTab('kanban')}
-            className={`px-4 py-2.5 text-sm font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-4 py-2.5 text-sm font-bold rounded-adm-sm flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'kanban' ? 'bg-blue text-white shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -140,7 +140,7 @@ export default function Kanban() {
 
           <button 
             onClick={() => setActiveTab('inbound')}
-            className={`px-4 py-2.5 text-sm font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-4 py-2.5 text-sm font-bold rounded-adm-sm flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'inbound' ? 'bg-gold text-navy shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -149,7 +149,7 @@ export default function Kanban() {
           
           <button 
             onClick={() => setActiveTab('outbound')}
-            className={`px-4 py-2.5 text-sm font-bold rounded-lg flex items-center gap-2 transition-all shrink-0 ${
+            className={`px-4 py-2.5 text-sm font-bold rounded-adm-sm flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'outbound' ? 'bg-blue text-white shadow-lg' : 'text-neutral-300 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -203,7 +203,7 @@ export default function Kanban() {
                         <button
                           key={o.id}
                           onClick={() => setPackingOrder(o)}
-                          className="w-full text-left bg-[#101623] hover:bg-[#151c2b] border border-white/5 rounded-md p-3 mb-2 shadow-sm transition-all focus:outline-none focus:ring-1 focus:ring-white/20 relative group overflow-hidden"
+                          className="w-full text-left bg-adm-surface hover:bg-adm-surface border border-white/5 rounded-adm-sm p-3 mb-2 shadow-sm transition-all focus:outline-none focus:ring-1 focus:ring-white/20 relative group overflow-hidden"
                         >
                           <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: col.accent }}></div>
                           <div className="pl-3">
@@ -232,7 +232,7 @@ export default function Kanban() {
                         </button>
                       ))}
                       {col.orders.length > 0 && (
-                        <button className="w-full rounded-lg border border-dashed border-white/20 bg-white/5 py-2 text-sm font-medium text-white/60 hover:border-white/40 hover:text-white transition-colors">
+                        <button className="w-full rounded-adm-sm border border-dashed border-white/20 bg-white/5 py-2 text-sm font-medium text-white/60 hover:border-white/40 hover:text-white transition-colors">
                           Print {col.orders.length} waybills
                         </button>
                       )}

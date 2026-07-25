@@ -148,10 +148,10 @@ export default function MilanPackingScannerModal({
   const totalPacked = items.reduce((sum, item) => sum + (item.italy_packed_qty || 0), 0)
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#09090b] text-white animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-50 flex flex-col bg-adm-sunken text-white animate-in fade-in duration-300">
       
       {/* Header Bar */}
-      <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#0A101D] shrink-0">
+      <div className="flex items-center justify-between p-4 border-b border-adm-line bg-adm-surface shrink-0">
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono font-bold uppercase tracking-widest bg-crimson/20 text-crimson px-2 py-0.5 rounded border border-crimson/30">
@@ -164,14 +164,14 @@ export default function MilanPackingScannerModal({
         <button
           onClick={onClose}
           aria-label="Close Milan Packing Scanner"
-          className="rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold text-neutral-300 hover:bg-white/20 transition-all"
+          className="rounded-adm-sm bg-white/10 px-3 py-1.5 text-sm font-semibold text-neutral-300 hover:bg-white/20 transition-all"
         >
           Close
         </button>
       </div>
 
       {/* Progress Banner */}
-      <div className="bg-[#020408] border-b border-white/10 px-4 py-3 flex items-center justify-between shrink-0">
+      <div className="bg-adm-sunken border-b border-adm-line px-4 py-3 flex items-center justify-between shrink-0">
         <div>
           <p className="text-xs font-mono uppercase tracking-widest text-white/60">Milan Box Units Packed</p>
           <p className="text-base font-bold text-white">
@@ -181,7 +181,7 @@ export default function MilanPackingScannerModal({
         <button
           onClick={onClose}
           aria-label="Close Milan Packing Scanner"
-          className="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-crimson/20 transition-all"
+          className="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-adm-sm font-bold text-sm shadow-lg shadow-crimson/20 transition-all"
         >
           Done Packing Box ✓
         </button>
@@ -191,14 +191,14 @@ export default function MilanPackingScannerModal({
       <div className="flex-1 relative flex flex-col items-center justify-center bg-black overflow-hidden">
         <div 
           id="milan-camera-reader" 
-          className={`w-full max-w-md h-full max-h-[380px] rounded-xl overflow-hidden transition-all ${
-            scanFlash ? 'ring-4 ring-crimson scale-[1.01]' : 'border border-white/10'
+          className={`w-full max-w-md h-full max-h-[380px] rounded-adm-sm overflow-hidden transition-all ${
+            scanFlash ? 'ring-4 ring-crimson scale-[1.01]' : 'border border-adm-line'
           }`} 
         />
 
         {/* Camera Overlay Guide */}
         <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
-          <div className="w-64 h-44 border-2 border-dashed border-crimson/60 rounded-xl flex items-center justify-center bg-black/10 backdrop-blur-[1px]">
+          <div className="w-64 h-44 border-2 border-dashed border-crimson/60 rounded-adm-sm flex items-center justify-center bg-black/10 backdrop-blur-[1px]">
             <span className="text-xs font-mono text-crimson bg-black/60 px-2 py-1 rounded tracking-widest uppercase animate-pulse">
               Pack & Scan Item (Milan)
             </span>
@@ -207,7 +207,7 @@ export default function MilanPackingScannerModal({
 
         {/* Scan Confirmation Banner */}
         {lastPacked && !unrecognizedCode && (
-          <div className="absolute bottom-4 left-4 right-4 bg-crimson/90 backdrop-blur-md text-white p-3.5 rounded-xl shadow-2xl flex items-center justify-between animate-in slide-in-from-bottom-2 duration-200">
+          <div className="absolute bottom-4 left-4 right-4 bg-crimson/90 backdrop-blur-md text-white p-3.5 rounded-adm-sm shadow-2xl flex items-center justify-between animate-in slide-in-from-bottom-2 duration-200">
             <div>
               <p className="text-sm font-bold font-mono text-neutral-300">+1 PACKED IN MILAN</p>
               <p className="text-base font-semibold truncate max-w-[220px]">{lastPacked.name}</p>
@@ -222,18 +222,18 @@ export default function MilanPackingScannerModal({
       </div>
 
       {/* Manual Entry & Quick Action Bar */}
-      <div className="p-4 bg-[#0A101D] border-t border-white/10 space-y-3 shrink-0">
+      <div className="p-4 bg-adm-surface border-t border-adm-line space-y-3 shrink-0">
         <form onSubmit={(e) => { e.preventDefault(); handleProcessScan(manualCode); setManualCode('') }} className="flex gap-2">
           <input
             type="text"
             value={manualCode}
             onChange={(e) => setManualCode(e.target.value)}
             placeholder="Milan Barcode / SKU entry (+1)..."
-            className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-crimson"
+            className="flex-1 rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-crimson"
           />
           <button
             type="submit"
-            className="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md shadow-crimson/20"
+            className="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-adm-sm text-sm font-bold shadow-md shadow-crimson/20"
           >
             +1 Pack
           </button>
@@ -247,7 +247,7 @@ export default function MilanPackingScannerModal({
               <button
                 key={item.sku}
                 onClick={() => handleProcessScan(item.sku)}
-                className="shrink-0 bg-white/5 border border-white/10 hover:border-crimson p-2 rounded-lg text-left transition-all active:scale-95"
+                className="shrink-0 bg-white/5 border border-adm-line hover:border-crimson p-2 rounded-adm-sm text-left transition-all active:scale-95"
               >
                 <p className="text-sm font-semibold text-neutral-200 truncate max-w-[120px]">{item.sku}</p>
                 <p className="text-xs text-white/50">
@@ -262,7 +262,7 @@ export default function MilanPackingScannerModal({
       {/* Unrecognized Barcode Modal */}
       {unrecognizedCode && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in zoom-in-95 duration-200">
-          <div className="w-full max-w-lg bg-[#0A101D] border border-amber/30 rounded-2xl p-6 text-white shadow-2xl space-y-4">
+          <div className="w-full max-w-lg bg-adm-surface border border-amber/30 rounded-adm p-6 text-white shadow-2xl space-y-4">
             
             <div className="flex items-center justify-between">
               <span className="text-sm font-mono font-bold uppercase tracking-wider bg-amber/20 text-amber px-2.5 py-1 rounded">
@@ -283,7 +283,7 @@ export default function MilanPackingScannerModal({
               {/* PRIMARY 1-TAP ULTRA-FAST DRAFT BUTTON */}
               <button
                 onClick={handleInstantDraftPack}
-                className="w-full flex items-center justify-between p-4 rounded-xl bg-crimson hover:bg-crimson/90 text-white font-bold text-base shadow-xl shadow-crimson/30 transition-all transform active:scale-98"
+                className="w-full flex items-center justify-between p-4 rounded-adm-sm bg-crimson hover:bg-crimson/90 text-white font-bold text-base shadow-xl shadow-crimson/30 transition-all transform active:scale-98"
               >
                 <div className="text-left">
                   <p className="font-extrabold text-base text-white flex items-center gap-1.5">
@@ -302,7 +302,7 @@ export default function MilanPackingScannerModal({
                   setUnrecognizedCode(null)
                   onUnrecognizedBarcode(code, 'ai')
                 }}
-                className="w-full flex items-center justify-between p-3.5 rounded-xl bg-blue/10 border border-blue/30 text-blue font-bold text-sm hover:bg-blue/20 transition-all text-left group"
+                className="w-full flex items-center justify-between p-3.5 rounded-adm-sm bg-blue/10 border border-blue/30 text-blue font-bold text-sm hover:bg-blue/20 transition-all text-left group"
               >
                 <div>
                   <p className="font-bold text-base text-white group-hover:text-blue">📷 Use AI Scan Box / Smart Paste</p>
@@ -312,7 +312,7 @@ export default function MilanPackingScannerModal({
               </button>
 
               {/* Quick Entry Form */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+              <div className="bg-white/5 border border-adm-line rounded-adm-sm p-4 space-y-3">
                 <p className="text-sm font-bold text-white uppercase tracking-wider font-mono">📝 Quick Create Italian Product</p>
 
                 <form onSubmit={handleQuickSubmit} className="space-y-2.5">
@@ -324,7 +324,7 @@ export default function MilanPackingScannerModal({
                       onChange={(e) => setQuickTitle(e.target.value)}
                       placeholder="e.g. Barilla Pesto Genovese 190g"
                       required
-                      className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white"
+                      className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white"
                     />
                   </div>
 
@@ -335,7 +335,7 @@ export default function MilanPackingScannerModal({
                         type="number"
                         value={quickSrp}
                         onChange={(e) => setQuickSrp(e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
+                        className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white font-mono"
                       />
                     </div>
                     <div>
@@ -344,7 +344,7 @@ export default function MilanPackingScannerModal({
                         type="text"
                         value={quickBatch}
                         onChange={(e) => setQuickBatch(e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
+                        className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white font-mono"
                       />
                     </div>
                     <div>
@@ -353,7 +353,7 @@ export default function MilanPackingScannerModal({
                         type="date"
                         value={quickBestBefore}
                         onChange={(e) => setQuickBestBefore(e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-[#09090b] px-3 py-2 text-sm text-white font-mono"
+                        className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white font-mono"
                       />
                     </div>
                   </div>
@@ -362,13 +362,13 @@ export default function MilanPackingScannerModal({
                     <button
                       type="button"
                       onClick={() => setUnrecognizedCode(null)}
-                      className="flex-1 py-2 text-sm font-semibold text-white/60 bg-white/5 rounded-lg"
+                      className="flex-1 py-2 text-sm font-semibold text-white/60 bg-white/5 rounded-adm-sm"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 py-2 text-sm font-bold text-white bg-crimson rounded-lg shadow-lg shadow-crimson/20"
+                      className="flex-1 py-2 text-sm font-bold text-white bg-crimson rounded-adm-sm shadow-lg shadow-crimson/20"
                     >
                       Save & Add to Box (+1)
                     </button>

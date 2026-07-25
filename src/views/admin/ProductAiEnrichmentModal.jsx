@@ -109,10 +109,10 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200 font-sans text-white">
-      <div className="w-full max-w-xl bg-[#0A101D] border border-white/10 rounded-2xl p-6 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-xl bg-adm-surface border border-adm-line rounded-adm p-6 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="flex items-center justify-between border-b border-adm-line pb-4">
           <div className="flex items-center gap-2.5">
             <span className="text-2xl leading-none">✨</span>
             <div>
@@ -128,14 +128,14 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-white/5 text-white/50 hover:text-white hover:bg-white/10 transition-all min-h-[40px] min-w-[40px]"
+            className="p-2 rounded-adm-sm bg-white/5 text-white/50 hover:text-white hover:bg-white/10 transition-all min-h-[40px] min-w-[40px]"
           >
             ✕
           </button>
         </div>
 
         {/* Selected Product Banner */}
-        <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+        <div className="p-3.5 rounded-adm-sm bg-white/5 border border-adm-line flex items-center justify-between">
           <div>
             <span className="text-xs font-mono text-amber uppercase font-bold">Target SKU: {product.sku || product.id}</span>
             <h3 className="font-serif font-bold text-lg text-white">{product.name || product.title}</h3>
@@ -150,12 +150,12 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
           </label>
           <div className="flex flex-wrap gap-1.5">
             {missingSpecs.length === 0 ? (
-              <span className="text-sm font-mono text-forest bg-forest/15 border border-forest/30 px-3 py-1 rounded-lg">
+              <span className="text-sm font-mono text-forest bg-forest/15 border border-forest/30 px-3 py-1 rounded-adm-sm">
                 ✓ All Product Specifications Complete!
               </span>
             ) : (
               missingSpecs.map((m, idx) => (
-                <span key={idx} className="text-xs font-mono text-amber bg-amber/15 border border-amber/30 px-2.5 py-1 rounded-lg">
+                <span key={idx} className="text-xs font-mono text-amber bg-amber/15 border border-amber/30 px-2.5 py-1 rounded-adm-sm">
                   ⚠️ {m}
                 </span>
               ))
@@ -167,7 +167,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
           {/* Option A: Copy Prompt */}
-          <div className="bg-[#09090b] border border-blue/30 p-4 rounded-xl space-y-3 font-mono text-sm flex flex-col justify-between">
+          <div className="bg-adm-sunken border border-blue/30 p-4 rounded-adm-sm space-y-3 font-mono text-sm flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-1.5 text-blue font-bold mb-1">
                 <span>📋</span> Option A: Copy AI Prompt
@@ -179,14 +179,14 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 
             <button
               onClick={handleCopyPrompt}
-              className="w-full mt-3 bg-blue hover:bg-blue/90 text-white font-bold py-2.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 min-h-[44px]"
+              className="w-full mt-3 bg-blue hover:bg-blue/90 text-white font-bold py-2.5 rounded-adm-sm transition-all shadow-md flex items-center justify-center gap-1.5 min-h-[44px]"
             >
               {copiedPrompt ? '✓ Copied to Clipboard!' : '📋 Copy ChatGPT Prompt'}
             </button>
           </div>
 
           {/* Option B: In-App Auto Enrich */}
-          <div className="bg-[#09090b] border border-forest/30 p-4 rounded-xl space-y-3 font-mono text-sm flex flex-col justify-between">
+          <div className="bg-adm-sunken border border-forest/30 p-4 rounded-adm-sm space-y-3 font-mono text-sm flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-1.5 text-forest font-bold mb-1">
                 <span>⚡</span> Option B: 1-Click Auto-Enrich
@@ -199,7 +199,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
             <button
               onClick={handleAutoEnrich}
               disabled={enriching}
-              className="w-full mt-3 bg-forest hover:bg-forest/90 text-white font-bold py-2.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 min-h-[44px]"
+              className="w-full mt-3 bg-forest hover:bg-forest/90 text-white font-bold py-2.5 rounded-adm-sm transition-all shadow-md flex items-center justify-center gap-1.5 min-h-[44px]"
             >
               {enriching ? 'AI Researching...' : '⚡ Auto-Enrich Specs'}
             </button>
@@ -209,8 +209,8 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 
         {/* Enriched Result Preview & Save */}
         {enrichedData && (
-          <div className="p-4 rounded-xl bg-white/5 border border-forest/40 space-y-3 font-mono text-sm animate-in fade-in">
-            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+          <div className="p-4 rounded-adm-sm bg-white/5 border border-forest/40 space-y-3 font-mono text-sm animate-in fade-in">
+            <div className="flex items-center justify-between border-b border-adm-line pb-2">
               <span className="text-forest font-bold text-base font-sans">✓ Enriched Product Master Preview:</span>
               <span className="text-xs text-white/60">Ready to Save</span>
             </div>
@@ -226,7 +226,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
             <button
               onClick={handleSaveEnriched}
               disabled={enriching}
-              className="w-full bg-forest hover:bg-forest/90 text-white font-bold py-3 rounded-xl transition-all shadow-lg min-h-[44px]"
+              className="w-full bg-forest hover:bg-forest/90 text-white font-bold py-3 rounded-adm-sm transition-all shadow-lg min-h-[44px]"
             >
               {savedSuccess ? '✓ Saved to Product Master!' : '💾 Save Enriched Specs to Product Master'}
             </button>

@@ -187,7 +187,7 @@ export default function OutboundSourcing() {
           </p>
           <button 
             onClick={() => { setPacking(true); startScanner(); }}
-            className="w-full rounded-xl bg-forest py-4 text-navy font-bold text-xl shadow-[0_0_30px_rgba(205,250,119,0.3)] transition-all hover:scale-105 active:scale-95"
+            className="w-full rounded-adm-sm bg-forest py-4 text-navy font-bold text-xl shadow-[0_0_30px_rgba(205,250,119,0.3)] transition-all hover:scale-105 active:scale-95"
           >
             Start Packing a Box
           </button>
@@ -200,7 +200,7 @@ export default function OutboundSourcing() {
     <div className="space-y-6 animate-in fade-in duration-500 flex flex-col h-[calc(100vh-100px)]">
       
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-4 shrink-0">
+      <div className="flex items-center justify-between border-b border-adm-line pb-4 shrink-0">
         <div>
           <h2 className="text-xl font-serif text-white flex items-center gap-2">
             <span className="flex h-2 w-2 rounded-full bg-forest pulse-dot"></span>
@@ -218,7 +218,7 @@ export default function OutboundSourcing() {
         
         {/* Left Side: Camera Scanner */}
         <div className="flex-1 flex flex-col min-h-[300px]">
-          <div className="relative rounded-2xl overflow-hidden bg-black/40 border border-white/10 shadow-inner flex-1 flex flex-col">
+          <div className="relative rounded-adm overflow-hidden bg-black/40 border border-adm-line shadow-inner flex-1 flex flex-col">
             {!scannerActive ? (
               <div 
                 onClick={startScanner}
@@ -234,7 +234,7 @@ export default function OutboundSourcing() {
                   <div id="outbound-qr-reader" className="absolute inset-0 object-cover"></div>
                   <button 
                     onClick={stopScanner}
-                    className="absolute top-4 right-4 bg-black/60 backdrop-blur text-neutral-300 rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-black/80 hover:text-white z-10"
+                    className="absolute top-4 right-4 bg-black/60 backdrop-blur text-neutral-300 rounded-adm-sm px-3 py-1.5 text-sm font-medium hover:bg-black/80 hover:text-white z-10"
                   >
                     Stop Scanning
                   </button>
@@ -245,10 +245,10 @@ export default function OutboundSourcing() {
                 </div>
                 
                 {/* Manual Trigger Button */}
-                <div className="bg-black p-4 shrink-0 border-t border-white/10 relative z-20">
+                <div className="bg-black p-4 shrink-0 border-t border-adm-line relative z-20">
                   <button
                     onClick={() => setTriggerActive(true)}
-                    className={`w-full py-4 rounded-xl font-bold text-xl transition-all flex items-center justify-center gap-2 ${
+                    className={`w-full py-4 rounded-adm-sm font-bold text-xl transition-all flex items-center justify-center gap-2 ${
                       triggerActive 
                         ? 'bg-amber text-black animate-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]' 
                         : 'bg-forest text-navy shadow-[0_0_20px_rgba(205,250,119,0.3)] hover:scale-[1.02] active:scale-95'
@@ -270,7 +270,7 @@ export default function OutboundSourcing() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className={`rounded-xl px-4 py-3 text-base font-bold flex items-center justify-center gap-2 shadow-lg ${
+                  className={`rounded-adm-sm px-4 py-3 text-base font-bold flex items-center justify-center gap-2 shadow-lg ${
                     lastScan.type === 'success' 
                       ? 'bg-forest/20 text-forest border border-forest/30' 
                       : 'bg-amber/20 text-amber border border-amber/30'
@@ -285,8 +285,8 @@ export default function OutboundSourcing() {
         </div>
 
         {/* Right Side: Manifest Checklist */}
-        <div className="flex-1 flex flex-col bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-lg">
-          <div className="bg-white/5 px-4 py-3 border-b border-white/10 flex justify-between items-center shrink-0">
+        <div className="flex-1 flex flex-col bg-white/5 border border-adm-line rounded-adm overflow-hidden shadow-lg">
+          <div className="bg-white/5 px-4 py-3 border-b border-adm-line flex justify-between items-center shrink-0">
             <h3 className="font-semibold text-neutral-200">Current Box Manifest</h3>
             <span className="bg-forest/20 text-forest text-sm font-bold px-2 py-0.5 rounded-full">{manifest.length} Unique SKUs</span>
           </div>
@@ -300,7 +300,7 @@ export default function OutboundSourcing() {
               </div>
             ) : (
               manifest.map((item, idx) => (
-                <div key={idx} className="bg-white/5 border border-white/10 rounded-lg p-3 flex items-center justify-between">
+                <div key={idx} className="bg-white/5 border border-adm-line rounded-adm-sm p-3 flex items-center justify-between">
                   <div>
                     <p className="text-base font-medium text-white line-clamp-1">{item.name}</p>
                     <p className="text-sm text-white/50 font-mono mt-0.5">{item.sku}</p>
@@ -313,11 +313,11 @@ export default function OutboundSourcing() {
             )}
           </div>
           
-          <div className="p-4 border-t border-white/10 bg-black/40 shrink-0">
+          <div className="p-4 border-t border-adm-line bg-black/40 shrink-0">
             <button 
               onClick={handleSealBox}
               disabled={manifest.length === 0 || saving}
-              className="w-full bg-blue text-white font-bold py-3.5 rounded-xl transition-all hover:bg-blue/90 active:scale-95 disabled:opacity-50 disabled:active:scale-100 flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+              className="w-full bg-blue text-white font-bold py-3.5 rounded-adm-sm transition-all hover:bg-blue/90 active:scale-95 disabled:opacity-50 disabled:active:scale-100 flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.3)]"
             >
               <BoxIcon size={20} />
               {saving ? 'Sealing Box...' : 'Seal & Ship Box'}

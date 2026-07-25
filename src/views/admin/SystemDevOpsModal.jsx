@@ -38,12 +38,12 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-4xl rounded-2xl bg-[#161922] border border-white/10 shadow-2xl overflow-hidden font-sans text-white flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-4xl rounded-adm bg-adm-surface border border-adm-line shadow-2xl overflow-hidden font-sans text-white flex flex-col max-h-[90vh]">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-white/10 bg-[#27272a] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-adm-line bg-adm-raised px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-blue flex items-center justify-center text-white text-xl font-bold shadow">
+            <div className="h-10 w-10 rounded-adm-sm bg-blue flex items-center justify-center text-white text-xl font-bold shadow">
               ⚡
             </div>
             <div>
@@ -53,7 +53,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           </div>
           <button
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all font-bold text-lg"
+            className="flex h-9 w-9 items-center justify-center rounded-adm-sm bg-white/10 text-white hover:bg-white/20 transition-all font-bold text-lg"
           >
             ✕
           </button>
@@ -64,7 +64,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           
           {/* Real-time Performance & Throughput Row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono">
-            <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
+            <div className="bg-adm-raised p-4 rounded-adm-sm border border-adm-line shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Throughput (QPS)</p>
               <p className="text-2xl font-bold text-white mt-1 flex items-center gap-2">
                 <span>{qps}</span>
@@ -73,7 +73,7 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
               <p className="text-xs text-neutral-300 mt-1 font-sans font-medium">Vercel Edge Network</p>
             </div>
 
-            <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
+            <div className="bg-adm-raised p-4 rounded-adm-sm border border-adm-line shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Edge Latency</p>
               <p className="text-2xl font-bold text-white mt-1 flex items-center gap-2">
                 <span>{latency}</span>
@@ -82,13 +82,13 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
               <p className="text-xs text-neutral-300 mt-1 font-sans font-medium">PH NAIA Edge Pop</p>
             </div>
 
-            <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
+            <div className="bg-adm-raised p-4 rounded-adm-sm border border-adm-line shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Database Engine</p>
               <p className="text-xl font-bold text-white mt-1">Supabase</p>
               <p className="text-xs text-neutral-300 mt-1 font-sans font-extrabold text-blue">PostgreSQL + RPC Locks</p>
             </div>
 
-            <div className="bg-[#27272a] p-4 rounded-xl border border-white/10 shadow">
+            <div className="bg-adm-raised p-4 rounded-adm-sm border border-adm-line shadow">
               <p className="text-gold text-sm font-extrabold uppercase">Realtime WebSockets</p>
               <p className="text-xl font-bold text-white mt-1">Active</p>
               <p className="text-xs text-neutral-300 mt-1 font-sans font-medium">{wsStatus}</p>
@@ -99,8 +99,8 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* AES-256 Vault Status */}
-            <div className="bg-[#27272a] p-5 rounded-2xl border border-white/10 space-y-3">
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+            <div className="bg-adm-raised p-5 rounded-adm border border-adm-line space-y-3">
+              <div className="flex items-center justify-between border-b border-adm-line pb-3">
                 <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
                   🔒 AES-256 Security Vault Health
                 </h3>
@@ -127,8 +127,8 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
             </div>
 
             {/* Rate Limiting & Concurrency Guard */}
-            <div className="bg-[#27272a] p-5 rounded-2xl border border-white/10 space-y-3">
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+            <div className="bg-adm-raised p-5 rounded-adm border border-adm-line space-y-3">
+              <div className="flex items-center justify-between border-b border-adm-line pb-3">
                 <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
                   🛡️ Anti-Abuse Rate Limiting Throttles
                 </h3>
@@ -156,8 +156,8 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
           </div>
 
           {/* Real client-error stream from the error_reports table */}
-          <div className="bg-[#27272a] p-5 rounded-2xl border border-white/10 space-y-3">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+          <div className="bg-adm-raised p-5 rounded-adm border border-adm-line space-y-3">
+            <div className="flex items-center justify-between border-b border-adm-line pb-3">
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 📋 Recent errors
               </h3>
@@ -167,13 +167,13 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
             </div>
 
             {errors.length === 0 && !errLoading ? (
-              <div className="p-4 rounded-xl bg-black/30 border border-white/10 text-center text-sm text-neutral-300">
+              <div className="p-4 rounded-adm-sm bg-black/30 border border-adm-line text-center text-sm text-neutral-300">
                 ✓ No errors logged — all clear.
               </div>
             ) : (
               <div className="space-y-2 font-mono text-sm max-h-72 overflow-y-auto custom-scrollbar">
                 {errors.map(e => (
-                  <div key={e.id} className="p-3 rounded-xl bg-black/40 border border-white/10">
+                  <div key={e.id} className="p-3 rounded-adm-sm bg-black/40 border border-adm-line">
                     <div className="flex items-start justify-between gap-3">
                       <span className="text-crimson font-medium break-all">{e.message || 'Unknown error'}</span>
                       <span className="text-white/50 text-xs shrink-0 font-sans">
@@ -190,13 +190,13 @@ export default function SystemDevOpsModal({ isOpen, onClose }) {
         </div>
 
         {/* Modal Footer */}
-        <div className="border-t border-white/10 bg-[#27272a] px-6 py-4 flex items-center justify-between">
+        <div className="border-t border-adm-line bg-adm-raised px-6 py-4 flex items-center justify-between">
           <p className="text-sm font-mono text-neutral-300 font-semibold">
             Vercel Production Deployment · Supabase BaaS Cloud Status: <strong className="text-gold">100% Operational</strong>
           </p>
           <button
             onClick={onClose}
-            className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-6 py-2.5 rounded-xl shadow transition-all"
+            className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-6 py-2.5 rounded-adm-sm shadow transition-all"
           >
             Close
           </button>

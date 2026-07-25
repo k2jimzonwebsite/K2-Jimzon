@@ -11,7 +11,7 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-white text-slate-900 rounded-2xl p-6 space-y-6 shadow-2xl">
+      <div className="w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-white text-slate-900 rounded-adm p-6 space-y-6 shadow-2xl">
         
         {/* Header Action Bar (Non-Printable) */}
         <div className="flex items-center justify-between border-b border-slate-200 pb-4 print:hidden">
@@ -25,13 +25,13 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-4 py-2 rounded-lg transition-all min-h-[40px] flex items-center gap-1.5"
+              className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-4 py-2 rounded-adm-sm transition-all min-h-[40px] flex items-center gap-1.5"
             >
               <span>🖨️</span> Print Label & Slip
             </button>
             <button
               onClick={onClose}
-              className="p-2 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition-all min-h-[40px] min-w-[40px]"
+              className="p-2 rounded-adm-sm bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition-all min-h-[40px] min-w-[40px]"
             >
               ✕
             </button>
@@ -39,7 +39,7 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
         </div>
 
         {/* 📦 OFFICIAL SHOPEE / LAZADA / TIKTOK STYLE AIR WAYBILL STICKER */}
-        <div className="border-2 border-slate-900 rounded-xl p-5 space-y-4 font-mono text-sm bg-white">
+        <div className="border-2 border-slate-900 rounded-adm-sm p-5 space-y-4 font-mono text-sm bg-white">
           
           {/* Top Carrier Header */}
           <div className="flex items-center justify-between border-b-2 border-slate-900 pb-3">

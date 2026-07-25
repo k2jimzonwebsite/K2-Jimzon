@@ -51,18 +51,18 @@ export default function Inbox() {
 
   if (!chat) {
     return (
-      <div className="flex h-[60vh] rounded-2xl border border-white/10 bg-[#0B0E14] items-center justify-center text-white/50 text-sm">
+      <div className="flex h-[60vh] rounded-adm border border-adm-line bg-adm-bg items-center justify-center text-white/50 text-sm">
         No conversations yet.
       </div>
     )
   }
 
   return (
-    <div className="flex h-[calc(100dvh-150px)] min-h-[440px] rounded-2xl border border-white/10 bg-[#0B0E14] overflow-hidden">
+    <div className="flex h-[calc(100dvh-150px)] min-h-[440px] rounded-adm border border-adm-line bg-adm-bg overflow-hidden">
 
       {/* ── Conversation list ─────────────────────────────────────────── */}
-      <div className={`${mobileView === 'chat' ? 'hidden' : 'flex'} lg:flex w-full lg:w-72 xl:w-80 shrink-0 flex-col border-r border-white/10 bg-[#0B0E14]`}>
-        <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
+      <div className={`${mobileView === 'chat' ? 'hidden' : 'flex'} lg:flex w-full lg:w-72 xl:w-80 shrink-0 flex-col border-r border-adm-line bg-adm-bg`}>
+        <div className="px-4 py-3 border-b border-adm-line flex items-center justify-between">
           <h2 className="font-semibold text-white text-[15px]">Messages</h2>
           {unreadCount > 0 && (
             <span className="bg-crimson text-white text-[11px] font-bold px-2 py-0.5 rounded-full">{unreadCount} new</span>
@@ -73,7 +73,7 @@ export default function Inbox() {
             const meta = channelMeta(c.channel)
             return (
               <button key={c.id} onClick={() => openChat(c.id)}
-                className={`w-full text-left px-3 py-2.5 rounded-lg border transition-all ${
+                className={`w-full text-left px-3 py-2.5 rounded-adm-sm border transition-all ${
                   activeId === c.id ? 'border-blue/40 bg-blue/10' : 'border-transparent hover:bg-white/5'
                 }`}>
                 <div className="flex justify-between items-baseline gap-2">
@@ -96,11 +96,11 @@ export default function Inbox() {
       </div>
 
       {/* ── Chat pane ─────────────────────────────────────────────────── */}
-      <div className={`${mobileView === 'list' ? 'hidden' : 'flex'} lg:flex flex-1 min-w-0 flex-col bg-[#0A101D]`}>
+      <div className={`${mobileView === 'list' ? 'hidden' : 'flex'} lg:flex flex-1 min-w-0 flex-col bg-adm-surface`}>
         {/* Header */}
-        <div className="px-3 sm:px-4 py-2.5 border-b border-white/10 flex items-center gap-2 bg-white/5 shrink-0">
+        <div className="px-3 sm:px-4 py-2.5 border-b border-adm-line flex items-center gap-2 bg-white/5 shrink-0">
           <button onClick={() => setMobileView('list')}
-            className="lg:hidden -ml-1 p-2 rounded-lg text-white/60 hover:bg-white/10 hover:text-white shrink-0" aria-label="Back">
+            className="lg:hidden -ml-1 p-2 rounded-adm-sm text-white/60 hover:bg-white/10 hover:text-white shrink-0" aria-label="Back">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
           </button>
           <div className="min-w-0 flex-1">
@@ -115,8 +115,8 @@ export default function Inbox() {
 
         {/* Pasabuy request note */}
         {chat.intent === 'pasabuy_request' && chat.metadata && (
-          <div className="p-3 shrink-0 border-b border-white/10 bg-black/20">
-            <div className="rounded-xl bg-[#fef9c3] text-black p-4 border border-[#fde047]">
+          <div className="p-3 shrink-0 border-b border-adm-line bg-black/20">
+            <div className="rounded-adm-sm bg-[#fef9c3] text-black p-4 border border-[#fde047]">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-[11px] font-bold uppercase tracking-widest text-black/60 bg-black/5 px-2 py-0.5 rounded border border-black/10">Pasabuy request</span>
               </div>
@@ -142,8 +142,8 @@ export default function Inbox() {
             <div key={i} className={`flex ${m.sender === 'agent' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[85%] sm:max-w-[75%] px-3.5 py-2 text-[14px] leading-relaxed ${
                 m.sender === 'agent'
-                  ? 'bg-blue text-white rounded-2xl rounded-tr-sm'
-                  : 'bg-white/10 text-neutral-200 rounded-2xl rounded-tl-sm'
+                  ? 'bg-blue text-white rounded-adm rounded-tr-sm'
+                  : 'bg-white/10 text-neutral-200 rounded-adm rounded-tl-sm'
               }`}>
                 {m.text}
               </div>
@@ -152,18 +152,18 @@ export default function Inbox() {
         </div>
 
         {/* Composer */}
-        <div className="p-3 bg-white/5 border-t border-white/10 shrink-0 space-y-2">
+        <div className="p-3 bg-white/5 border-t border-adm-line shrink-0 space-y-2">
           {/* AI helper — inline on phones/tablets where the side panel is hidden */}
           <button onClick={handleDraftAI} disabled={aiDrafting}
-            className="xl:hidden w-full flex justify-center items-center gap-2 py-2 border border-blue/40 bg-blue/10 text-blue font-semibold text-[13px] rounded-lg hover:bg-blue/20 disabled:opacity-50">
+            className="xl:hidden w-full flex justify-center items-center gap-2 py-2 border border-blue/40 bg-blue/10 text-blue font-semibold text-[13px] rounded-adm-sm hover:bg-blue/20 disabled:opacity-50">
             {aiDrafting ? 'Drafting…' : '✨ Draft a reply with AI'}
           </button>
           <div className="flex gap-2 items-end">
             <textarea value={replyText} onChange={(e) => setReplyText(e.target.value)}
               placeholder="Type a reply…" rows={1}
-              className="flex-1 resize-none max-h-32 min-h-[44px] rounded-xl border border-white/10 bg-[#09090b] px-3 py-2.5 text-[14px] text-white placeholder:text-white/40 focus:border-blue outline-none" />
+              className="flex-1 resize-none max-h-32 min-h-[44px] rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2.5 text-[14px] text-white placeholder:text-white/40 focus:border-blue outline-none" />
             <button onClick={handleSend} disabled={!replyText.trim()}
-              className="bg-blue text-white px-5 min-h-[44px] font-semibold text-sm rounded-xl hover:bg-blue/90 disabled:opacity-50 shrink-0">
+              className="bg-blue text-white px-5 min-h-[44px] font-semibold text-sm rounded-adm-sm hover:bg-blue/90 disabled:opacity-50 shrink-0">
               Send
             </button>
           </div>
@@ -171,8 +171,8 @@ export default function Inbox() {
       </div>
 
       {/* ── AI helper (desktop XL only) ───────────────────────────────── */}
-      <div className="hidden xl:flex w-72 shrink-0 border-l border-white/10 bg-[#0B0E14] flex-col">
-        <div className="px-4 py-3 border-b border-white/10 flex items-center gap-2">
+      <div className="hidden xl:flex w-72 shrink-0 border-l border-adm-line bg-adm-bg flex-col">
+        <div className="px-4 py-3 border-b border-adm-line flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-blue" />
           <h3 className="font-semibold text-[15px] text-white">AI assistant</h3>
         </div>
@@ -181,13 +181,13 @@ export default function Inbox() {
             Drafts a reply based on the conversation. Review it before sending.
           </p>
           <button onClick={handleDraftAI} disabled={aiDrafting}
-            className="w-full flex justify-center items-center gap-2 py-2.5 border border-blue/40 bg-blue/10 text-blue font-semibold text-sm rounded-lg hover:bg-blue/20 active:scale-[.99] disabled:opacity-50 mb-5">
+            className="w-full flex justify-center items-center gap-2 py-2.5 border border-blue/40 bg-blue/10 text-blue font-semibold text-sm rounded-adm-sm hover:bg-blue/20 active:scale-[.99] disabled:opacity-50 mb-5">
             {aiDrafting ? 'Drafting…' : 'Draft a reply'}
           </button>
           {dbResults && (
             <div>
               <p className="text-[11px] uppercase tracking-widest text-white/45 font-bold mb-2">Data used</p>
-              <div className="bg-black/40 border border-white/10 p-3 rounded-lg text-[11px] font-mono leading-relaxed text-neutral-300 mb-3 overflow-x-auto">
+              <div className="bg-black/40 border border-adm-line p-3 rounded-adm-sm text-[11px] font-mono leading-relaxed text-neutral-300 mb-3 overflow-x-auto">
                 <span className="text-blue-300">{dbResults.query}</span><br /><br />
                 <span className="text-forest">{dbResults.result}</span>
               </div>

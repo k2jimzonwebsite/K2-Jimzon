@@ -58,7 +58,7 @@ export default function Customers() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between rounded-lg border border-line bg-white p-4 shadow-sm">
+      <div className="flex items-center justify-between rounded-adm-sm border border-line bg-white p-4 shadow-sm">
         <div>
           <h2 className="text-lg font-bold text-navy flex items-center gap-2">
             <UserIcon size={18} />
@@ -68,7 +68,7 @@ export default function Customers() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-line bg-white shadow-card overflow-x-auto">
+      <div className="overflow-hidden rounded-adm-sm border border-line bg-white shadow-card overflow-x-auto">
         {loading && customers.length === 0 ? (
           <div className="p-8 text-center text-base text-navy-soft">Loading customers...</div>
         ) : customers.length === 0 ? (

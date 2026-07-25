@@ -104,11 +104,11 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-[#09090b]/95 backdrop-blur-sm animate-in fade-in text-white p-4 md:p-8">
-      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col bg-[#0A101D] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-adm-sunken/95 backdrop-blur-sm animate-in fade-in text-white p-4 md:p-8">
+      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col bg-adm-surface border border-adm-line rounded-adm overflow-hidden shadow-2xl">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/20 shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/20 shrink-0">
           <div className="flex items-center gap-4">
             <div>
               <h2 className="font-serif text-xl font-semibold">✨ Smart Paste AI Import</h2>
@@ -144,21 +144,21 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
         {stage === 'json' && (
           <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
             {/* Paste box */}
-            <div className="flex-1 p-8 flex flex-col gap-4 bg-[#09090b]">
+            <div className="flex-1 p-8 flex flex-col gap-4 bg-adm-sunken">
               <div className="mb-1">
                 <p className="font-semibold text-white text-base">Paste Section 1 — Product Object JSON</p>
                 <p className="text-sm text-white/60 mt-0.5">Copy the full JSON block from your K2 Jimzon Product Intelligence AI output</p>
               </div>
               <textarea
                 autoFocus
-                className="flex-1 w-full bg-black/40 border border-white/10 rounded-xl p-5 font-mono text-sm text-blue-300 placeholder-white/20 focus:outline-none focus:border-blue resize-none transition-colors"
+                className="flex-1 w-full bg-black/40 border border-adm-line rounded-adm-sm p-5 font-mono text-sm text-blue-300 placeholder-white/20 focus:outline-none focus:border-blue resize-none transition-colors"
                 placeholder={'{\n  "id": "mutti-polpa-400g",\n  "name": "Mutti Polpa Finely Chopped Tomatoes",\n  "short": "Mutti Polpa",\n  "brand_id": "Mutti",\n  "origin": "Parma, Italy",\n  "inside": "...",\n  "whyBuy": "...",\n  "whyRare": "...",\n  "pairings": ["...", "...", "..."],\n  ...\n}'}
                 value={pasteJson}
                 onChange={handleJsonChange}
                 spellCheck={false}
               />
               {error && (
-                <div className="p-3 rounded-lg bg-crimson/20 border border-crimson/50 text-crimson text-base flex items-start gap-2">
+                <div className="p-3 rounded-adm-sm bg-crimson/20 border border-crimson/50 text-crimson text-base flex items-start gap-2">
                   <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
@@ -168,7 +168,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
             </div>
 
             {/* Instruction sidebar */}
-            <div className="lg:w-72 p-8 border-t lg:border-t-0 lg:border-l border-white/10 bg-black/10 flex flex-col gap-5">
+            <div className="lg:w-72 p-8 border-t lg:border-t-0 lg:border-l border-adm-line bg-black/10 flex flex-col gap-5">
               <div className="space-y-4">
                 <p className="text-sm font-bold text-white/60 uppercase tracking-widest">How to use</p>
                 <ol className="space-y-4">
@@ -191,14 +191,14 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
 
               {parsedProduct && (
                 <div className="mt-auto">
-                  <div className="p-4 bg-forest/10 border border-forest/30 rounded-xl mb-4">
+                  <div className="p-4 bg-forest/10 border border-forest/30 rounded-adm-sm mb-4">
                     <p className="text-sm font-bold text-forest mb-1">✓ Valid JSON detected</p>
                     <p className="text-base font-semibold text-white">{parsedProduct.name || parsedProduct.product_name}</p>
                     <p className="text-sm text-white/60">{parsedProduct.brand_id || parsedProduct.brand} · {parsedProduct.origin}</p>
                   </div>
                   <button
                     onClick={handleNext}
-                    className="w-full py-3 bg-blue text-navy text-base font-bold rounded-xl hover:opacity-90 transition-opacity"
+                    className="w-full py-3 bg-blue text-navy text-base font-bold rounded-adm-sm hover:opacity-90 transition-opacity"
                   >
                     Next → Review + Photos
                   </button>
@@ -214,12 +214,12 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
             <div className="p-8 max-w-6xl mx-auto w-full space-y-10 animate-in fade-in">
 
               {/* ID & Barcode */}
-              <div className="flex flex-wrap gap-4 pb-6 border-b border-white/10">
+              <div className="flex flex-wrap gap-4 pb-6 border-b border-adm-line">
                 <div className="flex-1 min-w-48">
                   <label className="text-sm text-white/60 block mb-1.5">Product ID (kebab-case)</label>
                   <input
                     type="text"
-                    className="w-full text-base font-mono text-purple-400 bg-purple-400/10 border border-purple-400/30 px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-400"
+                    className="w-full text-base font-mono text-purple-400 bg-purple-400/10 border border-purple-400/30 px-3 py-2 rounded-adm-sm focus:outline-none focus:ring-1 focus:ring-purple-400"
                     value={parsedProduct.id || parsedProduct.sku || ''}
                     onChange={(e) => setParsedProduct({...parsedProduct, id: e.target.value, sku: e.target.value})}
                     placeholder="e.g. mutti-polpa-400g"
@@ -229,7 +229,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                   <label className="text-sm text-white/60 block mb-1.5">Barcode</label>
                   <input
                     type="text"
-                    className="w-full text-base font-mono text-neutral-300 bg-white/5 border border-white/10 px-3 py-2 rounded-lg focus:outline-none focus:border-blue"
+                    className="w-full text-base font-mono text-neutral-300 bg-white/5 border border-adm-line px-3 py-2 rounded-adm-sm focus:outline-none focus:border-blue"
                     value={parsedProduct.barcode || ''}
                     onChange={(e) => setParsedProduct({...parsedProduct, barcode: e.target.value})}
                     placeholder="8000400289000"
@@ -257,7 +257,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                           <label className="text-sm text-white/60 block mb-1">{label}</label>
                           <input
                             type="text"
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-base focus:border-blue outline-none"
+                            className="w-full bg-white/5 border border-adm-line rounded-adm-sm px-3 py-2 text-white text-base focus:border-blue outline-none"
                             value={parsedProduct[key] || ''}
                             onChange={(e) => setParsedProduct({...parsedProduct, [key]: e.target.value})}
                           />
@@ -278,7 +278,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                           <label className="text-sm text-white/60 block mb-1">{label}</label>
                           <textarea
                             rows={rows}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-base focus:border-amber outline-none resize-none"
+                            className="w-full bg-white/5 border border-adm-line rounded-adm-sm px-3 py-2 text-white text-base focus:border-amber outline-none resize-none"
                             value={parsedProduct[key] || ''}
                             onChange={(e) => setParsedProduct({...parsedProduct, [key]: e.target.value})}
                           />
@@ -293,7 +293,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                             key={i}
                             type="text"
                             placeholder={`Pairing ${i + 1}…`}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-base focus:border-amber outline-none mb-1.5"
+                            className="w-full bg-white/5 border border-adm-line rounded-adm-sm px-3 py-2 text-white text-base focus:border-amber outline-none mb-1.5"
                             value={(Array.isArray(parsedProduct.pairings) ? parsedProduct.pairings[i] : '') || ''}
                             onChange={(e) => {
                               const arr = Array.isArray(parsedProduct.pairings) ? [...parsedProduct.pairings] : ['', '', '']
@@ -320,7 +320,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                           <label className="text-sm text-white/60 block mb-1">{label}</label>
                           <textarea
                             rows={rows}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-base outline-none resize-none focus:border-white/30"
+                            className="w-full bg-white/5 border border-adm-line rounded-adm-sm px-3 py-2 text-white text-base outline-none resize-none focus:border-white/30"
                             value={parsedProduct[key] || ''}
                             onChange={(e) => setParsedProduct({...parsedProduct, [key]: e.target.value})}
                           />
@@ -335,7 +335,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                   <h4 className="text-sm font-bold text-purple-400 tracking-widest uppercase">Product Photos</h4>
 
                   {/* Primary */}
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <div className="bg-white/5 border border-adm-line rounded-adm-sm p-4">
                     <p className="text-sm font-bold text-neutral-300 mb-1">Primary Photo</p>
                     <p className="text-xs text-white/55 mb-3">Clean studio white background — generated by AI (Image 1)</p>
                     <ImageUploadDropzone
@@ -346,7 +346,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                   </div>
 
                   {/* After Use */}
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <div className="bg-white/5 border border-adm-line rounded-adm-sm p-4">
                     <p className="text-sm font-bold text-neutral-300 mb-1">After-Use Photo</p>
                     <p className="text-xs text-white/55 mb-3">Prepared / plated food — generated by AI (Image 2)</p>
                     <ImageUploadDropzone
@@ -357,7 +357,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                   </div>
 
                   {/* Gallery — 5 sample shots */}
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <div className="bg-white/5 border border-adm-line rounded-adm-sm p-4">
                     <p className="text-sm font-bold text-neutral-300 mb-1">Product Gallery <span className="text-white/55 font-normal">(up to 5 photos)</span></p>
                     <p className="text-xs text-white/55 mb-3">Detail shots, packaging angles, in-context lifestyle photos</p>
                     <ImageUploadDropzone
@@ -369,7 +369,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                   </div>
 
                   {/* Upload status summary */}
-                  <div className="bg-black/20 rounded-xl p-4 space-y-2">
+                  <div className="bg-black/20 rounded-adm-sm p-4 space-y-2">
                     <p className="text-sm font-bold text-white/60 uppercase tracking-widest mb-2">Upload Status</p>
                     {[
                       { label: 'Primary Photo',   filled: !!primaryUrl },
@@ -388,12 +388,12 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
               </div>
 
               {/* Save */}
-              <div className="pt-8 pb-4 flex flex-col items-center border-t border-white/10">
+              <div className="pt-8 pb-4 flex flex-col items-center border-t border-adm-line">
                 <p className="text-base text-white/60 mb-4 italic">Pricing and stock levels are set in the PIM Sheet after saving.</p>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="w-full max-w-sm bg-forest text-navy font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(205,250,119,0.2)] transition-all hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100 flex justify-center items-center gap-2"
+                  className="w-full max-w-sm bg-forest text-navy font-bold py-4 rounded-adm-sm shadow-[0_0_20px_rgba(205,250,119,0.2)] transition-all hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100 flex justify-center items-center gap-2"
                 >
                   {saving ? 'Saving to Inventory…' : '✓ Save Product to Inventory'}
                 </button>

@@ -42,23 +42,23 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="flex h-full w-full max-w-lg flex-col border-l border-white/10 bg-[#0A101D] text-white shadow-2xl">
+      <div className="flex h-full w-full max-w-lg flex-col border-l border-adm-line bg-adm-surface text-white shadow-2xl">
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#09090b] p-4">
+        <div className="flex shrink-0 items-center justify-between border-b border-adm-line bg-adm-sunken p-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-blue/40 bg-blue/20 text-lg text-blue">🧭</div>
+            <div className="flex h-8 w-8 items-center justify-center rounded-adm-sm border border-blue/40 bg-blue/20 text-lg text-blue">🧭</div>
             <div>
               <h2 className="text-base font-semibold text-white">Dashboard Guide</h2>
               <p className="text-xs text-white/50">Ask what anything is for, or where to do it</p>
             </div>
           </div>
-          <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-white/50 hover:bg-white/10 hover:text-white">✕</button>
+          <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-adm-sm bg-white/5 text-white/50 hover:bg-white/10 hover:text-white">✕</button>
         </div>
 
         {/* Example questions */}
-        <div className="flex shrink-0 gap-2 overflow-x-auto border-b border-white/10 bg-[#09090b]/50 p-3 scrollbar-none">
+        <div className="flex shrink-0 gap-2 overflow-x-auto border-b border-adm-line bg-adm-sunken/50 p-3 scrollbar-none">
           {EXAMPLES.map((ex) => (
-            <button key={ex} onClick={() => ask(ex)} className="shrink-0 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/70 hover:bg-white/10 hover:text-white">
+            <button key={ex} onClick={() => ask(ex)} className="shrink-0 rounded-adm-sm border border-adm-line bg-white/5 px-3 py-1.5 text-xs text-white/70 hover:bg-white/10 hover:text-white">
               {ex}
             </button>
           ))}
@@ -69,7 +69,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
           {messages.map((m, i) => (
             <div key={i} className={`flex flex-col ${m.sender === 'user' ? 'items-end' : 'items-start'} space-y-1`}>
               <span className="px-1 text-xs text-white/40">{m.sender === 'user' ? 'You' : 'Guide'}</span>
-              <div className={`max-w-[92%] rounded-2xl p-3.5 ${m.sender === 'user' ? 'rounded-tr-none bg-blue text-white' : 'rounded-tl-none border border-white/10 bg-[#161922]'}`}>
+              <div className={`max-w-[92%] rounded-adm p-3.5 ${m.sender === 'user' ? 'rounded-tr-none bg-blue text-white' : 'rounded-tl-none border border-adm-line bg-adm-surface'}`}>
                 {m.topic ? (
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
@@ -98,7 +98,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
                       </div>
                     )}
                     {m.topic.section && (
-                      <button onClick={() => jump(m.topic.section)} className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue py-2 text-sm font-medium text-white transition-colors hover:bg-blue-deep">
+                      <button onClick={() => jump(m.topic.section)} className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-adm-sm bg-blue py-2 text-sm font-medium text-white transition-colors hover:bg-blue-deep">
                         Open {m.topic.title} <span aria-hidden>→</span>
                       </button>
                     )}
@@ -113,14 +113,14 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {
         </div>
 
         {/* Input */}
-        <form onSubmit={(e) => { e.preventDefault(); ask() }} className="flex shrink-0 gap-2 border-t border-white/10 bg-[#09090b] p-3">
+        <form onSubmit={(e) => { e.preventDefault(); ask() }} className="flex shrink-0 gap-2 border-t border-adm-line bg-adm-sunken p-3">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about any screen or metric…"
-            className="min-h-[44px] flex-1 rounded-xl border border-white/10 bg-[#0A101D] px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 outline-none focus:border-blue"
+            className="min-h-[44px] flex-1 rounded-adm-sm border border-adm-line bg-adm-surface px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 outline-none focus:border-blue"
           />
-          <button type="submit" disabled={!input.trim()} className="min-h-[44px] shrink-0 rounded-xl bg-blue px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-blue-deep disabled:opacity-50">
+          <button type="submit" disabled={!input.trim()} className="min-h-[44px] shrink-0 rounded-adm-sm bg-blue px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-blue-deep disabled:opacity-50">
             Ask
           </button>
         </form>

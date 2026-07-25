@@ -104,10 +104,10 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-[#0A101D] border border-white/10 rounded-2xl p-4 sm:p-6 text-white space-y-6 shadow-2xl">
+      <div className="w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-6 text-white space-y-6 shadow-2xl">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="flex items-center justify-between border-b border-adm-line pb-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono font-bold bg-blue/20 text-blue px-2 py-0.5 rounded border border-blue/30 uppercase">
@@ -123,14 +123,14 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
 
           <button
             onClick={onClose}
-            className="p-2 rounded-lg bg-white/5 text-white/50 hover:text-white hover:bg-white/10 transition-all"
+            className="p-2 rounded-adm-sm bg-white/5 text-white/50 hover:text-white hover:bg-white/10 transition-all"
           >
             ✕
           </button>
         </div>
 
         {/* ⚡ Transfer stock between staff */}
-        <form onSubmit={handleExecute1ClickTransfer} className="bg-[#09090b] border border-amber/40 p-4 rounded-xl space-y-3 shadow-lg">
+        <form onSubmit={handleExecute1ClickTransfer} className="bg-adm-sunken border border-amber/40 p-4 rounded-adm-sm space-y-3 shadow-lg">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-amber flex items-center gap-1.5">
               <span>⚡</span> 1-Click Inter-Staff Stock Transfer Engine
@@ -144,7 +144,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
               <select
                 value={transferFromId}
                 onChange={(e) => setTransferFromId(e.target.value)}
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-amber"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-amber"
               >
                 {allocations.map(a => (
                   <option key={a.id} value={a.id}>
@@ -159,7 +159,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
               <select
                 value={transferToId}
                 onChange={(e) => setTransferToId(e.target.value)}
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-amber"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-amber"
               >
                 {allocations.map(a => (
                   <option key={a.id} value={a.id}>
@@ -177,11 +177,11 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                   min="1"
                   value={transferQty}
                   onChange={(e) => setTransferQty(Number(e.target.value))}
-                  className="w-20 rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-amber"
+                  className="w-20 rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-amber"
                 />
                 <button
                   type="submit"
-                  className="flex-1 bg-amber hover:bg-amber/90 text-navy-dark font-extrabold text-sm py-2 rounded-lg transition-all shadow-md"
+                  className="flex-1 bg-amber hover:bg-amber/90 text-navy-dark font-extrabold text-sm py-2 rounded-adm-sm transition-all shadow-md"
                 >
                   ⚡ Execute 1-Click Transfer
                 </button>
@@ -190,7 +190,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
           </div>
 
           {transferMessage && (
-            <div className={`p-2.5 rounded-lg border text-sm font-mono ${
+            <div className={`p-2.5 rounded-adm-sm border text-sm font-mono ${
               transferMessage.error ? 'bg-crimson/20 border-crimson/40 text-crimson' : 'bg-forest/20 border-forest/40 text-forest font-bold'
             }`}>
               {transferMessage.text}
@@ -206,7 +206,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
 
           <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
             {allocations.map((alloc) => (
-              <div key={alloc.id} className="p-4 rounded-xl bg-white/5 border border-white/10 text-sm font-mono space-y-3">
+              <div key={alloc.id} className="p-4 rounded-adm-sm bg-white/5 border border-adm-line text-sm font-mono space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <span className="w-8 h-8 rounded-full bg-blue/20 text-blue font-bold flex items-center justify-center text-sm">
@@ -219,7 +219,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${
+                    <span className={`px-2.5 py-1 rounded-adm-sm text-xs font-bold border ${
                       alloc.stock > 0 ? 'bg-forest/20 border-forest/40 text-forest' : 'bg-crimson/20 border-crimson/40 text-crimson'
                     }`}>
                       {alloc.stock > 0 ? `${alloc.stock} Units Available` : 'Out of Stock'}
@@ -245,7 +245,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                       min="0"
                       value={alloc.stock}
                       onChange={(e) => handleUpdateStock(alloc.id, e.target.value)}
-                      className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-1.5 text-white font-mono outline-none focus:border-blue"
+                      className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-1.5 text-white font-mono outline-none focus:border-blue"
                     />
                   </div>
 
@@ -256,7 +256,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                       value={alloc.bin}
                       onChange={(e) => handleUpdateBin(alloc.id, e.target.value)}
                       placeholder="e.g. Shelf A-02"
-                      className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-1.5 text-white font-mono outline-none focus:border-blue"
+                      className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-1.5 text-white font-mono outline-none focus:border-blue"
                     />
                   </div>
                 </div>
@@ -266,7 +266,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
         </div>
 
         {/* Add New Staff Allocation Form */}
-        <form onSubmit={handleAddAllocation} className="bg-[#09090b] border border-white/10 p-4 rounded-xl space-y-3">
+        <form onSubmit={handleAddAllocation} className="bg-adm-sunken border border-adm-line p-4 rounded-adm-sm space-y-3">
           <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Assign stock to staff</h4>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-sm font-mono">
             <div>
@@ -277,7 +277,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                 value={newStaffName}
                 onChange={(e) => setNewStaffName(e.target.value)}
                 placeholder="e.g. Maria Santos"
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-blue"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-blue"
               />
             </div>
 
@@ -289,7 +289,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                 value={newLocation}
                 onChange={(e) => setNewLocation(e.target.value)}
                 placeholder="e.g. Alabang Hub"
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-blue"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-blue"
               />
             </div>
 
@@ -300,7 +300,7 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                 min="1"
                 value={newStock}
                 onChange={(e) => setNewStock(Number(e.target.value))}
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-blue"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-blue"
               />
             </div>
 
@@ -311,32 +311,32 @@ export default function StaffAllocationModal({ product, onClose, onSaveAllocatio
                 value={newBin}
                 onChange={(e) => setNewBin(e.target.value)}
                 placeholder="e.g. Bin C-01"
-                className="w-full rounded-lg border border-white/10 bg-[#0A101D] px-3 py-2 text-white outline-none focus:border-blue"
+                className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-white outline-none focus:border-blue"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue hover:bg-blue/90 text-white font-bold text-sm py-2 rounded-lg transition-all shadow-md shadow-blue/20"
+            className="w-full bg-blue hover:bg-blue/90 text-white font-bold text-sm py-2 rounded-adm-sm transition-all shadow-md shadow-blue/20"
           >
             + Assign Custody Allocation
           </button>
         </form>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-2 border-t border-white/10">
+        <div className="flex justify-end gap-3 pt-2 border-t border-adm-line">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-neutral-300 hover:bg-white/10"
+            className="px-4 py-2 rounded-adm-sm bg-white/5 border border-adm-line text-sm font-semibold text-neutral-300 hover:bg-white/10"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="px-6 py-2 rounded-xl bg-blue text-sm font-bold text-white hover:bg-blue/90 shadow-lg shadow-blue/20"
+            className="px-6 py-2 rounded-adm-sm bg-blue text-sm font-bold text-white hover:bg-blue/90 shadow-lg shadow-blue/20"
           >
             💾 Save Staff Inventory Allocations
           </button>

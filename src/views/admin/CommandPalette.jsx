@@ -143,9 +143,9 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ duration: 0.15 }}
-            className="relative w-full max-w-2xl overflow-hidden rounded-xl border border-white/10 bg-[#0A101D] shadow-2xl"
+            className="relative w-full max-w-2xl overflow-hidden rounded-adm-sm border border-adm-line bg-adm-surface shadow-2xl"
           >
-            <div className="flex items-center border-b border-white/10 px-4 py-3">
+            <div className="flex items-center border-b border-adm-line px-4 py-3">
               <svg className="mr-3 h-5 w-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -158,7 +158,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
                 placeholder="Search products, customers, or commands..."
                 className="w-full bg-transparent text-xl text-white placeholder-white/30 outline-none"
               />
-              <span className="ml-2 flex shrink-0 items-center gap-1 rounded bg-white/5 px-2 py-1 text-sm text-white/60 border border-white/10">
+              <span className="ml-2 flex shrink-0 items-center gap-1 rounded bg-white/5 px-2 py-1 text-sm text-white/60 border border-adm-line">
                 ESC
               </span>
             </div>
@@ -180,7 +180,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
                       }}
                       onMouseEnter={() => setSelectedIndex(idx)}
                       className={
-                        'flex w-full items-center justify-between rounded-lg px-4 py-3 text-left transition-colors ' +
+                        'flex w-full items-center justify-between rounded-adm-sm px-4 py-3 text-left transition-colors ' +
                         (isSelected ? 'bg-blue/20 text-white' : 'text-neutral-300 hover:bg-white/5')
                       }
                     >
@@ -196,7 +196,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
                 })
               )}
             </div>
-            <div className="border-t border-white/10 bg-white/5 px-4 py-2 text-sm text-white/60 flex items-center justify-between">
+            <div className="border-t border-adm-line bg-white/5 px-4 py-2 text-sm text-white/60 flex items-center justify-between">
               <div className="flex gap-4">
                 <span><kbd className="font-sans font-semibold text-neutral-300">↑↓</kbd> to navigate</span>
                 <span><kbd className="font-sans font-semibold text-neutral-300">Enter</kbd> to select</span>

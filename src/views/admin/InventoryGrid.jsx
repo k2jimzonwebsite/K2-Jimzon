@@ -8,7 +8,7 @@ import StaffAllocationModal from './StaffAllocationModal'
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 
 // ── Shared input/textarea styles ──────────────────────────────────────────────
-const inp = 'w-full rounded-xl border border-white/20 bg-[#27272a] px-3.5 py-2.5 text-base text-white font-semibold focus:border-gold outline-none transition-colors shadow-sm'
+const inp = 'w-full rounded-adm-sm border border-white/20 bg-adm-raised px-3.5 py-2.5 text-base text-white font-semibold focus:border-gold outline-none transition-colors shadow-sm'
 const ta  = `${inp} resize-none`
 
 function Label({ children }) {
@@ -53,7 +53,7 @@ function PhotoSlot({ label, value, onChange, bucket = 'product-images' }) {
     <div>
       <Label>{label}</Label>
       <div
-        className="relative rounded-xl border border-white/10 bg-[#09090b] overflow-hidden cursor-pointer group"
+        className="relative rounded-adm-sm border border-adm-line bg-adm-sunken overflow-hidden cursor-pointer group"
         style={{ aspectRatio: '1 / 1' }}
         onClick={() => fileRef.current?.click()}
       >
@@ -84,7 +84,7 @@ function PhotoSlot({ label, value, onChange, bucket = 'product-images' }) {
       {/* Also allow pasting a URL directly */}
       <input type="url" value={value || ''} onChange={(e) => onChange(e.target.value)}
         placeholder="…or paste image URL"
-        className="mt-1.5 w-full rounded-lg border border-white/10 bg-transparent px-2 py-1.5 text-xs text-white/50 placeholder-white/20 focus:border-blue outline-none" />
+        className="mt-1.5 w-full rounded-adm-sm border border-adm-line bg-transparent px-2 py-1.5 text-xs text-white/50 placeholder-white/20 focus:border-blue outline-none" />
     </div>
   )
 }
@@ -113,7 +113,7 @@ function GallerySlots({ value = [], onChange, max = 5 }) {
       <Label>Lifestyle / Gallery Photos (up to {max})</Label>
       <div className="grid grid-cols-5 gap-2">
         {value.map((url, i) => (
-          <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-white/10 group">
+          <div key={i} className="relative aspect-square rounded-adm-sm overflow-hidden border border-adm-line group">
             <img src={url} alt={`gallery-${i}`} className="w-full h-full object-cover" />
             <button type="button" onClick={() => remove(i)}
               className="absolute top-0.5 right-0.5 bg-crimson/90 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">×</button>
@@ -121,7 +121,7 @@ function GallerySlots({ value = [], onChange, max = 5 }) {
         ))}
         {value.length < max && (
           <button type="button" onClick={() => fileRef.current?.click()}
-            className="aspect-square rounded-lg border-2 border-dashed border-white/10 hover:border-blue/50 hover:bg-blue/5 transition-colors flex items-center justify-center text-neutral-300 hover:text-white/50">
+            className="aspect-square rounded-adm-sm border-2 border-dashed border-adm-line hover:border-blue/50 hover:bg-blue/5 transition-colors flex items-center justify-center text-neutral-300 hover:text-white/50">
             {uploading ? <div className="w-4 h-4 border-2 border-blue border-t-transparent rounded-full animate-spin" /> : <span className="text-xl leading-none">+</span>}
           </button>
         )}
@@ -140,7 +140,7 @@ function BreakdownRow({ icon, data }) {
     <div className="flex items-center gap-1 flex-wrap">
       <span className="text-xs shrink-0">{icon}</span>
       {entries.map(([label, qty]) => (
-        <span key={label} className="text-xs font-mono bg-white/5 border border-white/10 rounded px-1.5 py-0.5 text-neutral-200">
+        <span key={label} className="text-xs font-mono bg-white/5 border border-adm-line rounded px-1.5 py-0.5 text-neutral-200">
           {label} <span className="font-bold text-white">{qty}</span>
         </span>
       ))}
@@ -316,7 +316,7 @@ export default function InventoryGrid() {
             const expiryHealth = getExpiryHealth(primaryExpiryDate)
 
             return (
-              <div key={p.sku} className="group relative rounded-xl border border-white/10 bg-[#09090b] overflow-hidden flex flex-col hover:border-blue/50 transition-colors">
+              <div key={p.sku} className="group relative rounded-adm-sm border border-adm-line bg-adm-sunken overflow-hidden flex flex-col hover:border-blue/50 transition-colors">
                 <div className="aspect-square bg-white/5 flex items-center justify-center p-4 relative">
                   <img src={p.primary_image_url || p.image_url || '/placeholder.png'} alt={p.name}
                     className="max-h-full max-w-full object-contain drop-shadow-lg" />
@@ -347,7 +347,7 @@ export default function InventoryGrid() {
                   {p.origin && <p className="text-sm text-gold font-medium mb-2">🇮🇹 {p.origin}</p>}
                   
                   <div className="mt-auto space-y-2.5">
-                    <div className="grid grid-cols-2 gap-2 text-base bg-white/5 p-2.5 rounded-lg border border-white/10">
+                    <div className="grid grid-cols-2 gap-2 text-base bg-white/5 p-2.5 rounded-adm-sm border border-adm-line">
                       <div>
                         <p className="text-white/60 uppercase text-sm font-bold tracking-wider mb-0.5">Stock</p>
                         <p className={`font-extrabold text-lg ${(p.stock_available ?? 0) <= 5 ? 'text-crimson' : 'text-white'}`}>{p.stock_available ?? 0}</p>
@@ -360,7 +360,7 @@ export default function InventoryGrid() {
 
                     {/* Where it is / which channel — live from the batch bank */}
                     {batchMap[p.sku] && (
-                      <div className="space-y-1.5 bg-white/5 border border-white/10 rounded-lg p-2">
+                      <div className="space-y-1.5 bg-white/5 border border-adm-line rounded-adm-sm p-2">
                         <p className="text-white/40 uppercase text-[10px] font-bold tracking-wider">
                           {batchMap[p.sku].total} pcs in {batchMap[p.sku].count} lot{batchMap[p.sku].count !== 1 ? 's' : ''}
                         </p>
@@ -373,13 +373,13 @@ export default function InventoryGrid() {
                     <div className="grid grid-cols-2 gap-1.5 pt-1">
                       <button
                         onClick={() => setBatchProduct(p)}
-                        className="text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-lg border border-white/10 transition-colors text-center"
+                        className="text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-adm-sm border border-adm-line transition-colors text-center"
                       >
                         📦 Batches ({batchMap[p.sku]?.count ?? p.batches?.length ?? 0})
                       </button>
                       <button
                         onClick={() => setAllocatingProduct(p)}
-                        className="text-sm font-sans font-bold bg-blue/15 hover:bg-blue/25 text-blue py-2 rounded-lg border border-blue/30 transition-colors text-center"
+                        className="text-sm font-sans font-bold bg-blue/15 hover:bg-blue/25 text-blue py-2 rounded-adm-sm border border-blue/30 transition-colors text-center"
                       >
                         👤 Custody
                       </button>
@@ -387,7 +387,7 @@ export default function InventoryGrid() {
 
                     <button
                       onClick={() => setEnrichProduct(p)}
-                      className="w-full text-sm font-sans font-bold bg-gold/15 hover:bg-gold/25 text-gold py-2 rounded-lg border border-gold/30 transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
+                      className="w-full text-sm font-sans font-bold bg-gold/15 hover:bg-gold/25 text-gold py-2 rounded-adm-sm border border-gold/30 transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       ✨ Enrich Specs with AI
                     </button>
@@ -395,7 +395,7 @@ export default function InventoryGrid() {
                 </div>
 
                 <button onClick={() => { setIsAdding(false); setEditTab('details'); setEditingProduct(p) }}
-                  className="absolute top-2 right-2 rounded-lg bg-blue hover:bg-blue/90 px-3.5 py-1.5 text-sm font-extrabold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
+                  className="absolute top-2 right-2 rounded-adm-sm bg-blue hover:bg-blue/90 px-3.5 py-1.5 text-sm font-extrabold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
                   Edit
                 </button>
               </div>
@@ -414,22 +414,22 @@ export default function InventoryGrid() {
       {/* ── FULL EDIT MODAL ─────────────────────────────────────────────────── */}
       {editingProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-2 md:p-4 animate-in fade-in">
-          <div className="w-full max-w-3xl rounded-2xl border border-white/10 bg-[#0A101D] shadow-2xl flex flex-col max-h-[96vh]">
+          <div className="w-full max-w-3xl rounded-adm border border-adm-line bg-adm-surface shadow-2xl flex flex-col max-h-[96vh]">
 
             {/* Header */}
-            <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5">
+            <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-adm-line bg-white/5">
               <div>
                 <h3 className="font-serif text-xl font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
                 <p className="text-sm text-white/60 font-mono mt-0.5">{editingProduct.sku}</p>
               </div>
-              <button onClick={() => { setEditingProduct(null); setIsAdding(false) }} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg hover:bg-white/10" aria-label="Close modal">
+              <button onClick={() => { setEditingProduct(null); setIsAdding(false) }} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10" aria-label="Close modal">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
 
             <form onSubmit={handleSave} className="flex-1 flex flex-col overflow-hidden">
               {/* Section tabs — edit one focused part at a time */}
-              <div className="flex gap-1 overflow-x-auto border-b border-white/10 px-3 sm:px-4 shrink-0 scrollbar-none">
+              <div className="flex gap-1 overflow-x-auto border-b border-adm-line px-3 sm:px-4 shrink-0 scrollbar-none">
                 {[['details', 'Details'], ['pricing', 'Pricing & stock'], ['photos', 'Photos']].map(([id, lbl]) => (
                   <button key={id} type="button" onClick={() => setEditTab(id)}
                     className={'px-3 py-3 text-sm font-semibold whitespace-nowrap border-b-2 -mb-px transition-colors ' +
@@ -614,7 +614,7 @@ export default function InventoryGrid() {
                       {[['Featured', 'is_featured'], ['Published', 'published']].map(([lbl, field]) => (
                         <label key={field} className="flex items-center gap-2 cursor-pointer">
                           <input type="checkbox" checked={Boolean(editingProduct[field])} onChange={e => set(field, e.target.checked)}
-                            className="w-4 h-4 rounded border border-white/20 bg-[#09090b] text-blue cursor-pointer" />
+                            className="w-4 h-4 rounded border border-white/20 bg-adm-sunken text-blue cursor-pointer" />
                           <span className="text-base text-neutral-300">{lbl}</span>
                         </label>
                       ))}
@@ -640,15 +640,15 @@ export default function InventoryGrid() {
               </div>
 
               {/* Footer */}
-              <div className="shrink-0 px-6 py-4 border-t border-white/10 bg-black/20 flex items-center justify-between">
+              <div className="shrink-0 px-6 py-4 border-t border-adm-line bg-black/20 flex items-center justify-between">
                 <p className="text-sm text-white/55 italic">All changes save directly to Supabase.</p>
                 <div className="flex gap-3">
                   <button type="button" onClick={() => { setEditingProduct(null); setIsAdding(false) }}
-                    className="px-4 py-2 rounded-lg text-base font-semibold text-white/60 hover:text-white transition-colors">
+                    className="px-4 py-2 rounded-adm-sm text-base font-semibold text-white/60 hover:text-white transition-colors">
                     Cancel
                   </button>
                   <button type="submit" disabled={saving}
-                    className="px-6 py-2 rounded-lg text-base font-semibold bg-blue text-white hover:bg-blue/90 disabled:opacity-50 transition-colors shadow-lg shadow-blue/20 flex items-center gap-2">
+                    className="px-6 py-2 rounded-adm-sm text-base font-semibold bg-blue text-white hover:bg-blue/90 disabled:opacity-50 transition-colors shadow-lg shadow-blue/20 flex items-center gap-2">
                     {saving && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                     {saving ? 'Saving…' : (isAdding ? 'Create Product' : 'Save Changes')}
                   </button>

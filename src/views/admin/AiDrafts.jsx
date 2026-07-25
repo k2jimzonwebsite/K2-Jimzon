@@ -59,7 +59,7 @@ export default function AiDrafts() {
 
   if (tableMissing) {
     return (
-      <div className="max-w-2xl mx-auto rounded-2xl border border-amber/30 bg-amber/10 p-5 text-sm">
+      <div className="max-w-2xl mx-auto rounded-adm border border-amber/30 bg-amber/10 p-5 text-sm">
         <p className="font-bold text-amber">One-time setup needed</p>
         <p className="text-neutral-300 mt-1">
           Run <span className="font-mono">RUN_THIS_product_drafts.sql</span> in the Supabase SQL editor so this queue has a table to read from. Until then no drafts can arrive.
@@ -70,8 +70,8 @@ export default function AiDrafts() {
 
   if (drafts.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-[#161922] p-12 text-center shadow-lg">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue/15 border border-blue/30 text-2xl">🇮🇹</div>
+      <div className="max-w-2xl mx-auto flex flex-col items-center justify-center rounded-adm border border-adm-line bg-adm-surface p-12 text-center shadow-lg">
+        <div className="flex h-14 w-14 items-center justify-center rounded-adm bg-blue/15 border border-blue/30 text-2xl">🇮🇹</div>
         <h3 className="mt-4 font-serif text-xl font-semibold text-white">Waiting for drafts from Italy</h3>
         <p className="mt-1.5 max-w-sm text-sm text-white/55 leading-relaxed">
           When the Italy AI feed proposes a new product, it appears here for you to review and publish. Nothing to review right now.
@@ -105,23 +105,23 @@ function DraftCard({ draft, onApprove, onReject }) {
     setBusy(false)
   }
 
-  const num = 'w-full rounded-lg border border-white/15 bg-black/30 px-3 min-h-11 py-2 text-base text-white tabular-nums focus:border-blue outline-none'
+  const num = 'w-full rounded-adm-sm border border-white/15 bg-black/30 px-3 min-h-11 py-2 text-base text-white tabular-nums focus:border-blue outline-none'
 
   return (
     <motion.div layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.97 }}
-      className="overflow-hidden rounded-2xl border border-white/10 bg-[#161922] shadow-lg">
+      className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface shadow-lg">
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-white/10 px-4 sm:px-5 py-3.5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-adm-line px-4 sm:px-5 py-3.5">
         <div className="min-w-0">
           <p className="text-[11px] font-bold uppercase tracking-widest text-white/45">New draft from Italy 🇮🇹</p>
           <p className="font-serif text-lg font-semibold text-white truncate">{draft.name || 'Unnamed product'}</p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {lowConfidence && (
-            <span className="rounded-lg bg-amber/20 border border-amber/40 px-2 py-1 text-xs font-bold text-amber">⚠ Low AI confidence</span>
+            <span className="rounded-adm-sm bg-amber/20 border border-amber/40 px-2 py-1 text-xs font-bold text-amber">⚠ Low AI confidence</span>
           )}
-          {draft.sku && <span className="rounded-lg border border-white/15 bg-white/5 px-2.5 py-1 text-xs font-mono text-white/60">{draft.sku}</span>}
+          {draft.sku && <span className="rounded-adm-sm border border-white/15 bg-white/5 px-2.5 py-1 text-xs font-mono text-white/60">{draft.sku}</span>}
         </div>
       </div>
 
@@ -156,20 +156,20 @@ function DraftCard({ draft, onApprove, onReject }) {
               {showRaw ? '▾ Hide raw AI output' : '▸ Show raw AI output'}
             </button>
             {showRaw && (
-              <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-xl bg-black/40 border border-white/10 p-3 text-xs font-mono leading-relaxed text-white/60">
+              <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-adm-sm bg-black/40 border border-adm-line p-3 text-xs font-mono leading-relaxed text-white/60">
                 {typeof draft.raw_json === 'string' ? draft.raw_json : JSON.stringify(draft.raw_json, null, 2)}
               </pre>
             )}
           </div>
         )}
 
-        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 border-t border-white/10 pt-4">
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 border-t border-adm-line pt-4">
           <button onClick={() => onReject(draft)} disabled={busy}
-            className="rounded-xl border border-white/15 bg-white/5 min-h-12 px-5 text-sm font-semibold text-white/70 hover:bg-white/10 transition-all disabled:opacity-50">
+            className="rounded-adm-sm border border-white/15 bg-white/5 min-h-12 px-5 text-sm font-semibold text-white/70 hover:bg-white/10 transition-all disabled:opacity-50">
             Reject
           </button>
           <button onClick={go} disabled={busy}
-            className="rounded-xl bg-forest hover:bg-forest/90 min-h-12 px-6 text-sm font-bold text-white shadow-lg transition-all active:scale-[.99] disabled:opacity-50">
+            className="rounded-adm-sm bg-forest hover:bg-forest/90 min-h-12 px-6 text-sm font-bold text-white shadow-lg transition-all active:scale-[.99] disabled:opacity-50">
             {busy ? 'Publishing…' : '✓ Approve & publish'}
           </button>
         </div>

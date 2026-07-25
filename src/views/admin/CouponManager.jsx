@@ -62,7 +62,7 @@ export default function CouponManager() {
     <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 font-sans text-white">
       
       {/* Header */}
-      <div className="bg-[#161922] border border-white/10 p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+      <div className="bg-adm-surface border border-adm-line p-4 sm:p-5 rounded-adm flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
         <div>
           <h1 className="font-serif text-lg sm:text-2xl font-bold text-white">Coupons &amp; vouchers</h1>
           <p className="text-xs sm:text-sm text-white/55 mt-1 max-w-xl">
@@ -71,7 +71,7 @@ export default function CouponManager() {
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="bg-gold hover:bg-gold-deep text-navy font-bold text-sm px-5 min-h-11 rounded-xl transition-all shadow-lg shrink-0 flex items-center justify-center gap-2"
+          className="bg-gold hover:bg-gold-deep text-navy font-bold text-sm px-5 min-h-11 rounded-adm-sm transition-all shadow-lg shrink-0 flex items-center justify-center gap-2"
         >
           🎟️ Create coupon
         </button>
@@ -79,30 +79,30 @@ export default function CouponManager() {
 
       {/* KPIs */}
       <div className="grid grid-cols-3 gap-2.5">
-        <div className="bg-[#161922] border border-white/10 p-3.5 rounded-2xl">
+        <div className="bg-adm-surface border border-adm-line p-3.5 rounded-adm">
           <p className="text-[11px] font-bold uppercase tracking-wide text-gold">Active</p>
           <p className="text-xl sm:text-2xl font-bold text-white mt-0.5">{activeCount}</p>
         </div>
-        <div className="bg-[#161922] border border-white/10 p-3.5 rounded-2xl">
+        <div className="bg-adm-surface border border-adm-line p-3.5 rounded-adm">
           <p className="text-[11px] font-bold uppercase tracking-wide text-gold">Hunts</p>
           <p className="text-xl sm:text-2xl font-bold text-blue mt-0.5">{huntCount}</p>
         </div>
-        <div className="bg-[#161922] border border-white/10 p-3.5 rounded-2xl">
+        <div className="bg-adm-surface border border-adm-line p-3.5 rounded-adm">
           <p className="text-[11px] font-bold uppercase tracking-wide text-gold">Redeemed</p>
           <p className="text-xl sm:text-2xl font-bold text-gold mt-0.5">{totalRedemptions}</p>
         </div>
       </div>
 
       {/* Coupons Table */}
-      <div className="bg-[#161922] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
-        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-white/10">
+      <div className="bg-adm-surface border border-adm-line rounded-adm overflow-hidden shadow-xl">
+        <div className="p-5 border-b border-adm-line flex items-center justify-between bg-white/10">
           <h2 className="font-serif font-bold text-xl text-white">All coupons & vouchers</h2>
           <span className="text-sm font-mono font-bold text-gold">{coupons.length} Total Coupons</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm font-sans">
-            <thead className="bg-[#27272a] text-gold uppercase tracking-wider text-sm font-extrabold border-b border-white/10">
+            <thead className="bg-adm-raised text-gold uppercase tracking-wider text-sm font-extrabold border-b border-adm-line">
               <tr>
                 <th className="p-4">Code / Campaign</th>
                 <th className="p-4">Type & Value</th>
@@ -113,7 +113,7 @@ export default function CouponManager() {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
+            <tbody className="divide-y divide-adm-line">
               {coupons.map((c) => (
                 <tr key={c.id} className="hover:bg-white/10 transition-colors">
                   <td className="p-4">
@@ -159,7 +159,7 @@ export default function CouponManager() {
                       className={`px-2.5 py-1 rounded-full text-xs font-bold border transition-all ${
                         c.isActive
                           ? 'bg-forest/20 text-forest border-forest/40 hover:bg-forest/30'
-                          : 'bg-white/10 text-white/60 border-white/10 hover:bg-white/20'
+                          : 'bg-white/10 text-white/60 border-adm-line hover:bg-white/20'
                       }`}
                     >
                       {c.isActive ? '● ACTIVE' : '○ PAUSED'}
@@ -172,7 +172,7 @@ export default function CouponManager() {
                         setBroadcastCode(c)
                         handleCopyBroadcast(c)
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-blue/20 hover:bg-blue/30 text-blue border border-blue/30 font-bold transition-all text-xs"
+                      className="px-3 py-1.5 rounded-adm-sm bg-blue/20 hover:bg-blue/30 text-blue border border-blue/30 font-bold transition-all text-xs"
                       title="Copy Social Media Broadcast Text"
                     >
                       📢 Broadcast
@@ -180,7 +180,7 @@ export default function CouponManager() {
 
                     <button
                       onClick={() => deleteCoupon(c.id)}
-                      className="px-2.5 py-1.5 rounded-lg bg-crimson/20 hover:bg-crimson/30 text-crimson border border-crimson/30 transition-all text-xs"
+                      className="px-2.5 py-1.5 rounded-adm-sm bg-crimson/20 hover:bg-crimson/30 text-crimson border border-crimson/30 transition-all text-xs"
                     >
                       🗑️
                     </button>
@@ -194,7 +194,7 @@ export default function CouponManager() {
 
       {/* Broadcast Copied Banner */}
       {copiedText && broadcastCode && (
-        <div className="fixed bottom-6 right-6 z-50 bg-forest text-white font-mono text-sm p-4 rounded-xl shadow-2xl border border-white/20 animate-in fade-in">
+        <div className="fixed bottom-6 right-6 z-50 bg-forest text-white font-mono text-sm p-4 rounded-adm-sm shadow-2xl border border-white/20 animate-in fade-in">
           ✓ Copied Promo Broadcast Text for <strong>{broadcastCode.code}</strong> to clipboard! Paste it directly to FB/IG/TikTok!
         </div>
       )}
@@ -202,9 +202,9 @@ export default function CouponManager() {
       {/* Create Coupon Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="w-full max-w-lg bg-[#0A101D] border border-white/10 rounded-2xl p-6 shadow-2xl space-y-5 font-sans">
+          <div className="w-full max-w-lg bg-adm-surface border border-adm-line rounded-adm p-6 shadow-2xl space-y-5 font-sans">
             
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="flex items-center justify-between border-b border-adm-line pb-4">
               <div>
                 <h3 className="font-serif font-bold text-xl text-white">Create a coupon</h3>
                 <p className="text-sm text-white/50 font-mono">Configure discount parameters and hunt clues</p>
@@ -227,7 +227,7 @@ export default function CouponManager() {
                     value={code}
                     onChange={(e) => setCode(e.target.value.toUpperCase())}
                     placeholder="e.g. MILAN20 or HUNT500"
-                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white placeholder:text-white/55 focus:border-amber outline-none min-h-[44px]"
+                    className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white placeholder:text-white/55 focus:border-amber outline-none min-h-[44px]"
                   />
                 </div>
 
@@ -236,7 +236,7 @@ export default function CouponManager() {
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white outline-none min-h-[44px]"
+                    className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white outline-none min-h-[44px]"
                   >
                     <option value="percentage">Percentage OFF (%)</option>
                     <option value="fixed">Fixed Amount OFF (₱)</option>
@@ -251,7 +251,7 @@ export default function CouponManager() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="e.g. 10% OFF authentic Italy chocolates & skincare"
-                  className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white placeholder:text-white/55 focus:border-amber outline-none min-h-[44px]"
+                  className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white placeholder:text-white/55 focus:border-amber outline-none min-h-[44px]"
                 />
               </div>
 
@@ -266,7 +266,7 @@ export default function CouponManager() {
                     min={1}
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
+                    className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
                   />
                 </div>
 
@@ -277,7 +277,7 @@ export default function CouponManager() {
                     min={0}
                     value={minSpend}
                     onChange={(e) => setMinSpend(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
+                    className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
                   />
                 </div>
 
@@ -288,13 +288,13 @@ export default function CouponManager() {
                     min={1}
                     value={maxUses}
                     onChange={(e) => setMaxUses(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-[#09090b] px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
+                    className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
                   />
                 </div>
               </div>
 
               {/* Secret Hunt Toggle */}
-              <div className="p-3.5 rounded-xl bg-forest/10 border border-forest/30 space-y-2">
+              <div className="p-3.5 rounded-adm-sm bg-forest/10 border border-forest/30 space-y-2">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
@@ -316,7 +316,7 @@ export default function CouponManager() {
                       value={clue}
                       onChange={(e) => setClue(e.target.value)}
                       placeholder="e.g. Clue: What Milan airport code equals 500 pesos off? Code = HUNT500"
-                      className="w-full rounded-xl border border-white/10 bg-[#09090b] p-2.5 text-white font-sans text-sm focus:border-forest outline-none"
+                      className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken p-2.5 text-white font-sans text-sm focus:border-forest outline-none"
                     />
                   </div>
                 )}
@@ -326,13 +326,13 @@ export default function CouponManager() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 rounded-xl border border-white/10 py-3 font-bold text-white/60 hover:bg-white/5 transition-all"
+                  className="flex-1 rounded-adm-sm border border-adm-line py-3 font-bold text-white/60 hover:bg-white/5 transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 rounded-xl bg-amber hover:bg-amber/90 py-3 font-bold text-navy shadow-lg transition-all"
+                  className="flex-1 rounded-adm-sm bg-amber hover:bg-amber/90 py-3 font-bold text-navy shadow-lg transition-all"
                 >
                   Create & Launch Coupon
                 </button>
