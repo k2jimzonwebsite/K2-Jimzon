@@ -19,7 +19,7 @@ function Hero() {
           <motion.div variants={reveal}>
             <Kicker className="flex items-center gap-2"><PlaneIcon size={14} /> Direct Italian sourcing · Manila fulfillment</Kicker>
           </motion.div>
-          <motion.h1 variants={reveal} className="mt-5 max-w-3xl font-serif text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-navy sm:text-6xl lg:text-[4.6rem]">
+          <motion.h1 variants={reveal} className="mt-5 max-w-3xl font-serif text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-navy sm:text-6xl lg:text-[4.6rem]">
             Italy, chosen well.<br /><em className="font-normal text-crimson">Delivered to Manila.</em>
           </motion.h1>
           <motion.p variants={reveal} className="mt-6 max-w-xl text-base leading-7 text-navy-soft sm:text-lg">
@@ -38,10 +38,10 @@ function Hero() {
           <div className="store-panel overflow-hidden p-5 sm:p-7">
             <div className="mb-2 flex items-center justify-between gap-4 border-b border-[var(--store-surface-border)] pb-4">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-navy-faint">Sourcing route</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-navy-faint">Sourcing route</p>
                 <p className="mt-1 font-serif text-lg font-semibold text-navy">Milano to Manila</p>
               </div>
-              <span className="rounded-md border border-gold/30 bg-gold-wash px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-gold-deep">Direct consignment</span>
+              <span className="rounded-md border border-gold/30 bg-gold-wash px-2.5 py-1 text-xs font-bold uppercase tracking-[0.12em] text-gold-deep">Direct consignment</span>
             </div>
             <FlightMap />
             <div className="grid grid-cols-2 gap-3 border-t border-[var(--store-surface-border)] pt-4 text-xs">
@@ -67,7 +67,7 @@ function TrustRow() {
     <div className="store-atmosphere-soft border-b border-line">
       <div className="store-section grid grid-cols-2 divide-x divide-y divide-line sm:grid-cols-4 sm:divide-y-0">
         {items.map(([ItemIcon, label]) => (
-          <div key={label} className="flex min-h-16 items-center justify-center gap-2 px-3 py-3 text-center text-[11px] font-semibold leading-tight text-navy-soft sm:text-xs">
+          <div key={label} className="flex min-h-16 items-center justify-center gap-2 px-3 py-3 text-center text-xs font-semibold leading-tight text-navy-soft sm:text-xs">
             <ItemIcon size={15} className="shrink-0 text-crimson" /> {label}
           </div>
         ))}

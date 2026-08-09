@@ -101,7 +101,7 @@ export default function ImageUploadDropzone({
                 <svg className="w-6 h-6 text-white/30 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 4v16m8-8H4" />
                 </svg>
-                <span className="text-[10px] text-white/30 font-semibold uppercase tracking-wider text-center">
+                <span className="text-xs text-white/30 font-semibold uppercase tracking-wider text-center">
                   {multiple ? 'Add Photo' : 'Upload'}
                 </span>
               </>
@@ -118,7 +118,7 @@ export default function ImageUploadDropzone({
         )}
       </div>
 
-      {error && <p className="text-red-400 text-[10px] mt-1">{error}</p>}
+      {error && <p className="text-red-400 text-xs mt-1">{error}</p>}
     </div>
   )
 }

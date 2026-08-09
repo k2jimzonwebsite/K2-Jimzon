@@ -90,23 +90,23 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
                     <article key={topic.id} className="rounded-adm-sm border border-adm-line bg-white/[0.025] p-4">
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-blue">{topic.category}</p>
+                          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-blue">{topic.category}</p>
                           <h3 className="mt-1 text-sm font-semibold text-white">{topic.title}</h3>
                         </div>
-                        {topicIndex === 0 && <span className="rounded-full border border-blue/25 bg-blue/10 px-2 py-0.5 text-[10px] font-semibold text-blue">Best match</span>}
+                        {topicIndex === 0 && <span className="rounded-full border border-blue/25 bg-blue/10 px-2 py-0.5 text-xs font-semibold text-blue">Best match</span>}
                       </div>
                       <p className="mt-2 text-sm leading-relaxed text-white/70">{topic.what}</p>
                       <ol className="mt-3 space-y-1.5">
                         {topic.how.map((step, stepIndex) => (
                           <li key={step} className="flex gap-2 text-sm leading-relaxed text-white/60">
-                            <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-white/[0.07] font-mono text-[9px] text-white/50">{stepIndex + 1}</span>
+                            <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-white/[0.07] font-mono text-xs text-white/50">{stepIndex + 1}</span>
                             <span>{step}</span>
                           </li>
                         ))}
                       </ol>
                       {topic.more && <p className="mt-3 border-l-2 border-amber/40 pl-3 text-xs leading-relaxed text-white/50">{topic.more}</p>}
                       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-adm-line pt-3">
-                        <span className="text-[11px] text-white/35">Source: {topic.source}</span>
+                        <span className="text-xs text-white/35">Source: {topic.source}</span>
                         {topic.section && <button onClick={() => jump(topic.section)} className="min-h-8 rounded-adm-sm bg-blue px-3 text-xs font-semibold text-white hover:bg-blue-deep">Open workspace →</button>}
                       </div>
                     </article>

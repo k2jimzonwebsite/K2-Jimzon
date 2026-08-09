@@ -29,7 +29,7 @@ export default function UniversalScanLauncher({ isOpen, onClose, onNavigate, onI
       >
         <header className="flex items-start justify-between border-b border-adm-line bg-adm-sunken px-5 py-4">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-blue"><BarcodeIcon size={17} /><span className="text-[11px] font-semibold uppercase tracking-[0.12em]">Scan center</span></div>
+            <div className="mb-2 flex items-center gap-2 text-blue"><BarcodeIcon size={17} /><span className="text-xs font-semibold uppercase tracking-[0.12em]">Scan center</span></div>
             <h2 id="scan-center-title" className="text-lg font-semibold">What are you scanning?</h2>
             <p className="mt-1 max-w-xl text-sm leading-relaxed text-white/50">The scan center sends you to the correct guarded workflow. Select the order, flight, or box before unit scans can change operational records.</p>
           </div>

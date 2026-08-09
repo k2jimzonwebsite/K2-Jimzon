@@ -124,7 +124,7 @@ export default function StaffPermissionManager() {
 
       {/* Header */}
       <div className="pt-1">
-        <h1 className="font-serif text-lg sm:text-2xl font-bold text-white">Staff &amp; roles</h1>
+        <h1 className="font-sans text-lg sm:text-2xl font-bold text-white">Staff &amp; roles</h1>
         <p className="text-sm text-white/55 mt-1 leading-relaxed">
           Invite people, choose what they can access, and protect your own login with 2FA. Accounts are invite-only — each person sets their own password.
         </p>
@@ -164,7 +164,7 @@ export default function StaffPermissionManager() {
           <span className="text-lg">🔒</span>
           <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Your delete PIN</h2>
           {hasPin !== null && (
-            <span className={`ml-auto px-2 py-0.5 rounded-full text-[11px] font-bold border ${
+            <span className={`ml-auto px-2 py-0.5 rounded-full text-xs font-bold border ${
               hasPin ? 'bg-forest/20 text-forest border-forest/40' : 'bg-amber/20 text-amber border-amber/40'
             }`}>
               {hasPin ? 'Set' : 'Not set'}
@@ -237,7 +237,7 @@ export default function StaffPermissionManager() {
                     <span className={`shrink-0 text-xs font-bold px-2 py-1 rounded-adm-sm border ${roleChip(role)}`}>{role}</span>
                   </div>
                   <label className="block mt-3">
-                    <span className="block text-[11px] font-bold uppercase tracking-wider text-white/40 mb-1">Change role</span>
+                    <span className="block text-xs font-bold uppercase tracking-wider text-white/40 mb-1">Change role</span>
                     <select value={role} onChange={e => changeRole(r.id, e.target.value)}
                       className="w-full rounded-adm-sm border border-white/20 bg-adm-surface px-3 min-h-11 py-2.5 text-base text-white focus:border-blue outline-none cursor-pointer appearance-none">
                       {ROLES.map(role => <option key={role} value={role}>{role}</option>)}

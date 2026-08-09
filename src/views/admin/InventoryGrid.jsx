@@ -199,7 +199,7 @@ function BreakdownRow({ label, data }) {
   if (!entries.length) return null
   return (
     <div className="flex items-center gap-1 flex-wrap">
-      <span className="w-16 shrink-0 text-[10px] font-semibold uppercase tracking-wide text-white/35">{label}</span>
+      <span className="w-16 shrink-0 text-xs font-semibold uppercase tracking-wide text-white/35">{label}</span>
       {entries.map(([label, qty]) => (
         <span key={label} className="text-xs font-mono bg-white/5 border border-adm-line rounded px-1.5 py-0.5 text-neutral-200">
           {label} <span className="font-bold text-white">{qty}</span>
@@ -482,7 +482,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
               ['low', 'Low', inventoryMetrics.low],
               ['expiry', 'Expiry', inventoryMetrics.expiryRisk],
               ['drafts', 'Drafts', inventoryMetrics.drafts],
-            ].map(([value, label, count]) => <button key={value} onClick={() => setStockFilter(value)} aria-pressed={stockFilter === value} className={`min-h-10 shrink-0 rounded-adm-sm px-3 text-xs font-semibold transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${stockFilter === value ? 'bg-blue text-white' : 'text-white/45 hover:bg-white/[0.05] hover:text-white'}`}>{label} <span className="ml-1 font-mono text-[10px] opacity-70">{count}</span></button>)}
+            ].map(([value, label, count]) => <button key={value} onClick={() => setStockFilter(value)} aria-pressed={stockFilter === value} className={`min-h-10 shrink-0 rounded-adm-sm px-3 text-xs font-semibold transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${stockFilter === value ? 'bg-blue text-white' : 'text-white/45 hover:bg-white/[0.05] hover:text-white'}`}>{label} <span className="ml-1 font-mono text-xs opacity-70">{count}</span></button>)}
           </div>
         </div>
       </section>
@@ -581,7 +581,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
                     {/* Where it is / which channel — live from the batch bank */}
                     {batchMap[p.sku] && (
                       <div className="space-y-1.5 bg-white/5 border border-adm-line rounded-adm-sm p-2">
-                        <p className="text-white/40 uppercase text-[10px] font-bold tracking-wider">
+                        <p className="text-white/40 uppercase text-xs font-bold tracking-wider">
                           {batchMap[p.sku].total} pcs in {batchMap[p.sku].count} lot{batchMap[p.sku].count !== 1 ? 's' : ''}
                         </p>
                         <BreakdownRow label="Location" data={batchMap[p.sku].hub} />
@@ -695,7 +695,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
             {/* Header */}
             <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-adm-line bg-white/5">
               <div>
-                <h3 className="font-serif text-xl font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
+                <h3 className="font-sans text-xl font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
                 <p className="text-sm text-white/60 font-mono mt-0.5">{editingProduct.sku}</p>
               </div>
               <button onClick={() => { setEditingProduct(null); setIsAdding(false) }} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10" aria-label="Close modal">

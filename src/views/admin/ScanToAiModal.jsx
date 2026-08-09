@@ -135,7 +135,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
 
       {step !== 'result' && (
         <div className="border-b border-adm-line bg-white/[0.02] px-5 py-3">
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/40">Research focus</p>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-white/40">Research focus</p>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none" role="radiogroup" aria-label="Product research focus">
             {RESEARCH_MODES.map(mode => (
               <button

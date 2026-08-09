@@ -52,7 +52,7 @@ export default function Checkout() {
 
   return (
     <main className="store-section max-w-6xl pb-24 pt-10 font-sans md:pb-20 md:pt-14">
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-crimson">Final review</p>
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson">Final review</p>
       <h1 className="mt-2 font-serif text-4xl font-semibold tracking-tight">Submit an order request</h1>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-navy-soft">
         No online payment is collected yet. We will verify stock, confirm delivery details, and send payment instructions through your chosen contact.

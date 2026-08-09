@@ -22,10 +22,10 @@ export const label = 'adm-label'
 export const chip = 'adm-chip'
 
 // Type ramp — import these instead of hand-picking a text-* size per screen.
-export const tTitle = 'text-lg sm:text-xl font-semibold tracking-tight text-white'
-export const tSection = 'text-xs font-bold uppercase tracking-wider text-gold'
-export const tBody = 'text-sm text-white/80 leading-relaxed'
-export const tMeta = 'text-xs text-white/50'
+export const tTitle = 'text-xl font-semibold tracking-tight text-white'
+export const tSection = 'text-sm font-semibold text-gold'
+export const tBody = 'text-base text-white/80 leading-relaxed'
+export const tMeta = 'text-[13px] text-white/55 leading-relaxed'
 
 // ── Page header — title + optional subtitle + optional right-side actions ────
 // The subtitle is decorative on mobile: it costs a full line of vertical space

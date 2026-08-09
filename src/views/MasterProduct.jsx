@@ -136,7 +136,7 @@ export default function MasterProduct() {
             <TrustBadge>Recorded origin · {product.country_of_origin || product.origin || 'Imported'}</TrustBadge>
             <StockPill stock={product.stock_available || product.stock} />
             {(product.subcategory || product.category_id) && (
-              <span className="rounded-full bg-shell border border-line/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-navy-soft">
+              <span className="rounded-full bg-shell border border-line/50 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-navy-soft">
                 {product.subcategory || product.category_id}
               </span>
             )}
@@ -151,7 +151,7 @@ export default function MasterProduct() {
             {isWholesale && (
               <>
                 <span className="text-base text-navy-faint line-through tabular">{peso(product.srp || product.retail)}</span>
-                <span className="rounded-full bg-blue-wash px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-blue">
+                <span className="rounded-full bg-blue-wash px-2 py-1 text-xs font-bold uppercase tracking-wider text-blue">
                   Wholesale
                 </span>
               </>

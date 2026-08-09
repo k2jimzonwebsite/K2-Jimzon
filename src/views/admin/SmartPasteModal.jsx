@@ -111,7 +111,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/20 shrink-0">
           <div className="flex items-center gap-4">
             <div>
-              <h2 className="font-serif text-xl font-semibold">✨ Smart Paste AI Import</h2>
+              <h2 className="font-sans text-xl font-semibold">✨ Smart Paste AI Import</h2>
               <p className="text-base text-white/50 mt-0.5">Paste JSON from K2 Jimzon Product Intelligence AI · Upload 7 product photos</p>
             </div>
           </div>

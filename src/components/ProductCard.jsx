@@ -26,11 +26,11 @@ export default function ProductCard({ product, compact = false, featured = false
           ) : (
             <ProductVisual product={product} className="h-full w-full object-contain drop-shadow-xl" pad="p-7 md:p-12" />
           )}
-          {product.tag && <span className="absolute left-4 top-4 rounded-md bg-navy px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-cream">{product.tag}</span>}
+          {product.tag && <span className="absolute left-4 top-4 rounded-md bg-navy px-2.5 py-1 text-xs font-bold uppercase tracking-[0.16em] text-cream">{product.tag}</span>}
         </div>
 
         <div className="flex flex-col justify-center border-t border-[var(--store-surface-border)] p-6 md:border-l md:border-t-0 md:p-10">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-crimson">New to the cabinet</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson">New to the cabinet</p>
           <button onClick={() => openProduct(product.sku)} className="group mt-3 text-left">
             <h3 className="font-serif text-2xl font-semibold leading-tight text-navy transition-colors duration-150 group-hover:text-crimson md:text-4xl">{product.name}</h3>
           </button>
@@ -54,7 +54,7 @@ export default function ProductCard({ product, compact = false, featured = false
     <article data-testid="product-card" className="product-card group flex h-full w-full flex-col overflow-hidden rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-[var(--store-surface-shadow)]">
       <button onClick={() => openProduct(product.sku)} data-testid="product-image-btn" className="product-img-surface relative aspect-[4/5] overflow-hidden text-left">
         <ProductVisual product={product} className="product-card-visual h-full w-full object-contain drop-shadow-lg" pad="p-4 sm:p-6" />
-        {product.tag && <span className="absolute left-2.5 top-2.5 rounded-md bg-navy/90 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-cream">{product.tag}</span>}
+        {product.tag && <span className="absolute left-2.5 top-2.5 rounded-md bg-navy/90 px-2 py-1 text-xs font-bold uppercase tracking-[0.1em] text-cream">{product.tag}</span>}
       </button>
 
       <div className="flex flex-1 flex-col border-t border-[var(--store-surface-border)] p-3.5 sm:p-4">

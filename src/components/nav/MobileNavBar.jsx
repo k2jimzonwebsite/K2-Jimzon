@@ -26,7 +26,7 @@ export default function MobileNavBar() {
               className={`relative flex min-h-[48px] flex-1 flex-col items-center justify-center gap-0.5 px-1 transition-[transform,color] duration-150 active:scale-[0.97] ${isActive ? 'text-crimson' : 'text-navy-faint'}`}
             >
               <ItemIcon size={19} />
-              <span className={`text-[11px] leading-4 ${isActive ? 'font-bold' : 'font-semibold'}`}>{item.label}</span>
+              <span className={`text-xs leading-4 ${isActive ? 'font-bold' : 'font-semibold'}`}>{item.label}</span>
               {isActive && <span className="absolute -top-1.5 h-0.5 w-7 rounded-full bg-crimson" />}
             </button>
           )

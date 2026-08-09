@@ -90,7 +90,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
       {/* Top Mobile Bar */}
       <div className="flex items-center justify-between p-4 border-b border-adm-line bg-adm-surface shrink-0">
         <div>
-          <h2 className="font-serif font-semibold text-xl text-white">Scan boxes on arrival</h2>
+          <h2 className="font-sans font-semibold text-xl text-white">Scan boxes on arrival</h2>
           <p className="text-sm text-white/50">Point phone camera at item barcode · +1 per scan</p>
         </div>
         <button

@@ -70,7 +70,7 @@ function GlobeProductsPanel() {
     <div>
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="font-serif text-xl font-semibold">Products on Globe</h3>
+          <h3 className="font-sans text-xl font-semibold">Products on Globe</h3>
           <p className="text-base text-white/45">
             {enabledCount} of {globeProducts.length} products enabled · These will be distributed across the globe
           </p>
@@ -103,7 +103,7 @@ function GlobeProductsPanel() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="font-serif text-lg font-semibold leading-snug truncate">{product.short || product.name}</p>
+                <p className="font-sans text-lg font-semibold leading-snug truncate">{product.short || product.name}</p>
                 <p className="text-sm text-white/45">{product.category} · {product.origin}</p>
               </div>
 
@@ -140,7 +140,7 @@ function ReviewsPanel() {
     <div>
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="font-serif text-xl font-semibold">Customer Reviews</h3>
+          <h3 className="font-sans text-xl font-semibold">Customer Reviews</h3>
           <p className="text-base text-white/45">{reviews.length} reviews · Shown on product globe cards</p>
         </div>
         <button

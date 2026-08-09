@@ -115,7 +115,7 @@ export function StockPill({ stock, className = '' }) {
 // Standardized section eyebrow
 export function Kicker({ children, className = '' }) {
   return (
-    <p className={'text-[11px] font-bold uppercase tracking-[0.22em] text-crimson ' + className}>
+    <p className={'text-xs font-bold uppercase tracking-[0.22em] text-crimson ' + className}>
       {children}
     </p>
   )

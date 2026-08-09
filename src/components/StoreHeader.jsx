@@ -68,7 +68,7 @@ export default function StoreHeader() {
           aria-label={`Open cart, ${count} items`}
         >
           <BagIcon size={20} />
-          {count > 0 && <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-crimson px-1 text-[10px] font-bold text-white">{count}</span>}
+          {count > 0 && <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-crimson px-1 text-xs font-bold text-white">{count}</span>}
         </button>
 
         <button

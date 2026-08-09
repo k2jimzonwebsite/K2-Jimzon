@@ -115,7 +115,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
             <span className="text-2xl leading-none">✨</span>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-serif font-bold text-xl text-white">AI product details helper</h2>
+                <h2 className="font-sans font-bold text-xl text-white">AI product details helper</h2>
                 <span className="text-xs font-mono font-bold bg-amber/20 text-amber px-1.5 py-0.5 rounded border border-amber/30 uppercase">
                   Shopee / Channel Connector
                 </span>
@@ -136,7 +136,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
         <div className="p-3.5 rounded-adm-sm bg-white/5 border border-adm-line flex items-center justify-between">
           <div>
             <span className="text-xs font-mono text-amber uppercase font-bold">Target SKU: {product.sku || product.id}</span>
-            <h3 className="font-serif font-bold text-lg text-white">{product.name || product.title}</h3>
+            <h3 className="font-sans font-bold text-lg text-white">{product.name || product.title}</h3>
             <p className="text-sm text-white/50">Current Price: ₱{(product.srp || product.retail || 0).toLocaleString()}</p>
           </div>
         </div>

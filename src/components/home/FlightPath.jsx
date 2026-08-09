@@ -23,7 +23,7 @@ export default function FlightPath() {
           <animate attributeName="opacity" values="1;0.4;1" dur="2.6s" repeatCount="indefinite" />
         </circle>
         <circle cx="90" cy="135" r="2.5" fill="#B59226" />
-        <text x="90" y="116" textAnchor="middle" fill="currentColor" fontFamily="Fraunces, Georgia, serif" fontSize="16" fontWeight="600">Milano 🇮🇹</text>
+        <text x="90" y="116" textAnchor="middle" fill="currentColor" fontFamily="'Source Sans 3', 'Segoe UI', sans-serif" fontSize="16" fontWeight="700">Milano 🇮🇹</text>
 
         {/* Manila destination */}
         <circle cx="410" cy="255" r="5" fill="#EF4444">
@@ -31,7 +31,7 @@ export default function FlightPath() {
           <animate attributeName="opacity" values="1;0.4;1" dur="2.6s" begin="1.3s" repeatCount="indefinite" />
         </circle>
         <circle cx="410" cy="255" r="2.5" fill="#B91C1C" />
-        <text x="410" y="282" textAnchor="middle" fill="currentColor" fontFamily="Fraunces, Georgia, serif" fontSize="16" fontWeight="600">Manila 🇵🇭</text>
+        <text x="410" y="282" textAnchor="middle" fill="currentColor" fontFamily="'Source Sans 3', 'Segoe UI', sans-serif" fontSize="16" fontWeight="700">Manila 🇵🇭</text>
 
         {/* The plane — flies the arc on a loop, fading in on departure and out on arrival */}
         <g>

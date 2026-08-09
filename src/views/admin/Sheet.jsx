@@ -400,7 +400,7 @@ export default function Sheet() {
             <button onClick={() => setShowBarcode(null)} className="absolute right-4 top-4 text-navy-soft hover:text-navy hover:bg-shell rounded p-1 transition-colors">
               <XIcon size={20} />
             </button>
-            <h3 className="font-serif text-xl font-medium tracking-tight text-navy mb-6">Product Barcode</h3>
+            <h3 className="font-sans text-xl font-medium tracking-tight text-navy mb-6">Product Barcode</h3>
             <div className="bg-white p-4 rounded-adm-sm flex items-center justify-center overflow-hidden">
               <Barcode 
                 value={showBarcode} 

@@ -228,7 +228,7 @@ export default function PasabuyManager() {
                     <div className="flex items-start justify-between gap-3"><span className="font-mono text-xs font-semibold text-blue">{request.public_reference || String(request.id).slice(0, 8)}</span><StatusPill tone={statusTone(request.status)}>{STATUS_LABELS[request.status] || request.status}</StatusPill></div>
                     <p className="mt-2 truncate text-sm font-semibold text-white">{request.item_title || 'Untitled request'}</p>
                     <p className="mt-1 truncate text-xs text-white/45">{request.customer_name || 'Customer'} / Qty {request.quantity || 0}</p>
-                    <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-white/35"><span>{ageLabel(request.created_at)}</span><span>{request.assigned_to ? 'Assigned' : 'Owner: unassigned'}</span>{deadline && <span className={deadline.expired ? 'text-crimson' : 'text-amber'}>{deadline.label}</span>}</div>
+                    <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-white/35"><span>{ageLabel(request.created_at)}</span><span>{request.assigned_to ? 'Assigned' : 'Owner: unassigned'}</span>{deadline && <span className={deadline.expired ? 'text-crimson' : 'text-amber'}>{deadline.label}</span>}</div>
                   </button>
                 )
               })}

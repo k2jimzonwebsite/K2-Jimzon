@@ -62,7 +62,7 @@ function RoutePoint({ x, y, labelY, label, color, animate }) {
         {animate && <animate attributeName="opacity" values="1;0.35;1" dur="2.8s" repeatCount="indefinite" />}
       </circle>
       <circle cx={x} cy={y} r="2.5" fill="var(--store-surface-bg)" />
-      <text x={x} y={labelY} textAnchor="middle" fill="currentColor" fontFamily="Archivo, Segoe UI, sans-serif" fontSize="15" fontWeight="700">{label}</text>
+      <text x={x} y={labelY} textAnchor="middle" fill="currentColor" fontFamily="'Source Sans 3', 'Segoe UI', sans-serif" fontSize="15" fontWeight="700">{label}</text>
     </g>
   )
 }

@@ -26,13 +26,13 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }) {
         <div className="max-h-[70vh] space-y-5 overflow-y-auto p-5 custom-scrollbar">
           {groups.map(group => (
             <div key={group}>
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/35">{group}</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-white/35">{group}</p>
               <div className="divide-y divide-adm-line rounded-adm-sm border border-adm-line">
                 {ADMIN_SHORTCUTS.filter(item => item.group === group).map(item => (
                   <div key={item.id} className="flex min-h-12 items-center justify-between gap-4 px-3 py-2.5">
                     <span className="text-sm text-white/75">{item.label}</span>
                     <span className="flex shrink-0 items-center gap-1">
-                      {item.keys.map(key => <kbd key={key} className="min-w-7 rounded border border-white/15 bg-adm-sunken px-2 py-1 text-center font-mono text-[11px] text-white/70">{key}</kbd>)}
+                      {item.keys.map(key => <kbd key={key} className="min-w-7 rounded border border-white/15 bg-adm-sunken px-2 py-1 text-center font-mono text-xs text-white/70">{key}</kbd>)}
                     </span>
                   </div>
                 ))}

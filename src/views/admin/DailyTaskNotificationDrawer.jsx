@@ -58,7 +58,7 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
               <div key={b.id} className="rounded-adm-sm border border-adm-line bg-adm-surface p-3.5">
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-sm font-semibold text-white">{b.product_name || b.sku}</p>
-                  <span className={'shrink-0 rounded border px-2 py-0.5 text-[11px] font-bold ' + (TONE[b.status] || TONE.warning)}>
+                  <span className={'shrink-0 rounded border px-2 py-0.5 text-xs font-bold ' + (TONE[b.status] || TONE.warning)}>
                     {daysText(b.days_left)}
                   </span>
                 </div>

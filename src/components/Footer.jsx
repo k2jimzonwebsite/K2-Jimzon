@@ -25,7 +25,7 @@ export default function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Wordmark />
             <p className="mt-5 max-w-sm text-sm leading-7 text-navy-soft">A multi-channel Italy-sourced catalog and Pasabuy operation serving Philippine customers and businesses.</p>
-            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.18em] text-crimson">Website · Shopee · TikTok Shop · Lazada · Pasabuy</p>
+            <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-crimson">Website · Shopee · TikTok Shop · Lazada · Pasabuy</p>
           </div>
 
           <FooterColumn title="Shop">
@@ -58,7 +58,7 @@ export default function Footer() {
 }
 
 function FooterColumn({ title, children }) {
-  return <div><h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-crimson">{title}</h3><ul className="mt-4 space-y-1">{children}</ul></div>
+  return <div><h3 className="text-xs font-bold uppercase tracking-[0.18em] text-crimson">{title}</h3><ul className="mt-4 space-y-1">{children}</ul></div>
 }
 
 function FooterButton({ children, onClick }) {

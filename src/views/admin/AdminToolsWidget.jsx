@@ -28,7 +28,7 @@ const TOOLS = [
 ]
 
 const field = 'w-full rounded-adm-sm border border-adm-line bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none'
-const lbl = 'text-[11px] font-medium uppercase tracking-wide text-white/45'
+const lbl = 'text-xs font-medium uppercase tracking-wide text-white/45'
 
 export default function AdminToolsWidget({ onOpenGuide }) {
   const [open, setOpen] = useState(false)
@@ -360,7 +360,7 @@ function Scratchpad() {
 function Stat({ label, value, tone }) {
   return (
     <div className="rounded-adm-sm bg-black/30 px-2 py-2 text-center">
-      <p className="text-[10px] uppercase tracking-wide text-white/40">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-white/40">{label}</p>
       <p className={'mt-0.5 text-sm font-semibold tabular-nums ' + (tone === 'good' ? 'text-gold' : tone === 'bad' ? 'text-crimson' : tone === 'warn' ? 'text-amber' : 'text-white')}>{value}</p>
     </div>
   )

@@ -21,7 +21,7 @@ test.describe('mobile storefront contract', () => {
       const style = getComputedStyle(element)
       return { family: style.fontFamily, size: Number.parseFloat(style.fontSize) }
     })
-    expect(titleType.family).toContain('Archivo')
+    expect(titleType.family).toContain('Source Sans 3')
     expect(titleType.size).toBeGreaterThanOrEqual(16)
 
     const firstStock = cards.first().getByTestId('stock-count')

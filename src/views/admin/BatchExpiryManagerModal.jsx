@@ -207,7 +207,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
               </span>
               <span className="text-sm text-white/50">SKU: {product?.sku || product?.id || 'N/A'}</span>
             </div>
-            <h2 className="font-serif text-xl font-bold text-white mt-1">{product?.name || product?.title || 'Product Batch Editor'}</h2>
+            <h2 className="font-sans text-xl font-bold text-white mt-1">{product?.name || product?.title || 'Product Batch Editor'}</h2>
             <p className="text-sm text-white/60">Total Batch Stock: <span className="text-forest font-bold font-mono">{totalBatchStock} units</span> across {batches.length} box shipment batches.</p>
           </div>
 
@@ -261,7 +261,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                       }`}>
                         {health.text}
                       </span>
-                      {health.status === 'WARNING' && <button type="button" disabled={saving} onClick={() => handleClearanceApproval(b)} className={`rounded border px-2 py-1 text-[10px] font-bold ${b.clearance_approved_at ? 'border-forest/40 bg-forest/10 text-forest' : 'border-amber/40 bg-amber/10 text-amber'}`}>{b.clearance_approved_at ? 'Clearance approved' : 'Approve clearance'}</button>}
+                      {health.status === 'WARNING' && <button type="button" disabled={saving} onClick={() => handleClearanceApproval(b)} className={`rounded border px-2 py-1 text-xs font-bold ${b.clearance_approved_at ? 'border-forest/40 bg-forest/10 text-forest' : 'border-amber/40 bg-amber/10 text-amber'}`}>{b.clearance_approved_at ? 'Clearance approved' : 'Approve clearance'}</button>}
 
                       <button
                         type="button"
@@ -319,7 +319,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                         <option value="unaccounted">Unaccounted</option>
                         <option value="depleted">Depleted</option>
                       </select>
-                      {Number(b.reserved_quantity || 0) > 0 && <p className="mt-1 text-[10px] text-amber">{b.reserved_quantity} unit(s) reserved</p>}
+                      {Number(b.reserved_quantity || 0) > 0 && <p className="mt-1 text-xs text-amber">{b.reserved_quantity} unit(s) reserved</p>}
                     </div>
                   </div>
 

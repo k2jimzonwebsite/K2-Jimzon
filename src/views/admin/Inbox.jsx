@@ -414,16 +414,16 @@ export function InboxView({ store, database = supabase }) {
                 >
                   <div className="flex items-start justify-between gap-2">
                     <span className={`truncate text-sm font-semibold ${conversation.unreadCount ? 'text-white' : 'text-white/75'}`}>{conversation.customer}</span>
-                    <span className="shrink-0 text-[10px] text-white/40">{conversation.time}</span>
+                    <span className="shrink-0 text-xs text-white/40">{conversation.time}</span>
                   </div>
                   <div className="mt-1 flex items-center gap-1.5">
-                    {conversation.unreadCount > 0 && <span className="rounded-full bg-crimson px-1.5 py-0.5 text-[10px] font-bold text-white">{conversation.unreadCount}</span>}
-                    <span className="rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide" style={{ color: meta.color, backgroundColor: `${meta.color}22` }}>{meta.label}</span>
-                    <span className="truncate text-[11px] text-white/45">{statusLabel(conversation.status)}</span>
-                    {conversation.priority !== 'normal' && <span className={conversation.priority === 'urgent' ? 'text-[10px] font-bold uppercase text-crimson' : 'text-[10px] font-bold uppercase text-amber'}>{conversation.priority}</span>}
+                    {conversation.unreadCount > 0 && <span className="rounded-full bg-crimson px-1.5 py-0.5 text-xs font-bold text-white">{conversation.unreadCount}</span>}
+                    <span className="rounded px-1.5 py-0.5 text-xs font-bold uppercase tracking-wide" style={{ color: meta.color, backgroundColor: `${meta.color}22` }}>{meta.label}</span>
+                    <span className="truncate text-xs text-white/45">{statusLabel(conversation.status)}</span>
+                    {conversation.priority !== 'normal' && <span className={conversation.priority === 'urgent' ? 'text-xs font-bold uppercase text-crimson' : 'text-xs font-bold uppercase text-amber'}>{conversation.priority}</span>}
                   </div>
                   <p className="mt-1 line-clamp-1 text-xs text-white/45">{lastMessage?.text || 'No messages recorded'}</p>
-                  {deadline && <p className={deadline.overdue ? 'mt-1 text-[10px] font-semibold text-crimson' : 'mt-1 text-[10px] text-white/40'}>{deadline.label}</p>}
+                  {deadline && <p className={deadline.overdue ? 'mt-1 text-xs font-semibold text-crimson' : 'mt-1 text-xs text-white/40'}>{deadline.label}</p>}
                 </button>
               )
             })}
@@ -443,10 +443,10 @@ export function InboxView({ store, database = supabase }) {
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="truncate text-[15px] font-semibold text-white">{chat.customer}</h3>
-                <span className="rounded bg-forest/15 px-1.5 py-0.5 text-[11px] font-medium text-forest">via {chat.channel}</span>
-                <span className="rounded bg-white/10 px-1.5 py-0.5 text-[11px] text-white/65">{statusLabel(chat.status)}</span>
+                <span className="rounded bg-forest/15 px-1.5 py-0.5 text-xs font-medium text-forest">via {chat.channel}</span>
+                <span className="rounded bg-white/10 px-1.5 py-0.5 text-xs text-white/65">{statusLabel(chat.status)}</span>
               </div>
-              <p className="mt-0.5 text-[11px] text-white/40">
+              <p className="mt-0.5 text-xs text-white/40">
                 {chat.assignedName ? `Owned by ${chat.assignedName}` : 'Unassigned'}
                 {chatDeadline ? ` · ${chatDeadline.label}` : ''}
               </p>
@@ -468,7 +468,7 @@ export function InboxView({ store, database = supabase }) {
                     : 'rounded-tr-sm border border-blue/30 bg-blue/15 text-white'
                 }`}>
                   <p className="whitespace-pre-wrap break-words">{message.text}</p>
-                  <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] text-white/45">
+                  <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs text-white/45">
                     <span>{formatMessageTime(message.createdAt)}</span>
                     {message.deliveryStatus === 'internal_only' && <span>· Internal only, not sent</span>}
                     {message.deliveryStatus === 'failed' && <span className="text-crimson">· Delivery failed</span>}
@@ -485,7 +485,7 @@ export function InboxView({ store, database = supabase }) {
             {notice && <p role="status" className="flex items-start gap-2 rounded-adm-sm border border-forest/40 bg-forest/10 p-2.5 text-xs text-forest"><CheckIcon size={14} className="mt-0.5 shrink-0" />{notice}</p>}
             <div className="flex flex-wrap items-center justify-between gap-2">
               <label htmlFor="inbox-internal-note" className="text-xs font-semibold text-white/65">Internal note or response draft</label>
-              <span className="text-[11px] text-amber">Not sent externally</span>
+              <span className="text-xs text-amber">Not sent externally</span>
             </div>
             <textarea
               id="inbox-internal-note"
@@ -507,7 +507,7 @@ export function InboxView({ store, database = supabase }) {
         <aside className="hidden w-80 shrink-0 flex-col border-l border-adm-line bg-adm-bg xl:flex" aria-label="Conversation workflow">
           <div className="border-b border-adm-line px-4 py-3">
             <h3 className="text-sm font-semibold text-white">Workflow</h3>
-            <p className="mt-0.5 text-[11px] text-white/45">Owner, deadline and next state</p>
+            <p className="mt-0.5 text-xs text-white/45">Owner, deadline and next state</p>
           </div>
           <div className="flex-1 space-y-5 overflow-y-auto p-4">
             {!inboxState.phase2Ready && (
@@ -524,7 +524,7 @@ export function InboxView({ store, database = supabase }) {
                   <div key={event.id} className="border-l border-adm-line pl-3">
                     <p className="text-xs font-semibold text-white/75">{event.event_type === 'internal_note_added' ? 'Internal note saved' : 'Workflow updated'}</p>
                     {event.reason && <p className="mt-0.5 text-xs leading-relaxed text-white/55">{event.reason}</p>}
-                    <time className="mt-1 block text-[10px] text-white/35">{formatMessageTime(event.created_at)}</time>
+                    <time className="mt-1 block text-xs text-white/35">{formatMessageTime(event.created_at)}</time>
                   </div>
                 ))}
               </div>

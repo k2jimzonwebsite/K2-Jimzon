@@ -13,10 +13,40 @@ colors:
   line: "#E5DDD2"
 typography:
   display:
-    fontFamily: "\"Fraunces\", Georgia, \"Times New Roman\", serif"
+    fontFamily: "Fraunces, Georgia, serif"
+    fontSize: "4.6rem"
+  wordmark:
+    fontFamily: "Fraunces, Georgia, serif"
+    fontSize: "1.55rem"
   body:
-    fontFamily: "\"Archivo\", \"Segoe UI\", system-ui, sans-serif"
-    fontSize: "15px"
+    fontFamily: "Source Sans 3, Segoe UI, system-ui, sans-serif"
+    fontSize: "1rem"
+  dense:
+    fontFamily: "Source Sans 3, Segoe UI, system-ui, sans-serif"
+    fontSize: "0.9375rem"
+  compact:
+    fontFamily: "Source Sans 3, Segoe UI, system-ui, sans-serif"
+    fontSize: "0.875rem"
+  metadata:
+    fontFamily: "Source Sans 3, Segoe UI, system-ui, sans-serif"
+    fontSize: "0.8125rem"
+  label:
+    fontFamily: "Source Sans 3, Segoe UI, system-ui, sans-serif"
+    fontSize: "0.75rem"
+  title-sm:
+    fontFamily: "Source Sans 3, Segoe UI, system-ui, sans-serif"
+    fontSize: "1.0625rem"
+  title-md:
+    fontFamily: "Source Sans 3, Segoe UI, system-ui, sans-serif"
+    fontSize: "1.1875rem"
+  title-lg:
+    fontFamily: "Source Sans 3, Segoe UI, system-ui, sans-serif"
+    fontSize: "1.375rem"
+  title-xl:
+    fontFamily: "Source Sans 3, Segoe UI, system-ui, sans-serif"
+    fontSize: "1.5rem"
+  code:
+    fontFamily: "Cascadia Code, Consolas, monospace"
 rounded:
   xl: "12px"
   '2xl': "16px"
@@ -44,7 +74,7 @@ Warm, organic, and expansive. It feels like a sunlit Mediterranean villa, reject
 **Key Characteristics:**
 - Warm, organic curves (`rounded-3xl` containers)
 - Tactile, accessible sizing (global 125% scale)
-- Editorial font contrast (Fraunces vs Archivo)
+- Editorial font contrast (Fraunces vs Source Sans 3)
 - Focused accents (Terracotta for action, Olive for trust)
 
 ## 2. Colors
@@ -85,21 +115,24 @@ The light-mode storefront must retain `public/wood-bg.jpg` as its continuous pag
 ## 3. Typography
 
 **Display Font:** Fraunces (with Georgia, "Times New Roman", serif)
-**Body Font:** Archivo (with "Segoe UI", system-ui, sans-serif)
+**Body/UI Font:** Source Sans 3 (with "Segoe UI", system-ui, sans-serif)
 
-**Character:** A high-contrast pairing on a real axis — Fraunces is a warm, optical serif with editorial personality that carries the "curated Italian goods" feeling; Archivo is a clean, slightly condensed grotesque that keeps prices, stock, and UI crisp and legible.
+**Character:** Fraunces keeps the warm, curated Italian storytelling voice; Source Sans 3 uses open forms and a generous x-height to keep descriptions, prices, stock, forms, and dense operational data readable.
 
 ### Hierarchy
 - **Display** (Fraunces 600): Hero headlines and major section titles. `text-wrap: balance` for even lines.
 - **Headline** (Fraunces 600, ~1.5rem): Section titles ("Word of mouth", "How it gets to you").
-- **Title** (Fraunces 600, ~1.125rem): Card titles, product names, step headings.
-- **Body** (Archivo 400, 15px): Paragraph copy in Navy Soft. Cap measure at 65–75ch.
-- **Label** (Archivo 700, 9px, 10px, 11px, 12px, 13px uppercase/mono): Section kickers, eyebrows, code badges, and dense table micro-labels.
+- **Title** (Source Sans 3 650–700, 1–1.25rem): Compact card titles, product names, steps, and operational headings.
+- **Body** (Source Sans 3 400, 16px): Paragraph copy in Navy Soft. Cap measure at 65–75ch.
+- **Metadata** (Source Sans 3 500–600, 13px): Secondary facts and helper text.
+- **Label** (Source Sans 3 650–700, 12px minimum): Short kickers, badges, and dense table labels. Uppercase tracking stays near 0.08–0.12em.
 
 ### Named Rules
-**The Serif-Says-Story Rule.** Fraunces carries voice — headlines, product names, editorial moments. Archivo carries fact — prices, stock, buttons, forms. Don't blur the line by setting UI in the serif.
+**The Serif-Says-Story Rule.** Fraunces carries voice only when it has room: hero headlines, major storefront section titles, and editorial moments at 24px or larger. Source Sans 3 carries every fact: compact product names, descriptions, prices, stock, buttons, forms, and the entire admin UI.
 
-**Compact Commerce Exception.** Product names use Fraunces when they are large editorial features, but use Archivo at card and mobile sizes. Stock, price, category, filters, and navigation always use Archivo. Operational text must not drop below 12px; card titles remain at least 16px with a readable line height.
+**Compact Commerce Exception.** Product names use Fraunces only when they are large editorial features, but use Source Sans 3 at card and mobile sizes. Stock, price, category, filters, and navigation always use Source Sans 3. Operational labels must not drop below 12px; descriptions remain 15–16px; card titles remain at least 17px with a readable line height.
+
+**The Admin One-Family Rule.** The operations dashboard uses Source Sans 3 for headings, descriptions, controls, metrics, and tables. Monospace is reserved for editable code, secrets, raw prompts, and machine identifiers; ordinary numbers use tabular Source Sans 3.
 
 **Universal Stock Slot.** Every catalog card reserves the same stock row immediately above its price and action footer. The wording and color may reflect healthy, low, or sold-out inventory, but the placement never moves with title or description length.
 
@@ -152,7 +185,7 @@ Tactile, expansive, and generously rounded. Containers embrace 3xl geometries an
 ### Do:
 - **Do** use expansive geometries like `rounded-3xl` for structural containers.
 - **Do** keep Terracotta (#B84E3A) to ~10% of any screen — it means action and nothing else.
-- **Do** pair Fraunces headlines with Archivo body/UI.
+- **Do** pair Fraunces storytelling headlines with Source Sans 3 body/UI.
 - **Do** use a global 125% scale for a confident, accessible presence.
 - **Do** preserve the light-mode wood canvas and use translucent structural bands over it.
 

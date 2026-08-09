@@ -1,4 +1,4 @@
-// Minimal inline icon set — 1.5px stroke, matches Archivo's utilitarian weight.
+// Minimal inline icon set — 1.5px stroke, matches Source Sans 3's clear UI weight.
 
 const base = {
   fill: 'none',

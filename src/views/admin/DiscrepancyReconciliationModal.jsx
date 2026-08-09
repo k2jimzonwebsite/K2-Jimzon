@@ -37,7 +37,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
               </span>
               <span className="text-sm text-white/60 font-mono">{consignment.manifest_code}</span>
             </div>
-            <h2 className="font-serif text-xl font-bold text-white mt-1">Fix box count mismatches</h2>
+            <h2 className="font-sans text-xl font-bold text-white mt-1">Fix box count mismatches</h2>
           </div>
           <button onClick={onClose} className="text-white/60 hover:text-white text-xl min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10" aria-label="Close modal">✕</button>
         </div>

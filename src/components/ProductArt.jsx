@@ -38,13 +38,13 @@ export default function ProductArt({ product, mode = 'sealed', className = '' })
       {mode === 'sealed' ? (
         <div className="relative w-[62%] rotate-[-2deg] border border-navy/15 bg-paper px-4 py-5 text-center shadow-card">
           <div className="tricolor absolute inset-x-0 top-0" />
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-navy-soft">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-navy-soft">
             Prodotto d'Italia
           </p>
           <p className="mt-2 font-sans text-base font-bold leading-snug text-navy sm:text-lg">
             {short || product.name || 'Italian selection'}
           </p>
-          <p className="mt-1 font-sans text-[11px] font-medium text-navy-soft">
+          <p className="mt-1 font-sans text-xs font-medium text-navy-soft">
             {origin} · {size}
           </p>
           <div className="mx-auto mt-3 flex h-5 w-24 items-end justify-center gap-[2px]" aria-hidden="true">

@@ -34,7 +34,7 @@ export default function CatalogGrid() {
     <section className="store-section py-8 md:py-12" id="catalog">
       <div className="grid gap-8 lg:grid-cols-[14rem_1fr] lg:gap-10">
         <aside className="min-w-0 lg:border-r lg:border-[var(--store-surface-border)] lg:pr-7">
-          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-navy-faint">Shop by category</p>
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-navy-faint">Shop by category</p>
           <div className="flex gap-1 overflow-x-auto pb-2 lg:block lg:space-y-0.5 lg:overflow-visible lg:pb-0">
             {CATEGORIES.map((item) => {
               const selected = category === item

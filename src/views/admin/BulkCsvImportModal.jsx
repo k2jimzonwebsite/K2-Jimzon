@@ -91,7 +91,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
         
         <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/40">
           <div>
-            <h2 className="font-serif text-xl font-semibold text-white">Bulk CSV Import</h2>
+            <h2 className="font-sans text-xl font-semibold text-white">Bulk CSV Import</h2>
             <p className="text-sm text-white/50 mt-1">Stage product metadata as drafts; reconcile physical stock by batch afterward.</p>
           </div>
           <button onClick={onClose} className="rounded-full bg-white/5 p-2 hover:bg-white/10 text-white/60 hover:text-white transition-colors">

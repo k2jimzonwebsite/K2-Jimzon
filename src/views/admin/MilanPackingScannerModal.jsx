@@ -159,7 +159,7 @@ export default function MilanPackingScannerModal({
             </span>
             <span className="text-sm text-white/50">Milan, Italy</span>
           </div>
-          <h2 className="font-serif font-semibold text-xl text-white">Pack a flight box</h2>
+          <h2 className="font-sans font-semibold text-xl text-white">Pack a flight box</h2>
         </div>
         <button
           onClick={onClose}
@@ -272,7 +272,7 @@ export default function MilanPackingScannerModal({
             </div>
 
             <div>
-              <h3 className="font-serif font-bold text-xl text-white">Unknown Barcode Detected</h3>
+              <h3 className="font-sans font-bold text-xl text-white">Unknown Barcode Detected</h3>
               <p className="text-sm text-white/60 mt-1">
                 Barcode <span className="font-mono text-amber font-bold">{unrecognizedCode}</span> is not in master catalog. Tap below for ultra-fast packing:
               </p>

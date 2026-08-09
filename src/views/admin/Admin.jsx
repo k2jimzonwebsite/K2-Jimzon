@@ -65,7 +65,7 @@ function NavList({ section, onSelect, activeSkus, canManageStaff }) {
       {NAV_GROUPS.map((group, gi) => (
         <div key={gi}>
           {group.heading && (
-            <p className="px-3 mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-white/55">
+            <p className="px-3 mb-1.5 text-xs font-semibold uppercase tracking-wider text-white/55">
               {group.heading}
             </p>
           )}
@@ -92,7 +92,7 @@ function NavList({ section, onSelect, activeSkus, canManageStaff }) {
                   </span>
                   <span className="truncate">{meta.label}</span>
                   {id === 'inventory' && activeSkus > 0 && (
-                    <span className="ml-auto text-[11px] font-medium text-white/60">{activeSkus}</span>
+                    <span className="ml-auto text-xs font-medium text-white/60">{activeSkus}</span>
                   )}
                 </button>
               )
@@ -262,7 +262,7 @@ export default function Admin() {
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-adm-sm border border-blue/25 bg-blue/10 text-xs font-bold tracking-tight text-blue">K2</span>
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold tracking-tight text-white">K2 Jimzon BOS</p>
-              <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.12em] text-white/35">Business operations</p>
+              <p className="mt-0.5 text-xs font-medium uppercase tracking-[0.12em] text-white/35">Business operations</p>
             </div>
           </div>
           <button
@@ -281,10 +281,10 @@ export default function Admin() {
 
         <div className="shrink-0 border-t border-adm-line p-3">
           <div className="mb-2 flex items-center gap-2.5 rounded-adm-sm bg-white/[0.025] p-2.5">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue/15 text-[10px] font-bold text-blue">{staffInitials}</span>
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue/15 text-xs font-bold text-blue">{staffInitials}</span>
             <div className="min-w-0 flex-1">
               <p className="truncate text-xs font-semibold text-white/80">{staffLabel}</p>
-              <p className="mt-0.5 truncate text-[10px] text-white/35">{user?.role || 'Staff'}</p>
+              <p className="mt-0.5 truncate text-xs text-white/35">{user?.role || 'Staff'}</p>
             </div>
             <span className="h-2 w-2 rounded-full bg-emerald-400" title="Authenticated" />
           </div>
@@ -330,7 +330,7 @@ export default function Admin() {
             <div className="fixed inset-0 bg-black/60 backdrop-blur-[2px]" onClick={() => setIsMobileMenuOpen(false)} />
             <div className="relative flex w-72 max-w-[88vw] flex-col overflow-y-auto border-r border-adm-line bg-adm-sunken px-2 pb-20 pt-4 shadow-adm-float">
               <div className="flex items-center justify-between px-3 mb-4">
-                <div><p className="text-base font-semibold text-white">K2 Jimzon BOS</p><p className="mt-0.5 text-[10px] uppercase tracking-wider text-white/35">Navigation</p></div>
+                <div><p className="text-base font-semibold text-white">K2 Jimzon BOS</p><p className="mt-0.5 text-xs uppercase tracking-wider text-white/35">Navigation</p></div>
                 <button aria-label="Close navigation menu" onClick={() => setIsMobileMenuOpen(false)} className="flex min-h-[44px] min-w-[44px] items-center justify-center text-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70">
                   <XIcon size={20} />
                 </button>
@@ -353,7 +353,7 @@ export default function Admin() {
             >
               <BarcodeIcon size={16} />
               <span>Scan</span>
-              <kbd className="hidden rounded border border-white/20 bg-black/10 px-1.5 py-0.5 font-mono text-[10px] text-white/70 xl:inline">Alt S</kbd>
+              <kbd className="hidden rounded border border-white/20 bg-black/10 px-1.5 py-0.5 font-mono text-xs text-white/70 xl:inline">Alt S</kbd>
             </button>
 
             <button
@@ -387,7 +387,7 @@ export default function Admin() {
               onClick={() => setPaletteOpen(true)}
               className="hidden min-h-[40px] items-center gap-2 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm text-white/60 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 lg:flex"
             >
-              <SearchIcon size={15} /> Search <kbd className="rounded border border-white/15 bg-adm-sunken px-1.5 py-0.5 font-mono text-[11px] text-white/45">Ctrl K</kbd>
+              <SearchIcon size={15} /> Search <kbd className="rounded border border-white/15 bg-adm-sunken px-1.5 py-0.5 font-mono text-xs text-white/45">Ctrl K</kbd>
             </button>
 
             {section === 'inventory' && (
@@ -466,14 +466,14 @@ export default function Admin() {
               className={'relative flex min-h-[58px] flex-1 flex-col items-center justify-center gap-0.5 py-2 transition-[transform,color] duration-150 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue/70 ' + (on ? 'text-blue' : 'text-white/45 hover:text-white')}>
               {on && <span className="absolute inset-x-5 top-0 h-0.5 rounded-full bg-blue" />}
               <Ico size={20} className={on ? 'text-blue' : 'text-white/60'} />
-              <span className="text-[10px] font-medium tracking-tight">{label}</span>
+              <span className="text-xs font-medium tracking-tight">{label}</span>
             </button>
           )
         })}
         <button onClick={() => setIsMobileMenuOpen(true)}
           className="flex min-h-[58px] flex-1 flex-col items-center justify-center gap-0.5 py-2 text-white/45 transition-[transform,color] duration-150 hover:text-white active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue/70">
           <MenuIcon size={20} />
-          <span className="text-[10px] font-medium tracking-tight">More</span>
+          <span className="text-xs font-medium tracking-tight">More</span>
         </button>
       </nav>
 

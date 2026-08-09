@@ -175,7 +175,7 @@ export default function ProductDetail() {
                     <TrustBadge>Recorded origin · {product.country_of_origin || product.origin || 'Imported'}</TrustBadge>
                     <StockPill stock={product.stock_available || product.stock} />
                     {(product.subcategory || product.category_id) && (
-                      <span className="rounded-full bg-shell border border-line/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-navy-soft">
+                      <span className="rounded-full bg-shell border border-line/50 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-navy-soft">
                         {product.subcategory || product.category_id}
                       </span>
                     )}
@@ -192,7 +192,7 @@ export default function ProductDetail() {
                     {isWholesale && (
                       <>
                         <span className="text-base text-navy-faint line-through tabular">{peso(product.srp || product.retail)}</span>
-                        <span className="rounded-full bg-blue-wash px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-blue">
+                        <span className="rounded-full bg-blue-wash px-2 py-1 text-xs font-bold uppercase tracking-wider text-blue">
                           Wholesale
                         </span>
                       </>
@@ -326,7 +326,7 @@ function ProductTabs({ product }) {
                     <div className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${ing.inBundle ? 'bg-crimson/80 dark:bg-rose-400/90' : 'bg-navy/40'}`} />
                     <span className={`font-medium ${ing.inBundle ? 'text-crimson dark:text-rose-400' : 'text-navy'}`}>{ing.name}</span>
                     {ing.inBundle && (
-                      <span className="text-[10px] uppercase font-bold text-navy ml-auto border border-navy/20 bg-white dark:bg-shell-deep dark:border-line dark:text-navy rounded px-2 py-0.5 shadow-sm">
+                      <span className="text-xs uppercase font-bold text-navy ml-auto border border-navy/20 bg-white dark:bg-shell-deep dark:border-line dark:text-navy rounded px-2 py-0.5 shadow-sm">
                         In Bundle
                       </span>
                     )}
@@ -374,7 +374,7 @@ function UsageGuide({ product }) {
       <Tricolor />
       <div className="grid gap-8 p-6 lg:grid-cols-[1fr_350px] lg:items-start md:p-10">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-navy-soft">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-navy-soft">
             Preparation & Cooking
           </p>
           <h2 className="mt-2 font-serif text-2xl font-semibold tracking-tight md:text-3xl text-navy">
@@ -395,7 +395,7 @@ function UsageGuide({ product }) {
         <div className="rounded-lg bg-shell/50 dark:bg-shell-deep p-6 border border-line/50 flex flex-col h-full">
           {guide.ingredients && (
             <div className="mb-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-navy-soft mb-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-navy-soft mb-4">
                 Ingredients Needed
               </p>
               <ul className="space-y-3">

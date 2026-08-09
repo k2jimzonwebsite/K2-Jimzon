@@ -105,7 +105,7 @@ export default function DemoRail() {
                 <div className="relative">
                   <Ico size={18} />
                   {v.id === 'checkout' && cartCount > 0 && (
-                    <span className="absolute -right-2 -top-1.5 flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-crimson px-1 text-[9px] font-bold text-white ring-2 ring-cream">
+                    <span className="absolute -right-2 -top-1.5 flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-crimson px-1 text-xs font-bold text-white ring-2 ring-cream">
                       {cartCount}
                     </span>
                   )}

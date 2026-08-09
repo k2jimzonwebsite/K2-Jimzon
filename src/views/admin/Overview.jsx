@@ -134,7 +134,7 @@ function RevenueChart({ points }) {
           return (
             <g key={ratio}>
               <line x1={pad.left} x2={pad.left + chartWidth} y1={y} y2={y} stroke="rgba(255,255,255,0.08)" strokeDasharray="3 5" />
-              <text x={pad.left - 10} y={y + 4} textAnchor="end" fill="rgba(255,255,255,0.42)" fontSize="10">
+              <text x={pad.left - 10} y={y + 4} textAnchor="end" fill="rgba(255,255,255,0.62)" fontSize="12">
                 {compactNumber(maxValue * ratio)}
               </text>
             </g>
@@ -157,7 +157,7 @@ function RevenueChart({ points }) {
               <title>{point.label}: {peso(point.value)}</title>
             </circle>
             {labelIndexes.has(index) && (
-              <text x={point.x} y={height - 6} textAnchor={index === 0 ? 'start' : index === points.length - 1 ? 'end' : 'middle'} fill="rgba(255,255,255,0.45)" fontSize="10">
+              <text x={point.x} y={height - 6} textAnchor={index === 0 ? 'start' : index === points.length - 1 ? 'end' : 'middle'} fill="rgba(255,255,255,0.62)" fontSize="12">
                 {point.label}
               </text>
             )}
@@ -417,9 +417,9 @@ export default function Overview({ setSection, pending = 0 }) {
             <p className={`mt-2 truncate font-mono text-xl font-semibold tabular-nums ${metric.tone === 'danger' ? 'text-crimson' : metric.tone === 'warning' ? 'text-amber' : 'text-white'}`}>
               {loading ? '—' : metric.value}
             </p>
-            <p className="mt-1.5 min-h-8 text-[11px] leading-relaxed text-white/38">{metric.detail}</p>
+            <p className="mt-1.5 min-h-8 text-xs leading-relaxed text-white/38">{metric.detail}</p>
             {metric.change && (
-              <p className={`mt-1 text-[11px] font-medium ${metric.change.positive ? 'text-emerald-400' : 'text-crimson'}`}>{metric.change.label}</p>
+              <p className={`mt-1 text-xs font-medium ${metric.change.positive ? 'text-emerald-400' : 'text-crimson'}`}>{metric.change.label}</p>
             )}
           </div>
         ))}
@@ -448,7 +448,7 @@ export default function Overview({ setSection, pending = 0 }) {
                   <span className={`flex h-8 w-8 items-center justify-center rounded-adm-sm ${active ? 'bg-amber/10 text-amber' : 'bg-white/[0.04] text-white/35'}`}><Icon size={16} /></span>
                   <span className="min-w-0">
                     <span className="block truncate text-xs font-semibold text-white/85">{queue.title}</span>
-                    <span className="mt-0.5 block truncate text-[11px] text-white/40">{queue.detail}</span>
+                    <span className="mt-0.5 block truncate text-xs text-white/40">{queue.detail}</span>
                   </span>
                   <span className="flex items-center gap-2">
                     <span className={`font-mono text-base font-semibold tabular-nums ${active ? queue.severity === 'critical' ? 'text-crimson' : 'text-amber' : 'text-white/35'}`}>{loading ? '—' : queue.count}</span>
@@ -470,31 +470,31 @@ export default function Overview({ setSection, pending = 0 }) {
             action={<button onClick={() => setSection('integrations')} className={`${actionClass} hidden min-h-9 items-center gap-1.5 rounded-adm-sm px-2 text-xs font-semibold text-blue hover:bg-blue/10 sm:flex`}>Manage <ArrowIcon size={13} /></button>}
           />
           <div className="divide-y divide-adm-line">
-            <div className="hidden grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] gap-3 px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-white/35 md:grid">
+            <div className="hidden grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] gap-3 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white/35 md:grid">
               <span>Channel</span><span>Status</span><span>Requests</span><span>Verified revenue</span><span>Listings</span>
             </div>
             {analytics.channelRows.map(channel => (
               <div key={channel.id} className="grid grid-cols-2 gap-x-4 gap-y-3 px-4 py-3.5 md:grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] md:items-center md:gap-3 md:px-5">
                 <div className="col-span-2 min-w-0 md:col-span-1">
                   <p className="text-xs font-semibold text-white">{channel.label}</p>
-                  <p className="mt-0.5 text-[11px] text-white/38">{channel.description}</p>
+                  <p className="mt-0.5 text-xs text-white/38">{channel.description}</p>
                 </div>
                 <div>
-                  <span className={`inline-flex items-center gap-1.5 text-[11px] font-medium ${channel.status === 'live' ? 'text-emerald-400' : 'text-white/45'}`}>
+                  <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${channel.status === 'live' ? 'text-emerald-400' : 'text-white/45'}`}>
                     <span className={`h-1.5 w-1.5 rounded-full ${channel.status === 'live' ? 'bg-emerald-400' : 'bg-white/25'}`} />
                     {channel.status === 'live' ? 'Operational' : 'Not connected'}
                   </span>
                 </div>
                 <div className="text-right md:text-left">
-                  <span className="md:hidden text-[10px] uppercase tracking-wider text-white/35">Requests </span>
+                  <span className="md:hidden text-xs uppercase tracking-wider text-white/35">Requests </span>
                   <span className="font-mono text-xs font-semibold tabular-nums text-white/75">{channel.orders}</span>
                 </div>
                 <div>
-                  <span className="md:hidden block text-[10px] uppercase tracking-wider text-white/35">Verified revenue</span>
+                  <span className="md:hidden block text-xs uppercase tracking-wider text-white/35">Verified revenue</span>
                   <span className="font-mono text-xs font-semibold tabular-nums text-white/75">{peso(channel.revenue)}</span>
                 </div>
                 <div className="text-right md:text-left">
-                  <span className="md:hidden block text-[10px] uppercase tracking-wider text-white/35">Listings</span>
+                  <span className="md:hidden block text-xs uppercase tracking-wider text-white/35">Listings</span>
                   <span className={`font-mono text-xs font-semibold tabular-nums ${channel.issues > 0 ? 'text-crimson' : channel.ready > 0 ? 'text-amber' : 'text-white/65'}`}>
                     {channel.published} live · {channel.ready} ready{channel.issues > 0 ? ` · ${channel.issues} blocked` : ''}
                   </span>
@@ -563,7 +563,7 @@ export default function Overview({ setSection, pending = 0 }) {
               { label: 'Expiry risk', value: analytics.expired + analytics.expiring, detail: `${analytics.expired} expired · ${analytics.expiring} within 30 days`, tone: analytics.expired > 0 ? 'text-crimson' : analytics.expiring > 0 ? 'text-amber' : 'text-white' },
             ].map(item => (
               <div key={item.label} className="flex min-h-[58px] items-center justify-between gap-4 py-3">
-                <div><p className="text-xs font-medium text-white/75">{item.label}</p><p className="mt-0.5 text-[11px] text-white/38">{item.detail}</p></div>
+                <div><p className="text-xs font-medium text-white/75">{item.label}</p><p className="mt-0.5 text-xs text-white/38">{item.detail}</p></div>
                 <p className={`font-mono text-lg font-semibold tabular-nums ${item.tone}`}>{loading ? '—' : item.value}</p>
               </div>
             ))}

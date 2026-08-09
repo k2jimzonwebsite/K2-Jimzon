@@ -13,7 +13,7 @@ export function WorkspaceIntro({ eyebrow, title, description, status, statusTone
     <header className="border-b border-adm-line pb-5">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div className="min-w-0">
-          {eyebrow && <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue">{eyebrow}</p>}
+          {eyebrow && <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue">{eyebrow}</p>}
           <h2 className="mt-1 text-xl font-semibold tracking-[-0.02em] text-white sm:text-2xl">{title}</h2>
           {description && <p className="mt-1.5 max-w-3xl text-sm leading-relaxed text-white/50">{description}</p>}
         </div>
@@ -33,12 +33,12 @@ export function MetricRail({ items, columns = 'lg:grid-cols-4' }) {
     <dl className={`grid grid-cols-2 overflow-hidden rounded-adm border border-adm-line bg-adm-surface ${columns}`}>
       {items.map((item, index) => (
         <div key={item.label} className={`min-w-0 border-adm-line px-3 py-3 sm:px-4 sm:py-3.5 ${index >= 2 ? 'border-t' : ''} ${index % 2 ? 'border-l' : ''} ${index ? 'lg:border-l' : 'lg:border-l-0'} lg:border-t-0`}>
-          <dt className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-white/40">
+          <dt className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-white/40">
             {item.label}
             {item.flag && <span className={`h-1.5 w-1.5 rounded-full ${item.flag}`} aria-hidden="true" />}
           </dt>
           <dd className={`mt-1 font-mono text-xl font-semibold tabular-nums tracking-tight ${item.tone || 'text-white'}`}>{item.value}</dd>
-          {item.detail && <p className="mt-1 truncate text-[11px] text-white/40" title={item.detail}>{item.detail}</p>}
+          {item.detail && <p className="mt-1 truncate text-xs text-white/40" title={item.detail}>{item.detail}</p>}
         </div>
       ))}
     </dl>
@@ -61,7 +61,7 @@ export function SectionHeading({ title, description, count, action }) {
 }
 
 export function StatusPill({ tone = 'neutral', children, className = '' }) {
-  return <span className={`inline-flex min-h-7 items-center rounded-full border px-2.5 text-[11px] font-semibold ${TONES[tone] || TONES.neutral} ${className}`}>{children}</span>
+  return <span className={`inline-flex min-h-7 items-center rounded-full border px-2.5 text-xs font-semibold ${TONES[tone] || TONES.neutral} ${className}`}>{children}</span>
 }
 
 export function StateBanner({ tone = 'neutral', children, role }) {

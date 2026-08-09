@@ -28,7 +28,7 @@ export default function Wholesale() {
           <div className="relative overflow-hidden rounded-2xl border border-[var(--store-surface-border)] shadow-sm">
             <img src={LIFESTYLE.venice} alt="Italy sourcing landscape" className="aspect-[4/3] h-full w-full object-cover opacity-90" />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[var(--store-surface-bg)] via-[var(--store-surface-bg)]/80 to-transparent p-6 pt-20">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-crimson">Current operating model</p>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-crimson">Current operating model</p>
               <p className="mt-2 max-w-sm text-sm leading-6 text-navy-soft">Account pricing and self-serve B2B ordering stay disabled until real approval and server-enforced pricing are ready.</p>
             </div>
           </div>

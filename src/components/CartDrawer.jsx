@@ -78,7 +78,7 @@ export default function CartDrawer() {
               <CrimsonButton className="w-full" onClick={() => { setCartOpen(false); go('checkout') }} disabled={lines.length === 0}>
                 Go to checkout
               </CrimsonButton>
-              <p className="mt-2 text-center text-[11px] leading-relaxed text-navy-faint">You will submit a request. No payment is collected online.</p>
+              <p className="mt-2 text-center text-xs leading-relaxed text-navy-faint">You will submit a request. No payment is collected online.</p>
             </footer>
           </motion.aside>
         </div>

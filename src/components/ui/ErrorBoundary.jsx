@@ -37,7 +37,7 @@ export default class ErrorBoundary extends React.Component {
               A module or data query encountered a minor glitch. Click below to reload this section cleanly.
             </p>
             {this.state.error && (
-              <p className="mt-2 text-[11px] font-mono text-crimson bg-crimson/10 px-3 py-1.5 rounded-lg border border-crimson/20 max-w-lg mx-auto truncate">
+              <p className="mt-2 text-xs font-mono text-crimson bg-crimson/10 px-3 py-1.5 rounded-lg border border-crimson/20 max-w-lg mx-auto truncate">
                 {this.state.error.message || String(this.state.error)}
               </p>
             )}
