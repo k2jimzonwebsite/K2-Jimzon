@@ -138,7 +138,10 @@ export function StoreProvider({ children }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
-        return localStorage.getItem('theme') === 'dark'
+        const savedTheme = localStorage.getItem('theme')
+        return savedTheme
+          ? savedTheme === 'dark'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches
       } catch (e) {
         return false
       }
@@ -148,19 +151,17 @@ export function StoreProvider({ children }) {
 
   useEffect(() => {
     try {
-      if (isDark) {
-        document.documentElement.classList.add('dark')
-        localStorage.setItem('theme', 'dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-        localStorage.setItem('theme', 'light')
-      }
+      const theme = isDark ? 'dark' : 'light'
+      document.documentElement.classList.toggle('dark', isDark)
+      document.documentElement.style.colorScheme = theme
+      document.querySelector('#theme-color')?.setAttribute('content', isDark ? '#090C15' : '#FAF7F2')
+      localStorage.setItem('theme', theme)
     } catch (e) {
       // Ignore localStorage errors in restricted browsers
     }
   }, [isDark])
 
-  const toggleDarkMode = () => setIsDark(!isDark)
+  const toggleDarkMode = () => setIsDark(current => !current)
 
   const loginWithGoogle = async () => {
     if (!supabase) {

@@ -307,7 +307,7 @@ function ProductTabs({ product }) {
                           if (product.guide.bundle.partner) addToCart(product.guide.bundle.partner)
                           setCartOpen(true)
                         }}
-                        className="w-full py-2.5 px-4 text-sm font-semibold rounded-lg bg-shell border border-line text-navy shadow-sm transition-colors hover:bg-navy hover:text-cream dark:hover:bg-shell-deep dark:hover:text-navy"
+                        className="w-full py-2.5 px-4 text-sm font-semibold rounded-lg bg-shell border border-line text-navy shadow-sm transition-colors hover:bg-navy hover:text-cream"
                       >
                         Buy the bundle — {peso(product.guide.bundle.price)}
                       </button>
@@ -342,7 +342,7 @@ function ProductTabs({ product }) {
                 <ol className="space-y-5">
                   {product.guide.steps.map((step, i) => (
                     <li key={i} className="flex gap-4 text-sm text-navy-soft">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-navy text-cream dark:bg-shell-deep dark:border dark:border-line dark:text-navy font-serif font-bold text-xs shadow-sm">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-navy text-cream font-serif font-bold text-xs shadow-sm">
                         {i + 1}
                       </span>
                       <p className="leading-relaxed pt-0.5">{step}</p>

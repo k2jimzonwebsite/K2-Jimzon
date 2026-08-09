@@ -14,12 +14,12 @@ export default function Wholesale() {
 
   return (
     <main className="pb-24 md:pb-20">
-      <section className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] overflow-hidden text-navy dark:text-cream">
+      <section className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] overflow-hidden text-navy">
         <div className="store-section grid min-h-[34rem] gap-10 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-16 lg:gap-16">
           <div>
-            <Kicker className="flex items-center gap-2 text-crimson dark:text-gold"><BriefcaseIcon size={14} /> Business supply</Kicker>
-            <h1 className="mt-4 max-w-3xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight text-navy dark:text-cream sm:text-5xl lg:text-6xl">Wholesale supply,<br /><em className="font-normal text-crimson dark:text-gold">reviewed by a person.</em></h1>
-            <p className="mt-6 max-w-xl text-base leading-7 text-navy-soft dark:text-cream/70">For cafés, restaurants, resellers, and other business buyers. K2 verifies case quantities, shared Manila stock, delivery needs, and commercial terms before sending a quote.</p>
+            <Kicker className="flex items-center gap-2 text-crimson"><BriefcaseIcon size={14} /> Business supply</Kicker>
+            <h1 className="mt-4 max-w-3xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl">Wholesale supply,<br /><em className="font-normal text-crimson">reviewed by a person.</em></h1>
+            <p className="mt-6 max-w-xl text-base leading-7 text-navy-soft">For cafés, restaurants, resellers, and other business buyers. K2 verifies case quantities, shared Manila stock, delivery needs, and commercial terms before sending a quote.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a href="mailto:k2jimzonwebsite@gmail.com?subject=K2%20Jimzon%20Wholesale%20Inquiry" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-crimson px-6 text-sm font-bold text-white transition-[transform,background-color] duration-150 hover:bg-crimson-deep active:scale-[0.97]">Email wholesale inquiry <ArrowIcon size={15} /></a>
               <GhostButton onClick={() => go('catalog')} className="px-6">Browse catalog</GhostButton>
@@ -28,8 +28,8 @@ export default function Wholesale() {
           <div className="relative overflow-hidden rounded-2xl border border-[var(--store-surface-border)] shadow-sm">
             <img src={LIFESTYLE.venice} alt="Italy sourcing landscape" className="aspect-[4/3] h-full w-full object-cover opacity-90" />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[var(--store-surface-bg)] via-[var(--store-surface-bg)]/80 to-transparent p-6 pt-20">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-crimson dark:text-gold">Current operating model</p>
-              <p className="mt-2 max-w-sm text-sm leading-6 text-navy-soft dark:text-cream/75">Account pricing and self-serve B2B ordering stay disabled until real approval and server-enforced pricing are ready.</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-crimson">Current operating model</p>
+              <p className="mt-2 max-w-sm text-sm leading-6 text-navy-soft">Account pricing and self-serve B2B ordering stay disabled until real approval and server-enforced pricing are ready.</p>
             </div>
           </div>
         </div>

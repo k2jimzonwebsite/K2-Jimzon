@@ -346,7 +346,7 @@ function ProductTabs({ product }) {
               <ol className="space-y-5">
                 {product.guide.steps?.map((step, i) => (
                   <li key={i} className="flex gap-4 text-sm text-navy-soft">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-navy text-cream dark:bg-shell-deep dark:border dark:border-line dark:text-navy font-serif font-bold text-xs shadow-sm">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-navy text-cream font-serif font-bold text-xs shadow-sm">
                       {i + 1}
                     </span>
                     <p className="leading-relaxed pt-0.5">{step}</p>
@@ -383,7 +383,7 @@ function UsageGuide({ product }) {
           <ol className="mt-8 space-y-5">
             {guide.steps.map((step, i) => (
               <li key={i} className="flex gap-4">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-navy font-serif text-[13px] font-semibold text-cream dark:bg-shell-deep dark:border dark:border-line dark:text-navy mt-0.5 shadow-sm">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-navy font-serif text-[13px] font-semibold text-cream mt-0.5 shadow-sm">
                   {i + 1}
                 </span>
                 <p className="text-[15px] leading-relaxed text-navy-soft">{step}</p>

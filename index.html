@@ -3,6 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta id="theme-color" name="theme-color" content="#FAF7F2" />
+    <script>
+      (() => {
+        try {
+          const savedTheme = localStorage.getItem('theme')
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isDark = savedTheme ? savedTheme === 'dark' : prefersDark
+          document.documentElement.classList.toggle('dark', isDark)
+          document.documentElement.style.colorScheme = isDark ? 'dark' : 'light'
+          document.querySelector('#theme-color')?.setAttribute('content', isDark ? '#090C15' : '#FAF7F2')
+        } catch (_) {
+          document.documentElement.style.colorScheme = 'light'
+        }
+      })()
+    </script>
     <title>K2 Jimzon — Italian imports, direct to the Philippines</title>
     <meta
       name="description"
@@ -18,8 +34,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-  <!-- impeccable-live-start -->
-<script src="http://localhost:8400/live.js"></script>
-<!-- impeccable-live-end -->
-</body>
+  </body>
 </html>

@@ -70,6 +70,14 @@ A sunlit Tuscan palette grounded by warm whites and punctuated by natural Italia
 The light-mode storefront must retain `public/wood-bg.jpg` as its continuous page canvas. Do not replace it with pure white, remove it during redesigns, or cover every full-width section with opaque Cream/Paper. If the atmosphere needs to be quieter, adjust the translucent overlay—not the existence of the texture. This rule is protected by a storefront smoke test that checks both light and dark modes.
 - **Ink (Navy)** (#2B2B2B): High-contrast text for ultimate legibility.
 
+### Theme Logic
+
+- Resolve a saved visitor choice first; otherwise follow the operating-system color preference.
+- Apply the resolved mode before React renders so the storefront never flashes the opposite theme.
+- Components use semantic tokens (`navy`, `navy-soft`, `paper`, `shell`, and the storefront surface variables). Those tokens already reverse between themes; do not add a second `dark:` text or surface swap unless the element has a documented exceptional need.
+- Light mode keeps the wood canvas. Dark mode removes the texture and uses the obsidian surface system.
+- Terracotta remains action, Olive remains trust/stock, and Blue remains wholesale in both modes. Theme changes never change a color's job.
+
 ### Named Rules
 **The One-Job Rule.** Every signal color has exactly one meaning: red = action, green = trust/stock, blue = wholesale. A color never crosses into another's territory.
 **The Quiet Tricolor Rule.** Italy is present as one 2px red hairline (`.tricolor`), in typography, and in photography — never as flag stripes, tricolore bars, or Tuscan-villa clichés.

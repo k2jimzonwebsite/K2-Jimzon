@@ -36,8 +36,8 @@ export default function StoreHeader() {
 
   return (
     <header className="store-nav-surface sticky top-0 z-40 border-b border-line backdrop-blur-xl">
-      <div className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-4 py-1.5 text-center text-[11px] font-semibold tracking-wide text-navy-soft dark:text-cream">
-        Italy-sourced goods, fulfilled in Manila <span className="mx-2 text-crimson dark:text-gold">·</span> Final stock and delivery are confirmed by K2 staff
+      <div className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-4 py-1.5 text-center text-[11px] font-semibold tracking-wide text-navy-soft">
+        Italy-sourced goods, fulfilled in Manila <span className="mx-2 text-crimson">·</span> Final stock and delivery are confirmed by K2 staff
       </div>
 
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 lg:px-6">
