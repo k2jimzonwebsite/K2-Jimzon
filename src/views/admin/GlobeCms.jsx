@@ -5,18 +5,13 @@ import { StarIcon } from '../../components/ui/icons'
 
 export default function GlobeCms() {
   const [tab, setTab] = useState('products')
-  const { isRemote, isLoading, cmsError, authSession, signOutAdmin } = useGlobeCms()
-
-  // Live mode requires an admin session before the CMS tools unlock
-  if (isRemote && !authSession) {
-    return <AdminSignIn />
-  }
+  const { isRemote, isLoading, cmsError } = useGlobeCms()
 
   return (
     <div>
       {/* Storage mode banner */}
       <div
-        className={`mb-4 flex items-center justify-between rounded-adm-sm border px-4 py-2.5 text-base ${
+        className={`mb-4 rounded-adm-sm border px-4 py-2.5 text-base ${
           isRemote ? 'border-forest/30 bg-forest/10 text-forest' : 'border-gold/40 bg-gold/10 text-gold'
         }`}
       >
@@ -25,14 +20,6 @@ export default function GlobeCms() {
             ? 'Live — changes save to Supabase and publish to every visitor.'
             : 'Demo mode — changes save to this browser only. Connect Supabase to publish for everyone.'}
         </span>
-        {isRemote && (
-          <button
-            onClick={signOutAdmin}
-            className="rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-1 text-sm font-medium text-white/70 hover:bg-adm-raised transition-colors"
-          >
-            Sign out
-          </button>
-        )}
       </div>
 
       {cmsError && (
@@ -68,66 +55,6 @@ export default function GlobeCms() {
       </div>
 
       {tab === 'products' ? <GlobeProductsPanel /> : <ReviewsPanel />}
-    </div>
-  )
-}
-
-/* ---------- Admin Sign In (Supabase live mode) ---------- */
-
-function AdminSignIn() {
-  const { signInAdmin } = useGlobeCms()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError(null)
-    setIsSubmitting(true)
-    try {
-      await signInAdmin(email.trim(), password)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign in failed')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  return (
-    <div className="mx-auto max-w-sm rounded-adm-sm border border-adm-line bg-adm-surface p-6">
-      <h3 className="font-serif text-xl font-semibold">Admin sign in</h3>
-      <p className="mt-1 text-base text-white/45">
-        The globe CMS is live on Supabase. Sign in with your admin account to manage products and reviews.
-      </p>
-
-      <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-        <div>
-          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-white/70">Email</label>
-          <input
-            type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username"
-            className="mt-1 w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 min-h-[44px] text-base text-white focus:border-blue focus:outline-none"
-          />
-        </div>
-        <div>
-          <label className="text-sm font-semibold uppercase tracking-[0.1em] text-white/70">Password</label>
-          <input
-            type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password"
-            className="mt-1 w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 min-h-[44px] text-base text-white focus:border-blue focus:outline-none"
-          />
-        </div>
-
-        {error && (
-          <p className="rounded-adm-sm border border-crimson/30 bg-crimson/10 px-3 py-2 text-base text-crimson">{error}</p>
-        )}
-
-        <button
-          type="submit" disabled={isSubmitting}
-          className="w-full rounded-adm-sm bg-crimson px-5 py-2.5 text-base font-semibold text-white hover:bg-crimson-deep transition-colors disabled:opacity-60"
-        >
-          {isSubmitting ? 'Signing in…' : 'Sign in'}
-        </button>
-      </form>
     </div>
   )
 }

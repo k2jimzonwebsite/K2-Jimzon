@@ -1,51 +1,42 @@
-# Shopee webhook connector
+# Shopee webhook intake
 
-This is the backend "pipe" that turns the Channels board's Shopee card 🟢 Live.
-It receives Shopee's order pushes, verifies them, and writes orders into your
-`orders` table. It runs on Supabase — never in the browser.
+This Edge Function verifies Shopee pushes and stores each signed event in
+`channel_event_inbox`. It deliberately does **not** create an order from the
+push because Shopee's status notification does not contain a complete order.
 
-## Deploy (one time)
+## Current readiness
 
-1. Install the Supabase CLI and log in:
-   ```bash
-   npm i -g supabase
-   supabase login
-   supabase link --project-ref <your-project-ref>
-   ```
+- Signature verification: implemented; confirm the exact signing string with
+  the approved Shopee app documentation before deployment.
+- Durable, idempotent event capture: implemented by
+  `20260809_operations_hardening.sql`.
+- Retry-safe failure response: implemented. Persistence failures return `503`
+  so the platform can retry instead of silently losing the event.
+- Full order-detail retrieval: pending partner credentials and API approval.
+- Canonical order normalization, inventory reservation, chat, and waybill:
+  pending the real API payloads and owner account access.
 
-2. Add the Shopee secret (the partner key from Shopee Open Platform):
-   ```bash
-   supabase secrets set SHOPEE_PARTNER_KEY=your_shopee_partner_key
-   ```
-   `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected automatically.
+## Required secrets
 
-3. Deploy the function:
-   ```bash
-   supabase functions deploy shopee-webhook --no-verify-jwt
-   ```
-   `--no-verify-jwt` is required because Shopee (not a logged-in user) calls it;
-   the function does its own signature check instead.
+- `SHOPEE_PARTNER_KEY`
+- `SUPABASE_URL` (injected by Supabase)
+- `SUPABASE_SERVICE_ROLE_KEY` (injected by Supabase)
 
-4. Copy the function URL it prints, e.g.
-   `https://<ref>.functions.supabase.co/shopee-webhook`, and paste it as the
-   **Push / webhook URL** in Shopee Open Platform → your app → Push settings.
+The function must be deployed without Supabase JWT verification because
+Shopee is the caller. Its own HMAC verification remains mandatory.
 
-## What happens next
+## Required next worker
 
-- Shopee sends a signed push → the function verifies it with `SHOPEE_PARTNER_KEY`.
-- Any valid push sets `channel_connections.shopee = 'live'`, so the admin card
-  flips to 🟢 on its own.
-- Order-status pushes (`code: 3`) insert a row into `orders` with
-  `channel_source = 'shopee'` and `fulfillment_method = 'SHOPEE:<ordersn>'`.
+Process `channel_event_inbox` rows in `received` state. For every order event:
 
-## The one thing to finish
+1. Lock/claim the event and increment `attempt_count`.
+2. Request Shopee order details with the correct shop access token.
+3. Validate external item identifiers against `channel_listings`.
+4. Upsert one `order_requests` header using `(channel_source,
+   external_order_id)` as the idempotency boundary.
+5. Insert real `order_request_items` and let staff confirmation allocate exact
+   FEFO lots.
+6. Mark the event `processed`, or `failed` with `last_error` for retry.
 
-Shopee's push only includes the **order serial + status** — not the line items.
-To fill in the real SKU, quantity, buyer and total, the function needs to call
-Shopee's `get_order_detail` API with your shop's **access token** right after
-receiving the push. That's marked with a `NOTE:` comment in `index.ts`. Until
-that call is added, orders arrive tagged and traceable (by `SHOPEE:<ordersn>`)
-but with placeholder line details.
-
-The same pattern (verify → write → mark live) is reused for Lazada, TikTok, Meta
-and WhatsApp — copy this folder and swap the signature check and field mapping.
+Do not reintroduce placeholder SKUs, guessed quantities, or a `200` response
+after a persistence failure.

@@ -99,6 +99,10 @@ The light-mode storefront must retain `public/wood-bg.jpg` as its continuous pag
 ### Named Rules
 **The Serif-Says-Story Rule.** Fraunces carries voice — headlines, product names, editorial moments. Archivo carries fact — prices, stock, buttons, forms. Don't blur the line by setting UI in the serif.
 
+**Compact Commerce Exception.** Product names use Fraunces when they are large editorial features, but use Archivo at card and mobile sizes. Stock, price, category, filters, and navigation always use Archivo. Operational text must not drop below 12px; card titles remain at least 16px with a readable line height.
+
+**Universal Stock Slot.** Every catalog card reserves the same stock row immediately above its price and action footer. The wording and color may reflect healthy, low, or sold-out inventory, but the placement never moves with title or description length.
+
 ## 4. Elevation
 
 Structural lift. Shadows are used strictly to define interactive elements against a flat background. Shadows carry a warm amber tint rather than harsh black, evoking organic materiality.
@@ -109,6 +113,20 @@ Structural lift. Shadows are used strictly to define interactive elements agains
 
 ### Named Rules
 **The Lift-on-Intent Rule.** The jump from Card to Float is reserved for interaction (hover, active) and true overlays. A static element never wears the Float shadow.
+
+## 4.1 Motion and Interaction
+
+Motion should make the storefront feel handled, not decorated. The continuous Milano-to-Manila route and review globe are the two ambient signatures. Everywhere else, movement belongs to an entrance, a state change, or direct customer input.
+
+- **Micro feedback:** 120–220ms with the shared Quart/Quint ease-out curves. Buttons compress slightly; icons may rotate or translate only when their meaning supports it.
+- **Composed transitions:** 240–400ms. Catalog entries may stagger by 25–45ms, capped after the first six items so browsing never waits for choreography.
+- **Performance:** Prefer transform and opacity. Hover-only movement must be inside a fine-pointer media query.
+- **Reduced motion:** Content remains visible and usable; ambient animation and spatial travel collapse to near-instant state changes.
+- **Mobile:** Interactions must not capture vertical scrolling. Hover affordances need an equivalent tap, focus, or persistent cue.
+
+**The One-Signature Rule.** A view may have one ambient or scroll-led motion sequence. Supporting sections use tactile state feedback, not repeated fade-up reveals.
+
+**The Motion-Earns-Its-Place Rule.** If movement does not explain hierarchy, location, progress, or response, remove it.
 
 ## 5. Components
 

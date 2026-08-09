@@ -221,6 +221,11 @@
   /* ── Product image tray — mode-aware neutral, soft warm ivory in light ── */
   --product-img-bg: #F3EDE0;   /* warm ivory in light */
 
+  /* Component typography: Archivo carries compact facts; Fraunces stays display-only. */
+  --store-card-title-size: 1rem;
+  --store-card-title-line-height: 1.35;
+  --store-stock-slot-min-height: 2.25rem;
+
   min-height: 100dvh;
   background-color: var(--color-cream);
   color-scheme: light;
@@ -339,6 +344,140 @@
 /* ── .product-img-surface: image tray inside product cards ─────────────── */
 .product-img-surface {
   background-color: var(--product-img-bg);
+}
+
+.store-card-title {
+  font-size: var(--store-card-title-size);
+  line-height: var(--store-card-title-line-height);
+}
+
+.product-card-stock {
+  min-height: var(--store-stock-slot-min-height);
+}
+
+/* Storefront motion language: one composed entrance, then tactile feedback. */
+.category-tile {
+  isolation: isolate;
+  transition: background-color 180ms var(--ease-out-quart), box-shadow 180ms var(--ease-out-quart), transform 160ms var(--ease-out-quart);
+}
+
+.category-tile::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 25%, color-mix(in srgb, var(--color-crimson) 8%, transparent) 50%, transparent 75%);
+  content: '';
+  opacity: 0;
+  transform: translateX(-65%);
+  transition: opacity 180ms ease, transform 420ms var(--ease-out-quint);
+}
+
+.category-tile:active { transform: scale(0.992); }
+
+.product-card {
+  transition: border-color 180ms ease, box-shadow 220ms var(--ease-out-quart), transform 220ms var(--ease-out-quart);
+}
+
+.product-card-visual {
+  transition: transform 280ms var(--ease-out-quint), filter 220ms ease;
+}
+
+.product-add-button svg { transition: transform 180ms var(--ease-out-quart); }
+
+.story-step { transition: background-color 220ms ease; }
+
+.story-step::before {
+  position: absolute;
+  inset-block: 18%;
+  left: 0;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--color-crimson);
+  content: '';
+  opacity: 0;
+  transform: scaleY(0.35);
+  transition: opacity 180ms ease, transform 260ms var(--ease-out-quint);
+}
+
+.story-step-number,
+.story-step-image {
+  transition: color 180ms ease, box-shadow 220ms ease, transform 220ms var(--ease-out-quart);
+}
+
+.story-step[aria-pressed='true'] {
+  background: linear-gradient(90deg, var(--color-crimson-wash), transparent 72%);
+}
+
+.story-step[aria-pressed='true']::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.story-step[aria-pressed='true'] .story-step-number { color: var(--color-crimson); }
+.story-step[aria-pressed='true'] .story-step-image { box-shadow: var(--store-surface-shadow); }
+
+.faq-item { transition: background-color 180ms ease; }
+.faq-trigger { transition: color 160ms ease; }
+
+.faq-icon {
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 220ms var(--ease-out-quart);
+}
+
+.faq-answer-grid { transition: grid-template-rows 280ms var(--ease-out-quart); }
+
+.faq-answer {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 160ms ease, transform 220ms var(--ease-out-quart);
+}
+
+.faq-item[data-open='true'] { background: linear-gradient(90deg, var(--color-crimson-wash), transparent 70%); }
+
+.faq-item[data-open='true'] .faq-icon {
+  border-color: color-mix(in srgb, var(--color-crimson) 34%, var(--store-surface-border));
+  background: var(--color-crimson-wash);
+  color: var(--color-crimson);
+}
+
+.faq-item[data-open='true'] .faq-answer {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .category-tile:hover {
+    background: color-mix(in srgb, var(--store-surface-bg) 91%, var(--color-crimson));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-crimson) 14%, transparent);
+  }
+
+  .category-tile:hover::after {
+    opacity: 1;
+    transform: translateX(65%);
+  }
+
+  .category-tile:hover > span:first-of-type { transform: translateY(-2px) rotate(-2deg); }
+
+  .product-card:hover {
+    border-color: color-mix(in srgb, var(--color-navy) 20%, var(--store-surface-border));
+    box-shadow: 0 4px 12px -2px rgba(80, 60, 40, 0.12), 0 14px 30px -6px rgba(80, 60, 40, 0.10);
+    transform: translateY(-2px);
+  }
+
+  .dark .product-card:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42);
+  }
+
+  .product-card:hover .product-card-visual { transform: scale(1.035); }
+  .product-add-button:hover svg { transform: rotate(90deg); }
+
+  .story-step:hover:not([aria-pressed='true']) { background: color-mix(in srgb, var(--store-surface-bg) 70%, transparent); }
+  .faq-item:hover:not([data-open='true']) { background: color-mix(in srgb, var(--store-surface-bg) 55%, transparent); }
+  .faq-item:hover .faq-icon { border-color: color-mix(in srgb, var(--color-navy) 28%, var(--store-surface-border)); }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .interactive-reveal-hint { opacity: 1; }
 }
 
 /* ── .store-card: named card container (replaces ad-hoc border+bg classes) */

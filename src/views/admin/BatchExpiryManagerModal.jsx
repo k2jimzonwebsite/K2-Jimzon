@@ -41,18 +41,27 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
     if (!supabase || !product?.sku) return
     let active = true
     supabase.from('product_batches').select('*').eq('sku', product.sku).order('expiry_date', { ascending: true })
-      .then(({ data }) => {
-        if (active && Array.isArray(data) && data.length > 0) {
+      .then(({ data, error: loadError }) => {
+        if (!active) return
+        if (loadError) {
+          setError(`Could not load physical lots: ${loadError.message}`)
+          return
+        }
+        if (Array.isArray(data)) {
           setBatches(data.map((r) => ({
             id: r.id,
             box_code: r.box_code || '',
+            batch_code: r.batch_code || '',
             qty: r.quantity ?? 0,
+            reserved_quantity: r.reserved_quantity ?? 0,
             expiry_date: r.expiry_date || '',
             landed_date: r.landed_date || '',
             hub: r.hub || '',
             custodian: r.custodian || '',
             channel: r.channel || '',
             is_pinned: !!r.is_pinned,
+            inventory_status: r.inventory_status || 'available',
+            clearance_approved_at: r.clearance_approved_at || null,
           })))
         }
       })
@@ -75,20 +84,48 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
     setBatches(prev => prev.map(b => b.id === id ? { ...b, is_pinned: !b.is_pinned } : b))
   }
 
+  const handleClearanceApproval = async batch => {
+    if (String(batch.id).startsWith('new-')) {
+      setError('Save the physical lot before recording a clearance approval.')
+      return
+    }
+    const approving = !batch.clearance_approved_at
+    const reason = window.prompt(approving
+      ? 'Record why this 31–89 day lot is approved for disclosed clearance sale.'
+      : 'Record why the clearance approval is being withdrawn.')
+    if (!reason?.trim()) return
+    setSaving(true); setError('')
+    const { data, error: approvalError } = await supabase.rpc('set_batch_clearance_approval', {
+      p_batch_id: batch.id,
+      p_approved: approving,
+      p_reason: reason.trim(),
+    })
+    setSaving(false)
+    if (approvalError) { setError(approvalError.message); return }
+    const saved = Array.isArray(data) ? data[0] : data
+    if (saved) setBatches(previous => previous.map(item => item.id === saved.id ? {
+      ...item,
+      inventory_status: saved.inventory_status,
+      clearance_approved_at: saved.clearance_approved_at,
+    } : item))
+  }
+
   const handleAddBatch = (e) => {
     e.preventDefault()
     if (!newBoxCode.trim() || !newExpiryDate || newQty <= 0) return
 
     const newBatch = {
-      id: `B-${Date.now().toString().slice(-4)}`,
+      id: `new-${Date.now()}-${Math.random().toString(16).slice(2)}`,
       box_code: newBoxCode.trim(),
+      batch_code: newBoxCode.trim(),
       qty: Number(newQty),
       expiry_date: newExpiryDate,
       landed_date: new Date().toISOString().split('T')[0],
       hub: newHub,
       custodian: newCustodian,
       channel: newChannel,
-      is_pinned: false
+      is_pinned: false,
+      inventory_status: 'available',
     }
 
     setBatches(prev => [...prev, newBatch])
@@ -101,7 +138,11 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
   }
 
   const handleDeleteBatch = (id) => {
-    setBatches(prev => prev.filter(b => b.id !== id))
+    setBatches(prev => prev.flatMap(batch => {
+      if (batch.id !== id) return [batch]
+      if (String(batch.id).startsWith('new-')) return []
+      return [{ ...batch, qty: 0, inventory_status: 'depleted' }]
+    }))
   }
 
   const handleSave = async () => {
@@ -115,9 +156,10 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
     }
     if (supabase && sku) {
       const rows = batches
-        .filter((b) => Number(b.qty) > 0 || b.expiry_date)
         .map((b) => ({
+          id: String(b.id).startsWith('new-') ? null : b.id,
           box_code: b.box_code || null,
+          batch_code: b.batch_code || b.box_code || null,
           quantity: Number(b.qty) || 0,
           expiry_date: b.expiry_date || null,
           landed_date: b.landed_date || null,
@@ -125,8 +167,9 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
           custodian: b.custodian || null,
           channel: b.channel || null,
           is_pinned: !!b.is_pinned,
+          inventory_status: b.inventory_status || null,
         }))
-      const { error: saveError } = await supabase.rpc('replace_product_batches', {
+      const { error: saveError } = await supabase.rpc('reconcile_product_batches', {
         p_sku: sku,
         p_batches: rows,
         p_reason: 'Batch editor reconciliation',
@@ -218,6 +261,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                       }`}>
                         {health.text}
                       </span>
+                      {health.status === 'WARNING' && <button type="button" disabled={saving} onClick={() => handleClearanceApproval(b)} className={`rounded border px-2 py-1 text-[10px] font-bold ${b.clearance_approved_at ? 'border-forest/40 bg-forest/10 text-forest' : 'border-amber/40 bg-amber/10 text-amber'}`}>{b.clearance_approved_at ? 'Clearance approved' : 'Approve clearance'}</button>}
 
                       <button
                         type="button"
@@ -260,6 +304,22 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                         onChange={(e) => handleUpdateBatchField(b.id, 'expiry_date', e.target.value)}
                         className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-2.5 py-1.5 text-white font-mono outline-none focus:border-amber"
                       />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-white/60 uppercase mb-1">Inventory disposition</label>
+                      <select
+                        value={b.inventory_status || 'available'}
+                        onChange={(e) => handleUpdateBatchField(b.id, 'inventory_status', e.target.value)}
+                        className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-2.5 py-1.5 text-white font-mono outline-none focus:border-amber"
+                      >
+                        <option value="available">Available</option>
+                        <option value="quarantine">Quarantine</option>
+                        <option value="damaged">Damaged</option>
+                        <option value="expired">Expired</option>
+                        <option value="unaccounted">Unaccounted</option>
+                        <option value="depleted">Depleted</option>
+                      </select>
+                      {Number(b.reserved_quantity || 0) > 0 && <p className="mt-1 text-[10px] text-amber">{b.reserved_quantity} unit(s) reserved</p>}
                     </div>
                   </div>
 

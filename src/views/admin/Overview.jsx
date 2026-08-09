@@ -188,7 +188,7 @@ function PanelHeading({ icon: Icon, title, description, action }) {
   )
 }
 
-export default function Overview({ setSection, skus = 0, lowStock = 0, pending = 0 }) {
+export default function Overview({ setSection, pending = 0 }) {
   const [range, setRange] = useState(30)
   const [data, setData] = useState(EMPTY_DATA)
   const [error, setError] = useState('')
@@ -276,7 +276,7 @@ export default function Overview({ setSection, skus = 0, lowStock = 0, pending =
     const overdue = conversations.filter(conversation => conversation.response_due_at && new Date(conversation.response_due_at).getTime() < now).length
     const urgent = conversations.filter(conversation => conversation.priority === 'urgent').length
     const unassigned = conversations.filter(conversation => !conversation.assigned_to).length
-    const products = data.products.length ? data.products : Array.from({ length: skus }, (_, index) => ({ sku: `fallback-${index}`, stock_available: index < lowStock ? 5 : 6 }))
+    const products = data.products
     const outOfStock = products.filter(product => Number(product.stock_available || 0) <= 0).length
     const lowStockCount = products.filter(product => Number(product.stock_available || 0) > 0 && Number(product.stock_available || 0) <= 5).length
     const thirtyDays = now + (30 * 86400000)
@@ -337,7 +337,7 @@ export default function Overview({ setSection, skus = 0, lowStock = 0, pending =
       pasabuyStages,
       revenueSeries: buildRevenueSeries(currentOrders, range),
     }
-  }, [data, lowStock, range, skus])
+  }, [data, range])
 
   const metrics = [
     { label: 'Verified revenue', value: peso(analytics.verifiedRevenue), detail: `${range}-day payment-verified total`, change: analytics.revenueChange },
@@ -557,7 +557,7 @@ export default function Overview({ setSection, skus = 0, lowStock = 0, pending =
           <PanelHeading icon={BoxIcon} title="Inventory health" description="SKU availability and FEFO batch risk requiring staff review." />
           <div className="divide-y divide-adm-line px-4 sm:px-5">
             {[
-              { label: 'Catalog SKUs', value: data.products.length || skus, detail: 'Current product records', tone: 'text-white' },
+              { label: 'Catalog SKUs', value: data.products.length, detail: 'Current product records', tone: 'text-white' },
               { label: 'Out of stock', value: analytics.outOfStock, detail: 'No sellable units', tone: analytics.outOfStock > 0 ? 'text-crimson' : 'text-white' },
               { label: 'Low stock', value: analytics.lowStock, detail: '1–5 units available', tone: analytics.lowStock > 0 ? 'text-amber' : 'text-white' },
               { label: 'Expiry risk', value: analytics.expired + analytics.expiring, detail: `${analytics.expired} expired · ${analytics.expiring} within 30 days`, tone: analytics.expired > 0 ? 'text-crimson' : analytics.expiring > 0 ? 'text-amber' : 'text-white' },

@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy } from 'react'
+import { useState, useEffect, useRef, Suspense, lazy } from 'react'
 import {
   BoxIcon, GlobeIcon, GridIcon, UserIcon, InboxIcon,
   PlaneIcon, BagIcon, ShieldIcon, BarcodeIcon, EyeIcon,
@@ -13,6 +13,9 @@ import DailyTaskNotificationDrawer from './DailyTaskNotificationDrawer'
 import AdminAiCopilotModal from './AdminAiCopilotModal'
 import SystemDevOpsModal from './SystemDevOpsModal'
 import StartHereGuide from './StartHereGuide'
+import KeyboardShortcutsModal from './KeyboardShortcutsModal'
+import UniversalScanLauncher from './UniversalScanLauncher'
+import { GO_TO_SHORTCUTS, isTextEntryTarget } from './adminOperations'
 
 // Lazy loaded heavy components to reduce initial bundle lag
 const Kanban = lazy(() => import('./Kanban'))
@@ -112,6 +115,11 @@ export default function Admin() {
   const [showAiCopilot, setShowAiCopilot] = useState(false)
   const [showDevOpsModal, setShowDevOpsModal] = useState(false)
   const [showStartHere, setShowStartHere] = useState(false)
+  const [showShortcuts, setShowShortcuts] = useState(false)
+  const [showScanCenter, setShowScanCenter] = useState(false)
+  const [guideQuery, setGuideQuery] = useState('')
+  const [inventoryTool, setInventoryTool] = useState(null)
+  const goChordRef = useRef(null)
 
   // KPI states (kept here because the sidebar badge + Overview both read them)
   const [activeSkus, setActiveSkus] = useState(0)
@@ -133,6 +141,63 @@ export default function Admin() {
       supabase.removeChannel(channel)
     }
   }, [isAdmin])
+
+  useEffect(() => {
+    if (!isAdmin) return undefined
+    const onKeyDown = event => {
+      if (event.key === 'Escape') {
+        if (showScanCenter) setShowScanCenter(false)
+        else if (showShortcuts) setShowShortcuts(false)
+        return
+      }
+      if (isTextEntryTarget(event.target)) return
+      const key = event.key.toLowerCase()
+      const hasOpenLayer = paletteOpen || showDailyTasks || showAiCopilot || showDevOpsModal || showStartHere || showShortcuts || showScanCenter || showCsvImport || isMobileMenuOpen
+
+      if (event.key === '?' && !hasOpenLayer) {
+        event.preventDefault()
+        setShowShortcuts(true)
+        return
+      }
+      if (event.altKey && key === 's' && !hasOpenLayer) {
+        event.preventDefault()
+        setShowScanCenter(true)
+        return
+      }
+      if (event.altKey && key === 'g' && !hasOpenLayer) {
+        event.preventDefault()
+        setGuideQuery('')
+        setShowAiCopilot(true)
+        return
+      }
+      if (event.altKey && key === 'a' && !hasOpenLayer) {
+        event.preventDefault()
+        setShowDailyTasks(true)
+        return
+      }
+      if (hasOpenLayer || event.ctrlKey || event.metaKey || event.altKey) return
+
+      if (goChordRef.current === 'g') {
+        window.clearTimeout(goChordRef.timeout)
+        goChordRef.current = null
+        const destination = GO_TO_SHORTCUTS[key]
+        if (destination) {
+          event.preventDefault()
+          selectSection(destination)
+        }
+        return
+      }
+      if (key === 'g') {
+        goChordRef.current = 'g'
+        goChordRef.timeout = window.setTimeout(() => { goChordRef.current = null }, 900)
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.clearTimeout(goChordRef.timeout)
+    }
+  }, [isAdmin, paletteOpen, showDailyTasks, showAiCopilot, showDevOpsModal, showStartHere, showShortcuts, showScanCenter, showCsvImport, isMobileMenuOpen, canManageStaff])
 
   const fetchKpis = async () => {
     if (!supabase) return
@@ -168,6 +233,11 @@ export default function Admin() {
     setIsMobileMenuOpen(false)
   }
 
+  const launchInventoryTool = id => {
+    selectSection('inventory')
+    setInventoryTool({ id, token: Date.now() })
+  }
+
   const showSheet = sheetMode && section === 'inventory'
   const showGrid = !sheetMode && section === 'inventory'
   const meta = SECTIONS[section] || SECTIONS.overview
@@ -176,7 +246,14 @@ export default function Admin() {
 
   return (
     <div className="admin-ui flex min-h-screen bg-adm-bg pb-20 text-white/80 md:pb-0 font-sans selection:bg-blue/30 selection:text-white">
-      <CommandPalette isOpen={paletteOpen} setIsOpen={setPaletteOpen} setSection={selectSection} />
+      <CommandPalette
+        isOpen={paletteOpen}
+        setIsOpen={setPaletteOpen}
+        setSection={selectSection}
+        onOpenScan={() => setShowScanCenter(true)}
+        onOpenGuide={(query = '') => { setGuideQuery(query); setShowAiCopilot(true) }}
+        onOpenShortcuts={() => setShowShortcuts(true)}
+      />
 
       {/* Sidebar */}
       <aside className="hidden w-64 shrink-0 flex-col border-r border-adm-line bg-adm-sunken lg:flex">
@@ -235,6 +312,9 @@ export default function Admin() {
         <div className="flex min-h-[58px] w-full shrink-0 items-center justify-between gap-2 border-b border-adm-line bg-adm-sunken px-3 lg:hidden">
           <p className="text-base font-semibold text-white truncate min-w-0">{meta.title}</p>
           <div className="flex items-center gap-0.5 shrink-0">
+            <button aria-label="Open scan center" onClick={() => setShowScanCenter(true)} className="flex min-h-[44px] min-w-[44px] items-center justify-center text-blue transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70">
+              <BarcodeIcon size={19} />
+            </button>
             <button aria-label="Search dashboard" onClick={() => setPaletteOpen(true)} className="flex min-h-[44px] min-w-[44px] items-center justify-center text-white/50 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70">
               <SearchIcon size={19} />
             </button>
@@ -267,6 +347,16 @@ export default function Admin() {
           </div>
           <div className="ml-auto flex items-center gap-2 overflow-x-auto scrollbar-none">
             <button
+              onClick={() => setShowScanCenter(true)}
+              className="flex min-h-[40px] items-center gap-1.5 rounded-adm-sm bg-blue px-3 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-blue-deep active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
+              title="Open scan center (Alt+S)"
+            >
+              <BarcodeIcon size={16} />
+              <span>Scan</span>
+              <kbd className="hidden rounded border border-white/20 bg-black/10 px-1.5 py-0.5 font-mono text-[10px] text-white/70 xl:inline">Alt S</kbd>
+            </button>
+
+            <button
               onClick={() => setShowStartHere(true)}
               className="flex min-h-[40px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
               title="How to use this dashboard — start here"
@@ -287,10 +377,10 @@ export default function Admin() {
             <button
               onClick={() => setShowAiCopilot(true)}
               className="relative flex min-h-[40px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
-              title="Open the dashboard AI guide"
+              title="Open the grounded operations guide (Alt+G)"
             >
-              <StarIcon size={14} className="text-blue" />
-              <span className="hidden xl:inline">AI guide</span>
+              <BookIcon size={14} className="text-blue" />
+              <span className="hidden xl:inline">Operations guide</span>
             </button>
 
             <button
@@ -352,8 +442,8 @@ export default function Admin() {
                : section === 'suppliers' ? <Suppliers />
                : section === 'consignment' ? <ConsignmentManager />
                : showSheet ? <Sheet />
-               : showGrid ? <InventoryGrid />
-               : section === 'overview' ? <Overview setSection={selectSection} skus={activeSkus} lowStock={lowStock} pending={pendingOrders} />
+               : showGrid ? <InventoryGrid launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} />
+               : section === 'overview' ? <Overview setSection={selectSection} pending={pendingOrders} />
                : <Kanban />}
             </Suspense>
           </ErrorBoundary>
@@ -403,6 +493,8 @@ export default function Admin() {
         isOpen={showAiCopilot}
         onClose={() => setShowAiCopilot(false)}
         onNavigate={selectSection}
+        currentSection={section}
+        initialQuery={guideQuery}
       />
 
       <SystemDevOpsModal
@@ -415,6 +507,15 @@ export default function Admin() {
         onClose={() => setShowStartHere(false)}
         onNavigate={selectSection}
       />
+
+      <UniversalScanLauncher
+        isOpen={showScanCenter}
+        onClose={() => setShowScanCenter(false)}
+        onNavigate={selectSection}
+        onInventoryTool={launchInventoryTool}
+      />
+
+      <KeyboardShortcutsModal isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
 
     </div>
   )

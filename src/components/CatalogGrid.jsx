@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useStore } from '../context/StoreContext'
 import { CATEGORIES } from '../data/products'
 import ProductCard from './ProductCard'
@@ -8,6 +8,7 @@ import { SearchIcon, XIcon } from './ui/icons'
 export default function CatalogGrid() {
   const { query, setQuery, category, setCategory, listedProducts: products } = useStore()
   const [sortBy, setSortBy] = useState('popular')
+  const reducedMotion = useReducedMotion()
 
   const filteredProducts = useMemo(() => {
     let result = products || []
@@ -68,10 +69,18 @@ export default function CatalogGrid() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
             <AnimatePresence initial={false}>
-              {filteredProducts.map((product) => (
-                <motion.div key={product.id || product.sku} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.16 }} className="flex h-full">
+              {filteredProducts.map((product, index) => (
+                <motion.div
+                  key={product.id || product.sku}
+                  layout
+                  initial={reducedMotion ? { opacity: 0 } : { opacity: 0, transform: 'translateY(8px)' }}
+                  animate={{ opacity: 1, transform: 'translateY(0)' }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: reducedMotion ? 0.01 : 0.22, delay: reducedMotion ? 0 : Math.min(index, 6) * 0.025, ease: [0.25, 1, 0.5, 1] }}
+                  className="flex h-full"
+                >
                   <ProductCard product={product} />
                 </motion.div>
               ))}

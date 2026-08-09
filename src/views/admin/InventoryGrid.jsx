@@ -211,7 +211,7 @@ function BreakdownRow({ label, data }) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function InventoryGrid() {
+export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
   const [products, setProducts]       = useState([])
   const [batchMap, setBatchMap]       = useState({})
   const [loading, setLoading]         = useState(true)
@@ -222,6 +222,13 @@ export default function InventoryGrid() {
   const [saving, setSaving]           = useState(false)
   const [showAiScanner, setShowAiScanner] = useState(false)
   const [showSmartPaste, setShowSmartPaste] = useState(false)
+
+  useEffect(() => {
+    if (!launchTool?.id) return
+    if (launchTool.id === 'scan-product') setShowAiScanner(true)
+    if (launchTool.id === 'smart-paste') setShowSmartPaste(true)
+    onLaunchToolHandled?.(launchTool.token)
+  }, [launchTool, onLaunchToolHandled])
   const [enrichProduct, setEnrichProduct] = useState(null)
   const [selected, setSelected] = useState(() => new Set())
   const [deleteTargets, setDeleteTargets] = useState(null)
@@ -245,7 +252,8 @@ export default function InventoryGrid() {
     if (!supabase) { setLoading(false); return }
     setLoading(true)
     const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false })
-    if (!error && data) setProducts(data)
+    if (error) flash(`Could not load the product master: ${error.message}`, true)
+    else setProducts(data || [])
     setLoading(false)
   }
 
@@ -253,8 +261,8 @@ export default function InventoryGrid() {
   // splits by location (hub), channel, and holder (custodian).
   const fetchBatches = async () => {
     if (!supabase) return
-    const { data } = await supabase.from('product_batches').select('sku, quantity, hub, custodian, channel, expiry_date, is_pinned')
-    if (!data) return
+    const { data, error } = await supabase.from('product_batches').select('sku, quantity, hub, custodian, channel, expiry_date, is_pinned, inventory_status, reserved_quantity')
+    if (error) { flash(`Could not load physical lot balances: ${error.message}`, true); return }
     const map = {}
     for (const r of data) {
       const q = Number(r.quantity) || 0

@@ -12,13 +12,11 @@ import { products as localProducts } from '../data/products'
 
 const StoreContext = createContext(null)
 
-const INITIAL_COUPONS = []
-
 // Shown when a product has no photo of its own. Never borrow another
 // product's image just to fill the frame.
 const PLACEHOLDER_IMG = '/images/placeholder.svg'
 
-export function StoreProvider({ children }) {
+export function StoreProvider({ children, enableAdminData = false }) {
   const [view, setView] = useState('home')
   const [productId, setProductId] = useState(null)
   const [cart, setCart] = useState([])
@@ -37,16 +35,8 @@ export function StoreProvider({ children }) {
   const [dbProducts, setDbProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Coupons & Voucher Hunt state
-  const [coupons, setCoupons] = useState(() => {
-    try {
-      const saved = localStorage.getItem('k2_coupons')
-      return saved ? JSON.parse(saved) : INITIAL_COUPONS
-    } catch (e) {
-      return INITIAL_COUPONS
-    }
-  })
-
+  // Coupon rules remain private in Supabase; the storefront validates one
+  // submitted code at a time and cannot enumerate promotion records.
   const [appliedCoupon, setAppliedCoupon] = useState(null)
   const [claimedVouchers, setClaimedVouchers] = useState(() => {
     try {
@@ -59,76 +49,36 @@ export function StoreProvider({ children }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('k2_coupons', JSON.stringify(coupons))
-    } catch (e) {}
-  }, [coupons])
-
-  useEffect(() => {
-    try {
       localStorage.setItem('k2_claimed_vouchers', JSON.stringify(claimedVouchers))
     } catch (e) {}
   }, [claimedVouchers])
 
-  const createCoupon = (newCouponData) => {
-    const coupon = {
-      id: 'c_' + Date.now(),
-      code: newCouponData.code.toUpperCase().trim(),
-      description: newCouponData.description || 'Exclusive Promotional Voucher',
-      type: newCouponData.type || 'percentage',
-      value: Number(newCouponData.value) || 10,
-      minSpend: Number(newCouponData.minSpend) || 0,
-      maxUses: Number(newCouponData.maxUses) || 100,
-      usedCount: 0,
-      expiryDate: newCouponData.expiryDate || '2026-12-31',
-      isHunt: Boolean(newCouponData.isHunt),
-      clue: newCouponData.clue || '',
-      isActive: true,
-    }
-    setCoupons(prev => [coupon, ...prev])
-    return coupon
-  }
-
-  const toggleCouponStatus = (couponId) => {
-    setCoupons(prev => prev.map(c => c.id === couponId ? { ...c, isActive: !c.isActive } : c))
-  }
-
-  const deleteCoupon = (couponId) => {
-    setCoupons(prev => prev.filter(c => c.id !== couponId))
-    if (appliedCoupon && appliedCoupon.id === couponId) {
-      setAppliedCoupon(null)
-    }
-  }
-
-  const claimCoupon = (codeStr) => {
+  const applyCoupon = async (codeStr) => {
     const cleanCode = codeStr.toUpperCase().trim()
-    const found = coupons.find(c => c.code === cleanCode && c.isActive)
-    if (!found) {
-      return { success: false, message: 'Invalid or expired coupon code!' }
-    }
-    if (!claimedVouchers.includes(cleanCode)) {
-      setClaimedVouchers(prev => [...prev, cleanCode])
-    }
-    return { success: true, message: `🎉 Voucher ${cleanCode} claimed into your wallet!`, coupon: found }
-  }
-
-  const applyCoupon = (codeStr) => {
-    const cleanCode = codeStr.toUpperCase().trim()
-    const found = coupons.find(c => c.code === cleanCode && c.isActive)
-    if (!found) {
-      return { success: false, message: 'Invalid or expired promo code!' }
-    }
+    if (!cleanCode) return { success: false, message: 'Enter a coupon code.' }
+    if (!supabase) return { success: false, message: 'Coupon validation is unavailable.' }
     const currentSubtotal = cart.reduce((sum, line) => {
       const product = getProduct(line.id)
       if (!product) return sum
-      const price = isWholesale ? product.wholesale : product.retail
-      return sum + price * line.qty
+      return sum + product.retail * line.qty
     }, 0)
-
-    if (currentSubtotal < found.minSpend) {
-      return { success: false, message: `Minimum spend of ₱${found.minSpend.toLocaleString()} required for ${cleanCode}!` }
+    const { data, error } = await supabase.rpc('validate_coupon', {
+      p_code: cleanCode,
+      p_subtotal: currentSubtotal,
+    })
+    if (error) return { success: false, message: error.message || 'Coupon could not be validated.' }
+    const row = Array.isArray(data) ? data[0] : data
+    if (!row?.coupon_id) return { success: false, message: 'Coupon could not be validated.' }
+    const coupon = {
+      id: row.coupon_id,
+      code: row.normalized_code,
+      type: row.discount_type,
+      value: Number(row.discount_value),
+      discountAmount: Number(row.discount_amount),
     }
-    setAppliedCoupon(found)
-    return { success: true, message: `✓ Applied ${found.code} (${found.type === 'percentage' ? found.value + '%' : '₱' + found.value} OFF)!`, coupon: found }
+    setAppliedCoupon(coupon)
+    if (!claimedVouchers.includes(cleanCode)) setClaimedVouchers(previous => [...previous, cleanCode])
+    return { success: true, message: `${coupon.code} applied. It will be rechecked when you submit.`, coupon }
   }
 
   const removeCoupon = () => {
@@ -321,7 +271,6 @@ export function StoreProvider({ children }) {
 
   useEffect(() => {
     fetchProducts()
-    fetchConversations()
     checkUser()
 
     if (!supabase) return;
@@ -331,24 +280,35 @@ export function StoreProvider({ children }) {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
       .subscribe()
 
-    const convosChannel = supabase
-      .channel('public:conversations:store')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'conversations' }, fetchConversations)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, fetchConversations)
-      .subscribe()
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       checkUser(session?.user)
-      if (session?.user) fetchConversations()
-      else setConversations([])
     })
 
     return () => {
       supabase.removeChannel(productsChannel)
-      supabase.removeChannel(convosChannel)
       subscription?.unsubscribe()
     }
   }, [])
+
+  // Conversations are privileged operational data. The storefront bundle must
+  // never query or subscribe to them, and the admin waits for a verified staff
+  // role before loading the inbox.
+  useEffect(() => {
+    if (!enableAdminData || !supabase || !isAdmin) {
+      setConversations([])
+      setInboxState({ loading: false, error: '', phase2Ready: true })
+      return undefined
+    }
+
+    fetchConversations()
+    const conversationsChannel = supabase
+      .channel('admin:conversations')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'conversations' }, fetchConversations)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, fetchConversations)
+      .subscribe()
+
+    return () => supabase.removeChannel(conversationsChannel)
+  }, [enableAdminData, isAdmin])
 
   const checkUser = async (authUser = null) => {
     if (!supabase) {
@@ -786,7 +746,7 @@ export function StoreProvider({ children }) {
       ? crypto.randomUUID()
       : `web-${Date.now()}-${Math.random().toString(16).slice(2)}`
 
-    const { data, error } = await supabase.rpc('submit_order_request', {
+    const { data, error } = await supabase.rpc('submit_order_request_v2', {
       p_customer_name: customerDetails.name?.trim(),
       p_customer_email: customerDetails.email?.trim() || null,
       p_customer_phone: customerDetails.phone?.trim() || null,
@@ -795,6 +755,7 @@ export function StoreProvider({ children }) {
       p_customer_note: customerDetails.note?.trim() || null,
       p_items: items,
       p_idempotency_key: requestKey,
+      p_coupon_code: appliedCoupon?.code || null,
     })
 
     if (error) return { ok: false, error: error.message || 'The order request could not be saved.' }
@@ -865,17 +826,12 @@ export function StoreProvider({ children }) {
     getProduct,
     isDark,
     toggleDarkMode,
-    coupons,
     appliedCoupon,
     claimedVouchers,
-    createCoupon,
-    toggleCouponStatus,
-    deleteCoupon,
-    claimCoupon,
     applyCoupon,
     removeCoupon,
     ...totals,
-  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, requests, conversations, inboxState, products, listedProducts, loading, totals, isDark, coupons, appliedCoupon, claimedVouchers])
+  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, requests, conversations, inboxState, products, listedProducts, loading, totals, isDark, appliedCoupon, claimedVouchers])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

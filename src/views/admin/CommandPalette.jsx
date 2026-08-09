@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useStore } from '../../context/StoreContext'
 import { supabase } from '../../lib/supabaseClient'
+import { searchGuide } from './adminGuide'
 
-export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
+export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenScan, onOpenGuide, onOpenShortcuts }) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -24,6 +25,9 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
     { id: 'nav-suppliers', type: 'Navigation', label: 'Manage Our Suppliers', action: () => setSection('suppliers') },
     { id: 'nav-pos', type: 'Navigation', label: 'View Incoming Deliveries', action: () => setSection('kanban') },
     { id: 'nav-storefront', type: 'Navigation', label: 'View Live Storefront', action: () => go('home') },
+    { id: 'action-scan', type: 'Action', label: 'Open Scan Center', sub: 'Alt S', action: onOpenScan },
+    { id: 'action-guide', type: 'Action', label: 'Ask the K2 Operations Guide', sub: 'Alt G', action: () => onOpenGuide?.('') },
+    { id: 'action-shortcuts', type: 'Action', label: 'Show Keyboard Shortcuts', sub: '?', action: onOpenShortcuts },
   ]
 
   useEffect(() => {
@@ -66,18 +70,26 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
         return
       }
 
-      // Search Supabase Products
-      const { data: prodData } = await supabase
+      const procedureMatches = searchGuide(q, { limit: 3 }).map(topic => ({
+        id: `procedure-${topic.id}`,
+        type: 'Procedure',
+        label: topic.title,
+        sub: topic.source,
+        action: () => onOpenGuide?.(topic.title),
+      }))
+
+      // Search persisted records only when Supabase is configured.
+      const { data: prodData } = supabase ? await supabase
         .from('products')
-        .select('sku, title')
-        .ilike('title', `%${q}%`)
-        .limit(3)
+        .select('sku, name, barcode')
+        .ilike('name', `%${q}%`)
+        .limit(3) : { data: [] }
       
       const prodMatches = (prodData || []).map(p => ({
         id: p.sku,
         type: 'Product',
-        label: p.title,
-        sub: p.sku,
+        label: p.name || p.sku,
+        sub: [p.sku, p.barcode].filter(Boolean).join(' · '),
         action: () => {
           setSection('inventory')
           // Future: Focus specific row
@@ -85,11 +97,11 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
       }))
 
       // Search Supabase Users
-      const { data: userData } = await supabase
+      const { data: userData } = supabase ? await supabase
         .from('user_profiles')
         .select('id, email, role')
         .ilike('email', `%${q}%`)
-        .limit(3)
+        .limit(3) : { data: [] }
       
       const userMatches = (userData || []).map(u => ({
         id: u.id,
@@ -99,7 +111,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
         action: () => setSection('wholesale')
       }))
 
-      setResults([...staticMatches, ...prodMatches, ...userMatches])
+      setResults([...staticMatches, ...procedureMatches, ...prodMatches, ...userMatches])
       setSelectedIndex(0)
     }
 
@@ -107,11 +119,11 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
   }, [query])
 
   const handleKeyDown = (e) => {
-    if (e.key === 'ArrowDown') {
+    if (e.key === 'ArrowDown' && results.length) {
       e.preventDefault()
       setSelectedIndex((prev) => (prev + 1) % results.length)
     }
-    if (e.key === 'ArrowUp') {
+    if (e.key === 'ArrowUp' && results.length) {
       e.preventDefault()
       setSelectedIndex((prev) => (prev - 1 + results.length) % results.length)
     }
@@ -128,7 +140,10 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection }) {
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]">
           {/* Backdrop */}
-          <motion.div 
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Command search"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

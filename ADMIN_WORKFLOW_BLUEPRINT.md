@@ -1,3 +1,10 @@
+# Historical reference — do not use as the current logic contract
+
+This blueprint contains prototype assumptions, simulated integrations, unsafe
+one-click operations, and references to components that may no longer exist.
+Follow `K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md` for required behavior
+and `K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md` for what is actually live.
+
 # 🏛️ K2 Jimzon Business Operating System (BOS)
 ## Comprehensive Administrative Workflow Blueprint
 

@@ -10,6 +10,10 @@ K2 Jimzon is a React/Vite storefront and operations dashboard for five income ch
 
 The website and Pasabuy intake can operate before marketplace connectors, a custom domain, or an online payment provider are available. Shopee, TikTok Shop, and Lazada remain explicit catalog/listing channels in the admin, but must stay **Not connected** until their back-end connectors process real data.
 
+## Required reading before changing operational logic
+
+Follow [`K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md`](K2%20Jimzon%20-%20Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md) for required workflow behavior, invariants, state transitions, and implementation order. Use [`K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md`](K2%20Jimzon%20-%20Brain/SYSTEM_BRAIN_CURRENT.md) to determine what is actually implemented today. A rulebook target must not be described as live until it is verified and added to the current-state Brain.
+
 ## Current launch behavior
 
 - Checkout creates an **order request**. It does not collect payment or reserve stock.
@@ -88,6 +92,29 @@ supabase/migrations/20260803_phase_2_unified_inbox.sql
 ```
 
 Phase 2 adds internal inbox workflow, delivery-state truth, and routes real persisted Pasabuy submissions into the queue. It does not connect WhatsApp, Viber, Meta, Shopee, Lazada, or TikTok messaging APIs.
+
+The deployed project also includes the coupon and consignment scan-event
+restoration:
+
+```text
+supabase/migrations/20260804_restore_coupons_and_consignment_scanning.sql
+```
+
+The operations and security upgrades are recorded in:
+
+```text
+supabase/migrations/20260809_operations_hardening.sql
+supabase/migrations/20260810_security_boundary_hardening.sql
+supabase/migrations/20260810_deprecated_rpc_lockdown.sql
+```
+
+All three passed complete `BEGIN … ROLLBACK` validation and were applied to the
+current K2jimzon production project through the migration system on 2026-08-10.
+They activate exact-lot FEFO, unit packing, custody, consignment, coupon,
+delivery, and connector contracts; restrict anonymous execution to the four
+reviewed customer-entry RPCs; and disable legacy stock mutation paths. New
+environments must apply them in the order shown. Do not rerun the old 1,800-line
+launch migration to obtain these changes.
 
 Applying a migration changes the live database. Review it and take a backup before running it in Supabase.
 

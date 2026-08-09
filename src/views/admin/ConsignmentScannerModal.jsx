@@ -23,6 +23,7 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
   const [error, setError] = useState('')
   const [cameraNote, setCameraNote] = useState('Starting camera…')
   const [processing, setProcessing] = useState(false)
+  const [activeItemId, setActiveItemId] = useState('')
   const scannerRef = useRef(null)
   const busyRef = useRef(false)
   const lastReadRef = useRef({ code: '', at: 0 })
@@ -42,7 +43,7 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
     if (lastReadRef.current.code === code && now - lastReadRef.current.at < 1200) return null
     busyRef.current = true; setProcessing(true); setError('')
     try {
-      const updated = await onScan(code)
+      const updated = await onScan(code, activeItemId || null)
       if (!updated) throw new Error('The scan was not recorded. Try again.')
       lastReadRef.current = { code, at: Date.now() }
       setLastScanned(updated)
@@ -55,13 +56,13 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
     } finally {
       busyRef.current = false; setProcessing(false)
     }
-  }, [onScan, stage])
+  }, [onScan, stage, activeItemId])
 
   processRef.current = processScan
 
   useEffect(() => {
     if (!isOpen) return undefined
-    setError(''); setLastScanned(null); setCameraNote('Starting camera…')
+    setError(''); setLastScanned(null); setActiveItemId(''); setCameraNote('Starting camera…')
     const timer = window.setTimeout(() => {
       if (!document.getElementById(readerId)) return
       const scanner = new Html5Qrcode(readerId)
@@ -120,10 +121,10 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
     <footer className="shrink-0 space-y-3 border-t border-adm-line bg-adm-surface p-4">
       {error && <div role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm text-crimson">{error}</div>}
       <form onSubmit={submitManual} className="flex gap-2"><label className="relative min-w-0 flex-1"><span className="sr-only">Barcode or SKU</span><BarcodeIcon size={17} className="pointer-events-none absolute left-3 top-3.5 text-white/35" /><input autoFocus type="text" value={manualCode} onChange={event => setManualCode(event.target.value)} placeholder="Scan barcode or enter SKU" className="adm-input min-h-11 w-full pl-10 font-mono text-base" /></label><button type="submit" disabled={processing || !manualCode.trim()} className={`min-h-11 rounded-adm-sm px-5 text-sm font-bold disabled:opacity-40 ${accentBg}`}>{processing ? 'Recording…' : 'Record +1'}</button></form>
-      <div><p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-white/35">Quick tap fallback</p><div className="flex gap-2 overflow-x-auto pb-1">{items.map(item => {
+      <div><p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-white/35">Active box / lot</p><div className="flex gap-2 overflow-x-auto pb-1">{items.map(item => {
         const count = Number(isMilan ? item.italy_packed_qty : item.manila_scanned_qty || 0)
         const target = Number(isMilan ? item.expected_qty : item.italy_packed_qty || 0)
-        return <button key={item.id || item.sku} disabled={processing || count >= target} onClick={() => processScan(item.sku)} className={`min-h-12 shrink-0 rounded-adm-sm border border-adm-line bg-white/5 px-3 text-left disabled:opacity-35`}><p className="max-w-36 truncate font-mono text-xs font-bold">{item.sku}</p><p className="mt-0.5 text-[10px] text-white/45">{count} / {target}</p></button>
+        return <button key={item.id || item.sku} disabled={processing || count >= target} onClick={() => setActiveItemId(item.id)} aria-pressed={activeItemId === item.id} className={`min-h-12 shrink-0 rounded-adm-sm border px-3 text-left disabled:opacity-35 ${activeItemId === item.id ? `${accentPanelBorder} bg-white/10` : 'border-adm-line bg-white/5'}`}><p className="max-w-40 truncate font-mono text-xs font-bold">{item.box_code || 'No box'} · {item.sku}</p><p className="mt-0.5 text-[10px] text-white/45">{item.batch_code || 'No lot'} · {count} / {target}</p></button>
       })}</div></div>
     </footer>
   </div>

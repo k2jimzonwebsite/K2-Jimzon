@@ -5,11 +5,12 @@ import ProductVisual from '../components/ProductVisual'
 import { CrimsonButton, GhostButton, TuscanCard } from '../components/ui/bits'
 import { ShieldIcon } from '../components/ui/icons'
 
-const SHIPPING = 85
-
 export default function Checkout() {
-  const { lines, placeOrder, go } = useStore()
+  const { lines, placeOrder, go, applyCoupon, removeCoupon, appliedCoupon, couponDiscount } = useStore()
   const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', note: '' })
+  const [couponCode, setCouponCode] = useState('')
+  const [couponMessage, setCouponMessage] = useState('')
+  const [checkingCoupon, setCheckingCoupon] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -24,7 +25,7 @@ export default function Checkout() {
   }
 
   const requestSubtotal = lines.reduce((sum, line) => sum + (line.product.retail * line.qty), 0)
-  const grandTotal = requestSubtotal + SHIPPING
+  const productsTotal = Math.max(requestSubtotal - couponDiscount, 0)
   const update = (key) => (event) => setForm(current => ({ ...current, [key]: event.target.value }))
 
   const submit = async (event) => {
@@ -41,6 +42,13 @@ export default function Checkout() {
   }
 
   const fieldClass = 'store-field w-full px-4 py-3 text-base'
+
+  const checkCoupon = async () => {
+    setCheckingCoupon(true); setCouponMessage('')
+    const result = await applyCoupon(couponCode)
+    setCheckingCoupon(false)
+    setCouponMessage(result?.message || 'Coupon could not be checked.')
+  }
 
   return (
     <main className="store-section max-w-6xl pb-24 pt-10 font-sans md:pb-20 md:pt-14">
@@ -68,11 +76,18 @@ export default function Checkout() {
 
           <div className="mt-4 space-y-2 border-t border-line pt-4 text-sm">
             <p className="flex justify-between text-navy-soft"><span>Subtotal</span><span>{peso(requestSubtotal)}</span></p>
-            <p className="flex justify-between text-navy-soft"><span>Metro Manila delivery</span><span>{peso(SHIPPING)}</span></p>
-            <p className="flex justify-between border-t border-line pt-3 text-lg font-bold"><span>Estimated total</span><span>{peso(grandTotal)}</span></p>
+            {appliedCoupon && <p className="flex justify-between text-forest"><span>{appliedCoupon.code}</span><span>−{peso(couponDiscount)}</span></p>}
+            <p className="flex justify-between text-navy-soft"><span>Courier delivery</span><span>Quoted after review</span></p>
+            <p className="flex justify-between border-t border-line pt-3 text-lg font-bold"><span>Products total</span><span>{peso(productsTotal)}</span></p>
+          </div>
+          <div className="mt-4 border-t border-line pt-4">
+            <label className="text-sm font-semibold">Coupon code</label>
+            <div className="mt-1.5 flex gap-2"><input value={couponCode} onChange={event => setCouponCode(event.target.value.toUpperCase())} className="store-field min-h-11 min-w-0 flex-1 px-3 font-mono text-base" placeholder="Enter code" /><button type="button" onClick={checkCoupon} disabled={checkingCoupon || !couponCode.trim()} className="min-h-11 rounded-lg border border-line px-3 text-sm font-bold disabled:opacity-40">{checkingCoupon ? 'Checking…' : 'Apply'}</button></div>
+            {couponMessage && <p role="status" className="mt-2 text-xs text-navy-soft">{couponMessage}</p>}
+            {appliedCoupon && <button type="button" onClick={() => { removeCoupon(); setCouponMessage('Coupon removed.') }} className="mt-2 text-xs font-semibold text-crimson">Remove coupon</button>}
           </div>
           <p className="mt-4 text-xs leading-relaxed text-navy-soft">
-            The server validates current website prices and stock when you submit. Discounts and wholesale terms are confirmed manually until account and payment workflows are live.
+            The server validates current prices, coupon rules, and stock when you submit. The actual courier charge is communicated for your approval before fulfillment.
           </p>
         </TuscanCard>
 

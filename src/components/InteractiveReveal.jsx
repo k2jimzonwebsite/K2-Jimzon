@@ -34,7 +34,7 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
   return (
     <div
       ref={trackRef}
-      className="relative aspect-auto h-full w-full cursor-ew-resize touch-none select-none overflow-hidden group bg-shell"
+      className="interactive-reveal group relative aspect-auto h-full w-full cursor-ew-resize touch-pan-y select-none overflow-hidden bg-shell"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -94,7 +94,7 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
           Packaging
         </span>
       </div>
-      <div className="absolute inset-x-0 bottom-4 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div className="interactive-reveal-hint absolute inset-x-0 bottom-4 flex justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
         <span className="bg-navy/80 backdrop-blur-md text-cream text-xs font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-lg">
           Interactive • Drag to view
         </span>

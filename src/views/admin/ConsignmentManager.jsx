@@ -8,6 +8,8 @@ import DiscrepancyReconciliationModal from './DiscrepancyReconciliationModal'
 export default function ConsignmentManager() {
   const { products } = useStore()
   const [manifest, setManifest] = useState(null)
+  const [manifests, setManifests] = useState([])
+  const [selectedManifestId, setSelectedManifestId] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
@@ -17,16 +19,23 @@ export default function ConsignmentManager() {
   const [showReconcile, setShowReconcile] = useState(false)
   const [working, setWorking] = useState(false)
   const [create, setCreate] = useState({ manifestCode: `K2-${new Date().toISOString().slice(0, 7)}`, flightNumber: '' })
-  const [line, setLine] = useState({ sku: '', batchCode: '', bestBefore: '', packedQty: '1' })
+  const [line, setLine] = useState({ sku: '', batchCode: '', boxCode: '', bestBefore: '', packedQty: '1' })
 
   const load = useCallback(async () => {
     if (!supabase) { setError('Supabase is not configured.'); setLoading(false); return }
     const { data, error: loadError } = await supabase.from('consignments')
-      .select('*, consignment_items(*)').order('created_at', { ascending: false }).limit(1).maybeSingle()
+      .select('*, consignment_items(*)').order('created_at', { ascending: false }).limit(100)
     if (loadError) setError(loadError.message)
-    else { setManifest(data || null); setError('') }
+    else {
+      const nextManifests = data || []
+      const selected = nextManifests.find(item => item.id === selectedManifestId) || nextManifests[0] || null
+      setManifests(nextManifests)
+      setManifest(selected)
+      setSelectedManifestId(selected?.id || '')
+      setError('')
+    }
     setLoading(false)
-  }, [])
+  }, [selectedManifestId])
 
   useEffect(() => {
     load()
@@ -47,41 +56,53 @@ export default function ConsignmentManager() {
 
   const createManifest = async (event) => {
     event.preventDefault(); setWorking(true); setError(''); setNotice('')
-    const { error: createError } = await supabase.rpc('create_consignment_manifest', {
+    const { data, error: createError } = await supabase.rpc('create_consignment_manifest', {
       p_manifest_code: create.manifestCode.trim(),
       p_shipment_reference: create.flightNumber.trim() || null,
     })
     setWorking(false)
     if (createError) { setError(createError.message); return }
+    const saved = Array.isArray(data) ? data[0] : data
+    if (saved?.id) setSelectedManifestId(saved.id)
     setShowCreate(false); setNotice('Manifest created in Packing Italy state.'); await load()
   }
 
   const addLine = async (event) => {
     event.preventDefault(); setWorking(true); setError(''); setNotice('')
-    const { error: lineError } = await supabase.rpc('add_consignment_item', {
+    const { error: lineError } = await supabase.rpc('add_consignment_item_v2', {
       p_consignment_id: manifest.id,
       p_sku: line.sku,
       p_batch_code: line.batchCode.trim(),
+      p_box_code: line.boxCode.trim(),
       p_best_before_date: line.bestBefore,
       p_expected_qty: Number(line.packedQty),
     })
     setWorking(false)
     if (lineError) { setError(lineError.message); return }
-    setLine({ sku: '', batchCode: '', bestBefore: '', packedQty: '1' }); setShowLine(false); setNotice('Manifest line saved.'); await load()
+    setLine({ sku: '', batchCode: '', boxCode: '', bestBefore: '', packedQty: '1' }); setShowLine(false); setNotice('Manifest box and lot line saved.'); await load()
   }
 
-  const scan = async (codeOrSku, stage) => {
+  const scan = async (codeOrSku, stage, selectedItemId = null) => {
     const clean = String(codeOrSku || '').trim()
     const product = (products || []).find(candidate => candidate.sku?.toLowerCase() === clean.toLowerCase() || (candidate.barcode && String(candidate.barcode) === clean))
-    const manifestItem = items.find(item => item.sku.toLowerCase() === clean.toLowerCase() || item.sku === product?.sku)
+    const matches = items.filter(item => item.sku.toLowerCase() === clean.toLowerCase() || item.sku === product?.sku)
+    const manifestItem = selectedItemId
+      ? matches.find(item => item.id === selectedItemId)
+      : matches.find(item => stage === 'milan'
+        ? item.italy_packed_qty < item.expected_qty
+        : item.manila_scanned_qty < item.italy_packed_qty)
     if (!manifestItem) throw new Error(`Barcode or SKU ${clean} is not on this manifest. Add the manifest line before scanning it.`)
     setWorking(true); setError(''); setNotice('')
-    const { data, error: scanError } = await supabase.rpc('record_consignment_scan', { p_consignment_id: manifest.id, p_sku: manifestItem.sku, p_stage: stage })
+    const { data, error: scanError } = await supabase.rpc('record_consignment_item_scan', {
+      p_consignment_id: manifest.id,
+      p_consignment_item_id: manifestItem.id,
+      p_stage: stage,
+    })
     setWorking(false)
     if (scanError) { setError(scanError.message); throw scanError }
     const updated = Array.isArray(data) ? data[0] : data
     if (updated) setManifest(current => ({ ...current, consignment_items: (current.consignment_items || []).map(item => item.id === updated.id ? updated : item) }))
-    setNotice(`${manifestItem.sku} recorded for ${stage === 'milan' ? 'Milan packing' : 'Manila receiving'}.`)
+    setNotice(`${manifestItem.sku} / ${manifestItem.box_code} recorded for ${stage === 'milan' ? 'Milan packing' : 'Manila receiving'}.`)
     return { ...(updated || manifestItem), name: bySku[manifestItem.sku]?.name || manifestItem.sku }
   }
 
@@ -97,15 +118,19 @@ export default function ConsignmentManager() {
     const message = missing > 0
       ? `Finalize with ${missing} unit${missing === 1 ? '' : 's'} missing on arrival? The discrepancy will be recorded.`
       : 'Finalize this receipt and add scanned units to inventory?'
-    if (!window.confirm(message)) return
+    if (!window.confirm(message)) return false
     setWorking(true); setError(''); setNotice('')
     const { error: finalError } = await supabase.rpc('finalize_consignment_receipt', {
       p_consignment_id: manifest.id,
       p_notes: notes.trim() || (missing > 0 ? `Finalized with ${missing} missing unit(s)` : 'All scanned units reconciled'),
     })
     setWorking(false)
-    if (finalError) { setError(finalError.message); return }
+    if (finalError) {
+      setError(finalError.message)
+      throw finalError
+    }
     setNotice('Receipt finalized atomically. Scanned batches and inventory events were recorded.'); setShowReconcile(false); await load()
+    return true
   }
 
   const input = 'min-h-11 w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue'
@@ -115,7 +140,8 @@ export default function ConsignmentManager() {
   return <div className="mx-auto max-w-7xl space-y-5 text-white">
     <div className="rounded-adm border border-adm-line bg-adm-surface p-5">
       <p className="text-xs font-semibold uppercase tracking-wider text-gold">Italy to Philippines custody</p>
-      <div className="mt-1 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><h1 className="font-serif text-2xl font-bold">Consignment receiving</h1><p className="mt-1 max-w-2xl text-sm text-white/55">Only persisted manifests and scan counts appear here. Finalization records batches, discrepancies, and inventory changes in one server transaction.</p></div>{!manifest && <button onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create first manifest</button>}</div>
+      <div className="mt-1 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><h1 className="font-serif text-2xl font-bold">Consignment receiving</h1><p className="mt-1 max-w-2xl text-sm text-white/55">Every flight, box, lot, and unit scan remains identifiable from Milan packing through Manila recount.</p></div><button onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button></div>
+      {manifests.length > 0 && <label className="mt-4 block max-w-md text-xs font-semibold text-white/55">Working manifest<select className={`${input} mt-1.5`} value={selectedManifestId} onChange={event => { const id = event.target.value; setSelectedManifestId(id); setManifest(manifests.find(item => item.id === id) || null) }}>{manifests.map(item => <option key={item.id} value={item.id}>{item.manifest_code} · {item.status.replaceAll('_', ' ')}</option>)}</select></label>}
     </div>
 
     {(error || notice) && <div role={error ? 'alert' : 'status'} className={`flex items-start gap-2 rounded-adm-sm border p-3 text-sm ${error ? 'border-crimson/40 bg-crimson/10 text-crimson' : 'border-forest/40 bg-forest/10 text-forest'}`}>{error ? <AlertIcon size={17} /> : <CheckIcon size={17} />}<span>{error || notice}</span></div>}
@@ -139,7 +165,8 @@ export default function ConsignmentManager() {
       </section>
 
       <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
-        <div className="flex items-center justify-between border-b border-adm-line bg-adm-sunken px-4 py-3"><h3 className="text-sm font-semibold">Manifest lines</h3><span className="text-xs text-white/45">{items.length} SKUs</span></div>
+        <div className="flex items-center justify-between border-b border-adm-line bg-adm-sunken px-4 py-3"><h3 className="text-sm font-semibold">Manifest box and lot lines</h3><span className="text-xs text-white/45">{items.length} lines</span></div>
+        {items.length > 0 && <div className="flex gap-2 overflow-x-auto border-b border-adm-line px-4 py-3">{items.map(item => <div key={`box-${item.id}`} className="min-w-48 rounded-adm-sm border border-adm-line bg-white/[0.03] px-3 py-2"><p className="font-mono text-xs font-bold text-blue">{item.box_code}</p><p className="mt-1 text-[11px] text-white/50">{item.batch_code} · {item.sku}</p></div>)}</div>}
         {items.length === 0 ? <p className="p-8 text-center text-sm text-white/45">No SKUs on this manifest yet.</p> : <div className="overflow-x-auto"><table className="w-full min-w-[820px] text-left text-sm"><thead className="bg-white/[0.03] text-xs uppercase tracking-wider text-white/45"><tr><th className="px-4 py-3">SKU / product</th><th className="px-4 py-3">Batch</th><th className="px-4 py-3">Best before</th><th className="px-4 py-3 text-center">Expected</th><th className="px-4 py-3 text-center">Milan packed</th><th className="px-4 py-3 text-center">Manila received</th><th className="px-4 py-3 text-right">Record scan</th></tr></thead><tbody className="divide-y divide-adm-line">{items.map(item => <tr key={item.id}><td className="px-4 py-3"><p className="font-mono text-xs font-bold">{item.sku}</p><p className="mt-0.5 text-xs text-white/45">{bySku[item.sku]?.name || item.sku}</p></td><td className="px-4 py-3 font-mono text-xs text-white/60">{item.batch_code}</td><td className="px-4 py-3 text-white/60">{item.best_before_date}</td><td className="px-4 py-3 text-center font-semibold">{item.expected_qty}</td><td className="px-4 py-3 text-center font-semibold">{item.italy_packed_qty}</td><td className="px-4 py-3 text-center font-semibold text-forest">{item.manila_scanned_qty}</td><td className="px-4 py-3 text-right">{manifest.status === 'Packing_Italy' ? <button disabled={working || item.italy_packed_qty >= item.expected_qty} onClick={() => scan(item.sku, 'milan').catch(() => {})} className="min-h-11 rounded-adm-sm border border-blue/35 bg-blue/10 px-3 text-xs font-semibold text-blue disabled:opacity-35">+1 Milan packed</button> : manifest.status === 'Arrived_Manila' ? <button disabled={working || item.manila_scanned_qty >= item.italy_packed_qty} onClick={() => scan(item.sku, 'manila').catch(() => {})} className="min-h-11 rounded-adm-sm border border-forest/35 bg-forest/10 px-3 text-xs font-semibold text-forest disabled:opacity-35">+1 Manila received</button> : <span className="text-xs text-white/35">Scanning closed</span>}</td></tr>)}</tbody></table></div>}
       </section>
     </>}
@@ -148,7 +175,7 @@ export default function ConsignmentManager() {
       isOpen={Boolean(scannerStage)}
       stage={scannerStage || 'milan'}
       items={displayItems}
-      onScan={code => scan(code, scannerStage)}
+      onScan={(code, itemId) => scan(code, scannerStage, itemId)}
       onClose={() => setScannerStage(null)}
       onDone={() => {
         const completedStage = scannerStage
@@ -174,6 +201,7 @@ export default function ConsignmentManager() {
         </> : <>
           <Field label="Product SKU"><select className={input} value={line.sku} onChange={e => setLine(current => ({ ...current, sku: e.target.value }))} required><option value="">Select a product</option>{(products || []).map(product => <option key={product.sku} value={product.sku}>{product.sku} · {product.name}</option>)}</select></Field>
           <Field label="Batch / lot code"><input className={input} value={line.batchCode} onChange={e => setLine(current => ({ ...current, batchCode: e.target.value }))} required /></Field>
+          <Field label="Physical box code"><input className={input} value={line.boxCode} onChange={e => setLine(current => ({ ...current, boxCode: e.target.value }))} required /></Field>
           <Field label="Best-before date"><input className={input} type="date" value={line.bestBefore} onChange={e => setLine(current => ({ ...current, bestBefore: e.target.value }))} required /></Field>
           <Field label="Expected quantity"><input className={input} type="number" min="1" value={line.packedQty} onChange={e => setLine(current => ({ ...current, packedQty: e.target.value }))} required /></Field>
         </>}

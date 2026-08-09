@@ -145,20 +145,32 @@ test.describe('admin command center redesign', () => {
   })
 
   test('renders multichannel analytics without desktop overflow', async ({ page }) => {
+    test.setTimeout(90000)
     await page.setViewportSize({ width: 1440, height: 1000 })
-    await page.goto('/admin-portal-k2-secure')
-    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 15000 })
+    await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
     await expect(page.getByText('Verified revenue trend')).toBeVisible()
     await expect(page.getByText('Channel performance and readiness')).toBeVisible()
     await expect(page.getByText('Inbox workload')).toBeVisible()
     await expect(page.locator('body')).toHaveJSProperty('scrollWidth', 1440)
+
+    await page.keyboard.press('Alt+s')
+    await expect(page.getByRole('dialog', { name: 'What are you scanning?' })).toBeVisible()
+    await expect(page.getByText('New product research', { exact: true })).toBeVisible()
+    await expect(page.getByText('Pack a customer order', { exact: true })).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page.getByRole('dialog', { name: 'What are you scanning?' })).toBeHidden()
+
+    await page.keyboard.press('?')
+    await expect(page.getByRole('dialog', { name: 'Keyboard shortcuts' })).toBeVisible()
+    await page.keyboard.press('Escape')
     await page.screenshot({ path: 'C:/tmp/k2-admin-command-center-desktop.png', fullPage: true })
   })
 
   test('collapses safely for mobile operations', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.setViewportSize({ width: 375, height: 812 })
-    await page.goto('/admin-portal-k2-secure')
+    await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 15000 })
     let overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(1)
@@ -173,7 +185,7 @@ test.describe('admin command center redesign', () => {
 
   test('keeps the five operational workspaces readable and overflow-safe', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1000 })
-    await page.goto('/admin-portal-k2-secure')
+    await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 15000 })
 
     const workspaces = [
@@ -196,7 +208,7 @@ test.describe('admin command center redesign', () => {
   test('keeps high-frequency workspace controls usable on mobile', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/admin-portal-k2-secure')
+    await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 15000 })
 
     await page.getByRole('button', { name: 'Inventory', exact: true }).last().click()

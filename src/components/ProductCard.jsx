@@ -35,7 +35,7 @@ export default function ProductCard({ product, compact = false, featured = false
             <h3 className="font-serif text-2xl font-semibold leading-tight text-navy transition-colors duration-150 group-hover:text-crimson md:text-4xl">{product.name}</h3>
           </button>
           {product.short && <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-navy-soft">{product.short}</p>}
-          <div className="mt-5"><StockPill stock={stock} /></div>
+          <div className="product-card-stock mt-5"><StockPill stock={stock} /></div>
           <div className="mt-7 flex items-end justify-between gap-4 border-t border-line pt-5">
             <div>
               <p className="text-xs font-semibold text-navy-faint">Current price</p>
@@ -51,33 +51,35 @@ export default function ProductCard({ product, compact = false, featured = false
   }
 
   return (
-    <article data-testid="product-card" className="group flex h-full w-full flex-col overflow-hidden rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-[var(--store-surface-shadow)] transition-[transform,border-color,box-shadow] duration-200 ease-out-quart hover:-translate-y-0.5 hover:border-navy/20 hover:shadow-card">
+    <article data-testid="product-card" className="product-card group flex h-full w-full flex-col overflow-hidden rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-[var(--store-surface-shadow)]">
       <button onClick={() => openProduct(product.sku)} data-testid="product-image-btn" className="product-img-surface relative aspect-[4/5] overflow-hidden text-left">
-        <ProductVisual product={product} className="h-full w-full object-contain drop-shadow-lg transition-transform duration-200 ease-out-quart group-hover:scale-[1.035]" pad="p-4 sm:p-6" />
-        {product.tag && <span className="absolute left-2.5 top-2.5 rounded-md bg-navy/90 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-cream">{product.tag}</span>}
+        <ProductVisual product={product} className="product-card-visual h-full w-full object-contain drop-shadow-lg" pad="p-4 sm:p-6" />
+        {product.tag && <span className="absolute left-2.5 top-2.5 rounded-md bg-navy/90 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-cream">{product.tag}</span>}
       </button>
 
       <div className="flex flex-1 flex-col border-t border-[var(--store-surface-border)] p-3.5 sm:p-4">
-        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-navy-faint">{product.category || 'Italian import'}</p>
+        <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.12em] text-navy-faint">{product.category || 'Italian import'}</p>
         <button onClick={() => openProduct(product.sku)} className="text-left">
-          <h3 className="line-clamp-2 font-serif text-[15px] font-semibold leading-snug text-navy transition-colors duration-150 group-hover:text-crimson sm:text-base">{product.name}</h3>
+          <h3 className="store-card-title line-clamp-2 min-h-10 font-sans font-bold text-navy transition-colors duration-150 group-hover:text-crimson">{product.name}</h3>
         </button>
-        {!compact && product.short && <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-navy-soft">{product.short}</p>}
-        <div className="mt-3"><StockPill stock={stock} /></div>
+        {!compact && product.short && <p className="mt-2 hidden text-sm leading-relaxed text-navy-soft sm:line-clamp-2">{product.short}</p>}
 
-        <div className="mt-auto flex items-center justify-between gap-2 pt-4">
-          <div>
-            <p className="text-base font-bold tabular text-crimson sm:text-lg">{peso(price)}</p>
-            {isWholesale && <p className="text-[11px] tabular text-navy-faint line-through">{peso(product.srp)}</p>}
+        <div className="mt-auto">
+          <div className="product-card-stock mt-3 border-t border-[var(--store-surface-border)] pt-3"><StockPill stock={stock} /></div>
+          <div className="flex items-center justify-between gap-2 pt-3">
+            <div>
+              <p className="font-sans text-lg font-bold tabular-nums text-crimson">{peso(price)}</p>
+              {isWholesale && <p className="font-sans text-xs tabular-nums text-navy-faint line-through">{peso(product.srp)}</p>}
+            </div>
+            <button
+              onClick={add}
+              disabled={soldOut}
+              aria-label={soldOut ? `${product.name} is sold out` : `Add ${product.name} to cart`}
+              className="product-add-button flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-crimson bg-crimson text-white transition-[transform,background-color] duration-150 hover:bg-crimson-deep active:scale-[0.97] disabled:cursor-not-allowed disabled:border-line disabled:bg-shell disabled:text-navy-faint"
+            >
+              {soldOut ? <span className="px-2 text-xs font-bold uppercase tracking-wide">Out</span> : <PlusIcon size={17} />}
+            </button>
           </div>
-          <button
-            onClick={add}
-            disabled={soldOut}
-            aria-label={soldOut ? `${product.name} is sold out` : `Add ${product.name} to cart`}
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-crimson bg-crimson text-white transition-[transform,background-color] duration-150 hover:bg-crimson-deep active:scale-[0.97] disabled:cursor-not-allowed disabled:border-line disabled:bg-shell disabled:text-navy-faint"
-          >
-            {soldOut ? <span className="px-2 text-[10px] font-bold uppercase tracking-wide">Out</span> : <PlusIcon size={17} />}
-          </button>
         </div>
       </div>
     </article>

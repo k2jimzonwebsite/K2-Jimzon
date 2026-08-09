@@ -78,7 +78,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <GlobeCmsProvider>
-        <StoreProvider>
+      <StoreProvider enableAdminData>
           <Shell />
         </StoreProvider>
       </GlobeCmsProvider>

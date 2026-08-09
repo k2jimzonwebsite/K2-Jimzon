@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabaseClient'
 export default function Customers() {
   const [customers, setCustomers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (!supabase) return;
@@ -27,12 +28,16 @@ export default function Customers() {
       setLoading(false);
       return;
     }
-    const { data, error } = await supabase
+    setError('')
+    const { data, error: fetchError } = await supabase
       .from('user_profiles')
       .select('*')
+      .in('role', ['Customer', 'VIP'])
       .order('created_at', { ascending: false })
 
-    if (!error && data) {
+    if (fetchError) {
+      setError(fetchError.message)
+    } else if (data) {
       setCustomers(data)
     }
     setLoading(false)
@@ -51,7 +56,9 @@ export default function Customers() {
       </div>
 
       <div className="overflow-hidden rounded-adm-sm border border-line bg-white shadow-card overflow-x-auto">
-        {loading && customers.length === 0 ? (
+        {error ? (
+          <div role="alert" className="p-8 text-center text-base text-crimson">Could not load customer profiles: {error}</div>
+        ) : loading && customers.length === 0 ? (
           <div className="p-8 text-center text-base text-navy-soft">Loading customers...</div>
         ) : customers.length === 0 ? (
           <div className="p-8 text-center text-base text-navy-soft">No registered customer profiles yet.</div>

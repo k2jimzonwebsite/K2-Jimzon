@@ -1,3 +1,11 @@
+# Pre-hardening connector reference
+
+This contract documents the earlier direct-table connector shape. New connector
+work must follow `K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md`, including
+durable raw events, idempotency, canonical orders, atomic reservations, retries,
+dead-letter handling, and capability-specific health. Update this contract before
+using it for a production connector.
+
 # K2 Jimzon — Connector Integration Spec (Data Contract)
 
 **Purpose:** the admin dashboard and storefront are already the "receiving end." They read from

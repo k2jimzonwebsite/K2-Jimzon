@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
 import { LIFESTYLE } from '../../data/site'
 import { Kicker } from '../ui/bits'
 
@@ -8,6 +10,9 @@ const STEPS = [
 ]
 
 export default function StorySection() {
+  const [activeStep, setActiveStep] = useState(0)
+  const reducedMotion = useReducedMotion()
+
   return (
     <section className="store-section py-16 md:py-24">
       <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
@@ -17,15 +22,34 @@ export default function StorySection() {
           <p className="mt-5 max-w-md text-sm leading-7 text-navy-soft">The storefront is connected to a real multi-channel operation. Product records and customer requests stay useful after the page visit ends.</p>
         </div>
 
-        <ol className="border-t border-line">
+        <ol className="story-journey border-t border-line" aria-label="K2 sourcing journey">
           {STEPS.map(([image, title, body], index) => (
-            <li key={title} className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-line py-7 sm:grid-cols-[4rem_10rem_1fr] sm:items-center sm:gap-5 md:py-9">
-              <span className="font-serif text-3xl font-semibold text-crimson/80">0{index + 1}</span>
-              <img src={LIFESTYLE[image]} alt="" aria-hidden="true" loading="lazy" className="hidden aspect-square w-full rounded-lg object-cover sm:block" />
-              <div>
-                <h3 className="font-serif text-xl font-semibold text-navy md:text-2xl">{title}</h3>
-                <p className="mt-2 text-sm leading-7 text-navy-soft">{body}</p>
-              </div>
+            <li key={title}>
+              <button
+                type="button"
+                aria-pressed={activeStep === index}
+                onClick={() => setActiveStep(index)}
+                onFocus={() => setActiveStep(index)}
+                onPointerEnter={(event) => event.pointerType === 'mouse' && setActiveStep(index)}
+                className="story-step group relative grid w-full grid-cols-[2.5rem_1fr] gap-4 border-b border-line py-7 text-left sm:grid-cols-[4rem_10rem_1fr] sm:items-center sm:gap-5 md:py-9"
+              >
+                <span className="story-step-number font-serif text-3xl font-semibold text-crimson/80">0{index + 1}</span>
+                <span className="story-step-image hidden aspect-square w-full overflow-hidden rounded-lg bg-[var(--product-img-bg)] sm:block">
+                  <motion.img
+                    src={LIFESTYLE[image]}
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    animate={reducedMotion ? undefined : { scale: activeStep === index ? 1.045 : 1 }}
+                    transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+                    className="h-full w-full object-cover"
+                  />
+                </span>
+                <span>
+                  <span className="block font-serif text-xl font-semibold text-navy md:text-2xl">{title}</span>
+                  <span className="mt-2 block text-sm leading-7 text-navy-soft">{body}</span>
+                </span>
+              </button>
             </li>
           ))}
         </ol>

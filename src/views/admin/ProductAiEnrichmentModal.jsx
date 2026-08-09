@@ -71,22 +71,29 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 
   const handleSaveEnriched = async () => {
     if (!enrichedData) return
+    setEnrichError('')
     setEnriching(true)
 
-    if (supabase) {
-      try {
-        await supabase.from('products').update({
-          origin: enrichedData.origin,
-          description: enrichedData.description,
-          usage_instructions: enrichedData.usage_instructions,
-          storage_instructions: enrichedData.storage_instructions,
-          ingredients: enrichedData.ingredients,
-          wholesale_price: enrichedData.wholesale_price,
-          is_ai_generated: true
-        }).eq('sku', product.sku || product.id)
-      } catch (e) {
-        console.warn("Supabase enrich update warning:", e)
-      }
+    if (!supabase) {
+      setEnriching(false)
+      setEnrichError('Could not save because Supabase is not configured.')
+      return
+    }
+
+    const { error } = await supabase.from('products').update({
+      origin: enrichedData.origin,
+      description: enrichedData.description,
+      usage_instructions: enrichedData.usage_instructions,
+      storage_instructions: enrichedData.storage_instructions,
+      ingredients: enrichedData.ingredients,
+      wholesale_price: enrichedData.wholesale_price,
+      is_ai_generated: true
+    }).eq('sku', product.sku || product.id)
+
+    if (error) {
+      setEnriching(false)
+      setEnrichError(`Could not save the reviewed product details: ${error.message}`)
+      return
     }
 
     if (onEnriched) onEnriched(enrichedData)

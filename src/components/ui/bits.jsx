@@ -91,18 +91,21 @@ export function GhostButton({ children, className = '', ...props }) {
 }
 
 // Live stock cue — green when healthy, red when scarce (urgency = key action).
-export function StockPill({ stock }) {
+export function StockPill({ stock, className = '' }) {
   const soldOut = stock <= 0
   const low = stock <= 5
   return (
     <span
+      data-testid="stock-count"
+      aria-label={soldOut ? 'Sold out' : `${stock} units available`}
       className={
-        'inline-flex items-center gap-1.5 text-xs font-semibold ' +
+        'inline-flex min-h-6 items-center gap-1.5 font-sans text-xs font-bold tabular-nums ' +
+        className + ' ' +
         (soldOut || low ? 'text-crimson' : 'text-forest')
       }
     >
       <span className={'h-1.5 w-1.5 rounded-full ' + (soldOut || low ? 'bg-crimson' : 'bg-forest')} />
-      {soldOut ? 'Sold out' : low ? `Only ${stock} left` : `In stock · ${stock}`}
+      {soldOut ? 'Sold out' : low ? `Only ${stock} available` : `${stock} available`}
     </span>
   )
 }

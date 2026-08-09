@@ -1,3 +1,10 @@
+# Historical reference — do not use as the current logic contract
+
+This document describes earlier prototype behavior and may contain removed,
+simulated, or insecure implementation details. Follow
+`K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md` for required behavior and
+`K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md` for verified current status.
+
 # K2 Jimzon System Architecture & Business Logic Blueprint
 
 > **System Version:** 2026.7 Production-Ready Hardened  

@@ -1,10 +1,15 @@
 # K2 Jimzon — System Brain (Current State)
 
-**Living source of truth. Last updated: 24 July 2026 (rev. 2).**
+**Living source of truth. Last updated: 9 August 2026 (rev. 3).**
 
 This is the "never get lost" document. It says what the system is, how our real
 workflow maps onto it, everything that's been built, exactly what to run, and
 what's left to do. When something changes, update this file.
+
+Required operational behavior is defined in
+[`OPERATIONS_LOGIC_AND_WORKFLOW.md`](OPERATIONS_LOGIC_AND_WORKFLOW.md). This
+System Brain records what is currently implemented; the rulebook records how
+completed workflows must behave. Never confuse a rulebook target with a live feature.
 
 Future proposals that are not yet implemented are kept separately in
 [`FUTURE_IDEAS.md`](FUTURE_IDEAS.md). Do not treat an entry in that register as
@@ -52,7 +57,12 @@ There is **no PIN step** — receiving is a scan-to-verify, not a code entry.
 
 ---
 
-## 3. The batch / expiry / location system (built, live)
+## 3. The batch / expiry / location system
+
+Current production truth: lot rows, expiry alerts, aggregate inventory, basic
+custody fields, exact-lot reservation, unit scanning, and protected custody
+transfers are live. The operations hardening and its two security follow-ups
+were applied through the migration ledger on 2026-08-10.
 
 The heart of inventory tracking. One product (one SKU) has **many lots**, and
 each lot carries its own details.
@@ -66,8 +76,9 @@ it's for)**, and a pin flag.
 - **Total stock** per product = sum of its lots.
 - **Expiry alerts** — the 🔔 bell shows any lot nearing/past expiry, with its
   days-left, box, hub, holder and channel. Sell/clear these first.
-- **FEFO shipping** — `deduct_stock_fefo()` ships the soonest-to-expire lot
-  first (pinned lots prioritised).
+- **FEFO allocation target** — confirmation reserves exact eligible lots in
+  soonest-expiry order. Pins are attention markers and never override FEFO.
+  The legacy `deduct_stock_fefo()` shortcut is intentionally disabled.
 - **Inventory breakdown** — each product card in Inventory shows live splits:
   "42 pcs in 3 lots", 📍 by location, 🛒 by channel, 🙋 by holder.
 
@@ -92,23 +103,23 @@ Edge Function secrets**. Treat every API key like a password.
 connect"** button with a plain 5-step guide and buttons that jump straight to
 the right Supabase page.
 
-**Shopee connector** (`supabase/functions/shopee-webhook`) is written and
-deploy-ready: it verifies Shopee's signature, writes orders to `orders`, and
-flips Shopee to Live. **Pending:** it still needs the `get_order_detail` call to
-fill full line items, and it needs the real `SHOPEE_PARTNER_KEY` (issued by
-Shopee Open Platform after they approve our developer app). The other four
-channels reuse the same verify → write → mark-live pattern.
+**Shopee connector intake** (`supabase/functions/shopee-webhook`) verifies a
+signed push and durably queues it without inventing a SKU, quantity, buyer, or
+order. It reports **Events only**, not Live, until full order-detail retrieval
+and reconciliation work. Deployment still requires approved credentials and
+verification against the exact current Shopee signing contract.
 
 ---
 
 ## 5. How data flows once connectors are on
 
-Connectors write into Supabase; the UI reads it live (realtime subscriptions),
-so **the moment a connector is connected, everything flows** with no front-end
-changes:
+Connector adapters will write into Supabase and the UI can consume canonical
+records live. A captured webhook does not mean the full order/message/waybill
+workflow is connected:
 
 - Inventory sync → **`products`** → shows in admin Inventory **and** storefront.
-- Incoming orders → **`orders`** → Fulfilment Hub queue + Overview counts.
+- Incoming events → **`channel_event_inbox`** → detail retrieval and
+  idempotent normalization → **`order_requests`** → Fulfilment Hub.
 - Incoming messages → **`conversations` + `messages`** → unified Inbox.
 - Connector heartbeat → **`channel_connections`** → Channels board turns Live.
 
@@ -133,13 +144,22 @@ numbered migrations.
 `v_stock_by_hub`, `v_stock_by_custodian`, `v_stock_by_channel`,
 `v_batch_allocations`.
 
-**Functions:** `deduct_stock_fefo(sku, qty)` (FEFO), `is_staff()`
-(non-recursive staff check for RLS).
+**Functions:** `is_staff()`, exact-lot reservation, order-first unit packing,
+non-destructive reconciliation, partial custody transfer, coupon redemption,
+and delivery quotation are live. Deprecated direct-stock and ambiguous-scan
+RPCs are unavailable to browser roles.
 
 **Enums:** `channel_type` (order channels incl. shopee/lazada/tiktok/website),
 `chat_platform` (inbox platforms).
 
-### SQL run order (all idempotent — safe to re-run)
+### Migration source of truth
+
+The historical `RUN_THIS_*` files explain earlier setup but are not the current
+upgrade path. For this deployed project use the dated additive migrations in
+`README.md`. Never rerun the old consolidated script merely to obtain a newer
+feature.
+
+### Historical SQL run order
 
 Run these in the Supabase SQL editor in this order. If a fresh database, run
 the numbered migrations `0001`–`0018` and the `20260722/23` RLS files first.
@@ -207,18 +227,60 @@ admin) or OAuth bounces to localhost.
   behind translucent structural bands. Pure-white page backgrounds are prohibited;
   future redesigns adjust overlay strength instead of removing the texture.
 - **FEFO** always — oldest expiry sells first.
+- **Shelf-life gate (default enforcement live):** expiry-tracked stock needs at
+  least **90 calendar days remaining** for ordinary sale by default.
+  Category-specific rules may raise this minimum. Lots with **31–89 days** remaining
+  require an explicitly approved, clearly disclosed clearance path; lots with **0–30
+  days**, already expired lots, and expiry-tracked lots with an unknown date are not
+  sellable and must stay out of available inventory. These are conservative K2 operating
+  defaults, not a claim of regulatory sufficiency.
 - **Stock is per-staff custody across multiple hubs** — not one warehouse.
-- **SQL workflow:** Claude writes idempotent `RUN_THIS_*.sql`; you paste-and-run
-  them yourself in the Supabase SQL editor.
+- **SQL workflow:** dated additive migrations are rollback-validated and applied
+  once through the Supabase migration system. `RUN_THIS_*` files are historical
+  references and must not be used as the current upgrade path.
+
+### Current flexible commercial rules
+
+- **Channel direction:** marketplaces remain active acquisition and income channels,
+  but K2's near-future objective is to move repeat customers toward direct website
+  purchasing. The admin must operate both paths without treating marketplace rules as
+  K2-wide rules.
+- **Delivery charges:** Shopee, TikTok Shop, Lazada, and other connected channels use
+  the delivery charge calculated by that channel. For direct and Pasabuy transactions,
+  staff first obtain the applicable courier rate, communicate it to the customer, and
+  record the customer's confirmation. A delivery estimate must remain labeled as an
+  estimate until the courier amount is known.
+- **Customer exceptions:** cancellation, return, exchange, refund, and failed-delivery
+  outcomes are handled case by case through direct communication with the customer.
+  The system must record the request, conversation, evidence, proposed resolution,
+  authorized decision, stock disposition, and final outcome. It must not automatically
+  promise a standard result that K2 has not agreed to.
+- **Pasabuy pricing:** there is no standard percentage or automatic final-price rule.
+  The owner decides the price for each request using factors such as season, scarcity,
+  sourcing difficulty, actual item cost, delivery/logistics cost, and other documented
+  circumstances. The system may calculate and display cost components, but the final
+  quoted price remains a manual owner decision with a recorded reason. Estimated and
+  actual costs must remain separate.
 
 ---
 
 ## 9. What's done vs what's next
 
-**Done and live:** batch/expiry/location/holder/channel tracking, FEFO,
-inventory breakdown, expiry alerts, honest Channels status board + connect
-guide, error monitoring, admin guides + tools, storefront polish, corrected
-cargo workflow, connector data contract, Shopee connector scaffold.
+**Done and live:** base batch/expiry/location/holder/channel records, inventory
+breakdowns, expiry alerts, honest channel status, error monitoring, admin
+guides/tools, storefront presentation, persistent order/Pasabuy intake, coupons,
+consignment scan events, separate admin/storefront production builds, and the
+2026-08-10 operations/security hardening package:
+
+- exact eligible-lot FEFO reservation and one-scan-per-unit packing;
+- non-destructive lot reconciliation and exact partial custody transfer;
+- repeated SKU across flight boxes/lots and manifest history selection;
+- server-backed storefront coupons with confirmation-time redemption;
+- actual courier quote/customer-confirmation/waybill fields;
+- durable connector event inbox and the Shopee Events-only intake state;
+- repair of `orders.sku` from archived `products_old` to current `products`.
+- anonymous access limited to reviewed customer submission/coupon RPCs;
+- deprecated direct-stock, whole-line packing, and ambiguous scan RPCs locked.
 
 **Paused (waiting on us / Shopee approval):**
 
@@ -231,9 +293,24 @@ cargo workflow, connector data contract, Shopee connector scaffold.
 - Enable **Google** provider in Supabase (needs Google Cloud OAuth credentials).
 - Build the **Italy AI feed** that writes into `product_drafts`.
 
+**Approved logic still to complete after hardening:** receiver acceptance
+for custody transfers, configurable category shelf-life thresholds, complete
+payment-evidence records/files, case-by-case exception workspace, Pasabuy
+entity separation, and real marketplace detail/message/waybill adapters.
+
 **Nice-to-have backlog:** auto-create batch rows from the receiving scan; a
 stock-by-location/channel summary panel across all products; harden the Shopee
 CSV import to exact export columns; wire consignment data fully live.
+
+### Admin assistance layer (local implementation, 10 August 2026)
+
+The admin now includes a no-cost guided operations layer: one operation-first
+Scan center, guarded laptop shortcuts, focus-aware copy/paste research prompts
+for new product drafts, and a deterministic procedure guide that retrieves up
+to three relevant K2 procedures with rulebook citations. The guide is a local
+RAG foundation, not a connected external AI, and it does not read live records
+or perform state-changing actions. The complete behavior and future
+server-backed retrieval plan are recorded in `ADMIN_ASSISTANCE_AND_SHORTCUTS.md`.
 
 ---
 
@@ -246,3 +323,5 @@ CSV import to exact export columns; wire consignment data fully live.
 - Backend: `supabase/migrations/*` (SQL), `supabase/functions/*` (connectors).
 - Reference docs: `CONNECTOR_INTEGRATION_SPEC.md`, `ADMIN_WORKFLOW_BLUEPRINT.md`,
   `SYSTEM_LOGIC_BLUEPRINT.md`, this file.
+- Authoritative operations rulebook:
+  `K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md`.

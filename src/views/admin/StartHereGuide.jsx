@@ -29,7 +29,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
                 <div className="flex items-start gap-3">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue/15 text-sm font-bold text-blue">{i + 1}</span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-white">{s.icon} {s.title}</p>
+                    <p className="text-sm font-semibold text-white">{s.title}</p>
                     <p className="mt-1 text-sm leading-relaxed text-white/65">{s.body}</p>
                     {s.more && (
                       <div className="mt-1.5">
@@ -54,7 +54,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
         {/* Footer */}
         <div className="shrink-0 border-t border-adm-line bg-adm-sunken px-6 py-4">
           <p className="text-sm text-white/60">
-            Stuck on anything? Click the floating <span className="font-semibold text-white">🧭 Guide</span> button and ask — e.g. “where do I pack my box?”
+            Stuck on anything? Open the <span className="font-semibold text-white">Operations guide</span> and ask how a procedure works. Every result shows its K2 source.
           </p>
         </div>
       </div>

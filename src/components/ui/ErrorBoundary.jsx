@@ -21,6 +21,11 @@ export default class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
+      if (this.props.fallback) {
+        return typeof this.props.fallback === 'function'
+          ? this.props.fallback({ error: this.state.error, reset: this.handleReset })
+          : this.props.fallback
+      }
       return (
         <div className="w-full min-h-[400px] flex flex-col items-center justify-center p-8 text-center bg-paper dark:bg-[#05080f] rounded-2xl border border-line dark:border-crimson/30 shadow-card space-y-4 my-4">
           <div className="w-14 h-14 rounded-full bg-crimson/15 text-crimson flex items-center justify-center text-2xl border border-crimson/30">

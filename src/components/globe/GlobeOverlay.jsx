@@ -9,7 +9,7 @@ import { StarIcon } from '../ui/icons'
 
 export default function GlobeOverlay({ product, onClose }) {
   const { openProduct, addToCart, setCartOpen, isWholesale } = useStore()
-  const { getProductReviews } = useGlobeCms()
+  const { getProductReviews, cmsError } = useGlobeCms()
 
   if (!product) return null
 
@@ -43,12 +43,12 @@ export default function GlobeOverlay({ product, onClose }) {
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.9, opacity: 0, y: 30 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-3xl bg-cream/95 backdrop-blur-xl shadow-float flex flex-col md:flex-row"
+        className="relative z-10 flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-y-auto rounded-3xl bg-cream/95 shadow-float backdrop-blur-xl md:flex-row md:overflow-hidden"
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-card border border-line hover:bg-shell transition-colors"
+          className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-line bg-paper/95 shadow-card transition-colors hover:bg-shell md:right-4 md:top-4"
           aria-label="Close"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
@@ -59,8 +59,8 @@ export default function GlobeOverlay({ product, onClose }) {
 
         {/* Product Visual Column */}
         <div className="w-full md:w-[40%] bg-shell flex-shrink-0 relative overflow-hidden flex flex-col">
-          <div className="flex-1 min-h-[300px] relative">
-            <ProductVisual product={product} className="absolute inset-0 h-full w-full" pad="p-12" />
+          <div className="relative min-h-[220px] flex-1 sm:min-h-[280px] md:min-h-[300px]">
+            <ProductVisual product={product} className="absolute inset-0 h-full w-full" pad="p-8 sm:p-12" />
           </div>
           <div className="p-6 bg-shell/80 border-t border-line/50 backdrop-blur-md relative z-10 flex flex-col items-center text-center">
             <TrustBadge className="mb-3">Recorded origin · {product.origin || 'Imported'}</TrustBadge>
@@ -77,7 +77,7 @@ export default function GlobeOverlay({ product, onClose }) {
         </div>
 
         {/* Reviews Column */}
-        <div className="flex-1 overflow-y-auto p-6 md:p-12 bg-white/50">
+        <div className="flex-1 bg-[var(--store-surface-bg)]/60 p-6 md:overflow-y-auto md:p-12">
           <div className="mb-8">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson mb-2">Customer Feedback</p>
             <h2 className="font-serif text-3xl md:text-4xl font-semibold text-navy tracking-tight">
@@ -115,8 +115,8 @@ export default function GlobeOverlay({ product, onClose }) {
           ) : (
             <div className="flex flex-col items-center justify-center h-64 text-center rounded-2xl border border-dashed border-line/80 bg-shell/30">
               <StarIcon size={32} className="text-line mb-4" />
-              <p className="font-serif text-xl text-navy-soft">No reviews yet.</p>
-              <p className="text-sm text-navy-faint mt-1 max-w-xs">Be the first to leave a review for this product after purchasing.</p>
+              <p className="font-sans text-lg font-bold text-navy-soft">{cmsError ? 'Review details are reconnecting.' : 'No published reviews yet.'}</p>
+              <p className="mt-1 max-w-xs text-sm leading-6 text-navy-faint">{cmsError ? 'The product remains available to browse while the review service reconnects.' : 'Published customer feedback will appear here after verification.'}</p>
             </div>
           )}
         </div>

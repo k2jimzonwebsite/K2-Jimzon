@@ -3,16 +3,18 @@ import { useState } from 'react'
 export default function DiscrepancyReconciliationModal({ isOpen, onClose, consignment, items, onFinalizeArrival }) {
   const [notes, setNotes] = useState('')
   const [finalizing, setFinalizing] = useState(false)
+  const [finalizeError, setFinalizeError] = useState('')
 
   if (!isOpen || !consignment) return null
 
   const handleFinalize = async () => {
+    setFinalizeError('')
     setFinalizing(true)
     try {
-      await onFinalizeArrival(notes)
-      onClose()
+      const finalized = await onFinalizeArrival(notes)
+      if (finalized !== false) onClose()
     } catch (e) {
-      alert("Error finalizing shipment stock sync: " + e.message)
+      setFinalizeError(e?.message || 'The receipt could not be finalized. No inventory was changed.')
     } finally {
       setFinalizing(false)
     }
@@ -118,6 +120,11 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
               className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken p-3 text-sm text-white placeholder-white/30 outline-none focus:border-forest resize-none h-20"
             />
           </div>
+          {finalizeError && (
+            <div role="alert" className="rounded-adm-sm border border-crimson/35 bg-crimson/10 p-3 text-sm text-crimson">
+              Finalization failed: {finalizeError}
+            </div>
+          )}
         </div>
 
         {/* Footer Actions */}

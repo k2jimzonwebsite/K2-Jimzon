@@ -37,6 +37,11 @@ export default defineConfig(({ command, mode }) => {
   }[target]
 
   return {
+    // Admin and storefront dev servers run together on this workstation. Vite's
+    // default shared optimizer cache lets one mode invalidate the other's
+    // pre-bundled Three.js dependencies, producing 504 "Outdated Optimize Dep"
+    // responses and a blank storefront. Keep each deployment cache isolated.
+    cacheDir: `${projectRoot}/node_modules/.vite-${target}`,
     plugins: [react(), tailwindcss(), deploymentBoundaryPlugin(target)],
     resolve: {
       alias: {

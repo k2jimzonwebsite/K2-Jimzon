@@ -61,6 +61,7 @@ export default function Sheet() {
   const [showBarcode, setShowBarcode] = useState(null)
   const [batchProduct, setBatchProduct] = useState(null)
   const [enrichProduct, setEnrichProduct] = useState(null)
+  const [operationError, setOperationError] = useState('')
 
   useEffect(() => {
     if (!supabase) return;
@@ -74,17 +75,21 @@ export default function Sheet() {
 
   const fetchProducts = async () => {
     setLoading(true)
-    let fetched = []
-    if (supabase) {
-      try {
-        const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false })
-        if (!error && data && data.length > 0) fetched = data
-      } catch (e) {
-        console.warn("Sheet Supabase fetch warning:", e)
-      }
+    setOperationError('')
+    if (!supabase) {
+      setRows([])
+      setOperationError('Supabase is not configured. Product records are unavailable.')
+      setLoading(false)
+      return
     }
 
-    setRows(fetched)
+    const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false })
+    if (error) {
+      setRows([])
+      setOperationError(`Could not load product records: ${error.message}`)
+    } else {
+      setRows(data || [])
+    }
     setLoading(false)
   }
 
@@ -92,6 +97,8 @@ export default function Sheet() {
     const field = FIELD_MAP[colName]
     if (field === 'stock_available') return
     const product = rows[index]
+    if (!product || !field) return
+    const previousValue = product[field]
     let finalValue = value
     
     // Numbers
@@ -109,8 +116,19 @@ export default function Sheet() {
 
     setRows(prev => prev.map((r, i) => i === index ? { ...r, [field]: finalValue } : r))
     
-    if (!supabase) return;
-    await supabase.from('products').update({ [field]: finalValue }).eq('sku', oldSku || product.sku)
+    if (!supabase) {
+      setRows(prev => prev.map((r, i) => i === index ? { ...r, [field]: previousValue } : r))
+      setOperationError('Could not save the change because Supabase is not configured.')
+      return false
+    }
+    const { error } = await supabase.from('products').update({ [field]: finalValue }).eq('sku', oldSku || product.sku)
+    if (error) {
+      setRows(prev => prev.map((r, i) => i === index ? { ...r, [field]: previousValue } : r))
+      setOperationError(`Could not save ${colName} for ${oldSku || product.sku}: ${error.message}`)
+      return false
+    }
+    setOperationError('')
+    return true
   }
 
   // Deletion goes through the same PIN gate as the card grid — a bare
@@ -120,8 +138,17 @@ export default function Sheet() {
   const handleAddRow = async () => {
     const newSku = `NEW-${Math.random().toString(36).substring(2, 6).toUpperCase()}`
     const newRow = { sku: newSku, name: '', status: 'Draft' }
+    if (!supabase) {
+      setOperationError('Could not create a product because Supabase is not configured.')
+      return
+    }
+    const { error } = await supabase.from('products').insert([newRow])
+    if (error) {
+      setOperationError(`Could not create ${newSku}: ${error.message}`)
+      return
+    }
+    setOperationError('')
     setRows(prev => [newRow, ...prev])
-    if (supabase) await supabase.from('products').insert([newRow])
   }
 
   const tableContainerRef = useRef(null)
@@ -188,6 +215,11 @@ export default function Sheet() {
             </button>
           ))}
         </div>
+        {operationError && (
+          <div role="alert" className="mx-3 mb-3 rounded-adm-sm border border-crimson/35 bg-crimson/10 px-3 py-2 text-sm text-crimson lg:mx-6">
+            {operationError}
+          </div>
+        )}
       </div>
 
       {/* Scroll container — dvh so the mobile URL bar can't crop the last row. */}

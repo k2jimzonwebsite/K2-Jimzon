@@ -1,40 +1,18 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { Html5Qrcode } from 'html5-qrcode'
-
-// ── Generates the copy-paste prompt for K2 Jimzon Product Intelligence AI ──
-function buildProject1Prompt({ barcode, productName }) {
-  const barcodeInfo = barcode ? `Barcode / EAN: ${barcode}` : 'Barcode: (not scanned)'
-  const nameInfo    = productName ? `Product Name: ${productName}` : 'Product Name: (unknown — read from packaging image)'
-
-  return `You are K2 Jimzon Product Intelligence AI.
-
-I am attaching the product packaging image(s) for you to analyze.
-
-${barcodeInfo}
-${nameInfo}
-
-Instructions:
-• Use the attached packaging image as the PRIMARY source of truth.
-• Read all visible text, ingredients, origin, and weight directly from the packaging.
-• Use the barcode only to confirm product identity if needed.
-• Never fabricate or guess any factual information.
-• If a field cannot be verified, leave it empty.
-
-Return EXACTLY TWO SECTIONS as per your project instructions:
-
-SECTION 1 — Product Object JSON (matching the K2 Jimzon React data model exactly)
-SECTION 2 — ChatGPT Image Prompt (one unified prompt generating exactly 2 images)`
-}
+import { buildProject1Prompt, RESEARCH_MODES } from './productResearchPrompt'
 
 export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
   const [step, setStep]               = useState('scan')   // 'scan' | 'manual' | 'result'
   const [barcode, setBarcode]         = useState('')
   const [manualBarcode, setManualBarcode] = useState('')
   const [productName, setProductName] = useState('')
+  const [researchMode, setResearchMode] = useState('complete')
   const [promptText, setPromptText]   = useState('')
   const [copied, setCopied]           = useState(false)
   const [checking, setChecking]       = useState(false)
+  const [checkError, setCheckError]   = useState('')
   const scannerRef                    = useRef(null)
 
   // ── Start camera scanner ─────────────────────────────────────────────────
@@ -55,7 +33,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           await handleBarcodeDetected(decodedText)
         },
         () => {}
-      ).catch(() => alert('Camera access denied or unavailable.'))
+      ).catch(() => setCheckError('Camera access was denied or is unavailable. Use manual entry instead.'))
     }, 300)
     return () => {
       clearTimeout(timer)
@@ -68,17 +46,25 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
 
   // ── Check Supabase + build prompt ────────────────────────────────────────
   const handleBarcodeDetected = async (code) => {
+    setCheckError('')
     setChecking(true)
-    try {
-      const { data } = await supabase.from('products').select('sku').eq('barcode', code).single()
-      if (data) {
-        alert(`Barcode ${code} is already in your inventory!`)
+    if (code && supabase) {
+      const { data, error } = await supabase.from('products').select('sku').eq('barcode', code).maybeSingle()
+      if (error) {
+        setCheckError(`Inventory verification failed: ${error.message}`)
         setChecking(false)
         return
       }
-    } catch {}
+      if (data) {
+        setCheckError(`Barcode ${code} already belongs to SKU ${data.sku}. Open that product instead of creating a duplicate.`)
+        setChecking(false)
+        return
+      }
+    } else if (code && !supabase) {
+      setCheckError('The prompt is ready, but inventory duplicate checking is unavailable. Verify the barcode before creating a draft.')
+    }
     setBarcode(code)
-    setPromptText(buildProject1Prompt({ barcode: code, productName }))
+    setPromptText(buildProject1Prompt({ barcode: code, productName, researchMode }))
     setStep('result')
     setChecking(false)
   }
@@ -102,18 +88,18 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-adm-sunken animate-in slide-in-from-bottom-4 text-white">
+    <div className="fixed inset-0 z-[115] flex flex-col bg-adm-sunken text-white" role="dialog" aria-modal="true" aria-labelledby="new-product-scan-title">
 
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-adm-line bg-black/30 shrink-0">
         <div>
-          <p className="font-serif text-xl font-semibold">
-            {step === 'result' ? '✓ Prompt Ready' : '📦 Scan Box'}
+          <p id="new-product-scan-title" className="text-xl font-semibold">
+            {step === 'result' ? 'Product research prompt ready' : 'Scan a new product'}
           </p>
           <p className="text-sm text-white/60 mt-0.5">
             {step === 'scan'   && 'Point camera at the product barcode'}
             {step === 'manual' && 'Type the barcode or product name manually'}
-            {step === 'result' && 'Copy this prompt → open ChatGPT Project 1 → attach photo → send'}
+            {step === 'result' && 'Review, copy, attach packaging photos, then import only after human verification'}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -140,6 +126,33 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           </button>
         </div>
       </div>
+
+      {checkError && (
+        <div role="alert" className="mx-5 mt-4 rounded-adm-sm border border-amber/35 bg-amber/10 px-4 py-3 text-sm text-amber">
+          {checkError}
+        </div>
+      )}
+
+      {step !== 'result' && (
+        <div className="border-b border-adm-line bg-white/[0.02] px-5 py-3">
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/40">Research focus</p>
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none" role="radiogroup" aria-label="Product research focus">
+            {RESEARCH_MODES.map(mode => (
+              <button
+                key={mode.id}
+                type="button"
+                role="radio"
+                aria-checked={researchMode === mode.id}
+                title={mode.hint}
+                onClick={() => setResearchMode(mode.id)}
+                className={`min-h-10 shrink-0 rounded-adm-sm border px-3 text-left text-xs transition-colors ${researchMode === mode.id ? 'border-blue/50 bg-blue/15 text-white' : 'border-adm-line bg-white/[0.025] text-white/55 hover:text-white'}`}
+              >
+                <span className="block font-semibold">{mode.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex-1 overflow-y-auto p-5 flex flex-col">
 
@@ -204,12 +217,11 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
 
             {/* Scanned info badge */}
             <div className="flex items-center gap-3 bg-forest/10 border border-forest/30 rounded-adm-sm px-4 py-3">
-              <span className="text-forest text-xl">✓</span>
               <div>
                 <p className="text-base font-semibold text-white">
                   {productName || 'Product'} {barcode && <span className="font-mono text-sm text-white/60 ml-1">· {barcode}</span>}
                 </p>
-                <p className="text-sm text-white/60 mt-0.5">Not in inventory — ready to process</p>
+                <p className="text-sm text-white/60 mt-0.5">Duplicate check passed when available · Focus: {RESEARCH_MODES.find(mode => mode.id === researchMode)?.label}</p>
               </div>
             </div>
 
@@ -217,8 +229,8 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
             <div className="bg-white/5 border border-adm-line rounded-adm-sm overflow-hidden flex flex-col flex-1 min-h-[280px]">
               <div className="bg-black/40 px-4 py-3 flex items-center justify-between border-b border-adm-line shrink-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-white/50 uppercase tracking-widest">Project 1 Prompt</span>
-                  <span className="text-xs font-bold bg-blue/20 text-blue px-2 py-0.5 rounded-full border border-blue/30">K2 Jimzon Product Intelligence AI</span>
+                  <span className="text-sm font-bold text-white/50 uppercase tracking-widest">Evidence-first prompt</span>
+                  <span className="text-xs font-bold bg-blue/20 text-blue px-2 py-0.5 rounded-full border border-blue/30">Human review required</span>
                 </div>
                 <span className="text-xs font-bold bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">EDITABLE</span>
               </div>
@@ -235,10 +247,10 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
               <p className="text-xs font-bold text-white/55 uppercase tracking-widest mb-3">What to do next</p>
               {[
                 ['Copy the prompt below', 'Hit the white button to copy it to your clipboard.'],
-                ['Open ChatGPT → Project 1', 'Go to your K2 Jimzon Product Intelligence project.'],
+                ['Open your research tool', 'Use the K2 Jimzon Product Intelligence project or another tool that can inspect the attached packaging photos.'],
                 ['Attach the packaging photo', 'Drag the product photo into the message box.'],
-                ['Paste & send', 'Paste the prompt, then hit enter. The AI will return Section 1 + Section 2.'],
-                ['Smart Paste the result', 'Copy the Section 1 JSON, then click the purple button below.'],
+                ['Paste and run', 'The tool must return the draft JSON, image prompt, source URLs, and review notes.'],
+                ['Verify, then Smart Paste', 'Check every factual claim and copy only Section 1 into Smart Paste.'],
               ].map(([title, body], i) => (
                 <div key={i} className="flex gap-3 items-start">
                   <span className="w-5 h-5 rounded-full bg-blue/20 text-blue text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
@@ -260,7 +272,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
-                    Copy Prompt for Project 1
+                    Copy product research prompt
                   </>
                 )}
               </button>
@@ -272,14 +284,14 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Open Smart Paste AI
+                Open Smart Paste review
               </button>
 
               <button
                 onClick={() => { setStep('scan'); setBarcode(''); setProductName(''); setManualBarcode('') }}
                 className="w-full text-white/55 hover:text-white/60 text-base py-2 transition-colors"
               >
-                ← Scan another product
+                Scan another product
               </button>
             </div>
           </div>

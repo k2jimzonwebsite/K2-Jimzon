@@ -124,19 +124,28 @@ function RemoteGlobeCmsProvider({ children }) {
       supabase.from('globe_products').select('*').order('display_order'),
       supabase.from('reviews').select('*').order('created_at', { ascending: false }),
     ])
-    if (gpRes.error || rvRes.error) {
-      setCmsError(`Could not load CMS data: ${(gpRes.error || rvRes.error).message}`)
-      // Production never substitutes illustrative local reviews for missing
-      // database content. An empty globe is more truthful than fake proof.
-      setGlobeProducts([])
-      setReviews([])
+    const errors = []
+
+    // The 3D product sphere is part of the storefront experience, so a review
+    // query failure must not remove the entire section. The fallback below is
+    // display configuration only; review copy always remains database-backed.
+    if (gpRes.error) {
+      errors.push(`globe products: ${gpRes.error.message}`)
+      setGlobeProducts(buildDefaultGlobeProducts())
     } else {
-      setCmsError(null)
       setGlobeProducts(
         gpRes.data.length ? gpRes.data.map(mapGlobeProductRow) : buildDefaultGlobeProducts()
       )
+    }
+
+    if (rvRes.error) {
+      errors.push(`reviews: ${rvRes.error.message}`)
+      setReviews([])
+    } else {
       setReviews(rvRes.data.map(mapReviewRow))
     }
+
+    setCmsError(errors.length ? `Could not load all review data (${errors.join('; ')})` : null)
     setIsLoading(false)
   }, [])
 

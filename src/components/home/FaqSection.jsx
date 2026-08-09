@@ -18,13 +18,18 @@ export default function FaqSection() {
           {FAQS.map((faq, index) => {
             const isOpen = open === index
             return (
-              <div key={faq.q} className="border-b border-line">
-                <button onClick={() => setOpen(isOpen ? -1 : index)} aria-expanded={isOpen} className="flex min-h-16 w-full items-center justify-between gap-5 py-4 text-left">
+              <div key={faq.q} data-open={isOpen || undefined} className="faq-item border-b border-line">
+                <button
+                  onClick={() => setOpen(isOpen ? -1 : index)}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${index}`}
+                  className="faq-trigger flex min-h-16 w-full items-center justify-between gap-5 py-4 text-left"
+                >
                   <span className="font-serif text-lg font-semibold text-navy">{faq.q}</span>
-                  <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line text-navy-soft transition-transform duration-150 ${isOpen ? 'rotate-45' : ''}`}><PlusIcon size={15} /></span>
+                  <span className={`faq-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line text-navy-soft ${isOpen ? 'rotate-45' : ''}`}><PlusIcon size={15} /></span>
                 </button>
-                <div className={`grid transition-[grid-template-rows] duration-200 ease-out-quart ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
-                  <div className="overflow-hidden"><p className="max-w-2xl pb-6 pr-12 text-sm leading-7 text-navy-soft">{faq.a}</p></div>
+                <div id={`faq-answer-${index}`} className={`faq-answer-grid grid ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                  <div className="overflow-hidden"><p className="faq-answer max-w-2xl pb-6 pr-12 text-sm leading-7 text-navy-soft">{faq.a}</p></div>
                 </div>
               </div>
             )

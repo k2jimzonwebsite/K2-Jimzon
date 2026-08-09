@@ -1,3 +1,4 @@
+import { motion, useReducedMotion } from 'motion/react'
 import { useStore } from '../../context/StoreContext'
 import { BoxIcon, CupIcon, HeartIcon, PlaneIcon, SparkleIcon, StarIcon, ArrowIcon } from '../ui/icons'
 import { Kicker } from '../ui/bits'
@@ -13,6 +14,7 @@ const CATEGORIES = [
 
 export default function CategoryTiles() {
   const { setCategory, setQuery, go } = useStore()
+  const reducedMotion = useReducedMotion()
 
   const open = (category) => {
     if (category === 'Pasabuy') return go('pasabuy')
@@ -31,10 +33,24 @@ export default function CategoryTiles() {
         <button onClick={() => go('catalog')} className="hidden min-h-11 items-center gap-2 text-sm font-bold text-navy transition-colors hover:text-crimson sm:flex">View all products <ArrowIcon size={15} /></button>
       </div>
 
-      <div className="grid border-l border-t border-[var(--store-surface-border)] sm:grid-cols-2 lg:grid-cols-3">
+      <motion.div
+        initial={reducedMotion ? false : 'hidden'}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={{ visible: { transition: { staggerChildren: 0.045 } } }}
+        className="grid border-l border-t border-[var(--store-surface-border)] sm:grid-cols-2 lg:grid-cols-3"
+      >
         {CATEGORIES.map(({ cat, label, note, icon: CategoryIcon }) => (
-          <button key={cat} onClick={() => open(cat)} className="group flex min-h-24 items-center gap-4 border-b border-r border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left transition-colors duration-150 hover:bg-[color-mix(in_srgb,var(--store-surface-bg)_85%,var(--color-crimson))] sm:p-5">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] text-crimson transition-colors duration-150 group-hover:border-crimson/25 group-hover:bg-crimson-wash">
+          <motion.button
+            key={cat}
+            onClick={() => open(cat)}
+            variants={{
+              hidden: { opacity: 0, transform: 'translateY(8px)' },
+              visible: { opacity: 1, transform: 'translateY(0)', transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] } },
+            }}
+            className="category-tile group relative flex min-h-24 items-center gap-4 overflow-hidden border-b border-r border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left sm:p-5"
+          >
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] text-crimson transition-[transform,border-color,background-color] duration-200 group-hover:border-crimson/25 group-hover:bg-crimson-wash">
               <CategoryIcon size={19} />
             </span>
             <span className="min-w-0 flex-1">
@@ -42,9 +58,9 @@ export default function CategoryTiles() {
               <span className="mt-0.5 block text-xs text-navy-faint">{note}</span>
             </span>
             <ArrowIcon size={15} className="text-navy-faint transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-crimson" />
-          </button>
+          </motion.button>
         ))}
-      </div>
+      </motion.div>
     </section>
   )
 }

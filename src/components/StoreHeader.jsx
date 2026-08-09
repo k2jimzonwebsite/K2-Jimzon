@@ -36,7 +36,7 @@ export default function StoreHeader() {
 
   return (
     <header className="store-nav-surface sticky top-0 z-40 border-b border-line backdrop-blur-xl">
-      <div className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-4 py-1.5 text-center text-[11px] font-semibold tracking-wide text-navy-soft">
+      <div className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-4 py-2 text-center text-xs font-semibold leading-5 tracking-wide text-navy-soft">
         Italy-sourced goods, fulfilled in Manila <span className="mx-2 text-crimson">·</span> Final stock and delivery are confirmed by K2 staff
       </div>
 
@@ -51,7 +51,7 @@ export default function StoreHeader() {
                 key={key}
                 onClick={() => go(key)}
                 aria-current={isActive ? 'page' : undefined}
-                className={`relative min-h-11 whitespace-nowrap px-3 text-[13px] font-semibold transition-colors duration-150 ${isActive ? 'text-crimson' : 'text-navy-soft hover:text-navy'}`}
+                className={`relative min-h-11 whitespace-nowrap px-3 text-sm font-semibold transition-colors duration-150 ${isActive ? 'text-crimson' : 'text-navy-soft hover:text-navy'}`}
               >
                 {label}
                 <span className={`absolute inset-x-3 -bottom-3 h-0.5 origin-left bg-crimson transition-transform duration-200 ease-out-quart ${isActive ? 'scale-x-100' : 'scale-x-0'}`} />

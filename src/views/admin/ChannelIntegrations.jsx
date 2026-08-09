@@ -109,6 +109,7 @@ export default function ChannelIntegrations() {
             {CHANNELS.map(channel => {
               const connection = connections[channel.key]
               const live = connection?.status === 'live'
+              const degraded = connection?.status === 'degraded'
               const failed = connection?.status === 'error'
               const channelStats = stats[channel.key] || { total: 0, ready: 0, incomplete: 0, published: 0 }
               const lastEvent = connection?.last_event_at ? new Date(connection.last_event_at).toLocaleString() : 'No reconciled event'
@@ -118,12 +119,12 @@ export default function ChannelIntegrations() {
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-adm-sm border border-white/10 text-white" style={{ backgroundColor: channel.color }}><GlobeIcon size={17} /></span>
                     <div className="min-w-0"><h3 className="text-sm font-semibold text-white">{channel.name}</h3><p className="mt-0.5 text-xs leading-relaxed text-white/45">{channel.description}</p></div>
                   </div>
-                  <div><StatusPill tone={live ? 'success' : failed ? 'danger' : 'neutral'}>{live ? 'Operational' : failed ? 'Connector error' : 'Not connected'}</StatusPill></div>
+                  <div><StatusPill tone={live ? 'success' : failed ? 'danger' : degraded ? 'warning' : 'neutral'}>{live ? 'Operational' : failed ? 'Connector error' : degraded ? 'Events only' : 'Not connected'}</StatusPill></div>
                   <div>
                     {channel.internal ? (
                       <><p className="text-xs font-medium text-white/65">{lastEvent}</p><p className="mt-1 text-[11px] text-white/35">{connection?.note || 'Internal intake requires reconciliation.'}</p></>
                     ) : (
-                      <><div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs tabular-nums"><span className="text-white/65">{channelStats.total} rows</span><span className="text-blue">{channelStats.ready} ready</span><span className={channelStats.incomplete ? 'text-crimson' : 'text-white/45'}>{channelStats.incomplete} incomplete</span></div><p className="mt-1 text-[11px] text-white/35">{live ? `Last event ${lastEvent}` : 'Seller Center remains the Step 1 fallback.'}</p></>
+                      <><div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs tabular-nums"><span className="text-white/65">{channelStats.total} rows</span><span className="text-blue">{channelStats.ready} ready</span><span className={channelStats.incomplete ? 'text-crimson' : 'text-white/45'}>{channelStats.incomplete} incomplete</span></div><p className="mt-1 text-[11px] text-white/35">{live ? `Last reconciled event ${lastEvent}` : degraded ? connection?.note : 'Seller Center remains the Step 1 fallback.'}</p></>
                     )}
                   </div>
                   <div className="flex lg:justify-end">
