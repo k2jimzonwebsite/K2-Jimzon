@@ -30,7 +30,7 @@ export default function ProductDetail() {
      return idx >= 0 ? idx : 0;
   });
 
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function ProductDetail() {
     const idx = initialFeaturedList.findIndex(p => p.id === productId);
     if (idx >= 0) {
       setCurrentIndex(idx);
-      setIsPlaying(true);
+      setIsPlaying(false);
       setProgress(0);
     }
   }, [productId, initialFeaturedList]);
@@ -99,7 +99,7 @@ export default function ProductDetail() {
   const isOutOfStock = totalStock <= 0
 
   return (
-    <main className="mx-auto max-w-6xl px-4 pb-24 pt-6 md:pb-16 md:pt-10">
+    <main className="store-section max-w-6xl pb-24 pt-6 md:pb-20 md:pt-10">
       
       {/* Featured Header */}
       <div className="text-center mb-8">
@@ -139,10 +139,10 @@ export default function ProductDetail() {
         <AnimatePresence mode="wait">
           <motion.div
             key={product.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, transform: 'translateY(8px)' }}
+            animate={{ opacity: 1, transform: 'translateY(0)' }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             className="w-full"
           >
             <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr] md:gap-10 lg:gap-16 min-h-[auto] lg:min-h-[500px]">
@@ -172,7 +172,7 @@ export default function ProductDetail() {
               <div className="relative min-h-[400px] lg:min-h-0 flex flex-col">
                 <div className="flex flex-col justify-start flex-1">
                   <div className="flex flex-wrap items-center gap-2 mt-4 lg:mt-0 shrink-0 mb-4">
-                    <TrustBadge>100% authentic · {product.country_of_origin || product.origin || 'Imported'}</TrustBadge>
+                    <TrustBadge>Recorded origin · {product.country_of_origin || product.origin || 'Imported'}</TrustBadge>
                     <StockPill stock={product.stock_available || product.stock} />
                     {(product.subcategory || product.category_id) && (
                       <span className="rounded-full bg-shell border border-line/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-navy-soft">
@@ -201,8 +201,15 @@ export default function ProductDetail() {
 
                   <div className="mt-6">
                     <p className="text-base leading-relaxed text-navy-soft mb-6">
-                      {product.description || product.short_description || "A premium imported selection from K2 Jimzon, crafted for authentic culinary experiences."}
+                      {product.description || product.short_description || 'Product details are being reviewed before publication.'}
                     </p>
+
+                    <div className="mb-7 rounded-xl border border-line bg-paper p-5 shadow-sm">
+                      <div className="flex items-center justify-between gap-4"><StockPill stock={totalStock} /><span className="text-xs text-navy-faint">{inCart ? `${inCart} already in cart` : 'Request confirmation at checkout'}</span></div>
+                      <RedButton className="mt-4 w-full" disabled={!canAdd} onClick={() => { addToCart(product.id); setCartOpen(true) }}>
+                        {isOutOfStock ? 'Sold out' : canAdd ? `Add to cart · ${peso(price)}` : 'Stock limit reached'}
+                      </RedButton>
+                    </div>
 
                     {(product.why_buy || product.usage_instructions) && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4">

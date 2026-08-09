@@ -63,7 +63,7 @@ export default function GlobeOverlay({ product, onClose }) {
             <ProductVisual product={product} className="absolute inset-0 h-full w-full" pad="p-12" />
           </div>
           <div className="p-6 bg-shell/80 border-t border-line/50 backdrop-blur-md relative z-10 flex flex-col items-center text-center">
-            <TrustBadge className="mb-3">100% authentic · {product.origin}</TrustBadge>
+            <TrustBadge className="mb-3">Recorded origin · {product.origin || 'Imported'}</TrustBadge>
             <h3 className="font-serif text-xl font-semibold text-navy">{product.name}</h3>
             <div className="mt-4 flex flex-col w-full gap-2">
               <RedButton className="w-full py-3" onClick={handleAddToCart}>

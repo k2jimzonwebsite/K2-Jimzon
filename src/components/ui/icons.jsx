@@ -72,6 +72,52 @@ export const SyncIcon = (p) => (
   <Icon {...p} d="M21 8a9 9 0 0 0-15.5-2.5L3 8m0-5v5h5m-5 8a9 9 0 0 0 15.5 2.5L21 16m0 5v-5h-5" />
 )
 
+export const HomeIcon = (p) => (
+  <Icon {...p} d="M3 11.5 12 4l9 7.5M5.5 10v10h13V10M9.5 20v-6h5v6" />
+)
+
+export const CupIcon = (p) => (
+  <Icon {...p} d="M5 8h11v5.5A5.5 5.5 0 0 1 10.5 19 5.5 5.5 0 0 1 5 13.5V8Zm11 2h1.5a2.5 2.5 0 0 1 0 5H16M8 4v1m4-2v2" />
+)
+
+export const HeartIcon = (p) => (
+  <Icon {...p} d="M20.8 5.8a5 5 0 0 0-7.1 0L12 7.5l-1.7-1.7a5 5 0 0 0-7.1 7.1L12 21l8.8-8.1a5 5 0 0 0 0-7.1Z" />
+)
+
+export const SparkleIcon = (p) => (
+  <Icon {...p} d="m12 3 1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6L12 3Zm7 12 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z" />
+)
+
+export const TagIcon = (p) => (
+  <Icon {...p} d="M20 13 13 20 4 11V4h7l9 9ZM8 8h.01" />
+)
+
+export const BriefcaseIcon = (p) => (
+  <Icon {...p} d="M4 8h16v11H4V8Zm5 0V5h6v3M4 12h16m-10 0v2h4v-2" />
+)
+
+export const TrendIcon = (p) => (
+  <Icon {...p} d="M3 18 9 12l4 4 8-10m-5 0h5v5" />
+)
+
+export const ClockIcon = (p) => (
+  <Icon {...p} d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-13v5l3 2" />
+)
+
+export const BellIcon = (p) => (
+  <Icon {...p} d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Zm-8 12h4" />
+)
+
+export const BookIcon = (p) => (
+  <Icon {...p} d="M4 4h6a3 3 0 0 1 3 3v13a3 3 0 0 0-3-3H4V4Zm16 0h-4a3 3 0 0 0-3 3v13a3 3 0 0 1 3-3h4V4Z" />
+)
+
+export const MenuIcon = (p) => <Icon {...p} d="M4 7h16M4 12h16M4 17h16" />
+
+export const UploadIcon = (p) => (
+  <Icon {...p} d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 15v4h16v-4" />
+)
+
 export const XIcon = (p) => <Icon {...p} d="M5 5l14 14M19 5 5 19" />
 
 export const MinusIcon = (p) => <Icon {...p} d="M5 12h14" />

@@ -60,7 +60,7 @@ export default function StaffPermissionManager() {
 
   const changeRole = async (id, role) => {
     setErr(''); setNotice('')
-    const { error } = await supabase.from('user_profiles').update({ role }).eq('id', id)
+    const { error } = await supabase.rpc('set_user_role', { p_user_id: id, p_role: role })
     if (error) setErr(error.message)
     else { setNotice('Role updated.'); setRows(prev => prev.map(r => r.id === id ? { ...r, role } : r)) }
   }
@@ -173,7 +173,7 @@ export default function StaffPermissionManager() {
         </div>
         <p className="text-xs text-white/45 mb-3 leading-relaxed">
           Required to delete products. It is yours alone — every deletion is logged
-          against whoever's PIN was used. Stored encrypted; it is never sent back to the browser.
+          against the signed-in admin. It is stored as a one-way bcrypt hash and is never sent back to the browser.
         </p>
         <form onSubmit={savePin} className="space-y-3">
           <div>

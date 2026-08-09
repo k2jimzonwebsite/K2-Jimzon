@@ -22,8 +22,11 @@ jobs:
       - name: Import-integrity check (catches "X is not defined" runtime crashes)
         run: npm run check:imports
 
-      - name: Build (catches import/syntax breaks)
-        run: npm run build
+      - name: Build isolated storefront production
+        run: npm run build:storefront
+
+      - name: Build isolated admin production
+        run: npm run build:admin
 
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium

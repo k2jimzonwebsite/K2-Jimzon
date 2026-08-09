@@ -142,7 +142,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
 /* --------------------------------- Strip --------------------------------- */
 function ClockRate() {
   const [now, setNow] = useState(new Date())
-  const [rate, setRate] = useState(() => load(LS.rate, '65'))
+  const [rate, setRate] = useState(() => load(LS.rate, ''))
   const [eur, setEur] = useState('')
   useEffect(() => { const t = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(t) }, [])
   useEffect(() => save(LS.rate, rate), [rate])
@@ -158,7 +158,7 @@ function ClockRate() {
         <span className="text-white/80"><strong className="text-white tabular-nums mr-1">{time('Asia/Manila')}</strong> Manila 🇵🇭</span>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-white/60 text-sm shrink-0">€1 = ₱</span>
+        <span className="text-white/60 text-sm shrink-0" title="Manual planning rate; not a live FX feed">Manual €1 = ₱</span>
         <input value={rate} onChange={(e) => setRate(e.target.value)} inputMode="decimal"
           className="w-16 rounded-adm-sm border border-adm-line bg-black/40 px-2 py-1 text-sm text-white tabular-nums outline-none focus:border-gold" />
         <input value={eur} onChange={(e) => setEur(e.target.value)} inputMode="decimal" placeholder="€ amount"
@@ -227,8 +227,8 @@ function Margin() {
       <div><p className={lbl}>Cost (₱)</p><input className={field} inputMode="decimal" value={cost} onChange={(e) => setCost(e.target.value)} placeholder="0" /></div>
       <div><p className={lbl}>Selling price (₱)</p><input className={field} inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="0" /></div>
       <div className="grid grid-cols-3 gap-2 pt-1">
-        <Stat label="Profit" value={'₱' + profit.toLocaleString(undefined, { maximumFractionDigits: 2 })} tone={profit >= 0 ? 'good' : 'bad'} />
-        <Stat label="Margin" value={margin.toFixed(1) + '%'} />
+        <Stat label="Gross difference" value={'₱' + profit.toLocaleString(undefined, { maximumFractionDigits: 2 })} tone={profit >= 0 ? 'good' : 'bad'} />
+        <Stat label="Gross margin" value={margin.toFixed(1) + '%'} />
         <Stat label="Markup" value={markup.toFixed(1) + '%'} />
       </div>
     </div>

@@ -1,43 +1,53 @@
 import { test, expect } from '@playwright/test'
 
-// Critical-path smoke test for the storefront buy flow.
-// Designed to run WITHOUT Supabase env vars (e.g. in CI): with no live data the
-// app falls back to local mock products, so this test needs no secrets and never
-// writes to the database (it stops before "Confirm payment").
-//
-// This is the test that would have caught the real bugs we hit:
-//  - the checkout `total` ReferenceError (asserted via the visible Total)
-//  - the applyCoupon crash (coupon apply is exercised)
-
-test.describe('Storefront buy flow (smoke)', () => {
-  test('home page renders', async ({ page }) => {
+test.describe('launch-critical storefront', () => {
+  test('light mode preserves the luxury wood canvas without leaking into dark mode', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('theme', 'light'))
     await page.goto('/')
-    await expect(page.getByText(/Milano/i).first()).toBeVisible({ timeout: 15000 })
+
+    const storefront = page.locator('.storefront-ui')
+    await expect(storefront).toBeVisible()
+    await expect.poll(() => storefront.evaluate(element => getComputedStyle(element).backgroundImage))
+      .toContain('wood-bg.jpg')
+
+    await page.getByRole('button', { name: 'Switch to dark mode' }).click()
+    await expect.poll(() => storefront.evaluate(element => getComputedStyle(element).backgroundImage))
+      .toBe('none')
   })
 
-  test('catalog shows product cards', async ({ page }) => {
+  test('home and catalog render without unsafe payment claims', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('button', { name: /Inventory & Catalog|Catalog/i }).first().click()
+    await expect(page).toHaveTitle(/K2 Jimzon/)
+    await expect(page.getByRole('button', { name: /Shop the Drop/i })).toBeVisible()
+    await expect(page.getByText(/Payment confirms automatically/i)).toHaveCount(0)
+    await page.getByRole('button', { name: /Inventory & Catalog/i }).first().click()
     await expect(page.locator('[data-testid="product-card"]').first()).toBeVisible({ timeout: 15000 })
   })
 
-  test('product → cart → checkout renders totals without crashing', async ({ page }) => {
+  test('cart closes before checkout and checkout is an order request', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('button', { name: /Inventory & Catalog|Catalog/i }).first().click()
-
-    // Open the first product
+    await page.getByRole('button', { name: /Inventory & Catalog/i }).first().click()
     await page.locator('[data-testid="product-image-btn"]').first().click()
-
-    // Add to cart (button label is "Add to cart — ₱X")
     await page.getByRole('button', { name: /Add to cart/i }).first().click()
+    const cart = page.getByRole('dialog', { name: 'Shopping cart' })
+    await expect(cart).toBeVisible()
+    await cart.getByRole('button', { name: /Go to checkout/i }).click()
+    await expect(cart).toBeHidden()
+    await expect(page.getByRole('heading', { name: /Submit an order request/i })).toBeVisible()
+    await expect(page.getByText(/No online payment is collected yet/i)).toBeVisible()
+    await expect(page.getByRole('button', { name: /Submit order request/i })).toBeVisible()
+    await expect(page.getByText(/Confirm payment|Scan with any QR/i)).toHaveCount(0)
+  })
 
-    // Go to checkout from the cart drawer
-    await page.getByRole('button', { name: /Go to checkout|checkout/i }).first().click()
-
-    // Checkout must render the order summary and the Total.
-    // If the old `total` ReferenceError regressed, the page would crash here.
-    await expect(page.getByText(/Order summary/i)).toBeVisible({ timeout: 15000 })
-    await expect(page.getByText(/^Total$/i).first()).toBeVisible()
-    await expect(page.getByText(/₱/).first()).toBeVisible()
+  test('checkout requires a contact channel before submission', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('button', { name: /Inventory & Catalog/i }).first().click()
+    await page.locator('[data-testid="product-image-btn"]').first().click()
+    await page.getByRole('button', { name: /Add to cart/i }).first().click()
+    await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /Go to checkout/i }).click()
+    await page.getByLabel('Full name').fill('Launch Test')
+    await page.getByLabel('Delivery address').fill('Makati City, Metro Manila')
+    await page.getByRole('button', { name: /Submit order request/i }).click()
+    await expect(page.getByRole('alert')).toContainText(/email address or mobile number/i)
   })
 })

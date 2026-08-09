@@ -1,130 +1,53 @@
-import { useState } from 'react'
+const peso = (value) => value == null
+  ? 'Not recorded'
+  : new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(Number(value) || 0)
 
 export default function PackingSlipModal({ isOpen, onClose, order }) {
-  const [copied, setCopied] = useState(false)
-
   if (!isOpen || !order) return null
 
-  const handlePrint = () => {
-    window.print()
-  }
+  const reference = order.publicReference || order.id
+  const packed = String(order.status).toLowerCase() === 'packed'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-white text-slate-900 rounded-adm p-6 space-y-6 shadow-2xl">
-        
-        {/* Header Action Bar (Non-Printable) */}
-        <div className="flex items-center justify-between border-b border-slate-200 pb-4 print:hidden">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded border border-amber-300 uppercase">
-              Shopee / Lazada Official Air Waybill & Packing Slip
-            </span>
-            <span className="text-sm text-slate-500 font-mono">Order #{order.id}</span>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="packing-slip-title">
+      <div className="max-h-[92vh] w-full max-w-2xl space-y-5 overflow-y-auto rounded-adm bg-white p-6 text-slate-900 shadow-2xl">
+        <div className="flex flex-col justify-between gap-3 border-b border-slate-200 pb-4 print:hidden sm:flex-row sm:items-center">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Internal document only</p>
+            <h2 id="packing-slip-title" className="mt-1 text-xl font-bold">Packing record</h2>
           </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handlePrint}
-              className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-4 py-2 rounded-adm-sm transition-all min-h-[40px] flex items-center gap-1.5"
-            >
-              <span>🖨️</span> Print Label & Slip
-            </button>
-            <button
-              onClick={onClose}
-              className="p-2 rounded-adm-sm bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition-all min-h-[40px] min-w-[40px]"
-            >
-              ✕
-            </button>
+          <div className="flex gap-2">
+            <button onClick={() => window.print()} className="min-h-11 rounded-adm-sm bg-slate-900 px-4 text-sm font-bold text-white hover:bg-slate-800">Print internal slip</button>
+            <button onClick={onClose} aria-label="Close packing record" className="min-h-11 min-w-11 rounded-adm-sm bg-slate-100 px-3 text-slate-700 hover:bg-slate-200">Close</button>
           </div>
         </div>
 
-        {/* 📦 OFFICIAL SHOPEE / LAZADA / TIKTOK STYLE AIR WAYBILL STICKER */}
-        <div className="border-2 border-slate-900 rounded-adm-sm p-5 space-y-4 font-mono text-sm bg-white">
-          
-          {/* Top Carrier Header */}
-          <div className="flex items-center justify-between border-b-2 border-slate-900 pb-3">
-            <div className="flex items-center gap-3">
-              <span className="font-serif text-xl font-bold tracking-tight text-slate-900">J&T <span className="text-red-600">EXPRESS</span></span>
-              <span className="text-xs font-bold bg-slate-900 text-white px-2 py-0.5 rounded uppercase">STANDARD DELIVERY</span>
-            </div>
-            <div className="text-right">
-              <p className="text-xs font-bold text-slate-500">WAYBILL NO.</p>
-              <p className="font-bold text-base text-slate-900">JT-PH-88941092</p>
-            </div>
+        <div className="rounded border-2 border-slate-900 p-5 font-mono text-sm">
+          <div className="flex flex-col justify-between gap-3 border-b-2 border-slate-900 pb-4 sm:flex-row">
+            <div><p className="text-xs font-bold uppercase text-slate-500">K2 Jimzon internal packing record</p><p className="mt-1 text-lg font-bold">{reference}</p></div>
+            <div className="sm:text-right"><p className="text-xs font-bold uppercase text-slate-500">Source</p><p className="font-bold">{order.channel || 'Not recorded'}</p></div>
           </div>
 
-          {/* Barcode Simulation */}
-          <div className="text-center py-2 bg-slate-50 border border-slate-200 rounded">
-            <div className="font-mono text-2xl tracking-[0.3em] font-bold text-slate-900">||||| ||||||| |||| |||||||| |||||</div>
-            <p className="text-xs font-bold text-slate-500 mt-1">TRACKING BARCODE: *JT88941092PH*</p>
+          <div className="my-4 rounded border border-amber-300 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
+            This is not a courier waybill and contains no carrier tracking number. Attach the real label generated by the marketplace or selected courier before handover.
           </div>
 
-          {/* Sender & Recipient Grid */}
-          <div className="grid grid-cols-2 gap-4 border-t-2 border-b-2 border-slate-900 py-3">
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-slate-400 uppercase">SENDER / SHIP FROM:</p>
-              <p className="font-bold text-slate-900">K2 Jimzon BOS (Makati Hub)</p>
-              <p className="text-slate-600 text-xs">Staff Custodian: {order.staff_assignee || 'Elena Guerrero'}</p>
-              <p className="text-slate-500 text-xs">Contact: +63 917 555 0192</p>
-            </div>
-
-            <div className="space-y-1 border-l border-slate-200 pl-4">
-              <p className="text-xs font-bold text-slate-400 uppercase">SHIP TO / RECIPIENT:</p>
-              <p className="font-bold text-slate-900">{order.customer || 'Maria Santos'}</p>
-              <p className="text-slate-600 text-xs">Address: 142 Amorsolo St, Legazpi Village, Makati City</p>
-              <p className="text-slate-500 text-xs">Contact: +63 920 111 4455</p>
-            </div>
+          <div className="grid gap-4 border-y border-slate-300 py-4 sm:grid-cols-2">
+            <div><p className="text-xs font-bold uppercase text-slate-400">Ship from</p><p className="mt-1 font-bold">K2 Jimzon · Manila hub</p></div>
+            <div><p className="text-xs font-bold uppercase text-slate-400">Recipient</p><p className="mt-1 font-bold">{order.customer}</p><p className="mt-1 text-xs text-slate-600">{order.deliveryAddress || 'Delivery address not present on this order line'}</p><p className="mt-1 text-xs text-slate-600">{order.customerPhone || order.customerEmail || 'Contact not present on this order line'}</p></div>
           </div>
 
-          {/* Itemized Order Breakdown */}
-          <div className="space-y-2">
-            <p className="text-xs font-bold text-slate-400 uppercase">ITEMIZED PARCEL BREAKDOWN (PACK-VERIFIED):</p>
-            <table className="w-full text-left text-sm border border-slate-200 rounded overflow-hidden">
-              <thead className="bg-slate-100 font-bold border-b border-slate-200">
-                <tr>
-                  <th className="p-2">SKU</th>
-                  <th className="p-2">Product Item Description</th>
-                  <th className="p-2 text-center">Qty</th>
-                  <th className="p-2 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {order.items ? (
-                  order.items.map((it, idx) => (
-                    <tr key={idx}>
-                      <td className="p-2 font-bold">{it.sku}</td>
-                      <td className="p-2">{it.title}</td>
-                      <td className="p-2 text-center font-bold">{it.qty}</td>
-                      <td className="p-2 text-right text-emerald-600 font-bold">Verified ✓</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td className="p-2 font-bold">{order.sku || 'KIKO-3D-05'}</td>
-                    <td className="p-2">{order.title || 'KIKO Milano 3D Hydra Lipgloss (Shade 05)'}</td>
-                    <td className="p-2 text-center font-bold">{order.quantity || 1}</td>
-                    <td className="p-2 text-right text-emerald-600 font-bold">Verified ✓</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+          <table className="mt-4 w-full border-collapse text-left text-sm">
+            <thead><tr className="border-b border-slate-300 bg-slate-100"><th className="p-2">SKU</th><th className="p-2">Product</th><th className="p-2 text-center">Qty</th><th className="p-2 text-right">Packing state</th></tr></thead>
+            <tbody>{(order.items || []).map((item) => <tr key={item.sku} className="border-b border-slate-200"><td className="p-2 font-bold">{item.sku}</td><td className="p-2">{item.title}</td><td className="p-2 text-center font-bold">{item.qty}</td><td className="p-2 text-right font-bold">{packed ? 'Packed' : 'Pending scan'}</td></tr>)}</tbody>
+          </table>
 
-          {/* COD & Courier Instruction Footer */}
-          <div className="flex items-center justify-between border-t-2 border-slate-900 pt-3 text-xs">
-            <div>
-              <p className="font-bold text-slate-900">PAYMENT METHOD: COD (Cash on Delivery)</p>
-              <p className="text-slate-500 text-xs">Collect ₱{order.total || 750} from recipient upon delivery.</p>
-            </div>
-            <div className="text-right">
-              <span className="inline-block bg-emerald-100 text-emerald-800 font-bold text-xs px-2.5 py-1 rounded border border-emerald-300">
-                SCAN VERIFIED BY STAFF ✓
-              </span>
-            </div>
+          <div className="mt-4 grid gap-3 border-t-2 border-slate-900 pt-4 text-xs sm:grid-cols-3">
+            <div><p className="font-bold uppercase text-slate-400">Payment state</p><p className="mt-1 font-bold">{String(order.paymentStatus).replaceAll('_', ' ')}</p></div>
+            <div><p className="font-bold uppercase text-slate-400">Recorded total</p><p className="mt-1 font-bold">{peso(order.total)}</p></div>
+            <div><p className="font-bold uppercase text-slate-400">Handover method</p><p className="mt-1 font-bold">{order.courier || 'Not recorded'}</p></div>
           </div>
-
         </div>
-
       </div>
     </div>
   )

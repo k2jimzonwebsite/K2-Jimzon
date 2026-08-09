@@ -1,81 +1,76 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { useStore } from '../../context/StoreContext';
-import { useGlobeCms } from '../../data/globeCms';
-import { CATEGORIES, COLLECTIONS, peso } from '../../data/products';
-import { FAQS, LIFESTYLE, REVIEWS } from '../../data/site';
-import ProductGlobe from '../globe/ProductGlobe';
-import GlobeOverlay from '../globe/GlobeOverlay';
-import ProductVisual from '../ProductVisual';
-import InteractiveReveal from '../InteractiveReveal';
-import { BizBadge, RedButton, StockPill, TrustBadge, Tricolor, GhostButton, Kicker } from '../ui/bits';
-import ProductCard from '../ProductCard';
-import FlightMap from './FlightMap';
-import { ArrowIcon, CheckIcon, PlaneIcon, PlusIcon, StarIcon, MinusIcon } from '../ui/icons';
+import { motion } from 'motion/react'
+import { useStore } from '../../context/StoreContext'
+import { RedButton, GhostButton, Kicker } from '../ui/bits'
+import { ArrowIcon, CheckIcon, PlaneIcon, ShieldIcon, GridIcon } from '../ui/icons'
+import FlightMap from './FlightMap'
+
+const reveal = {
+  hidden: { opacity: 0, transform: 'translateY(10px)' },
+  visible: { opacity: 1, transform: 'translateY(0)', transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] } },
+}
 
 function Hero() {
-  const { enabledGlobeProducts } = useGlobeCms()
   const { go } = useStore()
-  const [selected, setSelected] = useState(null)
 
   return (
-    <section className="relative overflow-hidden border-b border-line bg-cream/70 backdrop-blur-xl">
-      <Tricolor className="absolute inset-x-0 top-0 z-10" />
-      <div className="grain relative mx-auto grid max-w-6xl items-center gap-8 px-6 py-14 text-center sm:py-16 md:grid-cols-2 md:gap-10 md:py-24 md:text-left">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.1 } }, hidden: {} }}
-          className="mx-auto w-full max-w-xl md:mx-0"
-        >
-          <motion.span
-            variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } } }}
-            className="inline-block rounded-full bg-crimson px-3 py-1.5 text-xs font-bold uppercase tracking-[0.24em] text-white shadow-card ring-1 ring-crimson/20"
-          >
-            Flash Sale
-          </motion.span>
-          <motion.h1
-            variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } } }}
-            className="mt-6 font-serif text-4xl font-medium leading-[0.98] tracking-tight text-navy sm:text-5xl md:text-6xl xl:text-7xl"
-          >
-            The Milano <br className="hidden sm:block" /> Consignment.
-          </motion.h1>
-          <motion.p
-            variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } } }}
-            className="mx-auto mt-6 max-w-md text-base font-light leading-relaxed text-navy-soft md:mx-0"
-          >
-            Fresh stock just landed. Get up to 30% off retail prices on authentic Italian goods flown directly to Manila.
-          </motion.p>
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } } }}
-            className="mt-10 flex flex-wrap justify-center gap-3 sm:gap-4 md:justify-start"
-          >
-            <RedButton onClick={() => go('catalog')} className="px-8 py-4 text-sm">
-              Shop the Drop
-            </RedButton>
-            <GhostButton onClick={() => go('wholesale')}>
-              Wholesale Portal
-            </GhostButton>
+    <section className="store-atmosphere relative overflow-hidden border-b border-line">
+      <div className="store-section grid min-h-[36rem] items-center gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:py-20 lg:min-h-[42rem] lg:gap-16">
+        <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.06 } } }} className="max-w-2xl">
+          <motion.div variants={reveal}>
+            <Kicker className="flex items-center gap-2"><PlaneIcon size={14} /> Direct Italian sourcing · Manila fulfillment</Kicker>
           </motion.div>
+          <motion.h1 variants={reveal} className="mt-5 max-w-3xl font-serif text-5xl font-semibold leading-[0.96] tracking-[-0.045em] text-navy sm:text-6xl lg:text-[4.6rem]">
+            Italy, chosen well.<br /><em className="font-normal text-crimson">Delivered to Manila.</em>
+          </motion.h1>
+          <motion.p variants={reveal} className="mt-6 max-w-xl text-base leading-7 text-navy-soft sm:text-lg">
+            Shop reviewed Italian imports already in our catalog, or ask K2 to source the exact item you need through Pasabuy. Every request is checked by a person before commitment.
+          </motion.p>
+          <motion.div variants={reveal} className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <RedButton onClick={() => go('catalog')} className="px-7">Shop the Drop <ArrowIcon size={16} /></RedButton>
+            <GhostButton onClick={() => go('pasabuy')} className="px-7">Request from Italy</GhostButton>
+          </motion.div>
+          <motion.p variants={reveal} className="mt-5 flex items-center gap-2 text-xs font-semibold text-navy-faint">
+            <ShieldIcon size={15} className="text-forest" /> No online payment is collected at request submission.
+          </motion.p>
         </motion.div>
 
-        {/* Milano → Manila flight animation on a real world map fills the right side */}
-        <div className="w-full">
-          <FlightMap />
-        </div>
+        <motion.div initial={{ opacity: 0, transform: 'translateX(14px)' }} animate={{ opacity: 1, transform: 'translateX(0)' }} transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }} className="relative">
+          <div className="store-panel overflow-hidden p-5 sm:p-7">
+            <div className="mb-2 flex items-center justify-between gap-4 border-b border-[var(--store-surface-border)] pb-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-navy-faint">Sourcing route</p>
+                <p className="mt-1 font-serif text-lg font-semibold text-navy">Milano to Manila</p>
+              </div>
+              <span className="rounded-md border border-gold/30 bg-gold-wash px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-gold-deep">Direct consignment</span>
+            </div>
+            <FlightMap />
+            <div className="grid grid-cols-2 gap-3 border-t border-[var(--store-surface-border)] pt-4 text-xs">
+              <p><span className="block font-bold text-navy">Reviewed catalog</span><span className="text-navy-faint">Published details checked</span></p>
+              <p><span className="block font-bold text-navy">Human confirmation</span><span className="text-navy-faint">Before payment or purchase</span></p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   )
 }
 
 function TrustRow() {
+  const items = [
+    [CheckIcon, 'Reviewed Italy-sourced catalog'],
+    [PlaneIcon, 'Italy-to-Manila operations'],
+    [GridIcon, 'Website, Shopee, TikTok & Lazada'],
+    [ShieldIcon, 'Staff-confirmed requests'],
+  ]
+
   return (
-    <div className="border-b border-line bg-cream/80 backdrop-blur-xl shadow-sm">
-      <div className="mx-auto flex max-w-7xl overflow-x-auto whitespace-nowrap items-center gap-4 px-4 py-3 text-sm font-medium md:justify-center md:gap-8">
-        <span className="flex items-center gap-2 text-forest"><CheckIcon size={14}/> Sourced in Italy</span>
-        <span className="flex items-center gap-2 text-blue"><PlaneIcon size={14}/> Flown to Manila Monthly</span>
-        <span className="flex items-center gap-2 text-crimson"><StarIcon size={14}/> 4.9★ Preferred Seller</span>
-        <span className="flex items-center gap-2 text-gold"><CheckIcon size={14}/> 100% Authentic Guarantee</span>
+    <div className="store-atmosphere-soft border-b border-line">
+      <div className="store-section grid grid-cols-2 divide-x divide-y divide-line sm:grid-cols-4 sm:divide-y-0">
+        {items.map(([ItemIcon, label]) => (
+          <div key={label} className="flex min-h-16 items-center justify-center gap-2 px-3 py-3 text-center text-[11px] font-semibold leading-tight text-navy-soft sm:text-xs">
+            <ItemIcon size={15} className="shrink-0 text-crimson" /> {label}
+          </div>
+        ))}
       </div>
     </div>
   )

@@ -1,111 +1,33 @@
-import { useRef, useState, useLayoutEffect } from 'react'
-import World from '@svg-maps/world'
-
-const MAP = World.default || World
-
-// Real world-map flight route: Milano (Italy) → Manila (Philippines).
-// We render the actual country vectors, measure Italy's and the Philippines'
-// real positions, auto-frame the region between them, and fly a plane along the
-// great-circle-style arc. Slow, luxury-paced loop.
+// A deliberately lightweight editorial route map. The detailed review globe is
+// loaded separately below the fold, so the hero stays fast on mobile networks.
 export default function FlightMap() {
-  const italyRef = useRef(null)
-  const phRef = useRef(null)
-  const [region, setRegion] = useState(null)
-
-  useLayoutEffect(() => {
-    const it = italyRef.current
-    const ph = phRef.current
-    if (!it || !ph) return
-    let a, b
-    try { a = it.getBBox(); b = ph.getBBox() } catch { return }
-    if (!a.width || !b.width) return
-
-    const start = { x: a.x + a.width / 2, y: a.y + a.height / 2 }
-    const end = { x: b.x + b.width / 2, y: b.y + b.height / 2 }
-
-    // Frame both countries (extra room on top for the arc + labels)
-    const minX = Math.min(a.x, b.x)
-    const maxX = Math.max(a.x + a.width, b.x + b.width)
-    const minY = Math.min(a.y, b.y)
-    const maxY = Math.max(a.y + a.height, b.y + b.height)
-    const w = maxX - minX
-    const h = maxY - minY
-    const padX = w * 0.14
-    const padTop = h * 0.6
-    const padBot = h * 0.35
-    const vbW = w + padX * 2
-    const viewBox = `${minX - padX} ${minY - padTop} ${vbW} ${h + padTop + padBot}`
-
-    // Arc lifted above the straight line for a flight-path feel
-    const mx = (start.x + end.x) / 2
-    const my = (start.y + end.y) / 2
-    const dist = Math.hypot(end.x - start.x, end.y - start.y)
-    const arc = `M ${start.x} ${start.y} Q ${mx} ${my - dist * 0.3} ${end.x} ${end.y}`
-
-    setRegion({ viewBox, start, end, arc, s: vbW / 70 })
-  }, [])
-
-  const s = region ? region.s : 1
-
   return (
-    <svg
-      viewBox={region ? region.viewBox : MAP.viewBox}
-      className={`h-auto w-full text-navy transition-opacity duration-700 ${region ? 'opacity-100' : 'opacity-0'}`}
-      role="img"
-      aria-label="Flight route from Milano, Italy to Manila, Philippines shown on a world map"
-    >
-      {/* Real country vectors — muted, with Italy & Philippines highlighted */}
-      {MAP.locations.map((loc) => {
-        const hot = loc.id === 'it' || loc.id === 'ph'
-        return (
-          <path
-            key={loc.id}
-            ref={loc.id === 'it' ? italyRef : loc.id === 'ph' ? phRef : undefined}
-            d={loc.path}
-            fill={hot ? '#D4AF37' : 'currentColor'}
-            fillOpacity={hot ? 0.92 : 0.09}
-            stroke="currentColor"
-            strokeOpacity={0.14}
-            strokeWidth={0.4}
-          />
-        )
-      })}
+    <svg viewBox="0 0 600 300" className="h-auto w-full text-navy" role="img" aria-label="Illustrated sourcing route from Milano, Italy to Manila, Philippines">
+      <g fill="none" stroke="currentColor" strokeOpacity="0.08" strokeWidth="1">
+        <path d="M20 75h560M20 150h560M20 225h560" />
+        <path d="M110 24v252M220 24v252M330 24v252M440 24v252M550 24v252" />
+      </g>
 
-      {region && (
-        <>
-          <path id="k2-route" d={region.arc} fill="none" stroke="#B91C1C" strokeWidth={s * 0.5}
-            strokeDasharray={`${s * 0.6} ${s * 2.4}`} strokeLinecap="round" strokeOpacity={0.85} />
+      <g fill="currentColor" fillOpacity="0.07" stroke="currentColor" strokeOpacity="0.1" strokeWidth="1.2">
+        <path d="M42 76 70 53l48 7 24 24 38 7 19 26-13 32-34 11-20 33-39-5-18-30-31-17-12-35Z" />
+        <path d="m188 53 40-23 57 16 20 28-20 19-17 29-26 7-15 39-29-20-3-34-24-27Z" />
+        <path d="m274 72 54-31 75 4 42 22 63 10 45 38-17 25-49 2-21 24-55 5-36 30-38-15-27-35-39-19-23-34Z" />
+        <path d="m449 206 42-13 34 14 18 27-24 22-43-8-33-21Z" />
+        <path d="m510 158 10 6-5 18-8-12Zm21 19 7 7-4 14-8-9Z" />
+      </g>
 
-          {/* Milano */}
-          <circle cx={region.start.x} cy={region.start.y} r={s * 1.3} fill="#D4AF37">
-            <animate attributeName="r" values={`${s};${s * 2.2};${s}`} dur="2.6s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="1;0.3;1" dur="2.6s" repeatCount="indefinite" />
-          </circle>
-          <circle cx={region.start.x} cy={region.start.y} r={s * 0.7} fill="#B59226" />
-          <text x={region.start.x} y={region.start.y - s * 2.2} textAnchor="middle" fill="currentColor"
-            fontFamily="Fraunces, Georgia, serif" fontWeight="600" fontSize={s * 2}>Milano 🇮🇹</text>
+      <path d="M205 105 Q355 18 508 190" fill="none" stroke="#B63835" strokeWidth="2.4" strokeDasharray="2 9" strokeLinecap="round" />
+      <g transform="translate(354 63) rotate(27)">
+        <path d="M9 0 -6-5-1 0-6 5Z" fill="#762826" stroke="#FFFDF9" strokeWidth="0.7" strokeLinejoin="round" />
+      </g>
 
-          {/* Manila */}
-          <circle cx={region.end.x} cy={region.end.y} r={s * 1.3} fill="#EF4444">
-            <animate attributeName="r" values={`${s};${s * 2.2};${s}`} dur="2.6s" begin="1.3s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="1;0.3;1" dur="2.6s" begin="1.3s" repeatCount="indefinite" />
-          </circle>
-          <circle cx={region.end.x} cy={region.end.y} r={s * 0.7} fill="#B91C1C" />
-          <text x={region.end.x} y={region.end.y + s * 3.4} textAnchor="middle" fill="currentColor"
-            fontFamily="Fraunces, Georgia, serif" fontWeight="600" fontSize={s * 2}>Manila 🇵🇭</text>
+      <circle cx="205" cy="105" r="6" fill="#A97832" />
+      <circle cx="205" cy="105" r="2.5" fill="#FFFDF9" />
+      <text x="205" y="88" textAnchor="middle" fill="currentColor" fontFamily="Fraunces, Georgia, serif" fontSize="15" fontWeight="600">Milano</text>
 
-          {/* The plane, flying the real route on a slow loop */}
-          <g>
-            <g transform={`scale(${s})`}>
-              <path d="M2 0 L-1.3 -1.1 L-0.3 0 L-1.3 1.1 Z" fill="#B91C1C" stroke="#FFFDF9" strokeWidth={0.12} strokeLinejoin="round" />
-            </g>
-            <animateMotion dur="16s" repeatCount="indefinite" rotate="auto" calcMode="linear">
-              <mpath href="#k2-route" xlinkHref="#k2-route" />
-            </animateMotion>
-            <animate attributeName="opacity" values="0;1;1;1;0" keyTimes="0;0.1;0.5;0.9;1" dur="16s" repeatCount="indefinite" />
-          </g>
-        </>
-      )}
+      <circle cx="508" cy="190" r="6" fill="#B63835" />
+      <circle cx="508" cy="190" r="2.5" fill="#FFFDF9" />
+      <text x="508" y="215" textAnchor="middle" fill="currentColor" fontFamily="Fraunces, Georgia, serif" fontSize="15" fontWeight="600">Manila</text>
     </svg>
   )
 }

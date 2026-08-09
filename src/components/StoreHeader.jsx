@@ -1,185 +1,88 @@
-import { useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
 import { BagIcon, SearchIcon, MoonIcon, SunIcon } from './ui/icons'
-import VoucherHuntCenterModal from './VoucherHuntCenterModal'
-import CustomerProfileModal from './CustomerProfileModal'
 
 function SearchBox({ className = '' }) {
   const { query, setQuery, go, view } = useStore()
+
   return (
     <label className={'relative block ' + className}>
-      <SearchIcon size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-navy-faint" />
+      <span className="sr-only">Search the catalog</span>
+      <SearchIcon size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-faint" />
       <input
         type="search"
         value={query}
-        onChange={(e) => {
-          const val = e.target.value
-          setQuery(val)
-          if (val.trim().length > 0) {
-            if (view !== 'catalog') go('catalog')
-          }
+        onChange={(event) => {
+          const value = event.target.value
+          setQuery(value)
+          if (value.trim() && view !== 'catalog') go('catalog')
         }}
-        placeholder='Try "Lavazza", "Biscoff", "pesto"…'
-        className="w-full rounded-full border border-line bg-shell py-2.5 pl-9 pr-4 text-base md:text-sm placeholder:text-navy-faint focus:border-navy/40 focus:bg-paper focus:outline-none"
+        placeholder="Search products"
+        className="store-field h-11 w-full pl-10 pr-4"
       />
     </label>
   )
 }
 
 export default function StoreHeader() {
-  const { go, view, count, setCartOpen, isWholesale, setIsWholesale, isDark, toggleDarkMode } = useStore()
-  const [showVoucherHunt, setShowVoucherHunt] = useState(false)
-  const [showProfileModal, setShowProfileModal] = useState(false)
+  const { go, view, count, setCartOpen, isDark, toggleDarkMode } = useStore()
+  const active = view === 'product' || view === 'master_product' ? 'catalog' : view
+  const nav = [
+    ['home', 'Home'],
+    ['catalog', 'Inventory & Catalog'],
+    ['pasabuy', 'Pasabuy Sourcing'],
+    ['wholesale', 'Wholesale inquiry'],
+  ]
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-cream/95 backdrop-blur-xl transition-colors">
-      {/* Announcement Banner */}
-      <div className="bg-shell/80 border-b border-line px-4 py-1.5 text-center text-xs font-semibold text-navy-soft flex items-center justify-center gap-2 flex-wrap sm:flex-nowrap">
-        <span>✈ Next Milan consignment lands <span className="font-extrabold text-gold">22 July</span></span>
-        <span className="hidden sm:inline">· Free Metro Manila delivery over ₱2,500</span>
-        <button
-          onClick={() => setShowVoucherHunt(true)}
-          className="ml-2 bg-gold/20 hover:bg-gold/30 text-gold font-bold px-2.5 py-1 rounded border border-gold/40 transition-all text-xs min-h-[36px] sm:min-h-[44px] inline-flex items-center justify-center"
-        >
-          🎁 Voucher Hunt
-        </button>
+    <header className="store-nav-surface sticky top-0 z-40 border-b border-line backdrop-blur-xl">
+      <div className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-4 py-1.5 text-center text-[11px] font-semibold tracking-wide text-navy-soft dark:text-cream">
+        Italy-sourced goods, fulfilled in Manila <span className="mx-2 text-crimson dark:text-gold">·</span> Final stock and delivery are confirmed by K2 staff
       </div>
 
-      {isWholesale && (
-        <div className="flex items-center justify-center gap-3 bg-blue/15 border-b border-line px-4 py-1.5 text-xs font-semibold text-blue">
-          <span className="inline-flex h-2 w-2 rounded-full bg-blue pulse-dot" />
-          Wholesale pricing active — Bella Vita Trading
-          <button onClick={() => setIsWholesale(false)} className="px-2 py-1 -mx-2 underline decoration-blue/40 underline-offset-2 hover:decoration-blue font-bold min-h-[44px] inline-flex items-center">
-            Sign out
-          </button>
-        </div>
-      )}
+      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 lg:px-6">
+        <Wordmark onClick={() => go('home')} size="text-[1.55rem]" />
 
-      {/* Main Header Bar */}
-      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3.5 md:gap-6">
-        <Wordmark onClick={() => go('home')} />
+        <nav className="ml-6 hidden min-w-0 flex-1 items-stretch lg:flex" aria-label="Storefront">
+          {nav.map(([key, label]) => {
+            const isActive = active === key
+            return (
+              <button
+                key={key}
+                onClick={() => go(key)}
+                aria-current={isActive ? 'page' : undefined}
+                className={`relative min-h-11 whitespace-nowrap px-3 text-[13px] font-semibold transition-colors duration-150 ${isActive ? 'text-crimson' : 'text-navy-soft hover:text-navy'}`}
+              >
+                {label}
+                <span className={`absolute inset-x-3 -bottom-3 h-0.5 origin-left bg-crimson transition-transform duration-200 ease-out-quart ${isActive ? 'scale-x-100' : 'scale-x-0'}`} />
+              </button>
+            )
+          })}
+        </nav>
 
-        <SearchBox className="ml-auto hidden max-w-sm flex-1 md:block" />
-
-        <button
-          onClick={() => setShowVoucherHunt(true)}
-          className="ml-auto hidden sm:flex items-center gap-1.5 bg-gold/15 hover:bg-gold/25 text-gold font-bold text-xs px-3.5 py-2 rounded-full border border-gold/30 transition-all active:scale-95 shadow-sm min-h-[44px]"
-        >
-          <span>🎁</span>
-          <span>Voucher Hunt</span>
-        </button>
-
-        <button
-          onClick={() => setShowProfileModal(true)}
-          className="whitespace-nowrap rounded-lg px-3 py-2 text-xs font-bold text-navy hover:bg-shell border border-line flex items-center gap-1.5 transition-colors min-h-[44px]"
-          title="Account Profile & Delivery Settings"
-        >
-          <span>👤</span>
-          <span className="hidden sm:inline">My Account</span>
-        </button>
-
-        <button
-          onClick={() => go('wholesale')}
-          className="whitespace-nowrap rounded-lg px-3.5 py-2 text-xs font-bold text-blue transition-colors hover:bg-blue/10 border border-blue/20 min-h-[44px] inline-flex items-center justify-center"
-        >
-          {isWholesale ? 'Wholesale Portal' : 'Wholesale Login'}
-        </button>
+        <SearchBox className="ml-auto hidden w-full max-w-[17rem] md:block lg:ml-2" />
 
         <button
           onClick={() => setCartOpen(true)}
-          className="relative rounded-lg p-2.5 text-navy transition-colors hover:bg-shell border border-line"
+          className="relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
           aria-label={`Open cart, ${count} items`}
         >
-          <BagIcon size={21} />
-          {count > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-crimson px-1.5 text-xs font-extrabold text-white shadow-md">
-              {count}
-            </span>
-          )}
+          <BagIcon size={20} />
+          {count > 0 && <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-crimson px-1 text-[10px] font-bold text-white">{count}</span>}
         </button>
 
         <button
           onClick={toggleDarkMode}
-          className="relative rounded-lg p-2.5 text-navy transition-colors hover:bg-shell border border-line flex items-center justify-center"
-          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          className="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 hover:border-navy/25 active:scale-[0.97]"
+          aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-          {isDark ? <SunIcon size={20} className="text-gold" /> : <MoonIcon size={20} className="text-navy" />}
+          {isDark ? <SunIcon size={19} className="text-gold" /> : <MoonIcon size={19} />}
         </button>
       </div>
 
-      {/* Primary Navigation Tabs */}
-      <div className="border-t border-line bg-shell/40 px-4 py-2">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 overflow-x-auto custom-scrollbar">
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <button
-              onClick={() => go('home')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all flex items-center gap-1.5 ${
-                view === 'home'
-                  ? 'bg-navy border-navy text-cream shadow-md'
-                  : 'bg-cream border-line text-navy hover:border-crimson/50 hover:text-crimson hover:-translate-y-0.5 hover:shadow-card'
-              }`}
-            >
-              <span>🏠</span> Home
-            </button>
-
-            <button
-              onClick={() => go('catalog')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all flex items-center gap-1.5 ${
-                view === 'catalog'
-                  ? 'bg-navy border-navy text-cream shadow-md'
-                  : 'bg-cream border-line text-navy hover:border-crimson/50 hover:text-crimson hover:-translate-y-0.5 hover:shadow-card'
-              }`}
-            >
-              <span>📦</span> Inventory & Catalog
-            </button>
-
-            <button
-              onClick={() => go('pasabuy')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all flex items-center gap-1.5 ${
-                view === 'pasabuy'
-                  ? 'bg-navy border-navy text-cream shadow-md'
-                  : 'bg-cream border-line text-navy hover:border-crimson/50 hover:text-crimson hover:-translate-y-0.5 hover:shadow-card'
-              }`}
-            >
-              <span>✈️</span> Pasabuy Sourcing
-            </button>
-
-            <button
-              onClick={() => go('wholesale')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold border transition-all flex items-center gap-1.5 ${
-                view === 'wholesale'
-                  ? 'bg-navy border-navy text-cream shadow-md'
-                  : 'bg-cream border-line text-navy hover:border-crimson/50 hover:text-crimson hover:-translate-y-0.5 hover:shadow-card'
-              }`}
-            >
-              <span>💼</span> Wholesale Portal
-            </button>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-3 text-xs font-semibold text-navy-faint">
-            <span>🇮🇹 Direct Milan Imports</span>
-            <span>•</span>
-            <span>⚡ 24h Pasabuy Quotes</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile search */}
-      <div className="px-4 pb-3 pt-2 md:hidden">
+      <div className="px-4 pb-3 md:hidden">
         <SearchBox />
       </div>
-
-      <VoucherHuntCenterModal
-        isOpen={showVoucherHunt}
-        onClose={() => setShowVoucherHunt(false)}
-      />
-
-      <CustomerProfileModal
-        isOpen={showProfileModal}
-        onClose={() => setShowProfileModal(false)}
-      />
     </header>
   )
 }

@@ -40,7 +40,8 @@ export function Wordmark({ size = 'text-2xl', onClick, light = false }) {
   return (
     <button
       onClick={onClick}
-      className={'group text-left leading-none py-1 ' + (onClick ? 'cursor-pointer' : 'cursor-default')}
+      aria-label={onClick ? 'K2 Jimzon home' : undefined}
+      className={'group text-left leading-none py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/40 ' + (onClick ? 'cursor-pointer' : 'cursor-default')}
     >
       <span className={'font-serif font-semibold tracking-tight text-crimson ' + size}>
         K2 Jimzon
@@ -62,7 +63,7 @@ export function TerracottaButton({ children, className = '', ...props }) {
     <button
       {...props}
       className={
-        'inline-flex items-center justify-center gap-2 rounded-xl bg-crimson px-5 py-3 text-base font-semibold text-white shadow-card transition-all duration-200 hover:-translate-y-px hover:bg-crimson-deep hover:shadow-float active:translate-y-0 disabled:opacity-40 ' +
+        'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-crimson px-5 py-3 text-sm font-bold text-white shadow-sm transition-[transform,background-color,box-shadow] duration-150 ease-out-quart hover:bg-crimson-deep hover:shadow-card active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 ' +
         className
       }
     >
@@ -80,7 +81,7 @@ export function GhostButton({ children, className = '', ...props }) {
     <button
       {...props}
       className={
-        'inline-flex items-center justify-center gap-2 rounded-xl border border-navy/20 px-5 py-3 text-base font-semibold text-navy transition-colors hover:border-navy/50 hover:bg-navy/[0.03] ' +
+        'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-navy/20 bg-transparent px-5 py-3 text-sm font-bold text-navy transition-[transform,border-color,background-color] duration-150 ease-out-quart hover:border-navy/45 hover:bg-navy/[0.04] active:scale-[0.97] ' +
         className
       }
     >
@@ -91,16 +92,17 @@ export function GhostButton({ children, className = '', ...props }) {
 
 // Live stock cue — green when healthy, red when scarce (urgency = key action).
 export function StockPill({ stock }) {
+  const soldOut = stock <= 0
   const low = stock <= 5
   return (
     <span
       className={
         'inline-flex items-center gap-1.5 text-xs font-semibold ' +
-        (low ? 'text-crimson' : 'text-forest')
+        (soldOut || low ? 'text-crimson' : 'text-forest')
       }
     >
-      <span className={'h-1.5 w-1.5 rounded-full pulse-dot ' + (low ? 'bg-crimson' : 'bg-forest')} />
-      {low ? `Only ${stock} left` : `In stock · ${stock}`}
+      <span className={'h-1.5 w-1.5 rounded-full ' + (soldOut || low ? 'bg-crimson' : 'bg-forest')} />
+      {soldOut ? 'Sold out' : low ? `Only ${stock} left` : `In stock · ${stock}`}
     </span>
   )
 }
@@ -110,7 +112,7 @@ export function StockPill({ stock }) {
 // Standardized section eyebrow
 export function Kicker({ children, className = '' }) {
   return (
-    <p className={'text-sm font-bold uppercase tracking-[0.2em] text-crimson ' + className}>
+    <p className={'text-[11px] font-bold uppercase tracking-[0.22em] text-crimson ' + className}>
       {children}
     </p>
   )
@@ -153,7 +155,7 @@ export function QuantityStepper({ value, onChange, max, size = 'sm', className =
 // Shared Tuscan rounded-3xl surface
 export function TuscanCard({ children, className = '', tricolor = false, ...props }) {
   return (
-    <section className={'overflow-hidden rounded-3xl border border-line bg-cream/90 backdrop-blur-md shadow-card ' + className} {...props}>
+    <section className={'overflow-hidden rounded-2xl border border-line bg-paper shadow-sm ' + className} {...props}>
       {tricolor && <Tricolor />}
       {children}
     </section>

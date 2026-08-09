@@ -3,7 +3,7 @@ name: K2 Jimzon
 description: Premium Italian import store
 colors:
   cream: "#FAF8F4"
-  paper: "#FFFFFF"
+  paper: "#FFF9EF"
   shell: "#F2EEE8"
   navy: "#2B2B2B"
   navy-soft: "#525252"
@@ -59,11 +59,15 @@ A sunlit Tuscan palette grounded by warm whites and punctuated by natural Italia
 - **Amber Wood** (#9A6A45): Ambient backgrounds and structural shadows, adding materiality.
 
 ### Atmosphere
-- **Wood Texture:** A subtle, warm abstract wood grain background (`wood-bg.jpg`) is applied globally with a `soft-light` blend mode to create an organic, tactile atmosphere without competing with product photos.
+- **Wood Texture:** A subtle, warm abstract wood grain background (`wood-bg.jpg`) is applied to the complete light-mode storefront canvas with a multiply blend. Page-level bands remain translucent so the material stays visible without competing with text or product photos. Dark mode and the admin workspace do not inherit it.
 
 ### Neutral & The "Drenched" Strategy
 - **Warm White (Cream)** (#FAF8F4): The expansive body canvas and structural base.
-- **Glassmorphism / Ambient Bleed:** We employ a "Drenched" color strategy. "Pure White" (`bg-white` / `#FFFFFF`) is formally deprecated across the storefront to avoid breaking the atmospheric immersion. Cards and surfaces use `bg-cream/90 backdrop-blur-md` (or `bg-shell/80`) to let the underlying Tuscan wood and terracotta shadows bleed through, ensuring every surface feels like a physical object in a warm room, rather than a digital container.
+- **Glassmorphism / Ambient Bleed:** We employ a "Drenched" color strategy. "Pure White" (`bg-white` / `#FFFFFF`) is formally deprecated across the storefront to avoid breaking the atmospheric immersion. Structural bands use `.store-atmosphere`, `.store-atmosphere-soft`, or `.store-nav-surface`; contained cards may use warm Paper or Shell for legibility. These layers let the underlying Tuscan wood and terracotta shadows bleed through, ensuring every surface feels like a physical object in a warm room rather than a digital container.
+
+### Non-negotiable: The Luxury Wood Canvas Rule
+
+The light-mode storefront must retain `public/wood-bg.jpg` as its continuous page canvas. Do not replace it with pure white, remove it during redesigns, or cover every full-width section with opaque Cream/Paper. If the atmosphere needs to be quieter, adjust the translucent overlay—not the existence of the texture. This rule is protected by a storefront smoke test that checks both light and dark modes.
 - **Ink (Navy)** (#2B2B2B): High-contrast text for ultimate legibility.
 
 ### Named Rules
@@ -110,12 +114,12 @@ Tactile, expansive, and generously rounded. Containers embrace 3xl geometries an
 
 ### Cards / Containers
 - **Corner Style:** Expansive curves (`rounded-3xl` for main sections, `rounded-xl` for inner blocks).
-- **Background:** Paper (#FFFFFF) or Shell (#F2EEE8).
+- **Background:** Warm Paper (#FFF9EF) or Shell (#F2EEE8) for contained cards; page-level sections use the translucent atmosphere classes so the wood canvas remains visible.
 - **Shadow Strategy:** Card shadow at rest, Float on hover.
 - **Border:** Optional 1px Line (#E5DDD2) hairline where separation is needed without shadow.
 
 ### Navigation
-- **Store Header:** Sticky, white/95 with backdrop blur, Line bottom border. Serif Crimson wordmark with a tracked uppercase subtitle.
+- **Store Header:** Sticky warm translucent Cream with backdrop blur and a Line bottom border. Serif Crimson wordmark with a tracked uppercase subtitle.
 
 ## 6. Do's and Don'ts
 
@@ -124,9 +128,11 @@ Tactile, expansive, and generously rounded. Containers embrace 3xl geometries an
 - **Do** keep Terracotta (#B84E3A) to ~10% of any screen — it means action and nothing else.
 - **Do** pair Fraunces headlines with Archivo body/UI.
 - **Do** use a global 125% scale for a confident, accessible presence.
+- **Do** preserve the light-mode wood canvas and use translucent structural bands over it.
 
 ### Don't:
 - **Don't** use generic Shopee/Lazada seller pages: badge spam, neon discount stickers, cluttered listing grids, and screenshot-based trust.
 - **Don't** use loud dropship / deal sites: countdown timers, "ONLY 2 LEFT!!" fake scarcity, gradient buttons, and manufactured urgency.
 - **Don't** use cold SaaS / dashboard templates: Inter-for-everything, purple gradients, card-in-card nesting, and the soulless-startup look.
+- **Don't** replace the storefront canvas or full-width light-mode sections with pure white.
 - **Don't** use literal Italian-flag clichés (tricolore stripes everywhere, Tuscan-villa stock, pizza-parlor kitsch).

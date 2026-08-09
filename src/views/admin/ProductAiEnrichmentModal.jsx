@@ -6,22 +6,23 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose, onE
   const [enriching, setEnriching] = useState(false)
   const [enrichedData, setEnrichedData] = useState(null)
   const [savedSuccess, setSavedSuccess] = useState(false)
+  const [enrichError, setEnrichError] = useState('')
 
   if (!isOpen || !product) return null
 
   // Analyze missing fields
   const missingSpecs = []
-  if (!product.origin || product.origin === 'Manual' || product.origin.includes('Shopee')) missingSpecs.push('Italian Origin & Boutique Source')
-  if (!product.description || product.description.length < 30) missingSpecs.push('Luxury Marketing Description')
+  if (!product.origin || product.origin === 'Manual' || product.origin.includes('Shopee')) missingSpecs.push('Verified origin and source evidence')
+  if (!product.description || product.description.length < 30) missingSpecs.push('Factual product description')
   if (!product.usage_instructions) missingSpecs.push('Usage & Application Instructions')
   if (!product.storage_instructions) missingSpecs.push('Storage & FEFO Guidelines')
   if (!product.ingredients) missingSpecs.push('Ingredients & Allergens List')
-  if (!product.wholesale_price || product.wholesale_price === 0) missingSpecs.push('VIP Wholesale Tier Pricing')
+  if (!product.wholesale_price || product.wholesale_price === 0) missingSpecs.push('Reviewed wholesale price')
 
   // Generate Tailored AI Prompt for ChatGPT / Gemini
-  const promptText = `You are K2 Jimzon Product Intelligence AI.
+  const promptText = `You are assisting K2 Jimzon with a product-record research draft.
 
-I have imported a basic product listing from Shopee / Lazada that requires complete product specification enrichment for our luxury Italian e-commerce storefront:
+This basic marketplace record needs evidence-backed product details before a human can approve it:
 
 Product Details:
 • Title: "${product.name || product.title}"
@@ -30,14 +31,16 @@ Product Details:
 • Category: ${product.category || 'Italian Goods'}
 
 Instructions:
-1. Conduct research on this authentic Italian product.
-2. Generate rich, luxury e-commerce specifications including:
-   - Italian Origin (e.g. "Direct from KIKO Boutique, Malpensa Milan" or "Sourced from Emilia-Romagna, Italy")
-   - Luxury Marketing Description (highlights tasting/beauty notes, authenticity, premium quality)
+1. Research using the manufacturer, official distributor, packaging, or another primary source.
+2. Never assume authenticity, country of origin, ingredients, allergens, expiry, or a boutique source. Write "Unknown — verify manually" when evidence is absent.
+3. Return the source URL and the exact field it supports. Do not invent citations.
+4. Draft concise e-commerce specifications including:
+   - Verified country of origin and source evidence
+   - Factual product description without unsupported superlatives
    - Step-by-Step Usage & Application Instructions
-   - Storage & FEFO Shelf Life Guidelines (e.g. "Store below 25°C in a cool, dry place")
+   - Storage guidance only when supported by packaging or a primary source
    - Ingredients & Allergens
-   - Suggested VIP Wholesale SRP (₱)
+   - A clearly labeled wholesale-price suggestion with the cost and margin assumptions
 
 Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 
@@ -45,12 +48,14 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
 {
   "sku": "${product.sku || product.id}",
   "name": "${product.name || product.title}",
-  "origin": "Direct from Milan, Italy",
-  "description": "Rich luxury description...",
-  "usage_instructions": "Step-by-step usage guide...",
-  "storage_instructions": "Store below 25°C. Keep away from direct sunlight.",
-  "ingredients": "Ingredients list...",
-  "wholesale_price": ${Math.round((product.srp || product.retail || 500) * 0.75)}
+  "origin": "Unknown — verify manually",
+  "description": "Evidence-backed description or Unknown — verify manually",
+  "usage_instructions": "Evidence-backed instructions or Unknown — verify manually",
+  "storage_instructions": "Evidence-backed storage guidance or Unknown — verify manually",
+  "ingredients": "Evidence-backed ingredients and allergens or Unknown — verify manually",
+  "wholesale_price": 0,
+  "source_urls": [],
+  "evidence_notes": []
 }
 \`\`\``
 
@@ -61,21 +66,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
   }
 
   const handleAutoEnrich = () => {
-    setEnriching(true)
-    setTimeout(() => {
-      setEnriching(false)
-      const mockEnriched = {
-        sku: product.sku || product.id,
-        name: product.name || product.title,
-        origin: 'Directly sourced from Milan Boutiques, Italy 🇮🇹',
-        description: `Experience authentic Italian quality with ${product.name || product.title}. Hand-picked directly in Milan, Italy and delivered via direct air cargo for guaranteed freshness and 100% authenticity.`,
-        usage_instructions: 'For best results, use daily according to package directions. Store in a cool, dry place.',
-        storage_instructions: 'Keep sealed under 25°C. FEFO expiry priority locked.',
-        ingredients: '100% Premium Italian Sourced Quality Ingredients.',
-        wholesale_price: Math.round((product.srp || product.retail || 500) * 0.75)
-      }
-      setEnrichedData(mockEnriched)
-    }, 1200)
+    setEnrichError('Automatic enrichment is not connected. Copy the research prompt, verify every source, and use Smart Paste to review the result before saving.')
   }
 
   const handleSaveEnriched = async () => {
@@ -122,7 +113,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
                   Shopee / Channel Connector
                 </span>
               </div>
-              <p className="text-sm text-white/50 font-mono">Transform basic Shopee listings into luxury product masters</p>
+              <p className="text-sm text-white/50 font-mono">Prepare evidence-backed fields for human review</p>
             </div>
           </div>
 
@@ -173,7 +164,7 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
                 <span>📋</span> Option A: Copy AI Prompt
               </div>
               <p className="text-white/60 text-xs font-sans">
-                Generates a structured prompt tailored for ChatGPT / Gemini to research Italian origin & specs.
+                Generates a structured prompt that requires primary sources and preserves unknown fields.
               </p>
             </div>
 
@@ -192,20 +183,22 @@ Return EXACTLY THIS JSON OBJECT format for 1-click K2 Jimzon Smart Paste:
                 <span>⚡</span> Option B: 1-Click Auto-Enrich
               </div>
               <p className="text-white/60 text-xs font-sans">
-                Runs instant in-app AI research to auto-fill missing Italian specs in 2 seconds!
+                Automatic research is disabled until a real, source-citing server connector is configured.
               </p>
             </div>
 
             <button
               onClick={handleAutoEnrich}
-              disabled={enriching}
+              disabled
               className="w-full mt-3 bg-forest hover:bg-forest/90 text-white font-bold py-2.5 rounded-adm-sm transition-all shadow-md flex items-center justify-center gap-1.5 min-h-[44px]"
             >
-              {enriching ? 'AI Researching...' : '⚡ Auto-Enrich Specs'}
+              Connector required
             </button>
           </div>
 
         </div>
+
+        {enrichError && <p role="alert" className="rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-sm text-amber">{enrichError}</p>}
 
         {/* Enriched Result Preview & Save */}
         {enrichedData && (

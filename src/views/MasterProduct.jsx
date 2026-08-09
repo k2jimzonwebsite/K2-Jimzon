@@ -64,10 +64,10 @@ export default function MasterProduct() {
   }, [product])
 
   return (
-    <main className="mx-auto max-w-6xl px-4 pb-24 pt-6 md:pb-16 md:pt-10">
+    <main className="store-section max-w-6xl pb-24 pt-6 md:pb-20 md:pt-10">
       
       {/* Breadcrumbs / Back */}
-      <div className="mb-8 border-b border-line pb-6 flex justify-between items-center">
+      <div className="mb-8 flex items-center justify-between border-b border-line pb-5">
         <nav className="flex items-center gap-2 text-sm text-navy-faint font-medium">
           <button className="hover:text-navy transition-colors cursor-pointer" onClick={() => go('home')}>Home</button>
           <span>/</span>
@@ -75,18 +75,13 @@ export default function MasterProduct() {
         </nav>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] md:gap-10 lg:gap-16 min-h-[auto] lg:min-h-[600px]">
+      <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
         
         {/* Left Column: Image Gallery & Product Tabs */}
         <div className="flex flex-col w-full gap-8">
           {/* Image Gallery */}
           <div className="relative w-full aspect-square">
-            <div 
-              className="absolute inset-4 rounded-full blur-3xl mix-blend-multiply opacity-25" 
-              style={{ backgroundColor: `hsl(${product.hue || 220} 60% 50%)` }}
-              aria-hidden="true" 
-            />
-            <div className="relative z-10 w-full h-full drop-shadow-2xl shadow-navy/10 rounded-2xl overflow-hidden bg-shell border border-line/40">
+            <div className="relative z-10 h-full w-full overflow-hidden rounded-2xl border border-line bg-shell/60">
               <AnimatePresence>
                 <motion.div
                   key={currentSlide}
@@ -102,9 +97,7 @@ export default function MasterProduct() {
                     <video 
                       src={gallery[currentSlide].src} 
                       controls 
-                      autoPlay
-                      muted
-                      loop
+                      preload="metadata"
                       className="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal"
                     />
                   ) : (
@@ -121,14 +114,14 @@ export default function MasterProduct() {
           
           {/* Tiny Bubbles (Indicators) */}
           {gallery.length > 1 && (
-            <div className="flex justify-center gap-4 py-2">
+            <div className="flex justify-center gap-1 py-1">
               {gallery.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setCurrentSlide(i)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 shadow-sm ${i === currentSlide ? 'bg-navy scale-150 ring-2 ring-navy/20' : 'bg-navy/30 hover:bg-navy/60 hover:scale-125'}`}
+                  className="flex h-11 w-11 items-center justify-center rounded-full"
                   aria-label={`Go to slide ${i + 1}`}
-                />
+                ><span className={`h-2 w-2 rounded-full transition-[transform,background-color] duration-150 ${i === currentSlide ? 'scale-125 bg-crimson' : 'bg-navy/25'}`} /></button>
               ))}
             </div>
           )}
@@ -138,9 +131,9 @@ export default function MasterProduct() {
         </div>
 
         {/* Right Column: Product Info */}
-        <div className="flex flex-col">
+        <div className="flex flex-col lg:pt-2">
           <div className="flex flex-wrap items-center gap-2 mb-4 shrink-0">
-            <TrustBadge>100% authentic · {product.country_of_origin || product.origin || 'Imported'}</TrustBadge>
+            <TrustBadge>Recorded origin · {product.country_of_origin || product.origin || 'Imported'}</TrustBadge>
             <StockPill stock={product.stock_available || product.stock} />
             {(product.subcategory || product.category_id) && (
               <span className="rounded-full bg-shell border border-line/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-navy-soft">
@@ -166,13 +159,13 @@ export default function MasterProduct() {
           </div>
 
           <p className="mt-6 text-base leading-relaxed text-navy-soft">
-            {product.description || product.short_description || product.why_buy || "A premium imported selection from K2 Jimzon, crafted for authentic culinary experiences."}
+            {product.description || product.short_description || product.why_buy || 'Product details are being reviewed before publication.'}
           </p>
 
           {/* Product Specifications */}
-          <div className="mt-8 border-t border-line/60 pt-6">
-            <Kicker className="text-navy mb-4 text-sm">Product Specifications</Kicker>
-            <div className="bg-shell/30 rounded-xl border border-line/50 overflow-hidden divide-y divide-line/30 text-sm text-navy-soft">
+          <div className="mt-8 border-t border-line pt-6">
+            <Kicker className="mb-4 text-navy">Product specifications</Kicker>
+            <div className="overflow-hidden rounded-lg border border-line bg-paper text-sm text-navy-soft divide-y divide-line">
               {product.ingredients && (
                 <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Ingredients</span><span className="w-2/3">{product.ingredients}</span></div>
               )}
@@ -215,7 +208,7 @@ export default function MasterProduct() {
           <div className="flex-1" />
 
           {/* Add to Cart Actions */}
-          <div className="mt-10 shrink-0 pt-6 bg-cream/80 backdrop-blur-sm z-10 border-t border-line/60">
+          <div className="z-10 mt-9 shrink-0 rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-5 shadow-sm">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               {!isOutOfStock && <QuantityStepper value={qty} onChange={setQty} max={remaining} size="md" />}
               <span className="text-[13px] font-medium text-navy-soft">
@@ -228,14 +221,14 @@ export default function MasterProduct() {
             <div>
               {isOutOfStock ? (
                 <button
-                  className="mt-5 w-full py-3.5 text-base font-semibold rounded-xl bg-navy text-cream dark:bg-shell-deep dark:border dark:border-line dark:text-navy shadow-md transition-transform hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0"
+                  className="mt-5 min-h-12 w-full rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-[transform,opacity] duration-150 hover:bg-crimson-deep active:scale-[0.97]"
                   onClick={() => { addRequest(product.name); go('pasabuy'); }}
                 >
                   Add to Pasabuy
                 </button>
               ) : (
                 <RedButton
-                  className="mt-5 w-full py-3.5 text-base font-semibold shadow-md transition-transform hover:-translate-y-0.5 active:translate-y-0"
+                  className="mt-5 w-full py-3.5 text-base"
                   onClick={() => { addToCart(product.id, qty); setCartOpen(true) }}
                   disabled={!canAdd}
                 >

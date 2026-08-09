@@ -1,453 +1,292 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { peso } from '../../data/products'
 import { useStore } from '../../context/StoreContext'
 import { channelMeta } from '../../lib/channelMeta'
+import { BarcodeIcon, BoxIcon, CheckIcon, UserIcon } from '../../components/ui/icons'
 import PackingSlipModal from './PackingSlipModal'
-import StaffLoginModal from './StaffLoginModal'
+import {
+  EmptyState,
+  MetricRail,
+  SectionHeading,
+  StateBanner,
+  StatusPill,
+  WorkspaceIntro,
+  primaryButton,
+  secondaryButton,
+} from './AdminWorkspaceUi'
+
+const MODES = [
+  { id: 'manila_warehouse', label: 'Pack and ship' },
+  { id: 'box_handover', label: 'Box handover' },
+  { id: 'inter_staff_transfer', label: 'Custody transfer' },
+]
+
+function orderTone(status = '') {
+  const value = String(status).toLowerCase()
+  if (value.includes('packed')) return 'success'
+  if (value.includes('blocked') || value.includes('cancel')) return 'danger'
+  return 'warning'
+}
 
 export default function OmniOperationsHub() {
-  const { products } = useStore()
-
+  const { products, user } = useStore()
   const [activeRole, setActiveRole] = useState('manila_warehouse')
   const [activeStaff, setActiveStaff] = useState('')
   const [staffList, setStaffList] = useState([])
-
-  // Pull the REAL staff (from Staff & Roles) so this screen shows your actual
-  // accounts, not hardcoded names. Falls back to whatever is set if none exist.
-  useEffect(() => {
-    if (!supabase) return
-    supabase.from('user_profiles').select('email, role').in('role', ['Admin', 'Staff'])
-      .then(({ data }) => {
-        const names = (data || []).map(u => (u.email || '').split('@')[0]).filter(Boolean)
-        if (names.length) { setStaffList(names); setActiveStaff(names[0]) }
-      })
-  }, [])
   const [cargoBoxes, setCargoBoxes] = useState([])
   const [orders, setOrders] = useState([])
+  const [orderRequests, setOrderRequests] = useState([])
   const [scanBarcode, setScanBarcode] = useState('')
   const [scanMessage, setScanMessage] = useState(null)
   const [packedCount, setPackedCount] = useState(0)
   const [printSlipOrder, setPrintSlipOrder] = useState(null)
-  const [showStaffPinModal, setShowStaffPinModal] = useState(false)
   const [loadingBoxes, setLoadingBoxes] = useState(true)
   const [loadingOrders, setLoadingOrders] = useState(true)
   const [transferSku, setTransferSku] = useState('')
   const [transferTo, setTransferTo] = useState('')
 
-  const nameFor = (sku) => (products || []).find(p => p.sku === sku)?.name || sku
+  const nameFor = sku => (products || []).find(product => product.sku === sku)?.name || sku
+
+  useEffect(() => {
+    if (!supabase) return
+    supabase.from('user_profiles').select('email, role').in('role', ['Admin', 'Staff'])
+      .then(({ data }) => {
+        const names = (data || []).map(profile => (profile.email || '').split('@')[0]).filter(Boolean)
+        if (names.length) setStaffList(names)
+      })
+  }, [])
+
+  useEffect(() => {
+    setActiveStaff(user?.email ? user.email.split('@')[0] : '')
+  }, [user?.email])
 
   useEffect(() => {
     if (!supabase) { setLoadingBoxes(false); setLoadingOrders(false); return }
     fetchLiveOrders()
+    fetchOrderRequests()
     fetchBoxes()
-    const ch = supabase.channel('omni_hub')
+    const channel = supabase.channel('omni_hub')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, fetchLiveOrders)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'order_requests' }, fetchOrderRequests)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'product_batches' }, fetchBoxes)
       .subscribe()
-    return () => supabase.removeChannel(ch)
+    return () => supabase.removeChannel(channel)
   }, [])
 
-  // Orders queue = real, unshipped orders from the orders table.
+  const fetchOrderRequests = async () => {
+    const { data, error } = await supabase.from('order_requests')
+      .select('id,public_reference,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,total_amount,created_at,order_request_items(sku,product_name,quantity,line_total)')
+      .eq('status', 'submitted')
+      .order('created_at', { ascending: true })
+    if (!error) setOrderRequests(data || [])
+  }
+
+  const confirmOrderRequest = async request => {
+    if (!supabase) return
+    setScanMessage(null)
+    const { error } = await supabase.rpc('confirm_order_request', {
+      p_order_request_id: request.id,
+      p_reason: 'Stock and contact details reviewed in fulfillment hub',
+    })
+    if (error) setScanMessage({ success: false, text: error.message })
+    else {
+      setScanMessage({ success: true, text: `${request.public_reference} confirmed. Inventory is now reserved and packing lines were created.` })
+      await Promise.all([fetchOrderRequests(), fetchLiveOrders()])
+    }
+  }
+
   const fetchLiveOrders = async () => {
     setLoadingOrders(true)
-    const { data } = await supabase.from('orders').select('*')
+    const { data } = await supabase.from('orders')
+      .select('*, order_requests(public_reference,customer_phone,delivery_address,payment_status,total_amount)')
       .not('order_status', 'in', '("Shipped","Cancelled")')
       .order('created_at', { ascending: false })
-    const formatted = (data || []).map(o => ({
-      id: o.id,
-      shortId: String(o.id).slice(0, 8),
-      channel: channelMeta(o.channel_source).label,
-      channelColor: channelMeta(o.channel_source).color,
-      customer: o.customer_name || 'Customer',
-      items: [{ sku: o.sku, title: nameFor(o.sku), qty: o.quantity || 1 }],
-      status: o.order_status || 'Pending',
-      courier: o.fulfillment_method || '—',
-    }))
+    const formatted = (data || []).map(order => {
+      const request = Array.isArray(order.order_requests) ? order.order_requests[0] : order.order_requests
+      return {
+        id: order.id,
+        publicReference: request?.public_reference || null,
+        shortId: String(order.id).slice(0, 8),
+        channel: channelMeta(order.channel_source).label,
+        channelColor: channelMeta(order.channel_source).color,
+        customer: order.customer_name || 'Customer',
+        customerEmail: order.customer_email || null,
+        customerPhone: request?.customer_phone || null,
+        deliveryAddress: request?.delivery_address || null,
+        paymentStatus: request?.payment_status || order.payment_status || 'not recorded',
+        total: request?.total_amount ?? order.total_amount ?? null,
+        items: [{ sku: order.sku, title: nameFor(order.sku), qty: order.quantity || 1 }],
+        status: order.order_status || 'Pending',
+        courier: order.fulfillment_method || 'Not assigned',
+      }
+    })
     setOrders(formatted)
-    setPackedCount(formatted.filter(f => String(f.status).includes('Packed')).length)
+    setPackedCount(formatted.filter(order => String(order.status).includes('Packed')).length)
     setLoadingOrders(false)
   }
 
-  // Cargo boxes = real batches grouped by their box code (custodian = who holds it).
   const fetchBoxes = async () => {
     setLoadingBoxes(true)
     const { data } = await supabase.from('product_batches')
       .select('box_code, sku, quantity, custodian, hub').gt('quantity', 0)
     const map = {}
-    for (const r of data || []) {
-      const code = r.box_code || 'No box code'
-      const b = map[code] || (map[code] = { box_code: code, assigned_staff: r.custodian || '', location: r.hub || '', items: [] })
-      if (!b.assigned_staff && r.custodian) b.assigned_staff = r.custodian
-      if (!b.location && r.hub) b.location = r.hub
-      b.items.push({ sku: r.sku, title: nameFor(r.sku), qty: r.quantity })
+    for (const row of data || []) {
+      const code = row.box_code || 'No box code'
+      const box = map[code] || (map[code] = { box_code: code, assigned_staff: row.custodian || '', location: row.hub || '', items: [] })
+      if (!box.assigned_staff && row.custodian) box.assigned_staff = row.custodian
+      if (!box.location && row.hub) box.location = row.hub
+      box.items.push({ sku: row.sku, title: nameFor(row.sku), qty: row.quantity })
     }
     setCargoBoxes(Object.values(map))
     setLoadingBoxes(false)
   }
 
-  // Claim / reassign a box's custody = update the custodian on its batches.
   const handleReassignBoxStaff = async (boxCode, newStaff) => {
-    setCargoBoxes(prev => prev.map(b => b.box_code === boxCode ? { ...b, assigned_staff: newStaff } : b))
-    if (supabase && boxCode && boxCode !== 'No box code') {
-      await supabase.from('product_batches').update({ custodian: newStaff }).eq('box_code', boxCode)
-    }
+    if (!supabase || !boxCode || boxCode === 'No box code') return
+    const { error } = await supabase.rpc('transfer_inventory_custody', {
+      p_to_custodian: newStaff, p_box_code: boxCode, p_sku: null,
+      p_reason: 'Box custody reassigned from fulfillment hub',
+    })
+    if (error) { setScanMessage({ success: false, text: error.message }); return }
+    setCargoBoxes(previous => previous.map(box => box.box_code === boxCode ? { ...box, assigned_staff: newStaff } : box))
+    setScanMessage({ success: true, text: `${boxCode} is now assigned to ${newStaff}.` })
   }
-  const handleClaimBoxCustody = (boxCode) => handleReassignBoxStaff(boxCode, activeStaff)
 
-  // Real custody transfer: move every unit of a SKU to another staff member.
-  const handleTransfer = async (e) => {
-    e.preventDefault()
+  const handleClaimBoxCustody = boxCode => handleReassignBoxStaff(boxCode, activeStaff)
+
+  const handleTransfer = async event => {
+    event.preventDefault()
     if (!transferSku || !transferTo || !supabase) return
-    await supabase.from('product_batches').update({ custodian: transferTo }).eq('sku', transferSku)
-    setScanMessage({ success: true, text: `✓ Moved custody of ${nameFor(transferSku)} to ${transferTo}.` })
+    const { error } = await supabase.rpc('transfer_inventory_custody', {
+      p_to_custodian: transferTo, p_box_code: null, p_sku: transferSku,
+      p_reason: 'SKU custody transfer from fulfillment hub',
+    })
+    if (error) { setScanMessage({ success: false, text: error.message }); return }
+    setScanMessage({ success: true, text: `Moved custody of ${nameFor(transferSku)} to ${transferTo}.` })
     setTransferSku(''); setTransferTo('')
     fetchBoxes()
-    setTimeout(() => setScanMessage(null), 3500)
   }
 
-  const handleVerifyScan = (e) => {
-    e.preventDefault()
+  const handleVerifyScan = async event => {
+    event.preventDefault()
     if (!scanBarcode.trim()) return
-
     const match = scanBarcode.trim().toUpperCase()
-    let found = false
-
-    const updatedOrders = orders.map(ord => {
-      const itemMatch = ord.items.some(it => it.sku.toUpperCase() === match || it.title.toUpperCase().includes(match))
-      if (itemMatch) {
-        found = true
-        return { ...ord, status: 'Packed & Verified ✓' }
+    const found = orders.find(order => order.status === 'Pending' && order.items.some(item => item.sku.toUpperCase() === match || item.title.toUpperCase().includes(match)))
+    if (!found) setScanMessage({ success: false, text: `Barcode [${match}] is not in the pending pick queue for ${activeStaff || 'this station'}.` })
+    else if (!supabase) setScanMessage({ success: false, text: 'Database is not configured.' })
+    else {
+      const { error } = await supabase.rpc('mark_order_line_packed', { p_order_id: found.id })
+      if (error) setScanMessage({ success: false, text: error.message })
+      else {
+        setOrders(current => current.map(order => order.id === found.id ? { ...order, status: 'Packed' } : order))
+        setPackedCount(previous => previous + 1)
+        setScanMessage({ success: true, text: `Barcode [${match}] verified and the order line was marked Packed. Inventory remains reserved until fulfillment.` })
       }
-      return ord
-    })
-
-    if (found) {
-      setOrders(updatedOrders)
-      setPackedCount(prev => prev + 1)
-      setScanMessage({ success: true, text: `✓ Barcode [${match}] verified! Deducted from ${activeStaff}'s custody stock.` })
-    } else {
-      setScanMessage({ success: false, text: `⚠️ Barcode [${match}] not in current pick queue for ${activeStaff}!` })
     }
-
     setScanBarcode('')
-    setTimeout(() => setScanMessage(null), 3500)
   }
 
-  const staffBoxes = cargoBoxes.filter(b => b.assigned_staff === activeStaff)
+  const staffBoxes = cargoBoxes.filter(box => box.assigned_staff === activeStaff)
+  const unassignedBoxes = cargoBoxes.filter(box => !box.assigned_staff || box.box_code === 'No box code').length
+  const boxUnits = useMemo(() => cargoBoxes.reduce((sum, box) => sum + box.items.reduce((boxSum, item) => boxSum + (Number(item.qty) || 0), 0), 0), [cargoBoxes])
+  const pendingPickCount = orders.filter(order => !String(order.status).includes('Packed')).length
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 font-sans text-white">
-      
-      {/* Header Banner & Active Staff Profile Switcher */}
-      <div className="bg-adm-surface border border-adm-line p-4 sm:p-6 rounded-adm flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl">
-        <div>
-          <span className="text-[11px] font-mono font-bold uppercase tracking-wide bg-gold text-navy px-2 py-0.5 rounded-full">
-            Staff operations
-          </span>
-          <h1 className="font-serif text-lg sm:text-2xl font-bold text-white mt-2">Staff operations &amp; box handover</h1>
-          <p className="text-xs sm:text-sm text-white/55 mt-1 max-w-2xl">
-            Each staff member holds specific Italy boxes and ships only from their own claimed custody.
-          </p>
-        </div>
+    <div className="mx-auto max-w-[1600px] space-y-5 pb-12 text-white">
+      <WorkspaceIntro
+        eyebrow="Fulfillment control"
+        title="Order, packing, and custody desk"
+        description="Confirm website requests before reserving stock, scan confirmed order lines, and keep every Italy box assigned to a real custodian. Payment evidence remains a separate verification state."
+        status={activeStaff ? `Station: ${activeStaff}` : 'Staff identity unavailable'}
+        statusTone={activeStaff ? 'success' : 'danger'}
+      />
 
-        {/* Active Staff Member Station Selector & Quick PIN Login */}
-        <div className="bg-adm-raised border border-white/20 p-3.5 rounded-adm-sm space-y-2 shrink-0 shadow-md">
-          <div className="flex items-center justify-between gap-2">
-            <label className="block text-sm font-extrabold uppercase text-gold">Active Staff Station:</label>
-            <button
-              onClick={() => setShowStaffPinModal(true)}
-              className="text-sm font-bold text-navy bg-gold px-2.5 py-1 rounded-adm-sm hover:bg-gold-deep transition-all flex items-center gap-1 shadow"
-            >
-              🔑 PIN Login
-            </button>
-          </div>
-          <select
-            value={activeStaff}
-            onChange={(e) => setActiveStaff(e.target.value)}
-            className="w-full bg-adm-surface border border-gold text-sm font-bold text-white rounded-adm-sm px-3 py-2 outline-none"
-          >
-            {(staffList.length ? staffList : [activeStaff]).filter(Boolean).map(n => (
-              <option key={n} value={n}>👤 {n}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+      <MetricRail columns="lg:grid-cols-5" items={[
+        { label: 'Awaiting confirmation', value: loadingOrders ? '--' : orderRequests.length, detail: 'No stock reserved yet', tone: orderRequests.length ? 'text-amber' : 'text-white' },
+        { label: 'Pending pick', value: loadingOrders ? '--' : pendingPickCount, detail: 'Confirmed, not packed', tone: pendingPickCount ? 'text-amber' : 'text-white' },
+        { label: 'Packed lines', value: loadingOrders ? '--' : packedCount, detail: 'Awaiting next fulfillment step', tone: 'text-forest' },
+        { label: 'Custody boxes', value: loadingBoxes ? '--' : cargoBoxes.length, detail: `${boxUnits} recorded units` },
+        { label: 'Custody exceptions', value: loadingBoxes ? '--' : unassignedBoxes, detail: 'Unassigned or missing box code', tone: unassignedBoxes ? 'text-crimson' : 'text-white' },
+      ]} />
 
-      {/* Navigation Sub-Tabs */}
-      <div className="flex overflow-x-auto max-w-full bg-adm-surface border border-adm-line p-1.5 rounded-adm-sm text-[13px] font-bold scrollbar-none gap-1.5">
-        <button
-          onClick={() => setActiveRole('manila_warehouse')}
-          className={`px-3.5 py-2 min-h-11 rounded-adm-sm transition-all flex items-center gap-1.5 shrink-0 ${
-            activeRole === 'manila_warehouse' ? 'bg-blue text-white shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'
-          }`}
-        >
-          📦 Pack &amp; ship
-        </button>
-        <button
-          onClick={() => setActiveRole('box_handover')}
-          className={`px-3.5 py-2 min-h-11 rounded-adm-sm transition-all flex items-center gap-1.5 shrink-0 ${
-            activeRole === 'box_handover' ? 'bg-gold text-navy shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'
-          }`}
-        >
-          🛬 Box handover ({staffBoxes.length})
-        </button>
-        <button
-          onClick={() => setActiveRole('inter_staff_transfer')}
-          className={`px-3.5 py-2 min-h-11 rounded-adm-sm transition-all flex items-center gap-1.5 shrink-0 ${
-            activeRole === 'inter_staff_transfer' ? 'bg-blue text-white shadow-md' : 'text-neutral-300 hover:bg-white/10 hover:text-white'
-          }`}
-        >
-          ⚡ Transfer
-        </button>
-      </div>
+      {scanMessage && <StateBanner tone={scanMessage.success ? 'success' : 'danger'}>{scanMessage.text}</StateBanner>}
 
-      {/* MODE 1: STAFF SPECIFIC ORDER PACKING & SCAN-TO-SHIP */}
+      <nav className="flex max-w-full gap-1 overflow-x-auto rounded-adm-sm border border-adm-line bg-adm-surface p-1" aria-label="Fulfillment work modes">
+        {MODES.map(mode => {
+          const count = mode.id === 'manila_warehouse' ? orderRequests.length + orders.length : mode.id === 'box_handover' ? staffBoxes.length : null
+          return <button key={mode.id} onClick={() => setActiveRole(mode.id)} aria-current={activeRole === mode.id ? 'page' : undefined} className={`min-h-11 shrink-0 rounded-adm-sm px-4 text-sm font-semibold transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${activeRole === mode.id ? 'bg-blue text-white' : 'text-white/50 hover:bg-white/[0.05] hover:text-white'}`}>{mode.label}{count !== null ? ` (${count})` : ''}</button>
+        })}
+      </nav>
+
       {activeRole === 'manila_warehouse' && (
         <div className="space-y-6">
-          
-          {/* Barcode Verification Scanner Header */}
-          <div className="bg-adm-surface border border-adm-line p-4 sm:p-6 rounded-adm shadow-xl space-y-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-base">📦</span>
-                <div className="min-w-0">
-                  <h3 className="text-[15px] font-semibold text-white truncate">Pack &amp; ship — {activeStaff}</h3>
-                  <p className="text-xs text-white/50">Scan each item before sealing the polybag.</p>
+          <section className="space-y-3">
+            <SectionHeading title="Scan station" description={`Operator ${activeStaff || 'not identified'} / scan only items already present in the pending pick queue.`} action={<StatusPill tone="success">{packedCount} packed</StatusPill>} />
+            <form onSubmit={handleVerifyScan} className="flex flex-col gap-2 rounded-adm border border-adm-line bg-adm-surface p-3 sm:flex-row">
+              <label className="relative min-w-0 flex-1"><span className="sr-only">Barcode or SKU</span><BarcodeIcon size={17} className="pointer-events-none absolute left-3 top-3.5 text-white/35" /><input type="text" value={scanBarcode} onChange={event => setScanBarcode(event.target.value)} placeholder="Scan barcode or enter SKU" className="adm-input min-h-11 pl-10 font-mono text-base" /></label>
+              <button type="submit" className={primaryButton}>Verify and mark packed</button>
+            </form>
+          </section>
+
+          <section className="space-y-3">
+            <SectionHeading title="Confirmation queue" description="Review customer contact, item quantities, and stock before creating reservations and packing lines." count={orderRequests.length} />
+            {orderRequests.length === 0 ? <EmptyState title="No submitted website requests" description="New requests appear here without reserving stock." /> : (
+              <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
+                <div className="divide-y divide-adm-line">
+                  {orderRequests.map(request => (
+                    <article key={request.id} className="grid gap-3 px-4 py-4 lg:grid-cols-[minmax(180px,1fr)_minmax(220px,1.5fr)_130px_190px] lg:items-center">
+                      <div><p className="font-mono text-xs font-semibold text-blue">{request.public_reference}</p><p className="mt-1 text-sm font-semibold text-white">{request.customer_name}</p><p className="mt-0.5 truncate text-xs text-white/40">{request.customer_email || request.customer_phone}</p></div>
+                      <div><ul className="space-y-1">{(request.order_request_items || []).map(item => <li key={item.sku} className="flex justify-between gap-3 text-xs text-white/60"><span className="truncate">{item.product_name}</span><span className="shrink-0 font-mono">Qty {item.quantity}</span></li>)}</ul><p className="mt-2 line-clamp-1 text-[11px] text-white/35">{request.delivery_address} / {request.fulfillment_method}</p></div>
+                      <div><p className="font-mono text-sm font-semibold text-white">{peso(request.total_amount)}</p><p className="mt-1 text-[11px] text-amber">Payment not assumed</p></div>
+                      <button onClick={() => confirmOrderRequest(request)} className={`${primaryButton} w-full`}>Confirm and reserve</button>
+                    </article>
+                  ))}
                 </div>
               </div>
-              <span className="shrink-0 text-xs font-semibold text-white bg-blue px-2.5 py-1 rounded-adm-sm">{packedCount} packed</span>
-            </div>
+            )}
+          </section>
 
-            <form onSubmit={handleVerifyScan} className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="text"
-                value={scanBarcode}
-                onChange={(e) => setScanBarcode(e.target.value)}
-                placeholder="Scan barcode or SKU (e.g. KIKO-3D-05)..."
-                className="flex-1 rounded-adm-sm border border-white/20 bg-adm-raised px-4 py-3 text-base text-white font-mono placeholder:text-white/60 focus:border-gold outline-none min-h-[44px]"
-              />
-              <button
-                type="submit"
-                className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-6 py-3 rounded-adm-sm transition-all shadow-lg shrink-0 min-h-[44px] flex items-center justify-center"
-              >
-                Scan & Verify (+1)
-              </button>
-            </form>
-
-            {scanMessage && (
-              <div className={`p-3.5 rounded-adm-sm border text-sm font-bold flex items-center gap-2 ${
-                scanMessage.success ? 'bg-blue/20 border-blue text-white' : 'bg-crimson/20 border-crimson text-white'
-              }`}>
-                <span>{scanMessage.text}</span>
+          <section className="space-y-3">
+            <SectionHeading title="Packing queue" description="Confirmed order lines still inside the warehouse workflow." count={orders.length} />
+            {loadingOrders ? <div className="h-44 animate-pulse rounded-adm border border-adm-line bg-adm-surface" role="status" /> : orders.length === 0 ? <EmptyState title="No orders to pack" description="Only confirmed orders from persisted sources appear here." /> : (
+              <div className="overflow-x-auto rounded-adm border border-adm-line bg-adm-surface">
+                <table className="w-full min-w-[860px] text-left text-sm">
+                  <thead className="border-b border-adm-line bg-white/[0.025] text-[10px] font-semibold uppercase tracking-[0.09em] text-white/35"><tr><th className="px-4 py-3">Order and channel</th><th className="px-4 py-3">Customer</th><th className="px-4 py-3">Pick line</th><th className="px-4 py-3">Payment evidence</th><th className="px-4 py-3">Packing state</th><th className="px-4 py-3 text-right">Action</th></tr></thead>
+                  <tbody className="divide-y divide-adm-line">{orders.map(order => <tr key={order.id} className="transition-colors hover:bg-white/[0.025]"><td className="px-4 py-3"><span className="rounded px-1.5 py-0.5 text-[10px] font-bold text-white" style={{ backgroundColor: order.channelColor }}>{order.channel}</span><p className="mt-1 font-mono text-[11px] text-white/35">{order.publicReference || order.shortId}</p></td><td className="px-4 py-3"><p className="font-medium text-white">{order.customer}</p><p className="mt-0.5 text-xs text-white/35">{order.courier}</p></td><td className="px-4 py-3">{order.items.map(item => <p key={item.sku} className="text-xs text-white/65">{item.title} <span className="font-mono text-white">x{item.qty}</span></p>)}</td><td className="px-4 py-3"><StatusPill tone={order.paymentStatus === 'verified' ? 'success' : 'warning'}>{String(order.paymentStatus).replaceAll('_', ' ')}</StatusPill></td><td className="px-4 py-3"><StatusPill tone={orderTone(order.status)}>{order.status}</StatusPill></td><td className="px-4 py-3 text-right"><button onClick={() => setPrintSlipOrder(order)} className={`${secondaryButton} adm-btn-sm`}>Packing record</button></td></tr>)}</tbody>
+                </table>
               </div>
             )}
-          </div>
-
-          {/* Orders Queue — real, unshipped orders */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-gold">Shipping queue</h3>
-
-            {loadingOrders ? (
-              <p className="text-sm text-white/40 py-8 text-center">Loading orders…</p>
-            ) : orders.length === 0 ? (
-              <div className="rounded-adm border border-adm-line bg-adm-surface p-8 text-center">
-                <p className="text-sm text-white/60">No orders to pack</p>
-                <p className="text-xs text-white/40 mt-1">New orders from your channels land here automatically.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {orders.map(ord => (
-                  <div key={ord.id} className="bg-adm-surface border border-adm-line rounded-adm p-4 shadow-lg space-y-3 flex flex-col justify-between hover:border-gold/40 transition-all">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-[11px] font-bold text-white px-2 py-0.5 rounded" style={{ backgroundColor: ord.channelColor }}>
-                          {ord.channel}
-                        </span>
-                        <span className="text-[11px] font-mono text-white/40">#{ord.shortId}</span>
-                      </div>
-
-                      <p className="text-sm font-semibold text-white">{ord.customer}</p>
-                      {ord.courier !== '—' && <p className="text-xs text-white/50 font-mono mt-0.5">{ord.courier}</p>}
-
-                      <div className="mt-3 pt-2.5 border-t border-adm-line space-y-1.5">
-                        {ord.items.map((it, idx) => (
-                          <div key={idx} className="flex items-center justify-between gap-2">
-                            <p className="text-[13px] text-white truncate">{it.title}</p>
-                            <span className="text-xs text-white font-semibold bg-blue px-2 py-0.5 rounded shrink-0">x{it.qty}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="pt-2.5 border-t border-adm-line flex items-center justify-between gap-2">
-                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded ${
-                        String(ord.status).includes('Packed') ? 'bg-blue text-white' : 'bg-gold text-navy'
-                      }`}>
-                        {ord.status}
-                      </span>
-                      <button onClick={() => setPrintSlipOrder(ord)}
-                        className="bg-white/10 hover:bg-white/15 text-white font-semibold text-xs px-3 min-h-9 rounded-adm-sm transition-all flex items-center gap-1 shrink-0">
-                        🖨️ Slip
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
+          </section>
         </div>
       )}
 
-      {/* MODE 2: ITALY CARGO BOX HANDOVER & STAFF CUSTODY TRANSFER */}
       {activeRole === 'box_handover' && (
-        <div className="space-y-6">
-          
-          <div className="bg-adm-surface border border-adm-line p-4 sm:p-6 rounded-adm shadow-xl space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-adm-line pb-3">
-              <div>
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wide bg-gold text-navy px-2 py-0.5 rounded-full">
-                  Box handover
-                </span>
-                <h2 className="font-serif text-base sm:text-xl font-bold text-white mt-1.5">Italy box arrivals &amp; handover</h2>
-                <p className="text-xs text-white/50 mt-0.5">Assign flight boxes to staff and claim SKU custody into a hub.</p>
-              </div>
-              <span className="text-xs text-white/60">Custodian: <strong className="text-gold">{activeStaff}</strong></span>
-            </div>
-
-            {/* Cargo Box Cards */}
-            {loadingBoxes ? (
-              <p className="text-sm text-white/40 py-8 text-center">Loading boxes…</p>
-            ) : cargoBoxes.length === 0 ? (
-              <div className="rounded-adm border border-adm-line bg-adm-surface p-8 text-center">
-                <p className="text-sm text-white/60">No boxes yet</p>
-                <p className="text-xs text-white/40 mt-1">Boxes appear here once you record received stock with a box code (Inventory → a product → Batches).</p>
-              </div>
-            ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
-              {cargoBoxes.map((box) => {
+        <section className="space-y-3">
+          <SectionHeading title="Italy box handover" description={`Assign every box to a custodian. Signed-in operator: ${activeStaff || 'unavailable'}.`} count={cargoBoxes.length} />
+          {loadingBoxes ? <div className="h-52 animate-pulse rounded-adm border border-adm-line bg-adm-surface" role="status" /> : cargoBoxes.length === 0 ? <EmptyState icon={BoxIcon} title="No custody boxes recorded" description="Record received batches with a box code in Inventory before handover." /> : (
+            <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
+              <div className="divide-y divide-adm-line">{cargoBoxes.map(box => {
                 const isAssignedToActive = box.assigned_staff === activeStaff
-
-                return (
-                  <div
-                    key={box.box_code}
-                    className={`p-3.5 rounded-adm border transition-all space-y-3 ${
-                      isAssignedToActive ? 'bg-adm-raised border-gold shadow-lg' : 'bg-adm-surface border-adm-line'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] font-mono font-bold text-gold bg-black/50 px-2 py-0.5 rounded border border-gold/50">
-                        {box.box_code}
-                      </span>
-                      {box.location && <span className="text-[11px] font-mono text-white/50">📍{box.location}</span>}
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wide text-gold mb-1">Custodian</label>
-                      <select
-                        value={box.assigned_staff}
-                        onChange={(e) => handleReassignBoxStaff(box.box_code, e.target.value)}
-                        className="w-full bg-adm-surface border border-adm-line text-sm text-white rounded-adm-sm px-3 min-h-10 py-2 outline-none focus:border-gold"
-                      >
-                        {Array.from(new Set([box.assigned_staff, ...staffList])).filter(Boolean).map(n => (
-                          <option key={n} value={n}>{n}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* Box SKUs Contents */}
-                    <div className="bg-white/5 border border-adm-line p-3 rounded-adm-sm space-y-1.5">
-                      <p className="text-[11px] text-gold uppercase font-bold tracking-wide">Box contents</p>
-                      {box.items.map((it, idx) => (
-                        <div key={idx} className="flex justify-between gap-2 text-[13px] text-white">
-                          <span className="truncate">{it.title}</span>
-                          <span className="text-gold font-semibold shrink-0">x{it.qty}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Handover Claim Action */}
-                    <div className="pt-2 border-t border-adm-line flex items-center justify-between gap-2">
-                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded ${
-                        box.assigned_staff ? 'bg-blue text-white' : 'bg-white/10 text-white/60'
-                      }`}>
-                        {box.assigned_staff ? `Held by ${box.assigned_staff}` : 'Unassigned'}
-                      </span>
-
-                      {!isAssignedToActive && (
-                        <button
-                          onClick={() => handleClaimBoxCustody(box.box_code)}
-                          className="bg-gold hover:bg-gold-deep text-navy font-semibold text-xs px-3 min-h-9 rounded-adm-sm transition-all shrink-0"
-                        >
-                          ⚡ Claim to me
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
+                const total = box.items.reduce((sum, item) => sum + (Number(item.qty) || 0), 0)
+                return <article key={box.box_code} className={`grid gap-3 px-4 py-4 lg:grid-cols-[180px_minmax(260px,1.5fr)_220px_170px] lg:items-center ${isAssignedToActive ? 'bg-blue/[0.045]' : ''}`}><div><p className="font-mono text-xs font-semibold text-blue">{box.box_code}</p><p className="mt-1 text-xs text-white/40">{box.location || 'Location unassigned'} / {total} units</p></div><div className="flex flex-wrap gap-1.5">{box.items.map(item => <span key={`${box.box_code}-${item.sku}`} className="rounded-adm-sm border border-adm-line bg-white/[0.035] px-2 py-1 text-xs text-white/55">{item.title} <strong className="font-mono text-white">x{item.qty}</strong></span>)}</div><label className="text-xs font-semibold text-white/50">Custodian<select value={box.assigned_staff} onChange={event => handleReassignBoxStaff(box.box_code, event.target.value)} className="adm-input mt-1 min-h-11 text-base sm:text-sm"><option value="">Unassigned</option>{Array.from(new Set([box.assigned_staff, ...staffList])).filter(Boolean).map(name => <option key={name} value={name}>{name}</option>)}</select></label><div className="flex lg:justify-end">{isAssignedToActive ? <StatusPill tone="success"><CheckIcon size={13} className="mr-1" /> In my custody</StatusPill> : <button onClick={() => handleClaimBoxCustody(box.box_code)} disabled={!activeStaff || box.box_code === 'No box code'} className={secondaryButton}>Claim to me</button>}</div></article>
+              })}</div>
             </div>
-            )}
-
-          </div>
-
-        </div>
-      )}
-
-      {/* MODE 3: REAL INTER-STAFF CUSTODY TRANSFER */}
-      {activeRole === 'inter_staff_transfer' && (
-        <div className="bg-adm-surface border border-adm-line p-4 sm:p-5 rounded-adm shadow-lg space-y-4 max-w-xl">
-          <div>
-            <h2 className="font-serif text-base sm:text-xl font-bold text-white">Transfer custody</h2>
-            <p className="text-xs text-white/50 mt-0.5">Move every unit of a product into another staff member's custody.</p>
-          </div>
-
-          <form onSubmit={handleTransfer} className="space-y-3">
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-wide text-gold mb-1">Product</label>
-              <select value={transferSku} onChange={e => setTransferSku(e.target.value)} required
-                className="w-full bg-black/30 border border-white/15 text-sm text-white rounded-adm-sm px-3 min-h-11 py-2 outline-none focus:border-gold">
-                <option value="">Select a product…</option>
-                {Array.from(new Set(cargoBoxes.flatMap(b => b.items.map(i => i.sku)))).map(sku => (
-                  <option key={sku} value={sku}>{nameFor(sku)}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-wide text-gold mb-1">Move to</label>
-              <select value={transferTo} onChange={e => setTransferTo(e.target.value)} required
-                className="w-full bg-black/30 border border-white/15 text-sm text-white rounded-adm-sm px-3 min-h-11 py-2 outline-none focus:border-gold">
-                <option value="">Select staff…</option>
-                {staffList.map(n => <option key={n} value={n}>{n}</option>)}
-              </select>
-            </div>
-            <button type="submit" disabled={!transferSku || !transferTo}
-              className="w-full bg-blue hover:bg-blue-deep text-white font-semibold text-sm min-h-11 rounded-adm-sm transition-all disabled:opacity-50">
-              Move custody
-            </button>
-            {cargoBoxes.length === 0 && (
-              <p className="text-xs text-white/40 text-center">No stock in custody yet — record received batches first.</p>
-            )}
-          </form>
-
-          {scanMessage && (
-            <div className="p-3 rounded-adm-sm border border-forest/40 bg-forest/10 text-forest text-sm font-semibold">{scanMessage.text}</div>
           )}
-        </div>
+        </section>
       )}
 
-      <PackingSlipModal
-        isOpen={!!printSlipOrder}
-        onClose={() => setPrintSlipOrder(null)}
-        order={printSlipOrder}
-      />
+      {activeRole === 'inter_staff_transfer' && (
+        <section className="max-w-3xl space-y-3">
+          <SectionHeading title="Transfer SKU custody" description="Move every recorded unit of one SKU to another authenticated staff custodian. The database records the action reason." />
+          <form onSubmit={handleTransfer} className="space-y-4 rounded-adm border border-adm-line bg-adm-surface p-4 sm:p-5">
+            <div className="grid gap-4 sm:grid-cols-2"><label className="text-xs font-semibold text-white/60">Product<select value={transferSku} onChange={event => setTransferSku(event.target.value)} required className="adm-input mt-1.5 min-h-11 text-base sm:text-sm"><option value="">Select a product</option>{Array.from(new Set(cargoBoxes.flatMap(box => box.items.map(item => item.sku)))).map(sku => <option key={sku} value={sku}>{nameFor(sku)}</option>)}</select></label><label className="text-xs font-semibold text-white/60">Move to<select value={transferTo} onChange={event => setTransferTo(event.target.value)} required className="adm-input mt-1.5 min-h-11 text-base sm:text-sm"><option value="">Select staff</option>{staffList.map(name => <option key={name} value={name}>{name}</option>)}</select></label></div>
+            <div className="flex flex-col gap-3 border-t border-adm-line pt-4 sm:flex-row sm:items-center sm:justify-between"><p className="flex items-center gap-2 text-xs text-white/40"><UserIcon size={15} /> The signed-in operator remains the audit actor.</p><button type="submit" disabled={!transferSku || !transferTo} className={primaryButton}>Move custody</button></div>
+          </form>
+        </section>
+      )}
 
-      <StaffLoginModal
-        isOpen={showStaffPinModal}
-        onClose={() => setShowStaffPinModal(false)}
-        onStaffAuthenticated={(name) => setActiveStaff(name)}
-      />
+      <PackingSlipModal isOpen={!!printSlipOrder} onClose={() => setPrintSlipOrder(null)} order={printSlipOrder} />
     </div>
   )
 }

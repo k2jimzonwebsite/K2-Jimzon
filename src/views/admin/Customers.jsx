@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { UserIcon, CheckIcon } from '../../components/ui/icons'
+import { UserIcon } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
 
 export default function Customers() {
@@ -38,33 +38,15 @@ export default function Customers() {
     setLoading(false)
   }
 
-  const toggleRole = async (id, currentRole) => {
-    if (!supabase) return;
-    const nextRole = currentRole === 'VIP' ? 'Customer' : 'VIP'
-    
-    // Optimistic UI
-    setCustomers(prev => prev.map(c => c.id === id ? { ...c, role: nextRole } : c))
-
-    const { error } = await supabase
-      .from('user_profiles')
-      .update({ role: nextRole })
-      .eq('id', id)
-
-    if (error) {
-      console.error('Failed to update role:', error)
-      fetchCustomers() // revert
-    }
-  }
-
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between rounded-adm-sm border border-line bg-white p-4 shadow-sm">
         <div>
           <h2 className="text-lg font-bold text-navy flex items-center gap-2">
             <UserIcon size={18} />
-            Customer CRM & VIP Access
+            Registered customers
           </h2>
-          <p className="mt-0.5 text-base text-navy-soft">Approve wholesale accounts to grant them access to VIP pricing on the storefront.</p>
+          <p className="mt-0.5 text-base text-navy-soft">Supabase customer profiles only. Wholesale pricing and broadcasts are not enabled in Step 1.</p>
         </div>
       </div>
 
@@ -72,7 +54,7 @@ export default function Customers() {
         {loading && customers.length === 0 ? (
           <div className="p-8 text-center text-base text-navy-soft">Loading customers...</div>
         ) : customers.length === 0 ? (
-          <div className="p-8 text-center text-base text-navy-soft">No customers registered yet. Send them your VIP login link!</div>
+          <div className="p-8 text-center text-base text-navy-soft">No registered customer profiles yet.</div>
         ) : (
           <table className="w-full text-left text-base">
             <thead className="bg-shell text-sm text-navy-soft border-b border-line">
@@ -96,14 +78,7 @@ export default function Customers() {
                     {new Date(c.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    {c.role !== 'Admin' && (
-                      <button
-                        onClick={() => toggleRole(c.id, c.role)}
-                        className="text-sm font-bold text-blue hover:underline"
-                      >
-                        {c.role === 'VIP' ? 'Revoke VIP' : 'Upgrade to VIP'}
-                      </button>
-                    )}
+                    <span className="text-sm text-navy-faint">No customer action</span>
                   </td>
                 </tr>
               ))}

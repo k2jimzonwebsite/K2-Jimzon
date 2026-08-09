@@ -14,28 +14,24 @@ export default function GlobeSection() {
   if (!enabledGlobeProducts || enabledGlobeProducts.length === 0) return null
 
   return (
-    <section className="relative overflow-hidden border-y border-line bg-shell/60 px-4 py-12 md:py-20">
-      {/* Warm depth blobs */}
-      <div className="pointer-events-none absolute -top-[10%] -right-[10%] h-[60%] w-[60%] rounded-full bg-[#9A6A45] opacity-15 mix-blend-multiply blur-[100px]" />
-      <div className="pointer-events-none absolute -bottom-[20%] -left-[10%] h-[60%] w-[60%] rounded-full bg-[#B84E3A] opacity-[0.12] mix-blend-overlay blur-[120px]" />
+    <section className="store-atmosphere relative overflow-hidden border-y border-line px-4 py-14 md:py-20">
 
       <div className="relative z-10 mx-auto max-w-6xl">
         {/* Heading — framed around trust / reviews */}
-        <div className="mx-auto mb-6 max-w-xl text-center md:mb-8">
+        <div className="mx-auto mb-7 max-w-2xl text-center md:mb-9">
           <Kicker className="flex items-center justify-center gap-2">
             <StarIcon size={14} className="text-gold" /> Real customer reviews
           </Kicker>
           <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight text-navy sm:text-4xl">
-            Spin the globe. Tap a product.
+            Reviews, mapped to the products.
           </h2>
           <p className="mt-3 text-base leading-relaxed text-navy-soft">
-            Every item is loved by real buyers across the Philippines. Give it a spin and tap
-            any product to read their reviews.
+            Explore published customer feedback attached to the items in our reviewed catalog.
           </p>
         </div>
 
         {/* Globe stage — deliberately large on phones so it's usable */}
-        <div className="relative h-[68vh] min-h-[440px] w-full overflow-hidden rounded-3xl border border-line bg-cream/40 shadow-card sm:h-[520px] md:h-[580px]">
+        <div className="relative h-[62vh] min-h-[420px] w-full overflow-hidden rounded-2xl border border-line bg-shell/45 sm:h-[500px] md:h-[560px]">
           {/* Warm ground shadow */}
           <div className="pointer-events-none absolute top-[82%] left-1/2 z-0 h-[50px] w-[70%] -translate-x-1/2 rounded-full bg-[#9A6A45]/20 blur-2xl" />
 

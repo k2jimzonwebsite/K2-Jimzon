@@ -1,7 +1,50 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
+const projectRoot = process.cwd().replaceAll('\\', '/')
+
+function deploymentBoundaryPlugin(target) {
+  return {
+    name: 'k2-deployment-boundary',
+    generateBundle() {
+      this.emitFile({
+        type: 'asset',
+        fileName: 'k2-build-target.json',
+        source: `${JSON.stringify({ target }, null, 2)}\n`,
+      })
+    },
+  }
+}
+
+export default defineConfig(({ command, mode }) => {
+  const env = loadEnv(mode, projectRoot, '')
+  const configuredTarget = process.env.K2_DEPLOYMENT_TARGET || env.K2_DEPLOYMENT_TARGET
+  const legacyAdminFlag = process.env.VITE_IS_ADMIN_DEPLOYMENT || env.VITE_IS_ADMIN_DEPLOYMENT
+  const vercelDeploymentHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || ''
+  const vercelTarget = vercelDeploymentHost.toLowerCase().includes('admin') ? 'admin' : ''
+  const modeTarget = mode === 'admin' ? 'admin' : mode === 'storefront' ? 'storefront' : ''
+  const target = configuredTarget || (legacyAdminFlag === 'true' ? 'admin' : '') || vercelTarget || modeTarget || (command === 'serve' ? 'combined' : 'storefront')
+
+  if (!['storefront', 'admin', 'combined'].includes(target)) {
+    throw new Error(`Invalid K2_DEPLOYMENT_TARGET "${target}". Use storefront or admin.`)
+  }
+
+  const entryFile = {
+    storefront: 'src/StorefrontApp.jsx',
+    admin: 'src/AdminApp.jsx',
+    combined: 'src/App.jsx',
+  }[target]
+
+  return {
+    plugins: [react(), tailwindcss(), deploymentBoundaryPlugin(target)],
+    resolve: {
+      alias: {
+        '@k2-app-entry': `${projectRoot}/${entryFile}`,
+      },
+    },
+    build: {
+      manifest: true,
+    },
+  }
 })

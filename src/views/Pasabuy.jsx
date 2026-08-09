@@ -1,292 +1,155 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { RedButton, TrustBadge, TuscanCard, Kicker } from '../components/ui/bits'
 import { CheckIcon, PlaneIcon } from '../components/ui/icons'
 
-const STATUS_TONE = {
-  'Request received': 'bg-shell text-navy-soft',
-  'Quoted — ₱1,850': 'bg-blue-wash text-blue',
-  'Buying in Italy': 'bg-crimson/10 text-crimson',
-  'In Manila warehouse': 'bg-forest-wash text-forest',
+const EMPTY_FORM = {
+  customerName: '', email: '', phone: '', item: '', url: '', budget: '',
+  qty: 1, shipping: 'sea', alternatives: false, notes: '',
 }
 
 export default function Pasabuy() {
-  const { requests, addRequest, conversations, sendMessage } = useStore()
-  const [activeChatId, setActiveChatId] = useState(null)
-  const [sent, setSent] = useState(false)
-  const messagesEndRef = useRef(null)
+  const { requests, addRequest } = useStore()
+  const [form, setForm] = useState(EMPTY_FORM)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+  const [receipt, setReceipt] = useState(null)
 
-  useEffect(() => {
-    if (activeChatId && messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [activeChatId, conversations])
-  
-  const [formData, setFormData] = useState({
-    item: '',
-    url: '',
-    budget: '',
-    qty: 1,
-    shipping: 'sea',
-    alternatives: false,
-    image: null
-  })
-  
-  const fileInputRef = useRef(null)
-
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, image: e.target.files[0] })
-    }
+  const update = (key) => (event) => {
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
+    setForm(current => ({ ...current, [key]: value }))
   }
 
-  const submit = (e) => {
-    e.preventDefault()
-    if (!formData.item.trim()) return
-    addRequest(formData)
-    setFormData({
-      item: '',
-      url: '',
-      budget: '',
-      qty: 1,
-      shipping: 'sea',
-      alternatives: false,
-      image: null
-    })
-    setSent(true)
-    setTimeout(() => setSent(false), 4000)
+  const submit = async (event) => {
+    event.preventDefault()
+    setError('')
+    setReceipt(null)
+    if (!form.email.trim() && !form.phone.trim()) {
+      setError('Enter an email address or mobile number so we can send the quote.')
+      return
+    }
+    setSubmitting(true)
+    const result = await addRequest(form)
+    setSubmitting(false)
+    if (!result?.ok) {
+      setError(result?.error || 'The request could not be saved. Please try again.')
+      return
+    }
+    setReceipt(result.request)
+    setForm(EMPTY_FORM)
   }
+
+  const field = 'store-field w-full px-4 py-3 text-base'
 
   return (
-    <main className="mx-auto max-w-6xl px-4 pb-24 pt-10 md:pb-16">
-      <div className="grid gap-10 md:grid-cols-[1.2fr_1fr] md:gap-14">
-        {/* Left: pitch + form */}
+    <main className="store-section pb-24 pt-10 md:pb-20 md:pt-14">
+      <div className="grid gap-10 lg:grid-cols-[1.16fr_0.84fr] lg:gap-16">
         <div>
-          <Kicker className="rise flex items-center gap-2">
-            <PlaneIcon size={14} /> Customer-requested imports
-          </Kicker>
-          <h1 className="rise mt-3 font-serif text-3xl sm:text-4xl md:text-5xl font-semibold leading-[1.06] tracking-tight text-navy" style={{ animationDelay: '80ms' }}>
-            Pasabuy,
-            <br />
-            <em className="font-normal text-crimson dark:text-rose-400">without the group chat.</em>
+          <Kicker className="flex items-center gap-2"><PlaneIcon size={14} /> Customer-requested imports</Kicker>
+          <h1 className="mt-3 font-serif text-3xl font-semibold leading-[1.06] tracking-tight text-navy sm:text-4xl md:text-5xl">
+            Pasabuy,<br /><em className="font-normal text-crimson">with a real request trail.</em>
           </h1>
-          <p className="rise mt-5 text-base leading-relaxed text-navy-soft dark:text-navy-faint" style={{ animationDelay: '160ms' }}>
-            Tell us what you need from Italy. We quote it within 24 hours, buy it
-            ourselves, consolidate it with our monthly shipment, and deliver it to
-            your door. Fill out the sourcing request below.
+          <p className="mt-5 text-base leading-relaxed text-navy-soft">
+            Tell us what you need from Italy. We research the exact item, record the exchange-rate source and freight assumptions, then send a quote for your approval before buying anything.
           </p>
 
-          <form onSubmit={submit} className="rise mt-8 bg-cream/50 dark:bg-shell/30 backdrop-blur-sm p-6 rounded-2xl border border-line dark:border-line/30 shadow-sm" style={{ animationDelay: '240ms' }}>
-            <div className="space-y-4">
-              <div>
-                <label className="mb-1.5 block text-sm font-semibold text-navy">What exactly are you looking for?</label>
-                <textarea
-                  value={formData.item}
-                  onChange={(e) => setFormData({ ...formData, item: e.target.value })}
-                  rows={2}
-                  required
-                  placeholder={'e.g. "Pan di Stelle biscuits", brand names, specific flavors...'}
-                  className="w-full resize-none rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep px-4 py-3 text-sm text-navy placeholder:text-navy-faint dark:placeholder:text-navy-soft focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-sm font-semibold text-navy">Reference Link <span className="text-navy-faint dark:text-navy-soft font-normal">(Optional)</span></label>
-                <input
-                  type="url"
-                  value={formData.url}
-                  onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-                  placeholder="Link to Amazon IT, official store, etc."
-                  className="w-full rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep px-4 py-2.5 text-sm text-navy placeholder:text-navy-faint dark:placeholder:text-navy-soft focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
-                />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-navy">Target Budget</label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-navy-soft dark:text-navy-faint">₱</span>
-                    <input
-                      type="number"
-                      value={formData.budget}
-                      onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                      placeholder="Max price"
-                      className="w-full rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep pl-8 pr-4 py-2.5 text-sm text-navy placeholder:text-navy-faint dark:placeholder:text-navy-soft focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-navy">Quantity</label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={formData.qty}
-                    onChange={(e) => setFormData({ ...formData, qty: parseInt(e.target.value) || 1 })}
-                    className="w-full rounded-xl border border-line dark:border-line/50 bg-white dark:bg-shell-deep px-4 py-2.5 text-sm text-navy focus:border-crimson/60 dark:focus:border-rose-400 focus:outline-none transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-sm font-semibold text-navy">Shipping Preference</label>
-                <div className="flex bg-shell dark:bg-shell-deep rounded-lg p-1 border border-line dark:border-line/50">
-                  <button type="button" onClick={() => setFormData({ ...formData, shipping: 'sea' })} className={`flex-1 text-xs py-2 rounded-md font-medium transition-colors ${formData.shipping === 'sea' ? 'bg-white dark:bg-shell shadow-sm text-navy' : 'text-navy-soft dark:text-navy-faint hover:text-navy'}`}>
-                    Sea Cargo (~45d)
-                  </button>
-                  <button type="button" onClick={() => setFormData({ ...formData, shipping: 'air' })} className={`flex-1 text-xs py-2 rounded-md font-medium transition-colors ${formData.shipping === 'air' ? 'bg-white dark:bg-shell shadow-sm text-navy' : 'text-navy-soft dark:text-navy-faint hover:text-navy'}`}>
-                    Air Freight (~14d)
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between border border-line dark:border-line/50 rounded-xl px-4 py-3 bg-white dark:bg-shell-deep">
-                <div>
-                  <p className="text-sm font-semibold text-navy">Reference Photo</p>
-                  <p className="text-[11px] text-navy-faint dark:text-navy-soft">{formData.image ? formData.image.name : 'Upload screenshot or photo'}</p>
-                </div>
-                <button 
-                  type="button" 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="px-3 py-1.5 text-xs font-semibold bg-shell dark:bg-shell/50 hover:bg-line/50 dark:hover:bg-line/20 transition-colors rounded-lg text-navy"
-                >
-                  {formData.image ? 'Change' : 'Upload'}
-                </button>
-                <input type="file" ref={fileInputRef} onChange={handleImageChange} accept="image/*" className="hidden" />
-              </div>
-
-              <label className="flex items-start gap-3 mt-4 cursor-pointer group">
-                <div className="relative flex items-center justify-center mt-0.5">
-                  <input 
-                    type="checkbox" 
-                    checked={formData.alternatives}
-                    onChange={(e) => setFormData({ ...formData, alternatives: e.target.checked })}
-                    className="w-4 h-4 appearance-none border border-line dark:border-line/50 rounded bg-white dark:bg-shell-deep checked:bg-crimson dark:checked:bg-rose-500 checked:border-crimson dark:checked:border-rose-500 transition-colors peer cursor-pointer"
-                  />
-                  <svg className="absolute w-2.5 h-2.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path></svg>
-                </div>
-                <span className="text-sm text-navy-soft dark:text-navy-faint group-hover:text-navy dark:group-hover:text-cream transition-colors">
-                  If this exact item is sold out, our buyers can source a similar premium alternative.
-                </span>
+          <form onSubmit={submit} className="mt-9 store-panel p-5 shadow-sm sm:p-7">
+            <div className="mb-6 border-b border-[var(--store-surface-border)] pb-5"><h2 className="font-serif text-xl font-semibold text-navy">Tell us what to find</h2><p className="mt-1 text-sm text-navy-soft">Specific details help staff research the right listing faster.</p></div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block text-sm font-semibold text-navy">Full name
+                <input className={`${field} mt-1.5`} value={form.customerName} onChange={update('customerName')} autoComplete="name" required />
               </label>
+              <label className="block text-sm font-semibold text-navy">Mobile number
+                <input className={`${field} mt-1.5`} type="tel" value={form.phone} onChange={update('phone')} autoComplete="tel" />
+              </label>
+            </div>
+            <label className="mt-4 block text-sm font-semibold text-navy">Email
+              <input className={`${field} mt-1.5`} type="email" value={form.email} onChange={update('email')} autoComplete="email" />
+            </label>
+            <label className="mt-4 block text-sm font-semibold text-navy">What exactly are you looking for?
+              <textarea className={`${field} mt-1.5 min-h-24 resize-y`} value={form.item} onChange={update('item')} placeholder="Brand, exact variant, size, shade, or other identifying details" required />
+            </label>
+            <label className="mt-4 block text-sm font-semibold text-navy">Reference link <span className="font-normal text-navy-soft">(optional)</span>
+              <input className={`${field} mt-1.5`} type="url" value={form.url} onChange={update('url')} placeholder="Official store or product page" />
+            </label>
 
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <label className="block text-sm font-semibold text-navy">Target budget in PHP <span className="font-normal text-navy-soft">(optional)</span>
+                <input className={`${field} mt-1.5`} type="number" min="0" step="1" value={form.budget} onChange={update('budget')} />
+              </label>
+              <label className="block text-sm font-semibold text-navy">Quantity
+                <input className={`${field} mt-1.5`} type="number" min="1" max="999" value={form.qty} onChange={update('qty')} required />
+              </label>
             </div>
 
-            <RedButton type="submit" className="mt-6 w-full py-4 text-base" disabled={!formData.item.trim()}>
-              Submit Sourcing Request
-            </RedButton>
-            {sent && (
-              <div className="mt-4 flex items-center gap-2 p-3 bg-forest-wash dark:bg-forest/10 rounded-lg text-sm font-semibold text-forest dark:text-green-400 animate-in fade-in slide-in-from-bottom-2">
-                <CheckIcon size={16} /> Request sent! Ticket created in our inbox.
+            <fieldset className="mt-4">
+              <legend className="text-sm font-semibold text-navy">Shipping preference</legend>
+              <div className="mt-1.5 grid grid-cols-2 gap-2 rounded-lg border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] p-1">
+                {[
+                  ['sea', 'Sea cargo · slower, lower freight'],
+                  ['air', 'Air freight · faster, higher freight'],
+                ].map(([value, label]) => (
+                  <button key={value} type="button" onClick={() => setForm(current => ({ ...current, shipping: value }))}
+                    className={`min-h-11 rounded-md px-3 text-sm font-medium transition-colors duration-150 ${form.shipping === value ? 'bg-[var(--store-surface-bg)] text-navy shadow-sm border border-[var(--store-surface-border)]' : 'text-navy-soft hover:text-navy'}`}
+                    aria-pressed={form.shipping === value}>{label}</button>
+                ))}
+              </div>
+            </fieldset>
+
+            <label className="mt-4 block text-sm font-semibold text-navy">Notes <span className="font-normal text-navy-soft">(optional)</span>
+              <textarea className={`${field} mt-1.5 min-h-20 resize-y`} value={form.notes} onChange={update('notes')} placeholder="Receipt, authenticity, packaging, or deadline requirements" />
+            </label>
+            <label className="mt-4 flex min-h-11 items-start gap-3 rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-3 text-sm text-navy-soft">
+              <input type="checkbox" checked={form.alternatives} onChange={update('alternatives')} className="mt-1 h-4 w-4 accent-crimson" />
+              I allow K2 to suggest a similar premium alternative if the exact item is unavailable.
+            </label>
+
+            <p className="mt-4 text-xs leading-relaxed text-navy-soft">
+              Photo attachments will be requested by staff through your contact channel when needed. This avoids unsafe anonymous uploads before our protected attachment service is ready.
+            </p>
+            {error && <p role="alert" className="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
+            {receipt && (
+              <div role="status" className="mt-4 flex items-start gap-2 rounded-xl border border-forest/25 bg-forest/5 p-3 text-sm text-forest">
+                <CheckIcon size={17} className="mt-0.5 shrink-0" />
+                <span>Request saved. Keep reference <strong>{receipt.public_reference}</strong>; staff will review it before sending a quote.</span>
               </div>
             )}
+            <RedButton type="submit" className="mt-6 w-full py-4 text-base" disabled={submitting}>
+              {submitting ? 'Saving request…' : 'Submit Pasabuy request'}
+            </RedButton>
           </form>
 
           <div className="mt-8 flex flex-wrap gap-2">
-            <TrustBadge>Quoted upfront</TrustBadge>
-            <TrustBadge>Bought by us in Italy</TrustBadge>
-            <TrustBadge>Tracked delivery</TrustBadge>
+            <TrustBadge>Quote before purchase</TrustBadge>
+            <TrustBadge>Recorded cost assumptions</TrustBadge>
+            <TrustBadge>No payment at submission</TrustBadge>
           </div>
         </div>
 
-        {/* Right: how it works + live request tracker */}
-        <div className="space-y-6">
-          <TuscanCard tricolor className="rise" style={{ animationDelay: '200ms' }}>
-            <div className="p-6">
-              <h2 className="font-serif text-lg font-semibold text-navy">How it works</h2>
-              <ol className="mt-4 space-y-4">
-                {[
-                  ['You request', 'Name the product, paste a link, or describe it from memory.'],
-                  ['We quote in 24h', 'Landed price to your door — item, freight share, nothing hidden.'],
-                  ['We buy it in Italy', 'Our own buyers pick it up. It flies with the monthly consignment.'],
-                  ['Delivered & tracked', 'Same courier and tracking as any K2 order.'],
-                ].map(([title, body], i) => (
-                  <li key={title} className="flex gap-3.5">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-forest/10 dark:bg-forest/20 font-serif text-sm font-semibold text-forest dark:text-green-400">
-                      {i + 1}
-                    </span>
-                    <div>
-                      <p className="text-base font-semibold text-navy">{title}</p>
-                      <p className="text-sm leading-relaxed text-navy-soft dark:text-navy-faint">{body}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </TuscanCard>
+        <div className="space-y-6 lg:sticky lg:top-28 lg:h-fit">
+          <TuscanCard tricolor><div className="p-6">
+            <h2 className="font-serif text-lg font-semibold">How it works</h2>
+            <ol className="mt-4 space-y-4">
+              {[
+                ['You request', 'Give us the exact product and a reliable way to contact you.'],
+                ['We research', 'Staff confirms the item, availability, route, and cost inputs.'],
+                ['You approve the quote', 'No purchase happens until you accept the recorded quote.'],
+                ['We buy and track', 'The request advances through purchasing, transit, arrival, and delivery.'],
+              ].map(([title, body], index) => (
+                <li key={title} className="flex gap-3.5"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-forest/10 text-sm font-semibold text-forest">{index + 1}</span><div><p className="font-semibold">{title}</p><p className="text-sm leading-relaxed text-navy-soft">{body}</p></div></li>
+              ))}
+            </ol>
+          </div></TuscanCard>
 
-          <TuscanCard className="rise p-6" style={{ animationDelay: '280ms' }}>
-            <div className="flex items-baseline justify-between">
-              <h2 className="font-serif text-lg font-semibold text-navy">Your open requests</h2>
-              <span className="text-xs text-navy-faint dark:text-navy-soft">Next flight: 22 Jul, Milan</span>
-            </div>
-            <ul className="mt-4 divide-y divide-line dark:divide-line/30">
-              {requests.map((r) => {
-                const chat = conversations.find(c => c.id === r.id)
-                // A new message indicator if the last message is from the agent and it's unread
-                // (In a real app, unread logic would be two-way. For our mock, we check if agent sent last)
-                const hasNewMessage = chat && chat.messages.length > 1 && chat.messages[chat.messages.length - 1].sender === 'agent'
-                
-                return (
-                <li key={r.id} className="flex flex-col py-3">
-                  <div 
-                    onClick={() => setActiveChatId(activeChatId === r.id ? null : r.id)}
-                    className={`flex items-center gap-3 cursor-pointer p-2 -mx-2 rounded-xl hover:bg-shell/50 dark:hover:bg-shell-deep/50 transition-colors ${activeChatId === r.id ? 'bg-shell dark:bg-shell-deep' : ''}`}
-                  >
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-navy flex items-center gap-2">
-                        {r.item}
-                        {hasNewMessage && activeChatId !== r.id && (
-                          <span className="w-2 h-2 rounded-full bg-crimson dark:bg-rose-500 pulse-dot"></span>
-                        )}
-                      </p>
-                      <p className="text-xs text-navy-faint dark:text-navy-soft tabular">{r.id} · {r.eta}</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className={'shrink-0 rounded-full px-2.5 py-1 text-[10px] uppercase tracking-wider font-bold ' + (STATUS_TONE[r.status] ?? 'bg-shell text-navy-soft dark:bg-shell-deep dark:text-cream')}>
-                        {r.status}
-                      </span>
-                      {chat && (
-                        <button className="text-xs font-semibold text-crimson dark:text-rose-400 hover:underline shrink-0 w-8 text-right">
-                          {activeChatId === r.id ? 'Close' : 'Chat'}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {activeChatId === r.id && chat && (
-                    <div className="mt-3 bg-white dark:bg-[#0A101D] border border-line dark:border-white/10 rounded-xl overflow-hidden flex flex-col shadow-inner animate-in fade-in slide-in-from-top-2" style={{ height: '300px' }}>
-                      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                        {chat.messages.map((m, i) => (
-                           <div key={i} className={`flex ${m.sender === 'customer' ? 'justify-end' : 'justify-start'}`}>
-                              <div className={`max-w-[85%] p-3 text-sm shadow-sm ${
-                                m.sender === 'customer' 
-                                  ? 'bg-navy text-white rounded-2xl rounded-tr-sm' 
-                                  : 'bg-shell dark:bg-white/10 text-navy dark:text-white border border-line dark:border-white/5 rounded-2xl rounded-tl-sm'
-                              }`}>
-                                {m.text}
-                              </div>
-                            </div>
-                        ))}
-                        <div ref={messagesEndRef} />
-                      </div>
-                      <div className="p-3 bg-shell dark:bg-white/5 border-t border-line dark:border-white/10 flex gap-2">
-                         <input 
-                            type="text"
-                            onKeyDown={e => {
-                              if (e.key === 'Enter' && e.target.value.trim()) {
-                                sendMessage(r.id, e.target.value, 'customer')
-                                e.target.value = ''
-                              }
-                            }}
-                            placeholder="Send a message..."
-                            className="flex-1 rounded-xl border border-line dark:border-white/10 bg-white dark:bg-[#05080f] px-4 py-2 text-sm text-navy dark:text-white focus:outline-none focus:border-crimson dark:focus:border-rose-400 transition-colors"
-                          />
-                      </div>
-                    </div>
-                  )}
-                </li>
-              )})}
-            </ul>
+          <TuscanCard className="p-6">
+            <h2 className="font-serif text-lg font-semibold">Requests from this visit</h2>
+            {requests.length === 0 ? (
+              <p className="mt-3 text-sm leading-relaxed text-navy-soft">No requests submitted in this browser session yet. For privacy, previous guest requests are not shown without customer sign-in.</p>
+            ) : (
+              <ul className="mt-4 divide-y divide-line">
+                {requests.map(request => <li key={request.id} className="py-3"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-semibold">{request.item}</p><p className="mt-0.5 text-xs text-navy-soft">{request.id} · {request.eta}</p></div><span className="shrink-0 rounded-full bg-shell px-2.5 py-1 text-xs font-semibold text-navy-soft">{request.status}</span></div></li>)}
+              </ul>
+            )}
           </TuscanCard>
         </div>
       </div>

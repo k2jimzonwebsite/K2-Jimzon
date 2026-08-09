@@ -1,84 +1,113 @@
-# 🏛️ K2 Jimzon Business Operating System (BOS) & E-Commerce Platform
+# K2 Jimzon multi-channel commerce operations
 
-> **Version:** 2026.7 Production-Ready  
-> **Tech Stack:** React 19, Vite 6, TailwindCSS 4, Supabase (PostgreSQL + Auth + RLS), Playwright E2E Testing Suite.
+K2 Jimzon is a React/Vite storefront and operations dashboard for five income channels:
 
----
+- K2 Jimzon Website
+- Shopee
+- TikTok Shop
+- Lazada
+- Italy-to-Philippines Pasabuy
 
-## 📖 System Overview
+The website and Pasabuy intake can operate before marketplace connectors, a custom domain, or an online payment provider are available. Shopee, TikTok Shop, and Lazada remain explicit catalog/listing channels in the admin, but must stay **Not connected** until their back-end connectors process real data.
 
-K2 Jimzon BOS is a multi-channel e-commerce and logistics operating system tailored specifically for importing Italian luxury cosmetics, boutique pantry items, and specialty food products from Milan to Manila.
+## Current launch behavior
 
-### 🌟 Key Subsystems:
-1. **Public Storefront (`/`)**: High-converting shopper experience with 3D product view, search, category filters, cart slider, and COD/GCash payment checkout.
-2. **Italy Pasabuy Sourcing Portal (`/pasabuy`)**: Direct shopper custom item request form with budget (€) and Viber contact integration.
-3. **Wholesale B2B Reseller Portal (`/wholesale`)**: Bulk volume wholesale application and commercial pricing tiers.
-4. **Isolated Admin BOS Cockpit (`/admin-portal-k2-secure`)**: 
-   - **Real Supabase Auth + 2FA Gate** (`AdminAuthModal.jsx`).
-   - **AES-256 Client Secret Encryption Vault** (`securityVault.js`).
-   - **Master Financial Landed P&L Cockpit** (`Overview.jsx`): Real-time Gross Sales (₱), Italy Sourcing (€ FX), Air Freight (€14/kg) & 12% Duties, and Net Cash Profit (₱).
-   - **Daily Actionable Task & Expiration Center** (`DailyTaskNotificationDrawer.jsx`): 1-click execution for clearance sales, NAIA box handovers, low stock transfers, Pasabuy quotes.
-   - **Fulfillment & Staff Stations** (`OmniOperationsHub.jsx`): Barcode pack-to-ship verification (+1), NAIA flight box handovers, staff custody claims, 1-click inter-staff stock transfers.
-   - **1-Click Air Waybill Generator** (`PackingSlipModal.jsx`): Shopee/Lazada style shipping labels (J&T Express, Lalamove, LEX) with tracking barcodes.
-   - **Multi-Location & Staff Custody Allocations** (`StaffAllocationModal.jsx`): Single PIM SKU stock breakdown per staff custodian (Makati, QC, Milan).
-   - **FEFO Multi-Batch Expiration Manager** (`BatchExpiryManagerModal.jsx`): Expiry color health badges, batch breakdown, pinned priority batch lock.
-   - **Product Master PIM & Excel Sheet Mode** (`InventoryGrid.jsx` & `Sheet.jsx`): Sticky frozen SKU columns, 1-tap horizontal scroll jump buttons.
-   - **Automated Messaging Bot Webhook** (`Inbox.jsx`): Real-time automated stock checks, pricing, checkout links, and Pasabuy request parsing.
-   - **Custom Pasabuy Landed Cost Engine** (`PasabuyManager.jsx`): EUR FX + Air Freight + Duty Tax calculator, margin slider, 1-click Viber quote dispatcher.
-   - **Customer CRM & Mass Marketing Broadcasts** (`CustomerCrmBroadcast.jsx`): Customer lifetime spend (₱), VIP wholesale roles, campaign templates, mass email/SMS broadcast sender.
+- Checkout creates an **order request**. It does not collect payment or reserve stock.
+- Staff confirms an order request through a server-side workflow before stock is reserved.
+- Pasabuy creates a persistent request with a customer reference.
+- Pasabuy quotes are versioned and store the FX source, capture time, freight assumptions, estimated taxes, handling, landed cost, margin, final price, and validity.
+- Supabase Auth identifies staff. PostgreSQL RLS and server functions enforce access; a hidden URL or browser flag is never treated as authorization.
+- Marketplace credentials belong only in server-side function secrets. The browser has no credential vault.
 
----
+## Local setup
 
-## 🛠️ Local Development Setup
-
-### 1. Clone & Install Dependencies
 ```bash
-cd "c:\Users\jerze\K2 JImzon"
 npm install
+npm run dev
 ```
 
-### 2. Configure Environment Variables
-Copy `.env.example` to `.env.local`:
+`npm run dev` keeps the combined local workspace for development and automated
+tests only. The deployable targets can be run independently:
+
 ```bash
-cp .env.example .env.local
+npm run dev:storefront
+npm run dev:admin
 ```
-Fill in your Supabase credentials:
+
+Required public client variables:
+
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
-VITE_ENCRYPTION_SECRET=your-32-character-secret
 ```
 
-### 3. Launch Local Development Server
+Never add a Supabase service-role key or marketplace secret to a `VITE_` variable.
+
+Storefront: `http://localhost:5173/`
+
+Admin: `http://localhost:5174/`
+
+## Separate production deployments
+
+The storefront and admin are two different production artifacts built from the
+same reviewed source repository. They must remain separate Vercel projects:
+
+| Vercel project | Environment variable | Artifact |
+| --- | --- | --- |
+| Storefront | `K2_DEPLOYMENT_TARGET=storefront` | Shopper views only |
+| Admin | `K2_DEPLOYMENT_TARGET=admin` | Operations views only |
+
+Both projects may use `npm run build`; the non-public build flag selects the
+correct entry. `VITE_IS_ADMIN_DEPLOYMENT=true` remains accepted temporarily for
+the existing admin project, but `K2_DEPLOYMENT_TARGET=admin` is the canonical
+setting. Existing Vercel project URLs containing `admin` are also recognized as
+a safe compatibility fallback. Never configure the admin target on the
+storefront project.
+
+The build emits a manifest and fails verification if admin views enter the
+storefront artifact or shopper views enter the admin artifact. Supabase Auth,
+staff roles, and RLS remain the actual authorization boundary; deployment
+separation is an additional layer, not a replacement for database security.
+
+## Database setup
+
+For the existing K2 Supabase project, apply only the consolidated launch migration:
+
+```text
+supabase/migrations/20260803_launch_core_stabilization.sql
+```
+
+That migration creates the order-request, inventory-balance, Pasabuy, quote-version, event-history, channel-readiness, and tightened RLS contracts used by the current UI.
+
+The three `20260802_*_compatibility_preflight.sql` files were recovery helpers for the earlier failed attempts. Their compatibility work is now included in the consolidated migration, so do not run them again.
+
+After the launch-core migration succeeds, Phase 2 unified-inbox operations are activated with one additional verified migration:
+
+```text
+supabase/migrations/20260803_phase_2_unified_inbox.sql
+```
+
+Phase 2 adds internal inbox workflow, delivery-state truth, and routes real persisted Pasabuy submissions into the queue. It does not connect WhatsApp, Viber, Meta, Shopee, Lazada, or TikTok messaging APIs.
+
+Applying a migration changes the live database. Review it and take a backup before running it in Supabase.
+
+## Verification
+
 ```bash
-npm run dev
+npm run check:imports
+npm run build:storefront
+npm run build:admin
+npm test
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser.  
-To access the Admin Portal, go to [http://localhost:5173/admin-portal-k2-secure](http://localhost:5173/admin-portal-k2-secure).
 
----
+Passing a local build is not the same as production readiness. Before launch, also verify RLS with anonymous/customer/staff sessions, test the real deployed URLs, enroll staff MFA, and exercise an order request and Pasabuy request against the live database.
 
-## 🧪 Testing
+## Intentionally deferred
 
-### Run Playwright End-to-End Test Suite
-```bash
-node scratch/master_feature_audit_suite.js
-```
-Runs an automated test across all 14 core subsystems and user flows.
+- Online payment gateway and automatic payment verification
+- Custom storefront/admin domains
+- Shopee, TikTok Shop, and Lazada API credentials/connectors
+- Anonymous Pasabuy image uploads
+- Paid Supabase or Vercel features
 
----
-
-## 🚀 Production Deployment
-
-This project is pre-configured for 1-click deployment on **Vercel**, **Netlify**, or **Cloudflare Pages**.
-
-- **Vercel Configuration:** [`vercel.json`](file:///c:/Users/jerze/K2%20JImzon/vercel.json)
-- **Netlify Configuration:** [`netlify.toml`](file:///c:/Users/jerze/K2%20JImzon/netlify.toml)
-- **Database Security Migration:** [`supabase/README_MIGRATIONS.md`](file:///c:/Users/jerze/K2%20JImzon/supabase/README_MIGRATIONS.md)
-
----
-
-## 📚 Architectural Blueprints
-
-- **System Logic Blueprint:** [`SYSTEM_LOGIC_BLUEPRINT.md`](file:///c:/Users/jerze/K2%20JImzon/SYSTEM_LOGIC_BLUEPRINT.md)
-- **Admin Workflow Blueprint:** [`ADMIN_WORKFLOW_BLUEPRINT.md`](file:///c:/Users/jerze/K2%20JImzon/ADMIN_WORKFLOW_BLUEPRINT.md)
+See `LAUNCH_STEP_1.md` for the operational handoff and remaining gates.

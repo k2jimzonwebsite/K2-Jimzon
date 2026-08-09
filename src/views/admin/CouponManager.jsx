@@ -1,349 +1,145 @@
-import { useState } from 'react'
-import { useStore } from '../../context/StoreContext'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { supabase } from '../../lib/supabaseClient'
+import { PlusIcon, StarIcon, XIcon } from '../../components/ui/icons'
+import { EmptyState, MetricRail, SectionHeading, StateBanner, StatusPill, WorkspaceIntro } from './AdminWorkspaceUi'
+
+const EMPTY = {
+  code: '', description: '', discount_type: 'percentage', discount_value: '10',
+  min_spend: '0', max_redemptions: '100', starts_at: '', ends_at: '',
+  is_active: false, is_hunt: false, clue: '',
+}
 
 export default function CouponManager() {
-  const { coupons, createCoupon, toggleCouponStatus, deleteCoupon } = useStore()
+  const [coupons, setCoupons] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [working, setWorking] = useState(false)
+  const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
+  const [showCreate, setShowCreate] = useState(false)
+  const [form, setForm] = useState(EMPTY)
 
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [broadcastCode, setBroadcastCode] = useState(null)
-  const [copiedText, setCopiedText] = useState(false)
+  const load = useCallback(async () => {
+    if (!supabase) { setError('Supabase is not configured.'); setLoading(false); return }
+    const { data, error: loadError } = await supabase.from('coupons').select('*').order('created_at', { ascending: false })
+    if (loadError) {
+      const missing = loadError.code === '42P01' || /does not exist|schema cache/i.test(loadError.message)
+      setError(missing ? 'Coupon storage is not installed yet. Run migration 20260804_restore_coupons_and_consignment_scanning.sql, then reload this page.' : loadError.message)
+    } else {
+      setCoupons(data || [])
+      setError('')
+    }
+    setLoading(false)
+  }, [])
 
-  // Form State
-  const [code, setCode] = useState('')
-  const [description, setDescription] = useState('')
-  const [type, setType] = useState('percentage') // 'percentage' | 'fixed'
-  const [value, setValue] = useState(10)
-  const [minSpend, setMinSpend] = useState(1000)
-  const [maxUses, setMaxUses] = useState(50)
-  const [expiryDate, setExpiryDate] = useState('2026-12-31')
-  const [isHunt, setIsHunt] = useState(false)
-  const [clue, setClue] = useState('')
+  useEffect(() => { load() }, [load])
 
-  const handleCreate = (e) => {
-    e.preventDefault()
-    if (!code.trim()) return
+  const metrics = useMemo(() => {
+    const now = Date.now()
+    return {
+      active: coupons.filter(c => c.is_active && !c.archived_at && (!c.starts_at || Date.parse(c.starts_at) <= now) && (!c.ends_at || Date.parse(c.ends_at) > now)).length,
+      scheduled: coupons.filter(c => c.is_active && c.starts_at && Date.parse(c.starts_at) > now).length,
+      archived: coupons.filter(c => c.archived_at).length,
+      redemptions: coupons.reduce((sum, coupon) => sum + Number(coupon.redemption_count || 0), 0),
+    }
+  }, [coupons])
 
-    createCoupon({
-      code,
-      description,
-      type,
-      value,
-      minSpend,
-      maxUses,
-      expiryDate,
-      isHunt,
-      clue,
-    })
-
-    // Reset Form
-    setCode('')
-    setDescription('')
-    setType('percentage')
-    setValue(10)
-    setMinSpend(1000)
-    setMaxUses(50)
-    setIsHunt(false)
-    setClue('')
-    setShowCreateModal(false)
+  const update = key => event => {
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
+    setForm(current => ({ ...current, [key]: value }))
   }
 
-  const handleCopyBroadcast = (c) => {
-    const text = `🎁 EXCLUSIVE K2 JIMZON VOUCHER DROP! 🇮🇹\n\nCode: ${c.code}\nDiscount: ${c.type === 'percentage' ? c.value + '% OFF' : '₱' + c.value + ' OFF'}\nMin Spend: ₱${c.minSpend.toLocaleString()}\n${c.isHunt ? '🔍 Secret Clue: ' + c.clue : 'Claim on storefront now!'}\n\nType this code at checkout on k2jimzon.ph!`
-    navigator.clipboard.writeText(text)
-    setCopiedText(true)
-    setTimeout(() => setCopiedText(false), 2000)
+  const createCoupon = async event => {
+    event.preventDefault(); setWorking(true); setError(''); setNotice('')
+    const startsAt = form.starts_at ? new Date(form.starts_at).toISOString() : new Date().toISOString()
+    const endsAt = form.ends_at ? new Date(form.ends_at).toISOString() : null
+    if (endsAt && Date.parse(endsAt) <= Date.parse(startsAt)) {
+      setError('End date must be later than the start date.'); setWorking(false); return
+    }
+    const payload = {
+      code: form.code.trim().toUpperCase(),
+      description: form.description.trim(),
+      discount_type: form.discount_type,
+      discount_value: Number(form.discount_value),
+      min_spend: Number(form.min_spend || 0),
+      max_redemptions: form.max_redemptions ? Number(form.max_redemptions) : null,
+      starts_at: startsAt,
+      ends_at: endsAt,
+      is_active: form.is_active,
+      is_hunt: form.is_hunt,
+      clue: form.is_hunt ? form.clue.trim() || null : null,
+    }
+    const { error: createError } = await supabase.from('coupons').insert(payload)
+    setWorking(false)
+    if (createError) { setError(createError.message); return }
+    setForm(EMPTY); setShowCreate(false); setNotice(`Coupon ${payload.code} saved${payload.is_active ? ' and activated' : ' as an inactive draft'}.`); await load()
   }
 
-  const activeCount = coupons.filter(c => c.isActive).length
-  const huntCount = coupons.filter(c => c.isHunt && c.isActive).length
-  const totalRedemptions = coupons.reduce((sum, c) => sum + (c.usedCount || 0), 0)
+  const toggle = async coupon => {
+    setWorking(true); setError(''); setNotice('')
+    const { error: toggleError } = await supabase.from('coupons').update({ is_active: !coupon.is_active }).eq('id', coupon.id)
+    setWorking(false)
+    if (toggleError) { setError(toggleError.message); return }
+    setNotice(`${coupon.code} ${coupon.is_active ? 'paused' : 'activated'}.`); await load()
+  }
 
-  return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 font-sans text-white">
-      
-      {/* Header */}
-      <div className="bg-adm-surface border border-adm-line p-4 sm:p-5 rounded-adm flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
-        <div>
-          <h1 className="font-serif text-lg sm:text-2xl font-bold text-white">Coupons &amp; vouchers</h1>
-          <p className="text-xs sm:text-sm text-white/55 mt-1 max-w-xl">
-            Discount codes, min-spend rules, and secret "voucher hunt" drops for social.
-          </p>
-        </div>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="bg-gold hover:bg-gold-deep text-navy font-bold text-sm px-5 min-h-11 rounded-adm-sm transition-all shadow-lg shrink-0 flex items-center justify-center gap-2"
-        >
-          🎟️ Create coupon
-        </button>
-      </div>
+  const archive = async coupon => {
+    if (!window.confirm(`Archive ${coupon.code}? It will stop validating immediately and remain in the audit history.`)) return
+    setWorking(true); setError(''); setNotice('')
+    const { error: archiveError } = await supabase.from('coupons').update({ is_active: false, archived_at: new Date().toISOString() }).eq('id', coupon.id)
+    setWorking(false)
+    if (archiveError) { setError(archiveError.message); return }
+    setNotice(`${coupon.code} archived.`); await load()
+  }
 
-      {/* KPIs */}
-      <div className="grid grid-cols-3 gap-2.5">
-        <div className="bg-adm-surface border border-adm-line p-3.5 rounded-adm">
-          <p className="text-[11px] font-bold uppercase tracking-wide text-gold">Active</p>
-          <p className="text-xl sm:text-2xl font-bold text-white mt-0.5">{activeCount}</p>
-        </div>
-        <div className="bg-adm-surface border border-adm-line p-3.5 rounded-adm">
-          <p className="text-[11px] font-bold uppercase tracking-wide text-gold">Hunts</p>
-          <p className="text-xl sm:text-2xl font-bold text-blue mt-0.5">{huntCount}</p>
-        </div>
-        <div className="bg-adm-surface border border-adm-line p-3.5 rounded-adm">
-          <p className="text-[11px] font-bold uppercase tracking-wide text-gold">Redeemed</p>
-          <p className="text-xl sm:text-2xl font-bold text-gold mt-0.5">{totalRedemptions}</p>
-        </div>
-      </div>
+  const input = 'adm-input min-h-11 text-base sm:text-sm'
 
-      {/* Coupons Table */}
-      <div className="bg-adm-surface border border-adm-line rounded-adm overflow-hidden shadow-xl">
-        <div className="p-5 border-b border-adm-line flex items-center justify-between bg-white/10">
-          <h2 className="font-serif font-bold text-xl text-white">All coupons & vouchers</h2>
-          <span className="text-sm font-mono font-bold text-gold">{coupons.length} Total Coupons</span>
-        </div>
+  return <div className="mx-auto max-w-[1600px] space-y-5 text-white">
+    <WorkspaceIntro eyebrow="Promotions" title="Coupons & vouchers" description="Create controlled discount codes with spend rules, redemption limits, activation windows, and an audit trail. Codes are validated individually and are never publicly enumerable." actions={<button onClick={() => setShowCreate(true)} className="inline-flex min-h-11 items-center gap-2 rounded-adm-sm bg-gold px-4 text-sm font-bold text-adm-bg"><PlusIcon size={15} /> Create coupon</button>} />
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm font-sans">
-            <thead className="bg-adm-raised text-gold uppercase tracking-wider text-sm font-extrabold border-b border-adm-line">
-              <tr>
-                <th className="p-4">Code / Campaign</th>
-                <th className="p-4">Type & Value</th>
-                <th className="p-4">Min Spend</th>
-                <th className="p-4">Usage & Limit</th>
-                <th className="p-4">Mode</th>
-                <th className="p-4">Status</th>
-                <th className="p-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-adm-line">
-              {coupons.map((c) => (
-                <tr key={c.id} className="hover:bg-white/10 transition-colors">
-                  <td className="p-4">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-gold text-lg font-mono tracking-wide">{c.code}</span>
-                      {c.isHunt && (
-                        <span className="text-sm bg-blue text-white px-2 py-0.5 rounded font-bold shadow">
-                          🔍 SECRET HUNT
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-neutral-300 font-medium mt-1">{c.description}</p>
-                    {c.isHunt && c.clue && (
-                      <p className="text-xs text-amber/80 italic mt-1 font-sans">"{c.clue}"</p>
-                    )}
-                  </td>
+    {(error || notice) && <StateBanner tone={error ? 'danger' : 'success'}>{error || notice}</StateBanner>}
 
-                  <td className="p-4">
-                    <span className="font-bold text-white font-sans text-base">
-                      {c.type === 'percentage' ? `${c.value}% OFF` : `₱${c.value} OFF`}
-                    </span>
-                  </td>
+    <MetricRail items={[
+      { label: 'Active now', value: metrics.active, tone: 'text-forest' },
+      { label: 'Scheduled', value: metrics.scheduled, tone: 'text-blue' },
+      { label: 'Recorded uses', value: metrics.redemptions },
+      { label: 'Archived', value: metrics.archived },
+    ]} />
 
-                  <td className="p-4 text-neutral-300">
-                    {c.minSpend > 0 ? `₱${c.minSpend.toLocaleString()}` : 'No Min'}
-                  </td>
-
-                  <td className="p-4">
-                    <span className="text-white font-bold">{c.usedCount || 0}</span> / {c.maxUses} used
-                  </td>
-
-                  <td className="p-4">
-                    {c.isHunt ? (
-                      <span className="text-forest font-bold">Secret Clue Hunt</span>
-                    ) : (
-                      <span className="text-white/60">Standard Promo</span>
-                    )}
-                  </td>
-
-                  <td className="p-4">
-                    <button
-                      onClick={() => toggleCouponStatus(c.id)}
-                      className={`px-2.5 py-1 rounded-full text-xs font-bold border transition-all ${
-                        c.isActive
-                          ? 'bg-forest/20 text-forest border-forest/40 hover:bg-forest/30'
-                          : 'bg-white/10 text-white/60 border-adm-line hover:bg-white/20'
-                      }`}
-                    >
-                      {c.isActive ? '● ACTIVE' : '○ PAUSED'}
-                    </button>
-                  </td>
-
-                  <td className="p-4 text-right space-x-2">
-                    <button
-                      onClick={() => {
-                        setBroadcastCode(c)
-                        handleCopyBroadcast(c)
-                      }}
-                      className="px-3 py-1.5 rounded-adm-sm bg-blue/20 hover:bg-blue/30 text-blue border border-blue/30 font-bold transition-all text-xs"
-                      title="Copy Social Media Broadcast Text"
-                    >
-                      📢 Broadcast
-                    </button>
-
-                    <button
-                      onClick={() => deleteCoupon(c.id)}
-                      className="px-2.5 py-1.5 rounded-adm-sm bg-crimson/20 hover:bg-crimson/30 text-crimson border border-crimson/30 transition-all text-xs"
-                    >
-                      🗑️
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Broadcast Copied Banner */}
-      {copiedText && broadcastCode && (
-        <div className="fixed bottom-6 right-6 z-50 bg-forest text-white font-mono text-sm p-4 rounded-adm-sm shadow-2xl border border-white/20 animate-in fade-in">
-          ✓ Copied Promo Broadcast Text for <strong>{broadcastCode.code}</strong> to clipboard! Paste it directly to FB/IG/TikTok!
-        </div>
+    <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
+      <div className="p-4"><SectionHeading title="Promotion register" description="Activation is reversible; archive replaces destructive deletion so historical codes remain auditable." count={coupons.length} /></div>
+      {loading ? <div className="h-56 animate-pulse bg-white/[0.03]" role="status" /> : coupons.length === 0 ? <EmptyState icon={StarIcon} title="No production coupons yet" description="Create an inactive draft first, review its limits and dates, then activate it deliberately." /> : (
+        <div className="overflow-x-auto"><table className="w-full min-w-[900px] text-left text-sm">
+          <thead className="border-y border-adm-line bg-adm-sunken text-[11px] uppercase tracking-wider text-white/45"><tr><th className="px-4 py-3">Code</th><th className="px-4 py-3">Rule</th><th className="px-4 py-3">Window</th><th className="px-4 py-3">Usage</th><th className="px-4 py-3">State</th><th className="px-4 py-3 text-right">Actions</th></tr></thead>
+          <tbody className="divide-y divide-adm-line">{coupons.map(coupon => {
+            const exhausted = coupon.max_redemptions != null && coupon.redemption_count >= coupon.max_redemptions
+            const expired = coupon.ends_at && Date.parse(coupon.ends_at) <= Date.now()
+            const state = coupon.archived_at ? ['Archived', 'neutral'] : exhausted ? ['Limit reached', 'danger'] : expired ? ['Expired', 'warning'] : coupon.is_active ? ['Active', 'success'] : ['Inactive', 'neutral']
+            return <tr key={coupon.id} className="hover:bg-white/[0.025]"><td className="px-4 py-4"><p className="font-mono text-sm font-bold text-gold">{coupon.code}</p><p className="mt-1 max-w-xs text-xs text-white/45">{coupon.description || 'No description'}</p>{coupon.is_hunt && <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-blue">Voucher hunt</p>}</td><td className="px-4 py-4"><p className="font-semibold">{coupon.discount_type === 'percentage' ? `${Number(coupon.discount_value)}% off` : `₱${Number(coupon.discount_value).toLocaleString()} off`}</p><p className="mt-1 text-xs text-white/45">Minimum ₱{Number(coupon.min_spend || 0).toLocaleString()}</p></td><td className="px-4 py-4 text-xs text-white/55"><p>{new Date(coupon.starts_at).toLocaleString()}</p><p className="mt-1">{coupon.ends_at ? `to ${new Date(coupon.ends_at).toLocaleString()}` : 'No end date'}</p></td><td className="px-4 py-4 font-mono text-xs"><span className="font-bold text-white">{coupon.redemption_count}</span> / {coupon.max_redemptions ?? 'Unlimited'}</td><td className="px-4 py-4"><StatusPill tone={state[1]}>{state[0]}</StatusPill></td><td className="px-4 py-4"><div className="flex justify-end gap-2"><button disabled={working || Boolean(coupon.archived_at) || expired || exhausted} onClick={() => toggle(coupon)} className="min-h-10 rounded-adm-sm border border-adm-line bg-white/5 px-3 text-xs font-semibold disabled:opacity-35">{coupon.is_active ? 'Pause' : 'Activate'}</button><button disabled={working || Boolean(coupon.archived_at)} onClick={() => archive(coupon)} className="min-h-10 rounded-adm-sm border border-crimson/30 bg-crimson/10 px-3 text-xs font-semibold text-crimson disabled:opacity-35">Archive</button></div></td></tr>
+          })}</tbody>
+        </table></div>
       )}
+    </section>
 
-      {/* Create Coupon Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="w-full max-w-lg bg-adm-surface border border-adm-line rounded-adm p-6 shadow-2xl space-y-5 font-sans">
-            
-            <div className="flex items-center justify-between border-b border-adm-line pb-4">
-              <div>
-                <h3 className="font-serif font-bold text-xl text-white">Create a coupon</h3>
-                <p className="text-sm text-white/50 font-mono">Configure discount parameters and hunt clues</p>
-              </div>
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="text-white/60 hover:text-white text-xl p-2"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleCreate} className="space-y-4 text-sm font-mono">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs text-white/60 uppercase font-bold mb-1">Coupon Code *</label>
-                  <input
-                    type="text"
-                    required
-                    value={code}
-                    onChange={(e) => setCode(e.target.value.toUpperCase())}
-                    placeholder="e.g. MILAN20 or HUNT500"
-                    className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white placeholder:text-white/55 focus:border-amber outline-none min-h-[44px]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs text-white/60 uppercase font-bold mb-1">Discount Type</label>
-                  <select
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white outline-none min-h-[44px]"
-                  >
-                    <option value="percentage">Percentage OFF (%)</option>
-                    <option value="fixed">Fixed Amount OFF (₱)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs text-white/60 uppercase font-bold mb-1">Description</label>
-                <input
-                  type="text"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="e.g. 10% OFF authentic Italy chocolates & skincare"
-                  className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white placeholder:text-white/55 focus:border-amber outline-none min-h-[44px]"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-xs text-white/60 uppercase font-bold mb-1">
-                    Value ({type === 'percentage' ? '%' : '₱'})
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    min={1}
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs text-white/60 uppercase font-bold mb-1">Min Spend (₱)</label>
-                  <input
-                    type="number"
-                    min={0}
-                    value={minSpend}
-                    onChange={(e) => setMinSpend(e.target.value)}
-                    className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs text-white/60 uppercase font-bold mb-1">Max Uses</label>
-                  <input
-                    type="number"
-                    min={1}
-                    value={maxUses}
-                    onChange={(e) => setMaxUses(e.target.value)}
-                    className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3.5 py-2.5 text-white focus:border-amber outline-none min-h-[44px]"
-                  />
-                </div>
-              </div>
-
-              {/* Secret Hunt Toggle */}
-              <div className="p-3.5 rounded-adm-sm bg-forest/10 border border-forest/30 space-y-2">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={isHunt}
-                    onChange={(e) => setIsHunt(e.target.checked)}
-                    className="h-4 w-4 rounded accent-forest"
-                  />
-                  <span className="font-bold text-forest text-sm">Enable Secret "Voucher Hunt" Mode</span>
-                </label>
-                <p className="text-xs text-white/60 font-sans">
-                  Hides the code from standard list until customers solve the clue or type the secret code in the Voucher Hunt Center!
-                </p>
-
-                {isHunt && (
-                  <div className="pt-2">
-                    <label className="block text-xs text-white/60 uppercase font-bold mb-1">Secret Clue for Social Media</label>
-                    <textarea
-                      rows={2}
-                      value={clue}
-                      onChange={(e) => setClue(e.target.value)}
-                      placeholder="e.g. Clue: What Milan airport code equals 500 pesos off? Code = HUNT500"
-                      className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken p-2.5 text-white font-sans text-sm focus:border-forest outline-none"
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div className="flex gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateModal(false)}
-                  className="flex-1 rounded-adm-sm border border-adm-line py-3 font-bold text-white/60 hover:bg-white/5 transition-all"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 rounded-adm-sm bg-amber hover:bg-amber/90 py-3 font-bold text-navy shadow-lg transition-all"
-                >
-                  Create & Launch Coupon
-                </button>
-              </div>
-
-            </form>
-
-          </div>
+    {showCreate && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="coupon-create-title">
+      <form onSubmit={createCoupon} className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-adm border border-adm-line bg-adm-surface shadow-adm-float">
+        <header className="sticky top-0 z-10 flex items-center justify-between border-b border-adm-line bg-adm-surface px-5 py-4"><div><h2 id="coupon-create-title" className="font-serif text-xl font-bold">Create coupon</h2><p className="mt-1 text-xs text-white/45">New coupons default to inactive unless you deliberately publish them.</p></div><button type="button" onClick={() => setShowCreate(false)} aria-label="Close" className="flex h-11 w-11 items-center justify-center rounded-adm-sm hover:bg-white/5"><XIcon /></button></header>
+        <div className="grid gap-4 p-5 sm:grid-cols-2">
+          <Field label="Coupon code"><input className={`${input} font-mono uppercase`} value={form.code} onChange={update('code')} minLength="3" maxLength="40" required /></Field>
+          <Field label="Description"><input className={input} value={form.description} onChange={update('description')} required /></Field>
+          <Field label="Discount type"><select className={input} value={form.discount_type} onChange={update('discount_type')}><option value="percentage">Percentage</option><option value="fixed">Fixed PHP amount</option></select></Field>
+          <Field label={form.discount_type === 'percentage' ? 'Discount percent' : 'Discount amount (PHP)'}><input className={input} type="number" min="0.01" max={form.discount_type === 'percentage' ? '100' : undefined} step="0.01" value={form.discount_value} onChange={update('discount_value')} required /></Field>
+          <Field label="Minimum spend (PHP)"><input className={input} type="number" min="0" step="0.01" value={form.min_spend} onChange={update('min_spend')} required /></Field>
+          <Field label="Maximum redemptions"><input className={input} type="number" min="1" value={form.max_redemptions} onChange={update('max_redemptions')} placeholder="Blank means unlimited" /></Field>
+          <Field label="Starts at"><input className={input} type="datetime-local" value={form.starts_at} onChange={update('starts_at')} /></Field>
+          <Field label="Ends at"><input className={input} type="datetime-local" value={form.ends_at} onChange={update('ends_at')} /></Field>
+          <label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input type="checkbox" checked={form.is_hunt} onChange={update('is_hunt')} /> Voucher-hunt campaign</label>
+          <label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input type="checkbox" checked={form.is_active} onChange={update('is_active')} /> Activate immediately</label>
+          {form.is_hunt && <Field label="Public hunt clue" className="sm:col-span-2"><textarea className={`${input} min-h-20 resize-y`} value={form.clue} onChange={update('clue')} required /></Field>}
         </div>
-      )}
-
-    </div>
-  )
+        <footer className="sticky bottom-0 flex justify-end gap-2 border-t border-adm-line bg-adm-surface px-5 py-4"><button type="button" onClick={() => setShowCreate(false)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={working} className="min-h-11 rounded-adm-sm bg-gold px-5 text-sm font-bold text-adm-bg disabled:opacity-40">{working ? 'Saving…' : 'Save coupon'}</button></footer>
+      </form>
+    </div>}
+  </div>
 }
+
+function Field({ label, className = '', children }) { return <label className={`block text-xs font-semibold text-white/60 ${className}`}>{label}<span className="mt-1.5 block">{children}</span></label> }

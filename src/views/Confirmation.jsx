@@ -1,7 +1,7 @@
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 import { CrimsonButton, GhostButton, TrustBadge } from '../components/ui/bits'
-import { CheckIcon, SyncIcon } from '../components/ui/icons'
+import { CheckIcon, InboxIcon } from '../components/ui/icons'
 
 export default function Confirmation() {
   const { order, go } = useStore()
@@ -9,68 +9,52 @@ export default function Confirmation() {
   if (!order) {
     return (
       <main className="mx-auto max-w-lg px-4 py-20 text-center">
-        <p className="text-base text-navy-soft">Your pantry is missing out on all the Italian goodness. Let's fix that.</p>
+        <p className="text-base text-navy-soft">There is no current order request.</p>
         <GhostButton className="mt-6" onClick={() => go('home')}>Back to the shop</GhostButton>
       </main>
     )
   }
 
   return (
-    <main className="mx-auto max-w-lg px-4 pb-24 pt-14 text-center md:pb-16">
-      <div className="rise mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-forest text-white shadow-float relative before:absolute before:inset-0 before:animate-ping before:rounded-full before:bg-forest/40">
-        <CheckIcon size={30} className="relative z-10" />
+    <main className="mx-auto max-w-xl px-4 pb-24 pt-14 text-center md:pb-20 md:pt-20">
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-forest text-white shadow-card">
+        <CheckIcon size={30} />
       </div>
-      <h1 className="rise mt-5 font-serif text-3xl font-semibold tracking-tight" style={{ animationDelay: '80ms' }}>
-        Payment received
-      </h1>
-      <p className="rise mt-2 text-base text-navy-soft" style={{ animationDelay: '140ms' }}>
-        Order <span className="font-semibold text-navy">{order.id}</span> · {order.count}{' '}
-        {order.count === 1 ? 'item' : 'items'} · {peso(order.total)}
-        {order.wholesale && ' · wholesale'}
+      <h1 className="mt-5 font-serif text-3xl font-semibold tracking-tight">Order request received</h1>
+      <p className="mt-2 text-base text-navy-soft">
+        Reference <span className="font-semibold text-navy">{order.id}</span> · {order.count}{' '}
+        {order.count === 1 ? 'item' : 'items'} · estimated {peso(order.total)}
       </p>
 
-      <div className="rise mt-8 rounded-3xl border border-line bg-cream/90 backdrop-blur-md p-6 text-left shadow-card" style={{ animationDelay: '200ms' }}>
-        <h2 className="font-serif text-base font-semibold">Your order</h2>
-        <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-forest">
-          <SyncIcon size={15} /> Stock updated across every channel
+      <div className="mt-8 rounded-2xl border border-line bg-paper p-6 text-left shadow-sm sm:p-7">
+        <p className="flex items-center gap-2 text-sm font-semibold text-forest">
+          <InboxIcon size={16} /> Saved for staff review
         </p>
-        <p className="mt-1.5 text-sm leading-relaxed text-navy-soft">
-          Shopee, Lazada, the website, and the wholesale portal now show the same
-          counts. Nobody had to edit a spreadsheet.
+        <p className="mt-2 text-sm leading-relaxed text-navy-soft">
+          No payment was taken and stock has not been reserved yet. K2 staff will verify availability, confirm the final total, and contact you with the next step.
         </p>
-
-        <ol className="mt-6 space-y-0">
+        <ol className="mt-6 space-y-4">
           {[
-            ['Packing at the Manila warehouse', 'Today, within 4 hours', true],
-            ['Handed to courier', 'Tomorrow morning', false],
-            ['Delivered', 'Metro Manila: 1–2 days', false],
-          ].map(([label, when, active], i, arr) => (
-            <li key={label} className="relative flex gap-4 pb-6 last:pb-0">
-              {i < arr.length - 1 && (
-                <span className="absolute left-[7px] top-5 h-full w-px bg-line" aria-hidden="true" />
-              )}
-              <span
-                className={
-                  'relative mt-1 h-[15px] w-[15px] shrink-0 rounded-full border-2 ' +
-                  (active ? 'border-forest bg-forest' : 'border-line bg-paper')
-                }
-              />
-              <div>
-                <p className={'text-base font-semibold ' + (active ? '' : 'text-navy-soft')}>{label}</p>
-                <p className="text-sm text-navy-faint">{when}</p>
-              </div>
+            ['Request submitted', 'Complete'],
+            ['Stock and delivery review', 'Next'],
+            ['Payment instructions', 'After confirmation'],
+            ['Packing and courier handoff', 'After payment verification'],
+          ].map(([label, state], index) => (
+            <li key={label} className="flex gap-3">
+              <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${index === 0 ? 'bg-forest text-white' : 'border border-line bg-paper text-navy-soft'}`}>
+                {index + 1}
+              </span>
+              <div><p className="text-base font-semibold">{label}</p><p className="text-sm text-navy-soft">{state}</p></div>
             </li>
           ))}
         </ol>
       </div>
 
-      <div className="rise mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '260ms' }}>
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
         <CrimsonButton onClick={() => go('home')}>Continue shopping</CrimsonButton>
-        <GhostButton onClick={() => go('admin')}>See it land in the admin board</GhostButton>
+        <GhostButton onClick={() => go('pasabuy')}>Request an Italy item</GhostButton>
       </div>
-      <div className="mt-6 flex justify-center">
-        <TrustBadge>Official receipt sent to your email</TrustBadge>
-      </div>
+      <div className="mt-6 flex justify-center"><TrustBadge>Keep your reference number</TrustBadge></div>
     </main>
   )
 }

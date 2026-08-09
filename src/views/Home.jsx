@@ -1,46 +1,34 @@
-import { useStore } from '../context/StoreContext'
-import { Tricolor } from '../components/ui/bits'
+import { lazy, Suspense } from 'react'
 import Hero, { TrustRow } from '../components/home/Hero'
 import CategoryTiles from '../components/home/CategoryTiles'
 import NewArrivals from '../components/home/NewArrivals'
-import GlobeSection from '../components/home/GlobeSection'
-import HomeCatalog from '../components/home/HomeCatalog'
 import StorySection from '../components/home/StorySection'
 import { PasabuyBanner, WholesaleStrip } from '../components/home/Banners'
 import FaqSection from '../components/home/FaqSection'
-import Newsletter from '../components/home/Newsletter'
 
 import { Helmet } from 'react-helmet-async'
 
-export default function Home() {
-  const { query, category } = useStore()
+const GlobeSection = lazy(() => import('../components/home/GlobeSection'))
 
+export default function Home() {
   return (
-    <main className="pb-[calc(6rem+env(safe-area-inset-bottom,0px))] md:pb-12">
+    <main className="pb-[calc(4rem+env(safe-area-inset-bottom,0px))] md:pb-10">
       <Helmet>
         <title>K2 Jimzon | Premium Italian Imported Food & Ingredients in the Philippines</title>
-        <meta name="description" content="Discover K2 Jimzon, the premier importer of authentic Italian ingredients, espresso, and wholesale food in the Philippines. Shop our exclusive collection today." />
-        <meta name="keywords" content="Premium Italian imported food Philippines, Wholesale Italian ingredients Manila, Italian espresso, Authentic Italian groceries" />
+        <meta name="description" content="Browse K2 Jimzon's Italy-sourced catalog in the Philippines or submit a tracked Pasabuy sourcing request for a specific item." />
+        <meta name="keywords" content="Italian imported food Philippines, wholesale Italian ingredients Manila, Italian espresso, Italy Pasabuy" />
       </Helmet>
       <Hero />
       <TrustRow />
       <CategoryTiles />
-      
-      {/* Minimalist New Arrivals Section */}
-      <div className="w-full h-px bg-line max-w-7xl mx-auto mt-6" />
       <NewArrivals />
-
-      {/* Spin-the-globe customer reviews (social proof) */}
-      <GlobeSection />
-
-      <div className="w-full flex justify-center py-10"><Tricolor className="w-16" /></div>
-      
-      {/* Brought back the remaining sections */}
+      <Suspense fallback={<section className="store-atmosphere flex min-h-[28rem] items-center justify-center border-y border-line text-sm font-semibold text-navy-soft"><span className="store-loading-mark" aria-hidden />Loading review globe&hellip;</section>}>
+        <GlobeSection />
+      </Suspense>
       <StorySection />
       <PasabuyBanner />
       <WholesaleStrip />
       <FaqSection />
-      <Newsletter />
     </main>
   )
 }

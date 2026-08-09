@@ -1,37 +1,33 @@
 import { useStore } from '../../context/StoreContext'
+import { HomeIcon, GridIcon, PlaneIcon, BriefcaseIcon } from '../ui/icons'
 
-// Storefront bottom tab bar (mobile only). Quick-jump between the shopper pages.
-// Cart lives in the header, so it's not repeated here.
 export default function MobileNavBar() {
   const { view, go } = useStore()
-
+  const activeKey = view === 'product' || view === 'master_product' ? 'catalog' : view
   const navItems = [
-    { key: 'home', label: 'Home', icon: '🏠' },
-    { key: 'catalog', label: 'Shop', icon: '🛍️' },
-    { key: 'pasabuy', label: 'Pasabuy', icon: '✈️' },
-    { key: 'wholesale', label: 'Wholesale', icon: '🏷️' },
+    { key: 'home', label: 'Home', icon: HomeIcon },
+    { key: 'catalog', label: 'Shop', icon: GridIcon },
+    { key: 'pasabuy', label: 'Pasabuy', icon: PlaneIcon },
+    { key: 'wholesale', label: 'Wholesale', icon: BriefcaseIcon },
   ]
 
-  // Treat product pages as part of "Shop" so the tab stays highlighted.
-  const activeKey = (view === 'product' || view === 'master_product') ? 'catalog' : view
-
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0B132B]/95 backdrop-blur-md border-t border-white/10 px-2 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))] shadow-2xl">
-      <div className="flex items-center justify-around">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper/95 px-2 pb-[calc(0.35rem+env(safe-area-inset-bottom,0px))] pt-1.5 backdrop-blur-xl md:hidden" aria-label="Mobile storefront">
+      <div className="mx-auto flex max-w-lg items-center justify-around">
         {navItems.map((item) => {
           const isActive = activeKey === item.key
+          const ItemIcon = item.icon
           return (
             <button
               key={item.key}
               onClick={() => go(item.key)}
-              className={`flex flex-col items-center justify-center min-h-[46px] flex-1 px-1 py-1 transition-all active:scale-95 ${
-                isActive ? 'text-amber' : 'text-white/60 hover:text-white'
-              }`}
+              aria-current={isActive ? 'page' : undefined}
+              aria-label={item.key === 'catalog' ? 'Inventory & Catalog' : item.label}
+              className={`relative flex min-h-[48px] flex-1 flex-col items-center justify-center gap-0.5 px-1 transition-[transform,color] duration-150 active:scale-[0.97] ${isActive ? 'text-crimson' : 'text-navy-faint'}`}
             >
-              <span className="text-lg leading-none">{item.icon}</span>
-              <span className={`text-[10px] mt-0.5 ${isActive ? 'font-bold text-amber' : 'font-medium'}`}>
-                {item.label}
-              </span>
+              <ItemIcon size={19} />
+              <span className={`text-[10px] ${isActive ? 'font-bold' : 'font-semibold'}`}>{item.label}</span>
+              {isActive && <span className="absolute -top-1.5 h-0.5 w-7 rounded-full bg-crimson" />}
             </button>
           )
         })}

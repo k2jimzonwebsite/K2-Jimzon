@@ -126,9 +126,10 @@ function RemoteGlobeCmsProvider({ children }) {
     ])
     if (gpRes.error || rvRes.error) {
       setCmsError(`Could not load CMS data: ${(gpRes.error || rvRes.error).message}`)
-      // Fall back to catalog defaults so the globe still renders
-      setGlobeProducts(buildDefaultGlobeProducts())
-      setReviews(buildDefaultReviews())
+      // Production never substitutes illustrative local reviews for missing
+      // database content. An empty globe is more truthful than fake proof.
+      setGlobeProducts([])
+      setReviews([])
     } else {
       setCmsError(null)
       setGlobeProducts(
@@ -370,11 +371,15 @@ function LocalGlobeCmsProvider({ children }) {
 }
 
 export function GlobeCmsProvider({ children }) {
-  return isSupabaseConfigured ? (
-    <RemoteGlobeCmsProvider>{children}</RemoteGlobeCmsProvider>
-  ) : (
-    <LocalGlobeCmsProvider>{children}</LocalGlobeCmsProvider>
-  )
+  if (isSupabaseConfigured) return <RemoteGlobeCmsProvider>{children}</RemoteGlobeCmsProvider>
+  if (import.meta.env.DEV) return <LocalGlobeCmsProvider>{children}</LocalGlobeCmsProvider>
+  return <GlobeCmsContext.Provider value={{
+    globeProducts: [], reviews: [], enabledGlobeProducts: [], isLoading: false,
+    cmsError: 'Supabase is not configured.', toggleGlobeProduct: async () => {},
+    setGlobeProductImage: async () => {}, addReview: async () => {},
+    editReview: async () => {}, deleteReview: async () => {},
+    getProductReviews: () => [], signInAdmin: async () => {}, signOutAdmin: async () => {},
+  }}>{children}</GlobeCmsContext.Provider>
 }
 
 export const useGlobeCms = () => useContext(GlobeCmsContext)

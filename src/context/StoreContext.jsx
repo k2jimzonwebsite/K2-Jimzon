@@ -1,94 +1,22 @@
 import { createContext, useContext, useMemo, useState, useEffect, useRef } from 'react'
 import { flushSync } from 'react-dom'
 import { supabase } from '../lib/supabaseClient'
+import {
+  ADMIN_ROUTE,
+  buildAdminOAuthRedirectUrl,
+  clearAdminOAuthReturn,
+  consumeAdminOAuthReturn,
+  rememberAdminOAuthReturn,
+} from '../lib/adminAuthRedirect'
 import { products as localProducts } from '../data/products'
-import { verifyPassword, verifyPin, createSignedStaffToken } from '../lib/securityVault'
 
 const StoreContext = createContext(null)
 
-const INITIAL_REQUESTS = [
-  { id: 'PB-1042', item: 'Mulino Bianco Pan di Stelle, 2 boxes', status: 'Buying in Italy', eta: 'Flies 22 Jul' },
-  { id: 'PB-1039', item: 'Acqua di Parma shower gel', status: 'Quoted — ₱1,850', eta: 'Awaiting your go' },
-]
+const INITIAL_COUPONS = []
 
-const INITIAL_COUPONS = [
-  {
-    id: 'c1',
-    code: 'MILAN10',
-    description: '10% OFF your entire order of authentic Italian goods',
-    type: 'percentage',
-    value: 10,
-    minSpend: 1000,
-    maxUses: 100,
-    usedCount: 0,
-    expiryDate: '2026-12-31',
-    isHunt: false,
-    clue: '',
-    isActive: true,
-  },
-  {
-    id: 'c2',
-    code: 'PASABUY200',
-    description: '₱200 Flat Discount on all Italy Pasabuy & luxury items',
-    type: 'fixed',
-    value: 200,
-    minSpend: 2500,
-    maxUses: 50,
-    usedCount: 0,
-    expiryDate: '2026-12-31',
-    isHunt: false,
-    clue: '',
-    isActive: true,
-  },
-  {
-    id: 'c3',
-    code: 'HUNT500',
-    description: '🔍 Secret Italy Flight Drop: ₱500 OFF orders over ₱3,000!',
-    type: 'fixed',
-    value: 500,
-    minSpend: 3000,
-    maxUses: 20,
-    usedCount: 0,
-    expiryDate: '2026-08-30',
-    isHunt: true,
-    clue: 'Clue: What airport in Milan does Cousin Marco fly out of? (Malpensa code = HUNT500)',
-    isActive: true,
-  }
-]
-
-const INITIAL_CONVERSATIONS = [
-  {
-    id: 'c1',
-    customer: 'Maria Santos',
-    channel: 'WhatsApp',
-    time: '10:42 AM',
-    unread: true,
-    messages: [
-      { sender: 'customer', text: 'Hi! Do you have the KIKO Milano 3D Hydra Lipgloss in shade 05?' },
-    ],
-    intent: 'stock_check'
-  },
-  {
-    id: 'PB-1042',
-    customer: 'Cafe Roma (Wholesale)',
-    channel: 'Viber',
-    time: '9:15 AM',
-    unread: false,
-    messages: [
-      { sender: 'customer', text: 'Buongiorno, need 10 cases of Lavazza Oro beans by Friday.' },
-      { sender: 'agent', text: 'Hi Marco, yes we have 14 cases in the Manila warehouse. Sending the invoice now.' },
-      { sender: 'customer', text: 'Grazie! Can I also pasabuy some truffle oil next month?' }
-    ],
-    intent: 'pasabuy_request',
-    metadata: {
-      item: 'Lavazza Oro beans, 10 cases',
-      qty: 10,
-      budget: 'Open',
-      url: 'https://lavazza.it',
-      shipping: 'sea'
-    }
-  }
-]
+// Shown when a product has no photo of its own. Never borrow another
+// product's image just to fill the frame.
+const PLACEHOLDER_IMG = '/images/placeholder.svg'
 
 export function StoreProvider({ children }) {
   const [view, setView] = useState('home')
@@ -96,23 +24,16 @@ export function StoreProvider({ children }) {
   const [cart, setCart] = useState([])
   const [isWholesale, setIsWholesale] = useState(false)
   const [user, setUser] = useState(null)
-  const [isAdmin, setIsAdmin] = useState(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        return localStorage.getItem('k2_admin_session') === 'true'
-      } catch (e) {
-        return false
-      }
-    }
-    return false
-  })
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [authReady, setAuthReady] = useState(false)
   
   const [cartOpen, setCartOpen] = useState(false)
   const [order, setOrder] = useState(null)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('All')
-  const [requests, setRequests] = useState(INITIAL_REQUESTS)
-  const [conversations, setConversations] = useState(INITIAL_CONVERSATIONS)
+  const [requests, setRequests] = useState([])
+  const [conversations, setConversations] = useState([])
+  const [inboxState, setInboxState] = useState({ loading: true, error: '', phase2Ready: true })
   const [dbProducts, setDbProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -130,9 +51,9 @@ export function StoreProvider({ children }) {
   const [claimedVouchers, setClaimedVouchers] = useState(() => {
     try {
       const saved = localStorage.getItem('k2_claimed_vouchers')
-      return saved ? JSON.parse(saved) : ['MILAN10']
+      return saved ? JSON.parse(saved) : []
     } catch (e) {
-      return ['MILAN10']
+      return []
     }
   })
 
@@ -243,21 +164,22 @@ export function StoreProvider({ children }) {
 
   const loginWithGoogle = async () => {
     if (!supabase) {
-      alert("Supabase client is not active. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel environment variables.")
-      return false
+      return { ok: false, error: 'Backend not configured.' }
     }
+
+    rememberAdminOAuthReturn()
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: buildAdminOAuthRedirectUrl()
         }
       })
       if (error) throw error
-      return true
+      return { ok: true }
     } catch (err) {
-      alert("Google OAuth Sign-In Error: " + (err.message || 'Failed to initialize Google Auth.'))
-      return false
+      clearAdminOAuthReturn()
+      return { ok: false, error: err.message || 'Failed to initialize Google sign-in.' }
     }
   }
 
@@ -338,7 +260,7 @@ export function StoreProvider({ children }) {
     return { ok: true }
   }
 
-  // Super-admin invites a staff member (backend Edge Function does the work with fallback).
+  // Admin invites a staff member; the backend function re-checks the caller role.
   const inviteStaff = async (email, role = 'Staff') => {
     if (!supabase) return { ok: false, error: 'Backend not configured.' }
     const { data: { session } } = await supabase.auth.getSession()
@@ -354,10 +276,10 @@ export function StoreProvider({ children }) {
       .maybeSingle()
 
     if (existingProf) {
-      const { error: updateErr } = await supabase
-        .from('user_profiles')
-        .update({ role })
-        .eq('id', existingProf.id)
+      const { error: updateErr } = await supabase.rpc('set_user_role', {
+        p_user_id: existingProf.id,
+        p_role: role,
+      })
 
       if (updateErr) return { ok: false, error: updateErr.message }
       return { ok: true, note: `Updated role for ${cleanEmail} to ${role}.` }
@@ -379,7 +301,7 @@ export function StoreProvider({ children }) {
         if (/rate limit/i.test(errMsg)) {
           return { 
             ok: false, 
-            error: `Supabase email sending limit reached for this hour (free tier safety limit). Have ${cleanEmail} click 'Continue with Google' or log in once on the site, then refresh this page to make them Admin!` 
+            error: `Supabase email sending limit was reached. Wait for the limit to reset, or have ${cleanEmail} sign in once and then assign the intended role from Staff & roles.`
           }
         }
         return { ok: false, error: errMsg }
@@ -416,6 +338,8 @@ export function StoreProvider({ children }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       checkUser(session?.user)
+      if (session?.user) fetchConversations()
+      else setConversations([])
     })
 
     return () => {
@@ -426,7 +350,12 @@ export function StoreProvider({ children }) {
   }, [])
 
   const checkUser = async (authUser = null) => {
-    if (!supabase) return
+    if (!supabase) {
+      setIsAdmin(false)
+      setUser(null)
+      setAuthReady(true)
+      return
+    }
     try {
       const u = authUser || (await supabase.auth.getUser()).data?.user
       if (!u) { setIsAdmin(false); setUser(null); return }
@@ -440,21 +369,33 @@ export function StoreProvider({ children }) {
 
       const role = await resolveRole(u)
       setUser({ ...u, role })
+      if (isStaffRole(role)) {
+        // Supabase falls back to SITE_URL when redirectTo is not allowlisted.
+        // Recover only OAuth attempts that started from this admin login.
+        const returnTo = consumeAdminOAuthReturn()
+        if (returnTo === ADMIN_ROUTE && window.location.pathname !== ADMIN_ROUTE) {
+          window.location.replace(returnTo)
+        }
+      }
+
       if (isStaffRole(role) && mfaSatisfied) {
         setIsAdmin(true)
         setIsWholesale(true)
       } else {
         setIsAdmin(false)
+        if (!isStaffRole(role)) clearAdminOAuthReturn()
         if (role === 'VIP') setIsWholesale(true)
       }
     } catch (err) {
       console.warn('checkUser auth error:', err)
       setIsAdmin(false)
+    } finally {
+      setAuthReady(true)
     }
   }
 
   const fetchProducts = async () => {
-    if (!supabase) return;
+    if (!supabase) { setLoading(false); return }
     // Unlisted is fetched too: it must resolve by direct link even though it
     // never appears in browse surfaces. `listedProducts` below is what the
     // catalogue, search and category grids read.
@@ -470,46 +411,106 @@ export function StoreProvider({ children }) {
   }
 
   const fetchConversations = async () => {
-    if (!supabase) return;
+    if (!supabase) {
+      setConversations([])
+      setInboxState({ loading: false, error: 'Database connection is unavailable.', phase2Ready: false })
+      return
+    }
+    setInboxState(prev => ({ ...prev, loading: true, error: '' }))
     try {
-      const { data, error } = await supabase
+      const phase2Result = await supabase
         .from('conversations')
         .select(`
           id,
           customer_name,
           platform,
           status,
+          priority,
+          unread_count,
+          assigned_to,
+          response_due_at,
+          last_inbound_at,
+          last_read_at,
+          resolved_at,
           last_message_at,
+          assigned_profile:user_profiles!conversations_assigned_to_fkey (
+            id,
+            full_name,
+            email
+          ),
           messages (
             id,
             sender_type,
             content,
             is_draft,
+            delivery_status,
+            sent_at,
+            failure_reason,
             created_at
           )
         `)
         .order('last_message_at', { ascending: false })
 
-      if (!error && data && data.length > 0) {
-        const formatted = data.map(c => ({
+      let data = phase2Result.data
+      let phase2Ready = !phase2Result.error
+      let warning = ''
+
+      if (phase2Result.error) {
+        const legacyResult = await supabase
+          .from('conversations')
+          .select(`
+            id,
+            customer_name,
+            platform,
+            status,
+            last_message_at,
+            messages (id, sender_type, content, is_draft, created_at)
+          `)
+          .order('last_message_at', { ascending: false })
+
+        if (legacyResult.error) throw legacyResult.error
+        data = legacyResult.data
+        warning = 'Phase 2 inbox controls are not active in the database yet. Read-only legacy view is shown.'
+      }
+
+      const formatted = (data || []).map(c => ({
           id: c.id,
           customer: c.customer_name,
           channel: c.platform,
-          time: c.last_message_at ? new Date(c.last_message_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Now',
-          unread: c.status === 'Open',
+          status: c.status || 'Open',
+          priority: c.priority || 'normal',
+          unreadCount: Number(c.unread_count || 0),
+          unread: Number(c.unread_count || 0) > 0,
+          assignedTo: c.assigned_to || null,
+          assignedName: c.assigned_profile?.full_name || c.assigned_profile?.email || '',
+          responseDueAt: c.response_due_at || null,
+          lastInboundAt: c.last_inbound_at || null,
+          lastReadAt: c.last_read_at || null,
+          resolvedAt: c.resolved_at || null,
+          lastMessageAt: c.last_message_at || null,
+          time: c.last_message_at ? new Date(c.last_message_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'No activity',
           messages: (c.messages || [])
             .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
             .map(m => ({
-              sender: m.sender_type === 'Customer' ? 'customer' : 'agent',
+              id: m.id,
+              sender: m.sender_type === 'Customer' ? 'customer' : m.sender_type === 'AI' ? 'ai' : 'agent',
+              senderType: m.sender_type,
               text: m.content,
-              is_draft: m.is_draft
+              isDraft: Boolean(m.is_draft),
+              deliveryStatus: m.delivery_status || (m.sender_type === 'Customer' ? 'received' : 'internal_only'),
+              sentAt: m.sent_at || null,
+              failureReason: m.failure_reason || '',
+              createdAt: m.created_at,
             })),
           intent: 'general'
         }))
-        setConversations(formatted)
-      }
+
+      setConversations(formatted)
+      setInboxState({ loading: false, error: warning, phase2Ready })
     } catch (e) {
       console.warn("Failed to fetch conversations from Supabase:", e)
+      setConversations([])
+      setInboxState({ loading: false, error: e?.message || 'Inbox records could not be loaded.', phase2Ready: false })
     }
   }
 
@@ -518,6 +519,7 @@ export function StoreProvider({ children }) {
     // No live data yet: serve local mockups, but normalize them to the same
     // field shape DB products use so every consumer works either way.
     if (dbProducts.length === 0) {
+      if (!import.meta.env.DEV) return []
       return localProducts.map(lp => ({
         ...lp,
         sku: lp.id,
@@ -529,48 +531,52 @@ export function StoreProvider({ children }) {
         stock: lp.stock,
       }))
     }
-    return dbProducts.map((dbP, i) => {
-      // Find matching local product for rich UI assets (if any)
-      // First try by sku, then try matching the names if sku doesn't match perfectly
-      let localPMatch = localProducts.find(lp => lp.id.toLowerCase() === dbP.sku.toLowerCase() || (dbP.name && lp.name.includes(dbP.name)))
-      
-      // If we don't have a specific local match, dynamically cycle through our beautiful mockups!
-      let localP = localPMatch || localProducts[i % localProducts.length]
+    return dbProducts.map((dbP) => {
+      // Match a local mockup ONLY when it genuinely corresponds to this SKU.
+      // This used to fall back to localProducts[i % length], which handed a real
+      // product another product's photo, brand, description and usage guide —
+      // e.g. "Nutella Biscuits 304g" rendered as a Caffè Milano espresso bag.
+      // A wrong photo on a live listing is worse than a missing one.
+      const localP = localProducts.find(lp =>
+        lp.id.toLowerCase() === dbP.sku.toLowerCase()
+      ) || null
 
       return {
-        ...localP, // spread the rich UI data
-        category: dbP.origin?.startsWith('Shopee|') ? dbP.origin.split('|')[1] : (dbP.origin === 'Shopee' ? 'Shopee Imports' : localP.category),
+        ...(localP || {}), // rich UI data, only when it's really this product
+        category: dbP.origin?.startsWith('Shopee|') ? dbP.origin.split('|')[1] : (dbP.origin === 'Shopee' ? 'Shopee Imports' : (localP?.category ?? 'Uncategorised')),
         sku: dbP.sku,
         id: dbP.sku, // alias for legacy components
         name: dbP.name,
-        img: dbP.primary_image_url || dbP.secondary_images?.[0] || localP.img,
-        afterImage: dbP.lifestyle_images?.[0] || dbP.secondary_images?.[1] || localP.afterImage,
-        gallery: (dbP.secondary_images?.length ? dbP.secondary_images : null) || localP.gallery,
+        img: dbP.primary_image_url || dbP.secondary_images?.[0] || localP?.img || PLACEHOLDER_IMG,
+        afterImage: dbP.lifestyle_images?.[0] || dbP.secondary_images?.[1] || localP?.afterImage || null,
+        gallery: (dbP.secondary_images?.length ? dbP.secondary_images : null) || localP?.gallery || [],
         srp: Number(dbP.srp),
         retail: Number(dbP.srp), // alias
         wholesale_price: Number(dbP.wholesale_price),
         wholesale: Number(dbP.wholesale_price), // alias
         stock_available: dbP.stock_available,
         stock: dbP.stock_available, // alias
-        why_buy: dbP.why_buy || localP.whyBuy,
+        why_buy: dbP.why_buy || localP?.whyBuy || null,
         usage_instructions: dbP.usage_instructions,
-        ingredients: dbP.ingredients || localP.ingredients,
-        allergens: dbP.allergens || localP.allergens,
-        net_weight: dbP.net_weight || localP.net_weight,
-        package_type: dbP.package_type || localP.package_type,
-        storage_instructions: dbP.storage_instructions || localP.storage_instructions,
-        finished_product_details: dbP.finished_product_details || localP.finished_product_details,
-        brand_id: dbP.brand_id || localP.brand_id,
-        country_of_origin: dbP.country_of_origin || localP.country_of_origin,
-        barcode: dbP.barcode || localP.barcode,
-        product_video_url: dbP.product_video_url || localP.product_video_url,
-        guide: localP.guide,
-        pairings: (dbP.pairings?.length ? dbP.pairings : localP.pairings) || [],
-        description: dbP.description || dbP.short_description || localP.description,
+        ingredients: dbP.ingredients || localP?.ingredients || null,
+        allergens: dbP.allergens || localP?.allergens || null,
+        net_weight: dbP.net_weight || localP?.net_weight || null,
+        package_type: dbP.package_type || localP?.package_type || null,
+        storage_instructions: dbP.storage_instructions || localP?.storage_instructions || null,
+        finished_product_details: dbP.finished_product_details || localP?.finished_product_details || null,
+        brand_id: dbP.brand_id || localP?.brand_id || null,
+        country_of_origin: dbP.country_of_origin || localP?.country_of_origin || null,
+        barcode: dbP.barcode || localP?.barcode || null,
+        product_video_url: dbP.product_video_url || localP?.product_video_url || null,
+        guide: localP?.guide ?? null,
+        pairings: (dbP.pairings?.length ? dbP.pairings : localP?.pairings) || [],
+        description: dbP.description || dbP.short_description || localP?.description || null,
         short_description: dbP.short_description,
         subcategory: dbP.subcategory,
         seo_keywords: dbP.seo_keywords || [],
-        why_rare: dbP.why_rare || localP.whyRare,
+        why_rare: dbP.why_rare || localP?.whyRare || null,
+        hue: localP?.hue ?? 40,
+        tag: localP?.tag ?? null,
         status: dbP.status,
       }
     })
@@ -648,108 +654,82 @@ export function StoreProvider({ children }) {
     )
 
   const sendMessage = async (convoId, text, sender) => {
-    setConversations(prev => prev.map(c => {
-      if (c.id === convoId) {
-        return {
-          ...c,
-          unread: sender === 'customer',
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          messages: [...c.messages, { sender, text }]
-        }
-      }
-      return c
-    }))
+    if (!supabase) return { ok: false, error: 'Database connection is unavailable.' }
+    const isUuid = typeof convoId === 'string' && convoId.includes('-') && convoId.length > 10
+    if (!isUuid) return { ok: false, error: 'This conversation is not a persisted database record.' }
 
-    if (supabase) {
-      try {
-        const isUuid = typeof convoId === 'string' && convoId.includes('-') && convoId.length > 10;
-        if (isUuid) {
-          await supabase.from('messages').insert({
-            conversation_id: convoId,
-            sender_type: sender === 'customer' ? 'Customer' : 'Admin',
-            content: text
-          })
-          await supabase.from('conversations').update({
-            last_message_at: new Date().toISOString()
-          }).eq('id', convoId)
-        }
-      } catch (err) {
-        console.warn("Supabase message insert warning:", err)
-      }
-    }
+    if (sender === 'customer') return { ok: false, error: 'Customer messaging is not connected.' }
+    const { error: messageError } = await supabase.rpc('append_internal_message', {
+      p_conversation_id: convoId,
+      p_content: text,
+    })
+    if (messageError) return { ok: false, error: messageError.message }
+    await fetchConversations()
+    return { ok: true }
   }
 
-  const createConversation = async (customer, channel, text, intent = 'general', metadata = null, providedId = null) => {
-    const id = providedId || ('c' + Date.now())
-    setConversations(prev => [
-      {
-        id,
-        customer,
-        channel,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        unread: true,
-        messages: [{ sender: 'customer', text }],
-        intent,
-        metadata
-      },
-      ...prev
-    ])
+  const markConversationRead = async (convoId) => {
+    if (!supabase) return { ok: false, error: 'Database connection is unavailable.' }
+    if (!inboxState.phase2Ready) return { ok: false, error: 'Phase 2 inbox controls are not active yet.' }
 
-    if (supabase) {
-      try {
-        const validPlatforms = ['WhatsApp', 'Viber', 'Messenger', 'Instagram', 'TikTok', 'Shopee', 'Lazada', 'Website', 'Pasabuy']
-        const platform = validPlatforms.includes(channel) ? channel : 'Website'
+    const { error } = await supabase.rpc('mark_conversation_read', {
+      p_conversation_id: convoId,
+    })
+    if (error) return { ok: false, error: error.message }
 
-        const { data: newConvo, error: cErr } = await supabase
-          .from('conversations')
-          .insert({
-            customer_name: customer,
-            platform,
-            status: 'Open'
-          })
-          .select()
-          .single()
-
-        if (!cErr && newConvo) {
-          await supabase.from('messages').insert({
-            conversation_id: newConvo.id,
-            sender_type: 'Customer',
-            content: text
-          })
-        }
-      } catch (err) {
-        console.warn("Supabase create conversation warning:", err)
-      }
-    }
-
-    return id
+    setConversations(prev => prev.map(c => c.id === convoId
+      ? { ...c, unread: false, unreadCount: 0, lastReadAt: new Date().toISOString() }
+      : c))
+    return { ok: true }
   }
 
-  const addRequest = (payload) => {
-    // legacy support if string is passed
-    const data = typeof payload === 'string' ? { item: payload, qty: 1 } : payload;
-    const reqId = 'PB-' + String(1043 + requests.length)
-    
-    setRequests((prev) => [
-      {
-        id: reqId,
-        item: data.item,
-        status: 'Request received',
-        eta: data.shipping === 'air' ? 'Quote within 12h' : 'Quote within 24h',
-      },
-      ...prev,
-    ])
+  const updateConversationWorkflow = async (convoId, workflow) => {
+    if (!supabase) return { ok: false, error: 'Database connection is unavailable.' }
+    if (!inboxState.phase2Ready) return { ok: false, error: 'Phase 2 inbox controls are not active yet.' }
 
-    const text = `New Pasabuy Sourcing Request:
-• Item: ${data.item}
-• Quantity: ${data.qty || 1}
-• Target Budget: ${data.budget ? '₱' + data.budget : 'None specified'}
-• Reference URL: ${data.url || 'None'}
-• Shipping: ${data.shipping === 'air' ? 'Air Freight (~14 days)' : 'Sea Cargo (~45 days)'}
-• Alternatives OK: ${data.alternatives ? 'Yes' : 'No'}
-• Attachments: ${data.image ? data.image.name : 'None'}`
+    const { error } = await supabase.rpc('update_conversation_workflow', {
+      p_conversation_id: convoId,
+      p_status: workflow.status,
+      p_priority: workflow.priority,
+      p_assigned_to: workflow.assignedTo || null,
+      p_response_due_at: workflow.responseDueAt || null,
+      p_reason: workflow.reason?.trim() || null,
+    })
+    if (error) return { ok: false, error: error.message }
 
-    createConversation('Pasabuy Client', 'Pasabuy', text, 'pasabuy_request', data, reqId)
+    await fetchConversations()
+    return { ok: true }
+  }
+
+  const addRequest = async (payload) => {
+    if (!supabase) {
+      return { ok: false, error: 'Request service is not configured yet. Please contact K2 Jimzon directly.' }
+    }
+
+    const { data, error } = await supabase.rpc('submit_pasabuy_request', {
+      p_customer_name: payload.customerName?.trim(),
+      p_customer_email: payload.email?.trim() || null,
+      p_customer_phone: payload.phone?.trim() || null,
+      p_item_title: payload.item?.trim(),
+      p_reference_url: payload.url?.trim() || null,
+      p_quantity: Number(payload.qty) || 1,
+      p_target_budget_php: payload.budget ? Number(payload.budget) : null,
+      p_shipping_preference: payload.shipping || 'sea',
+      p_alternatives_allowed: Boolean(payload.alternatives),
+      p_customer_notes: payload.notes?.trim() || null,
+    })
+
+    if (error) return { ok: false, error: error.message || 'The request could not be saved.' }
+    const saved = Array.isArray(data) ? data[0] : data
+    if (!saved?.public_reference) return { ok: false, error: 'The request was not confirmed by the server.' }
+
+    setRequests(prev => [{
+      id: saved.public_reference,
+      item: payload.item.trim(),
+      status: 'Request received',
+      eta: 'Quote review within 24 hours',
+    }, ...prev])
+    return { ok: true, request: saved }
   }
 
   const totals = useMemo(() => {
@@ -783,74 +763,64 @@ export function StoreProvider({ children }) {
 
   const placingOrderRef = useRef(false)
 
-  const placeOrder = async () => {
+  const placeOrder = async (customerDetails = {}) => {
     // Idempotency guard: block double-submit (double-click / slow network) so a
     // single checkout can't create duplicate orders or double-decrement stock.
     if (placingOrderRef.current) return
     placingOrderRef.current = true
     try {
-      await runPlaceOrder()
+      return await runPlaceOrderRequest(customerDetails)
     } finally {
       placingOrderRef.current = false
     }
   }
 
-  const runPlaceOrder = async () => {
-    // Best available buyer identity: profile name → account name → email handle → guest
-    const buyerName = user?.user_metadata?.full_name || user?.name || (user?.email ? user.email.split('@')[0] : 'Website Guest')
-    const orderLines = totals.lines.map(l => ({
-      sku: l.id,
-      quantity: l.qty,
-      channel_source: isWholesale ? 'website_vip' : 'website_retail',
-      fulfillment_method: isWholesale ? 'Lalamove / Freight' : 'Standard Courier',
-      order_status: 'Pending',
-      payment_status: 'Unpaid',
-      customer_name: buyerName,
-      customer_email: user?.email || null,
-      total_amount: l.amount,
-    }))
-
+  const runPlaceOrderRequest = async (customerDetails) => {
     if (!supabase) {
-      alert("Checkout failed: Supabase is not configured.");
-      return;
-    }
-    
-    // Simulate complex transaction by updating stock & inserting orders
-    let success = true
-    for (const line of orderLines) {
-      const { error: lockError } = await supabase.rpc('decrement_stock', { p_sku: line.sku, p_quantity: line.quantity })
-      if (lockError) {
-        alert("Sorry, " + line.sku + " ran out of stock while you were checking out!")
-        return 
-      }
+      return { ok: false, error: 'Order requests are not configured yet. Please contact K2 Jimzon directly.' }
     }
 
-    const { data: insertedOrders, error: insertError } = await supabase.from('orders').insert(orderLines).select()
-    
-    if (insertError) {
-      alert("Something went wrong saving your order.")
-      return
-    }
+    const items = totals.lines.map(line => ({ sku: line.id, quantity: line.qty }))
+    const requestKey = typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `web-${Date.now()}-${Math.random().toString(16).slice(2)}`
 
-    const firstOrderId = insertedOrders?.[0]?.id?.split('-')[0] || String(Math.floor(20000 + Math.random() * 70000))
+    const { data, error } = await supabase.rpc('submit_order_request', {
+      p_customer_name: customerDetails.name?.trim(),
+      p_customer_email: customerDetails.email?.trim() || null,
+      p_customer_phone: customerDetails.phone?.trim() || null,
+      p_delivery_address: customerDetails.address?.trim(),
+      p_fulfillment_method: customerDetails.fulfillmentMethod || 'Metro Manila delivery',
+      p_customer_note: customerDetails.note?.trim() || null,
+      p_items: items,
+      p_idempotency_key: requestKey,
+    })
 
-    if (!document.startViewTransition) {
-      setOrder({ id: 'K2-' + firstOrderId, total: totals.finalTotal || totals.subtotal, count: totals.count, wholesale: isWholesale, coupon: appliedCoupon })
+    if (error) return { ok: false, error: error.message || 'The order request could not be saved.' }
+    const saved = Array.isArray(data) ? data[0] : data
+    if (!saved?.public_reference) return { ok: false, error: 'The server did not confirm the request.' }
+
+    const finish = () => {
+      setOrder({
+        id: saved.public_reference,
+        total: Number(saved.total_amount || totals.finalTotal || totals.subtotal),
+        count: totals.count,
+        wholesale: false,
+        status: saved.status,
+        paymentStatus: saved.payment_status,
+      })
       setCart([])
       setAppliedCoupon(null)
       setView('confirmation')
       window.scrollTo(0, 0)
-      return
     }
-    document.startViewTransition(() => {
-      flushSync(() => {
-        setOrder({ id: 'K2-' + firstOrderId, total: totals.finalTotal || totals.subtotal, count: totals.count, wholesale: isWholesale, coupon: appliedCoupon })
-        setCart([])
-        setAppliedCoupon(null)
-        setView('confirmation')
-        window.scrollTo(0, 0)
-      })
-    })
+
+    if (document.startViewTransition) {
+      document.startViewTransition(() => flushSync(finish))
+    } else {
+      finish()
+    }
+    return { ok: true, order: saved }
   }
 
   const value = useMemo(() => ({
@@ -866,6 +836,7 @@ export function StoreProvider({ children }) {
     isWholesale,
     setIsWholesale,
     isAdmin,
+    authReady,
     loginAdmin,
     loginWithGoogle,
     logoutAdmin,
@@ -883,8 +854,10 @@ export function StoreProvider({ children }) {
     requests,
     addRequest,
     conversations,
+    inboxState,
     sendMessage,
-    createConversation,
+    markConversationRead,
+    updateConversationWorkflow,
     products, // Full set incl. Unlisted — for lookups by id, cart, admin
     listedProducts, // Browse set — Unlisted removed. Use this for any grid.
     loading,
@@ -901,7 +874,7 @@ export function StoreProvider({ children }) {
     applyCoupon,
     removeCoupon,
     ...totals,
-  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, user, order, query, category, requests, conversations, products, listedProducts, loading, totals, isDark, coupons, appliedCoupon, claimedVouchers])
+  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, requests, conversations, inboxState, products, listedProducts, loading, totals, isDark, coupons, appliedCoupon, claimedVouchers])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

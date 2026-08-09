@@ -10,7 +10,7 @@ const EXAMPLES = [
   'Where do I start packing my box?',
   "What does 'Low-stock' mean?",
   'Where do cargo boxes arrive?',
-  'How do I add a staff PIN?',
+  'How do I invite a staff account?',
 ]
 
 export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate }) {

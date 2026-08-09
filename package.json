@@ -5,7 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "dev:admin": "vite --mode admin --port 5174",
+    "dev:storefront": "vite --mode storefront --port 5173",
+    "build": "vite build && node scripts/verify-build-boundary.mjs auto",
+    "build:storefront": "vite build --mode storefront && node scripts/verify-build-boundary.mjs storefront",
+    "build:admin": "vite build --mode admin && node scripts/verify-build-boundary.mjs admin",
     "preview": "vite preview",
     "check:imports": "node scripts/check-imports.mjs",
     "prebuild": "node scripts/check-imports.mjs",

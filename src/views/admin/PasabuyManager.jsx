@@ -1,402 +1,290 @@
-import { useState, useEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { peso } from '../../data/products'
-import { useStore } from '../../context/StoreContext'
 import { supabase } from '../../lib/supabaseClient'
+import { ArrowIcon, InboxIcon } from '../../components/ui/icons'
+import {
+  EmptyState,
+  MetricRail,
+  SectionHeading,
+  StateBanner,
+  StatusPill,
+  WorkspaceIntro,
+  primaryButton,
+  secondaryButton,
+} from './AdminWorkspaceUi'
 
-const INITIAL_PASABUY_REQUESTS = [
-  {
-    id: 'PB-1042',
-    customer_name: 'Maria Santos',
-    contact_number: '+63 917 555 0192',
-    channel: 'Viber',
-    item_title: 'Mulino Bianco Pan di Stelle (500g)',
-    quantity: 6,
-    reference_url: 'https://mulinobianco.it/pan-di-stelle',
-    notes: 'Please check if they have the limited edition holiday tin in Milan supermarkets.',
-    target_budget_eur: 18.0,
-    cost_eur: 3.5,
-    weight_kg: 0.5,
-    shipping_method: 'air', // 'air' | 'sea'
-    exchange_rate: 62.5,
-    air_rate_eur_per_kg: 14.0,
-    customs_tax_percent: 12,
-    quoted_price_php: 450,
-    status: 'Buying in Italy', // 'Pending Quote' | 'Quoted' | 'Approved' | 'Buying in Italy' | 'In Flight' | 'Delivered'
-    created_at: '2026-07-21'
-  },
-  {
-    id: 'PB-1043',
-    customer_name: 'Chef Marco Rossi (Cafe Roma)',
-    contact_number: '+63 918 888 2026',
-    channel: 'WhatsApp',
-    item_title: 'Urbani Tartufi White Truffle Oil (250ml)',
-    quantity: 12,
-    reference_url: 'https://urbanitartufi.it',
-    notes: 'Need authentic product certificates for restaurant compliance.',
-    target_budget_eur: 150.0,
-    cost_eur: 12.0,
-    weight_kg: 0.4,
-    shipping_method: 'air',
-    exchange_rate: 62.5,
-    air_rate_eur_per_kg: 14.0,
-    customs_tax_percent: 12,
-    quoted_price_php: 1480,
-    status: 'Quoted',
-    created_at: '2026-07-22'
-  },
-  {
-    id: 'PB-1044',
-    customer_name: 'Elena Guerrero',
-    contact_number: '+63 920 111 4455',
-    channel: 'Website Form',
-    item_title: 'KIKO Milano 3D Hydra Lipgloss Shade 20 & 21',
-    quantity: 4,
-    reference_url: 'https://kikocosmetics.com',
-    notes: 'Can you include original Rinascente Milan receipt?',
-    target_budget_eur: 40.0,
-    cost_eur: 11.0,
-    weight_kg: 0.1,
-    shipping_method: 'air',
-    exchange_rate: 62.5,
-    air_rate_eur_per_kg: 14.0,
-    customs_tax_percent: 12,
-    quoted_price_php: 1150,
-    status: 'Pending Quote',
-    created_at: '2026-07-22'
-  }
-]
+const STATUS_LABELS = {
+  request_received: 'Request received', researching: 'Researching', quoted: 'Quoted',
+  approved: 'Approved for sourcing', purchasing: 'Purchasing', purchased: 'Purchased',
+  in_transit: 'In transit', arrived: 'Arrived for receiving', delivered: 'Delivered',
+  expired: 'Quote expired', cancelled: 'Cancelled',
+}
+
+const NEXT = {
+  request_received: ['researching', 'cancelled'],
+  researching: ['quoted', 'cancelled'],
+  quoted: ['approved', 'researching', 'expired', 'cancelled'],
+  approved: ['purchasing', 'cancelled'],
+  purchasing: ['purchased', 'cancelled'],
+  purchased: ['in_transit'], in_transit: ['arrived'], arrived: ['delivered'],
+}
+
+const CLOSED = new Set(['delivered', 'expired', 'cancelled'])
+const REVIEW = new Set(['request_received', 'researching'])
+const SOURCING = new Set(['approved', 'purchasing', 'purchased', 'in_transit', 'arrived'])
+
+const DEFAULT_QUOTE = {
+  itemCost: '10', fxRate: '62.50', fxSource: '', weightKg: '0.5',
+  shippingMethod: 'air', airRate: '14', seaRate: '4', customsPercent: '12',
+  handlingPhp: '0', marginPercent: '40', finalPrice: '', validDays: '7',
+}
+
+function latestQuoteFor(request) {
+  return [...(request?.pasabuy_quotes || [])].sort((a, b) => Number(b.version) - Number(a.version))[0] || null
+}
+
+function ageLabel(value) {
+  if (!value) return 'Age unavailable'
+  const hours = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / 3600000))
+  if (hours < 24) return `${hours}h old`
+  return `${Math.floor(hours / 24)}d old`
+}
+
+function quoteDeadline(quote) {
+  if (!quote?.valid_until) return null
+  const delta = new Date(quote.valid_until).getTime() - Date.now()
+  const days = Math.ceil(Math.abs(delta) / 86400000)
+  return delta < 0 ? { expired: true, label: `Expired ${days}d ago` } : { expired: false, label: `${days}d remaining` }
+}
+
+function statusTone(status) {
+  if (['expired', 'cancelled'].includes(status)) return 'danger'
+  if (['delivered'].includes(status)) return 'success'
+  if (['quoted', 'approved', 'purchasing'].includes(status)) return 'warning'
+  if (['purchased', 'in_transit', 'arrived'].includes(status)) return 'info'
+  return 'neutral'
+}
 
 export default function PasabuyManager() {
-  const { conversations } = useStore()
-  const [requests, setRequests] = useState(() => {
-    const saved = localStorage.getItem('k2_pasabuy_requests')
-    return saved ? JSON.parse(saved) : INITIAL_PASABUY_REQUESTS
+  const [requests, setRequests] = useState([])
+  const [selectedId, setSelectedId] = useState(null)
+  const [filter, setFilter] = useState('open')
+  const [quote, setQuote] = useState(DEFAULT_QUOTE)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
+
+  const load = useCallback(async () => {
+    if (!supabase) { setError('Supabase is not configured.'); setLoading(false); return }
+    const { data, error: loadError } = await supabase
+      .from('pasabuy_requests')
+      .select('*, pasabuy_quotes(*)')
+      .order('created_at', { ascending: false })
+    if (loadError) setError(loadError.message)
+    else {
+      setRequests(data || [])
+      setSelectedId(current => current || data?.[0]?.id || null)
+    }
+    setLoading(false)
+  }, [])
+
+  useEffect(() => {
+    load()
+    if (!supabase) return undefined
+    const channel = supabase.channel('admin:pasabuy')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'pasabuy_requests' }, load)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'pasabuy_quotes' }, load)
+      .subscribe()
+    return () => supabase.removeChannel(channel)
+  }, [load])
+
+  const selected = requests.find(request => request.id === selectedId) || null
+  const latestQuote = useMemo(() => latestQuoteFor(selected), [selected])
+
+  useEffect(() => {
+    if (!latestQuote) { setQuote(DEFAULT_QUOTE); return }
+    setQuote({
+      itemCost: String(latestQuote.item_cost_foreign), fxRate: String(latestQuote.fx_rate),
+      fxSource: latestQuote.fx_source || '', weightKg: String(latestQuote.weight_kg),
+      shippingMethod: latestQuote.shipping_method,
+      airRate: latestQuote.shipping_method === 'air' ? String(latestQuote.freight_rate_foreign_per_kg) : '14',
+      seaRate: latestQuote.shipping_method === 'sea' ? String(latestQuote.freight_rate_foreign_per_kg) : '4',
+      customsPercent: String(latestQuote.customs_tax_percent), handlingPhp: String(latestQuote.handling_php),
+      marginPercent: String(latestQuote.margin_percent), finalPrice: String(latestQuote.final_price_php), validDays: '7',
+    })
+  }, [selectedId, latestQuote?.id])
+
+  const numbers = {
+    itemCost: Number(quote.itemCost) || 0, fxRate: Number(quote.fxRate) || 0,
+    weight: Number(quote.weightKg) || 0,
+    rate: Number(quote.shippingMethod === 'air' ? quote.airRate : quote.seaRate) || 0,
+    customs: Number(quote.customsPercent) || 0, handling: Number(quote.handlingPhp) || 0,
+    margin: Number(quote.marginPercent) || 0,
+  }
+  const itemPhp = numbers.itemCost * numbers.fxRate
+  const freightPhp = numbers.weight * numbers.rate * numbers.fxRate
+  const taxPhp = (itemPhp + freightPhp) * (numbers.customs / 100)
+  const landed = itemPhp + freightPhp + taxPhp + numbers.handling
+  const suggested = Math.ceil(landed * (1 + numbers.margin / 100))
+  const finalPrice = quote.finalPrice === '' ? suggested : Number(quote.finalPrice) || 0
+
+  const filtered = requests.filter(request => {
+    if (filter === 'all') return true
+    if (filter === 'closed') return CLOSED.has(request.status)
+    if (filter === 'review') return REVIEW.has(request.status)
+    if (filter === 'sourcing') return SOURCING.has(request.status)
+    return !CLOSED.has(request.status)
   })
+  const openRequests = requests.filter(request => !CLOSED.has(request.status))
+  const expiringQuotes = openRequests.filter(request => {
+    const deadline = quoteDeadline(latestQuoteFor(request))
+    if (!deadline || deadline.expired) return false
+    return new Date(latestQuoteFor(request).valid_until).getTime() - Date.now() <= 3 * 86400000
+  }).length
+  const oldestOpenHours = openRequests.reduce((max, request) => Math.max(max, Math.floor((Date.now() - new Date(request.created_at || Date.now()).getTime()) / 3600000)), 0)
 
-  const [selectedReq, setSelectedReq] = useState(null)
-  const [filterStatus, setFilterStatus] = useState('All')
-  const [quoteSuccess, setQuoteSuccess] = useState(false)
+  const transition = async toStatus => {
+    if (!selected || !supabase) return
+    setSaving(true); setError(''); setNotice('')
+    const { error: transitionError } = await supabase.rpc('transition_pasabuy_request', {
+      p_request_id: selected.id, p_to_status: toStatus, p_reason: 'Updated from admin operations',
+    })
+    setSaving(false)
+    if (transitionError) { setError(transitionError.message); return }
+    setNotice(`Moved to ${STATUS_LABELS[toStatus]}.`)
+    await load()
+  }
 
-  // Quotation Engine Form State
-  const [costEur, setCostEur] = useState(10)
-  const [weightKg, setWeightKg] = useState(0.5)
-  const [shippingMethod, setShippingMethod] = useState('air')
-  const [exchangeRate, setExchangeRate] = useState(62.5)
-  const [marginPercent, setMarginPercent] = useState(40)
-  const [customPricePhp, setCustomPricePhp] = useState('')
+  const saveQuote = async () => {
+    if (!selected || !supabase) return
+    if (!quote.fxSource.trim()) { setError('Enter the FX source used for this quote.'); return }
+    if (finalPrice < landed) { setError('Final price cannot be below the estimated landed cost.'); return }
+    setSaving(true); setError(''); setNotice('')
+    const validUntil = new Date(Date.now() + (Number(quote.validDays) || 7) * 86400000).toISOString()
+    const { error: quoteError } = await supabase.rpc('save_pasabuy_quote', {
+      p_request_id: selected.id, p_item_cost_foreign: numbers.itemCost,
+      p_fx_rate: numbers.fxRate, p_fx_source: quote.fxSource.trim(), p_fx_captured_at: new Date().toISOString(),
+      p_weight_kg: numbers.weight, p_shipping_method: quote.shippingMethod,
+      p_freight_rate_foreign_per_kg: numbers.rate, p_customs_tax_percent: numbers.customs,
+      p_handling_php: numbers.handling, p_margin_percent: numbers.margin,
+      p_final_price_php: finalPrice, p_valid_until: validUntil,
+    })
+    setSaving(false)
+    if (quoteError) { setError(quoteError.message); return }
+    setNotice('Quote version saved. It has not been sent to the customer.')
+    await load()
+  }
 
-  useEffect(() => {
-    localStorage.setItem('k2_pasabuy_requests', JSON.stringify(requests))
-  }, [requests])
-
-  useEffect(() => {
-    if (selectedReq) {
-      setCostEur(selectedReq.cost_eur || 10)
-      setWeightKg(selectedReq.weight_kg || 0.5)
-      setShippingMethod(selectedReq.shipping_method || 'air')
-      setExchangeRate(selectedReq.exchange_rate || 62.5)
-      setCustomPricePhp(selectedReq.quoted_price_php ? String(selectedReq.quoted_price_php) : '')
-    }
-  }, [selectedReq])
-
-  // Calculated Landed Cost Logic
-  const itemCostPhp = costEur * exchangeRate
-  const freightCostEur = shippingMethod === 'air' ? weightKg * 14.0 : weightKg * 4.0
-  const freightCostPhp = freightCostEur * exchangeRate
-  const customsTaxPhp = (itemCostPhp + freightCostPhp) * 0.12
-  const totalLandedCostPhp = itemCostPhp + freightCostPhp + customsTaxPhp
-  const suggestedSellingPricePhp = Math.ceil(totalLandedCostPhp * (1 + marginPercent / 100))
-  const finalPricePhp = customPricePhp ? Number(customPricePhp) : suggestedSellingPricePhp
-  const calculatedMarginPercent = totalLandedCostPhp > 0 ? (((finalPricePhp - totalLandedCostPhp) / finalPricePhp) * 100).toFixed(1) : 0
-
-  const handleUpdateStatus = (reqId, newStatus) => {
-    setRequests(prev => prev.map(r => r.id === reqId ? { ...r, status: newStatus } : r))
-    if (selectedReq && selectedReq.id === reqId) {
-      setSelectedReq(prev => ({ ...prev, status: newStatus }))
+  const copyQuote = async () => {
+    if (!selected || !latestQuote) return
+    const message = `K2 Jimzon Pasabuy ${selected.public_reference}\n${selected.item_title}\nQuantity: ${selected.quantity}\nQuoted price: ${peso(latestQuote.final_price_php)}\nValid until: ${latestQuote.valid_until ? new Date(latestQuote.valid_until).toLocaleDateString() : 'confirm with K2'}\nReply to K2 Jimzon to approve. No payment has been requested yet.`
+    try {
+      await navigator.clipboard.writeText(message)
+      setNotice('Quote message copied. Send it through the customer verified contact channel, then record their response.')
+    } catch {
+      setError('Clipboard access was blocked. Copy the quote details manually.')
     }
   }
 
-  const handleSaveQuote = () => {
-    if (!selectedReq) return
-    setRequests(prev => prev.map(r => {
-      if (r.id === selectedReq.id) {
-        return {
-          ...r,
-          cost_eur: costEur,
-          weight_kg: weightKg,
-          shipping_method: shippingMethod,
-          exchange_rate: exchangeRate,
-          quoted_price_php: finalPricePhp,
-          status: r.status === 'Pending Quote' ? 'Quoted' : r.status
-        }
-      }
-      return r
-    }))
-    setQuoteSuccess(true)
-    setTimeout(() => setQuoteSuccess(false), 2500)
-  }
-
-  const filteredRequests = requests.filter(r => filterStatus === 'All' || r.status === filterStatus)
+  const q = key => event => setQuote(current => ({ ...current, [key]: event.target.value }))
+  const input = 'adm-input min-h-11 text-base sm:text-sm'
+  const selectedDeadline = quoteDeadline(latestQuote)
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
-      
-      {/* Header */}
-      <div className="bg-adm-sunken border border-adm-line p-4 sm:p-5 rounded-adm flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-lg">
-        <div>
-          <h1 className="font-serif text-lg sm:text-2xl font-bold text-white">Pasabuy requests &amp; pricing</h1>
-          <p className="text-xs sm:text-sm text-white/55 mt-1 max-w-xl">
-            Review shopper requests, work out the landed cost, and send a quote.
-          </p>
-        </div>
+    <div className="mx-auto max-w-[1600px] space-y-5 pb-12">
+      <WorkspaceIntro
+        eyebrow="Pasabuy operations"
+        title="Request and quote control"
+        description="Review customer requests, version every estimate, retain FX evidence, and advance only through valid operational states. Saving or copying a quote does not mark it sent or paid."
+        status={loading ? 'Loading request evidence' : `${openRequests.length} open cases`}
+        statusTone={openRequests.length ? 'warning' : 'success'}
+      />
 
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="bg-white/5 border border-adm-line px-3 py-2 rounded-adm-sm text-xs font-mono">
-            <span className="text-white/50">EUR/PHP</span> <span className="text-forest font-bold">₱62.50</span>
+      <MetricRail items={[
+        { label: 'Open cases', value: loading ? '--' : openRequests.length, detail: 'Intake through arrival', tone: openRequests.length ? 'text-amber' : 'text-white' },
+        { label: 'Needs review', value: loading ? '--' : requests.filter(request => REVIEW.has(request.status)).length, detail: 'Request received or research', tone: requests.some(request => REVIEW.has(request.status)) ? 'text-crimson' : 'text-white' },
+        { label: 'Quotes expiring', value: loading ? '--' : expiringQuotes, detail: 'Within the next 3 days', tone: expiringQuotes ? 'text-amber' : 'text-white' },
+        { label: 'Oldest open', value: loading ? '--' : openRequests.length ? (oldestOpenHours < 24 ? `${oldestOpenHours}h` : `${Math.floor(oldestOpenHours / 24)}d`) : '--', detail: 'Age since submission' },
+      ]} />
+
+      {(error || notice) && <StateBanner tone={error ? 'danger' : 'success'}>{error || notice}</StateBanner>}
+
+      <div className="grid gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
+        <section className="min-w-0 space-y-3" aria-label="Pasabuy request queue">
+          <SectionHeading title="Priority queue" description="Filter by the work that must happen next." count={filtered.length} />
+          <div className="grid grid-cols-2 gap-1 rounded-adm-sm border border-adm-line bg-adm-surface p-1 sm:grid-cols-5 xl:grid-cols-2" aria-label="Filter Pasabuy requests">
+            {['open', 'review', 'sourcing', 'closed', 'all'].map(value => <button key={value} onClick={() => setFilter(value)} aria-pressed={filter === value} className={`min-h-10 rounded-adm-sm px-3 text-xs font-semibold capitalize transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${filter === value ? 'bg-blue text-white' : 'text-white/50 hover:bg-white/[0.05] hover:text-white'}`}>{value}</button>)}
           </div>
-          <div className="bg-white/5 border border-adm-line px-3 py-2 rounded-adm-sm text-xs font-mono">
-            <span className="text-white/50">Air cargo</span> <span className="text-blue font-bold">€14/kg</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Filter Tabs */}
-      <div className="flex gap-2 border-b border-adm-line pb-3 overflow-x-auto text-sm font-mono">
-        {['All', 'Pending Quote', 'Quoted', 'Approved', 'Buying in Italy', 'In Flight'].map(st => (
-          <button
-            key={st}
-            onClick={() => setFilterStatus(st)}
-            className={`px-3.5 py-1.5 rounded-adm-sm border transition-all whitespace-nowrap ${
-              filterStatus === st ? 'bg-amber/20 border-amber/40 text-amber font-bold' : 'bg-white/5 border-adm-line text-white/60 hover:text-white'
-            }`}
-          >
-            {st} {st !== 'All' && `(${requests.filter(r => r.status === st).length})`}
-          </button>
-        ))}
-      </div>
-
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        {/* Left Column: Request List */}
-        <div className="lg:col-span-1 space-y-3">
-          <p className="text-xs font-mono font-bold uppercase tracking-widest text-white/60 px-1">Customer Item Submissions</p>
-
-          {filteredRequests.map(req => {
-            const isSelected = selectedReq?.id === req.id
-            return (
-              <div
-                key={req.id}
-                onClick={() => setSelectedReq(req)}
-                className={`p-4 rounded-adm-sm border cursor-pointer transition-all ${
-                  isSelected ? 'bg-adm-surface border-amber/50 shadow-xl' : 'bg-adm-sunken border-adm-line hover:border-white/20'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-mono font-bold text-amber bg-amber/10 px-2 py-0.5 rounded border border-amber/20">
-                    {req.id}
-                  </span>
-                  <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
-                    req.status === 'Pending Quote' ? 'bg-crimson/20 text-crimson border border-crimson/30' :
-                    req.status === 'Quoted' ? 'bg-blue/20 text-blue border border-blue/30' :
-                    'bg-forest/20 text-forest border border-forest/30'
-                  }`}>
-                    {req.status}
-                  </span>
-                </div>
-
-                <h3 className="text-sm font-bold text-white truncate">{req.item_title}</h3>
-                <p className="text-xs text-white/50 mt-1 truncate">Customer: {req.customer_name} ({req.channel})</p>
-
-                <div className="flex items-center justify-between mt-3 pt-2 border-t border-white/5 text-xs font-mono">
-                  <span className="text-white/60">Qty: {req.quantity} pcs</span>
-                  <span className="text-forest font-bold">
-                    {req.quoted_price_php ? peso(req.quoted_price_php) : 'Needs Quote'}
-                  </span>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Right Column: Interactive Quotation & Landed Cost Calculator */}
-        <div className="lg:col-span-2 space-y-6">
-          {selectedReq ? (
-            <div className="bg-adm-sunken border border-adm-line rounded-adm p-6 shadow-xl space-y-6">
-              
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-adm-line pb-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-mono font-bold text-amber bg-amber/20 px-2 py-0.5 rounded">
-                      {selectedReq.id}
-                    </span>
-                    <span className="text-sm text-white/60">Requested on {selectedReq.created_at}</span>
-                  </div>
-                  <h2 className="font-serif text-xl font-bold text-white">{selectedReq.item_title}</h2>
-                  <p className="text-sm text-white/60 mt-0.5">Requester: {selectedReq.customer_name} ({selectedReq.contact_number} · {selectedReq.channel})</p>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <select
-                    value={selectedReq.status}
-                    onChange={(e) => handleUpdateStatus(selectedReq.id, e.target.value)}
-                    className="bg-adm-surface border border-white/20 text-sm font-mono text-white rounded-adm-sm px-3 py-2 outline-none"
-                  >
-                    <option value="Pending Quote">Pending Quote</option>
-                    <option value="Quoted">Quoted</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Buying in Italy">Buying in Italy</option>
-                    <option value="In Flight">In Flight</option>
-                    <option value="Delivered">Delivered</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Customer Notes Card */}
-              {selectedReq.notes && (
-                <div className="bg-white/5 border border-adm-line p-3.5 rounded-adm-sm text-sm text-neutral-300">
-                  <p className="text-xs font-mono uppercase text-white/60 font-bold mb-1">Customer Special Instructions:</p>
-                  <p className="italic">"{selectedReq.notes}"</p>
-                  {selectedReq.reference_url && (
-                    <a
-                      href={selectedReq.reference_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block mt-2 text-blue text-xs hover:underline"
-                    >
-                      🔗 Open Customer Reference Link →
-                    </a>
-                  )}
-                </div>
-              )}
-
-              {/* Quotation & Landed Cost Breakdown Engine */}
-              <div className="space-y-4 pt-2">
-                <div className="flex items-center justify-between border-b border-adm-line pb-2">
-                  <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">
-                    🇮🇹 Italy Landed Cost & Pricing Engine
-                  </h3>
-                  <span className="text-xs font-mono text-forest">Auto-Calculates Cargo & Customs</span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Cost in Italy (€ EUR)</label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={costEur}
-                      onChange={(e) => setCostEur(Number(e.target.value))}
-                      className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-sm text-white font-mono outline-none focus:border-amber"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Item Weight (KG)</label>
-                    <input
-                      type="number"
-                      step="0.05"
-                      value={weightKg}
-                      onChange={(e) => setWeightKg(Number(e.target.value))}
-                      className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-sm text-white font-mono outline-none focus:border-amber"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Shipping Route</label>
-                    <select
-                      value={shippingMethod}
-                      onChange={(e) => setShippingMethod(e.target.value)}
-                      className="w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 py-2 text-sm text-white font-mono outline-none focus:border-amber"
-                    >
-                      <option value="air">✈️ Air Express (€14/kg)</option>
-                      <option value="sea">🚢 Sea Cargo (€4/kg)</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Calculation Summary Card */}
-                <div className="bg-adm-surface border border-adm-line p-4 rounded-adm-sm space-y-2 text-sm font-mono">
-                  <div className="flex justify-between text-white/60">
-                    <span>Base Item Price (€{costEur} × ₱{exchangeRate}):</span>
-                    <span className="text-white">{peso(itemCostPhp)}</span>
-                  </div>
-                  <div className="flex justify-between text-white/60">
-                    <span>Freight Charge ({shippingMethod === 'air' ? 'Air Express' : 'Sea Cargo'}):</span>
-                    <span className="text-white">{peso(freightCostPhp)}</span>
-                  </div>
-                  <div className="flex justify-between text-white/60">
-                    <span>Manila Customs & Import Tax (12%):</span>
-                    <span className="text-white">{peso(customsTaxPhp)}</span>
-                  </div>
-                  <div className="flex justify-between font-bold border-t border-adm-line pt-2 text-base">
-                    <span className="text-neutral-300">Total Manila Landed Cost:</span>
-                    <span className="text-amber">{peso(totalLandedCostPhp)}</span>
-                  </div>
-                </div>
-
-                {/* Final Quote Input */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                  <div>
-                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Target Margin %</label>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="range"
-                        min="20"
-                        max="80"
-                        value={marginPercent}
-                        onChange={(e) => setMarginPercent(Number(e.target.value))}
-                        className="flex-1 accent-amber"
-                      />
-                      <span className="text-sm font-mono font-bold text-amber w-12">{marginPercent}%</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-mono uppercase text-white/60 mb-1">Final Customer Quote (PHP)</label>
-                    <input
-                      type="number"
-                      value={finalPricePhp}
-                      onChange={(e) => setCustomPricePhp(e.target.value)}
-                      className="w-full rounded-adm-sm border border-forest/50 bg-forest/10 px-3 py-2 text-base text-forest font-bold font-mono outline-none"
-                    />
-                  </div>
-                </div>
-
-                {/* Action Controls */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-adm-line">
-                  <div className="text-sm font-mono text-white/50">
-                    Calculated Margin: <span className="text-forest font-bold">{calculatedMarginPercent}%</span>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <button
-                      onClick={handleSaveQuote}
-                      className="bg-amber hover:bg-amber/90 text-navy font-bold text-sm px-5 py-2.5 rounded-adm-sm shadow-lg transition-all"
-                    >
-                      {quoteSuccess ? '✓ Quote Saved & Updated!' : '💾 Save Quotation'}
-                    </button>
-                    <button
-                      onClick={() => alert(`Quote for ${selectedReq.item_title}: ${peso(finalPricePhp)} pushed to ${selectedReq.customer_name} via ${selectedReq.channel}!`)}
-                      className="bg-forest hover:bg-forest/90 text-white font-bold text-sm px-4 py-2.5 rounded-adm-sm transition-all"
-                    >
-                      📱 Send Quote via {selectedReq.channel}
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-
+          <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
+            {loading && <div className="space-y-2 p-3" role="status">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-20 animate-pulse rounded-adm-sm bg-white/[0.05]" />)}</div>}
+            {!loading && filtered.length === 0 && <EmptyState icon={InboxIcon} title={`No ${filter} requests`} description="New website submissions will appear here with their real request state." />}
+            <div className="divide-y divide-adm-line">
+              {filtered.map(request => {
+                const requestQuote = latestQuoteFor(request)
+                const deadline = quoteDeadline(requestQuote)
+                return (
+                  <button key={request.id} onClick={() => { setSelectedId(request.id); setError(''); setNotice('') }} aria-current={selectedId === request.id ? 'true' : undefined} className={`w-full px-4 py-3.5 text-left transition-[transform,background-color] duration-150 active:scale-[0.99] ${selectedId === request.id ? 'bg-blue/10' : 'hover:bg-white/[0.025]'}`}>
+                    <div className="flex items-start justify-between gap-3"><span className="font-mono text-xs font-semibold text-blue">{request.public_reference || String(request.id).slice(0, 8)}</span><StatusPill tone={statusTone(request.status)}>{STATUS_LABELS[request.status] || request.status}</StatusPill></div>
+                    <p className="mt-2 truncate text-sm font-semibold text-white">{request.item_title || 'Untitled request'}</p>
+                    <p className="mt-1 truncate text-xs text-white/45">{request.customer_name || 'Customer'} / Qty {request.quantity || 0}</p>
+                    <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-white/35"><span>{ageLabel(request.created_at)}</span><span>{request.assigned_to ? 'Assigned' : 'Owner: unassigned'}</span>{deadline && <span className={deadline.expired ? 'text-crimson' : 'text-amber'}>{deadline.label}</span>}</div>
+                  </button>
+                )
+              })}
             </div>
-          ) : (
-            <div className="bg-adm-sunken border border-adm-line rounded-adm p-12 text-center text-white/60 font-mono text-sm">
-              👈 Select a Pasabuy request from the left panel to open the Landed Cost Quotation Engine.
+          </div>
+        </section>
+
+        <section className="min-w-0">
+          {!selected ? <EmptyState title="Select a Pasabuy case" description="Choose a request to review evidence, calculate a quote, and advance its valid next state." /> : (
+            <div className="space-y-5">
+              <div className="border-b border-adm-line pb-4">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><span className="font-mono text-xs font-semibold text-blue">{selected.public_reference}</span><StatusPill tone={statusTone(selected.status)}>{STATUS_LABELS[selected.status] || selected.status}</StatusPill>{selectedDeadline && <StatusPill tone={selectedDeadline.expired ? 'danger' : 'warning'}>{selectedDeadline.label}</StatusPill>}</div><h2 className="mt-2 text-xl font-semibold tracking-tight text-white">{selected.item_title}</h2><p className="mt-1 text-sm text-white/50">{selected.customer_name} / {selected.customer_email || selected.customer_phone || 'Contact unavailable'} / Qty {selected.quantity}</p><p className="mt-2 text-xs text-white/35">Owner: {selected.assigned_to || 'Unassigned'} / Submitted {ageLabel(selected.created_at)}</p>{selected.reference_url && <a className="mt-3 inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-blue underline underline-offset-4" href={selected.reference_url} target="_blank" rel="noreferrer">Open customer reference <ArrowIcon size={14} /></a>}</div>
+                  <div className="flex flex-wrap gap-2">{(NEXT[selected.status] || []).map(status => <button key={status} disabled={saving} onClick={() => transition(status)} className={status === 'cancelled' ? `${secondaryButton} text-crimson` : primaryButton}>Move to {STATUS_LABELS[status]}</button>)}</div>
+                </div>
+              </div>
+
+              <section className="space-y-3">
+                <SectionHeading title="Quote assumptions" description="Estimated inputs only. FX source and capture time are stored with every saved version." />
+                <div className="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4">
+                  <Field label="Item cost (EUR)"><input className={input} type="number" min="0" step="0.01" value={quote.itemCost} onChange={q('itemCost')} /></Field>
+                  <Field label="EUR/PHP rate"><input className={input} type="number" min="0.01" step="0.01" value={quote.fxRate} onChange={q('fxRate')} /></Field>
+                  <Field label="FX source"><input className={input} value={quote.fxSource} onChange={q('fxSource')} placeholder="Bank or published source" /></Field>
+                  <Field label="Weight (kg)"><input className={input} type="number" min="0" step="0.01" value={quote.weightKg} onChange={q('weightKg')} /></Field>
+                  <Field label="Route"><select className={input} value={quote.shippingMethod} onChange={q('shippingMethod')}><option value="air">Air</option><option value="sea">Sea</option></select></Field>
+                  <Field label={`${quote.shippingMethod === 'air' ? 'Air' : 'Sea'} rate (EUR/kg)`}><input className={input} type="number" min="0" step="0.01" value={quote.shippingMethod === 'air' ? quote.airRate : quote.seaRate} onChange={q(quote.shippingMethod === 'air' ? 'airRate' : 'seaRate')} /></Field>
+                  <Field label="Customs/tax estimate %"><input className={input} type="number" min="0" max="100" step="0.1" value={quote.customsPercent} onChange={q('customsPercent')} /></Field>
+                  <Field label="Handling (PHP)"><input className={input} type="number" min="0" step="1" value={quote.handlingPhp} onChange={q('handlingPhp')} /></Field>
+                </div>
+              </section>
+
+              <MetricRail items={[
+                { label: 'Item in PHP', value: peso(itemPhp), detail: `${numbers.itemCost} EUR at ${numbers.fxRate}` },
+                { label: 'Freight estimate', value: peso(freightPhp), detail: `${numbers.weight}kg by ${quote.shippingMethod}` },
+                { label: 'Tax estimate', value: peso(taxPhp), detail: `${numbers.customs}% assumption` },
+                { label: 'Estimated landed', value: peso(landed), detail: 'Before target margin', tone: 'text-amber' },
+              ]} />
+
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Field label="Target margin %"><input className={input} type="number" step="1" value={quote.marginPercent} onChange={q('marginPercent')} /></Field>
+                <Field label="Final quote (PHP)"><input className={input} type="number" min="0" step="1" value={quote.finalPrice === '' ? suggested : quote.finalPrice} onChange={q('finalPrice')} /></Field>
+                <Field label="Valid for days"><input className={input} type="number" min="1" max="30" value={quote.validDays} onChange={q('validDays')} /></Field>
+              </div>
+
+              <div className="flex flex-col justify-between gap-3 border-t border-adm-line pt-4 sm:flex-row sm:items-center">
+                <p className="text-xs text-white/45">Suggested {peso(suggested)} / Latest saved {latestQuote ? `version ${latestQuote.version}` : 'none'} / Saving does not send</p>
+                <div className="flex flex-col gap-2 sm:flex-row"><button onClick={saveQuote} disabled={saving} className={`${primaryButton} bg-amber text-navy hover:bg-amber/90`}>{saving ? 'Saving...' : 'Save new quote version'}</button><button onClick={copyQuote} disabled={!latestQuote} className={`${secondaryButton} border-forest/35 text-forest`}>Copy saved quote message</button></div>
+              </div>
             </div>
           )}
-        </div>
-
+        </section>
       </div>
-
     </div>
   )
+}
+
+function Field({ label, children }) {
+  return <label className="block text-xs font-semibold text-white/60">{label}<span className="mt-1.5 block">{children}</span></label>
 }

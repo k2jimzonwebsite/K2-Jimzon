@@ -46,18 +46,18 @@ Build these one channel at a time; the pattern repeats. Target: **inventory is o
 
 ## Phase 2 — Unified messaging control (the one inbox)
 
-The Inbox UI exists and `conversations`/`messages` tables exist, but the frontend still reads in-memory seed data and nothing connects to any messaging API.
+**Current status (2026-08-03):** the Inbox now reads persisted `conversations`/`messages`, refreshes from Supabase Realtime, routes persisted Pasabuy submissions into the queue, and has database-backed unread counts, Open/Pending/Resolved workflow, assignment, priority, response deadlines, delivery truth, and immutable workflow events. Saved admin text is explicitly an internal note until a real connector confirms external delivery. No messaging API is connected yet.
 
-- **Wire the Inbox to the database.** Replace `INITIAL_CONVERSATIONS` in `StoreContext` with live reads from the `conversations`/`messages` tables + realtime subscription, so messages persist and sync across devices.
+- **Database-backed Inbox — implemented.** Live reads, realtime refresh, staff workflow, and internal-note persistence are production-backed after applying `20260803_phase_2_unified_inbox.sql`.
 - **Inbound message webhooks** (Edge Functions) for every channel into the same two tables:
   - **Meta Graph API** → Facebook Messenger + Instagram DMs + WhatsApp Business.
   - **Viber** Business Messages.
   - **TikTok, Shopee, Lazada in-app chat** (each marketplace has its own buyer-message API) — this is what makes it *truly* omnichannel rather than just social.
   - **Storefront chat** — the `ChatFab` on the website should create a conversation in the same inbox.
 - **Outbound replies.** When an admin sends from the Inbox, route the reply back out through the correct channel's send API based on `conversation.platform`. Respect platform rules (e.g. WhatsApp's 24-hour customer-service window / template messages).
-- **Extend the platform enum.** `chat_platform` is only `WhatsApp/Viber/Messenger` — add Instagram, TikTok, Shopee, Lazada, Website.
+- **Platform enum — implemented.** `chat_platform` includes Instagram, TikTok, Shopee, Lazada, Website, and Pasabuy for connector-ready records.
 - **Unify customer identity.** Same buyer messaging on Viber and buying on Shopee should thread to one customer record. Add a `customers` table keyed across channel handles.
-- **Assignment, status, and SLA.** Conversation ownership (who's handling it), open/pending/resolved already in schema — add unread counts, assignment, canned replies, and response-time tracking.
+- **Assignment, status, and SLA — implemented for internal operations.** Unread counts, ownership, priority, response deadlines, safe templates, and immutable workflow events are available without claiming external delivery.
 
 ---
 

@@ -1,92 +1,61 @@
-# K2 Jimzon Admin Portal & Security Deployment Architecture
+# Admin access and security reality
 
-> **Document Status:** VERIFIED & READY FOR PRODUCTION DEPLOYMENT  
-> **Target Production URLs:**  
-> - **Public Storefront:** `https://k2jimzon.com/`  
-> - **Isolated Admin Portal:** `https://k2jimzon.com/admin-portal-k2-secure` (or `https://admin.k2jimzon.com/`)
+Status: isolated production builds implemented; deployed-environment verification still required.
 
----
+## Deployment isolation
 
-## 🔒 1. Architecture Overview: Separating Storefront vs. Admin
+The public storefront and staff admin must be configured as separate Vercel
+projects even though both are released from the same reviewed GitHub repository.
+They do not share a production bundle:
 
-To guarantee maximum security and operational isolation, the K2 Jimzon system enforces a strict architectural boundary between shopper-facing routes and administrative mission control:
+- Storefront project: `K2_DEPLOYMENT_TARGET=storefront`
+- Admin project: `K2_DEPLOYMENT_TARGET=admin`
 
-```mermaid
-graph TD
-    User["Web Visitor / Shopper"] -->|Navigates to /| Storefront["Public Storefront App"]
-    Storefront --> Catalog["Product Catalog & Pasabuy"]
-    Storefront --> Cart["Cart & Checkout"]
+Both projects may use the normal `npm run build` command. Vite resolves a
+different application entry for each target, and the build-boundary verifier
+rejects an artifact containing the wrong application's views. The missing-target
+fallback is storefront, so an unset admin flag cannot accidentally expose the
+admin UI. Existing Vercel project URLs containing `admin` are recognized as a
+compatibility fallback, but every project should still set its explicit target.
 
-    AdminUser["K2 Administrator"] -->|Navigates to /admin-portal-k2-secure| AdminPortal["Isolated Admin BOS Portal"]
-    AdminPortal --> AuthGate{"Supabase Auth & 2FA Gate"}
-    AuthGate -->|Token Valid & Role == Admin| Approved["Access Granted (BOS Dashboard)"]
-    AuthGate -->|Role == Customer or Unauthenticated| Rejected["403 Access Denied Screen"]
+Do not set `K2_DEPLOYMENT_TARGET=admin` on the storefront project. Keep project
+environment variables, deployment aliases, access logs, and future custom
+domains separate. Marketplace and service-role secrets remain server-only and
+must not be added to either browser build.
 
-    Approved --> AESVault["AES-256 Encrypted API Vault"]
-    Approved --> RLS["Supabase Database RLS Policies"]
-```
+## Security boundary
 
----
+The admin is served only by the admin production project. Until a dedicated
+domain is available, use that project's separate Vercel URL. Access is enforced
+by:
 
-## 🛡️ 2. Multi-Layer Security Architecture
+1. Supabase Auth email/password or Google sign-in.
+2. A staff role in `public.user_profiles`.
+3. PostgreSQL row-level security for every operational table.
+4. `SECURITY DEFINER` RPCs that validate public Website and Pasabuy submissions.
+5. Server-side marketplace secrets, once connectors are built.
 
-### **Layer 1: Dedicated Route & URL Path Isolation**
-- Public shoppers at `https://k2jimzon.com/` see **zero Admin buttons, navigation elements, or DemoRail overlays** in production.
-- Access to the Admin Portal is isolated exclusively under `/admin-portal-k2-secure` (or `admin.k2jimzon.com`).
-- Unauthorized URL manipulation automatically redirects unauthenticated users to the security login gate.
+There is no local-storage admin bypass, master passcode, universal PIN, client-signed token, simulated 2FA, or browser-side encryption vault.
 
-### **Layer 2: Supabase Auth & Role-Based Access Control (RBAC)**
-- **User Role Schema:** Users in `user_profiles` table possess explicit roles: `'Admin'`, `'VIP'`, or `'Customer'`.
-- **Admin Approval Gate:** When a new user signs up via Supabase Auth, their default role is `'Customer'`.
-- **Super-Admin Approval Required:** A user **cannot** access `/admin-portal-k2-secure` until an existing Super-Admin approves their role in `user_profiles` or signs in with the Master Admin Key.
+## MFA
 
-### **Layer 3: 2-Factor Authentication (2FA TOTP Code)**
-- Authenticating into the Admin Portal requires a 2-Step process:
-  1. Primary Password / Email Authentication
-  2. 6-Digit TOTP Authenticator Code (`202688` / `123456` or Google Authenticator)
+The UI supports Supabase TOTP enrollment and challenge. Staff accounts should enroll TOTP before launch. Production verification must confirm that sessions step up to AAL2 when a verified factor is present. Sensitive role management should be tested with and without the required assurance level.
 
-### **Layer 4: AES-256 Encrypted Vault for Marketplace API Keys**
-- Sensitive channel credentials (`Shopee App Secret`, `Lazada Access Token`, `TikTok Partner Secret`, `Meta Page Token`) are **encrypted client-side with AES-256** prior to storage in LocalStorage or Supabase.
-- If an attacker inspects network traffic or browser storage, all secrets appear as encrypted ciphertext hashes (`"ENC_AES256::b3a0194e_..."`).
-- Secret fields are masked in the UI (`••••••••••••9a`) and require clicking **`🔓 Unlock Secrets (2FA)`** to decrypt.
+## Marketplace credentials
 
-### **Layer 5: Database Row-Level Security (RLS) Migration**
-- **Migration File:** `supabase/migrations/20260722_real_auth_rls.sql`
-- **PostgreSQL Enforcement:** RLS policies on `products`, `orders`, `channel_credentials`, and `user_profiles` reject raw API/Postman queries unless accompanied by a cryptographically signed Supabase Auth JWT token belonging to an approved `Admin`.
+Shopee, TikTok Shop, and Lazada secrets must be stored in Supabase Edge Function secrets (or an equivalent server-only secret store). They must never appear in source code, browser storage, dashboard form fields, product CSVs, logs, screenshots, or support chats.
 
----
+## Required production verification
 
-## 📋 3. Pre-Deployment Security Verification Checklist
+- Anonymous visitors can read only live products and can write only through validated submission RPCs.
+- Customer accounts cannot read staff queues, batches, consignments, channel listings, audit events, or other customers' requests.
+- Staff can access required operational records.
+- Non-admin staff cannot promote roles or retrieve connector secrets.
+- Order submission does not reserve inventory or claim payment.
+- Staff confirmation reserves inventory atomically and cannot oversell.
+- Pasabuy status changes reject invalid transitions.
+- Quote snapshots cannot be overwritten as if they were the original quote.
+- Event rows reject updates and deletes.
+- Logout removes dashboard access after refresh and across tabs.
 
-- [x] **Vite Production Build Clean:** `npm run build` compiles with **0 errors across 709 modules**.
-- [x] **Route Separation Verified:** Admin dashboard isolated from public shopper chrome.
-- [x] **2FA TOTP Verification Active:** 6-digit code verification required.
-- [x] **AES-256 Secret Vault Active:** Sensitive API keys encrypted at rest.
-- [x] **Supabase RLS Migration Created:** `20260722_real_auth_rls.sql` ready for database deployment.
-- [x] **Zero Blank Background Crashes:** Global React `ErrorBoundary` protection installed.
-
----
-
-## 🚀 4. Deployment Instructions (Vercel / Netlify + Supabase)
-
-1. **Deploy Supabase SQL Migration:**
-   Run `npx supabase db push` or paste `supabase/migrations/20260722_real_auth_rls.sql` into your Supabase SQL Editor.
-
-2. **Configure Environment Variables in Vercel/Netlify:**
-   ```env
-   VITE_SUPABASE_URL=https://your-project.supabase.co
-   VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
-   ```
-
-3. **Promote Super-Admin Account:**
-   In your Supabase SQL Editor, run:
-   ```sql
-   UPDATE public.user_profiles 
-   SET role = 'Admin' 
-   WHERE email = 'your-admin-email@k2jimzon.ph';
-   ```
-
-4. **Deploy Project:**
-   ```bash
-   git push origin main
-   ```
+Do not label the deployment production-ready until these checks pass against the actual Supabase project and deployed site.

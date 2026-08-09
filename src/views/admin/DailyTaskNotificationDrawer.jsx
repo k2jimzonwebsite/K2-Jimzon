@@ -69,14 +69,9 @@ export default function DailyTaskNotificationDrawer({ isOpen, onClose, onNavigat
                   {b.custodian ? ` · 🙋${b.custodian}` : ''}
                   {b.channel ? ` · 🛒${b.channel}` : ''}
                 </p>
-                <div className="mt-2.5 flex gap-2">
-                  <button onClick={() => go('coupons')} className="flex-1 rounded-adm-sm bg-crimson/90 py-2 text-xs font-medium text-white transition-colors hover:bg-crimson">
-                    Create clearance discount
-                  </button>
-                  <button onClick={() => go('inventory')} className="rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-xs font-medium text-white/80 transition-colors hover:bg-white/10">
-                    Inventory
-                  </button>
-                </div>
+                <button onClick={() => go('inventory')} className="mt-2.5 min-h-11 w-full rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-xs font-medium text-white/80 transition-colors hover:bg-white/10">
+                  Review batch in inventory
+                </button>
               </div>
             ))
           )}

@@ -5,7 +5,6 @@ import DemoRail from './components/nav/DemoRail'
 import MobileNavBar from './components/nav/MobileNavBar'
 import StoreHeader from './components/StoreHeader'
 import CartDrawer from './components/CartDrawer'
-import ChatFab from './components/ChatFab'
 import Footer from './components/Footer'
 import ErrorBoundary from './components/ui/ErrorBoundary'
 
@@ -31,7 +30,7 @@ const VIEWS = {
   catalog: Catalog,
 }
 
-// Storefront chrome (header, cart, chat) wraps shopper-facing views only.
+// Storefront chrome wraps shopper-facing views only.
 const STOREFRONT = new Set(['home', 'product', 'master_product', 'catalog', 'pasabuy', 'wholesale', 'checkout', 'confirmation'])
 
 function Shell() {
@@ -42,28 +41,29 @@ function Shell() {
   // Environment & Subdomain Detection
   const isAdminDeployment = import.meta.env.VITE_IS_ADMIN_DEPLOYMENT === 'true' || hostname.includes('admin') || (typeof window !== 'undefined' && window.location.port === '5174')
   
-  // If this is an Admin Deployment, boot directly into Admin view.
-  // If this is a Storefront Deployment, block public route access to admin.
-  const isDedicatedAdminRoute = isAdminDeployment || (path.includes('/admin-portal-k2-secure') && !import.meta.env.PROD)
+  // The guarded path also works before a dedicated admin domain exists. The
+  // route itself is not the security boundary; Supabase Auth + database RLS is.
+  const isDedicatedAdminRoute = isAdminDeployment || path.includes('/admin-portal-k2-secure')
   
   const activeViewKey = isAdminDeployment ? 'admin' : (isDedicatedAdminRoute ? 'admin' : (view === 'admin' ? 'home' : view))
   const View = VIEWS[activeViewKey] ?? Home
   const isStorefront = !isAdminDeployment && !isDedicatedAdminRoute && STOREFRONT.has(activeViewKey)
-  const isDevOrDemoHash = import.meta.env.DEV || (typeof window !== 'undefined' && window.location.hash === '#demo')
+  // The prototype rail is useful for demos, but it should never compete with
+  // the real storefront navigation during ordinary local development.
+  const showDemoRail = typeof window !== 'undefined' && window.location.hash === '#demo'
 
   return (
-    <div className="min-h-screen overflow-x-hidden snap-y snap-proximity md:snap-none">
-      {isDevOrDemoHash && activeViewKey !== 'admin' && <DemoRail />}
+    <div className={`${isStorefront ? 'storefront-ui' : ''} min-h-[100dvh] overflow-x-hidden`}>
+      {showDemoRail && activeViewKey !== 'admin' && <DemoRail />}
       {isStorefront && <StoreHeader />}
       <ErrorBoundary key={activeViewKey}>
-        <Suspense fallback={<div className="min-h-screen bg-cream animate-pulse flex items-center justify-center text-navy/40 font-mono text-xs">Loading K2 Jimzon...</div>}>
+        <Suspense fallback={<div className="flex min-h-[70vh] items-center justify-center bg-cream text-sm font-semibold text-navy-soft"><span className="store-loading-mark" aria-hidden />Loading K2 Jimzon&hellip;</div>}>
           <View />
         </Suspense>
       </ErrorBoundary>
       {isStorefront && (
         <>
           <CartDrawer />
-          <ChatFab />
         </>
       )}
       {isStorefront && <Footer />}

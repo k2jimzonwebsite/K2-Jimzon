@@ -48,22 +48,32 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
       const shopeeCategory = row['Category'] || 'All'
 
       return {
-        sku: row.sku || row['SKU Reference No.'] || row['Parent SKU'] || row['Product ID'] || `MANUAL-CSV-${Math.floor(Math.random() * 100000)}`,
+        sku: String(row.sku || row['SKU Reference No.'] || row['Parent SKU'] || row['Product ID'] || '').trim(),
         name: row.name || row['Product Name'] || 'Untitled Product',
         description: row.description || row['Product Description'] || '',
         usage_instructions: row.usage_instructions || '',
         srp: Number(row.srp || row['Price']) || 0,
         wholesale_price: Number(row.wholesale_price) || 0,
-        stock_available: Number(row.stock || row['Stock']) || 0,
-        status: row.status || (isShopee ? 'Live' : 'Draft'),
+        status: 'Draft',
         origin: row.origin || (isShopee ? `Shopee|${shopeeCategory}` : 'Manual')
       }
     })
 
-    // Upsert to handle both new and existing SKUs safely
+    if (rowsToInsert.some(row => !row.sku)) {
+      setImporting(false)
+      setError('Every row needs a stable SKU. No rows were imported.')
+      return
+    }
+    if (new Set(rowsToInsert.map(row => row.sku.toLowerCase())).size !== rowsToInsert.length) {
+      setImporting(false)
+      setError('The CSV contains duplicate SKUs. Resolve them before importing.')
+      return
+    }
+
+    // Insert-only prevents a catalog upload from silently overwriting a live SKU.
     const { error: upsertError } = await supabase
       .from('products')
-      .upsert(rowsToInsert, { onConflict: 'sku' })
+      .insert(rowsToInsert)
 
     setImporting(false)
 
@@ -82,7 +92,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/40">
           <div>
             <h2 className="font-serif text-xl font-semibold text-white">Bulk CSV Import</h2>
-            <p className="text-sm text-white/50 mt-1">Upload an Excel/CSV spreadsheet to update inventory</p>
+            <p className="text-sm text-white/50 mt-1">Stage product metadata as drafts; reconcile physical stock by batch afterward.</p>
           </div>
           <button onClick={onClose} className="rounded-full bg-white/5 p-2 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,11 +105,13 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
           <div className="bg-blue/10 border border-blue/20 rounded-adm-sm p-4">
             <h4 className="text-base font-semibold text-blue mb-2">Required CSV Column Headers:</h4>
             <div className="flex flex-wrap gap-2">
-              {['sku', 'name', 'description', 'usage_instructions', 'srp', 'wholesale_price', 'stock'].map(h => (
+              {['sku', 'name', 'description', 'usage_instructions', 'srp', 'wholesale_price'].map(h => (
                 <span key={h} className="text-sm font-mono bg-black/40 text-blue-300 px-2 py-1 rounded border border-blue/20">{h}</span>
               ))}
             </div>
           </div>
+
+          <p className="text-sm leading-relaxed text-amber">CSV stock values are previewed but intentionally not imported. Use batch reconciliation so quantity, expiry, location, and custody remain one auditable record.</p>
 
           <div 
             onClick={() => fileInputRef.current?.click()}

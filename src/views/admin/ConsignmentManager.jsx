@@ -1,460 +1,187 @@
-import { useState, useEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { useStore } from '../../context/StoreContext'
-import MobileScannerModal from './MobileScannerModal'
-import MilanPackingScannerModal from './MilanPackingScannerModal'
+import { AlertIcon, BarcodeIcon, CheckIcon, PlaneIcon } from '../../components/ui/icons'
+import ConsignmentScannerModal from './ConsignmentScannerModal'
 import DiscrepancyReconciliationModal from './DiscrepancyReconciliationModal'
-import ScanToAiModal from './ScanToAiModal'
-
-const INITIAL_CONSIGNMENT = {
-  id: 'csg-101',
-  manifest_code: 'FLIGHT-MILAN-2026-08',
-  flight_number: 'PR 721 (Milan Malpensa → Manila NAIA)',
-  status: 'Arrived_Manila',
-  packed_at: '2026-07-20',
-  items: [
-    { sku: 'KIKO-3D-05', name: 'KIKO Milano 3D Hydra Lipgloss (Shade 05)', batch_code: 'LOT-202607-A', best_before_date: '2028-06-30', italy_packed_qty: 24, manila_scanned_qty: 20 },
-    { sku: 'LAV-ORO-1000', name: 'Lavazza Qualità Oro Coffee Beans 1kg', batch_code: 'LOT-202607-B', best_before_date: '2027-12-31', italy_packed_qty: 50, manila_scanned_qty: 50 },
-    { sku: 'MB-PANDISTELLE-350', name: 'Mulino Bianco Pan di Stelle Biscuits', batch_code: 'LOT-202607-C', best_before_date: '2027-04-15', italy_packed_qty: 36, manila_scanned_qty: 35 },
-    { sku: 'PERI-BACCI-200', name: 'Perugina Baci Dark Chocolates Box', batch_code: 'LOT-202607-D', best_before_date: '2027-09-30', italy_packed_qty: 15, manila_scanned_qty: 15 }
-  ]
-}
 
 export default function ConsignmentManager() {
   const { products } = useStore()
-  const [consignment, setConsignment] = useState(INITIAL_CONSIGNMENT)
-  const [isScannerOpen, setIsScannerOpen] = useState(false)
-  const [isMilanScannerOpen, setIsMilanScannerOpen] = useState(false)
-  const [showScanAiModal, setShowScanAiModal] = useState(false)
-  const [isReconcileOpen, setIsReconcileOpen] = useState(false)
-  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [manifest, setManifest] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
+  const [showCreate, setShowCreate] = useState(false)
+  const [showLine, setShowLine] = useState(false)
+  const [scannerStage, setScannerStage] = useState(null)
+  const [showReconcile, setShowReconcile] = useState(false)
+  const [working, setWorking] = useState(false)
+  const [create, setCreate] = useState({ manifestCode: `K2-${new Date().toISOString().slice(0, 7)}`, flightNumber: '' })
+  const [line, setLine] = useState({ sku: '', batchCode: '', bestBefore: '', packedQty: '1' })
 
-  // Form states for new packing manifest
-  const [manifestCode, setManifestCode] = useState(`FLIGHT-MILAN-${Date.now().toString().slice(-4)}`)
-  const [selectedSku, setSelectedSku] = useState('')
-  const [packedQty, setPackedQty] = useState(10)
-  const [batchCode, setBatchCode] = useState(`LOT-${new Date().toISOString().slice(0, 7).replace('-', '')}`)
-  const [bestBeforeDate, setBestBeforeDate] = useState('2028-12-31')
-
-  useEffect(() => {
-    fetchConsignmentFromDb()
+  const load = useCallback(async () => {
+    if (!supabase) { setError('Supabase is not configured.'); setLoading(false); return }
+    const { data, error: loadError } = await supabase.from('consignments')
+      .select('*, consignment_items(*)').order('created_at', { ascending: false }).limit(1).maybeSingle()
+    if (loadError) setError(loadError.message)
+    else { setManifest(data || null); setError('') }
+    setLoading(false)
   }, [])
 
-  const fetchConsignmentFromDb = async () => {
-    if (!supabase) return
-    try {
-      const { data: cData } = await supabase
-        .from('consignments')
-        .select('*, consignment_items(*)')
-        .order('created_at', { ascending: false })
-        .limit(1)
+  useEffect(() => {
+    load()
+    if (!supabase) return undefined
+    const channel = supabase.channel('admin:consignment')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'consignments' }, load)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'consignment_items' }, load)
+      .subscribe()
+    return () => supabase.removeChannel(channel)
+  }, [load])
 
-      if (cData && cData.length > 0) {
-        const c = cData[0]
-        setConsignment({
-          id: c.id,
-          manifest_code: c.manifest_code,
-          flight_number: c.flight_number,
-          status: c.status,
-          packed_at: new Date(c.packed_at).toLocaleDateString(),
-          items: (c.consignment_items || []).map(i => ({
-            sku: i.sku,
-            name: (products || []).find(p => p.sku === i.sku)?.name || i.sku,
-            batch_code: i.batch_code,
-            best_before_date: i.best_before_date,
-            italy_packed_qty: i.italy_packed_qty,
-            manila_scanned_qty: i.manila_scanned_qty
-          }))
-        })
-      }
-    } catch (e) {
-      console.warn("Consignment DB fetch notice:", e)
-    }
-  }
+  const items = manifest?.consignment_items || []
+  const packed = items.reduce((sum, item) => sum + item.italy_packed_qty, 0)
+  const scanned = items.reduce((sum, item) => sum + item.manila_scanned_qty, 0)
+  const missing = Math.max(packed - scanned, 0)
+  const bySku = useMemo(() => Object.fromEntries((products || []).map(product => [product.sku, product])), [products])
+  const displayItems = useMemo(() => items.map(item => ({ ...item, name: bySku[item.sku]?.name || item.sku })), [items, bySku])
 
-  // Handle +1 barcode scan increment
-  const handleScanItem = (codeOrSku) => {
-    let updatedItem = null
-    setConsignment(prev => {
-      const targetSku = codeOrSku.toLowerCase()
-      const newItems = prev.items.map(item => {
-        if (item.sku.toLowerCase() === targetSku || targetSku.includes(item.sku.toLowerCase())) {
-          updatedItem = { ...item, manila_scanned_qty: item.manila_scanned_qty + 1 }
-          return updatedItem
-        }
-        return item
-      })
-
-      // If SKU was not in list, add it dynamically
-      if (!updatedItem) {
-        const matchedP = (products || []).find(p => p.sku.toLowerCase() === targetSku)
-        updatedItem = {
-          sku: matchedP ? matchedP.sku : codeOrSku.toUpperCase(),
-          name: matchedP ? matchedP.name : 'Scanned Arrival Item',
-          batch_code: 'LOT-ARRIVED-MANILA',
-          best_before_date: '2028-12-31',
-          italy_packed_qty: 0,
-          manila_scanned_qty: 1
-        }
-        newItems.push(updatedItem)
-      }
-
-      return { ...prev, items: newItems }
+  const createManifest = async (event) => {
+    event.preventDefault(); setWorking(true); setError(''); setNotice('')
+    const { error: createError } = await supabase.rpc('create_consignment_manifest', {
+      p_manifest_code: create.manifestCode.trim(),
+      p_shipment_reference: create.flightNumber.trim() || null,
     })
-    return updatedItem
+    setWorking(false)
+    if (createError) { setError(createError.message); return }
+    setShowCreate(false); setNotice('Manifest created in Packing Italy state.'); await load()
   }
 
-  // Handle +1 barcode scan in Milan (Italy POV)
-  const handlePackItemMilan = (targetSku) => {
-    let updatedItem = null
-    setConsignment(prev => {
-      const target = targetSku.toLowerCase()
-      const newItems = prev.items.map(item => {
-        if (item.sku.toLowerCase() === target) {
-          updatedItem = { ...item, italy_packed_qty: item.italy_packed_qty + 1 }
-          return updatedItem
-        }
-        return item
-      })
-
-      if (!updatedItem) {
-        const matchedP = (products || []).find(p => p.sku.toLowerCase() === target)
-        updatedItem = {
-          sku: matchedP ? matchedP.sku : targetSku.toUpperCase(),
-          name: matchedP ? matchedP.name : 'Packed Milan Item',
-          batch_code: `LOT-${new Date().toISOString().slice(0, 7).replace('-', '')}`,
-          best_before_date: '2028-12-31',
-          italy_packed_qty: 1,
-          manila_scanned_qty: 0
-        }
-        newItems.push(updatedItem)
-      }
-
-      return { ...prev, items: newItems }
+  const addLine = async (event) => {
+    event.preventDefault(); setWorking(true); setError(''); setNotice('')
+    const { error: lineError } = await supabase.rpc('add_consignment_item', {
+      p_consignment_id: manifest.id,
+      p_sku: line.sku,
+      p_batch_code: line.batchCode.trim(),
+      p_best_before_date: line.bestBefore,
+      p_expected_qty: Number(line.packedQty),
     })
-    return updatedItem
+    setWorking(false)
+    if (lineError) { setError(lineError.message); return }
+    setLine({ sku: '', batchCode: '', bestBefore: '', packedQty: '1' }); setShowLine(false); setNotice('Manifest line saved.'); await load()
   }
 
-  const handleQuickCreateProduct = (newP) => {
-    if (supabase) {
-      supabase.from('products').insert({
-        sku: newP.sku,
-        name: newP.name,
-        srp: newP.srp || 0,
-        stock_available: 0,
-        status: 'Draft'
-      }).then(({ error }) => { if (error) console.warn('Quick create product failed:', error.message) })
-    }
-
-    setConsignment(prev => ({
-      ...prev,
-      items: [
-        ...prev.items,
-        {
-          sku: newP.sku,
-          name: newP.name,
-          batch_code: newP.batch_code,
-          best_before_date: newP.best_before_date,
-          italy_packed_qty: newP.italy_packed_qty,
-          manila_scanned_qty: 0
-        }
-      ]
-    }))
+  const scan = async (codeOrSku, stage) => {
+    const clean = String(codeOrSku || '').trim()
+    const product = (products || []).find(candidate => candidate.sku?.toLowerCase() === clean.toLowerCase() || (candidate.barcode && String(candidate.barcode) === clean))
+    const manifestItem = items.find(item => item.sku.toLowerCase() === clean.toLowerCase() || item.sku === product?.sku)
+    if (!manifestItem) throw new Error(`Barcode or SKU ${clean} is not on this manifest. Add the manifest line before scanning it.`)
+    setWorking(true); setError(''); setNotice('')
+    const { data, error: scanError } = await supabase.rpc('record_consignment_scan', { p_consignment_id: manifest.id, p_sku: manifestItem.sku, p_stage: stage })
+    setWorking(false)
+    if (scanError) { setError(scanError.message); throw scanError }
+    const updated = Array.isArray(data) ? data[0] : data
+    if (updated) setManifest(current => ({ ...current, consignment_items: (current.consignment_items || []).map(item => item.id === updated.id ? updated : item) }))
+    setNotice(`${manifestItem.sku} recorded for ${stage === 'milan' ? 'Milan packing' : 'Manila receiving'}.`)
+    return { ...(updated || manifestItem), name: bySku[manifestItem.sku]?.name || manifestItem.sku }
   }
 
-  // Finalize stock arrival and update database
-  const handleFinalizeArrival = async (notes) => {
-    if (supabase && consignment.id && consignment.id.includes('-')) {
-      for (const item of consignment.items) {
-        if (item.manila_scanned_qty > 0) {
-          // Increment product master stock
-          await supabase.rpc('decrement_stock', { p_sku: item.sku, p_quantity: -item.manila_scanned_qty })
-            .catch(async () => {
-              // Direct update fallback
-              const p = (products || []).find(prod => prod.sku === item.sku)
-              if (p) {
-                await supabase.from('products').update({
-                  stock_available: (p.stock_available || 0) + item.manila_scanned_qty,
-                  updated_at: new Date().toISOString()
-                }).eq('sku', item.sku)
-              }
-            })
-
-          // Add batch tracking
-          await supabase.from('product_batches').insert({
-            sku: item.sku,
-            batch_code: item.batch_code,
-            best_before_date: item.best_before_date,
-            quantity_available: item.manila_scanned_qty,
-            arrival_flight: consignment.manifest_code
-          }).catch(() => {})
-        }
-      }
-
-      await supabase.from('consignments').update({
-        status: 'Completed',
-        arrived_at: new Date().toISOString()
-      }).eq('id', consignment.id).catch(() => {})
-    }
-
-    setConsignment(prev => ({ ...prev, status: 'Completed' }))
-    alert("🎉 Success! Manila box arrival finalized, batch dates logged, and master stock updated!")
+  const advance = async (toStatus) => {
+    setWorking(true); setError(''); setNotice('')
+    const { error: advanceError } = await supabase.rpc('advance_consignment', { p_consignment_id: manifest.id, p_to_status: toStatus })
+    setWorking(false)
+    if (advanceError) { setError(advanceError.message); return }
+    setNotice(`Consignment moved to ${toStatus.replaceAll('_', ' ')}.`); await load()
   }
 
-  const handleAddPackingItem = (e) => {
-    e.preventDefault()
-    if (!selectedSku) return
-    const matchedP = products.find(p => p.sku === selectedSku)
-    
-    setConsignment(prev => {
-      const existing = prev.items.find(i => i.sku === selectedSku)
-      if (existing) {
-        return {
-          ...prev,
-          items: prev.items.map(i => i.sku === selectedSku ? { ...i, italy_packed_qty: i.italy_packed_qty + Number(packedQty) } : i)
-        }
-      }
-      return {
-        ...prev,
-        items: [
-          ...prev.items,
-          {
-            sku: selectedSku,
-            name: matchedP ? matchedP.name : selectedSku,
-            batch_code: batchCode,
-            best_before_date: bestBeforeDate,
-            italy_packed_qty: Number(packedQty),
-            manila_scanned_qty: 0
-          }
-        ]
-      }
+  const finalize = async (notes = '') => {
+    const message = missing > 0
+      ? `Finalize with ${missing} unit${missing === 1 ? '' : 's'} missing on arrival? The discrepancy will be recorded.`
+      : 'Finalize this receipt and add scanned units to inventory?'
+    if (!window.confirm(message)) return
+    setWorking(true); setError(''); setNotice('')
+    const { error: finalError } = await supabase.rpc('finalize_consignment_receipt', {
+      p_consignment_id: manifest.id,
+      p_notes: notes.trim() || (missing > 0 ? `Finalized with ${missing} missing unit(s)` : 'All scanned units reconciled'),
     })
-    setShowCreateModal(false)
+    setWorking(false)
+    if (finalError) { setError(finalError.message); return }
+    setNotice('Receipt finalized atomically. Scanned batches and inventory events were recorded.'); setShowReconcile(false); await load()
   }
 
-  const totalItalyPacked = consignment.items.reduce((sum, i) => sum + i.italy_packed_qty, 0)
-  const totalManilaScanned = consignment.items.reduce((sum, i) => sum + i.manila_scanned_qty, 0)
+  const input = 'min-h-11 w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue'
 
-  return (
-    <div className="max-w-7xl mx-auto text-white space-y-4 animate-in fade-in duration-300 font-sans">
+  if (loading) return <div className="rounded-adm border border-adm-line bg-adm-surface p-10 text-center text-sm text-white/55">Loading latest consignment…</div>
 
-      {/* Header */}
-      <div className="bg-adm-surface p-4 sm:p-5 rounded-adm border border-adm-line shadow-lg space-y-4">
-        <div>
-          <div className="flex flex-wrap items-center gap-2 mb-1.5">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wide bg-gold text-navy px-2 py-0.5 rounded-full">
-              Italy ✈ PH consignment
-            </span>
-            <span className="text-[11px] font-mono text-gold font-bold">{consignment.manifest_code}</span>
-          </div>
-          <h1 className="font-serif text-base sm:text-2xl font-bold text-white leading-snug">{consignment.flight_number}</h1>
-          <p className="text-xs sm:text-sm text-white/55 mt-1">
-            Packed in Milan {consignment.packed_at} · <span className="font-semibold text-blue">{consignment.status}</span>
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-2">
-          <button onClick={() => setIsMilanScannerOpen(true)}
-            className="bg-blue hover:bg-blue-deep text-white font-semibold text-sm px-4 min-h-11 rounded-adm-sm transition-all flex items-center justify-center gap-2">
-            📷 Scan in Milan
-          </button>
-          <button onClick={() => setShowCreateModal(true)}
-            className="bg-gold hover:bg-gold-deep text-navy font-semibold text-sm px-4 min-h-11 rounded-adm-sm transition-all">
-            + New box
-          </button>
-          <button onClick={() => setIsScannerOpen(true)}
-            className="bg-white/10 hover:bg-white/15 text-white font-semibold text-sm px-4 min-h-11 rounded-adm-sm transition-all flex items-center justify-center gap-2">
-            📷 Scan Manila arrival
-          </button>
-        </div>
-      </div>
-
-      {/* Receiving summary */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-        <div className="bg-adm-surface border border-adm-line p-3.5 rounded-adm-sm">
-          <p className="text-[11px] font-mono uppercase tracking-wide text-white/50">Milan packed</p>
-          <p className="text-xl font-bold text-white mt-0.5">{totalItalyPacked} <span className="text-xs font-normal text-white/45">units</span></p>
-        </div>
-
-        <div className="bg-adm-surface border border-adm-line p-3.5 rounded-adm-sm">
-          <p className="text-[11px] font-mono uppercase tracking-wide text-white/50">Manila scanned</p>
-          <p className="text-xl font-bold text-forest mt-0.5">{totalManilaScanned} <span className="text-xs font-normal text-white/45">units</span></p>
-        </div>
-
-        <div className="col-span-2 sm:col-span-1 bg-adm-surface border border-adm-line p-3.5 rounded-adm-sm flex flex-col justify-between gap-2">
-          <div>
-            <p className="text-[11px] font-mono uppercase tracking-wide text-white/50">Match status</p>
-            <p className={`text-base font-bold mt-0.5 ${totalManilaScanned === totalItalyPacked ? 'text-forest' : 'text-crimson'}`}>
-              {totalManilaScanned === totalItalyPacked ? '🟢 All matched' : `🔴 ${totalItalyPacked - totalManilaScanned} pending`}
-            </p>
-          </div>
-          <button onClick={() => setIsReconcileOpen(true)} className="text-[13px] font-semibold text-blue hover:underline text-left">
-            Reconcile →
-          </button>
-        </div>
-      </div>
-
-      {/* Manifest */}
-      <div className="bg-adm-surface border border-adm-line rounded-adm overflow-hidden shadow-lg">
-        <div className="px-4 py-3 border-b border-adm-line bg-adm-sunken flex justify-between items-center gap-2">
-          <h3 className="font-serif font-semibold text-white text-[15px]">Box manifest · Milan → Manila</h3>
-          <span className="text-xs font-mono text-white/45 shrink-0">{consignment.items.length} SKUs</span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm border-collapse">
-            <thead>
-              <tr className="border-b border-adm-line text-white/60 font-mono uppercase tracking-wider bg-white/5">
-                <th className="py-3 px-4">SKU</th>
-                <th className="py-3 px-4">Item Name</th>
-                <th className="py-3 px-4">Batch Code</th>
-                <th className="py-3 px-4">Best Before</th>
-                <th className="py-3 px-4 text-center">Italy Packed</th>
-                <th className="py-3 px-4 text-center">Manila Scanned</th>
-                <th className="py-3 px-4 text-right">Action (+1)</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {consignment.items.map(item => (
-                <tr key={item.sku} className="hover:bg-white/5 transition-colors">
-                  <td className="py-3 px-4 font-mono font-bold text-white">{item.sku}</td>
-                  <td className="py-3 px-4 font-medium text-neutral-200">{item.name}</td>
-                  <td className="py-3 px-4 font-mono text-white/60">{item.batch_code}</td>
-                  <td className="py-3 px-4 font-mono text-white/60">{item.best_before_date}</td>
-                  <td className="py-3 px-4 text-center font-mono font-bold text-white">{item.italy_packed_qty}</td>
-                  <td className="py-3 px-4 text-center font-mono font-bold text-forest">{item.manila_scanned_qty}</td>
-                  <td className="py-3 px-4 text-right">
-                    <button
-                      onClick={() => handleScanItem(item.sku)}
-                      className="bg-white/10 hover:bg-forest hover:text-white text-neutral-300 px-3 py-1 rounded text-sm font-bold transition-all"
-                    >
-                      +1 Scan
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Milan Packing Scanner Modal (Italy POV) */}
-      <MilanPackingScannerModal
-        isOpen={isMilanScannerOpen}
-        onClose={() => setIsMilanScannerOpen(false)}
-        items={consignment.items}
-        products={products}
-        onPackItem={handlePackItemMilan}
-        onUnrecognizedBarcode={(barcode) => {
-          setIsMilanScannerOpen(false)
-          setShowScanAiModal(true)
-        }}
-        onQuickCreateProduct={handleQuickCreateProduct}
-      />
-
-      {/* AI Scan-to-PIM Modal */}
-      {showScanAiModal && (
-        <ScanToAiModal
-          onClose={() => setShowScanAiModal(false)}
-          onOpenSmartPaste={() => {
-            setShowScanAiModal(false)
-          }}
-        />
-      )}
-
-      {/* Mobile Scanner Modal (Manila Arrival POV) */}
-      <MobileScannerModal
-        isOpen={isScannerOpen}
-        onClose={() => setIsScannerOpen(false)}
-        items={consignment.items}
-        onScanItem={handleScanItem}
-        onFinishScanning={() => {
-          setIsScannerOpen(false)
-          setIsReconcileOpen(true)
-        }}
-      />
-
-      {/* Reconciliation Modal */}
-      <DiscrepancyReconciliationModal
-        isOpen={isReconcileOpen}
-        onClose={() => setIsReconcileOpen(false)}
-        consignment={consignment}
-        items={consignment.items}
-        onFinalizeArrival={handleFinalizeArrival}
-      />
-
-      {/* Create New Box Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-          <div className="w-full max-w-md bg-adm-surface border border-adm-line rounded-adm p-6 text-white shadow-2xl space-y-4">
-            <h3 className="font-serif font-bold text-xl text-white">Pack New Item Box (Milan)</h3>
-            <form onSubmit={handleAddPackingItem} className="space-y-3">
-              <div>
-                <label className="block text-xs font-mono uppercase text-white/50 mb-1">Select SKU</label>
-                <select
-                  value={selectedSku}
-                  onChange={(e) => setSelectedSku(e.target.value)}
-                  required
-                  className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white"
-                >
-                  <option value="">Select a product SKU...</option>
-                  {(products || []).map(p => (
-                    <option key={p.sku} value={p.sku}>{p.sku} - {p.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-mono uppercase text-white/50 mb-1">Italy Box Packed Quantity</label>
-                <input
-                  type="number"
-                  min="1"
-                  value={packedQty}
-                  onChange={(e) => setPackedQty(e.target.value)}
-                  className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white font-mono"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-mono uppercase text-white/50 mb-1">Batch / Lot Code</label>
-                <input
-                  type="text"
-                  value={batchCode}
-                  onChange={(e) => setBatchCode(e.target.value)}
-                  className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white font-mono"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-mono uppercase text-white/50 mb-1">Best-Before Date</label>
-                <input
-                  type="date"
-                  value={bestBeforeDate}
-                  onChange={(e) => setBestBeforeDate(e.target.value)}
-                  className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-sm text-white font-mono"
-                />
-              </div>
-
-              <div className="flex gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateModal(false)}
-                  className="flex-1 py-2 rounded-adm-sm bg-white/10 text-sm font-semibold"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-2 rounded-adm-sm bg-crimson text-sm font-bold text-white shadow-lg shadow-crimson/20"
-                >
-                  Add to Manifest
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
+  return <div className="mx-auto max-w-7xl space-y-5 text-white">
+    <div className="rounded-adm border border-adm-line bg-adm-surface p-5">
+      <p className="text-xs font-semibold uppercase tracking-wider text-gold">Italy to Philippines custody</p>
+      <div className="mt-1 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><h1 className="font-serif text-2xl font-bold">Consignment receiving</h1><p className="mt-1 max-w-2xl text-sm text-white/55">Only persisted manifests and scan counts appear here. Finalization records batches, discrepancies, and inventory changes in one server transaction.</p></div>{!manifest && <button onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create first manifest</button>}</div>
     </div>
-  )
+
+    {(error || notice) && <div role={error ? 'alert' : 'status'} className={`flex items-start gap-2 rounded-adm-sm border p-3 text-sm ${error ? 'border-crimson/40 bg-crimson/10 text-crimson' : 'border-forest/40 bg-forest/10 text-forest'}`}>{error ? <AlertIcon size={17} /> : <CheckIcon size={17} />}<span>{error || notice}</span></div>}
+
+    {!manifest ? <div className="rounded-adm border border-dashed border-adm-line bg-adm-surface p-12 text-center"><PlaneIcon size={28} className="mx-auto text-white/35" /><p className="mt-3 text-sm font-semibold">No consignment manifests found</p><p className="mt-1 text-xs text-white/45">Create a real manifest when the next packing cycle begins.</p></div> : <>
+      <section className="rounded-adm border border-adm-line bg-adm-surface p-5">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start"><div><p className="font-mono text-xs font-bold text-gold">{manifest.manifest_code}</p><h2 className="mt-1 font-serif text-xl font-bold">{manifest.flight_number}</h2><p className="mt-1 text-sm text-white/50">{manifest.departure_city} → {manifest.destination_city}</p></div><span className="w-fit rounded-full border border-blue/30 bg-blue/10 px-3 py-1.5 text-xs font-semibold text-blue">{manifest.status.replaceAll('_', ' ')}</span></div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3"><Metric label="Milan packed" value={packed} /><Metric label="Manila scanned" value={scanned} /><Metric label="Difference" value={missing} warn={missing > 0} /></div>
+        <div className="mt-5 flex flex-wrap gap-2 border-t border-adm-line pt-5">
+          {manifest.status === 'Packing_Italy' && <>
+            <button onClick={() => setShowLine(true)} className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-4 text-sm font-semibold">Add manifest SKU</button>
+            <button disabled={working || items.length === 0} onClick={() => setScannerStage('milan')} className="inline-flex min-h-11 items-center gap-2 rounded-adm-sm bg-crimson px-4 text-sm font-bold disabled:opacity-40"><BarcodeIcon size={16} /> Start Milan scan</button>
+            <button disabled={working || items.length === 0} onClick={() => advance('In_Transit')} className="min-h-11 rounded-adm-sm bg-blue px-4 text-sm font-bold disabled:opacity-40">Close packing and mark in transit</button>
+          </>}
+          {manifest.status === 'In_Transit' && <button disabled={working} onClick={() => advance('Arrived_Manila')} className="min-h-11 rounded-adm-sm bg-blue px-4 text-sm font-bold">Mark arrived in Manila</button>}
+          {manifest.status === 'Arrived_Manila' && <>
+            <button disabled={working || packed === 0} onClick={() => setScannerStage('manila')} className="inline-flex min-h-11 items-center gap-2 rounded-adm-sm bg-forest px-4 text-sm font-bold disabled:opacity-40"><BarcodeIcon size={16} /> Start Manila recount</button>
+            <button disabled={working || scanned === 0} onClick={() => setShowReconcile(true)} className="min-h-11 rounded-adm-sm border border-forest/35 bg-forest/10 px-4 text-sm font-bold text-forest disabled:opacity-40">Review and finalize</button>
+          </>}
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
+        <div className="flex items-center justify-between border-b border-adm-line bg-adm-sunken px-4 py-3"><h3 className="text-sm font-semibold">Manifest lines</h3><span className="text-xs text-white/45">{items.length} SKUs</span></div>
+        {items.length === 0 ? <p className="p-8 text-center text-sm text-white/45">No SKUs on this manifest yet.</p> : <div className="overflow-x-auto"><table className="w-full min-w-[820px] text-left text-sm"><thead className="bg-white/[0.03] text-xs uppercase tracking-wider text-white/45"><tr><th className="px-4 py-3">SKU / product</th><th className="px-4 py-3">Batch</th><th className="px-4 py-3">Best before</th><th className="px-4 py-3 text-center">Expected</th><th className="px-4 py-3 text-center">Milan packed</th><th className="px-4 py-3 text-center">Manila received</th><th className="px-4 py-3 text-right">Record scan</th></tr></thead><tbody className="divide-y divide-adm-line">{items.map(item => <tr key={item.id}><td className="px-4 py-3"><p className="font-mono text-xs font-bold">{item.sku}</p><p className="mt-0.5 text-xs text-white/45">{bySku[item.sku]?.name || item.sku}</p></td><td className="px-4 py-3 font-mono text-xs text-white/60">{item.batch_code}</td><td className="px-4 py-3 text-white/60">{item.best_before_date}</td><td className="px-4 py-3 text-center font-semibold">{item.expected_qty}</td><td className="px-4 py-3 text-center font-semibold">{item.italy_packed_qty}</td><td className="px-4 py-3 text-center font-semibold text-forest">{item.manila_scanned_qty}</td><td className="px-4 py-3 text-right">{manifest.status === 'Packing_Italy' ? <button disabled={working || item.italy_packed_qty >= item.expected_qty} onClick={() => scan(item.sku, 'milan').catch(() => {})} className="min-h-11 rounded-adm-sm border border-blue/35 bg-blue/10 px-3 text-xs font-semibold text-blue disabled:opacity-35">+1 Milan packed</button> : manifest.status === 'Arrived_Manila' ? <button disabled={working || item.manila_scanned_qty >= item.italy_packed_qty} onClick={() => scan(item.sku, 'manila').catch(() => {})} className="min-h-11 rounded-adm-sm border border-forest/35 bg-forest/10 px-3 text-xs font-semibold text-forest disabled:opacity-35">+1 Manila received</button> : <span className="text-xs text-white/35">Scanning closed</span>}</td></tr>)}</tbody></table></div>}
+      </section>
+    </>}
+
+    <ConsignmentScannerModal
+      isOpen={Boolean(scannerStage)}
+      stage={scannerStage || 'milan'}
+      items={displayItems}
+      onScan={code => scan(code, scannerStage)}
+      onClose={() => setScannerStage(null)}
+      onDone={() => {
+        const completedStage = scannerStage
+        setScannerStage(null)
+        if (completedStage === 'manila') setShowReconcile(true)
+      }}
+    />
+
+    <DiscrepancyReconciliationModal
+      isOpen={showReconcile}
+      onClose={() => setShowReconcile(false)}
+      consignment={manifest}
+      items={displayItems}
+      onFinalizeArrival={finalize}
+    />
+
+    {(showCreate || showLine) && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true">
+      <form onSubmit={showCreate ? createManifest : addLine} className="w-full max-w-md space-y-4 rounded-adm border border-adm-line bg-adm-surface p-6">
+        <h2 className="font-serif text-xl font-bold">{showCreate ? 'Create consignment manifest' : 'Add manifest SKU'}</h2>
+        {showCreate ? <>
+          <Field label="Manifest code"><input className={input} value={create.manifestCode} onChange={e => setCreate(current => ({ ...current, manifestCode: e.target.value }))} required /></Field>
+          <Field label="Flight or shipment reference"><input className={input} value={create.flightNumber} onChange={e => setCreate(current => ({ ...current, flightNumber: e.target.value }))} placeholder="Record only confirmed details" /></Field>
+        </> : <>
+          <Field label="Product SKU"><select className={input} value={line.sku} onChange={e => setLine(current => ({ ...current, sku: e.target.value }))} required><option value="">Select a product</option>{(products || []).map(product => <option key={product.sku} value={product.sku}>{product.sku} · {product.name}</option>)}</select></Field>
+          <Field label="Batch / lot code"><input className={input} value={line.batchCode} onChange={e => setLine(current => ({ ...current, batchCode: e.target.value }))} required /></Field>
+          <Field label="Best-before date"><input className={input} type="date" value={line.bestBefore} onChange={e => setLine(current => ({ ...current, bestBefore: e.target.value }))} required /></Field>
+          <Field label="Expected quantity"><input className={input} type="number" min="1" value={line.packedQty} onChange={e => setLine(current => ({ ...current, packedQty: e.target.value }))} required /></Field>
+        </>}
+        <div className="flex gap-2 pt-2"><button type="button" onClick={() => { setShowCreate(false); setShowLine(false) }} className="min-h-11 flex-1 rounded-adm-sm border border-adm-line bg-white/5 text-sm font-semibold">Cancel</button><button type="submit" disabled={working} className="min-h-11 flex-1 rounded-adm-sm bg-blue text-sm font-bold disabled:opacity-40">{working ? 'Saving…' : 'Save'}</button></div>
+      </form>
+    </div>}
+  </div>
 }
+
+function Field({ label, children }) { return <label className="block text-xs font-semibold text-white/60">{label}<span className="mt-1.5 block">{children}</span></label> }
+function Metric({ label, value, warn }) { return <div className="rounded-adm-sm border border-adm-line bg-black/15 p-4"><p className="text-xs text-white/45">{label}</p><p className={`mt-1 text-2xl font-semibold ${warn ? 'text-crimson' : 'text-white'}`}>{value}</p></div> }

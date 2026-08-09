@@ -13,7 +13,7 @@ import ProductCard from '../ProductCard';
 import { ArrowIcon, CheckIcon, PlaneIcon, PlusIcon, StarIcon, MinusIcon } from '../ui/icons';
 
 function HomeCatalog() {
-  const { listedProducts: products, category, query } = useStore()
+  const { listedProducts: products, category, query, loading } = useStore()
   const [page, setPage] = useState(1)
   const PER_PAGE = 24
 
@@ -46,7 +46,7 @@ function HomeCatalog() {
 
       {filteredProducts.length === 0 ? (
         <div className="py-20 text-center text-navy-soft">
-          <p>No products found matching your criteria.</p>
+          <p>{loading ? 'Loading current catalog…' : query || category !== 'All' ? 'No products found matching your criteria.' : 'No live products are published yet. Please check back after the catalog update.'}</p>
         </div>
       ) : (
         <>

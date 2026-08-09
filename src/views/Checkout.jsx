@@ -2,49 +2,56 @@ import { useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 import ProductVisual from '../components/ProductVisual'
-import { CrimsonButton, GhostButton, TrustBadge, TuscanCard } from '../components/ui/bits'
-import { CheckIcon, SyncIcon } from '../components/ui/icons'
+import { CrimsonButton, GhostButton, TuscanCard } from '../components/ui/bits'
+import { ShieldIcon } from '../components/ui/icons'
 
 const SHIPPING = 85
 
 export default function Checkout() {
-  const { lines, subtotal, wholesaleSavings, isWholesale, couponDiscount, finalTotal, appliedCoupon, applyCoupon, removeCoupon, claimedVouchers, coupons, placeOrder, go } = useStore()
-
-  const [promoInput, setPromoInput] = useState('')
-  const [promoFeedback, setPromoFeedback] = useState(null)
+  const { lines, placeOrder, go } = useStore()
+  const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', note: '' })
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   if (lines.length === 0) {
     return (
       <main className="mx-auto max-w-lg px-4 py-20 text-center">
-        <h1 className="font-serif text-2xl font-semibold">Nothing to check out yet</h1>
-        <p className="mt-2 text-base text-navy-soft">Your cart is empty — the shipment table is full, though.</p>
+        <h1 className="font-serif text-2xl font-semibold">Nothing to request yet</h1>
+        <p className="mt-2 text-base text-navy-soft">Your cart is empty.</p>
         <GhostButton className="mt-6" onClick={() => go('home')}>Back to the shop</GhostButton>
       </main>
     )
   }
 
-  const grandTotal = (finalTotal !== undefined ? finalTotal : subtotal) + SHIPPING
+  const requestSubtotal = lines.reduce((sum, line) => sum + (line.product.retail * line.qty), 0)
+  const grandTotal = requestSubtotal + SHIPPING
+  const update = (key) => (event) => setForm(current => ({ ...current, [key]: event.target.value }))
 
-  const handleApplyCode = (e) => {
-    e.preventDefault()
-    if (!promoInput.trim()) return
-
-    const res = applyCoupon(promoInput)
-    if (res.success) {
-      setPromoFeedback({ type: 'success', message: res.message })
-      setPromoInput('')
-    } else {
-      setPromoFeedback({ type: 'error', message: res.message })
+  const submit = async (event) => {
+    event.preventDefault()
+    setError('')
+    if (!form.email.trim() && !form.phone.trim()) {
+      setError('Enter an email address or mobile number so we can confirm the order.')
+      return
     }
+    setSubmitting(true)
+    const result = await placeOrder({ ...form, fulfillmentMethod: 'Metro Manila delivery' })
+    setSubmitting(false)
+    if (!result?.ok) setError(result?.error || 'The request could not be submitted. Please try again.')
   }
 
-  return (
-    <main className="mx-auto max-w-5xl px-4 pb-24 pt-8 md:pb-16 font-sans">
-      <h1 className="rise font-serif text-3xl font-semibold tracking-tight">Checkout</h1>
-      <p className="rise mt-1 text-sm text-navy-soft">Payment detects automatically — no screenshots or 'sent na po' needed.</p>
+  const fieldClass = 'store-field w-full px-4 py-3 text-base'
 
-      <div className="mt-8 grid gap-6 md:grid-cols-[1.1fr_1fr] md:gap-10">
-        <TuscanCard className="rise p-5 md:p-7 bg-cream/90 backdrop-blur-md" style={{ animationDelay: '80ms' }}>
+  return (
+    <main className="store-section max-w-6xl pb-24 pt-10 font-sans md:pb-20 md:pt-14">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-crimson">Final review</p>
+      <h1 className="mt-2 font-serif text-4xl font-semibold tracking-tight">Submit an order request</h1>
+      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-navy-soft">
+        No online payment is collected yet. We will verify stock, confirm delivery details, and send payment instructions through your chosen contact.
+      </p>
+
+      <form onSubmit={submit} className="mt-9 grid gap-6 md:grid-cols-[1fr_0.86fr] md:gap-10">
+        <TuscanCard className="p-5 md:order-2 md:sticky md:top-28 md:h-fit md:p-7">
           <h2 className="font-serif text-lg font-semibold">Order summary</h2>
           <div className="mt-4 divide-y divide-line">
             {lines.map(({ product, qty, unit }) => (
@@ -59,162 +66,55 @@ export default function Checkout() {
             ))}
           </div>
 
-          {/* 🎟️ Promo Code & Voucher Section */}
-          <div className="mt-4 pt-4 border-t border-line space-y-3">
-            <label className="block font-serif text-xs font-bold uppercase tracking-wider text-navy">
-              Promo Code / Voucher Discount
-            </label>
-
-            {appliedCoupon ? (
-              <div className="flex items-center justify-between p-3 rounded-xl bg-forest/10 border border-forest/30 text-forest text-xs font-mono">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold">✓ {appliedCoupon.code}</span>
-                  <span className="text-[11px] font-sans opacity-80">
-                    ({appliedCoupon.type === 'percentage' ? appliedCoupon.value + '%' : '₱' + appliedCoupon.value} OFF)
-                  </span>
-                </div>
-                <button
-                  onClick={removeCoupon}
-                  className="text-crimson hover:underline font-bold text-xs min-h-[44px] inline-flex items-center px-2"
-                >
-                  Remove
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleApplyCode} className="flex gap-2">
-                <input
-                  type="text"
-                  value={promoInput}
-                  onChange={(e) => setPromoInput(e.target.value)}
-                  placeholder="Enter Promo Code (e.g. MILAN10)"
-                  className="flex-1 rounded-xl border border-line bg-shell px-3.5 py-2.5 text-base md:text-xs text-navy placeholder:text-navy-faint uppercase font-mono font-bold focus:outline-none focus:border-amber min-h-[44px]"
-                />
-                <button
-                  type="submit"
-                  className="bg-amber hover:bg-amber/90 text-navy font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm shrink-0 min-h-[44px] inline-flex items-center justify-center"
-                >
-                  Apply
-                </button>
-              </form>
-            )}
-
-            {promoFeedback && !appliedCoupon && (
-              <p className={`text-[11px] font-mono font-bold ${promoFeedback.type === 'success' ? 'text-forest' : 'text-crimson'}`}>
-                {promoFeedback.message}
-              </p>
-            )}
-
-            {/* Claimed Vouchers Quick Apply Pills */}
-            {!appliedCoupon && claimedVouchers.length > 0 && (
-              <div className="pt-1 flex items-center gap-1.5 overflow-x-auto text-xs font-mono scrollbar-none py-1">
-                <span className="text-navy-soft shrink-0">Wallet:</span>
-                {claimedVouchers.map(vCode => (
-                  <button
-                    key={vCode}
-                    type="button"
-                    onClick={() => {
-                      const res = applyCoupon(vCode)
-                      if (res.success) setPromoFeedback({ type: 'success', message: res.message })
-                      else setPromoFeedback({ type: 'error', message: res.message })
-                    }}
-                    className="px-3 py-2 rounded-lg bg-amber/15 hover:bg-amber/30 text-navy border border-amber/30 font-bold shrink-0 transition-all min-h-[44px] inline-flex items-center"
-                  >
-                    + {vCode}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
           <div className="mt-4 space-y-2 border-t border-line pt-4 text-sm">
-            {isWholesale && wholesaleSavings > 0 && (
-              <p className="flex justify-between font-semibold text-blue">
-                <span className="flex items-center gap-1.5"><CheckIcon size={13} /> Wholesale discount applied</span>
-                <span className="tabular">−{peso(wholesaleSavings)}</span>
-              </p>
-            )}
-
-            <p className="flex justify-between text-navy-soft">
-              <span>Subtotal</span><span className="tabular">{peso(subtotal)}</span>
-            </p>
-
-            {couponDiscount > 0 && (
-              <p className="flex justify-between font-bold text-forest">
-                <span className="flex items-center gap-1.5">🎟️ Promo Discount ({appliedCoupon?.code})</span>
-                <span className="tabular">−{peso(couponDiscount)}</span>
-              </p>
-            )}
-
-            <p className="flex justify-between text-navy-soft">
-              <span>Metro Manila delivery</span><span className="tabular">{peso(SHIPPING)}</span>
-            </p>
-
-            <p className="flex justify-between border-t border-line pt-3 text-lg font-bold">
-              <span>Total</span><span className="tabular">{peso(grandTotal)}</span>
-            </p>
+            <p className="flex justify-between text-navy-soft"><span>Subtotal</span><span>{peso(requestSubtotal)}</span></p>
+            <p className="flex justify-between text-navy-soft"><span>Metro Manila delivery</span><span>{peso(SHIPPING)}</span></p>
+            <p className="flex justify-between border-t border-line pt-3 text-lg font-bold"><span>Estimated total</span><span>{peso(grandTotal)}</span></p>
           </div>
+          <p className="mt-4 text-xs leading-relaxed text-navy-soft">
+            The server validates current website prices and stock when you submit. Discounts and wholesale terms are confirmed manually until account and payment workflows are live.
+          </p>
         </TuscanCard>
 
-        {/* Payment */}
-        <TuscanCard tricolor className="rise h-fit bg-cream/90 backdrop-blur-md" style={{ animationDelay: '160ms' }}>
+        <TuscanCard tricolor className="h-fit md:order-1">
           <div className="p-5 md:p-7">
-            <div className="flex items-center justify-between">
-              <h2 className="font-serif text-lg font-semibold">Payment</h2>
-              <TrustBadge>100% secure checkout</TrustBadge>
+            <div className="flex items-start gap-3 rounded-lg border border-forest/25 bg-forest/5 p-4">
+              <ShieldIcon size={20} className="mt-0.5 shrink-0 text-forest" />
+              <div>
+                <h2 className="font-serif text-lg font-semibold">Contact and delivery</h2>
+                <p className="mt-1 text-sm text-navy-soft">Submitting this form does not charge you or reserve stock.</p>
+              </div>
             </div>
 
-            <div className="mt-5 rounded-2xl bg-shell p-5 text-center">
-              <QrMock />
-              <p className="mt-3 text-sm font-semibold">Scan with any QR Ph app</p>
-              <p className="text-sm text-navy-soft">GCash · Maya · UnionBank · BPI</p>
+            <div className="mt-5 space-y-4">
+              <label className="block text-sm font-semibold">Full name
+                <input className={`${fieldClass} mt-1.5`} value={form.name} onChange={update('name')} autoComplete="name" required />
+              </label>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="block text-sm font-semibold">Email
+                  <input className={`${fieldClass} mt-1.5`} type="email" value={form.email} onChange={update('email')} autoComplete="email" />
+                </label>
+                <label className="block text-sm font-semibold">Mobile number
+                  <input className={`${fieldClass} mt-1.5`} type="tel" value={form.phone} onChange={update('phone')} autoComplete="tel" />
+                </label>
+              </div>
+              <label className="block text-sm font-semibold">Delivery address
+                <textarea className={`${fieldClass} mt-1.5 min-h-24 resize-y`} value={form.address} onChange={update('address')} autoComplete="street-address" required />
+              </label>
+              <label className="block text-sm font-semibold">Order note <span className="font-normal text-navy-soft">(optional)</span>
+                <textarea className={`${fieldClass} mt-1.5 min-h-20 resize-y`} value={form.note} onChange={update('note')} placeholder="Delivery timing, landmark, or product question" />
+              </label>
             </div>
 
-            <p className="mt-4 flex items-center justify-center gap-2 text-sm text-navy-soft">
-              <SyncIcon size={14} className="text-forest" />
-              Payment is detected automatically — no screenshot verification, ever.
-            </p>
+            {error && <p role="alert" className="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
 
-            <p className="mt-5 flex items-baseline justify-between">
-              <span className="text-sm text-navy-soft">Amount due</span>
-              <span className="text-2xl font-bold text-navy tabular">{peso(grandTotal)}</span>
-            </p>
-
-            <CrimsonButton className="mt-4 w-full py-4 text-base" onClick={placeOrder}>
-              Confirm payment
+            <CrimsonButton type="submit" className="mt-5 w-full py-4 text-base" disabled={submitting}>
+              {submitting ? 'Submitting request…' : 'Submit order request'}
             </CrimsonButton>
+            <p className="mt-3 text-center text-xs text-navy-soft">K2 staff will contact you before any payment is requested.</p>
           </div>
         </TuscanCard>
-      </div>
+      </form>
     </main>
-  )
-}
-
-// Deterministic QR-looking SVG — a mock, not a scannable code.
-function QrMock() {
-  const cells = []
-  let seed = 41
-  for (let y = 0; y < 21; y++) {
-    for (let x = 0; x < 21; x++) {
-      seed = (seed * 137 + 71) % 251
-      const inFinder =
-        (x < 7 && y < 7) || (x > 13 && y < 7) || (x < 7 && y > 13)
-      if (!inFinder && seed % 5 < 2) cells.push([x, y])
-    }
-  }
-  const finder = (fx, fy) => (
-    <g key={`${fx}-${fy}`}>
-      <rect x={fx} y={fy} width="7" height="7" fill="none" stroke="#23262c" strokeWidth="1" />
-      <rect x={fx + 2} y={fy + 2} width="3" height="3" fill="#23262c" />
-    </g>
-  )
-  return (
-    <svg viewBox="-1 -1 23 23" className="mx-auto h-36 w-36 rounded-md bg-cream/90 backdrop-blur-sm p-1.5 shadow-card" role="img" aria-label="QR Ph payment code (mock)">
-      {cells.map(([x, y]) => (
-        <rect key={`${x}.${y}`} x={x} y={y} width="1" height="1" fill="#23262c" />
-      ))}
-      {finder(0, 0)}
-      {finder(14, 0)}
-      {finder(0, 14)}
-    </svg>
   )
 }

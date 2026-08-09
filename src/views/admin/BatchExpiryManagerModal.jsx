@@ -31,21 +31,10 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
     if (product && product.batches && Array.isArray(product.batches) && product.batches.length > 0) {
       return product.batches
     }
-    // Default initial batch fallback
-    return [
-      {
-        id: 'B-01',
-        box_code: 'MIL-BOX-092',
-        qty: product?.stock || product?.stock_available || 12,
-        expiry_date: product?.expiry_date || '2026-08-15',
-        landed_date: '2026-07-02',
-        hub: '',
-        custodian: '',
-        channel: '',
-        is_pinned: false
-      }
-    ]
+    return []
   })
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
 
   // Load this product's real batches from Supabase (falls back to the initial state above)
   useEffect(() => {
@@ -72,8 +61,8 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
 
   // New Batch Form State
   const [newBoxCode, setNewBoxCode] = useState('')
-  const [newQty, setNewQty] = useState(10)
-  const [newExpiryDate, setNewExpiryDate] = useState('2026-11-30')
+  const [newQty, setNewQty] = useState(1)
+  const [newExpiryDate, setNewExpiryDate] = useState('')
   const [newHub, setNewHub] = useState('')
   const [newCustodian, setNewCustodian] = useState('')
   const [newChannel, setNewChannel] = useState('')
@@ -88,11 +77,11 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
 
   const handleAddBatch = (e) => {
     e.preventDefault()
-    if (!newExpiryDate || newQty <= 0) return
+    if (!newBoxCode.trim() || !newExpiryDate || newQty <= 0) return
 
     const newBatch = {
       id: `B-${Date.now().toString().slice(-4)}`,
-      box_code: newBoxCode || `MIL-BOX-${Math.floor(100 + Math.random() * 900)}`,
+      box_code: newBoxCode.trim(),
       qty: Number(newQty),
       expiry_date: newExpiryDate,
       landed_date: new Date().toISOString().split('T')[0],
@@ -104,7 +93,8 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
 
     setBatches(prev => [...prev, newBatch])
     setNewBoxCode('')
-    setNewQty(10)
+    setNewQty(1)
+    setNewExpiryDate('')
     setNewHub('')
     setNewCustodian('')
     setNewChannel('')
@@ -116,13 +106,17 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
 
   const handleSave = async () => {
     const sku = product?.sku || product?.id
+    setError('')
+    setSaving(true)
+    if (!supabase || !sku) {
+      setError('Database connection is unavailable. Nothing was saved.')
+      setSaving(false)
+      return
+    }
     if (supabase && sku) {
-      // Replace this SKU's batches with the current edited list
-      await supabase.from('product_batches').delete().eq('sku', sku)
       const rows = batches
         .filter((b) => Number(b.qty) > 0 || b.expiry_date)
         .map((b) => ({
-          sku,
           box_code: b.box_code || null,
           quantity: Number(b.qty) || 0,
           expiry_date: b.expiry_date || null,
@@ -132,19 +126,29 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
           channel: b.channel || null,
           is_pinned: !!b.is_pinned,
         }))
-      if (rows.length) await supabase.from('product_batches').insert(rows)
+      const { error: saveError } = await supabase.rpc('replace_product_batches', {
+        p_sku: sku,
+        p_batches: rows,
+        p_reason: 'Batch editor reconciliation',
+      })
+      if (saveError) {
+        setError(saveError.message)
+        setSaving(false)
+        return
+      }
     }
     if (onSaveBatches && product) onSaveBatches(sku, batches)
+    setSaving(false)
     onClose()
   }
 
   const totalBatchStock = batches.reduce((sum, b) => sum + (Number(b.qty) || 0), 0)
 
-  // Sort pinned batches first, then by closest expiration date (FEFO rule)
+  // FEFO order always wins. Pins are visual follow-up markers only.
   const sortedBatches = [...batches].sort((a, b) => {
-    if (a.is_pinned && !b.is_pinned) return -1
-    if (!a.is_pinned && b.is_pinned) return 1
-    return new Date(a.expiry_date) - new Date(b.expiry_date)
+    const aDate = a.expiry_date ? new Date(a.expiry_date).getTime() : Number.MAX_SAFE_INTEGER
+    const bDate = b.expiry_date ? new Date(b.expiry_date).getTime() : Number.MAX_SAFE_INTEGER
+    return aDate - bDate
   })
 
   return (
@@ -178,7 +182,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
             <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-white/50">
               Active Shipment Boxes & Expiration Dates (Editable)
             </h3>
-            <span className="text-xs font-mono text-amber">📌 Click Pin to priority-highlight specific batch</span>
+            <span className="text-xs font-mono text-amber">Pins flag follow-up only; dispatch remains FEFO.</span>
           </div>
 
           <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
@@ -199,9 +203,9 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                         className={`px-2 py-0.5 rounded text-xs font-bold border transition-all ${
                           b.is_pinned ? 'bg-amber text-navy border-amber font-extrabold' : 'bg-white/5 border-adm-line text-white/60 hover:text-white'
                         }`}
-                        title="Pin this batch to priority top"
+                        title="Flag this batch for staff attention"
                       >
-                        {b.is_pinned ? '📌 Pinned Priority' : '📌 Pin Batch'}
+                        {b.is_pinned ? '📌 Attention flagged' : '📌 Flag attention'}
                       </button>
                       <span className="text-white/60 text-xs">ID: {b.id}</span>
                     </div>
@@ -300,6 +304,8 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
           </div>
         </div>
 
+        {error && <p role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm text-crimson">{error}</p>}
+
         {/* Add New Batch Box Form */}
         <form onSubmit={handleAddBatch} className="bg-adm-sunken border border-adm-line p-4 rounded-adm-sm space-y-3">
           <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-white/60">+ Add an incoming box batch</h4>
@@ -308,6 +314,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
               <label className="block text-xs text-white/60 mb-1">Box / Cargo Code</label>
               <input
                 type="text"
+                required
                 value={newBoxCode}
                 onChange={(e) => setNewBoxCode(e.target.value)}
                 placeholder="e.g. MIL-BOX-104"
@@ -390,9 +397,10 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
           <button
             type="button"
             onClick={handleSave}
-            className="px-6 py-2 rounded-adm-sm bg-forest text-sm font-bold text-white hover:bg-forest/90 shadow-lg shadow-forest/20"
+            disabled={saving}
+            className="min-h-11 px-6 py-2 rounded-adm-sm bg-forest text-sm font-bold text-white hover:bg-forest/90 shadow-lg shadow-forest/20 disabled:opacity-40"
           >
-            💾 Save Multi-Batch Expirations
+            {saving ? 'Saving…' : 'Save batch reconciliation'}
           </button>
         </div>
 

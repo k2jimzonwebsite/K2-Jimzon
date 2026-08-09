@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" source("./");
 
 /*
   K2 Jimzon — Strict 4-Color Luxury Palette Strategy & Warm Tuscan Linen Light/Dark Mode (OKLCH & Impeccable Rules)
@@ -50,7 +50,7 @@
   }
 
   /* Warm Tuscan wood-grain linen texture — light mode only (soft, multiply-blended, zero glare) */
-  body:not(.dark) {
+  :root:not(.dark) body {
     background-color: #FAF7F2;
     background-image:
       /* Terracotta warmth — top right */
@@ -183,6 +183,217 @@
 
 @media (prefers-reduced-motion: reduce) {
   .chameleon-breathe, .chameleon-drift { animation: none; }
+  .storefront-ui *,
+  .storefront-ui *::before,
+  .storefront-ui *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .admin-ui .pulse-dot,
+  .admin-ui .animate-spin,
+  .admin-ui .animate-pulse { animation: none; }
+}
+
+/* ── STOREFRONT — EDITORIAL MARKET SYSTEM ─────────────────────────────── */
+.storefront-ui {
+  --color-crimson: #b63835;
+  --color-crimson-deep: #922c2a;
+  --color-crimson-wash: rgba(182, 56, 53, 0.11);
+  --color-oxblood: #762826;
+  --color-gold: #a97832;
+  --color-gold-deep: #82591f;
+  --color-gold-wash: rgba(169, 120, 50, 0.12);
+  --color-forest: #35664d;
+  --color-forest-wash: rgba(53, 102, 77, 0.11);
+  --color-blue: #345d80;
+  --color-blue-deep: #284966;
+  --color-blue-wash: rgba(52, 93, 128, 0.10);
+
+  /* ── Elevation tokens — single source of truth for every raised surface ─ */
+  /* Light: soft warm Tuscan linen paper (#FAF5EC) rested naturally on wood grain — zero harsh glare! */
+  /* Dark: obsidian dark surface raised off obsidian canvas                   */
+  --store-surface-bg:      #FAF5EC;
+  --store-surface-border:  #E4DAC7;
+  --store-surface-shadow:  0 2px 8px -2px rgba(80, 60, 40, 0.08), 0 8px 24px -4px rgba(80, 60, 40, 0.05);
+
+  /* ── Product image tray — mode-aware neutral, soft warm ivory in light ── */
+  --product-img-bg: #F3EDE0;   /* warm ivory in light */
+
+  min-height: 100dvh;
+  background-color: var(--color-cream);
+}
+
+/* Dark mode overrides for storefront tokens */
+.dark .storefront-ui {
+  --store-surface-bg:      #0E121E;
+  --store-surface-border:  rgba(255, 255, 255, 0.12);
+  --store-surface-shadow:  0 4px 20px -2px rgba(0, 0, 0, 0.45);
+  --product-img-bg:        #161B29;  /* deep navy tray in dark mode */
+
+  /* ProductArt tile: drop lightness so per-hue art reads as dark accent */
+  --art-tile-l:  0.24;
+  --art-tile-l2: 0.19;
+  --art-mid-l:   0.38;
+}
+
+/* NON-NEGOTIABLE STOREFRONT BRAND LAYER
+   The light theme is a warm material canvas, never a flat-white page. Keep the
+   wood asset and tune only the translucent overlays if the grain needs restraint. */
+:root:not(.dark) .storefront-ui {
+  background-color: #eadcc7;
+  background-image:
+    radial-gradient(ellipse 65% 48% at 86% 13%, oklch(55% 0.15 35 / 0.08) 0%, transparent 72%),
+    radial-gradient(ellipse 54% 62% at 8% 84%, oklch(55% 0.08 135 / 0.06) 0%, transparent 72%),
+    linear-gradient(180deg, rgb(255 252 246 / 0.16), rgb(238 222 197 / 0.12)),
+    url('/wood-bg.jpg');
+  background-size: 100% 100%, 100% 100%, 100% 100%, cover;
+  background-attachment: fixed, fixed, fixed, fixed;
+  background-position: center, center, center, center top;
+  background-repeat: no-repeat;
+  background-blend-mode: normal, normal, normal, multiply;
+}
+
+/* ── .store-atmosphere: full-width section backgrounds ─────────────────── */
+.store-atmosphere {
+  background-color: var(--store-surface-bg);
+}
+
+/* ── .store-atmosphere-soft: translucent tinted section fill ────────────── */
+.store-atmosphere-soft {
+  background-color: var(--store-surface-bg);
+}
+
+.store-nav-surface {
+  background-color: var(--store-surface-bg);
+}
+
+:root:not(.dark) .storefront-ui .store-atmosphere {
+  background-color: rgba(251, 246, 237, 0.78);
+  backdrop-filter: blur(4px);
+}
+
+:root:not(.dark) .storefront-ui .store-atmosphere-soft {
+  background-color: rgba(246, 239, 227, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+:root:not(.dark) .storefront-ui .store-nav-surface {
+  background-color: rgba(251, 246, 237, 0.88);
+  backdrop-filter: blur(16px) saturate(1.1);
+}
+
+.dark .storefront-ui .store-nav-surface {
+  background-color: rgba(9, 12, 21, 0.92);
+  backdrop-filter: blur(16px) saturate(1.1);
+}
+
+.storefront-ui ::selection {
+  background: var(--color-crimson);
+  color: white;
+}
+
+.storefront-ui :is(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-crimson) 70%, transparent);
+  outline-offset: 2px;
+}
+
+.store-field {
+  min-height: 44px;
+  border: 1px solid var(--store-surface-border);
+  border-radius: 0.625rem;
+  background: var(--store-surface-bg);
+  color: var(--color-navy);
+  font-size: 0.875rem;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+
+.store-field::placeholder { color: var(--color-navy-faint); }
+.store-field:hover { border-color: color-mix(in srgb, var(--color-navy) 24%, var(--store-surface-border)); }
+.store-field:focus {
+  border-color: color-mix(in srgb, var(--color-crimson) 65%, var(--store-surface-border));
+  box-shadow: 0 0 0 3px var(--color-crimson-wash);
+  outline: none;
+}
+
+.store-section {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1rem;
+}
+
+/* ── .store-panel: raised card surface ──────────────────────────────────── */
+/* Light: soft warm Tuscan linen paper (#FAF5EC) with rich warm border & shadow */
+/* Dark: obsidian surface                                                    */
+.store-panel {
+  border: 1px solid var(--store-surface-border);
+  border-radius: 1rem;
+  background: var(--store-surface-bg);
+  box-shadow: var(--store-surface-shadow);
+}
+
+/* ── .product-img-surface: image tray inside product cards ─────────────── */
+.product-img-surface {
+  background-color: var(--product-img-bg);
+}
+
+/* ── .store-card: named card container (replaces ad-hoc border+bg classes) */
+.store-card {
+  border: 1px solid var(--store-surface-border);
+  border-radius: 0.75rem;
+  background: var(--store-surface-bg);
+  box-shadow: var(--store-surface-shadow);
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 200ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.store-card:hover {
+  border-color: color-mix(in srgb, var(--color-navy) 20%, var(--store-surface-border));
+  box-shadow: 0 4px 12px -2px rgba(80, 60, 40, 0.12), 0 12px 28px -4px rgba(80, 60, 40, 0.08);
+  transform: translateY(-1px);
+}
+
+.dark .store-card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.40);
+}
+
+/* Dynamic Panel tokens — Theme-adaptive surfaces for featured callouts and footers */
+.store-dark-panel {
+  background: var(--store-surface-bg);
+  border-color: var(--store-surface-border);
+  color: var(--color-navy);
+}
+
+.store-loading-mark {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.75rem;
+  border: 2px solid var(--color-line);
+  border-top-color: var(--color-crimson);
+  border-radius: 999px;
+  animation: store-spin 700ms linear infinite;
+}
+
+.footer-link,
+.footer-copy {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 0.45rem;
+  color: rgba(255, 253, 249, 0.68);
+  font-size: 0.8125rem;
+  text-align: left;
+}
+
+.footer-link { transition: color 150ms ease; }
+.footer-link:hover { color: white; }
+
+@keyframes store-spin { to { transform: rotate(360deg); } }
+
+@media (min-width: 1024px) {
+  .store-section { padding-inline: 1.5rem; }
 }
 
 /* ============================================================================
@@ -191,6 +402,10 @@
    override them where a screen genuinely needs it.
    ========================================================================== */
 @layer components {
+  .admin-ui {
+    color-scheme: dark;
+  }
+
   .adm-card {
     background-color: var(--color-adm-surface);
     border: 1px solid var(--color-adm-line);
@@ -226,6 +441,11 @@
   }
   .adm-input::placeholder { color: rgba(255, 255, 255, 0.35); }
   .adm-input:focus { outline: none; border-color: var(--color-blue); }
+  .admin-ui select.adm-input,
+  .admin-ui select.adm-input option {
+    background-color: var(--color-adm-raised);
+    color: #fff;
+  }
 
   .adm-btn {
     display: inline-flex;
@@ -349,4 +569,12 @@
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(212, 175, 55, 0.7);
+}
+
+/* The admin uses one cool accent; keep its scroll affordances in that system. */
+.admin-ui .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.34);
+}
+.admin-ui .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.58);
 }

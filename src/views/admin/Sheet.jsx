@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
-import { products as localProducts } from '../../data/products'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import PhotoManagerModal from './PhotoManagerModal'
@@ -85,29 +84,13 @@ export default function Sheet() {
       }
     }
 
-    if (fetched.length === 0) {
-      fetched = localProducts.map(p => ({
-        sku: p.id,
-        barcode: p.barcode || '8050031123456',
-        name: p.name,
-        short: p.short,
-        origin: p.origin,
-        category_id: p.category,
-        srp: p.retail,
-        wholesale_price: p.wholesale,
-        stock_available: p.stock,
-        primary_image_url: p.img,
-        description: p.inside,
-        usage_instructions: p.guide?.steps ? p.guide.steps.join(' ') : 'Store in a cool dry place.',
-        status: 'Active'
-      }))
-    }
     setRows(fetched)
     setLoading(false)
   }
 
   const updateField = async (index, colName, value, oldSku = null) => {
     const field = FIELD_MAP[colName]
+    if (field === 'stock_available') return
     const product = rows[index]
     let finalValue = value
     
@@ -317,6 +300,10 @@ export default function Sheet() {
                             <input type="checkbox" checked={Boolean(val)} onChange={(e) => updateField(i, col, e.target.checked)} className="cursor-pointer mx-auto block w-4 h-4 text-blue" />
                           </Cell>
                         )
+                      }
+
+                      if (field === 'stock_available') {
+                        return <Cell key={colIdx} className="min-w-[120px] p-0"><button type="button" onClick={() => setBatchProduct(r)} className="min-h-11 w-full px-2.5 text-left font-mono text-sm font-bold text-blue" title="Stock changes use batch reconciliation">{displayVal || 0} · batches</button></Cell>
                       }
 
                       return (

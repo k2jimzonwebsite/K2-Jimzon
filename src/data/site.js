@@ -82,23 +82,23 @@ export const REVIEWS = [
 export const FAQS = [
   {
     q: 'Are your products really authentic?',
-    a: 'Yes — we buy them ourselves from Italian retail and wholesale suppliers, fly them on our own monthly consignment, and print the batch and best-before date on every listing. Five years, 4.9★ across 3,000+ marketplace ratings.',
+    a: 'K2 sources through its Italy purchasing network and records supplier, batch, and best-before details when available. Ask staff for the product-specific receipt, label, or provenance evidence you need before ordering.',
   },
   {
     q: 'How fast is delivery?',
-    a: 'In-stock items ship from our Manila warehouse within 24 hours: 1–2 days Metro Manila, 3–5 days provincial via courier. Pasabuy requests ride the next monthly flight from Milan.',
+    a: 'Delivery timing depends on confirmed Manila stock, destination, and courier availability. K2 staff confirms the expected handoff and delivery window after reviewing your order request. Pasabuy timing is quoted separately.',
   },
   {
     q: 'What is Pasabuy and how does it work?',
-    a: 'Ask us for any product we don’t stock. We quote the landed price within 24 hours, buy it in Italy ourselves, and it flies home with our regular shipment — tracked like any order, no group-chat chaos.',
+    a: 'Submit the exact item and your contact details. Staff researches it, records the exchange-rate and freight assumptions, sends a quote for approval, and only then proceeds to purchasing and shipment tracking.',
   },
   {
     q: 'How do I pay?',
-    a: 'QR Ph (GCash, Maya, UnionBank, BPI and any participating bank app) at checkout. Payment confirms automatically — no screenshot-sending, no "sent na po".',
+    a: 'Online payment is not enabled yet. Checkout submits an order request; K2 staff verifies stock and sends the available payment instructions directly. Do not send money until the order reference and instructions are confirmed.',
   },
   {
     q: 'I run a café / resto / reselling business. Can I get wholesale prices?',
-    a: 'Yes — apply for a wholesale account. Approved businesses see their tier pricing across the whole store, with live stock and self-serve ordering. No more waiting for a Viber reply.',
+    a: 'Yes. Send a wholesale inquiry with your business, products, quantities, delivery area, and required date. Staff confirms availability and commercial terms manually while wholesale account pricing is still being built.',
   },
   {
     q: 'Why do your fragrances say "inspired scent"?',

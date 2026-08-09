@@ -6,6 +6,10 @@ This is the "never get lost" document. It says what the system is, how our real
 workflow maps onto it, everything that's been built, exactly what to run, and
 what's left to do. When something changes, update this file.
 
+Future proposals that are not yet implemented are kept separately in
+[`FUTURE_IDEAS.md`](FUTURE_IDEAS.md). Do not treat an entry in that register as
+current production behavior until it is completed and incorporated here.
+
 ---
 
 ## 1. What K2 Jimzon is
@@ -199,6 +203,9 @@ admin) or OAuth bounces to localhost.
   the UI says so.
 - **Secrets:** never in the browser — only Supabase Edge Function secrets.
 - **Admin is the source of truth**; storefront reads from it.
+- **Luxury wood canvas:** light-mode storefront pages retain `public/wood-bg.jpg`
+  behind translucent structural bands. Pure-white page backgrounds are prohibited;
+  future redesigns adjust overlay strength instead of removing the texture.
 - **FEFO** always — oldest expiry sells first.
 - **Stock is per-staff custody across multiple hubs** — not one warehouse.
 - **SQL workflow:** Claude writes idempotent `RUN_THIS_*.sql`; you paste-and-run

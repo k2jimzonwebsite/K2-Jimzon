@@ -1,89 +1,66 @@
 import { useStore } from '../context/StoreContext'
-import { CATEGORIES } from '../data/products'
 import { Wordmark } from './ui/bits'
+import { ArrowIcon } from './ui/icons'
 
-const PAYMENTS = ['QR Ph', 'GCash', 'Maya', 'BPI', 'UnionBank', 'Visa · MC']
+const CATEGORY_LINKS = [
+  ['Seasoning, Staple Foods & Baking Ingredients', 'Pantry & baking'],
+  ['Snack & Sweets', 'Snacks & sweets'],
+  ['Beverages', 'Coffee & beverages'],
+  ['Bath & Body', 'Bath & body'],
+  ['Skin Care', 'Skin care'],
+]
 
 export default function Footer() {
   const { go, setCategory, setQuery } = useStore()
-
-  const jumpToCategory = (c) => {
+  const jump = (category) => {
     setQuery('')
-    setCategory(c)
-    go('home')
+    setCategory(category)
+    go('catalog')
   }
 
   return (
-    <footer className="border-t border-line bg-shell/60 backdrop-blur-sm pb-28 pt-12 md:pb-12">
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="grid gap-8 grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
-          <div>
+    <footer className="border-t border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] pb-28 pt-14 text-navy dark:text-cream md:pb-12 md:pt-16">
+      <div className="store-section">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.45fr_0.8fr_0.8fr_1fr]">
+          <div className="sm:col-span-2 lg:col-span-1">
             <Wordmark />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-navy-soft">
-              We discover, import, and deliver authentic Italian products for the
-              Philippine market — sourced by our own buyers in Italy, flown monthly,
-              stocked in Manila.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-1.5">
-              {PAYMENTS.map((p) => (
-                <span key={p} className="rounded border border-line bg-cream/80 px-2 py-1 text-xs font-semibold text-navy-soft">
-                  {p}
-                </span>
-              ))}
-            </div>
+            <p className="mt-5 max-w-sm text-sm leading-7 text-navy-soft dark:text-cream/65">A multi-channel Italy-sourced catalog and Pasabuy operation serving Philippine customers and businesses.</p>
+            <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.18em] text-crimson dark:text-gold">Website · Shopee · TikTok Shop · Lazada · Pasabuy</p>
           </div>
 
-          <FooterCol title="Shop">
-            {CATEGORIES.filter((c) => c !== 'All').map((c) => (
-              <FooterLink key={c} onClick={() => jumpToCategory(c)}>{c}</FooterLink>
-            ))}
-          </FooterCol>
+          <FooterColumn title="Shop">
+            {CATEGORY_LINKS.map(([category, label]) => <FooterButton key={category} onClick={() => jump(category)}>{label}</FooterButton>)}
+          </FooterColumn>
 
-          <FooterCol title="Services">
-            <FooterLink onClick={() => go('pasabuy')}>Pasabuy requests</FooterLink>
-            <FooterLink onClick={() => go('wholesale')}>Wholesale accounts</FooterLink>
-            <FooterLink onClick={() => go('checkout')}>Cart & checkout</FooterLink>
-            <FooterLink onClick={() => go('home')}>This month's shipment</FooterLink>
-          </FooterCol>
+          <FooterColumn title="Services">
+            <FooterButton onClick={() => go('pasabuy')}>Pasabuy sourcing</FooterButton>
+            <FooterButton onClick={() => go('wholesale')}>Business supply</FooterButton>
+            <FooterButton onClick={() => go('catalog')}>Current catalog</FooterButton>
+            <FooterButton onClick={() => go('checkout')}>Order request</FooterButton>
+          </FooterColumn>
 
-          <FooterCol title="Get in touch">
-            <FooterLink>Viber · 9am–9pm daily</FooterLink>
-            <FooterLink>Messenger · @k2jimzon</FooterLink>
-            <FooterLink>Shopee · k2jimzononlineshop</FooterLink>
-            <FooterLink>Lazada · K2 Jimzon</FooterLink>
-          </FooterCol>
+          <FooterColumn title="Contact">
+            <li><a className="footer-link hover:text-crimson dark:hover:text-white" href="mailto:k2jimzonwebsite@gmail.com">Email K2 Jimzon <ArrowIcon size={13} /></a></li>
+            <li><span className="footer-copy">Messenger · @k2jimzon</span></li>
+            <li><span className="footer-copy">Shopee · k2jimzononlineshop</span></li>
+            <li><span className="footer-copy">Manila, Philippines</span></li>
+          </FooterColumn>
         </div>
 
-        <div className="mt-10 border-t border-line pt-5 text-center text-xs leading-relaxed text-navy-faint">
-          <p>
-            Concept prototype — products, prices, and reviews are illustrative mock data.
-            Product photography via Open Food Facts (CC-BY-SA) · lifestyle photography via Unsplash.
-          </p>
-          <p className="mt-1">© 2026 K2 Jimzon · Direct Italian imports · Manila, Philippines</p>
+        <div className="mt-12 grid gap-3 border-t border-[var(--store-surface-border)] pt-6 text-xs leading-relaxed text-navy-faint dark:text-cream/50 md:grid-cols-[1fr_auto] md:items-end">
+          <p>Submitting a Website or Pasabuy request does not collect payment. K2 staff confirms availability, delivery, and payment instructions directly.</p>
+          <p className="md:text-right">© 2026 K2 Jimzon · Direct Italian imports</p>
+          {import.meta.env.DEV && <p className="md:col-span-2">Development preview: fallback products and reviews are illustrative. Production displays database-backed published records.</p>}
         </div>
       </div>
     </footer>
   )
 }
 
-function FooterCol({ title, children }) {
-  return (
-    <div>
-      <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-navy">{title}</h3>
-      <ul className="mt-3 space-y-2">{children}</ul>
-    </div>
-  )
+function FooterColumn({ title, children }) {
+  return <div><h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-crimson dark:text-gold">{title}</h3><ul className="mt-4 space-y-1">{children}</ul></div>
 }
 
-function FooterLink({ children, onClick }) {
-  return (
-    <li>
-      <button
-        onClick={onClick}
-        className={'text-left py-1 text-sm text-navy-soft ' + (onClick ? 'hover:text-crimson hover:underline underline-offset-2' : 'cursor-default')}
-      >
-        {children}
-      </button>
-    </li>
-  )
+function FooterButton({ children, onClick }) {
+  return <li><button onClick={onClick} className="footer-link hover:text-crimson dark:hover:text-white">{children}</button></li>
 }

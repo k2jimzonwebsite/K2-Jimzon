@@ -1,74 +1,140 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
+import { readFile } from 'node:fs/promises'
 
-test.describe('Italy-to-Manila Consignment & Mobile Barcode Box Receiving', () => {
+test('launch migration contains atomic receiving and controlled transitions', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260803_launch_core_stabilization.sql', import.meta.url), 'utf8')
+  expect(sql).toContain("alter type public.user_role add value if not exists 'Staff'")
+  expect(sql).toContain("alter type public.channel_type add value if not exists 'website_retail'")
+  expect(sql).toContain("alter type public.order_status_enum add value if not exists 'Packed'")
+  expect(sql).toContain('create or replace function public.replace_product_batches')
+  expect(sql).toContain('create view public.v_expiring_batches\nwith (security_invoker = true)')
+  expect(sql).toContain('create table if not exists public.error_reports')
+  expect(sql).toContain('create table if not exists public.consignments')
+  expect(sql).toContain('create table if not exists public.consignment_items')
+  expect(sql.indexOf('create table if not exists public.consignment_items'))
+    .toBeLessThan(sql.indexOf('alter table public.consignment_items add column if not exists expected_qty integer'))
+  expect(sql.indexOf('create table if not exists public.consignment_items'))
+    .toBeLessThan(sql.indexOf('returns public.consignment_items'))
+  expect(sql).toContain('create or replace function public.create_consignment_manifest')
+  expect(sql).toContain('create or replace function public.add_consignment_item')
+  expect(sql).toContain('create or replace function public.finalize_consignment_receipt')
+  expect(sql).toContain('create or replace function public.record_consignment_scan')
+  expect(sql).toContain('and italy_packed_qty <> expected_qty')
+  expect(sql).toContain('create or replace function public.transition_pasabuy_request')
+  expect(sql).toContain('create or replace function public.submit_order_request')
+  expect(sql).toContain('alter table public.orders add column if not exists customer_name text')
+  expect(sql).toContain('alter table public.orders add column if not exists customer_email text')
+  expect(sql).toContain('alter table public.orders add column if not exists total_amount numeric')
+  expect(sql).toContain('create or replace function public.confirm_order_request')
+  expect(sql).toContain('create or replace function public.mark_order_line_packed')
+  expect(sql).toContain('create or replace function public.cancel_order_request')
+  expect(sql).toContain('create or replace function public.fulfill_order_request')
+  expect(sql).toContain('create or replace function public.verify_internal_channel_event')
+  expect(sql).toContain('order by coalesce(expiry_date, best_before_date) asc nulls last, created_at asc')
+  expect(sql).not.toContain('order by is_pinned desc')
+  expect(sql).toContain('create policy orders_staff_read')
+  expect(sql).not.toContain('create policy orders_staff_all')
+  expect(sql).toContain('create policy products_authenticated_read')
+  expect(sql).toContain('create policy error_reports_public_insert')
+  expect(sql).toContain('create policy error_reports_staff_read')
+  expect(sql).toContain('for select to anon\nusing (status::text')
+  expect(sql).toContain('create or replace function public.set_user_role')
+  expect(sql).toContain("if v_admin_count <= 1 then raise exception 'The final Admin cannot be demoted'")
+  expect(sql).toContain('public.channel_connections, public.channel_credentials,')
+  expect(sql).toContain('from anon, authenticated')
+  expect(sql).toContain('grant select on public.products, public.globe_products, public.reviews\nto anon')
+  expect(sql).toContain('public.user_profiles, public.globe_products, public.reviews,')
+  expect(sql).toContain('create or replace function public.append_internal_message')
+  expect(sql).toContain('create policy conversations_staff_read')
+  expect(sql).toContain('create policy product_images_staff_insert')
+  expect(sql).toContain('drop policy if exists product_images_public_read on storage.objects')
+  expect(sql).toContain('drop policy if exists product_images_staff_insert on storage.objects')
+  expect(sql).toContain('public.conversations, public.messages, public.staff_allocations,')
+  expect(sql).not.toContain('grant select on public.staff_allocations')
+  expect(sql).toContain("Stock changes must use batch reconciliation, receiving, reservation, or fulfillment")
+  expect(sql).toContain("perform set_config('k2.allow_stock_write', 'on', true)")
+  expect(sql).toContain('alter table public.products add column if not exists title text')
+  expect(sql).toContain('alter table public.products add column if not exists retail_price numeric')
+  expect(sql).toContain('alter table public.products add column if not exists vip_price numeric')
+  expect(sql).toContain('alter table public.products add column if not exists total_stock integer')
+  expect(sql.indexOf('alter table public.products add column if not exists title text'))
+    .toBeLessThan(sql.indexOf("set name = coalesce(nullif(name, ''), nullif(title, ''), sku)"))
+  expect(sql).toContain('(greatest(on_hand - reserved - damaged - expired - unaccounted, 0)) stored,')
+  expect(sql).not.toContain('stored,;')
+  expect(sql).not.toMatch(/,\s*;/)
+  expect(sql).toContain("display_name text,\n  status text not null default 'not_connected',")
+  expect(sql).toContain("delete from public.products\nwhere sku in ('PAS-TRF-001'")
+  expect(sql).toContain('Event history is append-only')
+  expect(sql).not.toContain('FOR ALL TO public USING (true)')
+})
 
-  test('Admin authenticates and manages Italy flight consignment & box receiving', async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 900 });
+test('product compatibility preflight supports both deployed schemas', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260802_product_compatibility_preflight.sql', import.meta.url), 'utf8')
+  expect(sql).toContain('alter table public.products add column if not exists name text')
+  expect(sql).toContain('alter table public.products add column if not exists title text')
+  expect(sql).toContain('alter table public.products add column if not exists retail_price numeric')
+  expect(sql).toContain('alter table public.products add column if not exists total_stock integer')
+  expect(sql).toContain("select set_config('k2.allow_stock_write', 'on', true)")
+  expect(sql.indexOf('add column if not exists title text'))
+    .toBeLessThan(sql.indexOf("set name = coalesce(nullif(name, ''), nullif(title, ''), sku)"))
+})
 
-    // Inject admin session before loading page
-    await page.addInitScript(() => {
-      window.localStorage.setItem('k2_admin_session', 'true');
-    });
+test('consignment preflight creates missing operational relations securely', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260802_consignment_compatibility_preflight.sql', import.meta.url), 'utf8')
+  expect(sql).toContain('create table if not exists public.consignments')
+  expect(sql).toContain('create table if not exists public.consignment_items')
+  expect(sql.indexOf('create table if not exists public.consignments'))
+    .toBeLessThan(sql.indexOf('create table if not exists public.consignment_items'))
+  expect(sql).toContain('alter table public.consignments enable row level security')
+  expect(sql).toContain('alter table public.consignment_items enable row level security')
+  expect(sql).not.toContain('FOR ALL TO public USING (true)')
+})
 
-    // 1. Visit main app
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
+test('channel and admin preflight restores skipped late-stage relations', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260802_channel_admin_compatibility_preflight.sql', import.meta.url), 'utf8')
+  for (const table of ['channel_listings', 'channel_credentials', 'staff_allocations', 'product_deletions', 'audit_logs', 'notifications']) {
+    expect(sql).toContain(`create table if not exists public.${table}`)
+    expect(sql).toContain(`alter table public.${table} enable row level security`)
+  }
+  expect(sql).not.toContain('FOR ALL TO public USING (true)')
+})
 
-    // Open Admin view via DemoRail
-    const adminBtn = page.getByRole('button', { name: 'Admin', exact: true }).first();
-    await adminBtn.click();
+test('continuous consignment scanners stay connected to server-enforced counts', async () => {
+  const manager = await readFile(new URL('../src/views/admin/ConsignmentManager.jsx', import.meta.url), 'utf8')
+  const scanner = await readFile(new URL('../src/views/admin/ConsignmentScannerModal.jsx', import.meta.url), 'utf8')
+  const auditSql = await readFile(new URL('../supabase/migrations/20260804_restore_coupons_and_consignment_scanning.sql', import.meta.url), 'utf8')
 
-    // Navigate to "Global Logistics"
-    const globalLogisticsBtn = page.getByRole('button', { name: /Global Logistics/i }).first();
-    await globalLogisticsBtn.waitFor({ state: 'visible', timeout: 10000 });
-    await globalLogisticsBtn.click();
+  expect(manager).toContain("import ConsignmentScannerModal from './ConsignmentScannerModal'")
+  expect(manager).toContain("supabase.rpc('record_consignment_scan'")
+  expect(manager).toContain("setScannerStage('milan')")
+  expect(manager).toContain("setScannerStage('manila')")
+  expect(manager).toContain('Review and finalize')
+  expect(scanner).toContain("import { Html5Qrcode } from 'html5-qrcode'")
+  expect(scanner).toContain('lastReadRef')
+  expect(scanner).toContain('await onScan(code)')
+  expect(scanner).toContain('Barcode or SKU')
+  expect(auditSql).toContain('create table if not exists public.consignment_scan_events')
+  expect(auditSql).toContain("check (stage in ('milan', 'manila'))")
+  expect(auditSql).toContain("raise exception 'Packed scans cannot exceed the expected manifest quantity'")
+  expect(auditSql).toContain("raise exception 'Scanned quantity cannot exceed the packed manifest quantity'")
+  expect(auditSql).toContain('insert into public.consignment_scan_events')
+})
 
-    // Verify Unified Header
-    await expect(page.getByText(/Global Logistics & Manifest Command/i)).toBeVisible({ timeout: 15000 });
+test('coupon restoration is database-backed, private, limited, and auditable', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260804_restore_coupons_and_consignment_scanning.sql', import.meta.url), 'utf8')
+  const manager = await readFile(new URL('../src/views/admin/CouponManager.jsx', import.meta.url), 'utf8')
+  const admin = await readFile(new URL('../src/views/admin/Admin.jsx', import.meta.url), 'utf8')
 
-    // Verify Flight Consignment Manager Header
-    await expect(page.getByText(/Flight Consignment/i).first()).toBeVisible({ timeout: 15000 });
-    await expect(page.getByText('Milan Packed Total')).toBeVisible();
-    await expect(page.getByText('Manila Scanned Total')).toBeVisible();
-
-    // Test +1 Scan Increment on first item row
-    const firstScanBtn = page.getByRole('button', { name: '+1 Scan' }).first();
-    await firstScanBtn.click();
-    await page.waitForTimeout(500);
-
-    // Verify scanned count cell exists and is visible
-    const scannedCell = page.locator('td.text-forest').first();
-    await expect(scannedCell).toBeVisible();
-
-    // Test Milan Camera Scanner (Italy POV)
-    const milanScannerBtn = page.getByRole('button', { name: /Milan Camera Scanner/i }).first();
-    await milanScannerBtn.click();
-
-    // Verify Milan Scanner Modal opens
-    await expect(page.getByText('Milan Packing POV')).toBeVisible();
-    await expect(page.getByText('Flight Box Packing Scanner')).toBeVisible();
-
-    // Tap quick SKU tile to increment +1 pack
-    const quickTileBtn = page.getByRole('button', { name: /KIKO-3D-05/i }).first();
-    await quickTileBtn.click();
-
-    // Close Milan Scanner using exact aria-label 'Close Milan Packing Scanner'
-    const closeMilanBtn = page.getByRole('button', { name: 'Close Milan Packing Scanner' }).first();
-    await closeMilanBtn.click();
-    await expect(page.getByText('Milan Packing POV')).not.toBeVisible({ timeout: 10000 });
-
-    // Open Side-by-Side Discrepancy Reconciliation Matrix
-    const reconcileBtn = page.getByRole('button', { name: /Reconciliation/i }).first();
-    await reconcileBtn.scrollIntoViewIfNeeded();
-    await reconcileBtn.click({ force: true });
-
-    // Check Reconciliation Modal title
-    await expect(page.getByText('Box Checking Discrepancy Reconciliation')).toBeVisible({ timeout: 15000 });
-    await expect(page.getByText('Italy Packed Box Qty')).toBeVisible();
-
-    // Close modal
-    const closeBtn = page.getByRole('button', { name: 'Back to Scanning' });
-    await closeBtn.click();
-    await expect(page.getByText('Box Checking Discrepancy Reconciliation')).not.toBeVisible();
-  });
-
-});
+  expect(sql).toContain('create table if not exists public.coupons')
+  expect(sql).toContain("discount_type in ('percentage', 'fixed')")
+  expect(sql).toContain('coupon_percentage_limit')
+  expect(sql).toContain('coupon_window_valid')
+  expect(sql).toContain('create or replace function public.validate_coupon')
+  expect(sql).toContain('revoke all on table public.coupons from anon')
+  expect(sql).toContain('create trigger coupons_audit_change')
+  expect(manager).toContain("supabase.from('coupons')")
+  expect(manager).toContain('Archive')
+  expect(manager).not.toContain('deleteCoupon')
+  expect(admin).toContain("coupons:           { label: 'Coupons'")
+  expect(admin).toContain("section === 'coupons' ? <CouponManager />")
+})

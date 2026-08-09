@@ -1,62 +1,50 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { useStore } from '../../context/StoreContext';
-import { useGlobeCms } from '../../data/globeCms';
-import { CATEGORIES, COLLECTIONS, peso } from '../../data/products';
-import { FAQS, LIFESTYLE, REVIEWS } from '../../data/site';
-import ProductGlobe from '../globe/ProductGlobe';
-import GlobeOverlay from '../globe/GlobeOverlay';
-import ProductVisual from '../ProductVisual';
-import InteractiveReveal from '../InteractiveReveal';
-import { BizBadge, RedButton, StockPill, TrustBadge, Tricolor, GhostButton, Kicker } from '../ui/bits';
-import ProductCard from '../ProductCard';
-import { ArrowIcon, CheckIcon, PlaneIcon, PlusIcon, StarIcon, MinusIcon } from '../ui/icons';
+import { useStore } from '../../context/StoreContext'
+import { BoxIcon, CupIcon, HeartIcon, PlaneIcon, SparkleIcon, StarIcon, ArrowIcon } from '../ui/icons'
+import { Kicker } from '../ui/bits'
 
-const CATEGORY_TILES = [
-  { cat: 'Seasoning, Staple Foods & Baking Ingredients', label: 'Pantry & Baking', icon: '🧂', note: 'Pantry essentials' },
-  { cat: 'Snack & Sweets', label: 'Snacks & Sweets', icon: '🍫', note: 'Biscuits & treats' },
-  { cat: 'Beverages', label: 'Beverages', icon: '☕', note: 'Coffee & drinks' },
-  { cat: 'Breakfast Food', label: 'Breakfast', icon: '🥞', note: 'Morning starts' },
-  { cat: 'Bath & Body', label: 'Bath & Body', icon: '🛁', note: 'Body wash & soap' },
-  { cat: 'Fragrances', label: 'Fragrances', icon: '✨', note: 'Perfumes & scents' },
-  { cat: 'Hair Care', label: 'Hair Care', icon: '💇', note: 'Shampoo & treatments' },
-  { cat: 'Skin Care', label: 'Skin Care', icon: '🧴', note: 'Lotions & creams' },
-  { cat: 'Slimming', label: 'Slimming', icon: '🏃', note: 'Health & wellness' },
-  { cat: 'Whitening', label: 'Whitening', icon: '🌟', note: 'Beauty care' },
-  { cat: 'Pasabuy', label: 'Pasabuy', icon: '✈️', note: 'Request anything' },
+const CATEGORIES = [
+  { cat: 'Seasoning, Staple Foods & Baking Ingredients', label: 'Pantry & baking', note: 'Staples and ingredients', icon: BoxIcon },
+  { cat: 'Snack & Sweets', label: 'Snacks & sweets', note: 'Biscuits and treats', icon: StarIcon },
+  { cat: 'Beverages', label: 'Coffee & drinks', note: 'Italian café favorites', icon: CupIcon },
+  { cat: 'Bath & Body', label: 'Bath & body', note: 'Daily Italian care', icon: HeartIcon },
+  { cat: 'Skin Care', label: 'Beauty cabinet', note: 'Skin and fragrance', icon: SparkleIcon },
+  { cat: 'Pasabuy', label: 'Request from Italy', note: 'Tell us the exact item', icon: PlaneIcon },
 ]
 
-function CategoryTiles() {
+export default function CategoryTiles() {
   const { setCategory, setQuery, go } = useStore()
+
+  const open = (category) => {
+    if (category === 'Pasabuy') return go('pasabuy')
+    setQuery('')
+    setCategory(category)
+    go('catalog')
+  }
+
   return (
-    <section className="mx-auto max-w-7xl px-3 pt-6 md:px-4 md:pt-8">
-      <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-1.5 sm:gap-2 md:gap-3">
-        {CATEGORY_TILES.map(({ cat, label, icon }, i) => {
-          return (
-            <button
-              key={cat}
-              title={cat}
-              onClick={() => {
-                if (cat === 'Pasabuy') {
-                  go('pasabuy')
-                } else {
-                  setQuery(''); setCategory(cat)
-                  go('catalog')
-                }
-              }}
-              className="rise group flex flex-col items-center gap-1.5 rounded-lg border border-line bg-cream/90 backdrop-blur-md px-1 py-2.5 md:py-3 text-center shadow-sm transition-all duration-300 cursor-pointer hover:-translate-y-0.5 hover:shadow-float hover:border-crimson/40 hover:bg-cream active:scale-[0.97]"
-              style={{ animationDelay: `${i * 40}ms` }}
-            >
-              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-shell text-lg md:text-xl transition-colors group-hover:bg-crimson group-hover:text-white shadow-sm">
-                {icon}
-              </div>
-              <p className="w-full px-0.5 text-[11px] md:text-xs font-semibold leading-tight text-navy transition-colors group-hover:text-crimson line-clamp-2">{label}</p>
-            </button>
-          )
-        })}
+    <section className="store-section py-14 md:py-18">
+      <div className="mb-7 flex items-end justify-between gap-5">
+        <div>
+          <Kicker>Browse the cabinet</Kicker>
+          <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight text-navy md:text-4xl">Find your Italian favorite</h2>
+        </div>
+        <button onClick={() => go('catalog')} className="hidden min-h-11 items-center gap-2 text-sm font-bold text-navy transition-colors hover:text-crimson sm:flex">View all products <ArrowIcon size={15} /></button>
+      </div>
+
+      <div className="grid border-l border-t border-[var(--store-surface-border)] sm:grid-cols-2 lg:grid-cols-3">
+        {CATEGORIES.map(({ cat, label, note, icon: CategoryIcon }) => (
+          <button key={cat} onClick={() => open(cat)} className="group flex min-h-24 items-center gap-4 border-b border-r border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4 text-left transition-colors duration-150 hover:bg-[color-mix(in_srgb,var(--store-surface-bg)_85%,var(--color-crimson))] sm:p-5">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] text-crimson transition-colors duration-150 group-hover:border-crimson/25 group-hover:bg-crimson-wash">
+              <CategoryIcon size={19} />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-serif text-base font-semibold text-navy group-hover:text-crimson">{label}</span>
+              <span className="mt-0.5 block text-xs text-navy-faint">{note}</span>
+            </span>
+            <ArrowIcon size={15} className="text-navy-faint transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-crimson" />
+          </button>
+        ))}
       </div>
     </section>
   )
 }
-
-export default CategoryTiles

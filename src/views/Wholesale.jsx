@@ -1,127 +1,57 @@
-import { useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { LIFESTYLE } from '../data/site'
-import { BizBadge, RedButton, Wordmark } from '../components/ui/bits'
-import { CheckIcon, PlaneIcon } from '../components/ui/icons'
+import { GhostButton, Kicker, RedButton } from '../components/ui/bits'
+import { ArrowIcon, BriefcaseIcon, CheckIcon } from '../components/ui/icons'
 
-// Wholesale / B2B — the one zone where Philippine blue leads.
+const REQUIREMENTS = [
+  ['Products and quantities', 'List the exact products, case counts, or recurring volume you expect.'],
+  ['Delivery requirement', 'Include your area and when the first supply is needed.'],
+  ['Business contact', 'Share the business name and the person staff should coordinate with.'],
+]
+
 export default function Wholesale() {
-  const { setIsWholesale, go, isWholesale } = useStore()
-  const [email, setEmail] = useState('orders@bellavitatrading.ph')
-  const [password, setPassword] = useState('••••••••••')
-
-  const signIn = (e) => {
-    e.preventDefault()
-    setIsWholesale(true)
-    go('home')
-  }
+  const { go } = useStore()
 
   return (
-    <main className="grid min-h-[calc(100vh-40px)] pb-20 md:grid-cols-2 md:pb-0">
-      {/* Business panel */}
-      <section className="relative flex flex-col justify-between overflow-hidden bg-forest-wash p-6 text-navy md:p-12">
-        <img
-          src={LIFESTYLE.venice}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover opacity-15 mix-blend-multiply"
-        />
-        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-forest-wash via-forest-wash/80 to-transparent" />
-        <p className="relative flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.28em] text-forest">
-          <PlaneIcon size={14} /> Wholesale · direct consignment
-        </p>
-        <div className="relative py-8 md:py-0">
-          <h1 className="font-serif text-2xl sm:text-3xl font-semibold leading-[1.08] tracking-tight md:text-5xl text-navy">
-            Stop waiting for a
-            <br />
-            reply on Viber.
-          </h1>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-navy-soft">
-            The wholesale portal shows the same live warehouse counts we see — your
-            tier prices, case quantities, and instant self-serve ordering. If it's
-            in stock here, it's yours.
-          </p>
-          <ul className="mt-6 hidden space-y-2.5 text-sm text-navy-soft md:block">
-            {[
-              'Live stock, straight from the Manila warehouse count',
-              'Your negotiated wholesale tier, applied automatically',
-              'Order at 11pm — it packs at 7am',
-              'Recurring supply for cafés, restos, and resellers',
-            ].map((line) => (
-              <li key={line} className="flex items-start gap-2.5">
-                <CheckIcon size={15} className="mt-0.5 shrink-0 text-forest" />
-                {line}
-              </li>
-            ))}
-          </ul>
+    <main className="pb-24 md:pb-20">
+      <section className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] overflow-hidden text-navy dark:text-cream">
+        <div className="store-section grid min-h-[34rem] gap-10 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-16 lg:gap-16">
+          <div>
+            <Kicker className="flex items-center gap-2 text-crimson dark:text-gold"><BriefcaseIcon size={14} /> Business supply</Kicker>
+            <h1 className="mt-4 max-w-3xl font-serif text-4xl font-semibold leading-[1.02] tracking-tight text-navy dark:text-cream sm:text-5xl lg:text-6xl">Wholesale supply,<br /><em className="font-normal text-crimson dark:text-gold">reviewed by a person.</em></h1>
+            <p className="mt-6 max-w-xl text-base leading-7 text-navy-soft dark:text-cream/70">For cafés, restaurants, resellers, and other business buyers. K2 verifies case quantities, shared Manila stock, delivery needs, and commercial terms before sending a quote.</p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="mailto:k2jimzonwebsite@gmail.com?subject=K2%20Jimzon%20Wholesale%20Inquiry" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-crimson px-6 text-sm font-bold text-white transition-[transform,background-color] duration-150 hover:bg-crimson-deep active:scale-[0.97]">Email wholesale inquiry <ArrowIcon size={15} /></a>
+              <GhostButton onClick={() => go('catalog')} className="px-6">Browse catalog</GhostButton>
+            </div>
+          </div>
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--store-surface-border)] shadow-sm">
+            <img src={LIFESTYLE.venice} alt="Italy sourcing landscape" className="aspect-[4/3] h-full w-full object-cover opacity-90" />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[var(--store-surface-bg)] via-[var(--store-surface-bg)]/80 to-transparent p-6 pt-20">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-crimson dark:text-gold">Current operating model</p>
+              <p className="mt-2 max-w-sm text-sm leading-6 text-navy-soft dark:text-cream/75">Account pricing and self-serve B2B ordering stay disabled until real approval and server-enforced pricing are ready.</p>
+            </div>
+          </div>
         </div>
-        <p className="hidden text-xs text-navy-faint md:block">
-          Supplying coffee shops, restaurants & resellers · since 2021
-        </p>
       </section>
 
-      {/* Login form on white */}
-      <section className="flex items-center justify-center bg-transparent px-4 py-12 md:px-12">
-        <div className="w-full max-w-sm">
-          <Wordmark />
-          <div className="mt-8 flex items-center gap-2.5">
-            <h2 className="font-serif text-2xl font-semibold tracking-tight">Wholesale sign in</h2>
-            <BizBadge>B2B</BizBadge>
+      <section className="store-section py-14 md:py-20">
+        <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+          <div>
+            <Kicker>Prepare your inquiry</Kicker>
+            <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight md:text-4xl">What staff needs to quote clearly.</h2>
+            <p className="mt-4 text-sm leading-7 text-navy-soft">A complete first message reduces back-and-forth and makes inventory review more useful.</p>
           </div>
-          <p className="mt-1.5 text-sm text-navy-soft">
-            For accredited coffee shops, restaurants, and resellers.
-          </p>
+          <ol className="border-t border-line">
+            {REQUIREMENTS.map(([title, body], index) => <li key={title} className="grid gap-3 border-b border-line py-6 sm:grid-cols-[3rem_1fr]"><span className="font-serif text-2xl text-blue">0{index + 1}</span><div><h3 className="font-serif text-xl font-semibold">{title}</h3><p className="mt-1 text-sm leading-6 text-navy-soft">{body}</p></div></li>)}
+          </ol>
+        </div>
 
-          {isWholesale ? (
-            <div className="mt-8 rounded-3xl border border-line bg-cream/90 backdrop-blur-md p-6 shadow-card">
-              <BizBadge>Signed in · Bella Vita Trading</BizBadge>
-              <p className="mt-3 text-sm leading-relaxed text-navy-soft">
-                Wholesale pricing is active across the store. Browse the catalog to
-                see your tier prices next to retail.
-              </p>
-              <RedButton className="mt-4 w-full" onClick={() => go('home')}>
-                Browse wholesale catalog
-              </RedButton>
-            </div>
-          ) : (
-            <form onSubmit={signIn} className="mt-8 space-y-4">
-              <Field label="Business email" type="email" value={email} onChange={setEmail} />
-              <Field label="Password" type="password" value={password} onChange={setPassword} />
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-forest px-5 py-4 text-base font-semibold text-white shadow-card transition-all hover:-translate-y-px hover:bg-forest/90 hover:shadow-float active:scale-95"
-              >
-                Sign in to wholesale
-              </button>
-              <p className="text-center text-xs text-navy-soft">
-                Not accredited yet?{' '}
-                <button type="button" className="px-2 py-1 -mx-2 font-medium text-forest underline underline-offset-2">
-                  Apply for a wholesale account
-                </button>
-              </p>
-            </form>
-          )}
-
-          <p className="mt-10 border-t border-line pt-4 text-xs leading-relaxed text-navy-faint">
-            Demo note: any credentials work. Signing in switches the whole store
-            into wholesale tier pricing.
-          </p>
+        <div className="mt-14 flex flex-col items-start justify-between gap-6 border-y border-line bg-paper py-8 sm:flex-row sm:items-center sm:px-6">
+          <p className="flex max-w-xl items-start gap-3 text-sm leading-6 text-navy-soft"><CheckIcon size={17} className="mt-0.5 shrink-0 text-forest" /> Special Italy items for a business can start as a Pasabuy request and be reviewed for an appropriate supply route.</p>
+          <RedButton onClick={() => go('pasabuy')}>Request a special item <ArrowIcon size={15} /></RedButton>
         </div>
       </section>
     </main>
-  )
-}
-
-function Field({ label, type, value, onChange }) {
-  return (
-    <label className="block">
-      <span className="mb-1.5 block text-sm font-semibold">{label}</span>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-xl border border-line bg-cream/50 backdrop-blur-sm px-4 py-3 text-sm shadow-card placeholder:text-navy-faint focus:border-forest/60 focus:outline-none"
-      />
-    </label>
   )
 }

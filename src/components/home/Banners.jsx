@@ -1,44 +1,20 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { useStore } from '../../context/StoreContext';
-import { useGlobeCms } from '../../data/globeCms';
-import { CATEGORIES, COLLECTIONS, peso } from '../../data/products';
-import { FAQS, LIFESTYLE, REVIEWS } from '../../data/site';
-import ProductGlobe from '../globe/ProductGlobe';
-import GlobeOverlay from '../globe/GlobeOverlay';
-import ProductVisual from '../ProductVisual';
-import InteractiveReveal from '../InteractiveReveal';
-import { BizBadge, RedButton, StockPill, TrustBadge, Tricolor, GhostButton, Kicker } from '../ui/bits';
-import ProductCard from '../ProductCard';
-import { ArrowIcon, CheckIcon, PlaneIcon, PlusIcon, StarIcon, MinusIcon } from '../ui/icons';
+import { useStore } from '../../context/StoreContext'
+import { RedButton, GhostButton, Kicker } from '../ui/bits'
+import { ArrowIcon, BriefcaseIcon, PlaneIcon } from '../ui/icons'
 
 function PasabuyBanner() {
   const { go } = useStore()
   return (
-    <section className="mx-auto max-w-6xl px-4 pt-14 scroll-reveal">
-      <div className="relative overflow-hidden rounded-3xl bg-cream/80 backdrop-blur-md text-navy shadow-card border border-line">
-        
-        {/* Soft terracotta gradient in background */}
-        <div className="absolute top-0 right-0 w-[50%] h-[100%] bg-gradient-to-l from-crimson-wash to-transparent opacity-80"></div>
-        <div className="absolute inset-0 grain opacity-40 mix-blend-multiply pointer-events-none z-0"></div>
-
-        <Tricolor className="relative z-10" />
-        <div className="relative z-10 grid gap-6 p-6 md:grid-cols-[1fr_auto] md:items-center md:p-12">
-          <div>
-            <Kicker className="text-crimson">Pasabuy service</Kicker>
-            <h2 className="mt-2 max-w-lg font-serif text-2xl font-semibold tracking-tight md:text-3xl">
-              If it's on a shelf in Italy, we can put it on yours.
-            </h2>
-            <p className="mt-4 max-w-lg text-sm leading-relaxed text-navy-soft font-light">
-              Request any product we don't stock. We buy it in Italy ourselves,
-              consolidate it with our monthly shipment, and deliver it to your door —
-              quoted upfront, no surprises.
-            </p>
-          </div>
-          <RedButton onClick={() => go('pasabuy')} className="md:px-8">
-            Make a request
-          </RedButton>
+    <section className="store-section pb-6">
+      <div className="store-panel relative overflow-hidden rounded-2xl bg-[var(--store-surface-bg)] border border-[var(--store-surface-border)] px-6 py-9 text-navy dark:text-cream sm:px-9 md:grid md:grid-cols-[1fr_auto] md:items-center md:gap-10 md:px-12 md:py-12">
+        <div className="absolute -right-16 -top-24 h-64 w-64 rounded-full border border-gold/20" aria-hidden />
+        <div className="absolute -right-5 -top-12 h-44 w-44 rounded-full border border-gold/20" aria-hidden />
+        <div className="relative">
+          <Kicker className="flex items-center gap-2 text-crimson dark:text-gold"><PlaneIcon size={14} /> Pasabuy sourcing</Kicker>
+          <h2 className="mt-3 max-w-2xl font-serif text-3xl font-semibold leading-tight text-navy dark:text-cream md:text-4xl">Can’t find it in the catalog? Ask us to source it.</h2>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-navy-soft dark:text-cream/70">Share the exact item and preferences. K2 researches availability and sends a recorded quote for approval before anything is purchased.</p>
         </div>
+        <RedButton onClick={() => go('pasabuy')} className="relative mt-7 px-7 md:mt-0">Make a request <ArrowIcon size={15} /></RedButton>
       </div>
     </section>
   )
@@ -47,24 +23,15 @@ function PasabuyBanner() {
 function WholesaleStrip() {
   const { go } = useStore()
   return (
-    <section className="mx-auto max-w-6xl px-4 pt-6">
-      <div className="flex flex-col items-start justify-between gap-4 rounded-2xl bg-blue-wash p-6 md:flex-row md:items-center md:p-8">
+    <section className="store-section pb-6">
+      <div className="grid gap-6 border-y border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-1 py-8 sm:px-6 md:grid-cols-[auto_1fr_auto] md:items-center md:gap-8">
+        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-wash text-blue"><BriefcaseIcon size={20} /></span>
         <div>
-          <BizBadge solid>For business</BizBadge>
-          <h2 className="mt-3 font-serif text-2xl font-semibold tracking-tight md:text-3xl">
-            Coffee shops, restos, resellers — buy at wholesale.
-          </h2>
-          <p className="mt-2 max-w-lg text-sm leading-relaxed text-navy-soft">
-            Live stock, your tier pricing, self-serve ordering. No more waiting for
-            a Viber reply to close an order.
-          </p>
+          <Kicker className="text-blue">For cafés, restaurants and resellers</Kicker>
+          <h2 className="mt-2 font-serif text-2xl font-semibold text-navy md:text-3xl">Build a verified wholesale inquiry.</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-navy-soft">Send products, case quantities, delivery area, and required date. Staff checks shared stock and responds with written terms.</p>
         </div>
-        <button
-          onClick={() => go('wholesale')}
-          className="inline-flex items-center gap-2 rounded-lg bg-blue px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue/90"
-        >
-          Wholesale portal <ArrowIcon size={15} />
-        </button>
+        <GhostButton onClick={() => go('wholesale')} className="border-blue/30 text-blue">Wholesale inquiry <ArrowIcon size={15} /></GhostButton>
       </div>
     </section>
   )

@@ -1,12 +1,21 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { products as localProducts } from '../../data/products'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
-import StaffAllocationModal from './StaffAllocationModal'
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 import DeleteProductsModal from './DeleteProductsModal'
+import { BoxIcon, SearchIcon, UploadIcon } from '../../components/ui/icons'
+import {
+  EmptyState,
+  MetricRail,
+  SectionHeading,
+  StateBanner,
+  WorkspaceIntro,
+  primaryButton,
+  secondaryButton,
+} from './AdminWorkspaceUi'
 
 // ── Product lifecycle ─────────────────────────────────────────────────────────
 // Mirrors the products_status_check constraint. 'Active' is a legacy alias for
@@ -185,12 +194,12 @@ function GallerySlots({ value = [], onChange, max = 5 }) {
 }
 
 // ── Stock breakdown chips (by location / channel / holder) ───────────────────
-function BreakdownRow({ icon, data }) {
+function BreakdownRow({ label, data }) {
   const entries = Object.entries(data || {}).sort((a, b) => b[1] - a[1])
   if (!entries.length) return null
   return (
     <div className="flex items-center gap-1 flex-wrap">
-      <span className="text-xs shrink-0">{icon}</span>
+      <span className="w-16 shrink-0 text-[10px] font-semibold uppercase tracking-wide text-white/35">{label}</span>
       {entries.map(([label, qty]) => (
         <span key={label} className="text-xs font-mono bg-white/5 border border-adm-line rounded px-1.5 py-0.5 text-neutral-200">
           {label} <span className="font-bold text-white">{qty}</span>
@@ -209,7 +218,6 @@ export default function InventoryGrid() {
   const [editingProduct, setEditingProduct] = useState(null)
   const [editTab, setEditTab] = useState('details')
   const [batchProduct, setBatchProduct]   = useState(null)
-  const [allocatingProduct, setAllocatingProduct] = useState(null)
   const [isAdding, setIsAdding]       = useState(false)
   const [saving, setSaving]           = useState(false)
   const [showAiScanner, setShowAiScanner] = useState(false)
@@ -219,6 +227,8 @@ export default function InventoryGrid() {
   const [deleteTargets, setDeleteTargets] = useState(null)
   const [statusBusy, setStatusBusy] = useState(null)
   const [notice, setNotice] = useState(null)
+  const [search, setSearch] = useState('')
+  const [stockFilter, setStockFilter] = useState('all')
 
   useEffect(() => {
     if (!supabase) return
@@ -243,19 +253,21 @@ export default function InventoryGrid() {
   // splits by location (hub), channel, and holder (custodian).
   const fetchBatches = async () => {
     if (!supabase) return
-    const { data } = await supabase.from('product_batches').select('sku, quantity, hub, custodian, channel')
+    const { data } = await supabase.from('product_batches').select('sku, quantity, hub, custodian, channel, expiry_date, is_pinned')
     if (!data) return
     const map = {}
     for (const r of data) {
       const q = Number(r.quantity) || 0
       if (q <= 0) continue
-      const m = map[r.sku] || (map[r.sku] = { total: 0, count: 0, hub: {}, channel: {}, custodian: {} })
+      const m = map[r.sku] || (map[r.sku] = { total: 0, count: 0, hub: {}, channel: {}, custodian: {}, earliestExpiry: null, attention: 0 })
       m.total += q
       m.count += 1
       const hub = r.hub || 'Unassigned', ch = r.channel || 'Unassigned', cu = r.custodian || 'Unassigned'
       m.hub[hub]        = (m.hub[hub] || 0) + q
       m.channel[ch]     = (m.channel[ch] || 0) + q
       m.custodian[cu]   = (m.custodian[cu] || 0) + q
+      if (r.expiry_date && (!m.earliestExpiry || r.expiry_date < m.earliestExpiry)) m.earliestExpiry = r.expiry_date
+      if (r.is_pinned) m.attention += 1
     }
     setBatchMap(map)
   }
@@ -285,7 +297,6 @@ export default function InventoryGrid() {
     srp:                      Number(p.srp) || 0,
     wholesale_price:          Number(p.wholesale_price) || 0,
     dealer_price:             Number(p.dealer_price) || 0,
-    stock_available:          Number(p.stock_available) || 0,
     reorder_level:            Number(p.reorder_level) || 0,
     slug:                     p.slug || null,
     seo_keywords:             Array.isArray(p.seo_keywords) ? p.seo_keywords : (p.seo_keywords ? String(p.seo_keywords).split(',').map(s => s.trim()) : []),
@@ -358,11 +369,52 @@ export default function InventoryGrid() {
     return next
   })
 
-  const allSelected = products.length > 0 && selected.size === products.length
-  const toggleAll = () => setSelected(allSelected ? new Set() : new Set(products.map(p => p.sku)))
   const clearSelection = () => setSelected(new Set())
 
   const selectedProducts = products.filter(p => selected.has(p.sku))
+
+  const inventoryMetrics = useMemo(() => {
+    let units = 0
+    let out = 0
+    let low = 0
+    let expiryRisk = 0
+    let drafts = 0
+    for (const product of products) {
+      const stock = Number(product.stock_available) || 0
+      const threshold = Number(product.reorder_level) || 5
+      units += stock
+      if (stock <= 0) out += 1
+      else if (stock <= threshold) low += 1
+      const expiry = getExpiryHealth(batchMap[product.sku]?.earliestExpiry || product.expiry_date)
+      if (['EXPIRED', 'CRITICAL', 'WARNING'].includes(expiry.status)) expiryRisk += 1
+      if (!['Live', 'Active'].includes(product.status)) drafts += 1
+    }
+    return { units, out, low, expiryRisk, drafts }
+  }, [batchMap, products])
+
+  const visibleProducts = useMemo(() => {
+    const term = search.trim().toLowerCase()
+    return products.filter(product => {
+      const matchesSearch = !term || [product.sku, product.name, product.barcode, product.origin, product.country_of_origin]
+        .some(value => String(value || '').toLowerCase().includes(term))
+      if (!matchesSearch) return false
+      const stock = Number(product.stock_available) || 0
+      const threshold = Number(product.reorder_level) || 5
+      const expiry = getExpiryHealth(batchMap[product.sku]?.earliestExpiry || product.expiry_date)
+      if (stockFilter === 'out') return stock <= 0
+      if (stockFilter === 'low') return stock > 0 && stock <= threshold
+      if (stockFilter === 'expiry') return ['EXPIRED', 'CRITICAL', 'WARNING'].includes(expiry.status)
+      if (stockFilter === 'drafts') return !['Live', 'Active'].includes(product.status)
+      return true
+    })
+  }, [batchMap, products, search, stockFilter])
+  const allSelected = visibleProducts.length > 0 && visibleProducts.every(product => selected.has(product.sku))
+  const toggleAll = () => setSelected(previous => {
+    const next = new Set(previous)
+    if (allSelected) visibleProducts.forEach(product => next.delete(product.sku))
+    else visibleProducts.forEach(product => next.add(product.sku))
+    return next
+  })
 
   const handleDeleted = (skus, deletedCount) => {
     setProducts(prev => prev.filter(p => !skus.includes(p.sku)))
@@ -372,35 +424,29 @@ export default function InventoryGrid() {
   }
 
   return (
-    <div className="animate-in fade-in duration-500 relative min-h-full">
-      {/* Top bar */}
-      <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <p className="text-base text-white/50">Manage your inventory visually. Click Edit to update product details.</p>
-        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-          <button onClick={() => setShowAiScanner(true)}
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 rounded bg-forest/20 text-forest hover:bg-forest hover:text-white transition-colors px-3.5 py-2.5 text-sm font-semibold min-h-[44px]">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            Scan Box
-          </button>
-          <button onClick={() => setShowSmartPaste(true)}
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 rounded bg-purple-500/20 text-purple-400 hover:bg-purple-500 hover:text-white transition-colors px-3.5 py-2.5 text-sm font-semibold min-h-[44px]">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-            Smart Paste AI
-          </button>
-          <button onClick={() => { setIsAdding(true); setEditTab('details'); setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random()*10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }) }}
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 rounded bg-blue/20 text-blue hover:bg-blue hover:text-white transition-colors px-3.5 py-2.5 text-sm font-semibold min-h-[44px]">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Manual Add
-          </button>
-        </div>
-      </div>
+    <div className="relative mx-auto min-h-full max-w-[1600px] space-y-5 pb-12">
+      <WorkspaceIntro
+        eyebrow="Catalog and stock control"
+        title="Inventory exception board"
+        description="Search the product master, isolate stock and FEFO risks, then open the exact SKU or batch that needs action. Stock metrics use persisted product and batch records only."
+        status={loading ? 'Loading inventory evidence' : `${products.length} SKUs loaded`}
+        statusTone={inventoryMetrics.out || inventoryMetrics.expiryRisk ? 'warning' : 'success'}
+        actions={(
+          <div className="flex flex-wrap gap-2">
+            <button onClick={() => setShowAiScanner(true)} className={secondaryButton}><BoxIcon size={16} /> Scan box</button>
+            <button onClick={() => setShowSmartPaste(true)} className={secondaryButton}><UploadIcon size={16} /> Smart paste</button>
+            <button onClick={() => { setIsAdding(true); setEditTab('details'); setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }) }} className={primaryButton}>Add product</button>
+          </div>
+        )}
+      />
+
+      <MetricRail columns="lg:grid-cols-5" items={[
+        { label: 'Active SKUs', value: loading ? '--' : products.length - inventoryMetrics.drafts, detail: `${products.length} total product records` },
+        { label: 'Available units', value: loading ? '--' : inventoryMetrics.units.toLocaleString('en-PH'), detail: 'Product master available stock' },
+        { label: 'Out of stock', value: loading ? '--' : inventoryMetrics.out, detail: 'Immediate replenishment review', tone: inventoryMetrics.out ? 'text-crimson' : 'text-white' },
+        { label: 'Low stock', value: loading ? '--' : inventoryMetrics.low, detail: 'At or below reorder level', tone: inventoryMetrics.low ? 'text-amber' : 'text-white' },
+        { label: 'Expiry risk', value: loading ? '--' : inventoryMetrics.expiryRisk, detail: 'Expired or within 90 days', tone: inventoryMetrics.expiryRisk ? 'text-amber' : 'text-white' },
+      ]} />
 
       {showAiScanner && (
         <ScanToAiModal onClose={() => setShowAiScanner(false)}
@@ -411,16 +457,30 @@ export default function InventoryGrid() {
           onProductAdded={() => { fetchProducts(); setShowSmartPaste(false) }} />
       )}
 
-      {notice && (
-        <div className={`mb-3 rounded-adm-sm border p-3 text-sm font-semibold leading-snug ${
-          notice.error ? 'border-crimson/40 bg-crimson/10 text-crimson' : 'border-forest/40 bg-forest/10 text-forest'
-        }`}>
-          {notice.error ? '⚠️' : '✓'} {notice.text}
+      {notice && <StateBanner tone={notice.error ? 'danger' : 'success'}>{notice.text}</StateBanner>}
+
+      <section className="space-y-3">
+        <SectionHeading title="Product master" description="Filters change the working set only; bulk actions still show their exact selection count." count={visibleProducts.length} />
+        <div className="flex flex-col gap-2 rounded-adm-sm border border-adm-line bg-adm-surface p-2 sm:flex-row sm:items-center">
+          <label className="relative min-w-0 flex-1">
+            <span className="sr-only">Search inventory</span>
+            <SearchIcon size={16} className="pointer-events-none absolute left-3 top-3.5 text-white/35" />
+            <input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search SKU, product, barcode, or origin" className="adm-input min-h-11 pl-9 text-base sm:text-sm" />
+          </label>
+          <div className="flex gap-1 overflow-x-auto" aria-label="Filter inventory exceptions">
+            {[
+              ['all', 'All', products.length],
+              ['out', 'Out', inventoryMetrics.out],
+              ['low', 'Low', inventoryMetrics.low],
+              ['expiry', 'Expiry', inventoryMetrics.expiryRisk],
+              ['drafts', 'Drafts', inventoryMetrics.drafts],
+            ].map(([value, label, count]) => <button key={value} onClick={() => setStockFilter(value)} aria-pressed={stockFilter === value} className={`min-h-10 shrink-0 rounded-adm-sm px-3 text-xs font-semibold transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${stockFilter === value ? 'bg-blue text-white' : 'text-white/45 hover:bg-white/[0.05] hover:text-white'}`}>{label} <span className="ml-1 font-mono text-[10px] opacity-70">{count}</span></button>)}
+          </div>
         </div>
-      )}
+      </section>
 
       {/* Select-all row */}
-      {products.length > 0 && (
+      {visibleProducts.length > 0 && (
         <div className="mb-3 flex items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2">
           <label className="flex items-center gap-2.5 cursor-pointer select-none min-h-[36px]">
             <input
@@ -431,7 +491,7 @@ export default function InventoryGrid() {
               className="h-5 w-5 shrink-0 accent-blue cursor-pointer"
             />
             <span className="text-sm font-semibold text-white">
-              {selected.size > 0 ? `${selected.size} selected` : `Select all (${products.length})`}
+              {selected.size > 0 ? `${selected.size} selected` : `Select visible (${visibleProducts.length})`}
             </span>
           </label>
           {selected.size > 0 && (
@@ -444,13 +504,17 @@ export default function InventoryGrid() {
 
       {/* Product cards */}
       {loading && products.length === 0 ? (
-        <div className="flex h-64 items-center justify-center text-white/60">Loading products...</div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3" role="status">
+          {Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-64 animate-pulse rounded-adm border border-adm-line bg-adm-surface" />)}
+        </div>
+      ) : visibleProducts.length === 0 ? (
+        <EmptyState icon={BoxIcon} title="No products match this view" description="Clear the search or switch the exception filter to return to the full product master." />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-12">
-          {products.map(p => {
-            const pinnedBatch = p.batches?.find(b => b.is_pinned)
-            const primaryExpiryDate = pinnedBatch?.expiry_date || p.expiry_date || (p.batches && p.batches[0]?.expiry_date)
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          {visibleProducts.map(p => {
+            const primaryExpiryDate = batchMap[p.sku]?.earliestExpiry || p.expiry_date
             const expiryHealth = getExpiryHealth(primaryExpiryDate)
+            const attentionCount = batchMap[p.sku]?.attention || 0
 
             return (
               <div key={p.sku} className={`group relative rounded-adm-sm border bg-adm-sunken overflow-hidden flex flex-col transition-colors ${
@@ -470,18 +534,17 @@ export default function InventoryGrid() {
                   <img src={p.primary_image_url || p.image_url || '/placeholder.png'} alt={p.name}
                     className="max-h-full max-w-full object-contain drop-shadow-lg" />
                   
-                  {/* FEFO Color-Coded Expiration & Pinned Batch Badge */}
+                  {/* FEFO uses the earliest real batch expiry. Attention pins never override it. */}
                   {primaryExpiryDate && (
                     <button
                       onClick={(e) => { e.stopPropagation(); setBatchProduct(p) }}
                       className={`absolute bottom-2 left-2 text-sm font-bold px-2 py-0.5 rounded border transition-all ${
-                        pinnedBatch ? 'bg-gold text-navy font-extrabold border-gold shadow-md' :
                         expiryHealth.color === 'crimson' ? 'bg-crimson border-crimson text-white font-bold' :
                         expiryHealth.color === 'amber' ? 'bg-gold border-gold text-navy font-extrabold' :
                         'bg-blue border-blue text-white font-bold'
                       }`}
                     >
-                      {pinnedBatch ? `📌 Pinned: ${pinnedBatch.box_code} (${pinnedBatch.expiry_date})` : expiryHealth.text}
+                      {expiryHealth.text}{attentionCount > 0 ? ` · ${attentionCount} flagged` : ''}
                     </button>
                   )}
                 </div>
@@ -493,7 +556,7 @@ export default function InventoryGrid() {
                     </span>
                   </div>
                   <h3 className="text-lg font-semibold text-white line-clamp-2 mb-1.5">{p.name}</h3>
-                  {p.origin && <p className="text-sm text-gold font-medium mb-2">🇮🇹 {p.origin}</p>}
+                  {p.origin && <p className="mb-2 text-xs font-medium text-white/45">Origin: {p.origin}</p>}
                   
                   <div className="mt-auto space-y-2.5">
                     <div className="grid grid-cols-2 gap-2 text-base bg-white/5 p-2.5 rounded-adm-sm border border-adm-line">
@@ -513,24 +576,18 @@ export default function InventoryGrid() {
                         <p className="text-white/40 uppercase text-[10px] font-bold tracking-wider">
                           {batchMap[p.sku].total} pcs in {batchMap[p.sku].count} lot{batchMap[p.sku].count !== 1 ? 's' : ''}
                         </p>
-                        <BreakdownRow icon="📍" data={batchMap[p.sku].hub} />
-                        <BreakdownRow icon="🛒" data={batchMap[p.sku].channel} />
-                        <BreakdownRow icon="🙋" data={batchMap[p.sku].custodian} />
+                        <BreakdownRow label="Location" data={batchMap[p.sku].hub} />
+                        <BreakdownRow label="Channel" data={batchMap[p.sku].channel} />
+                        <BreakdownRow label="Holder" data={batchMap[p.sku].custodian} />
                       </div>
                     )}
 
-                    <div className="grid grid-cols-2 gap-1.5 pt-1">
+                    <div className="pt-1">
                       <button
                         onClick={() => setBatchProduct(p)}
-                        className="text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-adm-sm border border-adm-line transition-colors text-center"
+                        className="w-full text-sm font-sans font-bold bg-white/10 hover:bg-white/15 text-neutral-200 py-2 rounded-adm-sm border border-adm-line transition-colors text-center"
                       >
-                        📦 Batches ({batchMap[p.sku]?.count ?? p.batches?.length ?? 0})
-                      </button>
-                      <button
-                        onClick={() => setAllocatingProduct(p)}
-                        className="text-sm font-sans font-bold bg-blue/15 hover:bg-blue/25 text-blue py-2 rounded-adm-sm border border-blue/30 transition-colors text-center"
-                      >
-                        👤 Custody
+                        Batches ({batchMap[p.sku]?.count ?? p.batches?.length ?? 0})
                       </button>
                     </div>
 
@@ -538,7 +595,7 @@ export default function InventoryGrid() {
                       onClick={() => setEnrichProduct(p)}
                       className="w-full text-sm font-sans font-bold bg-gold/15 hover:bg-gold/25 text-gold py-2 rounded-adm-sm border border-gold/30 transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
                     >
-                      ✨ Enrich Specs with AI
+                      Enrich product specs
                     </button>
 
                     {/* Lifecycle: three visible states, plus a destructive
@@ -800,7 +857,8 @@ export default function InventoryGrid() {
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <Label>Available Stock</Label>
-                        <input type="number" min="0" value={editingProduct.stock_available || 0} onChange={e => set('stock_available', Math.max(0, Number(e.target.value)))} className={`${inp} tabular-nums`} />
+                        <div className={`${inp} flex items-center tabular-nums text-white/70`}>{editingProduct.stock_available || 0}</div>
+                        <button type="button" disabled={isAdding} onClick={() => setBatchProduct(editingProduct)} className="mt-2 min-h-11 w-full rounded-adm-sm border border-blue/35 bg-blue/10 px-3 text-xs font-semibold text-blue disabled:opacity-40">{isAdding ? 'Save the draft before adding batches' : 'Reconcile batches and stock'}</button>
                       </div>
                       <div>
                         <Label>Reorder Level</Label>
@@ -890,18 +948,6 @@ export default function InventoryGrid() {
         />
       )}
 
-      {allocatingProduct && (
-        <StaffAllocationModal
-          product={allocatingProduct}
-          onClose={() => setAllocatingProduct(null)}
-          onSaveAllocations={(sku, updatedAllocations) => {
-            setProducts(prev => prev.map(p => (p.sku === sku || p.id === sku) ? {
-              ...p,
-              staff_allocations: updatedAllocations
-            } : p))
-          }}
-        />
-      )}
     </div>
   )
 }
