@@ -669,6 +669,12 @@ contract locally. Storefront Contact uses its explicit email-draft fallback and
 Admin continues its existing browser Supabase Auth. Future BFF activation
 requires consolidating handlers behind the plan limit (or an owner-approved
 upgrade), restoring deployable routes, and repeating real-host security proof.
+The definitive correction passed both Vercel previews, merged through PR #2 as
+`e9ff7a0`, and both separate production deployments completed successfully on
+14 August 2026; main CI also passed. The Vercel aliases currently redirect
+unauthenticated checks to Vercel SSO, so customer-visible content and Admin
+sign-in still require authenticated owner acceptance. The prepared BFF handlers
+are not part of those artifacts and remain inactive.
 
 The following list records what the rejected completion draft claimed; it does
 not describe verified live behavior:
