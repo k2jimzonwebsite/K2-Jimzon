@@ -497,6 +497,11 @@ can deploy without misrepresenting the BFF as live. Before BFF activation,
 consolidate handlers behind no more than the plan limit per artifact (preferred)
 or obtain owner approval for an upgrade, restore deployable routes, and repeat
 deployed security/ownership tests.
+The correction passed both Vercel previews and main CI, then PR #2 deployed
+separate storefront and Admin production artifacts successfully as `e9ff7a0` on
+14 August 2026. Vercel SSO still prevents unauthenticated content/sign-in proof;
+owner acceptance remains required. The prepared BFF endpoints are absent and
+must not be described as live.
 
 **Deliver:**
 
