@@ -1,10 +1,21 @@
 export const ADMIN_ROUTE = '/admin-portal-k2-secure'
+export const ADMIN_PRODUCTION_ORIGIN = 'https://k2-jimzon-admin-seven.vercel.app'
 
 const ADMIN_OAUTH_RETURN_KEY = 'k2_admin_oauth_return_to'
 
-export function buildAdminOAuthRedirectUrl(origin) {
+function isLocalAdminOrigin(origin) {
+  try {
+    const hostname = new URL(origin).hostname
+    return hostname === 'localhost' || hostname === '127.0.0.1'
+  } catch {
+    return false
+  }
+}
+
+export function buildAdminOAuthRedirectUrl(origin, productionOrigin = ADMIN_PRODUCTION_ORIGIN) {
   const safeOrigin = origin || (typeof window !== 'undefined' ? window.location.origin : '')
-  return new URL(ADMIN_ROUTE, safeOrigin).toString()
+  const redirectOrigin = isLocalAdminOrigin(safeOrigin) ? safeOrigin : productionOrigin
+  return new URL(ADMIN_ROUTE, redirectOrigin).toString()
 }
 
 export function rememberAdminOAuthReturn() {

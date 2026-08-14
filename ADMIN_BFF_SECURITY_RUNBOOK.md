@@ -9,6 +9,14 @@ build is pending because the current execution quota prevented the build command
 None is deployed or active. The current UI still uses a browser Supabase session and
 must not be described as HttpOnly-cookie protected.
 
+While that direct-browser transition remains active, Google OAuth always returns
+to the allowlisted public Admin origin
+`https://k2-jimzon-admin-seven.vercel.app/admin-portal-k2-secure`; immutable
+preview/deployment URLs are not accepted as callbacks. A returned staff session
+requiring AAL2 must continue into the visible TOTP challenge. Returning to the
+credential form without a role, callback, or MFA explanation is a failed auth
+flow, not a successful sign-in.
+
 **Hobby deployment gate (14 August 2026):** the prepared Admin and Storefront
 handlers total 50 files, while each current Vercel Hobby deployment accepts at
 most 12 Serverless Functions. They therefore live under `prepared-api/`, outside

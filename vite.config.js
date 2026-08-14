@@ -27,8 +27,11 @@ export default defineConfig(({ command, mode }) => {
   const target = configuredTarget || (legacyAdminFlag === 'true' ? 'admin' : '') || vercelTarget || modeTarget || (command === 'serve' ? 'combined' : 'storefront')
   // Supabase's modern publishable key is intentionally browser-safe. Prefer it
   // over the legacy anon JWT so disabling legacy API keys cannot lock staff out.
-  const supabasePublicKey = env.VITE_SUPABASE_PUBLISHABLE_KEY
+  const supabasePublicKey = process.env.VITE_SUPABASE_PUBLISHABLE_KEY
+    || process.env.SUPABASE_PUBLISHABLE_KEY
+    || env.VITE_SUPABASE_PUBLISHABLE_KEY
     || env.SUPABASE_PUBLISHABLE_KEY
+    || process.env.VITE_SUPABASE_ANON_KEY
     || env.VITE_SUPABASE_ANON_KEY
 
   if (!['storefront', 'admin', 'combined'].includes(target)) {

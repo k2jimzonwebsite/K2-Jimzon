@@ -105,6 +105,17 @@ publication denial are visually distinct states. Motion is limited to brief
 upload/progress feedback and respects reduced-motion behavior. A disabled
 supplier-receipt option is labeled Pending rather than appearing functional.
 
+### Admin authentication interaction contract
+
+Admin authentication uses the compact Admin BOS product register and keeps
+security state explicit. Google sign-in from any deployed surface returns to the
+single public Admin origin. A valid staff session that requires AAL2 advances
+directly to the labeled six-digit authenticator form; it never drops back to the
+credential form without explanation. Missing Admin/Staff permission, role-check
+failure, invalid credentials, callback failure, and authenticator failure are
+distinct inline states. Controls retain 44px minimum targets, visible focus,
+disabled/loading feedback, and no decorative transition that delays staff entry.
+
 ### Storefront guest-inbox interaction contract
 
 The guest inbox preserves the storefront wood/editorial system and does not

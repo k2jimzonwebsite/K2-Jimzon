@@ -206,6 +206,15 @@ Backend Edge Function `invite-staff` performs invites (admin-verified).
 Supabase Auth URL Configuration must point at the two Vercel sites (storefront +
 admin) or OAuth bounces to localhost.
 
+The active production Admin OAuth callback is the exact public origin
+`https://k2-jimzon-admin-seven.vercel.app/admin-portal-k2-secure`. Vercel
+deployment-specific and protected preview URLs are never OAuth callbacks; the
+Admin client canonicalizes non-local Google sign-in returns to that stable
+origin. When Google returns an eligible Admin/Staff session that still requires
+AAL2, the sign-in surface opens the six-digit authenticator step instead of
+silently rendering the credential form again. Role lookup failures and accounts
+without Admin/Staff access render distinct inline recovery messages.
+
 ---
 
 ## 7. Other things built into the admin
@@ -337,8 +346,9 @@ The 24-hour provider query contained only 12 database/pooler events and did not
 prove API/Auth/Edge activity safe. Full containment remains blocked on runtime
 cutover, fuller evidence, and owner-approved JWT signing-key revocation.
 
-Local Admin browser configuration now prefers the modern Supabase publishable
-key over the disabled legacy anon JWT. A direct read-only Auth settings request
+Local and Vercel Admin browser configuration now prefer the modern Supabase
+publishable key from either the build environment or local environment files
+over the disabled legacy anon JWT. A direct read-only Auth settings request
 with that publishable key returned HTTP 200 on 14 August 2026, and the local
 Admin sign-in form renders at `127.0.0.1:5174`. This removes the legacy-key
 transport lockout without bypassing invite-only staff roles, password checks, or
