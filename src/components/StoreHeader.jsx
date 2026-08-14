@@ -1,6 +1,7 @@
 import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
-import { BagIcon, SearchIcon, MoonIcon, SunIcon } from './ui/icons'
+import { BagIcon, SearchIcon, MoonIcon, SunIcon, InboxIcon } from './ui/icons'
+import { guestBffEnabled } from '../services/guestCommerceService'
 
 function SearchBox({ className = '' }) {
   const { query, setQuery, go, view } = useStore()
@@ -61,6 +62,17 @@ export default function StoreHeader() {
         </nav>
 
         <SearchBox className="ml-auto hidden w-full max-w-[17rem] md:block lg:ml-2" />
+
+        {guestBffEnabled() && (
+          <button
+            onClick={() => go('messages')}
+            className={`relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border bg-[var(--store-surface-bg)] transition-[transform,border-color,color] duration-150 active:scale-[0.97] ${active === 'messages' ? 'border-crimson text-crimson' : 'border-[var(--store-surface-border)] text-navy hover:border-navy/25'}`}
+            aria-label="Open your secure K2 messages"
+            aria-current={active === 'messages' ? 'page' : undefined}
+          >
+            <InboxIcon size={20} />
+          </button>
+        )}
 
         <button
           onClick={() => setCartOpen(true)}

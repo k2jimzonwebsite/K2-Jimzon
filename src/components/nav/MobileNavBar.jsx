@@ -1,5 +1,6 @@
 import { useStore } from '../../context/StoreContext'
-import { HomeIcon, GridIcon, PlaneIcon, BriefcaseIcon } from '../ui/icons'
+import { HomeIcon, GridIcon, PlaneIcon, BriefcaseIcon, InboxIcon } from '../ui/icons'
+import { guestBffEnabled } from '../../services/guestCommerceService'
 
 export default function MobileNavBar() {
   const { view, go } = useStore()
@@ -9,6 +10,7 @@ export default function MobileNavBar() {
     { key: 'catalog', label: 'Shop', icon: GridIcon },
     { key: 'pasabuy', label: 'Pasabuy', icon: PlaneIcon },
     { key: 'wholesale', label: 'Wholesale', icon: BriefcaseIcon },
+    ...(guestBffEnabled() ? [{ key: 'messages', label: 'Messages', icon: InboxIcon }] : []),
   ]
 
   return (

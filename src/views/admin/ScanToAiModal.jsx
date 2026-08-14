@@ -1,7 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { Html5Qrcode } from 'html5-qrcode'
-import { buildProject1Prompt, RESEARCH_MODES } from './productResearchPrompt'
+import {
+  buildProductJsonPrompt,
+  K2_PRODUCT_IMAGE_PROJECT_INSTRUCTIONS,
+  K2_PRODUCT_JSON_PROJECT_INSTRUCTIONS,
+  PRODUCT_RESEARCH_COMMANDS,
+  PRODUCT_RESEARCH_SCHEMA_VERSION,
+  RESEARCH_MODES,
+} from './productResearchPrompt'
 
 export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
   const [step, setStep]               = useState('scan')   // 'scan' | 'manual' | 'result'
@@ -11,6 +18,8 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
   const [researchMode, setResearchMode] = useState('complete')
   const [promptText, setPromptText]   = useState('')
   const [copied, setCopied]           = useState(false)
+  const [copiedInstructions, setCopiedInstructions] = useState('')
+  const [copyError, setCopyError]     = useState('')
   const [checking, setChecking]       = useState(false)
   const [checkError, setCheckError]   = useState('')
   const scannerRef                    = useRef(null)
@@ -64,7 +73,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
       setCheckError('The prompt is ready, but inventory duplicate checking is unavailable. Verify the barcode before creating a draft.')
     }
     setBarcode(code)
-    setPromptText(buildProject1Prompt({ barcode: code, productName, researchMode }))
+    setPromptText(buildProductJsonPrompt({ barcode: code, productName, researchMode }))
     setStep('result')
     setChecking(false)
   }
@@ -76,11 +85,23 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
     await handleBarcodeDetected(manualBarcode.trim())
   }
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(promptText)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2500)
+  const copyToClipboard = async (text, key) => {
+    setCopyError('')
+    try {
+      await navigator.clipboard.writeText(text)
+      if (key === 'request') {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2500)
+      } else {
+        setCopiedInstructions(key)
+        setTimeout(() => setCopiedInstructions(''), 2500)
+      }
+    } catch {
+      setCopyError('Copy failed. Select the text manually or allow clipboard access, then try again.')
+    }
   }
+
+  const handleCopy = () => copyToClipboard(promptText, 'request')
 
   const handleOpenSmartPaste = () => {
     onClose()
@@ -99,7 +120,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           <p className="text-sm text-white/60 mt-0.5">
             {step === 'scan'   && 'Point camera at the product barcode'}
             {step === 'manual' && 'Type the barcode or product name manually'}
-            {step === 'result' && 'Review, copy, attach packaging photos, then import only after human verification'}
+            {step === 'result' && 'Use the Content Project first, then move the approved JSON to the separate Image Studio'}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -221,7 +242,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
                 <p className="text-base font-semibold text-white">
                   {productName || 'Product'} {barcode && <span className="font-mono text-sm text-white/60 ml-1">· {barcode}</span>}
                 </p>
-                <p className="text-sm text-white/60 mt-0.5">Duplicate check passed when available · Focus: {RESEARCH_MODES.find(mode => mode.id === researchMode)?.label}</p>
+                <p className="text-sm text-white/60 mt-0.5">Duplicate check passed when available · Content contract: {PRODUCT_RESEARCH_SCHEMA_VERSION} · Focus: {RESEARCH_MODES.find(mode => mode.id === researchMode)?.label}</p>
               </div>
             </div>
 
@@ -246,11 +267,10 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
             <div className="bg-black/20 border border-white/5 rounded-adm-sm p-4 space-y-2.5">
               <p className="text-xs font-bold text-white/55 uppercase tracking-widest mb-3">What to do next</p>
               {[
-                ['Copy the prompt below', 'Hit the white button to copy it to your clipboard.'],
-                ['Open your research tool', 'Use the K2 Jimzon Product Intelligence project or another tool that can inspect the attached packaging photos.'],
-                ['Attach the packaging photo', 'Drag the product photo into the message box.'],
-                ['Paste and run', 'The tool must return the draft JSON, image prompt, source URLs, and review notes.'],
-                ['Verify, then Smart Paste', 'Check every factual claim and copy only Section 1 into Smart Paste.'],
+                ['Set up two Projects once', 'Install the Product Content instructions in one ChatGPT Project and the Product Image Studio instructions in another.'],
+                ['Generate the final JSON', 'Attach readable front, back or label, barcode, and variant photos to the Content Project, then paste the request below.'],
+                ['Review in Smart Paste', 'Paste the single JSON object into K2 and verify every fact, source, unknown, heading, use case, and instruction.'],
+                ['Generate the two image requests', `Smart Paste prepares a product-specific ${PRODUCT_RESEARCH_COMMANDS.primary} request and ${PRODUCT_RESEARCH_COMMANDS.after} request for the separate Image Studio.`],
               ].map(([title, body], i) => (
                 <div key={i} className="flex gap-3 items-start">
                   <span className="w-5 h-5 rounded-full bg-blue/20 text-blue text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
@@ -261,6 +281,23 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
 
             {/* Action buttons */}
             <div className="space-y-3">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <button
+                  onClick={() => copyToClipboard(K2_PRODUCT_JSON_PROJECT_INSTRUCTIONS, 'content')}
+                  className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2.5 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-white/10 active:scale-[0.99]"
+                >
+                  {copiedInstructions === 'content' ? 'Content instructions copied' : 'Copy Content Project instructions'}
+                </button>
+                <button
+                  onClick={() => copyToClipboard(K2_PRODUCT_IMAGE_PROJECT_INSTRUCTIONS, 'images')}
+                  className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2.5 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-white/10 active:scale-[0.99]"
+                >
+                  {copiedInstructions === 'images' ? 'Image instructions copied' : 'Copy Image Studio instructions'}
+                </button>
+              </div>
+
+              {copyError && <p role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 px-3 py-2 text-sm leading-relaxed text-crimson">{copyError}</p>}
+
               <button
                 onClick={handleCopy}
                 className="w-full bg-white text-black font-bold py-3.5 rounded-adm-sm hover:bg-white/90 transition-colors flex items-center justify-center gap-2"
@@ -272,19 +309,19 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
-                    Copy product research prompt
+                    Copy PRODUCT_JSON request
                   </>
                 )}
               </button>
 
               <button
                 onClick={handleOpenSmartPaste}
-                className="w-full bg-purple-600 text-white font-bold py-4 rounded-adm-sm shadow-[0_0_24px_rgba(168,85,247,0.25)] hover:bg-purple-500 transition-colors flex items-center justify-center gap-2"
+                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-adm-sm bg-blue px-4 py-3 font-bold text-navy transition-[transform,opacity] duration-150 hover:opacity-90 active:scale-[0.99]"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Open Smart Paste review
+                Open JSON review and image handoff
               </button>
 
               <button

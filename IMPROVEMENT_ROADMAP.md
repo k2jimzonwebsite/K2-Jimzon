@@ -1,5 +1,9 @@
 # K2 Jimzon — Roadmap to a Fully Functional Storefront + Omnichannel BOS
 
+> **Historical planning snapshot — do not use as the active backlog.** Several
+> statements in this document predate implemented migrations and security
+> hardening. Use `MASTER_ACTION_PLAN.md` for approved unfinished work.
+
 **Goal:** turn the current prototype (complete UI, complete DB schema, mostly-mocked logic) into a live storefront and back-office that syncs inventory and orders across **Shopee, Lazada, TikTok Shop**, and the website — with **one unified inbox** for social media, marketplace chat, and storefront messages.
 
 **Current reality:** the storefront checkout and product/stock sync to Supabase work. Everything marketplace- and messaging-related is UI + database tables only. There are **no Supabase Edge Functions**, so nothing yet talks to any external channel. This roadmap is ordered so each phase unblocks the next.

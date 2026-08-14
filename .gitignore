@@ -6,8 +6,19 @@ awesome-codex-skills/
 *.local
 .env
 .env.*
+!.env.example
+supabase/functions/.env
+*.pem
+*.key
+*.p12
+*.pfx
+*.sql.gz
+*.dump
+security-scan-report.*
 
 .vercel
+supabase/.temp/
+.temp/
 .agents/
 .claude/
 .codex/

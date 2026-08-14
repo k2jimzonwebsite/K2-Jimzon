@@ -10,13 +10,14 @@
 // The admin never sees or handles the password. Secrets never touch the browser.
 //
 // Deploy:  supabase functions deploy invite-staff
-// Needs:   SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (auto-injected).
+// Needs:   SUPABASE_URL and SUPABASE_SECRET_KEYS (auto-injected JSON).
 // ============================================================================
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { getServiceRoleKey } from '../_shared/service-role.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? ''
-const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+const SERVICE_ROLE = getServiceRoleKey()
 const ANON = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
 
 const cors = {

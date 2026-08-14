@@ -7,7 +7,8 @@ import BulkCsvImportModal from './BulkCsvImportModal'
 import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 import DeleteProductsModal from './DeleteProductsModal'
-import { useStore } from '../../context/StoreContext'
+import ProductIntakeSessionModal from './ProductIntakeSessionModal'
+import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import Barcode from 'react-barcode'
 import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
 
@@ -58,6 +59,7 @@ export default function Sheet() {
   const [showAiScanner, setShowAiScanner] = useState(false)
   const [showSmartPaste, setShowSmartPaste] = useState(false)
   const [showCsvImport, setShowCsvImport] = useState(false)
+  const [showPhoneIntake, setShowPhoneIntake] = useState(false)
   const [showBarcode, setShowBarcode] = useState(null)
   const [batchProduct, setBatchProduct] = useState(null)
   const [enrichProduct, setEnrichProduct] = useState(null)
@@ -131,32 +133,15 @@ export default function Sheet() {
     return true
   }
 
-  // Deletion goes through the same PIN gate as the card grid — a bare
-  // window.confirm() on a row you might have mis-tapped is not a safeguard.
   const [deleteTargets, setDeleteTargets] = useState(null)
 
-  const handleAddRow = async () => {
-    const newSku = `NEW-${Math.random().toString(36).substring(2, 6).toUpperCase()}`
-    const newRow = { sku: newSku, name: '', status: 'Draft' }
-    if (!supabase) {
-      setOperationError('Could not create a product because Supabase is not configured.')
-      return
-    }
-    const { error } = await supabase.from('products').insert([newRow])
-    if (error) {
-      setOperationError(`Could not create ${newSku}: ${error.message}`)
-      return
-    }
-    setOperationError('')
-    setRows(prev => [newRow, ...prev])
+  const handleAddRow = () => {
+    setShowPhoneIntake(true)
   }
 
   const tableContainerRef = useRef(null)
   const domainRefs = useRef({})
 
-  // Jump to a domain by measuring the real header cell instead of guessing a
-  // pixel offset — the old hardcoded 0/600/1200/2000 drifted the moment a
-  // column width changed, and only covered 4 of the 7 domains.
   const handleScrollToDomain = (name) => {
     const el = domainRefs.current[name]
     const container = tableContainerRef.current
@@ -177,12 +162,10 @@ export default function Sheet() {
 
   return (
     <div className="flex flex-col h-full bg-adm-sunken">
-      {/* Toolbar — two single-line rails that scroll sideways on mobile instead
-          of wrapping into a four-row wall that eats half the viewport. */}
       <div className="shrink-0 border-b border-adm-line bg-adm-surface">
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none px-3 py-2 lg:px-6 lg:py-3">
           <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-adm-sm bg-forest text-white px-3.5 min-h-[44px] text-sm font-bold transition hover:bg-forest/90">
-            <span className="text-lg leading-none">+</span> Add Row
+            <span className="text-lg leading-none">+</span> Phone Intake
           </button>
           <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
             <span>📂</span> CSV Import
@@ -202,7 +185,6 @@ export default function Sheet() {
           </button>
         </div>
 
-        {/* Domain jump rail — generated from DOMAINS so all 7 are reachable. */}
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none border-t border-adm-line px-3 py-2 lg:px-6">
           <span className="shrink-0 text-xs font-mono font-extrabold uppercase text-gold hidden lg:inline">Jump:</span>
           {DOMAINS.map(d => (
@@ -222,7 +204,6 @@ export default function Sheet() {
         )}
       </div>
 
-      {/* Scroll container — dvh so the mobile URL bar can't crop the last row. */}
       <div ref={tableContainerRef} className="flex-1 min-h-0 overflow-x-auto overflow-y-auto custom-scrollbar relative bg-adm-sunken">
         {loading ? (
           <div className="flex items-center justify-center h-64 text-white font-extrabold animate-pulse font-sans text-lg">Loading Product Masters...</div>
@@ -230,8 +211,6 @@ export default function Sheet() {
           <table className="w-max min-w-full border-collapse text-base bg-adm-surface">
             <thead className="sticky top-0 z-30">
               <tr className="bg-adm-sunken text-sm text-white">
-                {/* Row-number gutter is pure chrome — dropped below sm so the
-                    390px viewport spends its width on SKU, not on "1, 2, 3". */}
                 <th className="hidden sm:table-cell w-10 min-w-10 border border-adm-line py-2.5 font-bold sticky left-0 z-40 bg-adm-sunken text-gold">#</th>
                 {DOMAINS.map((d) => (
                   <th
@@ -280,19 +259,20 @@ export default function Sheet() {
                         return (
                           <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="text-center p-0 min-w-[100px]">
                             <select 
-                              value={r.status || 'Draft'}
+                              value={r.status || 'draft'}
                               onChange={(e) => updateField(i, col, e.target.value)}
                               className={`w-full h-full bg-transparent px-2 py-1.5 text-sm outline-none cursor-pointer appearance-none text-center font-bold ${
-                                r.status === 'Draft' ? 'text-amber'
-                                : r.status === 'Unlisted' ? 'text-blue'
-                                : r.status === 'Discontinued' ? 'text-crimson'
+                                r.status === 'draft' ? 'text-amber'
+                                : r.status === 'unlisted' ? 'text-blue'
+                                : r.status === 'discontinued' ? 'text-crimson'
                                 : 'text-forest'
                               }`}
                             >
-                              <option value="Live">Live</option>
-                              <option value="Unlisted">Unlisted</option>
-                              <option value="Draft">Draft</option>
-                              <option value="Discontinued">Discontinued</option>
+                              <option value="live">Live</option>
+                              <option value="under_review">Under Review</option>
+                              <option value="draft">Draft</option>
+                              <option value="unlisted">Unlisted</option>
+                              <option value="discontinued">Discontinued</option>
                             </select>
                           </Cell>
                         )
@@ -303,24 +283,15 @@ export default function Sheet() {
                         return (
                           <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="p-1 min-w-[150px]">
                             <div className="flex items-center gap-1.5">
-                              <input 
-                                type="date"
-                                value={val || ''}
-                                onChange={(e) => updateField(i, col, e.target.value, r.sku)}
-                                className="bg-transparent text-sm font-mono text-white outline-none w-24"
-                              />
-                              {val && (
-                                <button
-                                  onClick={() => setBatchProduct(r)}
-                                  className={`px-1.5 py-0.5 rounded text-xs font-bold border transition-all ${
-                                    health.color === 'crimson' ? 'bg-crimson/20 border-crimson text-crimson animate-pulse' :
-                                    health.color === 'amber' ? 'bg-amber/20 border-amber text-amber' :
-                                    'bg-forest/20 border-forest text-forest'
-                                  }`}
-                                >
-                                  {health.text}
-                                </button>
-                              )}
+                              <span className="bg-transparent text-sm font-mono text-white outline-none w-24">
+                                {val || 'Lots Summary'}
+                              </span>
+                              <button
+                                onClick={() => setBatchProduct(r)}
+                                className="px-1.5 py-0.5 rounded text-xs font-bold border border-amber/40 bg-amber/10 text-amber"
+                              >
+                                View Lots
+                              </button>
                             </div>
                           </Cell>
                         )
@@ -344,18 +315,17 @@ export default function Sheet() {
                           onSelect={() => setSelected({ row: i, col: colIdx })}
                           selected={selected.row === i && selected.col === colIdx}
                           className={`p-0 min-w-[120px] ${
-                            /* was left-8 while the header sat at left-10 — the
-                               2-column offset is what slid Barcode under SKU */
                             col === 'SKU' ? 'sticky left-0 sm:left-10 z-20 bg-adm-surface shadow-[2px_0_6px_rgba(0,0,0,0.6)]' : ''
                           }`}
                         >
                           <input
                             type={typeof val === 'number' ? 'number' : 'text'}
                             value={displayVal}
+                            disabled={col === 'SKU'}
                             onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, [field]: e.target.value } : row))}
                             onBlur={(e) => updateField(i, col, e.target.value, col === 'SKU' ? r.sku : null)}
                             onFocus={() => setSelected({ row: i, col: colIdx })}
-                            className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-sm ${col === 'SKU' ? 'font-bold text-blue' : 'text-neutral-200'}`}
+                            className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-sm ${col === 'SKU' ? 'font-bold text-blue cursor-not-allowed' : 'text-neutral-200'}`}
                             placeholder={col}
                           />
                         </Cell>
@@ -382,6 +352,17 @@ export default function Sheet() {
           </table>
         )}
       </div>
+
+      <ProductIntakeSessionModal
+        isOpen={showPhoneIntake}
+        onClose={() => setShowPhoneIntake(false)}
+        onProductCreated={fetchProducts}
+        onExistingProduct={(product) => {
+          setShowPhoneIntake(false)
+          setBatchProduct(product)
+        }}
+      />
+
       {deleteTargets && (
         <DeleteProductsModal
           products={deleteTargets}

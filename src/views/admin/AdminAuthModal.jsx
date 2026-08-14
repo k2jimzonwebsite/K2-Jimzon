@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { useStore } from '../../context/StoreContext'
+import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { AlertIcon, ShieldIcon } from '../../components/ui/icons'
 
 // Real admin login: Supabase email+password or Google, with a genuine TOTP
 // second factor when the account has 2FA enrolled. No passcodes, no demo codes.
 export default function AdminAuthModal({ isOpen, onClose }) {
-  const { loginAdmin, loginWithGoogle, challengeMfa } = useStore()
+  const { loginAdmin, loginWithGoogle, challengeMfa, adminOAuthAvailable } = useStore()
   const [step, setStep] = useState(1)        // 1: credentials, 2: 2FA code
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -81,13 +81,13 @@ export default function AdminAuthModal({ isOpen, onClose }) {
               {loading ? 'Signing in…' : 'Sign in'}
             </button>
 
-            <div className="flex items-center gap-3 py-1">
+            <div hidden={!adminOAuthAvailable} className="flex items-center gap-3 py-1">
               <span className="h-px flex-1 bg-white/10" />
-              <span className="text-xs text-white/35 font-medium">or</span>
+              <span className="text-xs text-white/50 font-medium">or</span>
               <span className="h-px flex-1 bg-white/10" />
             </div>
 
-            <div>
+            <div hidden={!adminOAuthAvailable}>
               <button type="button" onClick={submitGoogle} disabled={loading}
                 className="w-full min-h-12 py-3 px-4 rounded-adm-sm bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-sm transition-all shadow-md flex items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-60">
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -102,6 +102,12 @@ export default function AdminAuthModal({ isOpen, onClose }) {
                 No account? Ask your super admin to invite you — accounts are created by invite only.
               </p>
             </div>
+
+            {!adminOAuthAvailable && (
+              <p className="text-center text-sm leading-relaxed text-white/60">
+                Staff access is invite-only and requires your authenticator.
+              </p>
+            )}
 
             <button type="button" onClick={onClose}
               className="w-full text-sm font-semibold text-white/45 hover:text-white transition-colors py-1">

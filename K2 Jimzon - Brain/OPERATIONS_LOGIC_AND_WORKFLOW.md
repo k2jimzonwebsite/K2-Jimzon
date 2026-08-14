@@ -104,6 +104,10 @@ available = on_hand
 - Owner and custodian are separate concepts.
 - Normal curated stock is physically pooled by location/lot. Customer or channel commitments are reservations.
 - Every quantity change writes an immutable event with actor, reason, delta, linked record, and before/after balance.
+- `quantity` is the verified physical count. `reserved_quantity` is committed
+  demand. A stored or projected sellable/available value is derived from those
+  facts plus disposition and shelf-life eligibility; a compatibility field or
+  trigger must never copy physical quantity over that derivation.
 
 ### Shelf life and FEFO
 
@@ -116,6 +120,14 @@ available = on_hand
 - Expiry-tracked stock with an unknown date is not sellable until corrected.
 - Categories may raise the 90-day minimum.
 - Expired, damaged, quarantined, unavailable, wrong-location, and wrong-custody lots cannot be reserved or fulfilled.
+- A 31–89 day clearance decision records actor, time, and a specific reason and
+  is reversible with a second reason. Changing expiry or moving the lot into a
+  non-available disposition invalidates the prior clearance approval.
+- A physical recount cannot reduce a lot below its active reservations. Resolve
+  or move the reservations through their own workflow first.
+- Lot reconciliation preserves existing IDs, rejects omitted existing lots, and
+  writes immutable before/after evidence. To remove physical stock, record zero
+  and the real reason rather than deleting the lot.
 
 ### Transaction truth
 
@@ -132,6 +144,11 @@ available = on_hand
 - Different concentration, size, flavor, shade, formulation, or pack count requires a distinct SKU.
 - Use a unique manufacturer barcode; if shared/unreliable, add a K2 internal scannable code.
 - One SKU may appear in many boxes/lots without duplicating the master.
+- The server assigns the stable internal SKU. A person, browser, import file, or AI
+  may propose a display name or slug but cannot invent the operational SKU.
+- Every active scannable code resolves to one sellable variant. A shared or
+  unreliable manufacturer code is recorded as non-authoritative evidence and the
+  variant receives a unique K2 scannable code.
 
 ```text
 draft -> under_review -> live
@@ -146,6 +163,119 @@ live | unlisted -> discontinued
 - Publishing validates identity, name, price, primary image, variant, and required channel fields.
 - Product import never creates stock; receiving/controlled adjustment does.
 - Claims about origin, ingredients, allergens, usage, and authenticity retain sources/evidence.
+
+### Phone-first new SKU and first-inventory workflow
+
+The default new-product workflow must work on a phone and remain resumable when
+staff switch to ChatGPT, the camera, or another app.
+
+```mermaid
+flowchart TD
+    A["Scan code or enter product facts"] --> B{"Exact SKU or code match?"}
+    B -->|Yes| C["Open existing product"]
+    C --> D["Add inventory or add to flight"]
+    B -->|No| E{"Possible brand/name/size match?"}
+    E -->|Yes| F["Staff resolves variant or duplicate"]
+    E -->|No| G["Start resumable Draft intake"]
+    G --> H["Capture packaging evidence"]
+    H --> I["ChatGPT Project research handoff"]
+    I --> J["Schema, evidence, and field review"]
+    J --> K["Server creates stable Draft SKU"]
+    K --> L{"Add first inventory now?"}
+    L -->|Italy import| M["Flight, box, and manifest line"]
+    L -->|Receipt| N["Supplier or receiving record"]
+    L -->|Legacy on hand| O["Authorized opening reconciliation"]
+    L -->|Not yet| P["Draft with no stock"]
+    M --> Q["Controlled lot after receiving"]
+    N --> Q
+    O --> Q
+    Q --> R["Separate publication-readiness review"]
+    P --> R
+```
+
+The checklist is:
+
+1. **Identify and prevent duplicates.** Scan the manufacturer/K2 code first or
+   type the known identity. Search exact code and SKU, then normalized brand,
+   product name, size, concentration, flavor, shade, formulation, and pack count.
+   An exact hit opens that product. An uncertain match blocks creation until a
+   staff member chooses the correct variant or documents why it is new.
+2. **Capture primary evidence.** Record the package front, back/label, barcode,
+   exact variant and net quantity. Require category-specific views: food and
+   beverage labels include ingredients, allergens, storage, nutrition when
+   present, batch and best-before/expiry; beauty/personal care includes INCI,
+   concentration/shade, warnings and use; household products include composition,
+   warnings and directions. Optional media is clearly separate from evidence.
+   The secure upload boundary verifies file signature through a real image
+   decoder, declared MIME, byte size, dimensions, pixel count, and single-image
+   decode. It re-encodes JPEG/PNG/WebP without embedded metadata before private
+   storage and records the content hash; browser file names and MIME values are
+   never accepted as proof that a file is a safe image.
+3. **Research without surrendering control.** The app saves the intake session
+   and prepares the versioned request. Staff manually use two private ChatGPT
+   Projects while no API exists. **K2 Product Content** accepts `PRODUCT_JSON`
+   and returns one strict product/copy/SEO/usage/evidence object. **K2 Product
+   Image Studio** accepts `PRIMARY` to compose the real front-package photograph
+   and `AFTER` to create the truthful prepared, applied, or in-use image. Neither
+   Project can assign SKU, slug, stock, approved prices, expiry, review status,
+   or publication status.
+4. **Validate and review the response.** `PRODUCT_JSON` contains the product
+   draft, customer copy, SEO/meta/headings, structured use cases and
+   instructions, two image briefs, per-field evidence/source references,
+   unknown fields, and review notes. It contains no surrounding prose or
+   operational fields. Re-run duplicate checks. Show
+   proposed-versus-current values and let staff accept or reject each suggestion.
+   Unknown or unsupported facts stay visibly unresolved as JSON `null` values.
+5. **Create one Draft product.** A server command assigns the stable SKU and
+   writes the reviewed product fields, code mappings, evidence/provenance,
+   checklist state, actor, and audit event atomically. App switching, timeout,
+   retry, and duplicate submission cannot create a second product.
+6. **Create inventory separately.** After the Draft exists, choose the truthful
+   source: an Italy flight/box manifest line, a supplier/receipt workflow, or an
+   authorized opening-balance reconciliation for verified legacy stock. The lot
+   owns batch, expiry/non-expiry evidence, quantity, hub, owner, custodian,
+   condition, unit cost, reason, and receiving state. Product rows never own
+   these values.
+7. **Review readiness separately.** Product review, inventory eligibility, and
+   channel/publication readiness are distinct. A Draft may exist with no stock;
+   received stock may exist while content remains Draft; neither fact makes the
+   other complete.
+
+Every publication change records a specific review reason. `Live` means the
+canonical storefront publication state only; Shopee, TikTok Shop, Lazada, and
+future channels require their own listing/readiness confirmation and cannot be
+implied by the Product Master status.
+
+The mobile interface uses one focused step at a time, visible progress and
+blockers, persistent save/resume, a sticky primary action, 44px or larger touch
+targets, suitable mobile keyboards, camera/file/scanner/manual fallbacks, and a
+predictable Back action. Frequent scanning and keyboard actions use immediate
+state feedback, not decorative motion.
+
+### Product copy, usage, and ChatGPT media contract
+
+- ChatGPT provides only the copy/evidence JSON and the two requested Draft image
+  deliverables. It never provides the operational SKU, internal ID, price, cost,
+  stock, quantity, product-level expiry, batch/lot, delivery, publication state,
+  human-review state, or claimed marketplace availability.
+- Usage separates purpose from procedure: a factual summary; zero to three
+  specific use cases; best-for context; supported amount/ratio; zero to six
+  ordered steps; expected visible/practical result; and applicable warnings.
+  Ready-to-consume products do not receive invented recipes merely to fill fields.
+- Food/beverage instructions distinguish serving suggestions from preparation;
+  beauty/personal-care instructions keep application and cosmetic results within
+  label/official evidence; household instructions keep surfaces, dilution,
+  contact time, ventilation, rinsing, and protection within evidence.
+- The uploaded packaging photographs remain primary evidence. `PRIMARY` may
+  remove the background and compose the real front photograph at 4:5, but must
+  not redraw or change any logo, label text, barcode, color, quantity, shape,
+  seal, or claim. If fidelity cannot be preserved, staff use the original photo.
+- `AFTER` is a separate 4:5 prepared/applied/in-use image tied to one approved
+  use case. It cannot exaggerate texture, amount, color, performance, or a
+  medical/cosmetic outcome. PRIMARY and AFTER are separate files, never a collage.
+- Every edited/generated image remains Draft until a person compares PRIMARY
+  with the physical package, compares AFTER with the approved use case, confirms
+  image rights, and uploads each file to its correct slot.
 
 ## 7. Curated imports
 
@@ -193,6 +323,13 @@ Payment/refund states remain separate.
 - Quote versions are immutable; one version must be explicitly accepted.
 - Estimates and actual landed costs remain separate with variance.
 - Substitutions require customer confirmation before purchase.
+- A state transition requires a specific operational/customer reason; a generic
+  “updated by admin” note is insufficient in the secure workflow.
+- A saved quote is not a sent quote, customer acceptance, payment request, or
+  verified payment. Those facts need their own evidence and state transitions.
+- Until the richer target lifecycle above is migrated and acceptance-tested,
+  the live narrower transition matrix remains authoritative. A server wrapper
+  may harden that matrix but must not silently invent unsupported states.
 
 ## 9. Flights, boxes, and scanning
 
@@ -222,6 +359,14 @@ Side states: `on_hold`, `delayed`, `cancelled`.
 - Similar variants rely on barcode/internal code, not eyesight.
 - Unexpected codes create exceptions; they never silently attach elsewhere.
 - Sealing requires acknowledgement of shortages, overages, and replacements.
+- A protected scan command carries both the actual scanned code and the selected
+  manifest line. The server proves that the code is that line's SKU or active
+  product barcode before incrementing exactly one unit.
+- One physical scan attempt keeps the same durable operation key if a response
+  is lost or retried. The next physical unit always receives a new key.
+- Closing Milan packing or recording Manila arrival requires a specific custody
+  or state-change reason. Record the actor, prior state, resulting state, and
+  reason in the audit trail.
 
 ### Manila
 
@@ -233,6 +378,9 @@ Side states: `on_hold`, `delayed`, `cancelled`.
 - Finalization creates accepted inventory exactly once and is idempotent.
 - Failed finalization leaves reconciliation open with the error.
 - Completed manifests stay searchable and the next flight can be created.
+- A variance requires an arrival/discrepancy note before finalization. A fully
+  matched independent recount may derive a statement that Manila matches the
+  Milan count, but the system must never copy Milan quantities into Manila.
 
 ## 10. Custody and locations
 
@@ -255,6 +403,42 @@ draft | offered -> cancelled
 Website, Shopee, TikTok Shop, Lazada, direct, wholesale, and future channels normalize into one canonical order before reservation/fulfillment.
 
 Every order retains channel, external reference, customer identity, exact lines, price/discount/delivery/total snapshots, raw source link, and separate fulfillment/payment states.
+
+Website customers use a hybrid identity model. A customer may submit and buy as
+a guest without creating an account, or use an optional account for saved
+history, cross-device continuity, and universal messaging. An account is never a
+condition for submitting an order request, Pasabuy request, or website message.
+Guest access is scoped to the exact order,
+request, or conversation through an expiring, revocable, high-entropy grant;
+email, phone number, sequential ID, or a changed URL ID is never ownership proof.
+An account may claim a guest record only after contact verification and conflict
+checks. Channel identities and guest/account records are not silently merged.
+
+The Admin customer directory presents canonical customer, contact, optional
+account, guest, and channel identity as separate attributable facts. It never
+infers a link from a matching name, email, or phone. Before the canonical
+identity schema is active, registered Auth profiles are labeled as a limited
+legacy view rather than being presented as all customers. Order, Pasabuy,
+conversation, value, and unread metrics are shown only when every supporting
+canonical query succeeds; partial failure is reported as unavailable, not zero.
+
+Public submission returns only a minimal receipt. It never returns an entire
+internal order/request row, customer PII, raw connector payload, staff identity,
+private notes, or internal coupon configuration. Idempotency keys prevent
+duplicate execution but are not access grants. Later guest retrieval or messaging
+uses an expiring, revocable, record-scoped server grant; a public reference is
+never authorization.
+
+Guest forms use a same-origin Storefront BFF. The browser sends no database
+secret and receives no raw grant token in JavaScript. The BFF validates an exact
+bounded schema, verifies the bot challenge, signs a short-lived request using a
+narrow server secret, and uses only the limited Supabase key. The database
+rejects stale or replayed signatures, applies durable per-IP and per-contact
+limits, binds idempotency to the canonical payload, creates canonical identity
+and conversation scopes atomically, and returns a minimal receipt. The raw guest
+grant exists only long enough for the BFF to place it in a scoped `HttpOnly`,
+`Secure`, `SameSite` cookie. This signing secret grants only the named guest
+commands; it is not a service-role or database master key.
 
 ### Connector ingestion
 
@@ -286,6 +470,15 @@ submitted -> reviewed -> confirmed -> reserved -> fulfillment
 - Coupon terms are snapshotted; redemption and reservation share the confirmation transaction.
 - Website orders receive a K2 order/packing QR before a courier waybill exists.
 - Delivery is visibly estimated, awaiting confirmation, or final.
+- Guest checkout returns only the scoped continuation needed for that order and
+  conversation. It never exposes another customer's history or requires an
+  account merely to submit a legitimate order request.
+- Account checkout links to the authenticated customer only after server-side
+  ownership checks. Claiming an earlier guest order requires verified contact
+  and preserves the original guest provenance.
+- A guest order or Pasabuy submission creates or links one website conversation
+  so the same scoped guest can continue messaging without registering. Creating
+  an account later is an optional verified claim, not a prerequisite.
 
 ## 13. Delivery and waybills
 
@@ -391,6 +584,16 @@ landed_cost = purchase_cost
 - Redemption is atomic, idempotent, and tied to the confirmed order/customer.
 - Browser storage is never the source of coupon truth.
 - Individual campaigns are configurable without one permanent universal policy.
+- Creating, activating, pausing, or archiving a coupon is an attributable
+  financial configuration decision. It requires an administrator, a specific
+  reason, bounded value/window/limit fields, idempotency, and immutable
+  before/after evidence.
+- Coupon codes are normalized and unique. Archived, expired, exhausted, or
+  otherwise ineligible campaigns cannot be activated. Archive is retained for
+  history and replaces destructive deletion.
+- Staff browsers do not directly mutate coupon rows after the secure Admin BFF
+  cutover. Public validation returns only a minimal preview and confirmation
+  revalidates and redeems against server truth.
 
 ## 19. Inbox and communication
 
@@ -400,7 +603,13 @@ landed_cost = purchase_cost
 - Mark delivery only after connector confirmation.
 - Retain copy/open-Seller-Center fallback when APIs are unavailable.
 - Identity merges require staff confirmation and preserve original history.
+- Guest, account, and channel messages normalize into one conversation model,
+  but every original identity/source remains attributable. A universal inbox is
+  not permission to reveal one customer's messages to another.
 - Delivery, Pasabuy, and exception decisions link to their conversation.
+- A guest reply is accepted only through the scoped BFF grant for that exact
+  conversation. A public reference, contact value, URL ID, or local-storage flag
+  never grants read or reply permission.
 
 ## 20. Admin organization
 
@@ -436,10 +645,25 @@ Do not fabricate fallbacks or turn query failure into zero.
 
 - Use real Supabase sessions and server-enforced roles.
 - Keep admin/storefront access separate.
-- Require MFA for privileged roles when enrollment/recovery is ready.
+- Protect Admin BOS sessions behind a same-origin server/BFF boundary using
+  `HttpOnly`, `Secure`, appropriately scoped `SameSite` cookies. Browser code
+  never receives an elevated key or refresh token. Cookie-authenticated state
+  changes require Origin/Referer validation and CSRF protection.
+- Require MFA/AAL2 for privileged roles and sensitive actions when enrollment,
+  challenge, and recovery flows are verified end to end.
 - Separate Admin, Operations, Warehouse, Support, Finance, and Read-only capabilities.
 - General Staff does not automatically receive every financial, security, publishing, write-off, or refund power.
 - Sensitive operations require confirmation, reason, and audit event.
+- Enable RLS and least-privilege grants on every exposed database/Storage object.
+  Customer records are owner-scoped; shared operational records are restricted
+  by role, hub, assignment, state, and action. UI route guards never substitute
+  for database/API authorization.
+- Publishable browser keys are public identifiers, not secrets. Secret/service
+  keys stay only in secured server environments and are rotated after exposure.
+- Validate and bound every input on the server; treat customer text as plain
+  text; parameterize queries; verify upload bytes/type/size; rate-limit public
+  and costly actions; redact secrets and internals from errors/logs; and verify
+  external webhook signatures over the exact raw body before durable capture.
 
 ## 23. Audit event contract
 
@@ -472,11 +696,14 @@ Until external dependencies exist:
 
 Before work:
 
-1. Identify the record that owns truth.
-2. Map current and target states.
-3. Define invariants, permissions, evidence, audit, failures.
-4. Check this rulebook and System Brain.
-5. Add an owner question only for a real unresolved business policy.
+1. Capture a new proposal in `FUTURE_IDEAS.md` and audit it through
+   `../MASTER_ACTION_PLAN.md`; never create a separate backlog.
+2. Confirm the accepted work exists in the Master Action Plan.
+3. Identify the record that owns truth.
+4. Map current and target states.
+5. Define invariants, permissions, evidence, audit, failures, and recovery.
+6. Check this rulebook and System Brain.
+7. Add an owner question only for a real unresolved business policy.
 
 Implementation order:
 
@@ -489,7 +716,10 @@ Implementation order:
 7. Desktop/mobile tests
 8. Production preflight/documentation
 
-After work, test valid, invalid, duplicate, concurrent, partial, and recovery paths. Update the System Brain only after verification.
+After work, test valid, invalid, duplicate, concurrent, partial, and recovery
+paths. Update the appropriate rulebook, System Brain, design, migration, test,
+and runbook records only after verification, then delete the completed MAP item.
+The Master Action Plan never keeps a completed-work section.
 
 ## 27. Definition of done
 

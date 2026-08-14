@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { peso } from '../../data/products'
-import { useStore } from '../../context/StoreContext'
+import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { channelMeta } from '../../lib/channelMeta'
 import { BarcodeIcon, BoxIcon, CheckIcon, UserIcon } from '../../components/ui/icons'
 import PackingSlipModal from './PackingSlipModal'
+import {
+  adminBffEnabled, assignBoxBff, confirmOrderBff, fulfillOrderBff, getAdminFulfillment,
+  recordPackingScanBff, transferLotBff, updateDeliveryBff, updatePaymentBff,
+} from '../../services/adminBffService'
 import {
   EmptyState,
   MetricRail,
@@ -31,6 +35,7 @@ function orderTone(status = '') {
 
 export default function OmniOperationsHub() {
   const { products, user } = useStore()
+  const secureAdmin = adminBffEnabled()
   const [activeRole, setActiveRole] = useState('manila_warehouse')
   const [activeStaff, setActiveStaff] = useState('')
   const [staffList, setStaffList] = useState([])
@@ -53,19 +58,25 @@ export default function OmniOperationsHub() {
   const nameFor = sku => (products || []).find(product => product.sku === sku)?.name || sku
 
   useEffect(() => {
+    if (secureAdmin) return
     if (!supabase) return
     supabase.from('user_profiles').select('email, role').in('role', ['Admin', 'Staff'])
       .then(({ data }) => {
         const names = (data || []).map(profile => (profile.email || '').split('@')[0]).filter(Boolean)
         if (names.length) setStaffList(names)
       })
-  }, [])
+  }, [secureAdmin])
 
   useEffect(() => {
     setActiveStaff(user?.email ? user.email.split('@')[0] : '')
   }, [user?.email])
 
   useEffect(() => {
+    if (secureAdmin) {
+      fetchSecureSnapshot()
+      const timer = window.setInterval(fetchSecureSnapshot, 30_000)
+      return () => window.clearInterval(timer)
+    }
     if (!supabase) { setLoadingBoxes(false); setLoadingOrders(false); return }
     fetchLiveOrders()
     fetchOrderRequests()
@@ -76,7 +87,52 @@ export default function OmniOperationsHub() {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'product_batches' }, fetchBoxes)
       .subscribe()
     return () => supabase.removeChannel(channel)
-  }, [])
+  }, [secureAdmin])
+
+  const fetchSecureSnapshot = async () => {
+    setLoadingBoxes(true); setLoadingOrders(true)
+    const response = await getAdminFulfillment()
+    if (!response.ok) {
+      setScanMessage({ success: false, text: response.error })
+      setLoadingBoxes(false); setLoadingOrders(false)
+      return
+    }
+    const data = response.data || {}
+    setStaffList((data.staff || []).map(profile => profile.displayName).filter(Boolean))
+    setOrderRequests(data.submitted || [])
+    const formatted = (data.confirmed || []).map(order => {
+      const reservations = order.inventory_reservations || []
+      const items = (order.order_request_items || []).map(item => ({
+        id: item.id, sku: item.sku, title: item.product_name || nameFor(item.sku), qty: item.quantity,
+        packed: reservations.filter(row => row.order_request_item_id === item.id && row.status === 'active').reduce((sum, row) => sum + Number(row.packed_quantity || 0), 0),
+      }))
+      const complete = items.length > 0 && items.every(item => item.packed >= item.qty)
+      return {
+        id: order.id, publicReference: order.public_reference, shortId: String(order.id).slice(0, 8),
+        channel: channelMeta(order.channel_source).label, channelColor: channelMeta(order.channel_source).color,
+        customer: order.customer_name || 'Customer', customerEmail: order.customer_email || null,
+        customerPhone: order.customer_phone || null, deliveryAddress: order.delivery_address || null,
+        paymentStatus: order.payment_status || 'not recorded', total: order.total_amount ?? null, items,
+        status: complete ? 'Packed' : 'Picking', courier: order.courier_name || order.fulfillment_method || 'Not assigned',
+        courierName: order.courier_name || '', shippingAmount: order.shipping_amount || 0,
+        trackingNumber: order.tracking_number || '', waybillUrl: order.waybill_url || '',
+        deliveryStatus: order.delivery_status, shippingQuoteStatus: order.shipping_quote_status,
+      }
+    })
+    setOrders(formatted)
+    setSelectedOrderId(current => formatted.some(order => order.id === current) ? current : (formatted[0]?.id || ''))
+    setPackedCount(formatted.reduce((sum, order) => sum + order.items.reduce((lineSum, item) => lineSum + item.packed, 0), 0))
+    const boxes = {}
+    for (const row of data.lots || []) {
+      const code = row.box_code || 'No box code'
+      const box = boxes[code] || (boxes[code] = { box_code: code, assigned_staff: row.custodian || '', location: row.hub || '', items: [] })
+      if (!box.assigned_staff && row.custodian) box.assigned_staff = row.custodian
+      if (!box.location && row.hub) box.location = row.hub
+      box.items.push({ ...row, title: nameFor(row.sku), qty: row.quantity })
+    }
+    setCargoBoxes(Object.values(boxes))
+    setLoadingBoxes(false); setLoadingOrders(false)
+  }
 
   const fetchOrderRequests = async () => {
     const { data, error } = await supabase.from('order_requests')
@@ -88,8 +144,17 @@ export default function OmniOperationsHub() {
   }
 
   const confirmOrderRequest = async request => {
-    if (!supabase) return
+    if (!secureAdmin && !supabase) return
     setScanMessage(null)
+    if (secureAdmin) {
+      const result = await confirmOrderBff(request.id, 'Stock and contact details reviewed in fulfillment hub')
+      if (!result.ok) setScanMessage({ success: false, text: result.error })
+      else {
+        setScanMessage({ success: true, text: `${request.public_reference} confirmed. Inventory is now reserved and packing lines were created.` })
+        await fetchSecureSnapshot()
+      }
+      return
+    }
     const { error } = await supabase.rpc('confirm_order_request', {
       p_order_request_id: request.id,
       p_reason: 'Stock and contact details reviewed in fulfillment hub',
@@ -176,7 +241,14 @@ export default function OmniOperationsHub() {
   }
 
   const handleReassignBoxStaff = async (boxCode, newStaff) => {
-    if (!supabase || !boxCode || boxCode === 'No box code') return
+    if ((!secureAdmin && !supabase) || !boxCode || boxCode === 'No box code') return
+    if (secureAdmin) {
+      const result = await assignBoxBff(boxCode, newStaff, 'Box custody reassigned from fulfillment hub')
+      if (!result.ok) { setScanMessage({ success: false, text: result.error }); return }
+      await fetchSecureSnapshot()
+      setScanMessage({ success: true, text: `${boxCode} is now assigned to ${newStaff}.` })
+      return
+    }
     const { error } = await supabase.rpc('transfer_inventory_custody', {
       p_to_custodian: newStaff, p_box_code: boxCode, p_sku: null,
       p_reason: 'Box custody reassigned from fulfillment hub',
@@ -190,7 +262,18 @@ export default function OmniOperationsHub() {
 
   const handleTransfer = async event => {
     event.preventDefault()
-    if (!transferBatchId || !transferTo || !supabase) return
+    if (!transferBatchId || !transferTo || (!secureAdmin && !supabase)) return
+    if (secureAdmin) {
+      const result = await transferLotBff({
+        batchId: transferBatchId, quantity: Number(transferQuantity), toCustodian: transferTo,
+        toLocation: '', reason: 'Exact lot custody transfer from fulfillment hub',
+      })
+      if (!result.ok) { setScanMessage({ success: false, text: result.error }); return }
+      setScanMessage({ success: true, text: `Moved ${transferQuantity} unit(s) to ${transferTo} with lot history preserved.` })
+      setTransferBatchId(''); setTransferQuantity('1'); setTransferTo('')
+      await fetchSecureSnapshot()
+      return
+    }
     const { error } = await supabase.rpc('transfer_inventory_custody_exact', {
       p_batch_id: transferBatchId,
       p_quantity: Number(transferQuantity),
@@ -210,7 +293,16 @@ export default function OmniOperationsHub() {
     const match = scanBarcode.trim()
     const found = orders.find(order => order.id === selectedOrderId)
     if (!found) setScanMessage({ success: false, text: 'Choose the exact order before scanning.' })
-    else if (!supabase) setScanMessage({ success: false, text: 'Database is not configured.' })
+    else if (!secureAdmin && !supabase) setScanMessage({ success: false, text: 'Database is not configured.' })
+    else if (secureAdmin) {
+      const result = await recordPackingScanBff(found.id, match)
+      if (!result.ok) setScanMessage({ success: false, text: result.error })
+      else {
+        const saved = result.result || {}
+        setScanMessage({ success: true, text: `${saved.product_name || match}: ${saved.packed_quantity || 0} of ${saved.required_quantity || 0} packed for ${saved.order_reference || found.publicReference}.` })
+        await fetchSecureSnapshot()
+      }
+    }
     else {
       const { data, error } = await supabase.rpc('record_packing_scan', { p_order_request_id: found.id, p_scanned_code: match })
       if (error) setScanMessage({ success: false, text: error.message })
@@ -224,6 +316,12 @@ export default function OmniOperationsHub() {
   }
 
   const updatePayment = async (order, target, note) => {
+    if (secureAdmin) {
+      const result = await updatePaymentBff(order.id, target, note || '')
+      if (!result.ok) throw new Error(result.error)
+      await fetchSecureSnapshot()
+      return
+    }
     const { error } = await supabase.rpc('set_order_request_payment_status', {
       p_order_request_id: order.id,
       p_to_status: target,
@@ -236,6 +334,13 @@ export default function OmniOperationsHub() {
   const fulfillOrder = async order => {
     const handoverNote = window.prompt('Enter the courier handover or dispatch reference. This becomes part of the audit trail.')
     if (!handoverNote?.trim()) return
+    if (secureAdmin) {
+      const result = await fulfillOrderBff(order.id, handoverNote.trim())
+      if (!result.ok) { setScanMessage({ success: false, text: result.error }); return }
+      setScanMessage({ success: true, text: `${order.publicReference} was handed to the courier with exact lot deductions recorded.` })
+      await fetchSecureSnapshot()
+      return
+    }
     const { error } = await supabase.rpc('fulfill_order_request', {
       p_order_request_id: order.id,
       p_handover_note: handoverNote.trim(),
@@ -348,14 +453,30 @@ export default function OmniOperationsHub() {
         </section>
       )}
 
-      <DeliveryDetailsModal order={deliveryOrder} onClose={() => setDeliveryOrder(null)} onSaved={async () => { setDeliveryOrder(null); await Promise.all([fetchOrderRequests(), fetchLiveOrders()]) }} />
+      <DeliveryDetailsModal order={deliveryOrder} onClose={() => setDeliveryOrder(null)} onSave={async payload => {
+        if (secureAdmin) {
+          const result = await updateDeliveryBff(payload)
+          if (!result.ok) throw new Error(result.error)
+          await fetchSecureSnapshot()
+        } else {
+          const { error } = await supabase.rpc('set_order_delivery_details', {
+            p_order_request_id: payload.orderRequestId, p_shipping_amount: payload.shippingAmount,
+            p_courier_name: payload.courierName, p_tracking_number: payload.trackingNumber || null,
+            p_waybill_url: payload.waybillUrl || null, p_customer_confirmed: payload.customerConfirmed,
+            p_note: payload.note,
+          })
+          if (error) throw error
+          await Promise.all([fetchOrderRequests(), fetchLiveOrders()])
+        }
+        setDeliveryOrder(null)
+      }} />
       <PaymentStatusModal order={paymentOrder} onClose={() => setPaymentOrder(null)} onSave={async (target, note) => { await updatePayment(paymentOrder, target, note); setPaymentOrder(null) }} />
       <PackingSlipModal isOpen={!!printSlipOrder} onClose={() => setPrintSlipOrder(null)} order={printSlipOrder} />
     </div>
   )
 }
 
-function DeliveryDetailsModal({ order, onClose, onSaved }) {
+function DeliveryDetailsModal({ order, onClose, onSave }) {
   const [form, setForm] = useState({ amount: '0', courier: '', tracking: '', waybill: '', confirmed: false, note: '' })
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -376,18 +497,14 @@ function DeliveryDetailsModal({ order, onClose, onSaved }) {
   if (!order) return null
   const save = async event => {
     event.preventDefault(); setBusy(true); setError('')
-    const { error: saveError } = await supabase.rpc('set_order_delivery_details', {
-      p_order_request_id: order.id,
-      p_shipping_amount: Number(form.amount),
-      p_courier_name: form.courier.trim(),
-      p_tracking_number: form.tracking.trim() || null,
-      p_waybill_url: form.waybill.trim() || null,
-      p_customer_confirmed: form.confirmed,
-      p_note: form.note.trim(),
-    })
-    setBusy(false)
-    if (saveError) { setError(saveError.message); return }
-    await onSaved()
+    try {
+      await onSave({
+        orderRequestId: order.id, shippingAmount: Number(form.amount), courierName: form.courier.trim(),
+        trackingNumber: form.tracking.trim(), waybillUrl: form.waybill.trim(),
+        customerConfirmed: form.confirmed, note: form.note.trim(),
+      })
+      setBusy(false)
+    } catch (saveError) { setBusy(false); setError(saveError?.message || 'Delivery details could not be saved.') }
   }
   const update = key => event => setForm(current => ({ ...current, [key]: event.target.type === 'checkbox' ? event.target.checked : event.target.value }))
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="delivery-details-title"><form onSubmit={save} className="max-h-[92vh] w-full max-w-lg space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white"><div><p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p><h2 id="delivery-details-title" className="mt-1 text-xl font-semibold">Delivery quote and waybill</h2><p className="mt-1 text-sm text-white/50">Direct orders require the actual courier quote and customer confirmation. Marketplace delivery is recorded as platform charged.</p></div><div className="grid gap-3 sm:grid-cols-2"><label className="text-xs font-semibold text-white/60">Courier<input required value={form.courier} onChange={update('courier')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Delivery amount<input required type="number" min="0" step="0.01" value={form.amount} onChange={update('amount')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Tracking number<input value={form.tracking} onChange={update('tracking')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Waybill URL<input type="url" value={form.waybill} onChange={update('waybill')} className="adm-input mt-1.5 min-h-11 text-base" /></label></div><label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input type="checkbox" checked={form.confirmed} onChange={update('confirmed')} /> Customer approved the quoted delivery charge</label><label className="block text-xs font-semibold text-white/60">Communication / reconciliation note<textarea required value={form.note} onChange={update('note')} className="adm-input mt-1.5 min-h-24 resize-y text-base" /></label>{error && <StateBanner tone="danger">{error}</StateBanner>}<div className="flex gap-2"><button type="button" onClick={onClose} className={`${secondaryButton} flex-1`}>Cancel</button><button disabled={busy} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : 'Save delivery details'}</button></div></form></div>

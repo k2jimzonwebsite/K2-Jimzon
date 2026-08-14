@@ -29,9 +29,9 @@ export const TOPICS = [
   },
   {
     id: 'new_product', section: 'inventory', category: 'Product master', title: 'Research and add a new product',
-    keywords: ['new product', 'add product', 'product prompt', 'ai prompt', 'smart paste', 'packaging photo', 'ingredients', 'allergen', 'usage'],
-    what: 'A barcode scan can prepare an evidence-first research prompt. The result is a draft only: staff must review identity, variant, sources, claims, images, and required fields before publishing.',
-    how: ['Scan the barcode or enter the product name.', 'Choose the research focus and copy the generated prompt.', 'Attach clear packaging photos to the research tool.', 'Paste the returned JSON into Smart Paste.', 'Review the draft and its evidence before saving or publishing.'],
+    keywords: ['new product', 'add product', 'product prompt', 'ai prompt', 'smart paste', 'packaging photo', 'ingredients', 'allergen', 'usage', 'primary image', 'after image'],
+    what: 'A barcode scan prepares a PRODUCT_JSON request for the private K2 Product Content Project. That Project returns one validated product, copy, SEO, usage, and evidence object. The separate K2 Product Image Studio creates the reviewed PRIMARY package image and AFTER use image. Everything remains Draft until staff review.',
+    how: ['Scan the barcode or enter the product name.', 'Attach readable front, back/label, barcode, and exact-variant photos in K2 Product Content.', 'Paste the PRODUCT_JSON request and copy the single JSON object into Smart Paste.', 'Review every fact, source, unknown, heading, use case, instruction, warning, and media brief.', 'In K2 Product Image Studio, attach the real front-package photo and send the PRIMARY and AFTER requests separately. Compare both outputs with the approved evidence, then upload each to its matching slot.'],
     where: 'Scan center → New product research, or Inventory → Scan product.', source: `${RULEBOOK} §6`,
     more: 'Product import never creates inventory quantity. Stock enters through receiving or a controlled, audited adjustment.',
   },

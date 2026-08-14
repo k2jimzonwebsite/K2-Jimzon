@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { RedButton, TrustBadge, TuscanCard, Kicker } from '../components/ui/bits'
 import { CheckIcon, PlaneIcon } from '../components/ui/icons'
+import TurnstileChallenge from '../components/security/TurnstileChallenge'
+import { guestBffEnabled } from '../services/guestCommerceService'
 
 const EMPTY_FORM = {
   customerName: '', email: '', phone: '', item: '', url: '', budget: '',
@@ -14,6 +16,8 @@ export default function Pasabuy() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [receipt, setReceipt] = useState(null)
+  const [botToken, setBotToken] = useState('')
+  const [challengeKey, setChallengeKey] = useState(0)
 
   const update = (key) => (event) => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
@@ -28,8 +32,12 @@ export default function Pasabuy() {
       setError('Enter an email address or mobile number so we can send the quote.')
       return
     }
+    if (guestBffEnabled() && !botToken) {
+      setError('Complete the security check before submitting your Pasabuy request.')
+      return
+    }
     setSubmitting(true)
-    const result = await addRequest(form)
+    const result = await addRequest({ ...form, botToken })
     setSubmitting(false)
     if (!result?.ok) {
       setError(result?.error || 'The request could not be saved. Please try again.')
@@ -37,6 +45,8 @@ export default function Pasabuy() {
     }
     setReceipt(result.request)
     setForm(EMPTY_FORM)
+    setBotToken('')
+    setChallengeKey(current => current + 1)
   }
 
   const field = 'store-field w-full px-4 py-3 text-base'
@@ -107,6 +117,7 @@ export default function Pasabuy() {
             <p className="mt-4 text-xs leading-relaxed text-navy-soft">
               Photo attachments will be requested by staff through your contact channel when needed. This avoids unsafe anonymous uploads before our protected attachment service is ready.
             </p>
+            <TurnstileChallenge key={challengeKey} onTokenChange={setBotToken} />
             {error && <p role="alert" className="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
             {receipt && (
               <div role="status" className="mt-4 flex items-start gap-2 rounded-xl border border-forest/25 bg-forest/5 p-3 text-sm text-forest">

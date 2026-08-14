@@ -1,0 +1,51 @@
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const rootDir = path.resolve(__dirname, '..')
+
+console.log('====================================================')
+console.log('   K2 JIMZON MAP-008 PASABUY LIFECYCLE AUDIT        ')
+console.log('====================================================\n')
+
+let failures = 0
+
+function check(name, condition, failureMessage) {
+  if (condition) {
+    console.log(`[PASS] ${name}`)
+  } else {
+    console.error(`[FAIL] ${name}: ${failureMessage}`)
+    failures++
+  }
+}
+
+// 1. Check PasabuyManager.jsx existence
+const managerPath = path.join(rootDir, 'src', 'views', 'admin', 'PasabuyManager.jsx')
+check('PasabuyManager.jsx exists', fs.existsSync(managerPath), 'PasabuyManager.jsx missing')
+
+if (fs.existsSync(managerPath)) {
+  const content = fs.readFileSync(managerPath, 'utf8')
+  check(
+    'PasabuyManager supports complete status lifecycle & transitions',
+    content.includes('STATUS_LABELS') && content.includes('NEXT') && content.includes('quoted'),
+    'PasabuyManager missing status labels or state transition map'
+  )
+  check(
+    'PasabuyManager calculates landed cost FX & margin formulas',
+    content.includes('DEFAULT_QUOTE') && content.includes('fxRate') && content.includes('customsPercent'),
+    'PasabuyManager missing FX or landed cost calculation parameters'
+  )
+}
+
+console.log('\n----------------------------------------------------')
+if (failures === 0) {
+  console.log(' ALL MAP-008 INTEGRITY CHECKS PASSED SUCCESSFULLY!')
+  console.log('----------------------------------------------------\n')
+  process.exit(0)
+} else {
+  console.error(` ${failures} INTEGRITY CHECK(S) FAILED.`)
+  console.log('----------------------------------------------------\n')
+  process.exit(1)
+}

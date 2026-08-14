@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { XIcon } from '../../components/ui/icons'
 
 export default function DiscrepancyReconciliationModal({ isOpen, onClose, consignment, items, onFinalizeArrival }) {
   const [notes, setNotes] = useState('')
@@ -23,9 +24,10 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
   const totalPacked = items.reduce((sum, i) => sum + (i.italy_packed_qty || 0), 0)
   const totalScanned = items.reduce((sum, i) => sum + (i.manila_scanned_qty || 0), 0)
   const varianceTotal = totalScanned - totalPacked
+  const discrepancyNeedsNote = varianceTotal !== 0 && notes.trim().length < 10
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-md animate-in fade-in duration-200 motion-reduce:animate-none sm:p-4" role="dialog" aria-modal="true" aria-labelledby="reconcile-consignment-title">
       <div className="w-full max-w-4xl max-h-[90vh] rounded-adm border border-adm-line bg-adm-surface text-white shadow-2xl flex flex-col overflow-hidden">
         
         {/* Header */}
@@ -37,9 +39,9 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
               </span>
               <span className="text-sm text-white/60 font-mono">{consignment.manifest_code}</span>
             </div>
-            <h2 className="font-sans text-xl font-bold text-white mt-1">Fix box count mismatches</h2>
+            <h2 id="reconcile-consignment-title" className="font-sans text-xl font-bold text-white mt-1">Review independent Manila counts</h2>
           </div>
-          <button onClick={onClose} className="text-white/60 hover:text-white text-xl min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10" aria-label="Close modal">✕</button>
+          <button onClick={onClose} className="text-white/60 hover:text-white min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10 active:scale-[0.98]" aria-label="Close reconciliation"><XIcon /></button>
         </div>
 
         {/* Stats Summary Bar */}
@@ -82,7 +84,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
                 const isShort = variance < 0
 
                 return (
-                  <tr key={item.sku} className="hover:bg-white/5 transition-colors">
+                  <tr key={item.id || `${item.sku}-${item.box_code}-${item.batch_code}`} className="hover:bg-white/5 transition-colors">
                     <td className="py-3 px-3">
                       <p className="font-bold text-white">{item.sku}</p>
                       <p className="text-xs text-white/50">{item.name || 'Authentic Italian Product'}</p>
@@ -98,7 +100,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
                       <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider ${
                         isMatched ? 'bg-forest/20 text-forest' : isShort ? 'bg-crimson/20 text-crimson' : 'bg-amber/20 text-amber'
                       }`}>
-                        {isMatched ? 'Matched 🟢' : isShort ? 'Shortage 🔴' : 'Surplus 🟡'}
+                        {isMatched ? 'Matched' : isShort ? 'Shortage' : 'Surplus'}
                       </span>
                     </td>
                   </tr>
@@ -117,9 +119,11 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Box #2 outer seal checked at NAIA customs. No damages detected..."
+              maxLength={1000}
               className="w-full rounded-adm-sm border border-adm-line bg-adm-sunken p-3 text-sm text-white placeholder-white/30 outline-none focus:border-forest resize-none h-20"
             />
           </div>
+          {discrepancyNeedsNote && <p className="text-sm leading-relaxed text-amber">Describe the shortage or discrepancy in at least 10 characters before finalizing.</p>}
           {finalizeError && (
             <div role="alert" className="rounded-adm-sm border border-crimson/35 bg-crimson/10 p-3 text-sm text-crimson">
               Finalization failed: {finalizeError}
@@ -131,16 +135,16 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
         <div className="p-4 border-t border-adm-line bg-adm-sunken flex justify-end gap-3 shrink-0">
           <button
             onClick={onClose}
-            className="rounded-adm-sm border border-adm-line bg-white/5 px-4 py-2.5 text-sm font-semibold text-neutral-300 hover:bg-white/10"
+            className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-4 py-2.5 text-sm font-semibold text-neutral-300 hover:bg-white/10 active:scale-[0.98]"
           >
             Back to Scanning
           </button>
           <button
             onClick={handleFinalize}
-            disabled={finalizing}
-            className="rounded-adm-sm bg-forest hover:bg-forest/90 text-white px-6 py-2.5 text-sm font-bold shadow-lg shadow-forest/20 transition-all disabled:opacity-50"
+            disabled={finalizing || discrepancyNeedsNote}
+            className="min-h-11 rounded-adm-sm bg-forest hover:bg-forest/90 text-white px-6 py-2.5 text-sm font-bold shadow-lg shadow-forest/20 transition-[transform,opacity,background-color] active:scale-[0.98] disabled:opacity-50"
           >
-            {finalizing ? 'Syncing Master Inventory...' : 'Finalize Arrival & Sync Master Stock 🚀'}
+            {finalizing ? 'Finalizing receipt…' : 'Finalize receipt and create lots'}
           </button>
         </div>
 

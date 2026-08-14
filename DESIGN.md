@@ -77,6 +77,99 @@ Warm, organic, and expansive. It feels like a sunlit Mediterranean villa, reject
 - Editorial font contrast (Fraunces vs Source Sans 3)
 - Focused accents (Terracotta for action, Olive for trust)
 
+### Mandatory four-skill design workflow
+
+Every storefront or admin task involving UI, UX, responsive behavior,
+typography, color, interaction, motion, navigation, forms, tables, charts, or
+interface states uses the complete design combination: `ui-ux-pro-max`,
+`impeccable`, `design-taste-frontend`, and `emil-design-eng`.
+
+The skills refine this existing system; they do not replace it. Begin with the
+user task, operational truth, `PRODUCT.md`, this document, current components,
+and mobile context. Apply accessibility/security first, preserve the storefront
+wood/editorial identity, keep admin density readable and fast, and use motion
+only when it explains hierarchy, progress, spatial relationship, or feedback.
+Frequent and keyboard-driven staff actions remain instant. Reduced motion and
+complete loading, empty, error, permission, conflict, and recovery states are
+mandatory.
+
+### Admin phone-intake interaction contract
+
+Product intake preserves the compact Admin BOS visual language while presenting
+one operational decision at a time. Required actions use at least 44px touch
+targets; camera/file controls show checking/uploading versus server-verified state;
+Next remains disabled until the server-backed gate is satisfied; and failures
+appear in one persistent inline recovery panel rather than browser alerts.
+Exact duplicate, possible variant, flight manifest, opening reconciliation, and
+publication denial are visually distinct states. Motion is limited to brief
+upload/progress feedback and respects reduced-motion behavior. A disabled
+supplier-receipt option is labeled Pending rather than appearing functional.
+
+### Storefront guest-inbox interaction contract
+
+The guest inbox preserves the storefront wood/editorial system and does not
+imitate a marketplace chat product. It is available only when the secure guest
+BFF is active. The surface explains that no account is required and that access
+belongs to this browser's private expiring grant; the raw grant is never shown.
+Conversation controls use 44px or larger targets, message copy is readable at
+phone widths, long text wraps safely, and loading, empty, denied/expired, send
+failure, retry, and success are distinct. It must never imply that Shopee,
+TikTok Shop, Lazada, payment, or courier messaging is connected.
+
+### Admin flight-scan interaction contract
+
+Flight scanning preserves the compact Admin BOS product system. Milan packing
+and Manila receiving remain visually and verbally distinct, with separate
+expected, scanned, remaining, and discrepancy feedback; the interface never
+copies a Milan total into Manila. Staff can use camera, hardware-scanner input,
+manual code entry, and box/line selection without changing operational meaning.
+A pending scan prevents overlapping submissions, the visible count changes only
+after server confirmation, and a failed-response retry retains the same
+operation key. State changes use a focused reason dialog rather than a browser
+prompt. Finalization stays open on failure, clearly requires a discrepancy note
+when counts vary, uses 44px or larger primary targets, and avoids decorative
+motion that would slow repeated scans. Reduced-motion and keyboard use remain
+first-class.
+
+### Admin lot and expiry interaction contract
+
+The lot editor uses the Admin BOS Source Sans system and shows physical,
+reserved, and sellable quantities as separate facts. FEFO order is structural;
+attention flags never reorder dispatch. On phones, each lot becomes one readable
+vertical work unit with labeled 44px controls and no horizontal dependency.
+Positive stock visibly requires box, batch, expiry, hub, and custodian. Clearance
+is an inline, reasoned 31–89 day decision—not a prompt or decorative warning.
+Loading uses stable skeleton rows; empty, denied, validation, conflict, and retry
+states remain inside the workflow. Frequent edits have only 150ms press/focus
+feedback, no entrance choreography, emoji icons, pulsing expiry warnings, or
+layout animation. The final action states exactly that it records a reconciliation
+and remains disabled until a specific reason is present.
+
+### Admin coupon interaction contract
+
+Coupon administration uses the Admin BOS Source Sans system and treats every
+promotion change as a financial configuration decision, not a playful marketing
+effect. Desktop uses the established compact register; phones use readable cards
+with no horizontal-table dependency. Codes, rules, windows, usage, and state stay
+visible before the action. Create, activate, pause, and archive require labeled
+44px controls, a specific inline reason, disabled/loading feedback, safe recovery,
+and explicit consequences. Archive is confirmed in a focused reason dialog and
+never presented as deletion. Loading, empty, permission, validation, duplicate,
+conflict, and retry states remain distinct. No emoji, raw provider errors,
+decorative entrance motion, or urgency theater is permitted.
+
+### Admin customer-directory interaction contract
+
+The customer directory uses the Admin BOS Source Sans/tokens and explains its
+identity mode before showing metrics. Canonical guest, account, contact, and
+channel facts remain visually distinct; matching contact text is never styled as
+a verified merge. Desktop uses a compact register and phones use vertical cards
+with 44px refresh controls and no horizontal-table requirement. Operational
+counts render only when their complete source succeeds; unavailable is not shown
+as zero. Loading, empty, permission, partial-data, and error states stay visible
+without raw provider messages. The surface is an operational identity directory,
+not a marketing broadcast list, and adds no decorative motion or invented action.
+
 ## 2. Colors
 
 A sunlit Tuscan palette grounded by warm whites and punctuated by natural Italian tones.

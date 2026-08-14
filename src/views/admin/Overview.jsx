@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
 import { peso } from '../../data/products'
 import {
   AlertIcon,
@@ -27,6 +28,12 @@ const CHANNELS = [
   { id: 'tiktok', label: 'TikTok Shop', description: 'Shop operations' },
   { id: 'lazada', label: 'Lazada', description: 'Open Platform' },
 ]
+
+const OVERVIEW_LABELS = {
+  orders: 'orders', orderBacklog: 'order backlog', pasabuy: 'Pasabuy',
+  batches: 'batches', connections: 'connections', listings: 'listings',
+  products: 'products', conversations: 'inbox',
+}
 
 const PASABUY_STAGES = [
   { label: 'Intake', statuses: ['request_received', 'researching'] },
@@ -197,7 +204,8 @@ export default function Overview({ setSection, pending = 0 }) {
   const [lastUpdated, setLastUpdated] = useState(null)
 
   const load = useCallback(async ({ quiet = false } = {}) => {
-    if (!supabase) {
+    const useSecureBoundary = adminBffEnabled()
+    if (!useSecureBoundary && !supabase) {
       setError('Supabase is not configured. Operational analytics are unavailable.')
       setLoading(false)
       return
@@ -206,6 +214,17 @@ export default function Overview({ setSection, pending = 0 }) {
     if (!quiet) setRefreshing(true)
     const priorStart = startOfPeriod(range, 1).toISOString()
     try {
+      if (useSecureBoundary) {
+        const result = await getAdminOverview(range)
+        if (!result.ok) throw new Error(result.error)
+        setData({ ...EMPTY_DATA, ...result.data })
+        const unavailable = result.unavailable.map((item) => OVERVIEW_LABELS[item.key] || item.key)
+        setError(unavailable.length
+          ? `Some analytics are unavailable — ${unavailable.join(' · ')}`
+          : '')
+        setLastUpdated(new Date())
+        return
+      }
       const results = await Promise.all([
         supabase.from('order_requests').select('id,channel_source,status,payment_status,total_amount,created_at').gte('created_at', priorStart),
         supabase.from('order_requests').select('*', { count: 'exact', head: true }).eq('status', 'submitted'),
@@ -244,6 +263,17 @@ export default function Overview({ setSection, pending = 0 }) {
 
   useEffect(() => {
     load({ quiet: true })
+    if (adminBffEnabled()) {
+      const refresh = () => {
+        if (document.visibilityState === 'visible') load({ quiet: true })
+      }
+      const interval = window.setInterval(refresh, 30_000)
+      document.addEventListener('visibilitychange', refresh)
+      return () => {
+        window.clearInterval(interval)
+        document.removeEventListener('visibilitychange', refresh)
+      }
+    }
     if (!supabase) return undefined
 
     const channel = supabase.channel(`admin:command-center:${range}`)
