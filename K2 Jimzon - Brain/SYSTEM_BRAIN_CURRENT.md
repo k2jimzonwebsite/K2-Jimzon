@@ -337,6 +337,14 @@ The 24-hour provider query contained only 12 database/pooler events and did not
 prove API/Auth/Edge activity safe. Full containment remains blocked on runtime
 cutover, fuller evidence, and owner-approved JWT signing-key revocation.
 
+Local Admin browser configuration now prefers the modern Supabase publishable
+key over the disabled legacy anon JWT. A direct read-only Auth settings request
+with that publishable key returned HTTP 200 on 14 August 2026, and the local
+Admin sign-in form renders at `127.0.0.1:5174`. This removes the legacy-key
+transport lockout without bypassing invite-only staff roles, password checks, or
+MFA. It is local verification, not proof that any specific staff credential can
+sign in or that the inactive Admin BFF has been deployed.
+
 A connected read-only provider audit on 11 August verified that all 42 live
 public tables have RLS, but this is not sufficient protection by itself. Two
 tables have no policy, six carry anon DML grants, two operational views are
@@ -455,6 +463,26 @@ phone-sized controls and complete loading/empty/expired/error states, and does
 not require an account; it is not active or real-host tested. Prepared server
 routes already prove scoped list/reply behavior and cross-guest denial in
 rollback-only production testing.
+The local Pasabuy receipt now links directly to this inbox when the flag is
+active, and the inbox refreshes every 15 seconds while visible without erasing
+the current conversation after a background-refresh failure. A 375px scripted
+UI check passed against mocked same-origin BFF responses. The production flag,
+migrations, and host remain inactive, so this is not a claim of live customer
+messaging.
+The local guest inbox can now create the first Website conversation directly,
+without an order or Pasabuy request. The prepared endpoint validates an exact
+name/contact/message schema, verifies Turnstile, signs `guest_start`, applies
+durable IP/contact limits and payload-bound idempotency, writes the canonical
+customer/conversation/inbound message, and issues only a scoped HttpOnly grant.
+A mocked same-origin 375px start-to-chat flow and four endpoint-denial contracts
+pass. This extension has not received a fresh provider rollback rehearsal and
+remains inactive with the rest of the guest boundary.
+The storefront now keeps Contact us visible as its fifth top-level destination
+regardless of that flag. With the flag off it creates a prefilled email draft
+and states that the customer must send it; with the flag on it uses the prepared
+canonical Website-conversation form. The page shows only confirmed K2 public
+details (email, Messenger and Shopee handles, Manila location). No staff-online
+state exists, and phone/Viber/WhatsApp remain unpublished pending OWNER-004.
 Activation order is in `../GUEST_COMMERCE_BFF_RUNBOOK.md`.
 
 The implementation sequence is also explicit: complete and prove the security,

@@ -115,6 +115,24 @@ Conversation controls use 44px or larger targets, message copy is readable at
 phone widths, long text wraps safely, and loading, empty, denied/expired, send
 failure, retry, and success are distinct. It must never imply that Shopee,
 TikTok Shop, Lazada, payment, or courier messaging is connected.
+Successful Pasabuy submission places one 44px `Open request chat` action inside
+the recorded receipt state when this boundary is active. The inbox refreshes in
+the background only while visible, preserves the current conversation if a
+refresh fails, and identifies automatic refresh without claiming instant staff
+response or provider delivery.
+Contact us is always the fifth top-level storefront destination on desktop and
+mobile. It contains the message entry and owner-confirmed channel directory even
+when the secure guest BFF is inactive. Inactive mode opens a prefilled email
+draft and clearly says it has not been sent; active mode uses the secure Website
+conversation form. Public phone, Viber, and WhatsApp values are omitted until
+confirmed. Staff is never labeled online without a fresh authorized server
+presence signal.
+When the browser has no conversation, the same inbox becomes the `Message K2`
+start surface instead of instructing the customer to order first. It uses visible
+name, contact, and message labels, at least one contact method, bot-check and
+inline recovery states, a 48px submit action, and the existing warm storefront
+tokens. Contact us links to the existing scoped inbox after a secure conversation
+exists; mobile keeps the five-item labeled navigation limit.
 
 ### Admin flight-scan interaction contract
 

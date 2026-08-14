@@ -3,7 +3,8 @@ begin
   if to_regnamespace('k2_private') is null
      or to_regclass('k2_private.guest_bff_secrets') is null
      or to_regclass('k2_private.guest_request_nonces') is null
-     or to_regclass('k2_private.guest_rate_buckets') is null then
+     or to_regclass('k2_private.guest_rate_buckets') is null
+     or to_regclass('k2_private.guest_conversation_receipts') is null then
     raise exception 'MAP020_POSTFLIGHT: private boundary objects are missing';
   end if;
   if to_regprocedure('public.submit_guest_order_v1(bigint,uuid,text,text,text,text)') is null
@@ -12,6 +13,7 @@ begin
     raise exception 'MAP020_POSTFLIGHT: public signed commands are missing';
   end if;
   if to_regprocedure('public.list_guest_conversations_v1(bigint,uuid,text,text,text,text)') is null
+     or to_regprocedure('public.start_guest_conversation_v1(bigint,uuid,text,text,text,text)') is null
      or to_regprocedure('public.append_guest_message_v1(bigint,uuid,text,text,text,text)') is null then
     raise exception 'MAP020_POSTFLIGHT: guest conversation commands are missing';
   end if;
@@ -21,6 +23,7 @@ begin
     raise exception 'MAP020_POSTFLIGHT: signed commands are not executable through the limited role';
   end if;
   if not has_function_privilege('anon','public.list_guest_conversations_v1(bigint,uuid,text,text,text,text)','EXECUTE')
+     or not has_function_privilege('anon','public.start_guest_conversation_v1(bigint,uuid,text,text,text,text)','EXECUTE')
      or not has_function_privilege('anon','public.append_guest_message_v1(bigint,uuid,text,text,text,text)','EXECUTE') then
     raise exception 'MAP020_POSTFLIGHT: guest conversation commands lack limited execution';
   end if;

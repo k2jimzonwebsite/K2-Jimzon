@@ -414,6 +414,14 @@ email, phone number, sequential ID, or a changed URL ID is never ownership proof
 An account may claim a guest record only after contact verification and conflict
 checks. Channel identities and guest/account records are not silently merged.
 
+Contact us is a permanent storefront destination and is not hidden merely
+because secure Website messaging is inactive. Its directory publishes only
+owner-confirmed public channels. A mailto draft is labeled as unsent until the
+customer sends it. `Online` staff availability may be shown only from an
+authorized server-side heartbeat with a short expiry; absent, stale, signed-out,
+or unverifiable presence is unavailable. Page visits, open Admin tabs, pending
+messages, and configured channel names are never presence evidence.
+
 The Admin customer directory presents canonical customer, contact, optional
 account, guest, and channel identity as separate attributable facts. It never
 infers a link from a matching name, email, or phone. Before the canonical
@@ -479,6 +487,15 @@ submitted -> reviewed -> confirmed -> reserved -> fulfillment
 - A guest order or Pasabuy submission creates or links one website conversation
   so the same scoped guest can continue messaging without registering. Creating
   an account later is an optional verified claim, not a prerequisite.
+- A guest may also start a Website conversation directly from `Message us`
+  without first creating an order or Pasabuy request. The same signed BFF,
+  bot-defense, contact, rate-limit, idempotency, scoped-grant, and safe-receipt
+  rules apply; the first customer message becomes the canonical inbound record.
+- After a successful Pasabuy submission, the storefront offers an immediate
+  path to that scoped conversation only when the secure guest BFF is active.
+  The open inbox may refresh while visible, but the UI never describes a browser
+  refresh, accepted write, copied response, or pending staff reply as real-time
+  delivery evidence.
 
 ## 13. Delivery and waybills
 

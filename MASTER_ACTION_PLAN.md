@@ -243,6 +243,10 @@ Provider-side evidence observed on 14 August 2026:
    request exposed 26 eligible rows, while the same public key plus the old Bearer
    JWT exposed 30, matching the modern elevated-key count. JWT signing-key migration
    and revocation therefore remain required after every active consumer is migrated.
+6. Local storefront/Admin builds now prefer the modern browser-safe publishable
+   key over the disabled legacy anon JWT. The publishable key returned HTTP 200
+   from the read-only Auth settings endpoint, both isolated builds and the 701-file
+   secret scan pass, and staff role/password/MFA enforcement remains unchanged.
 MAP-016 remains `Blocked — evidence required`; MAP-017 must not start.
 
 ### MAP-017 — Supabase schema truth, grants, RLS, RBAC, ownership, and RPC boundary
@@ -383,11 +387,14 @@ account. Accounts remain optional for saved history, identity continuity, and
 universal messaging. Staff Admin BOS sessions move behind a small server/BFF
 boundary using `HttpOnly`, `Secure`, `SameSite` cookies.
 
-**14 August scope audit:** IDEA-20260814-02 and IDEA-20260814-03 are merged here
+**14 August scope audit:** IDEA-20260814-02, IDEA-20260814-03, and the public
+Contact-us/live-availability idea are merged here
 instead of creating new queue items. The approved hybrid identity boundary also
 needs attributable wholesale organizations/buyers and durable customer
 continuation after refresh; neither a mailto link nor in-memory confirmation is
-the target operating model.
+the target operating model. Contact remains a permanent fifth storefront
+destination even while secure messaging is inactive; a real staff-online claim
+requires server-backed staff presence with an expiry, not a decorative status.
 
 **Confirmed launch sequence:** retain this hybrid model, complete and verify the
 security and operational boundaries first, then activate the separate storefront
@@ -429,6 +436,26 @@ phone-ready guest inbox are prepared behind the inactive feature flag. The
 inbox lists only conversations scoped to the HttpOnly guest grant, supports
 idempotent replies, distinguishes loading/empty/expired/error states, and does
 not require registration or expose the grant to JavaScript.
+Successful Pasabuy receipts now expose one immediate `Open request chat` action
+only behind that same flag. The inbox performs a visible-tab 15-second refresh,
+preserves existing messages on background-refresh failure, and makes no instant
+delivery or staff-response claim. A 375px scripted UI flow passed with mocked
+same-origin BFF responses; permanent activation and real-host proof remain gated.
+The prepared inbox now also supports starting the first Website conversation
+without an order or Pasabuy request. A new exact-schema endpoint and signed
+database command add Turnstile, IP/contact rate limits, payload-bound
+idempotency, canonical customer/conversation/message creation, and a scoped
+HttpOnly grant. The no-purchase 375px start-to-chat flow and four endpoint-denial
+contracts pass locally. The changed SQL still requires a fresh rollback-only
+provider rehearsal before any permanent activation.
+The local storefront now also exposes an always-visible `Contact us` destination
+on desktop, mobile, and footer navigation. It publishes only the confirmed K2
+email, Messenger and Shopee handles, uses an explicitly unsent email-draft
+fallback while the guest BFF is inactive, and switches to the prepared secure
+conversation form when active. No staff-online status is claimed; public
+phone/Viber/WhatsApp details await OWNER-004 confirmation. The storefront
+production build and six smoke flows pass, including 1024px and 375px Contact
+navigation/overflow checks.
 
 The first Admin data slice is also prepared behind
 `VITE_ADMIN_BFF_ENABLED=false`: `/api/admin/overview` replaces eight direct
@@ -484,6 +511,11 @@ Evidence and ordered activation are in
 - Universal messaging normalizes website, Pasabuy, Shopee, TikTok Shop, Lazada,
   and future messages into the canonical conversation model without claiming a
   connector delivered or received anything until provider confirmation exists.
+- Keep Contact us visible independently of messaging activation. Publish only
+  owner-confirmed channel details. If staff availability is added, derive it
+  from an authorized staff heartbeat with a short server-enforced expiry;
+  absent, stale, signed-out, or unverifiable presence is unavailable, never
+  `online`.
 - Add a same-origin BFF for the Admin BOS. Store staff sessions in `HttpOnly`,
   `Secure`, appropriately scoped `SameSite` cookies; rotate sessions; prevent
   fixation; validate Origin/Referer and CSRF tokens for state changes; never send

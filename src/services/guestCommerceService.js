@@ -20,6 +20,11 @@ export async function replyToGuestConversation(conversationReference, message, i
   return postGuestCommerce('message', { conversationReference, message, idempotencyKey })
 }
 
+export async function startGuestConversation(payload) {
+  if (!ENABLED) return { ok: false, error: 'Guest messaging is not active yet.' }
+  return postGuestCommerce('conversation', payload)
+}
+
 export function guestBffEnabled() {
   return ENABLED
 }

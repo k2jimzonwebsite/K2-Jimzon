@@ -18,6 +18,7 @@ end $$;
 grant execute on function public.submit_guest_order_v1(bigint,uuid,text,text,text,text) to anon;
 grant execute on function public.submit_guest_pasabuy_v1(bigint,uuid,text,text,text,text) to anon;
 grant execute on function public.preview_guest_coupon_v1(bigint,uuid,text,text,text) to anon;
+grant execute on function public.start_guest_conversation_v1(bigint,uuid,text,text,text,text) to anon;
 grant execute on function public.list_guest_conversations_v1(bigint,uuid,text,text,text,text) to anon;
 grant execute on function public.append_guest_message_v1(bigint,uuid,text,text,text,text) to anon;
 

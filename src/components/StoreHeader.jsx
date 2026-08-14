@@ -1,7 +1,6 @@
 import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
-import { BagIcon, SearchIcon, MoonIcon, SunIcon, InboxIcon } from './ui/icons'
-import { guestBffEnabled } from '../services/guestCommerceService'
+import { BagIcon, SearchIcon, MoonIcon, SunIcon } from './ui/icons'
 
 function SearchBox({ className = '' }) {
   const { query, setQuery, go, view } = useStore()
@@ -30,9 +29,10 @@ export default function StoreHeader() {
   const active = view === 'product' || view === 'master_product' ? 'catalog' : view
   const nav = [
     ['home', 'Home'],
-    ['catalog', 'Inventory & Catalog'],
-    ['pasabuy', 'Pasabuy Sourcing'],
-    ['wholesale', 'Wholesale inquiry'],
+    ['catalog', 'Shop'],
+    ['pasabuy', 'Pasabuy'],
+    ['wholesale', 'Wholesale'],
+    ['contact', 'Contact us'],
   ]
 
   return (
@@ -51,6 +51,7 @@ export default function StoreHeader() {
               <button
                 key={key}
                 onClick={() => go(key)}
+                aria-label={key === 'catalog' ? 'Inventory & Catalog' : undefined}
                 aria-current={isActive ? 'page' : undefined}
                 className={`relative min-h-11 whitespace-nowrap px-3 text-sm font-semibold transition-colors duration-150 ${isActive ? 'text-crimson' : 'text-navy-soft hover:text-navy'}`}
               >
@@ -61,18 +62,7 @@ export default function StoreHeader() {
           })}
         </nav>
 
-        <SearchBox className="ml-auto hidden w-full max-w-[17rem] md:block lg:ml-2" />
-
-        {guestBffEnabled() && (
-          <button
-            onClick={() => go('messages')}
-            className={`relative flex min-h-11 min-w-11 items-center justify-center rounded-lg border bg-[var(--store-surface-bg)] transition-[transform,border-color,color] duration-150 active:scale-[0.97] ${active === 'messages' ? 'border-crimson text-crimson' : 'border-[var(--store-surface-border)] text-navy hover:border-navy/25'}`}
-            aria-label="Open your secure K2 messages"
-            aria-current={active === 'messages' ? 'page' : undefined}
-          >
-            <InboxIcon size={20} />
-          </button>
-        )}
+        <SearchBox className="ml-auto hidden w-full max-w-[14rem] md:block lg:ml-2 xl:max-w-[17rem]" />
 
         <button
           onClick={() => setCartOpen(true)}

@@ -89,8 +89,8 @@ payloads, staff IDs, private notes, credential metadata, or stack/database text.
 
 ## Guest access and account claiming
 
-Submission does not automatically grant later record retrieval. When guest
-history/messaging is implemented, the BFF issues an expiring, revocable,
+Submission does not automatically grant later record retrieval. For guest
+history/messaging, the BFF issues an expiring, revocable,
 high-entropy grant in an `HttpOnly`, `Secure`, appropriately scoped `SameSite`
 cookie or a one-time verified magic-link exchange. Store only a hash server-side.
 The grant is bound to one order/request/conversation and has use/expiry/revocation
@@ -132,9 +132,13 @@ payload-bound idempotency, canonical guest identity, conversation scopes, and a
 30-day HttpOnly guest grant. The raw grant is returned only to the BFF and is
 removed from the JSON receipt.
 
-Prepared guest-message routes list only non-internal messages from scoped
-conversations and accept an idempotent customer reply only when the grant owns
-that exact conversation. They use a separate opaque conversation reference;
+Prepared guest-message routes let a customer start a Website conversation
+without an order or Pasabuy request, list only non-internal messages from scoped
+conversations, and accept an idempotent customer reply only when the grant owns
+that exact conversation. Direct conversation start repeats bounded contact and
+message validation, Turnstile, signed-request verification, durable IP/contact
+limits, payload-bound idempotency, and scoped HttpOnly grant issuance. The routes
+use a separate opaque conversation reference;
 internal UUIDs, staff-only messages, and failure details are not returned.
 
 The exact identity + boundary + cutover sequence passed production in an

@@ -25,6 +25,11 @@ export default defineConfig(({ command, mode }) => {
   const vercelTarget = vercelDeploymentHost.toLowerCase().includes('admin') ? 'admin' : ''
   const modeTarget = mode === 'admin' ? 'admin' : mode === 'storefront' ? 'storefront' : ''
   const target = configuredTarget || (legacyAdminFlag === 'true' ? 'admin' : '') || vercelTarget || modeTarget || (command === 'serve' ? 'combined' : 'storefront')
+  // Supabase's modern publishable key is intentionally browser-safe. Prefer it
+  // over the legacy anon JWT so disabling legacy API keys cannot lock staff out.
+  const supabasePublicKey = env.VITE_SUPABASE_PUBLISHABLE_KEY
+    || env.SUPABASE_PUBLISHABLE_KEY
+    || env.VITE_SUPABASE_ANON_KEY
 
   if (!['storefront', 'admin', 'combined'].includes(target)) {
     throw new Error(`Invalid K2_DEPLOYMENT_TARGET "${target}". Use storefront or admin.`)
@@ -47,6 +52,9 @@ export default defineConfig(({ command, mode }) => {
       alias: {
         '@k2-app-entry': `${projectRoot}/${entryFile}`,
       },
+    },
+    define: {
+      'import.meta.env.VITE_SUPABASE_PUBLIC_KEY': JSON.stringify(supabasePublicKey || ''),
     },
     build: {
       manifest: true,

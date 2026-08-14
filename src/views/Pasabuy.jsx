@@ -11,7 +11,7 @@ const EMPTY_FORM = {
 }
 
 export default function Pasabuy() {
-  const { requests, addRequest } = useStore()
+  const { requests, addRequest, go } = useStore()
   const [form, setForm] = useState(EMPTY_FORM)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -120,9 +120,16 @@ export default function Pasabuy() {
             <TurnstileChallenge key={challengeKey} onTokenChange={setBotToken} />
             {error && <p role="alert" className="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
             {receipt && (
-              <div role="status" className="mt-4 flex items-start gap-2 rounded-xl border border-forest/25 bg-forest/5 p-3 text-sm text-forest">
-                <CheckIcon size={17} className="mt-0.5 shrink-0" />
-                <span>Request saved. Keep reference <strong>{receipt.public_reference}</strong>; staff will review it before sending a quote.</span>
+              <div role="status" className="mt-4 rounded-xl border border-forest/25 bg-forest/5 p-3 text-sm text-forest">
+                <div className="flex items-start gap-2">
+                  <CheckIcon size={17} className="mt-0.5 shrink-0" />
+                  <span>Request saved. Keep reference <strong>{receipt.public_reference}</strong>; staff will review it before sending a quote.</span>
+                </div>
+                {guestBffEnabled() && (
+                  <button type="button" onClick={() => go('messages')} className="mt-3 inline-flex min-h-11 items-center justify-center rounded-lg bg-forest px-4 text-sm font-bold text-white transition-[transform,background-color] duration-150 hover:bg-forest/90 active:scale-[0.98]">
+                    Open request chat
+                  </button>
+                )}
               </div>
             )}
             <RedButton type="submit" className="mt-6 w-full py-4 text-base" disabled={submitting}>

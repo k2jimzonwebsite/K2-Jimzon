@@ -1,7 +1,7 @@
 # Guest Commerce BFF Activation Runbook
 
 This runbook implements the approved hybrid model: customers can buy, request
-Pasabuy, and continue a scoped conversation without an account; accounts remain
+Pasabuy, start or continue a scoped conversation without an account; accounts remain
 optional for verified history and cross-device continuity.
 
 ## Current state
@@ -33,17 +33,20 @@ RPCs while `VITE_GUEST_BFF_ENABLED=false`.
    challenges on the real preview host. Order and Pasabuy require the challenge;
    coupon preview uses the durable rate boundary without interrupting browsing.
 8. Switch the storefront service calls to `/api/storefront/order`,
-   `/api/storefront/pasabuy`, and `/api/storefront/coupon`. Verify minimal
+   `/api/storefront/pasabuy`, `/api/storefront/conversation`, and
+   `/api/storefront/coupon`. Verify minimal
    receipts, safe errors, duplicate retries, 429 behavior, and HttpOnly cookie
    issuance without reading the cookie from JavaScript.
-9. Enable the prepared guest history/message surface, which calls POST
-   `/api/storefront/messages` and `/api/storefront/message`. Verify an anonymous
+9. Enable the prepared guest history/message surface, which starts through POST
+   `/api/storefront/conversation` and calls POST `/api/storefront/messages` and
+   `/api/storefront/message`. Verify an anonymous
    browser with the scoped cookie can read/reply only to its own conversations;
    another browser, changed conversation reference, expired/revoked grant, and
-   duplicate/different-content retries must fail safely.
+   duplicate/different-content retries must fail safely. Prove that a clean
+   browser can start a Website conversation without an order or Pasabuy request.
 10. Apply `20260812_guest_submission_cutover.sql` in the same release window.
    Run its postflight and prove direct old RPC calls fail for `anon` and
-   `authenticated` while all three BFF paths still work.
+   `authenticated` while all four submission/start BFF paths still work.
 11. Run repository/history/bundle secret scans, both production builds, IDOR and
     cross-customer tests, then record real-host evidence before domains are
     considered ready.

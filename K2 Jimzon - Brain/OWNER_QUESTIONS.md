@@ -70,3 +70,23 @@ hard-coded 24-hour Pasabuy promise unless K2 adopts and measures it.
 
 **Why the owner must answer:** eligibility, prices, credit risk, minimums, and a
 public SLA are commercial promises, not safe engineering defaults.
+
+## OWNER-004 â€” Public phone, Viber, and WhatsApp details
+
+**Needed for:** publishing direct phone-based channels on the storefront Contact
+us page. Email, Messenger, Shopee, and secure Website messaging can proceed
+without this answer.
+
+Please confirm:
+
+1. The exact public K2 business phone number, including country code.
+2. Whether that same number is active for calls, SMS, Viber, and WhatsApp, or
+   whether each channel uses a different number.
+3. Which of those channels K2 wants customers to use publicly.
+
+**Recommendation:** publish only dedicated business numbers that staff actively
+monitor, format them with `+63`, and test every public link from a real phone
+before launch.
+
+**Why the owner must answer:** engineering must not invent or expose a private
+number, and a configured channel name does not prove the account is monitored.

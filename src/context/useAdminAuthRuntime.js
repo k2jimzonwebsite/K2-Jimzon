@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase, supabasePublicKey } from '../lib/supabaseClient'
 import {
   ADMIN_ROUTE, buildAdminOAuthRedirectUrl, clearAdminOAuthReturn,
   consumeAdminOAuthReturn, rememberAdminOAuthReturn,
@@ -179,7 +179,7 @@ export function useAdminAuthRuntime() {
     try {
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invite-staff`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}`, apikey: import.meta.env.VITE_SUPABASE_ANON_KEY },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}`, apikey: supabasePublicKey },
         body: JSON.stringify({ email: cleanEmail, role, redirectTo: window.location.origin }),
       })
       return response.ok ? { ok: true } : { ok: false, error: 'The staff invitation could not be sent.' }

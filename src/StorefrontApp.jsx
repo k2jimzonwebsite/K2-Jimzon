@@ -17,6 +17,7 @@ const Wholesale = lazy(() => import('./views/Wholesale'))
 const MasterProduct = lazy(() => import('./views/MasterProduct'))
 const Catalog = lazy(() => import('./views/Catalog'))
 const GuestMessages = lazy(() => import('./views/GuestMessages'))
+const Contact = lazy(() => import('./views/Contact'))
 
 const VIEWS = {
   home: Home,
@@ -28,6 +29,7 @@ const VIEWS = {
   wholesale: Wholesale,
   catalog: Catalog,
   messages: GuestMessages,
+  contact: Contact,
 }
 
 function StorefrontShell() {

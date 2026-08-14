@@ -4,6 +4,7 @@ import pasabuyHandler from '../api/storefront/pasabuy.js'
 import couponHandler from '../api/storefront/coupon.js'
 import messagesHandler from '../api/storefront/messages.js'
 import messageHandler from '../api/storefront/message.js'
+import conversationHandler from '../api/storefront/conversation.js'
 
 function response() {
   const headers = new Map()
@@ -64,6 +65,21 @@ test('storefront validation rejects unknown fields before a database call', asyn
   } }, invalidReply)
   expect(invalidReply.statusCode).toBe(400)
   expect(JSON.parse(invalidReply.body).error.code).toBe('CONVERSATION_INVALID')
+
+  const invalidConversation = response()
+  await conversationHandler({ ...request(), body: { customerName: 'Guest', message: 'Hello', admin: true } }, invalidConversation)
+  expect(invalidConversation.statusCode).toBe(400)
+  expect(JSON.parse(invalidConversation.body).error.code).toBe('REQUEST_INVALID')
+})
+
+test('starting a conversation fails closed on method and origin', async () => {
+  const wrongMethod = response()
+  await conversationHandler(request('GET'), wrongMethod)
+  expect(wrongMethod.statusCode).toBe(405)
+
+  const wrongOrigin = response()
+  await conversationHandler(request('POST', 'https://evil.example'), wrongOrigin)
+  expect(wrongOrigin.statusCode).toBe(403)
 })
 
 test('guest conversation listing is unavailable on the wrong production artifact', async () => {

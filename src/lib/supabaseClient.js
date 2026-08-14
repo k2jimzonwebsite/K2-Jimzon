@@ -3,14 +3,14 @@ import { createClient } from '@supabase/supabase-js'
 const env = (typeof import.meta !== 'undefined' && import.meta.env) ? import.meta.env : (process.env || {})
 
 const supabaseUrl = env.VITE_SUPABASE_URL
-const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY
+export const supabasePublicKey = env.VITE_SUPABASE_PUBLIC_KEY || env.VITE_SUPABASE_PUBLISHABLE_KEY || env.VITE_SUPABASE_ANON_KEY
 
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey)
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabasePublicKey)
 
 if (!isSupabaseConfigured) {
   const missingMsg = `[K2 Security Guard] Missing required production configuration: ` +
     `VITE_SUPABASE_URL (${supabaseUrl ? 'present' : 'MISSING'}), ` +
-    `VITE_SUPABASE_ANON_KEY (${supabaseAnonKey ? 'present' : 'MISSING'}).`
+    `Supabase publishable key (${supabasePublicKey ? 'present' : 'MISSING'}).`
 
   if (env.PROD) {
     console.error(missingMsg)
@@ -20,5 +20,5 @@ if (!isSupabaseConfigured) {
   }
 }
 export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey)
+  ? createClient(supabaseUrl, supabasePublicKey)
   : null
