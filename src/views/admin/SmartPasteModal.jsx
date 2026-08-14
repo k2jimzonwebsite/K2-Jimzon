@@ -1,15 +1,38 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import ImageUploadDropzone from '../../components/ui/ImageUploadDropzone'
+import { parseProductResearchPaste } from './productResearchContract.js'
+import {
+  buildAfterImagePrompt,
+  buildPrimaryImagePrompt,
+  K2_PRODUCT_IMAGE_PROJECT_INSTRUCTIONS,
+} from './productResearchPrompt.js'
 
-// ─── Field mapping: Project 1 AI output → Supabase columns ───────────────────
-function mapAiToDb(p, images) {
+// Field mapping: reviewed Product Content output to current Supabase columns.
+function mapAiToDb(p, images, contractInfo) {
   // Combine after-use + gallery into lifestyle_images array
   // after image goes first so the product page can use index 0 as the "after" slot
   const lifestyleArr = [
     images.after || null,
     ...images.gallery.filter(Boolean)
   ].filter(Boolean)
+
+  const researchNotes = contractInfo && !contractInfo.legacy
+    ? [
+        `ChatGPT content contract: ${contractInfo.schemaVersion}`,
+        p.card_description ? `Card description: ${p.card_description}` : null,
+        p.key_highlights?.length ? `Key highlights: ${p.key_highlights.join(' | ')}` : null,
+        p.seo_title ? `SEO title: ${p.seo_title}` : null,
+        p.meta_description ? `Meta description: ${p.meta_description}` : null,
+        p.page_heading ? `Page heading: ${p.page_heading}` : null,
+        p.supporting_heading ? `Supporting heading: ${p.supporting_heading}` : null,
+        contractInfo.media?.primary_alt_text ? `Primary alt text: ${contractInfo.media.primary_alt_text}` : null,
+        contractInfo.media?.after_alt_text ? `After alt text: ${contractInfo.media.after_alt_text}` : null,
+        contractInfo.unknownFields?.length ? `Unknown fields: ${contractInfo.unknownFields.join(', ')}` : null,
+        contractInfo.reviewNotes?.length ? `Review notes: ${contractInfo.reviewNotes.join(' | ')}` : null,
+        p.source_urls?.length ? `Evidence URLs: ${p.source_urls.join(' | ')}` : null,
+      ].filter(Boolean).join('\n')
+    : null
 
   return {
     sku:                      p.id || p.sku || null,
@@ -21,6 +44,7 @@ function mapAiToDb(p, images) {
     net_weight:               p.net_weight || null,
     package_type:             p.package_type || null,
     size:                     p.size || null,
+    subcategory:              p.subcategory || p.category || null,
     description:              p.inside || p.description || '',
     why_buy:                  p.whyBuy || p.why_buy || '',
     why_rare:                 p.whyRare || p.why_rare || null,
@@ -30,8 +54,10 @@ function mapAiToDb(p, images) {
     allergens:                p.allergens || '',
     finished_product_details: p.finished_product_details || p.finished_product || '',
     pairings:                 Array.isArray(p.pairings) ? p.pairings : [],
+    seo_keywords:             Array.isArray(p.seo_keywords) ? p.seo_keywords : [],
     primary_image_url:        images.primary || null,
     lifestyle_images:         lifestyleArr,
+    internal_notes:           researchNotes,
     is_ai_generated:          true,
     status:                   'Draft',
   }
@@ -41,8 +67,12 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
   const [stage, setStage]               = useState('json')    // 'json' | 'review'
   const [pasteJson, setPasteJson]       = useState('')
   const [parsedProduct, setParsedProduct] = useState(null)
+  const [contractInfo, setContractInfo]   = useState(null)
+  const [parseWarnings, setParseWarnings] = useState([])
   const [error, setError]               = useState('')
   const [saving, setSaving]             = useState(false)
+  const [copiedImageItem, setCopiedImageItem] = useState('')
+  const [copyError, setCopyError]       = useState('')
 
   // Image state
   const [primaryUrl, setPrimaryUrl]     = useState('')
@@ -55,22 +85,16 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
     setPasteJson(value)
     setError('')
     setParsedProduct(null)
+    setContractInfo(null)
+    setParseWarnings([])
     if (!value.trim()) return
     try {
-      let clean = value.trim()
-      if (clean.startsWith('```')) {
-        const firstNewline = clean.indexOf('\n')
-        const lastBacktick = clean.lastIndexOf('```')
-        clean = clean.substring(firstNewline, lastBacktick).trim()
-      }
-      const parsed = JSON.parse(clean)
-      if (!parsed.name && !parsed.product_name) {
-        setError('Missing required "name" field. Make sure you pasted the JSON block from Section 1 of your AI output.')
-        return
-      }
-      setParsedProduct(parsed)
-    } catch {
-      setError('Invalid JSON. Paste only the JSON block from Section 1 of your AI output.')
+      const parsed = parseProductResearchPaste(value)
+      setParsedProduct(parsed.product)
+      setContractInfo(parsed.meta)
+      setParseWarnings(parsed.warnings)
+    } catch (parseError) {
+      setError(parseError?.message || 'Invalid product JSON. Copy the complete PRODUCT_JSON response and try again.')
     }
   }
 
@@ -78,10 +102,21 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
     if (parsedProduct) setStage('review')
   }
 
+  const copyImageItem = async (text, key) => {
+    setCopyError('')
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedImageItem(key)
+      setTimeout(() => setCopiedImageItem(''), 2500)
+    } catch {
+      setCopyError('Copy failed. Allow clipboard access or select the prompt manually, then try again.')
+    }
+  }
+
   // ── Save to Supabase ─────────────────────────────────────────────────────────
   const handleSave = async () => {
     if (!parsedProduct) return
-    const dbRow = mapAiToDb(parsedProduct, { primary: primaryUrl, after: afterUrl, gallery: galleryUrls })
+    const dbRow = mapAiToDb(parsedProduct, { primary: primaryUrl, after: afterUrl, gallery: galleryUrls }, contractInfo)
     if (!dbRow.sku) {
       alert('Please fill in the Product ID field before saving.')
       return
@@ -104,32 +139,32 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-adm-sunken/95 backdrop-blur-sm animate-in fade-in text-white p-4 md:p-8">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-adm-sunken/95 text-white sm:p-4 md:p-8">
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col bg-adm-surface border border-adm-line rounded-adm overflow-hidden shadow-2xl">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/20 shrink-0">
+        <div className="flex shrink-0 flex-col gap-3 border-b border-adm-line bg-black/20 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center gap-4">
             <div>
-              <h2 className="font-sans text-xl font-semibold">✨ Smart Paste AI Import</h2>
-              <p className="text-base text-white/50 mt-0.5">Paste JSON from K2 Jimzon Product Intelligence AI · Upload 7 product photos</p>
+              <h2 className="font-sans text-xl font-semibold">Product JSON review</h2>
+              <p className="text-base text-white/50 mt-0.5">Validate one final Product Content JSON object, review it, then prepare the separate Image Studio handoff.</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center justify-between gap-3 sm:justify-end">
             {/* Step Pills */}
-            <div className="flex items-center gap-1 bg-black/30 rounded-full p-1">
+            <div className="flex min-w-0 items-center gap-1 overflow-x-auto rounded-full bg-black/30 p-1 scrollbar-none">
               <button
                 onClick={() => setStage('json')}
                 className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${stage === 'json' ? 'bg-blue text-navy' : 'text-white/60 hover:text-white'}`}
               >
-                1 · Paste JSON
+                1 · Validate JSON
               </button>
               <button
                 disabled={!parsedProduct}
                 onClick={() => setStage('review')}
                 className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed ${stage === 'review' ? 'bg-blue text-navy' : 'text-white/60 hover:text-white'}`}
               >
-                2 · Review + Photos
+                2 · Review + images
               </button>
             </div>
             <button onClick={onClose} aria-label="Close modal" className="rounded-full bg-white/5 p-2 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
@@ -144,15 +179,15 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
         {stage === 'json' && (
           <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
             {/* Paste box */}
-            <div className="flex-1 p-8 flex flex-col gap-4 bg-adm-sunken">
+            <div className="flex flex-1 flex-col gap-4 bg-adm-sunken p-4 sm:p-8">
               <div className="mb-1">
-                <p className="font-semibold text-white text-base">Paste Section 1 — Product Object JSON</p>
-                <p className="text-sm text-white/60 mt-0.5">Copy the full JSON block from your K2 Jimzon Product Intelligence AI output</p>
+                <p className="font-semibold text-white text-base">Paste the complete PRODUCT_JSON response</p>
+                <p className="text-sm text-white/60 mt-0.5">The current contract returns only product data, copy, SEO, usage, instructions, media handoff text, and verification details.</p>
               </div>
               <textarea
                 autoFocus
                 className="flex-1 w-full bg-black/40 border border-adm-line rounded-adm-sm p-5 font-mono text-sm text-blue-300 placeholder-white/20 focus:outline-none focus:border-blue resize-none transition-colors"
-                placeholder={'{\n  "id": "mutti-polpa-400g",\n  "name": "Mutti Polpa Finely Chopped Tomatoes",\n  "short": "Mutti Polpa",\n  "brand_id": "Mutti",\n  "origin": "Parma, Italy",\n  "inside": "...",\n  "whyBuy": "...",\n  "whyRare": "...",\n  "pairings": ["...", "...", "..."],\n  ...\n}'}
+                placeholder={'{\n  "schema_version": "k2.product-content.v3",\n  "product": { ... },\n  "copy": { ... },\n  "seo": { ... },\n  "usage": { ... },\n  "media": { ... },\n  "verification": { ... }\n}'}
                 value={pasteJson}
                 onChange={handleJsonChange}
                 spellCheck={false}
@@ -168,15 +203,15 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
             </div>
 
             {/* Instruction sidebar */}
-            <div className="lg:w-72 p-8 border-t lg:border-t-0 lg:border-l border-adm-line bg-black/10 flex flex-col gap-5">
+            <div className="flex flex-col gap-5 border-t border-adm-line bg-black/10 p-4 sm:p-8 lg:w-72 lg:border-l lg:border-t-0">
               <div className="space-y-4">
                 <p className="text-sm font-bold text-white/60 uppercase tracking-widest">How to use</p>
                 <ol className="space-y-4">
                   {[
-                    ['Open ChatGPT', 'Go to your K2 Jimzon Product Intelligence project and scan your product.'],
-                    ['Copy Section 1', 'Copy only the JSON block (Section 1 — Product Object) from the output.'],
-                    ['Paste here', 'Paste it in the box on the left. It parses automatically.'],
-                    ['Review + Photos', 'Confirm the product details and upload your 7 product photos.'],
+                    ['Use the Content Project', 'Attach readable packaging evidence and request one final PRODUCT_JSON object.'],
+                    ['Validate here', 'The parser rejects operational fields, extra keys, weak SEO structure, and malformed usage or instructions.'],
+                    ['Review every field', 'Check facts, copy, headings, sources, unknowns, and warnings before using the image prompts.'],
+                    ['Use the Image Studio', 'Copy the product-specific PRIMARY and AFTER prompts generated in the next step.'],
                   ].map(([title, body], i) => (
                     <li key={i} className="flex gap-3">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue/20 text-blue text-sm font-bold">{i + 1}</span>
@@ -192,15 +227,17 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
               {parsedProduct && (
                 <div className="mt-auto">
                   <div className="p-4 bg-forest/10 border border-forest/30 rounded-adm-sm mb-4">
-                    <p className="text-sm font-bold text-forest mb-1">✓ Valid JSON detected</p>
+                    <p className="text-sm font-bold text-forest mb-1">Valid JSON detected</p>
                     <p className="text-base font-semibold text-white">{parsedProduct.name || parsedProduct.product_name}</p>
                     <p className="text-sm text-white/60">{parsedProduct.brand_id || parsedProduct.brand} · {parsedProduct.origin}</p>
+                    <p className="mt-2 text-xs text-white/55">{contractInfo?.schemaVersion} · {contractInfo?.evidenceCount || 0} verification source(s)</p>
+                    {parseWarnings.map(warning => <p key={warning} className="mt-2 text-xs leading-relaxed text-amber">{warning}</p>)}
                   </div>
                   <button
                     onClick={handleNext}
                     className="w-full py-3 bg-blue text-navy text-base font-bold rounded-adm-sm hover:opacity-90 transition-opacity"
                   >
-                    Next → Review + Photos
+                    Next: review content and image handoff
                   </button>
                 </div>
               )}
@@ -211,19 +248,20 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
         {/* ── STAGE 2: Review + Photos ─────────────────────────────────────── */}
         {stage === 'review' && parsedProduct && (
           <div className="flex-1 overflow-y-auto">
-            <div className="p-8 max-w-6xl mx-auto w-full space-y-10 animate-in fade-in">
+            <div className="mx-auto w-full max-w-6xl space-y-8 p-4 sm:p-8">
 
               {/* ID & Barcode */}
               <div className="flex flex-wrap gap-4 pb-6 border-b border-adm-line">
                 <div className="flex-1 min-w-48">
-                  <label className="text-sm text-white/60 block mb-1.5">Product ID (kebab-case)</label>
+                  <label className="text-sm text-white/60 block mb-1.5">Operational SKU</label>
                   <input
                     type="text"
-                    className="w-full text-base font-mono text-purple-400 bg-purple-400/10 border border-purple-400/30 px-3 py-2 rounded-adm-sm focus:outline-none focus:ring-1 focus:ring-purple-400"
+                    className="w-full rounded-adm-sm border border-blue/30 bg-blue/10 px-3 py-2 font-mono text-base text-blue focus:outline-none focus:ring-1 focus:ring-blue"
                     value={parsedProduct.id || parsedProduct.sku || ''}
                     onChange={(e) => setParsedProduct({...parsedProduct, id: e.target.value, sku: e.target.value})}
                     placeholder="e.g. mutti-polpa-400g"
                   />
+                  <p className="mt-1.5 text-xs leading-relaxed text-white/45">ChatGPT never supplies this value. Until the server-generated SKU command in MAP-001 is complete, assign it through the controlled Product Master process.</p>
                 </div>
                 <div className="w-44">
                   <label className="text-sm text-white/60 block mb-1.5">Barcode</label>
@@ -270,9 +308,10 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                     <h4 className="text-sm font-bold text-amber tracking-widest uppercase mb-4">Copywriting</h4>
                     <div className="space-y-3">
                       {[
-                        { key: 'inside',  label: 'Inside — 3 sentence description', rows: 4 },
-                        { key: 'whyBuy',  label: 'Why Buy (max 18 words)',           rows: 2 },
-                        { key: 'whyRare', label: 'Why Rare in PH',                   rows: 2 },
+                        { key: 'card_description', label: 'Product card description', rows: 2 },
+                        { key: 'inside',          label: 'Full product description', rows: 4 },
+                        { key: 'whyBuy',          label: 'Why buy (max 18 words)',    rows: 2 },
+                        { key: 'whyRare',         label: 'Why rare in PH',            rows: 2 },
                       ].map(({ key, label, rows }) => (
                         <div key={key}>
                           <label className="text-sm text-white/60 block mb-1">{label}</label>
@@ -284,6 +323,24 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                           />
                         </div>
                       ))}
+
+                      <div>
+                        <label className="text-sm text-white/60 block mb-1">Key highlights (2–5 factual points)</label>
+                        {[0, 1, 2, 3, 4].map((i) => (
+                          <input
+                            key={i}
+                            type="text"
+                            placeholder={`Highlight ${i + 1}`}
+                            className="mb-1.5 w-full rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-base text-white outline-none focus:border-amber"
+                            value={(Array.isArray(parsedProduct.key_highlights) ? parsedProduct.key_highlights[i] : '') || ''}
+                            onChange={(e) => {
+                              const arr = Array.isArray(parsedProduct.key_highlights) ? [...parsedProduct.key_highlights] : []
+                              arr[i] = e.target.value
+                              setParsedProduct({...parsedProduct, key_highlights: arr.filter((item, index) => index <= i || item)})
+                            }}
+                          />
+                        ))}
+                      </div>
 
                       {/* Pairings */}
                       <div>
@@ -307,7 +364,38 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                   </div>
 
                   <div>
-                    <h4 className="text-sm font-bold text-white/60 tracking-widest uppercase mb-4">Specs</h4>
+                    <h4 className="mb-4 text-sm font-bold uppercase tracking-widest text-forest">SEO and page headings</h4>
+                    <div className="space-y-3">
+                      {[
+                        { key: 'seo_title',          label: 'SEO title (max 60 characters)', rows: 2 },
+                        { key: 'meta_description',    label: 'Meta description (max 160 characters)', rows: 3 },
+                        { key: 'page_heading',        label: 'Page heading (H1)', rows: 2 },
+                        { key: 'supporting_heading',  label: 'Supporting heading', rows: 2 },
+                      ].map(({ key, label, rows }) => (
+                        <div key={key}>
+                          <label className="mb-1 block text-sm text-white/60">{label}</label>
+                          <textarea
+                            rows={rows}
+                            className="w-full resize-none rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-base text-white outline-none focus:border-forest"
+                            value={parsedProduct[key] || ''}
+                            onChange={(e) => setParsedProduct({...parsedProduct, [key]: e.target.value})}
+                          />
+                        </div>
+                      ))}
+                      <div>
+                        <label className="mb-1 block text-sm text-white/60">Search keywords (comma-separated)</label>
+                        <textarea
+                          rows={2}
+                          className="w-full resize-none rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-base text-white outline-none focus:border-forest"
+                          value={Array.isArray(parsedProduct.seo_keywords) ? parsedProduct.seo_keywords.join(', ') : ''}
+                          onChange={(e) => setParsedProduct({...parsedProduct, seo_keywords: e.target.value.split(',').map(item => item.trim()).filter(Boolean)})}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-bold text-white/60 tracking-widest uppercase mb-4">Usage, instructions and label facts</h4>
                     <div className="space-y-3">
                       {[
                         { key: 'usage_instructions',       label: 'Usage Instructions',       rows: 2 },
@@ -332,12 +420,33 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
 
                 {/* RIGHT: Photos */}
                 <div className="space-y-6">
-                  <h4 className="text-sm font-bold text-purple-400 tracking-widest uppercase">Product Photos</h4>
+                  <h4 className="text-sm font-bold text-blue tracking-widest uppercase">Reviewed product images</h4>
+
+                  <div className="rounded-adm-sm border border-blue/25 bg-blue/10 p-4">
+                    <p className="text-sm font-bold text-white">Separate K2 Product Image Studio</p>
+                    <p className="mt-1 text-xs leading-relaxed text-white/60">Install the Image Studio instructions once. For this product, attach the real front-package photo and copy the PRIMARY or AFTER request below. Image generation never changes the approved JSON.</p>
+                    <button
+                      type="button"
+                      onClick={() => copyImageItem(K2_PRODUCT_IMAGE_PROJECT_INSTRUCTIONS, 'instructions')}
+                      className="mt-3 min-h-11 w-full rounded-adm-sm border border-blue/30 bg-blue/10 px-3 py-2 text-sm font-semibold text-blue transition-[transform,background-color] duration-150 hover:bg-blue/15 active:scale-[0.99]"
+                    >
+                      {copiedImageItem === 'instructions' ? 'Image Studio instructions copied' : 'Copy one-time Image Studio instructions'}
+                    </button>
+                    {copyError && <p role="alert" className="mt-2 text-xs leading-relaxed text-crimson">{copyError}</p>}
+                  </div>
 
                   {/* Primary */}
                   <div className="bg-white/5 border border-adm-line rounded-adm-sm p-4">
-                    <p className="text-sm font-bold text-neutral-300 mb-1">Primary Photo</p>
-                    <p className="text-xs text-white/55 mb-3">Clean studio white background — generated by AI (Image 1)</p>
+                    <p className="text-sm font-bold text-neutral-300 mb-1">PRIMARY · package as sold</p>
+                    <p className="text-xs leading-relaxed text-white/55 mb-3">The Image Studio edits the real front photo into K2's consistent 4:5 warm-ivory or transparent presentation. Reject the result if any package detail changes.</p>
+                    {contractInfo?.media?.primary_alt_text && <p className="mb-3 text-xs leading-relaxed text-white/45">Alt text: {contractInfo.media.primary_alt_text}</p>}
+                    <button
+                      type="button"
+                      onClick={() => copyImageItem(buildPrimaryImagePrompt(parsedProduct, contractInfo?.media), 'primary')}
+                      className="mb-3 min-h-11 w-full rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-white/10 active:scale-[0.99]"
+                    >
+                      {copiedImageItem === 'primary' ? 'PRIMARY request copied' : 'Copy product-specific PRIMARY request'}
+                    </button>
                     <ImageUploadDropzone
                       label=""
                       multiple={false}
@@ -347,8 +456,16 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
 
                   {/* After Use */}
                   <div className="bg-white/5 border border-adm-line rounded-adm-sm p-4">
-                    <p className="text-sm font-bold text-neutral-300 mb-1">After-Use Photo</p>
-                    <p className="text-xs text-white/55 mb-3">Prepared / plated food — generated by AI (Image 2)</p>
+                    <p className="text-sm font-bold text-neutral-300 mb-1">AFTER · prepared, applied, or in use</p>
+                    <p className="text-xs leading-relaxed text-white/55 mb-3">Generate one believable 4:5 use result from the approved scene without inventing texture, quantity, color, performance, or medical or cosmetic claims.</p>
+                    {contractInfo?.media?.after_scene && <p className="mb-3 text-xs leading-relaxed text-white/45">Scene: {contractInfo.media.after_scene}</p>}
+                    <button
+                      type="button"
+                      onClick={() => copyImageItem(buildAfterImagePrompt(parsedProduct, contractInfo?.media), 'after')}
+                      className="mb-3 min-h-11 w-full rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-white/10 active:scale-[0.99]"
+                    >
+                      {copiedImageItem === 'after' ? 'AFTER request copied' : 'Copy product-specific AFTER request'}
+                    </button>
                     <ImageUploadDropzone
                       label=""
                       multiple={false}
@@ -358,8 +475,8 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
 
                   {/* Gallery — 5 sample shots */}
                   <div className="bg-white/5 border border-adm-line rounded-adm-sm p-4">
-                    <p className="text-sm font-bold text-neutral-300 mb-1">Product Gallery <span className="text-white/55 font-normal">(up to 5 photos)</span></p>
-                    <p className="text-xs text-white/55 mb-3">Detail shots, packaging angles, in-context lifestyle photos</p>
+                    <p className="text-sm font-bold text-neutral-300 mb-1">Optional gallery <span className="text-white/55 font-normal">(up to 5 real or reviewed photos)</span></p>
+                    <p className="text-xs text-white/55 mb-3">Use package details, alternate angles, label evidence, or separately reviewed lifestyle images. Gallery files are not required for a Draft.</p>
                     <ImageUploadDropzone
                       label=""
                       multiple={true}
@@ -372,14 +489,12 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                   <div className="bg-black/20 rounded-adm-sm p-4 space-y-2">
                     <p className="text-sm font-bold text-white/60 uppercase tracking-widest mb-2">Upload Status</p>
                     {[
-                      { label: 'Primary Photo',   filled: !!primaryUrl },
-                      { label: 'After-Use Photo', filled: !!afterUrl },
-                      { label: `Gallery Photos`,  filled: galleryUrls.length > 0, extra: galleryUrls.length > 0 ? `(${galleryUrls.length}/5)` : '' },
+                      { label: 'PRIMARY package image', filled: !!primaryUrl },
+                      { label: 'AFTER in-use image', filled: !!afterUrl },
+                      { label: `Optional gallery`, filled: galleryUrls.length > 0, extra: galleryUrls.length > 0 ? `(${galleryUrls.length}/5)` : '' },
                     ].map(({ label, filled, extra }) => (
                       <div key={label} className="flex items-center gap-2 text-base">
-                        <span className={`w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold ${filled ? 'bg-forest/30 text-forest' : 'bg-white/5 text-neutral-300'}`}>
-                          {filled ? '✓' : '○'}
-                        </span>
+                        <span className={`h-2.5 w-2.5 rounded-full ${filled ? 'bg-forest' : 'border border-white/30 bg-transparent'}`} aria-hidden="true" />
                         <span className={filled ? 'text-neutral-300' : 'text-white/55'}>{label} {extra}</span>
                       </div>
                     ))}
@@ -389,13 +504,13 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
 
               {/* Save */}
               <div className="pt-8 pb-4 flex flex-col items-center border-t border-adm-line">
-                <p className="text-base text-white/60 mb-4 italic">Pricing and stock levels are set in the PIM Sheet after saving.</p>
+                <p className="text-base text-white/60 mb-4">This saves a product Draft. Pricing review, publication, and physical inventory remain separate controlled steps.</p>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="w-full max-w-sm bg-forest text-navy font-bold py-4 rounded-adm-sm shadow-[0_0_20px_rgba(205,250,119,0.2)] transition-all hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100 flex justify-center items-center gap-2"
+                  className="w-full max-w-sm bg-forest text-navy font-bold py-4 rounded-adm-sm transition-[transform,opacity] duration-150 active:scale-[0.99] disabled:opacity-50 flex justify-center items-center gap-2"
                 >
-                  {saving ? 'Saving to Inventory…' : '✓ Save Product to Inventory'}
+                  {saving ? 'Saving Draft…' : 'Save product Draft'}
                 </button>
               </div>
             </div>

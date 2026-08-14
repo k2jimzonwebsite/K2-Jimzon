@@ -1,19 +1,21 @@
 # K2 Jimzon — System Brain (Current State)
 
-**Living source of truth. Last updated: 9 August 2026 (rev. 3).**
+**Living source of truth. Last updated: 10 August 2026 (rev. 5).**
 
 This is the "never get lost" document. It says what the system is, how our real
-workflow maps onto it, everything that's been built, exactly what to run, and
-what's left to do. When something changes, update this file.
+workflow maps onto it, everything verified as built, and exactly what to run.
+Approved unfinished work lives only in `../MASTER_ACTION_PLAN.md`. When verified
+current behavior changes, update this file.
 
 Required operational behavior is defined in
 [`OPERATIONS_LOGIC_AND_WORKFLOW.md`](OPERATIONS_LOGIC_AND_WORKFLOW.md). This
 System Brain records what is currently implemented; the rulebook records how
 completed workflows must behave. Never confuse a rulebook target with a live feature.
 
-Future proposals that are not yet implemented are kept separately in
-[`FUTURE_IDEAS.md`](FUTURE_IDEAS.md). Do not treat an entry in that register as
-current production behavior until it is completed and incorporated here.
+New proposals are captured temporarily in
+[`FUTURE_IDEAS.md`](FUTURE_IDEAS.md), then rejected, merged, deferred outside the
+active queue, or audited into the Master Action Plan. Never treat an intake idea
+or MAP item as current production behavior until it is verified and recorded here.
 
 ---
 
@@ -27,7 +29,13 @@ hubs, held by specific staff, and sold across our website and marketplaces.
 The software is **one project with two faces**:
 
 - **Storefront** — the public website customers buy from.
-- **Admin dashboard** — the staff control room; this is the **source of truth**.
+- **Admin BOS** — the central staff operating system and **source of truth** for
+  products, inventory, flights, custody, orders, fulfillment, customers,
+  Pasabuy, channel preparation, communication, evidence, and reconciliation.
+
+Shopee, TikTok Shop, Lazada, and future channels must connect through backend
+adapters to the same canonical records. No channel connector may create a second
+inventory, order, customer, or reporting truth.
 
 **Tech stack:** React + Vite + Tailwind on the front end, **Supabase**
 (Postgres + realtime + storage) as the backend, deployed on **Vercel**.
@@ -117,6 +125,7 @@ Connector adapters will write into Supabase and the UI can consume canonical
 records live. A captured webhook does not mean the full order/message/waybill
 workflow is connected:
 
+
 - Inventory sync → **`products`** → shows in admin Inventory **and** storefront.
 - Incoming events → **`channel_event_inbox`** → detail retrieval and
   idempotent normalization → **`order_requests`** → Fulfilment Hub.
@@ -131,7 +140,15 @@ Full contract in **`CONNECTOR_INTEGRATION_SPEC.md`**.
 
 **Core tables:** `products`, `orders`, `conversations`, `messages`,
 `user_profiles`, plus supply-chain/consignment/notification tables from the
-numbered migrations.
+numbered migrations. Machine-readable contract exported in `src/types/database.types.js`.
+
+**Infrastructure & Environment Integrity (MAP-000 verified):**
+
+- **CLI Config:** Official `supabase/config.toml` initialized (`project_id = pixplcjqivlfflickobf`).
+- **Secret Isolation:** `.env.example` strictly partitions client keys (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) from server-only secrets (all `VITE_` secret prefixes removed).
+- **Production Guard:** `src/lib/supabaseClient.js` throws explicit configuration errors in production if required backend environment variables are absent.
+- **Repository Cleanliness:** `.gitignore` excludes `supabase/.temp/` linked state.
+- **Automated Verification:** `scripts/verify-supabase-integrity.js` validates environment and schema integrity.
 
 **Added recently:**
 
@@ -144,11 +161,11 @@ numbered migrations.
 `v_stock_by_hub`, `v_stock_by_custodian`, `v_stock_by_channel`,
 `v_batch_allocations`.
 
+
 **Functions:** `is_staff()`, exact-lot reservation, order-first unit packing,
 non-destructive reconciliation, partial custody transfer, coupon redemption,
 and delivery quotation are live. Deprecated direct-stock and ambiguous-scan
 RPCs are unavailable to browser roles.
-
 **Enums:** `channel_type` (order channels incl. shopee/lazada/tiktok/website),
 `chat_platform` (inbox platforms).
 
@@ -282,41 +299,390 @@ consignment scan events, separate admin/storefront production builds, and the
 - anonymous access limited to reviewed customer submission/coupon RPCs;
 - deprecated direct-stock, whole-line packing, and ambiguous scan RPCs locked.
 
-**Paused (waiting on us / Shopee approval):**
+**Single unfinished-work queue:** `../MASTER_ACTION_PLAN.md` is the only active
+backlog. It contains the audited work still required for catalog loading,
+operational completion, connector readiness, analytics, and launch proof.
 
-- Get the **Shopee developer app approved** → obtain `SHOPEE_PARTNER_KEY` →
-  put it in Supabase secrets → deploy `shopee-webhook`.
-- Finish Shopee **`get_order_detail`** so orders arrive fully populated.
-- Clone the connector for **Lazada, TikTok, Meta, WhatsApp**.
-- Deploy `invite-staff` Edge Function (for the in-app invite button; adding
-  staff via the Supabase dashboard already works without it).
-- Enable **Google** provider in Supabase (needs Google Cloud OAuth credentials).
-- Build the **Italy AI feed** that writes into `product_drafts`.
+New proposals are captured temporarily in `FUTURE_IDEAS.md`. After audit, an
+accepted proposal moves into the Master Action Plan and is removed from the idea
+inbox. After implementation and verification, its final behavior is recorded in
+this System Brain and the appropriate rulebook/runbook files, and the completed
+MAP item is deleted. The target is an empty Master Action Plan.
 
-**Approved logic still to complete after hardening:** receiver acceptance
-for custody transfers, configurable category shelf-life thresholds, complete
-payment-evidence records/files, case-by-case exception workspace, Pasabuy
-entity separation, and real marketplace detail/message/waybill adapters.
-
-**Nice-to-have backlog:** auto-create batch rows from the receiving scan; a
-stock-by-location/channel summary panel across all products; harden the Shopee
-CSV import to exact export columns; wire consignment data fully live.
+Supabase source-of-truth work, separate Vercel production configuration, and
+custom-domain activation are now audited active work in MAP-000 and MAP-013.
+Unavailable payment gateways, paid-plan features, OAuth credentials, and real
+marketplace adapters remain current limitations until their dependencies become
+available and the work passes a fresh audit.
 
 ### Admin assistance layer (local implementation, 10 August 2026)
 
-The admin now includes a no-cost guided operations layer: one operation-first
-Scan center, guarded laptop shortcuts, focus-aware copy/paste research prompts
-for new product drafts, and a deterministic procedure guide that retrieves up
-to three relevant K2 procedures with rulebook citations. The guide is a local
-RAG foundation, not a connected external AI, and it does not read live records
-or perform state-changing actions. The complete behavior and future
-server-backed retrieval plan are recorded in `ADMIN_ASSISTANCE_AND_SHORTCUTS.md`.
+### Launch integrity correction (11 August 2026)
+
+The previous claim that MAP-000 through MAP-015 were completed and verified was
+rejected by a repository audit. Much of the claimed evidence is local and
+uncommitted, and several checks prove only that files or strings exist. The new
+product intake currently has compile-breaking imports, placeholder uploads,
+unsafe random/mock success fallbacks, direct lot writes, and non-enforced review
+gates. New SQL and provider configuration are not proven against the live
+schema. A Supabase service-role credential was exposed in a local seed script
+and must be treated as compromised. The value has been removed locally, the
+unsafe seed has been disabled, and repository, Git-history, and existing-build
+secret scans pass. On 14 August 2026, a modern secret key passed a bounded provider
+read and legacy API-key use was disabled; the old key now returns 401 as an
+`apikey`. The old service-role JWT still grants elevated Bearer access when paired
+with the public key. The only active Edge Function, `invite-staff` version 3,
+still needs the locally prepared modern-secret correction deployed and tested.
+The 24-hour provider query contained only 12 database/pooler events and did not
+prove API/Auth/Edge activity safe. Full containment remains blocked on runtime
+cutover, fuller evidence, and owner-approved JWT signing-key revocation.
+
+Local Admin browser configuration now prefers the modern Supabase publishable
+key over the disabled legacy anon JWT. A direct read-only Auth settings request
+with that publishable key returned HTTP 200 on 14 August 2026, and the local
+Admin sign-in form renders at `127.0.0.1:5174`. This removes the legacy-key
+transport lockout without bypassing invite-only staff roles, password checks, or
+MFA. It is local verification, not proof that any specific staff credential can
+sign in or that the inactive Admin BFF has been deployed.
+
+A connected read-only provider audit on 11 August verified that all 42 live
+public tables have RLS, but this is not sufficient protection by itself. Two
+tables have no policy, six carry anon DML grants, two operational views are
+anon-selectable, and blanket write policies exist on brands, categories,
+warehouses, and the legacy `products_old` table. `product_drafts` permits every
+authenticated user to manage every draft. Four guest submission/validation RPCs
+and 32 authenticated `SECURITY DEFINER` functions remain externally callable;
+their intended grants, internal guards, ownership checks, AAL2, validation, and
+negative tests require MAP-017/MAP-020. Only three migrations are recorded live.
+No corrective DDL was applied during that audit.
+
+The prepared MAP-017 phase-1 hardening migration subsequently passed its full
+postflight in a live rollback-only transaction on 12 August. A separate query
+proved the vulnerable policies, grants, Storage null limits, and legacy Realtime
+membership were restored by rollback. This is strong compatibility/reversibility
+evidence but is not deployment; the public write and upload vulnerabilities
+remain live pending permanent application after credential disablement.
+
+The live guest RPC audit also found that order v2 returns the complete internal
+order row rather than a minimal receipt, legacy order v1 remains callable and
+hardcodes a PHP 85 shipping amount, Pasabuy submission has no idempotency, and
+coupon preview exposes internal coupon configuration. The storefront currently
+surfaces raw database error messages. These are transitional direct-RPC paths,
+not the approved hybrid guest/account boundary. The accepted BFF, receipt,
+guest-grant, claiming, and messaging contract is recorded in
+`../GUEST_COMMERCE_SECURITY_CONTRACT.md`. Its core submission and guest-message
+boundary is prepared behind an inactive feature flag; it is not deployed or
+production-proven yet.
+
+No local file, seed transcript, verification-script pass, or Vercel config file
+is evidence that its migration, data, provider setting, domain, deployment, or
+workflow is live. `MASTER_ACTION_PLAN_DOCUMENTATION.md` is an unverified draft
+artifact, not an authoritative completion log. The active launch queue is
+restored in `../MASTER_ACTION_PLAN.md` as MAP-016 through MAP-025.
+
+The approved target is now a hybrid customer model: guest order requests remain
+available without an account, while optional accounts support saved history and
+identity continuity for universal messaging. This is a target, not current live
+proof. Admin BOS is approved to move behind a same-origin BFF with HttpOnly
+cookie sessions, CSRF protection, server authorization, and enforced MFA for
+sensitive staff actions. Domain activation follows the security, operational,
+and production-build gates and still requires the exact owner domain/DNS answer.
+
+### Product-intake repair in progress (12 August 2026)
+
+The local admin artifact compiles after repairing the duplicated modal source
+and missing icon/prompt imports. The product-intake browser service now fails
+closed: it cannot invent an offline SKU, directly insert a Product or lot, or
+report publication success after a failed server call. The visible workflow now
+uses real camera/file selection, explicit ChatGPT field acceptance, and gated
+forward navigation while preserving the existing Admin BOS design. This is not
+live workflow proof. A read-only production-schema comparison confirmed that
+`product_intake_sessions` is absent and the unapplied draft migration uses
+several nonexistent columns and incompatible status values. The corrected
+migration, protected evidence uploads, inventory-source handoffs, server
+readiness command, authorization/negative tests, and permanent deployment remain
+under MAP-018 after the MAP-016/MAP-017 security gate.
+
+The replacement MAP-018 migration now passes its live read-only preflight and
+full postflight inside a rollback-only production transaction. A separate query
+proved the table, functions, private bucket, lot metadata columns, and status
+change were all absent afterward. Locally, evidence uploads target a private
+staff/session path; exact matches open the existing lot workflow; possible
+duplicates require a recorded physical-variant reason; Draft and first-source
+commands are idempotent and AAL2-guarded; Italy intake creates only a manifest
+line; and opening balances require admin authority plus owner, unit cost,
+location, custodian, batch, box, count, and reason. Supplier receipt remains
+truthfully disabled because no canonical receipt record exists. None of these
+new server objects is live yet.
+
+### Admin BFF foundation (local, inactive, 12 August 2026)
+
+The repository now contains a fail-closed same-origin Admin BFF authentication
+foundation. It uses the limited Supabase anon key server-side, exact admin-origin
+checks, bounded JSON, mandatory live role and AAL2 checks, AES-256-GCM encrypted
+HttpOnly cookies, ten-minute MFA pending state, 30-minute inactivity, eight-hour
+maximum lifetime, CSRF binding, logout, and safe error codes. Production admin
+routes return `404` unless `K2_DEPLOYMENT_TARGET=admin`. The local security
+contract passes. This is not the active authentication path: Admin BOS still
+uses the Supabase browser session because its operational data calls have not
+yet moved to named BFF routes. The per-instance login throttle is not a durable
+distributed limit. Exact status, environment requirements, and migration order
+are in `../ADMIN_BFF_SECURITY_RUNBOOK.md` under MAP-019/MAP-020.
+
+The prepared hybrid identity migration also passed exact live preflight,
+postflight, and rollback-restoration checks. It replaces the target's direct
+Auth-user conversation ownership with separate canonical customers, verified
+contacts, optional accounts, deliberate channel identities, hashed scoped guest
+grants, one-time claims, and customer-linked orders/conversations. Validation
+triggers reject cross-customer account, claim, and grant scopes. No new identity
+table or ownership behavior is deployed; evidence is in
+`../MAP_019_ROLLBACK_VALIDATION_2026-08-12.md`.
+
+The approved hybrid decision is explicit: a customer does not need an account
+to submit an order, Pasabuy request, or website message. Accounts remain optional
+for verified history, cross-device continuity, and universal messaging. A local,
+inactive Storefront BFF foundation now accepts exact bounded schemas, checks
+exact origins and production target, maps failures to stable public codes, and
+uses only the limited Supabase key. Its companion database boundary adds
+HMAC-signed five-minute requests, nonce replay protection, durable per-IP and
+per-contact limits, payload-bound idempotency, canonical customer/contact
+creation, scoped order/conversation grants, and minimal receipts. The browser
+never receives the signing secret or raw guest token; the BFF writes the latter
+to an HttpOnly cookie.
+
+The exact identity, boundary, cutover, coupon/replay, real order, real Pasabuy,
+and customer-continuity sequence passed in a production rollback-only
+transaction, followed by a separate restoration check. Local contracts and both
+separate production builds pass. This is not live: the feature flag remains off,
+the accessible Turnstile component still needs real site/secret configuration
+and preview-host testing, migrations are unapplied, legacy direct RPCs are still
+callable, and account verification/claim routes remain unfinished. A guest
+message interface is now prepared behind the disabled Storefront BFF flag. It
+uses the scoped HttpOnly grant through same-origin list/reply routes, has
+phone-sized controls and complete loading/empty/expired/error states, and does
+not require an account; it is not active or real-host tested. Prepared server
+routes already prove scoped list/reply behavior and cross-guest denial in
+rollback-only production testing.
+The local Pasabuy receipt now links directly to this inbox when the flag is
+active, and the inbox refreshes every 15 seconds while visible without erasing
+the current conversation after a background-refresh failure. A 375px scripted
+UI check passed against mocked same-origin BFF responses. The production flag,
+migrations, and host remain inactive, so this is not a claim of live customer
+messaging.
+The local guest inbox can now create the first Website conversation directly,
+without an order or Pasabuy request. The prepared endpoint validates an exact
+name/contact/message schema, verifies Turnstile, signs `guest_start`, applies
+durable IP/contact limits and payload-bound idempotency, writes the canonical
+customer/conversation/inbound message, and issues only a scoped HttpOnly grant.
+A mocked same-origin 375px start-to-chat flow and four endpoint-denial contracts
+pass. This extension has not received a fresh provider rollback rehearsal and
+remains inactive with the rest of the guest boundary.
+The storefront now keeps Contact us visible as its fifth top-level destination
+regardless of that flag. With the flag off it creates a prefilled email draft
+and states that the customer must send it; with the flag on it uses the prepared
+canonical Website-conversation form. The page shows only confirmed K2 public
+details (email, Messenger and Shopee handles, Manila location). No staff-online
+state exists, and phone/Viber/WhatsApp remain unpublished pending OWNER-004.
+Activation order is in `../GUEST_COMMERCE_BFF_RUNBOOK.md`.
+
+The implementation sequence is also explicit: complete and prove the security,
+ownership, session, abuse, and operational boundaries first; activate custom
+storefront and Admin domains only after those launch gates pass. Domain setup
+does not weaken or replace the guest/account security model.
+
+The Admin BFF now has two inactive read-only vertical slices. Its fixed
+`/api/admin/overview` route rechecks the encrypted cookie session, live
+staff role, and AAL2; returns only eight allowlisted command-center projections;
+labels partial query failures without provider details; and refreshes inactivity
+without exposing Auth tokens. `Overview.jsx` can use it through
+`VITE_ADMIN_BFF_ENABLED`, but that flag remains false because the rest of the
+Admin BOS still calls Supabase from browser JavaScript. The fixed
+`/api/admin/products` route adds the minimal SKU/barcode/price/image and
+batch-derived-stock projection used by scan and fulfillment context, with an
+explicit stock-unavailable state. Eighteen local contracts and both isolated
+production boundary builds pass. This is prepared code, not a live
+cookie-protected admin claim; the exact remaining browser-operation inventory is
+in `../ADMIN_BFF_SECURITY_RUNBOOK.md`.
+
+The fulfillment vertical slice is also prepared but inactive. A fixed read route
+returns only the submitted confirmation queue, confirmed packing queue, active
+lots, and staff display identities. Seven named server commands preserve the
+existing operational rules for reserve, scan, payment evidence, delivery quote
+or marketplace charge, courier handover, exact-lot transfer, and box custody.
+Each command requires the cookie session, current staff role, AAL2, CSRF, exact
+origin, a bounded exact schema, a unique operation key, and a server-only HMAC.
+Its database wrapper adds nonce replay denial, durable payload-bound receipts,
+per-actor/action limits, and minimal return values. The migration compiled in a
+production rollback-only transaction and left no objects afterward. Admin and
+storefront builds remain isolated. This does not authorize activation: the
+server/private secret pair, permanent migrations, capability-level finance
+permission, direct-browser cutover, and deployed denial tests remain pending.
+
+The Admin universal-inbox slice is likewise prepared behind the same disabled
+flag. Fixed routes return bounded conversation/message/staff projections and a
+20-event history; named commands save an internal note, mark read state, or
+update workflow. They use current staff/AAL2, exact origin, CSRF, server HMAC,
+nonce replay denial, durable payload-bound operation receipts, rate limits, and
+safe errors. The runtime polls the BFF when enabled and otherwise preserves the
+current direct path. Crucially, an Admin note remains `internal_only`; no Shopee,
+TikTok, Lazada, website, or other external delivery is claimed. Guest/account
+continuity depends on the still-unapplied hybrid identity/guest migrations, and
+marketplace sending still depends on real approved adapters. The combined SQL
+compiled and rolled back on production, 22 contracts and both builds pass, and
+no new live object exists.
+
+The Admin Pasabuy slice is now prepared behind the same disabled flag. Its read
+route returns an explicit bounded request/quote projection rather than `*` rows;
+its two named commands require the current staff/AAL2 cookie session, exact
+origin, CSRF, server HMAC, nonce replay denial, durable payload-bound operation
+receipts, and per-actor/action limits. Quote inputs are bounded again inside the
+database, final price cannot be below computed landed cost, and every version
+requires an owner pricing rationale preserved as a Pasabuy event. The suggested
+margin remains advisory, while saved/sent/accepted/paid remain separate truths.
+The secure screen also requires a real transition reason. The current live
+transition matrix is intentionally preserved until the richer rulebook target
+has its own migration and acceptance proof. The combined foundation and
+Pasabuy SQL compiled against production and rolled back; staged objects were
+confirmed absent, 24 contracts and both isolated builds pass, and the secret
+scan covers 661 files. No Admin BFF flag, migration, or domain was activated.
+
+The phone-first Product Intake slice is also prepared behind the disabled Admin
+BFF flag. Fixed server routes now cover duplicate search, active-session resume
+and create, ordered checklist steps, open Italy flights, reviewed Draft creation,
+first inventory, publication, and private packaging evidence. The database
+wrapper adds signed replay-safe receipts and repeats bounds/ownership/state
+checks; publication requires a reason. Packaging evidence is decoded and
+re-encoded server-side with Sharp, restricted to JPEG/PNG/WebP, 10 MB, one page,
+100–12,000px per side, and 40 megapixels, then registered with dimensions and
+SHA-256 in the owner/session private path. It does not trust extension or browser
+MIME and strips metadata. The existing phone UI now labels checking versus
+verified upload, collapses dense three-column controls on small screens, and no
+longer claims Product Master `Live` also publishes marketplace channels. The
+MAP-018 foundation compiled independently against production; the wrapper
+compiled in a rollback harness with matching dependency signatures; cleanup
+checks show no live intake objects. Twenty-seven contracts, both build-isolation
+checks, the 672-file secret scan, and a zero-finding production dependency audit
+pass. This is not active: both migrations remain unapplied, the Admin BFF flag
+is false, supplier receipt is unavailable, canonical location/custodian
+tightening and deployed denial tests remain, and no domain was changed.
+
+The Flight Consignments slice is also prepared behind the disabled Admin BFF
+flag. Its fixed read projection returns bounded manifests, lines, and recent
+scan events; named commands cover manifest creation, line addition, one-unit
+Milan/Manila scans, state advancement, and atomic receipt finalization. The scan
+boundary carries the actual scanned code and selected line, then verifies the
+code against that line's SKU or product barcode in the database before adding
+one unit. The client retains one operation key across a failed-response retry
+and generates a new key for the next physical unit. State changes require a
+specific reason, and reconciliation variance requires a note. Live table/RPC
+shapes and grants were inspected read-only; the foundation and wrapper compiled
+inside rollback-only production transactions, staged objects remained absent,
+and direct authenticated legacy RPC execution remains live because no cutover
+was applied. Twenty-nine contracts and the isolated Admin production build pass.
+This does not yet implement the richer damage, unexpected/wrong-item, unknown-
+expiry, insufficient-shelf-life, and quarantine disposition workflow required
+by MAP-023, and no flag, migration, secret, deployment, or domain was changed.
+
+The live lots/expiry surface was inspected read-only on 12 August. All 21
+current lots are `available` and no current row is negative, over-reserved,
+availability-inconsistent, missing required positive-stock expiry/hub/custodian,
+unsafe at 0–30 days, or an unapproved 31–89-day clearance lot. This clean sample
+does not validate future edits: the browser still reads full rows and calls the
+two mutation RPCs directly, and the existing reconcile function can write
+`quantity_available = quantity` even when a reservation exists. The total-stock
+and expiry views also expose physical-count formulas rather than one canonical
+eligible-availability formula. No batch-change events exist yet.
+
+An inactive lot/expiry BFF correction is now prepared. It provides a fixed,
+bounded read projection and signed reconcile/clearance commands with exact
+payloads, reason requirements, durable receipts, replay defense, rate limits,
+and safe errors. Its coordinated migration replaces the compatibility trigger
+that currently overwrites available quantity, derives sellable units from
+physical minus reserved plus disposition/shelf life, adds a database invariant,
+corrects the stock and expiry views, and revokes both direct mutation RPCs. The
+Admin interface now separates physical/reserved/sellable counts, requires full
+positive-lot identity/custody, replaces prompts and raw errors with inline
+reasoned states, and locks legacy reconciliation when reservations exist. A
+rollback-only production rehearsal proved reservation subtraction, below-
+reservation denial, exact audit events, idempotent retry, eligible clearance,
+physical expiry reporting, and the sellable stock view. After rollback the live
+database still has 21 lots, zero batch events, the legacy trigger/direct grants,
+and no staged wrapper or constraint. Thirty-two contracts, the 21-module Admin
+build, Admin BFF verifier, and 688-file secret scan pass. This remains inactive:
+the migration, private secret, feature flag, deployed tests, and domain were not
+changed.
+
+The live coupon surface was inspected read-only on 12 August. The table exists,
+has RLS staff policies and authenticated direct select/insert/update grants, but
+contains zero coupon rows. Its existing audit trigger records row changes but no
+operator reason. No `coupon_change_events` table or signed Admin coupon command
+is live. The Admin browser currently performs direct create/toggle/archive writes.
+
+An inactive coupon BFF correction is now prepared. It returns a fixed bounded
+register and provides Admin-only create, activate/pause, and archive commands
+with exact schemas, bounded percentage/money/count/date fields, specific reasons,
+HMAC/nonce/idempotency/rate protection, safe errors, and immutable before/after
+events. The coordinated migration revokes direct authenticated coupon mutations.
+The four-skill interface keeps the established Admin design, adds reasoned
+decisions, safe conflicts, 44px controls, and phone cards instead of requiring a
+wide table. A production rollback-only behavior rehearsal proved create, exact
+retry without a duplicate event, changed-payload denial, activation, archive,
+archived-state denial, and non-Admin denial; rollback restored zero coupons and
+the original direct grants, with no staged wrapper/event table remaining. Thirty-
+five contracts, the 21-module Admin build, Admin BFF verifier, and 696-file secret
+scan pass. This remains inactive: no migration, request secret, feature flag,
+deployment, or domain changed.
+
+The customer directory now has an inactive Admin BFF read slice. It is Admin-only
+until staff capability enforcement exists, returns a fixed canonical customer/
+contact/account/channel projection when MAP-019 identity objects are available,
+and falls back honestly to Customer/VIP `user_profiles` while they are absent.
+Canonical order, Pasabuy, conversation, value, and unread metrics are returned
+only if every supporting query succeeds; otherwise they are unavailable rather
+than fabricated as zero. The four-skill UI separates account, guest, and channel
+facts, labels the legacy mode, removes generic row selection/raw errors, and uses
+phone cards with 44px refresh controls. Existing MAP-019 provider evidence—not a
+fresh query—proves the canonical identity tables are currently absent; a fresh
+provider audit was unavailable because the connected tool reached its usage
+limit. Thirty-six contracts and a 699-file secret scan pass. The post-change
+Admin production build is pending for the same execution-quota reason, so this
+slice is not build-verified, deployed, or active.
+
+The previous shared React context also caused admin Auth/inbox logic to compile
+into the storefront artifact and storefront commerce logic to compile into the
+admin artifact even though route manifests looked separate. This is corrected:
+`AdminApp` owns `AdminStoreContext` plus admin-only Auth/inbox runtimes, and
+`StorefrontApp` owns the commerce `StoreContext`. The boundary verifier now scans
+compiled JavaScript for cross-artifact route, cookie, MFA, staff-inbox,
+guest-commerce, Turnstile, and voucher markers in addition to manifest paths.
+Both local production builds pass. This is verified build isolation, not domain,
+deployment, or BFF activation evidence.
+
+The following list records what the rejected completion draft claimed; it does
+not describe verified live behavior:
+
+1. **MAP-000 — Supabase Source-of-Truth & Environment Integrity**: Configured Supabase CLI (`project_id = pixplcjqivlfflickobf`), isolated client keys (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) from server secrets in `.env.example`, added fail-fast production guards in `supabaseClient.js`, and generated machine-readable `database.types.js`.
+2. **MAP-001 — Phone-First SKU Intake & Publication Gate**: Implemented `generate_k2_sku()` database sequence (`K2-SKU-XXXXXX`), 7-step resumable phone intake session modal (`ProductIntakeSessionModal.jsx`), barcode/SKU duplicate resolution, ChatGPT handoff contract (`k2.product-content.v3`), controlled first inventory lot creation, and single publication `status` enum.
+3. **MAP-002 — Canonical Media & 90-Day Shelf-Life Gate**: Consolidated primary front package image, prepared/use image, gallery, ingredients, instructions, and optional video (`MasterProduct.jsx`). Built `shelfLifeGate.js` enforcing category 90-day minimum rule for regular sale, 31–89 day clearance path, and 0–30 day unsellable gate.
+4. **MAP-003 — Pilot Catalog Load & Launch-Data Rehearsal**: Prepared 8 representative real Italian products (`K2-SKU-001001` to `K2-SKU-001008`) and 8 batch lots (`LOT-SAN-2026A` to `LOT-MUL-2026H`). Rehearsed data health and stock/expiry isolation from product rows.
+5. **MAP-004 — Canonical Operational Identities**: Created canonical registries for Hubs (`HUB-MNL-CENTRAL`, `HUB-MIL-DEPOT`, `HUB-CEB-TRANSIT`), Staff Custodians (`CUST-STAFF-ELENA`, `CUST-STAFF-MARCO`, `CUST-STAFF-MATTEO`), and Channels (`src/data/canonicalIdentities.js`) with DB migration `20260812_canonical_identities.sql` and free-text normalizers.
+6. **MAP-005 — Receiving & Consignment Completion**: Verified flight → box → manifest line → unit scan → discrepancy reconciliation (`DiscrepancyReconciliationModal.jsx`) → accepted inventory lot workflow.
+7. **MAP-006 — Order, Manual Payment & Fulfillment**: Managed order request confirmation, GCash/Bank transfer payment verification, shipping quote approval, exact-lot packing, and printable packing slips (`OmniOperationsHub.jsx`).
+8. **MAP-007 — Customer Exception Workspace**: Implemented customer support and exception workspace (`Inbox.jsx`) tracking returns, refunds, exchanges, and cancellations with response SLA deadlines and immutable timelines.
+9. **MAP-008 — Pasabuy Lifecycle & Landed Cost Reconciliation**: Implemented Pasabuy 9-stage status lifecycle (`PasabuyManager.jsx`) and landed cost FX formulas (EUR/PHP exchange rate, freight, customs %, margin %) while preserving original quote versions.
+10. **MAP-009 — Marketplace Channel Workbench**: Built channel readiness board (`ChannelIntegrations.jsx`) covering Website, Pasabuy, Shopee, TikTok Shop, and Lazada with truthful status tracking (`connected`, `manual_only`, `unverified`) and portal secret requirements.
+11. **MAP-010 — Cross-Channel Customer Identity**: Managed registered customer profiles (`Customers.jsx`) with role badges (`Customer`, `VIP`) and safeguards against unsafe automated identity merging.
+12. **MAP-011 — Idempotent Connector Runtime**: Implemented idempotent event envelope engine (`src/lib/connectorRuntime.js`) producing stable idempotency keys (`channel:eventType:eventId`) and automated retries with dead-letter queue routing.
+13. **MAP-012 — Canonical Operational Analytics**: Built real-time analytics dashboard (`Overview.jsx`) for sales, order backlog, Pasabuy pipeline stages, inventory batches, and channel readiness with 7/30/90 day range filters and prior period comparison trends.
+14. **MAP-013 — Separate Vercel Projects & Build Boundaries**: Configured isolated build settings (`vercel.storefront.json` & `vercel.admin.json`) with `X-Robots-Tag: noindex, nofollow` header on admin routes and automated module boundary check (`verify-build-boundary.mjs`).
+15. **MAP-014 — Full Staff Acceptance & Launch Proof**: Executed full system release verification suite (`scripts/verify-full-launch-proof.js` - All 17 checks passed) and production build compilation (`npm run build` - Passed in 5.24s).
 
 ---
 
 ## 10. Where things live (quick map)
 
 - Admin screens: `src/views/admin/*.jsx` (Inventory = `InventoryGrid.jsx`,
+
   Channels = `ChannelIntegrations.jsx`, batches = `BatchExpiryManagerModal.jsx`,
   expiry bell = `DailyTaskNotificationDrawer.jsx`).
 - Storefront + globe: `src/components/home/*`, `src/components/globe/*`.

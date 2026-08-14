@@ -51,12 +51,55 @@ Staff can choose one of four research focuses:
 
 - complete product draft;
 - label and safety;
-- usage and before/after transformation;
+- uses, ordered instructions, and before/after transformation;
 - marketplace readiness.
 
-Every generated prompt requires packaging photos as primary evidence, direct source URLs for external facts, explicit `Unknown — verify manually` values, exact variant identity, review notes, draft-only status, and exactly two image concepts: the product before use and the truthful prepared/applied result after use.
+The installed manual workflow uses two private ChatGPT Projects:
 
-The prompt never assigns stock or publishes the product. Smart Paste remains a human review step.
+- **K2 Product Content** accepts `PRODUCT_JSON` and returns one
+  `k2.product-content.v3` object with exact product data, customer copy, SEO and
+  headings, distinct use cases and ordered instructions, verification, unknowns,
+  review notes, and the two product-specific media briefs.
+- **K2 Product Image Studio** accepts `PRIMARY` or `AFTER`. `PRIMARY` edits the
+  real front-package photo into a faithful 4:5 package-as-sold image. A changed
+  logo, label, barcode, quantity, color, shape, seal, or claim invalidates the
+  image. `AFTER` creates one separate 4:5 truthful prepared, applied, or in-use
+  image tied to an approved use case.
+
+The JSON uses `null` plus `unknown_fields` rather than persuasive filler. It
+never contains SKU, price, stock, expiry, lot, delivery, review, or publication
+state. Usage is split into purpose, specific use cases, supported amount/ratio,
+ordered steps, expected result, and warnings. The prompt never assigns stock or
+publishes the product. Smart Paste remains a human review step.
+
+The workflow overview is recorded in `CHATGPT_PRODUCT_INTELLIGENCE_PROJECT.md`,
+with separate setup checklists in `CHATGPT_PRODUCT_JSON_PROJECT.md` and
+`CHATGPT_PRODUCT_IMAGE_PROJECT.md`. The exact copyable instructions are exported
+from `src/views/admin/productResearchPrompt.js` and are available in the
+Scan-to-AI result screen and Smart Paste image handoff.
+
+### Current implementation boundary
+
+This is a useful research foundation, not yet the approved end-to-end SKU intake:
+
+- Scan to AI and Smart Paste are separate modals and do not preserve one intake
+  session when a phone user switches to ChatGPT and returns.
+- Add product, Add row, Smart Paste, and product enrichment are competing paths;
+  some currently use a browser-random or AI/staff-supplied SKU.
+- Smart Paste now validates the v3 JSON contract, rejects forbidden operational
+  fields, flattens reviewed use cases for the legacy product column, preserves a
+  temporary evidence/review summary in internal notes, and labels legacy JSON.
+  Dedicated field-level provenance storage and individual accept/reject decisions
+  remain unfinished.
+- The enrichment modal now uses the same versioned PRODUCT_JSON request rather
+  than maintaining a second price-producing prompt contract.
+- Creating the product Draft is not yet followed by one guided, source-specific
+  first-inventory workflow.
+
+MAP-001 in `MASTER_ACTION_PLAN.md` owns the consolidation. The target behavior is
+defined in the Product Master section of the operations rulebook; none of those
+target improvements should be described as live until schema, server commands,
+UI, permissions, and tests verify them.
 
 ## Grounded operations guide (RAG foundation)
 
@@ -106,6 +149,7 @@ Do not implement silent autonomous transitions for purchasing, receiving, invent
 - `src/views/admin/UniversalScanLauncher.jsx` — operation-first scan entry point
 - `src/views/admin/KeyboardShortcutsModal.jsx` — shortcut reference
 - `src/views/admin/productResearchPrompt.js` — adaptive evidence-first prompt
+- `src/views/admin/productResearchContract.js` — versioned parser and validator
 - `src/views/admin/adminGuide.js` — grounded procedure registry and retrieval
 - `src/views/admin/AdminAiCopilotModal.jsx` — cited guide interface
 - `tests/admin-assistance.spec.js` — focused safety and retrieval checks

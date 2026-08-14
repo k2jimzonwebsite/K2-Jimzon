@@ -40,6 +40,7 @@ export default function Footer() {
           </FooterColumn>
 
           <FooterColumn title="Contact">
+            <FooterButton onClick={() => go('contact')}>Contact us</FooterButton>
             <li><a className="footer-link" href="mailto:k2jimzonwebsite@gmail.com">Email K2 Jimzon <ArrowIcon size={13} /></a></li>
             <li><span className="footer-copy">Messenger · @k2jimzon</span></li>
             <li><span className="footer-copy">Shopee · k2jimzononlineshop</span></li>

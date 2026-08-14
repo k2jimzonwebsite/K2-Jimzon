@@ -54,7 +54,8 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
         usage_instructions: row.usage_instructions || '',
         srp: Number(row.srp || row['Price']) || 0,
         wholesale_price: Number(row.wholesale_price) || 0,
-        status: 'Draft',
+        status: 'draft',
+        published: false,
         origin: row.origin || (isShopee ? `Shopee|${shopeeCategory}` : 'Manual')
       }
     })

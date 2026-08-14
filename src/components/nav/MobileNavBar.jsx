@@ -1,5 +1,5 @@
 import { useStore } from '../../context/StoreContext'
-import { HomeIcon, GridIcon, PlaneIcon, BriefcaseIcon } from '../ui/icons'
+import { HomeIcon, GridIcon, PlaneIcon, BriefcaseIcon, ChatIcon } from '../ui/icons'
 
 export default function MobileNavBar() {
   const { view, go } = useStore()
@@ -9,6 +9,7 @@ export default function MobileNavBar() {
     { key: 'catalog', label: 'Shop', icon: GridIcon },
     { key: 'pasabuy', label: 'Pasabuy', icon: PlaneIcon },
     { key: 'wholesale', label: 'Wholesale', icon: BriefcaseIcon },
+    { key: 'contact', label: 'Contact', icon: ChatIcon },
   ]
 
   return (

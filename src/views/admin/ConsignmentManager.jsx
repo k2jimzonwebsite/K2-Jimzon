@@ -1,12 +1,18 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
-import { useStore } from '../../context/StoreContext'
+import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { AlertIcon, BarcodeIcon, CheckIcon, PlaneIcon } from '../../components/ui/icons'
 import ConsignmentScannerModal from './ConsignmentScannerModal'
 import DiscrepancyReconciliationModal from './DiscrepancyReconciliationModal'
+import {
+  addConsignmentLineBff, adminBffEnabled, advanceConsignmentBff,
+  createConsignmentBff, finalizeConsignmentBff, getAdminConsignments,
+  recordConsignmentScanBff,
+} from '../../services/adminBffService'
 
 export default function ConsignmentManager() {
   const { products } = useStore()
+  const secureConsignments = adminBffEnabled()
   const [manifest, setManifest] = useState(null)
   const [manifests, setManifests] = useState([])
   const [selectedManifestId, setSelectedManifestId] = useState('')
@@ -17,35 +23,56 @@ export default function ConsignmentManager() {
   const [showLine, setShowLine] = useState(false)
   const [scannerStage, setScannerStage] = useState(null)
   const [showReconcile, setShowReconcile] = useState(false)
+  const [advanceTarget, setAdvanceTarget] = useState('')
+  const [advanceReason, setAdvanceReason] = useState('')
   const [working, setWorking] = useState(false)
   const [create, setCreate] = useState({ manifestCode: `K2-${new Date().toISOString().slice(0, 7)}`, flightNumber: '' })
   const [line, setLine] = useState({ sku: '', batchCode: '', boxCode: '', bestBefore: '', packedQty: '1' })
+  const commandKeysRef = useRef(new Map())
+
+  const operationKey = (slot, fingerprint) => {
+    const existing = commandKeysRef.current.get(slot)
+    if (existing?.fingerprint === fingerprint) return existing.key
+    const key = crypto.randomUUID()
+    commandKeysRef.current.set(slot, { fingerprint, key })
+    return key
+  }
+  const completeOperation = slot => commandKeysRef.current.delete(slot)
 
   const load = useCallback(async () => {
-    if (!supabase) { setError('Supabase is not configured.'); setLoading(false); return }
-    const { data, error: loadError } = await supabase.from('consignments')
-      .select('*, consignment_items(*)').order('created_at', { ascending: false }).limit(100)
-    if (loadError) setError(loadError.message)
+    if (!secureConsignments && !supabase) { setError('The consignment service is not configured.'); setLoading(false); return }
+    const result = secureConsignments
+      ? await getAdminConsignments()
+      : await supabase.from('consignments').select('*, consignment_items(*)').order('created_at', { ascending: false }).limit(100)
+    const nextManifests = secureConsignments ? result.data?.consignments : result.data
+    const loadError = secureConsignments ? (!result.ok ? result.error : '') : result.error
+    if (loadError) setError(secureConsignments ? loadError : 'Flight and consignment records could not be loaded.')
     else {
-      const nextManifests = data || []
-      const selected = nextManifests.find(item => item.id === selectedManifestId) || nextManifests[0] || null
-      setManifests(nextManifests)
+      const records = nextManifests || []
+      const selected = records.find(item => item.id === selectedManifestId) || records[0] || null
+      setManifests(records)
       setManifest(selected)
       setSelectedManifestId(selected?.id || '')
       setError('')
     }
     setLoading(false)
-  }, [selectedManifestId])
+  }, [selectedManifestId, secureConsignments])
 
   useEffect(() => {
     load()
+    if (secureConsignments) {
+      const timer = window.setInterval(() => {
+        if (document.visibilityState === 'visible') load()
+      }, 15000)
+      return () => window.clearInterval(timer)
+    }
     if (!supabase) return undefined
     const channel = supabase.channel('admin:consignment')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'consignments' }, load)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'consignment_items' }, load)
       .subscribe()
     return () => supabase.removeChannel(channel)
-  }, [load])
+  }, [load, secureConsignments])
 
   const items = manifest?.consignment_items || []
   const packed = items.reduce((sum, item) => sum + item.italy_packed_qty, 0)
@@ -56,29 +83,43 @@ export default function ConsignmentManager() {
 
   const createManifest = async (event) => {
     event.preventDefault(); setWorking(true); setError(''); setNotice('')
-    const { data, error: createError } = await supabase.rpc('create_consignment_manifest', {
-      p_manifest_code: create.manifestCode.trim(),
-      p_shipment_reference: create.flightNumber.trim() || null,
-    })
+    const payload = { manifestCode: create.manifestCode.trim(), shipmentReference: create.flightNumber.trim() }
+    const fingerprint = JSON.stringify(payload)
+    const slot = 'create'
+    const result = secureConsignments
+      ? await createConsignmentBff(payload, operationKey(slot, fingerprint))
+      : await supabase.rpc('create_consignment_manifest', {
+          p_manifest_code: payload.manifestCode, p_shipment_reference: payload.shipmentReference || null,
+        })
     setWorking(false)
-    if (createError) { setError(createError.message); return }
-    const saved = Array.isArray(data) ? data[0] : data
-    if (saved?.id) setSelectedManifestId(saved.id)
+    const createError = secureConsignments ? (!result.ok ? result.error : '') : result.error
+    if (createError) { setError(secureConsignments ? createError : 'The manifest could not be created.'); return }
+    completeOperation(slot)
+    const saved = secureConsignments ? result.result : (Array.isArray(result.data) ? result.data[0] : result.data)
+    const savedId = saved?.consignmentId || saved?.id
+    if (savedId) setSelectedManifestId(savedId)
     setShowCreate(false); setNotice('Manifest created in Packing Italy state.'); await load()
   }
 
   const addLine = async (event) => {
     event.preventDefault(); setWorking(true); setError(''); setNotice('')
-    const { error: lineError } = await supabase.rpc('add_consignment_item_v2', {
-      p_consignment_id: manifest.id,
-      p_sku: line.sku,
-      p_batch_code: line.batchCode.trim(),
-      p_box_code: line.boxCode.trim(),
-      p_best_before_date: line.bestBefore,
-      p_expected_qty: Number(line.packedQty),
-    })
+    const payload = {
+      consignmentId: manifest.id, sku: line.sku, batchCode: line.batchCode.trim(),
+      boxCode: line.boxCode.trim(), bestBeforeDate: line.bestBefore, expectedQty: Number(line.packedQty),
+    }
+    const fingerprint = JSON.stringify(payload)
+    const slot = `line:${manifest.id}`
+    const result = secureConsignments
+      ? await addConsignmentLineBff(payload, operationKey(slot, fingerprint))
+      : await supabase.rpc('add_consignment_item_v2', {
+          p_consignment_id: payload.consignmentId, p_sku: payload.sku,
+          p_batch_code: payload.batchCode, p_box_code: payload.boxCode,
+          p_best_before_date: payload.bestBeforeDate, p_expected_qty: payload.expectedQty,
+        })
     setWorking(false)
-    if (lineError) { setError(lineError.message); return }
+    const lineError = secureConsignments ? (!result.ok ? result.error : '') : result.error
+    if (lineError) { setError(secureConsignments ? lineError : 'The manifest line could not be saved.'); return }
+    completeOperation(slot)
     setLine({ sku: '', batchCode: '', boxCode: '', bestBefore: '', packedQty: '1' }); setShowLine(false); setNotice('Manifest box and lot line saved.'); await load()
   }
 
@@ -93,44 +134,79 @@ export default function ConsignmentManager() {
         : item.manila_scanned_qty < item.italy_packed_qty)
     if (!manifestItem) throw new Error(`Barcode or SKU ${clean} is not on this manifest. Add the manifest line before scanning it.`)
     setWorking(true); setError(''); setNotice('')
-    const { data, error: scanError } = await supabase.rpc('record_consignment_item_scan', {
-      p_consignment_id: manifest.id,
-      p_consignment_item_id: manifestItem.id,
-      p_stage: stage,
-    })
+    const payload = { consignmentId: manifest.id, itemId: manifestItem.id, stage, scannedCode: clean }
+    const fingerprint = JSON.stringify(payload)
+    const slot = `scan:${manifest.id}:${stage}:${manifestItem.id}`
+    const result = secureConsignments
+      ? await recordConsignmentScanBff(payload, operationKey(slot, fingerprint))
+      : await supabase.rpc('record_consignment_item_scan', {
+          p_consignment_id: payload.consignmentId, p_consignment_item_id: payload.itemId, p_stage: payload.stage,
+        })
     setWorking(false)
-    if (scanError) { setError(scanError.message); throw scanError }
-    const updated = Array.isArray(data) ? data[0] : data
+    const scanError = secureConsignments ? (!result.ok ? result.error : '') : result.error
+    if (scanError) { setError(secureConsignments ? scanError : 'The scan could not be recorded.'); throw new Error(secureConsignments ? scanError : 'The scan could not be recorded.') }
+    completeOperation(slot)
+    const serverItem = secureConsignments ? result.result : (Array.isArray(result.data) ? result.data[0] : result.data)
+    const updated = secureConsignments ? {
+      ...manifestItem, status: serverItem.status,
+      italy_packed_qty: Number(serverItem.italyPackedQty),
+      manila_scanned_qty: Number(serverItem.manilaScannedQty),
+    } : serverItem
     if (updated) setManifest(current => ({ ...current, consignment_items: (current.consignment_items || []).map(item => item.id === updated.id ? updated : item) }))
     setNotice(`${manifestItem.sku} / ${manifestItem.box_code} recorded for ${stage === 'milan' ? 'Milan packing' : 'Manila receiving'}.`)
     return { ...(updated || manifestItem), name: bySku[manifestItem.sku]?.name || manifestItem.sku }
   }
 
-  const advance = async (toStatus) => {
+  const advance = async (toStatus, reason) => {
     setWorking(true); setError(''); setNotice('')
-    const { error: advanceError } = await supabase.rpc('advance_consignment', { p_consignment_id: manifest.id, p_to_status: toStatus })
+    const payload = { consignmentId: manifest.id, toStatus, reason: reason.trim() }
+    const fingerprint = JSON.stringify(payload)
+    const slot = `advance:${manifest.id}:${toStatus}`
+    const result = secureConsignments
+      ? await advanceConsignmentBff(payload, operationKey(slot, fingerprint))
+      : await supabase.rpc('advance_consignment', { p_consignment_id: manifest.id, p_to_status: toStatus })
     setWorking(false)
-    if (advanceError) { setError(advanceError.message); return }
+    const advanceError = secureConsignments ? (!result.ok ? result.error : '') : result.error
+    if (advanceError) { setError(secureConsignments ? advanceError : 'The consignment state could not be changed.'); return false }
+    completeOperation(slot)
+    setAdvanceTarget(''); setAdvanceReason('')
     setNotice(`Consignment moved to ${toStatus.replaceAll('_', ' ')}.`); await load()
+    return true
   }
 
   const finalize = async (notes = '') => {
-    const message = missing > 0
-      ? `Finalize with ${missing} unit${missing === 1 ? '' : 's'} missing on arrival? The discrepancy will be recorded.`
-      : 'Finalize this receipt and add scanned units to inventory?'
-    if (!window.confirm(message)) return false
+    const finalNotes = notes.trim() || (missing === 0 ? 'All scanned units matched the Milan packed count.' : '')
+    if (finalNotes.length < 10) throw new Error('Describe the arrival discrepancy before finalizing. No inventory was changed.')
     setWorking(true); setError(''); setNotice('')
-    const { error: finalError } = await supabase.rpc('finalize_consignment_receipt', {
-      p_consignment_id: manifest.id,
-      p_notes: notes.trim() || (missing > 0 ? `Finalized with ${missing} missing unit(s)` : 'All scanned units reconciled'),
-    })
+    const payload = { consignmentId: manifest.id, notes: finalNotes }
+    const fingerprint = JSON.stringify(payload)
+    const slot = `finalize:${manifest.id}`
+    const result = secureConsignments
+      ? await finalizeConsignmentBff(payload, operationKey(slot, fingerprint))
+      : await supabase.rpc('finalize_consignment_receipt', { p_consignment_id: manifest.id, p_notes: finalNotes })
     setWorking(false)
+    const finalError = secureConsignments ? (!result.ok ? result.error : '') : result.error
     if (finalError) {
-      setError(finalError.message)
-      throw finalError
+      const safeError = secureConsignments ? finalError : 'The receipt could not be finalized. No inventory was changed.'
+      setError(safeError)
+      throw new Error(safeError)
     }
+    completeOperation(slot)
     setNotice('Receipt finalized atomically. Scanned batches and inventory events were recorded.'); setShowReconcile(false); await load()
     return true
+  }
+
+  const submitAdvance = async event => {
+    event.preventDefault()
+    if (advanceReason.trim().length < 10) {
+      setError('Record a specific reason of at least 10 characters before changing custody state.')
+      return
+    }
+    await advance(advanceTarget, advanceReason)
+  }
+
+  const closeEditor = () => {
+    setShowCreate(false); setShowLine(false); setAdvanceTarget(''); setAdvanceReason('')
   }
 
   const input = 'min-h-11 w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue'
@@ -154,9 +230,9 @@ export default function ConsignmentManager() {
           {manifest.status === 'Packing_Italy' && <>
             <button onClick={() => setShowLine(true)} className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-4 text-sm font-semibold">Add manifest SKU</button>
             <button disabled={working || items.length === 0} onClick={() => setScannerStage('milan')} className="inline-flex min-h-11 items-center gap-2 rounded-adm-sm bg-crimson px-4 text-sm font-bold disabled:opacity-40"><BarcodeIcon size={16} /> Start Milan scan</button>
-            <button disabled={working || items.length === 0} onClick={() => advance('In_Transit')} className="min-h-11 rounded-adm-sm bg-blue px-4 text-sm font-bold disabled:opacity-40">Close packing and mark in transit</button>
+            <button disabled={working || items.length === 0} onClick={() => setAdvanceTarget('In_Transit')} className="min-h-11 rounded-adm-sm bg-blue px-4 text-sm font-bold active:scale-[0.98] disabled:opacity-40">Close packing and mark in transit</button>
           </>}
-          {manifest.status === 'In_Transit' && <button disabled={working} onClick={() => advance('Arrived_Manila')} className="min-h-11 rounded-adm-sm bg-blue px-4 text-sm font-bold">Mark arrived in Manila</button>}
+          {manifest.status === 'In_Transit' && <button disabled={working} onClick={() => setAdvanceTarget('Arrived_Manila')} className="min-h-11 rounded-adm-sm bg-blue px-4 text-sm font-bold active:scale-[0.98]">Mark arrived in Manila</button>}
           {manifest.status === 'Arrived_Manila' && <>
             <button disabled={working || packed === 0} onClick={() => setScannerStage('manila')} className="inline-flex min-h-11 items-center gap-2 rounded-adm-sm bg-forest px-4 text-sm font-bold disabled:opacity-40"><BarcodeIcon size={16} /> Start Manila recount</button>
             <button disabled={working || scanned === 0} onClick={() => setShowReconcile(true)} className="min-h-11 rounded-adm-sm border border-forest/35 bg-forest/10 px-4 text-sm font-bold text-forest disabled:opacity-40">Review and finalize</button>
@@ -192,20 +268,23 @@ export default function ConsignmentManager() {
       onFinalizeArrival={finalize}
     />
 
-    {(showCreate || showLine) && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true">
-      <form onSubmit={showCreate ? createManifest : addLine} className="w-full max-w-md space-y-4 rounded-adm border border-adm-line bg-adm-surface p-6">
-        <h2 className="font-sans text-xl font-bold">{showCreate ? 'Create consignment manifest' : 'Add manifest SKU'}</h2>
-        {showCreate ? <>
-          <Field label="Manifest code"><input className={input} value={create.manifestCode} onChange={e => setCreate(current => ({ ...current, manifestCode: e.target.value }))} required /></Field>
-          <Field label="Flight or shipment reference"><input className={input} value={create.flightNumber} onChange={e => setCreate(current => ({ ...current, flightNumber: e.target.value }))} placeholder="Record only confirmed details" /></Field>
+    {(showCreate || showLine || advanceTarget) && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true">
+      <form onSubmit={advanceTarget ? submitAdvance : showCreate ? createManifest : addLine} className="w-full max-w-md space-y-4 rounded-adm border border-adm-line bg-adm-surface p-6">
+        <h2 className="font-sans text-xl font-bold">{advanceTarget ? (advanceTarget === 'In_Transit' ? 'Close Milan packing' : 'Confirm Manila arrival') : showCreate ? 'Create consignment manifest' : 'Add manifest SKU'}</h2>
+        {advanceTarget ? <>
+          <p className="text-sm leading-relaxed text-white/55">{advanceTarget === 'In_Transit' ? 'This closes Milan scanning. Every expected unit must already be scan-packed.' : 'This opens the independent Manila recount. Milan counts will not be copied as received.'}</p>
+          <Field label="Custody / state-change reason"><textarea minLength={10} maxLength={500} className={`${input} min-h-24 resize-y`} value={advanceReason} onChange={event => setAdvanceReason(event.target.value)} placeholder="Record who confirmed the handoff or arrival and the physical evidence checked" required /></Field>
+        </> : showCreate ? <>
+          <Field label="Manifest code"><input className={input} value={create.manifestCode} onChange={e => setCreate(current => ({ ...current, manifestCode: e.target.value }))} minLength={3} maxLength={80} required /></Field>
+          <Field label="Flight or shipment reference"><input className={input} value={create.flightNumber} onChange={e => setCreate(current => ({ ...current, flightNumber: e.target.value }))} maxLength={120} placeholder="Record only confirmed details" /></Field>
         </> : <>
           <Field label="Product SKU"><select className={input} value={line.sku} onChange={e => setLine(current => ({ ...current, sku: e.target.value }))} required><option value="">Select a product</option>{(products || []).map(product => <option key={product.sku} value={product.sku}>{product.sku} · {product.name}</option>)}</select></Field>
-          <Field label="Batch / lot code"><input className={input} value={line.batchCode} onChange={e => setLine(current => ({ ...current, batchCode: e.target.value }))} required /></Field>
-          <Field label="Physical box code"><input className={input} value={line.boxCode} onChange={e => setLine(current => ({ ...current, boxCode: e.target.value }))} required /></Field>
+          <Field label="Batch / lot code"><input className={input} value={line.batchCode} onChange={e => setLine(current => ({ ...current, batchCode: e.target.value }))} maxLength={120} required /></Field>
+          <Field label="Physical box code"><input className={input} value={line.boxCode} onChange={e => setLine(current => ({ ...current, boxCode: e.target.value }))} maxLength={120} required /></Field>
           <Field label="Best-before date"><input className={input} type="date" value={line.bestBefore} onChange={e => setLine(current => ({ ...current, bestBefore: e.target.value }))} required /></Field>
-          <Field label="Expected quantity"><input className={input} type="number" min="1" value={line.packedQty} onChange={e => setLine(current => ({ ...current, packedQty: e.target.value }))} required /></Field>
+          <Field label="Expected quantity"><input className={input} type="number" min="1" max="100000" value={line.packedQty} onChange={e => setLine(current => ({ ...current, packedQty: e.target.value }))} required /></Field>
         </>}
-        <div className="flex gap-2 pt-2"><button type="button" onClick={() => { setShowCreate(false); setShowLine(false) }} className="min-h-11 flex-1 rounded-adm-sm border border-adm-line bg-white/5 text-sm font-semibold">Cancel</button><button type="submit" disabled={working} className="min-h-11 flex-1 rounded-adm-sm bg-blue text-sm font-bold disabled:opacity-40">{working ? 'Saving…' : 'Save'}</button></div>
+        <div className="flex gap-2 pt-2"><button type="button" onClick={closeEditor} className="min-h-11 flex-1 rounded-adm-sm border border-adm-line bg-white/5 text-sm font-semibold active:scale-[0.98]">Cancel</button><button type="submit" disabled={working} className="min-h-11 flex-1 rounded-adm-sm bg-blue text-sm font-bold active:scale-[0.98] disabled:opacity-40">{working ? 'Saving…' : advanceTarget ? 'Confirm state change' : 'Save'}</button></div>
       </form>
     </div>}
   </div>

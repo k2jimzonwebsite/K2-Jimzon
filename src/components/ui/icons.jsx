@@ -144,3 +144,11 @@ export const SunIcon = (p) => (
 
 export const EyeIcon = (p) => <Icon {...p} d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"><circle cx="12" cy="12" r="3" /></Icon>
 export const BarcodeIcon = (p) => <Icon {...p} d="M3 5v14M7 5v14M11 5v14M15 5v14M19 5v14M23 5v14" />
+export const CameraIcon = (p) => (
+  <Icon {...p} d="M4 7h3l1.5-2h7L17 7h3v12H4V7z">
+    <circle cx="12" cy="13" r="3.25" />
+  </Icon>
+)
+export const CopyIcon = (p) => (
+  <Icon {...p} d="M9 9h10v10H9V9zM5 15H4V5h10v1" />
+)

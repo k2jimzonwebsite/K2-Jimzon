@@ -1,5 +1,9 @@
 # K2 Jimzon — Pre-Deployment TODO
 
+> **Historical checklist — do not use as the active backlog.** Its claims reflect
+> the July 2026 prototype and may be obsolete. Use `MASTER_ACTION_PLAN.md` for
+> approved unfinished work and the System Brain for current behavior.
+
 Running list of things intentionally deferred so we don't forget them before / after launch.
 Last updated: 2026-07-23.
 

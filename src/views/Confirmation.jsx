@@ -2,6 +2,7 @@ import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 import { CrimsonButton, GhostButton, TrustBadge } from '../components/ui/bits'
 import { CheckIcon, InboxIcon } from '../components/ui/icons'
+import { guestBffEnabled } from '../services/guestCommerceService'
 
 export default function Confirmation() {
   const { order, go } = useStore()
@@ -51,7 +52,8 @@ export default function Confirmation() {
       </div>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-        <CrimsonButton onClick={() => go('home')}>Continue shopping</CrimsonButton>
+        {guestBffEnabled() && <CrimsonButton onClick={() => go('messages')}>Open secure messages</CrimsonButton>}
+        <GhostButton onClick={() => go('home')}>Continue shopping</GhostButton>
         <GhostButton onClick={() => go('pasabuy')}>Request an Italy item</GhostButton>
       </div>
       <div className="mt-6 flex justify-center"><TrustBadge>Keep your reference number</TrustBadge></div>

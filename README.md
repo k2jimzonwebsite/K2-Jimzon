@@ -14,6 +14,12 @@ The website and Pasabuy intake can operate before marketplace connectors, a cust
 
 Follow [`K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md`](K2%20Jimzon%20-%20Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md) for required workflow behavior, invariants, state transitions, and implementation order. Use [`K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md`](K2%20Jimzon%20-%20Brain/SYSTEM_BRAIN_CURRENT.md) to determine what is actually implemented today. A rulebook target must not be described as live until it is verified and added to the current-state Brain.
 
+Use [`MASTER_ACTION_PLAN.md`](MASTER_ACTION_PLAN.md) as the **only** approved
+unfinished-work queue. New proposals enter through
+[`K2 Jimzon - Brain/FUTURE_IDEAS.md`](K2%20Jimzon%20-%20Brain/FUTURE_IDEAS.md),
+are audited into the Master Action Plan when justified, and are deleted from the
+plan after verified completion and current-state documentation.
+
 ## Current launch behavior
 
 - Checkout creates an **order request**. It does not collect payment or reserve stock.

@@ -5,7 +5,7 @@ import {
   BellIcon, BookIcon, MenuIcon, SearchIcon, StarIcon, UploadIcon, XIcon,
 } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
-import { useStore } from '../../context/StoreContext'
+import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import CommandPalette from './CommandPalette'
 import AdminAuthModal from './AdminAuthModal'
 import ErrorBoundary from '../../components/ui/ErrorBoundary'
@@ -125,7 +125,7 @@ export default function Admin() {
   const [activeSkus, setActiveSkus] = useState(0)
   const [lowStock, setLowStock] = useState(0)
   const [pendingOrders, setPendingOrders] = useState(0)
-  const canManageStaff = ['Admin', 'SuperAdmin'].includes(user?.role)
+  const canManageStaff = user?.role === 'Admin'
 
   useEffect(() => {
     if (!supabase || !isAdmin) return

@@ -3,6 +3,9 @@ import { peso } from '../../data/products'
 import { supabase } from '../../lib/supabaseClient'
 import { ArrowIcon, InboxIcon } from '../../components/ui/icons'
 import {
+  adminBffEnabled, getAdminPasabuy, savePasabuyQuoteBff, transitionPasabuyBff,
+} from '../../services/adminBffService'
+import {
   EmptyState,
   MetricRail,
   SectionHeading,
@@ -37,6 +40,7 @@ const DEFAULT_QUOTE = {
   itemCost: '10', fxRate: '62.50', fxSource: '', weightKg: '0.5',
   shippingMethod: 'air', airRate: '14', seaRate: '4', customsPercent: '12',
   handlingPhp: '0', marginPercent: '40', finalPrice: '', validDays: '7',
+  priceRationale: '',
 }
 
 function latestQuoteFor(request) {
@@ -66,6 +70,7 @@ function statusTone(status) {
 }
 
 export default function PasabuyManager() {
+  const secureAdmin = adminBffEnabled()
   const [requests, setRequests] = useState([])
   const [selectedId, setSelectedId] = useState(null)
   const [filter, setFilter] = useState('open')
@@ -74,8 +79,20 @@ export default function PasabuyManager() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
+  const [transitionReason, setTransitionReason] = useState('')
 
   const load = useCallback(async () => {
+    if (secureAdmin) {
+      const result = await getAdminPasabuy()
+      if (!result.ok) setError(result.error)
+      else {
+        const data = result.data?.requests || []
+        setRequests(data)
+        setSelectedId(current => current || data[0]?.id || null)
+      }
+      setLoading(false)
+      return
+    }
     if (!supabase) { setError('Supabase is not configured.'); setLoading(false); return }
     const { data, error: loadError } = await supabase
       .from('pasabuy_requests')
@@ -87,22 +104,27 @@ export default function PasabuyManager() {
       setSelectedId(current => current || data?.[0]?.id || null)
     }
     setLoading(false)
-  }, [])
+  }, [secureAdmin])
 
   useEffect(() => {
     load()
+    if (secureAdmin) {
+      const timer = window.setInterval(load, 30_000)
+      return () => window.clearInterval(timer)
+    }
     if (!supabase) return undefined
     const channel = supabase.channel('admin:pasabuy')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'pasabuy_requests' }, load)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'pasabuy_quotes' }, load)
       .subscribe()
     return () => supabase.removeChannel(channel)
-  }, [load])
+  }, [load, secureAdmin])
 
   const selected = requests.find(request => request.id === selectedId) || null
   const latestQuote = useMemo(() => latestQuoteFor(selected), [selected])
 
   useEffect(() => {
+    setTransitionReason('')
     if (!latestQuote) { setQuote(DEFAULT_QUOTE); return }
     setQuote({
       itemCost: String(latestQuote.item_cost_foreign), fxRate: String(latestQuote.fx_rate),
@@ -112,6 +134,7 @@ export default function PasabuyManager() {
       seaRate: latestQuote.shipping_method === 'sea' ? String(latestQuote.freight_rate_foreign_per_kg) : '4',
       customsPercent: String(latestQuote.customs_tax_percent), handlingPhp: String(latestQuote.handling_php),
       marginPercent: String(latestQuote.margin_percent), finalPrice: String(latestQuote.final_price_php), validDays: '7',
+      priceRationale: '',
     })
   }, [selectedId, latestQuote?.id])
 
@@ -145,33 +168,50 @@ export default function PasabuyManager() {
   const oldestOpenHours = openRequests.reduce((max, request) => Math.max(max, Math.floor((Date.now() - new Date(request.created_at || Date.now()).getTime()) / 3600000)), 0)
 
   const transition = async toStatus => {
-    if (!selected || !supabase) return
+    if (!selected || (!secureAdmin && !supabase)) return
+    const reason = secureAdmin ? transitionReason.trim() : 'Updated from admin operations'
+    if (!reason) { setError('Record why this Pasabuy case is moving to the next state.'); return }
     setSaving(true); setError(''); setNotice('')
-    const { error: transitionError } = await supabase.rpc('transition_pasabuy_request', {
-      p_request_id: selected.id, p_to_status: toStatus, p_reason: 'Updated from admin operations',
-    })
+    const result = secureAdmin
+      ? await transitionPasabuyBff(selected.id, toStatus, reason)
+      : await supabase.rpc('transition_pasabuy_request', {
+        p_request_id: selected.id, p_to_status: toStatus, p_reason: reason,
+      })
     setSaving(false)
-    if (transitionError) { setError(transitionError.message); return }
+    if (secureAdmin ? !result.ok : result.error) { setError(secureAdmin ? result.error : result.error.message); return }
+    setTransitionReason('')
     setNotice(`Moved to ${STATUS_LABELS[toStatus]}.`)
     await load()
   }
 
   const saveQuote = async () => {
-    if (!selected || !supabase) return
+    if (!selected || (!secureAdmin && !supabase)) return
     if (!quote.fxSource.trim()) { setError('Enter the FX source used for this quote.'); return }
     if (finalPrice < landed) { setError('Final price cannot be below the estimated landed cost.'); return }
+    if (secureAdmin && !quote.priceRationale.trim()) { setError('Record why the owner selected this final price.'); return }
     setSaving(true); setError(''); setNotice('')
     const validUntil = new Date(Date.now() + (Number(quote.validDays) || 7) * 86400000).toISOString()
-    const { error: quoteError } = await supabase.rpc('save_pasabuy_quote', {
-      p_request_id: selected.id, p_item_cost_foreign: numbers.itemCost,
-      p_fx_rate: numbers.fxRate, p_fx_source: quote.fxSource.trim(), p_fx_captured_at: new Date().toISOString(),
-      p_weight_kg: numbers.weight, p_shipping_method: quote.shippingMethod,
-      p_freight_rate_foreign_per_kg: numbers.rate, p_customs_tax_percent: numbers.customs,
-      p_handling_php: numbers.handling, p_margin_percent: numbers.margin,
-      p_final_price_php: finalPrice, p_valid_until: validUntil,
-    })
+    const fxCapturedAt = new Date().toISOString()
+    const result = secureAdmin
+      ? await savePasabuyQuoteBff({
+        requestId: selected.id, itemCostForeign: numbers.itemCost, fxRate: numbers.fxRate,
+        fxSource: quote.fxSource.trim(), fxCapturedAt, weightKg: numbers.weight,
+        shippingMethod: quote.shippingMethod, freightRateForeignPerKg: numbers.rate,
+        customsTaxPercent: numbers.customs, handlingPhp: numbers.handling,
+        marginPercent: numbers.margin, finalPricePhp: finalPrice, validUntil,
+        priceRationale: quote.priceRationale.trim(),
+      })
+      : await supabase.rpc('save_pasabuy_quote', {
+        p_request_id: selected.id, p_item_cost_foreign: numbers.itemCost,
+        p_fx_rate: numbers.fxRate, p_fx_source: quote.fxSource.trim(), p_fx_captured_at: fxCapturedAt,
+        p_weight_kg: numbers.weight, p_shipping_method: quote.shippingMethod,
+        p_freight_rate_foreign_per_kg: numbers.rate, p_customs_tax_percent: numbers.customs,
+        p_handling_php: numbers.handling, p_margin_percent: numbers.margin,
+        p_final_price_php: finalPrice, p_valid_until: validUntil,
+      })
     setSaving(false)
-    if (quoteError) { setError(quoteError.message); return }
+    if (secureAdmin ? !result.ok : result.error) { setError(secureAdmin ? result.error : result.error.message); return }
+    setQuote(current => ({ ...current, priceRationale: '' }))
     setNotice('Quote version saved. It has not been sent to the customer.')
     await load()
   }
@@ -242,7 +282,10 @@ export default function PasabuyManager() {
               <div className="border-b border-adm-line pb-4">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><span className="font-mono text-xs font-semibold text-blue">{selected.public_reference}</span><StatusPill tone={statusTone(selected.status)}>{STATUS_LABELS[selected.status] || selected.status}</StatusPill>{selectedDeadline && <StatusPill tone={selectedDeadline.expired ? 'danger' : 'warning'}>{selectedDeadline.label}</StatusPill>}</div><h2 className="mt-2 text-xl font-semibold tracking-tight text-white">{selected.item_title}</h2><p className="mt-1 text-sm text-white/50">{selected.customer_name} / {selected.customer_email || selected.customer_phone || 'Contact unavailable'} / Qty {selected.quantity}</p><p className="mt-2 text-xs text-white/35">Owner: {selected.assigned_to || 'Unassigned'} / Submitted {ageLabel(selected.created_at)}</p>{selected.reference_url && <a className="mt-3 inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-blue underline underline-offset-4" href={selected.reference_url} target="_blank" rel="noreferrer">Open customer reference <ArrowIcon size={14} /></a>}</div>
-                  <div className="flex flex-wrap gap-2">{(NEXT[selected.status] || []).map(status => <button key={status} disabled={saving} onClick={() => transition(status)} className={status === 'cancelled' ? `${secondaryButton} text-crimson` : primaryButton}>Move to {STATUS_LABELS[status]}</button>)}</div>
+                  <div className="w-full space-y-2 lg:max-w-lg">
+                    {secureAdmin && (NEXT[selected.status] || []).length > 0 && <Field label="Transition reason" hint="Required audit note; describe the evidence or customer decision."><input className={input} maxLength={500} value={transitionReason} onChange={event => setTransitionReason(event.target.value)} placeholder="Why is this case ready to move?" /></Field>}
+                    <div className="flex flex-wrap gap-2">{(NEXT[selected.status] || []).map(status => <button key={status} disabled={saving} onClick={() => transition(status)} className={status === 'cancelled' ? `${secondaryButton} text-crimson` : primaryButton}>Move to {STATUS_LABELS[status]}</button>)}</div>
+                  </div>
                 </div>
               </div>
 
@@ -273,6 +316,8 @@ export default function PasabuyManager() {
                 <Field label="Valid for days"><input className={input} type="number" min="1" max="30" value={quote.validDays} onChange={q('validDays')} /></Field>
               </div>
 
+              {secureAdmin && <Field label="Owner price rationale" hint="Required internal record. Note season, scarcity, delivery difficulty, or another factor behind the selected price."><textarea className={`${input} min-h-24 resize-y py-3`} maxLength={500} value={quote.priceRationale} onChange={q('priceRationale')} placeholder="Why was this final price selected?" /></Field>}
+
               <div className="flex flex-col justify-between gap-3 border-t border-adm-line pt-4 sm:flex-row sm:items-center">
                 <p className="text-xs text-white/45">Suggested {peso(suggested)} / Latest saved {latestQuote ? `version ${latestQuote.version}` : 'none'} / Saving does not send</p>
                 <div className="flex flex-col gap-2 sm:flex-row"><button onClick={saveQuote} disabled={saving} className={`${primaryButton} bg-amber text-navy hover:bg-amber/90`}>{saving ? 'Saving...' : 'Save new quote version'}</button><button onClick={copyQuote} disabled={!latestQuote} className={`${secondaryButton} border-forest/35 text-forest`}>Copy saved quote message</button></div>
@@ -285,6 +330,6 @@ export default function PasabuyManager() {
   )
 }
 
-function Field({ label, children }) {
-  return <label className="block text-xs font-semibold text-white/60">{label}<span className="mt-1.5 block">{children}</span></label>
+function Field({ label, hint, children }) {
+  return <label className="block text-xs font-semibold text-white/60">{label}<span className="mt-1.5 block">{children}</span>{hint && <span className="mt-1.5 block text-xs font-normal leading-5 text-white/40">{hint}</span>}</label>
 }

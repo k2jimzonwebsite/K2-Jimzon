@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useStore } from '../../context/StoreContext'
+import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { supabase } from '../../lib/supabaseClient'
 
 // Real staff & roles. Reads user_profiles (admins see all), lets the super admin

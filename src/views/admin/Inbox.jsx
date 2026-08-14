@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
-import { useStore } from '../../context/StoreContext'
+import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { channelMeta } from '../../lib/channelMeta'
 import { AlertIcon, CheckIcon, InboxIcon, SearchIcon } from '../../components/ui/icons'
 import { MetricRail, StateBanner, WorkspaceIntro } from './AdminWorkspaceUi'
@@ -66,6 +66,9 @@ export function InboxView({ store, database = supabase }) {
     sendMessage,
     markConversationRead,
     updateConversationWorkflow,
+    inboxStaff,
+    inboxUsesBff,
+    loadConversationHistory,
     user,
   } = store
   const [activeId, setActiveId] = useState(() => conversations[0]?.id || null)
@@ -78,7 +81,7 @@ export function InboxView({ store, database = supabase }) {
   const [notice, setNotice] = useState('')
   const [savingNote, setSavingNote] = useState(false)
   const [savingWorkflow, setSavingWorkflow] = useState(false)
-  const [staff, setStaff] = useState([])
+  const [directStaff, setDirectStaff] = useState([])
   const [history, setHistory] = useState([])
   const [workflow, setWorkflow] = useState({
     status: 'Open',
@@ -123,6 +126,10 @@ export function InboxView({ store, database = supabase }) {
   const chat = conversations.find(conversation => conversation.id === activeId) || null
 
   const loadHistory = async (conversationId) => {
+    if (inboxUsesBff) {
+      setHistory(await loadConversationHistory(conversationId))
+      return
+    }
     if (!database || !inboxState.phase2Ready || !conversationId) {
       setHistory([])
       return
@@ -137,6 +144,7 @@ export function InboxView({ store, database = supabase }) {
   }
 
   useEffect(() => {
+    if (inboxUsesBff) return
     if (!database || !inboxState.phase2Ready) return
     let active = true
     database
@@ -145,10 +153,12 @@ export function InboxView({ store, database = supabase }) {
       .in('role', ['Admin', 'Staff'])
       .order('full_name')
       .then(({ data, error }) => {
-        if (active && !error) setStaff(data || [])
+        if (active && !error) setDirectStaff(data || [])
       })
     return () => { active = false }
-  }, [database, inboxState.phase2Ready])
+  }, [database, inboxState.phase2Ready, inboxUsesBff])
+
+  const staff = inboxUsesBff ? inboxStaff : directStaff
 
   useEffect(() => {
     if (!chat) return

@@ -4,6 +4,8 @@ import { peso } from '../data/products'
 import ProductVisual from '../components/ProductVisual'
 import { CrimsonButton, GhostButton, TuscanCard } from '../components/ui/bits'
 import { ShieldIcon } from '../components/ui/icons'
+import TurnstileChallenge from '../components/security/TurnstileChallenge'
+import { guestBffEnabled } from '../services/guestCommerceService'
 
 export default function Checkout() {
   const { lines, placeOrder, go, applyCoupon, removeCoupon, appliedCoupon, couponDiscount } = useStore()
@@ -13,6 +15,7 @@ export default function Checkout() {
   const [checkingCoupon, setCheckingCoupon] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [botToken, setBotToken] = useState('')
 
   if (lines.length === 0) {
     return (
@@ -35,8 +38,12 @@ export default function Checkout() {
       setError('Enter an email address or mobile number so we can confirm the order.')
       return
     }
+    if (guestBffEnabled() && !botToken) {
+      setError('Complete the security check before submitting your order request.')
+      return
+    }
     setSubmitting(true)
-    const result = await placeOrder({ ...form, fulfillmentMethod: 'Metro Manila delivery' })
+    const result = await placeOrder({ ...form, botToken, fulfillmentMethod: 'Metro Manila delivery' })
     setSubmitting(false)
     if (!result?.ok) setError(result?.error || 'The request could not be submitted. Please try again.')
   }
@@ -120,6 +127,8 @@ export default function Checkout() {
                 <textarea className={`${fieldClass} mt-1.5 min-h-20 resize-y`} value={form.note} onChange={update('note')} placeholder="Delivery timing, landmark, or product question" />
               </label>
             </div>
+
+            <TurnstileChallenge onTokenChange={setBotToken} />
 
             {error && <p role="alert" className="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
 

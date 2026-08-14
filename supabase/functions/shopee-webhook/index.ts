@@ -6,10 +6,11 @@
 // and waybill before writing to the canonical order workflow.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { getServiceRoleKey } from '../_shared/service-role.ts'
 
 const SHOPEE_PARTNER_KEY = Deno.env.get('SHOPEE_PARTNER_KEY') ?? ''
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? ''
-const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+const SERVICE_ROLE = getServiceRoleKey()
 
 const db = createClient(SUPABASE_URL, SERVICE_ROLE, {
   auth: { persistSession: false },

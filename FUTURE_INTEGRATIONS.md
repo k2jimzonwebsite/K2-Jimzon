@@ -1,5 +1,9 @@
 # Future Integration Roadmap: The BOS API Layer
 
+> **Supporting technical reference, not an active backlog.** Any implementation
+> work described here must first pass the audit gate and appear in
+> `MASTER_ACTION_PLAN.md`.
+
 This document outlines the exact architecture required to connect the K2 Jimzon Business Operating System (BOS) to live external platforms (Shopee, Lazada, Meta, AI). 
 
 Currently, the BOS features a robust UI and a complete Supabase Database Schema. To bring the system fully online, we need to implement **Supabase Edge Functions** to act as the middleman between our database and the outside world.

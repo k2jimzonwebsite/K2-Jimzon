@@ -29,9 +29,10 @@ export default function StoreHeader() {
   const active = view === 'product' || view === 'master_product' ? 'catalog' : view
   const nav = [
     ['home', 'Home'],
-    ['catalog', 'Inventory & Catalog'],
-    ['pasabuy', 'Pasabuy Sourcing'],
-    ['wholesale', 'Wholesale inquiry'],
+    ['catalog', 'Shop'],
+    ['pasabuy', 'Pasabuy'],
+    ['wholesale', 'Wholesale'],
+    ['contact', 'Contact us'],
   ]
 
   return (
@@ -50,6 +51,7 @@ export default function StoreHeader() {
               <button
                 key={key}
                 onClick={() => go(key)}
+                aria-label={key === 'catalog' ? 'Inventory & Catalog' : undefined}
                 aria-current={isActive ? 'page' : undefined}
                 className={`relative min-h-11 whitespace-nowrap px-3 text-sm font-semibold transition-colors duration-150 ${isActive ? 'text-crimson' : 'text-navy-soft hover:text-navy'}`}
               >
@@ -60,7 +62,7 @@ export default function StoreHeader() {
           })}
         </nav>
 
-        <SearchBox className="ml-auto hidden w-full max-w-[17rem] md:block lg:ml-2" />
+        <SearchBox className="ml-auto hidden w-full max-w-[14rem] md:block lg:ml-2 xl:max-w-[17rem]" />
 
         <button
           onClick={() => setCartOpen(true)}

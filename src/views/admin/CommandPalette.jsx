@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useStore } from '../../context/StoreContext'
+import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { supabase } from '../../lib/supabaseClient'
 import { searchGuide } from './adminGuide'
 

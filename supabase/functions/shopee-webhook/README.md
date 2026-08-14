@@ -20,7 +20,8 @@ push because Shopee's status notification does not contain a complete order.
 
 - `SHOPEE_PARTNER_KEY`
 - `SUPABASE_URL` (injected by Supabase)
-- `SUPABASE_SERVICE_ROLE_KEY` (injected by Supabase)
+- `SUPABASE_SECRET_KEYS` (Supabase-injected JSON; the function uses the named
+  `default` modern secret key)
 
 The function must be deployed without Supabase JWT verification because
 Shopee is the caller. Its own HMAC verification remains mandatory.

@@ -1,8 +1,12 @@
 # K2 Jimzon Admin Operations Audit
 
-Status: working source of truth for the admin logic hardening program
+Status: dated audit evidence; not an active backlog
 Audit date: 2026-08-10
 Scope: admin application, operational database migrations, storefront hand-offs, and existing automated tests
+
+All accepted unfinished work from this audit is maintained only in
+`MASTER_ACTION_PLAN.md`. Remaining-action text below explains the audit findings
+at that date and must not be used as a competing task list.
 
 ## Executive conclusion
 
@@ -81,9 +85,9 @@ deleted.
 | Bulk CSV import | Partial | Insert-only drafts; stock intentionally excluded | Add complete preview, row validation, per-row error report, import batch ID, and idempotency |
 | AI product helper | Partial | Honest copy/paste research workflow | Store sources/evidence and human approval; keep automatic research disabled until server-backed |
 | Inventory balance | Backed foundation | Exact batch quantities, reservations, disposition, clearance, custody, and immutable changes are enforced | Replace remaining free-text dimensions with canonical IDs |
-| Batch editor | Backed | Preserves lot IDs and uses reasoned non-destructive reconciliation | Add richer adjustment reason taxonomy and evidence |
+| Batch editor | Current data clean; secure correction prepared | Preserves lot IDs and prevents destructive omission; 21 live lots pass aggregate integrity checks; inactive signed BFF and rollback rehearsal now prove reserved availability, expiry/clearance derivation, reasoned audit, exact retry, and corrected views | Apply only in coordinated Admin cutover; run deployed denial and fulfillment/custody regression tests, richer disposition evidence, and representative staff acceptance |
 | Custody transfer | Partial | Exact source lot and quantity transfer with immutable history are live | Add receiver acceptance/rejection |
-| Flight consignment | Backed foundation | Flight, box, batch, repeated-SKU lines, Milan/Manila exact scans, discrepancy review, and controlled completion are live | Add damage/correction evidence paths |
+| Flight consignment | Backed foundation; secure cutover prepared | Flight, box, batch, repeated-SKU lines, Milan/Manila exact scans, discrepancy review, and controlled completion are live; an inactive signed BFF now verifies barcode-to-line scans, durable retry, state reasons, and atomic finalization | Activate only after the coordinated security cutover; add damage, unexpected/wrong-item, expiry, quarantine, and correction-evidence paths |
 | Website order request | Backed foundation | Server-priced submission, coupon snapshot/redemption, delivery quotation, reservation, cancellation, packing, and fulfillment are live | Add complete payment-evidence records and customer order detail |
 | Packing | Backed | Operator selects the exact order, then records one immutable scan per unit | Add optional waybill/packing QR hardware runbook |
 | Fulfillment/FEFO | Backed | Confirmation reserves eligible exact lots and fulfillment consumes those reservations | Add broader exception recovery and receiver evidence |
@@ -314,7 +318,8 @@ Confirmed requirements and engineering decisions:
 ## Documentation cleanup
 
 - `SYSTEM_LOGIC_BLUEPRINT.md` contains obsolete prototype behavior and must be labeled historical, not operational truth.
-- `PRE_DEPLOYMENT_TODO.md` contains stale checkout and QR claims and must be reconciled.
-- `IMPROVEMENT_ROADMAP.md` mixes older gaps with later completions and should become an archive.
+- `PRE_DEPLOYMENT_TODO.md` is labeled as a historical July 2026 checklist.
+- `IMPROVEMENT_ROADMAP.md` is labeled as a historical planning snapshot.
 - `K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md` remains the living system summary, but it should only be updated after a feature is implemented and verified.
-- This audit owns the hardening backlog until each item is replaced by verified implementation documentation.
+- `MASTER_ACTION_PLAN.md` owns the only active backlog. This audit remains evidence
+  of the 2026-08-10 assessment and must not receive new action items.

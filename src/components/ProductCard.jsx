@@ -26,11 +26,10 @@ export default function ProductCard({ product, compact = false, featured = false
           ) : (
             <ProductVisual product={product} className="h-full w-full object-contain drop-shadow-xl" pad="p-7 md:p-12" />
           )}
-          {product.tag && <span className="absolute left-4 top-4 rounded-md bg-navy px-2.5 py-1 text-xs font-bold uppercase tracking-[0.16em] text-cream">{product.tag}</span>}
         </div>
 
         <div className="flex flex-col justify-center border-t border-[var(--store-surface-border)] p-6 md:border-l md:border-t-0 md:p-10">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson">New to the cabinet</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson">Current consignment</p>
           <button onClick={() => openProduct(product.sku)} className="group mt-3 text-left">
             <h3 className="font-serif text-2xl font-semibold leading-tight text-navy transition-colors duration-150 group-hover:text-crimson md:text-4xl">{product.name}</h3>
           </button>
