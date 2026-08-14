@@ -115,6 +115,9 @@ credential form without explanation. Missing Admin/Staff permission, role-check
 failure, invalid credentials, callback failure, and authenticator failure are
 distinct inline states. Controls retain 44px minimum targets, visible focus,
 disabled/loading feedback, and no decorative transition that delays staff entry.
+OAuth return never preserves a stale `Opening Google` loading state after a
+browser back/forward-cache restoration, and callback credentials are removed
+from the visible URL before the staff decision is presented.
 
 ### Storefront guest-inbox interaction contract
 

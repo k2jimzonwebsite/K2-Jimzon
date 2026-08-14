@@ -1,9 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
-const env = (typeof import.meta !== 'undefined' && import.meta.env) ? import.meta.env : (process.env || {})
-
-const supabaseUrl = env.VITE_SUPABASE_URL
-export const supabasePublicKey = env.VITE_SUPABASE_PUBLIC_KEY || env.VITE_SUPABASE_PUBLISHABLE_KEY || env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+export const supabasePublicKey = import.meta.env.VITE_SUPABASE_PUBLIC_KEY
+  || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabasePublicKey)
 
@@ -12,7 +11,7 @@ if (!isSupabaseConfigured) {
     `VITE_SUPABASE_URL (${supabaseUrl ? 'present' : 'MISSING'}), ` +
     `Supabase publishable key (${supabasePublicKey ? 'present' : 'MISSING'}).`
 
-  if (env.PROD) {
+  if (import.meta.env.PROD) {
     console.error(missingMsg)
     throw new Error(`${missingMsg} Production deployment cannot run without valid backend configuration.`)
   } else {
@@ -20,5 +19,14 @@ if (!isSupabaseConfigured) {
   }
 }
 export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabasePublicKey)
+  ? createClient(supabaseUrl, supabasePublicKey, {
+      auth: {
+        // PKCE returns a one-time code instead of exposing access and refresh
+        // tokens in the browser address bar during Google OAuth callbacks.
+        flowType: 'pkce',
+        detectSessionInUrl: true,
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    })
   : null

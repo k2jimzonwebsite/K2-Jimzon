@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
 import {
   ADMIN_PRODUCTION_ORIGIN, ADMIN_ROUTE, buildAdminOAuthRedirectUrl,
+  clearAdminOAuthCredentialsFromUrl,
 } from '../src/lib/adminAuthRedirect.js'
 
 test('Google admin OAuth returns to the guarded admin route', async () => {
@@ -32,8 +33,36 @@ test('Google callback exposes the authenticator step instead of returning to log
   )
 
   expect(authSource).toContain('setMfaRequired(true)')
+  expect(authSource).toContain('window.setTimeout')
+  expect(authSource).toContain('clearAdminOAuthCredentialsFromUrl()')
+  expect(authSource).not.toContain('onAuthStateChange((_event, session) => checkUser')
   expect(modalSource).toContain('if (!mfaRequired) return')
   expect(modalSource).toContain('setStep(2)')
+  expect(modalSource).toContain("window.addEventListener('pageshow', resetRedirectLoading)")
+})
+
+test('OAuth credentials are removed from the Admin callback URL', async () => {
+  const replacements = []
+  const locationLike = {
+    pathname: ADMIN_ROUTE,
+    search: '?source=google',
+    hash: '#access_token=secret&refresh_token=secret',
+  }
+  const historyLike = {
+    state: { preserved: true },
+    replaceState: (...args) => replacements.push(args),
+  }
+
+  expect(clearAdminOAuthCredentialsFromUrl(locationLike, historyLike)).toBe(true)
+  expect(replacements).toEqual([[historyLike.state, '', `${ADMIN_ROUTE}?source=google`]])
+  expect(replacements[0][2]).not.toContain('token')
+
+  const clientSource = await readFile(
+    new URL('../src/lib/supabaseClient.js', import.meta.url),
+    'utf8'
+  )
+  expect(clientSource).toContain("flowType: 'pkce'")
+  expect(clientSource).toContain('detectSessionInUrl: true')
 })
 
 test.describe('admin access boundary', () => {

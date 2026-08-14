@@ -44,3 +44,28 @@ export function clearAdminOAuthReturn() {
     // Ignore storage errors in restricted browsers.
   }
 }
+
+const OAUTH_QUERY_FIELDS = [
+  'code', 'error', 'error_code', 'error_description',
+  'access_token', 'refresh_token', 'provider_token', 'provider_refresh_token',
+]
+
+export function clearAdminOAuthCredentialsFromUrl(
+  locationLike = typeof window !== 'undefined' ? window.location : null,
+  historyLike = typeof window !== 'undefined' ? window.history : null,
+) {
+  if (!locationLike || !historyLike) return false
+
+  const hashParams = new URLSearchParams(String(locationLike.hash || '').replace(/^#/, ''))
+  const searchParams = new URLSearchParams(String(locationLike.search || '').replace(/^\?/, ''))
+  const hasOAuthCredentials = OAUTH_QUERY_FIELDS.some(
+    (field) => hashParams.has(field) || searchParams.has(field),
+  )
+  if (!hasOAuthCredentials) return false
+
+  OAUTH_QUERY_FIELDS.forEach((field) => searchParams.delete(field))
+  const safeSearch = searchParams.toString()
+  const safeUrl = `${locationLike.pathname || ADMIN_ROUTE}${safeSearch ? `?${safeSearch}` : ''}`
+  historyLike.replaceState(historyLike.state ?? null, '', safeUrl)
+  return true
+}
