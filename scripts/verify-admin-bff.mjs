@@ -44,9 +44,9 @@ assert.equal(security.verifyCsrf({ headers: { cookie: cookieHeader, 'x-k2-csrf':
 assert.equal(security.verifyCsrf({ headers: { cookie: cookieHeader, 'x-k2-csrf': `${csrf}x` } }, active), false)
 
 const files = [
-  'api/admin/auth/login.js', 'api/admin/auth/mfa.js',
-  'api/admin/auth/logout.js', 'api/admin/session.js', 'api/admin/overview.js',
-  'api/admin/products.js',
+  'prepared-api/admin/auth/login.js', 'prepared-api/admin/auth/mfa.js',
+  'prepared-api/admin/auth/logout.js', 'prepared-api/admin/session.js', 'prepared-api/admin/overview.js',
+  'prepared-api/admin/products.js',
   'server/admin-bff/security.js', 'server/admin-bff/supabase.js',
   'server/admin-bff/authorize.js', 'src/services/adminBffService.js',
   'src/context/useAdminAuthRuntime.js',

@@ -10,12 +10,12 @@ None is deployed or active. The current UI still uses a browser Supabase session
 must not be described as HttpOnly-cookie protected.
 
 **Hobby deployment gate (14 August 2026):** the prepared Admin and Storefront
-handlers total 50 files under `api/`, while each current Vercel Hobby deployment
-accepts at most 12 Serverless Functions. `.vercelignore` therefore excludes
-`api/` from both production artifacts while both BFF feature flags remain off.
-Do not remove that exclusion until the handlers are consolidated behind no more
-than 12 bounded functions per artifact or the owner deliberately upgrades the
-plan; then repeat every real-host denial and session test before activation.
+handlers total 50 files, while each current Vercel Hobby deployment accepts at
+most 12 Serverless Functions. They therefore live under `prepared-api/`, outside
+Vercel's special deployable `api/` directory, while both BFF feature flags remain
+off. Before activation, consolidate them behind no more than 12 bounded
+functions per artifact or deliberately upgrade the plan; then restore deployable
+routes and repeat every real-host denial and session test.
 
 ## Purpose
 

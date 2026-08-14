@@ -662,12 +662,13 @@ On 14 August 2026, Vercel rejected both preview and production attempts for
 commit `909d769` because the Hobby plan accepts at most 12 Serverless Functions
 and the repository exposes 50 prepared BFF handler files. GitHub CI still passed
 both isolated builds and all smoke flows; no new Vercel artifact was published.
-Because both BFF flags remain false, `.vercelignore` now excludes `api/` from
-deployment while preserving every handler and contract locally. Storefront
-Contact uses its explicit email-draft fallback and Admin continues its existing
-browser Supabase Auth. Future BFF activation requires consolidating handlers
-behind the plan limit (or an owner-approved upgrade), removing the exclusion,
-and repeating real-host security proof.
+An initial `.vercelignore` attempt did not affect Git-based function discovery.
+Because both BFF flags remain false, the handlers now live under `prepared-api/`,
+outside Vercel's deployable `api/` directory, preserving every handler and
+contract locally. Storefront Contact uses its explicit email-draft fallback and
+Admin continues its existing browser Supabase Auth. Future BFF activation
+requires consolidating handlers behind the plan limit (or an owner-approved
+upgrade), restoring deployable routes, and repeating real-host security proof.
 
 The following list records what the rejected completion draft claimed; it does
 not describe verified live behavior:

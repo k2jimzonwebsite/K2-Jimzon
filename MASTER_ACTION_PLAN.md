@@ -489,12 +489,14 @@ Evidence and ordered activation are in
 **Vercel Hobby correction (14 August 2026):** preview and production deployments
 for `909d769` were rejected because 50 prepared `api/` handlers exceed the Hobby
 limit of 12 Serverless Functions. GitHub CI passed both artifacts and smoke
-flows, but nothing new was published. Since both BFF flags are deliberately off,
-`.vercelignore` excludes these inactive handlers so the storefront Contact/email
-fallback and legacy Admin Auth can deploy without misrepresenting the BFF as
-live. Before BFF activation, consolidate handlers behind no more than the plan
-limit per artifact (preferred) or obtain owner approval for an upgrade, remove
-the exclusion, and repeat deployed security/ownership tests.
+flows, but nothing new was published. An initial `.vercelignore` correction did
+not affect Git-based function discovery. Since both BFF flags are deliberately
+off, the handlers now live under `prepared-api/`, outside Vercel's deployable
+`api/` directory, so the storefront Contact/email fallback and legacy Admin Auth
+can deploy without misrepresenting the BFF as live. Before BFF activation,
+consolidate handlers behind no more than the plan limit per artifact (preferred)
+or obtain owner approval for an upgrade, restore deployable routes, and repeat
+deployed security/ownership tests.
 
 **Deliver:**
 

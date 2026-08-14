@@ -29,8 +29,8 @@ assert.equal(args.p_signature, expected)
 assert.equal(args.p_guest_grant_hash, undefined)
 
 const files = [
-  'api/storefront/order.js', 'api/storefront/pasabuy.js', 'api/storefront/coupon.js',
-  'api/storefront/conversation.js', 'api/storefront/messages.js', 'api/storefront/message.js',
+  'prepared-api/storefront/order.js', 'prepared-api/storefront/pasabuy.js', 'prepared-api/storefront/coupon.js',
+  'prepared-api/storefront/conversation.js', 'prepared-api/storefront/messages.js', 'prepared-api/storefront/message.js',
   'server/storefront-bff/security.js', 'server/storefront-bff/supabase.js',
 ]
 for (const path of files) {
