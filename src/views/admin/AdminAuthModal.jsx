@@ -30,6 +30,14 @@ export default function AdminAuthModal({ isOpen, onClose }) {
     setLoading(false)
   }, [authError])
 
+  useEffect(() => {
+    // Browsers may restore the pre-redirect page from the back/forward cache.
+    // Never preserve a stale "Opening Google" state after the OAuth return.
+    const resetRedirectLoading = () => setLoading(false)
+    window.addEventListener('pageshow', resetRedirectLoading)
+    return () => window.removeEventListener('pageshow', resetRedirectLoading)
+  }, [])
+
   if (!isOpen) return null
 
   const submitCredentials = async (e) => {

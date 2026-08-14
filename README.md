@@ -48,7 +48,7 @@ Required public client variables:
 
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_SUPABASE_PUBLISHABLE_KEY=your-browser-safe-publishable-key
 ```
 
 Never add a Supabase service-role key or marketplace secret to a `VITE_` variable.

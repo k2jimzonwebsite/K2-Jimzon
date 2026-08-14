@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase, supabasePublicKey } from '../lib/supabaseClient'
 import {
   ADMIN_ROUTE, buildAdminOAuthRedirectUrl, clearAdminOAuthReturn,
-  consumeAdminOAuthReturn, rememberAdminOAuthReturn,
+  clearAdminOAuthCredentialsFromUrl, consumeAdminOAuthReturn, rememberAdminOAuthReturn,
 } from '../lib/adminAuthRedirect'
 import {
   adminBffEnabled, challengeAdminMfaBff, getAdminSessionBff,
@@ -104,8 +104,22 @@ export function useAdminAuthRuntime() {
   useEffect(() => {
     checkUser()
     if (!supabase || adminBffEnabled()) return undefined
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => checkUser(session?.user))
-    return () => subscription?.unsubscribe()
+    const pendingChecks = new Set()
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      // Supabase awaits auth callbacks while holding its internal auth lock.
+      // Defer follow-up Auth/MFA calls so the Google callback can finish,
+      // persist its session, and remove credentials from the URL first.
+      clearAdminOAuthCredentialsFromUrl()
+      const checkId = window.setTimeout(() => {
+        pendingChecks.delete(checkId)
+        checkUser(session?.user)
+      }, 0)
+      pendingChecks.add(checkId)
+    })
+    return () => {
+      pendingChecks.forEach((checkId) => window.clearTimeout(checkId))
+      subscription?.unsubscribe()
+    }
   }, [])
 
   const loginWithGoogle = async () => {

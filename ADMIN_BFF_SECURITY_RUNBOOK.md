@@ -16,6 +16,11 @@ preview/deployment URLs are not accepted as callbacks. A returned staff session
 requiring AAL2 must continue into the visible TOTP challenge. Returning to the
 credential form without a role, callback, or MFA explanation is a failed auth
 flow, not a successful sign-in.
+The temporary direct-browser flow uses PKCE, sanitizes callback credentials from
+the URL, and defers role/MFA verification outside the Supabase auth-state
+callback lock. The modern browser-safe publishable key is compiled as a reviewed
+fallback until the same value is present in the Admin Vercel environment; this
+does not authorize service-role access or activate the prepared BFF.
 
 **Hobby deployment gate (14 August 2026):** the prepared Admin and Storefront
 handlers total 50 files, while each current Vercel Hobby deployment accepts at

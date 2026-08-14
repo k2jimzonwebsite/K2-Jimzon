@@ -214,6 +214,14 @@ origin. When Google returns an eligible Admin/Staff session that still requires
 AAL2, the sign-in surface opens the six-digit authenticator step instead of
 silently rendering the credential form again. Role lookup failures and accounts
 without Admin/Staff access render distinct inline recovery messages.
+Google OAuth uses PKCE so access and refresh tokens are not returned in the
+address-bar fragment. The auth-state listener performs no nested Supabase Auth
+calls while the provider callback lock is held; role and MFA verification are
+deferred until the callback has persisted the session and sanitized the URL.
+The browser build contains the project's modern browser-safe publishable key as
+a reviewed fallback because the Admin Vercel project did not expose that value
+during the 14 August production build. This is public client configuration, not
+a service-role or secret key, and it activates no prepared API route.
 
 ---
 

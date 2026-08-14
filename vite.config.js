@@ -3,6 +3,10 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 const projectRoot = process.cwd().replaceAll('\\', '/')
+// Supabase publishable keys are browser identifiers, not secrets. Keep the
+// project key as a safe production fallback so a missing Vercel env cannot
+// silently fall back to the disabled legacy anon JWT and break OAuth callbacks.
+const K2_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_OCZx7JiRFTXZ43v0ZxVduQ_KAGCH_Z9'
 
 function deploymentBoundaryPlugin(target) {
   return {
@@ -31,8 +35,7 @@ export default defineConfig(({ command, mode }) => {
     || process.env.SUPABASE_PUBLISHABLE_KEY
     || env.VITE_SUPABASE_PUBLISHABLE_KEY
     || env.SUPABASE_PUBLISHABLE_KEY
-    || process.env.VITE_SUPABASE_ANON_KEY
-    || env.VITE_SUPABASE_ANON_KEY
+    || K2_SUPABASE_PUBLISHABLE_KEY
 
   if (!['storefront', 'admin', 'combined'].includes(target)) {
     throw new Error(`Invalid K2_DEPLOYMENT_TARGET "${target}". Use storefront or admin.`)
