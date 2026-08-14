@@ -11,6 +11,14 @@ migration, rollback evidence, and feature-gated guest inbox exist locally. None
 is active in production. The storefront still calls the transitional direct
 RPCs while `VITE_GUEST_BFF_ENABLED=false`.
 
+The Vercel Hobby deployment currently rejects more than 12 Serverless Functions;
+the repository has 50 prepared Admin and Storefront handlers. `.vercelignore`
+excludes `api/` from deployed artifacts while both BFF flags remain false.
+Remove that exclusion only after bounded-router consolidation (or an
+owner-approved plan upgrade) and repeat the full cutover and real-host denial
+tests. The Contact email-draft fallback and legacy browser Admin Auth do not
+require these inactive functions.
+
 ## Required activation order
 
 1. Obtain MAP-016 evidence that the exposed legacy service-role key is disabled

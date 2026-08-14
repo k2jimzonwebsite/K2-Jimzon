@@ -1,0 +1,5 @@
+# MAP-019/MAP-020 BFF handlers are prepared and contract-tested but inactive.
+# Current Vercel Hobby deployments accept at most 12 Serverless Functions; the
+# repository contains 50 prepared handlers. Keep them out of production until
+# they are consolidated behind bounded routers or the plan is upgraded.
+api/
