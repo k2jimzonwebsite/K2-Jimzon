@@ -1,17 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { AlertIcon, ShieldIcon } from '../../components/ui/icons'
 
 // Real admin login: Supabase email+password or Google, with a genuine TOTP
 // second factor when the account has 2FA enrolled. No passcodes, no demo codes.
 export default function AdminAuthModal({ isOpen, onClose }) {
-  const { loginAdmin, loginWithGoogle, challengeMfa, adminOAuthAvailable } = useStore()
+  const {
+    loginAdmin, loginWithGoogle, challengeMfa, adminOAuthAvailable,
+    mfaRequired, authError,
+  } = useStore()
   const [step, setStep] = useState(1)        // 1: credentials, 2: 2FA code
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!mfaRequired) return
+    setStep(2)
+    setError('')
+    setLoading(false)
+  }, [mfaRequired])
+
+  useEffect(() => {
+    if (!authError) return
+    setStep(1)
+    setError(authError)
+    setLoading(false)
+  }, [authError])
 
   if (!isOpen) return null
 

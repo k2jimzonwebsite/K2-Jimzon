@@ -16,10 +16,13 @@ export function useAdminAuthRuntime() {
   const [user, setUser] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [authReady, setAuthReady] = useState(false)
+  const [mfaRequired, setMfaRequired] = useState(false)
+  const [authError, setAuthError] = useState('')
 
   const resolveRole = async (authUser) => {
     if (!supabase || !authUser) return null
-    const { data } = await supabase.from('user_profiles').select('role').eq('id', authUser.id).single()
+    const { data, error } = await supabase.from('user_profiles').select('role').eq('id', authUser.id).maybeSingle()
+    if (error) throw error
     return data?.role || null
   }
 
@@ -27,6 +30,8 @@ export function useAdminAuthRuntime() {
     const normalizedUser = authUser?.userId && !authUser.id
       ? { ...authUser, id: authUser.userId }
       : authUser
+    setMfaRequired(false)
+    setAuthError('')
     setIsAdmin(true)
     setUser({ ...normalizedUser, role })
   }
@@ -36,10 +41,11 @@ export function useAdminAuthRuntime() {
       try {
         const result = await getAdminSessionBff()
         if (result.ok && isStaffRole(result.user?.role)) applyAdminSession(result.user, result.user.role)
-        else { setIsAdmin(false); setUser(null) }
+        else { setIsAdmin(false); setUser(null); setMfaRequired(Boolean(result.mfaRequired)) }
       } catch {
         setIsAdmin(false)
         setUser(null)
+        setMfaRequired(false)
       } finally {
         setAuthReady(true)
       }
@@ -48,12 +54,18 @@ export function useAdminAuthRuntime() {
     if (!supabase) {
       setIsAdmin(false)
       setUser(null)
+      setMfaRequired(false)
       setAuthReady(true)
       return
     }
     try {
       const currentUser = authUser || (await supabase.auth.getUser()).data?.user
-      if (!currentUser) { setIsAdmin(false); setUser(null); return }
+      if (!currentUser) {
+        setIsAdmin(false)
+        setUser(null)
+        setMfaRequired(false)
+        return
+      }
       let mfaSatisfied = true
       try {
         const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
@@ -65,14 +77,25 @@ export function useAdminAuthRuntime() {
         const returnTo = consumeAdminOAuthReturn()
         if (returnTo === ADMIN_ROUTE && window.location.pathname !== ADMIN_ROUTE) window.location.replace(returnTo)
       }
-      if (isStaffRole(role) && mfaSatisfied) setIsAdmin(true)
-      else {
+      if (isStaffRole(role) && mfaSatisfied) {
+        setMfaRequired(false)
+        setAuthError('')
+        setIsAdmin(true)
+      } else if (isStaffRole(role)) {
+        setMfaRequired(true)
+        setAuthError('')
         setIsAdmin(false)
-        if (!isStaffRole(role)) clearAdminOAuthReturn()
+      } else {
+        setMfaRequired(false)
+        setAuthError('This Google account has no Admin or Staff access.')
+        setIsAdmin(false)
+        clearAdminOAuthReturn()
       }
     } catch {
       setIsAdmin(false)
       setUser(null)
+      setMfaRequired(false)
+      setAuthError('Staff access could not be verified. Please try again.')
     } finally {
       setAuthReady(true)
     }
@@ -88,6 +111,8 @@ export function useAdminAuthRuntime() {
   const loginWithGoogle = async () => {
     if (adminBffEnabled()) return { ok: false, error: 'Google sign-in is unavailable during the secure admin migration. Use your invited staff email and authenticator.' }
     if (!supabase) return { ok: false, error: 'Backend not configured.' }
+    setAuthError('')
+    setMfaRequired(false)
     rememberAdminOAuthReturn()
     try {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -109,11 +134,16 @@ export function useAdminAuthRuntime() {
       return result
     }
     if (!supabase) return { ok: false, error: 'Backend not configured.' }
+    setAuthError('')
+    setMfaRequired(false)
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error || !data?.user) return { ok: false, error: 'Invalid email or password.' }
     try {
       const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
-      if (aal?.nextLevel === 'aal2' && aal.nextLevel !== aal.currentLevel) return { ok: false, mfaRequired: true }
+      if (aal?.nextLevel === 'aal2' && aal.nextLevel !== aal.currentLevel) {
+        setMfaRequired(true)
+        return { ok: false, mfaRequired: true }
+      }
     } catch { /* transitional legacy session */ }
     const role = await resolveRole(data.user)
     if (!isStaffRole(role)) {
@@ -131,6 +161,7 @@ export function useAdminAuthRuntime() {
       return result
     }
     if (!supabase) return { ok: false, error: 'Backend not configured.' }
+    setAuthError('')
     const { data: factors } = await supabase.auth.mfa.listFactors()
     const factor = factors?.totp?.find((item) => item.status === 'verified') || factors?.totp?.[0]
     if (!factor) return { ok: false, error: 'No authenticator is enrolled on this account.' }
@@ -191,12 +222,15 @@ export function useAdminAuthRuntime() {
   const logoutAdmin = async () => {
     setIsAdmin(false)
     setUser(null)
+    setMfaRequired(false)
+    setAuthError('')
     if (adminBffEnabled()) await logoutAdminBff()
     else if (supabase) await supabase.auth.signOut()
   }
 
   return {
-    user, isAdmin, authReady, loginAdmin, loginWithGoogle, logoutAdmin,
+    user, isAdmin, authReady, mfaRequired, authError,
+    loginAdmin, loginWithGoogle, logoutAdmin,
     challengeMfa, enrollMfa, verifyMfaEnroll, inviteStaff,
     adminOAuthAvailable: !adminBffEnabled(),
   }
