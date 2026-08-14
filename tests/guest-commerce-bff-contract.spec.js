@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test'
-import orderHandler from '../api/storefront/order.js'
-import pasabuyHandler from '../api/storefront/pasabuy.js'
-import couponHandler from '../api/storefront/coupon.js'
-import messagesHandler from '../api/storefront/messages.js'
-import messageHandler from '../api/storefront/message.js'
-import conversationHandler from '../api/storefront/conversation.js'
+import orderHandler from '../prepared-api/storefront/order.js'
+import pasabuyHandler from '../prepared-api/storefront/pasabuy.js'
+import couponHandler from '../prepared-api/storefront/coupon.js'
+import messagesHandler from '../prepared-api/storefront/messages.js'
+import messageHandler from '../prepared-api/storefront/message.js'
+import conversationHandler from '../prepared-api/storefront/conversation.js'
 
 function response() {
   const headers = new Map()

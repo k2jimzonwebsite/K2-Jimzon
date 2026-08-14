@@ -9,6 +9,14 @@ build is pending because the current execution quota prevented the build command
 None is deployed or active. The current UI still uses a browser Supabase session and
 must not be described as HttpOnly-cookie protected.
 
+**Hobby deployment gate (14 August 2026):** the prepared Admin and Storefront
+handlers total 50 files, while each current Vercel Hobby deployment accepts at
+most 12 Serverless Functions. They therefore live under `prepared-api/`, outside
+Vercel's special deployable `api/` directory, while both BFF feature flags remain
+off. Before activation, consolidate them behind no more than 12 bounded
+functions per artifact or deliberately upgrade the plan; then restore deployable
+routes and repeat every real-host denial and session test.
+
 ## Purpose
 
 The Admin BOS will authenticate and perform operational data work through the
