@@ -38,6 +38,7 @@ test.describe('Admin access, MFA status, and permanent product deletion contract
 
   test('deletion is bounded, retry-safe, audited, throttled, and refuses operational history', async () => {
     const sql = await read('supabase/migrations/20260815_harden_admin_delete_pin.sql')
+    const cleanup = await read('supabase/migrations/20260815_remove_legacy_delete_products_rpc.sql')
     const modal = await read('src/views/admin/DeleteProductsModal.jsx')
 
     expect(sql).toContain('k2_private.product_delete_operations')
@@ -47,6 +48,7 @@ test.describe('Admin access, MFA status, and permanent product deletion contract
     expect(sql).toContain("'code','PRODUCT_HAS_HISTORY'")
     expect(sql).toContain('insert into public.product_deletions')
     expect(sql).toContain("message='K2_DELETE_CLIENT_UPGRADE_REQUIRED'")
+    expect(cleanup).toContain('drop function if exists public.delete_products_with_pin(text[],text)')
     expect(modal).toContain("supabase.rpc('delete_products_with_pin_v2'")
     expect(modal).toContain('p_request_id: requestIdRef.current')
     expect(modal).toContain('Reason for permanent deletion')
