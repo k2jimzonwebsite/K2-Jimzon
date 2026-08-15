@@ -5,6 +5,8 @@ import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { channelMeta } from '../../lib/channelMeta'
 import { BarcodeIcon, BoxIcon, CheckIcon, UserIcon } from '../../components/ui/icons'
 import PackingSlipModal from './PackingSlipModal'
+import FulfillmentWorkflowDiagram from '../../components/admin/guides/FulfillmentWorkflowDiagram'
+import CustodyWorkflowDiagram from '../../components/admin/guides/CustodyWorkflowDiagram'
 import {
   adminBffEnabled, assignBoxBff, confirmOrderBff, fulfillOrderBff, getAdminFulfillment,
   recordPackingScanBff, transferLotBff, updateDeliveryBff, updatePaymentBff,
@@ -54,6 +56,7 @@ export default function OmniOperationsHub() {
   const [transferBatchId, setTransferBatchId] = useState('')
   const [transferQuantity, setTransferQuantity] = useState('1')
   const [transferTo, setTransferTo] = useState('')
+  const [showFulfillmentGuide, setShowFulfillmentGuide] = useState(false)
 
   const nameFor = sku => (products || []).find(product => product.sku === sku)?.name || sku
 
@@ -359,13 +362,32 @@ export default function OmniOperationsHub() {
 
   return (
     <div className="mx-auto max-w-[1600px] space-y-5 pb-12 text-white">
-      <WorkspaceIntro
-        eyebrow="Fulfillment control"
-        title="Order, packing, and custody desk"
-        description="Confirm website requests before reserving stock, scan confirmed order lines, and keep every Italy box assigned to a real custodian. Payment evidence remains a separate verification state."
-        status={activeStaff ? `Station: ${activeStaff}` : 'Staff identity unavailable'}
-        statusTone={activeStaff ? 'success' : 'danger'}
-      />
+      <div className="flex items-center justify-between">
+        <WorkspaceIntro
+          eyebrow="Fulfillment control"
+          title="Order, packing, and custody desk"
+          description="Confirm website requests before reserving stock, scan confirmed order lines, and keep every Italy box assigned to a real custodian. Payment evidence remains a separate verification state."
+          status={activeStaff ? `Station: ${activeStaff}` : 'Staff identity unavailable'}
+          statusTone={activeStaff ? 'success' : 'danger'}
+        />
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => setShowFulfillmentGuide((v) => !v)}
+          className="flex items-center gap-1.5 rounded-adm-sm border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-bold text-purple-400 hover:bg-purple-500/20"
+        >
+          <span>{showFulfillmentGuide ? 'Hide Fulfillment Map ▴' : '🗺️ View Packing & Custody Workflow Map ▸'}</span>
+        </button>
+      </div>
+
+      {showFulfillmentGuide && (
+        <div className="space-y-4 animate-in fade-in duration-200">
+          <FulfillmentWorkflowDiagram />
+          {activeRole === 'inter_staff_transfer' && <CustodyWorkflowDiagram />}
+        </div>
+      )}
 
       <MetricRail columns="lg:grid-cols-5" items={[
         { label: 'Awaiting confirmation', value: loadingOrders ? '--' : orderRequests.length, detail: 'No stock reserved yet', tone: orderRequests.length ? 'text-amber' : 'text-white' },

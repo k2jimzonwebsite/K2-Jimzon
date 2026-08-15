@@ -1,0 +1,8 @@
+{
+  "project_ref": "fabricated-malformed-project",
+  "exported_at": "2026-08-15T00:00:00Z",
+  "format_version": "2026-08-15.map017.meta.v1",
+  "tables": {
+    "brands": { "rlsEnabled": true }
+  }
+}

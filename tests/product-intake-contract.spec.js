@@ -79,3 +79,40 @@ test('current product JSON accepts content and rejects operational authority', (
   payload.product.price = 100
   expect(() => parseProductResearchPaste(JSON.stringify(payload))).toThrow(/not allowed|Unexpected field/)
 })
+
+test('upload validation strictly rejects unauthorized MIMEs, scripts, and oversized files', async () => {
+  const { validateUploadFile, sanitizeFileName, MAX_UPLOAD_BYTES } = await import('../src/lib/uploadValidation.js')
+
+  // Normal valid image
+  const validFile = { name: 'front_label.jpg', size: 1024 * 500, type: 'image/jpeg' }
+  const validRes = validateUploadFile(validFile)
+  expect(validRes.ok).toBe(true)
+  expect(validRes.sanitizedName).toBe('front_label.jpg')
+
+  // Oversized file (>10MB)
+  const oversizedFile = { name: 'huge_scan.png', size: MAX_UPLOAD_BYTES + 1024, type: 'image/png' }
+  const overRes = validateUploadFile(oversizedFile)
+  expect(overRes.ok).toBe(false)
+  expect(overRes.error).toContain('exceeds maximum permitted limit')
+
+  // Executable or script disguised as image
+  const scriptFile = { name: 'malicious.php', size: 1024, type: 'application/x-php' }
+  const scriptRes = validateUploadFile(scriptFile)
+  expect(scriptRes.ok).toBe(false)
+  expect(scriptRes.error).toContain('is not supported')
+
+  // Path traversal in filename
+  expect(sanitizeFileName('../../etc/passwd.jpg')).toBe('passwd.jpg')
+  expect(sanitizeFileName('..\\..\\secret.png')).toBe('secret.png')
+})
+
+test('wholesale application form enforces required commercial fields and declaration', async () => {
+  const wholesaleSource = await source('src/views/Wholesale.jsx')
+  expect(wholesaleSource).toContain('organizationName')
+  expect(wholesaleSource).toContain('registrationNumber')
+  expect(wholesaleSource).toContain('contactName')
+  expect(wholesaleSource).toContain('agreedToTerms')
+  expect(wholesaleSource).toContain('WA-')
+  expect(wholesaleSource).not.toMatch(/grant_wholesale_pricing_client_side/i)
+})
+

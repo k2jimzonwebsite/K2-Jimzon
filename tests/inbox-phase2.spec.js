@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
+import { normalizeAdminConversation } from '../src/lib/adminInboxNormalization.js'
 
 test.describe('Phase 2 unified inbox contract', () => {
   test('migration models workflow, delivery truth, and immutable events', async () => {
@@ -21,14 +22,34 @@ test.describe('Phase 2 unified inbox contract', () => {
     expect(sql).not.toMatch(/,\s*;/)
   })
 
-  test('store context keeps unread state separate from workflow status', async () => {
-    const source = await readFile(new URL('../src/context/StoreContext.jsx', import.meta.url), 'utf8')
+  test('admin inbox runtime normalizes snake_case and camelCase unread state independently from status', async () => {
+    const source = await readFile(new URL('../src/context/useAdminInboxRuntime.js', import.meta.url), 'utf8')
 
-    expect(source).toContain('unreadCount: Number(c.unread_count || 0)')
     expect(source).toContain("supabase.rpc('mark_conversation_read'")
     expect(source).toContain("supabase.rpc('update_conversation_workflow'")
     expect(source).not.toContain("unread: c.status === 'Open'")
     expect(source).not.toContain('INITIAL_CONVERSATIONS')
+
+    const normalize = (value) => {
+      const normalized = normalizeAdminConversation(value)
+      return { unreadCount: normalized.unreadCount, unread: normalized.unread, status: normalized.status }
+    }
+
+    // Direct Supabase snake_case records
+    expect(normalize({ unread_count: 5, status: 'Open' })).toEqual({ unreadCount: 5, unread: true, status: 'Open' })
+    expect(normalize({ unread_count: 0, status: 'Open' })).toEqual({ unreadCount: 0, unread: false, status: 'Open' })
+    expect(normalize({ unread_count: 2, status: 'Resolved' })).toEqual({ unreadCount: 2, unread: true, status: 'Resolved' })
+
+    // BFF API camelCase records
+    expect(normalize({ unreadCount: 3, status: 'Open' })).toEqual({ unreadCount: 3, unread: true, status: 'Open' })
+    expect(normalize({ unreadCount: 0, status: 'Open' })).toEqual({ unreadCount: 0, unread: false, status: 'Open' })
+    expect(normalize({ unreadCount: 1, status: 'Closed' })).toEqual({ unreadCount: 1, unread: true, status: 'Closed' })
+
+    // Missing / null count fallback
+    expect(normalize({ status: 'Open' })).toEqual({ unreadCount: 0, unread: false, status: 'Open' })
+    expect(normalize({ unread_count: null, status: 'Open' })).toEqual({ unreadCount: 0, unread: false, status: 'Open' })
+    expect(normalize({ unread_count: 'not-a-number', status: 'Resolved' })).toEqual({ unreadCount: 0, unread: false, status: 'Resolved' })
+    expect(normalize({ unreadCount: -4, status: 'Closed' })).toEqual({ unreadCount: 0, unread: false, status: 'Closed' })
   })
 
   test('admin inbox labels internal notes and disconnected delivery truthfully', async () => {

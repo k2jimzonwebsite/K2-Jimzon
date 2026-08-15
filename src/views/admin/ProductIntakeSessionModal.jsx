@@ -573,7 +573,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                           : 'Capture / Select'}
                       <input
                         type="file"
-                        accept="image/jpeg,image/png,image/webp"
+                        accept="image/jpeg,image/png,image/webp,image/avif"
                         capture="environment"
                         disabled={Boolean(evidenceUploading[s.slot])}
                         onChange={(event) => handleEvidenceFile(s.slot, event.target.files?.[0])}

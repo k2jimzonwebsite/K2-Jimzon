@@ -111,7 +111,7 @@ build-isolation fact, not evidence that the inactive cookie boundary is deployed
 | --- | --- | --- |
 | `K2_DEPLOYMENT_TARGET` | Admin Production/Preview | Exact value `admin`; storefront uses `storefront` |
 | `SUPABASE_URL` | Server only | Correct project URL; no `VITE_` prefix |
-| `SUPABASE_ANON_KEY` | Server only | Limited public/anon key; never service role for session/data proxy |
+| `SUPABASE_PUBLISHABLE_KEY` | Server only | Modern limited publishable key; never secret/service-role key for session/data proxy |
 | `K2_SESSION_COOKIE_KEY` | Admin server only | Base64 encoding of 32 unique random bytes; rotate through a controlled forced-logout procedure |
 | `K2_ADMIN_BFF_REQUEST_SECRET` | Admin server only | Base64 encoding of the same 32-byte secret installed only in `k2_private.admin_bff_secrets`; never expose to browser or logs |
 | `K2_ADMIN_ORIGINS` | Admin server only | Comma-separated exact HTTPS admin origins; no wildcard, path, or trailing guess |

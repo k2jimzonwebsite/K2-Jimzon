@@ -54,14 +54,16 @@ const files = [
 const contents = await Promise.all(files.map(async (path) => [path, await readFile(new URL(`../${path}`, import.meta.url), 'utf8')]))
 for (const [path, content] of contents) {
   assert.doesNotMatch(content, /SUPABASE_SERVICE_ROLE|SUPABASE_SECRET_KEY/, `${path} must use the limited key`)
+  assert.doesNotMatch(content, /SUPABASE_ANON_KEY/, `${path} must use the modern publishable key`)
   assert.doesNotMatch(content, /Access-Control-Allow-Origin['"\s:,]+\*/, `${path} must not use wildcard CORS`)
   assert.doesNotMatch(content, /error\.stack|error\.message\s*\|\|/, `${path} must not return provider internals`)
 }
+assert.match((contents.find(([path]) => path === 'server/admin-bff/supabase.js') || [null, ''])[1], /SUPABASE_PUBLISHABLE_KEY/)
 
 const viteConfig = await readFile(new URL('../vite.config.js', import.meta.url), 'utf8')
 const supabaseClient = await readFile(new URL('../src/lib/supabaseClient.js', import.meta.url), 'utf8')
 const adminAuthRuntime = await readFile(new URL('../src/context/useAdminAuthRuntime.js', import.meta.url), 'utf8')
-assert.match(viteConfig, /VITE_SUPABASE_PUBLISHABLE_KEY[\s\S]*SUPABASE_PUBLISHABLE_KEY[\s\S]*VITE_SUPABASE_ANON_KEY/)
+assert.match(viteConfig, /VITE_SUPABASE_PUBLISHABLE_KEY[\s\S]*SUPABASE_PUBLISHABLE_KEY[\s\S]*K2_SUPABASE_PUBLISHABLE_KEY/)
 assert.match(supabaseClient, /VITE_SUPABASE_PUBLIC_KEY/)
 assert.doesNotMatch(adminAuthRuntime, /apikey:\s*import\.meta\.env\.VITE_SUPABASE_ANON_KEY/)
 

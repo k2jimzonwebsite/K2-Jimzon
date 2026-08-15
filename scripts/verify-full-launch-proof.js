@@ -1,17 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { evaluateShelfLife } from '../src/lib/shelfLifeGate.js'
-import { CANONICAL_HUBS, CANONICAL_CUSTODIANS } from '../src/data/canonicalIdentities.js'
-import { PILOT_PRODUCTS, PILOT_BATCHES } from './seed-pilot-catalog.js'
-import { createEventEnvelope, processEventEnvelope, ADAPTER_STATUSES } from '../src/lib/connectorRuntime.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const rootDir = path.resolve(__dirname, '..')
 
 console.log('====================================================')
-console.log('   K2 JIMZON MAP-014 FULL SYSTEM RELEASE PROOF      ')
+console.log('   K2 JIMZON STATIC RELEASE-PRESENCE PRECHECK       ')
 console.log('====================================================\n')
 
 let failures = 0
@@ -32,17 +28,10 @@ check('Secret isolation matrix exists (.env.example)', fs.existsSync(envExPath),
 const intakeMigPath = path.join(rootDir, 'supabase', 'migrations', '20260811_product_intake_and_sku_gate.sql')
 check('Server SKU assignment migration exists', fs.existsSync(intakeMigPath), 'MAP-001 migration missing')
 
-// 2. MAP-002 Product Media & Shelf Life Gate
-const evalRes = evaluateShelfLife(new Date(Date.now() + 100 * 86400000).toISOString(), 'food')
-check('90-day shelf life gate operates correctly', evalRes.eligible && evalRes.status === 'regular', 'Shelf life gate check failed')
-
-// 3. MAP-003 Pilot Catalog Data Health
-check('Pilot catalog contains 8 representative products', PILOT_PRODUCTS.length === 8, 'Pilot products check failed')
-check('Pilot catalog contains 8 batch lots', PILOT_BATCHES.length === 8, 'Pilot batches check failed')
-
-// 4. MAP-004 Canonical Operational Identities
-check('Canonical Hubs registry defined (3 hubs)', CANONICAL_HUBS.length === 3, 'Canonical Hubs check failed')
-check('Canonical Custodians registry defined (3 custodians)', CANONICAL_CUSTODIANS.length === 3, 'Canonical Custodians check failed')
+// 2. Static prerequisite presence only. Behavioral proof belongs to MAP-025.
+check('Shelf-life gate source exists', fs.existsSync(path.join(rootDir, 'src', 'lib', 'shelfLifeGate.js')), 'Shelf-life gate source missing')
+check('Pilot catalog seed exists', fs.existsSync(path.join(rootDir, 'scripts', 'seed-pilot-catalog.js')), 'Pilot catalog seed missing')
+check('Canonical identity registry exists', fs.existsSync(path.join(rootDir, 'src', 'data', 'canonicalIdentities.js')), 'Canonical identity registry missing')
 
 // 5. MAP-005 through MAP-010 Operational Workspaces
 const consignmentPath = path.join(rootDir, 'src', 'views', 'admin', 'ConsignmentManager.jsx')
@@ -57,9 +46,8 @@ check('Customer Exception Inbox exists (MAP-007)', fs.existsSync(inboxPath), 'In
 check('Pasabuy Sourcing Manager exists (MAP-008)', fs.existsSync(pasabuyPath), 'PasabuyManager.jsx missing')
 check('Multichannel Integration Board exists (MAP-009)', fs.existsSync(channelPath), 'ChannelIntegrations.jsx missing')
 
-// 6. MAP-011 Idempotent Connector Runtime
-const testEnvelope = createEventEnvelope('lazada', 'order.paid', 'EVT-9009', { orderId: 'LAZ-123' })
-check('Connector idempotency key generated', testEnvelope.idempotencyKey === 'lazada:order.paid:EVT-9009', 'Idempotency key check failed')
+// 6. Connector runtime presence only; this does not prove a live adapter.
+check('Connector runtime source exists', fs.existsSync(path.join(rootDir, 'src', 'lib', 'connectorRuntime.js')), 'Connector runtime source missing')
 
 // 7. MAP-012 & MAP-013 Analytics & Vercel Boundary
 const overviewPath = path.join(rootDir, 'src', 'views', 'admin', 'Overview.jsx')
@@ -74,9 +62,12 @@ check('Admin Vercel config exists (MAP-013)', fs.existsSync(adminConfigPath), 'v
 
 console.log('\n----------------------------------------------------')
 if (failures === 0) {
-  console.log(' ALL FULL LAUNCH PROOF INTEGRITY CHECKS PASSED!')
+  console.log(' STATIC PRESENCE CHECKS PASSED; LAUNCH PROOF BLOCKED')
   console.log('----------------------------------------------------\n')
-  process.exit(0)
+  console.error('This script does not verify live providers, database behavior,')
+  console.error('backup/restore, production domains, operations, or acceptance.')
+  console.error('Use MASTER_ACTION_PLAN.md MAP-025 for the remaining evidence gates.')
+  process.exit(2)
 } else {
   console.error(` ${failures} LAUNCH PROOF CHECK(S) FAILED.`)
   console.log('----------------------------------------------------\n')

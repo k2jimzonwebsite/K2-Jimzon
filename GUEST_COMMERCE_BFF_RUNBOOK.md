@@ -32,7 +32,7 @@ Admin Auth do not require these inactive functions.
    decoded bytes plus the second contact-HMAC key in the private database table.
    Never paste either value into Git, logs, screenshots, chat, or browser code.
 6. Configure Storefront Vercel server variables: `SUPABASE_URL`, limited
-   `SUPABASE_ANON_KEY`, exact `K2_STOREFRONT_ORIGINS`, and
+   `SUPABASE_PUBLISHABLE_KEY`, exact `K2_STOREFRONT_ORIGINS`, and
    `K2_TURNSTILE_SECRET_KEY`. The signing secret must match the private database
    request secret. No service-role/secret key is used by these endpoints.
 7. Configure the prepared `VITE_TURNSTILE_SITE_KEY` on the Storefront preview

@@ -1,0 +1,100 @@
+{
+  "project_ref": "fabricated-test-project-001",
+  "exported_at": "2026-08-15T12:00:00Z",
+  "format_version": "2026-08-15.map017.meta.v1",
+  "schemas": ["public", "storage"],
+  "tables": {
+    "brands": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "categories": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "warehouses": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "products": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "product_batches": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "product_drafts": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "products_old": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "channel_credentials": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "staff_allocations": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "orders": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "user_profiles": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "conversations": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "messages": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" }
+  },
+  "views": {
+    "v_channel_catalog_readiness": { "securityInvoker": true, "owner": "postgres" },
+    "v_expiring_batches": { "securityInvoker": true, "owner": "postgres" },
+    "products_with_margins": { "securityInvoker": true, "owner": "postgres" },
+    "v_product_stock_from_batches": { "securityInvoker": true, "owner": "postgres" }
+  },
+  "materialized_views": {},
+  "functions": {
+    "public.is_staff()": { "securityDefiner": true, "returns": "boolean", "owner": "postgres", "searchPath": "public, pg_temp", "grants": [{ "grantee": "authenticated", "privilege": "EXECUTE" }] },
+    "public.is_admin()": { "securityDefiner": true, "returns": "boolean", "owner": "postgres", "searchPath": "public, pg_temp", "grants": [{ "grantee": "authenticated", "privilege": "EXECUTE" }] },
+    "public.set_user_role(uuid,text)": { "securityDefiner": true, "searchPath": "public", "owner": "postgres", "grants": [{ "grantee": "authenticated", "privilege": "EXECUTE" }] },
+    "public.process_audit_log()": { "securityDefiner": true, "searchPath": "public, pg_temp", "owner": "postgres", "grants": [] },
+    "public.decrement_stock(text,integer)": { "disabled": true, "owner": "postgres", "grants": [] },
+    "public.deduct_stock_fefo(text,integer)": { "disabled": true, "owner": "postgres", "grants": [] },
+    "public.replace_product_batches(text,jsonb,text)": { "disabled": true, "owner": "postgres", "grants": [] },
+    "public.mark_order_line_packed(uuid)": { "disabled": true, "owner": "postgres", "grants": [] }
+  },
+  "grants": {
+    "brands": [
+      { "grantee": "anon", "privilege": "SELECT" },
+      { "grantee": "authenticated", "privilege": "SELECT" },
+      { "grantee": "authenticated", "privilege": "INSERT" },
+      { "grantee": "authenticated", "privilege": "UPDATE" },
+      { "grantee": "authenticated", "privilege": "DELETE" }
+    ],
+    "categories": [
+      { "grantee": "anon", "privilege": "SELECT" },
+      { "grantee": "authenticated", "privilege": "SELECT" },
+      { "grantee": "authenticated", "privilege": "INSERT" },
+      { "grantee": "authenticated", "privilege": "UPDATE" },
+      { "grantee": "authenticated", "privilege": "DELETE" }
+    ],
+    "warehouses": [
+      { "grantee": "authenticated", "privilege": "SELECT" },
+      { "grantee": "authenticated", "privilege": "INSERT" },
+      { "grantee": "authenticated", "privilege": "UPDATE" },
+      { "grantee": "authenticated", "privilege": "DELETE" }
+    ],
+    "product_drafts": [
+      { "grantee": "authenticated", "privilege": "SELECT" },
+      { "grantee": "authenticated", "privilege": "INSERT" },
+      { "grantee": "authenticated", "privilege": "UPDATE" },
+      { "grantee": "authenticated", "privilege": "DELETE" }
+    ],
+    "products_old": [],
+    "channel_credentials": [],
+    "staff_allocations": []
+  },
+  "policies": [
+    { "table_name": "brands", "policy_name": "brands_public_read", "command": "SELECT", "roles": ["anon", "authenticated"], "using_expression": "true", "with_check_expression": null },
+    { "table_name": "brands", "policy_name": "brands_staff_manage", "command": "ALL", "roles": ["authenticated"], "using_expression": "public.is_staff()", "with_check_expression": "public.is_staff()" },
+    { "table_name": "categories", "policy_name": "categories_public_read", "command": "SELECT", "roles": ["anon", "authenticated"], "using_expression": "true", "with_check_expression": null },
+    { "table_name": "categories", "policy_name": "categories_staff_manage", "command": "ALL", "roles": ["authenticated"], "using_expression": "public.is_staff()", "with_check_expression": "public.is_staff()" },
+    { "table_name": "warehouses", "policy_name": "warehouses_staff_manage", "command": "ALL", "roles": ["authenticated"], "using_expression": "public.is_staff()", "with_check_expression": "public.is_staff()" },
+    { "table_name": "product_drafts", "policy_name": "product_drafts_staff_manage", "command": "ALL", "roles": ["authenticated"], "using_expression": "public.is_staff()", "with_check_expression": "public.is_staff()" }
+  ],
+  "storage": {
+    "buckets": {
+      "product-images": {
+        "id": "product-images",
+        "name": "product-images",
+        "public": true,
+        "file_size_limit": 10485760,
+        "allowed_mime_types": ["image/jpeg", "image/png", "image/webp", "image/avif"]
+      }
+    },
+    "policies": [
+      { "policy_name": "Staff upload product images", "bucket_id": "product-images", "command": "INSERT", "roles": ["authenticated"] }
+    ]
+  },
+  "realtime": {
+    "publication_tables": ["products", "product_drafts"]
+  },
+  "migrations": [
+    { "version": "20260809_operations_hardening", "inserted_at": "2026-08-09T00:00:00Z" },
+    { "version": "20260810_security_boundary_hardening", "inserted_at": "2026-08-10T00:00:00Z" },
+    { "version": "20260810_deprecated_rpc_lockdown", "inserted_at": "2026-08-10T00:00:00Z" },
+    { "version": "20260812_map017_public_write_boundary_hardening", "inserted_at": "2026-08-12T00:00:00Z" }
+  ]
+}

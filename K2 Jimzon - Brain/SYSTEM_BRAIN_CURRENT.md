@@ -145,7 +145,7 @@ numbered migrations. Machine-readable contract exported in `src/types/database.t
 **Infrastructure & Environment Integrity (MAP-000 verified):**
 
 - **CLI Config:** Official `supabase/config.toml` initialized (`project_id = pixplcjqivlfflickobf`).
-- **Secret Isolation:** `.env.example` strictly partitions client keys (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) from server-only secrets (all `VITE_` secret prefixes removed).
+- **Secret Isolation:** `.env.example` strictly partitions browser-safe configuration (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`) from server-only secrets (all secret `VITE_` prefixes removed).
 - **Production Guard:** `src/lib/supabaseClient.js` throws explicit configuration errors in production if required backend environment variables are absent.
 - **Repository Cleanliness:** `.gitignore` excludes `supabase/.temp/` linked state.
 - **Automated Verification:** `scripts/verify-supabase-integrity.js` validates environment and schema integrity.
@@ -198,11 +198,21 @@ All have been run on the live database as of this update.
 
 Auth is real Supabase Auth (email+password or Google); passwords are bcrypt-
 hashed and never seen by us. Access = a live session whose `user_profiles.role`
-is Admin or Staff, enforced by RLS. The old localStorage "admin=true" flag,
+is exactly Admin or Staff, enforced by RLS. A newly created Google/email Auth
+identity receives the `Customer` role and cannot enter Admin BOS. Staff access
+requires either the hardened invitation flow or an explicit audited Admin role
+assignment; merely creating an Auth identity grants no Admin access. The live
+aggregate on 15 August 2026 contained four existing authorized Admin profiles.
+Their identities were not changed during the security repair. The old localStorage "admin=true" flag,
 master passcodes, and `password123` fallback were REMOVED. Accounts are
 invite-only (super admin invites → person sets their own password → super admin
 sets role in **Staff & Roles**). Admins can enroll TOTP 2FA on their own account.
-Backend Edge Function `invite-staff` performs invites (admin-verified).
+The active production Edge Function `invite-staff` version 5 performs invites
+through modern hosted key maps with exact Admin role and AAL2 authorization,
+strict origin/body validation, durable operation receipts, bounded retry/rate
+behavior, and success only after canonical role persistence. Its production
+denial/CORS boundary and rollback-only receipt behavior passed on 15 August 2026;
+a successful invitation with a real Admin AAL2 session remains to be evidenced.
 Supabase Auth URL Configuration must point at the two Vercel sites (storefront +
 admin) or OAuth bounces to localhost.
 
@@ -218,6 +228,23 @@ Google OAuth uses PKCE so access and refresh tokens are not returned in the
 address-bar fragment. The auth-state listener performs no nested Supabase Auth
 calls while the provider callback lock is held; role and MFA verification are
 deferred until the callback has persisted the session and sanitized the URL.
+The Staff & Roles screen now reads verified TOTP factors from Supabase and keeps
+an `Active` security status visible after enrollment instead of reverting to a
+misleading enrollment button. The active Admin production bundle contains this
+status behavior. One verified TOTP factor was confirmed in the live provider
+aggregate on 15 August 2026; no factor identifier or account detail was recorded.
+
+Permanent product deletion now uses the live Admin+AAL2-only
+`delete_products_with_pin_v2` RPC. PIN hashes are held only in
+`k2_private.staff_delete_credentials`, never on the broadly readable profile
+table; five failed attempts in ten minutes lock the PIN for fifteen minutes.
+Each request requires a reason and UUID idempotency key, snapshots the product
+into `product_deletions`, and refuses products with stock, listings, or
+operational history. Such products must be retained and marked Discontinued.
+The legacy PIN-verification oracle and legacy delete RPC are removed. The live
+schema currently has zero configured Delete PINs, so an Admin must set one in
+Staff & Roles before deleting an eligible unused product.
+
 The browser build contains the project's modern browser-safe publishable key as
 a reviewed fallback because the Admin Vercel project did not expose that value
 during the 14 August production build. This is public client configuration, not
@@ -227,6 +254,12 @@ a service-role or secret key, and it activates no prepared API route.
 
 ## 7. Other things built into the admin
 
+- **Visual Workflow Guides Suite** — 5 responsive, self-contained SVG process
+  diagrams (`FlightWorkflowDiagram`, `CustodyWorkflowDiagram`, `FefoWorkflowDiagram`,
+  `FulfillmentWorkflowDiagram`, `PasabuyWorkflowDiagram`) and a master search modal
+  (`WorkflowGuideModal`). Accessible globally via `🗺️ Workflow Map` in the admin
+  header, shift guide shortcuts in `StartHereGuide.jsx`, and inline expandable
+  toggles across Consignments, Batches, Fulfillment, and Pasabuy.
 - **Start-here guide** + floating 🧭 **Guide** button — the daily workflow,
   written so staff can self-onboard without being told.
 - **Dashboard Guide (AI)** — honest, grounded Q&A about what each screen is for
@@ -248,6 +281,8 @@ a service-role or secret key, and it activates no prepared API route.
   stacked layouts). Data tables scroll horizontally on phones.
 - **Storefront** — mobile-first globe section, real Italy→Manila flight
   animation, chameleon product backgrounds, unified light/dark theme.
+- **Verification Evidence** — Full operational and boundary verification report
+  is documented in `../MAP_017_AND_ADMIN_WORKFLOW_GUIDES_EVIDENCE_2026-08-15.md`.
 
 ---
 
@@ -348,11 +383,24 @@ unsafe seed has been disabled, and repository, Git-history, and existing-build
 secret scans pass. On 14 August 2026, a modern secret key passed a bounded provider
 read and legacy API-key use was disabled; the old key now returns 401 as an
 `apikey`. The old service-role JWT still grants elevated Bearer access when paired
-with the public key. The only active Edge Function, `invite-staff` version 3,
-still needs the locally prepared modern-secret correction deployed and tested.
+with the public key. On 15 August the real replacement handler passed local
+behavior tests covering AAL2, strict origins/schema, provider failures, existing-
+user recovery, target resolution, role persistence, durable replay/conflict,
+concurrency, rate limiting, and retry recovery. A prepared database migration
+was then applied and the hardened modern-key function was deployed as active
+version 5. Exact-origin preflight and unauthenticated/foreign-origin denials passed
+live, and rollback-only SQL proved claim/replay/conflict/stale recovery without
+retaining fixtures. A real Admin AAL2 success path remains unproven.
 The 24-hour provider query contained only 12 database/pooler events and did not
 prove API/Auth/Edge activity safe. Full containment remains blocked on runtime
-cutover, fuller evidence, and owner-approved JWT signing-key revocation.
+cutover, fuller evidence, and execution of the owner-authorized JWT signing-key
+migration/revocation. Authorization was recorded on 15 August 2026 and used for
+the bounded Supabase deployment. A secure Vercel connector then verified the real K2
+team, separate READY storefront/Admin production deployments, truthful build-target
+markers, and modern publishable-key bundles with no legacy JWT or elevated key value.
+Revocation remains withheld until a real Admin AAL2 success test prevents lockout.
+The public JWKS confirms ES256 signing is active, while legacy old-token rejection
+remains unproven.
 
 Local and Vercel Admin browser configuration now prefer the modern Supabase
 publishable key from either the build environment or local environment files
@@ -380,6 +428,13 @@ proved the vulnerable policies, grants, Storage null limits, and legacy Realtime
 membership were restored by rollback. This is strong compatibility/reversibility
 evidence but is not deployment; the public write and upload vulnerabilities
 remain live pending permanent application after credential disablement.
+
+MAP-017 now has fail-closed local schema/audit scaffolding and static contracts,
+but its metadata exporter, database migration rehearsal, behavioral authorization
+suite, and captured-baseline recovery executor are not implemented. Their CLIs
+return nonzero rather than claiming blocked work passed. Fabricated fixtures and
+SQL-string checks are tooling evidence only; they are not live-schema, database-
+behavior, apply, or recovery proof.
 
 The live guest RPC audit also found that order v2 returns the complete internal
 order row rather than a minimal receipt, legacy order v1 remains callable and
@@ -697,7 +752,7 @@ are not part of those artifacts and remain inactive.
 The following list records what the rejected completion draft claimed; it does
 not describe verified live behavior:
 
-1. **MAP-000 — Supabase Source-of-Truth & Environment Integrity**: Configured Supabase CLI (`project_id = pixplcjqivlfflickobf`), isolated client keys (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) from server secrets in `.env.example`, added fail-fast production guards in `supabaseClient.js`, and generated machine-readable `database.types.js`.
+1. **MAP-000 — Supabase Source-of-Truth & Environment Integrity**: Configured Supabase CLI (`project_id = pixplcjqivlfflickobf`), isolated browser-safe configuration (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`) from server secrets in `.env.example`, added fail-fast production guards in `supabaseClient.js`, and generated machine-readable `database.types.js`.
 2. **MAP-001 — Phone-First SKU Intake & Publication Gate**: Implemented `generate_k2_sku()` database sequence (`K2-SKU-XXXXXX`), 7-step resumable phone intake session modal (`ProductIntakeSessionModal.jsx`), barcode/SKU duplicate resolution, ChatGPT handoff contract (`k2.product-content.v3`), controlled first inventory lot creation, and single publication `status` enum.
 3. **MAP-002 — Canonical Media & 90-Day Shelf-Life Gate**: Consolidated primary front package image, prepared/use image, gallery, ingredients, instructions, and optional video (`MasterProduct.jsx`). Built `shelfLifeGate.js` enforcing category 90-day minimum rule for regular sale, 31–89 day clearance path, and 0–30 day unsellable gate.
 4. **MAP-003 — Pilot Catalog Load & Launch-Data Rehearsal**: Prepared 8 representative real Italian products (`K2-SKU-001001` to `K2-SKU-001008`) and 8 batch lots (`LOT-SAN-2026A` to `LOT-MUL-2026H`). Rehearsed data health and stock/expiry isolation from product rows.

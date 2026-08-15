@@ -1,5 +1,32 @@
 # MAP-016 Recovery Evidence Snapshot
 
+## Production cutover update — 15 August 2026
+
+- Owner-authorized migration applied to production and permission postflight passed.
+- Exact Admin origin installed and `invite-staff` version 5 deployed ACTIVE using
+  modern hosted publishable/secret key maps with no legacy fallback.
+- Live boundary results: approved preflight 204; foreign/missing origin 403;
+  approved-origin unauthenticated POST 401 with redacted correlation ID.
+- Rollback-only database postflight returned `MAP016_POSTFLIGHT_PASSED` for claim,
+  replay lock, completed replay, conflict, and stale recovery; no test receipt retained.
+- Repository shared Edge Auth plus Admin/storefront BFF helpers require the modern
+  publishable key and their security contracts pass.
+- The stale CLI link was bypassed with the existing secure Vercel connector. It
+  verified the K2 team, separate storefront/Admin projects, READY production builds,
+  exact build-target markers, and no 24-hour runtime-error clusters. Active bundles
+  contain the modern publishable key and no legacy JWT/service-role/secret value.
+  Legacy signing-key revocation remains pending a real Admin AAL2 invite.
+- Public JWKS metadata confirms an active ES256 key. No secret or user content is
+  recorded in this evidence file; provider originals remain owner-retained.
+- Post-change verification: 11 handler contracts passed; Edge/Admin BFF/guest BFF
+  guards passed; fabricated-secret tests passed; 745 repository files scanned clean.
+- Vercel device authorization repeatedly returned `Not authorized`. A newly issued
+  refresh credential was accidentally emitted during diagnosis, immediately logged
+  out, and its private local auth file confirmed removed. No K2 Vercel resource was
+  accessed or changed. Owner dashboard evidence then confirmed every CLI token from
+  these attempts revoked/removed; the credential value is not reproduced in any
+  project record.
+
 **Captured:** 11 August 2026
 
 This file is a continuity/evidence snapshot, not a plan or competing backlog.

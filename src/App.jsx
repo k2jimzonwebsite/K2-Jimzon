@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { StoreProvider, useStore } from './context/StoreContext'
+import { AdminStoreProvider } from './context/AdminStoreContext'
 import { GlobeCmsProvider } from './data/globeCms'
 import DemoRail from './components/nav/DemoRail'
 import MobileNavBar from './components/nav/MobileNavBar'
@@ -82,9 +83,11 @@ export default function App() {
   return (
     <ErrorBoundary>
       <GlobeCmsProvider>
-      <StoreProvider enableAdminData>
-          <Shell />
-        </StoreProvider>
+        <AdminStoreProvider>
+          <StoreProvider enableAdminData>
+            <Shell />
+          </StoreProvider>
+        </AdminStoreProvider>
       </GlobeCmsProvider>
     </ErrorBoundary>
   )

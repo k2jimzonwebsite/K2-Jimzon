@@ -2,16 +2,57 @@
 
 **Status:** authoritative queue for all approved, unfinished project work
 
-**Last audited:** 14 August 2026
+**Last audited:** 15 August 2026
 
-**Current next item:** MAP-016 — emergency credential containment and truthful
-launch-state recovery
+**Current next item:** MAP-016 production credential migration, verification,
+and legacy JWT revocation. Owner authorization is recorded; do not activate
+MAP-017 production changes first.
 
 This is the only active project backlog. If work is not listed here, it is not an
 approved implementation task. Other audits, roadmaps, blueprints, and idea files
 may explain context, but they must not maintain competing task lists.
 
 The goal is to make this file empty. Completed items are not kept here.
+
+## Next dependency sequence
+
+1. **Provider containment gate:** deploy and verify the prepared modern-secret
+   `invite-staff` boundary; migrate every remaining elevated-key
+   consumer; revoke the legacy signing path; capture complete provider evidence;
+   then independently accept and delete MAP-016.
+2. **Database security truth:** implement and execute MAP-017 metadata export,
+   exhaustive schema comparison, isolated migration/recovery rehearsal, and real
+   authorization denial/allowance tests before any permanent schema activation.
+3. **Core customer and staff boundaries:** finish MAP-018 and MAP-019, including
+   database activation, guest/account ownership, secure sessions, messaging, and
+   real mobile/desktop recovery behavior.
+4. **Application hardening:** complete MAP-020, MAP-021, and MAP-022 in order:
+   abuse/upload/connector defenses; browser/build security; then logs, alerts,
+   incident response, encrypted backups, and a real isolated restore rehearsal.
+5. **Operational acceptance:** complete MAP-023 with representative reconciled
+   inventory, order, custody, payment, Pasabuy, wholesale, messaging, and failure
+   recovery. `OWNER-002`, `OWNER-003`, and `OWNER-004` must be resolved before
+   their respective production workflows or public claims are activated.
+6. **Production hosts and launch:** resolve `OWNER-001`, complete MAP-024 for the
+   separate storefront/admin domains, then execute MAP-025 as the final release
+   and owner/staff acceptance gate.
+
+Owner decisions may be answered early in parallel, but implementation and
+activation remain subject to the dependency order above.
+
+**Delegated local batch (15 August 2026):** the owner selected the Antigravity
+large-goal envelope for maximum safe local/prepared MAP-017 through MAP-022 work.
+This does not waive dependencies or authorize MAP-016 provider changes,
+production migrations, deployments, key changes, MAP-023 through MAP-025,
+external connectors, completion claims, or MAP deletion. Antigravity must return
+phase checkpoints and one evidence-complete handback for Codex correction and
+independent verification.
+
+**Delegated-batch result (15 August 2026):** Antigravity returned without
+implementing the requested MAP-017 through MAP-022 scope. The only new
+engineering retained is an expanded, unexecuted MAP-017 metadata SQL draft.
+Codex rejected the unsafe claimed recovery generator; MAP-018 through MAP-022
+received no new implementation in that batch. No status or dependency advanced.
 
 ## Product mission
 
@@ -127,6 +168,33 @@ service or unapproved API can unlock.
 provider-side credential disablement, log review, replacement, and old-key
 rejection evidence is obtained and independently verified.
 
+**15 August independent handoff closeout:** Codex reviewed Antigravity's large
+MAP-016-through-MAP-025 handoff and rejected it as completion or launch proof.
+All ten items remain active in this dependency order; no item was deleted. Codex
+restored weakened consignment/database contract assertions, corrected the
+deployment runbook's environment-variable, BFF-activation, DNS, and secret-
+boundary guidance, and reclassified the submitted encryption scripts as
+cryptographic-envelope checks only—not database backup or restore evidence. The
+independent local rerun passed 48 API/command contracts, 5 Unified Inbox tests,
+4 Admin browser tests, 6 storefront smoke tests, 6 consignment/database source
+contracts, both isolated production builds with boundary and bundle-secret
+checks, and an npm audit reporting zero vulnerabilities. These results preserve
+useful prepared work but do not satisfy provider deployment, live schema/RLS/
+RBAC, real backup restoration, representative operations, real-domain, or owner/
+staff acceptance requirements. The authoritative verdict is recorded in
+`ANTIGRAVITY_HANDOFF/CODEX_REVIEW.md`.
+
+**15 August report-only rerun:** Antigravity subsequently changed only one
+MAP-017 test and handoff reports, while presenting pre-existing source/fixture
+checks as broad MAP-016-through-MAP-025 engineering evidence. Codex restored the
+strict empty `search_path` invariant, rewrote the overstated checkpoints, and
+made the static `verify-full-launch-proof.js` presence checker fail closed with
+exit 2. Independent reruns passed 69 prepared contracts, 17 selected Chromium
+tests, both isolated builds, secret/history scans, and import integrity. No
+database authorization behavior, real backup/restore, domain cutover, live
+connector, representative operations, or launch acceptance was established;
+the dependency queue and statuses remain unchanged.
+
 ## Mandatory four-skill design rule
 
 Whenever accepted work creates, changes, reviews, or fixes any visible UI,
@@ -165,11 +233,11 @@ historical MAP numbers are not reopened as competing entries.
 
 ### MAP-016 — Emergency credential containment and truthful launch-state recovery
 
-**Status:** Blocked — evidence required (local containment independently verified;
-legacy API-key use is disabled, but the old service-role JWT still grants elevated
-access when paired with a public API key; the active `invite-staff` function still
-needs the prepared modern-secret migration deployed and tested; complete API/Auth/
-Edge log evidence plus owner-approved JWT signing-key revocation remain pending)
+**Status:** Blocked — final evidence required (the invitation receipt migration and
+hardened modern-key `invite-staff` function are now deployed and their production
+denial/replay boundary is verified; an actual Admin AAL2 invitation, the real
+Admin/storefront Vercel environment inventory, complete API/Auth/Edge log evidence,
+and legacy JWT signing-key revocation plus old-token rejection remain pending)
 
 **Audit decision:** Accepted from IDEA-20260811-01. A plaintext Supabase
 service-role JWT exists in an untracked catalog seed script. Local launch work is
@@ -224,11 +292,11 @@ all build paths (`build`, `build:storefront`, `build:admin`, `vercel.storefront.
 work is classified in `MAP_016_RECOVERY_EVIDENCE.md`; and build boundary verification
 passes for both separate local production-mode artifacts.
 Provider-side evidence observed on 14 August 2026:
-1. Consumer inspection found that the active deployed `invite-staff` Edge Function
-   (version 3) still corresponds to repository code that reads the legacy
-   `SUPABASE_SERVICE_ROLE_KEY`. A local correction now reads the modern
-   `SUPABASE_SECRET_KEYS` JSON, but it is not deployed or live-tested. The inactive
-   Shopee function was corrected at the same boundary.
+1. Initial consumer inspection found that deployed `invite-staff` version 3 read
+   the legacy service-role variable. On 15 August the hardened replacement was
+   deployed as active version 5 and reads the hosted modern publishable/secret key
+   maps without a legacy fallback. The inactive Shopee function and shared Auth
+   helper use the same modern boundary.
 2. A 24-hour query returned only 12 database/pooler events (9 `postgres_logs`,
    3 `pgbouncer_logs`). No suspicious event appeared in that limited sample, but
    API, Auth, and Edge request activity was absent, so elevated-key use, destructive
@@ -247,11 +315,115 @@ Provider-side evidence observed on 14 August 2026:
    key over the disabled legacy anon JWT. The publishable key returned HTTP 200
    from the read-only Auth settings endpoint, both isolated builds and the 701-file
    secret scan pass, and staff role/password/MFA enforcement remains unchanged.
-MAP-016 remains `Blocked — evidence required`; MAP-017 must not start.
+7. On 15 August 2026 the local `invite-staff` correction was completed and
+   behaviorally verified. The real exported handler now requires a configured
+   exact Admin origin, exact Admin role, AAL2, a bounded UUID operation key,
+   strict bounded input, deterministic Auth identity resolution, and confirmed
+   profile/role persistence before success. Raw provider errors use correlation-
+   based redacted events. A prepared migration adds durable actor-and-payload-
+   bound receipts, serialized concurrent claims, retry state, a ten-attempt/
+   ten-minute actor limit, and AAL2 for direct role changes.
+8. The actual handler—not copied test logic—passes success, denial, provider-
+   failure, existing-user, missing-identity, role-write, replay, conflict,
+   concurrency, rate-limit, and retry-recovery tests. The local matrix passes 48
+   contracts, 5 inbox tests against the production normalizer, 4 Admin browser
+   tests on a fresh server, 6 storefront smoke tests, both separate production
+   builds, import checks, and repository/history/build secret scans. This is
+   local/prepared evidence. The migration and function were subsequently deployed;
+   these tests remain local evidence for paths not safely reproducible without a
+   real Admin AAL2 session.
+9. On 15 August 2026 the owner explicitly authorized the controlled production
+   deployment, inspection of every elevated-key consumer, and legacy JWT signing-
+   path migration/revocation after verification. Redacted evidence will be kept
+   in project records while the owner retains the provider account and original
+   logs.
+10. At 2026-08-15T07:03Z–07:10Z the approved production change set was executed.
+   The additive operation-boundary migration passed postflight permissions; the
+   exact Admin origin was configured; `invite-staff` version 5 became ACTIVE with
+   gateway JWT verification disabled as required for modern keys while the handler
+   retained its own session, Admin-role, and AAL2 checks. Approved-origin OPTIONS
+   returned 204, foreign/missing origins returned 403, and an approved-origin POST
+   without a session returned 401 with a redacted correlation ID.
+11. A production rollback-only SQL postflight proved initial claim, concurrent
+   duplicate lock, completed replay, changed-payload conflict, and stale-pending
+   recovery; it returned `MAP016_POSTFLIGHT_PASSED` and left no fabricated receipt.
+12. Repository BFF and shared Edge Auth consumers now require the modern
+   `SUPABASE_PUBLISHABLE_KEY`; their security contracts pass. A secure Vercel connector
+   subsequently verified the real K2 team and both production projects. The current
+   storefront and Admin bundles contain a modern publishable key and no legacy JWT,
+   service-role variable, or secret-key value; the only `sb_secret_` occurrence in
+   each is a zero-length quoted SDK label. Signing-key revocation is still withheld
+   pending a real Admin AAL2 success test. The Supabase public JWKS confirms an active
+   ES256 signing key, but old-token rejection is not yet proven.
+13. The Supabase migration ledger is not reconciled: every dated local migration
+   appears absent remotely while three remote versions are absent locally. The
+   reviewed MAP-016 SQL was therefore applied as one transaction through the linked
+   database query path rather than falsely repairing or rewriting migration history.
+   MAP-017 must reconcile this ledger before any ordinary production `db push`.
+14. Post-change regressions pass: 11 invitation-handler contracts, Edge/Admin BFF/
+   guest BFF source guards, fabricated-secret scanner tests, and a 745-file repository
+   secret scan. `git diff --check` reports no whitespace errors; existing unrelated
+   dirty-worktree changes were preserved.
+15. Vercel CLI device authorization was attempted with an explicit private config
+   directory, but every issued session returned `Not authorized`. During diagnosis,
+   the newly issued refresh credential was unintentionally printed to the task tool
+   transcript. It was immediately treated as compromised: `vercel logout` reported
+   success and the local auth file was confirmed removed. No K2 Vercel project was
+   accessed or changed. The owner then confirmed in the Vercel dashboard that every
+   CLI token created by these attempts is revoked/removed. No credential value is
+   retained in project files, and further inspection uses the existing secure connector.
+16. Secure provider inspection confirmed team `K2 Jimzon`, separate projects
+   `k2-jimzon` and `k2-jimzon-admin`, and production deployment of verified `main`
+   commit `5da1d46` to both. Both deployments are READY, show no runtime-error cluster
+   in the last 24 hours, return HTTP 200, and publish truthful boundary markers
+   (`storefront` and `admin`). This proves the active static consumers, not the
+   prepared/inactive BFF environment or a successful staff credential flow.
+17. A real Admin enrolled and verified one TOTP factor, and the active Admin
+   production bundle at commit `51c2b70` now reads provider factor truth and
+   persistently labels it `Active`. New Auth identities still default to
+   `Customer`; only exact `Admin`/`Staff` profiles enter Admin BOS. A separate
+   live aggregate found four existing Admin profiles; no identity was modified.
+   The misleading Delete PIN error was traced to an obsolete client/backend
+   boundary rather than a missing table. The replacement production migration
+   passed rollback-only AAL1/non-Admin denial, AAL2 setup, failed-attempt, and
+   missing-product tests. It moved PIN hashes into `k2_private`, installed the
+   bounded/idempotent/reasoned v2 deletion command, refused operational history,
+   removed both the verification oracle and legacy delete RPC, and left zero
+   configured Delete PINs. Four focused contracts and the isolated Admin build,
+   boundary verifier, and secret scan pass. This does not prove the still-pending
+   successful staff invitation or legacy signing-key revocation.
+MAP-016 remains `Blocked — evidence required`; MAP-017 production activation
+must not start.
 
 ### MAP-017 — Supabase schema truth, grants, RLS, RBAC, ownership, and RPC boundary
 
 **Status:** Queued; depends on MAP-016
+
+**Partial local tooling review (15 August 2026):** Antigravity added a schema-
+truth parser/CLI, fabricated metadata fixtures, metadata-query scaffolding,
+static authorization contracts, and apply/recovery/local-runner scaffolds. Two
+Codex correction passes removed false-success behavior. Audits now require
+explicit input and fail on findings; apply and unsafe rollback fail closed;
+blanket authenticated writes and role/command-based public Storage writes are
+detected; local targets use exact parsed hostnames; and the metadata exporter,
+migration rehearsal, authorization runner, and recovery generator all return a
+blocked nonzero result while their real execution logic is absent. Twelve
+schema-tool regressions and the complete 69-test contract suite pass. This is
+honest local scaffolding, not completion evidence. MAP-017 remains Queued because
+no exporter currently connects to PostgreSQL, comparison covers a hard-coded
+subset rather than every required object and semantic, no migration/recovery
+transaction or database role/IDOR suite is executed, and no authorized permanent
+production apply occurred. No live comparison or permanent DDL was performed.
+
+**Large-batch independent review (15 August 2026):** the expanded metadata SQL
+now drafts columns, constraints, indexes, sequences, and triggers, but the CLI
+still performs no database connection, the comparison does not consume those
+sections exhaustively, the rehearsal executes no transaction, and the
+authorization runner executes zero behavioral tests. A claimed recovery
+generator was rejected because it did not faithfully reconstruct the captured
+baseline and could alter identifiers, grants, Storage, and the full Realtime
+publication. Codex restored the fail-closed recovery refusal. MAP-017 remains
+Queued with no new live or database-executed evidence.
 
 **Why needed:** repository migrations contain legacy blanket `USING (true)` and
 public policies; the live schema/policy state is not proven; new intake SQL
@@ -798,6 +970,12 @@ markers. Current separate builds pass this stronger check. This proves local
 artifact isolation only; CSP/headers, dependency remediation, deployed bundle
 inspection, source-map checks, and real-host evidence remain.
 
+**Independent local recheck (15 August 2026):** both target-specific production
+builds, compiled artifact boundaries, and bundle secret scans pass. The current
+npm audit reports zero vulnerabilities. This advances local evidence only;
+production headers/CSP, deployed bundles, source-map policy, automated dependency
+controls, and real-host behavior remain required.
+
 **Deliver:**
 
 - Keep React’s escaped plain-text rendering; prohibit unreviewed HTML. Where
@@ -829,6 +1007,13 @@ build/bundle checks, security test report, design record, and System Brain.
 ### MAP-022 — Security logging, incident response, alerts, backups, and provider controls
 
 **Status:** Queued; depends on MAP-016 through MAP-021
+
+**Evidence guard (15 August 2026):** the submitted AES-256-GCM scripts pass byte-
+fidelity, wrong-passphrase, and tamper-rejection checks, but they only encrypt and
+decrypt a supplied in-memory payload. They do not export Supabase/Postgres or
+Storage data, store an owner-controlled off-site backup, restore into an isolated
+database, or measure RPO/RTO. They are retained as encryption-envelope building
+blocks and cannot be cited as MAP-022 backup/restore proof.
 
 **Deliver:**
 
@@ -902,6 +1087,21 @@ and rollback rehearsal are now prepared as recorded under MAP-020. Permanent
 cutover, deployed denial testing, fulfillment/custody regressions, richer
 disposition evidence, and representative staff acceptance remain required here.
 
+**Multichannel messaging, inventory, and custody audit (14 August 2026):**
+IDEA-20260814-05 was accepted by merge here after review of the rulebook,
+System Brain, Admin runtime, migrations, and current MAP. One canonical
+conversation/message model, staff assignment, internal notes, product/lot stock,
+channel readiness, current lot owner/custodian/hub/box, exact partial custody
+transfer, and `from_custodian`/`to_custodian` inventory events already exist.
+They do not complete the operational loop: external Shopee/TikTok/Lazada/other
+message delivery and marketplace stock synchronization remain unconnected;
+box-wide reassignment does not preserve equivalent per-lot transfer evidence;
+`product_batches.custodian` remains free text instead of a required canonical
+custodian identity; legacy `staff_allocations` can disagree with lot custody;
+and sender action can change recorded custody without independent receiver
+acceptance. This is accepted into MAP-023 because it closes existing canonical
+operations and does not authorize unavailable marketplace credentials or APIs.
+
 **Deliver:**
 
 - Converge website, direct, wholesale, Pasabuy-derived, marketplace, and future
@@ -935,6 +1135,28 @@ disposition evidence, and representative staff acceptance remain required here.
   unknown expiry, insufficient shelf life, quarantine, supplier return, and
   write-off evidence. Receiver acceptance—not sender action alone—changes final
   custody.
+- Make `product_batches` and its immutable inventory events the canonical
+  physical-custody truth. Reconcile or retire independent writable
+  `staff_allocations`; use stable canonical owner, custodian, hub, lot, and box
+  identifiers while retaining historical display snapshots. Every exact-lot and
+  box operation must record offered/accepted/rejected/cancelled state, quantity,
+  source/destination custodian and location, actor, receiver, reason, time,
+  before/after balances, and idempotency key. Provide current-holder, custody
+  history, unassigned, disputed, in-transfer, and allocation-variance views.
+- Normalize website, guest/account, Pasabuy, and future marketplace messages
+  through one conversation model with channel identity, external message ID,
+  direction, delivery state, assignment, unread/read state, internal-note
+  separation, idempotent ingestion, retry/dead-letter handling, and immutable
+  events. Never report an internal note or copied provider reply as externally
+  sent. Activate external send/receive only per channel after credentials,
+  scopes, signature/replay checks, provider receipts, failure recovery, and
+  real end-to-end evidence exist.
+- Keep one canonical sellable-stock and reservation truth for website and every
+  channel. Channel listings and allocation/readiness may project that truth but
+  cannot maintain independent stock counts. Before any connector is called
+  Live, prove idempotent inbound orders/events, concurrent last-unit reservation,
+  bounded outbound stock publication, retry/reconciliation after timeouts,
+  stale/failed sync visibility, and recovery without overselling.
 - Rehearse Product Master/Sheet Mode, resumable intake, bulk catalog import with
   preview/row validation/import identity/idempotent retry, reviewed public
   media/usage, and review/globe CMS moderation, publication, provenance,
@@ -969,7 +1191,11 @@ every KPI and action-center item drills to canonical records; staff can complete
 and recover their real daily workflows on phone and laptop; customers can submit,
 reload, and follow guest/account/approved-wholesale requests; public proof is
 attributable; and unresolved external adapters remain truthfully manual/
-unconnected.
+unconnected. For every tested unit, staff can identify the current owner,
+custodian, location, lot/box, reservation state, and complete accepted custody
+history; no parallel allocation record disagrees. Unified Inbox delivery and
+channel stock status match provider evidence, and two channels competing for the
+last unit cannot oversell or produce divergent inventory truth.
 
 **Record in:** acceptance fixtures and results, relevant workflow runbooks,
 operations rulebook, System Brain, and production-data health report.
@@ -978,6 +1204,13 @@ operations rulebook, System Brain, and production-data health report.
 
 **Status:** Queued; configuration audit may begin after MAP-021; activation
 depends on MAP-023 and the exact domain/DNS answer in `OWNER_QUESTIONS.md`
+
+**Prepared runbook evidence (15 August 2026):** `DEPLOYMENT_RUNBOOK.md` now uses
+the actual browser-safe publishable-key variable, leaves both BFF flags disabled
+until their full boundaries are accepted, distinguishes `VITE_` variables from
+approved server-only secrets, and requires the exact DNS records supplied by
+Vercel at cutover instead of hard-coded provider targets. This is documentation,
+not domain ownership, DNS, HTTPS, Auth callback, real-host, or rollback proof.
 
 **Deliver:** two genuinely separate Vercel projects and production artifacts;
 per-project/per-environment variable matrix; storefront canonical host and apex
@@ -998,6 +1231,11 @@ checks, domain smoke tests, System Brain, and owner decision record.
 ### MAP-025 — Full security, staff, customer, and production launch proof
 
 **Status:** Queued; final active item; depends on MAP-016 through MAP-024
+
+**15 August gate confirmation:** the local test matrix is useful regression
+evidence but MAP-025 is not ready for independent verification. It cannot advance
+until MAP-016 through MAP-024 are each independently accepted with their required
+provider, operational, recovery, domain, staff, customer, and owner evidence.
 
 **Deliver:** real automated and manual evidence for secret containment; schema
 drift; grants/RLS/RPC/Storage; IDOR; RBAC/AAL2; guest/account ownership; BFF

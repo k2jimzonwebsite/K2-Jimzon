@@ -1,0 +1,67 @@
+{
+  "project_ref": "fabricated-vulnerable-project-002",
+  "exported_at": "2026-08-11T12:00:00Z",
+  "format_version": "2026-08-15.map017.meta.v1",
+  "schemas": ["public", "storage"],
+  "tables": {
+    "brands": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "categories": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "warehouses": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "products": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "product_batches": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "product_drafts": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
+    "products_old": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" }
+  },
+  "views": {
+    "v_channel_catalog_readiness": { "securityInvoker": false, "owner": "postgres" },
+    "v_expiring_batches": { "securityInvoker": false, "owner": "postgres" }
+  },
+  "materialized_views": {},
+  "functions": {
+    "public.decrement_stock(text,integer)": { "disabled": false, "owner": "postgres", "grants": [{ "grantee": "authenticated", "privilege": "EXECUTE" }] },
+    "public.deduct_stock_fefo(text,integer)": { "disabled": false, "owner": "postgres", "grants": [{ "grantee": "authenticated", "privilege": "EXECUTE" }] }
+  },
+  "grants": {
+    "brands": [
+      { "grantee": "anon", "privilege": "SELECT" },
+      { "grantee": "anon", "privilege": "INSERT" },
+      { "grantee": "anon", "privilege": "UPDATE" },
+      { "grantee": "anon", "privilege": "DELETE" }
+    ],
+    "warehouses": [
+      { "grantee": "anon", "privilege": "INSERT" },
+      { "grantee": "anon", "privilege": "UPDATE" },
+      { "grantee": "anon", "privilege": "DELETE" }
+    ],
+    "products_old": [
+      { "grantee": "anon", "privilege": "SELECT" },
+      { "grantee": "anon", "privilege": "INSERT" },
+      { "grantee": "anon", "privilege": "UPDATE" }
+    ]
+  },
+  "policies": [
+    { "table_name": "brands", "policy_name": "Admin Full Access", "command": "ALL", "roles": ["public"], "using_expression": "true", "with_check_expression": "true" },
+    { "table_name": "warehouses", "policy_name": "Admin Full Access", "command": "ALL", "roles": ["public"], "using_expression": "true", "with_check_expression": "true" },
+    { "table_name": "product_drafts", "policy_name": "Allow all authenticated", "command": "ALL", "roles": ["authenticated"], "using_expression": "true", "with_check_expression": "true" }
+  ],
+  "storage": {
+    "buckets": {
+      "product-images": {
+        "id": "product-images",
+        "name": "product-images",
+        "public": true,
+        "file_size_limit": null,
+        "allowed_mime_types": null
+      }
+    },
+    "policies": [
+      { "policy_name": "Anyone can upload", "bucket_id": "product-images", "command": "INSERT", "roles": ["public"] }
+    ]
+  },
+  "realtime": {
+    "publication_tables": ["products", "products_old"]
+  },
+  "migrations": [
+    { "version": "20260809_operations_hardening", "inserted_at": "2026-08-09T00:00:00Z" }
+  ]
+}

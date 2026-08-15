@@ -5,8 +5,8 @@ remains exclusively in `MASTER_ACTION_PLAN.md`.
 
 ## Incident SEC-20260811-001
 
-**Status:** contained in the local source tree; provider-side revocation and
-activity review still required
+**Status:** modern invitation runtime deployed; final legacy-JWT revocation,
+old-token rejection, full activity review, and real Admin AAL2 success proof required
 
 **Detected:** 11 August 2026
 
@@ -80,9 +80,13 @@ must use separate, authorized, audited, idempotent operations.
 | Scanner bypass fix | Verified 14 Aug 2026 | Independent match evaluation; coexisting markers tested |
 | Automated bundle build gate | Verified 14 Aug 2026 | Build paths scan dist; contaminated builds fail closed |
 | Supabase last-used/log review | Partial — evidence gap | 24h query returned only 9 postgres and 3 pgbouncer events; API/Auth/Edge activity was absent, so elevated use and request volume were not ruled out |
-| Replacement server secret installed | Partial — runtime cutover unverified | Modern key passed a bounded read; active `invite-staff` still requires the prepared modern-secret code to be deployed and tested |
+| Replacement server secret installed | Verified for active Edge invite runtime 15 Aug 2026 | `invite-staff` version 5 ACTIVE; modern key maps consumed with no legacy fallback |
 | Legacy API-key use disabled | Verified with authorization gap 14 Aug 2026 | Management state is disabled and old `apikey` use returns 401; explicit pre-disable owner confirmation was not recorded |
 | Old JWT rejection verified | Blocked — elevated Bearer access remains | Public key alone exposed 26 rows; public key plus old service-role Bearer JWT exposed 30, matching the modern elevated key |
+| Invitation operation boundary | Verified 15 Aug 2026 | Production migration permission postflight passed; rollback-only replay/conflict/stale-recovery test passed with no retained test row |
+| Edge request boundary | Partial — denial paths verified | Exact-origin preflight 204; foreign/missing origin 403; exact-origin unauthenticated POST 401; real Admin AAL2 invite still required |
+| Production consumer inventory | Verified for active static bundles 15 Aug 2026 | Secure connector confirmed separate K2 storefront/Admin projects; both bundles use a modern publishable key and contain no legacy JWT, service-role variable, or secret-key value; prepared BFF environment remains inactive/unproven |
+| Vercel CLI authorization incident | Contained and owner-confirmed 15 Aug 2026 | Newly issued refresh credential was accidentally emitted during diagnosis after all CLI calls returned `Not authorized`; immediate CLI logout succeeded, private auth file removal was verified, and owner dashboard evidence confirms every CLI token from the attempts is revoked/removed; no Vercel project was accessed or mutated through the CLI |
 
 ### If suspicious activity is found
 

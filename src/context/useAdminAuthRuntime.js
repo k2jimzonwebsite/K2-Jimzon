@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { supabase, supabasePublicKey } from '../lib/supabaseClient'
 import {
   ADMIN_ROUTE, buildAdminOAuthRedirectUrl, clearAdminOAuthReturn,
@@ -18,6 +18,7 @@ export function useAdminAuthRuntime() {
   const [authReady, setAuthReady] = useState(false)
   const [mfaRequired, setMfaRequired] = useState(false)
   const [authError, setAuthError] = useState('')
+  const inviteOperationRef = useRef({ fingerprint: '', key: '' })
 
   const resolveRole = async (authUser) => {
     if (!supabase || !authUser) return null
@@ -216,18 +217,40 @@ export function useAdminAuthRuntime() {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return { ok: false, error: 'You must be signed in.' }
     const cleanEmail = email.trim().toLowerCase()
-    const { data: existing } = await supabase.from('user_profiles').select('id,email,role').ilike('email', cleanEmail).maybeSingle()
-    if (existing) {
-      const { error } = await supabase.rpc('set_user_role', { p_user_id: existing.id, p_role: role })
-      return error ? { ok: false, error: 'The staff role could not be updated.' } : { ok: true, note: `Updated role for ${cleanEmail} to ${role}.` }
+    const fingerprint = `${cleanEmail}\n${role}`
+    if (inviteOperationRef.current.fingerprint !== fingerprint || !inviteOperationRef.current.key) {
+      inviteOperationRef.current = { fingerprint, key: crypto.randomUUID() }
     }
     try {
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invite-staff`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}`, apikey: supabasePublicKey },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+          apikey: supabasePublicKey,
+          'X-Idempotency-Key': inviteOperationRef.current.key,
+        },
         body: JSON.stringify({ email: cleanEmail, role, redirectTo: window.location.origin }),
       })
-      return response.ok ? { ok: true } : { ok: false, error: 'The staff invitation could not be sent.' }
+      const payload = await response.json().catch(() => ({}))
+      if (response.ok && payload.ok && payload.roleAssigned) {
+        inviteOperationRef.current = { fingerprint: '', key: '' }
+        return {
+          ok: true,
+          note: payload.invited
+            ? `Invite sent to ${cleanEmail}; the ${role} role was assigned.`
+            : `The existing account for ${cleanEmail} now has the ${role} role.`,
+        }
+      }
+      const errors = {
+        AAL2_REQUIRED: 'Verify your authenticator before inviting staff.',
+        RATE_LIMITED: 'Too many invitations were attempted. Wait ten minutes and try again.',
+        OPERATION_IN_PROGRESS: 'This invitation is already being processed. Try again shortly.',
+        IDEMPOTENCY_CONFLICT: 'The invitation details changed. Close and retry the action.',
+        FORBIDDEN_ROLE: 'Only an Admin can invite staff.',
+        INVALID_EMAIL: 'Enter a valid email address.',
+      }
+      return { ok: false, error: errors[payload.error] || 'The staff invitation could not be completed.' }
     } catch {
       return { ok: false, error: 'The staff invitation could not be sent.' }
     }

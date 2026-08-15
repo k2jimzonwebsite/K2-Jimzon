@@ -1,4 +1,17 @@
-# Questions for the K2 Jimzon Owner
+# K2 Jimzon Master Owner Actions and Questions
+
+This file contains only actions and business decisions that require the owner.
+It is not an engineering backlog; implementation remains exclusively in
+`MASTER_ACTION_PLAN.md`.
+
+## Owner action priority
+
+| Priority | Owner item | Needed before | Current action |
+| --- | --- | --- | --- |
+| Early | `OWNER-002` reservation holds | MAP-023 reservation activation | Choose hold, expiry, and extension rules |
+| Early | `OWNER-003` wholesale and response claims | MAP-019/MAP-023 commercial activation | Choose eligibility, pricing, credit, minimums, and any SLA |
+| Early | `OWNER-004` public contact channels | Public Contact page activation | Supply the monitored business numbers/channels |
+| Before domains | `OWNER-001` domain and DNS | MAP-024 activation | Choose the domain and confirm DNS control/preservation |
 
 ## OWNER-001 — Production domain and DNS control
 
@@ -71,7 +84,7 @@ hard-coded 24-hour Pasabuy promise unless K2 adopts and measures it.
 **Why the owner must answer:** eligibility, prices, credit risk, minimums, and a
 public SLA are commercial promises, not safe engineering defaults.
 
-## OWNER-004 â€” Public phone, Viber, and WhatsApp details
+## OWNER-004 — Public phone, Viber, and WhatsApp details
 
 **Needed for:** publishing direct phone-based channels on the storefront Contact
 us page. Email, Messenger, Shopee, and secure Website messaging can proceed

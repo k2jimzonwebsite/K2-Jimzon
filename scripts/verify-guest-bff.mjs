@@ -36,9 +36,12 @@ const files = [
 for (const path of files) {
   const content = await readFile(new URL(`../${path}`, import.meta.url), 'utf8')
   assert.doesNotMatch(content, /SUPABASE_SERVICE_ROLE|SUPABASE_SECRET_KEY/, `${path} must use the limited key`)
+  assert.doesNotMatch(content, /SUPABASE_ANON_KEY/, `${path} must use the modern publishable key`)
   assert.doesNotMatch(content, /Access-Control-Allow-Origin['"\s:,]+\*/, `${path} must not use wildcard CORS`)
   assert.doesNotMatch(content, /error\.stack|error\.message\s*\|\|/, `${path} must not return provider internals`)
 }
+const storefrontSupabase = await readFile(new URL('../server/storefront-bff/supabase.js', import.meta.url), 'utf8')
+assert.match(storefrontSupabase, /SUPABASE_PUBLISHABLE_KEY/)
 
 const migration = await readFile(new URL('../supabase/migrations/20260812_guest_submission_boundary.sql', import.meta.url), 'utf8')
 const cutover = await readFile(new URL('../supabase/migrations/20260812_guest_submission_cutover.sql', import.meta.url), 'utf8')

@@ -4,6 +4,7 @@ import {
   adminBffEnabled, getAdminInbox, getAdminInboxHistory, markConversationReadBff,
   saveInternalNoteBff, updateConversationWorkflowBff,
 } from '../services/adminBffService'
+import { normalizeAdminConversation } from '../lib/adminInboxNormalization'
 
 export function useAdminInboxRuntime({ enabled }) {
   const [conversations, setConversations] = useState([])
@@ -11,37 +12,7 @@ export function useAdminInboxRuntime({ enabled }) {
   const [inboxState, setInboxState] = useState({ loading: true, error: '', phase2Ready: true })
   const secureInbox = adminBffEnabled()
 
-  const mapConversations = (data) => (data || []).map((conversation) => ({
-    id: conversation.id,
-    customer: conversation.customerName ?? conversation.customer_name,
-    channel: conversation.platform,
-    status: conversation.status || 'Open',
-    priority: conversation.priority || 'normal',
-    unreadCount: Number(conversation.unreadCount ?? conversation.unread_count ?? 0),
-    unread: Number(conversation.unreadCount ?? conversation.unread_count ?? 0) > 0,
-    assignedTo: conversation.assignedTo ?? conversation.assigned_to ?? null,
-    assignedName: conversation.assigned_profile?.full_name || conversation.assigned_profile?.email || '',
-    responseDueAt: conversation.responseDueAt ?? conversation.response_due_at ?? null,
-    lastInboundAt: conversation.lastInboundAt ?? conversation.last_inbound_at ?? null,
-    lastReadAt: conversation.lastReadAt ?? conversation.last_read_at ?? null,
-    resolvedAt: conversation.resolvedAt ?? conversation.resolved_at ?? null,
-    lastMessageAt: conversation.lastMessageAt ?? conversation.last_message_at ?? null,
-    time: (conversation.lastMessageAt ?? conversation.last_message_at)
-      ? new Date(conversation.lastMessageAt ?? conversation.last_message_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-      : 'No activity',
-    messages: (conversation.messages || []).map((message) => ({
-      id: message.id,
-      sender: (message.senderType ?? message.sender_type) === 'Customer' ? 'customer' : (message.senderType ?? message.sender_type) === 'AI' ? 'ai' : 'agent',
-      senderType: message.senderType ?? message.sender_type,
-      text: message.content,
-      isDraft: Boolean(message.isDraft ?? message.is_draft),
-      deliveryStatus: (message.deliveryStatus ?? message.delivery_status) || ((message.senderType ?? message.sender_type) === 'Customer' ? 'received' : 'internal_only'),
-      sentAt: message.sentAt ?? message.sent_at ?? null,
-      failureReason: message.failed ? 'External delivery failed.' : '',
-      createdAt: message.createdAt ?? message.created_at,
-    })).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
-    intent: 'general',
-  }))
+  const mapConversations = (data) => (data || []).map(normalizeAdminConversation)
 
   const fetchConversations = async () => {
     if (secureInbox) {

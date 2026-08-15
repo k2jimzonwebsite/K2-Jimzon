@@ -29,6 +29,12 @@ MAP-011. The former product-transformation idea was audited into MAP-002. Their
 full earlier wording remains recoverable in Git history; only the actionable,
 still-needed scope remains in the Master Action Plan.
 
+On 14 August 2026, the multichannel messaging/inventory and inventory-custody
+truth idea was captured, audited, and merged into MAP-023. The audit found that
+the canonical models exist, but external messaging/stock adapters and a complete
+receiver-confirmed custody history remain unfinished. This inbox is therefore
+still empty; the accepted scope lives only in `../MASTER_ACTION_PLAN.md`.
+
 ## New idea template
 
 ```markdown

@@ -12,6 +12,24 @@ invent business policy, fabricate provider evidence, or call prepared work live.
 Codex will independently verify your work later. Your final state is `Ready for
 independent verification`, never `Complete`. Do not delete the MAP item.
 
+## Handoff relay
+
+For repository-based collaboration, also read
+`ANTIGRAVITY_HANDOFF/README.md` and `ANTIGRAVITY_HANDOFF/CURRENT_TASK.md`.
+`CURRENT_TASK.md` narrows the present run but never overrides MAP scope or
+dependency order. At the end of the run, replace
+`ANTIGRAVITY_HANDOFF/LATEST_REPORT.md` with the complete report required below.
+Codex will record its independent findings in
+`ANTIGRAVITY_HANDOFF/CODEX_REVIEW.md`. These are handoff artifacts, not a second
+backlog.
+
+When the owner explicitly selects `ANTIGRAVITY_HANDOFF/LARGE_GOAL_PROMPT.md`,
+that file authorizes one dependency-gated multi-item preparation run. It is an
+execution envelope, not another backlog: the MAP still owns all scope and order.
+The large-goal exception never authorizes production/provider mutations, owner
+decisions, deletion of MAP items, unsupported completion claims, or advancing a
+production activation past an unmet dependency.
+
 ## Read before acting
 
 Read these files in order, completely:
@@ -41,9 +59,13 @@ overwrite, or reformat unrelated work.
    second plan, roadmap, TODO file, or hidden scope.
 5. Keep unrelated improvements out of the change.
 
-The current authorized item is MAP-016. Do not begin MAP-017 or later until
-MAP-016 is independently verified or its remaining work is explicitly waived by
-the owner and recorded truthfully.
+The ordinary current authorized item is MAP-016. Do not begin MAP-017 or later
+unless MAP-016 is independently verified, its remaining work is explicitly
+waived by the owner and recorded truthfully, or the owner has explicitly selected
+`LARGE_GOAL_PROMPT.md`. Under that large-goal exception, later MAP work may be
+implemented only at the local/prepared evidence level when an earlier production
+gate is unresolved; it may not be activated, called complete, or used as evidence
+that the earlier gate passed.
 
 ## Stop and report before acting when
 
@@ -199,7 +221,9 @@ Never promote one evidence level into another.
 
 ## Mandatory complete report back
 
-Return one report using exactly these headings:
+Return one report using exactly these headings. For the explicitly selected
+large-goal run, cover every phase under the same 14 headings and add the required
+MAP-016 through MAP-025 evidence matrix; do not create separate final reports.
 
 ### 1. Executive result
 

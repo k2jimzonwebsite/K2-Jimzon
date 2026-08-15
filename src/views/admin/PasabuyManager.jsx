@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { peso } from '../../data/products'
 import { supabase } from '../../lib/supabaseClient'
 import { ArrowIcon, InboxIcon } from '../../components/ui/icons'
+import PasabuyWorkflowDiagram from '../../components/admin/guides/PasabuyWorkflowDiagram'
 import {
   adminBffEnabled, getAdminPasabuy, savePasabuyQuoteBff, transitionPasabuyBff,
 } from '../../services/adminBffService'
@@ -80,6 +81,7 @@ export default function PasabuyManager() {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [transitionReason, setTransitionReason] = useState('')
+  const [showPasabuyGuide, setShowPasabuyGuide] = useState(false)
 
   const load = useCallback(async () => {
     if (secureAdmin) {
@@ -240,6 +242,22 @@ export default function PasabuyManager() {
         status={loading ? 'Loading request evidence' : `${openRequests.length} open cases`}
         statusTone={openRequests.length ? 'warning' : 'success'}
       />
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => setShowPasabuyGuide((v) => !v)}
+          className="flex items-center gap-1.5 rounded-adm-sm border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-bold text-cyan-400 hover:bg-cyan-500/20"
+        >
+          <span>{showPasabuyGuide ? 'Hide Sourcing Map ▴' : '🗺️ View Pasabuy Sourcing & Quoting Map ▸'}</span>
+        </button>
+      </div>
+
+      {showPasabuyGuide && (
+        <div className="animate-in fade-in duration-200">
+          <PasabuyWorkflowDiagram />
+        </div>
+      )}
 
       <MetricRail items={[
         { label: 'Open cases', value: loading ? '--' : openRequests.length, detail: 'Intake through arrival', tone: openRequests.length ? 'text-amber' : 'text-white' },

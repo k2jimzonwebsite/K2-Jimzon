@@ -1,14 +1,16 @@
 // Auth & secret verification helper for Supabase Edge Functions
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { getPublishableKey } from './service-role.ts'
 
 export async function verifyUserToken(req: Request) {
   const authHeader = req.headers.get('Authorization')
   if (!authHeader) return null
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL') || ''
-  const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY') || ''
+  const supabasePublishableKey = getPublishableKey()
+  if (!supabaseUrl || !supabasePublishableKey) return null
 
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  const supabase = createClient(supabaseUrl, supabasePublishableKey, {
     global: { headers: { Authorization: authHeader } },
   })
 

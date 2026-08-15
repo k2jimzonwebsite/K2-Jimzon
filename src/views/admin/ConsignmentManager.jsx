@@ -4,6 +4,7 @@ import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { AlertIcon, BarcodeIcon, CheckIcon, PlaneIcon } from '../../components/ui/icons'
 import ConsignmentScannerModal from './ConsignmentScannerModal'
 import DiscrepancyReconciliationModal from './DiscrepancyReconciliationModal'
+import FlightWorkflowDiagram from '../../components/admin/guides/FlightWorkflowDiagram'
 import {
   addConsignmentLineBff, adminBffEnabled, advanceConsignmentBff,
   createConsignmentBff, finalizeConsignmentBff, getAdminConsignments,
@@ -21,6 +22,7 @@ export default function ConsignmentManager() {
   const [notice, setNotice] = useState('')
   const [showCreate, setShowCreate] = useState(false)
   const [showLine, setShowLine] = useState(false)
+  const [showGuide, setShowGuide] = useState(false)
   const [scannerStage, setScannerStage] = useState(null)
   const [showReconcile, setShowReconcile] = useState(false)
   const [advanceTarget, setAdvanceTarget] = useState('')
@@ -213,12 +215,34 @@ export default function ConsignmentManager() {
 
   if (loading) return <div className="rounded-adm border border-adm-line bg-adm-surface p-10 text-center text-sm text-white/55">Loading latest consignment…</div>
 
+  const flightStepIndex = manifest?.status === 'Packing_Italy' ? 0 : manifest?.status === 'In_Transit' ? 1 : manifest?.status === 'Arrived_Manila' ? 2 : 3
+
   return <div className="mx-auto max-w-7xl space-y-5 text-white">
     <div className="rounded-adm border border-adm-line bg-adm-surface p-5">
-      <p className="text-xs font-semibold uppercase tracking-wider text-gold">Italy to Philippines custody</p>
-      <div className="mt-1 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><h1 className="font-sans text-2xl font-bold">Consignment receiving</h1><p className="mt-1 max-w-2xl text-sm text-white/55">Every flight, box, lot, and unit scan remains identifiable from Milan packing through Manila recount.</p></div><button onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button></div>
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-semibold uppercase tracking-wider text-gold">Italy to Philippines custody</p>
+        <button
+          onClick={() => setShowGuide((v) => !v)}
+          className="flex items-center gap-1.5 rounded-adm-sm border border-sky-500/30 bg-sky-500/10 px-3 py-1 text-xs font-bold text-sky-400 hover:bg-sky-500/20"
+        >
+          <span>{showGuide ? 'Hide Workflow Map ▴' : '🗺️ View Receiving Flow Map ▸'}</span>
+        </button>
+      </div>
+      <div className="mt-2 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div>
+          <h1 className="font-sans text-2xl font-bold">Consignment receiving</h1>
+          <p className="mt-1 max-w-2xl text-sm text-white/55">Every flight, box, lot, and unit scan remains identifiable from Milan packing through Manila recount.</p>
+        </div>
+        <button onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button>
+      </div>
       {manifests.length > 0 && <label className="mt-4 block max-w-md text-xs font-semibold text-white/55">Working manifest<select className={`${input} mt-1.5`} value={selectedManifestId} onChange={event => { const id = event.target.value; setSelectedManifestId(id); setManifest(manifests.find(item => item.id === id) || null) }}>{manifests.map(item => <option key={item.id} value={item.id}>{item.manifest_code} · {item.status.replaceAll('_', ' ')}</option>)}</select></label>}
     </div>
+
+    {showGuide && (
+      <div className="animate-in fade-in duration-200">
+        <FlightWorkflowDiagram activeStep={flightStepIndex} />
+      </div>
+    )}
 
     {(error || notice) && <div role={error ? 'alert' : 'status'} className={`flex items-start gap-2 rounded-adm-sm border p-3 text-sm ${error ? 'border-crimson/40 bg-crimson/10 text-crimson' : 'border-forest/40 bg-forest/10 text-forest'}`}>{error ? <AlertIcon size={17} /> : <CheckIcon size={17} />}<span>{error || notice}</span></div>}
 

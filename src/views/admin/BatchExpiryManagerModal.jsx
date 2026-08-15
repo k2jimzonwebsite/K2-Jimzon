@@ -4,6 +4,8 @@ import {
   adminBffEnabled, getAdminLots, reconcileLotsBff, setLotClearanceBff,
 } from '../../services/adminBffService'
 import { AlertIcon, CheckIcon, MinusIcon, PlusIcon, XIcon } from '../../components/ui/icons'
+import FefoWorkflowDiagram from '../../components/admin/guides/FefoWorkflowDiagram'
+import CustodyWorkflowDiagram from '../../components/admin/guides/CustodyWorkflowDiagram'
 
 const STATUSES = ['available', 'quarantine', 'damaged', 'expired', 'unaccounted', 'depleted']
 
@@ -65,6 +67,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
   const [reason, setReason] = useState('')
   const [clearance, setClearance] = useState(null)
   const [clearanceReason, setClearanceReason] = useState('')
+  const [showGuide, setShowGuide] = useState(null) // null | 'fefo' | 'custody'
   const [newLot, setNewLot] = useState({ box: '', batch: '', quantity: 1, expiry: '', hub: '', custodian: '', channel: '' })
   const reconcileKey = useRef(null)
   const clearanceKeys = useRef(new Map())
@@ -231,9 +234,48 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
           {error && <div role="alert" className="mb-4 flex gap-3 rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm text-red-200"><AlertIcon className="mt-0.5 shrink-0" /><span>{error}</span></div>}
 
           <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
-            <div><h3 className="text-base font-bold text-white">Lots in FEFO order</h3><p className="text-sm text-white/60">Flags are reminders only. Expiry eligibility controls dispatch.</p></div>
-            <p className="text-xs font-semibold text-white/55">{secure ? 'Secure boundary prepared' : 'Current direct mode'}</p>
+            <div>
+              <h3 className="text-base font-bold text-white">Lots in FEFO order</h3>
+              <p className="text-sm text-white/60">Flags are reminders only. Expiry eligibility controls dispatch.</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setShowGuide((g) => (g === 'fefo' ? null : 'fefo'))}
+                className={`rounded-adm-sm border px-2.5 py-1 text-xs font-semibold transition-all ${
+                  showGuide === 'fefo'
+                    ? 'border-amber-500/50 bg-amber-500/15 text-amber-300'
+                    : 'border-adm-line text-white/60 hover:bg-white/6 hover:text-white'
+                }`}
+              >
+                ⏳ {showGuide === 'fefo' ? 'Hide FEFO Map' : 'FEFO Rules Map'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowGuide((g) => (g === 'custody' ? null : 'custody'))}
+                className={`rounded-adm-sm border px-2.5 py-1 text-xs font-semibold transition-all ${
+                  showGuide === 'custody'
+                    ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300'
+                    : 'border-adm-line text-white/60 hover:bg-white/6 hover:text-white'
+                }`}
+              >
+                🤝 {showGuide === 'custody' ? 'Hide Custody Map' : 'Custody Flow'}
+              </button>
+              <p className="text-xs font-semibold text-white/55">{secure ? 'Secure boundary prepared' : 'Current direct mode'}</p>
+            </div>
           </div>
+
+          {showGuide === 'fefo' && (
+            <div className="mb-4 animate-in fade-in duration-200">
+              <FefoWorkflowDiagram />
+            </div>
+          )}
+
+          {showGuide === 'custody' && (
+            <div className="mb-4 animate-in fade-in duration-200">
+              <CustodyWorkflowDiagram />
+            </div>
+          )}
 
           {loading ? (
             <div aria-label="Loading physical lots" className="space-y-2">

@@ -7,6 +7,7 @@
  */
 
 import { supabase } from '../lib/supabaseClient'
+import { validateUploadFile } from '../lib/uploadValidation'
 import {
   adminBffEnabled, createProductDraftBff, createProductFirstInventoryBff,
   createProductIntakeSessionBff, getProductIntakeSessionBff,
@@ -265,11 +266,12 @@ export async function uploadProductEvidence(session, slot, file) {
   if (!['PRIMARY', 'BACK', 'BARCODE'].includes(slot)) {
     throw commandError('EVIDENCE_SLOT_INVALID', 'Choose a valid packaging-evidence slot.')
   }
-  const extensionByType = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' }
-  const extension = extensionByType[file?.type]
-  if (!extension || !file?.size || file.size > 10 * 1024 * 1024) {
-    throw commandError('EVIDENCE_FILE_INVALID', 'Use a JPEG, PNG, or WebP image no larger than 10 MB.')
+  const validation = validateUploadFile(file)
+  if (!validation.ok) {
+    throw commandError('EVIDENCE_FILE_INVALID', validation.error || 'Use a valid JPG, PNG, WebP, or AVIF image no larger than 10 MB.')
   }
+  const extensionByType = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/avif': 'avif' }
+  const extension = extensionByType[file?.type] || 'jpg'
 
   if (adminBffEnabled()) {
     const result = await uploadProductEvidenceBff(session.id, slot, file)

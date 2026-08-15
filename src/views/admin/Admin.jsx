@@ -15,6 +15,7 @@ import SystemDevOpsModal from './SystemDevOpsModal'
 import StartHereGuide from './StartHereGuide'
 import KeyboardShortcutsModal from './KeyboardShortcutsModal'
 import UniversalScanLauncher from './UniversalScanLauncher'
+import WorkflowGuideModal from '../../components/admin/guides/WorkflowGuideModal'
 import { GO_TO_SHORTCUTS, isTextEntryTarget } from './adminOperations'
 
 // Lazy loaded heavy components to reduce initial bundle lag
@@ -117,6 +118,7 @@ export default function Admin() {
   const [showStartHere, setShowStartHere] = useState(false)
   const [showShortcuts, setShowShortcuts] = useState(false)
   const [showScanCenter, setShowScanCenter] = useState(false)
+  const [showWorkflowGuide, setShowWorkflowGuide] = useState(false)
   const [guideQuery, setGuideQuery] = useState('')
   const [inventoryTool, setInventoryTool] = useState(null)
   const goChordRef = useRef(null)
@@ -357,6 +359,15 @@ export default function Admin() {
             </button>
 
             <button
+              onClick={() => setShowWorkflowGuide(true)}
+              className="flex min-h-[40px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-sky-400 transition-[transform,background-color,color,border-color] duration-150 hover:border-sky-500/40 hover:bg-sky-500/10 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/70"
+              title="View visual workflow maps for all shifts"
+            >
+              <span>🗺️</span>
+              <span className="hidden sm:inline">Workflow Map</span>
+            </button>
+
+            <button
               onClick={() => setShowStartHere(true)}
               className="flex min-h-[40px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
               title="How to use this dashboard — start here"
@@ -505,6 +516,18 @@ export default function Admin() {
       <StartHereGuide
         isOpen={showStartHere}
         onClose={() => setShowStartHere(false)}
+        onNavigate={selectSection}
+      />
+
+      <WorkflowGuideModal
+        isOpen={showWorkflowGuide}
+        onClose={() => setShowWorkflowGuide(false)}
+        defaultTab={
+          section === 'consignment' ? 'flights' :
+          section === 'inventory' ? 'fefo' :
+          section === 'omni_hub' ? 'fulfillment' :
+          section === 'pasabuy_manager' ? 'pasabuy' : 'flights'
+        }
         onNavigate={selectSection}
       />
 

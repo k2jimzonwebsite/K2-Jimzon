@@ -92,11 +92,29 @@ export default function CouponManager() {
     if (form.reason.trim().length < 10) {
       setError('Record a specific reason of at least 10 characters.'); setWorking(false); return
     }
+    const discountVal = Number(form.discount_value)
+    if (!discountVal || discountVal <= 0 || Number.isNaN(discountVal)) {
+      setError('Discount value must be a positive number greater than zero.'); setWorking(false); return
+    }
+    if (form.discount_type === 'percentage' && (discountVal < 1 || discountVal > 100)) {
+      setError('Percentage discount must be between 1% and 100%.'); setWorking(false); return
+    }
+    if (form.discount_type === 'fixed' && discountVal > 50000) {
+      setError('Fixed discount cannot exceed ₱50,000 per coupon.'); setWorking(false); return
+    }
+    const minSpendVal = Number(form.min_spend || 0)
+    if (minSpendVal < 0 || Number.isNaN(minSpendVal)) {
+      setError('Minimum spend cannot be a negative amount.'); setWorking(false); return
+    }
+    const maxRedemptionsVal = form.max_redemptions ? Number(form.max_redemptions) : null
+    if (maxRedemptionsVal !== null && (maxRedemptionsVal < 1 || !Number.isInteger(maxRedemptionsVal))) {
+      setError('Max redemptions must be an integer of at least 1.'); setWorking(false); return
+    }
     const command = {
       code: form.code.trim().toUpperCase(), description: form.description.trim(),
-      discountType: form.discount_type, discountValue: Number(form.discount_value),
-      minSpend: Number(form.min_spend || 0),
-      maxRedemptions: form.max_redemptions ? Number(form.max_redemptions) : null,
+      discountType: form.discount_type, discountValue: discountVal,
+      minSpend: minSpendVal,
+      maxRedemptions: maxRedemptionsVal,
       startsAt, endsAt, isActive: form.is_active, isHunt: form.is_hunt,
       clue: form.is_hunt ? form.clue.trim() || null : null, reason: form.reason.trim(),
     }
