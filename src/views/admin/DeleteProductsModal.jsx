@@ -4,23 +4,25 @@ import { supabase } from '../../lib/supabaseClient'
 // ============================================================================
 // PIN-gated product deletion.
 //
-// Deletion is permanent and cascades to batches and custody rows, so this
-// screen does three things before it will proceed:
+// Deletion is permanent and is allowed only for unused setup mistakes with no
+// inventory or operational history. This screen does three things first:
 //   1. names every product about to be destroyed — no "3 items" abstraction
 //   2. requires the operator's own 4-digit PIN
-//   3. verifies that PIN server-side via delete_products_with_pin(), which
+//   3. verifies that PIN server-side via delete_products_with_pin_v2(), which
 //      snapshots each row into product_deletions before removing it
 //
-// The PIN never reaches the browser. If the operator hasn't set one, this
-// refuses and points them at Staff & Roles rather than silently allowing it.
+// The PIN is sent only to the protected RPC and never stored or returned in
+// browser state. Missing setup refuses and points the Admin to Staff & Roles.
 // ============================================================================
 
 export default function DeleteProductsModal({ products = [], onClose, onDeleted }) {
   const [pin, setPin] = useState('')
+  const [reason, setReason] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [pinState, setPinState] = useState('checking') // checking | ready | missing | offline
   const inputRef = useRef(null)
+  const requestIdRef = useRef(crypto.randomUUID())
 
   const count = products.length
   const isBulk = count > 1
@@ -35,8 +37,12 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
         setPinState('missing')
         setError(
           rpcError.message.includes('does not exist')
-            ? 'Delete PIN not installed — run migration 20260725_delete_pin_and_product_status.sql in Supabase.'
-            : rpcError.message
+            ? 'The secure product-deletion service is not available yet. Refresh after the Admin update finishes.'
+            : rpcError.message.includes('K2_AAL2_REQUIRED')
+              ? 'Verify your authenticator again before deleting a product.'
+              : rpcError.message.includes('K2_ADMIN_REQUIRED')
+                ? 'Only an Admin can permanently delete a product.'
+                : 'Delete PIN status could not be checked. Refresh and try again.'
         )
         return
       }
@@ -53,6 +59,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
 
   const handleDelete = async () => {
     if (pin.length !== 4) return setError('Enter your 4-digit PIN.')
+    if (reason.trim().length < 8) return setError('Enter a specific reason of at least 8 characters.')
     setBusy(true)
     setError('')
 
@@ -63,9 +70,11 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
       return setError('No database connection — cannot delete.')
     }
 
-    const { data, error: rpcError } = await supabase.rpc('delete_products_with_pin', {
-      skus,
-      candidate_pin: pin,
+    const { data, error: rpcError } = await supabase.rpc('delete_products_with_pin_v2', {
+      p_skus: skus,
+      p_candidate_pin: pin,
+      p_reason: reason.trim(),
+      p_request_id: requestIdRef.current,
     })
 
     setBusy(false)
@@ -73,13 +82,31 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
     if (rpcError) {
       setPin('')
       return setError(
-        rpcError.message.includes('Invalid delete PIN')
-          ? 'That PIN is not correct.'
-          : rpcError.message
+        rpcError.message.includes('does not exist')
+          ? 'The secure product-deletion service is not available yet. Refresh after the Admin update finishes.'
+          : rpcError.message.includes('K2_AAL2_REQUIRED')
+            ? 'Verify your authenticator again before deleting a product.'
+            : 'The deletion could not be completed. Nothing was removed.'
       )
     }
 
-    onDeleted?.(skus, Number(data) || 0)
+    if (!data?.ok) {
+      setPin('')
+      const messages = {
+        INVALID_PIN: `That PIN is not correct.${Number.isInteger(data?.attempts_remaining) ? ` ${data.attempts_remaining} attempt${data.attempts_remaining === 1 ? '' : 's'} remaining.` : ''}`,
+        PIN_LOCKED: 'Delete PIN is temporarily locked after repeated attempts. Wait 15 minutes and try again.',
+        PIN_NOT_SET: 'Set your Delete PIN under Staff & Roles first.',
+        INVALID_REASON: 'Enter a specific reason between 8 and 500 characters.',
+        INVALID_PRODUCTS: 'The selected product list is invalid. Close and try again.',
+        PRODUCT_NOT_FOUND: 'One or more products no longer exist. Refresh inventory before retrying.',
+        PRODUCT_HAS_HISTORY: 'A selected product has stock, listings, or operational history and cannot be permanently deleted. Mark it Discontinued instead.',
+        IDEMPOTENCY_CONFLICT: 'The deletion details changed during retry. Close this window and start again.',
+        OPERATION_IN_PROGRESS: 'This deletion is already being processed. Wait, then refresh inventory.',
+      }
+      return setError(messages[data?.code] || 'The deletion was refused. Nothing was removed.')
+    }
+
+    onDeleted?.(skus, Number(data.deleted_count) || 0)
     onClose()
   }
 
@@ -94,7 +121,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
             Delete {count} product{count !== 1 ? 's' : ''}?
           </h2>
           <p className="text-xs text-white/60 mt-0.5 leading-snug">
-            Permanent. Batches and staff custody records for {isBulk ? 'these SKUs' : 'this SKU'} go with {isBulk ? 'them' : 'it'}.
+            Permanent. Only unused products with no stock, listings, or operational history can be deleted.
           </p>
         </div>
 
@@ -116,7 +143,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
 
           {products.some(p => (p.stock_available ?? 0) > 0) && (
             <div className="rounded-adm-sm border border-amber/40 bg-amber/10 p-3 text-sm text-amber leading-snug">
-              ⚠️ {isBulk ? 'Some of these' : 'This product'} still {isBulk ? 'have' : 'has'} stock on hand. Deleting will not adjust any counts — reconcile inventory first if that matters.
+              {isBulk ? 'Some of these products have' : 'This product has'} stock on hand and will be refused. Reconcile the stock, or mark the product Discontinued.
             </div>
           )}
 
@@ -131,7 +158,21 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
           )}
 
           {pinState === 'ready' && (
-            <div>
+            <div className="space-y-3">
+              <div>
+                <label htmlFor="delete-reason" className="adm-label">Reason for permanent deletion</label>
+                <textarea
+                  id="delete-reason"
+                  value={reason}
+                  onChange={(e) => { setReason(e.target.value.slice(0, 500)); setError('') }}
+                  rows={3}
+                  maxLength={500}
+                  placeholder="Example: Duplicate draft created during catalog setup"
+                  className="w-full resize-y rounded-adm-sm border border-adm-line bg-adm-raised px-3 py-2.5 text-base text-white placeholder:text-white/35 outline-none focus:border-crimson"
+                />
+                <p className="mt-1 text-xs text-white/40">Required for the deletion audit record.</p>
+              </div>
+              <div>
               <label htmlFor="delete-pin" className="adm-label">Your 4-digit delete PIN</label>
               <input
                 id="delete-pin"
@@ -149,6 +190,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
               <p className="mt-1.5 text-xs text-white/40 leading-snug">
                 This deletion will be logged against your account.
               </p>
+              </div>
             </div>
           )}
         </div>
@@ -167,7 +209,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
           <button
             type="button"
             onClick={handleDelete}
-            disabled={busy || blocked || pin.length !== 4}
+            disabled={busy || blocked || pin.length !== 4 || reason.trim().length < 8}
             className="flex-1 min-h-[44px] rounded-adm-sm bg-crimson hover:bg-crimson-deep text-sm font-bold text-white transition-colors disabled:opacity-40"
           >
             {busy ? 'Deleting…' : `Delete ${count} product${count !== 1 ? 's' : ''}`}

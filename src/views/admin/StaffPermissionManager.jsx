@@ -34,6 +34,7 @@ export default function StaffPermissionManager() {
   const [mfa, setMfa] = useState(null)
   const [mfaCode, setMfaCode] = useState('')
   const [mfaBusy, setMfaBusy] = useState(false)
+  const [mfaStatus, setMfaStatus] = useState('checking') // checking | verified | unavailable | error
 
   const [pin, setPin] = useState('')
   const [pinConfirm, setPinConfirm] = useState('')
@@ -55,8 +56,18 @@ export default function StaffPermissionManager() {
     if (!supabase) return
     supabase.rpc('has_delete_pin').then(({ data, error }) => {
       if (!error) setHasPin(Boolean(data))
+      else if (error.message.includes('K2_AAL2_REQUIRED')) setErr('Verify your authenticator again before managing the delete PIN.')
+      else setErr('Delete PIN status could not be checked. Refresh and try again.')
     })
   }, [])
+
+  const refreshMfaStatus = async () => {
+    if (!supabase) { setMfaStatus('unavailable'); return }
+    const { data, error } = await supabase.auth.mfa.listFactors()
+    if (error) { setMfaStatus('error'); return }
+    setMfaStatus((data?.totp?.length || 0) > 0 ? 'verified' : 'unavailable')
+  }
+  useEffect(() => { refreshMfaStatus() }, [])
 
   const changeRole = async (id, role) => {
     setErr(''); setNotice('')
@@ -86,7 +97,12 @@ export default function StaffPermissionManager() {
     setErr(''); setMfaBusy(true)
     const res = await verifyMfaEnroll(mfa.factorId, mfaCode.trim())
     setMfaBusy(false)
-    if (res.ok) { setNotice('2FA is now on for your account.'); setMfa(null); setMfaCode('') }
+    if (res.ok) {
+      setNotice('Authenticator verified. Two-factor security is active on your account.')
+      setMfaStatus('verified')
+      setMfa(null)
+      setMfaCode('')
+    }
     else setErr(res.error || 'Code did not verify.')
   }
 
@@ -110,8 +126,12 @@ export default function StaffPermissionManager() {
     if (error) {
       return setErr(
         error.message.includes('does not exist')
-          ? 'Delete PIN not installed — run migration 20260725_delete_pin_and_product_status.sql in Supabase.'
-          : error.message
+          ? 'The secure Delete PIN service is not available yet. Refresh after the Admin update finishes.'
+          : error.message.includes('K2_AAL2_REQUIRED')
+            ? 'Verify your authenticator again before setting a Delete PIN.'
+            : error.message.includes('K2_ADMIN_REQUIRED')
+              ? 'Only an Admin can set a Delete PIN.'
+              : 'The Delete PIN could not be saved. Refresh and try again.'
       )
     }
 
@@ -131,8 +151,8 @@ export default function StaffPermissionManager() {
       </div>
 
       {/* Alerts */}
-      {err && <div className="p-3.5 rounded-adm-sm border border-crimson/40 bg-crimson/10 text-crimson text-sm font-semibold">⚠️ {err}</div>}
-      {notice && <div className="p-3.5 rounded-adm-sm border border-forest/40 bg-forest/10 text-forest text-sm font-semibold">✓ {notice}</div>}
+      {err && <div role="alert" className="p-3.5 rounded-adm-sm border border-crimson/40 bg-crimson/10 text-crimson text-sm font-semibold">{err}</div>}
+      {notice && <div role="status" aria-live="polite" className="p-3.5 rounded-adm-sm border border-forest/40 bg-forest/10 text-forest text-sm font-semibold">{notice}</div>}
 
       {/* Invite */}
       <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
@@ -255,15 +275,32 @@ export default function StaffPermissionManager() {
         <div className="flex items-center gap-2 mb-1">
           <span className="text-lg">🔐</span>
           <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Your two-factor security</h2>
+          {mfaStatus !== 'checking' && (
+            <span className={`ml-auto px-2 py-0.5 rounded-full text-xs font-bold border ${
+              mfaStatus === 'verified'
+                ? 'bg-forest/20 text-forest border-forest/40'
+                : 'bg-amber/20 text-amber border-amber/40'
+            }`}>
+              {mfaStatus === 'verified' ? 'Active' : 'Not active'}
+            </span>
+          )}
         </div>
         <p className="text-sm text-white/55 mb-4 leading-relaxed">
-          Add an authenticator app (Google Authenticator, Authy…) so your login also needs a 6-digit code. Strongly recommended for admins.
+          {mfaStatus === 'verified'
+            ? 'Your verified authenticator is active. New Admin sessions require its 6-digit code.'
+            : 'Add an authenticator app so your Admin login also needs a 6-digit code.'}
         </p>
 
-        {!mfa ? (
+        {mfaStatus === 'checking' ? (
+          <p role="status" className="text-sm text-white/50">Checking authenticator status…</p>
+        ) : mfaStatus === 'verified' ? (
+          <div className="rounded-adm-sm border border-forest/35 bg-forest/10 p-3 text-sm text-forest font-semibold">
+            Authenticator verified and required for privileged access.
+          </div>
+        ) : !mfa ? (
           <button onClick={startMfa} disabled={mfaBusy}
             className="w-full sm:w-auto rounded-adm-sm bg-forest hover:bg-forest/90 text-white font-bold px-6 min-h-12 py-3 disabled:opacity-50 transition-all active:scale-[.99]">
-            {mfaBusy ? 'Starting…' : '🔐 Turn on 2FA'}
+            {mfaBusy ? 'Starting…' : 'Turn on 2FA'}
           </button>
         ) : (
           <form onSubmit={confirmMfa} className="space-y-4">
