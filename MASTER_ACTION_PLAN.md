@@ -4,8 +4,8 @@
 
 **Last audited:** 25 August 2026
 
-**Active MAP item count:** 9 unfinished top-level items (`MAP-017` through
-`MAP-025`)
+**Active MAP item count:** 10 unfinished top-level items (`MAP-017` through
+`MAP-026`)
 
 **Current next item:** MAP-017 schema/grants/RLS remediation. Read-only and local
 rehearsal work may continue; permanent production activation requires the
@@ -58,6 +58,20 @@ queue.
 5. **Production hosts and launch:** resolve `OWNER-001`, complete MAP-024 for the
    separate storefront/admin domains, then execute MAP-025 as the final release
    and owner/staff acceptance gate.
+6. **Multi-shop channel operations:** MAP-026 adds per-shop channel accounts and
+   custody-based allocation on top of MAP-017 schema/RLS, MAP-020 connector
+   security, and MAP-023 operational acceptance. It does not depend on MAP-024 or
+   MAP-025 and may proceed in parallel with them once its gates are met.
+
+   **Open owner decision — launch timing.** MAP-025 is written as the final launch
+   gate. Whether the first launch must already include multi-shop channel
+   operations, or whether MAP-026 lands after an initial storefront launch, is a
+   scope decision only the owner can make. It matters because no marketplace
+   connector exists yet: Shopee captures signed events only and its database entry
+   point is unapplied, while TikTok Shop and Lazada have no connector at all.
+   Requiring MAP-026 before launch therefore pulls a substantial unbuilt
+   connector programme onto the critical path. Until this is answered, MAP-025
+   remains the launch gate and MAP-026 is sequenced after it.
 
 Owner decisions may be answered early in parallel, but implementation and
 activation remain subject to the dependency order above.
@@ -185,6 +199,7 @@ service or unapproved API can unlock.
 | 7 | MAP-023 | Complete and rehearse canonical storefront and Admin operations | MAP-017 through MAP-022; OWNER-002/003 gate policy activation |
 | 8 | MAP-024 | Configure separate production projects, domains, DNS, HTTPS, and Auth callbacks | MAP-023 and OWNER-001 |
 | 9 | MAP-025 | Produce final security, staff, customer, and production launch proof | MAP-017 through MAP-024 |
+| 10 | MAP-026 | Multi-shop channel accounts and custody-based inventory allocation | MAP-017, MAP-020, MAP-023 |
 
 **Current execution command:** continue MAP-017 read-only audit and reversible
 rehearsal work. Do not permanently apply its production migration until
@@ -2020,6 +2035,19 @@ normalization, stock reservation, or channel status changed. Recovery is to
 leave the function undeployed/Events-only until the exact partner documentation
 is approved and the configured window plus real retry behavior pass end to end.
 
+**Live confirmation of the Events-only state (25 August 2026 verification).** The
+live migration ledger holds exactly five entries, the newest
+`remove_legacy_delete_products_rpc` at version `20260815082633`. **Nothing dated
+after 15 August 2026 is applied to production.** `capture_shopee_event_v1` is
+therefore absent from the live database — it is confirmed missing from the
+24 August schema export and its migration
+(`20260825_shopee_webhook_ingress_boundary.sql`) is dated 25 August. So is
+`get_public_product_stock`, consistent with MAP-017 being unapplied. This
+independently corroborates the assessment below rather than contradicting it:
+channel ingress is not merely un-activated, its database entry point does not
+exist yet, so the Events-only posture is enforced by absence. Keep the Edge
+function undeployed until the coordinated migration is authorized and applied.
+
 **Tier — Shopee atomic capture and distributed ingress budgets complete locally
 (25 August 2026):** direct inbox `upsert` has been replaced in the prepared Edge
 path by service-role-only `capture_shopee_event_v1`. The coordinated migration
@@ -3270,7 +3298,9 @@ checks, domain smoke tests, System Brain, and owner decision record.
 
 ### MAP-025 — Full security, staff, customer, and production launch proof
 
-**Status:** Queued; final active item; depends on MAP-016 through MAP-024
+**Status:** Queued; final launch gate; depends on MAP-016 through MAP-024.
+MAP-026 is sequenced separately and does not gate this item — see the launch-timing
+decision in the dependency sequence.
 
 **Local bundle-budget observation (21 August 2026):** the isolated builds pass,
 but Vite still reports two Storefront chunks above its 500 kB warning threshold:
@@ -3318,6 +3348,135 @@ truthfully empty.
 **Record in:** automated tests, signed acceptance report, deployment/security/
 backup/incident runbooks, operations rulebook, System Brain, and Git history.
 
+
+### MAP-026 — Multi-shop channel accounts and custody-based inventory allocation
+
+**Status:** Queued; depends on MAP-017 for schema/RLS activation, MAP-020 for
+connector and command security, and MAP-023 for operational acceptance. Owner
+scope decision recorded 25 August 2026.
+
+**The operating model, from the owner.** K2 runs several seller accounts per
+marketplace — two Shopee shops, two TikTok shops, two Lazada shops to start, and
+the design must not hardcode two. Every shop is owned and operated by K2; this is
+channel utilisation, not a marketplace of third-party sellers. Each shop is run by
+a staff member who **physically holds** that shop's stock. Staff move goods
+between themselves as needed, so custody changes often. **Master Inventory is the
+sum of everything, including all shop stock** — it is the Philippines-wide truth
+and never shrinks when stock is allocated to a shop; only the holder changes.
+Stock moves on a **staff-request, admin-approval** workflow.
+
+**Why existing behaviour does not already solve it.** The custody half largely
+exists and is live: `product_batches` already carries `custodian`, `hub`,
+`channel`, `quantity_available`, and `reserved_quantity`, and
+`transfer_inventory_custody(text,text,text,text)` and
+`transfer_inventory_custody_exact(uuid,integer,text,text,text)` are both live
+security-definer functions. `v_stock_by_hub`, `v_stock_by_channel`, and
+`v_batch_allocations` are live views. The model is a good fit for physical
+custody, which is why this item extends it rather than replacing it.
+
+The shop half does not exist at all. Verified against the live schema export:
+
+- `channel_connections` has columns `channel, display_name, status, note,
+  last_event_at, updated_at` — **keyed by channel, one row per channel.** There is
+  no shop identity, so two Shopee shops are unrepresentable today.
+- `channel_credentials` is keyed by `channel_code` — one credential set per
+  channel, not per shop.
+- `channel_listings` carries `channel_source`, `external_item_id`, and
+  `external_sku_id` with no shop dimension, so two shops listing the same SKU
+  would collide on external identifiers.
+- `product_batches.channel` is a channel string, not a shop reference, so two
+  Shopee shops cannot hold distinct allocations of the same SKU.
+- `staff_allocations` exists (`staff_user_id, staff_name, sku, stock, location,
+  bin`) with RLS enabled and **zero policies**, so it is deny-all and unusable
+  from any staff or admin session.
+- `v_stock_by_holder` is defined in the historical bootstrap but is **absent from
+  the live database**, so the per-custodian view this model depends on is missing.
+- No transfer request or approval workflow exists. The custody functions execute
+  immediately, which does not satisfy staff-request/admin-approve.
+
+**Deliver:**
+
+- Introduce a first-class shop entity — channel plus shop account, with a stable
+  internal code, external marketplace shop id, display name, assigned custodian,
+  and lifecycle status. N shops per channel with no fixed limit; two per channel
+  is today's data, not a constraint in the schema, UI, or contracts.
+- Re-key `channel_connections` and `channel_credentials` from channel to shop, so
+  status and credentials are per shop. Preserve the existing rule that secrets
+  never enter the dashboard and that connection status is written only by the
+  backend connector. Credentials stay in `k2_private`/Edge secrets with
+  service-role-only access.
+- Add a shop reference to `channel_listings` and make external identifier
+  uniqueness per shop, so the same SKU can be listed by two shops without
+  collision, with per-shop publication, price, and sync error state.
+- Give `product_batches` a shop allocation dimension alongside `custodian`, so a
+  batch is attributable to one shop while custody stays the unit-level owner of
+  record. A shop may have several custodians; a unit may not be ambiguously held.
+  Derive Master Inventory as the sum across all shops plus unallocated stock,
+  reporting landed and in-transit positions distinctly. Master must never
+  double-count a unit and must never shrink because stock was allocated. Allocate
+  only after consignment receipt, so unconfirmed arrivals cannot be assigned to a
+  shop. Restore `v_stock_by_holder` and add a per-shop equivalent.
+- Build the transfer request workflow: a custodian raises a request naming exact
+  batch, quantity, destination shop or custodian, and reason; an admin approves or
+  refuses with a recorded actor, timestamp, and reason. Approval — not the request
+  — is what calls the existing custody functions, which keeps one movement path
+  and one audit trail. Requests must be idempotent, must fail closed on
+  insufficient quantity, and must survive concurrent approval attempts.
+- Write RLS so a staff custodian reads and acts on their own shops only, admins
+  see and move everything, and `staff_allocations` gets real policies instead of
+  its current deny-all. Cross-shop and cross-custodian access must be denied by
+  test, not by convention.
+- Surface it in Admin BOS: per-shop inventory alongside Master Inventory, who
+  holds what, pending transfer requests for approval, and per-shop channel status.
+  Never present a shop as connected or synced on the strength of configuration
+  alone — keep the existing honesty rule that status reflects real connector
+  evidence.
+
+**Complete when:** the schema represents an arbitrary number of shops per channel;
+two shops on one channel hold distinct allocations of the same SKU without
+external-identifier collision; Master Inventory equals the sum of all shop and
+unallocated stock at all times and is proven by test against concurrent movement;
+a staff transfer request cannot move stock without admin approval; a custodian
+cannot read or move another shop's stock; and the Admin views show per-shop and
+master positions from real data with honest unavailable states.
+
+**Record in:** the operations rulebook (custody, allocation, and approval rules),
+System Brain (live shop and custody state), migrations plus preflight/postflight
+and rollback, the connector integration spec, Admin BOS documentation and staff
+SOP, and the authorization test suite.
+
+**Owner answers recorded 25 August 2026 — these are decided, not open.**
+
+1. **A shop may have more than one custodian.** The requirement is not to
+   restrict it but to keep a precise, queryable answer to *who holds what*.
+   Ownership attribution is therefore per batch and custodian, not per shop:
+   a shop is an operating account, and custody is the unit-level truth. Two
+   custodians on one shop must never make a unit ambiguously owned.
+
+2. **In-transit stock reuses the consignment flow that already exists.** Do not
+   build a second path. Verified live: `consignments` carries `manifest_code`,
+   `flight_number`, `departure_city`, `destination_city`, `packed_at`,
+   `arrived_at`, and `status`; `consignment_items` carries **`expected_qty`,
+   `italy_packed_qty`, and `manila_scanned_qty`**, which is exactly the
+   pack-in-Italy then confirm-in-Manila reconciliation the owner described; and
+   `inventory_balances` already has an `in_transit` column. The live function set
+   — `create_consignment_manifest`, `add_consignment_item_v2`,
+   `record_packing_scan`, `record_consignment_item_scan`,
+   `record_consignment_scan`, `finalize_consignment_receipt`,
+   `advance_consignment`, `reconcile_product_batches` — covers the whole journey.
+
+   What MAP-026 must do is narrower than it first appeared: Master Inventory must
+   report landed Philippine stock and **in-transit stock distinctly**, never
+   silently merging them, and shop allocation must happen *after* consignment
+   receipt so a unit is not allocated to a shop while its arrival is still
+   unconfirmed. The owner also asked for flexibility to count stock on arrival
+   without a prior Italy declaration; verify whether the existing functions
+   already permit a zero-`expected_qty` consignment finalised purely from Manila
+   scans, and only add scope if they do not. Prove it before building.
+
+3. **A refused transfer request is simply re-raised.** No appeal path, no escalation
+   state. Staff resolve it in conversation. Keep the refusal reason on the record
+   for audit, and let the requester raise a new request.
 
 ## Constraints outside the active queue
 
