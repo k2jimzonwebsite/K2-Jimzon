@@ -745,6 +745,130 @@ The suite therefore reports green while masking a slow first render. This is a
 real quality signal, not a test-infrastructure quirk, and belongs to MAP-021
 performance work.
 
+## Unblocked execution queue — 25 August 2026
+
+Everything below can be implemented **now**, with no owner authorization, no
+production migration, no deployment, and no provider change. It exists so an
+implementer never has to guess what is workable while `OWNER-005` and
+`OWNER-001` remain unanswered. Each entry names its parent MAP item, the exact
+files, and an objective completion check. Work them in this order. Do not batch
+them into one run — the 15 August delegated batch failed precisely because its
+scope was too broad to finish or verify.
+
+**Currently blocked, for contrast — do not attempt:** the MAP-017 production
+migration and everything downstream of it (`OWNER-005`); custom domains, DNS and
+Auth callbacks (`OWNER-001`); BFF activation, which needs production server
+environment plus owner authorization; and any marketplace connector, since no
+partner credentials or approved partner documentation exist.
+
+### Queue item 1 — MAP-021 — Consolidate the duplicate product detail view
+
+`src/StorefrontApp.jsx` registers both `ProductDetail` (key `product`) and
+`MasterProduct` (key `master_product`). No `setView` call site anywhere reaches
+`product`, so `src/views/ProductDetail.jsx` compiles to an unreachable 13.68 kB
+chunk. Consolidate onto `MasterProduct.jsx` and delete `ProductDetail.jsx`,
+including its registration and lazy import.
+
+*Files:* `src/StorefrontApp.jsx`, `src/views/ProductDetail.jsx`,
+`src/views/MasterProduct.jsx`, `src/context/StoreContext.jsx`.
+*Check:* `npm run build:storefront` emits no `ProductDetail-*.js` chunk;
+`npm run test:smoke` stays 8/8; opening any product still renders full detail.
+
+### Queue item 2 — MAP-021 — Defer the Three.js globe until it is needed
+
+`GlobeSection` is lazy-loaded but `src/views/Home.jsx` renders it directly, so
+its 903.44 kB / 244.43 kB gzip chunk — the largest artifact in the storefront —
+starts downloading on landing. Mount it behind an `IntersectionObserver` so it
+loads only when scrolled near. Keep the existing `ErrorBoundary` and the
+`GlobeSectionUnavailable` fallback, and respect `prefers-reduced-motion`.
+
+*Files:* `src/views/Home.jsx`, `src/components/home/GlobeSection.jsx`.
+*Check:* on first paint of `/`, no request for the Globe chunk; it loads after
+scrolling toward the section; `npm run test:smoke` stays 8/8.
+
+### Queue item 3 — MAP-023 — One modal primitive, then migrate all 18
+
+Measured 25 August 2026 across `src/views/admin/*Modal.jsx`: only 4 of 18 handle
+`Escape`, 6 declare neither `role="dialog"` nor `aria-modal`, and 2 expose no
+accessible name. `DeleteProductsModal.jsx`, the most destructive surface in the
+product, has none of the three. There is no shared modal primitive and no focus
+trap, so every modal re-implements its shell and drifts.
+
+Build one reviewed primitive carrying dialog role, accessible name, initial
+focus, focus trap, `Escape` close, and focus restore to the trigger. Migrate all
+18. Do not spot-fix individual modals.
+
+*Files:* a new primitive under `src/components/ui/`, and all 18
+`src/views/admin/*Modal.jsx`.
+*Check:* 18/18 on each property, asserted by a test that enumerates the modal
+files rather than naming them one by one, so a new modal cannot regress it.
+
+### Queue item 4 — MAP-023 — Test the surfaces that actually sell
+
+No file under `tests/` references `MasterProduct.jsx` or `GuestMessages.jsx`.
+The suite has 35 spec files weighted toward security and API contracts, so the
+boundary is well covered and the conversion surface is not. Add behavioural
+coverage for product detail render, stock and price truth, and the guest message
+path. Sequence after queue item 1 so tests are written once against the
+surviving component.
+
+*Check:* new specs pass; `npm run test:contracts` total rises; failures are
+behavioural, not markup-string assertions.
+
+### Queue item 5 — MAP-024 — Storefront URL routing
+
+This is the highest-leverage unblocked item and a hard prerequisite for items 6
+and 7. Storefront navigation is in-memory React state only: `go()`,
+`openProduct()`, and `setView()` never touch `history.pushState`, and no
+`popstate` listener exists. Every view is served at `/`, so a refresh on a
+product or checkout resets to home, links cannot be shared, and no page-level
+analytics or search indexing is possible even in principle.
+
+Synchronize view state to real paths — at minimum `/`, `/catalog`,
+`/product/:sku`, `/pasabuy`, `/checkout`, `/wholesale` — using the History API
+with a `popstate` listener, preserving the existing `startViewTransition`
+behaviour. Deep-linking and browser back must both work. Do not break the
+multi-target build: the admin boundary check in `src/App.jsx` must keep working.
+
+*Files:* `src/App.jsx`, `src/StorefrontApp.jsx`, `src/context/StoreContext.jsx`.
+*Check:* loading `/product/<real-sku>` directly renders that product; refresh
+holds the view; browser back returns to the previous view; both builds and the
+full test suite stay green.
+
+### Queue item 6 — MAP-024 — robots.txt, sitemap, JSON-LD, and share metadata
+
+Depends on item 5; none of it can reference real URLs before routing exists.
+Add `public/robots.txt` allowing the storefront and disallowing
+`/admin-portal-k2-secure`; generate `sitemap.xml` from live catalog SKUs; inject
+Schema.org `Product`/`Offer` JSON-LD on product detail with availability that
+reflects real FEFO stock and never asserts stock the catalogue cannot honour;
+and add Open Graph, Twitter Card, canonical, and icon metadata to `index.html`.
+Commit real icon assets and restore the `icons` entry in the emitted manifests
+in `vite.config.js` — the previous entry pointed at a `favicon.ico` that does
+not exist.
+
+*Check:* valid `robots.txt` and `sitemap.xml` at root; JSON-LD validates; a
+shared product link renders a real title card with image and price.
+
+### Queue item 7 — MAP-023 — Product measurement
+
+Depends on item 5. The project has no analytics or telemetry dependency of any
+kind, so nothing can answer whether a customer reached a product, added to cart,
+or abandoned at checkout. Choose a provider consistent with the MAP-021 CSP and
+privacy posture, define the specific funnel to watch before launch, and collect
+that rather than everything.
+
+### Queue item 8 — MAP-017 — Verify, do not build, the count-on-arrival path
+
+A verification task. Confirm whether a zero-`expected_qty` consignment can
+already be finalised purely from Manila scans using the live functions
+`create_consignment_manifest`, `add_consignment_item_v2`,
+`record_consignment_item_scan`, and `finalize_consignment_receipt`. The owner
+asked for the flexibility to count stock on arrival without a prior Italy
+declaration. Prove whether it already works before adding any scope, and record
+the result. Use the portable PostgreSQL rehearsal harness; do not touch the live
+database.
+
 ## Mandatory four-skill design rule
 
 Whenever accepted work creates, changes, reviews, or fixes any visible UI,
