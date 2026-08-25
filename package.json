@@ -75,7 +75,7 @@
     "@svg-maps/world": "^2.0.0",
     "dotenv": "^17.4.2",
     "html5-qrcode": "^2.3.8",
-    "motion": "^12.42.2",
+    "motion": "^13.1.1",
     "papaparse": "^5.5.4",
     "react": "^19.1.0",
     "react-barcode": "^1.6.1",
