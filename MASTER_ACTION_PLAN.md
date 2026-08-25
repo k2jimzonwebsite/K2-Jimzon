@@ -875,6 +875,44 @@ that rather than everything.
 
 ### Queue item 8 — MAP-017 — Verify, do not build, the count-on-arrival path
 
+**Answered 25 August 2026 by reading the live function definitions. Verification
+complete; a small, well-bounded follow-up remains.**
+
+**Quantity flexibility already exists.** `finalize_consignment_receipt`
+(`20260809_operations_hardening.sql`) builds `product_batches` from
+`v_item.manila_scanned_qty` and **never reads `expected_qty` at all**. The gate is
+`if v_item.manila_scanned_qty > 0`, so whatever Manila physically counts becomes
+the batch quantity, the `inventory_balances` increment, and the recomputed
+`products.stock_available`. A declared Italy figure does not constrain what is
+received. The owner's "just count it here" requirement is satisfied for quantity.
+
+**One real blocker to a pure zero-declaration flow.**
+`add_consignment_item_v2` refuses `expected_qty < 1` —
+`raise exception 'Expected quantity must be positive'` — and only accepts items
+while the manifest is in `Packing_Italy`. So a SKU that was never declared in
+Italy cannot be added on arrival, and a line cannot be opened after the manifest
+leaves packing state. Today's workaround is to declare a nominal quantity and let
+the Manila scan carry the real count, which produces correct inventory but an
+inaccurate manifest. If the owner wants genuine count-on-arrival for undeclared
+goods, the smallest safe change is to permit an item to be added while the
+manifest is in the arrival state with `expected_qty` of zero, leaving
+`finalize_consignment_receipt` untouched because it already does the right thing.
+
+**Integrity gap found while tracing this — over-receipt is silently unrecorded.**
+The reconciliation step is `v_missing := v_item.italy_packed_qty -
+v_item.manila_scanned_qty`, and it logs a `missing_on_arrival` inventory event
+only `if v_missing > 0`. When Manila scans **more** than Italy packed, `v_missing`
+is negative, so **no event is written at all** — while the batch is still created
+at the higher scanned quantity. Stock therefore exceeds the manifest with no
+reconciliation trace. A shortfall is investigated and a surplus is not, even
+though a surplus can mean a mislabeled box, the wrong SKU picked, a miscount in
+Italy, or substitution somewhere in the chain. Log the symmetric case as its own
+event type (for example `surplus_on_arrival`) so both directions are auditable.
+This is additive, touches one function, and does not change any quantity maths.
+
+*Original task description, retained:*
+
+
 A verification task. Confirm whether a zero-`expected_qty` consignment can
 already be finalised purely from Manila scans using the live functions
 `create_consignment_manifest`, `add_consignment_item_v2`,
