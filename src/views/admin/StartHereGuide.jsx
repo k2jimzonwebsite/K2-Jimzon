@@ -25,7 +25,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
               </div>
               <p className="mt-0.5 text-sm text-white/50">Read top to bottom. This is everything you do in a shift.</p>
             </div>
-            <button onClick={onClose} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-adm-sm bg-white/5 text-white/50 hover:bg-white/10 hover:text-white">✕</button>
+            <button onClick={onClose} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-adm-sm bg-white/5 text-white/50 hover:bg-white/10 hover:text-white cursor-pointer">✕</button>
           </div>
 
           {/* Quick Visual Guide Banner */}
@@ -33,13 +33,13 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-xs text-white/80">
                 <span className="text-sm">🗺️</span>
-                <span>Visual diagrams available for Flights, Custody, FEFO & Packing</span>
+                <span>Interactive SVG Master Workflow Graph & AI Prompt Studio</span>
               </div>
               <button
-                onClick={() => setGuideModalTab('flights')}
-                className="shrink-0 rounded-md border border-sky-500/30 bg-sky-500/15 px-2.5 py-1 text-xs font-bold text-sky-400 hover:bg-sky-500/25"
+                onClick={() => setGuideModalTab('master_graph')}
+                className="shrink-0 rounded-md border border-sky-500/30 bg-sky-500/15 px-2.5 py-1 text-xs font-bold text-sky-400 hover:bg-sky-500/25 cursor-pointer"
               >
-                Open Diagrams →
+                Open SVG Map →
               </button>
             </div>
           </div>
@@ -56,23 +56,36 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
                       <p className="mt-1 text-sm leading-relaxed text-white/65">{s.body}</p>
                       {s.more && (
                         <div className="mt-1.5">
-                          <button onClick={() => setOpen((o) => ({ ...o, [i]: !o[i] }))} className="text-xs font-medium text-blue hover:underline">
+                          <button onClick={() => setOpen((o) => ({ ...o, [i]: !o[i] }))} className="text-xs font-medium text-blue hover:underline cursor-pointer">
                             {open[i] ? 'Less ▴' : 'More info ▸'}
                           </button>
-                          {open[i] && <p className="mt-1 text-xs leading-relaxed text-white/50">{s.more}</p>}
+                          {open[i] && (
+                            <p className="mt-1 rounded border border-adm-line bg-adm-sunken p-2 text-xs leading-relaxed text-white/70">
+                              {s.more}
+                            </p>
+                          )}
                         </div>
                       )}
                     </div>
-                    <div className="flex flex-col gap-1.5 self-center">
-                      {s.section && (
-                        <button onClick={() => jump(s.section)} className="shrink-0 rounded-adm-sm border border-adm-line bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 hover:text-white">
-                          Open →
-                        </button>
-                      )}
+                    <div className="flex shrink-0 flex-col items-end gap-1.5">
+                      <button
+                        onClick={() => jump(s.section)}
+                        className="shrink-0 rounded-adm-sm border border-adm-line bg-adm-elevated px-2.5 py-1 text-xs font-medium text-white hover:bg-white/10 cursor-pointer"
+                      >
+                        Go →
+                      </button>
                       {s.section === 'consignment' && (
                         <button
                           onClick={() => setGuideModalTab('flights')}
-                          className="shrink-0 rounded-adm-sm border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-[10px] font-bold text-sky-400 hover:bg-sky-500/20"
+                          className="shrink-0 rounded-adm-sm border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-[10px] font-bold text-sky-400 hover:bg-sky-500/20 cursor-pointer"
+                        >
+                          Diagram 🗺️
+                        </button>
+                      )}
+                      {s.section === 'inventory' && (
+                        <button
+                          onClick={() => setGuideModalTab('custody')}
+                          className="shrink-0 rounded-adm-sm border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-[10px] font-bold text-amber-400 hover:bg-amber-500/20 cursor-pointer"
                         >
                           Diagram 🗺️
                         </button>
@@ -80,7 +93,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
                       {s.section === 'omni_hub' && (
                         <button
                           onClick={() => setGuideModalTab('fulfillment')}
-                          className="shrink-0 rounded-adm-sm border border-purple-500/20 bg-purple-500/10 px-2 py-1 text-[10px] font-bold text-purple-400 hover:bg-purple-500/20"
+                          className="shrink-0 rounded-adm-sm border border-purple-500/20 bg-purple-500/10 px-2 py-1 text-[10px] font-bold text-purple-400 hover:bg-purple-500/20 cursor-pointer"
                         >
                           Diagram 🗺️
                         </button>
@@ -88,7 +101,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
                       {s.section === 'pasabuy_manager' && (
                         <button
                           onClick={() => setGuideModalTab('pasabuy')}
-                          className="shrink-0 rounded-adm-sm border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[10px] font-bold text-cyan-400 hover:bg-cyan-500/20"
+                          className="shrink-0 rounded-adm-sm border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[10px] font-bold text-cyan-400 hover:bg-cyan-500/20 cursor-pointer"
                         >
                           Diagram 🗺️
                         </button>
@@ -121,4 +134,3 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
     </>
   )
 }
-
