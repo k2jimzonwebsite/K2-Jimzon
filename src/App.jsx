@@ -20,6 +20,7 @@ const MasterProduct = lazy(() => import('./views/MasterProduct'))
 const Catalog = lazy(() => import('./views/Catalog'))
 const GuestMessages = lazy(() => import('./views/GuestMessages'))
 const Contact = lazy(() => import('./views/Contact'))
+const CustomerAccount = lazy(() => import('./views/CustomerAccount'))
 
 const VIEWS = {
   home: Home,
@@ -33,6 +34,7 @@ const VIEWS = {
   catalog: Catalog,
   messages: GuestMessages,
   contact: Contact,
+  account: CustomerAccount,
 }
 
 // Storefront chrome wraps shopper-facing views only.
@@ -53,8 +55,9 @@ function Shell() {
   const activeViewKey = isAdminDeployment ? 'admin' : (isDedicatedAdminRoute ? 'admin' : (view === 'admin' ? 'home' : view))
   const View = VIEWS[activeViewKey] ?? Home
   const isStorefront = !isAdminDeployment && !isDedicatedAdminRoute && STOREFRONT.has(activeViewKey)
-  // The prototype rail is useful for demos, but it should never compete with
-  // the real storefront navigation during ordinary local development.
+  // Combined mode is a workstation-only prototype surface. StorefrontApp does
+  // not import this rail, so no production Storefront hash can expose its
+  // direct-auth/VIP prototype behavior.
   const showDemoRail = typeof window !== 'undefined' && window.location.hash === '#demo'
 
   return (

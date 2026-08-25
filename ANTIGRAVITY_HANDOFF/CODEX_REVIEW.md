@@ -130,3 +130,9 @@ executed zero database behavior tests. The encryption scripts remain envelope
 tests only. The misleading `verify-full-launch-proof.js` presence checker now
 exits 2 even when its static checks pass, directing users back to MAP-025's real
 evidence gates. No MAP item advanced or was deleted.
+
+The subsequent MAP-016 continuation raised the prepared contract total to 71 by
+adding regressions that require fixture-only evidence labels to persist in both
+saved Markdown and JSON reports. The current local database runners also exit 2,
+not 1, when blocked. These remain local fail-closed checks and do not add database-
+executed authorization evidence.

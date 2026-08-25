@@ -15,17 +15,18 @@ function storefrontUrl() {
 export function AdminStoreProvider({ children }) {
   const auth = useAdminAuthRuntime()
   const inbox = useAdminInboxRuntime({ enabled: auth.isAdmin })
+  const secureAdmin = adminBffEnabled()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
   const loadProducts = async () => {
-    if (!supabase || !auth.isAdmin) {
+    if (!auth.isAdmin || (!secureAdmin && !supabase)) {
       setProducts([])
       setLoading(false)
       return
     }
     setLoading(true)
-    if (adminBffEnabled()) {
+    if (secureAdmin) {
       const result = await getAdminProducts()
       if (!result.ok) {
         setProducts([])
@@ -64,13 +65,19 @@ export function AdminStoreProvider({ children }) {
 
   useEffect(() => {
     loadProducts()
-    if (!supabase || !auth.isAdmin) return undefined
+    if (!auth.isAdmin || (!secureAdmin && !supabase)) return undefined
+    if (secureAdmin) {
+      const refresh = () => { if (document.visibilityState === 'visible') loadProducts() }
+      const interval = window.setInterval(refresh, 30_000)
+      document.addEventListener('visibilitychange', refresh)
+      return () => { window.clearInterval(interval); document.removeEventListener('visibilitychange', refresh) }
+    }
     const channel = supabase.channel('admin:products')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, loadProducts)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'product_batches' }, loadProducts)
       .subscribe()
     return () => supabase.removeChannel(channel)
-  }, [auth.isAdmin])
+  }, [auth.isAdmin, secureAdmin])
 
   const openStorefront = () => {
     const url = storefrontUrl()
@@ -97,4 +104,8 @@ export function useAdminStore() {
   const value = useContext(AdminStoreContext)
   if (!value) throw new Error('AdminStoreProvider is required.')
   return value
+}
+
+export function useOptionalAdminStore() {
+  return useContext(AdminStoreContext)
 }

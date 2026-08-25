@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
-import { supabase } from '../../lib/supabaseClient'
 import { searchGuide } from './adminGuide'
 
 export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenScan, onOpenGuide, onOpenShortcuts }) {
@@ -10,7 +9,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenSc
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef(null)
 
-  const { go } = useStore()
+  const { go, products = [] } = useStore()
 
   // Base static commands
   const COMMANDS = [
@@ -78,14 +77,10 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenSc
         action: () => onOpenGuide?.(topic.title),
       }))
 
-      // Search persisted records only when Supabase is configured.
-      const { data: prodData } = supabase ? await supabase
-        .from('products')
-        .select('sku, name, barcode')
-        .ilike('name', `%${q}%`)
-        .limit(3) : { data: [] }
-      
-      const prodMatches = (prodData || []).map(p => ({
+      // Search the already-authorized bounded product projection. The palette
+      // never opens a second browser database path or treats staff profiles as customers.
+      const prodMatches = products.filter(product => [product.name, product.sku, product.barcode]
+        .some(value => String(value || '').toLowerCase().includes(q))).slice(0, 3).map(p => ({
         id: p.sku,
         type: 'Product',
         label: p.name || p.sku,
@@ -96,27 +91,12 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenSc
         }
       }))
 
-      // Search Supabase Users
-      const { data: userData } = supabase ? await supabase
-        .from('user_profiles')
-        .select('id, email, role')
-        .ilike('email', `%${q}%`)
-        .limit(3) : { data: [] }
-      
-      const userMatches = (userData || []).map(u => ({
-        id: u.id,
-        type: 'Customer',
-        label: u.email,
-        sub: u.role,
-        action: () => setSection('wholesale')
-      }))
-
-      setResults([...staticMatches, ...procedureMatches, ...prodMatches, ...userMatches])
+      setResults([...staticMatches, ...procedureMatches, ...prodMatches])
       setSelectedIndex(0)
     }
 
     search()
-  }, [query])
+  }, [query, products])
 
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowDown' && results.length) {
@@ -169,7 +149,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenSc
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Search products, customers, or commands..."
+                placeholder="Search products or commands..."
                 className="w-full bg-transparent text-xl text-white placeholder-white/30 outline-none"
               />
               <span className="ml-2 flex shrink-0 items-center gap-1 rounded bg-white/5 px-2 py-1 text-sm text-white/60 border border-adm-line">

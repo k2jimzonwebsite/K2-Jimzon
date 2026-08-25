@@ -128,7 +128,7 @@ export default function Checkout() {
               </label>
             </div>
 
-            <TurnstileChallenge onTokenChange={setBotToken} />
+            <TurnstileChallenge enabled={guestBffEnabled()} onTokenChange={setBotToken} />
 
             {error && <p role="alert" className="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
 

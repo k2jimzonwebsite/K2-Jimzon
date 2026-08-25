@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { recordSecurityEvent } from './security-events.js'
 import { createHash } from 'node:crypto'
 import sharp from 'sharp'
 
@@ -10,6 +11,7 @@ const STEPS = new Set([
 ])
 const CATEGORIES = new Set(['food', 'beauty', 'household'])
 const PUBLICATION = new Set(['draft', 'under_review', 'live', 'unlisted', 'discontinued'])
+export const MAX_EVIDENCE_BYTES = 4 * 1024 * 1024
 
 function exactObject(value, keys) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('REQUEST_INVALID')
@@ -210,15 +212,18 @@ export async function handleProductIntakeCommand(req, res, action) {
   }
 }
 
-async function readImageBody(req) {
+export async function readImageBody(req) {
   const declared = Number(req.headers['content-length'] || 0)
-  if (!Number.isFinite(declared) || declared < 1 || declared > 10 * 1024 * 1024) throw new Error('EVIDENCE_FILE_INVALID')
-  if (Buffer.isBuffer(req.body)) return req.body
+  if (!Number.isFinite(declared) || declared < 1 || declared > MAX_EVIDENCE_BYTES) throw new Error('EVIDENCE_FILE_INVALID')
+  if (Buffer.isBuffer(req.body)) {
+    if (req.body.length !== declared || req.body.length > MAX_EVIDENCE_BYTES) throw new Error('EVIDENCE_FILE_INVALID')
+    return req.body
+  }
   const chunks = []
   let total = 0
   for await (const chunk of req) {
     total += chunk.length
-    if (total > 10 * 1024 * 1024) throw new Error('EVIDENCE_FILE_INVALID')
+    if (total > MAX_EVIDENCE_BYTES) throw new Error('EVIDENCE_FILE_INVALID')
     chunks.push(chunk)
   }
   if (!total || total !== declared) throw new Error('EVIDENCE_FILE_INVALID')
@@ -250,12 +255,96 @@ export async function decodeEvidenceImage(buffer, declaredType) {
     : metadata.format === 'png'
       ? await oriented.png({ compressionLevel: 9 }).toBuffer()
       : await oriented.webp({ quality: 95 }).toBuffer()
-  if (!encoded.length || encoded.length > 10 * 1024 * 1024) throw new Error('EVIDENCE_FILE_INVALID')
+  if (!encoded.length || encoded.length > MAX_EVIDENCE_BYTES) throw new Error('EVIDENCE_FILE_INVALID')
   const outputMetadata = await sharp(encoded, { failOn: 'warning', limitInputPixels: 40_000_000 }).metadata()
   return {
     buffer: encoded, type: format.type, extension: format.extension,
     width: outputMetadata.width, height: outputMetadata.height,
     sha256: createHash('sha256').update(encoded).digest('hex'),
+  }
+}
+
+export async function removeUnregisteredEvidence(client, path) {
+  if (!path) return false
+  try {
+    const removal = await client.storage.from('product-intake-evidence').remove([path])
+    return !removal.error
+  } catch {
+    return false
+  }
+}
+
+export async function recordPendingEvidenceCleanup(
+  client, identity, registrationRequestId, sessionId, objectPath,
+) {
+  const objectPathHash = createHash('sha256').update(objectPath, 'utf8').digest('hex')
+  const payload = { sessionId, objectPath, objectPathHash }
+  const signed = signedAdminCommandArguments(
+    'intake_evidence_cleanup_pending', identity.userId, registrationRequestId, payload,
+  )
+  const result = await client.rpc('record_admin_product_intake_evidence_cleanup_v1', signed)
+  const cleanupId = String(result?.data?.cleanupId || '')
+  if (result?.error || !UUID.test(cleanupId) || result.data?.status !== 'pending') return null
+  return { cleanupId, status: 'pending' }
+}
+
+export async function reconcilePendingEvidenceCleanup(
+  client, identity, retryRequestId, cleanupId,
+) {
+  if (!UUID.test(retryRequestId) || !UUID.test(cleanupId)) throw new Error('REQUEST_INVALID')
+  const claim = await client.rpc(
+    'claim_admin_product_intake_evidence_cleanup_v1',
+    signedAdminCommandArguments(
+      'intake_evidence_cleanup_retry', identity.userId, retryRequestId, { cleanupId },
+    ),
+  )
+  if (claim?.error || !claim?.data) throw new Error('EVIDENCE_CLEANUP_UNAVAILABLE')
+  if (claim.data.status === 'completed') return { cleanupId, cleanupPending: false }
+  const objectPath = String(claim.data.objectPath || '')
+  const objectPathHash = String(claim.data.objectPathHash || '')
+  const validPath = /^[0-9a-f-]{36}\/[0-9a-f-]{36}\/[A-Za-z0-9._-]{1,180}$/i.test(objectPath)
+  const actualHash = createHash('sha256').update(objectPath, 'utf8').digest('hex')
+  if (!validPath || !/^[a-f0-9]{64}$/.test(objectPathHash) || actualHash !== objectPathHash) {
+    throw new Error('EVIDENCE_CLEANUP_INVALID')
+  }
+  const removal = await client.storage.from('product-intake-evidence').remove([objectPath])
+  if (removal?.error) return { cleanupId, cleanupPending: true }
+  const completion = await client.rpc(
+    'complete_admin_product_intake_evidence_cleanup_v1',
+    signedAdminCommandArguments(
+      'intake_evidence_cleanup_complete', identity.userId, retryRequestId,
+      { cleanupId, objectPathHash },
+    ),
+  )
+  return { cleanupId, cleanupPending: Boolean(completion?.error) }
+}
+
+export async function handleProductEvidenceCleanup(req, res) {
+  if (req.method !== 'POST') {
+    return safeJson(res, 405, { error: { code: 'METHOD_NOT_ALLOWED' } }, { Allow: 'POST' })
+  }
+  const idempotencyKey = String(req.headers['x-k2-idempotency-key'] || '').trim()
+  if (!UUID.test(idempotencyKey)) {
+    return safeJson(res, 400, { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } })
+  }
+  const authorized = await authorizeAdminRequest(req, res, { csrf: true })
+  if (!authorized) return undefined
+  try {
+    const body = await readJson(req)
+    exactObject(body, ['cleanupId'])
+    const cleanupId = uuid(body.cleanupId)
+    const result = await reconcilePendingEvidenceCleanup(
+      authorized.client, authorized.identity, idempotencyKey, cleanupId,
+    )
+    return safeJson(res, 200, { ok: true, ...result })
+  } catch (error) {
+    if (['REQUEST_INVALID', 'BODY_TOO_LARGE', 'JSON_REQUIRED', 'INVALID_JSON'].includes(error?.message)) {
+      return safeJson(res, 400, { error: { code: 'EVIDENCE_CLEANUP_INVALID' } })
+    }
+    if (error?.message === 'EVIDENCE_CLEANUP_INVALID') {
+      return safeJson(res, 409, { error: { code: 'EVIDENCE_CLEANUP_INVALID' } })
+    }
+    return safeJson(res, 503, { error: { code: 'EVIDENCE_CLEANUP_UNAVAILABLE' } })
   }
 }
 
@@ -285,6 +374,27 @@ export async function handleProductEvidenceUpload(req, res) {
     const signed = signedAdminCommandArguments('intake_evidence_register', authorized.identity.userId, idempotencyKey, payload)
     const command = await authorized.client.rpc('execute_admin_product_intake_command_v1', signed)
     if (command.error) {
+      const removed = await removeUnregisteredEvidence(authorized.client, path)
+      if (!removed) {
+        const pending = await recordPendingEvidenceCleanup(
+          authorized.client, authorized.identity, idempotencyKey, sessionId, path,
+        ).catch(() => null)
+        const objectPathHash = createHash('sha256').update(path, 'utf8').digest('hex')
+        await recordSecurityEvent(authorized.client, {
+          correlationId: idempotencyKey,
+          eventType: 'application_error', source: 'admin_bff', severity: 'warning',
+          outcome: 'failed', sessionId: authorized.session?.sessionId || null,
+          routeKey: 'admin.product-intake.evidence',
+          reasonCode: pending ? 'INTAKE_EVIDENCE_CLEANUP_PENDING' : 'INTAKE_EVIDENCE_CLEANUP_UNTRACKED',
+          subjectKind: 'private_object_hash', subjectId: objectPathHash,
+        })
+        if (pending) {
+          return safeJson(res, 503, {
+            error: { code: 'EVIDENCE_CLEANUP_PENDING' }, cleanupId: pending.cleanupId,
+          })
+        }
+        return safeJson(res, 503, { error: { code: 'EVIDENCE_CLEANUP_UNTRACKED' } })
+      }
       const providerCode = String(command.error.message || '')
       if (providerCode.includes('K2_ADMIN_RATE_LIMITED')) return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': '60' })
       if (providerCode.includes('K2_ADMIN_IDEMPOTENCY_CONFLICT')) return safeJson(res, 409, { error: { code: 'IDEMPOTENCY_CONFLICT' } })

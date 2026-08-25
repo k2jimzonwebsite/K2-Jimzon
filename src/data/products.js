@@ -71,7 +71,7 @@ export const products = [
     brand_id: 'Pistì',
     country_of_origin: 'Italy',
     barcode: '8050031123456',
-    product_video_url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    product_video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     usage_instructions: 'Best enjoyed spread generously on warm bread, croissants, or pandesal. Can also be used as a filling for pastries or swirled into gelato.',
     whyBuy: 'The pistachio cream Milan cafés put in cornetti — dense, nutty, barely sweet.',
     whyRare: 'Real high-percentage pistachio creams rarely clear PH import; most local jars are thin paste.',

@@ -211,6 +211,22 @@ The checklist is:
    decode. It re-encodes JPEG/PNG/WebP without embedded metadata before private
    storage and records the content hash; browser file names and MIME values are
    never accepted as proof that a file is a safe image.
+   Public product media is a separate data class and bucket from private intake
+   evidence. Its prepared Admin boundary applies the same byte-level image
+   verification and metadata stripping, then stores only an actor-scoped,
+   idempotency- and content-hash-derived public object. Upload does not itself
+   assign the image to a product or confer publication authority.
+   Assignment is a separate reasoned command: new media must match the acting
+   staff member's completed upload receipt, existing legacy media may only be
+   retained unchanged, and removing a primary image is denied while a product
+   is published or Live. Unassignment does not assert that the public Storage
+   object has been deleted. The separate cleanup command may remove only a
+   completed-receipt object that is absent from every canonical product-media
+   field after a fresh database check. Assignment-triggered cleanup remains
+   pending across ambiguous Storage failures and retries with the original
+   operation key. Abandoned-upload review is Admin/AAL2-only, waits at least one
+   hour, is bounded to 100 review rows and 25 reasoned removals, and rechecks
+   references immediately before deletion.
 3. **Research without surrendering control.** The app saves the intake session
    and prepares the versioned request. Staff manually use two private ChatGPT
    Projects while no API exists. **K2 Product Content** accepts `PRODUCT_JSON`
@@ -219,24 +235,35 @@ The checklist is:
    and `AFTER` to create the truthful prepared, applied, or in-use image. Neither
    Project can assign SKU, slug, stock, approved prices, expiry, review status,
    or publication status.
-4. **Validate and review the response.** `PRODUCT_JSON` contains the product
+4. **Secure cutover uses named product-master commands.** Barcode helpers use
+   the protected duplicate search, and new products enter through phone-first
+   intake. Smart Paste may not fall back to direct browser inserts when the
+   Admin BFF is enabled. Existing-product detail updates use the fixed
+   Admin/AAL2 product-master projection, an optimistic record version, a
+   specific reason, CSRF, signature, and durable idempotency. Publication state
+   uses a separate five-state transition command and rechecks Live readiness;
+   it never rides inside a generic detail patch. Permanent deletion uses the
+   dedicated signed command while preserving the existing PIN, lockout,
+   stock/listing/history, reason, and retry rules. Direct browser product writes
+   and legacy deletion execution are revoked only in the coordinated cutover.
+5. **Validate and review the response.** `PRODUCT_JSON` contains the product
    draft, customer copy, SEO/meta/headings, structured use cases and
    instructions, two image briefs, per-field evidence/source references,
    unknown fields, and review notes. It contains no surrounding prose or
    operational fields. Re-run duplicate checks. Show
    proposed-versus-current values and let staff accept or reject each suggestion.
    Unknown or unsupported facts stay visibly unresolved as JSON `null` values.
-5. **Create one Draft product.** A server command assigns the stable SKU and
+6. **Create one Draft product.** A server command assigns the stable SKU and
    writes the reviewed product fields, code mappings, evidence/provenance,
    checklist state, actor, and audit event atomically. App switching, timeout,
    retry, and duplicate submission cannot create a second product.
-6. **Create inventory separately.** After the Draft exists, choose the truthful
+7. **Create inventory separately.** After the Draft exists, choose the truthful
    source: an Italy flight/box manifest line, a supplier/receipt workflow, or an
    authorized opening-balance reconciliation for verified legacy stock. The lot
    owns batch, expiry/non-expiry evidence, quantity, hub, owner, custodian,
    condition, unit cost, reason, and receiving state. Product rows never own
    these values.
-7. **Review readiness separately.** Product review, inventory eligibility, and
+8. **Review readiness separately.** Product review, inventory eligibility, and
    channel/publication readiness are distinct. A Draft may exist with no stock;
    received stock may exist while content remains Draft; neither fact makes the
    other complete.
@@ -245,6 +272,33 @@ Every publication change records a specific review reason. `Live` means the
 canonical storefront publication state only; Shopee, TikTok Shop, Lazada, and
 future channels require their own listing/readiness confirmation and cannot be
 implied by the Product Master status.
+
+### Public review-claim lifecycle
+
+Customer review copy is a public claim, not free-form CMS content. A new claim
+starts as `draft` and records the attributable source reference, source kind,
+rights basis, rights-confirmation time, actor, and reason before it can be
+considered for publication.
+
+```text
+draft -> published -> withdrawn
+  ^         |
+  +---------+  correction returns the claim to draft
+withdrawn -> published  only after evidence and copy are reviewed again
+```
+
+- Only an AAL2 Admin may create, correct, publish, or withdraw a claim.
+- Creation and correction never publish implicitly. Publication requires a
+  separate reasoned action and complete provenance/rights evidence.
+- Source references and rights evidence remain private. The storefront receives
+  only the reviewed public fields for records whose status is `published`.
+- Withdrawal preserves the record and immutable before/after audit history; it
+  is not deletion. A corrected published claim records withdrawal and returns to
+  draft until separately republished.
+- Seed strings, fixtures, screenshots, marketplace labels, or a successful file
+  check do not prove consent, attribution, publication, or live-host visibility.
+- Globe-product visibility is a separate reasoned, version-checked Admin command;
+  enabling a product on the Globe does not publish a review or prove any claim.
 
 The mobile interface uses one focused step at a time, visible progress and
 blockers, persistent save/resume, a sticky primary action, 44px or larger touch
@@ -413,6 +467,29 @@ request, or conversation through an expiring, revocable, high-entropy grant;
 email, phone number, sequential ID, or a changed URL ID is never ownership proof.
 An account may claim a guest record only after contact verification and conflict
 checks. Channel identities and guest/account records are not silently merged.
+After a verified claim revokes the guest grant, continuity derives only from the
+active account-to-customer link. Account history returns bounded customer-visible
+order, Pasabuy, and Website-conversation facts; it excludes contact/delivery PII,
+raw provider data, and internal notes. An account reply is accepted only when the
+same linked customer owns the exact conversation and the command is rate-limited
+and payload-idempotent. Browser-supplied customer/user IDs never establish scope.
+
+A wholesale inquiry is not a wholesale organization, authorized buyer, price
+list, quote, credit decision, order, or commercial approval. Before the secure
+inquiry boundary is active, the Storefront may only prepare an explicitly unsent
+email draft and must not create a local receipt. Initial intake minimizes data:
+business need, attributable contact, expected volume, target items, and delivery
+city/area. Registration/tax evidence is requested later only by staff through a
+confirmed channel. OWNER-003 governs eligibility, minimums, pricing, credit, and
+any response-time promise; browser text or state can never grant them.
+
+Admin review of a captured inquiry is triage, not commercial authorization.
+Only an AAL2 staff session with the Admin role may read the fixed inquiry
+projection or record a status change. Status is limited to `submitted`,
+`under_review`, or `closed`; every change requires an attributable bounded
+reason and immutable actor/from/to evidence, and a closed inquiry may be reopened
+for recovery. No triage action may create an organization, authorize a buyer,
+attach pricing, grant credit or terms, allocate stock, or promise delivery.
 
 Contact us is a permanent storefront destination and is not hidden merely
 because secure Website messaging is inactive. Its directory publishes only
@@ -461,7 +538,133 @@ commands; it is not a service-role or database master key.
 
 Replaying an event never duplicates the order or reservation.
 
+Before signature verification or durable capture, a marketplace webhook boundary
+also enforces its reviewed content type, byte ceiling, and one bounded body-read
+deadline. The deadline is an explicit server setting; missing or invalid
+configuration fails closed, and a stalled stream is cancelled without capture.
+A signed event must
+carry the provider account/shop identity, event time, and a deterministic
+provider event identity; a server clock, arrival time, or random value may never
+be substituted for a missing idempotency key. Timestamp freshness and permitted
+retry age come from the approved provider contract and are configured explicitly.
+Missing, malformed, future-skewed, stale, or identity-less events fail closed.
+Every validated signed attempt then crosses one atomic, distributed database
+capture command that consumes both provider-account and connector-global
+budgets before inserting the inbox row. Missing reviewed limits fail closed;
+limits are never guessed in code. A denied attempt remains counted, an exact
+replay preserves the existing inbox processing state, and reuse of an event key
+with changed type or payload is a conflict that cannot overwrite stored evidence.
+
 Track credentials, order capture, listings, stock sync, messages, waybill, and health separately. One webhook does not make a channel globally “Live.”
+
+### Internal-channel verification
+
+Website and Pasabuy may be marked operational only from a matching canonical
+`order_requests` or `pasabuy_requests` public reference that staff actually
+reconciled. The command is Admin/AAL2-only, signed, reasoned, idempotent,
+rate-limited, and records immutable private before/after evidence. A manual test
+toggle, catalog row, or configured channel name is not operational proof.
+Marketplace channels never inherit this internal shortcut: Shopee, TikTok Shop,
+Lazada, and future providers remain not connected until their own signed event,
+durable capture, normalization, stock, retry, and reconciliation evidence passes.
+
+### Staff access changes
+
+Only a current Admin with AAL2 may read the bounded staff register, change a
+role, or set/rotate their own delete PIN. Every role/PIN change requires a
+specific reason, signed request, durable idempotency key, rate limit, final-Admin
+protection, and immutable before/after evidence. Audit events record only whether
+a PIN was configured; PIN values and hashes never appear in browser responses or
+event history. Invitations remain unavailable through the secure Admin boundary
+until the reason column and v2 claim are applied, the matching Edge version is
+deployed, one Admin/AAL2 invitation and replay pass end to end, and the separate
+server activation switch is enabled. A disabled form or prepared endpoint is not
+invitation capability or delivery evidence.
+
+Replacing an active Admin authenticator is a credential change, not a recovery
+bypass. It requires a current Admin/AAL2 session, a 3–500 character reason, a
+signed private requested receipt, and one exact replacement operation. The old
+verified factor remains active while the new QR/manual-key setup is pending and
+is retired only after the exact new factor verifies. Requested and completed
+events retain reason and hashed—not raw—factor identifiers. Multiple existing
+verified factors fail closed. Lost-factor recovery must use a separately
+approved owner/provider identity process and may never be simulated by disabling
+MFA, trusting email alone, or exposing provider tokens to browser code.
+
+Before a staff email/password attempt reaches the Auth provider, the Admin
+server must consume its process-local IP brake and a signed durable database
+budget. The database stores only domain-separated server-HMAC IP and normalized
+email identifiers, never raw credentials, address, or IP. Login permits at most
+20 requests per IP per 15 minutes, ten per normalized address per hour, and 300
+total requests per minute. Every attempt, including a denial, increments all
+applicable buckets. A denial returns safe `RATE_LIMITED` plus integer
+`Retry-After` before password authentication; an unavailable, invalid, expired,
+or replayed durable boundary fails closed without calling Auth.
+
+Before any pending-session MFA attempt restores a provider session, the Admin
+server must consume its process-local IP brake and the same signed durable
+database boundary under a separate MFA action. The durable subject is a
+domain-separated server-HMAC of the encrypted pending-session ID; the database
+must never receive or store the raw pending ID, cookie, provider token, code, or
+IP. MFA permits at most ten requests per IP per 15 minutes, five per pending
+session per 15 minutes, and 300 total requests per minute. Every attempt,
+including a denial, increments all applicable buckets. A denial returns safe
+`RATE_LIMITED` plus integer `Retry-After` before provider restoration, challenge,
+verification, or enrollment. A missing, invalid, replayed, or unavailable
+durable boundary fails closed without calling Auth.
+
+Staff password recovery is available only to an invited Admin or Staff identity
+whose email is already verified. The request response is identical whether or
+not the address belongs to staff. The recovery email must use one exact
+allowlisted Admin callback and a custom provider template that sends the
+single-use token hash to the server boundary; provider sessions and refresh
+tokens never enter the URL or browser JavaScript. After server verification, a
+ten-minute encrypted recovery cookie plus separately bound CSRF token may change
+one password that is 12–128 characters. Completion rechecks the current staff
+role, closes all provider sessions, clears the recovery cookies, and requires a
+fresh password-plus-authenticator sign-in. A used, expired, altered, non-staff,
+unverified-email, wrong-origin, or replayed recovery fails closed. Password
+recovery does not remove, replace, or bypass a lost authenticator; lost-factor
+identity recovery remains a separately approved owner/provider process.
+
+Before requesting provider mail, the Admin server must consume both its
+process-local brake and a signed durable database budget. The database may store
+only server-HMAC identifiers: never the raw address or IP. Recovery permits at
+most five requests per IP per 15 minutes, three per normalized address per hour,
+and 120 total requests per minute. Every attempt, including a denial, increments
+all applicable buckets. A denial returns the same safe `RATE_LIMITED` response
+with an integer `Retry-After` and must not call the mail provider. A missing,
+invalid, replayed, or unavailable durable boundary fails closed without sending
+mail.
+
+Staff email/password login and recovery-email issuance also require one bounded
+Turnstile token for the `admin_auth` action. The Admin server consumes the
+applicable durable budget before remote challenge verification. A missing,
+expired, replayed, wrong-action, or failed challenge returns safe
+`BOT_CHALLENGE_REQUIRED` and must not call password Auth or request provider
+mail. Pending-session MFA, recovery-token verification, and password completion
+do not require a second challenge; each retains its stricter session/token budget.
+
+Before the recovery callback sends a token hash to the Auth provider, the Admin
+server must consume a separate signed durable verification budget. Its subject
+is a domain-separated server-HMAC of the one-use token hash; the database must
+never receive or store the raw token hash, address, provider token, cookie, or
+IP. Verification permits at most ten requests per IP per 15 minutes, three per
+token per 15 minutes, and 120 total requests per minute. Every attempt,
+including a denial, increments all applicable buckets. A denial returns safe
+`RATE_LIMITED` with an integer `Retry-After`; a missing, malformed, expired,
+replayed, or unavailable durable boundary fails closed before token verification.
+
+Before a verified recovery session can restore a provider session, change a
+password, or globally sign out sessions, the Admin server must consume a
+separate signed durable completion budget. Its subject is a domain-separated
+server-HMAC of the recovery-session ID; the database must never receive or store
+the raw recovery ID, cookie, provider token, password, or IP. Completion permits
+at most ten requests per IP per 15 minutes, five per recovery session per 15
+minutes, and 120 total requests per minute. Every attempt, including a denial,
+increments all applicable buckets. A denial returns safe `RATE_LIMITED` with an
+integer `Retry-After`; an unavailable, invalid, expired, or replayed durable
+boundary fails closed before every provider call.
 
 ## 12. Website checkout
 
@@ -487,6 +690,25 @@ submitted -> reviewed -> confirmed -> reserved -> fulfillment
 - A guest order or Pasabuy submission creates or links one website conversation
   so the same scoped guest can continue messaging without registering. Creating
   an account later is an optional verified claim, not a prerequisite.
+- Customer email-link request, SMS-code request, and SMS-code verification must
+  cross fixed same-origin Storefront server routes; browser code must not invoke
+  the Auth provider's OTP send or verification methods directly. Before any
+  provider call, the server consumes a signed, replay-protected durable budget
+  across the applicable IP, normalized-contact or verification-subject, and
+  global scopes. Only domain-separated server-HMAC subjects reach the database;
+  raw email, phone, code, and IP values do not. A denial or unavailable durable
+  boundary fails closed with generic recovery guidance and `Retry-After`.
+- Email-link and SMS-code issuance also require a bounded Storefront Turnstile
+  token for the `customer_auth` action. The server consumes the durable budget
+  before remote challenge verification so rejected traffic cannot use bot checks
+  or provider delivery as an unmetered resource. A missing, expired, wrong-action,
+  or failed challenge returns safe `BOT_CHALLENGE_REQUIRED` and must not request
+  provider email or SMS. SMS-code verification uses its stricter durable attempt
+  budget and does not require a second challenge for the same sign-in journey.
+- A successful SMS verification may return only the bounded access/refresh pair
+  required to establish the ordinary customer browser session. It grants no
+  staff, VIP, wholesale, pricing, or guest-record ownership authority; verified
+  claim remains a separate server command.
 - A guest may also start a Website conversation directly from `Message us`
   without first creating an order or Pasabuy request. The same signed BFF,
   bot-defense, contact, rate-limit, idempotency, scoped-grant, and safe-receipt
@@ -630,6 +852,14 @@ landed_cost = purchase_cost
 
 ## 20. Admin organization
 
+Supplier identity is separate from commercial approval. Creating a supplier
+records only a verified name/contact, expected lead time, actor, source/reason,
+and immutable event. It does not approve a price, create or send a purchase
+order, receive stock, create a lot, recognize a payable, settle money, or assign
+landed cost. Those actions require their own canonical records and reasoned,
+idempotent commands. Until they exist, the Admin must label them unavailable and
+Product Intake must keep supplier-receipt intake unavailable.
+
 1. Action center
 2. Pasabuy requests and quotes
 3. Purchasing and suppliers
@@ -662,12 +892,47 @@ Do not fabricate fallbacks or turn query failure into zero.
 
 - Use real Supabase sessions and server-enforced roles.
 - Keep admin/storefront access separate.
+- Shared Admin navigation, badges, and search reuse authorized fixed
+  projections. They do not make parallel browser table reads, infer customer
+  identity from staff profiles, fabricate unavailable counts, or maintain
+  direct Realtime subscriptions after the secure BFF cutover.
+- When the secure Admin BFF is selected, shared Storefront/Admin providers must
+  not mount legacy browser Auth listeners, table reads, RPCs, or mutation
+  transports that the secure Admin surface does not use. Flag-off compatibility
+  may remain explicit, but it cannot execute in parallel with the cookie-bound
+  Admin path. Secure transport availability must be evaluated before any browser-
+  client availability check; a missing browser Supabase client cannot suppress a
+  valid same-origin Admin BFF projection.
 - Protect Admin BOS sessions behind a same-origin server/BFF boundary using
   `HttpOnly`, `Secure`, appropriately scoped `SameSite` cookies. Browser code
   never receives an elevated key or refresh token. Cookie-authenticated state
   changes require Origin/Referer validation and CSRF protection.
+- Bind every K2 Admin cookie session to the provider JWT `session_id` and the
+  same actor's live provider-session row. A password change, global sign-out, or
+  provider security action that removes that row invalidates the K2 session on
+  its next request even if the old access JWT has not expired. Missing or
+  mismatched provider-session evidence fails closed and is audited without
+  storing tokens.
+- Apply both action-specific limits and cross-action actor/global budgets to
+  signed Admin requests. A budget denial returns a safe `429` and retry window;
+  it never becomes a generic availability error or permission to retry a
+  mutation with a different operation key.
 - Require MFA/AAL2 for privileged roles and sensitive actions when enrollment,
   challenge, and recovery flows are verified end to end.
+- An invited Admin or Staff account with a correct password but no verified TOTP
+  factor receives only a ten-minute encrypted pending session. It may remove only
+  that actor's stale unverified TOTP setup and start one new enrollment. The QR
+  and manual key are shown only for that setup attempt; no active Admin cookie is
+  issued until the exact factor verifies, live staff access is rechecked, and the
+  provider reports AAL2. Reload, expiry, invalid factor, or failed verification
+  returns to sign-in without silently granting or preserving Admin access.
+- An active Admin may replace one verified TOTP factor only from a live AAL2
+  session through the separately gated, reasoned replacement boundary. The old
+  factor stays usable until the new factor verifies; an ambiguous retirement or
+  audit result remains retryable under the same operation ID. The browser sees
+  only bounded setup material and opaque factor IDs, never provider session
+  tokens. Lost-factor recovery remains unavailable until its identity and
+  escalation policy is approved and proven end to end.
 - Separate Admin, Operations, Warehouse, Support, Finance, and Read-only capabilities.
 - General Staff does not automatically receive every financial, security, publishing, write-off, or refund power.
 - Sensitive operations require confirmation, reason, and audit event.

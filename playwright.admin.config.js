@@ -27,7 +27,8 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'npx vite --mode combined --port 5180',
+    command: 'npx vite --mode combined --port 5180 --configLoader runner',
+    env: { VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA' },
     url: 'http://localhost:5180',
     reuseExistingServer: false,
     timeout: 120000,

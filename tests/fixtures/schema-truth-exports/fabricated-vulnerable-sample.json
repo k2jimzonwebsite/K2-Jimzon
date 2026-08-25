@@ -1,7 +1,7 @@
 {
   "project_ref": "fabricated-vulnerable-project-002",
   "exported_at": "2026-08-11T12:00:00Z",
-  "format_version": "2026-08-15.map017.meta.v1",
+  "format_version": "2026-08-22.map017.meta.v2",
   "schemas": ["public", "storage"],
   "tables": {
     "brands": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
@@ -12,6 +12,11 @@
     "product_drafts": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
     "products_old": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" }
   },
+  "columns": [],
+  "constraints": [],
+  "indexes": [],
+  "sequences": [],
+  "triggers": [],
   "views": {
     "v_channel_catalog_readiness": { "securityInvoker": false, "owner": "postgres" },
     "v_expiring_batches": { "securityInvoker": false, "owner": "postgres" }
@@ -39,6 +44,8 @@
       { "grantee": "anon", "privilege": "UPDATE" }
     ]
   },
+  "schema_grants": [],
+  "default_privileges": [],
   "policies": [
     { "table_name": "brands", "policy_name": "Admin Full Access", "command": "ALL", "roles": ["public"], "using_expression": "true", "with_check_expression": "true" },
     { "table_name": "warehouses", "policy_name": "Admin Full Access", "command": "ALL", "roles": ["public"], "using_expression": "true", "with_check_expression": "true" },

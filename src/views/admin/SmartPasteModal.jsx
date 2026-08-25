@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { safeUiError } from '../../lib/safeUiError'
+import { adminBffEnabled } from '../../services/adminBffService'
 import ImageUploadDropzone from '../../components/ui/ImageUploadDropzone'
 import { parseProductResearchPaste } from './productResearchContract.js'
 import {
@@ -64,6 +66,7 @@ function mapAiToDb(p, images, contractInfo) {
 }
 
 export default function SmartPasteModal({ onClose, onProductAdded }) {
+  const secure = adminBffEnabled()
   const [stage, setStage]               = useState('json')    // 'json' | 'review'
   const [pasteJson, setPasteJson]       = useState('')
   const [parsedProduct, setParsedProduct] = useState(null)
@@ -93,8 +96,8 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
       setParsedProduct(parsed.product)
       setContractInfo(parsed.meta)
       setParseWarnings(parsed.warnings)
-    } catch (parseError) {
-      setError(parseError?.message || 'Invalid product JSON. Copy the complete PRODUCT_JSON response and try again.')
+    } catch {
+      setError(safeUiError('PRODUCT_JSON_INVALID'))
     }
   }
 
@@ -116,6 +119,10 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
   // ── Save to Supabase ─────────────────────────────────────────────────────────
   const handleSave = async () => {
     if (!parsedProduct) return
+    if (secure) {
+      setError('Secure mode keeps this as a review-only handoff. Close it and use phone-first intake to create the attributable Draft.')
+      return
+    }
     const dbRow = mapAiToDb(parsedProduct, { primary: primaryUrl, after: afterUrl, gallery: galleryUrls }, contractInfo)
     if (!dbRow.sku) {
       alert('Please fill in the Product ID field before saving.')
@@ -130,7 +137,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
     }
     const { error: insertError } = await supabase.from('products').insert([dbRow])
     if (insertError) {
-      alert('Error saving: ' + insertError.message)
+      setError(safeUiError('PRODUCT_SAVE_FAILED'))
       setSaving(false)
       return
     }
@@ -504,13 +511,14 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
 
               {/* Save */}
               <div className="pt-8 pb-4 flex flex-col items-center border-t border-adm-line">
-                <p className="text-base text-white/60 mb-4">This saves a product Draft. Pricing review, publication, and physical inventory remain separate controlled steps.</p>
+                <p className="mb-4 text-base text-white/60">{secure ? 'Review and copy the approved content here, then use phone-first intake for the server-created, attributable Draft.' : 'This saves a product Draft. Pricing review, publication, and physical inventory remain separate controlled steps.'}</p>
+                {error && <p role="alert" className="mb-4 w-full max-w-2xl rounded-adm-sm border border-amber/40 bg-amber/10 px-4 py-3 text-sm text-amber">{error}</p>}
                 <button
                   onClick={handleSave}
                   disabled={saving}
                   className="w-full max-w-sm bg-forest text-navy font-bold py-4 rounded-adm-sm transition-[transform,opacity] duration-150 active:scale-[0.99] disabled:opacity-50 flex justify-center items-center gap-2"
                 >
-                  {saving ? 'Saving Draft…' : 'Save product Draft'}
+                  {saving ? 'Saving Draft…' : secure ? 'Use phone-first intake to save' : 'Save product Draft'}
                 </button>
               </div>
             </div>

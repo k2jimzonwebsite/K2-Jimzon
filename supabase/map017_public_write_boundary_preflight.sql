@@ -3,7 +3,8 @@ with required_relations(relation_name) as (
   values
     ('brands'), ('categories'), ('warehouses'), ('product_drafts'),
     ('products_old'), ('channel_credentials'), ('staff_allocations'),
-    ('v_channel_catalog_readiness'), ('v_expiring_batches')
+    ('v_channel_catalog_readiness'), ('v_expiring_batches'),
+    ('v_product_stock_from_batches'), ('products'), ('product_batches')
 ), relation_check as (
   select r.relation_name,
     to_regclass(format('public.%I', r.relation_name)) is not null as exists_live
@@ -13,12 +14,24 @@ with required_relations(relation_name) as (
   from pg_class c
   join pg_namespace n on n.oid = c.relnamespace
   where n.nspname = 'public'
-    and c.relname in ('v_channel_catalog_readiness', 'v_expiring_batches')
+    and c.relname in (
+      'v_channel_catalog_readiness', 'v_expiring_batches',
+      'v_product_stock_from_batches'
+    )
 )
 select
   not exists (select 1 from relation_check where not exists_live)
     and to_regprocedure('public.is_staff()') is not null
-    and (select count(*) = 2 from view_check where options like '%security_invoker=true%')
+    and (select count(*) = 3 from view_check where options like '%security_invoker=true%')
+    and exists (
+      select 1
+      from pg_attribute
+      where attrelid = 'public.product_batches'::regclass
+        and attname in ('sku', 'quantity_available')
+        and not attisdropped
+      group by attrelid
+      having count(*) = 2
+    )
     and exists (select 1 from storage.buckets where id = 'product-images')
     as ready_to_apply,
   coalesce(

@@ -1,3 +1,5 @@
+import { safeUiError } from './safeUiError.js'
+
 /**
  * Connector Runtime Foundation (MAP-011)
  * Idempotent event intake, queue runner, retries, and dead-letter handling.
@@ -55,7 +57,7 @@ export async function processEventEnvelope(envelope, handler) {
       throw new Error('Handler returned non-success result.')
     }
   } catch (err) {
-    item.lastError = err.message || 'Unknown processing error'
+    item.lastError = safeUiError('ADAPTER_PROCESS_FAILED')
     if (item.attempts >= MAX_RETRY_ATTEMPTS) {
       item.status = ADAPTER_STATUSES.DEAD_LETTER
     } else {

@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { providerErrorIncludes } from '../../lib/safeUiError'
+import {
+  adminBffEnabled, commandAdminProductMasterBff, getAdminStaffAccessBff,
+} from '../../services/adminBffService'
 
 // ============================================================================
 // PIN-gated product deletion.
@@ -16,6 +20,7 @@ import { supabase } from '../../lib/supabaseClient'
 // ============================================================================
 
 export default function DeleteProductsModal({ products = [], onClose, onDeleted }) {
+  const secure = adminBffEnabled()
   const [pin, setPin] = useState('')
   const [reason, setReason] = useState('')
   const [busy, setBusy] = useState(false)
@@ -30,17 +35,29 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
   useEffect(() => {
     let cancelled = false
     const check = async () => {
+      if (secure) {
+        const response = await getAdminStaffAccessBff()
+        if (cancelled) return
+        if (!response.ok) {
+          setPinState('missing')
+          setError(response.error || 'Delete PIN status could not be checked. Refresh and try again.')
+        } else {
+          setPinState(response.staffAccess?.hasDeletePin ? 'ready' : 'missing')
+          if (!response.staffAccess?.hasDeletePin) setError('You have not set a delete PIN yet. Set one under Staff & Roles first.')
+        }
+        return
+      }
       if (!supabase) { if (!cancelled) setPinState('offline'); return }
       const { data, error: rpcError } = await supabase.rpc('has_delete_pin')
       if (cancelled) return
       if (rpcError) {
         setPinState('missing')
         setError(
-          rpcError.message.includes('does not exist')
+          providerErrorIncludes(rpcError, 'does not exist')
             ? 'The secure product-deletion service is not available yet. Refresh after the Admin update finishes.'
-            : rpcError.message.includes('K2_AAL2_REQUIRED')
+            : providerErrorIncludes(rpcError, 'K2_AAL2_REQUIRED')
               ? 'Verify your authenticator again before deleting a product.'
-              : rpcError.message.includes('K2_ADMIN_REQUIRED')
+              : providerErrorIncludes(rpcError, 'K2_ADMIN_REQUIRED')
                 ? 'Only an Admin can permanently delete a product.'
                 : 'Delete PIN status could not be checked. Refresh and try again.'
         )
@@ -51,7 +68,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
     }
     check()
     return () => { cancelled = true }
-  }, [])
+  }, [secure])
 
   useEffect(() => {
     if (pinState === 'ready') inputRef.current?.focus()
@@ -64,6 +81,31 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
     setError('')
 
     const skus = products.map(p => p.sku).filter(Boolean)
+
+    if (secure) {
+      const response = await commandAdminProductMasterBff('delete', {
+        skus, pin, reason: reason.trim(),
+      }, requestIdRef.current)
+      setBusy(false)
+      if (!response.ok) {
+        setPin('')
+        return setError(response.error || 'The deletion was refused. Nothing was removed.')
+      }
+      const result = response.result || {}
+      if (!result.ok) {
+        setPin('')
+        const messages = {
+          INVALID_PIN: `That PIN is not correct.${Number.isInteger(result.attempts_remaining) ? ` ${result.attempts_remaining} attempt${result.attempts_remaining === 1 ? '' : 's'} remaining.` : ''}`,
+          PIN_LOCKED: 'Delete PIN is temporarily locked after repeated attempts. Wait 15 minutes and try again.',
+          PIN_NOT_SET: 'Set your Delete PIN under Staff & Roles first.',
+          PRODUCT_HAS_HISTORY: 'A selected product has stock, listings, or operational history and cannot be permanently deleted. Mark it Discontinued instead.',
+        }
+        return setError(messages[result.code] || 'The deletion was refused. Nothing was removed.')
+      }
+      onDeleted?.(skus, Number(result.deleted_count) || 0)
+      onClose()
+      return
+    }
 
     if (!supabase) {
       setBusy(false)
@@ -82,9 +124,9 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
     if (rpcError) {
       setPin('')
       return setError(
-        rpcError.message.includes('does not exist')
+        providerErrorIncludes(rpcError, 'does not exist')
           ? 'The secure product-deletion service is not available yet. Refresh after the Admin update finishes.'
-          : rpcError.message.includes('K2_AAL2_REQUIRED')
+          : providerErrorIncludes(rpcError, 'K2_AAL2_REQUIRED')
             ? 'Verify your authenticator again before deleting a product.'
             : 'The deletion could not be completed. Nothing was removed.'
       )

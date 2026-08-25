@@ -1,11 +1,12 @@
 import { createClient } from '@supabase/supabase-js'
 
-export function createStorefrontServerSupabase() {
+export function createStorefrontServerSupabase(accessToken = null) {
   const url = process.env.SUPABASE_URL || ''
   const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY || ''
   if (!url || !publishableKey) throw new Error('SUPABASE_SERVER_CONFIG_MISSING')
   return createClient(url, publishableKey, {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    ...(accessToken ? { global: { headers: { Authorization: `Bearer ${accessToken}` } } } : {}),
   })
 }
 
@@ -24,6 +25,18 @@ export function mapBoundaryResult(data) {
   }
   if (result.error_code === 'CONVERSATION_NOT_AVAILABLE') {
     return { ok: false, status: 404, code: 'CONVERSATION_NOT_AVAILABLE' }
+  }
+  if (result.error_code === 'CLAIM_CONTACT_MISMATCH') {
+    return { ok: false, status: 403, code: 'CLAIM_CONTACT_MISMATCH' }
+  }
+  if (result.error_code === 'ACCOUNT_CONTACT_NOT_VERIFIED') {
+    return { ok: false, status: 403, code: 'ACCOUNT_CONTACT_NOT_VERIFIED' }
+  }
+  if (result.error_code === 'ACCOUNT_IDENTITY_CONFLICT') {
+    return { ok: false, status: 409, code: 'ACCOUNT_IDENTITY_CONFLICT' }
+  }
+  if (result.error_code === 'ACCOUNT_NOT_LINKED') {
+    return { ok: false, status: 409, code: 'ACCOUNT_NOT_LINKED' }
   }
   return { ok: false, status: 409, code: 'REQUEST_REJECTED' }
 }

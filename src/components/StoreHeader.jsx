@@ -1,6 +1,7 @@
 import { useStore } from '../context/StoreContext'
 import { Wordmark } from './ui/bits'
-import { BagIcon, SearchIcon, MoonIcon, SunIcon } from './ui/icons'
+import { BagIcon, SearchIcon, MoonIcon, SunIcon, UserIcon } from './ui/icons'
+import { customerAccountEnabled } from '../services/customerAccountService'
 
 function SearchBox({ className = '' }) {
   const { query, setQuery, go, view } = useStore()
@@ -63,6 +64,13 @@ export default function StoreHeader() {
         </nav>
 
         <SearchBox className="ml-auto hidden w-full max-w-[14rem] md:block lg:ml-2 xl:max-w-[17rem]" />
+
+        {customerAccountEnabled() && <button
+          onClick={() => go('account')}
+          className={`flex min-h-11 min-w-11 items-center justify-center rounded-lg border bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 active:scale-[0.97] ${view === 'account' ? 'border-crimson text-crimson' : 'border-[var(--store-surface-border)] hover:border-navy/25'}`}
+          aria-label="Customer account"
+          aria-current={view === 'account' ? 'page' : undefined}
+        ><UserIcon size={19} /></button>}
 
         <button
           onClick={() => setCartOpen(true)}

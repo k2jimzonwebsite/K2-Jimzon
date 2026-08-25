@@ -1,5 +1,4 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { guestBffEnabled } from '../../services/guestCommerceService'
 
 let scriptPromise = null
 
@@ -25,12 +24,19 @@ function loadTurnstile() {
   return scriptPromise
 }
 
-export default function TurnstileChallenge({ onTokenChange }) {
+export default function TurnstileChallenge({
+  onTokenChange,
+  action = 'guest_submission',
+  description = 'Complete this check before submitting. It helps us prevent automated spam.',
+  enabled: enabledOverride,
+  tone = 'storefront',
+}) {
   const containerRef = useRef(null)
   const widgetRef = useRef(null)
   const errorId = useId()
   const [error, setError] = useState('')
-  const enabled = guestBffEnabled()
+  const enabled = enabledOverride ?? true
+  const adminTone = tone === 'admin'
   const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
 
   useEffect(() => {
@@ -45,7 +51,7 @@ export default function TurnstileChallenge({ onTokenChange }) {
       if (cancelled || !turnstile || !containerRef.current) return
       widgetRef.current = turnstile.render(containerRef.current, {
         sitekey: siteKey,
-        action: 'guest_submission',
+        action,
         appearance: 'interaction-only',
         callback: (token) => { setError(''); onTokenChange(token) },
         'expired-callback': () => { setError('Security check expired. Please complete it again.'); onTokenChange('') },
@@ -61,14 +67,16 @@ export default function TurnstileChallenge({ onTokenChange }) {
       cancelled = true
       if (widgetRef.current != null && window.turnstile) window.turnstile.remove(widgetRef.current)
     }
-  }, [enabled, onTokenChange, siteKey])
+  }, [action, enabled, onTokenChange, siteKey])
 
   if (!enabled) return null
   return (
     <section aria-labelledby={`${errorId}-label`} aria-describedby={error ? errorId : undefined}
-      className="mt-4 rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4">
-      <h3 id={`${errorId}-label`} className="text-sm font-semibold text-navy">Security check</h3>
-      <p className="mt-1 text-sm leading-relaxed text-navy-soft">Complete this check before submitting. It helps us prevent automated spam.</p>
+      className={adminTone
+        ? 'rounded-adm-sm border border-white/15 bg-black/25 p-3.5'
+        : 'mt-4 rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-4'}>
+      <h3 id={`${errorId}-label`} className={adminTone ? 'text-sm font-bold text-white' : 'text-sm font-semibold text-navy'}>Security check</h3>
+      <p className={adminTone ? 'mt-1 text-sm leading-relaxed text-white/65' : 'mt-1 text-sm leading-relaxed text-navy-soft'}>{description}</p>
       <div ref={containerRef} className="mt-3 min-h-16" />
       {error && <p id={errorId} role="alert" className="mt-2 text-sm text-crimson">{error}</p>}
     </section>

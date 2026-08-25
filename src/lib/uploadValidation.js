@@ -6,6 +6,8 @@
  */
 
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024 // 10MB
+export const PRODUCT_EVIDENCE_MAX_BYTES = 4 * 1024 * 1024
+export const PRODUCT_EVIDENCE_MIMES = Object.freeze(['image/jpeg', 'image/png', 'image/webp'])
 
 export const ALLOWED_IMAGE_MIMES = [
   'image/jpeg',
@@ -60,9 +62,12 @@ export function validateUploadFile(file, { maxBytes = MAX_UPLOAD_BYTES, allowedM
 
   const mime = (file.type || '').toLowerCase()
   if (!allowedMimes.includes(mime)) {
+    const labels = allowedMimes.map((type) => ({
+      'image/jpeg': 'JPG', 'image/png': 'PNG', 'image/webp': 'WEBP', 'image/avif': 'AVIF',
+    }[type] || type)).join(', ')
     return {
       ok: false,
-      error: `File type "${mime || 'unknown'}" is not supported. Allowed formats: JPG, PNG, WEBP, AVIF.`,
+      error: `File type "${mime || 'unknown'}" is not supported. Allowed formats: ${labels}.`,
     }
   }
 

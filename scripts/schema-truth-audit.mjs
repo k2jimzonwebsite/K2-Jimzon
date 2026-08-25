@@ -81,12 +81,31 @@ async function runAudit() {
     const diff = compareSchemaTruth(parsedExport, expected)
     const report = formatSchemaTruthReport(diff, { format: options.json ? 'json' : 'markdown' })
 
+    // Every report states what kind of evidence it is. A fixture run only proves
+    // the parser handles self-authored test data; it is not database evidence,
+    // and an export audit is only as current as the export it was handed. Without
+    // this banner the two outputs look identical, which is how a fabricated
+    // fixture ends up quoted as proof about the live database.
+    const evidenceLevel = options.fixture
+      ? 'FABRICATED_FIXTURE_PARSER_CHECK_ONLY'
+      : 'EXPLICIT_SCHEMA_EXPORT_AUDIT'
+    const evidenceDisclaimer = options.fixture
+      ? 'This result validates the parser against self-authored test data; it is not database drift or authorization evidence.'
+      : 'This result compares the supplied metadata export only; verify the export provenance and capture time before treating it as database evidence.'
+    const renderedReport = options.json
+      ? JSON.stringify({
+          evidenceLevel,
+          evidenceDisclaimer,
+          source: sourceDescription,
+          ...JSON.parse(report),
+        }, null, 2)
+      : `${evidenceLevel}\n${evidenceDisclaimer}\n\n${report}\n\n[Schema Truth Source: ${sourceDescription}]`
+
     if (options.output) {
-      fs.writeFileSync(path.resolve(process.cwd(), options.output), report, 'utf8')
+      fs.writeFileSync(path.resolve(process.cwd(), options.output), renderedReport, 'utf8')
     }
 
-    console.log(report)
-    console.log(`\n[Schema Truth Source: ${sourceDescription}]`)
+    console.log(renderedReport)
 
     if (!options.allowFindings && diff.totalIssues > 0) {
       process.exit(1)

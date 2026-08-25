@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { safeUiError } from '../../lib/safeUiError'
 import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
 import { peso } from '../../data/products'
 import {
@@ -195,7 +196,7 @@ function PanelHeading({ icon: Icon, title, description, action }) {
   )
 }
 
-export default function Overview({ setSection, pending = 0 }) {
+export default function Overview({ setSection, pending = null }) {
   const [range, setRange] = useState(30)
   const [data, setData] = useState(EMPTY_DATA)
   const [error, setError] = useState('')
@@ -236,10 +237,7 @@ export default function Overview({ setSection, pending = 0 }) {
         supabase.from('conversations').select('id,status,priority,unread_count,response_due_at,assigned_to,last_message_at'),
       ])
 
-      const labels = ['orders', 'order backlog', 'Pasabuy', 'batches', 'connections', 'listings', 'products', 'inbox']
-      const failures = results
-        .map((result, index) => result.error ? `${labels[index]}: ${result.error.message}` : null)
-        .filter(Boolean)
+      const failures = results.filter(result => result.error)
 
       setData({
         orders: results[0].data || [],
@@ -251,10 +249,10 @@ export default function Overview({ setSection, pending = 0 }) {
         products: results[6].data || [],
         conversations: results[7].data || [],
       })
-      setError(failures.length ? `Some analytics are unavailable — ${failures.join(' · ')}` : '')
+      setError(failures.length ? safeUiError('OVERVIEW_PARTIAL') : '')
       setLastUpdated(new Date())
     } catch (loadError) {
-      setError(loadError?.message || 'The analytics workspace could not be loaded.')
+      setError(safeUiError('OVERVIEW_PARTIAL'))
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -276,7 +274,7 @@ export default function Overview({ setSection, pending = 0 }) {
     }
     if (!supabase) return undefined
 
-    const channel = supabase.channel(`admin:command-center:${range}`)
+    const channel = supabase.channel('admin:command-center')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'order_requests' }, () => load({ quiet: true }))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'pasabuy_requests' }, () => load({ quiet: true }))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'channel_connections' }, () => load({ quiet: true }))
@@ -611,7 +609,9 @@ export default function Overview({ setSection, pending = 0 }) {
           <CheckIcon size={15} className="mt-0.5 shrink-0 text-emerald-400" />
           <p>Revenue includes only payment-verified order requests. Marketplace connectors and online payment remain deferred; disconnected channels display zero instead of simulated activity.</p>
         </div>
-        {pending > 0 && <p className="shrink-0 text-amber">Legacy fulfillment queue: {pending}</p>}
+        {pending == null
+          ? <p className="shrink-0 text-white/55">Legacy fulfillment queue unavailable</p>
+          : pending > 0 && <p className="shrink-0 text-amber">Legacy fulfillment queue: {pending}</p>}
       </section>
     </div>
   )

@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process"
-import { readFileSync, readdirSync, statSync } from "node:fs"
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs"
 import { resolve, relative } from "node:path"
 import { looksBinary, scanText } from "./secret-scan-core.mjs"
 
@@ -26,7 +26,10 @@ function repositoryFiles() {
     ["ls-files", "--cached", "--others", "--exclude-standard", "-z"],
     { encoding: "utf8" },
   )
-  return output.split("\0").filter(Boolean).map((file) => resolve(file))
+  // `git ls-files --cached` includes paths deleted in the working tree until
+  // the deletion is staged/committed. They contain no current bytes to scan.
+  // Skip only missing paths; unreadable files that still exist must fail below.
+  return output.split("\0").filter(Boolean).map((file) => resolve(file)).filter(existsSync)
 }
 
 const targets = process.argv.slice(2)

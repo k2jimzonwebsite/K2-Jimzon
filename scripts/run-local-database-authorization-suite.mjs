@@ -2,15 +2,40 @@
 /**
  * MAP-017 Isolated Local Database Authorization Test Suite Runner
  *
- * Prepared boundary for live RBAC, RLS, IDOR, search-path, and AAL2 tests.
- * The behavioral assertion executor is not implemented; the CLI fails closed.
+ * Executes the phase-one RBAC, RLS, Storage, Realtime, default-privilege, and
+ * public-stock assertion groups. Coverage counts are derived from the SQL
+ * manifest rather than hard-coded.
  *
  * STRICT SAFETY RULE: Refuses to run against any remote or production host.
  * If no local database is running, truthfully reports the suite as BLOCKED.
  */
 
 import net from 'node:net'
-import { parseLocalTarget, validateLocalTarget } from './rehearse-local-migration.mjs'
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import {
+  parseLocalTarget,
+  psqlEnvironment,
+  runPsql,
+  validateMap017RehearsalTarget,
+} from './rehearse-local-migration.mjs'
+
+const rootDir = fileURLToPath(new URL('..', import.meta.url))
+const authorizationAssertionsPath = path.join(
+  rootDir,
+  'supabase/tests/map017_authorization_assertions.sql',
+)
+const assertionGroupPattern = /^-- K2_ASSERTION_GROUP: ([a-z0-9_]+)$/gm
+const successMarker = 'MAP017_AUTHORIZATION_ASSERTIONS_PASSED'
+
+export function authorizationAssertionGroups(sql) {
+  const groups = [...String(sql).matchAll(assertionGroupPattern)].map((match) => match[1])
+  if (groups.length === 0 || new Set(groups).size !== groups.length) {
+    throw new Error('AUTHORIZATION_ASSERTION_MANIFEST_INVALID')
+  }
+  return groups
+}
 
 export async function checkLocalPortReachable(host = '127.0.0.1', port = 5432, timeoutMs = 1500) {
   return new Promise((resolve) => {
@@ -42,13 +67,16 @@ export async function checkLocalPortReachable(host = '127.0.0.1', port = 5432, t
 
 export async function runDatabaseAuthorizationSuite(options = {}) {
   const target = options.target || process.env.LOCAL_PG_URL || '127.0.0.1:5432'
-  const localCheck = validateLocalTarget(target)
+  const localCheck = validateMap017RehearsalTarget(target)
 
   if (!localCheck.isLocal) {
     throw new Error(`SECURITY_REFUSAL: Target "${target}" is not a permitted local database (${localCheck.reason}).`)
   }
 
   const { hostname: host, port } = parseLocalTarget(target)
+  const assertionGroups = authorizationAssertionGroups(
+    readFileSync(authorizationAssertionsPath, 'utf8'),
+  )
 
   const isReachable = await checkLocalPortReachable(host, port)
 
@@ -58,16 +86,38 @@ export async function runDatabaseAuthorizationSuite(options = {}) {
       target: `${host}:${port}`,
       message: `No local PostgreSQL instance is listening at ${host}:${port}. Database-executed authorization tests require an active local database container or runtime.`,
       executedTests: 0,
+      assertionGroups,
       passed: false,
     }
   }
 
-  return {
-    status: 'BLOCKED_AUTHORIZATION_SUITE_NOT_IMPLEMENTED',
-    target: `${host}:${port}`,
-    message: 'The local database port is reachable, but no RBAC/RLS/IDOR/AAL2 assertions are implemented or executed.',
-    executedTests: 0,
-    passed: false,
+  try {
+    const output = runPsql(
+      options.psql || process.env.PSQL_BIN || 'psql',
+      psqlEnvironment(localCheck.parsed),
+      ['-f', authorizationAssertionsPath],
+      'MAP-017 authorization assertions',
+    )
+    if (!output.includes(successMarker)) {
+      throw new Error('AUTHORIZATION_ASSERTION_SUCCESS_MARKER_MISSING')
+    }
+    return {
+      status: 'PASSED',
+      target: `${host}:${port}`,
+      message: `${assertionGroups.length} database-executed phase-one authorization assertion groups passed without retaining test rows.`,
+      executedTests: assertionGroups.length,
+      assertionGroups,
+      passed: true,
+    }
+  } catch (error) {
+    return {
+      status: 'FAILED',
+      target: `${host}:${port}`,
+      message: error.message,
+      executedTests: assertionGroups.length,
+      assertionGroups,
+      passed: false,
+    }
   }
 }
 

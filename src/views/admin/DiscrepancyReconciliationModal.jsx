@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { XIcon } from '../../components/ui/icons'
+import { safeUiError } from '../../lib/safeUiError'
 
 export default function DiscrepancyReconciliationModal({ isOpen, onClose, consignment, items, onFinalizeArrival }) {
   const [notes, setNotes] = useState('')
@@ -14,8 +15,8 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
     try {
       const finalized = await onFinalizeArrival(notes)
       if (finalized !== false) onClose()
-    } catch (e) {
-      setFinalizeError(e?.message || 'The receipt could not be finalized. No inventory was changed.')
+    } catch {
+      setFinalizeError(safeUiError('RECEIPT_FINALIZE_FAILED'))
     } finally {
       setFinalizing(false)
     }

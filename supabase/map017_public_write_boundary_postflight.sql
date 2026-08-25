@@ -3,6 +3,24 @@ do $postflight$
 declare
   relation_name text;
 begin
+  if exists (
+    select 1
+    from pg_default_acl d
+    join pg_roles owner_role on owner_role.oid = d.defaclrole
+    join pg_namespace n on n.oid = d.defaclnamespace
+    cross join lateral aclexplode(d.defaclacl) a
+    left join pg_roles grantee_role on grantee_role.oid = a.grantee
+    where n.nspname = 'public'
+      and owner_role.rolname = 'postgres'
+      and coalesce(grantee_role.rolname, 'public') in ('public', 'anon', 'authenticated')
+      and (
+        (d.defaclobjtype = 'f' and a.privilege_type = 'EXECUTE')
+        or d.defaclobjtype in ('r', 'S')
+      )
+  ) then
+    raise exception 'MAP-017 postflight: unsafe public default privileges remain';
+  end if;
+
   foreach relation_name in array array[
     'brands', 'categories', 'warehouses', 'product_drafts', 'products_old',
     'channel_credentials', 'staff_allocations'
@@ -22,6 +40,26 @@ begin
   if has_table_privilege('anon', 'public.v_channel_catalog_readiness', 'select')
     or has_table_privilege('anon', 'public.v_expiring_batches', 'select') then
     raise exception 'MAP-017 postflight: operational view remains anon-readable';
+  end if;
+
+  if not has_table_privilege('anon', 'public.v_product_stock_from_batches', 'select')
+    or has_table_privilege('anon', 'public.product_batches', 'select') then
+    raise exception 'MAP-017 postflight: public stock projection boundary is incorrect';
+  end if;
+
+  if to_regprocedure('public.get_public_product_stock()') is null
+    or not has_function_privilege('anon', 'public.get_public_product_stock()', 'execute') then
+    raise exception 'MAP-017 postflight: public stock projection function is unavailable';
+  end if;
+
+  if not exists (
+    select 1 from pg_proc p
+    join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public' and p.proname = 'get_public_product_stock'
+      and p.prosecdef
+      and coalesce(array_to_string(p.proconfig, ','), '') like '%search_path=""%'
+  ) then
+    raise exception 'MAP-017 postflight: public stock projection function is not hardened';
   end if;
 
   if not has_table_privilege('anon', 'public.brands', 'select')

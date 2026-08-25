@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { peso } from '../../data/products'
 import { supabase } from '../../lib/supabaseClient'
+import { safeUiError } from '../../lib/safeUiError'
 import { ArrowIcon, InboxIcon } from '../../components/ui/icons'
 import PasabuyWorkflowDiagram from '../../components/admin/guides/PasabuyWorkflowDiagram'
 import {
@@ -100,7 +101,7 @@ export default function PasabuyManager() {
       .from('pasabuy_requests')
       .select('*, pasabuy_quotes(*)')
       .order('created_at', { ascending: false })
-    if (loadError) setError(loadError.message)
+    if (loadError) setError(safeUiError('PASABUY_LOAD_FAILED'))
     else {
       setRequests(data || [])
       setSelectedId(current => current || data?.[0]?.id || null)
@@ -180,7 +181,7 @@ export default function PasabuyManager() {
         p_request_id: selected.id, p_to_status: toStatus, p_reason: reason,
       })
     setSaving(false)
-    if (secureAdmin ? !result.ok : result.error) { setError(secureAdmin ? result.error : result.error.message); return }
+    if (secureAdmin ? !result.ok : result.error) { setError(safeUiError('PASABUY_SAVE_FAILED')); return }
     setTransitionReason('')
     setNotice(`Moved to ${STATUS_LABELS[toStatus]}.`)
     await load()
@@ -212,7 +213,7 @@ export default function PasabuyManager() {
         p_final_price_php: finalPrice, p_valid_until: validUntil,
       })
     setSaving(false)
-    if (secureAdmin ? !result.ok : result.error) { setError(secureAdmin ? result.error : result.error.message); return }
+    if (secureAdmin ? !result.ok : result.error) { setError(safeUiError('PASABUY_SAVE_FAILED')); return }
     setQuote(current => ({ ...current, priceRationale: '' }))
     setNotice('Quote version saved. It has not been sent to the customer.')
     await load()

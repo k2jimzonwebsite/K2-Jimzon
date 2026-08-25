@@ -1,4 +1,5 @@
 import { createHash, createHmac, randomUUID } from 'node:crypto'
+export { verifyBotChallenge } from '../bot-challenge.js'
 
 const MAX_BODY_BYTES = 24 * 1024
 const GUEST_COOKIE = 'k2_guest_access'
@@ -53,6 +54,12 @@ export function requestIp(req) {
     .split(',')[0].trim().slice(0, 128)
 }
 
+export function authorizationBearer(req) {
+  const header = String(req.headers.authorization || '')
+  const match = /^Bearer ([A-Za-z0-9._~-]{20,4096})$/.exec(header)
+  return match ? match[1] : null
+}
+
 export async function readJson(req) {
   const declared = Number(req.headers['content-length'] || 0)
   if (!Number.isFinite(declared) || declared > MAX_BODY_BYTES) throw new Error('BODY_TOO_LARGE')
@@ -97,35 +104,22 @@ export function signedRpcArguments(req, action, payload) {
   const guestGrantHash = /^[0-9a-f]{64}$/.test(guestToken)
     ? createHash('sha256').update(guestToken).digest('hex')
     : null
+  const guestGrantActions = new Set([
+    'order', 'pasabuy', 'conversation', 'wholesale_inquiry', 'guest_read', 'guest_reply', 'account_claim',
+  ])
   return {
     p_timestamp: timestamp,
     p_nonce: nonce,
     p_payload_text: payloadText,
     p_ip_hash: ipHash,
     p_signature: signature,
-    ...(action === 'coupon' ? {} : { p_guest_grant_hash: guestGrantHash }),
+    ...(guestGrantActions.has(action) ? { p_guest_grant_hash: guestGrantHash } : {}),
   }
 }
 
 export function setGuestGrantCookie(res, token) {
   if (/^[0-9a-f]{64}$/.test(String(token || ''))) {
     res.setHeader('Set-Cookie', cookie(token, 30 * 24 * 60 * 60))
-  }
-}
-
-export async function verifyBotChallenge(token, ip) {
-  const secret = process.env.K2_TURNSTILE_SECRET_KEY || ''
-  if (!secret) return process.env.NODE_ENV !== 'production'
-  if (!token || String(token).length > 2048) return false
-  try {
-    const body = new URLSearchParams({ secret, response: String(token), remoteip: ip })
-    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST', body, signal: AbortSignal.timeout(5000),
-    })
-    const result = await response.json()
-    return response.ok && result?.success === true
-  } catch {
-    return false
   }
 }
 

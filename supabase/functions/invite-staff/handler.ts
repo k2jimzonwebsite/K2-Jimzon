@@ -55,6 +55,22 @@ export function resolveAllowedOrigins(env: Record<string, string | undefined>) {
   return origins.size > 0 ? origins : null
 }
 
+// Reads the `aal` claim from an access token that has ALREADY been validated by
+// auth.getUser(). This never establishes trust on its own; it only reads a claim
+// from a token whose signature and expiry the auth server just confirmed.
+export function readAssuranceClaim(token: string): string | null {
+  const parts = token.split('.')
+  if (parts.length !== 3) return null
+  try {
+    const padded = parts[1].replace(/-/g, '+').replace(/_/g, '/')
+    const json = atob(padded.padEnd(Math.ceil(padded.length / 4) * 4, '='))
+    const claim = JSON.parse(json)?.aal
+    return typeof claim === 'string' ? claim : null
+  } catch {
+    return null
+  }
+}
+
 async function payloadHash(payload: Record<string, unknown>) {
   const bytes = new TextEncoder().encode(JSON.stringify(payload))
   const digest = await crypto.subtle.digest('SHA-256', bytes)
@@ -76,7 +92,7 @@ async function parseBody(req: Request) {
     throw new InviteStaffError('INVALID_REQUEST_BODY', 400)
   }
   const record = body as Record<string, unknown>
-  const allowedFields = new Set(['email', 'role', 'redirectTo'])
+  const allowedFields = new Set(['email', 'role', 'reason', 'redirectTo'])
   if (Object.keys(record).some((key) => !allowedFields.has(key))) {
     throw new InviteStaffError('UNKNOWN_REQUEST_FIELD', 400)
   }
@@ -107,7 +123,7 @@ export function createInviteStaffHandler(dependencies: {
   createCallerClient: (authorization: string) => any
   createAdminClient: () => any
   operationStore: {
-    claim: (actorId: string, key: string, hash: string) => Promise<any>
+    claim: (actorId: string, key: string, hash: string, reason: string) => Promise<any>
     complete: (actorId: string, key: string, hash: string, result: Record<string, unknown>) => Promise<void>
     release: (actorId: string, key: string, hash: string) => Promise<void>
   }
@@ -151,13 +167,25 @@ export function createInviteStaffHandler(dependencies: {
     let operationHash = ''
     let operationClaimed = false
     try {
+      const accessToken = authorization.slice('Bearer '.length).trim()
       const callerClient = dependencies.createCallerClient(authorization)
-      const { data: userData, error: userError } = await callerClient.auth.getUser()
+      const { data: userData, error: userError } = await callerClient.auth.getUser(accessToken)
       actorId = userData?.user?.id ?? ''
       if (userError || !actorId) throw new InviteStaffError('INVALID_SESSION', 401)
 
-      const { data: assurance, error: assuranceError } = await callerClient.auth.mfa.getAuthenticatorAssuranceLevel()
-      if (assuranceError || assurance?.currentLevel !== 'aal2') throw new InviteStaffError('AAL2_REQUIRED', 403)
+      // The caller client carries the session only as a request header; it has no
+      // persisted session. getAuthenticatorAssuranceLevel() must therefore be given
+      // the access token explicitly, otherwise it falls back to getSession(), finds
+      // nothing, and reports currentLevel null for every caller — including a real
+      // AAL2 admin. The token's own aal claim is the authoritative gate because
+      // getUser() above already validated this exact token against the auth server.
+      const claimedAal = readAssuranceClaim(accessToken)
+      const { data: assurance, error: assuranceError } = await callerClient.auth.mfa
+        .getAuthenticatorAssuranceLevel(accessToken)
+      if (assuranceError) throw new InviteStaffError('AAL2_REQUIRED', 403)
+      if (claimedAal !== 'aal2') throw new InviteStaffError('AAL2_REQUIRED', 403)
+      const reportedAal = assurance?.currentLevel ?? null
+      if (reportedAal !== null && reportedAal !== 'aal2') throw new InviteStaffError('AAL2_REQUIRED', 403)
 
       const adminClient = dependencies.createAdminClient()
       const { data: profile, error: profileError } = await adminClient.from('user_profiles').select('role').eq('id', actorId).single()
@@ -168,6 +196,8 @@ export function createInviteStaffHandler(dependencies: {
       if (!email || email.length > 254 || !EMAIL_PATTERN.test(email)) throw new InviteStaffError('INVALID_EMAIL', 400)
       const role = typeof body.role === 'string' ? body.role : 'Staff'
       if (!['Admin', 'Staff', 'Customer'].includes(role)) throw new InviteStaffError('INVALID_ROLE', 400)
+      const reason = typeof body.reason === 'string' ? body.reason.trim() : ''
+      if (reason.length < 3 || reason.length > 500) throw new InviteStaffError('INVALID_REASON', 400)
 
       let redirectTo: string | undefined
       if (body.redirectTo !== undefined) {
@@ -180,10 +210,10 @@ export function createInviteStaffHandler(dependencies: {
         redirectTo = parsed.toString()
       }
 
-      operationHash = await payloadHash({ email, role, redirectTo: redirectTo ?? null })
+      operationHash = await payloadHash({ email, role, reason, redirectTo: redirectTo ?? null })
       let claim: any
       try {
-        claim = await dependencies.operationStore.claim(actorId, operationKey, operationHash)
+        claim = await dependencies.operationStore.claim(actorId, operationKey, operationHash, reason)
       } catch {
         throw new InviteStaffError('OPERATION_STORE_FAILED', 503)
       }

@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 import { products } from './products'
 import { REVIEWS as SEED_REVIEWS } from './site'
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient'
+import { safeUiError } from '../lib/safeUiError'
 
 const CMS_PRODUCTS_KEY = 'k2_globe_products'
 const CMS_REVIEWS_KEY = 'k2_globe_reviews'
@@ -9,6 +10,18 @@ const CMS_VERSION_KEY = 'k2_globe_version'
 const CMS_VERSION = '4' // bump to clear stale localStorage on deploy
 
 const GlobeCmsContext = createContext(null)
+
+function SecureAdminGlobeCmsProvider({ children }) {
+  const unavailable = async () => {}
+  return <GlobeCmsContext.Provider value={{
+    globeProducts: [], reviews: [], enabledGlobeProducts: [],
+    toggleGlobeProduct: unavailable, setGlobeProductImage: unavailable,
+    addReview: unavailable, editReview: unavailable, deleteReview: unavailable,
+    getProductReviews: () => [], resetCms: unavailable,
+    isRemote: false, isLoading: false, cmsError: null, authSession: null,
+    signInAdmin: unavailable, signOutAdmin: unavailable,
+  }}>{children}</GlobeCmsContext.Provider>
+}
 
 // Only these product IDs have real customer reviews and should appear on the globe
 const GLOBE_PRODUCT_IDS = [
@@ -122,7 +135,7 @@ function RemoteGlobeCmsProvider({ children }) {
     setIsLoading(true)
     const [gpRes, rvRes] = await Promise.all([
       supabase.from('globe_products').select('*').order('display_order'),
-      supabase.from('reviews').select('*').order('created_at', { ascending: false }),
+      supabase.from('reviews').select('id,product_id,name,channel,stars,text,item,review_date,created_at').order('created_at', { ascending: false }),
     ])
     const errors = []
 
@@ -130,7 +143,7 @@ function RemoteGlobeCmsProvider({ children }) {
     // query failure must not remove the entire section. The fallback below is
     // display configuration only; review copy always remains database-backed.
     if (gpRes.error) {
-      errors.push(`globe products: ${gpRes.error.message}`)
+      errors.push(safeUiError('GLOBE_LOAD_FAILED'))
       setGlobeProducts(buildDefaultGlobeProducts())
     } else {
       setGlobeProducts(
@@ -139,7 +152,7 @@ function RemoteGlobeCmsProvider({ children }) {
     }
 
     if (rvRes.error) {
-      errors.push(`reviews: ${rvRes.error.message}`)
+      errors.push(safeUiError('GLOBE_LOAD_FAILED'))
       setReviews([])
     } else {
       setReviews(rvRes.data.map(mapReviewRow))
@@ -164,7 +177,7 @@ function RemoteGlobeCmsProvider({ children }) {
 
   const signInAdmin = useCallback(async (email, password) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) throw new Error(error.message)
+    if (error) throw new Error(safeUiError('ADMIN_SIGN_IN_FAILED'))
   }, [])
 
   const signOutAdmin = useCallback(async () => {
@@ -181,7 +194,7 @@ function RemoteGlobeCmsProvider({ children }) {
       .eq('product_id', productId)
       .select('product_id')
     if (error || !data?.length) {
-      setCmsError(error ? `Save failed: ${error.message}` : 'Save failed — sign in as admin to make changes.')
+      setCmsError(error ? safeUiError('GLOBE_SAVE_FAILED') : 'Save failed — sign in as admin to make changes.')
       return
     }
     setCmsError(null)
@@ -197,7 +210,7 @@ function RemoteGlobeCmsProvider({ children }) {
       .eq('product_id', productId)
       .select('product_id')
     if (error || !data?.length) {
-      setCmsError(error ? `Save failed: ${error.message}` : 'Save failed — sign in as admin to make changes.')
+      setCmsError(error ? safeUiError('GLOBE_SAVE_FAILED') : 'Save failed — sign in as admin to make changes.')
       return
     }
     setCmsError(null)
@@ -213,7 +226,7 @@ function RemoteGlobeCmsProvider({ children }) {
       .select()
       .single()
     if (error) {
-      setCmsError(`Could not add review: ${error.message}`)
+      setCmsError(safeUiError('GLOBE_SAVE_FAILED'))
       return
     }
     setCmsError(null)
@@ -228,7 +241,7 @@ function RemoteGlobeCmsProvider({ children }) {
       .select()
       .single()
     if (error || !data) {
-      setCmsError(error ? `Save failed: ${error.message}` : 'Save failed — sign in as admin to make changes.')
+      setCmsError(error ? safeUiError('GLOBE_SAVE_FAILED') : 'Save failed — sign in as admin to make changes.')
       return
     }
     setCmsError(null)
@@ -242,7 +255,7 @@ function RemoteGlobeCmsProvider({ children }) {
       .eq('id', id)
       .select('id')
     if (error || !data?.length) {
-      setCmsError(error ? `Delete failed: ${error.message}` : 'Delete failed — sign in as admin to make changes.')
+      setCmsError(error ? safeUiError('GLOBE_SAVE_FAILED') : 'Delete failed — sign in as admin to make changes.')
       return
     }
     setCmsError(null)
@@ -379,7 +392,8 @@ function LocalGlobeCmsProvider({ children }) {
   return <GlobeCmsContext.Provider value={value}>{children}</GlobeCmsContext.Provider>
 }
 
-export function GlobeCmsProvider({ children }) {
+export function GlobeCmsProvider({ children, secureAdmin = false }) {
+  if (secureAdmin) return <SecureAdminGlobeCmsProvider>{children}</SecureAdminGlobeCmsProvider>
   if (isSupabaseConfigured) return <RemoteGlobeCmsProvider>{children}</RemoteGlobeCmsProvider>
   if (import.meta.env.DEV) return <LocalGlobeCmsProvider>{children}</LocalGlobeCmsProvider>
   return <GlobeCmsContext.Provider value={{

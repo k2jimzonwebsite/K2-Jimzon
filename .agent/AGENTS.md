@@ -1,6 +1,8 @@
-# Everything Claude Code (ECC) — Agent Instructions
+# Shared AI Agent Instructions
 
-This is a **production-ready AI coding plugin** providing 64 specialized agents, 261 skills, 84 commands, and automated hook workflows for software development.
+This is a platform-neutral instruction layer for compatible AI coding agents.
+Agent, skill, command, and hook availability depends on the active harness; no
+rule in this file is specific to Codex, Claude Code, or any other single client.
 
 **Version:** 2.0.0
 
@@ -49,7 +51,8 @@ This is a **production-ready AI coding plugin** providing 64 specialized agents,
 
 ## Agent Orchestration
 
-Use agents proactively without user prompt:
+When the active harness supports delegated agents and project-level rules allow
+delegation, use the appropriate specialists:
 - Complex feature requests → **planner**
 - Code just written/modified → **code-reviewer**
 - Bug fix or new feature → **tdd-guide**
@@ -58,7 +61,29 @@ Use agents proactively without user prompt:
 - Autonomous loops / loop monitoring → **loop-operator**
 - Harness config reliability and cost → **harness-optimizer**
 
-Use parallel execution for independent operations — launch multiple agents simultaneously.
+Use parallel execution for independent operations when the active harness and
+project-level rules permit it.
+
+## Skill Routing
+
+1. Start each task with `using-superpowers` when it is installed, then inspect
+   the active skill catalog before planning or acting.
+2. Use every installed skill that is genuinely applicable. Follow the selected
+   `SKILL.md` instructions completely and use the smallest sufficient skill set.
+3. For code work, use the installed Karpathy engineering skill
+   (`karpathy-guidelines` or the available `andrej-karpathy` equivalent).
+4. For any visible UI or UX change or review, use all four skills together when
+   installed: `ui-ux-pro-max`, `impeccable`, `design-taste-frontend`, and
+   `emil-design-eng`.
+5. If a required skill is unavailable, state that clearly, use the safest
+   relevant fallback, and document any resulting unfinished work.
+
+## Durable Work Records
+
+Material work must be recorded in the project's authoritative backlog and
+documentation. Preserve the request, decision, changes, verification evidence,
+remaining risks, recovery path, and exact next action. Chat history or agent
+memory must never be the only record of unfinished work.
 
 ## Security Guidelines
 

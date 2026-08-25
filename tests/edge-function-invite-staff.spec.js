@@ -8,10 +8,21 @@ const ACTOR = '10000000-0000-4000-8000-000000000001'
 const TARGET = '20000000-0000-4000-8000-000000000002'
 const KEY = '30000000-0000-4000-8000-000000000003'
 
-function request(body = { email: 'staff@example.test', role: 'Staff', redirectTo: `${ORIGIN}/admin` }, options = {}) {
+// Builds a structurally real (unsigned) access token so the handler exercises the
+// same claim-reading path it uses in production. Signature validity is irrelevant
+// here because the handler only reads claims from a token auth.getUser() accepted.
+function token(aal = 'aal2') {
+  const b64 = (o) => Buffer.from(JSON.stringify(o)).toString('base64url')
+  return `${b64({ alg: 'ES256', typ: 'JWT' })}.${b64({ sub: ACTOR, aal })}.fabricated-test-signature`
+}
+
+function request(body = {
+  email: 'staff@example.test', role: 'Staff', reason: 'Add a warehouse operator for daily receiving.',
+  redirectTo: `${ORIGIN}/admin`,
+}, options = {}) {
   const headers = {
     Origin: options.origin ?? ORIGIN,
-    Authorization: options.authorization ?? 'Bearer verified-token',
+    Authorization: options.authorization ?? `Bearer ${token(options.aal ?? 'aal2')}`,
     'Content-Type': 'application/json',
     'X-Idempotency-Key': options.key ?? KEY,
     ...options.headers,
@@ -29,10 +40,10 @@ function memoryOperationStore() {
   const operations = new Map()
   return {
     operations,
-    async claim(actor, key, hash) {
+    async claim(actor, key, hash, reason) {
       const id = `${actor}:${key}`
       const existing = operations.get(id)
-      if (!existing) { operations.set(id, { hash, result: null }); return { state: 'claimed' } }
+      if (!existing) { operations.set(id, { hash, reason, result: null }); return { state: 'claimed' } }
       if (existing.hash !== hash) return { state: 'conflict' }
       return existing.result ? { state: 'completed', result: existing.result } : { state: 'in_progress' }
     },
@@ -92,12 +103,20 @@ function harness(overrides = {}) {
   const handler = createInviteStaffHandler({
     env: overrides.env ?? { K2_ADMIN_ORIGINS: ORIGIN },
     configured: overrides.configured ?? true,
+    // Mirrors @supabase/auth-js: getAuthenticatorAssuranceLevel() reports
+    // currentLevel null unless it is handed the access token, because a
+    // header-only client has no persisted session to fall back on. A mock that
+    // always returns 'aal2' hides a defect that blocks every real caller.
     createCallerClient: () => ({ auth: {
-      async getUser() {
-        return overrides.userError ? { data: null, error: {} } : { data: { user: { id: ACTOR } }, error: null }
+      async getUser(jwt) {
+        if (overrides.userError) return { data: null, error: {} }
+        return { data: { user: { id: ACTOR } }, error: jwt ? null : {} }
       },
-      mfa: { async getAuthenticatorAssuranceLevel() {
-        return { data: { currentLevel: overrides.aal ?? 'aal2' }, error: overrides.aalError ? {} : null }
+      mfa: { async getAuthenticatorAssuranceLevel(jwt) {
+        if (overrides.aalError) return { data: null, error: {} }
+        if (!jwt) return { data: { currentLevel: null, nextLevel: null }, error: null }
+        const claim = JSON.parse(Buffer.from(jwt.split('.')[1], 'base64url').toString()).aal ?? null
+        return { data: { currentLevel: claim, nextLevel: claim }, error: null }
       } },
     } }),
     createAdminClient: () => adminClient,
@@ -132,22 +151,30 @@ test.describe('invite-staff real handler', () => {
   test('requires a verified AAL2 Admin and a bounded UUID operation key', async () => {
     expect((await result(await harness().handler(request(undefined, { noAuthorization: true })))).body.error).toBe('NOT_AUTHENTICATED')
     expect((await result(await harness({ userError: true }).handler(request()))).body.error).toBe('INVALID_SESSION')
-    expect((await result(await harness({ aal: 'aal1' }).handler(request()))).body.error).toBe('AAL2_REQUIRED')
+    expect((await result(await harness().handler(request(undefined, { aal: 'aal1' })))).body.error).toBe('AAL2_REQUIRED')
+    // Regression: a genuine AAL2 caller must be accepted. This failed in
+    // production because the handler asked for the assurance level without
+    // supplying the access token, so every caller looked like currentLevel null.
+    expect((await result(await harness().handler(request(undefined, { aal: 'aal2' })))).status).toBe(200)
+    expect((await result(await harness({ aalError: true }).handler(request()))).body.error).toBe('AAL2_REQUIRED')
     expect((await result(await harness({ profileRole: 'Staff' }).handler(request()))).body.error).toBe('FORBIDDEN_ROLE')
     expect((await result(await harness().handler(request(undefined, { key: 'too-long-or-invalid' })))).body.error).toBe('INVALID_IDEMPOTENCY_KEY')
   })
 
   test('rejects malformed, unknown, oversized, and unsafe input', async () => {
     expect((await result(await harness().handler(request('{bad')))).body.error).toBe('INVALID_JSON')
-    expect((await result(await harness().handler(request({ email: 'staff@example.test', surprise: true })))).body.error).toBe('UNKNOWN_REQUEST_FIELD')
-    expect((await result(await harness().handler(request({ email: 'bad' })))).body.error).toBe('INVALID_EMAIL')
-    expect((await result(await harness().handler(request({ email: 'staff@example.test', role: 'Owner' })))).body.error).toBe('INVALID_ROLE')
-    expect((await result(await harness().handler(request({ email: 'staff@example.test', redirectTo: 'https://attacker.test' })))).body.error).toBe('INVALID_REDIRECT_ORIGIN')
+    expect((await result(await harness().handler(request({ email: 'staff@example.test', reason: 'Operational need.', surprise: true })))).body.error).toBe('UNKNOWN_REQUEST_FIELD')
+    expect((await result(await harness().handler(request({ email: 'bad', reason: 'Operational need.' })))).body.error).toBe('INVALID_EMAIL')
+    expect((await result(await harness().handler(request({ email: 'staff@example.test', role: 'Owner', reason: 'Operational need.' })))).body.error).toBe('INVALID_ROLE')
+    expect((await result(await harness().handler(request({ email: 'staff@example.test', role: 'Staff' })))).body.error).toBe('INVALID_REASON')
+    expect((await result(await harness().handler(request({ email: 'staff@example.test', role: 'Staff', reason: 'x' })))).body.error).toBe('INVALID_REASON')
+    expect((await result(await harness().handler(request({ email: 'staff@example.test', role: 'Staff', reason: 'x'.repeat(501) })))).body.error).toBe('INVALID_REASON')
+    expect((await result(await harness().handler(request({ email: 'staff@example.test', reason: 'Operational need.', redirectTo: 'https://attacker.test' })))).body.error).toBe('INVALID_REDIRECT_ORIGIN')
     expect((await result(await harness().handler(request(' '.repeat(4097))))).body.error).toBe('REQUEST_TOO_LARGE')
   })
 
   test('returns success only after a new identity and role are persisted', async () => {
-    const { handler, calls } = harness()
+    const { handler, calls, operationStore } = harness()
     const response = await result(await handler(request()))
     expect(response).toEqual({ status: 200, body: {
       ok: true, email: 'staff@example.test', role: 'Staff', invited: true, roleAssigned: true,
@@ -155,6 +182,7 @@ test.describe('invite-staff real handler', () => {
     expect(calls.invite).toBe(1)
     expect(calls.upsert).toBe(1)
     expect(calls.upsertValue).toMatchObject({ id: TARGET, role: 'Staff' })
+    expect([...operationStore.operations.values()][0].reason).toBe('Add a warehouse operator for daily receiving.')
   })
 
   test('recovers an existing user without sending another invite', async () => {
@@ -181,7 +209,7 @@ test.describe('invite-staff real handler', () => {
     expect(replay.calls.invite).toBe(0)
 
     const conflict = harness({ operationStore: sharedStore })
-    expect((await result(await conflict.handler(request({ email: 'other@example.test', role: 'Staff' })))).body.error).toBe('IDEMPOTENCY_CONFLICT')
+    expect((await result(await conflict.handler(request({ email: 'other@example.test', role: 'Staff', reason: 'Add a second receiving operator.' })))).body.error).toBe('IDEMPOTENCY_CONFLICT')
 
     const fixedStore = (state) => ({ claim: async () => ({ state }), complete: async () => {}, release: async () => {} })
     expect((await result(await harness({ operationStore: fixedStore('in_progress') }).handler(request()))).body.error).toBe('OPERATION_IN_PROGRESS')
@@ -210,7 +238,10 @@ test.describe('invite-staff real handler', () => {
   })
 
   test('prepared SQL provides a durable serialized receipt and AAL2 role boundary', async () => {
-    const sql = await readFile(new URL('../supabase/migrations/20260814_invite_staff_operation_boundary.sql', import.meta.url), 'utf8')
+    const [sql, reasonSql] = await Promise.all([
+      readFile(new URL('../supabase/migrations/20260814_invite_staff_operation_boundary.sql', import.meta.url), 'utf8'),
+      readFile(new URL('../supabase/migrations/20260824_admin_staff_invitation_reason_boundary.sql', import.meta.url), 'utf8'),
+    ])
     expect(sql).toContain('k2_private.staff_invitation_operations')
     expect(sql).toContain('pg_advisory_xact_lock')
     expect(sql).toContain("last_attempt_at > now()-interval '5 minutes'")
@@ -220,5 +251,10 @@ test.describe('invite-staff real handler', () => {
     expect(sql).not.toContain('set search_path = public')
     expect(sql).toContain('grant execute on function public.claim_staff_invitation_operation')
     expect(sql).not.toContain('grant execute on function public.claim_staff_invitation_operation(uuid,uuid,text) to authenticated')
+    expect(reasonSql).toContain('add column if not exists reason text')
+    expect(reasonSql).toContain('claim_staff_invitation_operation_v2')
+    expect(reasonSql).toContain('char_length(reason) between 3 and 500')
+    expect(reasonSql).toMatch(/grant execute on function public\.claim_staff_invitation_operation_v2[\s\S]*to service_role/i)
+    expect(reasonSql).not.toMatch(/claim_staff_invitation_operation_v2[\s\S]*to authenticated/i)
   })
 })

@@ -154,4 +154,22 @@ The app's accepted platform labels (from `StoreContext.createConversation`) are:
 5. Optional outbound: watch `messages` (sender_type='Admin') and `orders` (status changes) to push
    replies / fulfilment back to the marketplace.
 
+Every webhook additionally has a fixed content type, byte ceiling, and bounded
+body-read deadline that cancels a stalled stream before parsing or capture. The
+deadline must be explicitly configured and fail closed when absent or invalid. It verifies
+the signature over the exact raw provider body, and requires provider account,
+timestamp, and deterministic event identity before capture. Its replay window
+must be taken from the approved current provider contract and configured
+explicitly; arrival time or randomness never repairs a missing provider key.
+Shopee's prepared intake implements these provider-independent controls but
+remains Events-only and undeployable until its exact signing string and retry
+semantics are verified against the approved partner documentation.
+After validation, capture crosses one service-only database command that
+atomically consumes provider-account and connector-global budgets before inbox
+insert. The command must have no guessed default limits, must count denied
+attempts durably, must preserve an existing processing/processed row on exact
+replay, and must reject changed evidence under an existing event identity.
+Shopee's prepared `capture_shopee_event_v1` boundary implements this contract
+locally, but its migration and provider-approved limits are not applied.
+
 Once #3 writes into these tables, the dashboard displays everything live — no front-end changes.

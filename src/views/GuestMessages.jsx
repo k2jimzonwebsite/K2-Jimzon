@@ -89,7 +89,7 @@ export function StartConversationForm({ onCreated }) {
         <label htmlFor="message-body" className="block text-sm font-semibold text-navy">How can we help?
           <textarea id="message-body" className="store-field mt-1.5 min-h-32 w-full resize-y px-4 py-3 text-base" value={form.message} onChange={update('message')} maxLength={2000} placeholder="Write your question or the details K2 should review" required />
         </label>
-        <TurnstileChallenge key={challengeKey} onTokenChange={setBotToken} />
+        <TurnstileChallenge key={challengeKey} enabled={guestBffEnabled()} onTokenChange={setBotToken} />
         {error && <p role="alert" className="rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
         <button type="submit" disabled={submitting || !form.customerName.trim() || !form.message.trim()} className="flex min-h-12 w-full items-center justify-center rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-transform duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45">
           {submitting ? 'Starting conversation…' : 'Send message'}

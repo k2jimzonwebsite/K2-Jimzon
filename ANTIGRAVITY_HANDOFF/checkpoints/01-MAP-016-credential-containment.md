@@ -3,8 +3,9 @@
 ## Result
 
 `Blocked — final evidence required` (production migration, active modern-key Edge
-runtime, denial boundary, and rollback-only receipt behavior verified; real Admin
-AAL2 success, K2 Vercel consumer verification, key revocation, and full logs remain).
+runtime, denial boundary, rollback-only receipt behavior, and current static Vercel
+artifacts verified; real Admin AAL2 success, complete Vercel environment inventory,
+signing-path revocation, old-token rejection, and full exposure-period logs remain).
 
 ## Scope and dependency gate
 
@@ -58,6 +59,13 @@ AAL2 success, K2 Vercel consumer verification, key revocation, and full logs rem
 - Local/prepared: Handler, migration, test suite, and verification scripts are fully functional and pass all contracts.
 - Provider state: Migration applied as a reviewed transaction through the linked query path; `invite-staff` version 5 is ACTIVE, configured for the exact Admin origin, and consumes modern hosted key maps. The public JWKS exposes an active ES256 signing key. The local/remote migration ledger mismatch remains for MAP-017 and was not papered over with migration-repair commands.
 - Legacy API-key: Disabled via Management API (`enabled: false`), returning 401 when used as `apikey`. Old JWT Bearer still active pending consumer cutover and signing-key rotation.
+- Independent refresh: both separate Vercel projects serve READY production
+  artifacts of `26291bc`, and fetched bundles preserve the target split without
+  a legacy JWT-shaped value or service-role variable. The connector cannot list
+  environment-variable names/scopes, so this is static-consumer evidence only.
+- Log evidence: capped 24-hour provider samples contain unattributed invalid-login,
+  database-authentication, permission-denial, and malformed-Realtime-JWT events.
+  They are not a complete exposure-period review and have not been cleared.
 
 ## Rollback
 
@@ -78,7 +86,9 @@ AAL2 success, K2 Vercel consumer verification, key revocation, and full logs rem
 
 - Failed or skipped checks: real Admin AAL2 successful invitation, K2 Vercel environment inventory, full API/Auth/Edge log review, signing-key revocation, and old-token rejection.
 - Exact unblock condition: access the correct K2 Vercel team/projects, install/verify modern publishable configuration, complete a real Admin AAL2 invitation, respect the Auth token-expiry safety window, revoke the legacy signing path, and prove old-token rejection without recording credentials.
-- Next phase safe to begin: Phase 2 (MAP-017) can be executed at the local/prepared evidence level.
+- Next phase safe to begin: None. Under the current owner instruction, MAP-017
+  implementation and database execution begin only after MAP-016 is genuinely
+  accepted.
 
 ## Truth statement
 

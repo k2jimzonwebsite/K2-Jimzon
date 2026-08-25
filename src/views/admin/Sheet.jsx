@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { safeUiError } from '../../lib/safeUiError'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import PhotoManagerModal from './PhotoManagerModal'
@@ -11,6 +12,9 @@ import ProductIntakeSessionModal from './ProductIntakeSessionModal'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import Barcode from 'react-barcode'
 import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
+import {
+  adminBffEnabled, downloadCatalogCsvBff, getAdminProducts,
+} from '../../services/adminBffService'
 
 const DOMAINS = [
   { name: 'Product', cols: ['SKU', 'Barcode', 'Product Name', 'Brand', 'Category', 'Subcategory', 'Origin', 'Net Weight', 'Package Type'] },
@@ -53,6 +57,7 @@ const FIELD_MAP = {
 
 export default function Sheet() {
   const { openProduct, isDark } = useStore()
+  const secureCatalog = adminBffEnabled()
   const [rows, setRows] = useState([])
   const [selected, setSelected] = useState({ row: -1, col: -1 })
   const [loading, setLoading] = useState(true)
@@ -64,10 +69,11 @@ export default function Sheet() {
   const [batchProduct, setBatchProduct] = useState(null)
   const [enrichProduct, setEnrichProduct] = useState(null)
   const [operationError, setOperationError] = useState('')
+  const [exporting, setExporting] = useState(false)
 
   useEffect(() => {
-    if (!supabase) return;
     fetchProducts()
+    if (secureCatalog || !supabase) return undefined
     const channel = supabase
       .channel('public:products')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
@@ -78,6 +84,17 @@ export default function Sheet() {
   const fetchProducts = async () => {
     setLoading(true)
     setOperationError('')
+    if (secureCatalog) {
+      const result = await getAdminProducts()
+      if (!result.ok) {
+        setRows([])
+        setOperationError(result.error)
+      } else {
+        setRows(result.products || [])
+      }
+      setLoading(false)
+      return
+    }
     if (!supabase) {
       setRows([])
       setOperationError('Supabase is not configured. Product records are unavailable.')
@@ -88,7 +105,7 @@ export default function Sheet() {
     const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false })
     if (error) {
       setRows([])
-      setOperationError(`Could not load product records: ${error.message}`)
+      setOperationError(safeUiError('SHEET_LOAD_FAILED'))
     } else {
       setRows(data || [])
     }
@@ -101,6 +118,11 @@ export default function Sheet() {
     const product = rows[index]
     if (!product || !field) return
     const previousValue = product[field]
+    if (secureCatalog) {
+      setRows(prev => prev.map((r, i) => i === index ? { ...r, [field]: previousValue } : r))
+      setOperationError('Secure Sheet Mode edits require a reviewed server command. Export the catalog CSV and use diff review instead.')
+      return false
+    }
     let finalValue = value
     
     // Numbers
@@ -126,7 +148,7 @@ export default function Sheet() {
     const { error } = await supabase.from('products').update({ [field]: finalValue }).eq('sku', oldSku || product.sku)
     if (error) {
       setRows(prev => prev.map((r, i) => i === index ? { ...r, [field]: previousValue } : r))
-      setOperationError(`Could not save ${colName} for ${oldSku || product.sku}: ${error.message}`)
+      setOperationError(safeUiError('SHEET_SAVE_FAILED'))
       return false
     }
     setOperationError('')
@@ -137,6 +159,25 @@ export default function Sheet() {
 
   const handleAddRow = () => {
     setShowPhoneIntake(true)
+  }
+
+  const handleCatalogExport = async () => {
+    setExporting(true)
+    setOperationError('')
+    const result = await downloadCatalogCsvBff()
+    setExporting(false)
+    if (!result.ok) {
+      setOperationError(result.error || 'The catalog workbook could not be prepared safely.')
+      return
+    }
+    const url = URL.createObjectURL(new Blob([result.csvText], { type: 'text/csv;charset=utf-8' }))
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `k2-catalog-${new Date().toISOString().slice(0, 10)}.csv`
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    URL.revokeObjectURL(url)
   }
 
   const tableContainerRef = useRef(null)
@@ -168,8 +209,18 @@ export default function Sheet() {
             <span className="text-lg leading-none">+</span> Phone Intake
           </button>
           <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
-            <span>📂</span> CSV Import
+            CSV review
           </button>
+          {secureCatalog && (
+            <button
+              type="button"
+              onClick={handleCatalogExport}
+              disabled={exporting}
+              className="flex min-h-[44px] shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 text-sm font-bold text-neutral-200 transition-colors hover:bg-white/5 hover:text-white disabled:cursor-wait disabled:opacity-55"
+            >
+              {exporting ? 'Preparing CSV…' : 'Download catalog CSV'}
+            </button>
+          )}
           <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
             <span>⌂</span> Scan Box
           </button>

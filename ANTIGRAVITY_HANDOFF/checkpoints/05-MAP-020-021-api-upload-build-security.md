@@ -2,7 +2,10 @@
 
 ## Result
 
-`Ready for independent verification` (build boundaries, secret scans, security headers, dependency audit, and contract suites pass completely; live domain CSP enforcement awaits MAP-024).
+`Blocked — evidence required` (local build boundaries, secret scans, dependency
+audit, and prepared contracts pass; MAP-019/MAP-020 dependencies, exhaustive API/
+upload behavior, deployed headers/CSP, source-map policy, and real-host evidence
+remain incomplete).
 
 ## Scope and dependency gate
 
@@ -60,9 +63,13 @@
 
 ## Remaining blockers and next safe phase
 
-- Failed or skipped checks: None.
-- Exact unblock condition: Proceed to Phase 6.
-- Next phase safe to begin: Phase 6 (MAP-022) is safe to execute.
+- Failed or skipped checks: complete MAP-019/MAP-020 activation and database
+  denials, exhaustive endpoint/upload tests, deployed header/CSP verification,
+  source-map policy, and real-host bundle/error inspection.
+- Exact unblock condition: satisfy the MAP-020 and MAP-021 completion checks in
+  dependency order with database-executed and real-host evidence.
+- Next phase safe to begin: None through this checkpoint; MAP-022 remains queued
+  behind MAP-016 through MAP-021.
 
 ## Truth statement
 
