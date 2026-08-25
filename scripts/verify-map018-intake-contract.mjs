@@ -7,13 +7,37 @@ import {
 } from '../src/views/admin/productResearchContract.js'
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), 'utf8')
-const [service, modal, migration, preflight, postflight] = await Promise.all([
+const [service, modal, server, migration, cleanupMigration, preflight, postflight] = await Promise.all([
   read('src/services/productIntakeService.js'),
   read('src/views/admin/ProductIntakeSessionModal.jsx'),
+  read('server/admin-bff/product-intake.js'),
   read('supabase/migrations/20260811_product_intake_and_sku_gate.sql'),
+  read('supabase/migrations/20260824_map018_intake_evidence_cleanup_boundary.sql'),
   read('supabase/map018_product_intake_preflight.sql'),
   read('supabase/map018_product_intake_postflight.sql'),
 ])
+
+for (const required of [
+  'removeUnregisteredEvidence',
+  'recordPendingEvidenceCleanup',
+  'reconcilePendingEvidenceCleanup',
+  ".from('product-intake-evidence').remove([path])",
+]) assert.equal(server.includes(required), true, `Missing private-evidence rollback control: ${required}`)
+
+for (const required of [
+  'product_intake_evidence_cleanup_events',
+  'force row level security',
+  'record_admin_product_intake_evidence_cleanup_v1',
+  'claim_admin_product_intake_evidence_cleanup_v1',
+  'complete_admin_product_intake_evidence_cleanup_v1',
+  'K2_INTAKE_CLEANUP_ATTEMPTS_EXHAUSTED',
+]) assert.equal(cleanupMigration.includes(required),true,`Missing cleanup reconciliation boundary: ${required}`)
+
+for (const required of [
+  'retryProductEvidenceCleanup',
+  'Retry file cleanup',
+  'The unregistered private file is queued for cleanup.',
+]) assert.equal(`${service}\n${modal}`.includes(required),true,`Missing cleanup recovery UI: ${required}`)
 
 for (const forbidden of [
   /Mock Product Draft/i,

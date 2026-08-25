@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { safeUiError } from '../../lib/safeUiError'
 import { CheckIcon, GlobeIcon, XIcon } from '../../components/ui/icons'
+import { adminBffEnabled, getAdminChannelsBff, verifyInternalChannelBff } from '../../services/adminBffService'
 import {
   MetricRail,
   SectionHeading,
@@ -25,7 +27,8 @@ const CHANNELS = [
   { key: 'lazada', name: 'Lazada', color: '#27306f', portal: 'https://open.lazada.com', secrets: ['LAZADA_APP_KEY', 'LAZADA_APP_SECRET', 'LAZADA_SELLER_ID'], description: 'Catalog, orders, and inventory sync after Open Platform access.' },
 ]
 
-export default function ChannelIntegrations() {
+export default function ChannelIntegrations({ secureMode }) {
+  const secure = secureMode ?? adminBffEnabled()
   const [connections, setConnections] = useState({})
   const [readiness, setReadiness] = useState([])
   const [loading, setLoading] = useState(true)
@@ -33,34 +36,58 @@ export default function ChannelIntegrations() {
   const [guide, setGuide] = useState(null)
   const [verify, setVerify] = useState(null)
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (signal) => {
+    if (secure) {
+      const response = await getAdminChannelsBff(signal)
+      if (response.aborted) return
+      if (!response.ok) setError(response.error || 'Channel evidence could not be loaded.')
+      else {
+        const map = {}
+        for (const row of response.channels.connections || []) map[row.channel] = {
+          ...row, last_event_at: row.lastEventAt, updated_at: row.updatedAt,
+        }
+        setConnections(map)
+        setReadiness(response.channels.readiness || [])
+        setError('')
+      }
+      setLoading(false)
+      return
+    }
     if (!supabase) { setError('Supabase is not configured.'); setLoading(false); return }
     const [connectionRows, readinessRows] = await Promise.all([
       supabase.from('channel_connections').select('channel,status,last_event_at,note,updated_at'),
       supabase.from('v_channel_catalog_readiness').select('*'),
     ])
     const firstError = connectionRows.error || readinessRows.error
-    setError(firstError ? firstError.message : '')
+    setError(firstError ? safeUiError('CHANNEL_LOAD_FAILED') : '')
     const map = {}
     for (const row of connectionRows.data || []) map[row.channel] = row
     setConnections(map)
     setReadiness(readinessRows.data || [])
     setLoading(false)
-  }, [])
+  }, [secure])
 
   useEffect(() => {
-    load()
+    const controller = new AbortController()
+    load(controller.signal)
+    if (secure) {
+      const refresh = () => { if (document.visibilityState === 'visible') load(controller.signal) }
+      const interval = window.setInterval(refresh, 30_000)
+      document.addEventListener('visibilitychange', refresh)
+      return () => { controller.abort(); window.clearInterval(interval); document.removeEventListener('visibilitychange', refresh) }
+    }
     if (!supabase) return undefined
     const channel = supabase.channel('admin:channel-readiness')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'channel_connections' }, load)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'channel_listings' }, load)
       .subscribe()
-    return () => supabase.removeChannel(channel)
-  }, [load])
+    return () => { controller.abort(); supabase.removeChannel(channel) }
+  }, [load, secure])
 
   const stats = useMemo(() => Object.fromEntries(CHANNELS.map(channel => {
     const rows = readiness.filter(row => row.channel === channel.key)
-    return [channel.key, {
+    const aggregate = rows.find(row => Number.isInteger(row.total))
+    return [channel.key, aggregate || {
       total: rows.length,
       ready: rows.filter(row => (row.missing_fields || []).length === 0 && ['ready', 'published'].includes(row.publication_status)).length,
       incomplete: rows.filter(row => (row.missing_fields || []).length > 0).length,
@@ -98,6 +125,7 @@ export default function ChannelIntegrations() {
       ]} />
 
       {error && <StateBanner tone="warning">{error}. Apply the launch-core migration to enable readiness reporting.</StateBanner>}
+      {!secure && <StateBanner tone="warning">Transitional staff database path. The signed channel boundary remains inactive until coordinated cutover.</StateBanner>}
 
       <section className="space-y-3">
         <SectionHeading title="Channel evidence and next action" description="Connection truth, catalog preparation, and the next safe operational step for each income channel." count={CHANNELS.length} />
@@ -137,33 +165,40 @@ export default function ChannelIntegrations() {
         </div>
       </section>
 
-      <StateBanner tone="info"><strong className="font-semibold text-white/80">Operating rule:</strong> prepare channel titles, prices, images, and identifiers as drafts. Do not mark a marketplace row published or include it in synchronized stock until a real connector returns success. Marketplace Seller Centers remain the manual fallback during Step 1.</StateBanner>
+      <StateBanner tone="info"><strong className="font-semibold text-white/80">Operating rule:</strong> External marketplaces are not connected. Prepare channel titles, prices, images, and identifiers as drafts. Do not mark a marketplace row published or include it in synchronized stock until a real connector returns success. Marketplace Seller Centers remain the manual fallback during Step 1.</StateBanner>
 
       {guide && <ConnectorGuide channel={guide} onClose={() => setGuide(null)} />}
-      {verify && <InternalVerification channel={verify} onClose={() => setVerify(null)} onVerified={async () => { setVerify(null); await load() }} />}
+      {verify && <InternalVerification secure={secure} channel={verify} onClose={() => setVerify(null)} onVerified={async () => { setVerify(null); await load() }} />}
     </div>
   )
 }
 
-function InternalVerification({ channel, onClose, onVerified }) {
+function InternalVerification({ secure, channel, onClose, onVerified }) {
   const [reference, setReference] = useState('')
   const [note, setNote] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const closeRef = useRef(null)
+  useEffect(() => {
+    closeRef.current?.focus()
+    const handleKey = event => { if (event.key === 'Escape' && !busy) onClose() }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [busy, onClose])
   const submit = async event => {
     event.preventDefault(); setBusy(true); setError('')
-    const { error: verifyError } = await supabase.rpc('verify_internal_channel_event', {
-      p_channel: channel.key, p_public_reference: reference.trim(), p_note: note.trim(),
-    })
+    const result = secure
+      ? await verifyInternalChannelBff({ channel: channel.key, publicReference: reference.trim(), reason: note.trim() })
+      : await supabase.rpc('verify_internal_channel_event', { p_channel: channel.key, p_public_reference: reference.trim(), p_note: note.trim() })
     setBusy(false)
-    if (verifyError) { setError(verifyError.message); return }
+    if ((secure && !result.ok) || (!secure && result.error)) { setError(secure ? (result.error || 'The event could not be verified.') : safeUiError('UI_OPERATION_FAILED')); return }
     await onVerified()
   }
   const input = 'mt-1.5 min-h-11 w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-forest'
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="internal-verification-title">
-      <form onSubmit={submit} className="w-full max-w-md space-y-4 rounded-adm border border-adm-line bg-adm-surface p-6 text-white">
-        <div><p className="text-xs font-semibold uppercase tracking-wider text-forest">Real-event reconciliation</p><h2 id="internal-verification-title" className="mt-1 text-xl font-semibold">Verify {channel.name}</h2><p className="mt-2 text-sm leading-relaxed text-white/55">Enter a request that you opened in the dashboard and checked against the submitted customer details. This status is operational evidence, not a test toggle.</p></div>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/85 sm:items-center sm:p-3" role="presentation">
+      <form onSubmit={submit} className="w-full max-w-md space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:rounded-adm sm:p-6" role="dialog" aria-modal="true" aria-labelledby="internal-verification-title">
+        <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-wider text-forest">Real-event reconciliation</p><h2 id="internal-verification-title" className="mt-1 text-xl font-semibold">Verify {channel.name}</h2><p className="mt-2 text-sm leading-relaxed text-white/55">Enter a request that you opened in the dashboard and checked against the submitted customer details. This status is operational evidence, not a test toggle.</p></div><button ref={closeRef} type="button" onClick={onClose} aria-label="Close verification dialog" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line"><XIcon size={18} /></button></div>
         <label className="block text-xs font-semibold text-white/60">Public request reference<input className={input} value={reference} onChange={event => setReference(event.target.value)} placeholder={channel.key === 'website' ? 'WEB-...' : 'PB-...'} required /></label>
         <label className="block text-xs font-semibold text-white/60">Reconciliation note<textarea className={`${input} min-h-24 resize-y`} value={note} onChange={event => setNote(event.target.value)} placeholder="What was checked and by whom?" required /></label>
         {error && <StateBanner tone="danger">{error}</StateBanner>}
@@ -174,6 +209,13 @@ function InternalVerification({ channel, onClose, onVerified }) {
 }
 
 function ConnectorGuide({ channel, onClose }) {
+  const closeRef = useRef(null)
+  useEffect(() => {
+    closeRef.current?.focus()
+    const handleKey = event => { if (event.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [onClose])
   const steps = [
     ['Prepare catalog drafts', 'Validate names, channel price, stock, images, and identifiers in the readiness board.'],
     ['Obtain partner access', `Create the approved app in ${channel.name} and record which shop or account it controls.`],
@@ -182,9 +224,9 @@ function ConnectorGuide({ channel, onClose }) {
     ['Reconcile the first real event', 'Compare the marketplace order and inventory result before changing status to operational.'],
   ]
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="connector-guide-title">
-      <div className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white sm:p-6">
-        <div className="flex items-start justify-between gap-3 border-b border-adm-line pb-4"><div><p className="text-xs font-semibold uppercase tracking-wider text-blue">Not connected</p><h2 id="connector-guide-title" className="mt-1 text-xl font-semibold">{channel.name} connector checklist</h2></div><button onClick={onClose} aria-label="Close connector checklist" className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm bg-white/5 text-white/55 transition-colors hover:text-white"><XIcon size={18} /></button></div>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/85 sm:items-center sm:p-3" role="presentation">
+      <div className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:rounded-adm sm:p-6" role="dialog" aria-modal="true" aria-labelledby="connector-guide-title">
+        <div className="flex items-start justify-between gap-3 border-b border-adm-line pb-4"><div><p className="text-xs font-semibold uppercase tracking-wider text-blue">Not connected</p><h2 id="connector-guide-title" className="mt-1 text-xl font-semibold">{channel.name} connector checklist</h2></div><button ref={closeRef} onClick={onClose} aria-label="Close connector checklist" className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm bg-white/5 text-white/55 hover:text-white"><XIcon size={18} /></button></div>
         <ol className="mt-5 divide-y divide-adm-line border-y border-adm-line">
           {steps.map(([title, detail], index) => <li key={title} className="flex gap-3 py-4"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-blue/30 bg-blue/10 font-mono text-xs font-semibold text-blue">{index + 1}</span><div><p className="text-sm font-semibold">{title}</p><p className="mt-0.5 text-sm leading-relaxed text-white/55">{detail}</p></div></li>)}
         </ol>

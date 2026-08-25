@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { LIFESTYLE } from '../data/site'
 import { GhostButton, Kicker, RedButton } from '../components/ui/bits'
-import { ArrowIcon, BriefcaseIcon, CheckIcon, ShieldIcon } from '../components/ui/icons'
+import { ArrowIcon, BriefcaseIcon, CheckIcon, InboxIcon, ShieldIcon } from '../components/ui/icons'
+import TurnstileChallenge from '../components/security/TurnstileChallenge'
+import { guestBffEnabled, postGuestCommerce } from '../services/guestCommerceService'
+
+const WHOLESALE_EMAIL = 'k2jimzonwebsite@gmail.com'
 
 const BUSINESS_TYPES = [
   { id: 'cafe_restaurant', label: 'Café / Restaurant / Bakery' },
@@ -22,7 +26,7 @@ const VOLUME_TIERS = [
 const REQUIREMENTS = [
   ['Products and expected quantities', 'Specify target Italian items, preferred packaging sizes, and monthly case volume.'],
   ['Delivery destination & frequency', 'Include your hub area, logistics preferences, and required first delivery timeframe.'],
-  ['Authorized business credentials', 'Share business name, tax identification (TIN/SEC/DTI), and designated purchasing contact.'],
+  ['Later verification, if needed', 'Start with a business name and purchasing contact. Share registration evidence only after K2 requests it through a confirmed channel.'],
 ]
 
 export default function Wholesale() {
@@ -32,7 +36,6 @@ export default function Wholesale() {
   const [formData, setFormData] = useState({
     organizationName: '',
     businessType: 'cafe_restaurant',
-    registrationNumber: '', // TIN or DTI/SEC
     contactName: '',
     contactRole: '',
     email: '',
@@ -47,6 +50,9 @@ export default function Wholesale() {
   const [submitting, setSubmitting] = useState(false)
   const [submittedReceipt, setSubmittedReceipt] = useState(null)
   const [formError, setFormError] = useState('')
+  const [botToken, setBotToken] = useState('')
+  const requestKey = useRef('')
+  const secureInquiry = guestBffEnabled()
 
   const handleChange = (field) => (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
@@ -54,7 +60,7 @@ export default function Wholesale() {
     setFormError('')
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setFormError('')
 
@@ -66,47 +72,61 @@ export default function Wholesale() {
       setFormError('Contact name, work email, and phone number are required.')
       return
     }
-    if (!formData.registrationNumber.trim()) {
-      setFormError('Please enter your TIN, DTI, or SEC registration number for business verification.')
-      return
-    }
     if (!formData.deliveryAddress.trim()) {
       setFormError('Please indicate your primary business delivery address.')
       return
     }
     if (!formData.agreedToTerms) {
-      setFormError('Please confirm that you agree to K2 Jimzon business supply terms.')
+      setFormError('Please confirm that you are authorized to make this inquiry and understand that K2 has not approved commercial terms.')
+      return
+    }
+    if (secureInquiry && !botToken) {
+      setFormError('Complete the security check before recording this inquiry.')
       return
     }
 
     setSubmitting(true)
 
-    // Generate durable receipt ID and persist application state
-    const applicationRef = `WA-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
+    const businessType = BUSINESS_TYPES.find((b) => b.id === formData.businessType)?.label || formData.businessType
+    const volumeTier = VOLUME_TIERS.find((v) => v.id === formData.volumeTier)?.label || formData.volumeTier
     const receipt = {
-      reference: applicationRef,
       organization: formData.organizationName.trim(),
       contact: formData.contactName.trim(),
       email: formData.email.trim(),
       phone: formData.phone.trim(),
-      businessType: BUSINESS_TYPES.find((b) => b.id === formData.businessType)?.label || formData.businessType,
-      volumeTier: VOLUME_TIERS.find((v) => v.id === formData.volumeTier)?.label || formData.volumeTier,
-      submittedAt: new Date().toISOString(),
+      businessType,
+      volumeTier,
     }
-
-    // Store in local storage for session continuity
-    try {
-      const existing = JSON.parse(localStorage.getItem('k2_wholesale_applications') || '[]')
-      existing.push(receipt)
-      localStorage.setItem('k2_wholesale_applications', JSON.stringify(existing))
-    } catch {
-      // Non-blocking storage fallback
-    }
-
-    setTimeout(() => {
+    if (secureInquiry) {
+      if (!requestKey.current) requestKey.current=crypto.randomUUID()
+      const result=await postGuestCommerce('wholesale',{
+        organizationName:formData.organizationName.trim(), businessType:formData.businessType,
+        customerName:formData.contactName.trim(), contactRole:formData.contactRole.trim(),
+        email:formData.email.trim(), phone:formData.phone.trim(), deliveryArea:formData.deliveryAddress.trim(),
+        volumeBand:formData.volumeTier, targetItems:formData.targetItems.trim() || 'Business supply details to confirm',
+        notes:formData.notes.trim(), idempotencyKey:requestKey.current, botToken,
+      })
       setSubmitting(false)
-      setSubmittedReceipt(receipt)
-    }, 400)
+      if(!result.ok) { setFormError(result.error || 'The inquiry could not be recorded. Keep this page open and try again.'); return }
+      requestKey.current=''
+      setSubmittedReceipt({...receipt,recorded:true,reference:result.data?.public_reference,conversationReference:result.data?.conversation_reference})
+      return
+    }
+    const body = [
+      `Organization: ${receipt.organization}`,
+      `Business type: ${businessType}`,
+      `Contact: ${receipt.contact}${formData.contactRole.trim() ? ` (${formData.contactRole.trim()})` : ''}`,
+      `Email: ${receipt.email}`,
+      `Phone: ${receipt.phone}`,
+      `Delivery city / area: ${formData.deliveryAddress.trim()}`,
+      `Expected volume: ${volumeTier}`,
+      '',
+      `Target items: ${formData.targetItems.trim() || 'Not specified'}`,
+      `Notes: ${formData.notes.trim() || 'None'}`,
+    ].join('\n')
+    window.location.href = `mailto:${WHOLESALE_EMAIL}?subject=${encodeURIComponent(`Wholesale inquiry — ${receipt.organization}`)}&body=${encodeURIComponent(body)}`
+    setSubmitting(false)
+    setSubmittedReceipt({...receipt,recorded:false})
   }
 
   return (
@@ -123,15 +143,15 @@ export default function Wholesale() {
               <em className="font-normal text-crimson">reviewed by our sourcing team.</em>
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-navy-soft">
-              Direct air-freighted supply for cafés, restaurants, specialty delis, and corporate buyers.
-              K2 verifies fresh batches, Manila hub allocation, and custom volume pricing before confirming terms.
+              Italy-sourced business supply for cafés, restaurants, specialty delis, and corporate buyers.
+              K2 staff reviews the applicable batch, Manila availability, and versioned commercial terms before an order is accepted.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
                 href="#application-form"
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-crimson px-6 text-sm font-bold text-white transition-[transform,background-color] duration-150 hover:bg-crimson-deep active:scale-[0.97]"
               >
-                Apply for Wholesale Terms <ArrowIcon size={15} />
+                Prepare a Wholesale Inquiry <ArrowIcon size={15} />
               </a>
               <GhostButton onClick={() => go('catalog')} className="px-6">
                 Browse Retail Catalog
@@ -148,10 +168,10 @@ export default function Wholesale() {
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[var(--store-surface-bg)] via-[var(--store-surface-bg)]/80 to-transparent p-6 pt-20">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-crimson">
                 <ShieldIcon size={14} />
-                <span>Verified Commercial Operations</span>
+                <span>Manual Commercial Review</span>
               </div>
               <p className="mt-2 max-w-sm text-sm leading-6 text-navy-soft">
-                Wholesale pricing is staff-assigned and tied to verified business volume. Every batch carries an immutable landed cost and expiry date.
+                Wholesale pricing is staff-assigned and tied to a reviewed business need. The browser cannot approve pricing, stock, credit, or delivery terms.
               </p>
             </div>
           </div>
@@ -164,10 +184,10 @@ export default function Wholesale() {
           <div>
             <Kicker>Business Onboarding</Kicker>
             <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight md:text-4xl">
-              Apply for an Attributable Wholesale Account.
+              Start a traceable business-supply inquiry.
             </h2>
             <p className="mt-4 text-sm leading-7 text-navy-soft">
-              Submit your business profile and expected volume. Our team reviews all applications within 1–2 business days to set up your dedicated price list and logistics terms.
+              Prepare a business-supply inquiry with your expected volume. K2 reviews it manually; eligibility, pricing, delivery, and any commercial terms are confirmed only in a later staff response.
             </p>
 
             <div className="mt-8 rounded-xl border border-line bg-paper p-5">
@@ -177,15 +197,15 @@ export default function Wholesale() {
               <ol className="mt-3 space-y-2.5 text-xs leading-relaxed text-navy-soft">
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-navy">1.</span>
-                  <span>Staff reviews your TIN/SEC/DTI registration and volume tier.</span>
+                  <span>K2 reviews the business need and expected volume after the email is actually sent.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-navy">2.</span>
-                  <span>We confirm Manila warehouse stock availability and Italy flight schedule.</span>
+                  <span>Staff may request business evidence through a confirmed channel; the first inquiry should not contain sensitive documents.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-navy">3.</span>
-                  <span>A personalized commercial proposal is sent to your purchasing email.</span>
+                  <span>Any eligibility, stock, pricing, delivery, or commercial proposal is confirmed separately and remains version-specific.</span>
                 </li>
               </ol>
             </div>
@@ -193,18 +213,16 @@ export default function Wholesale() {
 
           <div>
             {submittedReceipt ? (
-              <div className="rounded-2xl border border-forest/30 bg-forest/5 p-6 text-navy shadow-sm sm:p-8">
+              <div className="rounded-2xl border border-blue/30 bg-blue/5 p-6 text-navy shadow-sm sm:p-8">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-forest text-white">
-                    <CheckIcon size={20} />
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue text-white">
+                    <InboxIcon size={20} />
                   </span>
                   <div>
                     <h3 className="font-serif text-2xl font-semibold text-navy">
-                      Application Submitted Successfully
+                      {submittedReceipt.recorded ? 'Inquiry recorded' : 'Email draft prepared — not submitted'}
                     </h3>
-                    <p className="text-xs font-mono font-bold text-forest">
-                      Ref: {submittedReceipt.reference}
-                    </p>
+                    <p className="text-xs font-semibold text-blue">{submittedReceipt.recorded ? `Ref: ${submittedReceipt.reference} · Conversation: ${submittedReceipt.conversationReference}` : 'Review it in your email app, then press Send.'}</p>
                   </div>
                 </div>
 
@@ -232,7 +250,7 @@ export default function Wholesale() {
                 </div>
 
                 <p className="mt-6 text-xs leading-relaxed text-navy-soft">
-                  A copy of this reference has been recorded. Our wholesale coordinator will reach out directly at <strong className="text-navy">{submittedReceipt.email}</strong>.
+                  {submittedReceipt.recorded ? 'K2 recorded this inquiry and its Website conversation. This does not approve a business account, wholesale pricing, stock, credit, delivery timing, or response time.' : 'K2 has not received or recorded this inquiry yet. Sending the email does not approve a business account, wholesale pricing, stock, credit, delivery timing, or response time.'}
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-3">
@@ -242,7 +260,6 @@ export default function Wholesale() {
                       setFormData({
                         organizationName: '',
                         businessType: 'cafe_restaurant',
-                        registrationNumber: '',
                         contactName: '',
                         contactRole: '',
                         email: '',
@@ -256,20 +273,20 @@ export default function Wholesale() {
                     }}
                     className="text-xs"
                   >
-                    Submit Another Inquiry
+                    Prepare Another Inquiry
                   </GhostButton>
                   <RedButton onClick={() => go('catalog')}>
-                    Explore Wholesale Eligible Products <ArrowIcon size={14} />
+                    Browse the Retail Catalog <ArrowIcon size={14} />
                   </RedButton>
                 </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-line bg-paper p-6 shadow-sm sm:p-8">
                 <h3 className="font-serif text-2xl font-semibold text-navy">
-                  Wholesale Application Form
+                  Wholesale Inquiry Draft
                 </h3>
                 <p className="text-xs text-navy-soft">
-                  All fields marked with an asterisk (*) are required for business account verification.
+                  This prepares an email draft only. It does not create or verify a business account.
                 </p>
 
                 {formError && (
@@ -278,13 +295,14 @@ export default function Wholesale() {
                   </div>
                 )}
 
-                {/* Company & TIN */}
-                <div className="grid gap-4 sm:grid-cols-2">
+                {/* Company */}
+                <div>
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-navy">
+                    <label htmlFor="wholesale-organization" className="mb-1 block text-xs font-semibold text-navy">
                       Registered Company Name *
                     </label>
                     <input
+                      id="wholesale-organization"
                       type="text"
                       required
                       value={formData.organizationName}
@@ -293,28 +311,17 @@ export default function Wholesale() {
                       className="min-h-11 w-full rounded-lg border border-line bg-[var(--store-surface-bg)] px-3 py-2 text-sm text-navy outline-none focus:border-crimson focus:ring-1 focus:ring-crimson"
                     />
                   </div>
-                  <div>
-                    <label className="mb-1 block text-xs font-semibold text-navy">
-                      TIN / DTI / SEC Registration Number *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.registrationNumber}
-                      onChange={handleChange('registrationNumber')}
-                      placeholder="e.g. 000-123-456-000"
-                      className="min-h-11 w-full rounded-lg border border-line bg-[var(--store-surface-bg)] px-3 py-2 text-sm text-navy outline-none focus:border-crimson focus:ring-1 focus:ring-crimson"
-                    />
-                  </div>
                 </div>
+                <p className="text-xs leading-5 text-navy-soft">Do not send registration documents, tax numbers, payment details, passwords, or one-time codes in this first inquiry. Staff will request only the evidence needed for a later review.</p>
 
                 {/* Business Type & Volume Tier */}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-navy">
+                    <label htmlFor="wholesale-business-type" className="mb-1 block text-xs font-semibold text-navy">
                       Business Type *
                     </label>
                     <select
+                      id="wholesale-business-type"
                       value={formData.businessType}
                       onChange={handleChange('businessType')}
                       className="min-h-11 w-full rounded-lg border border-line bg-[var(--store-surface-bg)] px-3 py-2 text-sm text-navy outline-none focus:border-crimson"
@@ -327,10 +334,11 @@ export default function Wholesale() {
                     </select>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-navy">
+                    <label htmlFor="wholesale-volume" className="mb-1 block text-xs font-semibold text-navy">
                       Expected Order Volume *
                     </label>
                     <select
+                      id="wholesale-volume"
                       value={formData.volumeTier}
                       onChange={handleChange('volumeTier')}
                       className="min-h-11 w-full rounded-lg border border-line bg-[var(--store-surface-bg)] px-3 py-2 text-sm text-navy outline-none focus:border-crimson"
@@ -347,10 +355,11 @@ export default function Wholesale() {
                 {/* Contact Person & Role */}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-navy">
+                    <label htmlFor="wholesale-contact-name" className="mb-1 block text-xs font-semibold text-navy">
                       Contact Person Full Name *
                     </label>
                     <input
+                      id="wholesale-contact-name"
                       type="text"
                       required
                       value={formData.contactName}
@@ -360,10 +369,11 @@ export default function Wholesale() {
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-navy">
+                    <label htmlFor="wholesale-contact-role" className="mb-1 block text-xs font-semibold text-navy">
                       Designation / Role
                     </label>
                     <input
+                      id="wholesale-contact-role"
                       type="text"
                       value={formData.contactRole}
                       onChange={handleChange('contactRole')}
@@ -376,10 +386,11 @@ export default function Wholesale() {
                 {/* Email & Phone */}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-navy">
+                    <label htmlFor="wholesale-email" className="mb-1 block text-xs font-semibold text-navy">
                       Work Email *
                     </label>
                     <input
+                      id="wholesale-email"
                       type="email"
                       required
                       value={formData.email}
@@ -389,10 +400,11 @@ export default function Wholesale() {
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-navy">
+                    <label htmlFor="wholesale-phone" className="mb-1 block text-xs font-semibold text-navy">
                       Mobile / WhatsApp / Viber *
                     </label>
                     <input
+                      id="wholesale-phone"
                       type="tel"
                       required
                       value={formData.phone}
@@ -405,25 +417,27 @@ export default function Wholesale() {
 
                 {/* Delivery Address */}
                 <div>
-                  <label className="mb-1 block text-xs font-semibold text-navy">
-                    Primary Business Delivery Address *
+                  <label htmlFor="wholesale-delivery-area" className="mb-1 block text-xs font-semibold text-navy">
+                    Delivery City / Area *
                   </label>
                   <input
+                    id="wholesale-delivery-area"
                     type="text"
                     required
                     value={formData.deliveryAddress}
                     onChange={handleChange('deliveryAddress')}
-                    placeholder="Unit, Building, Street, City, Province / Metro Manila"
+                    placeholder="City, Province / Metro Manila area"
                     className="min-h-11 w-full rounded-lg border border-line bg-[var(--store-surface-bg)] px-3 py-2 text-sm text-navy outline-none focus:border-crimson"
                   />
                 </div>
 
                 {/* Target Products & Notes */}
                 <div>
-                  <label className="mb-1 block text-xs font-semibold text-navy">
+                  <label htmlFor="wholesale-target-items" className="mb-1 block text-xs font-semibold text-navy">
                     Target Italian Items or Specific Requirements
                   </label>
                   <textarea
+                    id="wholesale-target-items"
                     rows={3}
                     value={formData.targetItems}
                     onChange={handleChange('targetItems')}
@@ -442,10 +456,12 @@ export default function Wholesale() {
                       className="mt-0.5 h-4 w-4 rounded accent-crimson"
                     />
                     <span>
-                      I declare that I am an authorized representative of this business. I understand that wholesale pricing and delivery schedules are subject to staff approval and verification.
+                      I am authorized to make this inquiry. I understand that it is not an application receipt or approval, and that pricing, stock, delivery, credit, and other commercial terms require separate staff confirmation.
                     </span>
                   </label>
                 </div>
+
+                {secureInquiry && <TurnstileChallenge onTokenChange={setBotToken} />}
 
                 {/* Submit Button */}
                 <div className="pt-3">
@@ -454,7 +470,7 @@ export default function Wholesale() {
                     disabled={submitting}
                     className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-crimson px-6 text-sm font-bold text-white transition-[transform,background-color] duration-150 hover:bg-crimson-deep active:scale-[0.98] disabled:opacity-50"
                   >
-                    {submitting ? 'Submitting Application…' : 'Submit Wholesale Application'}
+                    {submitting ? (secureInquiry ? 'Recording Inquiry…' : 'Preparing Email Draft…') : (secureInquiry ? 'Record Wholesale Inquiry' : 'Prepare Wholesale Email')}
                     <ArrowIcon size={15} />
                   </button>
                 </div>
@@ -469,7 +485,7 @@ export default function Wholesale() {
             Commercial Supply Guidelines
           </h3>
           <p className="mt-1 text-sm text-navy-soft">
-            How K2 Jimzon ensures product integrity, cold-chain safety, and accurate batch records for business buyers.
+            Information K2 staff reviews before confirming product handling, stock, batch, expiry, and delivery requirements for a business buyer.
           </p>
 
           <ol className="mt-8 grid gap-6 md:grid-cols-3">
@@ -486,7 +502,7 @@ export default function Wholesale() {
         <div className="mt-12 flex flex-col items-start justify-between gap-6 rounded-2xl border border-line bg-paper p-6 sm:flex-row sm:items-center sm:px-8">
           <p className="flex max-w-xl items-start gap-3 text-sm leading-6 text-navy-soft">
             <CheckIcon size={18} className="mt-0.5 shrink-0 text-forest" />
-            Looking for a rare or custom Italian brand not listed in our standard wholesale catalog? Submit a Pasabuy request and our Milan sourcing team will quote landed bulk pricing.
+            Looking for a rare or custom Italian brand not listed in the retail catalog? Submit a Pasabuy request so K2 staff can review the item, quantity, sourcing, and an appropriate next step.
           </p>
           <RedButton onClick={() => go('pasabuy')}>
             Request Custom Sourcing <ArrowIcon size={15} />

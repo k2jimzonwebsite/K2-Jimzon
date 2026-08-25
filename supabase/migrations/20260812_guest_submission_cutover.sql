@@ -2,18 +2,14 @@
 -- are deployed together and verified. This removes direct browser execution.
 begin;
 
-do $$
-declare v_function regprocedure;
-begin
-  for v_function in
-    select p.oid::regprocedure
-    from pg_proc p join pg_namespace n on n.oid=p.pronamespace
-    where n.nspname='public'
-      and p.proname in ('submit_order_request','submit_order_request_v2','submit_pasabuy_request','validate_coupon')
-  loop
-    execute format('revoke execute on function %s from public, anon, authenticated', v_function);
-  end loop;
-end $$;
+revoke execute on function public.submit_order_request(text,text,text,text,text,text,jsonb,text)
+  from public, anon, authenticated;
+revoke execute on function public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text)
+  from public, anon, authenticated;
+revoke execute on function public.submit_pasabuy_request(text,text,text,text,text,integer,numeric,text,boolean,text)
+  from public, anon, authenticated;
+revoke execute on function public.validate_coupon(text,numeric)
+  from public, anon, authenticated;
 
 grant execute on function public.submit_guest_order_v1(bigint,uuid,text,text,text,text) to anon;
 grant execute on function public.submit_guest_pasabuy_v1(bigint,uuid,text,text,text,text) to anon;

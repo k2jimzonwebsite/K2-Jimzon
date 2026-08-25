@@ -1,7 +1,7 @@
 {
   "project_ref": "fabricated-test-project-001",
   "exported_at": "2026-08-15T12:00:00Z",
-  "format_version": "2026-08-15.map017.meta.v1",
+  "format_version": "2026-08-22.map017.meta.v2",
   "schemas": ["public", "storage"],
   "tables": {
     "brands": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
@@ -18,6 +18,11 @@
     "conversations": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" },
     "messages": { "rlsEnabled": true, "rlsForced": false, "owner": "postgres" }
   },
+  "columns": [],
+  "constraints": [],
+  "indexes": [],
+  "sequences": [],
+  "triggers": [],
   "views": {
     "v_channel_catalog_readiness": { "securityInvoker": true, "owner": "postgres" },
     "v_expiring_batches": { "securityInvoker": true, "owner": "postgres" },
@@ -28,8 +33,9 @@
   "functions": {
     "public.is_staff()": { "securityDefiner": true, "returns": "boolean", "owner": "postgres", "searchPath": "public, pg_temp", "grants": [{ "grantee": "authenticated", "privilege": "EXECUTE" }] },
     "public.is_admin()": { "securityDefiner": true, "returns": "boolean", "owner": "postgres", "searchPath": "public, pg_temp", "grants": [{ "grantee": "authenticated", "privilege": "EXECUTE" }] },
-    "public.set_user_role(uuid,text)": { "securityDefiner": true, "searchPath": "public", "owner": "postgres", "grants": [{ "grantee": "authenticated", "privilege": "EXECUTE" }] },
+    "public.set_user_role(uuid,text)": { "securityDefiner": true, "searchPath": "public", "owner": "postgres", "references_is_admin": true, "references_aal2": true, "grants": [{ "grantee": "authenticated", "privilege": "EXECUTE" }] },
     "public.process_audit_log()": { "securityDefiner": true, "searchPath": "public, pg_temp", "owner": "postgres", "grants": [] },
+    "public.get_public_product_stock()": { "securityDefiner": true, "searchPath": "search_path=\"\"", "owner": "postgres", "grants": [{ "grantee": "anon", "privilege": "EXECUTE" }, { "grantee": "authenticated", "privilege": "EXECUTE" }] },
     "public.decrement_stock(text,integer)": { "disabled": true, "owner": "postgres", "grants": [] },
     "public.deduct_stock_fefo(text,integer)": { "disabled": true, "owner": "postgres", "grants": [] },
     "public.replace_product_batches(text,jsonb,text)": { "disabled": true, "owner": "postgres", "grants": [] },
@@ -64,8 +70,13 @@
     ],
     "products_old": [],
     "channel_credentials": [],
-    "staff_allocations": []
+    "staff_allocations": [],
+    "v_product_stock_from_batches": [
+      { "grantee": "anon", "privilege": "SELECT" }
+    ]
   },
+  "schema_grants": [],
+  "default_privileges": [],
   "policies": [
     { "table_name": "brands", "policy_name": "brands_public_read", "command": "SELECT", "roles": ["anon", "authenticated"], "using_expression": "true", "with_check_expression": null },
     { "table_name": "brands", "policy_name": "brands_staff_manage", "command": "ALL", "roles": ["authenticated"], "using_expression": "public.is_staff()", "with_check_expression": "public.is_staff()" },

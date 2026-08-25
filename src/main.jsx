@@ -7,13 +7,8 @@ import './index.css'
 import App from '@k2-app-entry'
 import { installErrorReporting } from './lib/reportError'
 
-// Capture uncaught errors + promise rejections app-wide.
+// Capture uncaught errors + promise rejections app-wide without raw diagnostics.
 installErrorReporting()
-
-console.log(
-  "%c☕ Ciao! Inspecting the code? You must appreciate the finer things in life, like authentic Italian espresso and beautifully crafted react. Welcome to the manifest.",
-  "font-size: 13px; font-family: monospace; color: #8A433A; padding: 10px; border-radius: 4px; border: 1px solid #E5D5C5; background: #FAF7F2;"
-)
 
 // Self-heal stale-deployment chunk errors. When a lazily-imported view fails to
 // fetch (its hashed filename changed after a new deploy), Vite fires this event.

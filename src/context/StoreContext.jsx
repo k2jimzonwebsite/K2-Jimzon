@@ -3,8 +3,10 @@ import { flushSync } from 'react-dom'
 import { supabase } from '../lib/supabaseClient'
 import { products as localProducts } from '../data/products'
 import { guestBffEnabled, postGuestCommerce } from '../services/guestCommerceService'
+import { customerAccountEnabled } from '../services/customerAccountService'
 
 const StoreContext = createContext(null)
+const CATALOG_REFRESH_INTERVAL_MS = 60_000
 
 const NO_ADMIN_RUNTIME = {
   user: null,
@@ -17,6 +19,8 @@ const NO_ADMIN_RUNTIME = {
   challengeMfa: async () => ({ ok: false, error: 'Admin access is available only on the separate admin site.' }),
   enrollMfa: async () => ({ ok: false, error: 'Admin access is available only on the separate admin site.' }),
   verifyMfaEnroll: async () => ({ ok: false, error: 'Admin access is available only on the separate admin site.' }),
+  startMfaReplacement: async () => ({ ok: false, error: 'Admin access is available only on the separate admin site.' }),
+  completeMfaReplacement: async () => ({ ok: false, error: 'Admin access is available only on the separate admin site.' }),
   inviteStaff: async () => ({ ok: false, error: 'Admin access is available only on the separate admin site.' }),
 }
 
@@ -33,13 +37,17 @@ const NO_ADMIN_INBOX = {
 const PLACEHOLDER_IMG = '/images/placeholder.svg'
 
 export function StoreProvider({ children, enableAdminData = false, adminAuth = NO_ADMIN_RUNTIME, adminInbox = NO_ADMIN_INBOX }) {
-  const [view, setView] = useState('home')
+  const [view, setView] = useState(() => {
+    if (!customerAccountEnabled()) return 'home'
+    try { return new URLSearchParams(window.location.search).get('account') === 'continue' ? 'account' : 'home' }
+    catch { return 'home' }
+  })
   const [productId, setProductId] = useState(null)
   const [cart, setCart] = useState([])
   const [isWholesale, setIsWholesale] = useState(false)
   const {
     user, isAdmin, authReady, loginAdmin, loginWithGoogle, logoutAdmin,
-    challengeMfa, enrollMfa, verifyMfaEnroll, inviteStaff, adminOAuthAvailable,
+    challengeMfa, enrollMfa, verifyMfaEnroll, startMfaReplacement, completeMfaReplacement, inviteStaff, adminOAuthAvailable,
   } = adminAuth
   
   const [cartOpen, setCartOpen] = useState(false)
@@ -52,6 +60,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   } = adminInbox
   const [dbProducts, setDbProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const catalogRefreshInFlightRef = useRef(false)
 
   // Coupon rules remain private in Supabase; the storefront validates one
   // submitted code at a time and cannot enumerate promotion records.
@@ -158,13 +167,26 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
       .subscribe()
 
+    // Realtime is the fast path, not the only freshness mechanism. A missed
+    // event must not leave a visible catalogue stale indefinitely. Refresh at
+    // a bounded interval while the page is visible and immediately on return.
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === 'visible') fetchProducts()
+    }
+    const refreshInterval = window.setInterval(refreshWhenVisible, CATALOG_REFRESH_INTERVAL_MS)
+    document.addEventListener('visibilitychange', refreshWhenVisible)
+
     return () => {
+      window.clearInterval(refreshInterval)
+      document.removeEventListener('visibilitychange', refreshWhenVisible)
       supabase.removeChannel(productsChannel)
     }
   }, [])
 
   const fetchProducts = async () => {
     if (!supabase) { setLoading(false); return }
+    if (catalogRefreshInFlightRef.current) return
+    catalogRefreshInFlightRef.current = true
     // Unlisted is fetched too: it must resolve by direct link even though it
     // never appears in browse surfaces. `listedProducts` below is what the
     // catalogue, search and category grids read.
@@ -173,22 +195,32 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     // batch operations can change it. The authoritative count lives in
     // v_product_stock_from_batches. We join both in parallel and overlay the
     // batch-derived stock so the storefront always shows accurate availability.
-    const [productsResult, stockResult] = await Promise.all([
-      supabase.from('products').select('*').in('status', ['Live', 'Active', 'Unlisted']),
-      supabase.from('v_product_stock_from_batches').select('sku, stock_from_batches'),
-    ])
+    try {
+      const [productsResult, stockResult] = await Promise.all([
+        supabase.from('products').select('*').in('status', ['Live', 'Active', 'Unlisted']),
+        supabase.from('v_product_stock_from_batches').select('sku, stock_from_batches'),
+      ])
 
-    if (!productsResult.error && productsResult.data) {
-      const stockBySku = Object.fromEntries(
-        (stockResult.data || []).map(r => [r.sku, r.stock_from_batches])
-      )
-      const merged = productsResult.data.map(p => ({
-        ...p,
-        stock_available: stockBySku[p.sku] ?? p.stock_available ?? 0,
-      }))
-      setDbProducts(merged)
+      // Publish one coherent snapshot only when both authoritative reads
+      // succeed. On a partial refresh failure, preserve the last known-good
+      // products and stock rather than mixing new product data with stale stock.
+      if (!productsResult.error && productsResult.data && !stockResult.error && stockResult.data) {
+        const stockBySku = Object.fromEntries(
+          stockResult.data.map(r => [r.sku, r.stock_from_batches])
+        )
+        const merged = productsResult.data.map(p => ({
+          ...p,
+          stock_available: stockBySku[p.sku] ?? 0,
+        }))
+        setDbProducts(merged)
+      }
+    } catch {
+      // Preserve the last known-good snapshot. The next bounded refresh or
+      // Realtime event can recover without blanking the catalogue.
+    } finally {
+      catalogRefreshInFlightRef.current = false
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   // Merge the rich local data (images, hue, guide) with the live pricing and stock from Supabase
@@ -529,6 +561,8 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     challengeMfa,
     enrollMfa,
     verifyMfaEnroll,
+    startMfaReplacement,
+    completeMfaReplacement,
     inviteStaff,
     user,
     order,

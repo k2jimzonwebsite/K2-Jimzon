@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabaseClient'
 import { peso } from '../../data/products'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { channelMeta } from '../../lib/channelMeta'
+import { safeUiError } from '../../lib/safeUiError'
 import { BarcodeIcon, BoxIcon, CheckIcon, UserIcon } from '../../components/ui/icons'
 import PackingSlipModal from './PackingSlipModal'
 import FulfillmentWorkflowDiagram from '../../components/admin/guides/FulfillmentWorkflowDiagram'
@@ -142,7 +143,7 @@ export default function OmniOperationsHub() {
       .select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,subtotal,discount_amount,shipping_amount,shipping_quote_status,courier_name,tracking_number,waybill_url,total_amount,payment_status,created_at,order_request_items(sku,product_name,quantity,line_total)')
       .eq('status', 'submitted')
       .order('created_at', { ascending: true })
-    if (error) setScanMessage({ success: false, text: `Could not load submitted requests: ${error.message}` })
+    if (error) setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') })
     else setOrderRequests(data || [])
   }
 
@@ -162,7 +163,7 @@ export default function OmniOperationsHub() {
       p_order_request_id: request.id,
       p_reason: 'Stock and contact details reviewed in fulfillment hub',
     })
-    if (error) setScanMessage({ success: false, text: error.message })
+    if (error) setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') })
     else {
       setScanMessage({ success: true, text: `${request.public_reference} confirmed. Inventory is now reserved and packing lines were created.` })
       await Promise.all([fetchOrderRequests(), fetchLiveOrders()])
@@ -176,7 +177,7 @@ export default function OmniOperationsHub() {
       .eq('status', 'confirmed')
       .order('created_at', { ascending: false })
     if (error) {
-      setScanMessage({ success: false, text: `Could not load the packing queue: ${error.message}` })
+      setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') })
       setOrders([])
       setLoadingOrders(false)
       return
@@ -226,7 +227,7 @@ export default function OmniOperationsHub() {
     const { data, error } = await supabase.from('product_batches')
       .select('id,box_code,batch_code,sku,quantity,reserved_quantity,custodian,hub,inventory_status,expiry_date').gt('quantity', 0)
     if (error) {
-      setScanMessage({ success: false, text: `Could not load custody lots: ${error.message}` })
+      setScanMessage({ success: false, text: safeUiError('INVENTORY_LOAD_FAILED') })
       setCargoBoxes([])
       setLoadingBoxes(false)
       return
@@ -256,7 +257,7 @@ export default function OmniOperationsHub() {
       p_to_custodian: newStaff, p_box_code: boxCode, p_sku: null,
       p_reason: 'Box custody reassigned from fulfillment hub',
     })
-    if (error) { setScanMessage({ success: false, text: error.message }); return }
+    if (error) { setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') }); return }
     setCargoBoxes(previous => previous.map(box => box.box_code === boxCode ? { ...box, assigned_staff: newStaff } : box))
     setScanMessage({ success: true, text: `${boxCode} is now assigned to ${newStaff}.` })
   }
@@ -284,7 +285,7 @@ export default function OmniOperationsHub() {
       p_to_location: null,
       p_reason: 'Exact lot custody transfer from fulfillment hub',
     })
-    if (error) { setScanMessage({ success: false, text: error.message }); return }
+    if (error) { setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') }); return }
     setScanMessage({ success: true, text: `Moved ${transferQuantity} unit(s) to ${transferTo} with lot history preserved.` })
     setTransferBatchId(''); setTransferQuantity('1'); setTransferTo('')
     fetchBoxes()
@@ -308,7 +309,7 @@ export default function OmniOperationsHub() {
     }
     else {
       const { data, error } = await supabase.rpc('record_packing_scan', { p_order_request_id: found.id, p_scanned_code: match })
-      if (error) setScanMessage({ success: false, text: error.message })
+      if (error) setScanMessage({ success: false, text: safeUiError('INVENTORY_SCAN_FAILED') })
       else {
         const saved = Array.isArray(data) ? data[0] : data
         setScanMessage({ success: true, text: `${saved?.product_name || match}: ${saved?.packed_quantity || 0} of ${saved?.required_quantity || 0} packed for ${saved?.order_reference || found.publicReference}.` })
@@ -348,7 +349,7 @@ export default function OmniOperationsHub() {
       p_order_request_id: order.id,
       p_handover_note: handoverNote.trim(),
     })
-    if (error) { setScanMessage({ success: false, text: error.message }); return }
+    if (error) { setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') }); return }
     setScanMessage({ success: true, text: `${order.publicReference} was handed to the courier with exact lot deductions recorded.` })
     await fetchLiveOrders()
   }
@@ -526,7 +527,7 @@ function DeliveryDetailsModal({ order, onClose, onSave }) {
         customerConfirmed: form.confirmed, note: form.note.trim(),
       })
       setBusy(false)
-    } catch (saveError) { setBusy(false); setError(saveError?.message || 'Delivery details could not be saved.') }
+    } catch { setBusy(false); setError(safeUiError('DELIVERY_SAVE_FAILED')) }
   }
   const update = key => event => setForm(current => ({ ...current, [key]: event.target.type === 'checkbox' ? event.target.checked : event.target.value }))
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="delivery-details-title"><form onSubmit={save} className="max-h-[92vh] w-full max-w-lg space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white"><div><p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p><h2 id="delivery-details-title" className="mt-1 text-xl font-semibold">Delivery quote and waybill</h2><p className="mt-1 text-sm text-white/50">Direct orders require the actual courier quote and customer confirmation. Marketplace delivery is recorded as platform charged.</p></div><div className="grid gap-3 sm:grid-cols-2"><label className="text-xs font-semibold text-white/60">Courier<input required value={form.courier} onChange={update('courier')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Delivery amount<input required type="number" min="0" step="0.01" value={form.amount} onChange={update('amount')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Tracking number<input value={form.tracking} onChange={update('tracking')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Waybill URL<input type="url" value={form.waybill} onChange={update('waybill')} className="adm-input mt-1.5 min-h-11 text-base" /></label></div><label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input type="checkbox" checked={form.confirmed} onChange={update('confirmed')} /> Customer approved the quoted delivery charge</label><label className="block text-xs font-semibold text-white/60">Communication / reconciliation note<textarea required value={form.note} onChange={update('note')} className="adm-input mt-1.5 min-h-24 resize-y text-base" /></label>{error && <StateBanner tone="danger">{error}</StateBanner>}<div className="flex gap-2"><button type="button" onClick={onClose} className={`${secondaryButton} flex-1`}>Cancel</button><button disabled={busy} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : 'Save delivery details'}</button></div></form></div>
@@ -551,7 +552,7 @@ function PaymentStatusModal({ order, onClose, onSave }) {
   const save = async event => {
     event.preventDefault(); setBusy(true); setError('')
     try { await onSave(target, note.trim()); setBusy(false) }
-    catch (saveError) { setBusy(false); setError(saveError?.message || 'Payment state could not be changed.') }
+    catch { setBusy(false); setError(safeUiError('PAYMENT_STATE_FAILED')) }
   }
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="payment-status-title"><form onSubmit={save} className="w-full max-w-md space-y-4 rounded-adm border border-adm-line bg-adm-surface p-5 text-white"><div><p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p><h2 id="payment-status-title" className="mt-1 text-xl font-semibold">Payment evidence state</h2><p className="mt-1 text-sm text-white/50">Current: {String(current || 'not recorded').replaceAll('_', ' ')}. This records evidence; it does not process payment.</p></div>{choices.length ? <><label className="block text-xs font-semibold text-white/60">Next valid state<select value={target} onChange={event => setTarget(event.target.value)} className="adm-input mt-1.5 min-h-11 text-base">{choices.map(choice => <option key={choice} value={choice}>{choice.replaceAll('_', ' ')}</option>)}</select></label><label className="block text-xs font-semibold text-white/60">Evidence or reconciliation note<textarea value={note} onChange={event => setNote(event.target.value)} required={target !== 'awaiting_instructions'} className="adm-input mt-1.5 min-h-24 resize-y text-base" /></label></> : <StateBanner tone="info">No further payment transition is available for this record.</StateBanner>}{error && <StateBanner tone="danger">{error}</StateBanner>}<div className="flex gap-2"><button type="button" onClick={onClose} className={`${secondaryButton} flex-1`}>Close</button>{choices.length > 0 && <button disabled={busy || !target} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : 'Record transition'}</button>}</div></form></div>
 }

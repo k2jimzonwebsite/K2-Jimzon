@@ -2,7 +2,10 @@ import {
   clearSessionCookies, readActiveSession, requireAdminProject,
   requireAllowedOrigin, safeJson, verifyCsrf,
 } from '../../../server/admin-bff/security.js'
-import { createServerSupabase, restoreAuthSession } from '../../../server/admin-bff/supabase.js'
+import {
+  createServerSupabase, requireStaffIdentity, restoreAuthSession,
+} from '../../../server/admin-bff/supabase.js'
+import { revokeCurrentAdminSession } from '../../../server/admin-bff/sessions.js'
 
 export default async function handler(req, res) {
   if (!requireAdminProject(req)) return safeJson(res, 404, { error: { code: 'NOT_FOUND' } })
@@ -13,9 +16,17 @@ export default async function handler(req, res) {
   try {
     const client = createServerSupabase()
     const restored = await restoreAuthSession(client, session)
-    if (restored) await client.auth.signOut()
+    if (restored) {
+      const identity = await requireStaffIdentity(client, restored.user)
+      const { data: aal } = await client.auth.mfa.getAuthenticatorAssuranceLevel()
+      if (identity && aal?.currentLevel === 'aal2') {
+        await revokeCurrentAdminSession(client, identity, session)
+      }
+      await client.auth.signOut()
+    }
   } catch {
-    // Local cookie revocation still completes; provider revocation is best-effort.
+    clearSessionCookies(res)
+    return safeJson(res, 503, { error: { code: 'SESSION_REVOCATION_UNAVAILABLE' } })
   }
   clearSessionCookies(res)
   return safeJson(res, 200, { ok: true })

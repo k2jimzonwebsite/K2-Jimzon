@@ -11,7 +11,8 @@ begin
   foreach required_relation in array array[
     'brands', 'categories', 'warehouses', 'product_drafts', 'products_old',
     'channel_credentials', 'staff_allocations',
-    'v_channel_catalog_readiness', 'v_expiring_batches'
+    'v_channel_catalog_readiness', 'v_expiring_batches',
+    'v_product_stock_from_batches'
   ] loop
     if to_regclass(format('public.%I', required_relation)) is null then
       raise exception 'MAP-017 preflight: missing public.%', required_relation;
@@ -96,6 +97,36 @@ revoke all on table public.v_channel_catalog_readiness from anon, authenticated;
 revoke all on table public.v_expiring_batches from anon, authenticated;
 grant select on table public.v_channel_catalog_readiness to authenticated;
 grant select on table public.v_expiring_batches to authenticated;
+
+-- Keep the public stock projection readable without granting anonymous callers
+-- access to private lot rows. A security-invoker view alone would require direct
+-- SELECT on product_batches, so the exact two-column projection crosses a fixed-
+-- search-path SECURITY DEFINER function and the browser receives only the view.
+create or replace function public.get_public_product_stock()
+returns table(sku text, stock_from_batches bigint)
+language sql
+stable
+security definer
+set search_path = ''
+as $function$
+  select b.sku::text, coalesce(sum(b.quantity_available), 0)::bigint
+  from public.product_batches b
+  join public.products p on p.sku::text = b.sku
+  where p.status in ('Live', 'Active', 'Unlisted')
+  group by b.sku
+$function$;
+
+revoke all on function public.get_public_product_stock() from public, anon, authenticated;
+grant execute on function public.get_public_product_stock() to anon, authenticated;
+
+create or replace view public.v_product_stock_from_batches
+with (security_invoker = true)
+as
+select stock.sku, stock.stock_from_batches
+from public.get_public_product_stock() stock;
+
+revoke all on table public.v_product_stock_from_batches from public, anon, authenticated;
+grant select on table public.v_product_stock_from_batches to anon, authenticated;
 
 drop policy if exists "Anyone can upload" on storage.objects;
 drop policy if exists "Anyone can update" on storage.objects;

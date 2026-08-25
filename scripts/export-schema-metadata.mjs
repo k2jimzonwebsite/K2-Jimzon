@@ -32,7 +32,24 @@ export function validateExportedMetadata(metadata) {
   if (!metadata || typeof metadata !== 'object') {
     throw new Error('INVALID_METADATA: Exported metadata is not a valid JSON object.')
   }
-  const requiredFields = ['format_version', 'schemas', 'tables', 'views', 'functions', 'policies', 'grants', 'storage', 'realtime']
+  const requiredFields = [
+    'format_version',
+    'schemas',
+    'tables',
+    'columns',
+    'constraints',
+    'indexes',
+    'sequences',
+    'triggers',
+    'views',
+    'materialized_views',
+    'functions',
+    'policies',
+    'grants',
+    'storage',
+    'realtime',
+    'migrations',
+  ]
   for (const field of requiredFields) {
     if (!(field in metadata)) {
       throw new Error(`INCOMPLETE_METADATA: Exported metadata is missing section "${field}".`)

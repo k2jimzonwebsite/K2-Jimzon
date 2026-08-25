@@ -8,8 +8,24 @@ on:
 jobs:
   build-and-smoke:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: k2_catalog_rehearsal_ci
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d k2_catalog_rehearsal_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -18,6 +34,27 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Dependency vulnerability and supply-chain policy
+        run: npm run security:dependency-audit && npm run security:dependency-policy
+
+      - name: Secret scanner regression fixtures
+        run: npm run security:test
+
+      - name: Deployment environment contract fixtures
+        run: npm run security:test-env-contract
+
+      - name: Tracked sensitive-file policy
+        run: npm run security:test-files && npm run security:files
+
+      - name: Browser/server environment source boundary
+        run: npm run security:test-env-source && npm run security:env-source
+
+      - name: Working-tree secret scan
+        run: npm run security:secrets
+
+      - name: Full Git-history secret scan
+        run: npm run security:history
 
       - name: Import-integrity check (catches "X is not defined" runtime crashes)
         run: npm run check:imports
@@ -30,6 +67,25 @@ jobs:
 
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
+
+      - name: API and security contract tests
+        run: npm run test:contracts
+
+      - name: Feature-gated account and Wholesale mobile journeys
+        run: npm run test:storefront-identity-ui
+
+      - name: Create isolated MAP-017 rehearsal database
+        run: createdb -h 127.0.0.1 -p 5432 -U postgres k2_map017_rehearsal_ci
+
+      - name: MAP-017 PostgreSQL migration, rollback, and authorization rehearsal
+        run: npm run rehearse:map017-local && npm run test:map017-local-db
+        env:
+          K2_MAP017_REHEARSAL_URL: postgresql://postgres@127.0.0.1:5432/k2_map017_rehearsal_ci
+
+      - name: Catalog spreadsheet PostgreSQL migration and rollback rehearsal
+        run: npm run rehearse:catalog-spreadsheet
+        env:
+          K2_CATALOG_REHEARSAL_URL: postgresql://postgres@127.0.0.1:5432/k2_catalog_rehearsal_ci
 
       # Runs against `npm run dev` (see playwright.config webServer) with no
       # Supabase env, so the storefront uses local mock data — no secrets needed,

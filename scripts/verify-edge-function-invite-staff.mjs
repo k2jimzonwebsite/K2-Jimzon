@@ -6,6 +6,7 @@ const sharedAuthSource = await readFile(new URL('../supabase/functions/_shared/a
 const entrySource = await readFile(new URL('../supabase/functions/invite-staff/index.ts', import.meta.url), 'utf8')
 const handlerSource = await readFile(new URL('../supabase/functions/invite-staff/handler.ts', import.meta.url), 'utf8')
 const migration = await readFile(new URL('../supabase/migrations/20260814_invite_staff_operation_boundary.sql', import.meta.url), 'utf8')
+const reasonMigration = await readFile(new URL('../supabase/migrations/20260824_admin_staff_invitation_reason_boundary.sql', import.meta.url), 'utf8')
 
 for (const source of [sharedSource, sharedAuthSource, entrySource, handlerSource]) {
   assert.doesNotMatch(source, /SUPABASE_ANON_KEY|SUPABASE_SERVICE_ROLE_KEY/, 'Legacy API keys must not be consumed')
@@ -14,15 +15,18 @@ for (const source of [sharedSource, sharedAuthSource, entrySource, handlerSource
 assert.match(sharedSource, /parseModernKeyMap/, 'Modern named key maps must be parsed')
 assert.match(sharedSource, /sb_secret_/, 'Secret key type must be validated')
 assert.match(sharedSource, /sb_publishable_/, 'Publishable key type must be validated')
-assert.match(handlerSource, /currentLevel !== 'aal2'/, 'The real handler must require AAL2')
+assert.match(handlerSource, /claimedAal !== 'aal2'/, 'The real handler must require the validated token AAL2 claim')
 assert.match(handlerSource, /UNKNOWN_REQUEST_FIELD/, 'The real handler must reject unknown fields')
 assert.match(handlerSource, /REQUEST_TOO_LARGE/, 'The real handler must bound request bytes')
 assert.match(handlerSource, /profile\?\.role !== 'Admin'/, 'The real handler must require exact Admin role')
 assert.match(handlerSource, /TARGET_IDENTITY_NOT_FOUND/, 'Missing target identity must fail')
 assert.match(handlerSource, /roleAssigned: true/, 'Success must explicitly follow role persistence')
+assert.match(handlerSource, /INVALID_REASON/, 'Every secure invitation must require an attributable reason')
+assert.match(entrySource, /claim_staff_invitation_operation_v2/, 'The Edge entrypoint must retain reason-bound operation receipts')
 assert.doesNotMatch(handlerSource, /Referer/, 'Referer must not substitute for Origin')
 assert.doesNotMatch(handlerSource, /console\.error/, 'The core handler must use injected redacted logging')
 assert.match(migration, /staff_invitation_operations/, 'Durable operation receipts must be prepared')
 assert.match(migration, /pg_advisory_xact_lock/, 'Actor claims must serialize')
+assert.match(reasonMigration, /char_length\(reason\) between 3 and 500/, 'The durable receipt must bound invitation reasons')
 
 console.log('✓ Supplemental invite-staff source guards passed; runtime behavior is covered by the handler contract tests.')

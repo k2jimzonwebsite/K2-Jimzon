@@ -1,146 +1,110 @@
-# K2 Jimzon multi-channel commerce operations
+# K2 Jimzon — Direct Italian Goods & Operations Platform
 
-K2 Jimzon is a React/Vite storefront and operations dashboard for five income channels:
+> **Specialized direct Italian import, curated retail, customer Pasabuy, wholesale, and multi-channel operations platform.**
 
-- K2 Jimzon Website
-- Shopee
-- TikTok Shop
-- Lazada
-- Italy-to-Philippines Pasabuy
+---
 
-The website and Pasabuy intake can operate before marketplace connectors, a custom domain, or an online payment provider are available. Shopee, TikTok Shop, and Lazada remain explicit catalog/listing channels in the admin, but must stay **Not connected** until their back-end connectors process real data.
+## 🌟 Overview
 
-## Required reading before changing operational logic
+**K2 Jimzon** connects authentic European luxury, beauty, personal care, gourmet food, and lifestyle goods directly from Milan to consumers, collectors, and wholesale partners in the Philippines.
 
-Follow [`K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md`](K2%20Jimzon%20-%20Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md) for required workflow behavior, invariants, state transitions, and implementation order. Use [`K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md`](K2%20Jimzon%20-%20Brain/SYSTEM_BRAIN_CURRENT.md) to determine what is actually implemented today. A rulebook target must not be described as live until it is verified and added to the current-state Brain.
+The platform coordinates **five core income channels**:
+1. **Website**: Curated luxury wood storefront retail with batch-stock transparency.
+2. **Shopee**: Integrated marketplace channel with bounded webhook ingress.
+3. **TikTok Shop**: Live selling and social commerce synchronization.
+4. **Lazada**: Secondary marketplace retail channel.
+5. **Pasabuy**: Custom on-demand Italian product sourcing and quoting wizard.
 
-Use [`MASTER_ACTION_PLAN.md`](MASTER_ACTION_PLAN.md) as the **only** approved
-unfinished-work queue. New proposals enter through
-[`K2 Jimzon - Brain/FUTURE_IDEAS.md`](K2%20Jimzon%20-%20Brain/FUTURE_IDEAS.md),
-are audited into the Master Action Plan when justified, and are deleted from the
-plan after verified completion and current-state documentation.
+---
 
-## Current launch behavior
+## 🏛️ System Architecture
 
-- Checkout creates an **order request**. It does not collect payment or reserve stock.
-- Staff confirms an order request through a server-side workflow before stock is reserved.
-- Pasabuy creates a persistent request with a customer reference.
-- Pasabuy quotes are versioned and store the FX source, capture time, freight assumptions, estimated taxes, handling, landed cost, margin, final price, and validity.
-- Supabase Auth identifies staff. PostgreSQL RLS and server functions enforce access; a hidden URL or browser flag is never treated as authorization.
-- Marketplace credentials belong only in server-side function secrets. The browser has no credential vault.
+K2 Jimzon is built as a **monorepo with two isolated production faces**:
 
-## Local setup
+- **Customer Storefront** (`npm run build:storefront`): A luxury wood editorial experience featuring 3D Globe cargo visualizers, guest-first passwordless ordering, and scoped order messaging.
+- **Staff Admin BOS** (`npm run build:admin`): A high-density Business Operating System for barcode scanning (Milan packing & Manila receiving), FEFO shelf-life inventory gating, and staff RBAC with AAL2 MFA.
+- **Backend-For-Frontend (BFF)**: Consolidated serverless API routers (`/api/storefront` and `/api/admin`) backed by PostgreSQL 17 on Supabase with Row Level Security (RLS).
 
+---
+
+## 🚀 Quick Start
+
+### 1. Install & Setup
 ```bash
+# Install dependencies
 npm install
+
+# Setup local environment
+cp .env.example .env.local
+
+# Run prebuild security verification
+npm run prebuild
+```
+
+### 2. Development Servers
+```bash
+# Run Customer Storefront (Port 5173)
+npm run dev:storefront
+
+# Run Staff Admin BOS (Port 5174)
+npm run dev:admin
+
+# Run Combined Workstation
 npm run dev
 ```
 
-`npm run dev` keeps the combined local workspace for development and automated
-tests only. The deployable targets can be run independently:
-
+### 3. Testing & Verification
 ```bash
-npm run dev:storefront
-npm run dev:admin
-```
+# Run 179 API & security contract tests
+npm run test:contracts
 
-Required public client variables:
+# Run portable PostgreSQL 17 rehearsals
+npm run verify:map017-portable
+npm run rehearse:map019-account-claim
 
-```env
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_PUBLISHABLE_KEY=your-browser-safe-publishable-key
-```
+# Run Playwright UI suites
+npm run test:smoke
+npm run test:admin-ui
+npm run test:customer-account-ui
 
-Never add a Supabase service-role key or marketplace secret to a `VITE_` variable.
-
-Storefront: `http://localhost:5173/`
-
-Admin: `http://localhost:5174/`
-
-## Separate production deployments
-
-The storefront and admin are two different production artifacts built from the
-same reviewed source repository. They must remain separate Vercel projects:
-
-| Vercel project | Environment variable | Artifact |
-| --- | --- | --- |
-| Storefront | `K2_DEPLOYMENT_TARGET=storefront` | Shopper views only |
-| Admin | `K2_DEPLOYMENT_TARGET=admin` | Operations views only |
-
-Both projects may use `npm run build`; the non-public build flag selects the
-correct entry. `VITE_IS_ADMIN_DEPLOYMENT=true` remains accepted temporarily for
-the existing admin project, but `K2_DEPLOYMENT_TARGET=admin` is the canonical
-setting. Existing Vercel project URLs containing `admin` are also recognized as
-a safe compatibility fallback. Never configure the admin target on the
-storefront project.
-
-The build emits a manifest and fails verification if admin views enter the
-storefront artifact or shopper views enter the admin artifact. Supabase Auth,
-staff roles, and RLS remain the actual authorization boundary; deployment
-separation is an additional layer, not a replacement for database security.
-
-## Database setup
-
-For the existing K2 Supabase project, apply only the consolidated launch migration:
-
-```text
-supabase/migrations/20260803_launch_core_stabilization.sql
-```
-
-That migration creates the order-request, inventory-balance, Pasabuy, quote-version, event-history, channel-readiness, and tightened RLS contracts used by the current UI.
-
-The three `20260802_*_compatibility_preflight.sql` files were recovery helpers for the earlier failed attempts. Their compatibility work is now included in the consolidated migration, so do not run them again.
-
-After the launch-core migration succeeds, Phase 2 unified-inbox operations are activated with one additional verified migration:
-
-```text
-supabase/migrations/20260803_phase_2_unified_inbox.sql
-```
-
-Phase 2 adds internal inbox workflow, delivery-state truth, and routes real persisted Pasabuy submissions into the queue. It does not connect WhatsApp, Viber, Meta, Shopee, Lazada, or TikTok messaging APIs.
-
-The deployed project also includes the coupon and consignment scan-event
-restoration:
-
-```text
-supabase/migrations/20260804_restore_coupons_and_consignment_scanning.sql
-```
-
-The operations and security upgrades are recorded in:
-
-```text
-supabase/migrations/20260809_operations_hardening.sql
-supabase/migrations/20260810_security_boundary_hardening.sql
-supabase/migrations/20260810_deprecated_rpc_lockdown.sql
-```
-
-All three passed complete `BEGIN … ROLLBACK` validation and were applied to the
-current K2jimzon production project through the migration system on 2026-08-10.
-They activate exact-lot FEFO, unit packing, custody, consignment, coupon,
-delivery, and connector contracts; restrict anonymous execution to the four
-reviewed customer-entry RPCs; and disable legacy stock mutation paths. New
-environments must apply them in the order shown. Do not rerun the old 1,800-line
-launch migration to obtain these changes.
-
-Applying a migration changes the live database. Review it and take a backup before running it in Supabase.
-
-## Verification
-
-```bash
-npm run check:imports
+# Verify isolated production builds
 npm run build:storefront
 npm run build:admin
-npm test
 ```
 
-Passing a local build is not the same as production readiness. Before launch, also verify RLS with anonymous/customer/staff sessions, test the real deployed URLs, enroll staff MFA, and exercise an order request and Pasabuy request against the live database.
+---
 
-## Intentionally deferred
+## 📚 Documentation Library
 
-- Online payment gateway and automatic payment verification
-- Custom storefront/admin domains
-- Shopee, TikTok Shop, and Lazada API credentials/connectors
-- Anonymous Pasabuy image uploads
-- Paid Supabase or Vercel features
+Complete documentation lives in the [`/docs/`](./docs/README.md) directory:
 
-See `LAUNCH_STEP_1.md` for the operational handoff and remaining gates.
+- [**Project Overview**](./docs/PROJECT_OVERVIEW.md) — Business model, cargo manifests, and FEFO inventory rules.
+- [**System Architecture**](./docs/ARCHITECTURE.md) — Dual-surface design, Serverless BFF routers, and database schemas.
+- [**Project Directory Map**](./docs/PROJECT_MAP.md) — Comprehensive guide to folder responsibilities and structure.
+- [**Feature Catalog**](./docs/FEATURES.md) — Complete status of all storefront and admin features.
+- [**Data Model**](./docs/DATA_MODEL.md) — Database schema, relationships, and derived stock formulas.
+- [**Routes & APIs**](./docs/ROUTES.md) — Map of all 11 storefront views and 81 BFF endpoints.
+- [**Integrations & Connectors**](./docs/INTEGRATIONS.md) — Supabase, Vercel, Shopee, Turnstile, and OpenAI prompts.
+- [**Development Guide**](./docs/DEVELOPMENT.md) — Testing commands, prebuild gates, and local PostgreSQL rehearsals.
+- [**Deployment Pipeline**](./docs/DEPLOYMENT.md) — Target-separated production deployment guide for Vercel.
+- [**Security Model**](./docs/SECURITY.md) — RLS policies, RBAC roles, HMAC rate limiting, and session encryption.
+- [**Design System**](./docs/DESIGN_SYSTEM.md) — Luxury Wood Storefront vs High-Density Admin BOS tokens.
+- [**Decision Log (ADRs)**](./docs/DECISIONS.md) — Architectural Decision Records 001 through 007.
+- [**Known Issues & Owner Gates**](./docs/KNOWN_ISSUES.md) — Active technical debt and open owner decisions.
+
+---
+
+## ⏳ Deferred Dependencies & Gated Work
+
+The following items are deferred pending owner business decisions in `K2 Jimzon - Brain/OWNER_QUESTIONS.md`:
+- **Online payment gateway**: Direct credit card / e-wallet processing (currently uses verified manual bank/QR payment verification).
+- **Custom storefront/admin domains**: Production DNS routing for `k2jimzon.ph` and `admin.k2jimzon.ph` (`OWNER-001`).
+- **Production database hardening migration**: Prepared and rehearsed locally (`verify:map017-portable`), awaiting authorization under `OWNER-005`.
+
+---
+
+## 🛡️ Governance & Rules of Operation
+
+- All project development is governed by [`MASTER_ACTION_PLAN.md`](./MASTER_ACTION_PLAN.md), the **single active backlog**.
+- AI coding agents must read and adhere to [`AGENTS.md`](./AGENTS.md) before making code or architecture modifications.
+- Operational invariants and logistics workflows are defined in [`K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md`](./K2%20Jimzon%20-%20Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md).

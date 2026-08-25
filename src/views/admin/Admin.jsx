@@ -17,6 +17,7 @@ import KeyboardShortcutsModal from './KeyboardShortcutsModal'
 import UniversalScanLauncher from './UniversalScanLauncher'
 import WorkflowGuideModal from '../../components/admin/guides/WorkflowGuideModal'
 import { GO_TO_SHORTCUTS, isTextEntryTarget } from './adminOperations'
+import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
 
 // Lazy loaded heavy components to reduce initial bundle lag
 const Kanban = lazy(() => import('./Kanban'))
@@ -106,7 +107,8 @@ function NavList({ section, onSelect, activeSkus, canManageStaff }) {
 }
 
 export default function Admin() {
-  const { isAdmin, authReady, logoutAdmin, user } = useStore()
+  const { isAdmin, authReady, logoutAdmin, user, products = [] } = useStore()
+  const secure = adminBffEnabled()
   const [section, setSection] = useState('overview')
   const [sheetMode, setSheetMode] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)
@@ -126,11 +128,25 @@ export default function Admin() {
   // KPI states (kept here because the sidebar badge + Overview both read them)
   const [activeSkus, setActiveSkus] = useState(0)
   const [lowStock, setLowStock] = useState(0)
-  const [pendingOrders, setPendingOrders] = useState(0)
+  const [pendingOrders, setPendingOrders] = useState(null)
   const canManageStaff = user?.role === 'Admin'
 
   useEffect(() => {
-    if (!supabase || !isAdmin) return
+    if (!isAdmin) return
+    if (secure) {
+      setActiveSkus(products.length)
+      setLowStock(products.filter(product => product.stock_available != null && Number(product.stock_available) <= 5).length)
+      const controller = new AbortController()
+      setPendingOrders(null)
+      getAdminOverview(30, controller.signal).then((result) => {
+        if (controller.signal.aborted) return
+        const backlogUnavailable = (result.unavailable || []).some((entry) => entry.key === 'orderBacklog')
+        setPendingOrders(result.ok && !backlogUnavailable && Number.isFinite(Number(result.data?.orderBacklog))
+          ? Number(result.data.orderBacklog) : null)
+      })
+      return () => controller.abort()
+    }
+    if (!supabase) return
     fetchKpis()
 
     const channel = supabase
@@ -142,7 +158,7 @@ export default function Admin() {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [isAdmin])
+  }, [isAdmin, products, secure])
 
   useEffect(() => {
     if (!isAdmin) return undefined
@@ -447,13 +463,13 @@ export default function Admin() {
                : section === 'omni_hub' ? <OmniOperationsHub />
                : section === 'pasabuy_manager' ? <PasabuyManager />
                : section === 'integrations' ? <ChannelIntegrations />
-               : section === 'globe' ? <GlobeCms />
+               : section === 'globe' ? <GlobeCms canManagePublicClaims={canManageStaff} />
                : section === 'inbox' ? <Inbox />
                : section === 'wholesale' ? <Customers />
-               : section === 'suppliers' ? <Suppliers />
+               : section === 'suppliers' ? <Suppliers canCreateSupplier={canManageStaff} />
                : section === 'consignment' ? <ConsignmentManager />
                : showSheet ? <Sheet />
-               : showGrid ? <InventoryGrid launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} />
+               : showGrid ? <InventoryGrid launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} canManageMediaCleanup={canManageStaff} canManageProducts={canManageStaff} />
                : section === 'overview' ? <Overview setSection={selectSection} pending={pendingOrders} />
                : <Kanban />}
             </Suspense>

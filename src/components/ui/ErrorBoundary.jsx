@@ -11,8 +11,8 @@ export default class ErrorBoundary extends React.Component {
     return { hasError: true, error }
   }
 
-  componentDidCatch(error, errorInfo) {
-    reportError(error, { kind: 'react.ErrorBoundary', componentStack: errorInfo?.componentStack?.slice(0, 2000) })
+  componentDidCatch(error) {
+    reportError(error, { kind: 'react-boundary' })
   }
 
   handleReset = () => {
@@ -27,33 +27,29 @@ export default class ErrorBoundary extends React.Component {
           : this.props.fallback
       }
       return (
-        <div className="w-full min-h-[400px] flex flex-col items-center justify-center p-8 text-center bg-paper dark:bg-[#05080f] rounded-2xl border border-line dark:border-crimson/30 shadow-card space-y-4 my-4">
-          <div className="w-14 h-14 rounded-full bg-crimson/15 text-crimson flex items-center justify-center text-2xl border border-crimson/30">
-            ⚠️
-          </div>
+        <div
+          className="w-full min-h-[400px] flex flex-col items-center justify-center p-8 text-center bg-paper dark:bg-[#05080f] rounded-2xl border border-line dark:border-crimson/30 space-y-4 my-4"
+          role="alert"
+        >
           <div>
-            <h3 className="font-serif text-2xl font-bold text-navy dark:text-white">Temporary Component Load Error</h3>
-            <p className="text-sm text-navy-soft dark:text-white/60 max-w-md mx-auto mt-1.5">
-              A module or data query encountered a minor glitch. Click below to reload this section cleanly.
+            <h3 className="text-2xl font-bold text-navy dark:text-white">This section stopped loading</h3>
+            <p className="text-base leading-relaxed text-navy-soft dark:text-white/70 max-w-md mx-auto mt-2">
+              No change was confirmed. Try this section again, or reload the Admin workspace if the problem continues.
             </p>
-            {this.state.error && (
-              <p className="mt-2 text-xs font-mono text-crimson bg-crimson/10 px-3 py-1.5 rounded-lg border border-crimson/20 max-w-lg mx-auto truncate">
-                {this.state.error.message || String(this.state.error)}
-              </p>
-            )}
+            <p className="mt-3 text-xs font-mono text-navy-soft dark:text-white/60">Error code: UI_SECTION_UNAVAILABLE</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap justify-center gap-3">
             <button
               onClick={this.handleReset}
-              className="bg-blue hover:bg-blue-deep text-white font-bold text-sm px-5 py-3 rounded-xl shadow-md transition-all active:scale-95"
+              className="min-h-11 bg-blue hover:bg-blue-deep text-white font-bold text-sm px-5 py-3 rounded-xl transition-transform duration-150 active:scale-[0.97]"
             >
-              🔄 Retry Loading Component
+              Try this section again
             </button>
             <button
               onClick={() => window.location.reload()}
-              className="bg-shell hover:bg-shell-deep text-navy dark:bg-white/10 dark:hover:bg-white/20 dark:text-white font-semibold text-sm px-4 py-3 rounded-xl border border-line dark:border-white/10 transition-all active:scale-95"
+              className="min-h-11 bg-shell hover:bg-shell-deep text-navy dark:bg-white/10 dark:hover:bg-white/20 dark:text-white font-semibold text-sm px-4 py-3 rounded-xl border border-line dark:border-white/10 transition-transform duration-150 active:scale-[0.97]"
             >
-              🌐 Reload Webpage
+              Reload Admin
             </button>
           </div>
         </div>

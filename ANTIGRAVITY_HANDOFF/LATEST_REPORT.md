@@ -1,5 +1,28 @@
 # Codex-reviewed Antigravity handoff — 15 August 2026
 
+## Current continuation
+
+An independent read-only provider refresh reconfirmed the healthy Supabase
+project, disabled legacy anon key, active modern publishable key, deployed
+`invite-staff` version 5 source, and READY `26291bc` production artifacts in the
+separate Vercel projects. Fetched bundles preserve the admin/storefront split and
+contain no legacy JWT-shaped value or service-role variable. The refresh also
+obtained only capped 24-hour provider logs, with unattributed invalid-login,
+database-authentication, permission-denial, and malformed-Realtime-JWT events;
+these are observations, not a complete exposure-period clearance.
+
+MAP-016 remains blocked because no real Admin+AAL2 invitation was executed, the
+available Vercel connector cannot enumerate environment variables, and the
+legacy signing path remains unrevoked with old-token rejection unproven. MAP-017
+was not started. The fabricated schema fixture CLI now prints a prominent
+parser-check-only warning in console and saved Markdown/JSON reports, and stale
+checkpoints can no longer claim MAP-020/021 readiness or permission to bypass
+the MAP-016 gate. A read-only production aggregate found zero invitation receipt
+rows and no Auth user created/invited since 11 August. The retained Auth audit
+table is empty, which is an evidence-retention gap rather than proof of no
+activity. Current Vercel build logs disclose no environment-variable names and
+therefore do not close the environment inventory gate.
+
 ## Verdict
 
 `Blocked — evidence required`
@@ -20,15 +43,15 @@ reports below. No MAP item advanced or was deleted.
 
 | Command | Result | What it proves |
 | --- | --- | --- |
-| `npm run test:contracts` | 69 passed | Prepared source/handler/fixture contracts pass; no live database behavior is implied. |
+| `npm run test:contracts` | 71 passed | Prepared source/handler/fixture contracts pass, including persisted fixture-evidence labels; no live database behavior is implied. |
 | `npx playwright test tests/smoke.spec.js tests/inbox-phase2.spec.js tests/consignment-receiving.spec.js` | 17 passed | Selected local storefront/Admin interactions and source contracts pass in Chromium. |
 | `npm run security:secrets` | 748 files checked; pass | Scanner found no recognized repository secret values. |
 | `npm run security:history` | Pass | Scanner found no recognized secrets in Git history. |
 | `npm run check:imports` | Pass | Import-integrity checker passed. |
 | `npm run build:storefront` | Pass; 18 manifest modules, 34 files scanned | Storefront build and bundle-boundary checks pass locally. |
 | `npm run build:admin` | Pass; 21 manifest modules, 37 files scanned | Admin build and bundle-boundary checks pass locally. |
-| `node scripts/rehearse-local-migration.mjs` | Exit 1; blocked | No local database target was supplied; no SQL behavior was executed. |
-| `node scripts/run-local-database-authorization-suite.mjs` | Exit 1; blocked | No local PostgreSQL runtime was available; zero database authorization tests ran. |
+| `node scripts/rehearse-local-migration.mjs` | Exit 2; blocked | No local database target was supplied; no SQL behavior was executed. |
+| `node scripts/run-local-database-authorization-suite.mjs` | Exit 2; blocked | No local PostgreSQL runtime was available; zero database authorization tests ran. |
 | `node scripts/restore-database-rehearsal.mjs` | Pass | Encryption-envelope integrity, wrong-passphrase rejection, and tamper rejection only. It is not a database restore. |
 
 The first browser run was blocked by sandbox process permissions; the authorized

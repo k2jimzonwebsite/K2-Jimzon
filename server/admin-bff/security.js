@@ -3,10 +3,15 @@ import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, 
 const SESSION_COOKIE = 'k2_admin_session'
 const PENDING_COOKIE = 'k2_admin_pending'
 const CSRF_COOKIE = 'k2_admin_csrf'
+const RECOVERY_COOKIE = 'k2_admin_recovery'
+const RECOVERY_CSRF_COOKIE = 'k2_admin_recovery_csrf'
 const MAX_BODY_BYTES = 16 * 1024
 const MAX_SESSION_MS = 8 * 60 * 60 * 1000
 const IDLE_SESSION_MS = 30 * 60 * 1000
 const loginAttempts = new Map()
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+const TOKEN_HASH = /^[A-Za-z0-9_-]{43}$/
+const STAFF_ROLES = new Set(['Admin', 'Staff'])
 
 function base64url(value) {
   return Buffer.from(value).toString('base64url')
@@ -41,6 +46,67 @@ function decrypt(value) {
   } catch {
     return null
   }
+}
+
+function validToken(value) {
+  return typeof value === 'string' && value.length >= 16 && value.length <= 16_384
+}
+
+function validTimestamp(value) {
+  return Number.isFinite(value) && value > 0
+}
+
+function validPendingSession(session) {
+  return Boolean(session
+    && session.version === 1
+    && UUID.test(session.pendingId || '')
+    && validToken(session.accessToken)
+    && validToken(session.refreshToken)
+    && validTimestamp(session.expiresAt)
+    && validTimestamp(session.createdAt)
+    && validTimestamp(session.expiresHardAt)
+    && session.expiresHardAt === session.createdAt + 10 * 60 * 1000)
+}
+
+function validActiveSession(session) {
+  return Boolean(session
+    && session.version === 1
+    && UUID.test(session.sessionId || '')
+    && UUID.test(session.userId || '')
+    && STAFF_ROLES.has(session.role)
+    && session.aal === 'aal2'
+    && TOKEN_HASH.test(session.csrfHash || '')
+    && validToken(session.accessToken)
+    && validToken(session.refreshToken)
+    && validTimestamp(session.expiresAt)
+    && validTimestamp(session.createdAt)
+    && validTimestamp(session.lastSeenAt)
+    && validTimestamp(session.expiresHardAt)
+    && session.expiresHardAt === session.createdAt + MAX_SESSION_MS
+    && session.lastSeenAt >= session.createdAt
+    && session.lastSeenAt <= session.expiresHardAt)
+}
+
+function validRecoverySession(session) {
+  return Boolean(session
+    && session.version === 1
+    && UUID.test(session.recoveryId || '')
+    && UUID.test(session.userId || '')
+    && STAFF_ROLES.has(session.role)
+    && TOKEN_HASH.test(session.csrfHash || '')
+    && validToken(session.accessToken)
+    && validToken(session.refreshToken)
+    && validTimestamp(session.expiresAt)
+    && validTimestamp(session.createdAt)
+    && validTimestamp(session.expiresHardAt)
+    && session.expiresHardAt === session.createdAt + 10 * 60 * 1000)
+}
+
+function requireAuthSession(authSession) {
+  const expiresAt = Number(authSession?.expires_at) * 1000
+  if (!validToken(authSession?.access_token) || !validToken(authSession?.refresh_token)
+      || !validTimestamp(expiresAt)) throw new Error('AUTH_SESSION_INVALID')
+  return expiresAt
 }
 
 function parseCookies(req) {
@@ -176,10 +242,13 @@ export function verifyCsrf(req, session) {
 
 export function setPendingCookie(res, authSession) {
   const now = Date.now()
+  const expiresAt = requireAuthSession(authSession)
   const pending = encrypt({
+    version: 1,
+    pendingId: randomUUID(),
     accessToken: authSession.access_token,
     refreshToken: authSession.refresh_token,
-    expiresAt: authSession.expires_at * 1000,
+    expiresAt,
     createdAt: now,
     expiresHardAt: now + 10 * 60 * 1000,
   })
@@ -188,25 +257,92 @@ export function setPendingCookie(res, authSession) {
 
 export function readPendingSession(req) {
   const pending = decrypt(parseCookies(req)[PENDING_COOKIE])
-  if (!pending || pending.expiresHardAt <= Date.now()) return null
+  if (!validPendingSession(pending) || pending.expiresHardAt <= Date.now()) return null
   return pending
 }
 
-export function setActiveSessionCookies(res, authSession, identity = {}) {
+export function verifyRecoveryCsrf(req, session) {
+  const cookies = parseCookies(req)
+  const cookieToken = cookies[RECOVERY_CSRF_COOKIE] || ''
+  const headerToken = String(req.headers['x-k2-recovery-csrf'] || '')
+  if (!cookieToken || !headerToken || cookieToken.length !== headerToken.length) return false
+  return timingSafeEqual(Buffer.from(cookieToken), Buffer.from(headerToken))
+    && hashToken(cookieToken) === session.csrfHash
+}
+
+export function setRecoverySessionCookies(res, authSession, identity = {}) {
   const now = Date.now()
+  const expiresAt = requireAuthSession(authSession)
+  if (!UUID.test(identity.userId || '') || !STAFF_ROLES.has(identity.role)) {
+    throw new Error('AUTH_IDENTITY_INVALID')
+  }
   const csrf = newCsrfToken()
-  const active = encrypt({
+  const recovery = encrypt({
+    version: 1,
+    recoveryId: randomUUID(),
+    userId: identity.userId,
+    role: identity.role,
     accessToken: authSession.access_token,
     refreshToken: authSession.refresh_token,
-    expiresAt: authSession.expires_at * 1000,
+    expiresAt,
+    csrfHash: hashToken(csrf),
+    createdAt: now,
+    expiresHardAt: now + 10 * 60 * 1000,
+  })
+  res.setHeader('Set-Cookie', [
+    cookie(RECOVERY_COOKIE, recovery, { path: '/api/admin/auth/password-recovery', maxAge: 600 }),
+    cookie(RECOVERY_CSRF_COOKIE, csrf, { path: '/', maxAge: 600, httpOnly: false }),
+  ])
+}
+
+export function readRecoverySession(req) {
+  const recovery = decrypt(parseCookies(req)[RECOVERY_COOKIE])
+  if (!validRecoverySession(recovery) || recovery.expiresHardAt <= Date.now()) return null
+  return recovery
+}
+
+export function clearRecoverySessionCookies(res) {
+  res.setHeader('Set-Cookie', [
+    cookie(RECOVERY_COOKIE, '', { path: '/api/admin/auth/password-recovery', maxAge: 0 }),
+    cookie(RECOVERY_CSRF_COOKIE, '', { path: '/', maxAge: 0, httpOnly: false }),
+  ])
+}
+
+export function prepareActiveSession(authSession, identity = {}) {
+  const now = Date.now()
+  const expiresAt = requireAuthSession(authSession)
+  if (!UUID.test(identity.userId || '') || !STAFF_ROLES.has(identity.role)) {
+    throw new Error('AUTH_IDENTITY_INVALID')
+  }
+  const createdAt = now
+  const expiresHardAt = createdAt + MAX_SESSION_MS
+  const csrf = newCsrfToken()
+  const session = {
+    version: 1,
+    sessionId: randomUUID(),
+    accessToken: authSession.access_token,
+    refreshToken: authSession.refresh_token,
+    expiresAt,
     userId: identity.userId,
     role: identity.role,
     aal: 'aal2',
     csrfHash: hashToken(csrf),
-    createdAt: identity.createdAt || now,
+    createdAt,
     lastSeenAt: now,
-    expiresHardAt: (identity.createdAt || now) + MAX_SESSION_MS,
-  })
+    expiresHardAt,
+  }
+  return { session, csrf }
+}
+
+export function setPreparedActiveSessionCookies(res, prepared) {
+  if (!validActiveSession(prepared?.session)
+      || typeof prepared?.csrf !== 'string'
+      || !TOKEN_HASH.test(prepared.csrf)
+      || hashToken(prepared.csrf) !== prepared.session.csrfHash) {
+    throw new Error('AUTH_SESSION_INVALID')
+  }
+  const { session, csrf } = prepared
+  const active = encrypt(session)
   res.setHeader('Set-Cookie', [
     cookie(SESSION_COOKIE, active, { path: '/api/admin', maxAge: MAX_SESSION_MS / 1000 }),
     cookie(CSRF_COOKIE, csrf, { path: '/', maxAge: MAX_SESSION_MS / 1000, httpOnly: false }),
@@ -214,13 +350,25 @@ export function setActiveSessionCookies(res, authSession, identity = {}) {
   ])
 }
 
+export function setActiveSessionCookies(res, authSession, identity = {}) {
+  const prepared = prepareActiveSession(authSession, identity)
+  setPreparedActiveSessionCookies(res, prepared)
+  return prepared.session
+}
+
 export function refreshActiveSessionCookie(res, authSession, session) {
   const now = Date.now()
+  const expiresAt = requireAuthSession(authSession)
+  if (!validActiveSession(session) || now >= session.expiresHardAt) {
+    throw new Error('AUTH_SESSION_INVALID')
+  }
   const remainingSeconds = Math.max(0, Math.ceil((session.expiresHardAt - now) / 1000))
   const active = encrypt({
+    version: 1,
+    sessionId: session.sessionId,
     accessToken: authSession.access_token,
     refreshToken: authSession.refresh_token,
-    expiresAt: authSession.expires_at * 1000,
+    expiresAt,
     userId: session.userId,
     role: session.role,
     aal: 'aal2',
@@ -237,7 +385,7 @@ export function refreshActiveSessionCookie(res, authSession, session) {
 export function readActiveSession(req) {
   const session = decrypt(parseCookies(req)[SESSION_COOKIE])
   const now = Date.now()
-  if (!session || session.aal !== 'aal2' || session.expiresHardAt <= now
+  if (!validActiveSession(session) || session.expiresHardAt <= now
       || session.lastSeenAt + IDLE_SESSION_MS <= now) return null
   return session
 }

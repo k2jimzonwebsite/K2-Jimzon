@@ -32,9 +32,9 @@ const handler = createInviteStaffHandler({
   },
   createAdminClient,
   operationStore: {
-    async claim(actorId, key, hash) {
-      const { data, error } = await createAdminClient().rpc('claim_staff_invitation_operation', {
-        p_actor_id: actorId, p_idempotency_key: key, p_payload_hash: hash,
+    async claim(actorId, key, hash, reason) {
+      const { data, error } = await createAdminClient().rpc('claim_staff_invitation_operation_v2', {
+        p_actor_id: actorId, p_idempotency_key: key, p_payload_hash: hash, p_reason: reason,
       })
       if (error) throw new Error('OPERATION_CLAIM_FAILED')
       return data

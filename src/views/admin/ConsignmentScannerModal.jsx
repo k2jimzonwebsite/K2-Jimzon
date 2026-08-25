@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Html5Qrcode } from 'html5-qrcode'
 import { BarcodeIcon, CheckIcon, XIcon } from '../../components/ui/icons'
+import { safeUiError } from '../../lib/safeUiError'
 
 function confirmScan(stage) {
   try {
@@ -49,8 +50,8 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
       setLastScanned(updated)
       confirmScan(stage)
       return updated
-    } catch (scanError) {
-      setError(scanError?.message || 'This barcode could not be recorded.')
+    } catch {
+      setError(safeUiError('INVENTORY_SCAN_FAILED'))
       if (navigator.vibrate) navigator.vibrate([80, 50, 80])
       return null
     } finally {

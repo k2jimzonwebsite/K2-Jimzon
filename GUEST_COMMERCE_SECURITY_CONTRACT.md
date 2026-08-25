@@ -101,6 +101,30 @@ checking for identity conflicts, consuming a one-time claim, and writing an audi
 event. Public reference, email, phone, browser storage, or URL ID alone is never
 enough.
 
+The prepared `account/claim` route now enforces this boundary without accepting
+raw contact text or a customer/record identifier. It validates the ordinary
+customer Auth bearer session, signs an exact command, and lets the database bind
+the confirmed Auth contact to the customer owned by the HttpOnly guest grant.
+The migration and route passed isolated rollback, behavioral, replay, privilege,
+and source contracts. They remain unapplied and inactive; this is not evidence
+of a working customer sign-in or deployed claim journey.
+
+The production Storefront must not expose prototype or staff authentication via
+URL/hash switches. A demo login cannot grant, imply, or preview wholesale/VIP
+pricing. Customer account continuity requires the verified claim boundary above;
+commercial terms come only from a server-authorized organization/buyer record.
+
+Until that server-authorized wholesale boundary exists, the public Wholesale
+surface is an inquiry handoff only. It must not mint a browser-only reference,
+persist an application in localStorage, label an unsent draft as submitted, or
+promise a review time. Registration/tax evidence is not required in the first
+draft. The prepared durable inquiry route returns a server-created minimal
+`WI-*`/`CV-*` receipt, remains incapable of granting pricing/credit/terms, and
+uses the signed/Turnstile/rate/idempotency boundary plus scoped guest messaging.
+Future staff decisions must link to separate canonical organization, buyer,
+quote/price-list, conversation, and order records; the inquiry never becomes
+that authorization merely because contact text matches.
+
 ## Universal messaging identity
 
 Every conversation retains channel, external conversation/customer reference,
@@ -150,3 +174,60 @@ migrations, the customer message surface, and coordinated legacy-RPC revocation
 can be activated and tested together. Details are
 in `MAP_020_GUEST_BOUNDARY_ROLLBACK_VALIDATION_2026-08-12.md` and
 `GUEST_COMMERCE_BFF_RUNBOOK.md`.
+
+The repository-target cutover now names the four legacy RPC signatures in
+explicit revoke statements and allowlists exactly six anonymous signed-boundary
+functions. The prebuild security inventory fails if any other function gains
+`PUBLIC`/`anon` execute or if an expected boundary grant disappears. This is
+static target-state enforcement, not proof that the cutover is deployed.
+
+## Prepared verified account claim (not live)
+
+`POST /api/storefront/account/claim` is the only prepared account-claim route.
+It requires exact Storefront origin, a validated customer Auth bearer token, an
+active HttpOnly guest-grant cookie, HMAC freshness/nonce protection, durable
+actor rate limiting, and an exact `{contactKind, idempotencyKey}` body. The
+database derives the confirmed email/phone from `auth.users`; callers cannot
+supply contact text, customer IDs, claim tokens, or target records.
+
+The command locks the actor and contact identity, matches the private contact
+HMAC within the guest grant's customer, rejects conflicting verified identities
+or account links, consumes one payload-bound claim, creates the account link,
+revokes guest access, and writes one fixed private audit event. A same-payload
+retry returns the prior result without another event; nonce replay and changed-
+payload key reuse fail closed. Local PostgreSQL rollback/apply/replay evidence
+and source contracts pass. No schema, route, Auth flow, or feature flag is live.
+
+## Prepared authenticated continuity (not live)
+
+After a verified claim revokes the guest grant, only two customer-account routes
+continue access. `account/history` derives the active customer from `auth.uid()`
+and returns bounded public order/Pasabuy facts plus customer-visible Website
+messages. `account/message` accepts one fixed conversation reference, bounded
+message, and idempotency key; the database proves that conversation belongs to
+the same active account customer. Neither route accepts a customer ID, user ID,
+contact value, or guest token, and neither returns staff-only messages or contact/
+delivery PII. Cross-customer reads and replies fail closed.
+
+The optional UI uses email-link or phone OTP only when both the guest BFF and
+independent customer-account browser flag are enabled. Browser code does not
+call provider OTP send or verification methods. The only prepared transports are
+`account/auth/email`, `account/auth/phone`, and `account/auth/verify`; each
+requires exact Storefront origin, bounded JSON, and a signed durable HMAC-only
+IP/contact-or-verification/global rate decision before any provider operation.
+Email permits 5/IP/15 minutes, 3/contact/hour, and 120/global/minute; SMS send
+permits 5/IP/15 minutes, 3/contact/hour, and 60/global/minute; SMS verification
+permits 10/IP/15 minutes, 5/phone/15 minutes, and 120/global/minute. Raw email,
+phone, code, and IP values never enter the rate tables. Denials are generic and
+include `Retry-After`. Email and SMS issuance additionally require a bounded
+Turnstile token for `customer_auth`: durable budget consumption precedes the
+remote challenge check, challenge denial returns `BOT_CHALLENGE_REQUIRED`, and
+neither denial path calls the delivery provider. SMS verification uses its
+separate strict attempt budget without requiring a second Turnstile challenge.
+The browser resets the issuance challenge after every request attempt, including
+an ambiguous network failure.
+Successful verification returns only the bounded customer
+access/refresh pair used to establish the ordinary browser session. There is no
+password form, URL-hash prototype, commercial role, tier-price promise, or account
+requirement for guest commerce. Provider redirect/SMS delivery and policy,
+deployed thresholds, alerts, flags, and real-host activation remain unverified.

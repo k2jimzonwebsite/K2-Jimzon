@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react'
-import { useAdminStore as useStore } from '../../context/AdminStoreContext'
+import { useCallback, useState, useEffect, useRef } from 'react'
+import { useOptionalAdminStore } from '../../context/AdminStoreContext'
 import { supabase } from '../../lib/supabaseClient'
+import { providerErrorIncludes, safeUiError } from '../../lib/safeUiError'
+import { adminBffEnabled, commandAdminStaffAccessBff, getAdminStaffAccessBff } from '../../services/adminBffService'
+import { CheckIcon, InboxIcon, ShieldIcon, UserIcon, XIcon } from '../../components/ui/icons'
 
 // Real staff & roles. Reads user_profiles (admins see all), lets the super admin
 // invite people + set roles, and lets an admin turn on their own 2FA.
@@ -20,8 +23,15 @@ const roleChip = (r) =>
 // 16px inputs prevent iOS zoom; min-h-12 = comfy thumb target.
 const inputCls = 'w-full rounded-adm-sm border border-white/20 bg-black/40 px-4 min-h-12 py-3 text-base text-white placeholder:text-white/40 focus:border-blue outline-none'
 
-export default function StaffPermissionManager() {
-  const { user, inviteStaff, enrollMfa, verifyMfaEnroll } = useStore()
+export default function StaffPermissionManager({ secureMode, runtime }) {
+  const secure = secureMode ?? adminBffEnabled()
+  const store = useOptionalAdminStore()
+  const {
+    user = null, inviteStaff = async () => ({ ok: false }),
+    enrollMfa = async () => ({ ok: false }), verifyMfaEnroll = async () => ({ ok: false }),
+    startMfaReplacement = async () => ({ ok: false }),
+    completeMfaReplacement = async () => ({ ok: false }),
+  } = runtime || store || {}
   const [rows, setRows] = useState([])
   const [loading, setLoading] = useState(true)
   const [err, setErr] = useState('')
@@ -29,59 +39,85 @@ export default function StaffPermissionManager() {
 
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteRole, setInviteRole] = useState('Staff')
+  const [inviteReason, setInviteReason] = useState('')
   const [inviting, setInviting] = useState(false)
 
   const [mfa, setMfa] = useState(null)
   const [mfaCode, setMfaCode] = useState('')
   const [mfaBusy, setMfaBusy] = useState(false)
   const [mfaStatus, setMfaStatus] = useState('checking') // checking | verified | unavailable | error
+  const [mfaReplacementAvailable, setMfaReplacementAvailable] = useState(false)
+  const [mfaReplacementOpen, setMfaReplacementOpen] = useState(false)
 
   const [pin, setPin] = useState('')
   const [pinConfirm, setPinConfirm] = useState('')
   const [pinBusy, setPinBusy] = useState(false)
   const [hasPin, setHasPin] = useState(null)
+  const [pinReason, setPinReason] = useState('')
+  const [roleChange, setRoleChange] = useState(null)
+  const [invitationAvailable, setInvitationAvailable] = useState(!secure)
 
-  const load = async () => {
+  const load = useCallback(async (signal) => {
+    if (secure) {
+      setLoading(true); setErr('')
+      const response = await getAdminStaffAccessBff(signal)
+      if (response.aborted) return
+      if (!response.ok) setErr(response.error || 'Staff access records could not be loaded.')
+      else {
+        setRows(response.staffAccess.profiles || [])
+        setHasPin(Boolean(response.staffAccess.hasDeletePin))
+        setInvitationAvailable(Boolean(response.staffAccess.invitationAvailable))
+        setMfaStatus(response.staffAccess.currentSessionAal2 ? 'verified' : 'unavailable')
+        setMfaReplacementAvailable(Boolean(response.staffAccess.mfaReplacementAvailable))
+      }
+      setLoading(false)
+      return
+    }
     if (!supabase) { setLoading(false); return }
     setLoading(true); setErr('')
     const { data, error } = await supabase.from('user_profiles')
       .select('id, email, role, created_at').order('created_at', { ascending: true })
-    if (error) setErr(error.message)
+    if (error) setErr(safeUiError('STAFF_LOAD_FAILED'))
     else setRows(data || [])
     setLoading(false)
-  }
-  useEffect(() => { load() }, [])
+  }, [secure])
+  useEffect(() => { const controller = new AbortController(); load(controller.signal); return () => controller.abort() }, [load])
 
   useEffect(() => {
-    if (!supabase) return
+    if (secure || !supabase) return
     supabase.rpc('has_delete_pin').then(({ data, error }) => {
       if (!error) setHasPin(Boolean(data))
-      else if (error.message.includes('K2_AAL2_REQUIRED')) setErr('Verify your authenticator again before managing the delete PIN.')
+      else if (providerErrorIncludes(error, 'K2_AAL2_REQUIRED')) setErr('Verify your authenticator again before managing the delete PIN.')
       else setErr('Delete PIN status could not be checked. Refresh and try again.')
     })
-  }, [])
+  }, [secure])
 
   const refreshMfaStatus = async () => {
+    if (secure) { setMfaStatus('verified'); return }
     if (!supabase) { setMfaStatus('unavailable'); return }
     const { data, error } = await supabase.auth.mfa.listFactors()
     if (error) { setMfaStatus('error'); return }
     setMfaStatus((data?.totp?.length || 0) > 0 ? 'verified' : 'unavailable')
   }
-  useEffect(() => { refreshMfaStatus() }, [])
+  useEffect(() => { refreshMfaStatus() }, [secure])
 
-  const changeRole = async (id, role) => {
+  const changeRole = async (id, role, reason) => {
     setErr(''); setNotice('')
-    const { error } = await supabase.rpc('set_user_role', { p_user_id: id, p_role: role })
-    if (error) setErr(error.message)
-    else { setNotice('Role updated.'); setRows(prev => prev.map(r => r.id === id ? { ...r, role } : r)) }
+    const result = secure
+      ? await commandAdminStaffAccessBff('staff_role_change', { targetUserId: id, role, reason })
+      : await supabase.rpc('set_user_role', { p_user_id: id, p_role: role })
+    if ((secure && !result.ok) || (!secure && result.error)) return setErr(secure ? (result.error || 'The role was not changed.') : safeUiError('STAFF_ROLE_FAILED'))
+    setRoleChange(null); setNotice('Role updated with an attributable reason.'); setRows(prev => prev.map(r => r.id === id ? { ...r, role } : r))
   }
 
   const sendInvite = async (e) => {
     e.preventDefault()
+    if (!invitationAvailable) { setErr('Staff invitations remain unavailable until the reason-bound Edge receipt and server forwarding configuration are active.'); return }
+    if (secure && inviteReason.trim().length < 3) { setErr('Enter an attributable reason for this invitation.'); return }
     setErr(''); setNotice(''); setInviting(true)
-    const res = await inviteStaff(inviteEmail.trim(), inviteRole)
+    const res = await inviteStaff(inviteEmail.trim(), inviteRole, inviteReason.trim())
     setInviting(false)
-    if (res.ok) { setNotice(res.note || `Invite sent to ${inviteEmail}. They'll set their own password.`); setInviteEmail(''); load() }
+    if (res.ok) { setNotice(res.note || `Invite sent to ${inviteEmail}. They'll set their own password.`); setInviteEmail(''); setInviteReason(''); load() }
     else setErr(res.error || 'Invite failed.')
   }
 
@@ -117,26 +153,31 @@ export default function StaffPermissionManager() {
 
     if (!/^\d{4}$/.test(pin)) return setErr('PIN must be exactly 4 digits.')
     if (pin !== pinConfirm) return setErr('The two PINs do not match.')
-    if (!supabase) return setErr('No database connection.')
+    if (!secure && !supabase) return setErr('No database connection.')
 
     setPinBusy(true)
-    const { error } = await supabase.rpc('set_delete_pin', { new_pin: pin })
+    if (pinReason.trim().length < 3) { setPinBusy(false); return setErr('Enter why the delete PIN is being set or changed.') }
+    const result = secure
+      ? await commandAdminStaffAccessBff('admin_delete_pin_set', { pin, reason: pinReason.trim() })
+      : await supabase.rpc('set_delete_pin', { new_pin: pin })
     setPinBusy(false)
 
+    const error = secure ? (!result.ok && result) : result.error
     if (error) {
+      if (secure) return setErr(result.error || 'The Delete PIN could not be saved safely.')
       return setErr(
-        error.message.includes('does not exist')
+        providerErrorIncludes(error, 'does not exist')
           ? 'The secure Delete PIN service is not available yet. Refresh after the Admin update finishes.'
-          : error.message.includes('K2_AAL2_REQUIRED')
+          : providerErrorIncludes(error, 'K2_AAL2_REQUIRED')
             ? 'Verify your authenticator again before setting a Delete PIN.'
-            : error.message.includes('K2_ADMIN_REQUIRED')
+            : providerErrorIncludes(error, 'K2_ADMIN_REQUIRED')
               ? 'Only an Admin can set a Delete PIN.'
               : 'The Delete PIN could not be saved. Refresh and try again.'
       )
     }
 
-    setPin(''); setPinConfirm(''); setHasPin(true)
-    setNotice('Delete PIN saved. You will need it to delete products.')
+    setPin(''); setPinConfirm(''); setPinReason(''); setHasPin(true)
+    setNotice('Delete PIN saved with an attributable reason. You will need it to delete products.')
   }
 
   return (
@@ -146,7 +187,7 @@ export default function StaffPermissionManager() {
       <div className="pt-1">
         <h1 className="font-sans text-lg sm:text-2xl font-bold text-white">Staff &amp; roles</h1>
         <p className="text-sm text-white/55 mt-1 leading-relaxed">
-          Invite people, choose what they can access, and protect your own login with 2FA. Accounts are invite-only — each person sets their own password.
+          {secure ? 'Review authenticated access, make attributable role changes, and protect privileged deletion. Invitations require a durable reason-bound receipt.' : 'Invite people, choose what they can access, and protect your own login with 2FA. Accounts are invite-only — each person sets their own password.'}
         </p>
       </div>
 
@@ -157,22 +198,28 @@ export default function StaffPermissionManager() {
       {/* Invite */}
       <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-3">
-          <span className="text-lg">✉️</span>
+          <InboxIcon size={19} className="text-gold" aria-hidden="true" />
           <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Invite a staff member</h2>
         </div>
+        {!invitationAvailable && <p role="status" className="mb-3 rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-sm text-amber">Invitations are unavailable until the reason-bound Edge receipt and server forwarding configuration are active. Existing access can still be reviewed.</p>}
         <form onSubmit={sendInvite} className="space-y-3">
-          <input type="email" required value={inviteEmail} onChange={e => setInviteEmail(e.target.value)}
+          <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Email address<input type="email" required disabled={!invitationAvailable} value={inviteEmail} onChange={e => setInviteEmail(e.target.value)}
             placeholder="name@example.com" className={inputCls} />
+          </label>
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-white/45 mb-1.5">Their role</label>
-            <select value={inviteRole} onChange={e => setInviteRole(e.target.value)}
+            <select disabled={!invitationAvailable} value={inviteRole} onChange={e => setInviteRole(e.target.value)}
               className={`${inputCls} cursor-pointer appearance-none`}>
               {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
             <p className="text-xs text-white/45 mt-1.5 leading-relaxed">{ROLE_BLURB[inviteRole]}</p>
           </div>
-          <button type="submit" disabled={inviting}
-            className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-50 transition-all active:scale-[.99]">
+          {secure && <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Reason for this invitation
+            <textarea required minLength={3} maxLength={500} disabled={!invitationAvailable} value={inviteReason} onChange={e => setInviteReason(e.target.value)}
+              placeholder="Why does this person need access?" className={`${inputCls} mt-1.5 min-h-24 resize-y`} />
+          </label>}
+          <button type="submit" disabled={inviting || !invitationAvailable || (secure && inviteReason.trim().length < 3)}
+            className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-50 transition-[background-color,opacity,transform] active:scale-[.99] motion-reduce:transition-none">
             {inviting ? 'Sending…' : 'Send invite'}
           </button>
         </form>
@@ -181,7 +228,7 @@ export default function StaffPermissionManager() {
       {/* Delete PIN */}
       <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-lg">🔒</span>
+          <ShieldIcon size={19} className="text-gold" aria-hidden="true" />
           <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Your delete PIN</h2>
           {hasPin !== null && (
             <span className={`ml-auto px-2 py-0.5 rounded-full text-xs font-bold border ${
@@ -216,8 +263,13 @@ export default function StaffPermissionManager() {
               className={`${inputCls} text-center tracking-[0.5em] font-mono`}
             />
           </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-white/45 mb-1.5">Reason for setting or changing this PIN</label>
+            <textarea required minLength={3} maxLength={500} value={pinReason} onChange={e => setPinReason(e.target.value)}
+              className={`${inputCls} min-h-24 resize-y`} placeholder="Why is this credential needed or being rotated?" />
+          </div>
           <button type="submit" disabled={pinBusy || pin.length !== 4 || pinConfirm.length !== 4}
-            className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-40 transition-all active:scale-[.99]">
+            className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-40 transition-[background-color,opacity,transform] active:scale-[.99] motion-reduce:transition-none">
             {pinBusy ? 'Saving…' : hasPin ? 'Change PIN' : 'Set PIN'}
           </button>
         </form>
@@ -227,7 +279,7 @@ export default function StaffPermissionManager() {
       <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-lg">👥</span>
+            <UserIcon size={19} className="text-gold" aria-hidden="true" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-gold">People with access</h2>
           </div>
           {!loading && <span className="text-xs text-white/40">{rows.length}</span>}
@@ -258,7 +310,7 @@ export default function StaffPermissionManager() {
                   </div>
                   <label className="block mt-3">
                     <span className="block text-xs font-bold uppercase tracking-wider text-white/40 mb-1">Change role</span>
-                    <select value={role} onChange={e => changeRole(r.id, e.target.value)}
+                    <select value={role} onChange={e => { if (e.target.value !== role) setRoleChange({ profile: r, role: e.target.value }) }}
                       className="w-full rounded-adm-sm border border-white/20 bg-adm-surface px-3 min-h-11 py-2.5 text-base text-white focus:border-blue outline-none cursor-pointer appearance-none">
                       {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
                     </select>
@@ -269,11 +321,12 @@ export default function StaffPermissionManager() {
           </div>
         )}
       </section>
+      {roleChange && <RoleChangeDialog change={roleChange} onCancel={() => setRoleChange(null)} onConfirm={changeRole} />}
 
       {/* Your 2FA */}
       <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-lg">🔐</span>
+          <CheckIcon size={19} className="text-gold" aria-hidden="true" />
           <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Your two-factor security</h2>
           {mfaStatus !== 'checking' && (
             <span className={`ml-auto px-2 py-0.5 rounded-full text-xs font-bold border ${
@@ -294,8 +347,20 @@ export default function StaffPermissionManager() {
         {mfaStatus === 'checking' ? (
           <p role="status" className="text-sm text-white/50">Checking authenticator status…</p>
         ) : mfaStatus === 'verified' ? (
-          <div className="rounded-adm-sm border border-forest/35 bg-forest/10 p-3 text-sm text-forest font-semibold">
-            Authenticator verified and required for privileged access.
+          <div className="space-y-3">
+            <div className="rounded-adm-sm border border-forest/35 bg-forest/10 p-3 text-sm text-forest font-semibold">
+              Authenticator verified and required for privileged access.
+            </div>
+            {secure && (mfaReplacementAvailable ? (
+              <button type="button" onClick={() => setMfaReplacementOpen(true)}
+                className="min-h-11 w-full rounded-adm-sm border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-bold text-white transition-[background-color,border-color,transform] hover:bg-white/10 active:scale-[.99] motion-reduce:transition-none sm:w-auto">
+                Replace authenticator
+              </button>
+            ) : (
+              <p role="status" className="text-sm leading-relaxed text-white/50">
+                Secure replacement is not active yet. Keep using the current authenticator. Lost access requires the documented owner/provider recovery process.
+              </p>
+            ))}
           </div>
         ) : !mfa ? (
           <button onClick={startMfa} disabled={mfaBusy}
@@ -332,6 +397,129 @@ export default function StaffPermissionManager() {
           </form>
         )}
       </section>
+      {mfaReplacementOpen && <MfaReplacementDialog
+        onClose={() => setMfaReplacementOpen(false)}
+        onStart={startMfaReplacement}
+        onComplete={completeMfaReplacement}
+        onSuccess={() => {
+          setMfaReplacementOpen(false)
+          setNotice('Authenticator replaced. Your previous factor is no longer active.')
+        }}
+      />}
     </div>
   )
+}
+
+function MfaReplacementDialog({ onClose, onStart, onComplete, onSuccess }) {
+  const [reason, setReason] = useState('')
+  const [replacement, setReplacement] = useState(null)
+  const [code, setCode] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const closeRef = useRef(null)
+
+  useEffect(() => {
+    closeRef.current?.focus()
+    const handleKey = event => { if (event.key === 'Escape' && !busy) onClose() }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [busy, onClose])
+
+  const start = async event => {
+    event.preventDefault()
+    setError(''); setBusy(true)
+    const result = await onStart(reason.trim())
+    setBusy(false)
+    if (!result.ok) return setError(result.error || 'Authenticator replacement could not be started.')
+    setReplacement({ ...result.replacement, reason: reason.trim() })
+  }
+
+  const complete = async event => {
+    event.preventDefault()
+    setError(''); setBusy(true)
+    const result = await onComplete({ ...replacement, reason: reason.trim(), code: code.trim() })
+    setBusy(false)
+    if (!result.ok) return setError(result.error || 'The new authenticator could not replace the previous factor.')
+    onSuccess()
+  }
+
+  return <div className="fixed inset-0 z-[110] flex items-end justify-center bg-black/80 sm:items-center sm:p-4" role="presentation">
+    <form onSubmit={replacement ? complete : start} role="dialog" aria-modal="true" aria-labelledby="mfa-replacement-title"
+      className="max-h-[92dvh] w-full overflow-y-auto rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-wider text-gold">Credential change</p>
+          <h2 id="mfa-replacement-title" className="mt-1 text-xl font-bold">Replace authenticator</h2>
+          <p className="mt-2 text-sm leading-relaxed text-white/55">
+            Keep your current authenticator until this replacement succeeds. The old factor is retired only after the new code verifies.
+          </p>
+        </div>
+        <button ref={closeRef} type="button" onClick={onClose} disabled={busy}
+          aria-label="Close authenticator replacement"
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line text-white/70 disabled:opacity-40">
+          <XIcon size={18} aria-hidden="true" />
+        </button>
+      </div>
+
+      <div className="mt-4 rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-sm leading-relaxed text-amber">
+        <strong>Lost access to the current authenticator?</strong> Stop here. This replacement requires an active AAL2 session; use the documented owner/provider recovery process.
+      </div>
+      {error && <div role="alert" className="mt-4 rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm font-semibold text-crimson">{error}</div>}
+
+      {!replacement ? <div className="mt-4 space-y-4">
+        <label className="block text-sm font-semibold text-white/70">Reason for replacing your authenticator
+          <textarea required minLength={3} maxLength={500} value={reason} onChange={event => setReason(event.target.value)}
+            className={`${inputCls} mt-1 min-h-24 resize-y`} placeholder="Why is this factor being replaced?" />
+        </label>
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button type="button" onClick={onClose} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button>
+          <button type="submit" disabled={busy || reason.trim().length < 3}
+            className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-[background-color,opacity,transform] active:scale-[.99] disabled:opacity-50 motion-reduce:transition-none">
+            {busy ? 'Starting…' : 'Start secure replacement'}
+          </button>
+        </div>
+      </div> : <div className="mt-4 space-y-4">
+        {replacement.qr && <div className="flex justify-center">
+          <img src={replacement.qr} alt="New authenticator setup QR code" className="h-48 w-48 rounded-adm-sm bg-white p-2.5" />
+        </div>}
+        <div className="space-y-2 text-sm leading-relaxed text-white/65">
+          <p>Scan the QR code with the new authenticator app.</p>
+          {replacement.secret && <p className="text-xs">Cannot scan? Enter this key manually:<br /><span className="break-all font-mono text-white">{replacement.secret}</span></p>}
+          <p className="font-semibold text-amber">Keep your current authenticator until this replacement succeeds.</p>
+        </div>
+        <label className="block text-sm font-semibold text-white/70">Six-digit code from the new authenticator
+          <input type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code}
+            onChange={event => setCode(event.target.value.replace(/\D/g, '').slice(0, 6))}
+            className="mt-1 min-h-14 w-full rounded-adm-sm border border-blue/50 bg-black/50 px-3 py-3 text-center font-mono text-2xl tracking-[0.35em] text-white outline-none focus:border-blue" />
+        </label>
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button type="button" onClick={onClose} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button>
+          <button type="submit" disabled={busy || code.length !== 6}
+            className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-[background-color,opacity,transform] active:scale-[.99] disabled:opacity-50 motion-reduce:transition-none">
+            {busy ? 'Verifying…' : 'Verify and replace authenticator'}
+          </button>
+        </div>
+      </div>}
+    </form>
+  </div>
+}
+
+function RoleChangeDialog({ change, onCancel, onConfirm }) {
+  const [reason, setReason] = useState('')
+  const [busy, setBusy] = useState(false)
+  const closeRef = useRef(null)
+  useEffect(() => {
+    closeRef.current?.focus()
+    const handleKey = event => { if (event.key === 'Escape' && !busy) onCancel() }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [busy, onCancel])
+  const label = change.profile.email || change.profile.fullName || 'this account'
+  return <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 sm:items-center sm:p-4" role="presentation">
+    <form role="dialog" aria-modal="true" aria-labelledby="role-change-title" onSubmit={async event => { event.preventDefault(); setBusy(true); await onConfirm(change.profile.id, change.role, reason.trim()); setBusy(false) }} className="w-full space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
+      <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-wider text-gold">Privilege change</p><h2 id="role-change-title" className="mt-1 text-xl font-bold">Change role to {change.role}</h2><p className="mt-2 break-all text-sm text-white/55">This changes Admin access for {label}. The database still protects the final Admin.</p></div><button ref={closeRef} type="button" onClick={onCancel} aria-label="Close role change dialog" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line">×</button></div>
+      <label className="block text-sm font-semibold text-white/70">Reason for this access change<textarea required minLength={3} maxLength={500} value={reason} onChange={event => setReason(event.target.value)} className={`${inputCls} mt-1 min-h-24 resize-y`} /></label>
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold">Cancel</button><button type="submit" disabled={busy || reason.trim().length < 3} className="min-h-11 rounded-adm-sm bg-crimson px-4 font-bold text-white disabled:opacity-50">{busy ? 'Changing…' : `Change to ${change.role}`}</button></div>
+    </form>
+  </div>
 }

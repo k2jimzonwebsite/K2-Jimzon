@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { supabase, supabasePublicKey } from '../lib/supabaseClient'
+import { fetchWithTimeout, isRequestTimeoutError } from '../lib/fetchWithTimeout.js'
 import {
   ADMIN_ROUTE, buildAdminOAuthRedirectUrl, clearAdminOAuthReturn,
   clearAdminOAuthCredentialsFromUrl, consumeAdminOAuthReturn, rememberAdminOAuthReturn,
 } from '../lib/adminAuthRedirect'
 import {
   adminBffEnabled, challengeAdminMfaBff, getAdminSessionBff,
-  loginAdminBff, logoutAdminBff,
+  inviteAdminStaffBff, loginAdminBff, logoutAdminBff,
+  requestAdminPasswordRecoveryBff, completeAdminPasswordRecoveryBff,
+  startAdminMfaEnrollmentBff, verifyAdminMfaEnrollmentBff,
+  startAdminMfaReplacementBff, completeAdminMfaReplacementBff,
 } from '../services/adminBffService'
 
 const STAFF_ROLES = ['Admin', 'Staff']
@@ -141,10 +145,10 @@ export function useAdminAuthRuntime() {
     }
   }
 
-  const loginAdmin = async ({ email, password }) => {
+  const loginAdmin = async ({ email, password, botToken = '' }) => {
     if (!email || !password) return { ok: false, error: 'Enter your email and password.' }
     if (adminBffEnabled()) {
-      const result = await loginAdminBff({ email: email.trim(), password })
+      const result = await loginAdminBff({ email: email.trim(), password, botToken })
       if (result.ok) applyAdminSession(result.user, result.user?.role)
       return result
     }
@@ -195,7 +199,10 @@ export function useAdminAuthRuntime() {
   }
 
   const enrollMfa = async () => {
-    if (adminBffEnabled()) return { ok: false, error: 'Authenticator enrollment is not yet available through the secure admin boundary.' }
+    if (adminBffEnabled()) {
+      const result = await startAdminMfaEnrollmentBff()
+      return result.ok ? { ok: true, ...result.enrollment } : result
+    }
     if (!supabase) return { ok: false, error: 'Backend not configured.' }
     const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp' })
     if (error) return { ok: false, error: 'Authenticator enrollment could not be started.' }
@@ -203,7 +210,11 @@ export function useAdminAuthRuntime() {
   }
 
   const verifyMfaEnroll = async (factorId, code) => {
-    if (adminBffEnabled()) return { ok: false, error: 'Authenticator enrollment is not yet available through the secure admin boundary.' }
+    if (adminBffEnabled()) {
+      const result = await verifyAdminMfaEnrollmentBff(factorId, code.trim())
+      if (result.ok) applyAdminSession(result.user, result.user?.role)
+      return result
+    }
     if (!supabase) return { ok: false, error: 'Backend not configured.' }
     const { data: challenge, error: challengeError } = await supabase.auth.mfa.challenge({ factorId })
     if (challengeError) return { ok: false, error: 'Authenticator verification could not be started.' }
@@ -211,18 +222,59 @@ export function useAdminAuthRuntime() {
     return error ? { ok: false, error: 'That authenticator code could not be verified.' } : { ok: true }
   }
 
-  const inviteStaff = async (email, role = 'Staff') => {
-    if (adminBffEnabled()) return { ok: false, error: 'Staff invitations are not yet available through the secure admin boundary.' }
+  const requestPasswordRecovery = async (email, botToken = '') => {
+    const cleanEmail = String(email || '').trim().toLowerCase()
+    if (!adminBffEnabled()) return { ok: false, error: 'Secure staff password recovery is not available in the legacy runtime.' }
+    if (!cleanEmail) return { ok: false, error: 'Enter your staff email.' }
+    return requestAdminPasswordRecoveryBff(cleanEmail, botToken)
+  }
+
+  const completePasswordRecovery = async (password) => {
+    if (!adminBffEnabled()) return { ok: false, error: 'Secure staff password recovery is not available in the legacy runtime.' }
+    return completeAdminPasswordRecoveryBff(password)
+  }
+
+  const startMfaReplacement = async (reason) => {
+    if (!adminBffEnabled()) return { ok: false, error: 'Secure authenticator replacement is unavailable in the legacy runtime.' }
+    const replacementId = crypto.randomUUID()
+    const result = await startAdminMfaReplacementBff(reason.trim(), replacementId)
+    return result.ok
+      ? { ok: true, replacement: { ...result.replacement, reason: reason.trim() } }
+      : result
+  }
+
+  const completeMfaReplacement = async (replacement) => {
+    if (!adminBffEnabled()) return { ok: false, error: 'Secure authenticator replacement is unavailable in the legacy runtime.' }
+    return completeAdminMfaReplacementBff(replacement, replacement.code.trim())
+  }
+
+  const inviteStaff = async (email, role = 'Staff', reason = '') => {
+    const cleanEmail = email.trim().toLowerCase()
+    if (adminBffEnabled()) {
+      const cleanReason = reason.trim()
+      const fingerprint = `${cleanEmail}\n${role}\n${cleanReason}`
+      if (inviteOperationRef.current.fingerprint !== fingerprint || !inviteOperationRef.current.key) {
+        inviteOperationRef.current = { fingerprint, key: crypto.randomUUID() }
+      }
+      const response = await inviteAdminStaffBff(cleanEmail, role, cleanReason, inviteOperationRef.current.key)
+      if (!response.ok) return { ok: false, error: response.error || 'The staff invitation could not be completed.' }
+      inviteOperationRef.current = { fingerprint: '', key: '' }
+      return {
+        ok: true,
+        note: response.result.invited
+          ? `Invite sent to ${cleanEmail}; the ${role} role was assigned.`
+          : `The existing account for ${cleanEmail} now has the ${role} role.`,
+      }
+    }
     if (!supabase) return { ok: false, error: 'Backend not configured.' }
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return { ok: false, error: 'You must be signed in.' }
-    const cleanEmail = email.trim().toLowerCase()
     const fingerprint = `${cleanEmail}\n${role}`
     if (inviteOperationRef.current.fingerprint !== fingerprint || !inviteOperationRef.current.key) {
       inviteOperationRef.current = { fingerprint, key: crypto.randomUUID() }
     }
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invite-staff`, {
+      const response = await fetchWithTimeout(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invite-staff`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -231,7 +283,7 @@ export function useAdminAuthRuntime() {
           'X-Idempotency-Key': inviteOperationRef.current.key,
         },
         body: JSON.stringify({ email: cleanEmail, role, redirectTo: window.location.origin }),
-      })
+      }, 15000)
       const payload = await response.json().catch(() => ({}))
       if (response.ok && payload.ok && payload.roleAssigned) {
         inviteOperationRef.current = { fingerprint: '', key: '' }
@@ -251,7 +303,10 @@ export function useAdminAuthRuntime() {
         INVALID_EMAIL: 'Enter a valid email address.',
       }
       return { ok: false, error: errors[payload.error] || 'The staff invitation could not be completed.' }
-    } catch {
+    } catch (error) {
+      if (isRequestTimeoutError(error)) {
+        return { ok: false, error: 'The invitation timed out and its final status is uncertain. Retry uses the same secure operation key.' }
+      }
       return { ok: false, error: 'The staff invitation could not be sent.' }
     }
   }
@@ -267,8 +322,9 @@ export function useAdminAuthRuntime() {
 
   return {
     user, isAdmin, authReady, mfaRequired, authError,
-    loginAdmin, loginWithGoogle, logoutAdmin,
-    challengeMfa, enrollMfa, verifyMfaEnroll, inviteStaff,
+    loginAdmin, loginWithGoogle, logoutAdmin, requestPasswordRecovery, completePasswordRecovery,
+    challengeMfa, enrollMfa, verifyMfaEnroll, startMfaReplacement, completeMfaReplacement, inviteStaff,
     adminOAuthAvailable: !adminBffEnabled(),
+    adminBotChallengeRequired: adminBffEnabled(),
   }
 }

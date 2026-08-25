@@ -7,13 +7,17 @@
  */
 
 import { supabase } from '../lib/supabaseClient'
-import { validateUploadFile } from '../lib/uploadValidation'
+import {
+  PRODUCT_EVIDENCE_MAX_BYTES,
+  PRODUCT_EVIDENCE_MIMES,
+  validateUploadFile,
+} from '../lib/uploadValidation'
 import {
   adminBffEnabled, createProductDraftBff, createProductFirstInventoryBff,
   createProductIntakeSessionBff, getProductIntakeSessionBff,
   listProductIntakeConsignmentsBff, saveProductIntakeStepBff,
   searchProductIntakeDuplicatesBff, transitionProductPublicationBff,
-  uploadProductEvidenceBff,
+  uploadProductEvidenceBff, retryProductEvidenceCleanupBff,
 } from './adminBffService'
 
 const ACTIVE_SESSION_KEY = 'k2_active_intake_session'
@@ -266,16 +270,23 @@ export async function uploadProductEvidence(session, slot, file) {
   if (!['PRIMARY', 'BACK', 'BARCODE'].includes(slot)) {
     throw commandError('EVIDENCE_SLOT_INVALID', 'Choose a valid packaging-evidence slot.')
   }
-  const validation = validateUploadFile(file)
+  const validation = validateUploadFile(file, {
+    maxBytes: PRODUCT_EVIDENCE_MAX_BYTES,
+    allowedMimes: PRODUCT_EVIDENCE_MIMES,
+  })
   if (!validation.ok) {
-    throw commandError('EVIDENCE_FILE_INVALID', validation.error || 'Use a valid JPG, PNG, WebP, or AVIF image no larger than 10 MB.')
+    throw commandError('EVIDENCE_FILE_INVALID', validation.error || 'Use a valid JPEG, PNG, or WebP image no larger than 4 MB.')
   }
   const extensionByType = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/avif': 'avif' }
   const extension = extensionByType[file?.type] || 'jpg'
 
   if (adminBffEnabled()) {
     const result = await uploadProductEvidenceBff(session.id, slot, file)
-    if (!result.ok) throw commandError(result.code || 'EVIDENCE_UPLOAD_FAILED', result.error)
+    if (!result.ok) {
+      const failure = commandError(result.code || 'EVIDENCE_UPLOAD_FAILED', result.error)
+      failure.cleanupId = result.cleanupId || null
+      throw failure
+    }
     const updatedSession = await fetchSession(null, session.id)
     const evidence = (updatedSession.packaging_images || []).find((image) => image.slot === slot)
     if (!evidence) throw commandError('EVIDENCE_REGISTER_FAILED', 'The evidence photo was uploaded but its verified record could not be loaded. Try again before continuing.')
@@ -323,6 +334,15 @@ export async function uploadProductEvidence(session, slot, file) {
     await client.storage.from(EVIDENCE_BUCKET).remove([path])
     throw error
   }
+}
+
+export async function retryProductEvidenceCleanup(cleanupId) {
+  if (!adminBffEnabled() || !cleanupId) {
+    throw commandError('EVIDENCE_CLEANUP_INVALID', 'No durable private-file cleanup is available to retry.')
+  }
+  const result = await retryProductEvidenceCleanupBff(cleanupId)
+  if (!result.ok) throw commandError(result.code || 'EVIDENCE_CLEANUP_UNAVAILABLE', result.error)
+  return { cleanupId: result.cleanupId, cleanupPending: Boolean(result.cleanupPending) }
 }
 
 /** Load open Italy manifests for the controlled first-inventory handoff. */

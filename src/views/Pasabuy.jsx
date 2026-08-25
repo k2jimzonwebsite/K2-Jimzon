@@ -117,7 +117,7 @@ export default function Pasabuy() {
             <p className="mt-4 text-xs leading-relaxed text-navy-soft">
               Photo attachments will be requested by staff through your contact channel when needed. This avoids unsafe anonymous uploads before our protected attachment service is ready.
             </p>
-            <TurnstileChallenge key={challengeKey} onTokenChange={setBotToken} />
+            <TurnstileChallenge key={challengeKey} enabled={guestBffEnabled()} onTokenChange={setBotToken} />
             {error && <p role="alert" className="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
             {receipt && (
               <div role="status" className="mt-4 rounded-xl border border-forest/25 bg-forest/5 p-3 text-sm text-forest">

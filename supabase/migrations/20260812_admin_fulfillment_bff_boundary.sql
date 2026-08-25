@@ -74,11 +74,13 @@ begin
     'consignment_create', 'consignment_add_line', 'consignment_scan',
     'consignment_advance', 'consignment_finalize',
     'lots_reconcile', 'lot_clearance',
-    'coupon_create', 'coupon_state', 'coupon_archive'
+    'coupon_create', 'coupon_state', 'coupon_archive',
+    'catalog_import_chunk'
   ) then
     raise exception using errcode='22023', message='K2_ADMIN_ACTION_INVALID';
   end if;
-  if p_payload_text is null or octet_length(convert_to(p_payload_text, 'UTF8')) > 16384
+  if p_payload_text is null or octet_length(convert_to(p_payload_text, 'UTF8')) >
+       case when p_action='catalog_import_chunk' then 1048576 else 16384 end
      or p_signature !~ '^[0-9a-f]{64}$' then
     raise exception using errcode='22023', message='K2_ADMIN_REQUEST_INVALID';
   end if;

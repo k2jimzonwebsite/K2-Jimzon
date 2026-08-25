@@ -8,6 +8,35 @@ const projectRoot = process.cwd().replaceAll('\\', '/')
 // silently fall back to the disabled legacy anon JWT and break OAuth callbacks.
 const K2_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_OCZx7JiRFTXZ43v0ZxVduQ_KAGCH_Z9'
 
+// Each target gets its own web app manifest. A single shared `public/manifest.json`
+// used to hold the Admin BOS identity and its internal `/admin-portal-k2-secure`
+// start URL, and `public/` is copied verbatim into both builds — so the public
+// storefront artifact shipped the admin manifest. Emitting per target keeps the
+// two identities separate by construction rather than by review.
+// No `icons` entry is declared: the previous manifest pointed at `/favicon.ico`,
+// which does not exist in the repository. Referencing a missing icon is worse
+// than declaring none. Add icons here once real assets are committed.
+const WEB_APP_MANIFESTS = {
+  storefront: {
+    short_name: 'K2 Jimzon',
+    name: 'K2 Jimzon — Italian imports, direct to the Philippines',
+    start_url: '/',
+    background_color: '#FAF7F2',
+    theme_color: '#FAF7F2',
+    display: 'standalone',
+    orientation: 'portrait',
+  },
+  admin: {
+    short_name: 'K2 Jimzon BOS',
+    name: 'K2 Jimzon Business Operating System',
+    start_url: '/admin-portal-k2-secure',
+    background_color: '#05080f',
+    theme_color: '#0A101D',
+    display: 'standalone',
+    orientation: 'portrait',
+  },
+}
+
 function deploymentBoundaryPlugin(target) {
   return {
     name: 'k2-deployment-boundary',
@@ -17,6 +46,14 @@ function deploymentBoundaryPlugin(target) {
         fileName: 'k2-build-target.json',
         source: `${JSON.stringify({ target }, null, 2)}\n`,
       })
+      const webAppManifest = WEB_APP_MANIFESTS[target]
+      if (webAppManifest) {
+        this.emitFile({
+          type: 'asset',
+          fileName: 'manifest.json',
+          source: `${JSON.stringify(webAppManifest, null, 2)}\n`,
+        })
+      }
     },
   }
 }
@@ -61,9 +98,13 @@ export default defineConfig(({ command, mode }) => {
     },
     define: {
       'import.meta.env.VITE_SUPABASE_PUBLIC_KEY': JSON.stringify(supabasePublicKey || ''),
+      // This compile-time constant lets Rollup remove Admin-only telemetry
+      // transport (including its route string) from the Storefront artifact.
+      __K2_ADMIN_BUILD__: JSON.stringify(target !== 'storefront'),
     },
     build: {
       manifest: true,
+      sourcemap: false,
     },
   }
 })

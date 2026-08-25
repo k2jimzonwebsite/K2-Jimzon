@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { providerErrorIncludes } from '../../lib/safeUiError'
 import { PlusIcon, StarIcon, XIcon } from '../../components/ui/icons'
 import {
   adminBffEnabled, archiveCouponBff, createCouponBff, getAdminCoupons, setCouponStateBff,
@@ -54,7 +55,7 @@ export default function CouponManager() {
     if (!supabase) { setError('Coupon storage is not configured.'); setLoading(false); return }
     const { data, error: loadError } = await supabase.from('coupons').select(PROJECTION).order('created_at', { ascending: false }).limit(500)
     if (loadError) {
-      const missing = loadError.code === '42P01' || /does not exist|schema cache/i.test(loadError.message || '')
+      const missing = loadError.code === '42P01' || providerErrorIncludes(loadError, 'does not exist', 'schema cache')
       setError(missing ? 'Coupon storage is not installed yet.' : 'Coupon records could not be loaded safely.')
     } else { setCoupons(data || []); setError('') }
     setLoading(false)

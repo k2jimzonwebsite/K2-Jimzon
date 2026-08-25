@@ -22,12 +22,26 @@ test('product intake cannot fabricate browser-side product, lot, or publication 
   expect(service).toContain('create_product_draft_server')
   expect(service).toContain('create_product_first_inventory_server')
   expect(service).toContain('transition_product_publication_server')
+  expect(modal).not.toContain('Product Intake & First Inventory Complete')
+  expect(modal).not.toContain('Quantity Received')
+  expect(modal).toContain('Expected manifest quantity')
+  expect(modal).toContain('inventorySaved')
+  expect(modal).toContain('savingInventory')
+  expect(modal).toContain('if (savingInventory) return')
+  expect(modal).toContain('You are offline')
+  expect(modal).toContain('aria-modal="true"')
+  expect(modal).toContain('grid-cols-1 gap-3')
+  expect(modal).toContain('accept="image/jpeg,image/png,image/webp"')
+  expect(modal).not.toContain('image/avif')
+  expect(modal).toContain('URL.revokeObjectURL')
+  expect(modal).toContain('Supplier receipt remains pending until the canonical purchasing and receiving workflow is activated.')
 })
 
 test('database contract is staff-owned, MFA-gated, idempotent, and private', async () => {
-  const [migration, postflight] = await Promise.all([
+  const [migration, postflight, cleanupMigration] = await Promise.all([
     source('supabase/migrations/20260811_product_intake_and_sku_gate.sql'),
     source('supabase/map018_product_intake_postflight.sql'),
+    source('supabase/migrations/20260824_map018_intake_evidence_cleanup_boundary.sql'),
   ])
   expect(migration).toContain('force row level security')
   expect(migration).toContain('K2_AAL2_REQUIRED')
@@ -39,6 +53,28 @@ test('database contract is staff-owned, MFA-gated, idempotent, and private', asy
   expect(migration).not.toMatch(/for all to authenticated\s+using\s*\(true\)/i)
   expect(postflight).toContain('anon retains intake-table privileges')
   expect(postflight).toContain('internal SKU generator is externally executable')
+  expect(cleanupMigration).toContain('product_intake_evidence_cleanup_events')
+  expect(cleanupMigration).toContain('force row level security')
+  expect(cleanupMigration).toContain('record_admin_product_intake_evidence_cleanup_v1')
+  expect(cleanupMigration).toContain('claim_admin_product_intake_evidence_cleanup_v1')
+  expect(cleanupMigration).toContain('complete_admin_product_intake_evidence_cleanup_v1')
+  expect(cleanupMigration).toContain('K2_INTAKE_CLEANUP_ATTEMPTS_EXHAUSTED')
+  expect(cleanupMigration).toMatch(/revoke all on table k2_private\.product_intake_evidence_cleanup_events[\s\S]*from public, anon, authenticated/i)
+})
+
+test('phone intake exposes one persistent retry state when orphan cleanup is pending', async () => {
+  const [modal, service, bff] = await Promise.all([
+    source('src/views/admin/ProductIntakeSessionModal.jsx'),
+    source('src/services/productIntakeService.js'),
+    source('src/services/adminBffService.js'),
+  ])
+  expect(service).toContain('retryProductEvidenceCleanup')
+  expect(bff).toContain("'/api/admin/product-intake/evidence-cleanup'")
+  expect(bff).toContain('EVIDENCE_CLEANUP_PENDING')
+  expect(modal).toContain('Retry file cleanup')
+  expect(modal).toContain('The unregistered private file is queued for cleanup.')
+  expect(modal).toContain('min-h-11')
+  expect(modal).not.toMatch(/alert\(|console\.error/)
 })
 
 test('current product JSON accepts content and rejects operational authority', () => {
@@ -89,7 +125,7 @@ test('upload validation strictly rejects unauthorized MIMEs, scripts, and oversi
   expect(validRes.ok).toBe(true)
   expect(validRes.sanitizedName).toBe('front_label.jpg')
 
-  // Oversized file (>10MB)
+  // Oversized file (above the shared generic upload cap)
   const oversizedFile = { name: 'huge_scan.png', size: MAX_UPLOAD_BYTES + 1024, type: 'image/png' }
   const overRes = validateUploadFile(oversizedFile)
   expect(overRes.ok).toBe(false)
@@ -106,13 +142,17 @@ test('upload validation strictly rejects unauthorized MIMEs, scripts, and oversi
   expect(sanitizeFileName('..\\..\\secret.png')).toBe('secret.png')
 })
 
-test('wholesale application form enforces required commercial fields and declaration', async () => {
+test('wholesale inquiry is an explicit unsent handoff and cannot fabricate commercial state', async () => {
   const wholesaleSource = await source('src/views/Wholesale.jsx')
   expect(wholesaleSource).toContain('organizationName')
-  expect(wholesaleSource).toContain('registrationNumber')
   expect(wholesaleSource).toContain('contactName')
   expect(wholesaleSource).toContain('agreedToTerms')
-  expect(wholesaleSource).toContain('WA-')
+  expect(wholesaleSource).toContain('mailto:')
+  expect(wholesaleSource).toContain('Email draft prepared — not submitted')
+  expect(wholesaleSource).toContain('K2 has not received or recorded this inquiry yet.')
+  expect(wholesaleSource).not.toContain("localStorage.getItem('k2_wholesale_applications')")
+  expect(wholesaleSource).not.toContain('WA-')
+  expect(wholesaleSource).not.toMatch(/within 1[–-]2 business days/i)
   expect(wholesaleSource).not.toMatch(/grant_wholesale_pricing_client_side/i)
 })
 

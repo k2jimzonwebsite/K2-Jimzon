@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { supabase } from '../../lib/supabaseClient'
+import { safeUiError } from '../../lib/safeUiError'
+import { searchIdentityDuplicates } from '../../services/productIntakeService'
 import { Html5Qrcode } from 'html5-qrcode'
 import {
   buildProductJsonPrompt,
@@ -53,24 +54,24 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
     }
   }, [step])
 
-  // ── Check Supabase + build prompt ────────────────────────────────────────
+  // ── Check canonical product identity + build prompt ──────────────────────
   const handleBarcodeDetected = async (code) => {
     setCheckError('')
     setChecking(true)
-    if (code && supabase) {
-      const { data, error } = await supabase.from('products').select('sku').eq('barcode', code).maybeSingle()
-      if (error) {
-        setCheckError(`Inventory verification failed: ${error.message}`)
+    if (code) {
+      try {
+        const result = await searchIdentityDuplicates(code)
+        const existing = result?.matchType === 'exact' ? result.product : null
+        if (existing) {
+          setCheckError(`Barcode ${code} already belongs to SKU ${existing.sku}. Open that product instead of creating a duplicate.`)
+          setChecking(false)
+          return
+        }
+      } catch {
+        setCheckError(safeUiError('INVENTORY_VERIFY_FAILED'))
         setChecking(false)
         return
       }
-      if (data) {
-        setCheckError(`Barcode ${code} already belongs to SKU ${data.sku}. Open that product instead of creating a duplicate.`)
-        setChecking(false)
-        return
-      }
-    } else if (code && !supabase) {
-      setCheckError('The prompt is ready, but inventory duplicate checking is unavailable. Verify the barcode before creating a draft.')
     }
     setBarcode(code)
     setPromptText(buildProductJsonPrompt({ barcode: code, productName, researchMode }))

@@ -1,3 +1,6 @@
+import { guestBffEndpoint } from './guestCommerceRoutes.js'
+import { fetchWithTimeout, isRequestTimeoutError } from '../lib/fetchWithTimeout.js'
+
 const ENABLED = import.meta.env.VITE_GUEST_BFF_ENABLED === 'true'
 
 const PUBLIC_MESSAGES = {
@@ -8,6 +11,7 @@ const PUBLIC_MESSAGES = {
   GUEST_ACCESS_EXPIRED: 'This conversation access has expired. Contact K2 Jimzon for help.',
   CONVERSATION_NOT_AVAILABLE: 'That conversation is not available to this browser.',
   INVALID_OR_INELIGIBLE: 'That coupon is invalid or not eligible for this cart.',
+  REQUEST_TIMEOUT: 'The request timed out. Check your connection, then retry the same request.',
 }
 
 export async function listGuestConversations() {
@@ -30,15 +34,22 @@ export function guestBffEnabled() {
 }
 
 export async function postGuestCommerce(path, body) {
+  const endpoint = guestBffEndpoint(path)
+  if (!endpoint) {
+    return { ok: false, code: 'REQUEST_INVALID', error: 'The request could not be completed.' }
+  }
   let response
   try {
-    response = await fetch(`/api/storefront/${path}`, {
+    response = await fetchWithTimeout(endpoint, {
       method: 'POST',
       credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
-    })
-  } catch {
+    }, 15000)
+  } catch (error) {
+    if (isRequestTimeoutError(error)) {
+      return { ok: false, code: 'REQUEST_TIMEOUT', error: PUBLIC_MESSAGES.REQUEST_TIMEOUT }
+    }
     return { ok: false, error: 'The service could not be reached. Check your connection and try again.' }
   }
 

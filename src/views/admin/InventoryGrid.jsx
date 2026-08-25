@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { safeUiError } from '../../lib/safeUiError'
 import { products as localProducts } from '../../data/products'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
@@ -7,6 +8,12 @@ import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerMo
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 import DeleteProductsModal from './DeleteProductsModal'
 import { BoxIcon, SearchIcon, UploadIcon } from '../../components/ui/icons'
+import PhotoManagerModal from './PhotoManagerModal'
+import ProductMediaCleanupModal from './ProductMediaCleanupModal'
+import ProductIntakeSessionModal from './ProductIntakeSessionModal'
+import {
+  adminBffEnabled, commandAdminProductMasterBff, getAdminProductMasterBff, getAdminProducts,
+} from '../../services/adminBffService'
 import {
   EmptyState,
   MetricRail,
@@ -21,13 +28,16 @@ import {
 // Mirrors the products_status_check constraint. 'Active' is a legacy alias for
 // 'Live' and is treated as Live everywhere in the UI.
 const STATUS_OPTIONS = [
-  { value: 'Live',     label: 'Live',     hint: 'In the catalogue, browsable and buyable' },
-  { value: 'Unlisted', label: 'Unlisted', hint: 'Hidden from browse — direct link still works' },
-  { value: 'Draft',    label: 'Draft',    hint: 'Invisible to customers' },
+  { value: 'Draft',        label: 'Draft',        hint: 'Invisible to customers' },
+  { value: 'Under Review', label: 'Review',       hint: 'Awaiting an administrator publication decision' },
+  { value: 'Live',         label: 'Live',         hint: 'In the catalogue, browsable and buyable' },
+  { value: 'Unlisted',     label: 'Unlisted',     hint: 'Hidden from browse — direct link still works' },
+  { value: 'Discontinued', label: 'Discontinued', hint: 'Permanently removed from sale, with history retained' },
 ]
 
 const STATUS_LABEL = {
-  Live: 'Live', Active: 'Live', Unlisted: 'Unlisted', Draft: 'Draft', Discontinued: 'Discontinued',
+  Live: 'Live', Active: 'Live', Unlisted: 'Unlisted', Draft: 'Draft',
+  'Under Review': 'Under Review', Discontinued: 'Discontinued',
 }
 
 const STATUS_TONE = {
@@ -35,17 +45,18 @@ const STATUS_TONE = {
   Active:       'bg-forest/20 text-forest border-forest/40',
   Unlisted:     'bg-blue/20 text-blue border-blue/40',
   Draft:        'bg-gold/20 text-gold border-gold/40',
+  'Under Review': 'bg-violet-500/20 text-violet-200 border-violet-400/40',
   Discontinued: 'bg-crimson/20 text-crimson border-crimson/40',
 }
 
 const normalizeStatus = (s) => (s === 'Active' ? 'Live' : (s || 'Draft'))
 
-// Segmented lifecycle control — three states always visible, so the current one
+// Segmented lifecycle control — all legal states remain visible, so the current one
 // reads as a position rather than a label you have to open a menu to check.
 function StatusControl({ value, onChange, disabled }) {
   const current = normalizeStatus(value)
   return (
-    <div className="grid grid-cols-3 gap-0.5 rounded-adm-sm border border-adm-line bg-adm-sunken p-0.5" role="group" aria-label="Product status">
+    <div className="grid grid-cols-2 gap-0.5 rounded-adm-sm border border-adm-line bg-adm-sunken p-0.5 sm:grid-cols-5" role="group" aria-label="Product status">
       {STATUS_OPTIONS.map(opt => {
         const on = current === opt.value
         return (
@@ -56,7 +67,7 @@ function StatusControl({ value, onChange, disabled }) {
             title={opt.hint}
             aria-pressed={on}
             onClick={() => !on && onChange(opt.value)}
-            className={`min-h-[36px] rounded-adm-sm text-xs font-bold transition-colors disabled:opacity-50 ${
+            className={`min-h-11 rounded-adm-sm text-xs font-bold transition-colors last:col-span-2 sm:last:col-span-1 disabled:cursor-not-allowed disabled:opacity-50 ${
               on ? STATUS_TONE[opt.value] + ' border' : 'text-white/50 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -66,6 +77,33 @@ function StatusControl({ value, onChange, disabled }) {
       })}
     </div>
   )
+}
+
+function StatusDecisionDialog({ decision, busy, onCancel, onConfirm }) {
+  const [reason, setReason] = useState('')
+  const [error, setError] = useState('')
+  const closeRef = useRef(null)
+  useEffect(() => {
+    closeRef.current?.focus()
+    const key = (event) => { if (event.key === 'Escape' && !busy) onCancel() }
+    window.addEventListener('keydown', key)
+    return () => window.removeEventListener('keydown', key)
+  }, [busy, onCancel])
+  const submit = async (event) => {
+    event.preventDefault()
+    if (reason.trim().length < 8) { setError('Enter a specific reason of at least 8 characters.'); return }
+    setError('')
+    const ok = await onConfirm(reason.trim())
+    if (ok === false) setError('The status change was not recorded. Review the current product state and try again.')
+  }
+  return <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 sm:items-center sm:p-4" role="presentation">
+    <form onSubmit={submit} role="dialog" aria-modal="true" aria-labelledby="product-status-title" className="w-full space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
+      <div className="flex items-start justify-between gap-4"><div><h2 id="product-status-title" className="font-sans text-xl font-bold">Set {decision.nextStatus}</h2><p className="mt-1 text-sm text-white/55">This changes {decision.skus.length} canonical product record{decision.skus.length === 1 ? '' : 's'}. Live requires reviewed content, price, category, brand, and a primary photo.</p></div><button ref={closeRef} type="button" onClick={onCancel} disabled={busy} aria-label="Close status decision" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line disabled:opacity-50">×</button></div>
+      <label className="block text-sm font-semibold text-white/70">Reason for the status change<textarea autoFocus={false} required minLength={8} maxLength={500} value={reason} onChange={(event) => setReason(event.target.value.slice(0, 500))} className="mt-1 min-h-[96px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" /></label>
+      {error && <p role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 px-3 py-2 text-sm text-crimson">{error}</p>}
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-50">Cancel</button><button type="submit" disabled={busy || reason.trim().length < 8} className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-transform duration-150 active:scale-[0.98] disabled:opacity-50">{busy ? 'Recording…' : `Set ${decision.nextStatus}`}</button></div>
+    </form>
+  </div>
 }
 
 // ── Shared input/textarea styles ──────────────────────────────────────────────
@@ -93,106 +131,6 @@ function Section({ color = 'blue', title, children }) {
   )
 }
 
-// ── Photo slot with preview + upload ─────────────────────────────────────────
-function PhotoSlot({ label, value, onChange, bucket = 'product-images' }) {
-  const [uploading, setUploading] = useState(false)
-  const fileRef = useRef()
-
-  const upload = async (file) => {
-    setUploading(true)
-    const ext = file.name.split('.').pop()
-    const path = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
-    const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false })
-    if (!error) {
-      const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(path)
-      onChange(publicUrl)
-    }
-    setUploading(false)
-  }
-
-  return (
-    <div>
-      <Label>{label}</Label>
-      <div
-        className="relative rounded-adm-sm border border-adm-line bg-adm-sunken overflow-hidden cursor-pointer group"
-        style={{ aspectRatio: '1 / 1' }}
-        onClick={() => fileRef.current?.click()}
-      >
-        {value ? (
-          <>
-            <img src={value} alt={label} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <p className="text-sm font-semibold text-white">Change Photo</p>
-            </div>
-          </>
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-neutral-300 hover:text-white/60 transition-colors">
-            {uploading ? (
-              <div className="w-5 h-5 border-2 border-blue border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <>
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <p className="text-xs font-semibold uppercase tracking-wider">Upload</p>
-              </>
-            )}
-          </div>
-        )}
-        <input ref={fileRef} type="file" accept="image/*" className="hidden"
-          onChange={(e) => e.target.files[0] && upload(e.target.files[0])} />
-      </div>
-      {/* Also allow pasting a URL directly */}
-      <input type="url" value={value || ''} onChange={(e) => onChange(e.target.value)}
-        placeholder="…or paste image URL"
-        className="mt-1.5 w-full rounded-adm-sm border border-adm-line bg-transparent px-2 py-1.5 text-xs text-white/50 placeholder-white/20 focus:border-blue outline-none" />
-    </div>
-  )
-}
-
-// ── Gallery slot (up to N images) ────────────────────────────────────────────
-function GallerySlots({ value = [], onChange, max = 5 }) {
-  const [uploading, setUploading] = useState(false)
-  const fileRef = useRef()
-
-  const upload = async (file) => {
-    setUploading(true)
-    const ext = file.name.split('.').pop()
-    const path = `gallery_${Date.now()}.${ext}`
-    const { error } = await supabase.storage.from('product-images').upload(path, file, { upsert: false })
-    if (!error) {
-      const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(path)
-      onChange([...value, publicUrl])
-    }
-    setUploading(false)
-  }
-
-  const remove = (idx) => onChange(value.filter((_, i) => i !== idx))
-
-  return (
-    <div>
-      <Label>Lifestyle / Gallery Photos (up to {max})</Label>
-      <div className="grid grid-cols-5 gap-2">
-        {value.map((url, i) => (
-          <div key={i} className="relative aspect-square rounded-adm-sm overflow-hidden border border-adm-line group">
-            <img src={url} alt={`gallery-${i}`} className="w-full h-full object-cover" />
-            <button type="button" onClick={() => remove(i)}
-              className="absolute top-0.5 right-0.5 bg-crimson/90 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">×</button>
-          </div>
-        ))}
-        {value.length < max && (
-          <button type="button" onClick={() => fileRef.current?.click()}
-            className="aspect-square rounded-adm-sm border-2 border-dashed border-adm-line hover:border-blue/50 hover:bg-blue/5 transition-colors flex items-center justify-center text-neutral-300 hover:text-white/50">
-            {uploading ? <div className="w-4 h-4 border-2 border-blue border-t-transparent rounded-full animate-spin" /> : <span className="text-xl leading-none">+</span>}
-          </button>
-        )}
-      </div>
-      <input ref={fileRef} type="file" accept="image/*" className="hidden"
-        onChange={(e) => e.target.files[0] && upload(e.target.files[0])} />
-    </div>
-  )
-}
-
 // ── Stock breakdown chips (by location / channel / holder) ───────────────────
 function BreakdownRow({ label, data }) {
   const entries = Object.entries(data || {}).sort((a, b) => b[1] - a[1])
@@ -211,17 +149,21 @@ function BreakdownRow({ label, data }) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
+export default function InventoryGrid({ launchTool, onLaunchToolHandled, canManageMediaCleanup = false, canManageProducts = false }) {
+  const secure = adminBffEnabled()
   const [products, setProducts]       = useState([])
   const [batchMap, setBatchMap]       = useState({})
   const [loading, setLoading]         = useState(true)
   const [editingProduct, setEditingProduct] = useState(null)
+  const [photoProduct, setPhotoProduct] = useState(null)
   const [editTab, setEditTab] = useState('details')
   const [batchProduct, setBatchProduct]   = useState(null)
   const [isAdding, setIsAdding]       = useState(false)
   const [saving, setSaving]           = useState(false)
   const [showAiScanner, setShowAiScanner] = useState(false)
   const [showSmartPaste, setShowSmartPaste] = useState(false)
+  const [showMediaCleanup, setShowMediaCleanup] = useState(false)
+  const [showPhoneIntake, setShowPhoneIntake] = useState(false)
 
   useEffect(() => {
     if (!launchTool?.id) return
@@ -233,26 +175,44 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
   const [selected, setSelected] = useState(() => new Set())
   const [deleteTargets, setDeleteTargets] = useState(null)
   const [statusBusy, setStatusBusy] = useState(null)
+  const [statusDecision, setStatusDecision] = useState(null)
+  const [editReason, setEditReason] = useState('')
+  const editOperationKey = useRef(null)
   const [notice, setNotice] = useState(null)
   const [search, setSearch] = useState('')
   const [stockFilter, setStockFilter] = useState('all')
 
   useEffect(() => {
-    if (!supabase) return
     fetchProducts()
+    if (secure) {
+      const refresh = () => { if (document.visibilityState === 'visible') fetchProducts() }
+      const timer = window.setInterval(refresh, 30_000)
+      document.addEventListener('visibilitychange', refresh)
+      return () => { window.clearInterval(timer); document.removeEventListener('visibilitychange', refresh) }
+    }
+    if (!supabase) return undefined
     fetchBatches()
     const ch = supabase.channel('public:products:grid')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'product_batches' }, fetchBatches)
       .subscribe()
     return () => supabase.removeChannel(ch)
-  }, [])
+  }, [secure])
 
   const fetchProducts = async () => {
+    if (secure) {
+      setLoading(true)
+      const result = await getAdminProducts()
+      if (!result.ok) flash(result.error || 'Product records could not be loaded.', true)
+      else setProducts(result.products || [])
+      setBatchMap({})
+      setLoading(false)
+      return
+    }
     if (!supabase) { setLoading(false); return }
     setLoading(true)
     const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false })
-    if (error) flash(`Could not load the product master: ${error.message}`, true)
+    if (error) flash(safeUiError('CATALOG_LOAD_FAILED'), true)
     else setProducts(data || [])
     setLoading(false)
   }
@@ -262,7 +222,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
   const fetchBatches = async () => {
     if (!supabase) return
     const { data, error } = await supabase.from('product_batches').select('sku, quantity, hub, custodian, channel, expiry_date, is_pinned, inventory_status, reserved_quantity')
-    if (error) { flash(`Could not load physical lot balances: ${error.message}`, true); return }
+    if (error) { flash(safeUiError('INVENTORY_LOAD_FAILED'), true); return }
     const map = {}
     for (const r of data) {
       const q = Number(r.quantity) || 0
@@ -288,7 +248,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
     subcategory:              p.subcategory || null,
     country_of_origin:        p.country_of_origin || p.origin || null,
     origin:                   p.origin || p.country_of_origin || null,
-    net_weight:               p.net_weight || null,
+    net_weight:               p.net_weight === '' || p.net_weight == null ? null : Number(p.net_weight),
     package_type:             p.package_type || null,
     size:                     p.size || null,
     expiry_date:              p.expiry_date || null,
@@ -309,16 +269,44 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
     slug:                     p.slug || null,
     seo_keywords:             Array.isArray(p.seo_keywords) ? p.seo_keywords : (p.seo_keywords ? String(p.seo_keywords).split(',').map(s => s.trim()) : []),
     is_featured:              Boolean(p.is_featured),
-    published:                Boolean(p.published),
-    primary_image_url:        p.primary_image_url || null,
-    lifestyle_images:         Array.isArray(p.lifestyle_images) ? p.lifestyle_images : [],
     product_video_url:        p.product_video_url || null,
-    status:                   p.status || 'Draft',
     internal_notes:           p.internal_notes || null,
   })
 
+  const openProductEditor = async (product) => {
+    setEditTab('details')
+    setIsAdding(false)
+    setEditReason('')
+    editOperationKey.current = null
+    if (!secure) { setEditingProduct(product); return }
+    if (!canManageProducts) { flash('Only an administrator can change product-master records.', true); return }
+    const result = await getAdminProductMasterBff(product.sku)
+    if (!result.ok) { flash(result.error || 'The product record could not be loaded.', true); return }
+    setEditingProduct(result.product)
+  }
+
   const handleSave = async (e) => {
     e.preventDefault()
+    if (secure) {
+      if (isAdding) { flash('Use phone-first intake to create an attributable product Draft.', true); return }
+      if (editReason.trim().length < 8) { flash('Enter a specific save reason of at least 8 characters.', true); return }
+      setSaving(true)
+      const operationKey = editOperationKey.current || crypto.randomUUID()
+      editOperationKey.current = operationKey
+      const result = await commandAdminProductMasterBff('update', {
+        sku: editingProduct.sku, patch: buildPayload(editingProduct),
+        expectedUpdatedAt: editingProduct.updated_at, reason: editReason.trim(),
+      }, operationKey)
+      setSaving(false)
+      if (!result.ok) { flash(result.error, true); return }
+      editOperationKey.current = null
+      const savedSku = editingProduct.sku
+      setEditingProduct(null)
+      setEditReason('')
+      await fetchProducts()
+      flash(`${savedSku} details were recorded.`)
+      return
+    }
     if (!editingProduct || !supabase) return
     setSaving(true)
     const payload = buildPayload(editingProduct)
@@ -326,10 +314,10 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
     if (isAdding) {
       if (!editingProduct.sku) { alert('SKU is required'); setSaving(false); return }
       const { error } = await supabase.from('products').insert([{ sku: editingProduct.sku, ...payload }])
-      if (error) { alert('Error creating: ' + error.message); setSaving(false); return }
+      if (error) { alert(safeUiError('CATALOG_SAVE_FAILED')); setSaving(false); return }
     } else {
       const { error } = await supabase.from('products').update(payload).eq('sku', editingProduct.sku)
-      if (error) { alert('Error saving: ' + error.message); setSaving(false); return }
+      if (error) { alert(safeUiError('CATALOG_SAVE_FAILED')); setSaving(false); return }
     }
 
     await fetchProducts()
@@ -348,6 +336,11 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
 
   const changeStatus = async (skus, nextStatus) => {
     if (skus.length === 0) return
+    if (secure) {
+      if (!canManageProducts) { flash('Only an administrator can change publication state.', true); return }
+      setStatusDecision({ skus, nextStatus, operationKey: crypto.randomUUID() })
+      return
+    }
     setStatusBusy(nextStatus)
 
     // Optimistic — the realtime channel will reconcile if the write fails.
@@ -358,7 +351,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
       if (error) {
         setStatusBusy(null)
         await fetchProducts()
-        return flash(`Could not update status: ${error.message}`, true)
+        return flash(safeUiError('CATALOG_STATUS_FAILED'), true)
       }
     }
 
@@ -443,7 +436,8 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
           <div className="flex flex-wrap gap-2">
             <button onClick={() => setShowAiScanner(true)} className={secondaryButton}><BoxIcon size={16} /> Scan box</button>
             <button onClick={() => setShowSmartPaste(true)} className={secondaryButton}><UploadIcon size={16} /> Smart paste</button>
-            <button onClick={() => { setIsAdding(true); setEditTab('details'); setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }) }} className={primaryButton}>Add product</button>
+            {canManageMediaCleanup && adminBffEnabled() && <button onClick={() => setShowMediaCleanup(true)} className={secondaryButton}>Unused uploads</button>}
+            <button onClick={() => secure ? setShowPhoneIntake(true) : (setIsAdding(true), setEditTab('details'), setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }))} className={primaryButton}>Add product</button>
           </div>
         )}
       />
@@ -464,6 +458,12 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
         <SmartPasteModal onClose={() => setShowSmartPaste(false)}
           onProductAdded={() => { fetchProducts(); setShowSmartPaste(false) }} />
       )}
+      <ProductIntakeSessionModal
+        isOpen={showPhoneIntake}
+        onClose={() => setShowPhoneIntake(false)}
+        onProductCreated={() => { fetchProducts(); setShowPhoneIntake(false) }}
+        onExistingProduct={() => { setShowPhoneIntake(false); flash('That product already exists. Find it in the inventory register.') }}
+      />
 
       {notice && <StateBanner tone={notice.error ? 'danger' : 'success'}>{notice.text}</StateBanner>}
 
@@ -611,12 +611,14 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
                     <div className="pt-1 space-y-1.5">
                       <StatusControl
                         value={p.status}
-                        disabled={!!statusBusy}
+                        disabled={!!statusBusy || (secure && !canManageProducts)}
                         onChange={(next) => changeStatus([p.sku], next)}
                       />
                       <button
                         onClick={() => setDeleteTargets([p])}
-                        className="w-full min-h-[36px] text-xs font-bold text-crimson/70 hover:text-crimson hover:bg-crimson/10 rounded-adm-sm border border-transparent hover:border-crimson/30 transition-colors"
+                        disabled={secure && !canManageProducts}
+                        title={secure && !canManageProducts ? 'Administrator permission is required' : 'Permanently delete this product'}
+                        className="w-full min-h-11 text-xs font-bold text-crimson/70 hover:text-crimson hover:bg-crimson/10 rounded-adm-sm border border-transparent hover:border-crimson/30 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         Delete product
                       </button>
@@ -624,10 +626,10 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
                   </div>
                 </div>
 
-                <button onClick={() => { setIsAdding(false); setEditTab('details'); setEditingProduct(p) }}
-                  className="absolute top-2 right-2 rounded-adm-sm bg-blue hover:bg-blue/90 px-3.5 py-1.5 text-sm font-extrabold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
-                  Edit
-                </button>
+                <div className="absolute right-2 top-2 flex gap-2">
+                  <button onClick={() => setPhotoProduct(p)} className="min-h-11 rounded-adm-sm border border-adm-line bg-adm-surface/95 px-3 text-sm font-bold text-white transition-[background-color,transform] duration-150 hover:bg-white/10 active:scale-[0.98]">Photos</button>
+                  <button onClick={() => openProductEditor(p)} disabled={secure && !canManageProducts} title={secure && !canManageProducts ? 'Administrator permission is required' : 'Edit product details'} className="min-h-11 rounded-adm-sm bg-blue px-3.5 text-sm font-extrabold text-white shadow-lg transition-[background-color,transform] duration-150 hover:bg-blue/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40">Edit</button>
+                </div>
               </div>
             )
           })}
@@ -654,7 +656,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
               {STATUS_OPTIONS.map(opt => (
                 <button
                   key={opt.value}
-                  disabled={!!statusBusy}
+                  disabled={!!statusBusy || (secure && !canManageProducts)}
                   onClick={() => changeStatus([...selected], opt.value)}
                   className={`shrink-0 min-h-[44px] px-3.5 rounded-adm-sm text-sm font-bold border transition-colors disabled:opacity-50 ${STATUS_TONE[opt.value]}`}
                 >
@@ -663,7 +665,8 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
               ))}
               <button
                 onClick={() => setDeleteTargets(selectedProducts)}
-                className="shrink-0 min-h-[44px] px-3.5 rounded-adm-sm bg-crimson hover:bg-crimson-deep text-sm font-bold text-white transition-colors"
+                disabled={secure && !canManageProducts}
+                className="shrink-0 min-h-[44px] px-3.5 rounded-adm-sm bg-crimson hover:bg-crimson-deep text-sm font-bold text-white transition-colors disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Delete {selected.size}
               </button>
@@ -679,6 +682,27 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
           onDeleted={handleDeleted}
         />
       )}
+
+      {statusDecision && <StatusDecisionDialog
+        decision={statusDecision}
+        busy={statusBusy === statusDecision.nextStatus}
+        onCancel={() => !statusBusy && setStatusDecision(null)}
+        onConfirm={async (reason) => {
+          setStatusBusy(statusDecision.nextStatus)
+          const result = await commandAdminProductMasterBff('status', {
+            skus: statusDecision.skus, status: statusDecision.nextStatus, reason,
+          }, statusDecision.operationKey)
+          setStatusBusy(null)
+          if (!result.ok) { flash(result.error, true); return false }
+          const changed = statusDecision.skus.length
+          const nextStatus = statusDecision.nextStatus
+          setStatusDecision(null)
+          setSelected(new Set())
+          await fetchProducts()
+          flash(`${changed} product${changed === 1 ? '' : 's'} set to ${nextStatus}.`)
+          return true
+        }}
+      />}
 
       <ProductAiEnrichmentModal
         product={enrichProduct}
@@ -706,7 +730,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
             <form onSubmit={handleSave} className="flex-1 flex flex-col overflow-hidden">
               {/* Section tabs — edit one focused part at a time */}
               <div className="flex gap-1 overflow-x-auto border-b border-adm-line px-3 sm:px-4 shrink-0 scrollbar-none">
-                {[['details', 'Details'], ['pricing', 'Pricing & stock'], ['photos', 'Photos']].map(([id, lbl]) => (
+                {[['details', 'Details'], ['pricing', 'Pricing & stock']].map(([id, lbl]) => (
                   <button key={id} type="button" onClick={() => setEditTab(id)}
                     className={'px-3 py-3 text-sm font-semibold whitespace-nowrap border-b-2 -mb-px transition-colors ' +
                       (editTab === id ? 'border-blue text-white' : 'border-transparent text-white/50 hover:text-white')}>
@@ -716,33 +740,6 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
               </div>
 
               <div className="p-4 sm:p-6 overflow-y-auto flex-1">
-
-                {/* ── Photos tab ───────────────────────────────────────── */}
-                <div className={editTab === 'photos' ? 'space-y-4' : 'hidden'}>
-                  <Section color="purple" title="Media">
-                    <PhotoSlot label="Primary Photo (Studio White)"
-                      value={editingProduct.primary_image_url}
-                      onChange={v => set('primary_image_url', v)} />
-                    <PhotoSlot label="After-Use / Lifestyle Photo (lifestyle_images[0])"
-                      value={Array.isArray(editingProduct.lifestyle_images) ? editingProduct.lifestyle_images[0] : null}
-                      onChange={v => {
-                        const arr = Array.isArray(editingProduct.lifestyle_images) ? [...editingProduct.lifestyle_images] : []
-                        arr[0] = v
-                        set('lifestyle_images', arr)
-                      }} />
-                    <GallerySlots
-                      value={Array.isArray(editingProduct.lifestyle_images) ? editingProduct.lifestyle_images.slice(1) : []}
-                      onChange={arr => {
-                        const first = Array.isArray(editingProduct.lifestyle_images) ? editingProduct.lifestyle_images[0] : null
-                        set('lifestyle_images', first ? [first, ...arr] : arr)
-                      }}
-                      max={5} />
-                    <div>
-                      <Label>Video URL</Label>
-                      <input type="url" value={editingProduct.product_video_url || ''} onChange={e => set('product_video_url', e.target.value)} className={inp} placeholder="https://…" />
-                    </div>
-                  </Section>
-                </div>
 
                 {/* ── Details tab: Identity + Content ──────────────────── */}
                 <div className={editTab === 'details' ? 'space-y-6' : 'hidden'}>
@@ -781,7 +778,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
                       </div>
                       <div>
                         <Label>Net Weight</Label>
-                        <input type="text" value={editingProduct.net_weight || ''} onChange={e => set('net_weight', e.target.value)} className={inp} placeholder="e.g. 400g" />
+                        <input type="number" min="0" max="100000" step="0.01" value={editingProduct.net_weight ?? ''} onChange={e => set('net_weight', e.target.value)} className={inp} placeholder="Weight in grams" />
                       </div>
                       <div>
                         <Label>Package Type</Label>
@@ -887,8 +884,12 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
                         onChange={e => set('seo_keywords', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
                         className={inp} placeholder="italian tomatoes, polpa, mutti…" />
                     </div>
+                    <div>
+                      <Label>Product video URL</Label>
+                      <input type="url" value={editingProduct.product_video_url || ''} onChange={e => set('product_video_url', e.target.value)} className={inp} placeholder="https://…" />
+                    </div>
                     <div className="flex items-center gap-6">
-                      {[['Featured', 'is_featured'], ['Published', 'published']].map(([lbl, field]) => (
+                      {([['Featured', 'is_featured'], ...(!secure ? [['Published', 'published']] : [])]).map(([lbl, field]) => (
                         <label key={field} className="flex items-center gap-2 cursor-pointer">
                           <input type="checkbox" checked={Boolean(editingProduct[field])} onChange={e => set(field, e.target.checked)}
                             className="w-4 h-4 rounded border border-white/20 bg-adm-sunken text-blue cursor-pointer" />
@@ -901,15 +902,15 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
                   <Section color="slate" title="Management">
                     <div>
                       <Label>Status</Label>
-                      <select value={normalizeStatus(editingProduct.status)} onChange={e => set('status', e.target.value)} className={`${inp} cursor-pointer`}>
+                      <select disabled={secure} value={normalizeStatus(editingProduct.status)} onChange={e => set('status', e.target.value)} className={`${inp} cursor-pointer disabled:opacity-60`}>
                         <option value="Live">Live — in the catalogue</option>
                         <option value="Unlisted">Unlisted — direct link only</option>
                         <option value="Draft">Draft — hidden</option>
                         <option value="Discontinued">Discontinued — retired</option>
                       </select>
                       <p className="mt-1.5 text-xs text-white/45 leading-snug">
-                        {STATUS_OPTIONS.find(o => o.value === normalizeStatus(editingProduct.status))?.hint
-                          || 'Retired product, kept for order history.'}
+                        {secure ? 'Use the reasoned status action on the product card or selected-products bar.' : (STATUS_OPTIONS.find(o => o.value === normalizeStatus(editingProduct.status))?.hint
+                          || 'Retired product, kept for order history.')}
                       </p>
                     </div>
                     <div>
@@ -922,15 +923,19 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
               </div>
 
               {/* Footer */}
-              <div className="shrink-0 px-6 py-4 border-t border-adm-line bg-black/20 flex items-center justify-between">
-                <p className="text-sm text-white/55 italic">All changes save directly to Supabase.</p>
-                <div className="flex gap-3">
+              <div className="shrink-0 space-y-3 border-t border-adm-line bg-black/20 px-4 py-4 sm:px-6">
+                <p className="text-sm text-white/55 italic">Product details save separately from photos, publication, and batch reconciliation.</p>
+                {secure && <label className="block text-sm font-semibold text-white/70">Reason for this change
+                  <textarea value={editReason} onChange={(event) => { setEditReason(event.target.value.slice(0, 500)); editOperationKey.current = null }} minLength={8} maxLength={500} required className="mt-1 min-h-[88px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" />
+                  <span className="mt-1 block text-xs font-normal text-white/45">Required for the immutable product-change record.</span>
+                </label>}
+                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                   <button type="button" onClick={() => { setEditingProduct(null); setIsAdding(false) }}
-                    className="px-4 py-2 rounded-adm-sm text-base font-semibold text-white/60 hover:text-white transition-colors">
+                    className="min-h-11 rounded-adm-sm px-4 py-2 text-base font-semibold text-white/60 transition-colors hover:text-white">
                     Cancel
                   </button>
-                  <button type="submit" disabled={saving}
-                    className="px-6 py-2 rounded-adm-sm text-base font-semibold bg-blue text-white hover:bg-blue/90 disabled:opacity-50 transition-colors shadow-lg shadow-blue/20 flex items-center gap-2">
+                  <button type="submit" disabled={saving || (secure && editReason.trim().length < 8)}
+                    className="flex min-h-11 items-center justify-center gap-2 rounded-adm-sm bg-blue px-6 py-2 text-base font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-blue/90 active:scale-[0.98] disabled:opacity-50">
                     {saving && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                     {saving ? 'Saving…' : (isAdding ? 'Create Product' : 'Save Changes')}
                   </button>
@@ -955,6 +960,16 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled }) {
           }}
         />
       )}
+
+      {photoProduct && (
+        <PhotoManagerModal
+          product={photoProduct}
+          onClose={() => setPhotoProduct(null)}
+          onSave={fetchProducts}
+        />
+      )}
+
+      {showMediaCleanup && <ProductMediaCleanupModal onClose={() => setShowMediaCleanup(false)} />}
 
     </div>
   )

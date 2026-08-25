@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   AlertIcon,
   ArrowIcon,
@@ -17,18 +17,27 @@ import {
   createOrResumeIntakeSession,
   saveIntakeSessionStep,
   uploadProductEvidence,
+  retryProductEvidenceCleanup,
   listPackingConsignments,
   createProductDraftServer,
   createFirstInventoryServer,
   updateProductPublicationServer,
 } from '../../services/productIntakeService'
+import { PRODUCT_EVIDENCE_MAX_BYTES, PRODUCT_EVIDENCE_MIMES } from '../../lib/uploadValidation'
 import { PRODUCT_RESEARCH_SCHEMA_VERSION, parseProductResearchPaste } from './productResearchContract'
 import { buildProductJsonPrompt } from './productResearchPrompt'
+import { safeUiError } from '../../lib/safeUiError'
 
 export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct }) {
+  const closeButtonRef = useRef(null)
+  const errorRef = useRef(null)
+  const copiedPromptTimerRef = useRef(null)
+  const previewUrlsRef = useRef(new Map())
   const [step, setStep] = useState(1)
   const [session, setSession] = useState(null)
   const [operationError, setOperationError] = useState('')
+  const [evidenceCleanup, setEvidenceCleanup] = useState(null)
+  const [isOnline, setIsOnline] = useState(() => typeof navigator === 'undefined' || navigator.onLine)
 
   // Step 1 states
   const [query, setQuery] = useState('')
@@ -80,6 +89,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   const [custodian, setCustodian] = useState('Warehouse Staff')
   const [unitCost, setUnitCost] = useState(0)
   const [inventorySaved, setInventorySaved] = useState(false)
+  const [savingInventory, setSavingInventory] = useState(false)
 
   // Step 7 states (Publication Readiness)
   const [publicationStatus, setPublicationStatus] = useState('draft')
@@ -88,19 +98,64 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
   // Initialize session on mount
   useEffect(() => {
-    if (isOpen && !session) {
+    if (isOpen && isOnline && !session) {
       initSession()
     }
+  }, [isOpen, isOnline])
+
+  useEffect(() => {
+    if (!isOpen) return undefined
+    const updateConnectionState = () => {
+      const online = navigator.onLine
+      setIsOnline(online)
+      if (online) {
+        setOperationError((current) => current.startsWith('You are offline.') ? '' : current)
+      }
+    }
+    updateConnectionState()
+    window.addEventListener('online', updateConnectionState)
+    window.addEventListener('offline', updateConnectionState)
+    const handleDialogKeyDown = (event) => {
+      if (event.key === 'Escape' && !creatingDraft && !savingInventory && !publishing) onClose()
+    }
+    window.addEventListener('keydown', handleDialogKeyDown)
+    closeButtonRef.current?.focus()
+    return () => {
+      window.removeEventListener('online', updateConnectionState)
+      window.removeEventListener('offline', updateConnectionState)
+      window.removeEventListener('keydown', handleDialogKeyDown)
+    }
+  }, [isOpen, creatingDraft, savingInventory, publishing, onClose])
+
+  useEffect(() => {
+    if (isOpen) return
+    if (copiedPromptTimerRef.current) clearTimeout(copiedPromptTimerRef.current)
+    setCopiedPrompt(false)
+    previewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url))
+    previewUrlsRef.current.clear()
+    setPackagingImages((current) => Object.fromEntries(
+      Object.entries(current).map(([slot, image]) => [slot, image ? { ...image, previewUrl: undefined } : image])
+    ))
   }, [isOpen])
 
   useEffect(() => {
-    if (!isOpen || step !== 6) return
+    if (operationError) errorRef.current?.focus()
+  }, [operationError])
+
+  useEffect(() => () => {
+    if (copiedPromptTimerRef.current) clearTimeout(copiedPromptTimerRef.current)
+    previewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url))
+    previewUrlsRef.current.clear()
+  }, [])
+
+  useEffect(() => {
+    if (!isOpen || !isOnline || step !== 6) return
     let active = true
     listPackingConsignments()
       .then((rows) => { if (active) setPackingConsignments(rows) })
       .catch((error) => { if (active) setOperationError(error.userMessage || 'Open Italy flights could not be loaded.') })
     return () => { active = false }
-  }, [isOpen, step])
+  }, [isOpen, isOnline, step])
 
   const initSession = async () => {
     setOperationError('')
@@ -110,6 +165,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       if (active.product_id && active.assigned_sku) {
         setCreatedProduct({ id: active.product_id, sku: active.assigned_sku, status: 'draft' })
       }
+      setInventorySaved(Boolean(active.inventory_result))
       if (Array.isArray(active.packaging_images)) {
         setPackagingImages((current) => ({
           ...current,
@@ -135,6 +191,10 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   // Handlers
   const handleSearchDuplicate = async () => {
     if (!query.trim()) return
+    if (!isOnline) {
+      setOperationError('You are offline. Reconnect before checking for duplicate products.')
+      return
+    }
     setSearching(true)
     setDuplicateResult(null)
     setOperationError('')
@@ -148,23 +208,35 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     }
   }
 
-  const handleCopyPrompt = () => {
+  const handleCopyPrompt = async () => {
     const prompt = buildProductJsonPrompt({
       barcode: query || 'N/A',
       productName: query || '',
       researchMode: 'complete',
     })
-    navigator.clipboard.writeText(prompt)
-    setCopiedPrompt(true)
-    setTimeout(() => setCopiedPrompt(false), 3000)
+    try {
+      await navigator.clipboard.writeText(prompt)
+      setCopiedPrompt(true)
+      if (copiedPromptTimerRef.current) clearTimeout(copiedPromptTimerRef.current)
+      copiedPromptTimerRef.current = setTimeout(() => setCopiedPrompt(false), 3000)
+    } catch {
+      setOperationError('The prompt could not be copied. Check browser clipboard permission and try again.')
+    }
   }
 
   const handleEvidenceFile = async (slot, file) => {
     setOperationError('')
     if (!file) return
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
-    if (!allowedTypes.includes(file.type) || file.size > 10 * 1024 * 1024) {
-      setOperationError('Use a JPEG, PNG, or WebP image no larger than 10 MB.')
+    if (evidenceCleanup) {
+      setOperationError('Retry the queued private-file cleanup before selecting another photo.')
+      return
+    }
+    if (!isOnline) {
+      setOperationError('You are offline. The photo was not uploaded; reconnect and select it again.')
+      return
+    }
+    if (!PRODUCT_EVIDENCE_MIMES.includes(file.type) || file.size > PRODUCT_EVIDENCE_MAX_BYTES) {
+      setOperationError('Use a JPEG, PNG, or WebP image no larger than 4 MB.')
       return
     }
     const previewUrl = URL.createObjectURL(file)
@@ -172,20 +244,48 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     try {
       const result = await uploadProductEvidence(session, slot, file)
       setSession(result.session)
+      const previousPreviewUrl = previewUrlsRef.current.get(slot)
+      if (previousPreviewUrl) URL.revokeObjectURL(previousPreviewUrl)
+      previewUrlsRef.current.set(slot, previewUrl)
       setPackagingImages((previous) => ({
         ...previous,
         [slot]: { ...result.evidence, previewUrl },
       }))
     } catch (error) {
       URL.revokeObjectURL(previewUrl)
+      if (error.cleanupId) {
+        setEvidenceCleanup({ cleanupId: error.cleanupId, retrying: false })
+      }
       setOperationError(error.userMessage || 'The evidence photo was not uploaded.')
     } finally {
       setEvidenceUploading((current) => ({ ...current, [slot]: false }))
     }
   }
 
+  const handleRetryEvidenceCleanup = async () => {
+    if (!evidenceCleanup?.cleanupId || evidenceCleanup.retrying) return
+    if (!isOnline) {
+      setOperationError('You are offline. Reconnect before retrying private-file cleanup.')
+      return
+    }
+    setOperationError('')
+    setEvidenceCleanup((current) => ({ ...current, retrying: true }))
+    try {
+      const result = await retryProductEvidenceCleanup(evidenceCleanup.cleanupId)
+      if (result.cleanupPending) {
+        setEvidenceCleanup((current) => ({ ...current, retrying: false }))
+        setOperationError('Private-file cleanup is still pending. Keep this intake open and try again.')
+        return
+      }
+      setEvidenceCleanup(null)
+    } catch (error) {
+      setEvidenceCleanup((current) => ({ ...current, retrying: false }))
+      setOperationError(error.userMessage || 'Private-file cleanup could not be completed. Try again.')
+    }
+  }
+
   const canAdvance = (() => {
-    if (!session?.id) return false
+    if (!session?.id || evidenceCleanup) return false
     if (step === 1) {
       return duplicateResult?.matchType === 'none'
         || (duplicateResult?.matchType === 'ambiguous'
@@ -203,6 +303,10 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
   const handleNextStep = async () => {
     if (!canAdvance) return
+    if (!isOnline) {
+      setOperationError('You are offline. Reconnect before saving this intake step.')
+      return
+    }
     setOperationError('')
     try {
       if (step === 1) {
@@ -252,14 +356,18 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
         Object.keys(res.product).forEach(k => { initialAccepted[k] = true })
       }
       setAcceptedFields(initialAccepted)
-    } catch (err) {
-      setParseError(err.message)
+    } catch {
+      setParseError(safeUiError('PRODUCT_JSON_INVALID'))
     }
   }
 
   const handleSaveDraft = async () => {
     if (!session?.id || !parsedPayload) {
       setOperationError('Validate the PRODUCT_JSON in Step 4 before creating a Draft.')
+      return
+    }
+    if (!isOnline) {
+      setOperationError('You are offline. Reconnect before creating the server Product Draft.')
       return
     }
     setCreatingDraft(true)
@@ -292,9 +400,14 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   }
 
   const handleSaveFirstInventory = async () => {
+    if (savingInventory) return
     setOperationError('')
     if (!createdProduct && !session?.assigned_sku) {
       setOperationError('Product Draft must exist before creating inventory.')
+      return
+    }
+    if (!isOnline) {
+      setOperationError('You are offline. No inventory was recorded; reconnect and try again.')
       return
     }
 
@@ -315,6 +428,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       setOperationError('Opening balance requires a box, batch, and written reconciliation reason.')
       return
     }
+    setSavingInventory(true)
     try {
       const result = await createFirstInventoryServer(session, {
         source: inventorySource,
@@ -335,12 +449,18 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       setStep(7)
     } catch (error) {
       setOperationError(error.userMessage || 'Inventory was not recorded. No quantity was added.')
+    } finally {
+      setSavingInventory(false)
     }
   }
 
   const handleUpdatePublicationStatus = async (newStatus) => {
     if (publicationReason.trim().length < 10) {
       setOperationError('Add a specific publication reason of at least 10 characters before changing status.')
+      return
+    }
+    if (!isOnline) {
+      setOperationError('You are offline. Publication status was not changed.')
       return
     }
     setPublishing(true)
@@ -359,20 +479,29 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-[#161922] border border-white/10 rounded-xl shadow-2xl text-white overflow-hidden my-auto max-h-[92vh] flex flex-col">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="product-intake-title"
+        aria-describedby="product-intake-summary"
+        className="relative w-full max-w-2xl bg-[#161922] border border-white/10 rounded-xl shadow-2xl text-white overflow-hidden my-auto max-h-[92vh] flex flex-col"
+      >
 
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/5">
           <div className="flex items-center gap-2">
             <BoxIcon className="w-5 h-5 text-amber-400" />
             <div>
-              <h3 className="text-sm font-semibold tracking-wide">Phone-First Product Intake</h3>
-              <p className="text-[11px] text-white/50">Resumable Session • Server-Controlled SKU</p>
+              <h3 id="product-intake-title" className="text-sm font-semibold tracking-wide">Phone-First Product Intake</h3>
+              <p id="product-intake-summary" className="text-[11px] text-white/50">Resumable session · server-controlled SKU</p>
             </div>
           </div>
           <button
+            ref={closeButtonRef}
+            type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition"
+            aria-label="Close product intake"
+            className="min-h-11 min-w-11 p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"
           >
             <XIcon className="w-5 h-5" />
           </button>
@@ -389,10 +518,14 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
             { num: 6, label: 'Inventory' },
             { num: 7, label: 'Publish' }
           ].map(s => (
-            <div
+            <button
+              type="button"
               key={s.num}
               onClick={() => s.num < step && setStep(s.num)}
-              className={`flex items-center gap-1 cursor-pointer transition shrink-0 ${
+              disabled={s.num >= step}
+              aria-current={s.num === step ? 'step' : undefined}
+              aria-label={`Step ${s.num}: ${s.label}`}
+              className={`min-h-11 flex items-center gap-1 transition-colors shrink-0 disabled:cursor-default ${
                 s.num === step
                   ? 'text-amber-400 font-semibold'
                   : s.num < step
@@ -410,15 +543,43 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 {s.num < step ? <CheckIcon className="w-3 h-3" /> : s.num}
               </span>
               <span className="hidden sm:inline">{s.label}</span>
-            </div>
+            </button>
           ))}
         </div>
 
         {/* Body Content */}
         <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
           {operationError && (
-            <div role="alert" className="p-3.5 bg-rose-500/10 border border-rose-500/30 text-rose-200 rounded-lg text-sm">
+            <div ref={errorRef} tabIndex={-1} role="alert" className="p-3.5 bg-rose-500/10 border border-rose-500/30 text-rose-200 rounded-lg text-sm focus:outline-none">
               <strong className="text-rose-300">Action not completed.</strong> {operationError}
+            </div>
+          )}
+
+          {evidenceCleanup && (
+            <section role="status" aria-live="polite" className="rounded-lg border border-amber-400/30 bg-amber-400/10 p-3.5 text-sm text-amber-100">
+              <div className="flex items-start gap-3">
+                <AlertIcon className="mt-0.5 h-5 w-5 shrink-0 text-amber-300" />
+                <div className="min-w-0 flex-1 space-y-2.5">
+                  <div>
+                    <strong className="text-amber-200">Private-file cleanup required.</strong>
+                    <p className="mt-1 text-amber-100/80">The unregistered private file is queued for cleanup.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleRetryEvidenceCleanup}
+                    disabled={!isOnline || evidenceCleanup.retrying}
+                    className="min-h-11 rounded-lg border border-amber-300/40 bg-amber-300 px-4 py-2 font-semibold text-black hover:bg-amber-200 disabled:cursor-wait disabled:opacity-50"
+                  >
+                    {evidenceCleanup.retrying ? 'Retrying cleanup…' : 'Retry file cleanup'}
+                  </button>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {!isOnline && (
+            <div role="status" className="p-3.5 bg-amber-500/10 border border-amber-500/30 text-amber-100 rounded-lg text-sm">
+              <strong>Offline.</strong> Review remains available, but uploads and server changes are paused until this device reconnects.
             </div>
           )}
 
@@ -435,6 +596,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               <div className="flex gap-2">
                 <div className="relative flex-1">
                   <input
+                    id="product-intake-identity"
+                    aria-label="Product barcode, SKU, or name"
                     type="text"
                     value={query}
                     onChange={(e) => {
@@ -449,9 +612,10 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   <BarcodeIcon className="absolute right-3 top-3 w-4 h-4 text-white/40" />
                 </div>
                 <button
+                  type="button"
                   onClick={handleSearchDuplicate}
                   disabled={searching || !query.trim()}
-                  className="px-4 py-2.5 bg-amber-500 text-black font-medium text-sm rounded-lg hover:bg-amber-400 disabled:opacity-50 transition flex items-center gap-1.5"
+                  className="min-h-11 px-4 py-2.5 bg-amber-500 text-black font-medium text-sm rounded-lg hover:bg-amber-400 disabled:opacity-50 transition-colors flex items-center gap-1.5"
                 >
                   {searching ? <SyncIcon className="w-4 h-4 animate-spin" /> : 'Check Duplicate'}
                 </button>
@@ -492,6 +656,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                       </div>
                       <p className="text-white/60">Continue only when the physical package proves a distinct size, concentration, flavor, shade, formulation, or pack count.</p>
                       <textarea
+                        aria-label="Distinct variant reason"
                         rows={2}
                         value={distinctVariantReason}
                         onChange={(event) => setDistinctVariantReason(event.target.value)}
@@ -573,8 +738,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                           : 'Capture / Select'}
                       <input
                         type="file"
-                        accept="image/jpeg,image/png,image/webp,image/avif"
+                        accept="image/jpeg,image/png,image/webp"
                         capture="environment"
+                        aria-label={`${s.label} evidence photo`}
                         disabled={Boolean(evidenceUploading[s.slot])}
                         onChange={(event) => handleEvidenceFile(s.slot, event.target.files?.[0])}
                         className="sr-only"
@@ -626,6 +792,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <p className="pt-1 text-white/50">
                   Each accepted photo is stored in the private intake-evidence bucket. It remains evidence only and is never published automatically.
                 </p>
+                <p className="text-white/50">If camera access is unavailable or denied, choose an existing package photo from this device.</p>
               </div>
             </div>
           )}
@@ -644,8 +811,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-amber-400 text-[11px]">Contract: k2.product-content.v3</span>
                   <button
+                    type="button"
                     onClick={handleCopyPrompt}
-                    className="px-3 py-1 bg-amber-400 text-black font-semibold rounded text-xs flex items-center gap-1 hover:bg-amber-300"
+                    className="min-h-11 px-3 py-2 bg-amber-400 text-black font-semibold rounded text-xs flex items-center gap-1 hover:bg-amber-300"
                   >
                     <CopyIcon className="w-3.5 h-3.5" />
                     {copiedPrompt ? 'Copied to Clipboard!' : 'Copy Prompt'}
@@ -669,7 +837,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               </div>
 
               <div className="space-y-2">
+                <label htmlFor="product-research-json" className="block text-white/70">Product research JSON</label>
                 <textarea
+                  id="product-research-json"
                   rows={5}
                   value={jsonInput}
                   onChange={(e) => setJsonInput(e.target.value)}
@@ -677,15 +847,16 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 font-mono text-[11px] text-amber-200 focus:outline-none focus:border-amber-400 placeholder-white/30"
                 />
                 <button
+                  type="button"
                   onClick={handleParseJson}
-                  className="px-4 py-2 bg-amber-500 text-black font-semibold rounded-lg hover:bg-amber-400 transition"
+                  className="min-h-11 px-4 py-2 bg-amber-500 text-black font-semibold rounded-lg hover:bg-amber-400 transition-colors"
                 >
                   Validate & Review Fields
                 </button>
               </div>
 
               {parseError && (
-                <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-300 rounded-lg">
+                <div role="alert" className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-300 rounded-lg">
                   <strong>Validation Error:</strong> {parseError}
                 </div>
               )}
@@ -693,7 +864,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               {parsedPayload && (
                 <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg space-y-2">
                   <div className="flex items-center justify-between text-emerald-300 font-semibold">
-                    <span>✓ Schema Validated: {parsedPayload.meta.schemaVersion}</span>
+                    <span className="flex items-center gap-1.5"><CheckIcon className="h-4 w-4" /> Schema validated: {parsedPayload.meta.schemaVersion}</span>
                     <span className="text-[10px] text-white/50">Evidence Items: {parsedPayload.meta.evidenceCount}</span>
                   </div>
                   <div className="space-y-1 bg-black/40 p-2 rounded max-h-40 overflow-y-auto">
@@ -738,9 +909,10 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   Product Name: <strong className="text-white">{parsedPayload?.product?.name || query || 'New Product'}</strong>
                 </p>
                 <button
+                  type="button"
                   onClick={handleSaveDraft}
                   disabled={creatingDraft}
-                  className="w-full py-3 bg-amber-400 text-black font-bold rounded-lg hover:bg-amber-300 transition flex items-center justify-center gap-2"
+                  className="w-full min-h-11 py-3 bg-amber-400 text-black font-bold rounded-lg hover:bg-amber-300 transition-colors flex items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-60"
                 >
                   {creatingDraft ? <SyncIcon className="w-4 h-4 animate-spin" /> : 'Assign SKU & Save Product Draft'}
                 </button>
@@ -766,6 +938,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   { id: 'reconciliation', label: 'Opening Balance' }
                 ].map(src => (
                   <button
+                    type="button"
                     key={src.id}
                     onClick={() => {
                       if (src.disabled) return
@@ -773,7 +946,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                       if (src.id === 'flight') setIsNonExpiry(false)
                     }}
                     disabled={src.disabled}
-                    className={`p-2.5 rounded-lg border text-center transition ${
+                    aria-describedby={src.disabled ? 'supplier-receipt-pending' : undefined}
+                    className={`min-h-11 p-2.5 rounded-lg border text-center transition-colors ${
                       inventorySource === src.id
                         ? 'bg-amber-400/20 border-amber-400 text-amber-300 font-semibold'
                         : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed'
@@ -783,6 +957,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   </button>
                 ))}
               </div>
+              <p id="supplier-receipt-pending" className="text-white/50">
+                Supplier receipt remains pending until the canonical purchasing and receiving workflow is activated.
+              </p>
 
               {inventorySource === 'flight' && (
                 <div className="space-y-1.5">
@@ -811,10 +988,11 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               )}
 
               {/* Inventory Fields */}
-              <div className="grid grid-cols-2 gap-3 bg-black/30 p-3 rounded-lg border border-white/5">
+              <div className="grid grid-cols-1 gap-3 bg-black/30 p-3 rounded-lg border border-white/5 sm:grid-cols-2">
                 <div>
-                  <label className="text-white/60">Box / Container Code</label>
+                  <label htmlFor="intake-box-code" className="text-white/60">Box / Container Code</label>
                   <input
+                    id="intake-box-code"
                     type="text"
                     value={boxCode}
                     onChange={(e) => setBoxCode(e.target.value)}
@@ -823,8 +1001,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   />
                 </div>
                 <div>
-                  <label className="text-white/60">Batch / Lot Code</label>
+                  <label htmlFor="intake-batch-code" className="text-white/60">Batch / Lot Code</label>
                   <input
+                    id="intake-batch-code"
                     type="text"
                     value={batchCode}
                     onChange={(e) => setBatchCode(e.target.value)}
@@ -834,8 +1013,11 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 </div>
 
                 <div>
-                  <label className="text-white/60">Quantity Received</label>
+                  <label htmlFor="intake-quantity" className="text-white/60">
+                    {inventorySource === 'flight' ? 'Expected manifest quantity' : 'Verified physical quantity'}
+                  </label>
                   <input
+                    id="intake-quantity"
                     type="number"
                     min="1"
                     value={quantity}
@@ -845,8 +1027,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 </div>
 
                 <div>
-                  <label className="text-white/60">Expiry Date</label>
+                  <label htmlFor="intake-expiry" className="text-white/60">Best-before / expiry date</label>
                   <input
+                    id="intake-expiry"
                     type="date"
                     disabled={isNonExpiry}
                     value={expiryDate}
@@ -870,8 +1053,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 {inventorySource === 'reconciliation' && (
                   <>
                     <div>
-                      <label className="text-white/60">Inventory Owner</label>
+                      <label htmlFor="intake-owner" className="text-white/60">Inventory Owner</label>
                       <input
+                        id="intake-owner"
                         type="text"
                         value={ownerCode}
                         onChange={(event) => setOwnerCode(event.target.value)}
@@ -879,8 +1063,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                       />
                     </div>
                     <div>
-                      <label className="text-white/60">Unit Cost (PHP)</label>
+                      <label htmlFor="intake-unit-cost" className="text-white/60">Unit Cost (PHP)</label>
                       <input
+                        id="intake-unit-cost"
                         type="number"
                         min="0"
                         step="0.01"
@@ -890,8 +1075,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                       />
                     </div>
                     <div>
-                      <label className="text-white/60">Hub / Location</label>
+                      <label htmlFor="intake-hub" className="text-white/60">Hub / Location</label>
                       <input
+                        id="intake-hub"
                         type="text"
                         value={hubLocation}
                         onChange={(event) => setHubLocation(event.target.value)}
@@ -899,17 +1085,19 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                       />
                     </div>
                     <div>
-                      <label className="text-white/60">Custodian</label>
+                      <label htmlFor="intake-custodian" className="text-white/60">Custodian</label>
                       <input
+                        id="intake-custodian"
                         type="text"
                         value={custodian}
                         onChange={(event) => setCustodian(event.target.value)}
                         className="w-full min-h-11 bg-white/5 border border-white/10 rounded px-2.5 py-2 text-white mt-1"
                       />
                     </div>
-                    <div className="col-span-2">
-                      <label className="text-white/60">Reconciliation reason</label>
+                    <div className="sm:col-span-2">
+                      <label htmlFor="intake-reconciliation-reason" className="text-white/60">Reconciliation reason</label>
                       <textarea
+                        id="intake-reconciliation-reason"
                         rows={3}
                         value={inventoryReason}
                         onChange={(event) => setInventoryReason(event.target.value)}
@@ -922,10 +1110,14 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               </div>
 
               <button
+                type="button"
                 onClick={handleSaveFirstInventory}
-                className="w-full min-h-11 py-2.5 bg-emerald-500 text-black font-bold rounded-lg hover:bg-emerald-400 transition"
+                disabled={savingInventory || !isOnline}
+                className="w-full min-h-11 py-2.5 bg-emerald-500 text-black font-bold rounded-lg hover:bg-emerald-400 transition-colors disabled:cursor-wait disabled:opacity-60"
               >
-                {inventorySource === 'flight' ? 'Add to Italy Flight Manifest' : 'Record Authorized Opening Balance'}
+                {savingInventory
+                  ? <span className="flex items-center justify-center gap-2"><SyncIcon className="h-4 w-4 animate-spin" /> Recording…</span>
+                  : inventorySource === 'flight' ? 'Add Expected Line to Italy Flight Manifest' : 'Record Authorized Opening Balance'}
               </button>
             </div>
           )}
@@ -954,7 +1146,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   />
                   <span className="block text-xs text-white/50">Required audit note, minimum 10 characters.</span>
                 </label>
+                <label htmlFor="product-publication-status" className="block text-white/70">Publication status</label>
                 <select
+                  id="product-publication-status"
                   value={publicationStatus}
                   onChange={(e) => handleUpdatePublicationStatus(e.target.value)}
                   disabled={publishing}
@@ -969,7 +1163,15 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               </div>
 
               <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-lg">
-                ✓ Product Intake & First Inventory Complete! SKU Assigned: <strong>{createdProduct?.sku || session?.assigned_sku}</strong>
+                <div className="flex items-start gap-2">
+                  <CheckIcon className="mt-0.5 h-4 w-4 shrink-0" />
+                  <span>
+                    {inventorySaved
+                      ? 'Product Draft and its first source record are saved.'
+                      : 'Product Draft is saved; this session does not show a completed first-source record.'}
+                    {' '}Server-assigned SKU: <strong>{createdProduct?.sku || session?.assigned_sku}</strong>
+                  </span>
+                </div>
               </div>
             </div>
           )}
@@ -979,15 +1181,17 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
         {/* Footer Controls */}
         <div className="flex items-center justify-between px-4 py-3 border-t border-white/10 bg-white/5">
           <button
+            type="button"
             disabled={step === 1}
             onClick={() => setStep(prev => Math.max(1, prev - 1))}
-            className="px-3 py-1.5 bg-white/5 border border-white/10 text-white/70 rounded-lg text-xs hover:bg-white/10 disabled:opacity-30 transition flex items-center gap-1"
+            className="min-h-11 px-3 py-2 bg-white/5 border border-white/10 text-white/70 rounded-lg text-xs hover:bg-white/10 disabled:opacity-30 transition-colors flex items-center gap-1"
           >
             <ArrowIcon className="w-3.5 h-3.5 rotate-180" /> Back
           </button>
 
           {step < 5 && (
             <button
+              type="button"
               onClick={handleNextStep}
               disabled={!canAdvance}
               className="min-h-11 px-4 py-2 bg-amber-400 text-black font-semibold rounded-lg text-sm hover:bg-amber-300 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center gap-1"
@@ -998,8 +1202,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
           {step === 7 && (
             <button
+              type="button"
               onClick={onClose}
-              className="px-4 py-1.5 bg-emerald-400 text-black font-bold rounded-lg text-xs hover:bg-emerald-300 transition"
+              className="min-h-11 px-4 py-2 bg-emerald-400 text-black font-bold rounded-lg text-xs hover:bg-emerald-300 transition-colors"
             >
               Finish & Close
             </button>

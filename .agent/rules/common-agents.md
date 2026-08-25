@@ -2,7 +2,9 @@
 
 ## Available Agents
 
-Located in `~/.claude/agents/`:
+Discover agents from the active harness or its configured shared agent catalog.
+Do not assume a client-specific path such as `~/.claude/agents/` or
+`~/.codex/agents/`.
 
 | Agent | Purpose | When to Use |
 |-------|---------|-------------|
@@ -20,7 +22,8 @@ Located in `~/.claude/agents/`:
 
 ## Immediate Agent Usage
 
-No user prompt needed:
+When delegation is supported and project-level rules permit it, no additional
+user prompt is needed for these in-scope specialists:
 1. Complex feature requests - Use **planner** agent
 2. Code just written/modified - Use **code-reviewer** agent
 3. Bug fix or new feature - Use **tdd-guide** agent
@@ -28,7 +31,8 @@ No user prompt needed:
 
 ## Parallel Task Execution
 
-ALWAYS use parallel Task execution for independent operations:
+Use parallel task execution for independent operations when the active harness
+and project-level rules permit it:
 
 ```markdown
 # GOOD: Parallel execution
@@ -49,3 +53,25 @@ For complex problems, use split role sub-agents:
 - Security expert
 - Consistency reviewer
 - Redundancy checker
+
+## Portable Skill Routing
+
+- Begin with `using-superpowers` when installed and inspect the active skill
+  catalog before planning or acting.
+- Invoke every installed skill genuinely required by the task and follow its
+  `SKILL.md` completely.
+- For code work, use `karpathy-guidelines` or the installed
+  `andrej-karpathy` equivalent.
+- For visible UI or UX work, use `ui-ux-pro-max`, `impeccable`,
+  `design-taste-frontend`, and `emil-design-eng` together when installed.
+- Never pretend a missing skill ran. State the gap, use the safest applicable
+  fallback, and record any unfinished consequence in the project's canonical
+  backlog.
+
+## Documentation and Traceability
+
+Record material work in the project's existing authoritative backlog and docs.
+The durable record must identify the request, decisions, changed files or
+systems, verification evidence, unresolved risks, rollback or recovery path,
+and exact next action. Do not rely on one agent client's chat history or memory
+as the only record of work that remains.

@@ -10,6 +10,7 @@ test.describe('MAP-017 Authorization and Boundary Invariant Suite', () => {
   let hardeningMigration
   let lockdownMigration
   let inviteMigration
+  let postflight
   let cleanSchemaExport
 
   test.beforeAll(async () => {
@@ -23,6 +24,10 @@ test.describe('MAP-017 Authorization and Boundary Invariant Suite', () => {
     )
     inviteMigration = await readFile(
       new URL('../supabase/migrations/20260814_invite_staff_operation_boundary.sql', import.meta.url),
+      'utf8',
+    )
+    postflight = await readFile(
+      new URL('../supabase/map017_public_write_boundary_postflight.sql', import.meta.url),
       'utf8',
     )
     const rawClean = await readFile(
@@ -49,6 +54,11 @@ test.describe('MAP-017 Authorization and Boundary Invariant Suite', () => {
 
     // Anon only receives select on public catalog tables
     expect(hardeningMigration).toContain('grant select on table public.brands, public.categories to anon, authenticated')
+  })
+
+  test('1b. future repository-owned public objects fail closed', () => {
+    expect(hardeningMigration).toContain('alter default privileges for role postgres in schema public')
+    expect(postflight).toContain('unsafe public default privileges remain')
   })
 
   test('2. blanket public write policies are dropped and replaced with is_staff() enforcement', () => {
@@ -78,6 +88,12 @@ test.describe('MAP-017 Authorization and Boundary Invariant Suite', () => {
     expect(hardeningMigration).toContain('revoke all on table public.v_expiring_batches from anon, authenticated')
     expect(hardeningMigration).toContain('grant select on table public.v_channel_catalog_readiness to authenticated')
     expect(hardeningMigration).toContain('grant select on table public.v_expiring_batches to authenticated')
+    expect(hardeningMigration).toContain('create or replace function public.get_public_product_stock()')
+    expect(hardeningMigration).toMatch(/get_public_product_stock\(\)[\s\S]+security definer[\s\S]+set search_path = ''/i)
+    expect(hardeningMigration).toContain('grant execute on function public.get_public_product_stock() to anon, authenticated')
+    expect(hardeningMigration).toContain('grant select on table public.v_product_stock_from_batches to anon, authenticated')
+    expect(hardeningMigration).toContain("where p.status in ('Live', 'Active', 'Unlisted')")
+    expect(hardeningMigration).not.toContain('grant select on table public.product_batches to anon')
   })
 
   test('4. deprecated stock and consignment mutation RPCs are completely revoked from client roles', () => {
@@ -128,5 +144,17 @@ test.describe('MAP-017 Authorization and Boundary Invariant Suite', () => {
     expect(diff.clean).toBe(true)
     expect(diff.criticalCount).toBe(0)
     expect(diff.summary.status).toBe('CONFORMANT')
+  })
+
+  test('10. reviewed live RPC contracts fail closed when admin or AAL2 guard signals disappear', () => {
+    const missingAdminGuard = structuredClone(cleanSchemaExport)
+    missingAdminGuard.functions['public.set_user_role(uuid,text)'].references_is_admin = false
+    missingAdminGuard.functions['public.set_user_role(uuid,text)'].references_aal2 = false
+
+    const diff = compareSchemaTruth(missingAdminGuard, buildExpectedRepositorySchema())
+    const issueTypes = diff.issues.map((issue) => issue.type)
+
+    expect(issueTypes).toContain('FUNCTION_AUTHORIZATION_GUARD_MISSING')
+    expect(issueTypes).toContain('FUNCTION_AAL2_GUARD_MISSING')
   })
 })

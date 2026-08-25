@@ -3,6 +3,7 @@ import { useStore } from '../../context/StoreContext'
 import { supabase } from '../../lib/supabaseClient'
 import { BagIcon, BoxIcon, GridIcon, PlaneIcon, ShieldIcon, UserIcon } from '../ui/icons'
 import { motion, AnimatePresence } from 'motion/react'
+import { safeUiError } from '../../lib/safeUiError'
 
 const VIEWS = [
   { id: 'home', label: 'Home', icon: GridIcon },
@@ -21,19 +22,30 @@ export default function DemoRail() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [authError, setAuthError] = useState('')
 
   const handleLogin = async (e) => {
     e.preventDefault()
+    setAuthError('')
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
-      alert("Login failed: " + error.message)
-    } else {
-      setShowAuth(false)
-      setEmail('')
-      setPassword('')
+    if (!supabase) {
+      setAuthError(safeUiError('ADMIN_SIGN_IN_FAILED'))
+      setLoading(false)
+      return
     }
-    setLoading(false)
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) setAuthError(safeUiError('ADMIN_SIGN_IN_FAILED'))
+      else {
+        setShowAuth(false)
+        setEmail('')
+        setPassword('')
+      }
+    } catch {
+      setAuthError(safeUiError('ADMIN_SIGN_IN_FAILED'))
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleLogout = async () => {
@@ -75,7 +87,7 @@ export default function DemoRail() {
                 Sign Out
               </button>
             ) : (
-              <button onClick={() => setShowAuth(true)} className="text-xs font-semibold text-blue hover:underline">
+              <button onClick={() => { setAuthError(''); setShowAuth(true) }} className="text-xs font-semibold text-blue hover:underline">
                 VIP Login
               </button>
             )}
@@ -153,11 +165,12 @@ export default function DemoRail() {
                     className="w-full rounded-md border border-line px-3 py-2 text-sm focus:border-navy focus:outline-none"
                   />
                 </div>
+                {authError && <p role="alert" className="rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{authError}</p>}
                 <div className="pt-2 flex justify-end gap-2">
-                  <button type="button" onClick={() => setShowAuth(false)} className="px-4 py-2 text-sm font-semibold text-navy-soft hover:text-navy">
+                  <button type="button" onClick={() => setShowAuth(false)} className="min-h-11 px-4 py-2 text-sm font-semibold text-navy-soft hover:text-navy">
                     Cancel
                   </button>
-                  <button type="submit" disabled={loading} className="rounded-md bg-navy px-5 py-2 text-sm font-semibold text-cream hover:bg-navy/90">
+                  <button type="submit" disabled={loading} className="min-h-11 rounded-md bg-navy px-5 py-2 text-sm font-semibold text-cream hover:bg-navy/90 disabled:cursor-wait disabled:opacity-50">
                     {loading ? 'Authenticating...' : 'Sign in'}
                   </button>
                 </div>

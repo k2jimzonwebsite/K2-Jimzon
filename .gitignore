@@ -1,4 +1,5 @@
 node_modules/
+.map019-postgres-data/
 dist/
 test-results/
 playwright-report/
@@ -19,6 +20,7 @@ security-scan-report.*
 .vercel
 supabase/.temp/
 .temp/
+.tools/
 .agents/
 .claude/
 .codex/
@@ -27,3 +29,11 @@ agentic-awesome-skills/
 antigravity-skills/
 .fuse_hidden*
 scratch/
+
+# Generated MAP-017 schema evidence. These contain no rows or credentials, but
+# they do describe the full authorization model (RLS predicates, grants, function
+# signatures and search_path config) and should not be committed casually.
+# scripts/map016-evidence/vercel-env-inventory.json is deliberately tracked: it
+# holds variable NAMES only and is referenced as MAP-016 evidence.
+live-schema-metadata.json
+scripts/map017-evidence/*.json
