@@ -154,3 +154,6 @@ export const CameraIcon = (p) => (
 export const CopyIcon = (p) => (
   <Icon {...p} d="M9 9h10v10H9V9zM5 15H4V5h10v1" />
 )
+export const MapIcon = (p) => (
+  <Icon {...p} d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3Zm0 0V3m6 3v15" />
+)

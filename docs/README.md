@@ -50,6 +50,7 @@ Verification logs, rollback validations, and schema audits for MAP work items:
 ## 📐 Specs & Blueprints (`docs/specs/`)
 
 Technical specifications, connector integration blueprints, and operations audits:
+- [**MASTER_WORKFLOW_GRAPH_SPEC.md**](./specs/MASTER_WORKFLOW_GRAPH_SPEC.md) — Visual workflow engine, SVG connector mathematics, shift checklists, and AI Prompt Studio.
 - Admin BOS blueprint, authorization matrix, connector integration specs, and AI studio configurations.
 
 ---

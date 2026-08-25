@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, Suspense, lazy } from 'react'
 import {
   BoxIcon, GlobeIcon, GridIcon, UserIcon, InboxIcon,
   PlaneIcon, BagIcon, ShieldIcon, BarcodeIcon, EyeIcon,
-  BellIcon, BookIcon, MenuIcon, SearchIcon, StarIcon, UploadIcon, XIcon,
+  BellIcon, BookIcon, MenuIcon, SearchIcon, StarIcon, UploadIcon, XIcon, MapIcon,
 } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
@@ -35,10 +35,12 @@ const PasabuyManager = lazy(() => import('./PasabuyManager'))
 const OmniOperationsHub = lazy(() => import('./OmniOperationsHub'))
 const StaffPermissionManager = lazy(() => import('./StaffPermissionManager'))
 const CouponManager = lazy(() => import('./CouponManager'))
+const MasterWorkflowGraph = lazy(() => import('../../components/admin/master-workflow-graph/MasterWorkflowGraph'))
 
 // Single source of truth for every section: nav label, page title, subtitle, icon.
 const SECTIONS = {
   overview:          { label: 'Command center',      icon: GridIcon,    title: 'Command center',                desc: 'Verified performance, channel readiness, and priority operations.' },
+  workflow_graph:    { label: 'Workflow Graph',      icon: MapIcon,     title: 'Master Operations Workflow Graph', desc: 'Interactive SVG flowcharts, shift checklists, safeguards, and AI prompt engineering.' },
   kanban:            { label: 'Purchasing',           icon: BagIcon,     title: 'Italy Purchasing',               desc: 'Supplier commitments and purchasing work before consolidation.' },
   consignment:       { label: 'Flight Consignments',  icon: PlaneIcon,   title: 'Italy Flight Consignments',      desc: 'Scan-count every expected unit in Milan, recount it in Manila, then reconcile inventory.' },
   pasabuy_manager:   { label: 'Pasabuy Quotes',      icon: BagIcon,     title: 'Custom Pasabuy Quotes',         desc: 'Process shopper requests and calculate Italy landed costs.' },
@@ -55,7 +57,7 @@ const SECTIONS = {
 
 // Grouped navigation by daily workflow. Home stands alone; settings sink to the bottom.
 const NAV_GROUPS = [
-  { heading: null,             items: ['overview'] },
+  { heading: null,             items: ['overview', 'workflow_graph'] },
   { heading: 'Supply Chain',   items: ['kanban', 'consignment', 'pasabuy_manager', 'suppliers'] },
   { heading: 'Sell & Fulfill', items: ['inventory', 'omni_hub', 'inbox', 'wholesale', 'coupons'] },
   { heading: 'Settings',       items: ['staff_permissions', 'integrations', 'globe'] },
@@ -459,6 +461,7 @@ export default function Admin() {
               </div>
             }>
               {section === 'staff_permissions' && canManageStaff ? <StaffPermissionManager />
+               : section === 'workflow_graph' ? <MasterWorkflowGraph onNavigate={selectSection} />
                : section === 'coupons' ? <CouponManager />
                : section === 'omni_hub' ? <OmniOperationsHub />
                : section === 'pasabuy_manager' ? <PasabuyManager />
