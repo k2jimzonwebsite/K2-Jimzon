@@ -26,7 +26,7 @@ const forbiddenPatterns = target === 'storefront'
   ? [/src\/AdminApp\.jsx$/i, /src\/views\/admin\//i]
   : [
       /src\/StorefrontApp\.jsx$/i,
-      /src\/views\/(Home|Catalog|Checkout|Confirmation|MasterProduct|Pasabuy|ProductDetail|Wholesale)\.jsx$/i,
+      /src\/views\/(Home|Catalog|Checkout|Confirmation|MasterProduct|Pasabuy|Wholesale)\.jsx$/i,
     ]
 
 const violations = modules.filter((moduleName) => forbiddenPatterns.some((pattern) => pattern.test(moduleName)))

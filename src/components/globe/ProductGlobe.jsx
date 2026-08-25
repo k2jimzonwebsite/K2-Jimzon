@@ -7,11 +7,16 @@ const getCameraZ = () => typeof window !== 'undefined' && window.innerWidth < 76
 
 function CameraController({ targetZ }) {
   useFrame((state) => {
-    state.camera.position.z = THREE.MathUtils.lerp(
-      state.camera.position.z,
-      targetZ.current,
-      0.05
-    )
+    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) {
+      state.camera.position.z = targetZ.current
+    } else {
+      state.camera.position.z = THREE.MathUtils.lerp(
+        state.camera.position.z,
+        targetZ.current,
+        0.05
+      )
+    }
   })
   return null
 }

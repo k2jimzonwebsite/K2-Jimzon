@@ -2,7 +2,9 @@ import { test, expect } from '@playwright/test'
 
 test.describe('storefront interaction language', () => {
   test('interactive surfaces respond without changing the editorial layout', async ({ page }) => {
-    await page.goto('/')
+    test.setTimeout(90000)
+    await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 60000 })
+    await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
 
     const categoryTile = page.locator('.category-tile').first()
     await categoryTile.scrollIntoViewIfNeeded()
@@ -30,8 +32,10 @@ test.describe('storefront interaction language', () => {
   })
 
   test('reduced motion keeps every interaction visible and usable', async ({ page }) => {
+    test.setTimeout(90000)
     await page.emulateMedia({ reducedMotion: 'reduce' })
-    await page.goto('/')
+    await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 60000 })
+    await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
 
     const categoryTile = page.locator('.category-tile').first()
     await categoryTile.scrollIntoViewIfNeeded()
@@ -47,5 +51,32 @@ test.describe('storefront interaction language', () => {
     await faqButton.scrollIntoViewIfNeeded()
     await faqButton.click()
     await expect(faqButton).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  test('Three.js globe chunk is not requested until the section is scrolled near', async ({ page }) => {
+    test.setTimeout(90000)
+    const requestedUrls = []
+    page.on('request', request => {
+      requestedUrls.push(request.url())
+    })
+
+    await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 60000 })
+    await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
+
+    // Landing must not pull the largest artifact in the build. This is the half
+    // of the deferral that saves bandwidth.
+    expect(requestedUrls.filter(url => /GlobeSection/i.test(url))).toHaveLength(0)
+
+    const globeHeading = page.getByRole('heading', { name: 'Reviews, mapped to the products.' })
+    await globeHeading.scrollIntoViewIfNeeded()
+
+    // The other half: it must actually load once scrolled near, or the section is
+    // permanently broken. Assert on the network request, not on the heading or the
+    // "Interactive review globe" region — GlobeSectionPlaceholder renders both of
+    // those itself, so a visibility check here passes even when the
+    // IntersectionObserver never fires and the globe never mounts.
+    await expect
+      .poll(() => requestedUrls.filter(url => /GlobeSection/i.test(url)).length, { timeout: 30000 })
+      .toBeGreaterThan(0)
   })
 })

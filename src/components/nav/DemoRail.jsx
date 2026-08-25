@@ -7,7 +7,7 @@ import { safeUiError } from '../../lib/safeUiError'
 
 const VIEWS = [
   { id: 'home', label: 'Home', icon: GridIcon },
-  { id: 'product', label: 'Product', icon: BoxIcon },
+  { id: 'master_product', label: 'Product', icon: BoxIcon },
   { id: 'pasabuy', label: 'Pasabuy', icon: PlaneIcon },
   { id: 'checkout', label: 'Checkout', icon: BagIcon },
   { id: 'wholesale', label: 'Wholesale', icon: UserIcon },

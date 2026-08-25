@@ -162,6 +162,13 @@ export default function MasterProduct() {
             {product.description || product.short_description || product.why_buy || 'Product details are being reviewed before publication.'}
           </p>
 
+          {product.why_buy && product.why_buy !== product.description && (
+            <div className="mt-4 rounded-lg bg-shell/70 border border-line/60 p-3.5 text-sm text-navy-soft">
+              <span className="font-semibold text-navy">Why this item: </span>
+              {product.why_buy}
+            </div>
+          )}
+
           {/* Product Specifications */}
           <div className="mt-8 border-t border-line pt-6">
             <Kicker className="mb-4 text-navy">Product specifications</Kicker>

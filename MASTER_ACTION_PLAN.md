@@ -763,28 +763,43 @@ partner credentials or approved partner documentation exist.
 
 ### Queue item 1 — MAP-021 — Consolidate the duplicate product detail view
 
-`src/StorefrontApp.jsx` registers both `ProductDetail` (key `product`) and
+~~`src/StorefrontApp.jsx` registers both `ProductDetail` (key `product`) and
 `MasterProduct` (key `master_product`). No `setView` call site anywhere reaches
 `product`, so `src/views/ProductDetail.jsx` compiles to an unreachable 13.68 kB
 chunk. Consolidate onto `MasterProduct.jsx` and delete `ProductDetail.jsx`,
-including its registration and lazy import.
+including its registration and lazy import.~~ **Done 25 August 2026.**
+`ProductDetail.jsx` has been verified for feature parity (why_buy highlight
+callout ported to `MasterProduct.jsx`), deleted from `src/views/`, and removed
+from `StorefrontApp.jsx`, `App.jsx`, `DemoRail.jsx`, `StoreHeader.jsx`,
+`MobileNavBar.jsx`, and `scripts/verify-build-boundary.mjs`. `build:storefront`
+emits no `ProductDetail-*.js` chunk (manifest modules reduced from 19 to 17).
 
-*Files:* `src/StorefrontApp.jsx`, `src/views/ProductDetail.jsx`,
-`src/views/MasterProduct.jsx`, `src/context/StoreContext.jsx`.
+*Files:* `src/StorefrontApp.jsx`, `src/views/ProductDetail.jsx` (deleted),
+`src/views/MasterProduct.jsx`, `src/App.jsx`, `src/components/nav/DemoRail.jsx`,
+`src/components/StoreHeader.jsx`, `src/components/nav/MobileNavBar.jsx`,
+`scripts/verify-build-boundary.mjs`.
 *Check:* `npm run build:storefront` emits no `ProductDetail-*.js` chunk;
-`npm run test:smoke` stays 8/8; opening any product still renders full detail.
+`npm run test:contracts` (181 passing); `npm run test:smoke` stays 8/8.
 
 ### Queue item 2 — MAP-021 — Defer the Three.js globe until it is needed
 
-`GlobeSection` is lazy-loaded but `src/views/Home.jsx` renders it directly, so
+~~`GlobeSection` is lazy-loaded but `src/views/Home.jsx` renders it directly, so
 its 903.44 kB / 244.43 kB gzip chunk — the largest artifact in the storefront —
 starts downloading on landing. Mount it behind an `IntersectionObserver` so it
 loads only when scrolled near. Keep the existing `ErrorBoundary` and the
-`GlobeSectionUnavailable` fallback, and respect `prefers-reduced-motion`.
+`GlobeSectionUnavailable` fallback, and respect `prefers-reduced-motion`.~~
+**Done 25 August 2026.** `Home.jsx` mounts `GlobeSection` behind a 300px
+`IntersectionObserver` with a reserved layout placeholder (`GlobeSectionPlaceholder`)
+with a dimension-matched placeholder so layout shift is unlikely by construction (not measured), retaining `ErrorBoundary` and `GlobeSectionUnavailable`. `GlobeCore.jsx`
+and `ProductGlobe.jsx` honor `prefers-reduced-motion` by disabling idle rotation
+and spring transitions. Playwright verification confirms no Globe chunk request on
+initial landing and clean deferred loading upon scroll.
 
-*Files:* `src/views/Home.jsx`, `src/components/home/GlobeSection.jsx`.
-*Check:* on first paint of `/`, no request for the Globe chunk; it loads after
-scrolling toward the section; `npm run test:smoke` stays 8/8.
+*Files:* `src/views/Home.jsx`, `src/components/globe/GlobeCore.jsx`,
+`src/components/globe/ProductGlobe.jsx`, `tests/storefront-motion.spec.js`.
+*Check:* On first paint of `/`, no request for the Globe chunk; it loads after
+scrolling toward the section; `tests/storefront-motion.spec.js` (3/3 passing);
+`npm run test:smoke` stays 8/8.
 
 ### Queue item 3 — MAP-023 — One modal primitive, then migrate all 18
 
@@ -2839,18 +2854,20 @@ bundles, real headers/CSP/cache behavior, and real-host tests remain unverified.
   admin artifact must contain no storefront/customer route assumptions.
 - Test production bundles for secrets, service-role/secret keys, source maps,
   debug flags, localhost URLs, stack leakage, mixed content, and wrong target.
-- Remove the orphaned second product-detail view. `StorefrontApp.jsx` registers
-  both `ProductDetail` (key `product`) and `MasterProduct` (key
-  `master_product`), but no `setView` call site reaches `product`, so
-  `ProductDetail.jsx` builds an unreachable 13.68 kB chunk. Consolidate on one
-  canonical component and delete the other, so a bundle boundary test cannot
-  pass while shipping a dead view. (Verified 25 August 2026; was AUD-004.)
-- Defer the Three.js globe until it is needed. `GlobeSection` is lazy-loaded but
-  `Home.jsx` renders it directly, so its 903.44 kB / 244.43 kB gzip chunk — the
-  largest artifact in the storefront build — begins downloading on landing.
-  Mount it behind an IntersectionObserver and confirm the landing request set no
-  longer fetches it. Bandwidth cost on Philippine mobile connections is the
-  operative concern. (Verified 25 August 2026; was AUD-005.)
+- ~~**Remove the orphaned second product-detail view.**~~ **Done 25 August
+  2026 — local repository change only, no deployment.** `ProductDetail.jsx` has
+  been audited for feature parity (why_buy highlight ported to `MasterProduct.jsx`),
+  deleted from `src/views/`, and removed from `StorefrontApp.jsx`, `App.jsx`,
+  `DemoRail.jsx`, `StoreHeader.jsx`, `MobileNavBar.jsx`, and `scripts/verify-build-boundary.mjs`.
+  `npm run build:storefront` emits no `ProductDetail-*.js` chunk (manifest modules
+  reduced from 19 to 17).
+- ~~**Defer the Three.js globe until it is needed.**~~ **Done 25 August 2026 — local
+  repository change only, no deployment.** `Home.jsx` mounts `GlobeSection` behind a
+  300px `IntersectionObserver` with a reserved layout placeholder (`GlobeSectionPlaceholder`)
+  with a dimension-matched placeholder so layout shift is unlikely by construction (not measured), retaining `ErrorBoundary` and `GlobeSectionUnavailable`. `GlobeCore.jsx`
+  and `ProductGlobe.jsx` honor `prefers-reduced-motion` by disabling idle auto-rotation
+  and spring transitions. Playwright verification confirms no Globe chunk request on
+  initial landing and clean deferred loading upon scroll.
 - ~~**Close the static-asset hole in the build boundary.**~~ **Done 25 August
   2026 — local repository change only, no deployment.** `verify-build-boundary.mjs`
   now walks every emitted static text asset (`.json`, `.webmanifest`, `.txt`,

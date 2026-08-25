@@ -10,7 +10,6 @@ import Footer from './components/Footer'
 import ErrorBoundary from './components/ui/ErrorBoundary'
 
 const Home = lazy(() => import('./views/Home'))
-const ProductDetail = lazy(() => import('./views/ProductDetail'))
 const Pasabuy = lazy(() => import('./views/Pasabuy'))
 const Checkout = lazy(() => import('./views/Checkout'))
 const Confirmation = lazy(() => import('./views/Confirmation'))
@@ -24,7 +23,6 @@ const CustomerAccount = lazy(() => import('./views/CustomerAccount'))
 
 const VIEWS = {
   home: Home,
-  product: ProductDetail,
   master_product: MasterProduct,
   pasabuy: Pasabuy,
   checkout: Checkout,
@@ -38,7 +36,7 @@ const VIEWS = {
 }
 
 // Storefront chrome wraps shopper-facing views only.
-const STOREFRONT = new Set(['home', 'product', 'master_product', 'catalog', 'pasabuy', 'wholesale', 'checkout', 'confirmation', 'messages', 'contact'])
+const STOREFRONT = new Set(['home', 'master_product', 'catalog', 'pasabuy', 'wholesale', 'checkout', 'confirmation', 'messages', 'contact'])
 
 function Shell() {
   const { view, setView } = useStore()

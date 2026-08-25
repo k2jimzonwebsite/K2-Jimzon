@@ -3,7 +3,7 @@ import { HomeIcon, GridIcon, PlaneIcon, BriefcaseIcon, ChatIcon } from '../ui/ic
 
 export default function MobileNavBar() {
   const { view, go } = useStore()
-  const activeKey = view === 'product' || view === 'master_product' ? 'catalog' : view
+  const activeKey = view === 'master_product' ? 'catalog' : view
   const navItems = [
     { key: 'home', label: 'Home', icon: HomeIcon },
     { key: 'catalog', label: 'Shop', icon: GridIcon },

@@ -8,7 +8,6 @@ import Footer from './components/Footer'
 import ErrorBoundary from './components/ui/ErrorBoundary'
 
 const Home = lazy(() => import('./views/Home'))
-const ProductDetail = lazy(() => import('./views/ProductDetail'))
 const Pasabuy = lazy(() => import('./views/Pasabuy'))
 const Checkout = lazy(() => import('./views/Checkout'))
 const Confirmation = lazy(() => import('./views/Confirmation'))
@@ -21,7 +20,6 @@ const CustomerAccount = lazy(() => import('./views/CustomerAccount'))
 
 const VIEWS = {
   home: Home,
-  product: ProductDetail,
   master_product: MasterProduct,
   pasabuy: Pasabuy,
   checkout: Checkout,

@@ -27,7 +27,7 @@ function SearchBox({ className = '' }) {
 
 export default function StoreHeader() {
   const { go, view, count, setCartOpen, isDark, toggleDarkMode } = useStore()
-  const active = view === 'product' || view === 'master_product' ? 'catalog' : view
+  const active = view === 'master_product' ? 'catalog' : view
   const nav = [
     ['home', 'Home'],
     ['catalog', 'Shop'],

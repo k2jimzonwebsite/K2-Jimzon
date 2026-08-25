@@ -35,13 +35,19 @@ export default function GlobeCore({ products, rotationState, velocityState, isDr
     rotationState.current.x = Math.max(-Math.PI / 2.5, Math.min(Math.PI / 2.5, rotationState.current.x))
 
     if (!isDragging.current) {
-      // Momentum decay
-      velocityState.current.x *= 0.92
-      velocityState.current.y *= 0.92
+      const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      if (prefersReducedMotion) {
+        velocityState.current.x = 0
+        velocityState.current.y = 0
+      } else {
+        // Momentum decay
+        velocityState.current.x *= 0.92
+        velocityState.current.y *= 0.92
 
-      // Idle rotation
-      if (Date.now() - lastInteraction.current > 2000) {
-        velocityState.current.y += 0.00015
+        // Idle rotation
+        if (Date.now() - lastInteraction.current > 2000) {
+          velocityState.current.y += 0.00015
+        }
       }
     } else {
       // Sharp decay while dragging
