@@ -17,20 +17,26 @@ function Hero() {
       <div className="store-section grid min-h-[36rem] items-center gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:py-20 lg:min-h-[42rem] lg:gap-16">
         <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.06 } } }} className="max-w-2xl">
           <motion.div variants={reveal}>
-            <Kicker className="flex items-center gap-2"><PlaneIcon size={14} /> Direct Italian sourcing · Manila fulfillment</Kicker>
+            <Kicker className="flex items-center gap-2">
+              <PlaneIcon size={14} /> Direct Italian sourcing, fulfilled in Manila
+            </Kicker>
           </motion.div>
           <motion.h1 variants={reveal} className="mt-5 max-w-3xl font-serif text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-navy sm:text-6xl lg:text-[4.6rem]">
             Italy, chosen well.<br /><em className="font-normal text-crimson">Delivered to Manila.</em>
           </motion.h1>
           <motion.p variants={reveal} className="mt-6 max-w-xl text-base leading-7 text-navy-soft sm:text-lg">
-            Shop reviewed Italian imports already in our catalog, or ask K2 to source the exact item you need through Pasabuy. Every request is checked by a person before commitment.
+            Shop genuine Italian favorites in our Manila stock, or ask us to source specific items through Pasabuy. A real person confirms every request before anything is purchased.
           </motion.p>
           <motion.div variants={reveal} className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <RedButton onClick={() => go('catalog')} className="px-7">Shop the Drop <ArrowIcon size={16} /></RedButton>
-            <GhostButton onClick={() => go('pasabuy')} className="px-7">Request from Italy</GhostButton>
+            <RedButton onClick={() => go('catalog')} className="px-7 py-3.5 text-base font-bold shadow-sm">
+              Shop the Collection <ArrowIcon size={16} />
+            </RedButton>
+            <GhostButton onClick={() => go('pasabuy')} className="px-7 py-3.5 text-base font-bold">
+              Request from Italy
+            </GhostButton>
           </motion.div>
           <motion.p variants={reveal} className="mt-5 flex items-center gap-2 text-xs font-semibold text-navy-faint">
-            <ShieldIcon size={15} className="text-forest" /> No online payment is collected at request submission.
+            <ShieldIcon size={15} className="text-forest" /> No payment required at checkout. We verify stock first.
           </motion.p>
         </motion.div>
 
@@ -41,12 +47,14 @@ function Hero() {
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-navy-faint">Sourcing route</p>
                 <p className="mt-1 font-serif text-lg font-semibold text-navy">Milano to Manila</p>
               </div>
-              <span className="rounded-md border border-gold/30 bg-gold-wash px-2.5 py-1 text-xs font-bold uppercase tracking-[0.12em] text-gold-deep">Direct consignment</span>
+              <span className="rounded-md border border-gold/30 bg-gold-wash px-2.5 py-1 text-xs font-bold uppercase tracking-[0.12em] text-gold-deep">
+                Direct shipment
+              </span>
             </div>
             <FlightMap />
             <div className="grid grid-cols-2 gap-3 border-t border-[var(--store-surface-border)] pt-4 text-xs">
-              <p><span className="block font-bold text-navy">Reviewed catalog</span><span className="text-navy-faint">Published details checked</span></p>
-              <p><span className="block font-bold text-navy">Human confirmation</span><span className="text-navy-faint">Before payment or purchase</span></p>
+              <p><span className="block font-bold text-navy">Genuine catalog</span><span className="text-navy-faint">Checked items in Manila</span></p>
+              <p><span className="block font-bold text-navy">Personal confirmation</span><span className="text-navy-faint">Staff checks before you pay</span></p>
             </div>
           </div>
         </motion.div>
@@ -57,18 +65,19 @@ function Hero() {
 
 function TrustRow() {
   const items = [
-    [CheckIcon, 'Reviewed Italy-sourced catalog'],
-    [PlaneIcon, 'Italy-to-Manila operations'],
-    [GridIcon, 'Website, Shopee, TikTok & Lazada'],
-    [ShieldIcon, 'Staff-confirmed requests'],
+    [CheckIcon, 'Authentic Italian imports'],
+    [PlaneIcon, 'Direct flights from Milan'],
+    [GridIcon, 'Multi-channel stock sync'],
+    [ShieldIcon, 'Checked by staff before payment'],
   ]
 
   return (
     <div className="store-atmosphere-soft border-b border-line">
       <div className="store-section grid grid-cols-2 divide-x divide-y divide-line sm:grid-cols-4 sm:divide-y-0">
         {items.map(([ItemIcon, label]) => (
-          <div key={label} className="flex min-h-16 items-center justify-center gap-2 px-3 py-3 text-center text-xs font-semibold leading-tight text-navy-soft sm:text-xs">
-            <ItemIcon size={15} className="shrink-0 text-crimson" /> {label}
+          <div key={label} className="flex min-h-16 items-center justify-center gap-2.5 px-3 py-3 text-center text-xs font-semibold leading-tight text-navy-soft sm:text-xs">
+            <ItemIcon size={16} className="shrink-0 text-crimson" />
+            <span>{label}</span>
           </div>
         ))}
       </div>

@@ -42,6 +42,8 @@ export const ShieldIcon = (p) => (
   <Icon {...p} d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Zm-3 9 2.2 2.2L15 10.5" />
 )
 
+export const ShieldCheckIcon = ShieldIcon
+
 export const StarIcon = ({ size = 14, className = '' }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor" aria-hidden="true">
     <path d="M12 2.5 15 9l7 .7-5.3 4.7 1.6 6.9L12 17.8l-6.3 3.5 1.6-6.9L2 9.7 9 9l3-6.5Z" />

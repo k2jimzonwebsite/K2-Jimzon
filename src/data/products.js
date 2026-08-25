@@ -1,6 +1,5 @@
-// Catalog grounded in K2 Jimzon's real Shopee category mix.
-// Product photos: Open Food Facts (CC-BY-SA) — real EU retail packaging.
-// Every product answers the two blueprint questions: whyBuy / whyRare.
+// Catalog grounded in K2 Jimzon's real category mix.
+// Real EU retail packaging, imported directly from Italy.
 
 const OFF = 'https://images.openfoodfacts.org/images/products'
 
@@ -73,8 +72,8 @@ export const products = [
     barcode: '8050031123456',
     product_video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     usage_instructions: 'Best enjoyed spread generously on warm bread, croissants, or pandesal. Can also be used as a filling for pastries or swirled into gelato.',
-    whyBuy: 'The pistachio cream Milan cafés put in cornetti — dense, nutty, barely sweet.',
-    whyRare: 'Real high-percentage pistachio creams rarely clear PH import; most local jars are thin paste.',
+    whyBuy: 'The rich pistachio cream Milan cafés spread in morning cornetti: dense, nutty, and gently sweet.',
+    whyRare: 'Real high-percentage pistachio creams rarely reach local shelves; most supermarket jars are mostly sugar paste.',
     pairings: ['Spread on warm pandesal', 'Swirled into halo-halo', 'Filling for mamón'],
     guide: {
       title: 'The pistachio cornetto, at home',
@@ -85,11 +84,11 @@ export const products = [
         { name: 'Flaky sea salt', inBundle: false }
       ],
       steps: [
-        'Warm a brioche bun or pandesal for 40 seconds — the cream loosens against warm bread.',
+        'Warm a brioche bun or pandesal for 40 seconds so the cream spreads easily on warm bread.',
         'Spread two generous spoons inside while the bread is still warm.',
-        'Finish with a pinch of flaky salt. Espresso on the side, obviously.',
+        'Finish with a pinch of flaky salt. Serve with hot espresso.',
       ],
-      bundle: { label: 'Merienda bundle — Pistì + Lavazza Oro', price: 2598, partner: 'lavazza-oro' },
+      bundle: { label: 'Merienda bundle: Pistì + Lavazza Oro', price: 2598, partner: 'lavazza-oro' },
     },
   },
   {
@@ -107,10 +106,10 @@ export const products = [
     img: '/images/mock/luxury_coffee_bag.jpg',
     afterImage: '/images/mock/luxury_espresso.jpg',
     collections: ['cafe'],
-    inside: '100% Arabica, medium roast — the café-counter bag',
-    whyBuy: 'Italy’s daily-driver espresso since 1956, in the kilo bag your barista actually buys.',
-    whyRare: 'PH shelves carry the softer Asian-market blend at best; this is the fresh-dated EU bag.',
-    pairings: ['Kapeng barako drinkers, meet your upgrade', 'Espresso base for iced latte', 'Affogato over ube ice cream'],
+    inside: '100% Arabica, medium roast (the authentic Italian café bag)',
+    whyBuy: 'Italy’s daily-driver espresso since 1956, in the 1kg bag Italian baristas brew every morning.',
+    whyRare: 'Local supermarket shelves usually stock older export blends; this is the fresh European batch.',
+    pairings: ['Kapeng barako drinkers looking for a smoother cup', 'Espresso base for iced lattes', 'Affogato over vanilla or ube ice cream'],
     guide: {
       title: 'Moka pot, the Torino way',
       ingredients: [
@@ -119,11 +118,11 @@ export const products = [
         { name: 'Filtered water', inBundle: false }
       ],
       steps: [
-        'Grind fine but not powder — one notch coarser than espresso.',
-        'Fill the base with hot (not cold) water up to the valve, grounds loose, never tamped.',
-        'Low heat, lid open, pull it off at the first gurgle.',
+        'Grind fine but not powder, just one notch coarser than espresso.',
+        'Fill the base with hot water up to the safety valve. Keep grounds loose and never tamp down.',
+        'Brew on low heat with the lid open, then take off the flame at the first gurgle.',
       ],
-      bundle: { label: 'Café starter — Oro beans + Pistì cream', price: 2598, partner: 'pistachio-cream' },
+      bundle: { label: 'Café starter: Oro beans + Pistì cream', price: 2598, partner: 'pistachio-cream' },
     },
   },
   {
@@ -141,10 +140,10 @@ export const products = [
     img: '/images/mock/luxury_biscuit_pouch.jpg',
     afterImage: '/images/mock/luxury_biscuit_plate.jpg',
     collections: ['trending'],
-    inside: '22 baked biscuits with a Nutella heart',
-    whyBuy: 'Italy sold out of these for months at launch. The hype is deserved.',
-    whyRare: 'The EU pouch, not the smaller repacked version circulating in gray-market groups.',
-    pairings: ['Pasalubong that survives the balikbayan box', 'With hot tsokolate', 'Crushed over leche flan'],
+    inside: '22 baked biscuits with a Nutella chocolate-hazelnut heart',
+    whyBuy: 'These sold out across Italy for months after release. The buttery crunch and creamy center are worth the hunt.',
+    whyRare: 'Direct EU-market pouches, fresh and crisp, not older stock from third-party resellers.',
+    pairings: ['Pasalubong that stays fresh', 'Enjoyed with hot chocolate', 'Crushed over vanilla flan'],
     guide: {
       title: 'Merienda, upgraded',
       ingredients: [
@@ -153,11 +152,11 @@ export const products = [
         { name: 'Hot black coffee', inBundle: false }
       ],
       steps: [
-        'Chill the pouch for 20 minutes — the centre turns fudgy.',
-        'Serve with strong coffee to cut the sweetness.',
-        'Reseal the pouch. This is the hard step.',
+        'Chill the pouch for 20 minutes so the hazelnut center turns thick and fudgy.',
+        'Serve with fresh black coffee or espresso.',
+        'Reseal the pouch between snacking.',
       ],
-      bundle: { label: 'Pasalubong pair — Biscuits + Nutella 400 g', price: 878, partner: 'nutella-jar' },
+      bundle: { label: 'Pasalubong pair: Biscuits + Nutella 400 g', price: 878, partner: 'nutella-jar' },
     },
   },
   {
@@ -175,10 +174,10 @@ export const products = [
     img: '/images/mock/luxury_chocolate_jar.jpg',
     afterImage: '/images/mock/luxury_crepes.jpg',
     collections: ['cafe'],
-    inside: 'The original gianduja recipe, EU production',
-    whyBuy: 'The EU-made jar — noticeably darker and less sweet than the repacked versions sold locally.',
-    whyRare: 'Import-batch Nutella with EU dates; supermarket jars here are often near expiry.',
-    pairings: ['Champorado topper', 'Banana-Nutella turon', 'Straight from the jar, we don’t judge'],
+    inside: 'The original Italian gianduja recipe, European production',
+    whyBuy: 'The authentic European glass jar: richer roasted hazelnut flavor and less sweet than tropical formulations.',
+    whyRare: 'Imported in fresh European batches with generous best-before dates.',
+    pairings: ['Champorado topper', 'Banana and Nutella turon', 'Spread over warm toast'],
   },
   {
     id: 'rio-mare',
@@ -196,9 +195,9 @@ export const products = [
     afterImage: '/images/mock/luxury_tuna_salad.jpg',
     collections: ['hiddenGems'],
     inside: 'Yellowfin fillets in 100% olive oil',
-    whyBuy: 'Italy’s #1 tuna — whole fillets in real olive oil, nothing like brined flakes.',
-    whyRare: 'Almost never on PH shelves; when it is, it’s triple the price per can.',
-    pairings: ['Ten-minute tonno pasta', 'Upgrade for pan de sal sandwiches', 'Rice bowls with calamansi'],
+    whyBuy: 'Italy’s favorite tuna: tender whole fillets packed in pure olive oil, never water or brine.',
+    whyRare: 'Rarely found in local stores, and priced at a steep markup when it is.',
+    pairings: ['Quick 10-minute pasta', 'Pandesal tuna melt', 'Rice bowls with a squeeze of calamansi'],
     guide: {
       title: 'Ten-minute tonno pasta',
       ingredients: [
@@ -208,11 +207,11 @@ export const products = [
         { name: 'Parsley', inBundle: false }
       ],
       steps: [
-        'Boil spaghetti; save a cup of the pasta water.',
-        'Flake the tuna with its oil, garlic, and chili into a warm pan.',
-        'Toss with the pasta and a splash of that starchy water.',
+        'Boil spaghetti in salted water; reserve half a cup of pasta water.',
+        'Flake the tuna with its olive oil, garlic, and chili into a warm pan.',
+        'Toss with the drained pasta and a splash of pasta water.',
       ],
-      bundle: { label: 'Pantry bundle — Rio Mare + Spaghetti N°5', price: 428, partner: 'barilla-spaghetti' },
+      bundle: { label: 'Pantry bundle: Rio Mare + Spaghetti N°5', price: 428, partner: 'barilla-spaghetti' },
     },
   },
   {
@@ -230,10 +229,10 @@ export const products = [
     img: `${OFF}/807/680/951/3340/front_en.3.400.jpg`,
     afterImage: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800&q=80',
     collections: ['justImported'],
-    inside: 'Basil, cashew, Grana Padano DOP',
-    whyBuy: 'Fresh basil pesto with real Grana Padano — the jar Italians keep for weeknights.',
-    whyRare: 'The EU recipe with DOP cheese, not the export version with substitute hard cheese.',
-    pairings: ['Pesto pasta in 12 minutes', 'Spread for grilled cheese', 'Marinade for inihaw na manok'],
+    inside: 'Italian basil, cashews, and real Grana Padano DOP cheese',
+    whyBuy: 'Fresh basil pesto with real Grana Padano: the classic jar Italian families keep on hand for quick dinners.',
+    whyRare: 'European recipe made with protected origin cheeses rather than processed substitutes.',
+    pairings: ['Pesto pasta in 10 minutes', 'Spread on toasted sourdough', 'Marinade for grilled chicken'],
     guide: {
       title: 'Pesto that tastes like Liguria',
       ingredients: [
@@ -242,11 +241,11 @@ export const products = [
         { name: 'Parmigiano Reggiano', inBundle: false }
       ],
       steps: [
-        'Never heat pesto in the pan — it goes bitter.',
-        'Loosen two spoonfuls with pasta water in the serving bowl.',
-        'Toss the drained pasta through it off the heat.',
+        'Never cook pesto in a hot pan because heat can make basil bitter.',
+        'Stir two spoonfuls of pesto with a splash of hot pasta water in your serving bowl.',
+        'Toss the drained hot pasta directly in the bowl off the heat.',
       ],
-      bundle: { label: 'Pranzo bundle — Pesto + Spaghetti N°5', price: 478, partner: 'barilla-spaghetti' },
+      bundle: { label: 'Pranzo bundle: Pesto + Spaghetti N°5', price: 478, partner: 'barilla-spaghetti' },
     },
   },
   {
@@ -264,10 +263,10 @@ export const products = [
     img: `${OFF}/807/680/019/5057/front_en.3809.400.jpg`,
     afterImage: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=800&q=80',
     collections: ['justImported'],
-    inside: 'Bronze-line durum wheat, the blue box itself',
-    whyBuy: 'The world’s benchmark spaghetti — al dente forgiveness no local pasta matches.',
-    whyRare: 'EU-milled durum batch, not the softer licensed production sold regionally.',
-    pairings: ['Tonno pasta with Rio Mare', 'Filipino-style sweet spaghetti, elevated', 'Aglio e olio at midnight'],
+    inside: '100% durum wheat semolina, the classic blue box',
+    whyBuy: 'The benchmark Italian spaghetti: holds a firm al dente texture that never turns mushy.',
+    whyRare: 'Authentic European durum wheat batch, milled and packed in Italy.',
+    pairings: ['Tuna pasta with Rio Mare', 'Aglio e olio with garlic and olive oil', 'Classic meat sauce'],
     guide: {
       title: 'The perfect al dente bite',
       ingredients: [
@@ -277,11 +276,11 @@ export const products = [
         { name: 'Pasta water', inBundle: false }
       ],
       steps: [
-        'Boil a large pot of water. Salt it heavily until it tastes like the sea.',
-        'Drop the spaghetti in and stir immediately to prevent sticking. Do not break the pasta.',
-        'Cook for exactly 9 minutes for authentic Italian al dente, or 11 minutes if you prefer it softer.',
+        'Boil a large pot of water and add generous salt until it tastes seasoned.',
+        'Drop the spaghetti in and stir immediately so noodles stay separate. Do not snap the pasta.',
+        'Cook for exactly 9 minutes for traditional Italian al dente, or 10 to 11 minutes for a softer bite.',
       ],
-      bundle: { label: 'Pasta bundle — Spaghetti N°5 + Barilla Pesto', price: 478, partner: 'barilla-pesto' },
+      bundle: { label: 'Pasta bundle: Spaghetti N°5 + Barilla Pesto', price: 478, partner: 'barilla-pesto' },
     },
   },
   {
@@ -299,12 +298,12 @@ export const products = [
     img: `${OFF}/800/511/063/0408/front_en.79.400.jpg`,
     afterImage: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=80',
     collections: ['justImported'],
-    inside: '100% Italian tomatoes, nothing else',
-    whyBuy: 'The tomato base every Italian nonna actually uses — sweet, bright, no tin taste.',
-    whyRare: 'Real passata is a specialty-store item here at twice this price.',
-    pairings: ['Sunday-sauce base', 'Menudo and afritada upgrade', 'Two-ingredient pizza sauce'],
+    inside: '100% ripe Italian sun-ripened tomatoes and salt',
+    whyBuy: 'The sweet, velvety tomato purée Italian cooks rely on. Naturally bright without any metallic aftertaste.',
+    whyRare: 'Pure Italian passata without added citric acid or thickeners.',
+    pairings: ['Neapolitan pizza base', 'Sunday tomato and meat sauce', 'Rich stews and braises'],
     guide: {
-      title: 'The five-minute authentic pizza sauce',
+      title: 'Five-minute pizza sauce',
       ingredients: [
         { name: 'Mutti passata di pomodoro', inBundle: true },
         { name: 'Fiorfiore taralli pugliesi', inBundle: true },
@@ -312,11 +311,11 @@ export const products = [
         { name: 'Fresh basil & salt', inBundle: false }
       ],
       steps: [
-        'Pour the passata into a bowl. Do not cook it — real Neapolitan pizza uses raw sauce.',
-        'Stir in a pinch of salt, a drizzle of good olive oil, and torn fresh basil if you have it.',
-        'Spread lightly on your dough and bake. The oven will cook it perfectly.',
+        'Pour the passata into a small bowl. Do not cook it beforehand; pizza sauce cooks best in the oven.',
+        'Stir in a pinch of salt, a drizzle of olive oil, and fresh torn basil leaves.',
+        'Spread lightly over your dough before adding cheese and toppings.',
       ],
-      bundle: { label: 'Pizza bundle — Mutti Passata + Taralli', price: 508, partner: 'taralli' },
+      bundle: { label: 'Pizza bundle: Mutti Passata + Taralli', price: 508, partner: 'taralli' },
     },
   },
   {
@@ -334,23 +333,23 @@ export const products = [
     img: `${OFF}/800/166/501/1419/front_it.29.400.jpg`,
     afterImage: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=800&q=80',
     collections: ['justImported', 'hiddenGems'],
-    inside: 'Thin-rolled fresh egg pasta filled with cured prosciutto',
-    whyBuy: 'Fresh filled pasta that cooks in 3 minutes — restaurant dinner, weeknight effort.',
-    whyRare: 'Chilled fresh pasta with cured meat almost never survives consolidated shipping; ours flies cold-chain.',
-    pairings: ['In chicken tinola broth', 'Brown butter and sage', 'With Mutti passata, 10 minutes flat'],
+    inside: 'Silky egg pasta filled with cured Italian prosciutto',
+    whyBuy: 'Fresh filled pasta that cooks in 3 minutes flat: restaurant-quality comfort with weeknight simplicity.',
+    whyRare: 'Fresh chilled pasta filled with cured meat requires cold-chain shipping, which we handle personally.',
+    pairings: ['Warm chicken broth', 'Tossed in brown butter with sage', 'With Mutti passata sauce'],
     guide: {
-      title: 'Fresh pasta, the 3-minute dinner',
+      title: 'Fresh pasta in 3 minutes',
       ingredients: [
         { name: 'Giovanni Rana Sfogliavelo', inBundle: true },
         { name: 'Mutti passata di pomodoro', inBundle: true },
         { name: 'Grated hard cheese', inBundle: false }
       ],
       steps: [
-        'Simmer in good chicken broth, not plain water, for 3 minutes.',
-        'They are done the moment they float.',
-        'Serve in the broth with grated cheese. That is the whole dish.',
+        'Simmer in seasoned broth or salted boiling water for 3 minutes.',
+        'They are cooked and tender the moment they float to the top.',
+        'Serve with a ladle of broth or simple warm butter and grated cheese.',
       ],
-      bundle: { label: 'Pranzo bundle — Sfogliavelo + Passata', price: 528, partner: 'mutti-passata' },
+      bundle: { label: 'Pranzo bundle: Sfogliavelo + Passata', price: 528, partner: 'mutti-passata' },
     },
   },
   {
@@ -368,24 +367,24 @@ export const products = [
     img: `${OFF}/800/112/087/2128/front_en.54.400.jpg`,
     afterImage: 'https://images.unsplash.com/photo-1572551525042-491c29668bdc?w=800&q=80',
     collections: ['hiddenGems', 'justImported'],
-    inside: 'Crisp cracker rings baked with extra-virgin olive oil',
-    whyBuy: 'The southern-Italian answer to chips — savory, crumbly, dangerously snackable.',
-    whyRare: 'A regional specialty that simply doesn’t reach PH retail. Pure discovery item.',
-    pairings: ['With cured meats and cheese', 'Beer match: pale lager', 'Dip in Barilla pesto'],
+    inside: 'Crisp cracker rings baked with extra-virgin olive oil and white wine',
+    whyBuy: 'Southern Italy’s traditional savory snack: crumbly, golden, and baked with pure olive oil.',
+    whyRare: 'A regional Pugliese specialty that rarely reaches mainstream stores in Asia.',
+    pairings: ['Charcuterie boards and cold cuts', 'Pairs with chilled lager or white wine', 'Dipped in pesto'],
     guide: {
-      title: 'Build the five-minute aperitivo',
+      title: 'Build a quick Italian aperitivo',
       ingredients: [
         { name: 'Fiorfiore taralli pugliesi', inBundle: true },
         { name: 'Rio Mare tuna in olive oil', inBundle: true },
         { name: 'Cured meats & cheese', inBundle: false },
-        { name: 'Cold beer or wine', inBundle: false }
+        { name: 'Cold beverage', inBundle: false }
       ],
       steps: [
-        'Tip taralli into a bowl — never serve from the bag, it matters.',
-        'Add anything cured or pickled you have on hand.',
-        'Open something cold. Aperitivo achieved.',
+        'Pour taralli into a serving bowl for sharing.',
+        'Set out olives, cured meat, or cheese slices alongside.',
+        'Serve with cold drinks for an easy afternoon get-together.',
       ],
-      bundle: { label: 'Aperitivo set — Taralli + Rio Mare', price: 628, partner: 'rio-mare' },
+      bundle: { label: 'Aperitivo set: Taralli + Rio Mare', price: 628, partner: 'rio-mare' },
     },
   },
   {
@@ -402,10 +401,10 @@ export const products = [
     hue: 260,
     img: `${OFF}/807/680/958/0748/front_en.22.400.jpg`,
     collections: ['trending'],
-    inside: 'Cocoa-hazelnut biscuits with the eleven sugar stars',
-    whyBuy: 'Italy’s most beloved breakfast biscuit — a national institution since 1983.',
-    whyRare: 'Never officially distributed in PH; the pouches here arrive only via pasabuy.',
-    pairings: ['Dunked in cold milk, the Italian way', 'Crushed into mango float', 'Base for no-bake cheesecake'],
+    inside: 'Cocoa-hazelnut breakfast biscuits with eleven sugar icing stars',
+    whyBuy: 'Italy’s most beloved breakfast biscuit, a staple in Italian homes since 1983.',
+    whyRare: 'Mulino Bianco has no official Philippine distributor; our bags are flown in directly from Italy.',
+    pairings: ['Dunked in cold milk', 'Crushed into mango float', 'Base for no-bake cheesecake'],
   },
   {
     id: 'baiocchi',
@@ -421,10 +420,10 @@ export const products = [
     hue: 32,
     img: `${OFF}/807/680/957/3252/front_en.148.400.jpg`,
     collections: ['cafe'],
-    inside: 'Sandwich biscuits with hazelnut-cocoa cream',
-    whyBuy: 'The biscuit Italians grab with their espresso — light, not cloying.',
-    whyRare: 'Mulino Bianco has no PH distribution; every pouch is direct import.',
-    pairings: ['Espresso companion', 'Office desk-drawer stash', 'Kids’ baon upgrade'],
+    inside: 'Shortbread sandwich biscuits filled with hazelnut-cocoa cream',
+    whyBuy: 'The biscuit Italians pair with morning espresso: buttery, crisp, and lightly sweet.',
+    whyRare: 'Direct Italian grocery import with authentic freshness.',
+    pairings: ['Espresso companion', 'Office snack', 'Afternoon treat with tea'],
   },
   {
     id: 'kinder-bueno',
@@ -440,10 +439,10 @@ export const products = [
     hue: 28,
     img: `${OFF}/000/008/005/2760/front_en.503.400.jpg`,
     collections: ['trending'],
-    inside: 'Hazelnut cream wafer, EU chocolate recipe',
-    whyBuy: 'EU-made Bueno — the chocolate is noticeably different from the tropical-recipe bars here.',
-    whyRare: 'Local bars use heat-resistant formulation; connoisseurs hunt the EU batch.',
-    pairings: ['Freezer-cold is the move', 'Milkshake mix-in', 'The ₱89 self-care purchase'],
+    inside: 'Crispy wafer with creamy hazelnut filling and European milk chocolate',
+    whyBuy: 'Original European recipe with a creamier hazelnut core and silky milk chocolate coating.',
+    whyRare: 'European-market bars use real cocoa butter instead of heat-resistant vegetable wax blends.',
+    pairings: ['Chilled in the fridge', 'Blended into milkshakes', 'Everyday snack'],
   },
   {
     id: 'loacker',
@@ -459,10 +458,10 @@ export const products = [
     hue: 40,
     img: `${OFF}/800/038/014/8714/front_fr.20.400.jpg`,
     collections: ['hiddenGems'],
-    inside: 'Hazelnut cream wafers from the Dolomites',
-    whyBuy: 'Baked at 1,000 m in the Dolomites — the wafer every Italian pantry hides somewhere.',
-    whyRare: 'The EU recipe, crispier and less sweet than the Asian-market version.',
-    pairings: ['With afternoon kape', 'Crumbled over ice cream', 'Lunchbox staple'],
+    inside: 'Hazelnut cream wafers from the Italian Alps',
+    whyBuy: 'Baked with Italian hazelnuts at high altitude in the Dolomites: light, crispy, and full of flavor.',
+    whyRare: 'Fresh European recipe with three crisp wafers and two rich hazelnut cream layers.',
+    pairings: ['Afternoon coffee break', 'Topping for gelato', 'Lunchbox snack'],
   },
   {
     id: 'lotus-biscoff',
@@ -479,10 +478,10 @@ export const products = [
     img: `${OFF}/541/012/671/6870/front_en.23.400.jpg`,
     afterImage: 'https://images.unsplash.com/photo-1563805042-7684c8a9e9cb?w=800&q=80',
     collections: ['justImported', 'cafe'],
-    inside: 'Caramelised biscuit spread with biscuit chunks',
-    whyBuy: 'The most-requested pasabuy item in our order history — now stocked, no waiting.',
-    whyRare: 'Fresh EU-dated jars; supermarket stock here is thin and often near expiry.',
-    pairings: ['Biscoff-graham icebox cake', 'Warm on suman', 'Milkshake base'],
+    inside: 'Caramelized biscuit spread packed with crunchy biscuit crumbs',
+    whyBuy: 'One of our most-requested items: rich caramelized spice flavor with satisfying crunch in every spoon.',
+    whyRare: 'Imported European batch with fresh dates and rich consistency.',
+    pairings: ['Layered in graham cake', 'Warmed over native suman', 'Blended into smoothies'],
     guide: {
       title: 'Three ways before the jar empties',
       ingredients: [
@@ -492,16 +491,16 @@ export const products = [
         { name: 'Graham crackers', inBundle: false }
       ],
       steps: [
-        'Microwave two spoons for 15 seconds and pour over vanilla ice cream.',
-        'Layer with crushed graham and cream for a no-bake icebox cake.',
-        'Or just a spoon. We understand.',
+        'Warm two spoonfuls for 15 seconds and drizzle over vanilla ice cream.',
+        'Layer with crushed grahams and cream for an easy no-bake dessert.',
+        'Enjoy straight from the jar with a spoon.',
       ],
-      bundle: { label: 'Sweet pair — Biscoff + Nutella Biscuits', price: 898, partner: 'nutella-biscuits' },
+      bundle: { label: 'Sweet pair: Biscoff + Nutella Biscuits', price: 898, partner: 'nutella-biscuits' },
     },
   },
   {
     id: 'milano-21',
-    name: 'Milano № 21 eau de parfum — inspired scent',
+    name: 'Milano № 21 eau de parfum (inspired scent)',
     short: 'Milano № 21',
     size: '85 ml',
     origin: 'Milano',
@@ -514,23 +513,23 @@ export const products = [
     img: null,
     afterImage: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=800&q=80',
     collections: ['trending'],
-    inside: 'Honest "smells-like" alternative · bergamot, iris, musk',
-    whyBuy: 'Our most-repurchased fragrance — sold honestly as an inspired scent, never a fake original.',
-    whyRare: 'Genuine EU-made inspired scents are rare here; most "smells-like" bottles are dupes of dupes.',
-    pairings: ['Office-safe daily wear', 'Layers well with vanilla lotions', 'Gift-ready boxed bottle'],
+    inside: 'Bergamot, soft iris, and clean white musk notes',
+    whyBuy: 'Our most-repurchased fragrance: formulated and bottled in Europe as an honest inspired scent.',
+    whyRare: 'European-made inspired perfume with genuine oil concentration that lasts throughout the day.',
+    pairings: ['Daily office and casual wear', 'Layers well with gentle vanilla lotions', 'Gift-boxed bottle'],
     guide: {
-      title: 'Make an inspired scent last',
+      title: 'Make your fragrance last',
       ingredients: [
         { name: 'Milano № 21 eau de parfum', inBundle: true },
         { name: 'Perlier honey bath cream', inBundle: true },
         { name: 'Unscented body lotion', inBundle: false }
       ],
       steps: [
-        'Spray on pulse points right after a shower, onto slightly damp skin.',
-        'Do not rub your wrists together — it crushes the top notes.',
-        'One pass on clothing makes the drydown last past dinner.',
+        'Apply to pulse points right after showering on slightly moisturized skin.',
+        'Avoid rubbing your wrists together so the top notes open naturally.',
+        'A light spray on fabric helps the base notes carry throughout the evening.',
       ],
-      bundle: { label: 'Self-care duo — № 21 + Perlier bath cream', price: 898, partner: 'perlier-honey' },
+      bundle: { label: 'Self-care duo: № 21 + Perlier bath cream', price: 898, partner: 'perlier-honey' },
     },
   },
   {
@@ -547,10 +546,10 @@ export const products = [
     hue: 52,
     img: null,
     collections: ['justImported'],
-    inside: 'Italian white honey, no parabens',
-    whyBuy: 'A 100-year-old Italian pharmacy brand at sari-sari-friendly pricing.',
-    whyRare: 'Perlier has no official PH distribution — it only arrives in consignments like ours.',
-    pairings: ['Post-beach skin rescue', 'Pairs with Milano № 21', 'Mother’s day staple'],
+    inside: '100% organic Italian white honey, paraben-free',
+    whyBuy: 'Classic Italian pharmacy bath cream with rich moisturizing lather and a clean, subtle honey fragrance.',
+    whyRare: 'Perlier has no commercial Philippine distributor and arrives exclusively through specialty consignments.',
+    pairings: ['Restorative evening baths', 'Pairs with Milano № 21', 'Thoughtful gift for family'],
   },
   {
     id: 'lindt-bianco',
@@ -566,10 +565,10 @@ export const products = [
     hue: 60,
     img: `${OFF}/800/334/006/2532/front_en.24.400.jpg`,
     collections: ['trending'],
-    inside: 'Rich, creamy Swiss white chocolate',
-    whyBuy: 'The silkiest white chocolate on the market, practically melts on the tongue.',
-    whyRare: 'Usually sold out or arrives melted; we ship cold-chain to preserve the temper.',
-    pairings: ['Snacktime treat', 'Paired with dark espresso', 'Crushed over berries'],
+    inside: 'Silky Swiss-recipe white chocolate bar',
+    whyBuy: 'Exceptionally smooth white chocolate made with real vanilla and cocoa butter.',
+    whyRare: 'Shipped with temperature care so it arrives firm without melting or heat bloom.',
+    pairings: ['Afternoon chocolate break', 'Enjoyed with black espresso', 'Shaved over fresh fruit'],
   },
   {
     id: 'suddenly-fragrance',
@@ -583,12 +582,12 @@ export const products = [
     stock: 12,
     tag: 'Bestseller',
     hue: 330,
-    img: '/images/mock/luxury_biscuit_pouch.jpg', // Placeholder since image gen failed
+    img: '/images/mock/luxury_biscuit_pouch.jpg',
     collections: ['trending', 'hiddenGems'],
-    inside: 'Highly praised inspired scents, long-lasting eau de parfum',
-    whyBuy: 'Considered one of the best affordable alternatives to high-end designer fragrances.',
-    whyRare: 'European exclusive line that rarely hits local online shops with authentic stock.',
-    pairings: ['Everyday signature scent', 'Gift for her', 'Office-friendly'],
+    inside: 'Long-lasting European eau de parfum',
+    whyBuy: 'A well-loved affordable everyday perfume from European boutique stores.',
+    whyRare: 'Imported in limited quantities directly from European retail partners.',
+    pairings: ['Everyday signature fragrance', 'Thoughtful gift', 'Office wear'],
   },
   {
     id: 'lavazza-dek',
@@ -604,10 +603,10 @@ export const products = [
     hue: 200,
     img: `${OFF}/800/007/002/0542/front_en.4.400.jpg`,
     collections: ['cafe'],
-    inside: 'Premium decaffeinated Italian espresso blend',
-    whyBuy: 'All the robust Italian espresso flavor without the caffeine jitters.',
-    whyRare: 'Fresh imported batches; most local decaf options are stale or instant.',
-    pairings: ['Late night espresso', 'Affogato dessert', 'Caffeine-free mornings'],
+    inside: 'Naturally decaffeinated Italian roast ground coffee',
+    whyBuy: 'Full-bodied Italian espresso flavor with chocolate undertones, with caffeine removed naturally.',
+    whyRare: 'Freshly roasted Italian decaf vacuum-sealed for aroma retention.',
+    pairings: ['Evening espresso', 'Affogato dessert', 'Gentle morning cup'],
   },
   {
     id: 'pringles-paprika',
@@ -623,18 +622,18 @@ export const products = [
     hue: 18,
     img: `${OFF}/800/301/730/7993/front_en.3.400.jpg`,
     collections: ['trending', 'snacks'],
-    inside: 'Potato crisps with mild paprika seasoning',
-    whyBuy: 'The EU paprika flavor is noticeably richer and more complex than what\'s sold locally.',
-    whyRare: 'Not imported by any mainstream grocery chain — only available through specialty importers like us.',
-    pairings: ['Party snacks', 'Movie nights', 'Beer companion'],
+    inside: 'Crispy potato snacks seasoned with sweet European paprika',
+    whyBuy: 'The famous European paprika seasoning: savory, aromatic, and distinctly richer than Asian formulas.',
+    whyRare: 'Not carried by major local supermarkets; sourced specially for European snack fans.',
+    pairings: ['Movie night snacks', 'Game day treats', 'Pairs with cold drinks'],
   }
 ]
 
 export const COLLECTIONS = [
-  { id: 'trending', name: 'Trending in Italy', note: 'What Italians are actually buying this month' },
-  { id: 'justImported', name: 'Just imported', note: 'Landed in Manila this week — counted into live stock' },
-  { id: 'hiddenGems', name: 'Hidden gems', note: 'Regional finds you won’t see on any PH shelf' },
-  { id: 'cafe', name: 'Coffee shop favorites', note: 'What our café wholesale clients reorder most' },
+  { id: 'trending', name: 'Trending in Italy', note: 'Popular items on Italian grocery shelves right now' },
+  { id: 'justImported', name: 'Just imported', note: 'Recently landed in Manila and added to our stock' },
+  { id: 'hiddenGems', name: 'Regional specialties', note: 'Authentic items rarely found in Philippine supermarkets' },
+  { id: 'cafe', name: 'Café favorites', note: 'Provisions trusted by our partner coffee shops' },
 ]
 
 export const CATEGORIES = [

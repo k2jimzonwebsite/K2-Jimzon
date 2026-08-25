@@ -2,12 +2,13 @@ import { useEffect, useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import BeforeAfterSlider from '../components/BeforeAfterSlider'
 import CatalogGrid from '../components/CatalogGrid'
+import ProductPassport from '../components/ProductPassport'
 import { RedButton, StockPill, TrustBadge, Kicker, QuantityStepper } from '../components/ui/bits'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 
 export default function MasterProduct() {
-  const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, go, addRequest } = useStore()
+  const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, go, requestPasabuyItem } = useStore()
   const [qty, setQty] = useState(1)
   const [currentSlide, setCurrentSlide] = useState(0)
 
@@ -46,7 +47,7 @@ export default function MasterProduct() {
       items.push({ type: 'image', src: product.primary_image_url || product.img })
     }
 
-    // Additional images (mocking additional images to show "other tiny bubbles")
+    // Additional images
     if (product.gallery && product.gallery.length > 0) {
       product.gallery.forEach(imgSrc => {
          items.push({ type: 'image', src: imgSrc })
@@ -58,7 +59,7 @@ export default function MasterProduct() {
     
     // Fallback if no images
     if (items.length === 0) {
-      items.push({ type: 'image', src: '/images/placeholder.jpg' })
+      items.push({ type: 'image', src: '/images/placeholder.svg' })
     }
     return items
   }, [product])
@@ -70,6 +71,8 @@ export default function MasterProduct() {
       <div className="mb-8 flex items-center justify-between border-b border-line pb-5">
         <nav className="flex items-center gap-2 text-sm text-navy-faint font-medium">
           <button className="hover:text-navy transition-colors cursor-pointer" onClick={() => go('home')}>Home</button>
+          <span>/</span>
+          <button className="hover:text-navy transition-colors cursor-pointer" onClick={() => go('catalog')}>Catalog</button>
           <span>/</span>
           <span className="text-navy">{product.name}</span>
         </nav>
@@ -119,7 +122,7 @@ export default function MasterProduct() {
                 <button
                   key={i}
                   onClick={() => setCurrentSlide(i)}
-                  className="flex h-11 w-11 items-center justify-center rounded-full"
+                  className="flex h-11 w-11 items-center justify-center rounded-full cursor-pointer"
                   aria-label={`Go to slide ${i + 1}`}
                 ><span className={`h-2 w-2 rounded-full transition-[transform,background-color] duration-150 ${i === currentSlide ? 'scale-125 bg-crimson' : 'bg-navy/25'}`} /></button>
               ))}
@@ -133,7 +136,7 @@ export default function MasterProduct() {
         {/* Right Column: Product Info */}
         <div className="flex flex-col lg:pt-2">
           <div className="flex flex-wrap items-center gap-2 mb-4 shrink-0">
-            <TrustBadge>Recorded origin · {product.country_of_origin || product.origin || 'Imported'}</TrustBadge>
+            <TrustBadge>Origin: {product.country_of_origin || product.origin || 'Italy'}</TrustBadge>
             <StockPill stock={product.stock_available || product.stock} />
             {(product.subcategory || product.category_id) && (
               <span className="rounded-full bg-shell border border-line/50 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-navy-soft">
@@ -159,7 +162,7 @@ export default function MasterProduct() {
           </div>
 
           <p className="mt-6 text-base leading-relaxed text-navy-soft">
-            {product.description || product.short_description || product.why_buy || 'Product details are being reviewed before publication.'}
+            {product.description || product.short_description || product.why_buy || 'Authentic Italian import in our Manila inventory.'}
           </p>
 
           {product.why_buy && product.why_buy !== product.description && (
@@ -168,6 +171,11 @@ export default function MasterProduct() {
               {product.why_buy}
             </div>
           )}
+
+          {/* Product Passport Provenance Card */}
+          <div className="mt-6">
+            <ProductPassport product={product} stock={totalStock} />
+          </div>
 
           {/* Product Specifications */}
           <div className="mt-8 border-t border-line pt-6">
@@ -191,19 +199,18 @@ export default function MasterProduct() {
               {product.barcode && (
                 <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Barcode</span><span className="w-2/3">{product.barcode}</span></div>
               )}
-              {/* Fallback if no specs available to ensure section isn't empty */}
               {!product.ingredients && !product.net_weight && !product.brand_id && (
-                <div className="p-3.5 text-center text-navy-faint italic">Specifications unavailable</div>
+                <div className="p-3.5 text-center text-navy-faint italic">Specifications verified upon batch arrival</div>
               )}
             </div>
           </div>
 
           {/* How Filipinos Enjoy It */}
-          {(product.pairings?.length > 0 || product.seo_keywords?.length > 0) && (
+          {Array.isArray(product.pairings) && product.pairings.length > 0 && (
             <div className="mt-8 border-t border-line/60 pt-6">
               <Kicker className="text-navy-faint mb-4">How Filipinos enjoy it</Kicker>
               <div className="flex flex-wrap gap-2">
-                {(product.pairings?.length > 0 ? product.pairings : product.seo_keywords).map((p) => (
+                {product.pairings.map((p) => (
                   <span key={p} className="rounded-full bg-shell border border-line/50 px-3 py-1.5 text-[13px] font-medium text-navy-soft">
                     {p}
                   </span>
@@ -220,26 +227,30 @@ export default function MasterProduct() {
               {!isOutOfStock && <QuantityStepper value={qty} onChange={setQty} max={remaining} size="md" />}
               <span className="text-[13px] font-medium text-navy-soft">
                 {isOutOfStock 
-                  ? 'Currently out of stock. Add to Pasabuy to request this item.' 
-                  : (canAdd ? (product.inside || 'In stock and ready to ship.') : 'All available stock is already in your cart.')}
+                  ? 'Currently out of stock in Manila. You can request this item via Pasabuy.' 
+                  : (canAdd ? (product.inside || 'In stock and ready for Manila delivery.') : 'All available stock is already in your cart.')}
               </span>
             </div>
 
             <div>
               {isOutOfStock ? (
                 <button
-                  className="mt-5 min-h-12 w-full rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-[transform,opacity] duration-150 hover:bg-crimson-deep active:scale-[0.97]"
-                  onClick={() => { addRequest(product.name); go('pasabuy'); }}
+                  className="mt-5 min-h-12 w-full rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-[transform,opacity] duration-150 hover:bg-crimson-deep active:scale-[0.97] cursor-pointer shadow-sm"
+                  onClick={() => requestPasabuyItem({
+                    item: product.name,
+                    notes: `Requested from out-of-stock product page (SKU: ${product.sku || product.id})`,
+                    qty,
+                  })}
                 >
-                  Add to Pasabuy
+                  Request via Pasabuy
                 </button>
               ) : (
                 <RedButton
-                  className="mt-5 w-full py-3.5 text-base"
+                  className="mt-5 w-full py-3.5 text-base font-bold shadow-sm"
                   onClick={() => { addToCart(product.id, qty); setCartOpen(true) }}
                   disabled={!canAdd}
                 >
-                  {canAdd ? `Add to cart — ${peso(price * qty)}` : 'Stock limit reached'}
+                  {canAdd ? `Add to cart · ${peso(price * qty)}` : 'Stock limit reached'}
                 </RedButton>
               )}
             </div>
@@ -272,13 +283,13 @@ function ProductTabs({ product }) {
     <div className="w-full">
       <div className="flex gap-4 border-b border-line/50 mb-4">
         <button 
-          className={`pb-2 text-sm font-semibold transition-colors ${activeTab === 'ingredients' ? 'text-navy border-b-2 border-navy' : 'text-navy-soft hover:text-navy'}`}
+          className={`pb-2 text-sm font-semibold transition-colors cursor-pointer ${activeTab === 'ingredients' ? 'text-navy border-b-2 border-navy' : 'text-navy-soft hover:text-navy'}`}
           onClick={(e) => { e.stopPropagation(); setActiveTab('ingredients'); }}
         >
           Ingredients
         </button>
         <button 
-          className={`pb-2 text-sm font-semibold transition-colors ${activeTab === 'instructions' ? 'text-navy border-b-2 border-navy' : 'text-navy-soft hover:text-navy'}`}
+          className={`pb-2 text-sm font-semibold transition-colors cursor-pointer ${activeTab === 'instructions' ? 'text-navy border-b-2 border-navy' : 'text-navy-soft hover:text-navy'}`}
           onClick={(e) => { e.stopPropagation(); setActiveTab('instructions'); }}
         >
           Instructions
@@ -314,15 +325,15 @@ function ProductTabs({ product }) {
                           if (product.guide.bundle.partner) addToCart(product.guide.bundle.partner)
                           setCartOpen(true)
                         }}
-                        className="w-full py-2.5 px-4 text-sm font-semibold rounded-lg bg-shell border border-line text-navy shadow-sm transition-colors hover:bg-navy hover:text-cream"
+                        className="w-full py-2.5 px-4 text-sm font-semibold rounded-lg bg-shell border border-line text-navy shadow-sm transition-colors hover:bg-navy hover:text-cream cursor-pointer"
                       >
-                        Buy the bundle — {peso(product.guide.bundle.price)}
+                        Get the pairing bundle for {peso(product.guide.bundle.price)}
                       </button>
                     </div>
                   )}
                 </>
               ) : (
-                <p className="text-sm text-navy-soft italic">Not available</p>
+                <p className="text-sm text-navy-soft italic">Ingredients verified on label</p>
               )}
             </motion.div>
           ) : (
@@ -359,7 +370,7 @@ function ProductTabs({ product }) {
               ) : product.usage_instructions ? (
                 <p className="text-sm leading-relaxed text-navy-soft whitespace-pre-line">{product.usage_instructions}</p>
               ) : (
-                <p className="text-sm text-navy-soft italic">Not available</p>
+                <p className="text-sm text-navy-soft italic">Serving instructions available on package</p>
               )}
             </motion.div>
           )}

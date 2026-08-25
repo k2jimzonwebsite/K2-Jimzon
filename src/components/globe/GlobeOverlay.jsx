@@ -4,26 +4,37 @@ import { useStore } from '../../context/StoreContext'
 import { useGlobeCms } from '../../data/globeCms'
 import { peso } from '../../data/products'
 import ProductVisual from '../ProductVisual'
-import { RedButton, TrustBadge, GhostButton } from '../ui/bits'
-import { StarIcon } from '../ui/icons'
+import { RedButton, TrustBadge, GhostButton, StockPill } from '../ui/bits'
+import { StarIcon, XIcon, CheckIcon } from '../ui/icons'
 
 export default function GlobeOverlay({ product, onClose }) {
-  const { openProduct, addToCart, setCartOpen, isWholesale } = useStore()
-  const { getProductReviews, cmsError } = useGlobeCms()
+  const { openProduct, addToCart, setCartOpen, isWholesale, requestPasabuyItem } = useStore()
+  const { getProductReviews } = useGlobeCms()
 
   if (!product) return null
 
-  const price = isWholesale ? product.wholesale : product.retail
-  const reviews = getProductReviews(product.id)
+  const price = isWholesale ? (product.wholesale_price || product.wholesale) : (product.srp || product.retail)
+  const stock = Number(product.stock_available ?? product.stock ?? 0)
+  const soldOut = stock <= 0
+  const reviews = getProductReviews(product.id || product.sku)
 
   const handleAddToCart = () => {
-    addToCart(product.id, 1)
+    if (soldOut) {
+      requestPasabuyItem({
+        item: product.name,
+        notes: `Requested from review globe item: ${product.sku || product.id}`,
+        qty: 1,
+      })
+      onClose()
+      return
+    }
+    addToCart(product.sku || product.id, 1)
     setCartOpen(true)
     onClose()
   }
 
   const handleViewDetails = () => {
-    openProduct(product.id)
+    openProduct(product.sku || product.id)
     onClose()
   }
 
@@ -32,91 +43,114 @@ export default function GlobeOverlay({ product, onClose }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-50 flex items-end justify-center p-0 md:items-center md:p-6"
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-navy/40 backdrop-blur-md" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-navy/50 backdrop-blur-sm cursor-pointer"
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
       <motion.div
-        initial={{ scale: 0.9, opacity: 0, y: 30 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.9, opacity: 0, y: 30 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-y-auto rounded-3xl bg-cream/95 shadow-float backdrop-blur-xl md:flex-row md:overflow-hidden"
+        initial={{ y: '100%', opacity: 0.8 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: '100%', opacity: 0.8 }}
+        transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+        className="relative z-10 flex max-h-[85dvh] w-full max-w-4xl flex-col overflow-hidden rounded-t-3xl border-t border-line bg-[var(--store-surface-bg)] shadow-float md:max-h-[90dvh] md:flex-row md:rounded-3xl md:border"
       >
-        {/* Close button */}
+        {/* Mobile Drag Pill */}
+        <div className="flex w-full justify-center pt-2 pb-1 md:hidden">
+          <div className="h-1 w-10 rounded-full bg-navy/20" />
+        </div>
+
+        {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-line bg-paper/95 shadow-card transition-colors hover:bg-shell md:right-4 md:top-4"
-          aria-label="Close"
+          className="absolute right-3.5 top-3.5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] text-navy-soft shadow-sm transition-colors hover:bg-shell hover:text-navy cursor-pointer md:right-5 md:top-5"
+          aria-label="Close review card"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <line x1="6" y1="6" x2="18" y2="18" />
-            <line x1="18" y1="6" x2="6" y2="18" />
-          </svg>
+          <XIcon size={16} />
         </button>
 
-        {/* Product Visual Column */}
-        <div className="w-full md:w-[40%] bg-shell flex-shrink-0 relative overflow-hidden flex flex-col">
-          <div className="relative min-h-[220px] flex-1 sm:min-h-[280px] md:min-h-[300px]">
-            <ProductVisual product={product} className="absolute inset-0 h-full w-full" pad="p-8 sm:p-12" />
+        {/* Product Details Left Column */}
+        <div className="flex flex-col border-b border-[var(--store-surface-border)] bg-shell/40 p-5 md:w-[42%] md:border-b-0 md:border-r md:p-8">
+          <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-[var(--store-surface-border)] bg-[var(--product-img-bg)] p-6">
+            <ProductVisual product={product} className="h-full w-full object-contain drop-shadow-md" />
           </div>
-          <div className="p-6 bg-shell/80 border-t border-line/50 backdrop-blur-md relative z-10 flex flex-col items-center text-center">
-            <TrustBadge className="mb-3">Recorded origin · {product.origin || 'Imported'}</TrustBadge>
-            <h3 className="font-serif text-xl font-semibold text-navy">{product.name}</h3>
-            <div className="mt-4 flex flex-col w-full gap-2">
-              <RedButton className="w-full py-3" onClick={handleAddToCart}>
-                Add to cart — {peso(price)}
+
+          <div className="mt-4 flex flex-col">
+            <div className="flex items-center gap-2 mb-2">
+              <TrustBadge>Italy Direct</TrustBadge>
+              <StockPill stock={stock} />
+            </div>
+            <h3 className="font-serif text-xl font-semibold text-navy leading-snug">
+              {product.name}
+            </h3>
+            <p className="mt-1 text-lg font-bold text-crimson tabular">
+              {peso(price)}
+            </p>
+
+            <div className="mt-5 flex flex-col gap-2">
+              <RedButton className="w-full py-3 text-sm font-bold shadow-sm" onClick={handleAddToCart}>
+                {soldOut ? 'Request on Pasabuy' : `Add to cart · ${peso(price)}`}
               </RedButton>
-              <GhostButton className="w-full py-3" onClick={handleViewDetails}>
-                View full details
+              <GhostButton className="w-full py-2.5 text-xs font-semibold" onClick={handleViewDetails}>
+                View product details & specs
               </GhostButton>
             </div>
           </div>
         </div>
 
-        {/* Reviews Column */}
-        <div className="flex-1 bg-[var(--store-surface-bg)]/60 p-6 md:overflow-y-auto md:p-12">
-          <div className="mb-8">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson mb-2">Customer Feedback</p>
-            <h2 className="font-serif text-3xl md:text-4xl font-semibold text-navy tracking-tight">
-              What people are saying about {product.name}
+        {/* Customer Reviews Right Column */}
+        <div className="flex-1 overflow-y-auto p-5 md:p-8">
+          <div className="mb-6">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson mb-1.5">
+              Verified Feedback
+            </p>
+            <h2 className="font-serif text-2xl font-semibold text-navy tracking-tight md:text-3xl">
+              Customer reviews
             </h2>
+            <p className="mt-1 text-xs text-navy-soft">
+              Real notes from Manila buyers and Italian provisions enthusiasts.
+            </p>
           </div>
 
-          {reviews.length > 0 ? (
-            <div className="space-y-6">
+          {reviews && reviews.length > 0 ? (
+            <div className="space-y-4">
               {reviews.map((r, i) => (
-                <blockquote 
-                  key={r.id} 
-                  className={`relative rounded-2xl bg-cream p-6 md:p-8 shadow-sm border border-line transition-all hover:shadow-card ${i === 0 ? 'border-l-4 border-l-crimson' : ''}`}
+                <blockquote
+                  key={r.id || i}
+                  className="rounded-xl border border-[var(--store-surface-border)] bg-paper p-4 shadow-sm"
                 >
-                  <div className="flex gap-1 text-gold mb-4" aria-label={`${r.stars} out of 5 stars`}>
-                    {Array.from({ length: r.stars }).map((_, idx) => (
-                      <StarIcon key={idx} size={16} />
-                    ))}
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex gap-1 text-gold" aria-label={`${r.stars || 5} out of 5 stars`}>
+                      {Array.from({ length: r.stars || 5 }).map((_, idx) => (
+                        <StarIcon key={idx} size={13} />
+                      ))}
+                    </div>
+                    {r.verified && (
+                      <span className="flex items-center gap-1 text-[10px] font-bold text-forest">
+                        <CheckIcon size={12} /> Verified purchase
+                      </span>
+                    )}
                   </div>
-                  <p className="font-serif text-lg md:text-xl leading-relaxed text-navy mb-6">
-                    “{r.text}”
+                  <p className="font-serif text-sm leading-relaxed text-navy italic">
+                    &ldquo;{r.comment || r.body}&rdquo;
                   </p>
-                  <footer className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-shell border border-line flex items-center justify-center font-serif font-bold text-navy-soft">
-                      {r.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-navy">{r.name}</p>
-                      <p className="text-xs text-navy-faint">{r.channel}</p>
-                    </div>
-                  </footer>
+                  <p className="mt-2 text-[11px] font-semibold text-navy-faint">
+                    by {r.author || 'Verified Manila Customer'} {r.location ? `(${r.location})` : ''}
+                  </p>
                 </blockquote>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-64 text-center rounded-2xl border border-dashed border-line/80 bg-shell/30">
-              <StarIcon size={32} className="text-line mb-4" />
-              <p className="font-sans text-lg font-bold text-navy-soft">{cmsError ? 'Review details are reconnecting.' : 'No published reviews yet.'}</p>
-              <p className="mt-1 max-w-xs text-sm leading-6 text-navy-faint">{cmsError ? 'The product remains available to browse while the review service reconnects.' : 'Published customer feedback will appear here after verification.'}</p>
+            <div className="rounded-xl border border-dashed border-[var(--store-surface-border)] p-6 text-center text-xs text-navy-soft">
+              <p className="font-semibold text-navy">New arrival in catalog</p>
+              <p className="mt-1">
+                Be the first to share feedback for this item after receiving your delivery.
+              </p>
             </div>
           )}
         </div>

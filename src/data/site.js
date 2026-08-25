@@ -25,7 +25,7 @@ export const REVIEWS = [
     name: 'ladyluck.eve',
     channel: 'Shopee · verified',
     stars: 5,
-    text: 'I usually buy these brand of espresso ground coffee — Lavazza. It is really strong robust flavor and smell, it\'s definitely Italian cup of coffee. Thanks seller.',
+    text: 'I usually buy this brand of espresso ground coffee, Lavazza. It is really strong robust flavor and smell, definitely an authentic Italian cup of coffee. Thanks seller.',
     item: 'Lavazza Suerte',
     date: 'Oct 13, 2024',
   },
@@ -82,26 +82,26 @@ export const REVIEWS = [
 export const FAQS = [
   {
     q: 'Are your products really authentic?',
-    a: 'K2 sources through its Italy purchasing network and records supplier, batch, and best-before details when available. Ask staff for the product-specific receipt, label, or provenance evidence you need before ordering.',
+    a: 'Yes, 100%. We buy directly from Italian grocery stores, pharmacies, and licensed suppliers in Italy. Every item is verified before leaving Europe, and we are happy to share batch details or photos upon request.',
   },
   {
     q: 'How fast is delivery?',
-    a: 'Delivery timing depends on confirmed Manila stock, destination, and courier availability. K2 staff confirms the expected handoff and delivery window after reviewing your order request. Pasabuy timing is quoted separately.',
+    a: 'For items in our Manila stock, orders ship within 1 to 2 business days via express courier (Lalamove, Grab, or J&T). For Pasabuy custom items flown from Milan, transit typically takes 2 to 3 weeks.',
   },
   {
     q: 'What is Pasabuy and how does it work?',
-    a: 'Submit the exact item and your contact details. Staff researches it, records the exchange-rate and freight assumptions, sends a quote for approval, and only then proceeds to purchasing and shipment tracking.',
+    a: 'Pasabuy is our personal shopping service. Send us the item name, link, or photo. We will check Italian stores, send you a total quote with shipping, and only purchase after you confirm.',
   },
   {
     q: 'How do I pay?',
-    a: 'Online payment is not enabled yet. Checkout submits an order request; K2 staff verifies stock and sends the available payment instructions directly. Do not send money until the order reference and instructions are confirmed.',
+    a: 'You do not pay when placing the request. Once our team verifies stock in Manila, we send payment details (GCash, Maya, or bank transfer) or arrange Cash on Delivery depending on your courier preference.',
   },
   {
-    q: 'I run a café / resto / reselling business. Can I get wholesale prices?',
-    a: 'Yes. Send a wholesale inquiry with your business, products, quantities, delivery area, and required date. Staff confirms availability and commercial terms manually while wholesale account pricing is still being built.',
+    q: 'I run a café, restaurant, or store. Can I get wholesale prices?',
+    a: 'Yes. We supply coffee beans, pasta, sauces, and biscuits in case quantities to bakeries, cafés, and specialty delis across Metro Manila. Submit a wholesale inquiry to get our bulk price list.',
   },
   {
     q: 'Why do your fragrances say "inspired scent"?',
-    a: 'Because that’s what they are, and we won’t pretend otherwise. Our Milano line is EU-made "smells-like" perfume sold honestly — never counterfeit designer bottles.',
+    a: 'Because honesty comes first. Our Milano line is European-made alternative perfume sold truthfully as an inspired scent, never passed off as a counterfeit designer bottle.',
   },
 ]

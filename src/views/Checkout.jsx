@@ -20,9 +20,9 @@ export default function Checkout() {
   if (lines.length === 0) {
     return (
       <main className="mx-auto max-w-lg px-4 py-20 text-center">
-        <h1 className="font-serif text-2xl font-semibold">Nothing to request yet</h1>
-        <p className="mt-2 text-base text-navy-soft">Your cart is empty.</p>
-        <GhostButton className="mt-6" onClick={() => go('home')}>Back to the shop</GhostButton>
+        <h1 className="font-serif text-2xl font-semibold">Your cart is empty</h1>
+        <p className="mt-2 text-base text-navy-soft">You have not added any products to request yet.</p>
+        <GhostButton className="mt-6" onClick={() => go('home')}>Back to catalog</GhostButton>
       </main>
     )
   }
@@ -35,11 +35,11 @@ export default function Checkout() {
     event.preventDefault()
     setError('')
     if (!form.email.trim() && !form.phone.trim()) {
-      setError('Enter an email address or mobile number so we can confirm the order.')
+      setError('Please enter an email address or mobile number so we can confirm your order.')
       return
     }
     if (guestBffEnabled() && !botToken) {
-      setError('Complete the security check before submitting your order request.')
+      setError('Please complete the security check before submitting.')
       return
     }
     setSubmitting(true)
@@ -60,9 +60,9 @@ export default function Checkout() {
   return (
     <main className="store-section max-w-6xl pb-24 pt-10 font-sans md:pb-20 md:pt-14">
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson">Final review</p>
-      <h1 className="mt-2 font-serif text-4xl font-semibold tracking-tight">Submit an order request</h1>
+      <h1 className="mt-2 font-serif text-4xl font-semibold tracking-tight">Review order request</h1>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-navy-soft">
-        No online payment is collected yet. We will verify stock, confirm delivery details, and send payment instructions through your chosen contact.
+        No upfront payment is required. We will check our Manila stock, confirm courier options, and send payment details directly to you.
       </p>
 
       <form onSubmit={submit} className="mt-9 grid gap-6 md:grid-cols-[1fr_0.86fr] md:gap-10">
@@ -94,7 +94,7 @@ export default function Checkout() {
             {appliedCoupon && <button type="button" onClick={() => { removeCoupon(); setCouponMessage('Coupon removed.') }} className="mt-2 text-xs font-semibold text-crimson">Remove coupon</button>}
           </div>
           <p className="mt-4 text-xs leading-relaxed text-navy-soft">
-            The server validates current prices, coupon rules, and stock when you submit. The actual courier charge is communicated for your approval before fulfillment.
+            We check stock and coupon details before confirming your order. Courier delivery is quoted for your approval before anything is sent.
           </p>
         </TuscanCard>
 
@@ -104,7 +104,7 @@ export default function Checkout() {
               <ShieldIcon size={20} className="mt-0.5 shrink-0 text-forest" />
               <div>
                 <h2 className="font-serif text-lg font-semibold">Contact and delivery</h2>
-                <p className="mt-1 text-sm text-navy-soft">Submitting this form does not charge you or reserve stock.</p>
+                <p className="mt-1 text-sm text-navy-soft">Submitting this form does not charge you or require immediate payment.</p>
               </div>
             </div>
 
@@ -113,7 +113,7 @@ export default function Checkout() {
                 <input className={`${fieldClass} mt-1.5`} value={form.name} onChange={update('name')} autoComplete="name" required />
               </label>
               <div className="grid gap-4 sm:grid-cols-2">
-                <label className="block text-sm font-semibold">Email
+                <label className="block text-sm font-semibold">Email address
                   <input className={`${fieldClass} mt-1.5`} type="email" value={form.email} onChange={update('email')} autoComplete="email" />
                 </label>
                 <label className="block text-sm font-semibold">Mobile number
@@ -124,7 +124,7 @@ export default function Checkout() {
                 <textarea className={`${fieldClass} mt-1.5 min-h-24 resize-y`} value={form.address} onChange={update('address')} autoComplete="street-address" required />
               </label>
               <label className="block text-sm font-semibold">Order note <span className="font-normal text-navy-soft">(optional)</span>
-                <textarea className={`${fieldClass} mt-1.5 min-h-20 resize-y`} value={form.note} onChange={update('note')} placeholder="Delivery timing, landmark, or product question" />
+                <textarea className={`${fieldClass} mt-1.5 min-h-20 resize-y`} value={form.note} onChange={update('note')} placeholder="Delivery timing, landmark, or specific instructions" />
               </label>
             </div>
 
@@ -132,10 +132,10 @@ export default function Checkout() {
 
             {error && <p role="alert" className="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
 
-            <CrimsonButton type="submit" className="mt-5 w-full py-4 text-base" disabled={submitting}>
+            <CrimsonButton type="submit" className="mt-5 w-full py-4 text-base font-bold shadow-sm" disabled={submitting}>
               {submitting ? 'Submitting request…' : 'Submit order request'}
             </CrimsonButton>
-            <p className="mt-3 text-center text-xs text-navy-soft">K2 staff will contact you before any payment is requested.</p>
+            <p className="mt-3 text-center text-xs text-navy-soft">Our staff will contact you directly before payment is collected.</p>
           </div>
         </TuscanCard>
       </form>

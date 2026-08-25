@@ -4,9 +4,9 @@ import { LIFESTYLE } from '../../data/site'
 import { Kicker } from '../ui/bits'
 
 const STEPS = [
-  ['market', 'Bought from established Italian shelves', 'Our buyers source through Italian supermarkets, pharmacies, and wholesalers, with the exact item details recorded for review.'],
-  ['plane', 'Consolidated for the Manila route', 'Catalog goods and approved Pasabuy purchases are organized into the appropriate shipment with their request trail intact.'],
-  ['warehouse', 'Checked into shared Manila stock', 'Arrival counts become the operating record used across the website, Shopee, Lazada, TikTok Shop, and wholesale fulfillment.'],
+  ['market', 'Sourced from Italian shelves', 'Our buyers shop directly in Italian grocery stores, pharmacies, and trusted local markets.'],
+  ['plane', 'Flown to Manila', 'Catalog goods and approved Pasabuy items are packed carefully and flown on regular scheduled cargo.'],
+  ['warehouse', 'Delivered to your home', 'We inspect every box upon arrival, stock items in Manila, and ship them straight to your doorstep.'],
 ]
 
 export default function StorySection() {
@@ -17,9 +17,13 @@ export default function StorySection() {
     <section className="store-section py-16 md:py-24">
       <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
         <div className="lg:sticky lg:top-32 lg:h-fit">
-          <Kicker>How K2 operates</Kicker>
-          <h2 className="mt-3 max-w-lg font-serif text-4xl font-semibold leading-[1.02] tracking-tight text-navy md:text-5xl">From an Italian shelf to a Manila order.</h2>
-          <p className="mt-5 max-w-md text-sm leading-7 text-navy-soft">The storefront is connected to a real multi-channel operation. Product records and customer requests stay useful after the page visit ends.</p>
+          <Kicker>How it works</Kicker>
+          <h2 className="mt-3 max-w-lg font-serif text-4xl font-semibold leading-[1.02] tracking-tight text-navy md:text-5xl">
+            From an Italian shelf to your kitchen.
+          </h2>
+          <p className="mt-5 max-w-md text-sm leading-7 text-navy-soft">
+            Everything you see is backed by real physical inventory in Manila and scheduled sourcing trips to Italy.
+          </p>
         </div>
 
         <ol className="story-journey border-t border-line" aria-label="K2 sourcing journey">

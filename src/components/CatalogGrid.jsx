@@ -6,7 +6,7 @@ import ProductCard from './ProductCard'
 import { SearchIcon, XIcon } from './ui/icons'
 
 export default function CatalogGrid() {
-  const { query, setQuery, category, setCategory, listedProducts: products } = useStore()
+  const { query, setQuery, category, setCategory, listedProducts: products, requestPasabuyItem } = useStore()
   const [sortBy, setSortBy] = useState('popular')
   const reducedMotion = useReducedMotion()
 
@@ -39,7 +39,7 @@ export default function CatalogGrid() {
             {CATEGORIES.map((item) => {
               const selected = category === item
               return (
-                <button key={item} onClick={() => setCategory(item)} aria-pressed={selected} className={`min-h-11 shrink-0 border-b-2 px-3 text-left text-sm transition-colors duration-150 lg:flex lg:w-full lg:items-center lg:justify-between lg:border-b-0 lg:border-l-2 lg:px-3 ${selected ? 'border-crimson font-bold text-crimson' : 'border-transparent text-navy-soft hover:text-navy'}`}>
+                <button key={item} onClick={() => setCategory(item)} aria-pressed={selected} className={`min-h-11 shrink-0 border-b-2 px-3 text-left text-sm transition-colors duration-150 cursor-pointer lg:flex lg:w-full lg:items-center lg:justify-between lg:border-b-0 lg:border-l-2 lg:px-3 ${selected ? 'border-crimson font-bold text-crimson' : 'border-transparent text-navy-soft hover:text-navy'}`}>
                   <span>{item}</span>
                   {selected && <span className="hidden h-1.5 w-1.5 rounded-full bg-crimson lg:block" />}
                 </button>
@@ -88,11 +88,30 @@ export default function CatalogGrid() {
           </div>
 
           {filteredProducts.length === 0 && (
-            <div className="flex min-h-64 flex-col items-center justify-center border border-dashed border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-6 text-center">
-              <SearchIcon size={24} className="text-navy-faint" />
-              <h2 className="mt-4 font-serif text-xl font-semibold text-navy">No matching products</h2>
-              <p className="mt-1 max-w-sm text-sm text-navy-soft">Try a broader search or return to all categories.</p>
-              <button onClick={clear} className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--store-surface-border)] px-4 text-sm font-bold text-navy hover:border-navy/30"><XIcon size={14} /> Clear filters</button>
+            <div className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-dashed border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-6 py-8 text-center">
+              <SearchIcon size={28} className="text-navy-faint" />
+              <h2 className="mt-4 font-serif text-xl font-semibold text-navy">Looking for something specific?</h2>
+              <p className="mt-1.5 max-w-md text-sm text-navy-soft">
+                {query.trim()
+                  ? `We do not have "${query.trim()}" in our Manila stock right now, but we can source it for you from Italy.`
+                  : 'No products found matching these filters.'}
+              </p>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                {query.trim() && (
+                  <button
+                    onClick={() => requestPasabuyItem({ item: query.trim(), notes: `Requested item "${query.trim()}" from catalog search.` })}
+                    className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-all duration-150 hover:bg-crimson-deep active:scale-[0.97] cursor-pointer shadow-sm"
+                  >
+                    Request &ldquo;{query.trim()}&rdquo; via Pasabuy
+                  </button>
+                )}
+                <button
+                  onClick={clear}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--store-surface-border)] bg-shell/50 px-4 text-sm font-bold text-navy hover:bg-shell active:scale-[0.97] cursor-pointer"
+                >
+                  <XIcon size={14} /> Clear search & filters
+                </button>
+              </div>
             </div>
           )}
         </div>

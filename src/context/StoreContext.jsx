@@ -36,14 +36,69 @@ const NO_ADMIN_INBOX = {
 // product's image just to fill the frame.
 const PLACEHOLDER_IMG = '/images/placeholder.svg'
 
+function parseLocationState() {
+  if (typeof window === 'undefined') return { view: 'home', productId: null }
+  try {
+    const params = new URLSearchParams(window.location.search)
+    const pathname = window.location.pathname.replace(/^\/+|\/+$/g, '')
+    
+    if (pathname.startsWith('product/')) {
+      const sku = pathname.slice(8)
+      if (sku) return { view: 'master_product', productId: decodeURIComponent(sku) }
+    }
+    if (pathname === 'catalog' || pathname === 'cabinet' || pathname === 'shop') return { view: 'catalog', productId: null }
+    if (pathname === 'pasabuy') return { view: 'pasabuy', productId: null }
+    if (pathname === 'trade' || pathname === 'wholesale') return { view: 'wholesale', productId: null }
+    if (pathname === 'contact') return { view: 'contact', productId: null }
+    if (pathname === 'account') return { view: 'account', productId: null }
+    if (pathname === 'messages') return { view: 'messages', productId: null }
+    if (pathname === 'checkout') return { view: 'checkout', productId: null }
+    if (pathname === 'confirmation') return { view: 'confirmation', productId: null }
+
+    if (params.get('product')) return { view: 'master_product', productId: params.get('product') }
+    if (params.get('view')) return { view: params.get('view'), productId: params.get('productId') || null }
+    if (customerAccountEnabled() && params.get('account') === 'continue') return { view: 'account', productId: null }
+
+    return { view: 'home', productId: null }
+  } catch {
+    return { view: 'home', productId: null }
+  }
+}
+
 export function StoreProvider({ children, enableAdminData = false, adminAuth = NO_ADMIN_RUNTIME, adminInbox = NO_ADMIN_INBOX }) {
-  const [view, setView] = useState(() => {
-    if (!customerAccountEnabled()) return 'home'
-    try { return new URLSearchParams(window.location.search).get('account') === 'continue' ? 'account' : 'home' }
-    catch { return 'home' }
+  const initialLoc = useMemo(() => parseLocationState(), [])
+  const [view, setView] = useState(initialLoc.view)
+  const [productId, setProductId] = useState(initialLoc.productId)
+  const [pasabuyPrefill, setPasabuyPrefill] = useState(null)
+  
+  const [cart, setCart] = useState(() => {
+    if (typeof window === 'undefined') return []
+    try {
+      const saved = localStorage.getItem('k2_cart_v1')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
   })
-  const [productId, setProductId] = useState(null)
-  const [cart, setCart] = useState([])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('k2_cart_v1', JSON.stringify(cart))
+    } catch {}
+  }, [cart])
+
+  // Listen to browser Back / Forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const { view: nextView, productId: nextProductId } = parseLocationState()
+      setView(nextView)
+      setProductId(nextProductId)
+      setCartOpen(false)
+    }
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
   const [isWholesale, setIsWholesale] = useState(false)
   const {
     user, isAdmin, authReady, loginAdmin, loginWithGoogle, logoutAdmin,
@@ -167,9 +222,6 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
       .subscribe()
 
-    // Realtime is the fast path, not the only freshness mechanism. A missed
-    // event must not leave a visible catalogue stale indefinitely. Refresh at
-    // a bounded interval while the page is visible and immediately on return.
     const refreshWhenVisible = () => {
       if (document.visibilityState === 'visible') fetchProducts()
     }
@@ -187,23 +239,12 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     if (!supabase) { setLoading(false); return }
     if (catalogRefreshInFlightRef.current) return
     catalogRefreshInFlightRef.current = true
-    // Unlisted is fetched too: it must resolve by direct link even though it
-    // never appears in browse surfaces. `listedProducts` below is what the
-    // catalogue, search and category grids read.
-    //
-    // stock_available on the products row is protected by a trigger — only
-    // batch operations can change it. The authoritative count lives in
-    // v_product_stock_from_batches. We join both in parallel and overlay the
-    // batch-derived stock so the storefront always shows accurate availability.
     try {
       const [productsResult, stockResult] = await Promise.all([
         supabase.from('products').select('*').in('status', ['Live', 'Active', 'Unlisted']),
         supabase.from('v_product_stock_from_batches').select('sku, stock_from_batches'),
       ])
 
-      // Publish one coherent snapshot only when both authoritative reads
-      // succeed. On a partial refresh failure, preserve the last known-good
-      // products and stock rather than mixing new product data with stale stock.
       if (!productsResult.error && productsResult.data && !stockResult.error && stockResult.data) {
         const stockBySku = Object.fromEntries(
           stockResult.data.map(r => [r.sku, r.stock_from_batches])
@@ -215,18 +256,15 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         setDbProducts(merged)
       }
     } catch {
-      // Preserve the last known-good snapshot. The next bounded refresh or
-      // Realtime event can recover without blanking the catalogue.
+      // Preserve last known-good snapshot
     } finally {
       catalogRefreshInFlightRef.current = false
       setLoading(false)
     }
   }
 
-  // Merge the rich local data (images, hue, guide) with the live pricing and stock from Supabase
+  // Merge the rich local data with the live pricing and stock from Supabase
   const products = useMemo(() => {
-    // No live data yet: serve local mockups, but normalize them to the same
-    // field shape DB products use so every consumer works either way.
     if (dbProducts.length === 0) {
       if (!import.meta.env.DEV) return []
       return localProducts.map(lp => ({
@@ -241,30 +279,25 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       }))
     }
     return dbProducts.map((dbP) => {
-      // Match a local mockup ONLY when it genuinely corresponds to this SKU.
-      // This used to fall back to localProducts[i % length], which handed a real
-      // product another product's photo, brand, description and usage guide —
-      // e.g. "Nutella Biscuits 304g" rendered as a Caffè Milano espresso bag.
-      // A wrong photo on a live listing is worse than a missing one.
       const localP = localProducts.find(lp =>
         lp.id.toLowerCase() === dbP.sku.toLowerCase()
       ) || null
 
       return {
-        ...(localP || {}), // rich UI data, only when it's really this product
+        ...(localP || {}),
         category: dbP.subcategory || (dbP.origin?.startsWith('Shopee|') ? dbP.origin.split('|')[1] : (dbP.origin === 'Shopee' ? 'Shopee Imports' : (localP?.category ?? 'Uncategorised'))),
         sku: dbP.sku,
-        id: dbP.sku, // alias for legacy components
+        id: dbP.sku,
         name: dbP.name,
         img: dbP.primary_image_url || dbP.secondary_images?.[0] || localP?.img || PLACEHOLDER_IMG,
         afterImage: dbP.lifestyle_images?.[0] || dbP.secondary_images?.[1] || localP?.afterImage || null,
         gallery: (dbP.secondary_images?.length ? dbP.secondary_images : null) || localP?.gallery || [],
         srp: Number(dbP.srp),
-        retail: Number(dbP.srp), // alias
+        retail: Number(dbP.srp),
         wholesale_price: Number(dbP.wholesale_price),
-        wholesale: Number(dbP.wholesale_price), // alias
+        wholesale: Number(dbP.wholesale_price),
         stock_available: dbP.stock_available,
-        stock: dbP.stock_available, // alias
+        stock: dbP.stock_available,
         why_buy: dbP.why_buy || localP?.whyBuy || null,
         usage_instructions: dbP.usage_instructions,
         ingredients: dbP.ingredients || localP?.ingredients || null,
@@ -291,10 +324,6 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     })
   }, [dbProducts])
 
-  // Browse set — everything a customer can stumble across by clicking around.
-  // Unlisted products are deliberately absent: reachable only if you already
-  // have the link. `products` stays the full set so getProduct() still resolves
-  // them and existing cart lines keep working.
   const listedProducts = useMemo(
     () => products.filter(p => p.status !== 'Unlisted'),
     [products]
@@ -302,7 +331,37 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
 
   const getProduct = (id) => products.find(p => p.id === id || p.sku === id)
 
+  const syncLocation = (nextView, nextProductId = null) => {
+    if (typeof window === 'undefined') return
+    let path = '/'
+    if (nextView === 'master_product' && nextProductId) {
+      path = `/product/${encodeURIComponent(nextProductId)}`
+    } else if (nextView === 'catalog') {
+      path = '/catalog'
+    } else if (nextView === 'pasabuy') {
+      path = '/pasabuy'
+    } else if (nextView === 'wholesale') {
+      path = '/trade'
+    } else if (nextView === 'contact') {
+      path = '/contact'
+    } else if (nextView === 'account') {
+      path = '/account'
+    } else if (nextView === 'messages') {
+      path = '/messages'
+    } else if (nextView === 'checkout') {
+      path = '/checkout'
+    } else if (nextView === 'confirmation') {
+      path = '/confirmation'
+    }
+    try {
+      if (window.location.pathname !== path && !window.location.search.includes('account=continue')) {
+        window.history.pushState({ view: nextView, productId: nextProductId }, '', path)
+      }
+    } catch {}
+  }
+
   const openProduct = (id) => {
+    syncLocation('master_product', id)
     if (!document.startViewTransition) {
       setProductId(id)
       setView('master_product')
@@ -319,6 +378,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   }
 
   const go = (v) => {
+    syncLocation(v, null)
     if (!document.startViewTransition) {
       setView(v)
       setCartOpen(false)
@@ -332,6 +392,15 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         window.scrollTo(0, 0)
       })
     })
+  }
+
+  const requestPasabuyItem = ({ item = '', url = '', notes = '', qty = 1 } = {}) => {
+    setPasabuyPrefill({ item, url, notes, qty })
+    go('pasabuy')
+  }
+
+  const clearPasabuyPrefill = () => {
+    setPasabuyPrefill(null)
   }
 
   const addToCart = (id, qty = 1) =>
@@ -459,8 +528,6 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   const pasabuyRequestKeyRef = useRef({ fingerprint: '', key: '' })
 
   const placeOrder = async (customerDetails = {}) => {
-    // Idempotency guard: block double-submit (double-click / slow network) so a
-    // single checkout can't create duplicate orders or double-decrement stock.
     if (placingOrderRef.current) return
     placingOrderRef.current = true
     try {
@@ -578,8 +645,8 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     sendMessage,
     markConversationRead,
     updateConversationWorkflow,
-    products, // Full set incl. Unlisted — for lookups by id, cart, admin
-    listedProducts, // Browse set — Unlisted removed. Use this for any grid.
+    products,
+    listedProducts,
     loading,
     getProduct,
     isDark,
@@ -588,8 +655,11 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     claimedVouchers,
     applyCoupon,
     removeCoupon,
+    pasabuyPrefill,
+    requestPasabuyItem,
+    clearPasabuyPrefill,
     ...totals,
-  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, requests, conversations, inboxState, products, listedProducts, loading, totals, isDark, appliedCoupon, claimedVouchers])
+  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, requests, conversations, inboxState, products, listedProducts, loading, totals, isDark, appliedCoupon, claimedVouchers, pasabuyPrefill])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

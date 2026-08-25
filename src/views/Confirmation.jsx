@@ -11,7 +11,7 @@ export default function Confirmation() {
     return (
       <main className="mx-auto max-w-lg px-4 py-20 text-center">
         <p className="text-base text-navy-soft">There is no current order request.</p>
-        <GhostButton className="mt-6" onClick={() => go('home')}>Back to the shop</GhostButton>
+        <GhostButton className="mt-6" onClick={() => go('home')}>Back to the catalog</GhostButton>
       </main>
     )
   }
@@ -32,12 +32,12 @@ export default function Confirmation() {
           <InboxIcon size={16} /> Saved for staff review
         </p>
         <p className="mt-2 text-sm leading-relaxed text-navy-soft">
-          No payment was taken and stock has not been reserved yet. K2 staff will verify availability, confirm the final total, and contact you with the next step.
+          No payment was charged. Our staff will check inventory in Manila, calculate exact delivery options, and contact you with payment details.
         </p>
         <ol className="mt-6 space-y-4">
           {[
-            ['Request submitted', 'Complete'],
-            ['Stock and delivery review', 'Next'],
+            ['Request submitted', 'Received'],
+            ['Stock and delivery review', 'Next step'],
             ['Payment instructions', 'After confirmation'],
             ['Packing and courier handoff', 'After payment verification'],
           ].map(([label, state], index) => (
@@ -52,9 +52,9 @@ export default function Confirmation() {
       </div>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-        {guestBffEnabled() && <CrimsonButton onClick={() => go('messages')}>Open secure messages</CrimsonButton>}
+        {guestBffEnabled() && <CrimsonButton onClick={() => go('messages')}>View your messages</CrimsonButton>}
         <GhostButton onClick={() => go('home')}>Continue shopping</GhostButton>
-        <GhostButton onClick={() => go('pasabuy')}>Request an Italy item</GhostButton>
+        <GhostButton onClick={() => go('pasabuy')}>Request an item from Italy</GhostButton>
       </div>
       <div className="mt-6 flex justify-center"><TrustBadge>Keep your reference number</TrustBadge></div>
     </main>
