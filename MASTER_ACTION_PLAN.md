@@ -803,6 +803,16 @@ scrolling toward the section; `tests/storefront-motion.spec.js` (3/3 passing);
 
 ### Queue item 3 — MAP-023 — One modal primitive, then migrate all 18
 
+**Assigned 25 August 2026 and not delivered. Still open, unchanged.** The run
+that received this scope implemented queue item 5, the workflow graph, and a
+documentation reorganization instead. Re-measured after that run: **4 of 18**
+modals handle `Escape`, **6** declare neither `role="dialog"` nor `aria-modal`,
+**2** expose no accessible name, and there is still no shared primitive and no
+focus trap anywhere. Identical to the original baseline.
+
+Re-issue this item before moving further down the queue — it is the oldest
+unstarted work and the only one touching a destructive surface.
+
 Measured 25 August 2026 across `src/views/admin/*Modal.jsx`: only 4 of 18 handle
 `Escape`, 6 declare neither `role="dialog"` nor `aria-modal`, and 2 expose no
 accessible name. `DeleteProductsModal.jsx`, the most destructive surface in the
@@ -831,6 +841,20 @@ surviving component.
 behavioural, not markup-string assertions.
 
 ### Queue item 5 — MAP-024 — Storefront URL routing
+
+**Largely delivered 25 August 2026 in `e7def20`, verified independently.**
+
+`src/context/StoreContext.jsx` now registers a `popstate` listener with cleanup,
+pushes `{ view, productId }` state, and parses a real path table — `/catalog`
+(with `cabinet` and `shop` aliases), `/product/:sku`, `/pasabuy`, `/trade` and
+`/wholesale`, `/contact`, `/account`, `/messages`, `/checkout`, `/confirmation`.
+Deep links resolve, refresh holds the view, and browser back works. This unblocks
+queue items 6 and 7, which could not reference real URLs before it existed.
+
+It shipped with **no test coverage and a production defect**, both now fixed —
+see the verification blind-spot note at the end of this queue.
+
+*Original task description, retained:*
 
 This is the highest-leverage unblocked item and a hard prerequisite for items 6
 and 7. Storefront navigation is in-memory React state only: `go()`,
@@ -921,6 +945,82 @@ asked for the flexibility to count stock on arrival without a prior Italy
 declaration. Prove whether it already works before adding any scope, and record
 the result. Use the portable PostgreSQL rehearsal harness; do not touch the live
 database.
+
+### Queue item 9 — MAP-023 — Decide the Contact page honesty wording
+
+An owner decision, not an engineering task, raised by the 25 August rebuild of
+`src/views/Contact.jsx`.
+
+The page previously carried an explicit row reading *"Public business number
+awaiting confirmation"* / *"Not published yet"*. The rebuild removed it. No phone
+number is advertised now, so the honesty outcome still holds and the smoke suite
+asserts that directly — but the deliberate disclosure is gone.
+
+The rebuild also added: *"Our team checks messages daily during Manila business
+hours. Send us a message and we will respond promptly."* That is a softer form of
+the response promise the wholesale smoke test explicitly forbids, which asserts
+that *"within 1–2 business days"* never appears. Either the wholesale rule is
+narrower than it reads, or this line should be trimmed to match it. Both cannot
+be right.
+
+Decide which, then make the copy and the tests agree. Do not resolve it by
+loosening the wholesale assertion without saying so.
+
+### Queue item 10 — MAP-021 — Rebuild the workflow graph canvas on the graph model
+
+`workflowGraph.js` now supplies what the map was missing: a single entry node,
+49 typed edges, real branching and convergence, grounding evidence per node, and
+traversal helpers. Verified: 41 nodes, 49 edges, 12 branches, 5 convergences, 2
+loopbacks, 0 dangling edges, 0 orphans, 23 layers, 3 terminal outcomes.
+
+The renderer has not been rebuilt on it. `WorkflowSvgCanvas.jsx` still draws a
+connector from node N to node N+1 in DOM order, so the map continues to render
+seven isolated straight lines and the six `decision` nodes still cannot fork on
+screen.
+
+*Deliver:* a pan/zoom canvas laying out `computeLayers()` with edges drawn from
+the edge list and styled by kind; a detail drawer showing upstream ("where did
+this come from"), downstream ("what can you do here"), and the node's grounding
+evidence with a jump to the real screen; and a path tracer over `tracePaths()`.
+Keep every node's existing content — copy, checklist, rules, simulation,
+troubleshooting — exactly as it is; `workflowData.js` stays the single source of
+node text.
+
+*Check:* selecting the entry node and walking any branch reaches a terminal node
+without leaving the canvas; a decision node visibly forks; the seven workflows
+render as one connected graph rather than seven lines.
+
+## Verification blind spot — read before trusting a green suite
+
+Recorded 25 August 2026, after it produced two production-only defects.
+
+**The smoke and UI suites run against `npm run dev:storefront`.** Anything that
+behaves differently in a production build or on Vercel is invisible to them:
+
+1. **The empty-catalogue hazard.** The catalogue memo returns local mockups when
+   `import.meta.env.DEV` is true and `[]` only in a production build, so a green
+   smoke run proves nothing about whether the live catalogue renders.
+2. **Deep-link 404s.** `e7def20` added real routing, but `vercel.storefront.json`
+   declared no catch-all rewrite, so `/product/:sku` had no file on disk and
+   Vercel would have returned 404 before React loaded. The dev server falls back
+   to `index.html` on its own, which hid it entirely. Both artifacts now declare
+   the catch-all last, after the API rewrite, because Vercel takes the first
+   match — and `security-headers-contract.spec.js` pins that ordering.
+
+**The rule this establishes:** when a change depends on hosting behaviour —
+rewrites, headers, redirects, static file resolution, environment gating, or
+anything reading `import.meta.env.DEV` — a dev-server test is not evidence.
+Assert it against the built artifact or the deploy configuration instead.
+
+**A second, related trap: untracked deletions never appear in `git status`.**
+`8d60e0e` deleted `ANTIGRAVITY_HANDOFF/` and
+`ANTIGRAVITY_GEMINI_MASTER_INSTRUCTION.md` outright without gitignoring them,
+taking the Codex review record, the nine MAP checkpoints, and the queue item 3
+scoping with them. The same commit moved nine runbooks into `docs/runbooks/`
+while three contract tests still read them from the repo root, so the suite fell
+from 181 to 178 with nothing in the status output to explain it. Both are fixed.
+When a commit reorganizes or untracks files, rerun the full suite and diff the
+file inventory rather than trusting `git status`.
 
 ## Mandatory four-skill design rule
 
