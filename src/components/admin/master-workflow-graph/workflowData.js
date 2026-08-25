@@ -1,40 +1,48 @@
 /**
- * K2 Jimzon — Master Workflow Graph Data Definitions
- * Complete operational workflows, step-by-step procedures, safety rules,
- * and ChatGPT/AI image generation prompt formulas for staff.
+ * K2 Jimzon — Master Workflow Graph Authoritative Data Definitions
+ * Compliant with K2 Pasabuy Commerce Operations, Operations Rulebook §1–§24,
+ * and high-agency Design Engineering standards.
  */
 
 export const WORKFLOWS = {
   new_inventory: {
     id: 'new_inventory',
     title: 'New Inventory & Intake Ingestion',
-    icon: '📥',
+    iconName: 'BoxIcon',
     badge: 'Stock Ingestion',
     category: 'Inventory Operations',
     description:
-      'Complete end-to-end procedure for receiving cargo boxes from Milan or local suppliers, barcode scanning, FEFO batch lot creation, quality inspection, and multi-channel inventory sync.',
+      'Complete procedure for receiving international cargo boxes from Milan or local vendor deliveries, performing 2-factor barcode scans, FEFO batch lot creation, quality inspection, and multi-channel ledger sync.',
     color: '#0284c7', // sky-600
     accentColor: '#38bdf8',
-    stats: { steps: 6, scansRequired: 2, roles: ['Intake Staff', 'Hub Manager'] },
+    stats: { steps: 6, scansRequired: 2, roles: ['Intake Staff', 'Hub Manager'], estTime: '15-20 mins/box' },
     nodes: [
       {
         id: 'inv_1',
         step: 1,
-        title: 'Shipment Arrival & Seal Verification',
+        title: 'Shipment Arrival & Tamper Verification',
         actor: 'Receiving Staff',
         location: 'Manila Receiving Dock',
         type: 'intake',
-        short: 'Verify international air cargo box number against flight manifest.',
+        short: 'Verify international air cargo box ID against flight consignment manifest.',
         summary:
-          'Inspect physical cargo boxes immediately upon courier/freight delivery. Verify tamper-evident security tape, box reference (e.g. BOX-2026-08-A), and check for external shipping damage.',
+          'Inspect physical cargo boxes immediately upon courier/freight delivery. Verify tamper-evident security tape, cargo box reference (e.g. BOX-2026-08-A), and check for external shipping or moisture damage.',
         checklist: [
-          'Match cargo box ID against the Milan Flight Consignment manifest in Admin BOS.',
-          'Verify tamper-evident tape is intact with no cuts, tears, or double-tape marks.',
-          'Record unboxing timestamp and take photo of sealed box if any damage is visible.',
+          'Match physical cargo box label against the Flight Consignment manifest in Admin BOS.',
+          'Verify tamper-evident tape is intact with zero cuts, punctures, or double-tape marks.',
+          'Record unboxing timestamp and capture photo evidence of sealed box if damage is observed.',
         ],
         rules: [
-          'If box security seal is broken, do NOT proceed without manager sign-off.',
-          'Never discard outer shipping labels until all internal items are fully reconciled.',
+          'If box security seal is broken or compromised, do NOT proceed without shift supervisor sign-off.',
+          'Never discard outer shipping labels until all internal items are fully counted and reconciled.',
+        ],
+        simulation: {
+          testBarcode: 'BOX-2026-08-A',
+          expectedResult: 'Manifest Verified: Flight AZ-784 (MXP -> MNL), Expected 48 Units.',
+        },
+        troubleshooting: [
+          { issue: 'Box ID not in manifest', fix: 'Check if box arrived on an earlier/later flight; notify Milan logistics lead before opening.' },
+          { issue: 'Damaged outer carton', fix: 'Capture 3 photos (top, sides, label) and create an Inbound Damage Exception report.' },
         ],
         adminJump: 'consignment',
         jumpLabel: 'Open Flight Manifests',
@@ -46,17 +54,25 @@ export const WORKFLOWS = {
         actor: 'Intake Staff',
         location: 'Inspection Bench',
         type: 'action',
-        short: 'Unbox goods under overhead lighting and inspect packaging integrity.',
+        short: 'Unbox goods under overhead lighting and inspect individual packaging integrity.',
         summary:
           'Unpack products onto clean stainless steel inspection surface. Check every individual unit for dents, packaging leaks, broken seals, melt damage (chocolates), or improper temperature exposure during transit.',
         checklist: [
-          'Group items by brand and product family (e.g. Mulino Bianco, Marvis, Lavazza).',
-          'Inspect glass jars for seal popping or micro-fractures.',
-          'Check expiration dates printed on manufacturer packaging in DD/MM/YYYY format.',
+          'Group items by brand and product family (e.g. Mulino Bianco, Marvis, Lavazza, Gentile).',
+          'Inspect glass jars for seal popping or micro-fractures in lids.',
+          'Check manufacturer expiration dates printed on packaging in DD/MM/YYYY format.',
         ],
         rules: [
-          'Any item with less than 30 days of shelf life cannot be accepted into regular stock.',
-          'Damaged packaging must be routed immediately to the Damaged Stock quarantine tray.',
+          'Any item with less than 30 days of shelf life cannot be accepted into regular sellable stock.',
+          'Damaged packaging must be routed immediately to the Damaged Stock quarantine bin.',
+        ],
+        simulation: {
+          testBarcode: 'QC-INSPECT-PASS',
+          expectedResult: 'QC Status: 48/48 units passed visual integrity inspection.',
+        },
+        troubleshooting: [
+          { issue: 'Cracked glass jar / leaking oil', fix: 'Isolate in hazardous leak tray; record unit write-off under breakage code DMG-01.' },
+          { issue: 'Melted chocolate bars', fix: 'Move to quarantine shelf; do not refrigerate immediately as bloom will ruin surface texture.' },
         ],
         adminJump: 'intake',
         jumpLabel: 'Open Mobile Intake Tool',
@@ -77,8 +93,16 @@ export const WORKFLOWS = {
           'If barcode is unrecognized, trigger New Product Intake flow in Admin BOS.',
         ],
         rules: [
-          'Do NOT invent a dummy barcode; use the real printed EAN-13 code.',
+          'Do NOT invent a dummy barcode; use the real printed EAN-13 code from the manufacturer.',
           'Staff must count units physically and never copy expected numbers blindly.',
+        ],
+        simulation: {
+          testBarcode: '8013355998124',
+          expectedResult: 'Matched Master SKU: IT-MUL-001 (Mulino Bianco Baiocchi 260g).',
+        },
+        troubleshooting: [
+          { issue: 'Barcode unreadable / torn label', fix: 'Search Master Catalog by Italian brand and variant name; print replacement SKU barcode sticker.' },
+          { issue: 'Uncataloged new variant', fix: 'Click "Create Product Draft" in Admin BOS to register brand and specifications.' },
         ],
         adminJump: 'intake',
         jumpLabel: 'Scan Barcode',
@@ -102,6 +126,14 @@ export const WORKFLOWS = {
           'Operations Rulebook §5 strictly enforces First-Expired, First-Out (FEFO).',
           'Batches with identical expiry can be grouped; different expiries MUST have separate batch lots.',
         ],
+        simulation: {
+          testBarcode: 'LOT-2026-08-01',
+          expectedResult: 'Batch Created: 24 units, Expiry: 2027-02-28, Landed Cost: ₱310.00/unit.',
+        },
+        troubleshooting: [
+          { issue: 'Multiple expiry dates in same box', fix: 'Split intake into two separate batch lot submissions (e.g. Lot A: 2026-11, Lot B: 2027-02).' },
+          { issue: 'Missing manufacturing date', fix: 'Estimate manufacturing date as Expiry minus standard manufacturer shelf-life duration.' },
+        ],
         adminJump: 'inventory',
         jumpLabel: 'View Inventory Lots',
       },
@@ -122,6 +154,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Never mix different batch lots in the same bin without clear visual separation.',
+        ],
+        simulation: {
+          testBarcode: 'BIN-LOC-B03',
+          expectedResult: 'Shelf Location Verified: Bin B-03 (Ambient Dry Pantry, 20°C).',
+        },
+        troubleshooting: [
+          { issue: 'Shelf bin already full', fix: 'Create secondary overflow bin location in Admin BOS (e.g. B-03-OVERFLOW) and apply cross-reference label.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Shelf Locations',
@@ -144,6 +183,13 @@ export const WORKFLOWS = {
         rules: [
           'Intake commits are immutable. Adjustments require an authorized cycle count transaction.',
         ],
+        simulation: {
+          testBarcode: 'COMMIT-SYNC-OK',
+          expectedResult: 'Sync Complete: Storefront (+24), Shopee (+24), Lazada (+24).',
+        },
+        troubleshooting: [
+          { issue: 'Channel sync timeout', fix: 'Check Integrations tab in Admin BOS; manually trigger channel reconnect token if expired.' },
+        ],
         adminJump: 'omni_hub',
         jumpLabel: 'Check Channel Sync',
       },
@@ -153,14 +199,14 @@ export const WORKFLOWS = {
   new_order: {
     id: 'new_order',
     title: 'Order Fulfillment & Packing Workflow',
-    icon: '📦',
+    iconName: 'BagIcon',
     badge: 'Order Fulfillment',
     category: 'Fulfillment Operations',
     description:
       'Step-by-step procedure for processing customer orders, allocating stock using strict FEFO rules, 2-factor scan verification at packing stations, and secure courier dispatch.',
     color: '#059669', // emerald-600
     accentColor: '#34d399',
-    stats: { steps: 6, scansRequired: 2, roles: ['Fulfillment Staff', 'Dispatch Coordinator'] },
+    stats: { steps: 6, scansRequired: 2, roles: ['Fulfillment Staff', 'Dispatch Coordinator'], estTime: '8-12 mins/order' },
     nodes: [
       {
         id: 'ord_1',
@@ -179,6 +225,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Never manually override FEFO batch allocation without written manager approval.',
+        ],
+        simulation: {
+          testBarcode: 'ORD-2026-8901',
+          expectedResult: 'Order Intake Verified: 3 items, Total ₱1,440, Stock Reserved.',
+        },
+        troubleshooting: [
+          { issue: 'Insufficient stock in earliest batch', fix: 'System automatically splits reservation across consecutive FEFO lots; verify both lots on pick list.' },
         ],
         adminJump: 'omni_hub',
         jumpLabel: 'Open Omni-Hub Orders',
@@ -201,6 +254,13 @@ export const WORKFLOWS = {
         rules: [
           'No items are packed or dispatched until payment is 100% verified or COD is approved.',
         ],
+        simulation: {
+          testBarcode: 'MSG-QUOTE-SENT',
+          expectedResult: 'Quote Sent: Metro Manila Same-Day ₱180 (Total ₱1,620).',
+        },
+        troubleshooting: [
+          { issue: 'Customer unresponsive past 24 hours', fix: 'Send reminder SMS; if unanswered after 48h, auto-release reserved stock back to active inventory.' },
+        ],
         adminJump: 'inbox',
         jumpLabel: 'Open Customer Messages',
       },
@@ -221,6 +281,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Never accept unverified payment screenshots without checking bank notification.',
+        ],
+        simulation: {
+          testBarcode: 'PAY-GCASH-9982',
+          expectedResult: 'Payment Verified: Ref #GC-889102, ₱1,620.00 confirmed in GCash merchant account.',
+        },
+        troubleshooting: [
+          { issue: 'Partial payment / missing courier fee', fix: 'Hold order in Payment Pending; contact customer with exact missing balance amount.' },
         ],
         adminJump: 'omni_hub',
         jumpLabel: 'View Packing Queue',
@@ -244,6 +311,13 @@ export const WORKFLOWS = {
           'Packing station software will reject incorrect SKU or wrong batch lot scans.',
           'Both staff member and packing station camera record the scan event.',
         ],
+        simulation: {
+          testBarcode: '8013355998124',
+          expectedResult: 'Packing Scan Match: Item 1 of 3 Verified (Baiocchi 260g, Lot LOT-2026-08-01).',
+        },
+        troubleshooting: [
+          { issue: 'Wrong variant picked by accident', fix: 'Scanner emits error buzzer; return unit to shelf and pick correct SKU indicated on screen.' },
+        ],
         adminJump: 'omni_hub',
         jumpLabel: 'Packing Station Scanner',
       },
@@ -264,6 +338,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Chocolates must include reusable frozen gel pack during dry/warm season.',
+        ],
+        simulation: {
+          testBarcode: 'WAYBILL-MNL-409',
+          expectedResult: 'Waybill Printed: Tracking #K2-MNL-2026-8901, Dispatch Gate: Station 2.',
+        },
+        troubleshooting: [
+          { issue: 'Thermal printer jam', fix: 'Reprint waybill using "Reprint Label" button; verify barcode contrast before attaching.' },
         ],
         adminJump: 'omni_hub',
         jumpLabel: 'Print Waybill',
@@ -286,6 +367,13 @@ export const WORKFLOWS = {
         rules: [
           'Never hand over package without recording driver plate number and booking ID.',
         ],
+        simulation: {
+          testBarcode: 'DISPATCH-LALAMOVE',
+          expectedResult: 'Dispatched: Rider Juan D. (Plate: NQ-9102), Customer SMS notified.',
+        },
+        troubleshooting: [
+          { issue: 'Rider cancellation / no-show', fix: 'Re-book backup courier rider in delivery portal; update pickup ETA in customer chat.' },
+        ],
         adminJump: 'omni_hub',
         jumpLabel: 'Dispatch Ledger',
       },
@@ -295,14 +383,14 @@ export const WORKFLOWS = {
   inventory_handover: {
     id: 'inventory_handover',
     title: 'Two-Party Inventory Custody Handshake',
-    icon: '🤝',
+    iconName: 'ShieldIcon',
     badge: 'Custody Handshake',
     category: 'Custody & Security',
     description:
       'Rigorous two-party physical custody transfer protocol. Enforces operations rulebook §10: sender initiation, dual physical scans, and explicit electronic acceptance by the receiver.',
     color: '#d97706', // amber-600
     accentColor: '#fbbf24',
-    stats: { steps: 5, scansRequired: 2, roles: ['Transferor (Sender)', 'Transferee (Receiver)'] },
+    stats: { steps: 5, scansRequired: 2, roles: ['Transferor (Sender)', 'Transferee (Receiver)'], estTime: '10 mins/transfer' },
     nodes: [
       {
         id: 'hand_1',
@@ -322,6 +410,13 @@ export const WORKFLOWS = {
         rules: [
           'Sender action ALONE never transfers custody; it only creates an open transfer offer.',
           'Stock is locked into "In Transit" status and cannot be sold during transfer.',
+        ],
+        simulation: {
+          testBarcode: 'TRF-INIT-0825',
+          expectedResult: 'Transfer Offer Created: 12 units of Lot LOT-2026-08-01 -> Receiver: Maria S.',
+        },
+        troubleshooting: [
+          { issue: 'Recipient staff not listed', fix: 'Verify recipient is active in Staff & Roles permissions table with Custodian capability.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Initiate Transfer',
@@ -344,6 +439,13 @@ export const WORKFLOWS = {
         rules: [
           'Damaged or missing units must be reconciled BEFORE initiating transfer.',
         ],
+        simulation: {
+          testBarcode: 'SEAL-SN-9941',
+          expectedResult: 'Seal Registered: Serial #SEAL-9941 locked to Manifest TRF-2026-0825-01.',
+        },
+        troubleshooting: [
+          { issue: 'Missing or broken seal before dispatch', fix: 'Discard broken seal; apply new seal and update serial number in transfer record.' },
+        ],
         adminJump: 'inventory',
         jumpLabel: 'View Custody Manifest',
       },
@@ -363,6 +465,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'No intermediate handoffs to unverified third parties are permitted.',
+        ],
+        simulation: {
+          testBarcode: 'TRANSIT-CHECKPOINT',
+          expectedResult: 'In-Transit Verified: Departure 10:15 AM, ETA Destination 10:45 AM.',
+        },
+        troubleshooting: [
+          { issue: 'Transit delay > 1 hour', fix: 'Transporter must notify receiving hub; check temperature indicator upon arrival.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Track Open Transfers',
@@ -386,6 +495,13 @@ export const WORKFLOWS = {
           'Receiver must NEVER accept a transfer without performing a physical recount scan.',
           'If any unit is missing or broken, flag a Transfer Variance Exception immediately.',
         ],
+        simulation: {
+          testBarcode: 'RECV-SCAN-12OF12',
+          expectedResult: 'Physical Recount Verified: 12/12 units scanned successfully with zero variance.',
+        },
+        troubleshooting: [
+          { issue: 'Unit count shortage (e.g. 11/12 scanned)', fix: 'Do not sign standard handshake; select "Partial Receipt with Exception" to log sender discrepancy.' },
+        ],
         adminJump: 'inventory',
         jumpLabel: 'Scan Received Crate',
       },
@@ -407,6 +523,13 @@ export const WORKFLOWS = {
         rules: [
           'Custody transfer is irreversible once signed. The receiver is now legally responsible.',
         ],
+        simulation: {
+          testBarcode: 'HANDSHAKE-SEALED',
+          expectedResult: 'Ownership Transferred: Active Custodian updated to Maria S. (Audit Log #CUST-9012).',
+        },
+        troubleshooting: [
+          { issue: 'Session PIN forgotten', fix: 'Use TOTP Authenticator 2-Factor code or request supervisor identity verification.' },
+        ],
         adminJump: 'inventory',
         jumpLabel: 'Custody History Log',
       },
@@ -416,14 +539,14 @@ export const WORKFLOWS = {
   monthly_count: {
     id: 'monthly_count',
     title: 'Monthly Cycle Count & Inventory Audit',
-    icon: '📊',
+    iconName: 'GridIcon',
     badge: 'Stock Audit',
     category: 'Inventory Audit',
     description:
       'Scheduled blind inventory cycle count procedure. Freezes warehouse zones, performs unbiased barcode recounts, classifies discrepancies, and executes audited ledger adjustments.',
     color: '#7c3aed', // violet-600
     accentColor: '#a78bfa',
-    stats: { steps: 5, scansRequired: 1, roles: ['Audit Counter', 'Inventory Manager'] },
+    stats: { steps: 5, scansRequired: 1, roles: ['Audit Counter', 'Inventory Manager'], estTime: '45-60 mins/zone' },
     nodes: [
       {
         id: 'cnt_1',
@@ -442,6 +565,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'No picking or stock movements are allowed in the active audit zone during counting.',
+        ],
+        simulation: {
+          testBarcode: 'AUDIT-ZONE-A',
+          expectedResult: 'Zone A Frozen: 14 Shelf Locations Locked for Cycle Count.',
+        },
+        troubleshooting: [
+          { issue: 'Urgent order requires item from frozen zone', fix: 'Expedite audit of that specific shelf bin first before releasing item.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Schedule Cycle Count',
@@ -464,6 +594,13 @@ export const WORKFLOWS = {
         rules: [
           'Never estimate or multiply box stacks; scan every unit physically.',
         ],
+        simulation: {
+          testBarcode: 'BLIND-SCAN-SHELF-01',
+          expectedResult: 'Shelf 1 Counted: 42 Units Scanned (System quantities hidden).',
+        },
+        troubleshooting: [
+          { issue: 'Dusty barcode / scanner misread', fix: 'Wipe barcode label with dry microfiber cloth; use manual 13-digit EAN entry as fallback.' },
+        ],
         adminJump: 'inventory',
         jumpLabel: 'Launch Blind Scanner',
       },
@@ -484,6 +621,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Any variance exceeding ₱500 in value requires a mandatory recount by a second staff member.',
+        ],
+        simulation: {
+          testBarcode: 'VAR-ANALYZE-RUN',
+          expectedResult: 'Analysis Complete: 12 SKUs Matched, 1 SKU Variance (-1 unit Mulino Bianco).',
+        },
+        troubleshooting: [
+          { issue: 'Overage detected (more units than system)', fix: 'Check if an intake batch was physically placed on shelf before being committed in Admin BOS.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Review Variance Report',
@@ -506,6 +650,13 @@ export const WORKFLOWS = {
         rules: [
           'Never attribute a shortage to "unknown" without shift supervisor investigation.',
         ],
+        simulation: {
+          testBarcode: 'DISC-REASON-DMG',
+          expectedResult: 'Classified: Reason Code BRK-01 (Packaging squashed during warehouse handling).',
+        },
+        troubleshooting: [
+          { issue: 'Unexplained missing unit', fix: 'Check packing station cameras for last 7 days to verify if unit was erroneously included in another order.' },
+        ],
         adminJump: 'inventory',
         jumpLabel: 'Classify Discrepancies',
       },
@@ -527,6 +678,13 @@ export const WORKFLOWS = {
         rules: [
           'Audit adjustment records are permanently archived for accounting and financial compliance.',
         ],
+        simulation: {
+          testBarcode: 'MGR-ADJUST-APPROVE',
+          expectedResult: 'Audit Closed: Ledger Adjusted (-₱310.00), Zone A Unfrozen for Fulfillment.',
+        },
+        troubleshooting: [
+          { issue: 'Adjustment exceeds threshold limit', fix: 'Requires 2-person executive authorization (Manager + Owner).' },
+        ],
         adminJump: 'inventory',
         jumpLabel: 'Approve Audit Adjustments',
       },
@@ -536,14 +694,14 @@ export const WORKFLOWS = {
   product_creation_ai: {
     id: 'product_creation_ai',
     title: 'Product Catalog Creation & AI Studio Prompting',
-    icon: '✨',
+    iconName: 'SparkleIcon',
     badge: 'Catalog & AI Studio',
     category: 'Product Management',
     description:
       'Complete workflow for adding authentic Italian products to the catalog, configuring pricing boundaries, and generating photorealistic luxury editorial product imagery with ChatGPT / AI Studio.',
     color: '#e11d48', // rose-600
     accentColor: '#fb7185',
-    stats: { steps: 6, scansRequired: 0, roles: ['Catalog Lead', 'Content Designer'] },
+    stats: { steps: 6, scansRequired: 0, roles: ['Catalog Lead', 'Content Designer'], estTime: '15-20 mins/product' },
     nodes: [
       {
         id: 'prod_1',
@@ -563,6 +721,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Never translate iconic Italian brand names (e.g. keep "Pan di Stelle", do not write "Bread of Stars").',
+        ],
+        simulation: {
+          testBarcode: 'PROD-DRAFT-CREATE',
+          expectedResult: 'Draft Created: SKU IT-MUL-002, Brand: Mulino Bianco, Origin: Parma, Italy.',
+        },
+        troubleshooting: [
+          { issue: 'Duplicate barcode error', fix: 'Search catalog to check if product is already registered under an existing SKU.' },
         ],
         adminJump: 'intake',
         jumpLabel: 'Create Product Draft',
@@ -585,6 +750,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Retail SRP must NEVER be set below the calculated landed cost floor.',
+        ],
+        simulation: {
+          testBarcode: 'PRICE-MARGIN-CHECK',
+          expectedResult: 'Pricing Validated: Landed Cost ₱310.00 -> SRP ₱480.00 (Gross Margin: 35.4%).',
+        },
+        troubleshooting: [
+          { issue: 'EUR/PHP exchange rate spike', fix: 'Update active exchange rate parameter in Admin Settings; recalculates landed cost floor.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Configure Pricing',
@@ -610,6 +782,13 @@ export const WORKFLOWS = {
           'Negative prompts must strictly exclude artificial neon lighting, 3D renders, and plastic glare.',
         ],
         hasPromptStudio: true,
+        simulation: {
+          testBarcode: 'AI-PROMPT-GENERATE',
+          expectedResult: 'Prompt Formula Generated: DALL-E 3 & Midjourney v6 Ready.',
+        },
+        troubleshooting: [
+          { issue: 'AI generated gibberish letters on packaging', fix: 'Use Photoshop or AI inpainting to paste the authentic vector brand logo over the generated box.' },
+        ],
         adminJump: 'intake',
         jumpLabel: 'Open AI Prompt Studio',
       },
@@ -630,6 +809,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Images must be compressed to WebP format under 250KB for fast mobile loading.',
+        ],
+        simulation: {
+          testBarcode: 'MEDIA-UPLOAD-OK',
+          expectedResult: 'WebP Compressed: Primary (142 KB), After Image (168 KB), Slider Configured.',
+        },
+        troubleshooting: [
+          { issue: 'Image file > 1MB', fix: 'Run through WebP compressor to maintain high visual quality under 250KB limit.' },
         ],
         adminJump: 'intake',
         jumpLabel: 'Upload Product Media',
@@ -652,6 +838,13 @@ export const WORKFLOWS = {
         rules: [
           'Allergen warnings are safety-critical; never omit gluten, nuts, dairy, or egg warnings.',
         ],
+        simulation: {
+          testBarcode: 'SPEC-VERIFY-PASS',
+          expectedResult: 'Allergens Flagged: Wheat (Gluten), Hazelnuts, Milk. Pairing: Warm Pandesal.',
+        },
+        troubleshooting: [
+          { issue: 'Ingredients only printed in Italian', fix: 'Use Italian culinary translation guide; verify technical terms (e.g. "Farina di grano tenero tipo 0" = Soft wheat flour).' },
+        ],
         adminJump: 'intake',
         jumpLabel: 'Edit Specifications',
       },
@@ -673,6 +866,13 @@ export const WORKFLOWS = {
         rules: [
           'Product will show "Out of Stock · Request via Pasabuy" until the first batch lot is received.',
         ],
+        simulation: {
+          testBarcode: 'PUBLISH-LIVE-OK',
+          expectedResult: 'Listing Published: Live on Storefront (/product/IT-MUL-002).',
+        },
+        troubleshooting: [
+          { issue: 'Product not showing in catalog', fix: 'Clear browser cache or verify category filter assignment.' },
+        ],
         adminJump: 'intake',
         jumpLabel: 'Publish Listing',
       },
@@ -682,14 +882,14 @@ export const WORKFLOWS = {
   pasabuy_lifecycle: {
     id: 'pasabuy_lifecycle',
     title: 'Pasabuy Custom Sourcing Workflow',
-    icon: '🇮🇹',
+    iconName: 'PlaneIcon',
     badge: 'Custom Sourcing',
     category: 'Pasabuy Concierge',
     description:
       'End-to-end concierge workflow for handling custom Italian product requests from Manila customers: request intake, Milan store research, cost computation, official quote approval, and flight delivery.',
     color: '#0284c7', // sky-600
     accentColor: '#38bdf8',
-    stats: { steps: 6, scansRequired: 1, roles: ['Pasabuy Coordinator', 'Milan Sourcing Lead'] },
+    stats: { steps: 6, scansRequired: 1, roles: ['Pasabuy Coordinator', 'Milan Sourcing Lead'], estTime: '2-5 days turnaround' },
     nodes: [
       {
         id: 'pasa_1',
@@ -708,6 +908,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Prohibited items (flammable liquids, perishable uncured meats) must be rejected immediately.',
+        ],
+        simulation: {
+          testBarcode: 'PSB-2026-0825-09',
+          expectedResult: 'Request Triaged: Baci Perugina Tin 400g, Target Budget ₱1,200, Air Cargo.',
+        },
+        troubleshooting: [
+          { issue: 'Vague product description without photo', fix: 'Send message requesting photo of packaging or exact weight to avoid buying wrong variant in Italy.' },
         ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Open Pasabuy Queue',
@@ -730,6 +937,13 @@ export const WORKFLOWS = {
         rules: [
           'Calculated landed cost sets the hard price floor; quote must ensure positive gross margin.',
         ],
+        simulation: {
+          testBarcode: 'COST-CALC-RUN',
+          expectedResult: 'Cost Breakdown: Item €12.50 + Air Freight €4.20 + Duty €1.80 = Landed ₱1,120.',
+        },
+        troubleshooting: [
+          { issue: 'Item out of stock in Milan supermarkets', fix: 'Check specialty bottegas or propose comparable authentic Italian alternative to customer.' },
+        ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Open Cost Calculator',
       },
@@ -750,6 +964,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Never purchase goods in Italy before the customer explicitly accepts the quote.',
+        ],
+        simulation: {
+          testBarcode: 'QUOTE-GEN-OK',
+          expectedResult: 'Quote #Q-9912 Issued: ₱1,380.00 Total (Valid for 7 days).',
+        },
+        troubleshooting: [
+          { issue: 'Customer requests discount on quote', fix: 'Only volume orders (5+ units) qualify for freight consolidation discounts.' },
         ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Issue Quote',
@@ -772,6 +993,13 @@ export const WORKFLOWS = {
         rules: [
           'Custom non-catalog items require at least 50% non-refundable deposit.',
         ],
+        simulation: {
+          testBarcode: 'DEP-PAID-50PCT',
+          expectedResult: 'Deposit Verified: ₱690.00 received via Maya. Transferred to Milan Purchasing Queue.',
+        },
+        troubleshooting: [
+          { issue: 'Customer wants to cancel after deposit', fix: 'If item has NOT been physically bought in Milan, refund deposit minus ₱100 handling fee.' },
+        ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Confirm Deposit',
       },
@@ -792,6 +1020,13 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Item is linked to the flight consignment tracking number.',
+        ],
+        simulation: {
+          testBarcode: 'PSB-TAG-BOX2',
+          expectedResult: 'Purchased in Milan: Receipt Uploaded (€12.50), Packed into Flight Box #BOX-2026-08-B.',
+        },
+        troubleshooting: [
+          { issue: 'Store receipt lost', fix: 'Use bank card charge slip and take photo of store price tag as secondary proof.' },
         ],
         adminJump: 'consignment',
         jumpLabel: 'View Flight Box Manifest',
@@ -814,6 +1049,13 @@ export const WORKFLOWS = {
         rules: [
           'Mark Pasabuy request as Completed only after verified courier delivery.',
         ],
+        simulation: {
+          testBarcode: 'PSB-FINAL-DISPATCH',
+          expectedResult: 'Delivered: Remaining ₱690 paid, Courier Lalamove dispatched to customer.',
+        },
+        troubleshooting: [
+          { issue: 'Customer address changed while in transit', fix: 'Update delivery address in booking system before scheduling final rider.' },
+        ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Finalize Pasabuy Delivery',
       },
@@ -821,15 +1063,10 @@ export const WORKFLOWS = {
   },
 }
 
-/**
- * AI Image Generation Prompt Studio Templates
- * Precision engineered for ChatGPT (DALL-E 3), Midjourney v6, FLUX.1, and Google Imagen 3.
- */
 export const AI_IMAGE_PROMPT_TEMPLATES = [
   {
     category: 'Italian Bakery & Biscuits',
     key: 'biscuits',
-    icon: '🍪',
     exampleItem: 'Mulino Bianco Baiocchi / Pan di Stelle',
     recommendedAspectRatio: '1:1 (Catalog) or 4:3 (Spotlight)',
     promptFormula:
@@ -845,7 +1082,6 @@ export const AI_IMAGE_PROMPT_TEMPLATES = [
   {
     category: 'Artisanal Olive Oil & Vinegar',
     key: 'olive_oil',
-    icon: '🫒',
     exampleItem: 'Frantoio Muraglia Extra Virgin Olive Oil / Aceto Balsamico di Modena',
     recommendedAspectRatio: '1:1 or 3:4',
     promptFormula:
@@ -860,7 +1096,6 @@ export const AI_IMAGE_PROMPT_TEMPLATES = [
   {
     category: 'Italian Espresso & Coffee',
     key: 'coffee',
-    icon: '☕',
     exampleItem: 'Lavazza Qualità Oro / Illy Classico Ground Coffee',
     recommendedAspectRatio: '1:1 (Catalog)',
     promptFormula:
@@ -875,7 +1110,6 @@ export const AI_IMAGE_PROMPT_TEMPLATES = [
   {
     category: 'Bronze-Die Pasta & Sauces',
     key: 'pasta',
-    icon: '🍝',
     exampleItem: 'Gentile Pasta di Gragnano IGP / Salsa Pronta di Pomodoro Ciliegino',
     recommendedAspectRatio: '1:1 or 16:9',
     promptFormula:
@@ -890,7 +1124,6 @@ export const AI_IMAGE_PROMPT_TEMPLATES = [
   {
     category: 'Italian Bath, Scents & Wellness',
     key: 'wellness',
-    icon: '🧼',
     exampleItem: 'Nesti Dante Luxury Soap / Marvis Classic Strong Mint Toothpaste',
     recommendedAspectRatio: '1:1',
     promptFormula:

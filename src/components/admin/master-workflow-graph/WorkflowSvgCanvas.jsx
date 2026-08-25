@@ -9,6 +9,7 @@ export default function WorkflowSvgCanvas({
   workflow,
   activeNodeId,
   onSelectNode,
+  completedSteps = [],
 }) {
   const containerRef = useRef(null)
   const [nodePositions, setNodePositions] = useState([])
@@ -75,15 +76,26 @@ export default function WorkflowSvgCanvas({
       d = `M ${startX} ${startY} C ${startX} ${midY}, ${endX} ${midY}, ${endX} ${endY}`
     }
 
-    const isActive =
-      workflow.nodes[idx].id === activeNodeId ||
-      workflow.nodes[idx + 1]?.id === activeNodeId
+    const isCurrentActive = workflow.nodes[idx].id === activeNodeId
+    const isNextActive = workflow.nodes[idx + 1]?.id === activeNodeId
+    const isActive = isCurrentActive || isNextActive
+    const isCompleted =
+      completedSteps.includes(workflow.nodes[idx].id) &&
+      completedSteps.includes(workflow.nodes[idx + 1]?.id)
+
+    let strokeColor = 'rgba(255, 255, 255, 0.15)'
+    if (isCompleted) {
+      strokeColor = '#10b981' // emerald
+    } else if (isActive) {
+      strokeColor = workflow.accentColor || '#38bdf8'
+    }
 
     return {
       id: `path-${current.id}-${next.id}`,
       d,
       isActive,
-      color: isActive ? workflow.accentColor : 'rgba(255, 255, 255, 0.2)',
+      isCompleted,
+      color: strokeColor,
     }
   }).filter(Boolean)
 
@@ -105,7 +117,7 @@ export default function WorkflowSvgCanvas({
   }
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl border border-white/10 bg-[#080d16] p-6">
+    <div className="relative w-full overflow-hidden rounded-2xl border border-white/10 bg-[#080d16] p-6 shadow-2xl">
       {/* Background Grid Pattern */}
       <div
         className="pointer-events-none absolute inset-0 opacity-20"
@@ -132,13 +144,8 @@ export default function WorkflowSvgCanvas({
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 1 L 8 5 L 0 9 z" fill={workflow.accentColor} opacity="0.85" />
+              <path d="M 0 1 L 8 5 L 0 9 z" fill={workflow.accentColor || '#38bdf8'} opacity="0.85" />
             </marker>
-            <linearGradient id={`pulse-grad-${workflow.id}`} x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor={workflow.accentColor} stopOpacity="0.2" />
-              <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
-              <stop offset="100%" stopColor={workflow.accentColor} stopOpacity="0.2" />
-            </linearGradient>
           </defs>
 
           {paths.map((p) => (
@@ -147,7 +154,7 @@ export default function WorkflowSvgCanvas({
               <path
                 d={p.d}
                 fill="none"
-                stroke="rgba(255,255,255,0.1)"
+                stroke="rgba(255,255,255,0.06)"
                 strokeWidth="4"
                 strokeLinecap="round"
               />
@@ -156,7 +163,7 @@ export default function WorkflowSvgCanvas({
                 d={p.d}
                 fill="none"
                 stroke={p.color}
-                strokeWidth={p.isActive ? '2.5' : '1.5'}
+                strokeWidth={p.isActive ? '2.5' : p.isCompleted ? '2' : '1.5'}
                 strokeDasharray={p.isActive ? '6 4' : 'none'}
                 strokeLinecap="round"
                 className={p.isActive ? 'animate-pulse' : ''}
@@ -169,16 +176,27 @@ export default function WorkflowSvgCanvas({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {workflow.nodes.map((node) => {
             const isSelected = node.id === activeNodeId
+            const isDone = completedSteps.includes(node.id)
             const badge = getNodeTypeBadge(node.type)
 
             return (
               <div
                 key={node.id}
                 data-node-id={node.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => onSelectNode(node.id)}
-                className={`group relative flex cursor-pointer flex-col rounded-xl border p-4 transition-all duration-200 ${
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    onSelectNode(node.id)
+                  }
+                }}
+                className={`group relative flex cursor-pointer flex-col rounded-xl border p-4 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${
                   isSelected
                     ? 'border-sky-400 bg-[#0e1726] shadow-lg shadow-sky-500/10 ring-2 ring-sky-400/30'
+                    : isDone
+                    ? 'border-emerald-500/40 bg-[#091512] hover:border-emerald-400/60'
                     : 'border-white/10 bg-[#0b121e]/90 hover:border-white/25 hover:bg-[#0f1828]'
                 }`}
               >
@@ -186,12 +204,14 @@ export default function WorkflowSvgCanvas({
                 <div className="flex items-center justify-between gap-2">
                   <span
                     className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-transform group-hover:scale-105 ${
-                      isSelected
+                      isDone
+                        ? 'bg-emerald-500 text-slate-950 font-extrabold'
+                        : isSelected
                         ? 'bg-sky-400 text-slate-950 font-extrabold shadow-sm'
                         : 'border border-white/20 bg-white/5 text-white/80'
                     }`}
                   >
-                    {node.step}
+                    {isDone ? '✓' : node.step}
                   </span>
 
                   <span
@@ -211,9 +231,9 @@ export default function WorkflowSvgCanvas({
                 </h4>
 
                 {/* Actor / Location */}
-                <p className="mt-1 flex items-center gap-1.5 text-[11px] text-white/50">
-                  <span>👤 {node.actor}</span>
-                </p>
+                <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-white/50">
+                  <span className="font-medium text-white/70">{node.actor}</span>
+                </div>
 
                 {/* Short Instruction */}
                 <p className="mt-2 text-xs leading-relaxed text-white/60 line-clamp-2">
@@ -222,8 +242,8 @@ export default function WorkflowSvgCanvas({
 
                 {/* View Details Hint */}
                 <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-[11px] font-semibold">
-                  <span className={isSelected ? 'text-sky-400' : 'text-white/40 group-hover:text-white/70'}>
-                    {isSelected ? 'Viewing details ▸' : 'Click to inspect'}
+                  <span className={isSelected ? 'text-sky-400' : isDone ? 'text-emerald-400' : 'text-white/40 group-hover:text-white/70'}>
+                    {isSelected ? 'Viewing details ▸' : isDone ? 'Step Completed ✓' : 'Click to inspect'}
                   </span>
                   {node.hasPromptStudio && (
                     <span className="rounded bg-rose-500/20 px-1.5 py-0.5 text-[9px] font-bold text-rose-300">

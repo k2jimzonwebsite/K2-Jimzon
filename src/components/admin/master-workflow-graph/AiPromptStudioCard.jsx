@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { AI_IMAGE_PROMPT_TEMPLATES } from './workflowData'
+import { SparkleIcon, CopyIcon, CheckIcon } from '../../ui/icons'
 
 /**
  * AiPromptStudioCard
@@ -29,8 +30,8 @@ export default function AiPromptStudioCard() {
       {/* Header */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-white/10 pb-5">
         <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-xl text-rose-400">
-            ✨
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30">
+            <SparkleIcon size={20} />
           </span>
           <div>
             <h3 className="font-serif text-lg font-bold text-white sm:text-xl">
@@ -66,7 +67,6 @@ export default function AiPromptStudioCard() {
                   : 'border-white/10 bg-white/5 text-white/70 hover:border-white/25 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <span>{tpl.icon}</span>
               <span>{tpl.category}</span>
             </button>
           ))}
@@ -86,7 +86,7 @@ export default function AiPromptStudioCard() {
           className="w-full rounded-lg border border-white/15 bg-black/40 px-4 py-2.5 text-sm text-white placeholder-white/30 focus:border-rose-400 focus:outline-none focus:ring-1 focus:ring-rose-400"
         />
         <p className="mt-1 text-[11px] text-white/40">
-          Tip: Include specific Italian descriptors (e.g. "con nocciole e cacao", "al tartufo estivo", "spremitura a freddo").
+          Tip: Include specific Italian descriptors (e.g. &quot;con nocciole e cacao&quot;, &quot;al tartufo estivo&quot;, &quot;spremitura a freddo&quot;).
         </p>
       </div>
 
@@ -100,60 +100,58 @@ export default function AiPromptStudioCard() {
             <button
               type="button"
               onClick={() => copyToClipboard(finalPrompt, 'prompt')}
-              className="flex items-center gap-1 rounded-md border border-rose-500/30 bg-rose-500/20 px-2.5 py-1 text-xs font-bold text-rose-200 transition-colors hover:bg-rose-500/30 cursor-pointer"
+              className="flex items-center gap-1.5 rounded-md border border-rose-400/30 bg-rose-500/20 px-2.5 py-1 text-xs font-bold text-rose-200 transition-all hover:bg-rose-500/30 active:scale-95 cursor-pointer"
             >
-              {copiedKey === 'prompt' ? '✓ Copied to clipboard!' : '📋 Copy Prompt'}
+              {copiedKey === 'prompt' ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
+              <span>{copiedKey === 'prompt' ? 'Copied!' : 'Copy Prompt'}</span>
             </button>
           </div>
-          <div className="rounded-xl border border-white/10 bg-black/60 p-4 font-mono text-xs leading-relaxed text-white/90">
+          <div className="rounded-xl border border-white/10 bg-black/50 p-4 font-mono text-xs leading-relaxed text-white/90">
             {finalPrompt}
           </div>
         </div>
 
-        {/* Negative Prompt Box */}
+        {/* Negative Prompt */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-bold uppercase tracking-wider text-white/50">
-              Negative Prompt (Crucial for Midjourney / FLUX)
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
+              Mandatory Negative Prompt
             </span>
             <button
               type="button"
               onClick={() => copyToClipboard(activeTemplate.negativePrompt, 'negative')}
-              className="text-xs font-semibold text-white/60 hover:text-white cursor-pointer"
+              className="flex items-center gap-1.5 rounded-md border border-amber-400/30 bg-amber-500/20 px-2.5 py-1 text-xs font-bold text-amber-200 transition-all hover:bg-amber-500/30 active:scale-95 cursor-pointer"
             >
-              {copiedKey === 'negative' ? '✓ Copied!' : 'Copy Negative'}
+              {copiedKey === 'negative' ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
+              <span>{copiedKey === 'negative' ? 'Copied!' : 'Copy Negative Prompt'}</span>
             </button>
           </div>
-          <div className="rounded-xl border border-white/10 bg-black/40 p-3 font-mono text-[11px] leading-relaxed text-white/60">
+          <div className="rounded-xl border border-white/10 bg-black/50 p-3 font-mono text-xs leading-relaxed text-white/70">
             {activeTemplate.negativePrompt}
           </div>
         </div>
-      </div>
 
-      {/* Aspect Ratio & Guidelines */}
-      <div className="mt-6 grid gap-4 rounded-xl border border-white/10 bg-white/5 p-4 sm:grid-cols-2">
-        <div>
-          <h4 className="text-xs font-bold uppercase tracking-wider text-amber-300">
-            📐 Aspect Ratio & Sizing
-          </h4>
-          <p className="mt-1 text-xs text-white/70">
-            Recommended: <strong className="text-white">{activeTemplate.recommendedAspectRatio}</strong>
-          </p>
-          <ul className="mt-2 space-y-1 text-[11px] text-white/60">
-            <li>• <strong>1:1 Square</strong>: Used for catalog grid tiles & Before/After slider.</li>
-            <li>• <strong>4:3 Landscape</strong>: Used for New Arrivals editorial hero cards.</li>
-          </ul>
-        </div>
+        {/* Photography Notes & Aspect Ratio */}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3.5 text-xs">
+            <span className="block font-semibold uppercase tracking-wider text-white/50 text-[10px] mb-1">
+              Aspect Ratio Target
+            </span>
+            <span className="font-mono text-sky-300 font-bold">
+              {activeTemplate.recommendedAspectRatio}
+            </span>
+          </div>
 
-        <div>
-          <h4 className="text-xs font-bold uppercase tracking-wider text-sky-300">
-            💡 Sourcing Staff Pro-Tips
-          </h4>
-          <ul className="mt-1 space-y-1 text-[11px] text-white/70">
-            {activeTemplate.tips.map((tip, i) => (
-              <li key={i}>• {tip}</li>
-            ))}
-          </ul>
+          <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3.5 text-xs">
+            <span className="block font-semibold uppercase tracking-wider text-white/50 text-[10px] mb-1">
+              Pro Studio Tips
+            </span>
+            <ul className="space-y-1 text-white/70">
+              {activeTemplate.tips.map((tip, idx) => (
+                <li key={idx}>• {tip}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

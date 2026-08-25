@@ -1,18 +1,18 @@
 # K2 Jimzon — Master Operations Workflow Graph Specification
 
-**Status:** ACTIVE & PRODUCTION INTEGRATED  
+**Status:** PRODUCTION INTEGRATED & ACCESSIBLE VIA ADMIN BOS  
 **Surface:** Admin Business Operating System (BOS)  
 **Primary Module:** `src/components/admin/master-workflow-graph/`  
-**Route / Section:** `workflow_graph` (Admin Navigation)  
-**Rulebook Governance:** Operations Rulebook §1–§24 & SYSTEM_BRAIN_CURRENT.md  
+**Route / Section:** `workflow_graph` (Admin Navigation & Header Shortcut)  
+**Governance:** Operations Rulebook §1–§24, SYSTEM_BRAIN_CURRENT.md & K2 Pasabuy Commerce Operations  
 
 ---
 
 ## 1. Executive Summary & Purpose
 
-The **Master Operations Workflow Graph** is K2 Jimzon's visual and interactive operations manual. Built directly into the Admin BOS, it replaces static documentation with an interactive node-based SVG interface that guides warehouse staff, logistics coordinators, catalog managers, and shift supervisors through every operational event.
+The **Master Operations Workflow Graph** is K2 Jimzon's visual and interactive operations engine. Built directly into the Admin BOS, it replaces static documentation with an interactive node-based SVG interface that guides warehouse staff, logistics coordinators, catalog managers, and shift supervisors through every operational event.
 
-Every step in the graph is traceable to the authoritative **Operations Rulebook**, enforces physical 2-factor scan requirements, defines exact actor responsibilities, and provides embedded tooling such as the **AI Image Prompt Studio** for product photography generation.
+Every step in the graph is traceable to the authoritative **Operations Rulebook**, enforces physical 2-factor scan requirements, defines exact actor responsibilities, provides an interactive **Barcode Simulator**, and embeds the **AI Image Prompt Studio** for luxury Italian product photography.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -24,16 +24,20 @@ Every step in the graph is traceable to the authoritative **Operations Rulebook*
     ┌───────────────────────────────┴───────────────────────────────┐
     │                 MasterWorkflowGraph Component                 │
     │  - Top Workflow Switcher (6 Operational Workflows)            │
-    │  - Summary Header & Required Scan Metrics                     │
+    │  - Keyword Search Filter (searches steps, barcodes, roles)    │
+    │  - Shift Progress Tracker (% completion & step checks)        │
     ├───────────────────────────────────────────────────────────────┤
     │                  WorkflowSvgCanvas (SVG Engine)               │
     │  - Dynamic Cubic Bezier Paths (M C x1 y1, x2 y2...)          │
     │  - Animated Active Pulse Lines & Status Badges                │
-    │  - Node Anchor Points with Click Event Routing                │
+    │  - Interactive Node Anchors with Keyboard (Enter/Space)       │
+    │  - Step Completion Checkmark States (✓)                       │
     ├───────────────────────────────────────────────────────────────┤
     │                  WorkflowDetailDrawer (SOP Panel)             │
-    │  - Step-by-Step Shift Checklist                              │
+    │  - Step-by-Step Shift Checklist with Real-Time Counter        │
+    │  - Laser Barcode & Step Simulator                             │
     │  - Operations Rulebook Invariants & Safeguards                │
+    │  - Troubleshooting & Failure Recovery Scenarios              │
     │  - "🚀 Open Tool in Admin" Direct Workspace Jump              │
     │  - Embedded AiPromptStudioCard (for Product Creation)         │
     └───────────────────────────────────────────────────────────────┘
@@ -47,11 +51,11 @@ All code and data definitions reside in `src/components/admin/master-workflow-gr
 
 | File | Purpose & Responsibilities |
 | :--- | :--- |
-| **`MasterWorkflowGraph.jsx`** | Central orchestrator. Manages active workflow state, node selection, progress navigation (Prev/Next), and renders both standalone and modal presentations. |
+| **`MasterWorkflowGraph.jsx`** | Central orchestrator. Manages active workflow state, node selection, progress navigation (Prev/Next), search filtering, shift progress tracking, and renders both standalone tab and modal presentations. |
 | **`WorkflowSvgCanvas.jsx`** | High-fidelity SVG rendering engine. Dynamically measures DOM node coordinates with `ResizeObserver` and draws smooth Bezier curves, animated dashed pulse strokes, and directional arrow markers. |
-| **`WorkflowDetailDrawer.jsx`** | Granular step drill-down panel. Renders shift checklists, rulebook safety invariants, actor tags, location badges, and direct navigation jump triggers. |
+| **`WorkflowDetailDrawer.jsx`** | Granular step drill-down panel. Renders shift checklists, barcode simulation runner, failure recovery accordion, rulebook safety invariants, actor tags, location badges, and direct navigation jump triggers. |
 | **`AiPromptStudioCard.jsx`** | Dedicated prompt engineering studio. Generates luxury editorial prompts for ChatGPT (DALL-E 3), Midjourney v6, and FLUX.1 with category presets, negative prompts, and camera settings. |
-| **`workflowData.js`** | Single source of truth data dictionary containing complete node definitions, checklists, rules, and AI prompt templates. |
+| **`workflowData.js`** | Single source of truth data dictionary containing complete node definitions, checklists, simulation fixtures, troubleshooting guides, and AI prompt templates. |
 
 ---
 
@@ -159,7 +163,7 @@ flowchart LR
 - **Step 1:** Freeze picking in designated warehouse zone during morning count window.
 - **Step 2 (Scan):** Staff scans all items shelf-by-shelf blindly (expected quantities hidden to prevent bias).
 - **Step 3:** System automatically calculates variances (Overages, Shortages, Mismatches).
-- **Step 4:** Second independent staff recounts any SKU with variance > 0 and classifies root cause (Damaged, Expired, Missing).
+- **Step 4:** Second independent staff member recounts any SKU with variance > 0 and classifies root cause (Damaged, Expired, Missing).
 - **Step 5 (Commit):** Authorized manager reviews financial impact and approves audited ledger adjustments.
 
 ---
@@ -240,14 +244,9 @@ plastic glare, neon lighting, oversaturated colors, distorted letters, blurry te
 
 ---
 
-## 5. How to Add or Extend Workflows
+## 5. Interactive Simulation & Troubleshooting Engine
 
-To add a new operational workflow (e.g. `damaged_stock_quarantine`, `shopee_returns`, or `wholesale_pallet_packing`):
-
-1. **Add Workflow Definition in `workflowData.js`**:
-   - Define a unique `id`, `title`, `icon`, `color`, and `stats`.
-   - Add ordered `nodes` with `step`, `title`, `actor`, `location`, `type` (`intake` | `scan` | `action` | `decision` | `complete`), `summary`, `checklist`, `rules`, and `adminJump`.
-2. **SVG Connector Automatic Adaptation**:
-   - `WorkflowSvgCanvas.jsx` automatically calculates new node coordinates and draws Bezier curves dynamically with zero manual SVG path adjustments.
-3. **Verify Security Gate**:
-   - Run `npm run security:gate` and `npm run build` to confirm zero regression.
+Each node provides:
+1. **Physical Laser Barcode Simulator:** Allows staff to test barcode reader hardware against realistic Italian EAN-13 and manifest tracking strings.
+2. **Troubleshooting Matrix:** Direct recovery procedures for edge cases (e.g. melted chocolates, missing seals, unrecognized barcodes, unverified deposits).
+3. **Shift Checklist Tracker:** Real-time state persistence enabling staff to track completed tasks throughout their shift.
