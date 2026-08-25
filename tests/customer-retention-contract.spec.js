@@ -18,7 +18,7 @@ async function sqlFiles(directory){
 test('customer deletion remains fail-closed until retention policy and audited execution exist',async()=>{
   const [identity,runbook,map,owners]=await Promise.all([
     readFile(path.join(root,'supabase/migrations/20260812_guest_account_identity_and_messaging.sql'),'utf8'),
-    readFile(path.join(root,'CUSTOMER_DATA_RETENTION_AND_DELETION_RUNBOOK.md'),'utf8'),
+    readFile(path.join(root,'docs/runbooks/CUSTOMER_DATA_RETENTION_AND_DELETION_RUNBOOK.md'),'utf8'),
     readFile(path.join(root,'MASTER_ACTION_PLAN.md'),'utf8'),
     readFile(path.join(root,'K2 Jimzon - Brain/OWNER_QUESTIONS.md'),'utf8'),
   ])

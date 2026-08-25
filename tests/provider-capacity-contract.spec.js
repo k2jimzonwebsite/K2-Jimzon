@@ -60,7 +60,7 @@ test('all browser and server ingress boundaries declare bounded payload or time 
 })
 
 test('capacity runbook distinguishes documented ceilings from missing account evidence', async () => {
-  const runbook = await source('PROVIDER_LIMITS_AND_CAPACITY_RUNBOOK.md')
+  const runbook = await source('docs/runbooks/PROVIDER_LIMITS_AND_CAPACITY_RUNBOOK.md')
   expect(runbook).toContain('Provider documented')
   expect(runbook).toContain('Owner evidence required')
   expect(runbook).toContain('https://vercel.com/docs/functions/limitations')
