@@ -1,210 +1,935 @@
 /**
  * K2 Jimzon — Master Workflow Graph Authoritative Data Definitions
- * Compliant with K2 Pasabuy Commerce Operations, Operations Rulebook §1–§24,
- * and high-agency Design Engineering standards.
+ * Divided into clear operational sections:
+ * 1. Cross-Border Supply Chain (Italy Cousin -> Air Transit -> Manila Arrival)
+ * 2. Manila Intake & Decision Branching (New Product Creation vs Added Inventory)
+ * 3. Inventory & Custody Management (FEFO Lots, Handover, Cycle Counts)
+ * 4. Fulfillment & Customer Concierge (Order Packing & Pasabuy)
  */
 
+export const WORKFLOW_SECTIONS = [
+  {
+    id: 'all',
+    label: 'All Workflows',
+    description: 'Complete operational blueprint across all business domains.',
+  },
+  {
+    id: 'cross_border',
+    label: 'Italy & Cross-Border',
+    description: 'Milan sourcing by cousin, pre-tagging, flight cargo boxes, and international transit.',
+  },
+  {
+    id: 'intake_branching',
+    label: 'Manila Intake & Catalog',
+    description: 'PH receiving, box opening, QC check, and branching between Existing Stock vs New SKU Creation.',
+  },
+  {
+    id: 'warehouse_custody',
+    label: 'Warehouse & Custody',
+    description: 'FEFO batch lots, shelf placement, two-party handshakes, and monthly cycle audits.',
+  },
+  {
+    id: 'orders_fulfillment',
+    label: 'Orders & Fulfillment',
+    description: 'Customer payment verification, 2-factor picking, secure packing, and courier dispatch.',
+  },
+]
+
 export const WORKFLOWS = {
-  new_inventory: {
-    id: 'new_inventory',
-    title: 'New Inventory & Intake Ingestion',
-    iconName: 'BoxIcon',
-    badge: 'Stock Ingestion',
-    category: 'Inventory Operations',
+  // -------------------------------------------------------------
+  // 1. CROSS-BORDER LIFECYCLE: ITALY TO MANILA END-TO-END
+  // -------------------------------------------------------------
+  cross_border_lifecycle: {
+    id: 'cross_border_lifecycle',
+    sectionId: 'cross_border',
+    title: 'Italy Sourcing to Manila Intake Lifecycle',
+    iconName: 'PlaneIcon',
+    badge: 'Cross-Border Supply Chain',
+    category: 'Italy & Cross-Border',
     description:
-      'Complete procedure for receiving international cargo boxes from Milan or local vendor deliveries, performing 2-factor barcode scans, FEFO batch lot creation, quality inspection, and multi-channel ledger sync.',
-    color: '#0284c7', // sky-600
+      'Complete journey of Italian provisions: Sourced by cousin in Milan, pre-inventoried into flight cargo boxes, air transit to Manila (PH), physical box opening, QC checking, and branching into new vs added inventory.',
+    color: '#0284c7',
     accentColor: '#38bdf8',
-    stats: { steps: 6, scansRequired: 2, roles: ['Intake Staff', 'Hub Manager'], estTime: '15-20 mins/box' },
+    stats: { steps: 7, scansRequired: 3, roles: ['Milan Cousin / Buyer', 'Manila Intake Staff', 'Hub Manager'], estTime: '3-7 days transit' },
     nodes: [
       {
-        id: 'inv_1',
+        id: 'cb_1',
         step: 1,
-        title: 'Shipment Arrival & Tamper Verification',
-        actor: 'Receiving Staff',
-        location: 'Manila Receiving Dock',
+        title: 'Milan Sourcing & Store Purchase',
+        actor: 'Milan Sourcing Lead (Cousin)',
+        location: 'Milan Supermarkets & Bottegas (Esselunga, Coop, Eataly)',
         type: 'intake',
-        short: 'Verify international air cargo box ID against flight consignment manifest.',
+        short: 'Cousin purchases authentic Italian goods, collects store receipts, and checks shelf expiry.',
         summary:
-          'Inspect physical cargo boxes immediately upon courier/freight delivery. Verify tamper-evident security tape, cargo box reference (e.g. BOX-2026-08-A), and check for external shipping or moisture damage.',
+          'Our Milan sourcing lead (cousin) visits Italian supermarkets and specialty bottegas. Inspects manufacturer batch dates on physical packaging to ensure at least 4–6 months of remaining shelf life. Collects official store fiscal receipts in EUR (€).',
         checklist: [
-          'Match physical cargo box label against the Flight Consignment manifest in Admin BOS.',
-          'Verify tamper-evident tape is intact with zero cuts, punctures, or double-tape marks.',
-          'Record unboxing timestamp and capture photo evidence of sealed box if damage is observed.',
+          'Verify packaging condition and check manufacturer expiry date in DD/MM/YYYY format.',
+          'Save official store fiscal receipt (Scontrino Fiscale) and photograph for accounting proof.',
+          'Store purchases in climate-controlled staging area in Milan (18°C–20°C).',
         ],
         rules: [
-          'If box security seal is broken or compromised, do NOT proceed without shift supervisor sign-off.',
-          'Never discard outer shipping labels until all internal items are fully counted and reconciled.',
+          'Never purchase products with less than 60 days before expiration date.',
+          'Always record unit purchase price in EUR (€) on store receipt.',
+        ],
+        simulation: {
+          testBarcode: 'MILAN-BUY-0825',
+          expectedResult: 'Purchase Logged: 36 units Mulino Bianco Baiocchi (€2.40/unit, Esselunga Milan).',
+        },
+        troubleshooting: [
+          { issue: 'Variant out of stock in Milan store', fix: 'Check neighboring Coop/Carrefour or notify Manila team for alternative flavor approval.' },
+        ],
+        adminJump: 'kanban',
+        jumpLabel: 'Open Italy Purchasing',
+      },
+      {
+        id: 'cb_2',
+        step: 2,
+        title: 'Milan Box Packing & Manifest Pre-Tagging',
+        actor: 'Milan Sourcing Lead (Cousin)',
+        location: 'Milan Staging Hub (MXP)',
+        type: 'action',
+        short: 'Cousin creates Flight Cargo Box in Admin BOS, packs goods, and applies tamper seal.',
+        summary:
+          'Goods are organized into heavy-duty flight cargo boxes (e.g. BOX-2026-08-A). Cousin logs item quantities and printed EAN barcodes into the Flight Consignment Manifest in Admin BOS. Applies tamper-evident numbered security tape.',
+        checklist: [
+          'Create new Flight Box ID in Admin Consignments tool (e.g. BOX-2026-08-A).',
+          'Scan or enter item EAN barcodes and count total units placed in box.',
+          'Affix outer box shipping label and record numbered security seal serial number.',
+        ],
+        rules: [
+          'Crate must be sealed with numbered security tape before delivery to air cargo forwarder.',
+          'Glass jars must be individually bubble-wrapped before packing into cargo boxes.',
         ],
         simulation: {
           testBarcode: 'BOX-2026-08-A',
-          expectedResult: 'Manifest Verified: Flight AZ-784 (MXP -> MNL), Expected 48 Units.',
+          expectedResult: 'Flight Box Sealed: 48 units total, Seal #SEAL-IT-9901, Linked to Flight AZ-784.',
         },
         troubleshooting: [
-          { issue: 'Box ID not in manifest', fix: 'Check if box arrived on an earlier/later flight; notify Milan logistics lead before opening.' },
-          { issue: 'Damaged outer carton', fix: 'Capture 3 photos (top, sides, label) and create an Inbound Damage Exception report.' },
+          { issue: 'Mismatch in item count before sealing', fix: 'Recount box contents physically; update manifest line items before applying seal.' },
         ],
         adminJump: 'consignment',
-        jumpLabel: 'Open Flight Manifests',
+        jumpLabel: 'Create Flight Manifest',
       },
       {
-        id: 'inv_2',
-        step: 2,
-        title: 'Physical Unboxing & QC Inspection',
-        actor: 'Intake Staff',
-        location: 'Inspection Bench',
+        id: 'cb_3',
+        step: 3,
+        title: 'Air Cargo International Transit',
+        actor: 'Air Freight Forwarder',
+        location: 'In Flight (Milan MXP -> Manila MNL)',
         type: 'action',
-        short: 'Unbox goods under overhead lighting and inspect individual packaging integrity.',
+        short: 'Cargo box flies via air freight to Manila; stock status locked as In Transit.',
         summary:
-          'Unpack products onto clean stainless steel inspection surface. Check every individual unit for dents, packaging leaks, broken seals, melt damage (chocolates), or improper temperature exposure during transit.',
+          'Box is handed over to air cargo forwarder at Malpensa Airport (MXP). Flies to Ninoy Aquino International Airport (NAIA, Manila). The system marks all items as "In Transit" with tracked flight ETA.',
         checklist: [
-          'Group items by brand and product family (e.g. Mulino Bianco, Marvis, Lavazza, Gentile).',
-          'Inspect glass jars for seal popping or micro-fractures in lids.',
-          'Check manufacturer expiration dates printed on packaging in DD/MM/YYYY format.',
+          'Confirm Master Air Waybill (MAWB) tracking number in flight portal.',
+          'Monitor customs clearance status at Manila terminal.',
         ],
         rules: [
-          'Any item with less than 30 days of shelf life cannot be accepted into regular sellable stock.',
-          'Damaged packaging must be routed immediately to the Damaged Stock quarantine bin.',
+          'Items in transit cannot be allocated for immediate customer fulfillment until received.',
         ],
         simulation: {
-          testBarcode: 'QC-INSPECT-PASS',
-          expectedResult: 'QC Status: 48/48 units passed visual integrity inspection.',
+          testBarcode: 'FLIGHT-AZ784-TRANSIT',
+          expectedResult: 'In-Transit Verified: Air Cargo ETA Manila 14:30 PHT, Customs Status: Clear.',
         },
         troubleshooting: [
-          { issue: 'Cracked glass jar / leaking oil', fix: 'Isolate in hazardous leak tray; record unit write-off under breakage code DMG-01.' },
-          { issue: 'Melted chocolate bars', fix: 'Move to quarantine shelf; do not refrigerate immediately as bloom will ruin surface texture.' },
+          { issue: 'Customs delay / flight reschedule', fix: 'Update consignment ETA in Admin BOS; automatically alerts customer care for pending Pasabuy orders.' },
+        ],
+        adminJump: 'consignment',
+        jumpLabel: 'Track Flight Consignments',
+      },
+      {
+        id: 'cb_4',
+        step: 4,
+        title: 'Manila Airport Receipt & Seal Verification',
+        actor: 'Manila Intake Staff',
+        location: 'Manila Receiving Dock',
+        type: 'scan',
+        short: 'Box arrives in Manila; staff verifies tamper seal against Milan manifest.',
+        summary:
+          'Manila warehouse receives physical box from freight delivery driver. Staff immediately scans outer box QR and checks the security seal serial number against what the cousin recorded in Milan.',
+        checklist: [
+          'Scan outer box barcode in Admin BOS Consignments tool.',
+          'Verify security seal serial number matches Milan manifest with zero signs of tampering.',
+          'Capture photo evidence of sealed box upon delivery.',
+        ],
+        rules: [
+          'If seal is cut, altered, or replaced with regular clear tape, halt unboxing and notify Hub Manager.',
+        ],
+        simulation: {
+          testBarcode: 'SEAL-IT-9901',
+          expectedResult: 'Seal Match Confirmed: Serial #SEAL-IT-9901 intact from Milan Hub.',
+        },
+        troubleshooting: [
+          { issue: 'Seal broken / box punctured', fix: 'Mark consignment as "Damaged on Arrival"; photograph all 6 sides of box before cutting open.' },
+        ],
+        adminJump: 'consignment',
+        jumpLabel: 'Verify Inbound Box',
+      },
+      {
+        id: 'cb_5',
+        step: 5,
+        title: 'Physical Box Opening & Item Quality Check',
+        actor: 'Manila Intake Staff',
+        location: 'Stainless Steel Inspection Bench',
+        type: 'action',
+        short: 'Cut seal, unpack items under bright lighting, and inspect physical condition.',
+        summary:
+          'Unpack products onto a sanitized stainless steel bench. Group items by brand. Check each unit for glass lid integrity, vacuum seal clicks on jars, chocolate melt/bloom, and printed expiry dates.',
+        checklist: [
+          'Count physical units unpackaged from box against expected manifest count.',
+          'Inspect glass bottles and jars for micro-cracks or oil seepage.',
+          'Check chocolate bars for heat deformation or packaging tears.',
+        ],
+        rules: [
+          'Any leaking, cracked, or melted item must be moved immediately to Quarantine.',
+        ],
+        simulation: {
+          testBarcode: 'QC-UNBOX-CHECK',
+          expectedResult: 'QC Passed: 48/48 units in pristine condition (0 breakages).',
+        },
+        troubleshooting: [
+          { issue: 'Shortage (fewer units in box than manifest)', fix: 'Log item discrepancy code SHORT-01; system automatically alerts Milan buyer.' },
         ],
         adminJump: 'intake',
         jumpLabel: 'Open Mobile Intake Tool',
       },
       {
-        id: 'inv_3',
-        step: 3,
-        title: 'Barcode Scanning & Product Matching',
-        actor: 'Intake Staff',
-        location: 'Scan Station',
-        type: 'scan',
-        short: 'Scan manufacturer barcode (EAN-13) to match internal Master SKU.',
+        id: 'cb_6',
+        step: 6,
+        title: 'Decision Branch: Existing SKU vs New Product',
+        actor: 'Manila Intake Staff',
+        location: 'Scan Terminal',
+        type: 'decision',
+        short: 'Scan barcode: If item exists in catalog -> Add Stock. If new -> Create SKU.',
         summary:
-          'Use USB laser scanner or mobile camera to scan the manufacturer barcode on each physical unit. The system automatically pulls product title, weight, and master specifications.',
+          'Staff laser-scans the printed manufacturer barcode (EAN-13). The system queries the master catalog in real-time and routes staff to the correct workflow branch.',
         checklist: [
-          'Scan physical barcode with zero manual keyboard entry whenever possible.',
-          'Verify scanned unit size matches catalog definition (e.g. 260g vs 330g).',
-          'If barcode is unrecognized, trigger New Product Intake flow in Admin BOS.',
+          'Scan product EAN-13 barcode with laser scanner.',
+          'Branch A (Catalog Match): Click "Add Batch to Existing SKU" (enters expiry date & cost).',
+          'Branch B (No Match / New Item): Click "Create New Product Intake" (enters title, AI prompts, specs).',
         ],
         rules: [
-          'Do NOT invent a dummy barcode; use the real printed EAN-13 code from the manufacturer.',
-          'Staff must count units physically and never copy expected numbers blindly.',
+          'Never create duplicate SKU listings for products that already exist under another variant.',
         ],
         simulation: {
           testBarcode: '8013355998124',
-          expectedResult: 'Matched Master SKU: IT-MUL-001 (Mulino Bianco Baiocchi 260g).',
+          expectedResult: 'Catalog Lookup: Found Master SKU IT-MUL-001 (Baiocchi 260g) -> Routing to Batch Intake.',
         },
         troubleshooting: [
-          { issue: 'Barcode unreadable / torn label', fix: 'Search Master Catalog by Italian brand and variant name; print replacement SKU barcode sticker.' },
-          { issue: 'Uncataloged new variant', fix: 'Click "Create Product Draft" in Admin BOS to register brand and specifications.' },
+          { issue: 'Barcode unreadable', fix: 'Search catalog manually by Italian brand name (e.g. Mulino Bianco) and select matching variant.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Product Catalog Lookup',
+      },
+      {
+        id: 'cb_7',
+        step: 7,
+        title: 'Commit Stock & Multi-Channel Sync',
+        actor: 'Hub Manager',
+        location: 'Admin BOS Terminal',
+        type: 'complete',
+        short: 'Approve batch lot; inventory immediately goes live across Storefront and channels.',
+        summary:
+          'Hub Manager reviews the intake reconciliation sheet. Clicking "Commit Batch" writes permanent ledger entries, assigns shelf bin location, and pushes live available stock to Storefront, Shopee, and Lazada.',
+        checklist: [
+          'Verify total counted units equals physical stock on shelves.',
+          'Affix K2 Jimzon internal lot label with QR code onto shelf bin.',
+          'Click "Commit Batch". Confirm live stock increases on Storefront.',
+        ],
+        rules: [
+          'Intake commits are permanent audit records; corrections require a manager-authorized cycle adjustment.',
+        ],
+        simulation: {
+          testBarcode: 'COMMIT-ALL-CHANNELS',
+          expectedResult: 'Committed: +48 units live on Storefront, Shopee, and Lazada.',
+        },
+        troubleshooting: [
+          { issue: 'Storefront stock count not updating', fix: 'Clear Redis cache in System DevOps modal or verify catalog status is Active.' },
+        ],
+        adminJump: 'omni_hub',
+        jumpLabel: 'Verify Live Stock',
+      },
+    ],
+  },
+
+  // -------------------------------------------------------------
+  // 2. INTAKE BRANCH A: ADDING INVENTORY TO EXISTING SKU
+  // -------------------------------------------------------------
+  existing_stock_intake: {
+    id: 'existing_stock_intake',
+    sectionId: 'intake_branching',
+    title: 'Quick Intake (Adding Stock to Existing SKU)',
+    iconName: 'BoxIcon',
+    badge: 'Existing Catalog SKU',
+    category: 'Manila Intake & Catalog',
+    description:
+      'Fast-track intake procedure for products that already exist in our master catalog. Scan barcode, record new FEFO expiry date, calculate landed cost (€ -> ₱), and add units directly to stock.',
+    color: '#059669',
+    accentColor: '#34d399',
+    stats: { steps: 5, scansRequired: 2, roles: ['Intake Staff', 'Warehouse Custodian'], estTime: '5-8 mins' },
+    nodes: [
+      {
+        id: 'ext_1',
+        step: 1,
+        title: 'Barcode Scan & Existing SKU Match',
+        actor: 'Intake Staff',
+        location: 'Scan Station',
+        type: 'scan',
+        short: 'Laser-scan EAN-13 barcode to pull existing product master profile.',
+        summary:
+          'Scan the manufacturer barcode on the physical item. The system instantly loads the product name, Italian brand, weight, category, current retail price (₱), and existing active batches.',
+        checklist: [
+          'Scan physical barcode with zero keyboard typing.',
+          'Confirm scanned unit matches catalog size (e.g. 260g vs 330g).',
+          'Verify current retail SRP is up to date.',
+        ],
+        rules: [
+          'Never mix different net weight variants into the same SKU listing.',
+        ],
+        simulation: {
+          testBarcode: '8013355998124',
+          expectedResult: 'Matched: SKU IT-MUL-001 | Mulino Bianco Baiocchi 260g | Current Stock: 14 units.',
+        },
+        troubleshooting: [
+          { issue: 'Different packaging artwork on new batch', fix: 'Upload secondary packaging photo in Product Media Manager without changing SKU.' },
         ],
         adminJump: 'intake',
         jumpLabel: 'Scan Barcode',
       },
       {
-        id: 'inv_4',
-        step: 4,
-        title: 'FEFO Batch Lot & Expiry Registration',
+        id: 'ext_2',
+        step: 2,
+        title: 'New FEFO Batch Lot & Expiry Registration',
         actor: 'Intake Staff',
         location: 'Intake Terminal',
         type: 'decision',
-        short: 'Create audited batch lot with exact expiry date and unit landed cost.',
+        short: 'Enter Best Before Date (YYYY-MM-DD) and landed cost for the new arrival.',
         summary:
-          'Register verified units into a new product_batches lot record. Enter precise Best Before Date, manufacturing batch number, unit purchase price in EUR, and allocated air cargo freight cost.',
+          'Create a new product_batches entry for this specific shipment arrival. Record the printed expiry date, unit EUR cost (€), freight surcharge, and total physical units received.',
         checklist: [
-          'Enter expiration date accurately in YYYY-MM-DD format.',
-          'Attach photo evidence of the printed expiry date on the packaging.',
-          'Assign initial shelf location in Manila Hub (e.g. Shelf B-03, Cold Room 1).',
+          'Enter expiration date accurately in YYYY-MM-DD format from the physical packaging.',
+          'Input EUR purchase cost from cousin’s store receipt (e.g. €2.40).',
+          'System automatically computes landed cost floor in PHP (₱310.00).',
         ],
         rules: [
-          'Operations Rulebook §5 strictly enforces First-Expired, First-Out (FEFO).',
-          'Batches with identical expiry can be grouped; different expiries MUST have separate batch lots.',
+          'Different expiry dates MUST be tracked as separate batch lots to enforce FEFO picking.',
         ],
         simulation: {
-          testBarcode: 'LOT-2026-08-01',
-          expectedResult: 'Batch Created: 24 units, Expiry: 2027-02-28, Landed Cost: ₱310.00/unit.',
+          testBarcode: 'LOT-NEW-2027',
+          expectedResult: 'Batch Created: 24 units, Expiry: 2027-04-30, Landed Cost: ₱310.00.',
         },
         troubleshooting: [
-          { issue: 'Multiple expiry dates in same box', fix: 'Split intake into two separate batch lot submissions (e.g. Lot A: 2026-11, Lot B: 2027-02).' },
-          { issue: 'Missing manufacturing date', fix: 'Estimate manufacturing date as Expiry minus standard manufacturer shelf-life duration.' },
+          { issue: 'Expiry date printed in Italian format (DD.MM.YY)', fix: 'Convert accurately: 15.08.27 = 2027-08-15.' },
         ],
         adminJump: 'inventory',
-        jumpLabel: 'View Inventory Lots',
+        jumpLabel: 'Batch Lot Manager',
       },
       {
-        id: 'inv_5',
-        step: 5,
-        title: 'Physical Custody Tagging & Placement',
-        actor: 'Warehouse Custodian',
-        location: 'Storage Shelving',
+        id: 'ext_3',
+        step: 3,
+        title: 'Physical Lot Sticker Printing',
+        actor: 'Intake Staff',
+        location: 'Intake Desk Printer',
         type: 'action',
-        short: 'Apply K2 batch QR tag and place on assigned warehouse shelf.',
+        short: 'Print K2 internal batch lot QR sticker with SKU, expiry, and storage instructions.',
         summary:
-          'Affix K2 Jimzon internal lot sticker with QR code onto carton/shelf bin. Place newer stock behind older stock on shelves to naturally enforce physical FEFO picking.',
+          'Thermal printer generates adhesive K2 lot label containing SKU, Lot Number, Best Before Date, and barcode for fulfillment scanners.',
         checklist: [
-          'Print batch lot label with SKU, Lot ID, Expiry Date, and Storage Requirements.',
-          'Place lot onto designated shelf bin. Oldest expiry placed at the FRONT of the shelf.',
-          'Verify ambient temperature (18°C–22°C for biscuits, 14°C–18°C for chocolates).',
+          'Print batch lot label.',
+          'Affix label onto carton case or master shelf bin.',
         ],
         rules: [
-          'Never mix different batch lots in the same bin without clear visual separation.',
+          'Do not obscure manufacturer original ingredients or allergen box with the sticker.',
         ],
         simulation: {
-          testBarcode: 'BIN-LOC-B03',
-          expectedResult: 'Shelf Location Verified: Bin B-03 (Ambient Dry Pantry, 20°C).',
+          testBarcode: 'PRINT-LOT-TAG',
+          expectedResult: 'Printed: Lot #LOT-2027-04-30 / SKU IT-MUL-001.',
         },
         troubleshooting: [
-          { issue: 'Shelf bin already full', fix: 'Create secondary overflow bin location in Admin BOS (e.g. B-03-OVERFLOW) and apply cross-reference label.' },
+          { issue: 'Thermal ribbon faint', fix: 'Replace thermal ribbon or clean printhead with isopropyl alcohol swab.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Print Batch Labels',
+      },
+      {
+        id: 'ext_4',
+        step: 4,
+        title: 'Shelf Bin Placement (Physical FEFO)',
+        actor: 'Warehouse Custodian',
+        location: 'Warehouse Shelving (Bin B-03)',
+        type: 'action',
+        short: 'Place newly arrived stock BEHIND older expiring stock on the shelf.',
+        summary:
+          'Bring verified units to designated shelf bin. Position the newly arrived batch (further expiry date) behind existing batches on the shelf so fulfillment pickers naturally grab the earliest-expiring unit first.',
+        checklist: [
+          'Locate assigned shelf bin in dry pantry / cold room.',
+          'Slide older batch units to the front of the shelf.',
+          'Place new batch units directly behind.',
+        ],
+        rules: [
+          'Never place newer stock in front of older stock.',
+        ],
+        simulation: {
+          testBarcode: 'BIN-PLACED-B03',
+          expectedResult: 'Placed: Bin B-03 (Front: Exp 2026-11, Back: Exp 2027-04).',
+        },
+        troubleshooting: [
+          { issue: 'Shelf full', fix: 'Assign overflow shelf bin location in Admin BOS and cross-tag.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Shelf Locations',
       },
       {
-        id: 'inv_6',
-        step: 6,
-        title: 'Commit Intake & Multi-Channel Sync',
+        id: 'ext_5',
+        step: 5,
+        title: 'Commit Added Stock to Live Channels',
         actor: 'Hub Manager',
         location: 'Admin BOS Terminal',
         type: 'complete',
-        short: 'Approve intake batch; stock automatically syncs across all channels.',
+        short: 'Manager authorizes batch; stock count increments across all channels.',
         summary:
-          'Manager reviews scan counts against flight manifest. Once approved, available sellable inventory immediately reflects on the Storefront, and auto-sync triggers across Shopee and Lazada channel connectors.',
+          'Manager reviews added batch count against flight consignment manifest. Click "Commit Stock Addition" to push live inventory updates to the Storefront, Shopee, and Lazada.',
         checklist: [
-          'Verify total scanned count equals physical units placed on shelves.',
-          'Click "Commit Batch" in Admin BOS to finalize the intake ledger entry.',
-          'Confirm Storefront catalog live stock count increases accordingly.',
+          'Verify total units added (+24).',
+          'Confirm Storefront stock badge updates from Low Stock to In Stock.',
         ],
         rules: [
-          'Intake commits are immutable. Adjustments require an authorized cycle count transaction.',
+          'Ledger entries are permanent and traceable to the staff member who performed the intake.',
         ],
         simulation: {
-          testBarcode: 'COMMIT-SYNC-OK',
-          expectedResult: 'Sync Complete: Storefront (+24), Shopee (+24), Lazada (+24).',
+          testBarcode: 'COMMIT-ADD-STOCK',
+          expectedResult: 'Stock Increment Live: Total on Hand 14 -> 38 units.',
         },
         troubleshooting: [
-          { issue: 'Channel sync timeout', fix: 'Check Integrations tab in Admin BOS; manually trigger channel reconnect token if expired.' },
+          { issue: 'Shopee sync delay', fix: 'Check Integrations tab to force manual webhook sync.' },
         ],
         adminJump: 'omni_hub',
-        jumpLabel: 'Check Channel Sync',
+        jumpLabel: 'Channel Inventory Hub',
       },
     ],
   },
 
+  // -------------------------------------------------------------
+  // 3. INTAKE BRANCH B: CREATING BRAND NEW PRODUCT (AI STUDIO)
+  // -------------------------------------------------------------
+  new_product_intake: {
+    id: 'new_product_intake',
+    sectionId: 'intake_branching',
+    title: 'New Product Intake & Catalog Creation',
+    iconName: 'SparkleIcon',
+    badge: 'New Catalog SKU',
+    category: 'Manila Intake & Catalog',
+    description:
+      'Complete workflow for new Italian items not yet in our catalog: Master SKU registration, EUR landed cost pricing matrix, ChatGPT / AI Studio photo generation, Before/After unboxing setup, and live publication.',
+    color: '#e11d48',
+    accentColor: '#fb7185',
+    stats: { steps: 6, scansRequired: 1, roles: ['Catalog Lead', 'Content Designer'], estTime: '15-20 mins' },
+    nodes: [
+      {
+        id: 'np_1',
+        step: 1,
+        title: 'Master SKU Registration & Sourcing Passport',
+        actor: 'Catalog Lead',
+        location: 'Admin Catalog Tool',
+        type: 'intake',
+        short: 'Register Italian brand name, authentic title, English culinary subtitle, and EAN-13.',
+        summary:
+          'Create a new product draft in Admin BOS. Enter official Italian brand (e.g. Gentile, Mulino Bianco, Marvis), Italian product title, net weight (e.g. 500g), packaging type, and verified Italian region of origin.',
+        checklist: [
+          'Enter exact Italian title and English culinary subtitle.',
+          'Scan physical manufacturer printed EAN-13 barcode.',
+          'Select category (Dolci, Caffè, Pasta & Dispensa, Cura, Bellezza).',
+          'Record Italian region of origin (e.g. Gragnano, Campania).',
+        ],
+        rules: [
+          'Never translate iconic Italian brand names into English.',
+        ],
+        simulation: {
+          testBarcode: '8005432109876',
+          expectedResult: 'SKU Draft Created: IT-GEN-003 | Gentile Paccheri di Gragnano IGP 500g.',
+        },
+        troubleshooting: [
+          { issue: 'Duplicate barcode error', fix: 'Check if product was already created under an alternative SKU.' },
+        ],
+        adminJump: 'intake',
+        jumpLabel: 'Create Product Draft',
+      },
+      {
+        id: 'np_2',
+        step: 2,
+        title: 'Pricing Matrix & Landed Cost Floor',
+        actor: 'Pricing Lead / Owner',
+        location: 'Admin Pricing Matrix',
+        type: 'action',
+        short: 'Input purchase cost in EUR (€); system calculates landed cost floor and margins in PHP (₱).',
+        summary:
+          'Enter original Italian store purchase price from cousin’s receipt in EUR. System calculates landed cost floor in PHP based on active exchange rate, air freight weight share, and customs duty.',
+        checklist: [
+          'Enter purchase cost in EUR (e.g. €3.50).',
+          'Review calculated landed cost floor in PHP (e.g. ₱380.00).',
+          'Set consumer retail SRP in PHP (e.g. ₱590.00).',
+          'Set wholesale B2B case price in PHP with MOQ (e.g. ₱480.00, MOQ: 12).',
+        ],
+        rules: [
+          'Consumer SRP must NEVER be set below the calculated landed cost floor.',
+        ],
+        simulation: {
+          testBarcode: 'PRICE-MARGIN-CHECK',
+          expectedResult: 'Pricing Valid: Floor ₱380.00 -> SRP ₱590.00 (Gross Margin: 35.6%).',
+        },
+        troubleshooting: [
+          { issue: 'Exchange rate spike', fix: 'Update active EUR/PHP rate in Settings to recalculate all pricing floors.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Configure Pricing',
+      },
+      {
+        id: 'np_3',
+        step: 3,
+        title: 'ChatGPT & AI Studio Photorealistic Image Generation',
+        actor: 'Content Designer',
+        location: 'AI Image Studio',
+        type: 'action',
+        short: 'Generate luxury editorial product photos using K2 verified prompt formulas.',
+        summary:
+          'Use K2’s tested prompt engineering formulas in ChatGPT / Midjourney / AI Studio to create hyper-realistic editorial product photography matching the Tuscan wood and linen storefront aesthetic.',
+        checklist: [
+          'Select product category and packaging style from the AI Prompt Studio.',
+          'Copy the structured prompt formula with lighting, texture, and lens parameters.',
+          'Generate 1:1 square image (Catalog tile) and 4:3 landscape image (Hero spotlight).',
+          'Check for visual defects (distorted text, unnatural reflections, fake logos).',
+        ],
+        rules: [
+          'Always use authentic Italian aesthetic constraints (warm morning sunlight, linen cloth, reclaimed oak).',
+          'Negative prompts must strictly exclude artificial neon lighting, 3D renders, and plastic glare.',
+        ],
+        hasPromptStudio: true,
+        simulation: {
+          testBarcode: 'AI-PROMPT-GENERATE',
+          expectedResult: 'Prompt Formula Ready: DALL-E 3 & Midjourney v6 Format.',
+        },
+        troubleshooting: [
+          { issue: 'AI generated gibberish letters on packaging', fix: 'Paste the authentic vector brand logo over the generated box in editor.' },
+        ],
+        adminJump: 'intake',
+        jumpLabel: 'Open AI Prompt Studio',
+      },
+      {
+        id: 'np_4',
+        step: 4,
+        title: 'Before/After Unboxing Experience Setup',
+        actor: 'Content Designer',
+        location: 'Product Media Manager',
+        type: 'action',
+        short: 'Upload packaging shot (Before) and served / unboxed shot (After).',
+        summary:
+          'Set up K2’s signature interactive Before/After comparison slider. Upload the sealed package photograph as "Before", and the unboxed / prepared culinary presentation as "After".',
+        checklist: [
+          'Upload Primary Image (sealed package on linen canvas).',
+          'Upload After Image (biscuits on ceramic saucer / pasta on plate).',
+          'Test interactive slider in preview mode to ensure smooth touch swipe performance.',
+        ],
+        rules: [
+          'Images must be compressed to WebP format under 250KB for fast mobile loading.',
+        ],
+        simulation: {
+          testBarcode: 'MEDIA-UPLOAD-OK',
+          expectedResult: 'WebP Compressed: Primary (142 KB), After Image (168 KB), Slider Configured.',
+        },
+        troubleshooting: [
+          { issue: 'Image file > 1MB', fix: 'Compress to WebP format under 250KB limit.' },
+        ],
+        adminJump: 'intake',
+        jumpLabel: 'Upload Media',
+      },
+      {
+        id: 'np_5',
+        step: 5,
+        title: 'Ingredients, Allergens & Preparation Guide',
+        actor: 'Catalog Lead',
+        location: 'Product Detail Editor',
+        type: 'decision',
+        short: 'Input verified ingredients, bold allergen declarations, and recipe pairings.',
+        summary:
+          'Enter certified nutritional and allergen specifications from the physical package. Write conversational Filipino pairing notes (e.g. "Best paired with morning espresso or warm pandesal").',
+        checklist: [
+          'Enter complete ingredients list.',
+          'Highlight bold allergens (e.g. Contains Wheat, Milk, Hazelnuts, Soy).',
+          'Add 2–3 authentic culinary pairing tags and step-by-step preparation tips.',
+        ],
+        rules: [
+          'Allergen warnings are safety-critical; never omit gluten, nuts, dairy, or egg warnings.',
+        ],
+        simulation: {
+          testBarcode: 'SPEC-VERIFY-PASS',
+          expectedResult: 'Allergens Flagged: 100% Durum Wheat Semolina (Gluten). Cook time: 14 mins.',
+        },
+        troubleshooting: [
+          { issue: 'Ingredients only printed in Italian', fix: 'Use Italian culinary translation reference guide.' },
+        ],
+        adminJump: 'intake',
+        jumpLabel: 'Edit Specifications',
+      },
+      {
+        id: 'np_6',
+        step: 6,
+        title: 'Review & Live Storefront Activation',
+        actor: 'Catalog Lead / Manager',
+        location: 'Admin BOS Terminal',
+        type: 'complete',
+        short: 'Preview mobile layout, verify tags, and publish live to the Storefront.',
+        summary:
+          'Inspect full product detail preview on mobile and desktop viewports. Check SEO title, category placement, and stock availability badge. Toggle product status from Draft to Active.',
+        checklist: [
+          'Inspect mobile product page preview for typography alignment and image clarity.',
+          'Verify search tags (e.g. #pasta #gragnano #artisanal).',
+          'Click "Publish Product". Verify new listing appears immediately in Storefront catalog.',
+        ],
+        rules: [
+          'Product will show "Out of Stock · Request via Pasabuy" until the first batch lot is received.',
+        ],
+        simulation: {
+          testBarcode: 'PUBLISH-LIVE-OK',
+          expectedResult: 'Listing Published: Live on Storefront (/product/IT-GEN-003).',
+        },
+        troubleshooting: [
+          { issue: 'Product not showing in catalog', fix: 'Clear browser cache or verify category filter assignment.' },
+        ],
+        adminJump: 'intake',
+        jumpLabel: 'Publish Listing',
+      },
+    ],
+  },
+
+  // -------------------------------------------------------------
+  // 4. WAREHOUSE & CUSTODY MANAGEMENT
+  // -------------------------------------------------------------
+  inventory_handover: {
+    id: 'inventory_handover',
+    sectionId: 'warehouse_custody',
+    title: 'Two-Party Inventory Custody Handshake',
+    iconName: 'ShieldIcon',
+    badge: 'Custody Handshake',
+    category: 'Warehouse & Custody',
+    description:
+      'Rigorous two-party physical custody transfer protocol. Enforces operations rulebook §10: sender initiation, dual physical scans, and explicit electronic acceptance by the receiver.',
+    color: '#d97706',
+    accentColor: '#fbbf24',
+    stats: { steps: 5, scansRequired: 2, roles: ['Transferor (Sender)', 'Transferee (Receiver)'], estTime: '10 mins' },
+    nodes: [
+      {
+        id: 'hand_1',
+        step: 1,
+        title: 'Transfer Request Initiation',
+        actor: 'Sender (Current Custodian)',
+        location: 'Source Hub / Station',
+        type: 'intake',
+        short: 'Sender selects batch lot, quantity, and designated recipient staff member.',
+        summary:
+          'The current responsible custodian opens the Custody Transfer tool in Admin BOS. Selects the exact batch lot, quantity to transfer, origin location, destination hub, and recipient staff ID.',
+        checklist: [
+          'Verify physical count of units to transfer matches system batch availability.',
+          'Select verified recipient staff member from the active staff directory.',
+          'Generate unique Custody Transfer Manifest ID (e.g. TRF-2026-0825-01).',
+        ],
+        rules: [
+          'Sender action ALONE never transfers custody; it only creates an open transfer offer.',
+          'Stock is locked into "In Transit" status and cannot be sold during transfer.',
+        ],
+        simulation: {
+          testBarcode: 'TRF-INIT-0825',
+          expectedResult: 'Transfer Offer Created: 12 units of Lot LOT-2026-08-01 -> Receiver: Maria S.',
+        },
+        troubleshooting: [
+          { issue: 'Recipient staff not listed', fix: 'Verify recipient is active in Staff & Roles permissions table with Custodian capability.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Initiate Transfer',
+      },
+      {
+        id: 'hand_2',
+        step: 2,
+        title: 'Pre-Transit Physical Count & QC',
+        actor: 'Sender',
+        location: 'Source Packing Area',
+        type: 'action',
+        short: 'Sender packs units into a secure transfer crate and seals it.',
+        summary:
+          'Units are placed into a transfer crate. Sender performs a 100% item count, records unit serial/batch details, and seals the crate with a numbered plastic zip tie / security seal.',
+        checklist: [
+          'Count physical units one by one.',
+          'Record security seal serial number on the transfer manifest.',
+          'Attach printed transfer sheet with QR code onto crate exterior.',
+        ],
+        rules: [
+          'Damaged or missing units must be reconciled BEFORE initiating transfer.',
+        ],
+        simulation: {
+          testBarcode: 'SEAL-SN-9941',
+          expectedResult: 'Seal Registered: Serial #SEAL-9941 locked to Manifest TRF-2026-0825-01.',
+        },
+        troubleshooting: [
+          { issue: 'Missing or broken seal before dispatch', fix: 'Discard broken seal; apply new seal and update serial number in transfer record.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'View Custody Manifest',
+      },
+      {
+        id: 'hand_3',
+        step: 3,
+        title: 'Secure Physical Transit',
+        actor: 'Internal Courier / Staff',
+        location: 'In Transit',
+        type: 'action',
+        short: 'Crate is transported between hubs or designated storage rooms.',
+        summary:
+          'Transfer crate is transported under secure conditions. If transporting chocolate or perishable goods between hubs, insulated temperature-controlled box is mandatory.',
+        checklist: [
+          'Maintain transit log with departure time and expected arrival time.',
+          'Keep custody crate within direct physical sight of the authorized transporter.',
+        ],
+        rules: [
+          'No intermediate handoffs to unverified third parties are permitted.',
+        ],
+        simulation: {
+          testBarcode: 'TRANSIT-CHECKPOINT',
+          expectedResult: 'In-Transit Verified: Departure 10:15 AM, ETA Destination 10:45 AM.',
+        },
+        troubleshooting: [
+          { issue: 'Transit delay > 1 hour', fix: 'Transporter must notify receiving hub; check temperature indicator upon arrival.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Track Open Transfers',
+      },
+      {
+        id: 'hand_4',
+        step: 4,
+        title: 'Physical Receipt & Independent Recount',
+        actor: 'Receiver (Designated Staff)',
+        location: 'Destination Receiving Hub',
+        type: 'scan',
+        short: 'Receiver breaks seal, unpacks crate, and independently scans every unit.',
+        summary:
+          'The designated receiver receives the crate, inspects the security seal number, opens the crate, and scans every unit using a barcode scanner to verify count independently.',
+        checklist: [
+          'Verify security seal number matches the transfer manifest in Admin BOS.',
+          'Scan every individual unit barcode into the receiving verification screen.',
+          'Check packaging for transit damage or temperature degradation.',
+        ],
+        rules: [
+          'Receiver must NEVER accept a transfer without performing a physical recount scan.',
+          'If any unit is missing or broken, flag a Transfer Variance Exception immediately.',
+        ],
+        simulation: {
+          testBarcode: 'RECV-SCAN-12OF12',
+          expectedResult: 'Physical Recount Verified: 12/12 units scanned successfully with zero variance.',
+        },
+        troubleshooting: [
+          { issue: 'Unit count shortage (e.g. 11/12 scanned)', fix: 'Do not sign standard handshake; select "Partial Receipt with Exception" to log sender discrepancy.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Scan Received Crate',
+      },
+      {
+        id: 'hand_5',
+        step: 5,
+        title: 'Electronic Handshake & Ownership Transfer',
+        actor: 'Receiver',
+        location: 'Destination Terminal',
+        type: 'complete',
+        short: 'Receiver signs electronic handshake; custody legally transfers in ledger.',
+        summary:
+          'Once all units are verified, receiver clicks "Accept Custody & Confirm Receipt" in Admin BOS with session PIN/biometric verification. The inventory lot custodian ID updates permanently.',
+        checklist: [
+          'Review final scanned count vs manifest line items.',
+          'Enter staff PIN to authenticate the electronic signature.',
+          'System logs immutable timestamp, sender ID, receiver ID, and location history.',
+        ],
+        rules: [
+          'Custody transfer is irreversible once signed. The receiver is now legally responsible.',
+        ],
+        simulation: {
+          testBarcode: 'HANDSHAKE-SEALED',
+          expectedResult: 'Ownership Transferred: Active Custodian updated to Maria S. (Audit Log #CUST-9012).',
+        },
+        troubleshooting: [
+          { issue: 'Session PIN forgotten', fix: 'Use TOTP Authenticator 2-Factor code or request supervisor identity verification.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Custody History Log',
+      },
+    ],
+  },
+
+  monthly_count: {
+    id: 'monthly_count',
+    sectionId: 'warehouse_custody',
+    title: 'Monthly Cycle Count & Inventory Audit',
+    iconName: 'GridIcon',
+    badge: 'Stock Audit',
+    category: 'Warehouse & Custody',
+    description:
+      'Scheduled blind inventory cycle count procedure. Freezes warehouse zones, performs unbiased barcode recounts, classifies discrepancies, and executes audited ledger adjustments.',
+    color: '#7c3aed',
+    accentColor: '#a78bfa',
+    stats: { steps: 5, scansRequired: 1, roles: ['Audit Counter', 'Inventory Manager'], estTime: '45-60 mins' },
+    nodes: [
+      {
+        id: 'cnt_1',
+        step: 1,
+        title: 'Audit Schedule & Zone Freeze',
+        actor: 'Inventory Manager',
+        location: 'Manila Hub',
+        type: 'intake',
+        short: 'Select warehouse zone to audit and temporarily freeze picking in that zone.',
+        summary:
+          'Manager schedules monthly cycle count for designated category or shelf section (e.g. Zone A: Coffee & Drinks; Zone B: Pasta & Oils). The system freezes order picking in that specific zone during count.',
+        checklist: [
+          'Notify fulfillment team of zone freeze window (typically 6:00 AM – 8:00 AM).',
+          'Ensure all incoming intakes from earlier shifts are committed before starting count.',
+          'Print blank shelf audit tally sheets or launch Mobile Audit Tool.',
+        ],
+        rules: [
+          'No picking or stock movements are allowed in the active audit zone during counting.',
+        ],
+        simulation: {
+          testBarcode: 'AUDIT-ZONE-A',
+          expectedResult: 'Zone A Frozen: 14 Shelf Locations Locked for Cycle Count.',
+        },
+        troubleshooting: [
+          { issue: 'Urgent order requires item from frozen zone', fix: 'Expedite audit of that specific shelf bin first before releasing item.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Schedule Cycle Count',
+      },
+      {
+        id: 'cnt_2',
+        step: 2,
+        title: 'Blind Physical Barcode Recount',
+        actor: 'Audit Counter (Staff A)',
+        location: 'Warehouse Shelves',
+        type: 'scan',
+        short: 'Staff scans every shelf item blindly without seeing system quantities.',
+        summary:
+          'Staff member scans every item shelf-by-shelf. The interface intentionally conceals expected quantities ("blind count") to prevent confirmation bias or shortcutting.',
+        checklist: [
+          'Scan barcode on each physical unit on Shelf 1, Shelf 2, Shelf 3 systematically.',
+          'Verify and record expiry date on packaging to verify batch lot integrity.',
+          'Flag any unstickered or uncataloged items for quarantine.',
+        ],
+        rules: [
+          'Never estimate or multiply box stacks; scan every unit physically.',
+        ],
+        simulation: {
+          testBarcode: 'BLIND-SCAN-SHELF-01',
+          expectedResult: 'Shelf 1 Counted: 42 Units Scanned (System quantities hidden).',
+        },
+        troubleshooting: [
+          { issue: 'Dusty barcode / scanner misread', fix: 'Wipe barcode label with dry microfiber cloth; use manual 13-digit EAN entry as fallback.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Launch Blind Scanner',
+      },
+      {
+        id: 'cnt_3',
+        step: 3,
+        title: 'Automated Variance Analysis',
+        actor: 'System / Manager',
+        location: 'Admin BOS Terminal',
+        type: 'decision',
+        short: 'System compares physical scan numbers against ledger and flags variances.',
+        summary:
+          'The cycle count engine cross-references physical scans against active batch lots. Identifies discrepancies: Overages (+), Shortages (-), or Batch Mismatches.',
+        checklist: [
+          'Review variance summary table showing Expected vs Scanned counts.',
+          'Identify items with zero discrepancy (automatically verified).',
+          'Highlight items with variance > 0 for immediate secondary recount.',
+        ],
+        rules: [
+          'Any variance exceeding ₱500 in value requires a mandatory recount by a second staff member.',
+        ],
+        simulation: {
+          testBarcode: 'VAR-ANALYZE-RUN',
+          expectedResult: 'Analysis Complete: 12 SKUs Matched, 1 SKU Variance (-1 unit Mulino Bianco).',
+        },
+        troubleshooting: [
+          { issue: 'Overage detected (more units than system)', fix: 'Check if an intake batch was physically placed on shelf before being committed in Admin BOS.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Review Variance Report',
+      },
+      {
+        id: 'cnt_4',
+        step: 4,
+        title: 'Secondary Recount & Discrepancy Classification',
+        actor: 'Shift Lead (Staff B)',
+        location: 'Audit Zone',
+        type: 'action',
+        short: 'Independent second staff member recounts flagged items and classifies cause.',
+        summary:
+          'A different staff member recounts the flagged discrepancy items. If variance persists, staff classifies the exact cause code (e.g. Expired & Discarded, Packaging Breakage, Store Sampling, Missing).',
+        checklist: [
+          'Staff B performs targeted recount of flagged SKUs only.',
+          'If breakage or damage, attach photo evidence of damaged packaging.',
+          'Select authoritative reason code in the Discrepancy Resolution Form.',
+        ],
+        rules: [
+          'Never attribute a shortage to "unknown" without shift supervisor investigation.',
+        ],
+        simulation: {
+          testBarcode: 'DISC-REASON-DMG',
+          expectedResult: 'Classified: Reason Code BRK-01 (Packaging squashed during warehouse handling).',
+        },
+        troubleshooting: [
+          { issue: 'Unexplained missing unit', fix: 'Check packing station cameras for last 7 days to verify if unit was erroneously included in another order.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Classify Discrepancies',
+      },
+      {
+        id: 'cnt_5',
+        step: 5,
+        title: 'Manager Authorization & Ledger Adjustment',
+        actor: 'Inventory Manager / Owner',
+        location: 'Admin BOS Terminal',
+        type: 'complete',
+        short: 'Manager signs off on cycle count adjustment; inventory ledger balances.',
+        summary:
+          'Manager reviews final variance report with attached evidence and reason codes. Approving the audit writes compensating adjustment entries to the inventory ledger and unfreezes the zone.',
+        checklist: [
+          'Review total net financial impact of the monthly audit.',
+          'Enter manager authorization credentials.',
+          'Unfreeze warehouse zone and resume normal fulfillment picking.',
+        ],
+        rules: [
+          'Audit adjustment records are permanently archived for accounting and financial compliance.',
+        ],
+        simulation: {
+          testBarcode: 'MGR-ADJUST-APPROVE',
+          expectedResult: 'Audit Closed: Ledger Adjusted (-₱310.00), Zone A Unfrozen for Fulfillment.',
+        },
+        troubleshooting: [
+          { issue: 'Adjustment exceeds threshold limit', fix: 'Requires 2-person executive authorization (Manager + Owner).' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Approve Audit Adjustments',
+      },
+    ],
+  },
+
+  // -------------------------------------------------------------
+  // 5. ORDERS & FULFILLMENT OPERATIONS
+  // -------------------------------------------------------------
   new_order: {
     id: 'new_order',
+    sectionId: 'orders_fulfillment',
     title: 'Order Fulfillment & Packing Workflow',
     iconName: 'BagIcon',
     badge: 'Order Fulfillment',
-    category: 'Fulfillment Operations',
+    category: 'Orders & Fulfillment',
     description:
       'Step-by-step procedure for processing customer orders, allocating stock using strict FEFO rules, 2-factor scan verification at packing stations, and secure courier dispatch.',
-    color: '#059669', // emerald-600
+    color: '#059669',
     accentColor: '#34d399',
     stats: { steps: 6, scansRequired: 2, roles: ['Fulfillment Staff', 'Dispatch Coordinator'], estTime: '8-12 mins/order' },
     nodes: [
@@ -380,516 +1105,18 @@ export const WORKFLOWS = {
     ],
   },
 
-  inventory_handover: {
-    id: 'inventory_handover',
-    title: 'Two-Party Inventory Custody Handshake',
-    iconName: 'ShieldIcon',
-    badge: 'Custody Handshake',
-    category: 'Custody & Security',
-    description:
-      'Rigorous two-party physical custody transfer protocol. Enforces operations rulebook §10: sender initiation, dual physical scans, and explicit electronic acceptance by the receiver.',
-    color: '#d97706', // amber-600
-    accentColor: '#fbbf24',
-    stats: { steps: 5, scansRequired: 2, roles: ['Transferor (Sender)', 'Transferee (Receiver)'], estTime: '10 mins/transfer' },
-    nodes: [
-      {
-        id: 'hand_1',
-        step: 1,
-        title: 'Transfer Request Initiation',
-        actor: 'Sender (Current Custodian)',
-        location: 'Source Hub / Station',
-        type: 'intake',
-        short: 'Sender selects batch lot, quantity, and designated recipient staff member.',
-        summary:
-          'The current responsible custodian opens the Custody Transfer tool in Admin BOS. Selects the exact batch lot, quantity to transfer, origin location, destination hub, and recipient staff ID.',
-        checklist: [
-          'Verify physical count of units to transfer matches system batch availability.',
-          'Select verified recipient staff member from the active staff directory.',
-          'Generate unique Custody Transfer Manifest ID (e.g. TRF-2026-0825-01).',
-        ],
-        rules: [
-          'Sender action ALONE never transfers custody; it only creates an open transfer offer.',
-          'Stock is locked into "In Transit" status and cannot be sold during transfer.',
-        ],
-        simulation: {
-          testBarcode: 'TRF-INIT-0825',
-          expectedResult: 'Transfer Offer Created: 12 units of Lot LOT-2026-08-01 -> Receiver: Maria S.',
-        },
-        troubleshooting: [
-          { issue: 'Recipient staff not listed', fix: 'Verify recipient is active in Staff & Roles permissions table with Custodian capability.' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'Initiate Transfer',
-      },
-      {
-        id: 'hand_2',
-        step: 2,
-        title: 'Pre-Transit Physical Count & QC',
-        actor: 'Sender',
-        location: 'Source Packing Area',
-        type: 'action',
-        short: 'Sender packs units into a secure transfer crate and seals it.',
-        summary:
-          'Units are placed into a transfer crate. Sender performs a 100% item count, records unit serial/batch details, and seals the crate with a numbered plastic zip tie / security seal.',
-        checklist: [
-          'Count physical units one by one.',
-          'Record security seal serial number on the transfer manifest.',
-          'Attach printed transfer sheet with QR code onto crate exterior.',
-        ],
-        rules: [
-          'Damaged or missing units must be reconciled BEFORE initiating transfer.',
-        ],
-        simulation: {
-          testBarcode: 'SEAL-SN-9941',
-          expectedResult: 'Seal Registered: Serial #SEAL-9941 locked to Manifest TRF-2026-0825-01.',
-        },
-        troubleshooting: [
-          { issue: 'Missing or broken seal before dispatch', fix: 'Discard broken seal; apply new seal and update serial number in transfer record.' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'View Custody Manifest',
-      },
-      {
-        id: 'hand_3',
-        step: 3,
-        title: 'Secure Physical Transit',
-        actor: 'Internal Courier / Staff',
-        location: 'In Transit',
-        type: 'action',
-        short: 'Crate is transported between hubs or designated storage rooms.',
-        summary:
-          'Transfer crate is transported under secure conditions. If transporting chocolate or perishable goods between hubs, insulated temperature-controlled box is mandatory.',
-        checklist: [
-          'Maintain transit log with departure time and expected arrival time.',
-          'Keep custody crate within direct physical sight of the authorized transporter.',
-        ],
-        rules: [
-          'No intermediate handoffs to unverified third parties are permitted.',
-        ],
-        simulation: {
-          testBarcode: 'TRANSIT-CHECKPOINT',
-          expectedResult: 'In-Transit Verified: Departure 10:15 AM, ETA Destination 10:45 AM.',
-        },
-        troubleshooting: [
-          { issue: 'Transit delay > 1 hour', fix: 'Transporter must notify receiving hub; check temperature indicator upon arrival.' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'Track Open Transfers',
-      },
-      {
-        id: 'hand_4',
-        step: 4,
-        title: 'Physical Receipt & Independent Recount',
-        actor: 'Receiver (Designated Staff)',
-        location: 'Destination Receiving Hub',
-        type: 'scan',
-        short: 'Receiver breaks seal, unpacks crate, and independently scans every unit.',
-        summary:
-          'The designated receiver receives the crate, inspects the security seal number, opens the crate, and scans every unit using a barcode scanner to verify count independently.',
-        checklist: [
-          'Verify security seal number matches the transfer manifest in Admin BOS.',
-          'Scan every individual unit barcode into the receiving verification screen.',
-          'Check packaging for transit damage or temperature degradation.',
-        ],
-        rules: [
-          'Receiver must NEVER accept a transfer without performing a physical recount scan.',
-          'If any unit is missing or broken, flag a Transfer Variance Exception immediately.',
-        ],
-        simulation: {
-          testBarcode: 'RECV-SCAN-12OF12',
-          expectedResult: 'Physical Recount Verified: 12/12 units scanned successfully with zero variance.',
-        },
-        troubleshooting: [
-          { issue: 'Unit count shortage (e.g. 11/12 scanned)', fix: 'Do not sign standard handshake; select "Partial Receipt with Exception" to log sender discrepancy.' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'Scan Received Crate',
-      },
-      {
-        id: 'hand_5',
-        step: 5,
-        title: 'Electronic Handshake & Ownership Transfer',
-        actor: 'Receiver',
-        location: 'Destination Terminal',
-        type: 'complete',
-        short: 'Receiver signs electronic handshake; custody legally transfers in ledger.',
-        summary:
-          'Once all units are verified, receiver clicks "Accept Custody & Confirm Receipt" in Admin BOS with session PIN/biometric verification. The inventory lot custodian ID updates permanently.',
-        checklist: [
-          'Review final scanned count vs manifest line items.',
-          'Enter staff PIN to authenticate the electronic signature.',
-          'System logs immutable timestamp, sender ID, receiver ID, and location history.',
-        ],
-        rules: [
-          'Custody transfer is irreversible once signed. The receiver is now legally responsible.',
-        ],
-        simulation: {
-          testBarcode: 'HANDSHAKE-SEALED',
-          expectedResult: 'Ownership Transferred: Active Custodian updated to Maria S. (Audit Log #CUST-9012).',
-        },
-        troubleshooting: [
-          { issue: 'Session PIN forgotten', fix: 'Use TOTP Authenticator 2-Factor code or request supervisor identity verification.' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'Custody History Log',
-      },
-    ],
-  },
-
-  monthly_count: {
-    id: 'monthly_count',
-    title: 'Monthly Cycle Count & Inventory Audit',
-    iconName: 'GridIcon',
-    badge: 'Stock Audit',
-    category: 'Inventory Audit',
-    description:
-      'Scheduled blind inventory cycle count procedure. Freezes warehouse zones, performs unbiased barcode recounts, classifies discrepancies, and executes audited ledger adjustments.',
-    color: '#7c3aed', // violet-600
-    accentColor: '#a78bfa',
-    stats: { steps: 5, scansRequired: 1, roles: ['Audit Counter', 'Inventory Manager'], estTime: '45-60 mins/zone' },
-    nodes: [
-      {
-        id: 'cnt_1',
-        step: 1,
-        title: 'Audit Schedule & Zone Freeze',
-        actor: 'Inventory Manager',
-        location: 'Manila Hub',
-        type: 'intake',
-        short: 'Select warehouse zone to audit and temporarily freeze picking in that zone.',
-        summary:
-          'Manager schedules monthly cycle count for designated category or shelf section (e.g. Zone A: Coffee & Drinks; Zone B: Pasta & Oils). The system freezes order picking in that specific zone during count.',
-        checklist: [
-          'Notify fulfillment team of zone freeze window (typically 6:00 AM – 8:00 AM).',
-          'Ensure all incoming intakes from earlier shifts are committed before starting count.',
-          'Print blank shelf audit tally sheets or launch Mobile Audit Tool.',
-        ],
-        rules: [
-          'No picking or stock movements are allowed in the active audit zone during counting.',
-        ],
-        simulation: {
-          testBarcode: 'AUDIT-ZONE-A',
-          expectedResult: 'Zone A Frozen: 14 Shelf Locations Locked for Cycle Count.',
-        },
-        troubleshooting: [
-          { issue: 'Urgent order requires item from frozen zone', fix: 'Expedite audit of that specific shelf bin first before releasing item.' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'Schedule Cycle Count',
-      },
-      {
-        id: 'cnt_2',
-        step: 2,
-        title: 'Blind Physical Barcode Recount',
-        actor: 'Audit Counter (Staff A)',
-        location: 'Warehouse Shelves',
-        type: 'scan',
-        short: 'Staff scans every shelf item blindly without seeing system quantities.',
-        summary:
-          'Staff member scans every item shelf-by-shelf. The interface intentionally conceals expected quantities ("blind count") to prevent confirmation bias or shortcutting.',
-        checklist: [
-          'Scan barcode on each physical unit on Shelf 1, Shelf 2, Shelf 3 systematically.',
-          'Verify and record expiry date on packaging to verify batch lot integrity.',
-          'Flag any unstickered or uncataloged items for quarantine.',
-        ],
-        rules: [
-          'Never estimate or multiply box stacks; scan every unit physically.',
-        ],
-        simulation: {
-          testBarcode: 'BLIND-SCAN-SHELF-01',
-          expectedResult: 'Shelf 1 Counted: 42 Units Scanned (System quantities hidden).',
-        },
-        troubleshooting: [
-          { issue: 'Dusty barcode / scanner misread', fix: 'Wipe barcode label with dry microfiber cloth; use manual 13-digit EAN entry as fallback.' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'Launch Blind Scanner',
-      },
-      {
-        id: 'cnt_3',
-        step: 3,
-        title: 'Automated Variance Analysis',
-        actor: 'System / Manager',
-        location: 'Admin BOS Terminal',
-        type: 'decision',
-        short: 'System compares physical scan numbers against ledger and flags variances.',
-        summary:
-          'The cycle count engine cross-references physical scans against active batch lots. Identifies discrepancies: Overages (+), Shortages (-), or Batch Mismatches.',
-        checklist: [
-          'Review variance summary table showing Expected vs Scanned counts.',
-          'Identify items with zero discrepancy (automatically verified).',
-          'Highlight items with variance > 0 for immediate secondary recount.',
-        ],
-        rules: [
-          'Any variance exceeding ₱500 in value requires a mandatory recount by a second staff member.',
-        ],
-        simulation: {
-          testBarcode: 'VAR-ANALYZE-RUN',
-          expectedResult: 'Analysis Complete: 12 SKUs Matched, 1 SKU Variance (-1 unit Mulino Bianco).',
-        },
-        troubleshooting: [
-          { issue: 'Overage detected (more units than system)', fix: 'Check if an intake batch was physically placed on shelf before being committed in Admin BOS.' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'Review Variance Report',
-      },
-      {
-        id: 'cnt_4',
-        step: 4,
-        title: 'Secondary Recount & Discrepancy Classification',
-        actor: 'Shift Lead (Staff B)',
-        location: 'Audit Zone',
-        type: 'action',
-        short: 'Independent second staff member recounts flagged items and classifies cause.',
-        summary:
-          'A different staff member recounts the flagged discrepancy items. If variance persists, staff classifies the exact cause code (e.g. Expired & Discarded, Packaging Breakage, Store Sampling, Missing).',
-        checklist: [
-          'Staff B performs targeted recount of flagged SKUs only.',
-          'If breakage or damage, attach photo evidence of damaged packaging.',
-          'Select authoritative reason code in the Discrepancy Resolution Form.',
-        ],
-        rules: [
-          'Never attribute a shortage to "unknown" without shift supervisor investigation.',
-        ],
-        simulation: {
-          testBarcode: 'DISC-REASON-DMG',
-          expectedResult: 'Classified: Reason Code BRK-01 (Packaging squashed during warehouse handling).',
-        },
-        troubleshooting: [
-          { issue: 'Unexplained missing unit', fix: 'Check packing station cameras for last 7 days to verify if unit was erroneously included in another order.' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'Classify Discrepancies',
-      },
-      {
-        id: 'cnt_5',
-        step: 5,
-        title: 'Manager Authorization & Ledger Adjustment',
-        actor: 'Inventory Manager / Owner',
-        location: 'Admin BOS Terminal',
-        type: 'complete',
-        short: 'Manager signs off on cycle count adjustment; inventory ledger balances.',
-        summary:
-          'Manager reviews final variance report with attached evidence and reason codes. Approving the audit writes compensating adjustment entries to the inventory ledger and unfreezes the zone.',
-        checklist: [
-          'Review total net financial impact of the monthly audit.',
-          'Enter manager authorization credentials.',
-          'Unfreeze warehouse zone and resume normal fulfillment picking.',
-        ],
-        rules: [
-          'Audit adjustment records are permanently archived for accounting and financial compliance.',
-        ],
-        simulation: {
-          testBarcode: 'MGR-ADJUST-APPROVE',
-          expectedResult: 'Audit Closed: Ledger Adjusted (-₱310.00), Zone A Unfrozen for Fulfillment.',
-        },
-        troubleshooting: [
-          { issue: 'Adjustment exceeds threshold limit', fix: 'Requires 2-person executive authorization (Manager + Owner).' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'Approve Audit Adjustments',
-      },
-    ],
-  },
-
-  product_creation_ai: {
-    id: 'product_creation_ai',
-    title: 'Product Catalog Creation & AI Studio Prompting',
-    iconName: 'SparkleIcon',
-    badge: 'Catalog & AI Studio',
-    category: 'Product Management',
-    description:
-      'Complete workflow for adding authentic Italian products to the catalog, configuring pricing boundaries, and generating photorealistic luxury editorial product imagery with ChatGPT / AI Studio.',
-    color: '#e11d48', // rose-600
-    accentColor: '#fb7185',
-    stats: { steps: 6, scansRequired: 0, roles: ['Catalog Lead', 'Content Designer'], estTime: '15-20 mins/product' },
-    nodes: [
-      {
-        id: 'prod_1',
-        step: 1,
-        title: 'Master Data & Sourcing Passport',
-        actor: 'Catalog Lead',
-        location: 'Admin Catalog Tool',
-        type: 'intake',
-        short: 'Enter authentic Italian brand, EAN-13 barcode, net weight, and origin.',
-        summary:
-          'Create a new product draft in Admin BOS. Enter official Italian brand name (e.g. Mulino Bianco, Gentile, Baci Perugina), Italian product title, net weight, packaging type, and verified origin region.',
-        checklist: [
-          'Enter exact Italian product title and English culinary subtitle.',
-          'Input manufacturer printed EAN-13 barcode.',
-          'Select correct category (Dolci, Caffè, Pasta & Dispensa, Cura, Bellezza).',
-          'Record Italian region of origin (e.g. Gragnano, Campania / Alba, Piedmont).',
-        ],
-        rules: [
-          'Never translate iconic Italian brand names (e.g. keep "Pan di Stelle", do not write "Bread of Stars").',
-        ],
-        simulation: {
-          testBarcode: 'PROD-DRAFT-CREATE',
-          expectedResult: 'Draft Created: SKU IT-MUL-002, Brand: Mulino Bianco, Origin: Parma, Italy.',
-        },
-        troubleshooting: [
-          { issue: 'Duplicate barcode error', fix: 'Search catalog to check if product is already registered under an existing SKU.' },
-        ],
-        adminJump: 'intake',
-        jumpLabel: 'Create Product Draft',
-      },
-      {
-        id: 'prod_2',
-        step: 2,
-        title: 'Pricing Tiers & Landed Cost Floor',
-        actor: 'Pricing Lead / Owner',
-        location: 'Admin Pricing Matrix',
-        type: 'action',
-        short: 'Set purchase cost (€), computed floor (₱), retail SRP, and wholesale tier.',
-        summary:
-          'Configure pricing boundaries. Enter original Italian shelf purchase price in EUR. System calculates landed cost floor based on active EUR/PHP exchange rate + cargo freight coefficient.',
-        checklist: [
-          'Enter purchase cost in EUR (e.g. €2.80).',
-          'Review calculated landed cost floor in PHP (e.g. ₱310).',
-          'Set consumer retail SRP in PHP (e.g. ₱480).',
-          'Set B2B wholesale case price in PHP with minimum order quantity (e.g. ₱380, MOQ: 6).',
-        ],
-        rules: [
-          'Retail SRP must NEVER be set below the calculated landed cost floor.',
-        ],
-        simulation: {
-          testBarcode: 'PRICE-MARGIN-CHECK',
-          expectedResult: 'Pricing Validated: Landed Cost ₱310.00 -> SRP ₱480.00 (Gross Margin: 35.4%).',
-        },
-        troubleshooting: [
-          { issue: 'EUR/PHP exchange rate spike', fix: 'Update active exchange rate parameter in Admin Settings; recalculates landed cost floor.' },
-        ],
-        adminJump: 'inventory',
-        jumpLabel: 'Configure Pricing',
-      },
-      {
-        id: 'prod_3',
-        step: 3,
-        title: 'ChatGPT & AI Studio Photorealistic Image Generation',
-        actor: 'Content Designer',
-        location: 'AI Image Studio',
-        type: 'action',
-        short: 'Generate luxury editorial product photos using K2 verified prompt formulas.',
-        summary:
-          'Use K2’s tested prompt engineering formulas in ChatGPT / Midjourney / AI Studio to create hyper-realistic editorial product photography matching the Tuscan wood and linen storefront aesthetic.',
-        checklist: [
-          'Select product category and packaging style from the AI Prompt Studio.',
-          'Copy the structured prompt formula with lighting, texture, and lens parameters.',
-          'Generate 1:1 square image (Catalog tile) and 4:3 landscape image (Hero spotlight).',
-          'Check for visual defects (distorted text, unnatural reflections, fake logos).',
-        ],
-        rules: [
-          'Always use authentic Italian aesthetic constraints (warm morning sunlight, linen cloth, reclaimed oak).',
-          'Negative prompts must strictly exclude artificial neon lighting, 3D renders, and plastic glare.',
-        ],
-        hasPromptStudio: true,
-        simulation: {
-          testBarcode: 'AI-PROMPT-GENERATE',
-          expectedResult: 'Prompt Formula Generated: DALL-E 3 & Midjourney v6 Ready.',
-        },
-        troubleshooting: [
-          { issue: 'AI generated gibberish letters on packaging', fix: 'Use Photoshop or AI inpainting to paste the authentic vector brand logo over the generated box.' },
-        ],
-        adminJump: 'intake',
-        jumpLabel: 'Open AI Prompt Studio',
-      },
-      {
-        id: 'prod_4',
-        step: 4,
-        title: 'Before/After Unboxing Experience Setup',
-        actor: 'Content Designer',
-        location: 'Product Media Manager',
-        type: 'action',
-        short: 'Upload packaging shot (Before) and served / unboxed shot (After).',
-        summary:
-          'Set up K2’s signature interactive Before/After comparison slider. Upload the sealed package photograph as "Before", and the unboxed / prepared culinary presentation as "After".',
-        checklist: [
-          'Upload Primary Image (sealed package on linen canvas).',
-          'Upload After Image (biscuits on ceramic saucer / coffee crema in espresso cup).',
-          'Test interactive slider in preview mode to ensure smooth touch swipe performance.',
-        ],
-        rules: [
-          'Images must be compressed to WebP format under 250KB for fast mobile loading.',
-        ],
-        simulation: {
-          testBarcode: 'MEDIA-UPLOAD-OK',
-          expectedResult: 'WebP Compressed: Primary (142 KB), After Image (168 KB), Slider Configured.',
-        },
-        troubleshooting: [
-          { issue: 'Image file > 1MB', fix: 'Run through WebP compressor to maintain high visual quality under 250KB limit.' },
-        ],
-        adminJump: 'intake',
-        jumpLabel: 'Upload Product Media',
-      },
-      {
-        id: 'prod_5',
-        step: 5,
-        title: 'Ingredients, Allergens & Preparation Guide',
-        actor: 'Catalog Lead',
-        location: 'Product Detail Editor',
-        type: 'decision',
-        short: 'Input verified ingredients, bold allergen declarations, and recipe pairings.',
-        summary:
-          'Enter certified nutritional and allergen specifications from the physical package. Write conversational Filipino pairing notes (e.g. "Best paired with morning espresso or warm pandesal").',
-        checklist: [
-          'Enter complete ingredients list.',
-          'Highlight bold allergens (e.g. Contains Wheat, Milk, Hazelnuts, Soy).',
-          'Add 2–3 authentic culinary pairing tags and step-by-step preparation tips.',
-        ],
-        rules: [
-          'Allergen warnings are safety-critical; never omit gluten, nuts, dairy, or egg warnings.',
-        ],
-        simulation: {
-          testBarcode: 'SPEC-VERIFY-PASS',
-          expectedResult: 'Allergens Flagged: Wheat (Gluten), Hazelnuts, Milk. Pairing: Warm Pandesal.',
-        },
-        troubleshooting: [
-          { issue: 'Ingredients only printed in Italian', fix: 'Use Italian culinary translation guide; verify technical terms (e.g. "Farina di grano tenero tipo 0" = Soft wheat flour).' },
-        ],
-        adminJump: 'intake',
-        jumpLabel: 'Edit Specifications',
-      },
-      {
-        id: 'prod_6',
-        step: 6,
-        title: 'Review & Live Storefront Activation',
-        actor: 'Catalog Lead / Manager',
-        location: 'Admin BOS Terminal',
-        type: 'complete',
-        short: 'Preview mobile layout, verify tags, and publish live to the Storefront.',
-        summary:
-          'Inspect full product detail preview on mobile and desktop viewports. Check SEO title, category placement, and stock availability badge. Toggle product status from Draft to Active.',
-        checklist: [
-          'Inspect mobile product page preview for typography alignment and image clarity.',
-          'Verify search tags (e.g. #biscotti #breakfast #mulino-bianco).',
-          'Click "Publish Product". Verify new listing appears immediately in Storefront catalog.',
-        ],
-        rules: [
-          'Product will show "Out of Stock · Request via Pasabuy" until the first batch lot is received.',
-        ],
-        simulation: {
-          testBarcode: 'PUBLISH-LIVE-OK',
-          expectedResult: 'Listing Published: Live on Storefront (/product/IT-MUL-002).',
-        },
-        troubleshooting: [
-          { issue: 'Product not showing in catalog', fix: 'Clear browser cache or verify category filter assignment.' },
-        ],
-        adminJump: 'intake',
-        jumpLabel: 'Publish Listing',
-      },
-    ],
-  },
-
   pasabuy_lifecycle: {
     id: 'pasabuy_lifecycle',
+    sectionId: 'orders_fulfillment',
     title: 'Pasabuy Custom Sourcing Workflow',
     iconName: 'PlaneIcon',
     badge: 'Custom Sourcing',
-    category: 'Pasabuy Concierge',
+    category: 'Orders & Fulfillment',
     description:
       'End-to-end concierge workflow for handling custom Italian product requests from Manila customers: request intake, Milan store research, cost computation, official quote approval, and flight delivery.',
-    color: '#0284c7', // sky-600
+    color: '#0284c7',
     accentColor: '#38bdf8',
-    stats: { steps: 6, scansRequired: 1, roles: ['Pasabuy Coordinator', 'Milan Sourcing Lead'], estTime: '2-5 days turnaround' },
+    stats: { steps: 6, scansRequired: 1, roles: ['Pasabuy Coordinator', 'Milan Sourcing Lead'], estTime: '2-5 days' },
     nodes: [
       {
         id: 'pasa_1',
@@ -923,7 +1150,7 @@ export const WORKFLOWS = {
         id: 'pasa_2',
         step: 2,
         title: 'Milan Sourcing & Cost Calculation',
-        actor: 'Milan Sourcing Lead',
+        actor: 'Milan Sourcing Lead (Cousin)',
         location: 'Milan Hub / Italian Stores',
         type: 'action',
         short: 'Milan team checks store availability and calculates landed cost floor.',
@@ -1007,7 +1234,7 @@ export const WORKFLOWS = {
         id: 'pasa_5',
         step: 5,
         title: 'Milan Purchase & Flight Cargo Tagging',
-        actor: 'Milan Buyer',
+        actor: 'Milan Buyer (Cousin)',
         location: 'Milan Retailers / MXP Hub',
         type: 'action',
         short: 'Buyer purchases item in Italy, applies Pasabuy QR tag, and loads into flight cargo box.',

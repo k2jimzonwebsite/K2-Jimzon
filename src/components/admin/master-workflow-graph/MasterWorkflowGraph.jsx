@@ -1,30 +1,47 @@
 import React, { useState, useMemo } from 'react'
-import { WORKFLOWS } from './workflowData'
+import { WORKFLOWS, WORKFLOW_SECTIONS } from './workflowData'
 import WorkflowSvgCanvas from './WorkflowSvgCanvas'
 import WorkflowDetailDrawer from './WorkflowDetailDrawer'
-import { MapIcon, SearchIcon, CheckIcon } from '../../ui/icons'
+import { MapIcon, SearchIcon, CheckIcon, PlaneIcon, BoxIcon, ShieldIcon, BagIcon, SparkleIcon } from '../../ui/icons'
 
 /**
  * MasterWorkflowGraph
  * The central visual operations map for K2 Jimzon administrators and warehouse staff.
- * Renders SVG node-based flowcharts, step checklists, safeguards, and AI prompt engineering tools.
+ * Divided into distinct operational sections:
+ * - Italy & Cross-Border (Cousin in Milan -> Flight Boxes -> Transit)
+ * - Manila Intake & Catalog (Unboxing -> Quality Check -> Branching: Existing Stock vs New Product)
+ * - Warehouse & Custody (FEFO Lots, Shelf Bins, Handshakes, Cycle Counts)
+ * - Orders & Fulfillment (Order Picking, 2-Factor Scans, Packing, Courier Handover, Pasabuy)
  */
 export default function MasterWorkflowGraph({
-  initialWorkflowId = 'new_inventory',
+  initialWorkflowId = 'cross_border_lifecycle',
   onNavigate = null,
   onClose = null,
   isModal = false,
 }) {
+  const [selectedSection, setSelectedSection] = useState('all')
   const [activeWorkflowId, setActiveWorkflowId] = useState(initialWorkflowId)
-  const activeWorkflow = WORKFLOWS[activeWorkflowId] || WORKFLOWS.new_inventory
+  const activeWorkflow = WORKFLOWS[activeWorkflowId] || WORKFLOWS.cross_border_lifecycle
 
   const [activeNodeId, setActiveNodeId] = useState(activeWorkflow.nodes[0]?.id)
   const [completedSteps, setCompletedSteps] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
 
+  const handleSelectSection = (secId) => {
+    setSelectedSection(secId)
+    if (secId !== 'all') {
+      // Auto-select first workflow in this section if current workflow doesn't belong
+      const firstInSec = Object.values(WORKFLOWS).find((w) => w.sectionId === secId)
+      if (firstInSec && activeWorkflow.sectionId !== secId) {
+        setActiveWorkflowId(firstInSec.id)
+        setActiveNodeId(firstInSec.nodes[0]?.id)
+      }
+    }
+  }
+
   const handleSelectWorkflow = (wfId) => {
     setActiveWorkflowId(wfId)
-    const targetWf = WORKFLOWS[wfId] || WORKFLOWS.new_inventory
+    const targetWf = WORKFLOWS[wfId] || WORKFLOWS.cross_border_lifecycle
     setActiveNodeId(targetWf.nodes[0]?.id)
   }
 
@@ -53,7 +70,16 @@ export default function MasterWorkflowGraph({
     setCompletedSteps([])
   }
 
-  const workflowList = Object.values(WORKFLOWS)
+  // Filter workflows by active section
+  const visibleWorkflows = useMemo(() => {
+    const all = Object.values(WORKFLOWS)
+    if (selectedSection === 'all') return all
+    return all.filter((w) => w.sectionId === selectedSection)
+  }, [selectedSection])
+
+  // Active section metadata
+  const currentSectionMeta =
+    WORKFLOW_SECTIONS.find((s) => s.id === selectedSection) || WORKFLOW_SECTIONS[0]
 
   // Calculate completion percentage for current workflow
   const currentWfCompletedCount = activeWorkflow.nodes.filter((n) =>
@@ -93,7 +119,7 @@ export default function MasterWorkflowGraph({
               </h2>
             </div>
             <p className="mt-1 text-xs text-white/60 sm:text-sm">
-              Authoritative step-by-step visual guides, 2-factor scan requirements, and AI Studio prompt engineering.
+              Cross-border supply chain (Milan cousin → Air Transit → Manila Hub) & live inventory decision branching.
             </p>
           </div>
 
@@ -105,7 +131,7 @@ export default function MasterWorkflowGraph({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Filter steps, barcodes, roles..."
+                placeholder="Search steps, barcodes, roles..."
                 className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3 text-xs text-white placeholder-white/40 focus:border-sky-500/50 focus:bg-white/[0.07] focus:outline-none"
               />
               {searchQuery && (
@@ -131,9 +157,30 @@ export default function MasterWorkflowGraph({
           </div>
         </div>
 
-        {/* Workflow Switcher Pills */}
-        <div className="flex flex-wrap gap-2 pt-2">
-          {workflowList.map((wf) => {
+        {/* 1. Operational Domain Section Tabs */}
+        <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-white/10 bg-black/40 p-1">
+          {WORKFLOW_SECTIONS.map((sec) => {
+            const isSelected = sec.id === selectedSection
+            return (
+              <button
+                key={sec.id}
+                type="button"
+                onClick={() => handleSelectSection(sec.id)}
+                className={`rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+                  isSelected
+                    ? 'bg-sky-500 text-slate-950 shadow-sm'
+                    : 'text-white/60 hover:bg-white/5 hover:text-white'
+                }`}
+              >
+                {sec.label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* 2. Specific Workflow Selector Pills within Selected Section */}
+        <div className="flex flex-wrap gap-2 pt-1">
+          {visibleWorkflows.map((wf) => {
             const isSelected = wf.id === activeWorkflowId
             return (
               <button
@@ -154,6 +201,16 @@ export default function MasterWorkflowGraph({
             )
           })}
         </div>
+      </div>
+
+      {/* Domain Context Notice */}
+      <div className="rounded-xl border border-sky-500/20 bg-sky-500/[0.04] px-4 py-2.5 text-xs text-sky-200/90 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <span className="font-semibold text-sky-400">
+          Domain: {currentSectionMeta.label}
+        </span>
+        <span className="text-white/70 text-[11px]">
+          {currentSectionMeta.description}
+        </span>
       </div>
 
       {/* Workflow Header Banner with Shift Progress */}
