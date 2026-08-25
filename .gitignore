@@ -22,9 +22,13 @@ supabase/.temp/
 .temp/
 .tools/
 .agents/
+.agent/
 .claude/
 .codex/
+.gemini/
 .impeccable/
+ANTIGRAVITY_HANDOFF/
+_globe_resources/
 agentic-awesome-skills/
 antigravity-skills/
 .fuse_hidden*

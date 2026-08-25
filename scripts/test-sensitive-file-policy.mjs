@@ -11,10 +11,9 @@ for (const file of blocked) {
   assert.notEqual(sensitiveFileReason(file), '', `${file} should be blocked`)
 }
 
-for (const file of ['.env.example', '_globe_resources/.env.example', 'docs/credentials.md', 'schema.sql']) {
+for (const file of ['.env.example', 'examples/.env.example', 'docs/credentials.md', 'schema.sql']) {
   assert.equal(sensitiveFileReason(file), '', `${file} should be allowed`)
 }
 
 assert.equal(findSensitiveFiles(blocked).length, blocked.length)
 console.log('Sensitive-file policy tests passed (13 blocked and 4 allowed fixtures).')
-

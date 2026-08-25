@@ -24,19 +24,33 @@ Welcome to the central documentation library for the **K2 Jimzon** platform. Thi
 
 ---
 
-## 📖 Operational Runbooks
+## 📖 Operational Runbooks (`docs/runbooks/`)
 
 Standard Operating Procedures (SOPs) and technical runbooks:
 
-- [**ADMIN_BFF_SECURITY_RUNBOOK.md**](../ADMIN_BFF_SECURITY_RUNBOOK.md) — Admin Backend-For-Frontend security controls and route policies.
-- [**GUEST_COMMERCE_BFF_RUNBOOK.md**](../GUEST_COMMERCE_BFF_RUNBOOK.md) — Guest checkout, scoped grant cookies, and universal messaging.
-- [**PRODUCT_INTAKE_RUNBOOK.md**](../PRODUCT_INTAKE_RUNBOOK.md) — Phone-first SKU generation, photo evidence capture, and first-inventory gate.
-- [**CATALOG_SPREADSHEET_RUNBOOK.md**](../CATALOG_SPREADSHEET_RUNBOOK.md) — Multi-variant spreadsheet export, staging, and atomic commit.
-- [**DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md**](../DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md) — Encrypted dump creation and loopback restoration rehearsal.
-- [**CUSTOMER_DATA_RETENTION_AND_DELETION_RUNBOOK.md**](../CUSTOMER_DATA_RETENTION_AND_DELETION_RUNBOOK.md) — Data lifecycle, retention policies, and GDPR/DPA deletion gates.
-- [**PROVIDER_LIMITS_AND_CAPACITY_RUNBOOK.md**](../PROVIDER_LIMITS_AND_CAPACITY_RUNBOOK.md) — Platform quotas, Vercel function limits, and Supabase connection ceilings.
-- [**SECURITY_INCIDENT_AND_KEY_ROTATION_RUNBOOK.md**](../SECURITY_INCIDENT_AND_KEY_ROTATION_RUNBOOK.md) — Incident response, token compromise recovery, and credential rotation.
-- [**DEPLOYMENT_RUNBOOK.md**](../DEPLOYMENT_RUNBOOK.md) — Step-by-step production promotion checklist.
+- [**ADMIN_BFF_SECURITY_RUNBOOK.md**](./runbooks/ADMIN_BFF_SECURITY_RUNBOOK.md) — Admin Backend-For-Frontend security controls and route policies.
+- [**GUEST_COMMERCE_BFF_RUNBOOK.md**](./runbooks/GUEST_COMMERCE_BFF_RUNBOOK.md) — Guest checkout, scoped grant cookies, and universal messaging.
+- [**PRODUCT_INTAKE_RUNBOOK.md**](./runbooks/PRODUCT_INTAKE_RUNBOOK.md) — Phone-first SKU generation, photo evidence capture, and first-inventory gate.
+- [**CATALOG_SPREADSHEET_RUNBOOK.md**](./runbooks/CATALOG_SPREADSHEET_RUNBOOK.md) — Multi-variant spreadsheet export, staging, and atomic commit.
+- [**DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md**](./runbooks/DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md) — Encrypted dump creation and loopback restoration rehearsal.
+- [**CUSTOMER_DATA_RETENTION_AND_DELETION_RUNBOOK.md**](./runbooks/CUSTOMER_DATA_RETENTION_AND_DELETION_RUNBOOK.md) — Data lifecycle, retention policies, and GDPR/DPA deletion gates.
+- [**PROVIDER_LIMITS_AND_CAPACITY_RUNBOOK.md**](./runbooks/PROVIDER_LIMITS_AND_CAPACITY_RUNBOOK.md) — Platform quotas, Vercel function limits, and Supabase connection ceilings.
+- [**SECURITY_INCIDENT_AND_KEY_ROTATION_RUNBOOK.md**](./runbooks/SECURITY_INCIDENT_AND_KEY_ROTATION_RUNBOOK.md) — Incident response, token compromise recovery, and credential rotation.
+- [**DEPLOYMENT_RUNBOOK.md**](./runbooks/DEPLOYMENT_RUNBOOK.md) — Step-by-step production promotion checklist.
+
+---
+
+## 🔬 Evidence & Audits (`docs/evidence/`)
+
+Verification logs, rollback validations, and schema audits for MAP work items:
+- MAP-016 through MAP-020 verification reports, schema audits, and rollback proofs.
+
+---
+
+## 📐 Specs & Blueprints (`docs/specs/`)
+
+Technical specifications, connector integration blueprints, and operations audits:
+- Admin BOS blueprint, authorization matrix, connector integration specs, and AI studio configurations.
 
 ---
 
