@@ -113,14 +113,30 @@ test('each Vercel artifact declares one exact consolidated BFF entrypoint and re
     readFile(new URL('../api/admin/index.js', import.meta.url), 'utf8'),
   ])
 
+  // Rewrite ORDER is load-bearing. Vercel takes the first match, so the BFF route
+  // must precede the SPA catch-all or every API call would be rewritten to
+  // index.html. The catch-all itself is what makes deep links work in production:
+  // without it, /product/:sku has no file on disk and Vercel returns 404. The dev
+  // server falls back to index.html on its own, so this failure is invisible
+  // locally and in the smoke suite — it only appears once deployed.
   expect(Object.keys(storefront.functions)).toEqual(['api/storefront/index.js'])
   expect(storefront.rewrites).toEqual([
     { source: '/api/storefront/:route*', destination: '/api/storefront?route=:route*' },
+    { source: '/(.*)', destination: '/index.html' },
   ])
   expect(Object.keys(admin.functions)).toEqual(['api/admin/index.js'])
   expect(admin.rewrites).toEqual([
     { source: '/api/admin/:route*', destination: '/api/admin?route=:route*' },
+    { source: '/(.*)', destination: '/index.html' },
   ])
+
+  // Every client-side route the storefront can push must be reachable by a cold
+  // direct request, which is only true while the catch-all is last.
+  for (const artifact of [storefront, admin]) {
+    const last = artifact.rewrites[artifact.rewrites.length - 1]
+    expect(last).toEqual({ source: '/(.*)', destination: '/index.html' })
+    expect(artifact.rewrites.findIndex((r) => r.source === '/(.*)')).toBe(artifact.rewrites.length - 1)
+  }
   expect(storefrontEntrypoint).toContain("process.env.K2_STOREFRONT_BFF_ENABLED === 'true'")
   expect(storefrontEntrypoint).not.toContain('admin-bff')
   expect(adminEntrypoint).toContain("process.env.K2_ADMIN_BFF_ENABLED === 'true'")
