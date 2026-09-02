@@ -786,6 +786,45 @@ Auth callbacks (`OWNER-001`); BFF activation, which needs production server
 environment plus owner authorization; and any marketplace connector, since no
 partner credentials or approved partner documentation exist.
 
+### Queue item 14 — MAP-019 — an order opens a conversation with nothing in it
+
+**Raised 2 September 2026 from an owner test order. Confirmed in source.**
+
+`public.submit_guest_order_v1` inserts a `public.conversations` row with
+`source_kind = 'order_request'` and grants the customer `read` and `reply` on it
+— then inserts no message. Compare `public.start_guest_conversation_v1` in the
+same migration (`20260812_guest_submission_boundary.sql:528`), which inserts the
+conversation *and* a first message, sets `unread_count = 1`, `last_inbound_at`,
+and `response_due_at = now() + 4 hours`. The order path sets none of the four.
+
+*Measured consequence.* The customer taps "View your messages" and lands in an
+empty thread. Staff see a conversation with no content, no unread badge, and no
+response-due timer, so it raises no signal and starts no SLA. The owner's report
+— "there are no message in k2jimzon website" — is this, plus the config cause
+below.
+
+*Second, separate cause found in the same investigation.* `VITE_GUEST_BFF_ENABLED`
+is absent from the local environment, so `guestCommerceService.js:4` evaluates
+false and checkout takes the direct `submit_order_request_v2` path, which creates
+no conversation at all. `src/views/Confirmation.jsx:109` also hides the "View your
+messages" button behind the same flag. Confirm the deployed value before treating
+the empty-thread defect as the only cause.
+
+*Fix.* Seed the order conversation the way the contact path already does: one
+inbound system-authored message stating the order reference and what happens
+next, plus `unread_count`, `last_inbound_at`, and `response_due_at`. Reuse
+`start_guest_conversation_v1`'s shape rather than inventing a second one. This is
+a database function change and therefore sits behind the MAP-017 apply gate.
+
+*Note for `IDEA-20260902-04`.* The owner's planned GCash payment step is intended
+to carry a live chat. That chat would open onto this empty thread, so this defect
+is a prerequisite for that flow, not a cosmetic follow-up.
+
+*Files:* a new additive migration under `supabase/migrations/`, and a contract
+asserting an order conversation is never created without a first message.
+*Check:* a guest order produces a thread whose first message names the order
+reference; the staff inbox shows it unread with a response-due time.
+
 ### Queue item 12 — MAP-023 — `Unlisted` products cannot be bought through the link that advertises them
 
 **Raised 2 September 2026 from a source audit. Not yet fixed; recorded here
@@ -3010,6 +3049,20 @@ scoped guest grant, account-claim, and channel-identity rules are recorded in
 
 **Status:** Queued — local preparation exists; production activation/evidence
 depends on MAP-017 and MAP-019
+
+**2 September 2026 release-gate incident — dependency audit locally repaired,
+remote proof pending.** GitHub Actions run `33602563855` stopped before the
+build at `npm audit --audit-level=low` because the locked transitive
+`browserslist` 4.28.6 became subject to two high-severity advisories
+(`GHSA-c83g-rgw3-j3cx`, `GHSA-73wf-gq98-2v4g`). The application did not add a
+direct dependency: the existing `@babel/helper-compilation-targets` range
+already accepts the patched line. A package-lock-only targeted update now
+resolves `browserslist` 4.28.8 and its compatible browser-data helpers. Fresh
+local `npm run security:dependency-audit` reports zero vulnerabilities and
+`npm run security:dependency-policy` passes. This is prepared local evidence,
+not a green remote CI run. Keep the gate open until the exact recovery commit
+passes the push-triggered `CI` workflow; rollback is the recovery commit's
+package-lock hunk only if the new resolution breaks the full acceptance suite.
 
 **Deliver:**
 
@@ -5488,6 +5541,26 @@ gates, and provider-level security headers were applied and verified on
 27 August 2026. Supabase Auth URL configuration, BFF activation, migrations,
 email delivery/DNS, SEO assets, complete real-host journeys, and rollback proof
 remain open. The exact domain is `k2jimzon.com`.
+
+**2 September 2026 failed Git-deploy incident — local recovery prepared, not
+deployed.** Commit `1af0710` reached GitHub `main`, and both linked projects
+started production deployments from that exact SHA, but neither promoted an
+artifact. Storefront deployment `dpl_66d5LrShnaKCT55Kwt1HPpJJEkAn` and Admin
+deployment `dpl_7oNFxJiWuioH8QUfzm9iEZ7UueC7` both failed while compiling root
+`vercel.ts`, before either application build ran. Vercel relocates the compiled
+configuration to `/vercel/path0/.vercel/vercel-temp.mjs`; the adapter's runtime
+`new URL(..., import.meta.url)` therefore looked for
+`.vercel/vercel.storefront.json` instead of the reviewed root artifact. The two
+prior production deployments remain the recovery state; no database, Storage,
+DNS, Auth, or BFF switch changed. The minimal local repair statically imports
+both reviewed JSON contracts so the provider compiler bundles them while the
+existing target/project mismatch refusal remains unchanged. A failing-first
+contract reproduced the unsafe runtime lookup and now passes locally with the
+complete deployment/security file. This is prepared evidence only. Keep this
+gate open until the exact recovery commit passes full local acceptance, remote
+CI, both production builds, separate-bundle/config identity checks, and real-host
+smoke evidence. If either target regresses, promote its recorded prior READY
+deployment rather than changing provider settings or weakening the selector.
 
 **31 August public-route gate (`IDEA-20260831-03`):** the current parser maps
 every unknown path to Home, and a nonexistent `/product/:sku` stays on

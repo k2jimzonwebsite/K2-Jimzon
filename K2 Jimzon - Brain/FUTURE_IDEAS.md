@@ -5,7 +5,7 @@ a competing implementation backlog.
 
 **Active implementation authority:** `../MASTER_ACTION_PLAN.md`
 
-**Current pending intake:** None
+**Current pending intake:** IDEA-20260902-04
 
 This is not a roadmap or backlog. An idea stays here only until it is audited
 against the operations rulebook, current System Brain, actual code/data,
@@ -428,6 +428,67 @@ Master Action Plan is authorized for implementation.
 | IDEA-20260902-02 | Merged | MAP-023 replaces the earlier single-courier customer-fee basis with a carrier-agnostic `K2-arranged delivery` rule: for one exact origin, destination, packed profile, and owner-approved route-qualified courier/service set, quote the PHP 5 ceiling of the maximum complete current outbound courier cost; missing or stale eligible-option evidence routes to manual quotation, integrity conflicts hard-stop, current J&T-only routes remain automatic only when J&T is explicitly the sole eligible option, and MAP-019/MAP-020 own the future Admin activation and independently validated import/snapshot boundary |
 
 ## Pending idea intake
+
+### IDEA-20260902-04 - Pay-at-checkout by GCash, on purchase-time reserved stock
+
+**Captured:** 2026-09-02
+**Raised by:** Owner, after placing a test order
+
+**Desired flow:** add to cart -> buy -> GCash QR -> pay -> a form where the
+customer submits that they paid (reference number required, screenshot
+optional) -> staff verify. Live chat supports that step now and becomes
+optional once the process is automated.
+
+**Owner's stated premise, and the correction.** The owner expected that
+"inventory here should automatically adjust, so staff don't need to check."
+That is not true in the current tree. `public.submit_order_request_v2` touches
+no stock, no reservations and no batches; it writes the order request, its
+items, subtotal/coupon and one event. Stock moves only in
+`public.confirm_order_request` (`20260809_operations_hardening.sql:381`), whose
+only caller is a staff button at `src/views/admin/OmniOperationsHub.jsx:164`.
+Enabling payment at checkout before this changes would let two customers pay
+for the same last unit, with manual GCash refunds and no gateway.
+
+**This is not new scope - it completes OWNER-002.** The owner's own answer
+records "Reservation - 30 minutes, starting when the customer clicks purchase."
+The implementation starts the hold later: `set_reservation_deadline()` sets
+`expires_at := now() + 30 minutes` on insert into `inventory_reservations`, and
+that insert happens inside `confirm_order_request`, i.e. at staff-confirm time,
+not at purchase. Those moments can be hours apart.
+
+**Dependency order, and none of it may be reordered:**
+
+1. Move reservation creation to purchase time so buying holds stock. Until this
+   lands, payment at checkout is unsafe at any scale.
+2. Apply `20260902_reservation_expiry_policy.sql`, still prepared and unapplied,
+   behind the MAP-017 gate.
+3. Only then: GCash QR at checkout, and the payment-evidence form.
+
+**Payment evidence shape, owner-selected:** GCash reference number required and
+format-validated, optional screenshot. The reference is what staff match against
+the GCash merchant account and it stays searchable; the screenshot is a fallback,
+not the record. This reaches the existing `payment_status` value
+`evidence_submitted`, so no new vocabulary is required - the chain
+`not_requested -> awaiting_instructions -> evidence_submitted -> verified ->
+failed/refunded` already exists (`20260803_launch_core_stabilization.sql:797`).
+
+**Refund exposure.** Even with purchase-time holds, a hold can expire or a lot can
+fail its expiry/quarantine check between payment and confirmation. A written
+refund procedure must exist before this is switched on, because K2 has no payment
+gateway and every refund is a manual GCash send.
+
+**Surfaces that must change together, or the storefront will contradict itself:**
+`src/views/Confirmation.jsx` ("No payment was charged... staff will contact you
+with payment details"), the FAQ at `src/data/site.js:97`, and the README's
+deferred-payment note all currently promise review-first.
+
+**Owner decision still required:** the GCash account details to display, and
+whether the QR is static or per-order. A static merchant QR cannot be matched to
+an order automatically, which is precisely why the reference number is required.
+
+**Status:** captured, premise corrected, not audited into the MAP. Not authorized
+for implementation.
+
 
 The idea below was captured, decided, audited, and merged into MAP-023 on
 2 September 2026. Its outcome is in the decision register above; MAP-023 holds
