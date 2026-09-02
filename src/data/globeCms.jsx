@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { products } from './products'
-import { REVIEWS as SEED_REVIEWS } from './site'
 import { getSupabaseClient, isSupabaseConfigured } from '../lib/lazySupabaseClient'
 import { safeUiError } from '../lib/safeUiError'
 
@@ -43,43 +42,47 @@ function buildDefaultGlobeProducts() {
   }))
 }
 
-// Seed reviews from existing site.js REVIEWS
-function buildDefaultReviews() {
-  return SEED_REVIEWS.map((r, i) => ({
-    id: `review-${i}`,
-    productId: matchReviewToProduct(r),
-    name: r.name,
-    channel: r.channel,
-    stars: r.stars,
-    text: r.text,
-    item: r.item,
-    date: new Date().toISOString().split('T')[0],
-  }))
+/**
+ * Sample reviews, loaded only if the table is empty.
+ *
+ * Imported dynamically from its own module so the copy lands in the globe's
+ * deferred chunk rather than the landing bundle, which sits inside 1 kB of its
+ * 150 kB gzip budget. A static import here, or adding these to `site.js`, puts
+ * them on every first paint of the home page.
+ */
+async function buildDefaultReviews() {
+  const { GLOBE_SEED_REVIEWS } = await import('./globeSeedReviews')
+  return GLOBE_SEED_REVIEWS.map((r, i) => ({ ...r, id: `seed-review-${i}` }))
 }
 
-// Map review item labels to product IDs
-function matchReviewToProduct(review) {
-  const map = {
-    'Rio Mare tuna': 'rio-mare',
-    'Lavazza Suerte': 'lavazza-dek',
-    'Lavazza Dek': 'lavazza-dek',
-    'Lindt Bianco': 'lindt-bianco',
-    'Suddenly Fragrance': 'suddenly-fragrance',
-    'Pringles Paprika': 'pringles-paprika',
-    // Legacy mappings kept for backward compat
-    'Nutella Biscuits': 'nutella-biscuits',
-    'Lavazza Qualità Oro': 'lavazza-oro',
-    'Biscoff crunchy': 'lotus-biscoff',
-  }
-  return map[review.item] ?? null
-}
 
 // Computed: enabled products enriched with catalog data
-// Only GLOBE_PRODUCT_IDS are ever allowed on the globe — hard-whitelist
+/**
+ * The products the globe shows.
+ *
+ * `enabled` on the database row is the owner's own choice, made in the Admin
+ * Globe CMS. That is the curation, and it is what this honours.
+ *
+ * It used to intersect that with GLOBE_PRODUCT_IDS as well — a hardcoded list of
+ * six written when those were the only items with reviews. The database now
+ * holds seventeen enabled rows, only two of which appear in that list, so
+ * fifteen products the owner had switched on were silently vetoed by a constant.
+ * The list stays, but only where it belongs: seeding defaults when there is no
+ * database to ask.
+ *
+ * Ordering comes from `display_order`, which is the field the CMS actually
+ * writes when the owner reorders the globe. Sorting by position in a hardcoded
+ * array ignored that entirely.
+ */
 function buildEnabledGlobeProducts(globeProducts) {
   return globeProducts
-    .filter((gp) => gp.enabled && GLOBE_PRODUCT_IDS.includes(gp.productId))
-    .sort((a, b) => GLOBE_PRODUCT_IDS.indexOf(a.productId) - GLOBE_PRODUCT_IDS.indexOf(b.productId))
+    .filter((gp) => gp.enabled)
+    .slice()
+    .sort((a, b) => {
+      const left = Number.isFinite(a.displayOrder) ? a.displayOrder : Number.MAX_SAFE_INTEGER
+      const right = Number.isFinite(b.displayOrder) ? b.displayOrder : Number.MAX_SAFE_INTEGER
+      return left - right
+    })
     .map((gp) => {
       const product = products.find((p) => p.id === gp.productId)
       return product ? { ...product, heroImage: gp.heroImage || product.img } : null
@@ -165,11 +168,16 @@ function RemoteGlobeCmsProvider({ children }) {
       )
     }
 
+    // Reviews fall back the same way the globe products above already do.
+    // An empty table is not the same as a broken one, but it produces the same
+    // screen: a review globe with nothing to read. The seed set in site.js is
+    // eight real published marketplace reviews already mapped to products, so
+    // the experience can be exercised end to end before the table is populated.
     if (rvRes.error) {
       errors.push(safeUiError('GLOBE_LOAD_FAILED'))
-      setReviews([])
+      setReviews(await buildDefaultReviews())
     } else {
-      setReviews(rvRes.data.map(mapReviewRow))
+      setReviews(rvRes.data.length ? rvRes.data.map(mapReviewRow) : await buildDefaultReviews())
     }
 
     setCmsError(errors.length ? `Could not load all review data (${errors.join('; ')})` : null)
@@ -337,9 +345,18 @@ function LocalGlobeCmsProvider({ children }) {
   const [globeProducts, setGlobeProducts] = useState(() =>
     loadFromStorage(CMS_PRODUCTS_KEY, buildDefaultGlobeProducts)
   )
-  const [reviews, setReviews] = useState(() =>
-    loadFromStorage(CMS_REVIEWS_KEY, buildDefaultReviews)
-  )
+  // The seed is loaded lazily to keep it out of the landing bundle, so it
+  // cannot be read during the initial render. Stored reviews still appear
+  // immediately; a first run fills in once the seed resolves.
+  const [reviews, setReviews] = useState(() => loadFromStorage(CMS_REVIEWS_KEY, () => []))
+  useEffect(() => {
+    let active = true
+    if (reviews.length) return undefined
+    buildDefaultReviews().then((seed) => { if (active) setReviews(seed) })
+    return () => { active = false }
+    // Seeding runs once, on a first visit with nothing stored.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Persist on change
   useEffect(() => {
@@ -383,7 +400,7 @@ function LocalGlobeCmsProvider({ children }) {
 
   const resetCms = useCallback(() => {
     setGlobeProducts(buildDefaultGlobeProducts())
-    setReviews(buildDefaultReviews())
+    buildDefaultReviews().then(setReviews)
   }, [])
 
   const getProductReviews = useCallback(
