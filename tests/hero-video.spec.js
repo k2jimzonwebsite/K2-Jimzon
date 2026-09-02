@@ -134,3 +134,35 @@ test('both pages open with the band, before any content', async () => {
     expect(hero, `${name} band must come before the headline`).toBeLessThan(heading)
   }
 })
+
+test('a video interrupted by a tab switch comes back on its own', async () => {
+  const source = await component()
+
+  // Browsers pause media in a hidden tab and do not reliably restart it.
+  // Measured before this was added: once paused the element stayed paused
+  // permanently, so a visitor who switched away and returned found the hero
+  // frozen on whatever frame it stopped at.
+  expect(source).toContain("document.addEventListener('visibilitychange', resume)")
+  expect(source).toContain("node.addEventListener('pause', resume)")
+  expect(source).toContain('if (!document.hidden && node.paused) attempt()')
+
+  // No play() attempts against a hidden tab; they only fail.
+  expect(source).toContain('if (document.hidden) return')
+})
+
+test('the video listeners do not outlive the element', async () => {
+  const source = await component()
+
+  // The visibilitychange listener lives on `document` and closes over the node,
+  // so it leaks every time the reduced-motion preference flips the video away.
+  // React 19 ref cleanup is what releases it.
+  const ref = source.slice(source.indexOf('const attachVideo'), source.indexOf('const poster'))
+  expect(ref).toContain('return () => {')
+  for (const removed of [
+    "document.removeEventListener('visibilitychange', resume)",
+    "node.removeEventListener('pause', resume)",
+    "node.removeEventListener('canplay', attempt)",
+  ]) {
+    expect(ref, `cleanup must release ${removed}`).toContain(removed)
+  }
+})

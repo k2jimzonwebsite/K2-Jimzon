@@ -45,6 +45,7 @@ export default function HeroVideo({ name, label }) {
     node.defaultMuted = true
 
     const attempt = () => {
+      if (document.hidden) return
       const started = node.play()
       if (started && typeof started.catch === 'function') started.catch(() => {})
     }
@@ -57,7 +58,33 @@ export default function HeroVideo({ name, label }) {
     node.addEventListener('canplay', attempt)
     node.addEventListener('loadeddata', attempt)
     node.addEventListener('playing', onPlaying)
+
+    // Browsers pause media in a hidden tab and do not reliably start it again,
+    // so a visitor who switches away and comes back otherwise finds the hero
+    // frozen on whatever frame it stopped at, permanently. There is no control
+    // to press: the clip is decorative, so any pause is unintended and the
+    // right response is always to resume once the page is on screen again.
+    //
+    // Listening to `pause` as well covers the interruptions that arrive without
+    // a visibility change. It cannot loop: if the browser refuses, play()
+    // rejects and the element simply stays paused rather than firing `pause`
+    // again.
+    const resume = () => { if (!document.hidden && node.paused) attempt() }
+    document.addEventListener('visibilitychange', resume)
+    node.addEventListener('pause', resume)
+
     attempt()
+
+    // React 19 ref cleanup. The visibilitychange listener lives on `document`
+    // and closes over this node, so without this it would outlive the element
+    // every time the reduced-motion preference flips the video away.
+    return () => {
+      document.removeEventListener('visibilitychange', resume)
+      node.removeEventListener('pause', resume)
+      node.removeEventListener('canplay', attempt)
+      node.removeEventListener('loadeddata', attempt)
+      node.removeEventListener('playing', onPlaying)
+    }
   }, [])
 
   const poster = `/ambient/${name}.jpg`
