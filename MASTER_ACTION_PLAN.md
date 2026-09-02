@@ -943,16 +943,31 @@ scanner and print modals, `AdminWorkspaceUi` (the shared kit, exercised
 indirectly), and `ReservationHolds`, whose behaviour is covered at the policy and
 route layer rather than by component name.
 
-**Skill availability, recorded rather than papered over.** `AGENTS.md` mandates
-`using-superpowers` and `andrej-karpathy`/`karpathy-guidelines`. Neither is
-installed in the harness that ran this pass, and no equivalent is exposed. The
-installed `verification-loop` skill in `.agent/.agents/skills/` was read and
-followed in their place. Its build, test, security, and diff phases were
-executed; its type-check and lint phases had nothing to run, because the
-repository defines no `lint` or `typecheck` script. That absence is the one
-unfinished consequence of this pass and is worth an explicit decision: the
-repository compensates with `check-imports.mjs`, the security gates, and 635
-tests, but nothing statically checks types or style.
+**Skill routing.** `AGENTS.md` mandates `using-superpowers` and
+`andrej-karpathy`/`karpathy-guidelines`, plus the four-skill design gate for any
+visible UI change. All six are installed at `~/.agents/skills`, which this
+repository exposes through its `.agents` symlink. They were read and applied.
+
+*A correction worth keeping, because it is the kind of mistake this plan exists
+to catch.* The first run of this pass reported those skills as **not installed**
+and substituted `verification-loop`. That was wrong: the search covered only
+`~/.claude/skills` and the project tree. The skills were present the whole time.
+The claim was made confidently, recorded here, and was false — a reminder that
+"not found" is a statement about the search, not about the repository.
+
+*What applying the design gate then found,* in UI written earlier in this same
+session: six Sheet lens controls shipped at 38px against the 44px Admin target
+stated in `docs/DESIGN_SYSTEM.md`, and the lens search field's only label was
+`hidden lg:inline`, so `display:none` removed it from the accessibility tree and
+the field had no accessible name on a phone. Both are fixed and pinned by
+contract. The gate earned its place: neither defect was visible to the test
+suite, the builds, or the security gates before it ran.
+
+**One unfinished consequence.** `verification-loop`'s type-check and lint phases
+had nothing to run, because the repository defines no `lint` or `typecheck`
+script. That is worth an explicit owner decision: the repository compensates
+with `check-imports.mjs`, the security gates, and 635 tests, but nothing
+statically checks types or style.
 
 *Evidence:* `npm test` exit 0 — 564 base, 30 storefront, 26 Admin, 1 product
 master, 1 owner close, 3 customer account, 5 selling surfaces, 5 contract-suite
