@@ -5,7 +5,7 @@ a competing implementation backlog.
 
 **Active implementation authority:** `../MASTER_ACTION_PLAN.md`
 
-**Current pending intake:** IDEA-20260902-04
+**Current pending intake:** IDEA-20260902-04, IDEA-20260902-05
 
 This is not a roadmap or backlog. An idea stays here only until it is audited
 against the operations rulebook, current System Brain, actual code/data,
@@ -428,6 +428,49 @@ Master Action Plan is authorized for implementation.
 | IDEA-20260902-02 | Merged | MAP-023 replaces the earlier single-courier customer-fee basis with a carrier-agnostic `K2-arranged delivery` rule: for one exact origin, destination, packed profile, and owner-approved route-qualified courier/service set, quote the PHP 5 ceiling of the maximum complete current outbound courier cost; missing or stale eligible-option evidence routes to manual quotation, integrity conflicts hard-stop, current J&T-only routes remain automatic only when J&T is explicitly the sole eligible option, and MAP-019/MAP-020 own the future Admin activation and independently validated import/snapshot boundary |
 
 ## Pending idea intake
+
+### IDEA-20260902-05 - Live chat active from checkout, plus inbox and notifications for signed-in customers
+
+**Captured:** 2026-09-02
+**Raised by:** Owner
+
+**Desired outcome:** completing checkout opens a live conversation the customer
+can actually use, and a signed-in customer has a real inbox with notifications
+rather than a page they must remember to revisit.
+
+**What is already recorded, and must not be duplicated.** MAP-023 queue item 14
+already holds the confirmed defect underneath the first half of this:
+`submit_guest_order_v1` opens a conversation with `source_kind = 'order_request'`
+and grants the customer read and reply, but inserts no message and sets no
+`unread_count`, `last_inbound_at` or `response_due_at`. The customer lands in an
+empty thread; staff get no unread badge and no response timer. That fix is the
+prerequisite for "make the live chat active after checkout" - a chat turned on
+over an empty thread is still an empty thread.
+
+**What is genuinely new here, beyond queue item 14:**
+
+1. **A customer inbox for signed-in accounts.** `list_guest_conversations_v1`
+   and the guest grant model are scoped to a browser grant, not to an account.
+   A signed-in customer's conversations across devices is a different read.
+   MAP-019 owns customer identity, so this belongs there rather than in MAP-023.
+2. **Notifications.** Nothing in the system notifies a customer of a staff
+   reply today. This needs an explicit owner decision on channel before any
+   design: in-app badge only, email, SMS, or push. Email and SMS both need a
+   provider K2 does not have, and both carry cost and deliverability work.
+   In-app-only is free and needs no provider.
+
+**Dependency and sequencing note.** This does not depend on the payment
+decision (`IDEA-20260902-04`). An order should seed a usable thread regardless of
+how or when the customer pays, so queue item 14 can proceed independently and
+should not be held behind the GCash choice.
+
+**Owner decision required:** which notification channel, and whether "signed-in
+inbox" means the existing customer account surface or something new. Note
+`OWNER-003` also still owes a promised response time, and a notification that
+implies a reply speed K2 has not committed to would contradict it.
+
+**Status:** captured, not audited. Not authorized for implementation.
+
 
 ### IDEA-20260902-04 - Pay-at-checkout by GCash, on purchase-time reserved stock
 
