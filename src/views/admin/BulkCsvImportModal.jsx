@@ -6,6 +6,8 @@ import {
   adminBffEnabled, commitCatalogCsvBff, getCatalogImportStatusBff, previewCatalogCsvBff,
 } from '../../services/adminBffService'
 import { AdminDialog } from '../../components/ui/AdminDialog'
+import { useReferenceOptions } from './useReferenceOptions'
+import ReferenceSelectCell from './ReferenceSelectCell'
 
 export default function BulkCsvImportModal({ onClose, onImportComplete }) {
   const secureCatalog = adminBffEnabled()
@@ -19,6 +21,8 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
   const [reason, setReason] = useState('')
   const [approved, setApproved] = useState(false)
   const [commitState, setCommitState] = useState({ status: 'idle', completed: 0, total: 0, rows: [] })
+  const [warehouseId, setWarehouseId] = useState('')
+  const { referenceState, createOption } = useReferenceOptions()
   const operationRef = useRef({ operationId: '', nextChunkIndex: 0, keys: new Map() })
   
   const fileInputRef = useRef(null)
@@ -103,6 +107,10 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
         wholesale_price: Number(row.wholesale_price) || 0,
         status: 'draft',
         published: false,
+        // One warehouse for the whole file. Channel exports carry no warehouse
+        // column, so the location is a fact about the upload — "this is the
+        // Shopee A export" — rather than about any individual row.
+        warehouse_id: warehouseId || null,
         origin: row.origin || (isShopee ? `Shopee|${shopeeCategory}` : 'Manual')
       }
     })
@@ -271,6 +279,30 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
           {error && (
             <div className="bg-crimson/10 border border-crimson/30 rounded-adm-sm p-3 text-base text-crimson">
               {error}
+            </div>
+          )}
+
+          {parsedData.length > 0 && !error && !secureCatalog && (
+            <div className="rounded-adm-sm border border-adm-line bg-adm-sunken p-4">
+              <h4 className="text-base font-semibold text-blue">Warehouse for this file</h4>
+              <p className="mt-1 text-sm text-white/60">
+                Every one of these {parsedData.length} rows is stored at the warehouse you pick here.
+                Channel exports carry no warehouse column, so this is set per upload — import one file per location.
+              </p>
+              <div className="mt-3 max-w-sm">
+                <ReferenceSelectCell
+                  field="warehouse_id"
+                  value={warehouseId}
+                  state={referenceState.warehouse_id}
+                  onCreate={createOption}
+                  onSelect={(id) => setWarehouseId(id || '')}
+                />
+              </div>
+              {!warehouseId && (
+                <p className="mt-2 text-sm text-amber">
+                  Leaving this as “none” imports the rows with no warehouse. You can set it per row in Sheet mode afterwards.
+                </p>
+              )}
             </div>
           )}
 

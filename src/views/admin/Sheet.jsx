@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
+import { isReferenceField } from './referenceTables'
+import { useReferenceOptions } from './useReferenceOptions'
+import ReferenceSelectCell from './ReferenceSelectCell'
 import ScanToAiModal from './ScanToAiModal'
 import SmartPasteModal from './SmartPasteModal'
 import PhotoManagerModal from './PhotoManagerModal'
@@ -65,6 +68,7 @@ export default function Sheet() {
   const { openProduct, isDark } = useStore()
   const secureCatalog = adminBffEnabled()
   const [rows, setRows] = useState([])
+  const { referenceState, createOption } = useReferenceOptions()
   const [selected, setSelected] = useState({ row: -1, col: -1 })
   const [loading, setLoading] = useState(true)
   const [showAiScanner, setShowAiScanner] = useState(false)
@@ -476,6 +480,23 @@ export default function Sheet() {
                         return (
                           <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="text-center p-0 min-w-[60px]">
                             <input type="checkbox" checked={Boolean(val)} onChange={(e) => updateField(i, col, e.target.checked)} className="cursor-pointer mx-auto block w-4 h-4 text-blue" />
+                          </Cell>
+                        )
+                      }
+
+                      // Foreign keys get a dropdown, never a text box: the
+                      // column holds another table's id, so free text can only
+                      // ever fail the write.
+                      if (isReferenceField(field)) {
+                        return (
+                          <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="p-0 min-w-[170px]">
+                            <ReferenceSelectCell
+                              field={field}
+                              value={val}
+                              state={referenceState[field]}
+                              onCreate={createOption}
+                              onSelect={(id) => updateField(i, col, id)}
+                            />
                           </Cell>
                         )
                       }
