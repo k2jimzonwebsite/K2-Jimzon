@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react'
 import { useStore } from '../context/StoreContext'
-import { LIFESTYLE } from '../data/site'
 import { GhostButton, Kicker, RedButton } from '../components/ui/bits'
 import { ArrowIcon, BriefcaseIcon, CheckIcon, InboxIcon, ShieldIcon } from '../components/ui/icons'
 import TurnstileChallenge from '../components/security/TurnstileChallenge'
 import { guestBffEnabled, postGuestCommerce } from '../services/guestCommerceService'
 import { applyImageFallback } from '../lib/imageFallback'
+import AmbientBackdrop from '../components/AmbientBackdrop'
 
 const WHOLESALE_EMAIL = 'k2jimzonwebsite@gmail.com'
 
@@ -133,8 +133,9 @@ export default function Wholesale() {
   return (
     <main className="pb-24 md:pb-20">
       {/* Hero Section */}
-      <section className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] overflow-hidden text-navy">
-        <div className="store-section grid min-h-[32rem] gap-10 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-16 lg:gap-16">
+      <section className="relative isolate border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] overflow-hidden text-navy">
+        <AmbientBackdrop name="wholesale" />
+        <div className="relative z-10 store-section grid min-h-[32rem] gap-10 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-16 lg:gap-16">
           <div>
             <Kicker className="flex items-center gap-2 text-crimson">
               <BriefcaseIcon size={14} /> Business & Wholesale Supply
@@ -161,9 +162,15 @@ export default function Wholesale() {
           </div>
 
           <div className="relative overflow-hidden rounded-2xl border border-[var(--store-surface-border)] shadow-sm">
+            {/* K2's own consolidation footage, still-framed. This replaced a
+                hotlinked Unsplash canal photo: the canal illustrated nothing
+                about wholesale, clashed with the warm backdrop behind it, and
+                made the page depend on a third-party image host at render. */}
             <img
-              src={LIFESTYLE.venice}
-              alt="Italy sourcing and consolidation"
+              src="/ambient/wholesale-still.jpg"
+              alt="Cases being packed for consolidation beside Italian stock"
+              width="1280"
+              height="720"
               onError={applyImageFallback}
               className="aspect-[4/3] h-full w-full object-cover opacity-90"
             />

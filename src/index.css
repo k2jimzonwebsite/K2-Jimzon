@@ -294,6 +294,70 @@
   background-blend-mode: normal, normal, normal, multiply;
 }
 
+/* ── .ambient-backdrop: dimmed atmosphere behind a page ────────────────────
+   Sits inside the wood canvas above, never in place of it. The clip is already
+   blurred in the file, so nothing here filters a playing video: that would
+   repaint every frame on the GPU for no visual gain. What is left is opacity,
+   a blend that matches how the wood grain itself sits on the canvas, and a
+   scrim that keeps text above it readable. */
+.ambient-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-backdrop__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ambient-backdrop__scrim {
+  position: absolute;
+  inset: 0;
+}
+
+/* Light: multiply into the grain, the same blend the wood uses, at an opacity
+   low enough that it reads as movement in the material rather than as video. */
+:root:not(.dark) .ambient-backdrop__media {
+  opacity: 0.42;
+  mix-blend-mode: multiply;
+}
+
+:root:not(.dark) .ambient-backdrop__scrim {
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--store-surface-bg) 55%, transparent) 0%,
+      color-mix(in srgb, var(--store-surface-bg) 68%, transparent) 55%,
+      color-mix(in srgb, var(--store-surface-bg) 86%, transparent) 100%);
+}
+
+/* Dark: the ground is near-black, so the clip has to add light rather than
+   remove it. Lower opacity, because a lit shape reads far louder on a dark
+   field than a darkened one does on a warm canvas. */
+.dark .ambient-backdrop__media {
+  opacity: 0.46;
+  mix-blend-mode: screen;
+}
+
+.dark .ambient-backdrop__scrim {
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--store-surface-bg) 34%, transparent) 0%,
+      color-mix(in srgb, var(--store-surface-bg) 52%, transparent) 55%,
+      color-mix(in srgb, var(--store-surface-bg) 78%, transparent) 100%);
+}
+
+/* Anyone asking for stillness gets no motion here. The component already
+   withholds the video element on that preference; this covers a session where
+   the preference changes after the element mounted. */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-backdrop video { display: none; }
+}
+
 /* ── .store-atmosphere: full-width section backgrounds ─────────────────── */
 .store-atmosphere {
   background-color: var(--store-surface-bg);

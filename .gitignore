@@ -67,3 +67,11 @@ scripts/map017-evidence/*.json
 .tmp/
 outputs/
 .k2-shot.mjs
+
+# Ambient-backdrop masters. The two source clips are ~3 MB each and only ever
+# feed `node scripts/prepare-ambient-video.mjs`, whose ~430 KB output in
+# public/ambient/ is what actually ships and IS committed. Keeping the masters
+# out avoids putting 6 MB of binary into history permanently. If they should be
+# versioned instead, delete these two lines — Git LFS is the better home for
+# them if more clips follow.
+assets/*.mp4
