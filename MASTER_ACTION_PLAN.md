@@ -4123,12 +4123,45 @@ the operations rulebook section 12.
 *Verification:* 528/528 local contracts green; security surface inventory reports
 zero unexpected grants and zero route-control gaps.
 
-*Remaining in this item before it can move to `Ready for independent
-verification`:* the automatic release needs a scheduled trigger, and K2 has no
-scheduled-job infrastructure — see the MAP-023 note on `pg_cron` versus a
-staff-initiated sweep. Admin surfacing of `v_reservations_due` and the bounded
-staff extension command are also outstanding, as is applying the migration after
-MAP-017.
+*Staff surface and commands completed the same day, still `local code`:*
+
+- `extend_reservation_v1()` enforces the 30-minute/7-day bound and the reason
+  requirement **in the database**, not only in the application, because the
+  application is replaceable and the bound is a promise to a customer. It refuses
+  an expired hold rather than reviving one, since those units have already
+  returned to the sellable pool and may belong to someone else.
+- `server/admin-bff/reservations.js` plus three routes: a GET read, and two
+  idempotent CSRF-protected commands at AAL2.
+- `src/views/admin/ReservationHolds.jsx`, registered under Sell & Fulfill.
+  Density over decoration, no motion on the rows, one overdue count, and the two
+  actions staff actually take.
+
+**Scheduled release: decided, and the limitation is stated in the UI.** K2 has no
+scheduled-job infrastructure. Rather than imply automation that does not exist,
+the sweep is **staff-initiated** and the screen says so in a standing banner:
+expired holds are not released automatically, and until a scheduler exists someone
+must run the release or those units stay counted as held. A button a person presses
+is visible and attributable; a cron job K2 does not have would be a promise the
+system cannot keep.
+
+*Upgrade path, not yet scoped into this item:* Supabase `pg_cron` calling
+`release_expired_reservations_v1()` on a short interval. It needs owner provider
+approval and its own MAP scope, and the function is already idempotent and
+concurrency-safe, so adopting it later is a configuration change rather than a
+rewrite.
+
+*Verification:* 533/533 local contracts green, including 20 reservation contracts
+covering policy bounds, route controls, BFF refusal before the database, and
+migration assertions that the bounds and the additive shape have not drifted. Both
+production builds pass their artifact-boundary, budget, and secret checks. The
+security surface inventory reports zero unexpected grants and zero route-control
+gaps.
+
+*Remaining before this item can move to `Ready for independent verification`:*
+applying `20260902_reservation_expiry_policy.sql` after MAP-017, wiring the
+30-minute deadline at order submission so new reservations are created with an
+`expires_at`, and preview acceptance of the staff surface with an authorized
+account.
 
 **Previous status, retained for dependency reading:** Queued; depends on MAP-017
 through MAP-022

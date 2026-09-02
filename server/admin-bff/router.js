@@ -72,6 +72,9 @@ import ownerCloseBookkeeping from '../../prepared-api/admin/owner-close/bookkeep
 import securityEvents from '../../prepared-api/admin/security-events.js'
 import wholesaleInquiries from '../../prepared-api/admin/wholesale-inquiries.js'
 import wholesaleInquiryReview from '../../prepared-api/admin/wholesale-inquiries/review.js'
+import reservations from '../../prepared-api/admin/reservations.js'
+import reservationExtend from '../../prepared-api/admin/reservations/extend.js'
+import reservationReleaseExpired from '../../prepared-api/admin/reservations/release-expired.js'
 import delivery from '../../prepared-api/admin/delivery.js'
 import deliveryQuote from '../../prepared-api/admin/delivery/quote.js'
 import deliveryCourier from '../../prepared-api/admin/delivery/courier.js'
@@ -163,6 +166,9 @@ const ROUTES = new Map([
   ['security-events', securityEvents],
   ['wholesale-inquiries', wholesaleInquiries],
   ['wholesale-inquiries/review', wholesaleInquiryReview],
+  ['reservations', reservations],
+  ['reservations/extend', reservationExtend],
+  ['reservations/release-expired', reservationReleaseExpired],
   ['delivery', delivery],
   ['delivery/quote', deliveryQuote],
   ['delivery/courier', deliveryCourier],
@@ -202,6 +208,7 @@ const ADMIN_POST_ROUTES = new Set([
   'marketplace-snapshots/stage',
   'marketplace-snapshots/decision',
   'marketplace-orders/stage',
+  'reservations/extend', 'reservations/release-expired',
   'delivery/quote', 'delivery/courier', 'delivery/courier-state',
   'delivery/locality', 'delivery/cost-publish', 'delivery/source-state',
   'wholesale-inquiries/review',

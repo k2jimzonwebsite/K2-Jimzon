@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, Suspense, lazy } from 'react'
 import {
   BoxIcon, GlobeIcon, GridIcon, UserIcon, InboxIcon,
   PlaneIcon, BagIcon, ShieldIcon, BarcodeIcon, EyeIcon,
-  BellIcon, BookIcon, MenuIcon, SearchIcon, StarIcon, UploadIcon, XIcon, MapIcon,
+  BellIcon, BookIcon, MenuIcon, SearchIcon, StarIcon, UploadIcon, XIcon, MapIcon, ClockIcon,
 } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
@@ -37,6 +37,7 @@ const OmniOperationsHub = lazy(() => import('./OmniOperationsHub'))
 const StaffPermissionManager = lazy(() => import('./StaffPermissionManager'))
 const CouponManager = lazy(() => import('./CouponManager'))
 const DeliveryRateControl = lazy(() => import('./DeliveryRateControl'))
+const ReservationHolds = lazy(() => import('./ReservationHolds'))
 const MasterWorkflowGraph = lazy(() => import('../../components/admin/master-workflow-graph/MasterWorkflowGraph'))
 const OwnerCountClose = lazy(() => import('./OwnerCountClose'))
 const WorkflowGuideModal = lazy(() => import('../../components/admin/guides/WorkflowGuideModal'))
@@ -54,6 +55,7 @@ const SECTIONS = {
   omni_hub:          { label: 'Fulfillment Hub',     icon: BarcodeIcon, title: 'Fulfillment & Staff Stations',  desc: 'Barcode pack-to-ship and Italy cargo box custody claims.' },
   inbox:             { label: 'Messages',            icon: InboxIcon,   title: 'Conversation Records',          desc: 'Persisted internal records; external messaging connectors are deferred.' },
   wholesale:         { label: 'Customers',           icon: UserIcon,    title: 'Registered Customer Profiles',  desc: 'Database-backed customer identities; wholesale pricing and broadcasts are deferred.' },
+  reservations:      { label: 'Stock Holds',         icon: ClockIcon,   title: 'Stock Holds',                   desc: 'Which units are held for a customer, how long is left, and what has already lapsed.' },
   delivery:          { label: 'Delivery Rates',      icon: PlaneIcon,   title: 'Delivery Rates & Couriers',     desc: 'The owner-approved courier pilot: exact localities, versioned rates, and the quote tester.', adminOnly: true },
   coupons:           { label: 'Coupons',             icon: StarIcon,    title: 'Coupons & Vouchers',             desc: 'Controlled discount codes, schedules, limits, and voucher-hunt campaigns.' },
   staff_permissions: { label: 'Staff & Roles',       icon: ShieldIcon,  title: 'Staff Roles & Permissions',     desc: 'Manage authenticated staff roles and access permissions.' },
@@ -66,7 +68,7 @@ const SECTIONS = {
 const NAV_GROUPS = [
   { heading: null,             items: ['overview', 'owner_close', 'workflow_graph'] },
   { heading: 'Supply Chain',   items: ['kanban', 'consignment', 'pasabuy_manager', 'suppliers'] },
-  { heading: 'Sell & Fulfill', items: ['inventory', 'store_assets', 'omni_hub', 'inbox', 'wholesale', 'coupons'] },
+  { heading: 'Sell & Fulfill', items: ['inventory', 'store_assets', 'omni_hub', 'reservations', 'inbox', 'wholesale', 'coupons'] },
   { heading: 'Settings',       items: ['delivery', 'staff_permissions', 'integrations', 'globe'] },
 ]
 
@@ -470,6 +472,7 @@ export default function Admin() {
               {section === 'staff_permissions' && canManageStaff ? <StaffPermissionManager />
                : section === 'owner_close' && canManageStaff ? <OwnerCountClose />
                : section === 'workflow_graph' ? <MasterWorkflowGraph onNavigate={selectSection} />
+               : section === 'reservations' ? <ReservationHolds />
                : section === 'delivery' && canManageStaff ? <DeliveryRateControl />
                : section === 'coupons' ? <CouponManager />
                : section === 'omni_hub' ? <OmniOperationsHub />

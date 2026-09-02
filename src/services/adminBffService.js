@@ -14,6 +14,7 @@ const ADMIN_COMMAND_ROUTES = Object.freeze({
   lots: new Set(['reconcile', 'clearance']),
   coupons: new Set(['create', 'state', 'archive']),
   delivery: new Set(['quote', 'courier', 'courier-state', 'locality', 'cost-publish', 'source-state']),
+  reservations: new Set(['extend', 'release-expired']),
   'catalog-import': new Set(['commit']),
   'marketplace-snapshots': new Set(['stage', 'decision']),
   'marketplace-orders': new Set(['stage']),
@@ -54,6 +55,13 @@ const ERROR_MESSAGES = {
   SESSION_REVOKED: 'This admin session is no longer valid. Sign in again.',
   MFA_REQUIRED: 'Two-factor verification is required again.',
   STAFF_ACCESS_REQUIRED: 'This account no longer has staff access.',
+  RESERVATIONS_UNAVAILABLE: 'Stock holds are temporarily unavailable.',
+  RESERVATION_COMMAND_UNAVAILABLE: 'That hold could not be updated safely. Retry the same change.',
+  RESERVATION_ALREADY_EXPIRED: 'This hold already expired and its stock returned to the sellable pool. Create a new reservation instead of extending it.',
+  RESERVATION_EXTENSION_OUT_OF_BOUNDS: 'An extension must be at least 30 minutes and no more than 7 days.',
+  RESERVATION_NOT_ACTIVE: 'This hold is no longer active.',
+  RESERVATION_HAS_NO_DEADLINE: 'This hold has no deadline recorded, so it cannot be extended.',
+  RESERVATION_NOT_FOUND: 'That hold no longer exists.',
   DELIVERY_CONTROL_UNAVAILABLE: 'Delivery rate control is temporarily unavailable.',
   DELIVERY_COMMAND_UNAVAILABLE: 'The delivery rule could not be saved safely. Retry the same change.',
   DELIVERY_ADMIN_REQUIRED: 'Only an administrator can change what a customer is charged for delivery.',
@@ -512,6 +520,19 @@ export const setDeliveryCourierStateBff = (payload, key) => deliveryCommand('cou
 export const upsertDeliveryLocalityBff = (payload, key) => deliveryCommand('locality', payload, key)
 export const publishDeliveryCostBff = (payload, key) => deliveryCommand('cost-publish', payload, key)
 export const setDeliverySourceStateBff = (payload, key) => deliveryCommand('source-state', payload, key)
+
+export function getAdminReservationsBff(signal) {
+  return adminRequest('/api/admin/reservations', { signal })
+}
+
+function reservationCommand(path, body, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('reservations', path), {
+    method: 'POST', body, csrf: true, idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+export const extendReservationBff = (payload, key) => reservationCommand('extend', payload, key)
+export const releaseExpiredReservationsBff = (payload, key) => reservationCommand('release-expired', payload, key)
 
 export function getAdminCustomers(signal) {
   return adminRequest('/api/admin/customers', { signal })

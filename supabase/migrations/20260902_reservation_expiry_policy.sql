@@ -153,6 +153,73 @@ revoke all on function public.release_expired_reservations_v1(integer) from publ
 grant execute on function public.release_expired_reservations_v1(integer) to authenticated;
 
 -- ---------------------------------------------------------------------------
+-- Extend one active hold, within the owner-approved bounds.
+--
+-- The bounds are enforced here rather than only in the application, because the
+-- application is replaceable and this is a promise to a customer. An expired
+-- hold is refused rather than revived: its units have already returned to the
+-- sellable pool and may now belong to someone else.
+-- ---------------------------------------------------------------------------
+
+create or replace function public.extend_reservation_v1(
+  p_reservation_id uuid,
+  p_minutes integer,
+  p_reason text
+)
+returns table(reservation_id uuid, expires_at timestamptz, extension_count integer)
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_row public.inventory_reservations;
+begin
+  if not public.is_staff() then
+    raise exception 'STAFF_REQUIRED' using errcode = '42501';
+  end if;
+  -- OWNER-002: no less than 30 minutes, no more than 7 days.
+  if p_minutes is null or p_minutes < 30 or p_minutes > 10080 then
+    raise exception 'RESERVATION_EXTENSION_OUT_OF_BOUNDS' using errcode = '22023';
+  end if;
+  if char_length(btrim(coalesce(p_reason, ''))) < 10 then
+    raise exception 'RESERVATION_EXTENSION_REASON_REQUIRED' using errcode = '22023';
+  end if;
+
+  select * into v_row from public.inventory_reservations
+  where id = p_reservation_id for update;
+  if not found then
+    raise exception 'RESERVATION_NOT_FOUND' using errcode = '22023';
+  end if;
+  if v_row.status <> 'active' then
+    raise exception 'RESERVATION_NOT_ACTIVE' using errcode = '22023';
+  end if;
+  if v_row.expires_at is null then
+    raise exception 'RESERVATION_HAS_NO_DEADLINE' using errcode = '22023';
+  end if;
+  -- Refuse to revive. Staff must create a new reservation instead.
+  if v_row.expires_at <= now() then
+    raise exception 'RESERVATION_ALREADY_EXPIRED' using errcode = '22023';
+  end if;
+
+  update public.inventory_reservations
+  set expires_at = v_row.expires_at + make_interval(mins => p_minutes),
+      extension_count = v_row.extension_count + 1,
+      last_extended_at = now(),
+      last_extended_by = auth.uid(),
+      last_extension_reason = btrim(p_reason),
+      updated_at = now()
+  where id = p_reservation_id
+  returning id, inventory_reservations.expires_at, inventory_reservations.extension_count
+  into reservation_id, expires_at, extension_count;
+
+  return next;
+end;
+$$;
+
+revoke all on function public.extend_reservation_v1(uuid,integer,text) from public, anon;
+grant execute on function public.extend_reservation_v1(uuid,integer,text) to authenticated;
+
+-- ---------------------------------------------------------------------------
 -- What staff need to see: holds that are about to lapse.
 -- ---------------------------------------------------------------------------
 

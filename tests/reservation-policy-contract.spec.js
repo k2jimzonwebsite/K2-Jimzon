@@ -145,3 +145,69 @@ test('Pasabuy and wholesale produce history, not a stock hold', () => {
   expect(reservationDeadline(T0, { channel: 'Wholesale' })).toBeNull()
   expect(reservationDeadline(T0, { channel: 'Website' })).toBe(at(30))
 })
+
+// --- boundary and route contracts -----------------------------------------
+
+test('reservation routes carry the controls a stock-moving command requires', async () => {
+  const { ADMIN_BFF_ROUTES, ADMIN_BFF_ROUTE_CONTROLS } = await import('../server/admin-bff/router.js')
+  expect(ADMIN_BFF_ROUTES).toContain('reservations')
+  expect(ADMIN_BFF_ROUTE_CONTROLS.reservations).toMatchObject({
+    method: 'GET', identity: 'active-aal2-session',
+  })
+  for (const route of ['reservations/extend', 'reservations/release-expired']) {
+    expect(ADMIN_BFF_ROUTE_CONTROLS[route], route).toMatchObject({
+      method: 'POST', csrf: true, idempotency: true, identity: 'active-aal2-session',
+    })
+  }
+})
+
+test('the BFF refuses an out-of-bounds extension before it reaches the database', async () => {
+  const { validateReservationCommand } = await import('../server/admin-bff/reservations.js')
+  const id = '11111111-1111-4111-8111-111111111111'
+  const ok = { reservationId: id, minutes: 60, reason: 'Customer is paying this afternoon.' }
+  expect(validateReservationCommand('reservation_extend', ok)).toMatchObject({ minutes: 60 })
+
+  for (const bad of [
+    { ...ok, minutes: 29 },
+    { ...ok, minutes: 10081 },
+    { ...ok, minutes: 60.5 },
+    { ...ok, reason: 'too short' },
+    { ...ok, reservationId: 'not-a-uuid' },
+    { ...ok, extra: true },
+  ]) {
+    expect(() => validateReservationCommand('reservation_extend', bad)).toThrow('REQUEST_INVALID')
+  }
+})
+
+test('the release sweep and the extension both require a stated reason', async () => {
+  const { validateReservationCommand } = await import('../server/admin-bff/reservations.js')
+  expect(() => validateReservationCommand('reservation_release_expired', { limit: 500, reason: 'x' }))
+    .toThrow('REQUEST_INVALID')
+  expect(validateReservationCommand('reservation_release_expired', {
+    limit: 500, reason: 'Staff released every hold past its deadline.',
+  })).toMatchObject({ limit: 500 })
+})
+
+test('the migration enforces the same bounds the application does', async () => {
+  const { readFile } = await import('node:fs/promises')
+  const sql = await readFile('supabase/migrations/20260902_reservation_expiry_policy.sql', 'utf8')
+  // 30 minutes to 7 days, in the database, because the application is replaceable
+  // and the bound is a promise to a customer.
+  expect(sql).toMatch(/p_minutes < 30 or p_minutes > 10080/)
+  // Refuse to revive an expired hold rather than re-taking released stock.
+  expect(sql).toMatch(/RESERVATION_ALREADY_EXPIRED/)
+  // Concurrent sweeps must not double-release one hold.
+  expect(sql).toMatch(/for update skip locked/)
+  // A release must always be explainable.
+  expect(sql).toMatch(/status <> 'released' or release_cause is not null/)
+  // Nothing here may be reachable anonymously.
+  expect(sql).toMatch(/revoke all on function public\.release_expired_reservations_v1\(integer\) from public, anon;/)
+  expect(sql).toMatch(/revoke all on function public\.extend_reservation_v1\(uuid,integer,text\) from public, anon;/)
+})
+
+test('the migration is additive: it adds columns and adds nothing destructive', async () => {
+  const { readFile } = await import('node:fs/promises')
+  const sql = await readFile('supabase/migrations/20260902_reservation_expiry_policy.sql', 'utf8')
+  expect(sql).toMatch(/add column if not exists expires_at timestamptz/)
+  expect(sql).not.toMatch(/drop table|drop column|truncate|delete from/i)
+})
