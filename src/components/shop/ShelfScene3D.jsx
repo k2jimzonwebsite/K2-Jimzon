@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { ContactShadows } from '@react-three/drei'
 import * as THREE from 'three'
@@ -73,19 +73,48 @@ const ROOM = {
     fill: 0.32,
     stone: '#F0E7D9',
     pendant: 26,
+    pendantDistance: 20,
+    shelfGlow: 0,
   },
+  /**
+   * Lights low: the shop after closing, lit by its own pendants.
+   *
+   * The previous values were the daytime rig turned down, which read as a dim
+   * photograph rather than as a different time of day. The point of the switch
+   * is that the light source changes, not just its level: ambient and key drop
+   * far enough that the pendants stop being decoration and become the reason
+   * anything is visible, so each one throws a real pool onto the goods beneath
+   * it and the aisle falls away between them.
+   *
+   * Fog closes in for the same reason. In daylight it sits far enough back to be
+   * invisible; at night it puts the far end of the run in shadow, which is what
+   * gives the aisle depth instead of a flat lit wall.
+   */
   dark: {
-    wall: '#1A1713',
-    panel: '#221E19',
-    fog: [40, 92],
-    ambient: 0.34,
-    hemi: 0.26,
-    key: 0.4,
-    fill: 0.1,
-    stone: '#6E6559',
-    pendant: 44,
+    wall: '#14110E',
+    panel: '#1C1814',
+    fog: [26, 74],
+    ambient: 0.2,
+    hemi: 0.15,
+    key: 0.16,
+    fill: 0.05,
+    stone: '#5E564B',
+    pendant: 74,
+    pendantDistance: 13,
+    shelfGlow: 9,
   },
 }
+
+/**
+ * The lighting state, shared with the bays.
+ *
+ * Pendants and shelf glow live inside `Bay` and `CounterBay`, which are rendered
+ * from a list and take no lighting props. Threading the palette through both
+ * signatures for one value each is how those signatures rot, so the room is a
+ * context instead.
+ */
+const RoomContext = createContext(ROOM.light)
+const useRoom = () => useContext(RoomContext)
 
 const WALL = '#F3EBE0'
 const WARM_WOOD = '#A87F55'
@@ -264,8 +293,13 @@ function AisleCamera({ activeIndex, bayCount, onShelfChange, height, fov, zoomRe
   // The arrival. The camera starts back and high, as if stepping through the
   // door, and settles over the first couple of seconds. It runs once.
   const intro = useRef(0)
+  // Sway is faded rather than switched, so letting go of a drag does not snap
+  // the view back into motion.
+  const sway = useRef(1)
+  const clock = useRef(0)
 
   useFrame((_, delta) => {
+    clock.current += delta
     intro.current = Math.min(1, intro.current + delta / 2.2)
     // Quintic ease-out: fast in, long settle. Linear reads as a camera being
     // dragged; this reads as coming to rest.
@@ -285,8 +319,24 @@ function AisleCamera({ activeIndex, bayCount, onShelfChange, height, fov, zoomRe
     pan.current.x = THREE.MathUtils.clamp(pan.current.x, -limitX, limitX)
     pan.current.y = THREE.MathUtils.clamp(pan.current.y, -limitY, limitY)
 
-    const wantX = bounded * BAY_SPACING + pan.current.x
-    const wantY = framing.target + pan.current.y
+    // Standing sway.
+    //
+    // A camera bolted to an exact position reads as a tripod, and a tripod is
+    // the thing that makes a rendered room feel like a product shot instead of
+    // somewhere a person is standing. Two slow sine waves at different periods
+    // never repeat visibly, and the amplitude is deliberately below the level
+    // anyone would name: about a centimetre and a half of drift. It is felt
+    // rather than seen. It also stops entirely while dragging, because sway
+    // fighting a deliberate pan is what makes a view feel loose.
+    const held = drag.current.active || pointers.current.size > 0
+    const swayTarget = held ? 0 : 1
+    sway.current += (swayTarget - sway.current) * Math.min(1, delta * 3)
+    const breath = sway.current * arrival
+    const swayX = Math.sin(clock.current * 0.53) * cm(1.6) * breath
+    const swayY = Math.sin(clock.current * 0.71 + 1.1) * cm(1.1) * breath
+
+    const wantX = bounded * BAY_SPACING + pan.current.x + swayX
+    const wantY = framing.target + pan.current.y + swayY
     camera.position.x += (wantX - camera.position.x) * ease
     // Zoom eases rather than snapping, so a wheel notch is a move and not a cut.
     const wantZ = framing.distance * zoom.current + (1 - arrival) * 14
@@ -613,7 +663,9 @@ function CounterBay({ index }) {
  * shade is emissive so the lamp itself is bright in frame, and it breathes
  * very slightly — a filament never sits perfectly still.
  */
-function Pendant({ position, warm = '#FFF3E2', intensity = 26 }) {
+function Pendant({ position, warm = '#FFF3E2', intensity = null }) {
+  const room = useRoom()
+  const lit = intensity ?? room.pendant
   const glow = useRef(null)
   const light = useRef(null)
 
@@ -621,7 +673,7 @@ function Pendant({ position, warm = '#FFF3E2', intensity = 26 }) {
     const t = state.clock.elapsedTime
     // Tiny, slow flicker. Anything stronger reads as a fault, not as light.
     const flicker = 1 + Math.sin(t * 1.7) * 0.03 + Math.sin(t * 4.3) * 0.015
-    if (light.current) light.current.intensity = intensity * flicker
+    if (light.current) light.current.intensity = lit * flicker
     if (glow.current) glow.current.material.emissiveIntensity = 1.5 * flicker
   })
 
@@ -641,13 +693,14 @@ function Pendant({ position, warm = '#FFF3E2', intensity = 26 }) {
         <sphereGeometry args={[0.26, 20, 16]} />
         <meshStandardMaterial color="#FFFFFF" emissive={warm} emissiveIntensity={1.5} toneMapped={false} />
       </mesh>
-      <pointLight ref={light} position={[0, -1.8, 0]} intensity={intensity} distance={20} decay={2} color={warm} castShadow />
+      <pointLight ref={light} position={[0, -1.8, 0]} intensity={lit} distance={room.pendantDistance} decay={2} color={warm} castShadow />
     </group>
   )
 }
 
 /** One category bay: back panel, sign, marble boards, and its goods. */
 function Bay({ shelf, index, selectedSku, onSelect }) {
+  const room = useRoom()
   const rows = useMemo(
     () => packRows(shelf?.products || [], BAY_WIDTH, MAX_ROWS),
     [shelf],
@@ -660,6 +713,22 @@ function Bay({ shelf, index, selectedSku, onSelect }) {
 
   return (
     <group position={[index * BAY_SPACING, 0, 0]}>
+      {/* Under-shelf light, and only with the lights low.
+          With ambient this far down the pendants alone leave the goods in
+          silhouette — readable as shapes, useless as products. A short-range
+          warm light per bay puts the stock back in the light while the aisle
+          around it stays dark, which is the whole point of the switch. At full
+          lights this is zero and the element does not render at all. */}
+      {room.shelfGlow > 0 && (
+        <pointLight
+          position={[0, height * 0.52, SHELF_DEPTH * 1.6]}
+          intensity={room.shelfGlow}
+          distance={16}
+          decay={2}
+          color="#FFE9CB"
+        />
+      )}
+
       {/* Recessed back panel, clad in the room's stone. Each bay draws its
           marble from a different seed so the veining never repeats down the
           run — a tiled wall is the tell that gives away a rendered room. */}
@@ -766,7 +835,7 @@ function Aisle({ shelves, activeIndex, selectedSku, onSelect, onShelfChange, kee
   }, [])
 
   return (
-    <>
+    <RoomContext.Provider value={room}>
       {/* Bright, slightly warm, and low-contrast — the light of a luxury hall
           rather than a spotlit gallery. The shadows come from the pendants. */}
       <ambientLight intensity={room.ambient} />
@@ -861,7 +930,7 @@ function Aisle({ shelves, activeIndex, selectedSku, onSelect, onShelfChange, kee
         zoomRequest={zoomRequest}
         mode={shelves[activeIndex]?.isCounter ? 'counter' : 'shelf'}
       />
-    </>
+    </RoomContext.Provider>
   )
 }
 
