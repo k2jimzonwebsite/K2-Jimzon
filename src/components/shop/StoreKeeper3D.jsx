@@ -15,22 +15,31 @@ import { AISLE_TRAVEL_RATE, CLOUD, KEEPER, cm } from './keeperRig'
  * shelf model and approved knowledge have not established.
  */
 
-const SKIN = '#F6D9BE'
-const SKIN_SHADE = '#E4B996'
-const HAIR = '#3A2A22'
-const HAIR_SHEEN = '#5B4335'
-const CAP = '#B84E3A'
-const CAP_SHADE = '#9A3F2E'
-const APRON = '#6E7F52'
-const APRON_SHADE = '#647449'
-const APRON_TIE = '#55643D'
-const BLOUSE = '#FBF9F6'
-const GOLD = '#C6A867'
-// Trousers and shoes. The legs were a single flat #363636, which under the
-// shop's warm key light read as two black cut-outs rather than clothing.
-const TROUSER = '#3E4450'
-const TROUSER_SHADE = '#353A44'
-const SHOE = '#2B2622'
+/**
+ * Palette, taken from the K2 shopkeeper character sheet.
+ *
+ * These are the sheet's own swatches rather than values picked by eye, which is
+ * what the previous set were: the cap was a warm orange-red where the sheet is
+ * a deep burgundy, the shirt was near-white where the sheet is cream, and the
+ * denim was grey-slate where the sheet is navy.
+ */
+const SKIN = '#F2D3B3'
+const SKIN_SHADE = '#DFB392'
+const HAIR = '#2E2018'          // sheet #222222, warmed so it is not flat black
+const HAIR_SHEEN = '#4E382A'
+const CAP = '#8B1E2D'           // sheet swatch
+const CAP_SHADE = '#711824'
+const APRON = '#556B3F'         // sheet swatch
+const APRON_SHADE = '#4A5C36'
+const APRON_TIE = '#41512F'
+const BLOUSE = '#F5ECDD'        // sheet swatch
+const GOLD = '#D8A574'          // sheet swatch, the apron buckles
+const NAMETAG = '#FBF7F0'
+// Denim and footwear. The sheet gives navy wide-leg jeans over white sneakers.
+const TROUSER = '#2C3650'       // sheet swatch
+const TROUSER_SHADE = '#243049'
+const SHOE = '#F4F2EE'
+const SHOE_SOLE = '#DCD8D1'
 
 /**
  * Skeleton, in centimetres from the floor.
@@ -208,10 +217,32 @@ function Hair() {
         </mesh>
       ))}
 
-      {/* Back low ponytail bundle */}
-      <mesh position={[0, -HEAD_R * 1.05, -HEAD_R * 0.82]} rotation={[0.26, 0, 0]} castShadow>
-        <capsuleGeometry args={[HEAD_R * 0.4, HEAD_R * 1.9, 6, 14]} />
-        <meshStandardMaterial color={HAIR} roughness={0.58} />
+      {/* Long waved length down the back.
+          The sheet gives her hair well past the shoulder blades with body in
+          it, not the short bundle that was here. Three overlapping strands at
+          slightly different lengths and angles read as waves; one capsule reads
+          as a ponytail. */}
+      {[
+        { x: 0, len: 3.6, r: 0.52, tilt: 0.2, z: -0.86 },
+        { x: -0.62, len: 3.1, r: 0.4, tilt: 0.16, z: -0.7 },
+        { x: 0.62, len: 3.2, r: 0.4, tilt: 0.16, z: -0.7 },
+      ].map((strand, i) => (
+        <mesh
+          key={i}
+          position={[strand.x * HEAD_R, -HEAD_R * (0.5 + strand.len / 2.4), HEAD_R * strand.z]}
+          rotation={[strand.tilt, 0, strand.x * -0.1]}
+          castShadow
+        >
+          <capsuleGeometry args={[HEAD_R * strand.r, HEAD_R * strand.len, 6, 16]} />
+          <meshStandardMaterial color={i === 0 ? HAIR : HAIR_SHEEN} roughness={0.56} />
+        </mesh>
+      ))}
+
+      {/* The wave itself: a wider mass low down, where hair curls out rather
+          than hanging straight. */}
+      <mesh position={[0, -HEAD_R * 2.5, -HEAD_R * 0.62]} scale={[1.15, 1, 0.9]} castShadow>
+        <sphereGeometry args={[HEAD_R * 0.62, 20, 16]} />
+        <meshStandardMaterial color={HAIR} roughness={0.56} />
       </mesh>
     </group>
   )
@@ -388,30 +419,33 @@ export default function StoreKeeper3D({
   return (
     <group ref={root} scale={scale} userData={{ targetBay }}>
       {/* Legs.
-          Each was a single dark capsule of even thickness with nothing on the
-          end, which is what made her read as a stick figure from the aisle: two
-          tubes of the same width from hip to floor, no ankle, no foot, and no
-          clothing for them to emerge from. Each leg is now a tapered trouser
-          over a slimmer ankle, finished with a shoe. */}
+          The sheet shows wide-leg navy jeans over white sneakers: the trouser
+          is widest at the hem, not the thigh, and it breaks over the shoe
+          rather than stopping at the ankle. An earlier pass tapered them the
+          other way, toward a narrow ankle, which is the opposite silhouette. */}
       {[-1, 1].map((side) => (
         <group key={side} ref={side < 0 ? leftLeg : rightLeg} position={[side * cm(9), cm(75), 0]}>
-          {/* Trouser: wider at the thigh than at the knee. */}
-          <mesh position={[0, -cm(22), 0]} scale={[1.06, 1, 1.06]} castShadow>
-            <capsuleGeometry args={[cm(7.6), cm(42), 6, 16]} />
-            <meshStandardMaterial color={TROUSER} roughness={0.86} />
+          {/* Thigh */}
+          <mesh position={[0, -cm(20), 0]} castShadow>
+            <capsuleGeometry args={[cm(7.4), cm(38), 6, 16]} />
+            <meshStandardMaterial color={TROUSER} roughness={0.88} />
           </mesh>
 
-          {/* Lower leg, narrower, so the silhouette reads as a leg not a pipe. */}
-          <mesh position={[0, -cm(52), 0]} castShadow>
-            <capsuleGeometry args={[cm(5.6), cm(24), 6, 16]} />
-            <meshStandardMaterial color={TROUSER_SHADE} roughness={0.86} />
+          {/* Wide hem, flaring toward the floor and long enough to break on
+              the shoe, which is what reads as a wide-leg cut. */}
+          <mesh position={[0, -cm(50), cm(0.4)]} scale={[1.28, 1, 1.24]} castShadow>
+            <capsuleGeometry args={[cm(7.2), cm(28), 6, 16]} />
+            <meshStandardMaterial color={TROUSER_SHADE} roughness={0.88} />
           </mesh>
 
-          {/* Shoe: a low rounded box set forward of the ankle, because a leg
-              ending in a rounded tube is the single clearest stick-figure tell. */}
-          <mesh position={[0, -cm(66), cm(3.4)]} scale={[1, 0.62, 1.5]} castShadow>
-            <capsuleGeometry args={[cm(5.4), cm(3.2), 5, 14]} />
-            <meshStandardMaterial color={SHOE} roughness={0.5} metalness={0.06} />
+          {/* Sneaker: white upper, slightly wider sole under it. */}
+          <mesh position={[0, -cm(67), cm(3.6)]} scale={[1, 0.6, 1.55]} castShadow>
+            <capsuleGeometry args={[cm(5.5), cm(3.4), 5, 14]} />
+            <meshStandardMaterial color={SHOE} roughness={0.62} />
+          </mesh>
+          <mesh position={[0, -cm(70.5), cm(3.6)]} scale={[1.06, 0.34, 1.6]} castShadow>
+            <capsuleGeometry args={[cm(5.5), cm(3.4), 5, 14]} />
+            <meshStandardMaterial color={SHOE_SOLE} roughness={0.72} />
           </mesh>
         </group>
       ))}
@@ -443,6 +477,18 @@ export default function StoreKeeper3D({
       <mesh position={[0, cm(92), cm(15.4)]} scale={[1.18, 1, 0.22]} castShadow>
         <capsuleGeometry args={[cm(10.8), cm(19), 8, 20]} />
         <meshStandardMaterial color={APRON_SHADE} roughness={0.88} />
+      </mesh>
+
+      {/* Name tag, pinned to the bib as it is on the sheet. Small, but it is
+          the detail that turns an apron into a uniform. */}
+      <mesh position={[cm(6.2), cm(116), cm(17.4)]} rotation={[0, 0, -0.04]} castShadow>
+        <boxGeometry args={[cm(7.4), cm(3.4), cm(0.35)]} />
+        <meshStandardMaterial color={NAMETAG} roughness={0.55} />
+      </mesh>
+      {/* Its burgundy header strip, the same red as the cap. */}
+      <mesh position={[cm(6.2), cm(117.3), cm(17.6)]} rotation={[0, 0, -0.04]}>
+        <boxGeometry args={[cm(7.4), cm(1.1), cm(0.36)]} />
+        <meshStandardMaterial color={CAP} roughness={0.6} />
       </mesh>
 
       {/* Waist tie, which is what makes the two pieces read as one garment */}
