@@ -424,9 +424,14 @@ Master Action Plan is authorized for implementation.
 | IDEA-20260901-01 | Merged | MAP-023 owns the owner-approved exact-locality manual delivery-rate workbook, controlled pilot quoting, actual-cost reconciliation, staff workflow, and recovery; MAP-019 owns any future customer-facing quote snapshot and continuation; MAP-020 owns a future independently validated import/API boundary; MAP-026 retains Warehouse A eligibility, marketplace separation, provider evidence, and later courier/channel adapters |
 | IDEA-20260901-02 | Merged | MAP-026 owns the Warehouse A-only K2-direct eligibility rule, Warehouse B/C marketplace-only boundary, TikTok Shop and Lazada access qualification, approved-app/webhook/order/inventory adapters, canonical stock synchronization, reconciliation and Admin recovery; Shopee adapter work is deferred by owner decision |
 | IDEA-20260902-01 | Merged | MAP-023 owns the editable evidence-source register, courier VIP-account-versus-public reference comparison, 30-day source-verification gate, quote-tester comparison panel, and staff recovery; public/secondary/third-party evidence remains nonquotable, traffic/time-of-day does not change the ordinary J&T fee without documented evidence, and MAP-020 still owns any future independently validated importer |
+| IDEA-20260902-03 | Merged | MAP-023 owns weight-scaled delivery pricing: band plus per-kg excess reusing the existing `delivery_cost_rows.profile_id` dimension, profile selected from chargeable weight instead of from the locality, an Admin band picker/editor, and a ceiling raised only as far as verified J&T evidence reaches with manual quotation above it. Admin-only by owner scope — no weight-derived price reaches the storefront, which stays with MAP-019. Band values remain blocked on owner-supplied J&T evidence under the 30-day source-verification gate, and the apply state of the five 2026-09-02 delivery migrations must be confirmed first |
 | IDEA-20260902-02 | Merged | MAP-023 replaces the earlier single-courier customer-fee basis with a carrier-agnostic `K2-arranged delivery` rule: for one exact origin, destination, packed profile, and owner-approved route-qualified courier/service set, quote the PHP 5 ceiling of the maximum complete current outbound courier cost; missing or stale eligible-option evidence routes to manual quotation, integrity conflicts hard-stop, current J&T-only routes remain automatic only when J&T is explicitly the sole eligible option, and MAP-019/MAP-020 own the future Admin activation and independently validated import/snapshot boundary |
 
 ## Pending idea intake
+
+The idea below was captured, decided, audited, and merged into MAP-023 on
+2 September 2026. Its outcome is in the decision register above; MAP-023 holds
+the remaining unfinished scope. Nothing is pending intake.
 
 None.
 

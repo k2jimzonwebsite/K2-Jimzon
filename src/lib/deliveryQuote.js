@@ -214,7 +214,7 @@ export function resolveDeliveryQuote(inputs = {}, tables = {}) {
     if (!optionById.has(row.optionId) || !sourceById.has(row.sourceId)) {
       return fail(DELIVERY_OUTCOMES.DATA_CONFLICT_STOP, 'DATA_CONFLICT_STOP')
     }
-    const routeKey = [row.optionId, row.originId, row.localityId, row.profileId].join(' ')
+    const routeKey = [row.optionId, row.originId, row.localityId, row.profileId].join('\u0000')
     if (seenRoutes.has(routeKey)) {
       return fail(DELIVERY_OUTCOMES.DATA_CONFLICT_STOP, 'DATA_CONFLICT_STOP')
     }

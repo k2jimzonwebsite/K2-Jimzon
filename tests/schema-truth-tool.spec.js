@@ -359,13 +359,23 @@ test('MAP-017 apply command fails truthfully without recorded owner authorizatio
   expect(fullResult.stderr).toContain('--confirm-artifact-sha256')
 })
 
-test('MAP-017 dry-run reports the recorded authorization without contradicting it', () => {
+test('MAP-017 dry-run reports the recorded authorization without contradicting it', async () => {
+  // The recovery-access line tracks a gate the owner can close and could reopen,
+  // so the expectation is read from the owner record rather than pinned to one
+  // state. Pinning it left this test asserting a gate state that had already
+  // changed, which is the opposite of the no-contradiction property it names.
+  const ownerDecisions = await readFile(new URL('../K2 Jimzon - Brain/OWNER_QUESTIONS.md', import.meta.url), 'utf8')
+  const owner005 = /## OWNER-005\b([\s\S]*?)(?=\n## OWNER-|$)/i.exec(ownerDecisions)?.[1] ?? ''
+  const recoveryVerified = /\*\*Owner recovery access:\*\*\s*Verified\b/i.test(owner005)
+
   const result = runNode(applyCli, ['--dry-run'])
   expect(result.status).toBe(0)
   expect(result.stdout).toContain('OWNER-005 recorded authorization: YES')
   expect(result.stdout).toContain('[PASS] OWNER-005 is authorized')
   expect(result.stdout).toContain('[PASS] Named production database, Storage, and off-site backup evidence is verified')
-  expect(result.stdout).toContain('[OPEN] Owner recovery access remains unverified; no apply was attempted')
+  expect(result.stdout).toContain(recoveryVerified
+    ? '[PASS] Owner recovery access is verified'
+    : '[OPEN] Owner recovery access remains unverified; no apply was attempted')
   expect(result.stdout).not.toContain('OWNER-005 remains unauthorized')
 })
 

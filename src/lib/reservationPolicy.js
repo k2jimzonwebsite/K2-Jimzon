@@ -54,7 +54,10 @@ export function cartHoldsStock() {
  * wrongly reserving or wrongly deducting is far higher than doing nothing.
  */
 export function stockEffectOf(event) {
-  return STOCK_EFFECTS[event] || 'none'
+  // Own-key only. A bare index would resolve inherited names such as
+  // `constructor` or `toString` to an Object member, which is truthy and would
+  // be returned in place of the 'none' the unrecognised-event rule promises.
+  return Object.hasOwn(STOCK_EFFECTS, event) ? STOCK_EFFECTS[event] : 'none'
 }
 
 function parseInstant(value) {

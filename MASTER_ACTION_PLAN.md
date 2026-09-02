@@ -786,6 +786,77 @@ Auth callbacks (`OWNER-001`); BFF activation, which needs production server
 environment plus owner authorization; and any marketplace connector, since no
 partner credentials or approved partner documentation exist.
 
+### Queue item 12 — MAP-023 — `Unlisted` products cannot be bought through the link that advertises them
+
+**Raised 2 September 2026 from a source audit. Not yet fixed; recorded here
+because the remedy is a database function change and therefore sits behind the
+same production DDL gate as MAP-017.**
+
+`Unlisted` has one documented meaning across the system: hidden from browse,
+**reachable and buyable by direct link**. The Admin status picker states it in
+those words (`src/views/admin/InventoryGrid.jsx:36` — "Hidden from browse —
+direct link still works"), the storefront honours it (`StoreContext.jsx:262`
+fetches `Live`, `Active`, `Unlisted`; `:369` withholds only `Unlisted` from
+browse), and queue item 6 above deliberately keeps `Unlisted` out of the sitemap
+for exactly that reason.
+
+The order function disagrees. `public.submit_order_request_v2`
+(`supabase/migrations/20260809_operations_hardening.sql:211`) accepts only
+`status in ('Live', 'Active')` and raises `Product % is not available for website
+orders` for anything else.
+
+*Measured consequence.* An `Unlisted`, `published=true` product renders a
+complete product page, adds to the cart, and passes every client-side
+availability check — `addCartItems` and `validateCartForSubmission` both read the
+unfiltered `products` set. The order is refused only at submission, inside
+Postgres. The BFF maps that raise to a generic failure, so the customer is told
+`ORDER_SERVICE_UNAVAILABLE` — "Order requests are not configured yet" — after
+entering their name, address, and contact details. The staff member who chose
+`Unlisted` on the promise that "direct link still works" gets no signal at all.
+
+*Decision required before implementation.* Two coherent resolutions exist and
+they are not interchangeable:
+
+1. **Honour the documented meaning** — add `'Unlisted'` to the allowlist in
+   `submit_order_request_v2`. This is a one-line, additive change, but it is a
+   production function change and must go through the MAP-017 apply gate with
+   preflight, rollback, and idempotent replay.
+2. **Change the meaning** — make `Unlisted` genuinely unsellable, and then the
+   Admin hint, the storefront fetch, and the product page must all say so and
+   fail early with an honest message instead of a checkout-time 503.
+
+Do not implement either until the owner picks one; the choice is a commercial
+policy question, not an engineering preference.
+
+*Files that will change under option 1:* a new migration under
+`supabase/migrations/`, plus a contract asserting the storefront's sellable
+predicate and the RPC's allowlist name the same set.
+*Check:* an `Unlisted`, published SKU completes a guest order in the isolated
+PostgreSQL rehearsal, and a contract fails if the two predicates diverge again.
+
+### Queue item 13 — MAP-021 — `AiPromptStudioCard.jsx` is documented but not mounted
+
+**Raised 2 September 2026 from a source audit. Small, unblocked, needs a
+decision rather than analysis.**
+
+`docs/specs/MASTER_WORKFLOW_GRAPH_SPEC.md:113` describes
+`AiPromptStudioCard.jsx` as a live part of the Master Workflow Graph — "generates
+luxury editorial prompts for ChatGPT (DALL-E 3), Midjourney v6, and FLUX.1". No
+file imports it. The spec therefore advertises a capability the Admin BOS does
+not have, which is the exact failure mode AGENTS.md forbids: describing a target
+as though it were current behavior.
+
+It was left in place rather than deleted with the other orphans, because
+deleting it would silently remove something a spec claims exists. Resolve it one
+way: mount it in `MasterWorkflowGraph.jsx`, or delete the component and the spec
+row together.
+
+*Files:* `src/components/admin/master-workflow-graph/AiPromptStudioCard.jsx`,
+`src/components/admin/master-workflow-graph/MasterWorkflowGraph.jsx`,
+`docs/specs/MASTER_WORKFLOW_GRAPH_SPEC.md`.
+*Check:* the spec and the mounted component agree; no orphaned module remains
+under `master-workflow-graph/`.
+
 ### Queue item 11 — MAP-017 — LIVE OUTAGE — the production catalog is empty
 
 **Raised 28 August 2026 from direct live evidence. This is the highest-priority
@@ -883,9 +954,14 @@ generator and the storefront disagree in queue item 6.
 `fetchProducts` now applies `.eq('published', true)` alongside the status filter.
 Unpublished drafts and mock rows can no longer reach the public storefront by
 construction, storefront and sitemap visibility now agree, and genuine products
-appear automatically when staff set `Published`. `HomeCatalog.jsx` already
-carries the correct empty state for this case. A new contract pins both the
+appear automatically when staff set `Published`. A new contract pins both the
 publication gate and the status filter so neither can be dropped silently.
+
+*Correction, 2 September 2026.* This paragraph previously credited the empty
+state to `HomeCatalog.jsx`. That component was already unmounted — nothing
+imported it — so the claim rested on dead code. The empty states that actually
+render are `CatalogGrid.jsx` (catalog view, including the Pasabuy offer on an
+empty search) and `NewArrivals.jsx` (home). `HomeCatalog.jsx` has been deleted.
 
 ### Queue item 1 — MAP-021 — Consolidate the duplicate product detail view
 
@@ -4317,6 +4393,114 @@ formula/DDE/external-link injection and requires external approval/content
 digest, and MAP-026 retains provider/account/warehouse eligibility. Sequential
 Skeptic, Constraint Guardian, User Advocate, and Arbiter review accepted and
 resolved every objection; final disposition was `APPROVED` with no blockers.
+
+**2 September weight-scaled delivery rate — accepted by merge
+(`IDEA-20260902-03`).** The owner raised that a parcel's weight does not affect
+what the customer is charged, and asked to edit the rate per weight band from the
+Admin dashboard.
+
+*The problem, with evidence that it still exists.* Weight is currently a
+pass/fail gate, not a price input. `maxWeightG: 3000`
+(`server/admin-bff/delivery.js:209`, mirrored as `c_max_weight_g` in
+`supabase/migrations/20260902_delivery_guest_quote_boundary.sql:65`) admits an
+order or refuses it; below that line a 200 g parcel and a 2,900 g parcel in the
+same barangay resolve to the identical flat cost. The packed profile that would
+carry a weight band is read from the destination rather than the order:
+`src/lib/deliveryQuote.js:227` — `const profileId = locality ? locality.profileId
+: null`. Exactly one profile exists, and its ID states the assumption in words:
+`PROFILE-STD-1P-UPTO-3KG`
+(`supabase/migrations/20260902_delivery_quote_control.sql:148`).
+
+*Operational outcome.* K2 stops absorbing the difference on heavy parcels and
+stops overcharging light ones, and staff can correct a band from Admin without a
+code change or a migration.
+
+*Why existing behavior does not already solve it.* The rate register added by
+`IDEA-20260902-02` fixed *which courier cost* to charge, not *how weight changes
+it*. Its "maximum complete eligible cost, PHP 5 ceiling" rule is orthogonal and
+must be preserved: weight banding selects which cost rows are candidates; the
+existing rule still picks among them.
+
+*Dependencies, and whether they are available now.* The weight dimension already
+exists and must be reused rather than rebuilt — `public.delivery_cost_rows.profile_id`
+is a real column and part of the active uniqueness index `(option_id, origin_id,
+locality_id, profile_id)`; the resolver already matches candidates on it
+(`deliveryQuote.js:249`) and already keys duplicate-route detection on it
+(`:217`); the Admin publish command already accepts and writes it
+(`server/admin-bff/delivery.js:163`, `DeliveryRateControl.jsx:213`); and the
+server-side twin already joins on it
+(`20260902_delivery_guest_quote_boundary.sql:159`). What is missing is narrow:
+select the profile from chargeable weight, define more than one band, expose a
+band picker and editor, and move the ceiling.
+
+**Two owner decisions, both answered 2 September 2026:**
+
+1. **Band plus per-kg excess.** Each band carries a base amount; weight above the
+   band floor is charged per additional kilogram. This is how J&T bills K2 and it
+   matches the already-designed `shipping_rate_matrix` shape in
+   `docs/specs/SHIPPING_AND_COURIER_LOGIC_SPEC.md` §4 (`min_weight_g`,
+   `max_weight_g`, `base_amount`, `additional_kg_amount`). Implementation must
+   reconcile against that design rather than inventing a third rate shape.
+   Linear-from-zero was rejected: it underprices light parcels below K2's own
+   courier cost.
+2. **Raise the ceiling to a verified maximum; keep manual quotation above it.**
+   The automatic band set extends only as far as K2 holds real J&T evidence. An
+   open-ended top band was rejected because it would quote weights never verified
+   with the carrier, and an accepted `STANDARD_FEE` is a commitment K2 must
+   honour.
+
+**Owner scope boundary: Admin dashboard only.** No weight-derived price reaches
+the storefront under this item. Checkout keeps `Quoted after review`
+(`src/components/DeliveryEstimate.jsx:15`). Customer exposure is a separate
+decision and stays with MAP-019's accepted-quote snapshot.
+
+*Blocked on owner-supplied values, not on engineering.* The band boundaries, each
+band's base amount, the per-kg excess, and the exact new ceiling all require J&T
+evidence recorded in `delivery_rate_sources` under the 30-day source-verification
+gate from `IDEA-20260902-01`. K2 holds eight verified VIP observations today, all
+at or below 3 kg. The mechanism is buildable without these values; no band may be
+published without them, and none may be inferred.
+
+*Records, permissions, and recovery.* Additive only: new profile rows and the
+excess-amount column alongside the existing `amount_minor`. Existing rows keep
+their meaning, since a single-band world is the degenerate case of a banded one.
+Publication stays append-only through the existing owner-approved command — a
+band change closes the current row and opens a new one with effective dates and a
+reason, so an accepted quote remains explainable. Accepted fees stay frozen in
+`delivery_quote_snapshots` and a band revision must never reprice a past order.
+Any unweighed line must fail closed to `MANUAL_COURIER_QUOTE`: `shipping_weight_g`
+is nullable by design (`src/context/StoreContext.jsx:345`) precisely so an
+unweighed SKU cannot be priced from a label.
+
+*Apply-state precondition, unresolved.* The five delivery migrations dated
+2026-09-02 (`delivery_quote_control`, `delivery_quote_admin_command`,
+`delivery_guest_quote_boundary`, `delivery_quote_pilot_seed`,
+`product_shipping_dimensions`) came from commit `38038f6`, which is still
+unpushed, and **neither `docs/KNOWN_ISSUES.md` nor the System Brain records
+whether any of them is applied to production.** Confirm apply state against the
+live migration ledger before adding a sixth migration on top of them.
+
+*Smallest safe implementation scope, in order.* (1) Add the excess column and the
+band profile rows, additively. (2) Change profile selection in
+`deliveryQuote.js` from locality-derived to chargeable-weight-derived, and make
+the SQL twin match. (3) Extend the parity test so the JS and SQL band selection
+and ceiling cannot drift. (4) Add the band picker and editor to
+`DeliveryRateControl.jsx`. (5) Move the ceiling constant in both places, once the
+owner supplies the verified number.
+
+*Objective completion checks.* A banded quote charges more for a heavier parcel
+in the same locality and matches a hand-computed base-plus-excess figure to the
+centavo; a weight above the ceiling routes to `MANUAL_COURIER_QUOTE` rather than
+extrapolating; an order with any unweighed line routes to manual quotation; the
+JS and SQL resolvers return identical outcomes across the band boundaries in the
+parity test; a published band change leaves an already-accepted snapshot
+unchanged; and no weight-derived amount appears on the storefront.
+
+*Files that will receive the verified final logic:* a new additive migration
+under `supabase/migrations/`, `src/lib/deliveryQuote.js`,
+`server/admin-bff/delivery.js`, `src/views/admin/DeliveryRateControl.jsx`,
+`tests/delivery-quote-contract.spec.js`, `tests/delivery-quote-parity.spec.js`,
+and `docs/specs/SHIPPING_AND_COURIER_LOGIC_SPEC.md`.
 
 **21 August catalog spreadsheet round-trip audit:** IDEA-20260821-02 was
 accepted by merge here after reviewing the operations rulebook, Product/Design

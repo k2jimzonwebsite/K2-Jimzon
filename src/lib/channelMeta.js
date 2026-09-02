@@ -65,18 +65,31 @@ const MESSAGE_PLATFORMS = {
 
 const META = { ...SALES_CHANNELS, ...MESSAGE_PLATFORMS }
 
+/**
+ * Own-key lookup for the vocabulary tables.
+ *
+ * These keys arrive from stored rows, so a bare index or an `in` test would also
+ * resolve inherited names such as `constructor` and `toString`. That would let
+ * `toString` read as a valid sales channel and hand `channelMeta` an Object
+ * member in place of a label/colour pair — a false channel fact in the one file
+ * whose job is to keep channel spelling honest.
+ */
+function ownEntry(table, key) {
+  return Object.hasOwn(table, key) ? table[key] : undefined
+}
+
 export function channelMeta(key) {
   if (!key) return { label: 'Storefront', color: '#2563EB' }
-  const canonical = LEGACY_CHANNEL_ALIASES[key] || key
-  return META[canonical] || { label: String(key), color: '#6B7280' }
+  const canonical = ownEntry(LEGACY_CHANNEL_ALIASES, key) ?? key
+  return ownEntry(META, canonical) ?? { label: String(key), color: '#6B7280' }
 }
 
 /** The canonical channel code for a value that may be a historical spelling. */
 export function canonicalChannelCode(key) {
   const value = String(key ?? '').trim()
   if (!value) return ''
-  const canonical = LEGACY_CHANNEL_ALIASES[value] || value
-  return canonical in SALES_CHANNELS ? canonical : ''
+  const canonical = ownEntry(LEGACY_CHANNEL_ALIASES, value) ?? value
+  return Object.hasOwn(SALES_CHANNELS, canonical) ? canonical : ''
 }
 
 /** Channels operated through seller shops, so a shop must be named on an order. */

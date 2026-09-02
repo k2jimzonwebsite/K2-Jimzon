@@ -33,11 +33,16 @@ supabase/.temp/
 .tools/
 .agents/
 .agent/
-.claude/
+# .claude/ and ANTIGRAVITY_HANDOFF/ carry tracked, authoritative files
+# (.claude/launch.json; the handoff review, prompts, and checkpoint records that
+# AGENTS.md treats as durable). Ignoring the whole directory silently excluded
+# every new file under them while their siblings stayed versioned, so only the
+# genuinely local parts are ignored here.
+.claude/settings.local.json
+.claude/skills/
 .codex/
 .gemini/
 .impeccable/
-ANTIGRAVITY_HANDOFF/
 _globe_resources/
 agentic-awesome-skills/
 antigravity-skills/
@@ -52,8 +57,6 @@ scratch/
 live-schema-metadata.json
 scripts/map017-evidence/*.json
 
-.vercel
-.env*
 .tools/map027-knowledge-pg-data/
 .tools/map027-knowledge-pg.log
 .tools/map028-channel-pg-data/
