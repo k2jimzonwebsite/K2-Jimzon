@@ -1199,6 +1199,29 @@ mode. The catalog fills itself as each row is ticked. Note that
 `InventoryGrid.jsx:901` hides the `Published` checkbox while `secure` is true, so
 Sheet mode is the surface that can set it.
 
+*Search indexing is gated while the products are thin, 2 September 2026.* The
+owner chose to publish the 27 so the real store can be reviewed by a person,
+and to keep the product pages out of search until they carry photographs and
+descriptions. `StorefrontMetadata.jsx` gives every one of them the same fallback
+social image and a generated one-line description built from the product name,
+so 27 pages would differ only by a noun — thin, near-duplicate content, on a
+domain that gets one first impression with a search engine.
+
+`/product/*` is therefore served `X-Robots-Tag: noindex, nofollow` and no
+product URL is emitted into `sitemap.xml`. Only product pages are withheld; the
+home, catalog, store, Pasabuy, Wholesale, and Contact pages stay indexable, and
+`robots.txt` deliberately still allows crawling so the header can actually be
+read. Publication and indexing are independent: shoppers can open, share, and
+buy from a product link throughout.
+
+**This is temporary and its removal is a checklist, not a flag flip.**
+`docs/PRELAUNCH_INDEXING.md` holds the undo procedure; the switch is
+`PRELAUNCH_PRODUCT_NOINDEX` in `scripts/prelaunch-indexing.mjs`, and
+`tests/prelaunch-indexing-contract.spec.js` fails if the switch and the Vercel
+header ever disagree, so a half-undo cannot ship. Undoing it also requires
+regenerating the catalog projection, or the sitemap will list only whatever was
+published when it was last built.
+
 ### Queue item 1 — MAP-021 — Consolidate the duplicate product detail view
 
 ~~`src/StorefrontApp.jsx` registers both `ProductDetail` (key `product`) and

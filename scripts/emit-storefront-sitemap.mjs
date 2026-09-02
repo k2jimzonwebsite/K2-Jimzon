@@ -22,6 +22,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { generateSitemap, K2_STOREFRONT_ORIGIN } from './map024-evidence/generate-sitemap.mjs'
 import { generateProductPages } from './map024-evidence/generate-product-pages.mjs'
+import { productUrlsAllowedInSitemap, PRELAUNCH_PRODUCT_NOINDEX } from './prelaunch-indexing.mjs'
 
 const rootDir = fileURLToPath(new URL('..', import.meta.url))
 const catalogPath = path.join(rootDir, 'scripts', 'map024-evidence', 'published-catalog.json')
@@ -57,11 +58,19 @@ export function emitSitemap({ target = resolveTarget(), origin = K2_STOREFRONT_O
     return { written: false, reason: 'dist/ does not exist; run the build first' }
   }
 
-  const products = readCatalog()
+  const allProducts = readCatalog()
+  // While the pre-launch gate is on, /product/* is served `noindex`. Listing
+  // those URLs here as well would ask a crawler to index exactly what the same
+  // deployment tells it to ignore, which Search Console reports as "Submitted
+  // URL marked noindex". The stable public routes are still emitted.
+  const products = productUrlsAllowedInSitemap() ? allProducts : []
   const xml = generateSitemap({ products, origin })
   fs.writeFileSync(path.join(distDir, 'sitemap.xml'), xml, 'utf8')
   const template = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8')
-  const pages = generateProductPages({ template, products, origin })
+  // Prerendered from the full catalog regardless of the gate. These pages are
+  // what a person sees when they open or share a product link; withholding them
+  // from search is a crawler instruction, not a reason to stop serving them.
+  const pages = generateProductPages({ template, products: allProducts, origin })
   for (const [segment, html] of pages) {
     const directory = path.join(distDir, 'product', segment)
     fs.mkdirSync(directory, { recursive: true })
@@ -81,7 +90,14 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   } else {
     console.log(`[sitemap] dist/sitemap.xml written with ${productUrlLabel(result)}`)
     console.log(`[metadata] ${result.productPages} product page${result.productPages === 1 ? '' : 's'} prerendered`)
-    if (result.products > 0 && result.productUrls === 0) {
+    if (PRELAUNCH_PRODUCT_NOINDEX) {
+      // Said unconditionally, because a sitemap with no product URLs otherwise
+      // reads as a broken catalog projection rather than a deliberate gate.
+      console.log('[sitemap] NOTE: the pre-launch indexing gate is ON, so no product URL is')
+      console.log('[sitemap] listed and /product/* is served noindex. This is deliberate while')
+      console.log('[sitemap] products have no photographs or descriptions. To launch product')
+      console.log('[sitemap] pages into search, follow docs/PRELAUNCH_INDEXING.md.')
+    } else if (result.products > 0 && result.productUrls === 0) {
       console.log('[sitemap] NOTE: the catalog projection contains no product marked published=true,')
       console.log('[sitemap] so only the stable public routes are listed. Publish products, re-run')
       console.log('[sitemap] `npm run evidence:map024-catalog`, and rebuild to list them.')
