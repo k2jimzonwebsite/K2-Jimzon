@@ -100,12 +100,20 @@ test('root Vercel config binds each real K2 project identity to its exact artifa
 })
 
 test('Vercel has exactly one root configuration authority', async () => {
-  await expect(readFile(new URL('../vercel.ts', import.meta.url), 'utf8')).resolves.toContain(
-    'selectVercelDeploymentConfig',
-  )
+  const source = await readFile(new URL('../vercel.ts', import.meta.url), 'utf8')
+  expect(source).toContain('selectVercelDeploymentConfig')
   await expect(readFile(new URL('../vercel.json', import.meta.url), 'utf8')).rejects.toMatchObject({
     code: 'ENOENT',
   })
+})
+
+test('root Vercel config bundles both reviewed artifacts before provider relocation', async () => {
+  const source = await readFile(new URL('../vercel.ts', import.meta.url), 'utf8')
+
+  expect(source).toContain("import storefrontConfig from './vercel.storefront.json' with { type: 'json' }")
+  expect(source).toContain("import adminConfig from './vercel.admin.json' with { type: 'json' }")
+  expect(source).not.toContain('readFileSync')
+  expect(source).not.toContain('import.meta.url')
 })
 
 test('root Vercel config refuses a real K2 target attached to the opposite project', () => {

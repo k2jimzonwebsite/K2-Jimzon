@@ -1,7 +1,6 @@
-import { readFileSync } from 'node:fs'
 import { selectVercelDeploymentConfig } from './scripts/map024-evidence/select-vercel-deployment-config.mjs'
-
-const readConfig = (name) => JSON.parse(readFileSync(new URL(name, import.meta.url), 'utf8'))
+import storefrontConfig from './vercel.storefront.json' with { type: 'json' }
+import adminConfig from './vercel.admin.json' with { type: 'json' }
 
 export const config = selectVercelDeploymentConfig({
   target: process.env.K2_DEPLOYMENT_TARGET,
@@ -11,7 +10,7 @@ export const config = selectVercelDeploymentConfig({
     admin: 'prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x',
   },
   configs: {
-    storefront: readConfig('./vercel.storefront.json'),
-    admin: readConfig('./vercel.admin.json'),
+    storefront: storefrontConfig,
+    admin: adminConfig,
   },
 })
