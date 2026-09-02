@@ -58,6 +58,28 @@
           "value": "public, max-age=31536000, immutable"
         }
       ]
+    },
+    {
+      "source": "/ambient/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "k2-jimzon-admin.vercel.app"
+        }
+      ],
+      "destination": "https://admin.k2jimzon.com/:path*",
+      "permanent": true
     }
   ]
 }

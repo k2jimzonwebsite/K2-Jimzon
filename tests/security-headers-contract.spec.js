@@ -399,3 +399,53 @@ test('Vite config loads only the exact browser-safe environment inputs it consum
     expect(source).toContain(`'${name}'`)
   }
 })
+
+test('each production vercel.app alias redirects to its custom domain', async () => {
+  const [storefront, admin] = await Promise.all([
+    readFile(new URL('../vercel.storefront.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../vercel.admin.json', import.meta.url), 'utf8').then(JSON.parse),
+  ])
+
+  const cases = [
+    ['storefront', storefront, 'k2-jimzon.vercel.app', 'https://www.k2jimzon.com/:path*'],
+    ['admin', admin, 'k2-jimzon-admin.vercel.app', 'https://admin.k2jimzon.com/:path*'],
+  ]
+
+  for (const [name, config, host, destination] of cases) {
+    const rule = (config.redirects || []).find(
+      (entry) => entry.has?.some((cond) => cond.type === 'host' && cond.value === host),
+    )
+    expect(rule, `${name} must retire its vercel.app production alias`).toBeTruthy()
+    expect(rule.destination).toBe(destination)
+    // 308, so the alias stops being a second indexable copy of the site rather
+    // than merely being discouraged.
+    expect(rule.permanent).toBe(true)
+
+    // Matched on the exact production hostname. Preview deployments also live
+    // on *.vercel.app, so a wildcard here would bounce every preview into
+    // production and make previews useless.
+    for (const entry of config.redirects || []) {
+      for (const cond of entry.has || []) {
+        if (cond.type !== 'host') continue
+        expect(cond.value, `${name} must not redirect every *.vercel.app host`).not.toMatch(/\*|\.\*/)
+      }
+    }
+  }
+})
+
+test('hero media is cached, but not frozen the way hashed assets are', async () => {
+  const storefront = await readFile(new URL('../vercel.storefront.json', import.meta.url), 'utf8').then(JSON.parse)
+
+  const ambient = storefront.headers.find((entry) => entry.source === '/ambient/(.*)')
+  expect(ambient, '/ambient/ needs its own cache rule').toBeTruthy()
+
+  const cacheControl = ambient.headers.find((h) => h.key === 'Cache-Control')?.value ?? ''
+  // Without this rule the catch-all applies `no-store` and roughly a megabyte
+  // of video is re-fetched on every single page view.
+  expect(cacheControl).toContain('public')
+  expect(cacheControl).toMatch(/max-age=\d+/)
+  // These filenames are stable rather than content-hashed, so `immutable` would
+  // strand a replaced clip in caches long after it was swapped.
+  expect(cacheControl).not.toContain('immutable')
+  expect(cacheControl).toContain('stale-while-revalidate')
+})
