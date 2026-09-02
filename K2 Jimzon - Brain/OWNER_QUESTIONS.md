@@ -306,6 +306,42 @@ answered by the Brain or handled safely as configurable system behavior.
 
 ## OWNER-002 — Reservation hold and release policy
 
+**Decision:** Answered 2 September 2026. **Resolved, with one clarification the
+owner should confirm on read-back (marked below).**
+
+The owner's answers separate two things that had been conflated in the original
+question. A saved cart and a stock reservation are different mechanisms:
+
+1. **Cart — permanent, and holds no stock.** The cart persists like Shopee's:
+   a customer can leave items in it indefinitely and find them later. It is a
+   saved shopping list, **not** a claim on inventory. *Clarification for owner
+   read-back:* this is deliberate. If a permanent cart reserved stock, abandoned
+   carts would lock inventory forever and the catalog would show sold-out for
+   goods K2 still holds. Availability is therefore re-checked at purchase, which
+   is the behavior customers already expect from Shopee.
+2. **Reservation — 30 minutes, starting when the customer clicks purchase.**
+   That is the window in which the exact units are held for them.
+3. **Staff extension — minimum 30 minutes, maximum 7 days.** An extension must
+   be attributed to the staff member and carry a reason.
+4. **Pasabuy and wholesale do not use a hold at all.** They are conversation-led
+   and run through live chat, so each commitment becomes a durable **history
+   record** on the customer instead: a Pasabuy history and a wholesale history.
+   The purpose the owner states is continuity of contact inside live chat and
+   never losing track of a request. These records are permanent operational
+   truth, not expiring reservations.
+
+**Engineering consequences recorded here so they are not rediscovered later:**
+
+- A permanent cart for a signed-in customer is a stored record. A permanent cart
+  for a guest needs either an account or a long-lived browser grant; the guest
+  case must degrade honestly rather than silently losing the cart.
+- Because the cart holds no stock, the existing pre-submit availability
+  revalidation (MAP-028 G-005/G-009) is load-bearing, not optional.
+- The 30-minute reservation needs an explicit deadline per reservation, a staff
+  warning before expiry, and idempotent release of the exact lots at expiry.
+- Pasabuy/wholesale history widgets are scoped by customer role — see OWNER-003.
+
+
 **Needed for:** MAP-023 production activation of confirmed-order and wholesale
 reservations. Schema, commands, audit, and release/recovery tests can be built
 with a configurable duration before this answer.
@@ -327,6 +363,34 @@ temporary reservation forever.
 policy, but engineering cannot invent how long K2 promises stock to a customer.
 
 ## OWNER-003 — Wholesale commercial policy and public response-time claims
+
+**Decision:** Partially answered 2 September 2026. **Two of four resolved; one
+deferred by the owner; one accepted in principle but still missing its value.**
+
+1. **Eligibility — answered as an identity model, not a criteria list.**
+   Wholesale and Pasabuy are **roles granted to signed-in customers**. The
+   Pasabuy history and wholesale history widgets are scoped to the customers
+   holding those roles. What business evidence staff must review before granting
+   a role is not yet defined; until it is, granting stays a manual staff decision
+   with an audit record, which is safe.
+2. **Pricing — not yet determined.** Wholesale therefore remains **manual quote
+   only**. No account price list, tier table, or minimum-order rule is activated.
+3. **Payment terms and credit — not yet determined.** The owner records this as
+   easy to add later and explicitly not urgent. **No credit is offered**, and no
+   credit-limit code path activates. This is the safe default: credit risk is the
+   one item here that can cost real money if guessed.
+4. **Public response-time promise — the owner wants one**, so customers are not
+   left waiting without knowing when to expect a reply. **The value is still
+   missing.** A promise cannot be published as "we reply quickly"; it needs an
+   exact number of hours and the exact business hours it is measured against
+   (for example, "within 12 business hours, Monday to Saturday, 9am-6pm").
+   Until that value exists, the previously hard-coded and unapproved 24-hour
+   Pasabuy claim stays removed and every surface continues to say
+   `Staff review required`.
+
+**Blocking question for the owner:** what is the promised response time, and
+during which days and hours is it measured? Nothing else in this item is waiting.
+
 
 **Needed for:** MAP-019/MAP-023 activation of server-authorized wholesale pricing,
 terms, reordering, and any promised response time. Secure inquiry and manual
@@ -351,6 +415,22 @@ hard-coded 24-hour Pasabuy promise unless K2 adopts and measures it.
 public SLA are commercial promises, not safe engineering defaults.
 
 ## OWNER-006 — Customer-data retention and deletion policy
+
+**Decision:** **Deferred by the owner on 2 September 2026** as too complex to
+answer now. This is a legitimate deferral, not an oversight, and it is recorded
+with its exact consequence so it is not mistaken for completed work.
+
+**Consequence while deferred:** the system continues to preserve every
+operational record, which is the safe direction. K2 therefore **cannot yet honour
+a customer data-deletion request**, because no approved retention period, legal
+hold, or anonymization rule exists to execute against. No privacy workflow is
+activated and none is claimed anywhere in the UI.
+
+**When to revisit:** before launch if K2 will publish a privacy notice promising
+erasure, and in any case before the first real deletion request arrives. The
+answer needs Philippine accounting/tax retention advice, not an engineering
+default.
+
 
 **Needed for:** MAP-019 customer privacy request, anonymization, and deletion
 activation. Source guards preserve operational records until this is decided.
@@ -378,6 +458,20 @@ accounting, security, or recovery.
 
 ## OWNER-004 — Public phone, Viber, and WhatsApp details
 
+**Decision:** Answered 2 September 2026. **Resolved.**
+
+- Public business number: **+63 931 864 9654**
+- The owner states this one number carries every K2 contact channel: calls, SMS,
+  Viber, and WhatsApp.
+- All of those channels may be published on the storefront Contact page.
+
+**Remaining before publication:** test every generated link (`tel:`, Viber,
+WhatsApp `wa.me`) from a real phone, and confirm the Viber and WhatsApp accounts
+on this number are actually installed and monitored. A published channel that
+nobody watches is worse than no channel, so the link test is part of the
+acceptance, not an optional extra.
+
+
 **Needed for:** publishing direct phone-based channels on the storefront Contact
 us page. Email, Messenger, Shopee, and secure Website messaging can proceed
 without this answer.
@@ -397,6 +491,45 @@ before launch.
 number, and a configured channel name does not prove the account is monitored.
 
 ## OWNER-007 — Paid AI product-intake controls
+
+**Measured cost model recorded 2 September 2026** at the owner's request, so the
+caps below are chosen against real numbers rather than a guess. Prices read from
+OpenAI's published pricing on 2 September 2026; re-check before activation, as
+provider pricing changes without notice.
+
+*Assumed work per product:* one structured text call (label/context in, then
+description, usage notes, SEO fields, and a media brief out; roughly 3,000 input
+and 1,500 output tokens), plus two generated 1024x1024 images.
+
+| Configuration | Text model | Image tier | Cost per product | Approx PHP |
+| --- | --- | --- | ---: | ---: |
+| Economy | gpt-5-mini | low | ~$0.022 | ~PHP 1.30 |
+| **Recommended** | gpt-5-mini | medium | **~$0.072** | **~PHP 4.20** |
+| Premium | gpt-5 | high | ~$0.285 | ~PHP 16.50 |
+
+PHP figures use an approximate rate of PHP 58 to USD 1 and are indicative only.
+
+**Model note — time-sensitive.** `gpt-image-1` is retired on **23 October 2026**.
+Do not name it as the approved snapshot; use `gpt-image-1.5`, whose 1024x1024
+output prices are $0.009 low, $0.034 medium, $0.133 high per image.
+
+**Recommended caps, derived from the middle row.** These carry roughly double the
+expected cost so a retry or a longer description cannot trip the cap mid-intake:
+
+- **Per product: $0.15** (about PHP 8.70)
+- **Per intake session: $3.00** (about PHP 175, roughly 40 products)
+- **Per month: $20.00** (about PHP 1,160, roughly 275 products)
+
+**Still required from the owner before activation:** confirm or replace those
+three numbers, name the exact approved model snapshots, and confirm the provider
+account's data-retention/training setting. The two-confirmation boundary and the
+typed `ENABLE_PAID_AI` control are already recorded above and are unchanged.
+
+**Why the text cost is not the thing to watch:** the text call is under half a
+centavo to three centavos per product. Essentially the entire bill is images, and
+the image *quality tier* moves it by a factor of fifteen. If cost matters more
+than polish, drop the tier before dropping the feature.
+
 
 **Needed for:** MAP-018/MAP-023 activation of the optional Automatic API path for
 product descriptions, usage/instructions, SEO, media briefs, and PRIMARY/AFTER
