@@ -92,3 +92,37 @@ test('sample shop assignment is stable for a SKU', async () => {
   // never show a row whose handler is unknown.
   expect(custodiansForShops(first).length).toBeGreaterThan(0)
 })
+
+test('every lens control meets the Admin 44px touch target', async () => {
+  const view = await sheet()
+
+  // docs/DESIGN_SYSTEM.md states 44px mobile touch targets for the Admin BOS,
+  // and several contracts already assert min-h-11 elsewhere. The lens shipped
+  // at 38px in its first draft, matching the adjacent domain-jump chips rather
+  // than the documented standard — the four-skill design gate caught it.
+  const lensBlock = view.slice(
+    view.indexOf('id="sheet-lens-search"'),
+    view.indexOf('Jump:'),
+  )
+  expect(lensBlock).not.toContain('min-h-[38px]')
+  expect(lensBlock.split('min-h-11').length - 1).toBeGreaterThanOrEqual(4)
+
+  // '{FIXTURE_NOTICE}' is the banner in the JSX; the bare name also matches the
+  // import at the top of the file, which would slice backwards to nothing.
+  const custodianBlock = view.slice(view.indexOf('Handled by:'), view.indexOf('{FIXTURE_NOTICE}'))
+  expect(custodianBlock).toContain('min-h-11')
+  expect(custodianBlock).not.toContain('min-h-[38px]')
+})
+
+test('the search field is named for assistive technology on every screen', async () => {
+  const view = await sheet()
+
+  // Its visible label is `hidden lg:inline`, and display:none removes an element
+  // from the accessibility tree — so on a phone the field had no accessible name
+  // at all. The explicit aria-label is what carries it there.
+  expect(view).toContain('aria-label="Search products by SKU, name, or barcode"')
+  // The selects and toggles carry their own names too.
+  expect(view).toContain('aria-label="Filter by status"')
+  expect(view).toContain('aria-label="Filter by shop"')
+  expect(view).toContain('aria-pressed={active}')
+})

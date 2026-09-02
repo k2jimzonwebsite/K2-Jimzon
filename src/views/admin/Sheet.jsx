@@ -286,14 +286,15 @@ export default function Sheet() {
             type="search"
             value={lensQuery}
             onChange={(e) => setLensQuery(e.target.value)}
+            aria-label="Search products by SKU, name, or barcode"
             placeholder="SKU, name, or barcode"
-            className="min-h-[38px] w-full sm:w-64 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm text-white outline-none placeholder:text-white/35 focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/40"
+            className="min-h-11 w-full sm:w-64 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm text-white outline-none placeholder:text-white/35 focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/40"
           />
           <select
             aria-label="Filter by status"
             value={lensStatus}
             onChange={(e) => setLensStatus(e.target.value)}
-            className="min-h-[38px] rounded-adm-sm border border-adm-line bg-adm-sunken px-2 text-sm font-semibold text-white outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/40"
+            className="min-h-11 rounded-adm-sm border border-adm-line bg-adm-sunken px-2 text-sm font-semibold text-white outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/40"
           >
             <option value="all">All statuses</option>
             <option value="live">Live</option>
@@ -306,7 +307,7 @@ export default function Sheet() {
             aria-label="Filter by shop"
             value={lensShop}
             onChange={(e) => setLensShop(e.target.value)}
-            className="min-h-[38px] rounded-adm-sm border border-adm-line bg-adm-sunken px-2 text-sm font-semibold text-white outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/40"
+            className="min-h-11 rounded-adm-sm border border-adm-line bg-adm-sunken px-2 text-sm font-semibold text-white outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/40"
           >
             <option value="all">All shops</option>
             {FIXTURE_SHOPS.map(shop => (
@@ -320,7 +321,7 @@ export default function Sheet() {
             <button
               type="button"
               onClick={clearLens}
-              className="shrink-0 min-h-[38px] rounded-adm-sm border border-adm-line px-3 text-xs font-bold text-white/80 transition hover:bg-white/10"
+              className="shrink-0 min-h-11 rounded-adm-sm border border-adm-line px-3 text-xs font-bold text-white/80 transition hover:bg-white/10"
             >
               Clear lens
             </button>
@@ -337,7 +338,7 @@ export default function Sheet() {
                 type="button"
                 aria-pressed={active}
                 onClick={() => toggleCustodian(name)}
-                className={`shrink-0 min-h-[38px] rounded-adm-sm border px-3 text-xs font-bold transition ${
+                className={`shrink-0 min-h-11 rounded-adm-sm border px-3 text-xs font-bold transition ${
                   active
                     ? 'border-blue bg-blue/20 text-white'
                     : 'border-adm-line text-white/70 hover:bg-white/10'
@@ -541,7 +542,7 @@ export default function Sheet() {
                       <button
                         type="button"
                         onClick={clearLens}
-                        className="mt-3 min-h-[38px] rounded-adm-sm border border-adm-line px-3 text-xs font-bold text-white/80 transition hover:bg-white/10"
+                        className="mt-3 min-h-11 rounded-adm-sm border border-adm-line px-3 text-xs font-bold text-white/80 transition hover:bg-white/10"
                       >
                         Clear lens to see all {rows.length}
                       </button>
