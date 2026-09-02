@@ -70,6 +70,25 @@ export default function Sheet() {
   const [enrichProduct, setEnrichProduct] = useState(null)
   const [operationError, setOperationError] = useState('')
   const [exporting, setExporting] = useState(false)
+  const [lensQuery, setLensQuery] = useState('')
+  const [lensStatus, setLensStatus] = useState('all')
+
+  // The lens narrows what is shown, never what is loaded, and every row keeps
+  // the index it has in `rows`. Editing is index-addressed (`updateField` reads
+  // `rows[index]`), so handing a filtered position to it would write the change
+  // to whichever product happened to sit at that position in the full list —
+  // silently, and to a row the staff member cannot see.
+  const visibleRows = rows
+    .map((row, index) => ({ row, index }))
+    .filter(({ row }) => {
+      if (lensStatus !== 'all' && String(row.status || '').toLowerCase() !== lensStatus) return false
+      const needle = lensQuery.trim().toLowerCase()
+      if (!needle) return true
+      return [row.sku, row.name, row.barcode, row.subcategory]
+        .some(field => String(field || '').toLowerCase().includes(needle))
+    })
+
+  const lensActive = lensStatus !== 'all' || lensQuery.trim() !== ''
 
   useEffect(() => {
     fetchProducts()
@@ -236,6 +255,43 @@ export default function Sheet() {
           </button>
         </div>
 
+        <div className="flex flex-wrap items-center gap-2 border-t border-adm-line px-3 py-2 lg:px-6">
+          <label className="shrink-0 text-xs font-mono font-extrabold uppercase text-gold hidden lg:inline" htmlFor="sheet-lens-search">Lens:</label>
+          <input
+            id="sheet-lens-search"
+            type="search"
+            value={lensQuery}
+            onChange={(e) => setLensQuery(e.target.value)}
+            placeholder="SKU, name, or barcode"
+            className="min-h-[38px] w-full sm:w-64 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm text-white outline-none placeholder:text-white/35 focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/40"
+          />
+          <select
+            aria-label="Filter by status"
+            value={lensStatus}
+            onChange={(e) => setLensStatus(e.target.value)}
+            className="min-h-[38px] rounded-adm-sm border border-adm-line bg-adm-sunken px-2 text-sm font-semibold text-white outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/40"
+          >
+            <option value="all">All statuses</option>
+            <option value="live">Live</option>
+            <option value="under_review">Under Review</option>
+            <option value="draft">Draft</option>
+            <option value="unlisted">Unlisted</option>
+            <option value="discontinued">Discontinued</option>
+          </select>
+          <span aria-live="polite" className="shrink-0 text-xs font-mono font-bold text-white/60">
+            {lensActive ? `${visibleRows.length} of ${rows.length}` : `${rows.length} products`}
+          </span>
+          {lensActive && (
+            <button
+              type="button"
+              onClick={() => { setLensQuery(''); setLensStatus('all') }}
+              className="shrink-0 min-h-[38px] rounded-adm-sm border border-adm-line px-3 text-xs font-bold text-white/80 transition hover:bg-white/10"
+            >
+              Clear lens
+            </button>
+          )}
+        </div>
+
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none border-t border-adm-line px-3 py-2 lg:px-6">
           <span className="shrink-0 text-xs font-mono font-extrabold uppercase text-gold hidden lg:inline">Jump:</span>
           {DOMAINS.map(d => (
@@ -293,11 +349,11 @@ export default function Sheet() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r, i) => {
+              {visibleRows.map(({ row: r, index: i }, position) => {
                 return (
                   <tr key={r.sku} className="hover:bg-blue/10 transition-colors group">
                     <td className="hidden sm:table-cell w-10 min-w-10 border border-adm-line bg-adm-surface px-2 py-1.5 text-center text-xs text-white/50 font-mono sticky left-0 z-20">
-                      {i + 1}
+                      {position + 1}
                     </td>
                     {ALL_COLS.map((col, colIdx) => {
                       const field = FIELD_MAP[col]
@@ -399,6 +455,24 @@ export default function Sheet() {
                   </tr>
                 )
               })}
+              {visibleRows.length === 0 && (
+                <tr>
+                  <td colSpan={ALL_COLS.length + 2} className="border border-adm-line px-4 py-10 text-center">
+                    <p className="text-sm font-semibold text-white">
+                      {lensActive ? 'No products match this lens.' : 'No products yet.'}
+                    </p>
+                    {lensActive && (
+                      <button
+                        type="button"
+                        onClick={() => { setLensQuery(''); setLensStatus('all') }}
+                        className="mt-3 min-h-[38px] rounded-adm-sm border border-adm-line px-3 text-xs font-bold text-white/80 transition hover:bg-white/10"
+                      >
+                        Clear lens to see all {rows.length}
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         )}

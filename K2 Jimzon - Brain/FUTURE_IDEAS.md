@@ -5,7 +5,7 @@ a competing implementation backlog.
 
 **Active implementation authority:** `../MASTER_ACTION_PLAN.md`
 
-**Current pending intake:** IDEA-20260902-04, IDEA-20260902-05
+**Current pending intake:** IDEA-20260902-04, IDEA-20260902-05, IDEA-20260902-06
 
 This is not a roadmap or backlog. An idea stays here only until it is audited
 against the operations rulebook, current System Brain, actual code/data,
@@ -428,6 +428,65 @@ Master Action Plan is authorized for implementation.
 | IDEA-20260902-02 | Merged | MAP-023 replaces the earlier single-courier customer-fee basis with a carrier-agnostic `K2-arranged delivery` rule: for one exact origin, destination, packed profile, and owner-approved route-qualified courier/service set, quote the PHP 5 ceiling of the maximum complete current outbound courier cost; missing or stale eligible-option evidence routes to manual quotation, integrity conflicts hard-stop, current J&T-only routes remain automatic only when J&T is explicitly the sole eligible option, and MAP-019/MAP-020 own the future Admin activation and independently validated import/snapshot boundary |
 
 ## Pending idea intake
+
+### IDEA-20260902-06 - Shop-scoped staff permissions, and a shop lens on inventory
+
+**Captured:** 2026-09-02
+**Raised by:** Owner
+
+**Desired outcome:** a staff member can only touch the shops they run - their
+Shopee account, their Lazada account - plus the master inventory, while Admin
+and SuperAdmin reach everything. Alongside it, a lens on Sheet mode that narrows
+the view to one shop or one staff member, or a combination.
+
+**Delivered already, and deliberately narrow:** Sheet mode now has a lens for
+search and status with a live count, an empty state, and a clear control
+(`src/views/admin/Sheet.jsx`). It filters what is shown, never what is loaded,
+and preserves each row's index in `rows` because editing is index-addressed -
+handing `updateField` a filtered position would have written the edit to
+whichever product sat at that position in the full list, invisibly. No shop or
+staff filter was added, because the data to back one does not exist yet. A
+dropdown that silently matches nothing would be worse than no dropdown.
+
+**What already exists and must be reused:**
+
+- `public.channel_shops.custodian_user_id` - "a staff member who physically
+  holds that shop's stock". The staff-to-shop link is already modelled.
+- `public.order_requests.shop_id` and `public.channel_listings.shop_id`, both
+  indexed. Orders and listings can therefore be scoped by shop today.
+
+**What does not exist, and blocks the inventory half:**
+
+- **Per-shop stock.** Inventory is a single `MANILA_MAIN` pool; batches carry no
+  shop dimension. `20260829_channel_vocabulary_and_shops.sql` states this
+  outright: "Deliberately NOT in scope here, and left to MAP-026: ... the batch
+  allocation dimension, and the staff-request/admin-approval transfer workflow."
+  Until that lands, "only Shopee A's inventory" has no rows to select.
+- **A per-shop permission predicate.** Roles are flat. `public.is_staff()` is
+  true for Staff, Admin and SuperAdmin alike, and `public.is_admin()` for the
+  latter two. Nothing asks "which shops does this user hold?"
+
+**The part that must not be built in the browser.** Hiding rows in the Admin UI
+is not access control; anyone can call the API directly. Scoping has to be
+enforced in the database and the BFF - a `custodian_shop_ids()` predicate used
+by RLS and by every shop-addressed route - with the UI lens as a convenience on
+top of it, never as the boundary. Building the lens first and calling it a
+permission would be the worst outcome available here.
+
+**Audit direction:** this is MAP-026's stated scope rather than a new stream.
+MAP-026 already owns per-shop channel accounts and custody-based allocation, and
+is sequenced after MAP-025. The permission predicate should be merged there
+rather than opened as a parallel item.
+
+**Owner decision required:** whether "their master inventory" means the shared
+Manila pool stays visible and editable to every staff member (simplest, and what
+the current single-pool model implies), or whether master inventory itself
+becomes shop-allocated so a staff member sees only their own allocated lots. The
+second is materially more work and changes how receiving and FEFO behave.
+
+**Status:** captured, not audited. The Sheet lens is delivered; no permission
+change was made.
+
 
 ### IDEA-20260902-05 - Live chat active from checkout, plus inbox and notifications for signed-in customers
 
