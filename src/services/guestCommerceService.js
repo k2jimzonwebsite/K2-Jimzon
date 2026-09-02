@@ -13,6 +13,9 @@ const PUBLIC_MESSAGES = {
   INVALID_OR_INELIGIBLE: 'That coupon is invalid or not eligible for this cart.',
   REQUEST_TIMEOUT: 'The request timed out. Check your connection, then retry the same request.',
   DELIVERY_QUOTE_UNAVAILABLE: 'We could not calculate delivery right now. Your order will be quoted after review.',
+  // Someone reached the last unit first. Said plainly, and while the customer
+  // can still act on it, rather than after they have paid for it.
+  INSUFFICIENT_STOCK: 'Someone else just took the last of one item in your cart. Nothing was charged. Review your cart and try again.',
 }
 
 export async function listGuestConversations() {

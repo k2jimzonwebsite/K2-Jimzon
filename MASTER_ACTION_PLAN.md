@@ -4307,6 +4307,68 @@ contracts.
 applying `20260902_reservation_expiry_policy.sql` after MAP-017, and preview
 acceptance of the staff surface with an authorized account.
 
+**The hold now starts at purchase, closing the gap against OWNER-002. This state
+is `local code, rehearsed on isolated PostgreSQL` only — nothing is applied.**
+
+An owner test order exposed that OWNER-002's central sentence was not
+implemented. The decision reads "Reservation — 30 minutes, starting when the
+customer clicks purchase"; the system claimed stock only inside
+`confirm_order_request`, whose sole caller is a staff button. Between purchase
+and confirmation nothing was held, so two customers could each submit an order
+for the same last unit and both receive a success page. That is survivable while
+a submission is only a request and no money moves, and it becomes a refund
+problem the moment payment is taken at checkout — which is exactly what
+`IDEA-20260902-04` proposes.
+
+- `supabase/migrations/20260902_purchase_time_reservation.sql` — **prepared, not
+  applied.** Additive. It extracts the FEFO selection, row locking, balance
+  arithmetic and stock recomputation that `confirm_order_request` has performed
+  since 20260809 into `reserve_order_request_lots_v1`, then calls that one
+  function from both submission and confirmation. Extracting rather than
+  duplicating is the whole point: two copies of the last-unit locking rule is
+  how a shop starts overselling in the precise case this exists to prevent. The
+  function is idempotent, so confirming an order that already holds stock is a
+  no-op, and an order predating the migration still reserves at confirm exactly
+  as before. Depends on `20260902_reservation_expiry_policy.sql` for
+  `hold_minutes`/`expires_at` and the deadline trigger, and its preflight
+  refuses to apply without them.
+- An unfillable purchase now aborts the whole submission rather than recording
+  an order nobody can fill. The raise carries SQLSTATE `K2STK`, which
+  `prepared-api/storefront/order.js` maps to HTTP 409 `INSUFFICIENT_STOCK`
+  instead of the generic 503. The customer is told "Someone else just took the
+  last of one item in your cart. Nothing was charged." while they can still act
+  on it, rather than after paying.
+- `scripts/rehearse-purchase-time-reservation.mjs` (`npm run rehearse:purchase-hold`)
+  installs the real 20260809 functions on an isolated PostgreSQL 17.11 loopback,
+  applies the migration verbatim on top, replays it for idempotency, and asserts
+  eight properties: the hold is taken at submission, it carries the 30-minute
+  deadline, a second buyer for the last unit is refused, the refused purchase
+  leaves no order behind, the winning hold is undisturbed, confirming does not
+  claim twice, confirmation still writes its order row and advances status, and
+  a pre-migration order still reserves at confirm. 8/8 pass.
+- `tests/purchase-time-reservation.spec.js` — 9 contracts pinning the invariants,
+  including that the FEFO loop appears exactly once in the migration.
+
+*A security regression was introduced and caught by the repository's own gate.*
+The first draft restated `grant execute ... to anon` on
+`submit_order_request_v2`. `20260812_guest_submission_cutover.sql` had revoked
+exactly that grant on purpose, so customers reach the function only through
+`submit_guest_order_v1` with its signature, bot challenge, rate limits and
+idempotency key. Because `create or replace function` preserves the ACL, the
+restated grant was not a harmless no-op — it would have reopened an unsigned,
+unthrottled path to order submission. `npm run security:surfaces` failed closed
+with `unexpected anon`, the grant was removed, and a contract now asserts the
+migration never restates it.
+
+*Verification:* `prebuild` exit 0, 452 API/command contracts plus 5 selling-surface
+contracts, 546 base contracts, both isolated production builds with boundary,
+budget and secret checks, and the 8/8 isolated-PostgreSQL rehearsal.
+
+*Remaining:* this migration is applied only after
+`20260902_reservation_expiry_policy.sql`, both behind the MAP-017 gate. Until
+then the live system still holds stock at staff-confirm time, and payment must
+not be taken at checkout.
+
 **Previous status, retained for dependency reading:** Queued; depends on MAP-017
 through MAP-022
 

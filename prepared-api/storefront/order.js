@@ -50,6 +50,15 @@ export default async function handler(req, res) {
     }
     const client = createStorefrontServerSupabase()
     const { data, error } = await client.rpc('submit_guest_order_v1', signedRpcArguments(req, 'order', payload))
+    // K2STK is raised by reserve_order_request_lots_v1 when the units are
+    // already held by someone else. That is a normal, expected outcome of two
+    // customers reaching the last unit, not a service fault: telling the
+    // customer the service is unavailable would hide the one fact they need.
+    // The submission transaction has already rolled back, so no unfillable
+    // order exists to clean up.
+    if (error?.code === 'K2STK') {
+      return safeJson(res, 409, { error: { code: 'INSUFFICIENT_STOCK' } })
+    }
     if (error) return safeJson(res, 503, { error: { code: 'ORDER_SERVICE_UNAVAILABLE' } })
     const mapped = mapBoundaryResult(data)
     if (!mapped.ok) return safeJson(res, mapped.status, { error: { code: mapped.code } },
