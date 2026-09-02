@@ -68,7 +68,12 @@ export default function Pasabuy() {
   return (
     <main className="pb-24 md:pb-20">
       <HeroVideo name="pasabuy" label="Shelves of Italian goods in a Milan shop" />
-      <div className="store-section -mt-6 grid gap-10 pt-4 md:pt-6 lg:grid-cols-[1.16fr_0.84fr] lg:gap-16">
+      {/* No negative top margin here. An earlier version pulled this block up
+          into the band to tighten the seam, which sliced the kicker in half
+          against the video's bottom edge — worst on a phone, where the band is
+          proportionally taller and the line sits right on the boundary. The
+          band ends where it ends; the copy starts below it. */}
+      <div className="store-section grid gap-10 pt-10 md:pt-14 lg:grid-cols-[1.16fr_0.84fr] lg:gap-16">
         <div>
           <Kicker className="flex items-center gap-2"><PlaneIcon size={14} /> Personal Shopping from Italy</Kicker>
           <h1 className="mt-3 font-serif text-3xl font-semibold leading-[1.06] tracking-tight text-navy sm:text-4xl md:text-5xl">

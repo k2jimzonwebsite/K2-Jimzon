@@ -166,3 +166,22 @@ test('the video listeners do not outlive the element', async () => {
     expect(ref, `cleanup must release ${removed}`).toContain(removed)
   }
 })
+
+test('no page pulls its copy up into the band', async () => {
+  const [pasabuy, wholesale] = await Promise.all([
+    readFile('src/views/Pasabuy.jsx', 'utf8'),
+    readFile('src/views/Wholesale.jsx', 'utf8'),
+  ])
+
+  // Pasabuy shipped with `-mt-6` on the block below the band, to tighten the
+  // seam. It sliced the kicker in half against the video's bottom edge, worst
+  // on a phone where the band is proportionally taller and the line landed
+  // right on the boundary. Measured after the fix: 40px of clearance at 375px
+  // wide, 56px at 1440px.
+  for (const [name, view] of [['pasabuy', pasabuy], ['wholesale', wholesale]]) {
+    const afterBand = view.slice(view.indexOf('<HeroVideo'))
+    const firstContainer = afterBand.slice(0, afterBand.indexOf('>', afterBand.indexOf('<div')) + 1)
+    expect(firstContainer, `${name} must not pull content up into the band`)
+      .not.toMatch(/-mt-\d/)
+  }
+})
