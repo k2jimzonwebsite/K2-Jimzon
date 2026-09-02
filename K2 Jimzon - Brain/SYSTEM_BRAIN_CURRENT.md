@@ -300,13 +300,33 @@ Read-only measurement of the production project through the browser-public
 anonymous client, exactly as the storefront queries it. This is what a customer's
 browser gets today.
 
-**The published catalog returns zero rows.** `products` filtered to
-`status in ('Live','Active','Unlisted')` and `published = true` returns nothing.
-MAP-023 queue item 11 is unchanged and current. The local storefront looks
-healthy only because `StoreContext` falls back to the `src/data/products.js`
-seed in development; production correctly renders an empty catalog, and a
-contract now pins that guard, because the seed ships in the bundle by necessity
-and is one deleted line from advertising 36 fabricated products.
+**The published catalog returns zero rows, and the cause is the publication flag,
+not the status.** Broken down rather than measured as a single number:
+`products` readable by `anon` is 27; `status in ('Live','Active','Unlisted')` is
+27; `published = true` is **0**; both together, which is what `fetchProducts`
+asks for, is **0**. Every row reads `Live / published=false`.
+
+`published` became a gate in `57c340c` on 2 September 2026. Before that commit
+`fetchProducts` filtered on status alone, so the flag was inert and no member of
+staff had ever set it. The gate shipped without a backfill and the catalog went
+to zero the same day. This is a different failure from the all-or-nothing stock
+coupling that MAP-023 queue item 11 was originally raised for; that coupling has
+since been fixed and no longer holds.
+
+**The gate is nevertheless correct, and the owner has chosen to leave production
+empty.** All 27 rows have `primary_image_url`, `secondary_images`, and
+`lifestyle_images` empty, and `PhotoManagerModal.jsx:42` requires a published
+product to keep a primary photo. By the project's own rule these 27 are not
+publishable, which means the catalog that was public before the gate shipped was
+showing photoless drafts. Filling the shelves is blocked on photography, not on
+engineering: photograph, attach a primary image, then tick `Published` per row in
+Sheet mode. `InventoryGrid.jsx:901` hides that checkbox while `secure` is true,
+so Sheet mode is the surface that can set it.
+
+The local storefront looks healthy only because `StoreContext` falls back to the
+`src/data/products.js` seed in development; production correctly renders an empty
+catalog, and a contract now pins that guard, because the seed ships in the bundle
+by necessity and is one deleted line from advertising 36 fabricated products.
 
 **`v_product_stock_from_batches` is denied to the anonymous role**, SQLSTATE
 `42501`, permission denied for view. `AUD-002` remains open and unchanged.

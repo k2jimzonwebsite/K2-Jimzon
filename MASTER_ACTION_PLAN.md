@@ -1161,6 +1161,44 @@ imported it — so the claim rested on dead code. The empty states that actually
 render are `CatalogGrid.jsx` (catalog view, including the Pasabuy offer on an
 empty search) and `NewArrivals.jsx` (home). `HomeCatalog.jsx` has been deleted.
 
+*Measured consequence, 2 September 2026 — the publication gate took the catalog
+to zero on its first day.* The paragraph above describes the gate as intended.
+Measured against production immediately after it shipped, the effect is total:
+
+| Condition | Rows |
+| --- | --- |
+| `products` readable by `anon` | 27 |
+| `status in ('Live','Active','Unlisted')` | 27 |
+| `published = true` | **0** |
+| both, which is what `fetchProducts` asks for | **0** |
+
+Every one of the 27 reads `Live / published=false`. `published` was inert before
+`57c340c`, so no member of staff had ever set it and there was nothing to
+backfill it from. The gate is correct; it was deployed without first turning its
+key, and `https://www.k2jimzon.com/store` now renders "The shelves are empty
+right now." to every visitor.
+
+This is a *different* failure from the one this queue item was raised for. The
+all-or-nothing stock coupling described above has since been fixed — the catalog
+now renders whenever the product read succeeds — so the original chain no longer
+holds. The outage persists for a new reason.
+
+**The owner's decision, 2 September 2026: leave production empty and photograph
+the products first.** Not a workaround — the gate is doing exactly what it was
+built to do. All 27 rows have `primary_image_url`, `secondary_images`, and
+`lifestyle_images` empty, and `PhotoManagerModal.jsx:42` states that a published
+product must keep a primary photo. By the project's own rule these products are
+not publishable. That reframes the history recorded here: the catalog that was
+public before this gate shipped was showing 27 photoless drafts, and the empty
+shelf is the first day the rule was actually enforced.
+
+*Publishing is therefore blocked on photography, not on engineering.* No code
+change and no migration is outstanding for this. The sequence is: photograph the
+products, attach a primary image to each, then set `Published` per row in Sheet
+mode. The catalog fills itself as each row is ticked. Note that
+`InventoryGrid.jsx:901` hides the `Published` checkbox while `secure` is true, so
+Sheet mode is the surface that can set it.
+
 ### Queue item 1 — MAP-021 — Consolidate the duplicate product detail view
 
 ~~`src/StorefrontApp.jsx` registers both `ProductDetail` (key `product`) and
