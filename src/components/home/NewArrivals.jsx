@@ -7,7 +7,7 @@ import { ArrowIcon } from '../ui/icons'
 import { peso } from '../../data/products'
 
 export default function NewArrivals() {
-  const { listedProducts: products, loading, openProduct, isWholesale } = useStore()
+  const { listedProducts: products, loading, openProduct, isWholesale, go } = useStore()
   const arrivals = useMemo(() => (products || []).slice(0, 4), [products])
   const [featuredIndex, setFeaturedIndex] = useState(0)
   const reducedMotion = useReducedMotion()
@@ -29,7 +29,7 @@ export default function NewArrivals() {
           </div>
 
           <button
-            onClick={() => window.location.href = '/catalog'}
+            onClick={() => go('catalog', { focusSelector: '#catalog-heading' })}
             className="hidden min-h-11 items-center gap-2 text-sm font-bold text-navy transition-colors hover:text-crimson sm:flex cursor-pointer"
           >
             Explore all arrivals <ArrowIcon size={15} />

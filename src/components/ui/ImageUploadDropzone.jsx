@@ -5,6 +5,7 @@ import {
   PRODUCT_EVIDENCE_MAX_BYTES, PRODUCT_EVIDENCE_MIMES, validateUploadFile,
 } from '../../lib/uploadValidation'
 import { adminBffEnabled, uploadProductMediaBff } from '../../services/adminBffService'
+import { applyImageFallback } from '../../lib/imageFallback'
 
 const ACCEPTED_MEDIA = '.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp'
 const EXTENSION = Object.freeze({ 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' })
@@ -123,7 +124,7 @@ export default function ImageUploadDropzone({
       <div className="mb-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
         {media.map((item, index) => (
           <div key={item.url} className="group relative aspect-square overflow-hidden rounded-adm-sm border border-adm-line bg-adm-sunken">
-            <img src={item.url} alt={`${label || 'Product photo'} ${index + 1}`} className="h-full w-full object-cover" />
+            <img src={item.url} alt={`${label || 'Product photo'} ${index + 1}`} onError={applyImageFallback} className="h-full w-full object-cover" />
             <button
               type="button"
               onClick={() => removeImage(index)}

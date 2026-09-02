@@ -3,6 +3,10 @@ import { useOptionalAdminStore } from '../../context/AdminStoreContext'
 import { supabase } from '../../lib/supabaseClient'
 import { providerErrorIncludes, safeUiError } from '../../lib/safeUiError'
 import { adminBffEnabled, commandAdminStaffAccessBff, getAdminStaffAccessBff } from '../../services/adminBffService'
+import {
+  AI_SPEND_CONTROL_CONFIRMATIONS, dollarsToMicros, microsToDollars,
+  normalizeAiSpendControls,
+} from '../../lib/aiSpendControls.js'
 import { CheckIcon, InboxIcon, ShieldIcon, UserIcon, XIcon } from '../../components/ui/icons'
 
 // Real staff & roles. Reads user_profiles (admins see all), lets the super admin
@@ -10,13 +14,16 @@ import { CheckIcon, InboxIcon, ShieldIcon, UserIcon, XIcon } from '../../compone
 // Mobile-first: big touch targets, 16px inputs, one clear thing per card.
 
 const ROLES = ['Admin', 'Staff', 'Customer']
+const DISPLAY_ROLES = [...ROLES, 'SuperAdmin']
 const ROLE_BLURB = {
   Admin: 'Full access — everything, including staff & financials.',
   Staff: 'Day-to-day operations. No staff management or financials.',
   Customer: 'Storefront only — no admin access.',
+  SuperAdmin: 'Owner-controlled access, including paid AI spending controls.',
 }
 const roleChip = (r) =>
   r === 'Admin' ? 'bg-crimson/20 text-crimson border-crimson/40'
+  : r === 'SuperAdmin' ? 'bg-gold/20 text-gold border-gold/40'
   : r === 'Staff' ? 'bg-blue/20 text-blue border-blue/40'
   : 'bg-white/10 text-white/60 border-white/20'
 
@@ -56,19 +63,28 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
   const [pinReason, setPinReason] = useState('')
   const [roleChange, setRoleChange] = useState(null)
   const [invitationAvailable, setInvitationAvailable] = useState(!secure)
+  const [aiSpendControls, setAiSpendControls] = useState(null)
+  const [aiSpendControlsStatus, setAiSpendControlsStatus] = useState('checking')
+  const isSuperAdmin = user?.role === 'SuperAdmin'
 
   const load = useCallback(async (signal) => {
     if (secure) {
       setLoading(true); setErr('')
       const response = await getAdminStaffAccessBff(signal)
       if (response.aborted) return
-      if (!response.ok) setErr(response.error || 'Staff access records could not be loaded.')
+      if (!response.ok) {
+        setErr(response.error || 'Staff access records could not be loaded.')
+        setAiSpendControls(null)
+        setAiSpendControlsStatus('unavailable')
+      }
       else {
         setRows(response.staffAccess.profiles || [])
         setHasPin(Boolean(response.staffAccess.hasDeletePin))
         setInvitationAvailable(Boolean(response.staffAccess.invitationAvailable))
         setMfaStatus(response.staffAccess.currentSessionAal2 ? 'verified' : 'unavailable')
         setMfaReplacementAvailable(Boolean(response.staffAccess.mfaReplacementAvailable))
+        setAiSpendControls(response.staffAccess.aiSpendControls ? normalizeAiSpendControls(response.staffAccess.aiSpendControls) : null)
+        setAiSpendControlsStatus(response.staffAccess.aiSpendControlsAvailable && response.staffAccess.aiSpendControls ? 'available' : 'unavailable')
       }
       setLoading(false)
       return
@@ -79,6 +95,8 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
       .select('id, email, role, created_at').order('created_at', { ascending: true })
     if (error) setErr(safeUiError('STAFF_LOAD_FAILED'))
     else setRows(data || [])
+    setAiSpendControls(null)
+    setAiSpendControlsStatus('unavailable')
     setLoading(false)
   }, [secure])
   useEffect(() => { const controller = new AbortController(); load(controller.signal); return () => controller.abort() }, [load])
@@ -185,7 +203,7 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
 
       {/* Header */}
       <div className="pt-1">
-        <h1 className="font-sans text-lg sm:text-2xl font-bold text-white">Staff &amp; roles</h1>
+        <h2 className="font-sans text-lg sm:text-2xl font-bold text-white">Staff &amp; roles</h2>
         <p className="text-sm text-white/55 mt-1 leading-relaxed">
           {secure ? 'Review authenticated access, make attributable role changes, and protect privileged deletion. Invitations require a durable reason-bound receipt.' : 'Invite people, choose what they can access, and protect your own login with 2FA. Accounts are invite-only — each person sets their own password.'}
         </p>
@@ -293,7 +311,7 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
           <div className="space-y-2.5">
             {rows.map(r => {
               const isSelf = user?.id === r.id
-              const role = ROLES.includes(r.role) ? r.role : 'Customer'
+              const role = DISPLAY_ROLES.includes(r.role) ? r.role : 'Customer'
               return (
                 <div key={r.id} className="rounded-adm-sm border border-adm-line bg-white/5 p-3.5">
                   <div className="flex items-center gap-3">
@@ -310,8 +328,9 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
                   </div>
                   <label className="block mt-3">
                     <span className="block text-xs font-bold uppercase tracking-wider text-white/40 mb-1">Change role</span>
-                    <select value={role} onChange={e => { if (e.target.value !== role) setRoleChange({ profile: r, role: e.target.value }) }}
+                    <select value={role} disabled={role === 'SuperAdmin'} onChange={e => { if (e.target.value !== role) setRoleChange({ profile: r, role: e.target.value }) }}
                       className="w-full rounded-adm-sm border border-white/20 bg-adm-surface px-3 min-h-11 py-2.5 text-base text-white focus:border-blue outline-none cursor-pointer appearance-none">
+                      {role === 'SuperAdmin' && <option value="SuperAdmin">SuperAdmin (owner controlled)</option>}
                       {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
                     </select>
                   </label>
@@ -322,6 +341,19 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
         )}
       </section>
       {roleChange && <RoleChangeDialog change={roleChange} onCancel={() => setRoleChange(null)} onConfirm={changeRole} />}
+
+      <PaidAiSpendControls
+        secure={secure}
+        isSuperAdmin={isSuperAdmin}
+        controls={aiSpendControls}
+        status={aiSpendControlsStatus}
+        onSaved={next => {
+          setAiSpendControls(normalizeAiSpendControls(next))
+          setAiSpendControlsStatus('available')
+          setNotice('Paid AI spending controls saved with an attributable reason. Provider activation remains separately gated.')
+        }}
+        onError={message => setErr(message)}
+      />
 
       {/* Your 2FA */}
       <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
@@ -408,6 +440,122 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
       />}
     </div>
   )
+}
+
+function PaidAiSpendControls({ secure, isSuperAdmin, controls, status, onSaved, onError }) {
+  const [enabled, setEnabled] = useState(false)
+  const [model, setModel] = useState('')
+  const [perProduct, setPerProduct] = useState('')
+  const [perSession, setPerSession] = useState('')
+  const [monthly, setMonthly] = useState('')
+  const [reason, setReason] = useState('')
+  const [confirmation, setConfirmation] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    const next = normalizeAiSpendControls(controls || {})
+    setEnabled(next.paidPathEnabled)
+    setModel(next.providerModelSnapshot || '')
+    setPerProduct(microsToDollars(next.perProductUsdMicros))
+    setPerSession(microsToDollars(next.perSessionUsdMicros))
+    setMonthly(microsToDollars(next.monthlyUsdMicros))
+  }, [controls])
+
+  const save = async event => {
+    event.preventDefault()
+    if (!secure || !isSuperAdmin || status !== 'available') return onError('Paid AI spending controls are not active in this environment.')
+    let payload
+    try {
+      payload = {
+        paidPathEnabled: enabled,
+        providerModelSnapshot: model.trim() || null,
+        perProductUsdMicros: dollarsToMicros(perProduct),
+        perSessionUsdMicros: dollarsToMicros(perSession),
+        monthlyUsdMicros: dollarsToMicros(monthly),
+        contentConfirmationRequired: true,
+        imageConfirmationRequired: true,
+        manualFallbackRequired: true,
+        expectedVersion: normalizeAiSpendControls(controls).version,
+        reason: reason.trim(),
+        confirmation: enabled ? confirmation.trim() : AI_SPEND_CONTROL_CONFIRMATIONS.SAVE,
+      }
+    } catch {
+      return onError('Enter valid dollar amounts with no more than six decimal places.')
+    }
+    if (payload.reason.length < 8) return onError('Enter at least 8 characters explaining this budget change.')
+    if (enabled && confirmation.trim() !== AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE) {
+      return onError(`Type ${AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE} to deliberately enable paid AI.`)
+    }
+    setBusy(true)
+    const response = await commandAdminStaffAccessBff('ai_spend_controls_update', payload)
+    setBusy(false)
+    if (!response.ok) return onError(response.error || 'The paid AI spending controls could not be saved safely.')
+    onSaved(response.result?.controls || response.result || payload)
+    setReason('')
+    setConfirmation('')
+  }
+
+  const display = normalizeAiSpendControls(controls || {})
+  return <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
+    <div className="flex items-center gap-2 mb-1">
+      <ShieldIcon size={19} className="text-gold" aria-hidden="true" />
+      <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Paid AI intake spending controls</h2>
+      <span className="ml-auto rounded-full border border-amber/40 bg-amber/15 px-2 py-0.5 text-xs font-bold text-amber">
+        {status === 'available' && display.paidPathEnabled ? 'Enabled by SuperAdmin' : 'Fail-closed'}
+      </span>
+    </div>
+    <p className="text-sm text-white/55 leading-relaxed mb-3">
+      Automatic API intake is an optional paid path for descriptions, usage/instructions, SEO, and draft image candidates. It can never write SKU, price, cost, stock, lots, expiry, custody, approval, or publication.
+    </p>
+    {!secure || status !== 'available' ? (
+      <div role="status" className="rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-sm leading-relaxed text-amber">
+        Prepared — not active. The provider boundary, owner-approved model, retention decision, and hard caps must be verified before this control can be changed. Use the manual K2 Product Content → Smart Paste → K2 Product Image Studio workflow meanwhile.
+      </div>
+    ) : !isSuperAdmin ? (
+      <div role="status" className="rounded-adm-sm border border-white/15 bg-white/5 p-3 text-sm leading-relaxed text-white/60">
+        Only a SuperAdmin may change these limits or enable paid calls. Ask the owner to review the current caps; the manual two-Project path remains available.
+      </div>
+    ) : (
+      <form onSubmit={save} className="space-y-3">
+        <label className="flex items-start gap-3 rounded-adm-sm border border-white/15 bg-white/5 p-3 text-sm text-white/75">
+          <input type="checkbox" checked={enabled} onChange={event => setEnabled(event.target.checked)} className="mt-1 h-5 w-5 accent-gold" />
+          <span><strong className="text-white">Allow the paid API path</strong><span className="block text-xs text-white/45 mt-1">This is off by default and remains blocked unless every cap, model, and confirmation is valid.</span></span>
+        </label>
+        <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Approved provider/model snapshot
+          <input value={model} onChange={event => setModel(event.target.value)} maxLength={160} placeholder="e.g. provider/model@approved-snapshot" className={`${inputCls} mt-1.5`} />
+        </label>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Per product (USD)
+            <input value={perProduct} onChange={event => setPerProduct(event.target.value)} inputMode="decimal" placeholder="0.00" className={`${inputCls} mt-1.5`} />
+          </label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Per session (USD)
+            <input value={perSession} onChange={event => setPerSession(event.target.value)} inputMode="decimal" placeholder="0.00" className={`${inputCls} mt-1.5`} />
+          </label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Monthly cap (USD)
+            <input value={monthly} onChange={event => setMonthly(event.target.value)} inputMode="decimal" placeholder="0.00" className={`${inputCls} mt-1.5`} />
+          </label>
+        </div>
+        <div className="rounded-adm-sm border border-blue/25 bg-blue/10 p-3 text-xs leading-relaxed text-white/65">
+          Content and image confirmations, manual fallback, server-only keys, redacted usage/cost receipts, and fail-closed cap checks are fixed safeguards. They are not removable from this screen.
+        </div>
+        {enabled && <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Type {AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE} to enable
+          <input value={confirmation} onChange={event => setConfirmation(event.target.value)} autoComplete="off" placeholder={AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE} className={`${inputCls} mt-1.5 font-mono`} />
+        </label>}
+        <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Reason for this control change
+          <textarea required minLength={8} maxLength={500} value={reason} onChange={event => setReason(event.target.value)} className={`${inputCls} mt-1.5 min-h-24 resize-y`} placeholder="Why is this model or budget being changed?" />
+        </label>
+        <button type="submit" disabled={busy || reason.trim().length < 8 || (enabled && confirmation.trim() !== AI_SPEND_CONTROL_CONFIRMATIONS.ENABLE)} className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-50 transition-[background-color,opacity,transform] active:scale-[.99] motion-reduce:transition-none">
+          {busy ? 'Saving…' : 'Save paid AI controls'}
+        </button>
+      </form>
+    )}
+    {status === 'available' && <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-white/55 sm:grid-cols-4">
+      <div><dt>Per product</dt><dd className="font-semibold text-white">{microsToDollars(display.perProductUsdMicros) || 'Unset'}</dd></div>
+      <div><dt>Per session</dt><dd className="font-semibold text-white">{microsToDollars(display.perSessionUsdMicros) || 'Unset'}</dd></div>
+      <div><dt>Monthly cap</dt><dd className="font-semibold text-white">{microsToDollars(display.monthlyUsdMicros) || 'Unset'}</dd></div>
+      <div><dt>Config version</dt><dd className="font-semibold text-white">{display.version}</dd></div>
+    </dl>}
+  </section>
 }
 
 function MfaReplacementDialog({ onClose, onStart, onComplete, onSuccess }) {

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Html5Qrcode } from 'html5-qrcode'
 import { BarcodeIcon, CheckIcon, XIcon } from '../../components/ui/icons'
 import { safeUiError } from '../../lib/safeUiError'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 function confirmScan(stage) {
   try {
@@ -101,7 +102,8 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
     ? 'Scan every expected unit into its manifest line. Packing cannot close until the expected count is complete.'
     : 'Scan every physical unit again on arrival. Inventory changes only after discrepancy review and finalization.'
 
-  return <div className="fixed inset-0 z-[70] flex flex-col bg-adm-sunken text-white" role="dialog" aria-modal="true" aria-labelledby={`${readerId}-title`}>
+  return <AdminDialog onClose={onClose} closeDisabled={processing} labelledBy={`${readerId}-title`}>
+  <div className="fixed inset-0 z-[70] flex flex-col bg-adm-sunken text-white">
     <header className="flex shrink-0 items-start justify-between gap-4 border-b border-adm-line bg-adm-surface p-4">
       <div><p className={`text-xs font-bold uppercase tracking-[0.16em] ${accentText}`}>{isMilan ? 'Italy custody count' : 'Philippines receiving count'}</p><h2 id={`${readerId}-title`} className="mt-1 font-sans text-xl font-bold">{title}</h2><p className="mt-1 max-w-2xl text-xs leading-relaxed text-white/50">{description}</p></div>
       <button onClick={onClose} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-adm-sm border border-adm-line bg-white/5" aria-label="Close scanner"><XIcon /></button>
@@ -129,4 +131,5 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
       })}</div></div>
     </footer>
   </div>
+  </AdminDialog>
 }

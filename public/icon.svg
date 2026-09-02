@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">K2 Jimzon</title>
+  <rect width="512" height="512" rx="104" fill="#8f1d2c"/>
+  <path d="M112 98v316h68V292l111 122h92L236 250 373 98h-88L180 222V98z" fill="#fff8ed"/>
+  <path d="M306 326h94v68h-94z" fill="#d6a754"/>
+</svg>

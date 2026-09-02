@@ -1,152 +1,112 @@
-# Antigravity Handoff Report — 25 August 2026
+# Antigravity Handoff Report — 26 August 2026
 
 ### 1. Executive result
 
-`Ready for independent verification` (for MAP-021 unblocked storefront scope: Items 1 and 2).
+`Blocked — evidence required`
 
-Operational result: The orphaned product detail view `ProductDetail.jsx` has been consolidated onto `MasterProduct.jsx` and deleted, eliminating the unreachable 13.68 kB chunk and reducing storefront manifest modules from 19 to 17. The Three.js globe (`GlobeSection.jsx`) is now deferred behind a 300px `IntersectionObserver` with a dimension-matched placeholder (`GlobeSectionPlaceholder`) designed to avoid layout shift (not measured — see correction note), preserving `ErrorBoundary` and `GlobeSectionUnavailable` fallback, and honoring `prefers-reduced-motion` in `GlobeCore.jsx` and `ProductGlobe.jsx`.
+- **MAP Item:** MAP-017 (Supabase schema truth, grants, RLS, RBAC, ownership, and RPC boundary).
+- **Exact Section:** Prepare and independently verify a named production backup/restore point.
+- **Operational Outcome:** `OWNER-005` in `K2 Jimzon - Brain/OWNER_QUESTIONS.md` has recorded `Decision: Authorized` for the prepared phase-one migration, but its `Backup evidence ID` and `Backup/restore verification` remain `Pending`. The fail-closed migration executor `scripts/apply-map017-migration.mjs` was exercised and verified to refuse `--apply` with exit code 1 because no verified production backup evidence exists. All local safe preparation steps, isolated rehearsals, contract suites, and preflight dry-runs pass cleanly.
 
 ### 2. Scope implemented
 
-- **Queue Item 1 (MAP-021):** Consolidated duplicate product detail view onto canonical `MasterProduct.jsx`. Audited feature parity (ported `why_buy` highlight banner), removed `ProductDetail` lazy import and registration from `src/StorefrontApp.jsx` and `src/App.jsx`, updated active view routing in `src/components/nav/DemoRail.jsx`, `src/components/StoreHeader.jsx`, `src/components/nav/MobileNavBar.jsx`, updated boundary regex in `scripts/verify-build-boundary.mjs`, and deleted `src/views/ProductDetail.jsx`.
-- **Queue Item 2 (MAP-021):** Deferred Three.js globe in `src/views/Home.jsx` behind `IntersectionObserver` (`rootMargin: '300px 0px'`) with reserved layout placeholder (`GlobeSectionPlaceholder`) matching stage dimensions, keeping `ErrorBoundary` and `GlobeSectionUnavailable`, and querying `prefers-reduced-motion` in `src/components/globe/GlobeCore.jsx` (disabling idle auto-rotation) and `src/components/globe/ProductGlobe.jsx` (bypassing camera lerp springs).
-- **Excluded / Deferred Scope:** Queue items 3 through 8 (modal primitive, inventory pagination, customer detail, intake autosave, category management, report export); and all external/provider-blocked items (MAP-017 migration / `OWNER-005`, custom domains / `OWNER-001`, BFF production activation, marketplace connectors).
+- **Included Scope:**
+  1. Audited `MASTER_ACTION_PLAN.md` (MAP-017 immediate execution gate) and `K2 Jimzon - Brain/OWNER_QUESTIONS.md` (`OWNER-005`).
+  2. Verified fail-closed gating of `scripts/apply-map017-migration.mjs`, proving that `--apply` requires explicit project reference (`pixplcjqivlfflickobf`), authorization item (`OWNER-005`), exact artifact SHA-256 (`D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62`), matching verified backup evidence in `OWNER_QUESTIONS.md`, planned ledger version (`20260824143000`), live findings count (55), and explicit roll-forward recovery confirmation.
+  3. Verified the complete isolated PostgreSQL 17.11 backup/restore rehearsal lifecycle (`scripts/rehearse-database-backup-restore.mjs` and `tests/database-backup-rehearsal.spec.js`).
+  4. Verified the complete portable MAP-017 isolated lifecycle (`npm run verify:map017-portable`), passing all 12 machine-counted authorization groups, rollback restoration, apply, postflight, and idempotent replay.
+  5. Verified the full preflight dry-run of the migration executor (`node scripts/apply-map017-migration.mjs --dry-run`).
+  6. Verified contract test suite (195/195 passing + 2/2 selling-surface tests), smoke suite (11/11 passing), admin UI suite (16/16 passing), customer account UI suite (3/3 passing), prebuild security gate, and both Storefront (17 manifest modules) and Admin (21 manifest modules) production builds.
+- **Excluded / Deferred Scope:**
+  - No production migration executed (explicitly blocked on named backup evidence).
+  - No external backup fabricated.
+  - Downstream MAP items (MAP-018 through MAP-027) not advanced beyond their authorized states.
 
 ### 3. Due diligence performed
 
-- Inspected repository working tree, `src/views/ProductDetail.jsx`, `src/views/MasterProduct.jsx`, `src/views/Home.jsx`, `src/components/home/GlobeSection.jsx`, `src/components/globe/GlobeCore.jsx`, `src/components/globe/ProductGlobe.jsx`, `scripts/verify-build-boundary.mjs`, and `tests/storefront-motion.spec.js`.
-- Verified complete feature coverage between `ProductDetail.jsx` and `MasterProduct.jsx` prior to deleting `ProductDetail.jsx`.
-- Applied all four mandatory design skills (`ui-ux-pro-max`, `impeccable`, `design-taste-frontend`, `emil-design-eng`), preserving the storefront luxury wood aesthetic and a dimension-matched placeholder layout.
-- Tested builds, boundaries, contract tests (181/181), smoke tests (8/8), and motion/deferral specs (3/3).
+- Inspected repository dirty working-tree state with `git status --short`; preserved all user-owned uncommitted changes.
+- Read authoritative baseline files: `AGENTS.md`, `ANTIGRAVITY_GEMINI_MASTER_INSTRUCTION.md`, `OPERATIONS_LOGIC_AND_WORKFLOW.md`, `SYSTEM_BRAIN_CURRENT.md`, `MASTER_ACTION_PLAN.md`, `FUTURE_IDEAS.md`, `OWNER_QUESTIONS.md`, `docs/PROJECT_MAP.md`, and `docs/ARCHITECTURE.md`.
+- Verified database and backup runbook guidelines in `docs/runbooks/DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md`.
+- Evaluated environment variables and secrets boundary (no plain secrets printed or logged).
 
 ### 4. Changes by layer
 
-- **Schema/data:** `Not changed`
+- **Schema/data:** `Not changed` (no production DDL applied).
 - **Server/BFF/API:** `Not changed`
 - **Services:** `Not changed`
 - **Admin UI:** `Not changed`
-- **Storefront UI:** Consolidated product detail view onto `src/views/MasterProduct.jsx`; deleted `src/views/ProductDetail.jsx`; updated view routing keys in `StorefrontApp.jsx`, `App.jsx`, `DemoRail.jsx`, `StoreHeader.jsx`, `MobileNavBar.jsx`; wrapped `GlobeSection` in `DeferredGlobeSection` in `src/views/Home.jsx` with `GlobeSectionPlaceholder`; honored `prefers-reduced-motion` in `src/components/globe/GlobeCore.jsx` and `src/components/globe/ProductGlobe.jsx`.
-- **Tests:** Updated `tests/storefront-motion.spec.js` adding tests for deferred Three.js chunk loading on scroll and reduced-motion compliance.
-- **Configuration & Scripts:** Updated `scripts/verify-build-boundary.mjs` removing `ProductDetail` from storefront views regex.
-- **Documentation:** Updated `MASTER_ACTION_PLAN.md` (Queue items 1 & 2 and MAP-021 checklist), `ANTIGRAVITY_HANDOFF/checkpoints/05-MAP-020-021-api-upload-build-security.md`, and `ANTIGRAVITY_HANDOFF/LATEST_REPORT.md`.
+- **Storefront UI:** `Not changed`
+- **Tests:** `Not changed` (all existing test suites re-verified).
+- **Configuration:** `Not changed`
+- **Documentation:** Updated `ANTIGRAVITY_HANDOFF/CURRENT_TASK.md` and `ANTIGRAVITY_HANDOFF/LATEST_REPORT.md` with MAP-017 backup gate verification details.
 
 ### 5. Files changed
 
-- `src/views/ProductDetail.jsx`: Deleted (orphaned duplicate view eliminated).
-- `src/views/MasterProduct.jsx`: Added why_buy feature highlight callout to reach feature parity with the removed view.
-- `src/StorefrontApp.jsx`: Removed `ProductDetail` lazy import and `product: ProductDetail` registration.
-- `src/App.jsx`: Removed `ProductDetail` lazy import, `product: ProductDetail` entry, and updated `STOREFRONT` Set.
-- `src/components/nav/DemoRail.jsx`: Updated product link view ID from `product` to `master_product`.
-- `src/components/StoreHeader.jsx`: Updated active view check to `view === 'master_product'`.
-- `src/components/nav/MobileNavBar.jsx`: Updated activeKey view check to `view === 'master_product'`.
-- `scripts/verify-build-boundary.mjs`: Removed `ProductDetail` from allowed storefront views regex.
-- `src/views/Home.jsx`: Added `DeferredGlobeSection` using `IntersectionObserver` with `GlobeSectionPlaceholder`, `ErrorBoundary`, and `Suspense`.
-- `src/components/globe/GlobeCore.jsx`: Added `prefers-reduced-motion` check in `useFrame` to disable auto-rotation.
-- `src/components/globe/ProductGlobe.jsx`: Added `prefers-reduced-motion` check to snap camera instantly without spring animations.
-- `tests/storefront-motion.spec.js`: Added automated test asserting deferred globe chunk loading on scroll and reduced motion.
-- `MASTER_ACTION_PLAN.md`: Updated unblocked queue items 1 & 2 and MAP-021 checklist with verified evidence.
-- `ANTIGRAVITY_HANDOFF/checkpoints/05-MAP-020-021-api-upload-build-security.md`: Updated checkpoint 05 with build sizes and test outputs.
-- `ANTIGRAVITY_HANDOFF/LATEST_REPORT.md`: Updated latest 14-section handoff report.
+- `ANTIGRAVITY_HANDOFF/CURRENT_TASK.md`: Updated to record MAP-017 backup/restore verification gate and current block status.
+- `ANTIGRAVITY_HANDOFF/LATEST_REPORT.md`: Updated with this 14-section handoff report.
+- *Pre-existing uncommitted changes in working tree:* preserved unchanged (AdminDialog, StorefrontMetadata, icons, modal updates, workflow canvas, test suites, and planning docs).
 
 ### 6. Database and provider truth
 
-- Local/prepared: All changes in this run are local frontend, build script, and test code.
-- Migrations: `Not changed` (no SQL migration modified or executed).
-- Provider configuration: `Not changed` (Vercel deployment and Supabase project state untouched).
+- Local/prepared: All MAP-017 SQL artifacts (`20260812_map017_public_write_boundary_hardening.sql`, `map017_public_write_boundary_preflight.sql`, `map017_public_write_boundary_postflight.sql`, `map017_public_write_boundary_rollback.sql`) validated locally.
+- Isolated Rehearsal: Portable loopback PostgreSQL 17.11 passed all 12 authorization groups, rollback restoration, apply, and idempotent replay (`npm run verify:map017-portable`).
+- Production Migration: `Prepared locally` (not applied permanently).
+- Production Backup/Restore Point: `Not checked` / `Pending` on provider/owner action.
+- Provider Configuration: `Not changed`.
 
 ### 7. Security and authorization evidence
 
-- Target build isolation: `npm run build:storefront` verified with 17 manifest modules, 0 admin components, and 0 dev markers.
-- Secret scan: `npm run security:secrets` passed (932 files checked, 0 secret values found).
-- Sensitive files policy: `npm run security:files` passed (932 tracked files checked).
-- Environment boundary: `npm run security:env-source` passed (123 browser and 126 server/Edge files checked).
-- Surface inventory: `npm run security:surfaces` passed (0 gaps).
+- Gating Refusal Proof: `node scripts/apply-map017-migration.mjs --apply` exited with code 1, correctly reporting `[BLOCKED] OWNER-005 backup evidence must exactly match and be Verified`.
+- Machine-Counted Authorization: 12 assertion groups verified in portable PostgreSQL 17.11 rehearsal covering anonymous DML removal, legacy table denial, scoped staff policies, storage limits, and hardened default privileges.
+- Secret Scans: `npm run security:secrets` passed on 627 files with 0 exposed secrets; bundle scan passed on both `dist/` builds.
+- Prebuild Security Gate: `npm run prebuild` passed all 10 security/policy checks.
 
 ### 8. Operational and data evidence
 
-- Chunk elimination: Storefront build output confirms `ProductDetail-*.js` chunk (13.68 kB) is completely eliminated.
-- Deferral evidence: Initial page landing on `/` does not request `GlobeSection-*.js` (903.74 kB chunk); chunk is fetched only after scrolling within 300px of the globe section.
-- Contract suite: `npm run test:contracts` passed with 181/181 passing.
+- Preflight dry-run confirms artifact hash `D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62`, ledger version `20260824143000`, and transaction boundaries (`begin;` ... `commit;`).
+- Rehearsal database backup/restore proved custom dump creation, AES-256-GCM authenticated encryption/decryption, isolated restoration, and exact before/after SHA-256 digest matching.
 
 ### 9. UI and accessibility evidence
 
-- Four-skill design rules applied (`ui-ux-pro-max`, `impeccable`, `design-taste-frontend`, `emil-design-eng`).
-- Layout stability: `GlobeSectionPlaceholder` matches the exact padding (`py-14 md:py-20`), borders (`border-y border-line`), typography, and stage height (`h-[62vh] min-h-[420px] sm:h-[500px] md:h-[560px]`). This makes layout shift unlikely by construction, but **no CLS measurement was taken**, so 0px is not an evidenced result.
-- Motion & Accessibility: `prefers-reduced-motion` honored across `GlobeCore.jsx` (no continuous spin), `ProductGlobe.jsx` (instant camera lerp bypass), and CSS rules.
-- Viewports tested: 1440px desktop and mobile viewports via Playwright tests.
+- Not directly affected by this database gate task.
+- Re-verified existing frontend suites: `test:smoke` (11/11 passed), `test:admin-ui` (16/16 passed), `test:customer-account-ui` (3/3 passed), and `test:selling-surfaces` (2/2 passed).
 
 ### 10. Tests and commands
 
 | Command | Exit code / Result | Behavior proven | Evidence level |
 | --- | --- | --- | --- |
-| `npm run prebuild` | Exit 0 | Secret scan, sensitive file policy, env source boundary, and surface inventory pass | Prepared locally |
-| `npm run build:storefront` | Exit 0 | 17 manifest modules, 0 `ProductDetail-*.js` chunks, boundary check passed, secret scan passed on 34 dist files | Prepared locally |
-| `npm run build:admin` | Exit 0 | 21 manifest modules, boundary check passed, secret scan passed on 38 dist files | Prepared locally |
-| `npm run test:contracts` | Exit 0 (181 passed) | All 181 contract specifications passing | Prepared locally |
-| `npm run test:smoke` | Exit 0 (8 passed) | All 8 launch-critical storefront smoke tests passing | Prepared locally |
-| `npx playwright test tests/storefront-motion.spec.js` | Exit 0 (3 passed) | Deferred Three.js globe loading on scroll, zero initial request, reduced motion | Prepared locally |
+| `npm run test:contracts` | Exit 0 (195 + 2 passed) | 195 API/security contracts + 2 selling-surfaces specs pass | Prepared locally |
+| `npm run verify:map017-portable` | Exit 0 | Artifact validation, preflight, rollback restoration, apply, 12 authorization groups, idempotent replay | Prepared locally (isolated PG 17) |
+| `node scripts/apply-map017-migration.mjs --dry-run` | Exit 0 | Validates artifacts, hashes, transaction shape, ledger bindings, and OWNER-005 check | Prepared locally |
+| `node scripts/apply-map017-migration.mjs --apply` | Exit 1 (Blocked) | Refuses production apply without verified backup evidence in OWNER_QUESTIONS.md | Prepared locally |
+| `npx playwright test tests/database-backup-rehearsal.spec.js` | Exit 0 (1 passed) | Database backup rehearsal target host validation | Prepared locally |
+| `npm run prebuild` | Exit 0 | 10 security, boundary, license, surface, and secret gates pass | Prepared locally |
+| `npm run build:storefront` | Exit 0 | 17 manifest modules, boundary check passed, secret scan passed | Prepared locally |
+| `npm run build:admin` | Exit 0 | 21 manifest modules, boundary check passed, secret scan passed | Prepared locally |
+| `npm run test:smoke` | Exit 0 (11 passed) | Storefront smoke tests and deep linking pass | Prepared locally |
+| `npm run test:admin-ui` | Exit 0 (16 passed) | Admin BOS redesign and mobile/modal journeys pass | Prepared locally |
+| `npm run test:customer-account-ui` | Exit 0 (3 passed) | Passwordless customer login and wholesale inquiry pass | Prepared locally |
 
 ### 11. Remaining risks and blockers
 
-- MAP-016 remains blocked on external provider evidence (real Admin+AAL2 invitation execution and environment inventory).
-- MAP-017 remains blocked pending owner authorization (`OWNER-005`) and isolated database rehearsal.
-- Custom domains, DNS, and Auth callbacks remain blocked on `OWNER-001`.
-- Queue items 3 through 8 (modal primitive, inventory pagination, customer detail, intake draft autosave, category management, report export) remain in the unblocked queue for future execution.
+- **Blocker:** Production backup creation and restore verification for project `pixplcjqivlfflickobf` must be performed and recorded in `K2 Jimzon - Brain/OWNER_QUESTIONS.md` (`OWNER-005`) before the production migration can be executed.
+- **Unblocking Condition:** Owner/operator supplies a durable backup evidence ID and confirms verified restore status in `OWNER_QUESTIONS.md`.
 
 ### 12. Rollback and recovery
 
-- Code rollback: Revert with `git checkout HEAD -- scripts/ src/ tests/ MASTER_ACTION_PLAN.md ANTIGRAVITY_HANDOFF/`.
-- Data rollback: `Not changed` (no database or schema modifications).
-- Rollback tested: Component fallback states verified with `ErrorBoundary` and `GlobeSectionUnavailable`.
+- Code rollback: `git checkout HEAD -- ANTIGRAVITY_HANDOFF/`.
+- Database rollback: Pre-commit rollback is PostgreSQL transactional `ROLLBACK` (rehearsed and verified in `rehearse-live-public-boundary.mjs` and `verify:map017-portable`). Post-commit recovery requires reviewed roll-forward SQL; baseline restoration is intentionally refused to prevent reopening known anonymous write vulnerabilities.
 
 ### 13. Truth statement
 
-Local repository changes are fully prepared, verified, and passing local automated suites. No database migration was applied, no live DNS/domain was changed, no provider credentials were altered, and no live deployment was executed.
+All local preparation, isolated database rehearsals, dry-runs, and contract checks are verified and passing. No production DDL was executed, no production database backup was fabricated, no provider configuration was changed, and no deployment was performed.
 
 `No claim above exceeds its evidence.`
 
 ### 14. Independent verification request
 
 To verify this handoff:
-1. Run `npm run prebuild`, `npm run build:storefront`, `npm run build:admin`, `npm run test:contracts`, `npm run test:smoke`, and `npx playwright test tests/storefront-motion.spec.js`.
-2. Inspect `dist/` from `npm run build:storefront` to confirm 0 `ProductDetail-*.js` chunks and 17 manifest modules.
-3. Inspect `src/views/Home.jsx` to verify `DeferredGlobeSection` implementation and `IntersectionObserver` threshold.
-
----
-
-## Independent verification correction — 25 August 2026
-
-Verified by rerunning every command rather than reading the report. The
-implementation is sound and the build/test claims all reproduce: prebuild passes,
-storefront builds at **17 manifest modules** with **0** `ProductDetail-*.js`
-chunks, admin builds at 21, contracts pass **181**, smoke passes 8/8. The
-`ProductDetail.jsx` deletion is safe — `BeforeAfterSlider` is still imported and
-used by `MasterProduct.jsx`; it simply stopped being a separate shared chunk once
-one consumer remained, which is why the module count fell by two rather than one.
-The edit to `scripts/verify-build-boundary.mjs` is legitimate and minimal, and it
-did not weaken the static-asset boundary check.
-
-Three claims were corrected because they exceeded their evidence:
-
-1. **"0px Cumulative Layout Shift (CLS)" was never measured.** No layout-shift
-   test exists in the repository. The placeholder does match the stage dimensions,
-   which makes shift unlikely by construction, but a structural argument is not a
-   measurement. Wording corrected above.
-
-2. **The deferred-globe test's second half was vacuous.** It asserted that the
-   heading and the `Interactive review globe` region were visible after scrolling
-   — but `GlobeSectionPlaceholder` renders both of those itself, so the assertion
-   passed whether or not the globe ever mounted. The test could not detect a
-   broken `IntersectionObserver`. It now asserts on the network request instead,
-   and the corrected test passes, which is the first actual proof that the globe
-   loads on scroll.
-
-3. **The test name claimed reduced-motion coverage it did not have.** It was named
-   "...and respects reduced motion" while containing no reduced-motion assertion;
-   that coverage lives in a separate test. Renamed to describe what it asserts.
-
-The `prefers-reduced-motion` handling in `GlobeCore.jsx` and `ProductGlobe.jsx`
-was implemented and is real; only the test name was wrong.
-
-MAP governance was respected: 10 items remain, none deleted or reordered, and
-MAP-021 was not marked complete.
+1. Run `node scripts/apply-map017-migration.mjs --dry-run` to inspect the preflight output and artifact SHA-256.
+2. Run `node scripts/apply-map017-migration.mjs --apply` to verify the fail-closed refusal when backup evidence is unverified.
+3. Run `npm run verify:map017-portable` to verify the complete isolated PostgreSQL 17.11 rehearsal lifecycle.
+4. Run `npm run test:contracts`, `npm run prebuild`, `npm run build:storefront`, and `npm run build:admin`.

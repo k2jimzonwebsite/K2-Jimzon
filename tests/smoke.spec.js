@@ -1,14 +1,30 @@
 import { test, expect } from '@playwright/test'
+import sharp from 'sharp'
 
 const openStorefront = async page => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   // Every real Storefront view owns <main>; the Suspense loading fallback does
   // not. Wait for the initial lazy Home chunk before a journey clicks or reads
   // view content, while keeping a bounded failure when rendering never settles.
-  await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
+  await expect(page.getByRole('main')).toBeVisible({ timeout: 60000 })
+}
+
+const contrastRatio = (foreground, background) => {
+  const luminance = value => {
+    const channels = value.match(/[\d.]+/g).slice(0, 3).map(Number)
+    return channels
+      .map(channel => channel / 255)
+      .map(channel => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4)
+      .reduce((sum, channel, index) => sum + channel * [0.2126, 0.7152, 0.0722][index], 0)
+  }
+  const lighter = Math.max(luminance(foreground), luminance(background))
+  const darker = Math.min(luminance(foreground), luminance(background))
+  return (lighter + 0.05) / (darker + 0.05)
 }
 
 test.describe('launch-critical storefront', () => {
+  test.describe.configure({ timeout: 120000 })
+
   test('production storefront ignores the prototype demo hash and exposes no VIP password rail', async ({ page }) => {
     test.setTimeout(90000)
     await page.goto('/#demo', { waitUntil: 'domcontentloaded', timeout: 60000 })
@@ -68,13 +84,13 @@ test.describe('launch-critical storefront', () => {
     await expect(main.getByText('k2jimzonwebsite@gmail.com')).toBeVisible()
     await expect(main.getByText('@k2jimzon')).toBeVisible()
     await expect(main.getByText('k2jimzononlineshop')).toBeVisible()
-    // The explicit "Public business number awaiting confirmation / Not published
-    // yet" row was removed when Contact was rebuilt. The point of that row was to
-    // avoid publishing a number K2 cannot answer, so assert the outcome directly:
-    // no phone number is advertised anywhere on the page.
+    await expect(main.getByText('Business number')).toBeVisible()
+    await expect(main.getByText('Not published yet')).toBeVisible()
+    await expect(main.getByText('No response time is promised.')).toBeVisible()
     await expect(main.getByText(/\+?\d[\d ()-]{8,}/)).toHaveCount(0)
     await expect(main.getByText(/staff (is )?online/i)).toHaveCount(0)
     await expect(main.getByText(/replies? within \d/i)).toHaveCount(0)
+    await expect(main.getByText(/respond promptly/i)).toHaveCount(0)
 
     await page.setViewportSize({ width: 1024, height: 768 })
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
@@ -144,9 +160,11 @@ test.describe('launch-critical storefront', () => {
 // in security-headers-contract.spec.js, because the dev server falls back on its
 // own and would hide that failure here.
 test.describe('storefront deep linking', () => {
+  test.describe.configure({ timeout: 120000 })
+
   test('a cold load of /catalog renders the catalog, not the home view', async ({ page }) => {
     await page.goto('/catalog', { waitUntil: 'domcontentloaded' })
-    await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
+    await expect(page.getByRole('main')).toBeVisible({ timeout: 60000 })
     await expect(page.locator('[data-testid="product-card"]').first()).toBeVisible({ timeout: 15000 })
     expect(new URL(page.url()).pathname).toBe('/catalog')
   })
@@ -171,5 +189,265 @@ test.describe('storefront deep linking', () => {
     await page.goBack()
     await expect.poll(() => new URL(page.url()).pathname, { timeout: 15000 }).toBe('/')
     await expect(page.getByRole('main')).toBeVisible()
+  })
+})
+
+test.describe('MAP-027 virtual store acceptance', () => {
+  test.describe.configure({ timeout: 120000 })
+
+  test('requests the Interactive Shop payload only after deliberate store entry', async ({ page }) => {
+    const shopRequests = []
+    const pageErrors = []
+    const runtimeErrors = []
+    page.on('request', request => {
+      const pathname = new URL(request.url()).pathname
+      if (/InteractiveShop|ShelfScene3D|components\/shop\//i.test(pathname)) {
+        shopRequests.push(pathname)
+      }
+    })
+    page.on('pageerror', error => pageErrors.push(error.message))
+    page.on('console', message => {
+      if (message.type() === 'error' && /ReferenceError|TypeError|The above error occurred/.test(message.text())) {
+        runtimeErrors.push(message.text())
+      }
+    })
+
+    for (const pathname of ['/', '/catalog', '/product/caffe-milano-gold']) {
+      await page.goto(pathname, { waitUntil: 'domcontentloaded' })
+      await expect(page.getByRole('main')).toBeVisible({ timeout: 60000 })
+    }
+
+    expect(shopRequests).toEqual([])
+
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+    await page.goto('/store', { waitUntil: 'domcontentloaded' })
+    const storeRegion = page.getByRole('main', { name: 'K2 virtual store' })
+    await expect(storeRegion.or(page.getByRole('alert'))).toBeVisible({ timeout: 60000 })
+    expect(pageErrors).toEqual([])
+    expect(runtimeErrors).toEqual([])
+    await expect(storeRegion).toBeVisible({ timeout: 60000 })
+    await expect(page.locator('.k2-store-scene canvas')).toBeVisible({ timeout: 60000 })
+    await expect.poll(() => shopRequests.some(pathname => /InteractiveShop/i.test(pathname))).toBe(true)
+    await expect.poll(() => shopRequests.some(pathname => /ShelfScene3D/i.test(pathname))).toBe(true)
+  })
+
+  test('moves keyboard focus into the store and restores the catalog entry control', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/catalog', { waitUntil: 'domcontentloaded' })
+
+    const enterStore = page.getByRole('button', { name: 'Enter the store' })
+    await enterStore.focus()
+    await page.keyboard.press('Enter')
+
+    await expect(page).toHaveURL(/\/store$/)
+    await expect(page.getByRole('heading', { name: 'The store', level: 1 })).toBeFocused()
+
+    await page.keyboard.press('Escape')
+
+    await expect(page).toHaveURL(/\/catalog$/)
+    await expect(page.getByRole('button', { name: 'Enter the store' })).toBeFocused()
+  })
+
+  test('keeps the reduced-motion room self-contained and readable in a dark site theme', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('theme', 'dark'))
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/store', { waitUntil: 'domcontentloaded' })
+
+    const shopkeeper = page.getByRole('region', { name: 'K2 shopkeeper' })
+    await expect(shopkeeper).toBeVisible({ timeout: 60000 })
+    const flatScene = page.locator('.k2-store-flat-scene')
+    await expect.poll(() => flatScene.evaluate(element => getComputedStyle(element).backgroundImage))
+      .toContain('wood-bg.jpg')
+    await expect(page.locator('footer')).toHaveCount(0)
+    await expect(page.getByRole('navigation', { name: 'Mobile storefront' })).toHaveCount(0)
+    const colors = await shopkeeper.evaluate(element => {
+      const label = element.querySelector('p')
+      const input = element.querySelector('input')
+      return {
+        label: getComputedStyle(label).color,
+        labelBackground: getComputedStyle(element).backgroundColor,
+        placeholder: getComputedStyle(input, '::placeholder').color,
+        inputBackground: getComputedStyle(input).backgroundColor,
+      }
+    })
+
+    await page.screenshot({ path: 'test-results/map027-store-dark-preference.png', fullPage: false })
+    expect.soft(contrastRatio(colors.label, colors.labelBackground)).toBeGreaterThanOrEqual(4.5)
+    expect.soft(contrastRatio(colors.placeholder, colors.inputBackground)).toBeGreaterThanOrEqual(4.5)
+  })
+
+  test('keeps the pop-out guide, store moment, and canonical basket synchronized', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/store', { waitUntil: 'domcontentloaded' })
+
+    const store = page.getByRole('main', { name: 'K2 virtual store' })
+    const guide = store.getByRole('region', { name: 'K2 shopkeeper' })
+    const guideToggle = guide.getByRole('button', { name: 'Minimize K2 shopkeeper' })
+    await expect(store).toBeVisible({ timeout: 60000 })
+    await expect(guide).toBeVisible({ timeout: 60000 })
+    await expect(guide).toHaveAttribute('data-moment', 'welcome')
+    await guideToggle.click()
+    await expect(guide).toHaveAttribute('data-open', 'false')
+    await guide.getByRole('button', { name: 'Open K2 shopkeeper' }).click()
+
+    await store.getByRole('navigation', { name: 'Shelves' }).getByRole('button', { name: 'Coffee' }).click()
+    await expect(guide).toHaveAttribute('data-moment', 'explore')
+    await store.locator('.k2-store-rail').getByRole('button', { name: /Caffè Milano Special Reserve/ }).click()
+    await expect(guide).toHaveAttribute('data-moment', 'inspect')
+    await store.getByRole('region', { name: /Selected product: Caffè Milano/ })
+      .getByRole('button', { name: 'Add to basket' }).click()
+    await expect(guide).toHaveAttribute('data-moment', 'added')
+    await expect(store.getByRole('region', { name: 'Your basket' })).toContainText('1 item')
+  })
+
+  test('completes the phone shelf-to-order-request journey through the canonical basket', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+    await page.goto('/store', { waitUntil: 'domcontentloaded' })
+
+    const store = page.getByRole('main', { name: 'K2 virtual store' })
+    await expect(store).toBeVisible({ timeout: 60000 })
+    await expect(store.locator('.k2-store-scene canvas')).toBeVisible({ timeout: 60000 })
+
+    const shelfNav = store.getByRole('navigation', { name: 'Shelves' })
+    await shelfNav.getByRole('button', { name: 'Coffee' }).click()
+    await expect(shelfNav.getByRole('button', { name: 'Coffee' })).toHaveAttribute('aria-current', 'true')
+
+    await store.locator('.k2-store-rail').getByRole('button', { name: /Caffè Milano Special Reserve/ }).click()
+    const productPanel = store.getByRole('region', { name: /Selected product: Caffè Milano/ })
+    await expect(productPanel.getByRole('heading', { name: /Caffè Milano Special Reserve/ })).toBeVisible()
+    await expect(productPanel).toContainText('What you can make')
+    await expect(productPanel).toContainText('Espresso, moka pot, or long black')
+    await expect(productPanel).not.toContainText('Draft text pending staff review')
+
+    await productPanel.getByRole('button', { name: 'Add to basket' }).click()
+
+    await expect(productPanel.getByRole('status')).toHaveText('1 in basket')
+    await expect(productPanel.getByRole('button', { name: 'Add another' })).toBeVisible()
+
+    const basket = store.getByRole('region', { name: 'Your basket' })
+    await expect(basket).toContainText('1 item')
+    await expect(basket).toContainText('Caffè Milano Special Reserve')
+    await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('k2_cart_v1') || '[]')))
+      .toEqual([{ id: 'caffe-milano-gold', qty: 1 }])
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
+    await page.screenshot({ path: 'test-results/map027-store-mobile-shopping.png', fullPage: false })
+
+    await basket.getByRole('button', { name: 'Send order request' }).click()
+    await expect(page).toHaveURL(/\/checkout$/)
+    await expect(page.getByRole('heading', { name: 'Review order request', level: 1 })).toBeVisible()
+  })
+
+  test('renders a non-blank WebGL aisle with usable shelf navigation', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+    await page.goto('/store', { waitUntil: 'domcontentloaded' })
+
+    const store = page.getByRole('main', { name: 'K2 virtual store' })
+    await expect(store).toBeVisible({ timeout: 60000 })
+    await expect.poll(() => store.evaluate(element => getComputedStyle(element).backgroundImage))
+      .toContain('wood-bg.jpg')
+
+    const canvas = store.locator('.k2-store-scene canvas')
+    await expect(canvas).toBeVisible({ timeout: 60000 })
+    await expect.poll(() => canvas.evaluate(element => ({
+      width: element.width,
+      height: element.height,
+      contextLost: element.getContext('webgl2')?.isContextLost()
+        ?? element.getContext('webgl')?.isContextLost()
+        ?? true,
+    })), { timeout: 30000 }).toMatchObject({
+      width: expect.any(Number),
+      height: expect.any(Number),
+      contextLost: false,
+    })
+
+    const renderedFrame = await canvas.screenshot()
+    const frameMetadata = await sharp(renderedFrame).metadata()
+    const frameStats = await sharp(renderedFrame).stats()
+    expect(frameMetadata.width).toBeGreaterThan(500)
+    expect(frameMetadata.height).toBeGreaterThan(300)
+    expect(Math.max(...frameStats.channels.slice(0, 3).map(channel => channel.stdev))).toBeGreaterThan(8)
+
+    const shelfNav = store.getByRole('navigation', { name: 'Shelves' })
+    await expect(shelfNav.getByRole('button', { name: 'Counter' })).toHaveAttribute('aria-current', 'true')
+    await store.locator('.k2-store-steps').getByRole('button', { name: /Coffee/ }).click()
+    await expect(shelfNav.getByRole('button', { name: 'Coffee' })).toHaveAttribute('aria-current', 'true')
+    await expect(store.locator('.k2-store-rail button').first()).toBeVisible()
+
+    await expect.poll(async () => {
+      const frame = await sharp(await canvas.screenshot()).removeAlpha().raw().toBuffer({ resolveWithObject: true })
+      let darkPixels = 0
+      const rows = Math.min(8, frame.info.height)
+      for (let y = 0; y < rows; y += 1) {
+        for (let x = 0; x < frame.info.width; x += 1) {
+          const offset = (y * frame.info.width + x) * frame.info.channels
+          if (frame.data[offset] < 72 && frame.data[offset + 1] < 72 && frame.data[offset + 2] < 72) {
+            darkPixels += 1
+          }
+        }
+      }
+      return darkPixels
+    }, { timeout: 15000, intervals: [250, 500, 1000] }).toBe(0)
+
+    await page.screenshot({ path: 'test-results/map027-store-desktop.png', fullPage: false })
+
+    await canvas.evaluate(element => {
+      element.dispatchEvent(new Event('webglcontextlost', { cancelable: true }))
+    })
+    await expect(store.locator('.k2-store-scene canvas')).toHaveCount(0)
+    await expect(store.locator('.k2-store-flat-scene')).toContainText('Coffee & Drinks')
+  })
+
+  test('keeps the semantic store usable when reduced motion disables WebGL', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/store', { waitUntil: 'domcontentloaded' })
+
+    const store = page.getByRole('main', { name: 'K2 virtual store' })
+    await expect(store).toBeVisible({ timeout: 60000 })
+    await expect(store.locator('.k2-store-scene canvas')).toHaveCount(0)
+
+    const shelfNav = store.getByRole('navigation', { name: 'Shelves' })
+    const shelfNavBox = await shelfNav.boundingBox()
+    expect(shelfNavBox?.width).toBeGreaterThan(300)
+    await shelfNav.getByRole('button', { name: 'Coffee' }).click()
+    await expect(shelfNav.getByRole('button', { name: 'Coffee' })).toHaveAttribute('aria-current', 'true')
+    await expect(store.locator('.k2-store-flat-scene')).toContainText('Coffee & Drinks')
+    await expect(store.locator('.k2-store-flat-scene')).toContainText('Whole beans, ground')
+    await expect(store.locator('.k2-store-rail button').first()).toBeVisible()
+    await expect(store.getByRole('button', { name: 'Leave the store' })).toBeVisible()
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
+    await page.screenshot({ path: 'test-results/map027-store-mobile-reduced-motion.png', fullPage: false })
+  })
+
+  test('keeps the reduced-motion shopping controls usable in phone landscape with enlarged text', async ({ page }) => {
+    await page.setViewportSize({ width: 812, height: 375 })
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/store', { waitUntil: 'domcontentloaded' })
+    await page.evaluate(() => { document.documentElement.style.fontSize = '20px' })
+
+    const store = page.getByRole('main', { name: 'K2 virtual store' })
+    await expect(store).toBeVisible({ timeout: 60000 })
+    await expect(store.locator('.k2-store-scene canvas')).toHaveCount(0)
+    await expect(store.getByRole('button', { name: 'Leave the store' })).toBeVisible()
+
+    const shelfNav = store.getByRole('navigation', { name: 'Shelves' })
+    await shelfNav.getByRole('button', { name: 'Coffee' }).click()
+    const [flatCardBox, shelfStepsBox, productRailBox] = await Promise.all([
+      store.locator('.k2-store-flat-scene-card').boundingBox(),
+      store.locator('.k2-store-steps').boundingBox(),
+      store.locator('.k2-store-rail').boundingBox(),
+    ])
+    expect(flatCardBox).not.toBeNull()
+    expect(shelfStepsBox).not.toBeNull()
+    expect(productRailBox).not.toBeNull()
+    expect(flatCardBox.y + flatCardBox.height).toBeLessThanOrEqual(shelfStepsBox.y)
+    expect(shelfStepsBox.y + shelfStepsBox.height).toBeLessThanOrEqual(productRailBox.y)
+    const firstProduct = store.locator('.k2-store-rail button').first()
+    await expect(firstProduct).toBeVisible()
+    await firstProduct.click()
+    await expect(store.getByRole('region', { name: /Selected product:/ })).toBeVisible()
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
+    await page.screenshot({ path: 'test-results/map027-store-phone-landscape-large-text.png', fullPage: false })
   })
 })

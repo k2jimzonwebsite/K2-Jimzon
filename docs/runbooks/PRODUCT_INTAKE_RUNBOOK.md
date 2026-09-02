@@ -47,9 +47,31 @@ receiving record is implemented.
      quarantined until eligibility is resolved.
    - **Supplier receipt:** unavailable. Do not imitate it with an opening balance
      or direct lot insert.
+
 9. Move the Draft to Under Review only after verified primary evidence exists.
    Move Under Review to Live only when the server proves resolved brand/category,
    price, primary storefront image, human review, and the valid prior state.
+
+### Optional paid API path (deliberate choice; currently unavailable)
+
+The owner has accepted paid OpenAI calls in principle as an optional per-product
+route for descriptions, usage/instructions, SEO fields, media briefs, and
+PRIMARY/AFTER Draft image candidates. It is not a default and it never fills
+physical stock, SKU, price, cost, lot, batch, expiry, custody, approval, or
+publication. The current Admin has no operational paid route: the confirmation
+sequence, spend caps, reviewed model/provider, retention setting, server-only
+credential, and production activation still require approval and evidence. The
+prepared Staff & Roles control is editable only by an owner-controlled
+SuperAdmin with AAL2; null/incomplete caps and a missing model are fail-closed.
+It is not a spending authorization or provider-live signal.
+
+Until those gates are closed, staff must use the manual sequence above:
+**K2 Product Content → Smart Paste field review → K2 Product Image Studio**
+(separate PRIMARY and AFTER requests). A future activated route must show the
+priced scope and current cap, obtain explicit confirmation, validate the exact
+`k2.product-content.v3` response at the server boundary, return field-by-field
+review, and only then request image candidates. Every call must be idempotent,
+audited, recoverable, and fail closed to the manual path.
 
 ## Failure and retry rules
 
@@ -118,8 +140,38 @@ keeps Step 2 active with an inline recovery message when a fabricated Storage
 upload returns 503. The complete five-test Admin UI suite, 127 API/security contracts,
 `verify:map018-intake`, the security gate, and the isolated Admin production build
 also pass. This is local behavior evidence only; authenticated deployed-role,
-real device permission, real provider failure, interruption/resume, and production
-activation evidence remain open.
+real device permission, real provider failure, authenticated deployed app-switch
+resume, and production activation evidence remain open.
+
+## Local interrupted-resume evidence — 26 August 2026
+
+The 375×812 reduced-motion journey now creates one fixture server session, saves
+Step 2, closes the modal, reopens it, and verifies that the same active record
+restores `Step 2: Capture Packaging Evidence` with an explicit `Intake resumed`
+status. The fixture is stateful because a server that reports no active record
+after accepting its own save cannot test resume behavior. The source contract
+also verifies that rejected research fields do not return after a Step-5 resume.
+This is local simulated-server evidence only; repeat it against the activated
+Admin BFF with an authenticated staff/AAL2 session and real mobile app switching
+before production acceptance.
+
+## Local canonical custody evidence — 26 August 2026
+
+For an administrator-authorized opening balance, **Hub / Location** and
+**Custodian** are canonical selections rather than free-text fields. Selecting a
+hub limits the custodian control to records assigned to that hub. The browser
+sends the stable hub and custodian IDs; the Admin BFF rejects an unknown ID or a
+custodian assigned to another hub, and both prepared SQL boundaries repeat the
+table and relationship checks before reconciliation.
+
+The reduced-motion 375×812 journey selects `HUB-MIL-DEPOT` and confirms
+`CUST-STAFF-MARCO`, with 44px controls and zero horizontal overflow. Sixty
+focused BFF/intake contracts, all 16 Admin UI journeys, the MAP-018 verifier,
+security gate, and isolated Admin build pass. This is local prepared evidence,
+not proof that the canonical identity migration, intake migration, Admin BFF,
+or production staff assignments are active. After MAP-017 permits activation,
+repeat valid, unknown-ID, and cross-hub mismatch cases with an authenticated
+staff/AAL2 session before accepting this gate in production.
 
 ## Local orphan-cleanup reconciliation evidence — 24 August 2026
 

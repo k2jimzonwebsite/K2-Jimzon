@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { peso } from '../../data/products'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
@@ -6,6 +6,7 @@ import { channelMeta } from '../../lib/channelMeta'
 import { safeUiError } from '../../lib/safeUiError'
 import { BarcodeIcon, BoxIcon, CheckIcon, UserIcon } from '../../components/ui/icons'
 import PackingSlipModal from './PackingSlipModal'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 import FulfillmentWorkflowDiagram from '../../components/admin/guides/FulfillmentWorkflowDiagram'
 import CustodyWorkflowDiagram from '../../components/admin/guides/CustodyWorkflowDiagram'
 import {
@@ -52,6 +53,7 @@ export default function OmniOperationsHub() {
   const [printSlipOrder, setPrintSlipOrder] = useState(null)
   const [deliveryOrder, setDeliveryOrder] = useState(null)
   const [paymentOrder, setPaymentOrder] = useState(null)
+  const [handoverOrder, setHandoverOrder] = useState(null)
   const [loadingBoxes, setLoadingBoxes] = useState(true)
   const [loadingOrders, setLoadingOrders] = useState(true)
   const [transferBatchId, setTransferBatchId] = useState('')
@@ -64,7 +66,7 @@ export default function OmniOperationsHub() {
   useEffect(() => {
     if (secureAdmin) return
     if (!supabase) return
-    supabase.from('user_profiles').select('email, role').in('role', ['Admin', 'Staff'])
+    supabase.from('user_profiles').select('email, role').in('role', ['Admin', 'Staff', 'SuperAdmin'])
       .then(({ data }) => {
         const names = (data || []).map(profile => (profile.email || '').split('@')[0]).filter(Boolean)
         if (names.length) setStaffList(names)
@@ -335,23 +337,23 @@ export default function OmniOperationsHub() {
     await fetchLiveOrders()
   }
 
-  const fulfillOrder = async order => {
-    const handoverNote = window.prompt('Enter the courier handover or dispatch reference. This becomes part of the audit trail.')
-    if (!handoverNote?.trim()) return
+  const fulfillOrder = async (order, handoverNote) => {
+    if (!order || !handoverNote?.trim()) return false
     if (secureAdmin) {
       const result = await fulfillOrderBff(order.id, handoverNote.trim())
-      if (!result.ok) { setScanMessage({ success: false, text: result.error }); return }
+      if (!result.ok) { setScanMessage({ success: false, text: result.error }); return false }
       setScanMessage({ success: true, text: `${order.publicReference} was handed to the courier with exact lot deductions recorded.` })
       await fetchSecureSnapshot()
-      return
+      return true
     }
     const { error } = await supabase.rpc('fulfill_order_request', {
       p_order_request_id: order.id,
       p_handover_note: handoverNote.trim(),
     })
-    if (error) { setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') }); return }
+    if (error) { setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') }); return false }
     setScanMessage({ success: true, text: `${order.publicReference} was handed to the courier with exact lot deductions recorded.` })
     await fetchLiveOrders()
+    return true
   }
 
   const staffBoxes = cargoBoxes.filter(box => box.assigned_staff === activeStaff)
@@ -416,7 +418,7 @@ export default function OmniOperationsHub() {
               <label className="relative min-w-0 flex-1"><span className="sr-only">Barcode or SKU</span><BarcodeIcon size={17} className="pointer-events-none absolute left-3 top-3.5 text-white/35" /><input type="text" value={scanBarcode} onChange={event => setScanBarcode(event.target.value)} placeholder="Scan barcode or enter SKU" className="adm-input min-h-11 pl-10 font-mono text-base" /></label>
               <button type="submit" disabled={!selectedOrderId || !scanBarcode.trim()} className={primaryButton}>Record one unit</button>
             </form>
-            {selectedPackingOrder && <div className="flex flex-col gap-3 rounded-adm-sm border border-blue/25 bg-blue/[0.04] p-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-mono text-xs font-bold text-blue">{selectedPackingOrder.publicReference}</p><p className="mt-1 text-xs text-white/50">Delivery: {String(selectedPackingOrder.shippingQuoteStatus).replaceAll('_', ' ')} · Payment: {String(selectedPackingOrder.paymentStatus).replaceAll('_', ' ')}</p></div><div className="flex flex-wrap gap-2"><button type="button" onClick={() => setDeliveryOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Delivery & waybill</button><button type="button" onClick={() => setPaymentOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Payment evidence</button><button type="button" onClick={() => fulfillOrder(selectedPackingOrder)} disabled={selectedPackingOrder.status !== 'Packed' || selectedPackingOrder.paymentStatus !== 'verified' || !['platform_charged', 'customer_confirmed', 'waived'].includes(selectedPackingOrder.shippingQuoteStatus)} className={`${primaryButton} adm-btn-sm disabled:opacity-35`}>Handover to courier</button></div></div>}
+            {selectedPackingOrder && <div className="flex flex-col gap-3 rounded-adm-sm border border-blue/25 bg-blue/[0.04] p-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-mono text-xs font-bold text-blue">{selectedPackingOrder.publicReference}</p><p className="mt-1 text-xs text-white/50">Delivery: {String(selectedPackingOrder.shippingQuoteStatus).replaceAll('_', ' ')} · Payment: {String(selectedPackingOrder.paymentStatus).replaceAll('_', ' ')}</p></div><div className="flex flex-wrap gap-2"><button type="button" onClick={() => setDeliveryOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Delivery & waybill</button><button type="button" onClick={() => setPaymentOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Payment evidence</button><button type="button" onClick={() => setHandoverOrder(selectedPackingOrder)} disabled={selectedPackingOrder.status !== 'Packed' || selectedPackingOrder.paymentStatus !== 'verified' || !['platform_charged', 'customer_confirmed', 'waived'].includes(selectedPackingOrder.shippingQuoteStatus)} className={`${primaryButton} adm-btn-sm disabled:opacity-35`}>Handover to courier</button></div></div>}
           </section>
 
           <section className="space-y-3">
@@ -494,9 +496,66 @@ export default function OmniOperationsHub() {
         setDeliveryOrder(null)
       }} />
       <PaymentStatusModal order={paymentOrder} onClose={() => setPaymentOrder(null)} onSave={async (target, note) => { await updatePayment(paymentOrder, target, note); setPaymentOrder(null) }} />
+      <HandoverDialog order={handoverOrder} onClose={() => setHandoverOrder(null)} onSave={note => fulfillOrder(handoverOrder, note)} />
       <PackingSlipModal isOpen={!!printSlipOrder} onClose={() => setPrintSlipOrder(null)} order={printSlipOrder} />
     </div>
   )
+}
+
+function HandoverDialog({ order, onClose, onSave }) {
+  const [note, setNote] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const noteRef = useRef(null)
+
+  useEffect(() => {
+    setNote('')
+    setError('')
+  }, [order?.id])
+
+  if (!order) return null
+
+  const save = async event => {
+    event.preventDefault()
+    const handoverNote = note.trim()
+    if (handoverNote.length < 3) {
+      setError('Enter the courier handover or dispatch reference.')
+      return
+    }
+    setBusy(true)
+    setError('')
+    try {
+      const saved = await onSave(handoverNote)
+      setBusy(false)
+      if (saved === false) {
+        setError('The courier handover was not recorded. Review the order state and try again.')
+        return
+      }
+      onClose()
+    } catch {
+      setBusy(false)
+      setError(safeUiError('FULFILLMENT_ACTION_FAILED'))
+    }
+  }
+
+  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="presentation">
+    <AdminDialog onClose={onClose} closeDisabled={busy} initialFocusRef={noteRef} labelledBy="handover-title" describedBy="handover-description">
+      <form onSubmit={save} className="w-full max-w-md space-y-4 rounded-adm border border-adm-line bg-adm-surface p-5 text-white">
+        <div>
+          <p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p>
+          <h2 id="handover-title" className="mt-1 text-xl font-semibold">Record courier handover</h2>
+          <p id="handover-description" className="mt-1 text-sm text-white/50">Record the actual courier receipt or dispatch reference. This deducts the exact reserved lots; it does not book a courier.</p>
+        </div>
+        <label htmlFor="handover-note" className="block text-xs font-semibold text-white/60">Courier handover or dispatch reference</label>
+        <textarea ref={noteRef} id="handover-note" required minLength={3} maxLength={500} value={note} onChange={event => { setNote(event.target.value.slice(0, 500)); setError('') }} className="adm-input min-h-24 resize-y text-base" />
+        {error && <StateBanner tone="danger">{error}</StateBanner>}
+        <div className="flex flex-col-reverse gap-2 sm:flex-row">
+          <button type="button" onClick={onClose} disabled={busy} className={`${secondaryButton} flex-1`}>Cancel</button>
+          <button type="submit" disabled={busy || note.trim().length < 3} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : 'Confirm handover'}</button>
+        </div>
+      </form>
+    </AdminDialog>
+  </div>
 }
 
 function DeliveryDetailsModal({ order, onClose, onSave }) {

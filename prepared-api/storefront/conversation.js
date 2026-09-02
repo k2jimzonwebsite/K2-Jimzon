@@ -1,12 +1,23 @@
 import {
-  contact, idempotencyKey, publicFailure, readJson, requestIp, requireAllowedOrigin,
+  contact, enumerated, idempotencyKey, publicFailure, readJson, requestIp, requireAllowedOrigin,
   requireStorefrontProject, safeJson, setGuestGrantCookie, signedRpcArguments, text,
   verifyBotChallenge,
 } from '../../server/storefront-bff/security.js'
 import { createStorefrontServerSupabase, mapBoundaryResult } from '../../server/storefront-bff/supabase.js'
 
+/**
+ * Where a conversation was started from.
+ *
+ * A closed set, so the admin inbox can trust the label. `virtual_store` is the
+ * 3D store; anything else on the storefront stays `storefront`, which is what
+ * an older client that sends no origin at all resolves to.
+ */
+const CONVERSATION_ORIGINS = ['storefront', 'virtual_store']
+
 function validate(body) {
-  const allowed = new Set(['customerName', 'email', 'phone', 'message', 'idempotencyKey', 'botToken'])
+  const allowed = new Set([
+    'customerName', 'email', 'phone', 'message', 'idempotencyKey', 'botToken', 'origin',
+  ])
   if (!body || typeof body !== 'object' || Array.isArray(body)
       || Object.keys(body).some((key) => !allowed.has(key))) throw new Error('REQUEST_INVALID')
   const { email, phone } = contact(body.email, body.phone)
@@ -17,6 +28,7 @@ function validate(body) {
       phone,
       message: text(body.message, 'MESSAGE', { required: true, min: 2, max: 2000 }),
       idempotencyKey: idempotencyKey(body.idempotencyKey),
+      origin: enumerated(body.origin, 'ORIGIN', CONVERSATION_ORIGINS, 'storefront'),
     },
     botToken: body.botToken,
   }

@@ -73,7 +73,7 @@ export default function FefoWorkflowDiagram({ activeTier = null, onSelectTier = 
             Operations Rulebook §5, §15 — First-Expired, First-Out (FEFO) Lifecycle
           </p>
         </div>
-        <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-medium text-white/70">
+        <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-white/70">
           Tier {activeData.num} of {tiers.length}
         </span>
       </div>
@@ -106,7 +106,7 @@ export default function FefoWorkflowDiagram({ activeTier = null, onSelectTier = 
             title="Prime: >90 Days"
           />
         </div>
-        <div className="mt-1 flex justify-between text-[10px] text-white/50">
+        <div className="mt-1 flex justify-between text-xs text-white/50">
           <span className="text-rose-400 font-semibold">0 Days (Expired)</span>
           <span className="text-amber-400 font-semibold">30 Days</span>
           <span className="text-amber-300 font-semibold">90 Days</span>
@@ -133,7 +133,7 @@ export default function FefoWorkflowDiagram({ activeTier = null, onSelectTier = 
             >
               <div className="flex items-center justify-between">
                 <span
-                  className="rounded px-2 py-0.5 text-[10px] font-bold"
+                  className="rounded px-2 py-0.5 text-xs font-bold"
                   style={{
                     backgroundColor: `${tier.color}20`,
                     color: tier.color,
@@ -142,10 +142,10 @@ export default function FefoWorkflowDiagram({ activeTier = null, onSelectTier = 
                 >
                   {tier.tag}
                 </span>
-                <span className="text-[11px] font-mono text-white/40">Tier {tier.num}</span>
+                <span className="text-xs font-mono text-white/40">Tier {tier.num}</span>
               </div>
               <div className="mt-2 text-xs font-bold text-white">{tier.name}</div>
-              <div className="text-[11px] text-white/60">{tier.days}</div>
+              <div className="text-xs text-white/60">{tier.days}</div>
             </button>
           )
         })}
@@ -169,7 +169,7 @@ export default function FefoWorkflowDiagram({ activeTier = null, onSelectTier = 
         <p className="mt-2.5 text-xs leading-relaxed text-white/80">{activeData.desc}</p>
 
         <div className="mt-3 space-y-1.5 border-t border-white/5 pt-2.5">
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+          <div className="text-xs font-semibold uppercase tracking-wider text-white/50">
             System Allocation & Operational Policy:
           </div>
           <ul className="space-y-1">

@@ -4,6 +4,7 @@ import {
   K2_PRODUCT_JSON_PROJECT_INSTRUCTIONS,
   PRODUCT_RESEARCH_SCHEMA_VERSION,
 } from './productResearchPrompt.js'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 export default function ProductAiEnrichmentModal({ product, isOpen, onClose }) {
   const [copiedItem, setCopiedItem] = useState('')
@@ -37,11 +38,12 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 font-sans text-white backdrop-blur-md">
+      <AdminDialog onClose={onClose} labelledBy="product-content-helper-title">
       <div className="max-h-[90vh] w-full max-w-2xl space-y-5 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 shadow-2xl sm:p-6">
         <div className="flex items-start justify-between gap-4 border-b border-adm-line pb-4">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-xl font-bold text-white">Product Content helper</h2>
+              <h2 id="product-content-helper-title" className="text-xl font-bold text-white">Product Content helper</h2>
               <span className="rounded border border-amber/30 bg-amber/15 px-2 py-1 text-xs font-bold uppercase text-amber">
                 Manual Project
               </span>
@@ -124,6 +126,7 @@ export default function ProductAiEnrichmentModal({ product, isOpen, onClose }) {
           Manual handoff only: ChatGPT cannot set the SKU, inventory, price, expiry, review state, or publication state.
         </p>
       </div>
+      </AdminDialog>
     </div>
   )
 }

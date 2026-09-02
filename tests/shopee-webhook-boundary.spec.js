@@ -114,3 +114,18 @@ test('Shopee intake verifies the bounded exact body before deterministic capture
   expect(source).toContain('readShopeePushBody(request, { timeoutMs: SHOPEE_BODY_READ_TIMEOUT_MS })')
   expect(source).toContain("code === 'SHOPEE_BODY_READ_TIMEOUT'")
 })
+
+test('MAP-023 reuses the authoritative Shopee capture rehearsal with an exact recovery invariant', async () => {
+  const packageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'))
+  expect(packageJson.scripts['verify:map020-shopee-ingress-portable'])
+    .toBe('node scripts/rehearse-map020-shopee-ingress.mjs')
+
+  const behavior = await readFile(new URL('../supabase/tests/map020_shopee_ingress_behavior.sql', import.meta.url), 'utf8')
+  expect(behavior).toContain('MAP-023 ambiguous-response replay acceptance')
+  expect(behavior).toContain("external_event_id = '42:replay'\n    ) <> 1")
+  expect(behavior).toContain("scope = 'shop' and shop_id = 42 and hit_count = 3")
+  expect(behavior).toContain("scope = 'global' and shop_id = 0 and hit_count = 3")
+
+  const runner = await readFile(new URL('../scripts/rehearse-map020-shopee-ingress.mjs', import.meta.url), 'utf8')
+  expect(runner).toContain('MAP-023 inbound-event acceptance')
+})

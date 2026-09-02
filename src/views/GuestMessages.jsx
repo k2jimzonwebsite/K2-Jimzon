@@ -16,7 +16,20 @@ function formatTime(value) {
 }
 
 export function StartConversationForm({ onCreated }) {
-  const [form, setForm] = useState({ customerName: '', email: '', phone: '', message: '' })
+  // MAP-027: a question asked from a product page arrives prefilled with bounded
+  // product context. It is seeded once as the initial value so the customer stays
+  // free to edit or delete it before sending.
+  const { productQuestionPrefill, clearProductQuestionPrefill } = useStore()
+  const [form, setForm] = useState(() => ({
+    customerName: '', email: '', phone: '',
+    message: productQuestionPrefill?.message || '',
+  }))
+
+  useEffect(() => {
+    if (productQuestionPrefill?.message) clearProductQuestionPrefill()
+    // Runs once for the seeded value; the prefill is consumed, not re-applied.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const [botToken, setBotToken] = useState('')
   const [challengeKey, setChallengeKey] = useState(0)
   const [submitting, setSubmitting] = useState(false)
@@ -258,6 +271,9 @@ export default function GuestMessages() {
       </div>
 
       <p className="mt-3 text-sm text-navy-soft">K2 replies refresh automatically while this page is open.</p>
+      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-navy-soft">
+        There is no self-service cancellation or return. Send the details here; each request is reviewed case by case.
+      </p>
       {state.refreshError && <p role="status" className="mt-2 text-sm text-crimson">Could not refresh messages. Your existing conversation is still available; try Refresh again.</p>}
       {state.notice && <p role="status" className="mt-2 rounded-xl border border-amber/25 bg-amber/5 p-3 text-sm text-amber">{state.notice}</p>}
 

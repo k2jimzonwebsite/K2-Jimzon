@@ -16,7 +16,7 @@ const IV_LENGTH = 16
 const AUTH_TAG_LENGTH = 16
 const SALT_LENGTH = 32
 
-export async function createEncryptedBackup({ sourceData, passphrase, destinationPath }) {
+export async function createEncryptedBackup({ sourceData, passphrase, destinationPath, authenticatedData }) {
   if (!passphrase || passphrase.length < 16) {
     throw new Error('Passphrase must be at least 16 characters long')
   }
@@ -25,6 +25,9 @@ export async function createEncryptedBackup({ sourceData, passphrase, destinatio
   const iv = crypto.randomBytes(IV_LENGTH)
   const key = crypto.scryptSync(passphrase, salt, 32)
   const cipher = crypto.createCipheriv(ALGORITHM, key, iv)
+  if (authenticatedData !== undefined) {
+    cipher.setAAD(Buffer.isBuffer(authenticatedData) ? authenticatedData : Buffer.from(authenticatedData, 'utf8'))
+  }
   const plaintext = Buffer.isBuffer(sourceData) ? sourceData : Buffer.from(sourceData, 'utf8')
   const encrypted = Buffer.concat([cipher.update(plaintext), cipher.final()])
   const authTag = cipher.getAuthTag()
@@ -42,7 +45,7 @@ export async function createEncryptedBackup({ sourceData, passphrase, destinatio
   }
 }
 
-export async function decryptAndVerifyBackup({ backupEnvelope, passphrase }) {
+export async function decryptAndVerifyBackup({ backupEnvelope, passphrase, authenticatedData }) {
   if (backupEnvelope.length < SALT_LENGTH + IV_LENGTH + AUTH_TAG_LENGTH + 1) {
     throw new Error('Invalid backup file structure: payload too small')
   }
@@ -53,6 +56,9 @@ export async function decryptAndVerifyBackup({ backupEnvelope, passphrase }) {
   const ciphertext = backupEnvelope.subarray(SALT_LENGTH + IV_LENGTH + AUTH_TAG_LENGTH)
   const key = crypto.scryptSync(passphrase, salt, 32)
   const decipher = crypto.createDecipheriv(ALGORITHM, key, iv)
+  if (authenticatedData !== undefined) {
+    decipher.setAAD(Buffer.isBuffer(authenticatedData) ? authenticatedData : Buffer.from(authenticatedData, 'utf8'))
+  }
   decipher.setAuthTag(authTag)
   return Buffer.concat([decipher.update(ciphertext), decipher.final()])
 }

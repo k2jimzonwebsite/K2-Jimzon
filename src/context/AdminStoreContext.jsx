@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAdminAuthRuntime } from './useAdminAuthRuntime'
 import { useAdminInboxRuntime } from './useAdminInboxRuntime'
 import { adminBffEnabled, getAdminProducts } from '../services/adminBffService'
+import { loadProductKnowledge } from '../lib/productKnowledgeSource'
 
 const AdminStoreContext = createContext(null)
 
@@ -63,8 +64,14 @@ export function AdminStoreProvider({ children }) {
     setLoading(false)
   }
 
+  // Staff read every record, approved or not: the Store Asset Studio's whole
+  // job is showing what is still waiting for review, which a public-only view
+  // would hide.
+  const reloadKnowledge = () => loadProductKnowledge(supabase).catch(() => {})
+
   useEffect(() => {
     loadProducts()
+    reloadKnowledge()
     if (!auth.isAdmin || (!secureAdmin && !supabase)) return undefined
     if (secureAdmin) {
       const refresh = () => { if (document.visibilityState === 'visible') loadProducts() }
@@ -90,6 +97,7 @@ export function AdminStoreProvider({ children }) {
     ...auth,
     ...inbox,
     products,
+    reloadKnowledge,
     loading,
     isDark: true,
     go: openStorefront,

@@ -1,5 +1,6 @@
 import { ADMIN_SHORTCUTS } from './adminOperations'
 import { XIcon } from '../../components/ui/icons'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 export default function KeyboardShortcutsModal({ isOpen, onClose }) {
   if (!isOpen) return null
@@ -7,10 +8,8 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm" role="presentation" onMouseDown={onClose}>
+      <AdminDialog onClose={onClose} labelledBy="shortcut-title">
       <section
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="shortcut-title"
         className="w-full max-w-xl overflow-hidden rounded-adm border border-adm-line bg-adm-surface text-white shadow-adm-float"
         onMouseDown={event => event.stopPropagation()}
       >
@@ -41,6 +40,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }) {
           ))}
         </div>
       </section>
+      </AdminDialog>
     </div>
   )
 }

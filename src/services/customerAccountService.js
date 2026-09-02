@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabaseClient'
+import { getSupabaseClient } from '../lib/lazySupabaseClient'
 import { guestBffEnabled } from './guestCommerceService'
 import { guestBffEndpoint } from './guestCommerceRoutes'
 import { fetchWithTimeout, isRequestTimeoutError } from '../lib/fetchWithTimeout'
@@ -24,8 +24,8 @@ export function customerAccountEnabled() {
   return ACCOUNT_ENABLED && guestBffEnabled()
 }
 
-export function customerAuthClient() {
-  return customerAccountEnabled() ? supabase : null
+export async function customerAuthClient() {
+  return customerAccountEnabled() ? getSupabaseClient() : null
 }
 
 async function accountAuthRequest(path, body) {
@@ -65,7 +65,7 @@ export async function requestCustomerPhoneCode(phone, botToken) {
 }
 
 export async function verifyCustomerPhoneCode(phone, token) {
-  const client = customerAuthClient()
+  const client = await customerAuthClient()
   if (!client) return { ok: false, error: 'Customer account access is not active yet.' }
   const result = await accountAuthRequest('account/auth/verify', { phone, code: token })
   if (!result.ok) return {

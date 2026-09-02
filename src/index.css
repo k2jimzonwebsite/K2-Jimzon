@@ -569,7 +569,7 @@
 .footer-link,
 .footer-copy {
   display: inline-flex;
-  min-height: 36px;
+  min-height: 44px;
   align-items: center;
   gap: 0.45rem;
   color: var(--color-navy-soft);

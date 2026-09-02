@@ -46,6 +46,10 @@ Shopee is the caller. Its own HMAC verification remains mandatory.
 Do not deploy this source, apply its migration, or configure guessed limits
 before MAP-017 authorization and the approved Shopee contract gates are met.
 Local verification is `npm run verify:map020-shopee-ingress-portable`.
+The same authoritative lifecycle carries MAP-023 inbound-event acceptance: an
+identical retry after an ambiguous successful response preserves one terminal
+event row, changed-payload identity reuse conflicts without overwriting evidence,
+and all three attempts remain visible in both local rate budgets.
 
 ## Required next worker
 

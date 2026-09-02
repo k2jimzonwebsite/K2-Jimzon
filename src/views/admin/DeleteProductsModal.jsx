@@ -4,6 +4,7 @@ import { providerErrorIncludes } from '../../lib/safeUiError'
 import {
   adminBffEnabled, commandAdminProductMasterBff, getAdminStaffAccessBff,
 } from '../../services/adminBffService'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 // ============================================================================
 // PIN-gated product deletion.
@@ -156,10 +157,11 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
 
   return (
     <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/85 backdrop-blur-md sm:p-4">
+      <AdminDialog onClose={onClose} closeDisabled={busy} labelledBy="delete-products-title">
       <div className="flex w-full sm:max-w-md max-h-[92dvh] flex-col overflow-hidden bg-adm-surface border border-crimson/40 rounded-t-adm sm:rounded-adm text-white shadow-adm-float">
 
         <div className="shrink-0 border-b border-adm-line bg-crimson/10 px-3.5 py-3">
-          <h2 className="text-base font-bold text-crimson">
+          <h2 id="delete-products-title" className="text-base font-bold text-crimson">
             Delete {count} product{count !== 1 ? 's' : ''}?
           </h2>
           <p className="text-xs text-white/60 mt-0.5 leading-snug">
@@ -258,6 +260,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
           </button>
         </div>
       </div>
+      </AdminDialog>
     </div>
   )
 }

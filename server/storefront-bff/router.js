@@ -6,9 +6,11 @@ import accountAuthPhone from '../../prepared-api/storefront/account/auth/phone.j
 import accountAuthVerify from '../../prepared-api/storefront/account/auth/verify.js'
 import conversation from '../../prepared-api/storefront/conversation.js'
 import coupon from '../../prepared-api/storefront/coupon.js'
+import deliveryQuote from '../../prepared-api/storefront/delivery/quote.js'
 import message from '../../prepared-api/storefront/message.js'
 import messages from '../../prepared-api/storefront/messages.js'
 import order from '../../prepared-api/storefront/order.js'
+import orderStatus from '../../prepared-api/storefront/order/status.js'
 import pasabuy from '../../prepared-api/storefront/pasabuy.js'
 import wholesale from '../../prepared-api/storefront/wholesale.js'
 import { safeJson } from './security.js'
@@ -22,9 +24,11 @@ const ROUTES = new Map([
   ['account/auth/verify', accountAuthVerify],
   ['conversation', conversation],
   ['coupon', coupon],
+  ['delivery/quote', deliveryQuote],
   ['message', message],
   ['messages', messages],
   ['order', order],
+  ['order/status', orderStatus],
   ['pasabuy', pasabuy],
   ['wholesale', wholesale],
 ])
@@ -39,9 +43,11 @@ export const STOREFRONT_BFF_ROUTE_CONTROLS = Object.freeze({
   'account/auth/verify': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'none', accountAuth: 'preauth', idempotency: false }),
   conversation: Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: true, guestGrant: 'issued', idempotency: true }),
   coupon: Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'none', idempotency: false }),
+  'delivery/quote': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'none', idempotency: false }),
   message: Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'required', idempotency: true }),
   messages: Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'required', idempotency: false }),
   order: Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: true, guestGrant: 'issued', idempotency: true }),
+  'order/status': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'required', idempotency: false }),
   pasabuy: Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: true, guestGrant: 'issued', idempotency: true }),
   wholesale: Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: true, guestGrant: 'issued', idempotency: true }),
 })

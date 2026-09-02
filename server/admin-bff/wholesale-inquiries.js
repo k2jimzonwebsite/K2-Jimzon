@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { isAdminRole } from './supabase.js'
 
 const REFERENCE=/^WI-[0-9A-F]{16}$/
 const STATUS=new Set(['submitted','under_review','closed'])
@@ -26,7 +27,7 @@ export async function handleWholesaleInquiryReview(req,res) {
   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idempotencyKey)) return safeJson(res,400,{error:{code:'IDEMPOTENCY_KEY_REQUIRED'}})
   const authorized=await authorizeAdminRequest(req,res,{csrf:true})
   if(!authorized) return undefined
-  if(authorized.identity.role!=='Admin') return safeJson(res,403,{error:{code:'WHOLESALE_ADMIN_REQUIRED'}})
+  if(!isAdminRole(authorized.identity.role)) return safeJson(res,403,{error:{code:'WHOLESALE_ADMIN_REQUIRED'}})
   try {
     const payload=validateWholesaleInquiryReview(await readJson(req))
     const signed=signedAdminCommandArguments('wholesale_inquiry_review',authorized.identity.userId,idempotencyKey,payload)

@@ -59,6 +59,30 @@ const INITIAL_CONVERSATIONS = [
       },
     ],
   },
+  {
+    id: '33333333-3333-4333-8333-333333333333',
+    customer: 'Elena Website',
+    channel: 'Virtual Store',
+    sourceKind: 'virtual_store_message',
+    status: 'Open',
+    priority: 'high',
+    unreadCount: 1,
+    unread: true,
+    assignedTo: null,
+    assignedName: '',
+    responseDueAt: new Date(now + 2 * 60 * 60 * 1000).toISOString(),
+    lastMessageAt: new Date(now - 3 * 60 * 1000).toISOString(),
+    time: 'Just now',
+    messages: [
+      {
+        id: 'm-4',
+        sender: 'customer',
+        text: 'Can you explain what is on the coffee shelf?',
+        deliveryStatus: 'received',
+        createdAt: new Date(now - 3 * 60 * 1000).toISOString(),
+      },
+    ],
+  },
 ]
 
 function Harness() {
@@ -66,7 +90,7 @@ function Harness() {
 
   const store = {
     conversations,
-    inboxState: { loading: false, error: '', phase2Ready: true },
+    inboxState: { loading: false, error: '', phase2Ready: true, websiteReplyReady: true },
     user: { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa' },
     sendMessage: async (conversationId, text) => {
       setConversations(current => current.map(conversation => conversation.id === conversationId
@@ -77,6 +101,22 @@ function Harness() {
               sender: 'agent',
               text,
               deliveryStatus: 'internal_only',
+              createdAt: new Date().toISOString(),
+            }],
+          }
+        : conversation))
+      return { ok: true }
+    },
+    sendCustomerReply: async (conversationId, text) => {
+      setConversations(current => current.map(conversation => conversation.id === conversationId
+        ? {
+            ...conversation,
+            status: 'Pending',
+            messages: [...conversation.messages, {
+              id: `reply-${Date.now()}`,
+              sender: 'agent',
+              text,
+              deliveryStatus: 'sent',
               createdAt: new Date().toISOString(),
             }],
           }

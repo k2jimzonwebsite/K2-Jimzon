@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { isAdminRole } from './supabase.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const PRODUCT_ID = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/
@@ -110,7 +111,7 @@ export default async function handleGlobeCms(req, res) {
   if (req.method === 'POST' && !UUID.test(idempotencyKey)) return safeJson(res, 400, { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } })
   const authorized = await authorizeAdminRequest(req, res, { csrf: req.method === 'POST' })
   if (!authorized) return undefined
-  if (authorized.identity.role !== 'Admin') return safeJson(res, 403, { error: { code: 'GLOBE_REVIEW_ADMIN_REQUIRED' } })
+  if (!isAdminRole(authorized.identity.role)) return safeJson(res, 403, { error: { code: 'GLOBE_REVIEW_ADMIN_REQUIRED' } })
   if (req.method === 'GET') {
     const result = await authorized.client.rpc('read_admin_globe_cms_v1')
     if (result.error || !result.data) return safeJson(res, 503, { error: { code: 'GLOBE_REVIEW_UNAVAILABLE' } })

@@ -1,0 +1,4 @@
+schema_version,source_row_id,external_item_id,external_variant_id,marketplace_sku,barcode,title,size,concentration,flavor,shade,formulation,pack_count,unit_price,currency,listing_status,reported_quantity,observed_at
+k2.marketplace-snapshot.v1,SP-ROW-001,SP-ITEM-1001,SP-VAR-1001-A,SP-LAV-250,8000000000012,Lavazza Qualita Oro Ground Coffee 250g,250 g,,,,ground coffee,1,349.00,PHP,active,4,2026-08-31T08:00:00+08:00
+k2.marketplace-snapshot.v1,SP-ROW-002,SP-ITEM-1002,SP-VAR-1002-A,SP-NUT-200,8000000000029,Nutella Hazelnut Spread 200g,200 g,,,original,hazelnut spread,1,219.00,PHP,out_of_stock,0,2026-08-31T08:00:00+08:00
+

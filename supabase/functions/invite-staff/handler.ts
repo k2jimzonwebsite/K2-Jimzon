@@ -189,7 +189,7 @@ export function createInviteStaffHandler(dependencies: {
 
       const adminClient = dependencies.createAdminClient()
       const { data: profile, error: profileError } = await adminClient.from('user_profiles').select('role').eq('id', actorId).single()
-      if (profileError || profile?.role !== 'Admin') throw new InviteStaffError('FORBIDDEN_ROLE', 403)
+      if (profileError || !['Admin', 'SuperAdmin'].includes(profile?.role)) throw new InviteStaffError('FORBIDDEN_ROLE', 403)
 
       const body = await parseBody(req)
       const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''

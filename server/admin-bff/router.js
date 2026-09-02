@@ -25,8 +25,10 @@ import fulfillmentTransferLot from '../../prepared-api/admin/fulfillment/transfe
 import inbox from '../../prepared-api/admin/inbox.js'
 import inboxHistory from '../../prepared-api/admin/inbox/history.js'
 import inboxInternalNote from '../../prepared-api/admin/inbox/internal-note.js'
+import inboxSendReply from '../../prepared-api/admin/inbox/send-reply.js'
 import inboxMarkRead from '../../prepared-api/admin/inbox/mark-read.js'
 import inboxWorkflow from '../../prepared-api/admin/inbox/workflow.js'
+import productKnowledgeSave from '../../prepared-api/admin/product-knowledge/save.js'
 import pasabuy from '../../prepared-api/admin/pasabuy.js'
 import pasabuyQuote from '../../prepared-api/admin/pasabuy/quote.js'
 import pasabuyTransition from '../../prepared-api/admin/pasabuy/transition.js'
@@ -56,9 +58,27 @@ import catalogExport from '../../prepared-api/admin/catalog-export.js'
 import catalogImportPreview from '../../prepared-api/admin/catalog-import/preview.js'
 import catalogImportCommit from '../../prepared-api/admin/catalog-import/commit.js'
 import catalogImportStatus from '../../prepared-api/admin/catalog-import/status.js'
+import marketplaceSnapshotStage from '../../prepared-api/admin/marketplace-snapshots/stage.js'
+import marketplaceSnapshotDecision from '../../prepared-api/admin/marketplace-snapshots/decision.js'
+import marketplaceSnapshotStatus from '../../prepared-api/admin/marketplace-snapshots/status.js'
+import marketplaceOrderStage from '../../prepared-api/admin/marketplace-orders/stage.js'
+import marketplaceOrderStatus from '../../prepared-api/admin/marketplace-orders/status.js'
+import ownerCloseSession from '../../prepared-api/admin/owner-close/session.js'
+import ownerCloseCoverage from '../../prepared-api/admin/owner-close/coverage.js'
+import ownerCloseFees from '../../prepared-api/admin/owner-close/fees.js'
+import ownerCloseStock from '../../prepared-api/admin/owner-close/stock.js'
+import ownerClosePasabuy from '../../prepared-api/admin/owner-close/pasabuy.js'
+import ownerCloseBookkeeping from '../../prepared-api/admin/owner-close/bookkeeping.js'
 import securityEvents from '../../prepared-api/admin/security-events.js'
 import wholesaleInquiries from '../../prepared-api/admin/wholesale-inquiries.js'
 import wholesaleInquiryReview from '../../prepared-api/admin/wholesale-inquiries/review.js'
+import delivery from '../../prepared-api/admin/delivery.js'
+import deliveryQuote from '../../prepared-api/admin/delivery/quote.js'
+import deliveryCourier from '../../prepared-api/admin/delivery/courier.js'
+import deliveryCourierState from '../../prepared-api/admin/delivery/courier-state.js'
+import deliveryLocality from '../../prepared-api/admin/delivery/locality.js'
+import deliveryCostPublish from '../../prepared-api/admin/delivery/cost-publish.js'
+import deliverySourceState from '../../prepared-api/admin/delivery/source-state.js'
 import globeCms from '../../prepared-api/admin/globe-cms.js'
 import procurement from '../../prepared-api/admin/procurement.js'
 import channels from '../../prepared-api/admin/channels.js'
@@ -96,8 +116,10 @@ const ROUTES = new Map([
   ['inbox', inbox],
   ['inbox/history', inboxHistory],
   ['inbox/internal-note', inboxInternalNote],
+  ['inbox/send-reply', inboxSendReply],
   ['inbox/mark-read', inboxMarkRead],
   ['inbox/workflow', inboxWorkflow],
+  ['product-knowledge/save', productKnowledgeSave],
   ['pasabuy', pasabuy],
   ['pasabuy/quote', pasabuyQuote],
   ['pasabuy/transition', pasabuyTransition],
@@ -127,9 +149,27 @@ const ROUTES = new Map([
   ['catalog-import/preview', catalogImportPreview],
   ['catalog-import/commit', catalogImportCommit],
   ['catalog-import/status', catalogImportStatus],
+  ['marketplace-snapshots/stage', marketplaceSnapshotStage],
+  ['marketplace-snapshots/decision', marketplaceSnapshotDecision],
+  ['marketplace-snapshots/status', marketplaceSnapshotStatus],
+  ['marketplace-orders/stage', marketplaceOrderStage],
+  ['marketplace-orders/status', marketplaceOrderStatus],
+  ['owner-close/session', ownerCloseSession],
+  ['owner-close/coverage', ownerCloseCoverage],
+  ['owner-close/fees', ownerCloseFees],
+  ['owner-close/stock', ownerCloseStock],
+  ['owner-close/pasabuy', ownerClosePasabuy],
+  ['owner-close/bookkeeping', ownerCloseBookkeeping],
   ['security-events', securityEvents],
   ['wholesale-inquiries', wholesaleInquiries],
   ['wholesale-inquiries/review', wholesaleInquiryReview],
+  ['delivery', delivery],
+  ['delivery/quote', deliveryQuote],
+  ['delivery/courier', deliveryCourier],
+  ['delivery/courier-state', deliveryCourierState],
+  ['delivery/locality', deliveryLocality],
+  ['delivery/cost-publish', deliveryCostPublish],
+  ['delivery/source-state', deliverySourceState],
   ['globe-cms', globeCms],
   ['procurement', procurement],
   ['channels', channels],
@@ -148,7 +188,8 @@ const ADMIN_POST_ROUTES = new Set([
   'fulfillment/assign-box', 'fulfillment/confirm', 'fulfillment/delivery',
   'fulfillment/fulfill', 'fulfillment/packing-scan', 'fulfillment/payment',
   'fulfillment/transfer-lot',
-  'inbox/internal-note', 'inbox/mark-read', 'inbox/workflow',
+  'inbox/internal-note', 'inbox/send-reply', 'inbox/mark-read', 'inbox/workflow',
+  'product-knowledge/save',
   'pasabuy/quote', 'pasabuy/transition',
   'product-intake/draft', 'product-intake/evidence', 'product-intake/evidence-cleanup', 'product-intake/inventory',
   'product-intake/publication', 'product-intake/step',
@@ -158,6 +199,11 @@ const ADMIN_POST_ROUTES = new Set([
   'coupons/archive', 'coupons/create', 'coupons/state',
   'catalog-import/preview',
   'catalog-import/commit',
+  'marketplace-snapshots/stage',
+  'marketplace-snapshots/decision',
+  'marketplace-orders/stage',
+  'delivery/quote', 'delivery/courier', 'delivery/courier-state',
+  'delivery/locality', 'delivery/cost-publish', 'delivery/source-state',
   'wholesale-inquiries/review',
   'staff-access/invite',
   'staff-access/mfa-replacement',
@@ -207,6 +253,9 @@ export const ADMIN_BFF_ROUTE_CONTROLS = Object.freeze(Object.fromEntries(
     const productMasterMethods = route === 'product-master'
       ? Object.freeze({ GET: Object.freeze({ csrf: false, idempotency: false, rateLimit: 'database' }) })
       : undefined
+    const ownerCloseMethods = route === 'owner-close/session' || route === 'owner-close/coverage' || route === 'owner-close/fees' || route === 'owner-close/stock' || route === 'owner-close/pasabuy' || route === 'owner-close/bookkeeping'
+      ? Object.freeze({ POST: Object.freeze({ csrf: true, idempotency: true, rateLimit: 'database' }) })
+      : undefined
     return [route, Object.freeze({
     method: ADMIN_POST_ROUTES.has(route) ? 'POST' : 'GET',
     identity: route === 'auth/login' ? 'credentials'
@@ -217,8 +266,8 @@ export const ADMIN_BFF_ROUTE_CONTROLS = Object.freeze(Object.fromEntries(
     idempotency: ADMIN_IDEMPOTENT_COMMAND_ROUTES.has(route),
     rateLimit: 'database',
     ...(route === 'auth/login' ? { bot: true } : {}),
-    ...(additionalMethods || securityMethods || orphanMethods || globeMethods || procurementMethods || channelMethods || staffAccessMethods || productMasterMethods
-      ? { additionalMethods: additionalMethods || securityMethods || orphanMethods || globeMethods || procurementMethods || channelMethods || staffAccessMethods || productMasterMethods } : {}),
+    ...(additionalMethods || securityMethods || orphanMethods || globeMethods || procurementMethods || channelMethods || staffAccessMethods || productMasterMethods || ownerCloseMethods
+      ? { additionalMethods: additionalMethods || securityMethods || orphanMethods || globeMethods || procurementMethods || channelMethods || staffAccessMethods || productMasterMethods || ownerCloseMethods } : {}),
   })]
   }),
 ))

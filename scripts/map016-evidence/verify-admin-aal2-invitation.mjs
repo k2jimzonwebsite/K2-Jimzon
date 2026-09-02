@@ -18,7 +18,9 @@ for (const line of fs.readFileSync(process.argv[2], 'utf8').split(/\r?\n/)) {
 const REF = 'pixplcjqivlfflickobf'
 const BASE = `https://${REF}.supabase.co`
 const FN = `${BASE}/functions/v1/invite-staff`
-const ORIGIN = 'https://k2-jimzon-admin-seven.vercel.app'
+// Current canonical Admin origin. Historical MAP-016 evidence retains the
+// preview host that was used when that proof was captured.
+const ORIGIN = 'https://admin.k2jimzon.com'
 const SECRET = env.SUPABASE_SECRET_KEY
 const PUBLISHABLE = env.VITE_SUPABASE_PUBLISHABLE_KEY
 

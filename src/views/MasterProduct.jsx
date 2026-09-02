@@ -1,14 +1,18 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import BeforeAfterSlider from '../components/BeforeAfterSlider'
 import CatalogGrid from '../components/CatalogGrid'
 import ProductPassport from '../components/ProductPassport'
-import { RedButton, StockPill, TrustBadge, Kicker, QuantityStepper } from '../components/ui/bits'
+import ProductKnowledge from '../components/ProductKnowledge'
+import { UNAVAILABLE_TEXT } from '../lib/productKnowledge'
+import { GhostButton, RedButton, StockPill, TrustBadge, Kicker, QuantityStepper } from '../components/ui/bits'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
+import { productStock } from '../lib/cartInventory'
+import { applyImageFallback } from '../lib/imageFallback'
 
 export default function MasterProduct() {
-  const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, go, requestPasabuyItem } = useStore()
+  const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, go, requestPasabuyItem, askStaffAboutProduct, loading } = useStore()
   const [qty, setQty] = useState(1)
   const [currentSlide, setCurrentSlide] = useState(0)
 
@@ -20,7 +24,7 @@ export default function MasterProduct() {
 
   const product = getProduct(productId)
 
-  if (!product) {
+  if (!product && loading) {
     return (
       <main className="min-h-screen bg-cream flex flex-col items-center justify-center">
         <div className="w-8 h-8 rounded-full border-2 border-t-navy border-r-navy border-b-transparent border-l-transparent animate-spin mb-4" />
@@ -29,15 +33,32 @@ export default function MasterProduct() {
     )
   }
 
+  if (!product) {
+    return (
+      <main className="mx-auto flex min-h-[62vh] max-w-2xl flex-col items-center justify-center px-4 py-16 text-center">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson">Catalog</p>
+        <h1 className="mt-3 font-serif text-4xl font-semibold tracking-tight">Product unavailable</h1>
+        <p className="mt-4 max-w-lg text-base leading-relaxed text-navy-soft">
+          This product is not in the current published catalog. It may be unavailable, unpublished, or linked from an older page.
+        </p>
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+          <RedButton onClick={() => go('catalog')}>Browse available products</RedButton>
+          <GhostButton onClick={() => go('contact')}>Ask K2 staff</GhostButton>
+        </div>
+      </main>
+    )
+  }
+
   const price = isWholesale ? product.wholesale_price : product.srp
   const inCart = lines.find((line) => line.id === product.id)?.qty ?? 0
-  const totalStock = product.stock_available ?? product.stock ?? 999
+  const totalStock = productStock(product)
+  const availabilityUnknown = totalStock === null
   const remaining = Math.max(0, totalStock - inCart)
-  const canAdd = remaining > 0
-  const isOutOfStock = totalStock <= 0
+  const canAdd = !availabilityUnknown && remaining > 0
+  const isOutOfStock = !availabilityUnknown && totalStock <= 0
 
   // Construct image gallery
-  const gallery = useMemo(() => {
+  const gallery = (() => {
     const items = []
     
     // Slide: Before/After Slider (or primary image if no afterImage)
@@ -62,7 +83,7 @@ export default function MasterProduct() {
       items.push({ type: 'image', src: '/images/placeholder.svg' })
     }
     return items
-  }, [product])
+  })()
 
   return (
     <main className="store-section max-w-6xl pb-24 pt-6 md:pb-20 md:pt-10">
@@ -107,6 +128,7 @@ export default function MasterProduct() {
                     <img 
                       src={gallery[currentSlide].src} 
                       alt={`${product.name} - View ${currentSlide + 1}`} 
+                      onError={applyImageFallback}
                       className="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal" 
                     />
                   )}
@@ -131,6 +153,9 @@ export default function MasterProduct() {
 
           {/* Product Tabs (Ingredients & Instructions) underneath the image */}
           <ProductTabs product={product} />
+
+          {/* MAP-027: approved product knowledge, shared with the Interactive Shop. */}
+          <ProductKnowledge product={product} onAskStaff={askStaffAboutProduct} />
         </div>
 
         {/* Right Column: Product Info */}
@@ -161,8 +186,11 @@ export default function MasterProduct() {
             )}
           </div>
 
+          {/* MAP-027 honesty rule: an unsupported field publishes no claim. The
+              previous generic fallback asserted "Authentic Italian import in our
+              Manila inventory" for products that had no description at all. */}
           <p className="mt-6 text-base leading-relaxed text-navy-soft">
-            {product.description || product.short_description || product.why_buy || 'Authentic Italian import in our Manila inventory.'}
+            {product.description || product.short_description || product.why_buy || UNAVAILABLE_TEXT}
           </p>
 
           {product.why_buy && product.why_buy !== product.description && (
@@ -224,16 +252,22 @@ export default function MasterProduct() {
           {/* Add to Cart Actions */}
           <div className="z-10 mt-9 shrink-0 rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-5 shadow-sm">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              {!isOutOfStock && <QuantityStepper value={qty} onChange={setQty} max={remaining} size="md" />}
+              {!isOutOfStock && !availabilityUnknown && <QuantityStepper value={qty} onChange={setQty} max={remaining} size="md" />}
               <span className="text-[13px] font-medium text-navy-soft">
-                {isOutOfStock 
+                {availabilityUnknown
+                  ? 'Live availability could not be confirmed. Adding this product is paused until stock is known.'
+                  : isOutOfStock
                   ? 'Currently out of stock in Manila. You can request this item via Pasabuy.' 
                   : (canAdd ? (product.inside || 'In stock and ready for Manila delivery.') : 'All available stock is already in your cart.')}
               </span>
             </div>
 
             <div>
-              {isOutOfStock ? (
+              {availabilityUnknown ? (
+                <RedButton className="mt-5 w-full py-3.5 text-base font-bold shadow-sm" disabled>
+                  Stock check pending
+                </RedButton>
+              ) : isOutOfStock ? (
                 <button
                   className="mt-5 min-h-12 w-full rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-[transform,opacity] duration-150 hover:bg-crimson-deep active:scale-[0.97] cursor-pointer shadow-sm"
                   onClick={() => requestPasabuyItem({
@@ -247,7 +281,7 @@ export default function MasterProduct() {
               ) : (
                 <RedButton
                   className="mt-5 w-full py-3.5 text-base font-bold shadow-sm"
-                  onClick={() => { addToCart(product.id, qty); setCartOpen(true) }}
+                  onClick={() => { if (addToCart(product.id, qty).ok) setCartOpen(true) }}
                   disabled={!canAdd}
                 >
                   {canAdd ? `Add to cart · ${peso(price * qty)}` : 'Stock limit reached'}
@@ -272,11 +306,13 @@ export default function MasterProduct() {
 }
 
 function ProductTabs({ product }) {
-  const { addToCart, setCartOpen } = useStore()
+  const { addBundleToCart, getProduct, setCartOpen } = useStore()
   const [activeTab, setActiveTab] = useState('ingredients');
+  const [bundleError, setBundleError] = useState('')
 
   useEffect(() => {
     setActiveTab('ingredients')
+    setBundleError('')
   }, [product.id])
 
   return (
@@ -321,14 +357,23 @@ function ProductTabs({ product }) {
                     <div className="mt-6 pt-5 border-t border-line/50">
                       <button 
                         onClick={() => {
-                          addToCart(product.id)
-                          if (product.guide.bundle.partner) addToCart(product.guide.bundle.partner)
-                          setCartOpen(true)
+                          const ids = [product.id, product.guide.bundle.partner].filter(Boolean)
+                          const result = addBundleToCart(ids)
+                          if (result.ok) {
+                            setBundleError('')
+                            setCartOpen(true)
+                          } else {
+                            const partner = getProduct(product.guide.bundle.partner)
+                            setBundleError(partner
+                              ? 'The complete pairing is not available in the requested quantity.'
+                              : 'The pairing product is not in the current catalog.')
+                          }
                         }}
                         className="w-full py-2.5 px-4 text-sm font-semibold rounded-lg bg-shell border border-line text-navy shadow-sm transition-colors hover:bg-navy hover:text-cream cursor-pointer"
                       >
                         Get the pairing bundle for {peso(product.guide.bundle.price)}
                       </button>
+                      {bundleError && <p role="status" className="mt-2 text-sm text-crimson">{bundleError}</p>}
                     </div>
                   )}
                 </>

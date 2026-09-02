@@ -43,7 +43,7 @@ review, or alerting system.
 
 While the explicit flag-off direct-browser transition remains active, Google OAuth always returns
 to the allowlisted public Admin origin
-`https://k2-jimzon-admin-seven.vercel.app/admin-portal-k2-secure`; immutable
+`https://admin.k2jimzon.com/admin-portal-k2-secure`; immutable
 preview/deployment URLs are not accepted as callbacks. A returned staff session
 requiring AAL2 must continue into the visible TOTP challenge. Returning to the
 credential form without a role, callback, or MFA explanation is a failed auth
@@ -56,16 +56,16 @@ does not authorize service-role access or activate the prepared BFF. Secure
 Admin mode rejects Google sign-in before a provider call and hides the OAuth
 option; provider credentials and a future server flow remain separately gated.
 
-**Hobby deployment gate (14 August 2026; current inventory 25 August):** the
-prepared Admin and Storefront route handlers total 81 files, while each current
+**Hobby deployment gate (14 August 2026; current inventory 1 September):** the
+prepared Admin and Storefront route handlers total 95 files, while each current
 Vercel Hobby deployment accepts at most 12 Serverless Functions. The leaf
 handlers remain under `prepared-api/`, outside Vercel's special deployable
 `api/` directory. Only the two consolidated guarded entrypoints have been
 promoted locally. Both server and browser BFF switches remain off.
 
-**Prepared consolidation (21 August 2026; expanded 25 August):** all 68 Admin endpoint modules now
+**Prepared consolidation (21 August 2026; expanded through 31 August):** all 81 Admin endpoint modules now
 sit behind one exact allowlist in `server/admin-bff/router.js`, with
-68 exact method-aware routes and `prepared-api/admin-router.js` as the shared
+81 exact method-aware routes and `prepared-api/admin-router.js` as the shared
 router adapter. The single deployable entrypoint is `api/admin/index.js`. The
 Admin verifier enumerates the endpoint directory and fails if any prepared
 handler is missing from—or duplicated in—the router. Unknown and traversal-like
@@ -149,7 +149,7 @@ bundle boundary separately proves that admin modules are not in customer JS.
 | `/api/admin/globe-cms` | GET/POST | Admin/AAL2-only fixed Globe/review projection plus signed, versioned, reasoned visibility and review draft/correction/publication/withdrawal commands |
 | `/api/admin/procurement` | GET/POST | Fixed staff supplier/PO projection plus Admin-only reasoned supplier creation; PO creation and receiving remain unavailable |
 | `/api/admin/channels` | GET/POST | Fixed staff five-channel readiness aggregate plus Admin-only signed Website/Pasabuy real-reference verification; external connectors remain inactive |
-| `/api/admin/staff-access` | GET/POST | Fixed Admin profile/PIN-state projection plus signed, reasoned role and delete-PIN changes; reports secure invitation availability only when its separate server gate is active |
+| `/api/admin/staff-access` | GET/POST | Fixed Admin/SuperAdmin profile/PIN-state projection plus signed, reasoned role and delete-PIN changes; the separate `ai_spend_controls_update` action is AAL2/SuperAdmin-only and reports versioned paid-AI caps only when its server gate is active |
 | `/api/admin/staff-access/invite` | POST | Admin/AAL2-only exact email/role/reason command; forwards the restored provider token server-side to the reason-bound Edge receipt and returns only email, role, and invite/existing-account outcome |
 | `/api/admin/system-readiness` | GET | Admin/AAL2-only boolean projection of protected request, session, database, and named-boundary presence; exposes no raw diagnostics or provider/deployment claims |
 
@@ -187,6 +187,7 @@ build-isolation fact, not evidence that the inactive cookie boundary is deployed
 | `K2_TURNSTILE_SECRET_KEY` | Admin server only | Private key paired to the Admin site key; never use a `VITE_` prefix or share its value with Storefront |
 | `K2_STAFF_INVITATIONS_ENABLED` | Admin server only | Keep unset/`false` until the reason migration is applied and invite-staff v7 is deployed and verified; exact `true` enables BFF forwarding |
 | `K2_MFA_REPLACEMENT_ENABLED` | Admin server only | Keep unset/`false` until `20260824_admin_mfa_replacement_boundary.sql`, exact route, provider-role test, retry rehearsal, and staff acceptance pass; exact `true` enables active-factor replacement only |
+| `K2_AI_SPEND_CONTROLS_ENABLED` | Admin server only | Keep unset/`false` until `20260830_paid_ai_spend_controls.sql`, owner-controlled SuperAdmin assignment, provider/model/retention decisions, cap/confirmation tests, and production activation evidence pass; exact `true` only exposes the prepared control read/write boundary and never supplies a provider key |
 | `K2_ADMIN_PASSWORD_RECOVERY_ENABLED` | Admin server only | Keep unset/`false` until `20260825_admin_preauth_rate_boundary.sql`, `map020_admin_preauth_rate_postflight.sql`, the exact callback allowlist, custom recovery template, real mail/link, role denial, replay, expiry, global revocation, provider-suppression, prefetch, and email-tracking checks pass; exact `true` enables the three recovery routes |
 | `K2_ADMIN_PASSWORD_RECOVERY_CALLBACK_URL` | Admin server only | One exact HTTPS Admin URL ending `/api/admin/auth/password-recovery/verify`; its origin must also appear exactly in `K2_ADMIN_ORIGINS` |
 | `K2_COOKIE_SECURE` | Local only | May be `false` for local HTTP; production forces Secure regardless |
@@ -235,6 +236,23 @@ support messages.
   budgets: 360 requests per actor across all actions and 6,000 requests across
   the Admin boundary. Existing command-specific limits remain stricter where
   configured. A budget denial is `429 RATE_LIMITED` with `Retry-After: 60`.
+
+## Local Product Master rendered evidence — 27 August 2026
+
+A dedicated secure-flag Chromium journey now exercises the real Inventory Grid
+with fixed mocked BFF responses at 375×812. It verifies the named product editor,
+required immutable-change reason, reasoned Draft → Under Review decision,
+delete-PIN initial focus, history-based permanent-deletion refusal, 44px actions,
+and zero horizontal overflow. The editor and lifecycle decision use the shared
+Admin dialog primitive; phone edit fields stack into one column.
+
+The focused journey, all 16 Admin UI journeys, 213 API/security contracts plus
+both selling-surface behaviors, the zero-gap security gate, and the isolated
+Admin production build pass. These are local source/rendered/compiled-artifact
+checks only. Before activation, repeat edit, conflict, lifecycle denial,
+permission denial, PIN lockout, history refusal, and valid unused-draft deletion
+against the deployed Admin host with real staff/AAL2 sessions after MAP-017 and
+MAP-019 gates pass.
 
 ## Current limitations and activation gate
 
@@ -317,6 +335,7 @@ acceptance remain exclusively in `MASTER_ACTION_PLAN.md`.
 | Command-center analytics | `Overview.jsx`, `Admin.jsx` | orders, Pasabuy, lots, products, channels, listings, inbox reads | `/api/admin/overview` plus shell summary | Prepared behind the disabled flag; Overview and the shared shell use authorized projections and bounded visible-page polling without depending on the browser Supabase client; permanent cutover pending |
 | Product Master and Sheet | `InventoryGrid.jsx`, `Sheet.jsx`, `SmartPasteModal.jsx`, `BulkCsvImportModal.jsx`, `ScanToAiModal.jsx` | product reads, draft/update/publication, duplicate checks | product queries and server commands | Product reads, reasoned optimistic master commands, lifecycle/deletion, reviewed CSV preview/commit, media assignment, and phone-first intake are prepared behind the disabled flag; secure Sheet and Smart Paste remain intentional review/handoff paths; permanent cutover pending |
 | Product intake evidence | `productIntakeService.js`, `ProductIntakeSessionModal.jsx` | intake session, evidence Storage, SKU/lot/publication RPCs | intake session/evidence/commit commands | Prepared behind disabled flag; real decode/re-encode and signed registration rollback-proven; permanent migrations/cutover pending |
+| Owner Count & Close | `OwnerCountClose.jsx` | exact-shop listing/order evidence, product decisions, fee estimates, physical reviews, coverage, Pasabuy readiness, customer-free handoff | `/marketplace-snapshots/*`, `/marketplace-orders/*`, `/owner-close/{session,fees,stock,coverage,pasabuy,bookkeeping}` | Prepared behind disabled flag; Admin/AAL2 signed mutations, forced-RLS evidence, latest-import order/fee reconciliation, exact-lot composition, proposal-only coverage, customer-minimized Pasabuy/handoff, sealed close event, and non-destructive rollback pass locally; real exports/policies/counts, deployment, and staff acceptance remain pending |
 | Lots and expiry | `BatchExpiryManagerModal.jsx`, `DailyTaskNotificationDrawer.jsx` | batch reads, reconciliation, clearance approval | lot query/reconcile/approve commands | Prepared behind disabled flag; fixed projection, reservation-safe derivation, expiry/clearance gates, corrected compatibility trigger/views, reasoned UI, behavioral rollback proof, and direct-RPC cutover are complete locally; permanent migration/cutover pending |
 | Flight consignments | `ConsignmentManager.jsx` | manifest reads/create, line add, scan, advance, finalize | flight query and explicit scan/state commands | Prepared behind disabled flag; barcode-to-line verification, durable scan retry, reason audit, direct-RPC cutover, and rollback compilation are proven; richer damage/unexpected/wrong/expiry/quarantine dispositions remain MAP-023 work |
 | Orders, packing, custody | `OmniOperationsHub.jsx` | order reads/confirm, packing scan, exact custody, payment/delivery/fulfillment state | fulfillment queries and commands | Prepared behind disabled flag; signed migration rollback-proven; permanent cutover pending |
@@ -326,9 +345,9 @@ acceptance remain exclusively in `MASTER_ACTION_PLAN.md`.
 | Coupons | `CouponManager.jsx` | coupon read/create/toggle/archive | coupon query plus create/state/archive commands | Prepared behind disabled flag; Admin-only reason/event boundary and direct-mutation cutover rollback-proven; permanent cutover pending |
 | Suppliers and purchases | `Suppliers.jsx`, `PurchaseOrders.jsx` | supplier and purchase-order reads/writes | supplier/purchase queries and commands | Fixed staff read and Admin-only supplier-create command prepared; PO creation/approval/receipt/settlement remain MAP-023 |
 | Channels | `ChannelIntegrations.jsx`, `connectorRuntime.js` | connection/readiness reads, verification and event writes | connector status and verification commands | Fixed readiness projection and attributable internal Website/Pasabuy verification are prepared behind the disabled flag; external adapters remain disconnected and permanent cutover is pending |
-| Staff and permissions | `AdminStoreContext.jsx`, `StaffPermissionManager.jsx`, `AdminAuthModal.jsx` | profile reads, role/PIN RPCs, invite function, MFA enrollment | owner-only staff/invite/role/session commands | Role/PIN, reason-bound invitation, pending-session TOTP enrollment, and separately gated active-factor replacement prepared; lost-factor recovery and permanent cutover pending |
+| Staff and permissions | `AdminStoreContext.jsx`, `StaffPermissionManager.jsx`, `AdminAuthModal.jsx` | profile reads, role/PIN RPCs, invite function, MFA enrollment, paid-AI control review | owner-only staff/invite/role/session commands plus the SuperAdmin-only paid-AI control action | Role/PIN, reason-bound invitation, pending-session TOTP enrollment, active-factor replacement, and versioned fail-closed paid-AI spend controls prepared; SuperAdmin assignment, owner/model/cap decisions, provider activation, lost-factor recovery, and permanent cutover pending |
 | Product/review media | `ImageUploadDropzone.jsx`, `InventoryGrid.jsx`, `PhotoManagerModal.jsx`, `ProductMediaCleanupModal.jsx`, `globeCms.jsx`, `GlobeCms.jsx` | public/private Storage plus product/globe/review CRUD | validated media upload/delete and CMS commands | Public upload, receipt-bound assignment/unassignment, retry-safe deletion, Admin-only orphan reconciliation, Globe visibility, and review draft/correction/publication/withdrawal are prepared; permanent migration/cutover and deployed denial evidence pending |
-| Diagnostics | `reportError.js`, `SystemDevOpsModal.jsx` | error insert/read, session and launch checks | redacted event intake plus boolean-only readiness and restricted review queries | Redacted browser-event intake, signed private recording/aggregation, bounded Admin review, readiness projection, and retention command are prepared locally; permanent activation, operator-review rehearsal, alert delivery, and scheduled-retention evidence remain pending |
+| Diagnostics | `reportError.js`, `SystemDevOpsModal.jsx` | fixed Admin event classification, session and launch checks; no direct browser `error_reports` access | redacted event intake plus boolean-only readiness and restricted review queries | Redacted browser-event intake, signed private recording/aggregation, bounded Admin review, readiness projection, and retention command are prepared locally; the separate direct-insert revoke passes local replay/flood denial but remains unapplied; permanent activation, operator-review rehearsal, alert delivery, and scheduled-retention evidence remain pending |
 
 The storefront-only product/catalog reads remain outside this Admin BFF
 inventory. They require their own public read policy, cache, and projection; they
@@ -367,6 +386,30 @@ replay, changed-payload idempotency conflict, duplicate scan retry, rate denial,
 nonstaff, AAL1, CSRF, wrong-origin, and storefront-project denial, then enable
 `VITE_ADMIN_BFF_ENABLED=true` only in the coordinated release. Never enable the
 flag while any required admin view still depends on browser Supabase Auth/data.
+
+Local pre-cutover concurrency evidence is available through
+`npm.cmd run rehearse:map023-last-unit`. The runner uses the ignored portable
+PostgreSQL 17.11 runtime, extracts the actual `confirm_order_request` definition
+from `20260809_operations_hardening.sql`, and races two submitted orders for one
+eligible unit. Acceptance requires one confirmed order, one insufficient-stock
+refusal after lock wait, physical/reserved `1/1`, and exactly one reservation,
+canonical order, and inventory event. It then retries the already-confirmed
+order as though the first response were lost. Acceptance also requires the same
+order ID/status and an unchanged full invariant, proving no duplicate reservation,
+canonical order, inventory event, or reserved quantity. This covers only the
+repository SQL function's ambiguous confirmation-response path; it is not proof
+of inbound connector-event idempotency or general timeout reconciliation. This
+is a source rehearsal only; repeat
+the race through the deployed signed BFF and verify live function identity before
+claiming production or multi-channel oversell protection.
+
+For retry-only recovery, remove the ambiguous-confirmation focused contract and
+restore the runner before its retry phase; do not delete the established
+last-unit concurrency rehearsal. The next local MAP-023 evidence step is the
+prepared Shopee capture boundary: same-event/same-payload replay must return one
+durable result, changed-payload reuse must fail closed, and an ambiguous outcome
+must be recoverable before any provider credential or channel activation is
+considered.
 
 Apply `supabase/migrations/20260812_admin_pasabuy_bff_boundary.sql` only after
 the foundation and private request secret exist. Denial tests must cover nonstaff,
@@ -414,6 +457,18 @@ state transitions, and raw error leakage. Positive tests must prove create,
 scheduled activation, pause, archive, one event per accepted change, exact retry
 without a second event, server validation/redemption continuity, and mobile/
 laptop staff acceptance.
+
+Apply `supabase/migrations/20260830_paid_ai_spend_controls.sql` only after the
+owner has assigned the exact SuperAdmin identity, approved the provider/model,
+retention and budget values, and the signed boundary/rollback tests are in the
+same coordinated release. The migration starts disabled and stores no provider
+secret. The Staff & Roles control requires AAL2, a reason, optimistic version,
+idempotency, and typed enable confirmation; Admin/Staff requests are denied.
+Its signer replacement preserves the existing action allow-list, catalog body
+ceiling, actor/global rate buckets, MFA replacement, website reply, and Product
+Knowledge actions while adding only the spend-control action. Run one
+disabled/read-only check before any provider activation and retain the manual
+two-Project workflow as the recovery path.
 
 Apply `supabase/migrations/20260822_admin_globe_review_boundary.sql` only after
 the Admin session registry/request-secret migration, the fixed

@@ -1,0 +1,2 @@
+schema_version,external_order_id,external_line_id,marketplace_sku,quantity,gross_amount,currency,ordered_at,order_status,payment_status
+k2.marketplace-orders.v1,LZ-ORDER-001,LZ-LINE-001,LZ-K2-001,2,2400.00,PHP,2026-08-16T09:00:00+08:00,shipped,verified

@@ -137,45 +137,6 @@ export function EmptyState({ icon = '📭', title, sub, action }) {
   )
 }
 
-// ── Modal shell — every admin modal should wrap in this so headers, footers,
-//    scroll behaviour and safe-area insets stay identical across the app. ────
-export function ModalShell({ title, sub, onClose, footer, children, wide = false }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-0 sm:p-4">
-      <div
-        className={`flex w-full ${wide ? 'sm:max-w-3xl' : 'sm:max-w-lg'} max-h-[92dvh] flex-col overflow-hidden bg-adm-surface border border-adm-line rounded-t-adm sm:rounded-adm shadow-adm-float`}
-      >
-        <div className="flex shrink-0 items-start justify-between gap-3 border-b border-adm-line bg-adm-sunken px-3.5 py-3">
-          <div className="min-w-0">
-            <h2 className="text-base font-semibold text-white truncate">{title}</h2>
-            {sub && <p className="hidden sm:block text-xs text-white/50 mt-0.5">{sub}</p>}
-          </div>
-          <button
-            onClick={onClose}
-            aria-label="Close"
-            className="shrink-0 -mr-1 flex h-11 w-11 items-center justify-center rounded-adm-sm text-white/50 hover:text-white hover:bg-white/10 transition-colors"
-          >
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-3.5 sm:p-5">{children}</div>
-
-        {footer && (
-          <div
-            className="flex shrink-0 items-center justify-end gap-2 border-t border-adm-line bg-adm-sunken px-3.5 py-3"
-            style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
-          >
-            {footer}
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
 // ── Inline alert (error / ok / warn) ─────────────────────────────────────────
 export function Alert({ kind = 'ok', children }) {
   if (!children) return null

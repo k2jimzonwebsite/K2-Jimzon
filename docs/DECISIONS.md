@@ -71,3 +71,35 @@ This document records the foundational architectural decisions, rationale, and c
 - **Context**: Compromised staff passwords could allow attackers to manipulate pricing, drain inventory, or tamper with customer orders.
 - **Decision**: Require TOTP MFA for all staff accounts, and enforce Authenticator Assurance Level 2 (AAL2) step-up verification for high-risk operations (inviting staff, MFA resets, clearance approvals, lot reconciliations).
 - **Consequences**: High-privilege actions are safeguarded even in the event of password exposure.
+
+---
+
+## ADR-008: Operations Guide Navigates; Canonical Workflows Record Completion
+
+- **Date**: 2026-08-31
+- **Status**: Accepted; implementation pending in MAP-023
+- **Context**: Staff need outcome-based, step-by-step help that names the exact
+  screen, control, input, external tool, expected result, and recovery action.
+  The existing guide retrieves procedure text and opens a broad Admin section,
+  but making it store operational progress would create a second completion
+  truth that could disagree with products, lots, orders, payments, files, and
+  provider receipts.
+- **Considered options**: (1) extend the single versioned procedure registry and
+  derive completion from the owning workflow; (2) duplicate instructions inside
+  every Admin page; or (3) let the guide store its own operational progress.
+  Page duplication risks copy/target drift, while guide-owned progress can claim
+  completion without canonical evidence.
+- **Decision**: Extend the existing registry with plain-language outcomes and
+  structured steps linked to stable, visibly labelled Admin controls. The guide
+  may navigate, focus, explain, and copy an approved customer-free prompt, but
+  it never submits a mutation or marks work complete. Only bounded canonical
+  records, events, files, provider receipts, or owning-workflow read models can
+  show `Verified by workflow`; local guide state remains rehearsal/navigation.
+  External tools remain explicit manual handoffs whose returned output must be
+  validated and human reviewed inside K2.
+- **Consequences**: Staff get one phone-safe source of instruction without a
+  parallel ledger. Missing or renamed controls become acceptance failures.
+  Product Content/Image Studio and other external steps stay honest and
+  recoverable. Implementation requires structured step contracts, a real-control
+  target registry, bounded completion readers where available, and representative
+  phone/laptop recovery testing before guide approval.

@@ -103,6 +103,10 @@ available = on_hand
 - Every received lot has a location and custodian.
 - Owner and custodian are separate concepts.
 - Normal curated stock is physically pooled by location/lot. Customer or channel commitments are reservations.
+- A marketplace/shop quantity is an attributable external observation or an
+  approved availability allocation; it is not a physical count and cannot be
+  summed into Master Inventory. Only controlled receiving, recount, disposition,
+  reservation, fulfillment, and custody events change canonical stock.
 - Every quantity change writes an immutable event with actor, reason, delta, linked record, and before/after balance.
 - `quantity` is the verified physical count. `reserved_quantity` is committed
   demand. A stored or projected sellable/available value is derived from those
@@ -149,6 +153,14 @@ available = on_hand
 - Every active scannable code resolves to one sellable variant. A shared or
   unreliable manufacturer code is recorded as non-authoritative evidence and the
   variant receives a unique K2 scannable code.
+- A marketplace SKU is scoped to one exact shop listing and is an alias, not a
+  K2 product identity. SKU/name/barcode similarity may suggest a product link but
+  never merges automatically. An Admin must approve Link existing, Create new
+  Draft, or Leave unresolved; new products receive a server-generated K2 SKU.
+- Imported product fields remain suggestions. K2 Product Master wins until an
+  authorized field-level review accepts a change. Different size,
+  concentration, flavor, shade, formulation, or pack count remains a distinct
+  variant even when a provider reused a SKU, name, or barcode.
 
 ```text
 draft -> under_review -> live
@@ -163,6 +175,41 @@ live | unlisted -> discontinued
 - Publishing validates identity, name, price, primary image, variant, and required channel fields.
 - Product import never creates stock; receiving/controlled adjustment does.
 - Claims about origin, ingredients, allergens, usage, and authenticity retain sources/evidence.
+
+### Public discovery and crawler truth
+
+- The Storefront has one canonical public origin. Canonical, Open Graph, Twitter,
+  sitemap, and product structured-data URLs must resolve to that origin; preview
+  and apex hosts may redirect or normalize to it, while local verification may
+  preserve its local origin.
+- Only customer-visible `Live`/`Active` products with a stable SKU and a valid
+  HTTPS primary image may enter a generated sitemap. The sitemap is derived from
+  a reviewed production catalog projection, never fixtures, fallback products,
+  private fields, or an unverified database snapshot.
+- Price, stock, availability, batch, and best-before remain live canonical
+  projections used by product JSON-LD and the storefront. They are not duplicated
+  into a static sitemap or used to create a second catalog truth.
+- Admin routes remain excluded from indexing and share previews. A crawler file,
+  canonical tag, or ownership record is not considered live until the exact
+  production host returns the intended content type and an end-to-end check is
+  recorded.
+- A registered public route must resolve to its intended view on direct load,
+  refresh, Back, and Forward. Unknown routes render an explicit noindex recovery
+  surface; an unknown product renders a bounded `Product unavailable` state.
+  Neither may silently render Home or remain on a permanent loading indicator.
+- Static-host routing may rewrite only the shared registered Storefront paths
+  and, after generated product HTML receives filesystem priority, use the
+  canonical product path as a client fallback. It must not use a global
+  application catch-all. An unmatched host path must retain a real
+  not-found response and use the target-specific, script-free, noindex recovery
+  document; the public artifact must never disclose the protected Admin route.
+  Repository configuration and isolated builds are prepared evidence only until
+  the exact preview and live hosts prove their response status, body, and target
+  identity.
+- Internal navigation uses the shared history/focus boundary. Full-page reloads
+  are reserved for actual document navigation; client-view changes move focus
+  to the destination heading so visual and assistive-technology users receive
+  the same route change.
 
 ### Phone-first new SKU and first-inventory workflow
 
@@ -235,6 +282,15 @@ The checklist is:
    and `AFTER` to create the truthful prepared, applied, or in-use image. Neither
    Project can assign SKU, slug, stock, approved prices, expiry, review status,
    or publication status.
+   A future paid API path is a separate deliberate staff choice, never the
+   default consequence of opening intake or uploading evidence. It may draft
+   the same descriptions, SEO, usage/instructions, media briefs, and image
+   candidates only through a server-held credential and approved spend controls.
+   It must show the priced scope and obtain the owner-approved confirmation at
+   the required boundary before a paid call. Until that confirmation sequence,
+   budget ceiling, provider/model, retention policy, server boundary, and
+   production activation are verified, the path remains visibly unavailable
+   and staff use the two private Projects above.
 4. **Secure cutover uses named product-master commands.** Barcode helpers use
    the protected duplicate search, and new products enter through phone-first
    intake. Smart Paste may not fall back to direct browser inserts when the
@@ -330,6 +386,57 @@ state feedback, not decorative motion.
 - Every edited/generated image remains Draft until a person compares PRIMARY
   with the physical package, compares AFTER with the approved use case, confirms
   image rights, and uploads each file to its correct slot.
+
+### Optional Interactive Shop truth and fallback contract
+
+- The Interactive Shop is an optional presentation of the same published
+  catalog, approved product knowledge, stock projection, basket, order-request,
+  staff-handoff, and Pasabuy boundaries. It never owns a second copy of product,
+  inventory, customer, conversation, or cart truth.
+- WebGL is decorative. Every shelf and product action remains reachable through
+  semantic controls; reduced motion or missing/failed WebGL uses a calm flat
+  shelf guide and must not download or require the scene bundle.
+- Product photographs may decorate packages only when they load successfully.
+  A blocked, missing, or failed photo settles to a generated label from canonical
+  product name/price data; it must not remain a black or blank package, retry
+  forever, or borrow another product's image.
+- The Storefront light-mode wood canvas continues through the full-frame room.
+  White-luxury surfaces may veil it but cannot replace it with an opaque white
+  page. At phone widths, shelf navigation owns a full horizontal row, direct
+  Previous/Next controls remain visible, and the document does not overflow.
+- The fixed light room owns its light semantic tokens and wood fallback rather
+  than inheriting a dark site preference or relying on Storefront chrome behind
+  it. Ordinary header, cart, footer, spacer, and mobile navigation layers do not
+  remain mounted beneath the full-frame room. Normal text and placeholders must
+  retain at least 4.5:1 contrast.
+- Keyboard entry moves focus to the room heading. Leave and Escape return to
+  Catalog and restore focus to the control that opened the room.
+- Adding a product produces immediate action-point feedback derived from the
+  canonical basket quantity. The room must not maintain a parallel cart counter
+  or claim success before the canonical basket changes.
+- The pop-out guide, aisle clerk, ambient accent, and physical basket view derive
+  from one current store moment. The 3D clerk may move only among authored
+  inter-bay dwelling zones: each zone must be wider than her complete rig, sit
+  in front of rather than through the shelf plane, and keep the camera and clerk
+  on one travel rate. She keeps one human-scale rig, so changing shelves cannot
+  shrink her into a fixture, carry her out of view, or place her through a board.
+  Each product bay exposes at least five physical shelf levels and may pack up to
+  seven levels without creating a second assortment or stock source. A greeting
+  wave uses her anatomical right arm and must not sweep across her torso.
+  The basket view reads canonical lines/count/subtotal and never stores or edits
+  quantities. Tucking the guide away cannot remove access to product, cart,
+  checkout, or staff-handoff actions.
+- The guide's contextual question form is the single staff-handoff entry in the
+  room. The desktop rail may link to ordering FAQs but must not expose a second
+  direct-chat action that bypasses the guide's shelf/product context.
+- The desktop shelf rail is an orientation and action surface, not decorative
+  dead space. Before selection it identifies the current shelf and exposes only
+  canonical shelf destinations or product highlights; after selection it shows
+  the existing canonical product detail. Help remains available without
+  inventing staff presence or response time.
+- A shelf guide or shopkeeper may repeat the current shelf model and approved
+  knowledge. It never invents product use, staff presence, response time,
+  availability, order completion, or payment state.
 
 ## 7. Curated imports
 
@@ -538,6 +645,87 @@ commands; it is not a service-role or database master key.
 
 Replaying an event never duplicates the order or reservation.
 
+Marketplace inventory/catalog intake is inbound-first and uses a staged
+snapshot before any canonical write. Every source batch names the exact provider
+and shop, source/export identity and hash, schema version, observation period and
+time, actor, row outcome, and idempotency/recovery identity. CSV is the initial
+transport; an approved API must normalize into the same contract. A snapshot may
+record per-shop SKU, external IDs, title, price, listing state, reported
+quantity, and freshness/error evidence. It cannot silently create a product,
+publish a listing, change a lot, custody, reservation, or physical quantity.
+
+The current provider-neutral CSV contract is versioned as
+`k2.marketplace-snapshot.v1` and has one exact header order:
+`schema_version`, `source_row_id`, `external_item_id`,
+`external_variant_id`, `marketplace_sku`, `barcode`, `title`, `size`,
+`concentration`, `flavor`, `shade`, `formulation`, `pack_count`, `unit_price`,
+`currency`, `listing_status`, `reported_quantity`, and `observed_at`. The parser
+accepts at most 512 KiB, 1,000 data rows, and 4,000 characters per cell; it
+rejects formula-leading cells and out-of-bound quantity, money, and time values.
+An exact repeated row remains explicit duplicate evidence; reuse of the same
+source identity or item/variant identity with changed evidence is a conflict.
+Provider-specific column dictionaries may map into this contract only after a
+redacted real export or approved current provider documentation is reviewed.
+
+Only an Admin with AAL2 may turn a pending accepted row into a product decision.
+The decision is signed, reasoned, idempotent, and limited to an eligible stored
+suggestion, a reviewed unpublished Draft with a server-generated K2 SKU, or an
+unresolved outcome. Staff may stage a bounded snapshot and recover its status,
+but may not approve a link or new product. Quantity is copied only into immutable
+listing-observation evidence; it never writes `product_batches` or another
+physical-stock record.
+
+Sales/order intake for Owner Count & Close uses the separate fixed
+`k2.marketplace-orders.v1` customer-free CSV contract. Its exact header order is
+`schema_version`, `external_order_id`, `external_line_id`, `marketplace_sku`,
+`quantity`, `gross_amount`, `currency`, `ordered_at`, `order_status`, and
+`payment_status`. One import belongs to one close session and one exact shop. A
+header-only file is valid reviewed evidence of zero sales. At most 512 KiB and
+5,000 facts are accepted; cells are formula-neutralized/bounded and dates must
+fall inside the close period. Exact shop/order/line replays are duplicates;
+changed payloads for the same identity are conflicts. Cross-import identity is
+checked again inside the database so a second source file cannot double-count a
+sale. Customer identity/contact/address fields are outside this contract.
+
+Marketplace fee estimates use only accepted, product-linked, deduplicated facts
+from the latest reviewed immutable import for one exact selected shop. Older
+imports remain evidence; a later clean export may supersede them for the close
+without deleting duplicate/conflict history. Every saved estimate names a 3–120 character
+policy version, PHP currency, commission/payment/withholding basis points, fixed
+minor-unit fee per distinct accepted order, reason, actor, and monotonic
+shop/session estimate version. K2 recomputes aggregate gross and each rounded
+minor-unit component server-side. Any changed fact or unresolved product link
+blocks saving. A reviewed zero-sales import produces a zero estimate. Every
+result remains `estimateOnly`; settlement reconciled, official books, and actual
+profit remain false until their separate authoritative evidence exists.
+
+Owner physical-count review compares each linked product's canonical exact-lot
+total, reserved/sellable derivation, accepted period sales, and latest per-shop
+reported quantity without merging those facts. A matching count records a
+durable review. A discrepancy can be recorded complete only after the existing
+reservation-safe full exact-lot reconciliation command makes the canonical lot
+sum equal the physical count; the close boundary never writes
+`product_batches` itself. A linked Draft with no lots still requires an explicit
+zero/zero review rather than treating missing inventory as reviewed.
+
+Pasabuy boxing review reads only open requests created by the close-period end
+and exposes public reference, item title, quantity, canonical status, and dates.
+It never returns customer contact/identity fields. The owner records Ready, Not
+ready, or Not applicable with a reason; this readiness evidence cannot change
+the canonical Pasabuy request status, quote, payment, or fulfillment state.
+
+The default coverage target is two eligible units per **individual shop
+account**, not per marketplace. It is flexible: a product/shop is Covered
+(two or more), Thin (one), Skipped (deliberately not offered), Out (previously
+active allocation consumed), or Needs review (facts stale/inconsistent).
+Verified recent sales may rank a proposed scarce-stock allocation; the owner may
+override or skip shops. Skipped shops do not create false alerts. Automatic
+rebalancing may change approved availability allocation only over already
+eligible canonical stock under row/version locks; it cannot exceed Master
+sellable stock, double-count a unit, create a negative balance, or move physical
+custody. Physical movement continues through exact-lot transfer and receiver
+acceptance.
+
 Before signature verification or durable capture, a marketplace webhook boundary
 also enforces its reviewed content type, byte ceiling, and one bounded body-read
 deadline. The deadline is an explicit server setting; missing or invalid
@@ -570,14 +758,16 @@ durable capture, normalization, stock, retry, and reconciliation evidence passes
 
 ### Staff access changes
 
-Only a current Admin with AAL2 may read the bounded staff register, change a
-role, or set/rotate their own delete PIN. Every role/PIN change requires a
+Only a current Admin or SuperAdmin with AAL2 may read the bounded staff
+register, change a role, or set/rotate their own delete PIN. SuperAdmin is an
+owner-controlled role and is never granted by the ordinary staff-role
+selector. Every role/PIN change requires a
 specific reason, signed request, durable idempotency key, rate limit, final-Admin
 protection, and immutable before/after evidence. Audit events record only whether
 a PIN was configured; PIN values and hashes never appear in browser responses or
 event history. Invitations remain unavailable through the secure Admin boundary
 until the reason column and v2 claim are applied, the matching Edge version is
-deployed, one Admin/AAL2 invitation and replay pass end to end, and the separate
+deployed, one Admin-or-SuperAdmin/AAL2 invitation and replay pass end to end, and the separate
 server activation switch is enabled. A disabled form or prepared endpoint is not
 invitation capability or delivery evidence.
 
@@ -590,6 +780,16 @@ events retain reason and hashed—not raw—factor identifiers. Multiple existin
 verified factors fail closed. Lost-factor recovery must use a separately
 approved owner/provider identity process and may never be simulated by disabling
 MFA, trusting email alone, or exposing provider tokens to browser code.
+
+Paid AI intake spending controls are a separate SuperAdmin-only capability.
+The prepared control stores a versioned provider/model snapshot, per-product,
+per-session, and monthly hard caps, the fixed content/image confirmation
+requirements, and the manual-fallback requirement in the private schema. A
+missing cap, model, confirmation, provider boundary, or activation switch
+fails closed to the two private ChatGPT Projects. Saving a control requires
+AAL2, an attributable reason, an optimistic version, a signed idempotent
+command, and `ENABLE_PAID_AI` when enabling. The control never writes product
+or inventory fields and is not proof that a provider call is live.
 
 Before a staff email/password attempt reaches the Auth provider, the Admin
 server must consume its process-local IP brake and a signed durable database
@@ -615,7 +815,10 @@ durable boundary fails closed without calling Auth.
 
 Staff password recovery is available only to an invited Admin or Staff identity
 whose email is already verified. The request response is identical whether or
-not the address belongs to staff. The recovery email must use one exact
+not the address belongs to staff. In the current production cutover, the exact
+Admin OAuth and recovery origin is `https://admin.k2jimzon.com`; Vercel preview
+hosts are not callback destinations, and Auth redirect allowlists must name only
+the approved K2 hosts plus localhost for local testing. The recovery email must use one exact
 allowlisted Admin callback and a custom provider template that sends the
 single-use token hash to the server boundary; provider sessions and refresh
 tokens never enter the URL or browser JavaScript. After server verification, a
@@ -676,6 +879,14 @@ submitted -> reviewed -> confirmed -> reserved -> fulfillment
 ```
 
 - Submission does not reserve stock or count as paid revenue.
+- Cart commands accept only a canonical product with known positive sellable
+  stock. Missing/null stock remains `unknown`, never fabricated zero; unknown
+  and zero both block add/quantity/submit while producing different customer
+  explanations. Repeated adds are capped at the known quantity.
+- Multi-product/bundle adds are atomic: validate every line against the same
+  current catalog snapshot before changing the cart. If any line is missing,
+  unknown, sold out, or insufficient, add none. Checkout revalidates the whole
+  stale cart immediately before creating the order request.
 - Confirmation atomically revalidates prices, discounts, quantity, customer details, and eligible stock.
 - Coupon validation/redemption is database-backed, not browser-only.
 - Coupon terms are snapshotted; redemption and reservation share the confirmation transaction.
@@ -684,6 +895,14 @@ submitted -> reviewed -> confirmed -> reserved -> fulfillment
 - Guest checkout returns only the scoped continuation needed for that order and
   conversation. It never exposes another customer's history or requires an
   account merely to submit a legitimate order request.
+- Successful checkout synchronizes the customer route to `/confirmation`.
+  Reload/back/forward continuity reads only the order scopes authorized by the
+  existing HttpOnly guest grant through the signed Storefront BFF. The response
+  is limited to public reference, operational/payment/delivery status, amount,
+  item count, and creation time; contact, address, notes, internal IDs, grant
+  material, and unrelated orders never enter the browser response. An expired,
+  missing, revoked, rate-limited, or unavailable grant produces explicit
+  recovery guidance, not a fabricated receipt or silent Home fallback.
 - Account checkout links to the authenticated customer only after server-side
   ownership checks. Claiming an earlier guest order requires verified contact
   and preserves the original guest provenance.
@@ -718,6 +937,13 @@ submitted -> reviewed -> confirmed -> reserved -> fulfillment
   The open inbox may refresh while visible, but the UI never describes a browser
   refresh, accepted write, copied response, or pending staff reply as real-time
   delivery evidence.
+- Customer accounts remain optional and default-off. When enabled, the account
+  surface may initialize its deferred public Auth client asynchronously, but it
+  must keep a bounded loading state until that client resolves, clean up its Auth
+  subscription on navigation, and show recoverable account UI instead of
+  dereferencing an unresolved loader or crashing the Storefront. Guest checkout,
+  scoped messaging, and the five-item mobile navigation remain available without
+  an account.
 
 ## 13. Delivery and waybills
 
@@ -731,14 +957,49 @@ submitted -> reviewed -> confirmed -> reserved -> fulfillment
 ### Direct website and Pasabuy
 
 ```text
-rate_needed -> estimated -> communicated -> customer_confirmed
-            -> courier_booked -> final
+eligible exact-locality pilot -> K2 final fee -> communicated -> customer_confirmed
+                              -> courier_booked separately -> reconciled
+
+all other orders -> manual_courier_quote -> communicated -> customer_confirmed
+                 -> courier_booked -> reconciled
 ```
 
-- Staff obtains the applicable courier rate.
-- Estimated and final charges are separate.
+- The owner-approved workbook is a controlled staff quoting aid. It does not change
+  storefront checkout, write to the database, contact J&T, book a courier, create a
+  waybill, or activate production behavior.
+- Warehouse A's owner-confirmed J&T sender is **Blk 48 Lot 2, Phase 1, San Jose
+  Heights, Barangay Muzon East, San Jose del Monte City, Bulacan**, with Guerra
+  Pharmacy as the landmark/business reference. The J&T hierarchy is
+  `BULACAN / SAN-JOSE-DEL-MONTE-CITY / MUZON EAST`.
+- A pilot `STANDARD_FEE` is allowed only for a direct website or Pasabuy order
+  shipping from Warehouse A by ordinary J&T EZ as exactly one parcel at or below
+  3 kg, with oversize, remote/ODZ, and special-protection flags explicitly false,
+  merchandise subtotal at or below PHP 2,000, and one unambiguous active exact-
+  locality rule. Unknown, missing, conflicting, expired, or ineligible input routes
+  to manual courier quotation and never falls back to a regional floor.
+- Initial exact-locality charges are: San Jose del Monte City / Muzon East,
+  Angeles City / Agapito del Rosario, Calamba City / Bagong Kalsada, Dagupan City /
+  Bacayao Norte, and Baguio City / A. Bonifacio-Caguioa-Rimando (ABCR) at PHP 85;
+  Caloocan / Barangay 1 at PHP 95; Cebu City / Apas at PHP 100; and Davao City /
+  Agdao at PHP 105. Luzon PHP 85, NCR PHP 95, Visayas PHP 100, and Mindanao PHP 105
+  are planning floors only and are never customer-quotable regional rates.
+- Before acceptance, a changed input requires a new fee and confirmation. After the
+  customer accepts a pilot `STANDARD_FEE`, that customer charge is frozen and K2
+  absorbs later ordinary carrier variance. Staff must not add a surprise delivery
+  charge; an exceptional discovery is escalated for owner handling.
+- K2 pickup is the only delivery outcome for which numeric zero is valid. Unknown
+  fees remain blank or `N/A`; they are never coerced to PHP 0.
+- The private authenticated J&T VIP calculator remains a staff evidence/reference
+  surface and is never a live customer-checkout dependency. Staff reconcile the
+  official carrier bill against the frozen customer charge; repeated losses may
+  create a future owner-approved rate version but never change an accepted order.
 - Record communication and customer confirmation.
 - Courier booking creates the real tracking/waybill.
+- A staff handover form may record a courier/channel and an actual tracking or
+  audit reference only after the external/manual handover exists. Opening or
+  submitting the form never claims to book a courier. Validation, failure, retry,
+  cancel, and focus return remain inline in the shared Admin dialog; blocking
+  browser `alert`, `prompt`, and `confirm` are not operational controls.
 - Before booking, use the K2 packing QR—not a fake courier label.
 
 ## 14. Packing and fulfillment
@@ -814,6 +1075,71 @@ landed_cost = purchase_cost
 - Never overwrite estimate with actual.
 - Show estimate/actual variance.
 - Owner-selected Pasabuy price remains separate from landed cost.
+- Admin sales summaries keep submitted-request value, payment-verified value,
+  fulfilled value, settled payout, and actual profit as separately labelled
+  facts. Missing settlement or exact-lot cost-allocation records render
+  `Unavailable`, never zero.
+- Each displayed submitted, payment-verified, or fulfilled subtotal must be
+  traceable to the exact bounded order-request rows behind it. Record review is
+  read-only, exposes no customer contact details, sorts newest first, and states
+  when its visible row limit is smaller than the matching set. Payment-verified
+  and fulfilled filters are exact independent facts; a row may belong to both.
+- Daily sales reconciliation partitions the same selected-period requests into
+  four mutually exclusive payment-by-fulfillment buckets: verified+fulfilled,
+  verified+not fulfilled, fulfilled+not verified, and neither. Bucket counts and
+  values must sum exactly to the selected-period request count/value. “Payment
+  not verified” describes only the absence of the exact verified state; it does
+  not assert unpaid, missing, failed, or lost funds. Exception drilldown/export
+  remains read-only and customer-free.
+- A staff sales export is a selected-period operational extract of the exact
+  active record filter, including matches beyond the on-screen row limit. Its
+  fixed customer-free projection is created time, internal order reference,
+  normalized channel, order state, payment state, and request value PHP. CSV
+  cells are quoted and formula-neutralized. The export is never described as a
+  full-history backup, settlement, accounting book, payout, or profit report.
+- A staff sales calculator is a non-posting planning aid. It may calculate gross
+  and net sales, costs, fees, planned gross profit, margin, markup, and break-even
+  price from reviewed inputs, but it never creates or updates an order, payment,
+  payout, tax, inventory, landed-cost, or accounting record. Its result is not
+  actual profit.
+- Forward price checking collects fixed peso fees separately from the
+  percentage payment/channel fee. The percentage fee is applied to gross sales
+  before discount and displayed separately from goods and other/fixed costs.
+  Break-even unit price must solve the changing percentage fee rather than
+  freezing the fee calculated at the proposed price: `(discount + goods cost +
+  other costs + fixed fees) ÷ (quantity × (1 − fee rate))`. The minimum rounds
+  upward to the nearest cent.
+- Reverse target-price planning defines gross margin as planned gross profit
+  divided by net sales after total discount and applies a percentage payment or
+  channel fee to gross sales before discount. The minimum unit price is solved
+  algebraically, rounded upward to the nearest cent, and fully recomputed from
+  that rounded price. Margin and fee rates each stay within 0–99.99% and their
+  sum must remain below 100%. The recommendation never changes canonical price
+  or represents price approval, landed cost, tax, payout, or actual profit.
+- Maximum-discount planning uses the same gross-margin and fee definitions but
+  starts from a chosen unit selling price. It solves the maximum total discount
+  that preserves the target margin, rounds that allowance downward to the
+  nearest cent, and fully recomputes the achieved scenario. If the chosen price
+  misses the target even at zero discount, the tool must refuse a discount
+  result. The total allowance—not a rounded per-unit display—is the ceiling.
+  The result never creates or approves a promotion, changes canonical price,
+  writes an order, or represents landed cost, tax, payout, settlement,
+  accounting, or actual profit.
+- Whole-unit target planning starts from a positive planned gross-profit target
+  and defines unit contribution as `unit price × (1 − channel fee rate) − unit
+  cost`. It solves `(target profit + total discount + other costs + fixed fees)
+  ÷ unit contribution`, rounds upward to a whole unit, recomputes the cent-
+  rounded scenario, and confirms the immediately previous quantity misses the
+  target. Non-positive contribution and results above 100,000 units fail closed.
+  The result is not a quota, order, inventory reservation, guaranteed outcome,
+  or actual-profit/accounting record.
+- A valid planning result may be copied only as a customer-free plain-text
+  handoff that keeps its ISO timestamp, mode, reviewed assumptions, complete
+  relevant result, and opening planning-only warning together. Invalid
+  calculations expose no copy action. Clipboard success/failure is announced
+  with an inline retry path. Copying changes clipboard text only and never
+  approves or writes a price, promotion, quota, inventory, order, payment, cost,
+  payout, tax, settlement, accounting, or actual-profit record.
 
 ## 18. Coupons
 
@@ -873,6 +1199,62 @@ Product Intake must keep supplier-receipt intake unavailable.
 
 Each record page shows identity/state, next action/blocker, owner, linked records, quantities, estimate/actual financials, evidence, immutable timeline, errors, and recovery.
 
+### Staff workflow guide authority
+
+- The workflow guide is advisory navigation and training content. Checking an
+  item, tracing a route, or revealing a training example never executes a
+  command and never proves that an operational result occurred.
+- Every guide release carries a version, approval state, effective date after
+  approval, and this rulebook as its authority. A draft is visibly not locked.
+- An enabled step names the authorized role, prerequisite evidence, real Admin
+  entry point, ordered actions, server or provider result to read back,
+  forbidden shortcuts, and retry/recovery path. An unavailable step names the
+  blocker and valid manual boundary instead of inventing an integration.
+- Guide acceptance compares the promised result with the canonical database,
+  event, file, or provider result on phone and laptop. Browser-local rehearsal
+  state is never acceptance evidence.
+- Ordinary staff may read an approved guide but cannot approve or replace its
+  locked version. A replacement remains Draft until owner/authorized-admin
+  approval and representative acceptance are recorded.
+- Staff enter the guide by naming the outcome they need, not by knowing K2's
+  internal module names. Search results may use plain-language aliases, but each
+  result resolves to one versioned procedure contract and one authoritative
+  source.
+- Each procedure step must identify: the exact Admin screen; exact visible
+  control label and stable guide target; the input, evidence, or approved prompt
+  required; the action staff performs; the expected intermediate result; the
+  canonical record, event, file, provider receipt, or bounded read model that
+  proves completion; and the recovery action when the result is absent,
+  ambiguous, invalid, stale, timed out, denied, or unavailable.
+- `Open this workspace` may navigate to and focus the named control. It never
+  presses a mutation, submits a form, approves a merge, publishes a product,
+  changes stock, contacts a customer, spends money, or marks the operational
+  step complete. Missing or renamed targets fail guide acceptance rather than
+  falling back to a vague or invented destination.
+- Guide-owned view state, expanded steps, recent searches, and rehearsal marks
+  may be browser-local convenience only. Operational progress and completion
+  are derived only from the owning workflow's canonical evidence. The guide
+  must label manual evidence review separately and must never convert a click,
+  copied prompt, pasted answer, or opened screen into a completed operation.
+- An external-tool step is visibly `MANUAL — EXTERNAL STEP` and names the
+  approved private tool or Project, allowed evidence, exact prompt/payload,
+  expected return format, prohibited data, return destination, validation, and
+  fallback. K2 may offer a customer-free `Copy approved prompt` action, but it
+  cannot claim to open, operate, monitor, or verify ChatGPT or another provider.
+  Returned content remains untrusted until the owning K2 workflow validates it
+  and a human reviews the fields or media required by that procedure.
+- The manual Product Intake guide preserves the sequence K2 Product Content →
+  Smart Paste review → separate PRIMARY and AFTER requests in K2 Product Image
+  Studio. Calculation guidance opens the exact Sales Planner mode, explains all
+  inputs and assumptions, and preserves the planning-only warning; it cannot
+  approve a price, promotion, quota, tax result, settlement, accounting entry,
+  or actual profit.
+- On phone, the current step is primary and previous/upcoming steps remain
+  compact. Staff can still inspect the full procedure, blockers, and source.
+  Every action remains keyboard reachable and at least 44px, uses visible text
+  rather than hover-only help, preserves focus after navigation, and avoids
+  decorative motion that slows repeated work.
+
 ## 21. Dashboards and KPIs
 
 Every KPI defines business question, source/formula, included/excluded states, Asia/Manila window, currency/FX, freshness, owner, all data states, and exact record drilldown.
@@ -887,6 +1269,36 @@ Prioritize:
 6. failed connector jobs/stale syncs.
 
 Do not fabricate fallbacks or turn query failure into zero.
+
+The phone-first Owner Count & Close workflow is one resumable composition of
+canonical/staged facts, not a new financial or inventory truth. It guides source
+and period selection, product-match approval, sales/order deduplication,
+versioned commission/fee estimation, expected-versus-physical count and reasoned
+reconciliation, Pasabuy boxing readiness, flexible per-shop coverage, low/zero
+Master Inventory review, and a customer-minimized bookkeeping handoff. Every
+step preserves progress and distinguishes loading, empty, offline, stale,
+partial, conflict, ambiguous-timeout, denied, failed, and confirmed states.
+Commission and tax remain estimates until provider settlement and approved
+accounting rules reconcile them; the close output is not an official tax filing,
+books of account, payout, settlement, or actual-profit record.
+
+Every close session is scoped to an explicit set of `channel_shops`, an
+inclusive period, and `Asia/Manila`. Each confirmed save carries an expected
+version; a stale save conflicts rather than overwriting another session. The
+session record is progress only: its steps may call the existing canonical
+Sales, Product, lot-reconciliation, Pasabuy, and bookkeeping-handoff boundaries,
+but never duplicate their writes or infer that a staged import completed them.
+
+The final bookkeeping handoff is server-derived from the latest clean order
+import and latest fee estimate for every selected shop, a physical-count review
+for every linked product, and a readiness review for every open Pasabuy request.
+Conflicts, unresolved lines, missing imports/estimates/counts/readiness, or any
+Not-ready Pasabuy request block completion. The sealed private artifact contains
+only fixed customer-minimized aggregate/shop facts; its downloadable CSV uses a
+fixed schema and formula-injection protection. Completion is a signed,
+idempotent Admin/AAL2 transaction that records an immutable event and changes
+only the close session to Completed. The artifact remains estimate-only and is
+never official books, a tax filing, payout settlement, or actual profit.
 
 ## 22. Roles and security
 
@@ -913,6 +1325,29 @@ Do not fabricate fallbacks or turn query failure into zero.
   its next request even if the old access JWT has not expired. Missing or
   mismatched provider-session evidence fails closed and is audited without
   storing tokens.
+- Permit only one active K2 Admin login per staff account. Concurrent AAL2
+  logins must serialize so the later login is the sole survivor; browser tabs
+  sharing that login are not separate sessions. Every protected request still
+  checks the provider session, AAL2, role, K2 registry row, and current private
+  security generation.
+- Treat every browser as unremembered by default. A staff member may request to
+  remember only a personal browser profile after AAL2, and owner/Admin approval
+  must activate it. Never use browser fingerprinting or describe a remembered
+  browser as proof of a physical device. The opaque host-only credential is a
+  revocable risk-policy signal, never authentication or authorization; store
+  only its hash and bounded metadata, and invalidate it on account/MFA/role or
+  owner security reset. Public or shared browsers must never be remembered.
+- On an unremembered browser, browser-history, back-forward-cache, or restored-
+  document entry must show a blank locked shell and require full login plus MFA
+  before protected data is fetched or rendered. A remembered browser may resume
+  a still-valid login only after server revalidation. Ordinary phone app/tab
+  switching alone must not expire or revoke the session; while hidden or being
+  checked, protected UI is privacy-masked and failures remain locked.
+- Admin HTML and API responses remain non-cacheable, sensitive Admin data must
+  not enter persistent browser stores or service-worker caches, and logout must
+  revoke server state and clear browser state. Browser/OS history thumbnails and
+  an already-visible unattended screen remain staff/public-computer risks, so
+  the SOP still requires explicit K2 and provider logout.
 - Apply both action-specific limits and cross-action actor/global budgets to
   signed Admin requests. A budget denial returns a safe `429` and retry window;
   it never becomes a generic availability error or permission to retry a
@@ -942,10 +1377,34 @@ Do not fabricate fallbacks or turn query failure into zero.
   for database/API authorization.
 - Publishable browser keys are public identifiers, not secrets. Secret/service
   keys stay only in secured server environments and are rotated after exposure.
+- Vite may expose only the explicit browser-safe environment-name allowlist.
+  Configuration must never use an empty environment prefix or a broad prefix
+  that imports server secrets into the resolved build config or debug output;
+  secret-shaped `VITE_` names are prohibited even in local-only files.
 - Validate and bound every input on the server; treat customer text as plain
   text; parameterize queries; verify upload bytes/type/size; rate-limit public
   and costly actions; redact secrets and internals from errors/logs; and verify
   external webhook signatures over the exact raw body before durable capture.
+- Browser code never inserts directly into `error_reports` or another diagnostic
+  table. Admin failures may emit only fixed, redacted classifications through the
+  protected Admin BFF security-event boundary. Storefront failures remain local
+  unless a separately approved, challenged, rate-bounded, monitored server
+  intake is justified; raw messages, stacks, URLs, user agents, tokens, and
+  arbitrary context never cross that boundary.
+- Before retiring legacy `products_old` access or Realtime publication, preserve
+  all 14 audited rows in the named encrypted pre-change database backup. Capture
+  only a redacted deterministic row count/SHA-256 fingerprint before and after
+  the dump, cryptographically bind it to the envelope, and require exact equality
+  after isolated restore. Any count, fingerprint, or envelope mismatch stops the
+  change; no row values belong in manifests, logs, or evidence receipts.
+- Off-site recovery artifacts are encrypted before upload and may be stored only
+  in the owner-controlled, unshared `K2 Production Backups` Drive folder owned by
+  `k2jimzonwebsite@gmail.com`; never upload the repository or plaintext database,
+  Storage paths, passphrases, or provider tokens. A provider upload is not a
+  recovery claim until exact byte lengths, independent download/checksums, MFA,
+  and recovery access are evidenced. If a provider input limit requires transport
+  chunking, split only the already-encrypted bytes, retain an authenticated parts
+  manifest, and verify exact reassembly before restore.
 
 ## 23. Audit event contract
 

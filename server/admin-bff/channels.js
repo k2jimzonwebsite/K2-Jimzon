@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { isAdminRole } from './supabase.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
@@ -37,7 +38,7 @@ export default async function handleChannels(req, res) {
     if (error || !data) return safeJson(res, 503, { error: { code: 'CHANNEL_READINESS_UNAVAILABLE' } })
     return safeJson(res, 200, { ok: true, channels: data })
   }
-  if (authorized.identity.role !== 'Admin') return safeJson(res, 403, { error: { code: 'CHANNEL_ADMIN_REQUIRED' } })
+  if (!isAdminRole(authorized.identity.role)) return safeJson(res, 403, { error: { code: 'CHANNEL_ADMIN_REQUIRED' } })
   try {
     const payload = validateInternalChannelVerification(await readJson(req))
     const signed = signedAdminCommandArguments('channel_internal_event_verify', authorized.identity.userId, idempotencyKey, payload)

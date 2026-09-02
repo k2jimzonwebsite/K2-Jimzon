@@ -5,6 +5,7 @@ import { GhostButton, Kicker, RedButton } from '../components/ui/bits'
 import { ArrowIcon, BriefcaseIcon, CheckIcon, InboxIcon, ShieldIcon } from '../components/ui/icons'
 import TurnstileChallenge from '../components/security/TurnstileChallenge'
 import { guestBffEnabled, postGuestCommerce } from '../services/guestCommerceService'
+import { applyImageFallback } from '../lib/imageFallback'
 
 const WHOLESALE_EMAIL = 'k2jimzonwebsite@gmail.com'
 
@@ -163,6 +164,7 @@ export default function Wholesale() {
             <img
               src={LIFESTYLE.venice}
               alt="Italy sourcing and consolidation"
+              onError={applyImageFallback}
               className="aspect-[4/3] h-full w-full object-cover opacity-90"
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[var(--store-surface-bg)] via-[var(--store-surface-bg)]/80 to-transparent p-6 pt-20">

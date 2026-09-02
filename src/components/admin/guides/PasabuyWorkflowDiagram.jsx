@@ -103,7 +103,7 @@ export default function PasabuyWorkflowDiagram({ activeStep = null, onSelectStep
             Operations Rulebook §8, §17 — Request Intake to Milan Sourcing & Cargo Flight
           </p>
         </div>
-        <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-medium text-white/70">
+        <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-white/70">
           Step {activeData.num} of {steps.length}
         </span>
       </div>
@@ -238,7 +238,7 @@ export default function PasabuyWorkflowDiagram({ activeStep = null, onSelectStep
               {activeData.num}
             </span>
             <h4 className="text-sm font-bold text-white">{activeData.title}</h4>
-            <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-white/80">
+            <span className="rounded bg-white/10 px-2 py-0.5 text-xs font-semibold text-white/80">
               {activeData.tag}
             </span>
           </div>
@@ -250,7 +250,7 @@ export default function PasabuyWorkflowDiagram({ activeStep = null, onSelectStep
         <p className="mt-2 text-xs leading-relaxed text-white/80">{activeData.short}</p>
 
         <div className="mt-3 space-y-1.5 border-t border-white/5 pt-2.5">
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-white/50">
+          <div className="text-xs font-semibold uppercase tracking-wider text-white/50">
             Workflow Logic & Safeguards:
           </div>
           <ul className="space-y-1">

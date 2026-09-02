@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test'
-import { config } from 'dotenv'
+import { STAFF_GUIDE_META } from '../src/views/admin/staffProcedureRegistry.js'
 
-config({ path: '.env.local' })
-
-const supabaseUrl = process.env.VITE_SUPABASE_URL
+// Keep the visual acceptance fixture hermetic and identical in CI. The Admin
+// Playwright server uses this same fabricated origin and every request is
+// fulfilled below; no real provider is contacted.
+const supabaseUrl = 'https://fixture.supabase.co'
 const projectRef = supabaseUrl ? new URL(supabaseUrl).hostname.split('.')[0] : ''
 const storageKey = projectRef ? `sb-${projectRef}-auth-token` : ''
 
@@ -19,6 +20,15 @@ const user = {
 
 const daysAgo = days => new Date(Date.now() - days * 86400000).toISOString()
 const daysAhead = days => new Date(Date.now() + days * 86400000).toISOString().slice(0, 10)
+
+async function unnamedInteractiveRoles(page) {
+  const session = await page.context().newCDPSession(page)
+  const { nodes } = await session.send('Accessibility.getFullAXTree')
+  const interactive = new Set(['button', 'link', 'textbox', 'searchbox', 'combobox', 'checkbox', 'radio', 'switch'])
+  return nodes
+    .filter(node => !node.ignored && interactive.has(node.role?.value) && !String(node.name?.value || '').trim())
+    .map(node => node.role.value)
+}
 
 const orders = [
   ['website', 'fulfilled', 'verified', 4380, 1],
@@ -99,6 +109,7 @@ const fixtures = {
 }
 
 async function installSupabaseFixture(page) {
+  let productIntakeSession = null
   const session = {
     access_token: 'visual-test-access-token',
     refresh_token: 'visual-test-refresh-token',
@@ -117,22 +128,29 @@ async function installSupabaseFixture(page) {
     const table = url.pathname.split('/').pop()
 
     if (table === 'product_intake_sessions') {
-      const session = {
-        id: '40000000-0000-4000-8000-000000000001',
-        status: 'active',
-        checklist_step: 'identify',
-        packaging_images: [],
-        evidence_checklist: {},
-        inventory_result: null,
+      if (request.method() === 'POST') {
+        productIntakeSession = {
+          id: '40000000-0000-4000-8000-000000000001',
+          status: 'active',
+          checklist_step: 'identify',
+          packaging_images: [],
+          evidence_checklist: {},
+          inventory_result: null,
+        }
+      } else if (request.method() === 'PATCH' && productIntakeSession) {
+        productIntakeSession = {
+          ...productIntakeSession,
+          ...request.postDataJSON(),
+        }
       }
-      const body = request.method() === 'GET' ? [] : {
-        ...session,
-        checklist_step: request.method() === 'PATCH' ? 'packaging_evidence' : session.checklist_step,
-      }
+      const wantsObject = (request.headers().accept || '').includes('application/vnd.pgrst.object+json')
+      const body = request.method() === 'GET' && !wantsObject
+        ? (productIntakeSession ? [productIntakeSession] : [])
+        : productIntakeSession
       return route.fulfill({
         status: request.method() === 'POST' ? 201 : 200,
         contentType: 'application/json',
-        headers: { 'content-range': request.method() === 'GET' ? '*/0' : '0-0/1' },
+        headers: { 'content-range': productIntakeSession ? '0-0/1' : '*/0' },
         body: JSON.stringify(body),
       })
     }
@@ -159,8 +177,6 @@ async function installSupabaseFixture(page) {
 }
 
 test.describe('admin command center redesign', () => {
-  test.skip(!supabaseUrl, 'Local Supabase environment is required for the protected visual fixture.')
-
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(() => {
       window.turnstile = {
@@ -172,10 +188,55 @@ test.describe('admin command center redesign', () => {
   })
 
   test('renders multichannel analytics without desktop overflow', async ({ page }) => {
-    test.setTimeout(90000)
+    test.setTimeout(120000)
     await page.setViewportSize({ width: 1440, height: 1000 })
+    await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
+    const salesSummary = page.getByRole('region', { name: 'Sales computation summary' })
+    await expect(salesSummary).toContainText('₱46,000')
+    await expect(salesSummary).toContainText('₱38,885')
+    await expect(salesSummary).toContainText('₱20,055')
+    await expect(salesSummary.getByText('Unavailable')).toHaveCount(2)
+    await expect(salesSummary.getByRole('heading', { name: 'Payment × fulfillment reconciliation' })).toBeVisible()
+    await expect(salesSummary.getByRole('button', { name: 'Review Verified + fulfilled records' })).toContainText('₱20,055')
+    await expect(salesSummary.getByRole('button', { name: 'Review Verified + fulfilled records' })).toContainText('5 records')
+    await expect(salesSummary.getByRole('button', { name: 'Review Verified, not fulfilled records' })).toContainText('₱18,830')
+    await expect(salesSummary.getByRole('button', { name: 'Review Verified, not fulfilled records' })).toContainText('2 records')
+    await expect(salesSummary.getByRole('button', { name: 'Review Fulfilled, payment not verified records' })).toContainText('₱0')
+    await expect(salesSummary.getByRole('button', { name: 'Review Neither exact state records' })).toContainText('₱7,115')
+    await salesSummary.getByRole('button', { name: 'Review Verified, not fulfilled records' }).click()
+    await expect(salesSummary).toContainText('2 matching records')
+    await expect(salesSummary).toContainText('Visible filter total: ₱18,830')
+    const exceptionDownloadPromise = page.waitForEvent('download')
+    await salesSummary.getByRole('button', { name: 'Download CSV (2)' }).click()
+    const exceptionDownload = await exceptionDownloadPromise
+    expect(exceptionDownload.suggestedFilename()).toMatch(/^k2-sales-30d-verified_pending-\d{4}-\d{2}-\d{2}\.csv$/)
+    const exceptionStream = await exceptionDownload.createReadStream()
+    let exceptionCsv = ''
+    for await (const chunk of exceptionStream) exceptionCsv += chunk.toString('utf8')
+    expect(exceptionCsv.split('\r\n').filter(Boolean)).toHaveLength(3)
+    await expect(salesSummary.getByRole('heading', { name: 'Records behind these totals' })).toBeVisible()
+    await salesSummary.getByRole('button', { name: 'All requests' }).click()
+    await expect(salesSummary).toContainText('9 matching records')
+    await expect(salesSummary).toContainText('Visible filter total: ₱46,000')
+    await salesSummary.getByRole('button', { name: 'Payment verified' }).click()
+    await expect(salesSummary).toContainText('7 matching records')
+    await expect(salesSummary).toContainText('Visible filter total: ₱38,885')
+    await salesSummary.getByRole('button', { name: 'Fulfilled', exact: true }).click()
+    await expect(salesSummary).toContainText('5 matching records')
+    await expect(salesSummary).toContainText('Visible filter total: ₱20,055')
+    const downloadPromise = page.waitForEvent('download')
+    await salesSummary.getByRole('button', { name: 'Download CSV (5)' }).click()
+    const download = await downloadPromise
+    expect(download.suggestedFilename()).toMatch(/^k2-sales-30d-fulfilled-\d{4}-\d{2}-\d{2}\.csv$/)
+    const downloadStream = await download.createReadStream()
+    let downloadedCsv = ''
+    for await (const chunk of downloadStream) downloadedCsv += chunk.toString('utf8')
+    expect(downloadedCsv).toContain('"created_at","order_reference","channel","order_status","payment_status","request_value_php"')
+    expect(downloadedCsv.split('\r\n').filter(Boolean)).toHaveLength(6)
+    expect(downloadedCsv).not.toMatch(/customer|email|profit|payout/i)
+    await expect(salesSummary).toContainText('Request value is not a payout or actual profit.')
     await expect(page.getByText('Verified revenue trend')).toBeVisible()
     await expect(page.getByText('Channel performance and readiness')).toBeVisible()
     await expect(page.getByText('Inbox workload')).toBeVisible()
@@ -188,17 +249,189 @@ test.describe('admin command center redesign', () => {
     await page.keyboard.press('Escape')
     await expect(page.getByRole('dialog', { name: 'What are you scanning?' })).toBeHidden()
 
+    const focusTrigger = page.getByRole('button').first()
+    await focusTrigger.focus()
+    await expect(focusTrigger).toBeFocused()
     await page.keyboard.press('?')
     await expect(page.getByRole('dialog', { name: 'Keyboard shortcuts' })).toBeVisible()
+    const closeShortcuts = page.getByRole('button', { name: 'Close shortcuts' })
+    await expect(closeShortcuts).toBeFocused()
+    await page.keyboard.press('Tab')
+    await expect(closeShortcuts).toBeFocused()
     await page.keyboard.press('Escape')
+    await expect(page.getByRole('dialog', { name: 'Keyboard shortcuts' })).toBeHidden()
+    await expect(focusTrigger).toBeFocused()
+
+    expect(await page.getByRole('main').count()).toBe(1)
+    expect(await page.getByRole('heading', { level: 1 }).count()).toBe(1)
+    expect(await page.locator('img:not([alt])').count()).toBe(0)
+    expect(await page.evaluate(() => {
+      const ids = [...document.querySelectorAll('[id]')].map(element => element.id).filter(Boolean)
+      return ids.filter((id, index) => ids.indexOf(id) !== index)
+    })).toEqual([])
+    expect(await unnamedInteractiveRoles(page)).toEqual([])
+
     await page.screenshot({ path: 'C:/tmp/k2-admin-command-center-desktop.png', fullPage: true })
+    await page.evaluate(() => { document.documentElement.style.fontSize = '200%' })
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
+  })
+
+  test('computes a bounded sales plan without presenting it as recorded finance truth', async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: {
+          writeText: async (text) => {
+            if (window.__k2PlanningClipboardShouldFail) throw new Error('Clipboard denied for test')
+            window.__k2CopiedPlanningSummary = text
+          },
+        },
+      })
+    })
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
+
+    await page.getByRole('button', { name: 'Open Admin tools' }).click()
+    await page.getByRole('button', { name: 'Sales planner' }).click()
+    await expect(page.getByText('Sales planning calculator')).toBeVisible()
+    await expect(page.getByText(/Nothing here writes a product price, promotion, order, payment, cost, payout, tax, or accounting record/)).toBeVisible()
+    await page.getByLabel('Quantity').fill('10')
+    await page.getByLabel('Unit selling price (₱)').fill('250')
+    await page.getByLabel('Unit cost (₱)').fill('120')
+    await page.getByLabel('Discount total (₱)').fill('100')
+    await page.getByLabel('Other costs (₱)').fill('75')
+    await page.getByLabel('Fixed fees (₱)').fill('50')
+    await page.getByLabel('Channel fee rate (%)').fill('8')
+
+    const result = page.getByLabel('Sales planning result')
+    await expect(result).toContainText('₱2,500.00')
+    await expect(result).toContainText('₱2,400.00')
+    await expect(result).toContainText('₱1,200.00')
+    await expect(result).toContainText('₱125.00')
+    await expect(result).toContainText('₱200.00')
+    await expect(result).toContainText('₱1,525.00')
+    await expect(result).toContainText('₱875.00')
+    await expect(result).toContainText('36.5%')
+    await expect(result).toContainText('57.4%')
+    await expect(result).toContainText('₱154.90')
+    await expect(page.getByText(/Break-even includes that changing fee and rounds upward to cents/)).toBeVisible()
+    const copySummary = page.getByRole('button', { name: 'Copy planning summary' })
+    expect((await copySummary.boundingBox())?.height).toBeGreaterThanOrEqual(44)
+    const clipboardBoundary = page.getByText('Clipboard text only. No Admin or financial record is created.')
+    expect(await clipboardBoundary.evaluate(element => parseFloat(getComputedStyle(element).fontSize))).toBeGreaterThanOrEqual(12)
+    await copySummary.click()
+    await expect(page.getByRole('status')).toContainText('Copied assumptions, results, timestamp')
+    const copiedSummary = await page.evaluate(() => window.__k2CopiedPlanningSummary)
+    expect(copiedSummary).toContain('K2 SALES PLANNING SUMMARY')
+    expect(copiedSummary).toContain('Mode: Check a price')
+    expect(copiedSummary).toContain('Unit selling price: PHP 250.00')
+    expect(copiedSummary).toContain('Percentage fees: PHP 200.00')
+    expect(copiedSummary).toContain('Fee-aware break-even unit price: PHP 154.90')
+    expect(copiedSummary).not.toMatch(/customer|email/i)
+    await page.screenshot({ path: 'C:/tmp/k2-admin-copy-summary-success-mobile.png', fullPage: true })
+    await page.evaluate(() => { window.__k2PlanningClipboardShouldFail = true })
+    await page.getByRole('button', { name: 'Planning summary copied' }).click()
+    await expect(page.getByRole('alert')).toContainText('Allow clipboard access')
+    await page.evaluate(() => { window.__k2PlanningClipboardShouldFail = false })
+    await result.scrollIntoViewIfNeeded()
+    await page.screenshot({ path: 'C:/tmp/k2-admin-forward-fee-mobile.png', fullPage: true })
+
+    await page.getByRole('button', { name: 'Find target price' }).click()
+    await page.getByLabel('Quantity').fill('10')
+    await page.getByLabel('Unit cost (₱)').fill('120')
+    await page.getByLabel('Discount total (₱)').fill('100')
+    await page.getByLabel('Other costs (₱)').fill('75')
+    await page.getByLabel('Fixed fees (₱)').fill('50')
+    await page.getByLabel('Channel fee rate (%)').fill('8')
+    await page.getByLabel('Target gross margin (%)').fill('30')
+    const targetResult = page.getByLabel('Target price result')
+    await expect(targetResult).toContainText('₱225.00')
+    await expect(targetResult).toContainText('₱2,250.00')
+    await expect(targetResult).toContainText('₱2,150.00')
+    await expect(targetResult).toContainText('₱180.00')
+    await expect(targetResult).toContainText('₱1,505.00')
+    await expect(targetResult).toContainText('₱645.00')
+    await expect(targetResult).toContainText('30.0%')
+    await expect(page.getByText(/Review and approve price through the canonical product workflow/)).toBeVisible()
+    await page.screenshot({ path: 'C:/tmp/k2-admin-target-price-mobile.png', fullPage: true })
+    await page.getByLabel('Channel fee rate (%)').fill('30')
+    await page.getByLabel('Target gross margin (%)').fill('70')
+    await expect(page.getByRole('alert')).toContainText('must stay below 100%')
+
+    await page.getByRole('button', { name: 'Find max discount' }).click()
+    await page.getByLabel('Quantity').fill('10')
+    await page.getByLabel('Unit selling price (₱)').fill('250')
+    await page.getByLabel('Unit cost (₱)').fill('120')
+    await page.getByLabel('Other costs (₱)').fill('75')
+    await page.getByLabel('Fixed fees (₱)').fill('50')
+    await page.getByLabel('Channel fee rate (%)').fill('8')
+    await page.getByLabel('Target gross margin (%)').fill('30')
+    const discountResult = page.getByLabel('Maximum discount result')
+    await expect(discountResult).toContainText('₱321.42')
+    await expect(discountResult).toContainText('₱32.14')
+    await expect(discountResult).toContainText('12.9%')
+    await expect(discountResult).toContainText('₱2,500.00')
+    await expect(discountResult).toContainText('₱2,178.58')
+    await expect(discountResult).toContainText('₱200.00')
+    await expect(discountResult).toContainText('₱1,525.00')
+    await expect(discountResult).toContainText('₱653.58')
+    await expect(discountResult).toContainText('30.0%')
+    await expect(page.getByText(/Review and approve any real promotion through the canonical product workflow/)).toBeVisible()
+    await page.screenshot({ path: 'C:/tmp/k2-admin-max-discount-mobile.png', fullPage: true })
+    await page.getByLabel('Unit selling price (₱)').fill('100')
+    await page.getByLabel('Unit cost (₱)').fill('100')
+    await page.getByLabel('Channel fee rate (%)').fill('10')
+    await page.getByLabel('Target gross margin (%)').fill('20')
+    await expect(page.getByRole('alert')).toContainText('cannot reach the target gross margin even with no discount')
+
+    const unitsMode = page.getByRole('button', { name: 'Find units needed' })
+    expect((await unitsMode.boundingBox())?.height).toBeGreaterThanOrEqual(44)
+    await unitsMode.click()
+    await page.getByLabel('Unit selling price (₱)').fill('250')
+    await page.getByLabel('Unit cost (₱)').fill('120')
+    await page.getByLabel('Discount total (₱)').fill('100')
+    await page.getByLabel('Other costs (₱)').fill('75')
+    await page.getByLabel('Fixed fees (₱)').fill('50')
+    await page.getByLabel('Channel fee rate (%)').fill('8')
+    await page.getByLabel('Target planned profit (₱)').fill('1000')
+    const unitsResult = page.getByLabel('Target units result')
+    await expect(unitsResult).toContainText('Minimum whole units')
+    await expect(unitsResult).toContainText('12')
+    await expect(unitsResult).toContainText('₱110.00')
+    await expect(unitsResult).toContainText('₱95.00')
+    await expect(unitsResult).toContainText('₱3,000.00')
+    await expect(unitsResult).toContainText('₱2,900.00')
+    await expect(unitsResult).toContainText('₱1,440.00')
+    await expect(unitsResult).toContainText('₱240.00')
+    await expect(unitsResult).toContainText('₱1,805.00')
+    await expect(unitsResult).toContainText('₱1,095.00')
+    await expect(unitsResult).toContainText('37.8%')
+    await expect(unitsResult).toContainText('At 11 units')
+    await expect(unitsResult).toContainText('₱985.00 — below target')
+    await expect(page.getByText(/planning target, not a sales quota or order/)).toBeVisible()
+    await unitsResult.scrollIntoViewIfNeeded()
+    await page.screenshot({ path: 'C:/tmp/k2-admin-target-units-mobile.png', fullPage: true })
+    await page.getByLabel('Unit selling price (₱)').fill('100')
+    await page.getByLabel('Unit cost (₱)').fill('95')
+    await page.getByLabel('Channel fee rate (%)').fill('10')
+    await expect(page.getByRole('alert')).toContainText('Each unit must contribute more than ₱0')
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
   })
 
   test('collapses safely for mobile operations', async ({ page }) => {
+    test.setTimeout(90000)
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.setViewportSize({ width: 375, height: 812 })
     await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
-    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
+    const salesSummary = page.getByRole('region', { name: 'Sales computation summary' })
+    await salesSummary.getByRole('button', { name: 'Review Verified, not fulfilled records' }).click()
+    await expect(salesSummary).toContainText('2 matching records')
+    const downloadCsv = salesSummary.getByRole('button', { name: 'Download CSV (2)' })
+    await expect(downloadCsv).toBeVisible()
+    expect((await downloadCsv.boundingBox())?.height).toBeGreaterThanOrEqual(44)
     let overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(1)
     await expect(page.locator('.pulse-dot').first()).toHaveCSS('animation-name', 'none')
@@ -394,6 +627,7 @@ test.describe('admin command center redesign', () => {
   })
 
   test('lets an invited staff account enroll an authenticator through the secure pending session at 375px', async ({ page }) => {
+    test.setTimeout(90000)
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.setViewportSize({ width: 375, height: 812 })
     await page.goto('/', { waitUntil: 'domcontentloaded' })
@@ -682,6 +916,10 @@ test.describe('admin command center redesign', () => {
       const root = createRoot(fixture)
       function IntakeFixture() {
         const [open, setOpen] = React.useState(true)
+        React.useEffect(() => {
+          window.__k2ReopenProductIntake = () => setOpen(true)
+          return () => { delete window.__k2ReopenProductIntake }
+        }, [])
         return React.createElement(ProductIntakeSessionModal, {
           isOpen: open,
           onClose: () => setOpen(false),
@@ -730,6 +968,33 @@ test.describe('admin command center redesign', () => {
     await expect(dialog.getByRole('alert')).toContainText('evidence photo was not uploaded')
     await page.keyboard.press('Escape')
     await expect(dialog).toBeHidden()
+    await page.evaluate(() => window.__k2ReopenProductIntake())
+    await expect(dialog).toBeVisible()
+    await expect(dialog.getByText('Intake resumed.')).toBeVisible()
+    await expect(dialog.getByText('Saved server progress restored at Step 2.')).toBeVisible()
+    await expect(dialog.getByText('Step 2: Capture Packaging Evidence')).toBeVisible()
+    await page.screenshot({ path: 'C:/tmp/k2-admin-product-intake-resume-mobile.png', fullPage: true })
+
+    await page.keyboard.press('Escape')
+    await expect(dialog).toBeHidden()
+    await page.evaluate(async () => {
+      const { supabase } = await import('/src/lib/supabaseClient.js')
+      await supabase.from('product_intake_sessions').update({
+        checklist_step: 'first_inventory',
+        product_id: '50000000-0000-4000-8000-000000000001',
+        assigned_sku: 'K2-SKU-001001',
+      }).eq('id', '40000000-0000-4000-8000-000000000001')
+    })
+    await page.evaluate(() => window.__k2ReopenProductIntake())
+    await expect(dialog.getByText('Step 6: Controlled First Inventory')).toBeVisible()
+    await dialog.getByRole('button', { name: 'Opening Balance' }).click()
+    await expect(dialog.getByLabel('Hub / Location')).toHaveValue('HUB-MNL-CENTRAL')
+    await expect(dialog.getByLabel('Custodian')).toHaveValue('CUST-STAFF-ELENA')
+    await dialog.getByLabel('Hub / Location').selectOption('HUB-MIL-DEPOT')
+    await expect(dialog.getByLabel('Custodian')).toHaveValue('CUST-STAFF-MARCO')
+    expect(await dialog.evaluate((element) => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1)
+    await dialog.getByLabel('Custodian').scrollIntoViewIfNeeded()
+    await page.screenshot({ path: 'C:/tmp/k2-admin-product-intake-canonical-identities-mobile.png', fullPage: true })
   })
 
   test('keeps the five operational workspaces readable and overflow-safe', async ({ page }) => {
@@ -752,6 +1017,40 @@ test.describe('admin command center redesign', () => {
       expect(overflow).toBeLessThanOrEqual(1)
       await page.screenshot({ path: `C:/tmp/k2-admin-${slug}-desktop.png`, fullPage: true })
     }
+  })
+
+  test('the store asset queue mounts and offers a real publish path', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 15000 })
+
+    await page.getByRole('button', { name: 'Store Assets', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Store assets' })).toBeVisible()
+
+    // The screen used to say approvals were session-only. Now that they are
+    // written through a signed command, that claim must be gone from the UI as
+    // well as from the code.
+    await expect(page.getByText('held for this session')).toHaveCount(0)
+    await expect(page.getByText('Products needing work')).toBeVisible()
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    expect(overflow).toBeLessThanOrEqual(1)
+  })
+
+  test('the workflow map exposes the channels section and names what is not connected', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 15000 })
+
+    await page.getByRole('button', { name: 'Workflow Graph', exact: true }).click()
+    await page.getByRole('button', { name: /Channels & Integrations/ }).first().click()
+
+    // Staff must be able to see, on the map itself, that these channels have no
+    // adapter — not have to read the plan to find out.
+    await expect(page.getByText('NOT BUILT').first()).toBeVisible()
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    expect(overflow).toBeLessThanOrEqual(1)
   })
 
   test('keeps high-frequency workspace controls usable on mobile', async ({ page }) => {
@@ -784,5 +1083,81 @@ test.describe('admin command center redesign', () => {
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(1)
+  })
+
+  test('renders the complete connected workflow graph with traceable routes', async ({ page }) => {
+    test.setTimeout(120000)
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
+
+    await page.getByRole('button', { name: 'Workflow Graph', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Master Operations Workflow Graph' })).toBeVisible()
+    await expect(page.getByText(/Version 2026-08-30-draft\.1 · DRAFT — NOT LOCKED/)).toBeVisible()
+    await expect(page.getByRole('note')).toContainText('not an operations terminal')
+    await expect(page.getByText(/does not write or verify a real record/)).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Mark guide step reviewed' })).toBeVisible()
+
+    const canvas = page.getByRole('region', { name: 'Connected operations workflow canvas' })
+    await expect(canvas).toBeVisible()
+    await expect(canvas.locator('[data-node-id]')).toHaveCount(49)
+    await expect(canvas.locator('[data-edge-kind="branch"]')).toHaveCount(16)
+    await expect(canvas.locator('[data-edge-kind="converge"]')).toHaveCount(7)
+    await expect(canvas.locator('[data-edge-kind="loopback"]')).toHaveCount(2)
+    await canvas.locator('[data-node-id="cb_1"]').click()
+    await expect(page.getByText('Training example', { exact: true })).toBeVisible()
+
+    await expect(page.getByText('Where did this come from?', { exact: true })).toBeVisible()
+    await expect(page.getByText('What can you do here?', { exact: true })).toBeVisible()
+    await expect(page.getByText('Grounding evidence', { exact: true })).toBeVisible()
+
+    const zoomValue = canvas.getByText('72%', { exact: true })
+    await expect(zoomValue).toBeVisible()
+    await canvas.getByRole('button', { name: 'Zoom out' }).click()
+    await expect(canvas.getByText('62%', { exact: true })).toBeVisible()
+    await canvas.getByRole('button', { name: 'Reset view' }).click()
+    await expect(zoomValue).toBeVisible()
+
+    await page.getByRole('button', { name: 'Trace path' }).click()
+    const tracedRoute = page.getByRole('status')
+    await expect(tracedRoute).toBeVisible()
+    expect(await tracedRoute.getByRole('button').count()).toBeGreaterThan(2)
+    await page.screenshot({ path: 'C:/tmp/k2-admin-workflow-graph-desktop.png', fullPage: true })
+
+    await page.setViewportSize({ width: 375, height: 812 })
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    expect(overflow).toBeLessThanOrEqual(1)
+    await expect(canvas.getByRole('button', { name: 'Zoom out' })).toBeVisible()
+    await expect(canvas.getByRole('button', { name: 'Reset view' })).toBeVisible()
+    await page.screenshot({ path: 'C:/tmp/k2-admin-workflow-graph-mobile.png', fullPage: true })
+  })
+
+  test('shows the complete paid-API blocker and manual fallback in the phone guide', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    await page.evaluate(async () => {
+      const [reactModule, reactDomClientModule, guideModule] = await Promise.all([
+        import('/@id/react'), import('/@id/react-dom/client'),
+        import('/src/views/admin/AdminAiCopilotModal.jsx'),
+      ])
+      const React = reactModule.default || reactModule
+      const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
+      const app = document.getElementById('root'); if (app) app.style.display = 'none'
+      const mount = document.createElement('main'); document.body.appendChild(mount)
+      createRoot(mount).render(React.createElement(guideModule.default, {
+        isOpen: true, onClose: () => {}, onNavigate: () => {}, currentSection: 'inventory',
+        initialQuery: 'paid API product intake',
+      }))
+    })
+
+    await expect(page.getByRole('heading', { name: 'K2 operations guide' })).toBeVisible()
+    await expect(page.getByText(STAFF_GUIDE_META.version)).toBeVisible()
+    await expect(page.getByText('Paid API product-content and image path')).toBeVisible()
+    await expect(page.getByText(/UNAVAILABLE — BLOCKED/).first()).toBeVisible()
+    await expect(page.getByText(/manual K2 Product Content → Smart Paste → K2 Product Image Studio fallback/)).toBeVisible()
+    await expect(page.getByText(/Owner confirmation design, spend ceiling/).first()).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
   })
 })

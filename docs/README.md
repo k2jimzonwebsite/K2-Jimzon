@@ -13,7 +13,7 @@ Welcome to the central documentation library for the **K2 Jimzon** platform. Thi
 | [**PROJECT_MAP.md**](./PROJECT_MAP.md) | Comprehensive folder directory map, component boundaries, and placement rules. | Developers & AI Agents |
 | [**FEATURES.md**](./FEATURES.md) | Complete catalog of features with status badges (`STABLE`, `ACTIVE DEVELOPMENT`, `PROTOTYPE`, `PLANNED`). | Product & Engineering |
 | [**DATA_MODEL.md**](./DATA_MODEL.md) | Authoritative database entities, derived stock formulas, schema boundaries, and invariants. | Backend Engineers |
-| [**ROUTES.md**](./ROUTES.md) | Complete index of 11 Storefront views, 68 Admin BFF routes, and 13 Storefront BFF routes. | Full-Stack Engineers |
+| [**ROUTES.md**](./ROUTES.md) | Complete index of 12 Storefront view states, 81 Admin BFF routes, and 14 Storefront BFF routes. | Full-Stack Engineers |
 | [**INTEGRATIONS.md**](./INTEGRATIONS.md) | External services: Supabase, Vercel, Shopee/Lazada/TikTok connectors, Cloudflare Turnstile, OpenAI. | Integrations & DevOps |
 | [**DEVELOPMENT.md**](./DEVELOPMENT.md) | Local development setup, dual Vite dev servers, PostgreSQL 17 rehearsals, and testing suites. | Engineers |
 | [**DEPLOYMENT.md**](./DEPLOYMENT.md) | Isolated target builds (`storefront` vs `admin`), Vercel environment contracts, and boundary validation. | DevOps & Release |
@@ -31,6 +31,7 @@ Standard Operating Procedures (SOPs) and technical runbooks:
 - [**ADMIN_BFF_SECURITY_RUNBOOK.md**](./runbooks/ADMIN_BFF_SECURITY_RUNBOOK.md) — Admin Backend-For-Frontend security controls and route policies.
 - [**GUEST_COMMERCE_BFF_RUNBOOK.md**](./runbooks/GUEST_COMMERCE_BFF_RUNBOOK.md) — Guest checkout, scoped grant cookies, and universal messaging.
 - [**PRODUCT_INTAKE_RUNBOOK.md**](./runbooks/PRODUCT_INTAKE_RUNBOOK.md) — Phone-first SKU generation, photo evidence capture, and first-inventory gate.
+- [**STAFF_PRODUCT_DELETION_SOP.md**](./runbooks/STAFF_PRODUCT_DELETION_SOP.md) — Four-digit Delete PIN prerequisite, eligible-product deletion, lockout recovery, and BFF cutover behavior.
 - [**CATALOG_SPREADSHEET_RUNBOOK.md**](./runbooks/CATALOG_SPREADSHEET_RUNBOOK.md) — Multi-variant spreadsheet export, staging, and atomic commit.
 - [**DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md**](./runbooks/DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md) — Encrypted dump creation and loopback restoration rehearsal.
 - [**CUSTOMER_DATA_RETENTION_AND_DELETION_RUNBOOK.md**](./runbooks/CUSTOMER_DATA_RETENTION_AND_DELETION_RUNBOOK.md) — Data lifecycle, retention policies, and GDPR/DPA deletion gates.
@@ -60,5 +61,5 @@ Technical specifications, connector integration blueprints, and operations audit
 The core project truth is governed by:
 1. `K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md` — Target operational rules, non-negotiable invariants, and logistics workflows.
 2. `K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md` — Current verified production state, verified schema truth, and active security baselines.
-3. `MASTER_ACTION_PLAN.md` — The **single active project backlog** (MAP-017 through MAP-025). Do not create competing TODO lists.
+3. `MASTER_ACTION_PLAN.md` — The **single active project backlog** (currently through MAP-028). Do not create competing TODO lists.
 4. `K2 Jimzon - Brain/OWNER_QUESTIONS.md` — Business decisions requiring explicit owner authorization.

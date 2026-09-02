@@ -34,10 +34,12 @@ file_size_limit = "50MiB"
 
 [auth]
 enabled = true
-site_url = "http://localhost:5173"
+site_url = "https://www.k2jimzon.com"
 additional_redirect_urls = [
   "http://localhost:5173/**",
-  "https://*.vercel.app/**"
+  "https://k2jimzon.com/**",
+  "https://www.k2jimzon.com/**",
+  "https://admin.k2jimzon.com/**"
 ]
 jwt_expiry = 3600
 enable_signup = true

@@ -1,6 +1,6 @@
 # K2 Jimzon — System Brain (Current State)
 
-**Living source of truth. Last updated: 25 August 2026 (rev. 21).**
+**Living source of truth. Last updated: 28 August 2026 (rev. 29).**
 
 This is the "never get lost" document. It says what the system is, how our real
 workflow maps onto it, everything verified as built, and exactly what to run.
@@ -68,7 +68,18 @@ critical, 7 high) and 12/14 read boundary on 22 August, fixed a cross-schema
 grant false positive, and repaired the migration's missing safe public-stock
 projection. The exact migration, postflight, and anonymous stock read then passed
 in an explicit production transaction ending in `ROLLBACK`; all nine sampled
-baseline restoration checks passed. It awaits `OWNER-005`. No DDL has been applied.
+baseline restoration checks passed. The owner authorized that exact phase-one
+migration on 26 August, but required verified recovery first. A named production
+application-database backup/loopback restore and a full Storage object-byte/local
+restore now pass. The owner-only off-site upload and all eight independent
+retrieval/SHA-256 checks pass. The Drive-retrieved first Storage chunk also
+reassembled with part 002 to the exact original encrypted archive digest. Owner
+recovery access remains Pending, so the guarded executor must still refuse.
+No DDL has been applied.
+The 29 August executor correction enforces that account-level recovery proof as
+a distinct permanent-apply gate instead of conflating it with backup evidence.
+Its focused contracts pass 24/24 and the portable PostgreSQL lifecycle passes all
+12 authorization groups plus encrypted backup and isolated restore.
 The captured metadata is not a complete DDL backup, so the recovery generator
 correctly remains fail-closed: pre-commit recovery is the verified PostgreSQL
 transaction rollback, while any post-commit incident must use a reviewed
@@ -94,7 +105,8 @@ stock view returning HTTP 401. The exact migration again passed a forced-
 rollback production rehearsal plus 9/9 restoration checks, and the isolated
 PostgreSQL lifecycle passed all 12 authorization groups and idempotent replay.
 The isolated server was stopped afterward. These are current preparation and
-reversibility facts only; production remains unremediated pending `OWNER-005`.
+reversibility facts only; production remains unremediated pending the required
+named backup/restore evidence and guarded authorized execution.
 The complete local lifecycle is now reproducible with
 `npm.cmd run verify:map017-portable`; it uses only the workspace's ignored
 PostgreSQL 17.11 runtime, loopback port 55432, and
@@ -105,11 +117,158 @@ payload-bound ledger receipt and a separate 11-invariant read-only verification,
 then proves exact replay. The production executor never retries a write and
 fails ambiguous responses closed unless that independent receipt and every
 postcondition are present. Its payload SHA-256 is
-`8AF7C69ABFBE6694302AC8AFD30A177EBEEA8461BD7B0963CD3AE23570DFC5F1` and its
-planned ledger version is `20260824143000`. It remains unusable until OWNER-005
-is recorded as Authorized and the exact project, payload, backup evidence,
-finding count, ledger, and recovery gates are supplied. No production apply was
-attempted.
+`D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62` and its
+planned ledger version is `20260824143000`. OWNER-005 is now recorded as
+Authorized, but the executor remains unusable until the exact project, payload,
+off-site/Storage recovery, finding count, ledger, and remaining recovery gates
+are supplied. No production apply was attempted. The owner also selected private
+archive plus verified retirement for the 14-row `products_old` legacy table; its
+encrypted database archive now exists and passed isolated equality, while no
+access change, Realtime change, or table retirement has occurred yet.
+
+On 28 August, a fresh default-run retry of `npm.cmd run verify:map017-portable`
+again passed the artifact, rollback, dry-run, and fixture parser checks but
+failed when the bundled PostgreSQL child process attempted to start
+(`portable PostgreSQL startup failed: unknown failure`). No database write or
+production connection occurred. The last approved workspace run remains the
+valid isolated lifecycle evidence; this runner still cannot reproduce it.
+
+The separate `20260826_map017_error_report_boundary` migration is prepared and
+verified only in isolated PostgreSQL; it is not applied live and is not part of
+the OWNER-005 phase-one payload. Its behavioral test denies 100 direct inserts
+for each of `anon` and `authenticated`, proves the row count is unchanged,
+preserves the staff-authenticated read policy, and proves an authenticated
+non-staff caller cannot read the rollback-only probe row. The migration applies
+and replays in `npm.cmd run verify:map017-portable`. Live anonymous insertion to
+`error_reports` therefore remains a confirmed exposure until a separately
+backup-gated application and live postflight occur.
+
+The 26 August independent correction pins that hash to the final committed SQL
+and adds a regression across all authoritative records. The executor dry-run now
+derives its authorization and backup safety lines from OWNER-005 instead of
+printing a stale hard-coded unauthorized status. It currently reports the
+truthful state: owner authorized, named backup/restore evidence pending, and no
+apply attempted.
+
+A prepared CLI now creates the MAP-017 pre-migration database artifact without
+writing a plaintext dump: it validates the exact Supabase project/TLS boundary,
+requires payload/ledger/purpose confirmations, enforces client/server major
+parity, captures a deterministic redacted fingerprint of exactly 14
+`products_old` rows before and after the dump, encrypts the in-memory custom dump,
+authenticates that fingerprint as AES-GCM associated data, and exclusively creates
+an encrypted envelope plus redacted manifest. Fourteen focused tests cover target refusal,
+credential-free arguments, encryption fidelity, manifest redaction, and
+pre-existing-file preservation. This is locally prepared behavior only. No
+production database URL, backup passphrase, or isolated restore target is
+configured, and no production backup existed at that checkpoint. On 26 August the owner selected
+Google Drive and the authorized connector created the owner-only, unshared
+`K2 Production Backups` folder under `k2jimzonwebsite@gmail.com`. This verifies a
+writable destination only; upload, independent download/checksum, restore, MFA,
+capacity, retention, and independent recovery-access evidence remain pending.
+
+The MAP-017 restore verifier is also implemented and exercised locally. It
+authenticates/decrypts the envelope, permits only a dedicated empty loopback
+database, enforces client/server major parity, restores without replaying source
+ownership or privileges, checks schema and migration-ledger health, and writes a
+redacted receipt only after the restored 14-row `products_old` fingerprint also
+matches exactly. Manifest fingerprint tampering and restored row drift fail
+closed. A real PostgreSQL 17.11 portable archive passed that complete encrypted
+backup/isolated restore path with 14 seeded legacy rows. At that checkpoint this
+was local tooling evidence only; the later production artifact and
+representative-data restore are recorded below. Off-site retrieval and
+Storage-object restore have still not passed.
+
+A read-only Supabase backup inventory on 26 August returned PITR disabled,
+WAL-G enabled, and no available backup entries for the exact production project.
+This proves only provider configuration and current inventory; it does not prove
+a recoverable backup. Supabase database backups also exclude Storage objects, so
+database restore and object restore remain separate evidence gates.
+
+On 27 August the same provider inventory was refreshed and remained unchanged:
+PITR disabled, WAL-G enabled, zero named backups. The complete portable gate
+passed again outside the process sandbox with 12 authorization groups,
+transaction rollback restoration, exact payload apply and replay, error-report
+flood denial, an authenticated encrypted custom archive, equality of all 14
+legacy rows, and isolated restore. A separate focused run passed 51/51 backup,
+restore, schema-truth, authorization, and error-report contracts. A redacted
+linked-project Supabase dump dry-run also exited successfully, proving the CLI
+can use its native stored credential. The approved production command does not
+extract that credential. At that checkpoint `.env.local` still lacked the
+explicit production database URL and owner-held backup passphrase, so no
+production envelope, manifest, or restore receipt had been created. The later
+27 August result is recorded next; no production DDL was attempted.
+
+Later on 27 August the owner replaced the local placeholders with valid values.
+The exact project/session-pooler/TLS checks and a read-only PostgreSQL 17
+connection passed. Backup
+`map017-pixplcjqivlfflickobf-20260827T134506.742Z-be6b75c0db0d` was encrypted
+directly to `.backups/map017-pre-migration-20260827-01.k2backup` without a
+plaintext dump or production write. Its isolated restore verifies 51 public
+relations, the required tables and migration ledger, and exact equality of all
+14 authenticated `products_old` rows. Plain PostgreSQL cannot install Supabase's
+managed `supabase_vault` extension, so the verifier explicitly excludes and
+records ten Vault-owned TOC entries; it also pins both database sessions to UTC
+so timestamp serialization is deterministic. The evidence boundary excludes
+Vault, Storage objects, provider configuration, off-site upload, and independent
+retrieval. Production DDL therefore remains blocked.
+
+The owner also confirmed `k2jimzonwebsite@gmail.com` as K2 Jimzon's primary
+owner/provider login, recovery identity, and project contact across Hostinger,
+Vercel, Supabase, Search Console, and related services. It remains a Gmail
+account identity, not a `@k2jimzon.com` mailbox or permission to store credentials
+in repository files.
+
+The production Storage inventory currently contains one public
+`product-images` bucket with 36 distinct objects and 115,573,916 bytes. On
+27 August `scripts/map017-storage-backup.mjs` downloaded those public bytes
+read-only, enforced database-recorded sizes, rejected unsafe or duplicate paths,
+hashed every object, and encrypted the complete path/byte archive with
+AES-256-GCM. Backup
+`map017-storage-pixplcjqivlfflickobf-2026-08-27T141713000Z-6e60fb24d07a`
+restored into a dedicated ignored local directory with exact count, total-byte,
+and collection-fingerprint equality. Its redacted manifest and receipt expose no
+object paths. This proves file-level object recovery only; Supabase bucket-policy
+and provider-configuration restoration and live re-upload behavior remain
+unverified. No production write or DDL occurred.
+
+The owner then authorized uploading only the encrypted/redacted database and
+Storage backup artifacts to the owner-only Google Drive folder. Because the
+115,580,694-byte Storage envelope exceeded the connector's 100 MiB input ceiling,
+`scripts/split-encrypted-backup.mjs` split it without decryption into
+67,108,864-byte and 48,471,830-byte parts and proved exact local reassembly to
+SHA-256 `6E60FB24D07A80CB8FDBDBBC7F0EE3EFF86FEE0EE0A9657E9D4F5C94607AE312`.
+Drive now holds eight files. Google metadata reports exact byte lengths,
+`shared: false`, the intended folder parent, and only owner
+`k2jimzonwebsite@gmail.com` on every artifact. Independent connector downloads
+matched local SHA-256 for all eight files. The owner used a normal authenticated
+Drive session for the first Storage part, which bypassed the connector frame
+limit; its 67,108,864 bytes and SHA-256 matched. Reassembly with part 002
+produced the exact original encrypted archive digest. Owner recovery access
+remains the only MAP-017 production-activation gate.
+
+On 30 August, a fresh owner-authenticated Drive profile check identified
+`k2jimzonwebsite@gmail.com`, exposed the owner-only backup folder and both
+restore receipts, and returned the complete encrypted database envelope. The
+repository validator then authenticated and decrypted that exact named envelope
+with the locally retained passphrase without printing it, verifying 674,413
+encrypted bytes, the custom PostgreSQL dump signature, and dump SHA-256
+`8ED220049E7611D471C7165FEAE3FFA490317197C55C24542DE4D1FA2893581D`.
+Current-workstation retrieval/decryption is therefore verified. OWNER-005 stays
+Pending until the owner confirms approved password-manager plus separate offline
+passphrase custody and current Google 2-Step Verification recovery email/phone;
+no production DDL was attempted.
+
+A separate MAP-017 migration now prepares retirement of the obsolete direct
+`error_reports` browser write. It drops both known public insert policies,
+revokes browser-role `INSERT`, preserves the authenticated staff-read boundary,
+and fails closed on catalog drift. PostgreSQL 17.11 applied it twice; 100
+anonymous and 100 authenticated direct attempts retained zero rows, while staff
+read access remained available and authenticated non-staff access remained
+hidden. The full portable authorization, encrypted-backup, and isolated-restore
+lifecycle still passed. This is local
+database evidence only. The migration is not part of the exact OWNER-005
+phase-one payload, has no production authorization/receipt, and has not changed
+the live anonymous grant documented above.
 
 **The migration ledger is not a record of what is applied.** There are 60 local
 migration files and 5 ledger entries. Spot-checks prove the gap runs both ways:
@@ -125,7 +284,7 @@ the SQL that was actually applied.
 **BFF entrypoints now exist locally but remain doubly disabled and are not
 deployed.** The leaf handlers remain in `prepared-api/`; one consolidated guarded
 entrypoint now exists at each of `api/admin/index.js` and
-`api/storefront/index.js`. Their exact catch-all rewrites are declared in the
+`api/storefront/index.js`. Their exact API-prefix rewrites are declared in the
 separate Vercel configurations. Each entrypoint returns a minimal `404` unless
 both its matching `K2_DEPLOYMENT_TARGET` and independent server switch
 (`K2_ADMIN_BFF_ENABLED` or `K2_STOREFRONT_BFF_ENABLED`) are enabled. Both server
@@ -203,6 +362,20 @@ it's for)**, and a pin flag.
 - **FEFO allocation target** — confirmation reserves exact eligible lots in
   soonest-expiry order. Pins are attention markers and never override FEFO.
   The legacy `deduct_stock_fefo()` shortcut is intentionally disabled.
+  On 31 August 2026 an isolated PostgreSQL 17.11 concurrency rehearsal executed
+  the repository's actual `confirm_order_request` definition: two orders raced
+  for one eligible unit, the loser waited on the winning lot lock and was refused,
+  and final state retained exactly one reservation/order/event with physical and
+  reserved quantity `1/1`. A same-order retry after an intentionally ambiguous
+  successful response returned the same confirmed order and preserved that exact
+  state without another reservation, canonical order, inventory event, or
+  reserved-quantity change. This is verified local source behavior for the
+  repository function's already-confirmed retry path, not general connector
+  ingestion/reconciliation evidence and not proof that
+  the live database has the same definition or that any external channel is safe
+  to activate. Fresh local closeout passed the complete consignment/receiving
+  file 9/9, API/security/source contracts 386/386, and rendered selling journeys
+  3/3.
 - **Inventory breakdown** — each product card in Inventory shows live splits:
   "42 pcs in 3 lots", 📍 by location, 🛒 by channel, 🙋 by holder.
 
@@ -245,11 +418,76 @@ returns a conflict without overwriting evidence when the same identity carries
 changed type or payload. The migration deliberately installs no production
 limits. Its isolated PostgreSQL rehearsal passes configuration, privilege, RLS,
 budget, replay/conflict, cleanup, postflight, and idempotent-replay assertions;
-all 179 API/security contracts, the complete security/prebuild gate, and both
-separate production builds also pass. This is source-level preparation only:
+the 31 August MAP-023 strengthening now explicitly proves an ambiguous successful
+response can be retried into the same terminal row, changed evidence cannot
+overwrite it, exactly one event row remains, and capture/replay/conflict produce
+shop/global budget counts of `3`. The focused boundary passes 5/5 and fresh
+API/security/source contracts pass 386/386 plus 3/3 rendered selling journeys.
+Earlier complete security/prebuild and separate-build evidence also remains
+recorded. This is source-level preparation only:
 the migration, limits, official Shopee signing string, retry window, credentials,
 deployment, real signed push, durable provider capture, and reconciliation
 remain unapplied or unverified, so the channel is not Live.
+
+One canonical channel/shop foundation is now prepared locally under
+`20260829_channel_vocabulary_and_shops.sql`. It defines the six channel codes
+(`website`, `pasabuy`, `manual`, `shopee`, `lazada`, `tiktok`), one
+`channel_shops` row per seller account, and shop identity on order requests and
+channel listings. The migration maps known legacy listing spellings, rejects
+unknown channels, requires every marketplace order to name a same-channel shop,
+forbids shop identity on K2-owned channels, and supports two shops listing the
+same SKU without sharing an external item identity. New foreign keys have
+dedicated lookup/cascade indexes. Its isolated PostgreSQL 17.11 migration,
+idempotent replay, access, index, and behavioral checks pass 12/12. This is
+prepared schema truth only: production still has the legacy vocabulary and no
+shop-aware connector is live.
+
+The owner approved an inbound-first target on 31 August 2026: K2 should first
+stage products, listings, prices, and reported quantities from each individual
+marketplace shop, require human product-link/new-Draft decisions, preserve one
+K2 SKU with per-shop aliases, and reconcile quantity observations before any
+physical-stock effect. The flexible planning target is two eligible units per
+individual shop, with Covered, Thin, Skipped, Out, and Needs-review states;
+scarce products may skip shops, and recent verified sales may rank a proposal
+that the owner can override. Automatic availability rebalancing must not be
+confused with a physical custody transfer.
+
+The private backend slice is now **prepared and rehearsed locally, not applied
+or deployed**. `20260831_marketplace_snapshot_staging.sql` adds forced-RLS
+listing/order evidence, aliases/observations, fee versions, physical-count
+reviews, coverage overrides, customer-minimized Pasabuy readiness, a sealed
+bookkeeping-handoff artifact, immutable events, and resumable close sessions.
+The 81-route Admin BFF exposes fixed listing/order stage/status and
+`owner-close/{session,fees,stock,coverage,pasabuy,bookkeeping}` boundaries.
+Staff/AAL2 can stage/recover listing evidence; Admin/AAL2 is required for human
+product decisions and every close mutation. Reported quantity remains an
+observation and the close migration contains no `product_batches` DML.
+
+Three explicitly synthetic Shopee/Lazada/TikTok listing fixtures and three
+customer-free order fixtures exercise only K2's normalized contracts; they do
+not prove provider columns, current fee policy, settlement fields, or API parity.
+The focused snapshot/order/fee/stock/coverage/Pasabuy/bookkeeping/close contracts
+pass. Isolated PostgreSQL 17.11 passes bootstrap, preflight, migration, replay,
+signed behavior, postflight, non-destructive rollback, and evidence preservation.
+It proves exact replay/conflict, Staff denial, Admin link/create/unresolved,
+server Draft SKU, versioned close resume, cross-import deduplication, latest-
+import fee arithmetic/blocking, matched/reconciled and zero-lot count review,
+customer-minimized Pasabuy readiness, blocker-aware handoff completion, forced
+RLS, and an unchanged `product_batches` sentinel. The 81-route verifier and
+zero-gap security-surface inventory pass.
+
+All nine phone rails are locally prepared: sources, listing import, identity,
+orders, fees, physical/exact-lot review, per-shop coverage/alerts, Pasabuy
+readiness, and a fixed-schema formula-safe bookkeeping CSV plus sealed completion
+event. The mocked secure-BFF journey passes at 375×812 and 812×375 with reduced
+motion, no horizontal overflow, and 44px active controls; its portrait render was
+visually reviewed. This is local synthetic evidence only. No real export, real
+quantity count, provider policy/settlement, production schema/flag/credential,
+deployment, physical-device, screen-reader, or staff acceptance was exercised.
+Those activation and representative-data steps remain in MAP-023/MAP-026.
+Existing Inventory, Sales Summary, Sales Planner, Pasabuy, and lot commands
+remain canonical; the former provider-quantity-to-`products` example remains
+historical and forbidden.
 
 ---
 
@@ -288,7 +526,9 @@ numbered migrations. Machine-readable contract exported in `src/types/database.t
 
 - `product_batches` — the batch bank (qty, expiry, box, hub, custodian, channel, pin).
 - `channel_connections` — real Live/Not-connected status per channel.
-- `error_reports` — client crashes/failed queries logged here.
+- `error_reports` — legacy diagnostic table; current browsers do not write it
+  directly, and its still-live anonymous insert boundary is prepared for
+  retirement under MAP-017.
 - `orders` gained `customer_name`, `customer_email`, `total_amount`.
 
 **Views:** `v_product_stock_from_batches`, `v_expiring_batches`,
@@ -343,7 +583,8 @@ All have been run on the live database as of this update.
 
 Auth is real Supabase Auth (email+password or Google); passwords are bcrypt-
 hashed and never seen by us. Access = a live session whose `user_profiles.role`
-is exactly Admin or Staff, enforced by RLS. A newly created Google/email Auth
+is exactly Admin, Staff, or the owner-controlled SuperAdmin role, enforced by
+RLS. A newly created Google/email Auth
 identity receives the `Customer` role and cannot enter Admin BOS. Staff access
 requires either the hardened invitation flow or an explicit audited Admin role
 assignment; merely creating an Auth identity grants no Admin access. The live
@@ -351,7 +592,9 @@ aggregate on 15 August 2026 contained four existing authorized Admin profiles.
 Their identities were not changed during the security repair. The old localStorage "admin=true" flag,
 master passcodes, and `password123` fallback were REMOVED. Accounts are
 invite-only (super admin invites → person sets their own password → super admin
-sets role in **Staff & Roles**). Admins can enroll TOTP 2FA on their own account.
+sets role in **Staff & Roles**). SuperAdmin assignment is owner-controlled and
+is not available in the ordinary role selector. Admins can enroll TOTP 2FA on
+their own account.
 The active production Edge Function `invite-staff` version 6 performs invites
 through modern hosted key maps with exact Admin role and AAL2 authorization,
 strict origin/body validation, durable operation receipts, bounded retry/rate
@@ -364,7 +607,7 @@ Supabase Auth URL Configuration must point at the two Vercel sites (storefront +
 admin) or OAuth bounces to localhost.
 
 The active production Admin OAuth callback is the exact public origin
-`https://k2-jimzon-admin-seven.vercel.app/admin-portal-k2-secure`. Vercel
+`https://admin.k2jimzon.com/admin-portal-k2-secure`. Vercel
 deployment-specific and protected preview URLs are never OAuth callbacks; the
 Admin client canonicalizes non-local Google sign-in returns to that stable
 origin. When Google returns an eligible Admin/Staff session that still requires
@@ -391,6 +634,10 @@ operational history. Such products must be retained and marked Discontinued.
 The legacy PIN-verification oracle and legacy delete RPC are removed. The live
 schema currently has zero configured Delete PINs, so an Admin must set one in
 Staff & Roles before deleting an eligible unused product.
+`docs/runbooks/STAFF_PRODUCT_DELETION_SOP.md` now records the operator procedure,
+lockout recovery, eligible-product refusal, durable evidence, and the prepared
+BFF cutover behavior. This is documented local readiness, not proof that staff
+have configured a PIN or completed a deletion rehearsal.
 
 The browser build contains the project's modern browser-safe publishable key as
 a reviewed fallback because the Admin Vercel project did not expose that value
@@ -407,14 +654,127 @@ a service-role or secret key, and it activates no prepared API route.
   (`WorkflowGuideModal`). Accessible globally via `🗺️ Workflow Map` in the admin
   header, shift guide shortcuts in `StartHereGuide.jsx`, and inline expandable
   toggles across Consignments, Batches, Fulfillment, and Pasabuy.
+- **Connected workflow guide truth correction (30 August 2026)** — the master
+  graph now exposes guide version `2026-08-30-draft.1` and status
+  `DRAFT — NOT LOCKED`, identifies the operations rulebook as authority, and
+  states that route tracing, checkmarks, and training examples are browser-only
+  rehearsal. The former fake barcode simulator no longer auto-completes a step.
+  Every jump now targets an actual Admin section. Copy that claimed automatic
+  customer alerts, marketplace stock sync, Redis controls, automatic price
+  approval, technical warehouse-zone locks, biometric transfer approval,
+  camera evidence, fabricated courier waybills/SMS, fixed payment deadlines,
+  and universal Pasabuy deposit/refund/discount rules was replaced with the
+  current canonical or explicitly manual behavior. New-product guidance now
+  names the two approved private Projects—K2 Product Content followed by K2
+  Product Image Studio—and the Smart Paste field/image review boundary. Thirteen
+  focused workflow contracts, all 383 source/API contracts, all 3 rendered
+  Storefront selling journeys, all 24 rendered Admin journeys, the strengthened
+  rendered workflow draft/rehearsal assertion, and the complete Admin production
+  build pass. Chromium required the approved out-of-sandbox
+  browser launch after the sandbox correctly returned `spawn EPERM`.
+  This is verified local draft behavior only; it is not a locked staff guide,
+  deployed-host evidence, representative phone/laptop acceptance, provider
+  verification, or proof that an operational command occurred.
+- **Structured staff procedure registry (30 August 2026)** — the searchable
+  Operations guide now consumes `staffProcedureRegistry.js`, version
+  `2026-08-30-draft.12`, and visibly remains `DRAFT — NOT LOCKED`. Its 18
+  procedure contracts cover every MAP-023 minimum operation, including product
+  create/edit/archive; manual and paid-API intake/fallback; allowed first-stock
+  sources; receive/recount/reconcile/transfer/quarantine/clear/write-off/lot
+  edit; publication; order/payment/packing/delivery exceptions; Pasabuy,
+  wholesale, messages, staff security, channels, backup/incident/rollback, and
+  unavailable integrations. Every contract now carries status, authorized role,
+  prerequisites, exact entry point, steps, validations/blockers, expected
+  canonical state, forbidden shortcuts, failure recovery, version/effective
+  date, and sources. The paid-API route is searchable but explicitly unavailable
+  pending OWNER-007's confirmation design, spend ceiling, provider/model,
+  retention, server-secret boundary, and production activation; its manual K2
+  Product Content → Smart Paste → K2 Product Image Studio fallback remains.
+  A separate searchable SuperAdmin procedure now documents the versioned paid
+  AI spend controls: per-product/per-session/monthly caps, model snapshot,
+  typed enable confirmation, fixed safeguards, and recovery. The controls are
+  prepared but unavailable until OWNER-007 and the protected migration are
+  activated.
+  The migration extends the current signed Admin verifier without dropping its
+  existing action names, catalog limit, rate buckets, MFA replacement, website
+  reply, or Product Knowledge paths.
+  The focused guide/retrieval/graph/channel contract group passes 25/25, and
+  the dedicated 375px rendered guide journey passes locally; the browser run required approved out-of-sandbox launch
+  after `spawn EPERM`. This proves local guide rendering and coverage only—not
+  guide approval, ordinary-staff read-only enforcement, production activation,
+  provider behavior, or representative operational acceptance.
+- **Outcome-first click-through guide target accepted (31 August 2026; not
+  implemented)** — IDEA-20260831-02 is merged into MAP-023 and ADR-008. The
+  accepted design keeps the Operations guide read-only: it will help staff find
+  an outcome, name and focus each exact control, explain inputs/evidence,
+  external handoffs, expected results, canonical completion evidence, and
+  recovery, while the owning workflow remains the only operational record. The
+  current local implementation does **not** yet have structured per-step control
+  targets, outcome aliases, one-step walkthrough states, canonical completion
+  read models, or a generic safe external-handoff renderer; its procedure steps
+  are still strings and its jump opens only a broad Admin section. Therefore no
+  click-through behavior, exact-control focus, automatic workflow verification,
+  staff usability acceptance, deployment, or provider behavior is claimed.
 - **Start-here guide** + floating 🧭 **Guide** button — the daily workflow,
   written so staff can self-onboard without being told.
 - **Dashboard Guide (AI)** — honest, grounded Q&A about what each screen is for
   (no fabricated data).
-- **Floating ⚙️ tools gear** — draggable; calculator, margin, cargo volumetric
-  weight, units, VAT 12%, expiry checker, scratchpad, plus a pinned Milan/Manila
-  clock and EUR→PHP rate.
-- **Error monitoring** — crashes auto-log to `error_reports`; stale-deploy
+- **Floating ⚙️ tools gear** — now mounted in the authenticated Admin shell
+  after a browser test exposed that the existing file was orphaned. It is
+  draggable and contains a bounded four-mode Sales planner, calculator, quick margin,
+  cargo volumetric weight, units, VAT 12%, expiry checker, scratchpad, plus a
+  pinned Milan/Manila clock and manual EUR→PHP planning rate. The Sales planner
+  Check-a-price mode collects fixed fees and gross-sales channel-fee rate
+  separately, calculates gross/net sales, goods/other-fixed/percentage-fee and
+  total costs, planned gross profit, margin, and markup, and solves the true
+  fee-aware break-even price upward to cents. Find-target-price mode solves a
+  minimum unit price from cost, total discount, fixed/other costs, gross-sales
+  percentage fee, and target gross margin, rounds upward to cents, and
+  recomputes the achieved scenario. Find-max-discount mode starts from a chosen
+  price, solves the maximum total discount that preserves the target margin,
+  rounds the allowance downward to cents, and refuses a result when the target
+  fails even without discount. Find-units-needed mode solves the minimum whole
+  quantity for a positive planned-profit target and proves one fewer unit misses;
+  non-positive contribution or more than 100,000 units fails closed. Every valid
+  mode exposes one customer-free Copy planning summary handoff containing its
+  timestamp, assumptions, result, and non-posting warning; clipboard denial has
+  inline recovery and invalid calculations expose no copy action. Impossible targets fail closed. No mode creates
+  a promotion, writes product price, or changes any financial/operational record.
+  The panel is height-bounded and internally scrollable so every 44px tool
+  control remains reachable at 375×812.
+- **Sales computation summary** — Admin Overview now computes submitted-request,
+  payment-verified, and fulfilled values separately from the same bounded
+  canonical order projection for the selected period. Settled payouts and
+  actual profit explicitly render `Unavailable` because K2 has neither a
+  canonical settlement ledger nor exact-lot cost snapshots on order lines. Its
+  read-only record drilldown now filters the bounded rows by all requests,
+  exact payment verification, or exact fulfillment; recomputes the visible
+  subtotal, sorts newest first, exposes no customer contact data, and limits the
+  rendered review to the newest 25 with explicit truncation copy. Its Download
+  CSV action exports every matching row in the selected period through a fixed
+  six-column customer-free projection, with UTF-8 BOM/CRLF, formula
+  neutralization, normalized channel, exact filter parity, and a dated
+  period/filter filename. Deterministic calculation/target/discount/summary/filter/export/mount
+  tests pass 14/14; the combined sales/guide contract gate passes 23/23, and
+  focused desktop download and 375px drilldown/planner/copy-success/copy-denial
+  journeys pass. The copy action is 44px, its explanatory line renders at no
+  less than the 12px Admin minimum, and the phone surface has no document
+  overflow. The
+  final full Admin suite passes 26/26, and the Admin production build passes its
+  security preflight, import, artifact-boundary, and built-secret gates. This is
+  local verified behavior, not deployed accounting or settlement truth.
+- **Payment × fulfillment reconciliation** — the selected-period order
+  projection is also partitioned into verified+fulfilled, verified+not
+  fulfilled, fulfilled+payment-not-verified, and neither. Each bucket shows
+  request count/value, all four reproduce the full selected-period count/value,
+  and every bucket opens its exact read-only ledger filter. The two operational
+  exceptions preserve exact wording; absence of verified status is never called
+  unpaid. Their CSV uses the same customer-free rows. Pure reconciliation and
+  filter coverage plus focused desktop/375px journeys pass locally; final shared
+  regression/build evidence is recorded in MAP-023.
+- **Error monitoring** — Admin crashes emit fixed redacted classifications only
+  through the protected Admin BFF when enabled; Storefront failures stay local.
+  Browsers never write raw diagnostics directly to `error_reports`; stale-deploy
   chunk errors auto-reload.
 - **Scanners** — Milan packing scan, mobile receive scan, discrepancy
   reconciliation, scan-to-AI (all real QR/barcode).
@@ -463,14 +823,37 @@ a service-role or secret key, and it activates no prepared API route.
   K2-wide rules.
 - **Delivery charges:** Shopee, TikTok Shop, Lazada, and other connected channels use
   the delivery charge calculated by that channel. For direct and Pasabuy transactions,
-  staff first obtain the applicable courier rate, communicate it to the customer, and
-  record the customer's confirmation. A delivery estimate must remain labeled as an
-  estimate until the courier amount is known.
+  K2 now has an owner-approved controlled manual-pilot rule: staff may communicate one
+  final K2 `STANDARD_FEE` without a fresh J&T inquiry only when a Warehouse A ordinary
+  J&T EZ order is direct/Pasabuy, exactly one parcel at or below 3 kg, at or below
+  PHP 2,000 merchandise subtotal, explicitly not oversize/remote/ODZ/special-
+  protection, and matched to one unambiguous active exact-locality row. All unknown,
+  conflicting, unlisted, or ineligible cases retain the existing manual courier-quote
+  workflow. Once the customer accepts an eligible standard fee, K2 freezes that charge
+  and absorbs ordinary provider-bill variance; later reconciliation may change only a
+  future rate version. Numeric PHP 0 is valid only for confirmed K2 pickup, never for
+  an unknown fee. Owner-authorized read-only research on
+  1 September 2026 verified the Warehouse A J&T VIP hierarchy as
+  `BULACAN / SAN-JOSE-DEL-MONTE-CITY / MUZON EAST` and recorded representative
+  ordinary, pouch, J&T Super, and valuation-fee responses in
+  `docs/JNT_VIP_SAFE_AUTOMATION_INVESTIGATION.md`. The locally prepared control file is
+  `outputs/01a05d7c-4c45-7902-892f-ef2c1990cbde/K2_DELIVERY_LOGIC_CONTROL.xlsx`.
+  Its eight exact rows and formulas passed local inspection, controlled behavior
+  checks, formula-error scanning, and rendered-sheet review. This file is a staff
+  quoting/reconciliation aid only: it has not been rehearsed by staff in Excel,
+  imported, connected to checkout or the database, applied to a real order, deployed,
+  or used to contact/book J&T. The four macro-area amounts remain explicitly
+  nonquotable planning floors; the private VIP calculator remains evidence/reference,
+  not a live dependency.
 - **Customer exceptions:** cancellation, return, exchange, refund, and failed-delivery
   outcomes are handled case by case through direct communication with the customer.
   The system must record the request, conversation, evidence, proposed resolution,
   authorized decision, stock disposition, and final outcome. It must not automatically
-  promise a standard result that K2 has not agreed to.
+  promise a standard result that K2 has not agreed to. The locally prepared order
+  confirmation and guest conversation surfaces now make the current cancellation/
+  return boundary explicit: there is no self-service path, the customer messages K2
+  staff, and each request is reviewed case by case without a response-time promise.
+  This is verified local copy and behavior, not production-host or customer acceptance.
 - **Pasabuy pricing:** there is no standard percentage or automatic final-price rule.
   The owner decides the price for each request using factors such as season, scarcity,
   sourcing difficulty, actual item cost, delivery/logistics cost, and other documented
@@ -481,6 +864,229 @@ a service-role or secret key, and it activates no prepared API route.
 ---
 
 ## 9. What's done vs what's next
+
+### Storefront catalog control accessibility — verified local state, 30 August 2026
+
+Catalog product-image controls now expose product-specific accessible names.
+The product-title and footer action hit areas use the established 44px minimum
+without changing the storefront's wood/editorial layout or interaction model.
+The focused rendered 390×844 Chromium suite passed 2/2, and the fresh
+Storefront production build passed its security preflight, artifact-boundary
+verification, and secret scan. The complete refreshed contract gate also passed
+383/383 API/security/source checks and 3/3 rendered selling journeys. This is
+local artifact/browser evidence only;
+automated full-surface accessibility/contrast analysis, real-device acceptance,
+and deployed-host verification remain MAP-028 work.
+
+### Shared Admin dialog accessibility — verified local state, 26 August 2026
+
+All 18 files matching `src/views/admin/*Modal.jsx` now use the single headless
+`src/components/ui/AdminDialog.jsx` primitive. It owns dialog semantics,
+accessible naming connections, initial focus, a topmost-dialog focus trap,
+Escape dismissal, mutation-busy Escape protection, and restoration of focus to
+the invoking control. The former unused `ModalShell` was removed so it cannot
+become a competing implementation. Existing Admin layout, color, typography,
+density, responsive behavior, and motion remain unchanged.
+
+This is verified local behavior, not deployment or real-staff acceptance. The
+enumerating contract covers 18/18 modal files and the rendered Chromium Admin
+journey proves initial focus, trapped Tab, Escape close, and trigger restoration.
+Fresh evidence: `npm.cmd run test:contracts` passed 184/184; the targeted Admin
+browser test passed 1/1; and `npm.cmd run build:admin` passed its complete
+security preflight, production boundary check, and bundle secret scan.
+
+### Storefront selling-surface coverage — verified local state, 29 August 2026
+
+The rendered product-detail and guest-message paths now have behavioral
+Chromium coverage in `tests/storefront-selling-surfaces.spec.js`. The product
+journey proves a deep-linked database-shaped product renders its canonical SRP
+and FEFO-derived available stock, calculates the multi-unit cart total, and
+enforces the last-unit limit. The guest journey proves Turnstile-scoped
+conversation creation and reply payloads, idempotency keys, the returned
+conversation reference, the staff-receipt status, and the visible no-self-service
+cancellation/return policy. A third mobile journey submits a complete order request,
+reaches confirmation, verifies the same case-by-case staff-message path without an
+SLA promise, and proves no document-level horizontal overflow at 375×812. The dedicated harness is
+hermetic: its Supabase REST and guest BFF boundaries are intercepted locally and
+external requests are blocked. `npm.cmd run test:selling-surfaces` passes 3/3.
+The fresh combined contract gate passes 195 API/source contracts plus both
+rendered journeys, and the isolated Storefront production build passes its
+security preflight, artifact-boundary verifier, and secret scan. The existing
+large main/Globe chunk warnings remain. This is local test evidence only; it
+does not prove a live catalog, real customer message delivery, deployment
+behavior, or production-host acceptance.
+
+### MAP-027 Interactive Shop rendering — verified local state, 28 August 2026
+
+The optional `/store` route now has visible Chromium evidence rather than only
+source contracts. At 1440×900 with reduced motion disabled, React Three Fiber
+creates a live non-lost WebGL context, draws a non-blank aisle frame, moves from
+Counter to Coffee through the direct Next control, and retains the semantic
+product rail. Camera framing uses the bay midpoint so the complete category sign
+stays inside the canvas; the browser crop regression moved from 546 dark pixels
+touching the top edge to zero. A failed external mock photo attempts once and
+then renders the generated product label instead of a black package.
+An injected `webglcontextlost` event unmounts the canvas and reveals the flat
+Coffee shelf guide; render exceptions use the same parent fallback.
+
+At 375×812 with reduced motion enabled, no canvas is created. A flat shelf guide
+shows the active canonical shelf name/blurb, the shelf navigation occupies a
+full-width second header row, the product rail and Leave action remain visible,
+and the document has no horizontal overflow. The full-frame light shell now
+preserves `wood-bg.jpg` below translucent warm-paper chrome instead of replacing
+K2's wood canvas with opaque white. The production Storefront shell does not
+mount its ordinary header, cart drawer, footer, mobile spacer, or mobile
+navigation behind this route, preventing those layers from painting through the
+fallback. Local fixed-light tokens keep labels and placeholders at 5.78:1 or
+better even when the site/operating system prefers dark mode.
+
+Keyboard activation of `Enter the store` focuses the room heading; Leave or
+Escape returns to Catalog and restores focus to that trigger. At 375×812 with
+ordinary motion, the locally verified customer path moves from the WebGL Coffee
+shelf through approved usage knowledge, canonical basket persistence and inline
+`1 in basket` feedback to `/checkout`; draft knowledge remains excluded. At
+812×375 with 125% root text, the reduced-motion path remains operable. The flat
+shelf summary, 44px shelf-step controls, and non-shrinking product rail now
+occupy separate bands; the compact guide does not cover the summary and the
+empty visual basket yields the constrained landscape frame. At 375px, shelf
+navigation owns its full row and the minimized guide does not intercept the
+product rail. The dark-preference input placeholder and header meet the local
+contrast gate, and the corrected `.k2-store-step` layer remains above WebGL.
+
+The same rerun found the localhost-blocking failure: the Antigravity 2D avatar
+used `headTilt` without defining it. A populated development catalog therefore
+mounted `StoreKeeperAvatar`, threw a `ReferenceError`, and sent `/store` to the
+`UI_SECTION_UNAVAILABLE` boundary; the empty production-catalog branch hid the
+defect. `headTilt` now derives from the existing delighted/listening expression
+state. The populated-catalog browser regression passes. At that rendered
+checkpoint, the MAP-027 source contracts passed 84/84 and the isolated browser
+group passed 8/8. The
+complete Storefront prebuild/security/boundary/secret scan and production build
+pass. Fresh local screenshots show a non-lost WebGL aisle plus phone,
+dark-reduced-motion, and enlarged-text landscape states. The earlier 3/7 result
+and its four polish defects are superseded by this evidence.
+
+One derived store-moment controller now synchronizes the functional 2D pop-out
+guide, a single aisle-level 3D clerk, scene accent, and canonical basket
+acknowledgement. Welcome, explore, inspect, and added states drive the same
+expression/gesture intent. The guide can be opened or tucked away and keeps the
+existing bounded human handoff; it never simulates staff presence. It is now the
+room's only chat entrance, preserving the active shelf/product context; the
+duplicate direct `Ask K2` rail action has been removed. The clerk moves only
+among authored positions, retains a stable 0.92 human-scale rig in Counter and
+shelf views, and uses its 3D speech cloud only at the Counter because the
+accessible guide owns shelf copy. Product positions now use a ten-unit inter-bay
+gap, with the clerk at its 12.5-unit midpoint and at aisle depth `z=3.2`; camera
+and clerk share travel rate `4`. Five shelf levels are always visible and the
+packing model can grow to seven. Her sleeves now articulate into forearms, oval
+palms, and thumbs instead of sphere hands. The wave ref is bound to scene `-X`,
+her anatomical right while she faces the camera, so the arm raises outward rather
+than crossing her torso. The desktop right rail is now an editorial
+shelf concierge: Counter shows canonical departments, a shelf shows up to four
+canonical product highlights and stock labels, and a selected item reuses the
+existing product-detail actions. Ordering FAQ remains an integrated service
+control rather than floating above dead space.
+
+The IDEA-20260828-05 correction is locally prepared and source-verified: its five
+new red-then-green regression contracts pass, the combined MAP-027 source suites
+pass 91/91, import integrity passes, and localhost Vite returns HTTP 200 for all
+six changed runtime modules/stylesheets. The complete Storefront prebuild gates
+pass, but the final Vite bundle remains unverified because the managed Windows
+sandbox cannot read the parent directory while resolving `vite.config.js`; a
+fresh rendered Chromium review is also still required. The earlier screenshots
+and 8/8 browser evidence establish the pre-correction store only, not this new
+inter-bay geometry.
+
+The persistent physical-looking basket dock receives StoreContext lines,
+subtotal, and quantity and owns no commerce state. Confirmed additions render
+parcel feedback, while checkout retains `Send order request` and preloads only
+after the basket exists. CSS ambient light, restrained grain, and moment warmth
+add depth without new external assets or heavy post-processing. Reduced motion
+removes the new movement while preserving all semantic guide/cart controls.
+
+The 2D and 3D shopkeeper avatar was completely overhauled into an authentic anime/cartoon human mascot:
+- 2D SVG avatar features warm multi-tier chestnut/amber gradient irises, double eyelid fold, winged eyeliner, soft blush with diagonal micro-stripes, layered bangs with downward tapered tips, angel ring hair sheen, low ponytail with ribbon, uniform with gold K2 monogram cap, interactive pointer-tracking gaze, click greeting animation, and delight sparkle particle bursts.
+- 3D WebGL avatar features high-contrast procedural canvas face textures, non-clipping 120° forward curved visor plate seated above brows, downward-tapered cone hair fringe, modular mouth viseme texture system (`128x128`), and natural breathing/blinking/waving physics.
+- Ambient 3D lighting dynamically tunes pendant intensities, sunlight fill, floor bounce, and floating dust particle hues across both Light Mode ("Lights on") and Dark Mode ("Lights low").
+- Cross-artifact runtime import in `StoreAssetStudio` was replaced with `useAdminStore` from `AdminStoreContext`, maintaining zero cross-artifact leakage between Admin BOS and Storefront.
+
+Screenshots are local test artifacts, not physical-phone, real screen-reader, deployed-host, or real-product evidence. Production still has no published real catalog/photography, and the Admin knowledge/AI/provider work remains dependency-gated under MAP-027.
+
+The same audit closed a local build-tool exposure: Vite no longer loads every
+`.env.local` value into its resolved config. `VITE_CONFIG_ENV_KEYS` and
+`BROWSER_ENV_KEYS` restrict config/debug and browser exposure to approved public
+names; the security contract, 269-file environment-source audit, five-fixture
+environment contract, prebuild secret scan, and isolated Storefront build pass.
+This changes local source/build behavior only. Any credential that was already
+printed by an earlier debug run still requires owner-authorized rotation; no
+provider credential or deployment was changed here.
+
+### Storefront path routing — verified local and artifact-contract state, 1 September 2026
+
+Storefront view state is synchronized to real paths for home, catalog, product,
+Pasabuy, trade/wholesale, contact, account, messages, checkout, and confirmation.
+The History API records navigation and a cleaned-up `popstate` listener restores
+Back/Forward state. Rendered Chromium evidence passes 3/3 for cold catalog,
+cold product plus refresh persistence, and browser Back. The Storefront Vercel
+contract keeps its API rewrite first and serves only the shared registered paths
+through `index.html`; Vercel checks generated product HTML in the filesystem
+before the `/product/:sku` client fallback. Admin serves only its protected entry
+path. A global SPA catch-all is forbidden in either target, so other unmatched
+host paths can retain a real not-found response.
+Each isolated build emits a target-specific, script-free, noindex `404.html`, and
+the boundary verifier rejects missing recovery structure, script content, or
+cross-target identity. Focused routing/discovery contracts pass 36/36 and both
+isolated production builds and boundary scans pass. This proves local source and
+artifact behavior only; DNS, Vercel alias visibility, preview/live HTTP status,
+and real-host deep links remain MAP-024/MAP-025 acceptance work.
+
+### Storefront discovery metadata — prepared local state, verified 29 August 2026
+
+The Storefront artifact now contains a crawler policy, K2 monogram and maskable
+icons, deterministic 192×192/512×512 PNG app icons, a 180×180 Apple touch icon,
+target-specific manifest icon declarations, a reviewed 1200×630 PNG social card,
+generic Open Graph/Twitter identity tags,
+and a runtime metadata controller. Product routes publish Product/Offer JSON-LD
+using canonical SKU/name/image, PHP SRP, current path, and FEFO-derived available
+stock; zero or unknown stock is `OutOfStock`. Rendered Chromium and two source/
+artifact contracts pass, as does the isolated Storefront build and boundary
+scan. A fresh 29 August build reverified the exact raster dimensions, emitted
+Storefront manifest identity and `/` start URL, copied the social card, and
+passed the focused discovery/config suite 26/26 plus build-boundary and artifact
+secret checks. This is not complete public discovery evidence: the owner-approved
+canonical host is now `https://www.k2jimzon.com` and the DNS/Vercel cutover is
+recorded separately, but the current reviewed production projection still emits
+no product URLs because it has zero published products, and there is no real
+shared-link or installed-device preview. Runtime
+canonical/share URLs derive the current origin and must not be described as
+crawler-side or deployed proof.
+
+### Public Contact claims — verified local state, 26 August 2026
+
+The Contact page publishes email, Messenger, Shopee, and Manila location only.
+It explicitly says the business number is not published yet and makes no reply
+SLA: messages are reviewed during Manila business hours, but no response time is
+promised. The focused desktop/mobile Chromium journey passes and proves no phone
+number, live-staff claim, numeric response promise, or `respond promptly` copy is
+rendered. This does not mean those channels are monitored in production or that
+a customer message was delivered.
+
+### Admin connected workflow graph — verified local state, 26 August 2026
+
+The Master Operations Workflow Graph is one connected, model-driven Admin
+surface: 41 nodes and 49 typed edges across supply, catalog, custody, orders,
+counts, and Pasabuy. Sequence, decision branch, convergence, enabling, and
+recovery-loop edges render distinctly on a bounded pan/zoom canvas generated
+from `workflowGraph.js`; the UI no longer connects adjacent DOM nodes. Selecting
+a node exposes clickable upstream/downstream context and its repository/screen
+grounding while retaining the workflow text, checklist, rules, simulation, and
+troubleshooting authored in `workflowData.js`. A finite path tracer can walk any
+forward route to each of the three terminal outcomes while recovery loopbacks
+remain visible on the map. Model contracts pass 2/2, the focused desktop/mobile
+Chromium acceptance passes 1/1 with no 375px document overflow, and the isolated
+Admin production build passes its security and artifact checks. The map is an
+operational guide, not an authorization grant or evidence that any provider or
+production workflow ran.
 
 **Done and live:** base batch/expiry/location/holder/channel records, inventory
 breakdowns, expiry alerts, honest channel status, error monitoring, admin
@@ -894,8 +1500,8 @@ compiled in a rollback harness with matching dependency signatures; cleanup
 checks show no live intake objects. Twenty-seven contracts, both build-isolation
 checks, the 672-file secret scan, and a zero-finding production dependency audit
 pass. This is not active: both migrations remain unapplied, the Admin BFF flag
-is false, supplier receipt is unavailable, canonical location/custodian
-tightening and deployed denial tests remain, and no domain was changed.
+is false, supplier receipt is unavailable, deployed canonical-identity and
+denial tests remain, and no domain was changed.
 
 On 22 August the real Product Intake component also passed a 375×812 Chromium
 acceptance check and the complete five-test Admin UI suite. Phone inventory fields
@@ -911,8 +1517,32 @@ and an inline, state-preserving failure when a fabricated Storage upload returns
 503. The 127-contract suite, MAP-018 static verifier, security
 gate, and isolated Admin production build pass. This remains local Tier 1
 evidence: migrations and the Admin BFF flag are unapplied, and authenticated
-deployed-role, real device permission, real provider failure, interruption/resume,
-and production activation evidence are still open.
+deployed-role, real device permission, real provider failure, and production
+activation evidence are still open.
+
+On 26 August the local interruption/resume path received a rendered regression
+instead of relying only on helper inspection. Its stateful Supabase fixture now
+preserves one active server session across create, Step-2 save, close, and
+reopen; the real modal restores the saved checklist step and announces
+`Intake resumed` at 375×812 with reduced motion. The resume mapping retains only
+server-recorded evidence, reviewed field decisions, Draft identity, and
+inventory result. Seven focused source contracts, all 16 Admin UI journeys, the
+MAP-018 verifier, and the isolated Admin production build pass. This does not
+prove authenticated deployed app switching, mobile process eviction, migration
+activation, or production recovery.
+
+Also on 26 August, the prepared opening-balance path stopped accepting typed
+hub and custodian values. The real phone modal now selects from the existing
+MAP-004 identity registry and filters custodians by their assigned hub. The
+Admin BFF rejects unknown IDs and cross-hub custody; the foundation RPC and
+signed wrapper independently verify the same records and relationship in
+`public.hubs` and `public.custodians`. A reduced-motion 375×812 Chromium journey
+shows Milan Cargo Depot with its assigned Marco Rossi custodian and no
+horizontal overflow. Sixty focused intake/BFF contracts, all 16 Admin UI
+journeys, the MAP-018 verifier, security gate, and isolated 21-module Admin
+build pass. This remains local prepared behavior: migrations, feature flag,
+deployed-role denials, and production identity truth are not activated or
+verified.
 
 The Flight Consignments slice is also prepared behind the disabled Admin BFF
 flag. Its fixed read projection returns bounded manifests, lines, and recent
@@ -1023,7 +1653,7 @@ On 21 August the prepared Admin leaf handlers were consolidated locally behind
 one explicit allowlisted router with 51 exact method-aware routes and a single
 serverless entrypoint. Automated verification compares the router with every
 prepared endpoint and denies unknown paths. On 22 August the guarded entrypoint
-was promoted to `api/admin/index.js` with an exact catch-all rewrite and
+was promoted to `api/admin/index.js` with an exact API-prefix catch-all rewrite and
 independent default-off server switch. No provider environment or feature flag
 changed, and the Admin still uses its existing direct browser session/data path;
 this is prepared activation work, not a live BFF. The 13 Storefront handlers
@@ -1064,6 +1694,16 @@ private bounded event ledger records only registration,
 validation-denial, and revocation outcomes without tokens, IP addresses,
 user-agent strings, provider errors, or free-form payloads; broader correlation,
 retention, review, and alerting remain MAP-022 work.
+
+IDEA-20260828-01 adds a required predeployment target, not current behavior. The
+repository does not yet enforce one active Admin login per staff account, issue
+owner-approved remembered-personal-browser credentials, distinguish remembered
+from unremembered history restoration, or prove that restored Admin content is
+locked before display. The current prepared session registry, provider-session
+binding, 30-minute idle limit, eight-hour hard limit, logout, and `no-store`
+contracts are foundations only. MAP-024 owns implementation; MAP-025 owns
+supported mobile/desktop real-host proof. Ordinary phone tab/app switching must
+not be reported as session expiry merely because document visibility changed.
 
 The same prepared verifier now enforces a second MAP-020 layer above individual
 command limits: one private forced-RLS minute bucket caps a staff actor at 360
@@ -1119,8 +1759,8 @@ another customer's conversation. The expanded PostgreSQL lifecycle proves this
 behavior after guest-grant revocation. A default-off passwordless Storefront
 surface supports email link and phone code, verified claim, scoped history,
 offline recovery, refresh, and reply without changing the five-item mobile nav
-or promising commercial terms. Two 375px rendered journeys and twelve focused
-contracts pass, including dark/landscape/no-overflow checks. On 25 August the
+or promising commercial terms. Two customer-account 375px journeys plus the
+secure Wholesale journey pass, including dark/landscape/no-overflow checks. On 25 August the
 three passwordless actions moved from direct browser provider calls to fixed
 `account/auth/email`, `account/auth/phone`, and `account/auth/verify` Storefront
 routes. Each consumes a signed durable HMAC-only IP/contact-or-verification/global
@@ -1137,7 +1777,13 @@ durable attempt budget. The browser reuses the existing accessible challenge,
 sends the token only with issuance, resets it after each request attempt or
 ambiguous request failure,
 and establishes the ordinary customer session only from the bounded verified
-access/refresh pair. Five
+access/refresh pair. On 1 September the complete rendered acceptance run exposed
+a deferred-client lifecycle defect: the account hook dereferenced `.auth` on the
+promise returned by the lazy Supabase boundary. The hook now awaits that client,
+owns cancellation and subscription cleanup, and signs out only through the
+resolved client reference. Both previously failing account journeys, secure
+Wholesale, the exact 442/442 source/API inventory, the 484/484 base suite, and
+the complete seven-stage 550/550 `npm test` aggregate pass locally. Five
 focused boundary contracts, the isolated PostgreSQL 17.11 threshold/denial/
 replay/privacy/migration-replay rehearsal, all 174 API/security contracts, the
 three-journey customer/Wholesale browser harness, the zero-gap security audit,
@@ -1203,7 +1849,7 @@ and both sequential isolated builds pass locally. No migration, BFF flag,
 provider environment, preview, or production host was activated.
 
 MAP-020 now has a source-level security-surface scanner wired into prebuild. Its
-25 August baseline covers 68 Admin and 13 Storefront prepared BFF routes, two
+25 August baseline covered 68 Admin and 13 Storefront prepared BFF routes, two
 Edge Functions, and 289 literal Data API/RPC/Auth/Storage/Realtime/API source operations, with zero
 unreviewed dynamic targets after bounded-route, fixed-bucket, and static-channel
 corrections. It also inventories the ordered local migration target: 123 unique
@@ -1221,6 +1867,14 @@ centrally enforced method denial, and zero prebuild classification gaps. None of
 this DDL or BFF routing is claimed live. The scanner records source and
 repository-target exposure; it does not prove production deployment,
 authorization, real rate limits, or provider configuration.
+
+The 29 August source refresh expands the prepared Admin router to 70 exact routes:
+`inbox/send-reply` adds the signed customer-visible website reply boundary and
+`product-knowledge/save` adds the signed reviewed-copy boundary. Both are
+AAL2/session/origin/CSRF/idempotency/database-rate classified. The standalone
+Admin verifier, source inventory, route documentation, and 366 source/API
+contracts agree on 70 Admin and 13 Storefront routes. This remains prepared
+source behavior, not proof that either production BFF flag is active.
 
 The prepared Admin BFF now also owns public product-media upload transport.
 The fixed route verifies the live Admin session, AAL2, exact origin, CSRF, UUID
@@ -1464,9 +2118,18 @@ execution from every browser role including `PUBLIC`. Inventory Grid supplies
 reasoned 44px actions, explicit permission states, safe recovery, and numeric
 weight validation. PostgreSQL rollback/apply/behavior/postflight/replay, 149
 contracts, the 62-route zero-gap inventory, and the isolated Admin build pass.
-Chromium review remains environment-blocked by a pre-launch Windows `EPERM`;
-production migration, flags, host, data, and grants remain unchanged behind
-`OWNER-005`.
+On 27 August a dedicated secure-flag Chromium journey closed the former Windows
+`EPERM` review gap. Its first run found that the product editor lacked an
+accessible dialog identity. The editor and lifecycle confirmation now use the
+shared Admin dialog focus/Escape/restore contract, busy close protection, and a
+stable accessible name; editor fields stack into one column at 375px. The real
+rendered flow proves reasoned editing, Draft → Under Review confirmation,
+delete-PIN initial focus, inline history-based deletion refusal, and zero
+horizontal overflow. The focused journey, all 16 Admin UI journeys, 213
+API/security contracts plus both selling-surface behaviors, the zero-gap gate,
+and the isolated 21-module Admin build pass. Production migration, flags, host,
+data, and grants remain unchanged behind the missing backup/restore evidence and
+coordinated cutover gates.
 
 System Readiness now has a protected boolean-only Admin/AAL2 route prepared as a
 MAP-022 prerequisite. It replaces direct browser session/table probes with fixed
@@ -1598,6 +2261,204 @@ It validates names and project separation only; values, matching database
 secrets, rewrites, flags, provider state, domains, and real-host behavior remain
 unproven.
 
+MAP-024 now also has an identity-independent Vercel configuration
+selector at `scripts/map024-evidence/select-vercel-deployment-config.mjs`. Given
+an explicit target, current project ID, reviewed target-to-project mapping, and
+the two existing artifact contracts, it returns only the exactly matched config
+and refuses missing, invalid, unmapped, mismatched, or absent-config input. Four isolated-
+process contracts cover two synthetic valid pairs and all refusal classes; the
+synthetic IDs prove logic only. A refreshed owner-authenticated Vercel connector
+supplied both real K2 project IDs; two additional isolated-process contracts bind
+them to their exact target configs and reject an opposite-project pairing. Root
+`vercel.ts` now exports that selected config through Vercel's supported
+programmatic configuration entrypoint, and the weaker generic
+`vercel.json` is removed locally; both readable target configs remain unchanged.
+On 30 August a dedicated contract first failed because the generic root JSON
+still existed, then passed after that obsolete file was removed; the complete
+focused config/security suite now passes 16/16. Fresh Storefront and Admin
+production builds pass their boundary and secret checks. This is prepared
+repository state, not a deployment. Preview function inventory, opposite-boundary `404`,
+disabled BFF switches, routes, headers, cache classes, and rollback still require
+provider evidence. Fresh verification after the root-adapter addition passed
+234 API/source contracts, two
+rendered Storefront selling journeys, the full prebuild gate, and both isolated
+artifact builds/boundary scans.
+
+The same read-only provider refresh found the Admin latest production deployment
+`READY` and the Storefront latest production deployment `ERROR`. The Storefront
+errors-only log shows the tracked-sensitive-file preflight refused Vercel's
+checkout because `.git` is unavailable; no security gate was bypassed. The
+Storefront project response also did not list the previously recorded apex/`www`
+custom domains, while Admin still listed `admin.k2jimzon.com`. These are current
+provider reconciliation blockers, not evidence that DNS or public-host behavior
+changed. No provider setting or deployment was mutated.
+
+On 27 August 2026, authenticated Hostinger connector access verified registrar
+and DNS-edit authority for `k2jimzon.com`, which is transfer-locked and
+registered through 27 August 2027. The pre-cutover zone contained only the
+Hostinger parking A record and `www` CNAME; no MX or TXT record was present.
+Hostinger DNS was changed at TTL 300 to Vercel's verified apex A records and
+project-specific `www` and `admin` CNAME targets. Public DNS and Vercel both
+verified the new records. The apex returns a 308 redirect to the canonical
+`https://www.k2jimzon.com`; Storefront and Admin HTTPS hosts return 200.
+
+Vercel project `k2-jimzon` builds the Storefront artifact and owns the apex and
+`www`; project `k2-jimzon-admin` builds the Admin artifact and owns
+`admin.k2jimzon.com`. Their live HTML references different hashed JavaScript
+bundles. The Admin route marker is absent from the Storefront bundle and present
+in the Admin bundle. Project-level routes provide report-only CSP, anti-framing,
+MIME, referrer, permissions, and no-store headers. Admin additionally returns
+`X-Robots-Tag: noindex, nofollow` and private no-store caching. Because the
+prepared BFFs are not accepted for activation, start-position Vercel routes
+return 404 for the Admin and Storefront API prefixes; both activation flags and
+Admin password recovery remain false. The currently installed secret matrix
+contains only generated per-project signing/cookie values and browser-safe
+Supabase configuration; missing Turnstile, signed-command, and matching database
+secrets were not fabricated.
+
+A fresh read-only Hostinger connector check on 28 August 2026 found
+`k2jimzon.com` still `Active`, privacy-protected, transfer-locked, and expiring
+27 August 2027. The Hostinger-managed nameservers remain
+`cosmos.dns-parking.com` and `nova.dns-parking.com`; the zone still contains
+apex A `216.198.79.1` and `64.29.17.1`, `www` CNAME
+`f683b7ff3d09cb06.vercel-dns-017.com.`, and `admin` CNAME
+`be6a2ad6b5b189c6.vercel-dns-017.com.`, all at TTL 300. This refresh verifies
+provider-held configuration only; public DNS propagation and real-host
+behavior still require the owner-authenticated network check recorded below.
+Hostinger also exposes rollback snapshot `175986373` (27 August 2026
+12:30:37Z), preserving the pre-cutover apex A `2.57.91.91` and `www` CNAME
+`k2jimzon.com.` at TTL 300. It is a recovery anchor only; no DNS restore or
+rollback rehearsal has been performed.
+
+During the 27 August continuation, the Vercel connector session available to
+Codex listed only the unrelated team `edgerzxcs-projects` and projects
+`scout-it`, `scoutit`, `mission-control`, and `receipt-auditor-app`; it could not
+read the K2 projects. This is a connector-account mismatch, not evidence of K2
+deployment loss. No Vercel deployment or setting was changed through that
+session. Future MAP-024 provider checks and writes require the
+owner-authenticated K2 Vercel session.
+
+A read-only connector refresh on 28 August 2026 returned the same boundary:
+Vercel exposes only team `edgerzxcs-projects`, while Supabase exposes only
+organization `ScoutIT` and project ref `yyixsuaimdzyiocswcgc`. The K2 projects
+remain unavailable through this session; no provider or database write was
+attempted.
+
+The same connector context's Supabase session lists only the unrelated `ScoutIT`
+project and denies access to K2 ref `pixplcjqivlfflickobf`. It was not used for
+K2 SQL, migration, or settings changes. K2 database reads and writes require the
+owner-authenticated K2 Supabase session or the approved local production
+connection boundary.
+
+Supabase Auth production URL settings are not yet verified or changed. The exact
+K2/localhost redirect targets are prepared in `supabase/config.toml` and the
+unbounded `*.vercel.app` redirect has been removed, but a broad CLI config push
+was rejected because it would mutate unrelated production Auth settings. Until
+a narrow dashboard or Management API change is applied and tested, OAuth and
+password-reset callbacks on the new hosts remain unproven. The Gmail owner
+address `k2jimzonwebsite@gmail.com` is an account identity, not evidence of a
+domain mailbox; the domain currently has no verified mail DNS configuration.
+
+A read-only exact-host discovery check later on 27 August found that the live
+Storefront returns the SPA HTML with status 200 and `text/html` for both
+`/robots.txt` and `/sitemap.xml`. The live initial HTML exposes no absolute
+canonical or Google/Bing ownership marker, and public DNS exposes no webmaster
+verification TXT record. The repository contains committed History API routing
+plus prepared robots, icons, runtime canonical/share metadata, and Product/
+Offer JSON-LD. The exact public host is now recorded as
+`https://www.k2jimzon.com`; `index.html` also carries absolute home canonical,
+Open Graph URL/image, and Twitter image fields, while the pure
+`src/lib/storefrontMetadataOrigin.js` resolver maps the apex and Vercel preview
+hosts back to the canonical storefront origin, keeps localhost test origins
+local, and preserves unrelated staging origins. These are prepared
+dirty-worktree assets,
+not deployed evidence, and there is still no production-generated sitemap,
+product-specific initial-response metadata, or real shared-link preview.
+
+The local MAP-024 sitemap preparation is fail-closed in
+`scripts/map024-evidence/generate-sitemap.mjs`. It accepts only a caller-
+supplied read-only catalog projection, requires a valid SKU and HTTPS primary
+image for each `Live`/`Active` customer-visible row, emits only home/catalog/
+product URLs plus validated `lastmod` and image fields, and rejects non-
+canonical hosts, duplicates, unsafe/legacy-host images, and incomplete rows. The
+three focused sitemap contracts pass. The exact-host validator in
+`scripts/map024-evidence/verify-live-discovery.mjs` separately checks public
+home/crawler response status, content types, canonical/share tags, Admin
+exclusion, and optional product initial-response metadata while emitting only
+redacted summaries. Its six contracts pass; the contract half of
+`npm.cmd run test:contracts` also passed 228/228. The chained selling-surface browser step could not launch Chromium in
+the restricted runner (`spawn EPERM`) and is not evidence for this change. A
+27 August attempt to run the validator against `https://www.k2jimzon.com` also
+failed closed before writing evidence because the restricted runner could not
+open the outbound request (`MAP024_DISCOVERY_REFUSAL: GET / failed
+(network-error)`). This is execution-environment evidence only, not a
+real-host validation result. No production catalog was read, no fixture was
+promoted to `public/sitemap.xml`, and no provider or deployment state changed;
+an owner-authenticated network-enabled K2 session must supply and review the
+projection before generation and deployment. A fresh 27 August
+`npm.cmd run build:storefront`
+retry passed all security/environment/dependency/surface/import/secret preflight
+gates, but the restricted Windows runner denied Vite/esbuild access to the
+workspace config (`Access is denied`), so no new build artifact or boundary scan
+was produced. This is an execution-environment limitation, not deployed
+evidence. A 28 August elevated retry was rejected by the host usage limit before
+the validator could run, so no live-host result or evidence file exists yet.
+
+On 30 August the exact-host validator's stale local contract was corrected
+through a witnessed RED/GREEN cycle. It now requires the reviewed absolute
+`/og-card.png` home share image instead of `icon.svg`, requires the public
+robots user-agent/allow/sitemap directives, and refuses a robots response that
+discloses `admin-portal-k2-secure`. Its focused tests pass 7/7 and the adjacent
+live/sitemap/Storefront/config group passes 34/34. This does not change the live
+host: its older SPA shell and HTML crawler fallbacks remain unverified for
+replacement until preview/deployment evidence passes.
+
+A fresh unrestricted public check on 30 August confirmed that deployed state is
+still unchanged: Storefront `/`, `/robots.txt`, and `/sitemap.xml` each return
+HTTP 200 `text/html` with the same 1,268-byte SPA shell and no canonical/share,
+robots, or sitemap structure. Storefront `/api/storefront/conversation` and
+Admin `/api/admin/session` return 404; both host roots return the same shell.
+The authenticated Vercel connector available in this session exposes only team
+`team_hWRb9j8WjUJshQqZuBkAOTFz` and three unrelated projects (`scout-it`,
+`mission-control`, `receipt-auditor-app`), not either recorded K2 project. No
+K2 project configuration, deployment, environment, or provider setting was
+read or changed through that mismatched account.
+
+Build-time product discovery is now prepared locally from that same reviewed
+catalog projection. `generate-product-pages.mjs` consumes the sitemap
+generator's exact visible-product selection and emits one static raw HTML page
+per published SKU with self-canonical title/description, absolute OG/Twitter
+fields, Product/Offer JSON-LD, and breadcrumb JSON-LD. Vercel checks the
+filesystem before higher-level rewrites, so generated product HTML wins and the
+`/product/:sku` rewrite falls back to the client only for a missing/unpublished
+SKU. Other unmatched paths are no longer consumed by a global SPA fallback and
+receive the emitted noindex recovery document when the host honors static `404.html`. The
+scripts in each generated product page retain the existing client application.
+Focused discovery/config contracts pass 36/36
+and a fresh Storefront production build passed its security, boundary, and
+secret gates. The current projection still contains 27 Live rows but 0
+published products, so that build emitted 0 product URLs/pages. This is prepared
+initial-response behavior, not preview, real-host, rich-result, or share-card
+evidence.
+
+A redacted read-only MAP-024 harness now exists at
+`scripts/map024-evidence/inventory-persisted-hostnames.mjs` with command
+`npm.cmd run evidence:map024-hostnames`. It scans production text/JSON columns
+for absolute URLs, legacy K2 Vercel hosts, localhost, and loopback values while
+emitting only schema/column names and counts. Its three safety contracts pass.
+The first live run failed closed because this sandbox forbids outbound sockets to
+the K2 Supabase pooler; the elevated retry was unavailable due the host usage
+limit. No inventory evidence was written and no production mutation occurred.
+An approved network-enabled owner session must run it before any hostname rewrite.
+
+IDEA-20260827-01 was audited and merged into MAP-024 as
+an ordered downstream closure register covering provider-route/config drift,
+Supabase Auth and templates, exact origins/cookies/Turnstile/OAuth callbacks,
+read-only database/storage hostname inventory, Google Search Console, Bing,
+domain mail/DNS security, structured commerce truth, monitoring, old-host cleanup,
+and rollback. None of those planned gates is described as applied merely because
+it is now documented.
+
 The 21 August isolated Storefront build still warns about two chunks above 500
 kB before gzip: the main bundle is about 629 kB and the Globe section about 903
 kB. This is a build-size observation, not latency or user-performance evidence;
@@ -1673,6 +2534,81 @@ not describe verified live behavior:
 15. **MAP-014 — Full Staff Acceptance & Launch Proof**: Executed full system release verification suite (`scripts/verify-full-launch-proof.js` - All 17 checks passed) and production build compilation (`npm run build` - Passed in 5.24s).
 
 ---
+
+### MAP-028 Storefront/Admin remediation — verified local state, 1 September 2026
+
+The current repository registry contains 81 Admin BFF routes and 14 Storefront
+BFF routes. The Storefront addition is `POST /api/storefront/order/status`.
+`20260831_guest_order_status_boundary.sql`, the handler, registry/control
+metadata, client service, route synchronization, and confirmation recovery UI
+exist locally. A successful order navigates to `/confirmation`; reload uses only
+the HttpOnly guest grant and a status-safe projection. Missing/expired/revoked
+grants show recovery and cannot expose contact, address, notes, internal IDs,
+grant material, or another customer's order. This boundary is prepared,
+unapplied, disabled, undeployed, and not live.
+
+Storefront stock/cart truth is centralized in `src/lib/cartInventory.js`.
+Unknown stock remains distinct from verified zero from catalog hydration through
+product/card/store/cart UI. Adds require known positive availability, repeated
+adds cap at the known quantity, bundles are all-or-nothing, cart quantity edits
+cannot resurrect unavailable units, and order submission revalidates stale
+lines. Unknown/zero/insufficient/missing states block without inventing a sale or
+sell-out. The false multichannel-sync and unapproved Pasabuy response-time copy
+are absent.
+
+Unknown URLs and missing products now render explicit noindex recovery surfaces.
+New Arrivals uses the shared history/view-transition/focus boundary. The neutral
+local image fallback and runtime error handler cover failed media references,
+and production boundary verification rejects missing named local assets. Real
+product publication still requires owner-approved rights/accuracy evidence and
+must not describe generated or fallback art as photography.
+
+Admin operational failures no longer use browser `alert`, `prompt`, or
+`confirm`. Inventory and Smart Paste keep errors inline. Courier handover uses
+the shared `AdminDialog`, requires an actual handover/audit reference, retains
+retry/cancel/focus behavior, and says it records rather than books the courier.
+Admin now owns one accessible H1 and one main workspace landmark; nested
+workspace titles are lower-level headings. Storefront confirmation and the
+virtual store also own their correct H1/main landmarks, and Admin operational
+text has a 12px minimum floor.
+
+The production build graph is target-separated and budget-enforced. The fresh
+Storefront landing graph is 149.43 kB/150.00 kB JS gzip and 26.73 kB/30.00 kB
+CSS gzip. Cart, Interactive Shop CSS/JS, deferred Supabase, and the approximately
+240.23 kB-gzip Three.js graph remain optional chunks. Google brand fonts load
+after application scheduling and cannot block bootstrap. The Admin entry is
+186.19 kB/300.00 kB minified; `MasterWorkflowGraph` is a separate 104.97 kB
+chunk, and the old static/dynamic split warning is gone. These figures are local
+artifact evidence, not real-host LCP/INP/CLS or RUM.
+
+Fresh local evidence covers a 442/442 API/source aggregate after the final
+CI/routing/static-404/account-lifecycle deltas; the first current run exposed
+and then corrected a synthetic Interactive Shop build fixture that was failing
+at the new mandatory 404 gate instead of its intended eager-payload gate. One
+uninterrupted exact current-tree `npm test` command, run after the final account
+fixture containment change, passes 550/550 across base 484/484, Storefront
+30/30, Admin 26/26, Product Master 1/1, Owner Count & Close 1/1,
+customer-account/secure Wholesale 3/3, and selling surfaces 5/5. GitHub CI is
+locally prepared to run the same aggregate command. Fabricated provider origins are
+scoped to the dedicated Admin and customer-account harnesses, matching requests
+are intercepted, the workflow exports no provider URL globally, and the
+harnesses do not name K2's real Supabase project. CI preserves Playwright
+failure evidence, rejects accidental `.only` tests, avoids reusing an unrelated
+server, and uses cross-platform server commands. The exact Owner Count & Close
+journey passes both standalone and inside the aggregate after its server command
+changed to `npx vite`. This is still not a green remote CI claim.
+The
+browser accessibility baseline checks semantic main/H1 structure, missing image
+alternatives, duplicate IDs, unnamed interactive accessibility-tree nodes,
+keyboard focus, reduced motion, and horizontal reflow at 200% text. It is not a
+complete contrast audit, screen-reader certification, WCAG conformance claim,
+real-device matrix, or deployed-host proof.
+
+No production database, Storage, DNS, Vercel, Auth, payment, courier,
+marketplace, social, or external provider state changed during this remediation.
+The release remains **NOT READY** while MAP-028 G-001/G-002 and the recorded
+provider, exact-host, authenticated, rollback, observability, approved-media,
+real-device/accessibility, and RUM gates remain open.
 
 ## 10. Where things live (quick map)
 

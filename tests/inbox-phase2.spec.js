@@ -50,6 +50,13 @@ test.describe('Phase 2 unified inbox contract', () => {
     expect(normalize({ unread_count: null, status: 'Open' })).toEqual({ unreadCount: 0, unread: false, status: 'Open' })
     expect(normalize({ unread_count: 'not-a-number', status: 'Resolved' })).toEqual({ unreadCount: 0, unread: false, status: 'Resolved' })
     expect(normalize({ unreadCount: -4, status: 'Closed' })).toEqual({ unreadCount: 0, unread: false, status: 'Closed' })
+
+    expect(normalizeAdminConversation({
+      customerName: 'Website customer', platform: 'Virtual Store', sourceKind: 'virtual_store_message',
+    }).sourceKind).toBe('virtual_store_message')
+    expect(normalizeAdminConversation({
+      customer_name: 'Website customer', platform: 'Website', source_kind: 'website_message',
+    }).sourceKind).toBe('website_message')
   })
 
   test('admin inbox labels internal notes and disconnected delivery truthfully', async () => {
@@ -106,5 +113,21 @@ test.describe('Phase 2 inbox interactions', () => {
     await expect(page.getByLabel('Search conversations')).toBeVisible()
     const hasHorizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)
     expect(hasHorizontalOverflow).toBe(false)
+  })
+
+  test('virtual-store website chat is unmistakable and sends a customer-visible reply', async ({ page }) => {
+    await page.goto('/tests/fixtures/inbox-harness.html')
+
+    await page.getByRole('button', { name: /Elena Website/i }).click()
+    await expect(page.getByText('LIVE WEBSITE CHAT · VIRTUAL STORE')).toBeVisible()
+    await expect(page.getByText('Replies appear in the customer’s website chat')).toBeVisible()
+
+    const reply = page.getByLabel('Customer-visible website reply')
+    await reply.fill('The coffee shelf includes whole beans and ground options. Which brewer do you use?')
+    await page.getByRole('button', { name: 'Send to website customer' }).click()
+
+    await expect(page.getByText('Sent. The reply is now visible in the customer’s website chat.')).toBeVisible()
+    await expect(page.locator('p.whitespace-pre-wrap').filter({ hasText: 'The coffee shelf includes whole beans and ground options. Which brewer do you use?' })).toBeVisible()
+    await expect(page.getByText('Visible in website chat')).toBeVisible()
   })
 })

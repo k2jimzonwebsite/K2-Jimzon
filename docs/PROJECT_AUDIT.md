@@ -1,5 +1,10 @@
 # K2 Jimzon — Full Project & Production Website Audit
 
+> **Historical snapshot dated 25 August 2026.** It is not current system truth
+> and does not authorize work. Preserve it for provenance; use
+> `MASTER_ACTION_PLAN.md` as the only active backlog and the System Brain for
+> verified current state.
+
 **Audit Date:** 25 August 2026  
 **Auditor:** Antigravity (Advanced Agentic Architecture & Security Specialist)  
 **Methodology:** Full Codebase Inspection, Static Analysis, Portable PostgreSQL 17 Lifecycles, 179 Automated Contract Tests, Playwright UI Verification, Security Boundary Verification, and Live Vercel Production Inspection.
@@ -328,7 +333,9 @@ LIVE WEBSITE (ADMIN):     PASS (HTTP 200, clean bundle, OAuth PKCE active)
 - [ ] **AUD-010:** Inject JSON-LD Schema.org `Product` structured data in product detail views.
 - [ ] **AUD-014:** Document staff SOP for Delete PIN setup in `Staff & Roles`.
 - [ ] **AUD-015:** Configure automated off-site encrypted database backup export runner.
-- [ ] **AUD-017:** Move client error reporting behind rate-limited BFF endpoint.
+- [ ] **AUD-017:** Apply and verify the prepared direct-browser `error_reports`
+  retirement after MAP-017 backup/authorization gates; local replay and
+  100-attempt denial pass, production remains unchanged.
 
 ### P3 — Cleanup / Optimization
 - [ ] **AUD-011:** Modularize `ProductIntakeSessionModal.jsx` (1,147 lines) into focused subcomponents.

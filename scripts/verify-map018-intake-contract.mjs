@@ -7,11 +7,13 @@ import {
 } from '../src/views/admin/productResearchContract.js'
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), 'utf8')
-const [service, modal, server, migration, cleanupMigration, preflight, postflight] = await Promise.all([
+const [service, modal, server, migration, bffMigration, canonicalIdentities, cleanupMigration, preflight, postflight] = await Promise.all([
   read('src/services/productIntakeService.js'),
   read('src/views/admin/ProductIntakeSessionModal.jsx'),
   read('server/admin-bff/product-intake.js'),
   read('supabase/migrations/20260811_product_intake_and_sku_gate.sql'),
+  read('supabase/migrations/20260812_admin_product_intake_bff_boundary.sql'),
+  read('src/data/canonicalIdentities.js'),
   read('supabase/migrations/20260824_map018_intake_evidence_cleanup_boundary.sql'),
   read('supabase/map018_product_intake_preflight.sql'),
   read('supabase/map018_product_intake_postflight.sql'),
@@ -38,6 +40,23 @@ for (const required of [
   'Retry file cleanup',
   'The unregistered private file is queued for cleanup.',
 ]) assert.equal(`${service}\n${modal}`.includes(required),true,`Missing cleanup recovery UI: ${required}`)
+
+for (const required of [
+  'CANONICAL_HUBS',
+  'CANONICAL_CUSTODIANS',
+  'custodian.hub_id === hubLocation',
+]) assert.equal(`${canonicalIdentities}\n${modal}`.includes(required), true, `Missing canonical custody UI: ${required}`)
+
+assert.equal(
+  server.includes('CUSTODIAN_HUBS.get(custodian) !== hubLocation'),
+  true,
+  'Admin BFF must reject cross-hub custody',
+)
+for (const sql of [migration, bffMigration]) {
+  for (const required of ['from public.hubs h', 'from public.custodians c']) {
+    assert.equal(sql.includes(required), true, `Missing canonical custody SQL boundary: ${required}`)
+  }
+}
 
 for (const forbidden of [
   /Mock Product Draft/i,

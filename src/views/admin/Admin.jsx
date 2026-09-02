@@ -15,7 +15,7 @@ import SystemDevOpsModal from './SystemDevOpsModal'
 import StartHereGuide from './StartHereGuide'
 import KeyboardShortcutsModal from './KeyboardShortcutsModal'
 import UniversalScanLauncher from './UniversalScanLauncher'
-import WorkflowGuideModal from '../../components/admin/guides/WorkflowGuideModal'
+import AdminToolsWidget from './AdminToolsWidget'
 import { GO_TO_SHORTCUTS, isTextEntryTarget } from './adminOperations'
 import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
 
@@ -28,6 +28,7 @@ const Inbox = lazy(() => import('./Inbox'))
 const Customers = lazy(() => import('./Customers'))
 const Overview = lazy(() => import('./Overview'))
 const Suppliers = lazy(() => import('./Suppliers'))
+const StoreAssetStudio = lazy(() => import('./StoreAssetStudio'))
 const ConsignmentManager = lazy(() => import('./ConsignmentManager'))
 const BulkCsvImportModal = lazy(() => import('./BulkCsvImportModal'))
 const ChannelIntegrations = lazy(() => import('./ChannelIntegrations'))
@@ -35,11 +36,15 @@ const PasabuyManager = lazy(() => import('./PasabuyManager'))
 const OmniOperationsHub = lazy(() => import('./OmniOperationsHub'))
 const StaffPermissionManager = lazy(() => import('./StaffPermissionManager'))
 const CouponManager = lazy(() => import('./CouponManager'))
+const DeliveryRateControl = lazy(() => import('./DeliveryRateControl'))
 const MasterWorkflowGraph = lazy(() => import('../../components/admin/master-workflow-graph/MasterWorkflowGraph'))
+const OwnerCountClose = lazy(() => import('./OwnerCountClose'))
+const WorkflowGuideModal = lazy(() => import('../../components/admin/guides/WorkflowGuideModal'))
 
 // Single source of truth for every section: nav label, page title, subtitle, icon.
 const SECTIONS = {
   overview:          { label: 'Command center',      icon: GridIcon,    title: 'Command center',                desc: 'Verified performance, channel readiness, and priority operations.' },
+  owner_close:       { label: 'Count & Close',       icon: BookIcon,    title: 'Owner Count & Close',           desc: 'Resume exact-shop imports, product review, counts, and close handoffs.', adminOnly: true },
   workflow_graph:    { label: 'Workflow Graph',      icon: MapIcon,     title: 'Master Operations Workflow Graph', desc: 'Interactive SVG flowcharts, shift checklists, safeguards, and AI prompt engineering.' },
   kanban:            { label: 'Purchasing',           icon: BagIcon,     title: 'Italy Purchasing',               desc: 'Supplier commitments and purchasing work before consolidation.' },
   consignment:       { label: 'Flight Consignments',  icon: PlaneIcon,   title: 'Italy Flight Consignments',      desc: 'Scan-count every expected unit in Milan, recount it in Manila, then reconcile inventory.' },
@@ -49,18 +54,20 @@ const SECTIONS = {
   omni_hub:          { label: 'Fulfillment Hub',     icon: BarcodeIcon, title: 'Fulfillment & Staff Stations',  desc: 'Barcode pack-to-ship and Italy cargo box custody claims.' },
   inbox:             { label: 'Messages',            icon: InboxIcon,   title: 'Conversation Records',          desc: 'Persisted internal records; external messaging connectors are deferred.' },
   wholesale:         { label: 'Customers',           icon: UserIcon,    title: 'Registered Customer Profiles',  desc: 'Database-backed customer identities; wholesale pricing and broadcasts are deferred.' },
+  delivery:          { label: 'Delivery Rates',      icon: PlaneIcon,   title: 'Delivery Rates & Couriers',     desc: 'The owner-approved courier pilot: exact localities, versioned rates, and the quote tester.', adminOnly: true },
   coupons:           { label: 'Coupons',             icon: StarIcon,    title: 'Coupons & Vouchers',             desc: 'Controlled discount codes, schedules, limits, and voucher-hunt campaigns.' },
   staff_permissions: { label: 'Staff & Roles',       icon: ShieldIcon,  title: 'Staff Roles & Permissions',     desc: 'Manage authenticated staff roles and access permissions.' },
   integrations:      { label: 'Channel Readiness',   icon: GlobeIcon,   title: 'Sales Channel Readiness',        desc: 'Catalog preparation and real connector status for Website, Shopee, TikTok, Lazada, and Pasabuy.' },
+  store_assets:      { label: 'Store Assets',        icon: StarIcon,    title: 'Virtual Store Assets',           desc: 'Products whose shelf panel is still empty, and the drafted copy waiting on staff approval.' },
   globe:             { label: 'Globe Display',        icon: EyeIcon,     title: '3D Globe Map Settings',         desc: 'Control which products appear on the interactive 3D map.' },
 }
 
 // Grouped navigation by daily workflow. Home stands alone; settings sink to the bottom.
 const NAV_GROUPS = [
-  { heading: null,             items: ['overview', 'workflow_graph'] },
+  { heading: null,             items: ['overview', 'owner_close', 'workflow_graph'] },
   { heading: 'Supply Chain',   items: ['kanban', 'consignment', 'pasabuy_manager', 'suppliers'] },
-  { heading: 'Sell & Fulfill', items: ['inventory', 'omni_hub', 'inbox', 'wholesale', 'coupons'] },
-  { heading: 'Settings',       items: ['staff_permissions', 'integrations', 'globe'] },
+  { heading: 'Sell & Fulfill', items: ['inventory', 'store_assets', 'omni_hub', 'inbox', 'wholesale', 'coupons'] },
+  { heading: 'Settings',       items: ['delivery', 'staff_permissions', 'integrations', 'globe'] },
 ]
 
 function NavList({ section, onSelect, activeSkus, canManageStaff }) {
@@ -74,7 +81,7 @@ function NavList({ section, onSelect, activeSkus, canManageStaff }) {
             </p>
           )}
           <div className="space-y-0.5">
-            {group.items.filter(id => id !== 'staff_permissions' || canManageStaff).map(id => {
+            {group.items.filter(id => !SECTIONS[id].adminOnly || canManageStaff).map(id => {
               const meta = SECTIONS[id]
               const Ico = meta.icon
               const on = section === id
@@ -131,7 +138,7 @@ export default function Admin() {
   const [activeSkus, setActiveSkus] = useState(0)
   const [lowStock, setLowStock] = useState(0)
   const [pendingOrders, setPendingOrders] = useState(null)
-  const canManageStaff = user?.role === 'Admin'
+  const canManageStaff = user?.role === 'Admin' || user?.role === 'SuperAdmin'
 
   useEffect(() => {
     if (!isAdmin) return
@@ -245,7 +252,7 @@ export default function Admin() {
   }
 
   const selectSection = (id) => {
-    setSection(id === 'staff_permissions' && !canManageStaff ? 'overview' : id)
+    setSection(SECTIONS[id]?.adminOnly && !canManageStaff ? 'overview' : id)
     // Card grid is the default view. Sheet mode is a power-user opt-in — it was
     // auto-enabling on every Inventory visit, which dropped mobile users
     // straight into a 30-column spreadsheet.
@@ -325,12 +332,12 @@ export default function Admin() {
         </div>
       </aside>
 
-      <div className="min-w-0 flex-1 flex flex-col h-full overflow-hidden">
+      <main className="min-w-0 flex-1 flex flex-col h-full overflow-hidden">
         {/* Mobile Header */}
         {/* Mobile top bar doubles as the page title, so the section header below
             can drop its own title row instead of stacking two headers. */}
         <div className="flex min-h-[58px] w-full shrink-0 items-center justify-between gap-2 border-b border-adm-line bg-adm-sunken px-3 lg:hidden">
-          <p className="text-base font-semibold text-white truncate min-w-0">{meta.title}</p>
+          <h1 className="text-base font-semibold text-white truncate min-w-0">{meta.title}</h1>
           <div className="flex items-center gap-0.5 shrink-0">
             <button aria-label="Open scan center" onClick={() => setShowScanCenter(true)} className="flex min-h-[44px] min-w-[44px] items-center justify-center text-blue transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70">
               <BarcodeIcon size={19} />
@@ -368,7 +375,7 @@ export default function Admin() {
           <div className="ml-auto flex items-center gap-2 overflow-x-auto scrollbar-none">
             <button
               onClick={() => setShowScanCenter(true)}
-              className="flex min-h-[40px] items-center gap-1.5 rounded-adm-sm bg-blue px-3 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-blue-deep active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
+              className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm bg-blue px-3 text-sm font-semibold text-white transition-[transform,background-color] duration-150 hover:bg-blue-deep active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
               title="Open scan center (Alt+S)"
             >
               <BarcodeIcon size={16} />
@@ -378,7 +385,7 @@ export default function Admin() {
 
             <button
               onClick={() => setShowWorkflowGuide(true)}
-              className="flex min-h-[40px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-sky-400 transition-[transform,background-color,color,border-color] duration-150 hover:border-sky-500/40 hover:bg-sky-500/10 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/70"
+              className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-sky-400 transition-[transform,background-color,color,border-color] duration-150 hover:border-sky-500/40 hover:bg-sky-500/10 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/70"
               title="View visual workflow maps for all shifts"
             >
               <span>🗺️</span>
@@ -387,7 +394,7 @@ export default function Admin() {
 
             <button
               onClick={() => setShowStartHere(true)}
-              className="flex min-h-[40px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
+              className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
               title="How to use this dashboard — start here"
             >
               <BookIcon size={15} />
@@ -396,7 +403,7 @@ export default function Admin() {
 
             <button
               onClick={() => setShowDailyTasks(true)}
-              className="relative flex min-h-[40px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
+              className="relative flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
               title="Expiry alerts"
             >
               <BellIcon size={15} />
@@ -405,7 +412,7 @@ export default function Admin() {
 
             <button
               onClick={() => setShowAiCopilot(true)}
-              className="relative flex min-h-[40px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
+              className="relative flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
               title="Open the grounded operations guide (Alt+G)"
             >
               <BookIcon size={14} className="text-blue" />
@@ -414,7 +421,7 @@ export default function Admin() {
 
             <button
               onClick={() => setPaletteOpen(true)}
-              className="hidden min-h-[40px] items-center gap-2 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm text-white/60 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 lg:flex"
+              className="hidden min-h-[44px] items-center gap-2 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm text-white/60 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 lg:flex"
             >
               <SearchIcon size={15} /> Search <kbd className="rounded border border-white/15 bg-adm-sunken px-1.5 py-0.5 font-mono text-xs text-white/45">Ctrl K</kbd>
             </button>
@@ -423,7 +430,7 @@ export default function Admin() {
               <div className="flex items-center gap-2 border-l border-adm-line pl-2">
                 <button
                   onClick={() => setShowCsvImport(true)}
-                  className="flex min-h-[40px] items-center gap-1.5 rounded-adm-sm bg-blue px-3 py-2 text-sm font-medium text-white transition-[transform,background-color] duration-150 hover:bg-blue-deep active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
+                  className="flex min-h-[44px] items-center gap-1.5 rounded-adm-sm bg-blue px-3 py-2 text-sm font-medium text-white transition-[transform,background-color] duration-150 hover:bg-blue-deep active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
                 >
                   <UploadIcon size={16} />
                   Upload CSV
@@ -461,11 +468,14 @@ export default function Admin() {
               </div>
             }>
               {section === 'staff_permissions' && canManageStaff ? <StaffPermissionManager />
+               : section === 'owner_close' && canManageStaff ? <OwnerCountClose />
                : section === 'workflow_graph' ? <MasterWorkflowGraph onNavigate={selectSection} />
+               : section === 'delivery' && canManageStaff ? <DeliveryRateControl />
                : section === 'coupons' ? <CouponManager />
                : section === 'omni_hub' ? <OmniOperationsHub />
                : section === 'pasabuy_manager' ? <PasabuyManager />
                : section === 'integrations' ? <ChannelIntegrations />
+               : section === 'store_assets' ? <StoreAssetStudio />
                : section === 'globe' ? <GlobeCms canManagePublicClaims={canManageStaff} />
                : section === 'inbox' ? <Inbox />
                : section === 'wholesale' ? <Customers />
@@ -478,7 +488,7 @@ export default function Admin() {
             </Suspense>
           </ErrorBoundary>
         </div>
-      </div>
+      </main>
 
       {/* Mobile bottom tab bar — quick jump between the sections you use most */}
       <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 flex items-stretch border-t border-adm-line bg-adm-sunken/95 backdrop-blur-md" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
@@ -536,19 +546,22 @@ export default function Admin() {
         isOpen={showStartHere}
         onClose={() => setShowStartHere(false)}
         onNavigate={selectSection}
+        onOpenOperationsGuide={() => setShowAiCopilot(true)}
       />
 
-      <WorkflowGuideModal
-        isOpen={showWorkflowGuide}
-        onClose={() => setShowWorkflowGuide(false)}
-        defaultTab={
-          section === 'consignment' ? 'flights' :
-          section === 'inventory' ? 'fefo' :
-          section === 'omni_hub' ? 'fulfillment' :
-          section === 'pasabuy_manager' ? 'pasabuy' : 'flights'
-        }
-        onNavigate={selectSection}
-      />
+      {showWorkflowGuide && <Suspense fallback={null}>
+        <WorkflowGuideModal
+          isOpen
+          onClose={() => setShowWorkflowGuide(false)}
+          defaultTab={
+            section === 'consignment' ? 'flights' :
+            section === 'inventory' ? 'fefo' :
+            section === 'omni_hub' ? 'fulfillment' :
+            section === 'pasabuy_manager' ? 'pasabuy' : 'flights'
+          }
+          onNavigate={selectSection}
+        />
+      </Suspense>}
 
       <UniversalScanLauncher
         isOpen={showScanCenter}
@@ -558,6 +571,8 @@ export default function Admin() {
       />
 
       <KeyboardShortcutsModal isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
+
+      <AdminToolsWidget onOpenGuide={() => setShowAiCopilot(true)} />
 
     </div>
   )

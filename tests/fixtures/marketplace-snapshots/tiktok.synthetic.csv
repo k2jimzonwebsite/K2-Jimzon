@@ -1,0 +1,4 @@
+schema_version,source_row_id,external_item_id,external_variant_id,marketplace_sku,barcode,title,size,concentration,flavor,shade,formulation,pack_count,unit_price,currency,listing_status,reported_quantity,observed_at
+k2.marketplace-snapshot.v1,TT-ROW-001,TT-ITEM-3001,TT-VAR-3001-A,TT-LAV-250,8000000000012,Lavazza Qualita Oro Ground Coffee 250g,250 g,,,,ground coffee,1,345.00,PHP,active,3,2026-08-31T08:10:00+08:00
+k2.marketplace-snapshot.v1,TT-ROW-002,TT-ITEM-3002,TT-VAR-3002-A,TT-COL-01,8000000000043,Collistar Rossetto Shade 01,3.5 g,,,rose,lipstick,1,899.00,PHP,draft,0,2026-08-31T08:10:00+08:00
+

@@ -14,6 +14,8 @@ import ProductIntakeSessionModal from './ProductIntakeSessionModal'
 import {
   adminBffEnabled, commandAdminProductMasterBff, getAdminProductMasterBff, getAdminProducts,
 } from '../../services/adminBffService'
+import { AdminDialog } from '../../components/ui/AdminDialog'
+import { applyImageFallback } from '../../lib/imageFallback'
 import {
   EmptyState,
   MetricRail,
@@ -83,12 +85,6 @@ function StatusDecisionDialog({ decision, busy, onCancel, onConfirm }) {
   const [reason, setReason] = useState('')
   const [error, setError] = useState('')
   const closeRef = useRef(null)
-  useEffect(() => {
-    closeRef.current?.focus()
-    const key = (event) => { if (event.key === 'Escape' && !busy) onCancel() }
-    window.addEventListener('keydown', key)
-    return () => window.removeEventListener('keydown', key)
-  }, [busy, onCancel])
   const submit = async (event) => {
     event.preventDefault()
     if (reason.trim().length < 8) { setError('Enter a specific reason of at least 8 characters.'); return }
@@ -97,12 +93,14 @@ function StatusDecisionDialog({ decision, busy, onCancel, onConfirm }) {
     if (ok === false) setError('The status change was not recorded. Review the current product state and try again.')
   }
   return <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 sm:items-center sm:p-4" role="presentation">
-    <form onSubmit={submit} role="dialog" aria-modal="true" aria-labelledby="product-status-title" className="w-full space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
+    <AdminDialog onClose={onCancel} closeDisabled={busy} initialFocusRef={closeRef} labelledBy="product-status-title">
+    <form onSubmit={submit} className="w-full space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
       <div className="flex items-start justify-between gap-4"><div><h2 id="product-status-title" className="font-sans text-xl font-bold">Set {decision.nextStatus}</h2><p className="mt-1 text-sm text-white/55">This changes {decision.skus.length} canonical product record{decision.skus.length === 1 ? '' : 's'}. Live requires reviewed content, price, category, brand, and a primary photo.</p></div><button ref={closeRef} type="button" onClick={onCancel} disabled={busy} aria-label="Close status decision" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line disabled:opacity-50">×</button></div>
       <label className="block text-sm font-semibold text-white/70">Reason for the status change<textarea autoFocus={false} required minLength={8} maxLength={500} value={reason} onChange={(event) => setReason(event.target.value.slice(0, 500))} className="mt-1 min-h-[96px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" /></label>
       {error && <p role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 px-3 py-2 text-sm text-crimson">{error}</p>}
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-50">Cancel</button><button type="submit" disabled={busy || reason.trim().length < 8} className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-transform duration-150 active:scale-[0.98] disabled:opacity-50">{busy ? 'Recording…' : `Set ${decision.nextStatus}`}</button></div>
     </form>
+    </AdminDialog>
   </div>
 }
 
@@ -177,6 +175,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
   const [statusBusy, setStatusBusy] = useState(null)
   const [statusDecision, setStatusDecision] = useState(null)
   const [editReason, setEditReason] = useState('')
+  const [editError, setEditError] = useState('')
   const editOperationKey = useRef(null)
   const [notice, setNotice] = useState(null)
   const [search, setSearch] = useState('')
@@ -277,6 +276,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     setEditTab('details')
     setIsAdding(false)
     setEditReason('')
+    setEditError('')
     editOperationKey.current = null
     if (!secure) { setEditingProduct(product); return }
     if (!canManageProducts) { flash('Only an administrator can change product-master records.', true); return }
@@ -287,9 +287,10 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
 
   const handleSave = async (e) => {
     e.preventDefault()
+    setEditError('')
     if (secure) {
-      if (isAdding) { flash('Use phone-first intake to create an attributable product Draft.', true); return }
-      if (editReason.trim().length < 8) { flash('Enter a specific save reason of at least 8 characters.', true); return }
+      if (isAdding) { setEditError('Use phone-first intake to create an attributable product Draft.'); return }
+      if (editReason.trim().length < 8) { setEditError('Enter a specific save reason of at least 8 characters.'); return }
       setSaving(true)
       const operationKey = editOperationKey.current || crypto.randomUUID()
       editOperationKey.current = operationKey
@@ -298,7 +299,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
         expectedUpdatedAt: editingProduct.updated_at, reason: editReason.trim(),
       }, operationKey)
       setSaving(false)
-      if (!result.ok) { flash(result.error, true); return }
+      if (!result.ok) { setEditError(result.error); return }
       editOperationKey.current = null
       const savedSku = editingProduct.sku
       setEditingProduct(null)
@@ -312,12 +313,12 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     const payload = buildPayload(editingProduct)
 
     if (isAdding) {
-      if (!editingProduct.sku) { alert('SKU is required'); setSaving(false); return }
+      if (!editingProduct.sku) { setEditError('SKU is required.'); setSaving(false); return }
       const { error } = await supabase.from('products').insert([{ sku: editingProduct.sku, ...payload }])
-      if (error) { alert(safeUiError('CATALOG_SAVE_FAILED')); setSaving(false); return }
+      if (error) { setEditError(safeUiError('CATALOG_SAVE_FAILED')); setSaving(false); return }
     } else {
       const { error } = await supabase.from('products').update(payload).eq('sku', editingProduct.sku)
-      if (error) { alert(safeUiError('CATALOG_SAVE_FAILED')); setSaving(false); return }
+      if (error) { setEditError(safeUiError('CATALOG_SAVE_FAILED')); setSaving(false); return }
     }
 
     await fetchProducts()
@@ -326,7 +327,10 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     setSaving(false)
   }
 
-  const set = (field, val) => setEditingProduct(prev => ({ ...prev, [field]: val }))
+  const set = (field, val) => {
+    setEditError('')
+    setEditingProduct(prev => ({ ...prev, [field]: val }))
+  }
 
   // ── Status lifecycle ───────────────────────────────────────────────────────
   const flash = (text, error = false) => {
@@ -437,7 +441,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
             <button onClick={() => setShowAiScanner(true)} className={secondaryButton}><BoxIcon size={16} /> Scan box</button>
             <button onClick={() => setShowSmartPaste(true)} className={secondaryButton}><UploadIcon size={16} /> Smart paste</button>
             {canManageMediaCleanup && adminBffEnabled() && <button onClick={() => setShowMediaCleanup(true)} className={secondaryButton}>Unused uploads</button>}
-            <button onClick={() => secure ? setShowPhoneIntake(true) : (setIsAdding(true), setEditTab('details'), setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }))} className={primaryButton}>Add product</button>
+            <button onClick={() => secure ? setShowPhoneIntake(true) : (setIsAdding(true), setEditTab('details'), setEditError(''), setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }))} className={primaryButton}>Add product</button>
           </div>
         )}
       />
@@ -539,7 +543,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                       className="h-5 w-5 accent-blue cursor-pointer"
                     />
                   </label>
-                  <img src={p.primary_image_url || p.image_url || '/placeholder.png'} alt={p.name}
+                  <img src={p.primary_image_url || p.image_url || '/images/placeholder.svg'} alt={p.name} onError={applyImageFallback}
                     className="max-h-full max-w-full object-contain drop-shadow-lg" />
                   
                   {/* FEFO uses the earliest real batch expiry. Attention pins never override it. */}
@@ -714,15 +718,20 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
       {/* ── FULL EDIT MODAL ─────────────────────────────────────────────────── */}
       {editingProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-2 md:p-4 animate-in fade-in">
+          <AdminDialog
+            onClose={() => { setEditingProduct(null); setIsAdding(false); setEditError('') }}
+            closeDisabled={saving}
+            labelledBy="product-editor-title"
+          >
           <div className="w-full max-w-3xl rounded-adm border border-adm-line bg-adm-surface shadow-2xl flex flex-col max-h-[96vh]">
 
             {/* Header */}
             <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-adm-line bg-white/5">
               <div>
-                <h3 className="font-sans text-xl font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
+                <h3 id="product-editor-title" className="font-sans text-xl font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
                 <p className="text-sm text-white/60 font-mono mt-0.5">{editingProduct.sku}</p>
               </div>
-              <button onClick={() => { setEditingProduct(null); setIsAdding(false) }} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10" aria-label="Close modal">
+              <button onClick={() => { setEditingProduct(null); setIsAdding(false); setEditError('') }} disabled={saving} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10 disabled:opacity-50" aria-label="Close product editor">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -759,7 +768,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                       <Label>Full Product Name</Label>
                       <input type="text" value={editingProduct.name || ''} onChange={e => set('name', e.target.value)} className={inp} required />
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
                         <Label>Short Name (UI Card)</Label>
                         <input type="text" value={editingProduct.short || ''} onChange={e => set('short', e.target.value)} className={inp} />
@@ -821,7 +830,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                       <Label>Ingredients</Label>
                       <textarea rows={3} value={editingProduct.ingredients || ''} onChange={e => set('ingredients', e.target.value)} className={ta} />
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
                         <Label>Allergens</Label>
                         <input type="text" value={editingProduct.allergens || ''} onChange={e => set('allergens', e.target.value)} className={inp} />
@@ -845,7 +854,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                 <div className={editTab === 'pricing' ? 'space-y-6' : 'hidden'}>
 
                   <Section color="forest" title="Pricing">
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       {[['Cost ₱', 'cost_price'], ['SRP ₱', 'srp'], ['Wholesale ₱', 'wholesale_price'], ['Dealer ₱', 'dealer_price']].map(([lbl, field]) => (
                         <div key={field}>
                           <Label>{lbl}</Label>
@@ -859,7 +868,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                   </Section>
 
                   <Section color="crimson" title="Inventory">
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
                         <Label>Available Stock</Label>
                         <div className={`${inp} flex items-center tabular-nums text-white/70`}>{editingProduct.stock_available || 0}</div>
@@ -925,12 +934,13 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
               {/* Footer */}
               <div className="shrink-0 space-y-3 border-t border-adm-line bg-black/20 px-4 py-4 sm:px-6">
                 <p className="text-sm text-white/55 italic">Product details save separately from photos, publication, and batch reconciliation.</p>
+                {editError && <StateBanner tone="danger">{editError}</StateBanner>}
                 {secure && <label className="block text-sm font-semibold text-white/70">Reason for this change
                   <textarea value={editReason} onChange={(event) => { setEditReason(event.target.value.slice(0, 500)); editOperationKey.current = null }} minLength={8} maxLength={500} required className="mt-1 min-h-[88px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" />
                   <span className="mt-1 block text-xs font-normal text-white/45">Required for the immutable product-change record.</span>
                 </label>}
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-                  <button type="button" onClick={() => { setEditingProduct(null); setIsAdding(false) }}
+                  <button type="button" onClick={() => { setEditingProduct(null); setIsAdding(false); setEditError('') }}
                     className="min-h-11 rounded-adm-sm px-4 py-2 text-base font-semibold text-white/60 transition-colors hover:text-white">
                     Cancel
                   </button>
@@ -943,6 +953,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
               </div>
             </form>
           </div>
+          </AdminDialog>
         </div>
       )}
 

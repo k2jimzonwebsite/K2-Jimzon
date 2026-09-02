@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { AlertIcon, ShieldIcon } from '../../components/ui/icons'
 import TurnstileChallenge from '../../components/security/TurnstileChallenge'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 // Real admin login: Supabase email+password or Google, with a genuine TOTP
 // second factor when the account has 2FA enrolled. No passcodes, no demo codes.
@@ -155,12 +156,13 @@ export function AdminAuthForm({ isOpen, onClose, runtime }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-200 motion-reduce:animate-none">
+      <AdminDialog onClose={onClose} closeDisabled={loading} labelledBy="admin-auth-title">
       <div className="w-full max-w-md my-auto rounded-adm border border-adm-line bg-adm-surface p-6 sm:p-7 text-white shadow-2xl relative overflow-hidden font-sans">
         <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-blue/15 blur-3xl pointer-events-none" />
 
         <div className="mb-7 text-center">
           <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-adm bg-blue/15 border border-blue/30 text-blue"><ShieldIcon size={24} /></div>
-          <h2 className="text-xl font-extrabold tracking-tight text-white">
+          <h2 id="admin-auth-title" className="text-xl font-extrabold tracking-tight text-white">
             K2 Jimzon <span className="text-blue">Admin</span>
           </h2>
           <p className="text-sm text-white/50 mt-1">Staff sign-in</p>
@@ -354,6 +356,7 @@ export function AdminAuthForm({ isOpen, onClose, runtime }) {
           </div>
         )}
       </div>
+      </AdminDialog>
     </div>
   )
 }

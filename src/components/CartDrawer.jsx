@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useStore } from '../context/StoreContext'
+import { productStock } from '../lib/cartInventory'
 import { peso } from '../data/products'
 import ProductVisual from './ProductVisual'
 import { CrimsonButton, Tricolor, QuantityStepper } from './ui/bits'
@@ -129,6 +130,8 @@ export default function CartDrawer() {
 function CartLine({ line }) {
   const { setQty } = useStore()
   const { product, qty, unit } = line
+  const stock = productStock(product)
+  const availabilityChanged = stock === null || stock <= 0
   return (
     <div className="flex gap-3 py-4">
       <ProductVisual product={product} className="h-16 w-16 shrink-0 rounded-md border border-[var(--store-surface-border)]" pad="p-1" />
@@ -136,9 +139,16 @@ function CartLine({ line }) {
         <p className="truncate font-serif text-base font-medium leading-tight text-navy">{product.name}</p>
         <p className="mt-0.5 text-xs text-navy-soft">{product.size}</p>
         <div className="mt-2 flex items-center justify-between">
-          <QuantityStepper value={qty} onChange={(val) => setQty(product.id, val)} max={product.stock} size="sm" />
+          {availabilityChanged ? (
+            <span className="text-xs font-semibold text-crimson">Availability changed</span>
+          ) : (
+            <QuantityStepper value={qty} onChange={(val) => setQty(product.id, val)} max={stock} size="sm" />
+          )}
           <span className="text-sm font-bold text-crimson tabular">{peso(unit * qty)}</span>
         </div>
+        <button type="button" onClick={() => setQty(product.id, 0)} className="mt-2 min-h-11 text-xs font-bold text-navy-soft underline-offset-4 hover:text-crimson hover:underline">
+          Remove from cart
+        </button>
       </div>
     </div>
   )

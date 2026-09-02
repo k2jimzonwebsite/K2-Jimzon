@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
+import { applyImageFallback } from '../lib/imageFallback'
 
 export default function InteractiveReveal({ beforeImage, afterImage }) {
   const [pos, setPos] = useState(50)
@@ -52,6 +53,7 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
         <img 
           src={beforeImage} 
           alt="Product Package" 
+          onError={applyImageFallback}
           loading="lazy"
           className="h-full w-full object-cover mix-blend-multiply"
           draggable={false}
@@ -67,6 +69,7 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
           <img 
             src={afterImage} 
             alt="Product Revealed" 
+            onError={applyImageFallback}
             loading="lazy"
             className="h-full w-full object-cover mix-blend-multiply"
             draggable={false}

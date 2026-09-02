@@ -10,7 +10,7 @@ test.describe('launch contract', () => {
   })
 
   test('unsafe prototype security implementation is removed', async () => {
-    const securityPlan = await readFile(new URL('../admin_deployment_security_plan.md', import.meta.url), 'utf8')
+    const securityPlan = await readFile(new URL('../docs/specs/admin_deployment_security_plan.md', import.meta.url), 'utf8')
     expect(securityPlan).toContain('There is no local-storage admin bypass')
     await expect(readFile(new URL('../src/lib/securityVault.js', import.meta.url), 'utf8')).rejects.toThrow()
   })

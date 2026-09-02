@@ -230,7 +230,7 @@ export default function ConsignmentManager() {
       </div>
       <div className="mt-2 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <h1 className="font-sans text-2xl font-bold">Consignment receiving</h1>
+          <h2 className="font-sans text-2xl font-bold">Consignment receiving</h2>
           <p className="mt-1 max-w-2xl text-sm text-white/55">Every flight, box, lot, and unit scan remains identifiable from Milan packing through Manila recount.</p>
         </div>
         <button onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button>

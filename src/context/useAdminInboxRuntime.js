@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import {
   adminBffEnabled, getAdminInbox, getAdminInboxHistory, markConversationReadBff,
-  saveInternalNoteBff, updateConversationWorkflowBff,
+  saveInternalNoteBff, sendWebsiteReplyBff, updateConversationWorkflowBff,
 } from '../services/adminBffService'
 import { normalizeAdminConversation } from '../lib/adminInboxNormalization'
 
 export function useAdminInboxRuntime({ enabled }) {
   const [conversations, setConversations] = useState([])
   const [inboxStaff, setInboxStaff] = useState([])
-  const [inboxState, setInboxState] = useState({ loading: true, error: '', phase2Ready: true })
+  const [inboxState, setInboxState] = useState({
+    loading: true, error: '', phase2Ready: true, websiteReplyReady: false,
+  })
   const secureInbox = adminBffEnabled()
 
   const mapConversations = (data) => (data || []).map(normalizeAdminConversation)
@@ -20,25 +22,28 @@ export function useAdminInboxRuntime({ enabled }) {
       const result = await getAdminInbox()
       if (!result.ok) {
         setConversations([]); setInboxStaff([])
-        setInboxState({ loading: false, error: result.error, phase2Ready: false })
+        setInboxState({ loading: false, error: result.error, phase2Ready: false, websiteReplyReady: false })
         return
       }
       setConversations(mapConversations(result.data?.conversations || []))
       setInboxStaff((result.data?.staff || []).map(member => ({
         id: member.id, full_name: member.fullName || member.displayName, email: '', role: member.role,
       })))
-      setInboxState({ loading: false, error: '', phase2Ready: true })
+      setInboxState({
+        loading: false, error: '', phase2Ready: true,
+        websiteReplyReady: result.data?.websiteReplyReady === true,
+      })
       return
     }
     if (!supabase) {
       setConversations([])
-      setInboxState({ loading: false, error: 'Database connection is unavailable.', phase2Ready: false })
+      setInboxState({ loading: false, error: 'Database connection is unavailable.', phase2Ready: false, websiteReplyReady: false })
       return
     }
     setInboxState((previous) => ({ ...previous, loading: true, error: '' }))
     try {
       const phase2Result = await supabase.from('conversations').select(`
-        id, customer_name, platform, status, priority, unread_count, assigned_to,
+        id, customer_name, platform, source_kind, status, priority, unread_count, assigned_to,
         response_due_at, last_inbound_at, last_read_at, resolved_at, last_message_at,
         assigned_profile:user_profiles!conversations_assigned_to_fkey (id, full_name, email),
         messages (id, sender_type, content, is_draft, delivery_status, sent_at, failure_reason, created_at)
@@ -49,7 +54,7 @@ export function useAdminInboxRuntime({ enabled }) {
       let warning = ''
       if (phase2Result.error) {
         const legacyResult = await supabase.from('conversations').select(`
-          id, customer_name, platform, status, last_message_at,
+          id, customer_name, platform, source_kind, status, last_message_at,
           messages (id, sender_type, content, is_draft, created_at)
         `).order('last_message_at', { ascending: false })
         if (legacyResult.error) throw new Error('INBOX_QUERY_FAILED')
@@ -57,23 +62,27 @@ export function useAdminInboxRuntime({ enabled }) {
         warning = 'Phase 2 inbox controls are not active in the database yet. Read-only legacy view is shown.'
       }
 
+      const websiteCapability = await supabase.rpc('website_reply_capability_v1')
       setConversations(mapConversations(data))
-      setInboxState({ loading: false, error: warning, phase2Ready })
+      setInboxState({
+        loading: false, error: warning, phase2Ready,
+        websiteReplyReady: !websiteCapability.error && websiteCapability.data === true,
+      })
     } catch {
       setConversations([])
-      setInboxState({ loading: false, error: 'Inbox records could not be loaded.', phase2Ready: false })
+      setInboxState({ loading: false, error: 'Inbox records could not be loaded.', phase2Ready: false, websiteReplyReady: false })
     }
   }
 
   useEffect(() => {
     if (!enabled || (!secureInbox && !supabase)) {
       setConversations([])
-      setInboxState({ loading: false, error: '', phase2Ready: true })
+      setInboxState({ loading: false, error: '', phase2Ready: true, websiteReplyReady: false })
       return undefined
     }
     fetchConversations()
     if (secureInbox) {
-      const timer = window.setInterval(fetchConversations, 15_000)
+      const timer = window.setInterval(fetchConversations, 8_000)
       return () => window.clearInterval(timer)
     }
     const channel = supabase.channel('admin:conversations')
@@ -97,6 +106,23 @@ export function useAdminInboxRuntime({ enabled }) {
     }
     const { error } = await supabase.rpc('append_internal_message', { p_conversation_id: conversationId, p_content: text })
     if (error) return { ok: false, error: 'The internal reply could not be saved.' }
+    await fetchConversations()
+    return { ok: true }
+  }
+
+  const sendCustomerReply = async (conversationId, text) => {
+    if (!secureInbox && !supabase) return { ok: false, error: 'Database connection is unavailable.' }
+    if (!inboxState.websiteReplyReady) return { ok: false, error: 'The website reply migration is not active yet.' }
+    if (typeof conversationId !== 'string' || !conversationId.includes('-') || conversationId.length <= 10) {
+      return { ok: false, error: 'This conversation is not a persisted database record.' }
+    }
+    const result = secureInbox
+      ? await sendWebsiteReplyBff(conversationId, text)
+      : await supabase.rpc('append_website_customer_reply_v1', {
+        p_conversation_id: conversationId, p_content: text,
+      })
+    const error = secureInbox ? !result.ok : result.error
+    if (error) return { ok: false, error: 'The website reply could not be sent.' }
     await fetchConversations()
     return { ok: true }
   }
@@ -143,6 +169,7 @@ export function useAdminInboxRuntime({ enabled }) {
 
   return {
     conversations, inboxState, inboxStaff, inboxUsesBff: secureInbox,
-    loadConversationHistory, sendMessage, markConversationRead, updateConversationWorkflow,
+    loadConversationHistory, sendMessage, sendCustomerReply,
+    markConversationRead, updateConversationWorkflow,
   }
 }

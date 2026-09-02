@@ -5,6 +5,40 @@ import { channelMeta } from '../../lib/channelMeta'
 import { AlertIcon, CheckIcon, InboxIcon, SearchIcon } from '../../components/ui/icons'
 import { MetricRail, StateBanner, WorkspaceIntro } from './AdminWorkspaceUi'
 
+/**
+ * Conversations started at a shelf in the virtual store.
+ *
+ * These get their own treatment in the queue because they carry context nothing
+ * else does: the customer was standing in front of a specific product when they
+ * asked. Staff answering a store question should know that before they open it,
+ * not after — so it is marked on the row itself, not buried in the thread.
+ */
+const VIRTUAL_STORE_PLATFORM = 'Virtual Store'
+const WEBSITE_SOURCE_KINDS = new Set(['website_message', 'virtual_store_message'])
+
+const isFromVirtualStore = (conversation) =>
+  conversation?.sourceKind === 'virtual_store_message'
+    || conversation?.channel === VIRTUAL_STORE_PLATFORM
+
+const isWebsiteConversation = (conversation) =>
+  WEBSITE_SOURCE_KINDS.has(conversation?.sourceKind)
+    || conversation?.channel === 'Website'
+    || conversation?.channel === VIRTUAL_STORE_PLATFORM
+
+/** The shelf mark. A drawn glyph, so it needs no icon font or image request. */
+function ShelfMark({ className = '' }) {
+  return (
+    <svg viewBox="0 0 16 16" className={className} aria-hidden="true" fill="none">
+      <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M1.5 6.5h13M1.5 10.5h13" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="3.5" y="3.6" width="2" height="2.9" rx="0.4" fill="currentColor" />
+      <rect x="6.6" y="3.6" width="2" height="2.9" rx="0.4" fill="currentColor" opacity="0.55" />
+      <rect x="3.5" y="7.6" width="2" height="2.9" rx="0.4" fill="currentColor" opacity="0.55" />
+      <rect x="9.7" y="7.6" width="2" height="2.9" rx="0.4" fill="currentColor" />
+    </svg>
+  )
+}
+
 const STATUS_OPTIONS = [
   { value: 'Open', label: 'Needs action' },
   { value: 'Pending', label: 'Waiting on customer' },
@@ -64,6 +98,7 @@ export function InboxView({ store, database = supabase }) {
     conversations,
     inboxState,
     sendMessage,
+    sendCustomerReply,
     markConversationRead,
     updateConversationWorkflow,
     inboxStaff,
@@ -80,6 +115,7 @@ export function InboxView({ store, database = supabase }) {
   const [saveError, setSaveError] = useState('')
   const [notice, setNotice] = useState('')
   const [savingNote, setSavingNote] = useState(false)
+  const [sendingReply, setSendingReply] = useState(false)
   const [savingWorkflow, setSavingWorkflow] = useState(false)
   const [directStaff, setDirectStaff] = useState([])
   const [history, setHistory] = useState([])
@@ -150,7 +186,7 @@ export function InboxView({ store, database = supabase }) {
     database
       .from('user_profiles')
       .select('id,full_name,email,role')
-      .in('role', ['Admin', 'Staff'])
+      .in('role', ['Admin', 'Staff', 'SuperAdmin'])
       .order('full_name')
       .then(({ data, error }) => {
         if (active && !error) setDirectStaff(data || [])
@@ -190,7 +226,9 @@ export function InboxView({ store, database = supabase }) {
 
   const handleTemplate = () => {
     setReplyText('Thanks for your message. Please share the exact item, quantity, preferred delivery area, and required date so K2 staff can review the request.')
-    setNotice('A neutral template was prepared. Verify it before copying to the external channel.')
+    setNotice(chat && isWebsiteConversation(chat)
+      ? 'A neutral template was prepared. Verify it before sending to the website customer.'
+      : 'A neutral template was prepared. Verify it before copying to the external channel.')
     setSaveError('')
   }
 
@@ -221,6 +259,22 @@ export function InboxView({ store, database = supabase }) {
     loadHistory(chat.id)
   }
 
+  const handleSendReply = async () => {
+    if (!replyText.trim() || !chat || sendingReply || !isWebsiteConversation(chat)) return
+    setSendingReply(true)
+    setSaveError('')
+    setNotice('')
+    const result = await sendCustomerReply(chat.id, replyText.trim())
+    setSendingReply(false)
+    if (!result?.ok) {
+      setSaveError(result?.error || 'The website reply could not be sent.')
+      return
+    }
+    setReplyText('')
+    setNotice('Sent. The reply is now visible in the customer’s website chat.')
+    loadHistory(chat.id)
+  }
+
   const handleWorkflowSave = async () => {
     if (!chat || savingWorkflow) return
     setSavingWorkflow(true)
@@ -247,6 +301,8 @@ export function InboxView({ store, database = supabase }) {
   const overdueCount = conversations.filter(conversation => deadlineState(conversation.responseDueAt, conversation.status)?.overdue).length
   const unassignedCount = conversations.filter(conversation => conversation.status !== 'Resolved' && !conversation.assignedTo).length
   const urgentCount = conversations.filter(conversation => conversation.status !== 'Resolved' && conversation.priority === 'urgent').length
+  const liveWebsiteCount = conversations.filter(conversation =>
+    conversation.status !== 'Resolved' && isWebsiteConversation(conversation)).length
 
   const WorkflowControls = ({ compact = false }) => {
     if (!chat) return null
@@ -350,18 +406,20 @@ export function InboxView({ store, database = supabase }) {
   }
 
   const chatDeadline = deadlineState(chat.responseDueAt, chat.status)
+  const chatIsWebsite = isWebsiteConversation(chat)
 
   return (
     <section aria-label="Unified message control" className="mx-auto max-w-[1600px] space-y-4 pb-12">
       <WorkspaceIntro
         eyebrow="Customer workload"
         title="Unified message control"
-        description="Persisted conversations, owner assignments, deadlines, and internal notes across channels; external sending is not connected, so copied replies must be sent through the verified source channel."
-        status="External delivery disconnected"
-        statusTone="warning"
+        description="Website live chat is customer-visible here; external sending is not connected for marketplace channels, which still use copied replies through their verified source."
+        status={inboxState.websiteReplyReady ? 'Website chat connected' : 'Website reply migration pending'}
+        statusTone={inboxState.websiteReplyReady ? 'success' : 'warning'}
       />
-      <MetricRail columns="lg:grid-cols-5" items={[
+      <MetricRail columns="lg:grid-cols-6" items={[
         { label: 'Active', value: activeCount, detail: 'Open or waiting on customer' },
+        { label: 'Live web', value: liveWebsiteCount, detail: 'Customer-visible website threads', tone: liveWebsiteCount ? 'text-forest' : 'text-white' },
         { label: 'Unread', value: unreadCount, detail: 'Persisted unread messages', tone: unreadCount ? 'text-blue' : 'text-white' },
         { label: 'Overdue', value: overdueCount, detail: 'Response deadline passed', tone: overdueCount ? 'text-crimson' : 'text-white' },
         { label: 'Unassigned', value: unassignedCount, detail: 'Active without an owner', tone: unassignedCount ? 'text-amber' : 'text-white' },
@@ -412,23 +470,43 @@ export function InboxView({ store, database = supabase }) {
               const meta = channelMeta(conversation.channel)
               const deadline = deadlineState(conversation.responseDueAt, conversation.status)
               const lastMessage = conversation.messages.at(-1)
+              const fromStore = isFromVirtualStore(conversation)
+              const fromWebsite = isWebsiteConversation(conversation)
               return (
                 <button
                   key={conversation.id}
                   type="button"
                   onClick={() => openChat(conversation.id)}
                   aria-current={activeId === conversation.id ? 'true' : undefined}
-                  className={`min-h-[76px] w-full rounded-adm-sm border px-3 py-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 ${
+                  className={`relative min-h-[76px] w-full overflow-hidden rounded-adm-sm border px-3 py-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 ${
                     activeId === conversation.id ? 'border-blue/45 bg-blue/10' : 'border-transparent hover:bg-white/5'
-                  }`}
+                  } ${fromWebsite && activeId !== conversation.id ? 'bg-blue/[0.06]' : ''}`}
                 >
+                  {/* A brass edge down the side of the row. Colour alone would
+                      not survive a monochrome display or a colour-blind reader,
+                      so it is paired with the mark and the label below. */}
+                  {fromWebsite && (
+                    <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[3px] bg-blue" />
+                  )}
                   <div className="flex items-start justify-between gap-2">
                     <span className={`truncate text-sm font-semibold ${conversation.unreadCount ? 'text-white' : 'text-white/75'}`}>{conversation.customer}</span>
                     <span className="shrink-0 text-xs text-white/40">{conversation.time}</span>
                   </div>
                   <div className="mt-1 flex items-center gap-1.5">
                     {conversation.unreadCount > 0 && <span className="rounded-full bg-crimson px-1.5 py-0.5 text-xs font-bold text-white">{conversation.unreadCount}</span>}
-                    <span className="rounded px-1.5 py-0.5 text-xs font-bold uppercase tracking-wide" style={{ color: meta.color, backgroundColor: `${meta.color}22` }}>{meta.label}</span>
+                    <span
+                      className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-bold uppercase tracking-wide"
+                      style={{ color: meta.color, backgroundColor: `${meta.color}22` }}
+                    >
+                      {fromStore && <ShelfMark className="h-3 w-3" />}
+                      {meta.label}
+                    </span>
+                    {fromWebsite && (
+                      <span className="inline-flex items-center gap-1 rounded border border-blue/35 bg-blue/10 px-1.5 py-0.5 text-xs font-bold uppercase tracking-[0.14em] text-blue">
+                        <span className="h-1.5 w-1.5 rounded-full bg-blue" aria-hidden="true" />
+                        {fromStore ? 'Live web · Asked at the shelf' : 'Live web'}
+                      </span>
+                    )}
                     <span className="truncate text-xs text-white/45">{statusLabel(conversation.status)}</span>
                     {conversation.priority !== 'normal' && <span className={conversation.priority === 'urgent' ? 'text-xs font-bold uppercase text-crimson' : 'text-xs font-bold uppercase text-amber'}>{conversation.priority}</span>}
                   </div>
@@ -453,13 +531,25 @@ export function InboxView({ store, database = supabase }) {
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="truncate text-[15px] font-semibold text-white">{chat.customer}</h3>
-                <span className="rounded bg-forest/15 px-1.5 py-0.5 text-xs font-medium text-forest">via {chat.channel}</span>
+                {chatIsWebsite ? (
+                  <span className="inline-flex items-center gap-1.5 rounded border border-blue/45 bg-blue/15 px-2 py-0.5 text-xs font-bold tracking-wide text-blue">
+                    {isFromVirtualStore(chat) ? <ShelfMark className="h-3.5 w-3.5" /> : <span className="h-2 w-2 rounded-full bg-blue" aria-hidden="true" />}
+                    LIVE WEBSITE CHAT{isFromVirtualStore(chat) ? ' · VIRTUAL STORE' : ''}
+                  </span>
+                ) : (
+                  <span className="rounded bg-forest/15 px-1.5 py-0.5 text-xs font-medium text-forest">via {chat.channel}</span>
+                )}
                 <span className="rounded bg-white/10 px-1.5 py-0.5 text-xs text-white/65">{statusLabel(chat.status)}</span>
               </div>
               <p className="mt-0.5 text-xs text-white/40">
                 {chat.assignedName ? `Owned by ${chat.assignedName}` : 'Unassigned'}
                 {chatDeadline ? ` · ${chatDeadline.label}` : ''}
               </p>
+              {chatIsWebsite && (
+                <p className="mt-1 text-xs font-medium text-blue">
+                  Replies appear in the customer’s website chat
+                </p>
+              )}
             </div>
           </div>
 
@@ -482,7 +572,7 @@ export function InboxView({ store, database = supabase }) {
                     <span>{formatMessageTime(message.createdAt)}</span>
                     {message.deliveryStatus === 'internal_only' && <span>· Internal only, not sent</span>}
                     {message.deliveryStatus === 'failed' && <span className="text-crimson">· Delivery failed</span>}
-                    {message.deliveryStatus === 'sent' && <span className="text-forest">· Sent externally</span>}
+                    {message.deliveryStatus === 'sent' && <span className="text-forest">· {chatIsWebsite ? 'Visible in website chat' : 'Sent externally'}</span>}
                   </div>
                 </div>
               </div>
@@ -494,22 +584,37 @@ export function InboxView({ store, database = supabase }) {
             {saveError && <p role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 p-2.5 text-xs text-crimson">{saveError}</p>}
             {notice && <p role="status" className="flex items-start gap-2 rounded-adm-sm border border-forest/40 bg-forest/10 p-2.5 text-xs text-forest"><CheckIcon size={14} className="mt-0.5 shrink-0" />{notice}</p>}
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <label htmlFor="inbox-internal-note" className="text-xs font-semibold text-white/65">Internal note or response draft</label>
-              <span className="text-xs text-amber">Not sent externally</span>
+              <label htmlFor="inbox-internal-note" className="text-xs font-semibold text-white/65">
+                {chatIsWebsite ? 'Customer-visible website reply' : 'Internal note or response draft'}
+              </label>
+              <span className={`text-xs ${chatIsWebsite ? 'text-forest' : 'text-amber'}`}>
+                {chatIsWebsite
+                  ? (inboxState.websiteReplyReady ? 'Connected to this website thread' : 'Migration required before sending')
+                  : 'Not sent externally'}
+              </span>
             </div>
             <textarea
               id="inbox-internal-note"
               value={replyText}
               onChange={event => setReplyText(event.target.value)}
-              placeholder="Record an internal note or prepare text to copy…"
+              placeholder={chatIsWebsite ? 'Write the reply the customer will see in the store…' : 'Record an internal note or prepare text to copy…'}
               rows={2}
               maxLength={5000}
               className="adm-input min-h-[72px] w-full resize-y text-base sm:text-sm"
             />
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               <button type="button" onClick={handleTemplate} className="adm-btn min-h-11 border border-blue/40 bg-blue/10 text-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80">Create safe template</button>
-              <button type="button" onClick={copyResponse} disabled={!replyText.trim()} className="adm-btn min-h-11 border border-adm-line bg-adm-raised text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed">Copy for external reply</button>
-              <button type="button" onClick={handleSaveNote} disabled={!replyText.trim() || savingNote} className="adm-btn min-h-11 bg-blue text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed">{savingNote ? 'Saving…' : 'Save internal note'}</button>
+              {chatIsWebsite ? (
+                <>
+                  <button type="button" onClick={handleSaveNote} disabled={!replyText.trim() || savingNote || sendingReply} className="adm-btn min-h-11 border border-adm-line bg-adm-raised text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed">{savingNote ? 'Saving…' : 'Save as internal note'}</button>
+                  <button type="button" onClick={handleSendReply} disabled={!inboxState.websiteReplyReady || !replyText.trim() || savingNote || sendingReply} className="adm-btn min-h-11 bg-blue text-white shadow-[0_0_0_1px_rgba(74,144,226,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed">{sendingReply ? 'Sending…' : 'Send to website customer'}</button>
+                </>
+              ) : (
+                <>
+                  <button type="button" onClick={copyResponse} disabled={!replyText.trim()} className="adm-btn min-h-11 border border-adm-line bg-adm-raised text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed">Copy for external reply</button>
+                  <button type="button" onClick={handleSaveNote} disabled={!replyText.trim() || savingNote} className="adm-btn min-h-11 bg-blue text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed">{savingNote ? 'Saving…' : 'Save internal note'}</button>
+                </>
+              )}
             </div>
           </div>
         </div>

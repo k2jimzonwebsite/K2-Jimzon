@@ -8,9 +8,9 @@ const initialState = { ready: false, session: null, history: null, historyState:
 
 export function useCustomerAccount() {
   const enabled = customerAccountEnabled()
-  const client = customerAuthClient()
   const [state, setState] = useState(() => ({ ...initialState, ready: !enabled }))
   const activeRef = useRef(true)
+  const clientRef = useRef(null)
   const sessionRef = useRef(null)
   sessionRef.current = state.session
 
@@ -27,27 +27,51 @@ export function useCustomerAccount() {
   }, [])
 
   useEffect(() => {
+    let cancelled = false
+    let subscription = null
     activeRef.current = true
-    if (!enabled || !client) {
+    if (!enabled) {
+      clientRef.current = null
       setState({ ...initialState, ready: true })
       return () => { activeRef.current = false }
     }
-    client.auth.getSession().then(({ data, error }) => {
-      if (!activeRef.current) return
-      const session = error ? null : data?.session || null
-      setState(current => ({ ...current, ready: true, session, error: error ? 'Your account session could not be checked. Refresh and try again.' : '' }))
-      if (session) refreshHistory(session)
-    })
-    const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
-      if (!activeRef.current) return
-      setState(current => ({ ...current, ready: true, session, history: session ? current.history : null, historyState: session ? current.historyState : 'idle', error: '', code: '' }))
-      if (session) window.setTimeout(() => refreshHistory(session), 0)
-    })
-    return () => {
-      activeRef.current = false
-      listener.subscription.unsubscribe()
+
+    const initialize = async () => {
+      try {
+        const client = await customerAuthClient()
+        if (cancelled) return
+        clientRef.current = client
+        if (!client) {
+          setState({ ...initialState, ready: true })
+          return
+        }
+
+        const { data, error } = await client.auth.getSession()
+        if (cancelled) return
+        const session = error ? null : data?.session || null
+        setState(current => ({ ...current, ready: true, session, error: error ? 'Your account session could not be checked. Refresh and try again.' : '' }))
+        if (session) refreshHistory(session)
+
+        const { data: listener } = client.auth.onAuthStateChange((_event, nextSession) => {
+          if (cancelled || !activeRef.current) return
+          setState(current => ({ ...current, ready: true, session: nextSession, history: nextSession ? current.history : null, historyState: nextSession ? current.historyState : 'idle', error: '', code: '' }))
+          if (nextSession) window.setTimeout(() => refreshHistory(nextSession), 0)
+        })
+        subscription = listener.subscription
+      } catch {
+        if (cancelled) return
+        setState({ ...initialState, ready: true, error: 'Your account session could not be checked. Refresh and try again.' })
+      }
     }
-  }, [client, enabled, refreshHistory])
+
+    void initialize()
+    return () => {
+      cancelled = true
+      activeRef.current = false
+      clientRef.current = null
+      subscription?.unsubscribe()
+    }
+  }, [enabled, refreshHistory])
 
   const claim = useCallback(async (contactKind, idempotencyKey) => {
     if (!state.session?.access_token) return { ok: false, error: 'Sign in before linking records.' }
@@ -64,9 +88,9 @@ export function useCustomerAccount() {
   }, [refreshHistory, state.session])
 
   const signOut = useCallback(async () => {
-    if (client) await client.auth.signOut()
+    if (clientRef.current) await clientRef.current.auth.signOut()
     setState({ ...initialState, ready: true })
-  }, [client])
+  }, [])
 
   return { enabled, ...state, refreshHistory, claim, reply, signOut }
 }

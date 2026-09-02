@@ -30,6 +30,8 @@ const applyCli = fileURLToPath(new URL('../scripts/apply-map017-migration.mjs', 
 const rehearsalCli = fileURLToPath(new URL('../scripts/rehearse-local-migration.mjs', import.meta.url))
 const authSuiteCli = fileURLToPath(new URL('../scripts/run-local-database-authorization-suite.mjs', import.meta.url))
 const exportCli = fileURLToPath(new URL('../scripts/export-schema-metadata.mjs', import.meta.url))
+const currentMap017ArtifactSha256 = 'D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62'
+const staleMap017ArtifactSha256 = '8AF7C69ABFBE6694302AC8AFD30A177EBEEA8461BD7B0963CD3AE23570DFC5F1'
 
 function runNode(script, args = []) {
   return spawnSync(process.execPath, [script, ...args], { encoding: 'utf8' })
@@ -357,6 +359,39 @@ test('MAP-017 apply command fails truthfully without recorded owner authorizatio
   expect(fullResult.stderr).toContain('--confirm-artifact-sha256')
 })
 
+test('MAP-017 dry-run reports the recorded authorization without contradicting it', () => {
+  const result = runNode(applyCli, ['--dry-run'])
+  expect(result.status).toBe(0)
+  expect(result.stdout).toContain('OWNER-005 recorded authorization: YES')
+  expect(result.stdout).toContain('[PASS] OWNER-005 is authorized')
+  expect(result.stdout).toContain('[PASS] Named production database, Storage, and off-site backup evidence is verified')
+  expect(result.stdout).toContain('[OPEN] Owner recovery access remains unverified; no apply was attempted')
+  expect(result.stdout).not.toContain('OWNER-005 remains unauthorized')
+})
+
+test('MAP-017 authoritative records pin the exact current SQL payload hash', async () => {
+  const authoritativeRecords = await Promise.all([
+    readFile(new URL('../MASTER_ACTION_PLAN.md', import.meta.url), 'utf8'),
+    readFile(new URL('../K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md', import.meta.url), 'utf8'),
+    readFile(new URL('../K2 Jimzon - Brain/OWNER_QUESTIONS.md', import.meta.url), 'utf8'),
+    readFile(new URL('../scripts/map017-evidence/README.md', import.meta.url), 'utf8'),
+    readFile(new URL('../docs/evidence/MAP_017_EXHAUSTIVE_AUTHORIZATION_AUDIT_2026-08-22.md', import.meta.url), 'utf8'),
+  ])
+
+  const [preflight, migration, postflight] = await Promise.all([
+    readFile(new URL('../supabase/map017_public_write_boundary_preflight.sql', import.meta.url), 'utf8'),
+    readFile(new URL('../supabase/migrations/20260812_map017_public_write_boundary_hardening.sql', import.meta.url), 'utf8'),
+    readFile(new URL('../supabase/map017_public_write_boundary_postflight.sql', import.meta.url), 'utf8'),
+  ])
+  expect(buildMap017ApplyContract({ preflight, migration, postflight }).artifactSha256)
+    .toBe(currentMap017ArtifactSha256)
+
+  for (const record of authoritativeRecords) {
+    expect(record).toContain(currentMap017ArtifactSha256)
+    expect(record).not.toContain(staleMap017ArtifactSha256)
+  }
+})
+
 test('MAP-017 permanent apply contract is payload-bound, ledgered, and independently verified', async () => {
   const [preflight, migration, postflight] = await Promise.all([
     readFile(new URL('../supabase/map017_public_write_boundary_preflight.sql', import.meta.url), 'utf8'),
@@ -376,6 +411,7 @@ test('MAP-017 permanent apply contract is payload-bound, ledgered, and independe
     '**Decision:** Authorized',
     '**Backup evidence ID:** production-backup-evidence-20260824',
     '**Backup/restore verification:** Verified',
+    '**Owner recovery access:** Verified',
   ].join('\n')
   const options = {
     apply: true,
@@ -392,6 +428,10 @@ test('MAP-017 permanent apply contract is payload-bound, ledgered, and independe
     '## OWNER-005',
     '**Decision:** Authorized',
   ].join('\n'))).toContain('OWNER-005 backup evidence must exactly match and be Verified')
+  expect(checkApplyGating(options, contract, ownerDecisionText.replace(
+    '**Owner recovery access:** Verified',
+    '**Owner recovery access:** Pending',
+  ))).toContain('OWNER-005 owner recovery access must be Verified')
 
   const calls = []
   const verification = Object.fromEntries(contract.verificationKeys.map((key) => [key, true]))
@@ -428,6 +468,7 @@ test('MAP-017 permanent apply refuses an ambiguous outcome without an exact dura
     '**Decision:** Authorized',
     '**Backup evidence ID:** production-backup-evidence-20260824',
     '**Backup/restore verification:** Verified',
+    '**Owner recovery access:** Verified',
   ].join('\n')
   const options = {
     apply: true,
@@ -482,6 +523,8 @@ test('portable MAP-017 rehearsal is pinned to the workspace runtime and isolated
   expect(config.port).toBe(55432)
   expect(config.database).toBe('k2_map017_rehearsal_local')
   expect(config.target).toBe('postgresql://postgres@127.0.0.1:55432/k2_map017_rehearsal_local')
+  expect(config.restoreDatabase).toBe('k2_map017_restore_verification_portable')
+  expect(config.restoreTarget).toBe('postgresql://postgres@127.0.0.1:55432/k2_map017_restore_verification_portable')
   expect(validateMap017RehearsalTarget(config.target).isLocal).toBe(true)
 })
 

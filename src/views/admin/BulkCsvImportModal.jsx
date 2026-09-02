@@ -5,6 +5,7 @@ import { safeUiError } from '../../lib/safeUiError'
 import {
   adminBffEnabled, commitCatalogCsvBff, getCatalogImportStatusBff, previewCatalogCsvBff,
 } from '../../services/adminBffService'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 export default function BulkCsvImportModal({ onClose, onImportComplete }) {
   const secureCatalog = adminBffEnabled()
@@ -213,7 +214,8 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-      <div role="dialog" aria-modal="true" aria-labelledby="catalog-csv-title" className="bg-adm-surface border border-adm-line rounded-adm w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <AdminDialog onClose={onClose} closeDisabled={importing} labelledBy="catalog-csv-title">
+      <div className="bg-adm-surface border border-adm-line rounded-adm w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         
         <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/40">
           <div>
@@ -430,6 +432,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
           </button>
         </div>
       </div>
+      </AdminDialog>
     </div>
   )
 }

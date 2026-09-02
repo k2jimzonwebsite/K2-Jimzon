@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { calculateMaximumSalesDiscount, calculateSalesPlan, calculateTargetSalesPrice, calculateTargetSalesQuantity, createSalesPlanningSummary } from '../../lib/salesCalculations'
 
 /* ---------------------------------------------------------------------------
    Floating, draggable "tools" gear for the admin.
@@ -18,6 +19,7 @@ const load = (k, fb) => { try { const v = localStorage.getItem(k); return v == n
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
 
 const TOOLS = [
+  { id: 'sales', label: 'Sales planner', icon: '💰' },
   { id: 'calc', label: 'Calculator', icon: '🧮' },
   { id: 'margin', label: 'Margin', icon: '📈' },
   { id: 'cargo', label: 'Cargo weight', icon: '📦' },
@@ -27,13 +29,13 @@ const TOOLS = [
   { id: 'notes', label: 'Scratchpad', icon: '📝' },
 ]
 
-const field = 'w-full rounded-adm-sm border border-adm-line bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none'
+const field = 'min-h-11 w-full rounded-adm-sm border border-adm-line bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none'
 const lbl = 'text-xs font-medium uppercase tracking-wide text-white/45'
 
 export default function AdminToolsWidget({ onOpenGuide }) {
   const [open, setOpen] = useState(false)
   const [pos, setPos] = useState(() => load(LS.pos, { x: null, y: null }))
-  const [tool, setTool] = useState(() => load(LS.tool, 'calc'))
+  const [tool, setTool] = useState(() => load(LS.tool, 'sales'))
   const gearRef = useRef(null)
   const drag = useRef({ active: false, moved: false, dx: 0, dy: 0 })
 
@@ -78,10 +80,11 @@ export default function AdminToolsWidget({ onOpenGuide }) {
     <div className="fixed z-[70]" style={{ left: pos.x, top: pos.y }}>
       {open && (
         <div
-          className="absolute w-80 rounded-adm border border-white/12 bg-adm-surface shadow-2xl overflow-hidden"
+          className="absolute w-[min(26rem,calc(100vw-1rem))] overflow-y-auto rounded-adm border border-white/12 bg-adm-surface shadow-2xl"
           style={{
             [openUp ? 'bottom' : 'top']: 60,
             [openLeft ? 'right' : 'left']: 0,
+            maxHeight: openUp ? Math.max(240, pos.y - 70) : Math.max(240, window.innerHeight - pos.y - 70),
           }}
         >
           {/* Dashboard guide (moved here from a separate floating button) */}
@@ -104,7 +107,9 @@ export default function AdminToolsWidget({ onOpenGuide }) {
                 key={t.id}
                 onClick={() => setTool(t.id)}
                 title={t.label}
-                className={'flex h-8 w-8 items-center justify-center rounded-adm-sm text-base transition-colors ' +
+                aria-label={t.label}
+                aria-pressed={tool === t.id}
+                className={'flex h-11 w-11 items-center justify-center rounded-adm-sm text-base transition-colors ' +
                   (tool === t.id ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}
               >
                 {t.icon}
@@ -114,6 +119,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
 
           {/* Active tool */}
           <div className="p-3.5">
+            {tool === 'sales' && <SalesPlanner />}
             {tool === 'calc' && <Calculator />}
             {tool === 'margin' && <Margin />}
             {tool === 'cargo' && <Cargo />}
@@ -131,6 +137,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
         onPointerDown={onDown}
         onClick={handleClick}
         title="Tools (drag to move)"
+        aria-label="Open Admin tools"
         className="flex h-12 w-12 items-center justify-center rounded-full bg-adm-surface border border-white/15 text-xl text-white shadow-xl hover:bg-adm-raised active:scale-95 cursor-grab active:cursor-grabbing touch-none"
       >
         ⚙️
@@ -160,9 +167,9 @@ function ClockRate() {
       <div className="flex items-center gap-2">
         <span className="text-white/60 text-sm shrink-0" title="Manual planning rate; not a live FX feed">Manual €1 = ₱</span>
         <input value={rate} onChange={(e) => setRate(e.target.value)} inputMode="decimal"
-          className="w-16 rounded-adm-sm border border-adm-line bg-black/40 px-2 py-1 text-sm text-white tabular-nums outline-none focus:border-gold" />
+          className="min-h-11 w-20 rounded-adm-sm border border-adm-line bg-black/40 px-2 py-1 text-sm text-white tabular-nums outline-none focus:border-gold" />
         <input value={eur} onChange={(e) => setEur(e.target.value)} inputMode="decimal" placeholder="€ amount"
-          className="flex-1 min-w-0 rounded-adm-sm border border-adm-line bg-black/40 px-2 py-1 text-sm text-white placeholder:text-white/30 outline-none focus:border-gold" />
+          className="min-h-11 flex-1 min-w-0 rounded-adm-sm border border-adm-line bg-black/40 px-2 py-1 text-sm text-white placeholder:text-white/30 outline-none focus:border-gold" />
         <span className="text-gold text-sm font-semibold tabular-nums shrink-0">{php != null ? '₱' + php.toLocaleString(undefined, { maximumFractionDigits: 2 }) : '—'}</span>
       </div>
     </div>
@@ -190,7 +197,7 @@ function Calculator() {
   const pct = () => { setDisplay((s) => String(parseFloat(s) / 100)); setOverwrite(true) }
 
   const Btn = ({ children, onClick, cls = '' }) => (
-    <button onClick={onClick} className={'h-10 rounded-adm-sm text-sm font-semibold transition-colors ' + (cls || 'bg-white/5 text-white hover:bg-white/10')}>{children}</button>
+    <button onClick={onClick} className={'h-11 rounded-adm-sm text-sm font-semibold transition-colors ' + (cls || 'bg-white/5 text-white hover:bg-white/10')}>{children}</button>
   )
   return (
     <div className="space-y-2">
@@ -210,6 +217,233 @@ function Calculator() {
         <Btn onClick={dot}>.</Btn>
         <Btn onClick={equals} cls="bg-gold text-navy hover:bg-gold-deep">=</Btn>
       </div>
+    </div>
+  )
+}
+
+/* ----------------------------- Sales planner ----------------------------- */
+function SalesPlanner() {
+  const [mode, setMode] = useState('check')
+
+  return (
+    <div className="space-y-3 text-white">
+      <div>
+        <p className="text-sm font-semibold">Sales planning calculator</p>
+        <p className="mt-1 text-xs leading-relaxed text-white/50">Planning only. Nothing here writes a product price, promotion, order, payment, cost, payout, tax, or accounting record.</p>
+      </div>
+      <div className="grid grid-cols-2 gap-2" aria-label="Sales planning mode">
+        {[
+          { id: 'check', label: 'Check a price' },
+          { id: 'target', label: 'Find target price' },
+          { id: 'discount', label: 'Find max discount' },
+          { id: 'quantity', label: 'Find units needed' },
+        ].map(option => (
+          <button
+            key={option.id}
+            type="button"
+            onClick={() => setMode(option.id)}
+            aria-pressed={mode === option.id}
+            className={`min-h-11 rounded-adm-sm border px-3 text-xs font-semibold transition-colors ${mode === option.id ? 'border-blue/50 bg-blue/15 text-blue' : 'border-adm-line bg-black/25 text-white/55 hover:text-white'}`}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+      {mode === 'check' && <ForwardSalesPlanner />}
+      {mode === 'target' && <TargetPricePlanner />}
+      {mode === 'discount' && <MaximumDiscountPlanner />}
+      {mode === 'quantity' && <TargetQuantityPlanner />}
+    </div>
+  )
+}
+
+function ForwardSalesPlanner() {
+  const [values, setValues] = useState({ quantity: '1', unitPrice: '', unitCost: '', discount: '0', otherCosts: '0', fixedFees: '0', channelFeePercent: '0' })
+  const update = key => event => setValues(current => ({ ...current, [key]: event.target.value }))
+  const result = calculateSalesPlan(values)
+  const php = value => `₱${Number(value || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  const percent = value => value == null ? '—' : `${value.toFixed(1)}%`
+
+  return (
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-2">
+        <label><span className={lbl}>Quantity</span><input className={field} inputMode="numeric" value={values.quantity} onChange={update('quantity')} /></label>
+        <label><span className={lbl}>Unit selling price (₱)</span><input className={field} inputMode="decimal" value={values.unitPrice} onChange={update('unitPrice')} placeholder="0" /></label>
+        <label><span className={lbl}>Unit cost (₱)</span><input className={field} inputMode="decimal" value={values.unitCost} onChange={update('unitCost')} placeholder="0" /></label>
+        <label><span className={lbl}>Discount total (₱)</span><input className={field} inputMode="decimal" value={values.discount} onChange={update('discount')} /></label>
+        <label><span className={lbl}>Other costs (₱)</span><input className={field} inputMode="decimal" value={values.otherCosts} onChange={update('otherCosts')} /></label>
+        <label><span className={lbl}>Fixed fees (₱)</span><input className={field} inputMode="decimal" value={values.fixedFees} onChange={update('fixedFees')} /></label>
+        <label className="col-span-2"><span className={lbl}>Channel fee rate (%)</span><input className={field} inputMode="decimal" value={values.channelFeePercent} onChange={update('channelFeePercent')} /></label>
+      </div>
+      {!result.ok ? (
+        <div role="alert" className="rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-xs leading-relaxed text-amber">{result.errors[0]}</div>
+      ) : (
+        <div className="grid grid-cols-2 gap-2" aria-label="Sales planning result">
+          <Stat label="Gross sales" value={php(result.grossSales)} />
+          <Stat label="Net sales" value={php(result.netSales)} />
+          <Stat label="Goods cost" value={php(result.goodsCost)} />
+          <Stat label="Other + fixed costs" value={php(result.otherAndFixedCosts)} />
+          <Stat label="Percentage fees" value={php(result.percentageFees)} />
+          <Stat label="Total planned costs" value={php(result.totalCosts)} />
+          <Stat label="Planned gross profit" value={php(result.grossProfit)} tone={result.grossProfit >= 0 ? 'good' : 'bad'} />
+          <Stat label="Gross margin" value={percent(result.grossMarginPercent)} />
+          <Stat label="Markup" value={percent(result.markupPercent)} />
+          <div className="col-span-2"><Stat label="Break-even unit price" value={php(result.breakEvenUnitPrice)} /></div>
+        </div>
+      )}
+      {result.ok && <PlanningSummaryCopy mode="check" input={values} result={result} />}
+      <p className="text-xs leading-relaxed text-white/45">Percentage fees use gross sales before discount. Break-even includes that changing fee and rounds upward to cents. Use recorded values when available; actual profit stays unavailable until exact-lot costs are snapshotted onto fulfilled order lines.</p>
+    </div>
+  )
+}
+
+function TargetPricePlanner() {
+  const [values, setValues] = useState({ quantity: '1', unitCost: '', discount: '0', otherCosts: '0', fixedFees: '0', channelFeePercent: '0', targetMarginPercent: '30' })
+  const update = key => event => setValues(current => ({ ...current, [key]: event.target.value }))
+  const result = calculateTargetSalesPrice(values)
+  const php = value => `₱${Number(value || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  const percent = value => value == null ? '—' : `${value.toFixed(1)}%`
+
+  return (
+    <div className="space-y-3">
+      <p className="text-xs leading-relaxed text-white/50">Find the minimum planned unit price for a target gross margin. Percentage fees are calculated from gross sales before discount.</p>
+      <div className="grid grid-cols-2 gap-2">
+        <label><span className={lbl}>Quantity</span><input className={field} inputMode="numeric" value={values.quantity} onChange={update('quantity')} /></label>
+        <label><span className={lbl}>Unit cost (₱)</span><input className={field} inputMode="decimal" value={values.unitCost} onChange={update('unitCost')} placeholder="0" /></label>
+        <label><span className={lbl}>Discount total (₱)</span><input className={field} inputMode="decimal" value={values.discount} onChange={update('discount')} /></label>
+        <label><span className={lbl}>Other costs (₱)</span><input className={field} inputMode="decimal" value={values.otherCosts} onChange={update('otherCosts')} /></label>
+        <label><span className={lbl}>Fixed fees (₱)</span><input className={field} inputMode="decimal" value={values.fixedFees} onChange={update('fixedFees')} /></label>
+        <label><span className={lbl}>Channel fee rate (%)</span><input className={field} inputMode="decimal" value={values.channelFeePercent} onChange={update('channelFeePercent')} /></label>
+        <label className="col-span-2"><span className={lbl}>Target gross margin (%)</span><input className={field} inputMode="decimal" value={values.targetMarginPercent} onChange={update('targetMarginPercent')} /></label>
+      </div>
+      {!result.ok ? (
+        <div role="alert" className="rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-xs leading-relaxed text-amber">{result.errors[0]}</div>
+      ) : (
+        <div className="grid grid-cols-2 gap-2" aria-label="Target price result">
+          <div className="col-span-2"><Stat label="Minimum planned unit price" value={php(result.recommendedUnitPrice)} tone="good" /></div>
+          <Stat label="Gross sales" value={php(result.grossSales)} />
+          <Stat label="Net sales" value={php(result.netSales)} />
+          <Stat label="Percentage fees" value={php(result.percentageFees)} />
+          <Stat label="Total planned costs" value={php(result.totalCosts)} />
+          <Stat label="Planned gross profit" value={php(result.grossProfit)} tone={result.grossProfit >= 0 ? 'good' : 'bad'} />
+          <Stat label="Achieved gross margin" value={percent(result.achievedMarginPercent)} />
+        </div>
+      )}
+      {result.ok && <PlanningSummaryCopy mode="target" input={values} result={result} />}
+      <p className="text-xs leading-relaxed text-white/45">The recommendation rounds upward to the nearest cent. Review and approve price through the canonical product workflow; this tool never changes it and does not calculate actual profit.</p>
+    </div>
+  )
+}
+
+function MaximumDiscountPlanner() {
+  const [values, setValues] = useState({ quantity: '1', unitPrice: '', unitCost: '', otherCosts: '0', fixedFees: '0', channelFeePercent: '0', targetMarginPercent: '30' })
+  const update = key => event => setValues(current => ({ ...current, [key]: event.target.value }))
+  const result = calculateMaximumSalesDiscount(values)
+  const php = value => `₱${Number(value || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  const percent = value => value == null ? '—' : `${value.toFixed(1)}%`
+
+  return (
+    <div className="space-y-3">
+      <p className="text-xs leading-relaxed text-white/50">Find the maximum total discount a chosen price can absorb while preserving a target gross margin. Percentage fees are calculated from gross sales before discount.</p>
+      <div className="grid grid-cols-2 gap-2">
+        <label><span className={lbl}>Quantity</span><input className={field} inputMode="numeric" value={values.quantity} onChange={update('quantity')} /></label>
+        <label><span className={lbl}>Unit selling price (₱)</span><input className={field} inputMode="decimal" value={values.unitPrice} onChange={update('unitPrice')} placeholder="0" /></label>
+        <label><span className={lbl}>Unit cost (₱)</span><input className={field} inputMode="decimal" value={values.unitCost} onChange={update('unitCost')} placeholder="0" /></label>
+        <label><span className={lbl}>Other costs (₱)</span><input className={field} inputMode="decimal" value={values.otherCosts} onChange={update('otherCosts')} /></label>
+        <label><span className={lbl}>Fixed fees (₱)</span><input className={field} inputMode="decimal" value={values.fixedFees} onChange={update('fixedFees')} /></label>
+        <label><span className={lbl}>Channel fee rate (%)</span><input className={field} inputMode="decimal" value={values.channelFeePercent} onChange={update('channelFeePercent')} /></label>
+        <label className="col-span-2"><span className={lbl}>Target gross margin (%)</span><input className={field} inputMode="decimal" value={values.targetMarginPercent} onChange={update('targetMarginPercent')} /></label>
+      </div>
+      {!result.ok ? (
+        <div role="alert" className="rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-xs leading-relaxed text-amber">{result.errors[0]}</div>
+      ) : (
+        <div className="grid grid-cols-2 gap-2" aria-label="Maximum discount result">
+          <div className="col-span-2"><Stat label="Maximum total discount" value={php(result.maximumDiscount)} tone="good" /></div>
+          <Stat label="Maximum per unit" value={php(result.maximumDiscountPerUnit)} />
+          <Stat label="Discount share of gross" value={percent(result.maximumDiscountPercent)} />
+          <Stat label="Gross sales" value={php(result.grossSales)} />
+          <Stat label="Net sales" value={php(result.netSales)} />
+          <Stat label="Percentage fees" value={php(result.percentageFees)} />
+          <Stat label="Total planned costs" value={php(result.totalCosts)} />
+          <Stat label="Planned gross profit" value={php(result.grossProfit)} tone={result.grossProfit >= 0 ? 'good' : 'bad'} />
+          <Stat label="Achieved gross margin" value={percent(result.achievedMarginPercent)} />
+        </div>
+      )}
+      {result.ok && <PlanningSummaryCopy mode="discount" input={values} result={result} />}
+      <p className="text-xs leading-relaxed text-white/45">The safe allowance rounds downward to the nearest cent. Review and approve any real promotion through the canonical product workflow; this tool never creates one, changes price, writes an order, or calculates actual profit.</p>
+    </div>
+  )
+}
+
+function TargetQuantityPlanner() {
+  const [values, setValues] = useState({ unitPrice: '', unitCost: '', discount: '0', otherCosts: '0', fixedFees: '0', channelFeePercent: '0', targetProfit: '' })
+  const update = key => event => setValues(current => ({ ...current, [key]: event.target.value }))
+  const result = calculateTargetSalesQuantity(values)
+  const php = value => `₱${Number(value || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  const percent = value => value == null ? '—' : `${value.toFixed(1)}%`
+
+  return (
+    <div className="space-y-3">
+      <p className="text-xs leading-relaxed text-white/50">Find the minimum whole units needed for a planned gross-profit target. Percentage fees use gross sales before discount.</p>
+      <div className="grid grid-cols-2 gap-2">
+        <label><span className={lbl}>Unit selling price (₱)</span><input className={field} inputMode="decimal" value={values.unitPrice} onChange={update('unitPrice')} placeholder="0" /></label>
+        <label><span className={lbl}>Unit cost (₱)</span><input className={field} inputMode="decimal" value={values.unitCost} onChange={update('unitCost')} placeholder="0" /></label>
+        <label><span className={lbl}>Discount total (₱)</span><input className={field} inputMode="decimal" value={values.discount} onChange={update('discount')} /></label>
+        <label><span className={lbl}>Other costs (₱)</span><input className={field} inputMode="decimal" value={values.otherCosts} onChange={update('otherCosts')} /></label>
+        <label><span className={lbl}>Fixed fees (₱)</span><input className={field} inputMode="decimal" value={values.fixedFees} onChange={update('fixedFees')} /></label>
+        <label><span className={lbl}>Channel fee rate (%)</span><input className={field} inputMode="decimal" value={values.channelFeePercent} onChange={update('channelFeePercent')} /></label>
+        <label className="col-span-2"><span className={lbl}>Target planned profit (₱)</span><input className={field} inputMode="decimal" value={values.targetProfit} onChange={update('targetProfit')} placeholder="0" /></label>
+      </div>
+      {!result.ok ? (
+        <div role="alert" className="rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-xs leading-relaxed text-amber">{result.errors[0]}</div>
+      ) : (
+        <div className="grid grid-cols-2 gap-2" aria-label="Target units result">
+          <div className="col-span-2"><Stat label="Minimum whole units" value={result.requiredQuantity.toLocaleString('en-PH')} tone="good" /></div>
+          <Stat label="Contribution per unit" value={php(result.unitContribution)} />
+          <Stat label="Profit above target" value={php(result.profitAboveTarget)} />
+          <Stat label="Gross sales" value={php(result.grossSales)} />
+          <Stat label="Net sales" value={php(result.netSales)} />
+          <Stat label="Goods cost" value={php(result.goodsCost)} />
+          <Stat label="Other + fixed costs" value={php(result.otherAndFixedCosts)} />
+          <Stat label="Percentage fees" value={php(result.percentageFees)} />
+          <Stat label="Total planned costs" value={php(result.totalCosts)} />
+          <Stat label="Planned gross profit" value={php(result.grossProfit)} tone="good" />
+          <Stat label="Achieved gross margin" value={percent(result.achievedMarginPercent)} />
+          <div className="col-span-2"><Stat label={`At ${result.previousQuantity.toLocaleString('en-PH')} units`} value={`${php(result.previousQuantityProfit)} — below target`} /></div>
+        </div>
+      )}
+      {result.ok && <PlanningSummaryCopy mode="quantity" input={values} result={result} />}
+      <p className="text-xs leading-relaxed text-white/45">This whole-unit result is a planning target, not a sales quota or order. It never changes price, promotion, inventory, or actual-profit records.</p>
+    </div>
+  )
+}
+
+function PlanningSummaryCopy({ mode, input, result }) {
+  const [copyState, setCopyState] = useState('')
+  const inputSignature = JSON.stringify(input)
+
+  useEffect(() => setCopyState(''), [mode, inputSignature])
+
+  const copySummary = async () => {
+    setCopyState('')
+    try {
+      const summary = createSalesPlanningSummary({ mode, input, result })
+      if (!summary || !navigator.clipboard?.writeText) throw new Error('Clipboard unavailable')
+      await navigator.clipboard.writeText(summary)
+      setCopyState('copied')
+    } catch {
+      setCopyState('error')
+    }
+  }
+
+  return (
+    <div className="space-y-2 rounded-adm-sm border border-adm-line bg-black/20 p-2.5">
+      <button type="button" onClick={copySummary} className="min-h-11 w-full rounded-adm-sm border border-blue/35 bg-blue/10 px-3 text-xs font-semibold text-blue transition-colors hover:bg-blue/15">
+        {copyState === 'copied' ? 'Planning summary copied' : 'Copy planning summary'}
+      </button>
+      {copyState === 'copied' && <p role="status" className="text-xs leading-relaxed text-green-400">Copied assumptions, results, timestamp, and the planning-only warning.</p>}
+      {copyState === 'error' && <p role="alert" className="text-xs leading-relaxed text-amber">Copy failed. Allow clipboard access, then try again.</p>}
+      <p className="text-xs leading-relaxed text-white/40">Clipboard text only. No Admin or financial record is created.</p>
     </div>
   )
 }

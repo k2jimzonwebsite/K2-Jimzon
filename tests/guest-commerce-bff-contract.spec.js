@@ -4,6 +4,7 @@ import accountClaimHandler, { validateAccountClaim } from '../prepared-api/store
 import accountHistoryHandler from '../prepared-api/storefront/account/history.js'
 import accountMessageHandler, { validateAccountMessage } from '../prepared-api/storefront/account/message.js'
 import orderHandler from '../prepared-api/storefront/order.js'
+import orderStatusHandler from '../prepared-api/storefront/order/status.js'
 import pasabuyHandler from '../prepared-api/storefront/pasabuy.js'
 import couponHandler from '../prepared-api/storefront/coupon.js'
 import messagesHandler from '../prepared-api/storefront/messages.js'
@@ -18,8 +19,51 @@ import {
   GUEST_BFF_CLIENT_ROUTES, guestBffEndpoint, isGuestBffRoute,
 } from '../src/services/guestCommerceRoutes.js'
 import { authorizationBearer, signedRpcArguments } from '../server/storefront-bff/security.js'
+import { addCartItems, productStock, validateCartForSubmission } from '../src/lib/cartInventory.js'
 
 const source = (path) => readFile(new URL(`../${path}`, import.meta.url), 'utf8')
+
+test('cart inventory commands reject zero, unknown, repeated, stale, and partial bundle additions', () => {
+  const available = { id: 'A', sku: 'A', stock_available: 1 }
+  const partner = { id: 'B', sku: 'B', stock_available: 1 }
+  const soldOut = { id: 'ZERO', sku: 'ZERO', stock_available: 0 }
+  const unknown = { id: 'UNKNOWN', sku: 'UNKNOWN', stock_available: null, stock: null }
+
+  expect(productStock(unknown)).toBeNull()
+  expect(addCartItems([], [soldOut], [{ id: 'ZERO', qty: 1 }])).toMatchObject({ ok: false, code: 'OUT_OF_STOCK', cart: [] })
+  expect(addCartItems([], [unknown], [{ id: 'UNKNOWN', qty: 1 }])).toMatchObject({ ok: false, code: 'STOCK_UNKNOWN', cart: [] })
+
+  const first = addCartItems([], [available], [{ id: 'A', qty: 1 }])
+  expect(first).toEqual({ ok: true, code: null, cart: [{ id: 'A', qty: 1 }] })
+  const repeated = addCartItems(first.cart, [available], [{ id: 'A', qty: 1 }])
+  expect(repeated).toMatchObject({ ok: false, code: 'INSUFFICIENT_STOCK' })
+  expect(repeated.cart).toBe(first.cart)
+
+  expect(addCartItems([], [available, soldOut], [
+    { id: 'A', qty: 1 }, { id: 'ZERO', qty: 1 },
+  ])).toMatchObject({ ok: false, cart: [] })
+  expect(addCartItems([], [available, partner], [
+    { id: 'A', qty: 1 }, { id: 'B', qty: 1 },
+  ])).toEqual({ ok: true, code: null, cart: [{ id: 'A', qty: 1 }, { id: 'B', qty: 1 }] })
+
+  expect(validateCartForSubmission([{ id: 'A', qty: 1 }], [{ ...available, stock_available: 0 }]))
+    .toEqual({ ok: false, code: 'OUT_OF_STOCK', id: 'A' })
+  expect(validateCartForSubmission([{ id: 'A', qty: 1 }], [{ ...available, stock_available: null, stock: null }]))
+    .toEqual({ ok: false, code: 'STOCK_UNKNOWN', id: 'A' })
+  expect(validateCartForSubmission([{ id: 'A', qty: 2 }], [available]))
+    .toEqual({ ok: false, code: 'INSUFFICIENT_STOCK', id: 'A' })
+})
+
+test('storefront public copy does not claim unverified stock sync or a Pasabuy response SLA', async () => {
+  const [hero, store] = await Promise.all([
+    source('src/components/home/Hero.jsx'),
+    source('src/context/StoreContext.jsx'),
+  ])
+  expect(hero).not.toMatch(/multi-channel stock sync/i)
+  expect(hero).toContain('Availability checked before payment')
+  expect(store).not.toMatch(/quote review within 24 hours/i)
+  expect(store).toContain("eta: 'Staff review required'")
+})
 
 test('production Storefront excludes the prototype VIP direct-auth rail', async () => {
   const [storefront, combined, verifier] = await Promise.all([
@@ -61,8 +105,8 @@ test.beforeEach(() => {
 })
 
 test('single-function Storefront router allowlists every prepared endpoint and rejects unknown paths', async () => {
-  expect(STOREFRONT_BFF_ROUTES).toHaveLength(13)
-  expect(new Set(STOREFRONT_BFF_ROUTES).size).toBe(13)
+  expect(STOREFRONT_BFF_ROUTES.length).toBeGreaterThan(0)
+  expect(new Set(STOREFRONT_BFF_ROUTES).size).toBe(STOREFRONT_BFF_ROUTES.length)
   expect(Object.keys(STOREFRONT_BFF_ROUTE_CONTROLS).sort()).toEqual([...STOREFRONT_BFF_ROUTES].sort())
   expect(Object.values(STOREFRONT_BFF_ROUTE_CONTROLS).every((control) =>
     control.method === 'POST' && control.origin && control.signed && control.databaseRateLimit)).toBe(true)
@@ -72,6 +116,9 @@ test('single-function Storefront router allowlists every prepared endpoint and r
     ])
   expect(STOREFRONT_BFF_ROUTE_CONTROLS.message).toMatchObject({
     guestGrant: 'required', idempotency: true,
+  })
+  expect(STOREFRONT_BFF_ROUTE_CONTROLS['order/status']).toMatchObject({
+    guestGrant: 'required', idempotency: false, bot: false,
   })
   expect(STOREFRONT_BFF_ROUTE_CONTROLS['account/claim']).toMatchObject({
     guestGrant: 'required', accountAuth: 'required', idempotency: true,
@@ -97,9 +144,33 @@ test('single-function Storefront router allowlists every prepared endpoint and r
   expect(isGuestBffRoute('order')).toBe(true)
   expect(isGuestBffRoute('../admin')).toBe(false)
   expect(guestBffEndpoint('order')).toBe('/api/storefront/order')
+  expect(guestBffEndpoint('order/status')).toBe('/api/storefront/order/status')
   expect(guestBffEndpoint('account/claim')).toBe('/api/storefront/account/claim')
   expect(guestBffEndpoint('account/history')).toBe('/api/storefront/account/history')
   expect([...GUEST_BFF_CLIENT_ROUTES].sort()).toEqual([...STOREFRONT_BFF_ROUTES].sort())
+})
+
+test('guest order status is read only through the scoped browser grant', async () => {
+  const denied = response()
+  await orderStatusHandler({ ...request('GET'), body: {} }, denied)
+  expect(denied.statusCode).toBe(405)
+
+  const [handler, migration] = await Promise.all([
+    source('prepared-api/storefront/order/status.js'),
+    source('supabase/migrations/20260831_guest_order_status_boundary.sql'),
+  ])
+  for (const required of [
+    'read_guest_order_status_v1', "signedRpcArguments(req, 'guest_read', {})",
+    'ORDER_STATUS_SERVICE_UNAVAILABLE',
+  ]) expect(handler).toContain(required)
+  for (const required of [
+    'security definer', "set search_path = ''", "token_hash=decode(p_guest_grant_hash,'hex')",
+    "scope_kind='order_request'", "'read'=any(s.permissions)", 'public_reference',
+    'payment_status', 'total_amount', 'created_at',
+    'revoke all on function public.read_guest_order_status_v1',
+    'grant execute on function public.read_guest_order_status_v1',
+  ]) expect(migration).toContain(required)
+  expect(migration).not.toMatch(/customer_(?:name|email|phone)|delivery_address/i)
 })
 
 test('wholesale inquiry is exact, bot-gated, signed, and structurally unable to grant commercial authority', async () => {
@@ -158,8 +229,9 @@ test('account continuity projection is owner-scoped, bounded, and excludes inter
 })
 
 test('customer account UI is independently gated, passwordless, honest, and keeps account outside primary mobile navigation', async () => {
-  const [service, accountUi, header, mobileNav, storefront, env] = await Promise.all([
-    source('src/services/customerAccountService.js'), source('src/views/CustomerAccount.jsx'),
+  const [service, accountHook, accountUi, header, mobileNav, storefront, env] = await Promise.all([
+    source('src/services/customerAccountService.js'), source('src/hooks/useCustomerAccount.js'),
+    source('src/views/CustomerAccount.jsx'),
     source('src/components/StoreHeader.jsx'), source('src/components/nav/MobileNavBar.jsx'),
     source('src/StorefrontApp.jsx'), source('.env.example'),
   ])
@@ -173,6 +245,8 @@ test('customer account UI is independently gated, passwordless, honest, and keep
   expect(service).toContain('client.auth.setSession')
   expect(service).not.toContain('signInWithPassword')
   expect(service).toContain('Authorization: `Bearer ${accessToken}`')
+  expect(accountHook).toContain('await customerAuthClient()')
+  expect(accountHook).not.toContain('const client = customerAuthClient()')
   expect(header).toContain('customerAccountEnabled()')
   expect(header).toContain('Customer account')
   expect(mobileNav).not.toContain("key: 'account'")

@@ -9,6 +9,7 @@ export function normalizeAdminConversation(conversation) {
     id: conversation.id,
     customer: conversation.customerName ?? conversation.customer_name,
     channel: conversation.platform,
+    sourceKind: conversation.sourceKind ?? conversation.source_kind ?? '',
     status: conversation.status || 'Open',
     priority: conversation.priority || 'normal',
     unreadCount,

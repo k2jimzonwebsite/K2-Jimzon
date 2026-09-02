@@ -116,7 +116,7 @@ export async function readFulfillmentData(client) {
     client.from('order_requests').select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,subtotal,discount_amount,shipping_amount,shipping_quote_status,courier_name,tracking_number,waybill_url,total_amount,payment_status,created_at,order_request_items(sku,product_name,quantity,line_total)').eq('status', 'submitted').order('created_at', { ascending: true }),
     client.from('order_requests').select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,payment_status,subtotal,discount_amount,shipping_amount,total_amount,delivery_status,shipping_quote_status,courier_name,tracking_number,waybill_url,created_at,order_request_items(id,sku,product_name,quantity,line_total),inventory_reservations(order_request_item_id,sku,quantity,packed_quantity,status,batch_id)').eq('status', 'confirmed').order('created_at', { ascending: false }),
     client.from('product_batches').select('id,box_code,batch_code,sku,quantity,reserved_quantity,custodian,hub,inventory_status,expiry_date').gt('quantity', 0),
-    client.from('user_profiles').select('id,email,full_name,role').in('role', ['Admin', 'Staff']),
+    client.from('user_profiles').select('id,email,full_name,role').in('role', ['Admin', 'Staff', 'SuperAdmin']),
   ])
   if ([submitted, confirmed, lots, staff].some((result) => result.error)) throw new Error('FULFILLMENT_UNAVAILABLE')
   return {

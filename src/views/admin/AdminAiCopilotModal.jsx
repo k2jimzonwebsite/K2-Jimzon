@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { answerQuestion } from './adminGuide'
+import { STAFF_GUIDE_META } from './staffProcedureRegistry'
 import { BookIcon, SearchIcon, XIcon } from '../../components/ui/icons'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 const EXAMPLES = [
   'How do I scan a new product?',
@@ -31,7 +33,6 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
 
   useEffect(() => {
     if (!isOpen) return
-    setTimeout(() => inputRef.current?.focus(), 50)
     if (initialQuery && initialQuery !== lastSeedRef.current) {
       lastSeedRef.current = initialQuery
       ask(initialQuery)
@@ -47,10 +48,8 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
 
   return (
     <div className="fixed inset-0 z-[105] flex justify-end bg-black/70 backdrop-blur-sm" role="presentation" onMouseDown={onClose}>
+      <AdminDialog onClose={onClose} initialFocusRef={inputRef} labelledBy="operations-guide-title">
       <section
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="operations-guide-title"
         className="flex h-full w-full max-w-xl flex-col border-l border-adm-line bg-adm-surface text-white shadow-2xl"
         onMouseDown={event => event.stopPropagation()}
       >
@@ -60,6 +59,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
             <div>
               <h2 id="operations-guide-title" className="text-base font-semibold">K2 operations guide</h2>
               <p className="mt-0.5 text-xs text-white/50">Grounded retrieval from the K2 rulebook—not a live external AI</p>
+              <p className="mt-1 text-xs font-semibold text-amber">{STAFF_GUIDE_META.approvalStatus} · {STAFF_GUIDE_META.version}</p>
             </div>
           </div>
           <button onClick={onClose} aria-label="Close operations guide" className="flex h-10 w-10 items-center justify-center rounded-adm-sm text-white/50 hover:bg-white/5 hover:text-white"><XIcon size={18} /></button>
@@ -67,7 +67,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
 
         <div className="flex shrink-0 gap-2 overflow-x-auto border-b border-adm-line bg-adm-sunken/50 p-3 scrollbar-none">
           {EXAMPLES.map(example => (
-            <button key={example} onClick={() => ask(example)} className="min-h-9 shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-xs text-white/65 hover:bg-white/[0.06] hover:text-white">{example}</button>
+            <button key={example} onClick={() => ask(example)} className="min-h-11 shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-xs text-white/65 hover:bg-white/[0.06] hover:text-white">{example}</button>
           ))}
         </div>
 
@@ -85,7 +85,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
                 <p className="max-w-[88%] rounded-adm-sm bg-blue px-3.5 py-2.5 text-sm text-white">{message.text}</p>
               ) : message.topics ? (
                 <div className="w-full space-y-3">
-                  <p className="text-xs font-medium text-white/40">Most relevant approved procedures</p>
+                  <p className="text-xs font-medium text-white/40">Most relevant draft procedures</p>
                   {message.topics.map((topic, topicIndex) => (
                     <article key={topic.id} className="rounded-adm-sm border border-adm-line bg-white/[0.025] p-4">
                       <div className="flex items-center justify-between gap-3">
@@ -96,6 +96,13 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
                         {topicIndex === 0 && <span className="rounded-full border border-blue/25 bg-blue/10 px-2 py-0.5 text-xs font-semibold text-blue">Best match</span>}
                       </div>
                       <p className="mt-2 text-sm leading-relaxed text-white/70">{topic.what}</p>
+                      {topic.procedure && (
+                        <div className="mt-3 grid gap-2 rounded-adm-sm border border-adm-line bg-adm-sunken p-3 text-xs leading-relaxed text-white/60 sm:grid-cols-2">
+                          <p><span className="font-semibold text-white/85">Status:</span> {topic.procedure.status}</p>
+                          <p><span className="font-semibold text-white/85">Authorized role:</span> {topic.procedure.authorizedRoles.join('; ')}</p>
+                          <p className="sm:col-span-2"><span className="font-semibold text-white/85">Prerequisites:</span> {topic.procedure.prerequisites.join(' · ')}</p>
+                        </div>
+                      )}
                       <ol className="mt-3 space-y-1.5">
                         {topic.how.map((step, stepIndex) => (
                           <li key={step} className="flex gap-2 text-sm leading-relaxed text-white/60">
@@ -104,10 +111,18 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
                           </li>
                         ))}
                       </ol>
+                      {topic.procedure && (
+                        <div className="mt-3 space-y-2 text-xs leading-relaxed text-white/55">
+                          <p><span className="font-semibold text-white/80">Validations / blockers:</span> {topic.procedure.validationsAndBlockers.join(' · ')}</p>
+                          <p><span className="font-semibold text-white/80">Forbidden shortcuts:</span> {topic.procedure.forbiddenShortcuts.join(' · ')}</p>
+                          <p><span className="font-semibold text-white/80">Failure / recovery:</span> {topic.procedure.recovery.join(' · ')}</p>
+                          {topic.procedure.blocker && <p className="rounded-adm-sm border border-red-500/25 bg-red-500/10 p-2 text-red-200"><span className="font-semibold">Unavailable:</span> {topic.procedure.blocker}</p>}
+                        </div>
+                      )}
                       {topic.more && <p className="mt-3 border-l-2 border-amber/40 pl-3 text-xs leading-relaxed text-white/50">{topic.more}</p>}
                       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-adm-line pt-3">
                         <span className="text-xs text-white/35">Source: {topic.source}</span>
-                        {topic.section && <button onClick={() => jump(topic.section)} className="min-h-8 rounded-adm-sm bg-blue px-3 text-xs font-semibold text-white hover:bg-blue-deep">Open workspace →</button>}
+                        {topic.section && <button onClick={() => jump(topic.section)} className="min-h-11 rounded-adm-sm bg-blue px-3 text-xs font-semibold text-white hover:bg-blue-deep">Open workspace →</button>}
                       </div>
                     </article>
                   ))}
@@ -128,6 +143,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
           <button type="submit" disabled={!input.trim()} className="min-h-11 shrink-0 rounded-adm-sm bg-blue px-5 text-sm font-semibold text-white hover:bg-blue-deep disabled:opacity-40">Find procedure</button>
         </form>
       </section>
+      </AdminDialog>
     </div>
   )
 }

@@ -1,91 +1,37 @@
-# Current Task — MAP-023 queue item 3: one modal primitive, then migrate all 18
+# Current Task — MAP-017: Named Production Backup/Restore Point Verification Gate
 
-**Set 25 August 2026. One queue item. Nothing else.**
+**Set 26 August 2026. MAP-017 immediate execution gate.**
 
-Queue items 1 and 2 are done and independently verified. This run is queue item
-**3** from the "Unblocked execution queue" in `MASTER_ACTION_PLAN.md`.
+## Selected MAP Scope
+- **MAP Item:** MAP-017 (Supabase schema truth, grants, RLS, RBAC, ownership, and RPC boundary)
+- **Section:** Prepare and independently verify a named production backup/restore point.
+- **Immediate Outcome:** Blocked — evidence required.
 
-## The problem, measured
+## The Gate & Current State
+- `OWNER-005` in `K2 Jimzon - Brain/OWNER_QUESTIONS.md` records `Decision: Authorized`.
+- However, `Backup evidence ID` and `Backup/restore verification` remain `Pending`.
+- The guarded production apply script (`scripts/apply-map017-migration.mjs`) is fail-closed and strictly verifies:
+  1. Project target: `pixplcjqivlfflickobf`
+  2. Authorization: `OWNER-005`
+  3. Artifact SHA-256: `D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62`
+  4. Durable backup evidence ID matching verified `OWNER-005` entry
+  5. Planned ledger version: `20260824143000`
+  6. Live findings count: `55`
+  7. Explicit roll-forward recovery confirmation
+- In absence of verified production backup evidence, executing `apply-map017-migration.mjs --apply` fails closed with code 1:
+  `[BLOCKED] OWNER-005 backup evidence must exactly match and be Verified`.
 
-Across the 18 files matching `src/views/admin/*Modal.jsx`, as of 25 August 2026:
+## Safe Local Preparations Verified
+1. **Local Backup/Restore Rehearsal:** `scripts/rehearse-database-backup-restore.mjs` and `tests/database-backup-rehearsal.spec.js` verify custom dump extraction, AES-256-GCM authenticated encryption/decryption, isolated database restoration, and SHA-256 payload/privilege fingerprint matching.
+2. **Portable MAP-017 Lifecycle:** `npm run verify:map017-portable` runs against the isolated PostgreSQL 17.11 loopback database, executing vulnerable bootstrap, preflight, rollback restoration, apply, all 12 machine-counted authorization groups, and idempotent replay.
+3. **Preflight & Dry-Run:** `node scripts/apply-map017-migration.mjs --dry-run` passes all artifact validations, transaction boundaries, and ledger bindings.
+4. **Contract & Security Suites:** 195/195 API and security contract tests passing, 2/2 selling-surface tests passing, 11/11 smoke tests passing, 16/16 admin UI tests passing, 3/3 customer account UI tests passing, prebuild secret/surface scans passing, and both Storefront and Admin production builds passing cleanly.
 
-- only **4** handle the `Escape` key
-- **6** declare neither `role="dialog"` nor `aria-modal`
-- **2** expose no accessible name
-- **0** implement a focus trap or restore focus to the trigger on close
-
-`DeleteProductsModal.jsx` — the most destructive surface in the product, which
-permanently deletes products behind a PIN — has none of the three.
-
-There is no shared modal primitive. Every modal hand-rolls its own shell, which
-is why they have drifted apart. MAP-018 already established the correct pattern
-on the Product Intake modal; it simply never propagated.
-
-## What to build
-
-**One** reviewed modal primitive, then migrate all 18 onto it. Do not spot-fix
-individual modals — that recreates the drift this item exists to remove.
-
-The primitive must provide, for every consumer:
-
-1. `role="dialog"` and `aria-modal="true"`
-2. an accessible name, wired via `aria-labelledby` to the modal's own heading
-3. initial focus moved into the dialog on open
-4. a focus trap — Tab and Shift+Tab cycle within the dialog
-5. `Escape` closes, and close is routed through the same handler as the close
-   button so both paths behave identically
-6. focus restored to the triggering element on close
-7. `prefers-reduced-motion` respected in any open/close transition
-
-Where a modal has a genuine reason to opt out of a behaviour — a scanner modal
-that must keep camera focus, for example — the opt-out must be an explicit,
-named prop with a comment explaining why, not a silent omission.
-
-## Completion check
-
-Write a test that **enumerates** `src/views/admin/*Modal.jsx` from the filesystem
-and asserts each property across every file found. Do not hardcode the list of 18
-names. The point is that a nineteenth modal added next month cannot regress this
-without failing the suite.
-
-The check is 18/18 on each property, or an explicit, commented opt-out.
-
-## Required verification
-
-Report exact exit codes and counts:
-
-```
-npm run prebuild
-npm run build:storefront
-npm run build:admin
-npm run test:contracts
-npm run test:admin-ui
-npm run test:smoke
-```
-
-`test:contracts` must stay at **181** or higher and `test:admin-ui` at **15/15**.
-A drop is a regression you fix, not something you report around.
-
-## Evidence rules for this run
-
-The last run's report claimed "0px Cumulative Layout Shift" that was never
-measured, and shipped a test whose assertion passed whether or not the feature
-worked. Both were corrected on review. For this run:
-
-- Do not state a measured result unless you measured it. "Focus is trapped" needs
-  a test that tabs and asserts where focus landed, not a claim that a trap was
-  added.
-- Do not assert on something both the real component and its fallback render. Ask
-  of every assertion: would this fail if the feature were removed? If not, it is
-  not a test.
-- Name each test for exactly what it asserts.
-
-## Hard limits
-
-Do not start queue items 4 through 8. Do not touch the database, migrations,
-providers, DNS, or deployment. Do not push, merge, or deploy. Do not delete or
-reorder any MAP item. MAP-023 has scope well beyond this item, so do not mark
-MAP-023 complete — mark queue item 3 done and leave the item `Queued`.
-
-`MASTER_ACTION_PLAN.md` remains the only backlog and the only source of scope
-and order.
+## Exact Required Owner/Provider Action
+To unblock permanent production migration execution:
+1. Generate an authenticated production database backup for project `pixplcjqivlfflickobf` (via Supabase Dashboard PITR / scheduled backup or server-side `pg_dump`).
+2. Record its durable backup identifier (e.g., `prod-backup-20260826-pixplcjqivlfflickobf-01`) and verify the restore capability on an isolated target.
+3. Update `K2 Jimzon - Brain/OWNER_QUESTIONS.md` under `OWNER-005`:
+   - `**Backup evidence ID:** <exact-durable-id>`
+   - `**Backup/restore verification:** Verified`
+4. Run the guarded apply command with all required parameters and recovery acknowledgements.

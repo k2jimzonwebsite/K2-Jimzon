@@ -1,6 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
 
-const STAFF_ROLES = new Set(['Admin', 'Staff'])
+const STAFF_ROLES = new Set(['Admin', 'Staff', 'SuperAdmin'])
+
+export function isAdminRole(role) {
+  return role === 'Admin' || role === 'SuperAdmin'
+}
 
 export function createServerSupabase() {
   const url = process.env.SUPABASE_URL || ''

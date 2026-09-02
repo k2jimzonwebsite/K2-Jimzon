@@ -67,7 +67,7 @@ function TrustRow() {
   const items = [
     [CheckIcon, 'Authentic Italian imports'],
     [PlaneIcon, 'Direct flights from Milan'],
-    [GridIcon, 'Multi-channel stock sync'],
+    [GridIcon, 'Availability checked before payment'],
     [ShieldIcon, 'Checked by staff before payment'],
   ]
 

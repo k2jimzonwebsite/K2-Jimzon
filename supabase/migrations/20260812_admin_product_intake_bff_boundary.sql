@@ -10,8 +10,10 @@ begin
      or to_regclass('k2_private.admin_command_receipts') is null then
     raise exception 'Admin BFF foundation must be applied first';
   end if;
-  if to_regclass('public.product_intake_sessions') is null
-     or to_regprocedure('public.create_product_draft_server(uuid,uuid,jsonb,jsonb)') is null
+      if to_regclass('public.product_intake_sessions') is null
+         or to_regclass('public.hubs') is null
+         or to_regclass('public.custodians') is null
+         or to_regprocedure('public.create_product_draft_server(uuid,uuid,jsonb,jsonb)') is null
      or to_regprocedure('public.create_product_first_inventory_server(uuid,uuid,text,jsonb)') is null
      or to_regprocedure('public.transition_product_publication_server(uuid,text)') is null then
     raise exception 'MAP-018 product intake foundation must be applied first';
@@ -265,6 +267,15 @@ begin
          or length(trim(coalesce(v_inventory->>'hubLocation',''))) not between 1 and 120
          or length(trim(coalesce(v_inventory->>'custodian',''))) not between 1 and 120
          or length(trim(coalesce(v_inventory->>'reason',''))) not between 1 and 1000
+         or not exists (
+           select 1 from public.hubs h
+           where h.id=trim(v_inventory->>'hubLocation')
+         )
+         or not exists (
+           select 1 from public.custodians c
+           where c.id=trim(v_inventory->>'custodian')
+             and c.hub_id=trim(v_inventory->>'hubLocation')
+         )
        )) then
       raise exception using errcode='22023', message='K2_ADMIN_PAYLOAD_INVALID';
     end if;

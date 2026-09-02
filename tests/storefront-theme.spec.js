@@ -43,7 +43,7 @@ test.describe('storefront theme contract', () => {
     expect(contrastRatio(lightAnnouncement.color, lightAnnouncement.backgroundColor)).toBeGreaterThanOrEqual(4.5)
     expect(contrastRatio(lightFooter.color, lightFooter.backgroundColor)).toBeGreaterThanOrEqual(4.5)
     if (process.env.K2_CAPTURE_THEMES === '1') {
-      await expect(page.getByRole('button', { name: /Shop the Drop/i })).toBeVisible({ timeout: 45000 })
+      await expect(page.getByRole('button', { name: /Shop the Collection/i })).toBeVisible({ timeout: 45000 })
       await page.screenshot({ path: 'test-results/storefront-theme-light.png', fullPage: true })
     }
 

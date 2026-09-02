@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import { lazy, Suspense, useState, useEffect } from 'react'
 import FlightWorkflowDiagram from './FlightWorkflowDiagram'
 import CustodyWorkflowDiagram from './CustodyWorkflowDiagram'
 import FefoWorkflowDiagram from './FefoWorkflowDiagram'
 import FulfillmentWorkflowDiagram from './FulfillmentWorkflowDiagram'
 import PasabuyWorkflowDiagram from './PasabuyWorkflowDiagram'
-import MasterWorkflowGraph from '../master-workflow-graph/MasterWorkflowGraph'
+import { STAFF_GUIDE_META } from '../../../views/admin/staffProcedureRegistry'
+
+const MasterWorkflowGraph = lazy(() => import('../master-workflow-graph/MasterWorkflowGraph'))
 
 /**
  * WorkflowGuideModal
@@ -59,13 +61,16 @@ export default function WorkflowGuideModal({
                 K2 Operations Visual Workflow Guide
               </h2>
               <p className="text-xs text-white/50">
-                Authoritative procedures, scan requirements, safeguards & AI prompt engineering.
+                Draft procedures, scan requirements, safeguards & AI prompt handoffs.
+              </p>
+              <p className="mt-1 text-xs font-semibold text-amber-300">
+                {STAFF_GUIDE_META.approvalStatus} · {STAFF_GUIDE_META.version}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
             title="Close (Esc)"
           >
             ✕
@@ -81,7 +86,7 @@ export default function WorkflowGuideModal({
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all cursor-pointer ${
+                  className={`flex min-h-11 shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all cursor-pointer ${
                     isActive
                       ? 'border border-sky-500/40 bg-sky-500/15 text-sky-400 shadow-sm'
                       : 'border border-transparent text-white/60 hover:bg-white/5 hover:text-white'
@@ -97,12 +102,14 @@ export default function WorkflowGuideModal({
         {/* Content Body */}
         <div className="flex-1 overflow-y-auto p-4 custom-scrollbar sm:p-6">
           {activeTab === 'master_graph' && (
-            <MasterWorkflowGraph
-              onNavigate={(section) => {
-                if (onNavigate) onNavigate(section)
-                onClose()
-              }}
-            />
+            <Suspense fallback={<div className="h-64 animate-pulse rounded-adm border border-adm-line bg-adm-sunken" role="status" aria-label="Loading workflow graph" />}>
+              <MasterWorkflowGraph
+                onNavigate={(section) => {
+                  if (onNavigate) onNavigate(section)
+                  onClose()
+                }}
+              />
+            </Suspense>
           )}
           {activeTab === 'flights' && <FlightWorkflowDiagram />}
           {activeTab === 'custody' && <CustodyWorkflowDiagram />}
@@ -124,7 +131,7 @@ export default function WorkflowGuideModal({
                   onNavigate(currentTab.section)
                   onClose()
                 }}
-                className="flex items-center gap-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 px-3 py-1.5 text-xs font-bold text-sky-400 transition-all hover:bg-sky-500/20 cursor-pointer"
+                className="flex min-h-11 items-center gap-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 px-3 py-1.5 text-xs font-bold text-sky-400 transition-all hover:bg-sky-500/20 cursor-pointer"
               >
                 <span>Open {currentTab.label.split(' ')[1]} Workspace</span>
                 <span>→</span>
@@ -132,7 +139,7 @@ export default function WorkflowGuideModal({
             )}
             <button
               onClick={onClose}
-              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white cursor-pointer"
+              className="min-h-11 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white cursor-pointer"
             >
               Done
             </button>

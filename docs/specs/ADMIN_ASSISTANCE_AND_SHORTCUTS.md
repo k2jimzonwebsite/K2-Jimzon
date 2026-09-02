@@ -103,7 +103,7 @@ UI, permissions, and tests verify them.
 
 ## Grounded operations guide (RAG foundation)
 
-Phase 1 is a local retrieval system. It searches a versioned procedure registry, weighs the current workspace, returns up to three relevant procedures, and displays each procedure's rulebook source. This provides the retrieval and grounding parts of RAG without pretending a paid LLM, embeddings service, or channel API is connected.
+Phase 1 is a local retrieval system. It searches a versioned procedure registry, weighs the current workspace, returns up to three relevant procedures, and displays each procedure's status, role, prerequisites, entry point, actions, blockers, expected canonical result, forbidden shortcuts, recovery, version, and sources. This provides the retrieval and grounding parts of RAG without pretending a paid LLM, embeddings service, or channel API is connected.
 
 Covered procedure families include:
 
@@ -114,7 +114,35 @@ Covered procedure families include:
 - Pasabuy, suppliers, coupons, customers, messages, and customer exceptions;
 - marketplace readiness, roles/security, failures/retries, and globe presentation.
 
-If retrieval has no approved answer, the guide says the procedure is undocumented. It does not guess.
+The current registry is `2026-08-30-draft.12` and is explicitly not locked. It
+includes the SuperAdmin-only paid-AI spend-control procedure and the enabled
+sales-computation procedure. The latter directs staff to canonical
+status-separated Overview totals, their read-only exact-fact record drilldown,
+the mutually exclusive Payment × fulfillment reconciliation, the fixed
+customer-free selected-period CSV, and all four non-posting Sales Planner modes.
+The reconciliation preserves the difference between not verified and unpaid,
+and its four buckets reproduce the selected-period total. Check a price asks
+for fixed peso fees and channel fee rate separately, automatically applies the
+percentage fee to gross sales, shows the cost breakdown, and upward-cent-rounds
+the fee-aware break-even price; Find target price solves and upward-cent-rounds a
+minimum recommendation from reviewed assumptions; Find max discount solves and
+downward-cent-rounds the maximum total allowance a chosen price can absorb
+while preserving the target margin. It refuses the discount result when the
+chosen price misses the target even without discount, and the total allowance
+remains authoritative over the rounded per-unit display. Find units needed
+solves the minimum whole units for a positive planned-
+profit target, recomputes the achieved scenario, and shows that one fewer unit
+misses; it refuses non-positive contribution and requirements above 100,000
+units. That result is a planning target, not a quota, order, reservation, or
+guarantee. Every valid mode offers Copy planning summary. Its customer-free
+plain text keeps the timestamp, mode, assumptions, result, and opening warning
+together; invalid calculations cannot copy, and clipboard denial has an inline
+retry instruction. The procedure forbids extracted, copied, or planned results from being reported as approved
+price, actual profit, landed cost, settlement, accounting, or backup truth. If
+retrieval has no documented answer, the guide says the procedure is
+undocumented. It does not guess. Prepared and unavailable procedures remain
+searchable so staff can see the exact blocker and valid manual boundary; guide
+retrieval itself never executes a command.
 
 ## Future server-backed RAG
 
@@ -151,5 +179,12 @@ Do not implement silent autonomous transitions for purchasing, receiving, invent
 - `src/views/admin/productResearchPrompt.js` — adaptive evidence-first prompt
 - `src/views/admin/productResearchContract.js` — versioned parser and validator
 - `src/views/admin/adminGuide.js` — grounded procedure registry and retrieval
+- `src/views/admin/staffProcedureRegistry.js` — MAP-023 procedure contracts and coverage/status truth
+- `src/lib/aiSpendControls.js` — fail-closed paid-AI control contract and USD-micros normalization
+- `src/lib/salesCalculations.js` — bounded sales-summary and non-posting planning math
+- `server/admin-bff/ai-spend-controls.js` — exact server payload validation and feature gate
+- `supabase/migrations/20260830_paid_ai_spend_controls.sql` — prepared private SuperAdmin config/audit boundary
 - `src/views/admin/AdminAiCopilotModal.jsx` — cited guide interface
 - `tests/admin-assistance.spec.js` — focused safety and retrieval checks
+- `tests/staff-workflow-guide-contract.spec.js` — required coverage and nine-field completeness gate
+- `tests/map018-paid-ai-controls.spec.js` — paid path caps, confirmations, role, and migration contract checks

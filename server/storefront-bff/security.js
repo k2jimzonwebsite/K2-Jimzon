@@ -130,6 +130,22 @@ export function text(value, name, { required = false, min = 0, max = 500 } = {})
   return result
 }
 
+/**
+ * A closed set of accepted values.
+ *
+ * Used for fields that name a surface rather than carry customer text. An
+ * unrecognised value is rejected rather than passed through: the whole point of
+ * an origin tag is that staff can trust what it says about where a message came
+ * from, and a free-text field would let a caller write anything into the admin
+ * inbox.
+ */
+export function enumerated(value, name, allowed, fallback = '') {
+  if (value === undefined || value === null || value === '') return fallback
+  const result = typeof value === 'string' ? value.trim() : ''
+  if (!allowed.includes(result)) throw new Error(`${name}_INVALID`)
+  return result
+}
+
 export function contact(emailValue, phoneValue) {
   const email = text(emailValue, 'EMAIL', { max: 320 }).toLowerCase()
   const phone = text(phoneValue, 'PHONE', { max: 40 }).replace(/[^0-9+]/g, '')

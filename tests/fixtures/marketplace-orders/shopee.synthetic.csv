@@ -1,0 +1,4 @@
+schema_version,external_order_id,external_line_id,marketplace_sku,quantity,gross_amount,currency,ordered_at,order_status,payment_status
+k2.marketplace-orders.v1,SP-ORDER-001,SP-LINE-001,SP-K2-001,1,1250.00,PHP,2026-08-15T08:30:00+08:00,paid,verified
+k2.marketplace-orders.v1,SP-ORDER-001,SP-LINE-001,SP-K2-001,1,1250.00,PHP,2026-08-15T08:30:00+08:00,paid,verified
+k2.marketplace-orders.v1,SP-ORDER-001,SP-LINE-001,SP-K2-001,2,2500.00,PHP,2026-08-15T08:30:00+08:00,paid,verified

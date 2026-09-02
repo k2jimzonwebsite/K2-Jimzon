@@ -1,6 +1,9 @@
 import { expect, test } from '@playwright/test'
 
-const AUTH_STORAGE_KEY = 'sb-pixplcjqivlfflickobf-auth-token'
+// Supplied by scripts/test-customer-account-ui.mjs, which also pins the
+// VITE_SUPABASE_URL this key is derived from. The literal is only a
+// fallback for running this spec directly against an already-running server.
+const AUTH_STORAGE_KEY = process.env.K2_ACCOUNT_UI_AUTH_STORAGE_KEY || 'sb-fixture-auth-token'
 
 function fakeJwt() {
   const encode = (value) => Buffer.from(JSON.stringify(value)).toString('base64url')
@@ -10,6 +13,16 @@ function fakeJwt() {
     email: 'buyer@example.com',
   })}.signature`
 }
+
+test.beforeEach(async ({ page }) => {
+  // No account fixture may make an external provider request. The fabricated
+  // origin is needed only so supabase-js constructs its local Auth client.
+  await page.route('https://fixture.supabase.co/**', route => route.fulfill({
+    status: 401,
+    contentType: 'application/json',
+    body: JSON.stringify({ message: 'Fixture provider calls are disabled.' }),
+  }))
+})
 
 test('customer account entry is phone-safe, passwordless, recoverable, and keeps primary mobile navigation at five', async ({ page, context }, testInfo) => {
   test.setTimeout(90000)
@@ -21,7 +34,7 @@ test('customer account entry is phone-safe, passwordless, recoverable, and keeps
     expect(route.request().postDataJSON()).toEqual({ email: 'buyer@example.com', botToken: 'verified-test-token' })
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) })
   })
-  await page.goto('/')
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
   await page.getByRole('button', { name: 'Customer account' }).click()
   await expect(page.getByRole('heading', { name: 'Keep verified K2 history across devices.' })).toBeVisible({ timeout: 30000 })
@@ -87,8 +100,8 @@ test('verified account claims once, loads only customer-visible history, and sen
     return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ ok: true, receipt: { message_status: 'received', created_at: '2026-08-22T07:06:00Z' } }) })
   })
 
-  await page.goto('/?account=continue')
-  await expect(page.getByRole('heading', { name: 'Link this browser’s guest records' })).toBeVisible()
+  await page.goto('/?account=continue', { waitUntil: 'domcontentloaded' })
+  await expect(page.getByRole('heading', { name: 'Link this browser’s guest records' })).toBeVisible({ timeout: 30000 })
   await page.getByRole('button', { name: 'Link verified guest records' }).click()
   await expect(page.getByRole('heading', { name: 'Your K2 records, in one place.' })).toBeVisible()
   await expect(page.getByText('WEB-A19X7K2Q')).toBeVisible()

@@ -93,6 +93,77 @@ Frequent and keyboard-driven staff actions remain instant. Reduced motion and
 complete loading, empty, error, permission, conflict, and recovery states are
 mandatory.
 
+### Admin dialog interaction contract
+
+Every file matching `src/views/admin/*Modal.jsx` uses the shared headless
+`AdminDialog` primitive. The primitive adds behavior without restyling the
+surface: each dialog has an accessible name, receives deterministic initial
+focus, traps forward and reverse Tab within the topmost dialog, closes on
+Escape when no protected operation is running, and restores focus to the
+invoking control after unmount. A busy mutation consumes Escape rather than
+closing or allowing a background shortcut to run. Visual shells remain owned
+by their workflow so phone scanners can stay full-screen and compact dialogs can
+retain the established Admin surface, radius, density, and 44px controls.
+Keyboard-initiated opening and closing remains instant; no decorative modal
+motion is introduced.
+
+### Admin financial-calculation contract
+
+Financial summaries use one labelled value per operational state; submitted,
+verified, fulfilled, settled, and profit are never collapsed into a single
+ambiguous KPI. Unavailable financial truth uses readable text rather than a
+fabricated zero. The record drilldown stays inside the summary, uses 44px exact-
+fact filters, recomputes its labelled subtotal, becomes stacked records on
+phones, and never exposes customer contact data or implies a write. Its adjacent
+44px CSV action includes the matching-row count and remains secondary to record
+review; the generated file follows the active filter rather than the 25-row
+render limit and is labelled as an operational extract, not financial truth.
+The payment-by-fulfillment reconciliation uses four equally weighted, mutually
+exclusive, keyboard-reachable buckets whose counts/values reproduce the period
+total. Exception color supplements precise labels rather than replacing them;
+zero remains a valid computed bucket value, while unavailable remains text.
+Selecting a bucket opens the same contained phone-safe ledger and CSV boundary.
+The floating tools panel stays inside the available viewport, scrolls internally when
+necessary, uses labelled 44px controls, and labels every manual result as
+planning-only. Forward checking, reverse target pricing, maximum-discount, and
+whole-unit target planning remain four explicit modes in a phone-safe 2×2
+selector inside one planner rather than separate floating tools. Forward
+checking separates fixed peso fees from the gross-sales
+percentage fee, exposes the cost components before the total, and labels its
+upward-rounded break-even as fee-aware. Reverse pricing names the target-margin and gross-sales fee
+definitions, rounds the minimum price upward, shows the recomputed achieved
+scenario, and keeps canonical price approval outside the tool. Maximum discount
+uses the same definitions, rounds its total ceiling downward, refuses an
+impossible chosen price, and keeps promotion approval outside the tool. Whole-
+unit targeting leads with the minimum quantity, keeps the achieved
+scenario and immediately-previous-unit proof together, and distinguishes a
+planning target from an assigned quota or promised outcome. Currency results use
+tabular numerals and keep negative outcomes visually distinct without relying
+on color alone. Each valid mode places one 44px secondary Copy planning summary
+control after its result. Success and clipboard denial use text/status semantics,
+and the copied warning/assumptions remain inseparable from the result; invalid
+calculations show no copy action.
+
+### Customer exception-path copy contract
+
+Order confirmation and guest conversations state the operational boundary in
+plain language: cancellation and return have no self-service control, customers
+message K2 staff, and each request is reviewed case by case. The copy stays in
+the existing reading flow, uses the established body-text treatment, and adds no
+decorative card, warning color, motion, automatic outcome, or response-time
+promise. At 375px it wraps without document-level horizontal overflow.
+
+### Admin Product Master decision contract
+
+Secure Product Master editing, lifecycle changes, and permanent-deletion review
+use named dialogs with the shared focus, Escape, busy-state, and focus-return
+behavior. At 375px, edit fields stack into one readable column while the reason
+and primary action remain visible in the contained workflow; desktop may restore
+two-column density. Lifecycle state changes are separate reasoned decisions.
+Deletion keeps its PIN, exact product identity, history/stock refusal, and
+recovery copy visible and never presents refusal as success. All repeated actions
+remain at least 44px and motion is limited to direct progress feedback.
+
 ### Admin phone-intake interaction contract
 
 Product intake preserves the compact Admin BOS visual language while presenting
@@ -110,12 +181,51 @@ received stock. Offline state stays visible, blocks server mutations, and explai
 reconnection; camera and clipboard denial offer explicit fallbacks. Completion
 copy is derived from the authoritative session result and cannot claim a first
 source merely because the staff member reached the final review screen.
+Opening-balance hub and custodian controls are canonical selects, not free text;
+the custodian list follows the selected hub and keeps the established compact
+single-column Admin rhythm on phones.
 If a private upload cannot be registered or removed, one persistent amber
 recovery panel explains that cleanup is queued, exposes a 44px **Retry file
 cleanup** action, and blocks forward progress and new file selection. The panel
 never displays the private object path. It clears only after the server confirms
 the durable cleanup record is complete; a provider or completion-write failure
 keeps the same recoverable state without decorative motion.
+
+### Admin Owner Count & Close interaction contract
+
+Owner Count & Close uses the established dense Admin BOS product register and
+appears as one Admin-only item in the full navigation; the phone bottom bar stays
+at five items and reaches it through **More**. A compact nine-step rail keeps the
+whole close visible while only the current operational decision expands. The
+prepared steps select explicit seller-shop identities, save an Asia/Manila
+period with a recovery ID, stage one bounded listing CSV, present one product row
+at a time for **Link existing**, **Create new Draft**, or **Leave unresolved**,
+stage/recover customer-free order facts, and save one named fee-policy estimate
+version per exact shop. Fee inputs remain familiar percent/PHP fields while the
+preview labels accepted orders, gross facts, excluded rows, estimated fees, and
+estimated net. Conflicts, unresolved product links, a missing order export, or a
+missing exact-shop estimate remain visible blockers; a header-only reviewed
+export is the explicit zero-sales path.
+Marketplace quantity is always styled and worded as observation evidence, never
+as canonical stock or custody. The count step separates canonical physical,
+reserved, sellable, shop-reported, and accepted-sales facts; its discrepancy
+form composes the existing exact-lot reconciliation command. Coverage shows
+per-shop Covered/Thin/Skipped/Out/Needs-review status, low/zero warnings,
+proposal-only language, and reasoned include/thin/skip controls. Pasabuy exposes
+only public reference, item, quantity, and canonical state while stating that
+readiness cannot change request status. The final handoff exposes blockers,
+aggregate/shop evidence, a customer-free CSV, and one reasoned sealing action.
+Fee and handoff warnings sit next to their results and always deny settlement, official books,
+tax filing, payout, and actual-profit authority; color supplements that language
+and never carries it alone.
+
+At 375px, fields stack in reading order, long recovery identities wrap, the page
+does not overflow horizontally, and every active control is at least 44px. The
+same workflow remains overflow-safe at 812×375 with reduced motion. Loading,
+empty, offline, conflict, retry, saved, and unresolved states stay in flow and
+never rely on transient browser alerts. Commission/tax copy remains an estimate
+disclaimer and cannot imply official books, filing, payout settlement, or actual
+profit. Desktop may restore compact columns without changing decision order.
 
 ### Admin product-media upload interaction contract
 
@@ -179,6 +289,89 @@ existing form immediately before the primary action. It uses the Admin surface,
 border, Source Sans, and blue-action system rather than Storefront styling;
 failure remains inline and every request attempt resets the challenge. MFA,
 recovery-link verification, and password completion do not repeat the widget.
+
+### Storefront social and install identity contract
+
+Social previews and installed-app icons extend the existing Storefront identity;
+they do not introduce a campaign style. The social card uses the established K2
+monogram, warm paper, crimson action color, restrained gold detail, Fraunces
+wordmark, Source Sans supporting copy, and the approved direct-import proposition.
+It remains legible at messaging-preview size, carries no fabricated product or
+rating proof, and uses a 1200×630 raster because social crawlers do not render
+the SVG source. PWA and Apple icons are deterministic crops of the same monogram,
+with sufficient safe area for rounded and platform-shaped masks. Build-time
+manifests remain target-specific so Storefront and Admin never share identity or
+start paths.
+
+### Storefront Interactive Shop interaction contract
+
+The optional `/store` route is a full-frame room over the same canonical K2
+commerce state; Catalog remains the primary fast list. Light mode preserves the
+continuous wood canvas under translucent warm-paper chrome while the WebGL aisle
+uses warmed marble, restrained brass, and one wood counter. White luxury may
+increase clarity but must not become a sterile opaque-white showroom.
+
+Desktop frames the complete shelf sign, products, direct shelf controls, and
+semantic product rail without edge cropping. The WebGL canvas is decorative and
+lazy. Reduced motion, missing WebGL, or a scene failure shows a calm flat shelf
+guide with the active shelf name and verified blurb while keeping the same shelf
+navigation, product rail, staff handoff, and exit. Failed product photography
+settles to the generated canonical label rather than a black/blank package or an
+endless retry.
+
+At 640px and below, brand/exit occupy the first header row and the horizontally
+scrollable shelf navigation owns the full second row. Previous/Next stay at least
+44px, the product rail stays ordinary keyboard/touch UI, and the page has no
+document-level horizontal overflow. Motion is limited to deliberate aisle travel
+and selected-product feedback; reduced motion removes the spatial scene entirely.
+
+Keyboard entry focuses the room heading; Leave and Escape return focus to the
+Catalog entry control. Product addition changes the action to `Add another` and
+shows the canonical basket quantity beside it, keeping feedback at the action
+point without adding a second cart state. The fixed room locks its warm-paper
+light tokens and wood fallback, preserves 4.5:1 text/placeholder contrast under
+a dark site preference, and does not leave ordinary Storefront chrome painted
+behind it.
+
+The store uses one synchronized guide layer. The 2D shopkeeper is a functional
+scene overlay that can pop open or tuck away; it carries readable shelf/product
+copy and the room's only real-person question form. The single 3D clerk is an expressive
+spatial mirror, not a second agent: it moves among authored Counter/shelf
+positions and receives wave, point, present, and celebrate intent from the same
+derived welcome/explore/inspect/added state. It does not pathfind freely or
+repeat a large speech cloud over shelf products. Her rendered scale remains
+human and stable across Counter and shelf scenes. Every product position is the
+midpoint of a deliberately wide gap between adjacent shelf bays, at an aisle
+depth in front of the furniture; the camera and clerk share one travel rate so
+she cannot drift into the shelving during a transition. Articulated sleeves,
+forearms, palms, and thumbs replace sphere hands. Because she faces the camera,
+the greeting binds her anatomical right arm at scene `-X` so it lifts outward
+instead of crossing her body. Product bays show five shelf levels and can expand
+to seven levels as canonical assortment grows.
+
+The desktop right rail is a warm editorial shelf concierge, not a white utility
+column. A dark wood-and-brass masthead establishes the active shelf; the body
+shows department choices at Counter, canonical product highlights on a shelf,
+or the selected-product detail. Product imagery is supporting evidence, stock
+labels remain canonical, and ordering FAQs are integrated as a secondary service
+control. Staff handoff stays in the contextual guide instead of being duplicated
+in the rail. The rail must remain useful before selection and must not duplicate
+catalog, basket, product, or conversation truth.
+
+The basket is always visible as a wood-and-canvas dock and fills with brief
+parcel feedback only after the canonical basket changes. Count, names, and
+subtotal come from StoreContext; editing and order review stay in the canonical
+checkout. Ambient glow, grain, pendant light, and dust add depth behind controls
+and never intercept input. On phone widths the guide starts tucked, the basket
+compacts, and both remain clear of the non-shrinking product rail. Reduced
+motion removes pop, drift, walk, wave, and parcel-drop animation without
+removing guide or basket functions.
+
+At phone-landscape heights of 400px or less, the fallback card becomes a compact
+two-column summary that retains the verified shelf blurb. It, the shelf-step
+controls, and the canonical product rail occupy separate vertical bands. The
+812×375 reduced-motion frame at 125% root text verifies those non-overlap bounds,
+selected-product access, Leave, and no document overflow.
 
 ### Storefront guest-inbox interaction contract
 
@@ -339,6 +532,14 @@ transitions, and respect reduced motion.
 Loading, empty, permission, conflict, success, and retry states avoid decorative
 motion and horizontal overflow at 375px.
 
+The paid-AI spend-control card follows the same register: it shows the current
+version and fail-closed state, separates SuperAdmin editing from ordinary staff
+read-only copy, uses USD fields with explicit cap labels, and keeps all fixed
+safeguards visible. Enabling is a deliberate checkbox plus typed
+`ENABLE_PAID_AI`, followed by a reason; unavailable/prepared states point to
+the manual two-Project fallback and never resemble a successful provider call.
+Fields and buttons remain 44px or larger and stack cleanly at 375px.
+
 ### Admin system-readiness interaction contract
 
 System Readiness is a compact Admin BOS evidence sheet, not a monitoring
@@ -365,6 +566,72 @@ prompt. Finalization stays open on failure, clearly requires a discrepancy note
 when counts vary, uses 44px or larger primary targets, and avoids decorative
 motion that would slow repeated scans. Reduced-motion and keyboard use remain
 first-class.
+
+### Admin connected-workflow interaction contract
+
+The workflow graph uses the established dense Admin BOS product register and
+presents one connected operational system, not seven decorative flowcharts.
+Every step remains selectable on a bounded pan/zoom canvas; sequence, decision,
+convergence, enabling, and recovery-loop edges must remain visually distinct,
+with written branch labels where the choice changes operational meaning. Search
+or workflow focus may reduce emphasis but must not remove graph context. The
+detail surface answers three staff questions in order: where the step came from,
+what can be done next, and what real screen or source grounds the guidance.
+Neighbor steps and mapped real screens are keyboard reachable with at least
+44px controls. Route tracing excludes loopbacks from finite walks without hiding
+them from the map. At 375px, controls stay inside the viewport and the canvas is
+pannable rather than forcing document-level horizontal scrolling. Motion is
+limited to direct pan/zoom feedback and respects reduced motion; the graph never
+implies permission, execution, provider state, or completion merely because a
+node is visible.
+
+The guide header exposes its version, approval state, and operational authority.
+Draft versions say `DRAFT — NOT LOCKED`; no effective date is implied before
+approval. Checklist marks and training examples are explicitly browser-local
+rehearsal, use the Admin one-family typography and 44px controls, and never
+imitate a successful scan or command. An example may show the expected record
+shape only after warning that it calls no scanner, database, provider, or
+customer channel. The primary action names the actual destination screen, and
+unavailable automation remains written as unavailable rather than styled as a
+disabled-but-soon capability.
+
+The searchable Operations guide uses the same interaction contract. Each
+structured procedure displays status, authorized role, prerequisites, exact
+entry point, ordered actions, validations/blockers, promised canonical result,
+forbidden shortcuts, recovery, version, and sources. On phone these groups stack
+without horizontal dependency; primary navigation remains at least 44px. A
+prepared or unavailable procedure stays readable but cannot visually resemble
+an enabled action, and the paid-API intake path always exposes its manual
+two-Project fallback while activation is blocked.
+
+The outcome-first guide extends that contract without becoming another work
+tracker. Its opening question is `What do you want to accomplish?`; search and
+plain-language choices resolve to one authoritative procedure. The procedure
+shows one current step prominently, with previous and upcoming steps compact on
+phone. Every step uses the same reading order: where to go, what exact control
+to use, what input/evidence is required, what action staff performs, what should
+happen, what canonical evidence proves completion, and how to recover. An
+`Open this workspace` action navigates to and focuses a stable, visibly labelled
+control but never activates it. A missing target is an inline guide error with a
+source/recovery path, not a broad fallback jump.
+
+Step states are `Ready`, `Current`, `Waiting for external result`, `Verified by
+workflow`, `Blocked`, and `Unavailable`. Only the owning workflow's bounded
+canonical read state may produce `Verified by workflow`; guide clicks, copied
+prompts, open screens, and browser-local rehearsal never do. Manual evidence
+review is labelled as such. The guide may remember the last viewed instruction
+locally, but it does not display that memory as operational progress.
+
+An external handoff is a visibly separate work unit naming the approved private
+tool/Project, allowed evidence, prohibited data, exact prompt or payload,
+expected return format, K2 return field, validation, and fallback. `Copy approved
+prompt` copies only the versioned customer-free payload. Staff still open and
+operate the external tool themselves. Loading, empty search, no matching
+procedure, permission denial, missing control, clipboard denial, invalid return,
+stale canonical state, ambiguous timeout, offline, conflict, blocked, and
+unavailable states remain inside the same step surface with one clear next
+action. Frequent navigation is crisp and non-decorative; status is never
+communicated by color or animation alone.
 
 ### Admin lot and expiry interaction contract
 

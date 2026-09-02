@@ -1,12 +1,19 @@
 import { createContext, useContext, useMemo, useState, useEffect, useRef } from 'react'
 import { flushSync } from 'react-dom'
-import { supabase } from '../lib/supabaseClient'
+import { getSupabaseClient, isSupabaseConfigured } from '../lib/lazySupabaseClient'
 import { products as localProducts } from '../data/products'
 import { guestBffEnabled, postGuestCommerce } from '../services/guestCommerceService'
 import { customerAccountEnabled } from '../services/customerAccountService'
+import { loadProductKnowledge } from '../lib/productKnowledgeSource'
+import { addCartItems, productStock, validateCartForSubmission } from '../lib/cartInventory'
+import { STOREFRONT_PATH_TO_VIEW, STOREFRONT_VIEW_TO_PATH } from '../lib/storefrontRoutes'
 
 const StoreContext = createContext(null)
 const CATALOG_REFRESH_INTERVAL_MS = 60_000
+const LEGACY_QUERY_VIEWS = new Set([
+  'home', 'catalog', 'store', 'pasabuy', 'wholesale', 'contact', 'account',
+  'messages', 'checkout', 'confirmation',
+])
 
 const NO_ADMIN_RUNTIME = {
   user: null,
@@ -46,22 +53,17 @@ function parseLocationState() {
       const sku = pathname.slice(8)
       if (sku) return { view: 'master_product', productId: decodeURIComponent(sku) }
     }
-    if (pathname === 'catalog' || pathname === 'cabinet' || pathname === 'shop') return { view: 'catalog', productId: null }
-    if (pathname === 'pasabuy') return { view: 'pasabuy', productId: null }
-    if (pathname === 'trade' || pathname === 'wholesale') return { view: 'wholesale', productId: null }
-    if (pathname === 'contact') return { view: 'contact', productId: null }
-    if (pathname === 'account') return { view: 'account', productId: null }
-    if (pathname === 'messages') return { view: 'messages', productId: null }
-    if (pathname === 'checkout') return { view: 'checkout', productId: null }
-    if (pathname === 'confirmation') return { view: 'confirmation', productId: null }
+    const routedView = pathname ? STOREFRONT_PATH_TO_VIEW[`/${pathname}`] : null
+    if (routedView) return { view: routedView, productId: null }
 
+    if (pathname) return { view: 'not_found', productId: null }
     if (params.get('product')) return { view: 'master_product', productId: params.get('product') }
-    if (params.get('view')) return { view: params.get('view'), productId: params.get('productId') || null }
+    if (LEGACY_QUERY_VIEWS.has(params.get('view'))) return { view: params.get('view'), productId: null }
     if (customerAccountEnabled() && params.get('account') === 'continue') return { view: 'account', productId: null }
 
     return { view: 'home', productId: null }
   } catch {
-    return { view: 'home', productId: null }
+    return { view: 'not_found', productId: null }
   }
 }
 
@@ -70,6 +72,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   const [view, setView] = useState(initialLoc.view)
   const [productId, setProductId] = useState(initialLoc.productId)
   const [pasabuyPrefill, setPasabuyPrefill] = useState(null)
+  const [productQuestionPrefill, setProductQuestionPrefill] = useState(null)
   
   const [cart, setCart] = useState(() => {
     if (typeof window === 'undefined') return []
@@ -156,6 +159,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       if (!claimedVouchers.includes(cleanCode)) setClaimedVouchers(previous => [...previous, cleanCode])
       return { success: true, message: `${coupon.code} applied. It will be rechecked when you submit.`, coupon }
     }
+    const supabase = await getSupabaseClient().catch(() => null)
     if (!supabase) return { success: false, message: 'Coupon validation is unavailable.' }
     const { data, error } = await supabase.rpc('validate_coupon', {
       p_code: cleanCode,
@@ -213,48 +217,82 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   }, [isAdmin])
 
   useEffect(() => {
+    let disposed = false
+    let productsChannel = null
+    let refreshInterval = null
     fetchProducts()
-
-    if (!supabase) return;
-
-    const productsChannel = supabase
-      .channel('public:products:store')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
-      .subscribe()
 
     const refreshWhenVisible = () => {
       if (document.visibilityState === 'visible') fetchProducts()
     }
-    const refreshInterval = window.setInterval(refreshWhenVisible, CATALOG_REFRESH_INTERVAL_MS)
-    document.addEventListener('visibilitychange', refreshWhenVisible)
+
+    if (isSupabaseConfigured) {
+      getSupabaseClient().then((supabase) => {
+        if (disposed || !supabase) return
+        productsChannel = supabase
+          .channel('public:products:store')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
+          .subscribe()
+        refreshInterval = window.setInterval(refreshWhenVisible, CATALOG_REFRESH_INTERVAL_MS)
+        document.addEventListener('visibilitychange', refreshWhenVisible)
+      }).catch(() => setLoading(false))
+    }
 
     return () => {
-      window.clearInterval(refreshInterval)
+      disposed = true
+      if (refreshInterval) window.clearInterval(refreshInterval)
       document.removeEventListener('visibilitychange', refreshWhenVisible)
-      supabase.removeChannel(productsChannel)
+      if (productsChannel) getSupabaseClient().then(client => client?.removeChannel(productsChannel)).catch(() => {})
     }
   }, [])
 
   const fetchProducts = async () => {
-    if (!supabase) { setLoading(false); return }
+    if (!isSupabaseConfigured) { setLoading(false); return }
     if (catalogRefreshInFlightRef.current) return
     catalogRefreshInFlightRef.current = true
     try {
+      const supabase = await getSupabaseClient()
+      if (!supabase) return
       const [productsResult, stockResult] = await Promise.all([
-        supabase.from('products').select('*').in('status', ['Live', 'Active', 'Unlisted']),
+        // `published` is the staff-controlled publication flag, set from the
+        // Published toggle in Sheet.jsx and guarded by PhotoManagerModal's
+        // primary-photo requirement. Honouring it here is what keeps unpublished
+        // and mock catalog rows off the public storefront; status alone is not a
+        // publication decision.
+        supabase.from('products').select('*').in('status', ['Live', 'Active', 'Unlisted']).eq('published', true),
         supabase.from('v_product_stock_from_batches').select('sku, stock_from_batches'),
       ])
 
-      if (!productsResult.error && productsResult.data && !stockResult.error && stockResult.data) {
-        const stockBySku = Object.fromEntries(
-          stockResult.data.map(r => [r.sku, r.stock_from_batches])
-        )
+      // The catalog renders whenever the product read succeeds. These two reads
+      // were previously coupled all-or-nothing, so a permission error on the
+      // stock view discarded a perfectly good product list and blanked the
+      // entire storefront — which is exactly what a revoked anon grant on
+      // v_product_stock_from_batches did in production.
+      if (!productsResult.error && productsResult.data) {
+        const stockAvailable = !stockResult.error && stockResult.data
+          ? Object.fromEntries(stockResult.data.map(r => [r.sku, r.stock_from_batches]))
+          : null
+
+        // When the FEFO projection is unavailable, fall back to the product
+        // row's own stock figure rather than inventing one. Stock is never
+        // fabricated upward, so the catalogue cannot assert stock it cannot
+        // honour.
         const merged = productsResult.data.map(p => ({
           ...p,
-          stock_available: stockBySku[p.sku] ?? 0,
+          stock_available: stockAvailable
+            ? (Object.hasOwn(stockAvailable, p.sku) ? Number(stockAvailable[p.sku]) : null)
+            : (p.stock_available === null || p.stock_available === undefined
+                ? null
+                : Number(p.stock_available)),
         }))
         setDbProducts(merged)
       }
+
+      // Approved product knowledge, loaded alongside the catalog it describes.
+      // Deliberately not awaited with the catalog: a product must render as
+      // soon as its price and stock are known, and its description arriving a
+      // moment later is not a reason to hold the shelf back.
+      loadProductKnowledge(supabase).catch(() => {})
     } catch {
       // Preserve last known-good snapshot
     } finally {
@@ -303,6 +341,9 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         ingredients: dbP.ingredients || localP?.ingredients || null,
         allergens: dbP.allergens || localP?.allergens || null,
         net_weight: dbP.net_weight || localP?.net_weight || null,
+        // Measured packed parcel, not the display net weight. Null means the SKU
+        // is unweighed, which keeps its orders on the quoted-after-review path.
+        shipping_weight_g: Number.isInteger(dbP.shipping_weight_g) ? dbP.shipping_weight_g : null,
         package_type: dbP.package_type || localP?.package_type || null,
         storage_instructions: dbP.storage_instructions || localP?.storage_instructions || null,
         finished_product_details: dbP.finished_product_details || localP?.finished_product_details || null,
@@ -333,25 +374,9 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
 
   const syncLocation = (nextView, nextProductId = null) => {
     if (typeof window === 'undefined') return
-    let path = '/'
+    let path = STOREFRONT_VIEW_TO_PATH[nextView] || '/'
     if (nextView === 'master_product' && nextProductId) {
       path = `/product/${encodeURIComponent(nextProductId)}`
-    } else if (nextView === 'catalog') {
-      path = '/catalog'
-    } else if (nextView === 'pasabuy') {
-      path = '/pasabuy'
-    } else if (nextView === 'wholesale') {
-      path = '/trade'
-    } else if (nextView === 'contact') {
-      path = '/contact'
-    } else if (nextView === 'account') {
-      path = '/account'
-    } else if (nextView === 'messages') {
-      path = '/messages'
-    } else if (nextView === 'checkout') {
-      path = '/checkout'
-    } else if (nextView === 'confirmation') {
-      path = '/confirmation'
     }
     try {
       if (window.location.pathname !== path && !window.location.search.includes('account=continue')) {
@@ -377,20 +402,30 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     })
   }
 
-  const go = (v) => {
+  const go = (v, { focusSelector = '' } = {}) => {
     syncLocation(v, null)
-    if (!document.startViewTransition) {
+    const updateView = () => {
       setView(v)
       setCartOpen(false)
       window.scrollTo(0, 0)
+    }
+    const focusDestination = () => {
+      if (focusSelector) {
+        document.querySelector(focusSelector)?.focus({ preventScroll: true })
+      }
+    }
+    if (!document.startViewTransition) {
+      if (focusSelector) {
+        flushSync(updateView)
+        focusDestination()
+      } else {
+        updateView()
+      }
       return
     }
     document.startViewTransition(() => {
-      flushSync(() => {
-        setView(v)
-        setCartOpen(false)
-        window.scrollTo(0, 0)
-      })
+      flushSync(updateView)
+      focusDestination()
     })
   }
 
@@ -403,21 +438,38 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     setPasabuyPrefill(null)
   }
 
-  const addToCart = (id, qty = 1) =>
-    setCart((prev) => {
-      const product = getProduct(id)
-      if (!product) return prev
-      const safeQty = Math.max(1, Math.min(qty, product.stock))
-      const existing = prev.find((line) => line.id === id)
-      if (existing) {
-        return prev.map((line) =>
-          line.id === id
-            ? { ...line, qty: Math.min(product.stock, line.qty + safeQty) }
-            : line,
-        )
-      }
-      return [...prev, { id, qty: safeQty }]
+  // MAP-027: hand a product question to the canonical guest conversation
+  // boundary. Bounded context only — SKU, public product name, originating
+  // surface, and the customer's own question. No conversation history, no
+  // identity, no private evidence, and no response-time promise.
+  const askStaffAboutProduct = ({ sku = '', productName = '', question = '', origin = 'product-page' } = {}) => {
+    const trimmed = String(question || '').trim()
+    if (!trimmed) return
+    const reference = sku ? `${productName || 'Product'} (SKU: ${sku})` : productName || 'Product'
+    setProductQuestionPrefill({
+      sku,
+      productName,
+      origin,
+      message: `About ${reference}\n\n${trimmed}`,
     })
+    go('messages')
+  }
+
+  const clearProductQuestionPrefill = () => {
+    setProductQuestionPrefill(null)
+  }
+
+  const addToCart = (id, qty = 1) => {
+    const result = addCartItems(cart, products, [{ id, qty }])
+    if (result.ok) setCart(result.cart)
+    return result
+  }
+
+  const addBundleToCart = (ids, qty = 1) => {
+    const result = addCartItems(cart, products, ids.map((id) => ({ id, qty })))
+    if (result.ok) setCart(result.cart)
+    return result
+  }
 
   const setQty = (id, qty) =>
     setCart((prev) =>
@@ -427,8 +479,11 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
             if (line.id !== id) return line
             const product = getProduct(id)
             if (!product) return line
-            return { ...line, qty: Math.min(qty, product.stock) }
-          }),
+            const stock = productStock(product)
+            if (stock === null) return line
+            if (stock <= 0) return null
+            return { ...line, qty: Math.min(qty, stock) }
+          }).filter(Boolean),
     )
 
   const addRequest = async (payload) => {
@@ -458,10 +513,11 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         id: saved.public_reference,
         item: payload.item.trim(),
         status: 'Request received',
-        eta: 'Quote review within 24 hours',
+        eta: 'Staff review required',
       }, ...prev])
       return { ok: true, request: saved }
     }
+    const supabase = await getSupabaseClient().catch(() => null)
     if (!supabase) {
       return { ok: false, error: 'Request service is not configured yet. Please contact K2 Jimzon directly.' }
     }
@@ -487,7 +543,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       id: saved.public_reference,
       item: payload.item.trim(),
       status: 'Request received',
-      eta: 'Quote review within 24 hours',
+      eta: 'Staff review required',
     }, ...prev])
     return { ok: true, request: saved }
   }
@@ -538,8 +594,20 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   }
 
   const runPlaceOrderRequest = async (customerDetails) => {
-    if (!guestBffEnabled() && !supabase) {
+    if (!guestBffEnabled() && !isSupabaseConfigured) {
       return { ok: false, error: 'Order requests are not configured yet. Please contact K2 Jimzon directly.' }
+    }
+
+    const availability = validateCartForSubmission(cart, products)
+    if (!availability.ok) {
+      const messages = {
+        EMPTY_CART: 'Your cart is empty.',
+        PRODUCT_UNAVAILABLE: 'A product in your cart is no longer available. Return to the catalog and review your cart.',
+        STOCK_UNKNOWN: 'Stock for a product in your cart cannot be confirmed right now. Please wait for the catalog to refresh or contact K2 staff.',
+        OUT_OF_STOCK: 'A product in your cart is now out of stock. Return to the catalog and review your cart.',
+        INSUFFICIENT_STOCK: 'The requested quantity is no longer available. Return to your cart and lower the quantity.',
+      }
+      return { ok: false, code: availability.code, error: messages[availability.code] || 'Cart availability could not be confirmed.' }
     }
 
     const items = totals.lines.map(line => ({ sku: line.id, quantity: line.qty }))
@@ -563,6 +631,8 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       return finishOrder(result.data)
     }
 
+    const supabase = await getSupabaseClient().catch(() => null)
+    if (!supabase) return { ok: false, error: 'Order requests are not configured yet. Please contact K2 Jimzon directly.' }
     const { data, error } = await supabase.rpc('submit_order_request_v2', {
       p_customer_name: customerDetails.name?.trim(),
       p_customer_email: customerDetails.email?.trim() || null,
@@ -583,6 +653,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   }
 
   const finishOrder = (saved) => {
+    syncLocation('confirmation')
     const finish = () => {
       setOrder({
         id: saved.public_reference,
@@ -614,6 +685,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     openProduct,
     cart,
     addToCart,
+    addBundleToCart,
     setQty,
     cartOpen,
     setCartOpen,
@@ -658,8 +730,11 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     pasabuyPrefill,
     requestPasabuyItem,
     clearPasabuyPrefill,
+    productQuestionPrefill,
+    askStaffAboutProduct,
+    clearProductQuestionPrefill,
     ...totals,
-  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, requests, conversations, inboxState, products, listedProducts, loading, totals, isDark, appliedCoupon, claimedVouchers, pasabuyPrefill])
+  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, requests, conversations, inboxState, products, listedProducts, loading, totals, isDark, appliedCoupon, claimedVouchers, pasabuyPrefill, productQuestionPrefill])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

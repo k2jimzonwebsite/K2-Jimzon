@@ -74,10 +74,34 @@ The new `verify:map017-portable` command reproduced that entire local lifecycle
 from a stopped-server state and shut the server down afterward; its focused
 configuration/refusal regressions, all 20 schema-truth tool tests, and all 11
 authorization contract tests pass. The generated artifact hash is
-`8AF7C69ABFBE6694302AC8AFD30A177EBEEA8461BD7B0963CD3AE23570DFC5F1`; the
+`D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62`; the
 planned ledger version is `20260824143000`. These values are evidence and apply
-gates, not authorization. OWNER-005 remains undecided and no production apply
-was attempted.
+gates, not production-apply evidence. OWNER-005 is authorized for that exact
+payload, but its named backup and verified-restore fields remain pending, so no
+production apply was attempted. The hash was corrected on 26 August 2026 after
+independent review proved the earlier recorded token did not identify the final
+committed SQL; the SQL artifacts were unchanged by that record correction.
+
+The same portable lifecycle now creates a real custom-format archive, encrypts
+it with the production backup envelope implementation, restores it into the
+separate `k2_map017_restore_verification_portable` loopback database, and runs
+the restore health gate. The source fixture contains 14 legacy `products_old`
+rows; the command fingerprints them before/after the dump, authenticates only the
+redacted count/hash with the envelope, and requires exact restored equality. The
+production tools are:
+
+```powershell
+npm.cmd run evidence:map017-backups
+npm.cmd run backup:map017-production -- <required confirmations>
+npm.cmd run verify:map017-production-restore -- --envelope=<absolute-path> --confirm-isolated-restore
+```
+
+The 26 August read-only provider inventory returned PITR disabled, WAL-G enabled,
+and zero available backup entries. The backup and restore tools pass locally,
+including tamper and restored-row-drift refusal, but no production envelope,
+off-site copy/retrieval, representative-data check,
+or Storage-object recovery exists. OWNER-005 therefore remains `Pending` at the
+backup/restore gate.
 
 The export omits function bodies but includes boolean-only signals for live
 staff/Admin/AAL2 references and explicit exception paths. These signals back the

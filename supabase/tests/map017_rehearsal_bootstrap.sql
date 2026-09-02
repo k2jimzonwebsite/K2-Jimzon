@@ -59,9 +59,22 @@ create table public.product_batches(
   sku text not null,
   quantity_available integer not null default 0
 );
+create table public.error_reports(
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  message text,
+  stack text,
+  url text,
+  user_agent text,
+  context jsonb not null default '{}'::jsonb,
+  status text not null default 'new'
+);
 
 insert into public.products(sku, status) values
   ('LIVE-001', 'Live'), ('UNLISTED-001', 'Unlisted'), ('DRAFT-001', 'Draft');
+insert into public.products_old(sku)
+select 'LEGACY-' || lpad(value::text, 3, '0')
+from generate_series(1, 14) as value;
 insert into public.product_batches(sku, quantity_available) values
   ('LIVE-001', 5), ('LIVE-001', 2), ('UNLISTED-001', 3), ('DRAFT-001', 99);
 
@@ -74,11 +87,13 @@ alter table public.channel_credentials enable row level security;
 alter table public.staff_allocations enable row level security;
 alter table public.products enable row level security;
 alter table public.product_batches enable row level security;
+alter table public.error_reports enable row level security;
 
 grant all on public.brands, public.categories, public.warehouses,
   public.product_drafts, public.products_old to anon, authenticated;
 grant select on public.products to anon, authenticated;
 grant select, insert, update, delete on public.product_batches to authenticated;
+grant select, insert on public.error_reports to anon, authenticated;
 grant usage, select on all sequences in schema public to anon, authenticated;
 
 create policy "Admin Full Access" on public.brands for all to public using (true) with check (true);
@@ -88,6 +103,10 @@ create policy "Staff manage product_drafts" on public.product_drafts for all to 
 create policy "Admins manage products" on public.products_old for all to public using (true) with check (true);
 create policy products_public_read on public.products for select to anon, authenticated using (true);
 create policy batches_staff_read on public.product_batches for select to authenticated using (public.is_staff());
+create policy error_reports_public_insert on public.error_reports
+  for insert to anon, authenticated with check (true);
+create policy error_reports_staff_read on public.error_reports
+  for select to authenticated using (public.is_staff());
 
 create view public.v_channel_catalog_readiness with (security_invoker = true) as select id, name from public.brands;
 create view public.v_expiring_batches with (security_invoker = true) as select id, sku from public.product_batches;

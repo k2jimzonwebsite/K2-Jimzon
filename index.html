@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <meta id="theme-color" name="theme-color" content="#FAF7F2" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <!-- iOS does not support SVG for apple-touch-icon, so this must be a raster. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <script src="/theme-init.js"></script>
     <link rel="manifest" href="/manifest.json" />
     <title>K2 Jimzon — Italian imports, direct to the Philippines</title>
@@ -12,12 +15,26 @@
       name="description"
       content="Authentic Italian products, sourced in Italy by our own buyers and flown monthly to Manila. Retail, wholesale, and pasabuy requests — with live stock across every channel."
     />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="K2 Jimzon" />
+    <meta property="og:title" content="K2 Jimzon — Italian imports, direct to the Philippines" />
+    <meta property="og:description" content="Authentic Italian products sourced in Italy and fulfilled in Manila, with availability confirmed by K2 staff." />
+    <link rel="canonical" href="https://www.k2jimzon.com/" />
+    <meta property="og:url" content="https://www.k2jimzon.com/" />
+    <!-- No social crawler renders SVG, and summary_large_image expects a
+         1200x630 raster. An SVG here produced a blank card on every platform. -->
+    <meta property="og:image" content="https://www.k2jimzon.com/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="K2 Jimzon — Italian imports, direct to the Philippines" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="K2 Jimzon — Italian imports, direct to the Philippines" />
+    <meta name="twitter:description" content="Authentic Italian products sourced in Italy and fulfilled in Manila, with availability confirmed by K2 staff." />
+    <meta name="twitter:image" content="https://www.k2jimzon.com/og-card.png" />
+    <meta name="twitter:image:alt" content="K2 Jimzon — Italian imports, direct to the Philippines" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Source+Sans+3:ital,wght@0,400..800;1,400..700&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body>
     <div id="root"></div>

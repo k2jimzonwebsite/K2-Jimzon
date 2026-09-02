@@ -1,16 +1,66 @@
+import { useEffect, useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 import { CrimsonButton, GhostButton, TrustBadge } from '../components/ui/bits'
 import { CheckIcon, InboxIcon } from '../components/ui/icons'
-import { guestBffEnabled } from '../services/guestCommerceService'
+import { guestBffEnabled, listGuestOrders } from '../services/guestCommerceService'
+
+function receiptOrder(saved) {
+  return {
+    id: saved.public_reference,
+    total: Number(saved.total_amount || 0),
+    count: Number(saved.item_count || 0),
+    wholesale: false,
+    status: saved.status,
+    paymentStatus: saved.payment_status,
+  }
+}
 
 export default function Confirmation() {
   const { order, go } = useStore()
+  const [restoredOrder, setRestoredOrder] = useState(order)
+  const [restoreState, setRestoreState] = useState(order ? 'ready' : 'loading')
 
-  if (!order) {
+  useEffect(() => {
+    if (order) {
+      setRestoredOrder(order)
+      setRestoreState('ready')
+      return undefined
+    }
+    if (!guestBffEnabled()) {
+      setRestoreState('unavailable')
+      return undefined
+    }
+
+    let active = true
+    listGuestOrders().then((result) => {
+      if (!active) return
+      const latest = result.ok && Array.isArray(result.data) ? result.data[0] : null
+      if (latest?.public_reference) {
+        setRestoredOrder(receiptOrder(latest))
+        setRestoreState('ready')
+      } else {
+        setRestoreState(result.ok ? 'empty' : 'unavailable')
+      }
+    })
+    return () => { active = false }
+  }, [order])
+
+  const currentOrder = order || restoredOrder
+
+  if (!currentOrder) {
     return (
       <main className="mx-auto max-w-lg px-4 py-20 text-center">
-        <p className="text-base text-navy-soft">There is no current order request.</p>
+        <h1 className="font-serif text-3xl font-semibold tracking-tight">
+          {restoreState === 'loading' ? 'Loading order request' : restoreState === 'empty' ? 'No order request found' : 'Order request status unavailable'}
+        </h1>
+        <p className="mt-3 text-base text-navy-soft" role={restoreState === 'unavailable' ? 'alert' : undefined}>
+          {restoreState === 'loading'
+            ? 'Checking the orders authorized for this browser…'
+            : restoreState === 'empty'
+              ? 'This browser does not have a saved order request.'
+              : 'We could not restore a receipt for this browser. Use your reference number when contacting K2 staff.'}
+        </p>
         <GhostButton className="mt-6" onClick={() => go('home')}>Back to the catalog</GhostButton>
       </main>
     )
@@ -23,8 +73,9 @@ export default function Confirmation() {
       </div>
       <h1 className="mt-5 font-serif text-3xl font-semibold tracking-tight">Order request received</h1>
       <p className="mt-2 text-base text-navy-soft">
-        Reference <span className="font-semibold text-navy">{order.id}</span> · {order.count}{' '}
-        {order.count === 1 ? 'item' : 'items'} · estimated {peso(order.total)}
+        Reference <span className="font-semibold text-navy">{currentOrder.id}</span>
+        {currentOrder.count > 0 && <> · {currentOrder.count} {currentOrder.count === 1 ? 'item' : 'items'}</>}
+        {' '}· estimated {peso(currentOrder.total)}
       </p>
 
       <div className="mt-8 rounded-2xl border border-line bg-paper p-6 text-left shadow-sm sm:p-7">
@@ -33,6 +84,9 @@ export default function Confirmation() {
         </p>
         <p className="mt-2 text-sm leading-relaxed text-navy-soft">
           No payment was charged. Our staff will check inventory in Manila, calculate exact delivery options, and contact you with payment details.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-navy-soft">
+          There is no self-service cancellation or return. Message K2 staff; each request is reviewed case by case.
         </p>
         <ol className="mt-6 space-y-4">
           {[

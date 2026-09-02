@@ -116,6 +116,10 @@ function owner005BackupVerified(ownerDecisionText, backupEvidence) {
   return verified && evidence === backupEvidence
 }
 
+function owner005RecoveryAccessVerified(ownerDecisionText) {
+  return /\*\*Owner recovery access:\*\*\s*Verified\b/i.test(owner005Section(ownerDecisionText))
+}
+
 function parseEnvFile(filePath = ENV_PATH) {
   if (!fs.existsSync(filePath)) return {}
   const values = {}
@@ -298,6 +302,9 @@ export function checkApplyGating(options, contract, ownerDecisionText) {
   if (!owner005BackupVerified(ownerDecisionText, options.backupEvidence)) {
     missing.push('OWNER-005 backup evidence must exactly match and be Verified')
   }
+  if (!owner005RecoveryAccessVerified(ownerDecisionText)) {
+    missing.push('OWNER-005 owner recovery access must be Verified')
+  }
   if (options.confirmLedgerVersion !== contract.ledgerVersion) {
     missing.push(`--confirm-ledger-version=${contract.ledgerVersion}`)
   }
@@ -392,6 +399,15 @@ export function loadMap017ApplyContract() {
 export function executeDryRun() {
   const { artifacts, contract } = loadMap017ApplyContract()
   const ownerDecisionText = fs.readFileSync(OWNER_QUESTIONS_PATH, 'utf8')
+  const ownerAuthorized = owner005Authorized(ownerDecisionText)
+  const recordedBackupEvidence = /\*\*Backup evidence ID:\*\*\s*([^\r\n]+)/i
+    .exec(owner005Section(ownerDecisionText))?.[1]?.trim()
+  const backupVerified = Boolean(
+    recordedBackupEvidence
+    && !/^pending$/i.test(recordedBackupEvidence)
+    && owner005BackupVerified(ownerDecisionText, recordedBackupEvidence),
+  )
+  const recoveryAccessVerified = owner005RecoveryAccessVerified(ownerDecisionText)
   console.log('===========================================================')
   console.log('   MAP-017 MIGRATION DRY-RUN & PREFLIGHT VERIFICATION      ')
   console.log('===========================================================')
@@ -402,7 +418,7 @@ export function executeDryRun() {
   console.log(`Rollback: supabase/map017_public_write_boundary_rollback.sql (${artifacts.rollbackSize} bytes)`)
   console.log(`Artifact SHA-256: ${contract.artifactSha256}`)
   console.log(`Planned ledger version: ${contract.ledgerVersion}`)
-  console.log(`OWNER-005 recorded authorization: ${owner005Authorized(ownerDecisionText) ? 'YES' : 'NO'}`)
+  console.log(`OWNER-005 recorded authorization: ${ownerAuthorized ? 'YES' : 'NO'}`)
   console.log('\nPlanned Hardening Operations:')
   console.log('  1. Revoke unsafe postgres-owned future-object defaults')
   console.log('  2. Revoke anonymous/browser access to seven catalog and legacy tables')
@@ -415,7 +431,17 @@ export function executeDryRun() {
   console.log('  [PASS] SQL artifacts and transaction shape validated')
   console.log('  [PASS] Apply payload bound to SHA-256 and fixed ledger identity')
   console.log('  [PASS] Independent post-commit verification and ambiguous-outcome recovery prepared')
-  console.log('  [OPEN] OWNER-005 remains unauthorized; no apply was attempted')
+  console.log(ownerAuthorized
+    ? '  [PASS] OWNER-005 is authorized'
+    : '  [OPEN] OWNER-005 remains unauthorized; no apply was attempted')
+  console.log(backupVerified
+    ? '  [PASS] Named production database, Storage, and off-site backup evidence is verified'
+    : recordedBackupEvidence && !/^pending$/i.test(recordedBackupEvidence)
+      ? '  [OPEN] Named production backup evidence is not fully verified; no apply was attempted'
+      : '  [OPEN] Named production backup evidence and restore verification remain pending; no apply was attempted')
+  console.log(recoveryAccessVerified
+    ? '  [PASS] Owner recovery access is verified'
+    : '  [OPEN] Owner recovery access remains unverified; no apply was attempted')
   console.log('  [OPEN] Post-commit recovery remains reviewed roll-forward, not insecure baseline restoration')
   console.log('\nDry-run complete. No changes were applied to any database.')
   return true

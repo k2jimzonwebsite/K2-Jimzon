@@ -98,7 +98,10 @@ Complete documentation lives in the [`/docs/`](./docs/README.md) directory:
 
 The following items are deferred pending owner business decisions in `K2 Jimzon - Brain/OWNER_QUESTIONS.md`:
 - **Online payment gateway**: Direct credit card / e-wallet processing (currently uses verified manual bank/QR payment verification).
-- **Custom storefront/admin domains**: Production DNS routing for `k2jimzon.ph` and `admin.k2jimzon.ph` (`OWNER-001`).
+- **Custom storefront/admin domains**: Hostinger DNS and Vercel custom-domain
+  routing for `k2jimzon.com`, `www.k2jimzon.com`, and `admin.k2jimzon.com` are
+  applied; Supabase Auth allowlists, crawler assets, and real-host acceptance
+  remain open under MAP-024 (`OWNER-001`).
 - **Production database hardening migration**: Prepared and rehearsed locally (`verify:map017-portable`), awaiting authorization under `OWNER-005`.
 
 ---

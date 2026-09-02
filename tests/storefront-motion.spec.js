@@ -6,12 +6,15 @@ test.describe('storefront interaction language', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 60000 })
     await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
 
-    const categoryTile = page.locator('.category-tile').first()
+    const categoryTile = page.getByRole('region', { name: 'The Italian Cabinet' })
+      .getByRole('button', { name: /Dolci & Biscotti/i })
     await categoryTile.scrollIntoViewIfNeeded()
     await expect(categoryTile).toBeVisible()
+    const categoryIcon = categoryTile.locator('span').first()
+    const idleBackground = await categoryIcon.evaluate(element => getComputedStyle(element).backgroundColor)
     await categoryTile.hover()
-    await expect.poll(() => categoryTile.locator('span').first().evaluate(element => getComputedStyle(element).transform))
-      .not.toBe('none')
+    await expect.poll(() => categoryIcon.evaluate(element => getComputedStyle(element).backgroundColor))
+      .not.toBe(idleBackground)
 
     const storySteps = page.locator('.story-step')
     await storySteps.nth(1).scrollIntoViewIfNeeded()
@@ -37,7 +40,8 @@ test.describe('storefront interaction language', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 60000 })
     await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
 
-    const categoryTile = page.locator('.category-tile').first()
+    const categoryTile = page.getByRole('region', { name: 'The Italian Cabinet' })
+      .getByRole('button', { name: /Dolci & Biscotti/i })
     await categoryTile.scrollIntoViewIfNeeded()
     await expect(categoryTile).toBeVisible()
     await expect(categoryTile).toHaveCSS('opacity', '1')

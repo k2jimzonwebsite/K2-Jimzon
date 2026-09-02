@@ -1,3 +1,5 @@
+import { AdminDialog } from '../../components/ui/AdminDialog'
+
 const peso = (value) => value == null
   ? 'Not recorded'
   : new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(Number(value) || 0)
@@ -9,7 +11,8 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
   const packed = String(order.status).toLowerCase() === 'packed'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="packing-slip-title">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
+      <AdminDialog onClose={onClose} labelledBy="packing-slip-title">
       <div className="max-h-[92vh] w-full max-w-2xl space-y-5 overflow-y-auto rounded-adm bg-white p-6 text-slate-900 shadow-2xl">
         <div className="flex flex-col justify-between gap-3 border-b border-slate-200 pb-4 print:hidden sm:flex-row sm:items-center">
           <div>
@@ -49,6 +52,7 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
           </div>
         </div>
       </div>
+      </AdminDialog>
     </div>
   )
 }

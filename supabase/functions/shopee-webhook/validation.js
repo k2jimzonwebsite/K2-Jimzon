@@ -1,110 +1,52 @@
-export const MAX_SHOPEE_PUSH_BYTES = 256 * 1024
+import {
+  MAX_PUSH_BYTES, assertPlainObject, assertReplayWindowConfig, assertWithinReplayWindow,
+  normalizedTimestampMs, readBoundedPushBody, safeExternalValue,
+} from '../_shared/marketplace-push.js'
 
-const SAFE_EXTERNAL_VALUE = /^[A-Za-z0-9._:-]{1,128}$/
+/**
+ * Shopee push validation.
+ *
+ * The bounded body read, replay window, and value-safety rules moved to
+ * `_shared/marketplace-push.js` (MAP-028 D3) so Lazada and TikTok inherit the
+ * reviewed implementation rather than a re-transcription. Error codes and
+ * exports are unchanged: every `SHOPEE_*` string this module produced before
+ * the extraction is still the string it produces.
+ *
+ * What stays here is the part that is genuinely Shopee's: how it identifies an
+ * event. `code` is Shopee's push type, and an order-status push (code 3) is
+ * keyed by shop, order number and status so a redelivery of the same transition
+ * resolves to the same identity while a real status change does not.
+ */
 
-function fail(code) {
-  throw new Error(code)
-}
+const PREFIX = 'SHOPEE'
+
+export const MAX_SHOPEE_PUSH_BYTES = MAX_PUSH_BYTES
 
 export async function readShopeePushBody(request, { timeoutMs } = {}) {
-  if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 30_000) {
-    fail('SHOPEE_BODY_TIMEOUT_INVALID')
-  }
-  const contentType = String(request.headers.get('content-type') || '').toLowerCase()
-  if (!/^application\/json(?:\s*;|$)/.test(contentType)) fail('SHOPEE_CONTENT_TYPE_INVALID')
-
-  const declaredLength = request.headers.get('content-length')
-  if (declaredLength !== null) {
-    const bytes = Number(declaredLength)
-    if (!Number.isSafeInteger(bytes) || bytes < 0) fail('SHOPEE_CONTENT_LENGTH_INVALID')
-    if (bytes > MAX_SHOPEE_PUSH_BYTES) fail('SHOPEE_PAYLOAD_TOO_LARGE')
-  }
-
-  if (!request.body) fail('SHOPEE_PAYLOAD_INVALID')
-  const reader = request.body.getReader()
-  const chunks = []
-  let total = 0
-  let timeoutId
-  const deadline = new Promise((_, reject) => {
-    timeoutId = setTimeout(() => reject(new Error('SHOPEE_BODY_READ_TIMEOUT')), timeoutMs)
-  })
-  try {
-    while (true) {
-      const { done, value } = await Promise.race([reader.read(), deadline])
-      if (done) break
-      total += value.byteLength
-      if (total > MAX_SHOPEE_PUSH_BYTES) {
-        await reader.cancel()
-        fail('SHOPEE_PAYLOAD_TOO_LARGE')
-      }
-      chunks.push(value)
-    }
-  } catch (error) {
-    await reader.cancel().catch(() => {})
-    throw error
-  } finally {
-    clearTimeout(timeoutId)
-    reader.releaseLock()
-  }
-
-  if (declaredLength !== null && total !== Number(declaredLength)) {
-    fail('SHOPEE_CONTENT_LENGTH_INVALID')
-  }
-  const bytes = new Uint8Array(total)
-  let offset = 0
-  for (const chunk of chunks) {
-    bytes.set(chunk, offset)
-    offset += chunk.byteLength
-  }
-  try {
-    return {
-      rawBody: new TextDecoder('utf-8', { fatal: true }).decode(bytes),
-      rawBytes: bytes,
-    }
-  } catch {
-    fail('SHOPEE_PAYLOAD_ENCODING_INVALID')
-  }
-}
-
-function normalizedTimestampMs(value) {
-  const numeric = typeof value === 'string' && /^\d{10,13}$/.test(value)
-    ? Number(value)
-    : value
-  if (!Number.isSafeInteger(numeric) || numeric <= 0) fail('SHOPEE_PAYLOAD_INVALID')
-  return numeric < 1_000_000_000_000 ? numeric * 1000 : numeric
-}
-
-function safeExternalValue(value) {
-  const normalized = String(value ?? '').trim()
-  if (!SAFE_EXTERNAL_VALUE.test(normalized)) fail('SHOPEE_PAYLOAD_INVALID')
-  return normalized
+  return readBoundedPushBody(request, { timeoutMs, prefix: PREFIX })
 }
 
 export function buildShopeeEventEnvelope(payload, { nowMs = Date.now(), maxAgeSeconds } = {}) {
-  if (!Number.isInteger(maxAgeSeconds) || maxAgeSeconds < 60 || maxAgeSeconds > 86_400) {
-    fail('SHOPEE_REPLAY_WINDOW_INVALID')
-  }
-  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
-    fail('SHOPEE_PAYLOAD_INVALID')
-  }
+  // Checked before the payload so a misconfigured function fails on its own
+  // configuration rather than appearing to reject a customer's event.
+  assertReplayWindowConfig(maxAgeSeconds, PREFIX)
+  assertPlainObject(payload, PREFIX)
 
   const code = payload.code
   const shopId = payload.shop_id
   if (!Number.isSafeInteger(code) || code < 0 || code > 1_000_000
       || !Number.isSafeInteger(shopId) || shopId <= 0) {
-    fail('SHOPEE_PAYLOAD_INVALID')
+    throw new Error('SHOPEE_PAYLOAD_INVALID')
   }
 
-  const timestampMs = normalizedTimestampMs(payload.timestamp)
-  const ageMs = nowMs - timestampMs
-  if (ageMs > maxAgeSeconds * 1000 || ageMs < -60_000) fail('SHOPEE_EVENT_STALE')
+  const timestampMs = normalizedTimestampMs(payload.timestamp, PREFIX)
+  assertWithinReplayWindow({ timestampMs, nowMs, maxAgeSeconds, prefix: PREFIX })
 
-  const data = payload.data
-  if (!data || typeof data !== 'object' || Array.isArray(data)) fail('SHOPEE_PAYLOAD_INVALID')
+  const data = assertPlainObject(payload.data, PREFIX)
 
   if (code === 3) {
-    const orderNumber = safeExternalValue(data.ordersn)
-    const status = safeExternalValue(data.status)
+    const orderNumber = safeExternalValue(data.ordersn, PREFIX)
+    const status = safeExternalValue(data.status, PREFIX)
     return {
       externalEventId: `${shopId}:${orderNumber}:${status}`,
       eventType: 'order_status',
@@ -113,7 +55,7 @@ export function buildShopeeEventEnvelope(payload, { nowMs = Date.now(), maxAgeSe
   }
 
   return {
-    externalEventId: `${shopId}:${safeExternalValue(payload.event_id)}`,
+    externalEventId: `${shopId}:${safeExternalValue(payload.event_id, PREFIX)}`,
     eventType: `push_${code}`,
     payload,
   }

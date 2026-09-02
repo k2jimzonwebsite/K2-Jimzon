@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
 import ImageUploadDropzone from '../../components/ui/ImageUploadDropzone'
 import { adminBffEnabled, assignProductMediaBff } from '../../services/adminBffService'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 const legacyItem = (url) => (url ? { url, objectPath: null } : null)
 
@@ -20,17 +21,6 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
   const [primary, setPrimary] = useState(() => legacyItem(product.primary_image_url))
   const [afterUse, setAfterUse] = useState(() => legacyItem(product.lifestyle_images?.[0]))
   const [samples, setSamples] = useState(() => (product.secondary_images || []).map(legacyItem))
-
-  useEffect(() => {
-    closeButtonRef.current?.focus()
-    const handleKeyDown = (event) => {
-      if (event.key !== 'Escape' || saving) return
-      if (dirty) setConfirmClose(true)
-      else onClose()
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [dirty, onClose, saving])
 
   const change = (setter) => (value) => {
     setter(value)
@@ -98,7 +88,8 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="photo-manager-title" aria-describedby="photo-manager-help">
+    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4">
+      <AdminDialog onClose={requestClose} closeDisabled={saving} initialFocusRef={closeButtonRef} labelledBy="photo-manager-title" describedBy="photo-manager-help">
       <div className="flex max-h-[100dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-adm border border-adm-line bg-adm-surface text-white shadow-2xl sm:max-h-[90dvh] sm:rounded-adm">
         <header className="flex items-start justify-between gap-4 border-b border-adm-line bg-black/35 px-4 py-4 sm:px-5">
           <div className="min-w-0">
@@ -149,6 +140,7 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
           </div>
         </footer>
       </div>
+      </AdminDialog>
     </div>
   )
 }

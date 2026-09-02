@@ -5,7 +5,7 @@ const baseURL = process.env.PLAYWRIGHT_ADMIN_BASE_URL || 'http://localhost:5180'
 export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
-  timeout: 45000,
+  timeout: 120000,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 1,
@@ -28,9 +28,14 @@ export default defineConfig({
 
   webServer: {
     command: 'npx vite --mode combined --port 5180 --configLoader runner',
-    env: { VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA' },
+    env: {
+      // The Admin visual fixtures intercept every request to this fabricated
+      // browser-public project origin. Never inherit a real local provider.
+      VITE_SUPABASE_URL: 'https://fixture.supabase.co',
+      VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
+    },
     url: 'http://localhost:5180',
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
 })

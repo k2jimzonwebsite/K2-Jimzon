@@ -14,7 +14,7 @@ import {
 } from '../services/adminBffService'
 
 const STAFF_ROLES = ['Admin', 'Staff']
-const isStaffRole = (role) => STAFF_ROLES.includes(role)
+const isStaffRole = (role) => STAFF_ROLES.includes(role) || role === 'SuperAdmin'
 
 export function useAdminAuthRuntime() {
   const [user, setUser] = useState(null)
@@ -92,7 +92,7 @@ export function useAdminAuthRuntime() {
         setIsAdmin(false)
       } else {
         setMfaRequired(false)
-        setAuthError('This Google account has no Admin or Staff access.')
+        setAuthError('This Google account has no Admin, Staff, or SuperAdmin access.')
         setIsAdmin(false)
         clearAdminOAuthReturn()
       }
@@ -299,7 +299,7 @@ export function useAdminAuthRuntime() {
         RATE_LIMITED: 'Too many invitations were attempted. Wait ten minutes and try again.',
         OPERATION_IN_PROGRESS: 'This invitation is already being processed. Try again shortly.',
         IDEMPOTENCY_CONFLICT: 'The invitation details changed. Close and retry the action.',
-        FORBIDDEN_ROLE: 'Only an Admin can invite staff.',
+        FORBIDDEN_ROLE: 'Only an Admin or SuperAdmin can invite staff.',
         INVALID_EMAIL: 'Enter a valid email address.',
       }
       return { ok: false, error: errors[payload.error] || 'The staff invitation could not be completed.' }

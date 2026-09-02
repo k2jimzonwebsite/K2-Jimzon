@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
 import { AlertIcon, CheckIcon, ShieldIcon, XIcon } from '../../components/ui/icons'
 import { adminBffEnabled, getAdminSystemReadinessBff } from '../../services/adminBffService'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 const INITIAL_STATE = { loading: true, serverBoundary: false, session: false, database: false, contracts: false, notice: '' }
 
@@ -16,9 +17,6 @@ export default function SystemDevOpsModal({ isOpen, onClose, secureMode }) {
     let active = true
     const controller = new AbortController()
     setState(INITIAL_STATE)
-    closeRef.current?.focus()
-    const handleKey = event => { if (event.key === 'Escape') onClose() }
-    window.addEventListener('keydown', handleKey)
 
     const load = async () => {
       if (secure) {
@@ -65,8 +63,8 @@ export default function SystemDevOpsModal({ isOpen, onClose, secureMode }) {
     load().catch(() => {
       if (active) setState({ ...INITIAL_STATE, loading: false, notice: safeUiError('ADMIN_HEALTH_FAILED') })
     })
-    return () => { active = false; controller.abort(); window.removeEventListener('keydown', handleKey) }
-  }, [isOpen, onClose, secure])
+    return () => { active = false; controller.abort() }
+  }, [isOpen, secure])
 
   if (!isOpen) return null
 
@@ -79,7 +77,8 @@ export default function SystemDevOpsModal({ isOpen, onClose, secureMode }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 sm:items-center sm:p-3" role="presentation">
-      <div className="flex max-h-[94dvh] w-full max-w-4xl flex-col overflow-hidden rounded-t-adm border border-adm-line bg-adm-surface text-white shadow-2xl sm:rounded-adm" role="dialog" aria-modal="true" aria-labelledby="system-tools-title">
+      <AdminDialog onClose={onClose} initialFocusRef={closeRef} labelledBy="system-tools-title">
+      <div className="flex max-h-[94dvh] w-full max-w-4xl flex-col overflow-hidden rounded-t-adm border border-adm-line bg-adm-surface text-white shadow-2xl sm:rounded-adm">
         <header className="flex items-center justify-between gap-4 border-b border-adm-line bg-adm-raised px-5 py-4">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-adm-sm bg-blue/15 text-blue"><ShieldIcon size={21} /></span>
@@ -127,6 +126,7 @@ export default function SystemDevOpsModal({ isOpen, onClose, secureMode }) {
 
         <footer className="flex justify-end border-t border-adm-line bg-adm-raised px-5 py-4"><button onClick={onClose} className="min-h-11 rounded-adm-sm bg-blue px-6 text-sm font-bold text-white hover:bg-blue-deep">Close</button></footer>
       </div>
+      </AdminDialog>
     </div>
   )
 }

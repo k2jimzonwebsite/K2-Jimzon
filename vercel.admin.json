@@ -12,7 +12,7 @@
       "destination": "/api/admin?route=:route*"
     },
     {
-      "source": "/(.*)",
+      "source": "/admin-portal-k2-secure",
       "destination": "/index.html"
     }
   ],

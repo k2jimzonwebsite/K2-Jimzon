@@ -8,14 +8,14 @@
  * @typedef {'draft' | 'under_review' | 'live' | 'unlisted' | 'discontinued'} PublicationStatus
  * @typedef {'shopee' | 'tiktok' | 'lazada' | 'website' | 'viber' | 'whatsapp' | 'wholesale' | 'manual'} ChannelType
  * @typedef {'shopee' | 'tiktok' | 'lazada' | 'viber' | 'whatsapp' | 'website'} ChatPlatform
- * @typedef {'Admin' | 'Staff' | 'Operations' | 'Warehouse' | 'Support' | 'Finance' | 'Read-Only'} UserRole
+ * @typedef {'Admin' | 'SuperAdmin' | 'Staff' | 'Operations' | 'Warehouse' | 'Support' | 'Finance' | 'Read-Only'} UserRole
  */
 
 export const DATABASE_ENUMS = {
   PublicationStatus: ['draft', 'under_review', 'live', 'unlisted', 'discontinued'],
   ChannelType: ['shopee', 'tiktok', 'lazada', 'website', 'viber', 'whatsapp', 'wholesale', 'manual'],
   ChatPlatform: ['shopee', 'tiktok', 'lazada', 'viber', 'whatsapp', 'website'],
-  UserRole: ['Admin', 'Staff', 'Operations', 'Warehouse', 'Support', 'Finance', 'Read-Only']
+  UserRole: ['Admin', 'SuperAdmin', 'Staff', 'Operations', 'Warehouse', 'Support', 'Finance', 'Read-Only']
 }
 
 /**

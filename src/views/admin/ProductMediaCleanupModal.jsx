@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { cleanupProductMediaOrphansBff, getProductMediaOrphansBff } from '../../services/adminBffService'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 const formatBytes = (value) => {
   const bytes = Number(value) || 0
@@ -29,11 +30,7 @@ export default function ProductMediaCleanupModal({ onClose }) {
   }
 
   useEffect(() => {
-    closeRef.current?.focus()
     void load()
-    const onKeyDown = (event) => { if (event.key === 'Escape' && state.kind !== 'working') onClose() }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
   const selectedPaths = useMemo(() => [...selected].sort(), [selected])
@@ -72,7 +69,8 @@ export default function ProductMediaCleanupModal({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="media-cleanup-title" aria-describedby="media-cleanup-help">
+    <div className="fixed inset-0 z-[110] flex items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4">
+      <AdminDialog onClose={onClose} closeDisabled={state.kind === 'working'} initialFocusRef={closeRef} labelledBy="media-cleanup-title" describedBy="media-cleanup-help">
       <div className="flex max-h-[100dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-adm border border-adm-line bg-adm-surface text-white shadow-2xl sm:max-h-[90dvh] sm:rounded-adm">
         <header className="flex items-start justify-between gap-4 border-b border-adm-line bg-black/35 px-4 py-4 sm:px-5">
           <div>
@@ -108,6 +106,7 @@ export default function ProductMediaCleanupModal({ onClose }) {
           <button type="button" onClick={() => void cleanup()} disabled={state.kind === 'working' || !selectedPaths.length || reason.trim().length < 3} className="min-h-11 flex-[1.4] rounded-adm-sm bg-crimson px-4 font-bold text-white hover:bg-crimson/90 disabled:cursor-not-allowed disabled:opacity-45">{state.kind === 'working' ? 'Removing…' : cleanupPending ? 'Retry cleanup' : `Remove ${selectedPaths.length || ''} unused`}</button>
         </footer>
       </div>
+      </AdminDialog>
     </div>
   )
 }

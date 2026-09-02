@@ -37,7 +37,7 @@ test('separate Vercel projects explicitly cap prepared functions at ten seconds'
 })
 
 test('all browser and server ingress boundaries declare bounded payload or time limits', async () => {
-  const [storefront, admin, invite, shopee, shopeeHandler, timeout, adminClient, guestClient] = await Promise.all([
+  const [storefront, admin, invite, shopee, shopeeHandler, timeout, adminClient, guestClient, marketplacePush] = await Promise.all([
     source('server/storefront-bff/security.js'),
     source('server/admin-bff/security.js'),
     source('supabase/functions/invite-staff/handler.ts'),
@@ -46,12 +46,17 @@ test('all browser and server ingress boundaries declare bounded payload or time 
     source('src/lib/fetchWithTimeout.js'),
     source('src/services/adminBffService.js'),
     source('src/services/guestCommerceService.js'),
+    source('supabase/functions/_shared/marketplace-push.js'),
   ])
   expect(storefront).toContain('const MAX_BODY_BYTES = 24 * 1024')
   expect(admin).toContain('const MAX_BODY_BYTES = 16 * 1024')
   expect(invite).toContain('const MAX_REQUEST_BYTES = 4096')
-  expect(shopee).toContain('MAX_SHOPEE_PUSH_BYTES = 256 * 1024')
-  expect(shopee).toContain("new Error('SHOPEE_BODY_READ_TIMEOUT')")
+  // The ceiling and the read deadline moved to the shared marketplace reader
+  // (MAP-028 D3) so Lazada and TikTok inherit them. Shopee still publishes the
+  // same bound under the same name, and the deadline is still absolute.
+  expect(marketplacePush).toContain('MAX_PUSH_BYTES = 256 * 1024')
+  expect(shopee).toContain('MAX_SHOPEE_PUSH_BYTES = MAX_PUSH_BYTES')
+  expect(marketplacePush).toContain('_BODY_READ_TIMEOUT')
   expect(shopeeHandler).toContain("Deno.env.get('SHOPEE_BODY_READ_TIMEOUT_MS')")
   expect(timeout).toContain('maxAttempts = 3')
   expect(adminClient).toContain('fetchWithTimeout(path, requestInit, 15000)')

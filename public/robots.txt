@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.k2jimzon.com/sitemap.xml
+
+# The admin is a separate deployment on its own host, and that host serves
+# X-Robots-Tag: noindex, nofollow on every response. Naming its path here would
+# publish the path to anyone reading this file — including scanners — while
+# adding nothing, because no crawler reaches it from this origin anyway.

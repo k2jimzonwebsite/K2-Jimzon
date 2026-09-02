@@ -158,6 +158,7 @@ test.describe('invite-staff real handler', () => {
     expect((await result(await harness().handler(request(undefined, { aal: 'aal2' })))).status).toBe(200)
     expect((await result(await harness({ aalError: true }).handler(request()))).body.error).toBe('AAL2_REQUIRED')
     expect((await result(await harness({ profileRole: 'Staff' }).handler(request()))).body.error).toBe('FORBIDDEN_ROLE')
+    expect((await result(await harness({ profileRole: 'SuperAdmin' }).handler(request()))).body.ok).toBe(true)
     expect((await result(await harness().handler(request(undefined, { key: 'too-long-or-invalid' })))).body.error).toBe('INVALID_IDEMPOTENCY_KEY')
   })
 

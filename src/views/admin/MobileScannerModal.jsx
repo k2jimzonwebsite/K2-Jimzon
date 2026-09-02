@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Html5Qrcode } from 'html5-qrcode'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 // Synthetic web audio beep for scanner feedback without external audio assets
 function playScanBeep() {
@@ -85,12 +86,13 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
   const totalScanned = items.reduce((sum, item) => sum + (item.manila_scanned_qty || 0), 0)
 
   return (
+    <AdminDialog onClose={onClose} labelledBy="mobile-scanner-title">
     <div className="fixed inset-0 z-50 flex flex-col bg-adm-sunken text-white animate-in fade-in duration-300">
       
       {/* Top Mobile Bar */}
       <div className="flex items-center justify-between p-4 border-b border-adm-line bg-adm-surface shrink-0">
         <div>
-          <h2 className="font-sans font-semibold text-xl text-white">Scan boxes on arrival</h2>
+          <h2 id="mobile-scanner-title" className="font-sans font-semibold text-xl text-white">Scan boxes on arrival</h2>
           <p className="text-sm text-white/50">Point phone camera at item barcode · +1 per scan</p>
         </div>
         <button
@@ -192,5 +194,6 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
       </div>
 
     </div>
+    </AdminDialog>
   )
 }

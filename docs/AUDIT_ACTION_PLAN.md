@@ -1,5 +1,10 @@
 # K2 Jimzon — Audit Action Plan
 
+> **Historical snapshot — not an active plan.** This 25 August audit checklist
+> is preserved for provenance and contains superseded counts/states. Execute
+> work only from `MASTER_ACTION_PLAN.md`; verify current behavior in
+> `K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md` and the operations rulebook.
+
 This execution-oriented action plan translates the audit findings into a prioritized, dependency-mapped work checklist.
 
 ---
@@ -30,9 +35,10 @@ This execution-oriented action plan translates the audit findings into a priorit
   - *Dependencies:* `OWNER-001` owner decision.
   - *Verification:* HTTPS certificate active and Google OAuth redirects cleanly on custom domain.
 
-- [ ] **AUD-017** — Protect `error_reports` insertion with HMAC rate limiting or migrate behind BFF endpoint.
-  - *Dependencies:* AUD-001, AUD-006.
-  - *Verification:* Bounded client error logging without unrestricted table write grants.
+- [ ] **AUD-017** — Retire direct browser `error_reports` insertion.
+  - *Dependencies:* AUD-001 and the separately authorized MAP-017 production cutover.
+  - *Prepared evidence:* the browser reporter already avoids the table; an idempotent migration revokes browser inserts, and a local 100-attempt denial rehearsal retains zero rows.
+  - *Verification still required:* permanent live revoke/policy evidence after the named backup/restore gate. No public Storefront telemetry endpoint is introduced.
 
 ---
 

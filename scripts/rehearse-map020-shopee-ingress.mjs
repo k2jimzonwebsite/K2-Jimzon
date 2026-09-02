@@ -48,7 +48,7 @@ try {
   run('psql', [...target, '-f', 'supabase/migrations/20260825_shopee_webhook_ingress_boundary.sql'], 'idempotent replay', env)
   run('psql', [...target, '-f', 'supabase/map020_shopee_ingress_postflight.sql'], 'post-replay postflight', env)
   console.log('MAP-020 Shopee ingress portable rehearsal passed: fail-closed configuration, service-role-only atomic capture, forced-RLS shop/global budgets, denial persistence, replay preservation, payload conflict, cleanup, postflight, and migration replay verified.')
+  console.log('MAP-023 inbound-event acceptance passed: ambiguous-response replay kept one durable row, changed-payload reuse preserved evidence, and all three attempts remained rate-accounted.')
 } finally {
   if (started) run('pg_ctl', ['-D', data, '-m', 'fast', '-w', 'stop'], 'shutdown', env)
 }
-

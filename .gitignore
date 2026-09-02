@@ -15,6 +15,16 @@ supabase/functions/.env
 *.pfx
 *.sql.gz
 *.dump
+*.k2backup
+*.k2backup.manifest.json
+*.k2backup.restore-verification.json
+*.k2storage
+*.k2storage.manifest.json
+*.k2storage.restore-verification.json
+*.k2storage.part[0-9][0-9][0-9]
+*.k2storage.parts.json
+k2_map017_storage_restore_verification_*/
+k2_map017_drive_download_verification_*/
 security-scan-report.*
 
 .vercel
@@ -41,3 +51,16 @@ scratch/
 # holds variable NAMES only and is referenced as MAP-016 evidence.
 live-schema-metadata.json
 scripts/map017-evidence/*.json
+
+.vercel
+.env*
+.tools/map027-knowledge-pg-data/
+.tools/map027-knowledge-pg.log
+.tools/map028-channel-pg-data/
+.tools/map028-channel-pg.log
+# Agent scratch space: workbook build previews, generated artefacts, and one-off
+# capture scripts. The delivery workbook's logic lives in src/lib/deliveryQuote.js
+# and docs/specs/SHIPPING_AND_COURIER_LOGIC_SPEC.md, not in a binary here.
+.tmp/
+outputs/
+.k2-shot.mjs

@@ -85,7 +85,7 @@ export default function AiPromptStudioCard() {
           placeholder={`e.g. ${activeTemplate.exampleItem}`}
           className="w-full rounded-lg border border-white/15 bg-black/40 px-4 py-2.5 text-sm text-white placeholder-white/30 focus:border-rose-400 focus:outline-none focus:ring-1 focus:ring-rose-400"
         />
-        <p className="mt-1 text-[11px] text-white/40">
+        <p className="mt-1 text-xs text-white/40">
           Tip: Include specific Italian descriptors (e.g. &quot;con nocciole e cacao&quot;, &quot;al tartufo estivo&quot;, &quot;spremitura a freddo&quot;).
         </p>
       </div>
@@ -134,7 +134,7 @@ export default function AiPromptStudioCard() {
         {/* Photography Notes & Aspect Ratio */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3.5 text-xs">
-            <span className="block font-semibold uppercase tracking-wider text-white/50 text-[10px] mb-1">
+            <span className="block font-semibold uppercase tracking-wider text-white/50 text-xs mb-1">
               Aspect Ratio Target
             </span>
             <span className="font-mono text-sky-300 font-bold">
@@ -143,7 +143,7 @@ export default function AiPromptStudioCard() {
           </div>
 
           <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3.5 text-xs">
-            <span className="block font-semibold uppercase tracking-wider text-white/50 text-[10px] mb-1">
+            <span className="block font-semibold uppercase tracking-wider text-white/50 text-xs mb-1">
               Pro Studio Tips
             </span>
             <ul className="space-y-1 text-white/70">

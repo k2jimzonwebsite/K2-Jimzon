@@ -125,6 +125,17 @@ test('continuous consignment scanners stay connected to server-enforced counts',
   expect(hardeningSql).toContain("raise exception 'SKU-only scans are ambiguous. Use record_consignment_item_scan with the selected box/lot line.'")
 })
 
+test('count-on-arrival truth is bounded by the Milan packed count', async () => {
+  const sql = await readFile(new URL('../supabase/migrations/20260809_operations_hardening.sql', import.meta.url), 'utf8')
+
+  expect(sql).toContain("if coalesce(p_expected_qty, 0) < 1 then raise exception 'Expected quantity must be positive'")
+  expect(sql).toContain("if v_manifest.status <> 'Packing_Italy' then raise exception 'Manifest packing is closed'")
+  expect(sql).toContain("if v_item.manila_scanned_qty >= v_item.italy_packed_qty then raise exception 'Received scans cannot exceed Milan packed quantity'")
+  expect(sql).toContain('v_item.manila_scanned_qty, v_item.manila_scanned_qty, 0,')
+  expect(sql).toContain('v_missing := v_item.italy_packed_qty - v_item.manila_scanned_qty')
+  expect(sql).not.toContain("'surplus_on_arrival'")
+})
+
 test('coupon restoration is database-backed, private, limited, and auditable', async () => {
   const sql = await readFile(new URL('../supabase/migrations/20260804_restore_coupons_and_consignment_scanning.sql', import.meta.url), 'utf8')
   const manager = await readFile(new URL('../src/views/admin/CouponManager.jsx', import.meta.url), 'utf8')
@@ -142,4 +153,27 @@ test('coupon restoration is database-backed, private, limited, and auditable', a
   expect(manager).not.toContain('deleteCoupon')
   expect(admin).toContain("coupons:           { label: 'Coupons'")
   expect(admin).toContain("section === 'coupons' ? <CouponManager />")
+})
+
+test('MAP-023 has a portable last-unit concurrency rehearsal', async () => {
+  const packageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'))
+  expect(packageJson.scripts['rehearse:map023-last-unit'])
+    .toBe('node scripts/rehearse-map023-last-unit-concurrency.mjs')
+
+  const runner = await readFile(new URL('../scripts/rehearse-map023-last-unit-concurrency.mjs', import.meta.url), 'utf8')
+  expect(runner).toContain('20260809_operations_hardening.sql')
+  expect(runner).toContain('create or replace function public.confirm_order_request(')
+  expect(runner).toContain("application_name='k2_last_unit_winner'")
+  expect(runner).toContain('pg_stat_activity')
+  expect(runner).toContain('Insufficient sellable lot stock')
+  expect(runner).toContain('exactly one confirmed order')
+})
+
+test('MAP-023 rehearses an ambiguous confirmation retry without duplicate effects', async () => {
+  const runner = await readFile(new URL('../scripts/rehearse-map023-last-unit-concurrency.mjs', import.meta.url), 'utf8')
+
+  expect(runner).toContain("application_name='k2_ambiguous_confirmation_retry'")
+  expect(runner).toContain('ambiguous-response baseline')
+  expect(runner).toContain('same confirmed order returned without duplicate effects')
+  expect(runner).toContain('AMBIGUOUS_RETRY_INVARIANT_MISMATCH')
 })

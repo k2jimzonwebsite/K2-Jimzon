@@ -22,6 +22,36 @@ if (expectedTarget !== 'auto' && target !== expectedTarget) {
   throw new Error(`Expected a ${expectedTarget} build but Vite produced ${target}.`)
 }
 
+function verifyStatic404() {
+  const notFoundFile = path.join(distDir, '404.html')
+  if (!fs.existsSync(notFoundFile)) {
+    throw new Error(`${target} build is missing its static 404 recovery page.`)
+  }
+
+  const contents = fs.readFileSync(notFoundFile, 'utf8')
+  const violations = []
+  if (!/<meta name="robots" content="noindex, nofollow">/i.test(contents)) violations.push('missing noindex policy')
+  if (!/<main(?:\s|>)/i.test(contents) || !/<h1(?:\s|>)/i.test(contents)) violations.push('missing main/H1 structure')
+  if (/<script(?:\s|>)/i.test(contents)) violations.push('contains executable script')
+
+  if (target === 'admin') {
+    if (!/Admin page not found/i.test(contents)) violations.push('missing Admin identity')
+    if (!/href="\/admin-portal-k2-secure"/i.test(contents)) violations.push('missing protected recovery link')
+  } else {
+    if (!/Page or product unavailable/i.test(contents)) violations.push('missing Storefront identity')
+    if (!/href="\/catalog"/i.test(contents) || !/href="\/contact"/i.test(contents)) {
+      violations.push('missing Storefront recovery links')
+    }
+    if (/admin-portal-k2-secure/i.test(contents)) violations.push('discloses the Admin route')
+  }
+
+  if (violations.length > 0) {
+    throw new Error(`${target} static 404 recovery page is invalid:\n${violations.join('\n')}`)
+  }
+}
+
+verifyStatic404()
+
 const forbiddenPatterns = target === 'storefront'
   ? [/src\/AdminApp\.jsx$/i, /src\/views\/admin\//i]
   : [
@@ -33,6 +63,53 @@ const violations = modules.filter((moduleName) => forbiddenPatterns.some((patter
 
 if (violations.length > 0) {
   throw new Error(`${target} build crossed the deployment boundary:\n${violations.join('\n')}`)
+}
+
+// MAP-027 is opt-in. React.lazy in source is not sufficient evidence because a
+// later Rollup/manual-chunk change could still pull the room or Three/Fiber into
+// the entry, Home, Catalog, or product chunk. Follow static `imports` only;
+// `dynamicImports` are the reviewed customer-initiated boundary.
+if (target === 'storefront') {
+  const ordinaryRouteEntries = [
+    'index.html',
+    'src/views/Home.jsx',
+    'src/views/Catalog.jsx',
+    'src/views/MasterProduct.jsx',
+  ]
+  const optionalPayloadPattern = /InteractiveShop|ShelfScene3D|react-three|(?:^|[/_.-])three(?:[/_.-]|$)|drei/i
+  const eagerPayloadViolations = []
+
+  for (const routeEntry of ordinaryRouteEntries) {
+    if (!manifest[routeEntry]) continue
+    const pending = [routeEntry]
+    const visited = new Set()
+
+    while (pending.length > 0) {
+      const moduleName = pending.pop()
+      if (visited.has(moduleName)) continue
+      visited.add(moduleName)
+
+      const moduleEntry = manifest[moduleName]
+      if (!moduleEntry) continue
+      for (const importedName of moduleEntry.imports || []) pending.push(importedName)
+    }
+
+    for (const moduleName of visited) {
+      if (moduleName === routeEntry) continue
+      const emittedFile = manifest[moduleName]?.file || ''
+      if (optionalPayloadPattern.test(`${moduleName} ${emittedFile}`)) {
+        eagerPayloadViolations.push(`${routeEntry} statically imports ${moduleName}`)
+      }
+    }
+  }
+
+  if (eagerPayloadViolations.length > 0) {
+    throw new Error(
+      `Storefront ordinary-route payload boundary includes opt-in Interactive Shop code:\n${[
+        ...new Set(eagerPayloadViolations),
+      ].join('\n')}`,
+    )
+  }
 }
 
 // Static files copied straight out of `public/` never appear in the Vite module
@@ -61,9 +138,16 @@ const staticViolations = []
 for (const file of staticTextFiles(distDir)) {
   if (path.resolve(file) === path.resolve(targetFile)) continue
   const contents = fs.readFileSync(file, 'utf8')
+  const relativePath = path.relative(distDir, file).replaceAll('\\', '/')
+  // `robots.txt` used to name the private Admin route in a Disallow directive,
+  // which published that route to anyone reading the public file, and this scan
+  // had to strip the line to avoid flagging it. The line is gone (MAP-028 B3),
+  // so the carve-out is gone with it: if the Admin route ever reappears in any
+  // storefront static asset, this now fails instead of quietly permitting it.
+  const reviewedContents = contents
   for (const marker of forbiddenStaticMarkers) {
-    if (marker.test(contents)) {
-      staticViolations.push(`${path.relative(distDir, file).replaceAll('\\', '/')} matches ${marker}`)
+    if (marker.test(reviewedContents)) {
+      staticViolations.push(`${relativePath} matches ${marker}`)
     }
   }
 }
@@ -90,6 +174,29 @@ function artifactFiles(directory) {
   })
 }
 
+function assertReferencedLocalAssets(files) {
+  const readable = new Set(['.css', '.html', '.js', '.json', '.svg', '.txt', '.webmanifest', '.xml'])
+  // Open Food Facts URLs are assembled from a trusted absolute base plus
+  // quoted numeric path fragments such as `/807/680/.../front.jpg`. Those
+  // fragments are not root-local assets. K2 local asset directories and root
+  // filenames are named, so exclude a numeric first segment while retaining
+  // missing-reference detection for `/images/...`, `/icon.svg`, and peers.
+  const localAsset = /(?<![A-Za-z0-9:/.])\/(?!\d+(?:\/|$))(?:[A-Za-z0-9._-]+\/)*[A-Za-z0-9._-]+\.(?:avif|gif|ico|jpe?g|png|svg|webp|woff2?)/gi
+  const missing = new Set()
+  for (const file of files) {
+    if (!readable.has(path.extname(file).toLowerCase())) continue
+    const content = fs.readFileSync(file, 'utf8')
+    for (const match of content.matchAll(localAsset)) {
+      const reference = match[0]
+      const targetPath = path.resolve(distDir, `.${reference}`)
+      if (!targetPath.startsWith(`${distDir}${path.sep}`) || !fs.existsSync(targetPath)) missing.add(reference)
+    }
+  }
+  if (missing.size > 0) {
+    throw new Error(`Build references missing local assets:\n${[...missing].sort().join('\n')}`)
+  }
+}
+
 const forbiddenBundleContent = target === 'storefront'
   ? [
       /\/api\/admin/, /k2_admin_csrf/, /MFA_ENROLLMENT_REQUIRED/,
@@ -105,6 +212,7 @@ const forbiddenBundleContent = target === 'storefront'
 
 const contentViolations = []
 const allArtifacts = artifactFiles(distDir)
+assertReferencedLocalAssets(allArtifacts)
 const sourceMaps = allArtifacts.filter((file) => file.endsWith('.map'))
 if (sourceMaps.length) {
   contentViolations.push(...sourceMaps.map((file) => `${path.relative(distDir, file)} is a production source map`))

@@ -12,7 +12,55 @@
       "destination": "/api/storefront?route=:route*"
     },
     {
-      "source": "/(.*)",
+      "source": "/product/:sku",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/catalog",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cabinet",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/shop",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/store",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/pasabuy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/trade",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/wholesale",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/account",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/messages",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/checkout",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/confirmation",
       "destination": "/index.html"
     }
   ],

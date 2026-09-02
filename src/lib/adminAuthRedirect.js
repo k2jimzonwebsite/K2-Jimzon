@@ -1,5 +1,5 @@
 export const ADMIN_ROUTE = '/admin-portal-k2-secure'
-export const ADMIN_PRODUCTION_ORIGIN = 'https://k2-jimzon-admin-seven.vercel.app'
+export const ADMIN_PRODUCTION_ORIGIN = 'https://admin.k2jimzon.com'
 
 const ADMIN_OAUTH_RETURN_KEY = 'k2_admin_oauth_return_to'
 

@@ -7,9 +7,11 @@ const GUEST_ENDPOINTS = Object.freeze({
   'account/auth/verify': '/api/storefront/account/auth/verify',
   conversation: '/api/storefront/conversation',
   coupon: '/api/storefront/coupon',
+  'delivery/quote': '/api/storefront/delivery/quote',
   message: '/api/storefront/message',
   messages: '/api/storefront/messages',
   order: '/api/storefront/order',
+  'order/status': '/api/storefront/order/status',
   pasabuy: '/api/storefront/pasabuy',
   wholesale: '/api/storefront/wholesale',
 })

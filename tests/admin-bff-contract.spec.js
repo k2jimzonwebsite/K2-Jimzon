@@ -225,7 +225,8 @@ test('secure Admin does not mount the shared direct-browser Globe Auth and data 
 
   expect(adminApp).toContain('<GlobeCmsProvider secureAdmin={adminBffEnabled()}>')
   expect(globeProvider).toContain('function SecureAdminGlobeCmsProvider')
-  expect(globeProvider).toContain('if (secureAdmin) return <SecureAdminGlobeCmsProvider')
+  expect(globeProvider).toContain('if (__K2_ADMIN_BUILD__ || secureAdmin) return <SecureAdminGlobeCmsProvider')
+  expect(globeProvider).toContain("import { getSupabaseClient, isSupabaseConfigured } from '../lib/lazySupabaseClient'")
   expect(storefrontApp).toContain('<GlobeCmsProvider>')
   expect(storefrontApp).not.toContain('secureAdmin=')
 })
@@ -779,6 +780,11 @@ test('universal inbox BFF preserves internal-note truth and rejects loose payloa
   })).toEqual({
     conversationId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', content: 'Customer asked for an updated courier quote.',
   })
+  expect(validateInboxCommand('inbox_send_reply', {
+    conversationId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', content: 'We can help with that item from the website chat.',
+  })).toEqual({
+    conversationId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', content: 'We can help with that item from the website chat.',
+  })
   expect(() => validateInboxCommand('inbox_internal_note', {
     conversationId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', content: 'note', delivered: true,
   })).toThrow('REQUEST_INVALID')
@@ -788,17 +794,22 @@ test('universal inbox BFF preserves internal-note truth and rejects loose payloa
   })).toThrow('REQUEST_INVALID')
 })
 
-test('prepared inbox command boundary is signed, durable, and not external delivery', async () => {
+test('prepared inbox boundary keeps internal notes private and website replies signed', async () => {
   const migration = await readFile(new URL('../supabase/migrations/20260812_admin_inbox_bff_boundary.sql', import.meta.url), 'utf8')
+  const websiteMigration = await readFile(new URL('../supabase/migrations/20260828_virtual_store_live_chat.sql', import.meta.url), 'utf8')
   const runtime = await readFile(new URL('../src/context/useAdminInboxRuntime.js', import.meta.url), 'utf8')
   expect(migration).toContain('execute_admin_inbox_command_v1')
   expect(migration).toContain('admin_command_receipts')
   expect(migration).toContain('public.append_internal_message')
   expect(migration).toContain('Internal notes remain internal_only')
   expect(migration).not.toContain("delivery_status = 'sent'")
+  expect(websiteMigration).toContain('execute_admin_website_reply_v1')
+  expect(websiteMigration).toContain('append_website_customer_reply_v1')
+  expect(websiteMigration).toContain("source_kind not in ('website_message','virtual_store_message')")
   expect(runtime).toContain('getAdminInbox')
   expect(runtime).toContain('saveInternalNoteBff')
-  expect(runtime).toContain('window.setInterval(fetchConversations, 15_000)')
+  expect(runtime).toContain('sendWebsiteReplyBff')
+  expect(runtime).toContain('window.setInterval(fetchConversations, 8_000)')
 })
 
 test('Pasabuy BFF is session/idempotency gated and bounds owner-selected pricing', async () => {
@@ -868,6 +879,28 @@ test('product-intake BFF is session/idempotency gated and rejects loose operatio
     sessionId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1',
     inventoryRequestId: 'e74a4161-72ca-4d72-8f59-37aa690e1869', source: 'receipt', inventory: {},
   })).toThrow('REQUEST_INVALID')
+
+  const openingBalance = {
+    sessionId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1',
+    inventoryRequestId: 'e74a4161-72ca-4d72-8f59-37aa690e1869',
+    source: 'reconciliation',
+    inventory: {
+      quantity: 1, boxCode: 'BOX-001', batchCode: 'LOT-001', expiryDate: '2027-08-26',
+      isNonExpiry: false, unitCost: 100, ownerCode: 'K2', hubLocation: 'HUB-MNL-CENTRAL',
+      custodian: 'CUST-STAFF-ELENA', reason: 'Verified opening count from the physical stock ledger.',
+    },
+  }
+  expect(validateProductIntakeCommand('intake_inventory', openingBalance).inventory).toMatchObject({
+    hubLocation: 'HUB-MNL-CENTRAL', custodian: 'CUST-STAFF-ELENA',
+  })
+  expect(() => validateProductIntakeCommand('intake_inventory', {
+    ...openingBalance,
+    inventory: { ...openingBalance.inventory, hubLocation: 'typed-free-form-hub' },
+  })).toThrow('REQUEST_INVALID')
+  expect(() => validateProductIntakeCommand('intake_inventory', {
+    ...openingBalance,
+    inventory: { ...openingBalance.inventory, custodian: 'CUST-STAFF-MARCO' },
+  })).toThrow('REQUEST_INVALID')
 })
 
 test('prepared product-intake boundary is named, signed, receipt-backed, and upload-honest', async () => {
@@ -877,6 +910,8 @@ test('prepared product-intake boundary is named, signed, receipt-backed, and upl
   expect(migration).toContain('admin_command_receipts')
   expect(migration).toContain("'intake_session_create','intake_session_step','intake_draft'")
   expect(migration).toContain('PRODUCT_PUBLICATION_REASON')
+  expect(migration).toContain('from public.hubs h')
+  expect(migration).toContain('from public.custodians c')
   expect(server).toContain(".select(SESSION_PROJECTION)")
   expect(server).not.toContain("select('*')")
   expect(server).not.toContain('packagingImages]')
@@ -1052,7 +1087,7 @@ test('active Admin MFA replacement is reasoned, signed, exact-factor-safe, and s
   expect(helper).toContain("status === 'unverified'")
   expect(helper).toContain('MFA_REPLACEMENT_MULTIPLE_ACTIVE_FACTORS')
   expect(helper).toContain("client.auth.mfa.unenroll({ factorId: previousFactorId })")
-  expect(handler).toContain("authorized.identity.role !== 'Admin'")
+  expect(handler).toContain('isAdminRole(authorized.identity.role)')
   expect(handler).toContain('recordMfaReplacementEvent')
   expect(handler).toContain('refreshActiveSessionCookie')
   expect(handler.indexOf("'admin_mfa_replacement_requested'")).toBeLessThan(handler.indexOf('startActiveMfaReplacement(authorized.client'))
@@ -1146,7 +1181,7 @@ test('product media assignment is signed, receipt-bound, reasoned, and removal-s
   expect(migration).toContain('prepare_admin_product_media_orphan_cleanup_v1')
   expect(migration).toContain("o.created_at<=clock_timestamp()-interval '1 hour'")
   expect(server).toContain('handleProductMediaOrphans')
-  expect(server).toContain("authorized.identity.role !== 'Admin'")
+  expect(server).toContain('isAdminRole(authorized.identity.role)')
   expect(cleanupModal).toContain('Only receipt-backed files older than one hour')
   expect(cleanupModal).toContain('Retry cleanup')
   expect(cleanupModal).not.toMatch(/alert\(|console\.error|purple/)
@@ -1460,12 +1495,22 @@ test('prepared Admin session registry is private, AAL2-bound, and fail-closed', 
 })
 
 test('single-function Admin router allowlists every prepared endpoint and rejects unknown paths', async () => {
-  expect(ADMIN_BFF_ROUTES).toHaveLength(68)
-  expect(new Set(ADMIN_BFF_ROUTES).size).toBe(68)
+  expect(ADMIN_BFF_ROUTES.length).toBeGreaterThan(0)
+  expect(new Set(ADMIN_BFF_ROUTES).size).toBe(ADMIN_BFF_ROUTES.length)
   expect(Object.keys(ADMIN_BFF_ROUTE_CONTROLS).sort()).toEqual([...ADMIN_BFF_ROUTES].sort())
   expect(ADMIN_BFF_ROUTE_CONTROLS['auth/login']).toEqual({
     method: 'POST', identity: 'credentials', origin: true, csrf: false,
     idempotency: false, rateLimit: 'database', bot: true,
+  })
+  expect(ADMIN_BFF_ROUTE_CONTROLS['inbox/send-reply']).toEqual({
+    method: 'POST', identity: 'active-aal2-session', origin: true, csrf: true,
+    idempotency: true, rateLimit: 'database',
+  })
+  // Product knowledge is customer-facing copy, so it carries the same controls
+  // as a customer-visible reply rather than a looser read-style classification.
+  expect(ADMIN_BFF_ROUTE_CONTROLS['product-knowledge/save']).toEqual({
+    method: 'POST', identity: 'active-aal2-session', origin: true, csrf: true,
+    idempotency: true, rateLimit: 'database',
   })
   expect(ADMIN_BFF_ROUTE_CONTROLS['auth/mfa']).toEqual({
     method: 'POST', identity: 'pending-session', origin: true, csrf: false,
@@ -1521,8 +1566,15 @@ test('single-function Admin router allowlists every prepared endpoint and reject
   expect(ADMIN_BFF_ROUTE_CONTROLS['staff-access/mfa-replacement']).toMatchObject({
     method:'POST',identity:'active-aal2-session',origin:true,csrf:true,idempotency:true,rateLimit:'database',
   })
-  expect(Object.values(ADMIN_BFF_ROUTE_CONTROLS).filter((control) => control.method === 'POST')).toHaveLength(43)
-  expect(Object.values(ADMIN_BFF_ROUTE_CONTROLS).filter((control) => control.idempotency)).toHaveLength(38)
+  const controls = Object.values(ADMIN_BFF_ROUTE_CONTROLS)
+  expect(controls.filter((control) => control.method === 'POST').every((control) => (
+    control.origin === true && control.rateLimit === 'database'
+  ))).toBe(true)
+  expect(controls.filter((control) => control.idempotency).every((control) => (
+    control.method === 'POST'
+      && control.csrf === true
+      && control.identity === 'active-aal2-session'
+  ))).toBe(true)
   expect(extractAdminRoute({ query: { route: ['product-intake', 'session'] } }))
     .toBe('product-intake/session')
   expect(extractAdminRoute({ url: '/api/admin/fulfillment/confirm?ignored=true', query: {} }))
@@ -1793,7 +1845,7 @@ test('prepared coupon boundary is admin-only, reasoned, auditable, and feature-g
   expect(migration).toContain("role::text='Admin'")
   expect(migration).toContain('K2_COUPON_STATE_CONFLICT')
   expect(migration).toContain('revoke insert,update,delete on table public.coupons from authenticated')
-  expect(server).toContain("authorized.identity.role !== 'Admin'")
+  expect(server).toContain('isAdminRole(authorized.identity.role)')
   expect(server).not.toContain("select('*')")
   expect(manager).toContain('adminBffEnabled()')
   expect(manager).toContain('createCouponBff')

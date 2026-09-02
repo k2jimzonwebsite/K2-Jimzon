@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { products } from './products'
 import { REVIEWS as SEED_REVIEWS } from './site'
-import { supabase, isSupabaseConfigured } from '../lib/supabaseClient'
+import { getSupabaseClient, isSupabaseConfigured } from '../lib/lazySupabaseClient'
 import { safeUiError } from '../lib/safeUiError'
 
 const CMS_PRODUCTS_KEY = 'k2_globe_products'
@@ -125,13 +125,27 @@ function toReviewRow(review) {
 /* ---------- Remote provider (Supabase) ---------- */
 
 function RemoteGlobeCmsProvider({ children }) {
+  const [supabase, setSupabase] = useState(null)
   const [globeProducts, setGlobeProducts] = useState([])
   const [reviews, setReviews] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [cmsError, setCmsError] = useState(null)
   const [authSession, setAuthSession] = useState(null)
 
+  useEffect(() => {
+    let active = true
+    getSupabaseClient()
+      .then(client => { if (active) setSupabase(client) })
+      .catch(() => {
+        if (!active) return
+        setCmsError(safeUiError('GLOBE_LOAD_FAILED'))
+        setIsLoading(false)
+      })
+    return () => { active = false }
+  }, [])
+
   const loadAll = useCallback(async () => {
+    if (!supabase) return
     setIsLoading(true)
     const [gpRes, rvRes] = await Promise.all([
       supabase.from('globe_products').select('*').order('display_order'),
@@ -160,7 +174,7 @@ function RemoteGlobeCmsProvider({ children }) {
 
     setCmsError(errors.length ? `Could not load all review data (${errors.join('; ')})` : null)
     setIsLoading(false)
-  }, [])
+  }, [supabase])
 
   useEffect(() => {
     loadAll()
@@ -168,23 +182,26 @@ function RemoteGlobeCmsProvider({ children }) {
 
   // Track admin auth session for CMS write access
   useEffect(() => {
+    if (!supabase) return undefined
     supabase.auth.getSession().then(({ data }) => setAuthSession(data.session))
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setAuthSession(session)
     })
     return () => listener.subscription.unsubscribe()
-  }, [])
+  }, [supabase])
 
   const signInAdmin = useCallback(async (email, password) => {
+    if (!supabase) throw new Error(safeUiError('ADMIN_SIGN_IN_FAILED'))
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw new Error(safeUiError('ADMIN_SIGN_IN_FAILED'))
-  }, [])
+  }, [supabase])
 
   const signOutAdmin = useCallback(async () => {
-    await supabase.auth.signOut()
-  }, [])
+    await supabase?.auth.signOut()
+  }, [supabase])
 
   const toggleGlobeProduct = useCallback(async (productId) => {
+    if (!supabase) { setCmsError(safeUiError('GLOBE_SAVE_FAILED')); return }
     const current = globeProducts.find((gp) => gp.productId === productId)
     if (!current) return
     // RLS silently updates 0 rows when unauthenticated — .select() lets us detect it
@@ -201,9 +218,10 @@ function RemoteGlobeCmsProvider({ children }) {
     setGlobeProducts((prev) =>
       prev.map((gp) => (gp.productId === productId ? { ...gp, enabled: !gp.enabled } : gp))
     )
-  }, [globeProducts])
+  }, [globeProducts, supabase])
 
   const setGlobeProductImage = useCallback(async (productId, imageUrl) => {
+    if (!supabase) { setCmsError(safeUiError('GLOBE_SAVE_FAILED')); return }
     const { data, error } = await supabase
       .from('globe_products')
       .update({ hero_image: imageUrl, updated_at: new Date().toISOString() })
@@ -217,9 +235,10 @@ function RemoteGlobeCmsProvider({ children }) {
     setGlobeProducts((prev) =>
       prev.map((gp) => (gp.productId === productId ? { ...gp, heroImage: imageUrl } : gp))
     )
-  }, [])
+  }, [supabase])
 
   const addReview = useCallback(async (review) => {
+    if (!supabase) { setCmsError(safeUiError('GLOBE_SAVE_FAILED')); return }
     const { data, error } = await supabase
       .from('reviews')
       .insert(toReviewRow(review))
@@ -231,9 +250,10 @@ function RemoteGlobeCmsProvider({ children }) {
     }
     setCmsError(null)
     setReviews((prev) => [mapReviewRow(data), ...prev])
-  }, [])
+  }, [supabase])
 
   const editReview = useCallback(async (id, updates) => {
+    if (!supabase) { setCmsError(safeUiError('GLOBE_SAVE_FAILED')); return }
     const { data, error } = await supabase
       .from('reviews')
       .update(toReviewRow(updates))
@@ -246,9 +266,10 @@ function RemoteGlobeCmsProvider({ children }) {
     }
     setCmsError(null)
     setReviews((prev) => prev.map((r) => (r.id === id ? mapReviewRow(data) : r)))
-  }, [])
+  }, [supabase])
 
   const deleteReview = useCallback(async (id) => {
+    if (!supabase) { setCmsError(safeUiError('GLOBE_SAVE_FAILED')); return }
     const { data, error } = await supabase
       .from('reviews')
       .delete()
@@ -260,7 +281,7 @@ function RemoteGlobeCmsProvider({ children }) {
     }
     setCmsError(null)
     setReviews((prev) => prev.filter((r) => r.id !== id))
-  }, [])
+  }, [supabase])
 
   const getProductReviews = useCallback(
     (productId) => reviews.filter((r) => r.productId === productId),
@@ -393,7 +414,7 @@ function LocalGlobeCmsProvider({ children }) {
 }
 
 export function GlobeCmsProvider({ children, secureAdmin = false }) {
-  if (secureAdmin) return <SecureAdminGlobeCmsProvider>{children}</SecureAdminGlobeCmsProvider>
+  if (__K2_ADMIN_BUILD__ || secureAdmin) return <SecureAdminGlobeCmsProvider>{children}</SecureAdminGlobeCmsProvider>
   if (isSupabaseConfigured) return <RemoteGlobeCmsProvider>{children}</RemoteGlobeCmsProvider>
   if (import.meta.env.DEV) return <LocalGlobeCmsProvider>{children}</LocalGlobeCmsProvider>
   return <GlobeCmsContext.Provider value={{

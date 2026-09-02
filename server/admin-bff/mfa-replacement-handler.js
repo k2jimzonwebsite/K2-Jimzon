@@ -3,6 +3,7 @@ import {
   readJson, refreshActiveSessionCookie, safeJson,
 } from './security.js'
 import { recordSecurityEvent } from './security-events.js'
+import { isAdminRole } from './supabase.js'
 import {
   completeActiveMfaReplacement, inspectActiveMfaReplacement,
   isMfaReplacementConfigured, mfaFactorFingerprint, recordMfaReplacementEvent,
@@ -33,7 +34,7 @@ export default async function handleMfaReplacement(req, res) {
   if (!UUID.test(replacementId)) return safeJson(res, 400, { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } })
   const authorized = await authorizeAdminRequest(req, res, { csrf: true })
   if (!authorized) return undefined
-  if (authorized.identity.role !== 'Admin') return safeJson(res, 403, { error: { code: 'STAFF_ACCESS_ADMIN_REQUIRED' } })
+  if (!isAdminRole(authorized.identity.role)) return safeJson(res, 403, { error: { code: 'STAFF_ACCESS_ADMIN_REQUIRED' } })
   if (!isMfaReplacementConfigured()) return safeJson(res, 503, { error: { code: 'MFA_REPLACEMENT_UNAVAILABLE' } })
   try {
     const command = validateMfaReplacementCommand(await readJson(req))

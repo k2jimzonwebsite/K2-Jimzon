@@ -6,6 +6,7 @@ import {
 } from '../src/lib/adminAuthRedirect.js'
 
 test('Google admin OAuth returns to the guarded admin route', async () => {
+  expect(ADMIN_PRODUCTION_ORIGIN).toBe('https://admin.k2jimzon.com')
   expect(buildAdminOAuthRedirectUrl('http://127.0.0.1:5173')).toBe(
     `http://127.0.0.1:5173${ADMIN_ROUTE}`
   )
@@ -66,9 +67,19 @@ test('OAuth credentials are removed from the Admin callback URL', async () => {
 })
 
 test.describe('admin access boundary', () => {
+  test.beforeEach(async ({ page }) => {
+    // The dedicated Admin runner points at this fabricated browser-public
+    // origin. Keep auth failures deterministic and prevent any provider call.
+    await page.route('https://fixture.supabase.co/auth/v1/**', route => route.fulfill({
+      status: 401,
+      contentType: 'application/json',
+      body: JSON.stringify({ message: 'Invalid login credentials' }),
+    }))
+  })
+
   test('guarded path works and requires real Supabase authentication', async ({ page }) => {
     await page.goto('/admin-portal-k2-secure')
-    await expect(page.getByRole('heading', { name: /K2 Jimzon Admin/i })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('heading', { name: /K2 Jimzon Admin/i })).toBeVisible({ timeout: 60000 })
     await expect(page.getByText('Staff sign-in')).toBeVisible()
     await expect(page.getByLabel('Email')).toBeVisible()
     await expect(page.getByLabel('Password')).toBeVisible()

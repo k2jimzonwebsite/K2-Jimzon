@@ -6,6 +6,7 @@ import {
 import { AlertIcon, CheckIcon, MinusIcon, PlusIcon, XIcon } from '../../components/ui/icons'
 import FefoWorkflowDiagram from '../../components/admin/guides/FefoWorkflowDiagram'
 import CustodyWorkflowDiagram from '../../components/admin/guides/CustodyWorkflowDiagram'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 const STATUSES = ['available', 'quarantine', 'damaged', 'expired', 'unaccounted', 'depleted']
 
@@ -212,7 +213,8 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-2 backdrop-blur-sm sm:p-4" role="presentation">
-      <section role="dialog" aria-modal="true" aria-labelledby="lot-editor-title" className="flex max-h-[96dvh] w-full max-w-5xl flex-col overflow-hidden rounded-adm border border-adm-line bg-adm-surface text-white shadow-adm-float">
+      <AdminDialog onClose={onClose} closeDisabled={saving} labelledBy="lot-editor-title">
+      <section className="flex max-h-[96dvh] w-full max-w-5xl flex-col overflow-hidden rounded-adm border border-adm-line bg-adm-surface text-white shadow-adm-float">
         <header className="flex shrink-0 items-start justify-between gap-4 border-b border-adm-line bg-adm-sunken px-4 py-4 sm:px-6">
           <div className="min-w-0">
             <p className="text-xs font-semibold text-white/65">Inventory lots · FEFO</p>
@@ -343,6 +345,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
           <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onClose} disabled={saving} className="min-h-11 rounded-adm-sm border border-adm-line px-5 text-sm font-semibold text-white/75 transition-[background-color,transform] duration-150 hover:bg-white/6 active:scale-[0.97] disabled:opacity-50">Cancel</button><button type="button" onClick={saveReconciliation} disabled={saving || loading || reason.trim().length < 10} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold text-white transition-[background-color,transform] duration-150 hover:bg-blue-deep active:scale-[0.97] disabled:opacity-45">{saving ? 'Recording reconciliation…' : 'Record reconciliation'}</button></div>
         </footer>
       </section>
+      </AdminDialog>
     </div>
   )
 }

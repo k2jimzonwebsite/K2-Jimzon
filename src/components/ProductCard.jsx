@@ -4,17 +4,18 @@ import ProductVisual from './ProductVisual'
 import InteractiveReveal from './InteractiveReveal'
 import { StockPill } from './ui/bits'
 import { PlusIcon } from './ui/icons'
+import { productStock } from '../lib/cartInventory'
 
 export default function ProductCard({ product, compact = false, featured = false }) {
   const { openProduct, addToCart, setCartOpen, isWholesale, requestPasabuyItem } = useStore()
   const price = isWholesale ? product.wholesale_price : product.srp
-  const stock = Number(product.stock ?? product.stock_available ?? 0)
-  const soldOut = stock <= 0
+  const stock = productStock(product)
+  const stockUnknown = stock === null
+  const soldOut = !stockUnknown && stock <= 0
 
   const add = () => {
-    if (soldOut) return
-    addToCart(product.sku)
-    setCartOpen(true)
+    if (soldOut || stockUnknown) return
+    if (addToCart(product.sku).ok) setCartOpen(true)
   }
 
   const handlePasabuyRequest = () => {
@@ -48,7 +49,11 @@ export default function ProductCard({ product, compact = false, featured = false
               <p className="text-xs font-semibold text-navy-faint">Price</p>
               <p className="mt-0.5 text-xl font-bold tabular text-crimson md:text-2xl">{peso(price)}</p>
             </div>
-            {soldOut ? (
+            {stockUnknown ? (
+              <button disabled className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-shell px-4 text-sm font-bold text-navy-soft opacity-70">
+                Stock check pending
+              </button>
+            ) : soldOut ? (
               <button
                 onClick={handlePasabuyRequest}
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-[transform,background-color] duration-150 hover:bg-crimson-deep active:scale-[0.97] cursor-pointer shadow-sm"
@@ -71,14 +76,14 @@ export default function ProductCard({ product, compact = false, featured = false
 
   return (
     <article data-testid="product-card" className="product-card group flex h-full w-full flex-col overflow-hidden rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-[var(--store-surface-shadow)]">
-      <button onClick={() => openProduct(product.sku)} data-testid="product-image-btn" className="product-img-surface relative aspect-[4/5] overflow-hidden text-left cursor-pointer">
+      <button onClick={() => openProduct(product.sku)} aria-label={`View ${product.name}`} data-testid="product-image-btn" className="product-img-surface relative aspect-[4/5] overflow-hidden text-left cursor-pointer">
         <ProductVisual product={product} className="product-card-visual h-full w-full object-contain drop-shadow-lg" pad="p-4 sm:p-6" />
         {product.tag && <span className="absolute left-2.5 top-2.5 rounded-md bg-navy/90 px-2 py-1 text-xs font-bold uppercase tracking-[0.1em] text-cream">{product.tag}</span>}
       </button>
 
       <div className="flex flex-1 flex-col border-t border-[var(--store-surface-border)] p-3.5 sm:p-4">
         <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.12em] text-navy-faint">{product.category || 'Italian import'}</p>
-        <button onClick={() => openProduct(product.sku)} className="text-left cursor-pointer">
+        <button onClick={() => openProduct(product.sku)} className="flex min-h-11 items-start text-left cursor-pointer">
           <h3 className="store-card-title line-clamp-2 min-h-10 font-sans font-bold text-navy transition-colors duration-150 group-hover:text-crimson">{product.name}</h3>
         </button>
         {!compact && product.short && <p className="mt-2 hidden text-sm leading-relaxed text-navy-soft sm:line-clamp-2">{product.short}</p>}
@@ -90,7 +95,15 @@ export default function ProductCard({ product, compact = false, featured = false
               <p className="font-sans text-lg font-bold tabular-nums text-crimson">{peso(price)}</p>
               {isWholesale && <p className="font-sans text-xs tabular-nums text-navy-faint line-through">{peso(product.srp)}</p>}
             </div>
-            {soldOut ? (
+            {stockUnknown ? (
+              <button
+                disabled
+                aria-label={`Stock check pending for ${product.name}`}
+                className="product-add-button flex min-h-11 items-center justify-center rounded-lg border border-line bg-shell/80 px-2.5 text-xs font-bold text-navy-soft opacity-70"
+              >
+                Pending
+              </button>
+            ) : soldOut ? (
               <button
                 onClick={handlePasabuyRequest}
                 aria-label={`Request ${product.name} on Pasabuy`}

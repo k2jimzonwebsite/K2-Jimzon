@@ -49,8 +49,10 @@ test('storefront coupon and delivery totals are server-backed and never browser-
 
 test('Shopee intake durably queues incomplete pushes and never creates placeholder orders', async () => {
   const connector = await read('../supabase/functions/shopee-webhook/index.ts')
+  const ingress = await read('../supabase/migrations/20260825_shopee_webhook_ingress_boundary.sql')
 
-  expect(connector).toContain("from('channel_event_inbox').upsert")
+  expect(connector).toContain("rpc('capture_shopee_event_v1'")
+  expect(ingress).toContain('insert into public.channel_event_inbox')
   expect(connector).not.toContain("from('orders')")
   expect(connector).toContain('status: 503')
   expect(connector).toContain('status: 202')

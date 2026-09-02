@@ -1,5 +1,10 @@
 # K2 Jimzon — Audit Findings Register
 
+> **Historical snapshot — not current system truth or an active backlog.** This
+> register is retained as audit provenance. Counts, statuses, and remediations
+> may have changed; use `MASTER_ACTION_PLAN.md` and
+> `K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md` for current authority.
+
 This register assigns a stable identifier to every verified finding from the full project and website audit.
 
 ---
@@ -470,13 +475,22 @@ The live `error_reports` table permits anonymous `INSERT` without rate limiting 
 A malicious actor could flood `error_reports` with junk data, exhausting database table storage.
 
 ### Recommended Action
-Move client error reporting behind the Storefront and Admin BFFs with HMAC rate limiting, or restrict insert via a rate-limited RPC definer. (Included in MAP-017/MAP-020).
+Retire the unused direct browser insert boundary. Admin errors already emit only
+fixed classifications through the protected Admin BFF; Storefront failures stay
+redacted/local unless a separately justified, challenged and rate-bounded server
+intake is approved. Apply the prepared MAP-017 revoke/policy migration only in
+the backup-gated coordinated cutover.
 
 ### Dependencies
 AUD-001 (MAP-017).
 
 ### Verification
-Flooding error reports triggers rate limit response.
+Locally, the prepared migration applies and replays successfully; 100 direct
+anonymous attempts and 100 direct authenticated attempts retain zero rows. The
+same rollback-only behavior test proves staff-authenticated reads remain allowed
+and authenticated non-staff reads remain hidden. Production remains unremediated
+until a separately backup-gated application and live privilege/policy inspection
+prove the revoke.
 
 ---
 

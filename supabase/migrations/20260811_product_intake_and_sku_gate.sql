@@ -518,6 +518,16 @@ begin
        or nullif(trim(p_inventory ->> 'ownerCode'), '') is null then
       raise exception using errcode = '22023', message = 'K2_RECONCILIATION_FIELDS_REQUIRED';
     end if;
+    if not exists (
+         select 1 from public.hubs h
+         where h.id = trim(p_inventory ->> 'hubLocation')
+       ) or not exists (
+         select 1 from public.custodians c
+         where c.id = trim(p_inventory ->> 'custodian')
+           and c.hub_id = trim(p_inventory ->> 'hubLocation')
+       ) then
+      raise exception using errcode = '22023', message = 'K2_RECONCILIATION_IDENTITY_INVALID';
+    end if;
     v_batches := jsonb_build_array(jsonb_build_object(
       'box_code', trim(p_inventory ->> 'boxCode'),
       'batch_code', trim(p_inventory ->> 'batchCode'),

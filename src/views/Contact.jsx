@@ -106,12 +106,13 @@ export default function Contact() {
             <ContactRow label="Email"><a className="text-crimson underline decoration-crimson/30 underline-offset-4" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a></ContactRow>
             <ContactRow label="Messenger">@k2jimzon</ContactRow>
             <ContactRow label="Shopee">k2jimzononlineshop</ContactRow>
+            <ContactRow label="Business number">Not published yet</ContactRow>
             <ContactRow label="Location">Manila, Philippines</ContactRow>
           </dl>
 
           <div className="mt-8 rounded-2xl bg-forest-wash p-5 text-forest">
-            <h2 className="text-base font-bold">Staff response time</h2>
-            <p className="mt-2 text-sm leading-6">Our team checks messages daily during Manila business hours. Send us a message and we will respond promptly.</p>
+            <h2 className="text-base font-bold">Message handling</h2>
+            <p className="mt-2 text-sm leading-6">Messages are reviewed during Manila business hours. No response time is promised.</p>
           </div>
           <p className="mt-5 text-xs leading-5 text-navy-faint">Never share passwords or sensitive credentials through chat or email.</p>
         </aside>

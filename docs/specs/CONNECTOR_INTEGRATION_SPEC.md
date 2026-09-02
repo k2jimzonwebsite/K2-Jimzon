@@ -6,14 +6,35 @@ durable raw events, idempotency, canonical orders, atomic reservations, retries,
 dead-letter handling, and capability-specific health. Update this contract before
 using it for a production connector.
 
+## Prepared canonical channel and shop identity (29 August 2026)
+
+The legacy examples below remain historical and must not be used as an
+implementation recipe. The prepared replacement migration
+`20260829_channel_vocabulary_and_shops.sql` establishes:
+
+- canonical channel codes: `website`, `pasabuy`, `manual`, `shopee`, `lazada`,
+  and `tiktok`;
+- one private `channel_shops` record for every seller account, so a second
+  Shopee/Lazada/TikTok shop never shares identity with the first;
+- `order_requests.channel_source` and `channel_listings.channel_source` foreign
+  keys to the canonical vocabulary;
+- required same-channel shop identity on marketplace orders and forbidden shop
+  identity on Website, Pasabuy, or manual orders;
+- listing uniqueness per shop and external marketplace-item uniqueness within
+  each shop.
+
+Adapters still capture durable provider evidence first and normalize through a
+reviewed service-only command. They do not write the historical `orders`
+example below, decrement product columns directly, or infer a missing shop. The
+migration passes 12 isolated PostgreSQL behavior/access/index checks but is not
+applied to production; no marketplace adapter is thereby connected.
+
 # K2 Jimzon — Connector Integration Spec (Data Contract)
 
-**Purpose:** the admin dashboard and storefront are already the "receiving end." They read from
-Supabase and listen for **real-time changes** on `products`, `orders`, `conversations`, and
-`messages`. So any connector (Shopee / Lazada / TikTok / Meta / Viber / WhatsApp) only needs to
-**write incoming data into these tables** — the UI updates live, with no front-end changes.
-
-This doc is the contract: build the backend to match it, and "the moment we connect, it flows."
+**Purpose:** define how a connector captures attributable shop evidence and
+normalizes it through K2's reviewed service boundaries. A connector does not gain
+permission to write canonical product, inventory, order, or communication truth
+merely because an Admin surface can render those tables.
 
 > **Important:** connectors run on the **backend** (e.g. Supabase Edge Functions or a Node
 > service) using the **service-role key** — never the browser. The service role bypasses RLS.
@@ -21,26 +42,86 @@ This doc is the contract: build the backend to match it, and "the moment we conn
 
 ---
 
-## 1. Inventory sync → `products` (your Inventory Master)
+## 1. Inbound marketplace inventory/catalog snapshot
 
-A stock/price update from a marketplace **upserts** into `products` keyed by `sku`. This instantly
-reflects in the admin **Inventory** sheet *and* the storefront **catalog** (both read `products`
-live).
+The former direct `products` upsert example is rejected. A provider SKU is scoped
+to one shop and may collide with another variant; provider quantity is a reported
+listing observation, not verified physical stock.
 
-```sql
-insert into public.products (sku, name, srp, wholesale_price, stock_available, status, origin)
-values ('LAV-ORO-1KG', 'Lavazza Oro 1kg', 1299, 1020, 26, 'Live', 'Shopee|Beverages')
-on conflict (sku) do update set
-  srp = excluded.srp,
-  stock_available = excluded.stock_available,
-  status = excluded.status,
-  updated_at = now();
-```
+CSV imports first, and approved APIs later, write one private staged snapshot
+contract with:
 
-Real columns to use: `sku` (PK), `name`, `srp`, `wholesale_price`, `stock_available`, `status`
-(`'Live'` to show on the storefront), `primary_image_url`, `secondary_images` (text[]),
-`description`, `barcode`, `origin`. **Only `status IN ('Live','Active')` products appear on the
-storefront.**
+- provider and exact shop identity;
+- source/export identity, content hash, schema version, observation period/time,
+  receipt time, and idempotency/recovery identity;
+- per row: external item/variant/SKU/barcode evidence, title/variant attributes,
+  price/currency, listing status, reported available quantity, and source row;
+- normalized validation, duplicate/conflict, freshness, and safe error state;
+- an Admin decision of Link existing, Create new Draft, or Leave unresolved;
+- a separate quantity decision that preserves the observation or invokes the
+  controlled physical-count reconciliation command.
+
+One K2 SKU remains the canonical sellable-variant identity. Marketplace SKUs and
+external IDs remain per-shop aliases after approval. Matching SKU, normalized
+name, or barcode may rank a suggestion but never merges automatically. New
+products receive the existing server-generated K2 SKU and remain Draft. Product
+fields are reviewable suggestions; no import silently publishes or overwrites
+Product Master.
+
+Reported shop quantity never changes Master Inventory directly. The flexible
+availability target is two eligible units per individual selected shop, with
+Covered, Thin, Skipped, Out, and Needs-review states. Recent verified sales may
+rank a scarcity proposal, and the owner may override or skip shops. Approved
+automatic availability rebalancing cannot exceed canonical sellable stock,
+double-count units, violate reservations, or represent physical custody
+movement. Actual custody transfer keeps its exact-lot request/approval/receipt
+workflow.
+
+Every canonical decision is Admin/AAL2, signed, reasoned, payload-idempotent,
+rate/batch bounded, and recorded with immutable before/after evidence. Provider
+credentials remain service-only. A staged row, CSV receipt, configured account,
+or successful parse is not proof of a live connector, reconciled inventory, or
+updated marketplace.
+
+### Prepared local v1 boundary (31 August 2026)
+
+The inactive implementation now fixes the provider-neutral header order as:
+`schema_version`, `source_row_id`, `external_item_id`,
+`external_variant_id`, `marketplace_sku`, `barcode`, `title`, `size`,
+`concentration`, `flavor`, `shade`, `formulation`, `pack_count`, `unit_price`,
+`currency`, `listing_status`, `reported_quantity`, and `observed_at`. The common
+schema version is `k2.marketplace-snapshot.v1`; the K2 parser ceiling is 512 KiB,
+1,000 rows, and 4,000 characters per cell. These are K2 safety bounds, not claims
+about provider export limits.
+
+The prepared close-session order contract is separately versioned as
+`k2.marketplace-orders.v1` with exact headers `schema_version`,
+`external_order_id`, `external_line_id`, `marketplace_sku`, `quantity`,
+`gross_amount`, `currency`, `ordered_at`, `order_status`, and `payment_status`.
+It contains no customer/contact/address columns, is scoped to one exact shop and
+close period, permits a header-only reviewed zero-sales export, and retains at
+most 5,000 facts under the same 512 KiB/4,000-character safety envelope. Exact
+shop/order/line payload replays become duplicates across rows and imports;
+changed payloads become conflicts. SQL repeats this identity check so BFF-only
+deduplication cannot become a double-counting gap.
+
+`20260831_marketplace_snapshot_staging.sql` prepares private forced-RLS import,
+row, alias, observation, event, and close-session records plus signed
+`marketplace_snapshot_stage`, `marketplace_order_fact_stage`,
+`marketplace_match_decision`, `marketplace_fee_estimate_save`, and
+`owner_close_session_save` actions. The fee action derives integer-minor-unit
+gross/commission/payment/withholding/fixed estimates from accepted linked facts,
+blocks changed or unresolved evidence, versions each shop/session estimate, and
+always returns non-settlement/non-accounting flags. It does not contain physical
+inventory DML.
+The Admin BFF prepares `marketplace-snapshots/stage`, `/decision`, `/status`, and
+`marketplace-orders/stage`, `/status`, `owner-close/session`, and
+`owner-close/fees`. Synthetic listing and customer-free order fixtures named for Shopee, Lazada, and TikTok
+prove only normalized K2 behavior. The isolated PostgreSQL rehearsal and focused
+contracts pass, but no real export dictionary, provider API, production apply,
+flag, deployment, shop reconciliation, or staff acceptance has occurred. See
+`docs/runbooks/MARKETPLACE_SNAPSHOT_STAGING_RUNBOOK.md` for activation and
+recovery gates.
 
 ---
 
@@ -171,5 +252,16 @@ attempts durably, must preserve an existing processing/processed row on exact
 replay, and must reject changed evidence under an existing event identity.
 Shopee's prepared `capture_shopee_event_v1` boundary implements this contract
 locally, but its migration and provider-approved limits are not applied.
+
+MAP-023 acceptance reuses `npm.cmd run verify:map020-shopee-ingress-portable`.
+The 31 August 2026 isolated run applied the actual prepared migration, treated a
+successful capture response as lost, and retried the identical event. The retry
+returned the existing terminal row without changing its processing state or
+creating another row. A changed payload under that identity returned `conflict`
+without replacing stored evidence. The exact postcondition is one inbox row plus
+shop/global budget counts of `3` for capture, replay, and conflict. This remains
+local prepared-source evidence: it does not verify the provider signing contract,
+real delivery/retry timing, production limits, deployment, order normalization,
+or outbound stock publication.
 
 Once #3 writes into these tables, the dashboard displays everything live — no front-end changes.

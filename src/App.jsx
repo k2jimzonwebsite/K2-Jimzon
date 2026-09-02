@@ -20,6 +20,10 @@ const Catalog = lazy(() => import('./views/Catalog'))
 const GuestMessages = lazy(() => import('./views/GuestMessages'))
 const Contact = lazy(() => import('./views/Contact'))
 const CustomerAccount = lazy(() => import('./views/CustomerAccount'))
+// MAP-027: opt-in Interactive Shop. Registered here as well as in
+// StorefrontApp.jsx — this combined entry has its own view registry, and a
+// route missing from either one silently falls back to Home.
+const InteractiveShop = lazy(() => import('./views/InteractiveShop'))
 
 const VIEWS = {
   home: Home,
@@ -30,6 +34,7 @@ const VIEWS = {
   wholesale: Wholesale,
   admin: Admin,
   catalog: Catalog,
+  store: InteractiveShop,
   messages: GuestMessages,
   contact: Contact,
   account: CustomerAccount,

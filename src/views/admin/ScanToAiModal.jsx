@@ -10,6 +10,7 @@ import {
   PRODUCT_RESEARCH_SCHEMA_VERSION,
   RESEARCH_MODES,
 } from './productResearchPrompt'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
   const [step, setStep]               = useState('scan')   // 'scan' | 'manual' | 'result'
@@ -110,7 +111,8 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[115] flex flex-col bg-adm-sunken text-white" role="dialog" aria-modal="true" aria-labelledby="new-product-scan-title">
+    <AdminDialog onClose={onClose} closeDisabled={checking} labelledBy="new-product-scan-title">
+    <div className="fixed inset-0 z-[115] flex flex-col bg-adm-sunken text-white">
 
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-adm-line bg-black/30 shrink-0">
@@ -336,5 +338,6 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
         )}
       </div>
     </div>
+    </AdminDialog>
   )
 }

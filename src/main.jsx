@@ -31,3 +31,22 @@ createRoot(document.getElementById('root')).render(
     </HelmetProvider>
   </StrictMode>,
 )
+
+// Brand fonts improve the visual finish but must never hold the application
+// bootstrap hostage when Google's font host is slow, filtered, or offline.
+// System fallbacks are already declared in index.css, so load this optional
+// stylesheet only after React has been scheduled to render.
+const loadBrandFonts = () => {
+  if (document.querySelector('link[data-k2-brand-fonts]')) return
+  const stylesheet = document.createElement('link')
+  stylesheet.rel = 'stylesheet'
+  stylesheet.href = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Source+Sans+3:ital,wght@0,400..800;1,400..700&display=swap'
+  stylesheet.dataset.k2BrandFonts = 'true'
+  document.head.appendChild(stylesheet)
+}
+
+if ('requestIdleCallback' in window) {
+  window.requestIdleCallback(loadBrandFonts, { timeout: 2000 })
+} else {
+  window.setTimeout(loadBrandFonts, 0)
+}

@@ -25,7 +25,7 @@ function uuid(value, { nullable = false } = {}) {
 }
 
 export function validateInboxCommand(action, body) {
-  if (action === 'inbox_internal_note') {
+  if (action === 'inbox_internal_note' || action === 'inbox_send_reply') {
     exactObject(body, ['conversationId', 'content'])
     return { conversationId: uuid(body.conversationId), content: boundedText(body.content, { required: true }) }
   }
@@ -63,16 +63,17 @@ function mapMessage(message) {
 
 export async function readAdminInbox(client) {
   const conversationsResult = await client.from('conversations')
-    .select('id,customer_name,platform,status,priority,unread_count,assigned_to,response_due_at,last_inbound_at,last_read_at,resolved_at,last_message_at')
+    .select('id,customer_name,platform,source_kind,status,priority,unread_count,assigned_to,response_due_at,last_inbound_at,last_read_at,resolved_at,last_message_at')
     .order('last_message_at', { ascending: false }).limit(200)
   if (conversationsResult.error) throw new Error('INBOX_UNAVAILABLE')
   const conversations = conversationsResult.data || []
   const ids = conversations.map((item) => item.id)
-  const [messagesResult, staffResult] = await Promise.all([
+  const [messagesResult, staffResult, websiteReplyResult] = await Promise.all([
     ids.length
       ? client.from('messages').select('id,conversation_id,sender_type,content,is_draft,delivery_status,sent_at,failure_reason,created_at').in('conversation_id', ids).order('created_at', { ascending: false }).limit(2000)
       : Promise.resolve({ data: [], error: null }),
-    client.from('user_profiles').select('id,full_name,email,role').in('role', ['Admin', 'Staff']).order('full_name'),
+    client.from('user_profiles').select('id,full_name,email,role').in('role', ['Admin', 'Staff', 'SuperAdmin']).order('full_name'),
+    client.rpc('website_reply_capability_v1'),
   ])
   if (messagesResult.error || staffResult.error) throw new Error('INBOX_UNAVAILABLE')
   const messagesByConversation = new Map()
@@ -84,7 +85,8 @@ export async function readAdminInbox(client) {
   return {
     conversations: conversations.map((conversation) => ({
       id: conversation.id, customerName: conversation.customer_name,
-      platform: conversation.platform, status: conversation.status, priority: conversation.priority,
+      platform: conversation.platform, sourceKind: conversation.source_kind,
+      status: conversation.status, priority: conversation.priority,
       unreadCount: Number(conversation.unread_count || 0), assignedTo: conversation.assigned_to,
       responseDueAt: conversation.response_due_at, lastInboundAt: conversation.last_inbound_at,
       lastReadAt: conversation.last_read_at, resolvedAt: conversation.resolved_at,
@@ -96,6 +98,7 @@ export async function readAdminInbox(client) {
       displayName: profile.full_name || String(profile.email || '').split('@')[0] || 'Staff member',
       role: profile.role,
     })),
+    websiteReplyReady: !websiteReplyResult.error && websiteReplyResult.data === true,
   }
 }
 
@@ -117,7 +120,12 @@ export async function handleInboxCommand(req, res, action) {
   try {
     const payload = validateInboxCommand(action, await readJson(req))
     const signed = signedAdminCommandArguments(action, authorized.identity.userId, idempotencyKey, payload)
-    const { data, error } = await authorized.client.rpc('execute_admin_inbox_command_v1', signed)
+    // Both database functions are named literally at the call site. A computed
+    // name would read the same here but would disappear from the security
+    // surface inventory, which can only classify a call it can see statically.
+    const { data, error } = action === 'inbox_send_reply'
+      ? await authorized.client.rpc('execute_admin_website_reply_v1', signed)
+      : await authorized.client.rpc('execute_admin_inbox_command_v1', signed)
     if (error) {
       const providerCode = String(error.message || '')
       if (providerCode.includes('K2_ADMIN_RATE_LIMITED')) return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': '60' })

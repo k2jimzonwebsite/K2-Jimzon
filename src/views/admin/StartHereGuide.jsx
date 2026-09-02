@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { DAILY_FLOW } from './adminGuide'
-import WorkflowGuideModal from '../../components/admin/guides/WorkflowGuideModal'
+
+const WorkflowGuideModal = lazy(() => import('../../components/admin/guides/WorkflowGuideModal'))
 
 // A read-and-go daily walkthrough. New staff read it top-to-bottom and can jump
 // straight to each screen or visual diagram — so the workflow needs no verbal explaining.
-export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
+export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOperationsGuide }) {
   const [open, setOpen] = useState({})
   const [guideModalTab, setGuideModalTab] = useState(null)
 
@@ -23,7 +24,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
                 <span className="text-base">📋</span>
                 <h2 className="text-lg font-semibold text-white">Start here — your daily workflow</h2>
               </div>
-              <p className="mt-0.5 text-sm text-white/50">Read top to bottom. This is everything you do in a shift.</p>
+              <p className="mt-0.5 text-sm text-white/50">Read top to bottom, then follow each procedure's role, evidence, blocker, and recovery checks.</p>
             </div>
             <button onClick={onClose} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-adm-sm bg-white/5 text-white/50 hover:bg-white/10 hover:text-white cursor-pointer">✕</button>
           </div>
@@ -77,7 +78,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
                       {s.section === 'consignment' && (
                         <button
                           onClick={() => setGuideModalTab('flights')}
-                          className="shrink-0 rounded-adm-sm border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-[10px] font-bold text-sky-400 hover:bg-sky-500/20 cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-xs font-bold text-sky-400 hover:bg-sky-500/20 cursor-pointer"
                         >
                           Diagram 🗺️
                         </button>
@@ -85,7 +86,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
                       {s.section === 'inventory' && (
                         <button
                           onClick={() => setGuideModalTab('custody')}
-                          className="shrink-0 rounded-adm-sm border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-[10px] font-bold text-amber-400 hover:bg-amber-500/20 cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-xs font-bold text-amber-400 hover:bg-amber-500/20 cursor-pointer"
                         >
                           Diagram 🗺️
                         </button>
@@ -93,7 +94,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
                       {s.section === 'omni_hub' && (
                         <button
                           onClick={() => setGuideModalTab('fulfillment')}
-                          className="shrink-0 rounded-adm-sm border border-purple-500/20 bg-purple-500/10 px-2 py-1 text-[10px] font-bold text-purple-400 hover:bg-purple-500/20 cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-purple-500/20 bg-purple-500/10 px-2 py-1 text-xs font-bold text-purple-400 hover:bg-purple-500/20 cursor-pointer"
                         >
                           Diagram 🗺️
                         </button>
@@ -101,7 +102,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
                       {s.section === 'pasabuy_manager' && (
                         <button
                           onClick={() => setGuideModalTab('pasabuy')}
-                          className="shrink-0 rounded-adm-sm border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[10px] font-bold text-cyan-400 hover:bg-cyan-500/20 cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-xs font-bold text-cyan-400 hover:bg-cyan-500/20 cursor-pointer"
                         >
                           Diagram 🗺️
                         </button>
@@ -115,21 +116,30 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate }) {
 
           {/* Footer */}
           <div className="shrink-0 border-t border-adm-line bg-adm-sunken px-6 py-4">
-            <p className="text-sm text-white/60">
-              Stuck on anything? Open the <span className="font-semibold text-white">Operations guide</span> or view visual diagrams for exact rules.
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm text-white/60">
+                Stuck on anything? Open the <span className="font-semibold text-white">Operations guide</span> or view visual diagrams for exact rules.
+              </p>
+              {onOpenOperationsGuide && (
+                <button onClick={() => { onClose(); onOpenOperationsGuide() }} className="min-h-11 shrink-0 rounded-adm-sm bg-blue px-3 text-xs font-semibold text-white hover:bg-blue-deep">
+                  Browse procedures →
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Visual Workflow Modal */}
       {guideModalTab && (
-        <WorkflowGuideModal
-          isOpen={!!guideModalTab}
-          defaultTab={guideModalTab}
-          onClose={() => setGuideModalTab(null)}
-          onNavigate={onNavigate}
-        />
+        <Suspense fallback={null}>
+          <WorkflowGuideModal
+            isOpen
+            defaultTab={guideModalTab}
+            onClose={() => setGuideModalTab(null)}
+            onNavigate={onNavigate}
+          />
+        </Suspense>
       )}
     </>
   )

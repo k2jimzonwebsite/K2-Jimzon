@@ -12,11 +12,17 @@ const PUBLIC_MESSAGES = {
   CONVERSATION_NOT_AVAILABLE: 'That conversation is not available to this browser.',
   INVALID_OR_INELIGIBLE: 'That coupon is invalid or not eligible for this cart.',
   REQUEST_TIMEOUT: 'The request timed out. Check your connection, then retry the same request.',
+  DELIVERY_QUOTE_UNAVAILABLE: 'We could not calculate delivery right now. Your order will be quoted after review.',
 }
 
 export async function listGuestConversations() {
   if (!ENABLED) return { ok: false, error: 'Guest messaging is not active yet.' }
   return postGuestCommerce('messages', {})
+}
+
+export async function listGuestOrders() {
+  if (!ENABLED) return { ok: false, error: 'Order status is not active yet.' }
+  return postGuestCommerce('order/status', {})
 }
 
 export async function replyToGuestConversation(conversationReference, message, idempotencyKey) {
@@ -27,6 +33,15 @@ export async function replyToGuestConversation(conversationReference, message, i
 export async function startGuestConversation(payload) {
   if (!ENABLED) return { ok: false, error: 'Guest messaging is not active yet.' }
   return postGuestCommerce('conversation', payload)
+}
+
+// MAP-023. Returns a delivery charge only for an exact locality inside the
+// owner-approved pilot. Every other case — including an unreachable service —
+// leaves checkout on the existing quoted-after-review path, so a failure here
+// can never turn into a wrong number in front of a customer.
+export async function quoteGuestDelivery(payload) {
+  if (!ENABLED) return { ok: false, error: 'Delivery quotation is not active yet.' }
+  return postGuestCommerce('delivery/quote', payload)
 }
 
 export function guestBffEnabled() {
@@ -64,5 +79,5 @@ export async function postGuestCommerce(path, body) {
       error: PUBLIC_MESSAGES[code] || 'The request could not be completed. Please try again.',
     }
   }
-  return { ok: true, data: result.receipt || result.preview || result.conversations }
+  return { ok: true, data: result.receipt || result.preview || result.conversations || result.orders }
 }

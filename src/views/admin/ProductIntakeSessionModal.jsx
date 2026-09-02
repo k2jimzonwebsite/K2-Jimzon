@@ -26,7 +26,11 @@ import {
 import { PRODUCT_EVIDENCE_MAX_BYTES, PRODUCT_EVIDENCE_MIMES } from '../../lib/uploadValidation'
 import { PRODUCT_RESEARCH_SCHEMA_VERSION, parseProductResearchPaste } from './productResearchContract'
 import { buildProductJsonPrompt } from './productResearchPrompt'
+import { buildResumedIntakeState, buildReviewedDraftState } from './productIntakeResume'
 import { safeUiError } from '../../lib/safeUiError'
+import { applyImageFallback } from '../../lib/imageFallback'
+import { AdminDialog } from '../../components/ui/AdminDialog'
+import { CANONICAL_CUSTODIANS, CANONICAL_HUBS } from '../../data/canonicalIdentities'
 
 export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct }) {
   const closeButtonRef = useRef(null)
@@ -35,6 +39,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   const previewUrlsRef = useRef(new Map())
   const [step, setStep] = useState(1)
   const [session, setSession] = useState(null)
+  const [sessionLoading, setSessionLoading] = useState(false)
+  const [resumeNotice, setResumeNotice] = useState('')
   const [operationError, setOperationError] = useState('')
   const [evidenceCleanup, setEvidenceCleanup] = useState(null)
   const [isOnline, setIsOnline] = useState(() => typeof navigator === 'undefined' || navigator.onLine)
@@ -85,8 +91,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   const [expiryDate, setExpiryDate] = useState('')
   const [isNonExpiry, setIsNonExpiry] = useState(false)
   const [quantity, setQuantity] = useState(1)
-  const [hubLocation, setHubLocation] = useState('Manila Central Hub')
-  const [custodian, setCustodian] = useState('Warehouse Staff')
+  const [hubLocation, setHubLocation] = useState(CANONICAL_HUBS[0].id)
+  const [custodian, setCustodian] = useState(CANONICAL_CUSTODIANS[0].id)
   const [unitCost, setUnitCost] = useState(0)
   const [inventorySaved, setInventorySaved] = useState(false)
   const [savingInventory, setSavingInventory] = useState(false)
@@ -95,19 +101,25 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   const [publicationStatus, setPublicationStatus] = useState('draft')
   const [publicationReason, setPublicationReason] = useState('')
   const [publishing, setPublishing] = useState(false)
+  const availableCustodians = CANONICAL_CUSTODIANS.filter(
+    (custodian) => custodian.hub_id === hubLocation,
+  )
 
   // Initialize session on mount
   useEffect(() => {
-    if (isOpen && isOnline && !session) {
+    if (isOpen && isOnline) {
       initSession()
     }
-  }, [isOpen, isOnline])
+  }, [isOpen])
 
   useEffect(() => {
     if (!isOpen) return undefined
     const updateConnectionState = () => {
       const online = navigator.onLine
-      setIsOnline(online)
+      setIsOnline((wasOnline) => {
+        if (!wasOnline && online && !session) initSession()
+        return online
+      })
       if (online) {
         setOperationError((current) => current.startsWith('You are offline.') ? '' : current)
       }
@@ -115,17 +127,11 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     updateConnectionState()
     window.addEventListener('online', updateConnectionState)
     window.addEventListener('offline', updateConnectionState)
-    const handleDialogKeyDown = (event) => {
-      if (event.key === 'Escape' && !creatingDraft && !savingInventory && !publishing) onClose()
-    }
-    window.addEventListener('keydown', handleDialogKeyDown)
-    closeButtonRef.current?.focus()
     return () => {
       window.removeEventListener('online', updateConnectionState)
       window.removeEventListener('offline', updateConnectionState)
-      window.removeEventListener('keydown', handleDialogKeyDown)
     }
-  }, [isOpen, creatingDraft, savingInventory, publishing, onClose])
+  }, [isOpen, session])
 
   useEffect(() => {
     if (isOpen) return
@@ -158,31 +164,30 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   }, [isOpen, isOnline, step])
 
   const initSession = async () => {
+    setSessionLoading(true)
     setOperationError('')
     try {
       const active = await createOrResumeIntakeSession()
+      const resumed = buildResumedIntakeState(active)
       setSession(active)
-      if (active.product_id && active.assigned_sku) {
-        setCreatedProduct({ id: active.product_id, sku: active.assigned_sku, status: 'draft' })
-      }
-      setInventorySaved(Boolean(active.inventory_result))
-      if (Array.isArray(active.packaging_images)) {
-        setPackagingImages((current) => ({
-          ...current,
-          ...Object.fromEntries(active.packaging_images.map((image) => [image.slot, image])),
-        }))
-      }
-      if (active.evidence_checklist) setEvidenceChecked((current) => ({ ...current, ...active.evidence_checklist }))
-      if (active.category_type) setCategoryType(active.category_type)
-      if (active.checklist_step === 'packaging_evidence') setStep(2)
-      else if (active.checklist_step === 'research_handoff') setStep(3)
-      else if (active.checklist_step === 'field_review') setStep(4)
-      else if (active.checklist_step === 'draft_saved') setStep(5)
-      else if (active.checklist_step === 'first_inventory') setStep(6)
-      else if (active.checklist_step === 'publication_review') setStep(7)
-      else setStep(1)
+      setStep(resumed.step)
+      setQuery(resumed.query)
+      setPackagingImages({ PRIMARY: null, BACK: null, BARCODE: null, ...resumed.packagingImages })
+      setEvidenceChecked({ ingredients: false, allergens: false, storage: false, expiry: false, ...resumed.evidenceChecked })
+      setCategoryType(resumed.categoryType)
+      setParsedPayload(resumed.parsedPayload)
+      setJsonInput(resumed.jsonInput)
+      setAcceptedFields(resumed.acceptedFields)
+      setCreatedProduct(resumed.createdProduct)
+      setInventorySaved(resumed.inventorySaved)
+      setResumeNotice(resumed.resumeNotice)
+      setDuplicateResult(null)
+      setDistinctVariantConfirmed(false)
+      setDistinctVariantReason('')
     } catch (error) {
       setOperationError(error.userMessage || 'Product intake could not be started. Nothing was changed.')
+    } finally {
+      setSessionLoading(false)
     }
   }
 
@@ -226,7 +231,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
   const handleEvidenceFile = async (slot, file) => {
     setOperationError('')
-    if (!file) return
+    if (!file || sessionLoading) return
     if (evidenceCleanup) {
       setOperationError('Retry the queued private-file cleanup before selecting another photo.')
       return
@@ -285,7 +290,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   }
 
   const canAdvance = (() => {
-    if (!session?.id || evidenceCleanup) return false
+    if (sessionLoading || !session?.id || evidenceCleanup) return false
     if (step === 1) {
       return duplicateResult?.matchType === 'none'
         || (duplicateResult?.matchType === 'ambiguous'
@@ -334,6 +339,12 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       } else if (step === 3) {
         const updated = await saveIntakeSessionStep(session, 'field_review')
         setSession(updated)
+      } else if (step === 4) {
+        const review = buildReviewedDraftState(parsedPayload, acceptedFields)
+        const updated = await saveIntakeSessionStep(session, 'draft_saved', review)
+        setSession(updated)
+        setParsedPayload(review.draft_payload)
+        setJsonInput(JSON.stringify(review.draft_payload, null, 2))
       }
       setStep((current) => current + 1)
     } catch (error) {
@@ -362,6 +373,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   }
 
   const handleSaveDraft = async () => {
+    if (sessionLoading) return
     if (!session?.id || !parsedPayload) {
       setOperationError('Validate the PRODUCT_JSON in Step 4 before creating a Draft.')
       return
@@ -373,19 +385,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     setCreatingDraft(true)
     setOperationError('')
     try {
-      const acceptedProduct = Object.fromEntries(
-        Object.entries(parsedPayload.product).filter(([field]) => acceptedFields[field])
-      )
-      const fieldDecisions = Object.fromEntries(
-        Object.keys(parsedPayload.product).map((field) => [field, acceptedFields[field] ? 'accepted' : 'rejected'])
-      )
-      const reviewedSession = await saveIntakeSessionStep(session, 'draft_saved', {
-        barcode: query || session.barcode || null,
-        draft_payload: { ...parsedPayload, product: acceptedProduct },
-        field_decisions: fieldDecisions,
-      })
-      setSession(reviewedSession)
-      const res = await createProductDraftServer(reviewedSession)
+      const res = await createProductDraftServer(session)
 
       if (res.success) {
         setCreatedProduct(res.product)
@@ -400,7 +400,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   }
 
   const handleSaveFirstInventory = async () => {
-    if (savingInventory) return
+    if (savingInventory || sessionLoading) return
     setOperationError('')
     if (!createdProduct && !session?.assigned_sku) {
       setOperationError('Product Draft must exist before creating inventory.')
@@ -455,6 +455,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   }
 
   const handleUpdatePublicationStatus = async (newStatus) => {
+    if (sessionLoading) return
     if (publicationReason.trim().length < 10) {
       setOperationError('Add a specific publication reason of at least 10 characters before changing status.')
       return
@@ -479,11 +480,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+      <AdminDialog onClose={onClose} closeDisabled={creatingDraft || savingInventory || publishing} initialFocusRef={closeButtonRef} labelledBy="product-intake-title" describedBy="product-intake-summary">
       <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="product-intake-title"
-        aria-describedby="product-intake-summary"
         className="relative w-full max-w-2xl bg-[#161922] border border-white/10 rounded-xl shadow-2xl text-white overflow-hidden my-auto max-h-[92vh] flex flex-col"
       >
 
@@ -493,7 +491,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
             <BoxIcon className="w-5 h-5 text-amber-400" />
             <div>
               <h3 id="product-intake-title" className="text-sm font-semibold tracking-wide">Phone-First Product Intake</h3>
-              <p id="product-intake-summary" className="text-[11px] text-white/50">Resumable session · server-controlled SKU</p>
+              <p id="product-intake-summary" className="text-xs text-white/50">Resumable session · server-controlled SKU</p>
             </div>
           </div>
           <button
@@ -533,7 +531,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   : 'text-white/30'
               }`}
             >
-              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
+              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${
                 s.num === step
                   ? 'bg-amber-400 text-black font-bold'
                   : s.num < step
@@ -549,6 +547,18 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
         {/* Body Content */}
         <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
+          {sessionLoading && (
+            <div role="status" aria-live="polite" className="rounded-lg border border-white/10 bg-white/5 p-3.5 text-sm text-white/70">
+              Restoring saved server progress…
+            </div>
+          )}
+
+          {!sessionLoading && resumeNotice && (
+            <div role="status" aria-live="polite" className="rounded-lg border border-blue-400/25 bg-blue-400/10 p-3.5 text-sm text-blue-100">
+              <strong className="text-blue-200">Intake resumed.</strong> {resumeNotice}
+            </div>
+          )}
+
           {operationError && (
             <div ref={errorRef} tabIndex={-1} role="alert" className="p-3.5 bg-rose-500/10 border border-rose-500/30 text-rose-200 rounded-lg text-sm focus:outline-none">
               <strong className="text-rose-300">Action not completed.</strong> {operationError}
@@ -614,7 +624,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <button
                   type="button"
                   onClick={handleSearchDuplicate}
-                  disabled={searching || !query.trim()}
+                  disabled={searching || sessionLoading || !session?.id || !query.trim()}
                   className="min-h-11 px-4 py-2.5 bg-amber-500 text-black font-medium text-sm rounded-lg hover:bg-amber-400 disabled:opacity-50 transition-colors flex items-center gap-1.5"
                 >
                   {searching ? <SyncIcon className="w-4 h-4 animate-spin" /> : 'Check Duplicate'}
@@ -650,7 +660,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                         {duplicateResult.candidates.map(c => (
                           <div key={c.id} className="p-2 bg-black/40 rounded flex items-center justify-between">
                             <span>{c.name} ({c.sku}) — {c.brand}</span>
-                            <span className="text-[10px] text-white/50">{c.category}</span>
+                            <span className="text-xs text-white/50">{c.category}</span>
                           </div>
                         ))}
                       </div>
@@ -722,11 +732,12 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 ].map(s => (
                   <div key={s.slot} className="p-3 bg-white/5 border border-white/10 rounded-lg text-center space-y-2">
                     <CameraIcon className="w-5 h-5 mx-auto text-amber-400/60" />
-                    <div className="text-[11px] font-medium text-white/80">{s.label}</div>
+                    <div className="text-xs font-medium text-white/80">{s.label}</div>
                     {packagingImages[s.slot]?.previewUrl && (
                       <img
                         src={packagingImages[s.slot].previewUrl}
                         alt={`${s.label} preview`}
+                        onError={applyImageFallback}
                         className="mx-auto h-20 w-16 rounded object-cover border border-white/10"
                       />
                     )}
@@ -741,7 +752,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                         accept="image/jpeg,image/png,image/webp"
                         capture="environment"
                         aria-label={`${s.label} evidence photo`}
-                        disabled={Boolean(evidenceUploading[s.slot])}
+                        disabled={sessionLoading || Boolean(evidenceUploading[s.slot])}
                         onChange={(event) => handleEvidenceFile(s.slot, event.target.files?.[0])}
                         className="sr-only"
                       />
@@ -809,7 +820,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
               <div className="p-3 bg-black/40 border border-white/10 rounded-lg space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-amber-400 text-[11px]">Contract: k2.product-content.v3</span>
+                  <span className="font-mono text-amber-400 text-xs">Contract: k2.product-content.v3</span>
                   <button
                     type="button"
                     onClick={handleCopyPrompt}
@@ -819,7 +830,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                     {copiedPrompt ? 'Copied to Clipboard!' : 'Copy Prompt'}
                   </button>
                 </div>
-                <p className="text-white/50 text-[11px]">
+                <p className="text-white/50 text-xs">
                   Paste this prompt into ChatGPT along with the packaging photos. Neither ChatGPT nor browser staff can set SKU, price, stock, expiry, or publication state.
                 </p>
               </div>
@@ -844,7 +855,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   value={jsonInput}
                   onChange={(e) => setJsonInput(e.target.value)}
                   placeholder="Paste PRODUCT_JSON object here..."
-                  className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 font-mono text-[11px] text-amber-200 focus:outline-none focus:border-amber-400 placeholder-white/30"
+                  className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 font-mono text-xs text-amber-200 focus:outline-none focus:border-amber-400 placeholder-white/30"
                 />
                 <button
                   type="button"
@@ -865,7 +876,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg space-y-2">
                   <div className="flex items-center justify-between text-emerald-300 font-semibold">
                     <span className="flex items-center gap-1.5"><CheckIcon className="h-4 w-4" /> Schema validated: {parsedPayload.meta.schemaVersion}</span>
-                    <span className="text-[10px] text-white/50">Evidence Items: {parsedPayload.meta.evidenceCount}</span>
+                    <span className="text-xs text-white/50">Evidence Items: {parsedPayload.meta.evidenceCount}</span>
                   </div>
                   <div className="space-y-1 bg-black/40 p-2 rounded max-h-40 overflow-y-auto">
                     {Object.entries(parsedPayload.product).map(([key, val]) => (
@@ -911,7 +922,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <button
                   type="button"
                   onClick={handleSaveDraft}
-                  disabled={creatingDraft}
+                  disabled={sessionLoading || creatingDraft}
                   className="w-full min-h-11 py-3 bg-amber-400 text-black font-bold rounded-lg hover:bg-amber-300 transition-colors flex items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-60"
                 >
                   {creatingDraft ? <SyncIcon className="w-4 h-4 animate-spin" /> : 'Assign SKU & Save Product Draft'}
@@ -1076,23 +1087,38 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                     </div>
                     <div>
                       <label htmlFor="intake-hub" className="text-white/60">Hub / Location</label>
-                      <input
+                      <select
                         id="intake-hub"
-                        type="text"
                         value={hubLocation}
-                        onChange={(event) => setHubLocation(event.target.value)}
+                        onChange={(event) => {
+                          const nextHub = event.target.value
+                          setHubLocation(nextHub)
+                          const nextCustodian = CANONICAL_CUSTODIANS.find((item) => item.hub_id === nextHub)
+                          setCustodian(nextCustodian?.id || '')
+                        }}
                         className="w-full min-h-11 bg-white/5 border border-white/10 rounded px-2.5 py-2 text-white mt-1"
-                      />
+                      >
+                        {CANONICAL_HUBS.map((hub) => (
+                          <option key={hub.id} value={hub.id} className="bg-black text-white">
+                            {hub.name} · {hub.code}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label htmlFor="intake-custodian" className="text-white/60">Custodian</label>
-                      <input
+                      <select
                         id="intake-custodian"
-                        type="text"
                         value={custodian}
                         onChange={(event) => setCustodian(event.target.value)}
                         className="w-full min-h-11 bg-white/5 border border-white/10 rounded px-2.5 py-2 text-white mt-1"
-                      />
+                      >
+                        {availableCustodians.map((item) => (
+                          <option key={item.id} value={item.id} className="bg-black text-white">
+                            {item.name} · {item.role}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="sm:col-span-2">
                       <label htmlFor="intake-reconciliation-reason" className="text-white/60">Reconciliation reason</label>
@@ -1112,7 +1138,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               <button
                 type="button"
                 onClick={handleSaveFirstInventory}
-                disabled={savingInventory || !isOnline}
+                disabled={sessionLoading || savingInventory || !isOnline}
                 className="w-full min-h-11 py-2.5 bg-emerald-500 text-black font-bold rounded-lg hover:bg-emerald-400 transition-colors disabled:cursor-wait disabled:opacity-60"
               >
                 {savingInventory
@@ -1151,7 +1177,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   id="product-publication-status"
                   value={publicationStatus}
                   onChange={(e) => handleUpdatePublicationStatus(e.target.value)}
-                  disabled={publishing}
+                  disabled={sessionLoading || publishing}
                   className="w-full min-h-11 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-amber-300 font-semibold disabled:cursor-wait disabled:opacity-60"
                 >
                   <option value="draft" className="bg-black text-white">Draft (Internal Only)</option>
@@ -1212,6 +1238,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
         </div>
 
       </div>
+      </AdminDialog>
     </div>
   )
 }

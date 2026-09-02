@@ -9,6 +9,7 @@ import {
   buildPrimaryImagePrompt,
   K2_PRODUCT_IMAGE_PROJECT_INSTRUCTIONS,
 } from './productResearchPrompt.js'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 // Field mapping: reviewed Product Content output to current Supabase columns.
 function mapAiToDb(p, images, contractInfo) {
@@ -119,19 +120,20 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
   // ── Save to Supabase ─────────────────────────────────────────────────────────
   const handleSave = async () => {
     if (!parsedProduct) return
+    setError('')
     if (secure) {
       setError('Secure mode keeps this as a review-only handoff. Close it and use phone-first intake to create the attributable Draft.')
       return
     }
     const dbRow = mapAiToDb(parsedProduct, { primary: primaryUrl, after: afterUrl, gallery: galleryUrls }, contractInfo)
     if (!dbRow.sku) {
-      alert('Please fill in the Product ID field before saving.')
+      setError('Please fill in the Product ID field before saving.')
       return
     }
     setSaving(true)
     const { data: existing } = await supabase.from('products').select('sku').eq('sku', dbRow.sku).single()
     if (existing) {
-      alert(`ID "${dbRow.sku}" already exists. Please change it.`)
+      setError(`ID "${dbRow.sku}" already exists. Please change it.`)
       setSaving(false)
       return
     }
@@ -147,13 +149,14 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
 
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-adm-sunken/95 text-white sm:p-4 md:p-8">
+      <AdminDialog onClose={onClose} closeDisabled={saving} labelledBy="product-json-review-title">
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col bg-adm-surface border border-adm-line rounded-adm overflow-hidden shadow-2xl">
 
         {/* Header */}
         <div className="flex shrink-0 flex-col gap-3 border-b border-adm-line bg-black/20 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center gap-4">
             <div>
-              <h2 className="font-sans text-xl font-semibold">Product JSON review</h2>
+              <h2 id="product-json-review-title" className="font-sans text-xl font-semibold">Product JSON review</h2>
               <p className="text-base text-white/50 mt-0.5">Validate one final Product Content JSON object, review it, then prepare the separate Image Studio handoff.</p>
             </div>
           </div>
@@ -526,6 +529,7 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
         )}
 
       </div>
+      </AdminDialog>
     </div>
   )
 }

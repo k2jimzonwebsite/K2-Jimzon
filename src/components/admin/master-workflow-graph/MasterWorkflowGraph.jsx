@@ -1,7 +1,11 @@
 import React, { useState, useMemo } from 'react'
-import { WORKFLOWS, WORKFLOW_SECTIONS } from './workflowData'
+import { WORKFLOW_GUIDE_META, WORKFLOWS, WORKFLOW_SECTIONS } from './workflowData'
 import WorkflowSvgCanvas from './WorkflowSvgCanvas'
 import WorkflowDetailDrawer from './WorkflowDetailDrawer'
+import {
+  ALL_NODES, ENTRY_NODE_ID, GRAPH_STATS, getDownstream, getNode, getTerminalNodes,
+  getUpstream, tracePaths,
+} from './workflowGraph'
 import { MapIcon, SearchIcon, CheckIcon, PlaneIcon, BoxIcon, ShieldIcon, BagIcon, SparkleIcon } from '../../ui/icons'
 
 /**
@@ -23,9 +27,13 @@ export default function MasterWorkflowGraph({
   const [activeWorkflowId, setActiveWorkflowId] = useState(initialWorkflowId)
   const activeWorkflow = WORKFLOWS[activeWorkflowId] || WORKFLOWS.cross_border_lifecycle
 
-  const [activeNodeId, setActiveNodeId] = useState(activeWorkflow.nodes[0]?.id)
+  const [activeNodeId, setActiveNodeId] = useState(ENTRY_NODE_ID)
   const [completedSteps, setCompletedSteps] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
+  const terminalNodes = useMemo(() => getTerminalNodes(), [])
+  const [traceFromId, setTraceFromId] = useState(ENTRY_NODE_ID)
+  const [traceToId, setTraceToId] = useState(terminalNodes[0]?.id || '')
+  const [traceEnabled, setTraceEnabled] = useState(false)
 
   const handleSelectSection = (secId) => {
     setSelectedSection(secId)
@@ -45,19 +53,31 @@ export default function MasterWorkflowGraph({
     setActiveNodeId(targetWf.nodes[0]?.id)
   }
 
-  const activeNodeIndex = activeWorkflow.nodes.findIndex((n) => n.id === activeNodeId)
-  const currentNode = activeWorkflow.nodes[activeNodeIndex] || activeWorkflow.nodes[0]
+  const handleSelectNode = (nodeId) => {
+    const target = getNode(nodeId)
+    if (!target) return
+    setActiveNodeId(nodeId)
+    if (target.workflowId && WORKFLOWS[target.workflowId]) setActiveWorkflowId(target.workflowId)
+  }
+
+  const currentNode = getNode(activeNodeId) || getNode(ENTRY_NODE_ID)
+  const currentWorkflow = currentNode.workflowId ? WORKFLOWS[currentNode.workflowId] : {
+    id: 'connected_operations',
+    title: 'Connected operations',
+    accentColor: '#38bdf8',
+    nodes: ALL_NODES,
+  }
+  const upstream = getUpstream(currentNode.id)
+  const downstream = getDownstream(currentNode.id)
 
   const handlePrevNode = () => {
-    if (activeNodeIndex > 0) {
-      setActiveNodeId(activeWorkflow.nodes[activeNodeIndex - 1].id)
-    }
+    const previous = upstream.find((item) => item.node)
+    if (previous) handleSelectNode(previous.node.id)
   }
 
   const handleNextNode = () => {
-    if (activeNodeIndex < activeWorkflow.nodes.length - 1) {
-      setActiveNodeId(activeWorkflow.nodes[activeNodeIndex + 1].id)
-    }
+    const next = downstream.find((item) => item.node && item.kind !== 'loopback') || downstream.find((item) => item.node)
+    if (next) handleSelectNode(next.node.id)
   }
 
   const handleToggleComplete = (nodeId) => {
@@ -93,7 +113,7 @@ export default function MasterWorkflowGraph({
   const filteredNodes = useMemo(() => {
     if (!searchQuery.trim()) return null
     const q = searchQuery.toLowerCase()
-    return activeWorkflow.nodes.filter(
+    return ALL_NODES.filter(
       (n) =>
         n.title.toLowerCase().includes(q) ||
         n.summary.toLowerCase().includes(q) ||
@@ -102,7 +122,20 @@ export default function MasterWorkflowGraph({
         (n.checklist && n.checklist.some((c) => c.toLowerCase().includes(q))) ||
         (n.rules && n.rules.some((r) => r.toLowerCase().includes(q)))
     )
-  }, [activeWorkflow, searchQuery])
+  }, [searchQuery])
+
+  const highlightedNodeIds = useMemo(() => {
+    if (filteredNodes) return new Set(filteredNodes.map((node) => node.id))
+    if (selectedSection === 'all') return null
+    return new Set(ALL_NODES.filter((node) => node.sectionId === selectedSection || node.id === ENTRY_NODE_ID).map((node) => node.id))
+  }, [filteredNodes, selectedSection])
+
+  const tracedPaths = useMemo(
+    () => traceEnabled ? tracePaths(traceFromId, traceToId) : [],
+    [traceEnabled, traceFromId, traceToId],
+  )
+  const tracedPath = tracedPaths[0] || []
+  const tracedEdgeIds = useMemo(() => new Set(tracedPath.map((edge) => `${edge.from}->${edge.to}`)), [tracedPath])
 
   return (
     <div className="flex flex-col gap-6 text-white pb-12">
@@ -114,12 +147,15 @@ export default function MasterWorkflowGraph({
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500/15 text-sky-400 border border-sky-500/30">
                 <MapIcon size={18} />
               </span>
-              <h2 className="font-serif text-2xl font-bold tracking-tight sm:text-3xl text-white">
+              <h2 className="font-sans text-2xl font-bold tracking-tight sm:text-3xl text-white">
                 Master Operations Workflow Graph
               </h2>
             </div>
             <p className="mt-1 text-xs text-white/60 sm:text-sm">
-              Cross-border supply chain (Milan cousin → Air Transit → Manila Hub) & live inventory decision branching.
+              One connected operational system from Admin entry through supply, stock, custody, orders, counts, and terminal outcomes.
+            </p>
+            <p className="mt-2 text-xs text-white/55">
+              Version {WORKFLOW_GUIDE_META.version} · {WORKFLOW_GUIDE_META.approvalStatus} · Authority: {WORKFLOW_GUIDE_META.authority}
             </p>
           </div>
 
@@ -132,13 +168,13 @@ export default function MasterWorkflowGraph({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search steps, barcodes, roles..."
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3 text-xs text-white placeholder-white/40 focus:border-sky-500/50 focus:bg-white/[0.07] focus:outline-none"
+                className="min-h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-12 text-sm text-white placeholder-white/50 focus:border-sky-500/50 focus:bg-white/[0.07] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-white/40 hover:text-white"
+                  className="absolute right-1 top-1/2 min-h-11 -translate-y-1/2 rounded-lg px-2 text-xs text-white/55 hover:bg-white/5 hover:text-white"
                 >
                   Clear
                 </button>
@@ -149,7 +185,7 @@ export default function MasterWorkflowGraph({
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white cursor-pointer"
+                className="min-h-11 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white cursor-pointer"
               >
                 Close Guide
               </button>
@@ -166,7 +202,7 @@ export default function MasterWorkflowGraph({
                 key={sec.id}
                 type="button"
                 onClick={() => handleSelectSection(sec.id)}
-                className={`rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+                className={`min-h-11 rounded-lg px-3.5 py-2 text-xs font-bold transition-[transform,background-color,color] cursor-pointer ${
                   isSelected
                     ? 'bg-sky-500 text-slate-950 shadow-sm'
                     : 'text-white/60 hover:bg-white/5 hover:text-white'
@@ -187,14 +223,14 @@ export default function MasterWorkflowGraph({
                 key={wf.id}
                 type="button"
                 onClick={() => handleSelectWorkflow(wf.id)}
-                className={`flex items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-bold transition-all cursor-pointer ${
+                className={`flex min-h-11 items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-bold transition-[transform,background-color,border-color,color] cursor-pointer ${
                   isSelected
                     ? 'border-sky-400 bg-sky-500/20 text-white shadow-md shadow-sky-500/10 ring-1 ring-sky-400/40'
                     : 'border-white/10 bg-[#0c121e] text-white/70 hover:border-white/20 hover:bg-white/5 hover:text-white'
                 }`}
               >
                 <span>{wf.title}</span>
-                <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-normal text-white/60">
+                <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs font-normal text-white/60">
                   {wf.nodes.length} steps
                 </span>
               </button>
@@ -208,22 +244,26 @@ export default function MasterWorkflowGraph({
         <span className="font-semibold text-sky-400">
           Domain: {currentSectionMeta.label}
         </span>
-        <span className="text-white/70 text-[11px]">
+        <span className="text-white/70 text-xs">
           {currentSectionMeta.description}
         </span>
       </div>
 
-      {/* Workflow Header Banner with Shift Progress */}
+      <div role="note" className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm leading-6 text-amber-100">
+        This is a versioned guide and rehearsal surface, not an operations terminal. Guide checkmarks stay in this browser only and never prove that inventory, money, customer communication, publication, or provider work occurred. Use each step’s named Admin screen and verify its server result.
+      </div>
+
+      {/* Workflow header with local guide rehearsal state */}
       <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-gradient-to-r from-[#0f172a] via-[#111c33] to-[#0f172a] p-5 lg:flex-row lg:items-center lg:justify-between shadow-xl">
         <div className="flex items-start gap-3.5">
           <div>
             <div className="flex items-center gap-2">
-              <span className="rounded-full border border-sky-500/30 bg-sky-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-sky-400">
+              <span className="rounded-full border border-sky-500/30 bg-sky-500/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-sky-400">
                 {activeWorkflow.badge}
               </span>
               <span className="text-xs text-white/40">{activeWorkflow.category}</span>
             </div>
-            <h3 className="mt-1 font-serif text-lg font-bold text-white sm:text-xl">
+            <h3 className="mt-1 font-sans text-lg font-bold text-white sm:text-xl">
               {activeWorkflow.title}
             </h3>
             <p className="mt-1 text-xs leading-relaxed text-white/70 max-w-3xl">
@@ -232,11 +272,11 @@ export default function MasterWorkflowGraph({
           </div>
         </div>
 
-        {/* Shift Progress & Stats */}
+        {/* Guide rehearsal and reference statistics */}
         <div className="flex flex-wrap items-center gap-4 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-xs">
           <div>
-            <div className="flex items-center justify-between gap-3 text-[10px] uppercase tracking-wider text-white/40 mb-1">
-              <span>Shift Progress</span>
+            <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-wider text-white/40 mb-1">
+              <span>Guide rehearsal</span>
               <span className="font-bold text-emerald-400">{progressPercent}%</span>
             </div>
             <div className="h-1.5 w-32 overflow-hidden rounded-full bg-white/10">
@@ -250,14 +290,14 @@ export default function MasterWorkflowGraph({
           <div className="h-6 w-px bg-white/10 hidden sm:block" />
 
           <div>
-            <span className="block text-[10px] uppercase tracking-wider text-white/40">Scans Required</span>
+            <span className="block text-xs uppercase tracking-wider text-white/40">Scans Required</span>
             <span className="text-sm font-bold text-sky-400">{activeWorkflow.stats.scansRequired}</span>
           </div>
 
           <div className="h-6 w-px bg-white/10 hidden sm:block" />
 
           <div>
-            <span className="block text-[10px] uppercase tracking-wider text-white/40">Est. Time</span>
+            <span className="block text-xs uppercase tracking-wider text-white/40">Est. Time</span>
             <span className="text-xs font-medium text-white/80">{activeWorkflow.stats.estTime}</span>
           </div>
 
@@ -265,8 +305,8 @@ export default function MasterWorkflowGraph({
             <button
               type="button"
               onClick={handleResetProgress}
-              className="text-[10px] text-white/40 hover:text-rose-400 transition-colors ml-2"
-              title="Reset verified shift checklist"
+              className="text-xs text-white/40 hover:text-rose-400 transition-colors ml-2"
+              title="Reset guide rehearsal checkmarks"
             >
               Reset
             </button>
@@ -281,43 +321,78 @@ export default function MasterWorkflowGraph({
           <button
             type="button"
             onClick={() => setSearchQuery('')}
-            className="text-[11px] underline text-sky-400 hover:text-white"
+            className="text-xs underline text-sky-400 hover:text-white"
           >
             Show All Steps
           </button>
         </div>
       )}
 
+      <section aria-label="Workflow path tracer" className="rounded-2xl border border-white/10 bg-[#0c1422] p-4">
+        <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+          <div>
+            <h3 className="text-sm font-bold text-white">Trace a route</h3>
+            <p className="mt-1 max-w-2xl text-xs leading-5 text-white/50">Walk a real forward path through decisions and convergence. Recovery loopbacks stay visible on the canvas but are excluded from finite traces.</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-[minmax(12rem,1fr)_minmax(12rem,1fr)_auto]">
+            <label className="text-xs font-bold uppercase tracking-wider text-white/45">From
+              <select value={traceFromId} onChange={(event) => { setTraceFromId(event.target.value); setTraceEnabled(false) }} className="mt-1 min-h-11 w-full rounded-adm-sm border border-white/10 bg-black/30 px-3 text-xs normal-case text-white">
+                {ALL_NODES.map((node) => <option key={node.id} value={node.id}>{node.title}</option>)}
+              </select>
+            </label>
+            <label className="text-xs font-bold uppercase tracking-wider text-white/45">Terminal outcome
+              <select value={traceToId} onChange={(event) => { setTraceToId(event.target.value); setTraceEnabled(false) }} className="mt-1 min-h-11 w-full rounded-adm-sm border border-white/10 bg-black/30 px-3 text-xs normal-case text-white">
+                {terminalNodes.map((node) => <option key={node.id} value={node.id}>{node.title}</option>)}
+              </select>
+            </label>
+            <button type="button" onClick={() => setTraceEnabled(true)} className="min-h-11 rounded-adm-sm bg-sky-500 px-4 text-xs font-bold text-slate-950 hover:bg-sky-400">Trace path</button>
+          </div>
+        </div>
+        {traceEnabled && (
+          <div className="mt-4 rounded-xl border border-sky-500/20 bg-sky-500/5 p-3" role="status">
+            {tracedPath.length ? (
+              <div className="flex flex-wrap items-center gap-2 text-xs">
+                <button type="button" onClick={() => handleSelectNode(traceFromId)} className="min-h-9 rounded-lg border border-white/10 bg-white/5 px-3 font-semibold text-white/80">{getNode(traceFromId)?.title}</button>
+                {tracedPath.map((edge) => <React.Fragment key={`${edge.from}->${edge.to}`}><span className="text-sky-300">→</span><button type="button" onClick={() => handleSelectNode(edge.to)} className="min-h-9 rounded-lg border border-white/10 bg-white/5 px-3 font-semibold text-white/80">{getNode(edge.to)?.title}</button></React.Fragment>)}
+                {tracedPaths.length > 1 && <span className="ml-2 text-white/45">Showing one of {tracedPaths.length} valid paths</span>}
+              </div>
+            ) : <p className="text-xs text-amber-300">No forward route reaches that terminal from the selected node.</p>}
+          </div>
+        )}
+      </section>
+
       {/* Interactive Visual SVG Graph Canvas */}
       <div>
         <div className="mb-2 flex items-center justify-between">
           <span className="text-xs font-bold uppercase tracking-wider text-white/50">
-            Interactive Visual Flow Map (Click any step to inspect)
+            Connected visual flow map · {GRAPH_STATS.nodeCount} nodes · {GRAPH_STATS.edgeCount} typed edges
           </span>
-          <span className="text-[11px] text-sky-400 font-medium">
-            Current: Step {currentNode?.step} of {activeWorkflow.nodes.length}
+          <span className="text-xs text-sky-400 font-medium">
+            Current: {currentNode?.title}
           </span>
         </div>
 
         <WorkflowSvgCanvas
-          workflow={activeWorkflow}
           activeNodeId={activeNodeId}
-          onSelectNode={setActiveNodeId}
+          onSelectNode={handleSelectNode}
           completedSteps={completedSteps}
+          tracedEdgeIds={tracedEdgeIds}
+          highlightedNodeIds={highlightedNodeIds}
         />
       </div>
 
       {/* Selected Step Drilldown Detail Drawer */}
       <WorkflowDetailDrawer
         node={currentNode}
-        workflow={activeWorkflow}
+        workflow={currentWorkflow}
         onNavigate={onNavigate}
         onPrevNode={handlePrevNode}
         onNextNode={handleNextNode}
-        isFirst={activeNodeIndex === 0}
-        isLast={activeNodeIndex === activeWorkflow.nodes.length - 1}
+        isFirst={upstream.length === 0}
+        isLast={downstream.length === 0}
         isCompleted={completedSteps.includes(currentNode?.id)}
         onToggleComplete={handleToggleComplete}
+        onSelectNode={handleSelectNode}
       />
     </div>
   )

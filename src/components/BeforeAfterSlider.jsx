@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
 import ProductArt from './ProductArt'
 import ProductVisual from './ProductVisual'
+import { applyImageFallback } from '../lib/imageFallback'
 
 // Drag/swipe reveal: sealed export packaging on the left of the handle,
 // "what's inside" on the right. Pointer events only — no media, no libs.
@@ -50,7 +51,7 @@ export default function BeforeAfterSlider({ product }) {
     >
       {/* After layer (base): opened */}
       {product.afterImage ? (
-        <img src={product.afterImage} alt="What's inside" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={product.afterImage} alt="What's inside" onError={applyImageFallback} className="absolute inset-0 h-full w-full object-cover" />
       ) : (
         <ProductArt product={product} mode="open" className="absolute inset-0" />
       )}

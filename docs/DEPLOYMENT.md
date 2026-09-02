@@ -15,9 +15,9 @@ Storefront and Admin BOS are deployed as **two independent Vercel projects** lin
   │   k2-jimzon-storefront      │               │       k2-jimzon-admin       │
   │     (Vercel Project)        │               │      (Vercel Project)       │
   ├─────────────────────────────┤               ├─────────────────────────────┤
-  │ Build: `npm run build:sf`   │               │ Build: `npm run build:admin`│
+  │ Build: `npm run build:storefront`│           │ Build: `npm run build:admin`│
   │ Output: `dist/`             │               │ Output: `dist/`             │
-  │ Config: `vercel.storefront` │               │ Config: `vercel.admin.json` │
+  │ Config: `vercel.ts` → Storefront│           │ Config: `vercel.ts` → Admin│
   │ API: `api/storefront/`      │               │ API: `api/admin/`           │
   └─────────────────────────────┘               └─────────────────────────────┘
 ```
@@ -32,9 +32,14 @@ Storefront and Admin BOS are deployed as **two independent Vercel projects** lin
 - **Configuration File**: `vercel.storefront.json`
 - **Environment Variables**:
   - `K2_DEPLOYMENT_TARGET`: `storefront`
-  - `K2_STOREFRONT_BFF_ENABLED`: `true`
-  - `K2_GUEST_GRANT_SECRET`: `[High-Entropy Secret]`
-  - `CLOUDFLARE_TURNSTILE_SECRET_KEY`: `[Turnstile Secret]`
+  - `VITE_GUEST_BFF_ENABLED`: browser switch; enable only after the server path passes
+  - `K2_STOREFRONT_BFF_ENABLED`: server switch
+  - `K2_GUEST_BFF_SECRET`: `[Base64 32-byte Secret]`
+  - `K2_STOREFRONT_ORIGINS`: `[Exact HTTPS Origin Allowlist]`
+  - `K2_TURNSTILE_SECRET_KEY`: `[Turnstile Secret]`
+  - `VITE_TURNSTILE_SITE_KEY`: `[Turnstile Site Key]`
+  - `SUPABASE_URL`: `https://...supabase.co`
+  - `SUPABASE_PUBLISHABLE_KEY`: `sb_publishable_...`
   - `VITE_SUPABASE_URL`: `https://...supabase.co`
   - `VITE_SUPABASE_PUBLISHABLE_KEY`: `sb_publishable_...`
 
@@ -44,9 +49,15 @@ Storefront and Admin BOS are deployed as **two independent Vercel projects** lin
 - **Configuration File**: `vercel.admin.json`
 - **Environment Variables**:
   - `K2_DEPLOYMENT_TARGET`: `admin`
-  - `K2_ADMIN_BFF_ENABLED`: `true`
-  - `K2_ADMIN_COOKIE_SECRET`: `[High-Entropy 32-byte AES Secret]`
-  - `SUPABASE_SERVICE_ROLE_KEY`: `[Supabase Service Role Key]`
+  - `VITE_ADMIN_BFF_ENABLED`: browser switch; enable only after the server path passes
+  - `K2_ADMIN_BFF_ENABLED`: server switch
+  - `K2_SESSION_COOKIE_KEY`: `[Base64 32-byte AES Key]`
+  - `K2_ADMIN_BFF_REQUEST_SECRET`: `[Base64 32-byte Request-HMAC Secret]`
+  - `K2_ADMIN_ORIGINS`: `[Exact HTTPS Origin Allowlist]`
+  - `K2_TURNSTILE_SECRET_KEY`: `[Turnstile Secret]`
+  - `VITE_TURNSTILE_SITE_KEY`: `[Turnstile Site Key]`
+  - `SUPABASE_URL`: `https://...supabase.co`
+  - `SUPABASE_PUBLISHABLE_KEY`: `sb_publishable_...`
   - `VITE_SUPABASE_URL`: `https://...supabase.co`
   - `VITE_SUPABASE_PUBLISHABLE_KEY`: `sb_publishable_...`
 

@@ -7,6 +7,13 @@
  * 4. Fulfillment & Customer Concierge (Order Packing & Pasabuy)
  */
 
+export const WORKFLOW_GUIDE_META = Object.freeze({
+  version: '2026-08-30-draft.1',
+  approvalStatus: 'DRAFT — NOT LOCKED',
+  effectiveDate: null,
+  authority: 'K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md',
+})
+
 export const WORKFLOW_SECTIONS = [
   {
     id: 'all',
@@ -32,6 +39,11 @@ export const WORKFLOW_SECTIONS = [
     id: 'orders_fulfillment',
     label: 'Orders & Fulfillment',
     description: 'Customer payment verification, 2-factor picking, secure packing, and courier dispatch.',
+  },
+  {
+    id: 'channel_intake',
+    label: 'Channels & Integrations',
+    description: 'How Shopee, Lazada, TikTok Shop, and social messaging connect to K2 — including the steps that are not built yet.',
   },
 ]
 
@@ -132,7 +144,7 @@ export const WORKFLOWS = {
           expectedResult: 'In-Transit Verified: Air Cargo ETA Manila 14:30 PHT, Customs Status: Clear.',
         },
         troubleshooting: [
-          { issue: 'Customs delay / flight reschedule', fix: 'Update consignment ETA in Admin BOS; automatically alerts customer care for pending Pasabuy orders.' },
+          { issue: 'Customs delay / flight reschedule', fix: 'Record the revised ETA on the consignment, review every linked Pasabuy case, and contact affected customers manually. No automatic alert is sent.' },
         ],
         adminJump: 'consignment',
         jumpLabel: 'Track Flight Consignments',
@@ -188,10 +200,10 @@ export const WORKFLOWS = {
           expectedResult: 'QC Passed: 48/48 units in pristine condition (0 breakages).',
         },
         troubleshooting: [
-          { issue: 'Shortage (fewer units in box than manifest)', fix: 'Log item discrepancy code SHORT-01; system automatically alerts Milan buyer.' },
+          { issue: 'Shortage (fewer units in box than manifest)', fix: 'Record the counted shortage and evidence in the receipt workflow, then notify the Milan buyer through the approved staff channel. Admin BOS does not send that notice automatically.' },
         ],
-        adminJump: 'intake',
-        jumpLabel: 'Open Mobile Intake Tool',
+        adminJump: 'inventory',
+        jumpLabel: 'Open Inventory Intake',
       },
       {
         id: 'cb_6',
@@ -224,30 +236,30 @@ export const WORKFLOWS = {
       {
         id: 'cb_7',
         step: 7,
-        title: 'Commit Stock & Multi-Channel Sync',
+        title: 'Finalize Manila Receipt & Verify Stock',
         actor: 'Hub Manager',
         location: 'Admin BOS Terminal',
         type: 'complete',
-        short: 'Approve batch lot; inventory immediately goes live across Storefront and channels.',
+        short: 'Finalize the verified receipt, then check the canonical lot and sellable-stock result.',
         summary:
-          'Hub Manager reviews the intake reconciliation sheet. Clicking "Commit Batch" writes permanent ledger entries, assigns shelf bin location, and pushes live available stock to Storefront, Shopee, and Lazada.',
+          'The authorized Hub Manager reviews the Manila recount and finalizes the receipt through the consignment workflow. The server creates or updates canonical batch and inventory records. Storefront availability is derived separately from eligible stock and product publication state; marketplace publishing and stock sync are not connected.',
         checklist: [
           'Verify total counted units equals physical stock on shelves.',
-          'Affix K2 Jimzon internal lot label with QR code onto shelf bin.',
-          'Click "Commit Batch". Confirm live stock increases on Storefront.',
+          'Record the physical shelf location and lot identifier used on the container or shelf label.',
+          'Finalize the receipt, then verify the resulting batch, physical quantity, reserved quantity, and sellable quantity in Inventory.',
         ],
         rules: [
           'Intake commits are permanent audit records; corrections require a manager-authorized cycle adjustment.',
         ],
         simulation: {
-          testBarcode: 'COMMIT-ALL-CHANNELS',
-          expectedResult: 'Committed: +48 units live on Storefront, Shopee, and Lazada.',
+          testBarcode: 'RECEIPT-REHEARSAL',
+          expectedResult: 'Expected record shape: finalized receipt plus canonical batch and inventory events. No marketplace sync is implied.',
         },
         troubleshooting: [
-          { issue: 'Storefront stock count not updating', fix: 'Clear Redis cache in System DevOps modal or verify catalog status is Active.' },
+          { issue: 'Storefront stock count differs from Inventory', fix: 'Do not edit product stock directly. Verify the lot is eligible, the product is Live, and the Storefront is using its server-backed catalog. Preserve the mismatch and escalate if those records agree.' },
         ],
-        adminJump: 'omni_hub',
-        jumpLabel: 'Verify Live Stock',
+        adminJump: 'inventory',
+        jumpLabel: 'Verify Inventory Record',
       },
     ],
   },
@@ -293,8 +305,8 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Different packaging artwork on new batch', fix: 'Upload secondary packaging photo in Product Media Manager without changing SKU.' },
         ],
-        adminJump: 'intake',
-        jumpLabel: 'Scan Barcode',
+        adminJump: 'inventory',
+        jumpLabel: 'Open Inventory Scan',
       },
       {
         id: 'ext_2',
@@ -303,20 +315,20 @@ export const WORKFLOWS = {
         actor: 'Intake Staff',
         location: 'Intake Terminal',
         type: 'decision',
-        short: 'Enter Best Before Date (YYYY-MM-DD) and landed cost for the new arrival.',
+        short: 'Enter the printed best-before date, verified quantity, source, location, custodian, and documented cost.',
         summary:
-          'Create a new product_batches entry for this specific shipment arrival. Record the printed expiry date, unit EUR cost (€), freight surcharge, and total physical units received.',
+          'Use the canonical intake or receipt command for this shipment. Record the printed expiry, verified physical quantity, source, hub, custodian, and documented PHP unit cost. A product row never receives stock directly.',
         checklist: [
           'Enter expiration date accurately in YYYY-MM-DD format from the physical packaging.',
-          'Input EUR purchase cost from cousin’s store receipt (e.g. €2.40).',
-          'System automatically computes landed cost floor in PHP (₱310.00).',
+          'Keep the source receipt with the purchase currency and amount; record only the reviewed PHP cost required by the canonical command.',
+          'If a landed-cost calculation is needed, use the reviewed Pasabuy/cost record and obtain the required owner pricing rationale. Intake does not invent a final price.',
         ],
         rules: [
           'Different expiry dates MUST be tracked as separate batch lots to enforce FEFO picking.',
         ],
         simulation: {
           testBarcode: 'LOT-NEW-2027',
-          expectedResult: 'Batch Created: 24 units, Expiry: 2027-04-30, Landed Cost: ₱310.00.',
+          expectedResult: 'Expected record shape: one source-linked batch with verified quantity, expiry, hub, custodian, and an inventory event.',
         },
         troubleshooting: [
           { issue: 'Expiry date printed in Italian format (DD.MM.YY)', fix: 'Convert accurately: 15.08.27 = 2027-08-15.' },
@@ -327,29 +339,29 @@ export const WORKFLOWS = {
       {
         id: 'ext_3',
         step: 3,
-        title: 'Physical Lot Sticker Printing',
+        title: 'Physical Lot Identification',
         actor: 'Intake Staff',
-        location: 'Intake Desk Printer',
+        location: 'Intake Desk and Shelf Bin',
         type: 'action',
-        short: 'Print K2 internal batch lot QR sticker with SKU, expiry, and storage instructions.',
+        short: 'Prepare a readable physical lot label from the saved SKU, lot, expiry, and storage facts.',
         summary:
-          'Thermal printer generates adhesive K2 lot label containing SKU, Lot Number, Best Before Date, and barcode for fulfillment scanners.',
+          'After the canonical batch exists, copy its exact SKU, lot identifier, best-before date, and storage facts onto the physical label used by the warehouse. Admin BOS does not currently claim an integrated lot-label printer.',
         checklist: [
-          'Print batch lot label.',
+          'Prepare the physical label using the saved batch facts; do not invent a lot number.',
           'Affix label onto carton case or master shelf bin.',
         ],
         rules: [
           'Do not obscure manufacturer original ingredients or allergen box with the sticker.',
         ],
         simulation: {
-          testBarcode: 'PRINT-LOT-TAG',
-          expectedResult: 'Printed: Lot #LOT-2027-04-30 / SKU IT-MUL-001.',
+          testBarcode: 'LOT-LABEL-REHEARSAL',
+          expectedResult: 'Expected physical check: label values exactly match the saved batch record.',
         },
         troubleshooting: [
-          { issue: 'Thermal ribbon faint', fix: 'Replace thermal ribbon or clean printhead with isopropyl alcohol swab.' },
+          { issue: 'Label cannot be read or scanned', fix: 'Replace it before shelving and compare every printed value with the saved batch. Do not change the database to match a bad label.' },
         ],
         adminJump: 'inventory',
-        jumpLabel: 'Print Batch Labels',
+        jumpLabel: 'Open Batch Records',
       },
       {
         id: 'ext_4',
@@ -382,16 +394,16 @@ export const WORKFLOWS = {
       {
         id: 'ext_5',
         step: 5,
-        title: 'Commit Added Stock to Live Channels',
+        title: 'Finalize Added Stock',
         actor: 'Hub Manager',
         location: 'Admin BOS Terminal',
         type: 'complete',
-        short: 'Manager authorizes batch; stock count increments across all channels.',
+        short: 'Manager finalizes the verified receipt and checks the resulting canonical lot balances.',
         summary:
-          'Manager reviews added batch count against flight consignment manifest. Click "Commit Stock Addition" to push live inventory updates to the Storefront, Shopee, and Lazada.',
+          'Manager reviews the Manila recount against the flight manifest and finalizes the receipt. The resulting batch becomes part of canonical Inventory. Storefront eligibility is derived separately; marketplace connectors remain separate and must not be inferred.',
         checklist: [
           'Verify total units added (+24).',
-          'Confirm Storefront stock badge updates from Low Stock to In Stock.',
+          'Confirm Inventory shows the expected physical, reserved, and sellable quantities for the exact lot.',
         ],
         rules: [
           'Ledger entries are permanent and traceable to the staff member who performed the intake.',
@@ -401,10 +413,10 @@ export const WORKFLOWS = {
           expectedResult: 'Stock Increment Live: Total on Hand 14 -> 38 units.',
         },
         troubleshooting: [
-          { issue: 'Shopee sync delay', fix: 'Check Integrations tab to force manual webhook sync.' },
+          { issue: 'A marketplace quantity does not match', fix: 'Treat the marketplace as manual unless Channel Readiness has end-to-end proof. Reconcile in its Seller Center; there is no force-sync control.' },
         ],
-        adminJump: 'omni_hub',
-        jumpLabel: 'Channel Inventory Hub',
+        adminJump: 'inventory',
+        jumpLabel: 'Verify Lot Balances',
       },
     ],
   },
@@ -420,7 +432,7 @@ export const WORKFLOWS = {
     badge: 'New Catalog SKU',
     category: 'Manila Intake & Catalog',
     description:
-      'Complete workflow for new Italian items not yet in our catalog: Master SKU registration, EUR landed cost pricing matrix, ChatGPT / AI Studio photo generation, Before/After unboxing setup, and live publication.',
+      'Create one server-assigned Draft, prepare evidence-backed content through the approved manual ChatGPT Projects, review PRIMARY/AFTER media, add inventory only through a truthful source workflow, then review publication separately.',
     color: '#e11d48',
     accentColor: '#fb7185',
     stats: { steps: 6, scansRequired: 1, roles: ['Catalog Lead', 'Content Designer'], estTime: '15-20 mins' },
@@ -451,34 +463,33 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Duplicate barcode error', fix: 'Check if product was already created under an alternative SKU.' },
         ],
-        adminJump: 'intake',
-        jumpLabel: 'Create Product Draft',
+        adminJump: 'inventory',
+        jumpLabel: 'Open Add Product',
       },
       {
         id: 'np_2',
         step: 2,
-        title: 'Pricing Matrix & Landed Cost Floor',
+        title: 'Owner Pricing Review',
         actor: 'Pricing Lead / Owner',
-        location: 'Admin Pricing Matrix',
+        location: 'Admin Inventory · product editor',
         type: 'action',
-        short: 'Input purchase cost in EUR (€); system calculates landed cost floor and margins in PHP (₱).',
+        short: 'Record reviewed PHP prices only after source cost and landed-cost evidence are available.',
         summary:
-          'Enter original Italian store purchase price from cousin’s receipt in EUR. System calculates landed cost floor in PHP based on active exchange rate, air freight weight share, and customs duty.',
+          'Preserve the original purchase evidence and the separate landed-cost record. The owner or authorized pricing lead chooses the product SRP and wholesale price with a written rationale; there is no universal automatic final-price formula.',
         checklist: [
-          'Enter purchase cost in EUR (e.g. €3.50).',
-          'Review calculated landed cost floor in PHP (e.g. ₱380.00).',
-          'Set consumer retail SRP in PHP (e.g. ₱590.00).',
-          'Set wholesale B2B case price in PHP with MOQ (e.g. ₱480.00, MOQ: 12).',
+          'Verify the source purchase evidence and reviewed landed-cost record belong to this exact variant.',
+          'Choose the PHP retail price and, when applicable, wholesale price and MOQ.',
+          'Record the required owner pricing rationale before saving.',
         ],
         rules: [
-          'Consumer SRP must NEVER be set below the calculated landed cost floor.',
+          'Final price cannot be below the reviewed landed cost, and AI may never choose or approve any price.',
         ],
         simulation: {
-          testBarcode: 'PRICE-MARGIN-CHECK',
-          expectedResult: 'Pricing Valid: Floor ₱380.00 -> SRP ₱590.00 (Gross Margin: 35.6%).',
+          testBarcode: 'PRICING-REHEARSAL',
+          expectedResult: 'Expected record shape: reviewed price values plus an owner rationale; no automatic price approval.',
         },
         troubleshooting: [
-          { issue: 'Exchange rate spike', fix: 'Update active EUR/PHP rate in Settings to recalculate all pricing floors.' },
+          { issue: 'Cost evidence or exchange basis changed', fix: 'Do not mass-recalculate product prices from the guide. Correct the landed-cost record, then run a new reasoned owner pricing review for each affected price.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Configure Pricing',
@@ -486,33 +497,34 @@ export const WORKFLOWS = {
       {
         id: 'np_3',
         step: 3,
-        title: 'ChatGPT & AI Studio Photorealistic Image Generation',
+        title: 'Manual Product Content & Image Projects',
         actor: 'Content Designer',
-        location: 'AI Image Studio',
+        location: 'Admin Inventory · Smart Scan and Smart Paste',
         type: 'action',
-        short: 'Generate luxury editorial product photos using K2 verified prompt formulas.',
+        short: 'Use K2 Product Content first, then K2 Product Image Studio for separate PRIMARY and AFTER candidates.',
         summary:
-          'Use K2’s tested prompt engineering formulas in ChatGPT / Midjourney / AI Studio to create hyper-realistic editorial product photography matching the Tuscan wood and linen storefront aesthetic.',
+          'In Inventory, Smart Scan prepares the versioned request for the private K2 Product Content ChatGPT Project. Staff attaches the exact package evidence, pastes the request, and sends the single JSON response to Smart Paste. After field-by-field review, Smart Paste prepares separate PRIMARY and AFTER requests for the private K2 Product Image Studio.',
         checklist: [
-          'Select product category and packaging style from the AI Prompt Studio.',
-          'Copy the structured prompt formula with lighting, texture, and lens parameters.',
-          'Generate 1:1 square image (Catalog tile) and 4:3 landscape image (Hero spotlight).',
-          'Check for visual defects (distorted text, unnatural reflections, fake logos).',
+          'Install the K2 Product Content and K2 Product Image Studio instructions in two separate private ChatGPT Projects once.',
+          'Attach readable front, back/label, barcode, and exact-variant photos to K2 Product Content; paste the Smart Scan request.',
+          'Paste the single schema response into Smart Paste, validate it, and accept or reject every evidence-backed content, usage, instruction, SEO, warning, and media-brief field.',
+          'Attach the real front-package photo to K2 Product Image Studio and run the product-specific PRIMARY and AFTER requests separately.',
+          'Reject any image that changes the package, branding, variant, size, claims, or required composition; upload only approved images to their matching slots.',
         ],
         rules: [
-          'Always use authentic Italian aesthetic constraints (warm morning sunlight, linen cloth, reclaimed oak).',
-          'Negative prompts must strictly exclude artificial neon lighting, 3D renders, and plastic glare.',
+          'K2 Product Content returns text/JSON only. K2 Product Image Studio returns one candidate for the requested slot only.',
+          'AI cannot set SKU, price, cost, stock, quantity, lot, batch, expiry, custody, approval, or publication.',
+          'If package fidelity cannot be preserved, use the original package photo.',
         ],
-        hasPromptStudio: true,
         simulation: {
-          testBarcode: 'AI-PROMPT-GENERATE',
-          expectedResult: 'Prompt Formula Ready: DALL-E 3 & Midjourney v6 Format.',
+          testBarcode: 'MANUAL-AI-HANDOFF',
+          expectedResult: 'Expected review package: one validated content object plus separately reviewed PRIMARY and AFTER candidates. Nothing is saved automatically.',
         },
         troubleshooting: [
-          { issue: 'AI generated gibberish letters on packaging', fix: 'Paste the authentic vector brand logo over the generated box in editor.' },
+          { issue: 'The generated package text, logo, size, or variant differs', fix: 'Reject the candidate. Do not repair a fabricated package claim; retry with the exact source photo or keep the original photo.' },
         ],
-        adminJump: 'intake',
-        jumpLabel: 'Open AI Prompt Studio',
+        adminJump: 'inventory',
+        jumpLabel: 'Open Smart Scan',
       },
       {
         id: 'np_4',
@@ -530,17 +542,17 @@ export const WORKFLOWS = {
           'Test interactive slider in preview mode to ensure smooth touch swipe performance.',
         ],
         rules: [
-          'Images must be compressed to WebP format under 250KB for fast mobile loading.',
+          'Uploads accept only the reviewed image types and size limit shown by Product Media Manager; the current secure limit is 4 MB per JPEG, PNG, or WebP file.',
         ],
         simulation: {
           testBarcode: 'MEDIA-UPLOAD-OK',
-          expectedResult: 'WebP Compressed: Primary (142 KB), After Image (168 KB), Slider Configured.',
+          expectedResult: 'Expected media state: approved PRIMARY and AFTER images assigned to the exact Draft without changing its content review.',
         },
         troubleshooting: [
-          { issue: 'Image file > 1MB', fix: 'Compress to WebP format under 250KB limit.' },
+          { issue: 'Image is rejected by upload validation', fix: 'Use a real JPEG, PNG, or WebP under 4 MB. Keep prior successful images and retry only the unfinished file.' },
         ],
-        adminJump: 'intake',
-        jumpLabel: 'Upload Media',
+        adminJump: 'inventory',
+        jumpLabel: 'Open Product Photos',
       },
       {
         id: 'np_5',
@@ -567,8 +579,8 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Ingredients only printed in Italian', fix: 'Use Italian culinary translation reference guide.' },
         ],
-        adminJump: 'intake',
-        jumpLabel: 'Edit Specifications',
+        adminJump: 'inventory',
+        jumpLabel: 'Open Product Editor',
       },
       {
         id: 'np_6',
@@ -583,20 +595,20 @@ export const WORKFLOWS = {
         checklist: [
           'Inspect mobile product page preview for typography alignment and image clarity.',
           'Verify search tags (e.g. #pasta #gragnano #artisanal).',
-          'Click "Publish Product". Verify new listing appears immediately in Storefront catalog.',
+          'Save the reasoned Live status, then verify the server response. On a configured preview or production deployment, confirm the exact product route appears in the Storefront catalog.',
         ],
         rules: [
           'Product will show "Out of Stock · Request via Pasabuy" until the first batch lot is received.',
         ],
         simulation: {
           testBarcode: 'PUBLISH-LIVE-OK',
-          expectedResult: 'Listing Published: Live on Storefront (/product/IT-GEN-003).',
+          expectedResult: 'Expected state: one reasoned Live product with its required primary media; deployed Storefront visibility is verified separately.',
         },
         troubleshooting: [
           { issue: 'Product not showing in catalog', fix: 'Clear browser cache or verify category filter assignment.' },
         ],
-        adminJump: 'intake',
-        jumpLabel: 'Publish Listing',
+        adminJump: 'inventory',
+        jumpLabel: 'Review Publication',
       },
     ],
   },
@@ -739,7 +751,7 @@ export const WORKFLOWS = {
         type: 'complete',
         short: 'Receiver signs electronic handshake; custody legally transfers in ledger.',
         summary:
-          'Once all units are verified, receiver clicks "Accept Custody & Confirm Receipt" in Admin BOS with session PIN/biometric verification. The inventory lot custodian ID updates permanently.',
+          'After both parties compare the exact lot and quantity, the authorized receiver submits the custody command with a written reason. The server records the authenticated actor and changes the canonical custodian only if every invariant passes.',
         checklist: [
           'Review final scanned count vs manifest line items.',
           'Enter staff PIN to authenticate the electronic signature.',
@@ -769,7 +781,7 @@ export const WORKFLOWS = {
     badge: 'Stock Audit',
     category: 'Warehouse & Custody',
     description:
-      'Scheduled blind inventory cycle count procedure. Freezes warehouse zones, performs unbiased barcode recounts, classifies discrepancies, and executes audited ledger adjustments.',
+      'Controlled physical count procedure: define a count boundary, pause movements through staff coordination, recount independently, classify discrepancies, and use the canonical reconciliation command.',
     color: '#7c3aed',
     accentColor: '#a78bfa',
     stats: { steps: 5, scansRequired: 1, roles: ['Audit Counter', 'Inventory Manager'], estTime: '45-60 mins' },
@@ -777,27 +789,27 @@ export const WORKFLOWS = {
       {
         id: 'cnt_1',
         step: 1,
-        title: 'Audit Schedule & Zone Freeze',
+        title: 'Define Count Boundary & Pause Movements',
         actor: 'Inventory Manager',
         location: 'Manila Hub',
         type: 'intake',
-        short: 'Select warehouse zone to audit and temporarily freeze picking in that zone.',
+        short: 'Name the shelves or lots being counted and coordinate a temporary manual pause on their movement.',
         summary:
-          'Manager schedules monthly cycle count for designated category or shelf section (e.g. Zone A: Coffee & Drinks; Zone B: Pasta & Oils). The system freezes order picking in that specific zone during count.',
+          'The Inventory Manager defines the exact shelf, category, or lot scope and tells affected staff not to pick, receive, or transfer those units during the count. Admin BOS does not currently provide a technical warehouse-zone lock.',
         checklist: [
-          'Notify fulfillment team of zone freeze window (typically 6:00 AM – 8:00 AM).',
+          'Record the count scope, responsible staff, and agreed movement-pause window.',
           'Ensure all incoming intakes from earlier shifts are committed before starting count.',
-          'Print blank shelf audit tally sheets or launch Mobile Audit Tool.',
+          'Prepare an independent count sheet or scanner record before reviewing ledger quantities.',
         ],
         rules: [
-          'No picking or stock movements are allowed in the active audit zone during counting.',
+          'If a scoped unit moves during counting, stop and restart that lot’s count from a known state.',
         ],
         simulation: {
-          testBarcode: 'AUDIT-ZONE-A',
-          expectedResult: 'Zone A Frozen: 14 Shelf Locations Locked for Cycle Count.',
+          testBarcode: 'COUNT-BOUNDARY-REHEARSAL',
+          expectedResult: 'Expected evidence: named lots/shelves, count owner, start time, and a manually acknowledged movement pause. No system lock is implied.',
         },
         troubleshooting: [
-          { issue: 'Urgent order requires item from frozen zone', fix: 'Expedite audit of that specific shelf bin first before releasing item.' },
+          { issue: 'An urgent order needs a scoped item', fix: 'Finish and record that exact lot’s count before moving it, or stop and restart the lot after the movement. Do not pretend the earlier count remained valid.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Schedule Cycle Count',
@@ -805,13 +817,13 @@ export const WORKFLOWS = {
       {
         id: 'cnt_2',
         step: 2,
-        title: 'Blind Physical Barcode Recount',
+        title: 'Independent Physical Recount',
         actor: 'Audit Counter (Staff A)',
         location: 'Warehouse Shelves',
         type: 'scan',
-        short: 'Staff scans every shelf item blindly without seeing system quantities.',
+        short: 'Count each physical unit and its exact lot before comparing with the ledger.',
         summary:
-          'Staff member scans every item shelf-by-shelf. The interface intentionally conceals expected quantities ("blind count") to prevent confirmation bias or shortcutting.',
+          'Staff counts the defined scope shelf-by-shelf and records the exact SKU, lot, expiry, location, and physical quantity. To reduce confirmation bias, complete the physical record before opening the current ledger values; the current UI does not claim a dedicated blind-count mode.',
         checklist: [
           'Scan barcode on each physical unit on Shelf 1, Shelf 2, Shelf 3 systematically.',
           'Verify and record expiry date on packaging to verify batch lot integrity.',
@@ -833,20 +845,20 @@ export const WORKFLOWS = {
       {
         id: 'cnt_3',
         step: 3,
-        title: 'Automated Variance Analysis',
-        actor: 'System / Manager',
+        title: 'Compare Count With Canonical Lots',
+        actor: 'Inventory Manager',
         location: 'Admin BOS Terminal',
         type: 'decision',
-        short: 'System compares physical scan numbers against ledger and flags variances.',
+        short: 'Compare each independently counted lot with its canonical physical, reserved, and sellable quantities.',
         summary:
-          'The cycle count engine cross-references physical scans against active batch lots. Identifies discrepancies: Overages (+), Shortages (-), or Batch Mismatches.',
+          'Open the exact lots in Inventory and compare the physical count with the canonical records. Classify matches, overages, shortages, wrong-lot items, and location/custody mismatches. A match needs no adjustment; a mismatch requires a second independent recount before any write.',
         checklist: [
           'Review variance summary table showing Expected vs Scanned counts.',
-          'Identify items with zero discrepancy (automatically verified).',
+          'Record items with zero discrepancy as reviewed without writing an adjustment.',
           'Highlight items with variance > 0 for immediate secondary recount.',
         ],
         rules: [
-          'Any variance exceeding ₱500 in value requires a mandatory recount by a second staff member.',
+          'Every variance requires a second independent recount before reconciliation, regardless of value.',
         ],
         simulation: {
           testBarcode: 'VAR-ANALYZE-RUN',
@@ -881,7 +893,7 @@ export const WORKFLOWS = {
           expectedResult: 'Classified: Reason Code BRK-01 (Packaging squashed during warehouse handling).',
         },
         troubleshooting: [
-          { issue: 'Unexplained missing unit', fix: 'Check packing station cameras for last 7 days to verify if unit was erroneously included in another order.' },
+          { issue: 'A unit remains unexplained after the second count', fix: 'Preserve the discrepancy and available physical, packing, order, and custody evidence for manager investigation. Do not invent a cause or claim camera evidence exists.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Classify Discrepancies',
@@ -895,21 +907,21 @@ export const WORKFLOWS = {
         type: 'complete',
         short: 'Manager signs off on cycle count adjustment; inventory ledger balances.',
         summary:
-          'Manager reviews final variance report with attached evidence and reason codes. Approving the audit writes compensating adjustment entries to the inventory ledger and unfreezes the zone.',
+          'Manager reviews the final before/after lots, reservations, evidence, and reason. The canonical reconciliation command preserves lot IDs and writes inventory events only if the resulting physical quantity does not fall below active reservations. Staff then ends the manually coordinated movement pause.',
         checklist: [
           'Review total net financial impact of the monthly audit.',
-          'Enter manager authorization credentials.',
-          'Unfreeze warehouse zone and resume normal fulfillment picking.',
+          'Submit the reasoned reconciliation through the authorized Admin command.',
+          'Read back the exact lot and event result, then tell staff the movement pause has ended.',
         ],
         rules: [
           'Audit adjustment records are permanently archived for accounting and financial compliance.',
         ],
         simulation: {
           testBarcode: 'MGR-ADJUST-APPROVE',
-          expectedResult: 'Audit Closed: Ledger Adjusted (-₱310.00), Zone A Unfrozen for Fulfillment.',
+          expectedResult: 'Expected record shape: preserved lot identity, reasoned before/after inventory events, reservations intact, and staff-confirmed movement resumption.',
         },
         troubleshooting: [
-          { issue: 'Adjustment exceeds threshold limit', fix: 'Requires 2-person executive authorization (Manager + Owner).' },
+          { issue: 'The command rejects the reconciliation', fix: 'Keep the original ledger unchanged. Resolve omitted lots, stale versions, reservation conflicts, permissions, or invalid quantities, then retry with the same reviewed evidence.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Approve Audit Adjustments',
@@ -942,7 +954,7 @@ export const WORKFLOWS = {
         type: 'intake',
         short: 'Order arrives from Storefront, Shopee, Lazada, or Wholesale channel.',
         summary:
-          'Order is received in Admin BOS. System automatically reserves physical stock from the earliest-expiring active batch lot (FEFO) to prevent overselling.',
+          'A submitted website order is only a request and does not reserve stock. Authorized staff reviews the order and confirms it through the canonical command, which revalidates price, discount, customer details, and eligible inventory and then reserves exact FEFO lots atomically.',
         checklist: [
           'Review customer contact info, delivery address, and requested items.',
           'Verify inventory reservation status is green with sufficient unallocated stock.',
@@ -956,7 +968,7 @@ export const WORKFLOWS = {
           expectedResult: 'Order Intake Verified: 3 items, Total ₱1,440, Stock Reserved.',
         },
         troubleshooting: [
-          { issue: 'Insufficient stock in earliest batch', fix: 'System automatically splits reservation across consecutive FEFO lots; verify both lots on pick list.' },
+          { issue: 'The earliest eligible batch cannot cover the full quantity', fix: 'The confirmation command may reserve the remaining quantity from the next eligible FEFO lot. Read back every exact reserved lot before picking.' },
         ],
         adminJump: 'omni_hub',
         jumpLabel: 'Open Omni-Hub Orders',
@@ -974,7 +986,7 @@ export const WORKFLOWS = {
         checklist: [
           'Quote exact delivery fee based on customer address and package size/weight.',
           'Provide official K2 Jimzon payment account details (never personal staff accounts).',
-          'Set payment deadline window (standard: 24 hours for stock reservation).',
+          'Record any owner-approved payment or reservation deadline for this order; do not invent a standard deadline.',
         ],
         rules: [
           'No items are packed or dispatched until payment is 100% verified or COD is approved.',
@@ -984,7 +996,7 @@ export const WORKFLOWS = {
           expectedResult: 'Quote Sent: Metro Manila Same-Day ₱180 (Total ₱1,620).',
         },
         troubleshooting: [
-          { issue: 'Customer unresponsive past 24 hours', fix: 'Send reminder SMS; if unanswered after 48h, auto-release reserved stock back to active inventory.' },
+          { issue: 'Customer is unresponsive before an approved deadline', fix: 'Contact the customer through an available channel, then use the reasoned order exception workflow. The guide never releases reserved stock automatically.' },
         ],
         adminJump: 'inbox',
         jumpLabel: 'Open Customer Messages',
@@ -1034,7 +1046,7 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Packing station software will reject incorrect SKU or wrong batch lot scans.',
-          'Both staff member and packing station camera record the scan event.',
+          'The canonical packing command records the authenticated staff actor and exact unit scan.',
         ],
         simulation: {
           testBarcode: '8013355998124',
@@ -1049,52 +1061,52 @@ export const WORKFLOWS = {
       {
         id: 'ord_5',
         step: 5,
-        title: 'Secure Packing & Waybill Generation',
+        title: 'Secure Packing & Courier Booking',
         actor: 'Fulfillment Staff',
         location: 'Packing Station',
         type: 'action',
-        short: 'Pack with protective padding, seal with security tape, and attach waybill.',
+        short: 'Pack securely, use the K2 packing QR, then obtain the real courier waybill from the booking provider.',
         summary:
-          'Wrap glass jars in honeycomb bubble wrap and place moisture-sensitive items into insulated pouches. Seal the box with branded K2 tamper tape. Print and affix the shipping waybill.',
+          'Pack and seal the verified order. Before courier booking, use the K2 order/packing QR; it is not a courier label. Book the courier in the provider portal and only then record and attach the real tracking or waybill details.',
         checklist: [
           'Include official K2 Jimzon product care note and receipt in box.',
           'Apply shock-absorbing cushioning so items cannot move or rattle inside box.',
-          'Affix waterproof adhesive shipping label with recipient name, phone, and address.',
+          'After booking, compare the real courier label with the order address before attaching it.',
         ],
         rules: [
           'Chocolates must include reusable frozen gel pack during dry/warm season.',
         ],
         simulation: {
-          testBarcode: 'WAYBILL-MNL-409',
-          expectedResult: 'Waybill Printed: Tracking #K2-MNL-2026-8901, Dispatch Gate: Station 2.',
+          testBarcode: 'K2-PACKING-QR',
+          expectedResult: 'Expected state: packed order plus K2 packing QR; courier tracking remains empty until a real booking is recorded.',
         },
         troubleshooting: [
-          { issue: 'Thermal printer jam', fix: 'Reprint waybill using "Reprint Label" button; verify barcode contrast before attaching.' },
+          { issue: 'Courier portal or printer is unavailable', fix: 'Keep the order packed but not dispatched. Retry in the courier portal or use its documented manual fallback; never fabricate a tracking number.' },
         ],
         adminJump: 'omni_hub',
-        jumpLabel: 'Print Waybill',
+        jumpLabel: 'Open Packing Record',
       },
       {
         id: 'ord_6',
         step: 6,
-        title: 'Courier Handover & Tracking Notification',
+        title: 'Courier Handover & Customer Update',
         actor: 'Dispatch Coordinator',
         location: 'Dispatch Desk',
         type: 'complete',
-        short: 'Hand over to courier rider, capture rider photo/signature, and send tracking.',
+        short: 'Verify the booked courier, record the handover evidence, and send the real tracking details through an available channel.',
         summary:
-          'Rider arrives (Lalamove/Grab/Courier). Scan rider QR / record driver details. Mark order as Dispatched in Admin BOS. Customer automatically receives live courier tracking link.',
+          'When the booked courier arrives, compare the provider booking details with the rider or counter handover. Record courier, tracking, actor, time, and available evidence in Admin BOS. Then send the real tracking details to the customer through an actually connected channel; no automatic SMS or email is claimed.',
         checklist: [
           'Verify rider name and plate number match the booking app.',
-          'Obtain courier signature on physical dispatch sheet.',
-          'Click "Dispatched" in Admin BOS to trigger automated tracking SMS/Email.',
+          'Record the booking ID, tracking reference, handover time, and available evidence.',
+          'Mark the order dispatched only after handover succeeds, then manually send the tracking details through the recorded customer conversation or external app in use.',
         ],
         rules: [
           'Never hand over package without recording driver plate number and booking ID.',
         ],
         simulation: {
           testBarcode: 'DISPATCH-LALAMOVE',
-          expectedResult: 'Dispatched: Rider Juan D. (Plate: NQ-9102), Customer SMS notified.',
+          expectedResult: 'Expected record shape: dispatched fulfillment with real courier/tracking evidence and a separately recorded customer communication.',
         },
         troubleshooting: [
           { issue: 'Rider cancellation / no-show', fix: 'Re-book backup courier rider in delivery portal; update pickup ETA in customer chat.' },
@@ -1186,8 +1198,8 @@ export const WORKFLOWS = {
           'Coordinator generates official K2 Pasabuy Quote in PHP showing item price, international freight share, handling fee, and estimated delivery ETA. Quote is sent via customer chat/email.',
         checklist: [
           'Review itemized breakdown (Product cost + Air Cargo + Customs + Concierge fee).',
-          'Set quote validity window (standard: 7 days based on EUR exchange rate).',
-          'Send interactive quote approval link to customer.',
+          'Set the owner-approved validity and terms on this quote; there is no universal duration.',
+          'Send the itemized quote through an actually available customer channel and record that communication.',
         ],
         rules: [
           'Never purchase goods in Italy before the customer explicitly accepts the quote.',
@@ -1197,7 +1209,7 @@ export const WORKFLOWS = {
           expectedResult: 'Quote #Q-9912 Issued: ₱1,380.00 Total (Valid for 7 days).',
         },
         troubleshooting: [
-          { issue: 'Customer requests discount on quote', fix: 'Only volume orders (5+ units) qualify for freight consolidation discounts.' },
+          { issue: 'Customer requests a discount or changed terms', fix: 'Return the quote to owner review. No automatic percentage, quantity threshold, or discount rule applies.' },
         ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Issue Quote',
@@ -1209,23 +1221,23 @@ export const WORKFLOWS = {
         actor: 'Customer / Finance Lead',
         location: 'Payment Gateway / Bank',
         type: 'action',
-        short: 'Customer approves quote and pays 50% deposit or full payment.',
+        short: 'Record the customer’s explicit quote acceptance, then verify any owner-approved payment requirement.',
         summary:
-          'Customer accepts quote and submits deposit via GCash/Maya/Bank Transfer. Finance confirms payment in bank ledger. Request status advances to "Approved for Purchasing".',
+          'The customer explicitly accepts the exact quote and its recorded payment terms. Finance verifies any required payment against the merchant ledger before staff advances the request to the purchasing state.',
         checklist: [
           'Record payment transaction reference number.',
           'Advance request status to "Purchasing Queue (Milan)" in Admin BOS.',
           'Notify Milan buyer with purchase priority flag.',
         ],
         rules: [
-          'Custom non-catalog items require at least 50% non-refundable deposit.',
+          'Deposit amount, refundability, and cancellation terms are quote-specific owner decisions and must be communicated before payment.',
         ],
         simulation: {
-          testBarcode: 'DEP-PAID-50PCT',
-          expectedResult: 'Deposit Verified: ₱690.00 received via Maya. Transferred to Milan Purchasing Queue.',
+          testBarcode: 'PASABUY-PAYMENT-REHEARSAL',
+          expectedResult: 'Expected record shape: accepted quote, separately verified payment evidence when required, and a reasoned purchasing transition.',
         },
         troubleshooting: [
-          { issue: 'Customer wants to cancel after deposit', fix: 'If item has NOT been physically bought in Milan, refund deposit minus ₱100 handling fee.' },
+          { issue: 'Customer asks to cancel after payment', fix: 'Open a customer exception, preserve the quote, payment, purchase state, and communication evidence, then obtain an authorized case-by-case decision. No automatic refund or handling fee applies.' },
         ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Confirm Deposit',
@@ -1288,6 +1300,239 @@ export const WORKFLOWS = {
       },
     ],
   },
+  // -------------------------------------------------------------
+  // 8. CHANNEL INTAKE: MARKETPLACE AND SOCIAL INTEGRATION
+  //
+  // MAP-028. This map is deliberately honest about what is not built.
+  // A staff member reading it must be able to tell, at a glance, which steps
+  // K2 can perform today and which ones require an adapter that does not
+  // exist. Drawing an unbuilt connector as if it worked would be worse than
+  // drawing nothing: it would set an expectation that a marketplace order is
+  // arriving somewhere when nobody is watching for it.
+  // -------------------------------------------------------------
+  channel_integration_lifecycle: {
+    id: 'channel_integration_lifecycle',
+    sectionId: 'channel_intake',
+    title: 'Marketplace & Social Channel Connection Lifecycle',
+    iconName: 'GridIcon',
+    badge: 'Channels & Integrations',
+    category: 'Channels & Integrations',
+    description:
+      'The real path from a seller-portal credential to stock and messages inside K2 — Shopee, Lazada, TikTok Shop, and the social inboxes. Steps marked NOT BUILT have no adapter today; the Seller Center remains the system of record for those.',
+    color: '#7c3aed',
+    accentColor: '#a78bfa',
+    stats: {
+      steps: 8,
+      scansRequired: 0,
+      roles: ['Owner / Account Holder', 'Admin', 'Channel Staff'],
+      estTime: 'Days to weeks — provider approval dominates',
+    },
+    nodes: [
+      {
+        id: 'ch_1',
+        step: 1,
+        title: 'Obtain Seller Portal Access',
+        actor: 'Owner / Account Holder',
+        location: 'Shopee Open Platform · Lazada Open Platform · TikTok Shop Partner Center',
+        type: 'intake',
+        short: 'Register the K2 developer app on each marketplace and record which shop it is bound to.',
+        summary:
+          'Every marketplace requires an approved developer application before any API call is possible. This is an account and paperwork step, not an engineering one, and it usually takes the longest. K2 operates more than one shop per marketplace, so each credential set must be recorded against the specific shop it belongs to — not against the marketplace as a whole.',
+        checklist: [
+          'Register the K2 application on the marketplace open platform and record the app identifiers.',
+          'Note the exact shop ID for every K2 shop on that marketplace, not just the first one.',
+          'Record which staff member physically holds stock for each shop.',
+          'Capture the approved API scopes; a scope K2 was not granted is a capability K2 does not have.',
+        ],
+        rules: [
+          'Never paste marketplace credentials into the Admin UI, a note, or a message. They belong in the server secret store only.',
+          'One credential set per shop. Two Shopee shops are two credential sets, never one shared set.',
+        ],
+        troubleshooting: [
+          { issue: 'Marketplace rejects or delays the app review', fix: 'Continue operating that channel from its Seller Center. Do not mark the channel connected in Admin; the readiness board must keep showing the truth.' },
+          { issue: 'Only one shop was approved', fix: 'Record only that shop. A second shop that has no credential must not inherit the first shop’s connection status.' },
+        ],
+        adminJump: 'integrations',
+        jumpLabel: 'Open Channel Readiness',
+      },
+      {
+        id: 'ch_2',
+        step: 2,
+        title: 'Store Secrets Server-Side',
+        actor: 'Admin',
+        location: 'Supabase Edge Function secrets',
+        type: 'action',
+        short: 'Load the partner keys into server secrets. They never reach the browser.',
+        summary:
+          'The Channel Readiness screen lists the exact secret names each channel needs — for example SHOPEE_PARTNER_ID, SHOPEE_PARTNER_KEY and SHOPEE_SHOP_ID. These are set in the Supabase function settings and read only by server-side code. The Admin browser bundle must never contain a marketplace key; the build boundary check exists to catch exactly that mistake.',
+        checklist: [
+          'Set each named secret in the Supabase Edge Function settings.',
+          'Confirm the secret names match what the function reads, character for character.',
+          'Re-run the secret and build-boundary scans so no key reached a browser bundle.',
+        ],
+        rules: [
+          'A marketplace secret in a VITE_ variable is a leak. VITE_ variables are compiled into the public bundle.',
+          'Rotate any credential that has ever been pasted into a chat, a ticket, or a screenshot.',
+        ],
+        troubleshooting: [
+          { issue: 'Function reports a missing secret', fix: 'Confirm the exact name and that it was set on the correct Supabase project, then redeploy the function so it picks the value up.' },
+        ],
+        adminJump: 'integrations',
+        jumpLabel: 'View Required Secrets',
+      },
+      {
+        id: 'ch_3',
+        step: 3,
+        title: 'Verify the Webhook Signature Path',
+        actor: 'Admin',
+        location: 'Supabase Edge Function — shopee-webhook',
+        type: 'decision',
+        short: 'Shopee ingress is prepared locally but still needs provider and real-event verification. Lazada and TikTok have none.',
+        summary:
+          'Shopee is the only channel with a locally prepared ingress path. Its function is designed to verify the push signature, bound the body to 256 KiB with an absolute read deadline, build a deterministic event identity, enforce a replay window, and hand the event to one atomic capture command. It is not operational until exact provider signing, credentials, limits, deployment, and one real event are verified end to end. Lazada and TikTok Shop have no function, validation module, or capture command, so those channels stay in their Seller Centers.',
+        checklist: [
+          'Confirm the signing string against the approved marketplace documentation before enabling the endpoint.',
+          'Send one real push and confirm a captured event appears with the expected shop and event identity.',
+          'Confirm a replayed push preserves the original row rather than creating a second one.',
+        ],
+        rules: [
+          'One successful webhook does not mean the channel is live. It means one event arrived.',
+          'Do not build a second ingress shape for Lazada or TikTok. Reuse the Shopee pattern so the security review carries over.',
+        ],
+        troubleshooting: [
+          { issue: 'Pushes arrive but fail signature verification', fix: 'The signing string is almost always the cause. Compare the exact concatenation order against the marketplace docs; do not relax verification to make it pass.' },
+          { issue: 'A Lazada or TikTok event needs handling today', fix: 'There is no path. Handle it in the Seller Center and record the outcome manually.' },
+        ],
+        adminJump: 'integrations',
+        jumpLabel: 'Check Channel Status',
+      },
+      {
+        id: 'ch_4',
+        step: 4,
+        title: 'Agree the Channel Vocabulary — BLOCKING',
+        actor: 'Admin',
+        location: 'Database schema',
+        type: 'decision',
+        short: 'Three different spellings for the same channels exist today. Settle them before the first real row.',
+        summary:
+          'The same marketplace is currently named in several ways across the system: orders accept a fixed short list, an older type carries per-account names, and the channel listing table has no constraint at all. A connector writing one spelling while a report reads another produces silence, not an error. Fixing this while the tables hold no marketplace rows costs almost nothing; fixing it afterwards means rewriting live data.',
+        checklist: [
+          'Choose one canonical name per channel, and one way to express which K2 shop a row belongs to.',
+          'Apply the vocabulary as a constraint on every table that carries a channel, including channel listings.',
+          'Map or retire the older per-account type so only one vocabulary survives.',
+        ],
+        rules: [
+          'A channel column without a constraint will eventually hold a typo, and nothing will report it.',
+          'Shop identity must exist on an order before the first marketplace order arrives. It cannot be inferred later.',
+        ],
+        troubleshooting: [
+          { issue: 'A report shows zero marketplace rows that should exist', fix: 'Compare the exact channel string the writer used against the string the reader filtered on. A mismatch returns an empty result, not an error.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Open Inventory',
+      },
+      {
+        id: 'ch_5',
+        step: 5,
+        title: 'Map SKUs to Channel Listings',
+        actor: 'Channel Staff',
+        location: 'Admin — Inventory & Channel Listings',
+        type: 'action',
+        short: 'Link each K2 SKU to its marketplace item so an incoming event can find the product.',
+        summary:
+          'A marketplace event identifies a product by the marketplace’s own item ID, not by the K2 SKU. The channel listing record is the translation between them, and it also holds the per-channel price, the publication state, and the last sync result. Without a listing row, an inbound event has no product to attach to.',
+        checklist: [
+          'Record the external item ID and external SKU ID exactly as the marketplace reports them.',
+          'Set the channel price if it differs from the K2 retail price.',
+          'Leave publication state as draft until the listing has been checked against the live marketplace page.',
+        ],
+        rules: [
+          'Two K2 shops listing the same SKU are two listing rows, never one. They have different external identifiers.',
+          'A listing row is a mapping, not a stock record. Stock stays in the batch ledger.',
+        ],
+        troubleshooting: [
+          { issue: 'External item ID changed after a marketplace edit', fix: 'Update the listing row. An unmapped event should be reviewed by a person, never guessed onto the nearest SKU.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Open Channel Listings',
+      },
+      {
+        id: 'ch_6',
+        step: 6,
+        title: 'Decide the Stock Pool and the Oversell Rule — BLOCKING FOR CHANNEL TWO',
+        actor: 'Owner / Admin',
+        location: 'Policy decision, then schema',
+        type: 'decision',
+        short: 'One pool, or per-shop allocation? Decide before two channels sell the same stock.',
+        summary:
+          'Master Inventory is the Philippines-wide sum of everything K2 holds, including stock physically held by shop staff. The moment two channels can sell the same item, a race exists: a Shopee sale and a website sale can both succeed against the last unit. With one channel live this is invisible. With two it is the defining failure of multi-channel retail, and marketplace accounts are penalised for cancellations in ways that are slow and expensive to recover.',
+        checklist: [
+          'Decide whether a marketplace sale decrements the same pool the website sells from, or whether each shop holds a reserved allocation.',
+          'Decide the behaviour when the race is lost: oversell and apologise, or under-list and protect the account rating.',
+          'Write the decision down before any adapter is built against an assumption.',
+        ],
+        rules: [
+          'Allocating stock to a shop changes the holder, never the total. Master Inventory does not shrink.',
+          'Do not let two systems each believe they own the last unit.',
+        ],
+        troubleshooting: [
+          { issue: 'A marketplace order cannot be fulfilled because the unit was sold on the website', fix: 'This is the race, not a data error. Cancel through the marketplace flow, record the cause, and treat repeat occurrences as a signal the allocation rule is wrong.' },
+        ],
+        adminJump: 'inventory',
+        jumpLabel: 'Open Master Inventory',
+      },
+      {
+        id: 'ch_7',
+        step: 7,
+        title: 'Social & Messaging Inboxes — NOT BUILT',
+        actor: 'Channel Staff',
+        location: 'Messenger · Instagram · WhatsApp · Viber · TikTok',
+        type: 'decision',
+        short: 'The unified inbox can display these platforms. Nothing delivers messages into it.',
+        summary:
+          'The admin inbox already understands these platforms and will render them correctly the moment rows exist — each has its own label and colour so staff can recognise the source instantly. But no webhook, adapter, or capture command exists for any of them. A customer messaging K2 on Instagram today reaches no K2 system. Only the website and Virtual Store chat write real conversation rows, and those two are themselves gated behind an unapplied migration.',
+        checklist: [
+          'Keep answering these platforms in their own apps until an adapter exists.',
+          'Do not mark a social channel as connected on the readiness board because messages are being answered manually.',
+        ],
+        rules: [
+          'Never tell a customer their message was received "in the system" for a platform K2 does not ingest.',
+          'The inbox showing a platform name is not evidence that platform is connected.',
+        ],
+        troubleshooting: [
+          { issue: 'Staff expect Instagram messages to appear in the inbox', fix: 'They will not. There is no ingestion. Answer in the app and record any commitment made as an internal note on the related order.' },
+        ],
+        adminJump: 'inbox',
+        jumpLabel: 'Open Unified Inbox',
+      },
+      {
+        id: 'ch_8',
+        step: 8,
+        title: 'Record Only Verified Channel Status',
+        actor: 'Admin',
+        location: 'Admin — Channel Readiness',
+        type: 'complete',
+        short: 'The readiness board is an evidence record, not an intention board.',
+        summary:
+          'A channel is marked operational only after a real event from that channel has been observed end to end. Everything else stays not connected. The value of this board is that a staff member can trust it: if it says a channel is connected, orders from that channel are actually arriving somewhere a person is watching.',
+        checklist: [
+          'Mark a channel operational only after observing a real, verified event through the full path.',
+          'Record what was verified and when, so the claim can be re-checked later.',
+          'Re-verify after any credential rotation or marketplace API version change.',
+        ],
+        rules: [
+          'Outbound listing publication does not exist yet. The listing table has columns for it, which is preparation, not capability.',
+          'An optimistic status on this board becomes an operational failure the day someone relies on it.',
+        ],
+        troubleshooting: [
+          { issue: 'Unsure whether a channel counts as connected', fix: 'It does not. If it needed a judgement call, the evidence is not there yet.' },
+        ],
+        adminJump: 'integrations',
+        jumpLabel: 'Open Channel Readiness',
+      },
+    ],
+  },
+
 }
 
 export const AI_IMAGE_PROMPT_TEMPLATES = [

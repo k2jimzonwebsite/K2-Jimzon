@@ -2,9 +2,11 @@
 // This is intentionally deterministic and local: it can cite K2's approved
 // rules without pretending that an external AI or live channel is connected.
 
+import { STAFF_PROCEDURES } from './staffProcedureRegistry.js'
+
 const RULEBOOK = 'Operations Rulebook'
 
-export const TOPICS = [
+const REFERENCE_TOPICS = [
   {
     id: 'overview', section: 'overview', category: 'Workspace', title: 'Command center',
     keywords: ['dashboard', 'home', 'overview', 'priority', 'start shift', 'what needs attention'],
@@ -101,6 +103,48 @@ export const TOPICS = [
     more: 'One successful webhook does not mean the entire channel is live. Until adapters exist, use the Seller Centers and record only verified facts.',
   },
   {
+    id: 'channel-connect-marketplace', section: 'integrations', category: 'Channels', title: 'Connecting a marketplace shop, step by step',
+    keywords: ['connect', 'shopee', 'lazada', 'tiktok', 'seller center', 'credentials', 'secrets', 'webhook', 'onboarding', 'partner', 'open platform'],
+    what: 'Bringing a marketplace shop online is four things in order: an approved developer app, server-side secrets, a verified ingress path, and a SKU-to-listing mapping. Only Shopee has an ingress path today; Lazada and TikTok Shop have no adapter, so they are operated entirely from their Seller Centers.',
+    how: [
+      'Register the K2 app on the marketplace open platform and record the exact shop ID for every K2 shop there, not just the first.',
+      'Set the named secrets in Supabase function settings only. A marketplace key in a VITE_ variable is compiled into the public bundle and is a leak.',
+      'Verify the signing string against the approved provider documentation, then send one real push and confirm a captured event.',
+      'Map each SKU to its external item ID in channel listings, one row per shop, before expecting any event to find a product.',
+      'Mark the channel operational only after a real event has been observed end to end.',
+    ],
+    where: 'Sidebar → Workflow Graph → Channels & Integrations, then Sidebar → Channel Readiness.',
+    source: `${RULEBOOK} §11`,
+    more: 'Two K2 shops on one marketplace are two credential sets and two listing rows; they share nothing. Rotate any credential that has ever appeared in a chat, a ticket, or a screenshot.',
+  },
+  {
+    id: 'channel-inventory-readiness', section: 'integrations', category: 'Channels', title: 'Before a channel can receive inventory',
+    keywords: ['inventory', 'stock', 'oversell', 'allocation', 'channel source', 'listing', 'sync', 'master inventory', 'reservation'],
+    what: 'The receiving tables exist — channel listings map SKUs to external items, and the batch ledger holds custody and reservations. Two things must be settled before a connector writes real rows: one agreed spelling for each channel, and one rule for how two channels share the same stock.',
+    how: [
+      'Confirm the channel name used by the writer is the exact string the reader filters on. A mismatch returns an empty result, not an error.',
+      'Confirm shop identity can be recorded on an order before the first marketplace order arrives; it cannot be inferred afterwards.',
+      'Confirm whether a marketplace sale decrements the same pool the website sells from, or whether each shop holds a reserved allocation.',
+      'Decide, in advance, what happens when both channels sell the last unit.',
+    ],
+    where: 'Sidebar → Inventory, and Sidebar → Workflow Graph → Channels & Integrations.',
+    source: `${RULEBOOK} §11`,
+    more: 'Master Inventory is the Philippines-wide sum of everything K2 holds, including stock physically held by shop staff. Allocating stock to a shop changes the holder, never the total.',
+  },
+  {
+    id: 'channel-social-messaging', section: 'integrations', category: 'Channels', title: 'Social and messaging channels — what is not connected',
+    keywords: ['facebook', 'messenger', 'instagram', 'whatsapp', 'viber', 'tiktok message', 'social', 'dm', 'not connected'],
+    what: 'The unified inbox understands Messenger, Instagram, WhatsApp, Viber, and TikTok, and will display them correctly the moment rows exist. No adapter delivers messages into it. A customer messaging K2 on any of these platforms today reaches no K2 system.',
+    how: [
+      'Keep answering these platforms in their own apps.',
+      'Do not mark a social channel connected because staff are replying manually.',
+      'Record any commitment made in a social conversation as an internal note on the related order or request, so the decision survives outside that app.',
+    ],
+    where: 'Sidebar → Messages, and Sidebar → Channel Readiness.',
+    source: `${RULEBOOK} §19`,
+    more: 'The inbox showing a platform name is not evidence that platform is connected. Never tell a customer their message was received "in the system" for a platform K2 does not ingest.',
+  },
+  {
     id: 'messages', section: 'inbox', category: 'Communication', title: 'Messages and customer communication',
     keywords: ['message', 'inbox', 'chat', 'reply', 'customer communication', 'shopee message', 'lazada message', 'tiktok message'],
     what: 'Messages displays persisted conversation records. A copied draft is not sent, and external channel delivery cannot be claimed until its connector confirms delivery.',
@@ -185,6 +229,25 @@ export const TOPICS = [
     where: 'Sidebar → Globe Display.', source: 'System Brain Current → Storefront presentation',
   },
 ]
+
+const procedureTopic = procedure => ({
+  id: `procedure-${procedure.id}`,
+  section: procedure.section,
+  category: procedure.category,
+  title: procedure.title,
+  keywords: [...procedure.covers, procedure.status, ...procedure.authorizedRoles],
+  what: procedure.expectedState,
+  how: procedure.steps,
+  where: procedure.entryPoint,
+  source: procedure.sources.join(' · '),
+  more: procedure.blocker || procedure.validationsAndBlockers.join(' '),
+  procedure,
+})
+
+export const TOPICS = Object.freeze([
+  ...STAFF_PROCEDURES.map(procedureTopic),
+  ...REFERENCE_TOPICS,
+])
 
 export const DAILY_FLOW = [
   { title: 'Sign in securely', body: 'Use an invited staff account. Permissions remain server-enforced.', section: 'staff_permissions' },

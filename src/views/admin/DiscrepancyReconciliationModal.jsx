@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { XIcon } from '../../components/ui/icons'
 import { safeUiError } from '../../lib/safeUiError'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 export default function DiscrepancyReconciliationModal({ isOpen, onClose, consignment, items, onFinalizeArrival }) {
   const [notes, setNotes] = useState('')
@@ -28,7 +29,8 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
   const discrepancyNeedsNote = varianceTotal !== 0 && notes.trim().length < 10
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-md animate-in fade-in duration-200 motion-reduce:animate-none sm:p-4" role="dialog" aria-modal="true" aria-labelledby="reconcile-consignment-title">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-md animate-in fade-in duration-200 motion-reduce:animate-none sm:p-4">
+      <AdminDialog onClose={onClose} closeDisabled={finalizing} labelledBy="reconcile-consignment-title">
       <div className="w-full max-w-4xl max-h-[90vh] rounded-adm border border-adm-line bg-adm-surface text-white shadow-2xl flex flex-col overflow-hidden">
         
         {/* Header */}
@@ -150,6 +152,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
         </div>
 
       </div>
+      </AdminDialog>
     </div>
   )
 }

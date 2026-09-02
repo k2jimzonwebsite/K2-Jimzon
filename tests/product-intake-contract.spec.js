@@ -27,14 +27,20 @@ test('product intake cannot fabricate browser-side product, lot, or publication 
   expect(modal).toContain('Expected manifest quantity')
   expect(modal).toContain('inventorySaved')
   expect(modal).toContain('savingInventory')
-  expect(modal).toContain('if (savingInventory) return')
+  expect(modal).toContain('if (savingInventory || sessionLoading) return')
   expect(modal).toContain('You are offline')
-  expect(modal).toContain('aria-modal="true"')
+  expect(modal).toContain("import { AdminDialog } from '../../components/ui/AdminDialog'")
+  expect(modal).toContain('labelledBy="product-intake-title"')
   expect(modal).toContain('grid-cols-1 gap-3')
   expect(modal).toContain('accept="image/jpeg,image/png,image/webp"')
   expect(modal).not.toContain('image/avif')
   expect(modal).toContain('URL.revokeObjectURL')
   expect(modal).toContain('Supplier receipt remains pending until the canonical purchasing and receiving workflow is activated.')
+  expect(modal).toContain("import { CANONICAL_CUSTODIANS, CANONICAL_HUBS } from '../../data/canonicalIdentities'")
+  expect(modal).toContain('<select')
+  expect(modal).toContain('custodian.hub_id === hubLocation')
+  expect(modal).not.toMatch(/id="intake-hub"[\s\S]{0,120}type="text"/)
+  expect(modal).not.toMatch(/id="intake-custodian"[\s\S]{0,120}type="text"/)
 })
 
 test('database contract is staff-owned, MFA-gated, idempotent, and private', async () => {
@@ -75,6 +81,52 @@ test('phone intake exposes one persistent retry state when orphan cleanup is pen
   expect(modal).toContain('The unregistered private file is queued for cleanup.')
   expect(modal).toContain('min-h-11')
   expect(modal).not.toMatch(/alert\(|console\.error/)
+})
+
+test('interrupted intake resumes from the server-saved field review without fabricating progress', async () => {
+  const module = await import('../src/views/admin/productIntakeResume.js')
+  expect(typeof module.buildReviewedDraftState).toBe('function')
+  expect(typeof module.buildResumedIntakeState).toBe('function')
+
+  const payload = {
+    meta: { schemaVersion: PRODUCT_RESEARCH_SCHEMA_VERSION, evidenceCount: 3 },
+    product: { name: 'Rigatoni 500g', variant: '500g', origin: 'Italy' },
+  }
+  const reviewed = module.buildReviewedDraftState(payload, {
+    name: true,
+    variant: false,
+    origin: true,
+  })
+  expect(reviewed).toEqual({
+    draft_payload: {
+      ...payload,
+      product: { name: 'Rigatoni 500g', origin: 'Italy' },
+    },
+    field_decisions: {
+      name: 'accepted',
+      variant: 'rejected',
+      origin: 'accepted',
+    },
+  })
+
+  const resumed = module.buildResumedIntakeState({
+    id: '6a88b5f9-8be6-4f4d-a504-173c96f40df1',
+    checklist_step: 'draft_saved',
+    scanned_identity: '8001234567890',
+    draft_payload: reviewed.draft_payload,
+    field_decisions: reviewed.field_decisions,
+    packaging_images: [],
+    evidence_checklist: {},
+  })
+  expect(resumed).toMatchObject({
+    step: 5,
+    query: '8001234567890',
+    parsedPayload: reviewed.draft_payload,
+    acceptedFields: { name: true, origin: true },
+    resumeNotice: 'Saved server progress restored at Step 5.',
+  })
+  expect(resumed.acceptedFields).not.toHaveProperty('variant')
+  expect(JSON.parse(resumed.jsonInput)).toEqual(reviewed.draft_payload)
 })
 
 test('current product JSON accepts content and rejects operational authority', () => {
@@ -155,4 +207,3 @@ test('wholesale inquiry is an explicit unsent handoff and cannot fabricate comme
   expect(wholesaleSource).not.toMatch(/within 1[–-]2 business days/i)
   expect(wholesaleSource).not.toMatch(/grant_wholesale_pricing_client_side/i)
 })
-

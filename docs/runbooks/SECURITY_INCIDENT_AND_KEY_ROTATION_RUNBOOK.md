@@ -3,6 +3,17 @@
 This is an operational runbook and evidence record, not a backlog. Active work
 remains exclusively in `MASTER_ACTION_PLAN.md`.
 
+## Browser diagnostic boundary
+
+Never restore or create direct browser `INSERT` access to `public.error_reports`.
+Admin browser failures may send only fixed classifications through the protected
+Admin BFF security-event route; Storefront failures remain redacted and local
+unless a separately approved public telemetry intake has origin, challenge,
+distributed rate, retention, alerting, and real-host denial evidence. Do not
+collect raw messages, stacks, full URLs, user agents, customer data, tokens, or
+arbitrary context. The MAP-017 revoke migration is locally rehearsed only until
+its permanent production receipt and postflight exist.
+
 ## Public review-claim incident response
 
 If a review claim is disputed, lacks rights, exposes private evidence, or shows

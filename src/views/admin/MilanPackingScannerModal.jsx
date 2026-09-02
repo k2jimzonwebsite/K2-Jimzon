@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Html5Qrcode } from 'html5-qrcode'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 function playMilanBeep() {
   try {
@@ -148,6 +149,7 @@ export default function MilanPackingScannerModal({
   const totalPacked = items.reduce((sum, item) => sum + (item.italy_packed_qty || 0), 0)
 
   return (
+    <AdminDialog onClose={onClose} labelledBy="milan-packing-title">
     <div className="fixed inset-0 z-50 flex flex-col bg-adm-sunken text-white animate-in fade-in duration-300">
       
       {/* Header Bar */}
@@ -159,7 +161,7 @@ export default function MilanPackingScannerModal({
             </span>
             <span className="text-sm text-white/50">Milan, Italy</span>
           </div>
-          <h2 className="font-sans font-semibold text-xl text-white">Pack a flight box</h2>
+          <h2 id="milan-packing-title" className="font-sans font-semibold text-xl text-white">Pack a flight box</h2>
         </div>
         <button
           onClick={onClose}
@@ -382,5 +384,6 @@ export default function MilanPackingScannerModal({
       )}
 
     </div>
+    </AdminDialog>
   )
 }

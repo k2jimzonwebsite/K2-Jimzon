@@ -3,6 +3,7 @@ import { useGlobeCms } from '../../data/globeCms'
 import { products } from '../../data/products'
 import { StarIcon } from '../../components/ui/icons'
 import { adminBffEnabled, commandAdminGlobeCmsBff, getAdminGlobeCmsBff } from '../../services/adminBffService'
+import { applyImageFallback } from '../../lib/imageFallback'
 
 const SOURCES = [['verified_marketplace', 'Verified marketplace'], ['website_customer', 'Website customer'], ['wholesale_customer', 'Wholesale customer'], ['pasabuy_customer', 'Pasabuy customer'], ['owner_record', 'Owner record']]
 const RIGHTS = [['customer_consent', 'Customer consent'], ['marketplace_publication', 'Marketplace publication'], ['contractual_permission', 'Contractual permission'], ['owner_record', 'Owner record']]
@@ -95,7 +96,7 @@ function GlobeProductsPanel({ rows, disabled, onToggle }) {
     {!rows.length ? <Empty title="No Globe configuration" body="No products are currently configured for the storefront Globe." /> : <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{rows.map((row) => {
       const product = products.find((entry) => entry.id === row.productId)
       return <article key={row.productId} className={`flex items-center gap-3 rounded-adm-sm border p-3 ${row.enabled ? 'border-forest/30 bg-forest/10' : 'border-adm-line bg-adm-surface'}`}>
-        <div className="h-14 w-14 flex-none overflow-hidden rounded-adm-sm bg-adm-raised">{product?.img ? <img src={product.img} alt="" className="h-full w-full object-contain p-1" /> : <div className="grid h-full place-items-center text-sm text-white/45">{row.productId.slice(0, 3)}</div>}</div>
+        <div className="h-14 w-14 flex-none overflow-hidden rounded-adm-sm bg-adm-raised">{product?.img ? <img src={product.img} alt="" onError={applyImageFallback} className="h-full w-full object-contain p-1" /> : <div className="grid h-full place-items-center text-sm text-white/45">{row.productId.slice(0, 3)}</div>}</div>
         <div className="min-w-0 flex-1"><p className="truncate text-base font-semibold">{product?.short || product?.name || row.productId}</p><p className="text-sm text-white/45">{row.enabled ? 'Visible publicly' : 'Hidden'} · v{row.version || 1}</p></div>
         <button type="button" disabled={disabled} onClick={() => onToggle(row)} aria-label={`${row.enabled ? 'Remove' : 'Show'} ${product?.short || row.productId} on Globe`} className={`relative h-11 w-14 flex-none rounded-full border disabled:opacity-50 ${row.enabled ? 'border-forest bg-forest' : 'border-adm-line bg-adm-raised'}`}><span className={`absolute top-[9px] h-6 w-6 rounded-full bg-white transition-[left] motion-reduce:transition-none ${row.enabled ? 'left-[27px]' : 'left-[3px]'}`} /></button>
       </article>

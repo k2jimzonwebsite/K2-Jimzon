@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson } from './security.js'
+import { isAdminRole } from './supabase.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
@@ -93,7 +94,7 @@ export default async function handleStaffInvitation(req, res) {
   if (!UUID.test(idempotencyKey)) return safeJson(res, 400, { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } })
   const authorized = await authorizeAdminRequest(req, res, { csrf: true })
   if (!authorized) return undefined
-  if (authorized.identity.role !== 'Admin') return safeJson(res, 403, { error: { code: 'STAFF_ACCESS_ADMIN_REQUIRED' } })
+  if (!isAdminRole(authorized.identity.role)) return safeJson(res, 403, { error: { code: 'STAFF_ACCESS_ADMIN_REQUIRED' } })
   try {
     const invitation = validateStaffInvitation(await readJson(req))
     const result = await forwardStaffInvitation(authorized, {

@@ -57,7 +57,8 @@ reset role;
 
 truncate public.channel_event_inbox, k2_private.shopee_webhook_rate_buckets;
 
--- Exact replay preserves terminal processing state; changed payload conflicts.
+-- MAP-023 ambiguous-response replay acceptance: exact replay preserves terminal
+-- processing state, changed payload conflicts, and every attempt stays counted.
 do $$
 declare v_result jsonb;
 begin
@@ -94,6 +95,21 @@ begin
          and payload = '{"code":99,"shop_id":42,"data":{"value":1}}'::jsonb
      ) then
     raise exception 'Changed-payload conflict was not preserved safely: %', v_result;
+  end if;
+
+  if (
+    select count(*) from public.channel_event_inbox
+    where channel = 'shopee' and external_event_id = '42:replay'
+    ) <> 1
+     or not exists (
+       select 1 from k2_private.shopee_webhook_rate_buckets
+       where scope = 'shop' and shop_id = 42 and hit_count = 3
+     )
+     or not exists (
+       select 1 from k2_private.shopee_webhook_rate_buckets
+       where scope = 'global' and shop_id = 0 and hit_count = 3
+     ) then
+    raise exception 'MAP-023 replay/conflict recovery invariant was not preserved';
   end if;
 end
 $$;
@@ -167,4 +183,3 @@ begin
   end if;
 end
 $$;
-

@@ -4,6 +4,13 @@ import { safeUiError } from '../../lib/safeUiError'
 import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
 import { peso } from '../../data/products'
 import {
+  createSalesExportFilename,
+  createSalesRecordCsv,
+  filterSalesOrders,
+  summarizeSalesReconciliation,
+  summarizeSalesOrders,
+} from '../../lib/salesCalculations'
+import {
   AlertIcon,
   ArrowIcon,
   BagIcon,
@@ -17,6 +24,16 @@ import {
 } from '../../components/ui/icons'
 
 const RANGE_OPTIONS = [7, 30, 90]
+const SALES_RECORD_FILTERS = [
+  { id: 'all', label: 'All requests' },
+  { id: 'verified', label: 'Payment verified' },
+  { id: 'fulfilled', label: 'Fulfilled' },
+  { id: 'verified_fulfilled', label: 'Verified + fulfilled' },
+  { id: 'verified_pending', label: 'Verified, not fulfilled' },
+  { id: 'fulfilled_unverified', label: 'Fulfilled, payment not verified' },
+  { id: 'other', label: 'Neither exact state' },
+]
+const SALES_RECORD_LIMIT = 25
 const ACTIVE_PASABUY = new Set([
   'request_received', 'researching', 'quoted', 'approved', 'purchasing',
   'purchased', 'in_transit', 'arrived',
@@ -93,6 +110,27 @@ function percentageChange(current, previous) {
 
 function compactNumber(value) {
   return new Intl.NumberFormat('en-PH', { notation: 'compact', maximumFractionDigits: 1 }).format(value || 0)
+}
+
+function readableStatus(value) {
+  return String(value || 'unknown').replaceAll('_', ' ')
+}
+
+function shortOrderReference(value) {
+  const reference = String(value || '')
+  return reference.length > 12 ? `…${reference.slice(-8)}` : reference || 'Unavailable'
+}
+
+function readableOrderDate(value) {
+  const date = new Date(value)
+  return Number.isFinite(date.getTime())
+    ? date.toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' })
+    : 'Date unavailable'
+}
+
+function safeOrderValue(value) {
+  const amount = Number(value)
+  return Number.isFinite(amount) && amount >= 0 ? amount : 0
 }
 
 function buildRevenueSeries(orders, days) {
@@ -198,6 +236,8 @@ function PanelHeading({ icon: Icon, title, description, action }) {
 
 export default function Overview({ setSection, pending = null }) {
   const [range, setRange] = useState(30)
+  const [salesRecordsOpen, setSalesRecordsOpen] = useState(false)
+  const [salesRecordFilter, setSalesRecordFilter] = useState('all')
   const [data, setData] = useState(EMPTY_DATA)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
@@ -295,8 +335,11 @@ export default function Overview({ setSection, pending = null }) {
     })
     const currentVerified = currentOrders.filter(order => order.payment_status === 'verified')
     const previousVerified = previousOrders.filter(order => order.payment_status === 'verified')
-    const verifiedRevenue = currentVerified.reduce((sum, order) => sum + Number(order.total_amount || 0), 0)
-    const previousRevenue = previousVerified.reduce((sum, order) => sum + Number(order.total_amount || 0), 0)
+    const sales = summarizeSalesOrders(currentOrders)
+    const reconciliation = summarizeSalesReconciliation(currentOrders)
+    const previousSales = summarizeSalesOrders(previousOrders)
+    const verifiedRevenue = sales.verifiedPaymentValue
+    const previousRevenue = previousSales.verifiedPaymentValue
     const openPasabuy = data.pasabuy.filter(request => ACTIVE_PASABUY.has(request.status))
     const now = Date.now()
     const conversations = data.conversations.filter(conversation => !['Resolved', 'Closed'].includes(conversation.status))
@@ -344,6 +387,8 @@ export default function Overview({ setSection, pending = null }) {
 
     return {
       currentOrders,
+      sales,
+      reconciliation,
       verifiedRevenue,
       verifiedOrders: currentVerified.length,
       averageOrder: currentVerified.length ? verifiedRevenue / currentVerified.length : 0,
@@ -368,13 +413,34 @@ export default function Overview({ setSection, pending = null }) {
   }, [data, range])
 
   const metrics = [
-    { label: 'Verified revenue', value: peso(analytics.verifiedRevenue), detail: `${range}-day payment-verified total`, change: analytics.revenueChange },
+    { label: 'Verified payments', value: peso(analytics.verifiedRevenue), detail: `${range}-day payment-verified total`, change: analytics.revenueChange },
     { label: 'Verified orders', value: analytics.verifiedOrders, detail: 'Counted only after verification', change: analytics.orderChange },
     { label: 'Average order value', value: peso(analytics.averageOrder), detail: 'Across verified orders' },
     { label: 'Requests to review', value: data.orderBacklog, detail: 'Submitted; stock not reserved', tone: data.orderBacklog > 0 ? 'warning' : 'normal' },
     { label: 'Open Pasabuy', value: analytics.openPasabuy.length, detail: 'Intake through arrival', tone: analytics.openPasabuy.length > 0 ? 'warning' : 'normal' },
     { label: 'Unread messages', value: analytics.unread, detail: `${analytics.overdue} response deadline${analytics.overdue === 1 ? '' : 's'} missed`, tone: analytics.overdue > 0 ? 'danger' : analytics.unread > 0 ? 'warning' : 'normal' },
   ]
+
+  const filteredSalesRecords = filterSalesOrders(analytics.currentOrders, salesRecordFilter)
+  const visibleSalesRecords = filteredSalesRecords.slice(0, SALES_RECORD_LIMIT)
+  const filteredSalesSummary = summarizeSalesOrders(filteredSalesRecords)
+  const filteredSalesValue = salesRecordFilter === 'verified'
+    ? filteredSalesSummary.verifiedPaymentValue
+    : salesRecordFilter === 'fulfilled'
+      ? filteredSalesSummary.fulfilledValue
+      : filteredSalesSummary.submittedValue
+
+  const downloadSalesRecords = () => {
+    const csv = createSalesRecordCsv(analytics.currentOrders, salesRecordFilter)
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }))
+    const link = document.createElement('a')
+    link.href = url
+    link.download = createSalesExportFilename({ range, filter: salesRecordFilter })
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    window.setTimeout(() => URL.revokeObjectURL(url), 0)
+  }
 
   const queues = [
     { title: 'Website requests awaiting review', count: data.orderBacklog, detail: 'Confirm contact details and available stock.', target: 'omni_hub', icon: InboxIcon, severity: 'high' },
@@ -451,6 +517,146 @@ export default function Overview({ setSection, pending = null }) {
             )}
           </div>
         ))}
+      </section>
+
+      <section aria-label="Sales computation summary" className={panelClass}>
+        <PanelHeading
+          icon={TrendIcon}
+          title="Sales computation summary"
+          description="Order, payment, fulfillment, payout, and profit remain separate facts."
+          action={(
+            <button
+              type="button"
+              onClick={() => setSalesRecordsOpen(open => !open)}
+              aria-expanded={salesRecordsOpen}
+              aria-controls="sales-record-ledger"
+              className={`${actionClass} min-h-11 shrink-0 rounded-adm-sm px-3 text-xs font-semibold text-blue hover:bg-blue/10`}
+            >
+              {salesRecordsOpen ? 'Hide records' : 'Review records'}
+            </button>
+          )}
+        />
+        <div className="grid sm:grid-cols-2 xl:grid-cols-5">
+          {[
+            { label: 'Submitted request value', value: peso(analytics.sales.submittedValue), detail: `${analytics.sales.submittedCount} request${analytics.sales.submittedCount === 1 ? '' : 's'} created in period` },
+            { label: 'Payment-verified value', value: peso(analytics.sales.verifiedPaymentValue), detail: `${analytics.sales.verifiedPaymentCount} verified payment${analytics.sales.verifiedPaymentCount === 1 ? '' : 's'}` },
+            { label: 'Fulfilled order value', value: peso(analytics.sales.fulfilledValue), detail: `${analytics.sales.fulfilledCount} fulfilled order${analytics.sales.fulfilledCount === 1 ? '' : 's'}` },
+            { label: 'Settled payouts', value: 'Unavailable', detail: 'No canonical settlement ledger yet', unavailable: true },
+            { label: 'Actual profit', value: 'Unavailable', detail: 'No exact-lot cost snapshot per order line yet', unavailable: true },
+          ].map((item, index) => (
+            <div key={item.label} className={`min-w-0 p-4 sm:p-5 ${index < 4 ? 'border-b border-adm-line xl:border-b-0 xl:border-r' : ''} ${index % 2 === 0 ? 'sm:border-r xl:border-r-0' : ''}`}>
+              <p className="text-xs font-medium text-white/55">{item.label}</p>
+              <p className={`mt-2 font-mono text-xl font-semibold tabular-nums ${item.unavailable ? 'text-amber' : 'text-white'}`}>{loading ? '—' : item.value}</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-white/40">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+        <div className="border-t border-adm-line">
+          <div className="px-4 py-3 sm:px-5">
+            <h4 className="text-sm font-semibold text-white">Payment × fulfillment reconciliation</h4>
+            <p className="mt-1 text-xs leading-relaxed text-white/45">Four mutually exclusive buckets reproduce every request and peso in the selected period. Select one to review its exact records.</p>
+          </div>
+          <div className="grid border-t border-adm-line sm:grid-cols-2 xl:grid-cols-4">
+            {[
+              { filter: 'verified_fulfilled', label: 'Verified + fulfilled', bucket: analytics.reconciliation.verifiedFulfilled, detail: 'Both exact states recorded' },
+              { filter: 'verified_pending', label: 'Verified, not fulfilled', bucket: analytics.reconciliation.verifiedPending, detail: 'Operational fulfillment follow-up' },
+              { filter: 'fulfilled_unverified', label: 'Fulfilled, payment not verified', bucket: analytics.reconciliation.fulfilledUnverified, detail: 'Payment-state review; not an unpaid claim', exception: true },
+              { filter: 'other', label: 'Neither exact state', bucket: analytics.reconciliation.other, detail: 'All remaining request states' },
+            ].map((item, index) => (
+              <button
+                key={item.filter}
+                type="button"
+                onClick={() => { setSalesRecordFilter(item.filter); setSalesRecordsOpen(true) }}
+                aria-label={`Review ${item.label} records`}
+                aria-pressed={salesRecordsOpen && salesRecordFilter === item.filter}
+                className={`${actionClass} min-h-[112px] p-4 text-left hover:bg-white/[0.035] sm:p-5 ${index < 3 ? 'border-b border-adm-line xl:border-b-0 xl:border-r' : ''} ${index % 2 === 0 ? 'sm:border-r xl:border-r-0' : ''}`}
+              >
+                <span className="block text-xs font-medium text-white/55">{item.label}</span>
+                <span className={`mt-2 block font-mono text-lg font-semibold tabular-nums ${item.exception && item.bucket.count > 0 ? 'text-crimson' : 'text-white'}`}>{loading ? '—' : peso(item.bucket.value)}</span>
+                <span className="mt-1 block text-xs text-white/40">{loading ? '—' : `${item.bucket.count} record${item.bucket.count === 1 ? '' : 's'}`} · {item.detail}</span>
+              </button>
+            ))}
+          </div>
+          <p className="border-t border-adm-line px-4 py-3 text-xs leading-relaxed text-white/40 sm:px-5">
+            Payment not verified means only that the exact verified state is absent. It does not mean unpaid, missing, failed, or lost.
+          </p>
+        </div>
+        {salesRecordsOpen && (
+          <div id="sales-record-ledger" className="border-t border-adm-line">
+            <div className="flex flex-col gap-3 border-b border-adm-line p-4 sm:flex-row sm:items-end sm:justify-between sm:px-5">
+              <div>
+                <h4 className="text-sm font-semibold text-white">Records behind these totals</h4>
+                <p className="mt-1 text-xs leading-relaxed text-white/45">
+                  Read-only order requests in the selected {range}-day period. Filters never change a record.
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap gap-2" aria-label="Sales record filter">
+                  {SALES_RECORD_FILTERS.map(option => (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => setSalesRecordFilter(option.id)}
+                      aria-pressed={salesRecordFilter === option.id}
+                      className={`${actionClass} min-h-11 rounded-adm-sm border px-3 text-xs font-semibold ${salesRecordFilter === option.id ? 'border-blue/50 bg-blue/10 text-blue' : 'border-adm-line bg-adm-sunken text-white/55 hover:text-white'}`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={downloadSalesRecords}
+                  disabled={filteredSalesRecords.length === 0}
+                  className={`${actionClass} min-h-11 rounded-adm-sm border border-adm-line bg-adm-raised px-3 text-xs font-semibold text-white/75 hover:border-adm-line-strong hover:text-white disabled:cursor-not-allowed disabled:opacity-45`}
+                >
+                  Download CSV ({filteredSalesRecords.length})
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-adm-line bg-adm-sunken/50 px-4 py-3 text-xs sm:px-5">
+              <span className="text-white/50" aria-live="polite">
+                {filteredSalesRecords.length} matching record{filteredSalesRecords.length === 1 ? '' : 's'}
+              </span>
+              <span className="font-semibold tabular-nums text-white">
+                Visible filter total: <span className="font-mono">{peso(filteredSalesValue)}</span>
+              </span>
+            </div>
+
+            <div className="hidden grid-cols-[minmax(110px,.8fr)_minmax(90px,.7fr)_minmax(100px,.8fr)_minmax(120px,1fr)_minmax(110px,.8fr)] gap-3 border-b border-adm-line px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white/35 md:grid">
+              <span>Date / reference</span><span>Channel</span><span>Order state</span><span>Payment state</span><span className="text-right">Request value</span>
+            </div>
+            <div className="divide-y divide-adm-line">
+              {visibleSalesRecords.map(order => (
+                <div key={order.id} className="grid gap-3 px-4 py-3.5 text-xs md:grid-cols-[minmax(110px,.8fr)_minmax(90px,.7fr)_minmax(100px,.8fr)_minmax(120px,1fr)_minmax(110px,.8fr)] md:items-center md:px-5">
+                  <div className="min-w-0">
+                    <span className="block text-white/70">{readableOrderDate(order.created_at)}</span>
+                    <span className="mt-0.5 block truncate font-mono text-white/38" title={String(order.id || '')}>{shortOrderReference(order.id)}</span>
+                  </div>
+                  <div><span className="md:hidden text-white/35">Channel · </span><span className="capitalize text-white/70">{normalizeChannel(order.channel_source)}</span></div>
+                  <div><span className="md:hidden text-white/35">Order · </span><span className="capitalize text-white/70">{readableStatus(order.status)}</span></div>
+                  <div><span className="md:hidden text-white/35">Payment · </span><span className={order.payment_status === 'verified' ? 'capitalize text-emerald-400' : 'capitalize text-amber'}>{readableStatus(order.payment_status)}</span></div>
+                  <div className="flex items-center justify-between gap-4 md:block md:text-right">
+                    <span className="text-white/35 md:hidden">Request value</span>
+                    <span className="font-mono font-semibold tabular-nums text-white">{peso(safeOrderValue(order.total_amount))}</span>
+                  </div>
+                </div>
+              ))}
+              {!loading && filteredSalesRecords.length === 0 && (
+                <p className="px-4 py-8 text-center text-sm text-white/45">No matching order records exist in this period.</p>
+              )}
+            </div>
+            {filteredSalesRecords.length > SALES_RECORD_LIMIT && (
+              <p className="border-t border-adm-line px-4 py-3 text-xs text-amber sm:px-5">
+                Showing the newest {SALES_RECORD_LIMIT} of {filteredSalesRecords.length} matching records. Change the reporting period to narrow the review.
+              </p>
+            )}
+            <p className="border-t border-adm-line px-4 py-3 text-xs leading-relaxed text-white/40 sm:px-5">
+              Request value is not a payout or actual profit. This ledger and its selected-period CSV expose no customer contact details, perform no accounting, payment, or order write, and are not a backup.
+            </p>
+          </div>
+        )}
       </section>
 
       <div className="grid gap-4 xl:grid-cols-12">

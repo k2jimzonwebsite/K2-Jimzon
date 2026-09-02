@@ -136,3 +136,53 @@ adding regressions that require fixture-only evidence labels to persist in both
 saved Markdown and JSON reports. The current local database runners also exit 2,
 not 1, when blocked. These remain local fail-closed checks and do not add database-
 executed authorization evidence.
+
+## Backup-gate handoff review — 26 August 2026
+
+**Verdict:** Correction required; MAP-017 remains active and production apply
+remains blocked.
+
+Accepted evidence:
+
+- Antigravity changed only its two handoff files during this run; no migration,
+  application, or provider artifact was changed.
+- A bare `--apply` attempt failed before token loading or provider access because
+  the named backup evidence and restore verification are still missing.
+- Codex independently passed 23/23 focused schema-truth and backup-rehearsal
+  tests. The isolated PostgreSQL 17.11 lifecycle also passed all 12 authorization
+  groups, rollback restoration, exact payload apply, receipt verification, and
+  idempotent replay after the bundled localhost process was permitted to start.
+- No production DDL, provider mutation, backup fabrication, or deployment was
+  performed.
+
+Corrections required before backup/apply execution:
+
+1. The authoritative records pin payload hash
+   `8AF7C69ABFBE6694302AC8AFD30A177EBEEA8461BD7B0963CD3AE23570DFC5F1`, but
+   both the final SQL payload in commit `1015748` and the current working tree
+   calculate
+   `D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62`.
+   The parent payload calculates a third value,
+   `6410431632C7CFB343C231D5C25FC87EE0A90D08B4004430EE879400FF28EFB9`.
+   The recorded hash therefore does not identify a traceable committed payload.
+   Re-review the final SQL, establish one canonical hash, update every durable
+   record together, and obtain explicit owner authorization for that exact hash.
+2. `executeDryRun()` prints `OWNER-005 recorded authorization: YES` and then a
+   hard-coded `[OPEN] OWNER-005 remains unauthorized` line. Make the safety
+   status conditional and add a regression covering both authorized and
+   unauthorized records so operator output cannot contradict durable truth.
+
+The owner's backup-first direction is still enforced. Do not create/apply the
+production backup evidence or migration from the current handoff until these
+contract-integrity corrections are independently verified.
+
+### Correction verification — 26 August 2026
+
+The owner requested both corrections. Codex pinned the final committed payload
+hash across the MAP, System Brain, OWNER-005, evidence audit, and operator README;
+added a regression that recalculates the contract from the three SQL artifacts;
+made the dry-run authorization and backup lines derive from the recorded owner
+fields; and added a regression for the authorized-but-backup-pending state. The
+focused schema/MAP-017 suite passes 24/24. Production remains blocked solely on
+the named backup and verified-restore evidence plus the existing guarded apply
+confirmations; no production DDL was run by this correction.

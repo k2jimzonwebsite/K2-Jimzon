@@ -29,6 +29,15 @@ conversation controls; it may capture an inquiry but cannot grant wholesale
 authority. Activation still requires the ordered migration, matching private
 secrets, exact provider environments, preview denial tests, and real-host proof.
 
+The optional customer-account UI now awaits the deferred Storefront Supabase
+client before reading Auth, owns cancellation and subscription cleanup, and
+signs out only through the resolved client reference. The exact local
+customer-account/secure Wholesale harness passes 3/3 and one uninterrupted
+exact current-tree local `npm test` aggregate passes 550/550 after the final
+customer-fixture containment change. This is fixture/browser evidence only; the
+customer flag, provider delivery, migration, and production route remain
+inactive until the activation order below is satisfied.
+
 The Vercel Hobby deployment rejects more than 12 Serverless Functions. The 81
 route handler files remain under `prepared-api/`, outside Vercel's deployable
 `api/` directory. Only one guarded consolidated entrypoint per artifact has
@@ -37,7 +46,7 @@ Contact email-draft fallback and legacy browser Admin Auth do not require these
 inactive functions.
 
 The local consolidation is now prepared: `server/storefront-bff/router.js`
-explicitly allowlists all 13 Storefront handlers and
+explicitly allowlists all 14 Storefront handlers and
 `prepared-api/storefront-router.js` is the shared router adapter, and
 `api/storefront/index.js` is the single deployable entrypoint.
 The verifier derives the endpoint inventory from the filesystem and fails on a
@@ -84,11 +93,18 @@ the Storefront artifact contains only its intended function.
    preview release. Verify valid, missing, expired, replayed, and bot-failed
    challenges on the real preview host. Order and Pasabuy require the challenge;
    coupon preview uses the durable rate boundary without interrupting browsing.
-10. Switch the storefront service calls to `/api/storefront/order`,
+10. Apply and postflight `20260831_guest_order_status_boundary.sql` after its
+   guest-grant/request-signing dependencies and before enabling the browser
+   switch. Switch the storefront service calls to `/api/storefront/order`,
+   `/api/storefront/order/status`,
    `/api/storefront/pasabuy`, `/api/storefront/conversation`, and
    `/api/storefront/coupon`. Verify minimal
    receipts, safe errors, duplicate retries, 429 behavior, and HttpOnly cookie
-   issuance without reading the cookie from JavaScript.
+   issuance without reading the cookie from JavaScript. Submit an order, reload
+   `/confirmation`, use Back/Forward, and prove only the scoped safe status
+   projection returns. A clean browser, changed scope, expired/revoked grant,
+   cross-guest attempt, and unavailable boundary must fail with explicit
+   recovery and no contact/address/note/internal-ID leakage.
 11. Enable the prepared guest history/message surface, which starts through POST
    `/api/storefront/conversation` and calls POST `/api/storefront/messages` and
    `/api/storefront/message`. Verify an anonymous
@@ -96,6 +112,10 @@ the Storefront artifact contains only its intended function.
    another browser, changed conversation reference, expired/revoked grant, and
    duplicate/different-content retries must fail safely. Prove that a clean
    browser can start a Website conversation without an order or Pasabuy request.
+   Verify the guest conversation view and post-order confirmation both state
+   that cancellation and return have no self-service path, direct the customer
+   to K2 staff, and describe case-by-case review without promising a response
+   time or outcome.
 12. Configure and verify the actual Supabase email-link redirect, phone/SMS OTP
     policy, expiry, resend, provider throttling, and the exact preview callback.
     Prove `POST /api/storefront/account/auth/email`, `account/auth/phone`, and

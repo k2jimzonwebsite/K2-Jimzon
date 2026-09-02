@@ -1,0 +1,4 @@
+schema_version,source_row_id,external_item_id,external_variant_id,marketplace_sku,barcode,title,size,concentration,flavor,shade,formulation,pack_count,unit_price,currency,listing_status,reported_quantity,observed_at
+k2.marketplace-snapshot.v1,LZ-ROW-001,LZ-ITEM-2001,LZ-VAR-2001-A,LZ-LAV-250,8000000000012,Lavazza Qualita Oro Ground Coffee 250g,250 g,,,,ground coffee,1,355.00,PHP,active,2,2026-08-31T08:05:00+08:00
+k2.marketplace-snapshot.v1,LZ-ROW-002,LZ-ITEM-2002,LZ-VAR-2002-A,LZ-PAS-500,8000000000036,Barilla Spaghetti No. 5 500g,500 g,,,,dry pasta,1,129.00,PHP,inactive,1,2026-08-31T08:05:00+08:00
+

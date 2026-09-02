@@ -78,6 +78,40 @@ export const ENTRY_NODE = {
  * map that points at code which is not there is worse than one that admits a gap.
  */
 export const NODE_GROUNDING = {
+  // Channel intake. Several of these nodes describe work that has no
+  // implementation yet; where that is the case the grounding names the screen
+  // that records the *absence* rather than inventing a module.
+  ch_1: [{ kind: 'screen', ref: 'src/views/admin/ChannelIntegrations.jsx' }],
+  ch_2: [
+    { kind: 'screen', ref: 'src/views/admin/ChannelIntegrations.jsx' },
+    { kind: 'table', ref: 'channel_credentials.encrypted_payload' },
+  ],
+  ch_3: [
+    { kind: 'component', ref: 'supabase/functions/shopee-webhook/index.ts' },
+    { kind: 'component', ref: 'supabase/functions/shopee-webhook/validation.js' },
+    { kind: 'rpc', ref: 'capture_shopee_event_v1()' },
+  ],
+  ch_4: [
+    { kind: 'table', ref: 'order_requests.channel_source' },
+    { kind: 'table', ref: 'channel_listings.channel_source' },
+  ],
+  ch_5: [
+    { kind: 'screen', ref: 'src/views/admin/InventoryGrid.jsx' },
+    { kind: 'table', ref: 'channel_listings.external_item_id' },
+  ],
+  ch_6: [
+    { kind: 'table', ref: 'inventory_reservations.packed_quantity' },
+    { kind: 'table', ref: 'product_batches.quantity_available' },
+  ],
+  ch_7: [
+    { kind: 'screen', ref: 'src/views/admin/Inbox.jsx' },
+    { kind: 'component', ref: 'src/lib/channelMeta.js' },
+  ],
+  ch_8: [
+    { kind: 'screen', ref: 'src/views/admin/ChannelIntegrations.jsx' },
+    { kind: 'rpc', ref: 'verify_internal_channel_event()' },
+    { kind: 'table', ref: 'channel_connections.status' },
+  ],
   cb_1: [{ kind: 'screen', ref: 'src/views/admin/Kanban.jsx' }],
   cb_2: [
     { kind: 'screen', ref: 'src/views/admin/ConsignmentManager.jsx' },
@@ -163,6 +197,7 @@ export const EDGES = [
   { from: ENTRY_NODE_ID, to: 'pasa_1', kind: EDGE_KINDS.BRANCH, label: 'Handle a pasabuy request', condition: 'A customer asked for something not in stock' },
   { from: ENTRY_NODE_ID, to: 'cnt_1', kind: EDGE_KINDS.BRANCH, label: 'Run a stock count', condition: 'A scheduled audit is due' },
   { from: ENTRY_NODE_ID, to: 'hand_1', kind: EDGE_KINDS.BRANCH, label: 'Move custody', condition: 'Stock must change hands or hub' },
+  { from: ENTRY_NODE_ID, to: 'ch_1', kind: EDGE_KINDS.BRANCH, label: 'Connect a sales channel', condition: 'A marketplace or social channel is being brought online' },
 
   // --- Cross-border lifecycle: Milan to committed stock ----------------------
   { from: 'cb_1', to: 'cb_2', kind: EDGE_KINDS.SEQUENCE },
@@ -231,6 +266,26 @@ export const EDGES = [
   { from: 'pasa_5', to: 'cb_3', kind: EDGE_KINDS.CONVERGE, label: 'Same monthly flight', condition: 'Pasabuy items are tagged into the same air cargo consignment' },
   { from: 'cb_5', to: 'pasa_6', kind: EDGE_KINDS.BRANCH, label: 'Pasabuy item', condition: 'Item is reserved for a named customer and never enters sellable stock' },
   { from: 'pasa_6', to: 'ord_5', kind: EDGE_KINDS.CONVERGE, label: 'Dispatch', condition: 'Pasabuy and stock orders share one packing and courier path' },
+
+  // --- Channels & integrations ---------------------------------------------
+  { from: 'ch_1', to: 'ch_2', kind: EDGE_KINDS.SEQUENCE },
+  { from: 'ch_2', to: 'ch_3', kind: EDGE_KINDS.SEQUENCE },
+  // Only Shopee has an ingress path. The other two marketplaces stop here and
+  // stay in their Seller Centers, and the map says so rather than drawing a
+  // connector that does not exist.
+  { from: 'ch_3', to: 'ch_4', kind: EDGE_KINDS.BRANCH, label: 'Ingress verified', condition: 'A signed marketplace push was captured end to end — Shopee only today' },
+  { from: 'ch_3', to: 'ch_8', kind: EDGE_KINDS.BRANCH, label: 'No adapter exists', condition: 'Lazada, TikTok Shop, and every social platform — record the channel as not connected and operate it from its own portal' },
+  { from: 'ch_4', to: 'ch_5', kind: EDGE_KINDS.SEQUENCE },
+  { from: 'ch_5', to: 'ch_6', kind: EDGE_KINDS.SEQUENCE },
+  { from: 'ch_6', to: 'ch_8', kind: EDGE_KINDS.CONVERGE, label: 'Stock rule agreed', condition: 'The pool and oversell behaviour are decided before a second channel sells' },
+  // Social messaging hangs off credential setup rather than the marketplace
+  // ingress path: these platforms carry conversations, not orders.
+  { from: 'ch_2', to: 'ch_7', kind: EDGE_KINDS.BRANCH, label: 'Messaging channel', condition: 'The channel carries customer conversations rather than orders' },
+  { from: 'ch_7', to: 'ch_8', kind: EDGE_KINDS.CONVERGE, label: 'Record honestly', condition: 'Answering in the platform app does not make the channel connected' },
+  // A connected channel is what makes marketplace orders reachable by the
+  // existing fulfillment path. `enables`, not `sequence`: nobody walks from
+  // here to picking in one sitting.
+  { from: 'ch_8', to: 'ord_1', kind: EDGE_KINDS.ENABLES, label: 'Channel orders become workable', condition: 'Once a channel is verified, its orders join the existing order and fulfillment path' },
 ]
 
 /** Every node in the graph, entry node first. */

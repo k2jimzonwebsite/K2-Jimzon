@@ -6,13 +6,18 @@ export function adminBffEnabled() {
 
 const ADMIN_COMMAND_ROUTES = Object.freeze({
   fulfillment: new Set(['confirm', 'packing-scan', 'payment', 'delivery', 'fulfill', 'transfer-lot', 'assign-box']),
-  inbox: new Set(['internal-note', 'mark-read', 'workflow']),
+  inbox: new Set(['internal-note', 'send-reply', 'mark-read', 'workflow']),
   pasabuy: new Set(['transition', 'quote']),
   'product-intake': new Set(['session', 'step', 'draft', 'inventory', 'publication']),
+  'product-knowledge': new Set(['save']),
   consignments: new Set(['create', 'add-line', 'scan', 'advance', 'finalize']),
   lots: new Set(['reconcile', 'clearance']),
   coupons: new Set(['create', 'state', 'archive']),
+  delivery: new Set(['quote', 'courier', 'courier-state', 'locality', 'cost-publish', 'source-state']),
   'catalog-import': new Set(['commit']),
+  'marketplace-snapshots': new Set(['stage', 'decision']),
+  'marketplace-orders': new Set(['stage']),
+  'owner-close': new Set(['session', 'coverage', 'fees', 'stock', 'pasabuy', 'bookkeeping']),
   'wholesale-inquiries': new Set(['review']),
 })
 
@@ -49,6 +54,14 @@ const ERROR_MESSAGES = {
   SESSION_REVOKED: 'This admin session is no longer valid. Sign in again.',
   MFA_REQUIRED: 'Two-factor verification is required again.',
   STAFF_ACCESS_REQUIRED: 'This account no longer has staff access.',
+  DELIVERY_CONTROL_UNAVAILABLE: 'Delivery rate control is temporarily unavailable.',
+  DELIVERY_COMMAND_UNAVAILABLE: 'The delivery rule could not be saved safely. Retry the same change.',
+  DELIVERY_ADMIN_REQUIRED: 'Only an administrator can change what a customer is charged for delivery.',
+  DELIVERY_EFFECTIVE_IN_PAST: 'A rate can only take effect today or later. Past orders keep the rate they were quoted.',
+  DELIVERY_COST_ID_TAKEN: 'That rate identifier already exists. Use a new one; published rates are never edited in place.',
+  DELIVERY_REFERENCE_MISSING: 'This rule points at a courier, locality, or source that does not exist.',
+  DELIVERY_RULE_CONFLICT: 'Another active rule already covers this route. Resolve the overlap before saving.',
+  DELIVERY_RULE_REJECTED: 'The delivery rules refused this change. Check the pilot scope and approval flags.',
   ORIGIN_DENIED: 'This admin request was blocked for security.',
   INVALID_RANGE: 'Choose a supported analytics range.',
   OVERVIEW_UNAVAILABLE: 'Operational analytics are temporarily unavailable.',
@@ -119,6 +132,12 @@ const ERROR_MESSAGES = {
   STAFF_PROFILE_NOT_FOUND: 'That staff profile is no longer available.',
   STAFF_ROLE_UNCHANGED: 'That person already has the selected role.',
   FINAL_ADMIN_REQUIRED: 'The final administrator cannot be demoted.',
+  AI_SPEND_CONTROLS_UNAVAILABLE: 'Paid AI spending controls are not active yet. Use the manual two-Project workflow.',
+  AI_SPEND_SUPER_ADMIN_REQUIRED: 'Only a SuperAdmin can change paid AI spending controls.',
+  AI_SPEND_CONTROLS_INVALID: 'Review the provider/model and budget values, then try again.',
+  AI_SPEND_CONTROLS_LIMIT_REQUIRED: 'Enabling paid AI requires a provider/model and all three hard caps.',
+  AI_SPEND_CONTROLS_CONFIRMATION_REQUIRED: 'Type ENABLE_PAID_AI to deliberately enable paid AI.',
+  AI_SPEND_CONTROLS_VERSION_CONFLICT: 'These controls changed in another session. Refresh and review the latest version.',
   STAFF_INVITATION_INVALID: 'Review the email, role, and required invitation reason.',
   STAFF_INVITATION_UNAVAILABLE: 'The staff invitation could not be completed safely. Refresh and try again.',
   SYSTEM_READINESS_UNAVAILABLE: 'Protected readiness checks are temporarily unavailable.',
@@ -162,6 +181,44 @@ const ERROR_MESSAGES = {
   CATALOG_HEADERS_INVALID: 'Use the current K2 template without adding, removing, or duplicating columns.',
   CATALOG_ROW_LIMIT: 'The workbook must contain between 1 and 1,000 product rows.',
   CATALOG_CELL_TOO_LARGE: 'One or more cells exceed the 4,000-character limit.',
+  MARKETPLACE_SNAPSHOT_FILE_INVALID: 'Choose a non-empty marketplace CSV no larger than 512 KB.',
+  MARKETPLACE_SNAPSHOT_CSV_INVALID: 'The marketplace CSV could not be parsed safely. Correct it and try again.',
+  MARKETPLACE_SNAPSHOT_HEADERS_INVALID: 'Use the exact current marketplace snapshot template without changing its columns.',
+  MARKETPLACE_SNAPSHOT_ROW_LIMIT: 'The marketplace snapshot must contain between 1 and 1,000 rows.',
+  MARKETPLACE_SNAPSHOT_CELL_TOO_LARGE: 'One or more marketplace cells exceed the 4,000-character limit.',
+  MARKETPLACE_SNAPSHOT_ROW_INVALID: 'One or more marketplace rows contain invalid or out-of-bound evidence.',
+  MARKETPLACE_SNAPSHOT_FORMULA_BLOCKED: 'Remove spreadsheet formulas from the marketplace export before importing.',
+  MARKETPLACE_SHOP_INVALID: 'Choose an exact shop that belongs to the selected marketplace.',
+  MARKETPLACE_SNAPSHOT_CONFLICT: 'This shop export identity already exists with different contents. Keep both files and review the conflict.',
+  MARKETPLACE_VARIANT_CONFLICT: 'That product suggestion conflicts on variant attributes and cannot be linked.',
+  MARKETPLACE_DECISION_CONFLICT: 'This row was already decided or changed. Refresh the staged import.',
+  MARKETPLACE_ROW_NOT_FOUND: 'That staged row no longer exists. Refresh the import.',
+  MARKETPLACE_SNAPSHOT_NOT_FOUND: 'No staged import was found for that identifier.',
+  MARKETPLACE_SNAPSHOT_UNAVAILABLE: 'Marketplace snapshot evidence is temporarily unavailable. Keep the file and try again.',
+  MARKETPLACE_ORDER_FILE_INVALID: 'Choose one non-empty marketplace order CSV no larger than 512 KB.',
+  MARKETPLACE_ORDER_CSV_INVALID: 'The marketplace order CSV could not be parsed safely.',
+  MARKETPLACE_ORDER_HEADERS_INVALID: 'Use the exact current marketplace order template without changing its columns.',
+  MARKETPLACE_ORDER_ROW_LIMIT: 'The marketplace order export can contain at most 5,000 rows. A header-only export is valid zero-sales evidence.',
+  MARKETPLACE_ORDER_CELL_TOO_LARGE: 'One or more marketplace order cells exceed the 4,000-character limit.',
+  MARKETPLACE_ORDER_FORMULA_BLOCKED: 'Remove spreadsheet formulas from the marketplace order export before importing.',
+  MARKETPLACE_ORDER_FACT_INVALID: 'One or more marketplace order rows contain invalid or out-of-period evidence.',
+  MARKETPLACE_ORDER_IMPORT_CONFLICT: 'This shop order-export identity already exists with different contents. Preserve both files and investigate.',
+  MARKETPLACE_ORDER_IMPORT_NOT_FOUND: 'No staged marketplace order import was found for that identifier.',
+  MARKETPLACE_ORDER_IMPORT_UNAVAILABLE: 'Marketplace order staging is temporarily unavailable. Keep the source file and try again.',
+  MARKETPLACE_COVERAGE_UNAVAILABLE: 'The exact-shop coverage proposal is temporarily unavailable.',
+  MARKETPLACE_COVERAGE_OVERRIDE_INVALID: 'Choose one exact shop and product, then enter a specific include or skip reason.',
+  MARKETPLACE_FEE_POLICY_INVALID: 'Review the named policy, rates, currency, fixed fee, and reason before saving.',
+  MARKETPLACE_FEE_FACTS_BLOCKED: 'Resolve changed order conflicts and unknown product links for this exact shop before estimating fees.',
+  MARKETPLACE_FEE_FACTS_INVALID: 'Stage and reconcile an order export for this exact shop before estimating fees.',
+  MARKETPLACE_FEE_UNAVAILABLE: 'Marketplace fee estimates are temporarily unavailable. Keep the reviewed policy evidence and try again.',
+  OWNER_CLOSE_STOCK_UNAVAILABLE: 'Canonical lot and marketplace observation evidence could not be loaded. Try again before counting.',
+  OWNER_CLOSE_STOCK_REVIEW_INVALID: 'Review every exact-lot count and enter a specific count reason.',
+  OWNER_CLOSE_STOCK_NOT_RECONCILED: 'Canonical lots do not yet equal the physical count. Retry the protected lot reconciliation before recording this review.',
+  OWNER_CLOSE_SESSION_INVALID: 'Review the period, exact shops, step, and reason before saving.',
+  OWNER_CLOSE_VERSION_CONFLICT: 'This close session changed in another session. Refresh before saving again.',
+  OWNER_CLOSE_SESSION_NOT_FOUND: 'No saved close session was found for that identifier.',
+  OWNER_CLOSE_SESSION_UNAVAILABLE: 'Owner Count & Close is temporarily unavailable. Keep this page open and try again.',
+  ADMIN_REQUIRED: 'Only an administrator can approve marketplace matches or save Owner Count & Close.',
   REQUEST_INVALID: 'Check the entered details and try again.',
   ADMIN_SERVICE_UNAVAILABLE: 'The secure admin service is temporarily unavailable.',
   REQUEST_TIMEOUT: 'The secure admin request timed out. Refresh the record before trying again.',
@@ -312,8 +369,21 @@ function inboxCommand(path, body) {
 }
 
 export const saveInternalNoteBff = (conversationId, content) => inboxCommand('internal-note', { conversationId, content })
+export const sendWebsiteReplyBff = (conversationId, content) => inboxCommand('send-reply', { conversationId, content })
 export const markConversationReadBff = (conversationId) => inboxCommand('mark-read', { conversationId })
 export const updateConversationWorkflowBff = (payload) => inboxCommand('workflow', payload)
+
+/**
+ * Publish a product's reviewed knowledge.
+ *
+ * One call carries the whole record for a SKU, matching the command: the
+ * Studio reviews a product's fields and FAQs together, so saving them together
+ * keeps what staff approved and what got stored the same thing.
+ */
+export const saveProductKnowledgeBff = (sku, fields, faqs) =>
+  adminRequest(boundedAdminCommandRoute('product-knowledge', 'save'), {
+    method: 'POST', body: { sku, fields, faqs }, csrf: true, idempotency: true,
+  })
 
 export function getAdminPasabuy(signal) {
   return adminRequest('/api/admin/pasabuy', { signal })
@@ -420,6 +490,28 @@ function couponCommand(path, body, idempotencyKey) {
 export const createCouponBff = (payload, key) => couponCommand('create', payload, key)
 export const setCouponStateBff = (payload, key) => couponCommand('state', payload, key)
 export const archiveCouponBff = (payload, key) => couponCommand('archive', payload, key)
+
+export function getAdminDeliveryControlBff(signal) {
+  return adminRequest('/api/admin/delivery', { signal })
+}
+
+const operationIdempotencyKey = () =>
+  (typeof crypto?.randomUUID === 'function' ? crypto.randomUUID() : '')
+
+function deliveryCommand(path, body, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('delivery', path), {
+    method: 'POST', body, csrf: true, idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+// Quoting writes nothing, but it keeps the same envelope as every other admin
+// POST. A fresh key per call keeps the tester re-runnable.
+export const testAdminDeliveryQuoteBff = (inputs) => deliveryCommand('quote', inputs, operationIdempotencyKey())
+export const upsertDeliveryCourierBff = (payload, key) => deliveryCommand('courier', payload, key)
+export const setDeliveryCourierStateBff = (payload, key) => deliveryCommand('courier-state', payload, key)
+export const upsertDeliveryLocalityBff = (payload, key) => deliveryCommand('locality', payload, key)
+export const publishDeliveryCostBff = (payload, key) => deliveryCommand('cost-publish', payload, key)
+export const setDeliverySourceStateBff = (payload, key) => deliveryCommand('source-state', payload, key)
 
 export function getAdminCustomers(signal) {
   return adminRequest('/api/admin/customers', { signal })
@@ -572,6 +664,104 @@ export function commitCatalogCsvBff(payload, idempotencyKey) {
 
 export function getCatalogImportStatusBff(operationId, signal) {
   return adminRequest(`/api/admin/catalog-import/status?operationId=${encodeURIComponent(operationId)}`, { signal })
+}
+
+export function getOwnerCloseWorkspaceBff(sessionId, signal) {
+  if (sessionId) {
+    return adminRequest(`/api/admin/owner-close/session?sessionId=${encodeURIComponent(sessionId)}`, { signal })
+  }
+  return adminRequest('/api/admin/owner-close/session', { signal })
+}
+
+export function saveOwnerCloseSessionBff(session, reason, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('owner-close', 'session'), {
+    method: 'POST', body: { session, reason }, csrf: true,
+    idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+export function getOwnerCloseCoverageBff(sessionId, signal) {
+  return adminRequest(`/api/admin/owner-close/coverage?sessionId=${encodeURIComponent(sessionId)}`, { signal })
+}
+
+export function saveOwnerCloseCoverageOverrideBff(payload, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('owner-close', 'coverage'), {
+    method: 'POST', body: payload, csrf: true,
+    idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+export function getOwnerCloseFeesBff(sessionId, signal) {
+  return adminRequest(`/api/admin/owner-close/fees?sessionId=${encodeURIComponent(sessionId)}`, { signal })
+}
+
+export function saveOwnerCloseFeeEstimateBff(payload, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('owner-close', 'fees'), {
+    method: 'POST', body: payload, csrf: true,
+    idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+export function getOwnerCloseStockBff(sessionId, signal) {
+  return adminRequest(`/api/admin/owner-close/stock?sessionId=${encodeURIComponent(sessionId)}`, { signal })
+}
+
+export function saveOwnerCloseStockReviewBff(payload, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('owner-close', 'stock'), {
+    method: 'POST', body: payload, csrf: true,
+    idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+export function getOwnerClosePasabuyBff(sessionId, signal) {
+  return adminRequest(`/api/admin/owner-close/pasabuy?sessionId=${encodeURIComponent(sessionId)}`, { signal })
+}
+
+export function saveOwnerClosePasabuyReviewBff(payload, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('owner-close', 'pasabuy'), {
+    method: 'POST', body: payload, csrf: true,
+    idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+export function getOwnerCloseBookkeepingHandoffBff(sessionId, signal) {
+  return adminRequest(`/api/admin/owner-close/bookkeeping?sessionId=${encodeURIComponent(sessionId)}`, { signal })
+}
+
+export function completeOwnerCloseBookkeepingHandoffBff(payload, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('owner-close', 'bookkeeping'), {
+    method: 'POST', body: payload, csrf: true,
+    idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+export function stageMarketplaceSnapshotBff(payload, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('marketplace-snapshots', 'stage'), {
+    method: 'POST', body: payload, csrf: true,
+    idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+export function getMarketplaceSnapshotStatusBff(importId, signal) {
+  return adminRequest(`/api/admin/marketplace-snapshots/status?importId=${encodeURIComponent(importId)}`, { signal })
+}
+
+export function decideMarketplaceSnapshotRowBff(payload, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('marketplace-snapshots', 'decision'), {
+    method: 'POST', body: payload, csrf: true,
+    idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+export function stageMarketplaceOrdersBff(payload, idempotencyKey) {
+  return adminRequest(boundedAdminCommandRoute('marketplace-orders', 'stage'), {
+    method: 'POST', body: payload, csrf: true,
+    idempotency: !idempotencyKey, idempotencyKey,
+  })
+}
+
+export function getMarketplaceOrderStatusBff(importId, signal) {
+  return adminRequest(`/api/admin/marketplace-orders/status?importId=${encodeURIComponent(importId)}`, { signal })
 }
 
 export function getSecurityReviewBff(hours = 24, signal) {

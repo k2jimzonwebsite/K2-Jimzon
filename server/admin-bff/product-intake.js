@@ -3,6 +3,7 @@ import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
 import { recordSecurityEvent } from './security-events.js'
 import { createHash } from 'node:crypto'
 import sharp from 'sharp'
+import { CANONICAL_CUSTODIANS, CANONICAL_HUBS } from '../../src/data/canonicalIdentities.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const STEPS = new Set([
@@ -11,6 +12,8 @@ const STEPS = new Set([
 ])
 const CATEGORIES = new Set(['food', 'beauty', 'household'])
 const PUBLICATION = new Set(['draft', 'under_review', 'live', 'unlisted', 'discontinued'])
+const HUB_IDS = new Set(CANONICAL_HUBS.map((hub) => hub.id))
+const CUSTODIAN_HUBS = new Map(CANONICAL_CUSTODIANS.map((custodian) => [custodian.id, custodian.hub_id]))
 export const MAX_EVIDENCE_BYTES = 4 * 1024 * 1024
 
 function exactObject(value, keys) {
@@ -66,11 +69,16 @@ function inventoryPayload(source, value) {
     if (value.isNonExpiry) throw new Error('REQUEST_INVALID')
     return { ...result, consignmentId: uuid(value.consignmentId) }
   }
+  const hubLocation = text(value.hubLocation, { required: true, max: 120 })
+  const custodian = text(value.custodian, { required: true, max: 120 })
+  if (!HUB_IDS.has(hubLocation) || CUSTODIAN_HUBS.get(custodian) !== hubLocation) {
+    throw new Error('REQUEST_INVALID')
+  }
   return {
     ...result,
     ownerCode: text(value.ownerCode, { required: true, max: 120 }),
-    hubLocation: text(value.hubLocation, { required: true, max: 120 }),
-    custodian: text(value.custodian, { required: true, max: 120 }),
+    hubLocation,
+    custodian,
     reason: text(value.reason, { required: true, max: 1000 }),
   }
 }

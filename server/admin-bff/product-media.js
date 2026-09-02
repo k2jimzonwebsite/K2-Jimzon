@@ -1,6 +1,7 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { decodeEvidenceImage, readImageBody } from './product-intake.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { isAdminRole } from './supabase.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const SKU = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/
@@ -208,7 +209,7 @@ export async function handleProductMediaOrphans(req, res) {
   }
   const authorized = await authorizeAdminRequest(req, res, { csrf: req.method === 'POST' })
   if (!authorized) return undefined
-  if (authorized.identity.role !== 'Admin') {
+  if (!isAdminRole(authorized.identity.role)) {
     return safeJson(res, 403, { error: { code: 'PRODUCT_MEDIA_ADMIN_REQUIRED' } })
   }
   if (req.method === 'GET') {

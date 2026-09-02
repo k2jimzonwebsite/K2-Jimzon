@@ -1,6 +1,7 @@
 import { authorizeAdminRequest } from '../../server/admin-bff/authorize.js'
 import { readJson, requireAdminProject, safeJson } from '../../server/admin-bff/security.js'
 import { recordSecurityEvent } from '../../server/admin-bff/security-events.js'
+import { isAdminRole } from '../../server/admin-bff/supabase.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const BROWSER_KINDS = new Set(['react-boundary','window-error','unhandled-rejection','browser-error'])
@@ -23,7 +24,7 @@ export default async function handler(req,res) {
   if (!authorized) return undefined
 
   if (req.method==='GET') {
-    if (authorized.identity.role!=='Admin') {
+    if (!isAdminRole(authorized.identity.role)) {
       return safeJson(res,403,{ error:{ code:'SECURITY_REVIEW_ADMIN_REQUIRED' } })
     }
     const hours=Number(Array.isArray(req.query?.hours)?req.query.hours[0]:req.query?.hours||24)

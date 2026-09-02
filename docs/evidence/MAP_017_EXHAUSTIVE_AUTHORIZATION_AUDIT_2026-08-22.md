@@ -30,12 +30,16 @@ committed.
 
 The production apply path is prepared but remains owner-gated and unused. Its
 three SQL artifacts are bound to SHA-256
-`8AF7C69ABFBE6694302AC8AFD30A177EBEEA8461BD7B0963CD3AE23570DFC5F1`; the
+`D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62`; the
 atomic receipt uses ledger version `20260824143000`. Execution requires a
 durable OWNER-005 Authorized decision, exact project/hash/ledger/finding-count
 confirmations, a named backup-evidence identifier, and roll-forward recovery
 acknowledgement. It performs no automatic write retry; an ambiguous response is
 accepted only when the separate read-only receipt and all invariants pass.
+
+The payload hash above was corrected on 26 August 2026 after independent review
+proved the earlier recorded token did not identify the final committed SQL. The
+SQL artifacts themselves were not changed by that documentation correction.
 
 ## Evidence boundary
 
@@ -116,8 +120,10 @@ must not be bypassed or falsely reported fixed.
 
 ### Separate coordinated cutovers
 
-- Direct anonymous `error_reports` insertion must move behind the protected,
-  redacted logging boundary before its grant/policy is revoked (MAP-021/022).
+- Direct anonymous `error_reports` insertion is now selected for retirement:
+  Admin classifications already use the protected redacted boundary and
+  Storefront errors remain local, so no replacement public intake is required.
+  The separate revoke/policy migration passes locally but remains unapplied.
 - Legacy anonymous order, Pasabuy, and coupon RPCs require the prepared
   Storefront BFF cutover before revocation (MAP-019/020).
 - The prepared function-execute lockdown removes the two obsolete purchase RPCs

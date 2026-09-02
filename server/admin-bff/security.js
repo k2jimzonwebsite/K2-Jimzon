@@ -11,7 +11,10 @@ const IDLE_SESSION_MS = 30 * 60 * 1000
 const loginAttempts = new Map()
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const TOKEN_HASH = /^[A-Za-z0-9_-]{43}$/
-const STAFF_ROLES = new Set(['Admin', 'Staff'])
+// SuperAdmin is an owner-controlled staff role. It shares the authenticated
+// Admin session boundary, while sensitive actions still enforce the narrower
+// SuperAdmin check at their command handler.
+const STAFF_ROLES = new Set(['Admin', 'Staff', 'SuperAdmin'])
 
 function base64url(value) {
   return Buffer.from(value).toString('base64url')

@@ -6,6 +6,7 @@ import { peso } from '../../data/products'
 import ProductVisual from '../ProductVisual'
 import { RedButton, TrustBadge, GhostButton, StockPill } from '../ui/bits'
 import { StarIcon, XIcon, CheckIcon } from '../ui/icons'
+import { productStock } from '../../lib/cartInventory'
 
 export default function GlobeOverlay({ product, onClose }) {
   const { openProduct, addToCart, setCartOpen, isWholesale, requestPasabuyItem } = useStore()
@@ -14,11 +15,13 @@ export default function GlobeOverlay({ product, onClose }) {
   if (!product) return null
 
   const price = isWholesale ? (product.wholesale_price || product.wholesale) : (product.srp || product.retail)
-  const stock = Number(product.stock_available ?? product.stock ?? 0)
-  const soldOut = stock <= 0
+  const stock = productStock(product)
+  const stockUnknown = stock === null
+  const soldOut = !stockUnknown && stock <= 0
   const reviews = getProductReviews(product.id || product.sku)
 
   const handleAddToCart = () => {
+    if (stockUnknown) return
     if (soldOut) {
       requestPasabuyItem({
         item: product.name,
@@ -28,9 +31,10 @@ export default function GlobeOverlay({ product, onClose }) {
       onClose()
       return
     }
-    addToCart(product.sku || product.id, 1)
-    setCartOpen(true)
-    onClose()
+    if (addToCart(product.sku || product.id, 1).ok) {
+      setCartOpen(true)
+      onClose()
+    }
   }
 
   const handleViewDetails = () => {
@@ -93,8 +97,8 @@ export default function GlobeOverlay({ product, onClose }) {
             </p>
 
             <div className="mt-5 flex flex-col gap-2">
-              <RedButton className="w-full py-3 text-sm font-bold shadow-sm" onClick={handleAddToCart}>
-                {soldOut ? 'Request on Pasabuy' : `Add to cart · ${peso(price)}`}
+              <RedButton className="w-full py-3 text-sm font-bold shadow-sm" onClick={handleAddToCart} disabled={stockUnknown}>
+                {stockUnknown ? 'Stock check pending' : soldOut ? 'Request on Pasabuy' : `Add to cart · ${peso(price)}`}
               </RedButton>
               <GhostButton className="w-full py-2.5 text-xs font-semibold" onClick={handleViewDetails}>
                 View product details & specs
