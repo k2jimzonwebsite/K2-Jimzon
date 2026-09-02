@@ -4157,11 +4157,26 @@ production builds pass their artifact-boundary, budget, and secret checks. The
 security surface inventory reports zero unexpected grants and zero route-control
 gaps.
 
+**Deadline creation wired by trigger, not by rewriting an applied function.**
+`confirm_order_request()` has been applied since 20260809 and creates
+reservations inside a larger transaction that also handles coupon redemption,
+balance updates, and FEFO lot selection. Replacing it to set one column would put
+all of that at risk for no benefit, so a `BEFORE INSERT` trigger fills the
+deadline instead. It is additive, reversible by dropping one trigger, and cannot
+miss a caller the way editing one function could.
+
+The trigger respects the channel rule directly: only `website` orders take a
+hold. Pasabuy, wholesale, and marketplace rows keep a null deadline, which the
+release sweep treats as unknown and never touches. An unknown channel is also
+left without a deadline, because a wrongly applied deadline silently cancels a
+real customer's hold.
+
+*Verification refresh:* 534/534 local contracts green, 21 of them reservation
+contracts.
+
 *Remaining before this item can move to `Ready for independent verification`:*
-applying `20260902_reservation_expiry_policy.sql` after MAP-017, wiring the
-30-minute deadline at order submission so new reservations are created with an
-`expires_at`, and preview acceptance of the staff surface with an authorized
-account.
+applying `20260902_reservation_expiry_policy.sql` after MAP-017, and preview
+acceptance of the staff surface with an authorized account.
 
 **Previous status, retained for dependency reading:** Queued; depends on MAP-017
 through MAP-022

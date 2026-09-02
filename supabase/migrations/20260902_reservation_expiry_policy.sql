@@ -241,4 +241,58 @@ where r.status = 'active' and r.expires_at is not null;
 revoke all on public.v_reservations_due from public, anon;
 grant select on public.v_reservations_due to authenticated;
 
+-- ---------------------------------------------------------------------------
+-- Give every new hold its deadline, at the moment it is created.
+--
+-- confirm_order_request() is a long function that has been applied since
+-- 20260809 and creates reservations as part of a larger transaction. Replacing
+-- it wholesale to set one column would put coupon redemption, balance updates,
+-- and FEFO lot selection at risk for no benefit. A BEFORE INSERT trigger sets
+-- the deadline instead: additive, reversible by dropping one trigger, and it
+-- cannot miss a caller the way editing one function could.
+--
+-- Channel matters here. OWNER-002 is explicit that Pasabuy and wholesale take no
+-- hold at all, because those flows are conversation-led through live chat and
+-- become history records instead. Those rows therefore keep a null deadline,
+-- which release_expired_reservations_v1() treats as "unknown, do not touch".
+-- ---------------------------------------------------------------------------
+
+create or replace function public.set_reservation_deadline()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_channel text;
+begin
+  -- An explicitly supplied deadline always wins; this only fills the gap.
+  if new.expires_at is not null then
+    return new;
+  end if;
+
+  select o.channel_source into v_channel
+  from public.order_requests o where o.id = new.order_request_id;
+
+  -- Marketplace orders are fulfilled against the platform's own commitment, and
+  -- Pasabuy/wholesale hold nothing. Only direct website purchases take a timed
+  -- hold. An unknown channel is left without a deadline rather than given one:
+  -- a wrongly applied deadline silently cancels a real customer's hold.
+  if v_channel is distinct from 'website' then
+    return new;
+  end if;
+
+  new.hold_minutes := coalesce(new.hold_minutes, 30);
+  new.expires_at := now() + make_interval(mins => new.hold_minutes);
+  return new;
+end;
+$$;
+
+drop trigger if exists inventory_reservations_set_deadline on public.inventory_reservations;
+create trigger inventory_reservations_set_deadline
+  before insert on public.inventory_reservations
+  for each row execute function public.set_reservation_deadline();
+
+revoke all on function public.set_reservation_deadline() from public, anon, authenticated;
+
 commit;

@@ -211,3 +211,17 @@ test('the migration is additive: it adds columns and adds nothing destructive', 
   expect(sql).toMatch(/add column if not exists expires_at timestamptz/)
   expect(sql).not.toMatch(/drop table|drop column|truncate|delete from/i)
 })
+
+test('a new hold gets its deadline from a trigger, and only for website orders', async () => {
+  const { readFile } = await import('node:fs/promises')
+  const sql = await readFile('supabase/migrations/20260902_reservation_expiry_policy.sql', 'utf8')
+  expect(sql).toMatch(/before insert on public\.inventory_reservations/)
+  // OWNER-002: Pasabuy and wholesale hold nothing, so only 'website' takes a hold.
+  expect(sql).toMatch(/if v_channel is distinct from 'website' then\s*\n\s*return new;/)
+  // 30 minutes, matching the policy module and the rulebook.
+  expect(sql).toMatch(/coalesce\(new\.hold_minutes, 30\)/)
+  // An explicitly supplied deadline is never overwritten.
+  expect(sql).toMatch(/if new\.expires_at is not null then\s*\n\s*return new;/)
+  // The existing applied confirm function is left alone.
+  expect(sql).not.toMatch(/create or replace function public\.confirm_order_request/)
+})
