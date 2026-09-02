@@ -22,8 +22,15 @@ const HAIR_SHEEN = '#5B4335'
 const CAP = '#B84E3A'
 const CAP_SHADE = '#9A3F2E'
 const APRON = '#6E7F52'
+const APRON_SHADE = '#647449'
+const APRON_TIE = '#55643D'
 const BLOUSE = '#FBF9F6'
 const GOLD = '#C6A867'
+// Trousers and shoes. The legs were a single flat #363636, which under the
+// shop's warm key light read as two black cut-outs rather than clothing.
+const TROUSER = '#3E4450'
+const TROUSER_SHADE = '#353A44'
+const SHOE = '#2B2622'
 
 /**
  * Skeleton, in centimetres from the floor.
@@ -380,15 +387,41 @@ export default function StoreKeeper3D({
 
   return (
     <group ref={root} scale={scale} userData={{ targetBay }}>
-      {/* Legs */}
+      {/* Legs.
+          Each was a single dark capsule of even thickness with nothing on the
+          end, which is what made her read as a stick figure from the aisle: two
+          tubes of the same width from hip to floor, no ankle, no foot, and no
+          clothing for them to emerge from. Each leg is now a tapered trouser
+          over a slimmer ankle, finished with a shoe. */}
       {[-1, 1].map((side) => (
         <group key={side} ref={side < 0 ? leftLeg : rightLeg} position={[side * cm(9), cm(75), 0]}>
-          <mesh position={[0, -cm(31), 0]} castShadow>
-            <capsuleGeometry args={[cm(7.5), cm(66), 6, 14]} />
-            <meshStandardMaterial color="#363636" roughness={0.85} />
+          {/* Trouser: wider at the thigh than at the knee. */}
+          <mesh position={[0, -cm(22), 0]} scale={[1.06, 1, 1.06]} castShadow>
+            <capsuleGeometry args={[cm(7.6), cm(42), 6, 16]} />
+            <meshStandardMaterial color={TROUSER} roughness={0.86} />
+          </mesh>
+
+          {/* Lower leg, narrower, so the silhouette reads as a leg not a pipe. */}
+          <mesh position={[0, -cm(52), 0]} castShadow>
+            <capsuleGeometry args={[cm(5.6), cm(24), 6, 16]} />
+            <meshStandardMaterial color={TROUSER_SHADE} roughness={0.86} />
+          </mesh>
+
+          {/* Shoe: a low rounded box set forward of the ankle, because a leg
+              ending in a rounded tube is the single clearest stick-figure tell. */}
+          <mesh position={[0, -cm(66), cm(3.4)]} scale={[1, 0.62, 1.5]} castShadow>
+            <capsuleGeometry args={[cm(5.4), cm(3.2), 5, 14]} />
+            <meshStandardMaterial color={SHOE} roughness={0.5} metalness={0.06} />
           </mesh>
         </group>
       ))}
+
+      {/* Hips. The legs previously began in mid-air below the blouse, so the
+          body had no join. This carries the waist down to where they start. */}
+      <mesh position={[0, cm(77), 0]} scale={[1, 0.86, 0.92]} castShadow>
+        <capsuleGeometry args={[cm(13.2), cm(11), 8, 20]} />
+        <meshStandardMaterial color={TROUSER} roughness={0.85} />
+      </mesh>
 
       {/* Torso: Blouse */}
       <mesh position={[0, TORSO_Y, 0]} castShadow receiveShadow>
@@ -396,10 +429,26 @@ export default function StoreKeeper3D({
         <meshStandardMaterial color={BLOUSE} roughness={0.8} />
       </mesh>
 
-      {/* Apron: front panel */}
-      <mesh position={[0, cm(100), cm(16.5)]} scale={[1, 1, 0.26]} castShadow>
-        <capsuleGeometry args={[cm(10.5), cm(24), 8, 20]} />
+      {/* Apron.
+          A single flattened capsule read as a green slab stuck to her front.
+          A real apron is wider at the hem than at the chest and is tied at the
+          waist, so it is now a bib, a skirt that widens, and a tie. */}
+      {/* Bib */}
+      <mesh position={[0, cm(112), cm(16.2)]} scale={[1, 1, 0.2]} castShadow>
+        <capsuleGeometry args={[cm(8.4), cm(11), 6, 18]} />
         <meshStandardMaterial color={APRON} roughness={0.88} />
+      </mesh>
+
+      {/* Skirt, widening toward the hem */}
+      <mesh position={[0, cm(92), cm(15.4)]} scale={[1.18, 1, 0.22]} castShadow>
+        <capsuleGeometry args={[cm(10.8), cm(19), 8, 20]} />
+        <meshStandardMaterial color={APRON_SHADE} roughness={0.88} />
+      </mesh>
+
+      {/* Waist tie, which is what makes the two pieces read as one garment */}
+      <mesh position={[0, cm(101), cm(15.6)]} scale={[1, 0.34, 0.3]} castShadow>
+        <capsuleGeometry args={[cm(11.6), cm(4), 6, 18]} />
+        <meshStandardMaterial color={APRON_TIE} roughness={0.8} />
       </mesh>
 
       {/* Two shoulder straps with gold buckles */}
