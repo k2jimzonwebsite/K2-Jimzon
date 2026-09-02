@@ -879,6 +879,38 @@ submitted -> reviewed -> confirmed -> reserved -> fulfillment
 ```
 
 - Submission does not reserve stock or count as paid revenue.
+
+**Reservation lifecycle (`OWNER-002`, decided 2 September 2026).** Four states,
+kept distinct so that "reserved" and "sold" are never confused:
+
+| Event | Effect on stock |
+| --- | --- |
+| An item sits in a cart, for any length of time | **Nothing.** The cart is a saved list. |
+| The customer clicks purchase | **Reserved for 30 minutes.** |
+| Payment verified or staff confirms | **Deducted.** Units leave inventory. |
+| 30 minutes pass with no completion | **Released.** Exact lots return, idempotently. |
+
+- The cart is **permanent and holds no stock**, in the same way Shopee's does. A
+  customer may leave items in it indefinitely. Availability is therefore checked
+  at the moment of purchase and never inferred from when the item entered the
+  cart. A cart that reserved stock would let abandoned carts lock inventory
+  forever and show `Sold out` for goods still on the shelf.
+- Staff may extend an active hold by **no less than 30 minutes and no more than
+  7 days**. Every extension records the staff member and a reason; an
+  unattributed extension is indistinguishable from stock going missing.
+- An **expired** hold may not be extended back to life. The units have already
+  returned to the sellable pool and may belong to another customer; staff create
+  a new reservation instead.
+- A release must always record its cause. A released reservation with no cause
+  makes a stock discrepancy impossible to investigate later.
+- A **missing deadline means unknown, never overdue.** Automatic release acts
+  only on holds with a real expiry, because releasing on unknown would cancel a
+  live customer's hold.
+- **Pasabuy and wholesale take no hold at all.** Those flows are conversation-led
+  through live chat, so each commitment becomes a durable history record on the
+  customer — a Pasabuy history and a wholesale history — rather than an expiring
+  claim on inventory. The purpose is continuity of contact inside live chat and
+  never losing track of a request.
 - Cart commands accept only a canonical product with known positive sellable
   stock. Missing/null stock remains `unknown`, never fabricated zero; unknown
   and zero both block add/quantity/submit while producing different customer

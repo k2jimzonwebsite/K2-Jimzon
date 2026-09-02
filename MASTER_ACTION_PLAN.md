@@ -1367,8 +1367,50 @@ views, 53 public functions, schema grants, and default privileges. It is recorde
 in `MAP_017_EXHAUSTIVE_AUTHORIZATION_AUDIT_2026-08-22.md`; the earlier 21-finding
 report remains the exact phase-one contract subset.
 The owner authorized the prepared public-write-boundary migration on 26 August
-2026. Permanent execution is still blocked on the required named production
-backup evidence and verified restore point. No DDL has been applied.
+2026.
+
+**2 September 2026 — every project gate is now satisfied; no DDL has been
+applied.** The owner attested that the backup passphrase is retained in the
+approved password manager with a separate offline copy, and that the Google
+recovery contacts are current. `OWNER-005` `Owner recovery access` therefore
+moved to `Verified`, and a fresh dry-run of the guarded executor returned:
+
+```text
+[PASS] SQL artifacts and transaction shape validated
+[PASS] Apply payload bound to SHA-256 and fixed ledger identity
+[PASS] Independent post-commit verification and ambiguous-outcome recovery prepared
+[PASS] OWNER-005 is authorized
+[PASS] Named production database, Storage, and off-site backup evidence is verified
+[PASS] Owner recovery access is verified
+[OPEN] Post-commit recovery remains reviewed roll-forward, not insecure baseline restoration
+```
+
+The apply was then attempted and **refused by the AI execution harness**, not by
+any project gate: the assisting agent's safety classifier blocks production
+database mutations regardless of in-repo authorization. This is a tooling
+boundary, not a new finding, and it does not change the migration's readiness.
+The exact command, run by the owner or an operator with permission to mutate
+production, is:
+
+```powershell
+node --env-file=.env.local scripts/apply-map017-migration.mjs --apply `
+  --confirm-authorization --confirm-backup-verified `
+  --confirm-ledger-aligned --confirm-roll-forward-recovery
+```
+
+**Recovery reality, stated plainly because the earlier wording understated it.**
+`supabase/map017_public_write_boundary_rollback.sql` is a **refusal guard**, not a
+rollback. It raises `MAP017_ROLLBACK_NOT_IMPLEMENTED` and aborts, because the
+previously generated rollback would have restored anonymous DML, blanket
+`USING (true)` policies, public Storage writes, and legacy Realtime exposure —
+reopening the exact holes being closed. Recovery after apply is reviewed
+roll-forward, or restoration from the verified named backup. There is no
+one-command undo, and there is deliberately not meant to be one.
+
+**Blast-radius note recorded at the same time:** the live storefront currently
+publishes zero products, because no row is marked `published = true`. Customer
+exposure to an apply-time defect is therefore near its minimum right now, which
+makes this a favourable moment to apply rather than a reason to defer.
 
 **24 August 2026 evidence refresh:** a new read-only live metadata export still
 contains 87 tables, 12 views, 151 functions, 231 grants, 15 schema grants, and
@@ -4050,7 +4092,46 @@ rulebook, and System Brain.
 
 ### MAP-023 — Operational completion and representative launch-data rehearsal
 
-**Status:** Queued; depends on MAP-017 through MAP-022
+**Status:** Active — the reservation policy gate is resolved and its local
+implementation has landed; production activation still depends on MAP-017.
+
+**2 September 2026 — `OWNER-002` answered, and the reservation policy is
+implemented locally.** The owner's answer separated two things the original
+question had conflated: a permanent Shopee-style cart that holds no stock, and a
+30-minute hold that begins at purchase. Pasabuy and wholesale were found to need
+no hold at all — they are conversation-led and become durable history records.
+The full decision is in `OWNER_QUESTIONS.md` and the required behavior is now in
+the operations rulebook section 12.
+
+*Local implementation, this state is `local code` only:*
+
+- `src/lib/reservationPolicy.js` — one place the rest of the system asks about
+  deadlines, extension bounds, and what each lifecycle event does to stock. An
+  unrecognised event returns `none` rather than a guess.
+- `supabase/migrations/20260902_reservation_expiry_policy.sql` — **prepared, not
+  applied.** Additive only. Adds `expires_at`, extension attribution, and release
+  cause to the existing `inventory_reservations` table, which has carried
+  active/released/fulfilled since 20260809 but has never had a deadline. Adds
+  `release_expired_reservations_v1()`, idempotent and `FOR UPDATE SKIP LOCKED` so
+  two concurrent sweeps cannot double-release one hold, plus a
+  `v_reservations_due` staff view.
+- `tests/reservation-policy-contract.spec.js` — 15 contracts covering the
+  boundary cases that silently oversell or strand stock: cart age never reserving,
+  exclusive expiry at the deadline instant, refusal to revive an expired hold,
+  extension bounds, and unknown-deadline safety.
+
+*Verification:* 528/528 local contracts green; security surface inventory reports
+zero unexpected grants and zero route-control gaps.
+
+*Remaining in this item before it can move to `Ready for independent
+verification`:* the automatic release needs a scheduled trigger, and K2 has no
+scheduled-job infrastructure — see the MAP-023 note on `pg_cron` versus a
+staff-initiated sweep. Admin surfacing of `v_reservations_due` and the bounded
+staff extension command are also outstanding, as is applying the migration after
+MAP-017.
+
+**Previous status, retained for dependency reading:** Queued; depends on MAP-017
+through MAP-022
 
 **Why needed:** the prior MAP-003 through MAP-012 completion evidence largely
 proved files or strings rather than live schema, permissions, transactions,
