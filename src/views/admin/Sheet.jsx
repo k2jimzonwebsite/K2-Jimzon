@@ -15,6 +15,12 @@ import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
 import {
   adminBffEnabled, downloadCatalogCsvBff, getAdminProducts,
 } from '../../services/adminBffService'
+// TEMPORARY: sample shop/custodian assignments. See the deletion note at the
+// top of sheetShopLensFixture.js — this import is one of the two removal points.
+import {
+  FIXTURE_CUSTODIANS, FIXTURE_NOTICE, FIXTURE_SHOPS,
+  custodiansForShops, shopAssignmentsFor, shopLabelsFor,
+} from './sheetShopLensFixture'
 
 const DOMAINS = [
   { name: 'Product', cols: ['SKU', 'Barcode', 'Product Name', 'Brand', 'Category', 'Subcategory', 'Origin', 'Net Weight', 'Package Type'] },
@@ -72,6 +78,14 @@ export default function Sheet() {
   const [exporting, setExporting] = useState(false)
   const [lensQuery, setLensQuery] = useState('')
   const [lensStatus, setLensStatus] = useState('all')
+  const [lensShop, setLensShop] = useState('all')
+  // Empty means every custodian. Selecting Staff A and Staff B together is the
+  // "A + B" view the owner asked for, so this is a set rather than one choice.
+  const [lensCustodians, setLensCustodians] = useState([])
+
+  const toggleCustodian = (name) =>
+    setLensCustodians(current =>
+      current.includes(name) ? current.filter(entry => entry !== name) : [...current, name])
 
   // The lens narrows what is shown, never what is loaded, and every row keeps
   // the index it has in `rows`. Editing is index-addressed (`updateField` reads
@@ -79,16 +93,26 @@ export default function Sheet() {
   // to whichever product happened to sit at that position in the full list —
   // silently, and to a row the staff member cannot see.
   const visibleRows = rows
-    .map((row, index) => ({ row, index }))
-    .filter(({ row }) => {
+    .map((row, index) => ({ row, index, shops: shopAssignmentsFor(row.sku) }))
+    .filter(({ row, shops }) => {
       if (lensStatus !== 'all' && String(row.status || '').toLowerCase() !== lensStatus) return false
+      if (lensShop !== 'all' && !shops.includes(lensShop)) return false
+      if (lensCustodians.length > 0) {
+        const holders = custodiansForShops(shops)
+        if (!holders.some(name => lensCustodians.includes(name))) return false
+      }
       const needle = lensQuery.trim().toLowerCase()
       if (!needle) return true
       return [row.sku, row.name, row.barcode, row.subcategory]
         .some(field => String(field || '').toLowerCase().includes(needle))
     })
 
-  const lensActive = lensStatus !== 'all' || lensQuery.trim() !== ''
+  const lensActive = lensStatus !== 'all' || lensShop !== 'all'
+    || lensCustodians.length > 0 || lensQuery.trim() !== ''
+
+  const clearLens = () => {
+    setLensQuery(''); setLensStatus('all'); setLensShop('all'); setLensCustodians([])
+  }
 
   useEffect(() => {
     fetchProducts()
@@ -278,19 +302,61 @@ export default function Sheet() {
             <option value="unlisted">Unlisted</option>
             <option value="discontinued">Discontinued</option>
           </select>
+          <select
+            aria-label="Filter by shop"
+            value={lensShop}
+            onChange={(e) => setLensShop(e.target.value)}
+            className="min-h-[38px] rounded-adm-sm border border-adm-line bg-adm-sunken px-2 text-sm font-semibold text-white outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/40"
+          >
+            <option value="all">All shops</option>
+            {FIXTURE_SHOPS.map(shop => (
+              <option key={shop.shopCode} value={shop.shopCode}>{shop.displayName}</option>
+            ))}
+          </select>
           <span aria-live="polite" className="shrink-0 text-xs font-mono font-bold text-white/60">
             {lensActive ? `${visibleRows.length} of ${rows.length}` : `${rows.length} products`}
           </span>
           {lensActive && (
             <button
               type="button"
-              onClick={() => { setLensQuery(''); setLensStatus('all') }}
+              onClick={clearLens}
               className="shrink-0 min-h-[38px] rounded-adm-sm border border-adm-line px-3 text-xs font-bold text-white/80 transition hover:bg-white/10"
             >
               Clear lens
             </button>
           )}
         </div>
+
+        <div className="flex flex-wrap items-center gap-2 border-t border-adm-line px-3 py-2 lg:px-6">
+          <span className="shrink-0 text-xs font-mono font-extrabold uppercase text-gold hidden lg:inline">Handled by:</span>
+          {FIXTURE_CUSTODIANS.map(name => {
+            const active = lensCustodians.includes(name)
+            return (
+              <button
+                key={name}
+                type="button"
+                aria-pressed={active}
+                onClick={() => toggleCustodian(name)}
+                className={`shrink-0 min-h-[38px] rounded-adm-sm border px-3 text-xs font-bold transition ${
+                  active
+                    ? 'border-blue bg-blue/20 text-white'
+                    : 'border-adm-line text-white/70 hover:bg-white/10'
+                }`}
+              >
+                {name}
+              </button>
+            )
+          })}
+          <span className="shrink-0 text-xs text-white/45">
+            {lensCustodians.length === 0
+              ? 'Showing everyone'
+              : `Showing ${lensCustodians.join(' + ')}`}
+          </span>
+        </div>
+
+        <p className="border-t border-amber/25 bg-amber/10 px-3 py-2 text-xs font-semibold text-amber lg:px-6">
+          {FIXTURE_NOTICE}
+        </p>
 
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none border-t border-adm-line px-3 py-2 lg:px-6">
           <span className="shrink-0 text-xs font-mono font-extrabold uppercase text-gold hidden lg:inline">Jump:</span>
@@ -345,11 +411,12 @@ export default function Sheet() {
                     {h}
                   </th>
                 ))}
+                <th className="border border-adm-line px-3 py-2.5 text-center text-gold">Shop</th>
                 <th className="border border-adm-line px-3 py-2.5 text-center text-gold">Action</th>
               </tr>
             </thead>
             <tbody>
-              {visibleRows.map(({ row: r, index: i }, position) => {
+              {visibleRows.map(({ row: r, index: i, shops }, position) => {
                 return (
                   <tr key={r.sku} className="hover:bg-blue/10 transition-colors group">
                     <td className="hidden sm:table-cell w-10 min-w-10 border border-adm-line bg-adm-surface px-2 py-1.5 text-center text-xs text-white/50 font-mono sticky left-0 z-20">
@@ -438,6 +505,15 @@ export default function Sheet() {
                         </Cell>
                       )
                     })}
+                    <td className="border border-adm-line px-2 py-1.5 bg-adm-surface group-hover:bg-blue/10 min-w-[130px]">
+                      <div className="flex flex-wrap items-center gap-1">
+                        {shopLabelsFor(shops).map(label => (
+                          <span key={label} className="rounded-adm-sm border border-white/15 bg-white/5 px-1.5 py-0.5 text-xs font-bold text-white/70">
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
                     <td className="border border-adm-line px-2 text-center bg-adm-surface group-hover:bg-blue/10">
                       <div className="flex items-center justify-center gap-0.5">
                         <button onClick={() => setEnrichProduct(r)} className="text-amber/70 hover:text-amber hover:bg-amber/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors text-sm font-bold" title="Enrich Product Specs with AI">
@@ -457,14 +533,14 @@ export default function Sheet() {
               })}
               {visibleRows.length === 0 && (
                 <tr>
-                  <td colSpan={ALL_COLS.length + 2} className="border border-adm-line px-4 py-10 text-center">
+                  <td colSpan={ALL_COLS.length + 3} className="border border-adm-line px-4 py-10 text-center">
                     <p className="text-sm font-semibold text-white">
                       {lensActive ? 'No products match this lens.' : 'No products yet.'}
                     </p>
                     {lensActive && (
                       <button
                         type="button"
-                        onClick={() => { setLensQuery(''); setLensStatus('all') }}
+                        onClick={clearLens}
                         className="mt-3 min-h-[38px] rounded-adm-sm border border-adm-line px-3 text-xs font-bold text-white/80 transition hover:bg-white/10"
                       >
                         Clear lens to see all {rows.length}
