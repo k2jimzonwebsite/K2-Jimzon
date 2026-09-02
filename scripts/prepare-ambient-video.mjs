@@ -1,23 +1,20 @@
 #!/usr/bin/env node
 /**
- * Prepares the Pasabuy and Wholesale ambient background media.
+ * Prepares the Pasabuy and Wholesale hero clips.
  *
- * The source clips in `assets/` are 1280x720 H.264 with an AAC track, about
- * 3 MB each. They are used as a dimmed, blurred atmosphere behind page content,
- * never as something the visitor is meant to watch, which changes what the
- * asset needs to be:
+ * These play in a band at the top of each page and are meant to be watched, so
+ * they keep their full 1280x720 detail. An earlier version blurred them into a
+ * backdrop; that made them cheap but pointless, since the footage is the reason
+ * they exist.
  *
- * - **The blur is baked in, not applied in CSS.** A runtime `filter: blur()`
- *   over a full-bleed video repaints every frame on the GPU, which is exactly
- *   the cost a mid-range phone cannot absorb. Blurring in the encoder also
- *   strips the high-frequency detail that dominates the bitrate, so the file
- *   gets dramatically smaller for free: ~3 MB becomes ~110 KB.
- * - **Resolution drops to 640x360.** Nothing blurred at this strength survives
- *   above that, so larger frames spend bytes on detail the viewer cannot see.
- * - **Audio is removed.** It is decoration behind a form. An audio track is
- *   dead weight and, on some browsers, enough to refuse autoplay outright.
- * - **A poster frame is emitted.** It carries the reduced-motion and mobile
- *   cases, where no video loads at all.
+ * What is still done to them:
+ *
+ * - **Audio is removed.** They are silent hero loops. An audio track is dead
+ *   weight and, on some browsers, enough to refuse autoplay outright.
+ * - **Encoded for streaming, not for archive.** CRF 26 with faststart, so the
+ *   first frames arrive without waiting for the whole file.
+ * - **A poster frame is emitted.** It carries the reduced-motion case, where no
+ *   video plays at all, and shows while the video buffers.
  *
  * Requires ffmpeg on PATH. Outputs to `public/ambient/`, which ships with the
  * storefront build.
@@ -34,12 +31,11 @@ const root = fileURLToPath(new URL('..', import.meta.url))
 const sourceDir = path.join(root, 'assets')
 const outDir = path.join(root, 'public', 'ambient')
 
-// Strong enough that no recognisable subject survives, which is the point:
-// it must read as atmosphere, not as a video someone is meant to watch.
-const BLUR_SIGMA = 18
-const WIDTH = 640
-const HEIGHT = 360
-const FILTER = `scale=${WIDTH}:${HEIGHT},gblur=sigma=${BLUR_SIGMA}`
+// Full source resolution. The clip is the point of the band it sits in, so
+// nothing is thrown away here.
+const WIDTH = 1280
+const HEIGHT = 720
+const FILTER = `scale=${WIDTH}:${HEIGHT}`
 
 const CLIPS = [
   { source: 'Pasabuy.mp4', name: 'pasabuy' },
@@ -72,30 +68,23 @@ function main() {
     // H.264 baseline of support, for Safari and everything older.
     ffmpeg([
       '-i', input, '-an', '-vf', FILTER,
-      '-c:v', 'libx264', '-profile:v', 'main', '-crf', '30', '-preset', 'slow',
+      '-c:v', 'libx264', '-profile:v', 'high', '-crf', '26', '-preset', 'slow',
       '-pix_fmt', 'yuv420p', '-movflags', '+faststart', mp4,
     ])
 
     // VP9 for browsers that take it, usually smaller again.
     ffmpeg([
       '-i', input, '-an', '-vf', FILTER,
-      '-c:v', 'libvpx-vp9', '-crf', '40', '-b:v', '0', '-deadline', 'good', '-cpu-used', '2',
+      '-c:v', 'libvpx-vp9', '-crf', '34', '-b:v', '0', '-deadline', 'good', '-cpu-used', '2',
       webm,
     ])
 
-    // The still that carries reduced-motion, mobile, and the pre-play frame.
+    // The still that carries reduced motion and the pre-play frame.
     ffmpeg([
       '-i', input, '-vf', `${FILTER},select=eq(n\\,0)`, '-frames:v', '1', '-q:v', '6', poster,
     ])
 
-    // A sharp frame at full source resolution, for the places these clips are
-    // shown as a picture rather than as atmosphere — the Wholesale hero panel
-    // uses one. Taken a little into the clip, since frame 0 is often the
-    // weakest composition.
-    const still = path.join(outDir, `${clip.name}-still.jpg`)
-    ffmpeg(['-ss', '3', '-i', input, '-frames:v', '1', '-q:v', '4', still])
-
-    console.log(`${clip.name}: mp4 ${kb(mp4)}, webm ${kb(webm)}, poster ${kb(poster)}, still ${kb(still)}`)
+    console.log(`${clip.name}: mp4 ${kb(mp4)}, webm ${kb(webm)}, poster ${kb(poster)}`)
   }
 
   console.log(`\nWrote ${CLIPS.length * 3} files to public/ambient/.`)

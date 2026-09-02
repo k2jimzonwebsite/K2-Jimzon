@@ -4,8 +4,7 @@ import { GhostButton, Kicker, RedButton } from '../components/ui/bits'
 import { ArrowIcon, BriefcaseIcon, CheckIcon, InboxIcon, ShieldIcon } from '../components/ui/icons'
 import TurnstileChallenge from '../components/security/TurnstileChallenge'
 import { guestBffEnabled, postGuestCommerce } from '../services/guestCommerceService'
-import { applyImageFallback } from '../lib/imageFallback'
-import AmbientBackdrop from '../components/AmbientBackdrop'
+import HeroVideo from '../components/HeroVideo'
 
 const WHOLESALE_EMAIL = 'k2jimzonwebsite@gmail.com'
 
@@ -133,9 +132,9 @@ export default function Wholesale() {
   return (
     <main className="pb-24 md:pb-20">
       {/* Hero Section */}
-      <section className="relative isolate border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] overflow-hidden text-navy">
-        <AmbientBackdrop name="wholesale" />
-        <div className="relative z-10 store-section grid min-h-[32rem] gap-10 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-16 lg:gap-16">
+      <HeroVideo name="wholesale" label="Cases being packed for consolidation beside Italian stock" />
+      <section className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] overflow-hidden text-navy">
+        <div className="store-section grid gap-10 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-16 lg:gap-16">
           <div>
             <Kicker className="flex items-center gap-2 text-crimson">
               <BriefcaseIcon size={14} /> Business & Wholesale Supply
@@ -161,28 +160,32 @@ export default function Wholesale() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border border-[var(--store-surface-border)] shadow-sm">
-            {/* K2's own consolidation footage, still-framed. This replaced a
-                hotlinked Unsplash canal photo: the canal illustrated nothing
-                about wholesale, clashed with the warm backdrop behind it, and
-                made the page depend on a third-party image host at render. */}
-            <img
-              src="/ambient/wholesale-still.jpg"
-              alt="Cases being packed for consolidation beside Italian stock"
-              width="1280"
-              height="720"
-              onError={applyImageFallback}
-              className="aspect-[4/3] h-full w-full object-cover opacity-90"
-            />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[var(--store-surface-bg)] via-[var(--store-surface-bg)]/80 to-transparent p-6 pt-20">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-crimson">
-                <ShieldIcon size={14} />
-                <span>Manual Commercial Review</span>
-              </div>
-              <p className="mt-2 max-w-sm text-sm leading-6 text-navy-soft">
-                Wholesale pricing is staff-assigned and tied to a reviewed business need. The browser cannot approve pricing, stock, credit, or delivery terms.
-              </p>
+          {/* This panel used to be a hotlinked Unsplash canal photo with the
+              review notice squeezed into a gradient across its bottom. The
+              canal illustrated nothing about wholesale, and once the hero band
+              above started playing K2's own consolidation footage, a still of
+              the same boxes sat directly beneath the moving version of itself.
+              One image per hero; the notice is the actual content here, so it
+              gets a card of its own and room to be read. */}
+          <div className="rounded-2xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-7 shadow-sm md:p-8">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-crimson">
+              <ShieldIcon size={14} />
+              <span>Manual Commercial Review</span>
             </div>
+            <p className="mt-4 text-base leading-7 text-navy-soft">
+              Wholesale pricing is staff-assigned and tied to a reviewed business need. The browser cannot approve pricing, stock, credit, or delivery terms.
+            </p>
+            <dl className="mt-7 grid gap-5 border-t border-[var(--store-surface-border)] pt-6 sm:grid-cols-2">
+              {[
+                ['Reviewed per order', 'Batch, Manila availability, and terms are confirmed by staff before acceptance.'],
+                ['No automatic pricing', 'Quotes are versioned and issued by a person, never generated at checkout.'],
+              ].map(([term, detail]) => (
+                <div key={term}>
+                  <dt className="text-sm font-bold text-navy">{term}</dt>
+                  <dd className="mt-1.5 text-sm leading-6 text-navy-soft">{detail}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </section>

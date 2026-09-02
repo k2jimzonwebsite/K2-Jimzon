@@ -294,68 +294,39 @@
   background-blend-mode: normal, normal, normal, multiply;
 }
 
-/* ── .ambient-backdrop: dimmed atmosphere behind a page ────────────────────
-   Sits inside the wood canvas above, never in place of it. The clip is already
-   blurred in the file, so nothing here filters a playing video: that would
-   repaint every frame on the GPU for no visual gain. What is left is opacity,
-   a blend that matches how the wood grain itself sits on the canvas, and a
-   scrim that keeps text above it readable. */
-.ambient-backdrop {
-  position: absolute;
-  inset: 0;
+/* ── .hero-video: a watchable clip banded across the top of a page ─────────
+   Roughly half the viewport, capped so it never eats a laptop screen and never
+   collapses on a phone. The clip stays sharp: it is the reason the band exists.
+   Only the bottom edge is treated, fading into the page ground so the band
+   settles rather than ending on a hard line. No text sits over it — moving
+   footage cannot hold a contrast ratio, because it keeps changing underneath. */
+.hero-video {
+  position: relative;
+  width: 100%;
+  height: clamp(15rem, 52vh, 34rem);
   overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
+  background-color: var(--store-surface-bg);
 }
 
-.ambient-backdrop__media {
+.hero-video__media {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.ambient-backdrop__scrim {
+/* Only the lower third is touched, and only enough to hand off to the page. */
+.hero-video__fade {
   position: absolute;
-  inset: 0;
-}
-
-/* Light: multiply into the grain, the same blend the wood uses, at an opacity
-   low enough that it reads as movement in the material rather than as video. */
-:root:not(.dark) .ambient-backdrop__media {
-  opacity: 0.42;
-  mix-blend-mode: multiply;
-}
-
-:root:not(.dark) .ambient-backdrop__scrim {
-  background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--store-surface-bg) 55%, transparent) 0%,
-      color-mix(in srgb, var(--store-surface-bg) 68%, transparent) 55%,
-      color-mix(in srgb, var(--store-surface-bg) 86%, transparent) 100%);
-}
-
-/* Dark: the ground is near-black, so the clip has to add light rather than
-   remove it. Lower opacity, because a lit shape reads far louder on a dark
-   field than a darkened one does on a warm canvas. */
-.dark .ambient-backdrop__media {
-  opacity: 0.46;
-  mix-blend-mode: screen;
-}
-
-.dark .ambient-backdrop__scrim {
-  background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--store-surface-bg) 34%, transparent) 0%,
-      color-mix(in srgb, var(--store-surface-bg) 52%, transparent) 55%,
-      color-mix(in srgb, var(--store-surface-bg) 78%, transparent) 100%);
-}
-
-/* Anyone asking for stillness gets no motion here. The component already
-   withholds the video element on that preference; this covers a session where
-   the preference changes after the element mounted. */
-@media (prefers-reduced-motion: reduce) {
-  .ambient-backdrop video { display: none; }
+  inset-inline: 0;
+  bottom: 0;
+  height: 38%;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--store-surface-bg) 55%, transparent) 58%,
+    var(--store-surface-bg) 100%);
 }
 
 /* ── .store-atmosphere: full-width section backgrounds ─────────────────── */

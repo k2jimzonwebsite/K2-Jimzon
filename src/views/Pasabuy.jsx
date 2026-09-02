@@ -4,7 +4,7 @@ import { RedButton, TrustBadge, TuscanCard, Kicker } from '../components/ui/bits
 import { CheckIcon, PlaneIcon } from '../components/ui/icons'
 import TurnstileChallenge from '../components/security/TurnstileChallenge'
 import { guestBffEnabled } from '../services/guestCommerceService'
-import AmbientBackdrop from '../components/AmbientBackdrop'
+import HeroVideo from '../components/HeroVideo'
 
 const EMPTY_FORM = {
   customerName: '', email: '', phone: '', item: '', url: '', budget: '',
@@ -66,9 +66,9 @@ export default function Pasabuy() {
   const field = 'store-field w-full px-4 py-3 text-base'
 
   return (
-    <main className="relative isolate store-section pb-24 pt-10 md:pb-20 md:pt-14">
-      <AmbientBackdrop name="pasabuy" />
-      <div className="relative z-10 grid gap-10 lg:grid-cols-[1.16fr_0.84fr] lg:gap-16">
+    <main className="pb-24 md:pb-20">
+      <HeroVideo name="pasabuy" label="Shelves of Italian goods in a Milan shop" />
+      <div className="store-section -mt-6 grid gap-10 pt-4 md:pt-6 lg:grid-cols-[1.16fr_0.84fr] lg:gap-16">
         <div>
           <Kicker className="flex items-center gap-2"><PlaneIcon size={14} /> Personal Shopping from Italy</Kicker>
           <h1 className="mt-3 font-serif text-3xl font-semibold leading-[1.06] tracking-tight text-navy sm:text-4xl md:text-5xl">
