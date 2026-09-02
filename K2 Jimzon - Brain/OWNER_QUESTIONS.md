@@ -24,7 +24,25 @@ It is not an engineering backlog; implementation remains exclusively in
 
 **Backup/restore verification:** Verified
 
-**Owner recovery access:** Pending
+**Owner recovery access:** Verified
+
+**Owner attestation recorded 2 September 2026.** The owner confirmed that the
+`K2_BACKUP_PASSPHRASE` is now retained in the approved password manager with a
+separate offline recovery copy held apart from the recovery workstation, and that
+the `k2jimzonwebsite@gmail.com` 2-Step Verification plus its recovery email and
+phone are current.
+
+This closes the gate honestly but note what it is: an **owner attestation**, not a
+machine-measured check. Software cannot see inside a password manager or a drawer.
+The measured half was already recorded on 30 August 2026 — that workstation
+retrieved the exact named envelope from Drive and decrypted it with the retained
+passphrase, proving the key works. What the owner has now added is that the key
+survives the loss of this laptop, which was the real exposure: until today the
+only known copy of the key to every encrypted backup sat in `.env.local` on one
+machine, while the locked archives sat in Drive.
+
+**Re-attest this whenever the passphrase rotates, the recovery workstation
+changes, or the Google recovery contacts change.**
 
 The named production database and Storage object-byte backups, both isolated
 restores, owner-only Drive upload, all eight independent retrieval checks, and
@@ -307,15 +325,16 @@ answered by the Brain or handled safely as configurable system behavior.
 ## OWNER-002 — Reservation hold and release policy
 
 **Decision:** Answered 2 September 2026. **Resolved, with one clarification the
-owner should confirm on read-back (marked below).**
+owner confirmed the stock lifecycle on read-back 2 September 2026.**
 
 The owner's answers separate two things that had been conflated in the original
 question. A saved cart and a stock reservation are different mechanisms:
 
 1. **Cart — permanent, and holds no stock.** The cart persists like Shopee's:
    a customer can leave items in it indefinitely and find them later. It is a
-   saved shopping list, **not** a claim on inventory. *Clarification for owner
-   read-back:* this is deliberate. If a permanent cart reserved stock, abandoned
+   saved shopping list, **not** a claim on inventory. *Confirmed by the owner
+   2 September 2026: "stock only deducts after a purchase has been made."* This is
+   deliberate. If a permanent cart reserved stock, abandoned
    carts would lock inventory forever and the catalog would show sold-out for
    goods K2 still holds. Availability is therefore re-checked at purchase, which
    is the behavior customers already expect from Shopee.
@@ -329,6 +348,19 @@ question. A saved cart and a stock reservation are different mechanisms:
    The purpose the owner states is continuity of contact inside live chat and
    never losing track of a request. These records are permanent operational
    truth, not expiring reservations.
+
+**Confirmed stock lifecycle, 2 September 2026.** Four distinct states, so that
+"reserved" is never confused with "sold":
+
+| Event | Effect on stock |
+| --- | --- |
+| Item sits in a cart, for any length of time | **None.** The cart is a saved list. |
+| Customer clicks purchase | **Reserved for 30 minutes.** Held for them, not yet sold. |
+| Payment verified / staff confirms | **Deducted.** Units leave inventory permanently. |
+| 30 minutes pass with no completion | **Released.** Exact lots return, idempotently. |
+
+Availability is therefore re-checked at the moment of purchase, never assumed from
+when the item entered the cart.
 
 **Engineering consequences recorded here so they are not rediscovered later:**
 
@@ -520,6 +552,37 @@ expected cost so a retry or a longer description cannot trip the cap mid-intake:
 - **Per intake session: $3.00** (about PHP 175, roughly 40 products)
 - **Per month: $20.00** (about PHP 1,160, roughly 275 products)
 
+**Owner decision recorded 2 September 2026 — caps approved.** The owner selected
+the **Premium** configuration and a **USD 100 monthly ceiling**. Derived caps,
+each carrying retry headroom above the expected premium cost of ~$0.285:
+
+| Cap | Value | Approx PHP | Roughly |
+| --- | ---: | ---: | --- |
+| Per product | **$0.50** | ~PHP 29 | one product, with room for a retry |
+| Per intake session | **$10.00** | ~PHP 580 | ~35 products in one sitting |
+| Per month | **$100.00** | ~PHP 5,800 | ~350 products |
+
+These are **ceilings, not spend**. At the premium rate, onboarding 50 products in
+a month costs about $14, not $100. The cap exists to stop a runaway loop, not to
+describe a budget.
+
+**Caps are editable, in two independent places, and both should be set:**
+
+1. **The K2 SuperAdmin control screen** — changes these three numbers. Fail-closed:
+   when a cap is reached the paid path stops and the free manual path remains.
+2. **The OpenAI account's own billing limit** — a hard ceiling at the provider.
+
+Set both. K2's cap protects the workflow; OpenAI's protects the card if anything
+ever bypasses K2's cap. A cap that lives only inside the application it governs is
+not a spending control.
+
+**Cost caution worth reading before activation.** Premium buys high-quality image
+generation at $0.133 per image, fifteen times the low tier. Per `G-014`, generated
+art may never be presented as real product photography, so these outputs are draft
+candidates and secondary/lifestyle imagery, not the primary product photo. If the
+images turn out to be drafts staff replace anyway, the medium tier does the same
+job for a quarter of the cost. Revisit the tier after the first real intake batch.
+
 **Still required from the owner before activation:** confirm or replace those
 three numbers, name the exact approved model snapshots, and confirm the provider
 account's data-retention/training setting. The two-confirmation boundary and the
@@ -543,9 +606,9 @@ Please confirm:
 
 1. The approved OpenAI model snapshot(s) for structured product content and
    image generation/editing, and whether the same provider account is used for
-   both stages.
-2. The maximum spend per product, per intake session, and monthly owner budget
-   cap, including the fail-closed behavior when any cap is reached.
+   both stages. **Use `gpt-image-1.5`; `gpt-image-1` retires 23 October 2026.**
+2. ~~The maximum spend per product, per intake session, and monthly owner budget
+   cap~~ **Answered 2 September 2026 — see the approved caps above.**
 3. **Owner direction recorded 30 August 2026:** use the two-confirmation
    boundary—one confirmation before the paid content call and a second before
    any image calls—with the UI showing the priced scope and current remaining
