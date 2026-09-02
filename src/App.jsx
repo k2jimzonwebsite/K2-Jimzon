@@ -20,6 +20,7 @@ const Catalog = lazy(() => import('./views/Catalog'))
 const GuestMessages = lazy(() => import('./views/GuestMessages'))
 const Contact = lazy(() => import('./views/Contact'))
 const CustomerAccount = lazy(() => import('./views/CustomerAccount'))
+const NotFound = lazy(() => import('./views/NotFound'))
 // MAP-027: opt-in Interactive Shop. Registered here as well as in
 // StorefrontApp.jsx — this combined entry has its own view registry, and a
 // route missing from either one silently falls back to Home.
@@ -38,10 +39,15 @@ const VIEWS = {
   messages: GuestMessages,
   contact: Contact,
   account: CustomerAccount,
+  // Combined mode must resolve an unknown path the way the production
+  // storefront does. Without this entry the `?? Home` fallback rendered the
+  // landing page for any bad URL, so a 404 checked on this workstation looked
+  // fine while StorefrontApp showed the real recovery page.
+  not_found: NotFound,
 }
 
 // Storefront chrome wraps shopper-facing views only.
-const STOREFRONT = new Set(['home', 'master_product', 'catalog', 'pasabuy', 'wholesale', 'checkout', 'confirmation', 'messages', 'contact'])
+const STOREFRONT = new Set(['home', 'master_product', 'catalog', 'pasabuy', 'wholesale', 'checkout', 'confirmation', 'messages', 'contact', 'not_found'])
 
 function Shell() {
   const { view, setView } = useStore()

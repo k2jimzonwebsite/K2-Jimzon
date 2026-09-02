@@ -63,3 +63,34 @@ test('storefront catalog is gated on the staff publication flag, not status alon
   // conditions and both must hold.
   expect(source).toContain("in('status', ['Live', 'Active', 'Unlisted'])")
 })
+
+test('an empty database renders an empty production catalog, never the local seed', async () => {
+  const source = await readStoreContext()
+
+  // src/data/products.js ships in the storefront bundle on purpose: it carries
+  // the curated copy (why_buy, pairings, guide, hue) that enriches real database
+  // rows. That makes the seed permanently reachable at runtime, so the only
+  // thing standing between a customer and 36 fabricated products is this guard.
+  //
+  // It matters right now rather than theoretically. Checked against production
+  // on 2 September 2026, the live catalog query returns zero rows, so this
+  // branch is the one that actually executes for every visitor. Without the
+  // guard the storefront would advertise stock K2 does not have, at prices it
+  // has not set — and it would look completely healthy while doing it.
+  expect(source).toContain('if (dbProducts.length === 0) {')
+  expect(source).toContain('if (!import.meta.env.DEV) return []')
+
+  // The seed branch must sit inside the empty-database case and after the
+  // production return, never as a general fallback.
+  const emptyCase = source.slice(
+    source.indexOf('if (dbProducts.length === 0) {'),
+    source.indexOf('return dbProducts.map('),
+  )
+  expect(emptyCase).toContain('localProducts.map')
+  expect(emptyCase.indexOf('if (!import.meta.env.DEV) return []'))
+    .toBeLessThan(emptyCase.indexOf('localProducts.map'))
+
+  // And the seed must not be reachable from the populated path either.
+  const populated = source.slice(source.indexOf('return dbProducts.map('))
+  expect(populated).not.toContain('stock_available: lp.stock')
+})

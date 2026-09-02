@@ -14,6 +14,7 @@ import {
   formatDeliveryFee,
   resolveDeliveryQuote,
 } from '../../lib/deliveryQuote'
+import { manilaToday, pesoInputToMinor } from './deliveryRateFormat'
 import {
   EmptyState, MetricRail, SectionHeading, StateBanner, StatusPill, WorkspaceIntro,
   primaryButton, secondaryButton,
@@ -58,22 +59,7 @@ const EMPTY_QUOTE_INPUTS = {
 const operationKey = () =>
   typeof globalThis.crypto?.randomUUID === 'function' ? globalThis.crypto.randomUUID() : ''
 
-/** Asia/Manila calendar date. Effective intervals are compared as plain dates. */
-function manilaToday() {
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Asia/Manila', year: 'numeric', month: '2-digit', day: '2-digit',
-  }).formatToParts(new Date())
-  const at = (type) => parts.find((part) => part.type === type)?.value
-  return `${at('year')}-${at('month')}-${at('day')}`
-}
-
 const peso = (minor) => (Number.isInteger(minor) ? formatDeliveryFee(minor) : '—')
-
-function pesoInputToMinor(value) {
-  const parsed = Number.parseFloat(String(value).replace(/,/g, ''))
-  if (!Number.isFinite(parsed) || parsed <= 0) return null
-  return Math.round(parsed * 100)
-}
 
 function Th({ children, align = 'left' }) {
   return (

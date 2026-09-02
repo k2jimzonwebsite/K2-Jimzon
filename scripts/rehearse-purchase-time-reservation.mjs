@@ -4,15 +4,22 @@
  *
  * Installs the repository's real 20260809 order functions onto a minimal
  * compatible schema, applies 20260902_purchase_time_reservation.sql verbatim on
- * top of them, and then proves the five properties that decide whether payment
- * can safely be taken at checkout:
+ * top of them, and then proves the properties that decide whether payment can
+ * safely be taken at checkout:
  *
- *   1. Submitting an order holds its stock immediately.
+ *   1. Submitting an order holds its stock immediately, with the OWNER-002
+ *      30-minute deadline.
  *   2. Two customers racing for one unit produce exactly one order.
  *   3. The loser's order does not exist at all, rather than existing unfillable.
- *   4. Confirming a purchase-held order does not claim the units a second time.
+ *   4. Confirming a purchase-held order does not claim the units a second time,
+ *      and still writes its order row and advances status.
  *   5. An order that predates the hold still reserves at confirm, so every row
  *      already in the table keeps working.
+ *   6. Two confirmations racing for one unit still serialize and refuse the
+ *      loser. `rehearse-map023-last-unit-concurrency.mjs` proves this for the
+ *      20260809 function it installs, which cannot speak for this one: the
+ *      reservation block now sits inside a called function, so the race is
+ *      re-proven here rather than assumed to have survived the extraction.
  *
  * It never connects to production.
  */
@@ -404,6 +411,66 @@ async function main() {
     check('an order created before the hold still reserves at confirm',
       legacyHold === '1' && legacyStock === '0',
       `reservations=${legacyHold} stock_available=${legacyStock}`)
+
+    // --- 6. Two confirmations racing for one unit, through the NEW function ---
+    // The existing last-unit rehearsal installs the 20260809 confirm and proves
+    // the original locking. It cannot speak for this one. The reservation block
+    // moved inside a called function here, so the race is re-proven rather than
+    // assumed to have survived the extraction.
+    psqlScript(`
+      insert into public.products (sku, name, srp, stock_available) values ('SKU-RACE', 'Race jar', 100, 1);
+      insert into public.product_batches (sku, quantity, reserved_quantity, expiry_date)
+      values ('SKU-RACE', 1, 0, current_date + 180);
+      insert into public.inventory_balances (sku, location_code, on_hand, reserved)
+      values ('SKU-RACE', 'MANILA_MAIN', 1, 0);
+      insert into public.order_requests (id, idempotency_key, channel_source) values
+        ('40000000-0000-4000-8000-000000000001','race-a','pasabuy'),
+        ('40000000-0000-4000-8000-000000000002','race-b','pasabuy');
+      insert into public.order_request_items (order_request_id, sku, quantity, unit_price, line_total) values
+        ('40000000-0000-4000-8000-000000000001','SKU-RACE',1,100,100),
+        ('40000000-0000-4000-8000-000000000002','SKU-RACE',1,100,100);
+    `, 'confirm-race fixture')
+
+    const winnerId = '40000000-0000-4000-8000-000000000001'
+    const loserId = '40000000-0000-4000-8000-000000000002'
+    const winner = runAsync(executable['psql.exe'], psqlArgs(
+      `set application_name='k2_confirm_race_winner';
+       begin;
+       select (public.confirm_order_request('${winnerId}', 'race winner')).status;
+       select pg_sleep(2);
+       commit;`), dbEnv)
+
+    let holding = false
+    for (let attempt = 0; attempt < 50; attempt += 1) {
+      const active = value(`select count(*)::text from pg_stat_activity
+        where application_name='k2_confirm_race_winner' and state='active' and query like '%pg_sleep%';`,
+      'confirm-race lock probe')
+      if (active === '1') { holding = true; break }
+      await sleep(100)
+    }
+    check('the winning confirmation holds the lot lock', holding)
+
+    const startedAt = Date.now()
+    const loser = await runAsync(executable['psql.exe'], psqlArgs(
+      `set application_name='k2_confirm_race_loser';
+       select (public.confirm_order_request('${loserId}', 'race loser')).status;`), dbEnv)
+    const waitedMs = Date.now() - startedAt
+    await winner
+
+    const blocked = waitedMs > 1000
+    const loserRefused = loser.status !== 0 && /Insufficient sellable lot stock/i.test(loser.stderr)
+    check('a second confirmation blocks on the lock, then is refused', blocked && loserRefused,
+      `waited ${waitedMs}ms, ${loserRefused ? 'refused' : `status=${loser.status}`}`)
+
+    const raceHolds = value(
+      `select count(*)::text from public.inventory_reservations where sku='SKU-RACE' and status='active';`,
+      'race holds')
+    const raceConfirmed = value(
+      `select count(*)::text from public.order_requests where idempotency_key in ('race-a','race-b') and status='confirmed';`,
+      'race confirmed')
+    check('exactly one confirmation owns the single unit',
+      raceHolds === '1' && raceConfirmed === '1',
+      `reservations=${raceHolds} confirmed=${raceConfirmed}`)
 
     const failed = checks.filter((entry) => !entry.passed)
     console.log(`\n${checks.length - failed.length}/${checks.length} properties held.`)
