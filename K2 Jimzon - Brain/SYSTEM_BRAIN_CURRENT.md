@@ -294,6 +294,34 @@ prove its function inventory and denial behavior before activation.
 
 ---
 
+## 0a. Verified live data state — 2 September 2026
+
+Read-only measurement of the production project through the browser-public
+anonymous client, exactly as the storefront queries it. This is what a customer's
+browser gets today.
+
+**The published catalog returns zero rows.** `products` filtered to
+`status in ('Live','Active','Unlisted')` and `published = true` returns nothing.
+MAP-023 queue item 11 is unchanged and current. The local storefront looks
+healthy only because `StoreContext` falls back to the `src/data/products.js`
+seed in development; production correctly renders an empty catalog, and a
+contract now pins that guard, because the seed ships in the bundle by necessity
+and is one deleted line from advertising 36 fabricated products.
+
+**`v_product_stock_from_batches` is denied to the anonymous role**, SQLSTATE
+`42501`, permission denied for view. `AUD-002` remains open and unchanged.
+
+**`globe_products` holds 17 rows, all enabled and readable.** This is the owner's
+curation from the Admin Globe CMS and it is intact; the globe was empty because
+of a source-side constant, now removed, not because of the data.
+
+**`reviews` is readable and returns zero rows.** The review globe therefore runs
+on a labelled sample set until real rows exist. The owner holds the real reviews
+as marketplace screenshots and PDFs, not yet as data.
+
+**Both Vercel projects deploy and serve.** The storefront and admin both built
+and deployed from `main` once the configuration defect above was fixed.
+
 ## 1. What K2 Jimzon is
 
 K2 Jimzon imports authentic Italian products and sells them in the Philippines.
@@ -864,6 +892,106 @@ a service-role or secret key, and it activates no prepared API route.
 ---
 
 ## 9. What's done vs what's next
+
+### Storefront, store and deployment session — verified 2 September 2026
+
+Shipped to `origin/main` and deployed by both Vercel projects. Local artifact and
+browser evidence unless a line says otherwise.
+
+**Deployment — the reason nothing was going live.** `vercel.ts` resolved
+`vercel.storefront.json` and `vercel.admin.json` with `readFileSync` against
+`import.meta.url`. That works locally, where the JSON sits beside the module, and
+fails once the provider bundles and relocates the config: the files are no longer
+on the resolved path, so no deployment configuration is produced. Static JSON
+imports now inline both reviewed artifacts into the output. A contract pins the
+import form so the runtime-read path cannot return.
+
+**Deployment — two production gaps closed.** Neither project had any redirects,
+so `k2-jimzon.vercel.app` and `k2-jimzon-admin.vercel.app` served complete,
+indexable second copies of the site beside the custom domains. Each now 308s to
+its canonical host, matched on the exact production hostname rather than
+`*.vercel.app`, because preview deployments live on that suffix and a wildcard
+would bounce every preview into production. Separately, only `/assets/` carried a
+cache rule, so the catch-all applied `no-store` to `/ambient/` and roughly a
+megabyte of hero video was re-fetched on every page view; it now takes a day of
+public caching with a week of stale-while-revalidate, deliberately not
+`immutable`, because those filenames are not content-hashed.
+
+**Storefront — hero video on Pasabuy and Wholesale.** Two owner-supplied clips
+play in a band across the top of each page, about half the viewport and clamped
+so they neither eat a laptop screen nor collapse on a phone. Audio stripped,
+`faststart` set, poster shown before the first frame, and no video element
+rendered at all under reduced motion so the file is never fetched. Browsers pause
+media in a hidden tab and do not reliably restart it — measured, the element
+stayed paused permanently — so a visibility listener resumes it. The Wholesale
+hero also stopped hotlinking Unsplash.
+
+**Store — lighting is now a state change, not a dimmer.** Lights low drops
+ambient and key far enough that the pendants become the reason anything is
+visible, tightens their reach from 20 to 13 so each throws a pool rather than a
+wash, and closes fog from 52-110 to 26-74 so the far aisle falls into shadow.
+Each bay gains a short-range warm light in that state only, because ambient that
+low otherwise leaves goods in silhouette. The camera also carries about a
+centimetre and a half of sway, which stops it reading as a tripod.
+
+**Store — the shopkeeper is built to the character sheet.** The owner supplied a
+sheet with turnarounds, nine expressions, ten poses and a hex palette. Her
+colours are now the sheet's swatches rather than values picked by eye: the cap
+was orange-red where the sheet is burgundy `#8B1E2D`, the shirt near-white where
+the sheet is cream `#F5ECDD`, the denim slate where the sheet is navy `#2C3650`.
+Two silhouette errors were corrected outright — her sneakers are white and were
+near-black, and her jeans are wide-leg where an earlier pass had tapered them.
+She gained hair past the shoulder blades, and the name tag the sheet pins to her
+bib.
+
+**Store — the review globe was empty for a recorded reason.** `globe_products`
+holds seventeen enabled, readable rows, every one of which was being intersected
+with `GLOBE_PRODUCT_IDS`, a hardcoded list of six. Two survived. The `enabled`
+flag is the owner's own curation from the Admin Globe CMS and a constant in
+source was overruling it for fifteen products. The flag now decides and ordering
+comes from `display_order`, which is what the CMS writes. Reviews fall back to a
+labelled sample set when the table is empty, in its own dynamically imported
+module so ten review texts do not ship in the landing bundle.
+
+**Admin — Sheet mode has a lens.** Search, status, shop and a multi-select
+custodian filter with a live count and an empty state. It narrows what is shown,
+never what is loaded, and every row keeps its index in `rows`: editing is
+index-addressed, so a filtered position would have written the edit to whichever
+product sat at that position in the full list. The shop and custodian
+assignments are sample data from one clearly labelled, deletable fixture,
+because inventory has no shop dimension yet.
+
+**Admin — the delivery money path is covered.** `DeliveryRateControl` was 753
+lines deciding what a customer is charged, with no test of any kind and its money
+parsing private to the component. `manilaToday` and `pesoInputToMinor` are
+extracted and covered. Extracting exposed a real defect: the old parser was raw
+`Number.parseFloat`, which read `"95.15 or so"` as 95.15, `"1e5"` as 100000 and
+`"85.123"` as 85.12 by silent truncation — each publishing an amount no staff
+member confirmed. Input is validated before parsing, and a round-trip test pins
+that re-opening a published rate and saving it unchanged cannot move the fee.
+
+**Repository — two rotted contracts and a set of hygiene defects.** The MAP-017
+dry-run test pinned an owner gate that had since closed; the delivery-totals test
+read `Checkout.jsx` after the quoted-fee line moved to `DeliveryEstimate.jsx`.
+Both now assert the property rather than the location. `deliveryQuote.js`
+carried a raw NUL byte as a join separator, which made git treat a
+money-affecting file as binary — no textual diffs, and no `eol=lf` normalisation
+that `.gitattributes` says the security contracts depend on. `.gitignore` had
+re-ignored `.env.example` after negating it and ignored two directories holding
+tracked files. Prototype-chain lookups in `reservationPolicy`, `shelfLifeGate`
+and `channelMeta` resolved inherited names such as `constructor` to Object
+members; they now use the `Object.hasOwn` guard `safeUiError` already
+established.
+
+**Combined dev mode no longer lies about 404s.** `App.jsx` had no `not_found`
+entry, so `VIEWS[key] ?? Home` served the landing page for any unknown URL while
+`StorefrontApp` routed it correctly. Production was right and the workstation
+quietly disagreed, which made a locally checked 404 meaningless.
+
+*Verification for the session:* `npm test` exit 0 across every suite, prebuild
+exit 0, both isolated production builds green with the storefront landing budget
+at 149.62/150.00 kB JS gzip, `rehearse:map023-last-unit` unchanged and green, and
+`rehearse:purchase-hold` 11/11 on isolated PostgreSQL 17.11.
 
 ### Storefront catalog control accessibility — verified local state, 30 August 2026
 

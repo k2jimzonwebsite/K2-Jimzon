@@ -770,13 +770,19 @@ files, and an objective completion check. Work them in this order. Do not batch
 them into one run — the 15 August delegated batch failed precisely because its
 scope was too broad to finish or verify.
 
-**Read order, 28 August 2026.** Items 1–5 and 8–10 are delivered and verified.
-Start at **queue item 11**, which is a live customer-facing outage and is
-recorded first below despite its number. Item 6 is then blocked behind item 11
-plus two data decisions; item 7 is deferred by the owner. Item 11 is the only
-remaining entry in this queue with unblocked engineering value, and the two data
-decisions in item 6 are the only questions standing between the current state and
-a complete, honest sitemap.
+**Read order, updated 2 September 2026.** Items 1–5 and 8–10 are delivered and
+verified. **Queue item 11 remains the highest priority**: it is a live
+customer-facing outage, re-confirmed against production on 2 September, and it is
+recorded first below despite its number. Item 6 is blocked behind it plus two
+data decisions; item 7 is deferred by the owner.
+
+Items 12 through 15 and the provider actions were added on 2 September. Of those,
+**item 15 is the only one with unblocked engineering value** — the Interactive
+Shop's navigation, its `aria-pressed` state and its unwired clerk poses need no
+migration, no owner decision and no provider change. Items 12 and 14 both need a
+database function change and therefore sit behind the MAP-017 apply gate; item 13
+needs one decision from the owner rather than any analysis; and the provider
+actions are not engineering at all.
 
 **Currently blocked, for contrast — do not attempt:** the MAP-017 production
 migration and everything downstream of it (authorized; backup, restores and the
@@ -785,6 +791,79 @@ recovery-access proof); custom domains, DNS and
 Auth callbacks (`OWNER-001`); BFF activation, which needs production server
 environment plus owner authorization; and any marketplace connector, since no
 partner credentials or approved partner documentation exist.
+
+### Queue item 15 — MAP-027 — the Interactive Shop's remaining defects
+
+**Raised 2 September 2026 from owner review of the live `/store` surface. The
+clerk model and the room lighting were rebuilt in the same session; these are
+what was found and not fixed.**
+
+*1. Navigation is offered three ways at once.* The shelf tabs across the top, the
+`← Previous / Next →` arrows over the scene, and a `Browse the shelves →` button
+all do the same job and are all on screen together. The owner's words were that
+it is hard to navigate. Decide which one is the control and demote the others.
+
+*2. Every shelf tab reports `aria-pressed="false"`, including the active one.*
+Measured in the browser. The visual active state is correct, so this affects
+assistive technology only, and it is a small fix.
+
+*3. The clerk is outside the camera frustum on narrow viewports.* She stands at
+`BAY_WIDTH / 2 + BAY_GAP / 2`, which is 12.5 units from the bay centre. The
+camera shows about ±8.9 units at the shortest shelf and ±10.4 at the counter, so
+on a narrow window she is not in shot at all; on a wide one she is, which is why
+the owner sees her and a 1080px-wide pane does not.
+
+This is **not** a constant to change. `IDEA-20260828-05` deliberately places her
+in the architectural gap between bays so she never clips through shelf boards,
+and a contract in `tests/map027-store-polish.spec.js` pins that position. Two
+correct requirements are in conflict: dwell in the gap, and be inside a frame
+centred on the bay. Reconciling them is a decision — narrow the gap, offset the
+camera toward her, or have her step to the frame edge on arrival — and an
+attempt to simply move her was reverted for that reason.
+
+*4. Her ten sheet poses are not wired.* The owner's character sheet defines
+Idle, Wave Hello, Talking, Point Left, Point Right, Present Product, Listening,
+Thinking, Happy and Tablet. `StoreKeeper3D` already receives `gesture`,
+`talking` and `waving` and the scene already sets them, but only idle and the
+wave are expressed. Pointing at the shelf being described and holding up the
+product being presented is the largest remaining gain on this surface, and it
+needs no new state — only poses for states that are already tracked.
+
+*Files:* `src/views/InteractiveShop.jsx`, `src/components/shop/ShelfScene3D.jsx`,
+`src/components/shop/StoreKeeper3D.jsx`, `src/interactive-store.css`, and the
+`map027-store-polish` contracts.
+*Check:* one primary navigation control; `aria-pressed` true on the active shelf;
+the clerk visible at 375px, 900px and 1440px widths without breaking the
+gap-dwelling contract; and a distinct pose observable for each tracked state.
+
+### Provider and owner actions — 2 September 2026
+
+Not engineering. Recorded because each blocks or costs something and none can be
+done from the repository.
+
+*Vercel connector is authenticated as the wrong account.* It signs in as
+`jerzelguerra26@gmail.com`, which sees only `edgerzxc's projects` and its single
+`scout-it` project. The K2 projects live under `k2jimzonwebsite@gmail.com`.
+Until the connector is reconnected as that account, Vercel domains, environment
+variables and deployment logs cannot be read or managed from here. Reconnecting
+is free and is not solved by changing plan.
+
+*The Vercel plan forbids the use K2 is making of it.* Both projects sit on Hobby,
+which is personal and non-commercial. K2 sells goods. Usage is nowhere near any
+limit — 4.9K of 1M edge requests, 150.7 MB of 100 GB transfer — so this is a
+licensing question, not a capacity one, and it should be resolved before the
+first real order rather than after. Pro is USD 20 per seat per month and also
+unlocks the anomaly alerts worth having once orders are live.
+
+*The reviews table has no rows.* The review globe runs on a labelled sample set.
+The real reviews exist only as marketplace screenshots and PDFs in the owner's
+`product review` folder; turning them into rows is data entry the owner or staff
+must do, and until then no published customer feedback on the storefront is real.
+
+*No `lint` or `typecheck` script exists.* Two phases of the installed
+verification-loop skill had nothing to run. The repository compensates with
+`check-imports.mjs`, the security gates and 486 contracts, but nothing statically
+checks types or style. Worth an explicit decision rather than an accident.
 
 ### Queue item 14 — MAP-019 — an order opens a conversation with nothing in it
 
