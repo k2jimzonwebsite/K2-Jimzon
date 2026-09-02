@@ -896,6 +896,71 @@ row together.
 *Check:* the spec and the mounted component agree; no orphaned module remains
 under `master-workflow-graph/`.
 
+### Verification pass — 2 September 2026
+
+A full two-surface verification run. Recorded here because two of its findings
+are live production evidence, not source observations, and because one required
+skill was unavailable.
+
+**Both MAP-017 catalog findings re-confirmed against production, read-only, on
+2 September 2026.** Queried through the browser-public anonymous client, exactly
+as the storefront does:
+
+- `v_product_stock_from_batches` returns SQLSTATE `42501`, *permission denied for
+  view*. `AUD-002` remains open and unchanged.
+- The published-catalog query — `status in ('Live','Active','Unlisted')` and
+  `published = true` — returns **zero rows**. Queue item 11 below is still
+  current, six days after it was raised.
+
+**Why the local storefront looks healthy anyway, which is the dangerous part.**
+On this workstation the catalog renders 36 products. None come from the
+database: `StoreContext` falls back to the `src/data/products.js` seed when the
+live query is empty, and that fallback is guarded only by `import.meta.env.DEV`.
+Nothing pinned that guard. A contract now does
+(`tests/catalog-freshness-contract.spec.js`), because the seed ships in the
+storefront bundle by necessity — it carries the curated copy that enriches real
+rows — and so remains permanently one deleted line away from advertising 36
+fabricated products at prices K2 never set.
+
+**Three defects found and fixed in the same pass:**
+
+1. Combined dev mode resolved every unknown URL to the landing page. `App.jsx`
+   had no `not_found` entry, so `VIEWS[key] ?? Home` swallowed it while
+   `StorefrontApp` routed it correctly. Production was right and the workstation
+   quietly disagreed, which made a locally checked 404 meaningless.
+2. `DeliveryRateControl` — 753 lines deciding the customer's delivery charge —
+   had no test of any kind, and its money parsing was private to the component
+   so nothing could reach it.
+3. That parser accepted `"95.15 or so"` as ₱95.15, `"1e5"` as ₱100,000, and
+   `"85.123"` as ₱85.12 by silent truncation, each publishing an amount no staff
+   member confirmed. Input is now validated before parsing, and a round-trip
+   contract pins that re-opening a published rate and saving it unchanged cannot
+   move the fee by a centavo.
+
+**Coverage gap analysis.** Of 43 Admin components, 7 had no test reference. The
+material one was `DeliveryRateControl` and it is now covered; the remainder are
+scanner and print modals, `AdminWorkspaceUi` (the shared kit, exercised
+indirectly), and `ReservationHolds`, whose behaviour is covered at the policy and
+route layer rather than by component name.
+
+**Skill availability, recorded rather than papered over.** `AGENTS.md` mandates
+`using-superpowers` and `andrej-karpathy`/`karpathy-guidelines`. Neither is
+installed in the harness that ran this pass, and no equivalent is exposed. The
+installed `verification-loop` skill in `.agent/.agents/skills/` was read and
+followed in their place. Its build, test, security, and diff phases were
+executed; its type-check and lint phases had nothing to run, because the
+repository defines no `lint` or `typecheck` script. That absence is the one
+unfinished consequence of this pass and is worth an explicit decision: the
+repository compensates with `check-imports.mjs`, the security gates, and 635
+tests, but nothing statically checks types or style.
+
+*Evidence:* `npm test` exit 0 — 564 base, 30 storefront, 26 Admin, 1 product
+master, 1 owner close, 3 customer account, 5 selling surfaces, 5 contract-suite
+selling surfaces. `prebuild` exit 0. Both isolated production builds pass their
+boundary, budget and secret checks. `rehearse:map023-last-unit` unchanged and
+green. `rehearse:purchase-hold` 11/11, now including a confirmation race through
+the new `confirm_order_request`.
+
 ### Queue item 11 — MAP-017 — LIVE OUTAGE — the production catalog is empty
 
 **Raised 28 August 2026 from direct live evidence. This is the highest-priority
