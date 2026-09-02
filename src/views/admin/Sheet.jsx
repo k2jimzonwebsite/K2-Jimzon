@@ -69,6 +69,10 @@ export default function Sheet() {
   const secureCatalog = adminBffEnabled()
   const [rows, setRows] = useState([])
   const { referenceState, createOption } = useReferenceOptions()
+  // Which cell currently holds the caret, as {sku, field}. A ref rather than
+  // state because only the realtime merge reads it, and re-rendering the sheet
+  // on every focus change would be a cost for no visible benefit.
+  const editingCellRef = useRef(null)
   const [selected, setSelected] = useState({ row: -1, col: -1 })
   const [loading, setLoading] = useState(true)
   const [showAiScanner, setShowAiScanner] = useState(false)
@@ -118,18 +122,97 @@ export default function Sheet() {
     setLensQuery(''); setLensStatus('all'); setLensShop('all'); setLensCustodians([])
   }
 
+  /**
+   * Fold one realtime change into `rows` without disturbing the view.
+   *
+   * The field being edited right now is preserved. A colleague's change to
+   * another column of the same product should still land, but overwriting the
+   * characters someone is mid-way through typing would be worse than showing
+   * their row a second late.
+   */
+  const applyRealtimeChange = (payload) => {
+    const incoming = payload?.new
+    const removed = payload?.old
+    if (payload?.eventType === 'DELETE') {
+      if (removed?.sku) setRows(prev => prev.filter(row => row.sku !== removed.sku))
+      return
+    }
+    if (!incoming?.sku) return
+    setRows(prev => {
+      const at = prev.findIndex(row => row.sku === incoming.sku)
+      // Newest first, matching the `created_at desc` load order.
+      if (at === -1) return [incoming, ...prev]
+      const editing = editingCellRef.current
+      const merged = editing?.sku === incoming.sku && editing.field
+        ? { ...incoming, [editing.field]: prev[at][editing.field] }
+        : incoming
+      return prev.map((row, index) => index === at ? merged : row)
+    })
+  }
+
+  /**
+   * Arrow-key movement between cells, the way a spreadsheet behaves.
+   *
+   * Delegated from the scroll container rather than bound per cell: the sheet
+   * renders a control for every column of every row, and one listener is both
+   * cheaper and the only version that keeps working as rows come and go.
+   *
+   * Left and Right are deliberately not handled — inside a text box they move
+   * the caret, which is what someone correcting a price expects. `<select>` and
+   * `<textarea>` are skipped entirely, because Up and Down already mean
+   * "change the option" and "move a line" there; stealing those would break
+   * the control to add a shortcut.
+   *
+   * Coordinates are the on-screen position, so movement follows the filtered
+   * view rather than the underlying list.
+   */
+  const handleGridKeyDown = (event) => {
+    if (!['ArrowUp', 'ArrowDown', 'Enter'].includes(event.key)) return
+    const element = event.target
+    if (!element?.getAttribute) return
+    if (element.tagName === 'SELECT' || element.tagName === 'TEXTAREA') return
+    const coordinate = element.getAttribute('data-k2-cell')
+    if (!coordinate) return
+
+    const [row, column] = coordinate.split(':').map(Number)
+    if (!Number.isFinite(row) || !Number.isFinite(column)) return
+    const step = event.key === 'ArrowUp' ? -1 : 1
+    const target = tableContainerRef.current
+      ?.querySelector(`[data-k2-cell="${row + step}:${column}"]`)
+    if (!target) return
+
+    event.preventDefault()
+    target.focus()
+    // Selecting the text means the next keystroke replaces the value, which is
+    // the point of arrowing down a column to retype it. A checkbox has no text
+    // to select and would throw.
+    if (target.tagName === 'INPUT' && target.type !== 'checkbox') target.select?.()
+  }
+
   useEffect(() => {
     fetchProducts()
     if (secureCatalog || !supabase) return undefined
     const channel = supabase
       .channel('public:products')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, fetchProducts)
+      // Patch the one row that changed. This used to re-run `fetchProducts`,
+      // which set `loading` and replaced the whole table — including for the
+      // staff member's own edit, since a write to `products` raises an event
+      // for its own author. Ticking Published therefore reloaded the sheet,
+      // lost the scroll position, and sent someone back to hunting for the row
+      // they had been working on.
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, applyRealtimeChange)
       .subscribe()
     return () => supabase.removeChannel(channel)
   }, [])
 
-  const fetchProducts = async () => {
-    setLoading(true)
+  /**
+   * @param {{background?: boolean}} [options] A background refresh leaves the
+   *   current rows on screen while it runs. Only the first load should blank
+   *   the sheet; doing it for a refresh after a modal closes throws away the
+   *   scroll position for a list that is about to look almost identical.
+   */
+  const fetchProducts = async ({ background = false } = {}) => {
+    if (!background) setLoading(true)
     setOperationError('')
     if (secureCatalog) {
       const result = await getAdminProducts()
@@ -382,7 +465,7 @@ export default function Sheet() {
         )}
       </div>
 
-      <div ref={tableContainerRef} className="flex-1 min-h-0 overflow-x-auto overflow-y-auto custom-scrollbar relative bg-adm-sunken">
+      <div ref={tableContainerRef} onKeyDown={handleGridKeyDown} className="flex-1 min-h-0 overflow-x-auto overflow-y-auto custom-scrollbar relative bg-adm-sunken">
         {loading ? (
           <div className="flex items-center justify-center h-64 text-white font-extrabold animate-pulse font-sans text-lg">Loading Product Masters...</div>
         ) : (
@@ -479,7 +562,7 @@ export default function Sheet() {
                       if (isBool) {
                         return (
                           <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="text-center p-0 min-w-[60px]">
-                            <input type="checkbox" checked={Boolean(val)} onChange={(e) => updateField(i, col, e.target.checked)} className="cursor-pointer mx-auto block w-4 h-4 text-blue" />
+                            <input type="checkbox" data-k2-cell={`${position}:${colIdx}`} checked={Boolean(val)} onChange={(e) => updateField(i, col, e.target.checked)} className="cursor-pointer mx-auto block w-4 h-4 text-blue" />
                           </Cell>
                         )
                       }
@@ -516,11 +599,20 @@ export default function Sheet() {
                         >
                           <input
                             type={typeof val === 'number' ? 'number' : 'text'}
+                            data-k2-cell={`${position}:${colIdx}`}
                             value={displayVal}
                             disabled={col === 'SKU'}
                             onChange={(e) => setRows(prev => prev.map((row, idx) => idx === i ? { ...row, [field]: e.target.value } : row))}
-                            onBlur={(e) => updateField(i, col, e.target.value, col === 'SKU' ? r.sku : null)}
-                            onFocus={() => setSelected({ row: i, col: colIdx })}
+                            onBlur={(e) => {
+                              editingCellRef.current = null
+                              updateField(i, col, e.target.value, col === 'SKU' ? r.sku : null)
+                            }}
+                            onFocus={() => {
+                              // Claimed while the caret is here so a colleague's
+                              // change to this row cannot overwrite half-typed text.
+                              editingCellRef.current = { sku: r.sku, field }
+                              setSelected({ row: i, col: colIdx })
+                            }}
                             className={`w-full h-full bg-transparent px-2.5 py-1.5 outline-none font-mono text-sm ${col === 'SKU' ? 'font-bold text-blue cursor-not-allowed' : 'text-neutral-200'}`}
                             placeholder={col}
                           />
@@ -579,7 +671,7 @@ export default function Sheet() {
       <ProductIntakeSessionModal
         isOpen={showPhoneIntake}
         onClose={() => setShowPhoneIntake(false)}
-        onProductCreated={fetchProducts}
+        onProductCreated={() => fetchProducts({ background: true })}
         onExistingProduct={(product) => {
           setShowPhoneIntake(false)
           setBatchProduct(product)
@@ -639,7 +731,7 @@ export default function Sheet() {
         product={enrichProduct}
         isOpen={!!enrichProduct}
         onClose={() => setEnrichProduct(null)}
-        onEnriched={() => fetchProducts()}
+        onEnriched={() => fetchProducts({ background: true })}
       />
     </div>
   )
