@@ -14,7 +14,10 @@ Approved real product-media and wider ecommerce design acceptance remain MAP-027
 
 **MAP-020 release follow-up, 6 September:** compatible fflate lock repair and
 passing local audit/build evidence are recorded in System Brain and the deployment
-runbook. Remaining: confirm the follow-up GitHub CI and both Vercel deployments.
+runbook. Both deployments succeeded for 93184bc. CI subsequently exposed a
+Node 20/24 runtime mismatch (605/608 base tests pass); correction and 24 passing
+local contracts are recorded in the deployment runbook. Remaining: verify the
+Node 24 CI run through the complete aggregate and PostgreSQL rehearsals.
 
 **Last audited:** 1 September 2026
 

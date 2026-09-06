@@ -1,5 +1,11 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+CI runtime alignment, 6 September: run 34019105481 cleared npm audit and both
+builds, then passed 605/608 base checks. The three failures imported vercel.ts
+with Node 20 and received ERR_UNKNOWN_FILE_EXTENSION. CI now uses Node 24,
+matching both Vercel projects and the verified local runtime; all 24 focused
+configuration/CI contracts pass locally. No test or security gate was removed.
+
 6 September hero release: GitHub main 7dd8585 triggered successful independent
 Storefront and Admin deployments, IDs dpl_6dQ2vBY15gS6dmveB3xiyXydj8bK and
 dpl_5xofp9tTT8tjwa1HdHqRGW4PFCkr. Canonical home returned 200 and rendered the
