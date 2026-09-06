@@ -1,5 +1,19 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+6 September hero release: GitHub main 7dd8585 triggered successful independent
+Storefront and Admin deployments, IDs dpl_6dQ2vBY15gS6dmveB3xiyXydj8bK and
+dpl_5xofp9tTT8tjwa1HdHqRGW4PFCkr. Canonical home returned 200 and rendered the
+additive collection with a catalog product. Existing visual rollback:
+docs/design-checkpoints/20260906-hero-before-additions/README.md. Prior Storefront
+deployment: dpl_C6LPnEjmTUqTtQU9C9Lki78tAdr9. Neither release activates APIs/SQL.
+
+CI's separate dependency scan exposed GHSA-px8p-9vwx-vf98 in nested fflate 0.6.10.
+Compatible 0.6.11 lock-only correction passes isolated install, npm audit (zero),
+dependency policy and both builds. Keep this security patch if reverting the
+hero; restore only the hero entry or use the reviewed visual rollback commit.
+Do not suppress npm audit to make CI green. Provider success and full CI success
+are separate evidence; the follow-up CI result remains in MAP-020 until checked.
+
 This operational runbook governs the deployment, artifact isolation, domain routing, and rollback procedures for K2 Jimzon across Storefront and Admin BOS.
 
 ## 1. Production Architecture Overview

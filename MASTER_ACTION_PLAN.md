@@ -2,8 +2,8 @@
 
 **MAP-028 I-009 / MAP-027 — hero release (IDEA-20260906-03), 6 September:**
 Owner authorizes committing the additive hero and pushing GitHub main for Vercel
-production. Both exact release-tree builds and 8/8 browser checks pass. Next:
-push and verify the resulting commit/deployment on the canonical host. Preserve
+production. Commit 7dd8585 passed both Vercel deployments and the canonical-host
+hero check. Remaining: approved real product-media and wider design acceptance. Preserve
 the existing design checkpoint. Production rollback candidate recorded read-only:
 `dpl_C6LPnEjmTUqTtQU9C9Lki78tAdr9` (Storefront, Git 53647a4).
 No database, payment, inventory or BFF activation belongs to this visual release.
@@ -11,6 +11,10 @@ Approved real product-media and wider ecommerce design acceptance remain MAP-027
 
 
 **Status:** authoritative queue for all approved, unfinished project work
+
+**MAP-020 release follow-up, 6 September:** compatible fflate lock repair and
+passing local audit/build evidence are recorded in System Brain and the deployment
+runbook. Remaining: confirm the follow-up GitHub CI and both Vercel deployments.
 
 **Last audited:** 1 September 2026
 

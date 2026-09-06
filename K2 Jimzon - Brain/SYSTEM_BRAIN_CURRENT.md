@@ -1,13 +1,27 @@
 # K2 Jimzon — System Brain (Current State)
 
+**Hero deployed and dependency repair, 6 September 2026:** GitHub main 7dd8585
+deployed successfully to Storefront (dpl_6dQ2vBY15gS6dmveB3xiyXydj8bK) and Admin
+(dpl_5xofp9tTT8tjwa1HdHqRGW4PFCkr), as reported by GitHub's Vercel checks.
+A read-only Chromium visit to https://www.k2jimzon.com returned 200, the new
+collection heading and one catalog item after loading. No payment/order was made.
+The Vercel connector subsequently switched to an unrelated team and returns 403
+for K2; no writes were attempted through that team.
+
+Separate CI 34018726176 failed at npm audit on existing three-stdlib/fflate
+0.6.10, GHSA-px8p-9vwx-vf98. The lockfile now resolves compatible 0.6.11 with no
+manifest/range changes. An isolated npm ci --ignore-scripts, zero-vulnerability
+npm audit, dependency policy and both production builds pass. The repair's
+remote CI/deployment remains MAP-020 release follow-up until verified.
+
 **Hero release prepared, 6 September 2026 (IDEA-20260906-03):** three canonical
 catalog previews are added above the existing sourcing map. All original hero
 content and actions remain. Source is Hero.jsx plus isolated Hero.css; the
 pre-edit checkpoint and hashes are under docs/design-checkpoints/20260906-hero-before-additions.
 The exact isolated release passes both production builds and 8/8 hero/selling
 browser checks. Storefront landing JS is 149.88/150 kB and CSS 27.39/30 kB gzip;
-Admin chunk is 186.91/300 kB. Boundary and secret scans pass. GitHub/Vercel
-confirmation remains pending in MAP-028 I-009.
+Admin chunk is 186.91/300 kB. Boundary and secret scans pass. Subsequent
+deployment confirmation is recorded above.
 This focused release excludes unfinished operational changes in the owner workspace.
 
 
