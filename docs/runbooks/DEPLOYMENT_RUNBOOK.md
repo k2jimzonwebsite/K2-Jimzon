@@ -1,5 +1,15 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+CI fixture repair, 6 September: run 34019315203 passed the base suite, then failed
+the phone shelf-to-order journey's approved usage-notes assertion. Its development
+catalog was present, but no database configuration means StoreContext skips the
+knowledge loader. The test now explicitly invokes loadProductKnowledge(null)
+through Vite's development module. The shared approval filter and all original
+assertions remain. Focused verification: `npx playwright test
+--config=playwright.map027.config.js tests/smoke.spec.js --grep
+'completes the phone shelf-to-order-request'` passes 1/1 in 24.6s. Full remote CI
+remains MAP-020. Rollback: revert the test fixture setup; no runtime code changed.
+
 CI runtime alignment, 6 September: run 34019105481 cleared npm audit and both
 builds, then passed 605/608 base checks. The three failures imported vercel.ts
 with Node 20 and received ERR_UNKNOWN_FILE_EXTENSION. CI now uses Node 24,

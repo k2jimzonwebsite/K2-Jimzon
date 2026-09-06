@@ -304,6 +304,13 @@ test.describe('MAP-027 virtual store acceptance', () => {
     await page.setViewportSize({ width: 375, height: 812 })
     await page.emulateMedia({ reducedMotion: 'no-preference' })
     await page.goto('/store', { waitUntil: 'domcontentloaded' })
+    // This journey uses the development catalog. CI has no database settings,
+    // so explicitly load its matching knowledge fixture through the shared
+    // loader; never depend on a developer's local database to seed the test.
+    await page.evaluate(async () => {
+      const { loadProductKnowledge } = await import('/src/lib/productKnowledgeSource.js')
+      await loadProductKnowledge(null)
+    })
 
     const store = page.getByRole('main', { name: 'K2 virtual store' })
     await expect(store).toBeVisible({ timeout: 60000 })

@@ -1,5 +1,12 @@
 # K2 Jimzon — System Brain (Current State)
 
+**CI fixture follow-up, 6 September:** Node 24 clears the base suite; run
+34019315203 fails the phone shopping journey because its development knowledge
+fixture implicitly depended on local database configuration. Explicit test-only
+fixture loading passes the focused journey (1/1, 24.6s). Product runtime and
+approval filtering are unchanged. Full remote verification remains MAP-020;
+see the deployment runbook for command and rollback.
+
 **Hero deployed and dependency repair, 6 September 2026:** GitHub main 7dd8585
 deployed successfully to Storefront (dpl_6dQ2vBY15gS6dmveB3xiyXydj8bK) and Admin
 (dpl_5xofp9tTT8tjwa1HdHqRGW4PFCkr), as reported by GitHub's Vercel checks.

@@ -17,7 +17,11 @@ passing local audit/build evidence are recorded in System Brain and the deployme
 runbook. Both deployments succeeded for 93184bc. CI subsequently exposed a
 Node 20/24 runtime mismatch (605/608 base tests pass); correction and 24 passing
 local contracts are recorded in the deployment runbook. Remaining: verify the
-Node 24 CI run through the complete aggregate and PostgreSQL rehearsals.
+Node 24 CI run through the complete aggregate and PostgreSQL rehearsals. Run
+34019315203 cleared base checks but exposed a database-dependent development
+knowledge fixture in the phone shopping journey. Explicit fixture loading now
+passes that journey locally (1/1, 24.6s); verify the next full CI run. This is
+test-only work under the existing release follow-up, with no production change.
 
 **Last audited:** 1 September 2026
 
