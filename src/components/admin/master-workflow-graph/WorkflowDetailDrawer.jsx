@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getDownstream, getUpstream } from './workflowGraph'
+import WorkflowRecords from './WorkflowRecords'
 
 /**
  * WorkflowDetailDrawer
@@ -107,6 +108,8 @@ export default function WorkflowDetailDrawer({
           Guide only: checking or rehearsing this step does not write or verify a real record. Complete the action in the named Admin screen and confirm the server result there.
         </p>
       </div>
+
+      <WorkflowRecords key={node.id} section={node.adminJump} />
 
       <div className="mt-6 grid gap-4 xl:grid-cols-3">
         <GraphContextList title="Where did this come from?" items={upstream} onSelectNode={onSelectNode} empty="This is the single graph entry." />

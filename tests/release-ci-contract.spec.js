@@ -1,8 +1,17 @@
 import { expect, test } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
+import { validateMap017RehearsalTarget } from '../scripts/rehearse-local-migration.mjs'
 
 const root = new URL('../', import.meta.url)
 const read = path => readFile(new URL(path, root), 'utf8')
+
+test('CI authorization runner receives the same isolated database as the migration runner', async () => {
+  const workflow = await read('.github/workflows/ci.yml')
+  const migrationTarget = workflow.match(/K2_MAP017_REHEARSAL_URL:\s*(\S+)/)?.[1]
+  const authorizationTarget = workflow.match(/LOCAL_PG_URL:\s*(\S+)/)?.[1]
+  expect(authorizationTarget).toBe(migrationTarget)
+  expect(validateMap017RehearsalTarget(authorizationTarget).isLocal).toBe(true)
+})
 
 test('remote CI runs the complete local acceptance command without skipping protected Admin fixtures', async () => {
   const [workflow, packageSource, adminConfig, adminDashboard, adminAuth, accountHarness, accountSpec] = await Promise.all([

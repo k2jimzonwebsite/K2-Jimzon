@@ -85,6 +85,7 @@ jobs:
         run: npm run rehearse:map017-local && npm run test:map017-local-db
         env:
           K2_MAP017_REHEARSAL_URL: postgresql://postgres@127.0.0.1:5432/k2_map017_rehearsal_ci
+          LOCAL_PG_URL: postgresql://postgres@127.0.0.1:5432/k2_map017_rehearsal_ci
 
       - name: Catalog spreadsheet PostgreSQL migration and rollback rehearsal
         run: npm run rehearse:catalog-spreadsheet

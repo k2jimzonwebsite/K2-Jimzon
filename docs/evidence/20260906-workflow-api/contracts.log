@@ -1,0 +1,19 @@
+
+Running 12 tests using 1 worker
+
+(node:10064) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\staff-workflow-guide-contract.spec.js:21:1 › staff guide registry is a versioned draft with one authoritative source (10ms)
+  ok  2 tests\staff-workflow-guide-contract.spec.js:29:1 › every required staff operation is covered by a complete procedure contract (181ms)
+  ok  3 tests\staff-workflow-guide-contract.spec.js:53:1 › unavailable work names the blocker and never invents a workaround (5ms)
+  ok  4 tests\staff-workflow-guide-contract.spec.js:67:1 › the daily guide exposes the complete procedure register (4ms)
+  ok  5 tests\workflow-graph-canvas.spec.js:9:1 › the operations graph is connected, layered, and traceable to every terminal (8ms)
+  ok  6 tests\workflow-graph-canvas.spec.js:18:1 › the canvas renders model edges and the detail surface exposes graph context (6ms)
+  ok  7 tests\workflow-graph-canvas.spec.js:35:1 › the workflow graph and visual guide stay outside the initial Admin chunk (4ms)
+  ok  8 tests\workflow-guide-truth.spec.js:8:1 › the staff workflow guide does not claim unavailable automation or integrations (8ms)
+  ok  9 tests\workflow-guide-truth.spec.js:31:1 › the guide exposes a version, approval state, and authoritative operational source (2ms)
+  ok 10 tests\workflow-guide-truth.spec.js:38:1 › the guide routes every action to an actual Admin section (23ms)
+  ok 11 tests\workflow-guide-truth.spec.js:54:1 › guide rehearsal state cannot be presented as a real operational completion (6ms)
+  ok 12 tests\workflow-guide-truth.spec.js:68:1 › the new-product guide names the two approved manual ChatGPT Projects (3ms)
+
+  12 passed (1.3s)

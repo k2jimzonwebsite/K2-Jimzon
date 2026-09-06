@@ -65,6 +65,13 @@ components:
 
 # Design System: K2 Jimzon
 
+Workflow record panel (IDEA-20260906-04): catalog/consignment nodes add an explicit
+Load current records button using the existing Admin dark surface, typography,
+focus outline and 44px target. Show identity, status, read time and batch limits;
+loading, error, partial and empty states remain distinct. No automatic calls or
+new motion. Desktop and phone fixture screenshots are retained in
+`docs/evidence/20260906-workflow-api/`. Full command interactions remain MAP-028 I-016.
+
 ## 1. Overview
 
 **Creative North Star: "The Editorial Import"**

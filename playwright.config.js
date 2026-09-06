@@ -19,6 +19,7 @@ export default defineConfig({
     'storefront-motion.spec.js',
     'storefront-selling-surfaces.spec.js',
     'hero-enhancement.spec.js',
+    'workflow-api-ui.spec.js',
     'storefront-theme.spec.js',
     'wholesale-inquiry-ui.spec.js',
   ],

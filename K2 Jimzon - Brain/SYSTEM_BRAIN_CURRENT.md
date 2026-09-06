@@ -1,5 +1,22 @@
 # K2 Jimzon — System Brain (Current State)
 
+**CI database follow-up:** 40956ef passes the full browser/contract aggregate and
+MAP-017 migration rehearsal in run 34021427328. Authorization rehearsal stops
+safely because CI omitted its LOCAL_PG_URL variable. Both rehearsal variables
+now target the same isolated CI database; no validator or production setting
+changes. Remote authorization/catalog rehearsal proof remains MAP-020.
+
+**Workflow records, prepared 6 September (IDEA-20260906-04 / MAP-028 I-016):**
+WorkflowRecords adds on-demand catalog and consignment reads to the detail drawer.
+It uses getAdminProducts/getAdminConsignments, displays up to ten records and
+read time, surfaces partial/error/empty results, prevents overlapping requests
+and discards cancelled responses when changing nodes. The BFF switch remains
+required; no activation or write command is included. Working-tree fixture
+acceptance passes 4/4 browser cases and 12/12 guide contracts; production Admin
+build passes. Isolated release verification also passes 4/4 browser cases (9.2s),
+12/12 guide contracts, 25/25 CI/configuration contracts and the Admin build
+(38 modules, 186.91/300 kB application chunk). Provider acceptance remains I-016.
+
 **CI fixture follow-up, 6 September:** Node 24 clears the base suite; run
 34019315203 fails the phone shopping journey because its development knowledge
 fixture implicitly depended on local database configuration. Explicit test-only

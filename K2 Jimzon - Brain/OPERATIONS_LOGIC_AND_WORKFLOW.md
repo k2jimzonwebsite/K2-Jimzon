@@ -1,5 +1,14 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+**Workflow API access:** diagram controls may invoke only registered K2 service
+operations under the existing staff session and server permission checks. A
+record read is evidence of the returned batch at the displayed request time,
+not proof that a workflow step completed or that a queue is exhaustive. Clear
+old results when changing steps and distinguish service failure from empty data.
+Guide checkmarks and fictional rehearsal responses never write business records.
+Any future mutation requires exact record/payload review, canonical validation,
+idempotent receipt handling and explicit uncertainty recovery before acceptance.
+
 **Hero merchandising:**previews reuse the canonical listed catalog, active
 retail/wholesale pricing mode and product-detail path. Loading must not present
 development seed products as loaded listings. Do not imply recency, popularity,

@@ -1,5 +1,10 @@
 # K2 Jimzon — Project Directory Map
 
+Workflow record access: `src/components/admin/master-workflow-graph/WorkflowRecords.jsx`
+owns the drawer's bounded catalog/consignment reads through `adminBffService.js`.
+`playwright.workflow.config.js` and `tests/workflow-api-ui.spec.js` verify the
+rendered states using intercepted API responses. MAP-028 I-016 owns remaining work.
+
 Hero additions are isolated in `src/components/home/Hero.css` and rendered by
 `Hero.jsx`. `tests/hero-enhancement.spec.js` runs only through the selling-surfaces
 configuration. Recovery: `docs/design-checkpoints/20260906-hero-before-additions/`.

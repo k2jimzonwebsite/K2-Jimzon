@@ -12,6 +12,18 @@ Approved real product-media and wider ecommerce design acceptance remain MAP-027
 
 **Status:** authoritative queue for all approved, unfinished project work
 
+**MAP-028 I-016 / MAP-019/021/023 — workflow API functionality (IDEA-20260906-04):**
+Owner requests real API calls in the workflow map. Catalog and consignment reads
+are prepared via existing authenticated services with loading/error/empty/partial
+results and node-change cancellation. Local fixture evidence is in
+`docs/evidence/20260906-workflow-api/`; this does not establish real staff access.
+Remaining: isolated release verification/deployment, authenticated real-host
+acceptance, other domain reads, exact record selection and command/receipt
+execution. External integration/editor scope remains undecided. Existing
+provider/database recovery and activation gates still apply. Never let guide
+checkmarks imply business completion. Rollback: remove the WorkflowRecords import
+and keyed child from WorkflowDetailDrawer; no backend state changes in this slice.
+
 **MAP-020 release follow-up, 6 September:** compatible fflate lock repair and
 passing local audit/build evidence are recorded in System Brain and the deployment
 runbook. Both deployments succeeded for 93184bc. CI subsequently exposed a
@@ -22,6 +34,10 @@ Node 24 CI run through the complete aggregate and PostgreSQL rehearsals. Run
 knowledge fixture in the phone shopping journey. Explicit fixture loading now
 passes that journey locally (1/1, 24.6s); verify the next full CI run. This is
 test-only work under the existing release follow-up, with no production change.
+Run 34021427328 then passed the full acceptance suite and migration rehearsal,
+but the authorization runner lacked LOCAL_PG_URL. CI now gives both runners the
+same isolated rehearsal database; safety checks remain unchanged. Verify the
+new run through authorization and catalog database rehearsals.
 
 **Last audited:** 1 September 2026
 

@@ -1,5 +1,11 @@
 # K2 Jimzon — System Architecture
 
+Workflow graph record reads reuse the same-origin Admin service layer. Node data
+selects an allowlisted operation, never a URL or privileged RPC. Existing server
+session, staff, MFA and data-access controls remain authoritative. Guide state
+does not become a command receipt; changing nodes cancels the old read. Initial
+coverage is catalog and consignments, with no backend activation or mutations.
+
 ## 1. High-Level Architecture
 
 The K2 Jimzon architecture is engineered around the principles of **defense-in-depth, strict surface separation, and transactional data integrity**:

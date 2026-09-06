@@ -1,5 +1,14 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+CI database configuration repair, 6 September: 40956ef / run 34021427328 passed
+the complete storefront/Admin acceptance command and MAP-017 migration/rollback
+rehearsal. The authorization runner reads LOCAL_PG_URL, while CI supplied only
+K2_MAP017_REHEARSAL_URL; its fallback omitted a database and was safely rejected.
+CI now supplies both variables with the same isolated rehearsal database URL.
+The safety validator is unchanged. A regression contract first failed on the
+missing variable; focused verification and the new remote run must pass. This
+does not connect to or change any production database.
+
 CI fixture repair, 6 September: run 34019315203 passed the base suite, then failed
 the phone shelf-to-order journey's approved usage-notes assertion. Its development
 catalog was present, but no database configuration means StoreContext skips the

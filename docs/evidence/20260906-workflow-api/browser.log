@@ -1,0 +1,19 @@
+
+> k2-jimzon-prototype@0.1.0 test:workflow-api
+> playwright test --config=playwright.workflow.config.js
+
+[WebServer] (node:23032) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:12776) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:23316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\workflow-api-ui.spec.js:5:1 › workflow step requests real API records only on staff action (3.9s)
+  ok 2 tests\workflow-api-ui.spec.js:26:1 › partial data stays explicit and a refresh replaces the previous batch (643ms)
+  ok 3 tests\workflow-api-ui.spec.js:43:1 › denied and malformed replies do not masquerade as empty success (646ms)
+  ok 4 tests\workflow-api-ui.spec.js:54:1 › switching steps drops old responses and loads the new allowed route (729ms)
+
+  4 passed (9.2s)
