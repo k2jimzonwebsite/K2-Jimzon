@@ -1,5 +1,16 @@
 # K2 Jimzon — System Brain (Current State)
 
+**Hero release prepared, 6 September 2026 (IDEA-20260906-03):** three canonical
+catalog previews are added above the existing sourcing map. All original hero
+content and actions remain. Source is Hero.jsx plus isolated Hero.css; the
+pre-edit checkpoint and hashes are under docs/design-checkpoints/20260906-hero-before-additions.
+The exact isolated release passes both production builds and 8/8 hero/selling
+browser checks. Storefront landing JS is 149.88/150 kB and CSS 27.39/30 kB gzip;
+Admin chunk is 186.91/300 kB. Boundary and secret scans pass. GitHub/Vercel
+confirmation remains pending in MAP-028 I-009.
+This focused release excludes unfinished operational changes in the owner workspace.
+
+
 **Living source of truth. Last updated: 28 August 2026 (rev. 29).**
 
 This is the "never get lost" document. It says what the system is, how our real

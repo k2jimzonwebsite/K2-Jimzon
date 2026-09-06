@@ -1,5 +1,11 @@
 # K2 Jimzon — Project Directory Map
 
+Hero additions are isolated in `src/components/home/Hero.css` and rendered by
+`Hero.jsx`. `tests/hero-enhancement.spec.js` runs only through the selling-surfaces
+configuration. Recovery: `docs/design-checkpoints/20260906-hero-before-additions/`.
+Evidence: `docs/evidence/20260906-hero-additions/`.
+
+
 This guide outlines the directory structure, file placement responsibilities, and structural boundaries of the repository.
 
 ---

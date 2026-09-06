@@ -1,0 +1,4 @@
+# Exact recovery copies: preserve bytes, including original whitespace.
+Hero.jsx -text -whitespace
+FlightMap.jsx -text -whitespace
+index.css -text -whitespace

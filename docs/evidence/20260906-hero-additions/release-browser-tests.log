@@ -1,0 +1,19 @@
+[WebServer] (node:13904) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20020) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:24488) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\hero-enhancement.spec.js:21:1 › additive hero preserves the original content and supports keyboard shopping (18.8s)
+  ok 2 tests\hero-enhancement.spec.js:67:1 › unavailable product images fall back without losing the product link (1.2s)
+  ok 3 tests\hero-enhancement.spec.js:78:1 › loading and empty collection keep both original shopping routes available (1.8s)
+  ok 4 tests\storefront-selling-surfaces.spec.js:30:1 › product detail renders canonical price and stock, then enforces the cart limit (1.6s)
+  ok 5 tests\storefront-selling-surfaces.spec.js:81:1 › guest message start and reply paths preserve scoped behavioral receipts (1.0s)
+  ok 6 tests\storefront-selling-surfaces.spec.js:161:1 › order confirmation explains the staff-reviewed exception path without an SLA promise (4.0s)
+  ok 7 tests\storefront-selling-surfaces.spec.js:242:1 › cold confirmation handles an expired guest grant with a useful recovery state (675ms)
+  ok 8 tests\storefront-selling-surfaces.spec.js:258:1 › unknown storefront and product URLs render explicit recovery pages (1.2s)
+
+  8 passed (36.1s)

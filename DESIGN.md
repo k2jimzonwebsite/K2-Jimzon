@@ -806,3 +806,30 @@ Tactile, expansive, and generously rounded. Containers embrace 3xl geometries an
 - **Don't** use cold SaaS / dashboard templates: Inter-for-everything, purple gradients, card-in-card nesting, and the soulless-startup look.
 - **Don't** replace the storefront canvas or full-width light-mode sections with pure white.
 - **Don't** use literal Italian-flag clichés (tricolore stripes everywhere, Tuscan-villa stock, pizza-parlor kitsch).
+
+## Additive hero direction — 6 September 2026
+
+IDEA-20260906-03 / MAP-028 I-009: owner requests visual work first and explicitly
+requires preservation and rollback. Add an editorial three-item merchandise
+shelf above the existing sourcing map. Keep all existing hero copy, actions,
+map and trust content. Use current catalog images/names and the current pricing
+mode, with the same product-detail navigation. Do not label this arbitrary
+selection as recent, popular or scarce. No new fonts, colors, libraries or
+decorative motion; tokens, warm surfaces and responsive columns remain K2's.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Headline and sourcing route lead the hero | Same content plus three shoppable product previews | Let visitors see merchandise sooner while preserving the owner-selected design |
+| No merchandise interaction in the hero | Whole preview is keyboard/touch actionable, with a neutral failed-image fallback | Give each visible product a useful next action |
+| Reverting relies on the broader dirty working tree | Exact pre-edit copies, hashes and a scoped restore instruction | Reverse the visual slice without losing readiness work |
+
+Assumptions: this is a reversible local enhancement for existing retail-first
+users; current catalog and pricing policy remain authoritative, no new requests
+or private data are introduced, and the existing landing bundle cap still applies.
+Alternatives considered: replacing the route panel conflicts with the owner's
+constraint; an animated carousel adds interaction and weight without helping a
+three-item preview. Wider first-screen/mobile hierarchy acceptance stays in I-009.
+
+Source: `src/components/home/Hero.jsx` and isolated `Hero.css`. Recovery:
+`docs/design-checkpoints/20260906-hero-before-additions/README.md`. Browser/build
+evidence and its fixture limitations: `docs/evidence/20260906-hero-additions/`.

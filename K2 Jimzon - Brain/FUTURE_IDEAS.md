@@ -392,6 +392,7 @@ Master Action Plan is authorized for implementation.
 
 | Idea | Outcome | Destination or reason |
 | --- | --- | --- |
+| IDEA-20260906-03 | Merged into MAP-028 I-009 / MAP-027 | Owner prioritizes additive hero visual enhancement and a restorable copy of the current design. Preserve headline, CTAs, map and trust content; add a small catalog-driven merchandise display in the existing brand. Exact pre-edit Hero, FlightMap and global styles saved with hashes under docs/design-checkpoints/20260906-hero-before-additions. No new product facts, stock promises, data source or deployment. |
 | Legacy multichannel control-center idea | Merged | Historical MAP-009 through MAP-011; original wording remains in Git history |
 | Legacy product-transformation idea | Merged | Historical MAP-002; original wording remains in Git history |
 | IDEA-20260814-05 | Merged | Remaining messaging, channel-stock, and custody-truth scope is in MAP-023 |

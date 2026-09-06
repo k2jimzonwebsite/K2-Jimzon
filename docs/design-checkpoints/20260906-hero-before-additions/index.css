@@ -1,0 +1,845 @@
+@import "tailwindcss" source("./");
+
+/*
+  K2 Jimzon — Strict 4-Color Luxury Palette Strategy & Warm Tuscan Linen Light/Dark Mode (OKLCH & Impeccable Rules)
+  Light Mode: Soft Tuscan Warm Cream & Linen Grain (#FAF7F2 / #FFFDF9) — Soft on the eyes, zero glare!
+  Dark Mode: Obsidian Black & Deep Charcoal (#090C15 / #0E121E)
+*/
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --bg-blend: multiply;
+    font-size: 16px;
+    line-height: 1.6;
+    letter-spacing: 0;
+    font-kerning: normal;
+    font-optical-sizing: auto;
+
+    /* Warm Tuscan Linen Light Theme Variables (Soft, zero harsh glare) */
+    --color-cream: #FAF7F2;
+    --color-paper: #FFFDF9;
+    --color-shell: #F2ECDF;
+    --color-shell-deep: #E6DCC8;
+    
+    --color-navy: #1C1917;
+    --color-navy-soft: #44403C;
+    --color-navy-faint: #696159;
+    --color-line: #E5DEC9;
+  }
+
+  /* Luxury Obsidian Dark Mode Tokens Override */
+  .dark {
+    --color-cream: #090C15;
+    --color-paper: #0E121E;
+    --color-shell: #161B29;
+    --color-shell-deep: #1F2638;
+    
+    --color-navy: #F9FAFB;
+    --color-navy-soft: #E5E7EB;
+    --color-navy-faint: #9CA3AF;
+    --color-line: rgba(255, 255, 255, 0.12);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-navy);
+    background-color: var(--color-cream);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* Warm Tuscan wood-grain linen texture — light mode only (soft, multiply-blended, zero glare) */
+  :root:not(.dark) body {
+    background-color: #FAF7F2;
+    background-image:
+      /* Terracotta warmth — top right */
+      radial-gradient(ellipse 60% 50% at 85% 15%, oklch(55% 0.15 35 / 0.07) 0%, transparent 70%),
+      /* Olive coolness — bottom left */
+      radial-gradient(ellipse 50% 60% at 10% 85%, oklch(55% 0.08 135 / 0.06) 0%, transparent 70%),
+      /* Amber glow — center */
+      radial-gradient(ellipse 80% 40% at 50% 50%, oklch(55% 0.12 65 / 0.05) 0%, transparent 60%),
+      /* Gold warmth — top left */
+      radial-gradient(ellipse 40% 40% at 15% 20%, oklch(70% 0.12 75 / 0.04) 0%, transparent 60%),
+      /* Wood grain texture */
+      url('/wood-bg.jpg');
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: normal, normal, normal, normal, multiply;
+  }
+
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Everything interactive shows the hand cursor, so it clearly reads as clickable. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  a,
+  summary,
+  label[for],
+  select {
+    cursor: pointer;
+  }
+}
+
+@theme {
+
+  /* 1. Black & Charcoal Surface System */
+  --color-cream: var(--color-cream);
+  --color-paper: var(--color-paper);
+  --color-shell: var(--color-shell);
+  --color-shell-deep: var(--color-shell-deep);
+  
+  --color-dark-bg: #090C15;
+  --color-dark-card: #0E121E;
+  --color-dark-hover: #161B29;
+  
+  /* Text Neutrals */
+  --color-navy: var(--color-navy);
+  --color-navy-soft: var(--color-navy-soft);
+  --color-navy-faint: var(--color-navy-faint);
+  
+  /* 2. Crimson Red Accent */
+  --color-crimson: #EF4444;
+  --color-crimson-deep: #DC2626;
+  --color-crimson-wash: rgba(239, 68, 68, 0.14);
+  --color-oxblood: #B91C1C;
+  
+  /* 3. Sapphire Blue Accent */
+  --color-blue: #3B82F6;
+  --color-blue-deep: #2563EB;
+  --color-blue-wash: rgba(59, 130, 246, 0.14);
+  
+  /* 4. Champagne Gold / Amber Accent */
+  --color-gold: #D4AF37;
+  --color-gold-deep: #B59226;
+  --color-gold-wash: rgba(212, 175, 55, 0.18);
+  
+  --color-amber: #F59E0B;
+  --color-amber-wash: rgba(245, 158, 11, 0.14);
+  
+  --color-forest: #3B82F6;
+  --color-forest-wash: rgba(59, 130, 246, 0.14);
+  
+  --color-line: var(--color-line);
+  --color-champagne: #FDE68A;
+
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Source Sans 3", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* ── ADMIN (BOS) SURFACE SYSTEM ────────────────────────────────────────────
+     Four surfaces, nothing else. Every admin panel must pick one of these
+     instead of inventing a hex. Depth reads bg → sunken → surface → raised. */
+  --color-adm-bg:      #0B0E14;  /* app canvas / page behind everything      */
+  --color-adm-sunken:  #080A10;  /* toolbars, modal headers & footers, wells */
+  --color-adm-surface: #12161F;  /* cards, modals, drawers — the default     */
+  --color-adm-raised:  #1A1F2B;  /* inputs, hovered rows, popovers on cards  */
+
+  --color-adm-line:        rgba(255, 255, 255, 0.10);
+  --color-adm-line-strong: rgba(255, 255, 255, 0.18);
+
+  /* One radius ramp. Cards use adm, controls use adm-sm. */
+  --radius-adm-sm: 0.625rem; /* 10px — inputs, buttons, chips */
+  --radius-adm:    0.875rem; /* 14px — cards, modals, drawers */
+
+  /* One elevation ramp. */
+  --shadow-adm:       0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-adm-float: 0 1px 2px rgba(0, 0, 0, 0.40), 0 12px 32px -14px rgba(0, 0, 0, 0.75);
+
+  /* Crisp Shadows */
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-float: 0 20px 32px rgba(0, 0, 0, 0.18);
+
+  /* Premium Easing Curves */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storefront-ui *,
+  .storefront-ui *::before,
+  .storefront-ui *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .admin-ui .pulse-dot,
+  .admin-ui .animate-spin,
+  .admin-ui .animate-pulse { animation: none; }
+}
+
+/* ── STOREFRONT — EDITORIAL MARKET SYSTEM ─────────────────────────────── */
+.storefront-ui {
+  --color-crimson: #b63835;
+  --color-crimson-deep: #922c2a;
+  --color-crimson-wash: rgba(182, 56, 53, 0.11);
+  --color-oxblood: #762826;
+  --color-gold: #a97832;
+  --color-gold-deep: #82591f;
+  --color-gold-wash: rgba(169, 120, 50, 0.12);
+  --color-forest: #35664d;
+  --color-forest-wash: rgba(53, 102, 77, 0.11);
+  --color-blue: #345d80;
+  --color-blue-deep: #284966;
+  --color-blue-wash: rgba(52, 93, 128, 0.10);
+
+  /* ── Elevation tokens — single source of truth for every raised surface ─ */
+  /* Light: soft warm Tuscan linen paper (#FAF5EC) rested naturally on wood grain — zero harsh glare! */
+  /* Dark: obsidian dark surface raised off obsidian canvas                   */
+  --store-surface-bg:      #FAF5EC;
+  --store-surface-border:  #E4DAC7;
+  --store-surface-shadow:  0 2px 8px -2px rgba(80, 60, 40, 0.08), 0 8px 24px -4px rgba(80, 60, 40, 0.05);
+
+  /* ── Product image tray — mode-aware neutral, soft warm ivory in light ── */
+  --product-img-bg: #F3EDE0;   /* warm ivory in light */
+
+  /* Component typography: Source Sans 3 carries facts; Fraunces stays display-only. */
+  --text-store-meta: 0.8125rem;
+  --text-store-body: 1rem;
+  --text-store-lead: 1.125rem;
+  --store-card-title-size: 1.0625rem;
+  --store-card-title-line-height: 1.4;
+  --store-stock-slot-min-height: 2.25rem;
+
+  min-height: 100dvh;
+  background-color: var(--color-cream);
+  font-family: var(--font-sans);
+  font-size: var(--text-store-body);
+  line-height: 1.6;
+  letter-spacing: 0;
+  color-scheme: light;
+}
+
+.storefront-ui :is(h1, h2) {
+  letter-spacing: -0.035em;
+}
+
+.storefront-ui :is(h3, h4) {
+  letter-spacing: -0.015em;
+}
+
+/* Fraunces is a storytelling voice, never compact commerce or control copy. */
+.storefront-ui .font-serif:is(.text-base, .text-lg, .text-xl),
+.storefront-ui :is(button, nav, form) .font-serif {
+  font-family: var(--font-sans);
+}
+
+/* Readable storefront ramp. Tiny labels remain compact, but never microscopic. */
+.storefront-ui :is(.text-\[9px\], .text-\[10px\], .text-\[11px\]) {
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.storefront-ui p.text-xs {
+  font-size: var(--text-store-meta);
+  line-height: 1.5;
+}
+
+.storefront-ui p.text-sm {
+  font-size: var(--text-store-body);
+  line-height: 1.6;
+}
+
+.storefront-ui .uppercase {
+  letter-spacing: 0.1em;
+}
+
+/* Dark mode overrides for storefront tokens */
+.dark .storefront-ui {
+  --store-surface-bg:      #0E121E;
+  --store-surface-border:  rgba(255, 255, 255, 0.12);
+  --store-surface-shadow:  0 4px 20px -2px rgba(0, 0, 0, 0.45);
+  --product-img-bg:        #161B29;  /* deep navy tray in dark mode */
+
+  /* ProductArt tile: drop lightness so per-hue art reads as dark accent */
+  --art-tile-l:  0.24;
+  --art-tile-l2: 0.19;
+  --art-mid-l:   0.38;
+  color-scheme: dark;
+}
+
+/* NON-NEGOTIABLE STOREFRONT BRAND LAYER
+   The light theme is a warm material canvas, never a flat-white page. Keep the
+   wood asset and tune only the translucent overlays if the grain needs restraint. */
+:root:not(.dark) .storefront-ui {
+  background-color: #eadcc7;
+  background-image:
+    radial-gradient(ellipse 65% 48% at 86% 13%, oklch(55% 0.15 35 / 0.08) 0%, transparent 72%),
+    radial-gradient(ellipse 54% 62% at 8% 84%, oklch(55% 0.08 135 / 0.06) 0%, transparent 72%),
+    linear-gradient(180deg, rgb(255 252 246 / 0.16), rgb(238 222 197 / 0.12)),
+    url('/wood-bg.jpg');
+  background-size: 100% 100%, 100% 100%, 100% 100%, cover;
+  background-attachment: fixed, fixed, fixed, fixed;
+  background-position: center, center, center, center top;
+  background-repeat: no-repeat;
+  background-blend-mode: normal, normal, normal, multiply;
+}
+
+/* ── .hero-video: a watchable clip banded across the top of a page ─────────
+   Roughly half the viewport, capped so it never eats a laptop screen and never
+   collapses on a phone. The clip stays sharp: it is the reason the band exists.
+   Only the bottom edge is treated, fading into the page ground so the band
+   settles rather than ending on a hard line. No text sits over it — moving
+   footage cannot hold a contrast ratio, because it keeps changing underneath. */
+.hero-video {
+  position: relative;
+  width: 100%;
+  height: clamp(15rem, 52vh, 34rem);
+  overflow: hidden;
+  background-color: var(--store-surface-bg);
+}
+
+.hero-video__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Only the lower third is touched, and only enough to hand off to the page. */
+.hero-video__fade {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 38%;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--store-surface-bg) 55%, transparent) 58%,
+    var(--store-surface-bg) 100%);
+}
+
+/* ── .store-atmosphere: full-width section backgrounds ─────────────────── */
+.store-atmosphere {
+  background-color: var(--store-surface-bg);
+}
+
+/* ── .store-atmosphere-soft: translucent tinted section fill ────────────── */
+.store-atmosphere-soft {
+  background-color: var(--store-surface-bg);
+}
+
+.store-nav-surface {
+  background-color: var(--store-surface-bg);
+}
+
+:root:not(.dark) .storefront-ui .store-atmosphere {
+  background-color: rgba(251, 246, 237, 0.78);
+  backdrop-filter: blur(4px);
+}
+
+:root:not(.dark) .storefront-ui .store-atmosphere-soft {
+  background-color: rgba(246, 239, 227, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+:root:not(.dark) .storefront-ui .store-nav-surface {
+  background-color: rgba(251, 246, 237, 0.88);
+  backdrop-filter: blur(16px) saturate(1.1);
+}
+
+.dark .storefront-ui .store-nav-surface {
+  background-color: rgba(9, 12, 21, 0.92);
+  backdrop-filter: blur(16px) saturate(1.1);
+}
+
+.storefront-ui ::selection {
+  background: var(--color-crimson);
+  color: white;
+}
+
+.storefront-ui :is(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-crimson) 70%, transparent);
+  outline-offset: 2px;
+}
+
+.store-field {
+  min-height: 44px;
+  border: 1px solid var(--store-surface-border);
+  border-radius: 0.625rem;
+  background: var(--store-surface-bg);
+  color: var(--color-navy);
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+
+.store-field::placeholder { color: var(--color-navy-faint); }
+.store-field:hover { border-color: color-mix(in srgb, var(--color-navy) 24%, var(--store-surface-border)); }
+.store-field:focus {
+  border-color: color-mix(in srgb, var(--color-crimson) 65%, var(--store-surface-border));
+  box-shadow: 0 0 0 3px var(--color-crimson-wash);
+  outline: none;
+}
+
+.store-section {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1rem;
+}
+
+/* ── .store-panel: raised card surface ──────────────────────────────────── */
+/* Light: soft warm Tuscan linen paper (#FAF5EC) with rich warm border & shadow */
+/* Dark: obsidian surface                                                    */
+.store-panel {
+  border: 1px solid var(--store-surface-border);
+  border-radius: 1rem;
+  background: var(--store-surface-bg);
+  box-shadow: var(--store-surface-shadow);
+}
+
+/* ── .product-img-surface: image tray inside product cards ─────────────── */
+.product-img-surface {
+  background-color: var(--product-img-bg);
+}
+
+.store-card-title {
+  font-size: var(--store-card-title-size);
+  line-height: var(--store-card-title-line-height);
+}
+
+.product-card-stock {
+  min-height: var(--store-stock-slot-min-height);
+}
+
+/* Storefront motion language: one composed entrance, then tactile feedback. */
+.category-tile {
+  isolation: isolate;
+  transition: background-color 180ms var(--ease-out-quart), box-shadow 180ms var(--ease-out-quart), transform 160ms var(--ease-out-quart);
+}
+
+.category-tile::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 25%, color-mix(in srgb, var(--color-crimson) 8%, transparent) 50%, transparent 75%);
+  content: '';
+  opacity: 0;
+  transform: translateX(-65%);
+  transition: opacity 180ms ease, transform 420ms var(--ease-out-quint);
+}
+
+.category-tile:active { transform: scale(0.992); }
+
+.product-card {
+  transition: border-color 180ms ease, box-shadow 220ms var(--ease-out-quart), transform 220ms var(--ease-out-quart);
+}
+
+.product-card-visual {
+  transition: transform 280ms var(--ease-out-quint), filter 220ms ease;
+}
+
+.product-add-button svg { transition: transform 180ms var(--ease-out-quart); }
+
+.story-step { transition: background-color 220ms ease; }
+
+.story-step::before {
+  position: absolute;
+  inset-block: 18%;
+  left: 0;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--color-crimson);
+  content: '';
+  opacity: 0;
+  transform: scaleY(0.35);
+  transition: opacity 180ms ease, transform 260ms var(--ease-out-quint);
+}
+
+.story-step-number,
+.story-step-image {
+  transition: color 180ms ease, box-shadow 220ms ease, transform 220ms var(--ease-out-quart);
+}
+
+.story-step[aria-pressed='true'] {
+  background: linear-gradient(90deg, var(--color-crimson-wash), transparent 72%);
+}
+
+.story-step[aria-pressed='true']::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.story-step[aria-pressed='true'] .story-step-number { color: var(--color-crimson); }
+.story-step[aria-pressed='true'] .story-step-image { box-shadow: var(--store-surface-shadow); }
+
+.faq-item { transition: background-color 180ms ease; }
+.faq-trigger { transition: color 160ms ease; }
+
+.faq-icon {
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 220ms var(--ease-out-quart);
+}
+
+.faq-answer-grid { transition: grid-template-rows 280ms var(--ease-out-quart); }
+
+.faq-answer {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 160ms ease, transform 220ms var(--ease-out-quart);
+}
+
+.faq-item[data-open='true'] { background: linear-gradient(90deg, var(--color-crimson-wash), transparent 70%); }
+
+.faq-item[data-open='true'] .faq-icon {
+  border-color: color-mix(in srgb, var(--color-crimson) 34%, var(--store-surface-border));
+  background: var(--color-crimson-wash);
+  color: var(--color-crimson);
+}
+
+.faq-item[data-open='true'] .faq-answer {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .category-tile:hover {
+    background: color-mix(in srgb, var(--store-surface-bg) 91%, var(--color-crimson));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-crimson) 14%, transparent);
+  }
+
+  .category-tile:hover::after {
+    opacity: 1;
+    transform: translateX(65%);
+  }
+
+  .category-tile:hover > span:first-of-type { transform: translateY(-2px) rotate(-2deg); }
+
+  .product-card:hover {
+    border-color: color-mix(in srgb, var(--color-navy) 20%, var(--store-surface-border));
+    box-shadow: 0 4px 12px -2px rgba(80, 60, 40, 0.12), 0 14px 30px -6px rgba(80, 60, 40, 0.10);
+    transform: translateY(-2px);
+  }
+
+  .dark .product-card:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42);
+  }
+
+  .product-card:hover .product-card-visual { transform: scale(1.035); }
+  .product-add-button:hover svg { transform: rotate(90deg); }
+
+  .story-step:hover:not([aria-pressed='true']) { background: color-mix(in srgb, var(--store-surface-bg) 70%, transparent); }
+  .faq-item:hover:not([data-open='true']) { background: color-mix(in srgb, var(--store-surface-bg) 55%, transparent); }
+  .faq-item:hover .faq-icon { border-color: color-mix(in srgb, var(--color-navy) 28%, var(--store-surface-border)); }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .interactive-reveal-hint { opacity: 1; }
+}
+
+/* ── .store-card: named card container (replaces ad-hoc border+bg classes) */
+.store-card {
+  border: 1px solid var(--store-surface-border);
+  border-radius: 0.75rem;
+  background: var(--store-surface-bg);
+  box-shadow: var(--store-surface-shadow);
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 200ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .store-card:hover {
+    border-color: color-mix(in srgb, var(--color-navy) 20%, var(--store-surface-border));
+    box-shadow: 0 4px 12px -2px rgba(80, 60, 40, 0.12), 0 12px 28px -4px rgba(80, 60, 40, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .dark .store-card:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.40);
+  }
+}
+
+/* Dynamic Panel tokens — Theme-adaptive surfaces for featured callouts and footers */
+.store-dark-panel {
+  background: var(--store-surface-bg);
+  border-color: var(--store-surface-border);
+  color: var(--color-navy);
+}
+
+.store-loading-mark {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.75rem;
+  border: 2px solid var(--color-line);
+  border-top-color: var(--color-crimson);
+  border-radius: 999px;
+  animation: store-spin 700ms linear infinite;
+}
+
+.footer-link,
+.footer-copy {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--color-navy-soft);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.footer-link { transition: color 150ms ease; }
+.footer-link:hover { color: var(--color-crimson); }
+
+@keyframes store-spin { to { transform: rotate(360deg); } }
+
+@media (min-width: 1024px) {
+  .store-section { padding-inline: 1.5rem; }
+}
+
+/* ============================================================================
+   ADMIN (BOS) COMPONENT SYSTEM
+   Defined in @layer components so one-off Tailwind utilities can still
+   override them where a screen genuinely needs it.
+   ========================================================================== */
+@layer components {
+  .admin-ui {
+    color-scheme: dark;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .adm-card {
+    background-color: var(--color-adm-surface);
+    border: 1px solid var(--color-adm-line);
+    border-radius: var(--radius-adm);
+    box-shadow: var(--shadow-adm);
+    padding: 0.875rem;
+  }
+  .adm-card-sunken {
+    background-color: var(--color-adm-sunken);
+    border: 1px solid var(--color-adm-line);
+    border-radius: var(--radius-adm);
+    padding: 0.875rem;
+  }
+  .adm-row {
+    background-color: var(--color-adm-surface);
+    border: 1px solid var(--color-adm-line);
+    border-radius: var(--radius-adm-sm);
+    padding: 0.75rem;
+  }
+
+  /* Controls — 16px text on mobile so iOS never zooms the viewport. */
+  .adm-input {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.625rem 0.875rem;
+    background-color: var(--color-adm-raised);
+    border: 1px solid var(--color-adm-line);
+    border-radius: var(--radius-adm-sm);
+    color: #fff;
+    font-size: 1rem;
+    line-height: 1.4;
+    transition: border-color 0.15s ease;
+  }
+  .adm-input::placeholder { color: rgba(255, 255, 255, 0.35); }
+  .adm-input:focus { outline: none; border-color: var(--color-blue); }
+  .admin-ui select.adm-input,
+  .admin-ui select.adm-input option {
+    background-color: var(--color-adm-raised);
+    color: #fff;
+  }
+
+  .adm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    border-radius: var(--radius-adm-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+  }
+  .adm-btn:active { transform: scale(0.99); }
+  .adm-btn:disabled { opacity: 0.5; }
+
+  /* Dense variant for toolbars and table row actions. */
+  .adm-btn-sm { min-height: 2.25rem; padding: 0 0.75rem; font-size: 0.875rem; }
+
+  .adm-label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.62);
+  }
+  .adm-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-adm-line);
+    background-color: var(--color-adm-raised);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+}
+
+/* ============================================================================
+   ADMIN MOBILE NORMALIZATION
+   Deliberately UNLAYERED: in Tailwind v4 the `utilities` layer outranks
+   `components` regardless of specificity, so scoped overrides must sit outside
+   every layer to win. Scoped to `.admin-ui` — the storefront is untouched.
+   ========================================================================== */
+@media (max-width: 767px) {
+  /* ── 1. Restrained mobile type scale ───────────────────────────────────────
+     Desktop headings shout on a 390px screen. Everything below the `lg`
+     breakpoint uses a readable 12 → 24px ramp without shrinking body copy. */
+  .admin-ui .text-5xl,
+  .admin-ui .text-4xl { font-size: 1.5rem;    line-height: 1.15; letter-spacing: -0.02em; }
+  .admin-ui .text-3xl { font-size: 1.375rem;  line-height: 1.2;  letter-spacing: -0.02em; }
+  .admin-ui .text-2xl { font-size: 1.1875rem; line-height: 1.25; letter-spacing: -0.015em; }
+  .admin-ui .text-xl  { font-size: 1.0625rem; line-height: 1.3; }
+  .admin-ui .text-lg  { font-size: 1rem;      line-height: 1.35; }
+  .admin-ui .text-base{ font-size: 1rem;      line-height: 1.5; }
+  .admin-ui .text-sm  { font-size: 0.9375rem; line-height: 1.5; }
+  .admin-ui .text-xs  { font-size: 0.8125rem; line-height: 1.45; }
+  .admin-ui .text-\[15px\],
+  .admin-ui .text-\[14px\],
+  .admin-ui .text-\[13px\] { font-size: 0.875rem; line-height: 1.5; }
+  .admin-ui .text-\[11px\],
+  .admin-ui .text-\[10px\],
+  .admin-ui .text-\[9px\] { font-size: 0.75rem; line-height: 1.45; }
+
+  /* Never let a form control fall under 16px — iOS auto-zooms below that. */
+  .admin-ui input,
+  .admin-ui select,
+  .admin-ui textarea { font-size: 16px !important; }
+
+  /* ── 2. Unified container geometry ─────────────────────────────────────────
+     Collapses the ad-hoc p-5/p-6/p-7 + rounded-2xl/3xl sprawl into one
+     rhythm so every box on the screen reads as the same object. */
+  .admin-ui .p-5,  .admin-ui .p-6,  .admin-ui .p-7,  .admin-ui .p-8  { padding: 0.875rem; }
+  .admin-ui .px-5, .admin-ui .px-6, .admin-ui .px-7, .admin-ui .px-8 { padding-left: 0.875rem; padding-right: 0.875rem; }
+  .admin-ui .py-5, .admin-ui .py-6, .admin-ui .py-7, .admin-ui .py-8 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+  .admin-ui .gap-5, .admin-ui .gap-6, .admin-ui .gap-8 { gap: 0.75rem; }
+  .admin-ui .space-y-6 > :not([hidden]) ~ :not([hidden]),
+  .admin-ui .space-y-8 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
+
+  .admin-ui .rounded-3xl,
+  .admin-ui .rounded-2xl { border-radius: var(--radius-adm); }
+  .admin-ui .rounded-xl  { border-radius: var(--radius-adm-sm); }
+
+  /* ── 3. Noise reduction ────────────────────────────────────────────────────
+     One elevation on mobile. Stacked drop shadows on a dark UI just smear. */
+  .admin-ui .shadow-lg,
+  .admin-ui .shadow-xl,
+  .admin-ui .shadow-2xl { box-shadow: var(--shadow-adm-float); }
+
+  /* Anything explicitly marked as decorative is dropped on small screens. */
+  .admin-ui .adm-desktop-only { display: none !important; }
+}
+
+/* Horizontal scrollers (toolbars, tab rails) without a visible scrollbar. */
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* Optical guard: long ids/SKUs/emails must not blow out a mobile card. */
+.admin-ui .adm-truncate {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Custom Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.4);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.7);
+}
+
+/* ADMIN TYPOGRAPHY CONTRACT
+   One readable sans family for the operational surface. Monospace remains for
+   actual editable machine values; normal metrics use tabular sans numerals. */
+.admin-ui {
+  --text-admin-micro: 0.75rem;
+  --text-admin-label: 0.8125rem;
+  --text-admin-meta: 0.8125rem;
+  --text-admin-dense: 0.9375rem;
+  --text-admin-body: 1rem;
+  --text-admin-section: 1rem;
+  --text-admin-title: 1.5rem;
+}
+
+.admin-ui :is(h1, h2, h3, h4, h5, h6),
+.admin-ui .font-serif {
+  font-family: var(--font-sans);
+  letter-spacing: -0.012em;
+}
+
+.admin-ui .font-mono {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums slashed-zero;
+  letter-spacing: 0;
+}
+
+.admin-ui :is(code, pre, kbd, input.font-mono, textarea.font-mono) {
+  font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+}
+
+.admin-ui .tabular-nums,
+.storefront-ui .tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-ui .text-base { font-size: var(--text-admin-body); line-height: 1.5; }
+.admin-ui .text-sm { font-size: var(--text-admin-dense); line-height: 1.5; }
+.admin-ui .text-xs { font-size: var(--text-admin-label); line-height: 1.45; }
+.admin-ui :is(.text-\[13px\], .text-\[14px\], .text-\[15px\]) { font-size: var(--text-admin-dense); line-height: 1.5; }
+.admin-ui :is(.text-\[9px\], .text-\[10px\], .text-\[11px\]) { font-size: var(--text-admin-micro); line-height: 1.45; }
+
+.admin-ui .uppercase {
+  letter-spacing: 0.08em;
+}
+
+/* Operational text must remain readable on the dark canvas. */
+.admin-ui :is(.text-white\/35, .text-white\/38, .text-white\/40) { color: rgba(255, 255, 255, 0.55); }
+.admin-ui .text-white\/45 { color: rgba(255, 255, 255, 0.62); }
+
+/* The admin uses one cool accent; keep its scroll affordances in that system. */
+.admin-ui .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.34);
+}
+.admin-ui .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.58);
+}

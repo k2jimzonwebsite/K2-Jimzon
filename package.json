@@ -83,7 +83,7 @@
     "test:smoke": "playwright test tests/smoke.spec.js",
     "test:map027-smoke": "playwright test --config=playwright.map027.config.js tests/smoke.spec.js",
     "test:storefront-ui": "playwright test --config=playwright.map027.config.js tests/smoke.spec.js tests/buyer.spec.js tests/storefront-mobile.spec.js tests/storefront-motion.spec.js tests/storefront-theme.spec.js",
-    "test:selling-surfaces": "playwright test --config=playwright.selling.config.js tests/storefront-selling-surfaces.spec.js",
+    "test:selling-surfaces": "playwright test --config=playwright.selling.config.js tests/storefront-selling-surfaces.spec.js tests/hero-enhancement.spec.js",
     "test:admin-ui": "playwright test --config=playwright.admin.config.js tests/admin.spec.js tests/admin-dashboard-redesign.spec.js",
     "test:admin-product-master-ui": "playwright test --config=playwright.product-master.config.js tests/admin-product-master-ui.spec.js",
     "test:owner-count-close-ui": "playwright test --config=playwright.owner-close.config.js tests/owner-count-close-ui.spec.js",

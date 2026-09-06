@@ -3,8 +3,6 @@ import { useStore } from '../../context/StoreContext'
 import { RedButton, GhostButton, Kicker } from '../ui/bits'
 import { ArrowIcon, CheckIcon, PlaneIcon, ShieldIcon, GridIcon } from '../ui/icons'
 import FlightMap from './FlightMap'
-import { peso } from '../../data/products'
-import './Hero.css'
 
 const reveal = {
   hidden: { opacity: 0, transform: 'translateY(10px)' },
@@ -12,7 +10,7 @@ const reveal = {
 }
 
 function Hero() {
-  const { go, listedProducts, loading, openProduct, isWholesale } = useStore()
+  const { go } = useStore()
 
   return (
     <section className="store-atmosphere relative overflow-hidden border-b border-line">
@@ -43,19 +41,6 @@ function Hero() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, transform: 'translateX(14px)' }} animate={{ opacity: 1, transform: 'translateX(0)' }} transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }} className="relative">
-          <div className="hero-collection" aria-label="Explore the collection" aria-busy={loading}>
-            <p className="hero-collection-heading">A little Italy, for your everyday.</p>
-            <div className="hero-collection-shelf">
-              {!loading && listedProducts.slice(0, 3).map(product => (
-                <button key={product.sku} className="hero-collection-item" onClick={() => openProduct(product.sku)}>
-                  <img className="hero-collection-image" src={product.img || '/images/placeholder.svg'} alt="" onError={event => { if (!event.currentTarget.src.endsWith('/images/placeholder.svg')) event.currentTarget.src = '/images/placeholder.svg' }} />
-                  <span className="hero-collection-name">{product.name}</span>
-                  <span className="hero-collection-price">{peso(isWholesale ? product.wholesale_price : product.srp)} <ArrowIcon size={14} /></span>
-                </button>
-              ))}
-              {(loading || !listedProducts.length) && <p className="hero-collection-empty">{loading ? 'Loading the collection…' : 'Explore the collection or request a favorite from Italy.'}</p>}
-            </div>
-          </div>
           <div className="store-panel overflow-hidden p-5 sm:p-7">
             <div className="mb-2 flex items-center justify-between gap-4 border-b border-[var(--store-surface-border)] pb-4">
               <div>

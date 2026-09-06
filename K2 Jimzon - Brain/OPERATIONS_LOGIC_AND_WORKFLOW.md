@@ -1,5 +1,14 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+**Hero merchandising:**previews reuse the canonical listed catalog, active
+retail/wholesale pricing mode and product-detail path. Loading must not present
+development seed products as loaded listings. Do not imply recency, popularity,
+availability or payment confirmation from selection order. Missing imagery uses
+a neutral placeholder. The owner's 6 September additive-design instruction keeps
+the existing hero content/actions; its visual rollback must preserve unrelated
+operational work.
+
+
 **Version:** 1.0
 **Approved working baseline:** 9 August 2026
 **Purpose:** The authoritative rulebook for designing, implementing, reviewing, and testing K2 Jimzon operations.
