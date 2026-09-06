@@ -1,10 +1,19 @@
 # K2 Jimzon — System Brain (Current State)
 
+**Release verified, 6 September:** code commit a438d85 passes full GitHub CI
+34021862535, including the complete acceptance command, MAP-017 PostgreSQL
+migration/rollback/authorization and catalog spreadsheet rehearsals. Both
+Vercel project statuses succeed for this commit. The canonical Admin entry
+`https://admin.k2jimzon.com/admin-portal-k2-secure` returns HTTP 200 and the app
+bootstrap. This verifies delivery, not an authenticated staff journey. Workflow
+record reads remain gated by the existing BFF environment/session controls;
+real staff acceptance and business write actions remain MAP-028 I-016.
+
 **CI database follow-up:** 40956ef passes the full browser/contract aggregate and
 MAP-017 migration rehearsal in run 34021427328. Authorization rehearsal stops
 safely because CI omitted its LOCAL_PG_URL variable. Both rehearsal variables
 now target the same isolated CI database; no validator or production setting
-changes. Remote authorization/catalog rehearsal proof remains MAP-020.
+changes. Authorization/catalog rehearsal proof subsequently passed in CI 34021862535.
 
 **Workflow records, prepared 6 September (IDEA-20260906-04 / MAP-028 I-016):**
 WorkflowRecords adds on-demand catalog and consignment reads to the detail drawer.
@@ -21,7 +30,7 @@ build passes. Isolated release verification also passes 4/4 browser cases (9.2s)
 34019315203 fails the phone shopping journey because its development knowledge
 fixture implicitly depended on local database configuration. Explicit test-only
 fixture loading passes the focused journey (1/1, 24.6s). Product runtime and
-approval filtering are unchanged. Full remote verification remains MAP-020;
+approval filtering are unchanged. Full remote verification subsequently passed in CI 34021862535;
 see the deployment runbook for command and rollback.
 
 **Hero deployed and dependency repair, 6 September 2026:** GitHub main 7dd8585

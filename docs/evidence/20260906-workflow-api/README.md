@@ -3,7 +3,13 @@
 IDEA-20260906-04 / MAP-028 I-016. Owner requests functional API calls in the map.
 First bounded slice adds explicit reads for inventory/catalog and consignment
 nodes via existing getAdminProducts/getAdminConsignments services. No write,
-provider activation, data migration or deployment occurs.
+provider activation or data migration occurs in this slice.
+
+Release evidence: a438d85 was pushed to main; both Vercel project statuses
+succeeded and full CI 34021862535 passed, including the new workflow suite and
+PostgreSQL authorization/rollback rehearsals. The public Admin entry returns
+HTTP 200 with the application bootstrap. Authenticated staff use is unverified
+and remains MAP-028 I-016; existing BFF activation gates are unchanged.
 
 Changed files: WorkflowRecords.jsx; WorkflowDetailDrawer.jsx; dedicated
 playwright.workflow.config.js and workflow-api UI fixture/tests; package test

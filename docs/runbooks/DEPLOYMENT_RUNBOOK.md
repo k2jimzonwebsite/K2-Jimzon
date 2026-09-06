@@ -1,5 +1,13 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+Verified release: code commit a438d85 (6 September) passes GitHub CI 34021862535
+through the complete acceptance suite and both PostgreSQL rehearsal stages.
+Both Vercel project statuses succeed. The canonical Admin entry returns HTTP 200
+with its application bootstrap. Authenticated workflow-read acceptance remains
+MAP-028 I-016; neither deployment nor the fixture suite proves staff access.
+Workflow rollback is the panel removal documented in its evidence README.
+Prior CI failures below describe the repaired history, not current blockers.
+
 CI database configuration repair, 6 September: 40956ef / run 34021427328 passed
 the complete storefront/Admin acceptance command and MAP-017 migration/rollback
 rehearsal. The authorization runner reads LOCAL_PG_URL, while CI supplied only
