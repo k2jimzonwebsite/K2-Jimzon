@@ -14,7 +14,7 @@
  *   5. a website order carrying a shop is refused
  *   6. an order whose shop belongs to a different marketplace is refused
  *   7. two shops can list the same SKU on the same marketplace
- *   8. two shops cannot claim the same external marketplace item
+ *   8. external item identity is unique within an exact shop
  *
  * Run: npm run rehearse:channel-vocabulary
  */
@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url'
 const rootDir = fileURLToPath(new URL('..', import.meta.url))
 
 const config = {
-  binDir: path.join(rootDir, '.tools', 'postgresql-17.11', 'runtime', 'pgsql', 'bin'),
+  binDir: process.env.K2_TEST_PG_BIN || path.join(rootDir, '.tools', 'postgresql-17.11', 'runtime', 'pgsql', 'bin'),
   dataDir: path.join(rootDir, '.tools', 'map028-channel-pg-data'),
   logPath: path.join(rootDir, '.tools', 'map028-channel-pg.log'),
   port: 54328,
@@ -111,13 +111,13 @@ values ('shopee-01', 'shopee', '111', 'K2 Shopee Main'),
 on conflict (shop_code) do nothing;
 `
 
-const refuses = (name, body) => ({
+const refuses = (name, body, expectedError, expectedState = '23514') => ({
   name,
   sql: `do $$ begin
       ${body}
       raise exception 'SHOULD_HAVE_BEEN_REFUSED';
     exception when others then
-      if sqlerrm = 'SHOULD_HAVE_BEEN_REFUSED' then raise; end if;
+      if sqlstate <> '${expectedState}' or position('${expectedError}' in sqlerrm) = 0 then raise; end if;
     end $$;
     select 'refused';`,
   expect: 'refused',
@@ -141,15 +141,15 @@ const CHECKS = [
     expect: 'lazada,shopee,tiktok',
   },
   refuses('an unknown channel is refused',
-    `insert into public.order_requests(channel_source) values ('tiktok_shop');`),
+    `insert into public.order_requests(channel_source) values ('tiktok_shop');`, 'K2_CHANNEL_UNKNOWN'),
   refuses('a marketplace order without a shop is refused',
-    `insert into public.order_requests(channel_source) values ('shopee');`),
+    `insert into public.order_requests(channel_source) values ('shopee');`, 'K2_MARKETPLACE_ORDER_REQUIRES_SHOP'),
   refuses('a website order carrying a shop is refused',
     `insert into public.order_requests(channel_source, shop_id)
-     values ('website', (select id from public.channel_shops where shop_code = 'shopee-01'));`),
+     values ('website', (select id from public.channel_shops where shop_code = 'shopee-01'));`, 'K2_NON_MARKETPLACE_ORDER_HAS_SHOP'),
   refuses('an order whose shop belongs to another marketplace is refused',
     `insert into public.order_requests(channel_source, shop_id)
-     values ('shopee', (select id from public.channel_shops where shop_code = 'lazada-01'));`),
+     values ('shopee', (select id from public.channel_shops where shop_code = 'lazada-01'));`, 'K2_ORDER_SHOP_CHANNEL_MISMATCH'),
   {
     name: 'a marketplace order naming its own shop is accepted',
     sql: `insert into public.order_requests(channel_source, shop_id)
@@ -165,9 +165,18 @@ const CHECKS = [
           where sku='caffe-milano-gold' and channel_source='shopee';`,
     expect: '2',
   },
-  refuses('two shops cannot claim the same external marketplace item',
+  {
+    name: 'external item IDs are scoped to the exact shop',
+    sql: `insert into public.products(sku,name) values ('other-product','Other fixture');
+      insert into public.channel_listings(sku,channel_source,shop_id,external_item_id)
+      values ('other-product','shopee',(select id from public.channel_shops where shop_code='shopee-01'),'SP-2');
+      select count(*)::text from public.channel_listings where external_item_id='SP-2';`,
+    expect: '2',
+  },
+  refuses('one shop cannot map its external item to a second SKU',
     `insert into public.channel_listings(sku, channel_source, shop_id, external_item_id)
-     values ('caffe-milano-gold','shopee',(select id from public.channel_shops where shop_code='shopee-02'),'SP-2');`),
+     values ('other-product','shopee',(select id from public.channel_shops where shop_code='shopee-02'),'SP-2');`,
+    'channel_listings_external_item_unique', '23505'),
   {
     name: 'the vocabulary is publicly readable but shops are not',
     sql: `set role anon;

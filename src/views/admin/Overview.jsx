@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
+import { overviewUnavailable } from '../../lib/overviewAvailability'
 import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
 import { peso } from '../../data/products'
 import {
@@ -22,6 +23,8 @@ import {
   SyncIcon,
   TrendIcon,
 } from '../../components/ui/icons'
+
+import { DASHBOARD_WIDGETS } from './dashboardWidgets'
 
 const RANGE_OPTIONS = [7, 30, 90]
 const SALES_RECORD_FILTERS = [
@@ -45,6 +48,7 @@ const CHANNELS = [
   { id: 'shopee', label: 'Shopee', description: 'Seller Center' },
   { id: 'tiktok', label: 'TikTok Shop', description: 'Shop operations' },
   { id: 'lazada', label: 'Lazada', description: 'Open Platform' },
+  { id: 'other', label: 'Other / unrecognized', description: 'Preserved source; not attributed to Website' },
 ]
 
 const OVERVIEW_LABELS = {
@@ -72,7 +76,7 @@ const EMPTY_DATA = {
   conversations: [],
 }
 
-const panelClass = 'rounded-adm border border-adm-line bg-adm-surface shadow-adm'
+const panelClass = 'rounded-adm border border-adm-line bg-adm-surface'
 const actionClass = 'transition-[transform,border-color,background-color,color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 focus-visible:ring-offset-2 focus-visible:ring-offset-adm-bg'
 
 function startOfPeriod(days, periodOffset = 0) {
@@ -96,7 +100,8 @@ function normalizeChannel(value = '') {
   if (channel.startsWith('tiktok')) return 'tiktok'
   if (channel.startsWith('lazada')) return 'lazada'
   if (channel.startsWith('pasabuy')) return 'pasabuy'
-  return 'website'
+  if (!channel || channel === 'website' || channel === 'web') return 'website'
+  return 'other'
 }
 
 function percentageChange(current, previous) {
@@ -211,7 +216,7 @@ function RevenueChart({ points }) {
         ))}
       </svg>
       {points.every(point => point.value === 0) && (
-        <p className="-mt-3 text-center text-xs text-white/45">No payment-verified revenue recorded in this period.</p>
+        <p className="-mt-3 text-center text-xs text-white/65">No payment-verified revenue recorded in this period.</p>
       )}
     </div>
   )
@@ -221,12 +226,12 @@ function PanelHeading({ icon: Icon, title, description, action }) {
   return (
     <div className="flex items-start justify-between gap-4 border-b border-adm-line px-4 py-3.5 sm:px-5">
       <div className="flex min-w-0 items-start gap-3">
-        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-adm-sm bg-blue/10 text-blue">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-adm-sm bg-white/[0.04] text-white/75">
           <Icon size={17} />
         </span>
         <div className="min-w-0">
           <h3 className="text-sm font-semibold text-white">{title}</h3>
-          <p className="mt-0.5 text-xs leading-relaxed text-white/45">{description}</p>
+          <p className="mt-0.5 text-xs leading-relaxed text-white/65">{description}</p>
         </div>
       </div>
       {action}
@@ -234,8 +239,13 @@ function PanelHeading({ icon: Icon, title, description, action }) {
   )
 }
 
-export default function Overview({ setSection, pending = null }) {
+export default function Overview({ setSection, pending = null, widget = 'metrics', onWidget }) {
+  const requestSequence = useRef(0)
+  const [unavailable, setUnavailable] = useState(Object.keys(EMPTY_DATA))
+  const [stale, setStale] = useState(false)
   const [range, setRange] = useState(30)
+  const [loadedRange, setLoadedRange] = useState(null)
+  const reportingRange = loadedRange ?? range
   const [salesRecordsOpen, setSalesRecordsOpen] = useState(false)
   const [salesRecordFilter, setSalesRecordFilter] = useState('all')
   const [data, setData] = useState(EMPTY_DATA)
@@ -245,6 +255,7 @@ export default function Overview({ setSection, pending = null }) {
   const [lastUpdated, setLastUpdated] = useState(null)
 
   const load = useCallback(async ({ quiet = false } = {}) => {
+    const sequence = ++requestSequence.current
     const useSecureBoundary = adminBffEnabled()
     if (!useSecureBoundary && !supabase) {
       setError('Supabase is not configured. Operational analytics are unavailable.')
@@ -258,6 +269,10 @@ export default function Overview({ setSection, pending = null }) {
       if (useSecureBoundary) {
         const result = await getAdminOverview(range)
         if (!result.ok) throw new Error(result.error)
+        if (sequence !== requestSequence.current) return
+        setUnavailable(result.unavailable.map(item => item.key))
+        setStale(false)
+        setLoadedRange(range)
         setData({ ...EMPTY_DATA, ...result.data })
         const unavailable = result.unavailable.map((item) => OVERVIEW_LABELS[item.key] || item.key)
         setError(unavailable.length
@@ -267,17 +282,21 @@ export default function Overview({ setSection, pending = null }) {
         return
       }
       const results = await Promise.all([
-        supabase.from('order_requests').select('id,channel_source,status,payment_status,total_amount,created_at').gte('created_at', priorStart),
+        supabase.from('order_requests').select('id,channel_source,status,payment_status,total_amount,created_at', { count: 'exact' }).gte('created_at', priorStart),
         supabase.from('order_requests').select('*', { count: 'exact', head: true }).eq('status', 'submitted'),
-        supabase.from('pasabuy_requests').select('id,status,target_budget_php,assigned_to,created_at'),
-        supabase.from('product_batches').select('id,quantity,quantity_available,expiry_date,best_before_date'),
-        supabase.from('channel_connections').select('channel,display_name,status,last_event_at,note'),
-        supabase.from('channel_listings').select('channel_source,publication_status,validation_errors,last_synced_at,sync_error'),
-        supabase.from('products').select('sku,status,stock_available'),
-        supabase.from('conversations').select('id,status,priority,unread_count,response_due_at,assigned_to,last_message_at'),
+        supabase.from('pasabuy_requests').select('id,status,target_budget_php,assigned_to,created_at', { count: 'exact' }),
+        supabase.from('product_batches').select('id,quantity,quantity_available,expiry_date,best_before_date', { count: 'exact' }),
+        supabase.from('channel_connections').select('channel,display_name,status,last_event_at,note', { count: 'exact' }),
+        supabase.from('channel_listings').select('channel_source,publication_status,validation_errors,last_synced_at,sync_error', { count: 'exact' }),
+        supabase.from('products').select('sku,status,stock_available', { count: 'exact' }),
+        supabase.from('conversations').select('id,status,priority,unread_count,response_due_at,assigned_to,last_message_at', { count: 'exact' }),
       ])
 
-      const failures = results.filter(result => result.error)
+      if (sequence !== requestSequence.current) return
+      const unavailableResults = overviewUnavailable(results, Object.keys(EMPTY_DATA))
+      setUnavailable(unavailableResults.map(item => item.key))
+      setStale(false)
+      setLoadedRange(range)
 
       setData({
         orders: results[0].data || [],
@@ -289,17 +308,19 @@ export default function Overview({ setSection, pending = null }) {
         products: results[6].data || [],
         conversations: results[7].data || [],
       })
-      setError(failures.length ? safeUiError('OVERVIEW_PARTIAL') : '')
+      setError(unavailableResults.length ? 'Some analytics are unavailable or incomplete. Narrow the reporting period or retry the source.' : '')
       setLastUpdated(new Date())
     } catch (loadError) {
+      if (sequence !== requestSequence.current) return
+      setStale(true)
       setError(safeUiError('OVERVIEW_PARTIAL'))
     } finally {
-      setLoading(false)
-      setRefreshing(false)
+      if (sequence === requestSequence.current) { setLoading(false); setRefreshing(false) }
     }
   }, [range])
 
   useEffect(() => {
+    setLoading(true)
     load({ quiet: true })
     if (adminBffEnabled()) {
       const refresh = () => {
@@ -308,6 +329,7 @@ export default function Overview({ setSection, pending = null }) {
       const interval = window.setInterval(refresh, 30_000)
       document.addEventListener('visibilitychange', refresh)
       return () => {
+        requestSequence.current++
         window.clearInterval(interval)
         document.removeEventListener('visibilitychange', refresh)
       }
@@ -322,12 +344,12 @@ export default function Overview({ setSection, pending = null }) {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'conversations' }, () => load({ quiet: true }))
       .subscribe()
 
-    return () => supabase.removeChannel(channel)
+    return () => { requestSequence.current++; supabase.removeChannel(channel) }
   }, [load, range])
 
   const analytics = useMemo(() => {
-    const currentStart = startOfPeriod(range).getTime()
-    const previousStart = startOfPeriod(range, 1).getTime()
+    const currentStart = startOfPeriod(reportingRange).getTime()
+    const previousStart = startOfPeriod(reportingRange, 1).getTime()
     const currentOrders = data.orders.filter(order => new Date(order.created_at).getTime() >= currentStart)
     const previousOrders = data.orders.filter(order => {
       const created = new Date(order.created_at).getTime()
@@ -408,17 +430,22 @@ export default function Overview({ setSection, pending = null }) {
       channelRows,
       liveChannels: channelRows.filter(channel => channel.status === 'live').length,
       pasabuyStages,
-      revenueSeries: buildRevenueSeries(currentOrders, range),
+      revenueSeries: buildRevenueSeries(currentOrders, reportingRange),
     }
-  }, [data, range])
+  }, [data, reportingRange])
+
+  const missing = source => (Array.isArray(source) ? source : [source]).some(key => unavailable.includes(key))
+  const display = (source, value) => loading ? '—' : missing(source) ? 'Unavailable' : value
+  const widgetSources = { sales: ['orders'], revenue: ['orders'], priority: ['orderBacklog', 'conversations', 'pasabuy', 'products', 'batches', 'listings'], inbox: ['conversations'], pasabuy: ['pasabuy'], stock: ['products', 'batches'] }
+  const widgetUnavailable = missing(widgetSources[widget] || [])
 
   const metrics = [
-    { label: 'Verified payments', value: peso(analytics.verifiedRevenue), detail: `${range}-day payment-verified total`, change: analytics.revenueChange },
-    { label: 'Verified orders', value: analytics.verifiedOrders, detail: 'Counted only after verification', change: analytics.orderChange },
-    { label: 'Average order value', value: peso(analytics.averageOrder), detail: 'Across verified orders' },
-    { label: 'Requests to review', value: data.orderBacklog, detail: 'Submitted; stock not reserved', tone: data.orderBacklog > 0 ? 'warning' : 'normal' },
-    { label: 'Open Pasabuy', value: analytics.openPasabuy.length, detail: 'Intake through arrival', tone: analytics.openPasabuy.length > 0 ? 'warning' : 'normal' },
-    { label: 'Unread messages', value: analytics.unread, detail: `${analytics.overdue} response deadline${analytics.overdue === 1 ? '' : 's'} missed`, tone: analytics.overdue > 0 ? 'danger' : analytics.unread > 0 ? 'warning' : 'normal' },
+    { source: 'orders', label: 'Verified payments', value: peso(analytics.verifiedRevenue), detail: `${reportingRange}-day payment-verified total`, change: analytics.revenueChange },
+    { source: 'orders', label: 'Verified orders', value: analytics.verifiedOrders, detail: 'Counted only after verification', change: analytics.orderChange },
+    { source: 'orders', label: 'Average order value', value: peso(analytics.averageOrder), detail: 'Across verified orders' },
+    { source: 'orderBacklog', label: 'Requests to review', value: data.orderBacklog, detail: 'Submitted; stock not reserved', tone: data.orderBacklog > 0 ? 'warning' : 'normal' },
+    { source: 'pasabuy', label: 'Open Pasabuy', value: analytics.openPasabuy.length, detail: 'Intake through arrival', tone: analytics.openPasabuy.length > 0 ? 'warning' : 'normal' },
+    { source: 'conversations', label: 'Unread messages', value: analytics.unread, detail: `${analytics.overdue} response deadline${analytics.overdue === 1 ? '' : 's'} missed`, tone: analytics.overdue > 0 ? 'danger' : analytics.unread > 0 ? 'warning' : 'normal' },
   ]
 
   const filteredSalesRecords = filterSalesOrders(analytics.currentOrders, salesRecordFilter)
@@ -435,7 +462,7 @@ export default function Overview({ setSection, pending = null }) {
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }))
     const link = document.createElement('a')
     link.href = url
-    link.download = createSalesExportFilename({ range, filter: salesRecordFilter })
+    link.download = createSalesExportFilename({ range: reportingRange, filter: salesRecordFilter })
     document.body.appendChild(link)
     link.click()
     link.remove()
@@ -454,13 +481,9 @@ export default function Overview({ setSection, pending = null }) {
     <div className="mx-auto w-full max-w-[1600px] space-y-4 pb-6">
       <section className="flex flex-col gap-4 border-b border-adm-line pb-4 xl:flex-row xl:items-end xl:justify-between">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-blue">
-            <span className="h-1.5 w-1.5 rounded-full bg-blue" />
-            Live operations workspace
-          </div>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">Operations command center</h2>
-          <p className="mt-1 max-w-3xl text-sm leading-relaxed text-white/55">
-            Revenue, inventory, customer workload, and channel readiness across Website, Pasabuy, Shopee, TikTok Shop, and Lazada.
+          <p className="mt-1 max-w-3xl text-sm leading-relaxed text-white/65">
+            Choose a widget from the left panel. Each view keeps its own records and operational meaning.
           </p>
         </div>
 
@@ -471,7 +494,7 @@ export default function Overview({ setSection, pending = null }) {
                 key={option}
                 onClick={() => setRange(option)}
                 aria-pressed={range === option}
-                className={`${actionClass} min-h-9 rounded-md px-3 text-xs font-semibold ${range === option ? 'bg-adm-raised text-white shadow-adm' : 'text-white/45 hover:text-white'}`}
+                className={`${actionClass} min-h-11 rounded-md px-3 text-xs font-semibold ${range === option ? 'bg-adm-raised text-white shadow-adm' : 'text-white/65 hover:text-white'}`}
               >
                 {option}D
               </button>
@@ -488,13 +511,9 @@ export default function Overview({ setSection, pending = null }) {
         </div>
       </section>
 
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-white/40">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-white/65">
         <span>{lastUpdated ? `Updated ${lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Waiting for the first data refresh'}</span>
-        <button onClick={() => setSection('integrations')} className={`${actionClass} flex min-h-9 items-center gap-2 rounded-adm-sm px-2 text-white/55 hover:text-white`}>
-          <span className={`h-2 w-2 rounded-full ${analytics.liveChannels === CHANNELS.length ? 'bg-emerald-400' : 'bg-amber'}`} />
-          {analytics.liveChannels}/{CHANNELS.length} channels operational
-          <ArrowIcon size={13} />
-        </button>
+        <span>{stale ? `Refresh failed — showing the last retrieved ${reportingRange}-day snapshot.` : 'Internal K2 records · external channel feeds are separate'}</span>
       </div>
 
       {error && (
@@ -504,22 +523,30 @@ export default function Overview({ setSection, pending = null }) {
         </div>
       )}
 
-      <section aria-label="Key performance indicators" className={`${panelClass} grid overflow-hidden grid-cols-2 md:grid-cols-3 xl:grid-cols-6`}>
+      <div className="lg:hidden">
+        <label htmlFor="dashboard-widget" className="block pb-2 text-sm text-white/75">Dashboard widget</label>
+        <select id="dashboard-widget" value={widget} onChange={event => onWidget?.(event.target.value)} className="min-h-11 w-full rounded-adm-sm border border-adm-line bg-adm-surface px-3 text-sm text-white">
+          {DASHBOARD_WIDGETS.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
+        </select>
+      </div>
+      <div><h3 className="text-lg font-semibold text-white">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.label}</h3><p className="mt-1 text-sm text-white/65">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.description}</p></div>
+      {widgetUnavailable && <p role="status" className="rounded-adm border border-adm-line p-5 text-sm text-white/75">{loading ? 'Loading this widget’s records…' : 'This widget is unavailable because its records could not be retrieved. Refresh to retry or choose another widget.'}</p>}
+      <section hidden={widget !== 'metrics'} aria-label="Key performance indicators" className={`${panelClass} [&[hidden]]:hidden grid overflow-hidden grid-cols-1 sm:grid-cols-2 xl:grid-cols-3`}>
         {metrics.map((metric, index) => (
-          <div key={metric.label} className={`min-w-0 border-adm-line p-4 ${index < metrics.length - 1 ? 'border-b xl:border-b-0 xl:border-r' : ''} ${index % 2 === 0 ? 'border-r md:border-r-0' : ''} ${index % 3 !== 2 ? 'md:border-r xl:border-r-0' : ''}`}>
-            <p className="text-xs font-medium text-white/50">{metric.label}</p>
+          <div key={metric.label} className="min-w-0 border-b border-adm-line p-4">
+            <p className="text-xs font-medium text-white/65">{metric.label}</p>
             <p className={`mt-2 truncate font-mono text-xl font-semibold tabular-nums ${metric.tone === 'danger' ? 'text-crimson' : metric.tone === 'warning' ? 'text-amber' : 'text-white'}`}>
-              {loading ? '—' : metric.value}
+              {display(metric.source, metric.value)}
             </p>
-            <p className="mt-1.5 min-h-8 text-xs leading-relaxed text-white/38">{metric.detail}</p>
-            {metric.change && (
+            <p className="mt-1.5 min-h-8 text-xs leading-relaxed text-white/65">{missing(metric.source) ? 'This source could not be retrieved.' : metric.detail}</p>
+            {!loading && !missing(metric.source) && metric.change && (
               <p className={`mt-1 text-xs font-medium ${metric.change.positive ? 'text-emerald-400' : 'text-crimson'}`}>{metric.change.label}</p>
             )}
           </div>
         ))}
       </section>
 
-      <section aria-label="Sales computation summary" className={panelClass}>
+      <section hidden={widget !== 'sales' || widgetUnavailable} aria-label="Sales computation summary" className={`${panelClass} [&[hidden]]:hidden`}>
         <PanelHeading
           icon={TrendIcon}
           title="Sales computation summary"
@@ -545,16 +572,16 @@ export default function Overview({ setSection, pending = null }) {
             { label: 'Actual profit', value: 'Unavailable', detail: 'No exact-lot cost snapshot per order line yet', unavailable: true },
           ].map((item, index) => (
             <div key={item.label} className={`min-w-0 p-4 sm:p-5 ${index < 4 ? 'border-b border-adm-line xl:border-b-0 xl:border-r' : ''} ${index % 2 === 0 ? 'sm:border-r xl:border-r-0' : ''}`}>
-              <p className="text-xs font-medium text-white/55">{item.label}</p>
+              <p className="text-xs font-medium text-white/65">{item.label}</p>
               <p className={`mt-2 font-mono text-xl font-semibold tabular-nums ${item.unavailable ? 'text-amber' : 'text-white'}`}>{loading ? '—' : item.value}</p>
-              <p className="mt-1.5 text-xs leading-relaxed text-white/40">{item.detail}</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-white/65">{item.detail}</p>
             </div>
           ))}
         </div>
         <div className="border-t border-adm-line">
           <div className="px-4 py-3 sm:px-5">
             <h4 className="text-sm font-semibold text-white">Payment × fulfillment reconciliation</h4>
-            <p className="mt-1 text-xs leading-relaxed text-white/45">Four mutually exclusive buckets reproduce every request and peso in the selected period. Select one to review its exact records.</p>
+            <p className="mt-1 text-xs leading-relaxed text-white/65">Four mutually exclusive buckets reproduce every request and peso in the selected period. Select one to review its exact records.</p>
           </div>
           <div className="grid border-t border-adm-line sm:grid-cols-2 xl:grid-cols-4">
             {[
@@ -571,13 +598,13 @@ export default function Overview({ setSection, pending = null }) {
                 aria-pressed={salesRecordsOpen && salesRecordFilter === item.filter}
                 className={`${actionClass} min-h-[112px] p-4 text-left hover:bg-white/[0.035] sm:p-5 ${index < 3 ? 'border-b border-adm-line xl:border-b-0 xl:border-r' : ''} ${index % 2 === 0 ? 'sm:border-r xl:border-r-0' : ''}`}
               >
-                <span className="block text-xs font-medium text-white/55">{item.label}</span>
+                <span className="block text-xs font-medium text-white/65">{item.label}</span>
                 <span className={`mt-2 block font-mono text-lg font-semibold tabular-nums ${item.exception && item.bucket.count > 0 ? 'text-crimson' : 'text-white'}`}>{loading ? '—' : peso(item.bucket.value)}</span>
-                <span className="mt-1 block text-xs text-white/40">{loading ? '—' : `${item.bucket.count} record${item.bucket.count === 1 ? '' : 's'}`} · {item.detail}</span>
+                <span className="mt-1 block text-xs text-white/65">{loading ? '—' : `${item.bucket.count} record${item.bucket.count === 1 ? '' : 's'}`} · {item.detail}</span>
               </button>
             ))}
           </div>
-          <p className="border-t border-adm-line px-4 py-3 text-xs leading-relaxed text-white/40 sm:px-5">
+          <p className="border-t border-adm-line px-4 py-3 text-xs leading-relaxed text-white/65 sm:px-5">
             Payment not verified means only that the exact verified state is absent. It does not mean unpaid, missing, failed, or lost.
           </p>
         </div>
@@ -586,8 +613,8 @@ export default function Overview({ setSection, pending = null }) {
             <div className="flex flex-col gap-3 border-b border-adm-line p-4 sm:flex-row sm:items-end sm:justify-between sm:px-5">
               <div>
                 <h4 className="text-sm font-semibold text-white">Records behind these totals</h4>
-                <p className="mt-1 text-xs leading-relaxed text-white/45">
-                  Read-only order requests in the selected {range}-day period. Filters never change a record.
+                <p className="mt-1 text-xs leading-relaxed text-white/65">
+                  Read-only order requests in the retrieved {reportingRange}-day period. Filters never change a record.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -598,7 +625,7 @@ export default function Overview({ setSection, pending = null }) {
                       type="button"
                       onClick={() => setSalesRecordFilter(option.id)}
                       aria-pressed={salesRecordFilter === option.id}
-                      className={`${actionClass} min-h-11 rounded-adm-sm border px-3 text-xs font-semibold ${salesRecordFilter === option.id ? 'border-blue/50 bg-blue/10 text-blue' : 'border-adm-line bg-adm-sunken text-white/55 hover:text-white'}`}
+                      className={`${actionClass} min-h-11 rounded-adm-sm border px-3 text-xs font-semibold ${salesRecordFilter === option.id ? 'border-blue/50 bg-white/[0.04] text-white/75' : 'border-adm-line bg-adm-sunken text-white/65 hover:text-white'}`}
                     >
                       {option.label}
                     </button>
@@ -607,7 +634,7 @@ export default function Overview({ setSection, pending = null }) {
                 <button
                   type="button"
                   onClick={downloadSalesRecords}
-                  disabled={filteredSalesRecords.length === 0}
+                  disabled={loading || missing('orders') || filteredSalesRecords.length === 0}
                   className={`${actionClass} min-h-11 rounded-adm-sm border border-adm-line bg-adm-raised px-3 text-xs font-semibold text-white/75 hover:border-adm-line-strong hover:text-white disabled:cursor-not-allowed disabled:opacity-45`}
                 >
                   Download CSV ({filteredSalesRecords.length})
@@ -616,7 +643,7 @@ export default function Overview({ setSection, pending = null }) {
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-adm-line bg-adm-sunken/50 px-4 py-3 text-xs sm:px-5">
-              <span className="text-white/50" aria-live="polite">
+              <span className="text-white/65" aria-live="polite">
                 {filteredSalesRecords.length} matching record{filteredSalesRecords.length === 1 ? '' : 's'}
               </span>
               <span className="font-semibold tabular-nums text-white">
@@ -624,7 +651,7 @@ export default function Overview({ setSection, pending = null }) {
               </span>
             </div>
 
-            <div className="hidden grid-cols-[minmax(110px,.8fr)_minmax(90px,.7fr)_minmax(100px,.8fr)_minmax(120px,1fr)_minmax(110px,.8fr)] gap-3 border-b border-adm-line px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white/35 md:grid">
+            <div className="hidden grid-cols-[minmax(110px,.8fr)_minmax(90px,.7fr)_minmax(100px,.8fr)_minmax(120px,1fr)_minmax(110px,.8fr)] gap-3 border-b border-adm-line px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white/65 md:grid">
               <span>Date / reference</span><span>Channel</span><span>Order state</span><span>Payment state</span><span className="text-right">Request value</span>
             </div>
             <div className="divide-y divide-adm-line">
@@ -632,19 +659,19 @@ export default function Overview({ setSection, pending = null }) {
                 <div key={order.id} className="grid gap-3 px-4 py-3.5 text-xs md:grid-cols-[minmax(110px,.8fr)_minmax(90px,.7fr)_minmax(100px,.8fr)_minmax(120px,1fr)_minmax(110px,.8fr)] md:items-center md:px-5">
                   <div className="min-w-0">
                     <span className="block text-white/70">{readableOrderDate(order.created_at)}</span>
-                    <span className="mt-0.5 block truncate font-mono text-white/38" title={String(order.id || '')}>{shortOrderReference(order.id)}</span>
+                    <span className="mt-0.5 block truncate font-mono text-white/65" title={String(order.id || '')}>{shortOrderReference(order.id)}</span>
                   </div>
-                  <div><span className="md:hidden text-white/35">Channel · </span><span className="capitalize text-white/70">{normalizeChannel(order.channel_source)}</span></div>
-                  <div><span className="md:hidden text-white/35">Order · </span><span className="capitalize text-white/70">{readableStatus(order.status)}</span></div>
-                  <div><span className="md:hidden text-white/35">Payment · </span><span className={order.payment_status === 'verified' ? 'capitalize text-emerald-400' : 'capitalize text-amber'}>{readableStatus(order.payment_status)}</span></div>
+                  <div><span className="md:hidden text-white/65">Channel · </span><span className="capitalize text-white/70">{normalizeChannel(order.channel_source)}</span></div>
+                  <div><span className="md:hidden text-white/65">Order · </span><span className="capitalize text-white/70">{readableStatus(order.status)}</span></div>
+                  <div><span className="md:hidden text-white/65">Payment · </span><span className={order.payment_status === 'verified' ? 'capitalize text-emerald-400' : 'capitalize text-amber'}>{readableStatus(order.payment_status)}</span></div>
                   <div className="flex items-center justify-between gap-4 md:block md:text-right">
-                    <span className="text-white/35 md:hidden">Request value</span>
+                    <span className="text-white/65 md:hidden">Request value</span>
                     <span className="font-mono font-semibold tabular-nums text-white">{peso(safeOrderValue(order.total_amount))}</span>
                   </div>
                 </div>
               ))}
               {!loading && filteredSalesRecords.length === 0 && (
-                <p className="px-4 py-8 text-center text-sm text-white/45">No matching order records exist in this period.</p>
+                <p className="px-4 py-8 text-center text-sm text-white/65">No matching order records exist in this period.</p>
               )}
             </div>
             {filteredSalesRecords.length > SALES_RECORD_LIMIT && (
@@ -652,22 +679,22 @@ export default function Overview({ setSection, pending = null }) {
                 Showing the newest {SALES_RECORD_LIMIT} of {filteredSalesRecords.length} matching records. Change the reporting period to narrow the review.
               </p>
             )}
-            <p className="border-t border-adm-line px-4 py-3 text-xs leading-relaxed text-white/40 sm:px-5">
+            <p className="border-t border-adm-line px-4 py-3 text-xs leading-relaxed text-white/65 sm:px-5">
               Request value is not a payout or actual profit. This ledger and its selected-period CSV expose no customer contact details, perform no accounting, payment, or order write, and are not a backup.
             </p>
           </div>
         )}
       </section>
 
-      <div className="grid gap-4 xl:grid-cols-12">
-        <section className={`${panelClass} min-w-0 xl:col-span-8`}>
-          <PanelHeading icon={TrendIcon} title="Verified revenue trend" description={`Daily payment-verified revenue for the selected ${range}-day window.`} />
+      <div className="contents">
+        <section hidden={widget !== 'revenue' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
+          <PanelHeading icon={TrendIcon} title="Verified revenue trend" description={`Daily payment-verified revenue for the selected ${reportingRange}-day window.`} />
           <div className="p-3 sm:p-5">
             {loading ? <div className="h-56 animate-pulse rounded-adm-sm bg-white/[0.04]" /> : <RevenueChart points={analytics.revenueSeries} />}
           </div>
         </section>
 
-        <section className={`${panelClass} xl:col-span-4`}>
+        <section hidden={widget !== 'priority' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
           <PanelHeading icon={AlertIcon} title="Priority queue" description="Database-backed work ranked by immediate operational impact." />
           <div className="divide-y divide-adm-line">
             {queues.map(queue => {
@@ -679,14 +706,14 @@ export default function Overview({ setSection, pending = null }) {
                   onClick={() => setSection(queue.target)}
                   className={`${actionClass} group grid min-h-[76px] w-full grid-cols-[32px_1fr_auto] items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.035] sm:px-5`}
                 >
-                  <span className={`flex h-8 w-8 items-center justify-center rounded-adm-sm ${active ? 'bg-amber/10 text-amber' : 'bg-white/[0.04] text-white/35'}`}><Icon size={16} /></span>
+                  <span className={`flex h-8 w-8 items-center justify-center rounded-adm-sm ${active ? 'bg-amber/10 text-amber' : 'bg-white/[0.04] text-white/65'}`}><Icon size={16} /></span>
                   <span className="min-w-0">
                     <span className="block truncate text-xs font-semibold text-white/85">{queue.title}</span>
-                    <span className="mt-0.5 block truncate text-xs text-white/40">{queue.detail}</span>
+                    <span className="mt-0.5 block truncate text-xs text-white/65">{queue.detail}</span>
                   </span>
                   <span className="flex items-center gap-2">
-                    <span className={`font-mono text-base font-semibold tabular-nums ${active ? queue.severity === 'critical' ? 'text-crimson' : 'text-amber' : 'text-white/35'}`}>{loading ? '—' : queue.count}</span>
-                    <ArrowIcon size={13} className="text-white/25 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-white/60" />
+                    <span className={`font-mono text-base font-semibold tabular-nums ${active ? queue.severity === 'critical' ? 'text-crimson' : 'text-amber' : 'text-white/65'}`}>{loading ? '—' : queue.count}</span>
+                    <ArrowIcon size={13} className="text-white/65 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-white/60" />
                   </span>
                 </button>
               )
@@ -695,50 +722,58 @@ export default function Overview({ setSection, pending = null }) {
         </section>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-12">
-        <section className={`${panelClass} min-w-0 xl:col-span-8`}>
+      <div className="contents">
+        <section hidden={widget !== 'metrics'} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
           <PanelHeading
             icon={GlobeIcon}
             title="Channel performance and readiness"
-            description="Revenue reflects verified internal records; connection status never implies an API connector."
+            description="Selected-period K2 order records and current listing states. Connection records do not verify a working API feed."
             action={<button onClick={() => setSection('integrations')} className={`${actionClass} hidden min-h-9 items-center gap-1.5 rounded-adm-sm px-2 text-xs font-semibold text-blue hover:bg-blue/10 sm:flex`}>Manage <ArrowIcon size={13} /></button>}
           />
           <div className="divide-y divide-adm-line">
-            <div className="hidden grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] gap-3 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white/35 md:grid">
+            <div className="hidden grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] gap-3 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white/65 md:grid">
               <span>Channel</span><span>Status</span><span>Requests</span><span>Verified revenue</span><span>Listings</span>
             </div>
             {analytics.channelRows.map(channel => (
-              <div key={channel.id} className="grid grid-cols-2 gap-x-4 gap-y-3 px-4 py-3.5 md:grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] md:items-center md:gap-3 md:px-5">
+              <div key={channel.id} role="group" aria-label={`${channel.label} metrics`} className="grid grid-cols-2 gap-x-4 gap-y-3 px-4 py-3.5 md:grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] md:items-center md:gap-3 md:px-5">
                 <div className="col-span-2 min-w-0 md:col-span-1">
                   <p className="text-xs font-semibold text-white">{channel.label}</p>
-                  <p className="mt-0.5 text-xs text-white/38">{channel.description}</p>
+                  <p className="mt-0.5 text-xs text-white/65">{channel.description}</p>
                 </div>
                 <div>
-                  <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${channel.status === 'live' ? 'text-emerald-400' : 'text-white/45'}`}>
+                  <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${channel.status === 'live' ? 'text-emerald-400' : 'text-white/65'}`}>
                     <span className={`h-1.5 w-1.5 rounded-full ${channel.status === 'live' ? 'bg-emerald-400' : 'bg-white/25'}`} />
-                    {channel.status === 'live' ? 'Operational' : 'Not connected'}
+                    {display('connections', channel.id === 'other' ? 'Unmapped source' : channel.status === 'live' ? 'Recorded as live' : readableStatus(channel.status))}
                   </span>
                 </div>
                 <div className="text-right md:text-left">
-                  <span className="md:hidden text-xs uppercase tracking-wider text-white/35">Requests </span>
-                  <span className="font-mono text-xs font-semibold tabular-nums text-white/75">{channel.orders}</span>
+                  <span className="md:hidden text-xs uppercase tracking-wider text-white/65">Requests </span>
+                  <span className="font-mono text-xs font-semibold tabular-nums text-white/75">{display('orders', channel.orders)}</span>
                 </div>
                 <div>
-                  <span className="md:hidden block text-xs uppercase tracking-wider text-white/35">Verified revenue</span>
-                  <span className="font-mono text-xs font-semibold tabular-nums text-white/75">{peso(channel.revenue)}</span>
+                  <span className="md:hidden block text-xs uppercase tracking-wider text-white/65">Verified revenue</span>
+                  <span className="font-mono text-xs font-semibold tabular-nums text-white/75">{display('orders', peso(channel.revenue))}</span>
                 </div>
                 <div className="text-right md:text-left">
-                  <span className="md:hidden block text-xs uppercase tracking-wider text-white/35">Listings</span>
+                  <span className="md:hidden block text-xs uppercase tracking-wider text-white/65">Listings</span>
                   <span className={`font-mono text-xs font-semibold tabular-nums ${channel.issues > 0 ? 'text-crimson' : channel.ready > 0 ? 'text-amber' : 'text-white/65'}`}>
-                    {channel.published} live · {channel.ready} ready{channel.issues > 0 ? ` · ${channel.issues} blocked` : ''}
+                    {display('listings', `${channel.published} published · ${channel.ready} ready${channel.issues > 0 ? ` · ${channel.issues} blocked` : ''}`)}
                   </span>
                 </div>
               </div>
             ))}
           </div>
+          <div className="border-t border-adm-line px-4 py-4 text-sm text-white/75 sm:px-5">
+            <h4 className="font-semibold text-white">Metric coverage</h4>
+            <dl className="mt-3 space-y-3">
+              <div><dt>Traffic, conversion and ad spend</dt><dd className="text-white/65">Unavailable — no verified analytics or advertising feed.</dd></div>
+              <div><dt>Settled payouts and actual profit</dt><dd className="text-white/65">Unavailable — settlement and exact-lot cost records are required.</dd></div>
+            </dl>
+            <p className="mt-3 text-xs leading-relaxed text-white/65">Zero means no matching internal records were returned. It does not mean zero activity in an external shop. Use the other widgets for sales reconciliation, inbox, sourcing and stock detail.</p>
+          </div>
         </section>
 
-        <section className={`${panelClass} xl:col-span-4`}>
+        <section hidden={widget !== 'inbox' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
           <PanelHeading icon={InboxIcon} title="Inbox workload" description="Current open-conversation pressure and response risk." />
           <div className="grid grid-cols-2">
             {[
@@ -749,7 +784,7 @@ export default function Overview({ setSection, pending = null }) {
             ].map((item, index) => (
               <div key={item.label} className={`p-4 sm:p-5 ${index % 2 === 0 ? 'border-r border-adm-line' : ''} ${index < 2 ? 'border-b border-adm-line' : ''}`}>
                 <p className={`font-mono text-2xl font-semibold tabular-nums ${item.tone}`}>{loading ? '—' : item.value}</p>
-                <p className="mt-1 text-xs text-white/45">{item.label}</p>
+                <p className="mt-1 text-xs text-white/65">{item.label}</p>
               </div>
             ))}
           </div>
@@ -761,8 +796,8 @@ export default function Overview({ setSection, pending = null }) {
         </section>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <section className={panelClass}>
+      <div className="contents">
+        <section hidden={widget !== 'pasabuy' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
           <PanelHeading icon={BagIcon} title="Pasabuy pipeline" description="Open requests by the next operational milestone." />
           <div className="space-y-3 p-4 sm:p-5">
             {analytics.pasabuyStages.map(stage => {
@@ -770,7 +805,7 @@ export default function Overview({ setSection, pending = null }) {
               const width = `${(stage.count / total) * 100}%`
               return (
                 <div key={stage.label} className="grid grid-cols-[72px_1fr_28px] items-center gap-3">
-                  <span className="text-xs text-white/55">{stage.label}</span>
+                  <span className="text-xs text-white/65">{stage.label}</span>
                   <span className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
                     <span className="block h-full rounded-full bg-blue" style={{ width }} />
                   </span>
@@ -778,7 +813,7 @@ export default function Overview({ setSection, pending = null }) {
                 </div>
               )
             })}
-            {!loading && analytics.openPasabuy.length === 0 && <p className="pt-1 text-xs text-white/40">No active Pasabuy cases. New requests will appear here automatically.</p>}
+            {!loading && analytics.openPasabuy.length === 0 && <p className="pt-1 text-xs text-white/65">No active Pasabuy cases. New requests will appear here automatically.</p>}
           </div>
           <div className="border-t border-adm-line p-3">
             <button onClick={() => setSection('pasabuy_manager')} className={`${actionClass} flex min-h-11 w-full items-center justify-center gap-2 rounded-adm-sm text-xs font-semibold text-white/60 hover:bg-white/[0.04] hover:text-white`}>
@@ -787,7 +822,7 @@ export default function Overview({ setSection, pending = null }) {
           </div>
         </section>
 
-        <section className={panelClass}>
+        <section hidden={widget !== 'stock' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
           <PanelHeading icon={BoxIcon} title="Inventory health" description="SKU availability and FEFO batch risk requiring staff review." />
           <div className="divide-y divide-adm-line px-4 sm:px-5">
             {[
@@ -797,7 +832,7 @@ export default function Overview({ setSection, pending = null }) {
               { label: 'Expiry risk', value: analytics.expired + analytics.expiring, detail: `${analytics.expired} expired · ${analytics.expiring} within 30 days`, tone: analytics.expired > 0 ? 'text-crimson' : analytics.expiring > 0 ? 'text-amber' : 'text-white' },
             ].map(item => (
               <div key={item.label} className="flex min-h-[58px] items-center justify-between gap-4 py-3">
-                <div><p className="text-xs font-medium text-white/75">{item.label}</p><p className="mt-0.5 text-xs text-white/38">{item.detail}</p></div>
+                <div><p className="text-xs font-medium text-white/75">{item.label}</p><p className="mt-0.5 text-xs text-white/65">{item.detail}</p></div>
                 <p className={`font-mono text-lg font-semibold tabular-nums ${item.tone}`}>{loading ? '—' : item.value}</p>
               </div>
             ))}
@@ -810,13 +845,13 @@ export default function Overview({ setSection, pending = null }) {
         </section>
       </div>
 
-      <section className="flex flex-col gap-3 border-t border-adm-line pt-4 text-xs leading-relaxed text-white/40 sm:flex-row sm:items-start sm:justify-between">
+      <section className="flex flex-col gap-3 border-t border-adm-line pt-4 text-xs leading-relaxed text-white/65 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex max-w-4xl items-start gap-2">
           <CheckIcon size={15} className="mt-0.5 shrink-0 text-emerald-400" />
-          <p>Revenue includes only payment-verified order requests. Marketplace connectors and online payment remain deferred; disconnected channels display zero instead of simulated activity.</p>
+          <p>Revenue includes only payment-verified order requests. Marketplace connectors and online payment remain deferred; channel figures are internal records, not marketplace analytics. Missing sources are marked unavailable.</p>
         </div>
         {pending == null
-          ? <p className="shrink-0 text-white/55">Legacy fulfillment queue unavailable</p>
+          ? <p className="shrink-0 text-white/65">Legacy fulfillment queue unavailable</p>
           : pending > 0 && <p className="shrink-0 text-amber">Legacy fulfillment queue: {pending}</p>}
       </section>
     </div>

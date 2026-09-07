@@ -7,7 +7,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-
 export function validateInternalChannelVerification(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)
       || Object.keys(body).length !== 3
-      || !['channel', 'publicReference', 'reason'].every((key) => Object.hasOwn(body, key))) throw new Error('REQUEST_INVALID')
+      || !['channel', 'publicReference', 'reason'].every((key) => Object.hasOwn(body, key) && typeof body[key] === 'string')) throw new Error('REQUEST_INVALID')
   const channel = String(body.channel || '').trim()
   const publicReference = String(body.publicReference || '').trim()
   const reason = String(body.reason || '').trim()

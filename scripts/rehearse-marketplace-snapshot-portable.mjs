@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url'
 
 const rootDir = fileURLToPath(new URL('..', import.meta.url))
 const config = {
-  binDir: path.join(rootDir,'.tools','postgresql-17.11','runtime','pgsql','bin'),
+  binDir: process.env.K2_TEST_PG_BIN || path.join(rootDir,'.tools','postgresql-17.11','runtime','pgsql','bin'),
   dataDir: path.join(rootDir,'.tools','map023-marketplace-pg-data'),
   logPath: path.join(rootDir,'.tools','map023-marketplace-pg.log'),
   port: 54329,

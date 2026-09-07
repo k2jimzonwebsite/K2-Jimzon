@@ -65,6 +65,45 @@ components:
 
 # Design System: K2 Jimzon
 
+Dashboard widgets (IDEA-20260906-07) refine the calmer Admin direction: seven
+named destinations in the existing left navigation, one visible reporting widget
+at a time, and a labelled 44px selector on phones. The default is Shop & channel
+metrics. Panels are flat neutral surfaces with readable muted text; accent is
+reserved for selection, actions and meaningful state. Existing operational
+navigation and permissions remain available below the widgets. No drag system or
+additional chart dependency. Source checkpoint and before image live under
+`docs/design-checkpoints/20260906-admin-widgets/`; local rendered evidence lives
+under `docs/evidence/20260906-admin-widgets/`. Screenshots establish layout, not
+measured staff efficiency or production availability.
+
+Automatic intake preparation (IDEA-20260906-05) preserves this product register:
+Manual ChatGPT Projects and Automatic API remain visibly separate within the
+existing modal. Automatic controls use current neutral Admin surfaces, readable
+text, 44px buttons and no added motion. Readiness, reservations, uncertain jobs,
+review decisions and canonical attachment have distinct labels. Recovery never
+means another paid request. Fields default unaccepted for recovered AI content;
+candidate acceptance requires a reason. Navigation is locked during an automatic
+request. Phone and full-modal fixture evidence passes locally; real staff acceptance
+remains recorded in MAP-018 / MAP-028 I-016.
+
+### Calm Admin, distinct operational states — IDEA-20260906-06
+
+Accepted design target; no redesign is claimed by this record. Preserve the
+existing Admin identity, compact sans typography and readable density. Use neutral
+surfaces and restrained borders; reserve accent for selected/current actions and
+semantic color for labelled state. Reduce decorative emphasis, not contrast.
+
+Keep exact record identity, state, blocker and next action together. Use one
+primary action per task area and quieter secondary controls. Collapse routine
+help/history only; keep blocking conditions, paid-call impact and uncertain
+outcomes visible. Product readiness, stock eligibility, payment, fulfillment and
+API configuration remain distinct. Every state needs text plus a non-color cue.
+Use the current shared controls and section registry; preserve deep links,
+permissions, focus, draft recovery and server receipts. No decorative motion on
+frequent tasks. Implementation order and measurable journey acceptance live only
+in MASTER_ACTION_PLAN's Admin ease-of-use strategy (I-012/I-016/MAP-025).
+
+
 Workflow record panel (IDEA-20260906-04): catalog/consignment nodes add an explicit
 Load current records button using the existing Admin dark surface, typography,
 focus outline and 44px target. Show identity, status, read time and batch limits;

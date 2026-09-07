@@ -134,7 +134,9 @@ test('browser API boundaries use explicit deadlines and do not auto-retry comman
   expect(guest).toContain('}, 15000)')
   expect(admin).toContain("method === 'GET'")
   expect(admin).toContain('fetchReadWithRetry(path, requestInit, { timeoutMs: 10000 })')
-  expect(admin).toContain('fetchWithTimeout(path, requestInit, 15000)')
+  expect(admin).toContain('timeoutMs = 15000')
+  expect(admin).toContain('fetchWithTimeout(path, requestInit, timeoutMs)')
+  expect(admin).toContain("timeoutMs: body.action === 'start' ? 125000 : 15000")
   expect(admin).toContain('}, 30000)')
   expect(auth).toContain('}, 15000)')
   for (const source of [guest, admin, auth]) {

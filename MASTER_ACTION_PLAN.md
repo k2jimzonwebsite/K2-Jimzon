@@ -1,5 +1,239 @@
 # K2 Jimzon Master Action Plan
 
+## Operational readiness refinement — IDEA-20260907-01
+
+MAP-018 / MAP-023 / MAP-026 / MAP-028 I-016: prepare payment-detail handoff,
+inventory receiving and channel handling without paid calls or production changes.
+**Resumed and audited, 7 September 2026:** owner requested implementation,
+verification, and correction of this session's claims. Worktree: `C:\Users\jerze\K2 JImzon\.tools\hero-release`,
+branch `codex/automatic-intake-preparation`. The owner subsequently authorized a
+GitHub `main` and linked Vercel production release on 7 September. This is a code
+promotion only: it does not authorize production SQL, provider keys or calls,
+paid requests, channel activation, or a claim that prepared workflows are live.
+Preserve root-workspace changes and the integrated automatic-intake/dashboard work.
+
+**Prepared changes and evidence:** `server/admin-bff/{fulfillment,consignments,
+channels}.js` now reject coerced evidence/reference/scan types, nonnumeric amounts
+and quantities, and impossible expiry dates before signed dispatch. Six added
+regressions in `tests/admin-bff-contract.spec.js` failed before the fix, then
+passed with 79 existing contracts; the channel rehearsal portability assertion
+now brings the scoped command to 86 passing tests. Command:
+`npx playwright test --config=playwright.api.config.js tests/admin-bff-contract.spec.js tests/consignment-receiving.spec.js tests/map028-channel-guidance.spec.js tests/marketplace-order-contract.spec.js tests/product-intake-contract.spec.js`.
+The final run passed 86/86. `npm run test:admin-ui` passed 31/31,
+`npm run test:intake-ai-ui` passed 2/2, and `npm run test:owner-count-close-ui`
+passed 1/1. The sandbox-only browser attempt failed before application
+assertions with Windows `browserType.launch: spawn EPERM`; the approved local
+reruns passed. `npm run build:admin` passed with a 188.47 kB/300.00 kB Admin
+entry, and `npm run build:storefront` passed with a 149.89 kB/150.00 kB
+landing JS gzip and 27.46 kB/30.00 kB CSS gzip, including boundary, budget and
+secret checks. These are local/fixture results, not authenticated production
+evidence.
+
+**Local PostgreSQL rehearsal verified, 7 September 2026:**
+`scripts/rehearse-map023-last-unit-concurrency.mjs`,
+`scripts/rehearse-marketplace-snapshot-portable.mjs`, and
+`scripts/rehearse-channel-vocabulary-portable.mjs` ran sequentially with
+`K2_TEST_PG_BIN` pointed at the existing local PostgreSQL 17.11 binaries at
+`C:\Users\jerze\K2 JImzon\.tools\postgresql-17.11\runtime\pgsql\bin`.
+The last-unit rehearsal passed lock waiting, one-unit competition, one
+reservation/order/event/balance, and same-confirmed-order retry without
+duplicate effects. The marketplace rehearsal passed bootstrap, preflight,
+migration, migration replay, behavior assertions, postflight, and
+non-destructive rollback while retaining staged evidence. All three database
+processes were isolated loopback rehearsals; no production database, provider,
+or migration activation occurred. The channel-vocabulary rehearsal also passed
+its original 12 checks for legacy-vocabulary migration/replay, exact marketplace/shop
+constraints, same-SKU multi-shop listings, external-item uniqueness, public
+lookup and dedicated indexes.
+
+**Readiness trace, 7 September 2026:** payment, receiving, and exact-shop
+handling were traced to their current Admin boundaries. The payment UI and
+`/api/admin/fulfillment/payment` command can move the existing narrow
+`payment_status` state machine and append a free-text evidence/reconciliation
+event. They do not persist the rulebook's separate method, amount, currency,
+payer, payment reference, proof, or instruction-delivery receipt. Existing
+payment events preserve `actor_id`, `created_at`, note and prior/new payment
+state; those identify the recorded submitter/verifier action. Dedicated payment
+evidence amounts and finance-verifier separation are still absent. GCash is a
+recorded candidate in the not-yet-audited `IDEA-20260902-04`; its merchant/account details and static
+versus per-order QR decision are still owner decisions. No payment instruction
+was invented or sent.
+
+The manual intake path creates a reviewed Draft, then either an expected line
+on a declared `Packing_Italy` manifest or an AAL2/Admin opening-balance
+reconciliation; supplier receipt remains visibly unavailable. The consignment
+path independently scans the selected line in Milan and Manila and finalizes
+accepted units into canonical batches/events through the existing atomic
+finalizer. The audit added executed SQL coverage for independent scans, shortage
+notes, physical box/source identity, short-dated quarantine, physical versus
+sellable quantities and terminal-state retry. The earlier source tests alone did
+not establish this behavior. Rich wrong-item/damage/unexpected-goods disposition
+remains incomplete; automatic shelf-life quarantine already exists.
+
+Listing imports are scoped to an exact provider/shop; order imports additionally
+carry the saved close session. Matching, duplicate/changed-payload conflict evidence,
+order deduplication and observation-only reported quantities passed the local
+rehearsal. Shopee remains Events-only; Lazada/TikTok/social adapters, outbound
+publication, stock synchronization, real exports and provider receipts remain
+unavailable.
+
+**Remaining execution order within the owning MAP items:**
+
+1. Payment readiness: obtain owner decisions for the exact method (the GCash
+   candidate is not approved for implementation), payee/merchant display and
+   account/QR asset, customer instruction channel/template, reference format,
+   proof retention, and finance-verifier/AAL2 separation. Then add the
+   structured instruction/evidence storage and Admin command only as a separately
+   reviewed migration, with negative/uncertain/replay tests. Keep storefront
+   payment copy review-first until that boundary is deployed and accepted.
+2. Inventory readiness: verify the composed UI/BFF/RLS journey from manual intake → field review → Draft → declared
+   Italy manifest → Milan/Manila scans → final receipt → canonical stock.
+   Also verify authorized opening balances, duplicates, shortages and recovery.
+   Undeclared arrival goods and supplier receipts remain unsupported; do not
+   fake them with nominal quantities or opening balances. Preserve separate
+   manual/API paths and all human review/AI authority restrictions.
+3. Channel readiness: repeat the locally passing listing/order staging, product
+   matching, duplicate/conflict and Owner Count & Close cases using approved
+   real exports and authenticated target-host Admin after activation gates pass.
+   External quantities are observations, not canonical stock. Shopee event
+   capture is not order ingestion; Lazada/TikTok/social adapters and outbound
+   publication/stock sync must stay explicitly unavailable until implemented
+   and separately authorized/verified.
+
+**Audit correction:** the scope is not fully implemented merely because the
+focused tests passed. Payment's richer state machine/evidence, rich arrival
+exceptions and supplier receiving remain engineering gaps in their owning MAP
+items, alongside activation and real staff acceptance. Merchant details are not
+a prerequisite to testing existing generic commands. New payment automation is
+outside this idea's accepted scope (see its decision register).
+
+Fresh audit evidence: the expanded last-unit runner executes six original
+receiving/payment SQL functions against a minimal synthetic schema in a rolled-
+back transaction, then tests last-unit concurrency. It does not exercise the
+entire intake-to-stock UI/BFF/RLS chain. The lock probe now observes PostgreSQL
+`PgSleep` after confirmation, rather than merely searching submitted SQL text.
+The channel runner now passes 13 checks; item uniqueness is per shop, and denial
+checks require the intended SQLSTATE/message. Earlier cross-shop uniqueness
+wording was incorrect. Full receipts and limits:
+`docs/evidence/20260907-operational-readiness/README.md`.
+
+**Production-release preflight, 7 September 2026:** the CI-equivalent security
+and supply-chain gate passed, including zero npm vulnerabilities, tracked-file,
+environment-source, current-tree/history secret scans, import integrity and 92
+Admin/15 Storefront route classifications with zero gaps. Fresh isolated
+Storefront and Admin builds passed. The first aggregate run found one stale
+source-contract assertion after command deadlines became parameterized for the
+bounded intake-AI request; the corrected contract proves the 15-second default,
+125-second paid-start override and no command retry. Its focused rerun passed
+8/8, then the complete aggregate passed 641 base, 30 Storefront, 31 Admin, 1
+Product Master, 1 Owner Close, 3 customer/Wholesale, 8 selling, 4 workflow API
+and 2 intake-AI checks. MAP-017 migration/rollback plus 12 database authorization
+groups and the catalog lifecycle/rollback also passed in a dedicated loopback
+PostgreSQL 17.11 cluster. Production receipts must be added after GitHub CI and
+both Vercel projects finish; until then deployment is not claimed.
+
+Recovery: selectively reverse the affected validator/test/runner changes and
+the two `operational_readiness_*.sql` fixtures if required, preserving all earlier
+intake/dashboard preparation. These changes activated no production state.
+
+Production authorization, MAP-017 schema activation, real staff payment/receiving
+reconciliation, provider billing/model/cap review and external channel acceptance
+remain gates. Do not claim only payment details or API keys remain. Do not make
+paid calls, activate production SQL, activate provider/channel capability, or
+stage unrelated changes. The authorized code release does not waive those gates.
+
+## Admin ease-of-use strategy — IDEA-20260906-06
+
+**Widget refinement — IDEA-20260906-07, remaining promotion/acceptance:** local
+implementation and evidence are recorded in System Brain and
+`docs/evidence/20260906-admin-widgets/README.md`. No production deployment or
+provider activation. Next: review the scoped visual diff and promote only through
+the existing separate Admin release gate; verify authenticated real-host reads,
+exact-count latency/cap behavior, phone hardware and representative Staff/Admin
+task timing. Full external analytics/settlement/profit sources remain unimplemented.
+Owner: MAP-028 I-012 / MAP-021/023/025. Preserve intake preparation and the
+source checkpoint at `docs/design-checkpoints/20260906-admin-widgets/`.
+Rollback instructions: `docs/runbooks/ADMIN_DASHBOARD_RUNBOOK.md`; retain metric
+availability/security fixes while reverting only the visual widget arrangement.
+
+**Owner direction, 6 September; broader target, dashboard slice prepared locally.** Make Admin
+calmer to look at and easier to operate while preserving distinct business states.
+This refines MAP-028 I-012/I-016 and MAP-018/019/021/023/025; it creates no new
+top-level backlog. Existing security, recovery and activation dependencies retain
+priority. Automatic intake preparation (IDEA-20260906-05) continues under MAP-018
+and must use this interaction contract; it is not cancelled by this strategy.
+
+### Execution order within the existing queue
+
+| Order / owner | Required result | Completion evidence |
+| --- | --- | --- |
+| 1 — I-012 / MAP-019/023 | Inventory the current staff routes, actions, permission rules and state sources. For each action record its exact record identity, prerequisites, side effects, pending/uncertain outcome and recovery. Fix misleading counts, wrong-record actions and unsafe retries before presenting a simpler control. | Route/action coverage register inside I-012; representative before screenshots and task-step baseline. No operational action silently disappears. |
+| 2 — I-012 / MAP-021 | Standardize existing Admin tokens and shared controls: neutral surfaces, restrained accent, readable sans typography, consistent spacing, buttons, tables, filters, dialogs and state feedback. Pilot on Inventory and its intake drawer before a wider rollout. | Before/after desktop and phone evidence; contrast, keyboard, zoom and complete-state checks. Preserve a scoped source/design checkpoint before UI changes. |
+| 3 — I-012 / MAP-019/023 | Organize navigation around daily work, product/stock operations, customer work, and owner/system settings using the existing section registry. Keep route IDs, permission enforcement and canonical destinations. Reuse search/shortcuts and avoid competing launchers for the same task. | Staff can locate and return to the same record, filter and position. Every existing route/action is retained, deliberately merged, or given an explicit destination. |
+| 4 — I-016 / MAP-018/023 | Apply one action pattern to workflow map, intake, receiving, fulfillment and Inbox: context → prerequisites → named action → server result → next step. Keep manual/automatic choices explicit and preserve reviewed work on fallback. | Tests cover denied, unconfigured, empty, partial, loading, success, stale, conflict and uncertain states; retries preserve operation identity. |
+| 5 — MAP-025 | Validate the revised daily tasks with representative Staff and Admin roles before broad promotion. Roll out one surface at a time. | Compare the baseline and revised journeys below; record participant/role, time, navigation steps, wrong turns and recovery. Local fixtures and real-host staff acceptance remain separate evidence. |
+
+### Calm appearance with clear meaning
+
+- Use the existing Admin palette and Source Sans/system sans. Neutral canvas,
+  slightly distinct work surfaces, restrained borders; reserve the primary accent
+  for the current selection and next action. Avoid decorative gradients, repeated
+  bright cards, oversized headings and persistent animation. Do not create a
+  blanket theme replacement or make text faint to achieve a toned appearance.
+- One primary action per active task area. Secondary actions use quieter styling;
+  destructive actions stay separated and explicitly named. Multiple independent
+  tasks may each have an action, but must not look like competing page primaries.
+- Keep record identity, current operational state, blocker and next action near
+  each other. For receiving/packing include the exact SKU, batch/lot, box and
+  location at the point of action; never shorten these into ambiguous labels.
+- Routine instructions and audit history may use progressive disclosure. Current
+  blockers, cost/impact, irreversible consequences and uncertain write outcomes
+  stay visible. Disabled actions explain the prerequisite and offer its next step.
+- Tables prioritize identity, actionable state and required quantity/amount;
+  secondary metadata opens in details. Preserve labelled table scrolling where
+  needed on phones. Do not remove essential fields merely to reduce columns.
+
+| Meaning | Visual treatment | Logic that must remain explicit |
+| --- | --- | --- |
+| Neutral / draft / informational | Neutral text and labelled badge | Draft product does not imply stock or publication. |
+| Selected / current step | Restrained accent plus focus/selection marker | Selection and guide review do not mean a command executed. |
+| Attention / blocked / uncertain | Amber cue plus exact state text and next action | Distinguish missing prerequisite, partial data, conflict and unknown write outcome. Never silently retry an uncertain write. |
+| Error / rejected / destructive | Red cue plus explicit label | A transport failure does not prove a business write failed. Reconcile before resubmission. |
+| Verified success | Green cue plus specific server-confirmed result | Name what succeeded: draft saved, payment verified, or units received. Never use one generic green status for overall readiness. |
+
+Product content/publication, physical stock eligibility, payment verification,
+fulfillment progress and provider/API readiness remain separately labelled.
+A missing API key, a disabled feature, missing permission and a provider failure
+must have different explanations. Color is supplemental: text and icon/shape
+must distinguish meaning in grayscale and for color-vision differences.
+
+### Required staff journeys and acceptance
+
+Measure the current and revised paths for: find a product by barcode/SKU; create
+and resume a manual Draft; request/recover/review automatic content when configured;
+receive the exact consignment line; review payment evidence and pack the exact lot;
+reply to the correct conversation and recover an uncertain send. Include missing
+permissions, unavailable API and interrupted tasks without manufacturing success.
+
+For each journey, a representative staff reviewer must identify the current
+record/state/next action within 10 seconds without coaching, then complete the
+permitted task without a wrong-record or unauthorized action. Target no increase
+in navigation steps or median completion time; record justified extra steps when
+needed for correct review, rather than removing safeguards to hit a metric.
+Do not claim usability improvement from screenshots or passing source tests alone.
+
+Verify 375px and 1440px layouts, 200% text zoom, visible keyboard focus, focus
+return after dialogs, 44px primary touch targets, reduced motion and >=4.5:1 body
+text contrast (>=3:1 large text and essential UI boundaries). Refresh must not
+blank usable data, move focus, erase drafts or mislabel stale data as current.
+
+**Handoff and rollback:** each implementation slice records affected routes,
+changed files, before/after evidence, commands/results, remaining real-host checks
+and a scoped visual revert in its owning MAP item. A visual revert must retain
+security/logic fixes and audit records. Remove completed scope from the MAP only
+after its behavior and evidence are preserved in System Brain/design/runbooks.
+
+
 **MAP-028 I-009 / MAP-027 — hero release (IDEA-20260906-03), 6 September:**
 Owner authorizes committing the additive hero and pushing GitHub main for Vercel
 production. Commit 7dd8585 passed both Vercel deployments and the canonical-host
@@ -11,6 +245,52 @@ Approved real product-media and wider ecommerce design acceptance remain MAP-027
 
 
 **Status:** authoritative queue for all approved, unfinished project work
+
+**MAP-018 / MAP-028 I-016 — key-later preparation (IDEA-20260906-05), in progress.**
+Owner confirms the automatic intake design described in this session. Use the
+existing intake session and strict k2.product-content.v3 contract. Assumptions:
+small staff workload, one bounded operation at a time per session; server-only
+OpenAI access; no customer/financial inputs; durable results and conservative
+unknown-outcome accounting; original/manual path remains usable. No provider
+call, spending authority or permanent migration is part of preparation.
+Decision: synchronous bounded calls with durable receipts rather than an external
+queue or a second inventory system. Content is reviewed before separately
+confirmed PRIMARY/AFTER generation; all candidates require human review.
+Execution plan (only active implementation queue):
+Prepared implementation includes the provider, private signed job/reservation
+migration, orchestration/route, review controls, canonical candidate attachment,
+environment contracts and runners. Evidence: `docs/evidence/20260906-intake-ai/README.md`.
+Latest provider/orchestration fixtures: 24 passed; focused existing contracts: 69
+passed. Final phone browser suite: 2 passed, including the real modal's persisted
+field review and canonical Draft request. Final separate production builds pass.
+`npm run rehearse:intake-ai` passes with real spend/media migrations, positive
+canonical attachment, stale rejection, replay and concurrent caps. Initial approval
+limit cleared; invalid fixture cap ordering was corrected before the passing rerun.
+Independent review defects are fixed and covered; final second independent review
+was unavailable due to that agent's usage limit. Primary integration review passed.
+Remaining acceptance is provider/activation and authenticated real-host work below;
+include independent final security review before production promotion.
+Separate activation: resolve deprecated image-model availability, revalidate costs
+and retention, approve caps, apply dependencies under MAP-017, verify the correct
+Admin Vercel project/runtime, then owner-approved paid preview and authenticated
+real-host acceptance. Keys alone enable nothing while configuration gates are off.
+Rollback: disable dispatch, preserve jobs/reservations/receipts, use manual intake
+and scoped Git revert. Never delete a job to repeat a possibly paid request.
+
+1. Add failing provider-contract tests for missing configuration, structured
+   content, image edits, refusal/timeout/malformed output and secret redaction.
+2. Implement server/admin-bff/intake-ai-provider.js using native fetch and fixed
+   official endpoints; version prompt/schema and expose configuration readiness.
+3. Prepare a signed private job/budget migration and server orchestrator/routes;
+   test ownership, replay, cap exhaustion, unknown outcomes and no double dispatch.
+4. Add intake controls using current Admin design: readiness, deliberate paid
+   confirmation, job recovery, field review and image candidate review.
+5. Wire environment contract/examples and deployment route registry. Run API
+   contracts, isolated database rehearsal, phone browser tests and both builds.
+6. Record exact passing evidence, remaining key/provider/activation checks and
+   rollback in System Brain/runbook. Keep this item open until the intended
+   deployed, authenticated behavior is verified. Current worktree:
+   `.tools/hero-release`, branch `codex/automatic-intake-preparation`.
 
 **MAP-028 I-016 / MAP-019/021/023 — workflow API functionality (IDEA-20260906-04):**
 Owner requests real API calls in the workflow map. Catalog and consignment reads

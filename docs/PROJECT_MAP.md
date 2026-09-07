@@ -1,5 +1,30 @@
 # K2 Jimzon — Project Directory Map
 
+Operational readiness verification uses
+`scripts/rehearse-map023-last-unit-concurrency.mjs` and
+`supabase/tests/operational_readiness_{bootstrap,assertions}.sql` to execute
+extracted receiving/payment functions before reservation concurrency. The schema
+and Auth are synthetic; full migration/BFF/RLS acceptance remains separate.
+Evidence and limits: `docs/evidence/20260907-operational-readiness/README.md`.
+
+Dashboard widget destinations are defined by `src/views/admin/dashboardWidgets.js`.
+`Admin.jsx` retains the selected widget and exposes desktop/mobile navigation;
+`Overview.jsx` displays the selected reporting surface and its existing data.
+`src/lib/overviewAvailability.js` checks failed/capped reads for both the prepared
+Admin overview route and the legacy browser read path. No reporting database or
+new connector is introduced. Acceptance uses `tests/admin-dashboard-redesign.spec.js`
+and `tests/admin-logic-regressions.spec.js` in the existing runners.
+
+Automatic intake (locally prepared, MAP-018 / MAP-028 I-016):
+`src/views/admin/AutomaticIntakePanel.jsx` composes reviewed API preparation inside
+`ProductIntakeSessionModal.jsx`; services use the registered prepared Admin AI
+route. `server/admin-bff/intake-ai-provider.js` owns bounded provider requests;
+`intake-ai-jobs.js` owns authentication/orchestration and canonical attachment.
+`supabase/migrations/20260906_automatic_intake_jobs.sql` owns private durable jobs,
+signed claims/recovery and cap accounting. `tests/intake-ai-*.spec.js`,
+`supabase/tests/intake_ai_*.sql` and `scripts/rehearse-intake-ai-portable.mjs`
+hold fixtures/rehearsal. Evidence: `docs/evidence/20260906-intake-ai/README.md`.
+
 Workflow record access: `src/components/admin/master-workflow-graph/WorkflowRecords.jsx`
 owns the drawer's bounded catalog/consignment reads through `adminBffService.js`.
 `playwright.workflow.config.js` and `tests/workflow-api-ui.spec.js` verify the
@@ -24,8 +49,8 @@ c:\Users\jerze\K2 JImzon\
 ├── .agents/                     # Specialized skill definitions and execution runbooks
 ├── .tools/                      # Local isolated PostgreSQL 17.11 runtime for offline rehearsals
 ├── api/                         # Consolidated Vercel Serverless Function entrypoints
-│   ├── admin/index.js           # Admin BFF consolidated router (81 endpoints)
-│   └── storefront/index.js      # Storefront BFF consolidated router (14 endpoints)
+│   ├── admin/index.js           # Admin BFF consolidated router (92 prepared routes)
+│   └── storefront/index.js      # Storefront BFF consolidated router (15 prepared routes)
 ├── prepared-api/                # Individual route handler implementations
 │   ├── admin/                   # Admin route handlers (auth, inventory, intake, sessions, etc.)
 │   └── storefront/              # Storefront route handlers (order, pasabuy, claim, auth, etc.)

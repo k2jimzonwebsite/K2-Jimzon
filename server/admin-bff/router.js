@@ -90,8 +90,10 @@ import staffAccessInvite from '../../prepared-api/admin/staff-access/invite.js'
 import staffAccessMfaReplacement from '../../prepared-api/admin/staff-access/mfa-replacement.js'
 import systemReadiness from '../../prepared-api/admin/system-readiness.js'
 import { safeJson } from './security.js'
+import intakeAi from '../../prepared-api/admin/product-intake/ai.js'
 
 const ROUTES = new Map([
+  ['product-intake/ai', intakeAi],
   ['auth/login', login],
   ['auth/logout', logout],
   ['auth/mfa', mfa],
@@ -186,6 +188,7 @@ const ROUTES = new Map([
 ])
 
 const ADMIN_POST_ROUTES = new Set([
+  'product-intake/ai',
   'auth/login', 'auth/logout', 'auth/mfa',
   'auth/password-recovery/request', 'auth/password-recovery/complete',
   'product-media', 'product-media/assign', 'product-media/orphans',

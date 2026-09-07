@@ -1,5 +1,24 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260907-01 — accepted refinement, merged into MAP-018 / MAP-023 /
+MAP-026 / MAP-028 I-016.** Owner requests continued engineering readiness for
+payment details, inventory receiving and channel operations. Audit: reuse the
+existing manual payment, consignment and channel commands. Close malformed-input
+gaps before signed dispatch and verify existing operational contracts. Preserve
+the separate manual/API intake paths. Provider activation, new payment automation
+and production changes are outside this preparation; keys alone do not establish
+readiness. Configuration/activation handoff belongs in the operations runbook.
+
+**IDEA-20260906-07 — accepted refinement of IDEA-20260906-06, merged into
+MAP-028 I-012 / MAP-021 / MAP-023.** Owner requests a calmer dashboard with
+selectable widgets in the left panel and consolidated shop/channel metrics.
+Use the existing section permissions and overview data; preserve every current
+operational destination and sales-record review/export. One selected widget per
+workspace avoids fitting all panels in one frame. No new connector, invented
+analytics, production activation or finance authority is implied. Alternatives:
+an even denser all-panel grid rejected; draggable customization deferred because
+it adds complexity without serving the owner's stated need.
+
 **Purpose:** durable intake and decision register for new ideas without becoming
 a competing implementation backlog.
 
@@ -392,6 +411,8 @@ Master Action Plan is authorized for implementation.
 
 | Idea | Outcome | Destination or reason |
 | --- | --- | --- |
+| IDEA-20260906-06 | Merged into MAP-028 I-012/I-016 and MAP-018/019/021/023/025 | Owner asks for a toned, easier Admin with unmistakable logic and states. Accept restrained shared controls, task-oriented navigation, explicit record/state/action hierarchy and measured staff journeys. Reject simplification by hiding blockers, merging business statuses, weakening permissions or replacing K2 identity. Documentation target only; implementation stays in existing MAP items. |
+| IDEA-20260906-05 | Merged into MAP-018 / MAP-028 I-016 | Owner asks to prepare automatic intake now and supply API keys later. Reuse accepted IDEA-20260830-01: server-only provider adapter, durable capped jobs, reviewed content/image candidates, manual fallback and explicit readiness. No paid call or production database activation in this preparation. |
 | IDEA-20260906-04 | Merged into MAP-028 I-016 / MAP-019/021/023 | Owner requests API calls from the workflow map. Accept bounded existing authenticated K2 service operations with visible results and recovery. Initial catalog/consignment reads reuse current routes; write commands require exact record review and server receipts. External integrations/editor scope remains undecided. No arbitrary URL execution or provider activation is authorized by the diagram. |
 | IDEA-20260906-03 | Merged into MAP-028 I-009 / MAP-027 | Owner prioritizes additive hero visual enhancement and a restorable copy of the current design. Preserve headline, CTAs, map and trust content; add a small catalog-driven merchandise display in the existing brand. Exact pre-edit Hero, FlightMap and global styles saved with hashes under docs/design-checkpoints/20260906-hero-before-additions. No new product facts, stock promises, data source or deployment. |
 | Legacy multichannel control-center idea | Merged | Historical MAP-009 through MAP-011; original wording remains in Git history |

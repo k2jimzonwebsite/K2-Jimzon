@@ -12,6 +12,7 @@ function exactObject(value, keys) {
 }
 
 function text(value, { required = false, max = 500 } = {}) {
+  if (value != null && typeof value !== 'string') throw new Error('REQUEST_INVALID')
   const result = String(value ?? '').trim()
   if ((required && !result) || result.length > max) throw new Error('REQUEST_INVALID')
   return result
@@ -42,7 +43,7 @@ export function validateFulfillmentCommand(action, body) {
   }
   if (action === 'delivery_details') {
     exactObject(body, ['orderRequestId', 'shippingAmount', 'courierName', 'trackingNumber', 'waybillUrl', 'customerConfirmed', 'note'])
-    const shippingAmount = Number(body.shippingAmount)
+    const shippingAmount = body.shippingAmount
     if (!Number.isFinite(shippingAmount) || shippingAmount < 0 || shippingAmount > 1_000_000) throw new Error('REQUEST_INVALID')
     const waybillUrl = text(body.waybillUrl, { max: 1000 })
     if (waybillUrl && !/^https?:\/\//i.test(waybillUrl)) throw new Error('REQUEST_INVALID')
@@ -60,7 +61,7 @@ export function validateFulfillmentCommand(action, body) {
   }
   if (action === 'transfer_lot') {
     exactObject(body, ['batchId', 'quantity', 'toCustodian', 'toLocation', 'reason'])
-    const quantity = Number(body.quantity)
+    const quantity = body.quantity
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > 1_000_000) throw new Error('REQUEST_INVALID')
     return {
       batchId: uuid(body.batchId), quantity,

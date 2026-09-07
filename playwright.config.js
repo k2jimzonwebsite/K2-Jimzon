@@ -20,6 +20,7 @@ export default defineConfig({
     'storefront-selling-surfaces.spec.js',
     'hero-enhancement.spec.js',
     'workflow-api-ui.spec.js',
+    'intake-ai-ui.spec.js',
     'storefront-theme.spec.js',
     'wholesale-inquiry-ui.spec.js',
   ],

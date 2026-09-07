@@ -752,6 +752,55 @@ test('fulfillment BFF is session/CSRF/idempotency gated and validates fixed comm
   })).toThrow('REQUEST_INVALID')
 })
 
+test('operational payment evidence rejects non-text JSON values', () => {
+  const base = { orderRequestId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', toStatus: 'verified' }
+  for (const evidenceNote of [{ reference: 'GC-1' }, ['GC-1'], true, 123]) {
+    expect(() => validateFulfillmentCommand('payment_status', { ...base, evidenceNote })).toThrow('REQUEST_INVALID')
+  }
+  expect(validateFulfillmentCommand('payment_status', { ...base, evidenceNote: ' GC-1 matched to merchant receipt ' }).evidenceNote).toBe('GC-1 matched to merchant receipt')
+})
+
+test('operational delivery amounts require explicit numbers and preserve zero', () => {
+  const base = { orderRequestId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', courierName: 'Pickup', customerConfirmed: true, note: 'Customer agreed to pickup' }
+  for (const shippingAmount of [null, '', ' ', false, true, [], [10], '10']) {
+    expect(() => validateFulfillmentCommand('delivery_details', { ...base, shippingAmount })).toThrow('REQUEST_INVALID')
+  }
+  expect(validateFulfillmentCommand('delivery_details', { ...base, shippingAmount: 0 }).shippingAmount).toBe(0)
+})
+
+test('operational stock quantities reject coercion before signing', () => {
+  const base = { batchId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', toCustodian: 'Manila', reason: 'Counted transfer' }
+  for (const quantity of [true, [1], '1', 1.5]) {
+    expect(() => validateFulfillmentCommand('transfer_lot', { ...base, quantity })).toThrow('REQUEST_INVALID')
+  }
+  expect(validateFulfillmentCommand('transfer_lot', { ...base, quantity: 1 }).quantity).toBe(1)
+})
+
+test('operational receiving rejects impossible expiry dates and coerced declarations', () => {
+  const year = new Date().getUTCFullYear() + 1
+  const base = { consignmentId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', sku: 'SKU-1', batchCode: 'B-1', boxCode: 'BOX-1', expectedQty: 1, bestBeforeDate: `${year}-03-01` }
+  expect(() => validateConsignmentCommand('consignment_add_line', { ...base, bestBeforeDate: `${year}-02-30` })).toThrow('REQUEST_INVALID')
+  for (const expectedQty of [true, [1], '1']) {
+    expect(() => validateConsignmentCommand('consignment_add_line', { ...base, expectedQty })).toThrow('REQUEST_INVALID')
+  }
+  expect(validateConsignmentCommand('consignment_add_line', base)).toEqual(base)
+})
+
+test('operational receiving scan codes must be text', () => {
+  const base = { consignmentId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', itemId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', stage: 'manila' }
+  for (const scannedCode of [{}, ['SKU-1'], true, 123]) {
+    expect(() => validateConsignmentCommand('consignment_scan', { ...base, scannedCode })).toThrow('REQUEST_INVALID')
+  }
+})
+
+test('operational channel verification rejects fabricated reference and reason types', () => {
+  const base = { channel: 'website', publicReference: 'WEB-1', reason: 'Matched canonical request' }
+  for (const key of ['channel', 'publicReference', 'reason']) {
+    expect(() => validateInternalChannelVerification({ ...base, [key]: [base[key]] })).toThrow('REQUEST_INVALID')
+  }
+  expect(validateInternalChannelVerification(base)).toEqual(base)
+})
+
 test('fulfillment boundary is signed, replay-safe, and remains feature-gated', async () => {
   const migration = await readFile(new URL('../supabase/migrations/20260812_admin_fulfillment_bff_boundary.sql', import.meta.url), 'utf8')
   const service = await readFile(new URL('../src/services/adminBffService.js', import.meta.url), 'utf8')

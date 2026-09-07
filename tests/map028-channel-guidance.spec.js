@@ -104,3 +104,8 @@ test('the audit findings are recorded in the master action plan', async () => {
   expect(plan).toMatch(/channel vocabular/i)
   expect(plan).toMatch(/oversell/i)
 })
+
+test('the portable channel rehearsal accepts the repository-local runtime override', async () => {
+  const rehearsal = await read('../scripts/rehearse-channel-vocabulary-portable.mjs')
+  expect(rehearsal).toContain("process.env.K2_TEST_PG_BIN || path.join(rootDir, '.tools', 'postgresql-17.11'")
+})

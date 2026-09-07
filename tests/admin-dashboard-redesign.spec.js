@@ -169,10 +169,10 @@ async function installSupabaseFixture(page) {
       if (table === 'order_requests' && url.searchParams.get('status') === 'eq.submitted') count = 4
       if (table === 'orders') count = 3
       if (table === 'products' && url.searchParams.has('stock_available')) count = 7
-      return route.fulfill({ status: 200, headers: { 'content-range': count ? `0-${count - 1}/${count}` : '*/0' } })
+      return route.fulfill({ status: 200, headers: { 'access-control-expose-headers': 'content-range', 'content-range': count ? `0-${count - 1}/${count}` : '*/0' } })
     }
 
-    return route.fulfill({ status: 200, contentType: 'application/json', headers: { 'content-range': rows.length ? `0-${rows.length - 1}/${rows.length}` : '*/0' }, body: JSON.stringify(rows) })
+    return route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-expose-headers': 'content-range', 'content-range': rows.length ? `0-${rows.length - 1}/${rows.length}` : '*/0' }, body: JSON.stringify(rows) })
   })
 }
 
@@ -187,12 +187,114 @@ test.describe('admin command center redesign', () => {
     await installSupabaseFixture(page)
   })
 
+  test('left-panel widgets show one workspace and preserve every dashboard destination', async ({ page }) => {
+    await page.goto('/admin-portal-k2-secure')
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible()
+    const widgets = page.getByRole('navigation', { name: 'Dashboard widgets' })
+    await expect(widgets.getByRole('button', { name: 'Shop & channel metrics', exact: true })).toHaveAttribute('aria-current', 'page')
+    await expect(page.getByRole('heading', { name: 'Channel performance and readiness' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Sales computation summary' })).toBeHidden()
+    for (const [name, heading] of [['Sales & records', 'Sales computation summary'], ['Revenue trend', 'Verified revenue trend'], ['Priority work', 'Priority queue'], ['Inbox metrics', 'Inbox workload'], ['Pasabuy metrics', 'Pasabuy pipeline'], ['Stock metrics', 'Inventory health']]) {
+      await widgets.getByRole('button', { name, exact: true }).click()
+      await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible()
+      await expect(page.getByRole('heading', { name: 'Channel performance and readiness' })).toBeHidden()
+    }
+    await page.getByRole('button', { name: 'Inventory', exact: true }).click()
+    await widgets.getByRole('button', { name: 'Shop & channel metrics', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Channel performance and readiness' })).toBeVisible()
+    await expect(page.getByText('Traffic, conversion and ad spend')).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
+  })
+
+  test('widget source failures stay unavailable and recover without inventing zero totals', async ({ page }) => {
+    let fail = true
+    await page.route('**/rest/v1/order_requests*', route => fail
+      ? route.fulfill({ status: 403, json: { message: 'fixture source unavailable' } })
+      : route.fallback())
+    await page.goto('/admin-portal-k2-secure')
+    await expect(page.getByRole('region', { name: 'Key performance indicators' }).getByText('Unavailable', { exact: true })).toHaveCount(4)
+    await expect(page.getByRole('group', { name: 'Website metrics', exact: true })).toContainText('Unavailable')
+    const widgets = page.getByRole('navigation', { name: 'Dashboard widgets' })
+    await widgets.getByRole('button', { name: 'Sales & records', exact: true }).click()
+    await expect(page.getByText('This widget is unavailable because its records could not be retrieved.', { exact: false })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Review records', exact: true })).toBeHidden()
+    await widgets.getByRole('button', { name: 'Inbox metrics', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Inbox workload' })).toBeVisible()
+    fail = false
+    await page.getByRole('button', { name: 'Refresh', exact: true }).click()
+    await widgets.getByRole('button', { name: 'Sales & records', exact: true }).click()
+    await expect(page.getByRole('region', { name: 'Sales computation summary' })).toContainText('₱38,885')
+  })
+
+  test('unknown channels remain separate and empty records are not marketplace analytics', async ({ page }) => {
+    await page.route('**/rest/v1/order_requests*', route => route.request().method() === 'HEAD'
+      ? route.fallback()
+      : route.fulfill({ json: [{ ...orders[0], channel_source: 'unmapped_seller', total_amount: 321 }] }))
+    await page.goto('/admin-portal-k2-secure')
+    await expect(page.getByRole('group', { name: 'Other / unrecognized metrics', exact: true })).toContainText('₱321')
+    await expect(page.getByRole('group', { name: 'Website metrics', exact: true })).toContainText('₱0')
+    await expect(page.getByText('Zero means no matching internal records were returned.', { exact: false })).toBeVisible()
+  })
+
+  test('phone metrics and navigation stay readable and incomplete totals cannot be exported', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/admin-portal-k2-secure')
+    await expect(page.getByRole('group', { name: 'Website metrics', exact: true })).toContainText('₱11,500')
+    const chooser = page.getByLabel('Dashboard widget', { exact: true })
+    await expect(chooser).toHaveValue('metrics')
+    expect((await chooser.boundingBox()).height).toBeGreaterThanOrEqual(44)
+    await chooser.focus()
+    await expect(chooser).toBeFocused()
+    await page.screenshot({ path: 'docs/evidence/20260906-admin-widgets/mobile-metrics.png', fullPage: true })
+    await page.getByRole('button', { name: 'More', exact: true }).click()
+    await page.getByRole('navigation', { name: 'Dashboard widgets' }).getByRole('button', { name: 'Stock metrics', exact: true }).click()
+    await expect(chooser).toHaveValue('stock')
+    await expect(page.getByRole('heading', { name: 'Inventory health' })).toBeVisible()
+    await page.route('**/rest/v1/order_requests*', route => route.request().method() === 'HEAD' ? route.fallback() : route.fulfill({ headers: { 'content-range': '0-0/1001', 'access-control-expose-headers': 'content-range' }, json: [orders[0]] }))
+    await page.getByRole('button', { name: 'Refresh', exact: true }).click()
+    await chooser.selectOption('sales')
+    await expect(page.getByText('This widget is unavailable because its records could not be retrieved.', { exact: false })).toBeVisible()
+    await expect(page.getByRole('button', { name: /Download CSV/ })).toBeHidden()
+    let releaseRead
+    const pendingRead = new Promise(resolve => { releaseRead = resolve })
+    await page.route('**/rest/v1/order_requests*', async route => {
+      if (route.request().method() === 'HEAD') return route.fallback()
+      await pendingRead
+      return route.fulfill({ headers: { 'content-range': '*/0', 'access-control-expose-headers': 'content-range' }, json: [] })
+    })
+    await page.getByRole('button', { name: '7D', exact: true }).click()
+    await expect(page.getByText('Loading this widget’s records…')).toBeVisible()
+    await expect(page.getByRole('button', { name: /Download CSV/ })).toBeHidden()
+    releaseRead()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
+  })
+
+  test('failed period refresh preserves and labels the prior snapshot and export period', async ({ page }) => {
+    await page.goto('/admin-portal-k2-secure')
+    await expect(page.getByRole('region', { name: 'Key performance indicators' })).toContainText('₱38,885')
+    await page.evaluate(async () => {
+      const { supabase } = await import('/src/lib/supabaseClient.js')
+      supabase.from = () => { throw new Error('fixture interrupted refresh') }
+    })
+    await page.getByRole('button', { name: '7D', exact: true }).click()
+    await expect(page.getByText('Refresh failed — showing the last retrieved 30-day snapshot.')).toBeVisible()
+    await page.getByRole('navigation', { name: 'Dashboard widgets' }).getByRole('button', { name: 'Sales & records', exact: true }).click()
+    await page.getByRole('button', { name: 'Review records', exact: true }).click()
+    await expect(page.getByText('Read-only order requests in the retrieved 30-day period.', { exact: false })).toBeVisible()
+    const downloading = page.waitForEvent('download')
+    await page.getByRole('button', { name: 'Download CSV (9)', exact: true }).click()
+    expect((await downloading).suggestedFilename()).toMatch(/^k2-sales-30d-all-/)
+  })
+
   test('renders multichannel analytics without desktop overflow', async ({ page }) => {
     test.setTimeout(120000)
     await page.setViewportSize({ width: 1440, height: 1000 })
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
+    if (page.viewportSize().width < 1024) await page.getByLabel('Dashboard widget', { exact: true }).selectOption('sales')
+    else await page.getByRole('navigation', { name: 'Dashboard widgets' }).getByRole('button', { name: 'Sales & records', exact: true }).click()
     const salesSummary = page.getByRole('region', { name: 'Sales computation summary' })
     await expect(salesSummary).toContainText('₱46,000')
     await expect(salesSummary).toContainText('₱38,885')
@@ -237,9 +339,10 @@ test.describe('admin command center redesign', () => {
     expect(downloadedCsv.split('\r\n').filter(Boolean)).toHaveLength(6)
     expect(downloadedCsv).not.toMatch(/customer|email|profit|payout/i)
     await expect(salesSummary).toContainText('Request value is not a payout or actual profit.')
-    await expect(page.getByText('Verified revenue trend')).toBeVisible()
-    await expect(page.getByText('Channel performance and readiness')).toBeVisible()
-    await expect(page.getByText('Inbox workload')).toBeVisible()
+    for (const [name, heading] of [['Revenue trend', 'Verified revenue trend'], ['Inbox metrics', 'Inbox workload'], ['Shop & channel metrics', 'Channel performance and readiness']]) {
+      await page.getByRole('navigation', { name: 'Dashboard widgets' }).getByRole('button', { name, exact: true }).click()
+      await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible()
+    }
     await expect(page.locator('body')).toHaveJSProperty('scrollWidth', 1440)
 
     await page.keyboard.press('Alt+s')
@@ -271,7 +374,7 @@ test.describe('admin command center redesign', () => {
     })).toEqual([])
     expect(await unnamedInteractiveRoles(page)).toEqual([])
 
-    await page.screenshot({ path: 'C:/tmp/k2-admin-command-center-desktop.png', fullPage: true })
+    await page.screenshot({ path: 'docs/evidence/20260906-admin-widgets/desktop.png', fullPage: true })
     await page.evaluate(() => { document.documentElement.style.fontSize = '200%' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
@@ -426,6 +529,8 @@ test.describe('admin command center redesign', () => {
     await page.setViewportSize({ width: 375, height: 812 })
     await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
+    if (page.viewportSize().width < 1024) await page.getByLabel('Dashboard widget', { exact: true }).selectOption('sales')
+    else await page.getByRole('navigation', { name: 'Dashboard widgets' }).getByRole('button', { name: 'Sales & records', exact: true }).click()
     const salesSummary = page.getByRole('region', { name: 'Sales computation summary' })
     await salesSummary.getByRole('button', { name: 'Review Verified, not fulfilled records' }).click()
     await expect(salesSummary).toContainText('2 matching records')
@@ -435,7 +540,7 @@ test.describe('admin command center redesign', () => {
     let overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(1)
     await expect(page.locator('.pulse-dot').first()).toHaveCSS('animation-name', 'none')
-    await page.screenshot({ path: 'C:/tmp/k2-admin-command-center-mobile.png', fullPage: true })
+    await page.screenshot({ path: 'docs/evidence/20260906-admin-widgets/mobile-sales.png', fullPage: true })
 
     await page.setViewportSize({ width: 844, height: 390 })
     overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)

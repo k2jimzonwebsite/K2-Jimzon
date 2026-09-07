@@ -244,7 +244,7 @@ function recoveryCsrfToken() {
   return match ? decodeURIComponent(match.slice('k2_admin_recovery_csrf='.length)) : ''
 }
 
-async function adminRequest(path, { method = 'GET', body, csrf = false, recoveryCsrf = false, idempotency = false, idempotencyKey, signal } = {}) {
+async function adminRequest(path, { method = 'GET', body, csrf = false, recoveryCsrf = false, idempotency = false, idempotencyKey, signal, timeoutMs = 15000 } = {}) {
   const headers = { Accept: 'application/json' }
   if (body !== undefined) headers['Content-Type'] = 'application/json'
   if (csrf) headers['X-K2-CSRF'] = csrfToken()
@@ -257,7 +257,7 @@ async function adminRequest(path, { method = 'GET', body, csrf = false, recovery
     }
     const response = method === 'GET'
       ? await fetchReadWithRetry(path, requestInit, { timeoutMs: 10000 })
-      : await fetchWithTimeout(path, requestInit, 15000)
+      : await fetchWithTimeout(path, requestInit, timeoutMs)
     const payload = await response.json().catch(() => ({}))
     if (!response.ok || !payload?.ok) {
       if (response.status === 202) {
@@ -277,6 +277,10 @@ async function adminRequest(path, { method = 'GET', body, csrf = false, recovery
 
 export function loginAdminBff(credentials) {
   return adminRequest('/api/admin/auth/login', { method: 'POST', body: credentials })
+}
+
+export function intakeAiBff(body, idempotencyKey) {
+  return adminRequest('/api/admin/product-intake/ai', { method: 'POST', body, csrf: true, idempotency: true, idempotencyKey, timeoutMs: body.action === 'start' ? 125000 : 15000 })
 }
 
 export function challengeAdminMfaBff(code) {

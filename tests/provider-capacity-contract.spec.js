@@ -27,13 +27,13 @@ test('K2 payload caps stay below provider ceilings and agree across evidence bou
   expect(adminClient).toContain('no larger than 4 MB')
 })
 
-test('separate Vercel projects explicitly cap prepared functions at ten seconds', async () => {
+test('separate Vercel projects cap Storefront at ten seconds and Admin at bounded intake duration', async () => {
   const configs = await Promise.all([
     source('vercel.storefront.json').then(JSON.parse),
     source('vercel.admin.json').then(JSON.parse),
   ])
   expect(configs[0].functions['api/storefront/index.js'].maxDuration).toBe(10)
-  expect(configs[1].functions['api/admin/index.js'].maxDuration).toBe(10)
+  expect(configs[1].functions['api/admin/index.js'].maxDuration).toBe(180)
 })
 
 test('all browser and server ingress boundaries declare bounded payload or time limits', async () => {
@@ -59,7 +59,9 @@ test('all browser and server ingress boundaries declare bounded payload or time 
   expect(marketplacePush).toContain('_BODY_READ_TIMEOUT')
   expect(shopeeHandler).toContain("Deno.env.get('SHOPEE_BODY_READ_TIMEOUT_MS')")
   expect(timeout).toContain('maxAttempts = 3')
-  expect(adminClient).toContain('fetchWithTimeout(path, requestInit, 15000)')
+  expect(adminClient).toContain('timeoutMs = 15000')
+  expect(adminClient).toContain('fetchWithTimeout(path, requestInit, timeoutMs)')
+  expect(adminClient).toContain("body.action === 'start' ? 125000 : 15000")
   expect(adminClient).toContain('}, 30000)')
   expect(guestClient).toContain('}, 15000)')
 })

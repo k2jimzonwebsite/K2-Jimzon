@@ -1,5 +1,29 @@
 # K2 Jimzon — System Architecture
 
+Status correction, 7 September 2026 session audit: this document describes
+prepared architecture. It does not establish applied database grants/RLS or
+deployed BFF activation. The fresh source inventory counts 92 Admin routes and
+15 Storefront routes; older counts in the overview diagram are historical.
+The disabled Admin BFF still has a legacy browser Supabase path. Runtime,
+authorization and real-host acceptance remain governed by the MAP and BFF runbook.
+
+Dashboard widgets remain presentation state within the authenticated Admin shell.
+They share the existing overview read boundary and do not grant permissions or
+execute writes. Exact query counts detect provider row caps; incomplete sources
+are excluded from displayed totals and CSV review. Request generations reject
+out-of-order refreshes, and the data period travels with a retained snapshot.
+Widget selection is session presentation state, not canonical operations data.
+
+Automatic intake is a prepared Admin-only extension of canonical intake. The
+same-origin `/api/admin/product-intake/ai` route authenticates cookie/AAL2/CSRF
+and delegates to `server/admin-bff/intake-ai-jobs.js`; its fixed-endpoint provider
+adapter holds credentials server-side. Private forced-RLS SQL jobs atomically
+claim identity/budget before dispatch and store recoverable results. List results
+omit image bytes; candidate retrieval is separate and ownership checked. Human
+review precedes existing signed product/media commands. No secondary product,
+inventory or publication authority is introduced. The migration remains unapplied;
+activation and unknown-outcome recovery are specified in the intake runbook.
+
 Workflow graph record reads reuse the same-origin Admin service layer. Node data
 selects an allowlisted operation, never a URL or privileged RPC. Existing server
 session, staff, MFA and data-access controls remain authoritative. Guide state
@@ -64,7 +88,8 @@ npm run build:admin
   - Zero `service_role` keys or server-only credentials.
 - **Admin BOS Artifact**:
   - Contains the complete operational suite (`Overview`, `InventoryGrid`, `Sheet`, `ConsignmentManager`, `PasabuyManager`, `Inbox`, `StaffPermissionManager`, `ProductIntakeSessionModal`, etc.).
-  - Communicates exclusively through same-origin Admin BFF routes.
+  - Uses same-origin Admin BFF routes when the secure mode is enabled; the
+    current flag-off compatibility path still uses browser Supabase.
 
 The prepared Owner Count & Close slice follows that boundary: listing/order
 sources enter immutable private staging, while product identity, exact-lot
@@ -125,14 +150,17 @@ tune matching functions; they are not treated as exclusion manifests.
 
 Both Storefront and Admin APIs are consolidated into single Serverless Function entrypoints to stay well within Vercel execution ceilings and function count limits:
 
-- **`api/admin/index.js`**: Consolidated entrypoint routing 81 Admin endpoints.
-- **`api/storefront/index.js`**: Consolidated entrypoint routing 14 Storefront endpoints.
+- **`api/admin/index.js`**: Consolidated entrypoint with 92 prepared routes.
+- **`api/storefront/index.js`**: Consolidated entrypoint with 15 prepared routes.
 
-Each route enforces:
+Controls are classified per route in the security surface inventory; public
+authentication/read endpoints do not share every mutation requirement:
 - **HTTP Method Whitelist**: Non-matching methods return `405 Method Not Allowed` with exact `Allow` headers.
 - **Origin & Referer Validation**: Prevents cross-site request hijacking.
 - **Idempotency Keys**: POST mutations require UUID `Idempotency-Key` headers to prevent duplicate charges or lot adjustments.
-- **Execution Deadlines**: Strict 10-second serverless execution timeouts.
+- **Execution Deadlines**: Storefront requests 10 seconds; prepared Admin requests
+  180 seconds for bounded automatic intake. Verify the correct project's deployed
+  allowance before activation; browser AI dispatch waits at most 125 seconds.
 
 The fourteenth Storefront route is `POST /api/storefront/order/status`. It is a
 signed, origin-checked, durable-rate-limited read that derives its scope from the
@@ -164,9 +192,11 @@ and Storefront BFF activation order is complete.
 PostgreSQL is partitioned into two functional schema domains:
 
 ### `public` Schema (Application Domain)
-- All 42 tables have Row Level Security (`ALTER TABLE ... ENABLE ROW LEVEL SECURITY`) enabled.
-- All 9 public views specify `WITH (security_invoker = true)` so that querying views enforces the caller's RLS policies.
-- Direct DML (INSERT, UPDATE, DELETE) for anonymous and unauthenticated users is revoked. Mutations occur through `SECURITY DEFINER` RPCs.
+- Prepared hardening enables RLS and uses security-invoker public views.
+- Prepared hardening revokes anonymous direct DML and routes authorized mutations
+  through controlled RPCs. Applied production coverage must be established by
+  the MAP-017 migration receipt and authorization audit; local source counts do
+  not prove it.
 
 ### `k2_private` Schema (Security & Platform State)
 - Inaccessible to `anon` and `authenticated` Supabase roles.

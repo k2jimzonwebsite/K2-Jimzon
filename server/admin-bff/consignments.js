@@ -14,6 +14,7 @@ function exactObject(value, keys) {
 }
 
 function text(value, { required = false, min = 0, max = 500 } = {}) {
+  if (value != null && typeof value !== 'string') throw new Error('REQUEST_INVALID')
   const result = String(value ?? '').trim()
   if ((required && result.length < Math.max(1, min)) || result.length > max || (result && result.length < min)) {
     throw new Error('REQUEST_INVALID')
@@ -30,6 +31,7 @@ function uuid(value) {
 function date(value) {
   const result = text(value, { required: true, min: 10, max: 10 })
   if (!DATE.test(result) || Number.isNaN(Date.parse(`${result}T00:00:00Z`))) throw new Error('REQUEST_INVALID')
+  if (new Date(`${result}T00:00:00Z`).toISOString().slice(0, 10) !== result) throw new Error('REQUEST_INVALID')
   const today = new Date().toISOString().slice(0, 10)
   const latest = new Date(); latest.setUTCFullYear(latest.getUTCFullYear() + 10)
   if (result < today || result > latest.toISOString().slice(0, 10)) throw new Error('REQUEST_INVALID')
@@ -46,7 +48,7 @@ export function validateConsignmentCommand(action, body) {
   }
   if (action === 'consignment_add_line') {
     exactObject(body, ['consignmentId', 'sku', 'batchCode', 'boxCode', 'bestBeforeDate', 'expectedQty'])
-    const expectedQty = Number(body.expectedQty)
+    const expectedQty = body.expectedQty
     if (!Number.isInteger(expectedQty) || expectedQty < 1 || expectedQty > 100_000) throw new Error('REQUEST_INVALID')
     return {
       consignmentId: uuid(body.consignmentId), sku: text(body.sku, { required: true, max: 120 }),

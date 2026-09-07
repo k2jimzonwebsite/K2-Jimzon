@@ -31,6 +31,7 @@ import { safeUiError } from '../../lib/safeUiError'
 import { applyImageFallback } from '../../lib/imageFallback'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { CANONICAL_CUSTODIANS, CANONICAL_HUBS } from '../../data/canonicalIdentities'
+import AutomaticIntakePanel from './AutomaticIntakePanel'
 
 export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct }) {
   const closeButtonRef = useRef(null)
@@ -40,6 +41,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   const [step, setStep] = useState(1)
   const [session, setSession] = useState(null)
   const [sessionLoading, setSessionLoading] = useState(false)
+  const [aiBusy, setAiBusy] = useState(false)
   const [resumeNotice, setResumeNotice] = useState('')
   const [operationError, setOperationError] = useState('')
   const [evidenceCleanup, setEvidenceCleanup] = useState(null)
@@ -290,6 +292,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   }
 
   const canAdvance = (() => {
+    if (aiBusy) return false
     if (sessionLoading || !session?.id || evidenceCleanup) return false
     if (step === 1) {
       return duplicateResult?.matchType === 'none'
@@ -480,7 +483,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-      <AdminDialog onClose={onClose} closeDisabled={creatingDraft || savingInventory || publishing} initialFocusRef={closeButtonRef} labelledBy="product-intake-title" describedBy="product-intake-summary">
+      <AdminDialog onClose={onClose} closeDisabled={creatingDraft || savingInventory || publishing || aiBusy} initialFocusRef={closeButtonRef} labelledBy="product-intake-title" describedBy="product-intake-summary">
       <div
         className="relative w-full max-w-2xl bg-[#161922] border border-white/10 rounded-xl shadow-2xl text-white overflow-hidden my-auto max-h-[92vh] flex flex-col"
       >
@@ -498,6 +501,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
             ref={closeButtonRef}
             type="button"
             onClick={onClose}
+            disabled={aiBusy}
             aria-label="Close product intake"
             className="min-h-11 min-w-11 p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"
           >
@@ -520,7 +524,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               type="button"
               key={s.num}
               onClick={() => s.num < step && setStep(s.num)}
-              disabled={s.num >= step}
+              disabled={s.num >= step || aiBusy}
               aria-current={s.num === step ? 'step' : undefined}
               aria-label={`Step ${s.num}: ${s.label}`}
               className={`min-h-11 flex items-center gap-1 transition-colors shrink-0 disabled:cursor-default ${
@@ -809,10 +813,22 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
           )}
 
           {/* STEP 3: CHATGPT RESEARCH HANDOFF */}
+          {session && step >= 3 && step <= 6 && <AutomaticIntakePanel session={session} isOnline={isOnline} onBusy={setAiBusy} onContent={async content => {
+              const parsed = parseProductResearchPaste(JSON.stringify(content))
+              if (session.checklist_step === 'research_handoff') {
+                const updated = await saveIntakeSessionStep(session, 'field_review')
+                setSession(updated)
+              }
+              setParsedPayload(parsed)
+              setJsonInput(JSON.stringify(content, null, 2))
+              setAcceptedFields({})
+              setParseError(null)
+              setStep(4)
+          }} />}
           {step === 3 && (
             <div className="space-y-4 text-xs">
               <div>
-                <h4 className="text-base font-medium text-white">Step 3: ChatGPT Handoff Contract</h4>
+                <h4 className="text-base font-medium text-white">Step 3: Manual ChatGPT Projects</h4>
                 <p className="text-white/60">
                   Copy the versioned adaptive prompt for the private ChatGPT Project <strong className="text-amber-300">K2 Product Content</strong>.
                 </p>
@@ -922,7 +938,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <button
                   type="button"
                   onClick={handleSaveDraft}
-                  disabled={sessionLoading || creatingDraft}
+                  disabled={sessionLoading || creatingDraft || aiBusy}
                   className="w-full min-h-11 py-3 bg-amber-400 text-black font-bold rounded-lg hover:bg-amber-300 transition-colors flex items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-60"
                 >
                   {creatingDraft ? <SyncIcon className="w-4 h-4 animate-spin" /> : 'Assign SKU & Save Product Draft'}
@@ -1208,7 +1224,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
         <div className="flex items-center justify-between px-4 py-3 border-t border-white/10 bg-white/5">
           <button
             type="button"
-            disabled={step === 1}
+            disabled={step === 1 || aiBusy}
             onClick={() => setStep(prev => Math.max(1, prev - 1))}
             className="min-h-11 px-3 py-2 bg-white/5 border border-white/10 text-white/70 rounded-lg text-xs hover:bg-white/10 disabled:opacity-30 transition-colors flex items-center gap-1"
           >

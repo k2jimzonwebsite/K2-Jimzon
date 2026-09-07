@@ -1,6 +1,14 @@
 import { expect, test } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
 
+test('overview completeness rejects capped result sets instead of reporting their subtotal as a total', async () => {
+  const { overviewUnavailable } = await import('../src/lib/overviewAvailability.js')
+  expect(overviewUnavailable([{ data: [{ id: 1 }], count: 2 }], ['orders'])).toEqual([{ key: 'orders', code: 'RESULT_INCOMPLETE' }])
+  expect(overviewUnavailable([{ data: [], count: 0 }], ['orders'])).toEqual([])
+  expect(overviewUnavailable([{ data: null, count: 4 }], ['orderBacklog'])).toEqual([])
+  expect(overviewUnavailable([{ error: { message: 'fixture' } }], ['orders'])).toEqual([{ key: 'orders', code: 'QUERY_UNAVAILABLE' }])
+})
+
 test('overview never fabricates inventory metrics when product data is empty or unavailable', async () => {
   const source = await readFile(new URL('../src/views/admin/Overview.jsx', import.meta.url), 'utf8')
 

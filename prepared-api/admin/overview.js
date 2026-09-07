@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from '../../server/admin-bff/authorize.js'
 import { requireAdminProject, safeJson } from '../../server/admin-bff/security.js'
+import { overviewUnavailable } from '../../src/lib/overviewAvailability.js'
 
 const ALLOWED_RANGES = new Set([7, 30, 90])
 
@@ -13,17 +14,17 @@ function periodStart(days) {
 export async function readOverviewData(client, range) {
   const priorStart = periodStart(range)
   const results = await Promise.all([
-    client.from('order_requests').select('id,channel_source,status,payment_status,total_amount,created_at').gte('created_at', priorStart),
+    client.from('order_requests').select('id,channel_source,status,payment_status,total_amount,created_at', { count: 'exact' }).gte('created_at', priorStart),
     client.from('order_requests').select('id', { count: 'exact', head: true }).eq('status', 'submitted'),
-    client.from('pasabuy_requests').select('id,status,target_budget_php,assigned_to,created_at'),
-    client.from('product_batches').select('id,quantity,quantity_available,expiry_date,best_before_date'),
-    client.from('channel_connections').select('channel,display_name,status,last_event_at,note'),
-    client.from('channel_listings').select('channel_source,publication_status,validation_errors,last_synced_at,sync_error'),
-    client.from('products').select('sku,status,stock_available'),
-    client.from('conversations').select('id,status,priority,unread_count,response_due_at,assigned_to,last_message_at'),
+    client.from('pasabuy_requests').select('id,status,target_budget_php,assigned_to,created_at', { count: 'exact' }),
+    client.from('product_batches').select('id,quantity,quantity_available,expiry_date,best_before_date', { count: 'exact' }),
+    client.from('channel_connections').select('channel,display_name,status,last_event_at,note', { count: 'exact' }),
+    client.from('channel_listings').select('channel_source,publication_status,validation_errors,last_synced_at,sync_error', { count: 'exact' }),
+    client.from('products').select('sku,status,stock_available', { count: 'exact' }),
+    client.from('conversations').select('id,status,priority,unread_count,response_due_at,assigned_to,last_message_at', { count: 'exact' }),
   ])
   const keys = ['orders', 'orderBacklog', 'pasabuy', 'batches', 'connections', 'listings', 'products', 'conversations']
-  const unavailable = keys.filter((key, index) => Boolean(results[index].error)).map((key) => ({ key, code: 'QUERY_UNAVAILABLE' }))
+  const unavailable = overviewUnavailable(results, keys)
   return {
     data: {
       orders: results[0].data || [],

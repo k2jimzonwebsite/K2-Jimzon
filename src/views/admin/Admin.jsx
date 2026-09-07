@@ -18,6 +18,7 @@ import UniversalScanLauncher from './UniversalScanLauncher'
 import AdminToolsWidget from './AdminToolsWidget'
 import { GO_TO_SHORTCUTS, isTextEntryTarget } from './adminOperations'
 import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
+import { DASHBOARD_WIDGETS } from './dashboardWidgets'
 
 // Lazy loaded heavy components to reduce initial bundle lag
 const Kanban = lazy(() => import('./Kanban'))
@@ -72,9 +73,17 @@ const NAV_GROUPS = [
   { heading: 'Settings',       items: ['delivery', 'staff_permissions', 'integrations', 'globe'] },
 ]
 
-function NavList({ section, onSelect, activeSkus, canManageStaff }) {
+function NavList({ section, onSelect, activeSkus, canManageStaff, widget, onWidget }) {
   return (
     <div className="space-y-5">
+      <nav aria-label="Dashboard widgets" className="space-y-0.5 border-b border-adm-line pb-3">
+        <p className="px-3 pb-2 text-xs font-medium text-white/65">Dashboard widgets</p>
+        {DASHBOARD_WIDGETS.map(item => <button key={item.id} type="button"
+          onClick={() => onWidget(item.id)} aria-current={section === 'overview' && widget === item.id ? 'page' : undefined}
+          className={`min-h-11 w-full rounded-adm-sm px-3 py-2 text-left text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue ${section === 'overview' && widget === item.id ? 'bg-white/[0.08] text-white font-semibold' : 'text-white/65 hover:bg-white/[0.04] hover:text-white'}`}>
+          {item.label}
+        </button>)}
+      </nav>
       {NAV_GROUPS.map((group, gi) => (
         <div key={gi}>
           {group.heading && (
@@ -91,6 +100,7 @@ function NavList({ section, onSelect, activeSkus, canManageStaff }) {
                 <button
                   key={id}
                   onClick={() => onSelect(id)}
+                  aria-label={meta.label}
                   aria-current={on ? 'page' : undefined}
                   className={
                     'relative flex min-h-10 w-full items-center gap-2.5 rounded-adm-sm px-2.5 py-2 text-left text-sm transition-[transform,background-color,color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 ' +
@@ -121,6 +131,7 @@ export default function Admin() {
   const { isAdmin, authReady, logoutAdmin, user, products = [] } = useStore()
   const secure = adminBffEnabled()
   const [section, setSection] = useState('overview')
+  const [widget, setWidget] = useState('metrics')
   const [sheetMode, setSheetMode] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -305,7 +316,7 @@ export default function Admin() {
         </div>
 
         <div className="mt-3 flex-1 overflow-y-auto px-2 custom-scrollbar">
-          <NavList section={section} onSelect={selectSection} activeSkus={activeSkus} canManageStaff={canManageStaff} />
+          <NavList widget={widget} onWidget={id => { setWidget(id); selectSection('overview') }} section={section} onSelect={selectSection} activeSkus={activeSkus} canManageStaff={canManageStaff} />
         </div>
 
         <div className="shrink-0 border-t border-adm-line p-3">
@@ -364,7 +375,7 @@ export default function Admin() {
                   <XIcon size={20} />
                 </button>
               </div>
-              <NavList section={section} onSelect={selectSection} activeSkus={activeSkus} canManageStaff={canManageStaff} />
+              <NavList widget={widget} onWidget={id => { setWidget(id); selectSection('overview') }} section={section} onSelect={selectSection} activeSkus={activeSkus} canManageStaff={canManageStaff} />
             </div>
           </div>
         )}
@@ -486,7 +497,7 @@ export default function Admin() {
                : section === 'consignment' ? <ConsignmentManager />
                : showSheet ? <Sheet />
                : showGrid ? <InventoryGrid launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} canManageMediaCleanup={canManageStaff} canManageProducts={canManageStaff} />
-               : section === 'overview' ? <Overview setSection={selectSection} pending={pendingOrders} />
+               : section === 'overview' ? <Overview widget={widget} onWidget={setWidget} setSection={selectSection} pending={pendingOrders} />
                : <Kanban />}
             </Suspense>
           </ErrorBoundary>

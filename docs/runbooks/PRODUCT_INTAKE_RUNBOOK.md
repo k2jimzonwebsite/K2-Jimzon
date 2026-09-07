@@ -5,6 +5,35 @@ not active in production. Permanent activation remains behind MAP-017.
 Supplier receipt is intentionally unavailable until a canonical
 receiving record is implemented.
 
+## Operational-readiness trace — 7 September 2026
+
+The manual Admin path is locally prepared for the allowed sequence: registered
+package evidence and field review create one unpublished Draft; Step 6 can add
+an expected SKU/batch/box line to a declared `Packing_Italy` manifest or record
+an authorized opening balance with the required physical identity and reason.
+It never turns product import into stock, and the Supplier Receipt control
+remains disabled because no canonical purchasing/receiving record exists.
+
+The separate Flight Consignments path uses the selected manifest line and
+actual code for one-unit Milan and Manila scans. The existing hardened SQL
+finalizer creates accepted `product_batches`, balances, and immutable receiving
+events exactly once; a shortage is retained as a reconciliation event and a
+lost response can be retried with the same protected operation identity. The
+earlier focused source checks did not execute this workflow. The session audit
+now executes the original receiving SQL functions in a minimal synthetic schema
+and verifies independent scans, shortages, box/source identity, short-dated
+quarantine and retry. The receipt automatically quarantines dates below 90 days
+(and legacy null dates); unknown dates cannot be newly declared through the
+current add-line command. Overages are refused. Wrong-item, damaged and unexpected
+goods still lack a complete arrival-exception workflow. Full UI/BFF/RLS receiving
+acceptance and production activation remain open in MAP-023.
+
+Focused local evidence for this boundary passed 86/86 API/contract checks and
+the two intake-AI browser checks (2/2). The separate Admin and Storefront builds
+also passed their local boundary, budget and secret checks. This does not prove
+production migration activation, supplier receiving, rich arrival dispositions,
+or real staff receiving acceptance.
+
 ## Staff prerequisites
 
 - Sign in through the Admin BOS as an authorized staff member.
@@ -52,13 +81,13 @@ receiving record is implemented.
    Move Under Review to Live only when the server proves resolved brand/category,
    price, primary storefront image, human review, and the valid prior state.
 
-### Optional paid API path (deliberate choice; currently unavailable)
+### Optional paid API path (locally prepared; production unavailable)
 
 The owner has accepted paid OpenAI calls in principle as an optional per-product
 route for descriptions, usage/instructions, SEO fields, media briefs, and
 PRIMARY/AFTER Draft image candidates. It is not a default and it never fills
 physical stock, SKU, price, cost, lot, batch, expiry, custody, approval, or
-publication. The current Admin has no operational paid route: the confirmation
+publication. The deployed Admin has no verified operational paid route: the confirmation
 sequence, spend caps, reviewed model/provider, retention setting, server-only
 credential, and production activation still require approval and evidence. The
 prepared Staff & Roles control is editable only by an owner-controlled
@@ -72,6 +101,49 @@ priced scope and current cap, obtain explicit confirmation, validate the exact
 `k2.product-content.v3` response at the server boundary, return field-by-field
 review, and only then request image candidates. Every call must be idempotent,
 audited, recoverable, and fail closed to the manual path.
+
+### Key-later configuration and activation
+
+Local preparation exposes Automatic API alongside Manual ChatGPT Projects.
+Check readiness / Recover saved results never starts a paid request. Content is
+loaded into the existing field review with every field initially unaccepted.
+Save that review before separately confirming PRIMARY and AFTER image requests.
+Review candidates against the package, record an acceptance/rejection reason,
+then explicitly attach accepted candidates after creating the canonical Draft.
+Attachment replaces the named media slot through existing signed intake/media
+commands; it does not approve, publish or change stock.
+
+Adding `OPENAI_API_KEY` supplies server authentication only. Activation also needs:
+
+- MAP-017-authorized dependency migrations and the rehearsed private
+  `20260906_automatic_intake_jobs.sql`, existing evidence/media storage and signer.
+- Owner-controlled SuperAdmin+AAL2 paid-path configuration with non-null product,
+  session and monthly caps and the exact model/version snapshot.
+- Server-only `K2_INTAKE_AI_ENABLED`, exact `K2_AI_CONTENT_MODEL` and
+  `K2_AI_IMAGE_MODEL`, `K2_AI_RETENTION_REVIEWED`, and `K2_AI_PRICING_REVIEWED`.
+  Defaults remain off; never put credentials in VITE variables or Storefront.
+- Current official capability, price and account-access review. The prepared
+  `gpt-image-1` alias is deprecated; confirm support or change adapter, SQL snapshot,
+  bounds, owner configuration and tests together. `store:false` does not establish
+  zero retention. Review actual provider data controls before enabling.
+- Verified ownership of the separate Admin Vercel project and its prepared
+  180-second function allowance. Do not configure an unrelated connector account.
+- Owner-approved paid preview, invoice reconciliation and authenticated real-host
+  acceptance before production enablement. None occurred during preparation.
+
+The server reserves $0.10 for content and $1 per image; these are conservative
+upper reservations, not billed costs. Durable claims precede provider calls.
+Unknown outcomes keep their reservation; recovery reads cannot dispatch again.
+One job per session and kind is deliberate: use manual fallback for rejected,
+failed or uncertain jobs rather than deleting records or starting paid retries.
+The same normalized product identity shares the product cap across sessions.
+
+Evidence, official source links and verification gaps are recorded in
+`docs/evidence/20260906-intake-ai/README.md`; remaining work stays in MAP-018 /
+MAP-028 I-016. Disable feature and owner paid-path gates to stop new dispatch;
+already claimed calls may finish. Preserve private jobs and media receipts.
+Retry canonical attachment with the same candidate; reconcile deterministic public
+orphans with existing media controls. Roll back code with scoped Git changes.
 
 ## Failure and retry rules
 

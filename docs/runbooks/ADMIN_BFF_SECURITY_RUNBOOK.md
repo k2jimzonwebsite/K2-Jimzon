@@ -1,5 +1,12 @@
 # Admin BOS Same-Origin BFF Security Runbook
 
+Dashboard widget preparation (IDEA-20260906-07) reuses the existing overview route
+and authorization. List reads request exact counts; known capped results return
+`RESULT_INCOMPLETE` in the existing unavailable-source list. The client withholds
+dependent totals/export rather than inventing zeros. No additional write route,
+secret, provider connection or role is introduced. Staff interpretation and visual
+rollback: `docs/runbooks/ADMIN_DASHBOARD_RUNBOOK.md`. Locally verified only.
+
 **Current status:** server foundation, cookie-auth client, fixed overview,
 product, product-master, fulfillment, inbox, Pasabuy, product-intake, flight-consignment,
 lot/expiry, and coupon reads plus their named signed command slices are locally
@@ -11,6 +18,16 @@ entrypoint now exists at `api/admin/index.js`, but independently requires
 minimal `404` even if the browser flag is changed accidentally.
 None is deployed or active. The current UI still uses a browser Supabase session and
 must not be described as HttpOnly-cookie protected.
+
+**IDEA-20260907-01 payment boundary:** the prepared fulfillment payment command
+only records the existing order-request state transition and bounded
+evidence/reconciliation note. It is not a structured payment-evidence store or
+instruction-delivery receipt. Owner decisions and the exact activation order
+are recorded in `docs/runbooks/PAYMENT_EVIDENCE_AND_INSTRUCTIONS_RUNBOOK.md`;
+no payment detail or secret was added by this session. A repository secret scan
+is not proof that every ignored/local file contains no credentials. Payment
+events already record actor/time; dedicated evidence fields and finance-verifier
+separation remain unimplemented.
 
 The prepared encrypted session payload is versioned and validated field by
 field before use. Every completed authentication receives a new opaque UUID

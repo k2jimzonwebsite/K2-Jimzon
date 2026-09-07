@@ -1,5 +1,103 @@
 # K2 Jimzon — System Brain (Current State)
 
+**7 September release state:** the owner authorized promotion of the integrated
+automatic-intake, dashboard and operational-readiness code to GitHub `main` and
+the two linked Vercel projects. The complete local release gate passes, including
+both isolated builds, all aggregate browser/API suites, security/supply-chain
+checks, MAP-017 and catalog database rehearsals, and the focused receiving,
+payment, marketplace and exact-shop rehearsals. This authorization is for code
+delivery only. Prepared SQL remains unapplied, automatic paid intake remains
+configuration/flag gated, no provider call was made, and no external channel was
+activated. GitHub CI, Vercel deployment IDs and real-host observations remain to
+be recorded after promotion; no live claim is made by this preflight entry.
+
+**Operational readiness refinement, locally verified 7 September 2026
+(IDEA-20260907-01):** all three isolated PostgreSQL 17.11 rehearsals pass when
+`K2_TEST_PG_BIN` points to the existing local runtime. The last-unit rehearsal
+proves lock-safe competition and idempotent confirmation; the marketplace
+rehearsal proves exact-shop staged evidence, replay/conflict, Owner Count & Close
+behavior, migration replay, postflight, and evidence-preserving rollback; and
+the channel-vocabulary rehearsal proves legacy-vocabulary migration/replay,
+exact marketplace/shop constraints, external-item uniqueness, public lookup and
+indexes. This is local evidence only: no production SQL, provider call,
+deployment, or channel activation occurred.
+
+The final focused local acceptance passed 86/86 API/contract checks, 31/31
+Admin browser checks, 2/2 intake-AI browser checks, and 1/1 Owner Count & Close
+browser check. The separate Admin and Storefront production builds passed their
+security, boundary, budget and secret checks; Admin measured 188.47 kB against
+the 300.00 kB entry budget, while Storefront measured 149.89 kB/150.00 kB
+landing JS gzip and 27.46 kB/30.00 kB CSS gzip. The initial sandbox browser
+launch failure was `spawn EPERM`; the approved local reruns passed. Evidence:
+`docs/evidence/20260907-operational-readiness/README.md`.
+
+The payment path remains a narrow manual state transition plus free-text
+evidence event. Existing events record actor, server timestamp, note and prior/new
+payment state, including submission and verification actions. It does not yet
+store separate method, amount, currency, payer, reference, proof or
+instruction-delivery records, or enforce finance-verifier separation. The recorded GCash idea is not audited/authorized
+for implementation and still lacks approved merchant/account/QR details. The
+manual intake and flight-receiving paths are prepared with supplier receipt
+disabled. The session audit executed the actual receiving/payment functions in a
+minimal synthetic SQL schema: independent scans, shortage, retained box/source,
+short-dated quarantine, physical/sellable quantities, receipt/payment retry and
+payment event actor/time passed. This adds behavioral evidence to the earlier
+source-only receiving checks; full UI/BFF/RLS receiving acceptance is still open.
+Richer wrong-item/damage/unexpected-goods disposition remains unimplemented;
+automatic shelf-life quarantine already exists. Exact-shop snapshot/order staging is prepared and observation-
+only; Shopee is Events-only and other external adapters/publication/stock sync
+remain unavailable. Remaining activation inputs and implementation work are
+recorded in `MASTER_ACTION_PLAN.md` and
+`docs/runbooks/PAYMENT_EVIDENCE_AND_INSTRUCTIONS_RUNBOOK.md`.
+
+The audited channel rehearsal passes 13 checks and now verifies exact refusal
+errors. External item IDs are unique within a shop; equal item IDs across distinct
+shops are allowed. The original test reused the same shop/SKU and did not prove
+its claimed cross-shop uniqueness. The last-unit lock probe now observes
+`wait_event='PgSleep'` after confirmation before starting the competitor.
+
+**Dashboard widgets, local implementation verified 7 September (IDEA-20260906-07):**
+seven named left-panel/mobile destinations now expose one reporting view at a time,
+defaulting to Shop & channel metrics. Existing permissions, operational destinations,
+sales reconciliation and CSV export are preserved. Neutral panels and stronger
+secondary text reduce visual competition. Missing/capped sources are unavailable;
+unrecognized channels are separate, and retained snapshots/export filenames keep
+their original reporting period. Exact query counts detect known row caps.
+31 Admin browser checks and 81 API/logic/sales checks passed; final dashboard
+loading/export guard is covered by the focused rerun in its evidence record.
+Both separate production builds pass local boundary/security/budget checks.
+No commit/deployment, production mutation or channel activation was performed.
+Metrics beyond existing K2 records remain explicitly unavailable. Runbook:
+`docs/runbooks/ADMIN_DASHBOARD_RUNBOOK.md`; screenshots/results/rollback checkpoint:
+`docs/evidence/20260906-admin-widgets/README.md`. Real-host acceptance, latency and
+staff timing remain MAP-028 I-012 / MAP-021/023/025.
+
+**Automatic intake, local preparation (IDEA-20260906-05):** the isolated
+`codex/automatic-intake-preparation` checkout now contains server-only OpenAI
+adapters, signed private jobs/cap reservations, registered-evidence verification,
+separate content/image confirmation, field/candidate review, durable recovery and
+canonical media attachment. No paid call, production migration or deployment.
+24 provider/orchestration and 69 focused existing checks passed. Final phone browser
+suite (2 tests, including real modal content review to Draft), separate builds and
+composed PostgreSQL lifecycle/concurrency/canonical-media attachment rehearsal pass.
+Initial execution approval limits cleared. Second independent review remains
+unavailable due to its agent usage limit; initial review defects have passing fixes.
+Provider/production acceptance remains MAP-018 / MAP-028 I-016.
+Evidence and rollback: `docs/evidence/20260906-intake-ai/README.md` and
+`docs/runbooks/PRODUCT_INTAKE_RUNBOOK.md`. Keys alone are insufficient: model
+availability (prepared image alias deprecated), retention/cost review, owner caps,
+database/runtime activation and authorized real-host testing remain separate gates.
+
+**Admin strategy refinement, 6 September (IDEA-20260906-06):** the owner requests
+a calmer, easier-to-scan Admin with business states still clearly distinguishable.
+The MAP now contains an ordered refinement of I-012/I-016: action/state inventory,
+shared-control pilot, navigation consistency, operational journeys and measured
+staff acceptance. DESIGN and the rulebook record the required presentation and
+logic boundaries. This change is documentation only; no screen, provider setting
+or runtime behavior changed. Automatic-intake preparation remains unfinished on
+`codex/automatic-intake-preparation` in `.tools/hero-release`; preserve that work.
+
+
 **Release verified, 6 September:** code commit a438d85 passes full GitHub CI
 34021862535, including the complete acceptance command, MAP-017 PostgreSQL
 migration/rollback/authorization and catalog spreadsheet rehearsals. Both

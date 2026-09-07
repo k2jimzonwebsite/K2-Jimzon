@@ -16,7 +16,7 @@ const rootDir = fileURLToPath(new URL('..', import.meta.url))
 const migrationPath = path.join(rootDir, 'supabase', 'migrations', '20260809_operations_hardening.sql')
 
 const config = {
-  binDir: path.join(rootDir, '.tools', 'postgresql-17.11', 'runtime', 'pgsql', 'bin'),
+  binDir: process.env.K2_TEST_PG_BIN || path.join(rootDir, '.tools', 'postgresql-17.11', 'runtime', 'pgsql', 'bin'),
   dataDir: path.join(rootDir, '.tools', 'map023-last-unit-pg-data'),
   logPath: path.join(rootDir, '.tools', 'map023-last-unit-pg.log'),
   port: 54329,
@@ -75,6 +75,25 @@ function extractConfirmationFunction() {
   const end = migration.indexOf(endMarker, start)
   if (start < 0 || end < 0) throw new Error('CONFIRM_ORDER_FUNCTION_NOT_FOUND')
   return migration.slice(start, end + endMarker.length)
+}
+
+function operationalRehearsalSql() {
+  const sources = [
+    ['20260803_launch_core_stabilization.sql', ['create_consignment_manifest', 'advance_consignment', 'set_order_request_payment_status']],
+    ['20260809_operations_hardening.sql', ['add_consignment_item_v2', 'record_consignment_item_scan', 'finalize_consignment_receipt']],
+  ]
+  const definitions = sources.flatMap(([file, names]) => {
+    const sql = fs.readFileSync(path.join(rootDir, 'supabase/migrations', file), 'utf8')
+    return names.map((name) => {
+      const start = sql.indexOf(`create or replace function public.${name}(`)
+      const end = sql.indexOf('$$;', start)
+      if (start < 0 || end < 0) throw new Error(`OPERATIONAL_FUNCTION_NOT_FOUND: ${name}`)
+      return sql.slice(start, end + 3)
+    })
+  })
+  const fixture = (name) => fs.readFileSync(path.join(rootDir, 'supabase/tests', name), 'utf8')
+  return ['begin;', fixture('operational_readiness_bootstrap.sql'), ...definitions,
+    fixture('operational_readiness_assertions.sql'), 'rollback;'].join('\n')
 }
 
 const BOOTSTRAP = `
@@ -269,6 +288,13 @@ async function main() {
     const psql = (sql, label) => run(executable['psql.exe'], psqlArgs(sql), label, dbEnv)
 
     psql(BOOTSTRAP, 'last-unit bootstrap')
+    const operationalResult = run(executable['psql.exe'],
+      ['-X', '--no-psqlrc', '-v', 'ON_ERROR_STOP=1'],
+      'receiving and payment behavior', dbEnv, { input: operationalRehearsalSql() })
+    if (!operationalResult.includes('OPERATIONAL_RECEIVING_PAYMENT_ASSERTIONS_OK')) {
+      throw new Error('OPERATIONAL_ASSERTION_RECEIPT_MISSING')
+    }
+    console.log('[ok] actual receiving/payment functions: scans, shortage, quarantine, retry and event actor/time (synthetic Auth; transaction rolled back)')
     psql(extractConfirmationFunction(), 'actual confirmation function install')
     console.log('[ok] repository confirm_order_request function installed')
 
@@ -282,7 +308,8 @@ async function main() {
     let winnerIsHoldingLock = false
     for (let attempt = 0; attempt < 50; attempt += 1) {
       const activity = psql(`select count(*)::text from pg_stat_activity
-        where application_name='k2_last_unit_winner' and state='active' and query like '%pg_sleep%';`,
+        where application_name='k2_last_unit_winner' and state='active'
+          and wait_event='PgSleep';`,
       'winner lock-state probe')
       if (activity.split('\n').at(-1)?.trim() === '1') {
         winnerIsHoldingLock = true

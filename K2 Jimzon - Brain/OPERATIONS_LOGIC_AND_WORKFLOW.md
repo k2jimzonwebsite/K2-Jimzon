@@ -1,5 +1,52 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+**IDEA-20260907-01 current implementation boundary (7 September 2026):** the
+rulebook requirements below remain the target contract. Local tracing confirms
+that the prepared Admin payment route currently records only the existing
+status transition and free-text event with actor/time; it does not establish the complete
+payment-evidence or instruction-delivery record required in §16. The prepared
+manual product-intake/flight-receiving path keeps supplier receipts disabled
+and automatically quarantines short-dated receipts, but does not yet provide
+the richer wrong-item/damaged/unexpected-goods disposition workflow required in
+§9. Exact-shop snapshot/order staging remains observation-only and provider
+inactive. These facts are local preparation evidence, not production claims;
+the MAP and payment runbook hold the activation dependencies.
+
+The focused contract, browser, PostgreSQL and separate-build evidence is
+recorded in `docs/evidence/20260907-operational-readiness/README.md`.
+
+**Dashboard widgets (IDEA-20260906-07; locally prepared):** staff chooses one
+dashboard widget from the left navigation or the phone selector. Shop/channel
+metrics, sales review, revenue, priority work, inbox, Pasabuy and stock retain
+their separate meanings and existing canonical destinations. Reporting widgets
+are read-only. Verified payments are not settled payouts or actual profit;
+internal channel records and recorded connection status do not prove a working
+external feed. Missing or known capped result sets are unavailable, never healthy
+zeros. Zero means no matching retrieved internal records. An interrupted refresh
+labels the retained snapshot's original period, including exports. New metrics
+sources require verified integration evidence and remain in the active MAP.
+
+**Automatic intake boundary (IDEA-20260906-05; prepared, not activated):**
+Manual ChatGPT Projects remains a separate usable path. Automatic requests use
+only registered package evidence, require staff+AAL2 and exact session ownership,
+and reserve owner-approved budget before a single provider dispatch. Signed jobs
+and results survive browser loss. Uncertain calls retain their reservation and
+must never be dispatched again by recovery. Staff reviews each content field and
+each PRIMARY/AFTER candidate before existing canonical save/attachment commands.
+AI never assigns stock, quantity, SKU, price, cost, expiry, custody, approval or
+publication. Missing configuration explains readiness and preserves manual work.
+Activation/recovery procedure: `docs/runbooks/PRODUCT_INTAKE_RUNBOOK.md`.
+
+**Admin usability contract (IDEA-20260906-06; target):** calmer presentation
+must preserve separately labelled product, stock, payment, fulfillment and API
+states. Show exact record context, blockers, action impact and server-confirmed
+results where staff act. Guide review is not execution; missing data is not zero;
+uncertain writes require receipt reconciliation. Routine help may be collapsed,
+but current blockers and consequences cannot be hidden. Color must supplement
+text/shape, never carry operational meaning alone. MAP-028 I-012/I-016 own the
+implementation and MAP-025 owns staff acceptance.
+
+
 **Workflow API access:** diagram controls may invoke only registered K2 service
 operations under the existing staff session and server permission checks. A
 record read is evidence of the returned batch at the displayed request time,

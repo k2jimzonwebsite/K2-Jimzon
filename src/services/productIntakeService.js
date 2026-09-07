@@ -18,6 +18,7 @@ import {
   listProductIntakeConsignmentsBff, saveProductIntakeStepBff,
   searchProductIntakeDuplicatesBff, transitionProductPublicationBff,
   uploadProductEvidenceBff, retryProductEvidenceCleanupBff,
+  intakeAiBff,
 } from './adminBffService'
 
 const ACTIVE_SESSION_KEY = 'k2_active_intake_session'
@@ -27,6 +28,22 @@ const SESSION_PATCH_FIELDS = new Set([
   'evidence_checklist', 'draft_payload', 'field_decisions',
   'field_provenance', 'unknown_fields',
 ])
+
+export async function automaticIntakeRequest(sessionId, action, payload = {}, requestId) {
+  if (!adminBffEnabled()) throw commandError('AI_NOT_CONFIGURED', 'Automatic API requires the secure Admin server. Manual ChatGPT Projects remains available.')
+  const response = await intakeAiBff({ sessionId, action, ...payload }, requestId)
+  if (!response.ok) {
+    const messages = {
+      AI_NOT_CONFIGURED: 'Automatic API is not configured. Use Manual ChatGPT Projects.',
+      AI_BUDGET_BLOCKED: 'The owner spending cap blocks this request. Use the manual path.',
+      AI_REVIEW_REQUIRED: 'Save your content review and enter a reviewed composition brief first.',
+      AI_EVIDENCE_REQUIRED: 'Registered package evidence could not be verified. Check the original uploads.',
+      AI_JOB_CONFLICT: 'This intake job already exists or the session changed. Recover saved results.',
+    }
+    throw commandError(response.code, messages[response.code] || 'Automatic intake could not be confirmed. Recover saved results before doing anything else. An uncertain job is never charged again by retrying it; the manual path remains available.')
+  }
+  return response.data
+}
 
 export class ProductIntakeError extends Error {
   constructor(code, userMessage, cause = null) {

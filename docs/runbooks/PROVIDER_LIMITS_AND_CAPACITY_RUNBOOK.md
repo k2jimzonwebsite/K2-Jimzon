@@ -26,10 +26,11 @@ behavior.
 | Staff invitation JSON | 4 KiB | `supabase/functions/invite-staff/handler.ts` | Reject declared or actual oversized input. |
 | Shopee webhook body | 256 KiB and required 1–30,000 ms absolute read deadline | `supabase/functions/shopee-webhook/validation.js` | Reject oversize input; cancel a stalled stream and return retryable unavailable state. The deployment value remains owner/provider-path evidence, not a source default. |
 | Vercel Storefront functions | 10 seconds | `vercel.storefront.json` | Function must finish or fail within the configured ceiling. |
-| Vercel Admin functions | 10 seconds | `vercel.admin.json` | Function must finish or fail within the configured ceiling. |
+| Vercel Admin functions | 180 seconds, locally prepared | `vercel.admin.json` | Supports bounded automatic intake; deployed account/runtime allowance remains unverified. |
 | Browser Admin reads | 10 seconds per attempt, at most 3 attempts | `src/lib/fetchWithTimeout.js`, `src/services/adminBffService.js` | Retry only transient GET/HEAD failures with capped exponential jitter. |
 | Browser commands/guest submissions/invitations | 15 seconds, one attempt | Browser service/auth boundaries | Never automatically replay state-changing requests. |
-| Browser evidence upload | 30 seconds, one attempt | `src/services/adminBffService.js` | Allows transfer/recovery time but does not extend the server's 10-second execution ceiling. |
+| Browser evidence upload | 30 seconds, one attempt | `src/services/adminBffService.js` | Allows transfer/recovery time; timeout does not establish whether the server completed. |
+| Automatic intake dispatch | 125 seconds, one attempt | `src/services/adminBffService.js` | Recover the durable job after timeout; never automatically repeat paid dispatch. |
 | Turnstile provider verification | 5 seconds | `server/storefront-bff/security.js` | Fail closed when verification does not complete. |
 
 The Vercel API handlers remain prepared rather than active production routes in
@@ -49,7 +50,7 @@ Official sources checked 21 August 2026:
 | Node Function bundle | 250 MB uncompressed | Verify generated function bundles after route activation; current frontend bundle checks do not prove this. |
 | Function file descriptors | 1,024 shared across concurrent executions | Avoid unbounded parallel provider/database/storage calls. |
 | Function memory | Hobby 2 GB; Pro/Enterprise up to 4 GB | **Owner evidence required** for K2 plan and configured memory. |
-| Function duration | Depends on plan and Fluid Compute | K2 explicitly requests 10 seconds; **owner evidence required** that deployed settings honor it. |
+| Function duration | Depends on plan and Fluid Compute | Storefront requests 10 seconds; prepared Admin requests 180 seconds. **Owner evidence required** that each deployed project honors its setting. |
 | Build time | 45 minutes | Both local target builds are far below this, but remote build duration must be recorded from CI/Vercel. |
 | Build cache | 1 GB per cache key, retained one month | Monitor cache misses/size remotely; local build success is not cache evidence. |
 | Deployment source files | 15,000 files | Verify Vercel deployment manifest after activation. |

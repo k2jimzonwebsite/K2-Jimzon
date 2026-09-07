@@ -5,6 +5,38 @@
 **Current state:** locally implemented and rehearsed; inactive, unapplied, and
 not provider-verified
 
+## Operational-readiness evidence refresh — 7 September 2026
+
+The portable PostgreSQL rehearsal passed sequentially after the last-unit
+rehearsal: bootstrap, preflight, migration, migration replay, exact-shop
+staging/order behavior, duplicate and changed-payload conflict handling,
+Owner Count & Close checkpoints, postflight, and non-destructive rollback.
+Rollback revoked the prepared entry points while preserving staged evidence.
+This is an isolated local rehearsal using synthetic fixtures, not a production
+database apply, provider export, connector receipt, settlement, or channel
+activation.
+
+The Admin workflow requires the saved shop UUID in the close session and checks
+the provider/shop pairing before staging. Reported marketplace quantity remains
+an observation and never changes canonical lots or stock. Shopee event capture
+does not become order ingestion; Lazada, TikTok, social messaging, outbound
+listing/publication and stock synchronization remain unavailable. Exact real
+shop exports, provider dictionaries, retention approval, authenticated staff
+acceptance, and the coordinated production migration/rollback window remain
+required before activation.
+
+The final focused local evidence passed 86/86 API/contract checks and the
+Owner Count & Close browser check 1/1. The separate Admin and Storefront builds
+passed their local boundary, budget and secret checks. This does not establish
+provider receipts, real-export acceptance, production migration state, or an
+active connector.
+
+Session audit: the separate vocabulary rehearsal now passes 13 checks and
+requires exact denial errors. Its external-item index is scoped to shop ID;
+equal external item IDs across different shops are valid. The former test's
+cross-shop uniqueness claim was inaccurate. Listing staging is scoped to
+provider/shop; order imports additionally reference the saved close session.
+
 ## Purpose and truth boundary
 
 This slice accepts bounded customer-free listing and order snapshots for one
