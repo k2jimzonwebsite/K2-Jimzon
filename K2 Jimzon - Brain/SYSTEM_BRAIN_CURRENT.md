@@ -1,5 +1,18 @@
 # K2 Jimzon — System Brain (Current State)
 
+**Dashboard truth follow-up, 7 September (IDEA-20260907-02; local only):**
+Overview rejects malformed source bodies, invalid backlog counts and unknown/
+invalid stock or monetary values rather than presenting valid zero totals.
+Visible tabs refresh every 30 seconds and on return; the legacy path also listens
+for product/batch changes. The secure path stays cookie-bound with no direct
+Realtime subscription. API/UI reporting windows now share Asia/Manila midnight.
+Channel aliases are exact; blank/unrecognized sources remain Other. Copy names
+creation-day payment-verified value, recorded deadlines and count-based queues.
+88 contract/calculation tests, 32 Admin browser tests and Admin build/security
+passed. Fixtures prove displayed stock updates, not live database/provider feeds.
+This follow-up is not deployed; next acceptance remains MAP-028 I-012 / MAP-021.
+Evidence: `docs/evidence/20260906-admin-widgets/README.md`.
+
 **Production code delivery verified, 7 September 2026:** `46827c7e6c8df2a85e88320c7b1855d917a5b3e4`
 reached GitHub `main`; CI run `34083906899` completed successfully. GitHub's
 production deployment receipts `6302082283` (Admin) and `6302086373` (Storefront)

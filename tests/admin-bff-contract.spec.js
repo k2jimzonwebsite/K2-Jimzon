@@ -173,7 +173,7 @@ test('admin overview is fixed-schema, session-gated, and reports partial data sa
   expect(JSON.parse(noSession.body).error.code).toBe('SESSION_EXPIRED')
 
   const queued = [
-    { data: [{ id: 'order-1' }], error: null },
+    { data: [{ id: 'order-1', total_amount: 25 }], error: null },
     { data: null, count: 2, error: null },
     { data: [], error: null },
     { data: [], error: { message: 'private provider detail' } },
@@ -195,7 +195,7 @@ test('admin overview is fixed-schema, session-gated, and reports partial data sa
     },
   }
   const result = await readOverviewData(client, 30)
-  expect(result.data.orders).toEqual([{ id: 'order-1' }])
+  expect(result.data.orders).toEqual([{ id: 'order-1', total_amount: 25 }])
   expect(result.data.orderBacklog).toBe(2)
   expect(result.unavailable).toEqual([{ key: 'batches', code: 'QUERY_UNAVAILABLE' }])
   expect(JSON.stringify(result)).not.toContain('private provider detail')

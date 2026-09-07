@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
 import { overviewUnavailable } from '../../lib/overviewAvailability'
+import { overviewPeriodStart as startOfPeriod, overviewDateKey as dateKey, OVERVIEW_TIME_ZONE } from '../../lib/overviewPeriod'
 import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
 import { peso } from '../../data/products'
 import {
@@ -79,28 +80,13 @@ const EMPTY_DATA = {
 const panelClass = 'rounded-adm border border-adm-line bg-adm-surface'
 const actionClass = 'transition-[transform,border-color,background-color,color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 focus-visible:ring-offset-2 focus-visible:ring-offset-adm-bg'
 
-function startOfPeriod(days, periodOffset = 0) {
-  const date = new Date()
-  date.setHours(0, 0, 0, 0)
-  date.setDate(date.getDate() - (days - 1) - (days * periodOffset))
-  return date
-}
-
-function dateKey(value) {
-  const date = new Date(value)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
-
 function normalizeChannel(value = '') {
   const channel = String(value).toLowerCase()
-  if (channel.startsWith('shopee')) return 'shopee'
-  if (channel.startsWith('tiktok')) return 'tiktok'
-  if (channel.startsWith('lazada')) return 'lazada'
-  if (channel.startsWith('pasabuy')) return 'pasabuy'
-  if (!channel || channel === 'website' || channel === 'web') return 'website'
+  if (channel === 'shopee') return 'shopee'
+  if (channel === 'tiktok' || channel === 'tiktok_shop') return 'tiktok'
+  if (channel === 'lazada') return 'lazada'
+  if (channel === 'pasabuy') return 'pasabuy'
+  if (channel === 'website' || channel === 'web') return 'website'
   return 'other'
 }
 
@@ -129,7 +115,7 @@ function shortOrderReference(value) {
 function readableOrderDate(value) {
   const date = new Date(value)
   return Number.isFinite(date.getTime())
-    ? date.toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' })
+    ? date.toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric', timeZone: OVERVIEW_TIME_ZONE })
     : 'Date unavailable'
 }
 
@@ -143,14 +129,15 @@ function buildRevenueSeries(orders, days) {
   orders
     .filter(order => order.payment_status === 'verified')
     .forEach(order => {
+      if (!Number.isFinite(new Date(order.created_at).getTime())) return
       const key = dateKey(order.created_at)
       totals.set(key, (totals.get(key) || 0) + Number(order.total_amount || 0))
     })
 
-  const formatter = new Intl.DateTimeFormat('en-PH', { month: 'short', day: 'numeric' })
+  const formatter = new Intl.DateTimeFormat('en-PH', { month: 'short', day: 'numeric', timeZone: OVERVIEW_TIME_ZONE })
   return Array.from({ length: days }, (_, index) => {
     const date = startOfPeriod(days)
-    date.setDate(date.getDate() + index)
+    date.setUTCDate(date.getUTCDate() + index)
     const key = dateKey(date)
     return { key, label: formatter.format(date), value: totals.get(key) || 0 }
   })
@@ -177,7 +164,7 @@ function RevenueChart({ points }) {
       <svg
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label="Verified revenue by day"
+        aria-label="Payment-verified request value by order creation day"
         className="h-auto w-full overflow-visible"
       >
         {[0, 0.25, 0.5, 0.75, 1].map(ratio => {
@@ -216,7 +203,7 @@ function RevenueChart({ points }) {
         ))}
       </svg>
       {points.every(point => point.value === 0) && (
-        <p className="-mt-3 text-center text-xs text-white/65">No payment-verified revenue recorded in this period.</p>
+        <p className="-mt-3 text-center text-xs text-white/65">No payment-verified request value recorded in this creation period.</p>
       )}
     </div>
   )
@@ -299,14 +286,14 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
       setLoadedRange(range)
 
       setData({
-        orders: results[0].data || [],
+        orders: Array.isArray(results[0].data) ? results[0].data.filter(row => row && typeof row === 'object') : [],
         orderBacklog: results[1].count || 0,
-        pasabuy: results[2].data || [],
-        batches: results[3].data || [],
-        connections: results[4].data || [],
-        listings: results[5].data || [],
-        products: results[6].data || [],
-        conversations: results[7].data || [],
+        pasabuy: Array.isArray(results[2].data) ? results[2].data.filter(row => row && typeof row === 'object') : [],
+        batches: Array.isArray(results[3].data) ? results[3].data.filter(row => row && typeof row === 'object') : [],
+        connections: Array.isArray(results[4].data) ? results[4].data.filter(row => row && typeof row === 'object') : [],
+        listings: Array.isArray(results[5].data) ? results[5].data.filter(row => row && typeof row === 'object') : [],
+        products: Array.isArray(results[6].data) ? results[6].data.filter(row => row && typeof row === 'object') : [],
+        conversations: Array.isArray(results[7].data) ? results[7].data.filter(row => row && typeof row === 'object') : [],
       })
       setError(unavailableResults.length ? 'Some analytics are unavailable or incomplete. Narrow the reporting period or retry the source.' : '')
       setLastUpdated(new Date())
@@ -322,21 +309,27 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
   useEffect(() => {
     setLoading(true)
     load({ quiet: true })
+    const refresh = () => {
+      if (document.visibilityState === 'visible') load({ quiet: true })
+    }
+    const interval = window.setInterval(refresh, 30_000)
+    document.addEventListener('visibilitychange', refresh)
     if (adminBffEnabled()) {
-      const refresh = () => {
-        if (document.visibilityState === 'visible') load({ quiet: true })
-      }
-      const interval = window.setInterval(refresh, 30_000)
-      document.addEventListener('visibilitychange', refresh)
       return () => {
         requestSequence.current++
         window.clearInterval(interval)
         document.removeEventListener('visibilitychange', refresh)
       }
     }
-    if (!supabase) return undefined
+    if (!supabase) return () => {
+      requestSequence.current++
+      window.clearInterval(interval)
+      document.removeEventListener('visibilitychange', refresh)
+    }
 
     const channel = supabase.channel('admin:command-center')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, refresh)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'product_batches' }, refresh)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'order_requests' }, () => load({ quiet: true }))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'pasabuy_requests' }, () => load({ quiet: true }))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'channel_connections' }, () => load({ quiet: true }))
@@ -344,13 +337,22 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
       .on('postgres_changes', { event: '*', schema: 'public', table: 'conversations' }, () => load({ quiet: true }))
       .subscribe()
 
-    return () => { requestSequence.current++; supabase.removeChannel(channel) }
+    return () => {
+      requestSequence.current++
+      window.clearInterval(interval)
+      document.removeEventListener('visibilitychange', refresh)
+      supabase.removeChannel(channel)
+    }
   }, [load, range])
 
   const analytics = useMemo(() => {
     const currentStart = startOfPeriod(reportingRange).getTime()
     const previousStart = startOfPeriod(reportingRange, 1).getTime()
-    const currentOrders = data.orders.filter(order => new Date(order.created_at).getTime() >= currentStart)
+    const currentEnd = startOfPeriod(1).getTime() + 86_400_000
+    const currentOrders = data.orders.filter(order => {
+      const created = new Date(order.created_at).getTime()
+      return created >= currentStart && created < currentEnd
+    })
     const previousOrders = data.orders.filter(order => {
       const created = new Date(order.created_at).getTime()
       return created >= previousStart && created < currentStart
@@ -470,7 +472,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
   }
 
   const queues = [
-    { title: 'Website requests awaiting review', count: data.orderBacklog, detail: 'Confirm contact details and available stock.', target: 'omni_hub', icon: InboxIcon, severity: 'high' },
+    { title: 'Order requests awaiting review', count: data.orderBacklog, detail: 'All recorded channels; confirm contact details and available stock.', target: 'omni_hub', icon: InboxIcon, severity: 'high' },
     { title: 'Inbox response deadlines missed', count: analytics.overdue, detail: 'Prioritize overdue customer conversations.', target: 'inbox', icon: ClockIcon, severity: 'critical' },
     { title: 'Open Pasabuy sourcing cases', count: analytics.openPasabuy.length, detail: 'Advance research, quotes, and purchase states.', target: 'pasabuy_manager', icon: BagIcon, severity: 'high' },
     { title: 'Inventory exceptions', count: analytics.outOfStock + analytics.lowStock + analytics.expired + analytics.expiring, detail: `${analytics.outOfStock} out · ${analytics.lowStock} low · ${analytics.expired + analytics.expiring} expiry risk`, target: 'inventory', icon: BoxIcon, severity: 'critical' },
@@ -688,14 +690,14 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
 
       <div className="contents">
         <section hidden={widget !== 'revenue' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading icon={TrendIcon} title="Verified revenue trend" description={`Daily payment-verified revenue for the selected ${reportingRange}-day window.`} />
+          <PanelHeading icon={TrendIcon} title="Verified revenue trend" description={`Payment-verified request value grouped by order creation day in the retrieved ${reportingRange}-day Asia/Manila window; not payment receipt dates or settled revenue.`} />
           <div className="p-3 sm:p-5">
             {loading ? <div className="h-56 animate-pulse rounded-adm-sm bg-white/[0.04]" /> : <RevenueChart points={analytics.revenueSeries} />}
           </div>
         </section>
 
         <section hidden={widget !== 'priority' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading icon={AlertIcon} title="Priority queue" description="Database-backed work ranked by immediate operational impact." />
+          <PanelHeading icon={AlertIcon} title="Priority queue" description="Current recorded work sorted by count. Inventory totals combine SKU and batch flags and may overlap." />
           <div className="divide-y divide-adm-line">
             {queues.map(queue => {
               const Icon = queue.icon
@@ -778,7 +780,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
           <div className="grid grid-cols-2">
             {[
               { label: 'Unread', value: analytics.unread, tone: analytics.unread > 0 ? 'text-amber' : 'text-white' },
-              { label: 'Overdue SLA', value: analytics.overdue, tone: analytics.overdue > 0 ? 'text-crimson' : 'text-white' },
+              { label: 'Past recorded deadline', value: analytics.overdue, tone: analytics.overdue > 0 ? 'text-crimson' : 'text-white' },
               { label: 'Urgent', value: analytics.urgent, tone: analytics.urgent > 0 ? 'text-crimson' : 'text-white' },
               { label: 'Unassigned', value: analytics.unassigned, tone: analytics.unassigned > 0 ? 'text-amber' : 'text-white' },
             ].map((item, index) => (

@@ -1,5 +1,51 @@
 # Calmer dashboard and left-panel widgets
 
+## 7 September dashboard truth follow-up — IDEA-20260907-02
+
+Release continuation: the initial approval-service usage rejection conflicted with
+the account's available allowance. An owner-requested retry succeeded; remote
+main and feature heads both remained at `4a12094`. Fresh scoped contracts passed
+88/88 and both separate production builds passed their security/boundary gates.
+The Admin rerun exposed an ambiguous global "Verify real event" test selector
+(Website and Pasabuy both offer it); the test now selects the intended Website
+article explicitly. No production component was changed for that fixture issue.
+
+Owner requested another truth audit and allowed mock data to prove future records
+are reflected. This follow-up is local/uncommitted, not a new production release.
+The older dashboard below was subsequently delivered in `46827c7`; historical
+local-only statements below describe its original verification checkpoint.
+
+Changed: Overview, shared overviewAvailability and new overviewPeriod helpers,
+prepared Admin overview route, three regression files, idea register, rulebook,
+System Brain and owning MAP-028 I-012 / MAP-021. PRODUCT.md and DESIGN.md unchanged.
+The four design skills guided clearer state/metric copy while preserving the
+existing Admin product register, layout, typography and navigation.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Malformed successful sources could look empty | Invalid shapes, amounts, stock and backlog marked unavailable | Unknown is not zero. |
+| Legacy stock omitted from realtime and polling | Product/batch events plus visible-tab 30s/return refresh | Newly retrieved records update the existing widgets. |
+| Blank/prefix-matched source attribution | Exact aliases, otherwise Other | Do not invent channel provenance. |
+| API UTC versus viewer-local reporting boundary | Shared Asia/Manila day boundary and chart labels | Consistent totals across staff locations. |
+| Revenue/queue/deadline wording overstated meaning | Creation-day verified request value, count sorting, recorded deadlines | Do not imply settlement, risk ranking or contractual SLA. |
+
+Verification after final implementation:
+
+- `npx playwright test --config=playwright.api.config.js tests/admin-logic-regressions.spec.js tests/admin-bff-contract.spec.js tests/admin-sales-calculation.spec.js`: **88 passed**. Includes invalid shapes/numbers and Manila midnight/year boundary. A pre-existing incomplete mock order failed the stronger contract; adding its actual amount field corrected the fixture, not the validation.
+- `npm run test:admin-ui`: **32 passed**. Stock fixture sequence proves unavailable → 1 SKU → 2 SKUs/1 out-of-stock → unavailable → valid empty/0 SKUs. Other tests cover failed refresh, capped/export denial, exact amounts, destinations and mobile layouts.
+- `npm run build:admin`: passed, including prebuild security, environment/dependency/import checks, isolated Admin bundle boundary, budget and artifact secret scan.
+- Screenshots in this directory were refreshed by the fixture suite; all numbers are fabricated test records, not production business evidence.
+
+Limits/next action: promote the reviewed patch, then perform authenticated
+real-host acceptance and reconcile dashboard aggregates to authorized canonical
+queries. Browser mocks validate the legacy transport; BFF behavior has contract
+coverage, not a new authenticated production journey. Exact-shop adapter feeds,
+settlement, traffic and profit remain unverified/unavailable as described in MAP.
+No mock seed was installed, no keys requested, no paid calls/SQL/provider changes
+made. Recovery is a scoped revert of this follow-up, not a database rollback.
+
+## Original widget checkpoint
+
 Requested 6 September; verification continued 7 September 2026.
 IDEA-20260906-07 refines IDEA-20260906-06, owned by MAP-028 I-012 / MAP-021/023/025.
 Checkout `.tools/hero-release`, branch `codex/automatic-intake-preparation`.

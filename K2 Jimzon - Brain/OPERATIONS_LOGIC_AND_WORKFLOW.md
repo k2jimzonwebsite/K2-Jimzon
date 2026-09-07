@@ -26,6 +26,15 @@ zeros. Zero means no matching retrieved internal records. An interrupted refresh
 labels the retained snapshot's original period, including exports. New metrics
 sources require verified integration evidence and remain in the active MAP.
 
+Dashboard truth refinement (IDEA-20260907-02): malformed source shapes and invalid
+stock, amount or backlog values must be unavailable, not coerced to healthy zero.
+API/UI reporting days use Asia/Manila. Payment-verified request value is grouped
+by request creation, not receipt/settlement date. Count-sorted queues are not the
+risk priority ordering required in §21; SKU/batch flags can overlap. Blank and
+unrecognized channel sources must not be attributed to Website or a marketplace.
+Refresh uses the existing authorized read boundary, including visible-tab polling
+and return-to-tab refresh; mock records belong only in isolated tests.
+
 **Automatic intake boundary (IDEA-20260906-05; prepared, not activated):**
 Manual ChatGPT Projects remains a separate usable path. Automatic requests use
 only registered package evidence, require staff+AAL2 and exact session ownership,

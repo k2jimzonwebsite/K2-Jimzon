@@ -270,6 +270,34 @@ test.describe('admin command center redesign', () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
   })
 
+  test('malformed stock source stays unavailable and new stock reflects on visibility refresh', async ({ page }) => {
+    let rows = { invalid: 'fixture' }
+    await page.route('**/rest/v1/products*', route => {
+      if (route.request().method() === 'HEAD') return route.fallback()
+      return route.fulfill({ json: rows })
+    })
+    await page.goto('/admin-portal-k2-secure')
+    await page.getByRole('navigation', { name: 'Dashboard widgets' }).getByRole('button', { name: 'Stock metrics', exact: true }).click()
+    await expect(page.getByText('This widget is unavailable because its records could not be retrieved.', { exact: false })).toBeVisible()
+    rows = [{ ...products[0], stock_available: 18 }]
+    await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')))
+    await expect(page.getByRole('heading', { name: 'Inventory health', exact: true })).toBeVisible()
+    await expect(page.getByText('Some analytics are unavailable', { exact: false })).toBeHidden()
+    const skuTotal = page.getByText('Catalog SKUs', { exact: true }).locator('../..').locator('p').last()
+    await expect(skuTotal).toHaveText('1')
+    rows = [{ ...products[0], stock_available: 18 }, { ...products[1], stock_available: 0 }]
+    await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')))
+    await expect(skuTotal).toHaveText('2')
+    await expect(page.getByText('Out of stock', { exact: true }).locator('../..').locator('p').last()).toHaveText('1')
+    rows = null
+    await page.getByRole('button', { name: 'Refresh', exact: true }).click()
+    await expect(page.getByText('This widget is unavailable because its records could not be retrieved.', { exact: false })).toBeVisible()
+    rows = []
+    await page.getByRole('button', { name: 'Refresh', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Inventory health', exact: true })).toBeVisible()
+    await expect(skuTotal).toHaveText('0')
+  })
+
   test('failed period refresh preserves and labels the prior snapshot and export period', async ({ page }) => {
     await page.goto('/admin-portal-k2-secure')
     await expect(page.getByRole('region', { name: 'Key performance indicators' })).toContainText('₱38,885')
@@ -674,7 +702,7 @@ test.describe('admin command center redesign', () => {
     })
     await expect(page.getByRole('heading', { name: 'Channel readiness board' })).toBeVisible()
     await expect(page.getByText('External marketplaces are not connected.')).toBeVisible()
-    await page.getByRole('button', { name: 'Verify real event' }).click()
+    await page.getByRole('article').filter({ hasText: 'K2 Jimzon Website' }).getByRole('button', { name: 'Verify real event', exact: true }).click()
     const dialog = page.getByRole('dialog', { name: 'Verify K2 Jimzon Website' })
     await expect(dialog).toBeVisible()
     await expect(dialog.getByRole('button', { name: 'Close verification dialog' })).toBeFocused()

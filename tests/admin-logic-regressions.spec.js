@@ -1,12 +1,32 @@
 import { expect, test } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
 
+test('overview periods use Manila midnight across UTC day and year boundaries', async () => {
+  const { overviewDateKey, overviewPeriodStart } = await import('../src/lib/overviewPeriod.js')
+  const now = new Date('2026-12-31T16:05:00Z')
+  expect(overviewDateKey(now)).toBe('2027-01-01')
+  expect(overviewDateKey('2026-12-31T15:59:59Z')).toBe('2026-12-31')
+  expect(overviewPeriodStart(7, 0, now).toISOString()).toBe('2026-12-25T16:00:00.000Z')
+  expect(overviewPeriodStart(7, 1, now).toISOString()).toBe('2026-12-18T16:00:00.000Z')
+})
+
 test('overview completeness rejects capped result sets instead of reporting their subtotal as a total', async () => {
   const { overviewUnavailable } = await import('../src/lib/overviewAvailability.js')
-  expect(overviewUnavailable([{ data: [{ id: 1 }], count: 2 }], ['orders'])).toEqual([{ key: 'orders', code: 'RESULT_INCOMPLETE' }])
+  expect(overviewUnavailable([{ data: [{ id: 1, total_amount: 25 }], count: 2 }], ['orders'])).toEqual([{ key: 'orders', code: 'RESULT_INCOMPLETE' }])
   expect(overviewUnavailable([{ data: [], count: 0 }], ['orders'])).toEqual([])
   expect(overviewUnavailable([{ data: null, count: 4 }], ['orderBacklog'])).toEqual([])
   expect(overviewUnavailable([{ error: { message: 'fixture' } }], ['orders'])).toEqual([{ key: 'orders', code: 'QUERY_UNAVAILABLE' }])
+  for (const data of [undefined, null, {}, [null], ['invalid']]) {
+    expect(overviewUnavailable([{ data }], ['orders'])).toEqual([{ key: 'orders', code: 'RESULT_INVALID' }])
+  }
+  for (const count of [undefined, null, -1, 1.5, '4']) {
+    expect(overviewUnavailable([{ data: null, count }], ['orderBacklog'])).toEqual([{ key: 'orderBacklog', code: 'RESULT_INVALID' }])
+  }
+  for (const value of [null, undefined, '', true, 'invalid', -1]) {
+    expect(overviewUnavailable([{ data: [{ stock_available: value }] }], ['products'])).toEqual([{ key: 'products', code: 'RESULT_INVALID' }])
+    expect(overviewUnavailable([{ data: [{ total_amount: value }] }], ['orders'])).toEqual([{ key: 'orders', code: 'RESULT_INVALID' }])
+  }
+  expect(overviewUnavailable([{ data: [{ stock_available: 0 }] }], ['products'])).toEqual([])
 })
 
 test('overview never fabricates inventory metrics when product data is empty or unavailable', async () => {

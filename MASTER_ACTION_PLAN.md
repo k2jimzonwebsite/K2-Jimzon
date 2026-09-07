@@ -1,5 +1,23 @@
 # K2 Jimzon Master Action Plan
 
+**Dashboard truth follow-up — IDEA-20260907-02 / MAP-028 I-012 / MAP-021:**
+Continuation release checkpoint: the approval-service usage error was not an
+account usage limit; account status showed available allowance. The explicitly
+authorized retry succeeded, with remote main/feature both at `4a12094`. Release
+execution has resumed. Stage only the dashboard patch and affected records;
+record separate production receipts after promotion, never infer live acceptance
+from local fixtures or from a successful Git push.
+Local corrections verified: malformed source/stock/amount guards, stock refresh,
+exact channel attribution, accurate labels and shared Asia/Manila windows.
+Evidence: `docs/evidence/20260906-admin-widgets/README.md` (7 September follow-up):
+88 contracts/calculations, 32 Admin browser tests and Admin build/security pass.
+Remaining: review and promote this local patch separately from the earlier release;
+then verify authenticated production empty/error/populated/refresh behavior against
+authorized records and reconcile displayed counts with canonical source queries.
+Exact-shop analytics/provider feeds remain separate activation work; fixtures do
+not prove live feeds, settlement or complete operational readiness. Recover by
+reverting only this follow-up patch; no SQL, provider or production data changed.
+
 ## Operational readiness refinement — IDEA-20260907-01
 
 **Code release verified, 7 September:** commit `46827c7` is on GitHub `main`;

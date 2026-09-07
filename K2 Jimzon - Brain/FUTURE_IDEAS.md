@@ -1,5 +1,11 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260907-02 — accepted refinement, merged into MAP-028 I-012 / MAP-021.**
+Owner requests another dashboard truth audit with fabricated test records proving
+that later real data updates the widgets. Reuse the existing overview boundary;
+reject malformed source results and verify refresh/recovery. Mock data stays in
+the test harness; no production seed or fabricated metric is authorized.
+
 **IDEA-20260907-01 — accepted refinement, merged into MAP-018 / MAP-023 /
 MAP-026 / MAP-028 I-016.** Owner requests continued engineering readiness for
 payment details, inventory receiving and channel operations. Audit: reuse the

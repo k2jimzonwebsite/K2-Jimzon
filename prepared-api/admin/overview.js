@@ -1,14 +1,12 @@
 import { authorizeAdminRequest } from '../../server/admin-bff/authorize.js'
 import { requireAdminProject, safeJson } from '../../server/admin-bff/security.js'
 import { overviewUnavailable } from '../../src/lib/overviewAvailability.js'
+import { overviewPeriodStart } from '../../src/lib/overviewPeriod.js'
 
 const ALLOWED_RANGES = new Set([7, 30, 90])
 
 function periodStart(days) {
-  const date = new Date()
-  date.setUTCHours(0, 0, 0, 0)
-  date.setUTCDate(date.getUTCDate() - ((days * 2) - 1))
-  return date.toISOString()
+  return overviewPeriodStart(days, 1).toISOString()
 }
 
 export async function readOverviewData(client, range) {
@@ -27,14 +25,14 @@ export async function readOverviewData(client, range) {
   const unavailable = overviewUnavailable(results, keys)
   return {
     data: {
-      orders: results[0].data || [],
+      orders: Array.isArray(results[0].data) ? results[0].data.filter(row => row && typeof row === 'object') : [],
       orderBacklog: results[1].error ? 0 : (results[1].count || 0),
-      pasabuy: results[2].data || [],
-      batches: results[3].data || [],
-      connections: results[4].data || [],
-      listings: results[5].data || [],
-      products: results[6].data || [],
-      conversations: results[7].data || [],
+      pasabuy: Array.isArray(results[2].data) ? results[2].data.filter(row => row && typeof row === 'object') : [],
+      batches: Array.isArray(results[3].data) ? results[3].data.filter(row => row && typeof row === 'object') : [],
+      connections: Array.isArray(results[4].data) ? results[4].data.filter(row => row && typeof row === 'object') : [],
+      listings: Array.isArray(results[5].data) ? results[5].data.filter(row => row && typeof row === 'object') : [],
+      products: Array.isArray(results[6].data) ? results[6].data.filter(row => row && typeof row === 'object') : [],
+      conversations: Array.isArray(results[7].data) ? results[7].data.filter(row => row && typeof row === 'object') : [],
     },
     unavailable,
   }
