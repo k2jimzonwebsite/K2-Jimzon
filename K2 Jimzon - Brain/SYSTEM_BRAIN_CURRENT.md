@@ -1,5 +1,16 @@
 # K2 Jimzon — System Brain (Current State)
 
+**Production code delivery verified, 7 September 2026:** `46827c7e6c8df2a85e88320c7b1855d917a5b3e4`
+reached GitHub `main`; CI run `34083906899` completed successfully. GitHub's
+production deployment receipts `6302082283` (Admin) and `6302086373` (Storefront)
+both report success for that SHA. Browser verification rendered the canonical
+Admin staff sign-in and Storefront home/catalog content. This supersedes the
+preflight-only deployment statements below for code delivery. Authenticated staff
+acceptance, unapplied SQL, provider configuration and operational activation
+remain open. Failed preview statuses shared the production check names; they
+must not be interpreted as failed production deployments. Full receipt URLs:
+`docs/evidence/20260907-operational-readiness/README.md`.
+
 **7 September release state:** the owner authorized promotion of the integrated
 automatic-intake, dashboard and operational-readiness code to GitHub `main` and
 the two linked Vercel projects. The complete local release gate passes, including

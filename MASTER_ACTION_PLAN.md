@@ -2,6 +2,18 @@
 
 ## Operational readiness refinement — IDEA-20260907-01
 
+**Code release verified, 7 September:** commit `46827c7` is on GitHub `main`;
+CI `34083906899` passed. Production deployment receipts `6302082283` (Admin)
+and `6302086373` (Storefront) report success for the same full SHA. The canonical
+Admin staff sign-in and Storefront home render in browser verification. The
+preflight-only deployment statements below are superseded for code delivery;
+SQL/provider/channel activation and authenticated operational acceptance are
+still pending. Preview failures use the same status names and must be tracked
+separately. Next: follow the existing activation order below and verify staff
+journeys after their prerequisites; no SQL or paid-provider activation occurred.
+Rollback of this code release is a reviewed revert to baseline `04734cb`, followed
+by separate project checks. Deployment receipts are in the owning evidence file.
+
 MAP-018 / MAP-023 / MAP-026 / MAP-028 I-016: prepare payment-detail handoff,
 inventory receiving and channel handling without paid calls or production changes.
 **Resumed and audited, 7 September 2026:** owner requested implementation,

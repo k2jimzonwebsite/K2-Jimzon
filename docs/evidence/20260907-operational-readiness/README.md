@@ -15,6 +15,35 @@ until remote receipts are appended below.
 
 ## Production-release preflight
 
+### Confirmed production delivery
+
+Code commit `46827c7e6c8df2a85e88320c7b1855d917a5b3e4` was pushed to both
+`codex/automatic-intake-preparation` and GitHub `main` by fast-forward from
+`04734cb`. [GitHub CI 34083906899](https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/34083906899)
+completed successfully, including the aggregate acceptance and database gates.
+
+- Admin production receipt `6302082283`: success at `2026-09-07T04:39:49Z`,
+  [deployment](https://k2-jimzon-admin-4uru6ez40-k2-jimzon.vercel.app).
+- Storefront production receipt `6302086373`: success at `2026-09-07T04:40:13Z`,
+  [deployment](https://k2-jimzon-kjfe3yx1d-k2-jimzon.vercel.app).
+
+Both receipts bind the same full code SHA. Browser verification rendered staff
+sign-in at `https://admin.k2jimzon.com/admin-portal-k2-secure` and the home page
+with catalog content at `https://www.k2jimzon.com/`. This is entry-page delivery
+evidence; no authenticated staff journey or payment/stock write was performed.
+
+The initial aggregate commit status misleadingly mixed failed previews with
+production. Production-specific GitHub deployment status records resolve that
+ambiguity. The available Vercel CLI/connector account could access only
+`edgerzxcs-projects`, and the browser was logged out of Vercel; direct preview
+build-log diagnosis remains unavailable. No production failure is inferred from
+those preview failures. The successful production receipts above are explicit.
+
+Earlier local-only statements in this record describe pre-release work and are
+superseded by this section for code delivery only. SQL, provider keys/flags,
+paid calls and external channel activation remain unchanged. Recovery is a
+reviewed code revert to `04734cb` followed by separate project verification.
+
 The fresh CI-equivalent local gate passed on 7 September 2026: dependency audit
 reported zero vulnerabilities; security, environment, tracked-file, secret,
 history and import checks passed; isolated Storefront and Admin builds passed;
