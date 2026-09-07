@@ -1,6 +1,6 @@
 # K2 Jimzon — System Brain (Current State)
 
-**Dashboard truth follow-up, 7 September (IDEA-20260907-02; local only):**
+**Dashboard truth follow-up, 7 September (IDEA-20260907-02; code deployed):**
 Overview rejects malformed source bodies, invalid backlog counts and unknown/
 invalid stock or monetary values rather than presenting valid zero totals.
 Visible tabs refresh every 30 seconds and on return; the legacy path also listens
@@ -10,7 +10,12 @@ Channel aliases are exact; blank/unrecognized sources remain Other. Copy names
 creation-day payment-verified value, recorded deadlines and count-based queues.
 88 contract/calculation tests, 32 Admin browser tests and Admin build/security
 passed. Fixtures prove displayed stock updates, not live database/provider feeds.
-This follow-up is not deployed; next acceptance remains MAP-028 I-012 / MAP-021.
+Commit `ace4fb6ecdf09ae86d23373bc5bd8fa11c43dbd4` reached GitHub main and
+feature; Vercel production receipts `6305213175` (Admin, 08:50:44Z) and
+`6305219977` (Storefront, 08:51:09Z) succeeded. Canonical Admin staff sign-in
+rendered. CI `34102722278` passed full acceptance and MAP-017/catalog PostgreSQL
+rehearsals. Authenticated
+data acceptance remains MAP-028 I-012 / MAP-021, not proven by fixture results.
 Evidence: `docs/evidence/20260906-admin-widgets/README.md`.
 
 **Production code delivery verified, 7 September 2026:** `46827c7e6c8df2a85e88320c7b1855d917a5b3e4`

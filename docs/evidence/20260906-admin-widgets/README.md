@@ -11,7 +11,22 @@ The Admin rerun exposed an ambiguous global "Verify real event" test selector
 article explicitly. No production component was changed for that fixture issue.
 
 Owner requested another truth audit and allowed mock data to prove future records
-are reflected. This follow-up is local/uncommitted, not a new production release.
+are reflected. Release commit `ace4fb6ecdf09ae86d23373bc5bd8fa11c43dbd4`
+was pushed to main and the feature branch under the earlier owner authorization.
+Fresh local acceptance: 88 scoped contracts, 32 Admin browser tests, both separate
+production builds/security gates and diff check passed. The ambiguous selector
+failed before its scoped correction; the complete browser rerun then passed.
+
+GitHub production receipts (not preview statuses):
+
+- Admin `6305213175`, success `2026-09-07T08:50:44Z`: https://k2-jimzon-admin-gombhoj7u-k2-jimzon.vercel.app
+- Storefront `6305219977`, success `2026-09-07T08:51:09Z`: https://k2-jimzon-hmjlcsgvq-k2-jimzon.vercel.app
+- Receipt source: GitHub deployments/statuses API for `k2jimzonwebsite/K2-Jimzon`, both bound to the full release SHA above.
+- CI: https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/34102722278 — success, build-and-smoke 5m3s. Full aggregate acceptance, both isolated builds/security gates, MAP-017 migration/rollback/authorization and catalog migration/rollback PostgreSQL rehearsals passed. The runner emitted a non-failing Node 20 action-runtime deprecation notice; no workflow change was made in this dashboard patch.
+- Canonical Admin browser smoke check rendered staff sign-in; canonical Storefront home rendered its hero and catalog content. No authenticated session or business-data mutation was used. Rendering is not verification of all business claims or stock correctness.
+
+Recovery: reviewed revert of `ace4fb6` restores the prior `4a12094` code state;
+verify the two project receipts after any rollback. No database rollback needed.
 The older dashboard below was subsequently delivered in `46827c7`; historical
 local-only statements below describe its original verification checkpoint.
 
@@ -36,7 +51,7 @@ Verification after final implementation:
 - `npm run build:admin`: passed, including prebuild security, environment/dependency/import checks, isolated Admin bundle boundary, budget and artifact secret scan.
 - Screenshots in this directory were refreshed by the fixture suite; all numbers are fabricated test records, not production business evidence.
 
-Limits/next action: promote the reviewed patch, then perform authenticated
+Limits/next action: perform authenticated
 real-host acceptance and reconcile dashboard aggregates to authorized canonical
 queries. Browser mocks validate the legacy transport; BFF behavior has contract
 coverage, not a new authenticated production journey. Exact-shop adapter feeds,

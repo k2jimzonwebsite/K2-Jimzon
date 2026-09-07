@@ -11,8 +11,10 @@ Local corrections verified: malformed source/stock/amount guards, stock refresh,
 exact channel attribution, accurate labels and shared Asia/Manila windows.
 Evidence: `docs/evidence/20260906-admin-widgets/README.md` (7 September follow-up):
 88 contracts/calculations, 32 Admin browser tests and Admin build/security pass.
-Remaining: review and promote this local patch separately from the earlier release;
-then verify authenticated production empty/error/populated/refresh behavior against
+Release `ace4fb6` reached both remote branches. Vercel production receipts
+`6305213175` (Admin) and `6305219977` (Storefront) succeeded for that full SHA.
+CI `34102722278` passed, including full acceptance and MAP-017/catalog PostgreSQL
+rehearsals. Remaining: verify authenticated production empty/error/populated/refresh behavior against
 authorized records and reconcile displayed counts with canonical source queries.
 Exact-shop analytics/provider feeds remain separate activation work; fixtures do
 not prove live feeds, settlement or complete operational readiness. Recover by
