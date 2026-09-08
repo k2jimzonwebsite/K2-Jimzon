@@ -1,5 +1,22 @@
 # K2 Jimzon — System Brain (Current State)
 
+**Production code release verified, 8 September 2026:**
+GitHub `main` is at `6ad7578235c8a6b16ce42b947028f090f1ae1eb1`.
+CI `34229084356` passed the complete application acceptance, production builds,
+MAP-017 database rehearsal, and catalog migration rehearsal. Vercel production
+receipts `6328123772` (Storefront) and `6328115682` (Admin) succeeded for the
+same SHA. The canonical Storefront home, `/store`, and Admin guarded route each
+returned HTTP 200. The live architectural store rendered at desktop, 390x844
+portrait, and 844x390 landscape with its navigation, 3D clerk/counter scene,
+shelf concierge, and no horizontal overflow. This is verified code delivery
+and unauthenticated render evidence. Exact-host discovery passed canonical and
+share metadata, robots, and the two-URL XML sitemap; target marker reads proved
+Storefront/Admin artifact separation, and the Admin guarded route rendered the
+invite-only staff sign-in boundary. CSP reporting/enforcement remains open.
+Prepared Supabase migrations remain
+unapplied by this release; paid providers, marketplace channels, authenticated
+staff records, and business-write acceptance remain governed by their MAP gates.
+
 **Dashboard truth follow-up, 7 September (IDEA-20260907-02; code deployed):**
 Overview rejects malformed source bodies, invalid backlog counts and unknown/
 invalid stock or monetary values rather than presenting valid zero totals.

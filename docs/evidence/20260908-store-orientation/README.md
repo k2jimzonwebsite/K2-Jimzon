@@ -1,5 +1,16 @@
 # 3D store orientation - 8 September 2026
 
+## Production verification
+
+Commit `6ad7578235c8a6b16ce42b947028f090f1ae1eb1` reached the Storefront
+production project in Vercel receipt `6328123772`; CI `34229084356` passed.
+The canonical `/store` returned HTTP 200 and was rendered after deployment at
+desktop, 390x844 portrait, and 844x390 landscape. The store heading, shelf
+navigation, light control, exit control, zoom controls, shopkeeper, basket or
+shelf concierge remained present as appropriate, and both mobile viewports had
+no horizontal overflow. This is live-host rendering evidence; it is not a
+physical-device, screen-reader, real-order, or provider acceptance claim.
+
 Request: finish interrupted recovery work, then improve the architectural `/store`
 on desktop and mobile portrait/landscape. Owner explicitly distinguishes it from
 catalog/shop. IDEA-20260908-02 is merged into MAP-028 I-009/I-015 and MAP-027.

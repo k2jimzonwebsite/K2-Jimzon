@@ -1,5 +1,29 @@
 # K2 Jimzon Master Action Plan
 
+**8 September production continuation release — IDEA-20260908-01 / IDEA-20260908-02:**
+Commit `6ad7578235c8a6b16ce42b947028f090f1ae1eb1` is on GitHub `main` and CI
+run `34229084356` passed the complete Storefront/Admin acceptance suite, both
+isolated production builds, the MAP-017 PostgreSQL migration/rollback/
+authorization rehearsal, and the catalog migration/rollback rehearsal. Vercel
+production receipts `6328123772` (Storefront) and `6328115682` (Admin) both
+completed successfully for that exact SHA. Canonical HTTP checks returned 200
+for `https://www.k2jimzon.com/`, `/store`, and
+`https://admin.k2jimzon.com/admin-portal-k2-secure`. The deployed `/store` was
+rendered at 390x844 portrait, 844x390 landscape, and desktop: each showed the
+architectural store controls and shelf concierge with no horizontal overflow.
+The exact-host discovery verifier also passed canonical/Open Graph/Twitter home
+metadata, a plain-text robots file with no Admin-path disclosure, and a two-URL
+canonical XML sitemap. Storefront and Admin build markers reported their correct
+separate targets; Storefront home/store and the Admin guard returned the expected
+frame/content-type/referrer/permissions/HSTS headers. The live Admin guarded
+route rendered the invite-only staff sign-in boundary. CSP reporting/enforcement
+and authenticated operational acceptance remain open under their existing gates.
+This release promotes repository and Vercel code only. It does not apply the
+prepared Supabase migrations, activate paid providers/channels, or establish
+authenticated staff/business-write acceptance. Continue with the dependency
+and owner gates retained in the owning MAP items. Roll back by reverting
+`6ad7578` and allowing both Git-linked production projects to redeploy.
+
 **Dashboard truth follow-up — IDEA-20260907-02 / MAP-028 I-012 / MAP-021:**
 Continuation release checkpoint: the approval-service usage error was not an
 account usage limit; account status showed available allowance. The explicitly

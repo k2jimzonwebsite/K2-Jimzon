@@ -1,5 +1,21 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+8 September production receipt: GitHub `main` commit
+`6ad7578235c8a6b16ce42b947028f090f1ae1eb1` passed CI run `34229084356`.
+The Git-linked Vercel production deployments succeeded separately as receipt
+`6328123772` for Storefront and `6328115682` for Admin. Canonical HTTP checks
+returned 200 for Storefront home, `/store`, and the Admin guarded route. Browser
+checks rendered `/store` at desktop, 390x844 portrait and 844x390 landscape with
+no horizontal overflow. The exact-host discovery verifier passed canonical/share
+metadata, robots without Admin disclosure, and a canonical two-URL XML sitemap.
+The target marker returned `storefront` on the public host and `admin` on the
+Admin host; the guarded Admin route rendered invite-only staff sign-in. Required
+frame/content-type/referrer/permissions/HSTS headers were present. CSP reporting
+and enforcement remain a separately gated MAP-021/MAP-022 task. Rollback is a
+reviewed revert of `6ad7578`, followed by
+verification of both Git-linked projects. No Supabase migration or provider/
+channel activation occurred in this release.
+
 8 September local continuation, MAP-028 I-014: PROJECT_MAP and ARCHITECTURE now
 declare the registry-derived 91 Admin / 15 Storefront prepared routes. The new
 security-inventory assertion failed first, then passed after reconciliation;
