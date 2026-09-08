@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { reportError } from '../../lib/reportError'
 import {
@@ -31,10 +31,19 @@ export default function ImageUploadDropzone({
   maxFiles = 1,
   onUploadComplete,
   onMediaChange,
+  onUploadingChange,
   existingUrls = [],
 }) {
   const inputId = useId()
   const operationKeys = useRef(new Map())
+  const runtime = useRef({ active: true, busy: false })
+  const uploadObserver = useRef(onUploadingChange)
+  uploadObserver.current = onUploadingChange
+  useEffect(() => {
+    const current = { active: true, busy: false }
+    runtime.current = current
+    return () => { current.active = false }
+  }, [])
   const [uploading, setUploading] = useState(false)
   const [media, setMedia] = useState(() => (
     Array.isArray(existingUrls) ? existingUrls : (existingUrls ? [existingUrls] : [])
@@ -53,7 +62,8 @@ export default function ImageUploadDropzone({
   }
 
   const uploadFiles = async (selectedFiles) => {
-    if (uploading || !selectedFiles.length) return
+    const current = runtime.current
+    if (!current.active || current.busy || !selectedFiles.length) return
     if ((!multiple && selectedFiles.length > 1) || urls.length + selectedFiles.length > maxFiles) {
       setError(`Choose no more than ${maxFiles} photo${maxFiles === 1 ? '' : 's'} for this field.`)
       setRetryFiles([])
@@ -71,6 +81,8 @@ export default function ImageUploadDropzone({
       }
     }
 
+    current.busy = true
+    uploadObserver.current?.(true)
     setUploading(true)
     setError('')
     setRetryFiles([])
@@ -84,22 +96,30 @@ export default function ImageUploadDropzone({
         operationKeys.current.set(fingerprint, key)
         if (adminBffEnabled()) {
           const result = await uploadProductMediaBff(file, key)
+          if (!current.active) return
           if (!result.ok) throw Object.assign(new Error(result.error), { safeMessage: result.error, failedAt: index })
           uploadedMedia.push({ url: result.media.publicUrl, objectPath: result.media.objectPath })
         } else {
-          uploadedMedia.push({ url: await uploadLegacyProductMedia(file), objectPath: null })
+          const url = await uploadLegacyProductMedia(file)
+          if (!current.active) return
+          uploadedMedia.push({ url, objectPath: null })
         }
         operationKeys.current.delete(fingerprint)
         setProgress({ complete: index + 1, total: selectedFiles.length })
       }
     } catch (uploadError) {
+      if (!current.active) return
       const failedAt = Number.isInteger(uploadError?.failedAt) ? uploadError.failedAt : uploadedMedia.length
       reportError(uploadError, { kind: 'browser-error' })
       setError(uploadError?.safeMessage || 'The photo could not be uploaded safely. Check the file and try again.')
       setRetryFiles(selectedFiles.slice(failedAt))
     } finally {
-      if (uploadedMedia.length) publishMedia(multiple ? [...media, ...uploadedMedia] : [uploadedMedia[0]])
-      setUploading(false)
+      current.busy = false
+      if (current.active) {
+        if (uploadedMedia.length) publishMedia(multiple ? [...media, ...uploadedMedia] : [uploadedMedia[0]])
+        setUploading(false)
+        uploadObserver.current?.(false)
+      }
     }
   }
 
@@ -110,6 +130,7 @@ export default function ImageUploadDropzone({
   }
 
   const removeImage = (indexToRemove) => {
+    if (runtime.current.busy) return
     publishMedia(media.filter((_, index) => index !== indexToRemove))
   }
 
@@ -127,6 +148,7 @@ export default function ImageUploadDropzone({
             <img src={item.url} alt={`${label || 'Product photo'} ${index + 1}`} onError={applyImageFallback} className="h-full w-full object-cover" />
             <button
               type="button"
+              disabled={uploading}
               onClick={() => removeImage(index)}
               aria-label={`Remove ${label || 'product photo'} ${index + 1}`}
               className="absolute right-1 top-1 flex min-h-11 min-w-11 items-center justify-center rounded-full bg-crimson text-white opacity-100 transition-[opacity,transform] duration-150 active:scale-[0.97] sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"

@@ -717,13 +717,14 @@ test('the speech cloud is drawn in the scene, above her head', async () => {
   expect(keeper).toContain('CLOUD.centreCm')
 })
 
-test('the greeting invites the customer through the aisle, and gives them a door', async () => {
+test('the greeting leads to direct shelves and accessible next/previous controls', async () => {
   const shop = await read('../src/views/InteractiveShop.jsx')
   const moments = await read('../src/components/shop/storeGuideState.js')
   expect(moments).toContain('Welcome to K2 Jimzon!')
-  expect(shop).toContain('Browse the shelves')
-  // The button only stands at the counter, and only when there is somewhere to go.
-  expect(shop).toMatch(/activeShelf\?\.isCounter && shelves\.length > 1/)
+  expect(shop).toContain('aria-label="Shelves"')
+  expect(shop).toContain('k2-store-steps')
+  expect(shop).toContain('Next shelf')
+  expect(shop).not.toContain('Browse the shelves')
 })
 
 test('the hair has points in it, not just spheres', async () => {
@@ -947,6 +948,114 @@ test('the aisle clerk keeps a human scale and travels exactly one bay with the c
   expect(scene).not.toContain("activeIndex === 0 ? 1 : 0.52")
   expect(scene).toContain('scale={CLERK_STAGE_SCALE}')
   expect(scene).toContain('activeIndex * BAY_SPACING + CLERK_STAGE_X')
+})
+
+test('the counter carries working props, and each one is a door into a flow the store already has', async () => {
+  const props = await read('../src/components/shop/CounterProps.jsx')
+  const scene = await read('../src/components/shop/ShelfScene3D.jsx')
+  const shop = await read('../src/views/InteractiveShop.jsx')
+
+  // A counter with nothing on it is the tell that a room is scenery.
+  expect(props).toContain("id: 'bell'")
+  expect(props).toContain("id: 'ledger'")
+  expect(props).toContain("id: 'pad'")
+  expect(props).toContain("id: 'lamp'")
+
+  // Each prop opens something that already exists. A 3D prop must never be the
+  // only way to reach a capability: the canvas is aria-hidden decoration.
+  expect(props).toContain("action: 'onAskStaff'")
+  expect(props).toContain("action: 'onOpenFaq'")
+  expect(props).toContain("action: 'onPasabuy'")
+  expect(props).toContain("action: 'onToggleLights'")
+  // The bell rings through the single chat entrance rather than opening the
+  // sheet itself, so every staff conversation still carries handoff context.
+  expect(shop).toContain('counterHandlers.current.openChat?.()')
+  expect(shop).toContain("counterHandlers.current.setSheet?.('faq')")
+  expect(shop).toContain("counterHandlers.current.go?.('pasabuy')")
+  expect(shop).toContain('counterHandlers.current.toggleDarkMode?.()')
+
+  // And the action object must keep its identity, or a hover rebuilds the
+  // scene context and cancels itself.
+  expect(shop).toMatch(/const counterActions = useMemo\(\(\) => \(\{[\s\S]*?\}\), \[\]\)/)
+
+  // The same three actions stay reachable without the scene.
+  expect(shop).toContain("onFaq={() => setSheet('faq')}")
+  expect(shop).toContain("go('pasabuy')")
+
+  // The counter bay is rendered from a list and takes an index, so the handlers
+  // travel by context rather than through its signature.
+  expect(scene).toContain('ActionsContext')
+  expect(scene).toContain('const actions = useActions()')
+  expect(scene).toContain('<CounterProps')
+})
+
+test('a prop the shopper cannot see is not a control: the flat ones are stood up and named', async () => {
+  const props = await read('../src/components/shop/CounterProps.jsx')
+  const css = await read('../src/interactive-store.css')
+
+  // The counter shot sits at about counter height, so anything lying flat on
+  // the top draws as a line. The ledger and pad carry a tilt; the bell is tall
+  // enough not to need one.
+  const tilts = [...props.matchAll(/id: '(\w+)',[\s\S]*?tilt: ([\d.]+)/g)]
+    .map(([, id, value]) => [id, Number(value)])
+  expect(Object.fromEntries(tilts).bell).toBe(0)
+  expect(Object.fromEntries(tilts).ledger).toBeGreaterThan(0.5)
+  expect(Object.fromEntries(tilts).pad).toBeGreaterThan(0.5)
+
+  // And a brass dome is ornament until it is named.
+  expect(props).toContain("label: 'Ring for staff'")
+  expect(props).toContain("label: 'Store answers'")
+  expect(props).toContain("label: 'Request a pasabuy'")
+  expect(props).toContain("label: 'Shop lights'")
+  expect(css).toContain('.k2-store-counter-hint')
+})
+
+test('the lamp shows which way the switch is, or it is a decoration', async () => {
+  const props = await read('../src/components/shop/CounterProps.jsx')
+  const scene = await read('../src/components/shop/ShelfScene3D.jsx')
+
+  // With the lights low the shop is lit by its own fittings, so the counter
+  // lamp burns; in daylight it is off. Without that the lamp is a button that
+  // gives no sign it did anything.
+  expect(props).toContain("child.name.startsWith('Lamp_Bulb')")
+  expect(props).toContain('emissiveIntensity = isDark ? 2.6 : 0')
+
+  // The bulb needs its own material instance or every prop sharing that
+  // material would light up with it.
+  expect(props).toContain('child.material = child.material.clone()')
+
+  // And the scene has to tell it which state the room is in.
+  expect(scene).toContain('isDark={room.isDark}')
+  expect(scene).toMatch(/isDark: false/)
+  expect(scene).toMatch(/isDark: true/)
+})
+
+test('the counter model is served from our own origin, so the CSP is not involved', async () => {
+  const props = await read('../src/components/shop/CounterProps.jsx')
+  expect(props).toContain("const MODEL_URL = '/models/k2-counter-props.glb'")
+  expect(props).not.toMatch(/https?:\/\//)
+
+  // It must not hold up the room being drawn.
+  const scene = await read('../src/components/shop/ShelfScene3D.jsx')
+  expect(scene).toMatch(/<Suspense fallback=\{null\}>\s*<CounterProps/)
+})
+
+test('the clerk stands behind the counter, not off the edge of its shot', async () => {
+  const scene = await read('../src/components/shop/ShelfScene3D.jsx')
+
+  // The aisle offset is most of a bay wide, which is right when she is standing
+  // in the gap between two shelf runs and wrong at the counter: it put her off
+  // the side of a shot framed on the counter itself. The aisle Z was wrong there
+  // too, standing her on the customer's side of her own till.
+  expect(scene).toContain('const CLERK_COUNTER_X')
+  expect(scene).toContain('const CLERK_COUNTER_Z')
+  expect(scene).toContain('activeIndex * BAY_SPACING + CLERK_COUNTER_X')
+  expect(scene).toContain("atCounter ? CLERK_COUNTER_Z : CLERK_STAGE_Z")
+
+  // Behind the counter means behind its back face. The body is centred on
+  // z = 1.4 and is COUNTER.depthCm deep, so anything above that is in front.
+  const counterZ = Number(/const CLERK_COUNTER_Z = (-?[\d.]+)/.exec(scene)[1])
+  expect(counterZ).toBeLessThan(1.4 - cm(COUNTER.depthCm) / 2)
 })
 
 test('the right rail is an actionable shelf concierge before a product is selected', async () => {

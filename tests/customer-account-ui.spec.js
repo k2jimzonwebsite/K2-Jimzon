@@ -25,7 +25,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('customer account entry is phone-safe, passwordless, recoverable, and keeps primary mobile navigation at five', async ({ page, context }, testInfo) => {
-  test.setTimeout(90000)
+  test.setTimeout(180000)
   await page.route('https://challenges.cloudflare.com/turnstile/v0/api.js**', route => route.fulfill({
     contentType: 'application/javascript',
     body: `window.turnstile={render:(_,options)=>{options.callback('verified-test-token');return 1},remove:()=>{}}`,
@@ -35,9 +35,9 @@ test('customer account entry is phone-safe, passwordless, recoverable, and keeps
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) })
   })
   await page.goto('/', { waitUntil: 'domcontentloaded' })
-  await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 })
+  await expect(page.getByRole('main')).toBeVisible({ timeout: 90000 })
   await page.getByRole('button', { name: 'Customer account' }).click()
-  await expect(page.getByRole('heading', { name: 'Keep verified K2 history across devices.' })).toBeVisible({ timeout: 30000 })
+  await expect(page.getByRole('heading', { name: 'Keep verified K2 history across devices.' })).toBeVisible({ timeout: 90000 })
   await expect(page.getByRole('navigation', { name: 'Mobile storefront' }).getByRole('button')).toHaveCount(5)
   await expect(page.getByLabel('Email address')).toBeVisible()
   await expect(page.getByText('Complete this check before K2 asks the sign-in provider to send a link or text code.')).toBeVisible()

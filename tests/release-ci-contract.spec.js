@@ -32,6 +32,7 @@ test('remote CI runs the complete local acceptance command without skipping prot
     'test:base',
     'test:storefront-ui',
     'test:admin-ui',
+    'test:payment-ui',
     'test:admin-product-master-ui',
     'test:owner-count-close-ui',
     'test:customer-account-ui',
@@ -60,6 +61,16 @@ test('the shared Playwright server cannot be reused by a CI run', async () => {
 
   expect(config).toContain('reuseExistingServer: !process.env.CI')
   expect(config).toContain("'owner-count-close-ui.spec.js'")
+  expect(config).toContain("'payment-recovery-ui.spec.js'")
+  expect(config).toContain("'coupon-recovery-ui.spec.js'")
+})
+
+test('selling fixtures wait for the observed slow CSS transform before starting browser assertions', async () => {
+  const { default: config } = await import('../playwright.selling.config.js')
+  expect(config.webServer.url).toBe(`${config.use.baseURL}/src/index.css`)
+  expect(config.webServer.command).toContain('--strictPort')
+  expect(config.webServer.reuseExistingServer).toBe(false)
+  expect(config.timeout).toBe(120000)
 })
 
 test('every Playwright runner rejects accidental focused tests in CI', async () => {
@@ -68,6 +79,7 @@ test('every Playwright runner rejects accidental focused tests in CI', async () 
     'playwright.account.config.js',
     'playwright.admin.config.js',
     'playwright.api.config.js',
+    'playwright.payment.config.js',
     'playwright.map027.config.js',
     'playwright.owner-close.config.js',
     'playwright.product-master.config.js',

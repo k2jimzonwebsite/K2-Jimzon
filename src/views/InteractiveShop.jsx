@@ -75,6 +75,8 @@ export default function InteractiveShop() {
   // 3D scene is a focus trap fighting another focus trap.
   const [sheet, setSheet] = useState(null)
   const [chatSeed, setChatSeed] = useState(null)
+  const [questionActive, setQuestionActive] = useState(false)
+  const [basketError, setBasketError] = useState('')
   // Each press is a fresh object so the scene sees a new value even when the
   // customer zooms the same direction twice.
   const [zoomRequest, setZoomRequest] = useState(null)
@@ -114,6 +116,7 @@ export default function InteractiveShop() {
   const handleSelect = (product) => {
     const id = product?.sku || product?.id
     if (!id) return
+    setBasketError('')
     setSelectedSku(id)
     const owningIndex = shelves.findIndex(shelf =>
       shelf.products.some(p => (p.sku || p.id) === id),
@@ -176,9 +179,10 @@ export default function InteractiveShop() {
    */
   const [greeted, setGreeted] = useState(false)
   useEffect(() => {
+    if (loading) return undefined
     const timer = setTimeout(() => setGreeted(true), 9000)
     return () => clearTimeout(timer)
-  }, [])
+  }, [loading])
 
   // Her mouth moves only while a line is actually being delivered. A character
   // whose mouth runs continuously is not talking, it is chewing.
@@ -203,7 +207,8 @@ export default function InteractiveShop() {
     product: selectedProduct,
     greeted,
     basketPulse: basketCelebrating ? basketPulse : 0,
-  }), [activeShelf, selectedProduct, greeted, basketCelebrating, basketPulse])
+    basketError, questionActive, sheet,
+  }), [activeShelf, selectedProduct, greeted, basketCelebrating, basketPulse, basketError, questionActive, sheet])
 
   // Speak whenever the line changes, not on every render.
   useEffect(() => say(storeMoment.message), [storeMoment.message, say])
@@ -211,7 +216,18 @@ export default function InteractiveShop() {
   const handleAddToCart = (product) => {
     const id = product?.sku || product?.id
     if (!id) return
-    if (addToCart(id).ok) setBasketPulse(n => n + 1)
+    const result = addToCart(id)
+    if (result.ok) {
+      setBasketError('')
+      setBasketPulse(n => n + 1)
+    } else {
+      setBasketCelebrating(false)
+      setBasketError(result.code === 'STOCK_UNKNOWN'
+        ? 'Stock is still being checked. Nothing was added; please try again shortly.'
+        : result.code === 'INSUFFICIENT_STOCK'
+          ? 'Your basket already holds the available quantity of this item.'
+          : 'This item cannot be added right now. Choose another item or ask K2 for help.')
+    }
   }
 
   const basketCount = lines?.reduce((sum, line) => sum + (line.qty || 0), 0) ?? 0
@@ -238,6 +254,8 @@ export default function InteractiveShop() {
   const goToShelf = (index) => {
     setShelfIndex(index)
     setSelectedSku(null)
+    setBasketError('')
+    resetZoom()
   }
 
   /**
@@ -249,8 +267,10 @@ export default function InteractiveShop() {
    * is the same bounded shape as before: product identity and the question, and
    * nothing else.
    */
-  const openChat = (question = '') => {
-    const context = buildStaffHandoffContext(selectedProduct || {}, question)
+  const [counterHint, setCounterHint] = useState(null)
+
+  const openChat = (question = '', origin = null) => {
+    const context = buildStaffHandoffContext(origin || selectedProduct || {}, question)
     const trimmed = String(question || '').trim()
     if (trimmed) {
       const reference = context.sku
@@ -258,8 +278,42 @@ export default function InteractiveShop() {
         : context.productName || ''
       setChatSeed({ message: reference ? `About ${reference}\n\n${trimmed}` : trimmed })
     }
+    setQuestionActive(false)
     setSheet('chat')
   }
+
+  /**
+   * What the props on the counter do.
+   *
+   * Each one is a shortcut to a flow the store already has, not a new one: the
+   * bell rings through to the same conversation a shelf question opens, the
+   * ledger opens the same approved-knowledge sheet as the FAQ link, and the pad
+   * leaves for the same Pasabuy route as the header button. The canvas is
+   * `aria-hidden` decoration, so nothing may live only there — every one of
+   * these is reachable from the rail and the header without the 3D scene.
+   *
+   * The bell deliberately goes through `openChat` rather than opening the sheet
+   * itself. The shop keeps exactly one live-chat entrance so every staff
+   * conversation carries the same handoff context; a second door into the same
+   * sheet is how that stops being true.
+   *
+   * The object has to keep its identity across renders. Rebuilt each time, it
+   * becomes a new scene context on every state change — including the one this
+   * very hover causes — which re-attached the props' pointer handlers mid-hover
+   * and cancelled the hover that set it. The handlers are therefore read from a
+   * ref that is kept current, and the object itself never changes.
+   */
+  const counterHandlers = useRef({})
+  useEffect(() => {
+    counterHandlers.current = { openChat, setSheet, go, toggleDarkMode }
+  })
+  const counterActions = useMemo(() => ({
+    onAskStaff: () => counterHandlers.current.openChat?.(),
+    onOpenFaq: () => counterHandlers.current.setSheet?.('faq'),
+    onPasabuy: () => counterHandlers.current.go?.('pasabuy'),
+    onToggleLights: () => counterHandlers.current.toggleDarkMode?.(),
+    onHoverLabel: setCounterHint,
+  }), [])
 
   return (
     <main className="k2-store" aria-label="K2 virtual store">
@@ -364,12 +418,25 @@ export default function InteractiveShop() {
                     onSelect={handleSelect}
                     onShelfChange={goToShelf}
                     onFailure={handleSceneFailure}
-                    keeper={{ ...storeMoment, talking }}
+                    keeper={{ ...storeMoment, talking: talking && !['listen', 'read', 'think'].includes(storeMoment.gesture), product: selectedProduct, activityKey: basketPulse }}
                     zoomRequest={zoomRequest}
                     isDark={isDark}
+                    actions={counterActions}
                   />
                 </Suspense>
               </SceneBoundary>
+            )}
+
+            {/* What the thing under the pointer is. A 3D prop gives no
+                affordance on its own — without a name, a brass dome on a
+                counter is decoration and nobody clicks it. */}
+            {counterHint && (
+              <p
+                className="k2-store-counter-hint"
+                aria-hidden="true"
+              >
+                {counterHint}
+              </p>
             )}
 
             {sceneReady === false && (
@@ -386,20 +453,6 @@ export default function InteractiveShop() {
                   </p>
                 </div>
               </div>
-            )}
-
-            {/* She invites the customer through the aisle, so there has to be
-                one obvious way to accept. The shelf tabs and the drag gesture
-                both still work; this is the door she is pointing at. */}
-            {activeShelf?.isCounter && shelves.length > 1 && (
-              <button
-                type="button"
-                onClick={() => goToShelf(1)}
-                className="k2-store-enter"
-              >
-                Browse the shelves
-                <span aria-hidden="true"> →</span>
-              </button>
             )}
 
             {/* Zoom. The wheel and pinch both work, but neither is discoverable
@@ -452,7 +505,7 @@ export default function InteractiveShop() {
                   <li key={id}>
                     <button
                       type="button"
-                      onClick={() => setSelectedSku(id)}
+                      onClick={() => handleSelect(product)}
                       aria-pressed={selectedSku === id}
                       className={`min-h-[44px] rounded-full border px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson ${
                         selectedSku === id
@@ -473,6 +526,7 @@ export default function InteractiveShop() {
               shelf={activeShelf}
               product={selectedProduct}
               onAskStaff={openChat}
+              onQuestionActivity={setQuestionActive}
             />
 
             <StoreBasketDock
@@ -501,7 +555,8 @@ export default function InteractiveShop() {
               onAddToCart={handleAddToCart}
               onOpenProduct={openProduct}
               onAskPasabuy={handleAskPasabuy}
-              onCloseProduct={() => setSelectedSku(null)}
+              onCloseProduct={() => { setSelectedSku(null); setBasketError('') }}
+              basketError={basketError}
             />
 
             <StoreSeoPanel product={selectedProduct} />
@@ -520,11 +575,12 @@ export default function InteractiveShop() {
 
       <StoreSheet
         open={sheet === 'chat'}
+        keepMounted
         onClose={closeSheet}
         title="Chat with K2"
         subtitle="You stay in the store. A real person replies here."
       >
-        <StoreChatPanel seed={chatSeed} onSeedConsumed={clearChatSeed} />
+        <StoreChatPanel seed={chatSeed} onSeedConsumed={clearChatSeed} active={sheet === 'chat'} />
       </StoreSheet>
     </main>
   )

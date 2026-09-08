@@ -79,7 +79,7 @@ function MessagingOffline({ seededMessage }) {
   )
 }
 
-export default function StoreChatPanel({ seed, onSeedConsumed }) {
+export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) {
   const enabled = guestBffEnabled()
 
   const [form, setForm] = useState({ customerName: '', email: '', phone: '' })
@@ -92,15 +92,18 @@ export default function StoreChatPanel({ seed, onSeedConsumed }) {
   const [notice, setNotice] = useState('')
   const requestKey = useRef({ fingerprint: '', key: '' })
   const threadRef = useRef(null)
+  useEffect(() => { if (!active) setBotToken('') }, [active])
 
   // A question asked at the shelf arrives as bounded product context. It seeds
   // the box once and is then the customer's to edit or delete — it is never
   // re-applied underneath them as they type.
   useEffect(() => {
     if (!seed?.message) return
-    setMessage((current) => (current ? current : seed.message))
-    onSeedConsumed?.()
-  }, [seed, onSeedConsumed])
+    if (!message || message === seed.message) {
+      setMessage(seed.message)
+      onSeedConsumed?.()
+    }
+  }, [seed, onSeedConsumed, message])
 
   const refresh = useCallback(async () => {
     if (!enabled || !conversation?.conversation_reference) return
@@ -114,10 +117,10 @@ export default function StoreChatPanel({ seed, onSeedConsumed }) {
 
   // Poll only while there is a conversation to poll for.
   useEffect(() => {
-    if (!conversation?.conversation_reference) return undefined
+    if (!active || !conversation?.conversation_reference) return undefined
     const timer = setInterval(refresh, POLL_MS)
     return () => clearInterval(timer)
-  }, [conversation?.conversation_reference, refresh])
+  }, [active, conversation?.conversation_reference, refresh])
 
   // Keep the newest message in view as the thread grows.
   useEffect(() => {
@@ -125,7 +128,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed }) {
     if (node) node.scrollTop = node.scrollHeight
   }, [conversation])
 
-  if (!enabled) return <MessagingOffline seededMessage={seed?.message || message} />
+  if (!enabled) return <MessagingOffline seededMessage={[message, seed?.message !== message ? seed?.message : ''].filter(Boolean).join('\n\n')} />
 
   const update = (key) => (event) => {
     setForm((current) => ({ ...current, [key]: event.target.value }))
@@ -257,6 +260,16 @@ export default function StoreChatPanel({ seed, onSeedConsumed }) {
       )}
 
       <form onSubmit={send} className="space-y-3">
+        {seed?.message && message && seed.message !== message && (
+          <div className="rounded-xl border border-[#E4DCD1] bg-[#FBF9F6] p-4 text-sm text-[#2B2B2B]" role="status">
+            <p>You already have an unsent draft. This new shelf question is ready below.</p>
+            <p className="mt-2 whitespace-pre-wrap">{seed.message}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button type="button" className="min-h-[44px] rounded-lg border border-[#E4DCD1] px-3" onClick={() => { setMessage(seed.message); onSeedConsumed?.() }}>Replace draft with this question</button>
+              <button type="button" className="min-h-[44px] rounded-lg border border-[#E4DCD1] px-3" onClick={() => onSeedConsumed?.()}>Keep current draft</button>
+            </div>
+          </div>
+        )}
         {!conversation && (
           <div className="grid gap-3">
             <label htmlFor="store-chat-name" className="block text-[13px] font-semibold text-[#5C5449]">
@@ -315,7 +328,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed }) {
           />
         </label>
 
-        {!conversation && (
+        {!conversation && active && (
           <TurnstileChallenge key={challengeKey} enabled={enabled} onTokenChange={setBotToken} />
         )}
 

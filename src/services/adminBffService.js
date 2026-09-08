@@ -83,6 +83,15 @@ const ERROR_MESSAGES = {
   PUBLICATION_TRANSITION_INVALID: 'That publication change is not allowed from the product’s current state.',
   FULFILLMENT_UNAVAILABLE: 'Fulfillment records are temporarily unavailable.',
   FULFILLMENT_COMMAND_UNAVAILABLE: 'That operation could not be completed safely. Refresh and try again.',
+  PAYMENT_VERSION_CONFLICT: 'This order changed after review. Close this dialog, refresh the order, and review its latest payment evidence.',
+  PAYMENT_ORDER_INELIGIBLE: 'This order no longer accepts payment evidence. Review its cancellation or completion before proceeding.',
+  PAYMENT_STOCK_INELIGIBLE: 'This order has expired, missing, or ineligible stock holds. Reconcile its reservations before accepting payment evidence.',
+  PAYMENT_TRANSITION_INVALID: 'That payment transition is no longer available. Refresh and review the current payment state.',
+  PAYMENT_EVIDENCE_REQUIRED: 'Enter a specific payment evidence or reconciliation note.',
+  PAYMENT_INDEPENDENT_REVIEW_REQUIRED: 'A different staff member must verify this evidence against the receiving account.',
+  PACKING_ALLOCATION_INVALID: 'The product or allocated lot is no longer eligible for this scan. Refresh and review its exact quantity and shelf life.',
+  PACKING_LOT_CONFIRMATION_REQUIRED: 'Check the physical batch, expiry and location before confirming this unit.',
+  RESERVATION_RECONCILIATION_REQUIRED: 'This order has incomplete or expired stock coverage. Reconcile its allocations before confirming.',
   IDEMPOTENCY_KEY_REQUIRED: 'A secure operation key could not be created. Refresh and try again.',
   IDEMPOTENCY_CONFLICT: 'This operation key was already used for different details. Refresh and try again.',
   COMMAND_IN_PROGRESS: 'That operation is still being recorded. Wait a moment, then refresh.',
@@ -232,16 +241,23 @@ const ERROR_MESSAGES = {
   REQUEST_TIMEOUT: 'The secure admin request timed out. Refresh the record before trying again.',
 }
 
+function cookieToken(name) {
+  const prefix = `${name}=`
+  const match = String(document.cookie || '').split(';').map(entry => entry.trim())
+    .find(entry => entry.startsWith(prefix))
+  try {
+    return match ? decodeURIComponent(match.slice(prefix.length)) : ''
+  } catch {
+    return ''
+  }
+}
+
 function csrfToken() {
-  const match = String(document.cookie || '').split('; ')
-    .find((entry) => entry.startsWith('k2_admin_csrf='))
-  return match ? decodeURIComponent(match.slice('k2_admin_csrf='.length)) : ''
+  return cookieToken('k2_admin_csrf')
 }
 
 function recoveryCsrfToken() {
-  const match = String(document.cookie || '').split('; ')
-    .find((entry) => entry.startsWith('k2_admin_recovery_csrf='))
-  return match ? decodeURIComponent(match.slice('k2_admin_recovery_csrf='.length)) : ''
+  return cookieToken('k2_admin_recovery_csrf')
 }
 
 async function adminRequest(path, { method = 'GET', body, csrf = false, recoveryCsrf = false, idempotency = false, idempotencyKey, signal, timeoutMs = 15000 } = {}) {
@@ -352,19 +368,19 @@ export function getAdminFulfillment(signal) {
   return adminRequest('/api/admin/fulfillment', { signal })
 }
 
-function fulfillmentCommand(path, body) {
+function fulfillmentCommand(path, body, idempotencyKey) {
   return adminRequest(boundedAdminCommandRoute('fulfillment', path), {
-    method: 'POST', body, csrf: true, idempotency: true,
+    method: 'POST', body, csrf: true, idempotency: true, idempotencyKey,
   })
 }
 
-export const confirmOrderBff = (orderRequestId, reason) => fulfillmentCommand('confirm', { orderRequestId, reason })
-export const recordPackingScanBff = (orderRequestId, scannedCode) => fulfillmentCommand('packing-scan', { orderRequestId, scannedCode })
-export const updatePaymentBff = (orderRequestId, toStatus, evidenceNote) => fulfillmentCommand('payment', { orderRequestId, toStatus, evidenceNote })
-export const updateDeliveryBff = (payload) => fulfillmentCommand('delivery', payload)
-export const fulfillOrderBff = (orderRequestId, handoverNote) => fulfillmentCommand('fulfill', { orderRequestId, handoverNote })
-export const transferLotBff = (payload) => fulfillmentCommand('transfer-lot', payload)
-export const assignBoxBff = (boxCode, toCustodian, reason) => fulfillmentCommand('assign-box', { boxCode, toCustodian, reason })
+export const confirmOrderBff = (orderRequestId, reason, idempotencyKey) => fulfillmentCommand('confirm', { orderRequestId, reason }, idempotencyKey)
+export const recordPackingScanBff = (payload, idempotencyKey) => fulfillmentCommand('packing-scan', payload, idempotencyKey)
+export const updatePaymentBff = (payload, idempotencyKey) => fulfillmentCommand('payment', payload, idempotencyKey)
+export const updateDeliveryBff = (payload, idempotencyKey) => fulfillmentCommand('delivery', payload, idempotencyKey)
+export const fulfillOrderBff = (orderRequestId, handoverNote, idempotencyKey) => fulfillmentCommand('fulfill', { orderRequestId, handoverNote }, idempotencyKey)
+export const transferLotBff = (payload, idempotencyKey) => fulfillmentCommand('transfer-lot', payload, idempotencyKey)
+export const assignBoxBff = (boxCode, toCustodian, reason, idempotencyKey) => fulfillmentCommand('assign-box', { boxCode, toCustodian, reason }, idempotencyKey)
 
 export function getAdminInbox(signal) {
   return adminRequest('/api/admin/inbox', { signal })
@@ -374,16 +390,84 @@ export function getAdminInboxHistory(conversationId, signal) {
   return adminRequest(`/api/admin/inbox/history?conversationId=${encodeURIComponent(conversationId)}`, { signal })
 }
 
-function inboxCommand(path, body) {
+function inboxCommand(path, body, idempotencyKey) {
   return adminRequest(boundedAdminCommandRoute('inbox', path), {
-    method: 'POST', body, csrf: true, idempotency: true,
+    method: 'POST', body, csrf: true, idempotency: true, idempotencyKey,
   })
+}
+
+// A write whose response never arrived may still have committed on the server.
+// These outcomes are uncertain, not clean failures, and must not be reported as
+// "not saved" — the record has to be reconciled before anything is sent again.
+export const UNCERTAIN_COMMAND_CODES = Object.freeze(['REQUEST_TIMEOUT', 'ADMIN_SERVICE_UNAVAILABLE'])
+
+export const UNCERTAIN_COMMAND_NOTICE = 'The Inbox did not confirm this command, so it may already be saved. Check the refreshed conversation before sending it again.'
+
+export function commandOutcomeIsUncertain(result) {
+  return Boolean(result) && result.ok !== true && UNCERTAIN_COMMAND_CODES.includes(result.code)
+}
+
+// One mounted staff session's unresolved commands. A payload keeps its
+// operation identity until the server authoritatively resolves it, so a manual
+// retry after a lost response is the same logical operation rather than a second
+// one. Identities are never persisted in browser storage: a reload discards
+// them, and the record must be reconciled instead.
+const UNRESOLVED_OPERATION_LIMIT = 100
+
+export function createRetainedOperationSession(send, messages = {}) {
+  const endedMessage = messages.ended || 'The staff session ended. Sign in again before sending.'
+  const lateMessage = messages.late || 'The staff session ended. Reconcile the record before sending again.'
+  const fullMessage = messages.full || 'Too many unresolved operations. Reconcile pending records before continuing.'
+  const operations = new Map()
+  let disposed = false
+  return {
+    run(...args) {
+      if (disposed) return Promise.resolve({ ok: false, error: endedMessage })
+      const fingerprint = JSON.stringify(args)
+      let operation = operations.get(fingerprint)
+      if (!operation) {
+        if (operations.size >= UNRESOLVED_OPERATION_LIMIT) return Promise.resolve({ ok: false, error: fullMessage })
+        operation = { key: crypto.randomUUID(), pending: null }
+        operations.set(fingerprint, operation)
+      }
+      if (operation.pending) return operation.pending
+      operation.pending = Promise.resolve(send(...args, operation.key)).then(result => {
+        if (disposed) return { ok: false, error: lateMessage }
+        if (result.ok) operations.delete(fingerprint)
+        return result
+      }).finally(() => { operation.pending = null })
+      return operation.pending
+    },
+    // Retained keys are commands whose outcome this runtime never learned.
+    unresolvedCount() {
+      return disposed ? 0 : operations.size
+    },
+    dispose() {
+      disposed = true
+      operations.clear()
+    },
+  }
+}
+
+export function createInboxCommandSession() {
+  return createRetainedOperationSession(
+    (path, body, key) => inboxCommand(path, body, key),
+    {
+      ended: 'The staff session ended. Sign in again before sending.',
+      late: 'The staff session ended. Reconcile the conversation before sending again.',
+      full: 'Too many unresolved Inbox operations. Reconcile pending records before continuing.',
+    },
+  )
 }
 
 export const saveInternalNoteBff = (conversationId, content) => inboxCommand('internal-note', { conversationId, content })
 export const sendWebsiteReplyBff = (conversationId, content) => inboxCommand('send-reply', { conversationId, content })
-export const markConversationReadBff = (conversationId) => inboxCommand('mark-read', { conversationId })
-export const updateConversationWorkflowBff = (payload) => inboxCommand('workflow', payload)
+export const markConversationReadBff = (conversationId, session) => session
+  ? session.run('mark-read', { conversationId })
+  : inboxCommand('mark-read', { conversationId })
+export const updateConversationWorkflowBff = (payload, session) => session
+  ? session.run('workflow', payload)
+  : inboxCommand('workflow', payload)
 
 /**
  * Publish a product's reviewed knowledge.
@@ -422,17 +506,17 @@ export function listProductIntakeConsignmentsBff(signal) {
   return adminRequest('/api/admin/product-intake/consignments', { signal })
 }
 
-function intakeCommand(path, body) {
+function intakeCommand(path, body, idempotencyKey) {
   return adminRequest(boundedAdminCommandRoute('product-intake', path), {
-    method: 'POST', body, csrf: true, idempotency: true,
+    method: 'POST', body, csrf: true, idempotency: true, idempotencyKey,
   })
 }
 
-export const createProductIntakeSessionBff = (payload) => intakeCommand('session', payload)
-export const saveProductIntakeStepBff = (payload) => intakeCommand('step', payload)
-export const createProductDraftBff = (payload) => intakeCommand('draft', payload)
-export const createProductFirstInventoryBff = (payload) => intakeCommand('inventory', payload)
-export const transitionProductPublicationBff = (payload) => intakeCommand('publication', payload)
+export const createProductIntakeSessionBff = (payload, key) => intakeCommand('session', payload, key)
+export const saveProductIntakeStepBff = (payload, key) => intakeCommand('step', payload, key)
+export const createProductDraftBff = (payload, key) => intakeCommand('draft', payload, key)
+export const createProductFirstInventoryBff = (payload, key) => intakeCommand('inventory', payload, key)
+export const transitionProductPublicationBff = (payload, key) => intakeCommand('publication', payload, key)
 
 export async function uploadProductEvidenceBff(sessionId, slot, file) {
   const headers = {
@@ -651,9 +735,9 @@ export function getAdminWholesaleInquiries(signal) {
   return adminRequest('/api/admin/wholesale-inquiries', { signal })
 }
 
-export function reviewAdminWholesaleInquiry(inquiryReference,toStatus,reason) {
+export function reviewAdminWholesaleInquiry(inquiryReference,toStatus,reason,idempotencyKey) {
   return adminRequest(boundedAdminCommandRoute('wholesale-inquiries','review'), {
-    method:'POST',body:{inquiryReference,toStatus,reason},csrf:true,idempotency:true,
+    method:'POST',body:{inquiryReference,toStatus,reason},csrf:true,idempotency:true,idempotencyKey,
   })
 }
 

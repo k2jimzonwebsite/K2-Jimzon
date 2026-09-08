@@ -1,4 +1,7 @@
 import { authorizeAdminRequest } from './authorize.js'
+import {
+  classifyEvidenceRegistrationFailure, evidenceCleanupDecision,
+} from './evidence-cleanup-policy.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
 import { recordSecurityEvent } from './security-events.js'
 import { createHash } from 'node:crypto'
@@ -238,6 +241,12 @@ export async function readImageBody(req) {
   return Buffer.concat(chunks)
 }
 
+/** Supabase Storage reports a refused overwrite as a duplicate/conflict. */
+function isExistingObjectError(error) {
+  const status = String(error?.statusCode ?? error?.status ?? '')
+  return status === '409' || /already exists|duplicate|resource_exists/i.test(String(error?.message || ''))
+}
+
 function safeFileName(value) {
   return String(value || 'evidence-image').replace(/[^a-zA-Z0-9._ -]/g, '_').slice(0, 120)
 }
@@ -370,10 +379,15 @@ export async function handleProductEvidenceUpload(req, res) {
   try {
     const decoded = await decodeEvidenceImage(await readImageBody(req), declaredType)
     const path = `${authorized.identity.userId}/${sessionId}/${slot.toLowerCase()}-${idempotencyKey}-${decoded.sha256.slice(0, 16)}.${decoded.extension}`
+    // The path is content-addressed, so an existing object at it holds the same
+    // bytes. Refusing to overwrite is what lets cleanup know whether this
+    // request created the object it might later remove (MAP-028 H-013).
     const upload = await authorized.client.storage.from('product-intake-evidence').upload(path, decoded.buffer, {
-      contentType: decoded.type, cacheControl: '3600', upsert: true,
+      contentType: decoded.type, cacheControl: '3600', upsert: false,
     })
-    if (upload.error) return safeJson(res, 503, { error: { code: 'EVIDENCE_UPLOAD_UNAVAILABLE' } })
+    const alreadyStored = Boolean(upload.error) && isExistingObjectError(upload.error)
+    if (upload.error && !alreadyStored) return safeJson(res, 503, { error: { code: 'EVIDENCE_UPLOAD_UNAVAILABLE' } })
+    const objectCreatedByThisRequest = !alreadyStored
     const payload = {
       sessionId, slot, path, fileName: safeFileName(req.headers['x-k2-file-name']),
       size: decoded.buffer.length, type: decoded.type, width: decoded.width,
@@ -382,31 +396,52 @@ export async function handleProductEvidenceUpload(req, res) {
     const signed = signedAdminCommandArguments('intake_evidence_register', authorized.identity.userId, idempotencyKey, payload)
     const command = await authorized.client.rpc('execute_admin_product_intake_command_v1', signed)
     if (command.error) {
-      const removed = await removeUnregisteredEvidence(authorized.client, path)
-      if (!removed) {
+      // Classify before touching Storage. A failure is not a licence to delete:
+      // only a refused command whose object this request created may be cleaned
+      // up. Everything else keeps the bytes.
+      const classification = classifyEvidenceRegistrationFailure(command.error)
+      const decision = evidenceCleanupDecision({ classification, objectCreatedByThisRequest })
+      const objectPathHash = createHash('sha256').update(path, 'utf8').digest('hex')
+
+      if (decision.remove) {
+        const removed = await removeUnregisteredEvidence(authorized.client, path)
+        if (!removed) {
+          const pending = await recordPendingEvidenceCleanup(
+            authorized.client, authorized.identity, idempotencyKey, sessionId, path,
+          ).catch(() => null)
+          await recordSecurityEvent(authorized.client, {
+            correlationId: idempotencyKey,
+            eventType: 'application_error', source: 'admin_bff', severity: 'warning',
+            outcome: 'failed', sessionId: authorized.session?.sessionId || null,
+            routeKey: 'admin.product-intake.evidence',
+            reasonCode: pending ? 'INTAKE_EVIDENCE_CLEANUP_PENDING' : 'INTAKE_EVIDENCE_CLEANUP_UNTRACKED',
+            subjectKind: 'private_object_hash', subjectId: objectPathHash,
+          })
+          if (pending) {
+            return safeJson(res, 503, {
+              error: { code: 'EVIDENCE_CLEANUP_PENDING' }, cleanupId: pending.cleanupId,
+            })
+          }
+          return safeJson(res, 503, { error: { code: 'EVIDENCE_CLEANUP_UNTRACKED' } })
+        }
+      } else if (decision.recordPending) {
+        // The object stays. It is recorded as an unreconciled reference so a
+        // human can decide, rather than being destroyed on a guess.
         const pending = await recordPendingEvidenceCleanup(
           authorized.client, authorized.identity, idempotencyKey, sessionId, path,
         ).catch(() => null)
-        const objectPathHash = createHash('sha256').update(path, 'utf8').digest('hex')
         await recordSecurityEvent(authorized.client, {
           correlationId: idempotencyKey,
           eventType: 'application_error', source: 'admin_bff', severity: 'warning',
           outcome: 'failed', sessionId: authorized.session?.sessionId || null,
           routeKey: 'admin.product-intake.evidence',
-          reasonCode: pending ? 'INTAKE_EVIDENCE_CLEANUP_PENDING' : 'INTAKE_EVIDENCE_CLEANUP_UNTRACKED',
+          reasonCode: pending ? 'INTAKE_EVIDENCE_REGISTRATION_UNRESOLVED' : 'INTAKE_EVIDENCE_CLEANUP_UNTRACKED',
           subjectKind: 'private_object_hash', subjectId: objectPathHash,
         })
-        if (pending) {
-          return safeJson(res, 503, {
-            error: { code: 'EVIDENCE_CLEANUP_PENDING' }, cleanupId: pending.cleanupId,
-          })
-        }
-        return safeJson(res, 503, { error: { code: 'EVIDENCE_CLEANUP_UNTRACKED' } })
       }
-      const providerCode = String(command.error.message || '')
-      if (providerCode.includes('K2_ADMIN_RATE_LIMITED')) return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': '60' })
-      if (providerCode.includes('K2_ADMIN_IDEMPOTENCY_CONFLICT')) return safeJson(res, 409, { error: { code: 'IDEMPOTENCY_CONFLICT' } })
-      return safeJson(res, 503, { error: { code: 'EVIDENCE_REGISTER_UNAVAILABLE' } })
+
+      if (classification.status === 429) return safeJson(res, 429, { error: { code: classification.code } }, { 'Retry-After': '60' })
+      return safeJson(res, classification.status, { error: { code: classification.code } })
     }
     return safeJson(res, 200, { ok: true, result: command.data })
   } catch (error) {

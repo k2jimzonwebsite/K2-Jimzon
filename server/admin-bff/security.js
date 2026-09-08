@@ -120,7 +120,14 @@ function parseCookies(req) {
       .filter(Boolean)
       .map((part) => {
         const index = part.indexOf('=')
-        return index < 0 ? [part, ''] : [part.slice(0, index), decodeURIComponent(part.slice(index + 1))]
+        if (index < 0) return [part, '']
+        const name = part.slice(0, index)
+        try {
+          return [name, decodeURIComponent(part.slice(index + 1))]
+        } catch {
+          // A malformed value cannot authenticate and must not abort other reads.
+          return [name, '']
+        }
       })
   )
 }

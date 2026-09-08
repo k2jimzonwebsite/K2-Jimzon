@@ -29,6 +29,64 @@ selects an allowlisted operation, never a URL or privileged RPC. Existing server
 session, staff, MFA and data-access controls remain authoritative. Guide state
 does not become a command receipt; changing nodes cancels the old read. Initial
 coverage is catalog and consignments, with no backend activation or mutations.
+WholesaleReviewDialog reuses the retained-command hook and validates the exact triage receipt before updating local canonical fields. PhotoManagerModal maps cleanupPending into a retained assignment until cleanup completes. ImageUploadDropzone reports upload activity and disposes late completions; Admin actor/role keys own Customers and InventoryGrid lifetimes. No new endpoint/schema; local evidence: docs/evidence/20260908-media-retry/README.md.
+
+Coupon command dialogs reuse `useRetainedFulfillmentCommand`; the owning Admin
+workspace key scopes their lifetime to staff actor/role. `AdminDialog` accepts
+an optional `returnFocusRef` for a trigger captured before opening disables it;
+existing callers retain the active-element fallback. No endpoint, schema or
+production artifact boundary changes. Local evidence is in
+`docs/evidence/20260908-coupon-retry/README.md` (MAP-028 I-002).
+
+- Prepared Admin routes: 92
+- Prepared Storefront routes: 15
+
+These are source registry counts, checked by
+`tests/security-surface-inventory.spec.js` in the contract and CI suites.
+Emitted provider functions and enabled deployed routes are separate inventories;
+neither is established by these counts. Exact-preview inventories remain I-014.
+
+Prepared purchase holds initialize and lock every involved balance by SKU before
+lot allocation (`20260908_purchase_hold_lock_order.sql`). This corrects opposing
+basket deadlocks without changing FEFO or deduction timing. All-writer locking
+and the complete committed-stock lifecycle remain MAP-023 / I-001.
+
+Prepared payment verification now takes SKU-ordered balance locks before
+allocation/batch locks and rejects inconsistent balance counters. The additive
+payment-balance patch preserves the signed wrapper and refund path. It does not
+establish a shared protocol for every writer or change when inventory is deducted.
+
+Prepared physical reconciliation acquires balance → existing batches by ID →
+product, avoiding the demonstrated purchase FK/product lock inversion. It keeps
+physical counts and reserved commitments distinct, including balance creation.
+
+Workflow map record reads use a fixed node-section → existing service function
+mapping in `WorkflowRecords.jsx`. Only authenticated same-origin Admin reads are
+available; no arbitrary URL executor, credential editor or direct database RPC
+is added. Results are scoped to the mounted node and discarded on unmount.
+Canonical operations and all authorization stay in existing Admin/BFF boundaries.
+
+Client lazy-load failures are left to React error boundaries; the bootstrap
+does not suppress Vite preload errors or automatically reload. This protects
+in-memory draft and pending-command state. Explicit recovery and receipt
+reconciliation remain necessary (MAP-028 I-010).
+
+Current prepared route counts are listed above. MAP-028 I-014 owns independent
+provider verification; historical scan evidence is retained under
+`docs/evidence/20260906-readiness-audit/`.
+
+Prepared handover coverage (MAP-023 H-023) validates complete packed allocations
+under order → balance → reservation → batch locks and retains active IDs for
+deduction summaries. Historical released rows remain audit history. This is
+local containment; all-writer lock ordering and confirmation-time deduction
+remain distinct unresolved lifecycle work.
+
+Prepared packing boundary (MAP-023 H-016): Admin sends exact reservation ID,
+product code and physical-lot attestation through the same-origin fulfillment
+BFF. Its signed receipt wrapper invokes `record_packing_scan_exact_v1`; browser
+roles cannot execute either packing RPC directly. The wrapper composes with
+payment version checks. Local fixtures prove composition; provider activation
+and the complete inventory lifecycle remain gated.
 
 ## 1. High-Level Architecture
 
@@ -47,7 +105,7 @@ The K2 Jimzon architecture is engineered around the principles of **defense-in-d
 │           STOREFRONT BFF ROUTER            │               ADMIN BFF ROUTER              │
 │       (api/storefront/index.js)            │           (api/admin/index.js)              │
 ├────────────────────────────────────────────┼─────────────────────────────────────────────┤
-│  • 14 Scoped Commerce Endpoints            │  • 81 Operational Command Endpoints         │
+│  • Scoped Commerce Routes                 │  • Operational Command Routes              │
 │  • Guest Grant Token Encryptor             │  • Cookie Session Registry (AES-256-GCM)    │
 │  • Domain-Separated Pre-Auth Rate Limiting │  • Mandatory AAL2 Step-Up Multi-Factor Auth │
 │  • Cloudflare Turnstile Bot Defense        │  • Idempotency & SHA-256 Payload Hash Gate  │
@@ -152,6 +210,8 @@ Both Storefront and Admin APIs are consolidated into single Serverless Function 
 
 - **`api/admin/index.js`**: Consolidated entrypoint with 92 prepared routes.
 - **`api/storefront/index.js`**: Consolidated entrypoint with 15 prepared routes.
+- **`api/admin/index.js`**: Consolidated Admin entrypoint; prepared inventory above.
+- **`api/storefront/index.js`**: Consolidated Storefront entrypoint; prepared inventory above.
 
 Controls are classified per route in the security surface inventory; public
 authentication/read endpoints do not share every mutation requirement:
@@ -171,6 +231,56 @@ and Storefront BFF activation order is complete.
 
 ### Client load boundaries
 
+- Payment review in `OmniOperationsHub` belongs to an actor-keyed workspace and
+  retains command identity across lost responses. The fulfillment projection
+  includes the original database timestamp; signed payment commands compare it
+  and the reviewed payment state under the order lock before appending events.
+  `20260906_payment_evidence_recovery.sql` prepares this boundary and revokes
+  unsigned payment RPC access; activation remains dependency-gated.
+
+- `InboxView` keys its workspace by staff actor; the workspace owns in-memory
+  conversation draft entries and thread-visit/history-request guards. The
+  `useAdminInboxRuntime` actor session separately owns unresolved BFF command
+  identities for notes, replies, workflow and mark-read. Neither boundary
+  persists customer drafts or retries to browser storage; durable reconciliation
+  and real authorization remain server responsibilities.
+
+- `createRetainedOperationSession` in `src/services/adminBffService.js` is the one
+  place a staff command's idempotency identity is kept. A payload keeps its key
+  until the server authoritatively resolves it, concurrent identical calls share
+  one request, and disposal refuses both new work and late success delivery.
+  Identities are memory-only by design. The Inbox, the stock-hold screen and the
+  delivery rate control use it; the consignment screen keeps an equivalent
+  slot-bound key of its own. No reviewed Admin mutation caller mints a fresh
+  identity per attempt.
+
+- `server/admin-bff/evidence-cleanup-policy.js` decides when intake evidence may
+  be deleted. Removal is irreversible, so it requires two proofs — that nothing
+  registered, and that the request created the object — and the evidence upload
+  refuses to overwrite so the second proof exists at all.
+
+- `k2_private.lock_privileged_membership()` is the single transactional guard for
+  the final-Admin invariant. It is a property of the Admin set, not of any row,
+  so every path that changes privileged membership takes the same lock before
+  counting. Prepared, not yet applied.
+
+- `src/lib/manilaReportingWindow.js` is the only definition of a reporting
+  period. Every producer and consumer of a range — the overview API, the
+  dashboard, and any export built from them — takes its boundaries from there, so
+  a browser's own time zone cannot decide which Manila day a sale belongs to.
+
+- `src/lib/overviewAvailability.js` keeps "unknown" and "zero" apart on the
+  dashboard: which domains failed, whether a figure may be shown at all, how
+  unknown stock is counted, and when an export must be refused. Operations
+  rulebook section 21 forbids presenting a failed query as a zero, and this is
+  where that rule is enforced rather than repeated per tile.
+
+- `src/context/adminInboxPolling.js` holds the Inbox refresh ownership rules as
+  pure functions — poll gating on visibility and in-flight reads, the response
+  generation guard, stale-queue retention on background failure, and
+  receipt-time-bound unread clearing — so those decisions are testable without a
+  browser and cannot drift into the hook's effect bodies.
+
 - `src/lib/lazySupabaseClient.js` defers the Storefront Supabase SDK until a
   remote catalog/Auth/CMS operation requests it. The Admin target aliases that
   import to `disabledLazySupabaseClient.js`, because Admin already owns its one
@@ -184,6 +294,13 @@ and Storefront BFF activation order is complete.
 - Optional Google brand fonts are scheduled after application bootstrap; system
   font fallbacks keep both artifacts usable when the external font host is slow
   or unavailable.
+- MAP-027's `AnimeClerk` loads `/models/k2-clerk-anime.glb` only inside the lazy
+  scene. Blender source stays in `assets/3d`; `scripts/build-anime-clerk.py`
+  reproduces the export. `clerkPoses` is a pure presentation rule, not commerce
+  state. Named joint extras insulate the controller from Blender name suffixes.
+  Chat retains its existing component state while its sheet is hidden after
+  first opening; `active` gates polling/challenge mounting. It remains the same
+  guest-commerce API and grant boundary and adds no persistent browser storage.
 
 ---
 
@@ -206,3 +323,6 @@ PostgreSQL is partitioned into two functional schema domains:
   - `rate_limit_buckets`: Distributed HMAC token-bucket counters.
   - `security_events`: Redacted security incident logs.
   - `evidence_cleanup_ledger`: Orphan file cleanup reconciliation queue.
+
+
+Store orientation (IDEA-20260908-02): `/store` remains the lazy 3D room; catalog/shop is separate. Responsive CSS and the side-panel inspecting attribute change layout without remounting the scene or introducing new commerce state. `playwright.store-orientation.config.js` runs the isolated local room/fallback and rotation fixture through `npm run test:store-orientation`, included in `npm test`.

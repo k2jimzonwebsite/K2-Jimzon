@@ -19,5 +19,9 @@ export default defineConfig({
     url: 'http://localhost:5192',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
+    env: {
+      VITE_SUPABASE_URL: '',
+      VITE_SUPABASE_PUBLISHABLE_KEY: '',
+    },
   },
 })

@@ -6,7 +6,8 @@ import { stockState } from './shelfModel'
 import { packRows } from './shelfLayout'
 import { labelTexture, photoTexture, talkerTexture, packageMaterials, disposePackageTextures } from './packageTexture'
 import { marbleTexture, signTexture, wallMarbleTexture, disposeRoomTextures } from './roomTextures'
-import StoreKeeper3D from './StoreKeeper3D'
+import StoreKeeper3D from './AnimeClerk'
+import CounterProps from './CounterProps'
 import { disposeKeeperTextures } from './keeperTextures'
 import {
   AISLE_TRAVEL_RATE, COUNTER, FLOOR_Y, FOV, ZOOM_MAX, ZOOM_MIN, clampZoom, cm, computeFraming, visibleHeight,
@@ -31,7 +32,9 @@ import {
  * than as evenly spaced display boxes.
  *
  * All materials are drawn at runtime. No external textures, fonts or HDR — the
- * production CSP forbids external asset hosts.
+ * production CSP forbids external asset hosts. The one loaded asset is the
+ * counter props model under `/models`, which is served from our own origin and
+ * so is not an external host; see `CounterProps`.
  *
  * The canvas is decoration; `InteractiveShop` renders the semantic product list
  * regardless, so the store works without any of this.
@@ -52,6 +55,14 @@ const MIN_ROWS = 5
 const CLERK_STAGE_SCALE = 0.92
 const CLERK_STAGE_X = BAY_WIDTH / 2 + BAY_GAP / 2
 const CLERK_STAGE_Z = 3.2
+
+// Behind the counter, not in front of it. The counter body is centred on
+// z = 1.4 and is 62 cm deep, so its back face sits just under z = -1; standing
+// her at -1.9 puts the till between her and the shopper, which is the whole
+// point of a counter. X is a small offset rather than most of a bay, so she is
+// inside the counter shot and clear of the shop sign centred above her.
+const CLERK_COUNTER_X = -3.1
+const CLERK_COUNTER_Z = -1.9
 
 /**
  * The room's own light and dark.
@@ -75,6 +86,9 @@ const ROOM = {
     pendant: 26,
     pendantDistance: 20,
     shelfGlow: 0,
+    // Backstock sits behind the listings and must never compete with them.
+    backstockOpacity: 0.88,
+    isDark: false,
   },
   /**
    * Lights low: the shop after closing, lit by its own pendants.
@@ -102,6 +116,8 @@ const ROOM = {
     pendant: 74,
     pendantDistance: 13,
     shelfGlow: 9,
+    backstockOpacity: 0.95,
+    isDark: true,
   },
 }
 
@@ -115,6 +131,16 @@ const ROOM = {
  */
 const RoomContext = createContext(ROOM.light)
 const useRoom = () => useContext(RoomContext)
+
+/**
+ * What the props on the counter are wired to.
+ *
+ * `CounterBay` is rendered from a list and takes an index and nothing else.
+ * Threading three callbacks and a hover setter through that signature is how it
+ * rots, so the handlers travel by context the same way the lighting does.
+ */
+const ActionsContext = createContext({})
+const useActions = () => useContext(ActionsContext)
 
 const WALL = '#F3EBE0'
 const WARM_WOOD = '#A87F55'
@@ -132,7 +158,7 @@ const PENNANT_COLOURS = ['#B84E3A', '#C6A867', '#6E7F52', '#9A6A45']
  * "go to the previous shelf" rather than "spin in place".
  */
 function AisleCamera({ activeIndex, bayCount, onShelfChange, height, fov, zoomRequest, mode }) {
-  const { camera, gl } = useThree()
+  const { camera, gl, size } = useThree()
   const drag = useRef({ active: false, startX: 0, offset: 0 })
   const settled = useRef(activeIndex)
   const zoom = useRef(1)
@@ -156,7 +182,12 @@ function AisleCamera({ activeIndex, bayCount, onShelfChange, height, fov, zoomRe
    * the frame. The distance is now derived from what actually has to be in
    * shot rather than picked by eye.
    */
-  const framing = useMemo(() => computeFraming({ height, fov, mode }), [height, fov, mode])
+  const framing = useMemo(() => computeFraming({
+    height, fov, mode, aspect: size.width / Math.max(1, size.height),
+    left: -BAY_WIDTH / 2 - 0.8,
+    right: mode === 'counter' ? BAY_WIDTH / 2 + 0.8 : CLERK_STAGE_X + 4.5,
+    front: CLERK_STAGE_Z,
+  }), [height, fov, mode, size.width, size.height])
   useEffect(() => { baseDistance.current = framing.distance }, [framing])
 
   useEffect(() => {
@@ -335,7 +366,7 @@ function AisleCamera({ activeIndex, bayCount, onShelfChange, height, fov, zoomRe
     const swayX = Math.sin(clock.current * 0.53) * cm(1.6) * breath
     const swayY = Math.sin(clock.current * 0.71 + 1.1) * cm(1.1) * breath
 
-    const wantX = bounded * BAY_SPACING + pan.current.x + swayX
+    const wantX = bounded * BAY_SPACING + framing.targetX + pan.current.x + swayX
     const wantY = framing.target + pan.current.y + swayY
     camera.position.x += (wantX - camera.position.x) * ease
     // Zoom eases rather than snapping, so a wheel notch is a move and not a cut.
@@ -578,6 +609,8 @@ function Package({ product, measurement, position, isSelected, isPrimary, onSele
  * the store reads as a shop with a person in it rather than a showroom.
  */
 function CounterBay({ index }) {
+  const actions = useActions()
+  const room = useRoom()
   const marble = useMemo(() => marbleTexture(index + 1), [index])
   const wall = useMemo(() => wallMarbleTexture(index + 3), [index])
   const sign = useMemo(() => signTexture('K2 Jimzon'), [])
@@ -651,6 +684,13 @@ function CounterBay({ index }) {
       {[-4.6, 4.6].map((x) => (
         <Pendant key={x} position={[x, 17, front - 0.6]} />
       ))}
+
+      {/* The counter's working surface: bell, ledger, request pad. A Suspense
+          boundary of its own, so the room draws immediately and the props
+          appear when their model arrives rather than holding up the scene. */}
+      <Suspense fallback={null}>
+        <CounterProps actions={actions} onHoverLabel={actions.onHoverLabel} isDark={room.isDark} />
+      </Suspense>
     </group>
   )
 }
@@ -699,6 +739,65 @@ function Pendant({ position, warm = '#FFF3E2', intensity = null }) {
 }
 
 /** One category bay: back panel, sign, marble boards, and its goods. */
+/**
+ * Backstock: the goods a shop has behind the goods it is selling.
+ *
+ * A real aisle is never a row of six jars on an empty plank — the plank is
+ * full, front to back, and what you notice is the facing. With a thin catalog
+ * this scene drew five bare boards and a marble wall, which reads as a shop
+ * that has closed down rather than one that flies stock in monthly.
+ *
+ * These are deliberately anonymous: no labels, no price strips, no pointer
+ * events, set back against the panel and left in the shade. They are the
+ * depth behind the real listings, not a claim that anything is in stock — the
+ * canvas is `aria-hidden` decoration and the semantic product list, which is
+ * the thing a customer actually buys from, is unaffected.
+ */
+const BACKSTOCK_TONES = ['#8A6A49', '#7A5B44', '#96795A', '#6B6053', '#877764', '#5E5245', '#9C8460']
+
+function BackStock({ y, seed }) {
+  const room = useRoom()
+  const items = useMemo(() => {
+    let s = (seed * 9301 + 49297) % 233280
+    const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280 }
+    const out = []
+    let x = -BAY_WIDTH / 2 + 0.25
+    while (x < BAY_WIDTH / 2 - 0.7) {
+      const w = 0.5 + rnd() * 0.8
+      const h = 1.0 + rnd() * 0.8
+      const d = 0.45 + rnd() * 0.3
+      const round = rnd() > 0.64
+      out.push({
+        key: `${seed}-${out.length}`,
+        x: x + w / 2,
+        w, h, d, round,
+        tone: BACKSTOCK_TONES[Math.floor(rnd() * BACKSTOCK_TONES.length)],
+      })
+      x += w + 0.05 + rnd() * 0.12
+    }
+    return out
+  }, [seed])
+
+  return (
+    <group position={[0, 0, -SHELF_DEPTH / 2 + 0.62]}>
+      {items.map((item) => (
+        <mesh
+          key={item.key}
+          position={[item.x, y + BOARD_THICKNESS / 2 + item.h / 2, 0]}
+          raycast={() => null}
+          castShadow={false}
+          receiveShadow
+        >
+          {item.round
+            ? <cylinderGeometry args={[item.w / 2, item.w / 2, item.h, 12]} />
+            : <boxGeometry args={[item.w, item.h, item.d]} />}
+          <meshStandardMaterial color={item.tone} roughness={0.92} metalness={0} opacity={room.backstockOpacity} transparent />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
 function Bay({ shelf, index, selectedSku, onSelect }) {
   const room = useRoom()
   const rows = useMemo(
@@ -764,6 +863,7 @@ function Bay({ shelf, index, selectedSku, onSelect }) {
         return (
           <group key={`row-${rowIndex}`}>
             <Board y={y} marble={marble} />
+            <BackStock y={y} seed={index * 17 + rowIndex * 3 + 1} />
             {row?.items.map((item, itemIndex) => {
               const id = item.product?.sku || item.product?.id
               return (
@@ -810,7 +910,8 @@ function Bay({ shelf, index, selectedSku, onSelect }) {
   )
 }
 
-function Aisle({ shelves, activeIndex, selectedSku, onSelect, onShelfChange, keeper, zoomRequest, room }) {
+function Aisle({ shelves, activeIndex, selectedSku, onSelect, onShelfChange, keeper, zoomRequest, room, actions }) {
+  const atCounter = Boolean(shelves[activeIndex]?.isCounter)
   const tallest = Math.max(
     ...shelves.map((s) => Math.max(packRows(s.products || [], BAY_WIDTH, MAX_ROWS).length, MIN_ROWS)),
     MIN_ROWS,
@@ -836,6 +937,7 @@ function Aisle({ shelves, activeIndex, selectedSku, onSelect, onShelfChange, kee
 
   return (
     <RoomContext.Provider value={room}>
+      <ActionsContext.Provider value={actions}>
       {/* Bright, slightly warm, and low-contrast — the light of a luxury hall
           rather than a spotlit gallery. The shadows come from the pendants. */}
       <ambientLight intensity={room.ambient} />
@@ -891,20 +993,33 @@ function Aisle({ shelves, activeIndex, selectedSku, onSelect, onShelfChange, kee
 
       {/* One clerk belongs to the whole aisle. She walks to the active bay
           instead of being duplicated inside every shelf or stranded at the
-          counter when the shopper moves. */}
+          counter when the shopper moves.
+
+          Where she stands depends on which side of the shop you are looking at.
+          In the aisle she stands out in the gap between bays, at the shopper's
+          side of the shelving. At the counter that is wrong twice over: the
+          aisle offset is most of a bay's width, which pushed her off the edge
+          of the counter shot entirely, and the aisle Z put her in front of the
+          counter — on the customer's side of her own till. At the counter she
+          therefore stands behind it, slightly off centre so the shop sign above
+          her is not blocked. */}
       <StoreKeeper3D
         targetBay={activeIndex}
         scale={CLERK_STAGE_SCALE}
         position={[
-          activeIndex * BAY_SPACING + CLERK_STAGE_X,
+          atCounter
+            ? activeIndex * BAY_SPACING + CLERK_COUNTER_X
+            : activeIndex * BAY_SPACING + CLERK_STAGE_X,
           FLOOR_Y,
-          CLERK_STAGE_Z,
+          atCounter ? CLERK_COUNTER_Z : CLERK_STAGE_Z,
         ]}
         expression={keeper?.expression || 'idle'}
         message={keeper?.message || ''}
         talking={Boolean(keeper?.talking)}
         waving={keeper?.gesture === 'wave'}
         gesture={keeper?.gesture || 'rest'}
+        product={keeper?.product || null}
+        activityKey={keeper?.activityKey}
         showMessage={activeIndex === 0}
         lookAt={keeper?.gesture === 'present' ? 0.8 : null}
       />
@@ -928,13 +1043,14 @@ function Aisle({ shelves, activeIndex, selectedSku, onSelect, onShelfChange, kee
         height={height}
         fov={FOV}
         zoomRequest={zoomRequest}
-        mode={shelves[activeIndex]?.isCounter ? 'counter' : 'shelf'}
+        mode={atCounter ? 'counter' : 'shelf'}
       />
+      </ActionsContext.Provider>
     </RoomContext.Provider>
   )
 }
 
-export default function ShelfScene3D({ shelves, activeIndex, selectedSku, onSelect, onShelfChange, onFailure, keeper, zoomRequest, isDark = false }) {
+export default function ShelfScene3D({ shelves, activeIndex, selectedSku, onSelect, onShelfChange, onFailure, keeper, zoomRequest, isDark = false, actions = {} }) {
   if (!Array.isArray(shelves) || shelves.length === 0) return null
 
   const room = isDark ? ROOM.dark : ROOM.light
@@ -961,6 +1077,7 @@ export default function ShelfScene3D({ shelves, activeIndex, selectedSku, onSele
           keeper={keeper}
           zoomRequest={zoomRequest}
           room={room}
+          actions={actions}
         />
       </Suspense>
     </Canvas>

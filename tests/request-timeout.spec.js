@@ -2,6 +2,63 @@ import { expect, test } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
 import { fetchReadWithRetry, fetchWithTimeout } from '../src/lib/fetchWithTimeout.js'
 
+test('deadline includes a stalled response body and never retries a write', async () => {
+  const originalFetch = globalThis.fetch
+  let calls = 0
+  globalThis.fetch = async (_input, init) => {
+    calls += 1
+    return new Response(new ReadableStream({
+      start(controller) {
+        init.signal.addEventListener('abort', () => controller.error(new DOMException('aborted', 'AbortError')), { once: true })
+      },
+    }))
+  }
+  try {
+    await expect(fetchWithTimeout('/command', { method: 'POST' }, 100)).rejects.toMatchObject({ name: 'RequestTimeoutError' })
+    expect(calls).toBe(1)
+  } finally { globalThis.fetch = originalFetch }
+})
+
+test('a complete response retains its payload and HTTP metadata', async () => {
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = async () => new Response('{"ok":true}', { status: 202, headers: { 'Content-Type': 'application/json', 'X-Receipt': 'fixture' } })
+  try {
+    const response = await fetchWithTimeout('/complete', {}, 100)
+    expect(response.status).toBe(202)
+    expect(response.headers.get('X-Receipt')).toBe('fixture')
+    expect(await response.json()).toEqual({ ok: true })
+  } finally { globalThis.fetch = originalFetch }
+})
+
+test('caller cancellation during body download stays an abort', async () => {
+  const originalFetch = globalThis.fetch
+  const caller = new AbortController()
+  let bodyStarted
+  const started = new Promise(resolve => { bodyStarted = resolve })
+  globalThis.fetch = async (_input, init) => new Response(new ReadableStream({
+    start(controller) {
+      init.signal.addEventListener('abort', () => controller.error(new DOMException('aborted', 'AbortError')), { once: true })
+      bodyStarted()
+    },
+  }))
+  try {
+    const pending = fetchWithTimeout('/body', { signal: caller.signal }, 1000)
+    await started
+    caller.abort()
+    await expect(pending).rejects.toMatchObject({ name: 'AbortError' })
+  } finally { globalThis.fetch = originalFetch }
+})
+
+test('bodyless responses remain valid', async () => {
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = async () => new Response(null, { status: 204 })
+  try {
+    const response = await fetchWithTimeout('/empty', {}, 100)
+    expect(response.status).toBe(204)
+    expect(await response.text()).toBe('')
+  } finally { globalThis.fetch = originalFetch }
+})
+
 test('request timeout aborts a stalled fetch with a stable error', async () => {
   const originalFetch = globalThis.fetch
   globalThis.fetch = (_input, init) => new Promise((_resolve, reject) => {

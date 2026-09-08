@@ -6,7 +6,6 @@ import { CrimsonButton, GhostButton, TuscanCard } from '../components/ui/bits'
 import { ShieldIcon } from '../components/ui/icons'
 import TurnstileChallenge from '../components/security/TurnstileChallenge'
 import { guestBffEnabled } from '../services/guestCommerceService'
-import DeliveryEstimate from '../components/DeliveryEstimate'
 
 export default function Checkout() {
   const { lines, placeOrder, go, applyCoupon, removeCoupon, appliedCoupon, couponDiscount } = useStore()
@@ -17,7 +16,6 @@ export default function Checkout() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [botToken, setBotToken] = useState('')
-  const [deliveryQuote, setDeliveryQuote] = useState(null)
 
   if (lines.length === 0) {
     return (
@@ -86,14 +84,10 @@ export default function Checkout() {
           <div className="mt-4 space-y-2 border-t border-line pt-4 text-sm">
             <p className="flex justify-between text-navy-soft"><span>Subtotal</span><span>{peso(requestSubtotal)}</span></p>
             {appliedCoupon && <p className="flex justify-between text-forest"><span>{appliedCoupon.code}</span><span>−{peso(couponDiscount)}</span></p>}
-            <DeliveryEstimate
-              lines={lines}
-              subtotalMinor={Math.round(productsTotal * 100)}
-              onQuote={setDeliveryQuote}
-            />
+            <p className="flex justify-between text-navy-soft"><span>Courier delivery</span><span>Quoted after review</span></p>
             <p className="flex justify-between border-t border-line pt-3 text-lg font-bold">
-              <span>{deliveryQuote ? 'Order total' : 'Products total'}</span>
-              <span>{peso(productsTotal + (deliveryQuote ? deliveryQuote.feeMinor / 100 : 0))}</span>
+              <span>Products total</span>
+              <span>{peso(productsTotal)}</span>
             </p>
           </div>
           <div className="mt-4 border-t border-line pt-4">
@@ -104,9 +98,7 @@ export default function Checkout() {
           </div>
           <p className="mt-4 text-xs leading-relaxed text-navy-soft">
             We check stock and coupon details before confirming your order.{' '}
-            {deliveryQuote
-              ? 'Your delivery charge above is final for this address.'
-              : 'Courier delivery is quoted for your approval before anything is sent.'}
+            Courier delivery is quoted for your approval before anything is sent.
           </p>
         </TuscanCard>
 

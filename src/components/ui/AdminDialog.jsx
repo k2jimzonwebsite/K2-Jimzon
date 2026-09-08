@@ -28,6 +28,7 @@ export function AdminDialog({
   onClose,
   closeDisabled = false,
   initialFocusRef,
+  returnFocusRef,
   labelledBy,
   describedBy,
   contentRef,
@@ -50,7 +51,7 @@ export function AdminDialog({
     const dialog = dialogRef.current
     if (!dialog) return undefined
 
-    previousFocusRef.current = document.activeElement
+    previousFocusRef.current = returnFocusRef?.current || document.activeElement
     const frame = window.requestAnimationFrame(() => {
       const currentFocus = document.activeElement
       const requestedFocus = initialFocusRef?.current
@@ -100,7 +101,7 @@ export function AdminDialog({
       document.removeEventListener('keydown', onKeyDown, true)
       previousFocusRef.current?.focus({ preventScroll: true })
     }
-  }, [initialFocusRef])
+  }, [initialFocusRef, returnFocusRef])
 
   if (!isValidElement(children)) {
     throw new TypeError('AdminDialog requires exactly one element child')

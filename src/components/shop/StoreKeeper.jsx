@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { getProductKnowledge } from '../../lib/productKnowledge'
+import { useProductKnowledgeVersion } from '../../lib/useProductKnowledgeVersion'
 import StoreKeeperAvatar from './StoreKeeperAvatar'
 
 /**
@@ -15,13 +16,13 @@ import StoreKeeperAvatar from './StoreKeeperAvatar'
  * response-time promise, and no invented product facts.
  */
 
-export default function StoreKeeper({ shelf, product, onAskStaff, moment }) {
+export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActivity, moment }) {
   const [question, setQuestion] = useState('')
   const [sent, setSent] = useState(false)
-  const [open, setOpen] = useState(() => (
-    typeof window === 'undefined' || window.innerWidth > 900
-  ))
-  const acknowledged = moment?.id === 'added'
+  const [open, setOpen] = useState(false)
+  const draftOrigin = useRef(null)
+  useProductKnowledgeVersion()
+  const acknowledged = ['added', 'unavailable', 'listening', 'reading', 'handoff'].includes(moment?.id)
 
   const knowledge = product ? getProductKnowledge(product.sku || product.id) : null
   const count = shelf?.products?.length ?? 0
@@ -47,8 +48,7 @@ export default function StoreKeeper({ shelf, product, onAskStaff, moment }) {
    * means the customer is mid-question. Neither claims a person is present.
   */
   let expression = moment?.expression || 'idle'
-  if (question.trim()) expression = 'listening'
-  else if (product && !moment?.expression) expression = 'speaking'
+  if (product && !moment?.expression) expression = 'speaking'
 
   const handleAsk = (event) => {
     event.preventDefault()
@@ -56,8 +56,10 @@ export default function StoreKeeper({ shelf, product, onAskStaff, moment }) {
     if (!trimmed) return
     // The store owns the product context and builds the bounded handoff; the
     // keeper only carries the customer's words across.
-    if (typeof onAskStaff === 'function') onAskStaff(trimmed)
+    if (typeof onAskStaff === 'function') onAskStaff(trimmed, draftOrigin.current)
     setQuestion('')
+    draftOrigin.current = null
+    onQuestionActivity?.(false)
     setSent(true)
   }
 
@@ -73,7 +75,7 @@ export default function StoreKeeper({ shelf, product, onAskStaff, moment }) {
         aria-expanded={open}
         aria-controls="k2-store-guide-panel"
         aria-label={open ? 'Minimize K2 shopkeeper' : 'Open K2 shopkeeper'}
-        onClick={() => setOpen(value => !value)}
+        onClick={() => { setOpen(value => !value); onQuestionActivity?.(false) }}
       >
         <StoreKeeperAvatar
           expression={expression}
@@ -105,14 +107,28 @@ export default function StoreKeeper({ shelf, product, onAskStaff, moment }) {
 
           <form onSubmit={handleAsk} className="k2-store-guide-form">
             <label htmlFor="keeper-question">
-              Ask about {product ? 'this item' : 'this shelf'}
+              {question && draftOrigin.current?.name
+                ? `Ask about ${draftOrigin.current.name}`
+                : `Ask about ${product ? 'this item' : 'this shelf'}`}
             </label>
             <div>
               <input
                 id="keeper-question"
                 type="text"
                 value={question}
-                onChange={event => { setQuestion(event.target.value); setSent(false) }}
+                maxLength={2000}
+                onFocus={() => onQuestionActivity?.(true)}
+                onBlur={() => onQuestionActivity?.(false)}
+                onChange={event => {
+                  const value = event.target.value
+                  if (!question.trim() && value.trim()) {
+                    draftOrigin.current = product
+                      ? { sku: product.sku || product.id, name: product.name }
+                      : { name: shelf?.name || 'The store' }
+                  }
+                  if (!value.trim()) draftOrigin.current = null
+                  setQuestion(value); setSent(false)
+                }}
                 placeholder="What can I cook with this?"
               />
               <button type="submit" disabled={!question.trim()}>Ask</button>

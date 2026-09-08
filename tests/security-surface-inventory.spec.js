@@ -7,6 +7,17 @@ import {
 } from '../scripts/security-surface-inventory-core.mjs'
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
+import { readFileSync } from 'node:fs'
+import { ADMIN_BFF_ROUTES } from '../server/admin-bff/router.js'
+import { STOREFRONT_BFF_ROUTES } from '../server/storefront-bff/router.js'
+
+test('architecture documentation matches the prepared route registries', () => {
+  for (const document of ['PROJECT_MAP.md', 'ARCHITECTURE.md']) {
+    const source = readFileSync(new URL(`../docs/${document}`, import.meta.url), 'utf8')
+    expect(source, document).toContain(`Prepared Admin routes: ${ADMIN_BFF_ROUTES.length}`)
+    expect(source, document).toContain(`Prepared Storefront routes: ${STOREFRONT_BFF_ROUTES.length}`)
+  }
+})
 
 test('security-surface inventory finds literal and dynamic Supabase/API operations with locations', () => {
   const source = [

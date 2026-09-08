@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { providerErrorIncludes } from '../../lib/safeUiError'
 import { PlusIcon, StarIcon, XIcon } from '../../components/ui/icons'
 import {
   adminBffEnabled, archiveCouponBff, createCouponBff, getAdminCoupons, setCouponStateBff,
 } from '../../services/adminBffService'
+import { AdminDialog } from '../../components/ui/AdminDialog'
+import { useRetainedFulfillmentCommand } from './useRetainedFulfillmentCommand'
 import { EmptyState, MetricRail, SectionHeading, StateBanner, StatusPill, WorkspaceIntro } from './AdminWorkspaceUi'
 
 const EMPTY = {
@@ -14,10 +16,6 @@ const EMPTY = {
 }
 const PROJECTION = 'id,code,description,discount_type,discount_value,min_spend,max_redemptions,redemption_count,starts_at,ends_at,is_active,is_hunt,clue,archived_at,created_at,updated_at'
 const safeLegacyError = 'Coupon records could not be updated safely. Refresh and try again.'
-
-function operationKey() {
-  return typeof globalThis.crypto?.randomUUID === 'function' ? globalThis.crypto.randomUUID() : ''
-}
 
 function stateFor(coupon) {
   const exhausted = coupon.max_redemptions != null && coupon.redemption_count >= coupon.max_redemptions
@@ -30,18 +28,18 @@ function stateFor(coupon) {
   return { label: 'Inactive', tone: 'neutral', exhausted, expired }
 }
 
-export default function CouponManager() {
-  const secure = adminBffEnabled()
+export default function CouponManager({ secureMode } = {}) {
+  const secure = secureMode ?? adminBffEnabled()
   const [coupons, setCoupons] = useState([])
   const [loading, setLoading] = useState(true)
-  const [working, setWorking] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState(EMPTY)
-  const [createKey, setCreateKey] = useState('')
   const [createStartsAt, setCreateStartsAt] = useState('')
   const [pendingAction, setPendingAction] = useState(null)
+  const openerRef = useRef(null)
+  const working = showCreate || Boolean(pendingAction)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -76,51 +74,16 @@ export default function CouponManager() {
   const update = key => event => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
     setForm(current => ({ ...current, [key]: value }))
-    setCreateKey(operationKey())
   }
 
   const openCreate = () => {
-    setForm(EMPTY); setCreateKey(operationKey()); setCreateStartsAt(new Date().toISOString()); setError(''); setNotice(''); setShowCreate(true)
+    openerRef.current = document.activeElement
+    setForm(EMPTY); setCreateStartsAt(new Date().toISOString()); setError(''); setNotice(''); setShowCreate(true)
   }
 
-  const createCoupon = async event => {
-    event.preventDefault(); setWorking(true); setError(''); setNotice('')
-    const startsAt = form.starts_at ? new Date(form.starts_at).toISOString() : createStartsAt
-    const endsAt = form.ends_at ? new Date(form.ends_at).toISOString() : null
-    if (endsAt && Date.parse(endsAt) <= Date.parse(startsAt)) {
-      setError('End date must be later than the start date.'); setWorking(false); return
-    }
-    if (form.reason.trim().length < 10) {
-      setError('Record a specific reason of at least 10 characters.'); setWorking(false); return
-    }
-    const discountVal = Number(form.discount_value)
-    if (!discountVal || discountVal <= 0 || Number.isNaN(discountVal)) {
-      setError('Discount value must be a positive number greater than zero.'); setWorking(false); return
-    }
-    if (form.discount_type === 'percentage' && (discountVal < 1 || discountVal > 100)) {
-      setError('Percentage discount must be between 1% and 100%.'); setWorking(false); return
-    }
-    if (form.discount_type === 'fixed' && discountVal > 50000) {
-      setError('Fixed discount cannot exceed ₱50,000 per coupon.'); setWorking(false); return
-    }
-    const minSpendVal = Number(form.min_spend || 0)
-    if (minSpendVal < 0 || Number.isNaN(minSpendVal)) {
-      setError('Minimum spend cannot be a negative amount.'); setWorking(false); return
-    }
-    const maxRedemptionsVal = form.max_redemptions ? Number(form.max_redemptions) : null
-    if (maxRedemptionsVal !== null && (maxRedemptionsVal < 1 || !Number.isInteger(maxRedemptionsVal))) {
-      setError('Max redemptions must be an integer of at least 1.'); setWorking(false); return
-    }
-    const command = {
-      code: form.code.trim().toUpperCase(), description: form.description.trim(),
-      discountType: form.discount_type, discountValue: discountVal,
-      minSpend: minSpendVal,
-      maxRedemptions: maxRedemptionsVal,
-      startsAt, endsAt, isActive: form.is_active, isHunt: form.is_hunt,
-      clue: form.is_hunt ? form.clue.trim() || null : null, reason: form.reason.trim(),
-    }
+  const sendCreate = async (command, key) => {
     let result
-    if (secure) result = await createCouponBff(command, createKey || operationKey())
+    if (secure) result = await createCouponBff(command, key)
     else {
       const { reason: _reason, ...withoutReason } = command
       const payload = {
@@ -131,37 +94,83 @@ export default function CouponManager() {
         is_active: withoutReason.isActive, is_hunt: withoutReason.isHunt, clue: withoutReason.clue,
       }
       const direct = await supabase.from('coupons').insert(payload)
-      result = direct.error ? { ok: false, error: safeLegacyError } : { ok: true }
+      result = direct.error ? { ok: false, code: 'ADMIN_SERVICE_UNAVAILABLE', error: safeLegacyError } : { ok: true }
     }
-    setWorking(false)
+    return result
+  }
+
+  const createCoupon = async (event, operation) => {
+    event.preventDefault(); setError(''); setNotice('')
+    const startsAt = form.starts_at ? new Date(form.starts_at).toISOString() : createStartsAt
+    const endsAt = form.ends_at ? new Date(form.ends_at).toISOString() : null
+    if (endsAt && Date.parse(endsAt) <= Date.parse(startsAt)) {
+      setError('End date must be later than the start date.'); return
+    }
+    if (form.reason.trim().length < 10) {
+      setError('Record a specific reason of at least 10 characters.'); return
+    }
+    const discountVal = Number(form.discount_value)
+    if (!discountVal || discountVal <= 0 || Number.isNaN(discountVal)) {
+      setError('Discount value must be a positive number greater than zero.'); return
+    }
+    if (form.discount_type === 'percentage' && (discountVal < 1 || discountVal > 100)) {
+      setError('Percentage discount must be between 1% and 100%.'); return
+    }
+    if (form.discount_type === 'fixed' && discountVal > 50000) {
+      setError('Fixed discount cannot exceed ₱50,000 per coupon.'); return
+    }
+    const minSpendVal = Number(form.min_spend || 0)
+    if (minSpendVal < 0 || Number.isNaN(minSpendVal)) {
+      setError('Minimum spend cannot be a negative amount.'); return
+    }
+    const maxRedemptionsVal = form.max_redemptions ? Number(form.max_redemptions) : null
+    if (maxRedemptionsVal !== null && (maxRedemptionsVal < 1 || !Number.isInteger(maxRedemptionsVal))) {
+      setError('Max redemptions must be an integer of at least 1.'); return
+    }
+    const command = {
+      code: form.code.trim().toUpperCase(), description: form.description.trim(),
+      discountType: form.discount_type, discountValue: discountVal,
+      minSpend: minSpendVal,
+      maxRedemptions: maxRedemptionsVal,
+      startsAt, endsAt, isActive: form.is_active, isHunt: form.is_hunt,
+      clue: form.is_hunt ? form.clue.trim() || null : null, reason: form.reason.trim(),
+    }
+    const result = await operation.run(command)
+    if (!result) return
     if (!result.ok) { setError(result.error); return }
-    setForm(EMPTY); setCreateKey(''); setCreateStartsAt(''); setShowCreate(false)
+    setForm(EMPTY); setCreateStartsAt(''); setShowCreate(false)
     setNotice(`Coupon ${command.code} saved${command.isActive ? ' and activated' : ' as an inactive draft'}.`)
     await load()
   }
 
   const openAction = (coupon, type) => {
+    openerRef.current = document.activeElement
     setError(''); setNotice('')
-    setPendingAction({ coupon, type, reason: '', key: operationKey() })
+    setPendingAction({ coupon, type, reason: '' })
   }
 
-  const confirmAction = async event => {
-    event.preventDefault()
-    if (!pendingAction || pendingAction.reason.trim().length < 10) return
-    setWorking(true); setError(''); setNotice('')
-    const { coupon, type, reason, key } = pendingAction
+  const sendDecision = async ({ couponId, type, reason }, key) => {
     let result
     if (secure) {
       result = type === 'archive'
-        ? await archiveCouponBff({ couponId: coupon.id, reason: reason.trim() }, key)
-        : await setCouponStateBff({ couponId: coupon.id, active: type === 'activate', reason: reason.trim() }, key)
+        ? await archiveCouponBff({ couponId, reason: reason.trim() }, key)
+        : await setCouponStateBff({ couponId, active: type === 'activate', reason: reason.trim() }, key)
     } else {
       const direct = type === 'archive'
-        ? await supabase.from('coupons').update({ is_active: false, archived_at: new Date().toISOString() }).eq('id', coupon.id)
-        : await supabase.from('coupons').update({ is_active: type === 'activate' }).eq('id', coupon.id)
-      result = direct.error ? { ok: false, error: safeLegacyError } : { ok: true }
+        ? await supabase.from('coupons').update({ is_active: false, archived_at: new Date().toISOString() }).eq('id', couponId)
+        : await supabase.from('coupons').update({ is_active: type === 'activate' }).eq('id', couponId)
+      result = direct.error ? { ok: false, code: 'ADMIN_SERVICE_UNAVAILABLE', error: safeLegacyError } : { ok: true }
     }
-    setWorking(false)
+    return result
+  }
+
+  const confirmAction = async (event, operation) => {
+    event.preventDefault()
+    if (!pendingAction || pendingAction.reason.trim().length < 10) return
+    setError(''); setNotice('')
+    const { coupon, type, reason } = pendingAction
+    const result = await operation.run({ couponId: coupon.id, type, reason: reason.trim() })
+    if (!result) return
     if (!result.ok) { setError(result.error); return }
     setPendingAction(null)
     setNotice(`${coupon.code} ${type === 'archive' ? 'archived' : type === 'activate' ? 'activated' : 'paused'}.`)
@@ -171,7 +180,7 @@ export default function CouponManager() {
   const input = 'adm-input min-h-11 text-base sm:text-sm'
 
   return <div className="mx-auto max-w-[1600px] space-y-5 text-white">
-    <WorkspaceIntro eyebrow="Promotions" title="Coupons & vouchers" description="Create controlled discount codes with spend rules, redemption limits, activation windows, and attributable changes. Codes are validated individually and are never publicly enumerable." actions={<button onClick={openCreate} className="inline-flex min-h-11 items-center gap-2 rounded-adm-sm bg-gold px-4 text-sm font-bold text-adm-bg"><PlusIcon size={15} /> Create coupon</button>} />
+    <WorkspaceIntro eyebrow="Promotions" title="Coupons & vouchers" description="Create controlled discount codes with spend rules, redemption limits, activation windows, and attributable changes. Codes are validated individually and are never publicly enumerable." actions={<button onClick={openCreate} disabled={working} className="inline-flex min-h-11 items-center gap-2 rounded-adm-sm bg-gold px-4 text-sm font-bold text-adm-bg"><PlusIcon size={15} /> Create coupon</button>} />
 
     {(error || notice) && <StateBanner tone={error ? 'danger' : 'success'}>{error || notice}</StateBanner>}
 
@@ -184,7 +193,7 @@ export default function CouponManager() {
 
     <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
       <div className="p-4"><SectionHeading title="Promotion register" description="Activation is reversible; archive replaces deletion so historical codes remain auditable." count={coupons.length} /></div>
-      {loading ? <div className="space-y-2 border-t border-adm-line p-4" role="status" aria-label="Loading coupons">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-20 rounded-adm-sm bg-white/[0.04]" />)}</div> : coupons.length === 0 ? <EmptyState icon={StarIcon} title="No production coupons yet" description="Create an inactive draft first, review its limits and dates, then activate it deliberately." /> : <>
+      {loading && coupons.length === 0 ? <div className="space-y-2 border-t border-adm-line p-4" role="status" aria-label="Loading coupons">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-20 rounded-adm-sm bg-white/[0.04]" />)}</div> : coupons.length === 0 ? <EmptyState icon={StarIcon} title="No production coupons yet" description="Create an inactive draft first, review its limits and dates, then activate it deliberately." /> : <>
         <div className="space-y-3 border-t border-adm-line p-3 sm:hidden">{coupons.map(coupon => <CouponCard key={coupon.id} coupon={coupon} working={working} onAction={openAction} />)}</div>
         <div className="hidden overflow-x-auto sm:block"><table className="w-full min-w-[900px] text-left text-sm">
           <thead className="border-y border-adm-line bg-adm-sunken text-xs uppercase tracking-wider text-white/55"><tr><th className="px-4 py-3">Code</th><th className="px-4 py-3">Rule</th><th className="px-4 py-3">Window</th><th className="px-4 py-3">Usage</th><th className="px-4 py-3">State</th><th className="px-4 py-3 text-right">Actions</th></tr></thead>
@@ -193,34 +202,47 @@ export default function CouponManager() {
       </>}
     </section>
 
-    {showCreate && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="coupon-create-title">
-      <form onSubmit={createCoupon} className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-adm border border-adm-line bg-adm-surface shadow-adm-float">
-        <header className="sticky top-0 z-10 flex items-center justify-between border-b border-adm-line bg-adm-surface px-5 py-4"><div><h2 id="coupon-create-title" className="font-sans text-xl font-bold">Create coupon</h2><p className="mt-1 text-sm text-white/55">Start inactive unless this campaign is already approved.</p></div><button type="button" onClick={() => setShowCreate(false)} aria-label="Close create coupon" className="flex h-11 w-11 items-center justify-center rounded-adm-sm hover:bg-white/5"><XIcon /></button></header>
+    {showCreate && <CouponCommandDialog send={sendCreate} secure={secure} returnFocusRef={openerRef} onClose={() => setShowCreate(false)} labelledBy="coupon-create-title">{operation => (
+      <form onSubmit={event => createCoupon(event, operation)} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-2xl overflow-y-auto rounded-adm border border-adm-line bg-adm-surface shadow-adm-float">
+        <header className="sticky top-0 z-10 flex items-center justify-between border-b border-adm-line bg-adm-surface px-5 py-4"><div><h2 id="coupon-create-title" className="font-sans text-xl font-bold">Create coupon</h2><p className="mt-1 text-sm text-white/55">Start inactive unless this campaign is already approved.</p></div><button type="button" disabled={operation.closeDisabled} onClick={() => setShowCreate(false)} aria-label="Close create coupon" className="flex h-11 w-11 items-center justify-center rounded-adm-sm hover:bg-white/5"><XIcon /></button></header>
         <div className="grid gap-4 p-5 sm:grid-cols-2">
-          <Field label="Coupon code"><input className={`${input} font-mono uppercase`} value={form.code} onChange={update('code')} pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,39}" minLength="3" maxLength="40" autoCapitalize="characters" required /></Field>
-          <Field label="Description"><input className={input} value={form.description} onChange={update('description')} minLength="3" maxLength="300" required /></Field>
-          <Field label="Discount type"><select className={input} value={form.discount_type} onChange={update('discount_type')}><option value="percentage">Percentage</option><option value="fixed">Fixed PHP amount</option></select></Field>
-          <Field label={form.discount_type === 'percentage' ? 'Discount percent' : 'Discount amount (PHP)'}><input className={input} type="number" inputMode="decimal" min="0.01" max={form.discount_type === 'percentage' ? '100' : '1000000'} step="0.01" value={form.discount_value} onChange={update('discount_value')} required /></Field>
-          <Field label="Minimum spend (PHP)"><input className={input} type="number" inputMode="decimal" min="0" max="10000000" step="0.01" value={form.min_spend} onChange={update('min_spend')} required /></Field>
-          <Field label="Maximum redemptions"><input className={input} type="number" inputMode="numeric" min="1" max="1000000" value={form.max_redemptions} onChange={update('max_redemptions')} placeholder="Blank means unlimited" /></Field>
-          <Field label="Starts at"><input className={input} type="datetime-local" value={form.starts_at} onChange={update('starts_at')} /></Field>
-          <Field label="Ends at"><input className={input} type="datetime-local" value={form.ends_at} onChange={update('ends_at')} /></Field>
-          <label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input type="checkbox" checked={form.is_hunt} onChange={update('is_hunt')} /> Voucher-hunt campaign</label>
-          <label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input type="checkbox" checked={form.is_active} onChange={update('is_active')} /> Activate immediately</label>
-          {form.is_hunt && <Field label="Public hunt clue" className="sm:col-span-2"><textarea className={`${input} min-h-20 resize-y`} value={form.clue} onChange={update('clue')} minLength="3" maxLength="300" required /></Field>}
-          <Field label="Reason for creating this promotion" className="sm:col-span-2"><textarea className={`${input} min-h-24 resize-y`} value={form.reason} onChange={update('reason')} minLength="10" maxLength="500" aria-describedby="coupon-reason-help" required /><span id="coupon-reason-help" className="mt-1.5 block text-sm font-normal text-white/55">Record the campaign, approver, or business purpose. This becomes audit evidence in secure mode.</span></Field>
+          <Field label="Coupon code"><input disabled={operation.locked} className={`${input} font-mono uppercase`} value={form.code} onChange={update('code')} pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,39}" minLength="3" maxLength="40" autoCapitalize="characters" required /></Field>
+          <Field label="Description"><input disabled={operation.locked} className={input} value={form.description} onChange={update('description')} minLength="3" maxLength="300" required /></Field>
+          <Field label="Discount type"><select disabled={operation.locked} className={input} value={form.discount_type} onChange={update('discount_type')}><option value="percentage">Percentage</option><option value="fixed">Fixed PHP amount</option></select></Field>
+          <Field label={form.discount_type === 'percentage' ? 'Discount percent' : 'Discount amount (PHP)'}><input disabled={operation.locked} className={input} type="number" inputMode="decimal" min="0.01" max={form.discount_type === 'percentage' ? '100' : '1000000'} step="0.01" value={form.discount_value} onChange={update('discount_value')} required /></Field>
+          <Field label="Minimum spend (PHP)"><input disabled={operation.locked} className={input} type="number" inputMode="decimal" min="0" max="10000000" step="0.01" value={form.min_spend} onChange={update('min_spend')} required /></Field>
+          <Field label="Maximum redemptions"><input disabled={operation.locked} className={input} type="number" inputMode="numeric" min="1" max="1000000" value={form.max_redemptions} onChange={update('max_redemptions')} placeholder="Blank means unlimited" /></Field>
+          <Field label="Starts at"><input disabled={operation.locked} className={input} type="datetime-local" value={form.starts_at} onChange={update('starts_at')} /></Field>
+          <Field label="Ends at"><input disabled={operation.locked} className={input} type="datetime-local" value={form.ends_at} onChange={update('ends_at')} /></Field>
+          <label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input disabled={operation.locked} type="checkbox" checked={form.is_hunt} onChange={update('is_hunt')} /> Voucher-hunt campaign</label>
+          <label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input disabled={operation.locked} type="checkbox" checked={form.is_active} onChange={update('is_active')} /> Activate immediately</label>
+          {form.is_hunt && <Field label="Public hunt clue" className="sm:col-span-2"><textarea disabled={operation.locked} className={`${input} min-h-20 resize-y`} value={form.clue} onChange={update('clue')} minLength="3" maxLength="300" required /></Field>}
+          <Field label="Reason for creating this promotion" className="sm:col-span-2"><textarea disabled={operation.locked} className={`${input} min-h-24 resize-y`} value={form.reason} onChange={update('reason')} minLength="10" maxLength="500" aria-describedby="coupon-reason-help" required /><span id="coupon-reason-help" className="mt-1.5 block text-sm font-normal text-white/55">Record the campaign, approver, or business purpose. This becomes audit evidence in secure mode.</span></Field>
         </div>
-        <footer className="sticky bottom-0 flex justify-end gap-2 border-t border-adm-line bg-adm-surface px-5 py-4"><button type="button" onClick={() => setShowCreate(false)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={working || form.reason.trim().length < 10} className="min-h-11 rounded-adm-sm bg-gold px-5 text-sm font-bold text-adm-bg disabled:opacity-40">{working ? 'Saving…' : 'Save coupon'}</button></footer>
+        {(operation.error || error) && <div className="px-5 pb-4"><StateBanner tone={operation.uncertain ? 'warning' : 'danger'}>{operation.error || error}</StateBanner></div>}
+        <footer className="sticky bottom-0 flex justify-end gap-2 border-t border-adm-line bg-adm-surface px-5 py-4"><button type="button" disabled={operation.closeDisabled} onClick={() => setShowCreate(false)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={operation.retryDisabled || form.reason.trim().length < 10} className="min-h-11 rounded-adm-sm bg-gold px-5 text-sm font-bold text-adm-bg disabled:opacity-40">{operation.busy ? 'Saving…' : operation.uncertain ? secure ? 'Retry same command' : 'Reconcile coupons first' : 'Save coupon'}</button></footer>
       </form>
-    </div>}
+    )}</CouponCommandDialog>}
 
-    {pendingAction && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="coupon-action-title">
-      <form onSubmit={confirmAction} className="w-full max-w-lg rounded-adm border border-adm-line bg-adm-surface shadow-adm-float">
-        <header className="flex items-start justify-between border-b border-adm-line px-5 py-4"><div><p className="text-xs font-bold uppercase tracking-wider text-gold">Coupon decision</p><h2 id="coupon-action-title" className="mt-1 font-sans text-xl font-bold">{pendingAction.type === 'archive' ? 'Archive' : pendingAction.type === 'activate' ? 'Activate' : 'Pause'} {pendingAction.coupon.code}</h2><p className="mt-2 text-sm text-white/60">{pendingAction.type === 'archive' ? 'Archiving stops validation immediately and cannot be undone from this screen.' : 'The change affects whether checkout can validate this code.'}</p></div><button type="button" onClick={() => setPendingAction(null)} aria-label="Close coupon decision" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-adm-sm hover:bg-white/5"><XIcon /></button></header>
-        <div className="p-5"><Field label="Decision reason"><textarea autoFocus className={`${input} min-h-28 resize-y`} value={pendingAction.reason} onChange={event => setPendingAction(current => ({ ...current, reason: event.target.value, key: operationKey() }))} minLength="10" maxLength="500" aria-describedby="coupon-action-help" required /><span id="coupon-action-help" className="mt-1.5 block text-sm font-normal text-white/55">At least 10 characters. State what changed and who approved it.</span></Field></div>
-        <footer className="flex justify-end gap-2 border-t border-adm-line px-5 py-4"><button type="button" onClick={() => setPendingAction(null)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={working || pendingAction.reason.trim().length < 10} className={`min-h-11 rounded-adm-sm px-5 text-sm font-bold disabled:opacity-40 ${pendingAction.type === 'archive' ? 'bg-crimson text-white' : 'bg-gold text-adm-bg'}`}>{working ? 'Recording…' : `Confirm ${pendingAction.type}`}</button></footer>
+    {pendingAction && <CouponCommandDialog send={sendDecision} secure={secure} returnFocusRef={openerRef} onClose={() => setPendingAction(null)} labelledBy="coupon-action-title">{operation => (
+      <form onSubmit={event => confirmAction(event, operation)} className="max-h-[calc(100dvh-1.5rem)] overflow-y-auto w-full max-w-lg rounded-adm border border-adm-line bg-adm-surface shadow-adm-float">
+        <header className="flex items-start justify-between border-b border-adm-line px-5 py-4"><div><p className="text-xs font-bold uppercase tracking-wider text-gold">Coupon decision</p><h2 id="coupon-action-title" className="mt-1 font-sans text-xl font-bold">{pendingAction.type === 'archive' ? 'Archive' : pendingAction.type === 'activate' ? 'Activate' : 'Pause'} {pendingAction.coupon.code}</h2><p className="mt-2 text-sm text-white/60">{pendingAction.type === 'archive' ? 'Archiving stops validation immediately and cannot be undone from this screen.' : 'The change affects whether checkout can validate this code.'}</p></div><button type="button" disabled={operation.closeDisabled} onClick={() => setPendingAction(null)} aria-label="Close coupon decision" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-adm-sm hover:bg-white/5"><XIcon /></button></header>
+        <div className="p-5"><Field label="Decision reason"><textarea disabled={operation.locked} autoFocus className={`${input} min-h-28 resize-y`} value={pendingAction.reason} onChange={event => setPendingAction(current => ({ ...current, reason: event.target.value }))} minLength="10" maxLength="500" aria-describedby="coupon-action-help" required /><span id="coupon-action-help" className="mt-1.5 block text-sm font-normal text-white/55">At least 10 characters. State what changed and who approved it.</span></Field></div>
+        {(operation.error || error) && <div className="px-5 pb-4"><StateBanner tone={operation.uncertain ? 'warning' : 'danger'}>{operation.error || error}</StateBanner></div>}
+        <footer className="flex justify-end gap-2 border-t border-adm-line px-5 py-4"><button type="button" disabled={operation.closeDisabled} onClick={() => setPendingAction(null)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={operation.retryDisabled || pendingAction.reason.trim().length < 10} className={`min-h-11 rounded-adm-sm px-5 text-sm font-bold disabled:opacity-40 ${pendingAction.type === 'archive' ? 'bg-crimson text-white' : 'bg-gold text-adm-bg'}`}>{operation.busy ? 'Recording…' : operation.uncertain ? secure ? 'Retry same command' : 'Reconcile coupons first' : `Confirm ${pendingAction.type}`} </button></footer>
       </form>
-    </div>}
+    )}</CouponCommandDialog>}
+  </div>
+}
+
+function CouponCommandDialog({ send, secure, returnFocusRef, onClose, labelledBy, children }) {
+  const operation = useRetainedFulfillmentCommand(send, secure, 'coupon register')
+  const closeDisabled = operation.busy || (operation.uncertain && secure)
+  const retryDisabled = operation.busy || (operation.uncertain && !secure)
+  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 backdrop-blur-sm">
+    <AdminDialog onClose={onClose} closeDisabled={closeDisabled} returnFocusRef={returnFocusRef} labelledBy={labelledBy}>
+      {children({ ...operation, closeDisabled, retryDisabled })}
+    </AdminDialog>
   </div>
 }
 

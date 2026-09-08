@@ -100,34 +100,7 @@ const originalConfirm = () => slice(
 
 const holdMigration = () => fs.readFileSync(holdPath, 'utf8').replace(/\r\n/g, '\n')
 
-// The reservation-expiry columns this migration depends on. Mirrors
-// 20260902_reservation_expiry_policy.sql, including the website-only deadline
-// trigger, so the rehearsal exercises the same shape production will have.
-const EXPIRY_COLUMNS = `
-alter table public.inventory_reservations
-  add column if not exists expires_at timestamptz,
-  add column if not exists hold_minutes integer,
-  add column if not exists released_at timestamptz,
-  add column if not exists release_cause text;
-
-create or replace function public.set_reservation_deadline() returns trigger
-language plpgsql as $$
-declare v_channel text;
-begin
-  if new.expires_at is not null then return new; end if;
-  select o.channel_source into v_channel from public.order_requests o where o.id = new.order_request_id;
-  if v_channel is distinct from 'website' then return new; end if;
-  new.hold_minutes := coalesce(new.hold_minutes, 30);
-  new.expires_at := now() + make_interval(mins => new.hold_minutes);
-  return new;
-end $$;
-
-drop trigger if exists inventory_reservations_set_deadline on public.inventory_reservations;
-create trigger inventory_reservations_set_deadline
-  before insert on public.inventory_reservations
-  for each row execute function public.set_reservation_deadline();
-`
-
+// Install the actual expiry migration below; do not mirror its constraints or trigger.
 const BOOTSTRAP = `
 create extension if not exists pgcrypto with schema public;
 create schema if not exists auth;
@@ -326,9 +299,19 @@ async function main() {
     }
 
     psqlScript(BOOTSTRAP, 'bootstrap')
-    psqlScript(EXPIRY_COLUMNS, 'reservation expiry columns')
+    psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/tests/legacy_release_bootstrap.sql'), 'utf8'), 'legacy released hold fixture')
+    psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/migrations/20260902_reservation_expiry_policy.sql'), 'utf8'), 'real reservation expiry migration')
+    psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/tests/legacy_release_behavior.sql'), 'utf8'), 'legacy release attribution assertions')
+    check('legacy unknown releases survive while new unattributed releases are refused', true)
     psqlScript(originalSubmit(), 'original submit_order_request_v2 install')
     psqlScript(originalConfirm(), 'original confirm_order_request install')
+    psqlScript(slice(basePath,
+      'create or replace function public.cancel_order_request(',
+      'grant execute on function public.cancel_order_request(uuid,text) to authenticated;',
+      'ORIGINAL_CANCEL'), 'original cancellation install')
+    psqlScript(`alter table public.order_requests add column exception_status text,
+      add column exception_note text, add column cancelled_at timestamptz;
+      alter table public.coupon_redemptions add column updated_at timestamptz;`, 'cancellation fixture fields')
     psqlScript(LEGACY_ORDER, 'pre-migration order fixture')
     console.log('[ok] repository 20260809 order functions installed')
 
@@ -339,6 +322,20 @@ async function main() {
     // Idempotent replay.
     psqlScript(holdMigration(), 'purchase-time reservation replay')
     console.log('[ok] migration replays without error')
+    const coverageCorrection = path.join(rootDir, 'supabase/migrations/20260906_reservation_coverage_guard.sql')
+    if (!process.argv.includes('--baseline-coverage')) {
+      psqlScript(fs.readFileSync(coverageCorrection, 'utf8'), 'reservation coverage correction')
+      psqlScript(fs.readFileSync(coverageCorrection, 'utf8'), 'reservation coverage replay')
+    }
+    const lockCorrection = path.join(rootDir, 'supabase/migrations/20260908_purchase_hold_lock_order.sql')
+    const applyLockCorrection = !process.argv.includes('--baseline-lock-order') && !process.argv.includes('--baseline-coverage')
+    psqlScript(`create table public.fixture_hold_recovery as
+      select pg_get_functiondef(oid) definition, proacl::text acl from pg_proc
+      where oid='public.reserve_order_request_lots_v1(uuid,text)'::regprocedure;`, 'capture local function recovery')
+    if (applyLockCorrection) {
+      psqlScript(fs.readFileSync(lockCorrection, 'utf8'), 'purchase lock order correction')
+      psqlScript(fs.readFileSync(lockCorrection, 'utf8'), 'purchase lock order correction replay')
+    }
 
     // --- 1. Submitting holds stock immediately -----------------------------
     psql(submitCall('buyer-one'), 'first submission')
@@ -471,6 +468,186 @@ async function main() {
     check('exactly one confirmation owns the single unit',
       raceHolds === '1' && raceConfirmed === '1',
       `reservations=${raceHolds} confirmed=${raceConfirmed}`)
+
+    const cancellationCorrection = path.join(rootDir, 'supabase/migrations/20260905_purchase_hold_cancellation.sql')
+    if (!process.argv.includes('--baseline-cancellation') && fs.existsSync(cancellationCorrection)) {
+      psqlScript(fs.readFileSync(cancellationCorrection, 'utf8'), 'cancellation correction')
+      psqlScript(fs.readFileSync(cancellationCorrection, 'utf8'), 'cancellation correction replay')
+    }
+    psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/tests/purchase_hold_cancellation.sql'), 'utf8'), 'purchase hold cancellation assertions')
+    check('submitted and confirmed cancellations release exact active lots once', true)
+
+    const expiryCorrection = path.join(rootDir, 'supabase/migrations/20260906_atomic_order_hold_expiry.sql')
+    if (!process.argv.includes('--baseline-expiry') && fs.existsSync(expiryCorrection)) {
+      psqlScript(fs.readFileSync(expiryCorrection, 'utf8'), 'atomic expiry correction')
+      psqlScript(fs.readFileSync(expiryCorrection, 'utf8'), 'atomic expiry correction replay')
+    }
+    psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/tests/purchase_hold_expiry.sql'), 'utf8'), 'composed expiry assertions')
+    check('expiry preserves confirmed commitments, releases whole orders and reconciles stock', true)
+    psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/tests/purchase_hold_completeness.sql'), 'utf8'), 'reservation completeness assertions')
+    check('confirmation refuses partial or expired purchase coverage without side effects', true)
+    psqlScript(slice(basePath, 'create or replace function public.record_packing_scan(',
+      'grant execute on function public.record_packing_scan(uuid,text) to authenticated;', 'ORIGINAL_PACKING'), 'original packing function')
+    if (process.argv.includes('--baseline-packing')) {
+      psqlScript(`create function public.record_packing_scan_exact_v1(uuid,text,uuid,boolean) returns jsonb language sql as
+        'select public.record_packing_scan($1,$2)';`, 'baseline packing adapter')
+    } else {
+      psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/migrations/20260906_exact_packing_lot.sql'), 'utf8'), 'exact packing function')
+    }
+    psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/tests/packing_lot_proof.sql'), 'utf8'), 'physical lot proof assertions')
+    check('packing credits only the explicitly confirmed physical lot', true)
+
+    psqlScript("alter type public.order_status_enum add value if not exists 'Shipped';", 'handover enum fixture')
+    psqlScript(slice(basePath, 'create or replace function public.fulfill_order_request(',
+      'grant execute on function public.fulfill_order_request(uuid,text) to authenticated;', 'ORIGINAL_HANDOVER'), 'original handover function')
+    const handoverCorrection = path.join(rootDir, 'supabase/migrations/20260906_handover_coverage.sql')
+    if (!process.argv.includes('--baseline-handover') && fs.existsSync(handoverCorrection)) {
+      psqlScript(fs.readFileSync(handoverCorrection, 'utf8'), 'handover coverage correction')
+      psqlScript(fs.readFileSync(handoverCorrection, 'utf8'), 'handover coverage correction replay')
+    }
+    psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/tests/handover_coverage.sql'), 'utf8'), 'handover coverage assertions')
+    check('handover requires complete packed coverage and preserves reservation history', true)
+
+    // Opposing basket order must not determine inventory lock order. The local
+    // trigger pauses after a lot is claimed to expose the historical A/B vs B/A
+    // deadlock; it does not replace any production reservation behavior.
+    psqlScript(`
+      insert into public.products (sku,name,srp,stock_available) values
+        ('LOCK-A','Lock fixture A',100,2),('LOCK-B','Lock fixture B',100,2);
+      insert into public.product_batches (sku,quantity,expiry_date) values
+        ('LOCK-A',2,current_date+180),('LOCK-B',2,current_date+180);
+      insert into public.inventory_balances (sku,location_code,on_hand) values
+        ('LOCK-A','MANILA_MAIN',2),('LOCK-B','MANILA_MAIN',2);
+      insert into public.order_requests (id,idempotency_key,channel_source) values
+        ('80000000-0000-4000-8000-000000000001','lock-ab','pasabuy'),
+        ('80000000-0000-4000-8000-000000000002','lock-ba','pasabuy');
+      insert into public.order_request_items (order_request_id,sku,quantity,unit_price,line_total,created_at) values
+        ('80000000-0000-4000-8000-000000000001','LOCK-A',1,100,100,now()),
+        ('80000000-0000-4000-8000-000000000001','LOCK-B',1,100,100,now()+interval '1 second'),
+        ('80000000-0000-4000-8000-000000000002','LOCK-B',1,100,100,now()),
+        ('80000000-0000-4000-8000-000000000002','LOCK-A',1,100,100,now()+interval '1 second');
+      create function public.fixture_slow_hold() returns trigger language plpgsql as $$
+      begin if new.sku in ('LOCK-A','LOCK-B') then perform pg_sleep(1); end if; return new; end $$;
+      create trigger fixture_slow_hold before insert on public.inventory_reservations
+        for each row execute function public.fixture_slow_hold();
+    `, 'opposing basket fixture')
+    const opposing = await Promise.all(['000001', '000002'].map(suffix =>
+      runAsync(executable['psql.exe'], psqlArgs(`set statement_timeout='15s';
+        select public.reserve_order_request_lots_v1('80000000-0000-4000-8000-000000${suffix}','opposing basket');`), dbEnv)))
+    check('opposing A/B and B/A baskets both reserve without a deadlock',
+      opposing.every(result => result.status === 0),
+      opposing.map(result => result.status === 0 ? 'committed' : result.stderr.trim()).join(' | '))
+    psql('drop trigger fixture_slow_hold on public.inventory_reservations; drop function public.fixture_slow_hold();', 'remove local delay')
+    const lockState = value(`select (
+      (select count(*)=4 from public.inventory_reservations where sku in ('LOCK-A','LOCK-B') and status='active')
+      and (select bool_and(reserved=2 and on_hand=2) from public.inventory_balances where sku in ('LOCK-A','LOCK-B'))
+      and (select bool_and(quantity=2 and reserved_quantity=2) from public.product_batches where sku in ('LOCK-A','LOCK-B'))
+      and (select bool_and(stock_available=0) from public.products where sku in ('LOCK-A','LOCK-B'))
+      and (select count(*)=4 from public.inventory_events where sku in ('LOCK-A','LOCK-B'))
+    )::text;`, 'opposing basket ledger')
+    check('opposing baskets retain exact lot, balance, catalog and event totals', lockState === 'true', lockState)
+    if (applyLockCorrection) {
+      const replayCount = value(`select public.reserve_order_request_lots_v1(
+        '80000000-0000-4000-8000-000000000001','replay')::text;`, 'opposing basket replay')
+      check('replaying an opposing basket adds no reservations or inventory events', replayCount === '0'
+        && value("select count(*)::text from inventory_events where sku in ('LOCK-A','LOCK-B');", 'replay events') === '4')
+      const aclPreserved = value(`select (p.proacl::text is not distinct from f.acl)::text
+        from pg_proc p cross join fixture_hold_recovery f
+        where p.oid='public.reserve_order_request_lots_v1(uuid,text)'::regprocedure;`, 'preserved RPC grants')
+      check('lock-order correction preserves exact installed RPC grants', aclPreserved === 'true')
+      psqlScript(`do $$ begin execute (select definition from fixture_hold_recovery); end $$;`, 'restore captured local function')
+      const restored = value(`select (pg_get_functiondef(p.oid)=f.definition
+        and p.proacl::text is not distinct from f.acl)::text
+        from pg_proc p cross join fixture_hold_recovery f
+        where p.oid='public.reserve_order_request_lots_v1(uuid,text)'::regprocedure;`, 'exact function recovery')
+      check('captured function recovery restores definition and ACL without changing inventory', restored === 'true'
+        && value("select count(*)::text from inventory_events where sku in ('LOCK-A','LOCK-B');", 'recovery events') === '4')
+      psqlScript(fs.readFileSync(lockCorrection, 'utf8'), 'reapply after recovery')
+    }
+
+    psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/tests/purchase_reconciliation_bootstrap.sql'), 'utf8'), 'reconciliation fixture')
+    psqlScript(slice(basePath, 'create or replace function public.reconcile_product_batches(',
+      'grant execute on function public.reconcile_product_batches(text,jsonb,text) to authenticated;', 'RECONCILE'), 'actual reconciliation function')
+    const reconcileCorrection = path.join(rootDir, 'supabase/migrations/20260908_reconciliation_lock_order.sql')
+    psqlScript(`create table fixture_reconcile_recovery as select pg_get_functiondef(oid) definition,proacl::text acl
+      from pg_proc where oid='public.reconcile_product_batches(text,jsonb,text)'::regprocedure;`, 'capture reconciliation recovery')
+    if (!process.argv.includes('--baseline-reconciliation') && fs.existsSync(reconcileCorrection)) {
+      psqlScript(fs.readFileSync(reconcileCorrection, 'utf8'), 'reconciliation lock correction')
+      psqlScript(fs.readFileSync(reconcileCorrection, 'utf8'), 'reconciliation lock correction replay')
+    }
+    const purchasing = runAsync(executable['psql.exe'], psqlArgs(`set statement_timeout='15s';
+      set application_name='k2_reconciliation_purchase';
+      select public.reserve_order_request_lots_v1('90000000-0000-4000-8000-000000000002','race purchase');`), dbEnv)
+    let purchasePaused = false
+    for (let attempt = 0; attempt < 30; attempt += 1) {
+      if (value("select count(*)::text from pg_stat_activity where application_name='k2_reconciliation_purchase' and wait_event='PgSleep';", 'purchase pause probe') === '1') {
+        purchasePaused = true; break
+      }
+      await sleep(50)
+    }
+    if (!purchasePaused) { await purchasing; throw new Error('Reconciliation race purchase pause not observed') }
+    const recount = await runAsync(executable['psql.exe'], psqlArgs(`set statement_timeout='15s';
+      select public.reconcile_product_batches('RECON-RACE',jsonb_build_array(jsonb_build_object(
+        'id','90000000-0000-4000-8000-000000000001','quantity',2,'box_code','RACE-BOX',
+        'expiry_date',current_date+180,'inventory_status','available')),'Physical recount');`), dbEnv)
+    const purchaseResult = await purchasing
+    check('purchase and physical reconciliation both commit without lock inversion',
+      purchaseResult.status === 0 && recount.status === 0,
+      JSON.stringify({ purchase: purchaseResult.status, recount: recount.status, errors: [purchaseResult.stderr, recount.stderr] }))
+    const reconciled = value(`select (
+      (select quantity=2 and reserved_quantity=1 from product_batches where sku='RECON-RACE')
+      and (select on_hand=2 and reserved=1 from inventory_balances where sku='RECON-RACE')
+      and (select stock_available=1 from products where sku='RECON-RACE')
+      and (select count(*)=1 from inventory_events where sku='RECON-RACE')
+      and (select count(*)=1 from batch_change_events where sku='RECON-RACE')
+    )::text;`, 'recount ledger')
+    check('concurrent recount preserves purchase holds, sellable projection and both audit events', reconciled === 'true', reconciled)
+    psql('drop trigger fixture_pause_recon_purchase on inventory_reservations; drop function fixture_pause_recon_purchase();', 'remove recount pause')
+    psqlScript(slice(basePath, 'create or replace function public.set_batch_clearance_approval(',
+      'grant execute on function public.set_batch_clearance_approval(uuid,boolean,text) to authenticated;', 'CLEARANCE'), 'actual clearance function')
+    psqlScript(`create function fixture_pause_clearance() returns trigger language plpgsql as $$
+      begin if current_setting('application_name')='k2_recount_clearance' then perform pg_sleep(2); end if; return new; end $$;
+      create trigger fixture_pause_clearance before update on product_batches for each row execute function fixture_pause_clearance();`, 'clearance race pause')
+    const clearing = runAsync(executable['psql.exe'], psqlArgs(`set statement_timeout='15s';
+      set application_name='k2_recount_clearance';
+      select public.set_batch_clearance_approval('90000000-0000-4000-8000-000000000001',false,'Withdraw clearance');`), dbEnv)
+    let clearancePaused = false
+    for (let attempt = 0; attempt < 30; attempt += 1) {
+      if (value("select count(*)::text from pg_stat_activity where application_name='k2_recount_clearance' and wait_event='PgSleep';", 'clearance pause probe') === '1') {
+        clearancePaused = true; break
+      }
+      await sleep(50)
+    }
+    if (!clearancePaused) { await clearing; throw new Error('Clearance pause not observed') }
+    const recountAfterClearance = await runAsync(executable['psql.exe'], psqlArgs(`set statement_timeout='15s';
+      select public.reconcile_product_batches('RECON-RACE',jsonb_build_array(jsonb_build_object(
+        'id','90000000-0000-4000-8000-000000000001','quantity',2,'box_code','RACE-BOX',
+        'expiry_date',current_date+180,'inventory_status','quarantine')),'Physical quarantine recount');`), dbEnv)
+    const clearanceResult = await clearing
+    check('clearance and recount serialize without a batch/product deadlock',
+      clearanceResult.status === 0 && recountAfterClearance.status === 0,
+      JSON.stringify({ clearance: clearanceResult.status, recount: recountAfterClearance.status }))
+    check('quarantine recount retains held units while removing them from sale',
+      value("select (stock_available=0)::text from products where sku='RECON-RACE';", 'quarantine projection') === 'true'
+      && value("select (quantity=2 and reserved_quantity=1 and inventory_status='quarantine')::text from product_batches where sku='RECON-RACE';", 'quarantine holds') === 'true')
+    psql('drop trigger fixture_pause_clearance on product_batches; drop function fixture_pause_clearance();', 'remove clearance pause')
+    if (!process.argv.includes('--baseline-reconciliation')) {
+      psql("update product_batches set inventory_status='available' where sku='RECON-RACE'; update products set stock_available=1 where sku='RECON-RACE';", 'reset local disposition for denial assertions')
+      psqlScript(fs.readFileSync(path.join(rootDir, 'supabase/tests/purchase_reconciliation_behavior.sql'), 'utf8'), 'recount safety assertions')
+      check('recount preserves holds/history, missing-balance commitments and first-count creation', true)
+      psqlScript(`do $$ begin
+        if exists(select 1 from pg_proc p cross join fixture_reconcile_recovery f
+          where p.oid='public.reconcile_product_batches(text,jsonb,text)'::regprocedure
+          and p.proacl::text is distinct from f.acl) then raise exception 'Recount ACL changed'; end if;
+        execute (select definition from fixture_reconcile_recovery);
+        if exists(select 1 from pg_proc p cross join fixture_reconcile_recovery f
+          where p.oid='public.reconcile_product_batches(text,jsonb,text)'::regprocedure
+          and (pg_get_functiondef(p.oid)<>f.definition or p.proacl::text is distinct from f.acl))
+          then raise exception 'Recount recovery mismatch'; end if;
+      end $$;`, 'recount permission and recovery assertions')
+      psqlScript(fs.readFileSync(reconcileCorrection, 'utf8'), 'reapply recount correction')
+      check('recount patch preserves RPC permissions and exact captured-definition recovery', true)
+    }
 
     const failed = checks.filter((entry) => !entry.passed)
     console.log(`\n${checks.length - failed.length}/${checks.length} properties held.`)

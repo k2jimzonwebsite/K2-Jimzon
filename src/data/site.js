@@ -86,7 +86,7 @@ export const FAQS = [
   },
   {
     q: 'How fast is delivery?',
-    a: 'For items in our Manila stock, orders ship within 1 to 2 business days via express courier (Lalamove, Grab, or J&T). For Pasabuy custom items flown from Milan, transit typically takes 2 to 3 weeks.',
+    a: 'Delivery timing and fees are confirmed by K2 staff after checking your items, destination, and courier availability. For Pasabuy, sourcing and arrival timing are included in the quote for your review. Submitting a request does not confirm a delivery date.',
   },
   {
     q: 'What is Pasabuy and how does it work?',
@@ -94,7 +94,7 @@ export const FAQS = [
   },
   {
     q: 'How do I pay?',
-    a: 'You do not pay when placing the request. Once our team verifies stock in Manila, we send payment details (GCash, Maya, or bank transfer) or arrange Cash on Delivery depending on your courier preference.',
+    a: 'No payment is collected when you submit a request. Manual GCash or QR payment is planned for launch. Wait for K2 staff to confirm your stock, delivery charge, total, and approved receiving details before paying. Your payment must then be checked by staff.',
   },
   {
     q: 'I run a café, restaurant, or store. Can I get wholesale prices?',

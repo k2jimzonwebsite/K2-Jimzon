@@ -111,7 +111,7 @@ test('the store keeps Previous and Next shelf controls, not only dragging', asyn
 test('the basket reads as a counter K2 will check, not an instant checkout', async () => {
   // Concept §16: K2 confirms stock, delivery and payment details afterwards.
   const basket = await read('../src/components/shop/StoreBasketDock.jsx')
-  expect(basket).toContain('Send order request')
+  expect(basket).toContain('Review basket')
   expect(basket).toContain('K2 confirms stock and delivery before any payment details')
   expect(basket).not.toMatch(/pay now|checkout securely|complete payment/i)
 })

@@ -1,5 +1,15 @@
 # Product Intake and First-Source Runbook
 
+**8 September I-002 transport correction, local:** the five JSON intake BFF
+wrappers accept a caller-owned retry key and forward it unchanged. Five
+response-loss regressions failed first, then the focused payment-recovery,
+product-intake-contract and admin-command-retry selection passed 28/28.
+This is transport support only: productIntakeService and its modal still need
+actor-scoped retained operation/payload adoption, including inner request IDs,
+evidence upload and honest uncertainty. Keep those remaining tasks in I-002.
+Recovery is the five wrappers and intakeCommand diff plus added test cases;
+do not undo earlier evidence cleanup or publication fixes. No provider changes.
+
 **Current status:** verified local implementation and rollback-tested migration;
 not active in production. Permanent activation remains behind MAP-017.
 Supplier receipt is intentionally unavailable until a canonical
@@ -33,6 +43,40 @@ the two intake-AI browser checks (2/2). The separate Admin and Storefront builds
 also passed their local boundary, budget and secret checks. This does not prove
 production migration activation, supplier receiving, rich arrival dispositions,
 or real staff receiving acceptance.
+## H-018 relisting correction — prepared locally, 5 September 2026
+
+`20260905_publication_transition_consistency.sql` replaces the publication
+function after the existing intake/boundary migrations. It permits reviewed
+Unlisted → Live with all existing Live readiness checks. An unchanged status
+returns after authorization/ownership/locks without duplicate transition audit
+or completion timestamp changes. Existing RPC privileges are preserved. The
+signed wrapper still records a new command's review reason; this rehearsal
+does not claim whole-wrapper no-op behavior.
+
+Evidence commands:
+
+- `node scripts/rehearse-publication-transitions.mjs --baseline` reproduced
+  `K2_PUBLICATION_NOT_READY / under_review_state` during Unlisted → Live.
+- `node scripts/rehearse-publication-transitions.mjs` passed real-function SQL
+  assertions for relisting, unchanged replay, required human/image/price
+  evidence, Draft/Discontinued denial, MFA on replay, double migration apply
+  and preserving a tightened RPC ACL.
+- `npx playwright test --config=playwright.api.config.js tests/product-intake-contract.spec.js tests/admin-bff-contract.spec.js --reporter=dot`
+  passed 60/60.
+
+The runner uses only a dedicated localhost:55439 PostgreSQL 17.11 fixture,
+resets only `k2_publication_transition_rehearsal`, and stops a server it starts.
+Windows required elevated execution for this local fixture; startup uses
+ignored stdio to prevent inherited server pipes from blocking the runner.
+Identity helpers and schema are simplified. Concurrent edits, signed receipt
+composition, browser readiness explanations and deployed-host checks remain in
+MAP-018 H-018. No production migration was applied.
+
+Recovery: before provider application, capture the currently deployed function
+definition and ACL using the normal migration/backup gate. If rollback becomes
+necessary, restore that captured definition and preserve its ACL; do not run the
+entire historical intake migration, which has unrelated schema/data effects.
+Locally, `--baseline` replays the original function in the disposable fixture.
 
 ## Staff prerequisites
 

@@ -189,6 +189,9 @@ Rollback instructions: `docs/runbooks/ADMIN_DASHBOARD_RUNBOOK.md`; retain metric
 availability/security fixes while reverting only the visual widget arrangement.
 
 **Owner direction, 6 September; broader target, dashboard slice prepared locally.** Make Admin
+## Admin ease-of-use strategy — IDEA-20260906-06
+
+**Owner direction, 6 September; accepted target, not implemented UI.** Make Admin
 calmer to look at and easier to operate while preserving distinct business states.
 This refines MAP-028 I-012/I-016 and MAP-018/019/021/023/025; it creates no new
 top-level backlog. Existing security, recovery and activation dependencies retain
@@ -338,9 +341,146 @@ checkmarks imply business completion. Rollback: remove the WorkflowRecords impor
 and keyed child from WorkflowDetailDrawer; no backend state changes in this slice.
 
 **Last audited:** 1 September 2026
+**Status:** authoritative queue for all approved, unfinished project work
+
+**6 September continuation — IDEA-20260906-01:** owner authorizes completing
+all executable readiness work; manual GCash or QR payment is the intended
+first-launch model. MAP-019/MAP-023 retain payment-evidence and reconciliation
+authority. Receiving account/approved QR and delivery arrangements remain owner
+inputs, alongside existing recovery, real inventory and acceptance gates.
+Automatic gateway activation is not required for this manual model.
+
+**Last audited:** 8 September 2026 — partial continuation under IDEA-20260908-01:
+source inventory documentation reconciled; purchase-hold opposing-basket deadlock
+reproduced and corrected in a prepared migration. Local evidence: 555 existing
+contracts, 24 final focused checks, 22 inventory properties, signed payment/packing
+rehearsal, both builds and prebuild pass. Selling browser suite passes 8/8 on
+rerun after a first-navigation timeout; this reliability finding remains open.
+This is not a completed audit of all MAP scope or fresh provider/live evidence.
 
 **Active MAP item count:** 12 unfinished top-level items (`MAP-017` through
 `MAP-028`)
+
+**Fresh full-surface audit:** MAP-028 section I (IDEA-20260906-02) consolidates
+engineering and ecommerce design findings with coverage, severity, evidence,
+dependencies and acceptance criteria. It supersedes blanket readiness/retry
+completion claims where current source shows unfinished callers. No redesign,
+provider activation or complete real-host acceptance is claimed by the audit.
+
+**5 September remediation authorization:** the owner requests continuing the
+existing MAP toward production readiness. Local fixes and rehearsals are active;
+permanent provider changes retain the recorded recovery/activation dependencies.
+
+**Latest local evidence — MAP-028 H-017 row targeting:** receiving row actions
+now address the exact manifest line instead of the first matching SKU, and the
+box identity is visible where staff act. 99/99 focused contracts and the Admin
+build gates pass locally; 375px rendering is not validated.
+
+**Same continuation — MAP-028 H-013 and H-014:** intake evidence is
+classified before any deletion, and the final-Admin invariant is serialized by a
+prepared migration whose concurrency rehearsal first reproduces the loss and then
+proves it held. 89/89 focused contracts, the isolated rehearsal and the Admin
+build gates pass locally; the migration remains unapplied.
+
+**Same continuation — MAP-028 H-007 completeness:** the bounded Inbox read
+now caps messages per conversation and declares what it truncated, and the Admin
+Inbox says so on screen. 103/103 focused contracts, 27/27 isolated Inbox browser
+tests and the Admin build gates pass locally.
+
+**Same continuation — MAP-028 H-005 and H-006:** the dashboard and the
+overview API share one Asia/Manila reporting window with latest-request-only
+application, and unreadable data is now reported as unavailable instead of zero
+across tiles, queues, exports and stock holds. 115/115 focused contracts, 26/26
+admin browser tests and the Admin build gates pass locally.
+
+**Same continuation — MAP-019 / MAP-028 H-002 delivery rate identity:**
+publishing a rate and setting courier/source state now retain operation identity
+across a retry, closing the last per-invocation Admin mutation caller reviewed
+under H-002. 124/124 focused contracts and the Admin build gates pass locally.
+
+**Same continuation — MAP-019 / MAP-028 H-002 beyond the Inbox:** the
+retained-key session is now a shared primitive and `ReservationHolds.jsx` uses it,
+so a retried stock-hold command is one logical operation instead of two. 112/112
+focused contracts and the Admin build gates pass locally.
+
+**Same continuation — MAP-019 / MAP-028 H-002 ambiguous commands:** an Inbox
+command whose response was lost is now reported as an unknown outcome that must
+be reconciled, not as a clean failure, and a `beforeunload` guard warns before a
+reload discards an unresolved operation's identity. 27/27 isolated Inbox tests,
+80/80 focused boundary tests and the Admin build gates pass locally.
+
+**Same continuation — MAP-019 / MAP-028 H-012 history parity:** the
+conversation event timeline is now reachable on phones and tablets through an
+`xl:hidden` disclosure, and a failed history read shows a distinct failure with a
+retry control instead of an empty timeline. 24/24 isolated Inbox tests, 78/78
+focused boundary tests and the Admin build gates pass locally.
+
+**Same continuation — MAP-019 / MAP-028 H-008 and H-002 canonical unread:**
+Inbox polling now pauses on hidden tabs, refuses overlapping reads, discards
+superseded responses, aborts on disable, and keeps a failed background refresh as
+a clearly stale read-only queue instead of emptying it. A replayed read receipt
+can no longer clear a newer inbound message. 21/21 isolated Inbox tests (six
+failing first as intended), 78/78 focused boundary tests and the Admin
+build/security/artifact/budget gates pass locally. No provider change occurred.
+
+**Prior local evidence — MAP-019 / MAP-028 H-001/H-002/H-009:** customer/actor-bound
+Inbox drafts, guarded async completion/history and stable workflow focus pass
+15/15 isolated browser tests after four intended failing reproductions.
+Workflow/mark-read retry continuity passes response-loss, concurrency, payload
+separation and session-disposal cases. The focused API/security/release-CI suite
+passes 82/82 and the fresh Admin build/security/artifact/budget gates pass.
+Independent static review found no introduced correctness/security regression;
+it is not independent browser or real-host acceptance. Durable evidence and
+rollback scope are in the Admin BFF runbook, System Brain and DESIGN.md.
+
+**Browser execution recovered:** automatic approval accepted the elevated local
+test run in this continuation. The shared-server run timed out against another
+project on port 5173. Use `npm run test:inbox-ui`, whose strict loopback port 5193
+refuses server reuse. Earlier EPERM/account-limit and wrong-server outcomes are
+execution failures, not product regression evidence.
+
+**Next local scope:** H-015 payment recovery and H-016 exact physical-lot packing
+have prepared corrections and local SQL/API evidence. Composed inventory
+lifecycle and activation remain open. H-017's routing is delivered; its rendered 375px layout validation
+remains. H-002, H-005, H-006, H-008, H-009 and H-012 have had their
+local engineering done and verified, and H-007 has had its fairness ceiling and
+truncation labels delivered. What remains on those is acceptance and the larger
+H-007 pieces: authenticated actor-switch, real-host signed commands, real
+devices, a genuine per-domain provider outage, cursor-paginated queues,
+independently paged thread messages, and authoritative dashboard aggregates.
+Previous H-003 cookie and H-004 response-body deadline evidence remains in the
+runbook/System Brain. No provider activation or deployment occurred.
+
+**Production still blocked:** MAP-017 requires OWNER-005 recovery-access proof;
+real inventory/content, operating inputs, recovery and exact-host acceptance
+remain in their owning MAP items and the table below. Local passing evidence
+does not close those gates.
+
+The 6 September isolated Storefront selling-surface rerun passes 5/5 after
+the restricted sandbox could not launch Chromium; no real-host claim follows.
+
+### Owner-only promotion requirements (consolidated; not a second backlog)
+
+These are human/provider inputs and acceptance actions within the existing MAPs.
+They are not a claim that only these tasks remain: engineering remediation below
+must also pass before promotion. Update this table as gates are evidenced.
+
+| Area / owner action | Evidence required before promotion | Owning MAP |
+| --- | --- | --- |
+| Recovery access | Personally retrieve/decrypt the recorded database and Storage backups and confirm the documented recovery access under OWNER-005. | MAP-017/MAP-022 |
+| Real inventory | Physical count by SKU, variant, box/lot, expiry, condition, custodian/location and actual cost; explain variances, approve removal or retention of identified mock records, and deliberately approve real catalog publication. Never replace missing counts with estimates. | MAP-018/MAP-023 |
+| Product content | Confirm product identity, label/allergen/storage facts, selling prices and rights to actual media. Staff review precedes publication. | MAP-018/MAP-027 |
+| Delivery | Confirm supported localities, approved fee/rate versions, manual booking process, courier account/access and actual waybill/accepted-fee evidence. Run a real booking/handover/cost reconciliation pilot with designated staff. | MAP-023 |
+| Payment | Supply approved receiving methods/account instructions and authorized reviewers; rehearse real evidence verification, reconciliation and exception/refund handling. Choose gateway credentials only if automatic payment is deliberately enabled; honest manual payment remains an allowed operating model. | MAP-019/MAP-023 |
+| Staff and recovery | Identify actual staff roles and owner recovery contacts; enroll and verify MFA and independently accept critical inventory/payment workflows. | MAP-020/MAP-021/MAP-025 |
+| Customer policy | Resolve only still-unanswered owner decisions on delivery, reservations, substitutions and case-by-case returns/refunds; preserve existing OWNER-002–004 decisions rather than asking them again. Approve accurate public policy wording. | MAP-023 |
+| Optional external channels | Supply approved accounts, scopes, costs and provider rules before enabling each adapter; verify real stock/order/settlement reconciliation. Unconnected channels remain explicitly manual/unavailable. | MAP-026 |
+| Final acceptance | Accept the exact separate Admin and Storefront release candidates using actual staff/customer journeys, representative phones/desktops, fulfillment/payment evidence and the recorded rollback path. Approve promotion only after the engineering gates and unresolved owner inputs are green. | MAP-024/MAP-025 |
+
+Engineering-owned work remains the active MAP implementation, regression and
+composed database tests, recovery rehearsals, provider/config preflights,
+separate builds, preview checks and documentation. An owner-only requirement
+must not be used to stop independent local remediation.
 
 **Current next item:** MAP-017 schema/grants/RLS remediation. Read-only and local
 rehearsal work may continue; permanent production activation requires the
@@ -1128,6 +1268,17 @@ environment plus owner authorization; and any marketplace connector, since no
 partner credentials or approved partner documentation exist.
 
 ### Queue item 15 — MAP-027 — the Interactive Shop's remaining defects
+
+**5 September update — IDEA-20260905-01:** the owner-approved enhancement is
+implemented locally with an original articulated cartoon clerk, shared activity
+priority, draft-origin preservation, retained chat state, basket refusal feedback,
+and aspect-aware framing. The duplicate Browse control is removed; current
+source uses `aria-current` for shelf selection. 121 local MAP-027 checks and the
+Storefront build pass. Browser acceptance of this replacement remains blocked:
+automatic approval review rejected the local browser reload/inspection because
+the account usage limit was reached. The older observations below are intake
+history, not an assertion that the same source defects remain. Exact current
+evidence, recovery, and next actions live in the main MAP-027 item below.
 
 **Raised 2 September 2026 from owner review of the live `/store` surface. The
 clerk model and the room lighting were rebuilt in the same session; these are
@@ -3173,6 +3324,232 @@ duplicate cost, Draft, inventory, or publication truth.
 Sheet Mode runbooks, tests, operations rulebook, System Brain, and design record.
 
 ### MAP-019 — Hybrid guest/account commerce, universal messaging, and secure sessions
+
+**5 September continuation — H-017 receiving row targeting, local evidence.**
+`src/views/admin/consignmentScanTarget.js` now owns which manifest line an action
+addresses. Row actions pass their exact item id, so the SKU fallback survives
+only for the scanner path where no row was chosen; refusals name the box rather
+than letting the action land on another lot; and the selected line is re-checked
+against its current quantities before sending, so a stale row cannot act on
+changed numbers. Retained operation keys in this component are untouched. The box
+code is now visible in a "Box / batch" desktop column and in a new `lg:hidden`
+card list carrying SKU, box, lot, expiry, counts and the action together, with
+desktop density unchanged. Nine checks in
+`tests/consignment-row-targeting.spec.js` (registered in `test:contracts`),
+99/99 focused contracts and a green Admin build at 186.96/300 kB.
+
+**Correction worth carrying forward:** the first card implementation had a JSX
+syntax error, and every source-string contract in that spec passed while
+`npm run build:admin` failed. The spec now transforms the component with esbuild
+as its final check. The other source contracts added this session pin intent, not
+compilability; the build remains the compile gate. Remaining in H-017: rendered
+validation at 375×812 and 844×390, and exhausted-line/retry flows against a
+rendered component.
+
+**5 September continuation — H-013 evidence cleanup and H-014 final-Admin
+serialization, local evidence.** `server/admin-bff/evidence-cleanup-policy.js`
+now classifies a registration failure before any Storage removal: cleanup needs
+both a proven non-registration and proof this request created the object. The
+route uploads with `upsert: false`, so a same-key/changed-file-name replay can no
+longer overwrite and then delete the object a successful earlier registration
+references; a conflict never deletes; an unknown outcome retains the bytes and
+records a recoverable pending state with a new
+`INTAKE_EVIDENCE_REGISTRATION_UNRESOLVED` reason.
+
+Prepared migration `20260905_privileged_membership_serialization.sql` adds
+`k2_private.lock_privileged_membership()` — a transaction-scoped advisory guard,
+revoked from every client role — and rebuilds both privileged-membership paths
+(`set_user_role` and `execute_admin_staff_access_command_v1`) to take it before
+counting Admins. The staff command keeps its receipts, rate limit, audit events,
+signature verification and error codes; no new writable role source exists.
+`npm run rehearse:final-admin` runs against the portable PostgreSQL runtime and
+**first reproduces** the defect (both demotions commit, 0 Admins remain, and the
+runner fails if it cannot reproduce it), then proves the guarded race leaves
+exactly one Admin, refuses the loser with `K2_ADMIN_FINAL_ADMIN`, and commits no
+partial state. Eleven new checks across two specs, both registered in
+`test:contracts`; 89/89 focused contracts and the Admin build gates pass.
+Remaining: isolated Storage/RPC provider fixtures for H-013's
+commit-then-lost-response and failed-cleanup paths, and applying H-014's
+migration with the MAP-017 phase plus a rehearsal against the applied functions.
+
+**5 September continuation — H-007 bounded read completeness, local evidence.**
+`server/admin-bff/inbox.js` exports `INBOX_READ_LIMITS` (200 conversations,
+2,000 messages, 30 per conversation). The bounds are unchanged in size — nothing
+was widened and no thread is eagerly downloaded — but each conversation now keeps
+at most its newest 30 messages, so one busy thread can no longer spend the whole
+allowance and leave the others empty. The response carries `completeness` for
+both conversations and messages plus a per-conversation `messagesTruncated`,
+which `adminInboxNormalization.js` and `useAdminInboxRuntime.js` carry through
+and `Inbox.jsx` displays: a queue banner naming what is on screen and that older
+conversations exist, and a line above a sampled thread. Seven new checks in
+`tests/inbox-read-completeness.spec.js` drive `readAdminInbox` against a fake
+client and assert the limits are still applied. 103/103 focused contracts, 27/27
+isolated Inbox browser tests and the Admin build gates pass. Remaining in H-007:
+cursor-paginated server-filtered queues so an old urgent thread can be reached
+rather than only declared missing, independently paged thread messages, and
+authoritative aggregates or explicit sample labels for the dashboard's seven
+record sets and its CSV.
+
+**5 September continuation — H-006 one Manila reporting window and H-005
+unknown-is-not-zero, local evidence.** `src/lib/manilaReportingWindow.js` is now
+the single definition of a reporting period: inclusive start, exclusive end at
+the next Manila midnight, an equal-length non-overlapping prior period, and the
+day keys behind the revenue chart. `prepared-api/admin/overview.js` (was UTC
+midnight) and `src/views/admin/Overview.jsx` (was browser-local midnight) both
+consume it, so Italy- and Manila-based staff see the same buckets and the prior
+period no longer loses its first eight hours; Manila observes no daylight saving,
+so an Italian summer-time change cannot move a bucket. A `rangeRequest`
+generation means only the newest 7/30/90 response may write state. Current totals
+are stated as payment-verified orders by Manila order date, not cash collected on
+the verification date.
+
+`src/lib/overviewAvailability.js` separates unknown from zero: a tile whose
+domain failed shows `Unavailable` and drops its percentage change, a queue built
+on an unreadable domain is withheld rather than shown empty, a total failure
+preserves the last successful data marked stale, the sales CSV is disabled with a
+stated reason, null or non-numeric product stock is counted as unknown and
+surfaced in the inventory detail, and `ReservationHolds.jsx` no longer derives
+"None overdue" from a failed read. Twelve new checks across two specs, both
+registered in `test:contracts`; the combined focused run passes 115/115,
+`npm run test:admin-ui` passes 26/26, and `npm run build:admin` passes its
+security, artifact/404, 186.96/300 kB budget and secret-scan gates. Remaining:
+real staff acceptance across a Manila midnight, a genuine per-domain provider
+outage, and per-domain freshness display (one stale flag currently covers the
+page).
+
+**5 September continuation — H-002 delivery rate command identity, local
+evidence.** `DeliveryRateControl.jsx` published rates and set courier/source
+states with a fresh `operationKey()` per attempt; all three now run through
+`createRetainedOperationSession`, and an unconfirmed outcome shows the amber
+notice and reloads instead of inviting a second publication. The read-only quote
+test is untouched. `ConsignmentManager.jsx` needed no change — it already retains
+a key per command slot until the fingerprint changes or the operation completes,
+and a contract now pins that; an earlier note calling it per-invocation was
+wrong. Two new source contracts, one failing first. The combined focused run
+passes 124/124 and `npm run build:admin` passes its security, artifact/404,
+186.91/300 kB budget and secret-scan gates. H-002 now has no known local
+per-invocation caller left; authenticated actor-switch and real-host command
+acceptance remain.
+
+**5 September continuation — H-002 retained identity beyond the Inbox, local
+evidence.** `createRetainedOperationSession(send, messages)` in
+`adminBffService.js` now owns the payload-fingerprinted identity, shared in-flight
+request, success-only key retirement, 100-operation ceiling, `unresolvedCount()`
+and disposal semantics; `createInboxCommandSession()` is a thin wrapper over it,
+so Inbox behavior is unchanged. `ReservationHolds.jsx` uses that session for both
+stock-hold commands instead of `operationKey()` per invocation, and reports an
+unconfirmed outcome as an amber notice with a reload rather than a crimson
+failure that invites a second attempt — releasing or extending a hold twice is a
+real inventory effect. Four new checks in `tests/admin-command-retry.spec.js`
+(now registered in `test:contracts`) failed first; the combined focused run
+passes 112/112 and `npm run build:admin` passes its security, artifact/404,
+186.91/300 kB budget and secret-scan gates. Remaining owners:
+`DeliveryRateControl.jsx` (partly protected server-side by
+`DELIVERY_COST_ID_TAKEN`) and `ConsignmentManager.jsx`.
+
+**5 September continuation — H-002 ambiguous command reconciliation, local
+evidence.** Operation identities are deliberately memory-only, so a reload
+discards the retry identity of any command whose outcome this runtime never
+learned. Rather than persisting keys into browser storage, which the security
+boundary forbids, two honest behaviors now cover it. `adminBffService` exports
+`UNCERTAIN_COMMAND_CODES` (`REQUEST_TIMEOUT`, `ADMIN_SERVICE_UNAVAILABLE`),
+`commandOutcomeIsUncertain()` and `UNCERTAIN_COMMAND_NOTICE`; the runtime returns
+`{ ok: false, uncertain: true }` for those and refreshes canonically instead of
+claiming the write failed, and the Inbox shows an amber "did not confirm" alert
+distinct from the crimson failure line while preserving the unsent draft. The
+session exposes `unresolvedCount()` and the runtime registers a `beforeunload`
+warning that fires only while unresolved operations exist, removed with the
+session. Three checks written first; two failed before implementation.
+`npm run test:inbox-ui` passes 27/27, the focused boundary suite 80/80, and
+`npm run build:admin` passes its security, artifact/404, 186.91/300 kB budget and
+secret-scan gates. Files: `src/services/adminBffService.js`,
+`src/context/useAdminInboxRuntime.js`, `src/views/admin/Inbox.jsx`,
+`tests/inbox-command-retry.spec.js`, `tests/inbox-phase2.spec.js`,
+`tests/fixtures/inbox-harness.jsx`. Remaining: the non-Inbox mutation owners
+(`ReservationHolds.jsx` and the other command groups), authenticated
+actor-switch, and real-host command acceptance.
+
+**5 September continuation — H-012 history parity and failure states, local
+evidence.** The conversation event timeline was reachable only in the
+`hidden ... xl:flex` aside and mapped every read failure to `[]`. It now renders
+through one shared `EventHistoryBody` in both that aside and a new `xl:hidden`
+disclosure, and `loadConversationHistory` returns `{ ok, events }` so a failed
+read shows an amber failure line with a 44px **Retry event history** control
+instead of "No Phase 2 workflow events recorded yet." Retry reuses `loadHistory`
+and therefore keeps H-001's conversation-visit and request-generation guards. The
+two pre-existing delayed-history contracts were scoped to the desktop aside
+because the timeline now exists twice in the DOM; that narrows the locator, not
+the assertion. Three new checks were written first. `npm run test:inbox-ui`
+passes 24/24, the focused boundary suite passes 78/78, and `npm run build:admin`
+passes its security, artifact/404, 186.91/300 kB budget and secret-scan gates.
+Files: `src/views/admin/Inbox.jsx`, `src/context/useAdminInboxRuntime.js`,
+`tests/fixtures/inbox-harness.jsx`, `tests/inbox-phase2.spec.js`. Remaining:
+real-device 375×812 and 844×390 with the software keyboard, 200% text zoom,
+screen-reader review of the disclosure, and a long-thread pass.
+
+**5 September continuation — H-008 polling ownership and H-002 canonical unread,
+local evidence.** The Inbox refresh no longer resets or races the working queue.
+`src/context/adminInboxPolling.js` holds the four decisions as pure functions:
+polling is skipped while the tab is hidden or a read is in flight (and refreshes
+on return to visibility); every response carries the generation it started in and
+a superseded one is discarded rather than applied; a failed *background* poll
+keeps the loaded queue and marks it stale behind one status banner, while only a
+first load with nothing to preserve clears it and reports the real error; and a
+mark-read receipt is stamped at issue time so a conversation with a newer
+`lastInboundAt` stays unread instead of being visually cleared by a replayed
+success. Secure reads abort through an `AbortController` on disable/unmount, and
+`inboxState` now separates `loading`, `refreshing` and `stale`.
+
+Six new checks failed first as intended. `npm run test:inbox-ui` now passes
+21/21; the focused boundary suite passes 78/78; `npm run build:admin` passes its
+security, artifact/404, 186.91/300 kB budget and secret-scan gates. One obsolete
+`admin-bff-contract` assertion pinning the exact unguarded interval line was
+replaced by assertions on the guarded poll. Files: `adminInboxPolling.js`,
+`useAdminInboxRuntime.js`, `src/views/admin/Inbox.jsx`,
+`tests/fixtures/inbox-harness.jsx`, `tests/inbox-phase2.spec.js`,
+`tests/admin-bff-contract.spec.js`. Evidence, rules and rollback are in the Admin
+BFF runbook and the System Brain.
+
+Remaining in H-008: real offline/reconnect behavior, a true provider permission
+revocation removing data, and a staff-initiated manual refresh control for a
+stale queue (the banner is currently informational and the view has no refresh
+action plumbed). Remaining in H-002: reload reconciliation of an ambiguous
+command across a page load, other mutation owners, and authenticated
+actor-switch acceptance. No provider change or deployment occurred.
+
+**5 September continuation — H-002 local workflow/read evidence:** the remaining
+secure callers use the existing actor-owned session. Two response-loss tests
+failed on fresh retry keys before the fix; focused suites now pass 78/78 with
+concurrent workflow, changed-payload, success-retirement and disposal coverage.
+Admin build/security/artifact/budget checks pass. Exact evidence and recovery
+are in the Admin BFF runbook and System Brain. No deployment/provider change.
+Remaining: authenticated hook/actor-switch acceptance, reload reconciliation,
+other command families, and canonical unread refresh so a replayed old read
+receipt cannot visually clear a newer inbound message. H-001 browser execution
+was retried: sandbox launch still failed EPERM, but automatic approval accepted
+the exact elevated command. It timed out because another project occupied 5173
+and the shared config reused that server. The scoped `playwright.inbox.config.js`
+now owns strict loopback port 5193 without server reuse. H-001 was reproduced,
+implemented and verified there as recorded below. The earlier timeout is harness
+failure, not failing-product evidence.
+
+**H-001/H-009 verified locally, same continuation:** the isolated
+server reproduced all four intended assertions: cross-customer draft transfer,
+new-text erasure after delayed save, another customer's draft/notice contamination
+after delayed save, and workflow reason losing focus after its first character.
+The working implementation now scopes drafts by actor/conversation and exact
+submitted version, guards async notice/history application by conversation visit,
+and gives workflow controls stable component identity. All 15 isolated browser
+tests pass, including staff switch, history races/return visits, delayed reply
+and phone draft navigation. The 82-test focused API/security/release-CI suite
+and fresh Admin build pass. Independent static review found no introduced
+correctness/security regression. Exact evidence is in the Admin BFF runbook,
+System Brain and design/architecture records. Recovery: reverse only these `Inbox.jsx` changes;
+preserve earlier work and reconcile unsent drafts before reverting. Remaining
+acceptance includes real authenticated actor changes, real-device use and
+real-host signed-command behavior; none of these local fixtures is production
+evidence. Continue H-002's reload/fresh-read reconciliation, H-008 polling and
+H-012 history error/mobile parity inside MAP-019. No deployment occurred.
 
 **Status:** Queued — local preparation exists; production activation depends on
 MAP-017
@@ -7182,6 +7559,150 @@ idempotency, concurrency, provider-failure, and exact-host acceptance suites.
 
 ### MAP-027 — AI-assisted verified product knowledge and optional Interactive Shop
 
+**Owner-requested clerk and workflow enhancement — 5 September 2026
+(IDEA-20260905-01). Status: Active, owner confirmed the direction and requested
+the shopping logic enhancement on 5 September 2026.**
+
+Execution sequence (the only implementation plan):
+1. Add failing behavioral tests for shared listening/help/refusal priority,
+   draft product context, and aspect-aware framing. Implement those pure rules
+   and wire existing guide, sheet, basket and navigation controls.
+2. Author a separate anime clerk Blender source/export without overwriting the
+   existing assets. Wire named head/arm/elbow/leg nodes to bounded shopper poses,
+   retain the procedural clerk as a model-load fallback, and inspect rendered
+   face/K2 cap, product presentation, gesture and framing quality.
+3. Verify MAP-027 contracts and the actual browser shopping journey, phone and
+   landscape layouts, reduced motion and asset failure. Run import/build/budget
+   checks; write exact evidence and limitations to durable records. No deployment
+   or provider/data mutation is part of this owner approval.
+
+Request: inspect the existing virtual-store workflow first, enhance the female
+clerk into a more cartoon/anime character with a clearly readable K2 cap, and
+make her reactions follow shopper intent/actions while improving store logic.
+This continues the existing owner-directed presentation sequencing exception;
+no database, provider activation, publication, or deployment is included.
+
+Audit evidence from source at intake (before this enhancement):
+- `InteractiveShop.jsx` derives welcome/explore/inspect/added/idle through
+  `storeGuideState.js`; the guide, clerk and ambient state consume that moment.
+  `StoreKeeper.jsx` separately owns question state and listening expression,
+  so typing a question is not reflected by the 3D clerk. FAQ/chat sheet state
+  also does not reach the shared moment.
+- `StoreKeeper3D.jsx` animates the right shoulder, head and legs, but present
+  and point share the same shoulder angle. Both elbows and the left arm lack
+  independent pose control; thinking/listening/tablet lack distinct full poses.
+- The current renderer uses procedural `StoreKeeper3D`, not the existing
+  untracked `public/models/k2-clerk.glb`. Blender MCP is reachable; its current
+  unsaved scene contains only Cube/Light/Camera. Preserve existing Blender and
+  GLB files when preparing any replacement.
+- Shelf staging remains at the authored inter-bay midpoint. `computeFraming`
+  solves vertical extent only; horizontal aspect and clerk bounds are omitted.
+  Queue item 15 already records narrow-view clipping. The current shelf buttons
+  use `aria-current`, superseding that item's older all-false pressed-state
+  description; recheck rendered semantics before changing them.
+- Counter currently exposes shelf tabs, Previous/Next, and Browse the shelves
+  together. Make hierarchy clearer while retaining keyboard and flat fallback
+  access required by the rulebook.
+- A question draft survives product/shelf changes, but `openChat` attaches the
+  currently selected product. Preserve the draft's originating context to avoid
+  associating a customer's question with the wrong item. Further inspection
+  found that closing StoreSheet unmounted its chat composer, losing the draft
+  and thread state. While mounted it also ignored a new seed when a draft
+  existed. Resolve both without silently losing unsent text.
+- `handleAddToCart` reacts only to `.ok`; failure has no local persistent
+  action-point feedback. Product-panel copy incorrectly says adding to basket
+  sends an order request; the actual request belongs to checkout submission.
+
+Proposed scope/assumptions: an adult anime-inspired clerk using the established
+burgundy/cream/olive uniform and wood/editorial room; a Blender-authored asset
+with local reproducible source and named articulation; one prioritized moment
+for greeting, shelf guidance, product presentation, question listening, FAQ
+reading, successful addition, and recoverable refusal. Gestures are bounded and
+interruptible. No generated answers, voice, paid AI, staff-presence simulation,
+or second commerce state. Keep scene assets route-lazy, preserve reduced-motion
+and WebGL-failure semantic shopping, and avoid per-frame React/texture churn.
+Assume existing traffic/catalog scale and current host budgets; this slice adds
+no backend endpoints or persistent shopper-data storage; chat state now survives
+sheet closure in route memory only. Repository sources and existing
+acceptance harness remain the maintenance authority.
+
+Verification required: behavioral regressions for question-origin preservation,
+failed/successful additions and shared moment priority; geometric framing checks
+plus rendered clerk/gesture review at 375px, 900px and 1440px; keyboard, reduced
+motion, failed model/WebGL, rapid shelf transitions and basket-to-checkout paths;
+MAP-027 contracts, import checks, Storefront build/budgets and separate-artifact
+boundary checks. The local 5192 store subsequently rendered at 1280x720 with
+Counter and one Pantry item after catalog loading. Screenshot review shows the
+expanded guide obscuring much of the 3D clerk and speech cloud; cap branding is
+not readable at the current framing. Include guide/character non-overlap in the
+design. This is baseline observation, not acceptance of the replacement.
+
+**Prepared local result and evidence, 5 September 2026:**
+- `AnimeClerk.jsx`, `clerkPoses.js`, and `build-anime-clerk.py` supply an original
+  local model with twelve articulated nodes, K2 cap geometry, idle/wave/point/
+  present/listen/think/read/happy poses, talk/blink and bounded walk feedback.
+  `k2-clerk-anime.glb` is 1,137,508 bytes, 11 meshes and 32 material primitives.
+  A Blender MCP studio render of the revised model was inspected at
+  `assets/3d/renders/k2-clerk-anime.png`; this proves the authored appearance,
+  not the in-store animation, lighting, or final camera composition.
+- Shared moment priority includes focused questions, FAQ/chat and refused
+  additions; successful additions alone celebrate. Draft questions retain the
+  product/shelf captured when typing began. Guide starts tucked on all sizes.
+  Chat mounts on first opening and survives sheet closure in route memory;
+  hidden chat stops polling and clears its challenge token. A conflicting new
+  question offers explicit replacement/keep choices. No message is auto-sent.
+- Camera framing fits horizontal aspect as well as vertical bounds while
+  preserving inter-bay clerk positions. Shelf changes reset zoom/pan. Basket
+  refusal is visible at the action; Review basket opens canonical checkout.
+- `npx playwright test --config=playwright.api.config.js` with the five
+  `map027-clerk-workflow`, `map027-interactive-shop`, `map027-store-polish`,
+  `map027-product-knowledge`, and `map027-product-knowledge-persistence` specs:
+  **121 passed**. Four original new priority/framing tests were observed red
+  before implementation. Pose and GLB tests were added after authoring; they
+  establish local integrity, not visual acceptance or complete TDD coverage.
+- `npm run build:storefront`: passed prebuild security/import checks, production
+  boundary, static recovery, bundle budget and emitted secret scan. Landing JS
+  149.62/150 kB gzip, CSS 26.76/30 kB gzip; limited JS headroom remains. The lazy
+  Three.js chunk still triggers Vite's 500 kB advisory. `git diff --check` passed.
+- `tests/smoke.spec.js` is updated for tucked guide, Review basket, and a prepared
+  question-origin journey. These browser changes have **not** been executed.
+  Automatic approval review rejected reloading/inspecting localhost in the
+  browser because the account usage limit was reached. No alternate browser
+  automation was used to bypass that rejection. No deployment, provider changes,
+  real message delivery, or real checkout submission is claimed.
+
+**Continuation verification, 5 September 2026:** reran the same five MAP-027
+specs: 121/121 passed (3.8 seconds). A fresh `npm run build:storefront` completed
+successfully, including security/import checks, the separate Storefront boundary,
+149.62/150 kB landing JS and 26.76/30 kB CSS budgets, and the 67-file output secret
+scan. Reinspected the saved studio render: K2 cap lettering is readable there;
+this is not new in-store visual evidence. No application code changed in this
+continuation. The current Blender MCP `get_scene_info` attempt returned “Could
+not connect to Blender”; the earlier reachable-server observation above is
+historical. Restart the installed Blender add-on server before model edits.
+Browser acceptance remains at its recorded automatic approval-review gate; no
+alternate browser route was attempted. Existing rollback instructions below
+still apply.
+
+**Next required action:** when browser access is restored, inspect `/store` at
+375px, 900px and 1440px plus phone landscape. Verify model-load failure fallback,
+cap/cloud/guide non-overlap, all gestures and item presentation, rapid navigation,
+keyboard/reduced motion, basket success/refusal and checkout review. Verify draft
+origin and chat reopen/conflict behavior against controlled data without sending
+real messages. Record real browser acceptance before closing this enhancement.
+The local semantic/source evidence alone does not satisfy this acceptance gate.
+
+Recovery/handoff: existing dirty files at intake were `ShelfScene3D.jsx`,
+`InteractiveShop.jsx`, `interactive-store.css`, and `map027-store-polish.spec.js`,
+plus untracked `CounterProps.jsx`, `assets/`, and `public/models/`. Do not reset or
+overwrite that work. To recover the old visual, switch the ShelfScene3D clerk
+import back to `StoreKeeper3D`; preserve the unrelated CounterProps and room
+changes. To regenerate only the new asset, follow `assets/3d/README.md`.
+Review/revert this enhancement's individual hunks if needed; do not reset whole
+files that were dirty at intake. Rulebook, System Brain, DESIGN and structural
+docs record the local result. This enhancement and the dependency-gated
+remainder of MAP-027 stay active until their respective acceptance gates pass.
+
 **Status:** Queued last in the active preparation sequence. Accepted from
 `IDEA-20260826-01` on 26 August 2026 after review of
 `K2_INTERACTIVE_SHOP_CONCEPT.md` and owner clarification. Depends on canonical
@@ -8463,6 +8984,1251 @@ matching server switch; preserve requests, grants, audit rows, and evidence for
 reconciliation. Provider recovery remains the owning MAP/runbook path below.
 
 ---
+
+#### H. Documentation-only gap audit — 5 September 2026, review recorded
+
+**Owner scope:** inspect missing capabilities, security gaps, logic, Admin
+dashboard workflows, and desktop/mobile visual improvements; document all work
+here. This instruction supersedes the implementation-oriented continuation
+prompt below for this audit. **Do not implement these findings under this
+documentation-only request.** No application, schema, provider, deployment or
+customer record was changed by this audit. Earlier dirty clerk/room changes are
+separate work and must be preserved. Findings extend the existing owners below,
+not a thirteenth top-level MAP or a separate roadmap.
+
+**Method and evidence limits:** current source, rulebook sections 19–24, Product,
+Design, structural boundaries, existing tests, and isolated in-memory Node
+probes. The four design skills were applied with the Admin product register;
+K2 identity and task usability override decorative skill defaults. The prior
+goal turn made progress by producing new reproducible evidence. This pass is
+not a penetration test, provider inventory, complete rendered audit, or release
+approval. Previous live grant/deployment findings remain dated historical
+evidence until refreshed. Browser access returned sufficiently to inspect the
+local Admin sign-in screen; no authenticated real customer/staff work occurred.
+The initial Inbox fixture navigation encountered connection refusal. After the
+local Vite server was restored, a new navigation to the legitimate localhost
+fixture succeeded. Desktop and 375×812 fixture checks below are local evidence,
+not authenticated production or real-phone evidence. No messages were sent.
+
+**Fresh evidence:**
+- Local `tests/fixtures/inbox-harness.html`: entering the fabricated text
+  `FIXTURE ONLY — draft for Maria` in Maria's internal note and selecting Elena
+  left that text in Elena's **Customer-visible website reply** field with the
+  send button enabled. H-001 is reproduced without submitting the form.
+- Typing `fixture` sequentially into **Workflow note (optional)** stopped at
+  `f`; the browser reported that the target changed/lost focus. A read-only DOM
+  check confirmed value `f` and `document.activeElement !== textarea`. H-009
+  is reproduced. No workflow save was submitted.
+- At 375×812, opening **Workflow controls** exposed status, priority, owner,
+  deadline and note; **Event history** remained invisible. H-012's parity gap
+  is reproduced. Viewport override was reset after inspection. Short landscape,
+  software keyboard and real-device checks remain open.
+- `npx playwright test --config=playwright.api.config.js
+  tests/admin-bff-contract.spec.js tests/admin-sales-calculation.spec.js
+  tests/security-boundary-hardening.spec.js tests/request-timeout.spec.js
+  --reporter=dot`: **77 passed**. These tests do not cover the new UI races,
+  response-body timeout, malformed-cookie case, or logical-retry continuity.
+- An isolated import of `readActiveSession` returned null with no cookie, but
+  threw `URIError` for both `unrelated=%` and `k2_admin_session=%`.
+- An in-memory fetch fixture returned headers immediately with a pending body.
+  `fetchWithTimeout(..., 100)` resolved to a Response, but body consumption was
+  still pending after 250 ms. The fixture stream was then closed. No network.
+- An isolated import of the actual Admin service with only its relative import
+  resolved and fetch replaced in memory invoked `sendWebsiteReplyBff` twice with
+  identical fabricated conversation/content. Captured idempotency keys differed.
+  This proves client retry identity changes, not a live duplicate delivery.
+- Declared CSS alpha compositing for white at 35% on `#1A1F2B` yields **3.20:1**
+  for `.adm-input::placeholder`; this is a token calculation, not measured
+  rendered contrast across every control.
+
+**H-001 — P1, MAP-019: bind Admin drafts and async feedback to the customer.**
+`src/views/admin/Inbox.jsx:114` keeps one `replyText` for every conversation.
+`openChat` changes only active ID/mobile view; the active-ID effect does not
+clear, segregate or confirm transfer of that draft. `handleSendReply` uses the
+new active chat ID. A note intended for customer A can therefore be sent to B
+after staff switches threads. A late successful send also clears the shared
+composer, potentially erasing newer text; history responses can arrive out of
+order. This is an accidental confidentiality/integrity risk, not evidence of a
+server authorization bypass. Target: conversation-keyed route-memory drafts,
+explicit recipient context, and request-generation guards for history/notices/
+draft clearing. Verify A→B→A retains separate drafts, late A success cannot clear
+B, history cannot cross threads, and note/reply remain distinct on phone/desktop.
+No automatic draft persistence to localStorage or customer messages is approved.
+
+**H-002 — P1, MAP-019/MAP-021: preserve logical operation identity on manual retry.**
+`src/services/adminBffService.js:247,373` generates a fresh UUID for every Inbox
+command call; `useAdminInboxRuntime.js` exposes no operation key to the composer.
+The SQL/BFF idempotency mechanism cannot deduplicate a manual retry with a new
+key after a committed-but-lost response. Review the same pattern in
+`ReservationHolds.jsx` (`operationKey()` per invocation) and other mutation
+callers; do not assume every endpoint duplicates effects. Target: retain a
+payload-bound operation key until authoritative resolution, show uncertain
+outcome distinctly, and reconcile before creating another logical operation.
+Verify committed response loss, same-key replay, changed-payload conflict and
+intentional new identical message. Existing staff-invitation key retention is
+positive precedent; generic POST single-attempt behavior does not close this gap.
+*Local correction, 5 September 2026:* uncertain outcomes are now distinct from
+rejections (`commandOutcomeIsUncertain`, `uncertain: true`, an amber "did not
+confirm" alert and a canonical refresh), and `unresolvedCount()` plus a
+`beforeunload` guard warn before a reload discards an unresolved identity.
+Identities stay memory-only by design. The retained-key session is now the shared
+`createRetainedOperationSession` primitive and `ReservationHolds.jsx` uses it;
+`DeliveryRateControl.jsx` now uses it too, and `ConsignmentManager.jsx` already
+retained a slot-bound key, so no known local caller still mints one per attempt.
+The canonical-unread half is also closed —
+`applyReadReceipt` stamps the receipt at issue time, a conversation with a newer
+`lastInboundAt` stays unread, and every read schedules a canonical refresh.
+Reload reconciliation of an ambiguous command across a page load, other mutation
+owners and authenticated actor-switch acceptance remain open.
+
+**H-003 — P2, MAP-020/MAP-021: malformed cookies escape safe authentication failure.**
+`server/admin-bff/security.js:115,388` decodes every cookie without handling
+invalid percent escapes. `authorize.js:33` calls `readActiveSession` before its
+try/catch; the router returns the handler without a top-level safe catch.
+The reproduced exception can produce a platform-level failure instead of the
+bounded 401/no-store JSON contract. Impact is malformed-request availability
+and response consistency; no session forgery or data exposure was established.
+Target: tolerant cookie parsing scoped to expected names, fail-closed invalid
+session handling, and safe response containment. Verify invalid UTF-8/percent
+escapes in relevant/unrelated cookies and existing valid/expired/CSRF cases.
+Inspect the equivalent Storefront parser too; do not claim it shares the same
+uncaught outer boundary without a handler-level test.
+
+**H-004 — P1, MAP-021: deadlines stop at headers, not complete response consumption.**
+`src/lib/fetchWithTimeout.js:56` clears its timer when native fetch resolves;
+Admin service calls `response.json()` afterward. Slow or stalled response bodies
+can leave an action pending beyond the advertised deadline. This corrects the
+scope of the older request-deadline evidence, not its passing header tests.
+Target: keep abort/deadline ownership through bounded body consumption and clean
+up on success/error/cancellation. Verify headers-fast/body-stalled, partial JSON,
+oversized response, caller abort and command ambiguity. Do not add automatic
+mutation retries; retain H-002's operation identity and server reconciliation.
+
+**H-005 — P1, MAP-023: unknown/failed dashboard data is shown as zero.**
+`prepared-api/admin/overview.js:14` emits empty arrays/zero plus `unavailable`;
+`Overview.jsx:258–296` keeps only a global warning and derives normal numeric
+tiles/queues/exports from those fallbacks. `Overview.jsx:354` also coerces unknown
+product stock to zero. `ReservationHolds.jsx:67–83` derives zero/“Nothing past
+its deadline” after an initial load failure; its intro can say “None overdue”.
+Target: per-domain availability/freshness, unavailable values instead of zero,
+preserved last-success data visibly stale, and disabled incomplete exports.
+Verify each individual domain failure, total failure, null stock, recovery and
+genuine zero independently. Preserve the Admin shell's existing unavailable
+backlog-to-null handling as the correct precedent. Rulebook section 21 expressly
+forbids turning query failure into zero.
+*Local correction, 5 September 2026:* implemented through
+`src/lib/overviewAvailability.js` — per-domain unavailability, `Unavailable`
+tiles without fabricated comparisons, withheld queues, preserved stale data on
+total failure, a blocked sales export with a stated reason, unknown stock counted
+as unknown, and honest stock-hold metrics after a failed read. Still open:
+per-domain freshness display and a genuine provider outage exercising each domain
+independently.
+
+**H-006 — P1, MAP-023: define one Manila reporting window and prevent stale range results.**
+`Overview.jsx:79,86` uses browser-local midnight/date keys;
+`prepared-api/admin/overview.js:6` uses UTC midnight. Rulebook section 21 requires
+Asia/Manila. Italy/Manila staff can see different buckets, and the query can omit
+the first eight hours of the intended prior Manila day. Concurrent range loads
+have no cancellation/generation check, so a slower old range can replace the
+current one. Target: shared explicit inclusive/exclusive Manila boundaries and
+latest-request-only application. Clarify that current totals select payment-
+verified orders by order creation date; they are not cash collected on the
+verification date. Verify midnight boundaries, Italy daylight-saving changes,
+7/30/90 rapid switching and delayed reverse-order responses.
+*Local correction, 5 September 2026:* implemented through
+`src/lib/manilaReportingWindow.js`, consumed by both the overview API and the
+dashboard, with a `rangeRequest` generation for latest-request-only application
+and the current-total wording clarified. Still open: real staff acceptance across
+a Manila midnight boundary.
+
+**H-007 — P1 at scale, MAP-019/MAP-023: expose completeness and paginate reads.**
+Overview reads seven record sets without pagination/aggregation or completeness
+metadata; response limits can silently truncate totals and the CSV. Secure
+Inbox (`server/admin-bff/inbox.js:65`) selects only the newest 200 conversations
+and newest 2,000 messages across that entire set. Older urgent/unresolved threads
+can disappear; one busy thread can consume the message allowance for others.
+There is no cursor or truncation marker in the returned projection. Target:
+server-filtered/paginated queues, independently paged selected-thread messages,
+and authoritative aggregates or explicit bounded-sample labels. Verify beyond
+200 conversations and 2,000 messages, urgent old threads, provider row limits,
+stable pagination under new arrivals, and complete/filter-matched CSV totals.
+Do not remove bounds or eagerly download every message to solve this.
+*Local correction, 5 September 2026:* the fairness ceiling and truncation labels
+are delivered — `INBOX_READ_LIMITS`, a per-conversation message cap, response
+`completeness` metadata and visible queue/thread labels, with the original bounds
+unchanged. Still open: cursor-paginated server-filtered queues, independently
+paged thread messages, and authoritative dashboard aggregates/CSV totals.
+
+**H-008 — P2, MAP-019/MAP-021: polling must not reset or race the working Inbox.**
+`useAdminInboxRuntime.js:18,82` marks each eight-second poll loading, clears the
+queue on error, and lacks visibility, abort, overlap and request-generation
+guards. Read retry may exceed a poll interval. A transient error can remove the
+active thread while staff is composing; older responses may repopulate state
+after disable/unmount. Target: separate initial/background loading, retain a
+clearly stale read-only queue, pause hidden polling, bound overlap and abort on
+disable. Verify delayed responses, offline/reconnect, hidden tabs, sign-out and
+active draft preservation. A true permission revocation must still remove data.
+*Local correction, 5 September 2026:* implemented and verified through
+`src/context/adminInboxPolling.js` — hidden-tab pause with refresh on return,
+in-flight overlap gate, generation guard, `AbortController` on disable, stale
+read-only retention on background failure, and separated initial/background
+loading. 21/21 isolated Inbox tests, 78/78 focused boundary tests and the Admin
+build gates pass. Still open: real offline/reconnect and provider-revocation
+acceptance, and a staff-initiated manual refresh for a stale queue.
+
+**H-009 — P1 usability, MAP-019/MAP-023: stabilize workflow form component identity.**
+`Inbox.jsx:307` defines `WorkflowControls` inside `InboxView` and renders it as
+`<WorkflowControls />`. Every parent state update gives React a new component
+type, remounting the subtree; typing the workflow reason or changing a select
+can lose focus, selection, or native picker continuity. Target: stable component
+definition with explicit props and distinct mobile/desktop IDs as necessary.
+Verify multi-character keyboard entry without refocusing, date-picker selection,
+background refresh during editing, and mobile disclosure persistence. The local
+fixture now reproduces focus loss after the first character; real-device
+acceptance remains pending.
+
+**H-010 — P2, MAP-021/MAP-023: readable operational text and usable chart alternatives.**
+`src/index.css:658` declares 35%-white placeholders on the raised Admin surface
+(calculated 3.20:1), below K2's 4.5:1 text requirement. `Overview.jsx` scales a
+760-unit SVG with 12-unit labels down to the container and makes every daily
+point tabbable (up to 90 tab stops) without an equivalent daily data table.
+Target: verified semantic muted/focus tokens, readable responsive chart labels,
+concise chart summary and optional daily table/controlled keyboard exploration.
+Preserve compact density and actual numbers, not oversized cards. Verify final
+computed contrast, 375px/desktop, 200% text, keyboard order, and screen-reader
+access to dates/values. Exact WCAG conformance remains a separate manual audit.
+Suggested design follow-up: impeccable typeset/adapt, then polish after logic.
+
+**H-011 — P2, MAP-023: dashboard actions need exact filtered destinations.**
+`Overview.jsx:443` defines severity but sorts queues only by count. Large routine
+queues outrank smaller critical exceptions. Buttons call `setSection(target)`
+with no record/filter context. Inventory exceptions sum product counts and lot
+counts, potentially counting the same SKU multiple times as one unnamed unit.
+Target: severity-aware actionable queue order, labelled counting units, exact
+filtered record drilldown and return context. Verify one expired lot versus many
+ordinary requests, mixed product/lot exceptions, preserved filters and keyboard
+focus on destination. Reuse canonical projections and navigation; no new source
+of inventory truth or speculative score is warranted.
+
+**H-012 — P2, MAP-019/MAP-023: phone workflow parity and history failure states.**
+The Inbox has mobile workflow controls in an `xl:hidden` disclosure, so controls
+are not absent. However, event history is only inside the `hidden ... xl:flex`
+aside. Below 1280px staff cannot inspect the same audit timeline there.
+`loadHistory` also maps direct-query failure to `[]`, shown as “No Phase 2
+workflow events recorded yet.” Target: reachable history on phone/tablet and
+distinct loading/error/empty states with retry; generation-guard it per H-001.
+Review `min-h-[560px]` plus the page header/metrics in short landscapes and with
+the software keyboard; no actual clipping is claimed until rendered.
+Verify 375×812, 844×390, tablet, desktop, text zoom, history denial/retry and a
+long thread. Suggested follow-up: impeccable adapt/harden, then polish.
+*Local correction, 5 September 2026:* the history half is implemented and
+verified. `loadConversationHistory` returns `{ ok, events }`, the view tracks
+loading/error/empty/ready with a 44px retry that keeps the visit and generation
+guards, and one shared `EventHistoryBody` renders in both the desktop aside and a
+new `xl:hidden` disclosure. 24/24 isolated Inbox tests, 78/78 focused boundary
+tests and the Admin build gates pass. Still open: real-device 375×812 and 844×390
+with the software keyboard, 200% text zoom, screen-reader review of the
+disclosure, and a long-thread pass.
+
+**H-013 — P1, MAP-018/MAP-021: reconcile evidence registration before deletion.**
+`server/admin-bff/product-intake.js:373–409` uploads with `upsert: true`, then
+calls signed registration; every returned RPC error enters Storage removal
+before error classification. A transport failure does not prove the transaction
+rolled back. A second concrete case is same key/image/session/slot with changed
+file name: object path is unchanged, but file name participates in the SQL
+payload hash, so registration can reject replay and cleanup deletes the object
+referenced by the original successful registration. The prepared
+`20260812_admin_product_intake_bff_boundary.sql:68–143` confirms both receipt
+hashing and persisted path references. These are source-derived failure paths,
+not observed production data loss. The earlier August cleanup correction above
+does not resolve this distinction. Target: receipt/reference reconciliation,
+immutable registered evidence, and cleanup only after proving an object is
+unreferenced; uncertain outcomes remain recoverable pending states. Verify
+commit-then-lost-response, same-key changed metadata, concurrent identical replay,
+rate denial, true rollback and failed cleanup with isolated Storage/RPC fixtures.
+Never exercise destructive reproduction against real evidence.
+*Local correction, 5 September 2026:* classification now precedes deletion —
+`evidence-cleanup-policy.js`, `upsert: false`, no deletion on conflict, and
+retained bytes with a pending state on an unknown outcome. Still open: isolated
+Storage/RPC provider fixtures for commit-then-lost-response and failed cleanup.
+
+**H-014 — P1, MAP-020/MAP-021: serialize the final-Admin invariant.**
+`20260822_admin_staff_access_boundary.sql:111–119` locks the target profile,
+counts Admin rows, then demotes. Different target rows do not share that lock:
+under ordinary READ COMMITTED isolation two concurrent demotions can each
+observe two Admins before either commits. The located earlier `set_user_role`
+implementations also use count-then-update. This is a source-derived concurrency
+gap; no concurrent database rehearsal or live lockout was performed. Target:
+one shared transactional guard for every path changing privileged membership,
+with an explicit owner/SuperAdmin recovery invariant and fresh authorization.
+Verify two-session concurrent demotions and deletion paths: at least one
+recoverable authorized owner must remain, one conflicting operation must fail
+clearly, and no partial role/audit state may commit. Extend the existing staff
+access boundary; do not introduce another writable role source.
+*Local correction, 5 September 2026:* prepared migration
+`20260905_privileged_membership_serialization.sql` adds a shared transactional
+guard taken by both `set_user_role` and the staff access command before counting,
+with an isolated two-session rehearsal that reproduces the loss and then proves
+the invariant held. Still open: applying it with the MAP-017 phase and rehearsing
+against the applied functions.
+
+**H-015 — P1 workflow, MAP-023: recover from rejected payment evidence.**
+*Local evidence, 6 September:* prepared migration
+`20260906_payment_evidence_recovery.sql` and matching BFF/client/dialog now pass
+real local SQL transition, independent review, stock eligibility, HMAC/receipt,
+stale-version and simultaneous-reviewer checks; baseline reproduced the failed
+state dead end. Five isolated browser tests pass at phone/landscape/desktop;
+550 contracts and Admin build gates pass. The prepared fulfillment migration's
+CASE parser failure was reproduced and fixed. No provider apply or payment
+activation occurred. Remaining: composed inventory lifecycle/lock-order checks
+under H-019/H-020/H-023, structured evidence/real receiving-ledger review,
+authenticated staff/exact-host acceptance and approved receiving details.
+Commands, files, activation order and rollback are in the Admin BFF runbook.
+Owner reported saving the Google Drive backup password; successful decryption
+of both archives is not yet confirmed. OWNER-005 remains pending that proof.
+
+*6 September implementation in progress:* reproduce the failed-state dead end
+against the original SQL in an isolated local fixture; prepare a correction
+retaining immutable event history and requiring order/hold eligibility and
+independent verification. Bind payment commands to expected payment state and
+record version inside the signed receipt boundary; expose the version in the
+existing fulfillment projection and preserve retries in the client. Verify
+rejection/correction, stale reviewer, same-actor denial, cancelled/expired order,
+duplicate retry and rollback; then verify the existing payment dialog on phone
+and desktop. Files: fulfillment BFF/service, OmniOperationsHub payment dialog,
+an additive payment-recovery migration, focused SQL/API/browser tests and the
+Admin BFF runbook/rulebook/System Brain/design records. No provider apply is
+authorized before OWNER-005 proof and the MAP-017 activation gates. Remaining
+work stays in this item until evidence is recorded; preserve pre-existing edits.
+
+`OmniOperationsHub.jsx:600–608` declares `failed: []`; the latest located
+`set_order_request_payment_status` definition in
+`20260803_launch_core_stabilization.sql:1077–1118` permits entry into `failed`
+but no exit. Staff cannot record corrected evidence through this state machine
+after a rejected proof or failed attempt. This is a manual-workflow gap, not a
+missing payment gateway. Merge into the existing payment/exception scope:
+retain immutable failed attempts and allow an attributable new attempt on the
+same canonical order, revalidating reservation/expiry and order eligibility.
+Require an approved transition policy, expected state/version and stable
+operation key; do not simply reopen every terminal state. Verify rejection →
+corrected evidence → independent verification, cancelled/expired-order denial,
+concurrent reviewers and retry. Partial refunds/returns already belong to
+MAP-023's settlement and stock-disposition work; no duplicate backlog is added.
+
+**H-016 — P1 accuracy, MAP-023: distinguish SKU scan from physical-lot proof.**
+*Local evidence, 6 September:* the old function reproducibly credited the
+wrong lot when two allocations shared a barcode. The exact-lot correction
+passes the purchase-hold rehearsal's 16 properties. The payment rehearsal now
+composes both new packing migrations with the real signed BFF wrapper: same-key
+replay records one unit, changed payload is refused, direct browser RPCs stay
+revoked, double application succeeds and the payment version guard survives.
+59 focused API/retry checks and six isolated payment/packing browser checks
+pass, including phone lot selection and clearing confirmation on selection
+change. A further failing-first SQL case reproduced aggregate lot
+overcommitment; the corrected scan now refuses it. Prepared files are `20260906_exact_packing_{lot,wrapper}.sql`, the
+fulfillment BFF/client and `OmniOperationsHub.jsx`. No provider application.
+Next: full H-020/H-023 inventory composition, physical reassignment and actual
+staff/host acceptance, then coordinated function → wrapper → BFF/browser
+cutover after OWNER-005. Recovery: hold packing writes and reconcile signed
+receipts/scan events before any retry or rollback; do not reactivate SKU-only
+packing. The Admin BFF runbook owns the detailed verification commands.
+
+*6 September implementation scope:* extend the existing packing command with
+an exact reservation ID and explicit physical-lot confirmation, preserving the
+product-code check and per-unit scan events. Show reserved batch/expiry/location
+from the existing fulfillment projection; retain one operation key on response
+loss. Prepare an exact-scan function behind the signed wrapper and revoke the
+old unsigned scan at coordinated cutover. Reproduce two lots sharing a SKU,
+then verify selected-lot, wrong-lot, exhausted-lot and missing-confirmation
+denials in an isolated SQL/API/browser fixture. Activation still requires the
+composed inventory lifecycle and MAP-017/OWNER-005; no fabricated lot label.
+
+`record_packing_scan` in `20260809_operations_hardening.sql:436–511` accepts a
+SKU/product barcode, then automatically chooses the earliest-expiry incomplete
+reservation and records that batch ID. Two physical lots can share that barcode;
+the scan proves the product, not which physical lot was picked. Target: expose
+the allocated lot/expiry/location, require an exact-lot identification or
+explicit auditable confirmation, and keep substitutions inside the canonical
+reservation workflow. Verify the same SKU in two lots, wrong-lot and excess-unit
+scans, near-expiry changes and reassignment. Preserve current order-first and
+per-unit quantity guards; do not describe those existing guards as absent.
+
+**H-017 — P1, MAP-023: receiving row actions must address the selected lot.**
+`ConsignmentManager.jsx:128–154` supports `selectedItemId`, but the manifest
+table's `+1 Milan packed` and `+1 Manila received` handlers at line 270 call
+`scan(item.sku, stage)` without that ID. The fallback picks the first incomplete
+matching SKU. Clicking the second box/lot can therefore increment the first.
+The scanner modal does pass its item ID; preserve that correct path. This is
+source-confirmed routing behavior, not a live stock mutation. Target: every row
+action passes the exact manifest-item ID, verifies that its current stage and
+remaining quantity still permit the action, and presents the affected box/lot
+in confirmation or feedback. Verify two incomplete lines sharing one SKU,
+clicking each row independently, exhausted first line, stale quantities and
+retry. Preserve retained operation keys already present in this component;
+H-002 must not be generalized to claim all Admin commands lack them.
+An isolated two-line JavaScript calculation using the current selection
+predicate confirmed that a SKU-only action from `box-b` selects `box-a` when
+both are incomplete; source inspection confirms the row handler omits the ID.
+This is not a rendered component or database test. The table additionally has
+an 820px minimum width and does not display `box_code` in its visible columns.
+For phone work, keep SKU, box, lot, expiry and exact action available together
+through a responsive detail/card or labelled scroll region; validate at 375px
+and desktop before selecting the final layout. Do not remove useful table
+density on desktop simply to satisfy the phone case.
+*Local correction, 5 September 2026:* exact-id routing, box-named refusals,
+current-quantity re-checks and visible box identity on both desktop and a phone
+card list are delivered; desktop density is unchanged. Still open: rendered
+375×812 and 844×390 validation and rendered exhausted-line/retry flows.
+
+**H-018 — P1 workflow, MAP-018: make publication transitions internally consistent.**
+Local correction (5 September): the dedicated local PostgreSQL runner
+`scripts/rehearse-publication-transitions.mjs` and
+`supabase/tests/publication_transition_{bootstrap,behavior}.sql` now exercise the
+real migration function: publish/unlist/relist, unchanged replay, required
+human/image/price evidence, Draft/Discontinued denial and MFA on replay. Default
+sandbox startup failed with Windows restricted-token error 87 before assertions.
+The elevated baseline reproduced `K2_PUBLICATION_NOT_READY`, detail
+`under_review_state`, at relisting. The corrective migration
+`20260905_publication_transition_consistency.sql` now passes the SQL assertions,
+including double application and preservation of restricted direct RPC ACLs.
+The runner's Windows inherited pipe and repeat-role fixture issues were fixed;
+the final run exits successfully. Product-intake/Admin BFF tests pass 60/60.
+Next: compose with signed BFF receipts/review-reason audit and concurrent edits,
+align browser readiness explanations, then follow provider activation gates.
+The runner owns only localhost port 55439 and its named disposable fixture DB;
+it stops a server it starts. Provider application remains recovery-gated.
+Exact commands and recovery are in `docs/runbooks/PRODUCT_INTAKE_RUNBOOK.md`.
+The diagnosis below describes the original function; this correction is locally
+prepared, not applied to production. H-018 stays open for the remaining gates.
+`transition_product_publication_server` in
+`20260811_product_intake_and_sku_gate.sql:592–688` lists `Unlisted → Live` and
+`Live → Live` as valid transitions, but its earlier `v_target = 'Live'` readiness
+gate always requires the current product status to equal `Under Review`.
+Both listed transitions are thus rejected; the transition list also has no
+`Unlisted → Under Review` recovery route. The UI calls this function via the
+signed BFF wrapper. Target: one explicitly approved transition matrix shared
+with readiness explanations; support reviewed relisting without bypassing
+human/media/price requirements, and define no-op semantics separately from a
+new publication. Verify publish → unlist → review/relist, unchanged Live replay,
+missing required evidence, discontinued denial and concurrent updates. This is
+a source-derived contradiction; no production publication was attempted.
+An isolated source probe extracted the three Live-target pairs (Under Review,
+Live and Unlisted) and confirmed the unconditional Under Review prerequisite.
+It does not substitute for SQL transition/replay acceptance.
+
+**H-019 — P1 inventory integrity, MAP-023: reconcile expired holds with order state and full coverage.**
+*Prepared containment, 6 September:* baseline composed SQL reproduced
+`Expiry released confirmed stock`. `20260906_atomic_order_hold_expiry.sql`
+preserves protected commitments, releases complete eligible orders, rechecks
+eligibility after reservation locks and uses ordered inventory locks. H-021
+projection refresh, attributable events and counter-mismatch rollback are also
+included. The extended purchase-hold rehearsal passes 14/14 and 40 focused
+contracts pass. Provider application, confirmation-time deduction, reserve
+completeness and cross-operation races remain open. Guest Commerce runbook owns
+commands, changed files, activation prerequisites and recovery instructions.
+
+*Coverage follow-through:* `20260906_reservation_coverage_guard.sql` rejects
+partial or expired preexisting allocations instead of returning merely because
+one active row exists. The SQL baseline reproduced partial-order confirmation;
+15/15 composed properties pass with the guard installed before complete replay
+and last-unit races. Reconciliation remains explicit; no automatic replacement
+allocation or confirmation-time deduction is claimed. See Guest Commerce runbook.
+
+*6 September next local slice — reservation completeness:* reproduce confirmation with one active
+line and one historical released line; reject partial/expired preexisting
+coverage instead of treating any active row as complete. Preserve ordinary
+complete replay and record recovery as explicit reconciliation, not automatic
+reallocation. The owning helper, additive guard and composed runner are the
+implementation/verification boundary. The preceding expiry slice prepares an additive replacement for
+`release_expired_reservations_v1`: lock eligible submitted/unpaid orders before
+SKU-sorted balances/reservations/batches, release all active lines of an expiring
+order atomically, refuse counter mismatches, append events and refresh catalog
+projections. Confirmed/verified/packed orders must not be swept. A bounded limit
+counts complete orders, with returned IDs/count still counting reservation rows.
+Verify preserved completed commitments, mixed deadlines, limit/replay,
+projection truth and rollback. This containment does not claim implementation
+of OWNER-002's confirmation-time deduction; that remains explicit H-023 work.
+
+`20260902_reservation_expiry_policy.sql:97–150` releases every due active
+reservation without joining/locking its order or checking payment/packing state.
+`confirm_order_request` in `20260902_purchase_time_reservation.sql:304–365`
+does not retire/replace the purchase-time deadline. Confirmed or packed orders
+can therefore lose their reservations when release runs. The reserve helper
+at lines 85–95 considers any active reservation sufficient and returns without
+comparing per-line required quantities. Different extension deadlines or the
+release batch limit can leave only partial coverage. Fulfillment's existing
+checks inspect active reservations rather than independently proving that every
+order line has its full quantity actively reserved and packed. Its later balance
+summary also includes reservation rows of every status. Source traces establish
+these missing checks; an end-to-end stock corruption outcome is not claimed.
+Target: explicit policy for deadlines after confirmation/payment/packing,
+order-level atomic coverage validation, exact release/reallocation events, and
+fulfillment blocked on missing or partial coverage. Verify expiry before/after
+confirmation, partial expiration across two lots, extensions, a release limit
+splitting an order, paid/packed orders and retry. Never infer complete coverage
+from existence of one active row or from an empty `NOT EXISTS` result.
+
+**H-020 — P1 reliability, MAP-023/MAP-021: use a common inventory lock order.**
+The purchase reserve helper locks order → balance → batches; expired release
+locks reservations → batches → balance; fulfillment locks order then updates
+batches before balance (`20260809_operations_hardening.sql:603–674`). A reserve
+transaction holding a balance and waiting for a batch can oppose a release
+holding that batch and waiting for the balance. `SKIP LOCKED` only skips the
+initial reservation selection, not those later locks. PostgreSQL can abort a
+deadlock victim; this is a source-derived availability/recovery risk, not proof
+of overselling. Multi-SKU reserve order is also based on line creation time,
+not a common SKU order. Target: consistent ordered locking across reserve,
+release, fulfill, transfer and cancellation, with stable operation identity and
+explicit recoverable conflict handling. Verify opposing two-session operations
+and baskets ordered A/B versus B/A in an isolated database. Preserve transaction
+rollback and existing same-SKU reserve serialization.
+
+**H-021 — P1 stock truth, MAP-023: reconcile every projection after hold release.**
+The expiry function changes batch `reserved_quantity` and balance `reserved`,
+then records the reservation as released. Unlike the reserve helper, it does
+not explicitly recompute `products.stock_available` in that function. Whether a
+separate trigger supplies equivalent synchronization was traced: the located
+`trg_sync_product_batch_compat_columns` only normalizes the batch's own columns
+(`20260803_launch_core_stabilization.sql:238–266`), and does not update products.
+No compensating product-stock trigger was found in the migration ledger.
+Provider-installed trigger state remains unverified; production currently has a
+documented fallback dependency on that column. Its `greatest(..., 0)` updates
+also mask insufficient reserved balances instead of raising a reconciliation
+exception, and do not check missing batch/balance rows. Target: prove the
+canonical projection refresh and reject/quarantine invariant violations with
+an attributable record, rather than silently clamping inconsistencies. Verify
+known stock before/after expiry, missing/mismatched balances, batch-derived and
+legacy reads and exact-host refresh once activation is authorized.
+`ReservationHolds.jsx:94–106` additionally requests at most 500 releases but
+records “every hold” and says released units are “sellable again”; remaining
+overdue work, quarantine and expiry eligibility must determine that wording.
+Its introduction says confirmation deducts units, whereas the traced confirm
+function retains holds and physical deduction occurs in fulfillment. The
+reservation-policy tests explicitly attribute confirmation deduction to
+OWNER-002: reconcile implementation and explanation against that owner decision,
+rather than changing the approved policy merely to match current code. Keep
+committed/sold stock distinct from physical handover and ensure confirmed units
+cannot return to availability through purchase-hold expiry. Do not invent an
+automatic release service.
+
+**H-022 — P1 migration compatibility, MAP-023: cancellation must release purchase-time holds.**
+Historical upgrade correction, 5 September: an actual pre-expiry released row
+reproduced migration failure at `inventory_reservations_released_has_cause_check`.
+The prepared expiry migration now installs that constraint NOT VALID, preserving
+unknown old attribution while enforcing new inserts and updates. Existing
+constraints are neither dropped nor weakened. `legacy_release_bootstrap.sql`
+and `legacy_release_behavior.sql` prove unknown cause/time and stock remain
+unchanged, and both insert/update violations name the intended constraint.
+The composed purchase-hold SQL rehearsal passes 13/13. No production migration
+or historical backfill occurred. Before provider application inspect actual
+legacy counts; validate the constraint only after evidence-backed reconciliation,
+never with guessed causes. Recovery and checks are in the Guest Commerce runbook.
+Active upgrade-path verification: add an actual pre-expiry released reservation
+to the local PostgreSQL fixture before installing the expiry migration. Require
+old unknown cause to remain unknown while rejecting new unattributed releases.
+If the baseline reproduces immediate validation failure, install the cause
+constraint without validating historical rows, then verify both insert/update
+enforcement and preserve an explicit historical-evidence reconciliation gate.
+This is remediation of H-022, not a new inventory policy or fabricated backfill.
+Local cancellation correction, 5 September: the composed PostgreSQL baseline
+failed with `Cancelled submitted order still holds stock`. The prepared
+`20260905_purchase_hold_cancellation.sql` releases active allocations in either
+Submitted or Confirmed state, records cause/time, excludes historical releases
+from balance/event quantities, recomputes catalog stock and preserves RPC ACLs.
+`rehearse-purchase-time-reservation.mjs` now installs the real expiry migration
+instead of mirrored columns/trigger, then the real cancellation function and
+correction. Its 12/12 checks pass, including the existing last-unit races and
+new `supabase/tests/purchase_hold_cancellation.sql` assertions for both states,
+historical releases, replay and full rollback on a mismatched lot counter.
+The purchase-time/reservation-policy contract group passes 30/30, but still does
+not prove the full owner policy. No production migration was applied.
+Remaining: provider historical-row inspection/attribution; expiry/cancellation
+concurrency and shared locking under H-019/H-020; confirmation-time deduction,
+payment/refund/packing composition and deployed acceptance. This correction
+must not be promoted alone as full lifecycle readiness. Commands and recovery
+are in the Guest Commerce BFF runbook. The diagnosis below is historical.
+The latest located `cancel_order_request` definition in
+`20260809_operations_hardening.sql:533–598` releases reservations only inside
+`if v_order.status = 'confirmed'`. The September purchase-time migration now
+creates those holds while an order is still `submitted`, so submitted
+cancellation leaves active stock holds behind. For confirmed orders, the older
+release update sets `status='released'` without `release_cause`, which the new
+`inventory_reservations_released_has_cause_check` rejects for ordinary rows whose
+cause is null. That constraint is also added with immediate validation and no
+historical-row backfill; existing released rows can prevent migration apply.
+No later cancellation replacement was found in the migration ledger. These are
+source-derived compatibility failures, not production cancellation tests.
+Target: migrate historical attribution honestly (no fabricated reason), update
+every release writer, and cancel all eligible active holds exactly once
+regardless of whether they began before staff confirmation. Reconcile partial
+prior releases without subtracting released rows again. Verify submitted and
+confirmed cancellation, already-expired/partly-released holds, historical rows,
+payment/exception policy, repeated requests and complete transaction rollback.
+
+**H-023 — P1 verification coverage, MAP-023/MAP-021: prove the composed inventory lifecycle.**
+*Local evidence, 6 September:* baseline handover accepted an order with no
+allocations. Prepared `20260906_handover_coverage.sql` rejects missing/unpacked
+coverage, locks balance → reservations → batches after the order, and uses
+only the captured active allocation IDs for deduction totals. Historical
+released rows cannot be deducted again. The purchase runner now passes 17/17
+properties, including purchase → confirm → exact-lot pack → handover, strict
+counter rollback, stock projection, historical row preservation and replay.
+The payment state in this lifecycle fixture is seeded; the real signed payment
+path is separately rehearsed and is not yet composed with the whole lifecycle.
+No production apply. Next: OWNER-002 deduction timing, H-020 opposing operations,
+and signed full lifecycle; recovery and test details are in Guest Commerce
+runbook. Do not remove this item based on the local containment evidence.
+*6 September active scope:* extend the existing inventory rehearsal through
+handover, first proving that missing/partial allocations cannot mark an order
+fulfilled. Prepare complete packed-coverage checks and exclude historical
+released reservations from deduction totals. Preserve strict rollback, events
+and replay. This containment does not close OWNER-002 deduction timing or H-020
+cross-operation locking; those remain required before activation.
+5 September progress: purchase-hold rehearsal now composes the actual expiry
+migration and cancellation function; purchase → cancel, history exclusion and
+atomic rollback pass. Confirm/pay → pack → handover, partial expiry/retry and
+cross-operation concurrency remain unverified. The preexisting confirmation
+checks describe current active-hold behavior, not OWNER-002 deduction acceptance.
+`tests/purchase-time-reservation.spec.js` pins the `if v_existing > 0` shortcut
+as idempotency evidence; that assertion cannot prove complete per-line coverage.
+`tests/reservation-policy-contract.spec.js` tests a pure policy model where
+confirmation deducts stock, independently of the SQL confirmation behavior.
+Retain useful contract checks but add behavioral acceptance for the combined
+migration sequence and real commands: purchase → confirm/pay → pack → handover,
+purchase → cancel, partial expiry → retry, release → catalog refresh, and
+concurrent operations from H-019/H-020. A green standalone policy model or
+source-string test must not establish operational correctness. Trace each
+assertion to order status, every reservation and lot, aggregate balances,
+public stock projection and immutable events. This extends existing rehearsals;
+it does not require a competing test roadmap or production test writes.
+
+**H-024 — P2, MAP-021: finish shared dialog adoption and verify dismissal during writes.**
+The shared `AdminDialog.jsx` already supplies Tab containment, Escape handling,
+initial focus and focus restoration. However, CouponManager's create/action
+dialogs, StaffPermissionManager's role/MFA dialogs and Customers' wholesale
+review still implement separate shells. Their inspected code does not provide
+the equivalent complete Tab containment/restore behavior. Customers' parent
+already guards `onClose` while saving, so its backdrop is not a pending-save
+dismissal finding. StaffPermissionManager's role dialog close/cancel buttons
+remain enabled during its request. The reconciliation
+modal passes `closeDisabled={finalizing}` to AdminDialog but its explicit close
+button independently invokes `onClose`. This is a source-backed adoption and
+write-feedback gap, not a claim that all dialogs lack accessible names. Merge
+into MAP-021's existing modal sweep; G-016's six passing cases do not prove every
+shell. Define consistent pending-operation dismissal/reconciliation behavior,
+then verify Tab/Shift+Tab, Escape, close/backdrop, success/failure after attempted
+dismissal, nested layers and trigger focus on desktop and phone. Prevent stale
+completion from closing or clearing a different record's newly opened form.
+
+**H-025 — P2, MAP-023/MAP-021: restore navigable Admin work context.**
+`Admin.jsx:123` initializes section to Overview; `selectSection` sets component
+state with no URL/history update in that file. Navigation correctly marks the
+active item using `aria-current`, but sections cannot be bookmarked or restored
+through browser Back/Forward/reload by this state model. Extend H-011's exact
+drilldowns with a validated section/filter/record route contract, authorized
+direct-entry recovery and focus transfer. Keep customer names, message content,
+tokens and sensitive search text out of URLs. Verify deep links, refresh,
+Back/Forward, revoked permissions, unknown sections and leaving unsaved work.
+Retain the established grouped navigation and keyboard shortcuts.
+
+**H-026 — P2, MAP-021/MAP-023: make metric explanations available without hover.**
+`AdminWorkspaceUi.jsx:43` truncates metric detail to one line and supplies the
+full text only through HTML `title`. The previously inspected 375px Inbox
+render visibly truncated these explanations. Native hover titles are not a
+dependable touch disclosure. Target: concise visible labels plus wrapping or an
+accessible tap/keyboard disclosure for definitions, freshness and exclusions;
+do not hide qualifications that change how a number is interpreted. Preserve
+the compact desktop rail and tabular numerals. Verify long translated/content
+labels, 375px, 200% text and keyboard/screen-reader access, alongside H-005's
+unknown/stale data semantics. Reuse shared tokens rather than redesigning K2.
+
+**Expanded coverage and rejected suspicions (source review):**
+- Evidence upload is not a MIME-header-only gate: `decodeEvidenceImage`
+  decodes/re-encodes JPEG/PNG/WebP, bounds bytes/pixels/dimensions/pages and
+  hashes sanitized output. Retain these controls; H-013 is a distinct outcome
+  reconciliation flaw. Provider bucket activation remains MAP-018/MAP-017.
+- Fulfillment does recheck reserved-lot availability and the 30-day expiry
+  boundary before handover (`20260809_operations_hardening.sql:603–681`).
+  It also requires confirmed order, verified payment, delivery confirmation and
+  completed active-reservation scans. Reject a blanket claim of missing checks;
+  exact-lot physical proof is H-016. Full FEFO concurrency and receipt inspection
+  still require the existing operational rehearsals.
+- Staff-access BFF denies non-Admin/non-SuperAdmin roles and requires the shared
+  authorization/CSRF boundary; paid-AI changes additionally require SuperAdmin.
+  Reject a claim that merely hiding the staff screen is its only protection.
+  Final-Admin concurrency is H-014; provider-applied role/session revocation
+  evidence remains required by the existing security MAP.
+- Supplier receipt, publication acceptance, independent custody receipt,
+  partial refunds/returns and quarantine are already explicit MAP-018/MAP-023
+  requirements. This pass does not relabel those known incomplete capabilities
+  as newly discovered or verified implemented workflows.
+- Product publication does lock the session and product, check staff/AAL2 and
+  ownership, validate name/brand/category/price/image/human review and append
+  an audit event. Reject a claim that the browser alone controls readiness.
+  The actual transition contradiction is H-018.
+- Consignment finalization locks the manifest and its lines, returns the
+  completed manifest on repeat, preserves source box/lot identity, and places
+  stock below 90 days into quarantine. Arrival counts are independently scanned
+  rather than copied from Milan. Keep these controls; row targeting is H-017.
+  Damage/overage/independent receipt acceptance remains existing MAP-023 scope.
+
+**Documentation deliverable coverage, checked 5 September:**
+
+| Requested area | Reviewed evidence and recorded outcome | Remaining implementation/acceptance owner |
+| --- | --- | --- |
+| Missing capabilities | Existing supplier receipt, returns/refunds, independent custody, settlement and adapter gaps reconciled with MAP-018/MAP-023/MAP-026; no duplicate roadmap. | Existing owning MAPs; provider-dependent capabilities remain explicitly unavailable. |
+| Security gaps | Session/cookie boundary, authorization/CSRF, staff access, idempotency, private evidence and prior dated provider findings. H-001–004, H-013–014, H-024 distinguish confidentiality, availability and integrity risks. | MAP-017–021; live grant refresh and activation retain their existing recovery gates. |
+| Logic tightening | Publication, receiving, packing/payment, cancellation, purchase holds, expiry, stock projections and lock order traced across UI, BFF and migration definitions. H-015–023 record contradictions and invariant gaps. | MAP-018/MAP-023; isolated composed SQL and concurrency acceptance is specified, not claimed passed. |
+| Admin workflow | Inbox drafts/ownership/history, dashboard truth and drilldowns, queues, retry continuity, failure recovery and navigation. H-001–012 and H-024–025. | MAP-019/MAP-021/MAP-023. |
+| Desktop visual/interaction | Existing dense product register preserved; chart keyboard/data alternative, contrast, dialogue consistency, meaningful metric explanations and exact lot context reviewed. H-009–012, H-017, H-024–026. | MAP-021/MAP-023; full contrast/screen-reader acceptance remains a release requirement. |
+| Mobile visual/interaction | Local 375×812 Inbox screenshot/DOM review confirms history parity and truncated metric explanations; receiving/table and dialog source review specifies phone layout and keyboard requirements. Existing InventoryGrid responsive cards and CouponManager mobile cards are preserved rather than reported missing. | H-010/H-012/H-017/H-024/H-026 and existing real-device/landscape/zoom matrix. |
+| Documentation only | All new audit findings, sources, limits, priorities, owners, targets, rejected suspicions and verification scenarios live in this section of the sole active MAP. No fixes, deployments or provider mutations performed. | Follow implementation only under its authorized owning MAP; do not interpret audit completion as remediation completion. |
+
+This completes the requested documentation review across the named areas. It
+does not certify the application as secure, operationally complete, or visually
+accepted on all devices. The 26 finding IDs are a risk register, not 26 proven
+production incidents. Browser reproductions, isolated calculations, source
+inferences and historical live evidence remain separately labelled above.
+Further isolated failure/concurrency validation (especially H-013/H-014 and
+H-019–023), full exception-path acceptance and additional real-device surfaces
+belong to the named remediation/acceptance scope and remain open in this MAP.
+
+**Audit handoff/recovery:** the next implementation priority is to reproduce
+and contain H-001's wrong-customer draft behavior, then address inventory
+integrity H-019–023 and evidence/privilege integrity H-013/H-014 within their
+existing dependency gates. Do not implement under this documentation-only
+request. H-024's wholesale backdrop suspicion was rejected after inspecting its
+parent guard; preserve that correction. Only documentation hunks from this audit may
+be reverted; do not reset earlier dirty code/assets. Existing provider and
+OWNER-005 gates are unchanged. Final fix verification belongs to each owning
+MAP and must update rulebook/System Brain/design/runbooks at implementation time.
+
+#### I. Full-surface engineering and ecommerce design audit — 6 September 2026
+
+**Authority:** IDEA-20260906-02, owner-requested fresh audit. This section is
+part of the sole active backlog. It consolidates remaining engineering across
+MAP-017–028 and adds precise findings; it does not reopen verified fixes or
+create a second roadmap. All entries below remain unfinished. The audit itself
+does not mean the website was redesigned or that production passed acceptance.
+
+**Evidence boundary:** current source, route registry, isolated browser fixtures,
+two production builds, security source scan and extracted-source probes were
+reviewed. The first route sweep covered 12 paths at 375 and 1440 pixels (24
+observations), including recovery/unavailable states. `/admin` in that sweep is
+an intentionally nonexistent path, not the protected Admin route. Authenticated
+Admin fixture coverage comes from the separate 26-test suite on
+`/admin-portal-k2-secure`. Fixtures use fabricated records; no production data
+was changed, no message/payment/booking was sent, and no migration was applied.
+Public web opens for both exact hosts were refused by the web tool; this is an
+access limitation, not evidence that either host is down. Existing live audit
+findings retain their original dates until a fresh provider/host audit succeeds.
+
+**Fresh checks:** `npm run build:storefront`, `npm run build:admin`, and
+`node scripts/audit-security-surfaces.mjs --fail-on-gaps` exit 0. Storefront
+landing JS is 149.60/150.00 kB gzip; CSS is 26.78/30.00 kB gzip. Admin application
+is 186.96/300.00 kB minified. Storefront prerender reports zero product pages
+and the intentional prelaunch noindex gate. These are not launch-ready SEO
+claims. `npx playwright test --config=playwright.admin.config.js
+tests/admin.spec.js tests/admin-dashboard-redesign.spec.js --retries=0` passes
+26/26. Previously recorded 552 contracts, 17 inventory properties and signed
+payment/packing evidence are retained, not presented as newly rerun by this audit.
+
+**Reproduction:** `node scripts/audit-web-readiness.mjs` produces the blocked-
+network route sweep; `--focused` inspects home, optional store, product and
+catalog with a longer render wait. Raw local evidence is under
+`.tools/readiness-audit-20260906/`; retained evidence is under
+`docs/evidence/20260906-readiness-audit/`. Screenshots deliberately contain
+fabricated audit products and placeholder media. The first phone-home screenshot
+captured a cold Vite loading state, not a proven production latency defect.
+External font/image blocking tests fallback behavior, not external availability.
+The focused pass added eight observations including `/store`; both phone and
+desktop home rendered successfully. `node scripts/audit-readiness-logic.mjs`
+reproduces the comparator/reload probes without a browser or provider.
+
+##### Coverage and remaining acceptance register
+
+| Surface / boundary | What was checked | Engineering still required / owner |
+| --- | --- | --- |
+| Home, navigation, footer, category entry | Source and desktop/phone rendering; route identity, hierarchy, target sizes | I-006–010; merchandising, truthful FAQ, evidence-backed media, semantic navigation, mobile buying priority |
+| Catalog, search, filters, sorting | Rendered fabricated assortment and extracted comparator | I-005; distinct loading/error/empty/stale states, date sorting, URL-restored filters, pagination and authoritative stock freshness |
+| Product detail, gallery, knowledge, related catalog | Phone/desktop rendering, DOM order, source buy guard and knowledge paths | I-006/I-008; buy-panel order, reviewable provenance, failed image recovery and complete product data states |
+| Optional interactive store and review globe | Source boundaries, lazy loading and focused rendered probe | I-009/I-010; WebGL loss, touch/keyboard/flat fallback, slow assets, reduced motion, approved asset/media acceptance; preserve optional status |
+| Cart, coupons, checkout, delivery, receipt | Source-to-service payload tracing; empty checkout and expired/no-grant receipt rendered | I-003/I-004; accepted quote persistence, ambiguity recovery, coupon/challenge retry, cart edits during failed submissions; real signed order lifecycle remains open |
+| Pasabuy, wholesale, contact, guest messages, account | Public route/form structure and unavailable states; source submission and identity paths | I-004/I-007/I-011; real sign-in/link/claim/message journey, identity conflicts, limits, offline retry, public policy and manual operating truth |
+| Admin auth, MFA, recovery, role boundary | 26-test Admin suite includes denial, MFA/recovery, media/intake and mobile checks | MAP-017/020/021/025: real AAL2 actors, concurrent membership, expiry/revocation and signed provider commands, no legacy bypass |
+| Overview, inventory, purchasing, suppliers, consignment, Pasabuy | Source inventory; suite renders core workspaces and intake/mobile controls | H-005–011/H-017/H-018, I-001/I-002/I-012; cursor completeness, exact destinations, full supplier→purchase→receive flow, publication and staff acceptance |
+| Fulfillment, holds, delivery, coupons, customers, Inbox | Source call sites and prior SQL evidence; rendered core workspace suite | I-001–004/I-012; all mutation retry identities, complete inventory lifecycle, late responses, common dialogs and full queue pagination |
+| Count & Close, channels, assets, globe settings, workflow guide | Registry/source and suite asset/guide/channel checks | MAP-018/023/026/027; complete exact-shop import/count/close acceptance, real adapter status, paid-AI/manual boundaries, reviewed media and guide-to-action parity |
+| Database, API, secrets, uploads, rate limits, authorization | Source scan and build boundaries; prior live findings reviewed | MAP-017 first; dependency-composed migrations, exhaustive actual-role denial/allow/replay tests, upload cleanup, quotas, signed endpoints and no anonymous mutation |
+| Separate hosts, routes, SEO, accessibility, performance, recovery | Two local artifacts and source policy checks; host read unavailable | I-010/I-013; exact previews/hosts, remote CI, crawl statuses, noindex release, real devices/assistive tech, monitoring and rollback |
+
+The matrix is coverage accounting, not a claim that every component line,
+authenticated action or every browser/device combination was behaviorally tested.
+Unverified rows above remain required acceptance work, even where smoke tests pass.
+
+##### Priority engineering findings
+
+**I-001 — P1, MAP-023, merge H-019/H-020/H-023: finish the inventory lifecycle.**
+**Active continuation, 8 September:** owner explicitly requests preserving the
+remaining work here and proceeding. I-009 owns the intermittent browser timeout;
+I-014 owns real provider inventories; I-013 and the owner-only table retain
+recovery/activation gates. Do not recreate completed local work as a new task.
+Payment stock integrity is now prepared in `20260908_payment_balance_integrity.sql`:
+ten missing/under-reserved/overdrawn/null balance denials, signed concurrent
+balance-change denial, refund recovery, payment/packing receipts, migration replay
+and exact function/ACL recovery pass in `npm run rehearse:payment-recovery`.
+The baseline accepted both a missing balance and a signed review during an
+inconsistent balance write. Final prebuild and 63 focused contracts pass.
+Evidence/recovery are in System Brain and the Guest Commerce BFF runbook.
+This remains unapplied and does not implement confirmation-time deduction.
+
+**Remaining writer audit (source observations, not composed acceptance):**
+
+| Writer / source | Observed locking and next required work |
+| --- | --- |
+| Purchase helper / 8 September prepared patch | All balances by SKU before new lots; opposing baskets locally proven. Compose with every other writer and signed lifecycle. |
+| Payment / 8 September prepared patch | Order/items → SKU balances → reservations by SKU/batch/id → batches by SKU/id. Concurrent balance-change denial proven; cross-operation races remain. |
+| Expiry / `20260906_atomic_order_hold_expiry.sql` | Orders → all SKU balances → reservations → batches; retain extension recheck. Compose against payment/cancel/reconcile. |
+| Cancellation / `20260905_purchase_hold_cancellation.sql` | Per-SKU balance then reservations/batches. Audit interaction with all-balance prelocks and future committed-unit restoration. |
+| Handover / `20260906_handover_coverage.sql` | Ordered balance/reservation/batch prelocks; still deducts at handover. Replace only as part of the confirmation/payment commitment lifecycle. |
+| Reconciliation / `20260908_reconciliation_lock_order.sql` (prepared) | Balance → existing batches by ID → product. Purchase/recount and clearance/recount commit locally; hold/history protection, first count and missing-balance commitments pass. Remaining: custody/receiving/channel and signed full-lifecycle composition. |
+| Exact custody transfer / same 9 August migration | Locks source batch and splits/moves unreserved stock; prove location/custody projections and races before claiming a common inventory protocol. |
+| Deadline extension / `20260902_reservation_expiry_policy.sql` | Reservation-only lock; expiry rechecks after waiting. Compose against payment and commitment rules. |
+
+This is a bounded audit of the named writers. Remaining receiving, clearance,
+channel allocation and trigger paths still need inclusion before all-writer closure.
+The 8 September recount continuation reproduces a purchase/recount deadlock in
+the original function (22/24 properties) and passes 28/28 after the additive
+patch, including permissions and captured-definition recovery. Final prebuild
+and 66 focused contracts pass. Runbook/System Brain retain commands and recovery.
+Nothing is applied to a provider. Continue the remaining writer/lifecycle scope
+below; independent I-009 browser-startup diagnosis can proceed alongside it.
+8 September continuation (IDEA-20260908-01): opposing A/B and B/A purchase
+baskets reproduce a PostgreSQL deadlock in the local rehearsal (17/19 properties).
+Prepared `20260908_purchase_hold_lock_order.sql` prelocks all SKU-sorted balances
+before lots and preserves installed coverage checks/ACLs. The expanded runner
+passes 22/22 properties, including migration replay, exact function/ACL recovery
+and unchanged replay event totals; nothing is applied to a provider. Evidence
+and recovery are in the Guest Commerce BFF runbook and System Brain. The owning runner is
+`scripts/rehearse-purchase-time-reservation.mjs`; use `--baseline-lock-order`
+to reproduce the original failure. Full lifecycle/all-writer scope below remains.
+Current local protections are real, but confirmation/payment-time deduction
+required by OWNER-002 is still not implemented throughout the lifecycle.
+The new prepared patch corrects purchase-helper ordering, but payment,
+release/transfer/reconcile and other writers still need composed lock-order
+verification. Next: inventory all writer locks, implement confirmation/payment
+commit semantics with exception restoration, then prove the signed lifecycle.
+Do not relabel handover deduction as confirmation deduction.
+Complete the state model for committed units, cancellation/restoration, packing,
+handover and refunds without double deduction or expiry of committed stock.
+Acceptance: real composed signed purchase→confirm/pay→pack→handover and exception
+paths; opposing A/B versus B/A baskets, release/transfer/reconcile races; assert
+every lot, balance, projection, immutable event and same-key replay. No production
+apply until this and MAP-017 are satisfied.
+
+**I-002 — P1, MAP-019/023: finish mutation retry acceptance and remaining callers.**
+8 September under IDEA-20260908-01: all five fulfillment service wrappers now
+forward retained keys; five response-loss regressions failed first and 69 focused
+retry/BFF contracts passed. Confirmation, box assignment and exact-lot transfer
+now review their exact target/payload in a shared retained dialog; delivery and
+handover freeze pending details and retain uncertain writes. The shared hook
+guards unload, disposes actor-scoped runtimes and supports exact receipt retry.
+Legacy delivery/handover cannot claim receipt recovery: an uncertain legacy
+command requires closing and reconciling instead. The first two frozen-input
+browser regressions failed against the old dialogs and subsequently passed.
+All ten local dialog browser cases pass, including frozen payload/key retry,
+duplicate submission, correction after denial, focus restoration, phone width
+and late success after actor change. The final 75 focused contracts and Admin
+build pass (186.96/300 kB minified application chunk). These are component/local
+checks, not full-page or deployed acceptance. Recovery: the exact pre-edit checkpoint
+under `docs/design-checkpoints/20260908-fulfillment-retry/`, scoped dialog/hook/
+service/test diff, preserving earlier uncommitted payment/packing work.
+
+Supplier dialog recovery is locally implemented and verified: pending
+values freeze, the same supplier payload/key is retained, shared focus/close
+handling is reused, and the workspace resets with staff actor/role. The new
+browser regression first reproduced the editable-pending defect. Checkpoint:
+`docs/design-checkpoints/20260908-supplier-retry/`. The complete 13-case dialog
+browser suite and final Admin build pass (187.09/300 kB minified application
+chunk; 40 manifest modules). Final retry/BFF/dialog/intake contracts pass 88/88.
+This does not establish a deployed supplier receipt.
+The five intake
+JSON wrappers now forward supplied keys: five response-loss regressions failed
+first, then 28 focused intake/retry contracts passed. The productIntakeService
+callers still need operation-scoped adoption; their inventory request ID is
+stored in localStorage by session, and evidence upload generates a key per
+request. Preserve separate inner request IDs and outer command receipts while
+fixing uncertainty and actor scope. Customers.jsx wholesale review calls reviewAdminWholesaleInquiry
+without retained identity and falls back to a browser timestamp if the result
+omits updatedAt. PhotoManagerModal retains a key but replacing media resets it
+without an unresolved-outcome gate. BulkCsvImportModal retains chunk keys and
+has a durable status recovery read; review its edited-reason/actor lifetime
+before extending any completion claim.
+Coupon create/activate/pause/archive recovery is locally verified under
+IDEA-20260908-01: frozen payload/key retry, stable default start time, duplicate
+submission and dismissal guards, corrected rejection and actor isolation. Four
+browser cases failed on opener focus after the interrupted implementation;
+capturing the trigger before disabling it and passing AdminDialog returnFocusRef
+fixes that lifecycle gap. All 20 recovery browser cases and 94 focused contracts
+pass. Admin build/boundary/budget/secret gates pass (187.21/300 kB application
+chunk, 40 manifest modules). npm test routes both recovery specs through their
+dedicated config; three CI-routing regressions failed before correction.
+Evidence and exact commands: `docs/evidence/20260908-coupon-retry/README.md`.
+Pre-edit recovery: `docs/design-checkpoints/20260908-coupon-retry/` plus the
+optional AdminDialog ref and test-routing diff. No provider state changed.
+Next local action: fix Customers.jsx wholesale review retained identity and
+canonical updatedAt handling, then media/intake callers; preserve existing
+server validation and separate inner request IDs. Coupon target-host receipt,
+legacy register reconciliation and full authenticated navigation acceptance
+remain unverified; component fixtures do not close those gates.
+Wholesale review continuation (IDEA-20260908-01): transport regression reproduced
+a new key on response-loss retry; browser baseline reproduced editable pending
+status. Both are corrected. Five isolated browser cases pass for response loss,
+unavailable service, incomplete receipt, rejection correction and actor disposal.
+The register uses only a matching receipt's exact timestamp; triage remains
+non-commercial. 95 focused contracts and the Admin build pass (187.29/300 kB
+application chunk). Complete shared browser regression is pending after media
+work. No provider state changed. Recovery checkpoint:
+`docs/design-checkpoints/20260908-wholesale-retry/Customers.jsx.before`.
+Media assignment recovery is locally verified: frozen image/reason payload,
+retained assignment key through cleanupPending, upload-before-save gate and late
+upload/save disposal. All four original media browser tests failed against the
+baseline; five media cases now pass, including correction after rejection.
+Final shared recovery browser suite passes 30/30, focused contracts 95/95 and
+Admin build/boundary/budget/secret gates pass (187.36/300 kB, 40 manifest modules).
+Evidence and recovery: `docs/evidence/20260908-media-retry/README.md` and
+`docs/design-checkpoints/20260908-media-retry/`. No provider state changed.
+The owning I-002 remains open for intake/CSV lifetimes, real legacy reconciliation,
+full authenticated navigation and actual signed receipt/audit acceptance.
+Owner explicitly prioritizes store desktop/portrait/landscape next (I-009,
+IDEA-20260908-02) after this verified wholesale/media slice. Resume intake/CSV
+caller audit afterwards; preserve durable inner intake IDs and receipt keys.
+Remaining: fix those caller gaps, finish customer/intake/media audit; actual
+signed fulfillment workspace lost-response → one receipt acceptance across all
+five commands, refresh/reconciliation, navigation and actor switch on the target
+host after activation. The component fixture does not prove provider behavior.
+Different payloads require different identities; duplicate delivery/stock events
+must be measured through receipts/history, never inferred from key presence.
+
+**I-003 — P1, MAP-019/023: bind displayed delivery fees to the accepted order.**
+8 September local mitigation (IDEA-20260908-01): checkout no longer mounts the
+unbound delivery pilot, adds an unpersisted fee to its total or promises a final
+delivery charge. It shows products total and delivery quoted for approval after
+review. The new contract failed against the previous fee-inclusive total before
+correction; all 15 delivery/operations contracts, the Storefront build and the
+phone request → confirmation → reload/back/forward browser journey pass. The
+first browser attempt caught the lazy-route loading state; the test now waits
+for the checkout heading before checking its delivery text. The subsequent
+rerun passed after account usage became available again; no unresolved tool
+approval remains for that check. Recovery checkpoint:
+`docs/design-checkpoints/20260908-checkout-delivery/`. The prepared, unmounted
+DeliveryEstimate pilot is not current behavior and must not be re-enabled before
+the immutable quote acceptance below. This mitigation does not complete I-003.
+
+Underlying target gap (pre-mitigation audit):
+`Checkout.jsx:88–97` adds `deliveryQuote.feeMinor` to an “Order total”, but its
+submit passes no locality/quote identity; `StoreContext.jsx:617–631` and
+`prepared-api/storefront/order.js:11` omit those fields. Source-confirmed gap:
+the shown fee is not carried by this order payload. Separately,
+`DeliveryEstimate.jsx:55–81` leaves the previous quote in parent state while a
+changed destination/weight/subtotal is checking; `!quotable` hides the picker
+without immediately clearing that parent total. Preserve the currently agreed
+manual quote model until an accepted immutable fee snapshot is implemented.
+Acceptance: change locality/quantity/coupon, become unweighed, fail or reorder
+responses, submit mid-quote and replay. No stale fee is shown as final; the server
+revalidates and persists the exact accepted locality/rate version/amount, and
+confirmation/Admin show the same snapshot. Never silently infer a courier rate.
+
+**I-004 — P1, MAP-019/023: make failed checkout recoverable after edits.**
+`StoreContext.jsx:583–668` keeps one checkout key until success without binding
+it to a frozen payload; cart/contact/coupon edits after an uncertain submission
+can send different contents under that key. Record whether the first attempt
+committed before changing operation identity. `Checkout.jsx` also keeps the bot
+token on unsuccessful submission, unlike account flows that reset challenges.
+The challenge behavior needs a real deny/retry fixture, not an assumed provider
+result. Acceptance: timeout-after-commit, definite validation rejection, coupon
+failure, expired challenge, rapid double submit, edited cart/contact, navigation
+and reload. Preserve one logical order, obtain a fresh challenge when required,
+retain useful form content and provide a clear reconciliation path.
+
+**I-005 — P1/P2, MAP-023, merge existing catalog scope: define every discovery
+state and sort.** `CatalogGrid.jsx:8–26` has no loading/error/stale input and
+`Latest` reaches `return 0`. Executing the actual extracted comparator with an
+old then new product returns `[old,new]`, not `[new,old]`. `NewArrivals.jsx:10`
+takes the first four products; `StoreContext` fetch has no newest-first ordering
+and its normalized product shape must preserve the chosen authoritative date.
+Failed product refresh silently retains the last snapshot; first failure can
+look like empty filters. Do not advertise “recently landed” from arbitrary array
+position. Implement explicit completeness/freshness states, real sort semantics,
+truthful empty search, and shareable/back-restored query/category/sort state.
+Acceptance: reversed date fixtures, ties, null dates, empty published catalog,
+failed first/background read, stock-read failure, 1,000+ rows and back/refresh.
+
+**I-006 — P1 conversion/usability, MAP-023/027: put mobile buying information
+before secondary product detail.** Rendered 375px product page follows the first
+desktop column (gallery→tabs→knowledge→ask staff) before the second column
+(name→price→specifications→quantity/cart). `MasterProduct.jsx:102–267` confirms
+that DOM order. This buries the buying decision under optional information.
+Move identity/price/known stock and purchase controls directly after or beside
+the main image on phones; defer expanded knowledge/specifications below. Keep
+allergen/variant warnings needed to buy safely visible. Consider a compact sticky
+buy bar only when it does not overlap the existing mobile navigation or keyboard.
+Acceptance: 375×812, 390×844, 844×390, desktop, 200% text, keyboard and screen
+reader order; long names, zero/unknown stock and missing media. Make buying easier
+without hiding stock restrictions or inventing reviews.
+
+**I-007 — P1 trust, MAP-019/023/027: reconcile public promises with manual launch.**
+*6 September local correction:* `src/data/site.js` payment FAQ now describes
+manual GCash/QR as planned for launch, requires staff-confirmed stock/fees/total/
+receiving details before payment, and does not advertise Maya/bank/COD.
+Delivery FAQ no longer promises fixed shipment or Pasabuy transit windows.
+This is a copy correction, not payment/courier activation. Full cross-surface
+promise/provenance audit and owner-approved operating facts remain open below.
+
+*Historical audit baseline:*
+`FaqSection.jsx` renders `src/data/site.js:88–97`: 1–2 business-day shipment,
+2–3 week Pasabuy transit, Maya/bank transfer/COD alongside GCash. These are
+currently unconditional copy. The owner's intended launch is manual GCash/QR;
+other methods and fixed timelines are not established by that instruction.
+`PRODUCT.md` also describes self-serve/live stock and proof metrics as positioning,
+not verified current operations. Audit FAQ, hero, passport, story, checkout,
+confirmation, contact, account, emails and guide copy against one approved source.
+Acceptance: unsupported methods/timelines/provenance claims are absent; available
+manual steps are explicit; no false SLA, trust metric or automatic confirmation.
+Approved business facts remain an owner input, but removing unsupported defaults
+and implementing a truthful configuration boundary is engineering-owned.
+
+**I-008 — P2, MAP-021/027: complete media failure and touch behavior.**
+Blocked external media visibly leaves broken Story images;
+`StorySection.jsx:42–50` has no error fallback. This is a reproduced blocked-host
+fallback failure, not proof the external host is normally broken. Use approved
+local media or the existing honest neutral fallback with stable geometry.
+The phone probe measured product breadcrumbs at 20px high and product tabs at
+30px; New Arrivals detail arrows are 32×32. Expand actual hit areas to K2's
+44px target while preserving desktop density. Small native checkboxes and inline
+links from the automated list require inspection of their enclosing label/link
+context, not automatic WCAG failure labels. Acceptance: blocked images, keyboard
+focus, touch targets, 200% text, dark/light tokens and reduced motion.
+
+**I-009 — P2 ecommerce design, MAP-023/027: make the first screen product-led.**
+Owner priority, 8 September (IDEA-20260908-02): finish the current wholesale/media
+recovery slice in I-002 first; then inspect the store in desktop browser and phone
+portrait/landscape and improve the landscape experience while retaining complete
+portrait behavior. Interpret orientation as responsive layout by available space,
+not a mandatory device lock. Verify rotation preserves selected product, basket,
+chat/drafts and navigation; cover touch, keyboard, short-height controls, flat
+fallback and reduced motion. Preserve K2 identity and canonical commerce. Use
+Blender MCP for new assets only if needed after inspecting the current surface.
+All findings and remaining acceptance stay here/I-015/MAP-027, not a second plan.
+Owner clarification: “store” means the 3D architectural shopping experience at
+`/store`; catalog/shop is a separate surface and is not the redesign target.
+Inspect actual WebGL room/camera/touch interaction in both orientations; reduced-
+motion/flat checks are supplemental resilience evidence, never 3D acceptance.
+8 September orientation repair (locally prepared, IDEA-20260908-02): actual
+WebGL counter screenshots exposed a 123px phone landscape header and oversized
+side introduction; portrait empty basket obscured the room/zoom. Compact phone
+introductions, single-row landscape navigation, selection-first side content and
+reserved zoom space are implemented. Final browser verification passes 2/2 in
+`tests/store-orientation-ui.spec.js` (isolated fabricated catalog): actual WebGL
+room, fallback, selected product and basket rotation, zoom access, unsent keeper
+question retention. Evidence: `docs/evidence/20260908-store-orientation/`. Storefront
+build passes its boundary, secret scan and landing budgets (149.86/150kB JS,
+27.45/30kB CSS); 111 store/clerk/release contracts pass. Full physical-phone touch,
+mobile keyboard, device GPU performance and deployed catalog acceptance remain
+open here/I-015/MAP-027. No new Blender asset was necessary for these layout fixes.
+8 September local browser-harness diagnosis: a captured cold Chromium trace
+showed `/src/index.css` taking 53,855.596 ms and initial navigation about 55.7 s.
+The selling config now waits for that stylesheet during server readiness and
+uses `--strictPort`; the 120-second test budget is unchanged. Ten focused
+inventory/CI contracts pass after a failing regression, and the complete isolated
+selling suite passes 8/8 in 2.3 minutes (first case 59.9 s). This fixes readiness
+accounting only; representative device/network and deployed performance remain
+unverified. No production rendering performance improvement is claimed.
+*6 September owner priority, IDEA-20260906-03:* additive hero implementation and
+local verification are recorded in System Brain, DESIGN and
+`docs/evidence/20260906-hero-additions/`; exact pre-edit recovery lives under
+`docs/design-checkpoints/20260906-hero-before-additions/`. Remaining here: owner
+visual review and representative approved catalog/media acceptance, plus the
+wider catalog/product-detail scope below. Next action: review the saved desktop
+and phone previews, then validate the same layout with approved product media
+and continue the compact catalog/relevant-product work. No deployment or full
+I-009 closure is claimed. Restore the saved Hero entry to reverse this visual
+slice without reverting other ongoing work. Skills used: using-superpowers,
+brainstorming/verification-before-completion, andrej-karpathy, ui-ux-pro-max,
+impeccable (brand/bolder/polish), design-taste-frontend and emil-design-eng. The
+installed Impeccable command is `bolder`; there is no `enhance.md` reference.
+
+The desktop home screenshot leads with headline and sourcing route; products
+appear after the category section. The 375px catalog renders one tall card per
+row below a long introductory/filter block; the product page repeats the entire
+catalog beneath the item. Preserve the distinctive wood, cream, serif and
+terracotta identity. Increase immediate product visibility with approved hero
+merchandise, clear category previews and a compact “current arrivals” shelf driven
+by real dates. Use a responsive card proportion that balances legible price/name
+with scanning several products; test one versus two phone columns with long names
+before choosing. Replace undifferentiated full-catalog repetition on product
+detail with a small genuinely related set or a clear browse link. No decorative
+feature is a launch requirement by itself. Acceptance: representative real media
+and catalog density, first-time shopper finds an item and adds it without tutorial,
+no fake popularity/scarcity, and unchanged stock/accessibility/build invariants.
+
+**I-010 — P1 recovery / P2 performance, MAP-021/024/027: bounded chunk recovery
+and disciplined optional 3D.**
+*6 September local correction:* removed the automatic preload-error reload
+handler from `src/main.jsx`. Explicit user recovery through the existing error
+boundary is safer than even a once-per-build automatic reload when checkout
+drafts or staff command identities are unresolved. The error is no longer
+suppressed and this path no longer reads sessionStorage. Both new regression
+tests failed first on actual bootstrap code (reload/suppression and blocked
+storage), then 19 chunk/error-safety/request-timeout checks passed. The tests
+are included in `test:contracts`; the audit probe handles the removed listener.
+Both production builds passed after the bootstrap correction; Storefront landing
+JS is 149.53/150.00 kB gzip. No complete audit closure follows from these checks.
+Still open: rendered failed-chunk/retry acceptance, target-neutral error-boundary
+copy (`ErrorBoundary.jsx` currently says “Reload Admin” on shared surfaces),
+pending-work recovery UX and all optional-3D/performance acceptance below.
+No deployed behavior is claimed. Recovery is an explicit user action; rollback
+of this local change must not restore an unattended reload loop.
+
+*Historical failing baseline:* the former `src/main.jsx` handler suppresses
+preload errors and reloads whenever ten seconds elapsed. The extracted current
+handler, given three errors eleven seconds apart, reloads three times; it is a
+cooldown, not the claimed once-only recovery. Use a per-build/chunk bounded
+attempt and then a recoverable error without losing pending operations. Handle
+unavailable sessionStorage. Separately preserve lazy opt-in store/globe, explicit
+flat access, WebGL context-loss recovery, resource cleanup and reduced motion.
+Acceptance: persistent slow/missing chunk, blocked storage, interrupted update,
+keyboard/phone flat-store flow and low-memory GPU failure. Measure production
+mobile vitals and memory rather than interpreting slow cold Vite compilation as
+production performance. New visual work must stay under the nearly full 150kB
+landing budget; optimize or isolate code before adding it.
+
+**I-011 — P1/P2, MAP-019/023/025: finish customer-facing policy and recovery entry
+points.** The route registry and footer offer no dedicated privacy/terms/returns
+destinations while multiple forms collect contact and delivery data. This is a
+product disclosure/acceptance gap, not a jurisdiction-specific legal finding.
+Publish accurate owner-reviewed collection/use/contact/manual returns guidance
+and make it reachable at collection and in the footer. Keep the existing
+case-by-case policy and avoid inventing a refund entitlement or SLA. Complete
+account email/phone sign-in→guest claim→history→messages tests for conflicting
+contacts, missing/expired grants, sign-out, offline state and record boundaries.
+Acceptance requires actual provider/host journeys after secure activation; the
+disabled-account fixture only proves honest unavailability.
+
+**I-012 — P1/P2, MAP-019/021/023, merge H-007/H-024/H-025: staff workspace
+completeness and recoverable dialogs.** `readFulfillmentData` reads entire
+submitted/confirmed/lot/staff sets without a cursor/completeness contract. A
+provider row cap can silently hide work; a large response can also exceed the
+existing timeout. Retain existing Inbox bounds and expose paged queues and
+authoritative aggregates throughout. `Suppliers.jsx`'s inline SupplierDialog
+allows close/cancel while saving and has no shared focus trap; delivery and
+other inline dialogs also need the H-024 sweep. Full-size desktop tables are not
+themselves defects when meaningful phone actions and labelled scroll regions
+exist. Acceptance: >provider-cap fixtures, independently paged messages, exact
+record/filter deep links, refresh/back restoration, Escape/backdrop during writes,
+late responses, keyboard return focus and all staff role/permission states.
+
+**I-013 — P0/P1 activation, MAP-017/020/022/024/025: finish real environment
+engineering rather than equating local builds with launch.** Preserve the
+existing live critical authorization finding until exhaustive fresh denial
+evidence closes it. After OWNER-005 recovery access, apply exact payload-bound
+MAP-017 once, then dependency-order the remaining schema/BFF/config changes;
+server switches precede browser switches. Verify both real preview artifacts,
+deep links, HTTP statuses, origin/CSRF/AAL2/rate/replay boundaries, approved public
+catalog, crawler metadata/noindex release, CSP reporting, error alerts and backup/
+rollback receipts. Real inventory, QR/account, courier inputs, staff identity and
+acceptance are explicitly external gates; scripts/config/preflights and safe
+independent local remediation are engineering work. Optional marketplaces may
+stay manual and must not block a truthful direct-order launch by default.
+
+**I-014 — P2, MAP-021/024/028: keep architectural inventories tied to the actual
+registry.** Remaining: independently verify emitted function and enabled-route
+inventories at both exact previews after the existing activation dependencies.
+Record artifact identity and provider inventory separately from source counts.
+The local source-count correction and CI contract are evidenced in System Brain
+and the deployment runbook (8 September); historical evidence retains its dates.
+Recovery: restore the affected documentation/test diff only; no route or provider
+configuration changed. Do not infer preview inventory from the prepared registry.
+
+**I-015 — P2 engagement/usability, MAP-027: remove mobile store overlay collisions.**
+The focused 375×900 screenshot of `/store` shows the floating “Your basket”
+card covering part of the Counter heading/welcome panel, alongside the keeper
+bubble. `InteractiveShop.jsx`, `StoreBasketDock.jsx`, `StoreKeeper.jsx` and
+`interactive-store.css` own these layers. No page-wide overflow does not mean
+content is unobscured. Reflow the basket/keeper into a compact phone strip or
+reserve real scene space; keep scene, basket and conversation overlays mutually
+readable. Acceptance: 375×812 and landscape, empty/full basket, long product
+names, guide/chat open, keyboard shown, reduced motion, scene/flat switch and
+scrolling; all labels and purchase/leave controls stay readable and tappable.
+
+##### Visual review and acceptance direction
+
+**I-016 — P1 workflow functionality, MAP-019/021/023 (IDEA-20260906-04).**
+*6 September local slice:* catalog/consignment node reads are implemented and
+verified (4 browser cases, 12 guide contracts, Admin build), with evidence in
+System Brain and `docs/evidence/20260906-workflow-api/`. Isolated release checks
+also pass (4 browser, 12 guide, 25 CI/configuration, Admin build). Commit a438d85
+passes full CI 34021862535 and both Vercel statuses. Authenticated staff acceptance remains unverified.
+Remaining: real staff/host permission acceptance, read coverage for other domains,
+exact record selection and command/receipt execution, and clarification of whether
+the owner also wants external-service integrations or an automation editor.
+Rollback: remove the `WorkflowRecords` import and keyed child in the detail
+drawer; existing navigation and rehearsal remain. API/backend state is unchanged.
+The broader target and acceptance below remain active.
+
+Owner requests API calls from the workflow map. The pre-change `MasterWorkflowGraph` and
+`WorkflowDetailDrawer` navigate to Admin sections, toggle local guide
+review state, and display fictional simulation responses; none of those operations
+executes a business command. Scope clarification is pending: existing K2 staff
+actions, external integrations, or a configurable automation editor. Default
+engineering direction is bounded existing K2 staff actions, not arbitrary URLs.
+Required before implementation: map each accepted node action to the existing
+service/route, required role, exact record/payload, prerequisite state, response
+receipt and recovery behavior. Reuse same-origin authenticated services and
+canonical validators; never call privileged database RPCs from diagram code.
+Reads must show loading/empty/denied/unavailable/stale states and cancel on node
+change. Writes require explicit record/impact review, payload-bound idempotency,
+server-confirmed results and uncertain-response reconciliation; local checklist
+state is never operational completion. Provider/database activation gates remain
+unchanged. Acceptance: role denials, disabled BFF, malformed responses, wrong
+record, duplicate/retry, stale node response, keyboard/phone workflow and an
+actual approved-host receipt once activation dependencies are met. Next action:
+resolve the requested API use and implement the matching bounded action surface.
+
+
+Provisional design diagnostic for inspected fixtures only: accessibility 2/4,
+performance 2/4, responsive 2/4, theming 3/4, visual distinctiveness 3/4 = 12/20.
+This is a review rubric, **not a readiness percentage or WCAG certification**.
+Remaining manual contrast/assistive-tech/device evidence prevents a higher claim.
+The wood/editorial identity is distinctive; retain it. The main weaknesses are
+product hierarchy, mobile buying depth, long low-density pages and incomplete
+failure states, not a need to replace the brand with a generic template.
+
+| Before (observed) | After (required direction) | Why / acceptance |
+| --- | --- | --- |
+| Phone knowledge panels precede name/price/cart | Gallery → name/price/availability → purchase → expandable detail | Reduce buying effort; verify DOM/focus order and warnings |
+| Sourcing route dominates the hero | Approved merchandise alongside a concise sourcing proof | Show what is for sale early; no invented product media |
+| Tall one-column phone catalog and full repeated catalog on product page | Tested compact cards and a bounded relevant-product section | Improve scanning without sacrificing target/text sizes |
+| Generic Latest/New Arrivals ordering | Date-backed arrivals or honestly labelled featured selection | Visual merchandising reflects operational data |
+| Tiny tabs/arrows and broken blocked-host story images | 44px hit areas, visible focus, stable neutral media fallback | Reliable touch/keyboard and network-failure behavior |
+| Additional motion risks almost-full landing bundle | Brief cart feedback and meaningful transitions, optional lazy 3D | Engagement serves shopping; reduced motion and budgets pass |
+| Phone store basket overlaps the Counter introduction | Compact reserved space for basket and keeper | Preserve engaging guidance without covering shopping content |
+
+Use the required four-skill combination for implementation. Appropriate follow-up
+sequence is impeccable harden/clarify, adapt/layout, optimize, then polish. The
+owner has already requested improvement; implementation does not need a new
+generic permission round. Each change must first satisfy its owning MAP's data,
+security and acceptance dependencies.
+
+**Execution order:** I-001–004 and I-010 recovery first alongside MAP-017-safe
+local work; I-005/I-007/I-011 truthful discovery and operating copy; I-006/I-008/
+I-009/I-015 visual conversion work; I-012 staff completeness and I-014 inventory
+traceability; I-013 coordinated real
+environment activation and acceptance. These dependencies refine the existing
+Required order below, not replace the recovery gate. Record passed behavior in
+System Brain/runbooks and remove completed active items only when their whole
+scope is evidenced. Rollback this audit's documentation/script additions using
+their exact diff; no database rollback is involved and unrelated dirty work stays.
 
 #### Required order of work
 

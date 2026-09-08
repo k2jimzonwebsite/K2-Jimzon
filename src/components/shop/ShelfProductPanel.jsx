@@ -27,7 +27,7 @@ const USAGE_FIELDS = [
   { key: 'preparation', label: 'How to prepare it' },
 ]
 
-export default function ShelfProductPanel({ product, cartQuantity = 0, onAddToCart, onOpenProduct, onAskPasabuy, onClose }) {
+export default function ShelfProductPanel({ product, cartQuantity = 0, basketError = '', onAddToCart, onOpenProduct, onAskPasabuy, onClose }) {
   // Hooks run before any early return: an empty selection is a normal state, not
   // a reason to change the hook order.
   const knowledgeVersion = useProductKnowledgeVersion()
@@ -164,8 +164,9 @@ export default function ShelfProductPanel({ product, cartQuantity = 0, onAddToCa
         </button>
       </div>
 
+      {basketError && <p role="alert" className="mt-3 text-sm font-semibold text-crimson">{basketError}</p>}
       <p className="mt-4 text-[13px] leading-6 text-navy-soft">
-        Adding to the basket sends an order request. K2 staff confirm availability before any payment instructions.
+        Adding to your basket saves your selection. Review it at checkout, then submit an order request. K2 confirms availability before payment instructions.
       </p>
     </section>
   )

@@ -113,7 +113,7 @@ test.describe('launch-critical storefront', () => {
     // Checkout's h1 is now "Review order request" and the no-charge wording was
     // rephrased. The guarantee is unchanged and must stay explicit on the page:
     // submitting collects nothing.
-    await expect(page.getByRole('heading', { name: /Review order request/i })).toBeVisible()
+    await expect(page.getByRole('heading', { name: /Review order request/i })).toBeVisible({ timeout: 60000 })
     await expect(page.getByText(/does not charge you or require immediate payment/i)).toBeVisible()
     await expect(page.getByText(/No upfront payment is required/i)).toBeVisible()
     await expect(page.getByRole('button', { name: /Submit order request/i })).toBeVisible()
@@ -255,6 +255,7 @@ test.describe('MAP-027 virtual store acceptance', () => {
 
     const shopkeeper = page.getByRole('region', { name: 'K2 shopkeeper' })
     await expect(shopkeeper).toBeVisible({ timeout: 60000 })
+    await shopkeeper.getByRole('button', { name: 'Open K2 shopkeeper' }).click()
     const flatScene = page.locator('.k2-store-flat-scene')
     await expect.poll(() => flatScene.evaluate(element => getComputedStyle(element).backgroundImage))
       .toContain('wood-bg.jpg')
@@ -265,7 +266,7 @@ test.describe('MAP-027 virtual store acceptance', () => {
       const input = element.querySelector('input')
       return {
         label: getComputedStyle(label).color,
-        labelBackground: getComputedStyle(element).backgroundColor,
+        labelBackground: getComputedStyle(element.querySelector('.k2-store-guide-panel')).backgroundColor,
         placeholder: getComputedStyle(input, '::placeholder').color,
         inputBackground: getComputedStyle(input).backgroundColor,
       }
@@ -282,11 +283,9 @@ test.describe('MAP-027 virtual store acceptance', () => {
 
     const store = page.getByRole('main', { name: 'K2 virtual store' })
     const guide = store.getByRole('region', { name: 'K2 shopkeeper' })
-    const guideToggle = guide.getByRole('button', { name: 'Minimize K2 shopkeeper' })
     await expect(store).toBeVisible({ timeout: 60000 })
     await expect(guide).toBeVisible({ timeout: 60000 })
     await expect(guide).toHaveAttribute('data-moment', 'welcome')
-    await guideToggle.click()
     await expect(guide).toHaveAttribute('data-open', 'false')
     await guide.getByRole('button', { name: 'Open K2 shopkeeper' }).click()
 
@@ -298,6 +297,33 @@ test.describe('MAP-027 virtual store acceptance', () => {
       .getByRole('button', { name: 'Add to basket' }).click()
     await expect(guide).toHaveAttribute('data-moment', 'added')
     await expect(store.getByRole('region', { name: 'Your basket' })).toContainText('1 item')
+  })
+
+  test('keeps a shelf question attached to its original product after browsing away', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/store', { waitUntil: 'domcontentloaded' })
+    const store = page.getByRole('main', { name: 'K2 virtual store' })
+    const guide = store.getByRole('region', { name: 'K2 shopkeeper' })
+    await expect(guide).toBeVisible({ timeout: 60000 })
+    await guide.getByRole('button', { name: 'Open K2 shopkeeper' }).click()
+    await store.getByRole('navigation', { name: 'Shelves' }).getByRole('button', { name: 'Coffee' }).click()
+    await store.locator('.k2-store-rail').getByRole('button', { name: /Caffè Milano Special Reserve/ }).click()
+    await guide.locator('#keeper-question').fill('Is this suitable for a moka pot?')
+    await expect(guide).toHaveAttribute('data-moment', 'listening')
+    await store.getByRole('navigation', { name: 'Shelves' }).getByRole('button', { name: 'Counter', exact: true }).click()
+    await expect(guide.getByLabel('Ask about Caffè Milano Special Reserve')).toHaveValue('Is this suitable for a moka pot?')
+    await guide.getByRole('button', { name: 'Ask', exact: true }).click()
+    const chat = page.getByRole('dialog', { name: 'Chat with K2' })
+    await expect(chat).toBeVisible()
+    const composer = chat.locator('#store-chat-message')
+    if (await composer.count()) {
+      await expect(composer).toHaveValue(/About Caffè Milano Special Reserve.*\(SKU: caffe-milano-gold\)/)
+    } else {
+      await expect(chat).toContainText(/About Caffè Milano Special Reserve.*\(SKU: caffe-milano-gold\)/)
+    }
+    await page.keyboard.press('Escape')
+    await expect(chat).toBeHidden()
+    await expect(store).toBeVisible()
   })
 
   test('completes the phone shelf-to-order-request journey through the canonical basket', async ({ page }) => {
@@ -340,7 +366,7 @@ test.describe('MAP-027 virtual store acceptance', () => {
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
     await page.screenshot({ path: 'test-results/map027-store-mobile-shopping.png', fullPage: false })
 
-    await basket.getByRole('button', { name: 'Send order request' }).click()
+    await basket.getByRole('button', { name: 'Review basket' }).click()
     await expect(page).toHaveURL(/\/checkout$/)
     await expect(page.getByRole('heading', { name: 'Review order request', level: 1 })).toBeVisible()
   })

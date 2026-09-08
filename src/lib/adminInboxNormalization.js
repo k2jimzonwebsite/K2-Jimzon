@@ -21,6 +21,8 @@ export function normalizeAdminConversation(conversation) {
     lastReadAt: conversation.lastReadAt ?? conversation.last_read_at ?? null,
     resolvedAt: conversation.resolvedAt ?? conversation.resolved_at ?? null,
     lastMessageAt: conversation.lastMessageAt ?? conversation.last_message_at ?? null,
+    // The projection carried only the newest messages for this thread.
+    messagesTruncated: Boolean(conversation.messagesTruncated),
     time: (conversation.lastMessageAt ?? conversation.last_message_at)
       ? new Date(conversation.lastMessageAt ?? conversation.last_message_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
       : 'No activity',

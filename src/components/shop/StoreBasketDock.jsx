@@ -42,7 +42,7 @@ export default function StoreBasketDock({
 
       {basketCount > 0 && (
         <button type="button" onClick={onCheckout} className="k2-store-basket-checkout">
-          Send order request <span aria-hidden="true">→</span>
+          Review basket <span aria-hidden="true">→</span>
         </button>
       )}
 

@@ -85,6 +85,93 @@ means another paid request. Fields default unaccepted for recovered AI content;
 candidate acceptance requires a reason. Navigation is locked during an automatic
 request. Phone and full-modal fixture evidence passes locally; real staff acceptance
 remains recorded in MAP-018 / MAP-028 I-016.
+## 8 September wholesale/media recovery — local I-002
+
+Four-skill Admin product-register review preserves existing tokens, Source Sans,
+compact density, phone sheets and instant keyboard interactions. No new assets,
+fonts or motion. Phone fixture screenshots were inspected; full authenticated
+shell, physical device and deployed receipt acceptance remain unverified.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Triage fields remain editable during pending requests; browser supplies a missing timestamp. | Freeze reviewed status/reason, require a matching canonical receipt and offer exact retry. | Preserve operational truth after response loss. |
+| Photo/reason edits replace an unresolved assignment key; save can race uploads. | Disable the assignment fieldset and wait for upload completion. | Preserve the reviewed image set. |
+| Cleanup may lose the original assignment context; old callbacks affect a new actor. | Retain the assignment through cleanup and dispose late responses with the actor workspace. | Recover without a duplicate assignment or cross-session UI update. |
+
+30 recovery browser cases, 95 focused contracts and the Admin build pass.
+Recovery/evidence: `docs/evidence/20260908-media-retry/README.md`.
+
+
+## 8 September coupon recovery — MAP-028 I-002, local preparation
+
+Use using-superpowers, debugging/TDD/verification and andrej-karpathy, with all
+four UI skills (ui-ux-pro-max, impeccable product/harden, design-taste-frontend,
+emil-design-eng). Staff review financial configuration on phone or desktop;
+preserve Admin Source Sans, density, tokens, labelled controls and no decorative
+motion. Existing K2 identity takes precedence over generic skill aesthetics.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Edits replace command identity during unresolved writes. | Submitted fields freeze and protected retries reuse the exact payload/key. | Avoid a second financial configuration change after response loss. |
+| Opening disables the trigger before focus is captured. | Capture the trigger first and pass AdminDialog's optional returnFocusRef. | Restore keyboard position after success or cancellation. |
+| Refresh removes the register while closing. | Retain loaded rows during refresh. | Keep the invoking control available for focus recovery. |
+
+The 20-case recovery browser suite passes, including 375px phone and 844x390
+reduced-motion keyboard checks. Saved dialog images were inspected; these are
+isolated fixtures without the full authenticated Admin shell or live coupons.
+Evidence: `docs/evidence/20260908-coupon-retry/`. Rollback checkpoint:
+`docs/design-checkpoints/20260908-coupon-retry/`. Real-host/staff acceptance stays
+in I-002/MAP-025.
+
+## 8 September supplier retry — MAP-028 I-002, local preparation
+
+Apply the same four design skills and Admin product register used for fulfillment
+recovery. Preserve the supplier form fields, initial close-button focus, colors
+and mobile sheet presentation; use the shared AdminDialog lifecycle.
+
+| Before | After |
+| --- | --- |
+| Supplier fields and close controls remain available while the request is pending. | Submitted values freeze; pending dismissal is blocked and an uncertain protected write offers the same-payload/key retry. |
+| An unavailable response can say “not saved.” | Recovery explicitly states the supplier may already be saved; legacy mode directs reconciliation of the supplier directory. |
+| A mounted supplier form can survive a staff identity change. | Admin keys the supplier workspace to staff identity and role; disposed operations cannot close a new dialog. |
+
+Checkpoint: `docs/design-checkpoints/20260908-supplier-retry/`. The pending-input
+browser regression reproduced the old defect; the final 13-case dialog browser
+suite, 88 focused contracts and Admin build pass. Target-host/staff acceptance
+and remaining caller work stay in I-002.
+
+## 8 September checkout delivery — MAP-028 I-003, local preparation
+
+Same four design skills, using the storefront brand register and existing
+Fraunces/Source Sans 3, cream/wood identity. No new typography, color or motion.
+
+| Before | After |
+| --- | --- |
+| A standalone quote can create an “Order total” and a final-charge promise, while the order payload omits the quote. | Checkout shows “Products total” and “Quoted after review”; the customer approves courier delivery separately before dispatch. |
+| A destination picker implies an exact saved fee without order binding. | That unbound pilot is unmounted until immutable fee acceptance is implemented. |
+
+Recovery: `docs/design-checkpoints/20260908-checkout-delivery/`. I-003 owns the
+remaining order-bound quotation work; this scoped honesty fix is not its closure.
+
+## 8 September fulfillment recovery — MAP-028 I-002, local preparation
+
+Warehouse/custody staff review and submit exact record changes on desktop or
+phone. Preserve existing Admin tokens, density, typography and shared dialog;
+no decorative motion is added. Skills: using-superpowers, debugging/TDD/
+verification, andrej-karpathy, ui-ux-pro-max, impeccable (product/harden),
+design-taste-frontend and emil-design-eng. Owner identity/density rules override
+generic animation, palette and card suggestions.
+
+| Before | After |
+| --- | --- |
+| Delivery fields and cancellation stay enabled during save; handover note stays editable. | Details freeze while pending, then remain fixed after an uncertain result. Protected retry keeps the exact key and payload. |
+| Delivery uses a dialog shell without the shared focus lifecycle. | Shared AdminDialog traps focus, blocks accidental pending dismissal and restores the opener after success. |
+| Confirmation, box assignment and lot transfer submit directly with fresh keys. | An exact record/payload review precedes submission; the same retained dialog handles waiting, rejection and receipt retry. |
+| A missing handover response can be described as not recorded. | Uncertainty explicitly says the command may already be saved. Definitive denial reopens correction; legacy uncertainty requires reconciliation. |
+
+Recovery checkpoint: `docs/design-checkpoints/20260908-fulfillment-retry/`.
+Browser evidence and remaining complete-workspace/provider acceptance live in
+I-002 and System Brain. This is not a deployed behavior claim.
 
 ### Calm Admin, distinct operational states — IDEA-20260906-06
 
@@ -110,6 +197,33 @@ focus outline and 44px target. Show identity, status, read time and batch limits
 loading, error, partial and empty states remain distinct. No automatic calls or
 new motion. Desktop and phone fixture screenshots are retained in
 `docs/evidence/20260906-workflow-api/`. Full command interactions remain MAP-028 I-016.
+### Ecommerce audit direction — 6 September 2026
+
+Launch FAQ copy distinguishes planned manual GCash/QR from activated payment
+instructions and avoids fixed delivery dates without a confirmed quote. Keep
+this concise and customer-facing; do not display engineering gate identifiers.
+
+The inspected phone product page places tabs/knowledge ahead of identity, price
+and purchase controls; the optional-store basket overlaps the Counter welcome
+area. These are observed current-state issues, not implemented design changes.
+Required direction: product-first mobile hierarchy, earlier approved merchandise
+on Home, compact readable catalog browsing, 44px controls, resilient media and
+non-overlapping store guidance. Preserve wood/cream/Fraunces/terracotta and the
+separate dense Admin register. Keep motion purposeful and reduced-motion safe;
+landing JS is already 149.60/150.00 kB gzip. All actionable scope, Before/After
+review and acceptance criteria live only in MASTER_ACTION_PLAN section I
+(especially I-006, I-008, I-009 and I-015). Do not interpret this direction as a
+verified redesign or invent product imagery, reviews, popularity or scarcity.
+
+### Admin physical-lot packing contract
+
+Show the selected allocation's SKU, batch, expiry, box, location and custodian
+beside the physical confirmation control. Changing allocation clears that
+confirmation; unknown identity disables it. During a pending or uncertain scan,
+lock the order, barcode and lot controls and offer the same-operation retry.
+Use readable wrapping details and labelled native controls on phones. This
+prepared interaction is implemented in `OmniOperationsHub.jsx` and exercised
+by the isolated payment/packing harness; real staff acceptance remains open.
 
 ## 1. Overview
 
@@ -139,7 +253,50 @@ Frequent and keyboard-driven staff actions remain instant. Reduced motion and
 complete loading, empty, error, permission, conflict, and recovery states are
 mandatory.
 
+### Admin Inbox draft and completion contract
+
+Inbox drafts belong to one mounted staff actor and one conversation. Switching
+customers restores that customer's draft; switching staff or leaving the
+workspace discards route-memory drafts. Drafts never persist to browser storage.
+A successful note/reply clears only the exact submitted draft version, preserving
+edits made while it was pending. Success, error and history feedback must belong
+to the currently selected conversation visit, including when staff leave and
+return before an older request resolves. Workflow controls keep stable component
+identity so typing, selection and keyboard focus survive parent updates. Keep
+the existing compact Admin typography and controls; no decorative motion is
+added to these frequent staff actions.
+
+Background refreshing is silent by design: the full loading state belongs to a
+genuinely empty first load only, and a periodic refresh never blanks, reorders
+under, or re-enters a queue staff are working in. When a background refresh
+fails, the last loaded queue stays on screen behind one honest status line —
+"Live updates paused. This queue is the last loaded copy — refresh before acting
+on it." — rather than an empty list or a silent stale view claiming to be
+current. Unread state is canonical: a read receipt clears only what was read at
+the moment it was issued, so a message that arrives afterwards stays visibly
+unread.
+
+The conversation event timeline belongs to the workspace at every width, not to a
+desktop-only column: below 1280px it appears as a disclosure beside the mobile
+workflow controls. It carries four distinct states — loading, failure with a
+retry control, genuinely empty, and the timeline itself. An unreadable timeline
+is never presented as an empty one.
+
+A command the Inbox could not confirm is not shown as a failure. It gets its own
+amber alert saying the command may already be saved and that the refreshed
+conversation must be checked before it is sent again, the unsent draft is kept,
+and the crimson failure line stays reserved for outcomes that certainly did not
+apply. Leaving the page while such a command is unresolved is guarded.
+
 ### Admin dialog interaction contract
+
+The payment-evidence dialog preserves rejected attempts and offers corrected
+evidence only through the protected workflow. It names the independent verifier
+requirement, keeps evidence on an uncertain response, freezes that payload for
+same-operation retry, and refuses dismissal while saving. It uses the shared
+focus/Escape/return primitive, 44px controls and a viewport-contained scrolling
+form. Local 375×812, 844×390 and 1280×900 browser checks pass; actual-device and
+authenticated staff acceptance remain MAP-023/MAP-025 scope.
 
 Every file matching `src/views/admin/*Modal.jsx` uses the shared headless
 `AdminDialog` primitive. The primitive adds behavior without restyling the
@@ -380,11 +537,19 @@ a dark site preference, and does not leave ordinary Storefront chrome painted
 behind it.
 
 The store uses one synchronized guide layer. The 2D shopkeeper is a functional
-scene overlay that can pop open or tuck away; it carries readable shelf/product
+scene overlay that starts tucked on every viewport and can pop open; it carries readable shelf/product
 copy and the room's only real-person question form. The single 3D clerk is an expressive
 spatial mirror, not a second agent: it moves among authored Counter/shelf
 positions and receives wave, point, present, and celebrate intent from the same
-derived welcome/explore/inspect/added state. It does not pathfind freely or
+derived welcome/explore/inspect/added/listening/reading/handoff/unavailable state.
+The September local replacement is an original cartoon/anime clerk with a raised
+K2 cap badge, cream blouse, olive apron and burgundy cap. Named joints blend
+interruptible poses; a selected item uses its canonical label on a stylized held
+prop, never an invented packaging photograph. The original procedural clerk is
+the model-loading/failure fallback. Both axes of the camera frame include clerk
+bounds; the counter speech cloud clears the taller cap. Browser composition and
+motion acceptance of this replacement remain open under MAP-027.
+It does not pathfind freely or
 repeat a large speech cloud over shelf products. Her rendered scale remains
 human and stable across Counter and shelf scenes. Every product position is the
 midpoint of a deliberately wide gap between adjacent shelf bays, at an aisle
@@ -408,7 +573,11 @@ The basket is always visible as a wood-and-canvas dock and fills with brief
 parcel feedback only after the canonical basket changes. Count, names, and
 subtotal come from StoreContext; editing and order review stay in the canonical
 checkout. Ambient glow, grain, pendant light, and dust add depth behind controls
-and never intercept input. On phone widths the guide starts tucked, the basket
+and never intercept input. The dock's Review basket action leads to checkout;
+adding goods does not send an order. Refusal has persistent inline feedback.
+A draft keeps its original product label after navigation; chat reopening keeps
+unsent text and the thread during this store visit. New questions require an
+explicit choice when an unsent draft already exists. On phone widths the basket
 compacts, and both remain clear of the non-shrinking product rail. Reduced
 motion removes pop, drift, walk, wave, and parcel-drop animation without
 removing guide or basket functions.
@@ -853,6 +1022,20 @@ Tactile, expansive, and generously rounded. Containers embrace 3xl geometries an
 - **Don't** replace the storefront canvas or full-width light-mode sections with pure white.
 - **Don't** use literal Italian-flag clichés (tricolore stripes everywhere, Tuscan-villa stock, pizza-parlor kitsch).
 
+## Workflow record access — 6 September 2026
+
+Workflow-map interaction addition (IDEA-20260906-04): the detail drawer includes
+an explicit record-loading panel for catalog/consignment nodes, using the existing
+Admin typography, dark surfaces, focus outline and 44px buttons. Read results
+show record identity, status and fetch time; batch-limit wording avoids false
+queue totals. No animation or automatic calls on node selection are added.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Only guide examples and navigation | Explicit authenticated record reads alongside the guide | Ground the step in actual returned data |
+| No API feedback in the drawer | Loading, failure, empty and loaded states; old-node reads cancelled | Prevent stale records and false completion claims |
+
+
 ## Additive hero direction — 6 September 2026
 
 IDEA-20260906-03 / MAP-028 I-009: owner requests visual work first and explicitly
@@ -879,3 +1062,7 @@ three-item preview. Wider first-screen/mobile hierarchy acceptance stays in I-00
 Source: `src/components/home/Hero.jsx` and isolated `Hero.css`. Recovery:
 `docs/design-checkpoints/20260906-hero-before-additions/README.md`. Browser/build
 evidence and its fixture limitations: `docs/evidence/20260906-hero-additions/`.
+
+
+### 8 September store orientation - IDEA-20260908-02
+The owner target is the architectural `/store`, separate from catalog/shop. Preserve existing wood, room models and camera behavior. Phone landscape uses one navigation row and a compact shelf introduction; selected goods take precedence over repeated introductory copy. Phone empty basket decoration is hidden, filled basket leaves zoom space, and the minimized keeper uses its labeled avatar control. Portrait retains stacked room and independently scrollable detail rail. Before/after screenshots and exact pre-edit recovery: `docs/evidence/20260908-store-orientation/` and `docs/design-checkpoints/20260908-store-orientation/`. These are fabricated local-browser evidence, not deployed/physical-device acceptance.

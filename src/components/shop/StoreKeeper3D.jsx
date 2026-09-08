@@ -129,7 +129,7 @@ function Mouth({ shape = 'closed' }) {
 /**
  * The speech cloud, hanging over her head the way a game draws one.
  */
-function SpeechCloud({ message }) {
+export function SpeechCloud({ message, liftCm = 0 }) {
   const group = useRef(null)
   const map = useMemo(() => speechCloudTexture(message), [message])
   const life = useRef(0)
@@ -143,13 +143,13 @@ function SpeechCloud({ message }) {
     const t = life.current
     const eased = t < 1 ? 1 - Math.pow(1 - t, 3) * Math.cos(t * Math.PI * 1.2) : 1
     node.scale.setScalar(Math.max(0.001, eased))
-    node.position.y = cm(CLOUD.centreCm) + Math.sin(state.clock.elapsedTime * 1.4) * cm(2.2)
+    node.position.y = cm(CLOUD.centreCm + liftCm) + Math.sin(state.clock.elapsedTime * 1.4) * cm(2.2)
   })
 
   if (!map) return null
 
   return (
-    <group ref={group} position={[cm(CLOUD.offsetXCm), cm(CLOUD.centreCm), cm(10)]}>
+    <group ref={group} position={[cm(CLOUD.offsetXCm), cm(CLOUD.centreCm + liftCm), cm(10)]}>
       <mesh>
         <planeGeometry args={[cm(CLOUD.widthCm), cm(CLOUD.heightCm)]} />
         <meshBasicMaterial map={map} transparent toneMapped={false} depthWrite={false} />

@@ -152,7 +152,7 @@ test('coupon restoration is database-backed, private, limited, and auditable', a
   expect(manager).toContain('Archive')
   expect(manager).not.toContain('deleteCoupon')
   expect(admin).toContain("coupons:           { label: 'Coupons'")
-  expect(admin).toContain("section === 'coupons' ? <CouponManager />")
+  expect(admin).toMatch(/section === 'coupons' \? <CouponManager\s+key=\{/)
 })
 
 test('MAP-023 has a portable last-unit concurrency rehearsal', async () => {

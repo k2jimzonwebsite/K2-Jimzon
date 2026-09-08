@@ -11,7 +11,26 @@ export function deriveStoreMoment({
   product = null,
   greeted = true,
   basketPulse = 0,
+  basketError = '',
+  questionActive = false,
+  sheet = null,
 } = {}) {
+  if (sheet === 'chat' || questionActive) {
+    return {
+      id: sheet === 'chat' ? 'handoff' : 'listening',
+      expression: 'listening', gesture: 'listen', accent: 'calm',
+      message: sheet === 'chat'
+        ? 'Your question stays with the item. Review it in the conversation before sending.'
+        : 'What would you like to know? Your question will stay with the item you started asking about.',
+    }
+  }
+  if (sheet === 'faq') {
+    return { id: 'reading', expression: 'listening', gesture: 'read', accent: 'calm',
+      message: 'Here are the ordering details and approved product answers.' }
+  }
+  if (basketError) {
+    return { id: 'unavailable', expression: 'listening', gesture: 'think', accent: 'calm', message: basketError }
+  }
   if (basketPulse > 0) {
     return {
       id: 'added',

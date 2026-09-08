@@ -3,8 +3,21 @@ import { BriefcaseIcon, UserIcon } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
 import { adminBffEnabled, getAdminCustomers, getAdminWholesaleInquiries, reviewAdminWholesaleInquiry } from '../../services/adminBffService'
 import { EmptyState, MetricRail, SectionHeading, StateBanner, StatusPill, WorkspaceIntro } from './AdminWorkspaceUi'
+import { AdminDialog } from '../../components/ui/AdminDialog'
+import { useRetainedFulfillmentCommand } from './useRetainedFulfillmentCommand'
 
 const LEGACY_PROJECTION = 'id,email,role,created_at,updated_at'
+
+async function sendWholesaleReview(command, key) {
+  const result = await reviewAdminWholesaleInquiry(command.inquiryReference, command.toStatus, command.reason, key)
+  const receipt = result.result
+  if (result.ok && (receipt?.publicReference !== command.inquiryReference
+    || receipt?.status !== command.toStatus || typeof receipt?.updatedAt !== 'string'
+    || !Number.isFinite(Date.parse(receipt.updatedAt)) || receipt.commercialAuthorityAvailable !== false)) {
+    return { ok: false, code: 'WHOLESALE_COMMAND_UNAVAILABLE' }
+  }
+  return result
+}
 
 function legacyCustomer(profile) {
   return {
@@ -43,22 +56,26 @@ export default function Customers() {
   const [reviewStatus, setReviewStatus] = useState('under_review')
   const [reviewReason, setReviewReason] = useState('')
   const [reviewError, setReviewError] = useState('')
-  const [savingReview, setSavingReview] = useState(false)
+  const reviewOpenerRef = useRef(null)
 
   const openReview = inquiry => {
+    if (reviewing) return
+    reviewOpenerRef.current = document.activeElement
     setReviewing(inquiry)
     setReviewStatus(inquiry.status==='closed'?'under_review':inquiry.status==='under_review'?'closed':'under_review')
     setReviewReason(''); setReviewError('')
   }
 
-  const saveReview = async event => {
+  const saveReview = async (event, operation) => {
     event.preventDefault()
     if(!reviewing||reviewReason.trim().length<3) return
-    setSavingReview(true); setReviewError('')
-    const result=await reviewAdminWholesaleInquiry(reviewing.publicReference,reviewStatus,reviewReason.trim())
-    if(!result.ok){setReviewError(result.error);setSavingReview(false);return}
-    setInquiries(current=>current.map(inquiry=>inquiry.publicReference===reviewing.publicReference?{...inquiry,status:result.result?.status||reviewStatus,updatedAt:result.result?.updatedAt||new Date().toISOString()}:inquiry))
-    setSavingReview(false); setReviewing(null)
+    setReviewError('')
+    const result = await operation.run({ inquiryReference: reviewing.publicReference, toStatus: reviewStatus, reason: reviewReason.trim() })
+    if (!result) return
+    if (!result.ok) { setReviewError(result.error); return }
+    setInquiries(current => current.map(inquiry => inquiry.publicReference === result.result.publicReference
+      ? { ...inquiry, status: result.result.status, updatedAt: result.result.updatedAt } : inquiry))
+    setReviewing(null)
   }
 
   const fetchCustomers = useCallback(async () => {
@@ -103,7 +120,7 @@ export default function Customers() {
   }), [customers, metricsAvailable])
 
   return <div className="mx-auto max-w-[1600px] space-y-5 text-white">
-    <WorkspaceIntro eyebrow="Customer identity" title="Customers" description="Account, guest, and channel identities stay separate until ownership is verified. Similar names, email addresses, and phone numbers are never merged automatically." actions={<button type="button" onClick={fetchCustomers} disabled={loading} className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-4 text-sm font-semibold disabled:opacity-40">{loading ? 'Refreshing…' : 'Refresh'}</button>} />
+    <WorkspaceIntro eyebrow="Customer identity" title="Customers" description="Account, guest, and channel identities stay separate until ownership is verified. Similar names, email addresses, and phone numbers are never merged automatically." actions={<button type="button" onClick={fetchCustomers} disabled={loading || Boolean(reviewing)} className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-4 text-sm font-semibold disabled:opacity-40">{loading ? 'Refreshing…' : 'Refresh'}</button>} />
 
     {error && <StateBanner tone="danger">{error}</StateBanner>}
     {!error && <StateBanner tone="info">{mode === 'canonical' ? 'Canonical customer identities are available. Order and conversation totals appear only when every supporting query succeeds.' : 'Current view contains registered Supabase customer profiles only. Guest and marketplace identities remain unavailable until the hybrid identity migration is activated.'}</StateBanner>}
@@ -116,7 +133,7 @@ export default function Customers() {
     ]} />
 
     <WholesaleInquirySection secure={secure} inquiryError={inquiryError} loading={loading} inquiries={inquiries} onReview={openReview} />
-    {reviewing&&<WholesaleReviewDialog inquiry={reviewing} status={reviewStatus} setStatus={setReviewStatus} reason={reviewReason} setReason={setReviewReason} error={reviewError} saving={savingReview} onClose={()=>!savingReview&&setReviewing(null)} onSubmit={saveReview} />}
+    {reviewing&&<WholesaleReviewDialog inquiry={reviewing} status={reviewStatus} setStatus={setReviewStatus} reason={reviewReason} setReason={setReviewReason} error={reviewError} returnFocusRef={reviewOpenerRef} onClose={()=>setReviewing(null)} onSubmit={saveReview} />}
 
     <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
       <div className="p-4"><SectionHeading title="Identity directory" description="This is an operational identity view, not a marketing broadcast list. Contact and channel provenance remains attributable." count={customers.length} /></div>
@@ -145,19 +162,18 @@ function WholesaleInquiryCard({inquiry,onReview}) {
   return <article className="rounded-adm-sm border border-adm-line bg-adm-sunken p-4"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="font-mono text-xs font-semibold text-blue">{inquiry.publicReference}</p><h3 className="mt-1 truncate font-semibold">{inquiry.organizationName}</h3></div><StatusPill tone="info">{inquiry.status?.replaceAll('_',' ')}</StatusPill></div><p className="mt-3 text-sm leading-6 text-white/75">{inquiry.targetItems}</p><dl className="mt-3 grid gap-2 text-xs text-white/50"><div><dt className="sr-only">Contact</dt><dd>{inquiry.contactName} · {inquiry.email || inquiry.phone || 'Contact unavailable'}</dd></div><div><dt className="sr-only">Volume and area</dt><dd>{inquiry.volumeBand?.replaceAll('_',' ')} · {inquiry.deliveryArea}</dd></div></dl><p className="mt-3 border-t border-adm-line pt-3 text-xs font-semibold text-white/45">Inquiry only · no commercial approval</p><button type="button" onClick={()=>onReview(inquiry)} className="mt-3 min-h-11 w-full rounded-adm-sm border border-adm-line bg-white/5 px-4 text-sm font-semibold">Review inquiry</button></article>
 }
 
-export function WholesaleReviewDialog({inquiry,status,setStatus,reason,setReason,error,saving,onClose,onSubmit}) {
+export function WholesaleReviewDialog({inquiry,status,setStatus,reason,setReason,error,saving = false,onClose,onSubmit,returnFocusRef}) {
   const options=inquiry.status==='submitted'?['under_review','closed']:inquiry.status==='under_review'?['submitted','closed']:['under_review']
-  const dialogRef=useRef(null)
-  const closeRef=useRef(onClose); const savingRef=useRef(saving)
-  closeRef.current=onClose; savingRef.current=saving
-  useEffect(()=>{
-    const previousOverflow=document.body.style.overflow; document.body.style.overflow='hidden'
-    dialogRef.current?.querySelector('select')?.focus()
-    const keydown=event=>{if(event.key==='Escape'&&!savingRef.current) closeRef.current()}
-    document.addEventListener('keydown',keydown)
-    return()=>{document.body.style.overflow=previousOverflow;document.removeEventListener('keydown',keydown)}
-  },[])
-  return <div className="fixed inset-0 z-50 grid place-items-end bg-black/70 p-0 sm:place-items-center sm:p-6" role="presentation" onMouseDown={event=>event.target===event.currentTarget&&onClose()}><section ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="wholesale-review-title" className="max-h-[90vh] w-full overflow-y-auto rounded-t-adm border border-adm-line bg-adm-surface p-5 shadow-2xl sm:max-w-lg sm:rounded-adm"><p className="font-mono text-xs font-semibold text-blue">{inquiry.publicReference}</p><h2 id="wholesale-review-title" className="mt-1 text-xl font-bold">Review {inquiry.organizationName}</h2><p className="mt-2 text-sm leading-6 text-white/60">This records triage only. It cannot approve a buyer, price, credit, stock, terms, or delivery.</p><form className="mt-5 space-y-4" onSubmit={onSubmit}><label className="block text-sm font-semibold" htmlFor="wholesale-review-status">New status<select id="wholesale-review-status" value={status} onChange={event=>setStatus(event.target.value)} className="mt-2 min-h-11 w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-white">{options.map(option=><option key={option} value={option}>{option.replaceAll('_',' ')}</option>)}</select></label><label className="block text-sm font-semibold" htmlFor="wholesale-review-reason">Reason<textarea id="wholesale-review-reason" required minLength={3} maxLength={500} value={reason} onChange={event=>setReason(event.target.value)} rows={4} className="mt-2 w-full rounded-adm-sm border border-adm-line bg-adm-sunken p-3 text-white" placeholder="What staff verified or why this inquiry is being closed" /></label>{error&&<StateBanner tone="danger">{error}</StateBanner>}<div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onClose} disabled={saving} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button><button type="submit" disabled={saving||reason.trim().length<3} className="min-h-11 rounded-adm-sm bg-blue px-4 font-semibold text-white disabled:opacity-40">{saving?'Recording…':'Record status'}</button></div></form></section></div>
+  const statusRef = useRef(null)
+  const operation = useRetainedFulfillmentCommand(sendWholesaleReview)
+  const locked = saving || operation.locked
+  const close = () => { if (!locked) onClose() }
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = previousOverflow }
+  }, [])
+  return <div className="fixed inset-0 z-50 grid place-items-end bg-black/70 p-0 sm:place-items-center sm:p-6" role="presentation" onMouseDown={event=>event.target===event.currentTarget&&close()}><AdminDialog onClose={close} closeDisabled={locked} initialFocusRef={statusRef} returnFocusRef={returnFocusRef} labelledBy="wholesale-review-title"><section className="max-h-[calc(100dvh-1.5rem)] w-full overflow-y-auto rounded-t-adm border border-adm-line bg-adm-surface p-5 shadow-2xl sm:max-w-lg sm:rounded-adm"><p className="font-mono text-xs font-semibold text-blue">{inquiry.publicReference}</p><h2 id="wholesale-review-title" className="mt-1 text-xl font-bold">Review {inquiry.organizationName}</h2><p className="mt-2 text-sm leading-6 text-white/60">This records triage only. It cannot approve a buyer, price, credit, stock, terms, or delivery.</p><form className="mt-5 space-y-4" onSubmit={event => onSubmit(event, operation)}><label className="block text-sm font-semibold" htmlFor="wholesale-review-status">New status<select ref={statusRef} disabled={locked} id="wholesale-review-status" value={status} onChange={event=>setStatus(event.target.value)} className="mt-2 min-h-11 w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-white">{options.map(option=><option key={option} value={option}>{option.replaceAll('_',' ')}</option>)}</select></label><label className="block text-sm font-semibold" htmlFor="wholesale-review-reason">Reason<textarea disabled={locked} id="wholesale-review-reason" required minLength={3} maxLength={500} value={reason} onChange={event=>setReason(event.target.value)} rows={4} className="mt-2 w-full rounded-adm-sm border border-adm-line bg-adm-sunken p-3 text-white" placeholder="What staff verified or why this inquiry is being closed" /></label>{(operation.error || error) && <StateBanner tone={operation.uncertain ? "warning" : "danger"}>{operation.error || error}</StateBanner>}<div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={close} disabled={locked} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button><button type="submit" disabled={saving||operation.busy||reason.trim().length<3} className="min-h-11 rounded-adm-sm bg-blue px-4 font-semibold text-white disabled:opacity-40">{saving || operation.busy ? 'Recording…' : operation.uncertain ? 'Retry same command' : 'Record status'}</button></div></form></section></AdminDialog></div>
 }
 
 function CustomerRow({ customer, metricsAvailable }) {

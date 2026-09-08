@@ -21,12 +21,13 @@ export default function StoreSidePanel({
   onOpenProduct,
   onAskPasabuy,
   onCloseProduct,
+  basketError,
 }) {
   const shelfProducts = activeShelf?.products || []
   const categoryShelves = shelves.filter(shelf => !shelf.isCounter)
 
   return (
-    <div className="k2-store-side-console">
+    <div className="k2-store-side-console" data-inspecting={Boolean(product)}>
       <header className="k2-store-side-intro">
         <p className="k2-store-side-eyebrow">Shelf concierge</p>
         <p className="k2-store-side-location">Now browsing</p>
@@ -42,6 +43,7 @@ export default function StoreSidePanel({
       {product ? (
         <ShelfProductPanel
           product={product}
+          basketError={basketError}
           cartQuantity={cartQuantity}
           onAddToCart={onAddToCart}
           onOpenProduct={onOpenProduct}
@@ -117,7 +119,7 @@ export default function StoreSidePanel({
       </div>
 
       <p className="k2-store-side-note">
-        Your basket creates an order request. K2 confirms stock before sending payment instructions.
+        Browse, choose your goods, then review your basket at checkout. Nothing is ordered until you submit your request.
       </p>
     </div>
   )

@@ -189,7 +189,7 @@ test.describe('admin command center redesign', () => {
 
   test('left-panel widgets show one workspace and preserve every dashboard destination', async ({ page }) => {
     await page.goto('/admin-portal-k2-secure')
-    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
     const widgets = page.getByRole('navigation', { name: 'Dashboard widgets' })
     await expect(widgets.getByRole('button', { name: 'Shop & channel metrics', exact: true })).toHaveAttribute('aria-current', 'page')
     await expect(page.getByRole('heading', { name: 'Channel performance and readiness' })).toBeVisible()

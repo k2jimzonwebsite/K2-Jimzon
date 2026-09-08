@@ -72,7 +72,8 @@ export const CLOUD = Object.freeze({
 })
 
 /** The highest thing the counter scene has to hold. */
-export const COUNTER_CONTENT_TOP_CM = CLOUD.centreCm + CLOUD.heightCm / 2
+export const ANIME_CLOUD_LIFT_CM = 24
+export const COUNTER_CONTENT_TOP_CM = CLOUD.centreCm + CLOUD.heightCm / 2 + ANIME_CLOUD_LIFT_CM
 
 /** How far up the counter the greeting shot starts. */
 export const COUNTER_FRAME_BASE_CM = 45
@@ -92,11 +93,12 @@ export const COUNTER = Object.freeze({
  * the shopkeeper's legs were all below the bottom edge. The distance is now
  * solved from what must be visible instead of chosen by eye.
  *
- * Only the vertical extent matters: a perspective camera's vertical field of
- * view is fixed, so this is correct at every viewport aspect ratio.
+ * Fit both axes at the nearest content plane so narrow viewports retain the
+ * clerk beside the shelf. The wider extent determines the resting distance.
  */
 export function computeFraming({
   height, fov = FOV, floorY = FLOOR_Y, headroom = 2.6, underhang = 1.6, mode = 'shelf',
+  aspect = 1, left = 0, right = 0, front = 0,
 }) {
   // The counter is a character scene, not a shelf run, and framing it like one
   // was the whole problem: at the shelf distance her head was 9.5% of the frame
@@ -111,9 +113,11 @@ export function computeFraming({
     : height + headroom
 
   const span = top - bottom
+  const lens = 2 * Math.tan((fov * Math.PI) / 360)
   return {
+    targetX: (left + right) / 2,
     target: (bottom + top) / 2,
-    distance: span / (2 * Math.tan((fov * Math.PI) / 360)),
+    distance: Math.max(span / lens, (right - left) / (lens * Math.max(0.1, aspect))) + front,
     bottom,
     top,
   }

@@ -1,11 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   adminBffEnabled,
+  commandOutcomeIsUncertain,
+  createRetainedOperationSession,
   extendReservationBff,
   getAdminReservationsBff,
   releaseExpiredReservationsBff,
+  UNCERTAIN_COMMAND_NOTICE,
 } from '../../services/adminBffService'
 import { RESERVATION_POLICY, extensionRefusalReason } from '../../lib/reservationPolicy'
+import { UNAVAILABLE_LABEL } from '../../lib/overviewAvailability'
 import {
   EmptyState, MetricRail, SectionHeading, StateBanner, StatusPill, WorkspaceIntro,
   primaryButton, secondaryButton,
@@ -24,8 +28,12 @@ const EXTENSION_CHOICES = [
   ['7 days', 10080],
 ]
 
-const operationKey = () =>
-  typeof globalThis.crypto?.randomUUID === 'function' ? globalThis.crypto.randomUUID() : ''
+// Holding stock twice, or releasing it twice, is a real inventory effect. A
+// retry after a lost response therefore has to reach the server as the same
+// logical operation rather than as a second one (MAP-028 H-002).
+const sendReservationCommand = (command, key) => (command.kind === 'release'
+  ? releaseExpiredReservationsBff(command.body, key)
+  : extendReservationBff(command.body, key))
 
 /** Human countdown. Overdue reads as overdue, never as a negative number. */
 function remaining(row) {
@@ -50,6 +58,23 @@ export default function ReservationHolds() {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [extend, setExtend] = useState(null)
+  const [uncertain, setUncertain] = useState('')
+  // A failed read must not become "no holds, nothing overdue" (MAP-028 H-005).
+  const [loadFailed, setLoadFailed] = useState(false)
+  const commands = useRef(null)
+  if (!commands.current) commands.current = createRetainedOperationSession(sendReservationCommand)
+  useEffect(() => () => commands.current?.dispose(), [])
+
+  // An unconfirmed hold command may already have moved stock. Say so instead of
+  // reporting a clean failure, and reload so staff decide from the real record.
+  const reportCommandResult = async (result) => {
+    if (commandOutcomeIsUncertain(result)) {
+      setUncertain(UNCERTAIN_COMMAND_NOTICE)
+      await load()
+      return
+    }
+    setError(result.error)
+  }
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -59,8 +84,8 @@ export default function ReservationHolds() {
       return
     }
     const result = await getAdminReservationsBff()
-    if (!result.ok) setError(result.error)
-    else { setData(result.data); setError('') }
+    if (!result.ok) { setError(result.error); setLoadFailed(true) }
+    else { setData(result.data); setError(''); setLoadFailed(false) }
     setLoading(false)
   }, [secure])
 
@@ -69,33 +94,48 @@ export default function ReservationHolds() {
   const rows = data?.reservations || []
   const overdue = data?.overdueCount || 0
 
-  const metrics = useMemo(() => [
-    { label: 'Active holds', value: String(rows.length) },
-    {
-      label: 'Overdue',
-      value: String(overdue),
-      tone: overdue ? 'text-crimson' : 'text-white',
-      detail: overdue ? 'Stock still counted as held' : 'Nothing past its deadline',
-    },
-    {
-      label: 'Lapsing within 10 min',
-      value: String(rows.filter((r) => !r.is_overdue && Number(r.minutes_remaining) <= 10).length),
-    },
-    { label: 'Default hold', value: `${RESERVATION_POLICY.defaultHoldMinutes} min` },
-  ], [rows, overdue])
+  const metrics = useMemo(() => {
+    // Without a successful read, every hold figure is unknown. Only the policy
+    // constant is still true, because it does not come from the database.
+    if (loadFailed || !data) {
+      return [
+        { label: 'Active holds', value: UNAVAILABLE_LABEL, detail: 'Holds could not be read' },
+        { label: 'Overdue', value: UNAVAILABLE_LABEL, detail: 'Unknown until this loads', tone: 'text-amber' },
+        { label: 'Lapsing within 10 min', value: UNAVAILABLE_LABEL, detail: 'Unknown until this loads' },
+        { label: 'Default hold', value: `${RESERVATION_POLICY.defaultHoldMinutes} min` },
+      ]
+    }
+    return [
+      { label: 'Active holds', value: String(rows.length) },
+      {
+        label: 'Overdue',
+        value: String(overdue),
+        tone: overdue ? 'text-crimson' : 'text-white',
+        detail: overdue ? 'Stock still counted as held' : 'Nothing past its deadline',
+      },
+      {
+        label: 'Lapsing within 10 min',
+        value: String(rows.filter((r) => !r.is_overdue && Number(r.minutes_remaining) <= 10).length),
+      },
+      { label: 'Default hold', value: `${RESERVATION_POLICY.defaultHoldMinutes} min` },
+    ]
+  }, [rows, overdue, loadFailed, data])
 
   const runRelease = async () => {
-    setWorking(true); setError(''); setNotice('')
-    const result = await releaseExpiredReservationsBff({
-      limit: 500,
-      reason: 'Staff released every hold whose deadline had already passed.',
-    }, operationKey())
-    if (!result.ok) setError(result.error)
+    setWorking(true); setError(''); setNotice(''); setUncertain('')
+    const result = await commands.current.run({
+      kind: 'release',
+      body: {
+        limit: 500,
+        reason: 'Staff requested a bounded release of eligible expired purchase holds.',
+      },
+    })
+    if (!result.ok) await reportCommandResult(result)
     else {
       const count = result.data?.result?.released_count ?? 0
       setNotice(count === 0
         ? 'Nothing was overdue. No stock moved.'
-        : `${count} expired hold${count === 1 ? '' : 's'} released. Those units are sellable again.`)
+        : `${count} expired hold${count === 1 ? '' : 's'} released in this batch. Review the refreshed queue for remaining holds; stock eligibility still applies.`)
       await load()
     }
     setWorking(false)
@@ -109,13 +149,16 @@ export default function ReservationHolds() {
       setError('Record why this hold is being extended, in at least ten characters.')
       return
     }
-    setWorking(true); setError(''); setNotice('')
-    const result = await extendReservationBff({
-      reservationId: extend.id,
-      minutes: extend.minutes,
-      reason: extend.reason.trim(),
-    }, operationKey())
-    if (!result.ok) setError(result.error)
+    setWorking(true); setError(''); setNotice(''); setUncertain('')
+    const result = await commands.current.run({
+      kind: 'extend',
+      body: {
+        reservationId: extend.id,
+        minutes: extend.minutes,
+        reason: extend.reason.trim(),
+      },
+    })
+    if (!result.ok) await reportCommandResult(result)
     else { setNotice(`Hold on ${extend.sku} extended.`); setExtend(null); await load() }
     setWorking(false)
   }
@@ -130,8 +173,10 @@ export default function ReservationHolds() {
         eyebrow="MAP-023"
         title="Stock holds"
         description="A cart holds nothing. Clicking purchase holds the exact lots for 30 minutes. Confirmation deducts them; an expired hold returns them to the sellable pool."
-        status={overdue ? `${overdue} overdue` : 'None overdue'}
-        statusTone={overdue ? 'danger' : 'success'}
+        status={loadFailed || !data
+          ? 'Hold status unavailable'
+          : overdue ? `${overdue} overdue` : 'None overdue'}
+        statusTone={loadFailed || !data ? 'warning' : overdue ? 'danger' : 'success'}
         actions={
           <button type="button" className={secondaryButton} onClick={load} disabled={working}>
             Refresh
@@ -140,6 +185,7 @@ export default function ReservationHolds() {
       />
 
       {error && <StateBanner tone="danger" role="alert">{error}</StateBanner>}
+      {uncertain && <StateBanner tone="warning" role="alert">{uncertain}</StateBanner>}
       {notice && <StateBanner tone="success">{notice}</StateBanner>}
 
       <MetricRail items={metrics} />

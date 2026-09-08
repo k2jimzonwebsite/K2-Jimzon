@@ -1384,3 +1384,75 @@
 }
 
 
+
+/* The name of the counter prop under the pointer.
+
+   The 3D props are the only things in the room besides a product that respond
+   to a click, and a brass dome reads as ornament until it is named. This sits
+   low and centre over the canvas so it never covers the goods, and it is
+   aria-hidden: the same three actions are on the rail and the header, where a
+   keyboard and a screen reader can reach them. */
+.k2-store-counter-hint {
+  position: absolute;
+  /* The bottom band of the canvas is taken: the browse call to action sits
+     centred and the basket dock sits right. The bottom-left corner is free —
+     the product name chip that lives there appears on shelf views, and these
+     props only exist at the counter. */
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 6;
+  margin: 0;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: rgb(43 43 43 / 0.88);
+  color: #FFF9EF;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 6px 18px rgb(43 43 43 / 0.22);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .k2-store-counter-hint {
+    animation: k2-store-counter-hint-in 140ms ease-out both;
+  }
+}
+
+@keyframes k2-store-counter-hint-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Keep the room usable in either phone orientation without remounting it. */
+@media (max-width: 900px) {
+  .k2-store-basket-dock[data-filled="false"] { display: none; }
+  .k2-store-basket-dock[data-filled="true"] { right: 4rem; }
+  .k2-store-guide[data-open="false"] { width: 5.2rem; }
+  .k2-store-guide[data-open="false"] .k2-store-guide-toggle {
+    grid-template-columns: 1fr;
+    padding: 0.1rem;
+  }
+  .k2-store-guide[data-open="false"] .k2-store-guide-toggle-copy,
+  .k2-store-guide[data-open="false"] .k2-store-guide-toggle-icon { display: none; }
+  .k2-store-side-console[data-inspecting="true"] .k2-store-side-intro { display: none; }
+  .k2-store-side-intro { padding: 0.8rem 1.25rem; }
+  .k2-store-side-eyebrow { display: none; }
+  .k2-store-side-location { margin-top: 0; }
+  .k2-store-side-intro h2 { font-size: 1.5rem; }
+  .k2-store-side-intro > p:last-of-type { margin-top: 0.35rem; }
+  .k2-store-side-count { margin-top: 0.4rem; padding: 0.15rem 0.4rem; }
+}
+
+@media (max-width: 900px) and (max-height: 480px) and (orientation: landscape) {
+  .k2-store-bar {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    padding: 0.4rem 0.75rem;
+  }
+  .k2-store-shelfnav { grid-column: 2; grid-row: 1; }
+  .k2-store-theme { grid-column: 3; }
+  .k2-store-leave { grid-column: 4; }
+  .k2-store-side-intro > p:last-of-type { display: none; }
+  .k2-store-side-intro { padding: 0.65rem 1.25rem; }
+}

@@ -30,16 +30,22 @@ export function validateFulfillmentCommand(action, body) {
     return { orderRequestId: uuid(body.orderRequestId), reason: text(body.reason, { required: true }) }
   }
   if (action === 'packing_scan') {
-    exactObject(body, ['orderRequestId', 'scannedCode'])
-    return { orderRequestId: uuid(body.orderRequestId), scannedCode: text(body.scannedCode, { required: true, max: 120 }) }
+    exactObject(body, ['orderRequestId', 'scannedCode', 'reservationId', 'lotConfirmed'])
+    if (body.lotConfirmed !== true) throw new Error('REQUEST_INVALID')
+    return { orderRequestId: uuid(body.orderRequestId), scannedCode: text(body.scannedCode, { required: true, max: 120 }), reservationId: uuid(body.reservationId), lotConfirmed: true }
   }
   if (action === 'payment_status') {
-    exactObject(body, ['orderRequestId', 'toStatus', 'evidenceNote'])
+    exactObject(body, ['orderRequestId', 'toStatus', 'evidenceNote', 'expectedPaymentStatus', 'expectedUpdatedAt'])
     const toStatus = text(body.toStatus, { required: true, max: 40 })
     if (!PAYMENT_STATES.has(toStatus)) throw new Error('REQUEST_INVALID')
     const evidenceNote = text(body.evidenceNote, { max: 1000 })
     if (toStatus !== 'awaiting_instructions' && !evidenceNote) throw new Error('REQUEST_INVALID')
-    return { orderRequestId: uuid(body.orderRequestId), toStatus, evidenceNote }
+    const expectedPaymentStatus = text(body.expectedPaymentStatus, { required: true, max: 40 })
+    const expectedUpdatedAt = text(body.expectedUpdatedAt, { required: true, max: 40 })
+    if (!new Set(['not_requested', ...PAYMENT_STATES]).has(expectedPaymentStatus)
+      || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$/.test(expectedUpdatedAt)
+      || !Number.isFinite(Date.parse(expectedUpdatedAt))) throw new Error('REQUEST_INVALID')
+    return { orderRequestId: uuid(body.orderRequestId), toStatus, evidenceNote, expectedPaymentStatus, expectedUpdatedAt }
   }
   if (action === 'delivery_details') {
     exactObject(body, ['orderRequestId', 'shippingAmount', 'courierName', 'trackingNumber', 'waybillUrl', 'customerConfirmed', 'note'])
@@ -92,6 +98,12 @@ export async function handleFulfillmentCommand(req, res, action) {
     const { data, error } = await authorized.client.rpc('execute_admin_fulfillment_command_v1', signed)
     if (error) {
       const providerCode = String(error.message || '')
+      if (['K2_PACKING_ALLOCATION_INVALID', 'K2_PACKING_LOT_CONFIRMATION_REQUIRED', 'K2_RESERVATION_RECONCILIATION_REQUIRED'].includes(providerCode)) {
+        return safeJson(res, 409, { error: { code: providerCode.slice(3) } })
+      }
+      const paymentErrors = ['VERSION_CONFLICT', 'ORDER_INELIGIBLE', 'STOCK_INELIGIBLE', 'TRANSITION_INVALID', 'EVIDENCE_REQUIRED', 'INDEPENDENT_REVIEW_REQUIRED']
+      const paymentError = paymentErrors.find(code => providerCode === `K2_PAYMENT_${code}`)
+      if (paymentError) return safeJson(res, 409, { error: { code: `PAYMENT_${paymentError}` } })
       if (providerCode.includes('K2_ADMIN_RATE_LIMITED')) {
         return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': '60' })
       }
@@ -114,8 +126,8 @@ export async function handleFulfillmentCommand(req, res, action) {
 
 export async function readFulfillmentData(client) {
   const [submitted, confirmed, lots, staff] = await Promise.all([
-    client.from('order_requests').select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,subtotal,discount_amount,shipping_amount,shipping_quote_status,courier_name,tracking_number,waybill_url,total_amount,payment_status,created_at,order_request_items(sku,product_name,quantity,line_total)').eq('status', 'submitted').order('created_at', { ascending: true }),
-    client.from('order_requests').select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,payment_status,subtotal,discount_amount,shipping_amount,total_amount,delivery_status,shipping_quote_status,courier_name,tracking_number,waybill_url,created_at,order_request_items(id,sku,product_name,quantity,line_total),inventory_reservations(order_request_item_id,sku,quantity,packed_quantity,status,batch_id)').eq('status', 'confirmed').order('created_at', { ascending: false }),
+    client.from('order_requests').select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,subtotal,discount_amount,shipping_amount,shipping_quote_status,courier_name,tracking_number,waybill_url,total_amount,payment_status,updated_at,created_at,order_request_items(sku,product_name,quantity,line_total)').eq('status', 'submitted').order('created_at', { ascending: true }),
+    client.from('order_requests').select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,payment_status,subtotal,discount_amount,shipping_amount,total_amount,delivery_status,shipping_quote_status,courier_name,tracking_number,waybill_url,updated_at,created_at,order_request_items(id,sku,product_name,quantity,line_total),inventory_reservations(id,order_request_item_id,sku,quantity,packed_quantity,status,batch_id)').eq('status', 'confirmed').order('created_at', { ascending: false }),
     client.from('product_batches').select('id,box_code,batch_code,sku,quantity,reserved_quantity,custodian,hub,inventory_status,expiry_date').gt('quantity', 0),
     client.from('user_profiles').select('id,email,full_name,role').in('role', ['Admin', 'Staff', 'SuperAdmin']),
   ])

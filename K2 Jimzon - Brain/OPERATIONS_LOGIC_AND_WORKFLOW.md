@@ -45,6 +45,46 @@ each PRIMARY/AFTER candidate before existing canonical save/attachment commands.
 AI never assigns stock, quantity, SKU, price, cost, expiry, custody, approval or
 publication. Missing configuration explains readiness and preserves manual work.
 Activation/recovery procedure: `docs/runbooks/PRODUCT_INTAKE_RUNBOOK.md`.
+**Checkout delivery commitment (I-003):** until the order endpoint revalidates
+and persists an immutable accepted delivery quote, checkout shows products total
+and delivery quoted for customer approval after review. A standalone rate lookup
+must not be added to a final order total or represented as the saved delivery
+charge. Re-enabling automatic fees requires the same accepted amount/locality/
+rate version in checkout, the canonical order, confirmation and Admin.
+
+**Fulfillment response loss (I-002):** a missing delivery/handover response does
+not prove that the write failed. Preserve the submitted reference/details and
+logical command identity, prevent edits while its outcome is unknown, and allow
+an exact receipt retry through the protected command boundary. A definitive
+rejection may reopen correction. A staff-session change invalidates the old
+dialog runtime; a late response must not close or confirm the new staff's form.
+Local UI acceptance and provider activation are separate evidence gates.
+
+The same rule applies to supplier identity creation: uncertainty must preserve
+the original name/contact/lead time/reason and receipt identity. A legacy write
+without protected receipts requires directory reconciliation before another
+creation attempt. Creating a supplier never implies approved pricing, a purchase
+order or receiving completion.
+
+Coupon creation and activation/pause/archive decisions follow the same response-
+loss rule. Preserve the exact code, discount, spend/redemption limits, dates,
+campaign flags, clue and reason (or decision target/action/reason) until receipt
+resolution. Freeze edits and accidental dismissal during protected uncertainty;
+definitive rejection permits correction. Legacy uncertainty requires register
+reconciliation. Returning from a dialog restores its invoking control, including
+when opening the dialog temporarily disables that control.
+
+Wholesale triage preserves its exact inquiry reference, target status and reason
+through uncertainty. Only a matching server receipt with a canonical timestamp
+may update the register; a missing or malformed receipt is unresolved, not a
+client-time success. Triage never grants commercial authority.
+
+Product media assignment must wait for active uploads. Freeze reviewed images
+and reason during an unresolved assignment; receipt retry preserves that exact
+payload. A successful assignment with pending cleanup is already saved and must
+reuse its original assignment receipt to finish cleanup. A late upload or save
+from a disposed staff workspace cannot change the replacement workspace. Legacy
+assignment uncertainty requires product-register reconciliation.
 
 **Admin usability contract (IDEA-20260906-06; target):** calmer presentation
 must preserve separately labelled product, stock, payment, fulfillment and API
@@ -66,6 +106,7 @@ Any future mutation requires exact record/payload review, canonical validation,
 idempotent receipt handling and explicit uncertainty recovery before acceptance.
 
 **Hero merchandising:**previews reuse the canonical listed catalog, active
+**Hero merchandising:** previews reuse the canonical listed catalog, active
 retail/wholesale pricing mode and product-detail path. Loading must not present
 development seed products as loaded listings. Do not imply recency, popularity,
 availability or payment confirmation from selection order. Missing imagery uses
@@ -73,6 +114,25 @@ a neutral placeholder. The owner's 6 September additive-design instruction keeps
 the existing hero content/actions; its visual rollback must preserve unrelated
 operational work.
 
+**Client-load recovery:** a failed code download must not automatically reload
+away customer drafts or unresolved staff-operation identities. Leave the failure
+available to the error boundary and make reload an explicit user action. Blocked
+browser storage must not turn recovery into a second exception.
+
+**Packing contract (MAP-023 H-016):** a shared product barcode proves only SKU
+identity. Staff must select the exact active allocation and confirm the physical
+batch, expiry and location before each unit is credited. Missing lot identity,
+an exhausted allocation or ineligible stock blocks the scan. Retrying an
+unconfirmed response must preserve the original payload and operation key until
+its receipt is reconciled. Reassignment remains a canonical reservation action.
+This is required behavior; deployment evidence belongs in System Brain.
+
+**Handover coverage (MAP-023 H-023):** every requested line must have its full
+quantity assigned and physically packed. Missing allocations cannot satisfy
+this check vacuously. Released historical allocations never enter current
+deduction totals. Counter discrepancies must abort the entire handover for
+reconciliation, preserving order state and events. This does not alter the
+OWNER-002 requirement to deduct at payment verification or confirmation.
 
 **Version:** 1.0
 **Approved working baseline:** 9 August 2026
@@ -102,6 +162,13 @@ If documents conflict, use this rulebook for target behavior and the System Brai
 - Technology reduces staff work without hiding uncertainty or inventing facts.
 - Never claim fake stock, payment, connector success, message delivery, sourcing evidence, or live metrics.
 - Secrets stay in secure backend storage, never browser code or browser storage.
+- Malformed browser cookies must not crash authorization. Invalid session/CSRF
+  values fail closed; diagnostic records must never expose raw credentials.
+- API request deadlines cover response-body download as well as headers.
+  A timed-out write has an uncertain outcome and must be reconciled before retry.
+- An unchanged unresolved staff message retry retains its operation identity.
+  New messages receive new identities after success; retry state must not cross
+  staff actors. Losing local state never proves a prior write failed.
 - Every inventory-changing, financial, destructive, or customer-facing decision is attributable and auditable.
 - Flexible business practices become controlled case workflows, not false fixed formulas.
 
@@ -161,6 +228,20 @@ flowchart LR
 
 ### Inventory
 
+- Basket item order must not determine inventory lock order. Purchase holds
+  initialize and lock every involved balance in SKU order before locking lots.
+  Preserve FEFO eligibility, reservation coverage, exact counters and audit
+  events. This rule does not change the required confirmation/payment deduction
+  timing; all inventory writers must still compose without lock inversion.
+- Payment evidence acceptance and verification require consistent locked
+  balances as well as complete eligible lot coverage. Missing, under-reserved
+  or overdrawn balances require reconciliation; do not invent a repair during
+  payment review. Financial refund recording remains possible during stock
+  discrepancies and does not itself restore inventory.
+- Physical recounts acquire the SKU balance before existing batch and product
+  locks. Creating a missing balance must preserve lot-backed reserved units;
+  neither a recount nor lock-order repair may erase holds or historical lots.
+
 ```text
 available = on_hand
           - reserved
@@ -173,6 +254,9 @@ available = on_hand
 
 - Available is derived and cannot be typed directly or become negative.
 - One unit cannot be reserved, transferred, fulfilled, and written off simultaneously.
+- Confirmation must prove complete eligible coverage for every order line;
+  one surviving active reservation never proves the entire order is covered.
+  Partial or expired allocations require explicit reconciliation before confirmation.
 - Every expiry-tracked unit belongs to a stable lot with a usable date.
 - Every received lot has a location and custodian.
 - Owner and custodian are separate concepts.
@@ -182,6 +266,11 @@ available = on_hand
   summed into Master Inventory. Only controlled receiving, recount, disposition,
   reservation, fulfillment, and custody events change canonical stock.
 - Every quantity change writes an immutable event with actor, reason, delta, linked record, and before/after balance.
+- Expiring an unpaid purchase hold is order-atomic: a bounded batch never releases
+  only part of an order's allocation. Confirmed, payment-verified, evidence-pending
+  or packed commitments are excluded from the temporary-hold sweep. Unknown
+  deadlines require reconciliation, and counter mismatches must roll back rather
+  than be clamped. Released stock becomes sellable only if its lot remains eligible.
 - `quantity` is the verified physical count. `reserved_quantity` is committed
   demand. A stored or projected sellable/available value is derived from those
   facts plus disposition and shelf-life eligibility; a compatibility field or
@@ -246,6 +335,14 @@ live | unlisted -> discontinued
 - Manual, CSV, AI-assisted, and connector-imported records start as draft.
 - AI may draft content but cannot publish without human review.
 - Use one canonical publication status.
+- Relisting from Unlisted to Live rechecks the required name, brand, category,
+  positive price, primary image and human review. Draft cannot jump directly
+  to Live and Discontinued cannot be relisted.
+- An unchanged publication status returns after authorization, ownership and
+  row locking without rewriting completion timestamps or inserting another
+  transition audit. The signed command boundary still owns request receipts
+  and the staff's review-reason audit; a new command differs from retrying an
+  existing receipt.
 - Publishing validates identity, name, price, primary image, variant, and required channel fields.
 - Product import never creates stock; receiving/controlled adjustment does.
 - Claims about origin, ingredients, allergens, usage, and authenticity retain sources/evidence.
@@ -488,6 +585,18 @@ state feedback, not decorative motion.
 - Adding a product produces immediate action-point feedback derived from the
   canonical basket quantity. The room must not maintain a parallel cart counter
   or claim success before the canonical basket changes.
+- Refused basket additions show a recoverable explanation at the product action
+  and never trigger success animation. Adding to a basket does not send an
+  order request: Review basket opens the existing checkout review; submission
+  remains an explicit action in that flow.
+- Clerk gestures mirror shopper activity: question focus listens, approved FAQ
+  reading uses a reading pose, selected goods can be presented, and basket
+  success/refusal have distinct reactions. Animation cannot imply a staff member
+  is online or that any message, order, stock hold, or payment was completed.
+- A question draft keeps the item/shelf where typing began when the shopper
+  browses elsewhere. Closing a conversation sheet preserves its unsent text and
+  existing thread in route memory; hidden sheets stop polling. New shelf context
+  cannot silently replace an existing draft, and opening chat never sends it.
 - The pop-out guide, aisle clerk, ambient accent, and physical basket view derive
   from one current store moment. The 3D clerk may move only among authored
   inter-bay dwelling zones: each zone must be wider than her complete rig, sit
@@ -977,6 +1086,15 @@ kept distinct so that "reserved" and "sold" are never confused:
   a new reservation instead.
 - A release must always record its cause. A released reservation with no cause
   makes a stock discrepancy impossible to investigate later.
+- Pre-policy released rows without a recorded cause remain explicitly unknown.
+  Migration must not invent a reason or timestamp. The cause check enforces new
+  and updated rows even while historical validation is pending. Staff reconcile
+  historical attribution only from evidence; absence of evidence is retained.
+- Cancelling an eligible Submitted or Confirmed order releases its active exact
+  allocations once, records cancellation cause/time, and restores aggregate and
+  catalog availability. Historical released allocations are never subtracted
+  again. A lot/balance mismatch aborts the entire cancellation for reconciliation;
+  it must not be hidden by clamping counters or partially changing order state.
 - A **missing deadline means unknown, never overdue.** Automatic release acts
   only on holds with a real expiry, because releasing on unknown would cancel a
   live customer's hold.
@@ -1149,6 +1267,15 @@ Stock disposition is `restock`, `quarantine`, `supplier_return`, `write_off`, or
 
 Online payment remains deferred until a proper provider exists.
 
+The owner's 6 September 2026 first-launch preference is manual GCash or QR
+payment with staff evidence verification. Receiving instructions and any QR
+must come from the approved receiving account; never invent a payment address
+or imply automatic confirmation. This preference does not activate a gateway.
+Rejected evidence remains immutable history. A corrected attempt may proceed
+only on an eligible order with valid stock coverage; a separate staff verifier
+must review it. Payment commands bind to the reviewed state/version and retain
+their operation identity across uncertain retries.
+
 ```text
 unpaid -> evidence_submitted -> under_review
        -> verified | rejected | needs_more_information
@@ -1268,6 +1395,11 @@ landed_cost = purchase_cost
 
 ## 19. Inbox and communication
 
+- A staff draft is scoped to its customer conversation and acting staff member.
+  Switching threads never transfers draft text. A late command completion clears
+  only the submitted draft version and cannot display another thread's feedback
+  or replace its event history. Leaving the staff workspace discards unsent
+  route-memory drafts; saving an internal note remains an explicit command.
 - Preserve channel, external message ID, identity, direction, time, delivery state, and source.
 - Internal notes are visibly internal and never presented as sent.
 - A copied reply is not delivered.
@@ -1281,6 +1413,10 @@ landed_cost = purchase_cost
 - A guest reply is accepted only through the scoped BFF grant for that exact
   conversation. A public reference, contact value, URL ID, or local-storage flag
   never grants read or reply permission.
+- Unresolved workflow and mark-read retries retain their payload-bound operation
+  identity within the acting staff session, just as message retries do. A
+  replayed read receipt does not prove that later inbound messages were read;
+  the current canonical unread state must be reconciled separately.
 
 ## 20. Admin organization
 
@@ -1571,3 +1707,7 @@ The Master Action Plan never keeps a completed-work section.
 ## 27. Definition of done
 
 A workflow is done only when state/ownership are unambiguous; transitions are server-enforced; quantities/money reconcile; actor/evidence/reason/history exist; retries are safe; exceptions recover; permissions hold; desktop/mobile work; KPIs drill into canonical records; tests cover risks; and the System Brain reports the truth.
+
+
+### Store orientation - IDEA-20260908-02
+The 3D shopping room at `/store` must adapt to portrait and landscape without a forced orientation lock. Rotation retains the canonical basket, selected goods and unsent shopkeeper question. Phone controls must reserve separate space for zoom and basket; an empty decorative basket may be hidden. Catalog/shop remains a separate surface. Reduced-motion fallback acceptance does not establish 3D rendering acceptance.

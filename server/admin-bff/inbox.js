@@ -61,28 +61,64 @@ function mapMessage(message) {
   }
 }
 
+/**
+ * The read is deliberately bounded: an Admin session must not be able to pull an
+ * unbounded slice of the message table. What the bounds may not do is masquerade
+ * as the whole record, so the projection reports exactly what it left out
+ * (MAP-028 H-007).
+ */
+export const INBOX_READ_LIMITS = Object.freeze({
+  conversations: 200,
+  messages: 2000,
+  // Without a per-conversation ceiling, one very busy thread consumes the whole
+  // message allowance and every other thread arrives empty.
+  messagesPerConversation: 30,
+})
+
 export async function readAdminInbox(client) {
   const conversationsResult = await client.from('conversations')
     .select('id,customer_name,platform,source_kind,status,priority,unread_count,assigned_to,response_due_at,last_inbound_at,last_read_at,resolved_at,last_message_at')
-    .order('last_message_at', { ascending: false }).limit(200)
+    .order('last_message_at', { ascending: false }).limit(INBOX_READ_LIMITS.conversations)
   if (conversationsResult.error) throw new Error('INBOX_UNAVAILABLE')
   const conversations = conversationsResult.data || []
   const ids = conversations.map((item) => item.id)
   const [messagesResult, staffResult, websiteReplyResult] = await Promise.all([
     ids.length
-      ? client.from('messages').select('id,conversation_id,sender_type,content,is_draft,delivery_status,sent_at,failure_reason,created_at').in('conversation_id', ids).order('created_at', { ascending: false }).limit(2000)
+      ? client.from('messages').select('id,conversation_id,sender_type,content,is_draft,delivery_status,sent_at,failure_reason,created_at').in('conversation_id', ids).order('created_at', { ascending: false }).limit(INBOX_READ_LIMITS.messages)
       : Promise.resolve({ data: [], error: null }),
     client.from('user_profiles').select('id,full_name,email,role').in('role', ['Admin', 'Staff', 'SuperAdmin']).order('full_name'),
     client.rpc('website_reply_capability_v1'),
   ])
   if (messagesResult.error || staffResult.error) throw new Error('INBOX_UNAVAILABLE')
+  const messageRows = messagesResult.data || []
+  // Messages arrive newest first, so the per-conversation ceiling keeps the
+  // newest ones and records that older ones exist.
   const messagesByConversation = new Map()
-  for (const message of messagesResult.data || []) {
+  const sampledConversations = new Set()
+  for (const message of messageRows) {
     const list = messagesByConversation.get(message.conversation_id) || []
+    if (list.length >= INBOX_READ_LIMITS.messagesPerConversation) {
+      sampledConversations.add(message.conversation_id)
+      continue
+    }
     list.push(mapMessage(message))
     messagesByConversation.set(message.conversation_id, list)
   }
+  const completeness = {
+    conversations: {
+      returned: conversations.length,
+      limit: INBOX_READ_LIMITS.conversations,
+      truncated: conversations.length >= INBOX_READ_LIMITS.conversations,
+    },
+    messages: {
+      returned: messageRows.length,
+      limit: INBOX_READ_LIMITS.messages,
+      perConversation: INBOX_READ_LIMITS.messagesPerConversation,
+      truncated: messageRows.length >= INBOX_READ_LIMITS.messages || sampledConversations.size > 0,
+    },
+  }
   return {
+    completeness,
     conversations: conversations.map((conversation) => ({
       id: conversation.id, customerName: conversation.customer_name,
       platform: conversation.platform, sourceKind: conversation.source_kind,
@@ -92,6 +128,8 @@ export async function readAdminInbox(client) {
       lastReadAt: conversation.last_read_at, resolvedAt: conversation.resolved_at,
       lastMessageAt: conversation.last_message_at,
       messages: messagesByConversation.get(conversation.id) || [],
+      // True when this thread has older messages the projection did not carry.
+      messagesTruncated: sampledConversations.has(conversation.id),
     })),
     staff: (staffResult.data || []).map((profile) => ({
       id: profile.id, fullName: profile.full_name,

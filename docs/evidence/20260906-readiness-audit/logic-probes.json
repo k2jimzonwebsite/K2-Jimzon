@@ -1,0 +1,13 @@
+{
+  "chunkErrorsSpacedElevenSecondsApart": 3,
+  "reloads": 3,
+  "latestSort": [
+    "old",
+    "new"
+  ],
+  "expectedLatest": [
+    "new",
+    "old"
+  ],
+  "scope": "executed extracted current source with fabricated state; no real deployment failures induced"
+}

@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { InboxView } from '../../src/views/admin/Inbox'
+import { STALE_QUEUE_NOTICE } from '../../src/context/adminInboxPolling'
+import { UNCERTAIN_COMMAND_NOTICE } from '../../src/services/adminBffService'
 import '../../src/index.css'
 
 const now = Date.now()
@@ -87,12 +89,63 @@ const INITIAL_CONVERSATIONS = [
 
 function Harness() {
   const [conversations, setConversations] = useState(INITIAL_CONVERSATIONS)
+  const [actorId, setActorId] = useState('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')
+  const [historyReleased, setHistoryReleased] = useState(false)
+  const historySequence = useRef(0)
+  const releaseHistory = useRef(null)
+  const options = new URLSearchParams(window.location.search)
+  const historyFailed = useRef(false)
+  const historyFixture = options.has('delayHistory') || options.has('historyError') || options.has('history')
 
   const store = {
     conversations,
-    inboxState: { loading: false, error: '', phase2Ready: true, websiteReplyReady: true },
-    user: { id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa' },
+    inboxState: {
+      loading: false,
+      refreshing: false,
+      stale: options.has('staleQueue'),
+      error: options.has('staleQueue') ? STALE_QUEUE_NOTICE : '',
+      phase2Ready: true,
+      websiteReplyReady: true,
+    },
+    user: { id: actorId },
+    inboxUsesBff: historyFixture,
+    inboxStaff: [],
+    loadConversationHistory: async (conversationId) => {
+      const request = ++historySequence.current
+      if (options.has('historyError')) {
+        if (!historyFailed.current) {
+          historyFailed.current = true
+          return { ok: false, events: [] }
+        }
+        return {
+          ok: true,
+          events: [{
+            id: `fixture-event-${request}`, event_type: 'fixture_history',
+            reason: 'Recovered Maria history', created_at: new Date().toISOString(),
+          }],
+        }
+      }
+      const delayed = options.has('delayHistory') && request === 1
+      if (delayed) {
+        await new Promise(resolve => { releaseHistory.current = resolve })
+        setHistoryReleased(true)
+      }
+      return {
+        ok: true,
+        events: [{
+          id: `fixture-event-${request}`, event_type: 'fixture_history',
+          reason: delayed ? 'Older Maria history' : conversationId === INITIAL_CONVERSATIONS[0].id ? 'Latest Maria history' : 'Elena history',
+          created_at: new Date().toISOString(),
+        }],
+      }
+    },
     sendMessage: async (conversationId, text) => {
+      if (options.has('uncertainSave')) {
+        return { ok: false, uncertain: true, error: UNCERTAIN_COMMAND_NOTICE }
+      }
+      if (new URLSearchParams(window.location.search).has('delaySave')) {
+        await new Promise(resolve => setTimeout(resolve, 800))
+      }
       setConversations(current => current.map(conversation => conversation.id === conversationId
         ? {
             ...conversation,
@@ -108,6 +161,7 @@ function Harness() {
       return { ok: true }
     },
     sendCustomerReply: async (conversationId, text) => {
+      if (options.has('delaySave')) await new Promise(resolve => setTimeout(resolve, 800))
       setConversations(current => current.map(conversation => conversation.id === conversationId
         ? {
             ...conversation,
@@ -145,6 +199,8 @@ function Harness() {
 
   return (
     <main className="admin-ui min-h-screen bg-adm-bg p-3 sm:p-5">
+      {options.has('switchActor') && <button type="button" onClick={() => setActorId('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb')}>Switch fixture staff</button>}
+      {historyFixture && <button type="button" onClick={() => releaseHistory.current?.()}>{historyReleased ? 'Old history released' : 'Release old history'}</button>}
       <InboxView store={store} database={null} />
     </main>
   )

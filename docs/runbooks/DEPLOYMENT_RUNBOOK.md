@@ -1,5 +1,21 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+8 September local continuation, MAP-028 I-014: PROJECT_MAP and ARCHITECTURE now
+declare the registry-derived 91 Admin / 15 Storefront prepared routes. The new
+security-inventory assertion failed first, then passed after reconciliation;
+24 focused inventory/payment/packing/CI contracts pass. The test is included in
+the existing contracts and CI base suite. Source route counts are not emitted
+provider functions or enabled deployed routes; I-014 retains both-preview proof.
+Recovery is the scoped documentation/test diff; no routing configuration changed.
+Both separate target builds pass their secret, artifact and budget checks.
+Storefront landing JS is 149.86/150 kB gzip; Admin application is 186.96/300 kB
+minified. No commit, push, deployment or provider activation occurred in this
+continuation. Selling fixtures passed 8/8 on rerun after a first-navigation
+timeout. I-009 subsequently traced a 53,855.596 ms cold stylesheet request;
+the isolated selling harness waits for stylesheet readiness on its strict port.
+Ten inventory/CI contracts and 8/8 selling cases passed with unchanged timeouts.
+This is local test readiness, not measured production performance.
+
 Verified release: code commit a438d85 (6 September) passes GitHub CI 34021862535
 through the complete acceptance suite and both PostgreSQL rehearsal stages.
 Both Vercel project statuses succeed. The canonical Admin entry returns HTTP 200

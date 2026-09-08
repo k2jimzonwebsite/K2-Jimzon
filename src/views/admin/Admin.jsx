@@ -485,18 +485,18 @@ export default function Admin() {
                : section === 'workflow_graph' ? <MasterWorkflowGraph onNavigate={selectSection} />
                : section === 'reservations' ? <ReservationHolds />
                : section === 'delivery' && canManageStaff ? <DeliveryRateControl />
-               : section === 'coupons' ? <CouponManager />
+               : section === 'coupons' ? <CouponManager key={`${user?.id || 'signed-out'}:${user?.role || ''}`} />
                : section === 'omni_hub' ? <OmniOperationsHub />
                : section === 'pasabuy_manager' ? <PasabuyManager />
                : section === 'integrations' ? <ChannelIntegrations />
                : section === 'store_assets' ? <StoreAssetStudio />
                : section === 'globe' ? <GlobeCms canManagePublicClaims={canManageStaff} />
                : section === 'inbox' ? <Inbox />
-               : section === 'wholesale' ? <Customers />
-               : section === 'suppliers' ? <Suppliers canCreateSupplier={canManageStaff} />
+               : section === 'wholesale' ? <Customers key={`${user?.id || 'signed-out'}:${user?.role || ''}`} />
+               : section === 'suppliers' ? <Suppliers key={`${user?.id || 'signed-out'}:${user?.role || ''}`} canCreateSupplier={canManageStaff} />
                : section === 'consignment' ? <ConsignmentManager />
                : showSheet ? <Sheet />
-               : showGrid ? <InventoryGrid launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} canManageMediaCleanup={canManageStaff} canManageProducts={canManageStaff} />
+               : showGrid ? <InventoryGrid key={`${user?.id || 'signed-out'}:${user?.role || ''}`} launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} canManageMediaCleanup={canManageStaff} canManageProducts={canManageStaff} />
                : section === 'overview' ? <Overview widget={widget} onWidget={setWidget} setSection={selectSection} pending={pendingOrders} />
                : <Kanban />}
             </Suspense>

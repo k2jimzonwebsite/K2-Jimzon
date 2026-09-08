@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { channelMeta } from '../../lib/channelMeta'
 import { AlertIcon, CheckIcon, InboxIcon, SearchIcon } from '../../components/ui/icons'
 import { MetricRail, StateBanner, WorkspaceIntro } from './AdminWorkspaceUi'
+import { STALE_QUEUE_NOTICE } from '../../context/adminInboxPolling'
+import { UNCERTAIN_COMMAND_NOTICE } from '../../services/adminBffService'
 
 /**
  * Conversations started at a shelf in the virtual store.
@@ -93,7 +95,125 @@ function queueRank(conversation) {
   return overdue + unread + priority
 }
 
+// One timeline, rendered in the desktop aside and the phone/tablet disclosure so
+// the same audit trail is reachable at every width (MAP-028 H-012).
+function EventHistoryBody({ status, history, onRetry }) {
+  if (status === 'loading') {
+    return <p role="status" className="text-xs leading-relaxed text-white/40">Loading event history…</p>
+  }
+  if (status === 'error') {
+    return (
+      <div className="space-y-2">
+        <p className="flex gap-2 text-xs leading-relaxed text-amber">
+          <AlertIcon size={14} className="mt-0.5 shrink-0" />Event history could not be loaded.
+        </p>
+        <button type="button" onClick={onRetry} className="adm-btn min-h-11 w-full border border-adm-line text-xs text-white/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80">
+          Retry event history
+        </button>
+      </div>
+    )
+  }
+  if (history.length === 0) {
+    return <p className="text-xs leading-relaxed text-white/40">No Phase 2 workflow events recorded yet.</p>
+  }
+  return (
+    <div className="space-y-3">
+      {history.map(event => (
+        <div key={event.id} className="border-l border-adm-line pl-3">
+          <p className="text-xs font-semibold text-white/75">{event.event_type === 'internal_note_added' ? 'Internal note saved' : 'Workflow updated'}</p>
+          {event.reason && <p className="mt-0.5 text-xs leading-relaxed text-white/55">{event.reason}</p>}
+          <time className="mt-1 block text-xs text-white/35">{formatMessageTime(event.created_at)}</time>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function WorkflowControls({ compact = false, chat, workflow, setWorkflow, inboxState, staff, savingWorkflow, handleWorkflowSave }) {
+  if (!chat) return null
+  const changingResolution = workflow.status !== chat.status
+    && (workflow.status === 'Resolved' || chat.status === 'Resolved')
+  return (
+    <div className={compact ? 'space-y-3' : 'space-y-4'}>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-1">
+        <label className="space-y-1.5 text-xs font-semibold text-white/65">
+          <span>Status</span>
+          <select
+            value={workflow.status}
+            onChange={event => setWorkflow(current => ({ ...current, status: event.target.value }))}
+            disabled={!inboxState.phase2Ready}
+            className="adm-input min-h-11 w-full text-base sm:text-sm"
+          >
+            {STATUS_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+        </label>
+        <label className="space-y-1.5 text-xs font-semibold text-white/65">
+          <span>Priority</span>
+          <select
+            value={workflow.priority}
+            onChange={event => setWorkflow(current => ({ ...current, priority: event.target.value }))}
+            disabled={!inboxState.phase2Ready}
+            className="adm-input min-h-11 w-full text-base sm:text-sm"
+          >
+            {PRIORITY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+        </label>
+        <label className="space-y-1.5 text-xs font-semibold text-white/65">
+          <span>Owner</span>
+          <select
+            value={workflow.assignedTo}
+            onChange={event => setWorkflow(current => ({ ...current, assignedTo: event.target.value }))}
+            disabled={!inboxState.phase2Ready}
+            className="adm-input min-h-11 w-full text-base sm:text-sm"
+          >
+            <option value="">Unassigned</option>
+            {staff.map(member => (
+              <option key={member.id} value={member.id}>
+                {member.full_name || member.email} · {member.role}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="space-y-1.5 text-xs font-semibold text-white/65">
+          <span>Response deadline</span>
+          <input
+            type="datetime-local"
+            value={workflow.responseDueAt}
+            onChange={event => setWorkflow(current => ({ ...current, responseDueAt: event.target.value }))}
+            disabled={!inboxState.phase2Ready}
+            className="adm-input min-h-11 w-full text-base sm:text-sm"
+          />
+        </label>
+      </div>
+      <label className="block space-y-1.5 text-xs font-semibold text-white/65">
+        <span>{changingResolution ? 'Reason (required)' : 'Workflow note (optional)'}</span>
+        <textarea
+          value={workflow.reason}
+          onChange={event => setWorkflow(current => ({ ...current, reason: event.target.value }))}
+          rows={2}
+          maxLength={500}
+          placeholder={changingResolution ? 'Why is this being resolved or reopened?' : 'Record why ownership, priority, or deadline changed.'}
+          disabled={!inboxState.phase2Ready}
+          className="adm-input min-h-20 w-full resize-y text-base sm:text-sm"
+        />
+      </label>
+      <button
+        type="button"
+        onClick={handleWorkflowSave}
+        disabled={!inboxState.phase2Ready || savingWorkflow || (changingResolution && !workflow.reason.trim())}
+        className="adm-btn min-h-11 w-full bg-blue text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed"
+      >
+        {savingWorkflow ? 'Saving workflow…' : 'Save workflow'}
+      </button>
+    </div>
+  )
+}
+
 export function InboxView({ store, database = supabase }) {
+  return <InboxWorkspace key={store.user?.id || 'signed-out'} store={store} database={database} />
+}
+
+function InboxWorkspace({ store, database }) {
   const {
     conversations,
     inboxState,
@@ -111,14 +231,29 @@ export function InboxView({ store, database = supabase }) {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('active')
   const [ownerFilter, setOwnerFilter] = useState('all')
-  const [replyText, setReplyText] = useState('')
+  const [drafts, setDrafts] = useState({})
+  const draft = drafts[activeId]
+  const replyText = draft?.text || ''
+  const setReplyText = (text) => setDrafts(current => ({ ...current, [activeId]: { text } }))
+  const clearSubmittedDraft = (conversationId, submittedDraft) => setDrafts(current => {
+    if (current[conversationId] !== submittedDraft) return current
+    const next = { ...current }
+    delete next[conversationId]
+    return next
+  })
   const [saveError, setSaveError] = useState('')
+  // An unconfirmed command is not a failure: it is an unknown outcome that must
+  // be reconciled against the refreshed record (MAP-028 H-002).
+  const [uncertainNotice, setUncertainNotice] = useState('')
   const [notice, setNotice] = useState('')
   const [savingNote, setSavingNote] = useState(false)
   const [sendingReply, setSendingReply] = useState(false)
   const [savingWorkflow, setSavingWorkflow] = useState(false)
   const [directStaff, setDirectStaff] = useState([])
   const [history, setHistory] = useState([])
+  // 'idle' | 'loading' | 'ready' | 'error' — an unreadable timeline must never
+  // be presented as an empty one.
+  const [historyStatus, setHistoryStatus] = useState('idle')
   const [workflow, setWorkflow] = useState({
     status: 'Open',
     priority: 'normal',
@@ -127,6 +262,19 @@ export function InboxView({ store, database = supabase }) {
     reason: '',
   })
   const messageEndRef = useRef(null)
+  const activeRequestContext = useRef(null)
+  const historyRequest = useRef(0)
+
+  useLayoutEffect(() => {
+    const context = { conversationId: activeId }
+    activeRequestContext.current = context
+    setHistory([])
+    setHistoryStatus('idle')
+    setSaveError('')
+    setUncertainNotice('')
+    setNotice('')
+    return () => { activeRequestContext.current = null }
+  }, [activeId])
 
   const filteredConversations = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase()
@@ -162,12 +310,24 @@ export function InboxView({ store, database = supabase }) {
   const chat = conversations.find(conversation => conversation.id === activeId) || null
 
   const loadHistory = async (conversationId) => {
+    const context = activeRequestContext.current
+    if (!context || context.conversationId !== conversationId) return
+    const request = ++historyRequest.current
+    const owned = () => activeRequestContext.current === context && historyRequest.current === request
+    const applyHistory = (ok, events) => {
+      if (!owned()) return
+      setHistoryStatus(ok ? 'ready' : 'error')
+      setHistory(ok ? (events || []) : [])
+    }
+    if (owned()) setHistoryStatus('loading')
     if (inboxUsesBff) {
-      setHistory(await loadConversationHistory(conversationId))
+      const result = await loadConversationHistory(conversationId)
+      // Older callers and fixtures may still return a bare array.
+      applyHistory(Array.isArray(result) ? true : result?.ok !== false, Array.isArray(result) ? result : result?.events)
       return
     }
     if (!database || !inboxState.phase2Ready || !conversationId) {
-      setHistory([])
+      applyHistory(true, [])
       return
     }
     const { data, error } = await database
@@ -176,7 +336,7 @@ export function InboxView({ store, database = supabase }) {
       .eq('conversation_id', conversationId)
       .order('created_at', { ascending: false })
       .limit(20)
-    setHistory(error ? [] : (data || []))
+    applyHistory(!error, data || [])
   }
 
   useEffect(() => {
@@ -209,8 +369,10 @@ export function InboxView({ store, database = supabase }) {
     setNotice('')
     loadHistory(chat.id)
     if (chat.unreadCount > 0 && inboxState.phase2Ready) {
+      const context = activeRequestContext.current
       markConversationRead(chat.id).then(result => {
-        if (!result?.ok) setSaveError(result?.error || 'Could not mark the conversation as read.')
+        if (activeRequestContext.current !== context) return
+        if (!result?.ok) reportCommandFailure(result, 'Could not mark the conversation as read.')
       })
     }
   }, [activeId, inboxState.phase2Ready])
@@ -234,51 +396,73 @@ export function InboxView({ store, database = supabase }) {
 
   const copyResponse = async () => {
     if (!replyText.trim()) return
+    const context = activeRequestContext.current
     try {
       await navigator.clipboard.writeText(replyText.trim())
+      if (activeRequestContext.current !== context) return
       setNotice('Response copied. Send it through the customer’s verified external channel.')
       setSaveError('')
     } catch {
+      if (activeRequestContext.current !== context) return
       setSaveError('Clipboard access was blocked. Select and copy the response manually.')
     }
   }
 
+  const reportCommandFailure = (result, fallback) => {
+    if (result?.uncertain) {
+      setUncertainNotice(result.error || UNCERTAIN_COMMAND_NOTICE)
+      return
+    }
+    setSaveError(result?.error || fallback)
+  }
+
   const handleSaveNote = async () => {
     if (!replyText.trim() || !chat || savingNote) return
+    const context = activeRequestContext.current
+    const submittedDraft = draft
     setSavingNote(true)
     setSaveError('')
+    setUncertainNotice('')
     setNotice('')
     const result = await sendMessage(chat.id, replyText, 'agent')
     setSavingNote(false)
+    if (result?.ok) clearSubmittedDraft(chat.id, submittedDraft)
+    if (activeRequestContext.current !== context) return
     if (!result?.ok) {
-      setSaveError(result?.error || 'The internal note could not be saved.')
+      reportCommandFailure(result, 'The internal note could not be saved.')
       return
     }
-    setReplyText('')
     setNotice('Internal note saved. It was not sent externally.')
     loadHistory(chat.id)
   }
 
   const handleSendReply = async () => {
     if (!replyText.trim() || !chat || sendingReply || !isWebsiteConversation(chat)) return
+    const context = activeRequestContext.current
+    const submittedDraft = draft
     setSendingReply(true)
     setSaveError('')
+    setUncertainNotice('')
     setNotice('')
     const result = await sendCustomerReply(chat.id, replyText.trim())
     setSendingReply(false)
+    if (result?.ok) clearSubmittedDraft(chat.id, submittedDraft)
+    if (activeRequestContext.current !== context) return
     if (!result?.ok) {
-      setSaveError(result?.error || 'The website reply could not be sent.')
+      reportCommandFailure(result, 'The website reply could not be sent.')
       return
     }
-    setReplyText('')
     setNotice('Sent. The reply is now visible in the customer’s website chat.')
     loadHistory(chat.id)
   }
 
   const handleWorkflowSave = async () => {
     if (!chat || savingWorkflow) return
+    const context = activeRequestContext.current
+    const submittedWorkflow = workflow
     setSavingWorkflow(true)
     setSaveError('')
+    setUncertainNotice('')
     setNotice('')
     const result = await updateConversationWorkflow(chat.id, {
       ...workflow,
@@ -287,11 +471,12 @@ export function InboxView({ store, database = supabase }) {
         : null,
     })
     setSavingWorkflow(false)
+    if (activeRequestContext.current !== context) return
     if (!result?.ok) {
-      setSaveError(result?.error || 'Workflow changes could not be saved.')
+      reportCommandFailure(result, 'Workflow changes could not be saved.')
       return
     }
-    setWorkflow(current => ({ ...current, reason: '' }))
+    setWorkflow(current => current === submittedWorkflow ? { ...current, reason: '' } : current)
     setNotice('Workflow updated and added to the immutable event history.')
     loadHistory(chat.id)
   }
@@ -304,85 +489,6 @@ export function InboxView({ store, database = supabase }) {
   const liveWebsiteCount = conversations.filter(conversation =>
     conversation.status !== 'Resolved' && isWebsiteConversation(conversation)).length
 
-  const WorkflowControls = ({ compact = false }) => {
-    if (!chat) return null
-    const changingResolution = workflow.status !== chat.status
-      && (workflow.status === 'Resolved' || chat.status === 'Resolved')
-    return (
-      <div className={compact ? 'space-y-3' : 'space-y-4'}>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-1">
-          <label className="space-y-1.5 text-xs font-semibold text-white/65">
-            <span>Status</span>
-            <select
-              value={workflow.status}
-              onChange={event => setWorkflow(current => ({ ...current, status: event.target.value }))}
-              disabled={!inboxState.phase2Ready}
-              className="adm-input min-h-11 w-full text-base sm:text-sm"
-            >
-              {STATUS_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
-            </select>
-          </label>
-          <label className="space-y-1.5 text-xs font-semibold text-white/65">
-            <span>Priority</span>
-            <select
-              value={workflow.priority}
-              onChange={event => setWorkflow(current => ({ ...current, priority: event.target.value }))}
-              disabled={!inboxState.phase2Ready}
-              className="adm-input min-h-11 w-full text-base sm:text-sm"
-            >
-              {PRIORITY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
-            </select>
-          </label>
-          <label className="space-y-1.5 text-xs font-semibold text-white/65">
-            <span>Owner</span>
-            <select
-              value={workflow.assignedTo}
-              onChange={event => setWorkflow(current => ({ ...current, assignedTo: event.target.value }))}
-              disabled={!inboxState.phase2Ready}
-              className="adm-input min-h-11 w-full text-base sm:text-sm"
-            >
-              <option value="">Unassigned</option>
-              {staff.map(member => (
-                <option key={member.id} value={member.id}>
-                  {member.full_name || member.email} · {member.role}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="space-y-1.5 text-xs font-semibold text-white/65">
-            <span>Response deadline</span>
-            <input
-              type="datetime-local"
-              value={workflow.responseDueAt}
-              onChange={event => setWorkflow(current => ({ ...current, responseDueAt: event.target.value }))}
-              disabled={!inboxState.phase2Ready}
-              className="adm-input min-h-11 w-full text-base sm:text-sm"
-            />
-          </label>
-        </div>
-        <label className="block space-y-1.5 text-xs font-semibold text-white/65">
-          <span>{changingResolution ? 'Reason (required)' : 'Workflow note (optional)'}</span>
-          <textarea
-            value={workflow.reason}
-            onChange={event => setWorkflow(current => ({ ...current, reason: event.target.value }))}
-            rows={2}
-            maxLength={500}
-            placeholder={changingResolution ? 'Why is this being resolved or reopened?' : 'Record why ownership, priority, or deadline changed.'}
-            disabled={!inboxState.phase2Ready}
-            className="adm-input min-h-20 w-full resize-y text-base sm:text-sm"
-          />
-        </label>
-        <button
-          type="button"
-          onClick={handleWorkflowSave}
-          disabled={!inboxState.phase2Ready || savingWorkflow || (changingResolution && !workflow.reason.trim())}
-          className="adm-btn min-h-11 w-full bg-blue text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed"
-        >
-          {savingWorkflow ? 'Saving workflow…' : 'Save workflow'}
-        </button>
-      </div>
-    )
-  }
 
   if (inboxState.loading && conversations.length === 0) {
     return (
@@ -405,6 +511,9 @@ export function InboxView({ store, database = supabase }) {
     )
   }
 
+  // The read is bounded on purpose (MAP-028 H-007). Say what is not on screen
+  // rather than letting a page look like the whole record.
+  const queueTruncated = Boolean(inboxState.completeness?.conversations?.truncated)
   const chatDeadline = deadlineState(chat.responseDueAt, chat.status)
   const chatIsWebsite = isWebsiteConversation(chat)
 
@@ -426,7 +535,16 @@ export function InboxView({ store, database = supabase }) {
         { label: 'Urgent', value: urgentCount, detail: 'Active urgent priority', tone: urgentCount ? 'text-crimson' : 'text-white' },
       ]} />
 
-      {inboxState.error && <StateBanner tone="warning">{inboxState.error}</StateBanner>}
+      {inboxState.stale
+        ? <StateBanner tone="warning" role="status">{inboxState.error || STALE_QUEUE_NOTICE}</StateBanner>
+        : inboxState.error && <StateBanner tone="warning">{inboxState.error}</StateBanner>}
+
+      {queueTruncated && (
+        <StateBanner tone="neutral" role="status">
+          Showing the {inboxState.completeness.conversations.returned} most recently active conversations.
+          Older ones exist beyond this page — search or resolve threads to bring them into view.
+        </StateBanner>
+      )}
 
       <div className="flex h-[calc(100dvh-390px)] min-h-[560px] overflow-hidden rounded-adm border border-adm-line bg-adm-bg">
         <div className={`${mobileView === 'chat' ? 'hidden' : 'flex'} w-full shrink-0 flex-col border-r border-adm-line bg-adm-bg lg:flex lg:w-80 xl:w-[22rem]`}>
@@ -555,10 +673,22 @@ export function InboxView({ store, database = supabase }) {
 
           <details className="shrink-0 border-b border-adm-line bg-adm-bg p-3 xl:hidden">
             <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold text-white">Workflow controls</summary>
-            <div className="mt-3"><WorkflowControls compact /></div>
+            <div className="mt-3"><WorkflowControls compact chat={chat} workflow={workflow} setWorkflow={setWorkflow} inboxState={inboxState} staff={staff} savingWorkflow={savingWorkflow} handleWorkflowSave={handleWorkflowSave} /></div>
+          </details>
+
+          <details className="shrink-0 border-b border-adm-line bg-adm-bg p-3 xl:hidden">
+            <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold text-white">Event history</summary>
+            <div className="mt-3">
+              <EventHistoryBody status={historyStatus} history={history} onRetry={() => loadHistory(chat.id)} />
+            </div>
           </details>
 
           <div className="flex-1 space-y-3 overflow-y-auto p-3 sm:p-4" aria-live="polite">
+            {chat.messagesTruncated && (
+              <p role="status" className="rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-center text-xs leading-relaxed text-white/55">
+                Showing the newest {chat.messages.length} messages. This conversation has older messages that are not loaded here.
+              </p>
+            )}
             {chat.messages.length === 0 && <p className="py-8 text-center text-sm text-white/45">No message content has been recorded.</p>}
             {chat.messages.map(message => (
               <div key={message.id} className={`flex ${message.sender === 'customer' ? 'justify-start' : 'justify-end'}`}>
@@ -582,6 +712,7 @@ export function InboxView({ store, database = supabase }) {
 
           <div className="shrink-0 space-y-2 border-t border-adm-line bg-white/5 p-3">
             {saveError && <p role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 p-2.5 text-xs text-crimson">{saveError}</p>}
+            {uncertainNotice && <p role="alert" className="flex gap-2 rounded-adm-sm border border-amber/40 bg-amber/10 p-2.5 text-xs leading-relaxed text-amber"><AlertIcon size={14} className="mt-0.5 shrink-0" />{uncertainNotice}</p>}
             {notice && <p role="status" className="flex items-start gap-2 rounded-adm-sm border border-forest/40 bg-forest/10 p-2.5 text-xs text-forest"><CheckIcon size={14} className="mt-0.5 shrink-0" />{notice}</p>}
             <div className="flex flex-wrap items-center justify-between gap-2">
               <label htmlFor="inbox-internal-note" className="text-xs font-semibold text-white/65">
@@ -630,18 +761,11 @@ export function InboxView({ store, database = supabase }) {
                 <AlertIcon size={16} className="shrink-0" />Activate the verified Phase 2 migration to use workflow controls.
               </div>
             )}
-            <WorkflowControls />
+            <WorkflowControls chat={chat} workflow={workflow} setWorkflow={setWorkflow} inboxState={inboxState} staff={staff} savingWorkflow={savingWorkflow} handleWorkflowSave={handleWorkflowSave} />
             <div className="border-t border-adm-line pt-4">
               <h4 className="text-xs font-bold uppercase tracking-wider text-white/45">Event history</h4>
-              <div className="mt-3 space-y-3">
-                {history.length === 0 && <p className="text-xs leading-relaxed text-white/40">No Phase 2 workflow events recorded yet.</p>}
-                {history.map(event => (
-                  <div key={event.id} className="border-l border-adm-line pl-3">
-                    <p className="text-xs font-semibold text-white/75">{event.event_type === 'internal_note_added' ? 'Internal note saved' : 'Workflow updated'}</p>
-                    {event.reason && <p className="mt-0.5 text-xs leading-relaxed text-white/55">{event.reason}</p>}
-                    <time className="mt-1 block text-xs text-white/35">{formatMessageTime(event.created_at)}</time>
-                  </div>
-                ))}
+              <div className="mt-3">
+                <EventHistoryBody status={historyStatus} history={history} onRetry={() => loadHistory(chat.id)} />
               </div>
             </div>
           </div>

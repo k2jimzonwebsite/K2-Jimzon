@@ -73,7 +73,16 @@ export async function fetchWithTimeout(input, init = {}, timeoutMs = 10000) {
   }, timeoutMs)
 
   try {
-    return await fetch(input, { ...init, signal: controller.signal })
+    const response = await fetch(input, { ...init, signal: controller.signal })
+    if (!response.body) return response
+    // API callers parse the body after this function returns. Keep its download
+    // inside the same deadline so headers alone cannot end timeout protection.
+    const body = await response.arrayBuffer()
+    return new Response(body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+    })
   } catch (error) {
     if (timedOut) throw new RequestTimeoutError()
     throw error

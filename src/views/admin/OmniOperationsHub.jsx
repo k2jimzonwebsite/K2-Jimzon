@@ -9,9 +9,11 @@ import PackingSlipModal from './PackingSlipModal'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import FulfillmentWorkflowDiagram from '../../components/admin/guides/FulfillmentWorkflowDiagram'
 import CustodyWorkflowDiagram from '../../components/admin/guides/CustodyWorkflowDiagram'
+import { useRetainedFulfillmentCommand } from './useRetainedFulfillmentCommand'
 import {
   adminBffEnabled, assignBoxBff, confirmOrderBff, fulfillOrderBff, getAdminFulfillment,
   recordPackingScanBff, transferLotBff, updateDeliveryBff, updatePaymentBff,
+  createRetainedOperationSession, commandOutcomeIsUncertain,
 } from '../../services/adminBffService'
 import {
   EmptyState,
@@ -38,8 +40,34 @@ function orderTone(status = '') {
 }
 
 export default function OmniOperationsHub() {
+  const { user } = useStore()
+  return <OmniOperationsWorkspace key={user?.id || 'signed-out'} />
+}
+
+function OmniOperationsWorkspace() {
   const { products, user } = useStore()
   const secureAdmin = adminBffEnabled()
+  const paymentCommands = useRef(null)
+  const packingCommands = useRef(null)
+  const [packingReservation, setPackingReservation] = useState('')
+  const [packingLotConfirmed, setPackingLotConfirmed] = useState(false)
+  const [packingBusy, setPackingBusy] = useState(false)
+  const [packingUncertain, setPackingUncertain] = useState(false)
+  const packingPending = useRef(null)
+  const [paymentUncertain, setPaymentUncertain] = useState(false)
+  useEffect(() => {
+    const session = createRetainedOperationSession(updatePaymentBff)
+    paymentCommands.current = session
+    const scans = createRetainedOperationSession(recordPackingScanBff)
+    packingCommands.current = scans
+    return () => { session.dispose(); scans.dispose() }
+  }, [])
+  useEffect(() => {
+    if (!paymentUncertain && !packingUncertain) return undefined
+    const guard = event => { event.preventDefault(); event.returnValue = '' }
+    window.addEventListener('beforeunload', guard)
+    return () => window.removeEventListener('beforeunload', guard)
+  }, [paymentUncertain, packingUncertain])
   const [activeRole, setActiveRole] = useState('manila_warehouse')
   const [activeStaff, setActiveStaff] = useState('')
   const [staffList, setStaffList] = useState([])
@@ -54,6 +82,7 @@ export default function OmniOperationsHub() {
   const [deliveryOrder, setDeliveryOrder] = useState(null)
   const [paymentOrder, setPaymentOrder] = useState(null)
   const [handoverOrder, setHandoverOrder] = useState(null)
+  const [actionReview, setActionReview] = useState(null)
   const [loadingBoxes, setLoadingBoxes] = useState(true)
   const [loadingOrders, setLoadingOrders] = useState(true)
   const [transferBatchId, setTransferBatchId] = useState('')
@@ -118,7 +147,8 @@ export default function OmniOperationsHub() {
         channel: channelMeta(order.channel_source).label, channelColor: channelMeta(order.channel_source).color,
         customer: order.customer_name || 'Customer', customerEmail: order.customer_email || null,
         customerPhone: order.customer_phone || null, deliveryAddress: order.delivery_address || null,
-        paymentStatus: order.payment_status || 'not recorded', total: order.total_amount ?? null, items,
+        paymentStatus: order.payment_status || 'not recorded', updatedAt: order.updated_at, total: order.total_amount ?? null, items,
+        allocations: reservations.filter(row => row.status === 'active').map(row => ({ ...row, lot: (data.lots || []).find(lot => lot.id === row.batch_id) })),
         status: complete ? 'Packed' : 'Picking', courier: order.courier_name || order.fulfillment_method || 'Not assigned',
         courierName: order.courier_name || '', shippingAmount: order.shipping_amount || 0,
         trackingNumber: order.tracking_number || '', waybillUrl: order.waybill_url || '',
@@ -153,12 +183,10 @@ export default function OmniOperationsHub() {
     if (!secureAdmin && !supabase) return
     setScanMessage(null)
     if (secureAdmin) {
-      const result = await confirmOrderBff(request.id, 'Stock and contact details reviewed in fulfillment hub')
-      if (!result.ok) setScanMessage({ success: false, text: result.error })
-      else {
-        setScanMessage({ success: true, text: `${request.public_reference} confirmed. Inventory is now reserved and packing lines were created.` })
-        await fetchSecureSnapshot()
-      }
+      setActionReview({ kind: 'confirm', title: 'Confirm this order', reference: request.public_reference,
+        details: `${request.customer_name} · ${(request.order_request_items || []).map(item => `${item.quantity} × ${item.product_name || item.sku}`).join(', ')}`,
+        impact: 'Confirm the reviewed customer request and create its packing lines. The server checks stock and reservation coverage.',
+        payload: { orderRequestId: request.id, reason: 'Stock and contact details reviewed in fulfillment hub' } })
       return
     }
     const { error } = await supabase.rpc('confirm_order_request', {
@@ -249,10 +277,10 @@ export default function OmniOperationsHub() {
   const handleReassignBoxStaff = async (boxCode, newStaff) => {
     if ((!secureAdmin && !supabase) || !boxCode || boxCode === 'No box code') return
     if (secureAdmin) {
-      const result = await assignBoxBff(boxCode, newStaff, 'Box custody reassigned from fulfillment hub')
-      if (!result.ok) { setScanMessage({ success: false, text: result.error }); return }
-      await fetchSecureSnapshot()
-      setScanMessage({ success: true, text: `${boxCode} is now assigned to ${newStaff}.` })
+      setActionReview({ kind: 'assign', title: 'Assign box custody', reference: boxCode,
+        details: `New custodian: ${newStaff || 'Unassigned'}`,
+        impact: 'Move custody of the recorded box lots to this staff member. The signed-in operator remains the audit actor.',
+        payload: { boxCode, toCustodian: newStaff, reason: 'Box custody reassigned from fulfillment hub' } })
       return
     }
     const { error } = await supabase.rpc('transfer_inventory_custody', {
@@ -270,14 +298,13 @@ export default function OmniOperationsHub() {
     event.preventDefault()
     if (!transferBatchId || !transferTo || (!secureAdmin && !supabase)) return
     if (secureAdmin) {
-      const result = await transferLotBff({
-        batchId: transferBatchId, quantity: Number(transferQuantity), toCustodian: transferTo,
-        toLocation: '', reason: 'Exact lot custody transfer from fulfillment hub',
-      })
-      if (!result.ok) { setScanMessage({ success: false, text: result.error }); return }
-      setScanMessage({ success: true, text: `Moved ${transferQuantity} unit(s) to ${transferTo} with lot history preserved.` })
-      setTransferBatchId(''); setTransferQuantity('1'); setTransferTo('')
-      await fetchSecureSnapshot()
+      const lot = cargoBoxes.flatMap(box => box.items).find(item => item.id === transferBatchId)
+      setActionReview({ kind: 'transfer', title: 'Transfer exact lot custody',
+        reference: `${lot?.box_code || 'No box'} · ${lot?.batch_code || transferBatchId}`,
+        details: `${transferQuantity} × ${lot?.sku || 'Selected lot'} to ${transferTo}`,
+        impact: 'Move only this quantity from this lot. Reserved units cannot move; partial transfers preserve lot history.',
+        payload: { batchId: transferBatchId, quantity: Number(transferQuantity), toCustodian: transferTo,
+          toLocation: '', reason: 'Exact lot custody transfer from fulfillment hub' } })
       return
     }
     const { error } = await supabase.rpc('transfer_inventory_custody_exact', {
@@ -295,15 +322,32 @@ export default function OmniOperationsHub() {
 
   const handleVerifyScan = async event => {
     event.preventDefault()
+    if (packingBusy) return
     if (!scanBarcode.trim()) return
     const match = scanBarcode.trim()
     const found = orders.find(order => order.id === selectedOrderId)
     if (!found) setScanMessage({ success: false, text: 'Choose the exact order before scanning.' })
     else if (!secureAdmin && !supabase) setScanMessage({ success: false, text: 'Database is not configured.' })
     else if (secureAdmin) {
-      const result = await recordPackingScanBff(found.id, match)
-      if (!result.ok) setScanMessage({ success: false, text: result.error })
+      const allocation = found.allocations?.find(row => row.id === packingReservation && row.packed_quantity < row.quantity)
+      const lotIdentified = allocation?.lot?.batch_code && allocation?.lot?.expiry_date && allocation?.lot?.hub && allocation?.lot?.custodian
+      if (!packingPending.current && (!lotIdentified || !packingLotConfirmed)) {
+        setScanMessage({ success: false, text: 'Choose the exact allocation and confirm its physical lot before scanning.' }); return
+      }
+      const payload = packingPending.current || { orderRequestId: found.id, scannedCode: match, reservationId: packingReservation, lotConfirmed: true }
+      packingPending.current = payload
+      setPackingBusy(true)
+      const result = await packingCommands.current.run(payload)
+      setPackingBusy(false)
+      if (!result.ok) {
+        const uncertain = commandOutcomeIsUncertain(result) || result.code === 'FULFILLMENT_COMMAND_UNAVAILABLE'
+        setPackingUncertain(uncertain)
+        if (!uncertain) packingPending.current = null
+        setScanMessage({ success: false, text: uncertain ? 'This scan did not confirm and may already be recorded. Retry the same scan to reconcile its receipt before scanning another unit.' : result.error })
+        return
+      }
       else {
+        packingPending.current = null; setPackingUncertain(false); setPackingLotConfirmed(false)
         const saved = result.result || {}
         setScanMessage({ success: true, text: `${saved.product_name || match}: ${saved.packed_quantity || 0} of ${saved.required_quantity || 0} packed for ${saved.order_reference || found.publicReference}.` })
         await fetchSecureSnapshot()
@@ -323,10 +367,21 @@ export default function OmniOperationsHub() {
 
   const updatePayment = async (order, target, note) => {
     if (secureAdmin) {
-      const result = await updatePaymentBff(order.id, target, note || '')
-      if (!result.ok) throw new Error(result.error)
+      const result = await paymentCommands.current.run({
+        orderRequestId: order.id, toStatus: target, evidenceNote: note || '',
+        expectedPaymentStatus: order.paymentStatus || order.payment_status,
+        expectedUpdatedAt: order.updatedAt || order.updated_at,
+      })
+      const uncertain = commandOutcomeIsUncertain(result) || result.code === 'FULFILLMENT_COMMAND_UNAVAILABLE'
+      if (uncertain) {
+        setPaymentUncertain(true)
+        await fetchSecureSnapshot()
+        return { ...result, uncertain: true, error: 'The payment command did not confirm and may already be saved. Review the refreshed order before retrying; keep the same evidence for a retry.' }
+      }
+      if (!result.ok) return result
+      setPaymentUncertain(false)
       await fetchSecureSnapshot()
-      return
+      return result
     }
     const { error } = await supabase.rpc('set_order_request_payment_status', {
       p_order_request_id: order.id,
@@ -335,25 +390,26 @@ export default function OmniOperationsHub() {
     })
     if (error) throw error
     await fetchLiveOrders()
+    return { ok: true }
   }
 
-  const fulfillOrder = async (order, handoverNote) => {
-    if (!order || !handoverNote?.trim()) return false
+  const fulfillOrder = async (order, handoverNote, key) => {
+    if (!order || !handoverNote?.trim()) return { ok: false, error: 'Enter the courier handover reference.' }
     if (secureAdmin) {
-      const result = await fulfillOrderBff(order.id, handoverNote.trim())
-      if (!result.ok) { setScanMessage({ success: false, text: result.error }); return false }
+      const result = await fulfillOrderBff(order.id, handoverNote.trim(), key)
+      if (!result.ok) return result
       setScanMessage({ success: true, text: `${order.publicReference} was handed to the courier with exact lot deductions recorded.` })
       await fetchSecureSnapshot()
-      return true
+      return result
     }
     const { error } = await supabase.rpc('fulfill_order_request', {
       p_order_request_id: order.id,
       p_handover_note: handoverNote.trim(),
     })
-    if (error) { setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') }); return false }
+    if (error) return { ok: false, error: safeUiError('FULFILLMENT_ACTION_FAILED') }
     setScanMessage({ success: true, text: `${order.publicReference} was handed to the courier with exact lot deductions recorded.` })
     await fetchLiveOrders()
-    return true
+    return { ok: true }
   }
 
   const staffBoxes = cargoBoxes.filter(box => box.assigned_staff === activeStaff)
@@ -414,10 +470,12 @@ export default function OmniOperationsHub() {
           <section className="space-y-3">
             <SectionHeading title="Scan station" description={`Operator ${activeStaff || 'not identified'} / scan only items already present in the pending pick queue.`} action={<StatusPill tone="success">{packedCount} packed</StatusPill>} />
             <form onSubmit={handleVerifyScan} className="flex flex-col gap-2 rounded-adm border border-adm-line bg-adm-surface p-3 sm:flex-row">
-              <label className="min-w-0 sm:w-72"><span className="sr-only">Selected order</span><select value={selectedOrderId} onChange={event => setSelectedOrderId(event.target.value)} required className="adm-input min-h-11 w-full text-base sm:text-sm"><option value="">Choose exact order</option>{orders.filter(order => order.status !== 'Packed').map(order => <option key={order.id} value={order.id}>{order.publicReference} · {order.customer}</option>)}</select></label>
-              <label className="relative min-w-0 flex-1"><span className="sr-only">Barcode or SKU</span><BarcodeIcon size={17} className="pointer-events-none absolute left-3 top-3.5 text-white/35" /><input type="text" value={scanBarcode} onChange={event => setScanBarcode(event.target.value)} placeholder="Scan barcode or enter SKU" className="adm-input min-h-11 pl-10 font-mono text-base" /></label>
-              <button type="submit" disabled={!selectedOrderId || !scanBarcode.trim()} className={primaryButton}>Record one unit</button>
+              <label className="min-w-0 sm:w-72"><span className="sr-only">Selected order</span><select disabled={packingBusy || Boolean(packingPending.current)} value={selectedOrderId} onChange={event => { setSelectedOrderId(event.target.value); setPackingReservation(''); setPackingLotConfirmed(false) }} required className="adm-input min-h-11 w-full text-base sm:text-sm"><option value="">Choose exact order</option>{orders.filter(order => order.status !== 'Packed').map(order => <option key={order.id} value={order.id}>{order.publicReference} · {order.customer}</option>)}</select></label>
+              <label className="relative min-w-0 flex-1"><span className="sr-only">Barcode or SKU</span><BarcodeIcon size={17} className="pointer-events-none absolute left-3 top-3.5 text-white/35" /><input type="text" disabled={packingBusy || Boolean(packingPending.current)} value={scanBarcode} onChange={event => setScanBarcode(event.target.value)} placeholder="Scan barcode or enter SKU" className="adm-input min-h-11 pl-10 font-mono text-base" /></label>
+              <button type="submit" disabled={packingBusy || !selectedOrderId || !scanBarcode.trim() || (secureAdmin && !packingPending.current && !packingLotConfirmed)} className={primaryButton}>{packingBusy ? 'Recording…' : packingPending.current ? 'Retry same scan' : 'Record one unit'}</button>
             </form>
+            {secureAdmin && <PackingLotProof allocations={selectedPackingOrder?.allocations || []} value={packingReservation} confirmed={packingLotConfirmed}
+              disabled={packingBusy || Boolean(packingPending.current)} onSelect={value => { setPackingReservation(value); setPackingLotConfirmed(false) }} onConfirm={setPackingLotConfirmed} />}
             {selectedPackingOrder && <div className="flex flex-col gap-3 rounded-adm-sm border border-blue/25 bg-blue/[0.04] p-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-mono text-xs font-bold text-blue">{selectedPackingOrder.publicReference}</p><p className="mt-1 text-xs text-white/50">Delivery: {String(selectedPackingOrder.shippingQuoteStatus).replaceAll('_', ' ')} · Payment: {String(selectedPackingOrder.paymentStatus).replaceAll('_', ' ')}</p></div><div className="flex flex-wrap gap-2"><button type="button" onClick={() => setDeliveryOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Delivery & waybill</button><button type="button" onClick={() => setPaymentOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Payment evidence</button><button type="button" onClick={() => setHandoverOrder(selectedPackingOrder)} disabled={selectedPackingOrder.status !== 'Packed' || selectedPackingOrder.paymentStatus !== 'verified' || !['platform_charged', 'customer_confirmed', 'waived'].includes(selectedPackingOrder.shippingQuoteStatus)} className={`${primaryButton} adm-btn-sm disabled:opacity-35`}>Handover to courier</button></div></div>}
           </section>
 
@@ -478,10 +536,10 @@ export default function OmniOperationsHub() {
         </section>
       )}
 
-      <DeliveryDetailsModal order={deliveryOrder} onClose={() => setDeliveryOrder(null)} onSave={async payload => {
+      {deliveryOrder && <DeliveryDetailsModal retrySafe={secureAdmin} key={deliveryOrder.id} order={deliveryOrder} onClose={() => setDeliveryOrder(null)} onSave={async (payload, key) => {
         if (secureAdmin) {
-          const result = await updateDeliveryBff(payload)
-          if (!result.ok) throw new Error(result.error)
+          const result = await updateDeliveryBff(payload, key)
+          if (!result.ok) return result
           await fetchSecureSnapshot()
         } else {
           const { error } = await supabase.rpc('set_order_delivery_details', {
@@ -493,24 +551,63 @@ export default function OmniOperationsHub() {
           if (error) throw error
           await Promise.all([fetchOrderRequests(), fetchLiveOrders()])
         }
-        setDeliveryOrder(null)
-      }} />
-      <PaymentStatusModal order={paymentOrder} onClose={() => setPaymentOrder(null)} onSave={async (target, note) => { await updatePayment(paymentOrder, target, note); setPaymentOrder(null) }} />
-      <HandoverDialog order={handoverOrder} onClose={() => setHandoverOrder(null)} onSave={note => fulfillOrder(handoverOrder, note)} />
+        return { ok: true }
+      }} />}
+      {paymentOrder && <PaymentStatusModal key={paymentOrder.id} secure={secureAdmin} order={paymentOrder} onClose={() => setPaymentOrder(null)} onSave={async (target, note) => {
+        const result = await updatePayment(paymentOrder, target, note)
+        if (result?.ok) setPaymentOrder(null)
+        return result
+      }} />}
+      {handoverOrder && <HandoverDialog retrySafe={secureAdmin} key={handoverOrder.id} order={handoverOrder} onClose={() => setHandoverOrder(null)} onSave={(note, key) => fulfillOrder(handoverOrder, note, key)} />}
+      {actionReview && <FulfillmentActionDialog action={actionReview} onClose={() => setActionReview(null)} onSave={async (payload, key) => {
+        const result = actionReview.kind === 'confirm'
+          ? await confirmOrderBff(payload.orderRequestId, payload.reason, key)
+          : actionReview.kind === 'assign'
+            ? await assignBoxBff(payload.boxCode, payload.toCustodian, payload.reason, key)
+            : await transferLotBff(payload, key)
+        if (result.ok) {
+          setScanMessage({ success: true, text: `${actionReview.reference}: ${actionReview.title.toLowerCase()} recorded.` })
+          if (actionReview.kind === 'transfer') { setTransferBatchId(''); setTransferQuantity('1'); setTransferTo('') }
+          await fetchSecureSnapshot()
+        }
+        return result
+      }} />}
       <PackingSlipModal isOpen={!!printSlipOrder} onClose={() => setPrintSlipOrder(null)} order={printSlipOrder} />
     </div>
   )
 }
 
-function HandoverDialog({ order, onClose, onSave }) {
+export function FulfillmentActionDialog({ action, onClose, onSave }) {
+  const { run, busy, uncertain, locked, error } = useRetainedFulfillmentCommand(onSave)
+  const save = async event => {
+    event.preventDefault()
+    const result = await run(action.payload)
+    if (result?.ok) onClose()
+  }
+  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md">
+    <AdminDialog onClose={onClose} closeDisabled={locked} labelledBy="fulfillment-action-title" describedBy="fulfillment-action-impact">
+      <form onSubmit={save} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-md space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white">
+        <h2 id="fulfillment-action-title" className="text-xl font-semibold">{action.title}</h2>
+        <p className="break-words font-mono text-sm text-blue">{action.reference}</p>
+        <p className="break-words text-sm text-white/80">{action.details}</p>
+        <p id="fulfillment-action-impact" className="text-sm text-white/70">{action.impact}</p>
+        {error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}
+        <div className="flex flex-col-reverse gap-2 sm:flex-row">
+          <button type="button" disabled={locked} onClick={onClose} className={`${secondaryButton} flex-1`}>Cancel</button>
+          <button type="submit" disabled={busy} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? 'Retry same command' : 'Confirm command'}</button>
+        </div>
+      </form>
+    </AdminDialog>
+  </div>
+}
+
+export function HandoverDialog({ order, onClose, onSave, retrySafe = true }) {
   const [note, setNote] = useState('')
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
+  const { run, busy, uncertain, locked, error } = useRetainedFulfillmentCommand(onSave, retrySafe)
   const noteRef = useRef(null)
 
   useEffect(() => {
     setNote('')
-    setError('')
   }, [order?.id])
 
   if (!order) return null
@@ -518,50 +615,35 @@ function HandoverDialog({ order, onClose, onSave }) {
   const save = async event => {
     event.preventDefault()
     const handoverNote = note.trim()
-    if (handoverNote.length < 3) {
-      setError('Enter the courier handover or dispatch reference.')
-      return
-    }
-    setBusy(true)
-    setError('')
-    try {
-      const saved = await onSave(handoverNote)
-      setBusy(false)
-      if (saved === false) {
-        setError('The courier handover was not recorded. Review the order state and try again.')
-        return
-      }
-      onClose()
-    } catch {
-      setBusy(false)
-      setError(safeUiError('FULFILLMENT_ACTION_FAILED'))
-    }
+    if (handoverNote.length < 3) return
+    const result = await run(handoverNote)
+    if (result?.ok) onClose()
   }
 
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="presentation">
-    <AdminDialog onClose={onClose} closeDisabled={busy} initialFocusRef={noteRef} labelledBy="handover-title" describedBy="handover-description">
-      <form onSubmit={save} className="w-full max-w-md space-y-4 rounded-adm border border-adm-line bg-adm-surface p-5 text-white">
+    <AdminDialog onClose={onClose} closeDisabled={busy || (uncertain && retrySafe)} initialFocusRef={noteRef} labelledBy="handover-title" describedBy="handover-description">
+      <form onSubmit={save} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-md space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white">
         <div>
           <p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p>
           <h2 id="handover-title" className="mt-1 text-xl font-semibold">Record courier handover</h2>
           <p id="handover-description" className="mt-1 text-sm text-white/50">Record the actual courier receipt or dispatch reference. This deducts the exact reserved lots; it does not book a courier.</p>
         </div>
         <label htmlFor="handover-note" className="block text-xs font-semibold text-white/60">Courier handover or dispatch reference</label>
-        <textarea ref={noteRef} id="handover-note" required minLength={3} maxLength={500} value={note} onChange={event => { setNote(event.target.value.slice(0, 500)); setError('') }} className="adm-input min-h-24 resize-y text-base" />
-        {error && <StateBanner tone="danger">{error}</StateBanner>}
+        <textarea ref={noteRef} id="handover-note" disabled={locked} required minLength={3} maxLength={500} value={note} onChange={event => setNote(event.target.value.slice(0, 500))} className="adm-input min-h-24 resize-y text-base" />
+        {error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}
         <div className="flex flex-col-reverse gap-2 sm:flex-row">
-          <button type="button" onClick={onClose} disabled={busy} className={`${secondaryButton} flex-1`}>Cancel</button>
-          <button type="submit" disabled={busy || note.trim().length < 3} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : 'Confirm handover'}</button>
+          <button type="button" onClick={onClose} disabled={busy || (uncertain && retrySafe)} className={`${secondaryButton} flex-1`}>Cancel</button>
+          <button type="submit" disabled={busy || (uncertain && !retrySafe) || note.trim().length < 3} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? retrySafe ? 'Retry same command' : 'Reconcile order first' : 'Confirm handover'}</button>
         </div>
       </form>
     </AdminDialog>
   </div>
 }
 
-function DeliveryDetailsModal({ order, onClose, onSave }) {
+export function DeliveryDetailsModal({ order, onClose, onSave, retrySafe = true }) {
   const [form, setForm] = useState({ amount: '0', courier: '', tracking: '', waybill: '', confirmed: false, note: '' })
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
+  const { run, busy, uncertain, locked, error } = useRetainedFulfillmentCommand(onSave, retrySafe)
+  const courierRef = useRef(null)
 
   useEffect(() => {
     if (!order) return
@@ -573,45 +655,97 @@ function DeliveryDetailsModal({ order, onClose, onSave }) {
       confirmed: ['platform_charged', 'customer_confirmed'].includes(order.shippingQuoteStatus ?? order.shipping_quote_status),
       note: '',
     })
-    setError('')
-  }, [order])
+  }, [order?.id])
 
   if (!order) return null
   const save = async event => {
-    event.preventDefault(); setBusy(true); setError('')
-    try {
-      await onSave({
+    event.preventDefault()
+    const result = await run({
         orderRequestId: order.id, shippingAmount: Number(form.amount), courierName: form.courier.trim(),
         trackingNumber: form.tracking.trim(), waybillUrl: form.waybill.trim(),
         customerConfirmed: form.confirmed, note: form.note.trim(),
       })
-      setBusy(false)
-    } catch { setBusy(false); setError(safeUiError('DELIVERY_SAVE_FAILED')) }
+    if (result?.ok) onClose()
   }
   const update = key => event => setForm(current => ({ ...current, [key]: event.target.type === 'checkbox' ? event.target.checked : event.target.value }))
-  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="delivery-details-title"><form onSubmit={save} className="max-h-[92vh] w-full max-w-lg space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white"><div><p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p><h2 id="delivery-details-title" className="mt-1 text-xl font-semibold">Delivery quote and waybill</h2><p className="mt-1 text-sm text-white/50">Direct orders require the actual courier quote and customer confirmation. Marketplace delivery is recorded as platform charged.</p></div><div className="grid gap-3 sm:grid-cols-2"><label className="text-xs font-semibold text-white/60">Courier<input required value={form.courier} onChange={update('courier')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Delivery amount<input required type="number" min="0" step="0.01" value={form.amount} onChange={update('amount')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Tracking number<input value={form.tracking} onChange={update('tracking')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Waybill URL<input type="url" value={form.waybill} onChange={update('waybill')} className="adm-input mt-1.5 min-h-11 text-base" /></label></div><label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input type="checkbox" checked={form.confirmed} onChange={update('confirmed')} /> Customer approved the quoted delivery charge</label><label className="block text-xs font-semibold text-white/60">Communication / reconciliation note<textarea required value={form.note} onChange={update('note')} className="adm-input mt-1.5 min-h-24 resize-y text-base" /></label>{error && <StateBanner tone="danger">{error}</StateBanner>}<div className="flex gap-2"><button type="button" onClick={onClose} className={`${secondaryButton} flex-1`}>Cancel</button><button disabled={busy} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : 'Save delivery details'}</button></div></form></div>
+  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="presentation"><AdminDialog onClose={onClose} closeDisabled={busy || (uncertain && retrySafe)} initialFocusRef={courierRef} labelledBy="delivery-details-title"><form onSubmit={save} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-lg space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white"><div><p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p><h2 id="delivery-details-title" className="mt-1 text-xl font-semibold">Delivery quote and waybill</h2><p className="mt-1 text-sm text-white/50">Direct orders require the actual courier quote and customer confirmation. Marketplace delivery is recorded as platform charged.</p></div><div className="grid gap-3 sm:grid-cols-2"><label className="text-xs font-semibold text-white/60">Courier<input disabled={locked} ref={courierRef} required value={form.courier} onChange={update('courier')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Delivery amount<input disabled={locked} required type="number" min="0" step="0.01" value={form.amount} onChange={update('amount')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Tracking number<input disabled={locked} value={form.tracking} onChange={update('tracking')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Waybill URL<input disabled={locked} type="url" value={form.waybill} onChange={update('waybill')} className="adm-input mt-1.5 min-h-11 text-base" /></label></div><label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input disabled={locked} type="checkbox" checked={form.confirmed} onChange={update('confirmed')} /> Customer approved the quoted delivery charge</label><label className="block text-xs font-semibold text-white/60">Communication / reconciliation note<textarea disabled={locked} required value={form.note} onChange={update('note')} className="adm-input mt-1.5 min-h-24 resize-y text-base" /></label>{error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}<div className="flex gap-2"><button type="button" onClick={onClose} disabled={busy || (uncertain && retrySafe)} className={`${secondaryButton} flex-1`}>Cancel</button><button disabled={busy || (uncertain && !retrySafe)} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : uncertain ? retrySafe ? 'Retry same command' : 'Reconcile order first' : 'Save delivery details'}</button></div></form></AdminDialog></div>
 }
 
-function PaymentStatusModal({ order, onClose, onSave }) {
+export function PackingLotProof({ allocations, value, confirmed, disabled, onSelect, onConfirm }) {
+  const available = allocations.filter(row => row.packed_quantity < row.quantity)
+  const selected = available.find(row => row.id === value)
+  const identifiable = Boolean(selected?.lot?.batch_code && selected?.lot?.expiry_date && selected?.lot?.hub && selected?.lot?.custodian)
+  return <div className="space-y-2 rounded-adm border border-adm-line bg-adm-surface p-3">
+    <label className="block text-sm text-white/80">Physical lot allocation
+      <select disabled={disabled} value={value} onChange={event => onSelect(event.target.value)} className="adm-input mt-1 min-h-11 w-full text-base">
+        <option value="">Choose the lot you are picking</option>
+        {available.map(row => <option key={row.id} value={row.id}>{row.sku} · {row.lot?.batch_code || 'Batch unknown'} · {row.quantity-row.packed_quantity} remaining</option>)}
+      </select>
+    </label>
+    {selected && <p className="break-words text-sm text-white/80">Batch {selected.lot?.batch_code || 'unknown'} · Best before {selected.lot?.expiry_date || 'unknown'} · Box {selected.lot?.box_code || 'unknown'} · {selected.lot?.hub || 'Location unknown'} · {selected.lot?.custodian || 'Custodian unknown'}</p>}
+    <label className="flex min-h-11 items-center gap-3 text-sm text-white/80">
+      <input type="checkbox" disabled={disabled || !identifiable} checked={confirmed && identifiable} onChange={event => onConfirm(event.target.checked)} />
+      I checked this unit's physical batch, expiry and location against this allocation.
+    </label>
+    <p className="text-sm text-white/70">A product barcode identifies the SKU. This confirmation records which physical lot was picked. Reconcile missing lot details before scanning.</p>
+  </div>
+}
+
+export function PaymentStatusModal({ order, onClose, onSave, secure = false }) {
   const [target, setTarget] = useState('')
   const [note, setNote] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [uncertain, setUncertain] = useState(false)
+  const saving = useRef(false)
   const current = order?.paymentStatus || order?.payment_status
+  const versionAvailable = Boolean(order?.updatedAt || order?.updated_at)
   const choices = {
     not_requested: ['awaiting_instructions'],
     awaiting_instructions: ['evidence_submitted', 'failed'],
     evidence_submitted: ['verified', 'failed'],
     verified: ['refunded'],
-    failed: [], refunded: [],
+    failed: secure && versionAvailable ? ['evidence_submitted'] : [], refunded: [],
   }[current] || []
 
-  useEffect(() => { setTarget(choices[0] || ''); setNote(''); setError('') }, [order?.id, current])
+  useEffect(() => { setTarget(choices[0] || ''); setNote(''); setError(''); setUncertain(false) }, [order?.id, current])
   if (!order) return null
   const save = async event => {
-    event.preventDefault(); setBusy(true); setError('')
-    try { await onSave(target, note.trim()); setBusy(false) }
-    catch { setBusy(false); setError(safeUiError('PAYMENT_STATE_FAILED')) }
+    event.preventDefault()
+    if (saving.current || !choices.includes(target) || (secure && !versionAvailable)) return
+    saving.current = true; setBusy(true); setError('')
+    try {
+      const result = await onSave(target, note.trim())
+      if (result?.ok === false) { setError(result.error); setUncertain(Boolean(result.uncertain)) }
+    } catch { setError(safeUiError('PAYMENT_STATE_FAILED')) }
+    finally { saving.current = false; setBusy(false) }
   }
-  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="payment-status-title"><form onSubmit={save} className="w-full max-w-md space-y-4 rounded-adm border border-adm-line bg-adm-surface p-5 text-white"><div><p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p><h2 id="payment-status-title" className="mt-1 text-xl font-semibold">Payment evidence state</h2><p className="mt-1 text-sm text-white/50">Current: {String(current || 'not recorded').replaceAll('_', ' ')}. This records evidence; it does not process payment.</p></div>{choices.length ? <><label className="block text-xs font-semibold text-white/60">Next valid state<select value={target} onChange={event => setTarget(event.target.value)} className="adm-input mt-1.5 min-h-11 text-base">{choices.map(choice => <option key={choice} value={choice}>{choice.replaceAll('_', ' ')}</option>)}</select></label><label className="block text-xs font-semibold text-white/60">Evidence or reconciliation note<textarea value={note} onChange={event => setNote(event.target.value)} required={target !== 'awaiting_instructions'} className="adm-input mt-1.5 min-h-24 resize-y text-base" /></label></> : <StateBanner tone="info">No further payment transition is available for this record.</StateBanner>}{error && <StateBanner tone="danger">{error}</StateBanner>}<div className="flex gap-2"><button type="button" onClick={onClose} className={`${secondaryButton} flex-1`}>Close</button>{choices.length > 0 && <button disabled={busy || !target} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : 'Record transition'}</button>}</div></form></div>
+  return <AdminDialog onClose={onClose} closeDisabled={busy} labelledBy="payment-status-title">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md">
+      <form onSubmit={save} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-md space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white">
+        <div><p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p>
+          <h2 id="payment-status-title" className="mt-1 text-xl font-semibold">Payment evidence state</h2>
+          <p className="mt-1 text-sm text-white/70">Current: {String(current || 'not recorded').replaceAll('_', ' ')}. This records evidence; it does not process payment.</p>
+        </div>
+        {current === 'failed' && <p className="text-sm text-white/80">The rejected attempt stays in history. Submit corrected evidence for a different staff member to verify against the receiving account.</p>}
+        {secure && !versionAvailable && <StateBanner tone="warning">Refresh this order to load its review version before recording payment evidence.</StateBanner>}
+        {choices.length ? <>
+          <label className="block text-xs font-semibold text-white/80">Next valid state
+            <select disabled={busy || uncertain} value={target} onChange={event => setTarget(event.target.value)} className="adm-input mt-1.5 min-h-11 text-base">
+              {choices.map(choice => <option key={choice} value={choice}>{choice.replaceAll('_', ' ')}</option>)}
+            </select>
+          </label>
+          <label className="block text-xs font-semibold text-white/80">Evidence or reconciliation note
+            <textarea disabled={busy || uncertain} value={note} maxLength={1000} onChange={event => setNote(event.target.value)} required={target !== 'awaiting_instructions'} className="adm-input mt-1.5 min-h-24 resize-y text-base" />
+          </label>
+          <p className="text-sm text-white/70">Record the method, amount, currency, payer, reference and proof source. A screenshot alone does not establish payment.</p>
+        </> : <StateBanner tone="info">{current === 'failed' ? 'Recovery requires the protected payment workflow and a current order review.' : 'No further payment transition is available for this record.'}</StateBanner>}
+        {error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}
+        <div className="flex gap-2">
+          <button type="button" disabled={busy} onClick={onClose} className={`${secondaryButton} flex-1`}>Close</button>
+          {choices.length > 0 && <button disabled={busy || !target || (secure && !versionAvailable)} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : uncertain ? 'Retry same evidence' : 'Record transition'}</button>}
+        </div>
+      </form>
+    </div>
+  </AdminDialog>
 }

@@ -15,7 +15,7 @@ function storefrontUrl() {
 
 export function AdminStoreProvider({ children }) {
   const auth = useAdminAuthRuntime()
-  const inbox = useAdminInboxRuntime({ enabled: auth.isAdmin })
+  const inbox = useAdminInboxRuntime({ enabled: auth.isAdmin, actorId: auth.user?.id })
   const secureAdmin = adminBffEnabled()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)

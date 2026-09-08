@@ -6,6 +6,176 @@ and authorization. List reads request exact counts; known capped results return
 dependent totals/export rather than inventing zeros. No additional write route,
 secret, provider connection or role is introduced. Staff interpretation and visual
 rollback: `docs/runbooks/ADMIN_DASHBOARD_RUNBOOK.md`. Locally verified only.
+**8 September wholesale/media recovery, local (IDEA-20260908-01 / I-002):**
+Wholesale review forwards the retained key, freezes pending/uncertain triage,
+uses shared focus handling and accepts only a matching server receipt with its
+exact canonical timestamp. Missing receipts stay unresolved. Media assignment
+freezes images/reason, waits for uploads and retains the original assignment key
+while cleanup is pending. Upload/save responses are ignored after disposal;
+Customers and InventoryGrid are keyed by staff actor/role. Transport and browser
+baselines failed before correction. Final shared browser suite: 30/30; focused
+contracts: 95/95; Admin build/boundary/budget/secret checks pass (187.36/300 kB
+application chunk, 40 manifest modules). This is intercepted local fixture
+verification, not deployed receipt or real-host acceptance. Evidence/recovery:
+`docs/evidence/20260908-media-retry/README.md`. I-002 retains intake/CSV, complete
+navigation/reconciliation and signed provider acceptance. Owner's next priority
+is store desktop/portrait/landscape acceptance under IDEA-20260908-02 / I-009.
+
+## Coupon recovery — I-002, locally verified 8 September
+
+Create/activate/pause/archive dialogs freeze unresolved commands and retry the
+same payload/key through the protected coupon endpoints. Definite rejection
+allows correction. Legacy uncertainty allows closing for register reconciliation
+and disables receipt retry. Actor/role remounts dispose the old dialog runtime.
+Capture the opener before disabling it; AdminDialog's optional returnFocusRef
+restores that control. All 20 recovery browser cases, 94 focused contracts and
+the Admin build pass. `npm test` now includes the isolated recovery suite.
+Commands, fixture limitations and rollback:
+`docs/evidence/20260908-coupon-retry/README.md`. No coupon migration, flag or
+provider state was activated. Next I-002 action: wholesale review retained
+identity/canonical timestamp, followed by media/intake caller acceptance.
+
+## Supplier recovery — I-002, locally verified 8 September
+
+Supplier creation forwards its retained key, freezes unresolved payloads and
+uses shared AdminDialog. Actor/role changes remount the workspace; protected
+uncertainty retrieves the same receipt, while legacy uncertainty requires
+directory reconciliation. The regression first caught editable pending inputs;
+the full 13-case dialog browser suite and final Admin build pass (187.09/300 kB
+application chunk, 40 manifest modules). Checkpoint/recovery scope:
+Final focused payment-recovery, admin-command-retry, admin-bff-contract,
+admin-dialog-contract and product-intake-contract selection passes 88/88.
+`docs/design-checkpoints/20260908-supplier-retry/`, Suppliers.jsx, the Admin
+actor key and shared hook's procurement-unavailable classification. Do not infer
+signed provider receipt acceptance from component fixtures; I-002 keeps that
+gate and the coupon/wholesale/media/intake caller work open.
+
+## 8 September fulfillment retry transport — MAP-028 I-002
+
+Confirmation, delivery, handover, exact-lot transfer and box assignment wrappers
+accept an optional retained key as their last argument. Callers must preserve
+the same frozen payload/key after an uncertain write; a changed payload requires
+a different operation. Five response-loss regressions failed first, then the
+payment-recovery/admin-command-retry/admin-bff-contract selection passed 69/69;
+`npm run build:admin` passed. Subsequent UI adoption uses
+`useRetainedFulfillmentCommand` and the actor/order-scoped dialogs in
+`OmniOperationsHub.jsx`. `npm run test:payment-ui` passes 10/10; final focused
+payment-recovery/admin-command-retry/admin-bff-contract/admin-dialog-contract
+checks pass 75/75 and the post-UI Admin build passes. Unknown results freeze
+details and preserve receipt identity; legacy delivery/handover instead requires
+manual reconciliation. Same-page full-workspace/server receipt and exact-host
+checks remain in I-002. Recovery is the scoped wrapper/dialog/hook/test diff
+and `docs/design-checkpoints/20260908-fulfillment-retry/`; do not revert the
+unrelated security boundary or existing payment/packing recovery work.
+
+## Local chunk-load recovery — MAP-028 I-010, 6 September 2026
+
+`src/main.jsx` no longer intercepts/suppresses Vite preload errors or reloads
+automatically. A missing lazy module can reject into the existing React error
+boundary without discarding pending command identity. The explicit boundary
+reload remains available. Do not automatically retry a mutation after any reload;
+reconcile its receipt first. Shared boundary wording and rendered failure/retry
+acceptance remain open in I-010.
+
+`npx playwright test --config=playwright.api.config.js tests/chunk-recovery.spec.js
+tests/browser-error-safety.spec.js tests/request-timeout.spec.js` passes 19/19.
+The two new tests first reproduced suppression/reload and blocked-storage failure
+using the actual bootstrap before its React mount. They do not claim rendered
+browser acceptance. `scripts/audit-readiness-logic.mjs` remains runnable after
+listener removal; historical evidence JSON is unchanged. No provider apply or
+deployment. Rollback scope is the exact bootstrap/test/script diff, preserving
+all unrelated dirty work; do not reintroduce unattended reloads as a remedy.
+Both production builds passed after the bootstrap correction, including source
+security checks, separate-artifact verification, bundle budgets and secret scan.
+Storefront landing JS measured 149.53/150.00 kB gzip. The subsequent FAQ-only
+copy correction was checked by importing its data module; those build results
+precede that wording edit and are not rendered FAQ acceptance.
+
+## Prepared exact-lot packing — 6 September 2026 (MAP-023 / H-016)
+
+`20260906_exact_packing_lot.sql` adds exact allocation + physical confirmation
+to per-unit packing and revokes browser access to both scan RPCs.
+`20260906_exact_packing_wrapper.sql` routes the signed receipt boundary to it,
+preserving payment version checks. Apply in that order only during coordinated
+BFF/browser cutover after recovery and composed inventory gates pass.
+
+Local evidence: `node scripts/rehearse-purchase-time-reservation.mjs` passes
+16 properties (the `--baseline-packing` variant reproduces wrong-lot credit).
+`node scripts/rehearse-payment-recovery.mjs` passes real signed packing replay,
+changed-payload refusal, restricted ACLs, double migration application and
+payment guard composition alongside payment review races. Both own disposable
+localhost databases only. The packing extension uses
+`supabase/tests/packing_signed_{bootstrap,behavior}.sql`.
+Focused `packing-lot-proof`, `payment-recovery` and `admin-bff-contract` API
+specs pass 59/59, including service-level response-loss retry identity.
+`npm run test:payment-ui` passes 6/6 browser cases, including phone lot identity
+and confirmation reset. The aggregate lot-overcommitment regression failed
+first and passes after the exact scan guard correction; signed composition
+was rerun successfully afterward.
+The Admin build/security/artifact/budget gates pass locally.
+The 6 September aggregate contract phase passes 552/552 after the packing and
+handover preparation. Its chained Storefront browser launch failed in the
+restricted sandbox and is tracked separately from those contract results.
+The permitted isolated rerun `npm run test:selling-surfaces` passes 5/5 (2.4
+minutes); this resolves browser execution for this run, not real-host acceptance.
+
+Remaining: physical reassignment, common inventory lock ordering, full
+confirmation/payment/handover lifecycle and actual host/staff acceptance.
+For recovery, pause packing writes, inspect receipt and packing events, and
+reconcile the physical unit before resuming. Do not restore SKU-only lot
+selection or mint a new key for an unresolved scan. No production application
+or deployment is claimed by these fixture results.
+
+## Prepared payment recovery — 6 September 2026 (MAP-023 / H-015)
+
+Manual GCash/QR is the owner's intended launch model, not an activated receiving
+method. The protected payment command now carries `expectedPaymentStatus` and
+the unchanged database `expectedUpdatedAt` string. The SQL wrapper locks that
+order, rejects stale reviews and retains its signed, actor-bound receipt. The
+underlying payment RPC is revoked from browser roles at cutover. Rejected
+attempts append corrected evidence rather than erasing events; a different
+staff actor must verify against the receiving ledger. Open-order, complete
+unexpired reservation, combined lot-counter and shelf-life checks precede
+evidence submission and verification. Refund reconciliation is not treated as
+reopening a cancelled order.
+
+Files: `20260906_payment_evidence_recovery.sql`, fulfillment BFF/projection,
+`adminBffService.js`, `OmniOperationsHub.jsx`, and the payment SQL/API/browser
+fixtures. The rehearsal exposed an existing unparenthesized CASE expression
+that PostgreSQL rejected in `20260812_admin_fulfillment_bff_boundary.sql`; its
+expression is now parenthesized. No provider migration has been applied.
+
+Fresh local evidence: `node scripts/rehearse-payment-recovery.mjs --baseline`
+reproduced `Invalid payment-status transition`; the corrected
+`npm run rehearse:payment-recovery` passes double application, history,
+independent review, cancelled/expired/missing/quarantined/short-life stock,
+split-reservation overcommit, real HMAC/receipt replay, changed-payload denial,
+stale version and two concurrent reviewers (one commit, one conflict).
+The fixture uses only loopback port 55441 and the fixed disposable
+`k2_payment_recovery_rehearsal` database; it stops a server it starts.
+Windows requires elevated local PostgreSQL/browser execution in this environment.
+`npm run test:payment-ui` passes 5/5 at 375×812, 844×390 and 1280×900, including
+busy close/Escape, focus return, legacy refusal and preserved uncertain evidence.
+All 550 API/contracts pass; Admin build, security, artifact and size gates pass.
+The elevated Storefront selling-surface browser rerun passes 5/5; the initial
+sandbox browser-start failures were execution failures, not product evidence.
+
+Activation order: complete OWNER-005/MAP-017, apply prerequisite operational,
+reservation and signed-BFF migrations, preflight the exact installed wrapper,
+then this additive correction; test authenticated denial/allow/replay before
+enabling the matching Admin browser release. The wrapper patch refuses an
+unexpected source shape. Never enable the new browser payload against an old
+wrapper. No QR/account details, real payment, delivery, or provider acceptance
+is established by these local fixtures.
+
+Recovery: before apply retain exact prior function definitions/ACLs with the
+approved backup. If activation fails, disable the affected browser/server
+payment path, preserve receipts and evidence, and reconcile uncertain commands
+before retry. Do not restore the old unrestricted payment grant or delete
+events. Before apply, removing this prepared migration and reverting only this
+payment slice is sufficient; retain unrelated dirty work. Next required work is
+H-019/H-020/H-023 composed lifecycle/locking acceptance and real receiving-ledger,
+staff and exact-host acceptance in MAP-023/MAP-025.
 
 **Current status:** server foundation, cookie-auth client, fixed overview,
 product, product-master, fulfillment, inbox, Pasabuy, product-intake, flight-consignment,
@@ -504,3 +674,537 @@ browser switch; a seeded string or local UI render is not publication proof.
 
 Run `npm run verify:admin-bff` for the local foundation contract. A passing
 source contract is not deployment or end-to-end session evidence.
+# Local cookie containment evidence — 5 September 2026
+
+## Inbox message retry continuity — 5 September 2026
+
+### Draft isolation and stable workflow controls — local browser evidence
+
+MAP-019 / MAP-028 H-001 and H-009 were reproduced in the isolated Inbox fixture:
+Maria's private draft appeared in Elena's reply composer; a delayed save erased
+newer text in the same or another thread; typing a workflow reason entered only
+its first character. Those four browser assertions failed before correction.
+
+`Inbox.jsx` now keeps drafts per conversation inside an actor-keyed workspace.
+Draft entries have identity, so successful completion removes only the exact
+submitted entry. A new edit, including retyping the same words, is preserved.
+Thread-visit identity and history request sequence reject stale results across
+customer changes, return visits and workspace disposal. Copy, read, workflow,
+note and reply notices are likewise guarded. `WorkflowControls` is now a stable
+module-level component with explicit props and unchanged controls/styles.
+
+Verification: `npx playwright test --config=playwright.inbox.config.js --reporter=dot`
+passes **15/15**, including staff-switch with pending save, delayed website
+reply, out-of-order history for another customer and a return visit, phone
+draft navigation, keyboard focus and existing workflow/note/reply journeys.
+The API/security/release-CI suite passes **82/82** using the earlier focused
+command plus `tests/release-ci-contract.spec.js`. A fresh `npm run build:admin`
+passes all prebuild, artifact, budget (**186.91/300 kB**) and secret gates.
+No live messages, provider changes, database writes or deployment were performed
+by these fixtures. Staff identities and history are fabricated; this is not
+real authentication or real-host delivery evidence.
+
+Harness recovery: sandbox Chromium launch returned EPERM. The exact elevated
+retry was accepted in this continuation, superseding the earlier account-limit
+block. Its shared-server attempt reached an unrelated project on port 5173 and
+timed out before assertions. `playwright.inbox.config.js` now starts K2 on strict
+loopback port 5193, refuses server reuse and shuts down its owned server when
+finished. Use `npm run test:inbox-ui`; `npm test` includes it, and the base suite
+excludes this spec to avoid accidentally using an unrelated server again.
+
+Rollback: reverse this continuation's `Inbox.jsx` diff and isolated harness/test
+wiring only; preserve all pre-existing edits. Reconcile drafts before leaving or
+reverting the workspace, because draft retention is deliberately memory-only.
+That rollback restores the reproduced defects and is not a release remedy.
+Remaining work belongs to MAP-019 / MAP-028 H-002/H-008/H-012 and MAP-025:
+reload/uncertain-command reconciliation, polling ownership and stale states,
+history failure/mobile parity, real staff roles, signed commands and exact-host
+acceptance. No MAP item is closed solely by these fixture results.
+
+### Workflow and mark-read continuation — local evidence, 5 September
+
+The remaining two secure Inbox callers now pass the mounted actor's command
+session to `markConversationReadBff` and `updateConversationWorkflowBff`.
+Missing runtime sessions deny the action; disposed sessions cannot submit or
+report late success. Existing direct-service compatibility remains stateless,
+so callers must explicitly supply the owning session for retry continuity.
+
+Two new regression tests first failed on different retry keys after a simulated
+lost response. The same tests now pass, including success-key retirement and
+disposed-session denial. A third verifies concurrent workflow deduplication,
+different-payload separation, original-payload replay and late-success denial.
+These are local HTTP fixtures, not live database commit or authentication proof.
+
+Verification: the focused command below passes **78/78**. `npm run build:admin`
+passes security/import checks, Admin-only artifact/404 checks, the **186.91/300
+kB** application budget and output secret scan. Tooling emitted existing
+NO_COLOR/FORCE_COLOR and Git ignore-access warnings; no gate failed.
+
+`npx playwright test --config=playwright.api.config.js tests/inbox-command-retry.spec.js tests/admin-client-cookie.spec.js tests/admin-cookie-recovery.spec.js tests/admin-bff-contract.spec.js tests/request-timeout.spec.js --reporter=dot`
+
+Recovery: reverse only this continuation's optional-session wrapper arguments
+and the corresponding hook wiring, preserving earlier cookie/message changes.
+That removes retry protection: reconcile canonical state before any subsequent
+operation. Nothing was deployed or changed in a provider. MAP-019 / MAP-028
+H-002 retains reload reconciliation, other command families and authenticated
+actor-switch acceptance. Mark-read's optimistic local projection also needs
+fresh-state reconciliation when a new inbound message races an older receipt.
+
+MAP-019 / MAP-028 H-002: internal-note and website-reply commands use a
+staff-actor-owned in-memory command session. Identical unresolved payloads reuse
+an idempotency key and concurrent duplicates share the pending request. Only
+success retires its key; different content is a different command. At 100
+unresolved operations, new commands stop for reconciliation instead of evicting
+unknown outcomes. Disposal clears retained content/keys and rejects future calls
+and late success delivery to the old runtime. It does not undo server commits.
+Reloads discard the memory: review the canonical conversation before resending.
+Workflow/read-mark commands and broader session/polling races remain in MAP.
+
+Verification: `npx playwright test --config=playwright.api.config.js tests/inbox-command-retry.spec.js tests/admin-client-cookie.spec.js tests/admin-cookie-recovery.spec.js tests/admin-bff-contract.spec.js tests/request-timeout.spec.js --reporter=dot`
+passed 75/75; `npm run build:admin` passed its prebuild/security, artifact
+boundary, bundle budget (186.91/300 kB) and output secret checks. Local only.
+Rollback spans the command-session implementation, message callers and actor
+prop in AdminStoreContext; retain regression tests. Reverting restores the
+unsafe retry behavior, so reconcile pending messages before any resend.
+
+Client follow-through: `adminBffService.js` now safely decodes normal/recovery
+CSRF cookies, including semicolon-separated entries without a following space.
+Malformed encodings yield empty tokens so the server can deny normally instead
+of the client throwing an unhandled URIError. Three new direct-service cases
+failed before the fix and pass afterward. Combined command adds
+`tests/admin-client-cookie.spec.js` to the cookie/BFF/timeout suites below:
+72/72 pass locally. Tests use fabricated cookies and in-memory HTTP responses;
+no real credentials or recovery/password requests were sent. Restore the prior
+token-reader hunk only for rollback and retain the tests. Exact-host denial
+acceptance remains MAP-025.
+
+## Full-response timeout evidence — 5 September 2026
+
+MAP-028 H-004: `src/lib/fetchWithTimeout.js` buffers finite API response bodies
+under the same AbortController/deadline as the headers. Commands are not retried;
+an ambiguous timeout still requires record/receipt reconciliation. Current
+callers are API clients, not streaming download consumers. HTTP status, headers
+and payload are retained; callers receive a reconstructed buffered Response,
+so future streaming or response-URL-dependent clients need a separate contract.
+The stalled-body regression failed before the correction. Command:
+`npx playwright test --config=playwright.api.config.js tests/request-timeout.spec.js tests/admin-bff-contract.spec.js tests/admin-cookie-recovery.spec.js --reporter=dot`
+passes 69/69 locally, including upstream cancellation and bodyless responses.
+No browser or live-host acceptance is implied. Recovery: revert the body-buffer
+hunk only and rerun the focused tests; preserve the regression and MAP's pending
+real-host acceptance. Never automatically resend a timed-out write.
+
+MAP-028 H-003 / MAP-020–021: malformed percent-encoded cookie values are treated
+as empty values by the shared Admin parser. Active, pending and recovery session
+reads remain unauthenticated for invalid input; CSRF denial does not throw.
+Four regression cases failed with URIError before the correction. Afterward,
+`npx playwright test --config=playwright.api.config.js tests/admin-cookie-recovery.spec.js tests/admin-bff-contract.spec.js --reporter=dot`
+passed 57/57. This is local evidence only, not deployment or provider activation.
+Recovery: revert the parser hunk if necessary and rerun this suite; retain the
+regressions and never log raw session cookies while diagnosing failures.
+
+## Inbox polling ownership and canonical unread — 5 September 2026
+
+MAP-019 / MAP-028 H-008 and the remaining H-002 read-state gap. Ownership rules
+now live in `src/context/adminInboxPolling.js` as pure functions so the exact
+staleness, generation and unread decisions are verifiable without a browser:
+
+- `shouldStartPoll` — the eight-second refresh is skipped while the document is
+  hidden or a read is already in flight. Returning to a visible tab refreshes
+  immediately, so a paused queue is never both stale and silent.
+- `isCurrentGeneration` — every read carries the generation it started in.
+  A response from a superseded session, filter or unmounted Inbox is discarded
+  instead of repopulating state. Secure reads also abort through an
+  `AbortController` on disable and unmount.
+- `resolveRefreshFailure` — a failed *background* poll keeps the loaded queue and
+  marks it stale; only a first load with nothing to preserve clears the queue and
+  reports the underlying error. Staff see one status banner reading
+  "Live updates paused. This queue is the last loaded copy — refresh before
+  acting on it." A true permission revocation still empties the queue on the
+  next initial load, and the banner never claims the data is current.
+- `applyReadReceipt` — mark-read stamps the instant the command was issued. A
+  conversation whose `lastInboundAt` is newer than that receipt stays unread, so
+  a replayed or delayed success cannot visually clear a message that arrived
+  after it. Every read now schedules a canonical background refresh instead of
+  trusting the optimistic projection alone.
+
+Initial and background loading are separated: `inboxState` carries `loading`,
+`refreshing` and `stale`, and the full-screen loading state is still limited to a
+genuinely empty first load.
+
+Verification, local only:
+`npm run test:inbox-ui` passes **21/21** (six new checks failed first as intended)
+and `npx playwright test --config=playwright.api.config.js tests/admin-bff-contract.spec.js tests/inbox-command-retry.spec.js tests/admin-client-cookie.spec.js tests/admin-cookie-recovery.spec.js tests/request-timeout.spec.js --reporter=dot`
+passes **78/78**. `npm run build:admin` passes its prebuild/security gates, the
+Admin-only artifact/404 boundary, the **186.91/300 kB** budget and the output
+secret scan. The obsolete `admin-bff-contract` assertion that pinned the exact
+unguarded interval line was replaced by assertions on the guarded poll.
+
+Recovery: revert `src/context/adminInboxPolling.js`, the polling/read hunks of
+`useAdminInboxRuntime.js`, the stale banner branch in `Inbox.jsx` and the harness
+`staleQueue` option; retain the regression tests. Reverting restores the
+queue-clearing poll, so reconcile any conversation acted on from a stale view.
+
+Not covered here and still open in MAP-019 / MAP-028: real offline/reconnect and
+provider revocation acceptance, authenticated actor-switch acceptance, H-002
+reload reconciliation of ambiguous commands across a page load, and H-012 phone
+history parity. No provider change or deployment occurred.
+
+## Inbox event history parity and failure states — 5 September 2026
+
+MAP-019 / MAP-028 H-012, the history half. The audit timeline was previously
+rendered only inside the `hidden ... xl:flex` aside and mapped every read failure
+to `[]`, so below 1280px staff could not inspect it at all and a denied or failed
+read was indistinguishable from a conversation with no events.
+
+- `useAdminInboxRuntime.loadConversationHistory` now returns
+  `{ ok, events }` instead of an array, so a failed secure read is reported as a
+  failure. The direct-database path reports its own query error the same way.
+- `Inbox.jsx` tracks `historyStatus` (`idle` / `loading` / `ready` / `error`) and
+  renders one shared `EventHistoryBody` in four distinct states: loading, an
+  amber "Event history could not be loaded." with a 44px **Retry event history**
+  control, the existing empty line, and the timeline itself. Retry reuses
+  `loadHistory`, so it keeps H-001's conversation-visit and request-generation
+  guards — a late reply from an abandoned visit still cannot land.
+- The same body is rendered in a second `xl:hidden` `<details>` disclosure beside
+  the existing "Workflow controls" one, giving phones and tablets the same
+  timeline. Both instances share one state; only one is visible per width.
+
+Because the timeline now exists twice in the DOM, the two pre-existing
+delayed-history contracts were scoped to the desktop aside
+(`getByRole('complementary', { name: 'Conversation workflow' })`). That narrows
+the locator, not the assertion.
+
+Verification, local only: `npm run test:inbox-ui` passes **24/24** (three new
+checks, written first); the focused boundary suite passes **78/78**; and
+`npm run build:admin` passes its security, artifact/404, **186.91/300 kB** budget
+and secret-scan gates.
+
+Recovery: revert the `EventHistoryBody` component, the `historyStatus` hunks in
+`Inbox.jsx`, the mobile disclosure, and the `loadConversationHistory` return
+shape together — the view tolerates a bare array for compatibility, so a partial
+revert of the runtime alone is safe but leaves failures shown as empty again.
+
+Still open in H-012: real-device acceptance at 375×812 and 844×390 with the
+software keyboard, 200% text zoom, screen-reader review of the disclosure, and a
+long-thread pass. Nothing here is live-host or authenticated evidence.
+
+## Ambiguous Inbox command reconciliation — 5 September 2026
+
+MAP-019 / MAP-028 H-002, the reload/uncertainty half. Operation identities are
+deliberately memory-only — nothing about a staff command is written to browser
+storage — so a reload permanently discards the retry identity of any command
+whose outcome this runtime never learned. Two honest behaviors now cover that,
+rather than persisting keys where they must not go:
+
+- **Uncertain outcomes are named as such.** `adminBffService` exports
+  `UNCERTAIN_COMMAND_CODES` (`REQUEST_TIMEOUT`, `ADMIN_SERVICE_UNAVAILABLE`),
+  `commandOutcomeIsUncertain()` and `UNCERTAIN_COMMAND_NOTICE`. A write whose
+  response was lost may already have committed, so the runtime returns
+  `{ ok: false, uncertain: true }` and triggers a canonical background refresh
+  instead of claiming "could not be saved". The Inbox renders that as an amber
+  alert — "The Inbox did not confirm this command, so it may already be saved.
+  Check the refreshed conversation before sending it again." — separate from the
+  crimson failure line, and the unsent draft is preserved for reconciliation.
+  Rejections (validation, session, permission) keep their exact prior messages.
+- **Leaving with unresolved work is guarded.** The command session exposes
+  `unresolvedCount()`, and the runtime registers a `beforeunload` handler that
+  warns only while that count is non-zero. The listener is removed with the
+  session, so a signed-out or unmounted Inbox never blocks navigation.
+
+Verification, local only: `npm run test:inbox-ui` passes **27/27** and the
+focused boundary suite passes **80/80** (three new checks written first; two
+failed on the missing helper and count before implementation). `npm run build:admin` passes its
+security, artifact/404, **186.91/300 kB** budget and secret-scan gates.
+
+Recovery: revert `commandOutcomeIsUncertain`/`UNCERTAIN_COMMAND_NOTICE`/
+`unresolvedCount` in `adminBffService.js`, the `commandFailure` helper and
+`beforeunload` effect in `useAdminInboxRuntime.js`, and the `uncertainNotice`
+state in `Inbox.jsx`. Reverting restores the misleading "could not be saved"
+message for lost responses, so reconcile any conversation acted on during an
+outage before trusting it.
+
+Still open in H-002: this covers the Inbox command families only. Other mutation
+owners (`ReservationHolds.jsx` and the remaining command groups) keep their
+per-invocation keys, and authenticated actor-switch plus real-host command
+acceptance remain unproven.
+
+## Retained operation identity beyond the Inbox — 5 September 2026
+
+MAP-019 / MAP-028 H-002 for mutation owners outside the Inbox. The retained-key
+session is now a shared primitive rather than Inbox-only code:
+
+- `createRetainedOperationSession(send, messages)` in `adminBffService.js` holds
+  the behavior — payload-fingerprinted identity, one shared in-flight request for
+  concurrent identical calls, key retirement only on success, a 100-operation
+  reconciliation ceiling, `unresolvedCount()`, and disposal that refuses new work
+  and late success delivery. `createInboxCommandSession()` is now a thin wrapper
+  over it with the Inbox's wording, so Inbox behavior is unchanged.
+- `ReservationHolds.jsx` uses that session for both stock-hold commands instead
+  of `operationKey()` per invocation. Releasing expired holds and extending a
+  hold are real inventory effects, so a retry after a lost response now reaches
+  the server as the same logical operation. Unconfirmed outcomes surface as an
+  amber `UNCERTAIN_COMMAND_NOTICE` banner and reload the record, rather than a
+  crimson failure that invites a second attempt.
+
+Verification, local only: four new checks in `tests/admin-command-retry.spec.js`
+(registered in `test:contracts`) failed first and now pass; the combined run of
+`admin-command-retry`, `inbox-command-retry`, `admin-bff-contract`,
+`purchase-time-reservation`, `reservation-policy-contract`,
+`admin-logic-regressions` and `release-ci-contract` passes **112/112**, and
+`npm run build:admin` passes its security, artifact/404, **186.91/300 kB** budget
+and secret-scan gates.
+
+Recovery: revert `ReservationHolds.jsx` to the per-invocation `operationKey()`
+and, if required, restore the inline Inbox session body; keep the regression
+spec. Reverting reintroduces double-application risk on a retried hold command.
+
+Both remaining owners were addressed immediately afterwards, below. Real
+authenticated and real-host command acceptance remains unproven everywhere.
+
+## Delivery rate command identity — 5 September 2026
+
+MAP-019 / MAP-028 H-002, closing the last per-invocation caller.
+`DeliveryRateControl.jsx` published rates and set courier/source states with a
+fresh `operationKey()` on every attempt. What a customer is charged is money, so
+a retry after a lost response now runs through `createRetainedOperationSession`
+and reaches the server as the same logical operation. Unconfirmed outcomes show
+the amber `UNCERTAIN_COMMAND_NOTICE` banner and reload the control tables instead
+of a crimson failure that invites a second publication. The read-only quote test
+is untouched — it is not a mutation.
+
+`ConsignmentManager.jsx` needed no change: it already retains a key per command
+slot until the payload fingerprint changes or the operation completes. A contract
+now pins that so a later refactor cannot silently reduce it to one key per
+attempt. An earlier note in this runbook listing it as per-invocation was wrong.
+
+Verification, local only: two new source contracts in
+`tests/admin-command-retry.spec.js` (one failed first), and the combined focused
+run of `admin-command-retry`, `delivery-rate-control`, `inbox-command-retry`,
+`admin-bff-contract`, `admin-logic-regressions`, `purchase-time-reservation`,
+`reservation-policy-contract` and `release-ci-contract` passes **124/124**.
+`npm run build:admin` passes its security, artifact/404, **186.91/300 kB** budget
+and secret-scan gates.
+
+Recovery: restore the `operationKey()` helper and the three inline command calls
+in `DeliveryRateControl.jsx`; keep the contracts. Reverting reintroduces
+double-publication risk on a retried rate change.
+
+## One Manila reporting window — 5 September 2026
+
+MAP-028 H-006. The dashboard used browser-local midnight and the overview API
+used UTC midnight, so staff in Italy and staff in Manila could see different
+buckets for the same data, and the UTC start silently omitted the first eight
+hours of the intended prior Manila day.
+
+`src/lib/manilaReportingWindow.js` is now the single definition. It exposes
+`manilaReportingWindow(days)` (inclusive `currentStart`, exclusive `currentEnd`
+at the next Manila midnight, plus an equal-length non-overlapping prior period),
+`manilaDateKey()` and `manilaDayKeys()` for the revenue chart, and
+`isSupportedReportingRange()`. Asia/Manila has observed no daylight saving since
+1978, so the fixed +08:00 offset is exact and stays exact when the viewer's own
+zone changes for summer time. `prepared-api/admin/overview.js` and
+`src/views/admin/Overview.jsx` both consume it; neither computes its own
+midnight any more.
+
+Rapid range switching is also guarded: `Overview.jsx` stamps each load with a
+`rangeRequest` generation and only the newest request may write state, so a
+slower 90-day response cannot replace the 7-day view staff just selected.
+
+Current totals select payment-verified orders **by order creation date in
+Manila**. They are not cash collected on the verification date; the tile detail
+now says so.
+
+## Unknown is not zero — 5 September 2026
+
+MAP-028 H-005, and operations rulebook section 21. `src/lib/overviewAvailability.js`
+holds the rules: `overviewDomainsUnavailable()` turns the API's per-domain
+`unavailable` list into a set, `showMetric()` reports a figure or the honest
+`Unavailable` (a metric spanning several domains is unknown if any of them is),
+`countProductStock()` keeps unknown stock separate from zero stock, and
+`salesExportBlockReason()` refuses an export whose source is unreadable or stale.
+
+In `Overview.jsx`: a tile whose domain failed shows `Unavailable` and drops its
+percentage change, because a comparison against unknown data is a fiction; a
+queue built on an unreadable domain is withheld rather than rendered as empty; a
+total failure preserves the last successful data and marks it stale instead of
+replacing the page with confident zeros; and the sales CSV is disabled with a
+stated reason. Null or non-numeric `stock_available` is now counted as unknown
+and surfaced in the inventory queue detail, never as out of stock.
+
+In `ReservationHolds.jsx`: a failed read reports `Unavailable` holds and
+"Hold status unavailable" rather than deriving "None overdue" from nothing. The
+reassuring wording remains correct on a successful read.
+
+Verification for both, local only: `tests/manila-reporting-window.spec.js` (6)
+and `tests/overview-availability.spec.js` (6) are new and registered in
+`test:contracts`; the combined focused run passes **115/115**, `npm run
+test:admin-ui` passes **26/26**, and `npm run build:admin` passes its security,
+artifact/404, **186.96/300 kB** budget and secret-scan gates.
+
+Recovery: the two library modules are additive — revert their call sites in
+`Overview.jsx`, `ReservationHolds.jsx` and `prepared-api/admin/overview.js` to
+restore the previous behavior, and keep the specs. Reverting reintroduces
+timezone-dependent buckets and failure-as-zero reporting.
+
+Still open: real staff acceptance across a Manila midnight boundary, an actual
+provider outage exercising each domain independently, and H-005's remaining
+freshness-per-domain display (a single stale flag currently covers the page).
+
+## Bounded Inbox read, honestly labelled — 5 September 2026
+
+MAP-028 H-007, the completeness half. The secure Inbox read selected the newest
+200 conversations and the newest 2,000 messages across that whole set, with no
+marker saying so. Two consequences: a busy thread could consume the entire
+message allowance and leave other threads empty, and a page could look like the
+complete record.
+
+`server/admin-bff/inbox.js` now exports `INBOX_READ_LIMITS`
+(`conversations: 200`, `messages: 2000`, `messagesPerConversation: 30`). The
+bounds are unchanged in size — an Admin session still may not pull an unbounded
+slice of the message table, and nothing eagerly downloads a full thread. What
+changed is fairness and honesty:
+
+- Messages arrive newest first and each conversation keeps at most
+  `messagesPerConversation`, so one very busy thread can no longer starve the
+  others in the returned projection.
+- The response carries `completeness.conversations` (`returned`, `limit`,
+  `truncated`) and `completeness.messages` (`returned`, `limit`,
+  `perConversation`, `truncated`), plus a per-conversation `messagesTruncated`.
+- `adminInboxNormalization.js` and `useAdminInboxRuntime.js` carry both through,
+  and `Inbox.jsx` shows them: a queue banner naming how many conversations are on
+  screen and that older ones exist, and a line above a sampled thread saying the
+  newest N messages are shown and older ones are not loaded.
+
+Verification, local only: seven new checks in
+`tests/inbox-read-completeness.spec.js` (registered in `test:contracts`) drive
+`readAdminInbox` against a fake client and assert the limits are still applied,
+not widened. The combined focused run passes **103/103**, `npm run test:inbox-ui`
+passes **27/27**, and `npm run build:admin` passes its security, artifact/404,
+**186.96/300 kB** budget and secret-scan gates.
+
+Recovery: revert the limits constant, the per-conversation grouping ceiling and
+the completeness projection together with their client labels. Reverting restores
+silent truncation, so re-check any operational conclusion drawn from a full page.
+
+Still open in H-007: server-filtered and cursor-paginated queues so an old urgent
+thread can be *reached* rather than only declared missing, independently paged
+messages for a selected thread, and authoritative aggregates (or explicit sample
+labels) for the dashboard's seven record sets and its CSV. This entry delivers
+the fairness ceiling and the truncation labels only.
+
+## Evidence is classified before it is deleted — 5 September 2026
+
+MAP-028 H-013. The intake evidence route uploaded with `upsert: true`, then sent
+*every* registration error into Storage removal before classifying it. Two
+source-derived losses follow. A transport failure does not prove the transaction
+rolled back, so the object of a committed registration could be deleted. And
+because the object path excludes the file name — which does participate in the
+registration payload hash — a replay with the same key, image, session and slot
+but a changed file name lands on the same path, is rejected as a conflict, and
+the cleanup then deletes the object the *original successful* registration
+references.
+
+`server/admin-bff/evidence-cleanup-policy.js` now decides this:
+
+- `classifyEvidenceRegistrationFailure()` separates a deterministic refusal
+  (`K2_ADMIN_RATE_LIMITED`) from a proven earlier success
+  (`K2_ADMIN_IDEMPOTENCY_CONFLICT`) from an unknown outcome (everything else).
+- `evidenceCleanupDecision()` removes an object only when the command was
+  refused **and** this request created it. A conflict never deletes, because the
+  stored object may be the referenced one. An unknown outcome keeps the bytes and
+  records a recoverable pending state for reconciliation.
+- The route uploads with `upsert: false`; a refused overwrite tells it the object
+  already existed, so it is not this request's to delete. The path is
+  content-addressed, so an existing object at it holds the same bytes.
+
+A new `INTAKE_EVIDENCE_REGISTRATION_UNRESOLVED` security-event reason records the
+retained-object case. The existing `EVIDENCE_CLEANUP_PENDING` /
+`EVIDENCE_CLEANUP_UNTRACKED` responses and the phone retry surface are unchanged.
+
+## The final-Admin invariant is serialized — 5 September 2026
+
+MAP-028 H-014. `20260822_admin_staff_access_boundary.sql` locks the target
+profile with `for update`, counts Admin rows, then demotes. Two concurrent
+demotions of two *different* Admins take two different row locks, so under READ
+COMMITTED both observe two Admins and both commit. The invariant belongs to the
+Admin set, and no row lock can express it.
+
+Prepared migration `20260905_privileged_membership_serialization.sql` adds
+`k2_private.lock_privileged_membership()` — a transaction-scoped advisory lock on
+a fixed, documented key, revoked from every client role — and rebuilds both paths
+that change privileged membership to take it before counting:
+`public.set_user_role` and `public.execute_admin_staff_access_command_v1`. The
+staff command's body is otherwise the 20260822 definition: same receipts, rate
+limit, audit events, error codes and signature verification. No new writable role
+source was introduced, and the lock releases at commit or rollback so a crashed
+session cannot wedge role changes.
+
+**Behavioural evidence, not a source claim.** `npm run rehearse:final-admin`
+(`scripts/rehearse-final-admin-concurrency.mjs`) runs against the portable
+PostgreSQL runtime, isolated from production:
+
+1. It first **reproduces** the defect against the current per-row guard — both
+   demotions commit and `0` Admins remain. The runner fails if it cannot
+   reproduce it, so the rehearsal cannot pass vacuously.
+2. It then installs the repository's own lock function from the migration and
+   races the same two demotions: exactly one commits, the other is refused with
+   `K2_ADMIN_FINAL_ADMIN`, one recoverable authorized Admin remains, and no
+   partial role state is committed.
+
+Verification for both, local only: `tests/evidence-cleanup-policy.spec.js` (7)
+and `tests/privileged-membership-serialization.spec.js` (4) are new and
+registered in `test:contracts`; the combined focused run passes **89/89**, the
+rehearsal passes, and `npm run build:admin` passes its security, artifact/404,
+**186.96/300 kB** budget and secret-scan gates.
+
+Recovery: H-013 is reverted by restoring `upsert: true` and the unconditional
+`removeUnregisteredEvidence` call — which reinstates the evidence-loss paths, so
+prefer fixing forward. H-014's migration is **prepared and unapplied**; it
+changes nothing until the MAP-017 apply gate opens, and it must be applied with
+the rest of that phase rather than on its own.
+
+Still open: H-013's isolated Storage/RPC fixture coverage for commit-then-lost-
+response and failed-cleanup paths against a real provider, and H-014's
+application to the live database plus a two-session rehearsal against the applied
+functions rather than an extracted copy.
+
+## Receiving row actions address the selected lot — 5 September 2026
+
+MAP-028 H-017. Two boxes of one product are two physical lots with their own
+batch code and expiry. The manifest table's `+1 Milan packed` and
+`+1 Manila received` handlers called `scan(item.sku, stage)` without the row's
+id, so the fallback picked the first incomplete line with that SKU: clicking the
+second box incremented the first, and the count was attributed to the wrong lot.
+The scanner modal already passed its item id and is unchanged.
+
+`src/views/admin/consignmentScanTarget.js` now owns the decision.
+`selectManifestItem()` addresses an exact manifest-item id when one is given and
+keeps the SKU fallback only for the scanner, where a barcode genuinely arrives
+without a chosen row. `scanRefusalReason()` names the **box** when a line cannot
+take another unit — Milan at its expected quantity, Manila at what Milan actually
+packed — so a refusal is actionable instead of silently landing elsewhere. The
+component re-checks the chosen line against its current quantities before
+sending, so a row rendered before another staff member's scan cannot act on stale
+numbers. Retained operation keys in this component are unchanged.
+
+The box code is now visible where staff act: a "Box / batch" column on desktop
+and an `lg:hidden` card list carrying SKU, box, lot, expiry, all three counts and
+the action together. Desktop table density is unchanged.
+
+Verification, local only: nine checks in `tests/consignment-row-targeting.spec.js`
+(registered in `test:contracts`), the focused run passing **99/99**, and
+`npm run build:admin` green at **186.96/300 kB** with its security, artifact/404
+and secret-scan gates.
+
+**Read this evidence with one correction in mind.** The first version of the card
+list introduced a JSX syntax error — two sibling elements in a ternary branch
+without a fragment — and every source-string contract in that spec still passed
+while `npm run build:admin` was failing. The build caught it; the contracts could
+not. The spec now transforms the component with esbuild as its last check, and
+the same lesson applies to the other source contracts added this session: they
+pin intent, not compilability.
+
+Not verified: the 375px and desktop rendering was never opened in a browser. The
+responsive structure is asserted by contract only, so H-017's layout validation
+at 375×812 and 844×390, and its exhausted-line and retry flows against a rendered
+component, remain open.

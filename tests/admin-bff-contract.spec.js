@@ -742,7 +742,8 @@ test('fulfillment BFF is session/CSRF/idempotency gated and validates fixed comm
 
   expect(validateFulfillmentCommand('packing_scan', {
     orderRequestId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', scannedCode: '8001234567890',
-  })).toEqual({ orderRequestId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', scannedCode: '8001234567890' })
+    reservationId: '22222222-2222-4222-8222-222222222222', lotConfirmed: true,
+  })).toEqual({ orderRequestId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', scannedCode: '8001234567890', reservationId: '22222222-2222-4222-8222-222222222222', lotConfirmed: true })
   expect(() => validateFulfillmentCommand('packing_scan', {
     orderRequestId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', scannedCode: 'SKU-1', injected: true,
   })).toThrow('REQUEST_INVALID')
@@ -753,7 +754,12 @@ test('fulfillment BFF is session/CSRF/idempotency gated and validates fixed comm
 })
 
 test('operational payment evidence rejects non-text JSON values', () => {
-  const base = { orderRequestId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', toStatus: 'verified' }
+  const base = {
+    orderRequestId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1',
+    toStatus: 'verified',
+    expectedPaymentStatus: 'evidence_submitted',
+    expectedUpdatedAt: '2026-09-08T08:00:00Z',
+  }
   for (const evidenceNote of [{ reference: 'GC-1' }, ['GC-1'], true, 123]) {
     expect(() => validateFulfillmentCommand('payment_status', { ...base, evidenceNote })).toThrow('REQUEST_INVALID')
   }
@@ -856,9 +862,16 @@ test('prepared inbox boundary keeps internal notes private and website replies s
   expect(websiteMigration).toContain('append_website_customer_reply_v1')
   expect(websiteMigration).toContain("source_kind not in ('website_message','virtual_store_message')")
   expect(runtime).toContain('getAdminInbox')
-  expect(runtime).toContain('saveInternalNoteBff')
-  expect(runtime).toContain('sendWebsiteReplyBff')
-  expect(runtime).toContain('window.setInterval(fetchConversations, 8_000)')
+  expect(runtime).toContain('createInboxCommandSession')
+  expect(runtime).toContain("messageCommand('internal-note', { conversationId, content: text })")
+  expect(runtime).toContain("messageCommand('send-reply', { conversationId, content: text })")
+  expect(runtime).toContain('session.dispose()')
+  expect(runtime).toContain('[enabled, actorId]')
+  // The eight-second refresh is retained, but it is now gated by shouldStartPoll
+  // so a hidden tab or an in-flight read cannot reset the working queue.
+  expect(runtime).toContain('POLL_INTERVAL_MS = 8_000')
+  expect(runtime).toContain('window.setInterval(poll, POLL_INTERVAL_MS)')
+  expect(runtime).toContain('shouldStartPoll({ enabled: true, hidden: document.hidden, inFlight: inFlight.current })')
 })
 
 test('Pasabuy BFF is session/idempotency gated and bounds owner-selected pricing', async () => {

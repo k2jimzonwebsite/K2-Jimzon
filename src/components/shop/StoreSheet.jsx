@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 /**
  * MAP-027 — an overlay panel inside the store.
@@ -21,7 +21,9 @@ const FOCUSABLE = [
   'textarea:not([disabled])', 'select:not([disabled])', 'details', '[tabindex]:not([tabindex="-1"])',
 ].join(',')
 
-export default function StoreSheet({ open, onClose, title, subtitle, children, footer }) {
+export default function StoreSheet({ open, onClose, title, subtitle, children, footer, keepMounted = false }) {
+  const [visited, setVisited] = useState(false)
+  useEffect(() => { if (open) setVisited(true) }, [open])
   const panelRef = useRef(null)
   const headingRef = useRef(null)
   const restoreTo = useRef(null)
@@ -72,10 +74,10 @@ export default function StoreSheet({ open, onClose, title, subtitle, children, f
     return () => window.removeEventListener('keydown', onKeyDown, true)
   }, [open, onClose])
 
-  if (!open) return null
+  if (!open && !(keepMounted && visited)) return null
 
   return (
-    <div className="k2-store-sheet-layer">
+    <div className="k2-store-sheet-layer" hidden={!open} style={!open ? { display: 'none' } : undefined}>
       <button
         type="button"
         className="k2-store-sheet-scrim"

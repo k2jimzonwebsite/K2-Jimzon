@@ -16,7 +16,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'npx vite --mode storefront --port 5191 --configLoader runner',
+    command: 'npx vite --mode storefront --port 5191 --strictPort --configLoader runner',
     env: {
       // Keep this browser contract hermetic: every Supabase request is fulfilled
       // by the test route handlers instead of touching a configured project.
@@ -25,7 +25,9 @@ export default defineConfig({
       VITE_GUEST_BFF_ENABLED: 'true',
       VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
     },
-    url: baseURL,
+    // The HTML shell returns before the cold Tailwind transform finishes.
+    // Wait for that observed slow request within the server-startup budget.
+    url: `${baseURL}/src/index.css`,
     reuseExistingServer: false,
     timeout: 120000,
   },

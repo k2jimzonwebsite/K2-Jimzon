@@ -38,12 +38,8 @@ test('consignment scanning distinguishes flight, box, lot, and manifest line', a
 test('storefront coupon and delivery totals are server-backed and never browser-authored', async () => {
   const store = await read('../src/context/StoreContext.jsx')
   const checkout = await read('../src/views/Checkout.jsx')
-  // The customer-facing delivery line moved out of Checkout.jsx and into
-  // DeliveryEstimate.jsx when the courier quotation pilot was extracted. This
-  // assertion kept reading Checkout.jsx, so it failed on a refactor that had
-  // preserved the property it exists to protect. It now follows the component
-  // that owns the line, and additionally pins where the fee comes from — the
-  // part that actually matters — rather than trusting one copy string.
+  // The prepared delivery pilot may read only a server-visible rate. Checkout
+  // keeps manual quoting until an immutable quote is carried by the saved order.
   const deliveryEstimate = await read('../src/components/DeliveryEstimate.jsx')
 
   expect(store).not.toContain("localStorage.getItem('k2_coupons')")
@@ -55,6 +51,11 @@ test('storefront coupon and delivery totals are server-backed and never browser-
   expect(deliveryEstimate).toContain('quoteGuestDelivery')
   expect(deliveryEstimate).toContain('result.quote?.customerVisible')
   expect(checkout).not.toContain('const SHIPPING =')
+  // A quote not carried by the order payload cannot become a final total.
+  expect(checkout).not.toContain('deliveryQuote.feeMinor')
+  expect(checkout).not.toContain('<DeliveryEstimate')
+  expect(checkout).toContain('Quoted after review')
+  expect(checkout).not.toContain('Your delivery charge above is final')
   expect(deliveryEstimate).not.toContain('const SHIPPING =')
 })
 

@@ -1,11 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   adminBffEnabled,
+  commandOutcomeIsUncertain,
+  createRetainedOperationSession,
   getAdminDeliveryControlBff,
   publishDeliveryCostBff,
   setDeliveryCourierStateBff,
   setDeliverySourceStateBff,
   testAdminDeliveryQuoteBff,
+  UNCERTAIN_COMMAND_NOTICE,
   upsertDeliveryCourierBff,
 } from '../../services/adminBffService'
 import {
@@ -56,8 +59,14 @@ const EMPTY_QUOTE_INPUTS = {
   quoteDate: '',
 }
 
-const operationKey = () =>
-  typeof globalThis.crypto?.randomUUID === 'function' ? globalThis.crypto.randomUUID() : ''
+// What a customer is charged is money. A retry after a lost response must be the
+// same logical operation, not a second published rate or state change
+// (MAP-028 H-002).
+const sendDeliveryCommand = (command, key) => {
+  if (command.kind === 'publish-cost') return publishDeliveryCostBff(command.body, key)
+  if (command.kind === 'courier-state') return setDeliveryCourierStateBff(command.body, key)
+  return setDeliverySourceStateBff(command.body, key)
+}
 
 const peso = (minor) => (Number.isInteger(minor) ? formatDeliveryFee(minor) : '—')
 
@@ -95,6 +104,21 @@ export default function DeliveryRateControl() {
   const [loading, setLoading] = useState(true)
   const [working, setWorking] = useState(false)
   const [error, setError] = useState('')
+  const [uncertain, setUncertain] = useState('')
+  const commands = useRef(null)
+  if (!commands.current) commands.current = createRetainedOperationSession(sendDeliveryCommand)
+  useEffect(() => () => commands.current?.dispose(), [])
+
+  // A rate change the service never confirmed may already be published. Say so
+  // and reload, rather than inviting a second publication of the same rate.
+  const reportCommandResult = async (result, reload) => {
+    if (commandOutcomeIsUncertain(result)) {
+      setUncertain(UNCERTAIN_COMMAND_NOTICE)
+      await reload()
+      return
+    }
+    setError(result.error)
+  }
   const [notice, setNotice] = useState('')
   const [tab, setTab] = useState('tester')
   const [inputs, setInputs] = useState({ ...EMPTY_QUOTE_INPUTS, quoteDate: manilaToday() })
@@ -175,7 +199,7 @@ export default function DeliveryRateControl() {
   }
 
   const runServerQuote = async () => {
-    setWorking(true); setError(''); setNotice('')
+    setWorking(true); setError(''); setNotice(''); setUncertain('')
     const result = await testAdminDeliveryQuoteBff(inputs)
     if (!result.ok) setError(result.error)
     else setServerQuote(result.data?.quote || null)
@@ -190,22 +214,25 @@ export default function DeliveryRateControl() {
       setError('Record why this rate changed, in at least ten characters.')
       return
     }
-    setWorking(true); setError(''); setNotice('')
-    const result = await publishDeliveryCostBff({
-      costId: priceEdit.costId,
-      optionId: priceEdit.optionId,
-      originId: priceEdit.originId,
-      localityId: priceEdit.localityId,
-      profileId: priceEdit.profileId,
-      sourceId: priceEdit.sourceId,
-      completeness: 'PROVIDER_TOTAL_COMPLETE',
-      amountMinor,
-      approvedByOwner: true,
-      effectiveFrom: priceEdit.effectiveFrom,
-      notes: priceEdit.reason.trim(),
-      reason: priceEdit.reason.trim(),
-    }, operationKey())
-    if (!result.ok) setError(result.error)
+    setWorking(true); setError(''); setNotice(''); setUncertain('')
+    const result = await commands.current.run({
+      kind: 'publish-cost',
+      body: {
+        costId: priceEdit.costId,
+        optionId: priceEdit.optionId,
+        originId: priceEdit.originId,
+        localityId: priceEdit.localityId,
+        profileId: priceEdit.profileId,
+        sourceId: priceEdit.sourceId,
+        completeness: 'PROVIDER_TOTAL_COMPLETE',
+        amountMinor,
+        approvedByOwner: true,
+        effectiveFrom: priceEdit.effectiveFrom,
+        notes: priceEdit.reason.trim(),
+        reason: priceEdit.reason.trim(),
+      },
+    })
+    if (!result.ok) await reportCommandResult(result, load)
     else {
       setNotice(`New rate published, effective ${priceEdit.effectiveFrom}. Orders already quoted keep their frozen fee.`)
       setPriceEdit(null)
@@ -215,14 +242,17 @@ export default function DeliveryRateControl() {
   }
 
   const toggleCourier = async (option, eligibility) => {
-    setWorking(true); setError(''); setNotice('')
-    const result = await setDeliveryCourierStateBff({
-      optionId: option.optionId,
-      eligibility,
-      approved: eligibility === 'AUTO_QUOTE_ELIGIBLE' ? true : option.approved,
-      reason: `Staff set ${option.providerName} ${option.serviceName} to ${eligibility}.`,
-    }, operationKey())
-    if (!result.ok) setError(result.error)
+    setWorking(true); setError(''); setNotice(''); setUncertain('')
+    const result = await commands.current.run({
+      kind: 'courier-state',
+      body: {
+        optionId: option.optionId,
+        eligibility,
+        approved: eligibility === 'AUTO_QUOTE_ELIGIBLE' ? true : option.approved,
+        reason: `Staff set ${option.providerName} ${option.serviceName} to ${eligibility}.`,
+      },
+    })
+    if (!result.ok) await reportCommandResult(result, load)
     else {
       setNotice(
         eligibility === 'AUTO_QUOTE_ELIGIBLE'
@@ -235,14 +265,17 @@ export default function DeliveryRateControl() {
   }
 
   const reviewSource = async (source, freshness) => {
-    setWorking(true); setError(''); setNotice('')
-    const result = await setDeliverySourceStateBff({
-      sourceId: source.sourceId,
-      freshness,
-      reviewDueOn: source.reviewDueOn || null,
-      reason: `Staff marked ${source.sourceId} as ${freshness}.`,
-    }, operationKey())
-    if (!result.ok) setError(result.error)
+    setWorking(true); setError(''); setNotice(''); setUncertain('')
+    const result = await commands.current.run({
+      kind: 'source-state',
+      body: {
+        sourceId: source.sourceId,
+        freshness,
+        reviewDueOn: source.reviewDueOn || null,
+        reason: `Staff marked ${source.sourceId} as ${freshness}.`,
+      },
+    })
+    if (!result.ok) await reportCommandResult(result, load)
     else { setNotice(`${source.sourceId} is now ${freshness}.`); await load() }
     setWorking(false)
   }
@@ -270,6 +303,7 @@ export default function DeliveryRateControl() {
       />
 
       {error && <StateBanner tone="danger" role="alert">{error}</StateBanner>}
+      {uncertain && <StateBanner tone="warning" role="alert">{uncertain}</StateBanner>}
       {notice && <StateBanner tone="success">{notice}</StateBanner>}
 
       <MetricRail items={metrics} />

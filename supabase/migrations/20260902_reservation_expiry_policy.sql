@@ -59,7 +59,11 @@ begin
   end if;
   if not exists (select 1 from pg_constraint where conname = 'inventory_reservations_released_has_cause_check') then
     alter table public.inventory_reservations add constraint inventory_reservations_released_has_cause_check
-      check (status <> 'released' or release_cause is not null);
+      check (status <> 'released' or release_cause is not null) not valid;
+    -- Pre-policy releases have no recorded cause. Preserve that unknown history
+    -- instead of guessing a cause or blocking installation. NOT VALID still
+    -- enforces every new/updated row. Validate only after evidence-led historical
+    -- reconciliation; never backfill a reason merely to make validation pass.
   end if;
   -- An extension must be attributable. An anonymous extension is indistinguishable
   -- from stock quietly going missing.
