@@ -1,5 +1,18 @@
 # K2 Jimzon — System Brain (Current State)
 
+**8 September owner-approved permanent apply:** MAP-017 phase one returned
+`APPLIED_AND_VERIFIED` for project `pixplcjqivlfflickobf`, ledger
+`20260824143000`, payload SHA-256
+`D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62`.
+`npm run evidence:map017-anon` passed 14/14 live read checks. Fresh metadata
+export and `npm run audit:schema-truth -- --export=live-schema-metadata.json`
+report 26 critical findings, down from the recorded 55 total: error-report
+anonymous writes, remaining function grants and supabase_admin defaults remain.
+MAP-017 remains active for those reviewed follow-ups; do not apply later
+migrations under this phase-one approval. The prior apply-approval blocker is
+superseded. Recovery remains reviewed roll-forward or verified backup restore.
+
+
 **Production code release verified, 8 September 2026:**
 GitHub `main` is at `6ad7578235c8a6b16ce42b947028f090f1ae1eb1`.
 CI `34229084356` passed the complete application acceptance, production builds,
@@ -16,6 +29,15 @@ invite-only staff sign-in boundary. CSP reporting/enforcement remains open.
 Prepared Supabase migrations remain
 unapplied by this release; paid providers, marketplace channels, authenticated
 staff records, and business-write acceptance remain governed by their MAP gates.
+
+**MAP-017 activation checkpoint, 8 September 2026:** the guarded executor dry
+run passed the exact project, payload SHA-256, ledger, OWNER-005, database and
+Storage backup/restore, off-site copy, and owner recovery-access gates. The
+permanent production apply was not executed: automatic approval review requires
+an explicit active-conversation approval for this disruptive, costly-to-reverse
+security/access-control mutation. No DDL or provider state changed. The next
+action is that explicit owner approval, then one guarded apply with ambiguous
+outcomes resolved only by the prepared read-only receipt/invariant check.
 
 **Dashboard truth follow-up, 7 September (IDEA-20260907-02; code deployed):**
 Overview rejects malformed source bodies, invalid backlog counts and unknown/

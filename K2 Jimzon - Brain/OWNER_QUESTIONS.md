@@ -20,7 +20,7 @@ It is not an engineering backlog; implementation remains exclusively in
 
 **Decision:** Authorized
 
-**Backup evidence ID:** `map017-pixplcjqivlfflickobf-20260827T134506.742Z-be6b75c0db0d`
+**Backup evidence ID:** map017-pixplcjqivlfflickobf-20260827T134506.742Z-be6b75c0db0d
 
 **Backup/restore verification:** Verified
 
@@ -91,8 +91,9 @@ its SHA-256 matched
 `47BB9160986C5C306C9026171FCC1DB1C4C92A8CA8C40902C410AE04F26FA350`.
 Reassembly with part 002 matched the original 115,580,694-byte archive digest
 `6E60FB24D07A80CB8FDBDBBC7F0EE3EFF86FEE0EE0A9657E9D4F5C94607AE312`.
-Owner recovery access remains unproven, so the guarded production executor must
-still refuse.
+At this 27 August checkpoint owner recovery access remained unproven. This
+historical state was superseded by the verified 2 September attestation at the
+top of this record.
 
 **30 August 2026 recovery evidence:** an authenticated Google Drive profile read
 confirmed the active account is `k2jimzonwebsite@gmail.com`; that same account
@@ -104,10 +105,13 @@ verified its authenticated manifest, required PostgreSQL custom-dump signature,
 674,413 encrypted bytes, and dump SHA-256
 `8ED220049E7611D471C7165FEAE3FFA490317197C55C24542DE4D1FA2893581D`.
 This proves retrieval and decryption capability on the current recovery
-workstation. `Owner recovery access` remains `Pending` until the owner confirms
+workstation. At this 30 August checkpoint `Owner recovery access` remained
+`Pending` until the owner confirmed
 that the passphrase is retained in the approved password manager with a separate
 offline recovery copy and that the Google account's 2-Step Verification plus
-recovery email/phone are current. No production DDL was attempted.
+recovery email/phone are current. That attestation was recorded and the gate
+became `Verified` on 2 September. No production DDL was attempted in either
+checkpoint.
 
 **Prepared backup tooling recorded 26 August 2026:** the repository can now
 create an encrypted custom-format database envelope and redacted manifest without

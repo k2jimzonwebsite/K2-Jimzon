@@ -1208,3 +1208,16 @@ Not verified: the 375px and desktop rendering was never opened in a browser. The
 responsive structure is asserted by contract only, so H-017's layout validation
 at 375×812 and 844×390, and its exhausted-line and retry flows against a rendered
 component, remain open.
+# MAP-017 production receipt — 8 September 2026
+
+**8 September owner-approved permanent apply:** MAP-017 phase one returned
+`APPLIED_AND_VERIFIED` for project `pixplcjqivlfflickobf`, ledger
+`20260824143000`, payload SHA-256
+`D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62`.
+`npm run evidence:map017-anon` passed 14/14 live read checks. Fresh metadata
+export and `npm run audit:schema-truth -- --export=live-schema-metadata.json`
+report 26 critical findings, down from the recorded 55 total: error-report
+anonymous writes, remaining function grants and supabase_admin defaults remain.
+MAP-017 remains active for those reviewed follow-ups; do not apply later
+migrations under this phase-one approval. The prior apply-approval blocker is
+superseded. Recovery remains reviewed roll-forward or verified backup restore.

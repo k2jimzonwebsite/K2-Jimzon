@@ -475,8 +475,12 @@ independently paged thread messages, and authoritative dashboard aggregates.
 Previous H-003 cookie and H-004 response-body deadline evidence remains in the
 runbook/System Brain. No provider activation or deployment occurred.
 
-**Production still blocked:** MAP-017 requires OWNER-005 recovery-access proof;
-real inventory/content, operating inputs, recovery and exact-host acceptance
+**Production schema activation still blocked:** OWNER-005 recovery access was
+verified on 2 September and the guarded 8 September dry run passed every project
+gate. MAP-017 now requires the exact permanent production apply; automatic
+approval review refused that mutation until the owner explicitly approves this
+exact database action in the active conversation. Real inventory/content,
+operating inputs, recovery and exact-host acceptance
 remain in their owning MAP items and the table below. Local passing evidence
 does not close those gates.
 
@@ -491,7 +495,7 @@ must also pass before promotion. Update this table as gates are evidenced.
 
 | Area / owner action | Evidence required before promotion | Owning MAP |
 | --- | --- | --- |
-| Recovery access | Personally retrieve/decrypt the recorded database and Storage backups and confirm the documented recovery access under OWNER-005. | MAP-017/MAP-022 |
+| Recovery access | **Verified 2 September:** the owner attested to password-manager and offline passphrase recovery plus current Google recovery controls; retrieval/decryption evidence already passed. | MAP-017/MAP-022 |
 | Real inventory | Physical count by SKU, variant, box/lot, expiry, condition, custodian/location and actual cost; explain variances, approve removal or retention of identified mock records, and deliberately approve real catalog publication. Never replace missing counts with estimates. | MAP-018/MAP-023 |
 | Product content | Confirm product identity, label/allergen/storage facts, selling prices and rights to actual media. Staff review precedes publication. | MAP-018/MAP-027 |
 | Delivery | Confirm supported localities, approved fee/rate versions, manual booking process, courier account/access and actual waybill/accepted-fee evidence. Run a real booking/handover/cost reconciliation pilot with designated staff. | MAP-023 |
@@ -513,8 +517,9 @@ application-database backup/loopback restore and a complete Storage object-byte
 backup/local restore exist and are verified. As of 28 August 2026 all eight
 encrypted/redacted artifacts in the owner-only Drive folder pass independent
 retrieval/SHA-256 checks, and the Drive-retrieved 64 MiB chunk reassembles with
-its counterpart into the exact original archive digest. **The only remaining
-activation gate is owner recovery-access proof.**
+its counterpart into the exact original archive digest. Owner recovery access
+was verified on 2 September. The 8 September guarded dry run passed every
+project gate. The owner then approved the permanent apply, which returned APPLIED_AND_VERIFIED. Phase one must not be repeated; 26 schema findings remain.
 
 This is the only active project backlog. If work is not listed here, it is not an
 approved implementation task. Other audits, roadmaps, blueprints, and idea files
@@ -701,7 +706,7 @@ service or unapproved API can unlock.
 
 | Order | Item | Purpose | Dependency gate |
 | --- | --- | --- | --- |
-| 1 | MAP-017 | Establish live schema, grants, RLS, RBAC, ownership, and RPC truth | OWNER-005 authorized; named backup, both isolated restores, and the full off-site copy all verified 28 Aug; **only owner recovery-access proof remains** |
+| 1 | MAP-017 | Establish live schema, grants, RLS, RBAC, ownership, and RPC truth | OWNER-005 and recovery access verified; backup/restores/off-site copy verified; phase one applied and verified; 14/14 anonymous read checks pass; 26 critical findings remain for separately reviewed follow-up |
 | 2 | MAP-018 | Complete phone-first product intake and publication gates | MAP-017 for activation |
 | 3 | MAP-019 | Complete hybrid identity, commerce continuity, wholesale identity, and secure sessions | MAP-017; may overlap MAP-018 where independent |
 | 4 | MAP-020 | Secure every API, upload, public form, Admin command, and connector boundary | MAP-017 and MAP-019 decisions |
@@ -713,11 +718,7 @@ service or unapproved API can unlock.
 | 10 | MAP-026 | Multi-shop channel accounts and custody-based inventory allocation | MAP-017, MAP-020, MAP-023 |
 | 11 | MAP-027 | AI-assisted verified product knowledge and optional Interactive Shop | MAP-018, MAP-019, MAP-020, MAP-021, MAP-023; exact-host SEO remains MAP-024 |
 
-**Current execution command:** prepare and independently verify a named
-production backup/restore point for MAP-017. `OWNER-005` authorizes the exact
-phase-one migration, but the guarded executor must not run until its backup ID,
-restore verification, project/payload/ledger gates, and recovery acknowledgement
-all pass.
+**Current execution command:** review the 26 remaining MAP-017 findings against the fresh schema export and existing follow-up migrations. Phase one is applied and independently verified. Google setup and keyword/indexing readiness are accepted under MAP-024 as IDEA-20260908-03.
 
 **15 August independent handoff closeout:** Codex reviewed Antigravity's large
 MAP-016-through-MAP-025 handoff and rejected it as completion or launch proof.
@@ -2203,6 +2204,17 @@ historical MAP numbers are not reopened as competing entries.
 
 
 ### MAP-017 — Supabase schema truth, grants, RLS, RBAC, ownership, and RPC boundary
+**8 September owner-approved permanent apply:** MAP-017 phase one returned
+`APPLIED_AND_VERIFIED` for project `pixplcjqivlfflickobf`, ledger
+`20260824143000`, payload SHA-256
+`D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62`.
+`npm run evidence:map017-anon` passed 14/14 live read checks. Fresh metadata
+export and `npm run audit:schema-truth -- --export=live-schema-metadata.json`
+report 26 critical findings, down from the recorded 55 total: error-report
+anonymous writes, remaining function grants and supabase_admin defaults remain.
+MAP-017 remains active for those reviewed follow-ups; do not apply later
+migrations under this phase-one approval. The prior apply-approval blocker is
+superseded. Recovery remains reviewed roll-forward or verified backup restore.
 
 **Status:** Active — exhaustive live schema truth established 22 August 2026.
 The exporter now runs against the real database, the audit consumes a real
@@ -2234,6 +2246,12 @@ The apply was then attempted and **refused by the AI execution harness**, not by
 any project gate: the assisting agent's safety classifier blocks production
 database mutations regardless of in-repo authorization. This is a tooling
 boundary, not a new finding, and it does not change the migration's readiness.
+An 8 September continuation repeated the exact guarded dry run successfully.
+Automatic approval review again refused the permanent apply, this time because
+the active conversation did not explicitly approve this exact production
+database mutation after stating its disruptive, costly-to-reverse nature. No
+DDL ran. The next action is one explicit owner approval in the active
+conversation, followed by the same guarded command once; do not use a workaround.
 The exact command, run by the owner or an operator with permission to mutate
 production, is:
 
@@ -6552,6 +6570,49 @@ last unit cannot oversell or produce divergent inventory truth.
 operations rulebook, System Brain, and production-data health report.
 
 ### MAP-024 — Separate Vercel production projects, HTTPS, domains, DNS, and Auth callbacks
+
+**IDEA-20260908-03 — Google measurement and search readiness (accepted).**
+Owner requests adding Google Analytics and Search Console setup and preparing
+Google discovery for imported goods, Italy-to-Philippines shopping and Pasabuy.
+Merged into MAP-024 discovery and MAP-028 B6/B8/B9; no competing backlog.
+
+1. Inspect existing Google properties before creating anything. Under the
+   owner-controlled business Google account, create/reuse one GA4 property and
+   Storefront web stream and verify the Search Console Domain property for
+   k2jimzon.com through the exact Google-issued DNS record. Record property IDs,
+   ownership/recovery, retention and approved consent settings. Keep staff Admin
+   activity, credentials, customer contacts and free-text messages out of GA4.
+2. Define the measurement questions before implementation: which organic
+   landing pages attract relevant shoppers, which products receive interest,
+   and which visits result in a server-receipted order request or Pasabuy inquiry.
+   Verify existing instrumentation and score measurement readiness before adding
+   tags. Use one page-view source with SPA navigation deduplication, bounded
+   view_item/add_to_cart/begin_checkout events, and distinct receipt-confirmed
+   order_request_submitted/pasabuy_request_submitted events. Count each request
+   once despite retries/reloads. A request is not a paid purchase; only a later
+   verified payment boundary may emit purchase/revenue. Validate DebugView,
+   consent states, no personal data, attribution, desktop and mobile.
+3. Research search intent and actual query evidence; initial keyword candidates
+   are "Italian imported goods Philippines", "imported goods from Italy",
+   "Italy to Philippines pasabuy", "Italy pasabuy", and "Italian groceries
+   Philippines". These are hypotheses, not measured search-volume or ranking
+   claims. Map imported Italian goods intent to home/catalog, sourcing intent
+   to the Pasabuy page, and exact product/brand/category terms only to verified
+   relevant pages. Improve natural titles, descriptions, headings, useful
+   sourcing/delivery FAQs and internal links without keyword stuffing, invented
+   stock claims, duplicate doorway pages or promises of Google ranking.
+4. Audit canonical URLs, redirects, robots/noindex, sitemap inclusion, structured
+   data, mobile rendering and crawlable content. Preserve the product noindex
+   gate until actual approved product copy/media and publication evidence are
+   ready. Submit the canonical sitemap and inspect eligible home/catalog/Pasabuy
+   and representative product URLs; record Google's actual crawl/index status.
+   Property verification or sitemap submission alone does not establish indexing.
+5. Acceptance: verified property/stream ownership, observed clean GA4 events,
+   Search Console sitemap processing and URL inspection receipts, an approved
+   keyword-to-page map, and recorded remaining exclusions. Monitor organic query
+   impressions/clicks and receipt-confirmed request conversion to guide revisions.
+   Keep all unfinished activation and evidence here; record verified settings
+   and results in System Brain and the deployment runbook before deleting scope.
 
 **Status:** In progress. Hostinger DNS, the two Vercel production projects,
 custom hosts, TLS, deployment-target environment matrices, fail-closed API

@@ -1,5 +1,14 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260908-03 — accepted and merged into MAP-024 / MAP-028 B6/B8/B9.**
+Owner requests Google Analytics, Search Console and Google indexing readiness
+for Italian imported goods in the Philippines and Italy-to-PH Pasabuy. Reuse
+existing discovery scope and Google properties where present; require verified
+ownership, privacy-aware measurement, receipt-confirmed request events, search
+intent research and keyword-to-page mapping. Preserve real-product publication
+and indexing gates. This records planned work, not created properties, deployed
+tracking, Google indexing or promised rankings.
+
 **IDEA-20260907-02 — accepted refinement, merged into MAP-028 I-012 / MAP-021.**
 Owner requests another dashboard truth audit with fabricated test records proving
 that later real data updates the widgets. Reuse the existing overview boundary;
