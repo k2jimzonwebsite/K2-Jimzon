@@ -3,6 +3,7 @@ import {
   BoxIcon, GlobeIcon, GridIcon, UserIcon, InboxIcon,
   PlaneIcon, BagIcon, ShieldIcon, BarcodeIcon, EyeIcon,
   BellIcon, BookIcon, MenuIcon, SearchIcon, StarIcon, UploadIcon, XIcon, MapIcon, ClockIcon, SparkleIcon,
+  PlusIcon,
 } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
@@ -548,8 +549,17 @@ export default function Admin() {
             {section === 'inventory' && (
               <div className="flex items-center gap-2 border-l border-adm-line pl-2">
                 <button
+                  onClick={() => launchInventoryTool('add-inventory')}
+                  className="flex min-h-[44px] items-center gap-1.5 rounded-adm-sm bg-blue px-3 py-2 text-sm font-bold text-white transition-[transform,background-color] duration-150 hover:bg-blue-deep active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 cursor-pointer shadow-sm shadow-blue/20"
+                  title="Add Inventory (Automatic Barcode Scan vs Manual ChatGPT Intake)"
+                >
+                  <PlusIcon size={16} />
+                  <span>+ Add Inventory</span>
+                </button>
+
+                <button
                   onClick={() => setShowCsvImport(true)}
-                  className="flex min-h-[44px] items-center gap-1.5 rounded-adm-sm bg-blue px-3 py-2 text-sm font-medium text-white transition-[transform,background-color] duration-150 hover:bg-blue-deep active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
+                  className="flex min-h-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 py-2 text-sm font-medium text-white/80 transition-[transform,background-color] duration-150 hover:bg-white/[0.08] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
                 >
                   <UploadIcon size={16} />
                   Upload CSV
@@ -602,7 +612,7 @@ export default function Admin() {
                : section === 'suppliers' ? <Suppliers key={`${user?.id || 'signed-out'}:${user?.role || ''}`} canCreateSupplier={canManageStaff} />
                : section === 'consignment' ? <ConsignmentManager />
                : showSheet ? <Sheet key={`${user?.id || 'signed-out'}:${user?.role || ''}`} canManageProducts={canManageStaff} />
-               : showGrid ? <InventoryGrid key={`${user?.id || 'signed-out'}:${user?.role || ''}`} launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} canManageMediaCleanup={canManageStaff} canManageProducts={canManageStaff} />
+               : showGrid ? <InventoryGrid key={`${user?.id || 'signed-out'}:${user?.role || ''}`} launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} canManageMediaCleanup={canManageStaff} canManageProducts={canManageStaff} onStartTour={handleStartTour} />
                : section === 'overview' ? <Overview widget={widget} onWidget={setWidget} setSection={selectSection} pending={pendingOrders} />
                : <Kanban />}
             </Suspense>

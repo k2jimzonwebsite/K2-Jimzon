@@ -64,6 +64,7 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
     const gridSource = await readFile(path.join(process.cwd(), 'src/views/admin/InventoryGrid.jsx'), 'utf8')
     const requiredAnchors = [
       'data-tour="inventory-actions"',
+      'data-tour="add-inventory-btn"',
       'data-tour="scan-box-btn"',
       'data-tour="smart-paste-btn"',
       'data-tour="add-product-btn"',
@@ -74,20 +75,52 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
     })
   })
 
-  test('Admin.jsx mounts SpotlightTourOverlay and TourSelectionModal', async () => {
+  test('AddInventoryChooserModal provides both automatic and manual intake options', async () => {
+    const chooserSource = await readFile(path.join(process.cwd(), 'src/components/admin/tour/AddInventoryChooserModal.jsx'), 'utf8')
+    expect(chooserSource).toContain('Automatically via Barcode')
+    expect(chooserSource).toContain('Manually via ChatGPT Studio')
+    expect(chooserSource).toContain('onSelectAutomaticQuick')
+    expect(chooserSource).toContain('onSelectAutomaticTour')
+    expect(chooserSource).toContain('onSelectManualSmartPaste')
+    expect(chooserSource).toContain('onSelectManualForm')
+    expect(chooserSource).toContain('onSelectManualTour')
+  })
+
+  test('AdminToolsWidget enforces clean SVG icons, backdrop overlay, and close button', async () => {
+    const toolsSource = await readFile(path.join(process.cwd(), 'src/views/admin/AdminToolsWidget.jsx'), 'utf8')
+    // No emoji in TOOLS array
+    expect(toolsSource).not.toContain("icon: '⚙️'")
+    expect(toolsSource).not.toContain("icon: '💰'")
+    expect(toolsSource).not.toContain("icon: '🧮'")
+    expect(toolsSource).not.toContain("icon: '📦'")
+    expect(toolsSource).not.toContain("icon: '📝'")
+    // Has backdrop
+    expect(toolsSource).toContain('bg-black/60 backdrop-blur-sm')
+    // Has close button
+    expect(toolsSource).toContain('aria-label="Close tools menu"')
+    // Clean SVG icons used
+    expect(toolsSource).toContain('SettingsIcon')
+    expect(toolsSource).toContain('CalculatorIcon')
+  })
+
+  test('Admin.jsx mounts SpotlightTourOverlay, TourSelectionModal, and + Add Inventory button', async () => {
     const adminSource = await readFile(path.join(process.cwd(), 'src/views/admin/Admin.jsx'), 'utf8')
     expect(adminSource).toContain('SpotlightTourOverlay')
     expect(adminSource).toContain('TourSelectionModal')
     expect(adminSource).toContain('handleStartTour')
     expect(adminSource).toContain('Guided Tours')
+    expect(adminSource).toContain("launchInventoryTool('add-inventory')")
+    expect(adminSource).toContain('onStartTour={handleStartTour}')
     expect(adminSource).not.toContain('<span>🗺️</span>')
   })
 
-  test('Enforces strict typography floor (>=12px) across tour components', async () => {
+  test('Enforces strict typography floor (>=12px) across tour and chooser components', async () => {
     const tourFiles = [
       'src/components/admin/tour/SpotlightTourOverlay.jsx',
       'src/components/admin/tour/TourSelectionModal.jsx',
+      'src/components/admin/tour/AddInventoryChooserModal.jsx',
       'src/components/admin/tour/tourData.js',
+      'src/views/admin/AdminToolsWidget.jsx',
     ]
 
     for (const file of tourFiles) {
@@ -98,10 +131,11 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
     }
   })
 
-  test('Enforces strict touch target floor (min 44px) across tour components', async () => {
+  test('Enforces strict touch target floor (min 44px) across tour and chooser components', async () => {
     const tourFiles = [
       'src/components/admin/tour/SpotlightTourOverlay.jsx',
       'src/components/admin/tour/TourSelectionModal.jsx',
+      'src/components/admin/tour/AddInventoryChooserModal.jsx',
     ]
 
     for (const file of tourFiles) {
@@ -116,11 +150,13 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
     }
   })
 
-  test('Anti-emoji policy strictly enforced in tour files', async () => {
+  test('Anti-emoji policy strictly enforced in tour and widget files', async () => {
     const tourFiles = [
       'src/components/admin/tour/SpotlightTourOverlay.jsx',
       'src/components/admin/tour/TourSelectionModal.jsx',
+      'src/components/admin/tour/AddInventoryChooserModal.jsx',
       'src/components/admin/tour/tourData.js',
+      'src/views/admin/AdminToolsWidget.jsx',
     ]
 
     // Common unicode emojis range

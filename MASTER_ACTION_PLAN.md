@@ -1,5 +1,26 @@
 # K2 Jimzon Master Action Plan
 
+**16 September Admin BOS Inventory Intake Chooser & Staff Quick Tools Overhaul (IDEA-20260916-07, MAP-021, code locally verified):**
+Completed inventory intake selection and staff quick tools UI/UX overhaul in Admin BOS:
+- **Inventory Intake Chooser Modal (`AddInventoryChooserModal.jsx`):** Mounted a high-contrast chooser modal triggered whenever staff clicks `+ Add Inventory` across the top header toolbar or `InventoryGrid` intro actions. Asks whether the intake is:
+  1. *Automatically via Barcode:* Restocking incoming physical units for existing master catalog SKUs via EAN-13 laser barcode scan and FEFO expiry lot binning. Offers 1-click direct scan (`Scan & Intake Now →`) or interactive guided walkthrough (`Start Guided Tour (5 steps)`).
+  2. *Manually via ChatGPT Studio:* Onboarding brand-new Italian provisions without an existing SKU. Offers 1-click Smart Paste JSON launcher, direct manual form creation, or interactive guided walkthrough.
+- **Top Header Action & Grid Workspace Integration (`Admin.jsx` & `InventoryGrid.jsx`):**
+  - Added primary `+ Add Inventory` button (`bg-blue font-bold min-h-11`) to the top header toolbar when `section === 'inventory'` and wired `launchInventoryTool('add-inventory')`.
+  - Mounted primary `+ Add Inventory` button in `WorkspaceIntro` actions (`data-tour="add-inventory-btn"`).
+  - Forwarded `onStartTour={handleStartTour}` prop into `<InventoryGrid />` so tours launch smoothly from the chooser modal.
+- **Staff Quick Tools Widget Polish (`AdminToolsWidget.jsx`):**
+  - Replaced all raw emojis (`⚙️`, `💰`, `🧮`, `📦`, `📝`, `🇮🇹`, `🇵🇭`) with clean SVG icons (`SettingsIcon`, `CalculatorIcon`, `BagIcon`, `BoxIcon`, `ScaleIcon`, etc.) and styled badges (`IT`, `PH`).
+  - Added backdrop overlay (`bg-black/60 backdrop-blur-sm z-[65]`) to prevent visual bleed and accidental backdrop clicks.
+  - Added header bar with explicit `[Close ×]` button (`min-h-11 min-w-11`) and `Escape` keyboard listener.
+  - Added position reset protection (`pos.y < 80` resets to safe bottom-right) preventing the panel from obscuring the top header controls.
+- **Contract Testing & Verification:**
+  - Expanded `tests/spotlight-tour-contract.spec.js` (10/10 PASS).
+  - Strict $\ge 12$px font floor, $\ge 44\times 44$px touch targets (`min-h-11`), and anti-emoji policy 100% verified.
+  - Full prebuild passed (1386 files checked, 0 secrets, 0 boundary gaps).
+  - Admin bundle passed at 195.99 kB / 300.00 kB minified.
+  - Storefront bundle passed at 149.89 kB / 150.50 kB gzip.
+
 **16 September Admin BOS interactive spotlight walkthrough tour system (IDEA-20260916-06, MAP-021, code locally verified):**
 Completed full interactive guided spotlight walkthrough tour system for Admin BOS, providing step-by-step visual spotlights, dark room dimming, exact widget highlighting, directives, and embedded prompt studios across both Manual and Automatic inventory intake workflows:
 - **Interactive Tour Engine (`SpotlightTourOverlay.jsx`):** Renders SVG spotlight mask cutout over target bounding rect (`getBoundingClientRect`), pulsating radar dot with glowing ring, floating high-contrast popover card with viewport boundary clamping and auto-scroll, step indicator dots, previous/next buttons, and full keyboard navigation (`Esc`, `[N]`, `[P]`).

@@ -1,5 +1,11 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260916-07 — accepted Add Inventory intake chooser and Settings / Ease of Use menu fix, merged into MAP-021.**
+Owner requests fixing the settings and ease of use menu, and providing a direct "+ Add Inventory" action where clicking it asks whether to add inventory automatically (Barcode Scan & FEFO Lot Intake) or manually (ChatGPT Studio & Smart Paste / New SKU). Audit gate:
+1. In `InventoryGrid.jsx`, mount a prominent primary `[+ Add Inventory]` action button that opens an "Add Inventory Intake Method" modal presenting two clear cards: Automatic (barcode scan + batch lot FEFO intake) vs Manual (ChatGPT prompt studio + Smart Paste JSON / manual spec). Each card provides direct tool launch ("Intake Now") and guided walkthrough tour launch ("Start Guided Tour").
+2. In `AdminToolsWidget.jsx`, fix the floating tools widget: replace raw emojis (`⚙️`, `💰`, `🧮`, `📈`, `📦`, `⚖️`, `🧾`, `⏳`, `📝`) with clean SVG icons; add a modal backdrop, a distinct header with an explicit `[Close ×]` button and title, `Escape` key and backdrop click dismissals, and prevent the widget from obscuring workspace action buttons.
+3. Streamline header and ease of use controls in `Admin.jsx`: add an `[+ Add Inventory]` shortcut in the inventory action bar; ensure all touch targets meet $\ge 44\times 44$px (`min-h-11`) and typography meets $\ge 12$px floor; verify Admin bundle budget remains $\le 300.00$ kB.
+
 **IDEA-20260916-06 — accepted interactive spotlight walkthrough tour engine, merged into MAP-021.**
 Owner requests an interactive spotlight guided tour for Admin BOS staff: clicking a workflow (such as manual inventory intake vs automatic inventory intake) blacks out the screen, highlights specific UI widgets with step-by-step instructions ("click this", then "go to ChatGPT with this prompt", "copy-paste here", etc.). Audit gate: implement fullscreen backdrop with element spotlight cutout; provide interactive tour steps for Manual Inventory (New Product Intake + ChatGPT Studio) and Automatic Inventory (Quick EAN-13 Scan + Batch Intake); embed 1-click ChatGPT prompt copying; ensure seamless workspace auto-routing; enforce 12px typography floor, $\ge 44$px touch targets, zero raw emojis, and Admin bundle budget ($\le 300$ kB minified).
 

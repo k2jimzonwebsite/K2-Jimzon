@@ -1,5 +1,18 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { calculateMaximumSalesDiscount, calculateSalesPlan, calculateTargetSalesPrice, calculateTargetSalesQuantity, createSalesPlanningSummary } from '../../lib/salesCalculations'
+import {
+  SettingsIcon,
+  CalculatorIcon,
+  TrendIcon,
+  BoxIcon,
+  ScaleIcon,
+  FileTextIcon,
+  ClockIcon,
+  BookIcon,
+  BagIcon,
+  XIcon,
+  MapIcon,
+} from '../../components/ui/icons'
 
 /* ---------------------------------------------------------------------------
    Floating, draggable "tools" gear for the admin.
@@ -19,14 +32,14 @@ const load = (k, fb) => { try { const v = localStorage.getItem(k); return v == n
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
 
 const TOOLS = [
-  { id: 'sales', label: 'Sales planner', icon: '💰' },
-  { id: 'calc', label: 'Calculator', icon: '🧮' },
-  { id: 'margin', label: 'Margin', icon: '📈' },
-  { id: 'cargo', label: 'Cargo weight', icon: '📦' },
-  { id: 'unit', label: 'Units', icon: '⚖️' },
-  { id: 'vat', label: 'VAT 12%', icon: '🧾' },
-  { id: 'expiry', label: 'Expiry', icon: '⏳' },
-  { id: 'notes', label: 'Scratchpad', icon: '📝' },
+  { id: 'sales', label: 'Sales planner', icon: BagIcon },
+  { id: 'calc', label: 'Calculator', icon: CalculatorIcon },
+  { id: 'margin', label: 'Margin', icon: TrendIcon },
+  { id: 'cargo', label: 'Cargo weight', icon: BoxIcon },
+  { id: 'unit', label: 'Units', icon: ScaleIcon },
+  { id: 'vat', label: 'VAT 12%', icon: FileTextIcon },
+  { id: 'expiry', label: 'Expiry', icon: ClockIcon },
+  { id: 'notes', label: 'Scratchpad', icon: BookIcon },
 ]
 
 const field = 'min-h-11 w-full rounded-adm-sm border border-adm-line bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none'
@@ -39,15 +52,24 @@ export default function AdminToolsWidget({ onOpenGuide }) {
   const gearRef = useRef(null)
   const drag = useRef({ active: false, moved: false, dx: 0, dy: 0 })
 
-  // Default position bottom-right if never dragged
+  // Default position bottom-right if never dragged, or reset if stuck in top header
   useEffect(() => {
-    if (pos.x == null) {
-      setPos({ x: window.innerWidth - 76, y: window.innerHeight - 150 })
+    if (pos.x == null || pos.y < 80) {
+      setPos({ x: Math.max(16, window.innerWidth - 76), y: Math.max(100, window.innerHeight - 150) })
     }
   }, []) // eslint-disable-line
 
   useEffect(() => { if (pos.x != null) save(LS.pos, pos) }, [pos])
   useEffect(() => save(LS.tool, tool), [tool])
+
+  useEffect(() => {
+    if (!open) return
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [open])
 
   const onDown = (e) => {
     const r = gearRef.current.getBoundingClientRect()
@@ -77,72 +99,109 @@ export default function AdminToolsWidget({ onOpenGuide }) {
   const openLeft = pos.x > window.innerWidth / 2
 
   return (
-    <div className="fixed z-[70]" style={{ left: pos.x, top: pos.y }}>
+    <>
       {open && (
         <div
-          className="absolute w-[min(26rem,calc(100vw-1rem))] overflow-y-auto rounded-adm border border-white/12 bg-adm-surface shadow-2xl"
-          style={{
-            [openUp ? 'bottom' : 'top']: 60,
-            [openLeft ? 'right' : 'left']: 0,
-            maxHeight: openUp ? Math.max(240, pos.y - 70) : Math.max(240, window.innerHeight - pos.y - 70),
-          }}
-        >
-          {/* Dashboard guide (moved here from a separate floating button) */}
-          {onOpenGuide && (
-            <button
-              onClick={() => { onOpenGuide(); setOpen(false) }}
-              className="w-full flex items-center gap-2 border-b border-adm-line bg-blue/15 px-3.5 py-2.5 text-sm font-semibold text-blue hover:bg-blue/25 transition-colors"
-            >
-              🧭 Dashboard guide — what does this do?
-            </button>
-          )}
-
-          {/* Pinned strip: clocks + rate */}
-          <ClockRate />
-
-          {/* Tool picker */}
-          <div className="flex flex-wrap gap-1 border-b border-adm-line bg-black/20 px-2 py-2">
-            {TOOLS.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setTool(t.id)}
-                title={t.label}
-                aria-label={t.label}
-                aria-pressed={tool === t.id}
-                className={'flex h-11 w-11 items-center justify-center rounded-adm-sm text-base transition-colors ' +
-                  (tool === t.id ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}
-              >
-                {t.icon}
-              </button>
-            ))}
-          </div>
-
-          {/* Active tool */}
-          <div className="p-3.5">
-            {tool === 'sales' && <SalesPlanner />}
-            {tool === 'calc' && <Calculator />}
-            {tool === 'margin' && <Margin />}
-            {tool === 'cargo' && <Cargo />}
-            {tool === 'unit' && <Units />}
-            {tool === 'vat' && <Vat />}
-            {tool === 'expiry' && <Expiry />}
-            {tool === 'notes' && <Scratchpad />}
-          </div>
-        </div>
+          className="fixed inset-0 z-[65] bg-black/60 backdrop-blur-sm animate-in fade-in duration-150"
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
       )}
+      <div className="fixed z-[70]" style={{ left: pos.x, top: pos.y }}>
+        {open && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Staff Tools and Margin Planner"
+            className="absolute w-[min(28rem,calc(100vw-1rem))] overflow-hidden rounded-2xl border border-white/15 bg-adm-surface shadow-2xl backdrop-blur-md"
+            style={{
+              [openUp ? 'bottom' : 'top']: 60,
+              [openLeft ? 'right' : 'left']: 0,
+              maxHeight: openUp ? Math.max(260, pos.y - 70) : Math.max(260, window.innerHeight - pos.y - 70),
+            }}
+          >
+            {/* Header with Title and Close Button */}
+            <div className="flex items-center justify-between border-b border-adm-line bg-[#0d131f] px-4 py-3">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue/15 text-blue border border-blue/30">
+                  <SettingsIcon size={16} />
+                </span>
+                <div>
+                  <h3 className="text-sm font-bold text-white leading-none">Staff Quick Tools</h3>
+                  <p className="mt-1 text-xs text-white/50 leading-none">Calculators, margin planner & currency</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Close tools menu"
+                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-white/50 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+              >
+                <XIcon size={18} />
+              </button>
+            </div>
 
-      {/* Draggable gear */}
-      <button
-        ref={gearRef}
-        onPointerDown={onDown}
-        onClick={handleClick}
-        title="Tools (drag to move)"
-        aria-label="Open Admin tools"
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-adm-surface border border-white/15 text-xl text-white shadow-xl hover:bg-adm-raised active:scale-95 cursor-grab active:cursor-grabbing touch-none"
-      >
-        ⚙️
-      </button>
-    </div>
+            {/* Dashboard guide (moved here from a separate floating button) */}
+            {onOpenGuide && (
+              <button
+                onClick={() => { onOpenGuide(); setOpen(false) }}
+                className="w-full flex min-h-11 items-center gap-2 border-b border-adm-line bg-blue/15 px-3.5 py-2.5 text-sm font-semibold text-blue hover:bg-blue/25 transition-colors cursor-pointer"
+              >
+                <MapIcon size={16} />
+                <span>Dashboard guide — what does this do?</span>
+              </button>
+            )}
+
+            {/* Pinned strip: clocks + rate */}
+            <ClockRate />
+
+            {/* Tool picker */}
+            <div className="flex flex-wrap gap-1.5 border-b border-adm-line bg-black/20 px-3 py-2">
+              {TOOLS.map((t) => {
+                const IconComponent = t.icon
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => setTool(t.id)}
+                    title={t.label}
+                    aria-label={t.label}
+                    aria-pressed={tool === t.id}
+                    className={'flex h-11 w-11 items-center justify-center rounded-adm-sm transition-colors cursor-pointer ' +
+                      (tool === t.id ? 'bg-blue text-white shadow-sm' : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white')}
+                  >
+                    <IconComponent size={18} />
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Active tool with custom scrollbar */}
+            <div className="p-3.5 max-h-[calc(100vh-320px)] overflow-y-auto custom-scrollbar">
+              {tool === 'sales' && <SalesPlanner />}
+              {tool === 'calc' && <Calculator />}
+              {tool === 'margin' && <Margin />}
+              {tool === 'cargo' && <Cargo />}
+              {tool === 'unit' && <Units />}
+              {tool === 'vat' && <Vat />}
+              {tool === 'expiry' && <Expiry />}
+              {tool === 'notes' && <Scratchpad />}
+            </div>
+          </div>
+        )}
+
+        {/* Draggable gear */}
+        <button
+          ref={gearRef}
+          onPointerDown={onDown}
+          onClick={handleClick}
+          title="Staff Tools & Margin Planner (drag to move)"
+          aria-label="Open Admin tools"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-adm-surface border border-white/20 text-white shadow-xl hover:bg-adm-raised active:scale-95 cursor-grab active:cursor-grabbing touch-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
+        >
+          <SettingsIcon size={20} className="text-white/80" />
+        </button>
+      </div>
+    </>
   )
 }
 
@@ -161,8 +220,8 @@ function ClockRate() {
   return (
     <div className="border-b border-adm-line bg-black/20 px-3.5 py-2.5 space-y-2">
       <div className="flex items-center justify-between text-sm">
-        <span className="text-white/80">🇮🇹 Milan <strong className="text-white tabular-nums ml-1">{time('Europe/Rome')}</strong></span>
-        <span className="text-white/80"><strong className="text-white tabular-nums mr-1">{time('Asia/Manila')}</strong> Manila 🇵🇭</span>
+        <span className="flex items-center text-white/80"><span className="mr-1.5 rounded bg-white/10 px-1 py-0.5 text-xs font-bold text-white/70">IT</span> Milan <strong className="text-white tabular-nums ml-1.5">{time('Europe/Rome')}</strong></span>
+        <span className="flex items-center text-white/80"><strong className="text-white tabular-nums mr-1.5">{time('Asia/Manila')}</strong> Manila <span className="ml-1.5 rounded bg-white/10 px-1 py-0.5 text-xs font-bold text-white/70">PH</span></span>
       </div>
       <div className="flex items-center gap-2">
         <span className="text-white/60 text-sm shrink-0" title="Manual planning rate; not a live FX feed">Manual €1 = ₱</span>

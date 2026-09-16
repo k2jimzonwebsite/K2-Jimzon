@@ -7,7 +7,8 @@ import SmartPasteModal from './SmartPasteModal'
 import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 import DeleteProductsModal from './DeleteProductsModal'
-import { BoxIcon, SearchIcon, UploadIcon } from '../../components/ui/icons'
+import { BoxIcon, SearchIcon, UploadIcon, PlusIcon } from '../../components/ui/icons'
+import AddInventoryChooserModal from '../../components/admin/tour/AddInventoryChooserModal'
 import PhotoManagerModal from './PhotoManagerModal'
 import ProductMediaCleanupModal from './ProductMediaCleanupModal'
 import ProductIntakeSessionModal from './ProductIntakeSessionModal'
@@ -177,7 +178,7 @@ function BreakdownRow({ label, data }) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function InventoryGrid({ launchTool, onLaunchToolHandled, canManageMediaCleanup = false, canManageProducts = false }) {
+export default function InventoryGrid({ launchTool, onLaunchToolHandled, canManageMediaCleanup = false, canManageProducts = false, onStartTour = null }) {
   const secure = adminBffEnabled()
   const [products, setProducts]       = useState([])
   const [batchMap, setBatchMap]       = useState({})
@@ -192,11 +193,13 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
   const [showSmartPaste, setShowSmartPaste] = useState(false)
   const [showMediaCleanup, setShowMediaCleanup] = useState(false)
   const [showPhoneIntake, setShowPhoneIntake] = useState(false)
+  const [showIntakeChooser, setShowIntakeChooser] = useState(false)
 
   useEffect(() => {
     if (!launchTool?.id) return
     if (launchTool.id === 'scan-product') setShowAiScanner(true)
     if (launchTool.id === 'smart-paste') setShowSmartPaste(true)
+    if (launchTool.id === 'add-inventory') setShowIntakeChooser(true)
     onLaunchToolHandled?.(launchTool.token)
   }, [launchTool, onLaunchToolHandled])
   const [enrichProduct, setEnrichProduct] = useState(null)
@@ -514,10 +517,18 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
         statusTone={inventoryMetrics.out || inventoryMetrics.expiryRisk || inventoryMetrics.unresolved ? 'warning' : 'success'}
         actions={(
           <div data-tour="inventory-actions" className="flex flex-wrap gap-2">
+            <button
+              data-tour="add-inventory-btn"
+              onClick={() => setShowIntakeChooser(true)}
+              className="flex min-h-11 items-center gap-2 rounded-adm-sm bg-blue px-4 py-2 text-sm font-bold text-white shadow-lg shadow-blue/20 hover:bg-blue-deep active:scale-[0.98] transition-all cursor-pointer"
+            >
+              <PlusIcon size={16} />
+              <span>+ Add Inventory</span>
+            </button>
             <button data-tour="scan-box-btn" onClick={() => setShowAiScanner(true)} className={secondaryButton}><BoxIcon size={16} /> Scan box</button>
             <button data-tour="smart-paste-btn" onClick={() => setShowSmartPaste(true)} className={secondaryButton}><UploadIcon size={16} /> Smart paste</button>
             {canManageMediaCleanup && adminBffEnabled() && <button onClick={() => setShowMediaCleanup(true)} className={secondaryButton}>Unused uploads</button>}
-            <button data-tour="add-product-btn" onClick={() => secure ? setShowPhoneIntake(true) : (setIsAdding(true), setEditTab('details'), setEditError(''), setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }))} className={primaryButton}>Add product</button>
+            <button data-tour="add-product-btn" onClick={() => secure ? setShowPhoneIntake(true) : (setIsAdding(true), setEditTab('details'), setEditError(''), setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }))} className={secondaryButton}>Add product</button>
           </div>
         )}
       />
@@ -535,6 +546,17 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
         { label: 'Expiry risk', value: loading ? '--' : inventoryMetrics.expiryRisk, detail: 'Expired or within 90 days', tone: inventoryMetrics.expiryRisk ? 'text-amber' : 'text-white' },
       ]} />
 
+      {showIntakeChooser && (
+        <AddInventoryChooserModal
+          isOpen={showIntakeChooser}
+          onClose={() => setShowIntakeChooser(false)}
+          onSelectAutomaticQuick={() => setShowAiScanner(true)}
+          onSelectAutomaticTour={() => onStartTour?.('auto_inventory')}
+          onSelectManualSmartPaste={() => setShowSmartPaste(true)}
+          onSelectManualForm={() => secure ? setShowPhoneIntake(true) : (setIsAdding(true), setEditTab('details'), setEditError(''), setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }))}
+          onSelectManualTour={() => onStartTour?.('manual_inventory')}
+        />
+      )}
       {showAiScanner && (
         <ScanToAiModal onClose={() => setShowAiScanner(false)}
           onOpenSmartPaste={() => { setShowAiScanner(false); setShowSmartPaste(true) }} />
