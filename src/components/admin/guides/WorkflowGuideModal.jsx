@@ -5,8 +5,18 @@ import FefoWorkflowDiagram from './FefoWorkflowDiagram'
 import FulfillmentWorkflowDiagram from './FulfillmentWorkflowDiagram'
 import PasabuyWorkflowDiagram from './PasabuyWorkflowDiagram'
 import { STAFF_GUIDE_META } from '../../../views/admin/staffProcedureRegistry'
+import { MapIcon, PlaneIcon, ShieldIcon, ClockIcon, BoxIcon, GlobeIcon } from '../../ui/icons'
 
 const MasterWorkflowGraph = lazy(() => import('../master-workflow-graph/MasterWorkflowGraph'))
+
+const TABS = [
+  { id: 'master_graph', label: 'Master Graph (SVG)', icon: MapIcon, section: 'inventory', workspaceLabel: 'Inventory' },
+  { id: 'flights', label: 'Flights & Cargo', icon: PlaneIcon, section: 'consignment', workspaceLabel: 'Consignments' },
+  { id: 'custody', label: 'Lot Custody', icon: ShieldIcon, section: 'inventory', workspaceLabel: 'Custody' },
+  { id: 'fefo', label: 'FEFO & Expiry', icon: ClockIcon, section: 'inventory', workspaceLabel: 'FEFO Stock' },
+  { id: 'fulfillment', label: 'Order Packing', icon: BoxIcon, section: 'omni_hub', workspaceLabel: 'Operations Hub' },
+  { id: 'pasabuy', label: 'Pasabuy Quotes', icon: GlobeIcon, section: 'pasabuy_manager', workspaceLabel: 'Pasabuy Manager' },
+]
 
 /**
  * WorkflowGuideModal
@@ -36,16 +46,7 @@ export default function WorkflowGuideModal({
 
   if (!isOpen) return null
 
-  const tabs = [
-    { id: 'master_graph', label: '🗺️ Master Graph (SVG)', section: 'inventory' },
-    { id: 'flights', label: '✈️ Flights & Cargo', section: 'consignment' },
-    { id: 'custody', label: '🤝 Lot Custody', section: 'inventory' },
-    { id: 'fefo', label: '⏳ FEFO & Expiry', section: 'inventory' },
-    { id: 'fulfillment', label: '📦 Order Packing', section: 'omni_hub' },
-    { id: 'pasabuy', label: '🇮🇹 Pasabuy Quotes', section: 'pasabuy_manager' },
-  ]
-
-  const currentTab = tabs.find((t) => t.id === activeTab) || tabs[0]
+  const currentTab = TABS.find((t) => t.id === activeTab) || TABS[0]
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md animate-in fade-in duration-200 sm:p-5">
@@ -53,15 +54,15 @@ export default function WorkflowGuideModal({
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#0d131f] px-5 py-4">
           <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-lg">
-              🗺️
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400">
+              <MapIcon size={18} />
             </span>
             <div>
               <h2 className="text-base font-bold text-white sm:text-lg">
                 K2 Operations Visual Workflow Guide
               </h2>
               <p className="text-xs text-white/50">
-                Draft procedures, scan requirements, safeguards & AI prompt handoffs.
+                Draft procedures, scan requirements, safeguards &amp; AI prompt handoffs.
               </p>
               <p className="mt-1 text-xs font-semibold text-amber-300">
                 {STAFF_GUIDE_META.approvalStatus} · {STAFF_GUIDE_META.version}
@@ -69,6 +70,7 @@ export default function WorkflowGuideModal({
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
             className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
             title="Close (Esc)"
@@ -80,18 +82,21 @@ export default function WorkflowGuideModal({
         {/* Tab Navigation Rail */}
         <div className="flex shrink-0 overflow-x-auto border-b border-white/10 bg-[#0a0e17] px-4 py-2 custom-scrollbar">
           <div className="flex space-x-1 sm:space-x-2">
-            {tabs.map((tab) => {
+            {TABS.map((tab) => {
               const isActive = activeTab === tab.id
+              const TabIcon = tab.icon
               return (
                 <button
                   key={tab.id}
+                  type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex min-h-11 shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all cursor-pointer ${
+                  className={`flex min-h-11 shrink-0 items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold transition-all cursor-pointer ${
                     isActive
                       ? 'border border-sky-500/40 bg-sky-500/15 text-sky-400 shadow-sm'
                       : 'border border-transparent text-white/60 hover:bg-white/5 hover:text-white'
                   }`}
                 >
+                  <TabIcon size={14} className={isActive ? 'text-sky-400' : 'text-white/50'} />
                   <span>{tab.label}</span>
                 </button>
               )
@@ -111,11 +116,11 @@ export default function WorkflowGuideModal({
               />
             </Suspense>
           )}
-          {activeTab === 'flights' && <FlightWorkflowDiagram />}
-          {activeTab === 'custody' && <CustodyWorkflowDiagram />}
-          {activeTab === 'fefo' && <FefoWorkflowDiagram />}
-          {activeTab === 'fulfillment' && <FulfillmentWorkflowDiagram />}
-          {activeTab === 'pasabuy' && <PasabuyWorkflowDiagram />}
+          {activeTab === 'flights' && <FlightWorkflowDiagram onNavigate={onNavigate} />}
+          {activeTab === 'custody' && <CustodyWorkflowDiagram onNavigate={onNavigate} />}
+          {activeTab === 'fefo' && <FefoWorkflowDiagram onNavigate={onNavigate} />}
+          {activeTab === 'fulfillment' && <FulfillmentWorkflowDiagram onNavigate={onNavigate} />}
+          {activeTab === 'pasabuy' && <PasabuyWorkflowDiagram onNavigate={onNavigate} />}
         </div>
 
         {/* Footer with Workspace Shortcut */}
@@ -127,17 +132,19 @@ export default function WorkflowGuideModal({
           <div className="flex items-center gap-2">
             {onNavigate && currentTab.section && activeTab !== 'master_graph' && (
               <button
+                type="button"
                 onClick={() => {
                   onNavigate(currentTab.section)
                   onClose()
                 }}
                 className="flex min-h-11 items-center gap-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 px-3 py-1.5 text-xs font-bold text-sky-400 transition-all hover:bg-sky-500/20 cursor-pointer"
               >
-                <span>Open {currentTab.label.split(' ')[1]} Workspace</span>
+                <span>Open {currentTab.workspaceLabel} Workspace</span>
                 <span>→</span>
               </button>
             )}
             <button
+              type="button"
               onClick={onClose}
               className="min-h-11 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/70 hover:bg-white/10 hover:text-white cursor-pointer"
             >

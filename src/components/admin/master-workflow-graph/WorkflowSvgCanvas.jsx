@@ -50,6 +50,15 @@ export default function WorkflowSvgCanvas({
 }) {
   const dragRef = useRef(null)
   const [view, setView] = useState({ x: 24, y: 28, zoom: 0.72 })
+  const [typeFilter, setTypeFilter] = useState('all')
+
+  const TYPE_FILTERS = [
+    { id: 'all', label: 'All types' },
+    { id: 'scan', label: 'Scans' },
+    { id: 'decision', label: 'Decisions' },
+    { id: 'action', label: 'Actions' },
+    { id: 'complete', label: 'Committed' },
+  ]
 
   const layout = useMemo(() => {
     const layers = computeLayers()
@@ -80,6 +89,15 @@ export default function WorkflowSvgCanvas({
   }))
   const resetView = () => setView({ x: 24, y: 28, zoom: 0.72 })
 
+  const focusNode = (nodeId) => {
+    const target = nodeId || activeNodeId
+    const pos = layout.positions.get(target)
+    if (!pos) return
+    const targetX = Math.round(440 - (pos.x + NODE_WIDTH / 2) * view.zoom)
+    const targetY = Math.round(290 - (pos.y + NODE_HEIGHT / 2) * view.zoom)
+    setView((current) => ({ ...current, x: targetX, y: targetY }))
+  }
+
   const handlePointerDown = (event) => {
     if (event.target.closest('[data-node-id]') || event.button !== 0) return
     dragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, originX: view.x, originY: view.y }
@@ -96,13 +114,43 @@ export default function WorkflowSvgCanvas({
 
   return (
     <section aria-label="Connected operations workflow canvas" className="overflow-hidden rounded-2xl border border-white/10 bg-[#080d16] shadow-2xl">
-      <div className="flex flex-col gap-3 border-b border-white/10 bg-[#0b121e] px-4 py-3 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-3 border-b border-white/10 bg-[#0b121e] px-4 py-3 xl:flex-row xl:items-center xl:justify-between">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-white/55" aria-label="Edge legend">
           {Object.entries(EDGE_STYLE).map(([kind, style]) => (
             <span key={kind} className="inline-flex items-center gap-1.5"><span className="h-0.5 w-5" style={{ backgroundColor: style.stroke }} />{style.label}</span>
           ))}
         </div>
-        <div className="flex items-center gap-2">
+
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Step Type Filter */}
+          <div className="flex items-center gap-1 rounded-lg border border-white/10 bg-black/40 p-1 mr-2">
+            {TYPE_FILTERS.map((f) => {
+              const isSelected = typeFilter === f.id
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setTypeFilter(f.id)}
+                  className={`min-h-9 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+                    isSelected
+                      ? 'bg-sky-500 text-slate-950 font-bold shadow-sm'
+                      : 'text-white/60 hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              )
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => focusNode(activeNodeId)}
+            className="min-h-11 rounded-adm-sm border border-sky-500/30 bg-sky-500/10 px-3 text-xs font-bold text-sky-300 transition-colors hover:bg-sky-500/20 active:scale-[0.98] cursor-pointer"
+            title="Pan canvas to center on selected node"
+          >
+            Focus Active Node
+          </button>
           <button type="button" aria-label="Zoom out" onClick={() => changeZoom(-0.1)} className="min-h-11 rounded-adm-sm border border-white/10 bg-white/5 px-3 text-sm font-bold text-white/75 hover:bg-white/10">−</button>
           <span className="min-w-12 text-center text-xs tabular-nums text-white/55">{Math.round(view.zoom * 100)}%</span>
           <button type="button" aria-label="Zoom in" onClick={() => changeZoom(0.1)} className="min-h-11 rounded-adm-sm border border-white/10 bg-white/5 px-3 text-sm font-bold text-white/75 hover:bg-white/10">+</button>
@@ -151,11 +199,32 @@ export default function WorkflowSvgCanvas({
             const selected = node.id === activeNodeId
             const completed = completedSteps.includes(node.id)
             const highlighted = !highlightedNodeIds || highlightedNodeIds.has(node.id)
+            const matchesType = typeFilter === 'all' || node.type === typeFilter
+            const isDimmed = !highlighted || !matchesType
             const [badge, badgeClass] = BADGES[node.type] || ['PROCESS', 'border-white/15 bg-white/5 text-white/60']
             return (
-              <button key={node.id} type="button" data-node-id={node.id} onClick={() => onSelectNode(node.id)} aria-pressed={selected} className={`absolute flex flex-col rounded-xl border p-3 text-left shadow-xl transition-[border-color,background-color,opacity,box-shadow] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-400/40 motion-reduce:transition-none ${selected ? 'border-sky-300 bg-[#13233a] ring-2 ring-sky-400/40' : completed ? 'border-emerald-500/45 bg-[#0b1c18]' : 'border-white/12 bg-[#0d1625] hover:border-white/30'} ${highlighted ? 'opacity-100' : 'opacity-25'}`} style={{ left: position.x, top: position.y, width: NODE_WIDTH, height: NODE_HEIGHT }}>
+              <button
+                key={node.id}
+                type="button"
+                data-node-id={node.id}
+                onClick={() => onSelectNode(node.id)}
+                aria-pressed={selected}
+                className={`absolute flex flex-col rounded-xl border p-3 text-left shadow-xl transition-[border-color,background-color,opacity,box-shadow] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-400/40 motion-reduce:transition-none ${
+                  selected
+                    ? 'border-sky-300 bg-[#13233a] ring-2 ring-sky-400/80 shadow-lg shadow-sky-500/25'
+                    : completed
+                    ? 'border-emerald-500/45 bg-[#0b1c18] hover:border-emerald-400/60'
+                    : 'border-white/12 bg-[#0d1625] hover:border-white/30'
+                } ${isDimmed ? 'opacity-20' : 'opacity-100'}`}
+                style={{ left: position.x, top: position.y, width: NODE_WIDTH, height: NODE_HEIGHT }}
+              >
                 <span className="flex w-full items-center justify-between gap-2">
-                  <span className={`rounded-full border px-2 py-0.5 text-[9px] font-bold tracking-[0.1em] ${badgeClass}`}>{badge}</span>
+                  <span className="flex items-center gap-1.5">
+                    <span className={`rounded-full border px-2 py-0.5 text-xs font-bold tracking-wider ${badgeClass}`}>{badge}</span>
+                    {selected && (
+                      <span className="flex h-2 w-2 rounded-full bg-sky-400 animate-ping" title="Active step" />
+                    )}
+                  </span>
                   <span className="text-xs tabular-nums text-white/40">{node.id === 'admin.entry' ? 'START' : node.step}</span>
                 </span>
                 <strong className="mt-2 line-clamp-2 font-sans text-sm leading-snug text-white">{node.title}</strong>

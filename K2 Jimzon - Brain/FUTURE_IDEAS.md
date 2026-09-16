@@ -1,5 +1,8 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260916-04 — accepted workflow guide visual & interactive enhancement, merged into MAP-021.**
+Owner requests visual and interactive enhancements across the workflow guide experience for both admins and staff: make workflows easier to understand, more tactile, and more responsive. Audit gate: auto-focus/center selected nodes in `WorkflowSvgCanvas`; add interactive node-type and staff-role filters; replace raw emojis in `WorkflowGuideModal` with clean SVG primitives; add visual breadcrumbs and 1-click clipboard copy in `WorkflowDetailDrawer`; retain all 49-node/60-edge topology, allowlisted `adminJump` targets, 12px font floors, and bundle budgets ($\le 300$ kB Admin).
+
 **IDEA-20260916-03 — accepted workflow map follow-through and staff instructional roadmap, merged into MAP-021.**
 Owner requests that when any workflow is clicked in the Admin BOS Master Operations Workflow Graph, it actively teaches admins and staff on what to click and do next to continue on and finish the objectives or goals. Audit gate: keep existing graph topology (49 nodes, 60 edges) and contracts; enrich all 8 workflows with structured operational goals and finish criteria; enrich all 48 operational nodes with concrete action directives (target screen, what to click, action directive, and next step handoff); mount an interactive sequential step roadmap and high-contrast staff action hero card.
 

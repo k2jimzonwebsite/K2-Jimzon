@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { WORKFLOW_GUIDE_META, WORKFLOWS, WORKFLOW_SECTIONS } from './workflowData'
 import WorkflowSvgCanvas from './WorkflowSvgCanvas'
 import WorkflowDetailDrawer from './WorkflowDetailDrawer'
@@ -81,6 +81,22 @@ export default function MasterWorkflowGraph({
     if (next) handleSelectNode(next.node.id)
   }
 
+  // Keyboard navigation for fast staff progression
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return
+      if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') {
+        const next = downstream.find((item) => item.node && item.kind !== 'loopback') || downstream.find((item) => item.node)
+        if (next) handleSelectNode(next.node.id)
+      } else if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') {
+        const previous = upstream.find((item) => item.node)
+        if (previous) handleSelectNode(previous.node.id)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [downstream, upstream])
+
   const handleToggleComplete = (nodeId) => {
     setCompletedSteps((prev) =>
       prev.includes(nodeId) ? prev.filter((id) => id !== nodeId) : [...prev, nodeId]
@@ -90,6 +106,13 @@ export default function MasterWorkflowGraph({
   const handleResetProgress = () => {
     setCompletedSteps([])
   }
+
+  // Available staff roles across all nodes
+  const availableRoles = useMemo(() => {
+    const roles = new Set(ALL_NODES.map((n) => n.actor).filter(Boolean))
+    return ['All Roles', ...Array.from(roles).sort()]
+  }, [])
+  const [selectedRole, setSelectedRole] = useState('All Roles')
 
   // Filter workflows by active section
   const visibleWorkflows = useMemo(() => {
@@ -126,10 +149,17 @@ export default function MasterWorkflowGraph({
   }, [searchQuery])
 
   const highlightedNodeIds = useMemo(() => {
-    if (filteredNodes) return new Set(filteredNodes.map((node) => node.id))
-    if (selectedSection === 'all') return null
-    return new Set(ALL_NODES.filter((node) => node.sectionId === selectedSection || node.id === ENTRY_NODE_ID).map((node) => node.id))
-  }, [filteredNodes, selectedSection])
+    let base = filteredNodes ? new Set(filteredNodes.map((node) => node.id)) : null
+    if (!base && selectedSection !== 'all') {
+      base = new Set(ALL_NODES.filter((node) => node.sectionId === selectedSection || node.id === ENTRY_NODE_ID).map((node) => node.id))
+    }
+    if (selectedRole !== 'All Roles') {
+      const roleMatches = new Set(ALL_NODES.filter((node) => node.actor === selectedRole || node.id === ENTRY_NODE_ID).map((node) => node.id))
+      if (!base) return roleMatches
+      return new Set([...base].filter((id) => roleMatches.has(id)))
+    }
+    return base
+  }, [filteredNodes, selectedSection, selectedRole])
 
   const tracedPaths = useMemo(
     () => traceEnabled ? tracePaths(traceFromId, traceToId) : [],
@@ -161,6 +191,47 @@ export default function MasterWorkflowGraph({
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            {/* Role Filter Selector */}
+            <div className="flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5">
+              <label htmlFor="staff-role-filter" className="text-xs font-semibold text-white/60 whitespace-nowrap">
+                Staff Role:
+              </label>
+              <select
+                id="staff-role-filter"
+                value={selectedRole}
+                onChange={(e) => setSelectedRole(e.target.value)}
+                className="bg-transparent text-xs font-semibold text-sky-300 focus:outline-none cursor-pointer"
+              >
+                {availableRoles.map((role) => (
+                  <option key={role} value={role} className="bg-slate-900 text-white">
+                    {role}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Quick Step Nav & Shortcuts */}
+            <div className="hidden sm:flex min-h-11 items-center gap-1 rounded-xl border border-white/10 bg-white/[0.04] p-1">
+              <button
+                type="button"
+                onClick={handlePrevNode}
+                className="min-h-11 flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                title="Previous step in workflow (or press P / Left Arrow)"
+              >
+                <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-xs font-mono font-bold text-white/90">P</kbd>
+                <span>Prev</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleNextNode}
+                className="min-h-11 flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                title="Next step in workflow (or press N / Right Arrow)"
+              >
+                <span>Next</span>
+                <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-xs font-mono font-bold text-white/90">N</kbd>
+              </button>
+            </div>
+
             {/* Search Input */}
             <div className="relative min-w-[240px]">
               <SearchIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />

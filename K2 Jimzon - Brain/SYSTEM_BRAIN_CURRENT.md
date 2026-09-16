@@ -1,5 +1,13 @@
 # K2 Jimzon — System Brain (Current State)
 
+**16 September Workflow Guide visual & tactile interactive enhancements (IDEA-20260916-04, MAP-021, code locally verified):**
+Visual polish and interactive guidance capabilities across Admin BOS Master Operations Workflow Guide surfaces:
+1. **Clean SVG Primitives (`WorkflowGuideModal.jsx`):** Raw emojis replaced with scalable vector iconography (`MapIcon`, `PlaneIcon`, `ShieldIcon`, `ClockIcon`, `BoxIcon`, `GlobeIcon`); resilient fallback for workspace shortcut button labels.
+2. **Canvas Viewport Auto-Focus & Step-Type Filter (`WorkflowSvgCanvas.jsx`):** Added smooth viewport auto-focus centering on active steps (`focusNode`) with a dedicated "Focus Active Node" control; added interactive step-type pills (`All types`, `Scans`, `Decisions`, `Actions`, `Committed`) that dim non-matching nodes; added pulsating active indicator (`animate-ping`) and high-contrast accent ring.
+3. **Staff Role Filtering & Shortcut Navigation (`MasterWorkflowGraph.jsx`):** Added role filter dropdown to isolate operations by staff role (`Milan Courier`, `Manila WH Admin`, `Owner / Admin`, `Inventory Specialist`); added global keyboard listeners (`[N]` / Arrow Right for next step, `[P]` / Arrow Left for previous step) with visual kbd shortcut badges.
+4. **Visual Breadcrumb Flow & 1-Click Copy (`WorkflowDetailDrawer.jsx`):** Mounted interactive 3-step sequence flow banner (`Prev Step` → `Current Active Step` → `Next Step`) for 1-click step progression; integrated 1-click clipboard copy buttons with visual feedback (`Copied!`) for click target, SOP physical directive, and simulation test barcode; enforced 12px typography floor across all grounding evidence.
+5. **Evidence Baseline:** 10/10 workflow tests PASS (`tests/workflow-guide-truth.spec.js`, `tests/workflow-graph-canvas.spec.js`); 652/652 contract tests PASS; 8/8 selling surfaces PASS; `npm run prebuild` clean (0 leaks, 0 gaps, 1378 files); Admin bundle passes at 191.12 kB / 300.00 kB minified; Storefront build passes at 149.89 kB / 150.50 kB gzip.
+
 **16 September Master Operations Workflow Graph follow-through & staff instructional roadmap (IDEA-20260916-03, MAP-021, code locally verified):**
 Operational follow-through and staff training UX across all 8 workflows and 49 nodes of the Admin BOS Master Operations Workflow Graph:
 1. **Operational Mission & Definition of Done (`workflowData.js`):** Every workflow (`cross_border_lifecycle`, `existing_stock_intake`, `new_product_intake`, `inventory_handover`, `monthly_count`, `new_order`, `pasabuy_lifecycle`, `channel_integration_lifecycle`) has an explicit `goal`, `startingPoint`, and `completionCriteria`.

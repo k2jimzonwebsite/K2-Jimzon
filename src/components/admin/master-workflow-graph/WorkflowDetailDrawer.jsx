@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { getDownstream, getUpstream } from './workflowGraph'
 import WorkflowRecords from './WorkflowRecords'
-import { CheckIcon, SparkleIcon } from '../../ui/icons'
+import { CheckIcon, CopyIcon, SparkleIcon } from '../../ui/icons'
 
 /**
  * WorkflowDetailDrawer
@@ -24,12 +24,28 @@ export default function WorkflowDetailDrawer({
   const [checkedItems, setCheckedItems] = useState({})
   const [simulated, setSimulated] = useState(false)
   const [showTroubleshooting, setShowTroubleshooting] = useState(false)
+  const [copiedField, setCopiedField] = useState(null)
+  const copyTimerRef = useRef(null)
 
   useEffect(() => {
     setCheckedItems({})
     setSimulated(false)
     setShowTroubleshooting(false)
+    setCopiedField(null)
+    return function cleanupCopyTimer() {
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current)
+    }
   }, [node?.id])
+
+  const handleCopy = (fieldKey, text) => {
+    if (!text) return
+    navigator.clipboard?.writeText?.(String(text).trim())
+    setCopiedField(fieldKey)
+    if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current)
+    copyTimerRef.current = window.setTimeout(function resetCopiedField() {
+      setCopiedField(null)
+    }, 2000)
+  }
 
   if (!node) return null
 
@@ -49,9 +65,12 @@ export default function WorkflowDetailDrawer({
 
   const currentWfNodes = workflow?.nodes || []
   const currentWfIdx = currentWfNodes.findIndex((n) => n.id === node.id)
+  const prevStepNode = currentWfIdx > 0
+    ? currentWfNodes[currentWfIdx - 1]
+    : upstream.find((item) => item.node)?.node || null
   const nextStepNode = currentWfIdx >= 0 && currentWfIdx < currentWfNodes.length - 1
     ? currentWfNodes[currentWfIdx + 1]
-    : null
+    : downstream.find((item) => item.node && item.kind !== 'loopback')?.node || downstream.find((item) => item.node)?.node || null
 
   return (
     <div className="flex flex-col rounded-2xl border border-white/10 bg-[#0d131f] p-6 text-white shadow-2xl">
@@ -145,6 +164,59 @@ export default function WorkflowDetailDrawer({
           )}
         </div>
 
+        {/* Interactive Visual Breadcrumb Flow: Prev -> Current -> Next */}
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/40 p-3">
+          <div className="flex flex-wrap items-center gap-2">
+            {prevStepNode ? (
+              <button
+                type="button"
+                onClick={() => onSelectNode?.(prevStepNode.id)}
+                className="min-h-11 flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/10 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
+                title={`Go to previous step: ${prevStepNode.title}`}
+              >
+                <span aria-hidden="true">←</span>
+                <span className="line-clamp-1 max-w-[150px]">Prev: {prevStepNode.step != null ? `Step ${prevStepNode.step}` : 'Entry'}</span>
+              </button>
+            ) : (
+              <span className="min-h-11 inline-flex items-center rounded-lg border border-white/5 bg-white/[0.02] px-3 py-1.5 text-xs text-white/40">
+                Start of flow
+              </span>
+            )}
+
+            <span className="text-white/30 font-bold" aria-hidden="true">→</span>
+
+            <div className="min-h-11 flex items-center gap-2 rounded-lg border border-sky-400/60 bg-sky-500/20 px-3 py-1.5 text-xs font-bold text-white shadow-sm ring-1 ring-sky-400/40">
+              <span className="flex h-2 w-2 rounded-full bg-sky-400 animate-ping" />
+              <span className="line-clamp-1 max-w-[180px]">Active: {node.step != null ? `Step ${node.step}` : 'Entry'}</span>
+            </div>
+
+            <span className="text-white/30 font-bold" aria-hidden="true">→</span>
+
+            {nextStepNode ? (
+              <button
+                type="button"
+                onClick={() => onSelectNode?.(nextStepNode.id)}
+                className="min-h-11 flex items-center gap-1.5 rounded-lg border border-sky-500/40 bg-sky-500/15 px-3 py-1.5 text-xs font-semibold text-sky-200 hover:bg-sky-500/25 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
+                title={`Advance to next step: ${nextStepNode.title}`}
+              >
+                <span className="line-clamp-1 max-w-[150px]">Next: {nextStepNode.step != null ? `Step ${nextStepNode.step}` : 'Complete'}</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            ) : (
+              <span className="min-h-11 inline-flex items-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-300">
+                Terminal outcome reached
+              </span>
+            )}
+          </div>
+
+          {/* Keyboard shortcut hint badge */}
+          <div className="hidden md:flex items-center gap-2 text-xs text-white/50">
+            <span>Rehearse:</span>
+            <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 font-mono text-xs font-bold text-white/80">[P] Prev</kbd>
+            <kbd className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 font-mono text-xs font-bold text-white/80">[N] Next</kbd>
+          </div>
+        </div>
+
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {/* Target Screen & What to Click */}
           <div className="rounded-xl border border-sky-500/20 bg-black/30 p-4">
@@ -157,10 +229,30 @@ export default function WorkflowDetailDrawer({
               </span>
             </div>
             <div className="mt-2 rounded-lg border border-white/10 bg-white/[0.04] p-2.5">
-              <span className="block text-xs font-bold uppercase tracking-wider text-white/40 mb-1">
-                What to click in Admin
-              </span>
-              <p className="text-xs font-mono font-medium text-white/95">
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <span className="block text-xs font-bold uppercase tracking-wider text-white/40">
+                  What to click in Admin
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopy('whatToClick', node.actionGuide?.whatToClick || node.jumpLabel)}
+                  className="min-h-11 inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-sky-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
+                  title="Copy click target to clipboard"
+                >
+                  {copiedField === 'whatToClick' ? (
+                    <>
+                      <CheckIcon size={13} className="text-emerald-400" />
+                      <span className="text-emerald-300">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <CopyIcon size={13} />
+                      <span>Copy target</span>
+                    </>
+                  )}
+                </button>
+              </div>
+              <p className="text-xs font-mono font-medium text-white/95 break-words">
                 {node.actionGuide?.whatToClick || node.jumpLabel || 'Select the action control in the designated screen.'}
               </p>
             </div>
@@ -168,9 +260,29 @@ export default function WorkflowDetailDrawer({
 
           {/* Action Directive */}
           <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-            <span className="block text-xs font-bold uppercase tracking-wider text-white/50">
-              {'2. Operational SOP & Physical Directive'}
-            </span>
+            <div className="flex items-center justify-between gap-2 mb-1">
+              <span className="block text-xs font-bold uppercase tracking-wider text-white/50">
+                {'2. Operational SOP & Physical Directive'}
+              </span>
+              <button
+                type="button"
+                onClick={() => handleCopy('actionDirective', node.actionGuide?.actionDirective || node.summary)}
+                className="min-h-11 inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-sky-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
+                title="Copy directive to clipboard"
+              >
+                {copiedField === 'actionDirective' ? (
+                  <>
+                    <CheckIcon size={13} className="text-emerald-400" />
+                    <span className="text-emerald-300">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <CopyIcon size={13} />
+                    <span>Copy SOP</span>
+                  </>
+                )}
+              </button>
+            </div>
             <p className="mt-2 text-xs leading-relaxed text-white/90">
               {node.actionGuide?.actionDirective || node.summary}
             </p>
@@ -224,7 +336,7 @@ export default function WorkflowDetailDrawer({
           <ul className="mt-3 space-y-2">
             {(node.grounding || []).map((evidence) => (
               <li key={`${evidence.kind}:${evidence.ref}`} className="rounded-lg border border-white/8 bg-white/[0.03] px-3 py-2">
-                <span className="block text-[9px] font-bold uppercase tracking-wider text-white/35">{evidence.kind}</span>
+                <span className="block text-xs font-bold uppercase tracking-wider text-white/35">{evidence.kind}</span>
                 <code className="mt-1 block break-all text-xs text-white/70">{evidence.ref}</code>
               </li>
             ))}
@@ -257,11 +369,31 @@ export default function WorkflowDetailDrawer({
           </p>
 
           <div className="mt-3 flex flex-col gap-2 font-mono text-xs sm:flex-row sm:items-center sm:justify-between">
-            <div className="rounded bg-black/40 px-2.5 py-1.5 text-white/70 border border-white/10">
-              <span className="text-white/40">Example input: </span>
-              <span className="text-purple-300 font-bold">{node.simulation.testBarcode}</span>
+            <div className="flex min-h-11 items-center justify-between gap-3 rounded bg-black/40 px-3 py-1.5 text-white/70 border border-white/10">
+              <div>
+                <span className="text-white/40">Example input: </span>
+                <span className="text-purple-300 font-bold">{node.simulation.testBarcode}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleCopy('testBarcode', node.simulation.testBarcode)}
+                className="min-h-9 inline-flex items-center gap-1 rounded-md border border-purple-400/30 bg-purple-500/10 px-2 py-1 text-xs font-semibold text-purple-200 hover:bg-purple-500/20 active:scale-[0.98] cursor-pointer"
+                title="Copy barcode to clipboard"
+              >
+                {copiedField === 'testBarcode' ? (
+                  <>
+                    <CheckIcon size={12} className="text-emerald-400" />
+                    <span className="text-emerald-300">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <CopyIcon size={12} />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
             </div>
-            <div className="flex-1 rounded bg-black/40 px-2.5 py-1.5 text-white/80 border border-white/10 sm:ml-2">
+            <div className="flex-1 rounded bg-black/40 px-3 py-2 text-white/80 border border-white/10 sm:ml-2">
               <span className="text-white/40">Expected shape: </span>
               <span className={simulated ? 'text-emerald-400 font-semibold' : 'text-white/70'}>
                 {simulated ? node.simulation.expectedResult : 'Select “Show expected record shape” to rehearse this guide step.'}
