@@ -65,6 +65,33 @@ const SECTIONS = {
   globe:             { label: 'Globe Display',        icon: EyeIcon,     title: '3D Globe Map Settings',         desc: 'Control which products appear on the interactive 3D map.' },
 }
 
+const SECTION_ALIASES = {
+  consignments: 'consignment',
+  fulfillment: 'omni_hub',
+  staff: 'staff_permissions',
+  channels: 'integrations',
+  messages: 'inbox',
+  customers: 'wholesale',
+}
+
+function resolveAdminSection(rawSection, canManageStaff) {
+  const key = String(rawSection || '').trim().toLowerCase()
+  const resolved = SECTION_ALIASES[key] || key
+  if (!resolved || !SECTIONS[resolved]) return 'overview'
+  if (SECTIONS[resolved].adminOnly && !canManageStaff) return 'overview'
+  return resolved
+}
+
+function readInitialSection(canManageStaff) {
+  if (typeof window === 'undefined') return 'overview'
+  try {
+    const params = new URLSearchParams(window.location.search)
+    return resolveAdminSection(params.get('section'), canManageStaff)
+  } catch {
+    return 'overview'
+  }
+}
+
 // Grouped navigation by daily workflow. Home stands alone; settings sink to the bottom.
 const NAV_GROUPS = [
   { heading: null,             items: ['overview', 'owner_close', 'workflow_graph'] },
@@ -103,7 +130,7 @@ function NavList({ section, onSelect, activeSkus, canManageStaff, widget, onWidg
                   aria-label={meta.label}
                   aria-current={on ? 'page' : undefined}
                   className={
-                    'relative flex min-h-10 w-full items-center gap-2.5 rounded-adm-sm px-2.5 py-2 text-left text-sm transition-[transform,background-color,color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 ' +
+                    'relative flex min-h-11 w-full items-center gap-2.5 rounded-adm-sm px-2.5 py-2 text-left text-sm transition-[transform,background-color,color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 ' +
                     (on
                       ? 'bg-blue/10 text-white font-semibold'
                       : 'text-white/50 hover:text-white hover:bg-white/[0.035]')
@@ -130,7 +157,8 @@ function NavList({ section, onSelect, activeSkus, canManageStaff, widget, onWidg
 export default function Admin() {
   const { isAdmin, authReady, logoutAdmin, user, products = [] } = useStore()
   const secure = adminBffEnabled()
-  const [section, setSection] = useState('overview')
+  const canManageStaff = user?.role === 'Admin' || user?.role === 'SuperAdmin'
+  const [section, setSection] = useState(() => readInitialSection(canManageStaff))
   const [widget, setWidget] = useState('metrics')
   const [sheetMode, setSheetMode] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)
@@ -146,12 +174,13 @@ export default function Admin() {
   const [guideQuery, setGuideQuery] = useState('')
   const [inventoryTool, setInventoryTool] = useState(null)
   const goChordRef = useRef(null)
+  const desktopHeadingRef = useRef(null)
+  const mobileHeadingRef = useRef(null)
 
   // KPI states (kept here because the sidebar badge + Overview both read them)
   const [activeSkus, setActiveSkus] = useState(0)
   const [lowStock, setLowStock] = useState(0)
   const [pendingOrders, setPendingOrders] = useState(null)
-  const canManageStaff = user?.role === 'Admin' || user?.role === 'SuperAdmin'
 
   useEffect(() => {
     if (!isAdmin) return
@@ -256,21 +285,73 @@ export default function Admin() {
     if (pendingCount !== null) setPendingOrders(pendingCount)
   }
 
+  const selectSection = (id, options = {}) => {
+    const { pushState = true, focusHeading = true } = options
+    const target = resolveAdminSection(id, canManageStaff)
+    setSection(target)
+    // Card grid is the default view. Sheet mode is a power-user opt-in — it was
+    // auto-enabling on every Inventory visit, which dropped mobile users
+    // straight into a 30-column spreadsheet.
+    setSheetMode(false)
+    setIsMobileMenuOpen(false)
+
+    if (pushState && typeof window !== 'undefined') {
+      try {
+        const url = new URL(window.location.href)
+        if (target === 'overview') {
+          url.searchParams.delete('section')
+        } else {
+          url.searchParams.set('section', target)
+        }
+        if (url.href !== window.location.href) {
+          window.history.pushState({ section: target }, '', url)
+        }
+      } catch {
+        // Ignore URL manipulation failures in restricted environments
+      }
+    }
+
+    if (focusHeading && typeof window !== 'undefined') {
+      requestAnimationFrame(() => {
+        const heading = window.innerWidth >= 1024 ? desktopHeadingRef.current : mobileHeadingRef.current
+        heading?.focus()
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (!authReady) return
+    const currentParam = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('section') : null
+    if (currentParam) {
+      const resolved = resolveAdminSection(currentParam, canManageStaff)
+      if (resolved !== section) {
+        setSection(resolved)
+      }
+    }
+  }, [authReady, canManageStaff])
+
+  useEffect(() => {
+    if (SECTIONS[section]?.adminOnly && !canManageStaff) {
+      selectSection('overview', { pushState: true, focusHeading: false })
+    }
+  }, [canManageStaff, section])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    const onPopState = () => {
+      const target = readInitialSection(canManageStaff)
+      selectSection(target, { pushState: false, focusHeading: true })
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [canManageStaff])
+
   if (!authReady) {
     return <div className="admin-ui min-h-screen bg-adm-bg flex items-center justify-center text-sm text-white/60">Checking staff access…</div>
   }
 
   if (!isAdmin) {
     return <div className="admin-ui"><AdminAuthModal isOpen={true} onClose={() => window.location.assign('/')} /></div>
-  }
-
-  const selectSection = (id) => {
-    setSection(SECTIONS[id]?.adminOnly && !canManageStaff ? 'overview' : id)
-    // Card grid is the default view. Sheet mode is a power-user opt-in — it was
-    // auto-enabling on every Inventory visit, which dropped mobile users
-    // straight into a 30-column spreadsheet.
-    setSheetMode(false)
-    setIsMobileMenuOpen(false)
   }
 
   const launchInventoryTool = id => {
@@ -308,7 +389,7 @@ export default function Admin() {
           <button
             onClick={() => setPaletteOpen(true)}
             aria-label="Search dashboard"
-            className="flex min-h-10 min-w-10 items-center justify-center rounded-adm-sm text-white/45 transition-[transform,background-color,color] duration-150 hover:bg-white/[0.06] hover:text-white active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm text-white/45 transition-[transform,background-color,color] duration-150 hover:bg-white/[0.06] hover:text-white active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
             title="Search (Ctrl+K)"
           >
             <SearchIcon size={17} />
@@ -330,7 +411,7 @@ export default function Admin() {
           </div>
           <button
             onClick={() => setShowDevOpsModal(true)}
-            className="flex min-h-10 w-full items-center gap-2 rounded-adm-sm px-3 py-2 text-xs text-white/45 transition-[transform,background-color,color] duration-150 hover:bg-white/[0.04] hover:text-white active:scale-[0.98]"
+            className="flex min-h-11 w-full items-center gap-2 rounded-adm-sm px-3 py-2 text-xs text-white/45 transition-[transform,background-color,color] duration-150 hover:bg-white/[0.04] hover:text-white active:scale-[0.98]"
             title="DevOps & System Architecture"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-blue pulse-dot" />
@@ -338,7 +419,7 @@ export default function Admin() {
           </button>
           <button
             onClick={logoutAdmin}
-            className="flex min-h-10 w-full items-center gap-2 rounded-adm-sm px-3 py-2 text-xs text-white/45 transition-[transform,background-color,color] duration-150 hover:bg-crimson/10 hover:text-crimson active:scale-[0.98]"
+            className="flex min-h-11 w-full items-center gap-2 rounded-adm-sm px-3 py-2 text-xs text-white/45 transition-[transform,background-color,color] duration-150 hover:bg-crimson/10 hover:text-crimson active:scale-[0.98]"
           >
             <ShieldIcon size={15} /> Lock / Exit Admin
           </button>
@@ -350,7 +431,7 @@ export default function Admin() {
         {/* Mobile top bar doubles as the page title, so the section header below
             can drop its own title row instead of stacking two headers. */}
         <div className="flex min-h-[58px] w-full shrink-0 items-center justify-between gap-2 border-b border-adm-line bg-adm-sunken px-3 lg:hidden">
-          <h1 className="text-base font-semibold text-white truncate min-w-0">{meta.title}</h1>
+          <h1 ref={mobileHeadingRef} tabIndex={-1} className="text-base font-semibold text-white truncate min-w-0 focus:outline-none">{meta.title}</h1>
           <div className="flex items-center gap-0.5 shrink-0">
             <button aria-label="Open scan center" onClick={() => setShowScanCenter(true)} className="flex min-h-[44px] min-w-[44px] items-center justify-center text-blue transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70">
               <BarcodeIcon size={19} />
@@ -382,7 +463,7 @@ export default function Admin() {
 
         <header className="flex min-h-[72px] items-center gap-2 border-b border-adm-line bg-adm-bg px-3 py-2 lg:gap-4 lg:px-6">
           <div className="hidden lg:block flex-1 min-w-0">
-            <h1 className="text-lg font-semibold tracking-tight text-white truncate">{meta.title}</h1>
+            <h1 ref={desktopHeadingRef} tabIndex={-1} className="text-lg font-semibold tracking-tight text-white truncate focus:outline-none">{meta.title}</h1>
             <p className="text-sm text-white/60 mt-0.5 truncate">{meta.desc}</p>
           </div>
           <div className="ml-auto flex items-center gap-2 overflow-x-auto scrollbar-none">
@@ -495,7 +576,7 @@ export default function Admin() {
                : section === 'wholesale' ? <Customers key={`${user?.id || 'signed-out'}:${user?.role || ''}`} />
                : section === 'suppliers' ? <Suppliers key={`${user?.id || 'signed-out'}:${user?.role || ''}`} canCreateSupplier={canManageStaff} />
                : section === 'consignment' ? <ConsignmentManager />
-               : showSheet ? <Sheet />
+               : showSheet ? <Sheet key={`${user?.id || 'signed-out'}:${user?.role || ''}`} canManageProducts={canManageStaff} />
                : showGrid ? <InventoryGrid key={`${user?.id || 'signed-out'}:${user?.role || ''}`} launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} canManageMediaCleanup={canManageStaff} canManageProducts={canManageStaff} />
                : section === 'overview' ? <Overview widget={widget} onWidget={setWidget} setSection={selectSection} pending={pendingOrders} />
                : <Kanban />}

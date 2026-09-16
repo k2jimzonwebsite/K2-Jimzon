@@ -1,0 +1,59 @@
+
+Running 2 tests using 1 worker
+
+(node:1192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\admin-logic-regressions.spec.js:6:1 › expiry drawer changes business day at Manila midnight (12ms)
+(node:15048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\admin-logic-regressions.spec.js:16:1 › clearance success reloads the exact canonical lot rather than inventing approval facts (16ms)
+
+
+  1) tests\admin-logic-regressions.spec.js:6:1 › expiry drawer changes business day at Manila midnight 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: -1
+    Received: 0
+
+      10 |     class Clock extends Date { constructor(...args) { super(...(args.length ? args : [instant])) } }
+      11 |     const result = vm.runInNewContext(body + "\nexpiryState('2026-09-13')", { Date: Clock, manilaDateKey })
+    > 12 |     expect(result.daysLeft).toBe(daysLeft)
+         |                             ^
+      13 |   }
+      14 | })
+      15 |
+        at C:\Users\jerze\K2 JImzon\tests\admin-logic-regressions.spec.js:12:29
+
+    Error Context: test-results\admin-logic-regressions-ex-22e80-ness-day-at-Manila-midnight\error-context.md
+
+  2) tests\admin-logic-regressions.spec.js:16:1 › clearance success reloads the exact canonical lot rather than inventing approval facts 
+
+    Error: expect(received).toMatchObject(expected)
+
+    - Expected  - 3
+    + Received  + 3
+
+      Object {
+    -   "clearance_approved_at": "2026-09-01T00:00:00Z",
+    -   "qty": 6,
+    -   "quantity_available": 5,
+    +   "clearance_approved_at": "2026-09-13T13:43:37.694Z",
+    +   "qty": 5,
+    +   "quantity_available": 4,
+      }
+
+      29 |   })
+      30 |   await vm.runInContext(mapBody + '\n' + body + '\nsaveClearance()', context)
+    > 31 |   expect(batches[0]).toMatchObject({ qty: 6, quantity_available: 5, clearance_approved_at: canonical.clearance_approved_at })
+         |                      ^
+      32 |   expect(batches[1]).toEqual({ id: 'other', qty: 7 })
+      33 | })
+      34 |
+        at C:\Users\jerze\K2 JImzon\tests\admin-logic-regressions.spec.js:31:22
+
+    Error Context: test-results\admin-logic-regressions-cl-efbe9-an-inventing-approval-facts\error-context.md
+
+  2 failed
+    tests\admin-logic-regressions.spec.js:6:1 › expiry drawer changes business day at Manila midnight 
+    tests\admin-logic-regressions.spec.js:16:1 › clearance success reloads the exact canonical lot rather than inventing approval facts 

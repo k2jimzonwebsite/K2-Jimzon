@@ -44,3 +44,16 @@ test('the workflow graph and visual guide stay outside the initial Admin chunk',
   expect(guide).not.toMatch(/^import MasterWorkflowGraph/m)
   expect(guide).toContain("lazy(() => import('../master-workflow-graph/MasterWorkflowGraph'))")
 })
+
+test('AiPromptStudioCard is mounted in MasterWorkflowGraph and consistent with its specification', () => {
+  const master = read('src/components/admin/master-workflow-graph/MasterWorkflowGraph.jsx')
+  const spec = read('docs/specs/MASTER_WORKFLOW_GRAPH_SPEC.md')
+  const card = read('src/components/admin/master-workflow-graph/AiPromptStudioCard.jsx')
+
+  expect(master).toContain("import AiPromptStudioCard from './AiPromptStudioCard'")
+  expect(master).toContain('<AiPromptStudioCard />')
+  expect(spec).toContain('`AiPromptStudioCard.jsx`')
+  expect(card).toContain('export default function AiPromptStudioCard()')
+  expect(card).toContain('AI Image Studio & Prompt Engineering')
+})
+

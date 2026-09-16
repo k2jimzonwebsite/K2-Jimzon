@@ -1,0 +1,10 @@
+[ok] bootstrap
+[ok] preflight
+[ok] migration
+[ok] migration replay
+[ok] behavior assertions
+[ok] postflight
+[ok] non-destructive rollback
+[ok] rollback revoked entry points and preserved staged evidence
+All marketplace snapshot checks passed against isolated PostgreSQL.
+This is local rehearsal evidence, not a provider or production apply.

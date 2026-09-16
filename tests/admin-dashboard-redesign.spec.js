@@ -212,6 +212,7 @@ test.describe('admin command center redesign', () => {
       ? route.fulfill({ status: 403, json: { message: 'fixture source unavailable' } })
       : route.fallback())
     await page.goto('/admin-portal-k2-secure')
+    await expect(page.getByRole('region', { name: 'Key performance indicators' })).toBeVisible({ timeout: 90000 })
     await expect(page.getByRole('region', { name: 'Key performance indicators' }).getByText('Unavailable', { exact: true })).toHaveCount(4)
     await expect(page.getByRole('group', { name: 'Website metrics', exact: true })).toContainText('Unavailable')
     const widgets = page.getByRole('navigation', { name: 'Dashboard widgets' })
@@ -231,6 +232,7 @@ test.describe('admin command center redesign', () => {
       ? route.fallback()
       : route.fulfill({ json: [{ ...orders[0], channel_source: 'unmapped_seller', total_amount: 321 }] }))
     await page.goto('/admin-portal-k2-secure')
+    await expect(page.getByRole('group', { name: 'Other / unrecognized metrics', exact: true })).toBeVisible({ timeout: 90000 })
     await expect(page.getByRole('group', { name: 'Other / unrecognized metrics', exact: true })).toContainText('₱321')
     await expect(page.getByRole('group', { name: 'Website metrics', exact: true })).toContainText('₱0')
     await expect(page.getByText('Zero means no matching internal records were returned.', { exact: false })).toBeVisible()
@@ -1293,4 +1295,41 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByText(/Owner confirmation design, spend ceiling/).first()).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
   })
+
+  test('synchronizes work context with URL, deep links directly, and supports browser back and forward', async ({ page }) => {
+    // 1. Direct deep link to inventory via URL query param
+    await page.goto('/admin-portal-k2-secure?section=inventory')
+    await expect(page.getByRole('heading', { name: 'Product Catalog & Stock' })).toBeVisible({ timeout: 60000 })
+    expect(page.url()).toContain('section=inventory')
+
+    // 2. Direct deep link with alias (e.g. consignments -> consignment)
+    await page.goto('/admin-portal-k2-secure?section=consignments')
+    await expect(page.getByRole('heading', { name: 'Italy Flight Consignments' })).toBeVisible({ timeout: 60000 })
+
+    // 3. Invalid section falls back to Overview / Command center safely
+    await page.goto('/admin-portal-k2-secure?section=non_existent_section_123')
+    await expect(page.getByRole('heading', { name: 'Command center', exact: true })).toBeVisible({ timeout: 60000 })
+
+    // 4. In-page navigation updates the URL via pushState
+    const nav = page.locator('aside')
+    await nav.getByRole('button', { name: 'Inventory', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Product Catalog & Stock' })).toBeVisible()
+    expect(page.url()).toContain('section=inventory')
+
+    // 5. Navigate to Messages
+    await nav.getByRole('button', { name: 'Messages', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Conversation Records' })).toBeVisible()
+    expect(page.url()).toContain('section=inbox')
+
+    // 6. Browser Back button restores previous section
+    await page.goBack()
+    await expect(page.getByRole('heading', { name: 'Product Catalog & Stock' })).toBeVisible()
+    expect(page.url()).toContain('section=inventory')
+
+    // 7. Browser Forward button restores next section
+    await page.goForward()
+    await expect(page.getByRole('heading', { name: 'Conversation Records' })).toBeVisible()
+    expect(page.url()).toContain('section=inbox')
+  })
 })
+

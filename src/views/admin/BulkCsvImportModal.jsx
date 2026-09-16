@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Papa from 'papaparse'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
 import {
-  adminBffEnabled, commitCatalogCsvBff, getCatalogImportStatusBff, previewCatalogCsvBff,
+  adminBffEnabled, commandOutcomeIsUncertain, commitCatalogCsvBff, getCatalogImportStatusBff, previewCatalogCsvBff,
 } from '../../services/adminBffService'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { useReferenceOptions } from './useReferenceOptions'
@@ -24,10 +24,23 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
   const [warehouseId, setWarehouseId] = useState('')
   const { referenceState, createOption } = useReferenceOptions()
   const operationRef = useRef({ operationId: '', nextChunkIndex: 0, keys: new Map() })
-  
+  const activeRef = useRef(true)
   const fileInputRef = useRef(null)
+  const commitUnresolved = ['committing', 'checking', 'uncertain'].includes(commitState.status)
+  const reviewEditable = ['idle', 'rejected'].includes(commitState.status)
+  const reviewLocked = !reviewEditable
+
+  useEffect(() => {
+    activeRef.current = true
+    return () => { activeRef.current = false }
+  }, [])
+
+  const handleClose = () => {
+    if (!commitUnresolved) onClose()
+  }
 
   const handleFileChange = async (e) => {
+    if (reviewLocked) return
     const selected = e.target.files?.[0]
     if (!selected) return
     if (!selected.name.endsWith('.csv')) {
@@ -49,6 +62,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
     }
     if (secureCatalog) {
       const text = await selected.text()
+      if (!activeRef.current) return
       setCsvText(text)
       setParsedData([])
       return
@@ -59,6 +73,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
+        if (!activeRef.current) return
         if (results.errors.length > 0) {
               setError(safeUiError('CSV_PARSE_FAILED'))
           return
@@ -66,17 +81,20 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
         setParsedData(results.data)
       },
       error: (err) => {
+        if (!activeRef.current) return
         setError(safeUiError('CSV_PARSE_FAILED'))
       }
     })
   }
 
   const handleImport = async () => {
+    if (reviewLocked) return
     if (secureCatalog) {
       if (!csvText) return
       setImporting(true)
       setError(null)
       const result = await previewCatalogCsvBff(csvText)
+      if (!activeRef.current) return
       setImporting(false)
       if (!result.ok) {
         setError(result.error)
@@ -131,6 +149,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
       .from('products')
       .insert(rowsToInsert)
 
+    if (!activeRef.current) return
     setImporting(false)
 
     if (upsertError) {
@@ -142,7 +161,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
   }
 
   const toggleRow = (rowNumber) => {
-    if (commitState.status !== 'idle') return
+    if (!reviewEditable) return
     setSelectedRows(current => current.includes(rowNumber)
       ? current.filter(value => value !== rowNumber)
       : [...current, rowNumber].sort((a, b) => a - b))
@@ -151,7 +170,8 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
 
   const handleCommit = async () => {
     const cleanReason = reason.trim()
-    if (!preview || selectedRows.length === 0 || cleanReason.length < 10 || !approved) return
+    if (!['idle', 'rejected', 'uncertain'].includes(commitState.status)
+      || !preview || selectedRows.length === 0 || cleanReason.length < 10 || !approved) return
     const operation = operationRef.current
     if (!operation.operationId) operation.operationId = crypto.randomUUID()
     const chunks = []
@@ -167,9 +187,17 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
         reason: cleanReason, operationId: operation.operationId, chunkIndex,
         finalChunk: chunkIndex === chunks.length - 1,
       }, key)
+      if (!activeRef.current) return
       if (!result.ok) {
-        setError(result.error || 'The selected rows could not be committed safely.')
-        setCommitState(current => ({ ...current, status: 'failed' }))
+        const uncertain = !result.code || commandOutcomeIsUncertain(result) || result.code === 'COMMAND_IN_PROGRESS'
+        setError(uncertain
+          ? `${result.error || 'The secure admin service did not confirm this catalog chunk.'} It may already be recorded. Check durable server status or retry the exact reviewed rows.`
+          : (result.error || 'The selected rows could not be committed safely.'))
+        if (!uncertain) {
+          operationRef.current = { operationId: '', nextChunkIndex: 0, keys: new Map() }
+          setApproved(false)
+        }
+        setCommitState(current => ({ ...current, status: uncertain ? 'uncertain' : 'rejected' }))
         return
       }
       operation.nextChunkIndex = chunkIndex + 1
@@ -203,26 +231,27 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
     if (!operation.operationId || !preview) return
     setCommitState(current => ({ ...current, status: 'checking' }))
     const result = await getCatalogImportStatusBff(operation.operationId)
+    if (!activeRef.current) return
     if (!result.ok || result.status?.fileSha256 !== preview.fileSha256) {
-      setError(result.error || 'The durable operation does not match this reviewed file.')
-      setCommitState(current => ({ ...current, status: 'failed' }))
+      setError(`${result.error || 'The durable operation does not match this reviewed file.'} The outcome remains uncertain; keep this review open and reconcile the recovery ID.`)
+      setCommitState(current => ({ ...current, status: 'uncertain' }))
       return
     }
     operation.nextChunkIndex = Number(result.status.lastChunkIndex ?? -1) + 1
     const completed = Number(result.status.committedRowCount || 0)
     setCommitState({
-      status: result.status.status === 'completed' ? 'completed' : 'failed',
+      status: result.status.status === 'completed' ? 'completed' : 'uncertain',
       completed, total: selectedRows.length, rows: result.status.rows || [],
     })
     setError(result.status.status === 'completed'
       ? null
       : `Recovered ${completed} committed row${completed === 1 ? '' : 's'} from the server. Retry continues with the next atomic chunk.`)
-    if (result.status.status === 'completed' && onImportComplete) onImportComplete()
+    if (result.status.status === 'completed' && activeRef.current && onImportComplete) onImportComplete()
   }
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-      <AdminDialog onClose={onClose} closeDisabled={importing} labelledBy="catalog-csv-title">
+      <AdminDialog onClose={handleClose} closeDisabled={importing || commitUnresolved} labelledBy="catalog-csv-title">
       <div className="bg-adm-surface border border-adm-line rounded-adm w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         
         <div className="flex items-center justify-between px-6 py-4 border-b border-adm-line bg-black/40">
@@ -230,7 +259,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
             <h2 id="catalog-csv-title" className="font-sans text-xl font-semibold text-white">{secureCatalog ? 'Catalog CSV review' : 'Bulk CSV Import'}</h2>
             <p className="text-sm text-white/60 mt-1">{secureCatalog ? 'Review every change before a future commit. This step never writes product or stock data.' : 'Stage product metadata as drafts; reconcile physical stock by batch afterward.'}</p>
           </div>
-          <button type="button" onClick={onClose} aria-label="Close catalog CSV review" className="flex min-h-11 min-w-11 items-center justify-center rounded-full bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white">
+          <button type="button" onClick={handleClose} disabled={importing || commitUnresolved} aria-label="Close catalog CSV review" className="flex min-h-11 min-w-11 items-center justify-center rounded-full bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -250,22 +279,24 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
           <p className="text-sm leading-relaxed text-amber">Stock, prices, publication, reservations, lots, expiry, location, and custody are excluded. Use their reasoned operational commands so the workbook cannot overwrite canonical truth.</p>
 
           <div 
-            onClick={() => fileInputRef.current?.click()}
+            onClick={() => { if (!reviewLocked) fileInputRef.current?.click() }}
             onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
+              if (!reviewLocked && (event.key === 'Enter' || event.key === ' ')) {
                 event.preventDefault()
                 fileInputRef.current?.click()
               }
             }}
             role="button"
-            tabIndex={0}
+            tabIndex={reviewLocked ? -1 : 0}
+            aria-disabled={reviewLocked}
             aria-label="Select a catalog CSV file"
-            className="border-2 border-dashed border-white/20 rounded-adm-sm p-10 text-center cursor-pointer hover:border-purple-500 hover:bg-white/5 transition-colors flex flex-col items-center justify-center"
+            className={`border-2 border-dashed border-white/20 rounded-adm-sm p-10 text-center transition-colors flex flex-col items-center justify-center ${reviewLocked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:border-purple-500 hover:bg-white/5'}`}
           >
             <input 
               type="file" 
               ref={fileInputRef} 
               onChange={handleFileChange}
+              disabled={reviewLocked}
               className="hidden" 
               accept=".csv"
             />
@@ -337,7 +368,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
             </div>
           )}
 
-          {preview && !error && (
+          {preview && (
             <section aria-labelledby="catalog-preview-heading" className="space-y-4">
               <div>
                 <h3 id="catalog-preview-heading" className="text-lg font-bold text-white">Diff review</h3>
@@ -392,8 +423,8 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
                   <textarea
                     id="catalog-import-reason"
                     value={reason}
-                    onChange={event => { setReason(event.target.value); setApproved(false) }}
-                    disabled={commitState.status !== 'idle'}
+                    onChange={event => { setReason(event.target.value); setApproved(false); if (commitState.status === 'rejected') setError(null) }}
+                    disabled={!reviewEditable}
                     rows={3}
                     maxLength={500}
                     className="mt-2 min-h-24 w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue disabled:opacity-60"
@@ -406,7 +437,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
                     type="checkbox"
                     checked={approved}
                     onChange={event => setApproved(event.target.checked)}
-                    disabled={selectedRows.length === 0 || reason.trim().length < 10 || commitState.status !== 'idle'}
+                    disabled={selectedRows.length === 0 || reason.trim().length < 10 || !reviewEditable}
                     className="mt-1 h-5 w-5 shrink-0 accent-forest"
                   />
                   <span>I reviewed the selected before/after values. New rows become unpublished Drafts, existing rows update metadata only, and no stock is created.</span>
@@ -421,13 +452,13 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
                     ? `Committing ${commitState.completed} of ${commitState.total}…`
                     : commitState.status === 'checking'
                       ? 'Checking durable status…'
-                    : commitState.status === 'failed'
-                      ? `Retry ${selectedRows.length} selected rows`
+                    : commitState.status === 'uncertain'
+                      ? `Retry ${selectedRows.length} selected row${selectedRows.length === 1 ? '' : 's'}`
                       : commitState.status === 'completed'
                         ? `Committed ${commitState.completed} rows`
                         : `Commit ${selectedRows.length} selected row${selectedRows.length === 1 ? '' : 's'}`}
                 </button>
-                {commitState.status === 'failed' && operationRef.current.operationId && (
+                {commitState.status === 'uncertain' && operationRef.current.operationId && (
                   <div className="rounded-adm-sm border border-amber/30 bg-amber/10 p-3 text-sm text-white/80">
                     <p>Recovery ID: <span className="break-all font-mono text-white">{operationRef.current.operationId}</span></p>
                     <button type="button" onClick={handleCheckStatus} className="mt-3 min-h-11 rounded-adm-sm border border-amber/50 px-3 py-2 font-bold text-amber transition-colors hover:bg-amber/10">
@@ -437,7 +468,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
                 )}
                 {commitState.status === 'completed' && (
                   <div role="status" className="space-y-3 rounded-adm-sm border border-forest/35 bg-forest/10 p-3 text-sm text-white">
-                    <p>{commitState.completed} selected rows were recorded successfully. Refresh Sheet Mode before making another edit.</p>
+                    <p>{commitState.completed} selected row{commitState.completed === 1 ? '' : 's'} {commitState.completed === 1 ? 'was' : 'were'} recorded successfully. Refresh Sheet Mode before making another edit.</p>
                     <button type="button" onClick={downloadResult} className="min-h-11 rounded-adm-sm border border-forest/50 px-3 py-2 font-bold text-forest transition-colors hover:bg-forest/10">
                       Download redacted result CSV
                     </button>
@@ -450,14 +481,15 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
 
         <div className="p-6 border-t border-adm-line bg-black/40 flex justify-end gap-3">
           <button 
-            onClick={onClose}
-            className="min-h-11 px-6 py-2 rounded-adm-sm text-base font-medium text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+            onClick={handleClose}
+            disabled={importing || commitUnresolved}
+            className="min-h-11 px-6 py-2 rounded-adm-sm text-base font-medium text-white/60 hover:text-white hover:bg-white/10 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
           >
             Cancel
           </button>
           <button 
             onClick={handleImport}
-            disabled={importing || (secureCatalog ? !csvText : parsedData.length === 0)}
+            disabled={importing || reviewLocked || (secureCatalog ? !csvText : parsedData.length === 0)}
             className="flex min-h-11 items-center gap-2 rounded-adm-sm bg-forest px-6 py-2 text-base font-bold text-navy transition-colors hover:bg-forest/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {secureCatalog ? (importing ? 'Reviewing…' : preview ? 'Review again' : 'Review changes') : (importing ? 'Importing...' : `Import ${parsedData.length} Rows`)}

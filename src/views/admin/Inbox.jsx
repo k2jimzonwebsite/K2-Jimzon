@@ -97,7 +97,7 @@ function queueRank(conversation) {
 
 // One timeline, rendered in the desktop aside and the phone/tablet disclosure so
 // the same audit trail is reachable at every width (MAP-028 H-012).
-function EventHistoryBody({ status, history, onRetry }) {
+function EventHistoryBody({ status, history, onRetry, staff = [] }) {
   if (status === 'loading') {
     return <p role="status" className="text-xs leading-relaxed text-white/40">Loading event history…</p>
   }
@@ -118,13 +118,20 @@ function EventHistoryBody({ status, history, onRetry }) {
   }
   return (
     <div className="space-y-3">
-      {history.map(event => (
-        <div key={event.id} className="border-l border-adm-line pl-3">
-          <p className="text-xs font-semibold text-white/75">{event.event_type === 'internal_note_added' ? 'Internal note saved' : 'Workflow updated'}</p>
-          {event.reason && <p className="mt-0.5 text-xs leading-relaxed text-white/55">{event.reason}</p>}
-          <time className="mt-1 block text-xs text-white/35">{formatMessageTime(event.created_at)}</time>
-        </div>
-      ))}
+      <p className="text-xs text-white/35">Showing the newest {history.length} events.</p>
+      {history.map(event => {
+        // The actor is shown only when it resolves to a known staff identity;
+        // nothing is invented for automated events or removed accounts.
+        const actorName = staff.find(member => member?.id === event.actor_id)?.full_name || ''
+        return (
+          <div key={event.id} className="border-l border-adm-line pl-3">
+            <p className="text-xs font-semibold text-white/75">{event.event_type === 'internal_note_added' ? 'Internal note saved' : 'Workflow updated'}</p>
+            {actorName && <p className="mt-0.5 text-xs text-white/45">by {actorName}</p>}
+            {event.reason && <p className="mt-0.5 text-xs leading-relaxed text-white/55">{event.reason}</p>}
+            <time className="mt-1 block text-xs text-white/35">{formatMessageTime(event.created_at)}</time>
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -245,6 +252,10 @@ function InboxWorkspace({ store, database }) {
   // An unconfirmed command is not a failure: it is an unknown outcome that must
   // be reconciled against the refreshed record (MAP-028 H-002).
   const [uncertainNotice, setUncertainNotice] = useState('')
+  // The frozen command behind the uncertainty notice, so its retry reuses the
+  // same retained operation identity instead of minting a second command.
+  const [uncertainCommand, setUncertainCommand] = useState(null)
+  const [templateArmed, setTemplateArmed] = useState(false)
   const [notice, setNotice] = useState('')
   const [savingNote, setSavingNote] = useState(false)
   const [sendingReply, setSendingReply] = useState(false)
@@ -272,6 +283,8 @@ function InboxWorkspace({ store, database }) {
     setHistoryStatus('idle')
     setSaveError('')
     setUncertainNotice('')
+    setUncertainCommand(null)
+    setTemplateArmed(false)
     setNotice('')
     return () => { activeRequestContext.current = null }
   }, [activeId])
@@ -332,7 +345,7 @@ function InboxWorkspace({ store, database }) {
     }
     const { data, error } = await database
       .from('conversation_events')
-      .select('id,event_type,reason,metadata,created_at')
+      .select('id,event_type,actor_id,reason,metadata,created_at')
       .eq('conversation_id', conversationId)
       .order('created_at', { ascending: false })
       .limit(20)
@@ -377,8 +390,17 @@ function InboxWorkspace({ store, database }) {
     }
   }, [activeId, inboxState.phase2Ready])
 
+  const lastThreadId = useRef(null)
   useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ block: 'end' })
+    // Background polls must not yank staff away from the message they are
+    // reading: a new conversation always starts at the latest message, but
+    // growth from a poll only follows when already near the bottom.
+    const opened = lastThreadId.current !== activeId
+    lastThreadId.current = activeId
+    const node = messageEndRef.current?.parentElement
+    if (!node) return
+    const nearBottom = node.scrollHeight - node.scrollTop - node.clientHeight < 120
+    if (opened || nearBottom) messageEndRef.current?.scrollIntoView({ block: 'end' })
   }, [activeId, chat?.messages.length])
 
   const openChat = (id) => {
@@ -386,8 +408,19 @@ function InboxWorkspace({ store, database }) {
     setMobileView('chat')
   }
 
+  const TEMPLATE_TEXT = 'Thanks for your message. Please share the exact item, quantity, preferred delivery area, and required date so K2 staff can review the request.'
+
   const handleTemplate = () => {
-    setReplyText('Thanks for your message. Please share the exact item, quantity, preferred delivery area, and required date so K2 staff can review the request.')
+    // A typed draft is staff work. The first click arms the replacement and
+    // says so; only the second click overwrites.
+    if (replyText.trim() && !templateArmed) {
+      setTemplateArmed(true)
+      setNotice('Your draft is kept. Click the template action again to replace it.')
+      setSaveError('')
+      return
+    }
+    setTemplateArmed(false)
+    setReplyText(TEMPLATE_TEXT)
     setNotice(chat && isWebsiteConversation(chat)
       ? 'A neutral template was prepared. Verify it before sending to the website customer.'
       : 'A neutral template was prepared. Verify it before copying to the external channel.')
@@ -416,69 +449,91 @@ function InboxWorkspace({ store, database }) {
     setSaveError(result?.error || fallback)
   }
 
-  const handleSaveNote = async () => {
-    if (!replyText.trim() || !chat || savingNote) return
+  const handleSaveNote = async (frozenText) => {
+    const text = typeof frozenText === 'string' ? frozenText : replyText
+    if (!text.trim() || !chat || savingNote) return
     const context = activeRequestContext.current
     const submittedDraft = draft
     setSavingNote(true)
     setSaveError('')
     setUncertainNotice('')
     setNotice('')
-    const result = await sendMessage(chat.id, replyText, 'agent')
+    const result = await sendMessage(chat.id, text, 'agent')
     setSavingNote(false)
     if (result?.ok) clearSubmittedDraft(chat.id, submittedDraft)
     if (activeRequestContext.current !== context) return
     if (!result?.ok) {
+      setUncertainCommand(result?.uncertain ? { kind: 'note', conversationId: chat.id, text } : null)
       reportCommandFailure(result, 'The internal note could not be saved.')
       return
     }
+    setUncertainCommand(null)
     setNotice('Internal note saved. It was not sent externally.')
     loadHistory(chat.id)
   }
 
-  const handleSendReply = async () => {
-    if (!replyText.trim() || !chat || sendingReply || !isWebsiteConversation(chat)) return
+  const handleSendReply = async (frozenText) => {
+    const text = typeof frozenText === 'string' ? frozenText : replyText
+    if (!text.trim() || !chat || sendingReply || !isWebsiteConversation(chat)) return
     const context = activeRequestContext.current
     const submittedDraft = draft
     setSendingReply(true)
     setSaveError('')
     setUncertainNotice('')
     setNotice('')
-    const result = await sendCustomerReply(chat.id, replyText.trim())
+    const result = await sendCustomerReply(chat.id, text.trim())
     setSendingReply(false)
     if (result?.ok) clearSubmittedDraft(chat.id, submittedDraft)
     if (activeRequestContext.current !== context) return
     if (!result?.ok) {
+      setUncertainCommand(result?.uncertain ? { kind: 'reply', conversationId: chat.id, text } : null)
       reportCommandFailure(result, 'The website reply could not be sent.')
       return
     }
+    setUncertainCommand(null)
     setNotice('Sent. The reply is now visible in the customer’s website chat.')
     loadHistory(chat.id)
   }
 
-  const handleWorkflowSave = async () => {
+  const handleWorkflowSave = async (frozenWorkflow) => {
     if (!chat || savingWorkflow) return
     const context = activeRequestContext.current
-    const submittedWorkflow = workflow
+    // Direct onClick callers pass the click event, not a workflow: only accept
+    // a genuine frozen workflow shape, otherwise use live state.
+    const submittedWorkflow = frozenWorkflow && typeof frozenWorkflow.status === 'string'
+      ? frozenWorkflow
+      : workflow
     setSavingWorkflow(true)
     setSaveError('')
     setUncertainNotice('')
     setNotice('')
     const result = await updateConversationWorkflow(chat.id, {
-      ...workflow,
-      responseDueAt: workflow.responseDueAt
-        ? new Date(workflow.responseDueAt).toISOString()
+      ...submittedWorkflow,
+      responseDueAt: submittedWorkflow.responseDueAt
+        ? new Date(submittedWorkflow.responseDueAt).toISOString()
         : null,
     })
     setSavingWorkflow(false)
     if (activeRequestContext.current !== context) return
     if (!result?.ok) {
+      setUncertainCommand(result?.uncertain ? { kind: 'workflow', conversationId: chat.id, workflow: submittedWorkflow } : null)
       reportCommandFailure(result, 'Workflow changes could not be saved.')
       return
     }
+    setUncertainCommand(null)
     setWorkflow(current => current === submittedWorkflow ? { ...current, reason: '' } : current)
     setNotice('Workflow updated and added to the immutable event history.')
     loadHistory(chat.id)
+  }
+
+  // Retry dispatches the frozen uncertain payload again. The runtime session
+  // keys operations by payload, so this resolves the same logical command
+  // instead of minting a second one.
+  const retryUncertainCommand = () => {
+    if (!uncertainCommand || uncertainCommand.conversationId !== activeId) return
+    if (uncertainCommand.kind === 'note') handleSaveNote(uncertainCommand.text)
+    else if (uncertainCommand.kind === 'reply') handleSendReply(uncertainCommand.text)
+    else handleWorkflowSave(uncertainCommand.workflow)
   }
 
   const activeCount = conversations.filter(conversation => conversation.status !== 'Resolved').length
@@ -514,6 +569,9 @@ function InboxWorkspace({ store, database }) {
   // The read is bounded on purpose (MAP-028 H-007). Say what is not on screen
   // rather than letting a page look like the whole record.
   const queueTruncated = Boolean(inboxState.completeness?.conversations?.truncated)
+  // Counts come from the loaded window, which may be a truncated page of a
+  // larger queue. Say so wherever the counts appear.
+  const windowNote = queueTruncated ? ' · this page' : ''
   const chatDeadline = deadlineState(chat.responseDueAt, chat.status)
   const chatIsWebsite = isWebsiteConversation(chat)
 
@@ -527,12 +585,12 @@ function InboxWorkspace({ store, database }) {
         statusTone={inboxState.websiteReplyReady ? 'success' : 'warning'}
       />
       <MetricRail columns="lg:grid-cols-6" items={[
-        { label: 'Active', value: activeCount, detail: 'Open or waiting on customer' },
-        { label: 'Live web', value: liveWebsiteCount, detail: 'Customer-visible website threads', tone: liveWebsiteCount ? 'text-forest' : 'text-white' },
-        { label: 'Unread', value: unreadCount, detail: 'Persisted unread messages', tone: unreadCount ? 'text-blue' : 'text-white' },
-        { label: 'Overdue', value: overdueCount, detail: 'Response deadline passed', tone: overdueCount ? 'text-crimson' : 'text-white' },
-        { label: 'Unassigned', value: unassignedCount, detail: 'Active without an owner', tone: unassignedCount ? 'text-amber' : 'text-white' },
-        { label: 'Urgent', value: urgentCount, detail: 'Active urgent priority', tone: urgentCount ? 'text-crimson' : 'text-white' },
+        { label: 'Active', value: activeCount, detail: `Open or waiting on customer${windowNote}` },
+        { label: 'Live web', value: liveWebsiteCount, detail: `Customer-visible website threads${windowNote}`, tone: liveWebsiteCount ? 'text-forest' : 'text-white' },
+        { label: 'Unread', value: unreadCount, detail: `Persisted unread messages${windowNote}`, tone: unreadCount ? 'text-blue' : 'text-white' },
+        { label: 'Overdue', value: overdueCount, detail: `Response deadline passed${windowNote}`, tone: overdueCount ? 'text-crimson' : 'text-white' },
+        { label: 'Unassigned', value: unassignedCount, detail: `Active without an owner${windowNote}`, tone: unassignedCount ? 'text-amber' : 'text-white' },
+        { label: 'Urgent', value: urgentCount, detail: `Active urgent priority${windowNote}`, tone: urgentCount ? 'text-crimson' : 'text-white' },
       ]} />
 
       {inboxState.stale
@@ -679,7 +737,7 @@ function InboxWorkspace({ store, database }) {
           <details className="shrink-0 border-b border-adm-line bg-adm-bg p-3 xl:hidden">
             <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold text-white">Event history</summary>
             <div className="mt-3">
-              <EventHistoryBody status={historyStatus} history={history} onRetry={() => loadHistory(chat.id)} />
+              <EventHistoryBody status={historyStatus} history={history} onRetry={() => loadHistory(chat.id)} staff={staff} />
             </div>
           </details>
 
@@ -712,7 +770,16 @@ function InboxWorkspace({ store, database }) {
 
           <div className="shrink-0 space-y-2 border-t border-adm-line bg-white/5 p-3">
             {saveError && <p role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 p-2.5 text-xs text-crimson">{saveError}</p>}
-            {uncertainNotice && <p role="alert" className="flex gap-2 rounded-adm-sm border border-amber/40 bg-amber/10 p-2.5 text-xs leading-relaxed text-amber"><AlertIcon size={14} className="mt-0.5 shrink-0" />{uncertainNotice}</p>}
+            {uncertainNotice && (
+              <div className="space-y-2">
+                <p role="alert" className="flex gap-2 rounded-adm-sm border border-amber/40 bg-amber/10 p-2.5 text-xs leading-relaxed text-amber"><AlertIcon size={14} className="mt-0.5 shrink-0" />{uncertainNotice}</p>
+                {uncertainCommand && uncertainCommand.conversationId === activeId && (
+                  <button type="button" onClick={retryUncertainCommand} disabled={savingNote || sendingReply || savingWorkflow} className="adm-btn min-h-11 w-full border border-amber/40 bg-amber/10 text-xs font-semibold text-amber focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed disabled:opacity-45">
+                    Retry the same command
+                  </button>
+                )}
+              </div>
+            )}
             {notice && <p role="status" className="flex items-start gap-2 rounded-adm-sm border border-forest/40 bg-forest/10 p-2.5 text-xs text-forest"><CheckIcon size={14} className="mt-0.5 shrink-0" />{notice}</p>}
             <div className="flex flex-wrap items-center justify-between gap-2">
               <label htmlFor="inbox-internal-note" className="text-xs font-semibold text-white/65">
@@ -734,7 +801,7 @@ function InboxWorkspace({ store, database }) {
               className="adm-input min-h-[72px] w-full resize-y text-base sm:text-sm"
             />
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-              <button type="button" onClick={handleTemplate} className="adm-btn min-h-11 border border-blue/40 bg-blue/10 text-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80">Create safe template</button>
+              <button type="button" onClick={handleTemplate} className="adm-btn min-h-11 border border-blue/40 bg-blue/10 text-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80">{templateArmed ? 'Replace draft with template' : 'Create safe template'}</button>
               {chatIsWebsite ? (
                 <>
                   <button type="button" onClick={handleSaveNote} disabled={!replyText.trim() || savingNote || sendingReply} className="adm-btn min-h-11 border border-adm-line bg-adm-raised text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed">{savingNote ? 'Saving…' : 'Save as internal note'}</button>
@@ -765,7 +832,7 @@ function InboxWorkspace({ store, database }) {
             <div className="border-t border-adm-line pt-4">
               <h4 className="text-xs font-bold uppercase tracking-wider text-white/45">Event history</h4>
               <div className="mt-3">
-                <EventHistoryBody status={historyStatus} history={history} onRetry={() => loadHistory(chat.id)} />
+                <EventHistoryBody status={historyStatus} history={history} onRetry={() => loadHistory(chat.id)} staff={staff} />
               </div>
             </div>
           </div>

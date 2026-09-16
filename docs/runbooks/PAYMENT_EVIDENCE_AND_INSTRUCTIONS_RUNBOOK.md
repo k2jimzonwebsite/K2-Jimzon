@@ -2,48 +2,47 @@
 
 **Owner:** MAP-018 / MAP-023 / MAP-028 I-016
 
-**Current state, 7 September 2026:** the Admin fulfillment surface is locally
-prepared for a narrow manual payment-state transition. It is not a payment
-gateway, instruction-delivery system, settlement ledger, refund executor, or
-production acceptance. No payment was collected, refunded, sent, or verified
-during this preparation.
+**Current state, 16 September 2026 (AUD-OPS-001, MAP-023 §16, MAP-019, local):**
+The Admin fulfillment surface and database layer are locally prepared and
+rehearsed for structured manual payment evidence and distinct staff verification.
+It is not an automated payment gateway, instruction-delivery system, settlement
+ledger, or production activation. No remote database migration or production
+activation has occurred.
 
-## What the current Admin path actually records
+## What the Admin and database path now records
 
-`OmniOperationsHub` and the prepared
-`/api/admin/fulfillment/payment` route can move the existing order-request
-state through the allowed transition matrix and attach one bounded free-text
-evidence/reconciliation note to an order-request event. The legacy
-`set_order_request_payment_status` function and the signed BFF wrapper do not
-have separate fields or records for:
+`OmniOperationsHub`, `/api/admin/fulfillment/payment`, and
+`supabase/migrations/20260916_structured_payment_evidence.sql` provide
+structured payment evidence and separation of duties:
 
-- approved payment method and currency;
-- amount actually received and amount verified;
-- payer identity;
-- searchable merchant/payment reference;
-- proof file or proof hash;
-- a separate finance-verifier capability or separation-of-duties decision; or
-- customer instruction content, delivery channel, delivery receipt, or
-  uncertain-delivery state.
-
-Correction from the session audit: `order_request_events` already stores
-`actor_id`, `created_at`, the note and payment transition metadata. These identify
-the actor/time of evidence submission or verification. The missing pieces are
-structured evidence and verifier authorization, not a total absence of audit
-identity/time. The local SQL rehearsal now executes the original payment
-function and verifies these events, invalid transitions, required notes and
-same-state retry. Auth is synthetic; this does not prove BFF/RLS authorization.
-
-The UI wording correctly says that the control records evidence and does not
-process payment. `awaiting_instructions` is only a state value; it is not proof
-that instructions were sent. The customer-facing review-first copy must remain
-unchanged until an approved instruction boundary exists.
-
-The focused local refresh passed the fixed Admin payment-validator contracts as
-part of 86/86 API/contract checks, the Admin browser suite 31/31, and both
-separate production build boundary/security checks. This proves local payload,
-feature-gate and artifact behavior only; it does not prove payment collection,
-instruction delivery, provider settlement, or finance verification.
+- **Structured Evidence:** `payment_evidence jsonb` on `order_requests` stores:
+  - `method`: whitelisted to `gcash`, `bank_transfer`, `maya`, `cash`, `other`;
+  - `amount`: positive numeric amount (PHP);
+  - `currency`: strictly `PHP`;
+  - `payer_name`: nonblank string (up to 140 chars);
+  - `payment_reference`: nonblank string (up to 100 chars);
+  - `proof_asset_ref`: optional URL or stored asset reference (up to 500 chars);
+  - `submitted_at` and `submitter_id`: recorded from server context.
+- **Separation of Duties:** `set_order_request_payment_status` enforces that
+  the verifier confirming funds arrived in the merchant account must be
+  distinct from the staff member who submitted payment evidence
+  (`auth.uid() <> v_submitter`).
+- **Admin BFF Validation:** `server/admin-bff/fulfillment.js` strictly validates
+  all payment fields and rejects invalid methods (`PAYMENT_METHOD_INVALID`),
+  non-positive or non-numeric amounts (`PAYMENT_AMOUNT_INVALID`), unsupported
+  currencies (`PAYMENT_CURRENCY_INVALID`), blank payers/references
+  (`PAYMENT_PAYER_INVALID`, `PAYMENT_REFERENCE_INVALID`), or oversized proof URLs
+  (`PAYMENT_PROOF_INVALID`).
+- **Staff Admin UI:** `PaymentStatusModal` in `OmniOperationsHub.jsx` provides
+  structured input fields when recording `evidence_submitted` and renders an
+  independent evidence review card plus an explicit merchant account check
+  confirmation ("I independently checked the merchant receiving account and
+  confirmed funds arrived") when advancing to `verified`.
+- **Verified Evidence:**
+  - `node scripts/rehearse-payment-recovery.mjs` exits code 0 against local PG 17.11.
+  - `tests/admin-bff-contract.spec.js` passes all 66 contract tests.
+  - `tests/payment-recovery-ui.spec.js` passes all 36 payment UI tests across viewports.
+  - Contract suite passes 636/636 tests; production builds pass within budget.
 
 ## Required owner decisions before publishing payment instructions
 

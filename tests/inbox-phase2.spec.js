@@ -348,3 +348,48 @@ test.describe('Inbox ambiguous command reconciliation', () => {
     expect(source).toContain("window.removeEventListener('beforeunload', warnOnUnresolved)")
   })
 })
+
+test.describe('Inbox truncated-window honesty and safe recovery', () => {
+  test('metric counts say they cover the visible page when the queue is truncated', async ({ page }) => {
+    await page.goto('/tests/fixtures/inbox-harness.html?truncatedQueue=1')
+    await expect(page.getByText('Older ones exist beyond this page', { exact: false })).toBeVisible()
+    await expect(page.getByText(/Open or waiting on customer · this page/).first()).toBeVisible()
+  })
+
+  test('a template asks before replacing a typed draft', async ({ page }) => {
+    await page.goto('/tests/fixtures/inbox-harness.html')
+    const draft = page.getByLabel('Internal note or response draft')
+    await draft.fill('Typed triage note')
+    await page.getByRole('button', { name: 'Create safe template', exact: true }).click()
+    await expect(draft).toHaveValue('Typed triage note')
+    const replace = page.getByRole('button', { name: 'Replace draft with template', exact: true })
+    await expect(replace).toBeVisible()
+    await replace.click()
+    await expect(draft).not.toHaveValue('Typed triage note')
+  })
+
+  test('an unconfirmed command offers the same-command retry', async ({ page }) => {
+    await page.goto('/tests/fixtures/inbox-harness.html?uncertainSave=1')
+    const draft = page.getByLabel('Internal note or response draft')
+    await draft.fill('Note with a lost response')
+    await page.getByRole('button', { name: 'Save internal note', exact: true }).click()
+    await expect(page.getByRole('alert').filter({ hasText: /did not confirm/i })).toBeVisible()
+    await page.getByRole('button', { name: 'Retry the same command', exact: true }).click()
+    await expect(page.getByText('Internal note saved. It was not sent externally.')).toBeVisible()
+    await expect(draft).toHaveValue('')
+  })
+
+  test('history events name the staff actor instead of omitting it', async ({ page }) => {
+    await page.goto('/tests/fixtures/inbox-harness.html?history=1&historyActors=1')
+    const timeline = page.getByRole('complementary', { name: 'Conversation workflow' })
+    await expect(timeline.getByText('Latest Maria history', { exact: true })).toBeVisible()
+    await expect(timeline.getByText('by K2 Operator', { exact: true })).toBeVisible()
+  })
+
+  test('the uncertain retry resolves the same retained command instead of minting a new one', async () => {
+    const source = await readFile(new URL('../src/views/admin/Inbox.jsx', import.meta.url), 'utf8')
+    expect(source).toContain('handleSaveNote(uncertainCommand.text)')
+    expect(source).toContain('handleSendReply(uncertainCommand.text)')
+    expect(source).toContain('handleWorkflowSave(uncertainCommand.workflow)')
+  })
+})

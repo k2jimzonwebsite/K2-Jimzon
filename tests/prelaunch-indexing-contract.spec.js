@@ -61,17 +61,18 @@ test.describe('pre-launch indexing gate', () => {
     expect(robots).not.toMatch(/^\s*Disallow:\s*\/product/mi)
   })
 
-  test('only product pages are withheld', () => {
+  test('only prelaunch products and scoped guest journeys are withheld', () => {
     // Withholding the finished marketing pages would cost real discovery. If a
     // future change needs a broader gate, that is a decision to take
     // deliberately, not to inherit from this one.
+    const allowedSources = new Set([PRODUCT_NOINDEX_SOURCE, '/account', '/messages', '/checkout', '/confirmation'])
     for (const entry of vercelConfig.headers || []) {
       const robotsHeader = (entry.headers || []).find(h => h.key === PRODUCT_NOINDEX_HEADER)
       if (!robotsHeader) continue
       expect(
-        entry.source,
-        `${PRODUCT_NOINDEX_HEADER} is set on "${entry.source}". Only ${PRODUCT_NOINDEX_SOURCE} may carry it on the storefront.`,
-      ).toBe(PRODUCT_NOINDEX_SOURCE)
+        allowedSources.has(entry.source),
+        `${PRODUCT_NOINDEX_HEADER} unexpectedly withholds the public marketing route "${entry.source}".`,
+      ).toBe(true)
     }
   })
 

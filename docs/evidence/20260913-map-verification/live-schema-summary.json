@@ -1,0 +1,35 @@
+{
+  "projectRef": "pixplcjqivlfflickobf",
+  "exportedAt": "2026-09-13T03:27:29.777985",
+  "metadataSha256": "0ebbfd4b354711739030c31c69b7fa43dd8c19a6b081068f8430d60720f257c7",
+  "migrations": [
+    {
+      "name": "operations_hardening_20260809",
+      "version": "20260809163606"
+    },
+    {
+      "name": "security_boundary_hardening_20260810",
+      "version": "20260809164204"
+    },
+    {
+      "name": "deprecated_rpc_lockdown_20260810",
+      "version": "20260809164442"
+    },
+    {
+      "name": "harden_admin_delete_pin",
+      "version": "20260815082132"
+    },
+    {
+      "name": "remove_legacy_delete_products_rpc",
+      "version": "20260815082633"
+    },
+    {
+      "name": "map017_public_write_boundary_hardening",
+      "version": "20260824143000"
+    }
+  ],
+  "publicFunctionCount": 54,
+  "guestSubmissionFunctions": [],
+  "commitmentFunctions": [],
+  "limitations": "Metadata-only read; no business rows, writes, or authenticated journey proof."
+}

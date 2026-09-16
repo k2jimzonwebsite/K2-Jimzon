@@ -1,0 +1,46 @@
+
+> k2-jimzon-prototype@0.1.0 test:admin-ui
+> playwright test --config=playwright.admin.config.js tests/admin.spec.js tests/admin-dashboard-redesign.spec.js --max-failures=1 --retries=0
+
+[WebServer] (node:17628) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:18132) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 32 tests using 1 worker
+
+(node:19920) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   1 [chromium] › tests\admin-dashboard-redesign.spec.js:190:3 › admin command center redesign › left-panel widgets show one workspace and preserve every dashboard destination (1.3m)
+Testing stopped early after 1 maximum allowed failures.
+
+
+  1) [chromium] › tests\admin-dashboard-redesign.spec.js:190:3 › admin command center redesign › left-panel widgets show one workspace and preserve every dashboard destination 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Operations command center' })
+    Expected: visible
+    Timeout: 60000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 60000ms
+      - waiting for getByRole('heading', { name: 'Operations command center' })
+
+
+      190 |   test('left-panel widgets show one workspace and preserve every dashboard destination', async ({ page }) => {
+      191 |     await page.goto('/admin-portal-k2-secure')
+    > 192 |     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
+          |                                                                                    ^
+      193 |     const widgets = page.getByRole('navigation', { name: 'Dashboard widgets' })
+      194 |     await expect(widgets.getByRole('button', { name: 'Shop & channel metrics', exact: true })).toHaveAttribute('aria-current', 'page')
+      195 |     await expect(page.getByRole('heading', { name: 'Channel performance and readiness' })).toBeVisible()
+        at C:\Users\jerze\K2 JImzon\tests\admin-dashboard-redesign.spec.js:192:84
+
+    Error Context: test-results\admin-dashboard-redesign-a-9086b-every-dashboard-destination-chromium\error-context.md
+
+  1 failed
+    [chromium] › tests\admin-dashboard-redesign.spec.js:190:3 › admin command center redesign › left-panel widgets show one workspace and preserve every dashboard destination 
+  31 did not run
+  1 error was not a part of any test, see above for details

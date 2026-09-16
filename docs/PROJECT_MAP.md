@@ -1,5 +1,57 @@
 # K2 Jimzon — Project Directory Map
 
+IDEA-20260914-02 adds `tests/master-audit-recovery.spec.js` for cookie/history
+boundaries and `tests/storefront-recovery-ui.spec.js` with
+`playwright.storefront-recovery.config.js` for synthetic guest retry and product
+truth/responsive regressions. `npm test` includes the dedicated recovery suite.
+MAP-019 F-019-002 adds `server/shared-numeric.js` (the single strict-numeric
+validator both BFFs enforce) and `tests/admin-bff-numeric-coercion.spec.js`
+(registered in `test:contracts`). MAP-019 F-019-003 adds
+`tests/storefront-copy-contract.spec.js` for path-conditional customer copy
+(registered in `test:contracts`). F-028-001/002 add inbox cases to
+`tests/inbox-phase2.spec.js`, `tests/admin-retained-command-gaps.spec.js`
+(registered in `test:contracts`), archive/delete-uncertain browser cases, and
+`actor_id` to both conversation-history projections. F-020-001 rewrites
+`server/bot-challenge.js` (hostname-bound single-use store, fail-closed
+secrets) and adds `tests/bot-challenge-contract.spec.js` (registered in
+`test:contracts`). Executed receipts are in
+`docs/evidence/20260914-map-remediation/README.md`;
+unfinished work remains solely in root `MASTER_ACTION_PLAN.md`.
+
+Audit remediation tests reuse `product-intake-contract.spec.js`,
+`admin-logic-regressions.spec.js`, `release-ci-contract.spec.js` and
+`scripts/test-secret-scan.mjs`. The existing three stock/payment/final-Admin
+rehearsal runners now support native executable paths and a CI-provided
+`K2_TEST_PG_BIN`; `.github/workflows/ci.yml` owns their isolated PostgreSQL job.
+No new application routes or production artifacts were introduced.
+
+`supabase/guest_order_conversation_seed_capture.sql` reads the two privileged
+function captures; `scripts/guest-seed-recovery.mjs` constructs reviewed scoped
+recovery, and `scripts/rehearse-guest-seed-recovery.mjs` verifies restoration and
+drift refusal in a fresh loopback database. They do not activate guest submission.
+
+Product-intake step/Draft/first-inventory retries use
+`src/views/admin/useRetainedIntakeCommand.js` for the mounted command lifetime,
+`ProductIntakeSessionModal.jsx` for frozen review/retry controls and
+`src/services/productIntakeService.js` for receipt/refresh validation. The existing
+intake-AI browser runner also owns these manual-intake recovery cases; its real
+modal fixture uses intercepted responses. MAP-028 I-002 retains remaining callers
+and activated receipt/audit acceptance. No new API or database truth is added.
+
+`tests/release-ci-contract.spec.js` imports the base and protected recovery
+Playwright configurations and verifies that protected specs cannot also run
+against the shared server. `playwright.config.js` excludes catalog-import retry;
+`playwright.payment.config.js` retains the three catalog-import recovery journeys
+in npm test alongside its other protected recovery specs.
+Audit evidence: `docs/evidence/20260909-map-truth-audit/README.md` (MAP-028 J).
+
+MAP-017's existing-function correction is
+`supabase/migrations/20260909_map017_existing_function_lockdown.sql`.
+`scripts/rehearse-map017-function-lockdown.mjs` is invoked by the existing portable
+runner and consumes `supabase/tests/map017_function_lockdown_{setup,assertions}.sql`.
+It verifies actual SQL roles and repository function bodies in a disposable
+transaction. No browser/API route or production apply entrypoint is added.
+
 Operational readiness verification uses
 `scripts/rehearse-map023-last-unit-concurrency.mjs` and
 `supabase/tests/operational_readiness_{bootstrap,assertions}.sql` to execute
@@ -44,6 +96,14 @@ their fixture environment. `CouponManager.jsx` owns coupon state and the shared
 AdminDialog/hook own focus and retained command lifecycle. Evidence and scoped
 recovery: `docs/evidence/20260908-coupon-retry/README.md`; remaining work: I-002.
 
+Catalog CSV response-loss acceptance lives in
+`tests/catalog-import-recovery-ui.spec.js`, using the shared payment fixture and
+`playwright.payment.config.js`. `BulkCsvImportModal.jsx` owns the retained
+operation/chunk identity and visible recovery state. Evidence and pre-edit
+recovery are under `docs/evidence/20260909-catalog-import-retry/` and
+`docs/design-checkpoints/20260909-catalog-import-retry/`; product-intake and
+target-host acceptance remain in I-002.
+
 - Prepared Admin routes: 92
 - Prepared Storefront routes: 15
 
@@ -51,6 +111,26 @@ These are source registry counts, checked by
 `tests/security-surface-inventory.spec.js` in the contract and CI suites.
 The two consolidated entrypoints below are source files, not verified emitted
 or enabled provider function inventories. Exact-preview inventories remain I-014.
+
+Payment/handover composition (13 September, MAP-023 / I-001) lives in
+`supabase/migrations/20260913_payment_handover_commitment.sql`. The existing
+purchase runner executes `supabase/tests/commitment_atomicity.sql`,
+`commitment_lifecycle_bootstrap.sql` and `commitment_payment_handover.sql` for
+fault injection, signed receipts, multi-lot lifecycle, refunds/cancellation,
+helper role denial and old-body negative controls. It verifies exact captured
+function/ACL recovery and the old rollback refusal. Evidence:
+`docs/evidence/20260913-stock-lifecycle/README.md`. No frontend route changes.
+
+Confirmation ownership deduction (MAP-023 / MAP-028 I-001, prepared):
+`supabase/migrations/20260912_confirmation_stock_commitment.sql` owns the
+commitment columns, the internal `commit_order_request_stock_v1` helper, the
+confirmation call and the sweep exemption.
+`supabase/confirmation_stock_commitment_rollback.sql` owns recovery.
+`supabase/tests/confirmation_commitment_behavior.sql` owns sweep/cancel
+behavior; `tests/confirmation-commitment-contract.spec.js` (registered in
+`test:contracts`) owns source-shape pinning. The purchase-time runner wires
+migration, replay and both SQL suites. Evidence:
+`docs/evidence/20260912-autonomous-batch/README.md`.
 
 `20260908_purchase_hold_lock_order.sql` and the existing purchase-hold rehearsal
 own the prepared opposing-basket deadlock correction under MAP-023/I-001.
@@ -113,8 +193,6 @@ c:\Users\jerze\K2 JImzon\
 ├── api/                         # Consolidated Vercel Serverless Function entrypoints
 │   ├── admin/index.js           # Admin BFF consolidated router (92 prepared routes)
 │   └── storefront/index.js      # Storefront BFF consolidated router (15 prepared routes)
-│   ├── admin/index.js           # Admin BFF consolidated router (prepared inventory above)
-│   └── storefront/index.js      # Storefront BFF consolidated router (prepared inventory above)
 ├── prepared-api/                # Individual route handler implementations
 │   ├── admin/                   # Admin route handlers (auth, inventory, intake, sessions, etc.)
 │   └── storefront/              # Storefront route handlers (order, pasabuy, claim, auth, etc.)

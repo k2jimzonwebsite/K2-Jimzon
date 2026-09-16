@@ -1,14 +1,29 @@
 import {
-  contact, idempotencyKey, publicFailure, readJson, requestIp, requireAllowedOrigin,
+  contact, idempotencyKey, publicFailure, quantity, readJson, requestHostname, requestIp, requireAllowedOrigin,
   requireStorefrontProject, safeJson, setGuestGrantCookie, signedRpcArguments, text,
   verifyBotChallenge,
 } from '../../server/storefront-bff/security.js'
 import { createStorefrontServerSupabase, mapBoundaryResult } from '../../server/storefront-bff/supabase.js'
 
-const FULFILLMENT = new Set(['Metro Manila delivery', 'Courier delivery', 'Pickup'])
+import { strictNumeric } from '../../server/shared-numeric.js'
+
+const FULFILLMENT = new Set([
+  'Metro Manila delivery',
+  'Courier delivery',
+  'Pickup',
+  'Standard Courier Delivery',
+  'Metro Manila Express Dispatch',
+  'Standard Courier Delivery (Luzon)',
+  'Standard Courier Delivery (Visayas)',
+  'Standard Courier Delivery (Mindanao)',
+  'K2 Warehouse Pickup',
+])
 
 function validate(body) {
-  const allowed = new Set(['customerName','email','phone','address','fulfillmentMethod','note','items','idempotencyKey','couponCode','botToken'])
+  const allowed = new Set([
+    'customerName','email','phone','address','fulfillmentMethod','note','items','idempotencyKey','couponCode','botToken',
+    'shippingAmount','shippingQuoteStatus',
+  ])
   if (!body || typeof body !== 'object' || Array.isArray(body)
       || Object.keys(body).some((key) => !allowed.has(key))) throw new Error('REQUEST_INVALID')
   const customerName = text(body.customerName, 'CUSTOMER_NAME', { required: true, min: 1, max: 140 })
@@ -21,20 +36,39 @@ function validate(body) {
     if (!item || typeof item !== 'object' || Array.isArray(item)
         || Object.keys(item).some((key) => !['sku','quantity'].includes(key))) throw new Error('ITEM_INVALID')
     const sku = text(item.sku, 'SKU', { required: true, min: 1, max: 80 })
-    const quantity = Number(item.quantity)
-    if (!/^[A-Za-z0-9._/-]+$/.test(sku) || !Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
+    const itemQuantity = quantity(item.quantity, 'ITEM')
+    if (!/^[A-Za-z0-9._/-]+$/.test(sku)) {
       throw new Error('ITEM_INVALID')
     }
-    return { quantity, sku }
+    return { quantity: itemQuantity, sku }
   })
   const couponCode = text(body.couponCode, 'COUPON', { max: 64 }).toUpperCase()
   if (couponCode && !/^[A-Z0-9_-]+$/.test(couponCode)) throw new Error('COUPON_INVALID')
+
+  let shippingAmount = null
+  if (body.shippingAmount !== undefined) {
+    shippingAmount = strictNumeric(body.shippingAmount, 'SHIPPING_AMOUNT_INVALID', { min: 0, max: 100000 })
+  }
+
+  let shippingQuoteStatus = null
+  if (body.shippingQuoteStatus !== undefined) {
+    const s = text(body.shippingQuoteStatus, 'SHIPPING_QUOTE_STATUS', { required: true, max: 40 })
+    if (!['pending_quote', 'quoted', 'customer_confirmed', 'platform_charged', 'waived'].includes(s)) {
+      throw new Error('SHIPPING_QUOTE_STATUS_INVALID')
+    }
+    shippingQuoteStatus = s
+  }
+
+  const payload = {
+    address, couponCode, customerName, email,
+    fulfillmentMethod, idempotencyKey: idempotencyKey(body.idempotencyKey), items,
+    note: text(body.note, 'NOTE', { max: 2000 }), phone,
+  }
+  if (shippingAmount !== null) payload.shippingAmount = shippingAmount
+  if (shippingQuoteStatus !== null) payload.shippingQuoteStatus = shippingQuoteStatus
+
   return {
-    payload: {
-      address, couponCode, customerName, email,
-      fulfillmentMethod, idempotencyKey: idempotencyKey(body.idempotencyKey), items,
-      note: text(body.note, 'NOTE', { max: 2000 }), phone,
-    },
+    payload,
     botToken: body.botToken,
   }
 }
@@ -45,7 +79,7 @@ export default async function handler(req, res) {
   if (!requireAllowedOrigin(req)) return safeJson(res, 403, { error: { code: 'ORIGIN_NOT_ALLOWED' } })
   try {
     const { payload, botToken } = validate(await readJson(req))
-    if (!await verifyBotChallenge(botToken, requestIp(req))) {
+    if (!await verifyBotChallenge(botToken, requestIp(req), 'guest_order', { hostname: requestHostname(req) })) {
       return safeJson(res, 403, { error: { code: 'BOT_CHALLENGE_REQUIRED' } })
     }
     const client = createStorefrontServerSupabase()

@@ -6,6 +6,7 @@ import {
   adminBffEnabled, archiveCouponBff, createCouponBff, getAdminCoupons, setCouponStateBff,
 } from '../../services/adminBffService'
 import { AdminDialog } from '../../components/ui/AdminDialog'
+import { useOptionalAdminStore } from '../../context/AdminStoreContext'
 import { useRetainedFulfillmentCommand } from './useRetainedFulfillmentCommand'
 import { EmptyState, MetricRail, SectionHeading, StateBanner, StatusPill, WorkspaceIntro } from './AdminWorkspaceUi'
 
@@ -30,6 +31,12 @@ function stateFor(coupon) {
 
 export default function CouponManager({ secureMode } = {}) {
   const secure = secureMode ?? adminBffEnabled()
+  // Pre-click Admin blocker for state decisions. The server stays authoritative
+  // (COUPON_ADMIN_REQUIRED); this only stops a doomed click early. The role is
+  // advisory: when it cannot be resolved (standalone fixtures), nothing is
+  // blocked and the server still decides.
+  const storeRole = useOptionalAdminStore()?.user?.role
+  const couponAdmin = !secure || !storeRole || storeRole === 'Admin' || storeRole === 'SuperAdmin'
   const [coupons, setCoupons] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -38,6 +45,10 @@ export default function CouponManager({ secureMode } = {}) {
   const [form, setForm] = useState(EMPTY)
   const [createStartsAt, setCreateStartsAt] = useState('')
   const [pendingAction, setPendingAction] = useState(null)
+  // Archiving cannot be undone from this screen, so it takes two deliberate
+  // clicks: the first arms, the second commits.
+  const [archiveArmed, setArchiveArmed] = useState(false)
+  useEffect(() => { setArchiveArmed(false) }, [pendingAction])
   const openerRef = useRef(null)
   const working = showCreate || Boolean(pendingAction)
 
@@ -148,7 +159,6 @@ export default function CouponManager({ secureMode } = {}) {
     setError(''); setNotice('')
     setPendingAction({ coupon, type, reason: '' })
   }
-
   const sendDecision = async ({ couponId, type, reason }, key) => {
     let result
     if (secure) {
@@ -167,6 +177,7 @@ export default function CouponManager({ secureMode } = {}) {
   const confirmAction = async (event, operation) => {
     event.preventDefault()
     if (!pendingAction || pendingAction.reason.trim().length < 10) return
+    if (pendingAction.type === 'archive' && !archiveArmed) { setArchiveArmed(true); return }
     setError(''); setNotice('')
     const { coupon, type, reason } = pendingAction
     const result = await operation.run({ couponId: coupon.id, type, reason: reason.trim() })
@@ -194,10 +205,10 @@ export default function CouponManager({ secureMode } = {}) {
     <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
       <div className="p-4"><SectionHeading title="Promotion register" description="Activation is reversible; archive replaces deletion so historical codes remain auditable." count={coupons.length} /></div>
       {loading && coupons.length === 0 ? <div className="space-y-2 border-t border-adm-line p-4" role="status" aria-label="Loading coupons">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-20 rounded-adm-sm bg-white/[0.04]" />)}</div> : coupons.length === 0 ? <EmptyState icon={StarIcon} title="No production coupons yet" description="Create an inactive draft first, review its limits and dates, then activate it deliberately." /> : <>
-        <div className="space-y-3 border-t border-adm-line p-3 sm:hidden">{coupons.map(coupon => <CouponCard key={coupon.id} coupon={coupon} working={working} onAction={openAction} />)}</div>
+        <div className="space-y-3 border-t border-adm-line p-3 sm:hidden">{coupons.map(coupon => <CouponCard key={coupon.id} coupon={coupon} working={working} decideDisabled={!couponAdmin} onAction={openAction} />)}</div>
         <div className="hidden overflow-x-auto sm:block"><table className="w-full min-w-[900px] text-left text-sm">
           <thead className="border-y border-adm-line bg-adm-sunken text-xs uppercase tracking-wider text-white/55"><tr><th className="px-4 py-3">Code</th><th className="px-4 py-3">Rule</th><th className="px-4 py-3">Window</th><th className="px-4 py-3">Usage</th><th className="px-4 py-3">State</th><th className="px-4 py-3 text-right">Actions</th></tr></thead>
-          <tbody className="divide-y divide-adm-line">{coupons.map(coupon => <CouponRow key={coupon.id} coupon={coupon} working={working} onAction={openAction} />)}</tbody>
+          <tbody className="divide-y divide-adm-line">{coupons.map(coupon => <CouponRow key={coupon.id} coupon={coupon} working={working} decideDisabled={!couponAdmin} onAction={openAction} />)}</tbody>
         </table></div>
       </>}
     </section>
@@ -229,7 +240,7 @@ export default function CouponManager({ secureMode } = {}) {
         <header className="flex items-start justify-between border-b border-adm-line px-5 py-4"><div><p className="text-xs font-bold uppercase tracking-wider text-gold">Coupon decision</p><h2 id="coupon-action-title" className="mt-1 font-sans text-xl font-bold">{pendingAction.type === 'archive' ? 'Archive' : pendingAction.type === 'activate' ? 'Activate' : 'Pause'} {pendingAction.coupon.code}</h2><p className="mt-2 text-sm text-white/60">{pendingAction.type === 'archive' ? 'Archiving stops validation immediately and cannot be undone from this screen.' : 'The change affects whether checkout can validate this code.'}</p></div><button type="button" disabled={operation.closeDisabled} onClick={() => setPendingAction(null)} aria-label="Close coupon decision" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-adm-sm hover:bg-white/5"><XIcon /></button></header>
         <div className="p-5"><Field label="Decision reason"><textarea disabled={operation.locked} autoFocus className={`${input} min-h-28 resize-y`} value={pendingAction.reason} onChange={event => setPendingAction(current => ({ ...current, reason: event.target.value }))} minLength="10" maxLength="500" aria-describedby="coupon-action-help" required /><span id="coupon-action-help" className="mt-1.5 block text-sm font-normal text-white/55">At least 10 characters. State what changed and who approved it.</span></Field></div>
         {(operation.error || error) && <div className="px-5 pb-4"><StateBanner tone={operation.uncertain ? 'warning' : 'danger'}>{operation.error || error}</StateBanner></div>}
-        <footer className="flex justify-end gap-2 border-t border-adm-line px-5 py-4"><button type="button" disabled={operation.closeDisabled} onClick={() => setPendingAction(null)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={operation.retryDisabled || pendingAction.reason.trim().length < 10} className={`min-h-11 rounded-adm-sm px-5 text-sm font-bold disabled:opacity-40 ${pendingAction.type === 'archive' ? 'bg-crimson text-white' : 'bg-gold text-adm-bg'}`}>{operation.busy ? 'Recording…' : operation.uncertain ? secure ? 'Retry same command' : 'Reconcile coupons first' : `Confirm ${pendingAction.type}`} </button></footer>
+        <footer className="flex justify-end gap-2 border-t border-adm-line px-5 py-4"><button type="button" disabled={operation.closeDisabled} onClick={() => setPendingAction(null)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold">Cancel</button><button type="submit" disabled={operation.retryDisabled || pendingAction.reason.trim().length < 10} className={`min-h-11 rounded-adm-sm px-5 text-sm font-bold disabled:opacity-40 ${pendingAction.type === 'archive' ? 'bg-crimson text-white' : 'bg-gold text-adm-bg'}`}>{operation.busy ? 'Recording…' : operation.uncertain ? secure ? 'Retry same command' : 'Reconcile coupons first' : pendingAction.type === 'archive' && !archiveArmed ? 'Confirm archive' : pendingAction.type === 'archive' ? 'Click again to archive' : `Confirm ${pendingAction.type}`} </button></footer>
       </form>
     )}</CouponCommandDialog>}
   </div>
@@ -246,18 +257,18 @@ function CouponCommandDialog({ send, secure, returnFocusRef, onClose, labelledBy
   </div>
 }
 
-function CouponActions({ coupon, working, state, onAction }) {
-  return <div className="flex flex-wrap justify-end gap-2"><button disabled={working || Boolean(coupon.archived_at) || state.expired || state.exhausted} onClick={() => onAction(coupon, coupon.is_active ? 'pause' : 'activate')} className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-3 text-sm font-semibold disabled:opacity-35">{coupon.is_active ? 'Pause' : 'Activate'}</button><button disabled={working || Boolean(coupon.archived_at)} onClick={() => onAction(coupon, 'archive')} className="min-h-11 rounded-adm-sm border border-crimson/30 bg-crimson/10 px-3 text-sm font-semibold text-crimson disabled:opacity-35">Archive</button></div>
+function CouponActions({ coupon, working, state, onAction, decideDisabled }) {
+  return <div className="flex flex-wrap justify-end gap-2"><button disabled={working || decideDisabled || Boolean(coupon.archived_at) || state.expired || state.exhausted} title={decideDisabled ? 'Only an Admin can change coupon state.' : undefined} onClick={() => onAction(coupon, coupon.is_active ? 'pause' : 'activate')} className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-3 text-sm font-semibold disabled:opacity-35">{coupon.is_active ? 'Pause' : 'Activate'}</button><button disabled={working || decideDisabled || Boolean(coupon.archived_at)} title={decideDisabled ? 'Only an Admin can change coupon state.' : undefined} onClick={() => onAction(coupon, 'archive')} className="min-h-11 rounded-adm-sm border border-crimson/30 bg-crimson/10 px-3 text-sm font-semibold text-crimson disabled:opacity-35">Archive</button></div>
 }
 
-function CouponRow({ coupon, working, onAction }) {
+function CouponRow({ coupon, working, decideDisabled, onAction }) {
   const state = stateFor(coupon)
-  return <tr className="hover:bg-white/[0.025]"><td className="px-4 py-4"><p className="font-mono text-sm font-bold text-gold">{coupon.code}</p><p className="mt-1 max-w-xs text-sm text-white/55">{coupon.description || 'No description'}</p>{coupon.is_hunt && <p className="mt-1 text-xs font-bold uppercase tracking-wider text-blue">Voucher hunt</p>}</td><td className="px-4 py-4"><p className="font-semibold">{coupon.discount_type === 'percentage' ? `${Number(coupon.discount_value)}% off` : `₱${Number(coupon.discount_value).toLocaleString()} off`}</p><p className="mt-1 text-sm text-white/55">Minimum ₱{Number(coupon.min_spend || 0).toLocaleString()}</p></td><td className="px-4 py-4 text-sm text-white/65"><p>{new Date(coupon.starts_at).toLocaleString()}</p><p className="mt-1">{coupon.ends_at ? `to ${new Date(coupon.ends_at).toLocaleString()}` : 'No end date'}</p></td><td className="px-4 py-4 text-sm tabular-nums"><strong>{coupon.redemption_count}</strong> / {coupon.max_redemptions ?? 'Unlimited'}</td><td className="px-4 py-4"><StatusPill tone={state.tone}>{state.label}</StatusPill></td><td className="px-4 py-4"><CouponActions coupon={coupon} working={working} state={state} onAction={onAction} /></td></tr>
+  return <tr className="hover:bg-white/[0.025]"><td className="px-4 py-4"><p className="font-mono text-sm font-bold text-gold">{coupon.code}</p><p className="mt-1 max-w-xs text-sm text-white/55">{coupon.description || 'No description'}</p>{coupon.is_hunt && <p className="mt-1 text-xs font-bold uppercase tracking-wider text-blue">Voucher hunt</p>}</td><td className="px-4 py-4"><p className="font-semibold">{coupon.discount_type === 'percentage' ? `${Number(coupon.discount_value)}% off` : `₱${Number(coupon.discount_value).toLocaleString()} off`}</p><p className="mt-1 text-sm text-white/55">Minimum ₱{Number(coupon.min_spend || 0).toLocaleString()}</p></td><td className="px-4 py-4 text-sm text-white/65"><p>{new Date(coupon.starts_at).toLocaleString()}</p><p className="mt-1">{coupon.ends_at ? `to ${new Date(coupon.ends_at).toLocaleString()}` : 'No end date'}</p></td><td className="px-4 py-4 text-sm tabular-nums"><strong>{coupon.redemption_count}</strong> / {coupon.max_redemptions ?? 'Unlimited'}</td><td className="px-4 py-4"><StatusPill tone={state.tone}>{state.label}</StatusPill></td><td className="px-4 py-4"><CouponActions coupon={coupon} working={working} decideDisabled={decideDisabled} state={state} onAction={onAction} /></td></tr>
 }
 
-function CouponCard({ coupon, working, onAction }) {
+function CouponCard({ coupon, working, decideDisabled, onAction }) {
   const state = stateFor(coupon)
-  return <article className="rounded-adm-sm border border-adm-line bg-adm-sunken p-4"><div className="flex items-start justify-between gap-3"><div><p className="font-mono text-base font-bold text-gold">{coupon.code}</p><p className="mt-1 text-sm leading-6 text-white/65">{coupon.description || 'No description'}</p></div><StatusPill tone={state.tone}>{state.label}</StatusPill></div><dl className="mt-4 grid grid-cols-2 gap-3 text-sm"><div><dt className="text-white/50">Discount</dt><dd className="mt-1 font-semibold">{coupon.discount_type === 'percentage' ? `${Number(coupon.discount_value)}%` : `₱${Number(coupon.discount_value).toLocaleString()}`}</dd></div><div><dt className="text-white/50">Uses</dt><dd className="mt-1 font-semibold tabular-nums">{coupon.redemption_count} / {coupon.max_redemptions ?? 'Unlimited'}</dd></div><div className="col-span-2"><dt className="text-white/50">Window</dt><dd className="mt-1 leading-6">{new Date(coupon.starts_at).toLocaleString()}<br />{coupon.ends_at ? `to ${new Date(coupon.ends_at).toLocaleString()}` : 'No end date'}</dd></div></dl><div className="mt-4 border-t border-adm-line pt-3"><CouponActions coupon={coupon} working={working} state={state} onAction={onAction} /></div></article>
+  return <article className="rounded-adm-sm border border-adm-line bg-adm-sunken p-4"><div className="flex items-start justify-between gap-3"><div><p className="font-mono text-base font-bold text-gold">{coupon.code}</p><p className="mt-1 text-sm leading-6 text-white/65">{coupon.description || 'No description'}</p></div><StatusPill tone={state.tone}>{state.label}</StatusPill></div><dl className="mt-4 grid grid-cols-2 gap-3 text-sm"><div><dt className="text-white/50">Discount</dt><dd className="mt-1 font-semibold">{coupon.discount_type === 'percentage' ? `${Number(coupon.discount_value)}%` : `₱${Number(coupon.discount_value).toLocaleString()}`}</dd></div><div><dt className="text-white/50">Uses</dt><dd className="mt-1 font-semibold tabular-nums">{coupon.redemption_count} / {coupon.max_redemptions ?? 'Unlimited'}</dd></div><div className="col-span-2"><dt className="text-white/50">Window</dt><dd className="mt-1 leading-6">{new Date(coupon.starts_at).toLocaleString()}<br />{coupon.ends_at ? `to ${new Date(coupon.ends_at).toLocaleString()}` : 'No end date'}</dd></div></dl><div className="mt-4 border-t border-adm-line pt-3"><CouponActions coupon={coupon} working={working} decideDisabled={decideDisabled} state={state} onAction={onAction} /></div></article>
 }
 
 function Field({ label, className = '', children }) {

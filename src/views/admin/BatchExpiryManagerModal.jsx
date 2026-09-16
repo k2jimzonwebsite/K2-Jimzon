@@ -3,15 +3,16 @@ import { supabase } from '../../lib/supabaseClient'
 import {
   adminBffEnabled, getAdminLots, reconcileLotsBff, setLotClearanceBff,
 } from '../../services/adminBffService'
-import { AlertIcon, CheckIcon, MinusIcon, PlusIcon, XIcon } from '../../components/ui/icons'
+import { AlertIcon, BoxIcon, CheckIcon, ClockIcon, MinusIcon, PlusIcon, XIcon } from '../../components/ui/icons'
 import FefoWorkflowDiagram from '../../components/admin/guides/FefoWorkflowDiagram'
 import CustodyWorkflowDiagram from '../../components/admin/guides/CustodyWorkflowDiagram'
 import { AdminDialog } from '../../components/ui/AdminDialog'
+import { manilaDateKey } from '../../lib/manilaReportingWindow'
 
 const STATUSES = ['available', 'quarantine', 'damaged', 'expired', 'unaccounted', 'depleted']
 
-function todayUtc() {
-  return new Date().toISOString().slice(0, 10)
+function todayManila() {
+  return manilaDateKey(new Date())
 }
 
 export function getExpiryHealth(dateString) {
@@ -19,7 +20,7 @@ export function getExpiryHealth(dateString) {
     return { status: 'NONE', tone: 'neutral', text: 'Expiry missing', daysLeft: null }
   }
   const expiry = Date.parse(`${dateString}T00:00:00Z`)
-  const today = Date.parse(`${todayUtc()}T00:00:00Z`)
+  const today = Date.parse(`${todayManila()}T00:00:00Z`)
   if (Number.isNaN(expiry)) return { status: 'NONE', tone: 'neutral', text: 'Expiry invalid', daysLeft: null }
   const daysLeft = Math.round((expiry - today) / 86_400_000)
   if (daysLeft < 0) return { status: 'EXPIRED', tone: 'danger', text: `Expired ${Math.abs(daysLeft)}d ago`, daysLeft }
@@ -44,6 +45,7 @@ function mapLot(row) {
     is_pinned: Boolean(row.is_pinned),
     inventory_status: row.inventory_status || 'quarantine',
     clearance_approved_at: row.clearance_approved_at || null,
+    activeAllocations: Array.isArray(row.activeAllocations) ? row.activeAllocations : [],
   }
 }
 
@@ -62,6 +64,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
   const sku = product?.sku || product?.id || ''
   const secure = adminBffEnabled()
   const [batches, setBatches] = useState(() => Array.isArray(product?.batches) ? product.batches.map(mapLot) : [])
+  const [derivedStock, setDerivedStock] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -83,7 +86,10 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
         const result = await getAdminLots(sku, controller.signal)
         if (!active || result.aborted) return
         if (!result.ok) setError(result.error)
-        else setBatches((result.data?.lots || []).map(mapLot))
+        else {
+          setBatches((result.data?.lots || []).map(mapLot))
+          setDerivedStock(result.data?.derivedStock?.[sku] || null)
+        }
       } else if (supabase) {
         const result = await supabase.from('product_batches')
           .select('id,sku,box_code,batch_code,quantity,quantity_available,reserved_quantity,expiry_date,best_before_date,landed_date,hub,custodian,channel,is_pinned,inventory_status,clearance_approved_at')
@@ -105,11 +111,22 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
     const bDate = b.expiry_date || '9999-12-31'
     return aDate.localeCompare(bDate)
   }), [batches])
-  const totals = useMemo(() => batches.reduce((sum, lot) => ({
-    physical: sum.physical + Number(lot.qty || 0),
-    reserved: sum.reserved + Number(lot.reserved_quantity || 0),
-    sellable: sum.sellable + sellablePreview(lot),
-  }), { physical: 0, reserved: 0, sellable: 0 }), [batches])
+  const totals = useMemo(() => {
+    const base = batches.reduce((sum, lot) => ({
+      physical: sum.physical + Number(lot.qty || 0),
+      reserved: sum.reserved + Number(lot.reserved_quantity || 0),
+      sellable: sum.sellable + sellablePreview(lot),
+    }), { physical: 0, reserved: 0, sellable: 0 })
+    return {
+      ...base,
+      owned: derivedStock ? (derivedStock.requiresReconciliation ? null : derivedStock.ownedQuantity) : Math.max(0, base.physical - base.reserved),
+      requiresReconciliation: derivedStock?.requiresReconciliation ?? false,
+      unresolvedCount: derivedStock?.unresolvedCount ?? 0,
+      unresolvedQuantity: derivedStock?.unresolvedQuantity ?? 0,
+      unresolvedAllocations: derivedStock?.unresolvedAllocations ?? [],
+    }
+  }, [batches, derivedStock])
+
 
   const updateLot = (id, field, value) => {
     setBatches((current) => current.map((lot) => lot.id === id ? { ...lot, [field]: value } : lot))
@@ -128,7 +145,7 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
     setBatches((current) => [...current, {
       id: `new-${crypto.randomUUID()}`, box_code: newLot.box.trim(), batch_code: newLot.batch.trim(),
       qty: quantity, quantity_available: 0, reserved_quantity: 0, expiry_date: newLot.expiry,
-      landed_date: todayUtc(), hub: newLot.hub.trim(), custodian: newLot.custodian.trim(),
+      landed_date: todayManila(), hub: newLot.hub.trim(), custodian: newLot.custodian.trim(),
       channel: newLot.channel.trim(), is_pinned: false,
       inventory_status: health.daysLeft >= 90 ? 'available' : 'quarantine', clearance_approved_at: null,
     }])
@@ -160,15 +177,20 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
       })
       result = direct.error ? { ok: false, error: 'The clearance decision could not be saved safely.' } : { ok: true, result: Array.isArray(direct.data) ? direct.data[0] : direct.data }
     } else result = { ok: false, error: 'Inventory service is unavailable.' }
+    if (!result.ok) { setSaving(false); setError(result.error); return }
+    let savedLot = result.result
+    if (secure) {
+      const refreshed = await getAdminLots(sku)
+      savedLot = refreshed.ok && Array.isArray(refreshed.data?.lots)
+        ? refreshed.data.lots.find((lot) => lot.id === clearance.id) : null
+    }
     setSaving(false)
-    if (!result.ok) { setError(result.error); return }
+    if (!savedLot || savedLot.id !== clearance.id) {
+      setError('Clearance was saved, but the updated lot could not be loaded. Retry to recover its recorded details.')
+      return
+    }
     clearanceKeys.current.delete(keyName)
-    setBatches((current) => current.map((lot) => lot.id === clearance.id ? {
-      ...lot,
-      inventory_status: clearance.approved ? 'available' : 'quarantine',
-      clearance_approved_at: clearance.approved ? new Date().toISOString() : null,
-      quantity_available: clearance.approved ? Math.max(lot.qty - lot.reserved_quantity, 0) : 0,
-    } : lot))
+    setBatches((current) => current.map((lot) => lot.id === clearance.id ? mapLot(savedLot) : lot))
     setClearance(null); setClearanceReason('')
   }
 
@@ -227,11 +249,33 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
         </header>
 
         <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-5 sm:px-6">
-          <div className="mb-5 grid grid-cols-3 divide-x divide-adm-line rounded-adm-sm border border-adm-line bg-adm-sunken">
-            {[['Physical', totals.physical], ['Reserved', totals.reserved], ['Sellable', totals.sellable]].map(([label, value]) => (
-              <div key={label} className="px-3 py-3 sm:px-4"><p className="text-xs font-semibold text-white/60">{label}</p><p className="mt-0.5 text-lg font-bold tabular-nums text-white">{value}</p></div>
+          <div className="mb-5 grid grid-cols-2 divide-x divide-adm-line rounded-adm-sm border border-adm-line bg-adm-sunken sm:grid-cols-4">
+            {[
+              ['Physical', totals.physical],
+              ['Owned', totals.requiresReconciliation ? 'Unresolved' : (totals.owned ?? '—')],
+              ['Reserved', totals.reserved],
+              ['Sellable', totals.sellable],
+            ].map(([label, value]) => (
+              <div key={label} className="px-3 py-3 sm:px-4">
+                <p className="text-xs font-semibold text-white/60">{label}</p>
+                <p className={`mt-0.5 text-lg font-bold tabular-nums ${label === 'Owned' && totals.requiresReconciliation ? 'text-crimson' : 'text-white'}`}>{value}</p>
+              </div>
             ))}
           </div>
+
+          {totals.requiresReconciliation && (
+            <div role="alert" className="mb-5 flex gap-3 rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3.5 text-sm text-red-200">
+              <AlertIcon className="mt-0.5 shrink-0 text-crimson" size={18} />
+              <div>
+                <p className="font-bold text-red-100">
+                  Unresolved stock commitments detected ({totals.unresolvedCount} {totals.unresolvedCount === 1 ? 'allocation' : 'allocations'}, {totals.unresolvedQuantity} pcs)
+                </p>
+                <p className="mt-1 text-xs text-red-200/80">
+                  Confirmed or verified orders carry allocations without complete commitment attribution or have malformed commitment data. Owned stock total is held as unresolved and will not mask unconfirmed balances as healthy.
+                </p>
+              </div>
+            </div>
+          )}
 
           {error && <div role="alert" className="mb-4 flex gap-3 rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm text-red-200"><AlertIcon className="mt-0.5 shrink-0" /><span>{error}</span></div>}
 
@@ -244,24 +288,26 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
               <button
                 type="button"
                 onClick={() => setShowGuide((g) => (g === 'fefo' ? null : 'fefo'))}
-                className={`rounded-adm-sm border px-2.5 py-1 text-xs font-semibold transition-all ${
+                className={`inline-flex items-center rounded-adm-sm border px-2.5 py-1 text-xs font-semibold transition-all ${
                   showGuide === 'fefo'
                     ? 'border-amber-500/50 bg-amber-500/15 text-amber-300'
                     : 'border-adm-line text-white/60 hover:bg-white/6 hover:text-white'
                 }`}
               >
-                ⏳ {showGuide === 'fefo' ? 'Hide FEFO Map' : 'FEFO Rules Map'}
+                <ClockIcon size={13} className="mr-1.5" />
+                {showGuide === 'fefo' ? 'Hide FEFO Map' : 'FEFO Rules Map'}
               </button>
               <button
                 type="button"
                 onClick={() => setShowGuide((g) => (g === 'custody' ? null : 'custody'))}
-                className={`rounded-adm-sm border px-2.5 py-1 text-xs font-semibold transition-all ${
+                className={`inline-flex items-center rounded-adm-sm border px-2.5 py-1 text-xs font-semibold transition-all ${
                   showGuide === 'custody'
                     ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300'
                     : 'border-adm-line text-white/60 hover:bg-white/6 hover:text-white'
                 }`}
               >
-                🤝 {showGuide === 'custody' ? 'Hide Custody Map' : 'Custody Flow'}
+                <BoxIcon size={13} className="mr-1.5" />
+                {showGuide === 'custody' ? 'Hide Custody Map' : 'Custody Flow'}
               </button>
               <p className="text-xs font-semibold text-white/55">{secure ? 'Secure boundary prepared' : 'Current direct mode'}</p>
             </div>
@@ -312,6 +358,42 @@ export default function BatchExpiryManagerModal({ product, onClose, onSaveBatche
                     <div><label className={labelClass} htmlFor={`custodian-${lot.id}`}>Custodian</label><input id={`custodian-${lot.id}`} maxLength={120} value={lot.custodian} onChange={(e) => updateLot(lot.id, 'custodian', e.target.value)} className={inputClass} /></div>
                     <div><label className={labelClass} htmlFor={`channel-${lot.id}`}>Channel allocation</label><input id={`channel-${lot.id}`} maxLength={80} value={lot.channel} onChange={(e) => updateLot(lot.id, 'channel', e.target.value)} placeholder="Optional" className={inputClass} /></div>
                   </div>
+
+                  {Array.isArray(lot.activeAllocations) && lot.activeAllocations.length > 0 && (
+                    <div className="mt-3 rounded-adm-sm border border-adm-line bg-adm-sunken/60 p-3">
+                      <p className="text-xs font-semibold text-white/70">
+                        Active commitments & reservations on this lot ({lot.activeAllocations.length})
+                      </p>
+                      <div className="mt-2 space-y-1.5">
+                        {lot.activeAllocations.map((alloc) => (
+                          <div key={alloc.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-adm-line/40 pb-1.5 text-xs last:border-b-0 last:pb-0">
+                            <div className="flex items-center gap-2">
+                              <span className={`inline-block rounded px-1.5 py-0.5 font-mono text-xs font-bold ${
+                                alloc.isUnresolved
+                                  ? 'border border-crimson/40 bg-crimson/20 text-red-200'
+                                  : alloc.commitmentType === 'COMMITTED'
+                                  ? 'border border-blue/40 bg-blue/20 text-blue-200'
+                                  : 'bg-white/10 text-white/70'
+                              }`}>
+                                {alloc.isUnresolved ? `UNRESOLVED: ${alloc.unresolvedReason || 'INCOMPLETE_ATTRIBUTION'}` : (alloc.commitmentType || 'RESERVED')}
+                              </span>
+                              <span className="font-mono text-white/80">
+                                {alloc.orderReference ? `Order ${alloc.orderReference}` : `Reservation ${alloc.id.slice(0, 8)}`}
+                              </span>
+                              {alloc.orderStatus && (
+                                <span className="text-white/50">
+                                  ({alloc.orderStatus}{alloc.orderPaymentStatus ? ` / ${alloc.orderPaymentStatus}` : ''})
+                                </span>
+                              )}
+                            </div>
+                            <span className="font-bold tabular-nums text-white/90">
+                              {alloc.quantity} pcs
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {clearance?.id === lot.id && <div className="mt-4 rounded-adm-sm border border-amber/35 bg-amber/8 p-3">
                     <label className={labelClass} htmlFor={`clearance-reason-${lot.id}`}>{clearance.approved ? 'Why is this lot suitable for disclosed clearance?' : 'Why is clearance approval being withdrawn?'}</label>

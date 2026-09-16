@@ -1,0 +1,32 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: historical documentation is not a credential
++ actual - expected
+
++ [
++   {
++     file: 'historical-doc',
++     line: 1,
++     rule: 'marketplace-partner-secret'
++   }
++ ]
+- []
+
+    at file:///C:/Users/jerze/K2%20JImzon/scripts/test-secret-scan.mjs:268:11 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      file: 'historical-doc',
+      line: 1,
+      rule: 'marketplace-partner-secret'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0

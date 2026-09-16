@@ -1,0 +1,36 @@
+[
+  {
+    "file": "vercel.admin.json",
+    "configuredBuild": "K2_DEPLOYMENT_TARGET=admin npm run build",
+    "genericBuild": "vite build --configLoader runner && node scripts/emit-static-404.mjs auto && node scripts/emit-storefront-sitemap.mjs && node scripts/verify-build-boundary.mjs auto && node scripts/scan-secrets.mjs dist",
+    "specializedBuild": "vite build --mode admin --configLoader runner && node scripts/emit-static-404.mjs admin && node scripts/emit-admin-head.mjs admin && node scripts/verify-build-boundary.mjs admin && node scripts/verify-bundle-budgets.mjs admin && node scripts/scan-secrets.mjs dist",
+    "genericEnforcesBudget": false,
+    "genericEmitsAdminHead": false
+  },
+  {
+    "file": "vercel.storefront.json",
+    "configuredBuild": "K2_DEPLOYMENT_TARGET=storefront npm run build",
+    "genericBuild": "vite build --configLoader runner && node scripts/emit-static-404.mjs auto && node scripts/emit-storefront-sitemap.mjs && node scripts/verify-build-boundary.mjs auto && node scripts/scan-secrets.mjs dist",
+    "specializedBuild": "vite build --mode storefront --configLoader runner && node scripts/emit-static-404.mjs storefront && node scripts/emit-storefront-sitemap.mjs && node scripts/verify-build-boundary.mjs storefront && node scripts/verify-bundle-budgets.mjs storefront && node scripts/scan-secrets.mjs dist",
+    "genericEnforcesBudget": false,
+    "genericEmitsAdminHead": false
+  }
+]
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Configured generic deployment build skips target budget gates
+    at file:///C:/Users/jerze/K2%20JImzon/docs/evidence/20260913-full-audit/probes/deployment-build.mjs:2:514
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:633:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.16.0

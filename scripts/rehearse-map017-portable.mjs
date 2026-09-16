@@ -11,6 +11,7 @@ import {
 } from './create-map017-production-backup.mjs'
 import { runMap017LocalRehearsal } from './rehearse-local-migration.mjs'
 import { runDatabaseAuthorizationSuite } from './run-local-database-authorization-suite.mjs'
+import { runMap017FunctionLockdown } from './rehearse-map017-function-lockdown.mjs'
 import { verifyMap017ProductionBackupRestore } from './verify-map017-production-backup-restore.mjs'
 
 const rootDir = fileURLToPath(new URL('..', import.meta.url))
@@ -143,6 +144,12 @@ export async function runPortableMap017Rehearsal(root = rootDir) {
     if (!rehearsal.passed || !authorization.passed || authorization.executedTests === 0) {
       throw new Error(`PORTABLE_MAP017_AUTHORIZATION_FAILED: ${authorization.message}`)
     }
+
+    runMap017FunctionLockdown({
+      target: config.target,
+      psql: executable['psql.exe'],
+      baseline: process.argv.includes('--baseline-function-lockdown'),
+    })
 
     runBinary(
       executable['psql.exe'],

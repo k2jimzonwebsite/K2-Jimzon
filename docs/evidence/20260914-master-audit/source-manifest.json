@@ -1,0 +1,4574 @@
+[
+  {
+    "file": "scripts/emit-admin-head.mjs",
+    "bytes": 3259,
+    "lines": 62,
+    "sha256": "bf97e0885c0f10bd59832e2154f61cef040c0aaeeb06815446e5bf66223bc104"
+  },
+  {
+    "file": "scripts/guest-seed-recovery.mjs",
+    "bytes": 3209,
+    "lines": 56,
+    "sha256": "17268896ab873db86baeed6825329c58710aca9fd5b5842f5291bcce7ae46fe5"
+  },
+  {
+    "file": "scripts/map017-followup-contract.mjs",
+    "bytes": 3744,
+    "lines": 77,
+    "sha256": "9dd5d87570b8058e6c54d9d765010dd8fe3b7751edaea5c7fda4de0e8a2d9cb8"
+  },
+  {
+    "file": "scripts/rehearse-guest-seed-recovery.mjs",
+    "bytes": 3649,
+    "lines": 57,
+    "sha256": "2b2262fc11aea0be480e37599a05f6b513081bc6cdda3b0b1efe140a79300546"
+  },
+  {
+    "file": "scripts/rehearse-map017-function-lockdown.mjs",
+    "bytes": 5252,
+    "lines": 99,
+    "sha256": "c49e854c1120e9455d6cdf6e62f93654c7ffa33a6b78dad75de9ff9b8321f367"
+  },
+  {
+    "file": "src/views/admin/useRetainedIntakeCommand.js",
+    "bytes": 2728,
+    "lines": 73,
+    "sha256": "27585ee6492de4fcfbcb01a4696d94b04ad5bcbfd6fda57bde3ff6d2e0a34557"
+  },
+  {
+    "file": "supabase/confirmation_stock_commitment_rollback.sql",
+    "bytes": 1708,
+    "lines": 32,
+    "sha256": "d37f8a6e18305e896d44248f0a59478f3c8e884ef56316f8549408b2631beaf2"
+  },
+  {
+    "file": "supabase/guest_order_conversation_seed_capture.sql",
+    "bytes": 881,
+    "lines": 18,
+    "sha256": "b7be0824667d07b5c2f85cd9757eb733661497e90c7ca2b89c3c901379d0d696"
+  },
+  {
+    "file": "supabase/guest_order_conversation_seed_rollback.sql",
+    "bytes": 1119,
+    "lines": 20,
+    "sha256": "0d3516af6f3a5ea83543c1f017acf07888e44e3f9f808fb33c1aa6352b6296bd"
+  },
+  {
+    "file": "supabase/map017_followup_verification.sql",
+    "bytes": 3187,
+    "lines": 44,
+    "sha256": "ceee2c5fa5cb6c79a2e0116b91db9b195aad1131b08606ef8b498f7903431a0f"
+  },
+  {
+    "file": "supabase/migrations/20260909_map017_existing_function_lockdown.sql",
+    "bytes": 1045,
+    "lines": 18,
+    "sha256": "556331f3d65077a99db98231319341e4415e00fa1aeb0a06f9c48fd2fdadcc68"
+  },
+  {
+    "file": "supabase/migrations/20260912_confirmation_stock_commitment.sql",
+    "bytes": 15837,
+    "lines": 314,
+    "sha256": "e3179ecc306251ff30403f856d7fa652d790c8b5592399193629e7853bb5a455"
+  },
+  {
+    "file": "supabase/migrations/20260912_guest_order_conversation_seed.sql",
+    "bytes": 12711,
+    "lines": 295,
+    "sha256": "d84424b870230ef30835406af65b44e6a96f381b584874b3f6aa25caa8f72514"
+  },
+  {
+    "file": "supabase/migrations/20260913_payment_handover_commitment.sql",
+    "bytes": 5419,
+    "lines": 83,
+    "sha256": "b533ecdf433b8e0eb9455684796fa4960a9cd9e78e411f9c54fbebea49472235"
+  },
+  {
+    "file": "supabase/tests/commitment_atomicity.sql",
+    "bytes": 3324,
+    "lines": 56,
+    "sha256": "a21bcb8b4ad1eaced838e505d94215efb5141d917751519fbea67c1028d136a3"
+  },
+  {
+    "file": "supabase/tests/commitment_lifecycle_bootstrap.sql",
+    "bytes": 1099,
+    "lines": 19,
+    "sha256": "f7cd22e444d03aac1bfe3ad866dfc669d9840b01bffc92d945d0d4d9399c085d"
+  },
+  {
+    "file": "supabase/tests/commitment_payment_handover.sql",
+    "bytes": 16056,
+    "lines": 246,
+    "sha256": "65b25d7534146e5648b4a7dd6622d5be02f718abac2b9064b86e33d77ba3a4f2"
+  },
+  {
+    "file": "supabase/tests/confirmation_commitment_behavior.sql",
+    "bytes": 4468,
+    "lines": 91,
+    "sha256": "dab6b5c1dba59ba1fbce621cfbf2982083ebb837fd9703acf2c4ecaa007efe41"
+  },
+  {
+    "file": "supabase/tests/map017_function_lockdown_assertions.sql",
+    "bytes": 3817,
+    "lines": 88,
+    "sha256": "6742b8a0b4980a2e3c71d5a3ded831a22df170f57ca0d33d33977be569a8a782"
+  },
+  {
+    "file": "supabase/tests/map017_function_lockdown_setup.sql",
+    "bytes": 2470,
+    "lines": 47,
+    "sha256": "eee66ee7653411b320bcf121c1be463a05d791679bba32b49a7a82c033eb465a"
+  },
+  {
+    "file": "supabase/tests/order_stock_commitment.sql",
+    "bytes": 1700,
+    "lines": 34,
+    "sha256": "fab24e32ea453a0def9cc48ffba11a4d1fe4c683880f4ff127a16c2eac33e83c"
+  },
+  {
+    "file": "tests/catalog-import-recovery-ui.spec.js",
+    "bytes": 9521,
+    "lines": 158,
+    "sha256": "15385ee11f45b18c8d6733b0abb4b30e432f00202d114eab36ed3ac0661589aa"
+  },
+  {
+    "file": "tests/confirmation-commitment-contract.spec.js",
+    "bytes": 2814,
+    "lines": 58,
+    "sha256": "dddfe7202bbc7fb59b5f064847eed4337f64098818e69b1c9c11f131894a2491"
+  },
+  {
+    "file": "tests/guest-conversation-seed-contract.spec.js",
+    "bytes": 3718,
+    "lines": 74,
+    "sha256": "4d443bf4924c3a4b8fe71f805cf212c25a59fe16cb2669e87046e4b8a6ca4122"
+  },
+  {
+    "file": "tests/storefront-truth-contract.spec.js",
+    "bytes": 3675,
+    "lines": 65,
+    "sha256": "c6a20a81f4aab3a34c95c0efcf4595f69a0ec92755c90bdaa9457ed8f706ea08"
+  },
+  {
+    "file": "tests/turnstile-wiring-contract.spec.js",
+    "bytes": 2489,
+    "lines": 55,
+    "sha256": "32fba3a7a8fdacdfe9e23c0729a436a48e1442ea6efa41670d6a38337c2d0cb2"
+  },
+  {
+    "file": "api/admin/index.js",
+    "bytes": 463,
+    "lines": 16,
+    "sha256": "97b66ec007a0b6ab11872a21b143c1d5e60efaabb7e8d09f0a8c7759e46c0a86"
+  },
+  {
+    "file": "api/storefront/index.js",
+    "bytes": 507,
+    "lines": 15,
+    "sha256": "e67777e63d91351c2a217ef347c15fc57b329ed72e57eec75ab4fa648565ec48"
+  },
+  {
+    "file": "prepared-api/admin-router.js",
+    "bytes": 265,
+    "lines": 5,
+    "sha256": "5b30d52e0490ecb8d7811e1f8aa39323016fba55b3097c8adf357fa70e0c187e"
+  },
+  {
+    "file": "prepared-api/admin/auth/login.js",
+    "bytes": 6120,
+    "lines": 110,
+    "sha256": "b6e70f413d7176e453b71b5b147fda4a685647a2986169f7a6566c42a6c4efad"
+  },
+  {
+    "file": "prepared-api/admin/auth/logout.js",
+    "bytes": 1535,
+    "lines": 34,
+    "sha256": "407fea0e10ae422ab9d89aac26a7b1b871076f1514ff14caefd48d095c21c8a0"
+  },
+  {
+    "file": "prepared-api/admin/auth/mfa.js",
+    "bytes": 8521,
+    "lines": 158,
+    "sha256": "996e8fdad6821b8168acab12ddfa2fe072ab0122bfe6cd552dbc5d97fc410f7f"
+  },
+  {
+    "file": "prepared-api/admin/auth/password-recovery/complete.js",
+    "bytes": 4436,
+    "lines": 74,
+    "sha256": "d201fcae0012490dc26c22e513bedfeb83141e573c396511016af4d7428fbc4c"
+  },
+  {
+    "file": "prepared-api/admin/auth/password-recovery/request.js",
+    "bytes": 3476,
+    "lines": 61,
+    "sha256": "66e386e46aced26e998968ea301bdcc120d17972171e7e6093249699bc83c44d"
+  },
+  {
+    "file": "prepared-api/admin/auth/password-recovery/verify.js",
+    "bytes": 3538,
+    "lines": 71,
+    "sha256": "d4fb6804b86e4cd1f6db6b5485f261f87d1f2a0051403238c2787e050f6c1e30"
+  },
+  {
+    "file": "prepared-api/admin/catalog-export.js",
+    "bytes": 119,
+    "lines": 3,
+    "sha256": "98c44738892b451679f9f0427aa18a2c6fc6ab7e1431c71c742cc95230cafae2"
+  },
+  {
+    "file": "prepared-api/admin/catalog-import/commit.js",
+    "bytes": 122,
+    "lines": 3,
+    "sha256": "93c00e36e7b9416c9c1b94f66cd837d5da98b053c671209565fec66986973ef4"
+  },
+  {
+    "file": "prepared-api/admin/catalog-import/preview.js",
+    "bytes": 124,
+    "lines": 3,
+    "sha256": "6400144f4ee755d73ad719cfcbfa51585e9b3458544a8b44a5e32449c938558f"
+  },
+  {
+    "file": "prepared-api/admin/catalog-import/status.js",
+    "bytes": 122,
+    "lines": 3,
+    "sha256": "a026c8addd077c5aad2df0fdf54ebd58a3cfa6bf096a590f605b5e8023995d58"
+  },
+  {
+    "file": "prepared-api/admin/channels.js",
+    "bytes": 61,
+    "lines": 2,
+    "sha256": "98f906e04daa8cf2711243e6e0cc3219e4b56921b81ca0c60b0cb3cc6c54a0af"
+  },
+  {
+    "file": "prepared-api/admin/consignments.js",
+    "bytes": 791,
+    "lines": 16,
+    "sha256": "69838e2d06bbb8c70ffd9a6e73e5b7dde4a2c18c44663d3c8a41bd06258074f1"
+  },
+  {
+    "file": "prepared-api/admin/consignments/add-line.js",
+    "bytes": 173,
+    "lines": 3,
+    "sha256": "490191308443a054c1af51ae75729cc7661e0c16635428cb18186863b3f2854d"
+  },
+  {
+    "file": "prepared-api/admin/consignments/advance.js",
+    "bytes": 172,
+    "lines": 3,
+    "sha256": "df8579b245d3cd8d1f088090a8f9c5eef8212337940d766e9e0d715d0454242a"
+  },
+  {
+    "file": "prepared-api/admin/consignments/create.js",
+    "bytes": 171,
+    "lines": 3,
+    "sha256": "2da4049399af06ed4dd03c4f68904fe2f72ad835e67d320a395efee2330f5e16"
+  },
+  {
+    "file": "prepared-api/admin/consignments/finalize.js",
+    "bytes": 173,
+    "lines": 3,
+    "sha256": "ce891c637c05e85a433d65af009fc532bfe7c68dd982d5a8f0ca7b47d00d5fd0"
+  },
+  {
+    "file": "prepared-api/admin/consignments/scan.js",
+    "bytes": 169,
+    "lines": 3,
+    "sha256": "a5fd2b08d0870f386b8849e3a3588711a10a6bbf9a0dd315836fccbdf1d8fb2e"
+  },
+  {
+    "file": "prepared-api/admin/coupons.js",
+    "bytes": 775,
+    "lines": 16,
+    "sha256": "1e77f2666c0a9b1a299e3119a5597a525e13f1942320c14bd47fb5f6e1f643dc"
+  },
+  {
+    "file": "prepared-api/admin/coupons/archive.js",
+    "bytes": 152,
+    "lines": 3,
+    "sha256": "b95ff2042cafde10f7e36dece54b10990b794ecb87df2da13c9b4e9473ebb036"
+  },
+  {
+    "file": "prepared-api/admin/coupons/create.js",
+    "bytes": 151,
+    "lines": 3,
+    "sha256": "63e8727205f783b400d8cf2f688eb0de599e9cd178b620081a2a542dceb30e0d"
+  },
+  {
+    "file": "prepared-api/admin/coupons/state.js",
+    "bytes": 150,
+    "lines": 3,
+    "sha256": "78d47ac2dde3ce89e8cc2c14ba5ee837d60fc0933fcf517c584c9bda7287a891"
+  },
+  {
+    "file": "prepared-api/admin/customers.js",
+    "bytes": 968,
+    "lines": 18,
+    "sha256": "fdd907bb8f4e7d5b64a5d2d3227d7c168062b675f36d8de52f97da5247273305"
+  },
+  {
+    "file": "prepared-api/admin/delivery.js",
+    "bytes": 130,
+    "lines": 3,
+    "sha256": "b5d4bf6d3233682049f56c5af6474f9b803897d432623f9f9cafcf4690b1119b"
+  },
+  {
+    "file": "prepared-api/admin/delivery/cost-publish.js",
+    "bytes": 164,
+    "lines": 3,
+    "sha256": "5a6dd9158391d2d85cac2ba24f2b052f73afed0ea033d539de51d3aa3d363f24"
+  },
+  {
+    "file": "prepared-api/admin/delivery/courier-state.js",
+    "bytes": 165,
+    "lines": 3,
+    "sha256": "33c3091e6f1b07741ae7c61c3d2ac481e0b91da5fb308bcb07372bd366152038"
+  },
+  {
+    "file": "prepared-api/admin/delivery/courier.js",
+    "bytes": 166,
+    "lines": 3,
+    "sha256": "66b65c701ba7f399feb45cb185b176ed95520c46447c0c06c2f8f1f6b2fcefd4"
+  },
+  {
+    "file": "prepared-api/admin/delivery/locality.js",
+    "bytes": 167,
+    "lines": 3,
+    "sha256": "0e9ac72ca2abd495b07b62de0a428ff6e18b4aa2f6222df318ce2bce03bbe0fb"
+  },
+  {
+    "file": "prepared-api/admin/delivery/quote.js",
+    "bytes": 135,
+    "lines": 3,
+    "sha256": "fbacd2aa1ea9af1f88a9ca7e6eadb49ab548b6fc1c4b1b00917d528a53e57b0d"
+  },
+  {
+    "file": "prepared-api/admin/delivery/source-state.js",
+    "bytes": 164,
+    "lines": 3,
+    "sha256": "b48149c148399e5be83cbc085964def86f62ea014804b875f41a11688456658b"
+  },
+  {
+    "file": "prepared-api/admin/fulfillment.js",
+    "bytes": 789,
+    "lines": 16,
+    "sha256": "d6be68b3a09067e559ed98faf0ab463ed089d16ed3c017dd2316f571790ab90d"
+  },
+  {
+    "file": "prepared-api/admin/fulfillment/assign-box.js",
+    "bytes": 162,
+    "lines": 3,
+    "sha256": "335b55eee55f62f5ddb248bd7fd89260bdc697fe886f9676bf0354aeb9ba97e0"
+  },
+  {
+    "file": "prepared-api/admin/fulfillment/confirm.js",
+    "bytes": 165,
+    "lines": 3,
+    "sha256": "350925bce044b3577fa1dfeb873a450470f2d70871798da9444ce5faf7bf4884"
+  },
+  {
+    "file": "prepared-api/admin/fulfillment/delivery.js",
+    "bytes": 168,
+    "lines": 3,
+    "sha256": "3b9f941cc8f15c856adea5bad8852fbefecb186eb4269c84df0fb353df1b372b"
+  },
+  {
+    "file": "prepared-api/admin/fulfillment/fulfill.js",
+    "bytes": 165,
+    "lines": 3,
+    "sha256": "323108f40e82e276602a6ddb2f92821d5a4c3ce1cb0e3540a6b657e3adcb57b6"
+  },
+  {
+    "file": "prepared-api/admin/fulfillment/packing-scan.js",
+    "bytes": 164,
+    "lines": 3,
+    "sha256": "3f2bb4b4aefa20dd5a2b1916c310936e9a3b8f067987bdc737b401e7333ab29f"
+  },
+  {
+    "file": "prepared-api/admin/fulfillment/payment.js",
+    "bytes": 166,
+    "lines": 3,
+    "sha256": "b7821c02d7fe7ce5cf5fa27bb7994df0b292b9f84f9c4513aa12abe9b5b04dba"
+  },
+  {
+    "file": "prepared-api/admin/fulfillment/transfer-lot.js",
+    "bytes": 164,
+    "lines": 3,
+    "sha256": "8f011296a458e84e4a16d8989f7b061b297e1c24211329a23d8e7cc4a90b896b"
+  },
+  {
+    "file": "prepared-api/admin/globe-cms.js",
+    "bytes": 62,
+    "lines": 2,
+    "sha256": "01386e023c2583284212804a0f1bd2e228f3fa1960ee0369d41ccfc40db39a66"
+  },
+  {
+    "file": "prepared-api/admin/inbox.js",
+    "bytes": 757,
+    "lines": 13,
+    "sha256": "2c98889f19ee887e420a9197159b5493d9ebfd8edb768873bda07a05a40270f2"
+  },
+  {
+    "file": "prepared-api/admin/inbox/history.js",
+    "bytes": 1072,
+    "lines": 17,
+    "sha256": "c630e1c33b3e83ad0c4da11b9e5e351c43e05c5ac4ff71b71125790d79e58e61"
+  },
+  {
+    "file": "prepared-api/admin/inbox/internal-note.js",
+    "bytes": 153,
+    "lines": 3,
+    "sha256": "358d47df5ea5a37ceff7a277212dcc330e403373ce0e077719a0d34e625e3dc4"
+  },
+  {
+    "file": "prepared-api/admin/inbox/mark-read.js",
+    "bytes": 149,
+    "lines": 3,
+    "sha256": "be658088fa9e62e5d6cdd6e2fc3f5c23e9bc98eff8e34d21cebd71a1c4aaddca"
+  },
+  {
+    "file": "prepared-api/admin/inbox/send-reply.js",
+    "bytes": 151,
+    "lines": 4,
+    "sha256": "491a57a3db05c136d2fc2148ed3b2e3dfbb8ba7877f9151e53eacaa5a5027171"
+  },
+  {
+    "file": "prepared-api/admin/inbox/workflow.js",
+    "bytes": 148,
+    "lines": 3,
+    "sha256": "467c3bb2fcafd3c416b0beebaeefb51df9cf64c4b6f6d41116bd9d4345fd8e4a"
+  },
+  {
+    "file": "prepared-api/admin/lots.js",
+    "bytes": 974,
+    "lines": 18,
+    "sha256": "6cf001953c713263e1063681fae4c088503f8f3cf6e1a07ce90f378b49330d5d"
+  },
+  {
+    "file": "prepared-api/admin/lots/clearance.js",
+    "bytes": 142,
+    "lines": 3,
+    "sha256": "5a38ac524b671f53779281ed18b22fe82b61699df7ed8bc1df79143b8d9a2175"
+  },
+  {
+    "file": "prepared-api/admin/lots/reconcile.js",
+    "bytes": 143,
+    "lines": 3,
+    "sha256": "bbd32c47de7b446da7cca9f42bdb766a9383ae4dd743f3df5b4090f86bd13163"
+  },
+  {
+    "file": "prepared-api/admin/marketplace-orders/stage.js",
+    "bytes": 109,
+    "lines": 3,
+    "sha256": "be71e6663169171e966776b19bae81d962bd2feae7e9e364e9bf9f0e3061f4a0"
+  },
+  {
+    "file": "prepared-api/admin/marketplace-orders/status.js",
+    "bytes": 110,
+    "lines": 3,
+    "sha256": "26cd60175a317364b1dcf5e264fa6b163680d82a4ca06c3a94b5767311a431b6"
+  },
+  {
+    "file": "prepared-api/admin/marketplace-snapshots/decision.js",
+    "bytes": 115,
+    "lines": 3,
+    "sha256": "7d52ac35e40c03593e8197f95e6820c99bd4cc8d0cade0ad2223f97721b6c7db"
+  },
+  {
+    "file": "prepared-api/admin/marketplace-snapshots/stage.js",
+    "bytes": 112,
+    "lines": 3,
+    "sha256": "0b31bdd75998212fc06e134d1c5a43afdb1631d9c95bc33a9b6268aa5fe5bce5"
+  },
+  {
+    "file": "prepared-api/admin/marketplace-snapshots/status.js",
+    "bytes": 113,
+    "lines": 3,
+    "sha256": "752fae8f2baf1f704651149ccbc07e87a377754f522a96d98d010290bd772d76"
+  },
+  {
+    "file": "prepared-api/admin/overview.js",
+    "bytes": 3499,
+    "lines": 57,
+    "sha256": "26d1a1409b333daccd1d96d9fbdfc3cbee3daf7eba10a9355835f90ed20eade6"
+  },
+  {
+    "file": "prepared-api/admin/owner-close/bookkeeping.js",
+    "bytes": 108,
+    "lines": 2,
+    "sha256": "062c729daaa42ed854176c0f06d5b00ab8cecc0d3e7ef9160b386801621b7e7c"
+  },
+  {
+    "file": "prepared-api/admin/owner-close/coverage.js",
+    "bytes": 106,
+    "lines": 3,
+    "sha256": "e8e46ab6cddb3af573b065abd2b3268dd53f79a78dd24ab287c2622d3805496b"
+  },
+  {
+    "file": "prepared-api/admin/owner-close/fees.js",
+    "bytes": 102,
+    "lines": 3,
+    "sha256": "5228c6e30b05d6f472dad685a5ecc293fc2f97570f67c70ab1f4630913f2341d"
+  },
+  {
+    "file": "prepared-api/admin/owner-close/pasabuy.js",
+    "bytes": 104,
+    "lines": 2,
+    "sha256": "8f7a7fb56f35d1df1332a90a0de2c30eab8e4767b5bdc00af64b886fce6c1f39"
+  },
+  {
+    "file": "prepared-api/admin/owner-close/session.js",
+    "bytes": 105,
+    "lines": 3,
+    "sha256": "ba0383a5d8e0ce84199f871fef8e99c2df81a0da928ca5a4db0207dc0a1f24f1"
+  },
+  {
+    "file": "prepared-api/admin/owner-close/stock.js",
+    "bytes": 103,
+    "lines": 3,
+    "sha256": "cfce51eeb3a8af1d31acff8465463e9da15232399df15527665e370bcbef9aa1"
+  },
+  {
+    "file": "prepared-api/admin/pasabuy.js",
+    "bytes": 765,
+    "lines": 13,
+    "sha256": "3954eed60d56b09292a59dbb037b71bf764461334c83e191f438649bd3f57626"
+  },
+  {
+    "file": "prepared-api/admin/pasabuy/quote.js",
+    "bytes": 153,
+    "lines": 3,
+    "sha256": "c6a6b24a293a46a34ae0578360f98916157d4d4670ed746e8ab1d8e86d812956"
+  },
+  {
+    "file": "prepared-api/admin/pasabuy/transition.js",
+    "bytes": 158,
+    "lines": 3,
+    "sha256": "6f951e3a7ed7beedea0d1c8907e98a6e5cdca328d7ac1dd2e7f85a4e5ae21383"
+  },
+  {
+    "file": "prepared-api/admin/procurement.js",
+    "bytes": 64,
+    "lines": 2,
+    "sha256": "574c7ef89255da7be6c86e7ef9f9a7740f1f19cd1ea66067ef232fae02c3f718"
+  },
+  {
+    "file": "prepared-api/admin/product-intake/ai.js",
+    "bytes": 107,
+    "lines": 3,
+    "sha256": "db3a0110783199f8447b7037fb173b4be83442eddadec0e657bd19358812219c"
+  },
+  {
+    "file": "prepared-api/admin/product-intake/consignments.js",
+    "bytes": 819,
+    "lines": 13,
+    "sha256": "aba5cbbe56deb401a371011df2d609c15b2cbed18e1d906e7b3e3ef169650f0c"
+  },
+  {
+    "file": "prepared-api/admin/product-intake/draft.js",
+    "bytes": 171,
+    "lines": 3,
+    "sha256": "43e6f6fba812c6938d30f81506041d26c4b72ce42d026993963cd66f9ac8eca7"
+  },
+  {
+    "file": "prepared-api/admin/product-intake/duplicates.js",
+    "bytes": 963,
+    "lines": 17,
+    "sha256": "758430979c82190cd82d72162aa056c5601fb0047cfa07b3c85d4794f0cf9e62"
+  },
+  {
+    "file": "prepared-api/admin/product-intake/evidence-cleanup.js",
+    "bytes": 136,
+    "lines": 4,
+    "sha256": "2f11e105a7fe1f8ac8ba43a0951aea54399208b881eeb3968fef8b229a6c93bf"
+  },
+  {
+    "file": "prepared-api/admin/product-intake/evidence.js",
+    "bytes": 187,
+    "lines": 5,
+    "sha256": "b0dbfef619d0eb89b7fd5e98811c4972af207c49c76d2b6dcfd62e660f7b1bd2"
+  },
+  {
+    "file": "prepared-api/admin/product-intake/inventory.js",
+    "bytes": 175,
+    "lines": 3,
+    "sha256": "708a4c021084ebfecccd15d52415b5225cb455aad196029c8815927c7312a877"
+  },
+  {
+    "file": "prepared-api/admin/product-intake/publication.js",
+    "bytes": 177,
+    "lines": 3,
+    "sha256": "c60c13b23b901fd3ddbbeee9fe7562e462971e6c71bb904084ab7f58743daab3"
+  },
+  {
+    "file": "prepared-api/admin/product-intake/session.js",
+    "bytes": 1131,
+    "lines": 16,
+    "sha256": "fceeb691c9d21d7384e056a65628b2180b32b370d94adc0005fdff136567d330"
+  },
+  {
+    "file": "prepared-api/admin/product-intake/step.js",
+    "bytes": 178,
+    "lines": 3,
+    "sha256": "45d6e89fab5bc4a527e0abfe2295977aa50133d52b993f0cdacabe0f1ea8cf84"
+  },
+  {
+    "file": "prepared-api/admin/product-knowledge/save.js",
+    "bytes": 191,
+    "lines": 4,
+    "sha256": "0d1e4f8c9e7a054946bfd47381cabc31d8c7d183fa699c4c7f31b0e246222342"
+  },
+  {
+    "file": "prepared-api/admin/product-master.js",
+    "bytes": 67,
+    "lines": 2,
+    "sha256": "63dc62ac17a1af7ec453a12259a0afbe4899cdc94d7e20d67a9dd304f7146ca4"
+  },
+  {
+    "file": "prepared-api/admin/product-media.js",
+    "bytes": 177,
+    "lines": 5,
+    "sha256": "2055223440d2017354454984252d871c11912540e36983b13432ae6e6e617ff4"
+  },
+  {
+    "file": "prepared-api/admin/product-media/assign.js",
+    "bytes": 135,
+    "lines": 4,
+    "sha256": "aa672a3ab37c406ae041a221d659dabe73d1717be2bd3cc98aaa13f702ec54e9"
+  },
+  {
+    "file": "prepared-api/admin/product-media/orphans.js",
+    "bytes": 129,
+    "lines": 4,
+    "sha256": "0cd0b30f850d1b3899c2dd752961b2f3ce698dcb24f756535338701537d92b88"
+  },
+  {
+    "file": "prepared-api/admin/products.js",
+    "bytes": 2014,
+    "lines": 45,
+    "sha256": "66525c0b254340335c8cd47d2342b1884eab5f564e9bca92af50b7fad56eca99"
+  },
+  {
+    "file": "prepared-api/admin/reservations.js",
+    "bytes": 142,
+    "lines": 3,
+    "sha256": "196c245d5404c5f1268e24f28d6b82e6a7e62952bc2d39b571142eeb448540a7"
+  },
+  {
+    "file": "prepared-api/admin/reservations/extend.js",
+    "bytes": 171,
+    "lines": 3,
+    "sha256": "d4d99b90e93d59347b18cca3b05e09e64e21b7fb9eab35dbf1b57086389eeac9"
+  },
+  {
+    "file": "prepared-api/admin/reservations/release-expired.js",
+    "bytes": 180,
+    "lines": 3,
+    "sha256": "093c9eae24d561e2638abccd074f2b51620ee7ec33cd622e9883cebf32493f0e"
+  },
+  {
+    "file": "prepared-api/admin/security-events.js",
+    "bytes": 2969,
+    "lines": 57,
+    "sha256": "457ac521e8926d82dc8384ff2f70661ac75e0d28601857d9b2ca8770b127fd43"
+  },
+  {
+    "file": "prepared-api/admin/session.js",
+    "bytes": 1896,
+    "lines": 46,
+    "sha256": "81921e819caa548b58d0fb80c84c18d4a5736eb6a261046e370b6db0605c4898"
+  },
+  {
+    "file": "prepared-api/admin/sessions.js",
+    "bytes": 1169,
+    "lines": 28,
+    "sha256": "ad1140368fbb04224ae90692cb6af6ea048d7df2054dfd921171c7a369738a46"
+  },
+  {
+    "file": "prepared-api/admin/sessions/revoke.js",
+    "bytes": 2349,
+    "lines": 49,
+    "sha256": "c3c77ac5da9a5a14b4bb0a4ec3dff263b6a484f5a2e893e76c2a5e29006ea058"
+  },
+  {
+    "file": "prepared-api/admin/staff-access.js",
+    "bytes": 65,
+    "lines": 2,
+    "sha256": "efea5c51ab7af981c7b341d5147d40bfc1859c632aeab1f51aa122a55e87e519"
+  },
+  {
+    "file": "prepared-api/admin/staff-access/invite.js",
+    "bytes": 73,
+    "lines": 2,
+    "sha256": "d10a2a3ba4f083e33b2c574fef161e08e886758b8384d3ca2cea6644dffb0e98"
+  },
+  {
+    "file": "prepared-api/admin/staff-access/mfa-replacement.js",
+    "bytes": 79,
+    "lines": 2,
+    "sha256": "7aeb121c9a10efd67d1667bfb893e7a9332caf92f680e0c9df1b10d384ce0957"
+  },
+  {
+    "file": "prepared-api/admin/system-readiness.js",
+    "bytes": 69,
+    "lines": 2,
+    "sha256": "fb20d6cf759d73bdd5c2323c556c80a286682ee1bff3fd5a0f031ca983e3bba1"
+  },
+  {
+    "file": "prepared-api/admin/wholesale-inquiries.js",
+    "bytes": 943,
+    "lines": 15,
+    "sha256": "006aa7f54f6381686f4322292b425f9334ca416c327e152545099bc0cebd3f68"
+  },
+  {
+    "file": "prepared-api/admin/wholesale-inquiries/review.js",
+    "bytes": 140,
+    "lines": 3,
+    "sha256": "b81618bddbc6982629d40dc4eac8afd010c840a4e19c8e3af775fdc6b3379e77"
+  },
+  {
+    "file": "prepared-api/storefront-router.js",
+    "bytes": 286,
+    "lines": 5,
+    "sha256": "815a0677e640c67a77913a550ed6d0f77aad28528fec7ba2aff7bb9383a1ec6c"
+  },
+  {
+    "file": "prepared-api/storefront/account/auth/email.js",
+    "bytes": 149,
+    "lines": 4,
+    "sha256": "022e597913c11232ae480545c33ed4e7e9fc71bbfb22ecad23cf4935c84ade26"
+  },
+  {
+    "file": "prepared-api/storefront/account/auth/phone.js",
+    "bytes": 149,
+    "lines": 4,
+    "sha256": "93156915df5aed7cb213a3064833cf23efc98c761f06e34d2815b32dd22276f7"
+  },
+  {
+    "file": "prepared-api/storefront/account/auth/verify.js",
+    "bytes": 153,
+    "lines": 4,
+    "sha256": "97852c6258284f6df9ea32bb27b7e4dbe7416dbc50775b8bebcdb37cd099845b"
+  },
+  {
+    "file": "prepared-api/storefront/account/claim.js",
+    "bytes": 2512,
+    "lines": 52,
+    "sha256": "7567aecfed99ecc7ad84a3e9f33c787ef5d6009b6ca3fe0b23e9d2fae401a1f9"
+  },
+  {
+    "file": "prepared-api/storefront/account/history.js",
+    "bytes": 1859,
+    "lines": 35,
+    "sha256": "bd93af0570d552d3d93ef7122ad5f4bbc42513d43dcea402113711a2c6b7848d"
+  },
+  {
+    "file": "prepared-api/storefront/account/message.js",
+    "bytes": 2562,
+    "lines": 49,
+    "sha256": "a3ef0011b165f3544fbeaa1d3a61bd545a5c15fe8340a21b243f2ecba38186d1"
+  },
+  {
+    "file": "prepared-api/storefront/conversation.js",
+    "bytes": 2949,
+    "lines": 62,
+    "sha256": "f9332d8cb18078a34385ffeab4eb7d40a326033374be874ef4fe18ca02c8bb71"
+  },
+  {
+    "file": "prepared-api/storefront/coupon.js",
+    "bytes": 1963,
+    "lines": 35,
+    "sha256": "da6986f0edb477d48c21e83f1d97174cdd33113102ce732e0bcf0065df42eb81"
+  },
+  {
+    "file": "prepared-api/storefront/delivery/quote.js",
+    "bytes": 4133,
+    "lines": 96,
+    "sha256": "4458e31079d09c16eaf0912334b9608ad35dcce5923738e670ddfd7650d507b1"
+  },
+  {
+    "file": "prepared-api/storefront/message.js",
+    "bytes": 2130,
+    "lines": 44,
+    "sha256": "4883737bcb94aeb8f9b60561933d22b0b0ca6123d53e5f17dc999c43e20c3d86"
+  },
+  {
+    "file": "prepared-api/storefront/messages.js",
+    "bytes": 1292,
+    "lines": 24,
+    "sha256": "50ea7d2c095be5628e85433f097ac51cb8fd8f6531d66e8b22c80bb1bf66786d"
+  },
+  {
+    "file": "prepared-api/storefront/order.js",
+    "bytes": 4236,
+    "lines": 74,
+    "sha256": "418bbca9e7af7823b49c152fb73257cc514e22216a2cb5414655a5ab137fb95f"
+  },
+  {
+    "file": "prepared-api/storefront/order/status.js",
+    "bytes": 1309,
+    "lines": 26,
+    "sha256": "aca8b10b427c49fe4dc5c8aac716249d4a2b6a3aa04cd1ed7cdf34239eaabf66"
+  },
+  {
+    "file": "prepared-api/storefront/pasabuy.js",
+    "bytes": 3341,
+    "lines": 59,
+    "sha256": "daf4c4a1965862107d88659c4657a5808e237768a19e13aa7d21d55c40e3acbc"
+  },
+  {
+    "file": "prepared-api/storefront/wholesale.js",
+    "bytes": 3285,
+    "lines": 44,
+    "sha256": "ac521266aac3a5f691ce7cbd1cbfb6fe6c4eb950dbc15d5eead2ea42e2a12098"
+  },
+  {
+    "file": "scripts/apply-map017-migration.mjs",
+    "bytes": 20681,
+    "lines": 484,
+    "sha256": "f1ff1771a329e2b872b0e6d58f41894aea84089f1b8294766d59ec69c71bcaca"
+  },
+  {
+    "file": "scripts/audit-readiness-logic.mjs",
+    "bytes": 1344,
+    "lines": 16,
+    "sha256": "5612bbaf8a39c528df6e25445cee2296e835e26ac45e70428cb9a42a52ee07b1"
+  },
+  {
+    "file": "scripts/audit-security-surfaces.mjs",
+    "bytes": 9193,
+    "lines": 181,
+    "sha256": "97a2c4ab87c5206c914e3267ea7549b858ccbb987ef66adf89af350dd8ca03d8"
+  },
+  {
+    "file": "scripts/audit-web-readiness.mjs",
+    "bytes": 4939,
+    "lines": 57,
+    "sha256": "9cff0f37f3e5b9a51dc0a039f7272262be3fa44638a1cb2fe5d08f5d6f2acae2"
+  },
+  {
+    "file": "scripts/backup-database-encrypted.mjs",
+    "bytes": 3463,
+    "lines": 79,
+    "sha256": "41d08bf3e733a0b1263beaec6b735923018f7bc45d649178cb773bc02b458d6c"
+  },
+  {
+    "file": "scripts/check-imports.mjs",
+    "bytes": 3041,
+    "lines": 71,
+    "sha256": "2e4e7baa2dc7fd99c03cb06159b899b28a4fd8a7241d8cd174c0764640a3a3e0"
+  },
+  {
+    "file": "scripts/create-map017-production-backup.mjs",
+    "bytes": 12266,
+    "lines": 292,
+    "sha256": "b8df7ff75937f066618954ddcbf906c9a38ee8192d2c3e39e1267e65b04fb3b4"
+  },
+  {
+    "file": "scripts/emit-static-404.mjs",
+    "bytes": 4174,
+    "lines": 76,
+    "sha256": "1997c3d5db141b1b884efc91458f55b73bacd98b959484f8af766092dfd50207"
+  },
+  {
+    "file": "scripts/emit-storefront-sitemap.mjs",
+    "bytes": 5483,
+    "lines": 112,
+    "sha256": "8e3c5dac6755882b4ffcfcf11ee66cfd6b5580cb72329a45f88f91f5f0be3bbd"
+  },
+  {
+    "file": "scripts/environment-source-boundary-core.mjs",
+    "bytes": 1261,
+    "lines": 35,
+    "sha256": "b340901717c1099187f824eaa025c064f1695a2ede4071ec93960403cfda9f52"
+  },
+  {
+    "file": "scripts/export-schema-metadata.mjs",
+    "bytes": 3296,
+    "lines": 111,
+    "sha256": "f0b48f8e5fc9ea769aa45f45cf16b87166203ee21f83eb70468459adb017ab08"
+  },
+  {
+    "file": "scripts/generate-captured-baseline-recovery.mjs",
+    "bytes": 4015,
+    "lines": 95,
+    "sha256": "d384a4d4b4e9330b07a33cd98ea9e640f132174f1d7418388e6a9c200a536a6b"
+  },
+  {
+    "file": "scripts/map016-evidence/build-vercel-env-inventory.mjs",
+    "bytes": 3900,
+    "lines": 94,
+    "sha256": "b5626e1b90c36a99b6c69a975f9f8d4c8953cdd3a0463efa2b870f3dc965c002"
+  },
+  {
+    "file": "scripts/map016-evidence/revoke-legacy-signing-key.mjs",
+    "bytes": 2445,
+    "lines": 59,
+    "sha256": "270bac622cc7aeea6c04159611dd8fccd8131672bee06131323d5611b3be9386"
+  },
+  {
+    "file": "scripts/map016-evidence/verify-admin-aal2-invitation.mjs",
+    "bytes": 10294,
+    "lines": 220,
+    "sha256": "1295b905da280e513f0bc25ff58f88bc0e3d07cf7fda5c588af0d5fd971dda1b"
+  },
+  {
+    "file": "scripts/map016-evidence/verify-legacy-token-rejection.mjs",
+    "bytes": 2897,
+    "lines": 67,
+    "sha256": "66517422e8b7ddfc385e16fb092240d26781612285798c80e677368b6c3cc9f9"
+  },
+  {
+    "file": "scripts/map017-evidence/export-live-schema-metadata.mjs",
+    "bytes": 2145,
+    "lines": 48,
+    "sha256": "942c2ec3c39b77c2dcd2d3810dae2ca396c4db8d8dde12bbe955fad5b0b1f280"
+  },
+  {
+    "file": "scripts/map017-evidence/list-provider-backups.mjs",
+    "bytes": 1536,
+    "lines": 46,
+    "sha256": "9be05cdba44d3ebc41cf61988610e13b4eb2b52cfc53f7d0de6f7de20d01f438"
+  },
+  {
+    "file": "scripts/map017-evidence/rehearse-live-public-boundary.mjs",
+    "bytes": 5214,
+    "lines": 135,
+    "sha256": "0e9715774616565c0a8207ad5fcea16a7b3c8bcea728801a23cd6b6e703ec09c"
+  },
+  {
+    "file": "scripts/map017-evidence/verify-anon-read-boundary.mjs",
+    "bytes": 3397,
+    "lines": 77,
+    "sha256": "5573edcf1d5cd8d6c6082695d0224e8da10b91864286a2458227f17350d50f62"
+  },
+  {
+    "file": "scripts/map017-storage-backup.mjs",
+    "bytes": 17844,
+    "lines": 398,
+    "sha256": "80d1a665bac33685e3d55a44c6fe2d5d977571fa14bc280fe74ece88c790ebc1"
+  },
+  {
+    "file": "scripts/map024-evidence/generate-product-pages.mjs",
+    "bytes": 4612,
+    "lines": 102,
+    "sha256": "7e299eb10bb7b36a21cd17027af3db3668d1435ae56a38c41fbfbfa5bf7fb8e7"
+  },
+  {
+    "file": "scripts/map024-evidence/generate-sitemap.mjs",
+    "bytes": 7747,
+    "lines": 220,
+    "sha256": "f665e2e8521888402d1958d683f7de6dbbb103053ad509a49efacec133a7cea8"
+  },
+  {
+    "file": "scripts/map024-evidence/inventory-persisted-hostnames.mjs",
+    "bytes": 6532,
+    "lines": 154,
+    "sha256": "3a8aa4b858b2ee5cf7cbf4b512d877066e4cbb3cf824ff545384bbc8c755455f"
+  },
+  {
+    "file": "scripts/map024-evidence/patch-auth-redirect-urls.mjs",
+    "bytes": 3107,
+    "lines": 75,
+    "sha256": "5f81f725a320e80211a6224aecaf53d32cad0aa47af50e8116d2deba0e2456bd"
+  },
+  {
+    "file": "scripts/map024-evidence/read-published-catalog.mjs",
+    "bytes": 6248,
+    "lines": 153,
+    "sha256": "ff32dc4f5af1f9d5c397c08f7b70d952933b9aedd7031e7e6e317f60d3874565"
+  },
+  {
+    "file": "scripts/map024-evidence/select-vercel-deployment-config.mjs",
+    "bytes": 1045,
+    "lines": 28,
+    "sha256": "c9169f438620e9b83ef98ac89116d66d209826c057b3c1adc800d661df044704"
+  },
+  {
+    "file": "scripts/map024-evidence/verify-live-discovery.mjs",
+    "bytes": 10898,
+    "lines": 258,
+    "sha256": "36350e747204e705e2cbed39a32f805ac032046c4356e7febffa6c6caeaca8d7"
+  },
+  {
+    "file": "scripts/prelaunch-indexing.mjs",
+    "bytes": 3044,
+    "lines": 67,
+    "sha256": "55fae77b14afa5a6eceb58a321f82fdb32aa0219288e1b2ed9594c7990a4801d"
+  },
+  {
+    "file": "scripts/prepare-ambient-video.mjs",
+    "bytes": 3190,
+    "lines": 94,
+    "sha256": "848b8fcb5a12f6a96a849dc1915d0b231ce6721835f44fb1b8e3dc6d3ed41a93"
+  },
+  {
+    "file": "scripts/rehearse-catalog-spreadsheet.mjs",
+    "bytes": 3970,
+    "lines": 85,
+    "sha256": "bdea0320fe46dcf64327ff11d7207bd782c5a286bb082b8fa7b46660e8c79323"
+  },
+  {
+    "file": "scripts/rehearse-channel-vocabulary-portable.mjs",
+    "bytes": 11976,
+    "lines": 279,
+    "sha256": "36bee9068938c2cade4e0fd34a2b115b61bd521f6b8ac95b6142d1eb9f3dd06f"
+  },
+  {
+    "file": "scripts/rehearse-database-backup-restore.mjs",
+    "bytes": 6746,
+    "lines": 126,
+    "sha256": "a993267bd34a31a007e64a5af75924b419983af604ba689227ee54bfe7b46965"
+  },
+  {
+    "file": "scripts/rehearse-final-admin-concurrency.mjs",
+    "bytes": 9987,
+    "lines": 220,
+    "sha256": "d8e11c14c98923ea3ec993b9ee9678a01d4326a61be6663224bd0dc325ea544d"
+  },
+  {
+    "file": "scripts/rehearse-intake-ai-portable.mjs",
+    "bytes": 4022,
+    "lines": 62,
+    "sha256": "b2e5a1ebcd1a7a6b0b9043a892ac199c64403d9cefb5cf8f46ccb07acbe40d5c"
+  },
+  {
+    "file": "scripts/rehearse-local-migration.mjs",
+    "bytes": 6672,
+    "lines": 143,
+    "sha256": "45f458af2203c32ef666601940521d9b0a6f43ba59615edf5ef1d586f283db5a"
+  },
+  {
+    "file": "scripts/rehearse-map017-portable.mjs",
+    "bytes": 9366,
+    "lines": 252,
+    "sha256": "4f70949c6a476176955b935436999613a14cc1f45fc690e16732a9ea9e25972d"
+  },
+  {
+    "file": "scripts/rehearse-map018-cleanup-portable.mjs",
+    "bytes": 2676,
+    "lines": 52,
+    "sha256": "1552ce18ef6423b7defd0961d40e55fe80820ba6ba382741ac95334e1648467e"
+  },
+  {
+    "file": "scripts/rehearse-map019-account-claim.mjs",
+    "bytes": 6935,
+    "lines": 94,
+    "sha256": "c07ad8eca87baa5e0b758fc8a6df3f1bda19131c117ad09189429d1021c4c365"
+  },
+  {
+    "file": "scripts/rehearse-map019-mfa-replacement.mjs",
+    "bytes": 2446,
+    "lines": 44,
+    "sha256": "a34d4ace3dc16e8c90e5fe8c3d66c036dc2e2ed1c9fd1620be5aece8bc0b82dc"
+  },
+  {
+    "file": "scripts/rehearse-map019-staff-invitation-reason.mjs",
+    "bytes": 2448,
+    "lines": 44,
+    "sha256": "3f55290ca388cc54ec2d6304da7ddd387cbab6a9707e52259af37b31c9451202"
+  },
+  {
+    "file": "scripts/rehearse-map020-admin-preauth-rate.mjs",
+    "bytes": 2989,
+    "lines": 54,
+    "sha256": "02698fea84972e92dedbc519072497bf846d146a01c81c0c9825b4f9c4e6e27a"
+  },
+  {
+    "file": "scripts/rehearse-map020-shopee-ingress.mjs",
+    "bytes": 3151,
+    "lines": 55,
+    "sha256": "15d309aa0816ede8e75b8485e4a6d206beae8e4bed20d0d4f5c562ee7960fdcb"
+  },
+  {
+    "file": "scripts/rehearse-map020-storefront-auth-rate.mjs",
+    "bytes": 2974,
+    "lines": 54,
+    "sha256": "f1994100119fa2cb9ed7bf66ea07163bc903b78133211e08033a27b425a809d3"
+  },
+  {
+    "file": "scripts/rehearse-map023-last-unit-concurrency.mjs",
+    "bytes": 17464,
+    "lines": 397,
+    "sha256": "bd36d36e03028db1abe0ecdc0c267fbbf083072d1a7533685fb131ff0770063e"
+  },
+  {
+    "file": "scripts/rehearse-marketplace-snapshot-portable.mjs",
+    "bytes": 4666,
+    "lines": 93,
+    "sha256": "141cf3d9786aade5352b6ecf78fe92c6a56e74dbc923ae9e216127efd935beae"
+  },
+  {
+    "file": "scripts/rehearse-payment-recovery.mjs",
+    "bytes": 9022,
+    "lines": 142,
+    "sha256": "734be4d78af4d79a11d35da6efd71a7643c5433fb33acd0b955520d20d35cbde"
+  },
+  {
+    "file": "scripts/rehearse-product-knowledge-portable.mjs",
+    "bytes": 10556,
+    "lines": 270,
+    "sha256": "1b8c6a07197dfcf33b2afad4158b811511ba6ed4136aacbfbe0e04e4c9f23b7f"
+  },
+  {
+    "file": "scripts/rehearse-publication-transitions.mjs",
+    "bytes": 3122,
+    "lines": 56,
+    "sha256": "ba03e731521c45c4b96d202480320c0bb6c4b4ea5f430c52e9aba26e34e6b530"
+  },
+  {
+    "file": "scripts/rehearse-purchase-time-reservation.mjs",
+    "bytes": 46841,
+    "lines": 756,
+    "sha256": "d99d08868f57a77c875d3cf830d3f16354355c508376a44c99d01132b118036b"
+  },
+  {
+    "file": "scripts/restore-database-rehearsal.mjs",
+    "bytes": 1674,
+    "lines": 46,
+    "sha256": "f0a04444548a63b852c9c5bdd29a62340a6ae32d47d95effe2f9035a534b0af3"
+  },
+  {
+    "file": "scripts/run-local-database-authorization-suite.mjs",
+    "bytes": 4707,
+    "lines": 146,
+    "sha256": "d7f7bdf966f6042590b3b00a50f672c882956d20caa2000cb012d48c82c973c8"
+  },
+  {
+    "file": "scripts/scan-git-history-secrets.mjs",
+    "bytes": 1164,
+    "lines": 37,
+    "sha256": "37f68502a8b1e675f682e926218c556b8406229c8d43a6ac2ac80bac7bcae8f0"
+  },
+  {
+    "file": "scripts/scan-secrets.mjs",
+    "bytes": 1917,
+    "lines": 56,
+    "sha256": "0ae227240bdd29a2886d6fa89131b04d709a21857989ad72a20aabea534f8ce7"
+  },
+  {
+    "file": "scripts/schema-truth-audit.mjs",
+    "bytes": 4232,
+    "lines": 121,
+    "sha256": "c3765c748e67757ded1d69547edabb8ca08960cc63f0addb8dba2bda034847d2"
+  },
+  {
+    "file": "scripts/schema-truth-core.mjs",
+    "bytes": 43820,
+    "lines": 972,
+    "sha256": "a339311e6e7a7ee6b0e7a5a71367a6fa117539f75d08aafe2137eb27645338d8"
+  },
+  {
+    "file": "scripts/secret-scan-core.mjs",
+    "bytes": 6372,
+    "lines": 162,
+    "sha256": "b71f1f41d08da5d74a3dc71e9671a4e87f8a90c4f57b208957096f1c214ababf"
+  },
+  {
+    "file": "scripts/security-surface-inventory-core.mjs",
+    "bytes": 11110,
+    "lines": 244,
+    "sha256": "18033e94c63dd042fb98f5a83a71f4a17d2b2482ce71c706cb056fc0ec2bb9f3"
+  },
+  {
+    "file": "scripts/security-surface-policy.mjs",
+    "bytes": 1035,
+    "lines": 17,
+    "sha256": "7686e9961b96fed8c939cccae142460618ff4b0c79c00012abd5f38082cd646f"
+  },
+  {
+    "file": "scripts/seed-full-catalog.mjs",
+    "bytes": 549,
+    "lines": 15,
+    "sha256": "c103fd8cebda1ef88e485163f9c36798f8d71bea7963a39150df2494eabca4c9"
+  },
+  {
+    "file": "scripts/seed-pilot-catalog.js",
+    "bytes": 7533,
+    "lines": 186,
+    "sha256": "81ea4d1073902add73794504e8a7834380ed45ac55fd057469e3bbf31613bd8e"
+  },
+  {
+    "file": "scripts/sensitive-file-policy.mjs",
+    "bytes": 3018,
+    "lines": 88,
+    "sha256": "717b5f0f28131bc55db767338b2e41b80263b2e749cf416d660b0be9aec17133"
+  },
+  {
+    "file": "scripts/split-encrypted-backup.mjs",
+    "bytes": 5032,
+    "lines": 117,
+    "sha256": "585f086b39fde2452416bb24c8f45d21adf8237272baaf3dcbeed8fc51a53260"
+  },
+  {
+    "file": "scripts/test-customer-account-ui.mjs",
+    "bytes": 2553,
+    "lines": 58,
+    "sha256": "80234afb38ee124fcc8993f830b0674171d3e5da2e2ff5f41a957732902376c4"
+  },
+  {
+    "file": "scripts/test-environment-source-boundary.mjs",
+    "bytes": 1296,
+    "lines": 15,
+    "sha256": "4bd7d977c098a4ca38f8a923c81e58c554cb7044a366b75e15d178e3a7b15c02"
+  },
+  {
+    "file": "scripts/test-secret-scan.mjs",
+    "bytes": 11971,
+    "lines": 284,
+    "sha256": "d4c1cdd0fd2919fb08ca12cd39d7a613d92ef1101b9efb9e0861b3138964a7b4"
+  },
+  {
+    "file": "scripts/test-sensitive-file-policy.mjs",
+    "bytes": 2744,
+    "lines": 65,
+    "sha256": "2390b0d8548ebf4c04ea5c9b2cbf9ade4fb39342bf7c05082bcd31806ebf7295"
+  },
+  {
+    "file": "scripts/verify-admin-bff.mjs",
+    "bytes": 7315,
+    "lines": 129,
+    "sha256": "3bb977c25c3eaa1dfbaadc569239100ea33c729a6d2813a74363796e7c231cdf"
+  },
+  {
+    "file": "scripts/verify-build-boundary.mjs",
+    "bytes": 10651,
+    "lines": 244,
+    "sha256": "efeccec743aae370e41d17e30b051b675f8718d3d30c930640e2144f2018370c"
+  },
+  {
+    "file": "scripts/verify-bundle-budgets.mjs",
+    "bytes": 3066,
+    "lines": 73,
+    "sha256": "65c36646dc6f97675c52f2cf846b46ca40e0ff575d57f4905fe2a1e1f3271f42"
+  },
+  {
+    "file": "scripts/verify-dependency-policy.mjs",
+    "bytes": 3366,
+    "lines": 70,
+    "sha256": "2b99d67aac8c5fd38338c964e0a7f313f57acf031428aa52d85ded8c1e3256d5"
+  },
+  {
+    "file": "scripts/verify-deployment-environment-contract.mjs",
+    "bytes": 6790,
+    "lines": 148,
+    "sha256": "9d95d2f8d939121761a36f5c64823d40bcce9a14339e5af5fe2fe6c5080d8fb0"
+  },
+  {
+    "file": "scripts/verify-edge-function-invite-staff.mjs",
+    "bytes": 2903,
+    "lines": 33,
+    "sha256": "bbae17757667ad70592bf215f7443211b93fa65abd22da30902113e4aff59655"
+  },
+  {
+    "file": "scripts/verify-environment-source-boundary.mjs",
+    "bytes": 1453,
+    "lines": 39,
+    "sha256": "58101ee080c474cb07dcf0d4a4d6de52a7daeafb558866321a46e889f80010f5"
+  },
+  {
+    "file": "scripts/verify-full-launch-proof.js",
+    "bytes": 4299,
+    "lines": 76,
+    "sha256": "d0b144fb81d0415de5c02293db439ebe83d941d694106109d743f61dc6437321"
+  },
+  {
+    "file": "scripts/verify-guest-bff.mjs",
+    "bytes": 8265,
+    "lines": 133,
+    "sha256": "058516d091ed5fc1d80065a5960e4c8c25d54bac34023f044feed7794b8d008c"
+  },
+  {
+    "file": "scripts/verify-map001-integrity.js",
+    "bytes": 6256,
+    "lines": 154,
+    "sha256": "f02a7144b1dc653eee96adb0d5242df55b8b15565d7d8d1300d3eaeb33b1ed70"
+  },
+  {
+    "file": "scripts/verify-map002-integrity.js",
+    "bytes": 2800,
+    "lines": 64,
+    "sha256": "6ecf412767d30b276f955cfaf91310e3d7e619b320a5438869e2993f0c01a2d4"
+  },
+  {
+    "file": "scripts/verify-map004-integrity.js",
+    "bytes": 2578,
+    "lines": 64,
+    "sha256": "e973a0226c022e37fa46abb5c956eddac9e152c5e412263e614c64d52a7d64e7"
+  },
+  {
+    "file": "scripts/verify-map005-integrity.js",
+    "bytes": 2519,
+    "lines": 62,
+    "sha256": "ee96f2921e8a6d92a7c05070c6a4aab9b3baa93171abf8ae7da8d9dc48406573"
+  },
+  {
+    "file": "scripts/verify-map006-integrity.js",
+    "bytes": 2087,
+    "lines": 57,
+    "sha256": "c1a1445eaf149be86342f8547ab1e72f598e473d430cca821e2e4480cc5ee52b"
+  },
+  {
+    "file": "scripts/verify-map007-integrity.js",
+    "bytes": 1781,
+    "lines": 52,
+    "sha256": "50b7251ded910b50d40af4de944644b6d79a740fd6cf8912473d5766d89df27e"
+  },
+  {
+    "file": "scripts/verify-map008-integrity.js",
+    "bytes": 1864,
+    "lines": 52,
+    "sha256": "107f21eadb73f72c3ae2070abfa4f178f729a028b549dab3d027ba69fb5d34d3"
+  },
+  {
+    "file": "scripts/verify-map009-integrity.js",
+    "bytes": 1952,
+    "lines": 52,
+    "sha256": "1559ca6f9827fa205539a95d83453ffdac6b68a183cbbad0b480ea3d502404c2"
+  },
+  {
+    "file": "scripts/verify-map011-integrity.js",
+    "bytes": 2786,
+    "lines": 75,
+    "sha256": "309bb955c9e469e34150820abcd619436af7b39565239029fa1ed19aa8f35dcc"
+  },
+  {
+    "file": "scripts/verify-map012-integrity.js",
+    "bytes": 1810,
+    "lines": 52,
+    "sha256": "3930ac93fe45fa195197492b168fb8eb6bb3e017f8d7a76da045547c4686df66"
+  },
+  {
+    "file": "scripts/verify-map013-integrity.js",
+    "bytes": 1906,
+    "lines": 55,
+    "sha256": "ed1ab6127457e555dd420230f4badb82f56200b2551057b6a75f31dea7812322"
+  },
+  {
+    "file": "scripts/verify-map017-production-backup-restore.mjs",
+    "bytes": 13456,
+    "lines": 354,
+    "sha256": "5077ba00933dd2f2e972b7e7207e1ce00505f7d275431cb78378dc4eb96eaf8a"
+  },
+  {
+    "file": "scripts/verify-map017-public-boundary.mjs",
+    "bytes": 2528,
+    "lines": 52,
+    "sha256": "fc138d1151f2d35d604aec2a76a63ce5030290604dee4cae88cbdff0fb574905"
+  },
+  {
+    "file": "scripts/verify-map017-rollback.mjs",
+    "bytes": 1028,
+    "lines": 24,
+    "sha256": "02a316ef85881b859aaba064df7f1c43d7ff565db56d9d4c0528fd3a287c418d"
+  },
+  {
+    "file": "scripts/verify-map018-intake-contract.mjs",
+    "bytes": 5846,
+    "lines": 134,
+    "sha256": "864ff8849c5806eb93e6cf7a042729760902307eb376720eb8961b7b2fb20984"
+  },
+  {
+    "file": "scripts/verify-map019-identity.mjs",
+    "bytes": 1799,
+    "lines": 29,
+    "sha256": "f918b1a67d9772458c905850b5fddcd8d4a39c636cf8ecdfd681dbd7e4848c20"
+  },
+  {
+    "file": "scripts/verify-map10-integrity.js",
+    "bytes": 1530,
+    "lines": 47,
+    "sha256": "1779546d13b3a0a8e7530738fc37cf187c840598337c364d44622449db133f06"
+  },
+  {
+    "file": "scripts/verify-pilot-data-health.js",
+    "bytes": 2816,
+    "lines": 62,
+    "sha256": "fd69ebba8c3075c598a03bb9c5af5fb249f4fd9c0dbafcfe7d1db43ee9b804dd"
+  },
+  {
+    "file": "scripts/verify-supabase-integrity.js",
+    "bytes": 4892,
+    "lines": 138,
+    "sha256": "79e844a2620450fc526c21778ca53c53e4624a9923bf2c5fbf0e4ce4ca05c1dd"
+  },
+  {
+    "file": "scripts/verify-tracked-sensitive-files.mjs",
+    "bytes": 2851,
+    "lines": 86,
+    "sha256": "43fc110a884a72321bb0024f3b4ad5e0890fe3e0fb384413e92582712dae9b8b"
+  },
+  {
+    "file": "server/admin-bff/ai-spend-controls.js",
+    "bytes": 5215,
+    "lines": 105,
+    "sha256": "55cd7e8f5052dd2ff4f42bc333ddebe0dac26283b2df53d9ece33c50bf0f0258"
+  },
+  {
+    "file": "server/admin-bff/authorize.js",
+    "bytes": 3966,
+    "lines": 90,
+    "sha256": "21113ca8d3a7f3526e140ddcd1193ef854db5698674f8f0b317306060976461c"
+  },
+  {
+    "file": "server/admin-bff/catalog-spreadsheet.js",
+    "bytes": 18125,
+    "lines": 384,
+    "sha256": "df5c437cdf208044af3c8b7775edc8ef6b0b48a5359bc07c61fcd95ab1f629fb"
+  },
+  {
+    "file": "server/admin-bff/channels.js",
+    "bytes": 3619,
+    "lines": 53,
+    "sha256": "cf1db0af70a898ba2689ebccc0c4344baa4fb91a6a32c3b828ceeb4fb83d0d20"
+  },
+  {
+    "file": "server/admin-bff/consignments.js",
+    "bytes": 6704,
+    "lines": 132,
+    "sha256": "21a9be5ed2133239036d545d624d1a26058fda082b0c0488051347077c017ebb"
+  },
+  {
+    "file": "server/admin-bff/coupons.js",
+    "bytes": 6826,
+    "lines": 129,
+    "sha256": "517f11e7aa6d2b0d97b0ef10dc6d187ef72234519ed0976458b48bbf5efc1da5"
+  },
+  {
+    "file": "server/admin-bff/customers.js",
+    "bytes": 4848,
+    "lines": 111,
+    "sha256": "58c3233c118f23265bb3f690ca11db13a0dbb62bd15901da08651680af357efc"
+  },
+  {
+    "file": "server/admin-bff/delivery.js",
+    "bytes": 13685,
+    "lines": 319,
+    "sha256": "1da63726ef7ee2c0ea5dcde6959a8fc7f9ae53b7b58b74bc840e9137d2aa8f6a"
+  },
+  {
+    "file": "server/admin-bff/evidence-cleanup-policy.js",
+    "bytes": 2905,
+    "lines": 70,
+    "sha256": "865f8a78ca41a7e5b5355f728e6ac4ba9f608c0b6a5d0426daaffb731d45fa64"
+  },
+  {
+    "file": "server/admin-bff/fulfillment.js",
+    "bytes": 9786,
+    "lines": 159,
+    "sha256": "900f447f09ca9235cb07db91ecaed33729927a11b8044f44da6c5c1bc660c20d"
+  },
+  {
+    "file": "server/admin-bff/globe-cms.js",
+    "bytes": 8317,
+    "lines": 139,
+    "sha256": "326647f9c5ad1b9e5cb4b42d64f20fed3015b0f865d532ea777cd18ea6601d9f"
+  },
+  {
+    "file": "server/admin-bff/inbox.js",
+    "bytes": 9288,
+    "lines": 182,
+    "sha256": "dde1885bb9d060bd7c2537cac7d87037f36357f4f4cf3aa9c73223d8c4e40873"
+  },
+  {
+    "file": "server/admin-bff/intake-ai-jobs.js",
+    "bytes": 9011,
+    "lines": 127,
+    "sha256": "2863ee6aa6a47005e27521aa50792856824a19ff8e2c5086667d599a663a6fd9"
+  },
+  {
+    "file": "server/admin-bff/intake-ai-provider.js",
+    "bytes": 10414,
+    "lines": 125,
+    "sha256": "07f29b65ff7fc5bb32e971eae94759918a554b9c5c65ae17e61eed0e7a8b3d3b"
+  },
+  {
+    "file": "server/admin-bff/lots.js",
+    "bytes": 6983,
+    "lines": 139,
+    "sha256": "324acb0359932c8dbf1e5bcb1c24e0236ac55225b66be0042e1994ce936d9636"
+  },
+  {
+    "file": "server/admin-bff/marketplace-snapshots.js",
+    "bytes": 49354,
+    "lines": 839,
+    "sha256": "a4d9d7953218f09f9a6edfdc2b8bc32cb136586f1cb5faff691e6573f097f318"
+  },
+  {
+    "file": "server/admin-bff/mfa-enrollment.js",
+    "bytes": 3154,
+    "lines": 60,
+    "sha256": "7ee01f8a258e1635bf858f8a12cb92844b74220f19c23094a1b69726bef5f5dd"
+  },
+  {
+    "file": "server/admin-bff/mfa-replacement-handler.js",
+    "bytes": 4838,
+    "lines": 87,
+    "sha256": "cd27089b44d664236e70f34572c402974f6440dddda7122c380ad6732f885466"
+  },
+  {
+    "file": "server/admin-bff/mfa-replacement.js",
+    "bytes": 6212,
+    "lines": 121,
+    "sha256": "5c74cbdedc51e3c54b7ddd11a9a2db1ff09badf2962372770a8dcd65dd7bc9e0"
+  },
+  {
+    "file": "server/admin-bff/pasabuy.js",
+    "bytes": 6518,
+    "lines": 125,
+    "sha256": "ebdd5487818be3de8fef9ff093f990c61ae43241e2606b23a7903593d333030a"
+  },
+  {
+    "file": "server/admin-bff/password-recovery.js",
+    "bytes": 2975,
+    "lines": 61,
+    "sha256": "7bfbccacf9ce97fce1ac99a84928a9928f1d3c5a8a81ad66622b64ffbe1212c9"
+  },
+  {
+    "file": "server/admin-bff/preauth-rate.js",
+    "bytes": 2446,
+    "lines": 63,
+    "sha256": "f7dd96186cdda89f0556db18ef65985bc77197980a80bcc89aaf3b80c0f2e209"
+  },
+  {
+    "file": "server/admin-bff/procurement.js",
+    "bytes": 3618,
+    "lines": 55,
+    "sha256": "01833e742e12515ae06b4c13053d5e7dce2d4d4fa1b43da61678987baa5995c9"
+  },
+  {
+    "file": "server/admin-bff/product-intake.js",
+    "bytes": 23996,
+    "lines": 467,
+    "sha256": "d799c59b00afc4b7a984963c06901eab0d5391b50cc788dcedf5333a58497406"
+  },
+  {
+    "file": "server/admin-bff/product-knowledge.js",
+    "bytes": 5565,
+    "lines": 117,
+    "sha256": "5f9ae3aecd84de214616e391a5cd4fa240ba552b2e2b0062a5b9ad5f96c5e630"
+  },
+  {
+    "file": "server/admin-bff/product-master.js",
+    "bytes": 8845,
+    "lines": 146,
+    "sha256": "ff2e89e2c3e1d9393524d39f4a06b52d346e158820d7c888e423226fa191fd11"
+  },
+  {
+    "file": "server/admin-bff/product-media.js",
+    "bytes": 12970,
+    "lines": 264,
+    "sha256": "498c50812d509607f2f77692b82d49079dcb561d86165d3554f3e21de99f0b79"
+  },
+  {
+    "file": "server/admin-bff/reservations.js",
+    "bytes": 5746,
+    "lines": 129,
+    "sha256": "d3fed83cf3d13bf4498669179f6c0c83951a1629055d20a21fa0cba952864b14"
+  },
+  {
+    "file": "server/admin-bff/router.js",
+    "bytes": 17492,
+    "lines": 310,
+    "sha256": "316eab8ac627ec76b785d1cb9066d3cdb33bb2584cb1a96538ec3ad99ba05a97"
+  },
+  {
+    "file": "server/admin-bff/security-events.js",
+    "bytes": 4285,
+    "lines": 90,
+    "sha256": "902cc96a392557cdf0f1b719787239520e81604c87443d546af814307b411fe0"
+  },
+  {
+    "file": "server/admin-bff/security.js",
+    "bytes": 14890,
+    "lines": 410,
+    "sha256": "69f50d8919d73466a62eb1e287bbed05cbe586eae4a6ad2d2a6018257c470740"
+  },
+  {
+    "file": "server/admin-bff/sessions.js",
+    "bytes": 4102,
+    "lines": 114,
+    "sha256": "8e6658e8f566552342542f403232299f7b8bf87dfba0e601369a731e4657f4d5"
+  },
+  {
+    "file": "server/admin-bff/staff-access.js",
+    "bytes": 6406,
+    "lines": 87,
+    "sha256": "57330678adc8f480e223ec2639ede7dac9d198d656288d1cca73cb00d4801678"
+  },
+  {
+    "file": "server/admin-bff/staff-invitations.js",
+    "bytes": 5759,
+    "lines": 116,
+    "sha256": "d0bdb0f5ccc6c183d6affccccc42a9dc3936b35036a03849b83a7d5a68d363d4"
+  },
+  {
+    "file": "server/admin-bff/supabase.js",
+    "bytes": 1202,
+    "lines": 36,
+    "sha256": "77535f6d282a72f108bcd5690fb136b85a12301d2f2692546d9425d04f46550d"
+  },
+  {
+    "file": "server/admin-bff/system-readiness.js",
+    "bytes": 959,
+    "lines": 15,
+    "sha256": "25a51f78fac0e3f1343ee4c67c407bf53502b5ba2ed742c3b50d3322d204a55a"
+  },
+  {
+    "file": "server/admin-bff/wholesale-inquiries.js",
+    "bytes": 3234,
+    "lines": 50,
+    "sha256": "56c87847c239c86135fc99b4c291a469f6e8d3fd3c0841b7cf8b4849caf0bde5"
+  },
+  {
+    "file": "server/bot-challenge.js",
+    "bytes": 705,
+    "lines": 17,
+    "sha256": "5befe9e090542bfe6390886f2e918a18ca3da304bed847125f633ddc7188f74f"
+  },
+  {
+    "file": "server/storefront-bff/customer-auth.js",
+    "bytes": 5517,
+    "lines": 132,
+    "sha256": "2bf9ef039d592759e618d5738fa49fc389c01dfdafc561a9029d504a2aca4c18"
+  },
+  {
+    "file": "server/storefront-bff/preauth-rate.js",
+    "bytes": 2280,
+    "lines": 59,
+    "sha256": "690b49349511aa47419d14066222271a8a07bf3740d7d0aef3f8060767851371"
+  },
+  {
+    "file": "server/storefront-bff/router.js",
+    "bytes": 5262,
+    "lines": 79,
+    "sha256": "9c7521832c8bcc6a4a8ca390504f577eb7ec613b834361e5809b38dbc712a7b8"
+  },
+  {
+    "file": "server/storefront-bff/security.js",
+    "bytes": 8073,
+    "lines": 197,
+    "sha256": "e6b6ebde8fb33cdf0f8468ebcb397bc88a2687f2aa188114edab4e5f4c811d4c"
+  },
+  {
+    "file": "server/storefront-bff/supabase.js",
+    "bytes": 1963,
+    "lines": 43,
+    "sha256": "d736a0c126e20ffa30f82e5ebdcadb408cfc0cf641abef88e5c7dc2ca8bb5216"
+  },
+  {
+    "file": "src/AdminApp.jsx",
+    "bytes": 870,
+    "lines": 28,
+    "sha256": "7e630d5b6ab6c98aa95b807e05766d00f3ed295b5453326f105846640236ef3b"
+  },
+  {
+    "file": "src/App.jsx",
+    "bytes": 4721,
+    "lines": 107,
+    "sha256": "b717a8dcafd28a7939de5a9115f8a585eef8c1d6ede281b66ac44f062adcec1e"
+  },
+  {
+    "file": "src/StorefrontApp.jsx",
+    "bytes": 2872,
+    "lines": 81,
+    "sha256": "dbbbf323ec50fc66c3a9c6900e15160553ecd3e33e83dacbf9765ac5ebcffae6"
+  },
+  {
+    "file": "src/components/BeforeAfterSlider.jsx",
+    "bytes": 3622,
+    "lines": 95,
+    "sha256": "7a0b35b28f2e1fbad0596e974ef5df4a225076b3b9ba702bec18118ff05c102c"
+  },
+  {
+    "file": "src/components/CartDrawer.jsx",
+    "bytes": 8082,
+    "lines": 165,
+    "sha256": "35de9c96b021a6c7a4ea7c335addee297e43552d249bd6d2b1d667918e591d7f"
+  },
+  {
+    "file": "src/components/CatalogGrid.jsx",
+    "bytes": 8069,
+    "lines": 139,
+    "sha256": "ee974cae109a83ef57047a5971184e6332d225c32e799142d037a0334cdd7930"
+  },
+  {
+    "file": "src/components/DeliveryEstimate.jsx",
+    "bytes": 5119,
+    "lines": 136,
+    "sha256": "f37452f715cef214644f1e5fe33ccacaf074eb00168820e093d5373f3532d64c"
+  },
+  {
+    "file": "src/components/Footer.jsx",
+    "bytes": 3430,
+    "lines": 68,
+    "sha256": "1f2a8185e38607486663a6370e0931aa1e24aa05621d92ee217971dfa063a583"
+  },
+  {
+    "file": "src/components/HeroVideo.jsx",
+    "bytes": 4681,
+    "lines": 117,
+    "sha256": "35673a8e146d44928c64424e94a104f094f0333da2a72434c975c9af54902ce2"
+  },
+  {
+    "file": "src/components/InteractiveReveal.jsx",
+    "bytes": 4145,
+    "lines": 113,
+    "sha256": "81ef4212b3bf947a349d2fe5f90f9e010d1db4869451f0badba71e8b2c06f1e7"
+  },
+  {
+    "file": "src/components/ProductArt.jsx",
+    "bytes": 2979,
+    "lines": 71,
+    "sha256": "75a0ab20373d5d1321298992ee31d2b90163fc9633262e01209d04d1ab0594bd"
+  },
+  {
+    "file": "src/components/ProductCard.jsx",
+    "bytes": 7473,
+    "lines": 129,
+    "sha256": "fb178c1fbd2942bc34e2cdde30cb2d7ef12f50c0b07cc483bcc90672dc07bb44"
+  },
+  {
+    "file": "src/components/ProductKnowledge.jsx",
+    "bytes": 6447,
+    "lines": 143,
+    "sha256": "03ff1b4565457625a475f59279ad08de9f8d73aed54ec80d9a6c1994ef756aa2"
+  },
+  {
+    "file": "src/components/ProductPassport.jsx",
+    "bytes": 3655,
+    "lines": 85,
+    "sha256": "e5842db7af470e47847208a956a8892f17858ea18feac91f571eec9d1abe0a4b"
+  },
+  {
+    "file": "src/components/ProductVisual.jsx",
+    "bytes": 923,
+    "lines": 28,
+    "sha256": "718b658f9f7c4bf3acdbfb4627768dd44d0060ea45c808b365854be4649f1b9b"
+  },
+  {
+    "file": "src/components/StoreHeader.jsx",
+    "bytes": 4752,
+    "lines": 99,
+    "sha256": "0257da9e3e9ea208e22989493582795396bc848612b26e881317c413fce9531c"
+  },
+  {
+    "file": "src/components/StorefrontMetadata.jsx",
+    "bytes": 4989,
+    "lines": 121,
+    "sha256": "7a235a12b04da963f1163a7c8b27b56e7b7d942cc40555f6879c519c1e47e584"
+  },
+  {
+    "file": "src/components/admin/guides/CustodyWorkflowDiagram.jsx",
+    "bytes": 10246,
+    "lines": 262,
+    "sha256": "8eb16aedeb24c289decf727a0afa12680d9bcd36fc5c04013b7fba1fe7dede29"
+  },
+  {
+    "file": "src/components/admin/guides/FefoWorkflowDiagram.jsx",
+    "bytes": 7911,
+    "lines": 193,
+    "sha256": "8f2fab4d08140934981a678e8081cd83790b2cf225e7b50cd8c2b8c76862cda8"
+  },
+  {
+    "file": "src/components/admin/guides/FlightWorkflowDiagram.jsx",
+    "bytes": 10948,
+    "lines": 285,
+    "sha256": "3937fd73db6ab81c87ebcf70691d93c46c424c6ba9c69e3656dd9ed6ed7e1aac"
+  },
+  {
+    "file": "src/components/admin/guides/FulfillmentWorkflowDiagram.jsx",
+    "bytes": 10127,
+    "lines": 260,
+    "sha256": "bec836200af48fa790167387e9dd432b9b4ae4b86f965dc1da31ca841424ffc1"
+  },
+  {
+    "file": "src/components/admin/guides/PasabuyWorkflowDiagram.jsx",
+    "bytes": 10995,
+    "lines": 276,
+    "sha256": "d71c54c2240a8bcbc4d5722ce085ebc79090ff8b9a0362df57fe86487e35203c"
+  },
+  {
+    "file": "src/components/admin/guides/WorkflowGuideModal.jsx",
+    "bytes": 6627,
+    "lines": 152,
+    "sha256": "af8e0a37a32ce1c148e32a0d233dcb54e0a5d78f65bc768082c4670c8eb8f384"
+  },
+  {
+    "file": "src/components/admin/master-workflow-graph/AiPromptStudioCard.jsx",
+    "bytes": 7116,
+    "lines": 160,
+    "sha256": "85ad86a1242454073cf14efe8b51d4475470ab405615053b6cb8bd7d17873aff"
+  },
+  {
+    "file": "src/components/admin/master-workflow-graph/MasterWorkflowGraph.jsx",
+    "bytes": 18790,
+    "lines": 400,
+    "sha256": "1b317b975bd774b522c172484a03c1a2275569017b1f3d8d963fac12eec4676d"
+  },
+  {
+    "file": "src/components/admin/master-workflow-graph/WorkflowDetailDrawer.jsx",
+    "bytes": 13486,
+    "lines": 287,
+    "sha256": "533790985f09529dc27e49b3d2ea5993c954b3cab195fd6f09a5207d5367de21"
+  },
+  {
+    "file": "src/components/admin/master-workflow-graph/WorkflowRecords.jsx",
+    "bytes": 4168,
+    "lines": 64,
+    "sha256": "9446f8f335aac45a156575167b1541891e57d9c2cb4832d44cb3e49d65df842a"
+  },
+  {
+    "file": "src/components/admin/master-workflow-graph/WorkflowSvgCanvas.jsx",
+    "bytes": 10410,
+    "lines": 173,
+    "sha256": "a2c9baac34433e26a9240c512ca2ed65492f5a50c3457e3eefcea5f5e454cd30"
+  },
+  {
+    "file": "src/components/admin/master-workflow-graph/workflowData.js",
+    "bytes": 87651,
+    "lines": 1611,
+    "sha256": "08e56577af4de0de56957baf7c0eb222628e4091ae506785248dc8906b85f5cf"
+  },
+  {
+    "file": "src/components/admin/master-workflow-graph/workflowGraph.js",
+    "bytes": 20235,
+    "lines": 403,
+    "sha256": "7fb438934bd5cd678d9579bdca5813be7374ecc097dfd1a13752d42470d32a5f"
+  },
+  {
+    "file": "src/components/globe/GlobeCore.jsx",
+    "bytes": 2516,
+    "lines": 81,
+    "sha256": "119a16c96b5c150fefca17cec364cf4d4acfd7577f197df342e4c84d5174b921"
+  },
+  {
+    "file": "src/components/globe/GlobeOverlay.jsx",
+    "bytes": 6965,
+    "lines": 165,
+    "sha256": "f66e635ea934b5659e79a8450bdc7d471a2f85ab98835b2d8ed59a82b189461e"
+  },
+  {
+    "file": "src/components/globe/ProductCard3D.jsx",
+    "bytes": 3974,
+    "lines": 132,
+    "sha256": "8d82300c72815ac02828714db0f520eb2c559e1b6e796c478e25d2bc1ab52844"
+  },
+  {
+    "file": "src/components/globe/ProductGlobe.jsx",
+    "bytes": 4295,
+    "lines": 126,
+    "sha256": "5d66d87e8a3e58261eadf10de5f74a0a6fee5eb19144a721efacdb86f5234b70"
+  },
+  {
+    "file": "src/components/globe/math.js",
+    "bytes": 750,
+    "lines": 30,
+    "sha256": "aa4770b94d05f15784f5d2be9d3f62f258b6cf45783646f9071ee75a6500f1f4"
+  },
+  {
+    "file": "src/components/home/Banners.jsx",
+    "bytes": 2715,
+    "lines": 53,
+    "sha256": "24e28034126c731084026dd255f516fa84d152f97b7814f82549aa94890738b2"
+  },
+  {
+    "file": "src/components/home/CategoryTiles.jsx",
+    "bytes": 6005,
+    "lines": 157,
+    "sha256": "458a709bca4684d0e6458a050a16f1aa93106252cc2509b81e2c994a8f5c4e62"
+  },
+  {
+    "file": "src/components/home/FaqSection.jsx",
+    "bytes": 1997,
+    "lines": 42,
+    "sha256": "fac789628521c1c8d54aae607401de337f183d209384f5778a02bf37d1d88b39"
+  },
+  {
+    "file": "src/components/home/FlightMap.jsx",
+    "bytes": 6314,
+    "lines": 168,
+    "sha256": "f908a5130e1be309dc226a8912ac32d778376a2959ce186790c5567bba57ea03"
+  },
+  {
+    "file": "src/components/home/GlobeSection.jsx",
+    "bytes": 3639,
+    "lines": 74,
+    "sha256": "5c4d2a9f78e0fe13fec0e79487fb3901ac9f6d9db0029632625ce06b76767de4"
+  },
+  {
+    "file": "src/components/home/Hero.jsx",
+    "bytes": 6083,
+    "lines": 104,
+    "sha256": "bad110e37d3e78765a5760b201a74faf6e992ec1a1d87ae5289eb1a344aadc5a"
+  },
+  {
+    "file": "src/components/home/NewArrivals.jsx",
+    "bytes": 6676,
+    "lines": 131,
+    "sha256": "0d6db97e9a9e497f2c5241e59de1ee211ebcba2ecc44f5c8e1dbcfcddfdea88a"
+  },
+  {
+    "file": "src/components/home/StorySection.jsx",
+    "bytes": 3171,
+    "lines": 64,
+    "sha256": "76265aca5738dac067eeeeb455f227475692778e795729bf984003309f92d1db"
+  },
+  {
+    "file": "src/components/nav/DemoRail.jsx",
+    "bytes": 7629,
+    "lines": 185,
+    "sha256": "df05441dbe01cc807d92c10f13d474b2236f49e4b11bb29f344fcbcb76a91b20"
+  },
+  {
+    "file": "src/components/nav/MobileNavBar.jsx",
+    "bytes": 1833,
+    "lines": 39,
+    "sha256": "8afe89400feaa5a2b2026812c613cf08580d8b6da4c1b7d72e9c7c3f7b5a2337"
+  },
+  {
+    "file": "src/components/security/TurnstileChallenge.jsx",
+    "bytes": 3428,
+    "lines": 85,
+    "sha256": "b7d9c920148124822f1fa8d99697f90e1b39e62b749b9ed05e6d404529042802"
+  },
+  {
+    "file": "src/components/shop/AnimeClerk.jsx",
+    "bytes": 4989,
+    "lines": 107,
+    "sha256": "f17b0056b6dfc3430d76eefdffaa2e9448656cb8d4c788015096a7c1bc90dca7"
+  },
+  {
+    "file": "src/components/shop/CounterProps.jsx",
+    "bytes": 7521,
+    "lines": 229,
+    "sha256": "17622d09c940dda23e4c38f25b9d5138e6345034bf82a9b32e8a8bd588574dd8"
+  },
+  {
+    "file": "src/components/shop/ShelfProductPanel.jsx",
+    "bytes": 8091,
+    "lines": 174,
+    "sha256": "e20a533460cdc6cd07710e800f0498c434bd3c4215415aab84b2f6bc0ffb8961"
+  },
+  {
+    "file": "src/components/shop/ShelfScene3D.jsx",
+    "bytes": 44162,
+    "lines": 1086,
+    "sha256": "60d73f28aa442e3708ab627869cc08ae27e5a51fda40a121edb1b5345d3783ea"
+  },
+  {
+    "file": "src/components/shop/StoreBasketDock.jsx",
+    "bytes": 2428,
+    "lines": 69,
+    "sha256": "2323e169059c1e5cfc5767b0eea56d1d48166eb16f161dd4478ffca788ca8541"
+  },
+  {
+    "file": "src/components/shop/StoreChatPanel.jsx",
+    "bytes": 15639,
+    "lines": 366,
+    "sha256": "78327d3e631d51bce94614dd53f258f04606a6cdc79e9e5b9fefbc047bf51dfe"
+  },
+  {
+    "file": "src/components/shop/StoreFaqPanel.jsx",
+    "bytes": 6115,
+    "lines": 155,
+    "sha256": "4de437afa9b03738118eb3d1961c43584916f554735ebc8b96b13a908c992398"
+  },
+  {
+    "file": "src/components/shop/StoreKeeper.jsx",
+    "bytes": 5891,
+    "lines": 148,
+    "sha256": "949bac5065a4a4e6aafbe188d71685cbc53cf04644d9495a9cae2694d492a368"
+  },
+  {
+    "file": "src/components/shop/StoreKeeper3D.jsx",
+    "bytes": 20643,
+    "lines": 559,
+    "sha256": "4ed8623f14325934760303b1aa2a7e14cc63f1d70b8aee093e5703957b0c6853"
+  },
+  {
+    "file": "src/components/shop/StoreKeeperAvatar.jsx",
+    "bytes": 14108,
+    "lines": 336,
+    "sha256": "4f60ad9ea04429f4b82a3622ed6c516914d533aa3a347d89dc06e5d152e0fea6"
+  },
+  {
+    "file": "src/components/shop/StoreSeoPanel.jsx",
+    "bytes": 4443,
+    "lines": 112,
+    "sha256": "6e89def41175215c7f25e010066ec14ca3b4f071be91844b33e95e379bcbc4d9"
+  },
+  {
+    "file": "src/components/shop/StoreSheet.jsx",
+    "bytes": 4426,
+    "lines": 123,
+    "sha256": "aa0c8efc2b2840634a0b212e7660e3bc3f6ea89d6e6b64fe89fc6e9932099178"
+  },
+  {
+    "file": "src/components/shop/StoreSidePanel.jsx",
+    "bytes": 4760,
+    "lines": 127,
+    "sha256": "1971978c67c84defc5032455cb2c6753943efbb8f1221561fce933a3ec765b53"
+  },
+  {
+    "file": "src/components/shop/clerkPoses.js",
+    "bytes": 1334,
+    "lines": 14,
+    "sha256": "1a76aa37d0d78dde93eb84d7ec8a228a3dfc23f1b91aa9a27b08dd1b4a8e94c1"
+  },
+  {
+    "file": "src/components/shop/keeperRig.js",
+    "bytes": 5200,
+    "lines": 142,
+    "sha256": "f80444535a8e64ff7729ec92db6476d752833c454491dd10e82e9f11df2a739c"
+  },
+  {
+    "file": "src/components/shop/keeperTextures.js",
+    "bytes": 12819,
+    "lines": 455,
+    "sha256": "863625b005a07048e0d055e24778267ef41d13855f2ecb169b5f870fcdd7fc93"
+  },
+  {
+    "file": "src/components/shop/packageTexture.js",
+    "bytes": 9204,
+    "lines": 289,
+    "sha256": "77447062a0b39b7da061b8cdb69431d2e5cc0c0192b544f141defab47df186f8"
+  },
+  {
+    "file": "src/components/shop/productDimensions.js",
+    "bytes": 11610,
+    "lines": 349,
+    "sha256": "88ea7c89109003426b783750101e69d5559b0fcd242ae672b1c4c2a2c0f349fa"
+  },
+  {
+    "file": "src/components/shop/roomTextures.js",
+    "bytes": 6263,
+    "lines": 195,
+    "sha256": "75e3e735d59fb359dee1aec2e89759df44f67eb78532468c047b8ee105d0b80d"
+  },
+  {
+    "file": "src/components/shop/shelfLayout.js",
+    "bytes": 4302,
+    "lines": 127,
+    "sha256": "0f3cc18be575cb5197b0bb69d8eb819b8e9e9b43918c03c2d17da5707e32a211"
+  },
+  {
+    "file": "src/components/shop/shelfModel.js",
+    "bytes": 7435,
+    "lines": 181,
+    "sha256": "594a96c4fa118d0b0241e88d364c7d69c36734d85e6383b5ef0b1897c1c72053"
+  },
+  {
+    "file": "src/components/shop/storeGuideState.js",
+    "bytes": 2705,
+    "lines": 86,
+    "sha256": "fbf3759c9f993092624aa5af31914c906a0e111dfe3518b1691b918373b4f2d6"
+  },
+  {
+    "file": "src/components/ui/AdminDialog.jsx",
+    "bytes": 3757,
+    "lines": 120,
+    "sha256": "0f0da67a3dcbf4e3be3f3deac88c6fe3c356e9989185c3c76ac7a736d359e428"
+  },
+  {
+    "file": "src/components/ui/ErrorBoundary.jsx",
+    "bytes": 2366,
+    "lines": 62,
+    "sha256": "3f62db066ac01e00e1955705cc289f1487f883ca3d1bb53dacb5c496e63cebf7"
+  },
+  {
+    "file": "src/components/ui/ImageUploadDropzone.jsx",
+    "bytes": 9445,
+    "lines": 207,
+    "sha256": "20159519b9f834e4278b150be3eaaab42ca3b50e3933b29b8f7efe074096624a"
+  },
+  {
+    "file": "src/components/ui/adminKit.jsx",
+    "bytes": 7255,
+    "lines": 151,
+    "sha256": "e47093be8e1388989bee20deb39bf7032ae4527c93a94d2173ace106786ff8af"
+  },
+  {
+    "file": "src/components/ui/bits.jsx",
+    "bytes": 6331,
+    "lines": 168,
+    "sha256": "94b05d6166ac9af080ba024bc4fe0ff761e333791d7e73014368ec32457e2591"
+  },
+  {
+    "file": "src/components/ui/icons.jsx",
+    "bytes": 4909,
+    "lines": 160,
+    "sha256": "c75dca10456b44e4c85a0091e76c49c8fef755b3efa594ce5e6d24c3b97b2c28"
+  },
+  {
+    "file": "src/context/AdminStoreContext.jsx",
+    "bytes": 4664,
+    "lines": 123,
+    "sha256": "76c621ed940664e465ca1d891341e7bc5c2b5fa46aa0025248d9916b2d3a0b6a"
+  },
+  {
+    "file": "src/context/StoreContext.jsx",
+    "bytes": 31156,
+    "lines": 782,
+    "sha256": "94bcf94677a801aca7b884d965ff6dea769b864f9a5d2eee275a928cd333430a"
+  },
+  {
+    "file": "src/context/adminInboxPolling.js",
+    "bytes": 1856,
+    "lines": 37,
+    "sha256": "4c693719939c411e51e73affd5fdcf6b86ff3e58515e0e9fd1bd648cdb465c29"
+  },
+  {
+    "file": "src/context/useAdminAuthRuntime.js",
+    "bytes": 14464,
+    "lines": 331,
+    "sha256": "a1984e3bef5d463bfc4bd50f432064516474e2d11c7498d5cb6b56b25c4893ed"
+  },
+  {
+    "file": "src/context/useAdminInboxRuntime.js",
+    "bytes": 13592,
+    "lines": 285,
+    "sha256": "59b8835f5bd986921f8b6247e31019b35b603a1a7cdbf407e9a4543e6f34a417"
+  },
+  {
+    "file": "src/data/canonicalIdentities.js",
+    "bytes": 2456,
+    "lines": 61,
+    "sha256": "accc3cca0a9225d76718b54c090556b101f17b8017754a93400aa0f237f540dc"
+  },
+  {
+    "file": "src/data/globeCms.jsx",
+    "bytes": 15515,
+    "lines": 447,
+    "sha256": "a7536a5f7c7e2d07d1c4d3a04780c4d81ce91b39cb6d89d902a88fc2994fa8d7"
+  },
+  {
+    "file": "src/data/globeSeedReviews.js",
+    "bytes": 4296,
+    "lines": 120,
+    "sha256": "33a541d04dba6e6ea8d0e35dc05e0015bc7c29b3acb9e7364a5a689ce75d3da6"
+  },
+  {
+    "file": "src/data/products.js",
+    "bytes": 27290,
+    "lines": 657,
+    "sha256": "d80a654f9486c2bfc21a25ec1ace9c4e7098885f74c3883495e08f678fd05986"
+  },
+  {
+    "file": "src/data/site.js",
+    "bytes": 5302,
+    "lines": 108,
+    "sha256": "3211b07e72cc63f333888bc1beda9b3ae64ddba249fc0723d1ff68c503175c33"
+  },
+  {
+    "file": "src/hooks/useCustomerAccount.js",
+    "bytes": 4171,
+    "lines": 97,
+    "sha256": "f841f9c9c1dc3d60cc5d6f4e6dbc7abdb4344f4126de45922f17c864bd2a31db"
+  },
+  {
+    "file": "src/lib/adminAuthRedirect.js",
+    "bytes": 2550,
+    "lines": 72,
+    "sha256": "95c76c4b556e43a56b5e1ddbf36465ea4bdac2d7ceea01b2e431155477645e4c"
+  },
+  {
+    "file": "src/lib/adminInboxNormalization.js",
+    "bytes": 2509,
+    "lines": 43,
+    "sha256": "9d38c93a99d9dd077d6bcd45db07a303392878d16e27cb1defc3b4109bb11171"
+  },
+  {
+    "file": "src/lib/aiSpendControls.js",
+    "bytes": 4289,
+    "lines": 94,
+    "sha256": "c52d7bf1c156048864d447d435d713873b1e4dc1cf7399ee23b9c1e9bfe773d9"
+  },
+  {
+    "file": "src/lib/cartInventory.js",
+    "bytes": 2479,
+    "lines": 63,
+    "sha256": "cb36e82b506f57dbb62ff31359ae91041bf0a12a5efe3b3994a2a20304f68068"
+  },
+  {
+    "file": "src/lib/channelMeta.js",
+    "bytes": 4104,
+    "lines": 101,
+    "sha256": "6ac572e5a7171eb8cd17ac99c9aaa70545bbada5b2514325412551c31eeb3816"
+  },
+  {
+    "file": "src/lib/connectorRuntime.js",
+    "bytes": 2029,
+    "lines": 69,
+    "sha256": "30081d820532911858e80c3ed0e48db9df0fddf2e1edccda6f249367ea945ea3"
+  },
+  {
+    "file": "src/lib/deliveryQuote.js",
+    "bytes": 13800,
+    "lines": 330,
+    "sha256": "71a55194d0c0ab1439063a91e9c133640f08412d67fdf3adac874c71b76fb9f1"
+  },
+  {
+    "file": "src/lib/disabledLazySupabaseClient.js",
+    "bytes": 268,
+    "lines": 5,
+    "sha256": "d263a06e1e0407bb0b86ec5e3ea49fb643ef2e59c1814130a91f9b969060781b"
+  },
+  {
+    "file": "src/lib/fetchWithTimeout.js",
+    "bytes": 4654,
+    "lines": 132,
+    "sha256": "ec6b55b24ae499b2fbd75c691174bc9d66072f056d8b632c38bbd5d067440441"
+  },
+  {
+    "file": "src/lib/imageFallback.js",
+    "bytes": 329,
+    "lines": 10,
+    "sha256": "5aa1e2129230b48ca499da090c6e05e76d96def58c7bc5de22bea4ba1b53e0fa"
+  },
+  {
+    "file": "src/lib/lazySupabaseClient.js",
+    "bytes": 1191,
+    "lines": 29,
+    "sha256": "91034e8bd02edcd68a1a6783e9f57103c81f3610d5b60b3ac00a13b26951efb7"
+  },
+  {
+    "file": "src/lib/manilaReportingWindow.js",
+    "bytes": 2889,
+    "lines": 74,
+    "sha256": "14df224ed7010603702e8fc778754a069c071dc8d793c2a708d23839b4b5ce73"
+  },
+  {
+    "file": "src/lib/marketplaceCoverage.js",
+    "bytes": 7225,
+    "lines": 150,
+    "sha256": "55105b42ef181751b9d14b44d8326376f9db1dd4cb598bfb9d67b0599725a98a"
+  },
+  {
+    "file": "src/lib/marketplaceFeeEstimate.js",
+    "bytes": 3801,
+    "lines": 67,
+    "sha256": "c9d2fd9e8e20b13502df3b9fcf87294cf01ef4cac314412c1a31dbc79acd76ef"
+  },
+  {
+    "file": "src/lib/overviewAvailability.js",
+    "bytes": 2538,
+    "lines": 59,
+    "sha256": "c7c7403aefad7d260b59796b7d7724dd6712fb3dc8d6d2731759cf4a5ccddaf6"
+  },
+  {
+    "file": "src/lib/overviewPeriod.js",
+    "bytes": 951,
+    "lines": 24,
+    "sha256": "2367a6988d12ce9cacab5cc717f4770d8f218b0a3322a22300472dd8fb39d0d5"
+  },
+  {
+    "file": "src/lib/ownerCloseBookkeepingHandoff.js",
+    "bytes": 2042,
+    "lines": 37,
+    "sha256": "15ea4706d36ab3aa7da83258921b12ca32d025af63dcfac3b81fd398b4c91b00"
+  },
+  {
+    "file": "src/lib/ownerCloseStockReview.js",
+    "bytes": 3032,
+    "lines": 51,
+    "sha256": "773bb6fa9c7d22eef1a18a2af78d7d1dc11157cfd9fde4db98358bdddb50bc4d"
+  },
+  {
+    "file": "src/lib/productKnowledge.js",
+    "bytes": 5564,
+    "lines": 163,
+    "sha256": "bc6e72111a1be8bdddea967cfd6648bbc9efe43554b153b7b2cd873bb890a5ed"
+  },
+  {
+    "file": "src/lib/productKnowledgeDevSeed.js",
+    "bytes": 3655,
+    "lines": 97,
+    "sha256": "cf6dca472c28b8d31af3cb8d58e39ea3b72cea76e6c1b402516a81f93c664eec"
+  },
+  {
+    "file": "src/lib/productKnowledgeSource.js",
+    "bytes": 3492,
+    "lines": 91,
+    "sha256": "90dd7f01f7969fdd734a041ae139c8278669595dc32d12ec2efb59504d39a6e6"
+  },
+  {
+    "file": "src/lib/productStructuredData.js",
+    "bytes": 5751,
+    "lines": 160,
+    "sha256": "dc3bbb54810aa3bcabeb371abe3a6190c40af516e0edc258ee93b7fe4ab9da13"
+  },
+  {
+    "file": "src/lib/reportError.js",
+    "bytes": 2746,
+    "lines": 72,
+    "sha256": "458d384594d98bc1b649b565b99876bfd73c78559a9d5b8fe4249458ea650aee"
+  },
+  {
+    "file": "src/lib/reservationPolicy.js",
+    "bytes": 5008,
+    "lines": 125,
+    "sha256": "b94b7d26d4881ffb9bfa388b3ba38e8012be555e6905e5aad690cbbd2f9ef7df"
+  },
+  {
+    "file": "src/lib/safeUiError.js",
+    "bytes": 3733,
+    "lines": 49,
+    "sha256": "e9dc14d1e178b670971e8c75ca42d4ee1b9b390a7dc35f5fea418491121210da"
+  },
+  {
+    "file": "src/lib/salesCalculations.js",
+    "bytes": 23281,
+    "lines": 540,
+    "sha256": "f8d5d127040f429abe4d027db5c86f8f73059bf1d1666c2270a3017114432da0"
+  },
+  {
+    "file": "src/lib/shelfLifeGate.js",
+    "bytes": 3337,
+    "lines": 114,
+    "sha256": "c70da5e7c0e45cec8cbf82f6d7abb3dec72dded6be9f72213b8b0d80b9637198"
+  },
+  {
+    "file": "src/lib/storeAssetPlan.js",
+    "bytes": 12413,
+    "lines": 309,
+    "sha256": "de963db0f896d257983327a22346aba785f4e2ef22f5adda68ae3f9ed18aa55f"
+  },
+  {
+    "file": "src/lib/storefrontMetadataOrigin.js",
+    "bytes": 487,
+    "lines": 14,
+    "sha256": "9d24dc4afa86a3a6b521f358e57f19f811d1ee0b1461dfff7c7f8d7800f8cdda"
+  },
+  {
+    "file": "src/lib/storefrontRoutes.js",
+    "bytes": 948,
+    "lines": 35,
+    "sha256": "b6527e664590d82908e2a3089c7e6fe7ada45faba1b761a08ff5af3cc2ae85e5"
+  },
+  {
+    "file": "src/lib/supabaseClient.js",
+    "bytes": 1244,
+    "lines": 33,
+    "sha256": "492407ce24904ad67df2414dab67f308499e78c68618e75d4d18834166566fc6"
+  },
+  {
+    "file": "src/lib/supabaseRlsMigration.sql",
+    "bytes": 2435,
+    "lines": 74,
+    "sha256": "5d0ce97039a8b0bda21440bcd6a89f9b269920be318ed3d3e3ab8526ab4edbdd"
+  },
+  {
+    "file": "src/lib/uploadValidation.js",
+    "bytes": 2558,
+    "lines": 88,
+    "sha256": "b1e05d9e32238922f1cb8a4462382610b75820c19fcd1b02ae68b2c2c4388fd1"
+  },
+  {
+    "file": "src/lib/useProductKnowledgeVersion.js",
+    "bytes": 717,
+    "lines": 20,
+    "sha256": "aa470e2bde58bb65a5038061d77fec92ffe8f0d527d1a966810b9fa8b111f603"
+  },
+  {
+    "file": "src/main.jsx",
+    "bytes": 1772,
+    "lines": 43,
+    "sha256": "83e6367f46c33756b487a430b2a5f14982e32f8f02253f948496d4bcfaea5eb5"
+  },
+  {
+    "file": "src/services/adminBffService.js",
+    "bytes": 51121,
+    "lines": 897,
+    "sha256": "f68955de6b75d0b156cba4894cc016439499c92901b1a0691e223d09948170be"
+  },
+  {
+    "file": "src/services/customerAccountService.js",
+    "bytes": 5528,
+    "lines": 114,
+    "sha256": "a3fcdedba189bf66b7305e102c8338fb9f35c8d5c68449f14bf2d15cedd6a0f9"
+  },
+  {
+    "file": "src/services/guestCommerceRoutes.js",
+    "bytes": 1054,
+    "lines": 28,
+    "sha256": "659c3ce4a3facbb2f8c11ced4d19f5facf8b4946bffd05d26a6be3c4022cbc0e"
+  },
+  {
+    "file": "src/services/guestCommerceService.js",
+    "bytes": 3935,
+    "lines": 87,
+    "sha256": "dc9c45eefc530689f69a65123b7a275c6f75119fd8bbdaeaaec7470ebb84138e"
+  },
+  {
+    "file": "src/services/productIntakeService.js",
+    "bytes": 20716,
+    "lines": 523,
+    "sha256": "f1fa522f2c6fced68ad264da6c86362459ca1a0c5cd31a428c1126e69835346b"
+  },
+  {
+    "file": "src/types/database.types.js",
+    "bytes": 3661,
+    "lines": 148,
+    "sha256": "3a1d7e1e378f57998eac8ed5042df40acf3fce02f91ef029ebe8d7a920738fca"
+  },
+  {
+    "file": "src/views/Catalog.jsx",
+    "bytes": 1665,
+    "lines": 35,
+    "sha256": "6532650f087716867f18c1054738480e5a2fda559ace2b4684cf893f10365a5e"
+  },
+  {
+    "file": "src/views/Checkout.jsx",
+    "bytes": 10058,
+    "lines": 169,
+    "sha256": "f0a3da73ec2910218cd674c39cb7dee888196bed5008820c2f6e19861aa5c4e6"
+  },
+  {
+    "file": "src/views/Confirmation.jsx",
+    "bytes": 5160,
+    "lines": 117,
+    "sha256": "7436d8cc79562127ee213d267eb295e39969692dc13238365e21934ee7ce6bff"
+  },
+  {
+    "file": "src/views/Contact.jsx",
+    "bytes": 6931,
+    "lines": 123,
+    "sha256": "561c02acfb9a141e2c1ab5187040ab28c1dfc202afd2565cebc36a422bb23c5b"
+  },
+  {
+    "file": "src/views/CustomerAccount.jsx",
+    "bytes": 21852,
+    "lines": 168,
+    "sha256": "df15c4b9f14a6c27737d41102174bb33201ed0d80456df96ca8d07b5afb32384"
+  },
+  {
+    "file": "src/views/GuestMessages.jsx",
+    "bytes": 15143,
+    "lines": 301,
+    "sha256": "4032040e87c076e7f4a19daa406135e44b0057049d380ea4b56c68e598ef71e5"
+  },
+  {
+    "file": "src/views/Home.jsx",
+    "bytes": 4856,
+    "lines": 126,
+    "sha256": "c0b517000fc5e47a834cb144849ff7ac075f9e0b9a5a10b380d84beae1d8c895"
+  },
+  {
+    "file": "src/views/InteractiveShop.jsx",
+    "bytes": 24254,
+    "lines": 588,
+    "sha256": "360f30d34661fdf13aade4e3082f7f84bdb13eac16d6c024a4f28a040e59874b"
+  },
+  {
+    "file": "src/views/MasterProduct.jsx",
+    "bytes": 21119,
+    "lines": 439,
+    "sha256": "07044c9b75729aae65375ccfe68cd5ac7c22f954e26795e0f71015a505c358a1"
+  },
+  {
+    "file": "src/views/NotFound.jsx",
+    "bytes": 977,
+    "lines": 20,
+    "sha256": "d0d3cd4489ddd484901efd0739d411467232bab84e7ee1c914ef7de91e359224"
+  },
+  {
+    "file": "src/views/Pasabuy.jsx",
+    "bytes": 11410,
+    "lines": 200,
+    "sha256": "e04851f9b814105497b50a4b7a199cf704155ec7c301be629c0d53ae65ce0022"
+  },
+  {
+    "file": "src/views/Wholesale.jsx",
+    "bytes": 27462,
+    "lines": 535,
+    "sha256": "3f083208922511e4b4144c514c3b55859209e252b3bf50da078df49794ce93ab"
+  },
+  {
+    "file": "src/views/admin/Admin.jsx",
+    "bytes": 35049,
+    "lines": 594,
+    "sha256": "451b270a50dcfa1e2b0d173e185d4e6641f8fc1dde8d8744c68ed0b6bba97d91"
+  },
+  {
+    "file": "src/views/admin/AdminAiCopilotModal.jsx",
+    "bytes": 9483,
+    "lines": 150,
+    "sha256": "134ee65bdb0b296a2471c41560ba2ad5281be170673a616e1914493dc5ec8d9f"
+  },
+  {
+    "file": "src/views/admin/AdminAuthModal.jsx",
+    "bytes": 22914,
+    "lines": 363,
+    "sha256": "be4d904897977ac05eebedf05710380735989a4e1e95c886fc3beb326873da5e"
+  },
+  {
+    "file": "src/views/admin/AdminToolsWidget.jsx",
+    "bytes": 36727,
+    "lines": 602,
+    "sha256": "338424cbebfebf08fde87d0cd061ac4b2379c93d683e033746309eab3f59ac57"
+  },
+  {
+    "file": "src/views/admin/AdminWorkspaceUi.jsx",
+    "bytes": 4691,
+    "lines": 89,
+    "sha256": "83ceda6332b4be7089d0dfc0fb015bf15003ed0e948cdd11104ae0d67845e85d"
+  },
+  {
+    "file": "src/views/admin/AutomaticIntakePanel.jsx",
+    "bytes": 8405,
+    "lines": 86,
+    "sha256": "4a7242d1e5dcf93d74197f2a1ec88344d4895b965bf46c5409405368e12b43b1"
+  },
+  {
+    "file": "src/views/admin/BatchExpiryManagerModal.jsx",
+    "bytes": 26254,
+    "lines": 358,
+    "sha256": "a0d4d8f78006514bcd0564b924a0ddb48ae31e0244c64afa14766298082c52de"
+  },
+  {
+    "file": "src/views/admin/BulkCsvImportModal.jsx",
+    "bytes": 26386,
+    "lines": 503,
+    "sha256": "2ef2b2ee4f593dfa387896ddbb29a8d969f82c8e20c0ad065a9f49f3104b2597"
+  },
+  {
+    "file": "src/views/admin/ChannelIntegrations.jsx",
+    "bytes": 18345,
+    "lines": 239,
+    "sha256": "05716fdb2252f8e56040625588229ca80d9be7354b52bd2a989c8694b6b048b4"
+  },
+  {
+    "file": "src/views/admin/CommandPalette.jsx",
+    "bytes": 8913,
+    "lines": 206,
+    "sha256": "52dcb4cba14354a251bbf404123d448568904979fa4d6ffb44d1434acb36e5af"
+  },
+  {
+    "file": "src/views/admin/ConsignmentManager.jsx",
+    "bytes": 26878,
+    "lines": 322,
+    "sha256": "85e88d2947885d9fbf129c009a424803853f11e417d929b7a3ec027e4ae83c33"
+  },
+  {
+    "file": "src/views/admin/ConsignmentScannerModal.jsx",
+    "bytes": 9377,
+    "lines": 136,
+    "sha256": "aab7e7337af6454dea627ccb5a7d66f072fc3ded40fb19b562aa1e6464eebe39"
+  },
+  {
+    "file": "src/views/admin/CouponManager.jsx",
+    "bytes": 23799,
+    "lines": 266,
+    "sha256": "6b9375fc494ca36b39967b843094bcbab60b9e6c8b0449afa78430a04f4426ee"
+  },
+  {
+    "file": "src/views/admin/Customers.jsx",
+    "bytes": 19943,
+    "lines": 190,
+    "sha256": "04241d5259a215d147e8e885f967fce4c5b7a8850422247800dd9a00cdd33c61"
+  },
+  {
+    "file": "src/views/admin/DailyTaskNotificationDrawer.jsx",
+    "bytes": 6128,
+    "lines": 81,
+    "sha256": "36150c2a2a3d8f0d345004bd1abdbfd79453249dbb0beee4d3d59d1770192922"
+  },
+  {
+    "file": "src/views/admin/DeleteProductsModal.jsx",
+    "bytes": 12447,
+    "lines": 267,
+    "sha256": "8badab7a009f2bb897f5ff95b1d57d279f43411cd40818e5b2f53f58f77b880b"
+  },
+  {
+    "file": "src/views/admin/DeliveryRateControl.jsx",
+    "bytes": 34080,
+    "lines": 774,
+    "sha256": "374d37325e6a7edf119826bc5b744b763cf223c0032a6ce5db1e15ced7c6f33b"
+  },
+  {
+    "file": "src/views/admin/DiscrepancyReconciliationModal.jsx",
+    "bytes": 8608,
+    "lines": 159,
+    "sha256": "36af4a5e4dbf98c75c77ee256e750e5da3acfd8db74113b99de5d8c5b311621d"
+  },
+  {
+    "file": "src/views/admin/GlobeCms.jsx",
+    "bytes": 18417,
+    "lines": 163,
+    "sha256": "42c9da116302710c64ae9d21965a7d56ab98ad4243bd2e17042f846bceb9ee47"
+  },
+  {
+    "file": "src/views/admin/Inbox.jsx",
+    "bytes": 40563,
+    "lines": 791,
+    "sha256": "69e8bdc6c78381954cfaa5b7527ab947d63a49d9f660fb09ea1e0c97f2516afb"
+  },
+  {
+    "file": "src/views/admin/InventoryGrid.jsx",
+    "bytes": 57341,
+    "lines": 998,
+    "sha256": "5ab4a1f67a235fca85290c20c094f74a08b0d40f63c073274bf46cd59fab1b96"
+  },
+  {
+    "file": "src/views/admin/Kanban.jsx",
+    "bytes": 1683,
+    "lines": 16,
+    "sha256": "6edacb8e1e839c6f357ebd042c427297c3c29e16221ac75c705d4ef20fea04c5"
+  },
+  {
+    "file": "src/views/admin/KeyboardShortcutsModal.jsx",
+    "bytes": 2503,
+    "lines": 47,
+    "sha256": "63733a5e72274a202074d162e35bfbec104864a6f2dc4c326574293dcab41f11"
+  },
+  {
+    "file": "src/views/admin/MilanPackingScannerModal.jsx",
+    "bytes": 16177,
+    "lines": 390,
+    "sha256": "f57e06c5d3c9b87822259a217a502fb2d1c7728e5c1ea75902f871e9730c0830"
+  },
+  {
+    "file": "src/views/admin/MobileScannerModal.jsx",
+    "bytes": 7904,
+    "lines": 200,
+    "sha256": "f7c9afdad69b27211a48c1f12e59b0f91f408b74204611d31341a23a534e4255"
+  },
+  {
+    "file": "src/views/admin/OmniOperationsHub.jsx",
+    "bytes": 56525,
+    "lines": 764,
+    "sha256": "fd950b21931509891f4ca110f6eb6239f96ba40ab1a9cff41796d3c5dd75d1eb"
+  },
+  {
+    "file": "src/views/admin/Overview.jsx",
+    "bytes": 52715,
+    "lines": 864,
+    "sha256": "9d54708a447c01e47ed61c4ebdd012df9b1c75193536e70c882ff4a4be504015"
+  },
+  {
+    "file": "src/views/admin/OwnerCountClose.jsx",
+    "bytes": 83593,
+    "lines": 1006,
+    "sha256": "1617c8436c534deb8f3498439fac12121c0cff45dc230e557aee049d8ca20bd6"
+  },
+  {
+    "file": "src/views/admin/PackingSlipModal.jsx",
+    "bytes": 4455,
+    "lines": 59,
+    "sha256": "35df8ad8900a3d52c6c1c912b0af4b9670cae0ccc7649f5c1af326319ce41acf"
+  },
+  {
+    "file": "src/views/admin/PasabuyManager.jsx",
+    "bytes": 25259,
+    "lines": 395,
+    "sha256": "0d61f6c3638906b70dfd1e0a5e47e10f6f0c604e5232c319a93dccc0cdccbb51"
+  },
+  {
+    "file": "src/views/admin/PhotoManagerModal.jsx",
+    "bytes": 10551,
+    "lines": 148,
+    "sha256": "fa30e48c41f2094fe6df3a46fb60207ec2a7019165a4d3d89c1464b9b30a4610"
+  },
+  {
+    "file": "src/views/admin/ProductAiEnrichmentModal.jsx",
+    "bytes": 6318,
+    "lines": 133,
+    "sha256": "bb10bd2d09766f56479ad0c3f680663eee53e2df2d1faa5501eeca9504e39cc7"
+  },
+  {
+    "file": "src/views/admin/ProductIntakeSessionModal.jsx",
+    "bytes": 61535,
+    "lines": 1322,
+    "sha256": "c7627587a15274042120f27adb251f613844988544a03285146beac63476ac67"
+  },
+  {
+    "file": "src/views/admin/ProductMediaCleanupModal.jsx",
+    "bytes": 7455,
+    "lines": 113,
+    "sha256": "85711d85ccea53d90a6c258ee37dcd67d91c84248a3d2d2b2ea1eff98eef264d"
+  },
+  {
+    "file": "src/views/admin/PurchaseOrders.jsx",
+    "bytes": 4506,
+    "lines": 51,
+    "sha256": "5ca001e1b959c8de688face3fad7497e152e679333ed9189447fdaf689863695"
+  },
+  {
+    "file": "src/views/admin/ReferenceSelectCell.jsx",
+    "bytes": 3875,
+    "lines": 109,
+    "sha256": "4ea38a41901574d03482e7bcec2839f19a252874d44d0ddaa159c238284d45ce"
+  },
+  {
+    "file": "src/views/admin/ReservationHolds.jsx",
+    "bytes": 12937,
+    "lines": 316,
+    "sha256": "9d2d8660c111ecc98ed3b72e20f25bb220c9e50246ec86f9725b91d80c6a78e4"
+  },
+  {
+    "file": "src/views/admin/ScanToAiModal.jsx",
+    "bytes": 17315,
+    "lines": 344,
+    "sha256": "34fda95a7deca5c4ebc4f867e094d480455637b8a6cd6129bcbb06506ddbe11c"
+  },
+  {
+    "file": "src/views/admin/Sheet.jsx",
+    "bytes": 37800,
+    "lines": 751,
+    "sha256": "2b868d00f0182df23f87b5db4273a2cc92fd782f6157bd2368268e6a973ae3ed"
+  },
+  {
+    "file": "src/views/admin/SmartPasteModal.jsx",
+    "bytes": 32201,
+    "lines": 536,
+    "sha256": "d7739c787e4427c7468c0a352c86445f969a833d3fdb577bb88e9238fd705085"
+  },
+  {
+    "file": "src/views/admin/StaffPermissionManager.jsx",
+    "bytes": 41392,
+    "lines": 674,
+    "sha256": "2369c8dcd9aa379a8a54f874564b0d714fca0228192df3c0f86974ec775822f6"
+  },
+  {
+    "file": "src/views/admin/StartHereGuide.jsx",
+    "bytes": 7629,
+    "lines": 147,
+    "sha256": "f77dde0d678d070d26364af5190cd273d094ae14441404251d2fbaa0442498d7"
+  },
+  {
+    "file": "src/views/admin/StoreAssetStudio.jsx",
+    "bytes": 23320,
+    "lines": 518,
+    "sha256": "d0c7de34af10ecd3d5369ba9bfe7f8dcf0773b4c919c1002512c50b342d75c78"
+  },
+  {
+    "file": "src/views/admin/Suppliers.jsx",
+    "bytes": 12586,
+    "lines": 87,
+    "sha256": "195f69b0d93d34eb5eb789e2dabd5be17782baf80ca08c1208da056a30a7e23c"
+  },
+  {
+    "file": "src/views/admin/SystemDevOpsModal.jsx",
+    "bytes": 7578,
+    "lines": 133,
+    "sha256": "b90bd512fb242372fd23ad9b3c0d2b022cd37e877936487535895c98e24dbe92"
+  },
+  {
+    "file": "src/views/admin/UniversalScanLauncher.jsx",
+    "bytes": 3666,
+    "lines": 65,
+    "sha256": "8d3e4b8bee7c81b38f9307f9bcdb347c2b6a1b2e9e39d5a706a1166e7f1dca98"
+  },
+  {
+    "file": "src/views/admin/adminGuide.js",
+    "bytes": 26709,
+    "lines": 307,
+    "sha256": "a743964a09a07e7ee37144e6d71d5c13a3985c0b7efd9e64e1bc3677bffe8bbb"
+  },
+  {
+    "file": "src/views/admin/adminOperations.js",
+    "bytes": 2896,
+    "lines": 75,
+    "sha256": "25967eb33d377969e3a80acabeebd037e41e4097d8333befd475972ba3ef9768"
+  },
+  {
+    "file": "src/views/admin/consignmentScanTarget.js",
+    "bytes": 2600,
+    "lines": 55,
+    "sha256": "e31b09d44ff940ac1bcf9d3a004a75040aa4d31cf8552e0f584eae761532b977"
+  },
+  {
+    "file": "src/views/admin/dashboardWidgets.js",
+    "bytes": 935,
+    "lines": 11,
+    "sha256": "d3170a9e9b19167b61d3a18ce625299941cb106c6fb31cf3f0b220184a949bac"
+  },
+  {
+    "file": "src/views/admin/deliveryRateFormat.js",
+    "bytes": 2289,
+    "lines": 53,
+    "sha256": "1b084735ec2e4bcef4a042884db49e23ce66d1d544d54b4172a9d2c4a90bb769"
+  },
+  {
+    "file": "src/views/admin/ownerCountCloseModel.js",
+    "bytes": 3074,
+    "lines": 58,
+    "sha256": "cd6a80e1da755cfef8e2c04f98a23ea2d40ee5ce528d2d5e79b2332a461c524e"
+  },
+  {
+    "file": "src/views/admin/productIntakeResume.js",
+    "bytes": 2117,
+    "lines": 60,
+    "sha256": "2d99f951e325a592bf96894cee8aa6d61327c379e353d8ecf5b7af05a1c91939"
+  },
+  {
+    "file": "src/views/admin/productResearchContract.js",
+    "bytes": 19000,
+    "lines": 466,
+    "sha256": "f8c4bb384f741c192dab6e49314f4e5be104329d53196a6a80cc84fd49001e61"
+  },
+  {
+    "file": "src/views/admin/productResearchPrompt.js",
+    "bytes": 14461,
+    "lines": 216,
+    "sha256": "d4a1aab3db2dfa642c5957f1b6d70c66a35b5f2d0a6de39ede717aa9159dc456"
+  },
+  {
+    "file": "src/views/admin/referenceTables.js",
+    "bytes": 3751,
+    "lines": 95,
+    "sha256": "e6448f0dc223ea09de97c553928660a3f9026e5fa68b09c05774a294a36d378a"
+  },
+  {
+    "file": "src/views/admin/sheetShopLensFixture.js",
+    "bytes": 3670,
+    "lines": 85,
+    "sha256": "97a1c5288b444377f9b2432899477ee6b9cabece810925aa6a30e13dc9671c1f"
+  },
+  {
+    "file": "src/views/admin/staffProcedureRegistry.js",
+    "bytes": 37769,
+    "lines": 268,
+    "sha256": "cdc2033abae8af0b9179d5e0f35842b61e8b2f3a44377fc5be125f090e84d16d"
+  },
+  {
+    "file": "src/views/admin/useReferenceOptions.js",
+    "bytes": 5336,
+    "lines": 128,
+    "sha256": "dadeb3eec22fbc096357bd81ce93c74ec6ec73ce72642a0a0c5218c0c14a7bfc"
+  },
+  {
+    "file": "src/views/admin/useRetainedFulfillmentCommand.js",
+    "bytes": 2645,
+    "lines": 50,
+    "sha256": "75e743842b99c0f16d1edbb9bdcb1f22354d835cdf34b4e3a63ff3e08c27ef4e"
+  },
+  {
+    "file": "supabase/catalog_spreadsheet_rollback.sql",
+    "bytes": 786,
+    "lines": 20,
+    "sha256": "8a17d1591350742c1a62d142c01d75f57adc2d6c16dde34514299fede350e44e"
+  },
+  {
+    "file": "supabase/export-schema-metadata.sql",
+    "bytes": 12199,
+    "lines": 300,
+    "sha256": "6fce8de2d4cf88d8ba2577d5725e94837aa25c09f1d3349fc84f54c81fa2d08a"
+  },
+  {
+    "file": "supabase/functions/_shared/auth.ts",
+    "bytes": 965,
+    "lines": 27,
+    "sha256": "845153c2e693c1511e5634358584c79f27a8eda047ae8ad1c2ab1f1beed6b39f"
+  },
+  {
+    "file": "supabase/functions/_shared/marketplace-push.js",
+    "bytes": 5958,
+    "lines": 159,
+    "sha256": "accd204f8c7b25b134e136e01575222415b8fbb648e3ba9bf4737e1182676a1f"
+  },
+  {
+    "file": "supabase/functions/_shared/service-role.ts",
+    "bytes": 2119,
+    "lines": 50,
+    "sha256": "375f8a93e425fb884506abf95ca7434a4b647c3b05f65e5681dd732c7dbda511"
+  },
+  {
+    "file": "supabase/functions/invite-staff/handler.ts",
+    "bytes": 13078,
+    "lines": 262,
+    "sha256": "9a0d07707cfe1237e6b795271d0a179317f30798ea34320ca173dc646cf81899"
+  },
+  {
+    "file": "supabase/functions/invite-staff/index.ts",
+    "bytes": 2271,
+    "lines": 61,
+    "sha256": "6d28828b8620b0e8e6aa9455ebbb978a0e82b4e3cc1a99c96ec38564939ccb3b"
+  },
+  {
+    "file": "supabase/functions/shopee-webhook/index.ts",
+    "bytes": 7485,
+    "lines": 180,
+    "sha256": "834c36e9fbf2266a4cca11a9e2a2e5e4467434fdb7e2a2b874b42fa3ad09de3d"
+  },
+  {
+    "file": "supabase/functions/shopee-webhook/validation.js",
+    "bytes": 2326,
+    "lines": 63,
+    "sha256": "431368507f7a07a1260c49668187adf846550d95d862762657324f20b960dbc7"
+  },
+  {
+    "file": "supabase/historical/RUN_THIS_auth_roles.sql",
+    "bytes": 3849,
+    "lines": 77,
+    "sha256": "e5a7491fa81cb8baab55d8a2523e604014ce871b29f5d318a7297b560d343735"
+  },
+  {
+    "file": "supabase/historical/RUN_THIS_batch_location_channel.sql",
+    "bytes": 3335,
+    "lines": 72,
+    "sha256": "6e3d40eff861a0d60edcd2bfe051003e006432686116b61b162038785afef3da"
+  },
+  {
+    "file": "supabase/historical/RUN_THIS_channel_connections.sql",
+    "bytes": 2672,
+    "lines": 48,
+    "sha256": "0a456ad3e0c8537c5705f0449f0ab52fc96983c7454a354df868c7cec79af589"
+  },
+  {
+    "file": "supabase/historical/RUN_THIS_master_setup.sql",
+    "bytes": 8807,
+    "lines": 184,
+    "sha256": "8961c9cd2f4c2e8e52dcddf64179fed46709f03ae27e676e8aedae5778706f14"
+  },
+  {
+    "file": "supabase/historical/RUN_THIS_product_drafts.sql",
+    "bytes": 1948,
+    "lines": 43,
+    "sha256": "eab0bd01d319e93f4eba73e95f898b59f6519b7f780d58e48a1009c5c6b0454f"
+  },
+  {
+    "file": "supabase/map016_invite_operation_postflight.sql",
+    "bytes": 1844,
+    "lines": 41,
+    "sha256": "9002c524d6a3a8d9c021f72629f685bc6eb7b85e6f6ef3b5efd79688225014c8"
+  },
+  {
+    "file": "supabase/map017_public_write_boundary_postflight.sql",
+    "bytes": 4663,
+    "lines": 120,
+    "sha256": "6677398e918459d817fe8de2c9b06b488a3b72446fb5b4b9e24c6d31a37ed96f"
+  },
+  {
+    "file": "supabase/map017_public_write_boundary_preflight.sql",
+    "bytes": 1894,
+    "lines": 49,
+    "sha256": "17247e9965e46593ce8aa6b9166655259fe529093fb81dd1843b7c8187576a74"
+  },
+  {
+    "file": "supabase/map017_public_write_boundary_rollback.sql",
+    "bytes": 757,
+    "lines": 23,
+    "sha256": "99574367ca1591f119548d431a7b9c081c5234ddcc0d696977ebcc9118335c01"
+  },
+  {
+    "file": "supabase/map018_product_intake_postflight.sql",
+    "bytes": 5623,
+    "lines": 103,
+    "sha256": "deabc647d61f4bbe6b457f66cbf75bdfcb8b884c4b5fe60dafb00cb93ed7fe3d"
+  },
+  {
+    "file": "supabase/map018_product_intake_preflight.sql",
+    "bytes": 3437,
+    "lines": 63,
+    "sha256": "82cc72717fd90fb66955009a000e45a529b5402356b93fa65582f8a8049c5a8c"
+  },
+  {
+    "file": "supabase/map019_account_claim_postflight.sql",
+    "bytes": 1944,
+    "lines": 31,
+    "sha256": "3316152b9f61bd854fd384868b38617999f109926fd46926a400ac2f9c29a7b4"
+  },
+  {
+    "file": "supabase/map019_identity_postflight.sql",
+    "bytes": 4388,
+    "lines": 82,
+    "sha256": "e4391b70a7afe721de11a7d80dc32b3bdc33a09d1d165b47acf6d44699347724"
+  },
+  {
+    "file": "supabase/map019_identity_preflight.sql",
+    "bytes": 1253,
+    "lines": 27,
+    "sha256": "d57d1bcd9b5d68be7a9e7301365a5b6ddd62ae4dc45f13dc09a8b325d4556916"
+  },
+  {
+    "file": "supabase/map019_product_media_postflight.sql",
+    "bytes": 2525,
+    "lines": 40,
+    "sha256": "0452ac8a93b9efd123af77e5ef4da305e89aea62d4f7d7574545e7a78712447d"
+  },
+  {
+    "file": "supabase/map019_wholesale_inquiry_postflight.sql",
+    "bytes": 1557,
+    "lines": 11,
+    "sha256": "f74be8125f4af25f105d6d6e77089b5cb104c61414c352a15ed45776cd7b1d04"
+  },
+  {
+    "file": "supabase/map020_admin_preauth_rate_postflight.sql",
+    "bytes": 4014,
+    "lines": 95,
+    "sha256": "8bd4cf1a52a637dd0dfad1107c2e1ebd2765a537414b4b62a556537a37f9f804"
+  },
+  {
+    "file": "supabase/map020_channel_readiness_postflight.sql",
+    "bytes": 1110,
+    "lines": 22,
+    "sha256": "5b06a45d005bba7bd42c5631ac66c23d1776a95af29df6a75f0efad97114667f"
+  },
+  {
+    "file": "supabase/map020_globe_review_postflight.sql",
+    "bytes": 1484,
+    "lines": 29,
+    "sha256": "d82f62020cac02c461ee9f8189c6d473fd14f30f731f409fecea56d0b190585e"
+  },
+  {
+    "file": "supabase/map020_guest_boundary_postflight.sql",
+    "bytes": 2339,
+    "lines": 35,
+    "sha256": "edc1702f7a786f50e94d5b26be6f655e704e24adaf03d3d1fc276beedcfb087c"
+  },
+  {
+    "file": "supabase/map020_guest_boundary_preflight.sql",
+    "bytes": 1173,
+    "lines": 22,
+    "sha256": "aa2ebfcbc7525775f8c0fc355568bdfbd7b18298aa4ab77d42082fc72c1200aa"
+  },
+  {
+    "file": "supabase/map020_guest_cutover_postflight.sql",
+    "bytes": 571,
+    "lines": 15,
+    "sha256": "80b519a74595967b9a26203542ead12b911e8f8fba560cccbae312ddccfb1071"
+  },
+  {
+    "file": "supabase/map020_procurement_postflight.sql",
+    "bytes": 1459,
+    "lines": 29,
+    "sha256": "025d335ecf9bcd20e83c2f328fbb85e1ca28e7bc1dc3a185dd62a3154417d6b3"
+  },
+  {
+    "file": "supabase/map020_product_master_postflight.sql",
+    "bytes": 705,
+    "lines": 15,
+    "sha256": "03bfffa6b80bb54df21218d24ad0c3e84deac29e83c1862bb38264a66c27bcdd"
+  },
+  {
+    "file": "supabase/map020_shopee_ingress_postflight.sql",
+    "bytes": 1476,
+    "lines": 41,
+    "sha256": "2f83dbb680f54b11682da4bd8fde6796030fcd7c326f36d9a288ed99eb9e3e18"
+  },
+  {
+    "file": "supabase/map020_staff_access_postflight.sql",
+    "bytes": 1170,
+    "lines": 22,
+    "sha256": "6698246ffe7ee1c35502cd89c6bc7f0c5c8ed2d627f8c4da7fe1857f8943a8eb"
+  },
+  {
+    "file": "supabase/map020_storefront_auth_rate_postflight.sql",
+    "bytes": 2017,
+    "lines": 51,
+    "sha256": "1d861e1252809f005dc400b253eb0fd7a024b1f70c2bc22c8a1897284bc77e1b"
+  },
+  {
+    "file": "supabase/map022_system_readiness_postflight.sql",
+    "bytes": 397,
+    "lines": 11,
+    "sha256": "d40755a2eea9f2a8a651c8b04b22a735f59318ebde048a1f01a306e1a316fa22"
+  },
+  {
+    "file": "supabase/marketplace_snapshot_staging_postflight.sql",
+    "bytes": 2424,
+    "lines": 45,
+    "sha256": "4e96d13a6a4087ea528bbd01d5cecf373bc93dcfa7071fb1698794e62b1180f9"
+  },
+  {
+    "file": "supabase/marketplace_snapshot_staging_preflight.sql",
+    "bytes": 948,
+    "lines": 26,
+    "sha256": "7523036285ce466badc303d76c94e06098290d73a720e65e1ace32c21b271c05"
+  },
+  {
+    "file": "supabase/marketplace_snapshot_staging_rollback.sql",
+    "bytes": 1475,
+    "lines": 28,
+    "sha256": "dcabfc44ad82ddf2f688fa9c77403fa9cf174cbad925fb1ff2ca0e8b60662148"
+  },
+  {
+    "file": "supabase/migrations/0001_globe_cms.sql",
+    "bytes": 3074,
+    "lines": 84,
+    "sha256": "1391a92bc09884bc3dd03549e222fa3be9c7f1ff64bfe5dbd2be366c4475c0d9"
+  },
+  {
+    "file": "supabase/migrations/0002_omnichannel_schema.sql",
+    "bytes": 4233,
+    "lines": 124,
+    "sha256": "32a17830c699b6e3cf9e50d3d1212802a56ec2b41fd321651a680b47f866ef5d"
+  },
+  {
+    "file": "supabase/migrations/0003_comprehensive_products.sql",
+    "bytes": 470,
+    "lines": 13,
+    "sha256": "28938c5176e37fcb2dc2662770c43097b70aa17bbbd766dab3db58e314510d2c"
+  },
+  {
+    "file": "supabase/migrations/0004_audit_logs.sql",
+    "bytes": 2062,
+    "lines": 55,
+    "sha256": "66fef0b58ab80f97bbd176a81b51ca4ed4e71d211eba6d831ae22a3397c87113"
+  },
+  {
+    "file": "supabase/migrations/0005_notifications.sql",
+    "bytes": 1091,
+    "lines": 32,
+    "sha256": "9119d3f933d405f43a6f159f7e2cfe32e75ab180351980fbd4fe55166de55ad4"
+  },
+  {
+    "file": "supabase/migrations/0006_supply_chain.sql",
+    "bytes": 2810,
+    "lines": 80,
+    "sha256": "ae12e4d6cfd860c908ef5cac7e79e2fe58f66b40e3646bd97a8e6a8797c459c7"
+  },
+  {
+    "file": "supabase/migrations/0007_scan_receive.sql",
+    "bytes": 1134,
+    "lines": 43,
+    "sha256": "75c6aea60cd3c247c8132497b2335e013bed22aef237acb16bb6724ad63c6cfd"
+  },
+  {
+    "file": "supabase/migrations/0008_unified_inbox.sql",
+    "bytes": 1503,
+    "lines": 34,
+    "sha256": "c64fd7d8f31c3d5142c0e04acf6229b7c8ceca9ec484dbcf317d396d95546b9c"
+  },
+  {
+    "file": "supabase/migrations/0009_product_description.sql",
+    "bytes": 143,
+    "lines": 6,
+    "sha256": "f2b73a03fd3bd65992a2d4f46ae9de76eac75cee7c162dc49a88959cc0c4d921"
+  },
+  {
+    "file": "supabase/migrations/0010_mock_pasabuy.sql",
+    "bytes": 2939,
+    "lines": 52,
+    "sha256": "2461f4b3d6a2c023ebb04255c2a9a848d505a698c62c7bafbf0059e6be6ed02b"
+  },
+  {
+    "file": "supabase/migrations/0011_photo_uploads.sql",
+    "bytes": 1217,
+    "lines": 33,
+    "sha256": "06497392293769f10105ebcecb22ca9c3654b7ef40f2daed3c1e251caa4df3da"
+  },
+  {
+    "file": "supabase/migrations/0012_fix_rls_for_prototype.sql",
+    "bytes": 1018,
+    "lines": 32,
+    "sha256": "6d9a0fd32ef61182e6a0f7ca47775e705bd9d2f4f1ed0afc6227d90ed41872bc"
+  },
+  {
+    "file": "supabase/migrations/0013_usage_instructions.sql",
+    "bytes": 157,
+    "lines": 6,
+    "sha256": "b1c8c0b636f330bf09062c5de4db9dafc85f46e805fe58698a275d5b56dfe689"
+  },
+  {
+    "file": "supabase/migrations/0014_enable_realtime.sql",
+    "bytes": 414,
+    "lines": 11,
+    "sha256": "4a9abcb96f90de241e1f39a32641894dad167ee0aa152f86aa504657f6d2debb"
+  },
+  {
+    "file": "supabase/migrations/0015_channel_listings_and_schema_sync.sql",
+    "bytes": 2152,
+    "lines": 51,
+    "sha256": "645b32e4eb3739177323c712ef649f16af43595a5a769e147508bcd86d23a4a2"
+  },
+  {
+    "file": "supabase/migrations/0016_fefo_batch_tracking.sql",
+    "bytes": 1007,
+    "lines": 25,
+    "sha256": "7c8e8a258d515f750721bbda9516f108df81910dfad15f85358efb0fde497e56"
+  },
+  {
+    "file": "supabase/migrations/0017_strict_rls_policies.sql",
+    "bytes": 1101,
+    "lines": 28,
+    "sha256": "509c27e9ff0c3d053ed11e36b0500dd548bd78d55b4b1e883203553027518e8e"
+  },
+  {
+    "file": "supabase/migrations/0018_consignment_manifests.sql",
+    "bytes": 2234,
+    "lines": 49,
+    "sha256": "e2c7e34b8641f20ca3485fc6e4b859dffd0a22bb3fd602a7643e1214989c74ef"
+  },
+  {
+    "file": "supabase/migrations/20260722_real_auth_rls.sql",
+    "bytes": 3360,
+    "lines": 101,
+    "sha256": "1708fb225ce4a2f4adeae26d3342fd2dcb02d56a27acbcfe29969f242b8d81e2"
+  },
+  {
+    "file": "supabase/migrations/20260723_master_security_rls.sql",
+    "bytes": 6876,
+    "lines": 170,
+    "sha256": "d64b6c94b4598e3ae6816c7789446485d3b76bf41d2336af32eb0cfc08c0328b"
+  },
+  {
+    "file": "supabase/migrations/20260723_orders_customer_fields.sql",
+    "bytes": 517,
+    "lines": 13,
+    "sha256": "6076d45e874efdb5480726a57a834bf7fb9bf99e688dd02091383eb5ae9c089d"
+  },
+  {
+    "file": "supabase/migrations/20260724_batch_expiry.sql",
+    "bytes": 4766,
+    "lines": 92,
+    "sha256": "3fd4fa66c1a5189ea94f1d14dfe83e6666e5b025c924b5391297370dbde5b404"
+  },
+  {
+    "file": "supabase/migrations/20260724_error_reports.sql",
+    "bytes": 1169,
+    "lines": 34,
+    "sha256": "7aa7008beb244bb42efd309e4a505790a170a56de68fcb2e73f3bbfa2533c2e4"
+  },
+  {
+    "file": "supabase/migrations/20260725_delete_pin_and_product_status.sql",
+    "bytes": 6732,
+    "lines": 184,
+    "sha256": "1b6b42c0f7e28e46c30843f4caa9fe76c52a097ce9295a1ffa4737775af62706"
+  },
+  {
+    "file": "supabase/migrations/20260725_staff_custody_allocations.sql",
+    "bytes": 3380,
+    "lines": 77,
+    "sha256": "afefeda3b1f5e29dd00990a8446ac278e3cd2ac18cd82327a227298ec2e594cf"
+  },
+  {
+    "file": "supabase/migrations/20260802_channel_admin_compatibility_preflight.sql",
+    "bytes": 3228,
+    "lines": 89,
+    "sha256": "f4ed8bf32fd74943bf684e7368a20a0d2d57f3688f04b8047fc437cd0bb3a236"
+  },
+  {
+    "file": "supabase/migrations/20260802_consignment_compatibility_preflight.sql",
+    "bytes": 1628,
+    "lines": 40,
+    "sha256": "544594dbd1be2ac372ef9c809c724c7d1414706556cba6b109bab7262df1c47b"
+  },
+  {
+    "file": "supabase/migrations/20260802_product_compatibility_preflight.sql",
+    "bytes": 1972,
+    "lines": 37,
+    "sha256": "f41cd65252bc50534bc7d242421b37092e43d9140824a04ebc56607697434d64"
+  },
+  {
+    "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+    "bytes": 86620,
+    "lines": 1978,
+    "sha256": "0ad68a320e4efded2d010ecce4890e4ed36eda08c77a050bf641deada080efb5"
+  },
+  {
+    "file": "supabase/migrations/20260803_phase_2_unified_inbox.sql",
+    "bytes": 19138,
+    "lines": 572,
+    "sha256": "e31683a6358333325a5b0eff7573267f53573a61e65cbb9996f6740bfe987701"
+  },
+  {
+    "file": "supabase/migrations/20260804_restore_coupons_and_consignment_scanning.sql",
+    "bytes": 9108,
+    "lines": 235,
+    "sha256": "cb69a49bc8a61efad56535a13302a43692cd9a15fc7ff39943db6c18b011c149"
+  },
+  {
+    "file": "supabase/migrations/20260809_operations_hardening.sql",
+    "bytes": 63468,
+    "lines": 1162,
+    "sha256": "b739d75129b2f9f573660bd58564d5dd51714408fbb592c3f2544c7686edd8cd"
+  },
+  {
+    "file": "supabase/migrations/20260810_deprecated_rpc_lockdown.sql",
+    "bytes": 1600,
+    "lines": 32,
+    "sha256": "9b5640ce2b579a5400a98e62623ec88d55abb5c62f1cd8daa855959308c5ccd2"
+  },
+  {
+    "file": "supabase/migrations/20260810_security_boundary_hardening.sql",
+    "bytes": 3104,
+    "lines": 63,
+    "sha256": "f93bebcef519f0634979045e1facee764e9d39058542e1d0d6231e37404f8e64"
+  },
+  {
+    "file": "supabase/migrations/20260811_product_intake_and_sku_gate.sql",
+    "bytes": 28031,
+    "lines": 697,
+    "sha256": "e94eb96090ae2aad3f88ee8f7a03e6d1d44528823c739735dee33cb758366ae9"
+  },
+  {
+    "file": "supabase/migrations/20260812_admin_consignments_bff_boundary.sql",
+    "bytes": 11929,
+    "lines": 242,
+    "sha256": "d76d5a29b850002ba3a79a2da02e70dba806beef9b78bf3eca20052328e41ce6"
+  },
+  {
+    "file": "supabase/migrations/20260812_admin_coupons_bff_boundary.sql",
+    "bytes": 11275,
+    "lines": 240,
+    "sha256": "62d6cd57cf4bdb529b03931d4caf21fd1567cbabaeef15c4cae9fb1fba77eebf"
+  },
+  {
+    "file": "supabase/migrations/20260812_admin_fulfillment_bff_boundary.sql",
+    "bytes": 12475,
+    "lines": 274,
+    "sha256": "7c486fdc59f9413981a037ee4650e195544a1792b579f6d6e1c702015bccdebf"
+  },
+  {
+    "file": "supabase/migrations/20260812_admin_inbox_bff_boundary.sql",
+    "bytes": 6290,
+    "lines": 150,
+    "sha256": "91b177c6037ca8b4d7bb67e869edd77c6a209bab83556bbbf4685ee887b65a46"
+  },
+  {
+    "file": "supabase/migrations/20260812_admin_lots_bff_boundary.sql",
+    "bytes": 18239,
+    "lines": 370,
+    "sha256": "78d7af0142af3dcbe339b69be911161fbf48de9ccff72501a7d142807853f5e7"
+  },
+  {
+    "file": "supabase/migrations/20260812_admin_pasabuy_bff_boundary.sql",
+    "bytes": 8412,
+    "lines": 202,
+    "sha256": "9d42eea61170ed1990d72adb6ca99050f9a9b37b64e29d416d3a5082ba93b15d"
+  },
+  {
+    "file": "supabase/migrations/20260812_admin_product_intake_bff_boundary.sql",
+    "bytes": 16380,
+    "lines": 320,
+    "sha256": "853a7ac6403b5a5662a315e6581499924eeb42ace04a2b6a5fbfa43ab058e575"
+  },
+  {
+    "file": "supabase/migrations/20260812_canonical_identities.sql",
+    "bytes": 2266,
+    "lines": 49,
+    "sha256": "f4ec50c3b2e279fa4986ca9d56cc39798e4871f145a0fa55d489f4c94bdc76bf"
+  },
+  {
+    "file": "supabase/migrations/20260812_guest_account_identity_and_messaging.sql",
+    "bytes": 17283,
+    "lines": 353,
+    "sha256": "c4dae76b080924e2f36e0ec98eb0a78a400ffa0e082e106d88fc895590d6f2ea"
+  },
+  {
+    "file": "supabase/migrations/20260812_guest_submission_boundary.sql",
+    "bytes": 33168,
+    "lines": 788,
+    "sha256": "3e8c53a73c2dcced788cb77a9f9f5809199e697a69b1c32a3a4720af1d1b9223"
+  },
+  {
+    "file": "supabase/migrations/20260812_guest_submission_cutover.sql",
+    "bytes": 1330,
+    "lines": 23,
+    "sha256": "4e5ea845e63b247113aabad579639bb172651d60ecebebc6adb2d8ebd6af99e9"
+  },
+  {
+    "file": "supabase/migrations/20260812_map017_public_write_boundary_hardening.sql",
+    "bytes": 6881,
+    "lines": 158,
+    "sha256": "cd4099bc4908890e45391a981f4deb8bcaaf4d9515875e09c49465125d109fa2"
+  },
+  {
+    "file": "supabase/migrations/20260814_invite_staff_operation_boundary.sql",
+    "bytes": 6820,
+    "lines": 170,
+    "sha256": "253e3bf952a72ddcfb7ebb0071808ff5eedf0c8710a0b0ec09f9256357942b25"
+  },
+  {
+    "file": "supabase/migrations/20260815_harden_admin_delete_pin.sql",
+    "bytes": 12172,
+    "lines": 317,
+    "sha256": "3ed0ed2f6d58996a89b640fe86fdd4499092f6307ce0c12a4fbf4055f510ca8f"
+  },
+  {
+    "file": "supabase/migrations/20260815_remove_legacy_delete_products_rpc.sql",
+    "bytes": 262,
+    "lines": 8,
+    "sha256": "737604aad9f0e67c92133e1b469fe2453a38235e9ab7878181515ba89f5a511e"
+  },
+  {
+    "file": "supabase/migrations/20260821_function_execute_lockdown.sql",
+    "bytes": 1362,
+    "lines": 19,
+    "sha256": "05fb12e4c68a937e948419e85af4fd298e98fef2dc246b91a2f1fadfe926b1f7"
+  },
+  {
+    "file": "supabase/migrations/20260822_admin_channel_readiness_boundary.sql",
+    "bytes": 7666,
+    "lines": 144,
+    "sha256": "9e1f6f18e53b7bf2f6e2360a6b24325654128d6190e5455f225d085c0cf3ef0b"
+  },
+  {
+    "file": "supabase/migrations/20260822_admin_globe_review_boundary.sql",
+    "bytes": 16792,
+    "lines": 267,
+    "sha256": "0923db29e6c99336f76208b615b3e2b791c04370764fab132d8cf5ae9b466f36"
+  },
+  {
+    "file": "supabase/migrations/20260822_admin_procurement_boundary.sql",
+    "bytes": 6942,
+    "lines": 128,
+    "sha256": "1ca370965e003f4e135e219cc0f010527ef0f2a5d5eefb35759e09ba667e3e38"
+  },
+  {
+    "file": "supabase/migrations/20260822_admin_product_master_boundary.sql",
+    "bytes": 12985,
+    "lines": 204,
+    "sha256": "6b0c0bba69533fb813d8460363767c7058119433afab13a6059532fc639f1979"
+  },
+  {
+    "file": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+    "bytes": 27843,
+    "lines": 612,
+    "sha256": "cecc6df0bcc11a115d90475b6b013d129b3c0ea601644f96b63f6abaeb494fa5"
+  },
+  {
+    "file": "supabase/migrations/20260822_admin_session_registry.sql",
+    "bytes": 18508,
+    "lines": 413,
+    "sha256": "977615f5480c2874bef48566e45f3120b800e2d41789e53fcddc273e454ae1bd"
+  },
+  {
+    "file": "supabase/migrations/20260822_admin_staff_access_boundary.sql",
+    "bytes": 8251,
+    "lines": 150,
+    "sha256": "5304d80efab8383985dc4a1373ea4f84405cf827a585089ed16fa80aee6a3fb8"
+  },
+  {
+    "file": "supabase/migrations/20260822_admin_system_readiness_boundary.sql",
+    "bytes": 1340,
+    "lines": 32,
+    "sha256": "8850d3d8908e07f683caafdc7ef033f1386c9619f99e4588574a95c97d17606c"
+  },
+  {
+    "file": "supabase/migrations/20260822_catalog_spreadsheet_commit.sql",
+    "bytes": 18113,
+    "lines": 402,
+    "sha256": "e954c1fbed7aca783b606e3367a839fc765aa3a6a21e9082e3cb929962ae0de3"
+  },
+  {
+    "file": "supabase/migrations/20260822_catalog_spreadsheet_identity.sql",
+    "bytes": 1835,
+    "lines": 48,
+    "sha256": "a388f00fc821d32c1d067cebb3429d7a725b55b6ca7d1512c8ab3f38ea98b402"
+  },
+  {
+    "file": "supabase/migrations/20260822_guest_account_claim_boundary.sql",
+    "bytes": 18696,
+    "lines": 414,
+    "sha256": "17d68e071ab60ddd417498adb68cd1f8d4964826c13ac6413c406f8300b77384"
+  },
+  {
+    "file": "supabase/migrations/20260822_security_event_boundary.sql",
+    "bytes": 14623,
+    "lines": 329,
+    "sha256": "0b57de0ba371d55527c6e076be8988ba081e88fc1421ca18c6e0811076bc2fa7"
+  },
+  {
+    "file": "supabase/migrations/20260822_wholesale_inquiry_boundary.sql",
+    "bytes": 16223,
+    "lines": 244,
+    "sha256": "ca1cac80e82915352b61805a6824338dcca4f8533ef33e2be4d7ad94af752cb7"
+  },
+  {
+    "file": "supabase/migrations/20260824_admin_mfa_replacement_boundary.sql",
+    "bytes": 5631,
+    "lines": 139,
+    "sha256": "c2c525d3b6df5aae9491ec0f97c23533892788a4954b447d68be3d6408336b49"
+  },
+  {
+    "file": "supabase/migrations/20260824_admin_staff_invitation_reason_boundary.sql",
+    "bytes": 3350,
+    "lines": 87,
+    "sha256": "2e29483a4bc628c5b3d167ed5eae8ef3797e2b81fd8d7db8daf3ad239f071178"
+  },
+  {
+    "file": "supabase/migrations/20260824_map018_intake_evidence_cleanup_boundary.sql",
+    "bytes": 11451,
+    "lines": 267,
+    "sha256": "36e72c7046e7735236c305cedad58dfb9b5ecbcf399ea6b10cd88aa267163eb2"
+  },
+  {
+    "file": "supabase/migrations/20260825_admin_preauth_rate_boundary.sql",
+    "bytes": 9725,
+    "lines": 233,
+    "sha256": "f82320cd5731d65944663516ca7433eeaab9be94c4be9281ce241ba5187e1cfc"
+  },
+  {
+    "file": "supabase/migrations/20260825_shopee_webhook_ingress_boundary.sql",
+    "bytes": 5980,
+    "lines": 160,
+    "sha256": "15824ca8a84738d17aad32bfabf7da4bd1dbe37165f35cc140a601617825105b"
+  },
+  {
+    "file": "supabase/migrations/20260825_storefront_customer_auth_boundary.sql",
+    "bytes": 9415,
+    "lines": 228,
+    "sha256": "32459123f96b5bd3af893c7acadfa0b5bcaa0bb46e5acc8f16cedc600dc55984"
+  },
+  {
+    "file": "supabase/migrations/20260826_map017_error_report_boundary.sql",
+    "bytes": 2191,
+    "lines": 79,
+    "sha256": "308e6363f4edf2f8efa09e9641be4f701e07a1cb72d8579b13394627bab2ffa7"
+  },
+  {
+    "file": "supabase/migrations/20260828_product_knowledge_boundary.sql",
+    "bytes": 13433,
+    "lines": 341,
+    "sha256": "d47a6cac26355259f5dcbb8912d3eb5e91a5d63b64be1c61a7c1486d5e59d098"
+  },
+  {
+    "file": "supabase/migrations/20260828_store_conversation_origin.sql",
+    "bytes": 6681,
+    "lines": 146,
+    "sha256": "e693b8b1f3e04c8919379779085e863eeb1b138d4590a4763943c0ab7559a5dd"
+  },
+  {
+    "file": "supabase/migrations/20260828_virtual_store_live_chat.sql",
+    "bytes": 6452,
+    "lines": 191,
+    "sha256": "b4133f2e20723507890781bc302eeee738800fb2741bf34239616d6903964428"
+  },
+  {
+    "file": "supabase/migrations/20260829_channel_vocabulary_and_shops.sql",
+    "bytes": 13028,
+    "lines": 289,
+    "sha256": "0053b6ee78e415125f17d1c7938059aa6310f90021ac4598acb1e572846e767f"
+  },
+  {
+    "file": "supabase/migrations/20260830_paid_ai_spend_controls.sql",
+    "bytes": 16447,
+    "lines": 327,
+    "sha256": "1d4cb2ef70fb46501ebcb9bcf6fe0fc31281dd3e2fd86faa2788cac1ef8e4213"
+  },
+  {
+    "file": "supabase/migrations/20260831_guest_order_status_boundary.sql",
+    "bytes": 2835,
+    "lines": 76,
+    "sha256": "065d1a0c557fa9aa8a10382a97c6ea8a14621ee0e4d5f9f41976263825e8be71"
+  },
+  {
+    "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+    "bytes": 102986,
+    "lines": 1958,
+    "sha256": "22f4bee0992785a272da070ade690f207ff2dcac91cbd5406f6650813b33e9b1"
+  },
+  {
+    "file": "supabase/migrations/20260902_delivery_guest_quote_boundary.sql",
+    "bytes": 7638,
+    "lines": 196,
+    "sha256": "768a4ed385a65f0dcf33ad5e6dcca8c37204fe240512c1374e081b76e0e4647e"
+  },
+  {
+    "file": "supabase/migrations/20260902_delivery_quote_admin_command.sql",
+    "bytes": 10367,
+    "lines": 235,
+    "sha256": "2523dea6f930b0dc325c4883a79573fcafefe789ff9f7b6fe788376dc4511822"
+  },
+  {
+    "file": "supabase/migrations/20260902_delivery_quote_control.sql",
+    "bytes": 18283,
+    "lines": 370,
+    "sha256": "5fac3d9739da51a271dcae733369eb161a9147c59b2353342aa1396fa81a86f9"
+  },
+  {
+    "file": "supabase/migrations/20260902_delivery_quote_pilot_seed.sql",
+    "bytes": 6465,
+    "lines": 117,
+    "sha256": "17536bc6a36c59c537972324f8c9472944a088386dcffb6109ddf016945a260d"
+  },
+  {
+    "file": "supabase/migrations/20260902_product_shipping_dimensions.sql",
+    "bytes": 2539,
+    "lines": 57,
+    "sha256": "84cdca526f5445f7a18ca577a2bfd89b3b0f8aa64c663e2db161d54c87f06a9f"
+  },
+  {
+    "file": "supabase/migrations/20260902_purchase_time_reservation.sql",
+    "bytes": 17404,
+    "lines": 367,
+    "sha256": "20281a5b3939389ca7646f4387fbf71cd4b24d8e6cb4bc43f707eb6a2d97cba4"
+  },
+  {
+    "file": "supabase/migrations/20260902_reservation_expiry_policy.sql",
+    "bytes": 12822,
+    "lines": 303,
+    "sha256": "43e7c26047ba6fa51fac2401d56011ee8662689281cd0c300c42da4a8347b4ac"
+  },
+  {
+    "file": "supabase/migrations/20260905_privileged_membership_serialization.sql",
+    "bytes": 9567,
+    "lines": 190,
+    "sha256": "3da7f6870e4e6d6024dd91c4dc957123c9423a8bd7a6791527644111dd45a8ed"
+  },
+  {
+    "file": "supabase/migrations/20260905_publication_transition_consistency.sql",
+    "bytes": 5082,
+    "lines": 120,
+    "sha256": "ccc45ede6ae4c8c84889dd3c1b989da5c6b2c1883fdb81ec303a878e234df271"
+  },
+  {
+    "file": "supabase/migrations/20260905_purchase_hold_cancellation.sql",
+    "bytes": 4629,
+    "lines": 89,
+    "sha256": "86be9ddab89db32221636f847ecc6527ae97255333e00e8497e4a0dbc04e6af9"
+  },
+  {
+    "file": "supabase/migrations/20260906_atomic_order_hold_expiry.sql",
+    "bytes": 5458,
+    "lines": 88,
+    "sha256": "6083c70ac3cd9f100729152becb49801df6f2d03cba44fb4e037ef6f5924f5c1"
+  },
+  {
+    "file": "supabase/migrations/20260906_automatic_intake_jobs.sql",
+    "bytes": 12686,
+    "lines": 151,
+    "sha256": "0d506cae59230a44a833335d2b45719836dd42fce67eeaae20d693d5a2a06e2d"
+  },
+  {
+    "file": "supabase/migrations/20260906_exact_packing_lot.sql",
+    "bytes": 4830,
+    "lines": 51,
+    "sha256": "803b607501bf479f8b801764d13342a248d48392130975e1fe443c3f3980f480"
+  },
+  {
+    "file": "supabase/migrations/20260906_exact_packing_wrapper.sql",
+    "bytes": 1480,
+    "lines": 28,
+    "sha256": "81b59bc4c14f3944d67f43719d38a73d31751c1d0d2d6a4d4b58ec529669d182"
+  },
+  {
+    "file": "supabase/migrations/20260906_handover_coverage.sql",
+    "bytes": 4384,
+    "lines": 55,
+    "sha256": "ffe65a9cc9b61db05d53d0fe07a36c7e74fa1c99670ae06f92f830e2c0ead4e6"
+  },
+  {
+    "file": "supabase/migrations/20260906_payment_evidence_recovery.sql",
+    "bytes": 7138,
+    "lines": 123,
+    "sha256": "ca8ed408327599efd74627410392e94047fd40facb7ff7e873c7d90c4f35b50d"
+  },
+  {
+    "file": "supabase/migrations/20260906_reservation_coverage_guard.sql",
+    "bytes": 3283,
+    "lines": 54,
+    "sha256": "fc910379cc2a36e446efc6e3c3e29b6f75f88d3b9c7538cdce0d67c9aa07bdb9"
+  },
+  {
+    "file": "supabase/migrations/20260908_payment_balance_integrity.sql",
+    "bytes": 2679,
+    "lines": 48,
+    "sha256": "0263fa43d7441468d8582b495eb525e4ef13570dd3bbdda2252cc900234127bf"
+  },
+  {
+    "file": "supabase/migrations/20260908_purchase_hold_lock_order.sql",
+    "bytes": 2287,
+    "lines": 48,
+    "sha256": "1cd8539d21dd51ff0627c62d75785f2fc985646b69e60d90a31dd497e6d09fdd"
+  },
+  {
+    "file": "supabase/migrations/20260908_reconciliation_lock_order.sql",
+    "bytes": 1552,
+    "lines": 31,
+    "sha256": "7d9a5dadfebf978c6488472d2914ca5267b21036021dd8744b595d954bda3681"
+  },
+  {
+    "file": "supabase/tests/catalog_spreadsheet_rehearsal_assertions.sql",
+    "bytes": 8750,
+    "lines": 212,
+    "sha256": "a153160bf909bd92cd75a25f06ceef1389266f9f82b4c386b8babe251614eea1"
+  },
+  {
+    "file": "supabase/tests/catalog_spreadsheet_rehearsal_bootstrap.sql",
+    "bytes": 3990,
+    "lines": 118,
+    "sha256": "971cc08203289db8b4df8a04cb1645863d4214fb8b73286cefbc73e35a985749"
+  },
+  {
+    "file": "supabase/tests/handover_coverage.sql",
+    "bytes": 4730,
+    "lines": 66,
+    "sha256": "1a6cfb679114f0186238f9cfc35739742f1ae56e0a61640546427115f183cc3a"
+  },
+  {
+    "file": "supabase/tests/intake_ai_attachment.sql",
+    "bytes": 3168,
+    "lines": 35,
+    "sha256": "b9af14ef6dea9df9b93ef7f1b7c8faf13133a3340f17a21497cef96040fa3e44"
+  },
+  {
+    "file": "supabase/tests/intake_ai_behavior.sql",
+    "bytes": 5209,
+    "lines": 74,
+    "sha256": "7719a8d4d5417e664ce016cf1130886d8b0f1b6040c8b5d7589af64553498a86"
+  },
+  {
+    "file": "supabase/tests/intake_ai_bootstrap.sql",
+    "bytes": 3550,
+    "lines": 29,
+    "sha256": "f3b52c6f69157829defe7f71575b0663d35c1a73667fb374a8828c292b328631"
+  },
+  {
+    "file": "supabase/tests/intake_ai_concurrency_claim.sql",
+    "bytes": 589,
+    "lines": 11,
+    "sha256": "b84331db6ae5d37368d38cc80d4fbfa28f0777bc0708e52d102224e425059335"
+  },
+  {
+    "file": "supabase/tests/intake_ai_concurrency_setup.sql",
+    "bytes": 551,
+    "lines": 5,
+    "sha256": "0f52b7a9ce1c9e84ce864885f2e3c4e3c3346f3309f68dff4deb1224be4ec034"
+  },
+  {
+    "file": "supabase/tests/legacy_release_behavior.sql",
+    "bytes": 1521,
+    "lines": 31,
+    "sha256": "21ddd94743bcef8f67648e22e9c66cec02d5f0c85ec40474a46f2f7ffe071853"
+  },
+  {
+    "file": "supabase/tests/legacy_release_bootstrap.sql",
+    "bytes": 1148,
+    "lines": 14,
+    "sha256": "bd31df14edd0b2a74eaa7eb36c26a4116dc44e0684aa0efcbf18e550a88e34a8"
+  },
+  {
+    "file": "supabase/tests/map017_authorization_assertions.sql",
+    "bytes": 8773,
+    "lines": 250,
+    "sha256": "726be0c49d76c1fc8db9ff93259de5dabc6bac1c064f164de684366b023fa79d"
+  },
+  {
+    "file": "supabase/tests/map017_error_report_boundary_authorization.sql",
+    "bytes": 2276,
+    "lines": 72,
+    "sha256": "29ee39473b4ebfba6ce6c91372a18a2d5f5ce3cbebde2e2e62b2ff6281463aa1"
+  },
+  {
+    "file": "supabase/tests/map017_rehearsal_baseline_assertions.sql",
+    "bytes": 1714,
+    "lines": 47,
+    "sha256": "61659885357abba7ba11cc86ff81181a1c606c6ef79c914f31bde9cdb7c29090"
+  },
+  {
+    "file": "supabase/tests/map017_rehearsal_bootstrap.sql",
+    "bytes": 7426,
+    "lines": 148,
+    "sha256": "538f4ea02f9abb359baa0bc925d7381f651a36b5c225e265d5fc134047058984"
+  },
+  {
+    "file": "supabase/tests/map018_cleanup_behavior.sql",
+    "bytes": 5070,
+    "lines": 112,
+    "sha256": "6a4300f613b43d51bef066215605ce869156562c6462c57e5fae44005cf8a2af"
+  },
+  {
+    "file": "supabase/tests/map018_cleanup_bootstrap.sql",
+    "bytes": 1604,
+    "lines": 40,
+    "sha256": "6c5f5969c51d13e087f2ad3a64610a205aba741942022f10cf90f685d73bb671"
+  },
+  {
+    "file": "supabase/tests/map019_account_claim_assertions.sql",
+    "bytes": 35199,
+    "lines": 469,
+    "sha256": "ffe48d0512e67a0b2147c8e88ee61497181268510f5e2bf340cefae8540afda4"
+  },
+  {
+    "file": "supabase/tests/map019_account_claim_bootstrap.sql",
+    "bytes": 20862,
+    "lines": 326,
+    "sha256": "821e38e274ae4c46a99c408a977dedcb7bf117413f8fe904e50f6c96db286731"
+  },
+  {
+    "file": "supabase/tests/map019_mfa_replacement_behavior.sql",
+    "bytes": 2931,
+    "lines": 68,
+    "sha256": "af6f6aa10913f96c0a182f4b3e2de368457ddd22dbbbbb1ba46078997c646e44"
+  },
+  {
+    "file": "supabase/tests/map019_mfa_replacement_bootstrap.sql",
+    "bytes": 1447,
+    "lines": 31,
+    "sha256": "db5db578c3fadc89dbe58343d0e3efb22bb9254fd34cac55c4276fee3b402829"
+  },
+  {
+    "file": "supabase/tests/map019_staff_invitation_reason_behavior.sql",
+    "bytes": 2301,
+    "lines": 59,
+    "sha256": "5bd569c66c4f73b7687bf8aa0bfb405b27a15d25ce60c04b9f8a8171aba4379b"
+  },
+  {
+    "file": "supabase/tests/map019_staff_invitation_reason_bootstrap.sql",
+    "bytes": 1108,
+    "lines": 22,
+    "sha256": "26852c70071b9bdb274545e2406863e56cdeefbcfb07aba1aeaea06ee5282511"
+  },
+  {
+    "file": "supabase/tests/map020_preauth_rate_behavior.sql",
+    "bytes": 18234,
+    "lines": 497,
+    "sha256": "0c64df2dc0f953155848ae08692a2be56c3be82a8ff446576eb4d995113b0376"
+  },
+  {
+    "file": "supabase/tests/map020_preauth_rate_bootstrap.sql",
+    "bytes": 954,
+    "lines": 30,
+    "sha256": "df03cbb9220e23cbbe7a389a1d054b92bcbca61e388dc812276af6a4e9131337"
+  },
+  {
+    "file": "supabase/tests/map020_product_master_assertions.sql",
+    "bytes": 4502,
+    "lines": 58,
+    "sha256": "fe5b9fdad9bbfc983af113c122760ad390848907ab66eed2d93d3413a6b21b79"
+  },
+  {
+    "file": "supabase/tests/map020_shopee_ingress_behavior.sql",
+    "bytes": 6694,
+    "lines": 186,
+    "sha256": "01a25248e8ac60c70a595a9ceaaf01257378c79ea490960d724801d135339db8"
+  },
+  {
+    "file": "supabase/tests/map020_shopee_ingress_bootstrap.sql",
+    "bytes": 1234,
+    "lines": 38,
+    "sha256": "e2f405ec53ea2e4c1af3438ff2b086c8a88f57b62ba17ec2aaa3f1eac3504a3e"
+  },
+  {
+    "file": "supabase/tests/map020_storefront_auth_rate_behavior.sql",
+    "bytes": 9176,
+    "lines": 221,
+    "sha256": "1df35731a702f022cbc6659c76ce42cc1c0274ea0459afdfe3f7563080d70eaf"
+  },
+  {
+    "file": "supabase/tests/map020_storefront_auth_rate_bootstrap.sql",
+    "bytes": 1098,
+    "lines": 27,
+    "sha256": "33dab8348e548c5a48e1020916a55278d90d8c793c3f39acb69d09e39b661aa5"
+  },
+  {
+    "file": "supabase/tests/marketplace_snapshot_staging_assertions.sql",
+    "bytes": 30618,
+    "lines": 649,
+    "sha256": "3c2e9b7abb3492346063baf842c27826eebeb2de93362c24174e7e80d4c73978"
+  },
+  {
+    "file": "supabase/tests/marketplace_snapshot_staging_bootstrap.sql",
+    "bytes": 7511,
+    "lines": 187,
+    "sha256": "caf09f9bbb6e9a6577f3cb22a0744a3294e8f15a5265102f8c56acc094064eb0"
+  },
+  {
+    "file": "supabase/tests/operational_readiness_assertions.sql",
+    "bytes": 6013,
+    "lines": 78,
+    "sha256": "a00bc0e725100eeff741d4f3c612fe300730cbf9865659c6a08d23410ae48d2f"
+  },
+  {
+    "file": "supabase/tests/operational_readiness_bootstrap.sql",
+    "bytes": 2189,
+    "lines": 42,
+    "sha256": "2383ec2bcee310ae7e96e05283279ce70ded5c8222b75bbc99351f2a5c3bfca0"
+  },
+  {
+    "file": "supabase/tests/packing_lot_proof.sql",
+    "bytes": 3839,
+    "lines": 47,
+    "sha256": "06ec988c1fb52c9c78056731978f3869e2253c07354b17e9c5e0839dd3ce843c"
+  },
+  {
+    "file": "supabase/tests/packing_signed_behavior.sql",
+    "bytes": 2101,
+    "lines": 30,
+    "sha256": "75f6c1324f57e250026f1775b667984b86a36b76ca25b7ea45002a3ff2fca73b"
+  },
+  {
+    "file": "supabase/tests/packing_signed_bootstrap.sql",
+    "bytes": 901,
+    "lines": 14,
+    "sha256": "c14a30f21764f3a517f8bf4e5fada95ecaa30db2dbb3fb966a92e889f5835d9b"
+  },
+  {
+    "file": "supabase/tests/payment_balance_integrity.sql",
+    "bytes": 2704,
+    "lines": 43,
+    "sha256": "eb99de36205e26bd90f61a2ba4725c1df7b2855e8ced9f7736592f3e63d9c610"
+  },
+  {
+    "file": "supabase/tests/payment_recovery_behavior.sql",
+    "bytes": 3121,
+    "lines": 46,
+    "sha256": "7255886850ec3644e98a1336f38b120be1ed67e2d09616918917f62c28e8fba2"
+  },
+  {
+    "file": "supabase/tests/payment_recovery_bootstrap.sql",
+    "bytes": 2961,
+    "lines": 52,
+    "sha256": "7b5f0dc9245984f9b2daf5c91407141311b44d51bf7af5945b8a4de06766a871"
+  },
+  {
+    "file": "supabase/tests/payment_recovery_signed.sql",
+    "bytes": 2895,
+    "lines": 44,
+    "sha256": "b5f2770abc8c11f835de98174802a3dc7d575ba65afd3d7d0039f2ad6730fe55"
+  },
+  {
+    "file": "supabase/tests/publication_transition_behavior.sql",
+    "bytes": 3491,
+    "lines": 74,
+    "sha256": "4381a44d730f7c6e13aad4d7f9dcf14dbe0d855901704d6f0f6a2f39e9abadcf"
+  },
+  {
+    "file": "supabase/tests/publication_transition_bootstrap.sql",
+    "bytes": 1237,
+    "lines": 24,
+    "sha256": "3f69a5e335bafe70f15e9932de652177885ea5a7aed0ad8a8435e5eeac9a308a"
+  },
+  {
+    "file": "supabase/tests/purchase_hold_cancellation.sql",
+    "bytes": 3926,
+    "lines": 65,
+    "sha256": "2c08a08e7f30f06a5b119d839898bded4a745500c671b751294269d48b864431"
+  },
+  {
+    "file": "supabase/tests/purchase_hold_completeness.sql",
+    "bytes": 2147,
+    "lines": 34,
+    "sha256": "8f6da3bb5dd579fac8ca65ca0bef0e5199df8dd775fe22ba9d6309296815c374"
+  },
+  {
+    "file": "supabase/tests/purchase_hold_expiry.sql",
+    "bytes": 5225,
+    "lines": 67,
+    "sha256": "9248bdd974b3461e85c2f9ceb4579062fd22f7eea5ca882c6f78ba1ca9c1d596"
+  },
+  {
+    "file": "supabase/tests/purchase_reconciliation_behavior.sql",
+    "bytes": 2173,
+    "lines": 38,
+    "sha256": "b1769edfc54dc6547b9484ccb491443901820f68ed1567b58498a11f2abdf3dd"
+  },
+  {
+    "file": "supabase/tests/purchase_reconciliation_bootstrap.sql",
+    "bytes": 1571,
+    "lines": 22,
+    "sha256": "9a3bd35751a129ce7dc5b8f30efb120e69098a12d2df416a19c591241726ccb3"
+  },
+  {
+    "file": "supabase/tests/security_event_rehearsal_assertions.sql",
+    "bytes": 4036,
+    "lines": 87,
+    "sha256": "c97cabd70fdb14034a6f3248033e20985b2b3089b71a43d9e6f308ed42a777b9"
+  },
+  {
+    "file": "tests/admin-assistance.spec.js",
+    "bytes": 9178,
+    "lines": 169,
+    "sha256": "7c382321e24e56b2bd1571b74ff43f97eb7386a5281af6ad520e1244d90f722f"
+  },
+  {
+    "file": "tests/admin-bff-contract.spec.js",
+    "bytes": 112051,
+    "lines": 2052,
+    "sha256": "2d830586201b897bc8b49aac2d2b7f45ea19a298abab6130e0638dde0f5e7d0a"
+  },
+  {
+    "file": "tests/admin-client-cookie.spec.js",
+    "bytes": 1829,
+    "lines": 48,
+    "sha256": "ddcff13cb8d98abda2a1c69b5796a68c352a8622841c39b5cf864444f44c04ef"
+  },
+  {
+    "file": "tests/admin-command-retry.spec.js",
+    "bytes": 4269,
+    "lines": 101,
+    "sha256": "15f07aa7b88515c2b48c122a3e7b27d2aef4147324720e0b04c1e6e837385fb8"
+  },
+  {
+    "file": "tests/admin-cookie-recovery.spec.js",
+    "bytes": 678,
+    "lines": 16,
+    "sha256": "37cfd2e32b9be2bedab0d41fdd9136fbee2a42e25fc10997edf776ab72dd43ce"
+  },
+  {
+    "file": "tests/admin-dashboard-redesign.spec.js",
+    "bytes": 88000,
+    "lines": 1297,
+    "sha256": "9df4044c04ae5f687f50732fc9505d2a115d036db4b551091be2b309ac351dab"
+  },
+  {
+    "file": "tests/admin-dialog-contract.spec.js",
+    "bytes": 3568,
+    "lines": 87,
+    "sha256": "96c328f912ba8672b713497c38de1bfa3ec9fd7122262169834f6fdfbbb21618"
+  },
+  {
+    "file": "tests/admin-logic-regressions.spec.js",
+    "bytes": 13952,
+    "lines": 237,
+    "sha256": "59ebe180a9ca7ac5ce400b19fbfda2b572e2c1267c0741370784cac6776ba364"
+  },
+  {
+    "file": "tests/admin-product-master-ui.spec.js",
+    "bytes": 4739,
+    "lines": 97,
+    "sha256": "299c0bba6fe82b269173b39843f16ca3e1a0c4729135ac4bea82c286ba86d85b"
+  },
+  {
+    "file": "tests/admin-sales-calculation.spec.js",
+    "bytes": 16268,
+    "lines": 265,
+    "sha256": "c9886e179de134b93eaca2b93bd5d7e8c22671a4ddfd3beff444897c7f7c4300"
+  },
+  {
+    "file": "tests/admin-security-status-and-delete-pin.spec.js",
+    "bytes": 3289,
+    "lines": 58,
+    "sha256": "e3fbf59db1a0c89fc94a15fc6f9c3cb5fa2f8a6cf1d77562a5c7370124468007"
+  },
+  {
+    "file": "tests/admin.spec.js",
+    "bytes": 4509,
+    "lines": 104,
+    "sha256": "bd36151acaa02ce38681b541eb0f7e6dc1f339b944cda00fc32a0d8a9bde47ba"
+  },
+  {
+    "file": "tests/browser-error-safety.spec.js",
+    "bytes": 4069,
+    "lines": 85,
+    "sha256": "fb1733cfea70cd89f8b82c793b3b9e6dbde222295608cf2b3570d2b904d52b68"
+  },
+  {
+    "file": "tests/buyer.spec.js",
+    "bytes": 1885,
+    "lines": 33,
+    "sha256": "6c933bad2a8eebd31f134e0e5301f86c7de2aebfb22a0d3b4e8c3b77568dd7c8"
+  },
+  {
+    "file": "tests/catalog-freshness-contract.spec.js",
+    "bytes": 4988,
+    "lines": 97,
+    "sha256": "346f7168ede60e5e00b67c8aecdb0a82b75026c86168740e87e7134f06ef5c74"
+  },
+  {
+    "file": "tests/catalog-spreadsheet-contract.spec.js",
+    "bytes": 9238,
+    "lines": 159,
+    "sha256": "61630ac091bc62f24d369af1d9234e4e78a1ffcad41a41b1c1dc72c3cd4c2249"
+  },
+  {
+    "file": "tests/chunk-recovery.spec.js",
+    "bytes": 1581,
+    "lines": 42,
+    "sha256": "09fc7d35668dcc90f4ad7550e458c149ee537f25325efc01b840655cb12b21bf"
+  },
+  {
+    "file": "tests/consignment-receiving.spec.js",
+    "bytes": 13131,
+    "lines": 180,
+    "sha256": "a6e40c690565eff6399523afab7845d6d9732d545f03ac0b7aa9e6d26aa82752"
+  },
+  {
+    "file": "tests/consignment-row-targeting.spec.js",
+    "bytes": 4477,
+    "lines": 93,
+    "sha256": "1a2aa0dea2a377c288fb6a339e8ac7076f93382d894d00cfd11083c0c378ade3"
+  },
+  {
+    "file": "tests/coupon-recovery-ui.spec.js",
+    "bytes": 8541,
+    "lines": 146,
+    "sha256": "4feb8bc99b59e540f703243c605d3949d56fa4c621ed68edbd82c115b4b1e02f"
+  },
+  {
+    "file": "tests/customer-account-ui.spec.js",
+    "bytes": 7838,
+    "lines": 117,
+    "sha256": "9e09f842d8ec29210ceae520cb665673737e87a7a418c762a02ae9fa89d40878"
+  },
+  {
+    "file": "tests/customer-retention-contract.spec.js",
+    "bytes": 2506,
+    "lines": 41,
+    "sha256": "fd86c8563e4688de787ffb76a1280fa62cda28a106c39570a9b51ae509785931"
+  },
+  {
+    "file": "tests/database-backup-rehearsal.spec.js",
+    "bytes": 29410,
+    "lines": 658,
+    "sha256": "ee5b6cbb26f1fa752b507c4f7d3c7e10086baed08174477a521cd6aa7f02e5f9"
+  },
+  {
+    "file": "tests/delivery-quote-contract.spec.js",
+    "bytes": 13870,
+    "lines": 361,
+    "sha256": "735944fe9b75b179608a32ad5bd3d396e4bfed6f58a574605dd564b56756e139"
+  },
+  {
+    "file": "tests/delivery-quote-parity.spec.js",
+    "bytes": 8213,
+    "lines": 152,
+    "sha256": "1e86d634848d68706e05a16595ab511e0d4fdd020f7ea7a72b6324dc0ba9d8dc"
+  },
+  {
+    "file": "tests/delivery-rate-control.spec.js",
+    "bytes": 6434,
+    "lines": 126,
+    "sha256": "2d4333501f703f0f5d20652a8133fbd969801aa1339dfadee5f219a0daa6b1f0"
+  },
+  {
+    "file": "tests/e2e_full_workflow.spec.js",
+    "bytes": 1274,
+    "lines": 23,
+    "sha256": "e65281c6c2c5967e3b79452f41badb2f316e31dba5fbd36aa862dc8187f4ade8"
+  },
+  {
+    "file": "tests/edge-function-invite-staff.spec.js",
+    "bytes": 15659,
+    "lines": 262,
+    "sha256": "0c4462b80a6732bb69f7cbe7d89e19075d716b6f6eceec69b5c9b5e63039d44c"
+  },
+  {
+    "file": "tests/evidence-cleanup-policy.spec.js",
+    "bytes": 3681,
+    "lines": 81,
+    "sha256": "8218843c564e90f66ae5a4849b0216623c90c52b4761c5e933541703b6ddc7fd"
+  },
+  {
+    "file": "tests/fixtures/inbox-harness.jsx",
+    "bytes": 7265,
+    "lines": 210,
+    "sha256": "d0dc9d5d768fef4ae420e4ce35d0872ad855bd1cbdc0f911edda0bd5d97bcddc"
+  },
+  {
+    "file": "tests/fixtures/intake-ai-harness.jsx",
+    "bytes": 1410,
+    "lines": 21,
+    "sha256": "8a837ab25eb2922d13af5bab05ae17d59922445f504c70ce27ad012685cc0037"
+  },
+  {
+    "file": "tests/fixtures/payment-harness.jsx",
+    "bytes": 4530,
+    "lines": 60,
+    "sha256": "1d99d062b6b93b4aae65abdc3aa0f15fe81bc1261191ede14a94df72fa0cef01"
+  },
+  {
+    "file": "tests/fixtures/workflow-api-harness.jsx",
+    "bytes": 773,
+    "lines": 12,
+    "sha256": "08868112b8fee08bab7272dd07fe35e241c1c828afce28364ad3863bfc7d8d52"
+  },
+  {
+    "file": "tests/guest-commerce-bff-contract.spec.js",
+    "bytes": 22314,
+    "lines": 421,
+    "sha256": "1f6de9aefaa31200ce729ae881c0da0f92a6ae7c48015acf2bea193e9d5fea8b"
+  },
+  {
+    "file": "tests/hero-enhancement.spec.js",
+    "bytes": 5788,
+    "lines": 99,
+    "sha256": "56b35ce0c0175bad5bf65623905d7b1bb1ddf8d6be3bf5891b1db8720633ee91"
+  },
+  {
+    "file": "tests/hero-video.spec.js",
+    "bytes": 8312,
+    "lines": 188,
+    "sha256": "740c55d6abf3f430fb7c81c7a3e4abd4eb6b661861f18e665e255fcb7af846c3"
+  },
+  {
+    "file": "tests/inbox-command-retry.spec.js",
+    "bytes": 8556,
+    "lines": 190,
+    "sha256": "206c413f3dc520378a8c9b9498bd3596bb6616cc6245e1744659144160f79e61"
+  },
+  {
+    "file": "tests/inbox-phase2.spec.js",
+    "bytes": 21543,
+    "lines": 351,
+    "sha256": "2df1bf5d7491dfd51f35f65941999d36c8d2325e0e8eb1ea7b81db5e58b33495"
+  },
+  {
+    "file": "tests/inbox-read-completeness.spec.js",
+    "bytes": 5412,
+    "lines": 143,
+    "sha256": "bc0c267602898c509ee8c99af2db17a4389f9cf81e637e1585c20436516bb442"
+  },
+  {
+    "file": "tests/intake-ai-jobs.spec.js",
+    "bytes": 5769,
+    "lines": 82,
+    "sha256": "c3288f947e45064fc54efbf75cbe4aa5f758302cb079d618ea9d1c80e98fd672"
+  },
+  {
+    "file": "tests/intake-ai-provider.spec.js",
+    "bytes": 8670,
+    "lines": 107,
+    "sha256": "f61333a27652b22821671db32692261e2e668297a27978b819f55075af5709a9"
+  },
+  {
+    "file": "tests/intake-ai-ui.spec.js",
+    "bytes": 19635,
+    "lines": 293,
+    "sha256": "64cb41c4b20b26c8b85b8b468b2ebb3c6aa777d2d94e2f469fa1404c82e23df1"
+  },
+  {
+    "file": "tests/manila-reporting-window.spec.js",
+    "bytes": 3813,
+    "lines": 77,
+    "sha256": "c651a6125cc93b03be8d35d1218757e4284c987ffc1083f342a2d113f7355af6"
+  },
+  {
+    "file": "tests/map017-authorization.spec.js",
+    "bytes": 8718,
+    "lines": 161,
+    "sha256": "2a4c8c279c983fddc3717870d88e051e9f147e4d51c891ae4fda1ce914fc27ac"
+  },
+  {
+    "file": "tests/map017-error-report-boundary.spec.js",
+    "bytes": 2728,
+    "lines": 46,
+    "sha256": "802062b24759521b40ab9abe6f3af87b0b788acb50b2795cd02ea48e1147d88d"
+  },
+  {
+    "file": "tests/map018-paid-ai-controls.spec.js",
+    "bytes": 5187,
+    "lines": 94,
+    "sha256": "8dbc43a188898019784be2584fd799d0330c2d84ccf72e56d794f6ab126f51ec"
+  },
+  {
+    "file": "tests/map024-live-discovery.spec.js",
+    "bytes": 5204,
+    "lines": 113,
+    "sha256": "ed81860d5fccb0a537063e408520be9966b388d499672d56645711d538d7c897"
+  },
+  {
+    "file": "tests/map024-persisted-hostname.spec.js",
+    "bytes": 2015,
+    "lines": 45,
+    "sha256": "ea168236c570e0cd6e2b489cb952fb8e9366fe95c5ac69d0393ce71d19437570"
+  },
+  {
+    "file": "tests/map024-sitemap.spec.js",
+    "bytes": 7831,
+    "lines": 156,
+    "sha256": "83976bd640eee54d137ae86c68d3b35ab086866cbbab9ce9b2d45a337351e8ae"
+  },
+  {
+    "file": "tests/map027-clerk-workflow.spec.js",
+    "bytes": 3762,
+    "lines": 65,
+    "sha256": "9fc80c586b9630ecc039d1651fb764a675149a1c376dbd030c080294667d1483"
+  },
+  {
+    "file": "tests/map027-interactive-shop.spec.js",
+    "bytes": 16124,
+    "lines": 362,
+    "sha256": "70efcbb8e5ce4264a62835b1885fba3ed0911ef92f5d3b8bdf30787012e4fc08"
+  },
+  {
+    "file": "tests/map027-product-knowledge-persistence.spec.js",
+    "bytes": 7400,
+    "lines": 151,
+    "sha256": "bf71e7a8c132ad05dbd791a6f80a6397207e2ece9297faa81216fb68be659e0c"
+  },
+  {
+    "file": "tests/map027-product-knowledge.spec.js",
+    "bytes": 4694,
+    "lines": 111,
+    "sha256": "ed825631dd8621b0ac2bc3581fe95a34627e507287313dc688cb3eb0c0288b0a"
+  },
+  {
+    "file": "tests/map027-store-polish.spec.js",
+    "bytes": 59007,
+    "lines": 1255,
+    "sha256": "db00e5b3d03812262bd135a06fd4c1955dbe87e01c9190ee53d1b9c42a38b8e6"
+  },
+  {
+    "file": "tests/map028-channel-guidance.spec.js",
+    "bytes": 5281,
+    "lines": 112,
+    "sha256": "6dddb45fef58562912dcbd52624a3f7c8909042ecb195be50974775f87a0ec82"
+  },
+  {
+    "file": "tests/map028-marketplace-push-shared.spec.js",
+    "bytes": 6607,
+    "lines": 156,
+    "sha256": "b3e47183b0490c39ee39962b4530a6784040c1e4022528bcc30cf6a6dd554861"
+  },
+  {
+    "file": "tests/marketplace-coverage-contract.spec.js",
+    "bytes": 4895,
+    "lines": 99,
+    "sha256": "4377083944e5cb32280cda320750a241e53bee8424a854f582c00606154e098e"
+  },
+  {
+    "file": "tests/marketplace-fee-estimate-contract.spec.js",
+    "bytes": 4688,
+    "lines": 80,
+    "sha256": "3ccc1c5754cbf960d7446164ccc72a56674a6096ab6d83cb11c9f9f6627b9191"
+  },
+  {
+    "file": "tests/marketplace-order-contract.spec.js",
+    "bytes": 3206,
+    "lines": 59,
+    "sha256": "d0206eb5ee2e091b9945b89ccbc170d984f024e8bfd1d261d4b1214d2222646b"
+  },
+  {
+    "file": "tests/marketplace-snapshot-contract.spec.js",
+    "bytes": 10692,
+    "lines": 185,
+    "sha256": "7e97b85458ba8856a26f98a5b859d90e12f98813a5ec7d647cacd5138b7428ae"
+  },
+  {
+    "file": "tests/marketplace-stock-count-contract.spec.js",
+    "bytes": 3206,
+    "lines": 56,
+    "sha256": "cc40ae817fb78ce5306d7b07c170ed4d9aa077198a9bc946c7313be20157ef89"
+  },
+  {
+    "file": "tests/media-recovery-ui.spec.js",
+    "bytes": 4987,
+    "lines": 96,
+    "sha256": "f6ae8fdb3d08c6f4e125d18339f897d11d72c7fbf7771da10569c6704b5d3f4e"
+  },
+  {
+    "file": "tests/operations-hardening.spec.js",
+    "bytes": 3789,
+    "lines": 72,
+    "sha256": "db1babc90edfa1981f08834d57174208384e8d56d5716767020edbcadc01e37a"
+  },
+  {
+    "file": "tests/overview-availability.spec.js",
+    "bytes": 6249,
+    "lines": 134,
+    "sha256": "42430d59e655b58721b6051e0f586aa90c64bb24c891b887eb38dd4cbd2c3e98"
+  },
+  {
+    "file": "tests/owner-close-bookkeeping-contract.spec.js",
+    "bytes": 2747,
+    "lines": 41,
+    "sha256": "71c05974cf6f0816cd7c4a069d3058f97fe0f7460609d9502ed1bed0ea1baf2a"
+  },
+  {
+    "file": "tests/owner-close-pasabuy-contract.spec.js",
+    "bytes": 1730,
+    "lines": 26,
+    "sha256": "d596748fd630a4828b593e23e5e9d5bc02761ad9f5283481c31f2c89bb2eb6e8"
+  },
+  {
+    "file": "tests/owner-count-close-contract.spec.js",
+    "bytes": 5243,
+    "lines": 114,
+    "sha256": "9af78bf86d7895cbb147cfc7b4a8843d8cc232f29997cfa0b3567db1f8ceaa88"
+  },
+  {
+    "file": "tests/owner-count-close-ui.spec.js",
+    "bytes": 21669,
+    "lines": 311,
+    "sha256": "02dcfdeeefee132aa8110ed6c3140f6e2067c1f6e137eead847688b93debc774"
+  },
+  {
+    "file": "tests/packing-lot-proof.spec.js",
+    "bytes": 771,
+    "lines": 11,
+    "sha256": "3e6d4abdab68cbcfa561fce0e81ce262c16f85c9a494482a3bf583f298e86fee"
+  },
+  {
+    "file": "tests/payment-recovery-ui.spec.js",
+    "bytes": 9324,
+    "lines": 148,
+    "sha256": "1265e944c0c2bb85fd1a2085288ed18d90b8141db6070f8d960f54490cb37141"
+  },
+  {
+    "file": "tests/payment-recovery.spec.js",
+    "bytes": 4659,
+    "lines": 59,
+    "sha256": "a8ec5a69810b3beeb0e535aa85c19c970a41884276af5f558c2de70fb69f2d24"
+  },
+  {
+    "file": "tests/prelaunch-indexing-contract.spec.js",
+    "bytes": 4126,
+    "lines": 90,
+    "sha256": "babb31c7904dec3b9d89ae393ca2dcbbd8b9fb6fc96168b49cd2ed25c6e672a0"
+  },
+  {
+    "file": "tests/privileged-membership-serialization.spec.js",
+    "bytes": 3401,
+    "lines": 72,
+    "sha256": "d6b39fe1cacd09fce25f86611e0cbd8153e360ce04265779cafe68f7b6155fb6"
+  },
+  {
+    "file": "tests/product-intake-contract.spec.js",
+    "bytes": 12208,
+    "lines": 255,
+    "sha256": "accdb6c18042d770c229a76fa7e09aa54da881e13389ff27463557bac9207e32"
+  },
+  {
+    "file": "tests/provider-capacity-contract.spec.js",
+    "bytes": 4156,
+    "lines": 79,
+    "sha256": "c243ee5de74c719991762206c030a0bbe8057bfa3a4bd7c5d92e10fc945be2dd"
+  },
+  {
+    "file": "tests/purchase-time-reservation.spec.js",
+    "bytes": 5651,
+    "lines": 121,
+    "sha256": "e04e82af7b9c49b4361e32ed5406b9a4f18a2639a686e3d66d8d77a45cc061fb"
+  },
+  {
+    "file": "tests/release-ci-contract.spec.js",
+    "bytes": 6102,
+    "lines": 138,
+    "sha256": "0f6e49de67d8ad6242817ababcdabd8328bf3e0f5df8e4028725c1d1a806458a"
+  },
+  {
+    "file": "tests/request-timeout.spec.js",
+    "bytes": 7761,
+    "lines": 204,
+    "sha256": "67ac014a47255d7bbbdf4878b5a3900c76a36d5e47f5ac7ba050c2c38725431a"
+  },
+  {
+    "file": "tests/reservation-policy-contract.spec.js",
+    "bytes": 10419,
+    "lines": 228,
+    "sha256": "4d29e7ad77f6ab6648962baf1e9c26631e331ffc00e714aea3c1b76f34ae3df5"
+  },
+  {
+    "file": "tests/schema-truth-tool.spec.js",
+    "bytes": 29796,
+    "lines": 592,
+    "sha256": "13b7f26d188ba3079ec3f8cea0137e682e2f809a323d036deeba6ed4a8cfec44"
+  },
+  {
+    "file": "tests/security-boundary-hardening.spec.js",
+    "bytes": 1772,
+    "lines": 40,
+    "sha256": "bda7629d2c29454f6d7abf732454485125c3f9fbe09fb4e7db02f10a75fe3611"
+  },
+  {
+    "file": "tests/security-event-boundary.spec.js",
+    "bytes": 2880,
+    "lines": 55,
+    "sha256": "592564127de1f36a75156bffdc16206e12a9c972370f0de5a793a9ba27241043"
+  },
+  {
+    "file": "tests/security-headers-contract.spec.js",
+    "bytes": 19226,
+    "lines": 452,
+    "sha256": "31c7022a0437932e6f25712aa2001ae1e186653209e96171f4ec71cc462799c5"
+  },
+  {
+    "file": "tests/security-surface-inventory.spec.js",
+    "bytes": 5303,
+    "lines": 105,
+    "sha256": "f5d94ecee050eedce18faf6d069b7674fcf501fa268298cd670b5746a19ba405"
+  },
+  {
+    "file": "tests/sheet-navigation-contract.spec.js",
+    "bytes": 4667,
+    "lines": 94,
+    "sha256": "4aa54074db1df27e5d91afd25d511aa7c14e94d96c9450dc60e5f61265a28239"
+  },
+  {
+    "file": "tests/sheet-reference-fields-contract.spec.js",
+    "bytes": 6770,
+    "lines": 142,
+    "sha256": "d5078429b5400f53c2c09a335e01a90b1b64dbebe5e04127e90db856714bdbcc"
+  },
+  {
+    "file": "tests/sheet-shop-lens.spec.js",
+    "bytes": 6062,
+    "lines": 129,
+    "sha256": "35b0f1bf8562bb779da239200c5d1e554468af67deeb3c4cb797ac766cda96d9"
+  },
+  {
+    "file": "tests/shopee-webhook-boundary.spec.js",
+    "bytes": 6639,
+    "lines": 143,
+    "sha256": "3cdf87f7bc1e80ef74a8a0daa0c0ea73e4d5b66c5f6065166f372a8f3dea69c2"
+  },
+  {
+    "file": "tests/smoke.spec.js",
+    "bytes": 27759,
+    "lines": 487,
+    "sha256": "77f70c53d73577684a5a8f910c58e0950542399a3da096aa188badb530656ee4"
+  },
+  {
+    "file": "tests/staff-workflow-guide-contract.spec.js",
+    "bytes": 4146,
+    "lines": 74,
+    "sha256": "58928fdd5d89501b0ce66b76bdb2bb7a30702caf00ce27c95f17a16c4a6f0322"
+  },
+  {
+    "file": "tests/store-orientation-ui.spec.js",
+    "bytes": 4508,
+    "lines": 69,
+    "sha256": "07c61f53fdcba7958e99708bfa6492b66dd888ac890bde9356527894d65ed396"
+  },
+  {
+    "file": "tests/storefront-auth-boundary.spec.js",
+    "bytes": 9141,
+    "lines": 192,
+    "sha256": "98c2e1eeb915ec0eb7e1c174882323b8d1ed4e96deb9b6e1d46a4b82b31f89b2"
+  },
+  {
+    "file": "tests/storefront-discovery-contract.spec.js",
+    "bytes": 13691,
+    "lines": 254,
+    "sha256": "fdfefee603c809e74df0de1dcd24701ebbdd2ad4711281c3fe8b1c6e46a15ca7"
+  },
+  {
+    "file": "tests/storefront-mobile.spec.js",
+    "bytes": 5810,
+    "lines": 113,
+    "sha256": "2404b9c929910d28dc2df880a64262a0f0a0e2bc131e12079b12ec6261ed56d3"
+  },
+  {
+    "file": "tests/storefront-motion.spec.js",
+    "bytes": 4146,
+    "lines": 87,
+    "sha256": "ce381c982e8f8e51868821c1080fa15278d20419e9a226b875ccda7260715fdf"
+  },
+  {
+    "file": "tests/storefront-selling-surfaces.spec.js",
+    "bytes": 12694,
+    "lines": 278,
+    "sha256": "05c704fe8b236eaea61809b549690c8b13b0afd37bea7c39751f1d4094ebaa00"
+  },
+  {
+    "file": "tests/storefront-theme.spec.js",
+    "bytes": 3714,
+    "lines": 79,
+    "sha256": "674c6bc97c0556c1999c53b94b886756f86e982368203175179653d06286f956"
+  },
+  {
+    "file": "tests/wholesale-inquiry-ui.spec.js",
+    "bytes": 2779,
+    "lines": 30,
+    "sha256": "8e2986ef984178b288b7094e933ce5cfff80c5e9de688833027971f80bd20c19"
+  },
+  {
+    "file": "tests/wholesale-recovery-ui.spec.js",
+    "bytes": 5402,
+    "lines": 100,
+    "sha256": "dbfb75444b7e76611ddbda85eda69d62c8516b3d7337c51a3433bd142633bbdf"
+  },
+  {
+    "file": "tests/workflow-api-ui.spec.js",
+    "bytes": 4422,
+    "lines": 68,
+    "sha256": "73afb597b67b5b96e26a0e5fde8f409290826d26e937688424e5508a79dd9467"
+  },
+  {
+    "file": "tests/workflow-graph-canvas.spec.js",
+    "bytes": 2633,
+    "lines": 47,
+    "sha256": "bedcc7f38fd1510a3045e420d83109dd7ad70253137c79e80bae065a8fabe2f6"
+  },
+  {
+    "file": "tests/workflow-guide-truth.spec.js",
+    "bytes": 3274,
+    "lines": 79,
+    "sha256": "1a14a70db37225479a9b09e26d26569e20fc01d5d0b33053152d783fd29869d8"
+  }
+]

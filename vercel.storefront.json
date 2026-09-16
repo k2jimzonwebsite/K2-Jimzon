@@ -1,5 +1,5 @@
 {
-  "buildCommand": "K2_DEPLOYMENT_TARGET=storefront npm run build",
+  "buildCommand": "K2_DEPLOYMENT_TARGET=storefront npm run build:storefront",
   "outputDirectory": "dist",
   "functions": {
     "api/storefront/index.js": {
@@ -62,6 +62,22 @@
     {
       "source": "/confirmation",
       "destination": "/index.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/returns",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/policies",
+      "destination": "/index.html"
     }
   ],
   "headers": [
@@ -120,9 +136,50 @@
           "value": "noindex, nofollow"
         }
       ]
+    },
+    {
+      "source": "/account",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/messages",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/checkout",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/confirmation",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ],
   "redirects": [
+    {
+      "source": "/wholesale",
+      "destination": "/trade",
+      "permanent": true
+    },
     {
       "source": "/:path*",
       "has": [

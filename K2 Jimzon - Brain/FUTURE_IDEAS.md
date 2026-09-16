@@ -1,5 +1,138 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260916-02 — accepted full project audit, merged into MAP-028 K.**
+Owner requests an exhaustive full-project audit: inspect for things that won't work,
+architectural and functional gaps, faults, runtime mistakes, edge case failures, and
+production readiness risks across Storefront, Admin BOS, BFF, Database (Supabase),
+APIs, and hosting configurations, then document all findings in MASTER_ACTION_PLAN.md.
+Audit gate: execute comprehensive automated scanners, contract tests, UI probes, and
+manual code inspections; categorize by severity (P0 Blocker, P1 High Risk, P2 Medium/Quality);
+reconcile verified reality against documented claims without creating a competing backlog.
+
+**IDEA-20260916-01 — accepted delivery automation, merged into MAP-023 / MAP-018. Database applied to Supabase, code locally verified.**
+Owner requests an automated Shopee/Lazada-style delivery calculator at checkout:
+calculate package weight from cart items, present instant delivery options and fees
+by destination region (NCR, Luzon, Visayas, Mindanao, Pickup), include the fee in
+the order total, and capture customer-confirmed delivery details without requiring
+pre-order manual staff negotiation. Delivery mode is selected by the customer;
+carrier commitment and dispatch are fulfilled by K2 Jimzon. Completed with real-time
+shipping calculator engine (`src/lib/cartShippingCalculator.js`), Storefront BFF
+`shippingAmount` and `shippingQuoteStatus` validation (`prepared-api/storefront/order.js`),
+database RPC update on production Supabase `submit_order_request_v2` and `order_requests.payment_evidence`,
+checkout UX cards and live totals (`Checkout.jsx`), and Admin BOS confirmation queue and courier modal integration
+(`OmniOperationsHub.jsx`). Database DDL permanently applied and verified on production Supabase (`pixplcjqivlfflickobf`) via Supabase Management API per explicit owner instruction. All 863 base tests, calculator tests, contracts, prebuild, and builds pass. Vercel deployment pending git push to `main`.
+
+**IDEA-20260914-02 — accepted autonomous remediation, merged into existing MAP owners.**
+Owner requests all MAP work that can proceed without interruptions. Execute
+independent prepared engineering in dependency order; retain actual policy,
+provider and activation gates without repeatedly asking for them. Begin with
+MAP-019/020 guest recovery and parsing, then independently verifiable audit
+defects under MAP-023/027/028. No new business policy or second backlog is created.
+Verification and recovery remain in each owning MAP slice and durable evidence.
+
+**IDEA-20260914-01 — accepted audit refresh, merged into MAP-028 J.**
+Owner requests the complete 44-domain project audit, with evidence, confidence,
+severity, preserved architecture, and no production mutations or broad code edits.
+Audit gate: consolidate current findings and superseded remediation into
+`docs/audits/MASTER_PROJECT_AUDIT.md`; keep the root MAP as the sole active backlog.
+Existing security, operational and launch owners retain their dependencies.
+This is audit/documentation work, not authorization to activate or deploy features.
+
+
+**IDEA-20260913-04 — accepted completeness review, merged into MAP-022/023/025/026/028.**
+Owner asks what the launch plan misses. Cross-check of the start-here guide,
+existing owner decisions and full-audit U-001–009 finds under-specified external
+stock-race/initial-sync acceptance and summary omissions for staff, scheduled
+work, financial reconciliation and remaining audit evidence. Refine existing
+owners and acceptance gates; no new connector or operational policy is activated.
+Existing detailed requirements are not newly discovered code defects. This review
+does not certify current source, database, deployments or legal compliance.
+
+**IDEA-20260913-03 — accepted planning refinement, merged into MAP-026 / MAP-028.**
+Owner continuation: document the entire launch sequence in the MAP for future
+execution without chat. Accepted as the same refinement: the execution dashboard
+now has a start-here guide covering all twelve existing owners, input packets,
+acceptance evidence, state distinctions and handoff rules. No new backlog item.
+Owner requests the remaining launch sequence and official Lazada/TikTok Shop
+website/application preparation, so payment, delivery and inventory inputs can
+follow later. Audit: existing MAP-026 already prioritizes both platforms and
+owns access qualification and synchronization. Merge researched application
+readiness into that item; do not create a second roadmap or public SaaS scope.
+Preserve K2-owned multi-shop and warehouse boundaries. Registration eligibility,
+reviews and shop grants require actual provider evidence. This is a planning
+update, not an app submission, provider activation or application deployment.
+
+**IDEA-20260913-02 — accepted audit remediation, merged into MAP-017–025 / MAP-028 J.**
+13 September production continuation: the owner authorized the explained exact
+MAP-017 security correction. Application and independent verification succeeded;
+audit 26→10 and live read boundary 14/14. This fulfills that authorization only.
+Remaining guest/provider permissions stay in MAP-017; completion evidence is in
+System Brain and `docs/evidence/20260913-audit-remediation/README.md`.
+
+Owner requested applying the 13 September full-audit findings and following the
+MAP rules. Evidence: `docs/evidence/20260913-full-audit/README.md` AUD3-001–008.
+Existing tests do not cover the reproduced intake coercion, scanner exemption,
+expiry-day and clearance projection faults; deployment/CI and scoped guest
+recovery gaps already belong to the existing queue. Accept surgical corrections
+and behavioral regression evidence, with no new operational authority or backlog.
+Preserve exact-payload production authorization, Unlisted owner policy, and
+real-host acceptance gates. Unconfirmed concerns require proof before changes.
+Record remaining execution only in each owning MAP item, and verified behavior
+in the rulebook, System Brain and relevant runbooks/test records.
+
+**IDEA-20260913-01 — accepted verification continuation, merged into MAP-028 J.**
+Owner requests independent verification of the recent MAP handoff and whether
+changes are actually applied. Audit: the checkout is dirty at `41d96df`; local
+test reports, prepared SQL, provider receipts and deployed behavior are different
+claims. Reuse existing MAP-017–028 owners and acceptance gates. Scope is fresh
+local checks, isolated investigation of the reported Admin failure, read-only
+applied/deployed-state checks, and durable corrections. Preserve other sessions'
+work and the existing stash; no deployment, production migration or business
+policy decision is authorized by this verification request.
+
+13 September continuation of **IDEA-20260908-01**: the owner asks to resume
+unfinished MAP work after reading its rules. Audit outcome remains merged into
+the existing dependency-ordered queue. MAP-023 / I-001 already accepts payment,
+confirmation, handover, refund/cancellation and failure/replay composition;
+checking the latest audit and completing these boundaries introduces no new
+business policy or inventory authority. Keep remaining work only in the MAP.
+
+9 September active goal continuation of **IDEA-20260908-01**: owner asks to
+complete the remaining production blockers. Existing MAP-028 I-001 owns the
+confirmation/payment stock commitment and composed lifecycle work; I-002/I-004
+and later items retain dependency order. Physical custody versus owned stock
+is an implementation distinction required by OWNER-002 and the existing
+physical-count rule, not a new business policy. No duplicate idea or backlog
+is created; local preparation does not grant production activation authority.
+
+9 September continuation of **IDEA-20260908-01**: the existing I-002 manual
+intake step/Draft/first-inventory retry slice was finished and locally verified;
+receipt-shape and post-write-refresh findings were merged into that same scope.
+Decision remains accepted/merged, with no new backlog or production authority.
+Evidence: `docs/evidence/20260909-intake-command-retry/README.md`; all remaining
+caller/activation work stays in MAP-028 I-002.
+
+**IDEA-20260909-02 — accepted refinement, merged into MAP-028 J/I-015 and MAP-027.**
+Owner requests a Master Action Plan truth audit, verification and correction of
+stale/completed claims, and explicit work for oversized phone next-pantry/category
+buttons and difficult in-store zoom. Audit: the MAP contains superseded phase-one
+apply instructions, stale release/browser blockers and duplicate headings. The
+store already has previous/next shelf and zoom controls, so extend their existing
+acceptance scope rather than create another navigation system or backlog. Existing
+orientation tests click zoom but do not assert camera movement or pinch behavior.
+Outcome: accept documentation corrections and local verification under MAP-028 J;
+merge compact navigation and zoom repair/real-device acceptance into I-015/MAP-027.
+Preserve 44px targets, readable category names, K2 room/wood identity, canonical
+basket and reduced-motion fallback. Remaining implementation, dependencies and
+acceptance live only in the owning MAP items. No production activation is implied.
+
+**IDEA-20260909-01 — audit continuation, merged into MAP-028 section J.**
+Owner asks to continue the interrupted full Storefront/Admin website audit and
+document gaps in the existing Master Action Plan. Reuse I-001–016 and existing
+activation gates; verify current live observations separately from source and
+isolated fixtures. This is an audit/documentation request, not authorization to
+change production data, enable providers, send customer requests, or deploy fixes.
+
 **IDEA-20260908-03 — accepted and merged into MAP-024 / MAP-028 B6/B8/B9.**
 Owner requests Google Analytics, Search Console and Google indexing readiness
 for Italian imported goods in the Philippines and Italy-to-PH Pasabuy. Reuse
@@ -426,15 +559,18 @@ Master Action Plan is authorized for implementation.
 
 | Idea | Outcome | Destination or reason |
 | --- | --- | --- |
+| IDEA-20260913-04 | Accepted completeness review; merged into MAP-022/023/025/026/028 | Clarify distributed stock and initial-sync acceptance; surface staff, scheduled jobs, money reconciliation and audit-proof dependencies in the existing launch guide. |
+| IDEA-20260913-03 | Accepted planning refinement; merged into MAP-026 / MAP-028 | Official-source marketplace access and website/application preparation, within existing own-shop scope and launch dependencies; no submission or activation performed. |
+| IDEA-20260913-02 | Accepted remediation; merged into existing MAP-017–025 / MAP-028 J | Apply proved AUD3 findings with failing-first tests, scoped recovery and durable evidence; preserve production/policy gates and investigate unconfirmed concerns before changing behavior. |
+| IDEA-20260913-01 | Accepted verification continuation; merged into MAP-028 J | Independently verify the dirty combined handoff, investigate Admin failures, distinguish prepared/applied/deployed evidence, and correct durable records. Existing MAP owners retain all implementation and activation gates. |
+| IDEA-20260909-01 | Merged into MAP-028 J and existing I findings | Resume interrupted full-surface audit. Record reproducible defects, fresh test evidence and exact unverified journeys without duplicating the backlog or treating prepared functionality as live. |
+| IDEA-20260909-02 | Accepted refinement; merged into MAP-028 J/I-015 and MAP-027 | Reconcile stale MAP instructions with dated evidence; verify local behavior; record compact phone category navigation and scene/browser zoom acceptance. |
 | IDEA-20260906-06 | Merged into MAP-028 I-012/I-016 and MAP-018/019/021/023/025 | Owner asks for a toned, easier Admin with unmistakable logic and states. Accept restrained shared controls, task-oriented navigation, explicit record/state/action hierarchy and measured staff journeys. Reject simplification by hiding blockers, merging business statuses, weakening permissions or replacing K2 identity. Documentation target only; implementation stays in existing MAP items. |
 | IDEA-20260906-05 | Merged into MAP-018 / MAP-028 I-016 | Owner asks to prepare automatic intake now and supply API keys later. Reuse accepted IDEA-20260830-01: server-only provider adapter, durable capped jobs, reviewed content/image candidates, manual fallback and explicit readiness. No paid call or production database activation in this preparation. |
 | IDEA-20260906-04 | Merged into MAP-028 I-016 / MAP-019/021/023 | Owner requests API calls from the workflow map. Accept bounded existing authenticated K2 service operations with visible results and recovery. Initial catalog/consignment reads reuse current routes; write commands require exact record review and server receipts. External integrations/editor scope remains undecided. No arbitrary URL execution or provider activation is authorized by the diagram. |
 | IDEA-20260906-03 | Merged into MAP-028 I-009 / MAP-027 | Owner prioritizes additive hero visual enhancement and a restorable copy of the current design. Preserve headline, CTAs, map and trust content; add a small catalog-driven merchandise display in the existing brand. Exact pre-edit Hero, FlightMap and global styles saved with hashes under docs/design-checkpoints/20260906-hero-before-additions. No new product facts, stock promises, data source or deployment. |
 | IDEA-20260908-02 | Merged into MAP-028 I-009/I-015 and MAP-027 | Owner requests finishing the current recovery work first, then inspecting and improving the store in desktop browser and mobile portrait/landscape. Accept responsive landscape treatment while retaining fully usable portrait, rotation/state preservation and existing K2 identity. Blender MCP may create assets if the inspection establishes a need. Do not force screen orientation or replace canonical commerce state. |
-| IDEA-20260908-01 | Merged into MAP-028 and existing MAP-017–027 | Owner requests checking and finishing work executable now. Preserve provider/recovery gates and existing unfinished changes; verify before removing scope. Accepted continuation includes I-001 writer locking/integrity, I-002 retained fulfillment/supplier/coupon retries and their focus/test-runner acceptance, I-003 manual delivery quoting until immutable fee binding, I-009 cold test readiness and I-014 source inventory drift. No new top-level backlog or production authority. |
-| IDEA-20260906-06 | Merged into MAP-028 I-012/I-016 and MAP-018/019/021/023/025 | Owner asks for a toned, easier Admin with unmistakable logic and states. Accept restrained shared controls, task-oriented navigation, explicit record/state/action hierarchy and measured staff journeys. Reject simplification by hiding blockers, merging business statuses, weakening permissions or replacing K2 identity. Documentation target only; implementation stays in existing MAP items. |
-| IDEA-20260906-04 | Merged into MAP-028 I-016 / MAP-019/021/023 | Owner requests a functional workflow map capable of API calls. Current graph contains navigation, local rehearsal state and fictional simulations. Accept bounded actions through existing authenticated K2 backend services with record selection, server receipts, permission checks and recovery; preserve guide-only meaning for rehearsal. External-service automation/editor scope awaits clarification and must not be inferred as arbitrary URL execution or provider activation. |
-| IDEA-20260906-03 | Merged into MAP-028 I-009 / MAP-027 | Owner prioritizes additive hero visual enhancement and a restorable copy of the current design. Preserve headline, CTAs, map and trust content; add a small catalog-driven merchandise display in the existing brand. Exact pre-edit Hero, FlightMap and global styles saved with hashes under docs/design-checkpoints/20260906-hero-before-additions. No new product facts, stock promises, data source or deployment. |
+| IDEA-20260908-01 | Merged into MAP-028 and existing MAP-017–027 | Owner requests checking and finishing work executable now.
 | IDEA-20260906-01 | Merged | Owner requests completing all executable production-readiness work until genuine external inputs remain, with manual GCash or QR payment as the intended first-launch model. Existing MAP-017–028 own implementation and acceptance; MAP-019/MAP-023 own evidence, independent verification, rejection recovery and receiving instructions. No automatic gateway, fabricated receiving account, QR payload or courier integration is authorized by this preference. Recovery access, real inventory and exact-host/staff acceptance remain required. |
 | IDEA-20260906-02 | Merged | Owner requests a fresh full Storefront/Admin engineering and visual audit, documented in the sole Master Action Plan. MAP-028 section I owns the coverage register, reproducible findings and ecommerce design acceptance; implementation remains under MAP-017–027 by domain. Preserve the wood/editorial Storefront and dense operational Admin. Audit uses isolated fabricated catalog/browser evidence and source/build checks; provider activation, live writes, invented product facts, payment methods, urgency or delivery promises are excluded. No separate roadmap is created. |
 | IDEA-20260905-01 | Merged | Owner-requested virtual-store enhancement: more expressive cartoon/anime adult clerk, readable K2 cap, shopper-driven poses, responsive framing, clearer navigation, and trustworthy question/basket feedback. MAP-027 owns the workflow audit, character direction, implementation, and local/browser verification. This is presentation work over existing canonical commerce, not authority to activate messaging, publish products, or deploy. |

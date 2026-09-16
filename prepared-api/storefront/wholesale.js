@@ -1,5 +1,5 @@
 import {
-  contact, idempotencyKey, publicFailure, readJson, requestIp, requireAllowedOrigin,
+  contact, idempotencyKey, publicFailure, readJson, requestHostname, requestIp, requireAllowedOrigin,
   requireStorefrontProject, safeJson, setGuestGrantCookie, signedRpcArguments, text,
   verifyBotChallenge,
 } from '../../server/storefront-bff/security.js'
@@ -32,7 +32,7 @@ export default async function handler(req,res) {
   if(!requireAllowedOrigin(req)) return safeJson(res,403,{error:{code:'ORIGIN_NOT_ALLOWED'}})
   try {
     const {payload,botToken}=validateWholesaleInquiry(await readJson(req))
-    if(!await verifyBotChallenge(botToken,requestIp(req))) return safeJson(res,403,{error:{code:'BOT_CHALLENGE_REQUIRED'}})
+    if(!await verifyBotChallenge(botToken,requestIp(req),'guest_wholesale', { hostname: requestHostname(req) })) return safeJson(res,403,{error:{code:'BOT_CHALLENGE_REQUIRED'}})
     const {data,error}=await createStorefrontServerSupabase().rpc('submit_wholesale_inquiry_v1',signedRpcArguments(req,'wholesale_inquiry',payload))
     if(error) return safeJson(res,503,{error:{code:'WHOLESALE_INQUIRY_UNAVAILABLE'}})
     const mapped=mapBoundaryResult(data)

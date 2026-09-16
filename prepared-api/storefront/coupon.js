@@ -1,5 +1,5 @@
 import {
-  publicFailure, readJson, requireAllowedOrigin, requireStorefrontProject, safeJson,
+  numeric, publicFailure, readJson, requireAllowedOrigin, requireStorefrontProject, safeJson,
   signedRpcArguments, text,
 } from '../../server/storefront-bff/security.js'
 import { createStorefrontServerSupabase, mapBoundaryResult } from '../../server/storefront-bff/supabase.js'
@@ -9,8 +9,7 @@ function validate(body) {
       || Object.keys(body).some((key) => !['code','subtotal'].includes(key))) throw new Error('REQUEST_INVALID')
   const code = text(body.code, 'COUPON', { required: true, min: 1, max: 64 }).toUpperCase()
   if (!/^[A-Z0-9_-]+$/.test(code)) throw new Error('COUPON_INVALID')
-  const subtotal = Number(body.subtotal)
-  if (!Number.isFinite(subtotal) || subtotal < 0 || subtotal > 10000000) throw new Error('SUBTOTAL_INVALID')
+  const subtotal = numeric(body.subtotal, 'SUBTOTAL', { min: 0, max: 10000000 })
   return { code, subtotal: Math.round(subtotal * 100) / 100 }
 }
 

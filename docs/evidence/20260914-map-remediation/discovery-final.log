@@ -1,0 +1,27 @@
+
+Running 20 tests using 1 worker
+
+(node:1624) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\prelaunch-indexing-contract.spec.js:30:3 › pre-launch indexing gate › the header and the switch agree (12ms)
+  ok  2 tests\prelaunch-indexing-contract.spec.js:43:3 › pre-launch indexing gate › the sitemap exclusion follows the same switch (4ms)
+  ok  3 tests\prelaunch-indexing-contract.spec.js:55:3 › pre-launch indexing gate › robots.txt still allows crawling so the header can be read (3ms)
+  ok  4 tests\prelaunch-indexing-contract.spec.js:64:3 › pre-launch indexing gate › only prelaunch products and scoped guest journeys are withheld (5ms)
+  ok  5 tests\prelaunch-indexing-contract.spec.js:79:3 › pre-launch indexing gate › the undo procedure is documented and reachable (3ms)
+  ok  6 tests\storefront-discovery-contract.spec.js:11:1 › the wholesale alias permanently redirects to the established trade URL (2ms)
+  ok  7 tests\storefront-discovery-contract.spec.js:16:1 › scoped guest routes have crawler exclusions at the deployed header boundary (3ms)
+  ok  8 tests\storefront-discovery-contract.spec.js:24:1 › storefront identity metadata and crawler policy ship in the public artifact (16ms)
+  ok  9 tests\storefront-discovery-contract.spec.js:72:1 › the Admin build replaces shared Storefront discovery tags with staff ones (6ms)
+  ok 10 tests\storefront-discovery-contract.spec.js:85:1 › both target builds emit a static noindex recovery page for real host 404 responses (7ms)
+  ok 11 tests\storefront-discovery-contract.spec.js:103:1 › the production boundary fails closed on missing or executable Storefront 404 output (212ms)
+  ok 12 tests\storefront-discovery-contract.spec.js:137:1 › every local product fallback is shipped and build verification rejects missing references (4ms)
+  ok 13 tests\storefront-discovery-contract.spec.js:152:1 › home discovery routes through the shared history and focus contract (2ms)
+  ok 14 tests\storefront-discovery-contract.spec.js:159:1 › the Storefront defers the full Supabase SDK until remote data is requested (8ms)
+  ok 15 tests\storefront-discovery-contract.spec.js:175:1 › production builds enforce the recorded route bundle budgets (7ms)
+  ok 16 tests\storefront-discovery-contract.spec.js:188:1 › optional brand fonts cannot block Storefront bootstrap (3ms)
+  ok 17 tests\storefront-discovery-contract.spec.js:197:1 › the cart overlay is loaded only when Storefront chrome requests it (3ms)
+  ok 18 tests\storefront-discovery-contract.spec.js:206:1 › product discovery metadata is derived from canonical storefront truth (6ms)
+  ok 19 tests\storefront-discovery-contract.spec.js:228:1 › the product page publishes Product, FAQ and Breadcrumb markup from one approved source (5ms)
+  ok 20 tests\storefront-discovery-contract.spec.js:250:1 › breadcrumb markup is positional, absolute, and refuses an incomplete trail (7ms)
+
+  20 passed (1.3s)

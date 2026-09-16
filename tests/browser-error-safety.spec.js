@@ -24,8 +24,12 @@ test('global error UI and reporter do not expose raw browser diagnostics', async
   expect(reporter).not.toContain('userAgent')
   expect(reporter).not.toContain('componentStack')
   expect(boundary).not.toContain('this.state.error.message')
+  expect(boundary).not.toContain('Reload Admin')
   expect(boundary).toContain('UI_SECTION_UNAVAILABLE')
   expect(boundary).toContain('role="alert"')
+  expect(boundary).toContain('Reload page')
+  expect(boundary).toContain('Try this section again')
+  expect(boundary).toContain('min-h-11')
 })
 
 test('visible operation errors use allowlisted recovery copy and stable codes', () => {

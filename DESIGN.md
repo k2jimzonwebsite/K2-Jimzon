@@ -65,6 +65,22 @@ components:
 
 # Design System: K2 Jimzon
 
+The remote review globe distinguishes an empty published-review register from
+an unavailable review source (IDEA-20260914-02). Its product display can remain
+interactive without filling the missing feedback with demo testimonials. These
+states retain the established typography and status styling.
+
+IDEA-20260914-02 preserves the storefront register while ordering phone product
+content as gallery, buying information/actions, then supporting tabs/knowledge.
+Desktop retains two columns. Product tabs and breadcrumb controls use at least
+44px targets. Missing canonical specifications, preparation and availability use
+explicit unavailable/unknown copy, without demo provenance badges. Checkout
+labels its coupon input and explains frozen details while a request is uncertain.
+Shared fatal recovery copy is surface-neutral and asks users to check receipts
+before repeating a request; it must not assert that a failed response caused no
+change. Synthetic phone/desktop evidence is under
+`docs/evidence/20260914-map-remediation`; real-device acceptance remains separate.
+
 Dashboard widgets (IDEA-20260906-07) refine the calmer Admin direction: seven
 named destinations in the existing left navigation, one visible reporting widget
 at a time, and a labelled 44px selector on phones. The default is Shop & channel
@@ -172,6 +188,24 @@ generic animation, palette and card suggestions.
 Recovery checkpoint: `docs/design-checkpoints/20260908-fulfillment-retry/`.
 Browser evidence and remaining complete-workspace/provider acceptance live in
 I-002 and System Brain. This is not a deployed behavior claim.
+
+## 9 September catalog CSV recovery — MAP-028 I-002, local preparation
+
+The four-skill Admin review preserves existing Source Sans typography, tokens,
+dense before/after review, 44px controls and motion behavior. It adds no new
+visual system; operational uncertainty and recovery remain the hierarchy.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Close, Escape, file replacement and re-preview can discard a pending or ambiguous chunk identity. | Lock those actions until the chunk is reconciled; retain the exact reviewed rows, reason and operation/key identity. | Prevent a different command from replacing a write that may already exist. |
+| Showing an error hides the review and its recovery controls. | Keep the uncertainty warning visible beside exact retry and durable-status recovery. | Make the safe next action visible without losing context. |
+| A late response can refresh the next staff actor's workspace. | Ignore async continuations after the actor-scoped modal is disposed. | Keep UI confirmation bound to the staff runtime that submitted it. |
+
+The 375 × 812 reduced-motion case has no horizontal overflow; catalog cases pass
+3/3 and the shared recovery suite passes 33/33. This is intercepted local fixture
+evidence, not a deployed receipt. Checkpoint/evidence:
+`docs/design-checkpoints/20260909-catalog-import-retry/` and
+`docs/evidence/20260909-catalog-import-retry/`.
 
 ### Calm Admin, distinct operational states — IDEA-20260906-06
 
@@ -368,6 +402,20 @@ recovery copy visible and never presents refusal as success. All repeated action
 remain at least 44px and motion is limited to direct progress feedback.
 
 ### Admin phone-intake interaction contract
+
+9 September I-002 recovery refinement (IDEA-20260908-01): step/Draft/first-
+inventory uncertainty uses the existing persistent error panel with explicit
+"Outcome unconfirmed" wording and one 44px exact retry button. Review controls
+are disabled as a group; the retry remains outside that group and is disabled
+offline or during dispatch. Preserve the dark Admin palette, focus-on-error and
+reduced-motion behavior. Screenshot evidence belongs under
+`docs/evidence/20260909-intake-command-retry/`; provider acceptance stays I-002.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Some packaging fields remained editable during a pending step | All reviewed step controls freeze together | Visible details must remain the submitted details |
+| Draft uncertainty offered two identical retry buttons | One retry beside the warning | Give staff one clear recovery action |
+| Error heading implied the write had not completed | Outcome is explicitly unconfirmed | Response loss does not establish failure |
 
 Product intake preserves the compact Admin BOS visual language while presenting
 one operational decision at a time. Required actions use at least 44px touch
@@ -1066,3 +1114,16 @@ evidence and its fixture limitations: `docs/evidence/20260906-hero-additions/`.
 
 ### 8 September store orientation - IDEA-20260908-02
 The owner target is the architectural `/store`, separate from catalog/shop. Preserve existing wood, room models and camera behavior. Phone landscape uses one navigation row and a compact shelf introduction; selected goods take precedence over repeated introductory copy. Phone empty basket decoration is hidden, filled basket leaves zoom space, and the minimized keeper uses its labeled avatar control. Portrait retains stacked room and independently scrollable detail rail. Before/after screenshots and exact pre-edit recovery: `docs/evidence/20260908-store-orientation/` and `docs/design-checkpoints/20260908-store-orientation/`. These are fabricated local-browser evidence, not deployed/physical-device acceptance.
+
+
+### 9 September mobile store acceptance refinement — IDEA-20260909-02
+
+Owner reports oversized next-pantry/category controls and difficult in-store
+zoom. This is a target refinement, not an implemented fix. MAP-028 I-015/MAP-027
+own compact navigation retaining readable category context and 44px hit targets,
+usable scene +/−/reset/pinch, and separate browser 200% text/page zoom. Preserve
+wood, room assets, canonical basket, keyboard/fallback and reduced motion. Check
+empty/full basket, keeper/chat and keyboard together in portrait and landscape.
+The 8 September screenshots establish earlier orientation only; click-only zoom
+tests do not establish camera movement or actual iOS/Android touch acceptance.
+Review and coverage: `docs/evidence/20260909-map-truth-audit/README.md`.

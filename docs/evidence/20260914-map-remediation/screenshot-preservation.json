@@ -1,0 +1,86 @@
+[
+  {
+    "original": "docs/evidence\\20260908-wholesale-retry\\unavailable-phone.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-wholesale-retry\\unavailable-phone.png",
+    "capturedSha256": "C65159BDF540C5FBA2693782F04321A354F95212C45D1F20CE09BC1E93D3D192",
+    "restoredSha256": "CFEEF235042650F65FD78A6AF771103F2129985CCFD3EC5CBF9F267A77850D52"
+  },
+  {
+    "original": "docs/evidence\\20260908-wholesale-retry\\missing-receipt-phone.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-wholesale-retry\\missing-receipt-phone.png",
+    "capturedSha256": "C65159BDF540C5FBA2693782F04321A354F95212C45D1F20CE09BC1E93D3D192",
+    "restoredSha256": "CFEEF235042650F65FD78A6AF771103F2129985CCFD3EC5CBF9F267A77850D52"
+  },
+  {
+    "original": "docs/evidence\\20260908-wholesale-retry\\lost-phone.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-wholesale-retry\\lost-phone.png",
+    "capturedSha256": "C65159BDF540C5FBA2693782F04321A354F95212C45D1F20CE09BC1E93D3D192",
+    "restoredSha256": "CFEEF235042650F65FD78A6AF771103F2129985CCFD3EC5CBF9F267A77850D52"
+  },
+  {
+    "original": "docs/evidence\\20260908-store-orientation\\3d-portrait-basket.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-store-orientation\\3d-portrait-basket.png",
+    "capturedSha256": "6AB0B82C918606687A8979EE82F34596B35276368A7523AE2BF946D7E5C50F52",
+    "restoredSha256": "DCCB87EE4717BABAA9E1B3F23CC5194B6F0DC819D96F8AE71C06E6E6662610B1"
+  },
+  {
+    "original": "docs/evidence\\20260908-store-orientation\\3d-portrait-after.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-store-orientation\\3d-portrait-after.png",
+    "capturedSha256": "AFD8205CF67A1F036A2C4043B2D8F02C0B0D0C4D320D0521182896ABB9F62EAA",
+    "restoredSha256": "896DA8D594304DAAD9042B03642B32668C86920E2E4E18BD6E76BCA7E47446ED"
+  },
+  {
+    "original": "docs/evidence\\20260908-store-orientation\\3d-landscape-basket.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-store-orientation\\3d-landscape-basket.png",
+    "capturedSha256": "DC84B9FE28D557CC40F1378E8EA55D1BEBB86E9992A5D74C0C5696DBAD0899AD",
+    "restoredSha256": "B850E4C6C1B9CD2EDC7AFF26D9495E6F2DC47176795F92A7D872F1011D27C246"
+  },
+  {
+    "original": "docs/evidence\\20260908-store-orientation\\3d-landscape-after.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-store-orientation\\3d-landscape-after.png",
+    "capturedSha256": "C33998333229F0FB2105C29E957F69A57633D42964A3E96C93EA7ACF899020C2",
+    "restoredSha256": "26CE102032EE7B2197C0AE7679FC3F8F2389929C09BBBE98AB6D0BAF5A9183BD"
+  },
+  {
+    "original": "docs/evidence\\20260908-store-orientation\\3d-desktop-basket.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-store-orientation\\3d-desktop-basket.png",
+    "capturedSha256": "AC93227CD7997B0A111CAFD4D8C232846C0E9BF8D82E5A413623FB02C32EBB21",
+    "restoredSha256": "44CEEA248C711113B2E3CF1FE2783C2BC61E218409AD6022CAACBF2AA6157CBE"
+  },
+  {
+    "original": "docs/evidence\\20260908-store-orientation\\3d-desktop-after.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-store-orientation\\3d-desktop-after.png",
+    "capturedSha256": "D042C0608AE2F7DA9F98F4758FDC1E274469E3884BBFFADE8554D5FB60FC9137",
+    "restoredSha256": "D3A747A113CD7B33EFFCAC333FD222024E8EE7CDF63C3253A6105118291B818E"
+  },
+  {
+    "original": "docs/evidence\\20260908-media-retry\\lost-phone.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-media-retry\\lost-phone.png",
+    "capturedSha256": "4C6B2FBA1D91396E320FCF004476FBB0CEAC4238BD81E82F810B00938915E124",
+    "restoredSha256": "B685685A0D90CD693947B72C6B6D72FAD7B90ADB70764230E846F47AAF830A50"
+  },
+  {
+    "original": "docs/evidence\\20260908-fulfillment-retry\\handover-legacy-landscape.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260908-fulfillment-retry\\handover-legacy-landscape.png",
+    "capturedSha256": "C11A2C51DABA9380CE15AF16C4223405BBC9E90047EAE994CB9C4DFC3FA9A5CD",
+    "restoredSha256": "10F0D621FB1105FA4E8ED837D524889CC509BB2EE2B0571F96A33EC89ECDD609"
+  },
+  {
+    "original": "docs/evidence\\20260906-admin-widgets\\mobile-sales.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260906-admin-widgets\\mobile-sales.png",
+    "capturedSha256": "169E805B67C86491DEFBD684D532A0581CAFD1BCD824553D2661C9F3148F907E",
+    "restoredSha256": "5F8E33896A3EB3F8D35B4A08BDAF369A6BB0D5510B8A853793C591DD807B5432"
+  },
+  {
+    "original": "docs/evidence\\20260906-admin-widgets\\mobile-metrics.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260906-admin-widgets\\mobile-metrics.png",
+    "capturedSha256": "774CFCD5EBFACF6480F10265C0BE1E90870F4B045FE0C82734537E4CFB266B0F",
+    "restoredSha256": "11A1F4E67D45856490261EC0AE5A160F944CDC0F928ED3662BFA3609A5B842A1"
+  },
+  {
+    "original": "docs/evidence\\20260906-admin-widgets\\desktop.png",
+    "captured": "docs\\evidence\\20260914-map-remediation\\acceptance-captures\\docs\\evidence\\20260906-admin-widgets\\desktop.png",
+    "capturedSha256": "1297AE1119EC04FBA3C2111F8CDD3EBE626AB6C504B9D8D60D29581C57EF01E6",
+    "restoredSha256": "EADE54D59E94EA877A1541DBDC13AC23E42D53342BA140028162B72964083F54"
+  }
+]

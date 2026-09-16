@@ -13,7 +13,7 @@ Welcome to the central documentation library for the **K2 Jimzon** platform. Thi
 | [**PROJECT_MAP.md**](./PROJECT_MAP.md) | Comprehensive folder directory map, component boundaries, and placement rules. | Developers & AI Agents |
 | [**FEATURES.md**](./FEATURES.md) | Complete catalog of features with status badges (`STABLE`, `ACTIVE DEVELOPMENT`, `PROTOTYPE`, `PLANNED`). | Product & Engineering |
 | [**DATA_MODEL.md**](./DATA_MODEL.md) | Authoritative database entities, derived stock formulas, schema boundaries, and invariants. | Backend Engineers |
-| [**ROUTES.md**](./ROUTES.md) | Complete index of 12 Storefront view states, 81 Admin BFF routes, and 14 Storefront BFF routes. | Full-Stack Engineers |
+| [**ROUTES.md**](./ROUTES.md) | Complete index of 12 Storefront view states, 92 Admin BFF routes, and 15 Storefront BFF routes. | Full-Stack Engineers |
 | [**INTEGRATIONS.md**](./INTEGRATIONS.md) | External services: Supabase, Vercel, Shopee/Lazada/TikTok connectors, Cloudflare Turnstile, OpenAI. | Integrations & DevOps |
 | [**DEVELOPMENT.md**](./DEVELOPMENT.md) | Local development setup, dual Vite dev servers, PostgreSQL 17 rehearsals, and testing suites. | Engineers |
 | [**DEPLOYMENT.md**](./DEPLOYMENT.md) | Isolated target builds (`storefront` vs `admin`), Vercel environment contracts, and boundary validation. | DevOps & Release |

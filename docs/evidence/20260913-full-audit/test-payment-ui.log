@@ -1,0 +1,48 @@
+
+> k2-jimzon-prototype@0.1.0 test:payment-ui
+> playwright test --config=playwright.payment.config.js
+
+[WebServer] (node:21640) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:18308) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 33 tests using 1 worker
+
+(node:21384) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\catalog-import-recovery-ui.spec.js:16:1 › uncertain catalog commit freezes review and retries the exact chunk identity (59.9s)
+  ok  2 tests\catalog-import-recovery-ui.spec.js:77:1 › catalog commit response from a disposed staff view cannot refresh the next actor (21.1s)
+  ok  3 tests\catalog-import-recovery-ui.spec.js:118:1 › definitive catalog rejection reopens correction with a new operation identity (11.9s)
+  ok  4 tests\coupon-recovery-ui.spec.js:8:3 › create retains the frozen coupon command after a lost response (9.8s)
+  ok  5 tests\coupon-recovery-ui.spec.js:8:3 › activate retains the frozen coupon command after a lost response (5.2s)
+  ok  6 tests\coupon-recovery-ui.spec.js:8:3 › pause retains the frozen coupon command after a lost response (1.1s)
+  ok  7 tests\coupon-recovery-ui.spec.js:8:3 › archive retains the frozen coupon command after a lost response (1.4s)
+  ok  8 tests\coupon-recovery-ui.spec.js:75:1 › coupon rejection permits a corrected command with a different identity (1.1s)
+  ok  9 tests\coupon-recovery-ui.spec.js:102:1 › coupon dialogs restore the keyboard trigger after cancellation on a short viewport (652ms)
+  ok 10 tests\coupon-recovery-ui.spec.js:123:1 › coupon actor change discards late completion and the old form (775ms)
+  ok 11 tests\media-recovery-ui.spec.js:12:44 › media lost freezes pending details and retains the assignment key (631ms)
+  ok 12 tests\media-recovery-ui.spec.js:12:44 › media cleanup freezes pending details and retains the assignment key (584ms)
+  ok 13 tests\media-recovery-ui.spec.js:44:1 › media rejection reopens correction with a new assignment key (752ms)
+  ok 14 tests\media-recovery-ui.spec.js:62:1 › media assignment waits for an in-flight upload (586ms)
+  ok 15 tests\media-recovery-ui.spec.js:77:1 › media actor change discards late save completion (563ms)
+  ok 16 tests\payment-recovery-ui.spec.js:7:3 › correct rejected evidence safely at 375x812 (458ms)
+  ok 17 tests\payment-recovery-ui.spec.js:7:3 › correct rejected evidence safely at 844x390 (421ms)
+  ok 18 tests\payment-recovery-ui.spec.js:7:3 › correct rejected evidence safely at 1280x900 (572ms)
+  ok 19 tests\payment-recovery-ui.spec.js:25:1 › legacy failure stays blocked until the protected recovery boundary is active (432ms)
+  ok 20 tests\payment-recovery-ui.spec.js:31:1 › uncertain outcome keeps evidence and shows reconciliation feedback (544ms)
+  ok 21 tests\payment-recovery-ui.spec.js:41:1 › physical lot selection resets confirmation and blocks missing identity on phone (380ms)
+  ok 22 tests\payment-recovery-ui.spec.js:58:3 › handover freezes pending details and retries the same uncertain command (484ms)
+  ok 23 tests\payment-recovery-ui.spec.js:58:3 › delivery freezes pending details and retries the same uncertain command (569ms)
+  ok 24 tests\payment-recovery-ui.spec.js:58:3 › custody freezes pending details and retries the same uncertain command (485ms)
+  ok 25 tests\payment-recovery-ui.spec.js:58:3 › supplier freezes pending details and retries the same uncertain command (486ms)
+  ok 26 tests\payment-recovery-ui.spec.js:102:1 › handover denial permits correction and actor change discards late completion (613ms)
+  ok 27 tests\payment-recovery-ui.spec.js:125:3 › handover legacy uncertainty requires reconciliation on a short viewport (571ms)
+  ok 28 tests\payment-recovery-ui.spec.js:125:3 › delivery legacy uncertainty requires reconciliation on a short viewport (590ms)
+  ok 29 tests\wholesale-recovery-ui.spec.js:23:67 › wholesale lost retains the original review command (650ms)
+  ok 30 tests\wholesale-recovery-ui.spec.js:23:67 › wholesale unavailable retains the original review command (697ms)
+  ok 31 tests\wholesale-recovery-ui.spec.js:23:67 › wholesale missing receipt retains the original review command (652ms)
+  ok 32 tests\wholesale-recovery-ui.spec.js:61:1 › wholesale rejection permits correction and uses a new identity (767ms)
+  ok 33 tests\wholesale-recovery-ui.spec.js:80:1 › wholesale actor change prevents an old response closing the new review (683ms)
+
+  33 passed (2.2m)

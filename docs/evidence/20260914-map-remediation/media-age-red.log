@@ -1,0 +1,38 @@
+
+Running 5 tests using 1 worker
+
+(node:8052) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\product-media-ownership.spec.js:5:1 › orphan review age rejects alternate numeric syntax and repeated query values (11ms)
+(node:20644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 tests\product-media-ownership.spec.js:11:1 › orphan review age preserves its default and inclusive safety bounds (10ms)
+  ok 3 tests\product-media-ownership.spec.js:20:1 › legacy media URLs are retained, never introduced (10ms)
+  ok 4 tests\product-media-ownership.spec.js:36:1 › fresh uploads skip the legacy retention gate (2ms)
+  ok 5 tests\product-media-ownership.spec.js:47:1 › assignment reads the current register before accepting legacy references (3ms)
+
+
+  1) tests\product-media-ownership.spec.js:5:1 › orphan review age rejects alternate numeric syntax and repeated query values 
+
+    Error: "1e2"
+
+    expect(received).toThrow(expected)
+
+    Expected substring: "PRODUCT_MEDIA_ORPHAN_RANGE_INVALID"
+
+    Received function did not throw
+
+       5 | test('orphan review age rejects alternate numeric syntax and repeated query values', () => {
+       6 |   for (const value of ['1e2', '0x100', ['60', '120'], [60], true, null, '', [], {}, 59, 10081, 60.5]) {
+    >  7 |     expect(() => validateProductMediaOrphanAge(value), JSON.stringify(value)).toThrow('PRODUCT_MEDIA_ORPHAN_RANGE_INVALID')
+         |                                                                               ^
+       8 |   }
+       9 | })
+      10 |
+        at C:\Users\jerze\K2 JImzon\tests\product-media-ownership.spec.js:7:79
+
+    Error Context: test-results\product-media-ownership-or-c0218-x-and-repeated-query-values\error-context.md
+
+  1 failed
+    tests\product-media-ownership.spec.js:5:1 › orphan review age rejects alternate numeric syntax and repeated query values 
+  4 passed (2.0s)

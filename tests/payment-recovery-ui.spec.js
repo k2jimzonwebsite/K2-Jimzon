@@ -9,9 +9,9 @@ for (const viewport of [{ width: 375, height: 812 }, { width: 844, height: 390 }
     await page.goto('/tests/fixtures/payment-harness.html')
     await page.getByRole('button', { name: 'Review local payment' }).click()
     const dialog = page.getByRole('dialog')
-    await expect(dialog.getByRole('combobox')).toHaveValue('evidence_submitted')
+    await expect(dialog.getByLabel('Next valid state')).toHaveValue('evidence_submitted')
     await expect(dialog).toContainText('different staff member')
-    await dialog.getByRole('textbox').fill('GCash reference reconciled with payer')
+    await dialog.getByLabel('Payment reference number').fill('GCash reference reconciled with payer')
     await dialog.getByRole('button', { name: 'Record transition' }).click()
     await expect(dialog.getByRole('button', { name: 'Close', exact: true })).toBeDisabled()
     await page.keyboard.press('Escape')
@@ -31,11 +31,53 @@ test('legacy failure stays blocked until the protected recovery boundary is acti
 test('uncertain outcome keeps evidence and shows reconciliation feedback', async ({ page }) => {
   await page.goto('/tests/fixtures/payment-harness.html?uncertain=1')
   await page.getByRole('button', { name: 'Review local payment' }).click()
-  await page.getByRole('textbox').fill('Corrected GCash reference')
+  await page.getByLabel('Payment reference number').fill('Corrected GCash reference')
   await page.getByRole('button', { name: 'Record transition' }).click()
   await page.evaluate(() => window.finishPayment())
   await expect(page.getByRole('dialog')).toContainText('Reconcile before retrying')
-  await expect(page.getByRole('textbox')).toHaveValue('Corrected GCash reference')
+  await expect(page.getByLabel('Payment reference number')).toHaveValue('Corrected GCash reference')
+})
+
+test('submits structured payment evidence with method, amount, payer and reference', async ({ page }) => {
+  await page.goto('/tests/fixtures/payment-harness.html')
+  await page.getByRole('button', { name: 'Review local payment' }).click()
+  const dialog = page.getByRole('dialog')
+  await dialog.getByLabel('Payment method').selectOption('maya')
+  await dialog.getByLabel('Payment amount (PHP)').fill('2500.50')
+  await dialog.getByLabel('Payer name').fill('Maria Santos')
+  await dialog.getByLabel('Payment reference number').fill('MAYA-REF-9988')
+  await dialog.getByLabel('Proof asset reference (optional)').fill('https://receipts.example.test/proof.png')
+  await dialog.getByLabel('Evidence notes / remarks (optional)').fill('Transferred via Maya app')
+  await dialog.getByRole('button', { name: 'Record transition' }).click()
+  await page.evaluate(() => window.finishPayment())
+  const evidence = await page.evaluate(() => window.lastEvidence)
+  expect(evidence).toEqual({
+    method: 'maya',
+    amount: 2500.5,
+    currency: 'PHP',
+    payerName: 'Maria Santos',
+    paymentReference: 'MAYA-REF-9988',
+    proofAssetRef: 'https://receipts.example.test/proof.png',
+  })
+})
+
+test('independent verification displays submitted evidence and enforces merchant receipt confirmation', async ({ page }) => {
+  await page.goto('/tests/fixtures/payment-harness.html?state=evidence_submitted&evidence=1')
+  await page.getByRole('button', { name: 'Review local payment' }).click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog.getByLabel('Next valid state')).toHaveValue('verified')
+  await expect(dialog).toContainText('Submitted Payment Evidence for Review')
+  await expect(dialog).toContainText('GCASH')
+  await expect(dialog).toContainText('₱1,250.00 PHP')
+  await expect(dialog).toContainText('Juan dela Cruz')
+  await expect(dialog).toContainText('GCASH-REF-001')
+  await dialog.getByRole('button', { name: 'Record transition' }).click()
+  await expect(dialog).toContainText('Confirm that you checked the merchant receiving account before verifying')
+  await dialog.getByRole('checkbox').check()
+  await dialog.getByLabel('Reconciliation note').fill('Reconciled with merchant GCash account statement')
+  await dialog.getByRole('button', { name: 'Record transition' }).click()
+  await page.evaluate(() => window.finishPayment())
+  await expect(page.getByRole('status')).toContainText('verified: Reconciled with merchant GCash account statement')
 })
 
 test('physical lot selection resets confirmation and blocks missing identity on phone', async ({ page }) => {
@@ -74,6 +116,8 @@ for (const kind of ['handover', 'delivery', 'custody', 'supplier']) {
     if (kind === 'custody') {
       await expect(dialog).toContainText('BOX-123 · LOT-ABC')
       await expect(dialog).toContainText('3 × SKU-123 to Receiving staff')
+      await expect(dialog.getByRole('button', { name: 'Confirm command' })).toBeDisabled()
+      await dialog.getByLabel('Reason (audit record)').fill('Verified physical transfer to receiving staff')
     }
     await dialog.getByRole('button', { name: kind === 'handover' ? 'Confirm handover' : kind === 'delivery' ? 'Save delivery details' : kind === 'supplier' ? 'Save supplier' : 'Confirm command' }).click()
     for (const field of await dialog.locator('input, textarea').all()) await expect(field).toBeDisabled()
@@ -89,6 +133,7 @@ for (const kind of ['handover', 'delivery', 'custody', 'supplier']) {
     expect(commands).toHaveLength(2)
     expect(commands[0].key).toMatch(/^[0-9a-f-]{36}$/)
     expect(commands[1]).toEqual(commands[0])
+    if (kind === 'custody') expect(commands[0].payload.reason).toBe('Verified physical transfer to receiving staff')
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     await page.evaluate(() => window.finishCommand({ ok: true }))
     await expect(dialog).toHaveCount(0)

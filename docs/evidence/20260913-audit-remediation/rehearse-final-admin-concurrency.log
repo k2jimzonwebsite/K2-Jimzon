@@ -1,0 +1,5 @@
+[reproduced] two concurrent demotions both committed and left 0 Admins
+[ok] serialized: one demotion committed, one was refused with K2_ADMIN_FINAL_ADMIN
+[ok] one recoverable authorized Admin remains
+[ok] final roles Staff,Admin
+[pass] MAP-028 H-014 final-Admin concurrency rehearsal

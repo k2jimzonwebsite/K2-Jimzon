@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
 import { CheckIcon, GlobeIcon, XIcon } from '../../components/ui/icons'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 import { adminBffEnabled, getAdminChannelsBff, verifyInternalChannelBff } from '../../services/adminBffService'
 import {
   MetricRail,
@@ -179,12 +180,7 @@ function InternalVerification({ secure, channel, onClose, onVerified }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const closeRef = useRef(null)
-  useEffect(() => {
-    closeRef.current?.focus()
-    const handleKey = event => { if (event.key === 'Escape' && !busy) onClose() }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [busy, onClose])
+
   const submit = async event => {
     event.preventDefault(); setBusy(true); setError('')
     const result = secure
@@ -197,25 +193,21 @@ function InternalVerification({ secure, channel, onClose, onVerified }) {
   const input = 'mt-1.5 min-h-11 w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-forest'
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/85 sm:items-center sm:p-3" role="presentation">
-      <form onSubmit={submit} className="w-full max-w-md space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:rounded-adm sm:p-6" role="dialog" aria-modal="true" aria-labelledby="internal-verification-title">
-        <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-wider text-forest">Real-event reconciliation</p><h2 id="internal-verification-title" className="mt-1 text-xl font-semibold">Verify {channel.name}</h2><p className="mt-2 text-sm leading-relaxed text-white/55">Enter a request that you opened in the dashboard and checked against the submitted customer details. This status is operational evidence, not a test toggle.</p></div><button ref={closeRef} type="button" onClick={onClose} aria-label="Close verification dialog" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line"><XIcon size={18} /></button></div>
-        <label className="block text-xs font-semibold text-white/60">Public request reference<input className={input} value={reference} onChange={event => setReference(event.target.value)} placeholder={channel.key === 'website' ? 'WEB-...' : 'PB-...'} required /></label>
-        <label className="block text-xs font-semibold text-white/60">Reconciliation note<textarea className={`${input} min-h-24 resize-y`} value={note} onChange={event => setNote(event.target.value)} placeholder="What was checked and by whom?" required /></label>
-        {error && <StateBanner tone="danger">{error}</StateBanner>}
-        <div className="flex gap-2"><button type="button" onClick={onClose} className={`${secondaryButton} flex-1`}>Cancel</button><button type="submit" disabled={busy} className={`${primaryButton} flex-1 bg-forest`}>{busy ? 'Verifying...' : 'Mark operational'}</button></div>
-      </form>
+      <AdminDialog onClose={onClose} closeDisabled={busy} initialFocusRef={closeRef} labelledBy="internal-verification-title">
+        <form onSubmit={submit} className="w-full max-w-md space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:rounded-adm sm:p-6">
+          <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-wider text-forest">Real-event reconciliation</p><h2 id="internal-verification-title" className="mt-1 text-xl font-semibold">Verify {channel.name}</h2><p className="mt-2 text-sm leading-relaxed text-white/55">Enter a request that you opened in the dashboard and checked against the submitted customer details. This status is operational evidence, not a test toggle.</p></div><button ref={closeRef} type="button" onClick={onClose} disabled={busy} aria-label="Close verification dialog" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line disabled:opacity-40"><XIcon size={18} /></button></div>
+          <label className="block text-xs font-semibold text-white/60">Public request reference<input className={input} value={reference} onChange={event => setReference(event.target.value)} placeholder={channel.key === 'website' ? 'WEB-...' : 'PB-...'} required /></label>
+          <label className="block text-xs font-semibold text-white/60">Reconciliation note<textarea className={`${input} min-h-24 resize-y`} value={note} onChange={event => setNote(event.target.value)} placeholder="What was checked and by whom?" required /></label>
+          {error && <StateBanner tone="danger">{error}</StateBanner>}
+          <div className="flex gap-2"><button type="button" onClick={onClose} disabled={busy} className={`${secondaryButton} flex-1 disabled:opacity-40`}>Cancel</button><button type="submit" disabled={busy} className={`${primaryButton} flex-1 bg-forest disabled:opacity-50`}>{busy ? 'Verifying...' : 'Mark operational'}</button></div>
+        </form>
+      </AdminDialog>
     </div>
   )
 }
 
 function ConnectorGuide({ channel, onClose }) {
   const closeRef = useRef(null)
-  useEffect(() => {
-    closeRef.current?.focus()
-    const handleKey = event => { if (event.key === 'Escape') onClose() }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [onClose])
   const steps = [
     ['Prepare catalog drafts', 'Validate names, channel price, stock, images, and identifiers in the readiness board.'],
     ['Obtain partner access', `Create the approved app in ${channel.name} and record which shop or account it controls.`],
@@ -225,14 +217,16 @@ function ConnectorGuide({ channel, onClose }) {
   ]
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/85 sm:items-center sm:p-3" role="presentation">
-      <div className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:rounded-adm sm:p-6" role="dialog" aria-modal="true" aria-labelledby="connector-guide-title">
-        <div className="flex items-start justify-between gap-3 border-b border-adm-line pb-4"><div><p className="text-xs font-semibold uppercase tracking-wider text-blue">Not connected</p><h2 id="connector-guide-title" className="mt-1 text-xl font-semibold">{channel.name} connector checklist</h2></div><button ref={closeRef} onClick={onClose} aria-label="Close connector checklist" className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm bg-white/5 text-white/55 hover:text-white"><XIcon size={18} /></button></div>
-        <ol className="mt-5 divide-y divide-adm-line border-y border-adm-line">
-          {steps.map(([title, detail], index) => <li key={title} className="flex gap-3 py-4"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-blue/30 bg-blue/10 font-mono text-xs font-semibold text-blue">{index + 1}</span><div><p className="text-sm font-semibold">{title}</p><p className="mt-0.5 text-sm leading-relaxed text-white/55">{detail}</p></div></li>)}
-        </ol>
-        <div className="mt-5 flex flex-col gap-2 sm:flex-row"><a href={channel.portal} target="_blank" rel="noreferrer" className={`${secondaryButton} flex-1`}>Open partner portal</a><a href={SUPA_SECRETS} target="_blank" rel="noreferrer" className={`${secondaryButton} flex-1 border-forest/35 text-forest`}>Function secrets</a><a href={SUPA_FUNCTIONS} target="_blank" rel="noreferrer" className={`${primaryButton} flex-1`}>Functions</a></div>
-        <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-white/45"><CheckIcon size={15} className="mt-0.5 shrink-0 text-forest" />Secrets never enter this dashboard or a listing CSV. Connection status is updated only by the backend connector.</p>
-      </div>
+      <AdminDialog onClose={onClose} initialFocusRef={closeRef} labelledBy="connector-guide-title">
+        <div className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:rounded-adm sm:p-6">
+          <div className="flex items-start justify-between gap-3 border-b border-adm-line pb-4"><div><p className="text-xs font-semibold uppercase tracking-wider text-blue">Not connected</p><h2 id="connector-guide-title" className="mt-1 text-xl font-semibold">{channel.name} connector checklist</h2></div><button ref={closeRef} onClick={onClose} aria-label="Close connector checklist" className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm bg-white/5 text-white/55 hover:text-white"><XIcon size={18} /></button></div>
+          <ol className="mt-5 divide-y divide-adm-line border-y border-adm-line">
+            {steps.map(([title, detail], index) => <li key={title} className="flex gap-3 py-4"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-blue/30 bg-blue/10 font-mono text-xs font-semibold text-blue">{index + 1}</span><div><p className="text-sm font-semibold">{title}</p><p className="mt-0.5 text-sm leading-relaxed text-white/55">{detail}</p></div></li>)}
+          </ol>
+          <div className="mt-5 flex flex-col gap-2 sm:flex-row"><a href={channel.portal} target="_blank" rel="noreferrer" className={`${secondaryButton} flex-1`}>Open partner portal</a><a href={SUPA_SECRETS} target="_blank" rel="noreferrer" className={`${secondaryButton} flex-1 border-forest/35 text-forest`}>Function secrets</a><a href={SUPA_FUNCTIONS} target="_blank" rel="noreferrer" className={`${primaryButton} flex-1`}>Functions</a></div>
+          <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-white/45"><CheckIcon size={15} className="mt-0.5 shrink-0 text-forest" />Secrets never enter this dashboard or a listing CSV. Connection status is updated only by the backend connector.</p>
+        </div>
+      </AdminDialog>
     </div>
   )
 }

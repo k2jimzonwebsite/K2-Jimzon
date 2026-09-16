@@ -1,0 +1,5 @@
+
+> k2-jimzon-prototype@0.1.0 security:history
+> node scripts/scan-git-history-secrets.mjs
+
+Git history secret scan passed (secret values are never printed).

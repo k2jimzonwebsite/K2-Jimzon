@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from 'node:crypto'
 import {
-  consumeLoginAttempt, requestIp, readJson, requireAdminProject, requireAllowedOrigin, safeJson,
+  consumeLoginAttempt, requestHostname, requestIp, readJson, requireAdminProject, requireAllowedOrigin, safeJson,
 } from '../../../../server/admin-bff/security.js'
 import {
   isPasswordRecoveryConfigured, passwordRecoveryCallbackUrl, validatePasswordRecoveryRequest,
@@ -37,7 +37,7 @@ export function createPasswordRecoveryRequestHandler(overrides = {}) {
           'Retry-After': String(durableAttempt.retryAfter),
         })
       }
-      if (!await verifyBot(botToken, requestIp(req), 'admin_auth')) {
+      if (!await verifyBot(botToken, requestIp(req), 'admin_auth', { hostname: requestHostname(req) })) {
         return safeJson(res, 403, { error: { code: 'BOT_CHALLENGE_REQUIRED' } })
       }
       const { error } = await client.auth.resetPasswordForEmail(email, {

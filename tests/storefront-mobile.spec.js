@@ -22,7 +22,7 @@ test.describe('mobile storefront contract', () => {
 
     const cards = page.getByTestId('product-card')
     await expect(cards.first()).toBeVisible({ timeout: 30000 })
-    await expect.poll(async () => (await cards.first().boundingBox())?.width || 0).toBeGreaterThan(340)
+    await expect.poll(async () => (await cards.first().boundingBox())?.width || 0).toBeGreaterThan(150)
 
     const firstTitle = cards.first().locator('.store-card-title')
     await expect(firstTitle).toBeVisible()

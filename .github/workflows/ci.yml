@@ -102,3 +102,27 @@ jobs:
             test-results/
           if-no-files-found: ignore
           retention-days: 7
+
+  critical-sql-behavior:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install PostgreSQL 17 from the official PostgreSQL repository
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get update
+          sudo apt-get install -y postgresql-17
+          /usr/lib/postgresql/17/bin/pg_config --version
+      - name: Execute real stock payment and final-Admin transitions
+        env:
+          K2_TEST_PG_BIN: /usr/lib/postgresql/17/bin
+        run: |
+          npm run rehearse:purchase-hold
+          npm run rehearse:payment-recovery
+          npm run rehearse:final-admin

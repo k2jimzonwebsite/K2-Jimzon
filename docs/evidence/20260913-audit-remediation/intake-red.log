@@ -1,0 +1,31 @@
+
+Running 1 test using 1 worker
+
+(node:24556) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\product-intake-contract.spec.js:10:1 › intake rejects coerced quantities and costs before they become inventory facts (9ms)
+
+
+  1) tests\product-intake-contract.spec.js:10:1 › intake rejects coerced quantities and costs before they become inventory facts 
+
+    Error: quantity rejects true
+
+    expect(received).toThrow(expected)
+
+    Expected substring: "REQUEST_INVALID"
+
+    Received function did not throw
+
+      17 |   for (const field of ['quantity', 'unitCost']) {
+      18 |     for (const value of [true, false, [1], [], {}, ' ', '']) {
+    > 19 |       expect(() => validate({ [field]: value }), `${field} rejects ${JSON.stringify(value)}`).toThrow('REQUEST_INVALID')
+         |                                                                                               ^
+      20 |     }
+      21 |   }
+      22 |   expect(validate({ quantity: '2', unitCost: '3.50' }).inventory).toMatchObject({ quantity: 2, unitCost: 3.5 })
+        at C:\Users\jerze\K2 JImzon\tests\product-intake-contract.spec.js:19:95
+
+    Error Context: test-results\product-intake-contract-in-40c76-they-become-inventory-facts\error-context.md
+
+  1 failed
+    tests\product-intake-contract.spec.js:10:1 › intake rejects coerced quantities and costs before they become inventory facts 

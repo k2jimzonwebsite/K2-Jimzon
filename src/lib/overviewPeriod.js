@@ -1,13 +1,23 @@
-export const OVERVIEW_TIME_ZONE = 'Asia/Manila'
-const DAY_MS = 86_400_000
-const MANILA_OFFSET_MS = 8 * 60 * 60 * 1000
+import {
+  MANILA_TIME_ZONE,
+  manilaDateKey,
+  manilaReportingWindow,
+} from './manilaReportingWindow.js'
 
-// Modern operational records use Philippine time (UTC+08, no daylight saving).
+// Single-implementation alias over the canonical Manila reporting window.
+// overviewPeriod.js keeps its historical exports so existing callers
+// (Overview, the prepared overview route) work unchanged, but every instant
+// is computed in exactly one place: manilaReportingWindow.js. A second
+// fixed-offset implementation here previously duplicated the math and could
+// drift from the canonical window without any test noticing.
+export const OVERVIEW_TIME_ZONE = MANILA_TIME_ZONE
+
+// The calendar day an instant falls on in Manila, as `YYYY-MM-DD`.
 export function overviewDateKey(value) {
-  return new Date(new Date(value).getTime() + MANILA_OFFSET_MS).toISOString().slice(0, 10)
+  return manilaDateKey(value)
 }
 
 export function overviewPeriodStart(days, periodOffset = 0, now = new Date()) {
-  const midnight = new Date(`${overviewDateKey(now)}T00:00:00+08:00`).getTime()
-  return new Date(midnight - (days - 1 + days * periodOffset) * DAY_MS)
+  const window = manilaReportingWindow(days, { now })
+  return new Date(periodOffset === 0 ? window.currentStart : window.priorStart)
 }

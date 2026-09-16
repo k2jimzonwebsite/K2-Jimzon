@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:21140) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\guest-conversation-seed-contract.spec.js:6:1 › guest seed recovery cannot be generated without exact complete target captures (15ms)
+  ok 2 tests\guest-conversation-seed-contract.spec.js:24:1 › order and pasabuy submissions seed the conversation instead of opening an empty thread (9ms)
+  ok 3 tests\guest-conversation-seed-contract.spec.js:41:1 › seeded columns exist in the canonical table definitions (225ms)
+  ok 4 tests\guest-conversation-seed-contract.spec.js:51:1 › seeded copy states the reference and next step without promising speed (6ms)
+  ok 5 tests\guest-conversation-seed-contract.spec.js:62:1 › the seeding migration preserves the anonymous submission grants (3ms)
+  ok 6 tests\guest-conversation-seed-contract.spec.js:68:1 › seed recovery refuses a broad replay of the older security boundary (17ms)
+
+  6 passed (3.0s)

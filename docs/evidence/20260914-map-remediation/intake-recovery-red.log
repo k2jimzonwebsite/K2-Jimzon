@@ -1,0 +1,41 @@
+[WebServer] (node:2960) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:12408) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:11548) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\intake-ai-ui.spec.js:5:1 › automatic field review retains an uncertain transition for exact retry (1.4m)
+
+
+  1) tests\intake-ai-ui.spec.js:5:1 › automatic field review retains an uncertain transition for exact retry 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "may already be saved"
+    Received string:    "Field review could not be opened. Recover the saved content and try again."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByRole('alert')
+        14 × locator resolved to <p role="alert" class="text-amber-200">Field review could not be opened. Recover the sav…</p>
+           - unexpected value "Field review could not be opened. Recover the saved content and try again."
+
+
+      24 |   await page.getByRole('button', { name: 'Check readiness / Recover saved results' }).click()
+      25 |   await page.getByRole('button', { name: 'Load content into field review' }).click()
+    > 26 |   await expect(page.getByRole('alert')).toContainText('may already be saved')
+         |                                         ^
+      27 |   await expect(page.getByRole('button', { name: 'Close product intake' })).toBeDisabled()
+      28 |   await page.getByRole('button', { name: 'Retry exact automatic field review' }).click()
+      29 |   await expect(page.getByRole('heading', { name: 'Step 4: Smart Paste & Field Review' })).toBeVisible()
+        at C:\Users\jerze\K2 JImzon\tests\intake-ai-ui.spec.js:26:41
+
+    Error Context: .tools\intake-recovery-red\intake-ai-ui-automatic-fie-af234--transition-for-exact-retry\error-context.md
+
+  1 failed
+    tests\intake-ai-ui.spec.js:5:1 › automatic field review retains an uncertain transition for exact retry 

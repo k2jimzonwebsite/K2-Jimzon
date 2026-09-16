@@ -25,7 +25,7 @@ const migrationPath = path.join(
 )
 
 const config = {
-  binDir: path.join(rootDir, '.tools', 'postgresql-17.11', 'runtime', 'pgsql', 'bin'),
+  binDir: process.env.K2_TEST_PG_BIN || path.join(rootDir, '.tools', 'postgresql-17.11', 'runtime', 'pgsql', 'bin'),
   dataDir: path.join(rootDir, '.tools', 'final-admin-pg-data'),
   logPath: path.join(rootDir, '.tools', 'final-admin-pg.log'),
   port: 54331,
@@ -38,7 +38,7 @@ const ADMIN_B = '30000000-0000-4000-8000-00000000000b'
 
 function requireRuntime() {
   const names = ['initdb.exe', 'pg_ctl.exe', 'psql.exe', 'dropdb.exe', 'createdb.exe']
-  const executables = Object.fromEntries(names.map((name) => [name, path.join(config.binDir, name)]))
+  const executables = Object.fromEntries(names.map((name) => [name, path.join(config.binDir, process.platform === 'win32' ? name : name.replace(/\.exe$/, ''))]))
   const missing = names.filter((name) => !fs.existsSync(executables[name]))
   if (missing.length > 0) throw new Error(`PORTABLE_POSTGRES_RUNTIME_MISSING: ${missing.join(', ')}`)
   return executables

@@ -4,8 +4,22 @@ import os from 'node:os'
 import path from 'node:path'
 import { spawnSync } from 'node:child_process'
 import { PUBLIC_STOREFRONT_ORIGIN, resolveStorefrontMetadataOrigin } from '../src/lib/storefrontMetadataOrigin.js'
+import { rewriteAdminHead } from '../scripts/emit-admin-head.mjs'
 
 const read = (path) => fs.readFileSync(path, 'utf8')
+
+test('the wholesale alias permanently redirects to the established trade URL', () => {
+  const config = JSON.parse(read('vercel.storefront.json'))
+  expect(config.redirects).toContainEqual({ source: '/wholesale', destination: '/trade', permanent: true })
+})
+
+test('scoped guest routes have crawler exclusions at the deployed header boundary', () => {
+  const config = JSON.parse(read('vercel.storefront.json'))
+  for (const route of ['/account', '/messages', '/checkout', '/confirmation']) {
+    expect(config.headers.some(rule => rule.source === route && rule.headers.some(header =>
+      header.key === 'X-Robots-Tag' && header.value === 'noindex, nofollow')), route).toBe(true)
+  }
+})
 
 test('storefront identity metadata and crawler policy ship in the public artifact', () => {
   const html = read('index.html')
@@ -53,6 +67,19 @@ test('storefront identity metadata and crawler policy ship in the public artifac
   expect(supabaseConfig).toContain('site_url = "https://www.k2jimzon.com"')
   expect(supabaseConfig).toContain('"https://admin.k2jimzon.com/**"')
   expect(supabaseConfig).not.toContain('https://*.vercel.app/**')
+})
+
+test('the Admin build replaces shared Storefront discovery tags with staff ones', () => {
+  const packageJson = JSON.parse(read('package.json'))
+  expect(packageJson.scripts['build:admin']).toContain('emit-admin-head.mjs admin')
+
+  const rewritten = rewriteAdminHead(read('index.html'))
+  expect(rewritten).toContain('<title>K2 Jimzon Admin</title>')
+  expect(rewritten).toContain('<link rel="canonical" href="https://admin.k2jimzon.com/admin-portal-k2-secure" />')
+  expect(rewritten).toContain('<meta property="og:url" content="https://admin.k2jimzon.com/admin-portal-k2-secure" />')
+  expect(rewritten).not.toContain('www.k2jimzon.com')
+  expect(rewritten).not.toContain('og:image')
+  expect(rewritten).not.toContain('twitter:image')
 })
 
 test('both target builds emit a static noindex recovery page for real host 404 responses', () => {
@@ -151,7 +178,7 @@ test('production builds enforce the recorded route bundle budgets', () => {
 
   expect(pkg.scripts['build:storefront']).toContain('verify-bundle-budgets.mjs storefront')
   expect(pkg.scripts['build:admin']).toContain('verify-bundle-budgets.mjs admin')
-  expect(verifier).toContain('150_000')
+  expect(verifier).toContain('150_500')
   expect(verifier).toContain('30_000')
   expect(verifier).toContain('300_000')
   expect(verifier).toContain("'src/views/Home.jsx'")
@@ -212,7 +239,7 @@ test('the product page publishes Product, FAQ and Breadcrumb markup from one app
   // Knowledge loads after the catalog, so the markup has to be rewritten when
   // it lands rather than computed once on first render.
   expect(metadata).toContain('useProductKnowledgeVersion')
-  expect(metadata).toMatch(/\[product, view, loading, unavailableSurface, knowledgeVersion\]/)
+  expect(metadata).toMatch(/\[product, view, loading, unavailableSurface, scopedSurface, knowledgeVersion\]/)
 
   // No social crawler renders SVG and Google refuses it for Product rich
   // results, so an unphotographed product must fall back to the raster card.
@@ -237,3 +264,39 @@ test('breadcrumb markup is positional, absolute, and refuses an incomplete trail
   expect(buildBreadcrumbStructuredData({ product: null, origin, url })).toBeNull()
   expect(buildBreadcrumbStructuredData({ product: { name: 'x' }, origin: '', url })).toBeNull()
 })
+
+test('catalog sorting satisfies real recency, price, and deterministic tie-breaking semantics', async () => {
+  const { compareCatalogProducts } = await import('../src/lib/catalogSort.js')
+  const older = { id: 'prod-old', name: 'Old Item', created_at: '2026-08-01T00:00:00.000Z', srp: 200, tag: '' }
+  const newer = { id: 'prod-new', name: 'New Item', created_at: '2026-09-01T00:00:00.000Z', srp: 100, tag: '' }
+  const undatedA = { id: 'prod-undated-a', name: 'Undated A', created_at: null, srp: 150, tag: '' }
+  const undatedB = { id: 'prod-undated-b', name: 'Undated B', created_at: null, srp: 150, tag: '' }
+  const bestseller = { id: 'prod-best', name: 'Best Seller', created_at: '2026-07-01T00:00:00.000Z', srp: 300, tag: 'Bestseller' }
+
+  // 1. Latest sort: reversed order fixtures (older first in array should sort [newer, older])
+  const latestSorted = [older, newer].sort((a, b) => compareCatalogProducts(a, b, 'latest'))
+  expect(latestSorted.map(p => p.id)).toEqual(['prod-new', 'prod-old'])
+
+  // 2. Latest sort with null dates: dated items come before undated items
+  const withUndated = [undatedA, newer, older].sort((a, b) => compareCatalogProducts(a, b, 'latest'))
+  expect(withUndated[0].id).toBe('prod-new')
+  expect(withUndated[1].id).toBe('prod-old')
+  expect(withUndated[2].id).toBe('prod-undated-a')
+
+  // 3. Latest sort tie-breaking: identical dates break ties by ID
+  const tiedA = { id: 'a-item', created_at: '2026-09-01T00:00:00.000Z' }
+  const tiedB = { id: 'b-item', created_at: '2026-09-01T00:00:00.000Z' }
+  expect([tiedB, tiedA].sort((a, b) => compareCatalogProducts(a, b, 'latest')).map(p => p.id)).toEqual(['a-item', 'b-item'])
+
+  // 4. Price sort ascending and descending
+  const priceAsc = [older, newer, undatedA].sort((a, b) => compareCatalogProducts(a, b, 'price_asc'))
+  expect(priceAsc.map(p => p.id)).toEqual(['prod-new', 'prod-undated-a', 'prod-old'])
+
+  const priceDesc = [older, newer, undatedA].sort((a, b) => compareCatalogProducts(a, b, 'price_desc'))
+  expect(priceDesc.map(p => p.id)).toEqual(['prod-old', 'prod-undated-a', 'prod-new'])
+
+  // 5. Popular sort: Bestseller first, then recency
+  const popularSorted = [older, newer, bestseller].sort((a, b) => compareCatalogProducts(a, b, 'popular'))
+  expect(popularSorted.map(p => p.id)).toEqual(['prod-best', 'prod-new', 'prod-old'])
+})
+

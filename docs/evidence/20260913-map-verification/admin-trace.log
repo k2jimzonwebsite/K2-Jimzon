@@ -1,0 +1,42 @@
+[WebServer] (node:22276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:11508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:10252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chromium] › tests\admin-dashboard-redesign.spec.js:190:3 › admin command center redesign › left-panel widgets show one workspace and preserve every dashboard destination (30.1s)
+
+
+  1) [chromium] › tests\admin-dashboard-redesign.spec.js:190:3 › admin command center redesign › left-panel widgets show one workspace and preserve every dashboard destination 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:5180/admin-portal-k2-secure", waiting until "load"
+
+
+      189 |
+      190 |   test('left-panel widgets show one workspace and preserve every dashboard destination', async ({ page }) => {
+    > 191 |     await page.goto('/admin-portal-k2-secure')
+          |                ^
+      192 |     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
+      193 |     const widgets = page.getByRole('navigation', { name: 'Dashboard widgets' })
+      194 |     await expect(widgets.getByRole('button', { name: 'Shop & channel metrics', exact: true })).toHaveAttribute('aria-current', 'page')
+        at C:\Users\jerze\K2 JImzon\tests\admin-dashboard-redesign.spec.js:191:16
+
+    Error Context: test-results\admin-dashboard-redesign-a-9086b-every-dashboard-destination-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\admin-dashboard-redesign-a-9086b-every-dashboard-destination-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\admin-dashboard-redesign-a-9086b-every-dashboard-destination-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › tests\admin-dashboard-redesign.spec.js:190:3 › admin command center redesign › left-panel widgets show one workspace and preserve every dashboard destination 

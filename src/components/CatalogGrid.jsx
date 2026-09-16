@@ -5,9 +5,15 @@ import { CATEGORIES } from '../data/products'
 import ProductCard from './ProductCard'
 import { SearchIcon, XIcon } from './ui/icons'
 
+import { compareCatalogProducts } from '../lib/catalogSort'
+
+export { compareCatalogProducts }
+
 export default function CatalogGrid() {
-  const { query, setQuery, category, setCategory, listedProducts: products, requestPasabuyItem } = useStore()
-  const [sortBy, setSortBy] = useState('popular')
+  const { query, setQuery, category, setCategory, sortBy: storeSortBy, setSortBy: setStoreSortBy, listedProducts: products, requestPasabuyItem, loading, catalogStale, catalogFailed, refreshCatalog } = useStore()
+  const [localSortBy, setLocalSortBy] = useState('popular')
+  const sortBy = storeSortBy ?? localSortBy
+  const setSortBy = setStoreSortBy ?? setLocalSortBy
   const reducedMotion = useReducedMotion()
 
   const filteredProducts = useMemo(() => {
@@ -17,17 +23,13 @@ export default function CatalogGrid() {
       const needle = query.trim().toLowerCase()
       result = result.filter((product) => [product.name, product.short, product.tag, product.category].some((value) => value?.toLowerCase().includes(needle)))
     }
-    return [...result].sort((a, b) => {
-      if (sortBy === 'price_asc') return Number(a.srp || 0) - Number(b.srp || 0)
-      if (sortBy === 'price_desc') return Number(b.srp || 0) - Number(a.srp || 0)
-      if (sortBy === 'popular') return Number(b.tag === 'Bestseller') - Number(a.tag === 'Bestseller')
-      return 0
-    })
+    return [...result].sort((a, b) => compareCatalogProducts(a, b, sortBy))
   }, [products, query, category, sortBy])
 
   const clear = () => {
     setQuery('')
     setCategory('All')
+    setSortBy('popular')
   }
 
   return (
@@ -49,6 +51,11 @@ export default function CatalogGrid() {
         </aside>
 
         <div className="min-w-0">
+          {catalogStale && !catalogFailed && (
+            <p role="status" className="mb-4 rounded-lg border border-amber/30 bg-amber/10 px-4 py-2.5 text-sm font-semibold text-navy">
+              Showing the last updated list — stock may differ.
+            </p>
+          )}
           <div className="mb-7 flex flex-col gap-3 border-b border-[var(--store-surface-border)] pb-5 sm:flex-row sm:items-center">
             <label className="relative block w-full sm:max-w-sm">
               <span className="sr-only">Search products</span>
@@ -59,9 +66,9 @@ export default function CatalogGrid() {
               <p className="text-xs font-semibold tabular text-navy-faint"><span className="text-navy">{filteredProducts.length}</span> products</p>
               <label className="flex items-center gap-2 text-xs font-semibold text-navy-soft">
                 <span className="sr-only sm:not-sr-only">Sort</span>
-                <select value={sortBy} onChange={(event) => setSortBy(event.target.value)} className="store-field min-h-11 bg-[var(--store-surface-bg)] px-3 pr-8 text-sm font-semibold">
+                <select value={sortBy} onChange={(event) => setSortBy(event.target.value)} className="store-field min-h-11 bg-[var(--store-surface-bg)] px-3 pr-8 text-sm font-semibold cursor-pointer">
                   <option value="popular">Featured first</option>
-                  <option value="latest">Latest</option>
+                  <option value="latest">Newest arrivals</option>
                   <option value="price_asc">Price: low to high</option>
                   <option value="price_desc">Price: high to low</option>
                 </select>
@@ -69,7 +76,7 @@ export default function CatalogGrid() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 min-[370px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
             <AnimatePresence initial={false}>
               {filteredProducts.map((product, index) => (
                 <motion.div
@@ -92,11 +99,23 @@ export default function CatalogGrid() {
               <SearchIcon size={28} className="text-navy-faint" />
               <h2 className="mt-4 font-serif text-xl font-semibold text-navy">Looking for something specific?</h2>
               <p className="mt-1.5 max-w-md text-sm text-navy-soft">
-                {query.trim()
-                  ? `We do not have "${query.trim()}" in our Manila stock right now, but we can source it for you from Italy.`
-                  : 'No products found matching these filters.'}
+                {loading
+                  ? 'Loading the Manila cabinet…'
+                  : catalogFailed
+                    ? 'The catalog could not be loaded. Check your connection and try again — nothing here means empty.'
+                    : query.trim()
+                      ? `We do not have "${query.trim()}" in our Manila stock right now, but we can source it for you from Italy.`
+                      : 'No products found matching these filters.'}
               </p>
               <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                {catalogFailed && !loading && (
+                  <button
+                    onClick={refreshCatalog}
+                    className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-all duration-150 hover:bg-crimson-deep active:scale-[0.97] cursor-pointer shadow-sm"
+                  >
+                    Retry loading the catalog
+                  </button>
+                )}
                 {query.trim() && (
                   <button
                     onClick={() => requestPasabuyItem({ item: query.trim(), notes: `Requested item "${query.trim()}" from catalog search.` })}

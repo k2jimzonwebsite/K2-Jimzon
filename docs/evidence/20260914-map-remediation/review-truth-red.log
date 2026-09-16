@@ -1,0 +1,68 @@
+[WebServer] (node:5660) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:18992) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:20196) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\storefront-recovery-ui.spec.js:127:3 › review globe does not fabricate feedback when the review source is empty (2.9m)
+(node:12200) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\storefront-recovery-ui.spec.js:127:3 › review globe does not fabricate feedback when the review source is unavailable (42.9s)
+
+
+  1) tests\storefront-recovery-ui.spec.js:127:3 › review globe does not fabricate feedback when the review source is empty 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('status').filter({ hasText: 'No published customer reviews are available yet.' })
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 30000ms
+      - waiting for getByRole('status').filter({ hasText: 'No published customer reviews are available yet.' })
+
+
+      139 |     await expect(page.getByRole('status').filter({ hasText: failure
+      140 |       ? 'Published review details are unavailable. Please try again later.'
+    > 141 |       : 'No published customer reviews are available yet.' })).toBeVisible({ timeout: 30000 })
+          |                                                                ^
+      142 |     expect(seedRequests).toEqual([])
+      143 |   })
+      144 | }
+        at C:\Users\jerze\K2 JImzon\tests\storefront-recovery-ui.spec.js:141:64
+
+    Error Context: .tools\review-truth-red\storefront-recovery-ui-rev-8dd22--the-review-source-is-empty\error-context.md
+
+  2) tests\storefront-recovery-ui.spec.js:127:3 › review globe does not fabricate feedback when the review source is unavailable 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('status').filter({ hasText: 'Published review details are unavailable. Please try again later.' })
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 30000ms
+      - waiting for getByRole('status').filter({ hasText: 'Published review details are unavailable. Please try again later.' })
+
+
+      139 |     await expect(page.getByRole('status').filter({ hasText: failure
+      140 |       ? 'Published review details are unavailable. Please try again later.'
+    > 141 |       : 'No published customer reviews are available yet.' })).toBeVisible({ timeout: 30000 })
+          |                                                                ^
+      142 |     expect(seedRequests).toEqual([])
+      143 |   })
+      144 | }
+        at C:\Users\jerze\K2 JImzon\tests\storefront-recovery-ui.spec.js:141:64
+
+    Error Context: .tools\review-truth-red\storefront-recovery-ui-rev-a9839-eview-source-is-unavailable\error-context.md
+
+  2 failed
+    tests\storefront-recovery-ui.spec.js:127:3 › review globe does not fabricate feedback when the review source is empty 
+    tests\storefront-recovery-ui.spec.js:127:3 › review globe does not fabricate feedback when the review source is unavailable 

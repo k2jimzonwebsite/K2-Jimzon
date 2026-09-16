@@ -8,6 +8,7 @@ export default defineConfig({
   // with the shared combined server. `npm test` runs each one through its
   // dedicated config after this base suite completes.
   testIgnore: [
+    'storefront-recovery-ui.spec.js',
     'store-orientation-ui.spec.js',
     'admin.spec.js',
     'admin-dashboard-redesign.spec.js',
@@ -15,6 +16,7 @@ export default defineConfig({
     'coupon-recovery-ui.spec.js',
     'wholesale-recovery-ui.spec.js',
     'media-recovery-ui.spec.js',
+    'catalog-import-recovery-ui.spec.js',
     'admin-product-master-ui.spec.js',
     'buyer.spec.js',
     'customer-account-ui.spec.js',
@@ -29,6 +31,7 @@ export default defineConfig({
     'intake-ai-ui.spec.js',
     'storefront-theme.spec.js',
     'wholesale-inquiry-ui.spec.js',
+    'product-led-evidence.spec.js',
   ],
   fullyParallel: false,
   // A cold combined-mode Vite transform can take about a minute on the Windows

@@ -8,6 +8,7 @@ import {
   normalizeAiSpendControls,
 } from '../../lib/aiSpendControls.js'
 import { CheckIcon, InboxIcon, ShieldIcon, UserIcon, XIcon } from '../../components/ui/icons'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 // Real staff & roles. Reads user_profiles (admins see all), lets the super admin
 // invite people + set roles, and lets an admin turn on their own 2FA.
@@ -566,13 +567,6 @@ function MfaReplacementDialog({ onClose, onStart, onComplete, onSuccess }) {
   const [error, setError] = useState('')
   const closeRef = useRef(null)
 
-  useEffect(() => {
-    closeRef.current?.focus()
-    const handleKey = event => { if (event.key === 'Escape' && !busy) onClose() }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [busy, onClose])
-
   const start = async event => {
     event.preventDefault()
     setError(''); setBusy(true)
@@ -592,63 +586,65 @@ function MfaReplacementDialog({ onClose, onStart, onComplete, onSuccess }) {
   }
 
   return <div className="fixed inset-0 z-[110] flex items-end justify-center bg-black/80 sm:items-center sm:p-4" role="presentation">
-    <form onSubmit={replacement ? complete : start} role="dialog" aria-modal="true" aria-labelledby="mfa-replacement-title"
-      className="max-h-[92dvh] w-full overflow-y-auto rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-gold">Credential change</p>
-          <h2 id="mfa-replacement-title" className="mt-1 text-xl font-bold">Replace authenticator</h2>
-          <p className="mt-2 text-sm leading-relaxed text-white/55">
-            Keep your current authenticator until this replacement succeeds. The old factor is retired only after the new code verifies.
-          </p>
-        </div>
-        <button ref={closeRef} type="button" onClick={onClose} disabled={busy}
-          aria-label="Close authenticator replacement"
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line text-white/70 disabled:opacity-40">
-          <XIcon size={18} aria-hidden="true" />
-        </button>
-      </div>
-
-      <div className="mt-4 rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-sm leading-relaxed text-amber">
-        <strong>Lost access to the current authenticator?</strong> Stop here. This replacement requires an active AAL2 session; use the documented owner/provider recovery process.
-      </div>
-      {error && <div role="alert" className="mt-4 rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm font-semibold text-crimson">{error}</div>}
-
-      {!replacement ? <div className="mt-4 space-y-4">
-        <label className="block text-sm font-semibold text-white/70">Reason for replacing your authenticator
-          <textarea required minLength={3} maxLength={500} value={reason} onChange={event => setReason(event.target.value)}
-            className={`${inputCls} mt-1 min-h-24 resize-y`} placeholder="Why is this factor being replaced?" />
-        </label>
-        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <button type="button" onClick={onClose} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button>
-          <button type="submit" disabled={busy || reason.trim().length < 3}
-            className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-[background-color,opacity,transform] active:scale-[.99] disabled:opacity-50 motion-reduce:transition-none">
-            {busy ? 'Starting…' : 'Start secure replacement'}
+    <AdminDialog onClose={onClose} closeDisabled={busy} initialFocusRef={closeRef} labelledBy="mfa-replacement-title">
+      <form onSubmit={replacement ? complete : start}
+        className="max-h-[92dvh] w-full overflow-y-auto rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-gold">Credential change</p>
+            <h2 id="mfa-replacement-title" className="mt-1 text-xl font-bold">Replace authenticator</h2>
+            <p className="mt-2 text-sm leading-relaxed text-white/55">
+              Keep your current authenticator until this replacement succeeds. The old factor is retired only after the new code verifies.
+            </p>
+          </div>
+          <button ref={closeRef} type="button" onClick={onClose} disabled={busy}
+            aria-label="Close authenticator replacement"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line text-white/70 disabled:opacity-40">
+            <XIcon size={18} aria-hidden="true" />
           </button>
         </div>
-      </div> : <div className="mt-4 space-y-4">
-        {replacement.qr && <div className="flex justify-center">
-          <img src={replacement.qr} alt="New authenticator setup QR code" className="h-48 w-48 rounded-adm-sm bg-white p-2.5" />
+
+        <div className="mt-4 rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-sm leading-relaxed text-amber">
+          <strong>Lost access to the current authenticator?</strong> Stop here. This replacement requires an active AAL2 session; use the documented owner/provider recovery process.
+        </div>
+        {error && <div role="alert" className="mt-4 rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm font-semibold text-crimson">{error}</div>}
+
+        {!replacement ? <div className="mt-4 space-y-4">
+          <label className="block text-sm font-semibold text-white/70">Reason for replacing your authenticator
+            <textarea required minLength={3} maxLength={500} value={reason} onChange={event => setReason(event.target.value)}
+              className={`${inputCls} mt-1 min-h-24 resize-y`} placeholder="Why is this factor being replaced?" />
+          </label>
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <button type="button" onClick={onClose} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button>
+            <button type="submit" disabled={busy || reason.trim().length < 3}
+              className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-[background-color,opacity,transform] active:scale-[.99] disabled:opacity-50 motion-reduce:transition-none">
+              {busy ? 'Starting…' : 'Start secure replacement'}
+            </button>
+          </div>
+        </div> : <div className="mt-4 space-y-4">
+          {replacement.qr && <div className="flex justify-center">
+            <img src={replacement.qr} alt="New authenticator setup QR code" className="h-48 w-48 rounded-adm-sm bg-white p-2.5" />
+          </div>}
+          <div className="space-y-2 text-sm leading-relaxed text-white/65">
+            <p>Scan the QR code with the new authenticator app.</p>
+            {replacement.secret && <p className="text-xs">Cannot scan? Enter this key manually:<br /><span className="break-all font-mono text-white">{replacement.secret}</span></p>}
+            <p className="font-semibold text-amber">Keep your current authenticator until this replacement succeeds.</p>
+          </div>
+          <label className="block text-sm font-semibold text-white/70">Six-digit code from the new authenticator
+            <input type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code}
+              onChange={event => setCode(event.target.value.replace(/\D/g, '').slice(0, 6))}
+              className="mt-1 min-h-14 w-full rounded-adm-sm border border-blue/50 bg-black/50 px-3 py-3 text-center font-mono text-2xl tracking-[0.35em] text-white outline-none focus:border-blue" />
+          </label>
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <button type="button" onClick={onClose} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button>
+            <button type="submit" disabled={busy || code.length !== 6}
+              className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-[background-color,opacity,transform] active:scale-[.99] disabled:opacity-50 motion-reduce:transition-none">
+              {busy ? 'Verifying…' : 'Verify and replace authenticator'}
+            </button>
+          </div>
         </div>}
-        <div className="space-y-2 text-sm leading-relaxed text-white/65">
-          <p>Scan the QR code with the new authenticator app.</p>
-          {replacement.secret && <p className="text-xs">Cannot scan? Enter this key manually:<br /><span className="break-all font-mono text-white">{replacement.secret}</span></p>}
-          <p className="font-semibold text-amber">Keep your current authenticator until this replacement succeeds.</p>
-        </div>
-        <label className="block text-sm font-semibold text-white/70">Six-digit code from the new authenticator
-          <input type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code}
-            onChange={event => setCode(event.target.value.replace(/\D/g, '').slice(0, 6))}
-            className="mt-1 min-h-14 w-full rounded-adm-sm border border-blue/50 bg-black/50 px-3 py-3 text-center font-mono text-2xl tracking-[0.35em] text-white outline-none focus:border-blue" />
-        </label>
-        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <button type="button" onClick={onClose} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button>
-          <button type="submit" disabled={busy || code.length !== 6}
-            className="min-h-11 rounded-adm-sm bg-blue px-4 font-bold text-white transition-[background-color,opacity,transform] active:scale-[.99] disabled:opacity-50 motion-reduce:transition-none">
-            {busy ? 'Verifying…' : 'Verify and replace authenticator'}
-          </button>
-        </div>
-      </div>}
-    </form>
+      </form>
+    </AdminDialog>
   </div>
 }
 
@@ -656,18 +652,14 @@ function RoleChangeDialog({ change, onCancel, onConfirm }) {
   const [reason, setReason] = useState('')
   const [busy, setBusy] = useState(false)
   const closeRef = useRef(null)
-  useEffect(() => {
-    closeRef.current?.focus()
-    const handleKey = event => { if (event.key === 'Escape' && !busy) onCancel() }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [busy, onCancel])
   const label = change.profile.email || change.profile.fullName || 'this account'
   return <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 sm:items-center sm:p-4" role="presentation">
-    <form role="dialog" aria-modal="true" aria-labelledby="role-change-title" onSubmit={async event => { event.preventDefault(); setBusy(true); await onConfirm(change.profile.id, change.role, reason.trim()); setBusy(false) }} className="w-full space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
-      <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-wider text-gold">Privilege change</p><h2 id="role-change-title" className="mt-1 text-xl font-bold">Change role to {change.role}</h2><p className="mt-2 break-all text-sm text-white/55">This changes Admin access for {label}. The database still protects the final Admin.</p></div><button ref={closeRef} type="button" onClick={onCancel} aria-label="Close role change dialog" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line">×</button></div>
-      <label className="block text-sm font-semibold text-white/70">Reason for this access change<textarea required minLength={3} maxLength={500} value={reason} onChange={event => setReason(event.target.value)} className={`${inputCls} mt-1 min-h-24 resize-y`} /></label>
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold">Cancel</button><button type="submit" disabled={busy || reason.trim().length < 3} className="min-h-11 rounded-adm-sm bg-crimson px-4 font-bold text-white disabled:opacity-50">{busy ? 'Changing…' : `Change to ${change.role}`}</button></div>
-    </form>
+    <AdminDialog onClose={onCancel} closeDisabled={busy} initialFocusRef={closeRef} labelledBy="role-change-title">
+      <form onSubmit={async event => { event.preventDefault(); setBusy(true); await onConfirm(change.profile.id, change.role, reason.trim()); setBusy(false) }} className="w-full space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
+        <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-wider text-gold">Privilege change</p><h2 id="role-change-title" className="mt-1 text-xl font-bold">Change role to {change.role}</h2><p className="mt-2 break-all text-sm text-white/55">This changes Admin access for {label}. The database still protects the final Admin.</p></div><button ref={closeRef} type="button" onClick={onCancel} disabled={busy} aria-label="Close role change dialog" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line disabled:opacity-40">×</button></div>
+        <label className="block text-sm font-semibold text-white/70">Reason for this access change<textarea required minLength={3} maxLength={500} value={reason} onChange={event => setReason(event.target.value)} className={`${inputCls} mt-1 min-h-24 resize-y`} /></label>
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button><button type="submit" disabled={busy || reason.trim().length < 3} className="min-h-11 rounded-adm-sm bg-crimson px-4 font-bold text-white disabled:opacity-50">{busy ? 'Changing…' : `Change to ${change.role}`}</button></div>
+      </form>
+    </AdminDialog>
   </div>
 }

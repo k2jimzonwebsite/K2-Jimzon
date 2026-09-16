@@ -7,6 +7,7 @@ const PUBLIC_MESSAGES = {
   BOT_CHALLENGE_REQUIRED: 'Please complete the security check and try again.',
   RATE_LIMITED: 'Too many attempts. Please wait a moment and try again.',
   REQUEST_CONFLICT: 'This request changed while it was being retried. Please review and submit again.',
+  IDEMPOTENCY_CONFLICT: 'This request key already belongs to different details. Check the original request with K2 staff before starting another.',
   GUEST_ACCESS_REQUIRED: 'This browser does not have access to that conversation.',
   GUEST_ACCESS_EXPIRED: 'This conversation access has expired. Contact K2 Jimzon for help.',
   CONVERSATION_NOT_AVAILABLE: 'That conversation is not available to this browser.',
@@ -82,5 +83,10 @@ export async function postGuestCommerce(path, body) {
       error: PUBLIC_MESSAGES[code] || 'The request could not be completed. Please try again.',
     }
   }
-  return { ok: true, data: result.receipt || result.preview || result.conversations || result.orders }
+  return {
+    ok: true,
+    data: result.receipt || result.preview || result.conversations || result.orders || result.quote,
+    quote: result.quote,
+  }
 }
+

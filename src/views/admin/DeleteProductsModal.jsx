@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { providerErrorIncludes } from '../../lib/safeUiError'
 import {
-  adminBffEnabled, commandAdminProductMasterBff, getAdminStaffAccessBff,
+  adminBffEnabled, commandAdminProductMasterBff, getAdminStaffAccessBff, commandOutcomeIsUncertain,
 } from '../../services/adminBffService'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 
@@ -26,9 +26,14 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
   const [reason, setReason] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [uncertainNotice, setUncertainNotice] = useState('')
+  const [uncertain, setUncertain] = useState(false)
   const [pinState, setPinState] = useState('checking') // checking | ready | missing | offline
   const inputRef = useRef(null)
   const requestIdRef = useRef(crypto.randomUUID())
+  // The deletion identity of the last submit. Editing the SKU set or reason
+  // afterwards starts a new command; retrying unchanged details reuses the key.
+  const lastSubmitRef = useRef(null)
 
   const count = products.length
   const isBulk = count > 1
@@ -80,18 +85,34 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
     if (reason.trim().length < 8) return setError('Enter a specific reason of at least 8 characters.')
     setBusy(true)
     setError('')
+    setUncertain(false)
+    setUncertainNotice('')
 
     const skus = products.map(p => p.sku).filter(Boolean)
 
     if (secure) {
+      // A changed deletion payload after a submit is a new command with a new
+      // identity; an unchanged retry keeps the key so a lost response resolves
+      // the original receipt instead of conflicting with it.
+      const fingerprint = JSON.stringify({ skus, reason: reason.trim() })
+      if (lastSubmitRef.current && lastSubmitRef.current !== fingerprint) {
+        requestIdRef.current = crypto.randomUUID()
+      }
+      lastSubmitRef.current = fingerprint
       const response = await commandAdminProductMasterBff('delete', {
         skus, pin, reason: reason.trim(),
       }, requestIdRef.current)
       setBusy(false)
       if (!response.ok) {
+        if (commandOutcomeIsUncertain(response)) {
+          setUncertain(true)
+          return setUncertainNotice('The deletion may already have completed. Retry the same deletion, or change the details to start over.')
+        }
         setPin('')
         return setError(response.error || 'The deletion was refused. Nothing was removed.')
       }
+      setUncertain(false)
+      setUncertainNotice('')
       const result = response.result || {}
       if (!result.ok) {
         setPin('')
@@ -197,6 +218,12 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
             </div>
           )}
 
+          {uncertainNotice && (
+            <div role="alert" className="rounded-adm-sm border border-amber/40 bg-amber/10 p-3 text-sm text-amber leading-snug">
+              {uncertainNotice}
+            </div>
+          )}
+
           {pinState === 'checking' && (
             <p className="text-sm text-white/50 text-center py-2">Checking your delete PIN…</p>
           )}
@@ -211,6 +238,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
                   onChange={(e) => { setReason(e.target.value.slice(0, 500)); setError('') }}
                   rows={3}
                   maxLength={500}
+                  disabled={busy || uncertain}
                   placeholder="Example: Duplicate draft created during catalog setup"
                   className="w-full resize-y rounded-adm-sm border border-adm-line bg-adm-raised px-3 py-2.5 text-base text-white placeholder:text-white/35 outline-none focus:border-crimson"
                 />
@@ -227,8 +255,9 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
                 maxLength={4}
                 value={pin}
                 onChange={(e) => { setPin(e.target.value.replace(/\D/g, '').slice(0, 4)); setError('') }}
-                onKeyDown={(e) => { if (e.key === 'Enter' && pin.length === 4 && !busy) handleDelete() }}
+                onKeyDown={(e) => { if (e.key === 'Enter' && pin.length === 4 && !busy && !uncertain) handleDelete() }}
                 placeholder="••••"
+                disabled={busy || uncertain}
                 className="w-full rounded-adm-sm border border-adm-line bg-adm-raised px-3 min-h-[52px] text-center text-2xl font-mono tracking-[0.5em] text-white outline-none focus:border-crimson"
               />
               <p className="mt-1.5 text-xs text-white/40 leading-snug">
@@ -250,13 +279,22 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
           >
             Cancel
           </button>
+          {uncertain && (
+            <button
+              type="button"
+              onClick={() => { setUncertain(false); setUncertainNotice(''); setError('') }}
+              className="min-h-[44px] px-4 rounded-adm-sm bg-white/5 border border-adm-line text-sm font-semibold text-neutral-200 hover:bg-white/10 transition-colors"
+            >
+              Change details
+            </button>
+          )}
           <button
             type="button"
             onClick={handleDelete}
-            disabled={busy || blocked || pin.length !== 4 || reason.trim().length < 8}
+            disabled={busy || blocked || (uncertain ? false : (pin.length !== 4 || reason.trim().length < 8))}
             className="flex-1 min-h-[44px] rounded-adm-sm bg-crimson hover:bg-crimson-deep text-sm font-bold text-white transition-colors disabled:opacity-40"
           >
-            {busy ? 'Deleting…' : `Delete ${count} product${count !== 1 ? 's' : ''}`}
+            {busy ? 'Deleting…' : uncertain ? 'Retry same deletion' : `Delete ${count} product${count !== 1 ? 's' : ''}`}
           </button>
         </div>
       </div>

@@ -143,7 +143,7 @@ export async function readAdminInbox(client) {
 export async function readConversationHistory(client, conversationId) {
   if (!UUID.test(conversationId)) throw new Error('REQUEST_INVALID')
   const { data, error } = await client.from('conversation_events')
-    .select('id,event_type,reason,created_at').eq('conversation_id', conversationId)
+    .select('id,event_type,actor_id,reason,created_at').eq('conversation_id', conversationId)
     .order('created_at', { ascending: false }).limit(20)
   if (error) throw new Error('INBOX_HISTORY_UNAVAILABLE')
   return data || []

@@ -1215,9 +1215,10 @@ test('the in-store chat reads as an automatically refreshing website conversatio
   const chatCode = await readCode('../src/components/shop/StoreChatPanel.jsx')
 
   expect(chat).toContain('const POLL_MS = 8000')
-  expect(chat).toContain('Live website conversation')
+  expect(chat).toContain('Website conversation')
+  expect(chat).toContain('replies are not instant')
   expect(chat).toContain('Replies refresh automatically')
-  expect(chatCode).not.toMatch(/online now|staff online|is typing/i)
+  expect(chatCode).not.toMatch(/online now|staff online|is typing|connected to K2 staff inbox/i)
 })
 
 test('virtual-store messages have one signed customer-visible path into Admin', async () => {

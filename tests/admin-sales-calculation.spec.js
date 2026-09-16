@@ -247,7 +247,8 @@ test('sales CSV exports the exact filter without customer data or spreadsheet fo
   expect(csv).toContain('"created_at","order_reference","channel","order_status","payment_status","request_value_php"')
   expect(csv).toContain('"\'=SUM(1,1)"')
   expect(csv).toContain('"\'+fulfilled"')
-  expect(csv).toContain('"shopee"')
+  // A marketplace-like source is not an approved exact channel identifier.
+  expect(csv).toContain('"other"')
   expect(csv).toContain('"1250.50"')
   expect(csv).not.toContain('unpaid-row')
   expect(csv).not.toContain('Must not export')

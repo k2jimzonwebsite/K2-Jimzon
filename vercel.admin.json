@@ -1,5 +1,5 @@
 {
-  "buildCommand": "K2_DEPLOYMENT_TARGET=admin npm run build",
+  "buildCommand": "K2_DEPLOYMENT_TARGET=admin npm run build:admin",
   "outputDirectory": "dist",
   "functions": {
     "api/admin/index.js": {

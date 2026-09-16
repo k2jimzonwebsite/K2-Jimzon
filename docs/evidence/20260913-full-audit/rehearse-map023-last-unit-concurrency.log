@@ -1,0 +1,10 @@
+[ok] actual receiving/payment functions: scans, shortage, quarantine, retry and event actor/time (synthetic Auth; transaction rolled back)
+[ok] repository confirm_order_request function installed
+[ok] winning transaction holds the reserved lot lock
+[ok] competing order waited 1815ms and was refused for insufficient stock
+[ok] exactly one confirmed order owns the one active reservation
+[ok] final state confirmed=1|submitted=1|batch=1/1|reservations=1|orders=1|events=1|balance=1/1
+[ok] same confirmed order returned without duplicate effects
+
+All MAP-023 last-unit concurrency checks passed against isolated PostgreSQL.
+This is local rehearsal evidence. It is not a production migration or channel activation.

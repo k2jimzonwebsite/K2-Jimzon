@@ -1,0 +1,30 @@
+
+Running 1 test using 1 worker
+
+(node:22004) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\storefront-discovery-contract.spec.js:11:1 › scoped guest routes have crawler exclusions at the deployed header boundary (12ms)
+
+
+  1) tests\storefront-discovery-contract.spec.js:11:1 › scoped guest routes have crawler exclusions at the deployed header boundary 
+
+    Error: /account
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      13 |   for (const route of ['/account', '/messages', '/checkout', '/confirmation']) {
+      14 |     expect(config.headers.some(rule => rule.source === route && rule.headers.some(header =>
+    > 15 |       header.key === 'X-Robots-Tag' && header.value === 'noindex, nofollow')), route).toBe(true)
+         |                                                                                       ^
+      16 |   }
+      17 | })
+      18 |
+        at C:\Users\jerze\K2 JImzon\tests\storefront-discovery-contract.spec.js:15:87
+
+    Error Context: test-results\storefront-discovery-contr-c457b-he-deployed-header-boundary\error-context.md
+
+  1 failed
+    tests\storefront-discovery-contract.spec.js:11:1 › scoped guest routes have crawler exclusions at the deployed header boundary 

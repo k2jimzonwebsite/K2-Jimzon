@@ -1,0 +1,43 @@
+[pass] legacy unknown releases survive while new unattributed releases are refused
+[ok] repository 20260809 order functions installed
+[ok] 20260902_purchase_time_reservation.sql applied
+[ok] migration replays without error
+[pass] submitting an order holds its stock immediately — reservations=1 batch.reserved=1 stock_available=0
+[pass] the hold carries the OWNER-002 30-minute deadline — probe=ok
+[pass] a second buyer for the last unit is refused at purchase — raised Insufficient sellable lot stock
+[pass] the refused purchase leaves no order behind — order_requests=0
+[pass] the refusal does not disturb the winning hold — stock_available=0 reservations=1
+[pass] confirming a purchase-held order does not claim the units twice — reservations=1 balance.reserved=1
+[pass] confirmation still writes its order row and advances status — orders=1 status=confirmed
+[pass] an order created before the hold still reserves at confirm — reservations=1 stock_available=0
+[pass] the winning confirmation holds the lot lock
+[pass] a second confirmation blocks on the lock, then is refused — waited 2020ms, refused
+[pass] exactly one confirmation owns the single unit — reservations=1 confirmed=1
+[pass] submitted and confirmed cancellations release exact active lots once
+[pass] expiry preserves confirmed commitments, releases whole orders and reconciles stock
+[pass] confirmation refuses partial or expired purchase coverage without side effects
+[pass] packing credits only the explicitly confirmed physical lot
+[pass] handover requires complete packed coverage and preserves reservation history
+[pass] opposing A/B and B/A baskets both reserve without a deadlock — committed | committed
+[pass] opposing baskets retain exact lot, balance, catalog and event totals — true
+[pass] replaying an opposing basket adds no reservations or inventory events
+[pass] lock-order correction preserves exact installed RPC grants
+[pass] captured function recovery restores definition and ACL without changing inventory
+[pass] purchase and physical reconciliation both commit without lock inversion — {"purchase":0,"recount":0,"errors":["",""]}
+[pass] concurrent recount preserves purchase holds, sellable projection and both audit events — true
+[pass] clearance and recount serialize without a batch/product deadlock — {"clearance":0,"recount":0}
+[pass] quarantine recount retains held units while removing them from sale
+[pass] recount preserves holds/history, missing-balance commitments and first-count creation
+[pass] recount patch preserves RPC permissions and exact captured-definition recovery
+[pass] confirmation deducts owned stock while preserving physical custody
+[pass] committed rows survive expiry and cancel with retained evidence
+[pass] second-lot failure rolls back confirmation/coupon/commitment and retry commits exactly once
+[pass] signed payment and confirmation commit once; handover requires evidence and refund preserves stock
+[pass] lifecycle assertions reject the old set_order_request_payment_status(uuid,text,text) body
+[pass] lifecycle assertions reject the old reserve_order_request_lots_v1(uuid,text) body
+[pass] lifecycle assertions reject the old fulfill_order_request(uuid,text) body
+[pass] lifecycle composition preserves ACLs and exact captured-definition recovery
+[pass] old confirmation rollback refuses composed callers before changing functions
+
+37/37 properties held.
+Purchase-time reservation rehearsal passed. Nothing was applied to production.

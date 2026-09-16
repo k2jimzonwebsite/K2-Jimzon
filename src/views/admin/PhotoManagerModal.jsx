@@ -54,7 +54,10 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
 
   const requestClose = () => {
     if (closeDisabled) return
-    if (operation.uncertain && !secureMode) { onClose(); return }
+    // An unconfirmed save on the transitional path has no operation identity to
+    // retry, so closing must route through the reconcile warning, never a
+    // silent discard.
+    if (operation.uncertain && !secureMode) { setConfirmClose(true); return }
     if (dirty) setConfirmClose(true)
     else onClose()
   }
@@ -66,8 +69,8 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
       setError('A published product must keep a primary photo. Add one before saving.')
       return
     }
-    if (secureMode && trimmedReason.length < 3) {
-      setError('Add a short reason for this product-media change.')
+    if (secureMode && trimmedReason.length < 10) {
+      setError('Add a reason of at least 10 characters for this product-media change.')
       return
     }
     setError('')
@@ -121,11 +124,11 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
           {cleanupPending && <div role="status" className="rounded-adm-sm border border-amber/40 bg-amber/10 p-3 text-sm leading-5 text-amber-100">Photos are saved. An unused old file still needs cleanup; retry to finish safely.</div>}
           {requiresPrimary && !primary && !error && <div role="status" className="rounded-adm-sm border border-amber/40 bg-amber/10 p-3 text-sm text-amber-100">This product is published and must keep a primary photo.</div>}
           {confirmClose && (
-            <div role="alertdialog" aria-label="Discard unsaved photo changes" className="rounded-adm-sm border border-amber/40 bg-amber/10 p-3">
-              <p className="text-sm font-semibold text-amber-100">Discard these unsaved photo changes?</p>
+            <div role="alertdialog" aria-label={operation.uncertain && !secureMode ? 'Leave with an unconfirmed photo save' : 'Discard unsaved photo changes'} className="rounded-adm-sm border border-amber/40 bg-amber/10 p-3">
+              <p className="text-sm font-semibold text-amber-100">{operation.uncertain && !secureMode ? 'The save outcome is unknown. Close and reconcile the product register before another change.' : 'Discard these unsaved photo changes?'}</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                <button type="button" onClick={() => setConfirmClose(false)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-white/5 active:scale-[0.98]">Keep editing</button>
-                <button type="button" onClick={onClose} className="min-h-11 rounded-adm-sm bg-crimson px-4 font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-crimson/90 active:scale-[0.98]">Discard changes</button>
+                <button type="button" onClick={() => setConfirmClose(false)} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-white/5 active:scale-[0.98]">{operation.uncertain && !secureMode ? 'Keep open' : 'Keep editing'}</button>
+                <button type="button" disabled={closeDisabled} onClick={onClose} className="min-h-11 rounded-adm-sm bg-crimson px-4 font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-crimson/90 active:scale-[0.98] disabled:opacity-50">{operation.uncertain && !secureMode ? 'Close and reconcile' : 'Discard changes'}</button>
               </div>
             </div>
           )}
@@ -135,7 +138,7 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
           <div aria-live="polite" className="sr-only">{saving ? 'Saving product photos' : ''}</div>
           <div className="flex gap-2">
             <button type="button" onClick={requestClose} disabled={closeDisabled} className="min-h-11 flex-1 rounded-adm-sm border border-adm-line px-4 font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-white/5 active:scale-[0.98] disabled:opacity-50">Cancel</button>
-            <button type="button" onClick={() => void handleSave()} disabled={saving || uploading || (operation.uncertain && !secureMode) || (!dirty && !cleanupPending) || (requiresPrimary && !primary) || (secureMode && reason.trim().length < 3)} className="min-h-11 flex-[1.4] rounded-adm-sm bg-forest px-4 font-bold text-navy transition-[background-color,transform] duration-150 hover:bg-forest/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45">
+            <button type="button" onClick={() => void handleSave()} disabled={saving || uploading || (operation.uncertain && !secureMode) || (!dirty && !cleanupPending) || (requiresPrimary && !primary) || (secureMode && reason.trim().length < 10)} className="min-h-11 flex-[1.4] rounded-adm-sm bg-forest px-4 font-bold text-navy transition-[background-color,transform] duration-150 hover:bg-forest/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45">
               {saving ? 'Saving…' : uploading ? 'Wait for photo upload' : cleanupPending ? 'Retry file cleanup' : operation.uncertain ? secureMode ? 'Retry same command' : 'Reconcile product photos first' : 'Save photo assignment'}
             </button>
           </div>

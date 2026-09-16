@@ -8,7 +8,7 @@ import { StarIcon } from '../ui/icons'
 
 // Dedicated, mobile-first "spin the globe to read reviews" trust section.
 export default function GlobeSection() {
-  const { enabledGlobeProducts, reviews, isLoading, cmsError } = useGlobeCms()
+  const { enabledGlobeProducts, reviews, isLoading, reviewsUnavailable } = useGlobeCms()
   const [selected, setSelected] = useState(null)
   const hasProducts = enabledGlobeProducts?.length > 0
   const reviewCount = reviews?.length || 0
@@ -58,9 +58,11 @@ export default function GlobeSection() {
             </p>
           </div>
         </div>
-        {hasProducts && (cmsError || reviewCount === 0) && (
+        {!isLoading && (reviewsUnavailable || reviewCount === 0) && (
           <p className="mt-4 text-center font-sans text-sm font-medium text-navy-soft" role="status">
-            The 3D globe is available. Published review details are reconnecting.
+            {reviewsUnavailable
+              ? 'Published review details are unavailable. Please try again later.'
+              : 'No published customer reviews are available yet.'}
           </p>
         )}
       </div>

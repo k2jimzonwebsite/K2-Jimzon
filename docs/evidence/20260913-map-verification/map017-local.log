@@ -1,0 +1,7 @@
+MAP-017 local rehearsal: vulnerable baseline created.
+MAP-017 local rehearsal: preflight passed.
+MAP-017 local rehearsal: rollback lifecycle and restoration passed.
+MAP-017 local rehearsal: apply and authorization assertions passed.
+MAP-017 local rehearsal: payload-bound apply, receipt, verification, and idempotent replay passed.
+MAP-017 function lockdown: seven exact ACLs, browser denial, service entry, real trigger behavior, replay, missing-signature refusal and exact function/ACL rollback passed.
+MAP-017 portable rehearsal passed: 12 authorization groups; rollback restoration, apply, error-report flood denial, idempotent replay, encrypted backup, 14-row legacy archive equality, and isolated restore verified.

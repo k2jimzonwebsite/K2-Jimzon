@@ -13,7 +13,7 @@ import {
   validateUploadFile,
 } from '../lib/uploadValidation'
 import {
-  adminBffEnabled, createProductDraftBff, createProductFirstInventoryBff,
+  adminBffEnabled, commandOutcomeIsUncertain, createProductDraftBff, createProductFirstInventoryBff,
   createProductIntakeSessionBff, getProductIntakeSessionBff,
   listProductIntakeConsignmentsBff, saveProductIntakeStepBff,
   searchProductIntakeDuplicatesBff, transitionProductPublicationBff,
@@ -69,6 +69,14 @@ function commandError(code, userMessage, cause) {
   return new ProductIntakeError(code, userMessage, cause)
 }
 
+function intakeCommandError(result, fallbackCode, fallbackMessage) {
+  const failure = commandError(result?.code || fallbackCode, result?.error || fallbackMessage)
+  failure.uncertain = commandOutcomeIsUncertain(result)
+    || result?.ok === true
+    || ['COMMAND_IN_PROGRESS', 'INTAKE_COMMAND_UNAVAILABLE'].includes(result?.code)
+  return failure
+}
+
 function cacheSession(session) {
   // Presentation continuity only. The server record remains authoritative.
   if (adminBffEnabled()) return
@@ -103,6 +111,17 @@ async function fetchSession(client, sessionId) {
   }
   cacheSession(data)
   return data
+}
+
+async function refreshAfterIntakeCommand(sessionId) {
+  try {
+    return await fetchSession(null, sessionId)
+  } catch (error) {
+    // The write already returned a receipt. A failed read must not release its
+    // identity or reopen editing; replay that receipt before refreshing again.
+    error.uncertain = true
+    throw error
+  }
 }
 
 /** Search exact identity first, then name candidates without interpolated filters. */
@@ -170,17 +189,26 @@ export async function searchIdentityDuplicates(rawQuery) {
 }
 
 /** Resume the cached server session when authorized, otherwise create one. */
-export async function createOrResumeIntakeSession(barcode = null, scannedIdentity = null) {
+export async function createOrResumeIntakeSession(barcode = null, scannedIdentity = null, options = {}) {
   if (adminBffEnabled()) {
-    const active = await getProductIntakeSessionBff(null)
-    if (!active.ok) throw commandError('INTAKE_RESUME_FAILED', active.error)
-    if (active.data?.session) return active.data.session
-    const requestId = crypto.randomUUID()
+    // After an uncertain create, replay that command instead of adopting an
+    // unrelated most-recent session returned by the general resume lookup.
+    if (!options.recovering) {
+      const active = await getProductIntakeSessionBff(null)
+      if (!active.ok || !active.data || !Object.hasOwn(active.data, 'session')
+          || (active.data.session !== null && !active.data.session?.id)) {
+        throw commandError('INTAKE_RESUME_FAILED', active.error || 'The saved intake session could not be checked. Retry session setup.')
+      }
+      if (active.data?.session) return active.data.session
+    }
+    const requestId = options.requestId || crypto.randomUUID()
     const created = await createProductIntakeSessionBff({
       requestId, barcode: barcode || null, scannedIdentity: scannedIdentity || barcode || '',
-    })
-    if (!created.ok) throw commandError('INTAKE_CREATE_FAILED', created.error)
-    return fetchSession(null, created.result?.sessionId)
+    }, options.idempotencyKey)
+    if (!created.ok || !created.result?.sessionId) {
+      throw intakeCommandError(created, 'INTAKE_CREATE_FAILED', 'The intake session could not be confirmed.')
+    }
+    return refreshAfterIntakeCommand(created.result.sessionId)
   }
   const client = requireClient()
   const cachedId = readCachedSessionId()
@@ -231,7 +259,7 @@ export async function createOrResumeIntakeSession(barcode = null, scannedIdentit
 }
 
 /** Persist one server-authoritative checklist transition. */
-export async function saveIntakeSessionStep(session, step, partialData = {}) {
+export async function saveIntakeSessionStep(session, step, partialData = {}, idempotencyKey) {
   if (!session?.id) {
     throw commandError('INTAKE_SESSION_REQUIRED', 'A valid server intake session is required before continuing.')
   }
@@ -258,9 +286,12 @@ export async function saveIntakeSessionStep(session, step, partialData = {}) {
       unknown_fields: 'unknownFields',
     }
     const patch = Object.fromEntries(Object.entries(safePatch).map(([key, value]) => [keyMap[key], value]))
-    const result = await saveProductIntakeStepBff({ sessionId: session.id, step, patch })
-    if (!result.ok) throw commandError('INTAKE_SAVE_FAILED', result.error)
-    return fetchSession(null, session.id)
+    const result = await saveProductIntakeStepBff({ sessionId: session.id, step, patch }, idempotencyKey)
+    if (!result.ok || result.result?.sessionId !== session.id || result.result?.step !== step
+      || typeof result.result?.updatedAt !== 'string' || !Number.isFinite(Date.parse(result.result.updatedAt))) {
+      throw intakeCommandError(result, 'INTAKE_SAVE_FAILED', 'This intake step could not be confirmed.')
+    }
+    return refreshAfterIntakeCommand(session.id)
   }
   const client = requireClient()
 
@@ -280,7 +311,7 @@ export async function saveIntakeSessionStep(session, step, partialData = {}) {
 }
 
 /** Upload one private packaging-evidence image and persist its server path. */
-export async function uploadProductEvidence(session, slot, file) {
+export async function uploadProductEvidence(session, slot, file, idempotencyKey) {
   if (!session?.id) {
     throw commandError('INTAKE_SESSION_REQUIRED', 'Start a secure intake session before uploading evidence.')
   }
@@ -298,15 +329,24 @@ export async function uploadProductEvidence(session, slot, file) {
   const extension = extensionByType[file?.type] || 'jpg'
 
   if (adminBffEnabled()) {
-    const result = await uploadProductEvidenceBff(session.id, slot, file)
-    if (!result.ok) {
-      const failure = commandError(result.code || 'EVIDENCE_UPLOAD_FAILED', result.error)
+    const result = await uploadProductEvidenceBff(session.id, slot, file, idempotencyKey)
+    const receipt = result.result
+    if (!result.ok || receipt?.sessionId !== session.id || receipt?.slot !== slot
+        || !receipt?.path || receipt?.uploadStatus !== 'uploaded') {
+      const failure = intakeCommandError(result, 'EVIDENCE_UPLOAD_FAILED', 'The evidence upload could not be confirmed.')
+      failure.uncertain ||= (!result.cleanupId && result.status >= 500)
+        || ['EVIDENCE_UPLOAD_UNAVAILABLE', 'EVIDENCE_REGISTER_UNAVAILABLE', 'IDEMPOTENCY_CONFLICT'].includes(result.code)
       failure.cleanupId = result.cleanupId || null
       throw failure
     }
-    const updatedSession = await fetchSession(null, session.id)
-    const evidence = (updatedSession.packaging_images || []).find((image) => image.slot === slot)
-    if (!evidence) throw commandError('EVIDENCE_REGISTER_FAILED', 'The evidence photo was uploaded but its verified record could not be loaded. Try again before continuing.')
+    const updatedSession = await refreshAfterIntakeCommand(session.id)
+    const evidence = (updatedSession.packaging_images || []).find((image) =>
+      image.slot === slot && image.path === receipt.path && image.upload_status === 'uploaded')
+    if (!evidence) {
+      const failure = commandError('EVIDENCE_REGISTER_FAILED', 'The evidence receipt does not match the loaded record. Retry before continuing.')
+      failure.uncertain = true
+      throw failure
+    }
     return { session: updatedSession, evidence }
   }
   const client = requireClient()
@@ -383,7 +423,7 @@ export async function listPackingConsignments() {
 }
 
 /** Create exactly one reviewed Draft through the server command. */
-export async function createProductDraftServer(session) {
+export async function createProductDraftServer(session, idempotencyKey) {
   if (!session?.id) {
     throw commandError('INTAKE_SESSION_REQUIRED', 'A valid server intake session is required before creating a product.')
   }
@@ -392,11 +432,11 @@ export async function createProductDraftServer(session) {
     const result = await createProductDraftBff({
       sessionId: session.id, requestId: session.request_id,
       reviewedPayload: session.draft_payload || {}, fieldDecisions: session.field_decisions || {},
-    })
-    if (!result.ok || !result.result?.success || !result.result?.product_id || !result.result?.sku) {
-      throw commandError('DRAFT_CREATE_FAILED', result.error || 'The product Draft was not created. Review the fields or ask an administrator.')
+    }, idempotencyKey)
+    if (!result.ok || result.result?.success !== true || !result.result?.product_id || !result.result?.sku) {
+      throw intakeCommandError(result, 'DRAFT_CREATE_FAILED', 'The product Draft was not created. Review the fields or ask an administrator.')
     }
-    const updatedSession = await fetchSession(null, session.id)
+    const updatedSession = await refreshAfterIntakeCommand(session.id)
     return {
       success: true, sku: result.result.sku,
       product: { id: result.result.product_id, sku: result.result.sku, status: 'draft' },
@@ -425,7 +465,7 @@ export async function createProductDraftServer(session) {
 }
 
 /** Route first inventory to its selected operational server workflow. */
-export async function createFirstInventoryServer(session, inventory) {
+export async function createFirstInventoryServer(session, inventory, idempotencyKey) {
   if (!session?.id || !session?.product_id) {
     throw commandError('PRODUCT_DRAFT_REQUIRED', 'Create the server Product Draft before recording inventory.')
   }
@@ -448,11 +488,11 @@ export async function createFirstInventoryServer(session, inventory) {
     const result = await createProductFirstInventoryBff({
       sessionId: session.id, inventoryRequestId: requestId,
       source: inventory.source, inventory: inventoryFields,
-    })
-    if (!result.ok || !result.result?.success) {
-      throw commandError('INVENTORY_CREATE_FAILED', result.error || 'Inventory was not recorded. No quantity was added.')
+    }, idempotencyKey)
+    if (!result.ok || result.result?.success !== true) {
+      throw intakeCommandError(result, 'INVENTORY_CREATE_FAILED', 'Inventory was not recorded. No quantity was added.')
     }
-    const updatedSession = await fetchSession(null, session.id)
+    const updatedSession = await refreshAfterIntakeCommand(session.id)
     return { ...result.result, session: updatedSession }
   }
   const client = requireClient()
@@ -471,7 +511,7 @@ export async function createFirstInventoryServer(session, inventory) {
 }
 
 /** Ask the server to validate and perform a publication transition. */
-export async function updateProductPublicationServer(session, requestedStatus, reason = '') {
+export async function updateProductPublicationServer(session, requestedStatus, reason = '', idempotencyKey) {
   if (!session?.id || !session?.product_id) {
     throw commandError('PRODUCT_DRAFT_REQUIRED', 'Create the server Product Draft before changing publication.')
   }
@@ -479,11 +519,11 @@ export async function updateProductPublicationServer(session, requestedStatus, r
   if (adminBffEnabled()) {
     const result = await transitionProductPublicationBff({
       sessionId: session.id, requestedStatus, reason: String(reason || '').trim(),
-    })
+    }, idempotencyKey)
     if (!result.ok || !result.result?.success) {
-      throw commandError('PUBLICATION_FAILED', result.error || 'Publication was not changed. Complete the server readiness checklist first.')
+      throw intakeCommandError(result, 'PUBLICATION_FAILED', 'Publication was not changed. Complete the server readiness checklist first.')
     }
-    const updatedSession = await fetchSession(null, session.id)
+    const updatedSession = await refreshAfterIntakeCommand(session.id)
     return { ...result.result, session: updatedSession }
   }
   const client = requireClient()

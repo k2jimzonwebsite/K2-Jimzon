@@ -9,6 +9,12 @@ function Harness() {
   const session = { id: 'e74a4161-72ca-4d72-8f59-37aa690e1869', product_id: 'fixture-draft', field_decisions: { name: 'accepted' }, draft_payload: { product: { name: 'Fixture package' } } }
   return <main className="admin-bos bg-[#161922] p-4 text-white min-h-screen"><button className="min-h-[44px]" onClick={() => setOpen(!open)}>Close / reopen intake fixture</button>{open && <AutomaticIntakePanel session={session} isOnline={true} onBusy={() => {}} onContent={() => setLoaded(true)} />}<p>Manual ChatGPT Projects</p>{loaded && <p>Field review loaded</p>}</main>
 }
+function ModalHarness() {
+  const [actor, setActor] = useState(0)
+  return <main className="admin-bos"><button onClick={() => setActor(value => value + 1)}>Replace fixture actor</button>
+    <ProductIntakeSessionModal key={actor} isOpen={true} onClose={() => {}} onProductCreated={() => {}} onExistingProduct={() => {}} />
+  </main>
+}
 createRoot(document.getElementById('root')).render(location.search === '?modal'
-  ? <ProductIntakeSessionModal isOpen={true} onClose={() => {}} onProductCreated={() => {}} onExistingProduct={() => {}} />
+  ? <ModalHarness />
   : <Harness />)

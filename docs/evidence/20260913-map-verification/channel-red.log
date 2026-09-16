@@ -1,0 +1,32 @@
+
+Running 1 test using 1 worker
+
+(node:9552) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\overview-availability.spec.js:111:1 › sales exports preserve exact channel aliases and reject marketplace-like unknown sources (11ms)
+
+
+  1) tests\overview-availability.spec.js:111:1 › sales exports preserve exact channel aliases and reject marketplace-like unknown sources 
+
+    Error: shopee_unmapped
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: ",\"other\","
+    Received string:    "﻿\"created_at\",\"order_reference\",\"channel\",\"order_status\",\"payment_status\",\"request_value_php\"·
+    \"\",\"fixture\",\"shopee\",\"\",\"\",\"0.00\"·
+    "
+
+      117 |   for (const [channel_source, expected] of channels) {
+      118 |     const csv = createSalesRecordCsv([{ id: 'fixture', channel_source }])
+    > 119 |     expect(csv, channel_source).toContain(`,"${expected}",`)
+          |                                 ^
+      120 |   }
+      121 | })
+      122 |
+        at C:\Users\jerze\K2 JImzon\tests\overview-availability.spec.js:119:33
+
+    Error Context: test-results\overview-availability-sale-4f0ac-tplace-like-unknown-sources\error-context.md
+
+  1 failed
+    tests\overview-availability.spec.js:111:1 › sales exports preserve exact channel aliases and reject marketplace-like unknown sources 

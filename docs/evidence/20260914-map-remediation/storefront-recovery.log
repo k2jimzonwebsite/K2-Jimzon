@@ -1,0 +1,21 @@
+
+> k2-jimzon-prototype@0.1.0 test:storefront-recovery
+> playwright test --config=playwright.storefront-recovery.config.js
+
+[WebServer] (node:25228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23500) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:21740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\storefront-recovery-ui.spec.js:26:1 › uncertain checkout freezes details and retries the same payload with a fresh challenge (3.0m)
+  ok 2 tests\storefront-recovery-ui.spec.js:52:3 › pasabuy renews its challenge after a failed submission (3.0s)
+  ok 3 tests\storefront-recovery-ui.spec.js:52:3 › messages renews its challenge after a failed submission (1.4s)
+  ok 4 tests\storefront-recovery-ui.spec.js:77:1 › product facts and availability remain honest when canonical fields are missing (851ms)
+  ok 5 tests\storefront-recovery-ui.spec.js:88:1 › phone product identity precedes supporting content and controls have usable targets (723ms)
+  ok 6 tests\storefront-recovery-ui.spec.js:99:1 › gallery shrinking during refresh preserves the product and its buying context (823ms)
+
+  6 passed (3.1m)

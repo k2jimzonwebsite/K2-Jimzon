@@ -1,0 +1,48 @@
+
+> k2-jimzon-prototype@0.1.0 security:gate
+> npm run security:test && npm run security:test-env-contract && npm run security:test-files && npm run security:files && npm run security:test-env-source && npm run security:env-source && npm run security:secrets && npm run security:history
+
+
+> k2-jimzon-prototype@0.1.0 security:test
+> node scripts/test-secret-scan.mjs
+
+Secret scanner tests passed (fabricated values only).
+
+> k2-jimzon-prototype@0.1.0 security:test-env-contract
+> node scripts/verify-deployment-environment-contract.mjs --self-test
+
+Deployment environment contract self-test passed (5 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:test-files
+> node scripts/test-sensitive-file-policy.mjs
+
+Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).
+
+> k2-jimzon-prototype@0.1.0 security:files
+> node scripts/verify-tracked-sensitive-files.mjs
+
+Sensitive-file policy passed in git mode (1031 files checked).
+
+> k2-jimzon-prototype@0.1.0 security:test-env-source
+> node scripts/test-environment-source-boundary.mjs
+
+Environment source-boundary tests passed (8 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:env-source
+> node scripts/verify-environment-source-boundary.mjs
+
+Environment source boundary passed (198 browser and 161 server/Edge files checked).
+
+> k2-jimzon-prototype@0.1.0 security:secrets
+> node scripts/scan-secrets.mjs
+
+warning: unable to access 'C:\Users\jerze/.config/git/ignore': Permission denied
+Secret scan passed (1092 files checked; secret values are never printed).
+
+> k2-jimzon-prototype@0.1.0 security:history
+> node scripts/scan-git-history-secrets.mjs
+
+Git history scan failed with 3 potential finding(s).
+commit:75fbb8e390a6:supabase/functions/shopee-webhook/README.md [marketplace-partner-secret]
+commit:6240aa973cb4:_globe_resources/.env.example [marketplace-partner-secret]
+commit:6240aa973cb4:_globe_resources/.env.example [marketplace-partner-secret]

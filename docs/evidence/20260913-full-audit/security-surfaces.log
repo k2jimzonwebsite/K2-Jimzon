@@ -1,0 +1,40 @@
+
+> k2-jimzon-prototype@0.1.0 security:surfaces
+> node scripts/audit-security-surfaces.mjs --fail-on-gaps
+
+# MAP-020 Security Surface Inventory
+
+Generated: 2026-09-13T10:05:55.959Z
+
+- Prepared Admin routes: 92
+- Prepared Storefront routes: 15
+- Supabase Edge Functions: 2 (invite-staff, shopee-webhook)
+- api_request: 55 source operations
+- auth: 37 source operations
+- realtime: 12 source operations
+- rpc: 113 source operations
+- storage: 16 source operations
+- table: 118 source operations
+- SQL functionDefinitionOccurrences: 198
+- SQL uniqueFunctionSignatures: 157
+- SQL functionGrantEvents: 149
+- SQL functionRevokeEvents: 209
+- SQL functionSearchPathHardeningEvents: 6
+- SQL effectiveSecurityDefinerWithoutFixedSearchPath: 0
+- SQL effectiveFunctionsWithPublicExecute: 0
+- SQL effectiveFunctionsWithAnonExecute: 14
+- SQL effectiveFunctionsWithAuthenticatedExecute: 84
+- SQL effectiveFunctionsWithServiceRoleExecute: 8
+- SQL scheduledJobs: 0
+- SQL publicationChanges: 16
+- SQL policyDefinitions: 145
+- SQL storagePolicyDefinitions: 15
+- Dynamic operations requiring explicit review: 0
+- Exact expected anonymous function grants: 14
+- Unexpected PUBLIC function grants: 0
+- Unexpected anonymous function grants: 0
+- Missing expected anonymous function grants: 0
+- BFF route-control classification gaps: 0
+- Wildcard CORS production sources: 0
+
+This is a source inventory, not deployment or authorization evidence.

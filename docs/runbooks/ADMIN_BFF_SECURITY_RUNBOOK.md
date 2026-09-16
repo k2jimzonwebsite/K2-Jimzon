@@ -1,11 +1,87 @@
 # Admin BOS Same-Origin BFF Security Runbook
 
+**13 September production correction:** MAP-017 follow-up `20260909023000` is
+applied and independently verified on K2. Do not rerun it. Seven internal function
+browser/PUBLIC ACLs and browser error-report writes are closed; required receiving
+service-role access, staff error reads and public stock reads are preserved.
+Receipt/all checks pass; fresh schema findings 10 and live read boundary 14/14.
+Guest cutover/default privileges remain separate. Recovery after commit requires
+reviewed roll-forward or verified restore, never restoring broad browser access.
+Evidence: `docs/evidence/20260913-audit-remediation/map017-applied-receipt.json`.
+
+13 September local projection correction (IDEA-20260913-02): clearance success
+reloads the selected lot through the existing Admin read boundary. A failed
+refresh keeps existing displayed data and the same receipt key; retry recovers
+canonical approval time/quantity without inventing them. Legacy direct mode uses
+the returned canonical batch. Drawer/editor dates use Manila. UI source tests
+cover midnight and failed-refresh recovery; full actor/dismissal/uncertain-write
+acceptance remains MAP-023 I-002. No endpoint, permission or provider activation
+was added. Evidence: `../evidence/20260913-audit-remediation/`.
+
+**13 September stock commitment composition (prepared, MAP-023 / I-001):**
+`20260913_payment_handover_commitment.sql` composes existing signed payment
+and handover with confirmation ownership evidence. It preserves the wrapper and
+RPC ACLs, requires independent payment review and exact eligible lots, and uses
+the existing reconciliation error for missing handover commitment. Receipt and
+nonce rollback on a second-lot failure and exact-key retry are locally verified.
+Migration order, recovery refusal and limits are in the Guest Commerce BFF
+runbook's 13 September section and
+`docs/evidence/20260913-stock-lifecycle/README.md`. No activation or real-host
+authorization is established; the current MAP-017 follow-up gate still comes first.
+
+MAP-017 existing-function lockdown (9 September, prepared):
+`20260909_map017_existing_function_lockdown.sql` is the seven-current-signature
+slice of the broader August privilege correction. It requires all seven targets
+and changes only execution grants; the two absent intake/publication functions
+stay with their prerequisite migration. Run
+`node scripts/rehearse-map017-portable.mjs` for local denial, trigger, replay and
+exact function/ACL rollback evidence. `--baseline-function-lockdown` intentionally
+fails on the vulnerable grant. Evidence and SHA-256:
+`docs/evidence/20260909-map017-followup.md`. Before provider application capture
+current signatures/ACLs and caller dependencies, bind a separate reviewed payload
+and receipt, and verify exhaustive grants plus catalog/actual-role behavior after
+commit. The original phase-one apply command does not apply this correction.
+No production apply or full receiving acceptance has occurred. Recover through
+a reviewed roll-forward; do not blindly restore PUBLIC/browser execution.
+
+The combined follow-up is built by `loadMap017FollowupContract()` from
+`scripts/map017-followup-contract.mjs`. It returns fixed project, ledger version,
+name, artifact SHA-256, `applySql` and independent `verificationSql`; importing it
+does not apply anything. Current reviewed identity:
+`20260909023000` / `map017_existing_functions_and_error_reports` /
+`7BA3F473C3313890F57899A657CD1234FEDAFEEB43DB7465819919EF1FB71E05`.
+The receipt key is `sha256:<artifactSha256>`. Check identity again before use;
+any SQL/builder edit requires review of the new identity. The transaction includes
+the error-report correction and exact phase-one receipt prerequisite, fails on
+conflicting ledger identity, checks grants/RLS/staff policy and anonymous stock
+read, and records its receipt atomically. Obtain authorization for this separate
+payload and revalidate the recovery/provider gate before application. Read the
+independent verification after a success or uncertain response; every Boolean
+including `exact_followup_receipt` must be true. Do not retry an ambiguous write.
+Then refresh exhaustive metadata and anonymous/actual-role acceptance. Ten
+findings are expected to remain for guest cutover/provider defaults, subject to
+fresh audit. The portable runner exercises this contract without retaining data.
+
 Dashboard widget preparation (IDEA-20260906-07) reuses the existing overview route
 and authorization. List reads request exact counts; known capped results return
 `RESULT_INCOMPLETE` in the existing unavailable-source list. The client withholds
 dependent totals/export rather than inventing zeros. No additional write route,
 secret, provider connection or role is introduced. Staff interpretation and visual
 rollback: `docs/runbooks/ADMIN_DASHBOARD_RUNBOOK.md`. Locally verified only.
+
+## Catalog CSV response-loss recovery — I-002, locally verified 9 September
+
+Each protected commit chunk retains the reviewed file hash, selected row set,
+reason, operation ID, chunk index and idempotency key. Pending or uncertain
+outcomes lock close/Escape, file replacement and re-preview; the visible warning
+keeps same-chunk retry and the durable operation-status read available. A
+definitive rejection may reopen correction. Actor disposal invalidates the old
+UI continuation so a late response cannot refresh the replacement workspace.
+The three catalog browser cases, complete 33-case shared recovery suite, 88 focused
+contracts and Admin build/security/budget gates pass locally. Evidence and scoped
+recovery: `docs/evidence/20260909-catalog-import-retry/README.md`. No provider or
+database state changed. Product-intake caller adoption and target-host signed
+receipt/audit acceptance remain in I-002.
 **8 September wholesale/media recovery, local (IDEA-20260908-01 / I-002):**
 Wholesale review forwards the retained key, freezes pending/uncertain triage,
 uses shared focus handling and accepts only a matching server receipt with its
@@ -371,7 +447,7 @@ build-isolation fact, not evidence that the inactive cookie boundary is deployed
 | `K2_ADMIN_BFF_REQUEST_SECRET` | Admin server only | Base64 encoding of the same 32-byte secret installed only in `k2_private.admin_bff_secrets`; never expose to browser or logs |
 | `K2_ADMIN_ORIGINS` | Admin server only | Comma-separated exact HTTPS admin origins; no wildcard, path, or trailing guess |
 | `VITE_TURNSTILE_SITE_KEY` | Admin browser | Public site key for the exact Admin preview/production host; never a secret |
-| `K2_TURNSTILE_SECRET_KEY` | Admin server only | Private key paired to the Admin site key; never use a `VITE_` prefix or share its value with Storefront |
+| `K2_TURNSTILE_SECRET_KEY` | Admin server only | Private key paired to the Admin site key; never use a `VITE_` prefix or share its value with Storefront. Login and recovery challenges verify hostname-bound single-use tokens and fail closed without it; local/fixture runners opt in explicitly with `K2_TURNSTILE_ALLOW_UNCONFIGURED=true` |
 | `K2_STAFF_INVITATIONS_ENABLED` | Admin server only | Keep unset/`false` until the reason migration is applied and invite-staff v7 is deployed and verified; exact `true` enables BFF forwarding |
 | `K2_MFA_REPLACEMENT_ENABLED` | Admin server only | Keep unset/`false` until `20260824_admin_mfa_replacement_boundary.sql`, exact route, provider-role test, retry rehearsal, and staff acceptance pass; exact `true` enables active-factor replacement only |
 | `K2_AI_SPEND_CONTROLS_ENABLED` | Admin server only | Keep unset/`false` until `20260830_paid_ai_spend_controls.sql`, owner-controlled SuperAdmin assignment, provider/model/retention decisions, cap/confirmation tests, and production activation evidence pass; exact `true` only exposes the prepared control read/write boundary and never supplies a provider key |
@@ -1221,3 +1297,11 @@ anonymous writes, remaining function grants and supabase_admin defaults remain.
 MAP-017 remains active for those reviewed follow-ups; do not apply later
 migrations under this phase-one approval. The prior apply-approval blocker is
 superseded. Recovery remains reviewed roll-forward or verified backup restore.
+## 14 September media orphan-review input correction
+
+IDEA-20260914-02: `minimumAgeMinutes` accepts one canonical integer value from
+60 through 10080; omission retains 60. Repeated query values and exponent/hex
+syntax now return `PRODUCT_MEDIA_ORPHAN_RANGE_INVALID`. Authorization and
+cleanup commands are unchanged. The exported validator is used by the actual
+GET handler; the failing-first range tests and 75 related BFF tests pass locally.
+No orphan listing, deletion, storage access or production query was performed.

@@ -1,0 +1,21 @@
+{
+  "checked": 1121,
+  "restoredThisCheck": [],
+  "earlierScreenshotsPreservedSeparately": [
+    "docs/evidence/20260906-admin-widgets/desktop.png",
+    "docs/evidence/20260906-admin-widgets/mobile-metrics.png",
+    "docs/evidence/20260906-admin-widgets/mobile-sales.png",
+    "docs/evidence/20260906-workflow-api/records-desktop.png",
+    "docs/evidence/20260906-workflow-api/records-phone.png",
+    "docs/evidence/20260908-fulfillment-retry/handover-legacy-landscape.png",
+    "docs/evidence/20260908-media-retry/cleanup-phone.png",
+    "docs/evidence/20260908-media-retry/lost-phone.png",
+    "docs/evidence/20260908-store-orientation/3d-desktop-after.png",
+    "docs/evidence/20260908-store-orientation/3d-desktop-basket.png",
+    "docs/evidence/20260908-store-orientation/3d-landscape-after.png",
+    "docs/evidence/20260908-store-orientation/3d-landscape-basket.png",
+    "docs/evidence/20260908-store-orientation/3d-portrait-after.png",
+    "docs/evidence/20260908-store-orientation/3d-portrait-basket.png"
+  ],
+  "unexpectedBaselineChanges": []
+}

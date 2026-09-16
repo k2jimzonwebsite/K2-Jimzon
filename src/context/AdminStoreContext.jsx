@@ -30,7 +30,10 @@ export function AdminStoreProvider({ children }) {
     if (secureAdmin) {
       const result = await getAdminProducts()
       if (!result.ok) {
-        setProducts([])
+        // A background poll must not empty the catalog: keep the last good
+        // rows. Functional update so interval callbacks never act on stale
+        // state. Only clear when nothing was ever loaded.
+        setProducts(prev => (prev.length === 0 ? [] : prev))
         setLoading(false)
         return
       }
@@ -55,11 +58,11 @@ export function AdminStoreProvider({ children }) {
         id: product.sku,
         retail: Number(product.srp || 0),
         wholesale: Number(product.wholesale_price || 0),
-        stock_available: stockBySku[product.sku] ?? product.stock_available ?? 0,
-        stock: stockBySku[product.sku] ?? product.stock_available ?? 0,
+        stock_available: stockBySku[product.sku] ?? product.stock_available ?? null,
+        stock: stockBySku[product.sku] ?? product.stock_available ?? null,
       })))
     } else {
-      setProducts([])
+      setProducts(prev => (prev.length === 0 ? [] : prev))
     }
     setLoading(false)
   }

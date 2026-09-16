@@ -1,5 +1,5 @@
 import {
-  contact, enumerated, idempotencyKey, publicFailure, readJson, requestIp, requireAllowedOrigin,
+  contact, enumerated, idempotencyKey, publicFailure, readJson, requestHostname, requestIp, requireAllowedOrigin,
   requireStorefrontProject, safeJson, setGuestGrantCookie, signedRpcArguments, text,
   verifyBotChallenge,
 } from '../../server/storefront-bff/security.js'
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
   if (!requireAllowedOrigin(req)) return safeJson(res, 403, { error: { code: 'ORIGIN_NOT_ALLOWED' } })
   try {
     const { payload, botToken } = validate(await readJson(req))
-    if (!await verifyBotChallenge(botToken, requestIp(req))) {
+    if (!await verifyBotChallenge(botToken, requestIp(req), 'guest_start', { hostname: requestHostname(req) })) {
       return safeJson(res, 403, { error: { code: 'BOT_CHALLENGE_REQUIRED' } })
     }
     const client = createStorefrontServerSupabase()

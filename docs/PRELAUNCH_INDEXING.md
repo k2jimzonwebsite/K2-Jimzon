@@ -152,3 +152,11 @@ weeks.
 - `tests/prelaunch-indexing-contract.spec.js` — pins the header and the sitemap
   to the same switch
 - `MASTER_ACTION_PLAN.md` — the publication and photography work this gate waits on
+
+## Scoped guest journeys
+
+Account, messages, checkout and confirmation have permanent scoped-route
+`noindex, nofollow` metadata and explicit Vercel headers (IDEA-20260914-02).
+These are separate from the temporary product launch gate. Removing the product
+gate must preserve those four route rules. Marketing/catalog pages remain
+indexable. Crawler exclusions never replace authorization.

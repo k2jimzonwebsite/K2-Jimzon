@@ -382,3 +382,39 @@ test('guest conversation listing is unavailable on the wrong production artifact
   await messagesHandler(request(), result)
   expect(result.statusCode).toBe(404)
 })
+
+test('customer numerics reject booleans and null while accepting canonical numbers', async () => {
+  const orderBase = {
+    customerName: 'Guest Buyer', email: 'guest@example.test', address: '1 Test Street, Manila',
+    fulfillmentMethod: 'Courier delivery', idempotencyKey: crypto.randomUUID(), botToken: 'test-token',
+  }
+  const orderBody = (quantity) => ({ ...orderBase, items: [{ sku: 'SKU-A', quantity }] })
+
+  // Boolean true used to coerce to quantity 1 via Number(true).
+  const coerced = response()
+  await orderHandler({ ...request(), body: orderBody(true) }, coerced)
+  expect(coerced.statusCode).toBe(400)
+
+  // A canonical numeric string still passes validation and stops at the bot
+  // challenge instead (403), proving validation accepted it.
+  const canonical = response()
+  await orderHandler({ ...request(), body: orderBody('2') }, canonical)
+  expect(canonical.statusCode).toBe(403)
+  expect(JSON.parse(canonical.body).error.code).toBe('BOT_CHALLENGE_REQUIRED')
+
+  const pasabuyBase = {
+    customerName: 'Guest Buyer', email: 'guest@example.test', item: 'Parmigiano',
+    quantity: 1, shipping: 'sea', idempotencyKey: crypto.randomUUID(), botToken: 'test-token',
+  }
+  const badQty = response()
+  await pasabuyHandler({ ...request(), body: { ...pasabuyBase, quantity: true } }, badQty)
+  expect(badQty.statusCode).toBe(400)
+
+  const badBudget = response()
+  await pasabuyHandler({ ...request(), body: { ...pasabuyBase, budget: true } }, badBudget)
+  expect(badBudget.statusCode).toBe(400)
+
+  const badSubtotal = response()
+  await couponHandler({ ...request(), body: { code: 'WELCOME', subtotal: true } }, badSubtotal)
+  expect(badSubtotal.statusCode).toBe(400)
+})

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict"
+import { readFile } from "node:fs/promises"
 import { scanText } from "./secret-scan-core.mjs"
 
 const fabricatedJwt = [
@@ -225,5 +226,58 @@ assert.equal(
   true,
   "Supabase secret key must fail even when an allowlisted key is on the same line",
 )
+
+// K2-assigned secrets must fail even though the key names look numeric.
+// Fabricated values are concatenated so this test file itself scans clean.
+assert.equal(
+  scanText("K2_ADMIN_BFF_REQUEST_SECRET=" + "c2VjcmV0LWJhc2U2NC0zMmJ5dGVzLXZvci10ZXN0aW5nMTIzNA==", "leak.env")
+    .some((finding) => finding.rule === "k2-assigned-secret"),
+  true,
+  "K2 assigned secret must fail the scan",
+)
+assert.equal(
+  scanText("K2_BACKUP_PASSPHRASE: " + "correct-horse-battery-staple-99", "leak.env")
+    .some((finding) => finding.rule === "k2-assigned-secret"),
+  true,
+  "K2 backup passphrase must fail the scan",
+)
+assert.equal(
+  scanText("SHOPEE_PARTNER_KEY=" + "live_9f8e7d6c5b4a39281736455443322110", "leak.env")
+    .some((finding) => finding.rule === "marketplace-partner-secret"),
+  true,
+  "marketplace partner secret must fail the scan",
+)
+// Key references without assigned values are not findings
+assert.deepEqual(
+  scanText("const secret = process.env.K2_ADMIN_BFF_REQUEST_SECRET || ''", "code.js"),
+  [],
+  "bare K2 key references must not fail the scan",
+)
+// The documented example file itself must scan clean
+assert.deepEqual(
+  scanText(await readFile(new URL("../.env.example", import.meta.url), "utf8"), ".env.example"),
+  [],
+  "documented .env.example placeholders must not fail the scan",
+)
+
+// Historical provider documentation must scan without broad token exemptions.
+for (const line of [
+  "SHOPEE_PARTNER_KEY=" + "your_shopee_partner_key",
+  'GEMINI_API_KEY="' + 'MY_GEMINI_API_KEY"',
+  "# GEMINI_API_KEY" + ": Required for Gemini AI API calls.",
+]) assert.deepEqual(scanText(line, "historical-doc"), [], "historical documentation is not a credential")
+for (const line of [
+  "GEMINI_API_KEY=" + "Required",
+  "SHOPEE_PARTNER_KEY=" + "your_shopee_partner_key_9f8e7d6c",
+  'GEMINI_API_KEY="' + 'MY_GEMINI_API_KEY_9f8e7d6c"',
+  "# GEMINI_API_KEY: " + "live_9f8e7d6c5b4a3928",
+]) assert.equal(scanText(line, "fabricated-assignment").some((finding) => finding.rule === "marketplace-partner-secret"), true)
+
+for (const fragment of ['your-', '-here', 'placeholder', 'generate-', 'base64-of', 'example', 'confirm-', 'leave-unset', 'change-me']) {
+  for (const key of ['K2_ADMIN_BFF_REQUEST_SECRET', 'SHOPEE_PARTNER_KEY']) {
+    assert.ok(scanText(key + '=' + 'Ab9Z7qL2' + fragment + 'T8V4N6R3P1S5', 'fabricated.env').length > 0,
+      'A placeholder fragment inside a credential must not exempt the assignment')
+  }
+}
 
 console.log("Secret scanner tests passed (fabricated values only).")

@@ -1,0 +1,24 @@
+
+> k2-jimzon-prototype@0.1.0 test:intake-ai-ui
+> playwright test --config=playwright.intake-ai.config.js
+
+[WebServer] (node:12028) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:12964) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 9 tests using 1 worker
+
+(node:6804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\intake-ai-ui.spec.js:5:1 › replacing the actor during a Draft command ignores its late receipt (1.1m)
+  ok 2 tests\intake-ai-ui.spec.js:32:1 › uncertain intake step freezes its reviewed payload and retries the same outer receipt key (19.7s)
+  ok 3 tests\intake-ai-ui.spec.js:72:1 › pending packaging review freezes every reviewed control and allows correction only after rejection (14.0s)
+  ok 4 tests\intake-ai-ui.spec.js:114:1 › uncertain Draft creation after response loss retries the frozen reviewed Draft with the same outer receipt key (20.0s)
+  ok 5 tests\intake-ai-ui.spec.js:114:1 › uncertain Draft creation after refresh failure retries the frozen reviewed Draft with the same outer receipt key (6.3s)
+  ok 6 tests\intake-ai-ui.spec.js:114:1 › uncertain Draft creation after incomplete receipt retries the frozen reviewed Draft with the same outer receipt key (1.3s)
+  ok 7 tests\intake-ai-ui.spec.js:162:1 › uncertain first inventory preserves separate inner request and outer receipt identities (1.7s)
+  ok 8 tests\intake-ai-ui.spec.js:205:1 › real modal persists automatic field-review transition before saving reviewed canonical Draft (793ms)
+  ok 9 tests\intake-ai-ui.spec.js:259:1 › phone recovery, missing configuration, reviewed image and canonical attachment remain deliberate (841ms)
+
+  9 passed (2.2m)

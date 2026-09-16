@@ -7,13 +7,26 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { getServiceRoleKey } from '../_shared/service-role.ts'
+import { strictEnvInt } from '../_shared/marketplace-push.js'
 import { buildShopeeEventEnvelope, readShopeePushBody } from './validation.js'
 
 const SHOPEE_PARTNER_KEY = Deno.env.get('SHOPEE_PARTNER_KEY') ?? ''
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? ''
 const SERVICE_ROLE = getServiceRoleKey()
-const SHOPEE_PUSH_MAX_AGE_SECONDS = Number(Deno.env.get('SHOPEE_PUSH_MAX_AGE_SECONDS') ?? '')
-const SHOPEE_BODY_READ_TIMEOUT_MS = Number(Deno.env.get('SHOPEE_BODY_READ_TIMEOUT_MS') ?? '')
+
+// Strict at startup: a blank or malformed boundary must refuse pushes, never
+// run them on a coerced zero.
+function loadPushEnv() {
+  try {
+    return {
+      maxAgeSeconds: strictEnvInt(Deno.env.get('SHOPEE_PUSH_MAX_AGE_SECONDS'), { min: 60, max: 86_400, prefix: 'SHOPEE' }),
+      timeoutMs: strictEnvInt(Deno.env.get('SHOPEE_BODY_READ_TIMEOUT_MS'), { min: 1, max: 30_000, prefix: 'SHOPEE' }),
+    }
+  } catch {
+    return null
+  }
+}
+const PUSH_ENV = loadPushEnv()
 
 const db = createClient(SUPABASE_URL, SERVICE_ROLE, {
   auth: { persistSession: false },
@@ -52,14 +65,32 @@ async function setShopeeState(status: 'degraded' | 'error', note: string) {
   }).eq('channel', 'shopee')
 }
 
+import { createPrefilterBucket } from '../_shared/marketplace-push.js'
+
+// Cheap per-instance pre-filter so an invalid-signature flood burns edge CPU
+// instead of reaching body parsing, HMAC verification, and the database.
+// The durable per-shop/global budgets inside capture_shopee_event_v1 remain
+// authoritative; this bucket only sheds obvious floods early.
+const preVerifyBuckets = createPrefilterBucket({ windowMs: 60_000, limit: 300 })
+function preVerifyAllowed(ip: string): boolean {
+  return preVerifyBuckets.allowed(ip)
+}
+
 Deno.serve(async request => {
-  if (request.method === 'GET') return new Response('ok', { status: 200 })
-  if (request.method !== 'POST') return new Response('method not allowed', { status: 405 })
+  if (request.method === 'GET') return new Response('method not allowed', { status: 405, headers: { Allow: 'POST' } })
+  if (request.method !== 'POST') return new Response('method not allowed', { status: 405, headers: { Allow: 'POST' } })
+  if (!PUSH_ENV) {
+    return new Response('webhook unavailable', { status: 503, headers: { 'retry-after': '60' } })
+  }
+  const senderIp = (request.headers.get('x-forwarded-for') || '').split(',')[0].trim()
+  if (senderIp && !preVerifyAllowed(senderIp)) {
+    return new Response('rate limited', { status: 429, headers: { 'retry-after': '60' } })
+  }
 
   let rawBody: string
   let rawBytes: Uint8Array
   try {
-    const boundedBody = await readShopeePushBody(request, { timeoutMs: SHOPEE_BODY_READ_TIMEOUT_MS })
+    const boundedBody = await readShopeePushBody(request, { timeoutMs: PUSH_ENV.timeoutMs })
     rawBody = boundedBody.rawBody
     rawBytes = boundedBody.rawBytes
   } catch (error) {
@@ -87,7 +118,7 @@ Deno.serve(async request => {
 
   let event: ReturnType<typeof buildShopeeEventEnvelope>
   try {
-    event = buildShopeeEventEnvelope(payload, { maxAgeSeconds: SHOPEE_PUSH_MAX_AGE_SECONDS })
+    event = buildShopeeEventEnvelope(payload, { maxAgeSeconds: PUSH_ENV.maxAgeSeconds })
   } catch (error) {
     if (error instanceof Error && error.message === 'SHOPEE_REPLAY_WINDOW_INVALID') {
       return new Response('webhook unavailable', { status: 503, headers: { 'retry-after': '60' } })

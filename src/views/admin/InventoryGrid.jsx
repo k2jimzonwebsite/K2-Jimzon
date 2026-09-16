@@ -12,7 +12,7 @@ import PhotoManagerModal from './PhotoManagerModal'
 import ProductMediaCleanupModal from './ProductMediaCleanupModal'
 import ProductIntakeSessionModal from './ProductIntakeSessionModal'
 import {
-  adminBffEnabled, commandAdminProductMasterBff, getAdminProductMasterBff, getAdminProducts,
+  adminBffEnabled, commandAdminProductMasterBff, getAdminLots, getAdminProductMasterBff, getAdminProducts,
 } from '../../services/adminBffService'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { applyImageFallback } from '../../lib/imageFallback'
@@ -52,6 +52,36 @@ const STATUS_TONE = {
 }
 
 const normalizeStatus = (s) => (s === 'Active' ? 'Live' : (s || 'Draft'))
+
+export function computeInventoryMetrics(products, batchMap = {}) {
+  let units = 0
+  let out = 0
+  let low = 0
+  let unknown = 0
+  let expiryRisk = 0
+  let drafts = 0
+  let unresolved = 0
+  for (const product of products || []) {
+    const raw = product?.stock_available
+    const stock = raw === null || raw === undefined || raw === '' ? Number.NaN : Number(raw)
+    const threshold = Number(product?.reorder_level) || 5
+    if (!Number.isFinite(stock)) {
+      unknown += 1
+    } else {
+      units += Math.max(0, stock)
+      if (stock <= 0) out += 1
+      else if (stock <= threshold) low += 1
+    }
+    if (batchMap[product?.sku]?.requiresReconciliation) {
+      unresolved += 1
+    }
+    const expiry = getExpiryHealth(batchMap[product?.sku]?.earliestExpiry || product?.expiry_date)
+    if (['EXPIRED', 'CRITICAL', 'WARNING'].includes(expiry.status)) expiryRisk += 1
+    if (!['Live', 'Active'].includes(product?.status)) drafts += 1
+  }
+  return { units, out, low, unknown, expiryRisk, drafts, unresolved }
+}
+
 
 // Segmented lifecycle control — all legal states remain visible, so the current one
 // reads as a position rather than a label you have to open a menu to check.
@@ -203,7 +233,13 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
       setLoading(true)
       const result = await getAdminProducts()
       if (!result.ok) flash(result.error || 'Product records could not be loaded.', true)
-      else setProducts(result.products || [])
+      else {
+        setProducts(result.products || [])
+        // A refresh can remove SKUs the bulk selection still names. Acting on
+        // them afterwards would change the wrong records, so prune first.
+        const live = new Set((result.products || []).map(product => product.sku))
+        setSelected(prev => new Set([...prev].filter(sku => live.has(sku))))
+      }
       setBatchMap({})
       setLoading(false)
       return
@@ -212,13 +248,66 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     setLoading(true)
     const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false })
     if (error) flash(safeUiError('CATALOG_LOAD_FAILED'), true)
-    else setProducts(data || [])
+    else {
+      setProducts(data || [])
+      const live = new Set((data || []).map(product => product.sku))
+      setSelected(prev => new Set([...prev].filter(sku => live.has(sku))))
+    }
     setLoading(false)
   }
 
   // Load every batch once, then roll it up per-SKU: total, count, and the
-  // splits by location (hub), channel, and holder (custodian).
+  // splits by location (hub), channel, and holder (custodian). Also integrates
+  // derived owned stock and flags unresolved allocations under OWNER-002.
   const fetchBatches = async () => {
+    if (secure) {
+      const result = await getAdminLots('')
+      if (result.ok && result.data?.lots) {
+        const map = {}
+        for (const r of result.data.lots) {
+          const q = Number(r.quantity) || 0
+          const ds = result.data.derivedStock?.[r.sku]
+          const m = map[r.sku] || (map[r.sku] = {
+            total: 0, count: 0, hub: {}, channel: {}, custodian: {}, earliestExpiry: null, attention: 0,
+            owned: ds?.requiresReconciliation ? null : ds?.ownedQuantity,
+            committed: ds?.committedQuantity ?? 0,
+            held: ds?.heldQuantity ?? 0,
+            requiresReconciliation: ds?.requiresReconciliation ?? false,
+            unresolvedCount: ds?.unresolvedCount ?? 0,
+            unresolvedQuantity: ds?.unresolvedQuantity ?? 0,
+            unresolvedAllocations: ds?.unresolvedAllocations ?? [],
+          })
+          if (q > 0) {
+            m.total += q
+            m.count += 1
+            const hub = r.hub || 'Unassigned', ch = r.channel || 'Unassigned', cu = r.custodian || 'Unassigned'
+            m.hub[hub]        = (m.hub[hub] || 0) + q
+            m.channel[ch]     = (m.channel[ch] || 0) + q
+            m.custodian[cu]   = (m.custodian[cu] || 0) + q
+            if (r.expiry_date && (!m.earliestExpiry || r.expiry_date < m.earliestExpiry)) m.earliestExpiry = r.expiry_date
+            if (r.is_pinned) m.attention += 1
+          }
+        }
+        if (result.data.derivedStock) {
+          for (const [sku, ds] of Object.entries(result.data.derivedStock)) {
+            if (!map[sku]) {
+              map[sku] = {
+                total: 0, count: 0, hub: {}, channel: {}, custodian: {}, earliestExpiry: null, attention: 0,
+                owned: ds.requiresReconciliation ? null : ds.ownedQuantity,
+                committed: ds.committedQuantity ?? 0,
+                held: ds.heldQuantity ?? 0,
+                requiresReconciliation: ds.requiresReconciliation ?? false,
+                unresolvedCount: ds.unresolvedCount ?? 0,
+                unresolvedQuantity: ds.unresolvedQuantity ?? 0,
+                unresolvedAllocations: ds.unresolvedAllocations ?? [],
+              }
+            }
+          }
+        }
+        setBatchMap(map)
+        return
+      }
+    }
     if (!supabase) return
     const { data, error } = await supabase.from('product_batches').select('sku, quantity, hub, custodian, channel, expiry_date, is_pinned, inventory_status, reserved_quantity')
     if (error) { flash(safeUiError('INVENTORY_LOAD_FAILED'), true); return }
@@ -238,6 +327,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     }
     setBatchMap(map)
   }
+
 
   // ── Build the full payload from editingProduct ─────────────────────────────
   const buildPayload = (p) => ({
@@ -378,24 +468,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
 
   const selectedProducts = products.filter(p => selected.has(p.sku))
 
-  const inventoryMetrics = useMemo(() => {
-    let units = 0
-    let out = 0
-    let low = 0
-    let expiryRisk = 0
-    let drafts = 0
-    for (const product of products) {
-      const stock = Number(product.stock_available) || 0
-      const threshold = Number(product.reorder_level) || 5
-      units += stock
-      if (stock <= 0) out += 1
-      else if (stock <= threshold) low += 1
-      const expiry = getExpiryHealth(batchMap[product.sku]?.earliestExpiry || product.expiry_date)
-      if (['EXPIRED', 'CRITICAL', 'WARNING'].includes(expiry.status)) expiryRisk += 1
-      if (!['Live', 'Active'].includes(product.status)) drafts += 1
-    }
-    return { units, out, low, expiryRisk, drafts }
-  }, [batchMap, products])
+  const inventoryMetrics = useMemo(() => computeInventoryMetrics(products, batchMap), [batchMap, products])
 
   const visibleProducts = useMemo(() => {
     const term = search.trim().toLowerCase()
@@ -403,11 +476,14 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
       const matchesSearch = !term || [product.sku, product.name, product.barcode, product.origin, product.country_of_origin]
         .some(value => String(value || '').toLowerCase().includes(term))
       if (!matchesSearch) return false
-      const stock = Number(product.stock_available) || 0
+      const raw = product?.stock_available
+      const stock = raw === null || raw === undefined || raw === '' ? Number.NaN : Number(raw)
       const threshold = Number(product.reorder_level) || 5
       const expiry = getExpiryHealth(batchMap[product.sku]?.earliestExpiry || product.expiry_date)
-      if (stockFilter === 'out') return stock <= 0
-      if (stockFilter === 'low') return stock > 0 && stock <= threshold
+      if (stockFilter === 'out') return Number.isFinite(stock) && stock <= 0
+      if (stockFilter === 'unknown') return !Number.isFinite(stock)
+      if (stockFilter === 'low') return Number.isFinite(stock) && stock > 0 && stock <= threshold
+      if (stockFilter === 'unresolved') return Boolean(batchMap[product.sku]?.requiresReconciliation)
       if (stockFilter === 'expiry') return ['EXPIRED', 'CRITICAL', 'WARNING'].includes(expiry.status)
       if (stockFilter === 'drafts') return !['Live', 'Active'].includes(product.status)
       return true
@@ -435,7 +511,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
         title="Inventory exception board"
         description="Search the product master, isolate stock and FEFO risks, then open the exact SKU or batch that needs action. Stock metrics use persisted product and batch records only."
         status={loading ? 'Loading inventory evidence' : `${products.length} SKUs loaded`}
-        statusTone={inventoryMetrics.out || inventoryMetrics.expiryRisk ? 'warning' : 'success'}
+        statusTone={inventoryMetrics.out || inventoryMetrics.expiryRisk || inventoryMetrics.unresolved ? 'warning' : 'success'}
         actions={(
           <div className="flex flex-wrap gap-2">
             <button onClick={() => setShowAiScanner(true)} className={secondaryButton}><BoxIcon size={16} /> Scan box</button>
@@ -446,11 +522,16 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
         )}
       />
 
-      <MetricRail columns="lg:grid-cols-5" items={[
+      <MetricRail columns={
+        (inventoryMetrics.unknown > 0 && inventoryMetrics.unresolved > 0) ? "lg:grid-cols-7" :
+        (inventoryMetrics.unknown > 0 || inventoryMetrics.unresolved > 0) ? "lg:grid-cols-6" : "lg:grid-cols-5"
+      } items={[
         { label: 'Active SKUs', value: loading ? '--' : products.length - inventoryMetrics.drafts, detail: `${products.length} total product records` },
         { label: 'Available units', value: loading ? '--' : inventoryMetrics.units.toLocaleString('en-PH'), detail: 'Product master available stock' },
         { label: 'Out of stock', value: loading ? '--' : inventoryMetrics.out, detail: 'Immediate replenishment review', tone: inventoryMetrics.out ? 'text-crimson' : 'text-white' },
         { label: 'Low stock', value: loading ? '--' : inventoryMetrics.low, detail: 'At or below reorder level', tone: inventoryMetrics.low ? 'text-amber' : 'text-white' },
+        ...(inventoryMetrics.unknown > 0 ? [{ label: 'Unknown stock', value: loading ? '--' : inventoryMetrics.unknown, detail: 'Stock read unconfirmed or missing', tone: 'text-amber' }] : []),
+        ...(inventoryMetrics.unresolved > 0 ? [{ label: 'Unresolved stock', value: loading ? '--' : inventoryMetrics.unresolved, detail: 'Attribution reconciliation required', tone: 'text-crimson' }] : []),
         { label: 'Expiry risk', value: loading ? '--' : inventoryMetrics.expiryRisk, detail: 'Expired or within 90 days', tone: inventoryMetrics.expiryRisk ? 'text-amber' : 'text-white' },
       ]} />
 
@@ -484,17 +565,20 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
               ['all', 'All', products.length],
               ['out', 'Out', inventoryMetrics.out],
               ['low', 'Low', inventoryMetrics.low],
+              ...(inventoryMetrics.unknown > 0 ? [['unknown', 'Unknown', inventoryMetrics.unknown]] : []),
+              ...(inventoryMetrics.unresolved > 0 ? [['unresolved', 'Unresolved', inventoryMetrics.unresolved]] : []),
               ['expiry', 'Expiry', inventoryMetrics.expiryRisk],
               ['drafts', 'Drafts', inventoryMetrics.drafts],
-            ].map(([value, label, count]) => <button key={value} onClick={() => setStockFilter(value)} aria-pressed={stockFilter === value} className={`min-h-10 shrink-0 rounded-adm-sm px-3 text-xs font-semibold transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${stockFilter === value ? 'bg-blue text-white' : 'text-white/45 hover:bg-white/[0.05] hover:text-white'}`}>{label} <span className="ml-1 font-mono text-xs opacity-70">{count}</span></button>)}
+            ].map(([value, label, count]) => <button key={value} onClick={() => setStockFilter(value)} aria-pressed={stockFilter === value} className={`min-h-11 shrink-0 rounded-adm-sm px-3 text-xs font-semibold transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${stockFilter === value ? 'bg-blue text-white' : 'text-white/45 hover:bg-white/[0.05] hover:text-white'}`}>{label} <span className="ml-1 font-mono text-xs opacity-70">{count}</span></button>)}
           </div>
         </div>
       </section>
 
+
       {/* Select-all row */}
       {visibleProducts.length > 0 && (
         <div className="mb-3 flex items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2">
-          <label className="flex items-center gap-2.5 cursor-pointer select-none min-h-[36px]">
+          <label className="flex items-center gap-2.5 cursor-pointer select-none min-h-11">
             <input
               type="checkbox"
               checked={allSelected}
@@ -507,7 +591,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
             </span>
           </label>
           {selected.size > 0 && (
-            <button onClick={clearSelection} className="ml-auto text-xs font-semibold text-white/50 hover:text-white transition-colors min-h-[36px] px-2">
+            <button onClick={clearSelection} className="ml-auto text-xs font-semibold text-white/50 hover:text-white transition-colors min-h-11 px-2">
               Clear
             </button>
           )}
@@ -574,7 +658,14 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                     <div className="grid grid-cols-2 gap-2 text-base bg-white/5 p-2.5 rounded-adm-sm border border-adm-line">
                       <div>
                         <p className="text-white/60 uppercase text-sm font-bold tracking-wider mb-0.5">Stock</p>
-                        <p className={`font-extrabold text-lg ${(p.stock_available ?? 0) <= 5 ? 'text-crimson' : 'text-white'}`}>{p.stock_available ?? 0}</p>
+                        {(() => {
+                          const raw = p.stock_available
+                          const stock = raw === null || raw === undefined || raw === '' ? Number.NaN : Number(raw)
+                          if (!Number.isFinite(stock)) {
+                            return <p className="font-extrabold text-lg text-amber">Unknown</p>
+                          }
+                          return <p className={`font-extrabold text-lg ${stock <= 5 ? 'text-crimson' : 'text-white'}`}>{stock}</p>
+                        })()}
                       </div>
                       <div>
                         <p className="text-white/60 uppercase text-sm font-bold tracking-wider mb-0.5">Retail SRP</p>
@@ -585,14 +676,26 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                     {/* Where it is / which channel — live from the batch bank */}
                     {batchMap[p.sku] && (
                       <div className="space-y-1.5 bg-white/5 border border-adm-line rounded-adm-sm p-2">
-                        <p className="text-white/40 uppercase text-xs font-bold tracking-wider">
-                          {batchMap[p.sku].total} pcs in {batchMap[p.sku].count} lot{batchMap[p.sku].count !== 1 ? 's' : ''}
-                        </p>
+                        <div className="flex items-center justify-between">
+                          <p className="text-white/40 uppercase text-xs font-bold tracking-wider">
+                            {batchMap[p.sku].total} pcs in {batchMap[p.sku].count} lot{batchMap[p.sku].count !== 1 ? 's' : ''}
+                          </p>
+                          {batchMap[p.sku].requiresReconciliation ? (
+                            <span className="text-xs font-bold text-crimson bg-crimson/15 px-1.5 py-0.5 rounded border border-crimson/30">
+                              Owned: Unresolved
+                            </span>
+                          ) : batchMap[p.sku].owned != null ? (
+                            <span className="text-xs font-medium text-white/60">
+                              Owned: <strong className="text-white font-bold">{batchMap[p.sku].owned}</strong> pcs
+                            </span>
+                          ) : null}
+                        </div>
                         <BreakdownRow label="Location" data={batchMap[p.sku].hub} />
                         <BreakdownRow label="Channel" data={batchMap[p.sku].channel} />
                         <BreakdownRow label="Holder" data={batchMap[p.sku].custodian} />
                       </div>
                     )}
+
 
                     <div className="pt-1">
                       <button
@@ -652,7 +755,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
               <p className="text-sm font-bold text-white">
                 {selected.size} selected
               </p>
-              <button onClick={clearSelection} className="text-xs font-semibold text-white/50 hover:text-white min-h-[36px] px-2 transition-colors">
+              <button onClick={clearSelection} className="text-xs font-semibold text-white/50 hover:text-white min-h-11 px-2 transition-colors">
                 Clear
               </button>
             </div>
@@ -871,7 +974,13 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
                         <Label>Available Stock</Label>
-                        <div className={`${inp} flex items-center tabular-nums text-white/70`}>{editingProduct.stock_available || 0}</div>
+                        <div className={`${inp} flex items-center tabular-nums text-white/70`}>
+                          {(() => {
+                            const raw = editingProduct.stock_available
+                            const stock = raw === null || raw === undefined || raw === '' ? Number.NaN : Number(raw)
+                            return Number.isFinite(stock) ? stock : 'Unknown'
+                          })()}
+                        </div>
                         <button type="button" disabled={isAdding} onClick={() => setBatchProduct(editingProduct)} className="mt-2 min-h-11 w-full rounded-adm-sm border border-blue/35 bg-blue/10 px-3 text-xs font-semibold text-blue disabled:opacity-40">{isAdding ? 'Save the draft before adding batches' : 'Reconcile batches and stock'}</button>
                       </div>
                       <div>

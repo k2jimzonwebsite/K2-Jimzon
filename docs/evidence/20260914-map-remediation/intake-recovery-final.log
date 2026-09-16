@@ -1,0 +1,21 @@
+[WebServer] (node:12936) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:12764) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 1 worker
+
+(node:24432) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\intake-ai-ui.spec.js:5:1 › automatic field review retains an uncertain transition for exact retry (1.3m)
+  ok  2 tests\intake-ai-ui.spec.js:41:1 › replacing the actor during a Draft command ignores its late receipt (32.1s)
+  ok  3 tests\intake-ai-ui.spec.js:68:1 › uncertain intake step freezes its reviewed payload and retries the same outer receipt key (24.3s)
+  ok  4 tests\intake-ai-ui.spec.js:108:1 › pending packaging review freezes every reviewed control and allows correction only after rejection (13.8s)
+  ok  5 tests\intake-ai-ui.spec.js:150:1 › uncertain Draft creation after response loss retries the frozen reviewed Draft with the same outer receipt key (6.3s)
+  ok  6 tests\intake-ai-ui.spec.js:150:1 › uncertain Draft creation after refresh failure retries the frozen reviewed Draft with the same outer receipt key (1.7s)
+  ok  7 tests\intake-ai-ui.spec.js:150:1 › uncertain Draft creation after incomplete receipt retries the frozen reviewed Draft with the same outer receipt key (1.1s)
+  ok  8 tests\intake-ai-ui.spec.js:198:1 › uncertain first inventory preserves separate inner request and outer receipt identities (648ms)
+  ok  9 tests\intake-ai-ui.spec.js:241:1 › real modal persists automatic field-review transition before saving reviewed canonical Draft (740ms)
+  ok 10 tests\intake-ai-ui.spec.js:295:1 › phone recovery, missing configuration, reviewed image and canonical attachment remain deliberate (854ms)
+
+  10 passed (2.7m)

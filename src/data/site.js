@@ -98,7 +98,7 @@ export const FAQS = [
   },
   {
     q: 'I run a café, restaurant, or store. Can I get wholesale prices?',
-    a: 'Yes. We supply coffee beans, pasta, sauces, and biscuits in case quantities to bakeries, cafés, and specialty delis across Metro Manila. Submit a wholesale inquiry to get our bulk price list.',
+    a: 'Yes. We supply coffee beans, pasta, sauces, and biscuits in case quantities to bakeries, cafés, and specialty delis across Metro Manila. Submit a wholesale inquiry and staff will quote your order — pricing is per order, never automatic.',
   },
   {
     q: 'Why do your fragrances say "inspired scent"?',

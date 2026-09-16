@@ -1,0 +1,5 @@
+
+> k2-jimzon-prototype@0.1.0 verify:admin-bff
+> node scripts/verify-admin-bff.mjs
+
+Admin BFF security foundation contract passed (UI/data proxy activation remains pending).

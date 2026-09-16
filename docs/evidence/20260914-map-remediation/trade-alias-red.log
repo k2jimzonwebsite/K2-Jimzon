@@ -1,0 +1,28 @@
+
+Running 1 test using 1 worker
+
+(node:1304) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\storefront-discovery-contract.spec.js:11:1 › the wholesale alias permanently redirects to the established trade URL (10ms)
+
+
+  1) tests\storefront-discovery-contract.spec.js:11:1 › the wholesale alias permanently redirects to the established trade URL 
+
+    Error: expect(received).toContainEqual(expected) // deep equality
+
+    Expected value: {"destination": "/trade", "permanent": true, "source": "/wholesale"}
+    Received array: [{"destination": "https://www.k2jimzon.com/:path*", "has": [{"type": "host", "value": "k2-jimzon.vercel.app"}], "permanent": true, "source": "/:path*"}]
+
+      11 | test('the wholesale alias permanently redirects to the established trade URL', () => {
+      12 |   const config = JSON.parse(read('vercel.storefront.json'))
+    > 13 |   expect(config.redirects).toContainEqual({ source: '/wholesale', destination: '/trade', permanent: true })
+         |                            ^
+      14 | })
+      15 |
+      16 | test('scoped guest routes have crawler exclusions at the deployed header boundary', () => {
+        at C:\Users\jerze\K2 JImzon\tests\storefront-discovery-contract.spec.js:13:28
+
+    Error Context: test-results\storefront-discovery-contr-7a27a-o-the-established-trade-URL\error-context.md
+
+  1 failed
+    tests\storefront-discovery-contract.spec.js:11:1 › the wholesale alias permanently redirects to the established trade URL 

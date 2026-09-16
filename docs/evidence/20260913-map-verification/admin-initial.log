@@ -1,0 +1,15 @@
+
+> k2-jimzon-prototype@0.1.0 test:admin-ui
+> playwright test --config=playwright.admin.config.js tests/admin.spec.js tests/admin-dashboard-redesign.spec.js --max-failures=1 --retries=0
+
+[WebServer] (node:12712) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:8804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 32 tests using 1 worker
+
+(node:19412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   1 [chromium] › tests\admin-dashboard-redesign.spec.js:190:3 › admin command center redesign › left-panel widgets show one workspace and preserve every dashboard destination (3ms)
+Testing stopped early after 1 maximum allowed failures.

@@ -104,13 +104,16 @@ export function summarizeSalesReconciliation(orders = []) {
   }
 }
 
-function normalizeSalesChannel(value = '') {
+export function normalizeSalesChannel(value = '') {
   const channel = String(value).toLowerCase()
-  if (channel.startsWith('shopee')) return 'shopee'
-  if (channel.startsWith('tiktok')) return 'tiktok'
-  if (channel.startsWith('lazada')) return 'lazada'
-  if (channel.startsWith('pasabuy')) return 'pasabuy'
-  return 'website'
+  if (channel === 'shopee') return 'shopee'
+  if (channel === 'tiktok' || channel === 'tiktok_shop') return 'tiktok'
+  if (channel === 'lazada') return 'lazada'
+  if (channel === 'pasabuy') return 'pasabuy'
+  if (channel === 'website' || channel === 'web') return 'website'
+  // Unrecognized sources stay unrecognized: the export must never attribute
+  // a blank or unknown source to Website. Matches the dashboard normalizer.
+  return 'other'
 }
 
 function csvCell(value) {

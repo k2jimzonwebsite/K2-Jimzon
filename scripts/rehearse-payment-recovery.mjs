@@ -5,12 +5,13 @@ import { spawn, spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
-const bin = path.join(root, '.tools/postgresql-17.11/runtime/pgsql/bin')
+const bin = process.env.K2_TEST_PG_BIN || path.join(root, '.tools/postgresql-17.11/runtime/pgsql/bin')
+const executable = name => path.join(bin, process.platform === 'win32' ? `${name}.exe` : name)
 const data = path.join(root, '.tools/payment-recovery-pg-data')
 const database = 'k2_payment_recovery_rehearsal'
 const env = { ...process.env, PGHOST: '127.0.0.1', PGPORT: '55441', PGUSER: 'postgres', PGDATABASE: database }
 function run(name, args, input, options = {}) {
-  const result = spawnSync(path.join(bin, `${name}.exe`), args, {
+  const result = spawnSync(executable(name), args, {
     cwd: root, env, input, encoding: 'utf8', windowsHide: true, ...options,
   })
   if (result.error || result.status !== 0) throw new Error(`${name}: ${result.error?.message || result.stderr || result.stdout}`)
@@ -19,7 +20,7 @@ function run(name, args, input, options = {}) {
 function sql(input) { return run('psql', ['-X', '-v', 'ON_ERROR_STOP=1'], input) }
 function asyncSql(input) {
   return new Promise((resolve, reject) => {
-    const child = spawn(path.join(bin, 'psql.exe'), ['-X', '-v', 'ON_ERROR_STOP=1'], { cwd: root, env, windowsHide: true })
+    const child = spawn(executable('psql'), ['-X', '-v', 'ON_ERROR_STOP=1'], { cwd: root, env, windowsHide: true })
     let stderr = ''
     child.stdout.resume()
     child.stderr.on('data', chunk => { stderr += chunk.toString() })
@@ -34,7 +35,7 @@ try {
     fs.mkdirSync(data, { recursive: true })
     run('initdb', ['-D', data, '-U', 'postgres', '--auth=trust', '--encoding=UTF8'])
   }
-  const status = spawnSync(path.join(bin, 'pg_ctl.exe'), ['-D', data, 'status'], { env, encoding: 'utf8', windowsHide: true })
+  const status = spawnSync(executable('pg_ctl'), ['-D', data, 'status'], { env, encoding: 'utf8', windowsHide: true })
   if (status.error) throw status.error
   if (status.status !== 0) {
     run('pg_ctl', ['-D', data, '-l', path.join(root, '.tools/payment-recovery-pg.log'), '-o', '-p 55441 -h 127.0.0.1', '-w', 'start'], undefined, { stdio: 'ignore' })
@@ -63,6 +64,11 @@ try {
   const balanceCorrection = fs.readFileSync(path.join(root, 'supabase/migrations/20260908_payment_balance_integrity.sql'), 'utf8')
   if (!process.argv.includes('--baseline') && !process.argv.includes('--baseline-balance') && !process.argv.includes('--baseline-balance-lock')) {
     sql(balanceCorrection); sql(balanceCorrection)
+  }
+  const structuredEvidence = path.join(root, 'supabase/migrations/20260916_structured_payment_evidence.sql')
+  if (!process.argv.includes('--baseline')) {
+    sql(fs.readFileSync(structuredEvidence, 'utf8'))
+    sql(fs.readFileSync(structuredEvidence, 'utf8'))
   }
   if (!process.argv.includes('--baseline-balance-lock')) {
     sql(fs.readFileSync(path.join(root, 'supabase/tests/payment_balance_integrity.sql'), 'utf8'))
@@ -101,7 +107,7 @@ try {
     "select jsonb_build_object('orderRequestId',id,'toStatus','verified','evidenceNote','Independent local ledger review','expectedPaymentStatus',payment_status,'expectedUpdatedAt',updated_at) from order_requests;").trim()
   const reviewers = ['22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333']
   const results = await Promise.all(reviewers.map(actor => new Promise((resolve, reject) => {
-    const child = spawn(path.join(bin, 'psql.exe'), ['-X', '-v', 'ON_ERROR_STOP=1'], { cwd: root, env, windowsHide: true })
+    const child = spawn(executable('psql'), ['-X', '-v', 'ON_ERROR_STOP=1'], { cwd: root, env, windowsHide: true })
     let stderr = ''
     child.stdout.resume()
     child.stderr.on('data', chunk => { stderr += chunk.toString() })

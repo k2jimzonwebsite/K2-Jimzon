@@ -58,8 +58,11 @@ export default function CategoryTiles() {
     products.forEach((p) => {
       const cat = p.category || ''
       CABINET_SECTIONS.forEach((section) => {
+        // Count exactly what the tile opens: the catalog filters by exact
+        // category, so a substring count here would advertise products the
+        // grid never shows.
         if (section.isPasabuy) return
-        if (cat === section.cat || cat.includes(section.queryMatch)) {
+        if (cat === section.cat) {
           result[section.title] = (result[section.title] || 0) + 1
         }
       })

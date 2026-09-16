@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-09-13T08:36:13.560Z",
+  "results": [
+    {
+      "url": "https://www.k2jimzon.com/",
+      "status": 200,
+      "finalUrl": "https://www.k2jimzon.com/",
+      "contentType": "text/html; charset=utf-8",
+      "sha256": "3c7976ed677e2d4afcb50c8fc6f8cd6581e434b9a03a18620f1c37b74d67b6eb",
+      "title": "K2 Jimzon — Italian imports, direct to the Philippines",
+      "canonical": "<link rel=\"canonical\" href=\"https://www.k2jimzon.com/\" />"
+    },
+    {
+      "url": "https://www.k2jimzon.com/k2-build-target.json",
+      "status": 200,
+      "finalUrl": "https://www.k2jimzon.com/k2-build-target.json",
+      "contentType": "application/json; charset=utf-8",
+      "sha256": "67c95840cf8372ce3b2620c4aeccec9468f08835ac9a94279e87ce93b12fdd69",
+      "marker": "{\n  \"target\": \"storefront\"\n}\n"
+    },
+    {
+      "url": "https://admin.k2jimzon.com/",
+      "status": 200,
+      "finalUrl": "https://admin.k2jimzon.com/",
+      "contentType": "text/html; charset=utf-8",
+      "sha256": "ffc10c01ae22be2f913ee8534dc4cedf3c19d5898e5884a2cb66d3f951540027",
+      "title": "K2 Jimzon — Italian imports, direct to the Philippines",
+      "canonical": "<link rel=\"canonical\" href=\"https://www.k2jimzon.com/\" />"
+    },
+    {
+      "url": "https://admin.k2jimzon.com/k2-build-target.json",
+      "status": 200,
+      "finalUrl": "https://admin.k2jimzon.com/k2-build-target.json",
+      "contentType": "application/json; charset=utf-8",
+      "sha256": "2a0633acaf66a0e290dcc667782d5901bb0fff1771c0263634af7f25acfedd7a",
+      "marker": "{\n  \"target\": \"admin\"\n}\n"
+    }
+  ]
+}

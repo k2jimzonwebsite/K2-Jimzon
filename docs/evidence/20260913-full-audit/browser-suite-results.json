@@ -1,0 +1,50 @@
+[
+  {
+    "suite": "test:base",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:store-orientation",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:storefront-ui",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:admin-ui",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:payment-ui",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:inbox-ui",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:admin-product-master-ui",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:owner-count-close-ui",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:customer-account-ui",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:selling-surfaces",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:workflow-api",
+    "exitCode": 0
+  },
+  {
+    "suite": "test:intake-ai-ui",
+    "exitCode": 0
+  }
+]

@@ -1,0 +1,21 @@
+{"providerReceipt":{"batchId":"lot-1","sku":"FIXTURE","approved":true,"inventoryStatus":"available","quantityAvailable":4,"sellableQuantity":4},"displayProjection":{"id":"lot-1","qty":5,"reserved_quantity":1,"inventory_status":"available","clearance_approved_at":"2026-09-13T13:30:47.043Z","quantity_available":4}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: UI fabricates approval time instead of using the receipt
++ actual - expected
+
++ '2026-09-13T13:30:47.043Z'
+- undefined
+
+    at file:///C:/Users/jerze/K2%20JImzon/docs/evidence/20260913-full-audit/probes/clearance-projection.mjs:3:530 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '2026-09-13T13:30:47.043Z',
+  expected: undefined,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.16.0

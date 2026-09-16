@@ -1,0 +1,22 @@
+HTTP 201
+
+wrote .tools/map-verification-20260913/live-schema-metadata.json
+  views                12 keys
+  grants               141 entries
+  tables               88 keys
+  columns              1085 entries
+  indexes              224 entries
+  schemas              11 entries
+  storage              2 keys
+  policies             54 entries
+  realtime             1 keys
+  triggers             18 entries
+  functions            152 keys
+  sequences            2 entries
+  migrations           6 entries
+  constraints          346 entries
+  exported_at          1 keys
+  schema_grants        15 entries
+  format_version       1 keys
+  default_privileges   96 entries
+  materialized_views   0 keys

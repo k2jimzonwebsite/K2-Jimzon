@@ -1,0 +1,30 @@
+[WebServer] (node:16968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:10112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 19 tests using 1 worker
+
+(node:21608) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\intake-ai-ui.spec.js:5:1 › an incomplete resume read never authorizes a new intake session (1.7m)
+  ok  2 tests\intake-ai-ui.spec.js:27:3 › packaging evidence retains exact file bytes and command identity after response loss (10.7s)
+  ok  3 tests\intake-ai-ui.spec.js:27:3 › packaging evidence retains exact file bytes and command identity after refresh failure (13.7s)
+  ok  4 tests\intake-ai-ui.spec.js:27:3 › packaging evidence retains exact file bytes and command identity after incomplete receipt (11.3s)
+  ok  5 tests\intake-ai-ui.spec.js:27:3 › packaging evidence retains exact file bytes and command identity after stale record (6.1s)
+  ok  6 tests\intake-ai-ui.spec.js:65:3 › intake session creation retains both identities after response loss (1.2s)
+  ok  7 tests\intake-ai-ui.spec.js:65:3 › intake session creation retains both identities after refresh failure (1.6s)
+  ok  8 tests\intake-ai-ui.spec.js:65:3 › intake session creation retains both identities after retry denial (1.1s)
+  ok  9 tests\intake-ai-ui.spec.js:103:1 › publication keeps its frozen command when the receipt refresh fails (1.3s)
+  ok 10 tests\intake-ai-ui.spec.js:138:1 › automatic field review retains an uncertain transition for exact retry (698ms)
+  ok 11 tests\intake-ai-ui.spec.js:174:1 › replacing the actor during a Draft command ignores its late receipt (578ms)
+  ok 12 tests\intake-ai-ui.spec.js:201:1 › uncertain intake step freezes its reviewed payload and retries the same outer receipt key (669ms)
+  ok 13 tests\intake-ai-ui.spec.js:241:1 › pending packaging review freezes every reviewed control and allows correction only after rejection (564ms)
+  ok 14 tests\intake-ai-ui.spec.js:283:1 › uncertain Draft creation after response loss retries the frozen reviewed Draft with the same outer receipt key (901ms)
+  ok 15 tests\intake-ai-ui.spec.js:283:1 › uncertain Draft creation after refresh failure retries the frozen reviewed Draft with the same outer receipt key (1.3s)
+  ok 16 tests\intake-ai-ui.spec.js:283:1 › uncertain Draft creation after incomplete receipt retries the frozen reviewed Draft with the same outer receipt key (535ms)
+  ok 17 tests\intake-ai-ui.spec.js:331:1 › uncertain first inventory preserves separate inner request and outer receipt identities (730ms)
+  ok 18 tests\intake-ai-ui.spec.js:374:1 › real modal persists automatic field-review transition before saving reviewed canonical Draft (776ms)
+  ok 19 tests\intake-ai-ui.spec.js:428:1 › phone recovery, missing configuration, reviewed image and canonical attachment remain deliberate (833ms)
+
+  19 passed (2.7m)

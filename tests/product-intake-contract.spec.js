@@ -5,6 +5,51 @@ import {
   PRODUCT_RESEARCH_SCHEMA_VERSION,
   parseProductResearchPaste,
 } from '../src/views/admin/productResearchContract.js'
+import { searchProductIntakeDuplicates, validateProductIntakeCommand } from '../server/admin-bff/product-intake.js'
+
+test('intake rejects coerced quantities and costs before they become inventory facts', () => {
+  const id = '10000000-0000-4000-8000-000000000001'
+  const inventory = { quantity: 1, unitCost: 0, boxCode: 'BOX-A', batchCode: 'LOT-A',
+    expiryDate: '2027-09-13', isNonExpiry: false, consignmentId: id }
+  const validate = (changes) => validateProductIntakeCommand('intake_inventory', {
+    sessionId: id, inventoryRequestId: id, source: 'flight', inventory: { ...inventory, ...changes },
+  })
+  for (const field of ['quantity', 'unitCost']) {
+    for (const value of [true, false, [1], [], {}, ' ', '']) {
+      expect(() => validate({ [field]: value }), `${field} rejects ${JSON.stringify(value)}`).toThrow('REQUEST_INVALID')
+    }
+  }
+  expect(validate({ quantity: '2', unitCost: '3.50' }).inventory).toMatchObject({ quantity: 2, unitCost: 3.5 })
+  expect(validate({ unitCost: undefined }).inventory.unitCost).toBe(0)
+})
+
+function duplicateClient(patterns) {
+  return {
+    from() {
+      return {
+        select() { return this },
+        eq() { return this },
+        ilike(column, pattern) {
+          patterns.push([column, pattern])
+          return this
+        },
+        limit() {
+          return Promise.resolve({ data: [], error: null })
+        },
+      }
+    },
+  }
+}
+
+test('duplicate search escapes like-wildcards instead of matching every SKU', async () => {
+  const patterns = []
+  const result = await searchProductIntakeDuplicates(duplicateClient(patterns), '%')
+  expect(result).toEqual({ matchType: 'none', candidates: [] })
+  const skuPattern = patterns.find(([column]) => column === 'sku')
+  expect(skuPattern, 'SKU ilike must receive the escaped literal').toEqual(['sku', '\\%'])
+  const namePattern = patterns.find(([column]) => column === 'name')
+  expect(namePattern, 'name ilike must receive the escaped literal').toEqual(['name', '%\\%%'])
+})
 
 const source = (path) => readFile(new URL(`../${path}`, import.meta.url), 'utf8')
 

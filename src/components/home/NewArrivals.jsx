@@ -7,8 +7,12 @@ import { ArrowIcon } from '../ui/icons'
 import { peso } from '../../data/products'
 
 export default function NewArrivals() {
-  const { listedProducts: products, loading, openProduct, isWholesale, go } = useStore()
-  const arrivals = useMemo(() => (products || []).slice(0, 4), [products])
+  const { listedProducts: products, loading, catalogStale, catalogFailed, openProduct, isWholesale, go } = useStore()
+  // Recency is derived, not asserted: newest catalog additions first, with
+  // undated rows keeping their catalog order.
+  const arrivals = useMemo(() => [...(products || [])]
+    .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+    .slice(0, 4), [products])
   const [featuredIndex, setFeaturedIndex] = useState(0)
   const reducedMotion = useReducedMotion()
 
@@ -24,7 +28,7 @@ export default function NewArrivals() {
               New Arrivals
             </h2>
             <p className="mt-1.5 text-sm text-navy-soft">
-              Recently landed Italian favorites, checked in Manila and ready to deliver.
+              Our latest catalog additions from Italy — stock is confirmed before anything is promised.
             </p>
           </div>
 
@@ -36,12 +40,16 @@ export default function NewArrivals() {
           </button>
         </div>
 
-        {arrivals.length === 0 ? (
-          <div className="store-panel flex h-72 items-center justify-center px-6 text-center text-sm text-navy-soft">
-            {loading ? 'Loading arrivals…' : 'No arrivals published yet.'}
-          </div>
-        ) : (
-          <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
+          {arrivals.length === 0 ? (
+            <div className="store-panel flex h-72 items-center justify-center px-6 text-center text-sm text-navy-soft">
+              {loading ? 'Loading arrivals…' : catalogFailed ? 'The arrivals could not be loaded. Check your connection and try again.' : 'No arrivals published yet.'}
+            </div>
+          ) : (
+            <>
+              {catalogStale && (
+                <p role="status" className="mb-4 text-sm font-semibold text-navy-soft">Showing the last updated arrivals — current stock may differ.</p>
+              )}
+              <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
             {/* Main Featured Arrival */}
             <div className="min-h-[28rem]">
               <AnimatePresence mode="wait">
@@ -104,7 +112,7 @@ export default function NewArrivals() {
                         e.stopPropagation()
                         openProduct(item.sku)
                       }}
-                      className="shrink-0 rounded-lg border border-[var(--store-surface-border)] p-2 text-navy-soft transition-colors hover:border-crimson hover:bg-crimson/5 hover:text-crimson"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[var(--store-surface-border)] text-navy-soft transition-colors hover:border-crimson hover:bg-crimson/5 hover:text-crimson cursor-pointer"
                       aria-label={`View ${item.name} details`}
                     >
                       <ArrowIcon size={14} />
@@ -113,8 +121,9 @@ export default function NewArrivals() {
                 )
               })}
             </div>
-          </div>
-        )}
+              </div>
+            </>
+          )}
       </div>
     </section>
   )

@@ -1,0 +1,14 @@
+[
+  {
+    "script": "rehearse-map020-admin-preauth-rate",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-map020-storefront-auth-rate",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-map020-shopee-ingress",
+    "exitCode": 0
+  }
+]

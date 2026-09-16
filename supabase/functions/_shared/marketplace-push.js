@@ -156,3 +156,44 @@ export function assertPlainObject(value, prefix, code = 'PAYLOAD_INVALID') {
   if (!value || typeof value !== 'object' || Array.isArray(value)) failWith(prefix, code)
   return value
 }
+
+/**
+ * Strict environment integer for push boundaries (MAP-020 F-020-002).
+ *
+ * Blank, missing and non-canonical values are rejected instead of coerced:
+ * Number('') === 0 must never become a live read timeout or replay window.
+ * Bounds come from the assertions that consume the value (body deadline
+ * 1–30s, replay window 60–86400s), not from invention.
+ */
+export function strictEnvInt(value, { min, max, prefix }) {
+  const text = String(value ?? '').trim()
+  if (!/^\d+$/.test(text)) failWith(prefix, 'ENV_INVALID')
+  const parsed = Number(text)
+  if (!Number.isSafeInteger(parsed) || parsed < min || parsed > max) failWith(prefix, 'ENV_INVALID')
+  return parsed
+}
+
+/**
+ * Cheap per-instance pre-filter so an invalid-signature flood burns edge CPU
+ * instead of reaching body parsing, HMAC verification, and the database. The
+ * durable per-shop/global budgets stay authoritative; this bucket only sheds
+ * obvious floods early. It fails closed: there is no exception path that
+ * admits traffic.
+ */
+export function createPrefilterBucket({ windowMs, limit, now = () => Date.now() }) {
+  const buckets = new Map()
+  return {
+    allowed(ip) {
+      const key = String(ip || '')
+      const at = now()
+      const current = buckets.get(key)
+      if (!current || current.resetAt <= at) {
+        if (buckets.size > 5000) buckets.clear()
+        buckets.set(key, { count: 1, resetAt: at + windowMs })
+        return true
+      }
+      current.count += 1
+      return current.count <= limit
+    },
+  }
+}

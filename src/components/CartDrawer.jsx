@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useStore } from '../context/StoreContext'
 import { productStock } from '../lib/cartInventory'
@@ -9,17 +9,26 @@ import { BagIcon, XIcon, ShieldCheckIcon } from './ui/icons'
 
 export default function CartDrawer() {
   const { cartOpen, setCartOpen, lines, subtotal, wholesaleSavings, isWholesale, go, count } = useStore()
+  const headingRef = useRef(null)
+  const openerRef = useRef(null)
 
   useEffect(() => {
     if (cartOpen) {
+      // Keyboard and screen-reader users enter the dialog, and return to the
+      // control that opened it when it closes.
+      openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
       document.body.style.overflow = 'hidden'
       const closeOnEscape = (event) => {
         if (event.key === 'Escape') setCartOpen(false)
       }
       window.addEventListener('keydown', closeOnEscape)
+      const focusTimer = window.setTimeout(() => headingRef.current?.focus({ preventScroll: true }), 60)
       return () => {
         document.body.style.overflow = ''
         window.removeEventListener('keydown', closeOnEscape)
+        window.clearTimeout(focusTimer)
+        openerRef.current?.focus({ preventScroll: true })
+        openerRef.current = null
       }
     }
   }, [cartOpen, setCartOpen])
@@ -46,7 +55,7 @@ export default function CartDrawer() {
           >
             <Tricolor />
             <header className="flex items-center justify-between px-5 py-4 border-b border-[var(--store-surface-border)]">
-              <h2 className="font-serif text-xl font-semibold text-navy">
+              <h2 ref={headingRef} tabIndex={-1} className="font-serif text-xl font-semibold text-navy outline-none">
                 Your cart <span className="text-sm font-normal text-navy-soft">({count})</span>
               </h2>
               <button
@@ -91,7 +100,7 @@ export default function CartDrawer() {
                       <li>Submit your request with no upfront payment</li>
                       <li>Our staff checks current Manila stock</li>
                       <li>We arrange delivery with a courier</li>
-                      <li>Pay when delivered or via bank transfer</li>
+                      <li>Pay as agreed with our staff after confirmation</li>
                     </ol>
                   </div>
                 </div>
@@ -128,7 +137,7 @@ export default function CartDrawer() {
 }
 
 function CartLine({ line }) {
-  const { setQty } = useStore()
+  const { setQty, pendingCheckout } = useStore()
   const { product, qty, unit } = line
   const stock = productStock(product)
   const availabilityChanged = stock === null || stock <= 0
@@ -139,14 +148,16 @@ function CartLine({ line }) {
         <p className="truncate font-serif text-base font-medium leading-tight text-navy">{product.name}</p>
         <p className="mt-0.5 text-xs text-navy-soft">{product.size}</p>
         <div className="mt-2 flex items-center justify-between">
-          {availabilityChanged ? (
+          {pendingCheckout ? (
+            <span className="text-xs font-semibold text-navy-soft">Held for your pending order request</span>
+          ) : availabilityChanged ? (
             <span className="text-xs font-semibold text-crimson">Availability changed</span>
           ) : (
             <QuantityStepper value={qty} onChange={(val) => setQty(product.id, val)} max={stock} size="sm" />
           )}
           <span className="text-sm font-bold text-crimson tabular">{peso(unit * qty)}</span>
         </div>
-        <button type="button" onClick={() => setQty(product.id, 0)} className="mt-2 min-h-11 text-xs font-bold text-navy-soft underline-offset-4 hover:text-crimson hover:underline">
+        <button type="button" disabled={Boolean(pendingCheckout)} onClick={() => setQty(product.id, 0)} className="mt-2 min-h-11 text-xs font-bold text-navy-soft underline-offset-4 hover:text-crimson hover:underline disabled:opacity-40">
           Remove from cart
         </button>
       </div>

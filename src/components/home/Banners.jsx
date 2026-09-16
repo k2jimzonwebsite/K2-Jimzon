@@ -38,7 +38,7 @@ function WholesaleStrip() {
             Wholesale supply for cafés and restaurants.
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-navy-soft">
-            Order case packs, whole beans, or pantry staples with volume pricing and regular delivery across Metro Manila.
+            Order case packs, whole beans, or pantry staples — pricing and delivery quoted per order after staff review.
           </p>
         </div>
         <GhostButton onClick={() => go('wholesale')} className="border-blue/30 text-blue">

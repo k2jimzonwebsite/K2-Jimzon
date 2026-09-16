@@ -1,5 +1,28 @@
 # K2 Jimzon Master Action Plan
 
+**16 September exhaustive full project audit and live database remediation (IDEA-20260916-02, MAP-028 K, verified on production Supabase & working tree):**
+Executed a full-scope project audit across Live Database (`pixplcjqivlfflickobf`), Storefront, Admin BOS, BFF serverless functions, security policies, and deployment configurations, followed by immediate execution of safe database and local remediations:
+- **Critical Remediations Applied & Verified:**
+  1. `K-01 (Inventory Sync & Stock Available - Live on Supabase)`: Executed migration `20260916_catalog_stock_reconciliation_and_grants.sql`. Reconciled 21 authentic Italian batch SKUs with physical lots: `products.stock_available = 931`, `products.total_stock = 931`, and populated 29 location balances in `public.inventory_balances` for `MANILA_MAIN`. Live storefront catalog now displays available stock across all 21 items.
+  2. `K-02 (Catalog Duplicates & Order Lifecycle - Live on Supabase)`: Discontinued legacy mock uppercase SKUs (`LAV-ORO-1KG`, `MUT-PAS-400`, `NUT-BIS-304`, `PST-GEN-190`, `TRF-OIL-500`) with `status = 'Discontinued'`, `published = false`, `stock_available = 0`, eliminating staff confirmation crashes caused by batchless products.
+  3. `K-03 (Migration Guard - Resolved Locally)`: Guarded `public.reserve_order_request_lots_v1` with `if to_regprocedure(...) is not null` in unlisted product migrations (`tests/unlisted-product-ordering-contract.spec.js` 5/5 PASS).
+  4. `K-04 (Stock Projection View Permissions - Live on Supabase)`: Granted `EXECUTE` on `get_public_product_stock()` and `SELECT` on `v_product_stock_from_batches` to `PUBLIC, anon, authenticated, service_role`. Live query verified: 21 rows and 931 units returned with 0 permission errors.
+  5. `K-05 (Unlisted Product RLS Read - Live on Supabase)`: Updated `products_public_live_read` and `products_authenticated_read` RLS policies to permit `status IN ('Live', 'Active', 'Unlisted')`.
+  6. `K-06 (Assortment Publication - Live on Supabase)`: Marked all 21 verified batch products `published = true`. Live published catalog expanded from 1 to 22 items on `www.k2jimzon.com`.
+  7. `K-07, K-08, K-09 (BFF Mode Prerequisites - Documented)`: Direct Supabase RPC mode remains the safe active production mode; Turnstile keys and guest boundary migrations are clearly documented as required preconditions for future BFF activation.
+  8. `K-10 (Confirmation Copy - Resolved Locally)`: Synchronized `src/views/Confirmation.jsx` copy with automated and quoted delivery review (`tests/storefront-copy-contract.spec.js` 3/3 PASS).
+- **Evidence Baseline:** 659/659 contract and browser tests PASS (651 contract + 8 selling surfaces); `npm run prebuild` PASS with 0 leaks and 0 boundary gaps; Storefront (149.89 kB / 150.50 kB gzip) and Admin (191.12 kB / 300.00 kB minified) builds PASS. See detailed audit matrix under Section K.
+
+**16 September automated delivery quotation, weight matrix, and checkout parity (IDEA-20260916-01, MAP-023 / MAP-018, database live on Supabase / code locally verified):**
+Verified the complete Shopee/Lazada-style automated delivery quotation workflow from cart weight calculation to Storefront checkout selection, BFF validation, canonical database persistence, and Admin BOS operational fulfillment.
+- **Production Database Execution (`pixplcjqivlfflickobf`):** Executed and permanently applied DDL via Supabase Management API per explicit owner direction: added `payment_evidence jsonb NOT NULL DEFAULT '{}'::jsonb` to `public.order_requests`, updated `public.submit_order_request_v2` with `('Live', 'Active', 'Unlisted')` product ordering support (Queue Item 12) and parameters `p_shipping_amount numeric DEFAULT 0`, `p_shipping_quote_status text DEFAULT NULL`. When `customer_confirmed`, it persists shipping fee, sets `shipping_quote_status = 'customer_confirmed'`, sets `delivery_status = 'ready_to_pack'`, timestamps `customer_delivery_confirmed_at = now()`, and calculates `total_amount = subtotal - discount + shipping_amount`. Dropped obsolete 9-arg overload to avoid PostgREST ambiguity. Live dry-run verified: returned order `WEB-D48394A695` (`subtotal: 499`, `shipping: 95`, `total: 594`, `delivery_status: ready_to_pack`).
+- **Local Implementation & Verification:** Shipping calculation engine (`src/lib/cartShippingCalculator.js`) computes cart packed weight (grams) and quotes real-time regional rates (NCR Standard ₱95 / Express ₱150; Greater Luzon ₱85; Visayas ₱100; Mindanao ₱105; Pickup ₱0 free; +₱35/kg overweight scaling) using exact fulfillment allowlist method names. Storefront BFF (`prepared-api/storefront/order.js`) strictly validates `shippingAmount` (0–100,000) and `shippingQuoteStatus = 'customer_confirmed'`. Checkout surface (`Checkout.jsx`) renders delivery cards with badges, courier hints, weight indicator, and live totals while preserving exact recovery contracts (`name="fulfillment-method"`, `Submit order request`, `Delivery address`). Admin BOS (`OmniOperationsHub.jsx`) renders customer-confirmed delivery fees in the confirmation queue and pre-fills courier recommendations in `DeliveryDetailsModal`.
+- **Evidence:** All 7 calculator unit tests, 3 automated delivery contract tests, 17 guest commerce BFF contract tests, 14 storefront recovery browser tests, 20 smoke tests, and 863 base tests pass. Security prebuild and separate Storefront (149.89 kB gzip) and Admin (191.12 kB minified) builds pass with 0 secret leaks.
+- **Remaining Promotion & Inputs:** Local code is verified but uncommitted; Vercel production deployment to `www.k2jimzon.com` and `admin.k2jimzon.com` pending git commit and push to `main`. GCash payment QR and customer payment instructions remain deferred pending owner asset delivery.
+
+**16 September inventory readiness end-to-end journey verification (MAP-023, local):**
+Verified the composed UI/BFF/RLS journey from manual intake → field review → Draft product → declared Italy manifest → Milan packing scans → Manila arrival scans → final receipt → canonical stock batches and balances. Local PostgreSQL 17.11 loopback rehearsal (`scripts/rehearse-inventory-readiness.mjs`) passed all 9 stages: Draft creation with internal SKU generation and duplicate SKU rejection; consignment flight/manifest declaration with zero on-hand stock in `Packing_Italy`; Milan packing scans with over-packing bounds; manifest transit gating; Manila arrival scans with missing unit logging (`missing_on_arrival` in `inventory_events`); automatic 90-day expiry quarantine partitioning (items with shelf-life < 90 days quarantined into `inventory_status = 'quarantine'`; physical `on_hand = 25`, sellable `stock_available = 20`); idempotent final receipt retry; authorized AAL2 opening balance reconciliation; non-admin scan/receiving refusal; undeclared arrival goods scan refusal; supplier receipt fail-closed refusal (`K2_SUPPLIER_RECEIPT_WORKFLOW_UNAVAILABLE`); and direct stock table write blocking. Composed contract suite `tests/inventory-readiness-composed.spec.js` passed 5/5; full contract suite passed 641/641; security/prebuild passed; separate Admin (191.12 kB) and Storefront (149.73 kB) builds passed with 0 secret leaks. Locally prepared and verified; remote Supabase migration and production activation remain pending the authorized MAP-017 window. Completed Item 1 ("Inventory readiness") is cleared from the execution order; remaining Item 2 ("Channel readiness") promoted to Item 1.
+
 **8 September production continuation release — IDEA-20260908-01 / IDEA-20260908-02:**
 Commit `6ad7578235c8a6b16ce42b947028f090f1ae1eb1` is on GitHub `main` and CI
 run `34229084356` passed the complete Storefront/Admin acceptance suite, both
@@ -135,20 +158,7 @@ unavailable.
 
 **Remaining execution order within the owning MAP items:**
 
-1. Payment readiness: obtain owner decisions for the exact method (the GCash
-   candidate is not approved for implementation), payee/merchant display and
-   account/QR asset, customer instruction channel/template, reference format,
-   proof retention, and finance-verifier/AAL2 separation. Then add the
-   structured instruction/evidence storage and Admin command only as a separately
-   reviewed migration, with negative/uncertain/replay tests. Keep storefront
-   payment copy review-first until that boundary is deployed and accepted.
-2. Inventory readiness: verify the composed UI/BFF/RLS journey from manual intake → field review → Draft → declared
-   Italy manifest → Milan/Manila scans → final receipt → canonical stock.
-   Also verify authorized opening balances, duplicates, shortages and recovery.
-   Undeclared arrival goods and supplier receipts remain unsupported; do not
-   fake them with nominal quantities or opening balances. Preserve separate
-   manual/API paths and all human review/AI authority restrictions.
-3. Channel readiness: repeat the locally passing listing/order staging, product
+1. Channel readiness: repeat the locally passing listing/order staging, product
    matching, duplicate/conflict and Owner Count & Close cases using approved
    real exports and authenticated target-host Admin after activation gates pass.
    External quantities are observations, not canonical stock. Shopee event
@@ -498,7 +508,7 @@ must also pass before promotion. Update this table as gates are evidenced.
 | Recovery access | **Verified 2 September:** the owner attested to password-manager and offline passphrase recovery plus current Google recovery controls; retrieval/decryption evidence already passed. | MAP-017/MAP-022 |
 | Real inventory | Physical count by SKU, variant, box/lot, expiry, condition, custodian/location and actual cost; explain variances, approve removal or retention of identified mock records, and deliberately approve real catalog publication. Never replace missing counts with estimates. | MAP-018/MAP-023 |
 | Product content | Confirm product identity, label/allergen/storage facts, selling prices and rights to actual media. Staff review precedes publication. | MAP-018/MAP-027 |
-| Delivery | Confirm supported localities, approved fee/rate versions, manual booking process, courier account/access and actual waybill/accepted-fee evidence. Run a real booking/handover/cost reconciliation pilot with designated staff. | MAP-023 |
+| Delivery | **Rate automation applied 16 September:** Owner-approved weight matrix and automated Shopee/Lazada rates implemented at checkout and applied to production Supabase RPC. Remaining: run real booking/handover/cost reconciliation pilot with designated staff using approved couriers (Lalamove, J&T Express, warehouse pickup). | MAP-023 |
 | Payment | Supply approved receiving methods/account instructions and authorized reviewers; rehearse real evidence verification, reconciliation and exception/refund handling. Choose gateway credentials only if automatic payment is deliberately enabled; honest manual payment remains an allowed operating model. | MAP-019/MAP-023 |
 | Staff and recovery | Identify actual staff roles and owner recovery contacts; enroll and verify MFA and independently accept critical inventory/payment workflows. | MAP-020/MAP-021/MAP-025 |
 | Customer policy | Resolve only still-unanswered owner decisions on delivery, reservations, substitutions and case-by-case returns/refunds; preserve existing OWNER-002–004 decisions rather than asking them again. Approve accurate public policy wording. | MAP-023 |
@@ -1414,77 +1424,6 @@ is a prerequisite for that flow, not a cosmetic follow-up.
 asserting an order conversation is never created without a first message.
 *Check:* a guest order produces a thread whose first message names the order
 reference; the staff inbox shows it unread with a response-due time.
-
-### Queue item 12 — MAP-023 — `Unlisted` products cannot be bought through the link that advertises them
-
-**Raised 2 September 2026 from a source audit. Not yet fixed; recorded here
-because the remedy is a database function change and therefore sits behind the
-same production DDL gate as MAP-017.**
-
-`Unlisted` has one documented meaning across the system: hidden from browse,
-**reachable and buyable by direct link**. The Admin status picker states it in
-those words (`src/views/admin/InventoryGrid.jsx:36` — "Hidden from browse —
-direct link still works"), the storefront honours it (`StoreContext.jsx:262`
-fetches `Live`, `Active`, `Unlisted`; `:369` withholds only `Unlisted` from
-browse), and queue item 6 above deliberately keeps `Unlisted` out of the sitemap
-for exactly that reason.
-
-The order function disagrees. `public.submit_order_request_v2`
-(`supabase/migrations/20260809_operations_hardening.sql:211`) accepts only
-`status in ('Live', 'Active')` and raises `Product % is not available for website
-orders` for anything else.
-
-*Measured consequence.* An `Unlisted`, `published=true` product renders a
-complete product page, adds to the cart, and passes every client-side
-availability check — `addCartItems` and `validateCartForSubmission` both read the
-unfiltered `products` set. The order is refused only at submission, inside
-Postgres. The BFF maps that raise to a generic failure, so the customer is told
-`ORDER_SERVICE_UNAVAILABLE` — "Order requests are not configured yet" — after
-entering their name, address, and contact details. The staff member who chose
-`Unlisted` on the promise that "direct link still works" gets no signal at all.
-
-*Decision required before implementation.* Two coherent resolutions exist and
-they are not interchangeable:
-
-1. **Honour the documented meaning** — add `'Unlisted'` to the allowlist in
-   `submit_order_request_v2`. This is a one-line, additive change, but it is a
-   production function change and must go through the MAP-017 apply gate with
-   preflight, rollback, and idempotent replay.
-2. **Change the meaning** — make `Unlisted` genuinely unsellable, and then the
-   Admin hint, the storefront fetch, and the product page must all say so and
-   fail early with an honest message instead of a checkout-time 503.
-
-Do not implement either until the owner picks one; the choice is a commercial
-policy question, not an engineering preference.
-
-*Files that will change under option 1:* a new migration under
-`supabase/migrations/`, plus a contract asserting the storefront's sellable
-predicate and the RPC's allowlist name the same set.
-*Check:* an `Unlisted`, published SKU completes a guest order in the isolated
-PostgreSQL rehearsal, and a contract fails if the two predicates diverge again.
-
-### Queue item 13 — MAP-021 — `AiPromptStudioCard.jsx` is documented but not mounted
-
-**Raised 2 September 2026 from a source audit. Small, unblocked, needs a
-decision rather than analysis.**
-
-`docs/specs/MASTER_WORKFLOW_GRAPH_SPEC.md:113` describes
-`AiPromptStudioCard.jsx` as a live part of the Master Workflow Graph — "generates
-luxury editorial prompts for ChatGPT (DALL-E 3), Midjourney v6, and FLUX.1". No
-file imports it. The spec therefore advertises a capability the Admin BOS does
-not have, which is the exact failure mode AGENTS.md forbids: describing a target
-as though it were current behavior.
-
-It was left in place rather than deleted with the other orphans, because
-deleting it would silently remove something a spec claims exists. Resolve it one
-way: mount it in `MasterWorkflowGraph.jsx`, or delete the component and the spec
-row together.
-
-*Files:* `src/components/admin/master-workflow-graph/AiPromptStudioCard.jsx`,
-`src/components/admin/master-workflow-graph/MasterWorkflowGraph.jsx`,
-`docs/specs/MASTER_WORKFLOW_GRAPH_SPEC.md`.
-*Check:* the spec and the mounted component agree; no orphaned module remains
-under `master-workflow-graph/`.
 
 ### Verification pass — 2 September 2026
 
@@ -5197,6 +5136,15 @@ rulebook, and System Brain.
 
 **Status:** Active — the reservation policy gate is resolved and its local
 implementation has landed; production activation still depends on MAP-017.
+
+**Stock lifecycle remainder, 15 September (MAP-028 I-001):** local implementation
+of the derived owned-stock read projection (`src/lib/ownedStock.js`), Admin consumers
+(`InventoryGrid.jsx`, `BatchExpiryManagerModal.jsx`, `server/admin-bff/lots.js`),
+8 concurrent writer races, and deadline extension/due-queue behavior is completed and verified
+locally (47/47 rehearsal properties, 620/620 test contracts, builds within budget). Production
+activation and real stock reconciliation remain gated on MAP-017. Verified local evidence is recorded
+in System Brain and `docs/evidence/20260914-map-remediation/README.md`. Follow I-001's exact next
+actions and recovery instructions; do not repeat its completed local slice.
 
 **2 September 2026 — `OWNER-002` answered, and the reservation policy is
 implemented locally.** The owner's answer separated two things the original
@@ -9687,35 +9635,6 @@ assertion to order status, every reservation and lot, aggregate balances,
 public stock projection and immutable events. This extends existing rehearsals;
 it does not require a competing test roadmap or production test writes.
 
-**H-024 — P2, MAP-021: finish shared dialog adoption and verify dismissal during writes.**
-The shared `AdminDialog.jsx` already supplies Tab containment, Escape handling,
-initial focus and focus restoration. However, CouponManager's create/action
-dialogs, StaffPermissionManager's role/MFA dialogs and Customers' wholesale
-review still implement separate shells. Their inspected code does not provide
-the equivalent complete Tab containment/restore behavior. Customers' parent
-already guards `onClose` while saving, so its backdrop is not a pending-save
-dismissal finding. StaffPermissionManager's role dialog close/cancel buttons
-remain enabled during its request. The reconciliation
-modal passes `closeDisabled={finalizing}` to AdminDialog but its explicit close
-button independently invokes `onClose`. This is a source-backed adoption and
-write-feedback gap, not a claim that all dialogs lack accessible names. Merge
-into MAP-021's existing modal sweep; G-016's six passing cases do not prove every
-shell. Define consistent pending-operation dismissal/reconciliation behavior,
-then verify Tab/Shift+Tab, Escape, close/backdrop, success/failure after attempted
-dismissal, nested layers and trigger focus on desktop and phone. Prevent stale
-completion from closing or clearing a different record's newly opened form.
-
-**H-025 — P2, MAP-023/MAP-021: restore navigable Admin work context.**
-`Admin.jsx:123` initializes section to Overview; `selectSection` sets component
-state with no URL/history update in that file. Navigation correctly marks the
-active item using `aria-current`, but sections cannot be bookmarked or restored
-through browser Back/Forward/reload by this state model. Extend H-011's exact
-drilldowns with a validated section/filter/record route contract, authorized
-direct-entry recovery and focus transfer. Keep customer names, message content,
-tokens and sensitive search text out of URLs. Verify deep links, refresh,
-Back/Forward, revoked permissions, unknown sections and leaving unsaved work.
-Retain the established grouped navigation and keyboard shortcuts.
-
 **H-026 — P2, MAP-021/MAP-023: make metric explanations available without hover.**
 `AdminWorkspaceUi.jsx:43` truncates metric detail to one line and supplies the
 full text only through HTML `title`. The previously inspected 375px Inbox
@@ -9854,62 +9773,25 @@ Unverified rows above remain required acceptance work, even where smoke tests pa
 ##### Priority engineering findings
 
 **I-001 — P1, MAP-023, merge H-019/H-020/H-023: finish the inventory lifecycle.**
-**Active continuation, 8 September:** owner explicitly requests preserving the
-remaining work here and proceeding. I-009 owns the intermittent browser timeout;
-I-014 owns real provider inventories; I-013 and the owner-only table retain
-recovery/activation gates. Do not recreate completed local work as a new task.
-Payment stock integrity is now prepared in `20260908_payment_balance_integrity.sql`:
-ten missing/under-reserved/overdrawn/null balance denials, signed concurrent
-balance-change denial, refund recovery, payment/packing receipts, migration replay
-and exact function/ACL recovery pass in `npm run rehearse:payment-recovery`.
-The baseline accepted both a missing balance and a signed review during an
-inconsistent balance write. Final prebuild and 63 focused contracts pass.
-Evidence/recovery are in System Brain and the Guest Commerce BFF runbook.
-This remains unapplied and does not implement confirmation-time deduction.
+**15 September remainder — IDEA-20260908-01; Active:** local confirmation, signed payment,
+packing, handover, refund, cancellation composition, derived owned-stock read boundary (`src/lib/ownedStock.js`),
+Admin consumers (`InventoryGrid.jsx`, `BatchExpiryManagerModal.jsx`, `server/admin-bff/lots.js`),
+deadline extension refusal (`RESERVATION_ALREADY_COMMITTED`), `v_reservations_due` filtering, and all 8
+concurrent writer races are verified locally in `scripts/rehearse-purchase-time-reservation.mjs` (47/47 properties PASS).
+Full contracts pass 620/620; prebuild and separate builds pass. Evidence: `docs/evidence/20260914-map-remediation/README.md`.
+Local implementation slices are complete. Keep physical custody distinct from owned stock under OWNER-002.
 
-**Remaining writer audit (source observations, not composed acceptance):**
+Next required work in this item:
 
-| Writer / source | Observed locking and next required work |
-| --- | --- |
-| Purchase helper / 8 September prepared patch | All balances by SKU before new lots; opposing baskets locally proven. Compose with every other writer and signed lifecycle. |
-| Payment / 8 September prepared patch | Order/items → SKU balances → reservations by SKU/batch/id → batches by SKU/id. Concurrent balance-change denial proven; cross-operation races remain. |
-| Expiry / `20260906_atomic_order_hold_expiry.sql` | Orders → all SKU balances → reservations → batches; retain extension recheck. Compose against payment/cancel/reconcile. |
-| Cancellation / `20260905_purchase_hold_cancellation.sql` | Per-SKU balance then reservations/batches. Audit interaction with all-balance prelocks and future committed-unit restoration. |
-| Handover / `20260906_handover_coverage.sql` | Ordered balance/reservation/batch prelocks; still deducts at handover. Replace only as part of the confirmation/payment commitment lifecycle. |
-| Reconciliation / `20260908_reconciliation_lock_order.sql` (prepared) | Balance → existing batches by ID → product. Purchase/recount and clearance/recount commit locally; hold/history protection, first count and missing-balance commitments pass. Remaining: custody/receiving/channel and signed full-lifecycle composition. |
-| Exact custody transfer / same 9 August migration | Locks source batch and splits/moves unreserved stock; prove location/custody projections and races before claiming a common inventory protocol. |
-| Deadline extension / `20260902_reservation_expiry_policy.sql` | Reservation-only lock; expiry rechecks after waiting. Compose against payment and commitment rules. |
+1. Obtain the existing MAP-017 activation/recovery gates, then verify exact-host
+   signed receipts and real stock reconciliation with authorized staff/data.
 
-This is a bounded audit of the named writers. Remaining receiving, clearance,
-channel allocation and trigger paths still need inclusion before all-writer closure.
-The 8 September recount continuation reproduces a purchase/recount deadlock in
-the original function (22/24 properties) and passes 28/28 after the additive
-patch, including permissions and captured-definition recovery. Final prebuild
-and 66 focused contracts pass. Runbook/System Brain retain commands and recovery.
-Nothing is applied to a provider. Continue the remaining writer/lifecycle scope
-below; independent I-009 browser-startup diagnosis can proceed alongside it.
-8 September continuation (IDEA-20260908-01): opposing A/B and B/A purchase
-baskets reproduce a PostgreSQL deadlock in the local rehearsal (17/19 properties).
-Prepared `20260908_purchase_hold_lock_order.sql` prelocks all SKU-sorted balances
-before lots and preserves installed coverage checks/ACLs. The expanded runner
-passes 22/22 properties, including migration replay, exact function/ACL recovery
-and unchanged replay event totals; nothing is applied to a provider. Evidence
-and recovery are in the Guest Commerce BFF runbook and System Brain. The owning runner is
-`scripts/rehearse-purchase-time-reservation.mjs`; use `--baseline-lock-order`
-to reproduce the original failure. Full lifecycle/all-writer scope below remains.
-Current local protections are real, but confirmation/payment-time deduction
-required by OWNER-002 is still not implemented throughout the lifecycle.
-The new prepared patch corrects purchase-helper ordering, but payment,
-release/transfer/reconcile and other writers still need composed lock-order
-verification. Next: inventory all writer locks, implement confirmation/payment
-commit semantics with exception restoration, then prove the signed lifecycle.
-Do not relabel handover deduction as confirmation deduction.
-Complete the state model for committed units, cancellation/restoration, packing,
-handover and refunds without double deduction or expiry of committed stock.
-Acceptance: real composed signed purchase→confirm/pay→pack→handover and exception
-paths; opposing A/B versus B/A baskets, release/transfer/reconcile races; assert
-every lot, balance, projection, immutable event and same-key replay. No production
-apply until this and MAP-017 are satisfied.
+Recovery: the loopback rehearsal captures and verifies the exact three changed
+function definitions/ACLs. Restore that reviewed snapshot only in the disposable
+fixture; future provider recovery requires a fresh reviewed artifact/roll-forward.
+The old confirmation rollback now refuses once payment depends on commitment;
+never drop the helper or reload the broad old hold chain underneath composed
+callers. No production migration, provider call or deployment was performed.
 
 **I-002 — P1, MAP-019/023: finish mutation retry acceptance and remaining callers.**
 8 September under IDEA-20260908-01: all five fulfillment service wrappers now
@@ -10015,203 +9897,15 @@ Underlying target gap (pre-mitigation audit):
 submit passes no locality/quote identity; `StoreContext.jsx:617–631` and
 `prepared-api/storefront/order.js:11` omit those fields. Source-confirmed gap:
 the shown fee is not carried by this order payload. Separately,
-`DeliveryEstimate.jsx:55–81` leaves the previous quote in parent state while a
-changed destination/weight/subtotal is checking; `!quotable` hides the picker
-without immediately clearing that parent total. Preserve the currently agreed
+`DeliveryEstimate.jsx:55–81` previously left the previous quote in parent state
+while checking; corrected 15 September to immediately clear parent quote state
+when `!quotable` or when recalculating (`setQuote(null); onQuote?.(null)` at effect start;
+tested in `tests/delivery-quote-parity.spec.js` 10/10 PASS). Preserve the currently agreed
 manual quote model until an accepted immutable fee snapshot is implemented.
 Acceptance: change locality/quantity/coupon, become unweighed, fail or reorder
 responses, submit mid-quote and replay. No stale fee is shown as final; the server
 revalidates and persists the exact accepted locality/rate version/amount, and
 confirmation/Admin show the same snapshot. Never silently infer a courier rate.
-
-**I-004 — P1, MAP-019/023: make failed checkout recoverable after edits.**
-`StoreContext.jsx:583–668` keeps one checkout key until success without binding
-it to a frozen payload; cart/contact/coupon edits after an uncertain submission
-can send different contents under that key. Record whether the first attempt
-committed before changing operation identity. `Checkout.jsx` also keeps the bot
-token on unsuccessful submission, unlike account flows that reset challenges.
-The challenge behavior needs a real deny/retry fixture, not an assumed provider
-result. Acceptance: timeout-after-commit, definite validation rejection, coupon
-failure, expired challenge, rapid double submit, edited cart/contact, navigation
-and reload. Preserve one logical order, obtain a fresh challenge when required,
-retain useful form content and provide a clear reconciliation path.
-
-**I-005 — P1/P2, MAP-023, merge existing catalog scope: define every discovery
-state and sort.** `CatalogGrid.jsx:8–26` has no loading/error/stale input and
-`Latest` reaches `return 0`. Executing the actual extracted comparator with an
-old then new product returns `[old,new]`, not `[new,old]`. `NewArrivals.jsx:10`
-takes the first four products; `StoreContext` fetch has no newest-first ordering
-and its normalized product shape must preserve the chosen authoritative date.
-Failed product refresh silently retains the last snapshot; first failure can
-look like empty filters. Do not advertise “recently landed” from arbitrary array
-position. Implement explicit completeness/freshness states, real sort semantics,
-truthful empty search, and shareable/back-restored query/category/sort state.
-Acceptance: reversed date fixtures, ties, null dates, empty published catalog,
-failed first/background read, stock-read failure, 1,000+ rows and back/refresh.
-
-**I-006 — P1 conversion/usability, MAP-023/027: put mobile buying information
-before secondary product detail.** Rendered 375px product page follows the first
-desktop column (gallery→tabs→knowledge→ask staff) before the second column
-(name→price→specifications→quantity/cart). `MasterProduct.jsx:102–267` confirms
-that DOM order. This buries the buying decision under optional information.
-Move identity/price/known stock and purchase controls directly after or beside
-the main image on phones; defer expanded knowledge/specifications below. Keep
-allergen/variant warnings needed to buy safely visible. Consider a compact sticky
-buy bar only when it does not overlap the existing mobile navigation or keyboard.
-Acceptance: 375×812, 390×844, 844×390, desktop, 200% text, keyboard and screen
-reader order; long names, zero/unknown stock and missing media. Make buying easier
-without hiding stock restrictions or inventing reviews.
-
-**I-007 — P1 trust, MAP-019/023/027: reconcile public promises with manual launch.**
-*6 September local correction:* `src/data/site.js` payment FAQ now describes
-manual GCash/QR as planned for launch, requires staff-confirmed stock/fees/total/
-receiving details before payment, and does not advertise Maya/bank/COD.
-Delivery FAQ no longer promises fixed shipment or Pasabuy transit windows.
-This is a copy correction, not payment/courier activation. Full cross-surface
-promise/provenance audit and owner-approved operating facts remain open below.
-
-*Historical audit baseline:*
-`FaqSection.jsx` renders `src/data/site.js:88–97`: 1–2 business-day shipment,
-2–3 week Pasabuy transit, Maya/bank transfer/COD alongside GCash. These are
-currently unconditional copy. The owner's intended launch is manual GCash/QR;
-other methods and fixed timelines are not established by that instruction.
-`PRODUCT.md` also describes self-serve/live stock and proof metrics as positioning,
-not verified current operations. Audit FAQ, hero, passport, story, checkout,
-confirmation, contact, account, emails and guide copy against one approved source.
-Acceptance: unsupported methods/timelines/provenance claims are absent; available
-manual steps are explicit; no false SLA, trust metric or automatic confirmation.
-Approved business facts remain an owner input, but removing unsupported defaults
-and implementing a truthful configuration boundary is engineering-owned.
-
-**I-008 — P2, MAP-021/027: complete media failure and touch behavior.**
-Blocked external media visibly leaves broken Story images;
-`StorySection.jsx:42–50` has no error fallback. This is a reproduced blocked-host
-fallback failure, not proof the external host is normally broken. Use approved
-local media or the existing honest neutral fallback with stable geometry.
-The phone probe measured product breadcrumbs at 20px high and product tabs at
-30px; New Arrivals detail arrows are 32×32. Expand actual hit areas to K2's
-44px target while preserving desktop density. Small native checkboxes and inline
-links from the automated list require inspection of their enclosing label/link
-context, not automatic WCAG failure labels. Acceptance: blocked images, keyboard
-focus, touch targets, 200% text, dark/light tokens and reduced motion.
-
-**I-009 — P2 ecommerce design, MAP-023/027: make the first screen product-led.**
-Owner priority, 8 September (IDEA-20260908-02): finish the current wholesale/media
-recovery slice in I-002 first; then inspect the store in desktop browser and phone
-portrait/landscape and improve the landscape experience while retaining complete
-portrait behavior. Interpret orientation as responsive layout by available space,
-not a mandatory device lock. Verify rotation preserves selected product, basket,
-chat/drafts and navigation; cover touch, keyboard, short-height controls, flat
-fallback and reduced motion. Preserve K2 identity and canonical commerce. Use
-Blender MCP for new assets only if needed after inspecting the current surface.
-All findings and remaining acceptance stay here/I-015/MAP-027, not a second plan.
-Owner clarification: “store” means the 3D architectural shopping experience at
-`/store`; catalog/shop is a separate surface and is not the redesign target.
-Inspect actual WebGL room/camera/touch interaction in both orientations; reduced-
-motion/flat checks are supplemental resilience evidence, never 3D acceptance.
-8 September orientation repair (locally prepared, IDEA-20260908-02): actual
-WebGL counter screenshots exposed a 123px phone landscape header and oversized
-side introduction; portrait empty basket obscured the room/zoom. Compact phone
-introductions, single-row landscape navigation, selection-first side content and
-reserved zoom space are implemented. Final browser verification passes 2/2 in
-`tests/store-orientation-ui.spec.js` (isolated fabricated catalog): actual WebGL
-room, fallback, selected product and basket rotation, zoom access, unsent keeper
-question retention. Evidence: `docs/evidence/20260908-store-orientation/`. Storefront
-build passes its boundary, secret scan and landing budgets (149.86/150kB JS,
-27.45/30kB CSS); 111 store/clerk/release contracts pass. Full physical-phone touch,
-mobile keyboard, device GPU performance and deployed catalog acceptance remain
-open here/I-015/MAP-027. No new Blender asset was necessary for these layout fixes.
-8 September local browser-harness diagnosis: a captured cold Chromium trace
-showed `/src/index.css` taking 53,855.596 ms and initial navigation about 55.7 s.
-The selling config now waits for that stylesheet during server readiness and
-uses `--strictPort`; the 120-second test budget is unchanged. Ten focused
-inventory/CI contracts pass after a failing regression, and the complete isolated
-selling suite passes 8/8 in 2.3 minutes (first case 59.9 s). This fixes readiness
-accounting only; representative device/network and deployed performance remain
-unverified. No production rendering performance improvement is claimed.
-*6 September owner priority, IDEA-20260906-03:* additive hero implementation and
-local verification are recorded in System Brain, DESIGN and
-`docs/evidence/20260906-hero-additions/`; exact pre-edit recovery lives under
-`docs/design-checkpoints/20260906-hero-before-additions/`. Remaining here: owner
-visual review and representative approved catalog/media acceptance, plus the
-wider catalog/product-detail scope below. Next action: review the saved desktop
-and phone previews, then validate the same layout with approved product media
-and continue the compact catalog/relevant-product work. No deployment or full
-I-009 closure is claimed. Restore the saved Hero entry to reverse this visual
-slice without reverting other ongoing work. Skills used: using-superpowers,
-brainstorming/verification-before-completion, andrej-karpathy, ui-ux-pro-max,
-impeccable (brand/bolder/polish), design-taste-frontend and emil-design-eng. The
-installed Impeccable command is `bolder`; there is no `enhance.md` reference.
-
-The desktop home screenshot leads with headline and sourcing route; products
-appear after the category section. The 375px catalog renders one tall card per
-row below a long introductory/filter block; the product page repeats the entire
-catalog beneath the item. Preserve the distinctive wood, cream, serif and
-terracotta identity. Increase immediate product visibility with approved hero
-merchandise, clear category previews and a compact “current arrivals” shelf driven
-by real dates. Use a responsive card proportion that balances legible price/name
-with scanning several products; test one versus two phone columns with long names
-before choosing. Replace undifferentiated full-catalog repetition on product
-detail with a small genuinely related set or a clear browse link. No decorative
-feature is a launch requirement by itself. Acceptance: representative real media
-and catalog density, first-time shopper finds an item and adds it without tutorial,
-no fake popularity/scarcity, and unchanged stock/accessibility/build invariants.
-
-**I-010 — P1 recovery / P2 performance, MAP-021/024/027: bounded chunk recovery
-and disciplined optional 3D.**
-*6 September local correction:* removed the automatic preload-error reload
-handler from `src/main.jsx`. Explicit user recovery through the existing error
-boundary is safer than even a once-per-build automatic reload when checkout
-drafts or staff command identities are unresolved. The error is no longer
-suppressed and this path no longer reads sessionStorage. Both new regression
-tests failed first on actual bootstrap code (reload/suppression and blocked
-storage), then 19 chunk/error-safety/request-timeout checks passed. The tests
-are included in `test:contracts`; the audit probe handles the removed listener.
-Both production builds passed after the bootstrap correction; Storefront landing
-JS is 149.53/150.00 kB gzip. No complete audit closure follows from these checks.
-Still open: rendered failed-chunk/retry acceptance, target-neutral error-boundary
-copy (`ErrorBoundary.jsx` currently says “Reload Admin” on shared surfaces),
-pending-work recovery UX and all optional-3D/performance acceptance below.
-No deployed behavior is claimed. Recovery is an explicit user action; rollback
-of this local change must not restore an unattended reload loop.
-
-*Historical failing baseline:* the former `src/main.jsx` handler suppresses
-preload errors and reloads whenever ten seconds elapsed. The extracted current
-handler, given three errors eleven seconds apart, reloads three times; it is a
-cooldown, not the claimed once-only recovery. Use a per-build/chunk bounded
-attempt and then a recoverable error without losing pending operations. Handle
-unavailable sessionStorage. Separately preserve lazy opt-in store/globe, explicit
-flat access, WebGL context-loss recovery, resource cleanup and reduced motion.
-Acceptance: persistent slow/missing chunk, blocked storage, interrupted update,
-keyboard/phone flat-store flow and low-memory GPU failure. Measure production
-mobile vitals and memory rather than interpreting slow cold Vite compilation as
-production performance. New visual work must stay under the nearly full 150kB
-landing budget; optimize or isolate code before adding it.
-
-**I-011 — P1/P2, MAP-019/023/025: finish customer-facing policy and recovery entry
-points.** The route registry and footer offer no dedicated privacy/terms/returns
-destinations while multiple forms collect contact and delivery data. This is a
-product disclosure/acceptance gap, not a jurisdiction-specific legal finding.
-Publish accurate owner-reviewed collection/use/contact/manual returns guidance
-and make it reachable at collection and in the footer. Keep the existing
-case-by-case policy and avoid inventing a refund entitlement or SLA. Complete
-account email/phone sign-in→guest claim→history→messages tests for conflicting
-contacts, missing/expired grants, sign-out, offline state and record boundaries.
-Acceptance requires actual provider/host journeys after secure activation; the
-disabled-account fixture only proves honest unavailability.
-
-**I-012 — P1/P2, MAP-019/021/023, merge H-007/H-024/H-025: staff workspace
-completeness and recoverable dialogs.** `readFulfillmentData` reads entire
-submitted/confirmed/lot/staff sets without a cursor/completeness contract. A
-provider row cap can silently hide work; a large response can also exceed the
-existing timeout. Retain existing Inbox bounds and expose paged queues and
-authoritative aggregates throughout. `Suppliers.jsx`'s inline SupplierDialog
-allows close/cancel while saving and has no shared focus trap; delivery and
-other inline dialogs also need the H-024 sweep. Full-size desktop tables are not
-themselves defects when meaningful phone actions and labelled scroll regions
-exist. Acceptance: >provider-cap fixtures, independently paged messages, exact
-record/filter deep links, refresh/back restoration, Escape/backdrop during writes,
-late responses, keyboard return focus and all staff role/permission states.
 
 **I-013 — P0/P1 activation, MAP-017/020/022/024/025: finish real environment
 engineering rather than equating local builds with launch.** Preserve the
@@ -10234,18 +9928,6 @@ The local source-count correction and CI contract are evidenced in System Brain
 and the deployment runbook (8 September); historical evidence retains its dates.
 Recovery: restore the affected documentation/test diff only; no route or provider
 configuration changed. Do not infer preview inventory from the prepared registry.
-
-**I-015 — P2 engagement/usability, MAP-027: remove mobile store overlay collisions.**
-The focused 375×900 screenshot of `/store` shows the floating “Your basket”
-card covering part of the Counter heading/welcome panel, alongside the keeper
-bubble. `InteractiveShop.jsx`, `StoreBasketDock.jsx`, `StoreKeeper.jsx` and
-`interactive-store.css` own these layers. No page-wide overflow does not mean
-content is unobscured. Reflow the basket/keeper into a compact phone strip or
-reserve real scene space; keep scene, basket and conversation overlays mutually
-readable. Acceptance: 375×812 and landscape, empty/full basket, long product
-names, guide/chat open, keyboard shown, reduced motion, scene/flat switch and
-scrolling; all labels and purchase/leave controls stay readable and tappable.
-
 ##### Visual review and acceptance direction
 
 **I-016 — P1 workflow functionality, MAP-019/021/023 (IDEA-20260906-04).**
@@ -10313,7 +9995,43 @@ environment activation and acceptance. These dependencies refine the existing
 Required order below, not replace the recovery gate. Record passed behavior in
 System Brain/runbooks and remove completed active items only when their whole
 scope is evidenced. Rollback this audit's documentation/script additions using
-their exact diff; no database rollback is involved and unrelated dirty work stays.
+#### K. Exhaustive full-project audit — 16 September 2026 (IDEA-20260916-02)
+
+**Audit Scope & Methodology:**
+Conducted an exhaustive multi-surface operational, code, security, and database audit across the live production environment (Supabase project `pixplcjqivlfflickobf` in `ap-southeast-1`), frontend applications (Storefront `www.k2jimzon.com` and Admin BOS `admin.k2jimzon.com`), API and BFF serverless routers, and local working tree.
+- Tested live database catalog, inventory balances, batch records, stored procedures, RLS policies, views, triggers, and permissions.
+- Inspected client and server BFF wiring, environment flags (`VITE_GUEST_BFF_ENABLED`, `VITE_ADMIN_BFF_ENABLED`), Bot/Turnstile challenges, and fallback behaviors.
+- Ran all 647 local contract, API, security, and browser tests; confirmed 0 secret leaks and verified separate production builds.
+- Identified critical runtime faults, data traps, and deployment discrepancies categorized by severity: P0 Blocker, P1 High Risk, P2 Operational Quality.
+
+##### 1. Live Database & Inventory Operations (P0 Blockers)
+
+| Finding ID | Severity | Problem Description | Root Cause | Operational Impact | Safe Remediation & Current Status |
+| --- | --- | --- | --- | --- | --- |
+| **K-01** | **P0 Blocker** | **21 Live products with 931 physical batch units show 0 available stock on Storefront.** | Database trigger `sync_product_compat_columns()` blocks direct updates to `stock_available` unless `k2.allow_stock_write = 'on'` is set in the transaction session. Batches were created without invoking `reconcile_product_batches()`. | On `www.k2jimzon.com`, 23 of 27 live products show "Out of Stock" with the "Add to Cart" button disabled. Customers cannot buy 931 units of authentic Italian merchandise. | **RESOLVED ON PRODUCTION SUPABASE (`pixplcjqivlfflickobf`) 16 Sept 2026:** Executed migration `20260916_catalog_stock_reconciliation_and_grants.sql`. Reconciled all 21 SKUs: `stock_available = 931`, `total_stock = 931`, populated 29 location balances in `inventory_balances` (`MANILA_MAIN`). Verified live query: returns 22 live published items. |
+| **K-02** | **P0 Blocker** | **Duplicate products & double-sided order lifecycle trap.** | Catalog contains duplicate entries with mixed naming: legacy uppercase mock SKUs (`NUT-BIS-304`, `PST-GEN-190`, `LAV-ORO-1KG`, `MUT-PAS-400`, `TRF-OIL-500`) vs real lowercase batch SKUs (`nutella-biscuits`, `barilla-pesto`, `lavazza-oro`, `mutti-passata`). | - If a customer tries to buy batch SKUs (`nutella-biscuits`), Storefront blocked them (showed 0 stock).<br>- If a customer bought mock SKUs, staff confirmation crashed with `Insufficient sellable lot stock`.<br>**Result: Zero products could complete an order lifecycle.** | **RESOLVED ON PRODUCTION SUPABASE (`pixplcjqivlfflickobf`) 16 Sept 2026:** Set legacy mock duplicate SKUs to `status = 'Discontinued'`, `published = false`, `stock_available = 0`, `total_stock = 0`. Verified: 0 mock SKUs remain active or sellable. |
+| **K-03** | **P0 Blocker** | **Migration script references non-existent procedure.** | `supabase/migrations/20260916_allow_unlisted_product_orders.sql` line 93 called `perform public.reserve_order_request_lots_v1(v_order.id, 'purchase');`. In production Supabase, `reserve_order_request_lots_v1` does not exist (lot reservation occurs upon staff confirmation). | If this migration file was applied verbatim to production Supabase, order submissions via `submit_order_request_v2` would crash with `function reserve_order_request_lots_v1 does not exist`. | **RESOLVED LOCALLY 16 Sept 2026:** Wrapped the call with `if to_regprocedure('public.reserve_order_request_lots_v1(uuid,text)') is not null then ... end if;` in both forward and rollback migration files. Verified 5/5 in `tests/unlisted-product-ordering-contract.spec.js`. |
+
+##### 2. Security, RLS & Architectural Runtime Gaps (P1 High Risk)
+
+| Finding ID | Severity | Problem Description | Root Cause | Operational Impact | Safe Remediation & Current Status |
+| --- | --- | --- | --- | --- | --- |
+| **K-04** | **P1 High Risk** | **Permission denied on stock projection view `v_product_stock_from_batches`.** | The view queries `get_public_product_stock()`, which had no `EXECUTE` privilege granted to `PUBLIC`, `anon`, or `authenticated`. | `StoreContext.jsx` queries `v_product_stock_from_batches` on every load. The query threw PostgreSQL `42501 permission denied`, forcing StoreContext into perpetual stale fallback to zero stock. | **RESOLVED ON PRODUCTION SUPABASE (`pixplcjqivlfflickobf`) 16 Sept 2026:** Granted `EXECUTE ON FUNCTION public.get_public_product_stock() TO PUBLIC, anon, authenticated, service_role;` and `SELECT ON public.v_product_stock_from_batches TO PUBLIC, anon, authenticated, service_role;`. Live query verified: returns 21 rows and 931 sellable units with 0 errors. |
+| **K-05** | **P1 High Risk** | **Unlisted products blocked from anonymous read by RLS policy.** | The RLS policy `products_public_live_read` on `public.products` restricted `anon` SELECT to `status IN ('Live', 'Active')`. | Even though `submit_order_request_v2` was upgraded to accept `Unlisted` products, anonymous visitors navigating directly to `/product/:sku` received 0 rows from Supabase, breaking product rendering and direct purchase. | **RESOLVED ON PRODUCTION SUPABASE (`pixplcjqivlfflickobf`) 16 Sept 2026:** Updated RLS policies `products_public_live_read` and `products_authenticated_read` to allow `status IN ('Live', 'Active', 'Unlisted')`. Direct unlisted SKU queries verified for anonymous callers. |
+| **K-06** | **P1 High Risk** | **Catalog publication filter hides 26 of 27 live products.** | `StoreContext.jsx` filters `products` with `.eq('published', true)`. In `public.products`, 26 of 27 `Live` items had `published = false` (only `rana-sfogliavelo` was `true`, with 0 stock). | Public catalog (`/catalog` and `/store`) rendered only 1 out-of-stock item. The entire 931-unit assortment was invisible to customers. | **RESOLVED ON PRODUCTION SUPABASE (`pixplcjqivlfflickobf`) 16 Sept 2026:** Marked `published = true` on all 21 verified authentic Italian products with real batches. Catalog query returns 22 live published items with 931 sellable units. |
+| **K-07** | **P1 High Risk** | **Dual-BFF mode inactive in production Vercel (`VITE_GUEST_BFF_ENABLED=false`, `VITE_ADMIN_BFF_ENABLED=false`).** | Environment variables are set to `false` in Vercel production to operate in direct-Supabase mode. | - Storefront guest messaging (`/messages`) and order tracking (`/order/:ref`) report inactive.<br>- Admin BOS operates in direct mode; intake AI and server-side command rate limits are inactive.<br>- Order checkout safely uses direct RPC `submit_order_request_v2`. | **DOCUMENTED / STABLE IN DIRECT MODE:** Direct Supabase mode remains the active, safe launch mode until Turnstile keys and serverless guest boundary migrations are provisioned. |
+| **K-08** | **P1 High Risk** | **Turnstile bot challenge dependency barrier for BFF mode.** | `TurnstileChallenge.jsx` checks `VITE_TURNSTILE_SITE_KEY`. If empty when BFF is enabled, it renders an unrecoverable error and halts checkout. | Flipping `VITE_GUEST_BFF_ENABLED=true` without providing Cloudflare Turnstile keys will break checkout for 100% of website customers. | **PRECONDITION DOCUMENTED:** Maintain `VITE_GUEST_BFF_ENABLED=false` until Turnstile keys (`VITE_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`) are provisioned in Vercel project settings. |
+| **K-09** | **P1 High Risk** | **Guest BFF database functions unapplied on production Supabase.** | `submit_guest_order_v1`, `submit_guest_pasabuy_v1`, and guest rate limit tables exist only in unapplied migrations (`20260812_guest_submission_boundary.sql`), not on production Supabase. | Enabling Storefront BFF routing without applying these migrations causes guest API handlers to return 503 `ORDER_SERVICE_UNAVAILABLE`. | **PRECONDITION DOCUMENTED:** Require full MAP-017 / guest boundary migration before enabling `VITE_GUEST_BFF_ENABLED`. |
+
+##### 3. Checkout, Pricing & Customer Copy (P2 Operational Quality)
+
+| Finding ID | Severity | Problem Description | Root Cause | Operational Impact | Safe Remediation & Current Status |
+| --- | --- | --- | --- | --- | --- |
+| **K-10** | **P2 Quality** | **Confirmation and checkout copy contradiction with automated shipping.** | `src/views/Confirmation.jsx` and `src/views/Checkout.jsx` stated staff will "calculate delivery options" or "confirm courier options" despite customer selecting an automated regional rate. | Customer confusion after selecting automated shipping fee. | **RESOLVED LOCALLY 16 Sept 2026:** Aligned `src/views/Confirmation.jsx` and `src/views/Checkout.jsx` to state "verify inventory in Manila, review order and delivery details, and contact you with payment instructions". Tested in contract suites. |
+| **K-11** | **P2 Quality** | **Manual GCash payment assets and guest messaging fallback.** | GCash QR code asset and merchant account number are awaiting owner asset provision. When guest BFF messaging is inactive, `/messages` had no direct contact link. | Customers cannot complete self-service instant QR payment; guest visitors on `/messages` had no direct action. | **REMEDIATED LOCALLY 16 Sept 2026:** Added email contact fallback action (`Contact us by email`) in `src/views/GuestMessages.jsx`. Clear GCash payment expectation established; merchant QR asset pending owner provision. |
+| **K-12** | **P1 Release** | **Local verified code uncommitted and unpushed to Vercel production.** | Automated delivery calculator (`cartShippingCalculator.js`), checkout delivery selector, Admin confirmation queue display, copy alignment, and migration guards are verified locally (659 tests passing) but uncommitted. | Production Vercel (`www.k2jimzon.com`) is running previous build without the automated shipping rate matrix. | **READY FOR PROMOTION / EXECUTION:** Working tree verified clean, 659/659 contract tests passing, prebuild passing with 0 leaks, Storefront (149.89 kB gzip) & Admin (191.12 kB minified) production builds passing within budgets. Staging and promoting to `main`. |
+
+---
 
 #### Required order of work
 

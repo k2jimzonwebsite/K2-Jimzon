@@ -38,6 +38,8 @@ for (const action of ['create', 'activate', 'pause', 'archive']) {
       await dialog.getByLabel('Reason for creating this promotion').fill('Owner approved the launch promotion')
     } else await dialog.getByLabel('Decision reason').fill('Owner reviewed this promotion decision')
     await dialog.getByRole('button', { name: action === 'create' ? 'Save coupon' : `Confirm ${action}`, exact: true }).click()
+    // Archive takes two deliberate clicks; the first only arms it.
+    if (action === 'archive') await dialog.getByRole('button', { name: 'Click again to archive', exact: true }).click()
     await expect.poll(() => calls.length).toBe(1)
     for (const field of await dialog.locator('input, select, textarea').all()) await expect(field).toBeDisabled()
     await expect(dialog.getByRole('button', { name: 'Cancel', exact: true })).toBeDisabled()
@@ -142,4 +144,23 @@ test('coupon actor change discards late completion and the old form', async ({ p
   await expect(dialog).toBeVisible()
   await expect(dialog.getByLabel('Coupon code', { exact: true })).toHaveValue('')
   await expect(page.getByText(/Coupon NEWCODE10 saved/)).toHaveCount(0)
+})
+
+test('archive requires a second deliberate confirmation', async ({ page }) => {
+  const calls = []
+  await page.route('https://**/*', route => route.abort())
+  await page.route('**/api/admin/coupons**', async route => {
+    if (route.request().method() === 'GET') return route.fulfill({ json: { ok: true, data: { coupons: [coupon] } } })
+    calls.push(route.request().postDataJSON())
+    return route.fulfill({ json: { ok: true } })
+  })
+  await page.goto('/tests/fixtures/payment-harness.html?coupons=1')
+  await page.getByRole('button', { name: 'Archive', exact: true }).filter({ visible: true }).click()
+  const dialog = page.getByRole('dialog')
+  await dialog.getByLabel('Decision reason').fill('Owner approved archiving this promotion')
+  await dialog.getByRole('button', { name: 'Confirm archive', exact: true }).click()
+  expect(calls).toHaveLength(0)
+  await dialog.getByRole('button', { name: 'Click again to archive', exact: true }).click()
+  expect(calls).toHaveLength(1)
+  await expect(dialog).toHaveCount(0)
 })

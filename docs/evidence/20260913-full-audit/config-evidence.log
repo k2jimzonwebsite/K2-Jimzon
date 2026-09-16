@@ -1,0 +1,62 @@
+{
+  "exportedAt": "2026-09-13T03:27:29.777985",
+  "functions": [
+    [
+      "public.handle_new_user()",
+      {
+        "owner": "postgres",
+        "grants": [],
+        "arguments": "",
+        "signature": "public.handle_new_user()",
+        "return_type": "trigger",
+        "schema_name": "public",
+        "function_name": "handle_new_user",
+        "references_aal2": false,
+        "raises_exception": false,
+        "security_definer": true,
+        "search_path_config": "search_path=public",
+        "references_auth_uid": false,
+        "references_is_admin": false,
+        "references_is_staff": false,
+        "references_admin_role": false
+      }
+    ],
+    [
+      "public.process_audit_log()",
+      {
+        "owner": "postgres",
+        "grants": [],
+        "arguments": "",
+        "signature": "public.process_audit_log()",
+        "return_type": "trigger",
+        "schema_name": "public",
+        "function_name": "process_audit_log",
+        "references_aal2": false,
+        "raises_exception": false,
+        "security_definer": true,
+        "search_path_config": "search_path=public, pg_temp",
+        "references_auth_uid": true,
+        "references_is_admin": false,
+        "references_is_staff": false,
+        "references_admin_role": false
+      }
+    ]
+  ]
+}
+node:fs:441
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open 'C:\Users\jerze\K2 JImzon\vercel.json'
+    at Object.readFileSync (node:fs:441:20)
+    at file:///C:/Users/jerze/K2%20JImzon/.tools/full-audit-20260913/config-evidence.mjs:3:137
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:633:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\jerze\\K2 JImzon\\vercel.json'
+}
+
+Node.js v24.16.0

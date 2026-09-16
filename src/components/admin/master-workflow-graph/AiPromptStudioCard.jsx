@@ -19,10 +19,24 @@ export default function AiPromptStudioCard() {
   const productName = customProduct.trim() || activeTemplate.exampleItem
   const finalPrompt = activeTemplate.promptFormula.replace(/\[PRODUCT NAME\]/g, productName)
 
-  const copyToClipboard = (text, key) => {
-    navigator.clipboard.writeText(text)
-    setCopiedKey(key)
-    setTimeout(() => setCopiedKey(''), 2000)
+  const copyToClipboard = async (text, key) => {
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text)
+      } else {
+        const textarea = document.createElement('textarea')
+        textarea.value = text
+        document.body.appendChild(textarea)
+        textarea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textarea)
+      }
+      setCopiedKey(key)
+      setTimeout(() => setCopiedKey(''), 2000)
+    } catch {
+      setCopiedKey(key)
+      setTimeout(() => setCopiedKey(''), 2000)
+    }
   }
 
   return (
@@ -57,11 +71,12 @@ export default function AiPromptStudioCard() {
             <button
               key={tpl.key}
               type="button"
+              aria-pressed={tpl.key === selectedCategory}
               onClick={() => {
                 setSelectedCategory(tpl.key)
                 setCustomProduct('')
               }}
-              className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex min-h-11 items-center gap-2 rounded-lg border px-3 py-2 text-xs font-semibold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 ${
                 tpl.key === selectedCategory
                   ? 'border-rose-400 bg-rose-500/20 text-white shadow-sm'
                   : 'border-white/10 bg-white/5 text-white/70 hover:border-white/25 hover:bg-white/10 hover:text-white'
@@ -75,10 +90,11 @@ export default function AiPromptStudioCard() {
 
       {/* Product Name Input */}
       <div className="mt-5">
-        <label className="block text-xs font-semibold text-white/70 mb-1.5">
+        <label htmlFor="ai-prompt-product-name" className="block text-xs font-semibold text-white/70 mb-1.5">
           Italian Product Name / Variant
         </label>
         <input
+          id="ai-prompt-product-name"
           type="text"
           value={customProduct}
           onChange={(e) => setCustomProduct(e.target.value)}
@@ -99,10 +115,11 @@ export default function AiPromptStudioCard() {
             </span>
             <button
               type="button"
+              aria-label="Copy primary photorealistic prompt"
               onClick={() => copyToClipboard(finalPrompt, 'prompt')}
-              className="flex items-center gap-1.5 rounded-md border border-rose-400/30 bg-rose-500/20 px-2.5 py-1 text-xs font-bold text-rose-200 transition-all hover:bg-rose-500/30 active:scale-95 cursor-pointer"
+              className="flex min-h-11 items-center gap-1.5 rounded-lg border border-rose-400/30 bg-rose-500/20 px-3 py-2 text-xs font-bold text-rose-200 transition-all hover:bg-rose-500/30 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
             >
-              {copiedKey === 'prompt' ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
+              {copiedKey === 'prompt' ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
               <span>{copiedKey === 'prompt' ? 'Copied!' : 'Copy Prompt'}</span>
             </button>
           </div>
@@ -119,10 +136,11 @@ export default function AiPromptStudioCard() {
             </span>
             <button
               type="button"
+              aria-label="Copy mandatory negative prompt"
               onClick={() => copyToClipboard(activeTemplate.negativePrompt, 'negative')}
-              className="flex items-center gap-1.5 rounded-md border border-amber-400/30 bg-amber-500/20 px-2.5 py-1 text-xs font-bold text-amber-200 transition-all hover:bg-amber-500/30 active:scale-95 cursor-pointer"
+              className="flex min-h-11 items-center gap-1.5 rounded-lg border border-amber-400/30 bg-amber-500/20 px-3 py-2 text-xs font-bold text-amber-200 transition-all hover:bg-amber-500/30 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
             >
-              {copiedKey === 'negative' ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
+              {copiedKey === 'negative' ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
               <span>{copiedKey === 'negative' ? 'Copied!' : 'Copy Negative Prompt'}</span>
             </button>
           </div>

@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { useEffect, useState, useMemo } from 'react'
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import BeforeAfterSlider from '../components/BeforeAfterSlider'
-import CatalogGrid from '../components/CatalogGrid'
+import ProductCard from '../components/ProductCard'
 import ProductPassport from '../components/ProductPassport'
 import ProductKnowledge from '../components/ProductKnowledge'
 import { UNAVAILABLE_TEXT } from '../lib/productKnowledge'
 import { GhostButton, RedButton, StockPill, TrustBadge, Kicker, QuantityStepper } from '../components/ui/bits'
+import { ArrowIcon } from '../components/ui/icons'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 import { productStock } from '../lib/cartInventory'
@@ -15,12 +16,13 @@ export default function MasterProduct() {
   const { productId, getProduct, addToCart, setCartOpen, isWholesale, lines, go, requestPasabuyItem, askStaffAboutProduct, loading } = useStore()
   const [qty, setQty] = useState(1)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const reducedMotion = useReducedMotion()
 
   useEffect(() => {
     setQty(1)
     setCurrentSlide(0)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [productId])
+    window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' })
+  }, [productId, reducedMotion])
 
   const product = getProduct(productId)
 
@@ -71,11 +73,16 @@ export default function MasterProduct() {
     // Additional images
     if (product.gallery && product.gallery.length > 0) {
       product.gallery.forEach(imgSrc => {
-         items.push({ type: 'image', src: imgSrc })
+        if (imgSrc && !items.some(item => item.src === imgSrc)) items.push({ type: 'image', src: imgSrc })
       })
     } else {
-      if (product.img && items.length > 0) items.push({ type: 'image', src: product.img })
-      if (product.afterImage && items.length > 0) items.push({ type: 'image', src: product.afterImage })
+      // No gallery array: make sure the primary and after images appear
+      // exactly once even though the primary was already added above.
+      for (const imgSrc of [product.img, product.afterImage]) {
+        if (imgSrc && items.length > 0 && !items.some(item => item.src === imgSrc)) {
+          items.push({ type: 'image', src: imgSrc })
+        }
+      }
     }
     
     // Fallback if no images
@@ -85,15 +92,17 @@ export default function MasterProduct() {
     return items
   })()
 
+  const activeSlide = Math.min(currentSlide, gallery.length - 1)
+
   return (
     <main className="store-section max-w-6xl pb-24 pt-6 md:pb-20 md:pt-10">
       
       {/* Breadcrumbs / Back */}
       <div className="mb-8 flex items-center justify-between border-b border-line pb-5">
-        <nav className="flex items-center gap-2 text-sm text-navy-faint font-medium">
-          <button className="hover:text-navy transition-colors cursor-pointer" onClick={() => go('home')}>Home</button>
+        <nav className="flex flex-wrap items-center gap-2 text-sm text-navy-faint font-medium">
+          <button className="inline-flex min-h-11 min-w-11 shrink-0 items-center hover:text-navy transition-colors cursor-pointer" onClick={() => go('home')}>Home</button>
           <span>/</span>
-          <button className="hover:text-navy transition-colors cursor-pointer" onClick={() => go('catalog')}>Catalog</button>
+          <button className="inline-flex min-h-11 min-w-11 shrink-0 items-center hover:text-navy transition-colors cursor-pointer" onClick={() => go('catalog')}>Catalog</button>
           <span>/</span>
           <span className="text-navy">{product.name}</span>
         </nav>
@@ -108,26 +117,26 @@ export default function MasterProduct() {
             <div className="relative z-10 h-full w-full overflow-hidden rounded-2xl border border-line bg-shell/60">
               <AnimatePresence>
                 <motion.div
-                  key={currentSlide}
+                  key={activeSlide}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: reducedMotion ? 0.01 : 0.3 }}
                   className="absolute inset-0 w-full h-full"
                 >
-                  {gallery[currentSlide].type === 'slider' ? (
+                  {gallery[activeSlide].type === 'slider' ? (
                     <BeforeAfterSlider product={product} />
-                  ) : gallery[currentSlide].type === 'video' ? (
+                  ) : gallery[activeSlide].type === 'video' ? (
                     <video 
-                      src={gallery[currentSlide].src} 
+                      src={gallery[activeSlide].src} 
                       controls 
                       preload="metadata"
                       className="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal"
                     />
                   ) : (
                     <img 
-                      src={gallery[currentSlide].src} 
-                      alt={`${product.name} - View ${currentSlide + 1}`} 
+                      src={gallery[activeSlide].src} 
+                      alt={`${product.name} - View ${activeSlide + 1}`} 
                       onError={applyImageFallback}
                       className="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal" 
                     />
@@ -146,23 +155,20 @@ export default function MasterProduct() {
                   onClick={() => setCurrentSlide(i)}
                   className="flex h-11 w-11 items-center justify-center rounded-full cursor-pointer"
                   aria-label={`Go to slide ${i + 1}`}
-                ><span className={`h-2 w-2 rounded-full transition-[transform,background-color] duration-150 ${i === currentSlide ? 'scale-125 bg-crimson' : 'bg-navy/25'}`} /></button>
+                ><span className={`h-2 w-2 rounded-full transition-[transform,background-color] duration-150 ${i === activeSlide ? 'scale-125 bg-crimson' : 'bg-navy/25'}`} /></button>
               ))}
             </div>
           )}
 
-          {/* Product Tabs (Ingredients & Instructions) underneath the image */}
-          <ProductTabs product={product} />
-
-          {/* MAP-027: approved product knowledge, shared with the Interactive Shop. */}
-          <ProductKnowledge product={product} onAskStaff={askStaffAboutProduct} />
         </div>
 
         {/* Right Column: Product Info */}
-        <div className="flex flex-col lg:pt-2">
+        <div className="flex min-w-0 flex-col lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:pt-2">
           <div className="flex flex-wrap items-center gap-2 mb-4 shrink-0">
-            <TrustBadge>Origin: {product.country_of_origin || product.origin || 'Italy'}</TrustBadge>
-            <StockPill stock={product.stock_available || product.stock} />
+            {(product.country_of_origin || (product.origin && !product.origin.startsWith('Shopee'))) && (
+              <TrustBadge>Origin: {product.country_of_origin || product.origin}</TrustBadge>
+            )}
+            <StockPill stock={product.stock_available ?? product.stock} />
             {(product.subcategory || product.category_id) && (
               <span className="rounded-full bg-shell border border-line/50 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-navy-soft">
                 {product.subcategory || product.category_id}
@@ -184,6 +190,55 @@ export default function MasterProduct() {
                 </span>
               </>
             )}
+          </div>
+
+          {/* MAP-028 I-006: Keep allergen/variant warnings needed to buy safely visible before cart actions */}
+          {product.allergens && (
+            <div className="mt-4 flex items-center gap-2 rounded-lg border border-amber-600/30 bg-amber-50 dark:bg-amber-950/20 px-3.5 py-2.5 text-xs font-medium text-amber-900 dark:text-amber-200" role="alert">
+              <span className="shrink-0 font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">Allergen Notice:</span>
+              <span>Contains {product.allergens}</span>
+            </div>
+          )}
+
+          {/* Add to Cart Actions - positioned directly after price and safety notices */}
+          <div className="z-10 mt-6 shrink-0 rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-5 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              {!isOutOfStock && !availabilityUnknown && <QuantityStepper value={qty} onChange={setQty} max={remaining} size="md" />}
+              <span className="text-[13px] font-medium text-navy-soft">
+                {availabilityUnknown
+                  ? 'Live availability could not be confirmed. Adding this product is paused until stock is known.'
+                  : isOutOfStock
+                  ? 'Currently out of stock in Manila. You can request this item via Pasabuy.' 
+                  : (canAdd ? (product.inside || 'In stock and ready for Manila delivery.') : 'All available stock is already in your cart.')}
+              </span>
+            </div>
+
+            <div>
+              {availabilityUnknown ? (
+                <RedButton className="mt-5 w-full py-3.5 text-base font-bold shadow-sm" disabled>
+                  Stock check pending
+                </RedButton>
+              ) : isOutOfStock ? (
+                <button
+                  className="mt-5 min-h-12 w-full rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-[transform,opacity] duration-150 hover:bg-crimson-deep active:scale-[0.97] cursor-pointer shadow-sm"
+                  onClick={() => requestPasabuyItem({
+                    item: product.name,
+                    notes: `Requested from out-of-stock product page (SKU: ${product.sku || product.id})`,
+                    qty,
+                  })}
+                >
+                  Request via Pasabuy
+                </button>
+              ) : (
+                <RedButton
+                  className="mt-5 w-full py-3.5 text-base font-bold shadow-sm"
+                  onClick={() => { if (addToCart(product.id, qty).ok) setCartOpen(true) }}
+                  disabled={!canAdd}
+                >
+                  {canAdd ? `Add to cart · ${peso(price * qty)}` : 'Stock limit reached'}
+                </RedButton>
+              )}
+            </div>
           </div>
 
           {/* MAP-027 honesty rule: an unsupported field publishes no claim. The
@@ -228,7 +283,7 @@ export default function MasterProduct() {
                 <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Barcode</span><span className="w-2/3">{product.barcode}</span></div>
               )}
               {!product.ingredients && !product.net_weight && !product.brand_id && (
-                <div className="p-3.5 text-center text-navy-faint italic">Specifications verified upon batch arrival</div>
+                <div className="p-3.5 text-center text-navy-faint italic">Product specifications are not available yet.</div>
               )}
             </div>
           </div>
@@ -247,60 +302,22 @@ export default function MasterProduct() {
             </div>
           )}
 
-          <div className="flex-1" />
 
-          {/* Add to Cart Actions */}
-          <div className="z-10 mt-9 shrink-0 rounded-xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] p-5 shadow-sm">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              {!isOutOfStock && !availabilityUnknown && <QuantityStepper value={qty} onChange={setQty} max={remaining} size="md" />}
-              <span className="text-[13px] font-medium text-navy-soft">
-                {availabilityUnknown
-                  ? 'Live availability could not be confirmed. Adding this product is paused until stock is known.'
-                  : isOutOfStock
-                  ? 'Currently out of stock in Manila. You can request this item via Pasabuy.' 
-                  : (canAdd ? (product.inside || 'In stock and ready for Manila delivery.') : 'All available stock is already in your cart.')}
-              </span>
-            </div>
 
-            <div>
-              {availabilityUnknown ? (
-                <RedButton className="mt-5 w-full py-3.5 text-base font-bold shadow-sm" disabled>
-                  Stock check pending
-                </RedButton>
-              ) : isOutOfStock ? (
-                <button
-                  className="mt-5 min-h-12 w-full rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-[transform,opacity] duration-150 hover:bg-crimson-deep active:scale-[0.97] cursor-pointer shadow-sm"
-                  onClick={() => requestPasabuyItem({
-                    item: product.name,
-                    notes: `Requested from out-of-stock product page (SKU: ${product.sku || product.id})`,
-                    qty,
-                  })}
-                >
-                  Request via Pasabuy
-                </button>
-              ) : (
-                <RedButton
-                  className="mt-5 w-full py-3.5 text-base font-bold shadow-sm"
-                  onClick={() => { if (addToCart(product.id, qty).ok) setCartOpen(true) }}
-                  disabled={!canAdd}
-                >
-                  {canAdd ? `Add to cart · ${peso(price * qty)}` : 'Stock limit reached'}
-                </RedButton>
-              )}
-            </div>
-          </div>
 
+
+        </div>
+        <div className="min-w-0 space-y-8 lg:col-start-1 lg:row-start-2">
+          {/* Product Tabs (Ingredients & Instructions) underneath the image */}
+          <ProductTabs product={product} />
+
+          {/* MAP-027: approved product knowledge, shared with the Interactive Shop. */}
+          <ProductKnowledge product={product} onAskStaff={askStaffAboutProduct} />
         </div>
       </div>
 
-      {/* Bottom Section: Explore the Catalog */}
-      <div className="mt-24 border-t border-line pt-12">
-        <div className="mb-10 text-center">
-          <Kicker className="mb-3 text-navy-soft">More to Discover</Kicker>
-          <h2 className="font-serif text-3xl font-semibold text-navy">Explore the Catalog</h2>
-        </div>
-        <CatalogGrid />
-      </div>
+      {/* Bottom Section: Related Provisions & Direct Catalog Browse */}
+      <RelatedProducts currentProduct={product} />
     </main>
   )
 }
@@ -309,6 +326,10 @@ function ProductTabs({ product }) {
   const { addBundleToCart, getProduct, setCartOpen } = useStore()
   const [activeTab, setActiveTab] = useState('ingredients');
   const [bundleError, setBundleError] = useState('')
+  const reducedMotion = useReducedMotion()
+  const tabTransition = { duration: reducedMotion ? 0.01 : 0.3 }
+  const tabEnter = reducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }
+  const tabExit = reducedMotion ? { opacity: 0 } : { opacity: 0, y: -10 }
 
   useEffect(() => {
     setActiveTab('ingredients')
@@ -319,13 +340,13 @@ function ProductTabs({ product }) {
     <div className="w-full">
       <div className="flex gap-4 border-b border-line/50 mb-4">
         <button 
-          className={`pb-2 text-sm font-semibold transition-colors cursor-pointer ${activeTab === 'ingredients' ? 'text-navy border-b-2 border-navy' : 'text-navy-soft hover:text-navy'}`}
+          className={`min-h-11 px-2 text-sm font-semibold transition-colors cursor-pointer ${activeTab === 'ingredients' ? 'text-navy border-b-2 border-navy' : 'text-navy-soft hover:text-navy'}`}
           onClick={(e) => { e.stopPropagation(); setActiveTab('ingredients'); }}
         >
           Ingredients
         </button>
         <button 
-          className={`pb-2 text-sm font-semibold transition-colors cursor-pointer ${activeTab === 'instructions' ? 'text-navy border-b-2 border-navy' : 'text-navy-soft hover:text-navy'}`}
+          className={`min-h-11 px-2 text-sm font-semibold transition-colors cursor-pointer ${activeTab === 'instructions' ? 'text-navy border-b-2 border-navy' : 'text-navy-soft hover:text-navy'}`}
           onClick={(e) => { e.stopPropagation(); setActiveTab('instructions'); }}
         >
           Instructions
@@ -337,10 +358,10 @@ function ProductTabs({ product }) {
           {activeTab === 'ingredients' ? (
             <motion.div 
               key="ingredients"
-              initial={{ opacity: 0, y: 10 }}
+              initial={tabEnter}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              exit={tabExit}
+              transition={tabTransition}
             >
               <h4 className="font-serif text-lg text-navy mb-4">What you'll need</h4>
               {product.guide?.ingredients?.length > 0 ? (
@@ -378,16 +399,16 @@ function ProductTabs({ product }) {
                   )}
                 </>
               ) : (
-                <p className="text-sm text-navy-soft italic">Ingredients verified on label</p>
+                <p className="text-sm text-navy-soft italic">Ingredient details are not available yet. Check the package or ask K2 staff.</p>
               )}
             </motion.div>
           ) : (
             <motion.div 
               key="instructions"
-              initial={{ opacity: 0, y: 10 }}
+              initial={tabEnter}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              exit={tabExit}
+              transition={tabTransition}
             >
               <h4 className="font-serif text-lg text-navy mb-4">How to prepare</h4>
               
@@ -415,12 +436,57 @@ function ProductTabs({ product }) {
               ) : product.usage_instructions ? (
                 <p className="text-sm leading-relaxed text-navy-soft whitespace-pre-line">{product.usage_instructions}</p>
               ) : (
-                <p className="text-sm text-navy-soft italic">Serving instructions available on package</p>
+                <p className="text-sm text-navy-soft italic">Preparation instructions are not available yet. Check the package or ask K2 staff.</p>
               )}
             </motion.div>
           )}
         </AnimatePresence>
       </div>
     </div>
+  )
+}
+
+function RelatedProducts({ currentProduct }) {
+  const { listedProducts, go } = useStore()
+
+  const related = useMemo(() => {
+    if (!listedProducts || !currentProduct) return []
+    const others = listedProducts.filter(p => (p.sku || p.id) !== (currentProduct.sku || currentProduct.id))
+    const sameSubcategory = others.filter(p => currentProduct.subcategory && p.subcategory === currentProduct.subcategory)
+    const sameCategory = others.filter(p => p.category === currentProduct.category && !sameSubcategory.includes(p))
+    const rest = others.filter(p => !sameSubcategory.includes(p) && !sameCategory.includes(p))
+
+    return [...sameSubcategory, ...sameCategory, ...rest].slice(0, 4)
+  }, [listedProducts, currentProduct])
+
+  if (!related.length) return null
+
+  return (
+    <section aria-labelledby="related-provisions-heading" className="mt-20 border-t border-line pt-12 md:mt-24 md:pt-16">
+      <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end md:mb-10">
+        <div>
+          <Kicker className="mb-2 text-crimson">Curated Pairing</Kicker>
+          <h2 id="related-provisions-heading" className="font-serif text-2xl font-semibold text-navy sm:text-3xl">
+            Related Italian Provisions
+          </h2>
+          <p className="mt-1 text-sm text-navy-soft">
+            Handpicked favorites from the same pantry category in our Manila inventory.
+          </p>
+        </div>
+        <button
+          onClick={() => go('catalog', { focusSelector: '#catalog-heading' })}
+          className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-4 py-2 text-sm font-bold text-navy shadow-sm transition-colors hover:border-crimson hover:text-crimson cursor-pointer"
+        >
+          <span>Browse full catalog</span>
+          <ArrowIcon size={15} />
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 min-[370px]:grid-cols-2 md:grid-cols-4">
+        {related.map(item => (
+          <ProductCard key={item.sku || item.id} product={item} compact />
+        ))}
+      </div>
+    </section>
   )
 }

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import {
-  consumeLoginAttempt, requestIp, readJson, requireAdminProject,
+  consumeLoginAttempt, requestHostname, requestIp, readJson, requireAdminProject,
   prepareActiveSession, requireAllowedOrigin, safeJson,
   setPendingCookie, setPreparedActiveSessionCookies,
 } from '../../../server/admin-bff/security.js'
@@ -60,7 +60,7 @@ export function createAdminLoginHandler(overrides = {}) {
           'Retry-After': String(durableAttempt.retryAfter),
         })
       }
-      if (!await verifyBot(botToken, requestIp(req), 'admin_auth')) {
+      if (!await verifyBot(botToken, requestIp(req), 'admin_auth', { hostname: requestHostname(req) })) {
         await record({ eventType:'bot_defense',reasonCode:'BOT_CHALLENGE_REQUIRED' },client)
         return safeJson(res, 403, { error: { code: 'BOT_CHALLENGE_REQUIRED' } })
       }

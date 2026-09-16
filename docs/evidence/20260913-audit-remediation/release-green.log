@@ -1,0 +1,16 @@
+
+Running 9 tests using 1 worker
+
+(node:20328) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\release-ci-contract.spec.js:8:1 › deployment configurations select the separately gated artifact scripts (12ms)
+  ok 2 tests\release-ci-contract.spec.js:18:1 › CI executes stock payment and final-Admin behavior in PostgreSQL (4ms)
+  ok 3 tests\release-ci-contract.spec.js:26:1 › CI authorization runner receives the same isolated database as the migration runner (3ms)
+  ok 4 tests\release-ci-contract.spec.js:34:1 › remote CI runs the complete local acceptance command without skipping protected Admin fixtures (24ms)
+  ok 5 tests\release-ci-contract.spec.js:77:1 › the shared Playwright server cannot be reused by a CI run (4ms)
+  ok 6 tests\release-ci-contract.spec.js:86:1 › selling fixtures wait for the observed slow CSS transform before starting browser assertions (23ms)
+  ok 7 tests\release-ci-contract.spec.js:94:1 › protected recovery journeys run only in their dedicated fixture environment (34ms)
+  ok 8 tests\release-ci-contract.spec.js:106:1 › every Playwright runner rejects accidental focused tests in CI (6ms)
+  ok 9 tests\release-ci-contract.spec.js:124:1 › Playwright web servers use cross-platform commands on the Ubuntu CI runner (5ms)
+
+  9 passed (856ms)

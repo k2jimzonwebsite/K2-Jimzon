@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { strictInteger } from '../shared-numeric.js'
 import { isAdminRole } from './supabase.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -11,7 +12,7 @@ export function validateSupplierCreate(body) {
       || !['name', 'contactEmail', 'leadTimeDays', 'reason'].every((key) => Object.hasOwn(body, key))) throw new Error('REQUEST_INVALID')
   const name = String(body.name || '').trim()
   const contactEmail = String(body.contactEmail || '').trim().toLowerCase()
-  const leadTimeDays = Number(body.leadTimeDays)
+  const leadTimeDays = strictInteger(body.leadTimeDays, 'REQUEST_INVALID', { min: 0, max: 365 })
   const reason = String(body.reason || '').trim()
   if (name.length < 2 || name.length > 120 || contactEmail.length > 254
       || (contactEmail && !EMAIL.test(contactEmail)) || !Number.isInteger(leadTimeDays)

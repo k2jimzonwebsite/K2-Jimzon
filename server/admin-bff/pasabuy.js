@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { strictNumeric } from '../shared-numeric.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const STATUS = new Set([
@@ -27,9 +28,7 @@ function uuid(value) {
 }
 
 function number(value, { min = 0, max }) {
-  const result = Number(value)
-  if (!Number.isFinite(result) || result < min || result > max) throw new Error('REQUEST_INVALID')
-  return result
+  return strictNumeric(value, 'REQUEST_INVALID', { min, max })
 }
 
 function timestamp(value, { future = false, maxFutureDays = 31 } = {}) {

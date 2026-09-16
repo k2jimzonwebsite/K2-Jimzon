@@ -1,5 +1,7 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { strictInteger } from '../shared-numeric.js'
+import { deriveCatalogOwnedStock, isAttributableCommitment, isUnresolvedAllocation } from '../../src/lib/ownedStock.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const DATE = /^\d{4}-\d{2}-\d{2}$/
@@ -42,8 +44,7 @@ function lot(value) {
     'id', 'boxCode', 'batchCode', 'quantity', 'expiryDate', 'landedDate',
     'hub', 'custodian', 'channel', 'pinned', 'status',
   ])
-  const quantity = Number(value.quantity)
-  if (!Number.isInteger(quantity) || quantity < 0 || quantity > 1_000_000) throw new Error('REQUEST_INVALID')
+  const quantity = strictInteger(value.quantity, 'REQUEST_INVALID', { min: 0, max: 1_000_000 })
   const status = text(value.status, { required: true, max: 30 })
   if (!STATUSES.has(status)) throw new Error('REQUEST_INVALID')
   const normalized = {
@@ -103,11 +104,66 @@ export async function readLotData(client, requestedSku = '') {
     if (products.error) throw new Error('LOTS_UNAVAILABLE')
     productNames = Object.fromEntries((products.data || []).map((item) => [item.sku, item.name || item.title || item.sku]))
   }
+
+  let reservations = []
+  if (skus.length) {
+    let resQuery = client.from('inventory_reservations')
+      .select('id,order_request_id,sku,batch_id,quantity,packed_quantity,status,expires_at,committed_at,committed_by,commit_cause,commit_reason,created_at')
+      .eq('status', 'active')
+    if (sku) {
+      resQuery = resQuery.eq('sku', sku)
+    } else {
+      resQuery = resQuery.in('sku', skus)
+    }
+    const resResult = await (typeof resQuery.limit === 'function' ? resQuery.limit(1000) : resQuery)
+    if (resResult.error) throw new Error('LOTS_UNAVAILABLE')
+    reservations = resResult.data || []
+  }
+
+  const orderIds = [...new Set(reservations.map((r) => r.order_request_id).filter(Boolean))]
+  const ordersMap = new Map()
+  if (orderIds.length > 0) {
+    const ordersQuery = client.from('order_requests')
+      .select('id,status,payment_status')
+      .in('id', orderIds)
+    const ordersResult = await (typeof ordersQuery.limit === 'function' ? ordersQuery.limit(1000) : ordersQuery)
+    if (ordersResult.error) throw new Error('LOTS_UNAVAILABLE')
+    for (const o of ordersResult.data || []) {
+      ordersMap.set(o.id, o)
+    }
+  }
+
+  const derivedStock = deriveCatalogOwnedStock({ batches: lots, reservations, orders: ordersMap })
+
+  const allocationsByBatch = {}
+  for (const r of reservations) {
+    const order = ordersMap.get(r.order_request_id)
+    const unresolved = isUnresolvedAllocation(r, order)
+    const entry = {
+      id: r.id,
+      order_request_id: r.order_request_id,
+      quantity: Number(r.quantity) || 0,
+      committed: isAttributableCommitment(r),
+      held: !isAttributableCommitment(r) && !unresolved,
+      unresolved: Boolean(unresolved),
+      unresolvedReason: unresolved?.reason || null,
+      committed_at: r.committed_at,
+      expires_at: r.expires_at,
+    }
+    ;(allocationsByBatch[r.batch_id] || (allocationsByBatch[r.batch_id] = [])).push(entry)
+  }
+
   return {
-    lots: lots.map((item) => ({ ...item, product_name: productNames[item.sku] || item.sku })),
+    lots: lots.map((item) => ({
+      ...item,
+      product_name: productNames[item.sku] || item.sku,
+      activeAllocations: allocationsByBatch[item.id] || [],
+    })),
+    derivedStock,
     asOf: new Date().toISOString(),
   }
 }
+
 
 export async function handleLotCommand(req, res, action) {
   if (req.method !== 'POST') return safeJson(res, 405, { error: { code: 'METHOD_NOT_ALLOWED' } }, { Allow: 'POST' })

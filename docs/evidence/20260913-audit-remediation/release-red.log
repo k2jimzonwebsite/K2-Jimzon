@@ -1,0 +1,134 @@
+
+Running 2 tests using 1 worker
+
+(node:22848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\release-ci-contract.spec.js:8:1 › deployment configurations select the separately gated artifact scripts (13ms)
+(node:21932) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\release-ci-contract.spec.js:18:1 › CI executes stock payment and final-Admin behavior in PostgreSQL (11ms)
+
+
+  1) tests\release-ci-contract.spec.js:8:1 › deployment configurations select the separately gated artifact scripts 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "K2_DEPLOYMENT_TARGET=admin npm run build:admin"
+    Received: "K2_DEPLOYMENT_TARGET=admin npm run build"
+
+      10 |   for (const target of ['admin', 'storefront']) {
+      11 |     const config = JSON.parse(await read(`vercel.${target}.json`))
+    > 12 |     expect(config.buildCommand).toBe(`K2_DEPLOYMENT_TARGET=${target} npm run build:${target}`)
+         |                                 ^
+      13 |     expect(scripts[`build:${target}`]).toContain(`verify-bundle-budgets.mjs ${target}`)
+      14 |   }
+      15 |   expect(scripts['build:admin']).toContain('emit-admin-head.mjs admin')
+        at C:\Users\jerze\K2 JImzon\tests\release-ci-contract.spec.js:12:33
+
+    Error Context: test-results\release-ci-contract-deploy-c38de-tely-gated-artifact-scripts\error-context.md
+
+  2) tests\release-ci-contract.spec.js:18:1 › CI executes stock payment and final-Admin behavior in PostgreSQL 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "npm run rehearse:purchase-hold"
+    Received string:    "name: CI·
+    on:
+      push:
+        branches: [ main, master ]
+      pull_request:·
+    jobs:
+      build-and-smoke:
+        runs-on: ubuntu-latest
+        services:
+          postgres:
+            image: postgres:17
+            env:
+              POSTGRES_USER: postgres
+              POSTGRES_DB: k2_catalog_rehearsal_ci
+              POSTGRES_HOST_AUTH_METHOD: trust
+            ports:
+              - 5432:5432
+            options: >-
+              --health-cmd \"pg_isready -U postgres -d k2_catalog_rehearsal_ci\"
+              --health-interval 10s
+              --health-timeout 5s
+              --health-retries 5
+        steps:
+          - uses: actions/checkout@v4
+            with:
+              fetch-depth: 0·
+          - uses: actions/setup-node@v4
+            with:
+              node-version: 24
+              cache: npm·
+          - name: Install dependencies
+            run: npm ci·
+          - name: Dependency vulnerability and supply-chain policy
+            run: npm run security:dependency-audit && npm run security:dependency-policy·
+          - name: Secret scanner regression fixtures
+            run: npm run security:test·
+          - name: Deployment environment contract fixtures
+            run: npm run security:test-env-contract·
+          - name: Tracked sensitive-file policy
+            run: npm run security:test-files && npm run security:files·
+          - name: Browser/server environment source boundary
+            run: npm run security:test-env-source && npm run security:env-source·
+          - name: Working-tree secret scan
+            run: npm run security:secrets·
+          - name: Full Git-history secret scan
+            run: npm run security:history·
+          - name: Import-integrity check (catches \"X is not defined\" runtime crashes)
+            run: npm run check:imports·
+          - name: Build isolated storefront production
+            run: npm run build:storefront·
+          - name: Build isolated admin production
+            run: npm run build:admin·
+          - name: Install Playwright browser
+            run: npx playwright install --with-deps chromium·
+          # This is the same aggregate acceptance command used on a workstation:
+          # source/API contracts plus Storefront, Admin BOS, Product Master,
+          # Owner Count & Close, customer account/Wholesale, and selling journeys.
+          # Dedicated configs own their hermetic fixture environment. No provider
+          # credentials or live writes are used by this step.
+          - name: Complete Storefront and Admin BOS acceptance suite
+            run: npm test
+            env:
+              CI: 'true'·
+          - name: Create isolated MAP-017 rehearsal database
+            run: createdb -h 127.0.0.1 -p 5432 -U postgres k2_map017_rehearsal_ci·
+          - name: MAP-017 PostgreSQL migration, rollback, and authorization rehearsal
+            run: npm run rehearse:map017-local && npm run test:map017-local-db
+            env:
+              K2_MAP017_REHEARSAL_URL: postgresql://postgres@127.0.0.1:5432/k2_map017_rehearsal_ci
+              LOCAL_PG_URL: postgresql://postgres@127.0.0.1:5432/k2_map017_rehearsal_ci·
+          - name: Catalog spreadsheet PostgreSQL migration and rollback rehearsal
+            run: npm run rehearse:catalog-spreadsheet
+            env:
+              K2_CATALOG_REHEARSAL_URL: postgresql://postgres@127.0.0.1:5432/k2_catalog_rehearsal_ci·
+          - name: Upload Playwright failure evidence
+            if: always()
+            uses: actions/upload-artifact@v4
+            with:
+              name: playwright-evidence
+              path: |
+                playwright-report/
+                test-results/
+              if-no-files-found: ignore
+              retention-days: 7
+    "
+
+      19 |   const workflow = await read('.github/workflows/ci.yml')
+      20 |   for (const command of ['rehearse:purchase-hold', 'rehearse:payment-recovery', 'rehearse:final-admin']) {
+    > 21 |     expect(workflow).toContain(`npm run ${command}`)
+         |                      ^
+      22 |   }
+      23 |   expect(workflow).toContain('K2_TEST_PG_BIN: /usr/lib/postgresql/17/bin')
+      24 | })
+        at C:\Users\jerze\K2 JImzon\tests\release-ci-contract.spec.js:21:22
+
+    Error Context: test-results\release-ci-contract-CI-exe-4461e-dmin-behavior-in-PostgreSQL\error-context.md
+
+  2 failed
+    tests\release-ci-contract.spec.js:8:1 › deployment configurations select the separately gated artifact scripts 
+    tests\release-ci-contract.spec.js:18:1 › CI executes stock payment and final-Admin behavior in PostgreSQL 

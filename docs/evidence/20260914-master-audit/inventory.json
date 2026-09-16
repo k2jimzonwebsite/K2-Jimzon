@@ -1,0 +1,208 @@
+{
+  "head": "41d96df012997cc98751ca405ab632f95ae8806f",
+  "sourceFiles": 762,
+  "sourceLines": 113648,
+  "sourceByRoot": {
+    "scripts": 101,
+    "src": 199,
+    "supabase": 201,
+    "tests": 107,
+    "api": 2,
+    "prepared-api": 109,
+    "server": 43
+  },
+  "largestSource": [
+    {
+      "file": "tests/admin-bff-contract.spec.js",
+      "bytes": 112051,
+      "lines": 2052,
+      "sha256": "2d830586201b897bc8b49aac2d2b7f45ea19a298abab6130e0638dde0f5e7d0a"
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "bytes": 86620,
+      "lines": 1978,
+      "sha256": "0ad68a320e4efded2d010ecce4890e4ed36eda08c77a050bf641deada080efb5"
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "bytes": 102986,
+      "lines": 1958,
+      "sha256": "22f4bee0992785a272da070ade690f207ff2dcac91cbd5406f6650813b33e9b1"
+    },
+    {
+      "file": "src/components/admin/master-workflow-graph/workflowData.js",
+      "bytes": 87651,
+      "lines": 1611,
+      "sha256": "08e56577af4de0de56957baf7c0eb222628e4091ae506785248dc8906b85f5cf"
+    },
+    {
+      "file": "src/views/admin/ProductIntakeSessionModal.jsx",
+      "bytes": 61535,
+      "lines": 1322,
+      "sha256": "c7627587a15274042120f27adb251f613844988544a03285146beac63476ac67"
+    },
+    {
+      "file": "tests/admin-dashboard-redesign.spec.js",
+      "bytes": 88000,
+      "lines": 1297,
+      "sha256": "9df4044c04ae5f687f50732fc9505d2a115d036db4b551091be2b309ac351dab"
+    },
+    {
+      "file": "tests/map027-store-polish.spec.js",
+      "bytes": 59007,
+      "lines": 1255,
+      "sha256": "db00e5b3d03812262bd135a06fd4c1955dbe87e01c9190ee53d1b9c42a38b8e6"
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "bytes": 63468,
+      "lines": 1162,
+      "sha256": "b739d75129b2f9f573660bd58564d5dd51714408fbb592c3f2544c7686edd8cd"
+    },
+    {
+      "file": "src/components/shop/ShelfScene3D.jsx",
+      "bytes": 44162,
+      "lines": 1086,
+      "sha256": "60d73f28aa442e3708ab627869cc08ae27e5a51fda40a121edb1b5345d3783ea"
+    },
+    {
+      "file": "src/views/admin/OwnerCountClose.jsx",
+      "bytes": 83593,
+      "lines": 1006,
+      "sha256": "1617c8436c534deb8f3498439fac12121c0cff45dc230e557aee049d8ca20bd6"
+    },
+    {
+      "file": "src/views/admin/InventoryGrid.jsx",
+      "bytes": 57341,
+      "lines": 998,
+      "sha256": "5ab4a1f67a235fca85290c20c094f74a08b0d40f63c073274bf46cd59fab1b96"
+    },
+    {
+      "file": "scripts/schema-truth-core.mjs",
+      "bytes": 43820,
+      "lines": 972,
+      "sha256": "a339311e6e7a7ee6b0e7a5a71367a6fa117539f75d08aafe2137eb27645338d8"
+    },
+    {
+      "file": "src/services/adminBffService.js",
+      "bytes": 51121,
+      "lines": 897,
+      "sha256": "f68955de6b75d0b156cba4894cc016439499c92901b1a0691e223d09948170be"
+    },
+    {
+      "file": "src/views/admin/Overview.jsx",
+      "bytes": 52715,
+      "lines": 864,
+      "sha256": "9d54708a447c01e47ed61c4ebdd012df9b1c75193536e70c882ff4a4be504015"
+    },
+    {
+      "file": "server/admin-bff/marketplace-snapshots.js",
+      "bytes": 49354,
+      "lines": 839,
+      "sha256": "a4d9d7953218f09f9a6edfdc2b8bc32cb136586f1cb5faff691e6573f097f318"
+    }
+  ],
+  "largestPublicAssets": [
+    {
+      "file": "public/models/k2-clerk-anime.glb",
+      "bytes": 1137508,
+      "sha256": "b53ef8908c4342f914c62f33a7df5efc01a45c251db8c0de8b5d1e36b2b35910"
+    },
+    {
+      "file": "public/ambient/wholesale.mp4",
+      "bytes": 1128470,
+      "sha256": "20b1c8b51a829491eb8032cd6c124e21f19168b3754f1d528e6c642c6c37b251"
+    },
+    {
+      "file": "public/ambient/wholesale.webm",
+      "bytes": 989419,
+      "sha256": "b4ee51b74455da1205aca6aa009934d7b7e184dcbb35c4c6e8b7e23339e3bf36"
+    },
+    {
+      "file": "public/ambient/pasabuy.mp4",
+      "bytes": 964798,
+      "sha256": "40ab999c91b2e1e4f46cf4d1648de374feab85722a1d571cccdae476e7800b1b"
+    },
+    {
+      "file": "public/images/mock/luxury_crepes.jpg",
+      "bytes": 833865,
+      "sha256": "bdd10858500549db643492075fdc3debef2ca08bc976ae9d177792760d48e88a"
+    },
+    {
+      "file": "public/images/mock/pistachio_croissant.jpg",
+      "bytes": 827269,
+      "sha256": "595a461e8ee598387a7be3e814db2941ebfa0b2c6cd026badcfb76306a892d0c"
+    },
+    {
+      "file": "public/images/mock/luxury_espresso.jpg",
+      "bytes": 802325,
+      "sha256": "95b6b12a94fb8132467d453c22a54ef590be412b9f8c474247071e97227009de"
+    },
+    {
+      "file": "public/images/mock/luxury_tuna_salad.jpg",
+      "bytes": 799083,
+      "sha256": "cd5dde81fc7ff006e30673922a67f3e467d6be12863b9310466efb082a4677d8"
+    },
+    {
+      "file": "public/images/mock/luxury_biscuit_plate.jpg",
+      "bytes": 754405,
+      "sha256": "544f48661ac7d6dcc2d6f40b28a93b71fa51b607b52f5f6a263b3075dd5860c6"
+    },
+    {
+      "file": "public/images/mock/luxury_biscuit_pouch.jpg",
+      "bytes": 734718,
+      "sha256": "75697b8b507892e7b6a4a22e3f6e36fe129a8156b5cfe9442d93eed177949612"
+    },
+    {
+      "file": "public/models/k2-clerk.glb",
+      "bytes": 669516,
+      "sha256": "ab2c8dca20c0264cac61c234de8204909c77be2157ee51f4c2c400f6b34182ce"
+    },
+    {
+      "file": "public/ambient/pasabuy.webm",
+      "bytes": 650552,
+      "sha256": "da4b23bcef01bc8dc033f28aeaad8cdd5d89462ac3cd51e9577d51e637a8dc7f"
+    },
+    {
+      "file": "public/images/mock/luxury_chocolate_jar.jpg",
+      "bytes": 630573,
+      "sha256": "476dedad7c66cd4be3a52cbe7c547dd1d96a6a321b9dfbe75503ccb304c36595"
+    },
+    {
+      "file": "public/images/mock/luxury_coffee_bag.jpg",
+      "bytes": 616743,
+      "sha256": "ec920e5f21a48c1ac96c1caab20543a0d2a090963dcad145a4edccc2026bb1ab"
+    },
+    {
+      "file": "public/images/mock/luxury_pistachio.jpg",
+      "bytes": 607992,
+      "sha256": "8372f62569779f0e3db4ccbeffad3b7b1b60467a626ed8b3a9babddaba2a4636"
+    }
+  ],
+  "duplicateAssets": [],
+  "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
+    "@supabase/supabase-js": "^2.110.7",
+    "html5-qrcode": "^2.3.8",
+    "motion": "^12.42.2",
+    "papaparse": "^5.5.4",
+    "react": "^19.1.0",
+    "react-barcode": "^1.6.1",
+    "react-dom": "^19.1.0",
+    "react-helmet-async": "^3.0.0",
+    "sharp": "^0.35.4",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@tailwindcss/vite": "^4.1.11",
+    "@vitejs/plugin-react": "^4.6.0",
+    "playwright": "^1.61.1",
+    "tailwindcss": "^4.0.0",
+    "vite": "^6.3.5"
+  },
+  "lintScript": null,
+  "typecheckScript": null
+}

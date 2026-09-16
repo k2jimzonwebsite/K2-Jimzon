@@ -1,0 +1,36 @@
+{
+  "code": "MAP024_DISCOVERY_VERIFIED",
+  "origin": "https://www.k2jimzon.com",
+  "home": {
+    "path": "/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "checks": {
+      "title": true,
+      "canonical": true,
+      "openGraph": true,
+      "twitter": true
+    }
+  },
+  "robots": {
+    "path": "/robots.txt",
+    "status": 200,
+    "contentType": "text/plain; charset=utf-8",
+    "checks": {
+      "userAgent": true,
+      "allow": true,
+      "adminPathAbsent": true,
+      "sitemap": true
+    }
+  },
+  "sitemap": {
+    "path": "/sitemap.xml",
+    "status": 200,
+    "contentType": "application/xml",
+    "checks": {
+      "urlCount": 2,
+      "canonicalUrls": 2
+    }
+  },
+  "products": []
+}

@@ -1,0 +1,1122 @@
+{
+  "method": "Lexical inventory by function name, not overload/signature or dynamic-patch execution proof. Historical definitions are not live state.",
+  "migrationFiles": 102,
+  "definitions": 194,
+  "latestByName": [
+    {
+      "file": "supabase/migrations/0002_omnichannel_schema.sql",
+      "line": 91,
+      "name": "decrement_stock",
+      "securityDefiner": false,
+      "fixedSearchPath": false
+    },
+    {
+      "file": "supabase/migrations/0004_audit_logs.sql",
+      "line": 17,
+      "name": "public.process_audit_log",
+      "securityDefiner": true,
+      "fixedSearchPath": false
+    },
+    {
+      "file": "supabase/migrations/0006_supply_chain.sql",
+      "line": 48,
+      "name": "receive_po",
+      "securityDefiner": false,
+      "fixedSearchPath": false
+    },
+    {
+      "file": "supabase/migrations/0007_scan_receive.sql",
+      "line": 4,
+      "name": "receive_po_scanned",
+      "securityDefiner": false,
+      "fixedSearchPath": false
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 40,
+      "name": "public.is_admin",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260723_master_security_rls.sql",
+      "line": 145,
+      "name": "public.handle_new_user",
+      "securityDefiner": true,
+      "fixedSearchPath": false
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 428,
+      "name": "public.deduct_stock_fefo",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260815_harden_admin_delete_pin.sql",
+      "line": 85,
+      "name": "public.set_delete_pin",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260725_delete_pin_and_product_status.sql",
+      "line": 74,
+      "name": "public.verify_delete_pin",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260815_harden_admin_delete_pin.sql",
+      "line": 63,
+      "name": "public.has_delete_pin",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260815_harden_admin_delete_pin.sql",
+      "line": 283,
+      "name": "public.delete_products_with_pin",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260725_staff_custody_allocations.sql",
+      "line": 42,
+      "name": "public.touch_staff_allocations",
+      "securityDefiner": false,
+      "fixedSearchPath": false
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 25,
+      "name": "public.is_staff",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260905_privileged_membership_serialization.sql",
+      "line": 40,
+      "name": "public.set_user_role",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_phase_2_unified_inbox.sql",
+      "line": 356,
+      "name": "public.append_internal_message",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 172,
+      "name": "public.sync_product_compat_columns",
+      "securityDefiner": false,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_admin_lots_bff_boundary.sql",
+      "line": 25,
+      "name": "public.sync_product_batch_compat_columns",
+      "securityDefiner": false,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 836,
+      "name": "public.replace_product_batches",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 904,
+      "name": "public.transfer_inventory_custody",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 552,
+      "name": "public.create_consignment_manifest",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 1023,
+      "name": "public.add_consignment_item",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 1035,
+      "name": "public.record_consignment_scan",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 666,
+      "name": "public.advance_consignment",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 1048,
+      "name": "public.finalize_consignment_receipt",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 857,
+      "name": "public.submit_order_request",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260912_confirmation_stock_commitment.sql",
+      "line": 152,
+      "name": "public.confirm_order_request",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 517,
+      "name": "public.mark_order_line_packed",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260906_payment_evidence_recovery.sql",
+      "line": 4,
+      "name": "public.set_order_request_payment_status",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260905_purchase_hold_cancellation.sql",
+      "line": 12,
+      "name": "public.cancel_order_request",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 603,
+      "name": "public.fulfill_order_request",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 1346,
+      "name": "public.submit_pasabuy_request",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 1406,
+      "name": "public.transition_pasabuy_request",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 1458,
+      "name": "public.save_pasabuy_quote",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 1653,
+      "name": "public.verify_internal_channel_event",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_launch_core_stabilization.sql",
+      "line": 1901,
+      "name": "public.reject_event_mutation",
+      "securityDefiner": false,
+      "fixedSearchPath": false
+    },
+    {
+      "file": "supabase/migrations/20260803_phase_2_unified_inbox.sql",
+      "line": 252,
+      "name": "public.route_pasabuy_request_to_inbox",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_phase_2_unified_inbox.sql",
+      "line": 341,
+      "name": "public.prevent_conversation_event_mutation",
+      "securityDefiner": false,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_phase_2_unified_inbox.sql",
+      "line": 408,
+      "name": "public.mark_conversation_read",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260803_phase_2_unified_inbox.sql",
+      "line": 431,
+      "name": "public.update_conversation_workflow",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260804_restore_coupons_and_consignment_scanning.sql",
+      "line": 47,
+      "name": "public.touch_coupon_updated_at",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260804_restore_coupons_and_consignment_scanning.sql",
+      "line": 65,
+      "name": "public.audit_coupon_change",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260804_restore_coupons_and_consignment_scanning.sql",
+      "line": 92,
+      "name": "public.validate_coupon",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260902_purchase_time_reservation.sql",
+      "line": 179,
+      "name": "public.submit_order_request_v2",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 252,
+      "name": "public.set_order_delivery_details",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 436,
+      "name": "public.record_packing_scan",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 687,
+      "name": "public.reconcile_product_batches",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 794,
+      "name": "public.set_batch_clearance_approval",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 845,
+      "name": "public.transfer_inventory_custody_exact",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 943,
+      "name": "public.add_consignment_item_v2",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260809_operations_hardening.sql",
+      "line": 980,
+      "name": "public.record_consignment_item_scan",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260810_deprecated_rpc_lockdown.sql",
+      "line": 6,
+      "name": "public.decrement_stock",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260811_product_intake_and_sku_gate.sql",
+      "line": 77,
+      "name": "public.touch_product_intake_session",
+      "securityDefiner": false,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260811_product_intake_and_sku_gate.sql",
+      "line": 190,
+      "name": "public.generate_k2_sku_internal",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260811_product_intake_and_sku_gate.sql",
+      "line": 210,
+      "name": "public.sync_product_publication_status",
+      "securityDefiner": false,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260811_product_intake_and_sku_gate.sql",
+      "line": 232,
+      "name": "public.create_product_draft_server",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260811_product_intake_and_sku_gate.sql",
+      "line": 420,
+      "name": "public.create_product_first_inventory_server",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260905_publication_transition_consistency.sql",
+      "line": 11,
+      "name": "public.transition_product_publication_server",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_admin_consignments_bff_boundary.sql",
+      "line": 23,
+      "name": "public.execute_admin_consignment_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_admin_coupons_bff_boundary.sql",
+      "line": 35,
+      "name": "public.execute_admin_coupon_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 364,
+      "name": "k2_private.verify_admin_bff_request",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_admin_fulfillment_bff_boundary.sql",
+      "line": 116,
+      "name": "public.execute_admin_fulfillment_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_admin_inbox_bff_boundary.sql",
+      "line": 23,
+      "name": "public.execute_admin_inbox_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_admin_lots_bff_boundary.sql",
+      "line": 71,
+      "name": "public.execute_admin_lot_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_admin_pasabuy_bff_boundary.sql",
+      "line": 21,
+      "name": "public.execute_admin_pasabuy_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_admin_product_intake_bff_boundary.sql",
+      "line": 24,
+      "name": "public.execute_admin_product_intake_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_account_identity_and_messaging.sql",
+      "line": 142,
+      "name": "public.validate_customer_account_link",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_account_identity_and_messaging.sql",
+      "line": 169,
+      "name": "public.validate_guest_access_grant",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_account_identity_and_messaging.sql",
+      "line": 192,
+      "name": "public.validate_guest_access_scope",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_account_identity_and_messaging.sql",
+      "line": 216,
+      "name": "public.validate_customer_claim_request",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_account_identity_and_messaging.sql",
+      "line": 298,
+      "name": "public.customer_record_owned_by_current_user",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_guest_account_claim_boundary.sql",
+      "line": 26,
+      "name": "k2_private.verify_guest_bff_request",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_submission_boundary.sql",
+      "line": 118,
+      "name": "k2_private.contact_hash",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_submission_boundary.sql",
+      "line": 143,
+      "name": "k2_private.consume_guest_rate",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_submission_boundary.sql",
+      "line": 186,
+      "name": "k2_private.resolve_guest_identity",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260912_guest_order_conversation_seed.sql",
+      "line": 36,
+      "name": "public.submit_guest_order_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260912_guest_order_conversation_seed.sql",
+      "line": 167,
+      "name": "public.submit_guest_pasabuy_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_submission_boundary.sql",
+      "line": 472,
+      "name": "public.preview_guest_coupon_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260828_store_conversation_origin.sql",
+      "line": 22,
+      "name": "public.start_guest_conversation_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_submission_boundary.sql",
+      "line": 637,
+      "name": "public.list_guest_conversations_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_guest_submission_boundary.sql",
+      "line": 707,
+      "name": "public.append_guest_message_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260812_map017_public_write_boundary_hardening.sql",
+      "line": 105,
+      "name": "public.get_public_product_stock",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260814_invite_staff_operation_boundary.sql",
+      "line": 25,
+      "name": "public.claim_staff_invitation_operation",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260814_invite_staff_operation_boundary.sql",
+      "line": 92,
+      "name": "public.complete_staff_invitation_operation",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260814_invite_staff_operation_boundary.sql",
+      "line": 115,
+      "name": "public.release_staff_invitation_operation",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260815_harden_admin_delete_pin.sql",
+      "line": 130,
+      "name": "public.delete_products_with_pin_v2",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_channel_readiness_boundary.sql",
+      "line": 25,
+      "name": "public.read_admin_channel_readiness_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_channel_readiness_boundary.sql",
+      "line": 65,
+      "name": "public.execute_admin_channel_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_globe_review_boundary.sql",
+      "line": 56,
+      "name": "public.read_admin_globe_cms_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_globe_review_boundary.sql",
+      "line": 87,
+      "name": "public.execute_admin_globe_review_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_procurement_boundary.sql",
+      "line": 22,
+      "name": "public.read_admin_procurement_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_procurement_boundary.sql",
+      "line": 56,
+      "name": "public.execute_admin_supplier_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_product_master_boundary.sql",
+      "line": 24,
+      "name": "public.execute_admin_product_master_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "line": 7,
+      "name": "public.execute_admin_product_media_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "line": 155,
+      "name": "k2_private.validate_product_media_item",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "line": 209,
+      "name": "public.execute_admin_product_media_assignment_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "line": 380,
+      "name": "public.complete_admin_product_media_cleanup_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "line": 447,
+      "name": "public.read_admin_product_media_orphans_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "line": 504,
+      "name": "public.prepare_admin_product_media_orphan_cleanup_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "line": 580,
+      "name": "public.complete_admin_product_media_orphan_cleanup_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_session_registry.sql",
+      "line": 183,
+      "name": "public.execute_admin_session_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_staff_access_boundary.sql",
+      "line": 26,
+      "name": "public.read_admin_staff_access_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260905_privileged_membership_serialization.sql",
+      "line": 86,
+      "name": "public.execute_admin_staff_access_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_admin_system_readiness_boundary.sql",
+      "line": 5,
+      "name": "public.read_admin_system_readiness_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_catalog_spreadsheet_commit.sql",
+      "line": 70,
+      "name": "public.execute_admin_catalog_import_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_catalog_spreadsheet_commit.sql",
+      "line": 355,
+      "name": "public.read_admin_catalog_import_status_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_catalog_spreadsheet_identity.sql",
+      "line": 24,
+      "name": "public.bump_product_catalog_record_version",
+      "securityDefiner": false,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_guest_account_claim_boundary.sql",
+      "line": 78,
+      "name": "public.claim_guest_customer_account_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_guest_account_claim_boundary.sql",
+      "line": 254,
+      "name": "public.list_customer_account_history_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_guest_account_claim_boundary.sql",
+      "line": 330,
+      "name": "public.append_customer_account_message_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_security_event_boundary.sql",
+      "line": 84,
+      "name": "public.record_security_event_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_security_event_boundary.sql",
+      "line": 192,
+      "name": "public.read_admin_security_review_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_security_event_boundary.sql",
+      "line": 295,
+      "name": "public.prune_security_events_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_wholesale_inquiry_boundary.sql",
+      "line": 64,
+      "name": "public.submit_wholesale_inquiry_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_wholesale_inquiry_boundary.sql",
+      "line": 149,
+      "name": "public.list_admin_wholesale_inquiries_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260822_wholesale_inquiry_boundary.sql",
+      "line": 170,
+      "name": "public.execute_admin_wholesale_inquiry_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260824_admin_mfa_replacement_boundary.sql",
+      "line": 36,
+      "name": "public.record_admin_mfa_replacement_event_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260824_admin_staff_invitation_reason_boundary.sql",
+      "line": 15,
+      "name": "public.claim_staff_invitation_operation_v2",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260824_map018_intake_evidence_cleanup_boundary.sql",
+      "line": 33,
+      "name": "k2_private.verify_admin_bff_cleanup_request",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260824_map018_intake_evidence_cleanup_boundary.sql",
+      "line": 93,
+      "name": "public.record_admin_product_intake_evidence_cleanup_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260824_map018_intake_evidence_cleanup_boundary.sql",
+      "line": 150,
+      "name": "public.claim_admin_product_intake_evidence_cleanup_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260824_map018_intake_evidence_cleanup_boundary.sql",
+      "line": 200,
+      "name": "public.complete_admin_product_intake_evidence_cleanup_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260825_admin_preauth_rate_boundary.sql",
+      "line": 66,
+      "name": "public.consume_admin_preauth_rate_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260825_shopee_webhook_ingress_boundary.sql",
+      "line": 51,
+      "name": "public.capture_shopee_event_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260825_storefront_customer_auth_boundary.sql",
+      "line": 74,
+      "name": "public.consume_storefront_customer_auth_rate_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260828_product_knowledge_boundary.sql",
+      "line": 135,
+      "name": "public.save_product_knowledge_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260828_product_knowledge_boundary.sql",
+      "line": 226,
+      "name": "public.product_knowledge_capability_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260828_product_knowledge_boundary.sql",
+      "line": 253,
+      "name": "public.execute_admin_product_knowledge_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260828_virtual_store_live_chat.sql",
+      "line": 21,
+      "name": "public.append_website_customer_reply_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260828_virtual_store_live_chat.sql",
+      "line": 82,
+      "name": "public.website_reply_capability_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260828_virtual_store_live_chat.sql",
+      "line": 95,
+      "name": "public.execute_admin_website_reply_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260829_channel_vocabulary_and_shops.sql",
+      "line": 145,
+      "name": "public.enforce_order_channel_shop",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260830_paid_ai_spend_controls.sql",
+      "line": 174,
+      "name": "public.read_admin_ai_spend_controls_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260830_paid_ai_spend_controls.sql",
+      "line": 208,
+      "name": "public.execute_admin_ai_spend_controls_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_guest_order_status_boundary.sql",
+      "line": 6,
+      "name": "public.read_guest_order_status_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 469,
+      "name": "public.execute_admin_marketplace_snapshot_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 1376,
+      "name": "public.read_admin_marketplace_snapshot_row_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 1403,
+      "name": "public.read_admin_marketplace_snapshot_status_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 1442,
+      "name": "public.read_admin_owner_close_session_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 1470,
+      "name": "public.read_admin_owner_close_order_import_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 1503,
+      "name": "public.read_admin_marketplace_shop_options_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 1526,
+      "name": "public.read_admin_owner_close_fee_input_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 1581,
+      "name": "public.read_admin_owner_close_stock_input_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 1647,
+      "name": "public.read_admin_owner_close_pasabuy_input_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 1681,
+      "name": "public.read_admin_owner_close_bookkeeping_handoff_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "line": 1832,
+      "name": "public.read_admin_marketplace_coverage_input_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260902_delivery_guest_quote_boundary.sql",
+      "line": 31,
+      "name": "public.quote_guest_delivery_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260902_delivery_quote_admin_command.sql",
+      "line": 24,
+      "name": "public.execute_admin_delivery_command_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260902_delivery_quote_control.sql",
+      "line": 278,
+      "name": "public.read_delivery_control_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260902_delivery_quote_control.sql",
+      "line": 334,
+      "name": "public.read_delivery_pilot_localities_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260902_purchase_time_reservation.sql",
+      "line": 66,
+      "name": "public.reserve_order_request_lots_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260912_confirmation_stock_commitment.sql",
+      "line": 230,
+      "name": "public.release_expired_reservations_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260902_reservation_expiry_policy.sql",
+      "line": 168,
+      "name": "public.extend_reservation_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260902_reservation_expiry_policy.sql",
+      "line": 264,
+      "name": "public.set_reservation_deadline",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260905_privileged_membership_serialization.sql",
+      "line": 22,
+      "name": "k2_private.lock_privileged_membership",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260906_automatic_intake_jobs.sql",
+      "line": 35,
+      "name": "public.execute_admin_intake_ai_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260906_exact_packing_lot.sql",
+      "line": 3,
+      "name": "public.record_packing_scan_exact_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    },
+    {
+      "file": "supabase/migrations/20260912_confirmation_stock_commitment.sql",
+      "line": 79,
+      "name": "public.commit_order_request_stock_v1",
+      "securityDefiner": true,
+      "fixedSearchPath": true
+    }
+  ],
+  "candidates": [
+    {
+      "file": "supabase/migrations/0004_audit_logs.sql",
+      "line": 17,
+      "name": "public.process_audit_log",
+      "securityDefiner": true,
+      "fixedSearchPath": false
+    },
+    {
+      "file": "supabase/migrations/20260723_master_security_rls.sql",
+      "line": 145,
+      "name": "public.handle_new_user",
+      "securityDefiner": true,
+      "fixedSearchPath": false
+    }
+  ]
+}

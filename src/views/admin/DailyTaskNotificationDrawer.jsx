@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { adminBffEnabled, getAdminLots } from '../../services/adminBffService'
 import { AlertIcon, BellIcon, CheckIcon, XIcon } from '../../components/ui/icons'
+import { manilaDateKey } from '../../lib/manilaReportingWindow'
 
 function expiryState(dateString) {
   if (!dateString) return null
   const expiry = Date.parse(`${dateString}T00:00:00Z`)
-  const today = Date.parse(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`)
+  const today = Date.parse(`${manilaDateKey(new Date())}T00:00:00Z`)
   if (Number.isNaN(expiry)) return null
   const daysLeft = Math.round((expiry - today) / 86_400_000)
   return { daysLeft, status: daysLeft < 0 ? 'expired' : daysLeft <= 30 ? 'critical' : daysLeft <= 90 ? 'warning' : 'fresh' }

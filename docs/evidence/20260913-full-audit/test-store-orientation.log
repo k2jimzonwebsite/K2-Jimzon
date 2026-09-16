@@ -1,0 +1,17 @@
+
+> k2-jimzon-prototype@0.1.0 test:store-orientation
+> playwright test --config=playwright.store-orientation.config.js
+
+[WebServer] (node:2788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20088) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:23116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\store-orientation-ui.spec.js:17:1 › fallback keeps room controls usable in portrait and landscape (35.1s)
+  ok 2 tests\store-orientation-ui.spec.js:36:1 › 3D room renders in desktop, portrait and landscape (56.0s)
+
+  2 passed (2.6m)

@@ -1,5 +1,15 @@
 # Admin dashboard widgets
 
+13 September independent verification corrected a mount-time exception:
+Overview now obtains all bounds from `manilaReportingWindow(7|30|90)` rather
+than requesting an unsupported one-day window. Dashboard and CSV share
+`normalizeSalesChannel`; only exact approved IDs/aliases map to channels.
+For example `tiktok_shop` maps to TikTok and `web` to Website, while
+`shopee-ph` and `shopee_unmapped` remain Other. Fresh isolated Admin tests
+passed 32/32, with focused reporting/channel tests and both target builds
+passing. These are local fixture/build results, not live staff acceptance.
+Evidence and recovery: `docs/evidence/20260913-map-verification/README.md`.
+
 IDEA-20260906-07, MAP-028 I-012 / MAP-021/023. Locally prepared; no dashboard
 deployment, production database change or new channel connection was performed.
 

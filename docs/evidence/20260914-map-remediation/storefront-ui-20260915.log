@@ -1,0 +1,46 @@
+
+> k2-jimzon-prototype@0.1.0 test:storefront-ui
+> playwright test --config=playwright.map027.config.js tests/smoke.spec.js tests/buyer.spec.js tests/storefront-mobile.spec.js tests/storefront-motion.spec.js tests/storefront-theme.spec.js --output=.tools/storefront-20260915
+
+[WebServer] (node:14676) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22220) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 31 tests using 1 worker
+
+(node:4104) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\buyer.spec.js:4:3 › Pasabuy and wholesale truthfulness › Pasabuy validates contact and explains attachment limitation (1.6m)
+  ok  2 tests\buyer.spec.js:16:3 › Pasabuy and wholesale truthfulness › wholesale page has no demo credential bypass (18.9s)
+  ok  3 tests\buyer.spec.js:24:3 › Pasabuy and wholesale truthfulness › mobile primary actions meet the 44px interaction target (10.1s)
+  ok  4 tests\smoke.spec.js:28:3 › launch-critical storefront › production storefront ignores the prototype demo hash and exposes no VIP password rail (886ms)
+  ok  5 tests\smoke.spec.js:37:3 › launch-critical storefront › light mode preserves the luxury wood canvas without leaking into dark mode (1.7s)
+  ok  6 tests\smoke.spec.js:51:3 › launch-critical storefront › home and catalog render without unsafe payment claims (2.0s)
+  ok  7 tests\smoke.spec.js:60:3 › launch-critical storefront › latest consignment keeps the featured visual free of a New Arrival overlay (749ms)
+  ok  8 tests\smoke.spec.js:75:3 › launch-critical storefront › contact is always visible and never fabricates live staff availability (1.8s)
+  ok  9 tests\smoke.spec.js:105:3 › launch-critical storefront › cart closes before checkout and checkout is an order request (3.4s)
+  ok 10 tests\smoke.spec.js:123:3 › launch-critical storefront › checkout requires a contact channel before submission (3.4s)
+  ok 11 tests\smoke.spec.js:134:3 › launch-critical storefront › wholesale inquiry never fabricates a receipt, approval, or response promise (1.6s)
+  ok 12 tests\smoke.spec.js:165:3 › storefront deep linking › a cold load of /catalog renders the catalog, not the home view (738ms)
+  ok 13 tests\smoke.spec.js:172:3 › storefront deep linking › a cold load of /product/:sku opens that product and survives reload (1.4s)
+  ok 14 tests\smoke.spec.js:184:3 › storefront deep linking › browser back returns to the previous view rather than leaving the site (825ms)
+  ok 15 tests\smoke.spec.js:198:3 › MAP-027 virtual store acceptance › requests the Interactive Shop payload only after deliberate store entry (6.0s)
+  ok 16 tests\smoke.spec.js:234:3 › MAP-027 virtual store acceptance › moves keyboard focus into the store and restores the catalog entry control (1.8s)
+  ok 17 tests\smoke.spec.js:251:3 › MAP-027 virtual store acceptance › keeps the reduced-motion room self-contained and readable in a dark site theme (1.0s)
+  ok 18 tests\smoke.spec.js:280:3 › MAP-027 virtual store acceptance › keeps the pop-out guide, store moment, and canonical basket synchronized (1.2s)
+  ok 19 tests\smoke.spec.js:302:3 › MAP-027 virtual store acceptance › keeps a shelf question attached to its original product after browsing away (1.4s)
+  ok 20 tests\smoke.spec.js:329:3 › MAP-027 virtual store acceptance › completes the phone shelf-to-order-request journey through the canonical basket (13.4s)
+  ok 21 tests\smoke.spec.js:374:3 › MAP-027 virtual store acceptance › renders a non-blank WebGL aisle with usable shelf navigation (24.0s)
+  ok 22 tests\smoke.spec.js:434:3 › MAP-027 virtual store acceptance › keeps the semantic store usable when reduced motion disables WebGL (892ms)
+  ok 23 tests\smoke.spec.js:456:3 › MAP-027 virtual store acceptance › keeps the reduced-motion shopping controls usable in phone landscape with enlarged text (975ms)
+  ok 24 tests\storefront-mobile.spec.js:15:3 › mobile storefront contract › catalog stays readable and keeps stock in one universal slot (989ms)
+  ok 25 tests\storefront-mobile.spec.js:61:3 › mobile storefront contract › animated route and interactive review globe remain present (1.2s)
+  ok 26 tests\storefront-mobile.spec.js:85:3 › mobile storefront contract › landmarks, names, keyboard focus, and reflow survive 200% text (1.3s)
+  ok 27 tests\storefront-motion.spec.js:4:3 › storefront interaction language › interactive surfaces respond without changing the editorial layout (4.5s)
+  ok 28 tests\storefront-motion.spec.js:37:3 › storefront interaction language › reduced motion keeps every interaction visible and usable (1.4s)
+  ok 29 tests\storefront-motion.spec.js:60:3 › storefront interaction language › Three.js globe chunk is not requested until the section is scrolled near (1.0s)
+  ok 30 tests\storefront-theme.spec.js:28:3 › storefront theme contract › saved theme is applied before render and persists after toggling (1.7s)
+  ok 31 tests\storefront-theme.spec.js:69:3 › storefront theme contract › first visit follows the operating-system preference (322ms)
+
+  31 passed (3.5m)

@@ -14,7 +14,7 @@ import DeleteProductsModal from './DeleteProductsModal'
 import ProductIntakeSessionModal from './ProductIntakeSessionModal'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import Barcode from 'react-barcode'
-import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
+import { EyeIcon, BarcodeIcon, XIcon, SparkleIcon } from '../../components/ui/icons'
 import {
   adminBffEnabled, downloadCatalogCsvBff, getAdminProducts,
 } from '../../services/adminBffService'
@@ -64,7 +64,7 @@ const FIELD_MAP = {
   'Status': 'status', 'Internal Notes': 'internal_notes'
 }
 
-export default function Sheet() {
+export default function Sheet({ canManageProducts = false }) {
   const { openProduct, isDark } = useStore()
   const secureCatalog = adminBffEnabled()
   const [rows, setRows] = useState([])
@@ -214,10 +214,14 @@ export default function Sheet() {
   const fetchProducts = async ({ background = false } = {}) => {
     if (!background) setLoading(true)
     setOperationError('')
+    // A failed refresh must never blank a working set: keep the last good
+    // rows on screen and say the refresh failed. Only the very first load
+    // may present an empty sheet.
+    const hadRows = rows.length > 0
     if (secureCatalog) {
       const result = await getAdminProducts()
       if (!result.ok) {
-        setRows([])
+        if (!hadRows) setRows([])
         setOperationError(result.error)
       } else {
         setRows(result.products || [])
@@ -226,7 +230,7 @@ export default function Sheet() {
       return
     }
     if (!supabase) {
-      setRows([])
+      if (!hadRows) setRows([])
       setOperationError('Supabase is not configured. Product records are unavailable.')
       setLoading(false)
       return
@@ -234,7 +238,7 @@ export default function Sheet() {
 
     const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false })
     if (error) {
-      setRows([])
+      if (!hadRows) setRows([])
       setOperationError(safeUiError('SHEET_LOAD_FAILED'))
     } else {
       setRows(data || [])
@@ -358,8 +362,8 @@ export default function Sheet() {
             <span>✨</span> Smart Paste AI
           </button>
           <button
-            onClick={() => rows.length > 0 && setEnrichProduct(rows[0])}
-            disabled={rows.length === 0}
+            onClick={() => visibleRows.length > 0 && setEnrichProduct(visibleRows[0])}
+            disabled={visibleRows.length === 0}
             className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-amber/30 bg-amber/10 px-3 min-h-[44px] text-sm font-medium text-amber transition hover:bg-amber/20 disabled:opacity-40"
           >
             <span>✨</span> AI Spec Enricher
@@ -452,7 +456,7 @@ export default function Sheet() {
             <button
               key={d.name}
               onClick={() => handleScrollToDomain(d.name)}
-              className={`shrink-0 px-3 min-h-[38px] rounded-adm-sm text-xs font-bold font-mono transition-all ${DOMAIN_TONE[d.name] || 'bg-white/15 text-white'}`}
+              className={`shrink-0 px-3 min-h-11 rounded-adm-sm text-xs font-bold font-mono transition-all ${DOMAIN_TONE[d.name] || 'bg-white/15 text-white'}`}
             >
               {d.name}
             </button>
@@ -630,16 +634,16 @@ export default function Sheet() {
                     </td>
                     <td className="border border-adm-line px-2 text-center bg-adm-surface group-hover:bg-blue/10">
                       <div className="flex items-center justify-center gap-0.5">
-                        <button onClick={() => setEnrichProduct(r)} className="text-amber/70 hover:text-amber hover:bg-amber/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors text-sm font-bold" title="Enrich Product Specs with AI">
-                          ✨
+                        <button onClick={() => setEnrichProduct(r)} className="text-amber/70 hover:text-amber hover:bg-amber/10 rounded-adm-sm w-11 h-11 flex items-center justify-center transition-colors text-sm font-bold" title="Enrich Product Specs with AI" aria-label="Enrich Product Specs with AI">
+                          <SparkleIcon size={16} />
                         </button>
-                        <button onClick={() => openProduct(r.sku)} className="text-white/55 hover:text-white hover:bg-white/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors" title="View Store Page">
-                          <EyeIcon size={15} />
+                        <button onClick={() => openProduct(r.sku)} className="text-white/55 hover:text-white hover:bg-white/10 rounded-adm-sm w-11 h-11 flex items-center justify-center transition-colors" title="View Store Page" aria-label="View Store Page">
+                          <EyeIcon size={16} />
                         </button>
-                        <button onClick={() => setShowBarcode(r.barcode || r.sku)} className="text-white/55 hover:text-white hover:bg-white/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors" title="View Barcode">
-                          <BarcodeIcon size={15} />
+                        <button onClick={() => setShowBarcode(r.barcode || r.sku)} className="text-white/55 hover:text-white hover:bg-white/10 rounded-adm-sm w-11 h-11 flex items-center justify-center transition-colors" title="View Barcode" aria-label="View Barcode">
+                          <BarcodeIcon size={16} />
                         </button>
-                        <button onClick={() => setDeleteTargets([r])} className="text-crimson/60 hover:text-crimson hover:bg-crimson/10 rounded-adm-sm w-9 h-9 flex items-center justify-center transition-colors text-lg leading-none" title="Delete Row">×</button>
+                        <button onClick={() => setDeleteTargets([r])} disabled={secureCatalog && !canManageProducts} className="text-crimson/60 hover:text-crimson hover:bg-crimson/10 rounded-adm-sm w-11 h-11 flex items-center justify-center transition-colors text-lg leading-none disabled:cursor-not-allowed disabled:opacity-40" title={secureCatalog && !canManageProducts ? 'Administrator permission is required' : 'Delete Row'} aria-label="Delete Row">×</button>
                       </div>
                     </td>
                   </tr>

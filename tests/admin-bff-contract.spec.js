@@ -51,7 +51,7 @@ import {
 import systemReadinessHandler from '../prepared-api/admin/system-readiness.js'
 import fulfillmentHandler from '../prepared-api/admin/fulfillment.js'
 import confirmHandler from '../prepared-api/admin/fulfillment/confirm.js'
-import { validateFulfillmentCommand } from '../server/admin-bff/fulfillment.js'
+import { FULFILLMENT_READ_LIMITS, readFulfillmentData, requiresPaymentVerdictAdmin, validateFulfillmentCommand } from '../server/admin-bff/fulfillment.js'
 import inboxHandler from '../prepared-api/admin/inbox.js'
 import internalNoteHandler from '../prepared-api/admin/inbox/internal-note.js'
 import { validateInboxCommand } from '../server/admin-bff/inbox.js'
@@ -730,6 +730,42 @@ test('admin product projection is session-gated and derives stock without exposi
   expect(result.products[0]).not.toHaveProperty('private_note')
 })
 
+test('admin products never turn missing or malformed stock projections into healthy totals', async () => {
+  for (const rows of [[], [{ sku: 'SKU-1', stock_from_batches: null }],
+    ...['', true, [], '0x10', '1e2', -1, 1.5].map(value => [{ sku: 'SKU-1', stock_from_batches: value }]),
+    [{ sku: 'SKU-1', stock_from_batches: 3 }, { sku: 'SKU-1', stock_from_batches: 5 }]]) {
+    const client = {
+      from(table) {
+        const builder = {
+          select() { return builder }, order() { return builder },
+          limit() { return Promise.resolve({ data: table === 'products' ? [{ sku: 'SKU-1' }] : rows, error: null }) },
+        }
+        return builder
+      },
+    }
+    const result = await readAdminProducts(client)
+    expect(result.products[0].stock_available).toBeNull()
+    expect(result.unavailable).toEqual([{ key: 'stock', code: 'QUERY_UNAVAILABLE' }])
+  }
+})
+
+test('admin products preserve canonical zero and numeric-string stock totals', async () => {
+  const client = {
+    from(table) {
+      const builder = {
+        select() { return builder }, order() { return builder },
+        limit() { return Promise.resolve({ data: table === 'products'
+          ? [{ sku: 'ZERO' }, { sku: 'POSITIVE' }]
+          : [{ sku: 'ZERO', stock_from_batches: 0 }, { sku: 'POSITIVE', stock_from_batches: '12' }], error: null }) },
+      }
+      return builder
+    },
+  }
+  const result = await readAdminProducts(client)
+  expect(result.products.map(product => product.stock_available)).toEqual([0, 12])
+  expect(result.unavailable).toEqual([])
+})
+
 test('fulfillment BFF is session/CSRF/idempotency gated and validates fixed command schemas', async () => {
   const noSession = response()
   await fulfillmentHandler(request('GET'), noSession)
@@ -753,6 +789,63 @@ test('fulfillment BFF is session/CSRF/idempotency gated and validates fixed comm
   })).toThrow('REQUEST_INVALID')
 })
 
+test('fulfillment data read enforces read limits and returns completeness metadata', async () => {
+  expect(FULFILLMENT_READ_LIMITS).toEqual({
+    submitted: 200,
+    confirmed: 200,
+    lots: 1000,
+    staff: 50,
+  })
+
+  const queries = []
+  const client = {
+    from(table) {
+      const q = {
+        table,
+        limitVal: null,
+        select() { return q },
+        eq() { return q },
+        gt() { return q },
+        in() { return q },
+        order() { return q },
+        limit(val) {
+          q.limitVal = val
+          queries.push({ table, limit: val })
+          return Promise.resolve({ data: [], error: null })
+        },
+      }
+      return q
+    },
+  }
+
+  const result = await readFulfillmentData(client)
+  expect(result.completeness).toEqual({
+    submitted: { returned: 0, limit: 200, truncated: false },
+    confirmed: { returned: 0, limit: 200, truncated: false },
+    lots: { returned: 0, limit: 1000, truncated: false },
+    staff: { returned: 0, limit: 50, truncated: false },
+  })
+  expect(queries).toEqual([
+    { table: 'order_requests', limit: 200 },
+    { table: 'order_requests', limit: 200 },
+    { table: 'product_batches', limit: 1000 },
+    { table: 'user_profiles', limit: 50 },
+  ])
+})
+
+test('payment verdicts require the Admin role while warehouse commands stay with Staff', () => {
+  for (const toStatus of ['verified', 'failed', 'refunded']) {
+    expect(requiresPaymentVerdictAdmin('payment_status', toStatus)).toBe(true)
+  }
+  for (const [action, toStatus] of [
+    ['payment_status', 'awaiting_instructions'], ['payment_status', 'evidence_submitted'],
+    ['confirm_order', undefined], ['packing_scan', undefined], ['delivery_details', undefined],
+    ['fulfill_order', undefined], ['transfer_lot', undefined], ['assign_box', undefined],
+  ]) {
+    expect(requiresPaymentVerdictAdmin(action, toStatus)).toBe(false)
+  }
+})
+
 test('operational payment evidence rejects non-text JSON values', () => {
   const base = {
     orderRequestId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1',
@@ -764,6 +857,55 @@ test('operational payment evidence rejects non-text JSON values', () => {
     expect(() => validateFulfillmentCommand('payment_status', { ...base, evidenceNote })).toThrow('REQUEST_INVALID')
   }
   expect(validateFulfillmentCommand('payment_status', { ...base, evidenceNote: ' GC-1 matched to merchant receipt ' }).evidenceNote).toBe('GC-1 matched to merchant receipt')
+})
+
+test('operational structured payment evidence validates method, amount, payer, reference, and currency', () => {
+  const base = {
+    orderRequestId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1',
+    toStatus: 'evidence_submitted',
+    expectedPaymentStatus: 'awaiting_instructions',
+    expectedUpdatedAt: '2026-09-08T08:00:00Z',
+    paymentMethod: 'gcash',
+    paymentAmount: 1250.50,
+    paymentCurrency: 'PHP',
+    payerName: 'Juan dela Cruz',
+    paymentReference: 'GC-20260916-001',
+    proofAssetRef: 'https://proofs.example.test/receipt.png',
+    evidenceNote: 'Payer submitted via Viber',
+  }
+  const valid = validateFulfillmentCommand('payment_status', base)
+  expect(valid.paymentMethod).toBe('gcash')
+  expect(valid.paymentAmount).toBe(1250.5)
+  expect(valid.paymentCurrency).toBe('PHP')
+  expect(valid.payerName).toBe('Juan dela Cruz')
+  expect(valid.paymentReference).toBe('GC-20260916-001')
+  expect(valid.proofAssetRef).toBe('https://proofs.example.test/receipt.png')
+
+  for (const method of ['gcash', 'bank_transfer', 'maya', 'cash', 'other']) {
+    expect(validateFulfillmentCommand('payment_status', { ...base, paymentMethod: method }).paymentMethod).toBe(method)
+  }
+
+  for (const paymentMethod of ['crypto', 'stripe', 'paypal', '', null, 123]) {
+    expect(() => validateFulfillmentCommand('payment_status', { ...base, paymentMethod })).toThrow('REQUEST_INVALID')
+  }
+
+  for (const paymentAmount of [0, -10, null, false, true, 'not-a-number', 10000001, '']) {
+    expect(() => validateFulfillmentCommand('payment_status', { ...base, paymentAmount })).toThrow('REQUEST_INVALID')
+  }
+
+  for (const paymentCurrency of ['USD', 'EUR', 'JPY', '', null]) {
+    expect(() => validateFulfillmentCommand('payment_status', { ...base, paymentCurrency })).toThrow('REQUEST_INVALID')
+  }
+
+  for (const payerName of ['', '   ', null, undefined]) {
+    expect(() => validateFulfillmentCommand('payment_status', { ...base, payerName })).toThrow('REQUEST_INVALID')
+  }
+
+  for (const paymentReference of ['', '   ', null, undefined]) {
+    expect(() => validateFulfillmentCommand('payment_status', { ...base, paymentReference })).toThrow('REQUEST_INVALID')
+  }
+
+  expect(() => validateFulfillmentCommand('payment_status', { ...base, proofAssetRef: 'x'.repeat(501) })).toThrow('REQUEST_INVALID')
 })
 
 test('operational delivery amounts require explicit numbers and preserve zero', () => {
@@ -911,7 +1053,15 @@ test('prepared Pasabuy boundary is signed, durable, rationale-audited, and featu
   expect(migration).toContain("'sent',false,'paid',false")
   expect(service).toContain("'/api/admin/pasabuy'")
   expect(manager).toContain('adminBffEnabled()')
-  expect(manager).toContain('savePasabuyQuoteBff')
+  // Transitions and quotes run through one retained session per mount, so a
+  // retry after a lost response replays the same operation identity instead
+  // of minting a fresh key per attempt.
+  expect(manager).toContain('createPasabuyCommandSession')
+  expect(manager).toContain("commands.current.run('transition'")
+  expect(manager).toContain("commands.current.run('quote'")
+  expect(manager).not.toContain('transitionPasabuyBff(')
+  expect(manager).not.toContain('savePasabuyQuoteBff({')
+  expect(service).toContain('createPasabuyCommandSession')
   expect(manager).toContain('Owner price rationale')
 })
 
@@ -1785,6 +1935,68 @@ test('provider cleanup failure stays pending and is not falsely marked complete'
   expect(rpcNames).toEqual(['claim_admin_product_intake_evidence_cleanup_v1'])
 })
 
+test('unexpected cleanup claim state cannot reach private evidence deletion', async () => {
+  process.env.K2_ADMIN_BFF_REQUEST_SECRET = Buffer.alloc(32, 5).toString('base64')
+  const cleanupId = '6df7df67-60cf-4bc7-8975-c1987508621f'
+  const objectPath = '6a88b5f9-8be6-4f4d-a504-173c96f40df1/e74a4161-72ca-4d72-8f59-37aa690e1869/back.png'
+  let removalAttempted = false
+  const client = {
+    async rpc() {
+      return {
+        data: {
+          cleanupId, objectPath,
+          objectPathHash: createHash('sha256').update(objectPath, 'utf8').digest('hex'),
+          status: 'claimed',
+        },
+        error: null,
+      }
+    },
+    storage: { from: () => ({ remove: async () => {
+      removalAttempted = true
+      return { error: null }
+    } }) },
+  }
+
+  await expect(reconcilePendingEvidenceCleanup(
+    client,
+    { userId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', role: 'Staff' },
+    'e2898343-a635-49a2-8546-a2ad33a9198a',
+    cleanupId,
+  )).rejects.toThrow('EVIDENCE_CLEANUP_INVALID')
+  expect(removalAttempted).toBe(false)
+})
+
+test('cleanup stays pending without an exact completion receipt', async () => {
+  process.env.K2_ADMIN_BFF_REQUEST_SECRET = Buffer.alloc(32, 5).toString('base64')
+  const cleanupId = '6df7df67-60cf-4bc7-8975-c1987508621f'
+  const objectPath = '6a88b5f9-8be6-4f4d-a504-173c96f40df1/e74a4161-72ca-4d72-8f59-37aa690e1869/back.png'
+  let rpcCall = 0
+  const client = {
+    async rpc() {
+      rpcCall += 1
+      if (rpcCall === 1) {
+        return {
+          data: {
+            cleanupId, objectPath,
+            objectPathHash: createHash('sha256').update(objectPath, 'utf8').digest('hex'),
+            status: 'pending',
+          },
+          error: null,
+        }
+      }
+      return { data: null, error: null }
+    },
+    storage: { from: () => ({ remove: async () => ({ error: null }) }) },
+  }
+
+  await expect(reconcilePendingEvidenceCleanup(
+    client,
+    { userId: '6a88b5f9-8be6-4f4d-a504-173c96f40df1', role: 'Staff' },
+    'e2898343-a635-49a2-8546-a2ad33a9198a',
+    cleanupId,
+  )).resolves.toEqual({ cleanupId, cleanupPending: true })
+})
+
 test('flight consignment BFF is session/idempotency gated and validates exact scan truth', async () => {
   const noSession = response()
   await consignmentsHandler(request('GET'), noSession)
@@ -1843,7 +2055,7 @@ test('customer BFF is session-gated and keeps canonical identities separate', as
     pasabuy_requests: { data: [], error: null },
     conversations: { data: [{ id: 'x1', customer_id: 'c1', status: 'open', unread_count: 2 }], error: null },
   }
-  const client = { from(table) { const chain = { select() { return chain }, order() { return chain }, in() { return chain }, limit() { return Promise.resolve(rows[table]) } }; return chain } }
+  const client = { from(table) { const chain = { select() { return chain }, order() { return chain }, in() { return chain }, limit() { return Promise.resolve({ ...rows[table], count: rows[table].data.length }) } }; return chain } }
   const result = await readAdminCustomers(client)
   expect(result.mode).toBe('canonical')
   expect(result.customers[0].account.linked).toBe(false)

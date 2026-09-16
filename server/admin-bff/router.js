@@ -89,7 +89,14 @@ import staffAccess from '../../prepared-api/admin/staff-access.js'
 import staffAccessInvite from '../../prepared-api/admin/staff-access/invite.js'
 import staffAccessMfaReplacement from '../../prepared-api/admin/staff-access/mfa-replacement.js'
 import systemReadiness from '../../prepared-api/admin/system-readiness.js'
-import { safeJson } from './security.js'
+import { requestIp, safeJson } from './security.js'
+import { ADMIN_AUTH_RATE_SHIELD, shieldKey } from '../rate-shield.js'
+
+// Sessionless authentication entrypoints shed floods here, before durable
+// budgets, provider calls, or the database. Every other route already carries
+// a staff or recovery session, so the shield would only duplicate the
+// per-session durable limits.
+const SHIELDED_AUTH_ROUTES = new Set(['auth/login', 'auth/password-recovery/request'])
 import intakeAi from '../../prepared-api/admin/product-intake/ai.js'
 
 const ROUTES = new Map([
@@ -304,6 +311,12 @@ export default async function adminBffRouter(req, res) {
   const allowedMethods = [control.method, ...Object.keys(control.additionalMethods || {})]
   if (!allowedMethods.includes(req.method)) {
     return safeJson(res, 405, { error: { code: 'METHOD_NOT_ALLOWED' } }, { Allow: allowedMethods.join(', ') })
+  }
+  if (SHIELDED_AUTH_ROUTES.has(route)) {
+    const shield = ADMIN_AUTH_RATE_SHIELD.consume(shieldKey(route, requestIp(req)))
+    if (!shield.allowed) {
+      return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': String(shield.retryAfter) })
+    }
   }
   return handler(req, res)
 }

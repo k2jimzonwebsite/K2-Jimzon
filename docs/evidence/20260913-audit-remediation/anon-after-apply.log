@@ -1,0 +1,21 @@
+--- anonymous read boundary (live, read-only) ---
+
+Public catalog — anon SHOULD be able to read:
+PASS  anon can read products                         anon=206/27 actual=30
+PASS  anon can read brands                           anon=200/0 actual=0  (table empty — grant proven, visibility not)
+PASS  anon can read categories                       anon=200/0 actual=0  (table empty — grant proven, visibility not)
+PASS  anon can read v_product_stock_from_batches     anon=206/21 actual=21
+
+Private data — anon MUST NOT be able to read any row:
+PASS  anon cannot read user_profiles                 anon=401/- actual=4
+PASS  anon cannot read orders                        anon=401/- actual=8
+PASS  anon cannot read messages                      anon=401/- actual=0
+PASS  anon cannot read conversations                 anon=401/- actual=0
+PASS  anon cannot read channel_credentials           anon=401/- actual=0
+PASS  anon cannot read staff_allocations             anon=401/- actual=0
+PASS  anon cannot read product_drafts                anon=401/- actual=0
+PASS  anon cannot read product_batches               anon=401/- actual=21
+PASS  anon cannot read products_old                  anon=401/- actual=14
+PASS  anon cannot read warehouses                    anon=401/- actual=0
+
+===== 14/14 boundary checks passed =====

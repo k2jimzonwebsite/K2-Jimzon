@@ -1,5 +1,25 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+**14 September prepared discovery changes (IDEA-20260914-02):** Vercel now has
+an explicit permanent `/wholesale` to `/trade` redirect; canonical and social
+metadata use `/trade` even on the development alias. Account/messages/checkout/
+confirmation carry exact noindex/nofollow header rules. Preserve these scoped
+rules when eventually removing the independent temporary product launch gate.
+After an approved Storefront release, verify redirect status/Location and the
+four actual response headers; local tests establish configuration and browser
+metadata only. Do not activate or redeploy from this note alone.
+
+13 September local configuration correction (IDEA-20260913-02): each selected
+Vercel configuration invokes its own `build:storefront` or `build:admin` script,
+including the corresponding budget and boundary gate and Admin head rewrite.
+The new CI job installs PostgreSQL 17 using the official PostgreSQL Apt procedure
+and sequentially executes purchase-hold, payment-recovery and final-Admin real SQL
+rehearsals. The runners accept `K2_TEST_PG_BIN` and native executable suffixes.
+This is prepared configuration; obtain exact-commit remote CI/preview receipts
+before claiming it deployed. Existing known-good deployment recovery remains.
+Official installation reference: https://www.postgresql.org/download/linux/ubuntu/
+Evidence: `../evidence/20260913-audit-remediation/`.
+
 8 September production receipt: GitHub `main` commit
 `6ad7578235c8a6b16ce42b947028f090f1ae1eb1` passed CI run `34229084356`.
 The Git-linked Vercel production deployments succeeded separately as receipt
@@ -17,7 +37,7 @@ verification of both Git-linked projects. No Supabase migration or provider/
 channel activation occurred in this release.
 
 8 September local continuation, MAP-028 I-014: PROJECT_MAP and ARCHITECTURE now
-declare the registry-derived 91 Admin / 15 Storefront prepared routes. The new
+declare the registry-derived 92 Admin / 15 Storefront prepared routes. The new
 security-inventory assertion failed first, then passed after reconciliation;
 24 focused inventory/payment/packing/CI contracts pass. The test is included in
 the existing contracts and CI base suite. Source route counts are not emitted

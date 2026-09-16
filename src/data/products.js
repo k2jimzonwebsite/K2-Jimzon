@@ -650,8 +650,6 @@ export const CATEGORIES = [
   'Skin Care',
 ]
 
-export const getProduct = (id) => products.find((p) => p.id === id) ?? products[0]
-
 export const byCollection = (id) => products.filter((p) => p.collections.includes(id))
 
 export const peso = (n) =>

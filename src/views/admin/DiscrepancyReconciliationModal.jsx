@@ -44,7 +44,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
             </div>
             <h2 id="reconcile-consignment-title" className="font-sans text-xl font-bold text-white mt-1">Review independent Manila counts</h2>
           </div>
-          <button onClick={onClose} className="text-white/60 hover:text-white min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10 active:scale-[0.98]" aria-label="Close reconciliation"><XIcon /></button>
+          <button onClick={onClose} disabled={finalizing} className="text-white/60 hover:text-white min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10 active:scale-[0.98] disabled:opacity-40" aria-label="Close reconciliation"><XIcon /></button>
         </div>
 
         {/* Stats Summary Bar */}
@@ -138,7 +138,8 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
         <div className="p-4 border-t border-adm-line bg-adm-sunken flex justify-end gap-3 shrink-0">
           <button
             onClick={onClose}
-            className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-4 py-2.5 text-sm font-semibold text-neutral-300 hover:bg-white/10 active:scale-[0.98]"
+            disabled={finalizing}
+            className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-4 py-2.5 text-sm font-semibold text-neutral-300 hover:bg-white/10 active:scale-[0.98] disabled:opacity-40"
           >
             Back to Scanning
           </button>

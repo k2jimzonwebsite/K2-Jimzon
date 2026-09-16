@@ -1,5 +1,5 @@
 import {
-  contact, idempotencyKey, publicFailure, readJson, requestIp, requireAllowedOrigin,
+  contact, idempotencyKey, numeric, publicFailure, quantity, readJson, requestHostname, requestIp, requireAllowedOrigin,
   requireStorefrontProject, safeJson, setGuestGrantCookie, signedRpcArguments, text,
   verifyBotChallenge,
 } from '../../server/storefront-bff/security.js'
@@ -12,10 +12,8 @@ function validate(body) {
   const { email, phone } = contact(body.email, body.phone)
   const shipping = text(body.shipping || 'sea', 'SHIPPING', { required: true, max: 10 })
   if (!['air','sea','either'].includes(shipping)) throw new Error('SHIPPING_INVALID')
-  const quantity = Number(body.quantity)
-  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) throw new Error('QUANTITY_INVALID')
-  const budget = body.budget === '' || body.budget == null ? null : Number(body.budget)
-  if (budget != null && (!Number.isFinite(budget) || budget < 0 || budget > 10000000)) throw new Error('BUDGET_INVALID')
+  const itemQuantity = quantity(body.quantity, 'QUANTITY')
+  const budget = body.budget === '' || body.budget == null ? null : numeric(body.budget, 'BUDGET', { min: 0, max: 10000000 })
   const url = text(body.url, 'URL', { max: 2048 })
   if (url) {
     let parsed
@@ -29,7 +27,7 @@ function validate(body) {
       customerName: text(body.customerName, 'CUSTOMER_NAME', { required: true, min: 1, max: 140 }),
       email, idempotencyKey: idempotencyKey(body.idempotencyKey),
       item: text(body.item, 'ITEM', { required: true, min: 2, max: 500 }),
-      notes: text(body.notes, 'NOTES', { max: 2000 }), phone, quantity, shipping, url,
+      notes: text(body.notes, 'NOTES', { max: 2000 }), phone, quantity: itemQuantity, shipping, url,
     },
     botToken: body.botToken,
   }
@@ -41,7 +39,7 @@ export default async function handler(req, res) {
   if (!requireAllowedOrigin(req)) return safeJson(res, 403, { error: { code: 'ORIGIN_NOT_ALLOWED' } })
   try {
     const { payload, botToken } = validate(await readJson(req))
-    if (!await verifyBotChallenge(botToken, requestIp(req))) {
+    if (!await verifyBotChallenge(botToken, requestIp(req), 'guest_pasabuy', { hostname: requestHostname(req) })) {
       return safeJson(res, 403, { error: { code: 'BOT_CHALLENGE_REQUIRED' } })
     }
     const client = createStorefrontServerSupabase()

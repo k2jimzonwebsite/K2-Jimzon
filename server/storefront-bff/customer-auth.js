@@ -1,5 +1,5 @@
 import {
-  publicFailure, readJson, requestIp, requireAllowedOrigin, requireStorefrontProject, safeJson,
+  publicFailure, readJson, requestHostname, requestIp, requireAllowedOrigin, requireStorefrontProject, safeJson,
   verifyBotChallenge,
 } from './security.js'
 import { createStorefrontServerSupabase } from './supabase.js'
@@ -69,7 +69,7 @@ function handlerFactory({ action, validate, execute, bot = false }, overrides = 
           error: { code: 'RATE_LIMITED', retryAfter: attempt.retryAfter },
         }, { 'Retry-After': String(attempt.retryAfter) })
       }
-      if (bot && !await verifyBot(payload.botToken, requestIp(req), 'customer_auth')) {
+      if (bot && !await verifyBot(payload.botToken, requestIp(req), 'customer_auth', { hostname: requestHostname(req) })) {
         return safeJson(res, 403, { error: { code: 'BOT_CHALLENGE_REQUIRED' } })
       }
       return execute({ client, payload, req, res })

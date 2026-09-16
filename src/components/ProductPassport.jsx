@@ -5,7 +5,7 @@ import { ShieldCheckIcon, CheckIcon } from './ui/icons'
  * Strictly conditional provenance card.
  * Never invent or hardcode fictional operational facts. Missing data gracefully omits that line.
  */
-export default function ProductPassport({ product, stock = 0 }) {
+export default function ProductPassport({ product, stock = null }) {
   if (!product) return null
 
   const origin = product.country_of_origin || (product.origin && !product.origin.startsWith('Shopee') ? product.origin : null)
@@ -21,9 +21,6 @@ export default function ProductPassport({ product, stock = 0 }) {
           <ShieldCheckIcon size={16} className="text-forest" />
           <span className="font-serif text-sm font-semibold tracking-wide text-navy">Product Details</span>
         </div>
-        <span className="rounded-full bg-forest/10 px-2.5 py-0.5 text-[11px] font-bold text-forest">
-          Authentic Import
-        </span>
       </div>
 
       <dl className="mt-3 divide-y divide-line/60 text-xs">
@@ -33,10 +30,6 @@ export default function ProductPassport({ product, stock = 0 }) {
             <dd className="font-semibold text-navy text-right">{origin}</dd>
           </div>
         )}
-        <div className="flex justify-between py-2">
-          <dt className="font-medium text-navy-faint">Consignment</dt>
-          <dd className="font-semibold text-navy text-right">Direct import to Manila</dd>
-        </div>
         {stock > 0 ? (
           <div className="flex justify-between py-2">
             <dt className="font-medium text-navy-faint">Manila Stock</dt>
@@ -47,7 +40,7 @@ export default function ProductPassport({ product, stock = 0 }) {
         ) : (
           <div className="flex justify-between py-2">
             <dt className="font-medium text-navy-faint">Manila Stock</dt>
-            <dd className="font-semibold text-crimson text-right">Available on Pasabuy request</dd>
+            <dd className="font-semibold text-crimson text-right">{stock === null ? 'Stock check pending' : 'Out of stock'}</dd>
           </div>
         )}
         {batch && (

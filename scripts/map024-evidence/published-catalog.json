@@ -267,13 +267,13 @@
     "sku": "rana-sfogliavelo",
     "name": "Giovanni Rana Sfogliavelo prosciutto crudo 250g",
     "status": "Live",
-    "published": false,
+    "published": true,
     "primary_image_url": null,
     "image_url": null,
     "secondary_images": null,
     "lifestyle_images": null,
     "srp": "385",
-    "updated_at": "2026-08-21 04:52:13.391909+00"
+    "updated_at": "2026-09-02 15:08:56.42855+00"
   },
   {
     "sku": "rio-mare",

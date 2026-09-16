@@ -1,0 +1,3 @@
+{"input":{"quantity":true,"unitCost":false},"accepted":{"quantity":1,"boxCode":"BOX-A","batchCode":"LOT-A","expiryDate":"2027-09-13","isNonExpiry":false,"unitCost":0,"consignmentId":"10000000-0000-4000-8000-000000000001"}}
+{"input":{"quantity":[1],"unitCost":false},"accepted":{"quantity":1,"boxCode":"BOX-A","batchCode":"LOT-A","expiryDate":"2027-09-13","isNonExpiry":false,"unitCost":0,"consignmentId":"10000000-0000-4000-8000-000000000001"}}
+{"input":{"quantity":"1","unitCost":false},"accepted":{"quantity":1,"boxCode":"BOX-A","batchCode":"LOT-A","expiryDate":"2027-09-13","isNonExpiry":false,"unitCost":0,"consignmentId":"10000000-0000-4000-8000-000000000001"}}

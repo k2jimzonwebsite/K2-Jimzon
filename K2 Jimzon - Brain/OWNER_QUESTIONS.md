@@ -8,15 +8,31 @@ It is not an engineering backlog; implementation remains exclusively in
 
 | Priority | Owner item | Needed before | Current action |
 | --- | --- | --- | --- |
-| **Immediate** | `OWNER-005` public-write-boundary migration | MAP-017 remediation of live critical findings | Verify owner recovery access, then apply the authorized migration through its guarded executor |
-| Early | `OWNER-002` reservation holds | MAP-023 reservation activation | Choose hold, expiry, and extension rules |
+| **Immediate** | `OWNER-005` remaining database permission gates | MAP-017 remediation of ten remaining findings | Phase one and follow-up are applied/verified. Coordinate guest cutover and provider-owned default corrections under MAP-017; do not repeat either applied correction. |
+| Early | `OWNER-002` reservation holds | MAP-023 reservation activation | Answered 2 September; implement and verify the recorded lifecycle in MAP-023. |
 | Early | `OWNER-003` wholesale and response claims | MAP-019/MAP-023 commercial activation | Choose eligibility, pricing, credit, minimums, and any SLA |
 | Early | `OWNER-006` customer retention and deletion | MAP-019 privacy workflow | Approve record-specific retention, legal holds, anonymization, and request ownership |
 | Early | `OWNER-007` paid AI intake controls | MAP-018/MAP-023 optional Automatic API path | Controls are prepared; confirm provider/model, per-product/session/monthly caps, retention, and activation evidence |
-| Early | `OWNER-004` public contact channels | Public Contact page activation | Supply the monitored business numbers/channels |
+| Early | `OWNER-004` public contact channels | Public Contact page activation | Answered 2 September; use the recorded channels and verify the customer path. |
 | Before domains | `OWNER-001` domain and DNS | MAP-024 activation | Resolved 27 August 2026: authenticated Hostinger access proved authority; the pre-cutover zone had no MX/TXT records |
 
 ## OWNER-005 — Authorize the public-write-boundary production migration
+
+**13 September owner authorization fulfilled:** “yes proceed” authorized the
+reviewed follow-up `20260909023000`, exact artifact
+`7BA3F473C3313890F57899A657CD1234FEDAFEEB43DB7465819919EF1FB71E05` on K2
+`pixplcjqivlfflickobf`. It is applied with independent exact receipt/all-check
+verification, fresh audit 26→10, and 14/14 live read-boundary checks. This request
+is satisfied; do not ask for the same authorization again. Separate guest cutover
+and provider-owned default work remains MAP-017, not covered by this payload.
+Evidence: `docs/evidence/20260913-audit-remediation/map017-applied-receipt.json`.
+
+**Current disposition, reconciled 9 September:** System Brain/MAP-017 record
+phase one `20260824143000` as `APPLIED_AND_VERIFIED` on 8 September with 14/14
+anonymous read checks. The authorization fields below retain that exact contract;
+they are not a request to repeat it. The remaining 26 critical findings and
+separate follow-up authorization belong to MAP-017 and
+`docs/evidence/20260909-map017-followup.md`.
 
 **Decision:** Authorized
 
@@ -46,8 +62,8 @@ changes, or the Google recovery contacts change.**
 
 The named production database and Storage object-byte backups, both isolated
 restores, owner-only Drive upload, all eight independent retrieval checks, and
-whole-archive reassembly are verified. The account-level recovery-access check
-remains pending and is enforced separately by the guarded executor.
+whole-archive reassembly are verified. Account-level recovery access was verified
+by the 2 September attestation above; revalidate if those conditions change.
 
 **Owner decision recorded 26 August 2026:** the prepared phase-one migration is
 authorized, but execution must wait for a named, verified production backup and

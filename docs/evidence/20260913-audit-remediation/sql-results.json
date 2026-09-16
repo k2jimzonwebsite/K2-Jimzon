@@ -1,0 +1,14 @@
+[
+  {
+    "runner": "rehearse-purchase-time-reservation",
+    "exitCode": 0
+  },
+  {
+    "runner": "rehearse-payment-recovery",
+    "exitCode": 0
+  },
+  {
+    "runner": "rehearse-final-admin-concurrency",
+    "exitCode": 0
+  }
+]

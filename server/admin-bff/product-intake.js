@@ -3,6 +3,7 @@ import {
   classifyEvidenceRegistrationFailure, evidenceCleanupDecision,
 } from './evidence-cleanup-policy.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { strictInteger, strictNumeric } from '../shared-numeric.js'
 import { recordSecurityEvent } from './security-events.js'
 import { createHash } from 'node:crypto'
 import sharp from 'sharp'
@@ -55,10 +56,13 @@ function inventoryPayload(source, value) {
     ? [...common, 'consignmentId']
     : [...common, 'ownerCode', 'hubLocation', 'custodian', 'reason']
   exactObject(value, keys)
-  const quantity = Number(value.quantity)
-  const unitCost = Number(value.unitCost ?? 0)
-  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 100_000) throw new Error('REQUEST_INVALID')
-  if (!Number.isFinite(unitCost) || unitCost < 0 || unitCost > 10_000_000) throw new Error('REQUEST_INVALID')
+  // Omitted optional cost keeps its zero default; every other shape —
+  // booleans, blank strings, arrays, objects, null and non-canonical text —
+  // is rejected rather than coerced.
+  const quantity = strictInteger(value.quantity, 'REQUEST_INVALID', { min: 1, max: 100_000 })
+  const unitCost = value.unitCost === undefined
+    ? 0
+    : strictNumeric(value.unitCost, 'REQUEST_INVALID', { min: 0, max: 10_000_000 })
   if (typeof value.isNonExpiry !== 'boolean') throw new Error('REQUEST_INVALID')
   const expiryDate = text(value.expiryDate, { max: 10, nullable: true })
   if (expiryDate && !/^\d{4}-\d{2}-\d{2}$/.test(expiryDate)) throw new Error('REQUEST_INVALID')
@@ -177,12 +181,12 @@ export async function searchProductIntakeDuplicates(client, rawQuery) {
   const barcode = await client.from('products').select(projection).eq('barcode', query).limit(5)
   if (barcode.error) throw new Error('INTAKE_DUPLICATES_UNAVAILABLE')
   if (barcode.data?.length) return { matchType: 'exact', product: normalize(barcode.data[0]), candidates: barcode.data.map(normalize) }
-  const sku = await client.from('products').select(projection).ilike('sku', query).limit(5)
+  const safeSku = query.replace(/[\\%_]/g, (character) => `\\${character}`)
+  const sku = await client.from('products').select(projection).ilike('sku', safeSku).limit(5)
   if (sku.error) throw new Error('INTAKE_DUPLICATES_UNAVAILABLE')
   const exactSku = sku.data?.find((product) => product.sku?.toLowerCase() === query.toLowerCase())
   if (exactSku) return { matchType: 'exact', product: normalize(exactSku), candidates: sku.data.map(normalize) }
-  const safeLike = query.replace(/[\\%_]/g, (character) => `\\${character}`)
-  const names = await client.from('products').select(projection).ilike('name', `%${safeLike}%`).limit(5)
+  const names = await client.from('products').select(projection).ilike('name', `%${safeSku}%`).limit(5)
   if (names.error) throw new Error('INTAKE_DUPLICATES_UNAVAILABLE')
   return names.data?.length
     ? { matchType: 'ambiguous', candidates: names.data.map(normalize) }
@@ -316,6 +320,10 @@ export async function reconcilePendingEvidenceCleanup(
     ),
   )
   if (claim?.error || !claim?.data) throw new Error('EVIDENCE_CLEANUP_UNAVAILABLE')
+  const claimedCleanupId = String(claim.data.cleanupId || '')
+  if (claimedCleanupId !== cleanupId || !['pending', 'completed'].includes(claim.data.status)) {
+    throw new Error('EVIDENCE_CLEANUP_INVALID')
+  }
   if (claim.data.status === 'completed') return { cleanupId, cleanupPending: false }
   const objectPath = String(claim.data.objectPath || '')
   const objectPathHash = String(claim.data.objectPathHash || '')
@@ -333,7 +341,10 @@ export async function reconcilePendingEvidenceCleanup(
       { cleanupId, objectPathHash },
     ),
   )
-  return { cleanupId, cleanupPending: Boolean(completion?.error) }
+  const completed = !completion?.error
+    && completion?.data?.cleanupId === cleanupId
+    && completion.data.status === 'completed'
+  return { cleanupId, cleanupPending: !completed }
 }
 
 export async function handleProductEvidenceCleanup(req, res) {

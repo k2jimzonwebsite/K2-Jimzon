@@ -1,4 +1,5 @@
 import { createHash, createHmac, randomUUID } from 'node:crypto'
+import { strictInteger, strictNumeric } from '../shared-numeric.js'
 export { verifyBotChallenge } from '../bot-challenge.js'
 
 const MAX_BODY_BYTES = 24 * 1024
@@ -17,7 +18,9 @@ function parseCookies(req) {
   return Object.fromEntries(String(req.headers.cookie || '').split(';')
     .map((part) => part.trim()).filter(Boolean).map((part) => {
       const index = part.indexOf('=')
-      return index < 0 ? [part, ''] : [part.slice(0, index), decodeURIComponent(part.slice(index + 1))]
+      if (index < 0) return [part, '']
+      try { return [part.slice(0, index), decodeURIComponent(part.slice(index + 1))] }
+      catch { return [part.slice(0, index), ''] }
     }))
 }
 
@@ -52,6 +55,17 @@ export function requireAllowedOrigin(req) {
 export function requestIp(req) {
   return String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown')
     .split(',')[0].trim().slice(0, 128)
+}
+
+// Hostname of the already-validated request origin. Callers pass it to the
+// bot challenge so a token minted on one host cannot be replayed on another.
+export function requestHostname(req) {
+  try {
+    const origin = String(req.headers.origin || '')
+    return origin ? new URL(origin).hostname : ''
+  } catch {
+    return ''
+  }
 }
 
 export function authorizationBearer(req) {
@@ -155,8 +169,23 @@ export function contact(emailValue, phoneValue) {
   return { email, phone }
 }
 
-export function idempotencyKey(value) {
-  const result = text(value, 'IDEMPOTENCY_KEY', { required: true, min: 36, max: 64 })
+/**
+ * Strict numerics for customer-supplied quantities and money.
+ *
+ * Single shared boundary: the canonical shape lives in
+ * server/shared-numeric.js so both BFFs enforce one rule. Only genuine
+ * numbers and canonical numeric strings are accepted; anything else is
+ * rejected rather than coerced.
+ */
+export function numeric(value, name, { min = 0, max = 10000000 } = {}) {
+  return strictNumeric(value, `${name}_INVALID`, { min, max })
+}
+
+export function quantity(value, name, { min = 1, max = 99 } = {}) {
+  return strictInteger(value, `${name}_INVALID`, { min, max })
+}
+
+export function idempotencyKey(value) {  const result = text(value, 'IDEMPOTENCY_KEY', { required: true, min: 36, max: 64 })
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(result)) {
     throw new Error('IDEMPOTENCY_KEY_INVALID')
   }

@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from '../../server/admin-bff/authorize.js'
 import { requireAdminProject, safeJson } from '../../server/admin-bff/security.js'
+import { strictInteger } from '../../server/shared-numeric.js'
 
 const PRODUCT_FIELDS = [
   'sku', 'name', 'barcode', 'status', 'srp', 'wholesale_price', 'subcategory',
@@ -12,7 +13,19 @@ export async function readAdminProducts(client) {
     client.from('v_product_stock_from_batches').select('sku,stock_from_batches').limit(500),
   ])
   if (productResult.error) throw new Error('PRODUCT_QUERY_FAILED')
-  const stockBySku = Object.fromEntries((stockResult.data || []).map((row) => [row.sku, Number(row.stock_from_batches || 0)]))
+  const stockBySku = new Map()
+  for (const row of stockResult.data || []) {
+    if (stockBySku.has(row.sku)) {
+      stockBySku.set(row.sku, null)
+      continue
+    }
+    try {
+      stockBySku.set(row.sku, strictInteger(row.stock_from_batches, 'STOCK_UNAVAILABLE', { max: Number.MAX_SAFE_INTEGER }))
+    } catch {
+      stockBySku.set(row.sku, null)
+    }
+  }
+  const stockUnavailable = Boolean(stockResult.error) || (productResult.data || []).some(product => stockBySku.get(product.sku) == null)
   return {
     products: (productResult.data || []).map((product) => ({
       sku: product.sku,
@@ -24,9 +37,9 @@ export async function readAdminProducts(client) {
       subcategory: product.subcategory || null,
       primary_image_url: product.primary_image_url || null,
       created_at: product.created_at,
-      stock_available: stockResult.error ? null : (stockBySku[product.sku] ?? 0),
+      stock_available: stockResult.error ? null : (stockBySku.get(product.sku) ?? null),
     })),
-    unavailable: stockResult.error ? [{ key: 'stock', code: 'QUERY_UNAVAILABLE' }] : [],
+    unavailable: stockUnavailable ? [{ key: 'stock', code: 'QUERY_UNAVAILABLE' }] : [],
   }
 }
 

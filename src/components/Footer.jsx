@@ -48,7 +48,13 @@ export default function Footer() {
           </FooterColumn>
         </div>
 
-        <div className="mt-12 grid gap-3 border-t border-[var(--store-surface-border)] pt-6 text-xs leading-relaxed text-navy-faint md:grid-cols-[1fr_auto] md:items-end">
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 border-t border-[var(--store-surface-border)] pt-2 text-xs font-semibold text-navy-soft">
+          <button onClick={() => go('privacy')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Privacy &amp; Data</button>
+          <button onClick={() => go('terms')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Terms of Service</button>
+          <button onClick={() => go('returns')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Returns &amp; Replacements</button>
+        </div>
+
+        <div className="mt-4 grid gap-3 border-t border-[var(--store-surface-border)]/60 pt-4 text-xs leading-relaxed text-navy-faint md:grid-cols-[1fr_auto] md:items-end">
           <p>Submitting a Website or Pasabuy request does not collect payment. K2 staff confirms availability, delivery, and payment instructions directly.</p>
           <p className="md:text-right">© 2026 K2 Jimzon · Direct Italian imports</p>
           {import.meta.env.DEV && <p className="md:col-span-2">Development preview: fallback products and reviews are illustrative. Production displays database-backed published records.</p>}

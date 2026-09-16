@@ -53,9 +53,9 @@ export function psqlEnvironment(parsed) {
   }
 }
 
-export function runPsql(executable, env, args, label) {
+export function runPsql(executable, env, args, label, input) {
   const result = spawnSync(executable, ['-X', '--no-psqlrc', '-v', 'ON_ERROR_STOP=1', ...args], {
-    cwd: rootDir, env, encoding: 'utf8', windowsHide: true,
+    cwd: rootDir, env, encoding: 'utf8', windowsHide: true, input,
   })
   if (result.error || result.status !== 0) {
     const detail = String(result.stderr || result.error?.message || 'unknown psql failure').trim()

@@ -2,6 +2,7 @@ import { createHash, randomUUID } from 'node:crypto'
 import Papa from 'papaparse'
 import { authorizeAdminRequest } from './authorize.js'
 import { safeJson, signedAdminCommandArguments } from './security.js'
+import { strictInteger } from '../shared-numeric.js'
 import { isAdminRole } from './supabase.js'
 import { buildMarketplaceCoverageProposal, summarizeMarketplaceCoverageAlerts } from '../../src/lib/marketplaceCoverage.js'
 
@@ -296,10 +297,9 @@ function normalizeOrderFact(value) {
     'grossAmount', 'currency', 'orderedAt', 'orderStatus', 'paymentStatus',
   ], 'MARKETPLACE_ORDER_FACT_INVALID')
   const orderedAt = new Date(value.orderedAt)
-  const quantity = Number(value.quantity)
+  const quantity = strictInteger(value.quantity, 'MARKETPLACE_ORDER_FACT_INVALID', { min: 1, max: 100_000 })
   const amount = String(value.grossAmount ?? '').trim()
-  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 100_000
-      || !/^(?:0|[1-9]\d{0,10})(?:\.\d{1,2})?$/.test(amount)
+  if (!/^(?:0|[1-9]\d{0,10})(?:\.\d{1,2})?$/.test(amount)
       || !/^[A-Z]{3}$/.test(String(value.currency || ''))
       || Number.isNaN(orderedAt.getTime()) || orderedAt.getUTCFullYear() < 2000
       || orderedAt.getTime() > Date.now() + 366 * 86_400_000) throw new Error('MARKETPLACE_ORDER_FACT_INVALID')
@@ -647,7 +647,7 @@ export async function handleOwnerCloseCoverage(req, res) {
     if (!UUID.test(idempotencyKey)) return safeJson(res, 400, { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } })
     try {
       const body = exactObject(await readMarketplaceJson(req), ['sessionId', 'productId', 'shopId', 'action', 'priority', 'reason'])
-      const priority = body.priority === null ? null : Number(body.priority)
+      const priority = body.priority === null ? null : strictInteger(body.priority, 'REQUEST_INVALID', { min: 1, max: 50 })
       const payload = {
         sessionId: uuid(body.sessionId), productId: uuid(body.productId), shopId: uuid(body.shopId),
         action: boundedText(body.action, { required: true, max: 20 }),
@@ -694,11 +694,7 @@ export async function handleOwnerCloseFees(req, res) {
         'sessionId', 'shopId', 'policyVersion', 'currency', 'commissionBasisPoints',
         'paymentBasisPoints', 'withholdingBasisPoints', 'fixedFeeMinorPerOrder', 'reason',
       ])
-      const integer = (value, minimum, maximum) => {
-        const parsed = Number(value)
-        if (!Number.isSafeInteger(parsed) || parsed < minimum || parsed > maximum) throw new Error('MARKETPLACE_FEE_POLICY_INVALID')
-        return parsed
-      }
+      const integer = (value, minimum, maximum) => strictInteger(value, 'MARKETPLACE_FEE_POLICY_INVALID', { min: minimum, max: maximum })
       const payload = {
         estimateId: randomUUID(), sessionId: uuid(body.sessionId), shopId: uuid(body.shopId),
         policyVersion: boundedText(body.policyVersion, { required: true, min: 3, max: 120, code: 'MARKETPLACE_FEE_POLICY_INVALID' }),
@@ -742,11 +738,7 @@ export async function handleOwnerCloseStock(req, res) {
       const body = exactObject(await readMarketplaceJson(req), [
         'sessionId', 'productId', 'expectedCanonicalBefore', 'physicalCount', 'reason',
       ])
-      const integer = (value) => {
-        const parsed = Number(value)
-        if (!Number.isSafeInteger(parsed) || parsed < 0 || parsed > 100_000_000) throw new Error('OWNER_CLOSE_STOCK_REVIEW_INVALID')
-        return parsed
-      }
+      const integer = (value) => strictInteger(value, 'OWNER_CLOSE_STOCK_REVIEW_INVALID', { min: 0, max: 100_000_000 })
       const payload = {
         sessionId: uuid(body.sessionId), productId: uuid(body.productId),
         expectedCanonicalBefore: integer(body.expectedCanonicalBefore),
@@ -814,8 +806,7 @@ export async function handleOwnerCloseBookkeeping(req, res) {
     if (!UUID.test(idempotencyKey)) return safeJson(res, 400, { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } })
     try {
       const body = exactObject(await readMarketplaceJson(req), ['sessionId', 'expectedSessionVersion', 'reason'])
-      const expectedSessionVersion = Number(body.expectedSessionVersion)
-      if (!Number.isSafeInteger(expectedSessionVersion) || expectedSessionVersion < 1) throw new Error('OWNER_CLOSE_HANDOFF_INVALID')
+      const expectedSessionVersion = strictInteger(body.expectedSessionVersion, 'OWNER_CLOSE_HANDOFF_INVALID', { min: 1, max: Number.MAX_SAFE_INTEGER })
       const payload = {
         sessionId: uuid(body.sessionId), expectedSessionVersion,
         reason: boundedText(body.reason, { required: true, min: 10, max: 500, code: 'OWNER_CLOSE_HANDOFF_INVALID' }),

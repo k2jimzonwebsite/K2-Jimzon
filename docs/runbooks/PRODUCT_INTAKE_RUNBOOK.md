@@ -1,5 +1,76 @@
 # Product Intake and First-Source Runbook
 
+**15 September evidence upload (IDEA-20260914-02, local):** keep the original
+file and use “Retry exact evidence upload” while uncertain. Session, slot, bytes,
+filename and key stay fixed. Preview appears only after the canonical evidence
+record matches the upload receipt's path/slot and uploaded status. The server's
+existing cleanup queue remains authoritative; cleanup IDs are preserved and no
+client retry guesses that private storage should be deleted. Response/refresh
+loss plus session controls passed 4/4; the complete 19-case intake suite also
+passed, including incomplete receipts, stale canonical paths, malformed resume
+reads and denied retries. A denied retry never erases an earlier unknown outcome;
+first-attempt definitive rejection still permits correction. Evidence:
+`docs/evidence/20260914-map-remediation/intake-complete-current.log`.
+Files/keys remain in mounted memory; forced navigation still needs reconciliation.
+
+**15 September secure session setup (IDEA-20260914-02, local):** the modal
+retains a distinct intake request ID and outer command key. It resumes an existing
+session on the first attempt; after an uncertain create it replays the exact
+create command before refreshing its returned session. It does not adopt an
+unrelated latest session during that retry. Response loss and refresh failure
+regressions failed first, then session/publication/actor checks passed 4/4.
+Use “Retry exact session setup” while uncertain. A failed initial read can be
+retried with “Retry session setup”; no write was dispatched in that case.
+Keys remain mounted-session memory; full navigation and legacy reconciliation
+are still separate acceptance requirements. No database/provider state changed.
+
+**14 September publication refresh recovery (IDEA-20260914-02, local):**
+publication retains product ID, session ID, selected status, reason and command
+key. If the write returns success but the canonical session refresh fails,
+the form remains locked and “Retry publication change” replays the original
+command before reading again. The failed-refresh browser regression reproduced
+the old unlocked form, then passed with the automatic-review recovery control
+(2/2). See `publication-refresh-red.log` and `publication-refresh-green.log` in
+the current remediation evidence. This does not establish legacy transport or
+deployed signed-command acceptance.
+
+**14 September automatic field-review recovery (IDEA-20260914-02, local):**
+loading saved automatic content into field review now retains the transition's
+session, reviewed content and outer key. An uncertain response locks the modal;
+“Retry exact automatic field review” retrieves the original receipt before
+opening Step 4. Field acceptance still requires staff review. Sheet mode now
+remounts on actor/role changes like InventoryGrid; that source boundary does not
+prove every forced-navigation journey. The complete synthetic intake suite passed
+10/10 (`intake-recovery-final.log` in the remediation evidence folder). The
+valid failing-first fixture is `intake-recovery-valid-red.log`; two earlier runs
+used incomplete research content and did not test response loss. Session creation,
+evidence upload, publication receipt completeness, durable navigation recovery
+and actual signed database acceptance remain in I-002. No production state changed.
+
+13 September validation correction (IDEA-20260913-02): the prepared BFF rejects
+boolean, array, object and blank quantity/cost inputs before normalization. Valid
+numeric strings remain supported; omitted cost retains the existing zero default.
+The failing-first coercion regression and all nine intake contracts pass locally.
+Production activation remains MAP-017/018; evidence: `../evidence/20260913-audit-remediation/`.
+
+**9 September I-002 caller continuation, local:** the manual Next-step, Draft
+creation and first-inventory commands now retain their reviewed payload and
+outer receipt key while unresolved. Keep the modal open, reconnect if offline,
+and use its one exact retry action. A successful write followed by failed session
+refresh remains locked; replay retrieves the original receipt before refreshing.
+A definitive rejection allows correction. Browser reload/unmount loses this
+in-memory outer key and requires canonical reconciliation before another write;
+the existing inner intake IDs do not prove the outcome by themselves.
+
+Final local browser cases pass 9/9; focused contracts 87/87; Admin build,
+security, artifact boundary and budget pass. The step fixture and validation now
+use the actual SQL receipt shape. Evidence, screenshots and scoped recovery:
+`docs/evidence/20260909-intake-command-retry/README.md`. This supersedes the
+transport-only claim below for these three manual callers. Session creation,
+evidence upload, publication, automatic-review callback, Sheet actor/full
+navigation, legacy reconciliation and real signed receipt/audit acceptance
+remain in I-002. No production activation or database change occurred.
+
 **8 September I-002 transport correction, local:** the five JSON intake BFF
 wrappers accept a caller-owned retry key and forward it unchanged. Five
 response-loss regressions failed first, then the focused payment-recovery,
@@ -201,10 +272,13 @@ orphans with existing media controls. Roll back code with scoped Git changes.
   an opaque cleanup ID, never the path. Intake cannot advance or select another
   evidence file while this cleanup is pending.
 - Use **Retry file cleanup** in the persistent amber recovery panel. A retry
-  claims only the signed-in staff member's pending record, revalidates the path
-  against its hash, asks Storage to remove it, and marks the ledger complete only
-  after Storage returns success. If Storage or the completion write is
-  unavailable, the panel remains and retry is safe. After ten provider attempts,
+  claims only the signed-in staff member's exact pending record, revalidates the
+  cleanup ID, status, path, and path hash, and only then asks Storage to remove
+  it. An unexpected claim state never reaches deletion. The ledger is presented
+  as complete only after the database returns the same cleanup ID with explicit
+  `completed` status; missing or malformed completion receipts keep the panel
+  pending. If Storage or the completion write is unavailable, retry remains safe.
+  After ten provider attempts,
   stop retrying and escalate the opaque cleanup ID to an administrator; never
   expose a private Storage path in chat, tickets, or browser logs.
 - Draft retries reuse the session request ID and return the original product.
@@ -307,3 +381,20 @@ its reduced-motion 375×812 Chromium journey with zero horizontal overflow and
 failure recovery. This is local prepared evidence only. The migration and Admin
 BFF flag remain inactive; real Storage-provider failure/recovery, deployed-role
 denials, MAP-022 alert delivery, and production activation are still required.
+
+## Local cleanup receipt validation — 9 September 2026
+
+Two failing-first Admin BFF cases reproduced unsafe recovery behavior: an
+unrecognized claim status could reach private Storage deletion, and a completion
+RPC with no receipt could be reported as completed. The BFF now requires an
+exact claim ID plus `pending`/`completed` state before deletion and an exact
+completion ID plus `completed` state before clearing the recovery panel.
+
+Fresh local evidence passed: 75/75 intake/BFF contracts,
+`npm run verify:map018-intake`, `npm run verify:map018-cleanup-portable`, and
+`npm run build:admin` (188.92 kB/300 kB application chunk). The first portable
+run could not start `pg_ctl` inside the restricted sandbox; the approved rerun
+of the identical loopback-only command passed. This does not activate the
+migration or route and does not prove authenticated real-provider recovery.
+Detailed evidence and scoped rollback are in
+`docs/evidence/20260909-h013-evidence-cleanup/README.md`.

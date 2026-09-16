@@ -43,7 +43,7 @@ function buildDefaultGlobeProducts() {
 }
 
 /**
- * Sample reviews, loaded only if the table is empty.
+ * Sample reviews for the explicit local development provider only.
  *
  * Imported dynamically from its own module so the copy lands in the globe's
  * deferred chunk rather than the landing bundle, which sits inside 1 kB of its
@@ -131,6 +131,7 @@ function RemoteGlobeCmsProvider({ children }) {
   const [supabase, setSupabase] = useState(null)
   const [globeProducts, setGlobeProducts] = useState([])
   const [reviews, setReviews] = useState([])
+  const [reviewsUnavailable, setReviewsUnavailable] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [cmsError, setCmsError] = useState(null)
   const [authSession, setAuthSession] = useState(null)
@@ -168,16 +169,14 @@ function RemoteGlobeCmsProvider({ children }) {
       )
     }
 
-    // Reviews fall back the same way the globe products above already do.
-    // An empty table is not the same as a broken one, but it produces the same
-    // screen: a review globe with nothing to read. The seed set in site.js is
-    // eight real published marketplace reviews already mapped to products, so
-    // the experience can be exercised end to end before the table is populated.
+    // Remote customer feedback must come from its published register. Demo
+    // testimonials cannot fill an empty or unavailable production source.
+    setReviewsUnavailable(Boolean(rvRes.error))
     if (rvRes.error) {
       errors.push(safeUiError('GLOBE_LOAD_FAILED'))
-      setReviews(await buildDefaultReviews())
+      setReviews([])
     } else {
-      setReviews(rvRes.data.length ? rvRes.data.map(mapReviewRow) : await buildDefaultReviews())
+      setReviews((rvRes.data || []).map(mapReviewRow))
     }
 
     setCmsError(errors.length ? `Could not load all review data (${errors.join('; ')})` : null)
@@ -308,6 +307,7 @@ function RemoteGlobeCmsProvider({ children }) {
     getProductReviews,
     resetCms: loadAll,
     isRemote: true,
+    reviewsUnavailable,
     isLoading,
     cmsError,
     authSession,

@@ -1,0 +1,14 @@
+[ok] migration applied
+[ok] migration is idempotent on replay
+[ok] staff can publish approved knowledge
+[ok] an anonymous reader sees approved rows only
+[ok] an anonymous reader cannot see a draft answer
+[ok] an anonymous reader cannot write knowledge
+[ok] a signed-in non-staff account cannot publish
+[ok] approving empty text is refused by the table
+[ok] knowledge for an unknown SKU is refused
+[ok] a save replaces the record rather than merging into it
+[ok] a removed FAQ actually disappears
+
+All 9 boundary checks passed against isolated PostgreSQL.
+This rehearses the migration. It is not a production apply.

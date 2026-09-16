@@ -1,0 +1,8 @@
+Catalog PostgreSQL rehearsal: bootstrap passed.
+Catalog PostgreSQL rehearsal: identity migration passed.
+Catalog PostgreSQL rehearsal: commit migration passed.
+Catalog PostgreSQL rehearsal: behavior assertions passed.
+Catalog PostgreSQL rehearsal: security-event migration passed.
+Catalog PostgreSQL rehearsal: security-event assertions passed.
+Catalog PostgreSQL rehearsal: emergency rollback passed.
+Catalog PostgreSQL rehearsal: rollback assertions passed.

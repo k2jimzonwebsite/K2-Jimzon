@@ -53,9 +53,11 @@ export default function DeliveryEstimate({ lines, subtotalMinor, onQuote }) {
   }, [quotable])
 
   useEffect(() => {
-    if (!localityId) { setQuote(null); onQuote?.(null); return undefined }
+    if (!quotable || !localityId) { setQuote(null); onQuote?.(null); return undefined }
     let active = true
     setChecking(true)
+    setQuote(null)
+    onQuote?.(null)
     ;(async () => {
       const result = await quoteGuestDelivery({
         channel: 'Website',
@@ -78,7 +80,7 @@ export default function DeliveryEstimate({ lines, subtotalMinor, onQuote }) {
       setChecking(false)
     })()
     return () => { active = false }
-  }, [localityId, weightG, subtotalMinor, onQuote])
+  }, [quotable, localityId, weightG, subtotalMinor, onQuote])
 
   if (!quotable || localities.length === 0) {
     return (

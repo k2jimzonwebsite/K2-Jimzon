@@ -55,6 +55,8 @@ export default function Pasabuy() {
     setSubmitting(false)
     if (!result?.ok) {
       setError(result?.error || 'The request could not be saved. Please try again.')
+      setBotToken('')
+      setChallengeKey(current => current + 1)
       return
     }
     setReceipt(result.request)
@@ -120,8 +122,8 @@ export default function Pasabuy() {
               </label>
               <label className="block text-sm font-semibold text-navy">Shipping preference
                 <select className={`${field} mt-1.5`} value={form.shipping} onChange={update('shipping')}>
-                  <option value="sea">Sea freight (Economical, ~4-6 weeks)</option>
-                  <option value="air">Air cargo (Faster, ~1-2 weeks)</option>
+                  <option value="sea">Sea freight (Economical — timing quoted per request)</option>
+                  <option value="air">Air cargo (Faster — timing quoted per request)</option>
                 </select>
               </label>
             </div>
@@ -137,7 +139,7 @@ export default function Pasabuy() {
 
             {guestBffEnabled() && (
               <div className="mt-6">
-                <TurnstileChallenge key={challengeKey} onVerify={setBotToken} />
+                <TurnstileChallenge key={challengeKey} action="guest_pasabuy" onTokenChange={setBotToken} />
               </div>
             )}
 
@@ -158,6 +160,12 @@ export default function Pasabuy() {
             <RedButton type="submit" className="mt-6 w-full py-4 text-base font-bold shadow-sm" disabled={submitting}>
               {submitting ? 'Submitting request…' : 'Submit Pasabuy request'}
             </RedButton>
+            <p className="mt-3 text-center text-xs text-navy-soft">
+              Submitting requests a custom quote with no upfront payment. Contact details are protected under our{' '}
+              <button type="button" onClick={() => go('privacy')} className="underline hover:text-crimson font-medium">Privacy Policy</button>
+              {' '}and{' '}
+              <button type="button" onClick={() => go('terms')} className="underline hover:text-crimson font-medium">Terms</button>.
+            </p>
           </form>
 
           <div className="mt-8 flex flex-wrap gap-2">

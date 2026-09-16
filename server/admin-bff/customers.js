@@ -59,11 +59,12 @@ export async function readAdminCustomers(client) {
   let metricsAvailable = true
   if (ids.length) {
     const [orders, pasabuy, conversations] = await Promise.all([
-      client.from('order_requests').select('id,customer_id,total_amount,status,created_at').in('customer_id', ids).limit(2000),
-      client.from('pasabuy_requests').select('id,customer_id,status,created_at').in('customer_id', ids).limit(2000),
-      client.from('conversations').select('id,customer_id,status,unread_count,last_message_at').in('customer_id', ids).limit(2000),
+      client.from('order_requests').select('id,customer_id,total_amount,status,created_at', { count: 'exact' }).in('customer_id', ids).limit(2000),
+      client.from('pasabuy_requests').select('id,customer_id,status,created_at', { count: 'exact' }).in('customer_id', ids).limit(2000),
+      client.from('conversations').select('id,customer_id,status,unread_count,last_message_at', { count: 'exact' }).in('customer_id', ids).limit(2000),
     ])
-    metricsAvailable = !orders.error && !pasabuy.error && !conversations.error
+    metricsAvailable = [orders, pasabuy, conversations].every(result =>
+      !result.error && Number.isInteger(result.count) && result.count === result.data?.length)
     orderRows = orders.error ? [] : orders.data || []
     pasabuyRows = pasabuy.error ? [] : pasabuy.data || []
     conversationRows = conversations.error ? [] : conversations.data || []

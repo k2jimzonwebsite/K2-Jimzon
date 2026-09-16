@@ -1,0 +1,165 @@
+[
+  {
+    "version": "20260723",
+    "files": [
+      "20260723_master_security_rls.sql",
+      "20260723_orders_customer_fields.sql"
+    ]
+  },
+  {
+    "version": "20260724",
+    "files": [
+      "20260724_batch_expiry.sql",
+      "20260724_error_reports.sql"
+    ]
+  },
+  {
+    "version": "20260725",
+    "files": [
+      "20260725_delete_pin_and_product_status.sql",
+      "20260725_staff_custody_allocations.sql"
+    ]
+  },
+  {
+    "version": "20260802",
+    "files": [
+      "20260802_channel_admin_compatibility_preflight.sql",
+      "20260802_consignment_compatibility_preflight.sql",
+      "20260802_product_compatibility_preflight.sql"
+    ]
+  },
+  {
+    "version": "20260803",
+    "files": [
+      "20260803_launch_core_stabilization.sql",
+      "20260803_phase_2_unified_inbox.sql"
+    ]
+  },
+  {
+    "version": "20260810",
+    "files": [
+      "20260810_deprecated_rpc_lockdown.sql",
+      "20260810_security_boundary_hardening.sql"
+    ]
+  },
+  {
+    "version": "20260812",
+    "files": [
+      "20260812_admin_consignments_bff_boundary.sql",
+      "20260812_admin_coupons_bff_boundary.sql",
+      "20260812_admin_fulfillment_bff_boundary.sql",
+      "20260812_admin_inbox_bff_boundary.sql",
+      "20260812_admin_lots_bff_boundary.sql",
+      "20260812_admin_pasabuy_bff_boundary.sql",
+      "20260812_admin_product_intake_bff_boundary.sql",
+      "20260812_canonical_identities.sql",
+      "20260812_guest_account_identity_and_messaging.sql",
+      "20260812_guest_submission_boundary.sql",
+      "20260812_guest_submission_cutover.sql",
+      "20260812_map017_public_write_boundary_hardening.sql"
+    ]
+  },
+  {
+    "version": "20260815",
+    "files": [
+      "20260815_harden_admin_delete_pin.sql",
+      "20260815_remove_legacy_delete_products_rpc.sql"
+    ]
+  },
+  {
+    "version": "20260822",
+    "files": [
+      "20260822_admin_channel_readiness_boundary.sql",
+      "20260822_admin_globe_review_boundary.sql",
+      "20260822_admin_procurement_boundary.sql",
+      "20260822_admin_product_master_boundary.sql",
+      "20260822_admin_product_media_boundary.sql",
+      "20260822_admin_session_registry.sql",
+      "20260822_admin_staff_access_boundary.sql",
+      "20260822_admin_system_readiness_boundary.sql",
+      "20260822_catalog_spreadsheet_commit.sql",
+      "20260822_catalog_spreadsheet_identity.sql",
+      "20260822_guest_account_claim_boundary.sql",
+      "20260822_security_event_boundary.sql",
+      "20260822_wholesale_inquiry_boundary.sql"
+    ]
+  },
+  {
+    "version": "20260824",
+    "files": [
+      "20260824_admin_mfa_replacement_boundary.sql",
+      "20260824_admin_staff_invitation_reason_boundary.sql",
+      "20260824_map018_intake_evidence_cleanup_boundary.sql"
+    ]
+  },
+  {
+    "version": "20260825",
+    "files": [
+      "20260825_admin_preauth_rate_boundary.sql",
+      "20260825_shopee_webhook_ingress_boundary.sql",
+      "20260825_storefront_customer_auth_boundary.sql"
+    ]
+  },
+  {
+    "version": "20260828",
+    "files": [
+      "20260828_product_knowledge_boundary.sql",
+      "20260828_store_conversation_origin.sql",
+      "20260828_virtual_store_live_chat.sql"
+    ]
+  },
+  {
+    "version": "20260831",
+    "files": [
+      "20260831_guest_order_status_boundary.sql",
+      "20260831_marketplace_snapshot_staging.sql"
+    ]
+  },
+  {
+    "version": "20260902",
+    "files": [
+      "20260902_delivery_guest_quote_boundary.sql",
+      "20260902_delivery_quote_admin_command.sql",
+      "20260902_delivery_quote_control.sql",
+      "20260902_delivery_quote_pilot_seed.sql",
+      "20260902_product_shipping_dimensions.sql",
+      "20260902_purchase_time_reservation.sql",
+      "20260902_reservation_expiry_policy.sql"
+    ]
+  },
+  {
+    "version": "20260905",
+    "files": [
+      "20260905_privileged_membership_serialization.sql",
+      "20260905_publication_transition_consistency.sql",
+      "20260905_purchase_hold_cancellation.sql"
+    ]
+  },
+  {
+    "version": "20260906",
+    "files": [
+      "20260906_atomic_order_hold_expiry.sql",
+      "20260906_automatic_intake_jobs.sql",
+      "20260906_exact_packing_lot.sql",
+      "20260906_exact_packing_wrapper.sql",
+      "20260906_handover_coverage.sql",
+      "20260906_payment_evidence_recovery.sql",
+      "20260906_reservation_coverage_guard.sql"
+    ]
+  },
+  {
+    "version": "20260908",
+    "files": [
+      "20260908_payment_balance_integrity.sql",
+      "20260908_purchase_hold_lock_order.sql",
+      "20260908_reconciliation_lock_order.sql"
+    ]
+  },
+  {
+    "version": "20260912",
+    "files": [
+      "20260912_confirmation_stock_commitment.sql",
+      "20260912_guest_order_conversation_seed.sql"
+    ]
+  }
+]

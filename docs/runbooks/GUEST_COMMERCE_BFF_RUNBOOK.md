@@ -1,5 +1,52 @@
 # Guest Commerce BFF Activation Runbook
 
+**14 September browser recovery (IDEA-20260914-02, locally prepared):** an
+uncertain checkout holds its original payload/key and renews the bot challenge.
+Use “Retry order request” to recover that request; changing contact/cart/coupon
+details is disabled while it is pending. A later rejected retry does not establish
+that the first request failed. Mounted-session recovery does not survive a hard
+reload: resolve through the original receipt/staff reconciliation before creating
+a replacement order. Do not describe a lost response as a confirmed failed order.
+Pasabuy/message/wholesale forms renew failed challenge tokens. Malformed cookies
+yield no grant and do not crash unrelated valid-cookie parsing. Run
+`npm run test:storefront-recovery` and the guest BFF contracts before release;
+synthetic evidence is not Turnstile/provider or real-host acceptance. Rollback is
+selective reversal of this idea's changes, preserving unrelated workspace edits.
+
+**13 September captured recovery tooling (IDEA-20260913-02, local):**
+`supabase/guest_order_conversation_seed_capture.sql` reads exact definitions,
+owners, ACLs, database and PostgreSQL cluster identity. Save private captures
+before and after the seed change. A maintainer can import
+`generateGuestSeedRecovery` from `scripts/guest-seed-recovery.mjs` and pass these
+two reviewed capture objects to generate transactional recovery SQL. These are
+trusted privileged DDL captures, never browser input. Freeze concurrent schema
+writes, review later dependencies and authorize the exact recovery payload before
+execution. Cluster replacement/failover changes require new review, not bypassing
+the identity guard. Missing privileged pg_control_system access also stays blocked.
+
+`node scripts/rehearse-guest-seed-recovery.mjs` passes real old/seeded definition
+replay/restoration and later-change refusal in a fresh loopback database. It checks
+definition/owner/ACL identity, not signed submission behavior or full table/RLS
+composition. The static rollback refusal remains. Complete signed order/Pasabuy
+tests and actual target captures are still MAP-019 activation gates.
+
+## Guest conversation seed recovery — verified 13 September, prepared only
+
+`20260912_guest_order_conversation_seed.sql` remains unapplied on the live K2
+database. Its former rollback replayed the entire older guest boundary, including
+unrelated security functions and ACLs. `guest_order_conversation_seed_rollback.sql`
+now refuses with `K2_GUEST_SEED_CAPTURED_RECOVERY_REQUIRED` before any mutation;
+local PostgreSQL confirms psql exit 3 with `ON_ERROR_STOP`.
+
+Before activation, capture the target's exact definitions, owners and ACLs for
+`submit_guest_order_v1(bigint,uuid,text,text,text,text)` and
+`submit_guest_pasabuy_v1(bigint,uuid,text,text,text,text)`. Rehearse restoring only
+those captures in one transaction, proving unrelated definitions/ACLs unchanged
+and retaining seeded message history. Review subsequently composed dependencies
+or roll forward. This recovery procedure and full composed seed/replay behavior
+remain MAP-019 gates; the refusal is not a functioning rollback. Evidence:
+`docs/evidence/20260913-map-verification/README.md`.
+
 ## Checkout delivery commitment — I-003, prepared 8 September
 
 Checkout keeps the manual delivery-approval model. It no longer mounts the
@@ -257,6 +304,82 @@ under the recovery gate. Rollback restores that exact function with its ACL;
 do not replay the entire historical operations migration. Locally the baseline
 flag restores the original cancellation definition in the disposable fixture.
 
+### Historical confirmation-only slice (12 September 2026, prepared only)
+
+MAP-023 / MAP-028 I-001 owns `20260912_confirmation_stock_commitment.sql`.
+First confirmation now deducts owned stock exactly once through the internal
+`commit_order_request_stock_v1` helper: commitment actor/time/cause persist on
+the exact active allocations and one `stock_committed` inventory event per
+allocation records the sale. Physical `quantity`/`on_hand` and encumbered
+counters stay unchanged at commitment; handover still moves custody.
+Cancellation releases committed allocations with `cancelled` cause while the
+committed facts stay on the released rows. The temporary-hold sweep exempts
+any order holding committed rows. Historical confirmed allocations without
+commitment evidence stay unresolved: nothing is backfilled and no
+retrospective sale event is written. The helper allowlists
+`confirmation`/`payment_verification` causes; only confirmation calls it, so
+the payment ordering stays open without inventing a payment fact.
+
+Verification (all local, loopback PostgreSQL 17.11, no production change):
+
+- `npm run rehearse:purchase-hold` passes 30/30, including the previously
+  failing `order_stock_commitment.sql` ownership-deduction assertions and the
+  new `confirmation_commitment_behavior.sql` sweep-exemption, cause-allowlist,
+  helper-idempotency, cancellation-retention and uncommitted-expiry checks.
+  The migration applies twice in that run (apply + replay).
+- Rollback `supabase/confirmation_stock_commitment_rollback.sql` was executed
+  against a scratch loopback database: the helper is dropped, the
+  hold-migration confirmation body and pre-commitment sweep body are restored
+  byte-for-behavior, and the evidence columns are retained deliberately.
+- `npx playwright test --config=playwright.api.config.js
+  tests/confirmation-commitment-contract.spec.js
+  tests/purchase-time-reservation.spec.js tests/consignment-receiving.spec.js
+  tests/reservation-policy-contract.spec.js` passes 45/45; the new spec is
+  registered in `test:contracts`.
+- `npm run security:surfaces` still reports zero gaps with the new function
+  accounted (196 definition occurrences, 157 signatures, 209 revokes).
+
+The historical rollback result above applies only to that isolated slice.
+The composed payment/handover chain below supersedes that recovery instruction.
+Owned-stock read consumers and incomplete-attribution handling remain in I-001.
+
+### Payment and handover commitment (13 September 2026, prepared only)
+
+`20260913_payment_handover_commitment.sql` depends on the existing reservation
+coverage and balance lock-order corrections, payment evidence and balance
+integrity, confirmation commitment and complete handover coverage. Apply after
+those exact prerequisites and retain the existing signed fulfillment wrapper.
+No production application is authorized by this local rehearsal. MAP-017 and
+the coordinated activation sequence still govern any future application.
+
+Verified payment records exact-lot ownership once after stock eligibility and
+independent review. Confirmation/payment retain the original evidence and accept
+attributable committed allocations after the old temporary purchase deadline.
+Uncommitted expired or malformed commitment facts remain denied. Handover requires
+complete committed/packed allocations through the existing reconciliation error,
+then moves physical stock once. Refund before/after dispatch changes no stock;
+cancellation restores exact availability separately while retaining history.
+
+Fresh checks: `npm run rehearse:purchase-hold` **37/37** property groups,
+existing `npm run rehearse:payment-recovery` pass, **81** focused contracts and
+prebuild pass. The fixture executes actual HMAC verification and signed receipts
+with local identities, checks multi-lot fault rollback/retry, preserves payment
+submitter/verifier separation, and requires missing-proof handover denials.
+Restoring each old function independently makes the lifecycle suite fail.
+Detailed evidence and limits: `docs/evidence/20260913-stock-lifecycle/README.md`.
+
+Recovery: before any future apply, capture reviewed exact definitions/ACLs for
+`set_order_request_payment_status(uuid,text,text)`,
+`reserve_order_request_lots_v1(uuid,text)` and
+`fulfill_order_request(uuid,text)`. The loopback runner verifies restoring
+its snapshots and reapplying the migration. That local snapshot is not a provider
+recovery artifact. After provider activation use the separately reviewed recovery
+or roll-forward; do not drop commitment history. The earlier confirmation rollback
+now refuses with `K2_COMPOSED_COMMITMENT_RECOVERY_REQUIRED` before any changes
+if payment calls the helper. Never reload the broad old hold migration or drop
+the helper underneath composed callers. I-001 holds the remaining read projection,
+all-writer/deadline composition and real-host acceptance.
+
 This runbook implements the approved hybrid model: customers can buy, request
 Pasabuy, start or continue a scoped conversation without an account; accounts remain
 optional for verified history and cross-device continuity.
@@ -348,8 +471,15 @@ the Storefront artifact contains only its intended function.
    `K2_STOREFRONT_BFF_ENABLED=true` on preview, prove the server routes and
    denials, then enable `VITE_GUEST_BFF_ENABLED=true` last for the coordinated
    preview release. Verify valid, missing, expired, replayed, and bot-failed
-   challenges on the real preview host. Order and Pasabuy require the challenge;
-   coupon preview uses the durable rate boundary without interrupting browsing.
+    challenges on the real preview host. Order and Pasabuy require the challenge;
+    coupon preview uses the durable rate boundary without interrupting browsing.
+    Mutation challenges verify hostname-bound single-use tokens (token, action
+    and the validated request origin must all match; replays are rejected) and
+    fail closed when `K2_TURNSTILE_SECRET_KEY` is absent. Coupon, delivery-quote,
+    message-list and order-status reads stay challenge-free by decision and sit
+    behind the same durable per-IP/contact budgets. Local and fixture runners
+    that never touch the provider set `K2_TURNSTILE_ALLOW_UNCONFIGURED=true`
+    explicitly; nothing opts in silently.
 10. Apply and postflight `20260831_guest_order_status_boundary.sql` after its
    guest-grant/request-signing dependencies and before enabling the browser
    switch. Switch the storefront service calls to `/api/storefront/order`,

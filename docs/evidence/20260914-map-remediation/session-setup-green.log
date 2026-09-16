@@ -1,0 +1,15 @@
+[WebServer] (node:5448) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19388) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:15408) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\intake-ai-ui.spec.js:6:3 › intake session creation retains both identities after response loss (1.5m)
+  ok 2 tests\intake-ai-ui.spec.js:6:3 › intake session creation retains both identities after refresh failure (29.1s)
+  ok 3 tests\intake-ai-ui.spec.js:36:1 › publication keeps its frozen command when the receipt refresh fails (16.3s)
+  ok 4 tests\intake-ai-ui.spec.js:107:1 › replacing the actor during a Draft command ignores its late receipt (13.7s)
+
+  4 passed (2.7m)

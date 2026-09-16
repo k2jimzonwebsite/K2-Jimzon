@@ -31,7 +31,7 @@ configuration, not preview/live HTTP-status evidence.
 
 ---
 
-## 2. Storefront BFF Endpoints (14 Routes / `api/storefront`)
+## 2. Storefront BFF Endpoints (15 Routes / `api/storefront`)
 
 | Route Name | HTTP Method | Origin Check | Bot Challenge | Rate Limited | Scoped Grant | Description |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -49,10 +49,11 @@ configuration, not preview/live HTTP-status evidence.
 | `account/claim` | `POST` | Yes | No | Yes (DB) | Required | Claim guest order history into customer account. |
 | `account/history` | `POST` | Yes | No | Yes (DB) | None | Fetch verified order history for signed-in customer. |
 | `account/message` | `POST` | Yes | No | Yes (DB) | None | Post message from authenticated customer account. |
+| `delivery/quote` | `POST` | Yes | No | Yes (DB) | Issued | Read the pilot delivery-fee quote for an order request. |
 
 ---
 
-## 3. Admin BOS BFF Endpoints (81 Routes / `api/admin`)
+## 3. Admin BOS BFF Endpoints (92 Routes / `api/admin`)
 
 Grouped by operational subsystem:
 
@@ -80,7 +81,7 @@ Grouped by operational subsystem:
 - `catalog-import/commit` (`POST`): Commit the exact reviewed versioned import.
 - `catalog-import/status` (`GET`): Recover a bounded redacted import receipt.
 
-### 📱 Phone-First Product Intake (9 Routes)
+### 📱 Phone-First Product Intake (10 Routes)
 - `product-intake/consignments` (`GET`): Read the fixed consignment choices available to intake.
 - `product-intake/session` (`GET`, `POST`): Create or resume mobile intake wizard session.
 - `product-intake/duplicates` (`POST`): Check barcode/name collisions before drafting.
@@ -90,6 +91,7 @@ Grouped by operational subsystem:
 - `product-intake/draft` (`POST`): Atomically assign server SKU and create Draft.
 - `product-intake/inventory` (`POST`): Attach flight line or admin opening balance.
 - `product-intake/publication` (`POST`): Advance status to Under Review or Live.
+- `product-intake/ai` (`POST`): Bounded paid provider drafting with signed job, budget reservation, and human review gates.
 
 ### ✈️ Consignments & Flight Manifests (6 Routes)
 - `consignments` (`GET`): List flight shipments and box counts.
@@ -133,6 +135,20 @@ Grouped by operational subsystem:
 - `fulfillment/delivery` (`POST`): Attach courier tracking number / waybill.
 - `fulfillment/fulfill` (`POST`): Complete order delivery handover.
 
+### Delivery Rates & Localities (7 Routes)
+- `delivery` (`GET`): Read the delivery-rate workbook state.
+- `delivery/quote` (`POST`): Read a bounded delivery-fee quote for an order request.
+- `delivery/courier` (`POST`): Set the courier for a locality or order.
+- `delivery/courier-state` (`POST`): Enable or disable a courier.
+- `delivery/locality` (`GET`): List supported delivery localities.
+- `delivery/cost-publish` (`POST`): Publish a reviewed delivery-rate version.
+- `delivery/source-state` (`POST`): Set the rate-source state.
+
+### Stock Reservations (3 Routes)
+- `reservations` (`GET`): Read active stock holds with overdue state.
+- `reservations/extend` (`POST`): Extend a hold within the owner-approved 30-minute to 7-day bounds with reason.
+- `reservations/release-expired` (`POST`): Staff-initiated sweep releasing whole expired orders with reconciliation.
+
 ### 💬 Universal Inbox & Pasabuy (9 Routes)
 - `inbox` (`GET`): Unified message stream across all channels.
 - `inbox/history` (`POST`): Thread message history.
@@ -156,3 +172,15 @@ Grouped by operational subsystem:
 - `globe-cms` (`GET`, `POST`): Update 3D Globe landing nodes and brand highlights.
 - `procurement` (`GET`, `POST`): Supplier directory and pricing terms.
 - `channels` (`GET`, `POST`): Read readiness and record signed internal verification; it does not create a provider connector.
+
+## 14 September scoped crawler policy — IDEA-20260914-02
+
+Prepared page metadata and `vercel.storefront.json` headers mark `/account`,
+`/messages`, `/checkout` and `/confirmation` as `noindex, nofollow`. This is
+crawler policy, not access control. Verify the actual headers on the deployed
+Storefront after release; local Vite tests do not execute Vercel routing rules.
+
+`/trade` remains the canonical wholesale path. `/wholesale` has a prepared
+permanent Vercel redirect to it; local alias rendering emits `/trade` canonical
+and social URLs. This preserves incoming links without creating a second
+wholesale page identity.

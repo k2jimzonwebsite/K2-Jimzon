@@ -1,0 +1,18 @@
+[ok] migration applied over legacy data
+[ok] migration is idempotent on replay
+[ok] legacy tiktok_shop is migrated onto the canonical vocabulary
+[ok] the canonical vocabulary is exactly the six sales channels
+[ok] only marketplaces are flagged as carrying shops
+[ok] an unknown channel is refused
+[ok] a marketplace order without a shop is refused
+[ok] a website order carrying a shop is refused
+[ok] an order whose shop belongs to another marketplace is refused
+[ok] a marketplace order naming its own shop is accepted
+[ok] two shops can list the same SKU on the same marketplace
+[ok] external item IDs are scoped to the exact shop
+[ok] one shop cannot map its external item to a second SKU
+[ok] the vocabulary is publicly readable but shops are not
+[ok] shop foreign keys have dedicated lookup and cascade indexes
+
+All 13 checks passed against isolated PostgreSQL.
+This rehearses the migration. It is not a production apply.

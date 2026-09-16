@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useGlobeCms } from '../../data/globeCms'
 import { products } from '../../data/products'
 import { StarIcon } from '../../components/ui/icons'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 import { adminBffEnabled, commandAdminGlobeCmsBff, getAdminGlobeCmsBff } from '../../services/adminBffService'
 import { applyImageFallback } from '../../lib/imageFallback'
 
@@ -148,15 +149,24 @@ function ReasonDialog({ title, actionLabel, onCancel, onConfirm }) {
   const [reason, setReason] = useState('')
   const [working, setWorking] = useState(false)
   const closeRef = useRef(null)
-  useEffect(() => {
-    closeRef.current?.focus()
-    const onKeyDown = (event) => { if (event.key === 'Escape' && !working) onCancel() }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [working, onCancel])
-  return <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/65 p-0 sm:items-center sm:p-4" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !working) onCancel() }}><div role="dialog" aria-modal="true" aria-labelledby="claim-dialog-title" className="w-full rounded-t-adm bg-adm-surface p-5 shadow-adm-lg sm:max-w-lg sm:rounded-adm">
-    <div className="flex items-start justify-between gap-4"><div><h3 id="claim-dialog-title" className="text-xl font-semibold">{title}</h3><p className="mt-1 text-sm text-white/55">This reason is retained in the private audit history.</p></div><button ref={closeRef} type="button" disabled={working} onClick={onCancel} aria-label="Close dialog" className="grid h-11 w-11 place-items-center rounded-adm-sm border border-adm-line text-xl">×</button></div>
-    <label className="mt-5 block text-sm font-semibold text-white/75">Reason<textarea required minLength={3} maxLength={500} rows={4} value={reason} onChange={(event) => setReason(event.target.value)} className={`${CONTROL} mt-1 resize-y py-3`} /></label>
-    <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" disabled={working} onClick={onCancel} className="min-h-[44px] rounded-adm-sm border border-adm-line px-4 font-semibold">Cancel</button><button type="button" disabled={working || reason.trim().length < 3} onClick={async () => { setWorking(true); const ok = await onConfirm(reason.trim()); if (!ok) setWorking(false) }} className="min-h-[44px] rounded-adm-sm bg-crimson px-4 font-semibold text-white disabled:opacity-50">{working ? 'Saving…' : actionLabel}</button></div>
-  </div></div>
+  return (
+    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/65 p-0 sm:items-center sm:p-4" role="presentation">
+      <AdminDialog onClose={onCancel} closeDisabled={working} initialFocusRef={closeRef} labelledBy="claim-dialog-title">
+        <div className="w-full rounded-t-adm bg-adm-surface p-5 shadow-adm-lg sm:max-w-lg sm:rounded-adm">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h3 id="claim-dialog-title" className="text-xl font-semibold">{title}</h3>
+              <p className="mt-1 text-sm text-white/55">This reason is retained in the private audit history.</p>
+            </div>
+            <button ref={closeRef} type="button" disabled={working} onClick={onCancel} aria-label="Close dialog" className="grid h-11 w-11 place-items-center rounded-adm-sm border border-adm-line text-xl disabled:opacity-40">×</button>
+          </div>
+          <label className="mt-5 block text-sm font-semibold text-white/75">Reason<textarea required minLength={3} maxLength={500} rows={4} value={reason} onChange={(event) => setReason(event.target.value)} className={`${CONTROL} mt-1 resize-y py-3`} /></label>
+          <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <button type="button" disabled={working} onClick={onCancel} className="min-h-[44px] rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button>
+            <button type="button" disabled={working || reason.trim().length < 3} onClick={async () => { setWorking(true); const ok = await onConfirm(reason.trim()); if (!ok) setWorking(false) }} className="min-h-[44px] rounded-adm-sm bg-crimson px-4 font-semibold text-white disabled:opacity-50">{working ? 'Saving…' : actionLabel}</button>
+          </div>
+        </div>
+      </AdminDialog>
+    </div>
+  )
 }

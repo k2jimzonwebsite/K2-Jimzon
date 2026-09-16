@@ -1,5 +1,47 @@
 import { expect, test } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
+import vm from 'node:vm'
+import { manilaDateKey } from '../src/lib/manilaReportingWindow.js'
+
+test('expiry drawer changes business day at Manila midnight', async () => {
+  const source = await readFile('src/views/admin/DailyTaskNotificationDrawer.jsx', 'utf8')
+  const body = source.slice(source.indexOf('function expiryState('), source.indexOf('\nconst TONE'))
+  for (const [instant, daysLeft] of [['2026-09-13T15:59:59Z', 0], ['2026-09-13T16:00:00Z', -1]]) {
+    class Clock extends Date { constructor(...args) { super(...(args.length ? args : [instant])) } }
+    const result = vm.runInNewContext(body + "\nexpiryState('2026-09-13')", { Date: Clock, manilaDateKey })
+    expect(result.daysLeft).toBe(daysLeft)
+  }
+})
+
+test('clearance success reloads the exact canonical lot rather than inventing approval facts', async () => {
+  const source = await readFile('src/views/admin/BatchExpiryManagerModal.jsx', 'utf8')
+  const body = source.slice(source.indexOf('const saveClearance = async () => {'), source.indexOf('\n  const saveReconciliation'))
+  let batches = [{ id: 'lot-1', qty: 5, reserved_quantity: 1 }, { id: 'other', qty: 7 }]
+  let refreshAvailable = false
+  let error = ''
+  const keys = new Map()
+  const submittedKeys = []
+  const canonical = { id: 'lot-1', quantity: 6, reserved_quantity: 1, quantity_available: 5,
+    inventory_status: 'available', clearance_approved_at: '2026-09-01T00:00:00Z' }
+  const mapBody = source.slice(source.indexOf('function mapLot('), source.indexOf('\nfunction sellablePreview'))
+  const context = vm.createContext({ clearance: { id: 'lot-1', approved: true }, clearanceReason: 'Reviewed actual batch',
+    clearanceKeys: { current: keys }, crypto: { randomUUID: () => 'fixture-key' }, secure: true, sku: 'FIXTURE',
+    setSaving() {}, setError(value) { error = value }, setClearance() {}, setClearanceReason() {},
+    setBatches: fn => { batches = fn(batches) },
+    setLotClearanceBff: async (payload, key) => { submittedKeys.push(key); return { ok: true, result: { batchId: 'lot-1', approved: true } } },
+    getAdminLots: async () => refreshAvailable ? { ok: true, data: { lots: [canonical] } } : { ok: false },
+  })
+  await vm.runInContext(mapBody + '\n' + body + '\nsaveClearance()', context)
+  expect(batches[0]).toEqual({ id: 'lot-1', qty: 5, reserved_quantity: 1 })
+  expect(error).toContain('Clearance was saved')
+  expect(keys.get('lot-1:true')).toBe('fixture-key')
+  refreshAvailable = true
+  await vm.runInContext('saveClearance()', context)
+  expect(batches[0]).toMatchObject({ qty: 6, quantity_available: 5, clearance_approved_at: canonical.clearance_approved_at })
+  expect(batches[1]).toEqual({ id: 'other', qty: 7 })
+  expect(submittedKeys).toEqual(['fixture-key', 'fixture-key'])
+  expect(keys.size).toBe(0)
+})
 
 test('overview periods use Manila midnight across UTC day and year boundaries', async () => {
   const { overviewDateKey, overviewPeriodStart } = await import('../src/lib/overviewPeriod.js')
@@ -192,3 +234,39 @@ test('lot editor separates physical, reserved, and sellable truth and blocks uns
   expect(source).toContain('Record a specific reconciliation reason')
   expect(source).not.toContain("select('*')")
 })
+
+test('inventory grid separates unknown stock from out-of-stock without zero coercion', async () => {
+  const source = await readFile(new URL('../src/views/admin/InventoryGrid.jsx', import.meta.url), 'utf8')
+
+  expect(source).not.toContain('const stock = Number(product.stock_available) || 0')
+  expect(source).toContain('unknown')
+  expect(source).toContain('computeInventoryMetrics')
+  expect(source).toContain("'Unknown stock'")
+
+  const funcBody = source.slice(
+    source.indexOf('export function computeInventoryMetrics('),
+    source.indexOf('\n// Segmented lifecycle control')
+  ).replace('export function computeInventoryMetrics', 'function computeInventoryMetrics')
+
+  const computeInventoryMetrics = vm.runInNewContext(funcBody + '\ncomputeInventoryMetrics', {
+    getExpiryHealth: () => ({ status: 'GOOD' }),
+  })
+
+  const metrics = computeInventoryMetrics([
+    { sku: 'SKU-0', stock_available: 0, status: 'Live' },
+    { sku: 'SKU-NULL', stock_available: null, status: 'Live' },
+    { sku: 'SKU-UNDEF', stock_available: undefined, status: 'Live' },
+    { sku: 'SKU-EMPTY', stock_available: '', status: 'Live' },
+    { sku: 'SKU-LOW', stock_available: 3, reorder_level: 5, status: 'Live' },
+    { sku: 'SKU-OK', stock_available: 20, reorder_level: 5, status: 'Live' },
+    { sku: 'SKU-DRAFT', stock_available: 10, status: 'Draft' },
+  ])
+
+  expect(metrics.out).toBe(1)
+  expect(metrics.unknown).toBe(3)
+  expect(metrics.low).toBe(1)
+  expect(metrics.units).toBe(33)
+  expect(metrics.drafts).toBe(1)
+})
+
+

@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { peso } from '../../data/products'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
 import { ArrowIcon, InboxIcon } from '../../components/ui/icons'
 import PasabuyWorkflowDiagram from '../../components/admin/guides/PasabuyWorkflowDiagram'
 import {
-  adminBffEnabled, getAdminPasabuy, savePasabuyQuoteBff, transitionPasabuyBff,
+  adminBffEnabled, commandOutcomeIsUncertain, createPasabuyCommandSession,
+  getAdminPasabuy,
 } from '../../services/adminBffService'
 import {
   EmptyState,
@@ -83,6 +84,12 @@ export default function PasabuyManager() {
   const [notice, setNotice] = useState('')
   const [transitionReason, setTransitionReason] = useState('')
   const [showPasabuyGuide, setShowPasabuyGuide] = useState(false)
+  const [uncertain, setUncertain] = useState(false)
+  // Retained operation identity: a retry after a lost response is the same
+  // logical transition/quote, never a second financial version.
+  const commands = useRef(null)
+  if (!commands.current) commands.current = createPasabuyCommandSession()
+  useEffect(() => () => commands.current?.dispose(), [])
 
   const load = useCallback(async () => {
     if (secureAdmin) {
@@ -123,7 +130,16 @@ export default function PasabuyManager() {
     return () => supabase.removeChannel(channel)
   }, [load, secureAdmin])
 
-  const selected = requests.find(request => request.id === selectedId) || null
+  const filtered = requests.filter(request => {
+    if (filter === 'all') return true
+    if (filter === 'closed') return CLOSED.has(request.status)
+    if (filter === 'review') return REVIEW.has(request.status)
+    if (filter === 'sourcing') return SOURCING.has(request.status)
+    return !CLOSED.has(request.status)
+  })
+  // Actions always address a record inside the visible working set: a
+  // selection that the filter hides can no longer be transitioned or quoted.
+  const selected = filtered.find(request => request.id === selectedId) || null
   const latestQuote = useMemo(() => latestQuoteFor(selected), [selected])
 
   useEffect(() => {
@@ -155,13 +171,6 @@ export default function PasabuyManager() {
   const suggested = Math.ceil(landed * (1 + numbers.margin / 100))
   const finalPrice = quote.finalPrice === '' ? suggested : Number(quote.finalPrice) || 0
 
-  const filtered = requests.filter(request => {
-    if (filter === 'all') return true
-    if (filter === 'closed') return CLOSED.has(request.status)
-    if (filter === 'review') return REVIEW.has(request.status)
-    if (filter === 'sourcing') return SOURCING.has(request.status)
-    return !CLOSED.has(request.status)
-  })
   const openRequests = requests.filter(request => !CLOSED.has(request.status))
   const expiringQuotes = openRequests.filter(request => {
     const deadline = quoteDeadline(latestQuoteFor(request))
@@ -174,14 +183,23 @@ export default function PasabuyManager() {
     if (!selected || (!secureAdmin && !supabase)) return
     const reason = secureAdmin ? transitionReason.trim() : 'Updated from admin operations'
     if (!reason) { setError('Record why this Pasabuy case is moving to the next state.'); return }
-    setSaving(true); setError(''); setNotice('')
+    setSaving(true); setError(''); setNotice(''); setUncertain(false)
     const result = secureAdmin
-      ? await transitionPasabuyBff(selected.id, toStatus, reason)
+      ? await commands.current.run('transition', { requestId: selected.id, toStatus, reason })
       : await supabase.rpc('transition_pasabuy_request', {
         p_request_id: selected.id, p_to_status: toStatus, p_reason: reason,
       })
     setSaving(false)
-    if (secureAdmin ? !result.ok : result.error) { setError(safeUiError('PASABUY_SAVE_FAILED')); return }
+    if (secureAdmin ? !result.ok : result.error) {
+      if (secureAdmin && commandOutcomeIsUncertain(result)) {
+        setUncertain(true)
+        setNotice('The transition did not confirm. It may already be saved — reload the case and reconcile before sending it again.')
+        await load()
+        return
+      }
+      setError(secureAdmin && result.error ? result.error : safeUiError('PASABUY_SAVE_FAILED'))
+      return
+    }
     setTransitionReason('')
     setNotice(`Moved to ${STATUS_LABELS[toStatus]}.`)
     await load()
@@ -192,11 +210,11 @@ export default function PasabuyManager() {
     if (!quote.fxSource.trim()) { setError('Enter the FX source used for this quote.'); return }
     if (finalPrice < landed) { setError('Final price cannot be below the estimated landed cost.'); return }
     if (secureAdmin && !quote.priceRationale.trim()) { setError('Record why the owner selected this final price.'); return }
-    setSaving(true); setError(''); setNotice('')
+    setSaving(true); setError(''); setNotice(''); setUncertain(false)
     const validUntil = new Date(Date.now() + (Number(quote.validDays) || 7) * 86400000).toISOString()
     const fxCapturedAt = new Date().toISOString()
     const result = secureAdmin
-      ? await savePasabuyQuoteBff({
+      ? await commands.current.run('quote', {
         requestId: selected.id, itemCostForeign: numbers.itemCost, fxRate: numbers.fxRate,
         fxSource: quote.fxSource.trim(), fxCapturedAt, weightKg: numbers.weight,
         shippingMethod: quote.shippingMethod, freightRateForeignPerKg: numbers.rate,
@@ -213,7 +231,16 @@ export default function PasabuyManager() {
         p_final_price_php: finalPrice, p_valid_until: validUntil,
       })
     setSaving(false)
-    if (secureAdmin ? !result.ok : result.error) { setError(safeUiError('PASABUY_SAVE_FAILED')); return }
+    if (secureAdmin ? !result.ok : result.error) {
+      if (secureAdmin && commandOutcomeIsUncertain(result)) {
+        setUncertain(true)
+        setNotice('The quote save did not confirm. It may already be saved — reload the case and reconcile before sending it again.')
+        await load()
+        return
+      }
+      setError(secureAdmin && result.error ? result.error : safeUiError('PASABUY_SAVE_FAILED'))
+      return
+    }
     setQuote(current => ({ ...current, priceRationale: '' }))
     setNotice('Quote version saved. It has not been sent to the customer.')
     await load()
@@ -267,7 +294,17 @@ export default function PasabuyManager() {
         { label: 'Oldest open', value: loading ? '--' : openRequests.length ? (oldestOpenHours < 24 ? `${oldestOpenHours}h` : `${Math.floor(oldestOpenHours / 24)}d`) : '--', detail: 'Age since submission' },
       ]} />
 
-      {(error || notice) && <StateBanner tone={error ? 'danger' : 'success'}>{error || notice}</StateBanner>}
+      {(error || notice) && <StateBanner tone={error ? 'danger' : uncertain ? 'warning' : 'success'}>{error || notice}</StateBanner>}
+      {uncertain && (
+        <button
+          type="button"
+          onClick={async () => { setSaving(true); await load(); setSaving(false); setUncertain(false); setNotice('Case reloaded from the server. Compare before sending again.') }}
+          disabled={saving}
+          className={`${secondaryButton} min-h-11`}
+        >
+          Re-check case from server
+        </button>
+      )}
 
       <div className="grid gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
         <section className="min-w-0 space-y-3" aria-label="Pasabuy request queue">
@@ -283,7 +320,7 @@ export default function PasabuyManager() {
                 const requestQuote = latestQuoteFor(request)
                 const deadline = quoteDeadline(requestQuote)
                 return (
-                  <button key={request.id} onClick={() => { setSelectedId(request.id); setError(''); setNotice('') }} aria-current={selectedId === request.id ? 'true' : undefined} className={`w-full px-4 py-3.5 text-left transition-[transform,background-color] duration-150 active:scale-[0.99] ${selectedId === request.id ? 'bg-blue/10' : 'hover:bg-white/[0.025]'}`}>
+                  <button key={request.id} onClick={() => { setSelectedId(request.id); setError(''); setNotice(''); setUncertain(false) }} aria-current={selectedId === request.id ? 'true' : undefined} className={`w-full px-4 py-3.5 text-left transition-[transform,background-color] duration-150 active:scale-[0.99] ${selectedId === request.id ? 'bg-blue/10' : 'hover:bg-white/[0.025]'}`}>
                     <div className="flex items-start justify-between gap-3"><span className="font-mono text-xs font-semibold text-blue">{request.public_reference || String(request.id).slice(0, 8)}</span><StatusPill tone={statusTone(request.status)}>{STATUS_LABELS[request.status] || request.status}</StatusPill></div>
                     <p className="mt-2 truncate text-sm font-semibold text-white">{request.item_title || 'Untitled request'}</p>
                     <p className="mt-1 truncate text-xs text-white/45">{request.customer_name || 'Customer'} / Qty {request.quantity || 0}</p>
@@ -297,7 +334,10 @@ export default function PasabuyManager() {
 
         <section className="min-w-0">
           {!selected ? <EmptyState title="Select a Pasabuy case" description="Choose a request to review evidence, calculate a quote, and advance its valid next state." /> : (
-            <div className="space-y-5">
+            // While an outcome is unconfirmed the reviewed payload is frozen:
+            // any retry must be byte-identical to keep its operation identity.
+            <fieldset disabled={uncertain} className="space-y-5">
+              {uncertain && <p className="text-xs font-semibold text-amber">Review frozen until the unconfirmed write is reconciled. Use “Re-check case from server” above.</p>}
               <div className="border-b border-adm-line pb-4">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><span className="font-mono text-xs font-semibold text-blue">{selected.public_reference}</span><StatusPill tone={statusTone(selected.status)}>{STATUS_LABELS[selected.status] || selected.status}</StatusPill>{selectedDeadline && <StatusPill tone={selectedDeadline.expired ? 'danger' : 'warning'}>{selectedDeadline.label}</StatusPill>}</div><h2 className="mt-2 text-xl font-semibold tracking-tight text-white">{selected.item_title}</h2><p className="mt-1 text-sm text-white/50">{selected.customer_name} / {selected.customer_email || selected.customer_phone || 'Contact unavailable'} / Qty {selected.quantity}</p><p className="mt-2 text-xs text-white/35">Owner: {selected.assigned_to || 'Unassigned'} / Submitted {ageLabel(selected.created_at)}</p>{selected.reference_url && <a className="mt-3 inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-blue underline underline-offset-4" href={selected.reference_url} target="_blank" rel="noreferrer">Open customer reference <ArrowIcon size={14} /></a>}</div>
@@ -341,7 +381,7 @@ export default function PasabuyManager() {
                 <p className="text-xs text-white/45">Suggested {peso(suggested)} / Latest saved {latestQuote ? `version ${latestQuote.version}` : 'none'} / Saving does not send</p>
                 <div className="flex flex-col gap-2 sm:flex-row"><button onClick={saveQuote} disabled={saving} className={`${primaryButton} bg-amber text-navy hover:bg-amber/90`}>{saving ? 'Saving...' : 'Save new quote version'}</button><button onClick={copyQuote} disabled={!latestQuote} className={`${secondaryButton} border-forest/35 text-forest`}>Copy saved quote message</button></div>
               </div>
-            </div>
+            </fieldset>
           )}
         </section>
       </div>

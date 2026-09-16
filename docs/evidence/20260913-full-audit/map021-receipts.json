@@ -1,0 +1,30 @@
+[
+  {
+    "command": "npm run test:contracts",
+    "exitCode": 1
+  },
+  {
+    "command": "npm run prebuild",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run security:surfaces",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run security:gate",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run security:dependency-audit",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run build:storefront",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run build:admin",
+    "exitCode": 0
+  }
+]

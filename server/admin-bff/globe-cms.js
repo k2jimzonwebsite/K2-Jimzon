@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { strictInteger } from '../shared-numeric.js'
 import { isAdminRole } from './supabase.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -33,7 +34,7 @@ function validateHero(value) {
 }
 
 function validateReviewFields(body) {
-  const stars = Number(body.stars)
+  const stars = strictInteger(body.stars, 'REQUEST_INVALID', { min: 1, max: 5 })
   const reviewDate = String(body.reviewDate || '')
   const parsedReviewDate = new Date(`${reviewDate}T00:00:00Z`)
   const productId = body.productId === null ? null : String(body.productId || '')
@@ -64,8 +65,8 @@ export function validateGlobeReviewCommand(body) {
   const reason = boundedText(body.payload?.reason, 3, 500)
   if (body.action === 'globe_config_update') {
     if (!exactKeys(body.payload, ['productId', 'enabled', 'hero', 'displayOrder', 'version', 'reason'])) throw new Error('REQUEST_INVALID')
-    const displayOrder = Number(body.payload.displayOrder)
-    const version = Number(body.payload.version)
+    const displayOrder = strictInteger(body.payload.displayOrder, 'REQUEST_INVALID', { min: 0, max: 99 })
+    const version = strictInteger(body.payload.version, 'REQUEST_INVALID', { min: 1, max: Number.MAX_SAFE_INTEGER })
     if (!PRODUCT_ID.test(String(body.payload.productId || '')) || typeof body.payload.enabled !== 'boolean'
         || !Number.isInteger(displayOrder) || displayOrder < 0 || displayOrder > 99
         || !Number.isInteger(version) || version < 1) throw new Error('REQUEST_INVALID')
@@ -76,7 +77,7 @@ export function validateGlobeReviewCommand(body) {
   }
   if (['review_publish', 'review_withdraw'].includes(body.action)) {
     if (!exactKeys(body.payload, ['id', 'version', 'reason'])) throw new Error('REQUEST_INVALID')
-    const version = Number(body.payload.version)
+    const version = strictInteger(body.payload.version, 'REQUEST_INVALID', { min: 1, max: Number.MAX_SAFE_INTEGER })
     if (!UUID.test(String(body.payload.id || '')) || !Number.isInteger(version) || version < 1) throw new Error('REQUEST_INVALID')
     return { action: body.action, payload: { id: body.payload.id, version, reason } }
   }
@@ -85,7 +86,7 @@ export function validateGlobeReviewCommand(body) {
   if (!exactKeys(body.payload, keys)) throw new Error('REQUEST_INVALID')
   const payload = { ...validateReviewFields(body.payload), reason }
   if (body.action === 'review_update') {
-    const version = Number(body.payload.version)
+    const version = strictInteger(body.payload.version, 'REQUEST_INVALID', { min: 1, max: Number.MAX_SAFE_INTEGER })
     if (!UUID.test(String(body.payload.id || '')) || !Number.isInteger(version) || version < 1) throw new Error('REQUEST_INVALID')
     payload.id = body.payload.id
     payload.version = version

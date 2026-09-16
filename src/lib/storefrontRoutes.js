@@ -12,6 +12,10 @@ export const STOREFRONT_PATH_TO_VIEW = Object.freeze({
   '/messages': 'messages',
   '/checkout': 'checkout',
   '/confirmation': 'confirmation',
+  '/privacy': 'privacy',
+  '/terms': 'terms',
+  '/returns': 'returns',
+  '/policies': 'policies',
 })
 
 export const STOREFRONT_VIEW_TO_PATH = Object.freeze({
@@ -25,6 +29,10 @@ export const STOREFRONT_VIEW_TO_PATH = Object.freeze({
   messages: '/messages',
   checkout: '/checkout',
   confirmation: '/confirmation',
+  privacy: '/privacy',
+  terms: '/terms',
+  returns: '/returns',
+  policies: '/policies',
 })
 
 // Root resolves to the emitted index file without a rewrite. Every other

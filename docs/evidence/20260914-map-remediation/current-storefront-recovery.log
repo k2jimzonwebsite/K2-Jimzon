@@ -1,0 +1,20 @@
+[WebServer] (node:7652) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3452) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 9 tests using 1 worker
+
+(node:10564) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\storefront-recovery-ui.spec.js:26:1 › uncertain checkout freezes details and retries the same payload with a fresh challenge (2.2m)
+  ok 2 tests\storefront-recovery-ui.spec.js:62:3 › pasabuy renews its challenge after a failed submission (20.5s)
+  ok 3 tests\storefront-recovery-ui.spec.js:62:3 › messages renews its challenge after a failed submission (3.9s)
+  ok 4 tests\storefront-recovery-ui.spec.js:87:1 › product facts and availability remain honest when canonical fields are missing (826ms)
+  ok 5 tests\storefront-recovery-ui.spec.js:98:1 › phone product identity precedes supporting content and controls have usable targets (1.8s)
+  ok 6 tests\storefront-recovery-ui.spec.js:116:1 › gallery shrinking during refresh preserves the product and its buying context (889ms)
+  ok 7 tests\storefront-recovery-ui.spec.js:127:3 › review globe does not fabricate feedback when the review source is empty (1.7s)
+  ok 8 tests\storefront-recovery-ui.spec.js:127:3 › review globe does not fabricate feedback when the review source is unavailable (9.0s)
+  ok 9 tests\storefront-recovery-ui.spec.js:146:1 › private guest journeys stay noindex while public browsing stays indexable (1.9s)
+
+  9 passed (2.9m)

@@ -92,6 +92,7 @@ function Harness() {
   const [actorId, setActorId] = useState('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')
   const [historyReleased, setHistoryReleased] = useState(false)
   const historySequence = useRef(0)
+  const saveFailed = useRef(false)
   const releaseHistory = useRef(null)
   const options = new URLSearchParams(window.location.search)
   const historyFailed = useRef(false)
@@ -106,10 +107,15 @@ function Harness() {
       error: options.has('staleQueue') ? STALE_QUEUE_NOTICE : '',
       phase2Ready: true,
       websiteReplyReady: true,
+      completeness: options.has('truncatedQueue')
+        ? { conversations: { truncated: true, returned: 3, limit: 3 } }
+        : null,
     },
     user: { id: actorId },
     inboxUsesBff: historyFixture,
-    inboxStaff: [],
+    inboxStaff: options.has('historyActors')
+      ? [{ id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', full_name: 'K2 Operator', email: '', role: 'Staff' }]
+      : [],
     loadConversationHistory: async (conversationId) => {
       const request = ++historySequence.current
       if (options.has('historyError')) {
@@ -136,11 +142,14 @@ function Harness() {
           id: `fixture-event-${request}`, event_type: 'fixture_history',
           reason: delayed ? 'Older Maria history' : conversationId === INITIAL_CONVERSATIONS[0].id ? 'Latest Maria history' : 'Elena history',
           created_at: new Date().toISOString(),
+          ...(options.has('historyActors') ? { actor_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa' } : {}),
         }],
       }
     },
     sendMessage: async (conversationId, text) => {
-      if (options.has('uncertainSave')) {
+      // The first save loses its response; the retry resolves the same command.
+      if (options.has('uncertainSave') && !saveFailed.current) {
+        saveFailed.current = true
         return { ok: false, uncertain: true, error: UNCERTAIN_COMMAND_NOTICE }
       }
       if (new URLSearchParams(window.location.search).has('delaySave')) {

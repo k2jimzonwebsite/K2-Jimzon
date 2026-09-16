@@ -1,0 +1,5 @@
+
+> k2-jimzon-prototype@0.1.0 verify:guest-bff
+> node scripts/verify-guest-bff.mjs
+
+Guest commerce BFF contract passed (production cutover remains gated).

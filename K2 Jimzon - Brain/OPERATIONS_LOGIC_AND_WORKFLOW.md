@@ -1,16 +1,96 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
-**IDEA-20260907-01 current implementation boundary (7 September 2026):** the
-rulebook requirements below remain the target contract. Local tracing confirms
-that the prepared Admin payment route currently records only the existing
-status transition and free-text event with actor/time; it does not establish the complete
-payment-evidence or instruction-delivery record required in §16. The prepared
-manual product-intake/flight-receiving path keeps supplier receipts disabled
-and automatically quarantines short-dated receipts, but does not yet provide
-the richer wrong-item/damaged/unexpected-goods disposition workflow required in
-§9. Exact-shop snapshot/order staging remains observation-only and provider
-inactive. These facts are local preparation evidence, not production claims;
-the MAP and payment runbook hold the activation dependencies.
+**16 September automated delivery quotation and checkout parity (IDEA-20260916-01, MAP-023 / MAP-018):**
+Automated Shopee/Lazada-style delivery pricing at checkout (`src/lib/cartShippingCalculator.js`) eliminates manual pre-order quoting friction while keeping carrier fulfillment commitment with K2 Jimzon. Real-time rates calculate from cart items' packed weight and customer-selected Philippine delivery region (NCR: Standard ₱95 / Express ₱150; Greater Luzon: ₱85; Visayas: ₱100; Mindanao: ₱105; Pickup: ₱0 free; overweight scaling: +₱35/kg over 3kg). Storefront BFF (`prepared-api/storefront/order.js`) revalidates `shippingAmount` via `strictNumeric` (0–100,000) and `shippingQuoteStatus = 'customer_confirmed'`. Database RPC `submit_order_request_v2` (live in production on Supabase) and companion `submit_guest_order_v1` (`supabase/migrations/20260916_automated_delivery_quotation.sql`) persist `shipping_amount`, set `shipping_quote_status = 'customer_confirmed'`, set initial `delivery_status = 'ready_to_pack'`, calculate `total_amount = subtotal - discount + shipping_amount`, and record the delivery breakdown in events and conversation thread. The customer chooses their service tier; staff fulfill dispatch with courier of choice, with Admin BOS (`OmniOperationsHub.jsx`) rendering the customer-confirmed delivery fee and pre-filling courier dispatch recommendations in `DeliveryDetailsModal`.
+
+**16 September structured manual payment evidence record and distinct verification (AUD-OPS-001, MAP-023 §16, MAP-019):**
+Manual payment transitions to `evidence_submitted` require structured evidence fields: payment method (`gcash`, `bank_transfer`, `maya`, `cash`, `other`), positive numeric amount strictly in PHP, nonblank payer name ($\le 140$ chars), nonblank payment reference number ($\le 100$ chars), optional proof asset reference ($\le 500$ chars), and optional remarks. The database migration `supabase/migrations/20260916_structured_payment_evidence.sql` attaches `payment_evidence jsonb` to `order_requests`, records submission timestamp and submitter identity, and enforces separation of duties in `set_order_request_payment_status`: the staff member verifying that funds arrived in the merchant account must be distinct from the staff member who recorded evidence submission (`auth.uid() <> v_submitter`). Staff Admin UI (`PaymentStatusModal` in `OmniOperationsHub.jsx`) provides structured input fields on evidence submission and renders an independent evidence review card plus an explicit merchant account check confirmation checkbox on verification.
+
+**15 September delivery estimate parent state clearing and quote lifecycle (MAP-019/023 I-003):**
+Delivery estimate calculation (`src/components/DeliveryEstimate.jsx`) must never allow parent state to hold a stale fee while a new quote is checking. Whenever destination, weight, or merchandise subtotal changes (`localityId`, `weightG`, `subtotalMinor`), `setQuote(null)` and `onQuote?.(null)` must be dispatched immediately alongside `setChecking(true)` before asynchronous rate resolution. If `quotable` becomes false (e.g. cart items become unweighed or empty) or `localityId` is cleared, parent quote state must immediately clear to null. Checkout retains the approved manual quoting model ("Courier delivery is quoted for approval after review; nothing is charged here") until remote immutable quote persistence is active under MAP-017/G-001.
+
+**15 September checkout error recovery and idempotency lifecycle (MAP-019/023 I-004):**
+An unconfirmed/uncertain checkout attempt holds the pending order lines and contact payload, locking the form fieldsets against accidental modification while preserving all entered form values (`name`, `email`, `phone`, `address`, `fulfillmentMethod`, `note`). If the customer explicitly chooses "Edit order or contact details" or modifies cart quantities, items, or coupons, the held pending checkout state is cleared (`resetPendingCheckout`) and a fresh idempotency key (`crypto.randomUUID()`) is assigned on the next submission so modified order contents are never submitted under a stale key. Definite server rejections (`result.code?.endsWith('_INVALID')`, `INSUFFICIENT_STOCK`, `CONTACT_REQUIRED`, `BOT_CHALLENGE_REQUIRED`, `INVALID_REQUEST`, `RATE_LIMITED`, `INVALID_OR_INELIGIBLE`) immediately unlock the checkout fieldsets and cart controls on both initial attempts and retries (`resetPendingCheckout`), allowing customers to immediately correct issues without refreshing or losing entered data. All interactive recovery actions must meet the $\ge 44\times 44$px touch target requirement (`min-h-11`) with accessible focus rings.
+
+**15 September staff workspace completeness, recoverable dialogs, and navigable admin work context (MAP-019/021/023 I-012, H-007, H-024, H-025):**
+Staff fulfillment queue reads must enforce explicit bounding limits across queries (`submitted`: 200, `confirmed`: 200, `lots`: 1000, `staff`: 50) and return structured completeness metadata (`returned`, `limit`, `truncated`). When query limits are hit, staff workspaces must display an accessible alert banner (`role="alert"`) warning of truncation rather than silently presenting a partial read as the entire operational backlog. All Admin modal and dialog workflows must standardize on the shared `AdminDialog` primitive with focus trapping, `aria-modal="true"`, and explicit write locking (`closeDisabled`, disabled dismiss/cancel controls while mutations are in-flight (`busy`, `working`, `finalizing`)) so operations cannot be abandoned or double-committed mid-reconciliation, role change, or consignment advance. Admin work contexts must maintain exact two-way URL synchronization (`?section=...`) via HTML5 History `pushState`, map aliases (`consignments`, `fulfillment`, `staff`, `channels`, `messages`, `customers`), sanitize against the authoritative `SECTIONS` registry with role permission gates (`adminOnly` fallback to `overview`), support browser Back/Forward navigation with `popstate` restoration, and shift accessible focus to the section heading landmark on section transitions.
+
+**15 September storefront media failure, touch targets, discovery ordering, mobile buying hierarchy, and launch truth (MAP-028 I-008, I-005, I-006, I-007):**
+External or local media failures across all storefront visual surfaces (story journeys, interactive reveals, product cards) must fail-safe to the canonical neutral placeholder (`/images/placeholder.svg`) with stable layout geometry rather than leaving broken layout artifacts or silently failing. Interactive targets across storefront discovery, product detail breadcrumbs, tabs, and action icons must satisfy the 44px minimum touch target invariant (`min-h-11`, `min-w-11`). Catalog discovery requires explicit recency sorting ('latest' ordering by descending database `created_at` timestamp with deterministic SKU/ID tie-breaking), preserves null/undated rows deterministically, supports full URL parameter synchronization (`q`, `category`, `sort`) with history popstate restoration on Back/Forward navigation, and queries remote databases newest-first without inventing ungrounded 'recently landed' claims from arbitrary array indices. The product detail surface (`MasterProduct.jsx`) prioritizes primary purchase decisions over optional details: on mobile and desktop viewports, product identity, price, allergen safety notices (`role="alert"`), and purchasing controls (stepper, stock status, cart/Pasabuy submission) precede product descriptions, provenance passports, specifications, and pairings in DOM and visual hierarchy, ensuring customers are not required to scroll past secondary content or miss critical allergen warnings before purchasing. Public promises must reconcile strictly with manual launch operating facts: customer-facing FAQs, Hero, Checkout, Confirmation, and Contact surfaces describe only available manual steps (manual GCash/QR planned for launch upon staff stock/quote confirmation; delivery quoted and confirmed per order; no false 1-2 day delivery or 2-3 week Pasabuy transit SLAs; no unapproved Maya/bank/COD payment methods; no self-service returns or instant confirmations).
+
+**15 September inventory commitment and owned-stock projection (MAP-028 I-001):**
+Owned stock is strictly a derived read projection, never a second writable balance.
+Physical on-hand custody remains distinct from owned stock: committed units remain
+physically on-hand until handover dispatch, while available sellable stock excludes
+both uncommitted purchase holds and committed allocations. Complete allocation visibility
+is required; missing or unattributed confirmed/verified allocations flag explicit
+reconciliation required rather than silently masquerading as healthy inventory totals.
+Committed reservations exit the due-for-expiry queue and refuse deadline extensions
+(`RESERVATION_ALREADY_COMMITTED`). All 8 concurrent writers (payment verification, order
+confirmation, hold cancellation, expiry sweep, balance recount, handover dispatch, custody
+transfer, and channel allocation) serialize deterministically on balance/lot locks without
+deadlocks or balance corruption.
+
+**15 September intake retry contract (IDEA-20260914-02):** secure session
+creation retains its distinct inner request ID and outer command key. Packaging
+evidence retains exact file bytes, filename, slot, session and outer key until its
+receipt is reconciled. Upload success requires a matching registered path/slot;
+a failed read, incomplete receipt or older image is not confirmation. Preserve
+private-file cleanup tracking and never delete evidence based on response loss.
+These requirements do not imply durable browser-reload recovery or activation.
+
+**14 September review/discovery truth (IDEA-20260914-02):** remote customer
+feedback must come from the published review register. An empty or failed read
+must never substitute demo testimonials; distinguish no published reviews from
+an unavailable source. Account, private messages, checkout and confirmation are
+scoped journeys and must use noindex/nofollow in page metadata and host headers.
+Crawler policy is separate from authentication and does not grant or deny access.
+
+**14 September recovery and fact authority (IDEA-20260914-02):** an uncertain
+checkout must retain its original order details and request identity, freeze cart
+and coupon edits, and obtain a fresh bot token on retry. A later retry failure
+does not prove that the original write failed. Canonical products must not inherit
+demo ingredients, origin, preparation or provenance from a matching demo SKU.
+Missing availability remains unknown. Customer metrics are unavailable unless
+every supporting history query is demonstrably complete; a loaded register count
+must describe loaded records. These are required behaviors; local evidence and
+remaining activation/reload limitations are recorded in the System Brain.
+
+**13 September audit corrections (IDEA-20260913-02):** intake quantity and cost
+must be explicit numbers or supported nonblank numeric strings, never booleans,
+arrays or objects converted into facts. Omitted optional cost retains its existing
+zero default. Staff expiry displays use the Manila business date. Clearance
+approval dates and quantities must come from canonical lot reads/receipts; a
+browser clock is not approval evidence. A failed post-write read preserves the
+last displayed data and receipt identity until the recorded result can be loaded.
+These local corrections do not change SQL expiry eligibility or activate providers.
+
+**Mobile store navigation and overlay collision boundaries (IDEA-20260909-02 / I-015 verified 15 September 2026):**
+Compact category controls, keeper dialogue, zoom controls, and basket dock must never
+collide or occlude each other on mobile viewports (portrait 375×812 and landscape 844×390).
+On mobile screens (`max-width: 900px`):
+1. **Empty basket:** Hidden (`data-filled='false' { display: none }`) to eliminate canvas obstruction.
+2. **Filled basket dock:** Anchored at bottom-right above the product rail (`bottom: calc(44px + 1.15rem); right: 0.75rem; z-index: 9`) as a compact pill (`min-height: 48px; border-radius: 999px; padding: 0.3rem 0.55rem 0.3rem 0.65rem`) with scaled parcel icon, keeping the Counter title, shelf signage, and keeper clear. The review basket button maintains a $\ge 44\times 44$px touch target.
+3. **Shopkeeper card overlay:** Top-anchored (`top: 0.6rem; left: 0.6rem; z-index: 25`), bounded to `max-height: calc(100% - 9rem)` with a scrollable dialogue panel (`max-height: min(10.5rem, calc(100% - 3.5rem))`), guaranteeing a vertical gap $\ge 16$px above the bottom basket dock.
+4. **Input auto-zoom protection:** Mobile question input (`#keeper-question`) is styled at `font-size: 1rem` (16px) to prevent iOS Safari viewport auto-zoom from distorting the 3D canvas.
+5. **No horizontal overflow:** `document.documentElement.scrollWidth <= innerWidth` across portrait and landscape.
+6. Scene camera zoom and browser text zoom remain separate controls. Evidence: `docs/evidence/20260915-store-overlay-collisions/README.md`.
+
+**Product-led merchandising and related provisions (MAP-023/027 I-009 verified 15 September 2026):**
+1. **Product Detail Scope:** Product pages (`MasterProduct.jsx`) must never repeat the entire catalog or secondary filter/search controls beneath the product specifications. Instead, they must render a small, curated set of up to 4 related provisions (`RelatedProducts`) matching the current product's category or subcategory, accompanied by an explicit, accessible call-to-action button linking directly to the full catalog (`/catalog`) with $\ge 44$px touch targets (`min-h-11`).
+2. **Mobile Catalog Scanning Density:** The catalog grid (`CatalogGrid.jsx`) must support responsive 2-column scanning on mobile devices $\ge 370$px (`min-[370px]:grid-cols-2`), enabling customers to quickly compare products without excessive scroll depth, while retaining 1-column fallback on screens $< 370$px to prevent layout cramping. All product action buttons and touch links must satisfy the $\ge 44\times 44$px invariant. Evidence: `docs/evidence/20260915-product-led-catalog/README.md`.
+
+**IDEA-20260907-01 current implementation boundary (7 September 2026; updated 16 September 2026):**
+the rulebook requirements below remain the target contract. On 16 September 2026,
+the structured payment evidence record and distinct staff verification were
+implemented and verified locally (AUD-OPS-001, MAP-023 §16, MAP-019), with
+migration `supabase/migrations/20260916_structured_payment_evidence.sql` prepared
+for the MAP-017 maintenance window. The prepared manual product-intake/flight-receiving
+path keeps supplier receipts disabled and automatically quarantines short-dated
+receipts, but does not yet provide the richer wrong-item/damaged/unexpected-goods
+disposition workflow required in §9. Exact-shop snapshot/order staging remains
+observation-only and provider inactive. These facts are local preparation evidence,
+not production claims; the MAP and payment runbook hold the activation dependencies.
 
 The focused contract, browser, PostgreSQL and separate-build evidence is
 recorded in `docs/evidence/20260907-operational-readiness/README.md`.
@@ -42,15 +122,14 @@ and reserve owner-approved budget before a single provider dispatch. Signed jobs
 and results survive browser loss. Uncertain calls retain their reservation and
 must never be dispatched again by recovery. Staff reviews each content field and
 each PRIMARY/AFTER candidate before existing canonical save/attachment commands.
+Evidence cleanup may remove a private object only from an exact pending claim;
+an unrecognized claim state must not reach Storage deletion, and cleanup remains
+pending until the database returns the matching cleanup ID with an explicit
+completed receipt.
 AI never assigns stock, quantity, SKU, price, cost, expiry, custody, approval or
 publication. Missing configuration explains readiness and preserves manual work.
 Activation/recovery procedure: `docs/runbooks/PRODUCT_INTAKE_RUNBOOK.md`.
-**Checkout delivery commitment (I-003):** until the order endpoint revalidates
-and persists an immutable accepted delivery quote, checkout shows products total
-and delivery quoted for customer approval after review. A standalone rate lookup
-must not be added to a final order total or represented as the saved delivery
-charge. Re-enabling automatic fees requires the same accepted amount/locality/
-rate version in checkout, the canonical order, confirmation and Admin.
+**Checkout delivery commitment (I-003):** automated delivery fees are enabled via the owner-approved weight and regional pricing matrix (`src/lib/cartShippingCalculator.js`). The Storefront BFF revalidates `shippingAmount` and `shippingQuoteStatus = 'customer_confirmed'`, persisting them to the canonical order via `submit_guest_order_v1`. Grand total is calculated as `subtotal - discount + shipping_amount` across checkout, confirmation, order seeds, and Admin BOS. For unweighed or out-of-zone cargo, fallback to manual quoting ("Quoted after review") remains supported. Carrier selection and dispatch commitment are fulfilled by K2 Jimzon staff based on the customer-selected service tier.
 
 **Fulfillment response loss (I-002):** a missing delivery/handover response does
 not prove that the write failed. Preserve the submitted reference/details and
@@ -59,6 +138,17 @@ an exact receipt retry through the protected command boundary. A definitive
 rejection may reopen correction. A staff-session change invalidates the old
 dialog runtime; a late response must not close or confirm the new staff's form.
 Local UI acceptance and provider activation are separate evidence gates.
+
+Product-intake checklist steps, reviewed Draft creation and first inventory use
+the same rule: retain the exact reviewed payload and outer receipt key while
+pending or unconfirmed, separately from the durable inner intake request ID.
+A missing/malformed receipt or failed post-write session refresh does not permit
+a new command identity or revised details. Retry resolves the original receipt
+before refreshing server truth. Freeze all review fields and dismissal, keep
+one explicit retry action beside the uncertainty warning, and allow correction
+only after a definitive rejection. Disposed UI continuations cannot advance a
+replacement staff workspace. This rule also remains the target for the other
+intake callers awaiting adoption in I-002.
 
 The same rule applies to supplier identity creation: uncertainty must preserve
 the original name/contact/lead time/reason and receipt identity. A legacy write
@@ -73,6 +163,14 @@ resolution. Freeze edits and accidental dismissal during protected uncertainty;
 definitive rejection permits correction. Legacy uncertainty requires register
 reconciliation. Returning from a dialog restores its invoking control, including
 when opening the dialog temporarily disables that control.
+
+Catalog CSV commits follow the same response-loss rule per atomic chunk. Preserve
+the exact reviewed file hash, selected rows, reason, operation ID, chunk index and
+chunk idempotency key until a matching durable receipt resolves the outcome.
+While unresolved, staff cannot dismiss the review, replace the file or produce a
+different preview. The uncertainty warning and exact retry/status recovery remain
+visible together. A staff-session change disposes the old UI continuation; its
+late response must not refresh or confirm the replacement actor's workspace.
 
 Wholesale triage preserves its exact inquiry reference, target status and reason
 through uncertainty. Only a matching server receipt with a canonical timestamp
@@ -105,7 +203,6 @@ Guide checkmarks and fictional rehearsal responses never write business records.
 Any future mutation requires exact record/payload review, canonical validation,
 idempotent receipt handling and explicit uncertainty recovery before acceptance.
 
-**Hero merchandising:**previews reuse the canonical listed catalog, active
 **Hero merchandising:** previews reuse the canonical listed catalog, active
 retail/wholesale pricing mode and product-detail path. Loading must not present
 development seed products as loaded listings. Do not imply recency, popularity,
@@ -725,6 +822,12 @@ Side states: `on_hold`, `delayed`, `cancelled`.
 - A variance requires an arrival/discrepancy note before finalization. A fully
   matched independent recount may derive a statement that Manila matches the
   Milan count, but the system must never copy Milan quantities into Manila.
+- Manual intake produces reviewed Draft products (`draft`) with internal K2 SKUs; draft items have 0 sellable and 0 physical balance.
+- Stock establishment is permitted only through two verified paths: (1) an approved Consignment Manifest lifecycle (`Packing_Italy` -> Milan packing scans -> transit -> Manila arrival scans -> idempotent finalization) or (2) an authorized AAL2 Admin opening balance reconciliation (`reconcile_product_batches`).
+- Automatic 90-day shelf-life quarantine: arriving batches with expiry dates < 90 days from arrival are automatically marked `quarantine` in `product_batches`, counted in physical `inventory_balances.on_hand` but strictly excluded from sellable `products.stock_available`.
+- Arriving batches with expiry dates >= 90 days become `available` and increment `products.stock_available`.
+- Shortages on arrival log `missing_on_arrival` events in `inventory_events` with detailed discrepancy notes.
+- Undeclared arrival goods cannot be scanned or received into inventory; supplier receipts remain unsupported and fail closed (`K2_SUPPLIER_RECEIPT_WORKFLOW_UNAVAILABLE`). Direct table writes to inventory balances and batches remain blocked by RLS.
 
 ## 10. Custody and locations
 
@@ -1061,7 +1164,8 @@ submitted -> reviewed -> confirmed -> reserved -> fulfillment
           -> needs_information | cancelled
 ```
 
-- Submission does not reserve stock or count as paid revenue.
+- A purchase submission creates the timed hold below. It does not establish
+  verified payment or completed-sale revenue.
 
 **Reservation lifecycle (`OWNER-002`, decided 2 September 2026).** Four states,
 kept distinct so that "reserved" and "sold" are never confused:
@@ -1070,7 +1174,7 @@ kept distinct so that "reserved" and "sold" are never confused:
 | --- | --- |
 | An item sits in a cart, for any length of time | **Nothing.** The cart is a saved list. |
 | The customer clicks purchase | **Reserved for 30 minutes.** |
-| Payment verified or staff confirms | **Deducted.** Units leave inventory. |
+| Payment verified or staff confirms | **Owned stock deducted once.** Physical custody remains until handover. |
 | 30 minutes pass with no completion | **Released.** Exact lots return, idempotently. |
 
 - The cart is **permanent and holds no stock**, in the same way Shopee's does. A
@@ -1095,6 +1199,18 @@ kept distinct so that "reserved" and "sold" are never confused:
   catalog availability. Historical released allocations are never subtracted
   again. A lot/balance mismatch aborts the entire cancellation for reconciliation;
   it must not be hidden by clamping counters or partially changing order state.
+- First confirmation and verified payment share the exact-allocation commitment
+  evidence. Later confirmation/payment preserves the original actor, timestamp
+  and cause. A committed allocation no longer expires under its old temporary
+  purchase deadline; complete coverage, balances and shelf-life eligibility still
+  apply. Partial or unattributed commitment evidence requires reconciliation.
+- Handover requires attributable commitment on every active packed allocation.
+  It moves physical stock and releases encumbrance without recording a second
+  ownership deduction. Financial refund alone changes no stock, before or after
+  dispatch; cancellation and a physical return remain separate operations.
+- An error partway through confirmation or signed payment rolls back the whole
+  command, including coupon/order/commitment events and receipt state. Recovery
+  retries the original logical operation after its outcome is established.
 - A **missing deadline means unknown, never overdue.** Automatic release acts
   only on holds with a real expiry, because releasing on unknown would cancel a
   live customer's hold.
@@ -1711,3 +1827,9 @@ A workflow is done only when state/ownership are unambiguous; transitions are se
 
 ### Store orientation - IDEA-20260908-02
 The 3D shopping room at `/store` must adapt to portrait and landscape without a forced orientation lock. Rotation retains the canonical basket, selected goods and unsent shopkeeper question. Phone controls must reserve separate space for zoom and basket; an empty decorative basket may be hidden. Catalog/shop remains a separate surface. Reduced-motion fallback acceptance does not establish 3D rendering acceptance.
+
+### Bounded chunk recovery and target-neutral error boundary — IDEA-20260908-01 / I-010
+Preload and chunk recovery errors are explicit, user-initiated actions and must never trigger an automatic unconstrained reload loop. Error boundary copy on shared surfaces (`ErrorBoundary.jsx`) must be target-neutral, referencing the general shop or section rather than "Reload Admin" or leaking administrative surfaces. Touch targets for retry and reload buttons must meet the `>= 44px` minimum (`min-h-11`).
+
+### Customer-facing policy and recovery entry points — IDEA-20260908-01 / I-011
+Customer data collection on checkout, contact, pasabuy, and wholesale forms must offer reachable, clear disclosures of data collection and usage policies. The storefront must publish dedicated SPA routes (`/privacy`, `/terms`, `/returns`, `/policies`) and footer entry points for Privacy & Data, Terms of Service, and Returns & Replacements. The returns policy must accurately communicate the manual, case-by-case 48-hour inspection workflow without creating automated refund entitlements or false response SLAs. Touch targets on policy links and tab selectors must satisfy the `>= 44px` minimum.

@@ -1,0 +1,72 @@
+[
+  {
+    "original": "docs/evidence/20260906-admin-widgets/desktop.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260906-admin-widgets/desktop.png",
+    "restoredSha256": "EADE54D59E94EA877A1541DBDC13AC23E42D53342BA140028162B72964083F54"
+  },
+  {
+    "original": "docs/evidence/20260906-admin-widgets/mobile-metrics.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260906-admin-widgets/mobile-metrics.png",
+    "restoredSha256": "11A1F4E67D45856490261EC0AE5A160F944CDC0F928ED3662BFA3609A5B842A1"
+  },
+  {
+    "original": "docs/evidence/20260906-admin-widgets/mobile-sales.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260906-admin-widgets/mobile-sales.png",
+    "restoredSha256": "5F8E33896A3EB3F8D35B4A08BDAF369A6BB0D5510B8A853793C591DD807B5432"
+  },
+  {
+    "original": "docs/evidence/20260906-workflow-api/records-desktop.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260906-workflow-api/records-desktop.png",
+    "restoredSha256": "64EBD0A370C1A18B1F9FB687323624E9896B0FBDF15C8F5C845BCCC778341ED2"
+  },
+  {
+    "original": "docs/evidence/20260906-workflow-api/records-phone.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260906-workflow-api/records-phone.png",
+    "restoredSha256": "6C2D15A0646F1410FABFC7F2B73DAAAA0F4ECC503D89673726B95996E571F594"
+  },
+  {
+    "original": "docs/evidence/20260908-fulfillment-retry/handover-legacy-landscape.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260908-fulfillment-retry/handover-legacy-landscape.png",
+    "restoredSha256": "10F0D621FB1105FA4E8ED837D524889CC509BB2EE2B0571F96A33EC89ECDD609"
+  },
+  {
+    "original": "docs/evidence/20260908-media-retry/cleanup-phone.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260908-media-retry/cleanup-phone.png",
+    "restoredSha256": "0BB8CA4DEB2D9146E1B0751B78B030DFA836295B058A1513DC9A440BBDF153C7"
+  },
+  {
+    "original": "docs/evidence/20260908-media-retry/lost-phone.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260908-media-retry/lost-phone.png",
+    "restoredSha256": "B685685A0D90CD693947B72C6B6D72FAD7B90ADB70764230E846F47AAF830A50"
+  },
+  {
+    "original": "docs/evidence/20260908-store-orientation/3d-desktop-after.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260908-store-orientation/3d-desktop-after.png",
+    "restoredSha256": "D29B7289DCD348FA5DA1918F252C99D3821DFA69B15AF1D6E471E52D157C30F3"
+  },
+  {
+    "original": "docs/evidence/20260908-store-orientation/3d-desktop-basket.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260908-store-orientation/3d-desktop-basket.png",
+    "restoredSha256": "401A28B784E80152EF3F4E8C2F8939F98C0CA8E4EE8BD94550582CE803BCFE02"
+  },
+  {
+    "original": "docs/evidence/20260908-store-orientation/3d-landscape-after.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260908-store-orientation/3d-landscape-after.png",
+    "restoredSha256": "DED45E1A0BB20F6D81A8E5D1AF17AB1DE00DBAD87D4891C90EC4CCAFAC2C17F8"
+  },
+  {
+    "original": "docs/evidence/20260908-store-orientation/3d-landscape-basket.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260908-store-orientation/3d-landscape-basket.png",
+    "restoredSha256": "A3509074FF822C8DC2B08BC23C13EAC3B2856769CB40E437A1C0BD83070C558A"
+  },
+  {
+    "original": "docs/evidence/20260908-store-orientation/3d-portrait-after.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260908-store-orientation/3d-portrait-after.png",
+    "restoredSha256": "47F8F0CC8E252C9878852433EC19BAAA3F9A1859C5DCF00FE22C2175560B5BCB"
+  },
+  {
+    "original": "docs/evidence/20260908-store-orientation/3d-portrait-basket.png",
+    "currentEvidence": "docs/evidence/20260913-map-verification/screenshots/20260908-store-orientation/3d-portrait-basket.png",
+    "restoredSha256": "65DF3E6399958986A3AC2AAD79EE7A02913AEA344E1ED987FC2B70A0AA12976E"
+  }
+]

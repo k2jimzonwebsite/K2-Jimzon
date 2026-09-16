@@ -40,7 +40,7 @@ function EmailDraftForm() {
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-crimson/10 text-crimson"><InboxIcon size={20} /></span>
           <div>
             <h2 className="font-serif text-xl font-semibold text-navy">Leave us a message</h2>
-            <p className="mt-1 text-sm leading-relaxed text-navy-soft">You can send us a message anytime. We will get back to you by email or phone.</p>
+            <p className="mt-1 text-sm leading-relaxed text-navy-soft">You can send us a message anytime. Messages are reviewed during Manila business hours.</p>
           </div>
         </div>
       </div>
@@ -115,6 +115,10 @@ export default function Contact() {
             <p className="mt-2 text-sm leading-6">Messages are reviewed during Manila business hours. No response time is promised.</p>
           </div>
           <p className="mt-5 text-xs leading-5 text-navy-faint">Never share passwords or sensitive credentials through chat or email.</p>
+          <p className="mt-2 text-xs leading-5 text-navy-faint">
+            Contact information is protected under our{' '}
+            <button type="button" onClick={() => go('privacy')} className="underline hover:text-crimson font-medium">Privacy Policy</button>.
+          </p>
         </aside>
       </div>
     </main>

@@ -94,3 +94,57 @@ test('keeps secure Product Master edit, lifecycle, and delete decisions usable a
   await deleteDialog.getByRole('button', { name: 'Delete 1 product' }).click()
   await expect(deleteDialog).toContainText('has stock, listings, or operational history')
 })
+
+test('an unconfirmed deletion freezes the form and retries the same identity', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.context().addCookies([{
+    name: 'k2_admin_csrf', value: 'visual-csrf-token', url: 'http://localhost:5181',
+  }])
+
+  await page.route('**/api/admin/products', route => route.fulfill({
+    status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, products: [product] }),
+  }))
+  await page.route('**/api/admin/staff-access', route => route.fulfill({
+    status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, staffAccess: { hasDeletePin: true } }),
+  }))
+  const keys = []
+  let failOpen = true
+  await page.route('**/api/admin/product-master*', route => {
+    if (route.request().method() === 'GET') {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, product }) })
+    }
+    keys.push(route.request().headers()['x-k2-idempotency-key'])
+    if (failOpen) return route.abort('failed')
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, result: { ok: true, deleted_count: 1 } }) })
+  })
+
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await page.evaluate(async () => {
+    const [reactModule, reactDomClientModule, inventoryModule] = await Promise.all([
+      import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/InventoryGrid.jsx'),
+    ])
+    const React = reactModule.default || reactModule
+    const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
+    const app = document.getElementById('root')
+    if (app) app.style.display = 'none'
+    const fixture = document.createElement('main')
+    fixture.id = 'product-master-browser-fixture'
+    document.body.appendChild(fixture)
+    createRoot(fixture).render(React.createElement(inventoryModule.default, { canManageProducts: true }))
+  })
+
+  await page.getByRole('button', { name: 'Delete product' }).click()
+  const deleteDialog = page.getByRole('dialog', { name: 'Delete 1 product?' })
+  await expect(deleteDialog).toBeVisible()
+  await deleteDialog.getByLabel('Reason for permanent deletion').fill('Duplicate setup record with history review.')
+  await deleteDialog.getByLabel('Your 4-digit delete PIN').fill('1234')
+  await deleteDialog.getByRole('button', { name: 'Delete 1 product' }).click()
+  await expect(deleteDialog).toContainText('may already have completed')
+  await expect(deleteDialog.getByLabel('Reason for permanent deletion')).toBeDisabled()
+  await expect(deleteDialog.getByLabel('Your 4-digit delete PIN')).toBeDisabled()
+  failOpen = false
+  await deleteDialog.getByRole('button', { name: 'Retry same deletion' }).click()
+  await expect(deleteDialog).toHaveCount(0)
+  expect(keys).toHaveLength(2)
+  expect(keys[1]).toBe(keys[0])
+})

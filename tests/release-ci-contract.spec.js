@@ -5,6 +5,24 @@ import { validateMap017RehearsalTarget } from '../scripts/rehearse-local-migrati
 const root = new URL('../', import.meta.url)
 const read = path => readFile(new URL(path, root), 'utf8')
 
+test('deployment configurations select the separately gated artifact scripts', async () => {
+  const { scripts } = JSON.parse(await read('package.json'))
+  for (const target of ['admin', 'storefront']) {
+    const config = JSON.parse(await read(`vercel.${target}.json`))
+    expect(config.buildCommand).toBe(`K2_DEPLOYMENT_TARGET=${target} npm run build:${target}`)
+    expect(scripts[`build:${target}`]).toContain(`verify-bundle-budgets.mjs ${target}`)
+  }
+  expect(scripts['build:admin']).toContain('emit-admin-head.mjs admin')
+})
+
+test('CI executes stock payment and final-Admin behavior in PostgreSQL', async () => {
+  const workflow = await read('.github/workflows/ci.yml')
+  for (const command of ['rehearse:purchase-hold', 'rehearse:payment-recovery', 'rehearse:final-admin']) {
+    expect(workflow).toContain(`npm run ${command}`)
+  }
+  expect(workflow).toContain('K2_TEST_PG_BIN: /usr/lib/postgresql/17/bin')
+})
+
 test('CI authorization runner receives the same isolated database as the migration runner', async () => {
   const workflow = await read('.github/workflows/ci.yml')
   const migrationTarget = workflow.match(/K2_MAP017_REHEARSAL_URL:\s*(\S+)/)?.[1]
@@ -71,6 +89,18 @@ test('selling fixtures wait for the observed slow CSS transform before starting 
   expect(config.webServer.command).toContain('--strictPort')
   expect(config.webServer.reuseExistingServer).toBe(false)
   expect(config.timeout).toBe(120000)
+})
+
+test('protected recovery journeys run only in their dedicated fixture environment', async () => {
+  const [{ default: base }, { default: recovery }] = await Promise.all([
+    import('../playwright.config.js'),
+    import('../playwright.payment.config.js'),
+  ])
+  for (const spec of recovery.testMatch) {
+    expect(base.testIgnore, `${spec} must not run against the shared server`).toContain(spec)
+  }
+  const { scripts } = JSON.parse(await read('package.json'))
+  expect(scripts.test).toContain('npm run test:payment-ui')
 })
 
 test('every Playwright runner rejects accidental focused tests in CI', async () => {

@@ -1,0 +1,16 @@
+
+> k2-jimzon-prototype@0.1.0 test:admin-product-master-ui
+> playwright test --config=playwright.product-master.config.js tests/admin-product-master-ui.spec.js
+
+[WebServer] (node:7344) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19436) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:4140) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chromium] › tests\admin-product-master-ui.spec.js:27:1 › keeps secure Product Master edit, lifecycle, and delete decisions usable at 375px (1.3m)
+
+  1 passed (1.4m)

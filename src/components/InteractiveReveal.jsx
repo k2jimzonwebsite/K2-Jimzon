@@ -1,5 +1,11 @@
 import { useCallback, useRef, useState } from 'react'
-import { applyImageFallback } from '../lib/imageFallback'
+
+const onImageFallback = (e) => {
+  const img = e?.currentTarget
+  if (!img || img.dataset.fb) return
+  img.dataset.fb = '1'
+  img.src = '/images/placeholder.svg'
+}
 
 export default function InteractiveReveal({ beforeImage, afterImage }) {
   const [pos, setPos] = useState(50)
@@ -53,7 +59,7 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
         <img 
           src={beforeImage} 
           alt="Product Package" 
-          onError={applyImageFallback}
+          onError={onImageFallback}
           loading="lazy"
           className="h-full w-full object-cover mix-blend-multiply"
           draggable={false}
@@ -69,7 +75,7 @@ export default function InteractiveReveal({ beforeImage, afterImage }) {
           <img 
             src={afterImage} 
             alt="Product Revealed" 
-            onError={applyImageFallback}
+            onError={onImageFallback}
             loading="lazy"
             className="h-full w-full object-cover mix-blend-multiply"
             draggable={false}

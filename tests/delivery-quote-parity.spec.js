@@ -149,3 +149,22 @@ test('only the two intended delivery functions are reachable anonymously', () =>
   expect(EXPECTED_ANON_FUNCTIONS).not.toContain('public.read_delivery_control_v1()')
   expect(EXPECTED_ANON_FUNCTIONS.some((name) => name.includes('execute_admin_delivery'))).toBe(false)
 })
+
+test('guestCommerceService preserves result.quote and matches DeliveryEstimate expectations', async () => {
+  const serviceSource = await readFile('src/services/guestCommerceService.js', 'utf8')
+  const estimateSource = await readFile('src/components/DeliveryEstimate.jsx', 'utf8')
+
+  // DeliveryEstimate depends on result.ok and result.quote?.customerVisible
+  expect(estimateSource).toContain('result.ok && result.quote?.customerVisible')
+
+  // guestCommerceService must preserve result.quote on success
+  expect(serviceSource).toContain('quote: result.quote')
+})
+
+test('DeliveryEstimate clears previous quote from parent state when checking or unquotable', async () => {
+  const estimateSource = await readFile('src/components/DeliveryEstimate.jsx', 'utf8')
+  // Clearing quote when checking prevents parent state from showing stale amounts
+  expect(estimateSource).toMatch(/if\s*\(!quotable\s*\|\|\s*!localityId\)\s*\{\s*setQuote\(null\);\s*onQuote\?.\(null\);/)
+  expect(estimateSource).toMatch(/setChecking\(true\)\s*setQuote\(null\)\s*onQuote\?.\(null\)/)
+})
+

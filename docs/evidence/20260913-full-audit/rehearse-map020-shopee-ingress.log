@@ -1,0 +1,2 @@
+MAP-020 Shopee ingress portable rehearsal passed: fail-closed configuration, service-role-only atomic capture, forced-RLS shop/global budgets, denial persistence, replay preservation, payload conflict, cleanup, postflight, and migration replay verified.
+MAP-023 inbound-event acceptance passed: ambiguous-response replay kept one durable row, changed-payload reuse preserved evidence, and all three attempts remained rate-accounted.

@@ -170,6 +170,20 @@ export function requestIp(req) {
     .split(',')[0].trim().slice(0, 128)
 }
 
+// Hostname of the already-validated request origin (Origin header first, then
+// the page that referred). Callers pass it to the bot challenge so a token
+// minted on one host cannot be replayed on another.
+export function requestHostname(req) {
+  try {
+    const origin = String(req.headers.origin || '')
+    if (origin) return new URL(origin).hostname
+    const referer = String(req.headers.referer || '')
+    return referer ? new URL(referer).hostname : ''
+  } catch {
+    return ''
+  }
+}
+
 export function consumeLoginAttempt(key) {
   const now = Date.now()
   if (loginAttempts.size > 5000) {

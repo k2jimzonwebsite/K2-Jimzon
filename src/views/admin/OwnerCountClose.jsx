@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AlertIcon, CheckIcon, SyncIcon, UploadIcon } from '../../components/ui/icons'
 import {
   adminBffEnabled,
@@ -649,6 +649,8 @@ export default function OwnerCountClose() {
   const [coverageRetry, setCoverageRetry] = useState(null)
   const [pasabuyRetry, setPasabuyRetry] = useState(null)
   const [bookkeepingRetry, setBookkeepingRetry] = useState(null)
+  // Session-save command identity: an unchanged save retries the same key.
+  const sessionSaveRef = useRef(null)
 
   const loadWorkspace = useCallback(async (sessionId, signal) => {
     if (!secure) { setLoading(false); return }
@@ -795,7 +797,13 @@ export default function OwnerCountClose() {
         sessionId: session?.sessionId || crypto.randomUUID(), periodStart, periodEnd,
         shopIds: selectedShopIds, currentStep, expectedVersion: session?.version || 1,
       })
-      const response = await saveOwnerCloseSessionBff(draft, reason)
+      // An unchanged session save retries the same command identity; only a
+      // changed draft mints a new one.
+      const fingerprint = JSON.stringify({ draft, reason })
+      if (sessionSaveRef.current?.fingerprint !== fingerprint) {
+        sessionSaveRef.current = { fingerprint, key: crypto.randomUUID() }
+      }
+      const response = await saveOwnerCloseSessionBff(draft, reason, sessionSaveRef.current.key)
       if (!response.ok) setError(response.error || 'The close session could not be saved. Try again.')
       else { setSession(response.session); if (reason === sessionReason) setSessionReason(''); return true }
     } catch {

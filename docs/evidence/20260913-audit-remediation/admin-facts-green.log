@@ -1,0 +1,24 @@
+
+Running 17 tests using 1 worker
+
+(node:23084) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\admin-logic-regressions.spec.js:6:1 › expiry drawer changes business day at Manila midnight (11ms)
+  ok  2 tests\admin-logic-regressions.spec.js:16:1 › clearance success reloads the exact canonical lot rather than inventing approval facts (6ms)
+  ok  3 tests\admin-logic-regressions.spec.js:35:1 › overview periods use Manila midnight across UTC day and year boundaries (25ms)
+  ok  4 tests\admin-logic-regressions.spec.js:44:1 › overview completeness rejects capped result sets instead of reporting their subtotal as a total (40ms)
+  ok  5 tests\admin-logic-regressions.spec.js:63:1 › overview never fabricates inventory metrics when product data is empty or unavailable (6ms)
+  ok  6 tests\admin-logic-regressions.spec.js:71:1 › failed consignment finalization remains visible and keeps reconciliation open (17ms)
+  ok  7 tests\admin-logic-regressions.spec.js:84:1 › customer directory excludes staff accounts and never fabricates identity links (5ms)
+  ok  8 tests\admin-logic-regressions.spec.js:95:1 › globe CMS relies on the existing protected admin boundary (3ms)
+  ok  9 tests\admin-logic-regressions.spec.js:103:1 › product sheet rolls back failed edits and routes new rows through protected intake (5ms)
+  ok 10 tests\admin-logic-regressions.spec.js:114:1 › Smart Paste remains review-only after secure Admin cutover (4ms)
+  ok 11 tests\admin-logic-regressions.spec.js:124:1 › shared Admin navigation reuses authorized projections in secure mode (11ms)
+  ok 12 tests\admin-logic-regressions.spec.js:144:1 › purchase-order workspace uses the fixed procurement projection in secure mode (16ms)
+  ok 13 tests\admin-logic-regressions.spec.js:154:1 › inventory product editing routes every photo assignment through the dedicated media workflow (10ms)
+  ok 14 tests\admin-logic-regressions.spec.js:176:1 › permanent product deletion uses the signed secure command before the legacy flag-off path (4ms)
+  ok 15 tests\admin-logic-regressions.spec.js:187:1 › admin helpers never continue after inventory verification or save failure (5ms)
+  ok 16 tests\admin-logic-regressions.spec.js:204:1 › coupon administration uses safe projections and reasoned mobile actions (21ms)
+  ok 17 tests\admin-logic-regressions.spec.js:216:1 › lot editor separates physical, reserved, and sellable truth and blocks unsafe legacy saves (5ms)
+
+  17 passed (1.0s)

@@ -1,0 +1,3 @@
+psql:supabase/guest_order_conversation_seed_rollback.sql:19: ERROR:  K2_GUEST_SEED_CAPTURED_RECOVERY_REQUIRED
+CONTEXT:  PL/pgSQL function inline_code_block line 2 at RAISE
+psql exit code: 3 (expected 3)

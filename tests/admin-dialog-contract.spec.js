@@ -84,3 +84,28 @@ test('Admin owns one responsive page heading and a main workspace landmark', asy
   expect(admin).toMatch(/lg:hidden[\s\S]*?<h1/)
   expect(children.join('\n')).not.toContain('<h1')
 })
+
+test('inline Admin workflow dialogs adopt AdminDialog and lock dismissals during writes', async () => {
+  const inlineDialogViews = [
+    'StaffPermissionManager.jsx',
+    'ConsignmentManager.jsx',
+    'GlobeCms.jsx',
+    'ChannelIntegrations.jsx',
+    'Suppliers.jsx',
+    'Customers.jsx',
+    'CouponManager.jsx',
+  ]
+  for (const file of inlineDialogViews) {
+    const source = await readFile(new URL(file, adminViews), 'utf8')
+    expect(source, `${file} must import AdminDialog`).toMatch(
+      /import\s+\{\s*AdminDialog\s*\}\s+from\s+['"]\.\.\/\.\.\/components\/ui\/AdminDialog['"]/,
+    )
+    expect(source, `${file} must render AdminDialog`).toContain('<AdminDialog')
+    expect(source, `${file} must connect closeDisabled to operation state`).toMatch(/closeDisabled=\{/)
+  }
+
+  const recon = await readFile(new URL('DiscrepancyReconciliationModal.jsx', adminViews), 'utf8')
+  expect(recon).toMatch(/<button\s+onClick=\{onClose\}\s+disabled=\{finalizing\}/)
+  expect(recon).toMatch(/closeDisabled=\{finalizing\}/)
+})
+

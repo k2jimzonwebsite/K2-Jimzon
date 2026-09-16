@@ -14,6 +14,8 @@ import orderStatus from '../../prepared-api/storefront/order/status.js'
 import pasabuy from '../../prepared-api/storefront/pasabuy.js'
 import wholesale from '../../prepared-api/storefront/wholesale.js'
 import { safeJson } from './security.js'
+import { requestIp } from './security.js'
+import { STOREFRONT_RATE_SHIELD, shieldKey } from '../rate-shield.js'
 
 const ROUTES = new Map([
   ['account/claim', accountClaim],
@@ -73,6 +75,12 @@ export default async function storefrontBffRouter(req, res) {
   const control = STOREFRONT_BFF_ROUTE_CONTROLS[route]
   if (req.method !== control.method) {
     return safeJson(res, 405, { error: { code: 'METHOD_NOT_ALLOWED' } }, { Allow: control.method })
+  }
+  // In-memory cost shield ahead of the durable budgets: obvious floods get an
+  // early 429 before they reach provider delivery, RPC cost, or the database.
+  const shield = STOREFRONT_RATE_SHIELD.consume(shieldKey(route, requestIp(req)))
+  if (!shield.allowed) {
+    return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': String(shield.retryAfter) })
   }
   return handler(req, res)
 }

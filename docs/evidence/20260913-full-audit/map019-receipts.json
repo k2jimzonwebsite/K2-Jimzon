@@ -1,0 +1,14 @@
+[
+  {
+    "script": "rehearse-map019-staff-invitation-reason",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-map019-mfa-replacement",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-map019-account-claim",
+    "exitCode": 0
+  }
+]

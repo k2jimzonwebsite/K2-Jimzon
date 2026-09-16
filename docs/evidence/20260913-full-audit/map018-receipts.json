@@ -1,0 +1,18 @@
+[
+  {
+    "script": "rehearse-map018-cleanup-portable",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-intake-ai-portable",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-publication-transitions",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-catalog-spreadsheet",
+    "exitCode": 2
+  }
+]

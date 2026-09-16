@@ -31,6 +31,16 @@ const PATTERNS = [
     id: "credentialed-database-url",
     pattern: /\b(?:postgres(?:ql)?|mysql|mongodb(?:\+srv)?):\/\/[^\s:@/]+:[^\s@/]+@[^\s]+/gi,
   },
+  {
+    id: "k2-assigned-secret",
+    pattern: /\bK2_[A-Z0-9_]*(?:SECRET|PASSPHRASE|PRIVATE_KEY)\s*[:=]\s*['"]?(?!Deno\.env|process\.env|import\.meta)([A-Za-z0-9+/=_-]{16,})['"]?/g,
+    valueAware: true,
+  },
+  {
+    id: "marketplace-partner-secret",
+    pattern: /\b(?:SHOPEE_PARTNER_KEY|LAZADA_APP_SECRET|TIKTOK_APP_SECRET|GEMINI_API_KEY|GOOGLE_CLIENT_SECRET|FACEBOOK_APP_SECRET|WHATSAPP_ACCESS_TOKEN|VIBER_BOT_TOKEN)\s*[:=]\s*['"]?(?!Deno\.env|process\.env|import\.meta)(\S{8,})['"]?/g,
+    valueAware: true,
+  },
 ]
 
 const ALLOWLISTED_PUBLIC_KEYS = new Set([
@@ -61,12 +71,34 @@ const DOCUMENTATION_DATABASE_PASSWORDS = new Set([
   "placeholder",
 ])
 
+// Only complete reviewed template values are exempt, never substrings of secrets.
+const DOCUMENTATION_VALUES = new Set([
+  "base64-of-another-32-random-bytes",
+  "base64-of-32-random-bytes",
+  "your-google-client-secret",
+  "your-facebook-app-secret",
+  "your-whatsapp-permanent-token",
+  "your-viber-bot-token",
+  "your-shopee-partner-secret-key",
+  "your-lazada-app-secret",
+  "your-tiktok-app-secret",
+  "your-google-gemini-api-key",
+])
+
 function decodedUrlComponent(value) {
   try {
     return decodeURIComponent(value).toLowerCase()
   } catch {
     return ""
   }
+}
+
+function isHistoricalProviderPlaceholder(rule, match, line) {
+  if (rule.id !== "marketplace-partner-secret") return false
+  const value = match[1]?.replace(/^['"]|['"]$/g, "")
+  return value === "your_shopee_partner_key"
+    || value === "MY_GEMINI_API_KEY"
+    || (value === "Required" && /^\s*#\s*GEMINI_API_KE[Y]:\s+Required\s+for\s/.test(line))
 }
 
 function isPlaceholderCredentialedUrl(value) {
@@ -113,6 +145,11 @@ export function scanText(text, file = "") {
             continue
           }
           findings.push({ file, line: index + 1, rule: rule.id })
+        } else if (isHistoricalProviderPlaceholder(rule, matchObj, line)) {
+          continue
+        } else if (rule.valueAware && matchObj[1]
+          && DOCUMENTATION_VALUES.has(matchObj[1].replace(/['"]$/, ''))) {
+          continue
         } else {
           findings.push({ file, line: index + 1, rule: rule.id })
         }

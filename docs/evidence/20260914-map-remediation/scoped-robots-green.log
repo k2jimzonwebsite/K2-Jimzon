@@ -1,0 +1,21 @@
+
+Running 14 tests using 1 worker
+
+(node:4528) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\storefront-discovery-contract.spec.js:11:1 › scoped guest routes have crawler exclusions at the deployed header boundary (10ms)
+  ok  2 tests\storefront-discovery-contract.spec.js:19:1 › storefront identity metadata and crawler policy ship in the public artifact (20ms)
+  ok  3 tests\storefront-discovery-contract.spec.js:67:1 › the Admin build replaces shared Storefront discovery tags with staff ones (5ms)
+  ok  4 tests\storefront-discovery-contract.spec.js:80:1 › both target builds emit a static noindex recovery page for real host 404 responses (9ms)
+  ok  5 tests\storefront-discovery-contract.spec.js:98:1 › the production boundary fails closed on missing or executable Storefront 404 output (220ms)
+  ok  6 tests\storefront-discovery-contract.spec.js:132:1 › every local product fallback is shipped and build verification rejects missing references (4ms)
+  ok  7 tests\storefront-discovery-contract.spec.js:147:1 › home discovery routes through the shared history and focus contract (2ms)
+  ok  8 tests\storefront-discovery-contract.spec.js:154:1 › the Storefront defers the full Supabase SDK until remote data is requested (7ms)
+  ok  9 tests\storefront-discovery-contract.spec.js:170:1 › production builds enforce the recorded route bundle budgets (6ms)
+  ok 10 tests\storefront-discovery-contract.spec.js:183:1 › optional brand fonts cannot block Storefront bootstrap (5ms)
+  ok 11 tests\storefront-discovery-contract.spec.js:192:1 › the cart overlay is loaded only when Storefront chrome requests it (4ms)
+  ok 12 tests\storefront-discovery-contract.spec.js:201:1 › product discovery metadata is derived from canonical storefront truth (7ms)
+  ok 13 tests\storefront-discovery-contract.spec.js:223:1 › the product page publishes Product, FAQ and Breadcrumb markup from one approved source (5ms)
+  ok 14 tests\storefront-discovery-contract.spec.js:245:1 › breadcrumb markup is positional, absolute, and refuses an incomplete trail (27ms)
+
+  14 passed (1.2s)

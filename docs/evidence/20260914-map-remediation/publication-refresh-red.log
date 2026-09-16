@@ -1,0 +1,41 @@
+[WebServer] (node:14092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:18876) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:7424) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\intake-ai-ui.spec.js:5:1 › publication keeps its frozen command when the receipt refresh fails (1.3m)
+
+
+  1) tests\intake-ai-ui.spec.js:5:1 › publication keeps its frozen command when the receipt refresh fails 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "may already be saved"
+    Received string:    "Action not completed. The secure admin service is temporarily unavailable."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByRole('alert')
+        8 × locator resolved to <div role="alert" tabindex="-1" class="p-3.5 bg-rose-500/10 border border-rose-500/30 text-rose-200 rounded-lg text-sm focus:outline-none">…</div>
+          - unexpected value "Action not completed. The secure admin service is temporarily unavailable."
+
+
+      27 |   await page.getByLabel('Publication status').selectOption('unlisted')
+      28 |   await expect.poll(() => calls.length).toBe(1)
+    > 29 |   await expect(page.getByRole('alert')).toContainText('may already be saved')
+         |                                         ^
+      30 |   await expect(page.getByLabel('Publication reason')).toBeDisabled()
+      31 |   await expect(page.getByLabel('Publication status')).toBeDisabled()
+      32 |   await page.getByRole('button', { name: 'Retry publication change' }).click()
+        at C:\Users\jerze\K2 JImzon\tests\intake-ai-ui.spec.js:29:41
+
+    Error Context: .tools\publication-refresh-red\intake-ai-ui-publication-k-c2be2-n-the-receipt-refresh-fails\error-context.md
+
+  1 failed
+    tests\intake-ai-ui.spec.js:5:1 › publication keeps its frozen command when the receipt refresh fails 

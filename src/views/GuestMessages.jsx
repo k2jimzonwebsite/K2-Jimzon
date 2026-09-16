@@ -66,6 +66,8 @@ export function StartConversationForm({ onCreated }) {
     setSubmitting(false)
     if (!result.ok) {
       setError(result.error)
+      setBotToken('')
+      setChallengeKey(current => current + 1)
       return
     }
     requestKey.current = { fingerprint: '', key: '' }
@@ -102,7 +104,7 @@ export function StartConversationForm({ onCreated }) {
         <label htmlFor="message-body" className="block text-sm font-semibold text-navy">How can we help?
           <textarea id="message-body" className="store-field mt-1.5 min-h-32 w-full resize-y px-4 py-3 text-base" value={form.message} onChange={update('message')} maxLength={2000} placeholder="Write your question or the details K2 should review" required />
         </label>
-        <TurnstileChallenge key={challengeKey} enabled={guestBffEnabled()} onTokenChange={setBotToken} />
+        <TurnstileChallenge key={challengeKey} enabled={guestBffEnabled()} action="guest_start" onTokenChange={setBotToken} />
         {error && <p role="alert" className="rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
         <button type="submit" disabled={submitting || !form.customerName.trim() || !form.message.trim()} className="flex min-h-12 w-full items-center justify-center rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-transform duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45">
           {submitting ? 'Starting conversation…' : 'Send message'}
@@ -283,7 +285,11 @@ export default function GuestMessages() {
           <TuscanCard className="p-6">
             <p role="alert" className="text-sm leading-relaxed text-crimson">{state.error}</p>
             <p className="mt-2 text-sm leading-relaxed text-navy-soft">Refresh to retry. Orders and Pasabuy requests remain available separately.</p>
-            <div className="mt-5 flex flex-col gap-2 sm:flex-row"><GhostButton onClick={() => go('catalog')}>Browse catalog</GhostButton><GhostButton onClick={() => go('pasabuy')}>Start Pasabuy</GhostButton></div>
+            <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+              <GhostButton onClick={() => go('catalog')}>Browse catalog</GhostButton>
+              <GhostButton onClick={() => go('pasabuy')}>Start Pasabuy</GhostButton>
+              <GhostButton onClick={() => go('contact')}>Contact us by email</GhostButton>
+            </div>
           </TuscanCard>
         )}
         {!state.loading && !state.error && conversations.length === 0 && (

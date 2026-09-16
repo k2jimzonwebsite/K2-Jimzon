@@ -89,6 +89,7 @@ function OmniOperationsWorkspace() {
   const [transferQuantity, setTransferQuantity] = useState('1')
   const [transferTo, setTransferTo] = useState('')
   const [showFulfillmentGuide, setShowFulfillmentGuide] = useState(false)
+  const [completeness, setCompleteness] = useState(null)
 
   const nameFor = sku => (products || []).find(product => product.sku === sku)?.name || sku
 
@@ -133,6 +134,7 @@ function OmniOperationsWorkspace() {
       return
     }
     const data = response.data || {}
+    setCompleteness(data.completeness || null)
     setStaffList((data.staff || []).map(profile => profile.displayName).filter(Boolean))
     setOrderRequests(data.submitted || [])
     const formatted = (data.confirmed || []).map(order => {
@@ -147,7 +149,7 @@ function OmniOperationsWorkspace() {
         channel: channelMeta(order.channel_source).label, channelColor: channelMeta(order.channel_source).color,
         customer: order.customer_name || 'Customer', customerEmail: order.customer_email || null,
         customerPhone: order.customer_phone || null, deliveryAddress: order.delivery_address || null,
-        paymentStatus: order.payment_status || 'not recorded', updatedAt: order.updated_at, total: order.total_amount ?? null, items,
+        paymentStatus: order.payment_status || 'not recorded', paymentEvidence: order.payment_evidence || null, updatedAt: order.updated_at, total: order.total_amount ?? null, items,
         allocations: reservations.filter(row => row.status === 'active').map(row => ({ ...row, lot: (data.lots || []).find(lot => lot.id === row.batch_id) })),
         status: complete ? 'Packed' : 'Picking', courier: order.courier_name || order.fulfillment_method || 'Not assigned',
         courierName: order.courier_name || '', shippingAmount: order.shipping_amount || 0,
@@ -172,7 +174,7 @@ function OmniOperationsWorkspace() {
 
   const fetchOrderRequests = async () => {
     const { data, error } = await supabase.from('order_requests')
-      .select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,subtotal,discount_amount,shipping_amount,shipping_quote_status,courier_name,tracking_number,waybill_url,total_amount,payment_status,created_at,order_request_items(sku,product_name,quantity,line_total)')
+      .select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,subtotal,discount_amount,shipping_amount,shipping_quote_status,courier_name,tracking_number,waybill_url,total_amount,payment_status,payment_evidence,created_at,order_request_items(sku,product_name,quantity,line_total)')
       .eq('status', 'submitted')
       .order('created_at', { ascending: true })
     if (error) setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') })
@@ -203,7 +205,7 @@ function OmniOperationsWorkspace() {
   const fetchLiveOrders = async () => {
     setLoadingOrders(true)
     const { data, error } = await supabase.from('order_requests')
-      .select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,payment_status,subtotal,discount_amount,shipping_amount,total_amount,delivery_status,shipping_quote_status,courier_name,tracking_number,waybill_url,created_at,order_request_items(id,sku,product_name,quantity,line_total),inventory_reservations(order_request_item_id,sku,quantity,packed_quantity,status,batch_id)')
+      .select('id,public_reference,channel_source,customer_name,customer_email,customer_phone,delivery_address,fulfillment_method,payment_status,payment_evidence,subtotal,discount_amount,shipping_amount,total_amount,delivery_status,shipping_quote_status,courier_name,tracking_number,waybill_url,created_at,order_request_items(id,sku,product_name,quantity,line_total),inventory_reservations(order_request_item_id,sku,quantity,packed_quantity,status,batch_id)')
       .eq('status', 'confirmed')
       .order('created_at', { ascending: false })
     if (error) {
@@ -233,6 +235,7 @@ function OmniOperationsWorkspace() {
         customerPhone: order.customer_phone || null,
         deliveryAddress: order.delivery_address || null,
         paymentStatus: order.payment_status || 'not recorded',
+        paymentEvidence: order.payment_evidence || null,
         total: order.total_amount ?? null,
         items,
         status: complete ? 'Packed' : 'Picking',
@@ -277,8 +280,10 @@ function OmniOperationsWorkspace() {
   const handleReassignBoxStaff = async (boxCode, newStaff) => {
     if ((!secureAdmin && !supabase) || !boxCode || boxCode === 'No box code') return
     if (secureAdmin) {
+      const box = cargoBoxes.find(candidate => candidate.box_code === boxCode)
       setActionReview({ kind: 'assign', title: 'Assign box custody', reference: boxCode,
         details: `New custodian: ${newStaff || 'Unassigned'}`,
+        from: box?.assigned_staff || 'Unassigned',
         impact: 'Move custody of the recorded box lots to this staff member. The signed-in operator remains the audit actor.',
         payload: { boxCode, toCustodian: newStaff, reason: 'Box custody reassigned from fulfillment hub' } })
       return
@@ -302,6 +307,7 @@ function OmniOperationsWorkspace() {
       setActionReview({ kind: 'transfer', title: 'Transfer exact lot custody',
         reference: `${lot?.box_code || 'No box'} · ${lot?.batch_code || transferBatchId}`,
         details: `${transferQuantity} × ${lot?.sku || 'Selected lot'} to ${transferTo}`,
+        from: lot?.custodian || 'Unassigned',
         impact: 'Move only this quantity from this lot. Reserved units cannot move; partial transfers preserve lot history.',
         payload: { batchId: transferBatchId, quantity: Number(transferQuantity), toCustodian: transferTo,
           toLocation: '', reason: 'Exact lot custody transfer from fulfillment hub' } })
@@ -365,13 +371,24 @@ function OmniOperationsWorkspace() {
     setScanBarcode('')
   }
 
-  const updatePayment = async (order, target, note) => {
+  const updatePayment = async (order, target, note, structuredEvidence) => {
     if (secureAdmin) {
-      const result = await paymentCommands.current.run({
+      const payload = {
         orderRequestId: order.id, toStatus: target, evidenceNote: note || '',
         expectedPaymentStatus: order.paymentStatus || order.payment_status,
         expectedUpdatedAt: order.updatedAt || order.updated_at,
-      })
+      }
+      if (structuredEvidence && target === 'evidence_submitted') {
+        payload.paymentMethod = structuredEvidence.method
+        payload.paymentAmount = structuredEvidence.amount
+        payload.paymentCurrency = structuredEvidence.currency || 'PHP'
+        payload.payerName = structuredEvidence.payerName
+        payload.paymentReference = structuredEvidence.paymentReference
+        if (structuredEvidence.proofAssetRef) {
+          payload.proofAssetRef = structuredEvidence.proofAssetRef
+        }
+      }
+      const result = await paymentCommands.current.run(payload)
       const uncertain = commandOutcomeIsUncertain(result) || result.code === 'FULFILLMENT_COMMAND_UNAVAILABLE'
       if (uncertain) {
         setPaymentUncertain(true)
@@ -387,6 +404,14 @@ function OmniOperationsWorkspace() {
       p_order_request_id: order.id,
       p_to_status: target,
       p_evidence_note: note || null,
+      p_payment_evidence: (structuredEvidence && target === 'evidence_submitted') ? {
+        method: structuredEvidence.method,
+        amount: structuredEvidence.amount,
+        currency: structuredEvidence.currency || 'PHP',
+        payer_name: structuredEvidence.payerName,
+        payment_reference: structuredEvidence.paymentReference,
+        proof_asset_ref: structuredEvidence.proofAssetRef || null,
+      } : {},
     })
     if (error) throw error
     await fetchLiveOrders()
@@ -430,6 +455,16 @@ function OmniOperationsWorkspace() {
           statusTone={activeStaff ? 'success' : 'danger'}
         />
       </div>
+
+      {completeness && (completeness.submitted?.truncated || completeness.confirmed?.truncated || completeness.lots?.truncated) && (
+        <div role="alert" className="rounded-adm-sm border border-amber/40 bg-amber/10 p-3 text-sm text-amber">
+          <strong>Fulfillment queue bounded:</strong> Older records exist beyond the current view limit ({[
+            completeness.submitted?.truncated ? `submitted: ${completeness.submitted.returned}/${completeness.submitted.limit}` : null,
+            completeness.confirmed?.truncated ? `confirmed: ${completeness.confirmed.returned}/${completeness.confirmed.limit}` : null,
+            completeness.lots?.truncated ? `inventory lots: ${completeness.lots.returned}/${completeness.lots.limit}` : null,
+          ].filter(Boolean).join(', ')}). All records remain protected in the database.
+        </div>
+      )}
 
       <div className="flex justify-end">
         <button
@@ -488,7 +523,15 @@ function OmniOperationsWorkspace() {
                     <article key={request.id} className="grid gap-3 px-4 py-4 lg:grid-cols-[minmax(180px,1fr)_minmax(220px,1.5fr)_130px_190px] lg:items-center">
                       <div><p className="font-mono text-xs font-semibold text-blue">{request.public_reference}</p><p className="mt-1 text-sm font-semibold text-white">{request.customer_name}</p><p className="mt-0.5 truncate text-xs text-white/40">{request.customer_email || request.customer_phone}</p></div>
                       <div><ul className="space-y-1">{(request.order_request_items || []).map(item => <li key={item.sku} className="flex justify-between gap-3 text-xs text-white/60"><span className="truncate">{item.product_name}</span><span className="shrink-0 font-mono">Qty {item.quantity}</span></li>)}</ul><p className="mt-2 line-clamp-1 text-xs text-white/35">{request.delivery_address} / {request.fulfillment_method}</p></div>
-                      <div><p className="font-mono text-sm font-semibold text-white">{peso(request.total_amount)}</p><p className="mt-1 text-xs text-amber">Payment not assumed</p></div>
+                      <div>
+                        <p className="font-mono text-sm font-semibold text-white">{peso(request.total_amount)}</p>
+                        {request.shipping_quote_status === 'customer_confirmed' ? (
+                          <p className="mt-0.5 text-xs text-forest">Delivery: {Number(request.shipping_amount) > 0 ? peso(request.shipping_amount) : 'Free'}</p>
+                        ) : (
+                          <p className="mt-0.5 text-xs text-white/40">Delivery unquoted</p>
+                        )}
+                        <p className="mt-1 text-xs text-amber">Payment not assumed</p>
+                      </div>
                       <div className="grid gap-2"><button onClick={() => setDeliveryOrder(request)} className={`${secondaryButton} w-full`}>{request.shipping_quote_status === 'customer_confirmed' ? 'Delivery confirmed' : 'Set delivery quote'}</button><button onClick={() => confirmOrderRequest(request)} className={`${primaryButton} w-full`}>Confirm and reserve</button></div>
                     </article>
                   ))}
@@ -500,12 +543,46 @@ function OmniOperationsWorkspace() {
           <section className="space-y-3">
             <SectionHeading title="Packing queue" description="Confirmed order lines still inside the warehouse workflow." count={orders.length} />
             {loadingOrders ? <div className="h-44 animate-pulse rounded-adm border border-adm-line bg-adm-surface" role="status" /> : orders.length === 0 ? <EmptyState title="No orders to pack" description="Only confirmed orders from persisted sources appear here." /> : (
-              <div className="overflow-x-auto rounded-adm border border-adm-line bg-adm-surface">
-                <table className="w-full min-w-[860px] text-left text-sm">
-                  <thead className="border-b border-adm-line bg-white/[0.025] text-xs font-semibold uppercase tracking-[0.09em] text-white/35"><tr><th className="px-4 py-3">Order and channel</th><th className="px-4 py-3">Customer</th><th className="px-4 py-3">Pick line</th><th className="px-4 py-3">Payment evidence</th><th className="px-4 py-3">Packing state</th><th className="px-4 py-3 text-right">Action</th></tr></thead>
-                  <tbody className="divide-y divide-adm-line">{orders.map(order => <tr key={order.id} className={`transition-colors hover:bg-white/[0.025] ${selectedOrderId === order.id ? 'bg-blue/[0.05]' : ''}`}><td className="px-4 py-3"><span className="rounded px-1.5 py-0.5 text-xs font-bold text-white" style={{ backgroundColor: order.channelColor }}>{order.channel}</span><p className="mt-1 font-mono text-xs text-white/35">{order.publicReference || order.shortId}</p></td><td className="px-4 py-3"><p className="font-medium text-white">{order.customer}</p><p className="mt-0.5 text-xs text-white/35">{order.courier}</p></td><td className="px-4 py-3">{order.items.map(item => <p key={item.sku} className="text-xs text-white/65">{item.title} <span className="font-mono text-white">{item.packed}/{item.qty}</span></p>)}</td><td className="px-4 py-3"><StatusPill tone={order.paymentStatus === 'verified' ? 'success' : 'warning'}>{String(order.paymentStatus).replaceAll('_', ' ')}</StatusPill></td><td className="px-4 py-3"><StatusPill tone={orderTone(order.status)}>{order.status}</StatusPill></td><td className="px-4 py-3 text-right"><div className="flex justify-end gap-2"><button onClick={() => setSelectedOrderId(order.id)} disabled={order.status === 'Packed'} className={`${secondaryButton} adm-btn-sm`}>Select</button><button onClick={() => setPrintSlipOrder(order)} className={`${secondaryButton} adm-btn-sm`}>Packing record</button></div></td></tr>)}</tbody>
-                </table>
-              </div>
+              <>
+                <div className="hidden overflow-x-auto rounded-adm border border-adm-line bg-adm-surface lg:block">
+                  <table className="w-full min-w-[860px] text-left text-sm">
+                    <thead className="border-b border-adm-line bg-white/[0.025] text-xs font-semibold uppercase tracking-[0.09em] text-white/35"><tr><th className="px-4 py-3">Order and channel</th><th className="px-4 py-3">Customer</th><th className="px-4 py-3">Pick line</th><th className="px-4 py-3">Payment evidence</th><th className="px-4 py-3">Packing state</th><th className="px-4 py-3 text-right">Action</th></tr></thead>
+                    <tbody className="divide-y divide-adm-line">{orders.map(order => <tr key={order.id} className={`transition-colors hover:bg-white/[0.025] ${selectedOrderId === order.id ? 'bg-blue/[0.05]' : ''}`}><td className="px-4 py-3"><span className="rounded px-1.5 py-0.5 text-xs font-bold text-white" style={{ backgroundColor: order.channelColor }}>{order.channel}</span><p className="mt-1 font-mono text-xs text-white/35">{order.publicReference || order.shortId}</p></td><td className="px-4 py-3"><p className="font-medium text-white">{order.customer}</p><p className="mt-0.5 text-xs text-white/35">{order.courier}</p></td><td className="px-4 py-3">{order.items.map(item => <p key={item.sku} className="text-xs text-white/65">{item.title} <span className="font-mono text-white">{item.packed}/{item.qty}</span></p>)}</td><td className="px-4 py-3"><StatusPill tone={order.paymentStatus === 'verified' ? 'success' : 'warning'}>{String(order.paymentStatus).replaceAll('_', ' ')}</StatusPill></td><td className="px-4 py-3"><StatusPill tone={orderTone(order.status)}>{order.status}</StatusPill></td><td className="px-4 py-3 text-right"><div className="flex justify-end gap-2"><button onClick={() => setSelectedOrderId(order.id)} disabled={order.status === 'Packed'} className={`${secondaryButton} adm-btn-sm`}>Select</button><button onClick={() => setPrintSlipOrder(order)} className={`${secondaryButton} adm-btn-sm`}>Packing record</button></div></td></tr>)}</tbody>
+                  </table>
+                </div>
+                <div className="divide-y divide-adm-line overflow-hidden rounded-adm border border-adm-line bg-adm-surface lg:hidden">
+                  {orders.map(order => (
+                    <article key={order.id} className={`space-y-3 p-4 transition-colors ${selectedOrderId === order.id ? 'bg-blue/[0.05]' : ''}`}>
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <span className="rounded px-1.5 py-0.5 text-xs font-bold text-white" style={{ backgroundColor: order.channelColor }}>{order.channel}</span>
+                          <p className="mt-1 font-mono text-xs text-white/50">{order.publicReference || order.shortId}</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-1">
+                          <StatusPill tone={orderTone(order.status)}>{order.status}</StatusPill>
+                          <StatusPill tone={order.paymentStatus === 'verified' ? 'success' : 'warning'}>{String(order.paymentStatus).replaceAll('_', ' ')}</StatusPill>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-white">{order.customer}</p>
+                        <p className="mt-0.5 text-xs text-white/40">{order.courier}</p>
+                      </div>
+                      <div className="space-y-1 rounded-adm-sm border border-adm-line bg-adm-sunken p-2.5">
+                        {order.items.map(item => (
+                          <p key={item.sku} className="flex justify-between text-xs text-white/65">
+                            <span className="truncate">{item.title}</span>
+                            <span className="shrink-0 font-mono text-white">{item.packed}/{item.qty}</span>
+                          </p>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <button onClick={() => setSelectedOrderId(order.id)} disabled={order.status === 'Packed'} className={`${secondaryButton} min-h-11 flex-1 text-xs font-bold`}>Select</button>
+                        <button onClick={() => setPrintSlipOrder(order)} className={`${secondaryButton} min-h-11 flex-1 text-xs font-bold`}>Packing record</button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </>
             )}
           </section>
         </div>
@@ -553,8 +630,8 @@ function OmniOperationsWorkspace() {
         }
         return { ok: true }
       }} />}
-      {paymentOrder && <PaymentStatusModal key={paymentOrder.id} secure={secureAdmin} order={paymentOrder} onClose={() => setPaymentOrder(null)} onSave={async (target, note) => {
-        const result = await updatePayment(paymentOrder, target, note)
+      {paymentOrder && <PaymentStatusModal key={paymentOrder.id} secure={secureAdmin} order={paymentOrder} onClose={() => setPaymentOrder(null)} onSave={async (target, note, evidence) => {
+        const result = await updatePayment(paymentOrder, target, note, evidence)
         if (result?.ok) setPaymentOrder(null)
         return result
       }} />}
@@ -577,33 +654,42 @@ function OmniOperationsWorkspace() {
   )
 }
 
-export function FulfillmentActionDialog({ action, onClose, onSave }) {
+export function FulfillmentActionDialog({ action, onClose, onSave, returnFocusRef }) {
   const { run, busy, uncertain, locked, error } = useRetainedFulfillmentCommand(onSave)
+  const [reason, setReason] = useState(action.payload.reason || '')
+  useEffect(() => { setReason(action.payload.reason || '') }, [action])
+  const reasonOk = reason.trim().length >= 10
   const save = async event => {
     event.preventDefault()
-    const result = await run(action.payload)
+    if (!reasonOk) return
+    const result = await run({ ...action.payload, reason: reason.trim() })
     if (result?.ok) onClose()
   }
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md">
-    <AdminDialog onClose={onClose} closeDisabled={locked} labelledBy="fulfillment-action-title" describedBy="fulfillment-action-impact">
+    <AdminDialog onClose={onClose} closeDisabled={locked} returnFocusRef={returnFocusRef} labelledBy="fulfillment-action-title" describedBy="fulfillment-action-impact">
       <form onSubmit={save} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-md space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white">
         <h2 id="fulfillment-action-title" className="text-xl font-semibold">{action.title}</h2>
         <p className="break-words font-mono text-sm text-blue">{action.reference}</p>
         <p className="break-words text-sm text-white/80">{action.details}</p>
         <p id="fulfillment-action-impact" className="text-sm text-white/70">{action.impact}</p>
+        {action.from && <p className="text-sm text-white/70">Current holder: <span className="font-semibold text-white">{action.from}</span></p>}
+        <label className="block text-xs font-semibold text-white/80">Reason (audit record)
+          <textarea value={reason} onChange={event => setReason(event.target.value)} disabled={locked} required minLength={10} maxLength={500} rows={2} className="adm-input mt-1.5 min-h-16 resize-y text-base" placeholder="Why is this custody or state changing?" />
+        </label>
         {error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}
         <div className="flex flex-col-reverse gap-2 sm:flex-row">
           <button type="button" disabled={locked} onClick={onClose} className={`${secondaryButton} flex-1`}>Cancel</button>
-          <button type="submit" disabled={busy} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? 'Retry same command' : 'Confirm command'}</button>
+          <button type="submit" disabled={busy || !reasonOk} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? 'Retry same command' : 'Confirm command'}</button>
         </div>
       </form>
     </AdminDialog>
   </div>
 }
 
-export function HandoverDialog({ order, onClose, onSave, retrySafe = true }) {
+export function HandoverDialog({ order, onClose, onSave, retrySafe, returnFocusRef }) {
+  const isRetrySafe = retrySafe ?? true
   const [note, setNote] = useState('')
-  const { run, busy, uncertain, locked, error } = useRetainedFulfillmentCommand(onSave, retrySafe)
+  const { run, busy, uncertain, locked, error } = useRetainedFulfillmentCommand(onSave, isRetrySafe)
   const noteRef = useRef(null)
 
   useEffect(() => {
@@ -621,7 +707,7 @@ export function HandoverDialog({ order, onClose, onSave, retrySafe = true }) {
   }
 
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="presentation">
-    <AdminDialog onClose={onClose} closeDisabled={busy || (uncertain && retrySafe)} initialFocusRef={noteRef} labelledBy="handover-title" describedBy="handover-description">
+    <AdminDialog onClose={onClose} closeDisabled={busy || (uncertain && isRetrySafe)} initialFocusRef={noteRef} returnFocusRef={returnFocusRef} labelledBy="handover-title" describedBy="handover-description">
       <form onSubmit={save} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-md space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white">
         <div>
           <p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p>
@@ -632,28 +718,40 @@ export function HandoverDialog({ order, onClose, onSave, retrySafe = true }) {
         <textarea ref={noteRef} id="handover-note" disabled={locked} required minLength={3} maxLength={500} value={note} onChange={event => setNote(event.target.value.slice(0, 500))} className="adm-input min-h-24 resize-y text-base" />
         {error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}
         <div className="flex flex-col-reverse gap-2 sm:flex-row">
-          <button type="button" onClick={onClose} disabled={busy || (uncertain && retrySafe)} className={`${secondaryButton} flex-1`}>Cancel</button>
-          <button type="submit" disabled={busy || (uncertain && !retrySafe) || note.trim().length < 3} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? retrySafe ? 'Retry same command' : 'Reconcile order first' : 'Confirm handover'}</button>
+          <button type="button" onClick={onClose} disabled={busy || (uncertain && isRetrySafe)} className={`${secondaryButton} flex-1`}>Cancel</button>
+          <button type="submit" disabled={busy || (uncertain && !isRetrySafe) || note.trim().length < 3} className={`${primaryButton} flex-1`}>{busy ? 'Recording…' : uncertain ? isRetrySafe ? 'Retry same command' : 'Reconcile order first' : 'Confirm handover'}</button>
         </div>
       </form>
     </AdminDialog>
   </div>
 }
 
-export function DeliveryDetailsModal({ order, onClose, onSave, retrySafe = true }) {
+export function DeliveryDetailsModal({ order, onClose, onSave, retrySafe, returnFocusRef }) {
+  const isRetrySafe = retrySafe ?? true
   const [form, setForm] = useState({ amount: '0', courier: '', tracking: '', waybill: '', confirmed: false, note: '' })
-  const { run, busy, uncertain, locked, error } = useRetainedFulfillmentCommand(onSave, retrySafe)
+  const { run, busy, uncertain, locked, error } = useRetainedFulfillmentCommand(onSave, isRetrySafe)
   const courierRef = useRef(null)
 
   useEffect(() => {
     if (!order) return
+    const method = (order.fulfillmentMethod ?? order.fulfillment_method ?? '').toLowerCase()
+    const autoCourier = order.courierName ?? order.courier_name ?? (
+      method.includes('express')
+        ? 'Lalamove'
+        : method.includes('pickup')
+          ? 'Warehouse Pickup'
+          : (method ? 'J&T Express' : '')
+    )
+    const isConfirmed = ['platform_charged', 'customer_confirmed'].includes(order.shippingQuoteStatus ?? order.shipping_quote_status)
     setForm({
       amount: String(order.shippingAmount ?? order.shipping_amount ?? 0),
-      courier: order.courierName ?? order.courier_name ?? '',
+      courier: autoCourier,
       tracking: order.trackingNumber ?? order.tracking_number ?? '',
       waybill: order.waybillUrl ?? order.waybill_url ?? '',
-      confirmed: ['platform_charged', 'customer_confirmed'].includes(order.shippingQuoteStatus ?? order.shipping_quote_status),
-      note: '',
+      confirmed: isConfirmed,
+      note: isConfirmed && (order.shippingQuoteStatus ?? order.shipping_quote_status) === 'customer_confirmed'
+        ? `Customer confirmed ${(order.fulfillmentMethod ?? order.fulfillment_method) || 'delivery'} via storefront checkout.`
+        : '',
     })
   }, [order?.id])
 
@@ -668,7 +766,7 @@ export function DeliveryDetailsModal({ order, onClose, onSave, retrySafe = true 
     if (result?.ok) onClose()
   }
   const update = key => event => setForm(current => ({ ...current, [key]: event.target.type === 'checkbox' ? event.target.checked : event.target.value }))
-  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="presentation"><AdminDialog onClose={onClose} closeDisabled={busy || (uncertain && retrySafe)} initialFocusRef={courierRef} labelledBy="delivery-details-title"><form onSubmit={save} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-lg space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white"><div><p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p><h2 id="delivery-details-title" className="mt-1 text-xl font-semibold">Delivery quote and waybill</h2><p className="mt-1 text-sm text-white/50">Direct orders require the actual courier quote and customer confirmation. Marketplace delivery is recorded as platform charged.</p></div><div className="grid gap-3 sm:grid-cols-2"><label className="text-xs font-semibold text-white/60">Courier<input disabled={locked} ref={courierRef} required value={form.courier} onChange={update('courier')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Delivery amount<input disabled={locked} required type="number" min="0" step="0.01" value={form.amount} onChange={update('amount')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Tracking number<input disabled={locked} value={form.tracking} onChange={update('tracking')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Waybill URL<input disabled={locked} type="url" value={form.waybill} onChange={update('waybill')} className="adm-input mt-1.5 min-h-11 text-base" /></label></div><label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input disabled={locked} type="checkbox" checked={form.confirmed} onChange={update('confirmed')} /> Customer approved the quoted delivery charge</label><label className="block text-xs font-semibold text-white/60">Communication / reconciliation note<textarea disabled={locked} required value={form.note} onChange={update('note')} className="adm-input mt-1.5 min-h-24 resize-y text-base" /></label>{error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}<div className="flex gap-2"><button type="button" onClick={onClose} disabled={busy || (uncertain && retrySafe)} className={`${secondaryButton} flex-1`}>Cancel</button><button disabled={busy || (uncertain && !retrySafe)} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : uncertain ? retrySafe ? 'Retry same command' : 'Reconcile order first' : 'Save delivery details'}</button></div></form></AdminDialog></div>
+  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="presentation"><AdminDialog onClose={onClose} closeDisabled={busy || (uncertain && isRetrySafe)} initialFocusRef={courierRef} returnFocusRef={returnFocusRef} labelledBy="delivery-details-title"><form onSubmit={save} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-lg space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white"><div><p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p><h2 id="delivery-details-title" className="mt-1 text-xl font-semibold">Delivery quote and waybill</h2><p className="mt-1 text-sm text-white/50">Direct orders require the actual courier quote and customer confirmation. Marketplace delivery is recorded as platform charged.</p></div><div className="grid gap-3 sm:grid-cols-2"><label className="text-xs font-semibold text-white/60">Courier<input disabled={locked} ref={courierRef} required value={form.courier} onChange={update('courier')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Delivery amount<input disabled={locked} required type="number" min="0" step="0.01" value={form.amount} onChange={update('amount')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Tracking number<input disabled={locked} value={form.tracking} onChange={update('tracking')} className="adm-input mt-1.5 min-h-11 text-base" /></label><label className="text-xs font-semibold text-white/60">Waybill URL<input disabled={locked} type="url" value={form.waybill} onChange={update('waybill')} className="adm-input mt-1.5 min-h-11 text-base" /></label></div><label className="flex min-h-11 items-center gap-3 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm"><input disabled={locked} type="checkbox" checked={form.confirmed} onChange={update('confirmed')} /> Customer approved the quoted delivery charge</label><label className="block text-xs font-semibold text-white/60">Communication / reconciliation note<textarea disabled={locked} required value={form.note} onChange={update('note')} className="adm-input mt-1.5 min-h-24 resize-y text-base" /></label>{error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}<div className="flex gap-2"><button type="button" onClick={onClose} disabled={busy || (uncertain && isRetrySafe)} className={`${secondaryButton} flex-1`}>Cancel</button><button disabled={busy || (uncertain && !isRetrySafe)} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : uncertain ? isRetrySafe ? 'Retry same command' : 'Reconcile order first' : 'Save delivery details'}</button></div></form></AdminDialog></div>
 }
 
 export function PackingLotProof({ allocations, value, confirmed, disabled, onSelect, onConfirm }) {
@@ -691,59 +789,191 @@ export function PackingLotProof({ allocations, value, confirmed, disabled, onSel
   </div>
 }
 
-export function PaymentStatusModal({ order, onClose, onSave, secure = false }) {
+export function PaymentStatusModal({ order, onClose, onSave, secure, returnFocusRef }) {
+  const isSecure = Boolean(secure)
   const [target, setTarget] = useState('')
   const [note, setNote] = useState('')
+  const [method, setMethod] = useState('gcash')
+  const [amount, setAmount] = useState('')
+  const [payerName, setPayerName] = useState('')
+  const [paymentReference, setPaymentReference] = useState('')
+  const [proofAssetRef, setProofAssetRef] = useState('')
+  const [verifiedChecked, setVerifiedChecked] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [uncertain, setUncertain] = useState(false)
   const saving = useRef(false)
   const current = order?.paymentStatus || order?.payment_status
   const versionAvailable = Boolean(order?.updatedAt || order?.updated_at)
+  const existingEvidence = order?.paymentEvidence || order?.payment_evidence || {}
   const choices = {
     not_requested: ['awaiting_instructions'],
     awaiting_instructions: ['evidence_submitted', 'failed'],
     evidence_submitted: ['verified', 'failed'],
     verified: ['refunded'],
-    failed: secure && versionAvailable ? ['evidence_submitted'] : [], refunded: [],
+    failed: isSecure && versionAvailable ? ['evidence_submitted'] : [], refunded: [],
   }[current] || []
 
-  useEffect(() => { setTarget(choices[0] || ''); setNote(''); setError(''); setUncertain(false) }, [order?.id, current])
+  useEffect(() => {
+    setTarget(choices[0] || '')
+    setNote('')
+    setMethod(existingEvidence?.method || 'gcash')
+    setAmount(existingEvidence?.amount != null ? String(existingEvidence.amount) : (order?.total != null ? String(order.total) : (order?.total_amount != null ? String(order.total_amount) : '')))
+    setPayerName(existingEvidence?.payer_name || order?.customer || order?.customer_name || '')
+    setPaymentReference(existingEvidence?.payment_reference || '')
+    setProofAssetRef(existingEvidence?.proof_asset_ref || '')
+    setVerifiedChecked(false)
+    setError('')
+    setUncertain(false)
+  }, [order?.id, current])
+
   if (!order) return null
+
   const save = async event => {
     event.preventDefault()
-    if (saving.current || !choices.includes(target) || (secure && !versionAvailable)) return
-    saving.current = true; setBusy(true); setError('')
+    if (saving.current || !choices.includes(target) || (isSecure && !versionAvailable)) return
+    setError('')
+
+    let structuredEvidence = null
+    if (target === 'evidence_submitted') {
+      const parsedAmount = Number(amount)
+      if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+        setError('Payment amount must be a positive number.')
+        return
+      }
+      if (!payerName.trim()) {
+        setError('Enter the payer name.')
+        return
+      }
+      if (!paymentReference.trim()) {
+        setError('Enter the payment reference number.')
+        return
+      }
+      structuredEvidence = {
+        method,
+        amount: parsedAmount,
+        currency: 'PHP',
+        payerName: payerName.trim(),
+        paymentReference: paymentReference.trim(),
+        proofAssetRef: proofAssetRef.trim() || undefined,
+      }
+    } else if (target === 'verified') {
+      if (!verifiedChecked) {
+        setError('Confirm that you checked the merchant receiving account before verifying.')
+        return
+      }
+      if (!note.trim()) {
+        setError('Enter the reconciliation note.')
+        return
+      }
+    } else if (target !== 'awaiting_instructions' && !note.trim()) {
+      setError('Enter a reconciliation note.')
+      return
+    }
+
+    saving.current = true; setBusy(true)
     try {
-      const result = await onSave(target, note.trim())
+      const result = await onSave(target, note.trim(), structuredEvidence)
       if (result?.ok === false) { setError(result.error); setUncertain(Boolean(result.uncertain)) }
     } catch { setError(safeUiError('PAYMENT_STATE_FAILED')) }
     finally { saving.current = false; setBusy(false) }
   }
-  return <AdminDialog onClose={onClose} closeDisabled={busy} labelledBy="payment-status-title">
+
+  return <AdminDialog onClose={onClose} closeDisabled={busy || (uncertain && isSecure)} returnFocusRef={returnFocusRef} labelledBy="payment-status-title">
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md">
-      <form onSubmit={save} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-md space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white">
+      <form onSubmit={save} noValidate className="max-h-[calc(100dvh-1.5rem)] w-full max-w-md space-y-4 overflow-y-auto rounded-adm border border-adm-line bg-adm-surface p-5 text-white">
         <div><p className="font-mono text-xs text-blue">{order.publicReference || order.public_reference}</p>
           <h2 id="payment-status-title" className="mt-1 text-xl font-semibold">Payment evidence state</h2>
           <p className="mt-1 text-sm text-white/70">Current: {String(current || 'not recorded').replaceAll('_', ' ')}. This records evidence; it does not process payment.</p>
         </div>
         {current === 'failed' && <p className="text-sm text-white/80">The rejected attempt stays in history. Submit corrected evidence for a different staff member to verify against the receiving account.</p>}
-        {secure && !versionAvailable && <StateBanner tone="warning">Refresh this order to load its review version before recording payment evidence.</StateBanner>}
+        {isSecure && !versionAvailable && <StateBanner tone="warning">Refresh this order to load its review version before recording payment evidence.</StateBanner>}
         {choices.length ? <>
           <label className="block text-xs font-semibold text-white/80">Next valid state
             <select disabled={busy || uncertain} value={target} onChange={event => setTarget(event.target.value)} className="adm-input mt-1.5 min-h-11 text-base">
               {choices.map(choice => <option key={choice} value={choice}>{choice.replaceAll('_', ' ')}</option>)}
             </select>
           </label>
-          <label className="block text-xs font-semibold text-white/80">Evidence or reconciliation note
-            <textarea disabled={busy || uncertain} value={note} maxLength={1000} onChange={event => setNote(event.target.value)} required={target !== 'awaiting_instructions'} className="adm-input mt-1.5 min-h-24 resize-y text-base" />
-          </label>
-          <p className="text-sm text-white/70">Record the method, amount, currency, payer, reference and proof source. A screenshot alone does not establish payment.</p>
+
+          {target === 'evidence_submitted' && (
+            <div className="space-y-3 rounded-adm border border-adm-line bg-adm-surface-2/40 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-white/70">Structured Payment Evidence</p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <label className="block text-xs font-semibold text-white/80">Payment method
+                  <select disabled={busy || uncertain} value={method} onChange={e => setMethod(e.target.value)} className="adm-input mt-1.5 min-h-11 text-base">
+                    <option value="gcash">GCash</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                    <option value="maya">Maya</option>
+                    <option value="cash">Cash</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+                <label className="block text-xs font-semibold text-white/80">Payment amount (PHP)
+                  <input type="number" step="0.01" min="0.01" max="10000000" disabled={busy || uncertain} value={amount} onChange={e => setAmount(e.target.value)} required placeholder="0.00" className="adm-input mt-1.5 min-h-11 font-mono text-base" />
+                </label>
+              </div>
+              <label className="block text-xs font-semibold text-white/80">Payer name
+                <input type="text" maxLength={140} disabled={busy || uncertain} value={payerName} onChange={e => setPayerName(e.target.value)} required placeholder="Full name of payer" className="adm-input mt-1.5 min-h-11 text-base" />
+              </label>
+              <label className="block text-xs font-semibold text-white/80">Payment reference number
+                <input type="text" maxLength={100} disabled={busy || uncertain} value={paymentReference} onChange={e => setPaymentReference(e.target.value)} required placeholder="Transaction / confirmation ID from receipt" className="adm-input mt-1.5 min-h-11 font-mono text-base" />
+              </label>
+              <label className="block text-xs font-semibold text-white/80">Proof asset reference (optional)
+                <input type="text" maxLength={500} disabled={busy || uncertain} value={proofAssetRef} onChange={e => setProofAssetRef(e.target.value)} placeholder="https://... or stored proof link" className="adm-input mt-1.5 min-h-11 text-base" />
+              </label>
+              <label className="block text-xs font-semibold text-white/80">Evidence notes / remarks (optional)
+                <textarea disabled={busy || uncertain} value={note} maxLength={1000} onChange={event => setNote(event.target.value)} placeholder="Additional context (e.g. payer phone, branch)" className="adm-input mt-1.5 min-h-20 resize-y text-base" />
+              </label>
+              <p className="text-xs text-white/70">Record the method, amount, currency, payer, reference and proof source. A screenshot alone does not establish payment.</p>
+            </div>
+          )}
+
+          {target === 'verified' && (
+            <div className="space-y-3">
+              {(existingEvidence?.method || existingEvidence?.legacy_note) && (
+                <div className="space-y-2 rounded-adm border border-adm-line bg-adm-surface-2 p-3 text-xs">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-white/70">Submitted Payment Evidence for Review</p>
+                  {existingEvidence.method && (
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div><span className="text-white/60">Method:</span> <strong className="ml-1 font-mono uppercase text-white">{existingEvidence.method.replace('_', ' ')}</strong></div>
+                      <div><span className="text-white/60">Amount:</span> <strong className="ml-1 font-mono text-emerald-400">₱{Number(existingEvidence.amount || 0).toLocaleString('en-PH', { minimumFractionDigits: 2 })} {existingEvidence.currency || 'PHP'}</strong></div>
+                      <div className="col-span-2"><span className="text-white/60">Payer:</span> <strong className="ml-1 text-white">{existingEvidence.payer_name || 'N/A'}</strong></div>
+                      <div className="col-span-2"><span className="text-white/60">Reference:</span> <strong className="ml-1 font-mono text-blue">{existingEvidence.payment_reference || 'N/A'}</strong></div>
+                      {existingEvidence.proof_asset_ref && (
+                        <div className="col-span-2"><span className="text-white/60">Proof:</span> {/^https?:\/\//i.test(existingEvidence.proof_asset_ref) ? <a href={existingEvidence.proof_asset_ref} target="_blank" rel="noopener noreferrer" className="ml-1 text-blue underline">View proof asset</a> : <span className="ml-1 font-mono text-white/80">{existingEvidence.proof_asset_ref}</span>}</div>
+                      )}
+                      {existingEvidence.submitted_at && (
+                        <div className="col-span-2 text-xs text-white/50">Submitted: {new Date(existingEvidence.submitted_at).toLocaleString()}</div>
+                      )}
+                    </div>
+                  )}
+                  {existingEvidence.legacy_note && (
+                    <p className="text-white/80"><span className="text-white/60">Submitted note:</span> {existingEvidence.legacy_note}</p>
+                  )}
+                </div>
+              )}
+              <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-white/80">
+                <input type="checkbox" disabled={busy || uncertain} checked={verifiedChecked} onChange={e => setVerifiedChecked(e.target.checked)} className="h-4 w-4 rounded border-adm-line" />
+                <span>I independently checked the merchant receiving account and confirmed funds arrived.</span>
+              </label>
+              <label className="block text-xs font-semibold text-white/80">Reconciliation note
+                <textarea disabled={busy || uncertain} value={note} maxLength={1000} onChange={event => setNote(event.target.value)} required placeholder="Record verification details (e.g. Matched in merchant GCash portal)" className="adm-input mt-1.5 min-h-20 resize-y text-base" />
+              </label>
+              <p className="text-xs text-white/70">Verification requires independent reconciliation against the receiving bank/e-wallet account.</p>
+            </div>
+          )}
+
+          {target !== 'evidence_submitted' && target !== 'verified' && (
+            <label className="block text-xs font-semibold text-white/80">Evidence or reconciliation note
+              <textarea disabled={busy || uncertain} value={note} maxLength={1000} onChange={event => setNote(event.target.value)} required={target !== 'awaiting_instructions'} placeholder={target === 'failed' ? 'State why payment was rejected (e.g. Reference not found in merchant ledger)' : target === 'refunded' ? 'Record refund transaction details' : 'Optional note'} className="adm-input mt-1.5 min-h-24 resize-y text-base" />
+            </label>
+          )}
         </> : <StateBanner tone="info">{current === 'failed' ? 'Recovery requires the protected payment workflow and a current order review.' : 'No further payment transition is available for this record.'}</StateBanner>}
         {error && <StateBanner tone={uncertain ? 'warning' : 'danger'}>{error}</StateBanner>}
+        {uncertain && isSecure && <p className="text-xs font-semibold text-amber">Closing is locked until this resolves: the frozen evidence above lives only in this dialog. Retry the same evidence, or reload the order first.</p>}
         <div className="flex gap-2">
-          <button type="button" disabled={busy} onClick={onClose} className={`${secondaryButton} flex-1`}>Close</button>
-          {choices.length > 0 && <button disabled={busy || !target || (secure && !versionAvailable)} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : uncertain ? 'Retry same evidence' : 'Record transition'}</button>}
+          <button type="button" disabled={busy || (uncertain && isSecure)} onClick={onClose} className={`${secondaryButton} flex-1`}>Close</button>
+          {choices.length > 0 && <button disabled={busy || !target || (isSecure && !versionAvailable)} className={`${primaryButton} flex-1`}>{busy ? 'Saving…' : uncertain ? 'Retry same evidence' : 'Record transition'}</button>}
         </div>
       </form>
     </div>

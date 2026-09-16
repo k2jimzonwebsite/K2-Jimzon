@@ -2,10 +2,17 @@ import { authorizeAdminRequest } from './authorize.js'
 import { decodeEvidenceImage, readImageBody } from './product-intake.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
 import { isAdminRole } from './supabase.js'
+import { strictInteger } from '../shared-numeric.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const SKU = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/
 const HTTPS_URL = /^https:\/\/[^\s\u0000-\u001f\u007f]+$/
+
+export function validateProductMediaOrphanAge(input) {
+  return strictInteger(input === undefined ? 60 : input, 'PRODUCT_MEDIA_ORPHAN_RANGE_INVALID', {
+    min: 60, max: 10080,
+  })
+}
 
 function validateMediaItem(item) {
   if (!item || typeof item !== 'object' || Array.isArray(item)
@@ -63,6 +70,36 @@ function validateOwnedObjectUrls(client, actorId, payload) {
     if (!item.objectPath.startsWith(expectedPrefix)) throw new Error('REQUEST_INVALID')
     const { data } = client.storage.from('product-images').getPublicUrl(item.objectPath)
     if (!data?.publicUrl || data.publicUrl !== item.url) throw new Error('REQUEST_INVALID')
+  }
+}
+
+// A null object path marks a legacy reference from before upload receipts
+// existed. Legacy URLs may be retained unchanged, but a foreign URL must not
+// be introduced as one: every null-path URL has to already sit on the product.
+// (Full storage-object attestation additionally runs inside the prepared
+// database command; see 20260822_admin_product_media_boundary.sql.)
+export function rejectForeignLegacyMedia(payload, currentUrls) {
+  if (!Array.isArray(currentUrls)) throw new Error('REQUEST_INVALID')
+  const known = new Set(currentUrls.filter((url) => typeof url === 'string'))
+  for (const item of [payload.primary, ...payload.lifestyle, ...payload.secondary].filter(Boolean)) {
+    if (item.objectPath === null && !known.has(item.url)) throw new Error('REQUEST_INVALID')
+  }
+}
+
+export async function readCurrentProductMediaUrls(client, sku) {
+  try {
+    const { data, error } = await client.from('products')
+      .select('primary_image_url,image_url,lifestyle_images,secondary_images')
+      .eq('sku', sku)
+      .maybeSingle()
+    if (error || !data) return null
+    return [
+      data.primary_image_url, data.image_url,
+      ...(Array.isArray(data.lifestyle_images) ? data.lifestyle_images : []),
+      ...(Array.isArray(data.secondary_images) ? data.secondary_images : []),
+    ]
+  } catch {
+    return null
   }
 }
 
@@ -145,6 +182,16 @@ export async function handleProductMediaAssignment(req, res) {
   try {
     const payload = validateProductMediaAssignment(await readJson(req))
     validateOwnedObjectUrls(authorized.client, authorized.identity.userId, payload)
+    // Legacy references are retention-only: when the register cannot be read,
+    // they are refused rather than trusted blindly.
+    const currentUrls = await readCurrentProductMediaUrls(authorized.client, payload.sku)
+    if (currentUrls === null) {
+      for (const item of [payload.primary, ...payload.lifestyle, ...payload.secondary].filter(Boolean)) {
+        if (item.objectPath === null) throw new Error('REQUEST_INVALID')
+      }
+    } else {
+      rejectForeignLegacyMedia(payload, currentUrls)
+    }
     const signed = signedAdminCommandArguments(
       'product_media_assign', authorized.identity.userId, idempotencyKey, payload,
     )
@@ -213,10 +260,10 @@ export async function handleProductMediaOrphans(req, res) {
     return safeJson(res, 403, { error: { code: 'PRODUCT_MEDIA_ADMIN_REQUIRED' } })
   }
   if (req.method === 'GET') {
-    const rawAge = Array.isArray(req.query?.minimumAgeMinutes)
-      ? req.query.minimumAgeMinutes[0] : req.query?.minimumAgeMinutes
-    const minimumAgeMinutes = rawAge === undefined ? 60 : Number(rawAge)
-    if (!Number.isInteger(minimumAgeMinutes) || minimumAgeMinutes < 60 || minimumAgeMinutes > 10080) {
+    let minimumAgeMinutes
+    try {
+      minimumAgeMinutes = validateProductMediaOrphanAge(req.query?.minimumAgeMinutes)
+    } catch {
       return safeJson(res, 400, { error: { code: 'PRODUCT_MEDIA_ORPHAN_RANGE_INVALID' } })
     }
     const result = await authorized.client.rpc('read_admin_product_media_orphans_v1', {

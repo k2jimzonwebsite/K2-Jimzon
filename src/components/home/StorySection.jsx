@@ -3,6 +3,13 @@ import { motion, useReducedMotion } from 'motion/react'
 import { LIFESTYLE } from '../../data/site'
 import { Kicker } from '../ui/bits'
 
+const applyImageFallback = (e) => {
+  const img = e?.currentTarget
+  if (!img || img.dataset.fb) return
+  img.dataset.fb = '1'
+  img.src = '/images/placeholder.svg'
+}
+
 const STEPS = [
   ['market', 'Sourced from Italian shelves', 'Our buyers shop directly in Italian grocery stores, pharmacies, and trusted local markets.'],
   ['plane', 'Flown to Manila', 'Catalog goods and approved Pasabuy items are packed carefully and flown on regular scheduled cargo.'],
@@ -44,6 +51,7 @@ export default function StorySection() {
                     alt=""
                     aria-hidden="true"
                     loading="lazy"
+                    onError={applyImageFallback}
                     animate={reducedMotion ? undefined : { scale: activeStep === index ? 1.045 : 1 }}
                     transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
                     className="h-full w-full object-cover"

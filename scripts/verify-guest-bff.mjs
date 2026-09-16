@@ -11,8 +11,8 @@ process.env.K2_GUEST_BFF_SECRET = Buffer.alloc(32, 17).toString('base64')
 
 const security = await import('../server/storefront-bff/security.js')
 const router = await import('../server/storefront-bff/router.js')
-assert.equal(router.STOREFRONT_BFF_ROUTES.length, 13)
-assert.equal(new Set(router.STOREFRONT_BFF_ROUTES).size, 13)
+assert.equal(router.STOREFRONT_BFF_ROUTES.length, 15)
+assert.equal(new Set(router.STOREFRONT_BFF_ROUTES).size, 15)
 const preparedStorefrontRoot = fileURLToPath(new URL('../prepared-api/storefront', import.meta.url))
 async function preparedRoutes(directory = preparedStorefrontRoot) {
   const entries = await readdir(directory, { withFileTypes: true })

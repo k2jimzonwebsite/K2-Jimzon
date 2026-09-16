@@ -1,5 +1,37 @@
 # K2 Jimzon — System Architecture
 
+The remote Globe CMS never falls back to the development testimonial seed.
+Its review availability state is separate from the product-globe display
+configuration. StorefrontMetadata and the four explicit Vercel scoped-route
+header rules exclude account/messages/checkout/confirmation from indexing;
+authorization continues to be enforced by the existing server boundaries.
+
+IDEA-20260914-02 keeps uncertain guest-order identity and its immutable payload
+inside StoreProvider; Checkout and CartDrawer share that pending state. The bot
+token is renewed independently of the business request. This is mounted-session
+recovery, not durable recovery across reload. Product projections use canonical
+database fields without merging demo records by SKU. The customer BFF uses exact
+supporting-history counts to detect capped/incomplete metric inputs. These local
+changes do not introduce a production artifact, provider or database migration.
+
+The prepared clearance editor reloads the exact canonical lot after success,
+instead of manufacturing approval time and availability from client state.
+Failed refresh preserves the old projection and command key. Expiry presentation
+uses the shared Manila date helper; SQL eligibility remains authoritative.
+The deployment configurations now select their separate target build scripts;
+local script success and deployed provider execution remain separate evidence.
+
+The prepared product-intake modal retains one unresolved session setup, evidence
+upload, automatic/manual step, Draft, first-inventory or publication command
+within its mounted lifetime. Evidence retains the File and exact slot/session;
+its returned path must match refreshed canonical evidence before preview. A later
+retry denial preserves any earlier uncertain outcome. Its outer BFF receipt identity
+is distinct from the existing durable inner intake request ID. The service
+checks the existing SQL step receipt (session ID, step and canonical timestamp)
+and preserves uncertainty if the follow-up session read fails. This does not
+add a persistence authority or prove live receipts. Remaining intake caller and
+full actor/navigation coverage stays in MAP-028 I-002.
+
 Status correction, 7 September 2026 session audit: this document describes
 prepared architecture. It does not establish applied database grants/RLS or
 deployed BFF activation. The fresh source inventory counts 92 Admin routes and
@@ -45,6 +77,27 @@ These are source registry counts, checked by
 `tests/security-surface-inventory.spec.js` in the contract and CI suites.
 Emitted provider functions and enabled deployed routes are separate inventories;
 neither is established by these counts. Exact-preview inventories remain I-014.
+
+Prepared confirmation deducts owned stock once through the internal
+`commit_order_request_stock_v1` helper (MAP-023 / I-001). The helper locks
+the order row first like cancellation and the sweep, writes commitment
+actor/time/cause on the exact active allocations plus one `stock_committed`
+event per allocation, and never touches physical or encumbered counters.
+Browser roles cannot execute it. Prepared migration
+`20260913_payment_handover_commitment.sql` adds payment verification as the
+second caller after locked stock and independent-review checks. Both callers
+share the existing signed receipt boundary and retain the first commitment.
+The reservation/payment guards accept attributable committed allocations after
+their temporary deadline while retaining lot/balance/coverage checks. Handover
+uses its locked active allocation IDs to reject missing commitment through the
+existing reconciliation error. No new API or stock counter is added.
+The temporary-hold sweep exempts orders holding committed rows. Cancellation needs no change: it
+releases every active row and retains the commitment facts. Prepared, not
+provider-applied. Recovery of the three composed functions is verified using
+captured exact definitions/ACLs in the local runner. The earlier confirmation
+rollback refuses when payment depends on the helper; it cannot remove that
+dependency safely. Owned-stock read projection/consumers and all-writer races
+remain I-001. Evidence: `docs/evidence/20260913-stock-lifecycle/README.md`.
 
 Prepared purchase holds initialize and lock every involved balance by SKU before
 lot allocation (`20260908_purchase_hold_lock_order.sql`). This corrects opposing
@@ -119,6 +172,7 @@ The K2 Jimzon architecture is engineered around the principles of **defense-in-d
 │                              SUPABASE POSTGRESQL & EDGE RUNTIME                          │
 ├──────────────────────────────────────────────────────────────────────────────────────────┤
 │  • Public Schema: 42 RLS Tables, 9 Security-Invoker Views, 53 Hardened RPC Functions     │
+│    (historical bootstrap counts; live exports report more — see MAP-017 evidence)          │
 │  • k2_private Schema: Session Registry, Rate Limit Buckets, Audit Ledgers, Nonces        │
 │  • Storage Buckets: private 'intake-evidence' vs public 'product-media'                  │
 │  • Edge Functions: 'invite-staff' (AAL2-enforced), 'shopee-webhook' (Bounded Ingress)    │
@@ -210,17 +264,17 @@ Both Storefront and Admin APIs are consolidated into single Serverless Function 
 
 - **`api/admin/index.js`**: Consolidated entrypoint with 92 prepared routes.
 - **`api/storefront/index.js`**: Consolidated entrypoint with 15 prepared routes.
-- **`api/admin/index.js`**: Consolidated Admin entrypoint; prepared inventory above.
-- **`api/storefront/index.js`**: Consolidated Storefront entrypoint; prepared inventory above.
 
 Controls are classified per route in the security surface inventory; public
 authentication/read endpoints do not share every mutation requirement:
 - **HTTP Method Whitelist**: Non-matching methods return `405 Method Not Allowed` with exact `Allow` headers.
 - **Origin & Referer Validation**: Prevents cross-site request hijacking.
 - **Idempotency Keys**: POST mutations require UUID `Idempotency-Key` headers to prevent duplicate charges or lot adjustments.
-- **Execution Deadlines**: Storefront requests 10 seconds; prepared Admin requests
-  180 seconds for bounded automatic intake. Verify the correct project's deployed
-  allowance before activation; browser AI dispatch waits at most 125 seconds.
+- **Execution Deadlines**: Storefront requests 10 seconds; browser Admin
+  requests default to 15 seconds (125 seconds for a paid intake start).
+  These are caller-side bounds, not platform ceilings: the Admin Vercel
+  function allows up to 180 seconds `maxDuration`. Verify the correct
+  project's deployed allowance before activation.
 
 The fourteenth Storefront route is `POST /api/storefront/order/status`. It is a
 signed, origin-checked, durable-rate-limited read that derives its scope from the

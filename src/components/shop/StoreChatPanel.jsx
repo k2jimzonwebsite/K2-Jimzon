@@ -43,9 +43,9 @@ function WebsiteChatHeader({ enabled }) {
           <span className="h-2.5 w-2.5 rounded-full bg-[#E0C48A] shadow-[0_0_0_4px_rgba(224,196,138,0.12)]" />
         </span>
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold">Live website conversation</p>
+          <p className="truncate text-sm font-semibold">Website conversation</p>
           <p className="text-[12px] text-[#E9DCC7]">
-            {enabled ? 'Connected to K2 staff inbox' : 'Preview mode · messaging not active'}
+            {enabled ? 'Messages reach the K2 staff inbox · replies are not instant' : 'Preview mode · messaging not active'}
           </p>
         </div>
       </div>
@@ -83,7 +83,17 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
   const enabled = guestBffEnabled()
 
   const [form, setForm] = useState({ customerName: '', email: '', phone: '' })
-  const [message, setMessage] = useState('')
+  // An unsent draft survives sheet close, Escape, and remounts within this
+  // tab visit. It clears only after a confirmed send.
+  const [message, setMessage] = useState(() => {
+    try { return sessionStorage.getItem('k2-store-chat-draft') || '' } catch { return '' }
+  })
+  useEffect(() => {
+    try {
+      if (message) sessionStorage.setItem('k2-store-chat-draft', message)
+      else sessionStorage.removeItem('k2-store-chat-draft')
+    } catch { /* private-mode storage: draft simply does not persist */ }
+  }, [message])
   const [conversation, setConversation] = useState(null)
   const [botToken, setBotToken] = useState('')
   const [challengeKey, setChallengeKey] = useState(0)
@@ -329,7 +339,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
         </label>
 
         {!conversation && active && (
-          <TurnstileChallenge key={challengeKey} enabled={enabled} onTokenChange={setBotToken} />
+          <TurnstileChallenge key={challengeKey} enabled={enabled} action="guest_start" onTokenChange={setBotToken} />
         )}
 
         {error && (

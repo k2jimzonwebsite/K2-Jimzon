@@ -50,13 +50,14 @@ export default function StorefrontMetadata() {
   const { view, productId, getProduct, loading } = useStore()
   const product = view === 'master_product' ? getProduct(productId) : null
   const unavailableSurface = view === 'not_found' || (view === 'master_product' && !loading && !product)
+  const scopedSurface = ['account', 'messages', 'checkout', 'confirmation'].includes(view)
   // Approved knowledge arrives after the catalog, so the FAQ markup has to be
   // rewritten when it lands rather than computed once on first render.
   const knowledgeVersion = useProductKnowledgeVersion()
 
   useEffect(() => {
     const origin = metadataOrigin()
-    const canonicalUrl = new URL(window.location.pathname, origin).href
+    const canonicalUrl = new URL(view === 'wholesale' ? '/trade' : window.location.pathname, origin).href
     const title = product
       ? `${product.name} — K2 Jimzon`
       : view === 'not_found'
@@ -81,7 +82,7 @@ export default function StorefrontMetadata() {
     canonical.setAttribute('href', canonicalUrl)
 
     setMeta('name', 'description', description)
-    setMeta('name', 'robots', unavailableSurface ? 'noindex, nofollow' : 'index, follow')
+    setMeta('name', 'robots', unavailableSurface || scopedSurface ? 'noindex, nofollow' : 'index, follow')
     setMeta('property', 'og:type', product ? 'product' : 'website')
     setMeta('property', 'og:site_name', 'K2 Jimzon')
     setMeta('property', 'og:title', title)
@@ -114,7 +115,7 @@ export default function StorefrontMetadata() {
       'data-k2-breadcrumb-jsonld',
       buildBreadcrumbStructuredData({ product, origin, url: canonicalUrl }),
     )
-  }, [product, view, loading, unavailableSurface, knowledgeVersion])
+  }, [product, view, loading, unavailableSurface, scopedSurface, knowledgeVersion])
 
   return null
 }

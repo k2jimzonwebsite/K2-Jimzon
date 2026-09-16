@@ -1,5 +1,6 @@
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
+import { strictInteger, strictNumeric } from '../shared-numeric.js'
 import { isAdminRole } from './supabase.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -25,16 +26,13 @@ function uuid(value) {
 }
 
 function number(value, { min = 0, max }) {
-  const result = Number(value)
-  if (!Number.isFinite(result) || result < min || result > max) throw new Error('REQUEST_INVALID')
+  const result = strictNumeric(value, 'REQUEST_INVALID', { min, max })
   return Math.round(result * 100) / 100
 }
 
 function integer(value, optional = false) {
   if (optional && (value === null || value === undefined || value === '')) return null
-  const result = Number(value)
-  if (!Number.isInteger(result) || result < 1 || result > 1_000_000) throw new Error('REQUEST_INVALID')
-  return result
+  return strictInteger(value, 'REQUEST_INVALID', { min: 1, max: 1_000_000 })
 }
 
 function timestamp(value, optional = false) {

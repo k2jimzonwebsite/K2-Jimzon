@@ -89,6 +89,12 @@ const ERROR_MESSAGES = {
   PAYMENT_TRANSITION_INVALID: 'That payment transition is no longer available. Refresh and review the current payment state.',
   PAYMENT_EVIDENCE_REQUIRED: 'Enter a specific payment evidence or reconciliation note.',
   PAYMENT_INDEPENDENT_REVIEW_REQUIRED: 'A different staff member must verify this evidence against the receiving account.',
+  PAYMENT_METHOD_INVALID: 'Select a valid payment method (GCash, Bank Transfer, Maya, Cash, or Other).',
+  PAYMENT_AMOUNT_INVALID: 'Payment amount must be a positive number.',
+  PAYMENT_CURRENCY_INVALID: 'Payment currency must be PHP.',
+  PAYMENT_PAYER_INVALID: 'Enter a valid payer name.',
+  PAYMENT_REFERENCE_INVALID: 'Enter a valid payment reference number.',
+  PAYMENT_PROOF_INVALID: 'Proof asset reference must be 500 characters or fewer.',
   PACKING_ALLOCATION_INVALID: 'The product or allocated lot is no longer eligible for this scan. Refresh and review its exact quantity and shelf life.',
   PACKING_LOT_CONFIRMATION_REQUIRED: 'Check the physical batch, expiry and location before confirming this unit.',
   RESERVATION_RECONCILIATION_REQUIRED: 'This order has incomplete or expired stock coverage. Reconcile its allocations before confirming.',
@@ -236,6 +242,11 @@ const ERROR_MESSAGES = {
   OWNER_CLOSE_SESSION_NOT_FOUND: 'No saved close session was found for that identifier.',
   OWNER_CLOSE_SESSION_UNAVAILABLE: 'Owner Count & Close is temporarily unavailable. Keep this page open and try again.',
   ADMIN_REQUIRED: 'Only an administrator can approve marketplace matches or save Owner Count & Close.',
+  AAL2_REQUIRED: 'Two-factor authentication (AAL2) is required. Please authenticate with your two-factor method.',
+  MFA_REQUIRED: 'Two-factor authentication is required. Please complete your security check.',
+  STAFF_ACCESS_REQUIRED: 'Staff access is required for this area.',
+  SESSION_REVOKED: 'Your staff session expired or was revoked. Please sign in again.',
+  FORBIDDEN_ROLE: 'Administrator access is required for this action.',
   REQUEST_INVALID: 'Check the entered details and try again.',
   ADMIN_SERVICE_UNAVAILABLE: 'The secure admin service is temporarily unavailable.',
   REQUEST_TIMEOUT: 'The secure admin request timed out. Refresh the record before trying again.',
@@ -485,14 +496,26 @@ export function getAdminPasabuy(signal) {
   return adminRequest('/api/admin/pasabuy', { signal })
 }
 
-function pasabuyCommand(path, body) {
+function pasabuyCommand(path, body, idempotencyKey) {
   return adminRequest(boundedAdminCommandRoute('pasabuy', path), {
-    method: 'POST', body, csrf: true, idempotency: true,
+    method: 'POST', body, csrf: true, idempotency: true, idempotencyKey,
   })
 }
 
-export const transitionPasabuyBff = (requestId, toStatus, reason) => pasabuyCommand('transition', { requestId, toStatus, reason })
-export const savePasabuyQuoteBff = (payload) => pasabuyCommand('quote', payload)
+export const transitionPasabuyBff = (requestId, toStatus, reason, idempotencyKey) =>
+  pasabuyCommand('transition', { requestId, toStatus, reason }, idempotencyKey)
+export const savePasabuyQuoteBff = (payload, idempotencyKey) => pasabuyCommand('quote', payload, idempotencyKey)
+
+export function createPasabuyCommandSession() {
+  return createRetainedOperationSession(
+    (path, body, key) => pasabuyCommand(path, body, key),
+    {
+      ended: 'The staff session ended. Sign in again before sending.',
+      late: 'The staff session ended. Reconcile the Pasabuy case before sending again.',
+      full: 'Too many unresolved Pasabuy operations. Reconcile pending cases before continuing.',
+    },
+  )
+}
 
 export function getProductIntakeSessionBff(sessionId, signal) {
   return adminRequest(`/api/admin/product-intake/session?sessionId=${encodeURIComponent(sessionId || '')}`, { signal })
@@ -518,10 +541,10 @@ export const createProductDraftBff = (payload, key) => intakeCommand('draft', pa
 export const createProductFirstInventoryBff = (payload, key) => intakeCommand('inventory', payload, key)
 export const transitionProductPublicationBff = (payload, key) => intakeCommand('publication', payload, key)
 
-export async function uploadProductEvidenceBff(sessionId, slot, file) {
+export async function uploadProductEvidenceBff(sessionId, slot, file, idempotencyKey) {
   const headers = {
     Accept: 'application/json', 'Content-Type': file.type,
-    'X-K2-CSRF': csrfToken(), 'X-K2-Idempotency-Key': crypto.randomUUID(),
+    'X-K2-CSRF': csrfToken(), 'X-K2-Idempotency-Key': idempotencyKey || crypto.randomUUID(),
     'X-K2-Intake-Session': sessionId, 'X-K2-Evidence-Slot': slot,
     'X-K2-File-Name': String(file.name || 'evidence-image').slice(0, 120),
   }
@@ -533,7 +556,7 @@ export async function uploadProductEvidenceBff(sessionId, slot, file) {
     if (!response.ok || !payload?.ok) {
       const code = payload?.error?.code || 'EVIDENCE_UPLOAD_UNAVAILABLE'
       return {
-        ok: false, code, cleanupId: payload?.cleanupId || null,
+        ok: false, code, status: response.status, cleanupId: payload?.cleanupId || null,
         error: ERROR_MESSAGES[code] || ERROR_MESSAGES.EVIDENCE_UPLOAD_UNAVAILABLE,
       }
     }

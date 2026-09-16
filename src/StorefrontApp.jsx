@@ -3,7 +3,6 @@ import { StoreProvider, useStore } from './context/StoreContext'
 import { GlobeCmsProvider } from './data/globeCms'
 import MobileNavBar from './components/nav/MobileNavBar'
 import StoreHeader from './components/StoreHeader'
-import Footer from './components/Footer'
 import ErrorBoundary from './components/ui/ErrorBoundary'
 import StorefrontMetadata from './components/StorefrontMetadata'
 
@@ -19,9 +18,11 @@ const Contact = lazy(() => import('./views/Contact'))
 const CustomerAccount = lazy(() => import('./views/CustomerAccount'))
 const NotFound = lazy(() => import('./views/NotFound'))
 const CartDrawer = lazy(() => import('./components/CartDrawer'))
+const Footer = lazy(() => import('./components/Footer'))
 // MAP-027: the Interactive Shop is opt-in. Lazy so its scene never loads on
 // landing, catalog, or product paths.
 const InteractiveShop = lazy(() => import('./views/InteractiveShop'))
+const Policy = lazy(() => import('./views/Policy'))
 
 const VIEWS = {
   home: Home,
@@ -35,6 +36,10 @@ const VIEWS = {
   messages: GuestMessages,
   contact: Contact,
   account: CustomerAccount,
+  privacy: Policy,
+  terms: Policy,
+  returns: Policy,
+  policies: Policy,
   not_found: NotFound,
 }
 
@@ -57,7 +62,9 @@ function StorefrontShell() {
               {cartOpen && <Suspense fallback={null}>
                 <CartDrawer />
               </Suspense>}
-          <Footer />
+          <Suspense fallback={null}>
+            <Footer />
+          </Suspense>
           <div className="h-16 md:hidden" aria-hidden />
           <MobileNavBar />
         </>

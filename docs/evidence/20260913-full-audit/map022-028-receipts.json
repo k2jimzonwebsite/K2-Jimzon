@@ -1,0 +1,34 @@
+[
+  {
+    "script": "rehearse-database-backup-restore",
+    "exitCode": 2
+  },
+  {
+    "script": "rehearse-purchase-time-reservation",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-map023-last-unit-concurrency",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-payment-recovery",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-final-admin-concurrency",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-marketplace-snapshot-portable",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-channel-vocabulary-portable",
+    "exitCode": 0
+  },
+  {
+    "script": "rehearse-product-knowledge-portable",
+    "exitCode": 0
+  }
+]

@@ -1,3 +1,8 @@
+# DORMANT — K2 deploys to Vercel, not Netlify. This file exists only so a
+# forgotten Netlify link does not silently resurrect a global SPA catch-all
+# (which would swallow real 404s) plus a weaker header set. Owner action:
+# confirm no Netlify site is linked to this repo, then delete this file. Do
+# NOT connect a Netlify site while this file exists.
 [build]
   command = "npm run build"
   publish = "dist"

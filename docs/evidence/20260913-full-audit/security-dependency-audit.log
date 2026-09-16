@@ -1,0 +1,5 @@
+
+> k2-jimzon-prototype@0.1.0 security:dependency-audit
+> npm audit --audit-level=low
+
+found 0 vulnerabilities

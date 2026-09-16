@@ -51,6 +51,7 @@ export default function Wholesale() {
   const [submittedReceipt, setSubmittedReceipt] = useState(null)
   const [formError, setFormError] = useState('')
   const [botToken, setBotToken] = useState('')
+  const [challengeKey, setChallengeKey] = useState(0)
   const requestKey = useRef('')
   const secureInquiry = guestBffEnabled()
 
@@ -70,6 +71,14 @@ export default function Wholesale() {
     }
     if (!formData.contactName.trim() || !formData.email.trim() || !formData.phone.trim()) {
       setFormError('Contact name, work email, and phone number are required.')
+      return
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      setFormError('Enter a valid work email address.')
+      return
+    }
+    if (!/^\+?[0-9][0-9\s()-]{6,19}$/.test(formData.phone.trim())) {
+      setFormError('Enter a valid phone number with country code.')
       return
     }
     if (!formData.deliveryAddress.trim()) {
@@ -107,6 +116,8 @@ export default function Wholesale() {
         notes:formData.notes.trim(), idempotencyKey:requestKey.current, botToken,
       })
       setSubmitting(false)
+      setBotToken('')
+      setChallengeKey(current => current + 1)
       if(!result.ok) { setFormError(result.error || 'The inquiry could not be recorded. Keep this page open and try again.'); return }
       requestKey.current=''
       setSubmittedReceipt({...receipt,recorded:true,reference:result.data?.public_reference,conversationReference:result.data?.conversation_reference})
@@ -209,7 +220,7 @@ export default function Wholesale() {
               <ol className="mt-3 space-y-2.5 text-xs leading-relaxed text-navy-soft">
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-navy">1.</span>
-                  <span>K2 reviews the business need and expected volume after the email is actually sent.</span>
+                  <span>{secureInquiry ? 'K2 records the inquiry and its Website conversation for manual review of business need and expected volume.' : 'K2 reviews the business need and expected volume after the email is actually sent.'}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-navy">2.</span>
@@ -473,7 +484,7 @@ export default function Wholesale() {
                   </label>
                 </div>
 
-                {secureInquiry && <TurnstileChallenge onTokenChange={setBotToken} />}
+                {secureInquiry && <TurnstileChallenge key={challengeKey} action="guest_wholesale" onTokenChange={setBotToken} />}
 
                 {/* Submit Button */}
                 <div className="pt-3">
@@ -485,6 +496,11 @@ export default function Wholesale() {
                     {submitting ? (secureInquiry ? 'Recording Inquiry…' : 'Preparing Email Draft…') : (secureInquiry ? 'Record Wholesale Inquiry' : 'Prepare Wholesale Email')}
                     <ArrowIcon size={15} />
                   </button>
+                  <p className="mt-2 text-center text-xs text-navy-soft">
+                    Business inquiry details are protected under our{' '}
+                    <button type="button" onClick={() => go('privacy')} className="underline hover:text-crimson font-medium">Privacy Policy</button>
+                    {' '}and commercial terms.
+                  </p>
                 </div>
               </form>
             )}

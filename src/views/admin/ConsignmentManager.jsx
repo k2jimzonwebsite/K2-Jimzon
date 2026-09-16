@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabaseClient'
 import { scanRefusalReason, selectManifestItem } from './consignmentScanTarget'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { AlertIcon, BarcodeIcon, CheckIcon, PlaneIcon } from '../../components/ui/icons'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 import ConsignmentScannerModal from './ConsignmentScannerModal'
 import DiscrepancyReconciliationModal from './DiscrepancyReconciliationModal'
 import FlightWorkflowDiagram from '../../components/admin/guides/FlightWorkflowDiagram'
@@ -295,25 +296,29 @@ export default function ConsignmentManager() {
       onFinalizeArrival={finalize}
     />
 
-    {(showCreate || showLine || advanceTarget) && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="dialog" aria-modal="true">
-      <form onSubmit={advanceTarget ? submitAdvance : showCreate ? createManifest : addLine} className="w-full max-w-md space-y-4 rounded-adm border border-adm-line bg-adm-surface p-6">
-        <h2 className="font-sans text-xl font-bold">{advanceTarget ? (advanceTarget === 'In_Transit' ? 'Close Milan packing' : 'Confirm Manila arrival') : showCreate ? 'Create consignment manifest' : 'Add manifest SKU'}</h2>
-        {advanceTarget ? <>
-          <p className="text-sm leading-relaxed text-white/55">{advanceTarget === 'In_Transit' ? 'This closes Milan scanning. Every expected unit must already be scan-packed.' : 'This opens the independent Manila recount. Milan counts will not be copied as received.'}</p>
-          <Field label="Custody / state-change reason"><textarea minLength={10} maxLength={500} className={`${input} min-h-24 resize-y`} value={advanceReason} onChange={event => setAdvanceReason(event.target.value)} placeholder="Record who confirmed the handoff or arrival and the physical evidence checked" required /></Field>
-        </> : showCreate ? <>
-          <Field label="Manifest code"><input className={input} value={create.manifestCode} onChange={e => setCreate(current => ({ ...current, manifestCode: e.target.value }))} minLength={3} maxLength={80} required /></Field>
-          <Field label="Flight or shipment reference"><input className={input} value={create.flightNumber} onChange={e => setCreate(current => ({ ...current, flightNumber: e.target.value }))} maxLength={120} placeholder="Record only confirmed details" /></Field>
-        </> : <>
-          <Field label="Product SKU"><select className={input} value={line.sku} onChange={e => setLine(current => ({ ...current, sku: e.target.value }))} required><option value="">Select a product</option>{(products || []).map(product => <option key={product.sku} value={product.sku}>{product.sku} · {product.name}</option>)}</select></Field>
-          <Field label="Batch / lot code"><input className={input} value={line.batchCode} onChange={e => setLine(current => ({ ...current, batchCode: e.target.value }))} maxLength={120} required /></Field>
-          <Field label="Physical box code"><input className={input} value={line.boxCode} onChange={e => setLine(current => ({ ...current, boxCode: e.target.value }))} maxLength={120} required /></Field>
-          <Field label="Best-before date"><input className={input} type="date" value={line.bestBefore} onChange={e => setLine(current => ({ ...current, bestBefore: e.target.value }))} required /></Field>
-          <Field label="Expected quantity"><input className={input} type="number" min="1" max="100000" value={line.packedQty} onChange={e => setLine(current => ({ ...current, packedQty: e.target.value }))} required /></Field>
-        </>}
-        <div className="flex gap-2 pt-2"><button type="button" onClick={closeEditor} className="min-h-11 flex-1 rounded-adm-sm border border-adm-line bg-white/5 text-sm font-semibold active:scale-[0.98]">Cancel</button><button type="submit" disabled={working} className="min-h-11 flex-1 rounded-adm-sm bg-blue text-sm font-bold active:scale-[0.98] disabled:opacity-40">{working ? 'Saving…' : advanceTarget ? 'Confirm state change' : 'Save'}</button></div>
-      </form>
-    </div>}
+    {(showCreate || showLine || advanceTarget) && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md" role="presentation">
+        <AdminDialog onClose={closeEditor} closeDisabled={working} labelledBy="consignment-dialog-title">
+          <form onSubmit={advanceTarget ? submitAdvance : showCreate ? createManifest : addLine} className="w-full max-w-md space-y-4 rounded-adm border border-adm-line bg-adm-surface p-6">
+            <h2 id="consignment-dialog-title" className="font-sans text-xl font-bold">{advanceTarget ? (advanceTarget === 'In_Transit' ? 'Close Milan packing' : 'Confirm Manila arrival') : showCreate ? 'Create consignment manifest' : 'Add manifest SKU'}</h2>
+            {advanceTarget ? <>
+              <p className="text-sm leading-relaxed text-white/55">{advanceTarget === 'In_Transit' ? 'This closes Milan scanning. Every expected unit must already be scan-packed.' : 'This opens the independent Manila recount. Milan counts will not be copied as received.'}</p>
+              <Field label="Custody / state-change reason"><textarea minLength={10} maxLength={500} className={`${input} min-h-24 resize-y`} value={advanceReason} onChange={event => setAdvanceReason(event.target.value)} placeholder="Record who confirmed the handoff or arrival and the physical evidence checked" required /></Field>
+            </> : showCreate ? <>
+              <Field label="Manifest code"><input className={input} value={create.manifestCode} onChange={e => setCreate(current => ({ ...current, manifestCode: e.target.value }))} minLength={3} maxLength={80} required /></Field>
+              <Field label="Flight or shipment reference"><input className={input} value={create.flightNumber} onChange={e => setCreate(current => ({ ...current, flightNumber: e.target.value }))} maxLength={120} placeholder="Record only confirmed details" /></Field>
+            </> : <>
+              <Field label="Product SKU"><select className={input} value={line.sku} onChange={e => setLine(current => ({ ...current, sku: e.target.value }))} required><option value="">Select a product</option>{(products || []).map(product => <option key={product.sku} value={product.sku}>{product.sku} · {product.name}</option>)}</select></Field>
+              <Field label="Batch / lot code"><input className={input} value={line.batchCode} onChange={e => setLine(current => ({ ...current, batchCode: e.target.value }))} maxLength={120} required /></Field>
+              <Field label="Physical box code"><input className={input} value={line.boxCode} onChange={e => setLine(current => ({ ...current, boxCode: e.target.value }))} maxLength={120} required /></Field>
+              <Field label="Best-before date"><input className={input} type="date" value={line.bestBefore} onChange={e => setLine(current => ({ ...current, bestBefore: e.target.value }))} required /></Field>
+              <Field label="Expected quantity"><input className={input} type="number" min="1" max="100000" value={line.packedQty} onChange={e => setLine(current => ({ ...current, packedQty: e.target.value }))} required /></Field>
+            </>}
+            <div className="flex gap-2 pt-2"><button type="button" onClick={closeEditor} disabled={working} className="min-h-11 flex-1 rounded-adm-sm border border-adm-line bg-white/5 text-sm font-semibold active:scale-[0.98] disabled:opacity-40">Cancel</button><button type="submit" disabled={working} className="min-h-11 flex-1 rounded-adm-sm bg-blue text-sm font-bold active:scale-[0.98] disabled:opacity-40">{working ? 'Saving…' : advanceTarget ? 'Confirm state change' : 'Save'}</button></div>
+          </form>
+        </AdminDialog>
+      </div>
+    )}
   </div>
 }
 

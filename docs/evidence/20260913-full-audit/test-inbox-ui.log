@@ -1,0 +1,42 @@
+
+> k2-jimzon-prototype@0.1.0 test:inbox-ui
+> playwright test --config=playwright.inbox.config.js
+
+[WebServer] (node:10856) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:7140) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 27 tests using 1 worker
+
+(node:23176) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\inbox-phase2.spec.js:5:1 › drafts remain bound to the customer when switching channels (1.2m)
+  ok  2 tests\inbox-phase2.spec.js:15:1 › pending note save preserves edits made after submission (13.0s)
+  ok  3 tests\inbox-phase2.spec.js:25:1 › late note completion cannot clear another customer draft or show its success there (9.3s)
+  ok  4 tests\inbox-phase2.spec.js:38:1 › workflow reason retains keyboard focus through multiple characters (9.2s)
+  ok  5 tests\inbox-phase2.spec.js:48:1 › staff switching discards the prior actor draft and late notice (6.0s)
+  ok  6 tests\inbox-phase2.spec.js:62:3 › delayed history cannot replace the current customer (1.1s)
+  ok  7 tests\inbox-phase2.spec.js:62:3 › delayed history cannot replace the current return visit (869ms)
+  ok  8 tests\inbox-phase2.spec.js:80:1 › delayed website reply preserves newer text (1.5s)
+  ok  9 tests\inbox-phase2.spec.js:91:1 › phone navigation preserves each customer draft (590ms)
+  ok 10 tests\inbox-phase2.spec.js:106:3 › Phase 2 unified inbox contract › migration models workflow, delivery truth, and immutable events (12ms)
+  ok 11 tests\inbox-phase2.spec.js:125:3 › Phase 2 unified inbox contract › admin inbox runtime normalizes snake_case and camelCase unread state independently from status (8ms)
+  ok 12 tests\inbox-phase2.spec.js:162:3 › Phase 2 unified inbox contract › admin inbox labels internal notes and disconnected delivery truthfully (3ms)
+  ok 13 tests\inbox-phase2.spec.js:176:3 › Phase 2 inbox interactions › desktop queue saves internal notes and controlled workflow changes (697ms)
+  ok 14 tests\inbox-phase2.spec.js:200:3 › Phase 2 inbox interactions › mobile queue opens one conversation at a time with a usable back action (465ms)
+  ok 15 tests\inbox-phase2.spec.js:218:3 › Phase 2 inbox interactions › virtual-store website chat is unmistakable and sends a customer-visible reply (638ms)
+  ok 16 tests\inbox-phase2.spec.js:236:3 › Inbox polling ownership and canonical unread › background polling yields to hidden tabs, in-flight reads, and disabled sessions (145ms)
+  ok 17 tests\inbox-phase2.spec.js:245:3 › Inbox polling ownership and canonical unread › a superseded read response can never repopulate the queue (3ms)
+  ok 18 tests\inbox-phase2.spec.js:253:3 › Inbox polling ownership and canonical unread › a failed background poll keeps the loaded queue and marks it stale (2ms)
+  ok 19 tests\inbox-phase2.spec.js:264:3 › Inbox polling ownership and canonical unread › a replayed read receipt cannot clear a message that arrived after it (2ms)
+  ok 20 tests\inbox-phase2.spec.js:278:3 › Inbox polling ownership and canonical unread › the Inbox tells staff when the visible queue is stale rather than live (416ms)
+  ok 21 tests\inbox-phase2.spec.js:284:3 › Inbox polling ownership and canonical unread › the inbox runtime owns its polling instead of resetting the queue every interval (4ms)
+  ok 22 tests\inbox-phase2.spec.js:298:3 › Inbox event history parity and failure states › a failed history read is distinguishable from an empty one and can be retried (488ms)
+  ok 23 tests\inbox-phase2.spec.js:308:3 › Inbox event history parity and failure states › event history is reachable on a phone, not only on wide desktops (405ms)
+  ok 24 tests\inbox-phase2.spec.js:318:3 › Inbox event history parity and failure states › the runtime reports a failed history read instead of an empty timeline (2ms)
+  ok 25 tests\inbox-phase2.spec.js:326:3 › Inbox ambiguous command reconciliation › an unconfirmed command is shown as unknown, not as a clean failure (573ms)
+  ok 26 tests\inbox-phase2.spec.js:338:3 › Inbox ambiguous command reconciliation › the runtime distinguishes an unconfirmed command from a rejected one (2ms)
+  ok 27 tests\inbox-phase2.spec.js:344:3 › Inbox ambiguous command reconciliation › leaving the page with an unresolved command is guarded, because a reload discards its identity (2ms)
+
+  27 passed (2.0m)

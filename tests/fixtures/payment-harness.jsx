@@ -6,6 +6,7 @@ import { SupplierDialog } from '../../src/views/admin/Suppliers.jsx'
 import CouponManager from '../../src/views/admin/CouponManager.jsx'
 import Customers from '../../src/views/admin/Customers.jsx'
 import PhotoManagerModal from '../../src/views/admin/PhotoManagerModal.jsx'
+import BulkCsvImportModal from '../../src/views/admin/BulkCsvImportModal.jsx'
 function Harness() {
   const [open, setOpen] = useState(false)
   const [saved, setSaved] = useState('')
@@ -14,6 +15,10 @@ function Harness() {
   const [actor, setActor] = useState('first-staff')
   const params = new URLSearchParams(location.search)
   window.switchActor = () => setActor('next-staff')
+  if (params.has('csv')) return <main className="admin-bos bg-adm-bg min-h-screen p-3">
+    <button onClick={() => setOpen(true)}>Open catalog CSV review</button><p role="status">{saved}</p>
+    {open && <BulkCsvImportModal key={actor} onClose={() => setOpen(false)} onImportComplete={() => setSaved('Catalog import refreshed')} />}
+  </main>
   if (params.has('media')) return <main className="admin-bos bg-adm-bg min-h-screen p-3">
     <button onClick={() => setOpen(true)}>Review product photos</button><p role="status">{saved}</p>
     {open && <PhotoManagerModal key={actor} product={{ sku: 'TEST-PANTRY', status: 'Draft', primary_image_url: 'https://images.example.test/pantry.png' }} onClose={() => setOpen(false)} onSave={() => setSaved('Assignment refreshed')} />}
@@ -43,11 +48,28 @@ function Harness() {
     value={lot} confirmed={confirmed} disabled={false} onSelect={value => { setLot(value); setConfirmed(false) }} onConfirm={setConfirmed} /></main>
   return <main className="admin-bos"><button onClick={() => setOpen(true)}>Review local payment</button><p role="status">{saved}</p>
     {open && <PaymentStatusModal secure={params.get('legacy') !== '1'}
-      order={{ id: 'local-order', publicReference: 'LOCAL-PAYMENT', paymentStatus: params.get('state') || 'failed', updatedAt: '2026-09-06T00:00:00Z' }}
-      onClose={() => setOpen(false)} onSave={async (target, note) => {
+      order={{
+        id: 'local-order',
+        publicReference: 'LOCAL-PAYMENT',
+        paymentStatus: params.get('state') || 'failed',
+        total: 1250,
+        customer: 'Juan dela Cruz',
+        updatedAt: '2026-09-06T00:00:00Z',
+        paymentEvidence: params.has('evidence') ? {
+          method: 'gcash',
+          amount: 1250,
+          currency: 'PHP',
+          payer_name: 'Juan dela Cruz',
+          payment_reference: 'GCASH-REF-001',
+          proof_asset_ref: 'https://proofs.example.test/receipt-001.png',
+          submitted_at: '2026-09-06T01:00:00Z',
+        } : null,
+      }}
+      onClose={() => setOpen(false)} onSave={async (target, note, evidence) => {
+        window.lastEvidence = evidence
         await new Promise(resolve => { window.finishPayment = resolve })
         if (params.get('uncertain') === '1') return { ok: false, uncertain: true, error: 'The payment command did not confirm. Reconcile before retrying.' }
-        setSaved(`${target}: ${note}`); setOpen(false); return { ok: true }
+        setSaved(`${target}: ${note || evidence?.paymentReference || ''}`); setOpen(false); return { ok: true }
       }} />}
   </main>
 }

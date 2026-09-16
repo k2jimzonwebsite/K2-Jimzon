@@ -1,0 +1,27 @@
+{
+  "project": "pixplcjqivlfflickobf",
+  "version": "20260909023000",
+  "artifactSha256": "7BA3F473C3313890F57899A657CD1234FEDAFEEB43DB7465819919EF1FB71E05",
+  "verifiedAt": "2026-09-13T15:24:53.942Z",
+  "applyStatus": "APPLY_RESPONSE_SUCCESS",
+  "applyError": null,
+  "verified": true,
+  "postflight": [
+    {
+      "verification": {
+        "exact_followup_receipt": true,
+        "expected_function_types": true,
+        "seven_signatures_present": true,
+        "error_reports_rls_enabled": true,
+        "functions_owned_by_postgres": true,
+        "public_function_execute_removed": true,
+        "browser_function_execute_removed": true,
+        "error_reports_staff_read_preserved": true,
+        "public_stock_view_select_preserved": true,
+        "receiving_service_execute_preserved": true,
+        "error_reports_browser_insert_removed": true,
+        "error_reports_browser_insert_policies_removed": true
+      }
+    }
+  ]
+}

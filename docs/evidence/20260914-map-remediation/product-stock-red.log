@@ -1,0 +1,27 @@
+
+Running 1 test using 1 worker
+
+(node:21724) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\admin-bff-contract.spec.js:733:1 › admin products never turn missing or malformed stock projections into healthy totals (9ms)
+
+
+  1) tests\admin-bff-contract.spec.js:733:1 › admin products never turn missing or malformed stock projections into healthy totals 
+
+    Error: expect(received).toBeNull()
+
+    Received: 0
+
+      745 |     }
+      746 |     const result = await readAdminProducts(client)
+    > 747 |     expect(result.products[0].stock_available).toBeNull()
+          |                                                ^
+      748 |     expect(result.unavailable).toEqual([{ key: 'stock', code: 'QUERY_UNAVAILABLE' }])
+      749 |   }
+      750 | })
+        at C:\Users\jerze\K2 JImzon\tests\admin-bff-contract.spec.js:747:48
+
+    Error Context: test-results\admin-bff-contract-admin-p-1522d-ections-into-healthy-totals\error-context.md
+
+  1 failed
+    tests\admin-bff-contract.spec.js:733:1 › admin products never turn missing or malformed stock projections into healthy totals 

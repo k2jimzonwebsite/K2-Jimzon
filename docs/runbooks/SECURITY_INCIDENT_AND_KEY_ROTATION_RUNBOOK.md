@@ -1,7 +1,23 @@
 # K2 Jimzon Security Incident and Key Rotation Runbook
 
+13 September scanner correction (IDEA-20260913-02): complete reviewed template
+values are exempt, not credential substrings such as `example`. Eighteen negative
+fragment fixtures and current-tree/history scans pass. New templates require an
+explicit reviewed value and regression test; never broaden substring exemptions
+to silence a scan. This correction establishes detection behavior, not absence
+of every possible credential leak. Evidence: `../evidence/20260913-audit-remediation/`.
+
 This is an operational runbook and evidence record, not a backlog. Active work
 remains exclusively in `MASTER_ACTION_PLAN.md`.
+
+13 September scanner verification: `security:gate` and the complete Git history
+scan pass after correcting three historical documentation false positives.
+Only the exact partner-key placeholder, Gemini placeholder and Required-for
+prose line are recognized; negative regression cases retain detection for
+credential-like extensions and comment-contained assignments. No history or
+provider credentials were changed. Evidence and commands:
+`docs/evidence/20260913-map-verification/README.md`. A scanner pass is not proof
+that all providers have completed rotation or deployment acceptance.
 
 ## Browser diagnostic boundary
 

@@ -1,5 +1,472 @@
 # K2 Jimzon — System Brain (Current State)
 
+**16 September catalog batch stock reconciliation, permission grants, and full audit remediation (IDEA-20260916-02, MAP-028 K, database live on Supabase / code locally verified):**
+Resolved critical inventory, catalog, permission, and RLS policy blockers identified during the 16 September full-project audit:
+1. **Catalog Batch Stock & Inventory Balances (Resolves K-01 & K-02, Live on Supabase `pixplcjqivlfflickobf`):** Executed migration `20260916_catalog_stock_reconciliation_and_grants.sql`. Reconciled 21 authentic Italian batch SKUs with physical lots from `public.product_batches`: `products.stock_available = 931`, `products.total_stock = 931`. Populated 29 location balances in `public.inventory_balances` (`location_code = 'MANILA_MAIN'`). Retired legacy mock uppercase SKUs (`LAV-ORO-1KG`, `MUT-PAS-400`, `NUT-BIS-304`, `PST-GEN-190`, `TRF-OIL-500`) to `status = 'Discontinued'`, `published = false`, `stock_available = 0`, eliminating staff confirmation lot reservation crashes.
+2. **Stock Projection View Grants (Resolves K-04, Live on Supabase):** Granted `EXECUTE` on `public.get_public_product_stock()` and `SELECT` on `public.v_product_stock_from_batches` to `PUBLIC, anon, authenticated, service_role`. Live query tested and verified: returns 21 rows and 931 sellable units without PostgreSQL 42501 permission denied errors.
+3. **RLS Policy for Unlisted Direct-Link Products (Resolves K-05, Live on Supabase):** Updated `products_public_live_read` and `products_authenticated_read` to allow `status IN ('Live', 'Active', 'Unlisted')`, ensuring anonymous visitors navigating to `/product/:sku` for unlisted products can read and buy.
+4. **Public Assortment Publication (Resolves K-06, Live on Supabase):** Set `published = true` for all 21 verified authentic Italian batch products. Public storefront catalog query returns 22 live published items with 931 available units, resolving the 0-stock storefront presentation.
+5. **Confirmation & Checkout Copy Parity (Resolves K-10, Local):** Updated `src/views/Confirmation.jsx` and `src/views/Checkout.jsx` to state "verify inventory in Manila, review order and delivery details, and send payment instructions directly to you". Added email fallback in `src/views/GuestMessages.jsx` when guest BFF is disabled.
+6. **Verification Evidence:** All 659 contract and browser tests PASS (651 contract + 8 selling surfaces); `npm run prebuild` clean (1031 tracked files, 0 secret leaks, 0 boundary gaps); Storefront (149.89 kB / 150.50 kB gzip) and Admin (191.12 kB / 300.00 kB minified) builds PASS within budgets. Database changes permanently active on Supabase production (`pixplcjqivlfflickobf`).
+
+**16 September automated delivery quotation, weight matrix, and checkout parity (IDEA-20260916-01, MAP-023 / MAP-018, database live on Supabase / code locally verified):**
+Implemented Shopee/Lazada-style real-time delivery calculation and confirmation across Storefront, BFF, Database, and Admin BOS:
+1. **Shipping Engine (`src/lib/cartShippingCalculator.js`):** Computes packed cart weight from item attributes (defaulting to 500g for unspecified provisions). Calculates instant delivery options based on the owner-approved matrix and destination region (`NCR`, `Greater Luzon`, `Visayas`, `Mindanao`, `Pickup`). Base rates: NCR Standard ₱95, Express Dispatch ₱150; Greater Luzon Standard ₱85; Visayas ₱100; Mindanao ₱105; Pickup ₱0 free; overweight scaling at +₱35/kg above 3kg. Method names strictly adhere to fulfillment allowlists (`'Metro Manila delivery'`, `'Metro Manila Express Dispatch'`, `'Courier delivery'`, `'Pickup'`). Unit tests: `tests/cart-shipping-calculator.spec.js` (7/7 PASS).
+2. **Storefront BFF Validation (`prepared-api/storefront/order.js`):** Revalidates incoming `shippingAmount` via `strictNumeric` (0 to 100,000) and `shippingQuoteStatus` (`'customer_confirmed'`). Passes confirmed shipping fee and status to database RPC. Contract tests: `tests/automated-delivery-quotation-contract.spec.js` (3/3 PASS) and `tests/guest-commerce-bff-contract.spec.js` (17/17 PASS).
+3. **Database Execution on Supabase Production (`pixplcjqivlfflickobf`):** Permanently applied DDL via Supabase Management API per explicit owner direction: added `payment_evidence jsonb NOT NULL DEFAULT '{}'::jsonb` to `public.order_requests`. Updated `public.submit_order_request_v2` with `('Live', 'Active', 'Unlisted')` product ordering support (Queue Item 12) and parameters `p_shipping_amount numeric DEFAULT 0`, `p_shipping_quote_status text DEFAULT NULL`. When `customer_confirmed`, it persists shipping fee, sets `shipping_quote_status = 'customer_confirmed'`, sets `delivery_status = 'ready_to_pack'`, timestamps `customer_delivery_confirmed_at = now()`, and calculates `total_amount = subtotal - discount + shipping_amount`. Dropped obsolete 9-arg overload. Live dry-run verified: returned order `WEB-D48394A695` (`subtotal: 499`, `shipping: 95`, `total: 594`, `delivery_status: ready_to_pack`). Rollback script at `supabase/migrations/20260916_automated_delivery_quotation_rollback.sql`.
+4. **Storefront Checkout UX (`src/views/Checkout.jsx` & `src/context/StoreContext.jsx`):** Renders Shopee/Lazada-style delivery option cards with badges (`Recommended`, `Fastest`, `Free`), courier hints, ETAs, and real-time peso pricing. Integrated with a live package weight indicator (`📦 X.X kg · N pkg`) and real-time destination region selector. Maintains the exact `"Delivery address"` input label and exact submit button label `"Submit order request"`, satisfying recovery UI contracts while showing the full order breakdown (Subtotal, Voucher, Delivery fee, Grand Total) in the order summary.
+5. **Admin BOS Operational Visibility (`src/views/admin/OmniOperationsHub.jsx`):** Confirmation queue displays delivery status (`Delivery: ₱XX` / `Free` in forest green when customer-confirmed). `DeliveryDetailsModal` auto-detects courier name based on service tier (e.g., Lalamove for Express, J&T Express for Standard, Warehouse Pickup for Pickup), marks confirmed, and pre-fills an operational communication note.
+6. **Verification Evidence:** `npm run prebuild` (clean, 0 secret leaks, 0 boundary gaps), `npm run test:base` (863/863 PASS), `tests/smoke.spec.js` (20/20 PASS), `tests/storefront-recovery-ui.spec.js` (14/14 PASS), isolated Storefront build (149.89 kB / 150.50 kB gzip), isolated Admin build (191.12 kB / 300.00 kB minified). Database schema & RPC live in production on Supabase (`pixplcjqivlfflickobf`). Code deployment to Vercel pending git push to `main`.
+
+**16 September 'Unlisted' products direct link ordering parity (Queue Item 12, MAP-023, local):**
+Resolved documented inconsistency between Admin/Storefront documented meaning and database order submission RPC:
+1. **Documented Meaning Parity:** In `src/views/admin/InventoryGrid.jsx:36`, `Unlisted` is documented as "Hidden from browse — direct link still works". `StoreContext.jsx:302` queries `in('status', ['Live', 'Active', 'Unlisted'])`, withholding `Unlisted` products from the browse grid (`listedProducts`) while allowing direct navigation to `/product/:sku`.
+2. **Database RPC Migration (`supabase/migrations/20260916_allow_unlisted_product_orders.sql`):** Updated `public.submit_order_request_v2` allowlist from `('Live', 'Active')` to `('Live', 'Active', 'Unlisted')`. An unlisted, published product can now be checked out via direct link rather than failing with an unexpected `ORDER_SERVICE_UNAVAILABLE` error. Rollback script prepared at `supabase/migrations/20260916_allow_unlisted_product_orders_rollback.sql`. Preflight and postflight registration checks enforced; anon direct grant excluded to preserve the signed guest cutover (`20260812_guest_submission_cutover.sql`).
+3. **Local Loopback PostgreSQL Rehearsal (`scripts/rehearse-purchase-time-reservation.mjs`):** Verified 48/48 properties in isolated PostgreSQL 17.11 loopback cluster (port 54331):
+   - Prior to migration: order submission for an Unlisted product fails with `Product % is not available for website orders`.
+   - Migration applies and replays idempotently without errors.
+   - Post-migration: Unlisted product order succeeds with lot hold; Draft product order remains refused.
+   - Rollback restores original check; reapplying allows Unlisted again.
+4. **Contract Verification (`tests/unlisted-product-ordering-contract.spec.js`):** 5/5 PASS. Full contract suite (647/647 PASS); prebuild clean; Admin build passes (191.12 kB / 300.00 kB); Storefront build passes (149.74 kB / 150.50 kB gzip). Prepared remote execution and Vercel verification guide in `docs/runbooks/SUPABASE_MIGRATION_AND_DEPLOYMENT_HANDOFF.md`. Queue Item 12 removed from `MASTER_ACTION_PLAN.md`.
+
+**16 September AI Prompt Studio mounting and spec alignment (Queue Item 13, MAP-021, local):**
+Resolved documented orphan component in `src/components/admin/master-workflow-graph/`:
+1. **Component Enhancement (`AiPromptStudioCard.jsx`):** Upgraded category selector buttons with `aria-pressed`, `focus-visible:ring-2`, and $\ge 44$px touch targets (`min-h-11`). Added `aria-label` and `min-h-11` to copy buttons with asynchronous clipboard write and fallback handling. Enforced $\ge 12$px typography floor.
+2. **Mounting in Master Workflow Graph (`MasterWorkflowGraph.jsx`):** Mounted `<AiPromptStudioCard />` in a dedicated semantic `<section aria-label="AI Image Studio and Prompt Engineering">` below the step drilldown drawer.
+3. **Specification & Contract Verification (`tests/workflow-graph-canvas.spec.js`):** Added contract assertion proving `MasterWorkflowGraph.jsx` imports and mounts `AiPromptStudioCard`, and that `docs/specs/MASTER_WORKFLOW_GRAPH_SPEC.md` matches the mounted component. 4/4 canvas/spec contracts pass; full contract suite (642/642 PASS); prebuild clean; Admin build passes (191.12 kB / 300.00 kB); Storefront build passes (149.74 kB / 150.50 kB gzip). Queue Item 13 removed from `MASTER_ACTION_PLAN.md`.
+
+**16 September inventory readiness end-to-end journey and local rehearsal verification (MAP-023, local):**
+Verified the composed UI/BFF/RLS journey from manual intake → field review → Draft product → declared Italy manifest → Milan packing scans → Manila arrival scans → final receipt → canonical stock batches and balances:
+1. **Local Loopback PostgreSQL Rehearsal (`scripts/rehearse-inventory-readiness.mjs`):** Exercises the complete 9-step inventory lifecycle in isolated PostgreSQL 17.11 (`.tools/postgresql-17.11/runtime/pgsql/bin`):
+   - Product Draft creation via `create_product_draft_server` with internal K2 SKU generation and duplicate SKU rejection.
+   - Consignment flight/manifest declaration (`create_consignment_manifest`, `add_consignment_item_v2`) with zero on-hand stock and `Packing_Italy` status.
+   - Milan packing scans (`record_consignment_item_scan`) incrementing packed count with over-packing boundary prevention.
+   - Manifest transit advancement (`advance_consignment`) requiring sealed/in-transit states before receiving.
+   - Manila arrival scans with shortage logging (`result: missing_on_arrival` in `inventory_events`), physical vs sellable stock quarantine separation (items with shelf-life < 90 days quarantined into `inventory_status = 'quarantine'`; physical `on_hand = 25`, sellable `stock_available = 20`).
+   - Idempotent receipt retry (`finalize_consignment_receipt`) preventing duplicate balance writes or event duplication.
+   - Authorized opening balance reconciliation (`reconcile_product_batches`) requiring AAL2/Admin credentials.
+   - Security fail-closed defenses: non-admin refusal, undeclared arrival goods scan refusal, and supplier receipt refusal (`K2_SUPPLIER_RECEIPT_WORKFLOW_UNAVAILABLE`), plus direct table write blocking via RLS.
+2. **Composed Contract Test Suite (`tests/inventory-readiness-composed.spec.js`):** Added 5 composed contract test suites:
+   - Rehearsal script execution and invariant assertion.
+   - BFF consignment command validation (missing parameters, negative quantities, invalid barcodes, unauthorized transitions).
+   - Product intake BFF validation (draft creation, price validation, category assignment, duplicate rejection).
+   - Client-side scan target selection and refusal reasons (`src/views/admin/consignmentScanTarget.js` — `selectManifestItem`, `scanRefusalReason`).
+   - ConsignmentManager UI workflow guards (status badge rendering, flight detail drawer, manifest line display, scan modal locking).
+3. **Verification Evidence:**
+   - `node scripts/rehearse-inventory-readiness.mjs` (exit code 0; products=3, batches=3, manifests=1, scan_events=28, inventory_events=3, total_on_hand=25, total_sellable=20).
+   - `node scripts/rehearse-map023-last-unit-concurrency.mjs` (exit code 0).
+   - `npm run test:contracts` (641/641 PASS).
+   - `npm run prebuild` (security gates, dependency policy, surface inventory, secret scan, and import integrity all PASS).
+   - `npm run build:admin` (191.12 kB / 300.00 kB minified, 0 secrets, static 404 and admin discovery tags emitted).
+   - `npm run build:storefront` (149.73 kB / 150.50 kB gzip JS, 27.80 kB / 30.00 kB gzip CSS, 0 secrets).
+Locally prepared and verified; remote Supabase migration and production activation remain pending the authorized MAP-017 window.
+
+**16 September structured manual payment evidence record and distinct verification (AUD-OPS-001, MAP-023 §16, MAP-019, local):**
+Implemented structured manual payment evidence storage, strict validation, distinct verifier separation of duties, and Staff Admin UI:
+1. **Database Schema & RPC Migration (`supabase/migrations/20260916_structured_payment_evidence.sql`):** Added `payment_evidence jsonb` to `order_requests`. Updated `set_order_request_payment_status` to validate method whitelist (`gcash`, `bank_transfer`, `maya`, `cash`, `other`), positive numeric amount, `PHP` currency, nonblank payer name ($\le 140$ chars), nonblank reference ($\le 100$ chars), and optional proof URL/ref ($\le 500$ chars). Enforces separation of duties: when transitioning to `verified`, the verifier confirming funds arrived in the merchant account must not be the submitter who recorded evidence (`auth.uid() <> v_submitter`). Patched `execute_admin_fulfillment_command_v1` to support structured evidence parameter. Rehearsed in `supabase/tests/payment_recovery_behavior.sql` and `scripts/rehearse-payment-recovery.mjs` against local PostgreSQL 17.11 (exit 0).
+2. **Admin BFF Validation (`server/admin-bff/fulfillment.js`):** Extended `validateFulfillmentCommand('payment_status', ...)` with strict type and format guards; added granular error codes (`PAYMENT_METHOD_INVALID`, `PAYMENT_AMOUNT_INVALID`, `PAYMENT_CURRENCY_INVALID`, `PAYMENT_PAYER_INVALID`, `PAYMENT_REFERENCE_INVALID`, `PAYMENT_PROOF_INVALID`) in `handleFulfillmentCommand`. Projected `payment_evidence` across `order_requests` reads. Mapped error messages in `src/services/adminBffService.js`.
+3. **Staff Admin UI (`src/views/admin/OmniOperationsHub.jsx`):** `PaymentStatusModal` renders structured evidence inputs (method selector, positive amount in PHP, payer name, reference number, optional proof asset URL/ref, notes) when target state is `evidence_submitted`. When target state is `verified`, it renders a structured evidence review card and an explicit merchant account check confirmation checkbox ("I independently checked the merchant receiving account and confirmed funds arrived") and requires a reconciliation note. Added `noValidate` on the form to allow React-driven validation without browser popup suppression and enforced the $\ge 12$px (`text-xs`) typography floor.
+Verified by: `node scripts/rehearse-payment-recovery.mjs` (exit 0), `tests/admin-bff-contract.spec.js` (66/66 PASS), `tests/payment-recovery-ui.spec.js` (36/36 PASS in `playwright.payment.config.js`), full contract suite (636/636 PASS), prebuild clean, Admin application build (191.12 kB / 300.00 kB minified), Storefront build (149.73 kB / 150.50 kB gzip JS, 27.80 kB / 30.00 kB gzip CSS), 0 secrets. Locally prepared and verified; remote migration and production activation remain pending the approved MAP-017 window.
+
+**15 September delivery estimate parent state clearing and quote lifecycle (MAP-019/023 I-003, local):**
+In `src/components/DeliveryEstimate.jsx`, resolved quote retention lifecycle:
+1. When destination, weight, or subtotal changes (`localityId`, `weightG`, `subtotalMinor`), `setQuote(null)` and `onQuote?.(null)` are immediately dispatched alongside `setChecking(true)` before asynchronous rate calculation resolves. This guarantees parent state never displays or commits a stale fee while a new quote is calculating.
+2. If `quotable` becomes false (e.g., cart lines become unweighed or empty) or `localityId` is cleared, parent quote state is immediately cleared to null.
+3. In `Checkout.jsx`, manual quoting remains current launch behavior ("Courier delivery is quoted for approval after review; nothing is charged here"); the pilot `DeliveryEstimate` component remains unmounted in checkout until remote immutable quote persistence is active under MAP-017/G-001.
+Verified by contract tests in `tests/delivery-quote-parity.spec.js` (10/10 PASS). Contracts suite passes 635/635 tests. Production builds pass within budget. Locally prepared work; remote deployment remains open.
+
+**15 September storefront checkout error recovery, idempotent retries, and customer edit lifecycle (MAP-019/023 I-004, local):**
+Resolved checkout recovery lifecycle in `StoreContext.jsx` and `Checkout.jsx` under uncertain network outcomes, server rejections, and customer modifications:
+1. **Payload Invalidation & Idempotency Key Isolation (`src/context/StoreContext.jsx`):** The checkout request key (`checkoutRequestKeyRef.current`) is bound strictly to the held pending checkout attempt. Adding items, bundles, or changing item quantities in the cart (`addToCart`, `addBundleToCart`, `setQty`) or applying/removing coupons (`applyCoupon`, `removeCoupon`) invalidates held checkout state via `resetPendingCheckout()`, clearing `checkoutPayloadRef.current`, `pendingCheckout`, and resetting the request key to empty so that edited order contents are always submitted with a fresh idempotency key (`crypto.randomUUID()`).
+2. **Immediate Unlock on Server Rejections (`src/context/StoreContext.jsx`):** Removed `!recovering` gate from server rejection handling in `runPlaceOrderRequest`. Definite rejection codes (`result.code?.endsWith('_INVALID')`, `INSUFFICIENT_STOCK`, `CONTACT_REQUIRED`, `BOT_CHALLENGE_REQUIRED`, `INVALID_REQUEST`, `RATE_LIMITED`, `INVALID_OR_INELIGIBLE`) immediately invoke `resetPendingCheckout()` to unlock disabled fieldsets on initial submissions and retries alike, preventing customers from becoming trapped in disabled fieldsets upon validation errors.
+3. **Accessible Customer Recovery Flow (`src/views/Checkout.jsx`):** When `pendingCheckout` is held, form values (`name`, `email`, `phone`, `address`, `fulfillmentMethod`, `note`) are preserved. Added an accessible secondary action button ("Edit order or contact details") meeting the $\ge 44\times 44$px touch target invariant (`min-h-11`) with clear focus rings. Clicking this action clears held checkout state, enables all fieldsets for immediate revision, and generates a fresh idempotency key upon resubmission. Bot challenge tokens are reset and the Turnstile widget key is incremented on each submission.
+Verified by 4 new Playwright browser scenarios in `tests/storefront-recovery-ui.spec.js` (14/14 PASS across the full recovery suite). Contract test suite passes 627/627 (619 contract tests + 8 selling surfaces e2e tests). Separate production builds pass within strict budgets: Storefront landing JS 149.73 kB <= 150.50 kB gzip, CSS 27.80 kB <= 30.00 kB gzip; Admin application 191.12 kB <= 300.00 kB minified; 0 secrets. Evidence: `docs/evidence/20260915-checkout-recovery/README.md`. Locally prepared and verified; remote activation remains open.
+
+**15 September product-led storefront, curated related provisions, and mobile catalog scanning density (MAP-023/027 I-009, local):**
+Eliminated full-catalog repetition on single product detail pages and improved mobile catalog scanning density:
+1. **Product Detail Scope (`src/views/MasterProduct.jsx`):** Replaced `<CatalogGrid />` (which previously dumped search inputs, category pills, sorting, and all 50+ items beneath product specs) with `RelatedProducts`. The curated section selects up to 4 provisions prioritizing the active product's category or subcategory, renders responsive 2-column mobile cards (`grid-cols-1 min-[370px]:grid-cols-2 md:grid-cols-4`) via `<ProductCard compact />`, and provides an explicit, accessible call-to-action button ("Browse full catalog") with `ArrowIcon` and $\ge 44$px touch target (`min-h-11`) navigating to `/catalog`. Unused `CatalogGrid` import removed from `MasterProduct.jsx`, reducing product chunk size from >30 kB to 24.51 kB.
+2. **Mobile Catalog Scanning Density (`src/components/CatalogGrid.jsx`):** Adjusted the 2-column breakpoint from `min-[420px]` to `min-[370px]`. Standard mobile viewports (375px - 414px) now render a balanced 2-column grid instead of a single massive card per row, doubling product scan density while preserving legible typography and $\ge 44\times 44$px touch targets (`ProductCard` action buttons).
+Verified by dedicated contracts in `tests/storefront-truth-contract.spec.js` (14/14 PASS), full contracts suite (627/627 PASS + 8/8 selling surfaces PASS), and storefront recovery suite `tests/storefront-recovery-ui.spec.js` (10/10 PASS). Production builds pass within budgets: Storefront landing JS 149.74 kB <= 150.50 kB gzip, CSS 27.80 kB <= 30.00 kB gzip, Admin application 191.12 kB <= 300.00 kB minified, 0 secrets. Evidence and visual captures: `docs/evidence/20260915-product-led-catalog/README.md`. Locally prepared and verified; production deployment remains open.
+
+**15 September mobile store overlay collision removal, touch targets, and visual reflow (MAP-027 I-015, local):**
+Reflowed `/store` overlay layout in `src/interactive-store.css` across mobile portrait (375×812) and landscape (844×390) viewports to eliminate bounding box collisions between the 3D Counter scene, shopkeeper toggle/dialogue card, zoom controls, and floating basket dock.
+1. **Empty basket hidden:** `.k2-store-basket-dock[data-filled='false']` set to `display: none;`, keeping the 3D counter, shelf banners, and room canvas completely unobstructed.
+2. **Filled basket dock relocated & reflowed:** On screens `max-width: 900px`, relocated the filled basket from top-center (`top: 0.5rem; right: 4rem`) down to the bottom-right directly above the product rail (`bottom: calc(44px + 1.15rem); right: 0.75rem; top: auto; left: auto; z-index: 9`). Transformed into a compact horizontal pill (`min-height: 48px; border-radius: 999px; padding: 0.3rem 0.55rem 0.3rem 0.65rem; background: linear-gradient(145deg, #FFFDF8, #EBDCC6); box-shadow: 0 10px 26px rgba(45, 28, 13, 0.24), inset 0 1px rgba(255, 255, 255, 0.85)`). The "Review basket" button meets the $\ge 44\times 44$px touch target invariant with `min-height: 44px; padding: 0 0.85rem; border-radius: 999px; font-size: 0.78rem; font-weight: 750; white-space: nowrap;`. Parcel icon scaled to `width: 2.85rem; height: 2.3rem; transform: scale(0.72);` preventing handle overlap into copy.
+3. **Shopkeeper card overlay constrained:** Top-anchored (`top: 0.6rem; left: 0.6rem; z-index: 25; width: min(22rem, calc(100% - 1.2rem))`), constrained to `max-height: calc(100% - 9rem); display: flex; flex-direction: column;` with a scrollable dialogue panel (`max-height: min(10.5rem, calc(100% - 3.5rem)); overflow-y: auto;`). Guarantees $\ge 16$px vertical clearance above the basket dock when fully expanded, preventing dialogue overlap.
+4. **iOS auto-zoom fix:** `#keeper-question` input styled at `font-size: 1rem;` (16px) to prevent iOS Safari auto-zooming the viewport on focus.
+5. **Overflow and rail protection:** Zero horizontal overflow (`document.documentElement.scrollWidth <= innerWidth`); product rail buttons protected with `max-width: min(80vw, 22rem); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;`.
+Verified by dedicated tests: `tests/store-overlay-collision.spec.js` (5/5 tests pass in `playwright.store-orientation.config.js`), full contract suite passes 625/625 + 8 selling surfaces tests. Production builds pass within strict budgets: Storefront landing JS 149.76 kB <= 150.50 kB gzip, CSS 27.77 kB <= 30.00 kB gzip, Admin application 191.12 kB <= 300.00 kB minified, 0 secrets exposed. Evidence & visual captures: `docs/evidence/20260915-store-overlay-collisions/README.md`. Locally prepared and verified; production deployment remains open.
+
+**15 September staff workspace completeness, recoverable dialogs, and navigable admin work context (MAP-019/021/023 I-012, H-007, H-024, H-025, local):**
+Fulfillment reads in `server/admin-bff/fulfillment.js` enforce explicit bounding limits (`FULFILLMENT_READ_LIMITS`: submitted 200, confirmed 200, lots 1000, staff 50) and return structured completeness metadata (`returned`, `limit`, `truncated`). `OmniOperationsHub.jsx` captures completeness in state and renders an accessible truncation warning banner (`role="alert"`). Shared dialog primitive policy enforced across all inline Admin workflows via `AdminDialog` (`DiscrepancyReconciliationModal.jsx`, `StaffPermissionManager.jsx`, `ConsignmentManager.jsx`, `GlobeCms.jsx`, `ChannelIntegrations.jsx`) with `closeDisabled` write locks disabling dismiss and cancel controls while async operations are in-flight (`busy`, `working`, `finalizing`). Admin work context in `src/views/admin/Admin.jsx` implements `SECTION_ALIASES`, `resolveAdminSection`, and `readInitialSection`, synchronizing active sections with the URL search param (`?section=...`) via `window.history.pushState`, handling browser Back/Forward navigation through `popstate`, and maintaining accessible focus handoff on section heading landmarks (`desktopHeadingRef`, `mobileHeadingRef`).
+Verified by dedicated tests: `tests/admin-bff-contract.spec.js` (completeness read bounds), `tests/admin-dialog-contract.spec.js` (7/7 dialog contract tests pass), and `tests/admin-dashboard-redesign.spec.js` (URL sync, deep linking, alias resolution, and history navigation pass). Full contract test suite passes 625/625 + 8 selling surfaces tests. Admin UI suite passes 33/33 tests (`admin.spec.js` + `admin-dashboard-redesign.spec.js`). Production builds pass within budgets: Admin application 191.12 kB <= 300.00 kB minified; Storefront landing JS 149.77 kB <= 150.50 kB gzip, CSS 27.77 kB <= 30.00 kB gzip. Security gates clean. Evidence: `docs/evidence/20260915-staff-workspace-and-dialogs/README.md`. Locally prepared and verified; production BFF deployment remains disabled.
+
+**15 September storefront media fallback, 44px touch targets, discovery sort, mobile buying hierarchy, and launch truth (MAP-028 I-008, I-005, I-006, I-007, local):**
+Media failure handling in `StorySection.jsx` and `InteractiveReveal.jsx` provides honest neutral placeholder fallback (`/images/placeholder.svg`) with stable geometry and dataset guards. Touch targets meet the 44px invariant (`min-h-11`, `min-w-11`) across New Arrivals navigation arrows and MasterProduct breadcrumbs/tabs. Catalog discovery sorting (`src/lib/catalogSort.js`) provides explicit comparator logic for 'latest' (descending `created_at` timestamp, deterministic ID tie-breaking, safe null date handling), 'popular', 'price_asc', and 'price_desc'. `CatalogGrid.jsx` integrates 'latest' ("Newest arrivals") option. `StoreContext.jsx` queries Supabase products ordered newest-first (`.order('created_at', { ascending: false })`), preserves `created_at` in normalized records, parses URL search params (`q`, `category`, `sort`) on `/catalog`, updates browser history on filter/sort changes via `replaceState`, and restores filter and sort states on browser popstate. `MasterProduct.jsx` reorders product detail hierarchy so that allergen safety notices (`role="alert"`) and purchase actions (quantity stepper, stock status, and add-to-cart/Pasabuy submission) precede product descriptions, provenance passports, and specifications on all viewports, ensuring mobile shoppers can buy immediately without scrolling past secondary content or missing allergen warnings. Public promises across `site.js` FAQs, Hero, Checkout, Confirmation, and Contact surfaces reconcile strictly with manual launch operating facts (manual GCash/QR planned for launch upon staff stock/quote confirmation; delivery quoted and confirmed per order; no false 1-2 day delivery or 2-3 week Pasabuy transit SLAs; no unapproved Maya/bank/COD payment methods; no self-service returns or instant confirmations).
+All 28 focused storefront truth/discovery contracts and 3 storefront copy contracts pass (`tests/storefront-truth-contract.spec.js`, `tests/storefront-discovery-contract.spec.js`, `tests/storefront-copy-contract.spec.js`). Full contract test suite passes 627/627 (619 contract tests + 8 selling surfaces e2e tests). Production builds pass within strict budgets: Admin application 189.73 kB <= 300.00 kB minified; Storefront landing JS 150.40 kB <= 150.50 kB gzip, CSS 27.74 kB <= 30.00 kB gzip. Security, dependency policy, and tracked file checks pass cleanly. Locally prepared and verified; production deployment remains open.
+
+**15 September inventory commitment and owned-stock verification (MAP-028 I-001, local):**
+Derived owned-stock read boundary (`src/lib/ownedStock.js`) and Admin consumers (`InventoryGrid.jsx`,
+`BatchExpiryManagerModal.jsx`, `server/admin-bff/lots.js`) implemented and verified. Owned stock is
+strictly a derived read projection with zero second writable balance, computing physical on hand,
+purchase holds, committed owned stock, available sellable stock, and flagging unattributed allocations
+as `reconciliationRequired: true`. Deadline extensions on committed reservations fail-closed with
+`RESERVATION_ALREADY_COMMITTED` and committed reservations cleanly leave `v_reservations_due`. All 8
+concurrent writer races (payment vs confirmation, payment vs cancellation, payment vs expiry sweep,
+recount vs payment, custody transfer vs confirmation, consignment receiving vs confirmation, handover vs
+cancellation, channel allocation vs confirmation) serialize without deadlock or balance corruption in
+`scripts/rehearse-purchase-time-reservation.mjs` (47/47 properties PASS). Full test contracts pass
+620/620; prebuild clean; Admin (189.73/300 kB) and Storefront (150.31/150.50 kB JS, 27.56/30 kB CSS)
+separate production builds pass within budget. Locally prepared work; production activation remains
+gated on MAP-017 and live database migration. Evidence: `docs/evidence/20260914-map-remediation/README.md`.
+
+**15 September intake recovery (IDEA-20260914-02, local):** secure session
+creation retains its inner request ID and outer key; evidence upload retains the
+original file, session, slot and key until the receipt matches canonical evidence.
+Malformed resume data dispatches no create. A later retry denial cannot release
+an earlier uncertain outcome. All 19 synthetic intake browser tests passed;
+current base acceptance passed 820 tests. Separate builds and prebuild passed:
+Storefront 150.31/150.50 kB landing JS gzip, 27.63/30 kB CSS; Admin
+189.73/300 kB app minified. Evidence and exact commands:
+`docs/evidence/20260914-map-remediation/README.md`. I-002 still owns full
+navigation, durable identity/reconciliation, legacy transport and real signed
+receipt/storage acceptance. No production activation or provider write occurred.
+
+**14 September inventory, delivery quote, and admin command accessibility remediation (F-021-001, F-023-002, F-028-003, local):**
+InventoryGrid distinguishes unknown stock (`stock_available` null/undefined) from out-of-stock, matching Overview availability semantics without inflating out-of-stock counts.
+`guestCommerceService.calculateDeliveryQuote` preserves `result.quote` property parity required by `DeliveryEstimate.jsx` (mounting in Checkout remains gated behind I-003 order persistence).
+Admin action controls and navigation links meet 44px touch targets across Sheet, InventoryGrid, and Admin shell (`min-h-11`); OmniOperationsHub packing queue adds responsive phone cards for screens `<lg`; OmniOperationsHub dialogs (`HandoverDialog`, `DeliveryDetailsModal`, `PaymentStatusModal`) and Suppliers `SupplierDialog` accept and forward `returnFocusRef` to deterministically restore trigger focus; `adminBffService.js` provides explicit human-readable staff instructions for `AAL2_REQUIRED`, `MFA_REQUIRED`, `STAFF_ACCESS_REQUIRED`, `SESSION_REVOKED`, and `FORBIDDEN_ROLE` without falling back to generic service unavailability.
+Failing-first test suite `tests/admin-retained-command-gaps.spec.js` passes 11/11; contracts suite passes 613/613; Admin UI passes 32/32; prebuild (surfaces 92/15, 0 gaps) and separate Admin/Storefront production builds pass within budget. Locally prepared work; production BFF remains disabled.
+
+**14 September review and crawler correction (IDEA-20260914-02, local):**
+remote review reads no longer substitute demo testimonials for empty/error
+responses; the review globe distinguishes those states. Account/messages/
+checkout/confirmation use scoped noindex metadata and prepared Vercel headers.
+Nine current storefront recovery cases passed, including the pending unload
+guard, refreshed gallery and both review-source failures. Media orphan-review
+age now rejects alternate numeric syntax/repeated query values while retaining
+the 60-minute default and 60–10080 bounds; 75 focused BFF/validation tests passed.
+Base acceptance passed 806 tests after updating the older product-only noindex
+assertion. Separate builds passed: Storefront 150.30/150.50 kB landing gzip and
+Admin 189.73/300 kB app minified; current prebuild checks passed. These are local
+artifacts, not deployed behavior. The wholesale alias redirect/canonical and
+publication refresh continuation are tracked in the existing MAP owners.
+
+**14 September intake continuation (IDEA-20260914-02, local):** automatic
+field-review transition now uses the existing retained intake command and keeps
+reviewed content until the exact receipt is recovered. Complete synthetic intake
+acceptance passed 10/10, including failed-response replay and actor disposal.
+Sheet has the Grid's actor/role remount key; full Sheet navigation acceptance
+is still open. Checkout additionally guards accidental unload while unresolved
+and ignores coupon validations that arrive after its payload is frozen. This
+does not provide durable checkout recovery after reload. Evidence and fixture
+limitations: `docs/evidence/20260914-map-remediation/README.md`.
+
+**14 September MAP-019 remediation (F-019-002, local):** both BFFs now enforce
+one shared strict-numeric rule (`server/shared-numeric.js`): canonical numbers
+and canonical numeric strings pass, while `true`/`''`/`[]`/`null` and
+non-canonical text are rejected with each module's own error code across Admin
+coupons/pasabuy/lots/procurement/intake/globe/marketplace validators.
+Failing-first `tests/admin-bff-numeric-coercion.spec.js` went 7 red to 8 green;
+contracts 573+8, base 782, admin/intake-ai/payment UI suites and both isolated
+builds pass. Evidence: `docs/evidence/20260914-map-remediation/README.md`.
+Locally prepared, not deployed; the Admin BFF stays disabled. F-019-001
+(payment evidence) still waits on owner decisions. F-019-003 also remediated
+locally 14 September: Wholesale step-1 copy is path-conditional and Contact
+carries one consistent reviewed-hours statement (copy spec 2/2, contracts
+575+8, base 784, storefront-ui 31, both builds pass). F-028-001/002 remediated
+locally 14 September: inbox visible-page counts, template confirm, same-command
+uncertain retry, history actors, coupon Admin blocker + two-step archive, photo
+and deletion recovery, 10-char audit reasons, owner-close key retention
+(inbox-ui 32, payment-ui 34, contracts 580+8, base 789). F-020-001 remediated
+locally 14 September: hostname-bound single-use bot challenges with fail-closed
+secrets (contract 5/5, contracts 585+8, base 794, all guest/admin/storefront
+suites and both builds pass). F-020-002/003/004 remediated locally 14
+September: Shopee 405-on-GET with fail-closed pre-filter and strict env
+(webhook spec 10/10 + ingress rehearsal), retention-only legacy media URLs,
+and bounded in-memory flood shields in both routers (contracts 594+8, base
+803, payment-ui 34, both builds pass).
+
+**14 September autonomous remediation (IDEA-20260914-02, local):** the browser
+now retains an uncertain checkout payload/key, freezes its cart/contact/coupon
+edits, and renews the bot challenge after submission. Pasabuy, messages and
+wholesale also renew failed-submission challenges. Retention currently lasts for
+the mounted StoreProvider; hard reload recovery is not established. Cookie decode
+failures are isolated per cookie. Customer history metrics require exact counts
+matching every loaded supporting history. Canonical product projections no longer
+inherit demo facts/media; missing stock remains unknown, unsubstantiated passport
+claims are removed, and gallery refresh clamps the active image. The phone product
+page places buying information/actions before supporting tabs; tabs/breadcrumbs
+have 44px targets, checkout has an associated coupon label, the unsupported Latest
+sort is removed, and the shared error boundary uses neutral receipt-aware language.
+Focused backend checks passed 82 tests and synthetic browser recovery checks passed
+six tests; expanded acceptance is recorded in
+`docs/evidence/20260914-map-remediation/README.md`. These changes are locally
+prepared, not deployed. MAP-028 J and existing owning items retain remaining
+engineering, policy, activation and real-host acceptance. This supersedes the
+preceding audit's unchanged-code observation only for the listed corrections.
+
+**14 September master audit — IDEA-20260914-01:** the consolidated report is
+`docs/audits/MASTER_PROJECT_AUDIT.md`; fresh receipts and limits are in
+`docs/evidence/20260914-master-audit/README.md`. Local evidence: 771 base tests
+and 32 dedicated Admin tests passed; both separate builds, secret gates, source
+security classification and dependency audit passed. Synthetic browser/helper
+probes exposed retry/token, product-gallery, cookie parsing and capped-metric
+problems; source review also identified product-fact authority and payment-evidence
+gaps. Fourteen findings (six P1, eight P2) remain assigned to existing MAP owners
+through MAP-028 J. Overall judgment is 6.4/10, NOT YET for operational launch.
+This audit changed documentation/evidence only; no application fix, provider
+activation or deployment is claimed. Applied permissions still rely on dated
+13 September evidence: automatic approval review blocked the fresh metadata
+export before execution. Full real-host/device/business lifecycle acceptance
+remains unverified. No operations-rulebook or design target was changed.
+
+**13 September plan completeness review — IDEA-20260913-04:** the MAP launch
+guide now surfaces staff/recovery inputs, scheduled-job operation, financial
+reconciliation, notification receipts and remaining audit proof. MAP-026 adds
+explicit external stock-delay/allocation-transfer and first-sync/reconnect
+acceptance. These are planning clarifications, not implemented or activated
+capabilities. No application tests or live provider checks were run for this
+documentation review; original audit unknowns retain their evidence limits.
+
+**13 September marketplace planning (IDEA-20260913-03):** official Lazada and
+TikTok Shop documentation was researched and the existing MAP-026 access gate
+refined with website/application preparation and staged acceptance. K2-owned PH
+shops remain the scope; Shopee remains deferred. This is documentation-only:
+no app submission, seller authorization, provider activation or deployment was
+performed. Exact registration eligibility, scopes and review requirements remain
+subject to each provider's current console and decision. The plan and official
+source links are in MAP-026; the durable intake decision is in FUTURE_IDEAS.
+The MAP execution dashboard also contains the owner's complete start-here launch
+handoff: ordered work, five input packets, acceptance gates and completion rules.
+It distinguishes engineering prepared for inputs from verified operational launch;
+it records intended execution without claiming additional implementation or tests.
+
+**13 September production security follow-up — applied and verified:** after the
+owner's explicit “yes proceed”, version `20260909023000` was applied once to
+`pixplcjqivlfflickobf`, artifact SHA-256
+`7BA3F473C3313890F57899A657CD1234FEDAFEEB43DB7465819919EF1FB71E05`.
+Independent postflight at **2026-09-13T15:24:53.942Z** confirms the exact receipt
+and all eleven permission/applicability checks. Seven internal functions lost
+excess browser/PUBLIC execution; the two receiving functions retain service-role
+execution. Browser error-report INSERT/policies were removed; staff read remains.
+Fresh schema audit reduced **26 to 10 findings**; live anonymous boundary checks
+passed **14/14**, with public products and stock readable and private tables denied.
+Four legacy guest/coupon RPC grants and six provider-owned default groups remain.
+Neither phase one nor this follow-up is to be repeated. Recovery is reviewed
+roll-forward or the existing verified backup procedure, not broad regranting.
+This supersedes earlier unapplied/authorization-pending statements below for this
+exact correction only. No application deployment, payment/delivery configuration,
+stock quantity change or guest BFF activation occurred. Receipt and evidence:
+`docs/evidence/20260913-audit-remediation/README.md`.
+
+**13 September audit remediation (IDEA-20260913-02, locally prepared):** intake
+now rejects coercible boolean/array/object/blank inputs before numeric conversion;
+the nine-test intake suite passed after a failing-first regression. Scanner
+placeholder exemptions now match complete reviewed values; 18 internal-fragment
+negative cases, scanner fixtures, working-tree and history scans pass.
+Admin expiry labels use Manila dates. Clearance success reloads the exact saved
+lot, retaining prior data/key if that read fails; it no longer invents approval
+timestamps or calculates a replacement receipt. The 17-test Admin logic suite
+passes, including failed-refresh/same-key recovery. Separate Vercel build commands
+and a PostgreSQL 17 CI job are locally prepared; deployment/remote CI are not proved.
+Current verification and remaining gates: `docs/evidence/20260913-audit-remediation/README.md`
+and the owning MAP items. No production SQL, deployment or business-policy change
+has been made in this remediation.
+
+Fresh broader remediation evidence: 770 base tests, 32 Admin UI tests, both
+isolated builds and all three stock/payment/final-Admin SQL rehearsals passed.
+Final focused intake/Admin/release/guest checks pass 41/41. These counts overlap.
+Guest-seed captured recovery tooling now passes actual old/seeded definition,
+owner/ACL restoration and later-change refusal on loopback PostgreSQL; full
+signed submission behavior and actual target captures remain MAP-019. A fresh
+read-only production preflight at 2026-09-13T13:53:03Z still finds no follow-up
+receipt and all applicability prerequisites present; schema audit remains 26.
+The exact MAP-017 payload and Unlisted policy questions remain pending owner input.
+
+**13 September independent handoff verification (IDEA-20260913-01 / MAP-028 J):**
+Other K2 sessions were confirmed stopped. Two real local regressions were
+corrected: Overview requested an unsupported one-day reporting window and could
+not mount; CSV channel prefixes disagreed with dashboard exact aliases. Overview
+now uses the canonical window bounds and shares the CSV channel normalizer.
+Fresh isolated Admin **32/32**, focused reporting **39/39**, Storefront/Admin
+builds and dependency audit (**0 vulnerabilities**) passed. Security gate/history
+also pass after narrowly classifying three historical documentation placeholders;
+new negative checks retain credential detection.
+
+The prepared guest-seed rollback was unsafe: it replayed ten older security
+functions and ACLs. It now refuses before writes (local PostgreSQL exit 3).
+Captured two-function recovery and full composed seed behavior remain MAP-019.
+Live metadata at **2026-09-13 03:27 UTC** still has six ledger entries, latest
+`20260824143000`; the newer guest submission and commitment functions are absent.
+The schema audit still reports **26 critical policy findings**, not 26 proven
+exploits. MAP-017 follow-up `20260909023000` remains the first activation gate;
+do not repeat the applied phase-one migration. Public host markers are separate
+Storefront/Admin, but live Admin still has Storefront discovery tags. Local dirty
+`main` and remote main remain `41d96df`; its successful 8 September CI does not
+cover the uncommitted handoff. No provider writes or deployment occurred.
+Detailed commands, aggregate-suite results, limitations and recovery:
+`docs/evidence/20260913-map-verification/README.md`. Remaining work stays in MAP.
+
+The full npm-test sequence was covered across the initial run and corrected
+continuation: base 764, orientation 2, Storefront 31, Admin 32, recovery 33,
+Inbox 27, product-master 1, owner-close 1, account/wholesale 3, selling 8,
+workflow 4 and intake 9 passed (**915 cases across 12 groups**). The initial
+aggregate stopped on an outdated custody fixture that omitted the required
+reason; its corrected test verifies both blank-reason denial and exact retry
+payload. The eight resumed groups all exited 0. This is not one uninterrupted
+green `npm test` run. Final targeted reporting/guest recovery tests passed 44/44.
+Fourteen older evidence PNGs were restored byte-for-byte after preserving the
+new captures in the verification folder; original stash and source work remain.
+
+**13 September stock lifecycle composition, locally verified (MAP-023 / I-001):**
+Prepared `20260913_payment_handover_commitment.sql` adds verified payment as
+the second commitment caller, accepts attributable committed lots after the old
+temporary deadline, and requires commitment at physical handover. First actor/
+time/cause and existing RPC ACLs are preserved. Refund changes no stock;
+cancellation separately releases lots once. The older confirmation rollback
+refuses when payment depends on its helper.
+
+Fresh evidence: purchase rehearsal **37/37** property groups; **81** focused
+contracts; existing payment/packing recovery rehearsal and prebuild/security
+checks passed. Multi-lot failure rolls back order/coupon/payment/commitment and
+signed receipt/nonce changes. Old-body negative controls detect all three
+corrected boundaries. The alleged partial-commit defect (AUD2-003) is refuted
+for this SQL failure path; no confirmation rewrite was needed. Actual base-runner
+selection also refutes AUD2-004: all 55 named contract specs and sales are already
+selected by test:base (759 tests in 81 files); this is selection, not a new
+aggregate or remote CI pass. No provider/database production change, deployment
+or UI change occurred. Evidence/recovery:
+`docs/evidence/20260913-stock-lifecycle/README.md`. Owned-stock read consumers,
+legacy attribution, current-chain writer races, deadline queues and real-host
+acceptance remain I-001; MAP-017 remains the first activation gate.
+
+**12 September autonomous batch, locally verified (prepared, not live):**
+the recorded batch checks passed on loopback/fixture evidence with no
+production change (this is not verification of every MAP remainder): MAP-017 portable (12 auth groups,
+replay, rollback, backup/restore); MAP-018 intake/cleanup/intake-AI plus 9/9
+browser; 88 focused BFF/receiving/channel/order/intake contracts; inbox
+27/27, payment/recovery 33/33, Admin 32/32; Admin build 188.92/300 kB and
+Storefront build (149.85/150 JS, 27.48/30 CSS gzip) with prebuild/security
+surfaces zero-gap; `sharp` 0.35.4 (audit 0 vulns); purchase-hold 30/30 with
+the newly implemented confirmation ownership deduction; last-unit, payment,
+marketplace, channel-vocabulary (13/13), final-admin, invite/MFA/rate/
+ingress/claim, product-knowledge and MAP-024 discovery/sitemap contracts;
+store orientation/workflow/owner-close/product-master/account/selling/
+storefront-ui suites and `test:base` 742/742. Catalog-spreadsheet and
+database-backup rehearsals stay env-blocked locally by design. New prepared
+artifacts: `20260912_confirmation_stock_commitment.sql` + executed rollback,
+`confirmation_commitment_behavior.sql`,
+`confirmation-commitment-contract.spec.js`. Full log:
+`docs/evidence/20260912-autonomous-batch/README.md`. Production apply,
+activation, paid calls, credentials, channels and acceptance remain gated.
+
+**9 September intake command recovery (IDEA-20260908-01 / MAP-028 I-002),
+locally verified:** manual checklist-step, Draft and first-inventory callers
+retain exact payload/outer receipt identity, freeze review and dismissal, and
+preserve uncertainty after malformed receipts or failed post-write refreshes.
+Step receipt validation matches the existing SQL session/step/timestamp shape.
+Definitive rejection permits correction with a new key; the existing durable
+inner intake request identities remain separate. A remounted actor fixture
+proves late Draft results cannot advance the replacement modal.
+Final evidence: 9 intake browser cases, 87 focused contracts and Admin build /
+security / 40-module boundary / 188.92-of-300 kB budget pass. Phone and desktop
+screenshots were inspected. This extends the interrupted dirty implementation;
+no production or provider state changed. Evidence/recovery and precise limits:
+`docs/evidence/20260909-intake-command-retry/README.md`. Other intake callers,
+Sheet/full navigation, legacy reconciliation and real signed receipt/audit
+acceptance remain open in I-002; this is not full intake or launch completion.
+
+**9 September MAP truth reconciliation — IDEA-20260909-02:** eight completed
+queue entries and repeated completed implementation bullets were removed from
+the MAP. All 12 whole MAP items remain open for their recorded remainders.
+Phase-one apply, widget promotion, browser-blocker, owner decision, route-count
+and indexing instructions were corrected against dated evidence. No provider
+state or production code changed. The separate follow-up remains prepared.
+
+Resumed independent review corrected remaining stale phase-one, dashboard
+promotion and product-indexing directions at their local sections. Fresh reruns
+passed 534 contract-stage tests, 22 focused release/route/authorization checks
+and five indexing checks (overlapping counts). Earlier browser/build logs were
+confirmed, not rerun in this documentation-only continuation. The bounded audit
+is finished; MAP-028 J retains its operational findings and I-015 the mobile
+repair. Review details and recovery remain in the linked audit evidence.
+
+Fresh local evidence: 533 contract-stage tests; 31 Storefront and 32 Admin browser
+cases; eight selling and three catalog-import recovery cases; 23 focused indexing/authorization/CI
+contracts; both isolated builds and their security/budget checks. Counts overlap.
+The initial selling-browser launch failed with sandbox EPERM; the combined
+`test:contracts` invocation is not claimed green. Public GET-only home/robots/
+two-URL sitemap verification passes. Full npm test, remote CI, new SQL rehearsal,
+physical-device zoom and authenticated production operations are not established.
+Exact results and scope: `docs/evidence/20260909-map-truth-audit/README.md`.
+
+The catalog-import recovery spec is excluded from the shared Playwright runner
+and remains selected by the dedicated protected payment fixture in npm test.
+A new config-importing contract failed before that one-line fix and passes now.
+Existing dirty intake/retry/security changes were preserved. Mobile store
+overlay collisions and 44px touch targets under MAP-028 I-015/MAP-027 are
+resolved and verified with dedicated Playwright collision checks (evidence in
+docs/evidence/20260915-store-overlay-collisions/); physical-device GPU pinch/pan
+remains an operating target.
+
+Current local behavior retained from completed queue cleanup: MasterProduct is
+the single product-detail view; the home globe is intersection-deferred; Admin
+modals share AdminDialog; selling journeys have their dedicated fixture; public
+History API routes support deep linking/back; the workflow canvas uses the graph
+model. Per-target manifests/static asset checks and historical SQL relocation
+are implemented. Contact wording does not promise a response time; current
+channel values remain governed by OWNER-004. Receiving uses accepted Manila
+scans within the Milan ceiling and requires declared positive manifest lines;
+undeclared arrival is not supported. This summarizes implemented boundaries,
+not blanket production acceptance. Detailed historical evidence remains in Git
+history and the existing runbooks; remaining work lives only in the MAP.
+
+**9 September MAP-017 activation preflight:** a fresh approved read-only provider
+export still reports 26 critical findings. Eleven-check SQL verifies seven
+matching postgres-owned functions, existing error-report RLS/staff reads and
+public stock-view access; the unwanted function grants and error-report insertion
+remain. A locally verified combined follow-up transaction and exact receipt
+contract are prepared under version `20260909023000`; no provider write ran.
+The full portable transaction/replay/conflict/restore suite and 41 focused tests
+pass. Identity, live Boolean results and limits:
+`docs/evidence/20260909-map017-followup.md`. MAP-017 owns authorization/application
+and subsequent evidence; phase one stays applied and must not be repeated.
+
+**9 September existing-function lockdown, prepared only (MAP-017):**
+`20260909_map017_existing_function_lockdown.sql` revokes PUBLIC/anon/authenticated
+execution on the seven existing trigger/receiving signatures and preserves
+service-role receiving execution. It changes no function bodies and does not
+depend on absent intake/publication functions. The portable PostgreSQL runner
+reproduced the vulnerable ACL, then passed browser denials, service-role entry
+to the existing receiving guard, five real trigger bodies, replay, missing-target
+refusal and exact definition/ACL rollback. Existing 12 authorization groups,
+backup/restore and 41 focused contracts also pass. Provider application and
+full operational acceptance remain open in MAP-017. Evidence and scope limits:
+`docs/evidence/20260909-map017-followup.md`.
+
+**9 September MAP-017 follow-up evidence:** re-auditing the named 8 September
+schema export reproduces 26 critical findings, mapped to existing error-report,
+function-lockdown and guest-cutover migrations plus six provider-owned defaults.
+Fresh local PostgreSQL rehearsal passes 12 authorization groups, error-report
+denial, replay, rollback, encrypted backup and isolated restore. The full
+function-lockdown file names two intake/publication functions absent from that
+export; its prerequisite/slice acceptance remains in MAP-017. No production
+state changed. Evidence: `docs/evidence/20260909-map017-followup.md`.
+
+**9 September audit continuation (IDEA-20260909-01 / MAP-028 J):** fresh public
+browser checks confirm the Rana product is visible but stock is unavailable;
+purchase is disabled while other stock/provenance labels conflict. Customer
+accounts and secure guest messages explicitly report inactive; the Admin host
+shows staff sign-in. Local Admin 32/32 and Storefront 31/31 browser/contract
+suite cases pass. Home/robots/two-URL sitemap discovery passes, but the same
+verifier with `--product=rana-sfogliavelo` fails its initial product canonical
+check. These findings and phone buying-order/transport-copy gaps are recorded
+in MAP-028 J and `docs/evidence/20260909-full-surface-audit/README.md`.
+This audit changes documentation only; it does not activate or fix those flows,
+reapply MAP-017, or certify authenticated production operations. The permanent
+phase-one receipt immediately below supersedes the older apply-waiting entry.
+
 **8 September owner-approved permanent apply:** MAP-017 phase one returned
 `APPLIED_AND_VERIFIED` for project `pixplcjqivlfflickobf`, ledger
 `20260824143000`, payload SHA-256
@@ -30,14 +497,14 @@ Prepared Supabase migrations remain
 unapplied by this release; paid providers, marketplace channels, authenticated
 staff records, and business-write acceptance remain governed by their MAP gates.
 
-**MAP-017 activation checkpoint, 8 September 2026:** the guarded executor dry
+**Historical MAP-017 pre-apply checkpoint, superseded by the permanent receipt above:** the guarded executor dry
 run passed the exact project, payload SHA-256, ledger, OWNER-005, database and
 Storage backup/restore, off-site copy, and owner recovery-access gates. The
 permanent production apply was not executed: automatic approval review requires
 an explicit active-conversation approval for this disruptive, costly-to-reverse
-security/access-control mutation. No DDL or provider state changed. The next
-action is that explicit owner approval, then one guarded apply with ambiguous
-outcomes resolved only by the prepared read-only receipt/invariant check.
+security/access-control mutation. No DDL or provider state changed in that
+preflight. The later owner-approved apply superseded this blocker; phase one
+must not be repeated. Current follow-up scope is recorded separately above.
 
 **Dashboard truth follow-up, 7 September (IDEA-20260907-02; code deployed):**
 Overview rejects malformed source bodies, invalid backlog counts and unknown/
@@ -246,6 +713,19 @@ Admin build pass. Legacy delivery/handover uncertainty requires reconciliation
 and offers no claimed receipt retry. No provider or full-workspace end-to-end
 evidence is implied. I-002 owns remaining caller audit/fixes and host acceptance;
 the design checkpoint records exact pre-edit recovery.
+
+**9 September catalog CSV recovery, local (I-002):** the secure CSV review now
+retains exact operation/chunk keys and freezes close, Escape, file replacement
+and re-preview during pending or uncertain commits. Its uncertainty warning no
+longer hides exact retry and durable-status controls. Disposed staff-view
+responses cannot invoke completion for the replacement actor. All three regressions
+failed first; the final catalog cases pass 3/3, the shared recovery browser suite
+passes 33/33, focused contracts pass 88/88 and the Admin build/security/budget
+gates pass (188.92/300 kB, 40 manifest modules). Evidence and pre-edit recovery:
+`docs/evidence/20260909-catalog-import-retry/README.md` and
+`docs/design-checkpoints/20260909-catalog-import-retry/README.md`. This is local
+fixture/build evidence only. I-002 remains open for product-intake caller keys,
+authenticated navigation and actual signed receipt/audit acceptance.
 
 **8 September continuation — reconciliation locking, prepared:** I-001's real
 purchase/recount fixture reproduced a PostgreSQL deadlock (22/24 properties).
@@ -527,6 +1007,19 @@ commits, one refused with `K2_ADMIN_FINAL_ADMIN`, one Admin remains, no partial
 state). 89/89 focused contracts and the Admin build gates pass. The migration is
 prepared and unapplied; provider-fixture evidence paths and live application
 remain open in MAP-028 H-013/H-014.
+
+**H-013 cleanup-receipt correction, locally prepared 9 September 2026:** the
+Admin BFF now accepts only an exact `pending` or `completed` cleanup claim for
+the requested cleanup ID before any private Storage deletion. After deletion it
+reports completion only when the database returns that same ID with explicit
+`completed` status; a missing or malformed completion receipt remains pending.
+Two failing-first boundary cases reproduced the prior false completion and
+unexpected-claim deletion paths. The final intake/BFF set passed 75/75, the
+static MAP-018 contract passed, the isolated PostgreSQL cleanup lifecycle passed,
+and the Admin production build/security gates passed with a 188.92 kB/300 kB
+application chunk. This is local prepared evidence only: the cleanup migration
+and Admin BFF route are not activated here, and authenticated real-provider
+failure/recovery remains required under MAP-018/MAP-025.
 
 **Local Inbox completeness correction, 5 September 2026:** the secure Inbox read
 keeps its bounds (200 conversations, 2,000 messages) but now caps each
@@ -1571,6 +2064,21 @@ a service-role or secret key, and it activates no prepared API route.
 ---
 
 ## 9. What's done vs what's next
+
+### Storefront orientation, error recovery and customer policy — verified local state, 15 September 2026
+
+Evidence: `docs/evidence/20260915-policy-and-recovery/README.md`, `docs/evidence/20260908-store-orientation/README.md`.
+Skills used: `using-superpowers`, `andrej-karpathy`, `ui-ux-pro-max`, `impeccable`, `design-taste-frontend`, `emil-design-eng`.
+Local artifact and Playwright contract evidence:
+
+**Store orientation & first-screen hierarchy (IDEA-20260908-02 / I-009):**
+The 3D interactive store at `/store` verified across desktop (1440×900), phone portrait (390×844), and phone landscape (844×390). Header height is bounded (<= 80px), intro height is bounded (<= 115px), empty basket dock is unobtrusive, 3D WebGL room renders without horizontal overflow, and room zoom is accessible. Unsent clerk question drafts are preserved across navigation. Verified with 2/2 passing tests in `npm run test:store-orientation` and 114 store contracts.
+
+**Bounded chunk recovery & target-neutral error boundary (IDEA-20260908-01 / I-010):**
+`src/components/ui/ErrorBoundary.jsx` renders target-neutral recovery UI with stable code `UI_SECTION_UNAVAILABLE` and `role="alert"`. Copy references the general shop/section ("This section stopped loading", "Try this section again", "Reload page") and never displays administrative commands ("Reload Admin") on shared storefront surfaces. Touch targets for retry/reload buttons meet the 44px minimum touch target (`min-h-11`). Verified with 5/5 passing tests in `tests/browser-error-safety.spec.js`.
+
+**Customer-facing policy and recovery entry points (IDEA-20260908-01 / I-011):**
+Authoritative customer-facing policies published in `src/data/policies.js` covering Privacy, Terms of Service, and Returns & Replacements. Reflects actual manual launch operations: 48-hour inspection upon receipt, photographic evidence requirement, case-by-case replacement/credit without false automated refund SLAs. Accessible, mobile-first view `src/views/Policy.jsx` is lazy-loaded to protect the landing bundle. SPA routes `/privacy`, `/terms`, `/returns`, `/policies` added to `src/lib/storefrontRoutes.js`, `src/StorefrontApp.jsx`, and `vercel.storefront.json`. Accessible 44px policy entry points added to `src/components/Footer.jsx`, `Checkout.jsx`, `Contact.jsx`, `Pasabuy.jsx`, and `Wholesale.jsx`. Verified with 4/4 passing tests in `tests/storefront-policy-contract.spec.js` and wired into `test:contracts`. Storefront landing JS gzip is 149.77 kB / 150.50 kB; CSS gzip is 27.77 kB / 30.00 kB. Admin chunk is 189.73 kB / 300.00 kB minified.
 
 ### Storefront, store and deployment session — verified 2 September 2026
 

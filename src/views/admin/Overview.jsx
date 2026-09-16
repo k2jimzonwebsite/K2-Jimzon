@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
-import { overviewUnavailable } from '../../lib/overviewAvailability'
+import { countProductStock, overviewUnavailable } from '../../lib/overviewAvailability'
 import { overviewPeriodStart as startOfPeriod, overviewDateKey as dateKey, OVERVIEW_TIME_ZONE } from '../../lib/overviewPeriod'
+import { manilaReportingWindow } from '../../lib/manilaReportingWindow'
 import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
 import { peso } from '../../data/products'
 import {
   createSalesExportFilename,
   createSalesRecordCsv,
   filterSalesOrders,
+  normalizeSalesChannel as normalizeChannel,
   summarizeSalesReconciliation,
   summarizeSalesOrders,
 } from '../../lib/salesCalculations'
@@ -79,16 +81,6 @@ const EMPTY_DATA = {
 
 const panelClass = 'rounded-adm border border-adm-line bg-adm-surface'
 const actionClass = 'transition-[transform,border-color,background-color,color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 focus-visible:ring-offset-2 focus-visible:ring-offset-adm-bg'
-
-function normalizeChannel(value = '') {
-  const channel = String(value).toLowerCase()
-  if (channel === 'shopee') return 'shopee'
-  if (channel === 'tiktok' || channel === 'tiktok_shop') return 'tiktok'
-  if (channel === 'lazada') return 'lazada'
-  if (channel === 'pasabuy') return 'pasabuy'
-  if (channel === 'website' || channel === 'web') return 'website'
-  return 'other'
-}
 
 function percentageChange(current, previous) {
   if (previous === 0) return current > 0 ? { label: 'New activity', positive: true } : null
@@ -346,9 +338,10 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
   }, [load, range])
 
   const analytics = useMemo(() => {
-    const currentStart = startOfPeriod(reportingRange).getTime()
-    const previousStart = startOfPeriod(reportingRange, 1).getTime()
-    const currentEnd = startOfPeriod(1).getTime() + 86_400_000
+    const period = manilaReportingWindow(reportingRange)
+    const currentStart = Date.parse(period.currentStart)
+    const previousStart = Date.parse(period.priorStart)
+    const currentEnd = Date.parse(period.currentEnd)
     const currentOrders = data.orders.filter(order => {
       const created = new Date(order.created_at).getTime()
       return created >= currentStart && created < currentEnd
@@ -372,8 +365,12 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
     const urgent = conversations.filter(conversation => conversation.priority === 'urgent').length
     const unassigned = conversations.filter(conversation => !conversation.assigned_to).length
     const products = data.products
-    const outOfStock = products.filter(product => Number(product.stock_available || 0) <= 0).length
-    const lowStockCount = products.filter(product => Number(product.stock_available || 0) > 0 && Number(product.stock_available || 0) <= 5).length
+    // Unknown stock is never counted as out-of-stock: a null read is a
+    // missing fact, not an empty shelf. See countProductStock.
+    const stockCounts = countProductStock(products)
+    const outOfStock = stockCounts.outOfStock
+    const lowStockCount = stockCounts.lowStock
+    const unknownStockCount = stockCounts.unknownStock
     const thirtyDays = now + (30 * 86400000)
     const expired = data.batches.filter(batch => {
       const date = batch.expiry_date || batch.best_before_date
@@ -425,6 +422,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
       unassigned,
       outOfStock,
       lowStock: lowStockCount,
+      unknownStockCount,
       expiring,
       expired,
       listingIssues,
@@ -438,6 +436,9 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
 
   const missing = source => (Array.isArray(source) ? source : [source]).some(key => unavailable.includes(key))
   const display = (source, value) => loading ? '—' : missing(source) ? 'Unavailable' : value
+  // Risk order for the priority queue: a critical queue with work always
+  // outranks lower-severity queues regardless of raw counts.
+  const SEVERITY_RANK = { critical: 0, high: 1, normal: 2 }
   const widgetSources = { sales: ['orders'], revenue: ['orders'], priority: ['orderBacklog', 'conversations', 'pasabuy', 'products', 'batches', 'listings'], inbox: ['conversations'], pasabuy: ['pasabuy'], stock: ['products', 'batches'] }
   const widgetUnavailable = missing(widgetSources[widget] || [])
 
@@ -472,12 +473,12 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
   }
 
   const queues = [
-    { title: 'Order requests awaiting review', count: data.orderBacklog, detail: 'All recorded channels; confirm contact details and available stock.', target: 'omni_hub', icon: InboxIcon, severity: 'high' },
-    { title: 'Inbox response deadlines missed', count: analytics.overdue, detail: 'Prioritize overdue customer conversations.', target: 'inbox', icon: ClockIcon, severity: 'critical' },
-    { title: 'Open Pasabuy sourcing cases', count: analytics.openPasabuy.length, detail: 'Advance research, quotes, and purchase states.', target: 'pasabuy_manager', icon: BagIcon, severity: 'high' },
-    { title: 'Inventory exceptions', count: analytics.outOfStock + analytics.lowStock + analytics.expired + analytics.expiring, detail: `${analytics.outOfStock} out · ${analytics.lowStock} low · ${analytics.expired + analytics.expiring} expiry risk`, target: 'inventory', icon: BoxIcon, severity: 'critical' },
-    { title: 'Listings ready or blocked', count: analytics.listingsReady + analytics.listingIssues, detail: `${analytics.listingsReady} ready · ${analytics.listingIssues} with issues`, target: 'integrations', icon: GlobeIcon, severity: 'normal' },
-  ].sort((a, b) => (b.count > 0) - (a.count > 0) || b.count - a.count)
+    { source: 'orderBacklog', title: 'Order requests awaiting review', count: data.orderBacklog, detail: 'All recorded channels; confirm contact details and available stock.', target: 'omni_hub', icon: InboxIcon, severity: 'high' },
+    { source: 'conversations', title: 'Inbox response deadlines missed', count: analytics.overdue, detail: 'Prioritize overdue customer conversations.', target: 'inbox', icon: ClockIcon, severity: 'critical' },
+    { source: 'pasabuy', title: 'Open Pasabuy sourcing cases', count: analytics.openPasabuy.length, detail: 'Advance research, quotes, and purchase states.', target: 'pasabuy_manager', icon: BagIcon, severity: 'high' },
+    { source: 'products', title: 'Inventory exceptions', count: analytics.outOfStock + analytics.lowStock + analytics.expired + analytics.expiring, detail: `${analytics.outOfStock} out · ${analytics.lowStock} low · ${analytics.expired + analytics.expiring} expiry risk${analytics.unknownStockCount > 0 ? ` · ${analytics.unknownStockCount} unknown` : ''}`, target: 'inventory', icon: BoxIcon, severity: 'critical' },
+    { source: 'listings', title: 'Listings ready or blocked', count: analytics.listingsReady + analytics.listingIssues, detail: `${analytics.listingsReady} ready · ${analytics.listingIssues} with issues`, target: 'integrations', icon: GlobeIcon, severity: 'normal' },
+  ].sort((a, b) => (SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity]) || ((b.count > 0) - (a.count > 0)) || b.count - a.count)
 
   return (
     <div className="mx-auto w-full max-w-[1600px] space-y-4 pb-6">
@@ -697,11 +698,12 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
         </section>
 
         <section hidden={widget !== 'priority' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading icon={AlertIcon} title="Priority queue" description="Current recorded work sorted by count. Inventory totals combine SKU and batch flags and may overlap." />
+          <PanelHeading icon={AlertIcon} title="Priority queue" description="Current recorded work ordered by severity, then count. Inventory totals combine SKU and batch flags and may overlap." />
           <div className="divide-y divide-adm-line">
             {queues.map(queue => {
               const Icon = queue.icon
-              const active = queue.count > 0
+              const known = !missing(queue.source)
+              const active = known && queue.count > 0
               return (
                 <button
                   key={queue.title}
@@ -714,7 +716,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
                     <span className="mt-0.5 block truncate text-xs text-white/65">{queue.detail}</span>
                   </span>
                   <span className="flex items-center gap-2">
-                    <span className={`font-mono text-base font-semibold tabular-nums ${active ? queue.severity === 'critical' ? 'text-crimson' : 'text-amber' : 'text-white/65'}`}>{loading ? '—' : queue.count}</span>
+                    <span className={`font-mono text-base font-semibold tabular-nums ${active ? queue.severity === 'critical' ? 'text-crimson' : 'text-amber' : 'text-white/65'}`}>{display(queue.source, queue.count)}</span>
                     <ArrowIcon size={13} className="text-white/65 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-white/60" />
                   </span>
                 </button>

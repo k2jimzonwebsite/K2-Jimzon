@@ -32,6 +32,8 @@ import { applyImageFallback } from '../../lib/imageFallback'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { CANONICAL_CUSTODIANS, CANONICAL_HUBS } from '../../data/canonicalIdentities'
 import AutomaticIntakePanel from './AutomaticIntakePanel'
+import { useRetainedIntakeCommand } from './useRetainedIntakeCommand'
+import { adminBffEnabled } from '../../services/adminBffService'
 
 export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct }) {
   const closeButtonRef = useRef(null)
@@ -103,6 +105,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   const [publicationStatus, setPublicationStatus] = useState('draft')
   const [publicationReason, setPublicationReason] = useState('')
   const [publishing, setPublishing] = useState(false)
+  const intakeCommand = useRetainedIntakeCommand()
+  const displayedError = intakeCommand.error || operationError
   const availableCustodians = CANONICAL_CUSTODIANS.filter(
     (custodian) => custodian.hub_id === hubLocation,
   )
@@ -147,8 +151,8 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   }, [isOpen])
 
   useEffect(() => {
-    if (operationError) errorRef.current?.focus()
-  }, [operationError])
+    if (displayedError) errorRef.current?.focus()
+  }, [displayedError])
 
   useEffect(() => () => {
     if (copiedPromptTimerRef.current) clearTimeout(copiedPromptTimerRef.current)
@@ -168,8 +172,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   const initSession = async () => {
     setSessionLoading(true)
     setOperationError('')
-    try {
-      const active = await createOrResumeIntakeSession()
+    const restoreSession = (active) => {
       const resumed = buildResumedIntakeState(active)
       setSession(active)
       setStep(resumed.step)
@@ -186,6 +189,27 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       setDuplicateResult(null)
       setDistinctVariantConfirmed(false)
       setDistinctVariantReason('')
+    }
+    try {
+      if (adminBffEnabled()) {
+        let attempted = false
+        await intakeCommand.run({
+          kind: 'session-setup',
+          label: 'intake session',
+          retryLabel: 'Retry exact session setup',
+          payload: { requestId: crypto.randomUUID() },
+          send: (frozen, key) => {
+            const recovering = attempted
+            attempted = true
+            return createOrResumeIntakeSession(null, null, {
+              requestId: frozen.requestId, idempotencyKey: key, recovering,
+            })
+          },
+          onSuccess: restoreSession,
+        })
+      } else {
+        restoreSession(await createOrResumeIntakeSession())
+      }
     } catch (error) {
       setOperationError(error.userMessage || 'Product intake could not be started. Nothing was changed.')
     } finally {
@@ -233,7 +257,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
   const handleEvidenceFile = async (slot, file) => {
     setOperationError('')
-    if (!file || sessionLoading) return
+    if (!file || sessionLoading || intakeCommand.locked) return
     if (evidenceCleanup) {
       setOperationError('Retry the queued private-file cleanup before selecting another photo.')
       return
@@ -246,10 +270,9 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       setOperationError('Use a JPEG, PNG, or WebP image no larger than 4 MB.')
       return
     }
-    const previewUrl = URL.createObjectURL(file)
     setEvidenceUploading((current) => ({ ...current, [slot]: true }))
-    try {
-      const result = await uploadProductEvidence(session, slot, file)
+    const showEvidence = (result) => {
+      const previewUrl = URL.createObjectURL(file)
       setSession(result.session)
       const previousPreviewUrl = previewUrlsRef.current.get(slot)
       if (previousPreviewUrl) URL.revokeObjectURL(previousPreviewUrl)
@@ -258,8 +281,26 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
         ...previous,
         [slot]: { ...result.evidence, previewUrl },
       }))
+    }
+    try {
+      if (adminBffEnabled()) {
+        await intakeCommand.run({
+          kind: 'evidence-upload', label: 'evidence upload', retryLabel: 'Retry exact evidence upload',
+          payload: { session, slot, file },
+          send: async (frozen, key) => {
+            try {
+              return await uploadProductEvidence(frozen.session, frozen.slot, frozen.file, key)
+            } catch (error) {
+              if (error.cleanupId) setEvidenceCleanup({ cleanupId: error.cleanupId, retrying: false })
+              throw error
+            }
+          },
+          onSuccess: showEvidence,
+        })
+      } else {
+        showEvidence(await uploadProductEvidence(session, slot, file))
+      }
     } catch (error) {
-      URL.revokeObjectURL(previewUrl)
       if (error.cleanupId) {
         setEvidenceCleanup({ cleanupId: error.cleanupId, retrying: false })
       }
@@ -292,6 +333,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   }
 
   const canAdvance = (() => {
+    if (intakeCommand.locked) return false
     if (aiBusy) return false
     if (sessionLoading || !session?.id || evidenceCleanup) return false
     if (step === 1) {
@@ -317,8 +359,11 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     }
     setOperationError('')
     try {
+      let requestedStep = ''
+      let partialData = {}
       if (step === 1) {
-        const updated = await saveIntakeSessionStep(session, 'packaging_evidence', {
+        requestedStep = 'packaging_evidence'
+        partialData = {
           barcode: query || null,
           scanned_identity: query,
           field_provenance: duplicateResult?.matchType === 'ambiguous'
@@ -331,25 +376,36 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 },
               }
             : {},
-        })
-        setSession(updated)
+        }
       } else if (step === 2) {
-        const updated = await saveIntakeSessionStep(session, 'research_handoff', {
+        requestedStep = 'research_handoff'
+        partialData = {
           evidence_checklist: evidenceChecked,
           category_type: categoryType,
-        })
-        setSession(updated)
+        }
       } else if (step === 3) {
-        const updated = await saveIntakeSessionStep(session, 'field_review')
-        setSession(updated)
+        requestedStep = 'field_review'
       } else if (step === 4) {
-        const review = buildReviewedDraftState(parsedPayload, acceptedFields)
-        const updated = await saveIntakeSessionStep(session, 'draft_saved', review)
-        setSession(updated)
-        setParsedPayload(review.draft_payload)
-        setJsonInput(JSON.stringify(review.draft_payload, null, 2))
+        requestedStep = 'draft_saved'
+        partialData = buildReviewedDraftState(parsedPayload, acceptedFields)
       }
-      setStep((current) => current + 1)
+      await intakeCommand.run({
+        kind: 'step',
+        label: 'intake step',
+        retryLabel: 'Retry exact intake step',
+        payload: { session, requestedStep, partialData },
+        send: (frozen, key) => saveIntakeSessionStep(
+          frozen.session, frozen.requestedStep, frozen.partialData, key,
+        ),
+        onSuccess: (updated) => {
+          setSession(updated)
+          if (requestedStep === 'draft_saved') {
+            setParsedPayload(partialData.draft_payload)
+            setJsonInput(JSON.stringify(partialData.draft_payload, null, 2))
+          }
+          setStep((current) => current + 1)
+        },
+      })
     } catch (error) {
       setOperationError(error.userMessage || 'This step was not saved. Your previous state is unchanged.')
     }
@@ -388,13 +444,19 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     setCreatingDraft(true)
     setOperationError('')
     try {
-      const res = await createProductDraftServer(session)
-
-      if (res.success) {
-        setCreatedProduct(res.product)
-        setSession(res.session)
-        setStep(6)
-      }
+      await intakeCommand.run({
+        kind: 'draft',
+        label: 'Product Draft command',
+        retryLabel: 'Retry exact Draft command',
+        payload: { session },
+        send: (frozen, key) => createProductDraftServer(frozen.session, key),
+        onSuccess: (res) => {
+          if (!res.success) return
+          setCreatedProduct(res.product)
+          setSession(res.session)
+          setStep(6)
+        },
+      })
     } catch (error) {
       setOperationError(error.userMessage || 'The Product Draft was not created. Nothing was changed.')
     } finally {
@@ -433,7 +495,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
     }
     setSavingInventory(true)
     try {
-      const result = await createFirstInventoryServer(session, {
+      const inventory = {
         source: inventorySource,
         consignmentId: consignmentId || null,
         boxCode: boxCode || null,
@@ -446,10 +508,19 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
         unitCost: Number(unitCost),
         reason: inventoryReason || null,
         ownerCode: ownerCode || null,
+      }
+      await intakeCommand.run({
+        kind: 'inventory',
+        label: 'first-inventory command',
+        retryLabel: 'Retry exact first-inventory command',
+        payload: { session, inventory },
+        send: (frozen, key) => createFirstInventoryServer(frozen.session, frozen.inventory, key),
+        onSuccess: (result) => {
+          setInventorySaved(true)
+          setSession(result.session)
+          setStep(7)
+        },
       })
-      setInventorySaved(true)
-      setSession(result.session)
-      setStep(7)
     } catch (error) {
       setOperationError(error.userMessage || 'Inventory was not recorded. No quantity was added.')
     } finally {
@@ -467,23 +538,35 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       setOperationError('You are offline. Publication status was not changed.')
       return
     }
+    // The reviewed status + reason are frozen into one retained operation:
+    // a retry after a lost response replays the exact command, never a
+    // revised decision made mid-flight.
     setPublishing(true)
     setOperationError('')
-    try {
-      const result = await updateProductPublicationServer(session, newStatus, publicationReason.trim())
-      setSession(result.session)
-      setPublicationStatus(newStatus)
-      if (onProductCreated) onProductCreated()
-    } catch (error) {
-      setOperationError(error.userMessage || 'Publication was not changed.')
-    } finally {
-      setPublishing(false)
+    const frozen = { sessionId: session.id, productId: session.product_id, status: newStatus, reason: publicationReason.trim() }
+    const outcome = await intakeCommand.run({
+      kind: 'publication',
+      label: 'publication change',
+      retryLabel: 'Retry publication change',
+      payload: frozen,
+      send: (payload, key) => updateProductPublicationServer(
+        { id: payload.sessionId, product_id: payload.productId }, payload.status, payload.reason, key,
+      ),
+      onSuccess: (value) => {
+        setSession(value.session)
+        setPublicationStatus(frozen.status)
+        if (onProductCreated) onProductCreated()
+      },
+    })
+    setPublishing(false)
+    if (outcome === null) {
+      setOperationError('Another intake command is still unresolved. Reconcile it before changing publication.')
     }
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-      <AdminDialog onClose={onClose} closeDisabled={creatingDraft || savingInventory || publishing || aiBusy} initialFocusRef={closeButtonRef} labelledBy="product-intake-title" describedBy="product-intake-summary">
+      <AdminDialog onClose={onClose} closeDisabled={creatingDraft || savingInventory || publishing || aiBusy || intakeCommand.locked} initialFocusRef={closeButtonRef} labelledBy="product-intake-title" describedBy="product-intake-summary">
       <div
         className="relative w-full max-w-2xl bg-[#161922] border border-white/10 rounded-xl shadow-2xl text-white overflow-hidden my-auto max-h-[92vh] flex flex-col"
       >
@@ -501,7 +584,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
             ref={closeButtonRef}
             type="button"
             onClick={onClose}
-            disabled={aiBusy}
+            disabled={aiBusy || intakeCommand.locked}
             aria-label="Close product intake"
             className="min-h-11 min-w-11 p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"
           >
@@ -563,9 +646,25 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
             </div>
           )}
 
-          {operationError && (
+          {displayedError && (
             <div ref={errorRef} tabIndex={-1} role="alert" className="p-3.5 bg-rose-500/10 border border-rose-500/30 text-rose-200 rounded-lg text-sm focus:outline-none">
-              <strong className="text-rose-300">Action not completed.</strong> {operationError}
+              <strong className="text-rose-300">{intakeCommand.uncertain ? 'Outcome unconfirmed.' : 'Action not completed.'}</strong> {displayedError}
+              {intakeCommand.uncertain && (
+                <button
+                  type="button"
+                  onClick={intakeCommand.retry}
+                  disabled={intakeCommand.busy || !isOnline}
+                  className="mt-3 flex min-h-11 items-center justify-center rounded-lg border border-amber-300/40 bg-amber-300 px-4 py-2 font-semibold text-black hover:bg-amber-200 disabled:cursor-wait disabled:opacity-50"
+                >
+                  {intakeCommand.busy ? 'Retrying exact command…' : intakeCommand.retryLabel}
+                </button>
+              )}
+              {!session && !sessionLoading && !intakeCommand.locked && (
+                <button type="button" onClick={initSession} disabled={!isOnline}
+                  className="mt-3 flex min-h-11 items-center justify-center rounded-lg border border-white/30 px-4 py-2 font-semibold disabled:opacity-50">
+                  Retry session setup
+                </button>
+              )}
             </div>
           )}
 
@@ -597,6 +696,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
             </div>
           )}
 
+          <fieldset disabled={intakeCommand.locked} className="min-w-0 space-y-4">
           {/* STEP 1: IDENTIFY & DUPLICATE CHECK */}
           {step === 1 && (
             <div className="space-y-4">
@@ -614,6 +714,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                     aria-label="Product barcode, SKU, or name"
                     type="text"
                     value={query}
+                    disabled={intakeCommand.locked}
                     onChange={(e) => {
                       setQuery(e.target.value)
                       setDuplicateResult(null)
@@ -628,7 +729,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <button
                   type="button"
                   onClick={handleSearchDuplicate}
-                  disabled={searching || sessionLoading || !session?.id || !query.trim()}
+                  disabled={searching || sessionLoading || intakeCommand.locked || !session?.id || !query.trim()}
                   className="min-h-11 px-4 py-2.5 bg-amber-500 text-black font-medium text-sm rounded-lg hover:bg-amber-400 disabled:opacity-50 transition-colors flex items-center gap-1.5"
                 >
                   {searching ? <SyncIcon className="w-4 h-4 animate-spin" /> : 'Check Duplicate'}
@@ -815,15 +916,25 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
           {/* STEP 3: CHATGPT RESEARCH HANDOFF */}
           {session && step >= 3 && step <= 6 && <AutomaticIntakePanel session={session} isOnline={isOnline} onBusy={setAiBusy} onContent={async content => {
               const parsed = parseProductResearchPaste(JSON.stringify(content))
-              if (session.checklist_step === 'research_handoff') {
-                const updated = await saveIntakeSessionStep(session, 'field_review')
+              const openReview = (updated) => {
                 setSession(updated)
+                setParsedPayload(parsed)
+                setJsonInput(JSON.stringify(content, null, 2))
+                setAcceptedFields({})
+                setParseError(null)
+                setStep(4)
               }
-              setParsedPayload(parsed)
-              setJsonInput(JSON.stringify(content, null, 2))
-              setAcceptedFields({})
-              setParseError(null)
-              setStep(4)
+              if (session.checklist_step === 'research_handoff') {
+                return intakeCommand.run({
+                  kind: 'automatic-field-review',
+                  label: 'automatic field review',
+                  retryLabel: 'Retry exact automatic field review',
+                  payload: { session },
+                  send: (frozen, key) => saveIntakeSessionStep(frozen.session, 'field_review', {}, key),
+                  onSuccess: openReview,
+                })
+              }
+              openReview(session)
           }} />}
           {step === 3 && (
             <div className="space-y-4 text-xs">
@@ -938,10 +1049,12 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <button
                   type="button"
                   onClick={handleSaveDraft}
-                  disabled={sessionLoading || creatingDraft || aiBusy}
+                  disabled={sessionLoading || creatingDraft || aiBusy || intakeCommand.locked}
                   className="w-full min-h-11 py-3 bg-amber-400 text-black font-bold rounded-lg hover:bg-amber-300 transition-colors flex items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-60"
                 >
-                  {creatingDraft ? <SyncIcon className="w-4 h-4 animate-spin" /> : 'Assign SKU & Save Product Draft'}
+                  {creatingDraft || (intakeCommand.busy && intakeCommand.kind === 'draft')
+                    ? <SyncIcon className="w-4 h-4 animate-spin" />
+                    : 'Assign SKU & Save Product Draft'}
                 </button>
               </div>
             </div>
@@ -949,7 +1062,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
           {/* STEP 6: CONTROLLED FIRST INVENTORY */}
           {step === 6 && (
-            <div className="space-y-4 text-xs">
+            <fieldset disabled={intakeCommand.locked} className="space-y-4 text-xs disabled:opacity-70">
               <div>
                 <h4 className="text-base font-medium text-white">Step 6: Controlled First Inventory</h4>
                 <p className="text-white/60">
@@ -1157,11 +1270,11 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 disabled={sessionLoading || savingInventory || !isOnline}
                 className="w-full min-h-11 py-2.5 bg-emerald-500 text-black font-bold rounded-lg hover:bg-emerald-400 transition-colors disabled:cursor-wait disabled:opacity-60"
               >
-                {savingInventory
+                {savingInventory || (intakeCommand.busy && intakeCommand.kind === 'inventory')
                   ? <span className="flex items-center justify-center gap-2"><SyncIcon className="h-4 w-4 animate-spin" /> Recording…</span>
                   : inventorySource === 'flight' ? 'Add Expected Line to Italy Flight Manifest' : 'Record Authorized Opening Balance'}
               </button>
-            </div>
+            </fieldset>
           )}
 
           {/* STEP 7: PUBLICATION READINESS REVIEW */}
@@ -1184,6 +1297,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                     value={publicationReason}
                     onChange={(event) => setPublicationReason(event.target.value)}
                     placeholder="Describe the review evidence and why this status is correct."
+                    disabled={intakeCommand.locked}
                     className="w-full min-h-24 resize-y rounded-lg border border-white/20 bg-white/10 px-3 py-2.5 text-sm text-white placeholder:text-white/45 focus:border-amber-400 focus:outline-none"
                   />
                   <span className="block text-xs text-white/50">Required audit note, minimum 10 characters.</span>
@@ -1193,7 +1307,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   id="product-publication-status"
                   value={publicationStatus}
                   onChange={(e) => handleUpdatePublicationStatus(e.target.value)}
-                  disabled={sessionLoading || publishing}
+                  disabled={sessionLoading || publishing || intakeCommand.locked}
                   className="w-full min-h-11 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-amber-300 font-semibold disabled:cursor-wait disabled:opacity-60"
                 >
                   <option value="draft" className="bg-black text-white">Draft (Internal Only)</option>
@@ -1218,13 +1332,14 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
             </div>
           )}
 
+          </fieldset>
         </div>
 
         {/* Footer Controls */}
         <div className="flex items-center justify-between px-4 py-3 border-t border-white/10 bg-white/5">
           <button
             type="button"
-            disabled={step === 1 || aiBusy}
+            disabled={step === 1 || aiBusy || intakeCommand.locked}
             onClick={() => setStep(prev => Math.max(1, prev - 1))}
             className="min-h-11 px-3 py-2 bg-white/5 border border-white/10 text-white/70 rounded-lg text-xs hover:bg-white/10 disabled:opacity-30 transition-colors flex items-center gap-1"
           >

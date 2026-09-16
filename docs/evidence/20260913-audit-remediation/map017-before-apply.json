@@ -1,0 +1,18 @@
+[
+  {
+    "verification": {
+      "exact_followup_receipt": false,
+      "expected_function_types": true,
+      "seven_signatures_present": true,
+      "error_reports_rls_enabled": true,
+      "functions_owned_by_postgres": true,
+      "public_function_execute_removed": false,
+      "browser_function_execute_removed": false,
+      "error_reports_staff_read_preserved": true,
+      "public_stock_view_select_preserved": true,
+      "receiving_service_execute_preserved": true,
+      "error_reports_browser_insert_removed": false,
+      "error_reports_browser_insert_policies_removed": false
+    }
+  }
+]

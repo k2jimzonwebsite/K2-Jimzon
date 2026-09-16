@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { WORKFLOW_GUIDE_META, WORKFLOWS, WORKFLOW_SECTIONS } from './workflowData'
 import WorkflowSvgCanvas from './WorkflowSvgCanvas'
 import WorkflowDetailDrawer from './WorkflowDetailDrawer'
+import AiPromptStudioCard from './AiPromptStudioCard'
 import {
   ALL_NODES, ENTRY_NODE_ID, GRAPH_STATS, getDownstream, getNode, getTerminalNodes,
   getUpstream, tracePaths,
@@ -394,6 +395,11 @@ export default function MasterWorkflowGraph({
         onToggleComplete={handleToggleComplete}
         onSelectNode={handleSelectNode}
       />
+
+      {/* AI Image Studio & Prompt Engineering Card */}
+      <section aria-label="AI Image Studio and Prompt Engineering" className="mt-8 border-t border-white/10 pt-6">
+        <AiPromptStudioCard />
+      </section>
     </div>
   )
 }

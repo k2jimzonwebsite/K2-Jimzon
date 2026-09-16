@@ -1,0 +1,29 @@
+src/context/StoreContext.jsx:268: supabase.from('products').select('*').in('status', ['Live', 'Active', 'Unlisted']).eq('published', true),
+src/context/StoreContext.jsx:388: () => products.filter(p => p.status !== 'Unlisted'),
+supabase/migrations/20260902_purchase_time_reservation.sql:241: if v_product.product_status not in ('Live', 'Active') then raise exception 'Product % is not available for website orders', v_product.sku; end if;
+supabase/guest_order_conversation_seed_rollback.sql:18: raise exception 'K2_GUEST_SEED_CAPTURED_RECOVERY_REQUIRED';
+.github/workflows/ci.yml:36: run: npm ci
+.github/workflows/ci.yml:39: run: npm run security:dependency-audit && npm run security:dependency-policy
+.github/workflows/ci.yml:42: run: npm run security:test
+.github/workflows/ci.yml:45: run: npm run security:test-env-contract
+.github/workflows/ci.yml:48: run: npm run security:test-files && npm run security:files
+.github/workflows/ci.yml:51: run: npm run security:test-env-source && npm run security:env-source
+.github/workflows/ci.yml:54: run: npm run security:secrets
+.github/workflows/ci.yml:57: run: npm run security:history
+.github/workflows/ci.yml:60: run: npm run check:imports
+.github/workflows/ci.yml:63: run: npm run build:storefront
+.github/workflows/ci.yml:66: run: npm run build:admin
+.github/workflows/ci.yml:69: run: npx playwright install --with-deps chromium
+.github/workflows/ci.yml:77: run: npm test
+.github/workflows/ci.yml:82: run: createdb -h 127.0.0.1 -p 5432 -U postgres k2_map017_rehearsal_ci
+.github/workflows/ci.yml:85: run: npm run rehearse:map017-local && npm run test:map017-local-db
+.github/workflows/ci.yml:91: run: npm run rehearse:catalog-spreadsheet
+tests/confirmation-commitment-contract.spec.js:2: import { readFile } from 'node:fs/promises'
+tests/confirmation-commitment-contract.spec.js:6: const runner = 'scripts/rehearse-purchase-time-reservation.mjs'
+tests/confirmation-commitment-contract.spec.js:9: const sql = await readFile(migration, 'utf8')
+tests/confirmation-commitment-contract.spec.js:16: const sql = await readFile(migration, 'utf8')
+tests/confirmation-commitment-contract.spec.js:25: const sql = await readFile(migration, 'utf8')
+tests/confirmation-commitment-contract.spec.js:29: expect(sql).toMatch(/event_type, quantity, reference_type, reference_id[^;]*'stock_committed'/)
+tests/confirmation-commitment-contract.spec.js:39: const sql = await readFile(migration, 'utf8')
+tests/confirmation-commitment-contract.spec.js:45: const sql = await readFile(rollback, 'utf8')
+tests/confirmation-commitment-contract.spec.js:53: const js = await readFile(runner, 'utf8')

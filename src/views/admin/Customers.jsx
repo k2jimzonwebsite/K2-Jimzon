@@ -123,10 +123,10 @@ export default function Customers() {
     <WorkspaceIntro eyebrow="Customer identity" title="Customers" description="Account, guest, and channel identities stay separate until ownership is verified. Similar names, email addresses, and phone numbers are never merged automatically." actions={<button type="button" onClick={fetchCustomers} disabled={loading || Boolean(reviewing)} className="min-h-11 rounded-adm-sm border border-adm-line bg-white/5 px-4 text-sm font-semibold disabled:opacity-40">{loading ? 'Refreshing…' : 'Refresh'}</button>} />
 
     {error && <StateBanner tone="danger">{error}</StateBanner>}
-    {!error && <StateBanner tone="info">{mode === 'canonical' ? 'Canonical customer identities are available. Order and conversation totals appear only when every supporting query succeeds.' : 'Current view contains registered Supabase customer profiles only. Guest and marketplace identities remain unavailable until the hybrid identity migration is activated.'}</StateBanner>}
+    {!error && <StateBanner tone="info">{mode === 'canonical' ? 'Canonical customer identities are available. Order and conversation totals appear only when every supporting query is complete. Counts below describe the loaded customer records.' : 'Current view contains registered Supabase customer profiles only. Guest and marketplace identities remain unavailable until the hybrid identity migration is activated.'}</StateBanner>}
 
     <MetricRail items={[
-      { label: 'Customer records', value: metrics.total },
+      { label: 'Loaded customer records', value: metrics.total },
       { label: 'Accounts linked', value: metrics.accounts, tone: 'text-forest' },
       { label: 'Guest or channel only', value: mode === 'canonical' ? metrics.guestOrChannel : 'Pending', tone: 'text-blue' },
       { label: metricsAvailable ? 'Unread messages' : 'Operational totals', value: metricsAvailable ? metrics.unread : 'Unavailable' },

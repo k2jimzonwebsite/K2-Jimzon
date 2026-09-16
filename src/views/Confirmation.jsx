@@ -83,7 +83,7 @@ export default function Confirmation() {
           <InboxIcon size={16} /> Saved for staff review
         </p>
         <p className="mt-2 text-sm leading-relaxed text-navy-soft">
-          No payment was charged. Our staff will check inventory in Manila, calculate exact delivery options, and contact you with payment details.
+          No payment was charged. Our staff will verify inventory in Manila, review order and delivery details, and contact you with payment instructions.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-navy-soft">
           There is no self-service cancellation or return. Message K2 staff; each request is reviewed case by case.
@@ -91,7 +91,7 @@ export default function Confirmation() {
         <ol className="mt-6 space-y-4">
           {[
             ['Request submitted', 'Received'],
-            ['Stock and delivery review', 'Next step'],
+            ['Stock and order review', 'Next step'],
             ['Payment instructions', 'After confirmation'],
             ['Packing and courier handoff', 'After payment verification'],
           ].map(([label, state], index) => (

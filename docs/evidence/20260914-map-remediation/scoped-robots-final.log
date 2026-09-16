@@ -1,0 +1,26 @@
+
+Running 19 tests using 1 worker
+
+(node:19696) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\prelaunch-indexing-contract.spec.js:30:3 › pre-launch indexing gate › the header and the switch agree (8ms)
+  ok  2 tests\prelaunch-indexing-contract.spec.js:43:3 › pre-launch indexing gate › the sitemap exclusion follows the same switch (4ms)
+  ok  3 tests\prelaunch-indexing-contract.spec.js:55:3 › pre-launch indexing gate › robots.txt still allows crawling so the header can be read (3ms)
+  ok  4 tests\prelaunch-indexing-contract.spec.js:64:3 › pre-launch indexing gate › only prelaunch products and scoped guest journeys are withheld (4ms)
+  ok  5 tests\prelaunch-indexing-contract.spec.js:79:3 › pre-launch indexing gate › the undo procedure is documented and reachable (3ms)
+  ok  6 tests\storefront-discovery-contract.spec.js:11:1 › scoped guest routes have crawler exclusions at the deployed header boundary (3ms)
+  ok  7 tests\storefront-discovery-contract.spec.js:19:1 › storefront identity metadata and crawler policy ship in the public artifact (14ms)
+  ok  8 tests\storefront-discovery-contract.spec.js:67:1 › the Admin build replaces shared Storefront discovery tags with staff ones (5ms)
+  ok  9 tests\storefront-discovery-contract.spec.js:80:1 › both target builds emit a static noindex recovery page for real host 404 responses (8ms)
+  ok 10 tests\storefront-discovery-contract.spec.js:98:1 › the production boundary fails closed on missing or executable Storefront 404 output (219ms)
+  ok 11 tests\storefront-discovery-contract.spec.js:132:1 › every local product fallback is shipped and build verification rejects missing references (4ms)
+  ok 12 tests\storefront-discovery-contract.spec.js:147:1 › home discovery routes through the shared history and focus contract (2ms)
+  ok 13 tests\storefront-discovery-contract.spec.js:154:1 › the Storefront defers the full Supabase SDK until remote data is requested (7ms)
+  ok 14 tests\storefront-discovery-contract.spec.js:170:1 › production builds enforce the recorded route bundle budgets (7ms)
+  ok 15 tests\storefront-discovery-contract.spec.js:183:1 › optional brand fonts cannot block Storefront bootstrap (6ms)
+  ok 16 tests\storefront-discovery-contract.spec.js:192:1 › the cart overlay is loaded only when Storefront chrome requests it (7ms)
+  ok 17 tests\storefront-discovery-contract.spec.js:201:1 › product discovery metadata is derived from canonical storefront truth (9ms)
+  ok 18 tests\storefront-discovery-contract.spec.js:223:1 › the product page publishes Product, FAQ and Breadcrumb markup from one approved source (6ms)
+  ok 19 tests\storefront-discovery-contract.spec.js:245:1 › breadcrumb markup is positional, absolute, and refuses an incomplete trail (9ms)
+
+  19 passed (1.3s)
