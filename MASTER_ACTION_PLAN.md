@@ -1,5 +1,13 @@
 # K2 Jimzon Master Action Plan
 
+**16 September order and pasabuy conversation and message seeding (IDEA-20260916-05, MAP-019 / Queue Item 14, database live on Supabase / code locally verified):**
+Permanently applied database migration `supabase/migrations/20260916_order_and_pasabuy_conversation_seed.sql` on production Supabase (`pixplcjqivlfflickobf`) via Supabase Management API per explicit owner instruction, resolving the empty support thread defect (Queue Item 14):
+- **Schema Hardening (`public.messages`):** Added `direction text` (`check direction in ('inbound', 'outbound', 'internal')`) and `provider_event_key text` with unique/index guard to `public.messages`.
+- **Order Submission Seeding (`public.submit_order_request_v2`):** Preserved 11 arguments (`p_shipping_amount numeric default 0`, `p_shipping_quote_status text default null`). When an order is placed, an initial support conversation is created (`platform = 'Website'`, `status = 'Open'`, `priority = 'normal'`, `unread_count = 1`, `response_due_at = now() + 4 hours`, `source_kind = 'order_request'`, `source_id = id`). An initial customer-authored message is seeded (`sender_type = 'Customer'`, `delivery_status = 'received'`, `direction = 'inbound'`, `provider_event_key = 'guest-order-seed:' || id`) detailing the order reference and non-promissory review expectation.
+- **Pasabuy Submission Seeding (`public.submit_pasabuy_request`):** Preserved 10 arguments. Creates a support conversation (`platform = 'Pasabuy'`, `status = 'Open'`, `unread_count = 1`, `response_due_at = now() + 4 hours`, `source_kind = 'pasabuy_request'`, `source_id = id`) and seeds an inbound customer message (`provider_event_key = 'guest-pasabuy-seed:' || id`). Qualified table column references to avoid PL/pgSQL variable collision.
+- **Live Production & Replay Verification:** Verified on live production Supabase (`pixplcjqivlfflickobf`) using `verify-live-rollback.mjs` in a safe transactional session: order submission generated order, conversation, message, and event; idempotent replay created 0 duplicate messages; pasabuy submission generated request, conversation, and message; transaction rolled back cleanly leaving 0 test residue.
+- **Automated Contracts & Budgets:** Contract test `tests/order-request-conversation-seed-contract.spec.js` passes 3/3; guest conversation seed contracts pass 6/6; full contract suite passes 652/652; selling surfaces pass 8/8; `npm run prebuild` clean with 0 leaks and 0 boundary gaps (1378 files); Admin bundle passes at 191.12 kB / 300.00 kB minified; Storefront passes at 149.89 kB / 150.50 kB gzip. Rollback script prepared at `supabase/migrations/20260916_order_and_pasabuy_conversation_seed_rollback.sql`. Queue Item 14 removed from the active backlog.
+
 **16 September Workflow Guide visual & tactile interactive enhancements (IDEA-20260916-04, MAP-021, code locally verified):**
 Completed interactive and visual polish across the Admin BOS Master Operations Workflow Guide surfaces (`WorkflowGuideModal.jsx`, `WorkflowSvgCanvas.jsx`, `MasterWorkflowGraph.jsx`, and `WorkflowDetailDrawer.jsx`):
 - **Clean SVG Primitives & Touch Targets (`WorkflowGuideModal.jsx`):** Eliminated all raw emojis in tab navigation rail (`MapIcon`, `PlaneIcon`, `ShieldIcon`, `ClockIcon`, `BoxIcon`, `GlobeIcon`); fortified workspace button label calculation; passed `onNavigate` downstream.
@@ -1406,45 +1414,6 @@ must do, and until then no published customer feedback on the storefront is real
 verification-loop skill had nothing to run. The repository compensates with
 `check-imports.mjs`, the security gates and 486 contracts, but nothing statically
 checks types or style. Worth an explicit decision rather than an accident.
-
-### Queue item 14 — MAP-019 — an order opens a conversation with nothing in it
-
-**Raised 2 September 2026 from an owner test order. Confirmed in source.**
-
-`public.submit_guest_order_v1` inserts a `public.conversations` row with
-`source_kind = 'order_request'` and grants the customer `read` and `reply` on it
-— then inserts no message. Compare `public.start_guest_conversation_v1` in the
-same migration (`20260812_guest_submission_boundary.sql:528`), which inserts the
-conversation *and* a first message, sets `unread_count = 1`, `last_inbound_at`,
-and `response_due_at = now() + 4 hours`. The order path sets none of the four.
-
-*Measured consequence.* The customer taps "View your messages" and lands in an
-empty thread. Staff see a conversation with no content, no unread badge, and no
-response-due timer, so it raises no signal and starts no SLA. The owner's report
-— "there are no message in k2jimzon website" — is this, plus the config cause
-below.
-
-*Second, separate cause found in the same investigation.* `VITE_GUEST_BFF_ENABLED`
-is absent from the local environment, so `guestCommerceService.js:4` evaluates
-false and checkout takes the direct `submit_order_request_v2` path, which creates
-no conversation at all. `src/views/Confirmation.jsx:109` also hides the "View your
-messages" button behind the same flag. Confirm the deployed value before treating
-the empty-thread defect as the only cause.
-
-*Fix.* Seed the order conversation the way the contact path already does: one
-inbound system-authored message stating the order reference and what happens
-next, plus `unread_count`, `last_inbound_at`, and `response_due_at`. Reuse
-`start_guest_conversation_v1`'s shape rather than inventing a second one. This is
-a database function change and therefore sits behind the MAP-017 apply gate.
-
-*Note for `IDEA-20260902-04`.* The owner's planned GCash payment step is intended
-to carry a live chat. That chat would open onto this empty thread, so this defect
-is a prerequisite for that flow, not a cosmetic follow-up.
-
-*Files:* a new additive migration under `supabase/migrations/`, and a contract
-asserting an order conversation is never created without a first message.
-*Check:* a guest order produces a thread whose first message names the order
-reference; the staff inbox shows it unread with a response-due time.
 
 ### Verification pass — 2 September 2026
 
