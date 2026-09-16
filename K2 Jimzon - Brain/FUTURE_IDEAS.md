@@ -1,5 +1,8 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260916-03 — accepted workflow map follow-through and staff instructional roadmap, merged into MAP-021.**
+Owner requests that when any workflow is clicked in the Admin BOS Master Operations Workflow Graph, it actively teaches admins and staff on what to click and do next to continue on and finish the objectives or goals. Audit gate: keep existing graph topology (49 nodes, 60 edges) and contracts; enrich all 8 workflows with structured operational goals and finish criteria; enrich all 48 operational nodes with concrete action directives (target screen, what to click, action directive, and next step handoff); mount an interactive sequential step roadmap and high-contrast staff action hero card.
+
 **IDEA-20260916-02 — accepted full project audit, merged into MAP-028 K.**
 Owner requests an exhaustive full-project audit: inspect for things that won't work,
 architectural and functional gaps, faults, runtime mistakes, edge case failures, and

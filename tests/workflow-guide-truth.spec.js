@@ -76,3 +76,31 @@ test('the new-product guide names the two approved manual ChatGPT Projects', () 
   expect(text).toContain('AFTER')
   expect(text).not.toMatch(/Midjourney|FLUX|DALL-E 3/i)
 })
+
+test('every workflow defines objective/goal/exit gates and all nodes provide complete staff action guides', async () => {
+  for (const [wfId, workflow] of Object.entries(WORKFLOWS)) {
+    expect(workflow.goal, `${wfId} missing goal`).toBeTruthy()
+    expect(workflow.startingPoint, `${wfId} missing startingPoint`).toBeTruthy()
+    expect(workflow.completionCriteria, `${wfId} missing completionCriteria`).toBeTruthy()
+    for (const node of workflow.nodes) {
+      expect(node.actionGuide, `${node.id} missing actionGuide`).toBeDefined()
+      expect(node.actionGuide.targetScreen, `${node.id} missing targetScreen`).toBeTruthy()
+      expect(node.actionGuide.whatToClick, `${node.id} missing whatToClick`).toBeTruthy()
+      expect(node.actionGuide.actionDirective, `${node.id} missing actionDirective`).toBeTruthy()
+      expect(node.actionGuide.nextAction, `${node.id} missing nextAction`).toBeTruthy()
+      expect(node.actionGuide.exitCriteria, `${node.id} missing exitCriteria`).toBeTruthy()
+    }
+  }
+
+  const master = await read('../src/components/admin/master-workflow-graph/MasterWorkflowGraph.jsx')
+  const detail = await read('../src/components/admin/master-workflow-graph/WorkflowDetailDrawer.jsx')
+
+  expect(master).toContain('Workflow Objective & Operational Definition of Done')
+  expect(master).toContain('Step Sequence & Staff Handoffs')
+  expect(detail).toContain('Staff Operational Directive')
+  expect(detail).toContain('What to Click & Do Next')
+  expect(detail).toContain('1. Target Admin Screen & Click Target')
+  expect(detail).toContain('2. Operational SOP & Physical Directive')
+  expect(detail).toContain('3. Next Action & Operational Follow-Through')
+  expect(detail).toContain('4. Step Exit Criteria (Server Verification Gate)')
+})

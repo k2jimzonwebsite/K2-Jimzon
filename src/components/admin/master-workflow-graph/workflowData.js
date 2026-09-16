@@ -63,6 +63,18 @@ export const WORKFLOWS = {
     color: '#0284c7',
     accentColor: '#38bdf8',
     stats: { steps: 7, scansRequired: 3, roles: ['Milan Cousin / Buyer', 'Manila Intake Staff', 'Hub Manager'], estTime: '3-7 days transit' },
+    goal:
+      "Source authentic Italian provisions in Milan, pack and seal flight cargo boxes, coordinate international air freight transit to Manila, verify customs clearance and seal integrity, perform 100% item QC unboxing, and intake verified inventory into the K2 system.",
+    startingPoint:
+      "Italy Purchasing Kanban & Consignment Manager",
+    completionCriteria: [
+          "Flight cargo manifest pre-tagged with items, EAN barcodes, and numbered tamper seal",
+          "Air cargo transit tracked and Manila customs clearance verified",
+          "Manila receiving dock verifies physical box and tamper seal against Milan manifest",
+          "Physical unboxing and 100% item count completed with damaged units quarantined",
+          "Items routed to Existing SKU stock addition or New Product catalog creation",
+          "Final receipt submitted and canonical inventory lots verified in Manila hub"
+    ],
     nodes: [
       {
         id: 'cb_1',
@@ -92,6 +104,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'kanban',
         jumpLabel: 'Open Italy Purchasing',
+        actionGuide: {
+          targetScreen: "Italy Purchasing Kanban",
+          whatToClick: "Select purchase card and click \"Log Store Purchase\"",
+          actionDirective:
+            "Purchase authentic Italian goods in Milan bottegas/supermarkets. Verify packaging condition and at least 4-6 months shelf life. Photograph and upload official store receipt (Scontrino Fiscale) in EUR (€).",
+          nextAction:
+            "Proceed to Step 2: Milan Box Packing & Manifest Pre-Tagging once goods are assembled at Milan staging hub.",
+          exitCriteria:
+            "Store receipt photographed and uploaded with unit cost in EUR and minimum 60 days shelf life.",
+        },
       },
       {
         id: 'cb_2',
@@ -121,6 +143,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'consignment',
         jumpLabel: 'Create Flight Manifest',
+        actionGuide: {
+          targetScreen: "Flight Consignments",
+          whatToClick: "Click \"+ Create Flight Manifest\" or open active Flight Cargo Box",
+          actionDirective:
+            "Pack items into heavy-duty cargo boxes. Enter item quantities and scan EAN barcodes into the Flight Consignment Manifest. Affix numbered security tape and record seal serial number.",
+          nextAction:
+            "Proceed to Step 3: Air Cargo International Transit once box is sealed and delivered to air freight forwarder.",
+          exitCriteria:
+            "Box sealed with recorded security seal serial number and linked to scheduled flight manifest.",
+        },
       },
       {
         id: 'cb_3',
@@ -148,6 +180,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'consignment',
         jumpLabel: 'Track Flight Consignments',
+        actionGuide: {
+          targetScreen: "Flight Consignments",
+          whatToClick: "Select flight in Consignment Manager to view Master Air Waybill (MAWB)",
+          actionDirective:
+            "Monitor flight transit from Milan (MXP) to Manila (NAIA). Confirm MAWB tracking status and monitor terminal customs clearance.",
+          nextAction:
+            "Proceed to Step 4: Manila Airport Receipt & Seal Verification once cargo lands at NAIA terminal.",
+          exitCriteria:
+            "Flight landed and customs clearance confirmed without terminal impound.",
+        },
       },
       {
         id: 'cb_4',
@@ -176,6 +218,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'consignment',
         jumpLabel: 'Verify Inbound Box',
+        actionGuide: {
+          targetScreen: "Flight Consignments",
+          whatToClick: "Click \"Verify Inbound Box\" on the arriving consignment",
+          actionDirective:
+            "Receive physical cargo box at Manila dock. Scan outer box barcode and verify the tamper-evident security seal serial number matches the Milan manifest before opening.",
+          nextAction:
+            "Proceed to Step 5: Physical Box Opening & Item Quality Check to cut the seal and unpack items.",
+          exitCriteria:
+            "Security seal serial number matches Milan manifest with zero evidence of tampering.",
+        },
       },
       {
         id: 'cb_5',
@@ -204,6 +256,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Open Inventory Intake',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Open Inventory Intake\" under Consignments / Receiving",
+          actionDirective:
+            "Cut seal and unpack items onto sanitized stainless steel bench. Perform 100% item recount against manifest. Inspect glass lid vacuum seals, oil leaks, and expiry dates. Move damaged units to Quarantine.",
+          nextAction:
+            "Proceed to Step 6: Decision Branch: Existing SKU vs New Product to barcode-scan and route each product.",
+          exitCriteria:
+            "Physical count completed and any breakage or shortage logged in the receipt workflow.",
+        },
       },
       {
         id: 'cb_6',
@@ -232,6 +294,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Product Catalog Lookup',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Product Catalog Lookup\" or scan item with barcode scanner",
+          actionDirective:
+            "Scan manufacturer EAN-13 barcode. If catalog match is found, route to Existing Stock Intake (Branch A). If no match or new item, route to New Product Intake (Branch B).",
+          nextAction:
+            "Follow the selected branch (Step 1 of Existing Stock Intake or Step 1 of New Product Intake).",
+          exitCriteria:
+            "Every scanned unit correctly identified and routed to either batch replenishment or new SKU setup.",
+        },
       },
       {
         id: 'cb_7',
@@ -260,6 +332,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Verify Inventory Record',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Verify Inventory Record\" on the finalized consignment receipt",
+          actionDirective:
+            "Hub Manager reviews the verified recount, finalizes the receipt, and checks the resulting batch lots, physical quantities, and sellable stock in MANILA_MAIN warehouse.",
+          nextAction:
+            "Stock is now ready for order picking in Omni-Operations Hub and visible for storefront ordering.",
+          exitCriteria:
+            "Consignment status finalized, batch lots created, and location inventory balances reconciled.",
+        },
       },
     ],
   },
@@ -279,6 +361,17 @@ export const WORKFLOWS = {
     color: '#059669',
     accentColor: '#34d399',
     stats: { steps: 5, scansRequired: 2, roles: ['Intake Staff', 'Warehouse Custodian'], estTime: '5-8 mins' },
+    goal:
+      "Quickly replenish stock for already-cataloged Italian master SKUs: scan barcode, record new manufacturer FEFO expiry date and unit PHP cost, affix physical lot identifier, position stock behind older batches on shelves, and verify inventory balance.",
+    startingPoint:
+      "Inventory Management > Quick Intake",
+    completionCriteria: [
+          "Barcode scanned and matched to active catalog Master SKU",
+          "New FEFO batch lot registered with valid DD/MM/YYYY expiry date (>90 days for sellable status)",
+          "Physical lot identifier labeled and placed on storage bin",
+          "New units positioned behind older expiring stock on warehouse shelf (physical FEFO)",
+          "Hub Manager verifies lot quantity and sellable stock balance in MANILA_MAIN"
+    ],
     nodes: [
       {
         id: 'ext_1',
@@ -307,6 +400,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Open Inventory Scan',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Open Inventory Scan\" or focus barcode input in Quick Intake",
+          actionDirective:
+            "Scan manufacturer EAN-13 barcode. Verify loaded product matches physical packaging size and net weight (e.g. 260g vs 330g).",
+          nextAction:
+            "Proceed to Step 2: New FEFO Batch Lot & Expiry Registration to log the manufacturer expiration date.",
+          exitCriteria:
+            "Barcode matched to canonical Master SKU with correct size and variant details.",
+        },
       },
       {
         id: 'ext_2',
@@ -335,6 +438,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Batch Lot Manager',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Batch Lot Manager\" on the selected product",
+          actionDirective:
+            "Enter printed expiration date in YYYY-MM-DD format. Input verified physical intake quantity and reviewed PHP unit cost. Ensure lots with distinct expiry dates are saved separately.",
+          nextAction:
+            "Proceed to Step 3: Physical Lot Identification to prepare the warehouse container label.",
+          exitCriteria:
+            "Batch lot saved with verified quantity, expiry date, hub, and documented PHP unit cost.",
+        },
       },
       {
         id: 'ext_3',
@@ -362,6 +475,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Open Batch Records',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Open Batch Records\" to view saved lot identifier",
+          actionDirective:
+            "Prepare a clear physical label with SKU, lot ID, best-before date, and storage requirements. Affix to carton case or bin without obscuring manufacturer allergen panel.",
+          nextAction:
+            "Proceed to Step 4: Shelf Bin Placement (Physical FEFO) to stage goods in the warehouse.",
+          exitCriteria:
+            "Physical label matches canonical batch record and is affixed securely to storage carton.",
+        },
       },
       {
         id: 'ext_4',
@@ -390,6 +513,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Shelf Locations',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Shelf Locations\" to confirm assigned bin code",
+          actionDirective:
+            "Bring labeled items to assigned shelf bin. Position the newly arrived batch behind existing older-expiring batches so order pickers retrieve earliest-expiring units first.",
+          nextAction:
+            "Proceed to Step 5: Finalize Added Stock for manager verification.",
+          exitCriteria:
+            "Stock placed physically behind earlier-expiring units in designated bin location.",
+        },
       },
       {
         id: 'ext_5',
@@ -417,6 +550,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Verify Lot Balances',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Verify Lot Balances\" in Product Batches",
+          actionDirective:
+            "Hub Manager reviews the intake count and checks that Inventory reflects the updated physical and sellable quantities for MANILA_MAIN.",
+          nextAction:
+            "Intake complete. Added stock is now eligible for order fulfillment picking.",
+          exitCriteria:
+            "Inventory balance reflects added units and batch lot status is verified.",
+        },
       },
     ],
   },
@@ -436,6 +579,18 @@ export const WORKFLOWS = {
     color: '#e11d48',
     accentColor: '#fb7185',
     stats: { steps: 6, scansRequired: 1, roles: ['Catalog Lead', 'Content Designer'], estTime: '15-20 mins' },
+    goal:
+      "Register and launch a brand new authentic Italian provision into the K2 catalog: create master SKU draft, establish owner-reviewed pricing, generate high-fidelity editorial copy and studio photography using approved ChatGPT Projects, set up Before/After unboxing media, declare allergens, and publish to the storefront.",
+    startingPoint:
+      "Inventory Management > Add Product",
+    completionCriteria: [
+          "Master SKU, Italian brand, product title, and origin registered as Draft",
+          "Owner pricing review completed with documented PHP retail price and rationale",
+          "Evidence-backed product copy and image briefs reviewed via K2 Product Content and K2 Product Image Studio",
+          "PRIMARY and AFTER unboxing comparison photos uploaded to Product Media Manager",
+          "Mandatory allergen declarations and culinary pairing notes verified",
+          "Product status toggled to Active/Live and verified on Storefront"
+    ],
     nodes: [
       {
         id: 'np_1',
@@ -465,6 +620,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Open Add Product',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"+ Add Product\" button in upper right of Catalog",
+          actionDirective:
+            "Enter official Italian brand name, authentic Italian title, English culinary subtitle, net weight, packaging type, and verified Italian region of origin. Scan printed EAN-13 barcode.",
+          nextAction:
+            "Proceed to Step 2: Owner Pricing Review to establish retail and wholesale pricing.",
+          exitCriteria:
+            "Product draft saved with unique Master SKU, valid EAN barcode, and origin classification.",
+        },
       },
       {
         id: 'np_2',
@@ -493,6 +658,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Configure Pricing',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Configure Pricing\" in the product draft editor",
+          actionDirective:
+            "Review source purchase receipt (€) and landed cost calculation. Pricing lead or owner enters PHP retail price and records written pricing rationale. Price must remain above landed cost.",
+          nextAction:
+            "Proceed to Step 3: Manual Product Content & Image Projects to generate copy and visual briefs.",
+          exitCriteria:
+            "PHP retail price recorded with written owner rationale; landed cost floor respected.",
+        },
       },
       {
         id: 'np_3',
@@ -525,6 +700,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Open Smart Scan',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Open Smart Scan\" in product editor",
+          actionDirective:
+            "Use Smart Scan to prepare the versioned prompt. Attach real packaging photos to private \"K2 Product Content\" ChatGPT Project. Paste returned JSON into Smart Paste and accept or reject fields. Then run separate PRIMARY and AFTER requests in private \"K2 Product Image Studio\" ChatGPT Project.",
+          nextAction:
+            "Proceed to Step 4: Before/After Unboxing Experience Setup to upload the approved visual assets.",
+          exitCriteria:
+            "Content schema reviewed in Smart Paste and candidate images verified against authentic packaging.",
+        },
       },
       {
         id: 'np_4',
@@ -553,6 +738,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Open Product Photos',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Open Product Photos\" in Product Media Manager",
+          actionDirective:
+            "Upload approved sealed package shot to the PRIMARY slot and unboxed/served presentation to the AFTER slot (JPEG/PNG/WebP under 4 MB). Preview the interactive slider.",
+          nextAction:
+            "Proceed to Step 5: Ingredients, Allergens & Preparation Guide to enter safety details.",
+          exitCriteria:
+            "Both PRIMARY and AFTER images uploaded and interactive comparison slider verified.",
+        },
       },
       {
         id: 'np_5',
@@ -581,6 +776,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Open Product Editor',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Open Product Editor\" and navigate to Specifications tab",
+          actionDirective:
+            "Enter certified ingredients from physical packaging. Bold mandatory allergens (Wheat/Gluten, Milk, Nuts, Soy, Eggs). Write authentic Italian culinary pairing notes and preparation tips.",
+          nextAction:
+            "Proceed to Step 6: Review & Live Storefront Activation for final publication check.",
+          exitCriteria:
+            "Allergen warnings accurately declared and culinary pairing guidance recorded.",
+        },
       },
       {
         id: 'np_6',
@@ -609,6 +814,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Review Publication',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Review Publication\" and toggle status to \"Live\"",
+          actionDirective:
+            "Inspect mobile and desktop preview. Verify search tags, SEO title, and pricing display. Toggle product status from Draft to Active/Live and save. Verify the live product URL.",
+          nextAction:
+            "Product is published. Stock will display as \"Request via Pasabuy\" until batch inventory is received.",
+          exitCriteria:
+            "Product status saved as Active/Live and verified on Storefront catalog.",
+        },
       },
     ],
   },
@@ -628,6 +843,17 @@ export const WORKFLOWS = {
     color: '#d97706',
     accentColor: '#fbbf24',
     stats: { steps: 5, scansRequired: 2, roles: ['Transferor (Sender)', 'Transferee (Receiver)'], estTime: '10 mins' },
+    goal:
+      "Execute an authenticated physical custody transfer of inventory between warehouse hubs or staff: initiate transfer request, count and seal outbound goods, transport securely, perform an independent inbound recount, and finalize custody ledger via dual-party electronic handshake.",
+    startingPoint:
+      "Inventory Management > Custody Transfers",
+    completionCriteria: [
+          "Transfer manifest initiated with batch lot, unit quantity, and designated recipient",
+          "Outbound count verified and numbered security seal applied to transport container",
+          "Physical transport logged with departure and arrival checkpoints",
+          "Recipient performs independent 100% barcode recount at destination dock",
+          "Electronic handshake signed by recipient transferring legal custody in ledger"
+    ],
     nodes: [
       {
         id: 'hand_1',
@@ -657,6 +883,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Initiate Transfer',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Initiate Transfer\" in Custody Transfers tab",
+          actionDirective:
+            "Select batch lot, quantity, source hub, destination hub, and designated recipient staff member. Generate unique Transfer Manifest ID.",
+          nextAction:
+            "Proceed to Step 2: Pre-Transit Physical Count & QC to pack and seal the crate.",
+          exitCriteria:
+            "Transfer manifest created in open offer state and inventory locked in transit.",
+        },
       },
       {
         id: 'hand_2',
@@ -685,6 +921,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'View Custody Manifest',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"View Custody Manifest\" to print or display transfer sheet",
+          actionDirective:
+            "Count units one-by-one into transfer container. Affix numbered tamper-evident security seal. Record seal serial number on manifest and attach printed transfer sheet.",
+          nextAction:
+            "Proceed to Step 3: Secure Physical Transit for transport dispatch.",
+          exitCriteria:
+            "Physical unit count matches manifest and security seal serial number is registered.",
+        },
       },
       {
         id: 'hand_3',
@@ -712,6 +958,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Track Open Transfers',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Track Open Transfers\" to monitor transit status",
+          actionDirective:
+            "Transport container between hubs under secure, temperature-controlled conditions. Log departure timestamp and driver identity.",
+          nextAction:
+            "Proceed to Step 4: Physical Receipt & Independent Recount upon arrival at destination.",
+          exitCriteria:
+            "Container delivered to destination hub with security seal intact.",
+        },
       },
       {
         id: 'hand_4',
@@ -741,6 +997,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Scan Received Crate',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Scan Received Crate\" in Inbound Transfers queue",
+          actionDirective:
+            "Inspect security seal number against manifest. Break seal, unpack container, and independently scan every unit barcode into the receiving screen. Flag any variance immediately.",
+          nextAction:
+            "Proceed to Step 5: Electronic Handshake & Ownership Transfer to accept custody.",
+          exitCriteria:
+            "100% of physical units scanned and zero discrepancy confirmed against manifest.",
+        },
       },
       {
         id: 'hand_5',
@@ -769,6 +1035,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Custody History Log',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Custody History Log\" and sign the Electronic Handshake",
+          actionDirective:
+            "Review verified count. Recipient enters staff authentication credentials to sign acceptance. System logs immutable custody transfer in ledger.",
+          nextAction:
+            "Custody transfer complete. Received units are staged in destination warehouse bins.",
+          exitCriteria:
+            "Electronic handshake signed and canonical custodian updated in inventory ledger.",
+        },
       },
     ],
   },
@@ -785,6 +1061,17 @@ export const WORKFLOWS = {
     color: '#7c3aed',
     accentColor: '#a78bfa',
     stats: { steps: 5, scansRequired: 1, roles: ['Audit Counter', 'Inventory Manager'], estTime: '45-60 mins' },
+    goal:
+      "Conduct an accurate monthly inventory cycle count: define physical audit scope, coordinate manual movement pause, execute independent blind physical counts, compare against database lot balances, investigate variances, and obtain Hub Manager approval for ledger reconciliation.",
+    startingPoint:
+      "Inventory Management > Cycle Count & Audits",
+    completionCriteria: [
+          "Audit scope defined by shelf bins and movement pause coordinated with staff",
+          "Independent physical count executed shelf-by-shelf without viewing system quantities",
+          "Variance report generated comparing physical scan against canonical lot balances",
+          "Discrepancies recounted by second staff member and classified with reason codes",
+          "Hub Manager authorizes and applies formal inventory balance adjustments"
+    ],
     nodes: [
       {
         id: 'cnt_1',
@@ -813,6 +1100,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Schedule Cycle Count',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Schedule Cycle Count\" in Cycle Count tab",
+          actionDirective:
+            "Define shelves, categories, or lots to be audited. Coordinate with warehouse staff to pause movements (picking, receiving, transfers) on scoped bins during count.",
+          nextAction:
+            "Proceed to Step 2: Independent Physical Recount to start shelf scanning.",
+          exitCriteria:
+            "Audit scope documented and staff movement pause confirmed across warehouse.",
+        },
       },
       {
         id: 'cnt_2',
@@ -841,6 +1138,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Launch Blind Scanner',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Launch Blind Scanner\" or open physical count sheet",
+          actionDirective:
+            "Scan every physical unit systematically shelf-by-shelf. Record SKU, batch lot, and expiry date. Complete physical count before viewing expected system quantities.",
+          nextAction:
+            "Proceed to Step 3: Compare Count With Canonical Lots to analyze variances.",
+          exitCriteria:
+            "All units in scoped bins physically scanned and count submitted.",
+        },
       },
       {
         id: 'cnt_3',
@@ -869,6 +1176,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Review Variance Report',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Review Variance Report\" in Audit Management",
+          actionDirective:
+            "Review variance summary comparing physical counts against database balances. SKUs with zero variance require no action; SKUs with variance > 0 are flagged for secondary recount.",
+          nextAction:
+            "Proceed to Step 4: Secondary Recount & Discrepancy Classification for flagged items.",
+          exitCriteria:
+            "Variance report generated and discrepancy items flagged for investigation.",
+        },
       },
       {
         id: 'cnt_4',
@@ -897,6 +1214,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Classify Discrepancies',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Classify Discrepancies\" on flagged variance rows",
+          actionDirective:
+            "A second staff member recounts flagged items. If variance persists, assign authoritative reason code (Breakage, Expiry Discard, Shrinkage) and attach photo evidence.",
+          nextAction:
+            "Proceed to Step 5: Manager Authorization & Ledger Adjustment for final sign-off.",
+          exitCriteria:
+            "Secondary recount verified and all variances assigned approved reason codes.",
+        },
       },
       {
         id: 'cnt_5',
@@ -925,6 +1252,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Approve Audit Adjustments',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Approve Audit Adjustments\" with Manager credentials",
+          actionDirective:
+            "Hub Manager reviews net financial impact and reasons. Submit authorized reconciliation command to update lot balances, then notify staff that movement pause has ended.",
+          nextAction:
+            "Audit complete. Archive count records and resume standard warehouse operations.",
+          exitCriteria:
+            "Inventory ledger adjusted with manager approval and movement pause lifted.",
+        },
       },
     ],
   },
@@ -944,6 +1281,17 @@ export const WORKFLOWS = {
     color: '#059669',
     accentColor: '#34d399',
     stats: { steps: 6, scansRequired: 2, roles: ['Fulfillment Staff', 'Dispatch Coordinator'], estTime: '8-12 mins/order' },
+    goal:
+      "Fulfill customer orders from intake hold to courier dispatch: verify customer contact and delivery address, verify structured payment evidence against bank records, confirm order and commit stock, pick oldest expiring batch lots via FEFO, pack securely with transit protection, and dispatch via courier with recorded tracking.",
+    startingPoint:
+      "Omni-Operations Hub > Fulfillment Queue",
+    completionCriteria: [
+          "Order request reviewed and customer contact / delivery address confirmed",
+          "Structured payment evidence verified by staff distinct from submitter, and stock committed",
+          "Earliest-expiring batch lots physically picked from shelf bins via FEFO order sheet",
+          "Order packed securely with cushioning materials, product care note, and address label",
+          "Courier booked, package handed over to rider, and tracking number recorded"
+    ],
     nodes: [
       {
         id: 'ord_1',
@@ -972,6 +1320,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'omni_hub',
         jumpLabel: 'Open Omni-Hub Orders',
+        actionGuide: {
+          targetScreen: "Omni-Operations Hub",
+          whatToClick: "Click \"Open Omni-Hub Orders\" and select unconfirmed order row",
+          actionDirective:
+            "Review submitted customer details, delivery address, ordered items, and customer-confirmed delivery fee. Verify inventory reservation status is healthy.",
+          nextAction:
+            "Proceed to Step 2: Customer Contact & Total Confirmation if order requires custom coordination, or Step 3 if payment evidence is submitted.",
+          exitCriteria:
+            "Order request reviewed and held inventory verified against MANILA_MAIN stock.",
+        },
       },
       {
         id: 'ord_2',
@@ -1000,6 +1358,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inbox',
         jumpLabel: 'Open Customer Messages',
+        actionGuide: {
+          targetScreen: "Customer Messages Inbox",
+          whatToClick: "Click \"Open Customer Messages\" on the customer conversation thread",
+          actionDirective:
+            "Contact customer via chat or messaging to confirm delivery details, special handling requests, or provide official K2 payment account details (GCash/Maya/Bank Transfer).",
+          nextAction:
+            "Proceed to Step 3: Payment Verification & Release to Queue once payment proof is received.",
+          exitCriteria:
+            "Customer acknowledges order total, delivery method, and payment instructions.",
+        },
       },
       {
         id: 'ord_3',
@@ -1028,6 +1396,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'omni_hub',
         jumpLabel: 'View Packing Queue',
+        actionGuide: {
+          targetScreen: "Omni-Operations Hub",
+          whatToClick: "Click \"Payment Status\" button on the order card to open Payment Modal",
+          actionDirective:
+            "Review structured payment evidence (method, amount, payer name, reference number). Confirm funds in merchant account. Enforce separation of duties: verifying staff must be distinct from submitter. Confirm order to commit stock.",
+          nextAction:
+            "Proceed to Step 4: FEFO Shelf Picking & Barcode Verification to retrieve units from warehouse.",
+          exitCriteria:
+            "Payment confirmed in merchant account, separation of duties satisfied, and stock committed.",
+        },
       },
       {
         id: 'ord_4',
@@ -1057,6 +1435,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'omni_hub',
         jumpLabel: 'Packing Station Scanner',
+        actionGuide: {
+          targetScreen: "Omni-Operations Hub",
+          whatToClick: "Click \"Packing Station Scanner\" or print Pick List",
+          actionDirective:
+            "Take pick list to warehouse shelves. Pick the specific oldest-expiring FEFO batch lots indicated. Bring units to packing station and scan barcodes to verify 100% SKU match.",
+          nextAction:
+            "Proceed to Step 5: Secure Packing & Courier Booking once all items pass scan verification.",
+          exitCriteria:
+            "All order line items verified via barcode scan against assigned FEFO lots.",
+        },
       },
       {
         id: 'ord_5',
@@ -1085,6 +1473,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'omni_hub',
         jumpLabel: 'Open Packing Record',
+        actionGuide: {
+          targetScreen: "Omni-Operations Hub",
+          whatToClick: "Click \"Open Packing Record\" on verified order",
+          actionDirective:
+            "Pack items with protective bubble wrap, cushioning, and cold packs if chocolates. Include K2 care card. Book courier in delivery portal (Lalamove, Grab, J&T) and print courier waybill.",
+          nextAction:
+            "Proceed to Step 6: Courier Handover & Customer Update when courier rider arrives.",
+          exitCriteria:
+            "Order securely packaged, boxed, and courier waybill affixed to parcel.",
+        },
       },
       {
         id: 'ord_6',
@@ -1113,6 +1511,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'omni_hub',
         jumpLabel: 'Dispatch Ledger',
+        actionGuide: {
+          targetScreen: "Omni-Operations Hub",
+          whatToClick: "Click \"Dispatch Ledger\" or \"Mark Dispatched\" on the order",
+          actionDirective:
+            "Verify courier rider name and plate number against booking. Hand over package. Record tracking number and courier in Admin BOS. Send tracking link to customer in chat.",
+          nextAction:
+            "Order fulfillment complete. Order transitions to Dispatched status.",
+          exitCriteria:
+            "Package handed to courier, tracking number recorded, and customer notified.",
+        },
       },
     ],
   },
@@ -1129,6 +1537,18 @@ export const WORKFLOWS = {
     color: '#0284c7',
     accentColor: '#38bdf8',
     stats: { steps: 6, scansRequired: 1, roles: ['Pasabuy Coordinator', 'Milan Sourcing Lead'], estTime: '2-5 days' },
+    goal:
+      "Provide an end-to-end bespoke Italian sourcing concierge service: intake customer request, research Milan store availability and euro landed costs, issue official itemized quote, collect deposit, purchase in Milan, transport via monthly cargo flight, and dispatch to customer upon final payment.",
+    startingPoint:
+      "Pasabuy Manager > Request Queue",
+    completionCriteria: [
+          "Custom product request reviewed with packaging photo, variant, and target budget",
+          "Milan buyer verifies shop availability and computes landed cost in EUR/PHP",
+          "Official itemized quote generated and customer approval confirmed",
+          "Downpayment deposit verified in merchant account",
+          "Item purchased in Milan and tagged into scheduled flight cargo manifest",
+          "Manila arrival confirmed, final balance settled, and courier dispatched"
+    ],
     nodes: [
       {
         id: 'pasa_1',
@@ -1157,6 +1577,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Open Pasabuy Queue',
+        actionGuide: {
+          targetScreen: "Pasabuy Manager",
+          whatToClick: "Click \"Open Pasabuy Queue\" and select pending request",
+          actionDirective:
+            "Review requested Italian product, reference photo, packaging size, customer target budget, and shipping preference. Verify items are non-perishable and allowed for air cargo.",
+          nextAction:
+            "Proceed to Step 2: Milan Sourcing & Cost Calculation to check availability in Italy.",
+          exitCriteria:
+            "Request triaged, reference photo verified, and unique Pasabuy ID assigned.",
+        },
       },
       {
         id: 'pasa_2',
@@ -1185,6 +1615,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Open Cost Calculator',
+        actionGuide: {
+          targetScreen: "Pasabuy Manager",
+          whatToClick: "Click \"Open Cost Calculator\" on the request card",
+          actionDirective:
+            "Milan buyer checks physical stock in Italian stores. Input retail price in EUR, local Italian VAT, and weight. Compute landed cost floor in PHP including air cargo share.",
+          nextAction:
+            "Proceed to Step 3: Official Itemized Quote Generation to issue customer pricing.",
+          exitCriteria:
+            "Product availability confirmed in Milan and landed cost calculated.",
+        },
       },
       {
         id: 'pasa_3',
@@ -1213,6 +1653,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Issue Quote',
+        actionGuide: {
+          targetScreen: "Pasabuy Manager",
+          whatToClick: "Click \"Issue Quote\" button in Pasabuy card",
+          actionDirective:
+            "Review itemized quote breakdown (item cost, air cargo, customs share, concierge fee). Set validity terms and send formal quote to customer via messaging thread.",
+          nextAction:
+            "Proceed to Step 4: Customer Approval & Downpayment once customer accepts quote.",
+          exitCriteria:
+            "Itemized quote sent to customer with explicit terms and expiration date.",
+        },
       },
       {
         id: 'pasa_4',
@@ -1241,6 +1691,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Confirm Deposit',
+        actionGuide: {
+          targetScreen: "Pasabuy Manager",
+          whatToClick: "Click \"Confirm Deposit\" in payment status section",
+          actionDirective:
+            "Record customer quote acceptance. Verify downpayment deposit in merchant bank account. Advance request to \"Purchasing Queue (Milan)\" to notify Milan buyer.",
+          nextAction:
+            "Proceed to Step 5: Milan Purchase & Flight Cargo Tagging for physical procurement.",
+          exitCriteria:
+            "Customer acceptance recorded and downpayment deposit verified in merchant ledger.",
+        },
       },
       {
         id: 'pasa_5',
@@ -1269,6 +1729,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'consignment',
         jumpLabel: 'View Flight Box Manifest',
+        actionGuide: {
+          targetScreen: "Flight Consignments",
+          whatToClick: "Click \"View Flight Box Manifest\" in Consignment Manager",
+          actionDirective:
+            "Milan buyer purchases item in store, photographs receipt, applies Pasabuy tracking tag, and scans item into the active scheduled flight cargo box manifest.",
+          nextAction:
+            "Proceed to Step 6: Manila Receiving & Final Dispatch when flight arrives in Manila.",
+          exitCriteria:
+            "Item purchased, receipt uploaded, and item added to flight cargo manifest.",
+        },
       },
       {
         id: 'pasa_6',
@@ -1297,6 +1767,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'pasabuy_manager',
         jumpLabel: 'Finalize Pasabuy Delivery',
+        actionGuide: {
+          targetScreen: "Pasabuy Manager",
+          whatToClick: "Click \"Finalize Pasabuy Delivery\" on the arriving request",
+          actionDirective:
+            "Scan Pasabuy reference barcode upon unboxing flight cargo. Collect remaining balance if applicable, book courier directly to customer, and record tracking number.",
+          nextAction:
+            "Pasabuy request complete. Mark request as Completed upon verified delivery.",
+          exitCriteria:
+            "Final balance verified, courier dispatched, and tracking link provided to customer.",
+        },
       },
     ],
   },
@@ -1327,6 +1807,19 @@ export const WORKFLOWS = {
       roles: ['Owner / Account Holder', 'Admin', 'Channel Staff'],
       estTime: 'Days to weeks — provider approval dominates',
     },
+    goal:
+      "Safely integrate external sales channels (Shopee, Lazada, TikTok Shop, social messaging) without forking inventory or risking overselling: establish developer portal access, store secrets server-side, verify webhooks, standardize channel vocabulary, map master SKUs, define stock pool rules, and record verified status.",
+    startingPoint:
+      "Integrations > Channel Readiness",
+    completionCriteria: [
+          "Developer portal application approved and shop IDs recorded",
+          "API credentials safely stored in server-side Supabase secret vault",
+          "Webhook signature verification tested with real payload and replay defense",
+          "Channel vocabulary standardized across all database tables",
+          "Master SKUs mapped to external channel listing IDs",
+          "Stock pool allocation and oversell prevention rules formally defined",
+          "Channel marked operational only after end-to-end event verification"
+    ],
     nodes: [
       {
         id: 'ch_1',
@@ -1354,6 +1847,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'integrations',
         jumpLabel: 'Open Channel Readiness',
+        actionGuide: {
+          targetScreen: "Marketplace Integrations",
+          whatToClick: "Click \"Open Channel Readiness\" to inspect channel credential checklist",
+          actionDirective:
+            "Apply for developer partner access in marketplace open platform (Shopee, Lazada, TikTok Shop). Record exact shop IDs and approved API scopes for each K2 storefront.",
+          nextAction:
+            "Proceed to Step 2: Store Secrets Server-Side once marketplace credentials are issued.",
+          exitCriteria:
+            "Developer partner application approved and shop identifiers recorded.",
+        },
       },
       {
         id: 'ch_2',
@@ -1379,6 +1882,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'integrations',
         jumpLabel: 'View Required Secrets',
+        actionGuide: {
+          targetScreen: "Marketplace Integrations",
+          whatToClick: "Click \"View Required Secrets\" in Channel Readiness",
+          actionDirective:
+            "Configure marketplace partner keys in Supabase Edge Function settings. Never put keys in frontend environment variables or Admin UI. Run prebuild scan to verify zero leaks.",
+          nextAction:
+            "Proceed to Step 3: Verify the Webhook Signature Path to test real-time event ingress.",
+          exitCriteria:
+            "All required credentials stored in server secret vault with zero frontend leaks.",
+        },
       },
       {
         id: 'ch_3',
@@ -1405,6 +1918,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'integrations',
         jumpLabel: 'Check Channel Status',
+        actionGuide: {
+          targetScreen: "Marketplace Integrations",
+          whatToClick: "Click \"Check Channel Status\" in Webhook Monitor",
+          actionDirective:
+            "Test incoming webhook signature validation in Edge Function. Verify request body limits (256 KiB), replay window defense, and atomic event capture in database.",
+          nextAction:
+            "Proceed to Step 4: Agree the Channel Vocabulary — BLOCKING before writing order rows.",
+          exitCriteria:
+            "Webhook signature path verified with authenticated test event.",
+        },
       },
       {
         id: 'ch_4',
@@ -1430,6 +1953,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Open Inventory',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Open Inventory\" to review channel schema constraints",
+          actionDirective:
+            "Enforce one canonical spelling for each channel across all tables. Standardize shop identity fields so reports and order queues read the exact same string.",
+          nextAction:
+            "Proceed to Step 5: Map SKUs to Channel Listings to associate external catalog items.",
+          exitCriteria:
+            "Channel naming constraints applied to database schema without typo vulnerability.",
+        },
       },
       {
         id: 'ch_5',
@@ -1455,6 +1988,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Open Channel Listings',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Open Channel Listings\" in Master Inventory",
+          actionDirective:
+            "Map each K2 Master SKU to its external marketplace item ID and SKU ID. Record per-channel pricing if different from website retail SRP.",
+          nextAction:
+            "Proceed to Step 6: Decide the Stock Pool and the Oversell Rule — BLOCKING FOR CHANNEL TWO.",
+          exitCriteria:
+            "External listing IDs mapped to canonical Master SKUs in channel listings table.",
+        },
       },
       {
         id: 'ch_6',
@@ -1480,6 +2023,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inventory',
         jumpLabel: 'Open Master Inventory',
+        actionGuide: {
+          targetScreen: "Inventory Management",
+          whatToClick: "Click \"Open Master Inventory\" to configure stock allocation",
+          actionDirective:
+            "Formally decide stock allocation strategy between website and marketplace: single shared pool vs reserved shop allocation. Establish oversell rule before two channels go live.",
+          nextAction:
+            "Proceed to Step 7: Social & Messaging Inboxes — NOT BUILT for customer communication protocol.",
+          exitCriteria:
+            "Stock pool and oversell prevention policy documented and implemented in allocation logic.",
+        },
       },
       {
         id: 'ch_7',
@@ -1504,6 +2057,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'inbox',
         jumpLabel: 'Open Unified Inbox',
+        actionGuide: {
+          targetScreen: "Customer Messages Inbox",
+          whatToClick: "Click \"Open Unified Inbox\" to review active messaging sources",
+          actionDirective:
+            "Note that social platform messaging (Instagram, Messenger, WhatsApp) has no automated ingestion today. Instruct staff to continue responding in native apps and logging order notes manually.",
+          nextAction:
+            "Proceed to Step 8: Record Only Verified Channel Status for final readiness sign-off.",
+          exitCriteria:
+            "Staff protocol for manual social messaging acknowledged.",
+        },
       },
       {
         id: 'ch_8',
@@ -1529,6 +2092,16 @@ export const WORKFLOWS = {
         ],
         adminJump: 'integrations',
         jumpLabel: 'Open Channel Readiness',
+        actionGuide: {
+          targetScreen: "Marketplace Integrations",
+          whatToClick: "Click \"Open Channel Readiness\" to review operational verification",
+          actionDirective:
+            "Mark channel as Operational only after observing a real order event through the full pipeline from ingress to fulfillment. Keep unverified channels in Not Connected status.",
+          nextAction:
+            "Integration complete. Monitor live orders in Omni-Operations Hub.",
+          exitCriteria:
+            "Channel verified end-to-end with real observed event before enabling live status.",
+        },
       },
     ],
   },

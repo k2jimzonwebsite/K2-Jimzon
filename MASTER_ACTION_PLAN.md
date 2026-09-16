@@ -1,5 +1,18 @@
 # K2 Jimzon Master Action Plan
 
+**16 September Master Operations Workflow Graph follow-through & staff instructional roadmap (IDEA-20260916-03, MAP-021, code locally verified):**
+Completed operational follow-through and staff training UX across all 8 workflows and 49 nodes of the Admin BOS Master Operations Workflow Graph (`MasterWorkflowGraph.jsx`, `WorkflowDetailDrawer.jsx`, `workflowData.js`, and `workflowGraph.js`):
+- **Structured Operational Goals & Definition of Done (`workflowData.js`):** Enriched all 8 lifecycles (`cross_border_lifecycle`, `existing_stock_intake`, `new_product_intake`, `inventory_handover`, `monthly_count`, `new_order`, `pasabuy_lifecycle`, `channel_integration_lifecycle`) with explicit `goal` (clear operational objective), `startingPoint` (entry trigger), and `completionCriteria` (concrete server verification gate before considering the lifecycle complete).
+- **Staff Action Directives (`workflowData.js` & `workflowGraph.js`):** Enriched all 48 operational nodes + `ENTRY_NODE` with structured `actionGuide`:
+  - `targetScreen`: Designated Admin BOS workspace (strictly conforming to the 15-target allowlist).
+  - `whatToClick`: Explicit interface target button, modal trigger, or input field.
+  - `actionDirective`: Concrete SOP detailing inspection, verification, and data entry rules.
+  - `nextAction`: Clear handoff instruction explaining what to do next to maintain forward momentum.
+  - `exitCriteria`: Required server-verified gate before proceeding to downstream operations.
+- **Workflow Mission & Action Roadmap (`MasterWorkflowGraph.jsx`):** Mounted a high-visibility Mission card rendering Operational Objective, Starting Point, and Definition of Done chips, paired with an interactive sequential step stepper/roadmap showing step numbers, titles, target screen badges, and reviewed states with 1-click step selection.
+- **Staff Action Directive Console (`WorkflowDetailDrawer.jsx`):** Mounted a hero operational directive console right below the drawer header featuring a 1-click primary CTA button (`Jump to [targetScreen] ↗`), highlighted `What to Click in Admin` callout, operational SOP directive, a 1-click `Advance to Step [Next #]: [Next Title] →` button, and the exit criteria gate.
+- **Evidence & Verification:** All 10 workflow contract and canvas tests passed (`tests/workflow-guide-truth.spec.js` and `tests/workflow-graph-canvas.spec.js`); full contract test suite passed (652/652 PASS); browser selling surfaces passed (8/8 PASS); prebuild security check passed with 0 leaks and 0 boundary gaps (1378 files scanned); Admin bundle budget passed at 191.12 kB / 300.00 kB minified; Storefront budget passed at 149.89 kB / 150.50 kB gzip.
+
 **16 September exhaustive full project audit and live database remediation (IDEA-20260916-02, MAP-028 K, verified on production Supabase & working tree):**
 Executed a full-scope project audit across Live Database (`pixplcjqivlfflickobf`), Storefront, Admin BOS, BFF serverless functions, security policies, and deployment configurations, followed by immediate execution of safe database and local remediations:
 - **Critical Remediations Applied & Verified:**

@@ -58,6 +58,18 @@ export const ENTRY_NODE = {
   short: 'Every operational path in the business starts here.',
   summary:
     'Signing in to Admin BOS is the single entrance to every workflow below. What an operator can reach from here depends on their role, hub, and assignment — the graph shows the whole system, not the subset any one person may act on.',
+  adminJump: 'overview',
+  jumpLabel: 'Open Admin Overview',
+  actionGuide: {
+    targetScreen: 'Admin Overview Dashboard',
+    whatToClick: 'Select an operational section from the sidebar or click a workflow pill above',
+    actionDirective:
+      'Sign in to Admin BOS with authorized staff credentials. Review current operational priority alerts and queues on the overview dashboard. Match the physical operational situation in front of you with the corresponding workflow.',
+    nextAction:
+      'Select the corresponding workflow from the domain section tabs above and begin at Step 1.',
+    exitCriteria:
+      'Staff authentication confirmed and matching operational workflow identified.',
+  },
   checklist: [
     'Confirm you are signed in as the correct staff identity before acting.',
     'Pick the workflow that matches the physical situation in front of you, not the one you ran last time.',

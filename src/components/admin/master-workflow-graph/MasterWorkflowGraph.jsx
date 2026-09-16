@@ -315,6 +315,106 @@ export default function MasterWorkflowGraph({
         </div>
       </div>
 
+      {/* Workflow Mission & Action Roadmap */}
+      <section aria-label="Workflow Mission and Sequential Step Roadmap" className="flex flex-col gap-5 rounded-2xl border border-white/10 bg-[#0c1422] p-5 shadow-xl">
+        {/* Objectives & Definition of Done */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/15 text-sky-400 border border-sky-500/30">
+              <SparkleIcon size={14} />
+            </span>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-sky-300">
+              Workflow Objective & Operational Definition of Done
+            </h4>
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="rounded-xl border border-sky-500/20 bg-sky-500/[0.04] p-3.5">
+              <span className="block text-xs font-bold uppercase tracking-wider text-sky-400">
+                Operational Objective
+              </span>
+              <p className="mt-1.5 text-xs leading-relaxed text-white/90 font-medium">
+                {activeWorkflow.goal || 'Complete designated operational sequence.'}
+              </p>
+            </div>
+            <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/[0.04] p-3.5">
+              <span className="block text-xs font-bold uppercase tracking-wider text-indigo-300">
+                Starting Point / Trigger
+              </span>
+              <p className="mt-1.5 text-xs leading-relaxed text-white/90">
+                {activeWorkflow.startingPoint || 'Intake queue notification.'}
+              </p>
+            </div>
+            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] p-3.5">
+              <span className="block text-xs font-bold uppercase tracking-wider text-emerald-400">
+                Completion Criteria (Exit Gate)
+              </span>
+              <p className="mt-1.5 text-xs leading-relaxed text-white/90">
+                {activeWorkflow.completionCriteria || 'Server state permanently verified.'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Sequential Step Stepper / Roadmap */}
+        <div className="border-t border-white/10 pt-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white/60">
+              Step Sequence & Staff Handoffs ({activeWorkflow.nodes.length} Steps)
+            </h4>
+            <span className="text-xs text-white/40">
+              Click any step to view target Admin screen, click targets, and next-action directive
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {activeWorkflow.nodes.map((stepNode, idx) => {
+              const isSelected = stepNode.id === activeNodeId
+              const isReviewed = completedSteps.includes(stepNode.id)
+              const targetScreen = stepNode.actionGuide?.targetScreen || stepNode.location
+              return (
+                <React.Fragment key={stepNode.id}>
+                  <button
+                    type="button"
+                    onClick={() => handleSelectNode(stepNode.id)}
+                    className={`group flex min-h-11 items-center gap-2.5 rounded-xl border px-3 py-2 text-left transition-[transform,background-color,border-color] active:scale-[0.98] cursor-pointer ${
+                      isSelected
+                        ? 'border-sky-400 bg-sky-500/20 text-white shadow-md shadow-sky-500/10 ring-1 ring-sky-400/50'
+                        : isReviewed
+                        ? 'border-emerald-500/30 bg-emerald-500/5 text-emerald-200 hover:border-emerald-500/50 hover:bg-emerald-500/10'
+                        : 'border-white/10 bg-black/30 text-white/75 hover:border-white/20 hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    <span
+                      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
+                        isSelected
+                          ? 'bg-sky-400 text-slate-950 font-extrabold'
+                          : isReviewed
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                          : 'bg-white/10 text-white/70'
+                      }`}
+                    >
+                      {isReviewed ? <CheckIcon size={12} /> : (stepNode.step ?? (idx + 1))}
+                    </span>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold leading-tight line-clamp-1">
+                        {stepNode.title}
+                      </span>
+                      <span className="text-xs text-white/45 group-hover:text-white/60">
+                        {targetScreen}
+                      </span>
+                    </div>
+                  </button>
+                  {idx < activeWorkflow.nodes.length - 1 && (
+                    <span className="text-white/20 select-none hidden md:inline" aria-hidden="true">
+                      →
+                    </span>
+                  )}
+                </React.Fragment>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Filter notice if search active */}
       {filteredNodes && (
         <div className="rounded-xl border border-sky-500/20 bg-sky-500/5 px-4 py-2 text-xs text-sky-300 flex items-center justify-between">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getDownstream, getUpstream } from './workflowGraph'
 import WorkflowRecords from './WorkflowRecords'
+import { CheckIcon, SparkleIcon } from '../../ui/icons'
 
 /**
  * WorkflowDetailDrawer
@@ -45,6 +46,12 @@ export default function WorkflowDetailDrawer({
   const checklistCompletedCount = node.checklist.filter((_, i) => checkedItems[i]).length
   const upstream = getUpstream(node.id)
   const downstream = getDownstream(node.id)
+
+  const currentWfNodes = workflow?.nodes || []
+  const currentWfIdx = currentWfNodes.findIndex((n) => n.id === node.id)
+  const nextStepNode = currentWfIdx >= 0 && currentWfIdx < currentWfNodes.length - 1
+    ? currentWfNodes[currentWfIdx + 1]
+    : null
 
   return (
     <div className="flex flex-col rounded-2xl border border-white/10 bg-[#0d131f] p-6 text-white shadow-2xl">
@@ -108,6 +115,104 @@ export default function WorkflowDetailDrawer({
           Guide only: checking or rehearsing this step does not write or verify a real record. Complete the action in the named Admin screen and confirm the server result there.
         </p>
       </div>
+
+      {/* Staff Action Directive: What to Click & Do Next */}
+      <section aria-label="Staff Action Directive" className="mt-6 rounded-2xl border border-sky-500/30 bg-gradient-to-br from-[#0e1a30] via-[#0d1526] to-[#090e18] p-5 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/10 pb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/20 text-sky-400 border border-sky-500/30">
+                <SparkleIcon size={13} />
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-sky-400">
+                Staff Operational Directive
+              </span>
+            </div>
+            <h4 className="mt-1 font-sans text-lg font-bold text-white">
+              {'What to Click & Do Next'}
+            </h4>
+          </div>
+
+          {node.adminJump && onNavigate && (
+            <button
+              type="button"
+              onClick={() => onNavigate(node.adminJump)}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2 text-xs shadow-md shadow-sky-500/20 transition-[transform,background-color] active:scale-[0.98] cursor-pointer"
+            >
+              <span>Jump to {node.actionGuide?.targetScreen || node.jumpLabel || 'Screen'}</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+          )}
+        </div>
+
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          {/* Target Screen & What to Click */}
+          <div className="rounded-xl border border-sky-500/20 bg-black/30 p-4">
+            <span className="block text-xs font-bold uppercase tracking-wider text-sky-400">
+              {'1. Target Admin Screen & Click Target'}
+            </span>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <span className="rounded-md border border-sky-400/30 bg-sky-400/10 px-2.5 py-1 text-xs font-semibold text-sky-300">
+                Screen: {node.actionGuide?.targetScreen || node.location}
+              </span>
+            </div>
+            <div className="mt-2 rounded-lg border border-white/10 bg-white/[0.04] p-2.5">
+              <span className="block text-xs font-bold uppercase tracking-wider text-white/40 mb-1">
+                What to click in Admin
+              </span>
+              <p className="text-xs font-mono font-medium text-white/95">
+                {node.actionGuide?.whatToClick || node.jumpLabel || 'Select the action control in the designated screen.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Action Directive */}
+          <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+            <span className="block text-xs font-bold uppercase tracking-wider text-white/50">
+              {'2. Operational SOP & Physical Directive'}
+            </span>
+            <p className="mt-2 text-xs leading-relaxed text-white/90">
+              {node.actionGuide?.actionDirective || node.summary}
+            </p>
+          </div>
+
+          {/* Next Action & 1-Click Advance */}
+          <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+            <span className="block text-xs font-bold uppercase tracking-wider text-white/50">
+              {'3. Next Action & Operational Follow-Through'}
+            </span>
+            <p className="mt-2 text-xs leading-relaxed text-white/90">
+              {node.actionGuide?.nextAction || 'Advance to downstream operational stage once verified.'}
+            </p>
+            {nextStepNode && onSelectNode && (
+              <button
+                type="button"
+                onClick={() => onSelectNode(nextStepNode.id)}
+                className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-sky-400/40 bg-sky-500/15 px-3 py-2 text-xs font-bold text-sky-200 transition-colors hover:bg-sky-500/25 hover:text-white active:scale-[0.98] cursor-pointer"
+              >
+                <span>Advance to Step {nextStepNode.step}: {nextStepNode.title}</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            )}
+            {!nextStepNode && (
+              <div className="mt-3 flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-300">
+                <CheckIcon size={14} />
+                <span>Final step of {workflow.title} reached</span>
+              </div>
+            )}
+          </div>
+
+          {/* Step Exit Criteria */}
+          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-4">
+            <span className="block text-xs font-bold uppercase tracking-wider text-emerald-400">
+              4. Step Exit Criteria (Server Verification Gate)
+            </span>
+            <p className="mt-2 text-xs leading-relaxed text-emerald-200/90">
+              {node.actionGuide?.exitCriteria || 'Confirm record created or updated on server before proceeding.'}
+            </p>
+          </div>
+        </div>
+      </section>
 
       <WorkflowRecords key={node.id} section={node.adminJump} />
 
