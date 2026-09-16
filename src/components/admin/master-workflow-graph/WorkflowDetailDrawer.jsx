@@ -20,6 +20,7 @@ export default function WorkflowDetailDrawer({
   isCompleted = false,
   onToggleComplete = null,
   onSelectNode = null,
+  onStartTour = null,
 }) {
   const [checkedItems, setCheckedItems] = useState({})
   const [simulated, setSimulated] = useState(false)
@@ -152,16 +153,28 @@ export default function WorkflowDetailDrawer({
             </h4>
           </div>
 
-          {node.adminJump && onNavigate && (
-            <button
-              type="button"
-              onClick={() => onNavigate(node.adminJump)}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2 text-xs shadow-md shadow-sky-500/20 transition-[transform,background-color] active:scale-[0.98] cursor-pointer"
-            >
-              <span>Jump to {node.actionGuide?.targetScreen || node.jumpLabel || 'Screen'}</span>
-              <span aria-hidden="true">↗</span>
-            </button>
-          )}
+          <div className="flex flex-wrap items-center gap-2">
+            {onStartTour && (
+              <button
+                type="button"
+                onClick={() => onStartTour(node.workflowId === 'new_product_intake' ? 'manual_inventory' : 'auto_inventory')}
+                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 font-bold px-3.5 py-2 text-xs shadow-md transition-all active:scale-[0.98] cursor-pointer"
+              >
+                <SparkleIcon size={14} />
+                <span>Start Spotlight Tour</span>
+              </button>
+            )}
+            {node.adminJump && onNavigate && (
+              <button
+                type="button"
+                onClick={() => onNavigate(node.adminJump)}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-2 text-xs shadow-md shadow-sky-500/20 transition-[transform,background-color] active:scale-[0.98] cursor-pointer"
+              >
+                <span>Jump to {node.actionGuide?.targetScreen || node.jumpLabel || 'Screen'}</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Interactive Visual Breadcrumb Flow: Prev -> Current -> Next */}

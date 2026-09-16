@@ -23,6 +23,7 @@ export default function MasterWorkflowGraph({
   onNavigate = null,
   onClose = null,
   isModal = false,
+  onStartTour = null,
 }) {
   const [selectedSection, setSelectedSection] = useState('all')
   const [activeWorkflowId, setActiveWorkflowId] = useState(initialWorkflowId)
@@ -390,13 +391,25 @@ export default function MasterWorkflowGraph({
       <section aria-label="Workflow Mission and Sequential Step Roadmap" className="flex flex-col gap-5 rounded-2xl border border-white/10 bg-[#0c1422] p-5 shadow-xl">
         {/* Objectives & Definition of Done */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/15 text-sky-400 border border-sky-500/30">
-              <SparkleIcon size={14} />
-            </span>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-sky-300">
-              Workflow Objective & Operational Definition of Done
-            </h4>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+            <div className="flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/15 text-sky-400 border border-sky-500/30">
+                <SparkleIcon size={14} />
+              </span>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-sky-300">
+                Workflow Objective & Operational Definition of Done
+              </h4>
+            </div>
+            {onStartTour && (
+              <button
+                type="button"
+                onClick={() => onStartTour(activeWorkflowId === 'cross_border_lifecycle' || activeWorkflowId.includes('intake') ? 'manual_inventory' : 'auto_inventory')}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-amber-400/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 hover:border-amber-400 text-xs font-bold transition-colors min-h-11 shadow-sm"
+              >
+                <SparkleIcon size={14} />
+                <span>Start Interactive Spotlight Tour</span>
+              </button>
+            )}
           </div>
           <div className="grid gap-3 md:grid-cols-3">
             <div className="rounded-xl border border-sky-500/20 bg-sky-500/[0.04] p-3.5">
@@ -565,6 +578,7 @@ export default function MasterWorkflowGraph({
         isCompleted={completedSteps.includes(currentNode?.id)}
         onToggleComplete={handleToggleComplete}
         onSelectNode={handleSelectNode}
+        onStartTour={onStartTour}
       />
 
       {/* AI Image Studio & Prompt Engineering Card */}

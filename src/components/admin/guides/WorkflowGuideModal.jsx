@@ -28,6 +28,7 @@ export default function WorkflowGuideModal({
   onClose,
   defaultTab = 'master_graph',
   onNavigate = null,
+  onStartTour = null,
 }) {
   const [activeTab, setActiveTab] = useState(defaultTab)
 
@@ -112,6 +113,10 @@ export default function WorkflowGuideModal({
                 onNavigate={(section) => {
                   if (onNavigate) onNavigate(section)
                   onClose()
+                }}
+                onStartTour={(tourId) => {
+                  onClose()
+                  if (onStartTour) onStartTour(tourId)
                 }}
               />
             </Suspense>

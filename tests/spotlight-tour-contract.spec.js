@@ -1,0 +1,135 @@
+import { test, expect } from '@playwright/test'
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
+import { SPOTLIGHT_TOURS, CHATGPT_PROMPT_TEMPLATES, generateChatGPTListingPrompt } from '../src/components/admin/tour/tourData.js'
+
+test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
+  test('SPOTLIGHT_TOURS defines both manual and automatic intake workflows', () => {
+    expect(SPOTLIGHT_TOURS).toHaveProperty('manual_inventory')
+    expect(SPOTLIGHT_TOURS).toHaveProperty('auto_inventory')
+
+    const manual = SPOTLIGHT_TOURS.manual_inventory
+    const auto = SPOTLIGHT_TOURS.auto_inventory
+
+    expect(manual.id).toBe('manual_inventory')
+    expect(manual.title).toContain('Manual')
+    expect(manual.theme).toBe('rose')
+    expect(manual.steps.length).toBeGreaterThanOrEqual(5)
+
+    expect(auto.id).toBe('auto_inventory')
+    expect(auto.title).toContain('Automatic')
+    expect(auto.theme).toBe('emerald')
+    expect(auto.steps.length).toBeGreaterThanOrEqual(5)
+  })
+
+  test('All tour steps define valid directives and explanations', () => {
+    Object.values(SPOTLIGHT_TOURS).forEach((tour) => {
+      tour.steps.forEach((step, idx) => {
+        expect(step.stepNumber).toBe(idx + 1)
+        expect(step.title.trim().length).toBeGreaterThan(3)
+        expect(step.directive.trim().length).toBeGreaterThan(5)
+        expect(step.sopAction.trim().length).toBeGreaterThan(10)
+        expect(step.whatToClick.trim().length).toBeGreaterThan(5)
+        expect(step.exitCriteria.trim().length).toBeGreaterThan(5)
+        if (step.targetSelector) {
+          expect(step.targetSelector).toMatch(/^\[data-tour="[a-z0-9-]+"]$/)
+        }
+        expect(step.targetSection).toBe('inventory')
+      })
+    })
+  })
+
+  test('ChatGPT Prompt Templates satisfy catalog and schema requirements', () => {
+    expect(CHATGPT_PROMPT_TEMPLATES.length).toBeGreaterThanOrEqual(4)
+    const keys = CHATGPT_PROMPT_TEMPLATES.map((t) => t.key)
+    expect(keys).toContain('dolci')
+    expect(keys).toContain('pasta')
+    expect(keys).toContain('caffe')
+    expect(keys).toContain('olio')
+
+    CHATGPT_PROMPT_TEMPLATES.forEach((tpl) => {
+      expect(tpl.prompt).toContain('JSON')
+      expect(tpl.prompt).toContain('country_of_origin')
+      expect(tpl.prompt).toContain('Italy')
+      expect(tpl.prompt).toContain('allergens')
+      expect(tpl.prompt).toContain('ingredients')
+    })
+
+    const generated = generateChatGPTListingPrompt('dolci', 'Cantucci alle Mandorle 500g')
+    expect(generated).toContain('Cantucci alle Mandorle 500g')
+    expect(generated).toContain('Dolci')
+  })
+
+  test('InventoryGrid provides all required data-tour selector anchors', async () => {
+    const gridSource = await readFile(path.join(process.cwd(), 'src/views/admin/InventoryGrid.jsx'), 'utf8')
+    const requiredAnchors = [
+      'data-tour="inventory-actions"',
+      'data-tour="scan-box-btn"',
+      'data-tour="smart-paste-btn"',
+      'data-tour="add-product-btn"',
+      'data-tour="search-input"',
+    ]
+    requiredAnchors.forEach((anchor) => {
+      expect(gridSource, `InventoryGrid.jsx must define anchor ${anchor}`).toContain(anchor)
+    })
+  })
+
+  test('Admin.jsx mounts SpotlightTourOverlay and TourSelectionModal', async () => {
+    const adminSource = await readFile(path.join(process.cwd(), 'src/views/admin/Admin.jsx'), 'utf8')
+    expect(adminSource).toContain('SpotlightTourOverlay')
+    expect(adminSource).toContain('TourSelectionModal')
+    expect(adminSource).toContain('handleStartTour')
+    expect(adminSource).toContain('Guided Tours')
+    expect(adminSource).not.toContain('<span>🗺️</span>')
+  })
+
+  test('Enforces strict typography floor (>=12px) across tour components', async () => {
+    const tourFiles = [
+      'src/components/admin/tour/SpotlightTourOverlay.jsx',
+      'src/components/admin/tour/TourSelectionModal.jsx',
+      'src/components/admin/tour/tourData.js',
+    ]
+
+    for (const file of tourFiles) {
+      const content = await readFile(path.join(process.cwd(), file), 'utf8')
+      expect(content, `${file} must not contain text-[9px]`).not.toContain('text-[9px]')
+      expect(content, `${file} must not contain text-[10px]`).not.toContain('text-[10px]')
+      expect(content, `${file} must not contain text-[11px]`).not.toContain('text-[11px]')
+    }
+  })
+
+  test('Enforces strict touch target floor (min 44px) across tour components', async () => {
+    const tourFiles = [
+      'src/components/admin/tour/SpotlightTourOverlay.jsx',
+      'src/components/admin/tour/TourSelectionModal.jsx',
+    ]
+
+    for (const file of tourFiles) {
+      const content = await readFile(path.join(process.cwd(), file), 'utf8')
+      // All interactive button elements should have min-h-11 or min-h-[44px]
+      const buttonMatches = content.match(/<button[\s\S]*?<\/button>/g) || []
+      expect(buttonMatches.length).toBeGreaterThan(0)
+      for (const btn of buttonMatches) {
+        const hasMinH11 = btn.includes('min-h-11') || btn.includes('min-h-[44px]') || btn.includes('min-h-[48px]')
+        expect(hasMinH11, `Button in ${file} must have min-h-11 touch target: ${btn.slice(0, 80)}`).toBe(true)
+      }
+    }
+  })
+
+  test('Anti-emoji policy strictly enforced in tour files', async () => {
+    const tourFiles = [
+      'src/components/admin/tour/SpotlightTourOverlay.jsx',
+      'src/components/admin/tour/TourSelectionModal.jsx',
+      'src/components/admin/tour/tourData.js',
+    ]
+
+    // Common unicode emojis range
+    const emojiRegex = /[\u{1F300}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E0}-\u{1F1FF}]/u
+
+    for (const file of tourFiles) {
+      const content = await readFile(path.join(process.cwd(), file), 'utf8')
+      const match = content.match(emojiRegex)
+      expect(match, `Found emoji in ${file}: ${match ? match[0] : ''}`).toBeNull()
+    }
+  })
+})

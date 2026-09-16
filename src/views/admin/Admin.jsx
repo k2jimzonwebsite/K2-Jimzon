@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, Suspense, lazy } from 'react'
 import {
   BoxIcon, GlobeIcon, GridIcon, UserIcon, InboxIcon,
   PlaneIcon, BagIcon, ShieldIcon, BarcodeIcon, EyeIcon,
-  BellIcon, BookIcon, MenuIcon, SearchIcon, StarIcon, UploadIcon, XIcon, MapIcon, ClockIcon,
+  BellIcon, BookIcon, MenuIcon, SearchIcon, StarIcon, UploadIcon, XIcon, MapIcon, ClockIcon, SparkleIcon,
 } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
@@ -42,6 +42,8 @@ const ReservationHolds = lazy(() => import('./ReservationHolds'))
 const MasterWorkflowGraph = lazy(() => import('../../components/admin/master-workflow-graph/MasterWorkflowGraph'))
 const OwnerCountClose = lazy(() => import('./OwnerCountClose'))
 const WorkflowGuideModal = lazy(() => import('../../components/admin/guides/WorkflowGuideModal'))
+const SpotlightTourOverlay = lazy(() => import('../../components/admin/tour/SpotlightTourOverlay'))
+const TourSelectionModal = lazy(() => import('../../components/admin/tour/TourSelectionModal'))
 
 // Single source of truth for every section: nav label, page title, subtitle, icon.
 const SECTIONS = {
@@ -171,6 +173,8 @@ export default function Admin() {
   const [showShortcuts, setShowShortcuts] = useState(false)
   const [showScanCenter, setShowScanCenter] = useState(false)
   const [showWorkflowGuide, setShowWorkflowGuide] = useState(false)
+  const [showTourChooser, setShowTourChooser] = useState(false)
+  const [activeTourId, setActiveTourId] = useState(null)
   const [guideQuery, setGuideQuery] = useState('')
   const [inventoryTool, setInventoryTool] = useState(null)
   const goChordRef = useRef(null)
@@ -215,13 +219,15 @@ export default function Admin() {
     if (!isAdmin) return undefined
     const onKeyDown = event => {
       if (event.key === 'Escape') {
-        if (showScanCenter) setShowScanCenter(false)
+        if (showTourChooser) setShowTourChooser(false)
+        else if (activeTourId) setActiveTourId(null)
+        else if (showScanCenter) setShowScanCenter(false)
         else if (showShortcuts) setShowShortcuts(false)
         return
       }
       if (isTextEntryTarget(event.target)) return
       const key = event.key.toLowerCase()
-      const hasOpenLayer = paletteOpen || showDailyTasks || showAiCopilot || showDevOpsModal || showStartHere || showShortcuts || showScanCenter || showCsvImport || isMobileMenuOpen
+      const hasOpenLayer = paletteOpen || showDailyTasks || showAiCopilot || showDevOpsModal || showStartHere || showShortcuts || showScanCenter || showCsvImport || isMobileMenuOpen || showTourChooser || Boolean(activeTourId)
 
       if (event.key === '?' && !hasOpenLayer) {
         event.preventDefault()
@@ -359,6 +365,16 @@ export default function Admin() {
     setInventoryTool({ id, token: Date.now() })
   }
 
+  const handleStartTour = (tourId) => {
+    setShowTourChooser(false)
+    setShowWorkflowGuide(false)
+    setActiveTourId(tourId)
+  }
+
+  const handleCloseTour = () => {
+    setActiveTourId(null)
+  }
+
   const showSheet = sheetMode && section === 'inventory'
   const showGrid = !sheetMode && section === 'inventory'
   const meta = SECTIONS[section] || SECTIONS.overview
@@ -482,8 +498,17 @@ export default function Admin() {
               className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-sky-400 transition-[transform,background-color,color,border-color] duration-150 hover:border-sky-500/40 hover:bg-sky-500/10 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/70"
               title="View visual workflow maps for all shifts"
             >
-              <span>🗺️</span>
+              <MapIcon size={16} />
               <span className="hidden sm:inline">Workflow Map</span>
+            </button>
+
+            <button
+              onClick={() => setShowTourChooser(true)}
+              className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-amber-500/30 bg-amber-500/10 px-3 text-sm font-medium text-amber-300 transition-[transform,background-color,color,border-color] duration-150 hover:border-amber-400 hover:bg-amber-500/20 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/70"
+              title="Launch interactive guided walkthrough tour (Manual vs Auto Intake)"
+            >
+              <SparkleIcon size={15} />
+              <span className="hidden sm:inline">Guided Tours</span>
             </button>
 
             <button
@@ -563,7 +588,7 @@ export default function Admin() {
             }>
               {section === 'staff_permissions' && canManageStaff ? <StaffPermissionManager />
                : section === 'owner_close' && canManageStaff ? <OwnerCountClose />
-               : section === 'workflow_graph' ? <MasterWorkflowGraph onNavigate={selectSection} />
+               : section === 'workflow_graph' ? <MasterWorkflowGraph onNavigate={selectSection} onStartTour={handleStartTour} />
                : section === 'reservations' ? <ReservationHolds />
                : section === 'delivery' && canManageStaff ? <DeliveryRateControl />
                : section === 'coupons' ? <CouponManager key={`${user?.id || 'signed-out'}:${user?.role || ''}`} />
@@ -655,6 +680,7 @@ export default function Admin() {
             section === 'pasabuy_manager' ? 'pasabuy' : 'flights'
           }
           onNavigate={selectSection}
+          onStartTour={handleStartTour}
         />
       </Suspense>}
 
@@ -668,6 +694,30 @@ export default function Admin() {
       <KeyboardShortcutsModal isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
 
       <AdminToolsWidget onOpenGuide={() => setShowAiCopilot(true)} />
+
+      {showTourChooser && (
+        <Suspense fallback={null}>
+          <TourSelectionModal
+            isOpen={showTourChooser}
+            onClose={() => setShowTourChooser(false)}
+            onSelectTour={handleStartTour}
+          />
+        </Suspense>
+      )}
+
+      {activeTourId && (
+        <Suspense fallback={null}>
+          <SpotlightTourOverlay
+            isOpen={Boolean(activeTourId)}
+            tourId={activeTourId}
+            currentSection={section}
+            onClose={handleCloseTour}
+            onNavigate={(targetSection) => {
+              selectSection(targetSection)
+            }}
+          />
+        </Suspense>
+      )}
 
     </div>
   )

@@ -513,11 +513,11 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
         status={loading ? 'Loading inventory evidence' : `${products.length} SKUs loaded`}
         statusTone={inventoryMetrics.out || inventoryMetrics.expiryRisk || inventoryMetrics.unresolved ? 'warning' : 'success'}
         actions={(
-          <div className="flex flex-wrap gap-2">
-            <button onClick={() => setShowAiScanner(true)} className={secondaryButton}><BoxIcon size={16} /> Scan box</button>
-            <button onClick={() => setShowSmartPaste(true)} className={secondaryButton}><UploadIcon size={16} /> Smart paste</button>
+          <div data-tour="inventory-actions" className="flex flex-wrap gap-2">
+            <button data-tour="scan-box-btn" onClick={() => setShowAiScanner(true)} className={secondaryButton}><BoxIcon size={16} /> Scan box</button>
+            <button data-tour="smart-paste-btn" onClick={() => setShowSmartPaste(true)} className={secondaryButton}><UploadIcon size={16} /> Smart paste</button>
             {canManageMediaCleanup && adminBffEnabled() && <button onClick={() => setShowMediaCleanup(true)} className={secondaryButton}>Unused uploads</button>}
-            <button onClick={() => secure ? setShowPhoneIntake(true) : (setIsAdding(true), setEditTab('details'), setEditError(''), setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }))} className={primaryButton}>Add product</button>
+            <button data-tour="add-product-btn" onClick={() => secure ? setShowPhoneIntake(true) : (setIsAdding(true), setEditTab('details'), setEditError(''), setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }))} className={primaryButton}>Add product</button>
           </div>
         )}
       />
@@ -558,7 +558,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
           <label className="relative min-w-0 flex-1">
             <span className="sr-only">Search inventory</span>
             <SearchIcon size={16} className="pointer-events-none absolute left-3 top-3.5 text-white/35" />
-            <input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search SKU, product, barcode, or origin" className="adm-input min-h-11 pl-9 text-base sm:text-sm" />
+            <input data-tour="search-input" type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search SKU, product, barcode, or origin" className="adm-input min-h-11 pl-9 text-base sm:text-sm" />
           </label>
           <div className="flex gap-1 overflow-x-auto" aria-label="Filter inventory exceptions">
             {[
