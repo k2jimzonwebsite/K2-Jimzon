@@ -1,5 +1,18 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260917-04: accepted Storefront Buyer Persona Audit & 100% J&T Fulfillment Parity, merged into MAP-023. Code locally verified.**
+Owner requested auditing what information we ask users across three scenarios:
+1. When logging in / managing an account (`CustomerAccount.jsx`)
+2. When buying as an existing customer / returning user (`Checkout.jsx`)
+3. When buying as a guest without an account yet
+And comparing what information is collected against official J&T Express VIP courier fulfillment (`exptemplete_en.xls` and `vip.jtexpress.ph`), identifying all gaps, and ensuring 100% completion without manual typing:
+- Audit Findings:
+  - Account Sign-in: strictly optional passwordless magic link (email) or SMS OTP (phone). Asks only for email or +63 phone, no passwords or redundant questions.
+  - Checkout Questions: asks for Full name (recipient), Mobile number (Philippine 11-digit mobile format), Email address (optional if mobile provided), Destination region (for accurate courier tier pricing and province routing), Delivery address (Street/house #, Barangay, City), Delivery option (Metro Manila, Courier, or Warehouse pickup), Payment preference (Cash on Delivery vs Prepaid GCash/Maya/Bank), and Order note.
+  - J&T 1:1 Parity: resolved address and contact fields map 100% to J&T VIP Smart Recognition text syntax and all 13 columns of the bulk upload template (`exptemplete_en.xls`). Added accessible Payment Preference selector (Cash on Delivery vs GCash/Maya/Bank) that automatically sets J&T column 12 (`COD (PHP) (*)`) to the exact grand total for COD or 0.00 for prepaid. Hardened address parsing to support 3-part Philippine addresses with barangay keywords.
+- Strict UI compliance: touch targets $\ge 44\times 44$px (`min-h-11`), font floor strictly $\ge 12$px, zero raw emojis (clean SVG icons only), zero em dashes.
+- Verification: Playwright contract tests (`tests/jnt-vip-dispatch-contract.spec.js`, `tests/storefront-recovery-ui.spec.js`, `tests/storefront-truth-contract.spec.js`, `tests/operations-hardening.spec.js`) all PASS; `npm run prebuild:storefront` clean (0 leaks, 0 boundary gaps); Admin BOS bundle passes at 196.06 kB / 300.00 kB minified; Storefront bundle passes at 149.89 kB / 150.50 kB gzip.
+
 **IDEA-20260917-03: accepted J&T VIP Official Excel Bulk Template Parity & Step-by-Step Interactive Guide Mode, merged into MAP-023. Code locally verified.**
 Owner requested inspecting the official J&T Express bulk waybill template (`C:\Users\jerze\Downloads\exptemplete_en.xls`) to determine if it can be used even for single orders as a much easier fulfillment method without manual field typing, and adding an interactive step-by-step guide button in the Admin BOS modal that walks staff/sister through the 1-tap copy & paste and waybill creation workflow:
 1. Analysis of `exptemplete_en.xls`: Confirmed standard 13 contractual columns with exact character parity: `Receiver(*)`, `Receiver Telephone (*)`, `Receiver Address (*)`, `Receiver Province (*)`, `Receiver City (*)`, `Receiver Region (*)`, `Express Type (*)`, `Parcel Name (*)`, `Weight (kg)  (*)`, `Total parcels(*)`, `Parcel Value (Insurance Fee) (*)`, `COD (PHP) (*)`, `Remarks`. Discovered and accommodated the double space in `Weight (kg)  (*)`.

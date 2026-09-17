@@ -107,6 +107,15 @@ export function parseRecipientAddress(address) {
   }
 
   if (parts.length === 3) {
+    const isSecondBarangay = parts[1].toLowerCase().includes('brgy') || parts[1].toLowerCase().includes('barangay')
+    if (isSecondBarangay) {
+      return {
+        province: 'Metro Manila',
+        city: parts[2],
+        barangay: parts[1],
+        street: parts[0],
+      }
+    }
     return {
       province: parts[2],
       city: parts[1],
@@ -197,7 +206,10 @@ export function extractJntOrderDetails(order) {
   // Financial values
   const totalAmount = Number(order.total_amount ?? order.total ?? 0)
   const subtotal = Number(order.subtotal ?? totalAmount)
-  const isCod = String(order.payment_method || '').toLowerCase() === 'cod'
+  const note = String(order.customer_note || order.note || '').toLowerCase()
+  const paymentEvidence = order.payment_evidence && typeof order.payment_evidence === 'object' ? order.payment_evidence : {}
+  const rawMethod = String(order.payment_method || order.paymentMethod || paymentEvidence.payment_method || '').toLowerCase()
+  const isCod = rawMethod === 'cod' || note.includes('cash on delivery') || note.includes('[payment: cod]') || note.includes('[payment: cash on delivery')
   const codAmount = isCod ? totalAmount.toFixed(2) : '0.00'
   const itemValue = Math.max(0, subtotal).toFixed(2)
 

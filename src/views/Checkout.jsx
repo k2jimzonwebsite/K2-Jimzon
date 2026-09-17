@@ -19,8 +19,28 @@ export default function Checkout() {
   } = useStore()
 
   const [form, setForm] = useState(() => (pendingCheckout
-    ? { ...pendingCheckout, name: pendingCheckout.customerName }
-    : { name: '', email: '', phone: '', address: '', note: '' }))
+    ? {
+        ...pendingCheckout,
+        name: pendingCheckout.customerName || '',
+        phone: pendingCheckout.phone || '',
+        street: pendingCheckout.street || pendingCheckout.address || '',
+        barangay: pendingCheckout.barangay || '',
+        city: pendingCheckout.city || '',
+        address: pendingCheckout.address || '',
+        paymentMethod: pendingCheckout.paymentMethod || 'cod',
+        note: pendingCheckout.note || '',
+      }
+    : {
+        name: '',
+        email: '',
+        phone: '',
+        street: '',
+        barangay: '',
+        city: '',
+        address: '',
+        paymentMethod: 'cod',
+        note: '',
+      }))
 
   const [regionId, setRegionId] = useState(DEFAULT_REGION_ID)
   const [deliveryOptionId, setDeliveryOptionId] = useState('standard')
@@ -42,6 +62,7 @@ export default function Checkout() {
   }, [shippingData.options, deliveryOptionId])
 
   const shippingFee = selectedDeliveryOption.fee
+  const isPickup = selectedDeliveryOption.id === 'pickup'
 
   if (lines.length === 0) {
     return (
@@ -62,19 +83,50 @@ export default function Checkout() {
   const submit = async (event) => {
     event.preventDefault()
     setError('')
+
+    if (!form.name.trim()) {
+      setError('Please enter your full name for the package recipient label.')
+      return
+    }
+
     if (!form.email.trim() && !form.phone.trim()) {
       setError('Please enter an email address or mobile number so we can confirm your order.')
       return
     }
+
+    const cleanPhone = form.phone.replace(/\D/g, '')
+    if (form.phone.trim() && cleanPhone.length < 10) {
+      setError('Please enter a valid 11-digit Philippine mobile number (e.g. 09171234567).')
+      return
+    }
+
+    if (!isPickup && !form.address.trim()) {
+      setError('Please enter your delivery address for door-to-door courier delivery.')
+      return
+    }
+
     if (guestBffEnabled() && !botToken) {
       setError('Please complete the security check before submitting.')
       return
     }
+
+    const resolvedAddress = isPickup
+      ? 'Warehouse Pickup (K2 Jimzon Manila Hub, Quezon City)'
+      : form.address.trim()
+
+    // Prefix payment preference cleanly to customer note
+    const paymentLabel = form.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'Prepaid (GCash / Maya / Bank Transfer)'
+    const combinedNote = form.note?.trim()
+      ? `[Payment: ${paymentLabel}] ${form.note.trim()}`
+      : `[Payment: ${paymentLabel}]`
+
     setSubmitting(true)
     try {
       const result = await placeOrder({
         ...form,
-        address: form.address.trim(),
+        address: resolvedAddress,
+        paymentMethod: form.paymentMethod,
+        note: combinedNote,
         fulfillmentMethod: selectedDeliveryOption.methodName,
         shippingAmount: shippingFee,
         shippingQuoteStatus: 'customer_confirmed',
@@ -229,16 +281,21 @@ export default function Checkout() {
                 </select>
               </div>
 
-              <label className="block text-sm font-semibold">Delivery address
-                <textarea
-                  className={`${fieldClass} mt-1.5 min-h-20 resize-y`}
-                  value={form.address}
-                  onChange={update('address')}
-                  autoComplete="street-address"
-                  placeholder="House/Unit #, Street, Barangay, City, Postal Code"
-                  required
-                />
-              </label>
+              <div>
+                <label className="block text-sm font-semibold">Delivery address
+                  <textarea
+                    className={`${fieldClass} mt-1.5 min-h-20 resize-y`}
+                    value={form.address}
+                    onChange={update('address')}
+                    autoComplete="street-address"
+                    placeholder="House/Unit #, Street, Barangay, City, Postal Code"
+                    required
+                  />
+                </label>
+                <p className="mt-1.5 text-xs text-navy-soft">
+                  Include House/Unit #, Street, Barangay, and City (e.g. <span className="font-medium text-navy">Unit 402 Jade Tower, Brgy. San Antonio, Pasig City</span>) for rapid doorstep waybill recognition.
+                </p>
+              </div>
 
                   {/* Delivery Options Selector (Shopee/Lazada style: Metro Manila delivery, Courier delivery, Pickup) */}
                   <fieldset className="block pt-2">
@@ -318,6 +375,77 @@ export default function Checkout() {
                       <span className="font-medium text-navy">Quoted after review</span>
                     </div>
                   </fieldset>
+
+              {/* Payment Preference Selector */}
+              <fieldset className="block pt-2">
+                <legend className="text-sm font-semibold text-navy">Payment preference</legend>
+                <p className="mt-0.5 text-xs text-navy-soft">
+                  Choose how you want to pay when your package arrives or before dispatch.
+                </p>
+                <div className="mt-2.5 grid gap-3 sm:grid-cols-2">
+                  <label
+                    className={`flex min-h-[4rem] cursor-pointer items-start justify-between rounded-xl border p-3.5 transition-all duration-150 ${
+                      form.paymentMethod === 'cod'
+                        ? 'border-crimson bg-crimson/[0.03] shadow-sm'
+                        : 'border-line bg-surface hover:border-line-dark hover:bg-black/[0.01]'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <input
+                        type="radio"
+                        name="payment-preference"
+                        value="cod"
+                        checked={form.paymentMethod === 'cod'}
+                        onChange={() => setForm((curr) => ({ ...curr, paymentMethod: 'cod' }))}
+                        className="mt-1 h-4 w-4 accent-crimson"
+                      />
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-sm font-bold text-navy">Cash on Delivery</span>
+                          <span className="rounded bg-forest/10 px-1.5 py-0.5 text-xs font-bold uppercase text-forest">COD</span>
+                        </div>
+                        <p className="mt-1 text-xs text-navy-soft">Pay cash directly to courier rider upon doorstep arrival.</p>
+                      </div>
+                    </div>
+                    {form.paymentMethod === 'cod' && (
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-crimson text-white">
+                        <CheckIcon size={12} />
+                      </span>
+                    )}
+                  </label>
+
+                  <label
+                    className={`flex min-h-[4rem] cursor-pointer items-start justify-between rounded-xl border p-3.5 transition-all duration-150 ${
+                      form.paymentMethod === 'prepaid'
+                        ? 'border-crimson bg-crimson/[0.03] shadow-sm'
+                        : 'border-line bg-surface hover:border-line-dark hover:bg-black/[0.01]'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <input
+                        type="radio"
+                        name="payment-preference"
+                        value="prepaid"
+                        checked={form.paymentMethod === 'prepaid'}
+                        onChange={() => setForm((curr) => ({ ...curr, paymentMethod: 'prepaid' }))}
+                        className="mt-1 h-4 w-4 accent-crimson"
+                      />
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-sm font-bold text-navy">GCash / Maya / Bank</span>
+                          <span className="rounded bg-blue-600/10 px-1.5 py-0.5 text-xs font-bold uppercase text-blue-700">Online</span>
+                        </div>
+                        <p className="mt-1 text-xs text-navy-soft">Staff sends verified QR code or account details before dispatch.</p>
+                      </div>
+                    </div>
+                    {form.paymentMethod === 'prepaid' && (
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-crimson text-white">
+                        <CheckIcon size={12} />
+                      </span>
+                    )}
+                  </label>
+                </div>
+              </fieldset>
 
               <label className="block text-sm font-semibold">Order note <span className="font-normal text-navy-soft">(optional)</span>
                 <textarea
