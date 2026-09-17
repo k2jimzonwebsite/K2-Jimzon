@@ -298,7 +298,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
                   <div className="truncate max-w-[120px]" title={s.display_name}>
                     {s.display_name}
                   </div>
-                  <span className="block text-[10px] text-white/30 font-mono lowercase">
+                  <span className="block text-xs text-white/30 font-mono lowercase">
                     {s.channel_code}
                   </span>
                 </th>
@@ -327,7 +327,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
                         {prod.masterAvailable}
                       </span>
                       {isScarce && (
-                        <span className="block text-[10px] text-amber">
+                        <span className="block text-xs text-amber">
                           Scarce
                         </span>
                       )}
@@ -342,7 +342,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
                           <div className="font-mono font-bold text-xs text-white">
                             {units} / {DEFAULT_TARGET_UNITS}
                           </div>
-                          <span className={`inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-semibold ${
+                          <span className={`inline-block mt-1 px-1.5 py-0.5 rounded text-xs font-semibold ${
                             status === COVERAGE_STATUS.COVERED
                               ? 'bg-forest/15 text-forest border border-forest/30'
                               : status === COVERAGE_STATUS.THIN
@@ -604,15 +604,15 @@ function RebalanceModal({ product, shops, allocations, onClose, onCommitted }) {
 
         <div className="grid grid-cols-3 gap-3 bg-adm-sunken p-4 rounded-adm-sm border border-adm-line">
           <div>
-            <span className="text-[10px] uppercase text-white/40 font-semibold block">Master stock</span>
+            <span className="text-xs uppercase text-white/40 font-semibold block">Master stock</span>
             <span className="font-mono text-lg font-bold text-forest">{proposal.masterStock}</span>
           </div>
           <div>
-            <span className="text-[10px] uppercase text-white/40 font-semibold block">Total allocated</span>
+            <span className="text-xs uppercase text-white/40 font-semibold block">Total allocated</span>
             <span className="font-mono text-lg font-bold text-blue">{proposal.totalAllocated}</span>
           </div>
           <div>
-            <span className="text-[10px] uppercase text-white/40 font-semibold block">Unallocated stock</span>
+            <span className="text-xs uppercase text-white/40 font-semibold block">Unallocated stock</span>
             <span className="font-mono text-lg font-bold text-white/60">{proposal.unallocatedMasterStock}</span>
           </div>
         </div>
@@ -630,11 +630,11 @@ function RebalanceModal({ product, shops, allocations, onClose, onCommitted }) {
               <div key={item.shopCode} className="px-4 py-2.5 flex items-center justify-between text-xs hover:bg-white/[0.02]">
                 <div>
                   <span className="font-semibold text-white">{item.displayName}</span>
-                  <span className="block text-[10px] text-white/40 font-mono lowercase">{item.channelCode} · Priority {item.priority}</span>
+                  <span className="block text-xs text-white/40 font-mono lowercase">{item.channelCode} · Priority {item.priority}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-mono font-bold">{item.allocatedUnits} / {item.targetUnits}</span>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                  <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
                     item.status === COVERAGE_STATUS.COVERED
                       ? 'bg-forest/15 text-forest border border-forest/30'
                       : item.status === COVERAGE_STATUS.THIN
