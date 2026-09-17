@@ -1,5 +1,13 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260917-03: accepted J&T VIP Official Excel Bulk Template Parity & Step-by-Step Interactive Guide Mode, merged into MAP-023. Code locally verified.**
+Owner requested inspecting the official J&T Express bulk waybill template (`C:\Users\jerze\Downloads\exptemplete_en.xls`) to determine if it can be used even for single orders as a much easier fulfillment method without manual field typing, and adding an interactive step-by-step guide button in the Admin BOS modal that walks staff/sister through the 1-tap copy & paste and waybill creation workflow:
+1. Analysis of `exptemplete_en.xls`: Confirmed standard 13 contractual columns with exact character parity: `Receiver(*)`, `Receiver Telephone (*)`, `Receiver Address (*)`, `Receiver Province (*)`, `Receiver City (*)`, `Receiver Region (*)`, `Express Type (*)`, `Parcel Name (*)`, `Weight (kg)  (*)`, `Total parcels(*)`, `Parcel Value (Insurance Fee) (*)`, `COD (PHP) (*)`, `Remarks`. Discovered and accommodated the double space in `Weight (kg)  (*)`.
+2. 1-Order Batch CSV export: Added `generateJntVipSingleOrderCsv(order)` in `src/lib/jntVipBulkEngine.js` so staff can download a 1-order CSV batch directly from the single-order modal, enabling 1-click batch upload in J&T VIP (`My Order > Create Waybills In Bulk`) with zero manual copy-pasting.
+3. Interactive Step-by-Step Guide mode: Added `[Step-by-Step Guide]` toggle in `JntVipDispatchModal.jsx` featuring a visual 3-step progress stepper (Step 1: Recipient Address smart recognition & direct portal link; Step 2: Package Specs & COD with individual 1-tap copy chips; Step 3: Barcode scanning & waybill handover).
+4. Strict UI compliance: touch targets $\ge 44\times 44$px (`min-h-11`), font floor strictly $\ge 12$px, zero raw emojis (clean SVG icons only), and zero em dashes in code or UI copy.
+5. Verification: Playwright contract tests (`tests/jnt-vip-dispatch-contract.spec.js` and `tests/admin-dialog-contract.spec.js`) 16/16 PASS; `npm run prebuild` clean (0 leaks, 0 boundary gaps); Admin BOS bundle passes at 196.06 kB / 300.00 kB minified; Storefront bundle passes at 149.89 kB / 150.50 kB gzip.
+
 **IDEA-20260917-02: accepted J&T VIP Mobile & Desktop Courier Booking & Waybill Dispatch Suite, merged into MAP-023. Code locally verified.**
 Owner requested automating courier waybill creation and dispatch for the single Manila master warehouse (`MANILA_MAIN`) backing the website (Package 2):
 1. User sees "Fulfilled by K2 Jimzon (Manila Hub Dispatch)" on storefront and checkout (`Checkout.jsx` and `CartDrawer.jsx`), reinforcing operational truth and brand trust while maintaining the single warehouse stock boundary.

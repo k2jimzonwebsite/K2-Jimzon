@@ -9,6 +9,7 @@ import {
   formatJntSmartAddress,
   extractJntOrderDetails,
   generateJntVipBulkCsv,
+  generateJntVipSingleOrderCsv,
   validateJntTrackingNumber,
 } from '../src/lib/jntVipBulkEngine.js'
 
@@ -22,7 +23,7 @@ test('J&T VIP bulk headers match the 13 required contractual template columns', 
   expect(JNT_VIP_BULK_HEADERS[5]).toBe('Receiver Region (*)')
   expect(JNT_VIP_BULK_HEADERS[6]).toBe('Express Type (*)')
   expect(JNT_VIP_BULK_HEADERS[7]).toBe('Parcel Name (*)')
-  expect(JNT_VIP_BULK_HEADERS[8]).toBe('Weight (kg) (*)')
+  expect(JNT_VIP_BULK_HEADERS[8]).toBe('Weight (kg)  (*)')
   expect(JNT_VIP_BULK_HEADERS[9]).toBe('Total parcels(*)')
   expect(JNT_VIP_BULK_HEADERS[10]).toBe('Parcel Value (Insurance Fee) (*)')
   expect(JNT_VIP_BULK_HEADERS[11]).toBe('COD (PHP) (*)')
@@ -134,6 +135,27 @@ test('bulk CSV generator outputs valid 13-column rows with UTF-8 BOM', () => {
   expect(lines[2]).toContain('"09182222222"')
   expect(lines[2]).toContain('"0.00"') // COD 0
   expect(lines[2]).toContain('"J&T Super"') // Express
+})
+
+test('generateJntVipSingleOrderCsv generates 1-order batch CSV for bulk upload', () => {
+  const singleOrder = {
+    id: 'single-1',
+    public_reference: 'WEB-SINGLE-01',
+    customer_name: 'Maria Santos',
+    customer_phone: '09171234567',
+    delivery_address: '123 Kalayaan Ave, Brgy. Central, Quezon City, Metro Manila',
+    total_amount: 1394,
+    subtotal: 1299,
+  }
+
+  const csv = generateJntVipSingleOrderCsv(singleOrder)
+  expect(csv.startsWith('\uFEFF')).toBe(true)
+  const lines = csv.trim().split('\r\n')
+  expect(lines.length).toBe(2) // Header + 1 row
+  expect(lines[0]).toContain('"Weight (kg)  (*)"')
+  expect(lines[1]).toContain('"Maria Santos"')
+  expect(lines[1]).toContain('"09171234567"')
+  expect(lines[1]).toContain('"1299.00"')
 })
 
 test('J&T tracking number validator distinguishes valid barcodes from invalid input', () => {

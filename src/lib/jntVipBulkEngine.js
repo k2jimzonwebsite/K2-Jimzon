@@ -28,7 +28,7 @@ export const JNT_VIP_BULK_HEADERS = Object.freeze([
   'Receiver Region (*)',
   'Express Type (*)',
   'Parcel Name (*)',
-  'Weight (kg) (*)',
+  'Weight (kg)  (*)',
   'Total parcels(*)',
   'Parcel Value (Insurance Fee) (*)',
   'COD (PHP) (*)',
@@ -274,6 +274,18 @@ export function generateJntVipBulkCsv(orders = []) {
   })
 
   return `\uFEFF${headerLine}\r\n${rows.join('\r\n')}\r\n`
+}
+
+/**
+ * Generates an official J&T VIP bulk import CSV string for a single order.
+ * Enables 1-click batch upload even for individual orders.
+ *
+ * @param {object} order - Order object
+ * @returns {string} CSV formatted content with UTF-8 BOM
+ */
+export function generateJntVipSingleOrderCsv(order) {
+  if (!order) return generateJntVipBulkCsv([])
+  return generateJntVipBulkCsv([order])
 }
 
 /**

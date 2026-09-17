@@ -1,25 +1,31 @@
 # K2 Jimzon — System Brain (Current State)
 
-**17 September J&T VIP Mobile & Desktop Courier Booking & Waybill Dispatch Suite (IDEA-20260917-02, MAP-023, code locally verified):**
-Delivered pure J&T VIP bulk CSV generation calculation engine, mobile & desktop dispatch assistant modal, single-warehouse website fulfillment boundary, storefront brand trust indicators, and contract test suites:
-1. **J&T VIP Bulk CSV & Address Recognition Engine (`src/lib/jntVipBulkEngine.js`):**
-   - Implements J&T VIP Philippines bulk order specification with exact 13 contractual headers (`Item Name`, `Weight`, `Receiver Name`, `Receiver Phone`, `Receiver Province`, `Receiver City`, `Receiver District`, `Detailed Address`, `COD Amount`, `Declared Value`, `Express Type`, `Remark`, `Number of Goods`).
+**17 September J&T VIP Courier Booking, Official Template Parity & Interactive Guide Mode (IDEA-20260917-02, IDEA-20260917-03, MAP-023, code locally verified):**
+Delivered pure J&T VIP bulk CSV calculation engine, official Excel template parity (`exptemplete_en.xls`), 1-order batch CSV export, interactive step-by-step dispatch walkthrough mode, mobile & desktop dispatch assistant modal, single-warehouse website fulfillment boundary, storefront brand trust indicators, and contract test suites:
+1. **Official J&T VIP Template Parity & Bulk Calculation Engine (`src/lib/jntVipBulkEngine.js`):**
+   - Implements J&T VIP Philippines bulk order specification with exact 13 contractual headers matching `exptemplete_en.xls`: `Receiver(*)`, `Receiver Telephone (*)`, `Receiver Address (*)`, `Receiver Province (*)`, `Receiver City (*)`, `Receiver Region (*)`, `Express Type (*)`, `Parcel Name (*)`, `Weight (kg)  (*)`, `Total parcels(*)`, `Parcel Value (Insurance Fee) (*)`, `COD (PHP) (*)`, `Remarks`.
+   - Accommodates J&T's double-spaced column 8 (`Weight (kg)  (*)`).
+   - Added `generateJntVipSingleOrderCsv(order)` for 1-order batch CSV downloads, enabling zero-typing 1-click batch upload on J&T VIP (`My Order > Create Waybills In Bulk`).
    - Standardizes Philippine mobile numbers (`normalizePhilippinePhone`) into canonical `09xxxxxxxxx` format required by J&T auto-assignment.
    - Formats smart recognition addresses (`formatJntSmartAddress`) enabling 1-click paste into J&T VIP's single waybill address parser.
    - Generates RFC 4180 compliant CSV batches with UTF-8 Byte Order Mark (`\uFEFF`) and proper quoting for quotes, commas, and newlines.
    - Validates J&T tracking numbers (`validateJntTrackingNumber`) accepting official `PH...` barcodes and 10 to 16 digit numerical codes.
-2. **Storefront Single-Warehouse Brand & Trust Boundary (`Checkout.jsx` & `CartDrawer.jsx`):**
+2. **Staff Admin BOS J&T VIP Dispatch Modal (`src/views/admin/JntVipDispatchModal.jsx` & `OmniOperationsHub.jsx`):**
+   - Mounted in `OmniOperationsHub.jsx` for single orders ("J&T VIP Book" in Confirmation Queue and Packing Station) and batch exports ("J&T VIP Batch (.csv)" action header).
+   - Single Order tab: provides 1-tap Smart Address copy for J&T VIP single waybill parser, breakdown copy chips (Weight, Value, COD, Remarks), portal shortcut, 1-order batch CSV download button, and physical barcode scanner input that updates order status to handed over.
+   - Interactive Guided Mode: 3-step visual progress stepper (`[Step-by-Step Guide]` toggle):
+     - Step 1: Recipient Address (smart recognition address copy, direct J&T portal link, step instructions, and 1-order CSV download).
+     - Step 2: Package Specs & COD (1-tap copy chips for Weight, Declared Value, COD Amount, Remarks).
+     - Step 3: Scan / Save Waybill (laser scan barcode input, validation, and save & mark dispatched).
+   - Bulk Batch tab: lists ready-to-pack website orders, 1-tap CSV download, and a 3-step visual guide matching the real J&T VIP portal upload interface (`JWORLDBASKETPH ONLINE STORE`, Bulacan/SJDM default sender).
+   - Full `<AdminDialog>` compliance, $\ge 44\times 44$px touch targets (`min-h-11`), strictly $\ge 12$px typography floor, zero em dashes, and zero raw emojis (clean SVG icons only).
+3. **Storefront Single-Warehouse Brand & Trust Boundary (`Checkout.jsx` & `CartDrawer.jsx`):**
    - User sees "Fulfilled by K2 Jimzon (Manila Hub Dispatch)" across Checkout delivery option cards and "Fulfilled by K2 Jimzon · Manila Warehouse Dispatch" in the Cart Drawer.
    - Respects single warehouse boundary (`MANILA_MAIN` backs the website while marketplace channels manage separate warehouse reservations).
    - Removed raw emojis and em dashes, enforcing accessible font floors ($\ge 12$px) across all badges and helper copy.
-3. **Staff Admin BOS J&T VIP Dispatch Modal (`src/views/admin/JntVipDispatchModal.jsx` & `OmniOperationsHub.jsx`):**
-   - Mounted in `OmniOperationsHub.jsx` for single orders ("J&T VIP Book" in Confirmation Queue and Packing Station) and batch exports ("J&T VIP Batch (.csv)" action header).
-   - Single Order tab: provides 1-tap Smart Address copy for J&T VIP single waybill parser, breakdown copy chips (Weight, Value, COD, Remarks), portal shortcut, and physical barcode scanner input that updates order status to handed over.
-   - Bulk Batch tab: lists ready-to-pack website orders, 1-tap CSV download, and a 3-step visual guide matching the real J&T VIP portal upload interface (`JWORLDBASKETPH ONLINE STORE`, Bulacan/SJDM default sender).
-   - Full `<AdminDialog>` compliance, $\ge 44\times 44$px touch targets (`min-h-11`), strictly $\ge 12$px typography, and zero raw emojis.
 4. **Automated Contracts & Budgets:**
-   - Contract test suites `tests/jnt-vip-dispatch-contract.spec.js` (8/8 PASS) and `tests/admin-dialog-contract.spec.js` (7/7 PASS) passed.
-   - `npm run prebuild` passed with 0 secret leaks and 0 boundary gaps.
+   - Contract test suites `tests/jnt-vip-dispatch-contract.spec.js` (9/9 PASS) and `tests/admin-dialog-contract.spec.js` (7/7 PASS) passed (16/16 PASS total).
+   - `npm run prebuild` passed across 1,396 files with 0 secret leaks and 0 boundary gaps.
    - Admin BOS bundle passed at 196.06 kB / 300.00 kB minified (103.94 kB headroom).
    - Storefront bundle passed at JS 149.89 kB / 150.50 kB gzip, CSS 29.37 kB / 30.00 kB gzip.
 
