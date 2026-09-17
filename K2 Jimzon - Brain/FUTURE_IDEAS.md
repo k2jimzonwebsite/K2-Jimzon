@@ -1,5 +1,13 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260917-05: accepted Live 2-Way Peer-to-Peer Storefront to Admin BOS Chat, merged into MAP-027. Database applied live on Supabase (`pixplcjqivlfflickobf`), code locally verified.**
+Owner requested making the storefront live chat operational immediately without requiring manual typing or third-party bot blockers:
+1. Operational Truth & P2P Live Messaging: When a customer visits the storefront and opens "Chat with K2" (`StoreChatPanel.jsx`), they can enter their name, contact (mobile/email), and message, and hit "Send to K2". The message directly writes to canonical `public.conversations` and `public.messages` in Supabase via `submit_storefront_chat_v1`.
+2. Live Admin BOS Inbox Integration: The Admin Inbox (`src/views/admin/Inbox.jsx`) is subscribed via Supabase Realtime to `public.messages` and `public.conversations`. Inbound customer questions appear live with unread counters and the shelf-side origin badge.
+3. Customer-Visible Staff Replies: Activated `public.append_website_customer_reply_v1` and `public.website_reply_capability_v1` on Supabase. Staff clicking "Send to website customer" writes an outbound Admin message, sets status to `Pending`, and logs a `customer_reply_sent` event.
+4. Auto-refreshing Realtime Store Chat: Storefront chat listens on Supabase Realtime (`storefront:live_chat`) and polls `get_storefront_chat_v1` on an 8-second background timer. Replies from staff appear in the customer's chat thread automatically. The active conversation ID is retained in `sessionStorage` so refreshing the browser preserves the active thread.
+5. Verification: Applied migration `20260917_live_p2p_storefront_chat.sql` to live Supabase; verified round-trip message submission, retrieval, and cleanup; 150/150 contract tests pass; prebuild passes with 0 leaks / 0 gaps; Storefront landing budget passes at 149.89 kB / 150.50 kB gzip; Admin bundle passes at 196.06 kB / 300.00 kB minified.
+
 **IDEA-20260917-04: accepted Storefront Buyer Persona Audit & 100% J&T Fulfillment Parity, merged into MAP-023. Code locally verified.**
 Owner requested auditing what information we ask users across three scenarios:
 1. When logging in / managing an account (`CustomerAccount.jsx`)

@@ -1,5 +1,13 @@
 # K2 Jimzon — System Brain (Current State)
 
+**17 September Live 2-Way Peer-to-Peer Storefront to Admin BOS Chat (IDEA-20260917-05, MAP-027, database live on Supabase / code locally verified):**
+Activated direct two-way live person-to-person chat between storefront visitors and staff in Admin BOS without third-party bot roadblocks or serverless proxies:
+1. **Live Direct Supabase Chat:** Storefront chat (`StoreChatPanel.jsx`) now operates directly against Supabase RPC functions (`submit_storefront_chat_v1` and `get_storefront_chat_v1`) without requiring Cloudflare Turnstile bot tokens or inactive BFF proxies. Customers can ask shelf questions or general store inquiries by entering their name, contact, and message.
+2. **Admin BOS Inbox Realtime Integration (`Inbox.jsx`):** Admin Inbox is subscribed to Supabase Realtime changes on `public.messages` and `public.conversations`. Inbound customer questions appear live with unread counters and virtual store / website badges.
+3. **Staff Customer-Visible Replies:** Activated `append_website_customer_reply_v1` on Supabase. Staff clicking "Send to website customer" writes an outbound message and sets conversation status to `Pending`.
+4. **Auto-Refreshing Realtime Thread:** Storefront chat listens on Realtime channel `storefront:live_chat` and polls `get_storefront_chat_v1` every 8 seconds. Active conversation reference is saved to `sessionStorage` (`k2-store-chat-convo-id`) to preserve continuity across page navigation.
+5. **Quality & Evidence:** 150/150 contract tests PASS; `npm run prebuild:storefront` clean; Storefront bundle 149.89 kB / 150.50 kB gzip; Admin bundle 196.06 kB / 300.00 kB minified.
+
 **17 September J&T VIP Courier Booking, Bulk Parity, and Checkout Questions Audit (IDEA-20260917-02, IDEA-20260917-03, IDEA-20260917-04, MAP-023, code locally verified):**
 Delivered pure J&T VIP bulk CSV calculation engine, official Excel template parity (`exptemplete_en.xls`), 1-order batch CSV export, interactive step-by-step dispatch walkthrough mode, buyer persona questions audit, storefront payment preference selector, mobile & desktop dispatch assistant modal, single-warehouse website fulfillment boundary, storefront brand trust indicators, and contract test suites:
 1. **Storefront Buyer Persona Questions Audit & Fulfillment Parity:**

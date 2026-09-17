@@ -98,6 +98,21 @@ Executed a full-scope project audit across Live Database (`pixplcjqivlfflickobf`
   8. `K-10 (Confirmation Copy - Resolved Locally)`: Synchronized `src/views/Confirmation.jsx` copy with automated and quoted delivery review (`tests/storefront-copy-contract.spec.js` 3/3 PASS).
 - **Evidence Baseline:** 659/659 contract and browser tests PASS (651 contract + 8 selling surfaces); `npm run prebuild` PASS with 0 leaks and 0 boundary gaps; Storefront (149.89 kB / 150.50 kB gzip) and Admin (191.12 kB / 300.00 kB minified) builds PASS. See detailed audit matrix under Section K.
 
+**17 September Live 2-Way Peer-to-Peer Storefront to Admin BOS Chat (IDEA-20260917-05, MAP-027, database live on Supabase / code locally verified):**
+Activated direct two-way live person-to-person chat between storefront customers and staff in Admin BOS without third-party bot roadblocks or serverless proxies:
+- **Production Supabase Database Execution (`pixplcjqivlfflickobf`):** Permanently applied migration `20260917_live_p2p_storefront_chat.sql` defining:
+  1. `public.append_website_customer_reply_v1(p_conversation_id uuid, p_content text)`: Staff-only RPC function that inserts an outbound `'Admin'` message into `public.messages`, marks `public.conversations.status = 'Pending'`, and logs a `customer_reply_sent` event in `public.conversation_events`.
+  2. `public.website_reply_capability_v1()`: Security definer function returning staff status, enabling the Admin BOS Inbox to display `Website chat connected` with green status indicator.
+  3. `public.submit_storefront_chat_v1(p_customer_name, p_customer_contact, p_message, p_conversation_id, p_origin)`: Anon-callable RPC that starts a new conversation or appends an inbound `'Customer'` message to an existing conversation, updating `unread_count`, `last_inbound_at`, and 4-hour SLA timer.
+  4. `public.get_storefront_chat_v1(p_conversation_id uuid)`: Anon-callable RPC allowing customers to retrieve their active conversation thread (excluding internal staff notes).
+  5. Verified live execution via Supabase API: synthetic message submission, thread retrieval, and clean purge succeeded with 0 errors.
+- **Storefront & Admin Integration:** Updated `StoreChatPanel.jsx` to operate in direct Supabase mode when `VITE_GUEST_BFF_ENABLED=false`:
+  1. Bypassed `<MessagingOffline>` blocking view; customers can now directly send questions from the shelf or storefront footer.
+  2. Maintained `sessionStorage` conversation ID persistence (`k2-store-chat-convo-id`) so customers can navigate across pages or refresh without losing their conversation thread.
+  3. Subscribed to live Supabase Realtime changes (`storefront:live_chat` on `public.messages`) with 8-second slow polling fallback (`POLL_MS = 8000`).
+  4. In Admin BOS (`src/views/admin/Inbox.jsx`), staff receive Realtime change events on incoming customer messages and can reply with 1 click via "Send to website customer".
+- **Evidence & Verification:** 150/150 contract tests PASS (`map027-store-polish`, `turnstile-wiring`, `admin-bff`, `guest-conversation-seed`); `npm run prebuild:storefront` clean (0 leaks, 0 boundary gaps, 16 expected anon functions); Storefront bundle passes at 149.89 kB / 150.50 kB gzip; Admin bundle passes at 196.06 kB / 300.00 kB minified.
+
 **17 September J&T VIP Fulfillment Parity, Bulk Template Integration, and Checkout Persona Audit (IDEA-20260917-03 / IDEA-20260917-04, MAP-023, code locally verified):**
 Verified complete J&T Express VIP courier fulfillment parity and audited buyer information flows across logging in (`CustomerAccount.jsx`), returning buyers, and guest checkouts (`Checkout.jsx`):
 - **Buyer Persona & Questions Audit:** Confirmed customer account sign-in is strictly optional passwordless magic link (email) or SMS OTP (phone). No passwords, credit cards, or unnecessary forms. Storefront checkout captures recipient Full Name, Mobile Number (standardized 11-digit Philippine mobile `09xxxxxxxxx`), optional Email, Destination Region (for regional weight tiers & J&T province mapping), Delivery Address (with rapid-recognition tips for Street, Barangay, City), fulfillment method selector (Metro Manila delivery, Courier delivery, or Warehouse pickup), and Payment Preference selector (Cash on Delivery vs Prepaid GCash/Maya/Bank).

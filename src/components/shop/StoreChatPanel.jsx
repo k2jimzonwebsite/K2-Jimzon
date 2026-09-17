@@ -3,6 +3,7 @@ import TurnstileChallenge from '../security/TurnstileChallenge'
 import {
   guestBffEnabled, listGuestConversations, replyToGuestConversation, startGuestConversation,
 } from '../../services/guestCommerceService'
+import { supabase, isSupabaseConfigured } from '../../lib/supabaseClient'
 
 /**
  * MAP-027 — talking to staff without leaving the store.
@@ -80,7 +81,9 @@ function MessagingOffline({ seededMessage }) {
 }
 
 export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) {
-  const enabled = guestBffEnabled()
+  const bffEnabled = guestBffEnabled()
+  const directEnabled = isSupabaseConfigured
+  const enabled = bffEnabled || directEnabled
 
   const [form, setForm] = useState({ customerName: '', email: '', phone: '' })
   // An unsent draft survives sheet close, Escape, and remounts within this
@@ -104,6 +107,66 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
   const threadRef = useRef(null)
   useEffect(() => { if (!active) setBotToken('') }, [active])
 
+  // Load existing conversation from sessionStorage if present in direct mode
+  useEffect(() => {
+    try {
+      const savedConvoId = sessionStorage.getItem('k2-store-chat-convo-id')
+      if (savedConvoId && !conversation && directEnabled && !bffEnabled && supabase) {
+        supabase.rpc('get_storefront_chat_v1', { p_conversation_id: savedConvoId })
+          .then(({ data, error: rpcErr }) => {
+            if (!rpcErr && data?.ok) {
+              setConversation({
+                id: data.conversation_id,
+                conversation_reference: data.conversation_id,
+                customerName: data.customer_name,
+                status: data.status,
+                messages: data.messages || [],
+              })
+            }
+          })
+          .catch(() => {})
+      }
+    } catch { /* storage fallback */ }
+  }, [directEnabled, bffEnabled, conversation])
+
+  // Subscribe to live postgres_changes when conversation exists
+  useEffect(() => {
+    const convoId = conversation?.id || conversation?.conversation_reference
+    if (!active || !convoId || bffEnabled || !directEnabled || !supabase) return undefined
+
+    const channel = supabase.channel('storefront:live_chat')
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'messages',
+        filter: `conversation_id=eq.${convoId}`,
+      }, (payload) => {
+        if (payload?.new) {
+          const newMsg = payload.new
+          setConversation((current) => {
+            if (!current) return current
+            if (current.messages?.some((m) => m.id === newMsg.id)) return current
+            return {
+              ...current,
+              messages: [...(current.messages || []), {
+                id: newMsg.id,
+                direction: newMsg.direction || (newMsg.sender_type === 'Customer' ? 'inbound' : 'outbound'),
+                content: newMsg.content,
+                delivery_status: newMsg.delivery_status || 'received',
+                created_at: newMsg.created_at || new Date().toISOString(),
+                sender_type: newMsg.sender_type,
+              }],
+            }
+          })
+        }
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [active, conversation?.id, conversation?.conversation_reference, bffEnabled, directEnabled])
+
   // A question asked at the shelf arrives as bounded product context. It seeds
   // the box once and is then the customer's to edit or delete — it is never
   // re-applied underneath them as they type.
@@ -116,21 +179,35 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
   }, [seed, onSeedConsumed, message])
 
   const refresh = useCallback(async () => {
-    if (!enabled || !conversation?.conversation_reference) return
-    const result = await listGuestConversations()
-    if (!result.ok || !Array.isArray(result.data)) return
-    const match = result.data.find(
-      (item) => item.conversation_reference === conversation.conversation_reference,
-    )
-    if (match) setConversation(match)
-  }, [enabled, conversation?.conversation_reference])
+    if (!enabled) return
+    if (bffEnabled) {
+      if (!conversation?.conversation_reference) return
+      const result = await listGuestConversations()
+      if (!result.ok || !Array.isArray(result.data)) return
+      const match = result.data.find(
+        (item) => item.conversation_reference === conversation.conversation_reference,
+      )
+      if (match) setConversation(match)
+    } else if (directEnabled && supabase) {
+      const convoId = conversation?.id || conversation?.conversation_reference
+      if (!convoId) return
+      const { data, error: rpcErr } = await supabase.rpc('get_storefront_chat_v1', { p_conversation_id: convoId })
+      if (!rpcErr && data?.ok) {
+        setConversation((current) => ({
+          ...current,
+          status: data.status,
+          messages: data.messages || [],
+        }))
+      }
+    }
+  }, [enabled, bffEnabled, directEnabled, conversation?.id, conversation?.conversation_reference])
 
   // Poll only while there is a conversation to poll for.
   useEffect(() => {
-    if (!active || !conversation?.conversation_reference) return undefined
+    if (!active || !(conversation?.id || conversation?.conversation_reference)) return undefined
     const timer = setInterval(refresh, POLL_MS)
     return () => clearInterval(timer)
-  }, [active, conversation?.conversation_reference, refresh])
+  }, [active, conversation?.id, conversation?.conversation_reference, refresh])
 
   // Keep the newest message in view as the thread grows.
   useEffect(() => {
@@ -149,6 +226,59 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
     event.preventDefault()
     const content = message.trim()
     if (!content || sending) return
+
+    // Direct Supabase mode (when BFF is not active)
+    if (!bffEnabled && directEnabled && supabase) {
+      const convoId = conversation?.id || conversation?.conversation_reference || null
+      if (!convoId) {
+        if (!form.customerName.trim()) {
+          setError('Add a name so K2 knows who they are replying to.')
+          return
+        }
+        if (!form.email.trim() && !form.phone.trim()) {
+          setError('Enter an email address or mobile number so K2 can identify the conversation.')
+          return
+        }
+      }
+
+      setSending(true)
+      const { data, error: rpcErr } = await supabase.rpc('submit_storefront_chat_v1', {
+        p_customer_name: form.customerName.trim() || 'Website Customer',
+        p_customer_contact: form.email.trim() || form.phone.trim() || '',
+        p_message: content,
+        p_conversation_id: convoId,
+        p_origin: 'virtual_store',
+      })
+      setSending(false)
+
+      if (rpcErr || !data?.ok) {
+        setError(rpcErr?.message || 'Message could not be sent. Please retry.')
+        return
+      }
+
+      try {
+        if (data.conversation_id) {
+          sessionStorage.setItem('k2-store-chat-convo-id', data.conversation_id)
+        }
+      } catch { /* storage fallback */ }
+
+      setConversation((current) => ({
+        id: data.conversation_id,
+        conversation_reference: data.conversation_id,
+        status: 'Open',
+        messages: [...(current?.messages || []), {
+          id: data.message_id,
+          direction: 'inbound',
+          content,
+          delivery_status: 'received',
+          created_at: data.created_at || new Date().toISOString(),
+          sender_type: 'Customer',
+        }],
+      }))
+      setMessage('')
+      setNotice('Sent. A person answers here during Manila business hours.')
+      return
+    }
 
     // An existing thread just takes the reply; a new one needs identity and a
     // bot check, exactly as the messages page requires.
@@ -182,7 +312,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
       setError('Enter an email address or mobile number so K2 can identify the conversation.')
       return
     }
-    if (!botToken) {
+    if (bffEnabled && !botToken) {
       setError('Complete the security check before sending.')
       return
     }
@@ -339,7 +469,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
         </label>
 
         {!conversation && active && (
-          <TurnstileChallenge key={challengeKey} enabled={enabled} action="guest_start" onTokenChange={setBotToken} />
+          <TurnstileChallenge key={challengeKey} enabled={bffEnabled} action="guest_start" onTokenChange={setBotToken} />
         )}
 
         {error && (
