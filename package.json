@@ -43,6 +43,7 @@
     "rehearse:map017-local": "node scripts/rehearse-local-migration.mjs",
     "rehearse:catalog-spreadsheet": "node scripts/rehearse-catalog-spreadsheet.mjs",
     "rehearse:channel-vocabulary": "node scripts/rehearse-channel-vocabulary-portable.mjs",
+    "rehearse:shop-transfers": "node scripts/rehearse-multi-shop-transfers-portable.mjs",
     "rehearse:marketplace-snapshots": "node scripts/rehearse-marketplace-snapshot-portable.mjs",
     "rehearse:map023-last-unit": "node scripts/rehearse-map023-last-unit-concurrency.mjs",
     "rehearse:inventory-readiness": "node scripts/rehearse-inventory-readiness.mjs",

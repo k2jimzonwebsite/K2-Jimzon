@@ -1,5 +1,34 @@
 # K2 Jimzon — System Brain (Current State)
 
+**17 September Multi-Shop Channel Allocation & Custody Transfer Engine (IDEA-20260917-01, MAP-026, code locally verified):**
+Delivered pure multi-shop inventory projection calculation engine, physical custody transfer state machine, PostgreSQL schema and stored procedures, migration rehearsal harness, and Admin BOS staff interfaces:
+1. **Multi-Shop Channel Allocation Calculation Engine (`src/lib/channelAllocationEngine.js`):**
+   - Implements owner-confirmed multi-shop inventory projection rules: default target coverage of 2 sellable units per active individual shop account (`DEFAULT_TARGET_UNITS = 2`, `DEFAULT_SHOPS` covering Shopee Main/Outlet, TikTok Main/Live Outlet, Lazada Flagship/Express).
+   - Evaluates coverage status explicitly: `Covered` (2+ units), `Thin` (1 unit), `Skipped` (intentionally excluded from shop), `Out` (0 units), `Needs review` (discrepancy flagged).
+   - Zero double-counting invariant: sum of shop allocations never exceeds Master sellable stock (`masterStock`). Master Inventory remains physical truth across warehouse lots and never shrinks when stock is allocated.
+   - Computes outbox synchronization deltas (`calculateOutboxSyncDeltas`) generating structured diffs (`increase_stock` / `decrease_stock`) for downstream marketplace connectors.
+2. **Custody Transfer State Machine (`src/lib/custodyTransferEngine.js`):**
+   - Implements physical stock custody movement rules: staff request -> admin approval -> receiver acceptance workflow (`pending_approval`, `approved`, `rejected`, `in_transit`, `completed`, `cancelled`).
+   - Transfer requests fail closed if requested quantity exceeds unreserved lot availability (`validateTransferAvailability`).
+   - Role transition gates: non-admin roles cannot approve or reject transfers (`UNAUTHORIZED_TRANSFER_REVIEW`). Rejections mandate explicit operational reasons.
+3. **Database Schema, Views & Stored Procedures (`supabase/migrations/20260917_multi_shop_allocation_and_transfers.sql` and rollback):**
+   - Created tables `public.channel_shop_allocations` and `public.inventory_transfer_requests` with row-level security policies.
+   - Created view `public.v_multi_shop_stock_projection` aggregating current warehouse stock, allocated units, and per-shop coverage statuses.
+   - Created stored procedures `public.rebalance_shop_allocations_v1`, `public.request_inventory_transfer`, and `public.review_inventory_transfer`.
+   - Included safe role exception handlers (`exception when undefined_object then null`) ensuring idempotent execution on standalone PostgreSQL instances.
+4. **Local PostgreSQL 17 Migration Rehearsal (`scripts/rehearse-multi-shop-transfers-portable.mjs`):**
+   - Dedicated test harness running on port 54334 verifying migration application, idempotent replay, ample stock distribution (12 units across 6 shops -> all Covered), scarce stock distribution (3 units -> Priority 1 Covered, Priority 2 Thin, Priority 3-6 Out), fail-closed over-quantity request rejection, admin approval transitions, and clean rollback (`npm run rehearse:shop-transfers` exit code 0).
+5. **Admin BOS Staff Interface (`src/views/admin/ShopAllocationManager.jsx` & `ChannelIntegrations.jsx`):**
+   - Mounted sub-navigation rail in Channel Integrations toggling between "Channel readiness & connectors" and "Multi-shop stock allocation & custody".
+   - Allocation Matrix view: real-time summary cards, product-by-product breakdown, per-shop status pills, and interactive "Rebalance Projections" modal with live 2-unit preview and scarcity warnings.
+   - Custody Transfers view: pending approvals queue for admins with Approve / Reject dialogs, historical transfers log, and "Request Custody Transfer" staff modal.
+   - Full compliance with 12px font floor, `min-h-11` touch targets, SVG icons, and zero raw emojis.
+6. **Automated Contracts & Budgets:**
+   - Playwright contract suite `tests/multi-shop-allocation-contract.spec.js` passes 4/4 tests in 4.3s.
+   - `npm run prebuild` passed across 1,393 files with 0 secret leaks and 0 boundary gaps.
+   - Admin BOS bundle passed at 196.06 kB / 300.00 kB minified (103.94 kB headroom).
+   - Storefront bundle passed at JS 149.89 kB / 150.50 kB gzip, CSS 29.32 kB / 30.00 kB gzip.
+
 **17 September GitHub Actions CI fix, PostgreSQL portable runtime lifecycle, and Store Overlay Clearance (code locally verified):**
 Resolved root causes in remote CI test and rehearsal execution across Linux and Windows:
 1. **Store Overlay Collision Test Isolation & Mobile Layout Clearance:**

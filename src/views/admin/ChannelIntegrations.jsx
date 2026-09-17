@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
-import { CheckIcon, GlobeIcon, XIcon } from '../../components/ui/icons'
+import { BoxIcon, CheckIcon, GlobeIcon, XIcon } from '../../components/ui/icons'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { adminBffEnabled, getAdminChannelsBff, verifyInternalChannelBff } from '../../services/adminBffService'
 import {
@@ -13,6 +13,7 @@ import {
   primaryButton,
   secondaryButton,
 } from './AdminWorkspaceUi'
+import ShopAllocationManager from './ShopAllocationManager'
 
 const SUPA_URL = import.meta.env.VITE_SUPABASE_URL || ''
 const REF = (SUPA_URL.match(/https?:\/\/([a-z0-9-]+)\.supabase\./i) || [])[1] || ''
@@ -36,6 +37,7 @@ export default function ChannelIntegrations({ secureMode }) {
   const [error, setError] = useState('')
   const [guide, setGuide] = useState(null)
   const [verify, setVerify] = useState(null)
+  const [subTab, setSubTab] = useState('connectors')
 
   const load = useCallback(async (signal) => {
     if (secure) {
@@ -109,67 +111,99 @@ export default function ChannelIntegrations({ secureMode }) {
 
   return (
     <div className="mx-auto max-w-[1600px] space-y-5 pb-12">
-      <WorkspaceIntro
-        eyebrow="Multichannel control"
-        title="Channel readiness board"
-        description="One product master feeds the Website, Shopee, TikTok Shop, and Lazada. Pasabuy remains a request-and-quote channel. Operational means a real event was reconciled; it is never a manual test toggle."
-        status={loading ? 'Checking channel evidence' : `${liveCount} of ${CHANNELS.length} operational`}
-        statusTone={liveCount === CHANNELS.length ? 'success' : 'warning'}
-      />
+      {/* Top Channel Sub-Navigation */}
+      <nav aria-label="Channel workspace views" className="flex border-b border-adm-line pb-1">
+        <button
+          onClick={() => setSubTab('connectors')}
+          className={`flex min-h-11 items-center gap-2 border-b-2 px-4 text-xs font-semibold uppercase tracking-wider transition-colors ${
+            subTab === 'connectors'
+              ? 'border-blue text-white'
+              : 'border-transparent text-white/50 hover:text-white'
+          }`}
+        >
+          <GlobeIcon size={16} />
+          <span>Channel readiness & connectors</span>
+        </button>
+        <button
+          onClick={() => setSubTab('allocations')}
+          className={`flex min-h-11 items-center gap-2 border-b-2 px-4 text-xs font-semibold uppercase tracking-wider transition-colors ${
+            subTab === 'allocations'
+              ? 'border-blue text-white'
+              : 'border-transparent text-white/50 hover:text-white'
+          }`}
+        >
+          <BoxIcon size={16} />
+          <span>Multi-shop stock allocation & custody</span>
+        </button>
+      </nav>
 
-      <MetricRail columns="lg:grid-cols-5" items={[
-        { label: 'Operational channels', value: loading ? '--' : `${liveCount}/${CHANNELS.length}`, detail: 'Reconciled real events', tone: liveCount === CHANNELS.length ? 'text-forest' : 'text-amber' },
-        { label: 'Blocked channels', value: loading ? '--' : blockedChannels, detail: 'Connector or verification work', tone: blockedChannels ? 'text-amber' : 'text-white' },
-        { label: 'Marketplace rows', value: loading ? '--' : marketplaceTotals.rows, detail: 'Shopee, TikTok, Lazada' },
-        { label: 'Ready drafts', value: loading ? '--' : marketplaceTotals.ready, detail: 'Validated, not necessarily live', tone: 'text-blue' },
-        { label: 'Incomplete rows', value: loading ? '--' : marketplaceTotals.incomplete, detail: 'Missing listing data', tone: marketplaceTotals.incomplete ? 'text-crimson' : 'text-white' },
-      ]} />
+      {subTab === 'allocations' ? (
+        <ShopAllocationManager secureMode={secure} />
+      ) : (
+        <>
+          <WorkspaceIntro
+            eyebrow="Multichannel control"
+            title="Channel readiness board"
+            description="One product master feeds the Website, Shopee, TikTok Shop, and Lazada. Pasabuy remains a request-and-quote channel. Operational means a real event was reconciled; it is never a manual test toggle."
+            status={loading ? 'Checking channel evidence' : `${liveCount} of ${CHANNELS.length} operational`}
+            statusTone={liveCount === CHANNELS.length ? 'success' : 'warning'}
+          />
 
-      {error && <StateBanner tone="warning">{error}. Apply the launch-core migration to enable readiness reporting.</StateBanner>}
-      {!secure && <StateBanner tone="warning">Transitional staff database path. The signed channel boundary remains inactive until coordinated cutover.</StateBanner>}
+          <MetricRail columns="lg:grid-cols-5" items={[
+            { label: 'Operational channels', value: loading ? '--' : `${liveCount}/${CHANNELS.length}`, detail: 'Reconciled real events', tone: liveCount === CHANNELS.length ? 'text-forest' : 'text-amber' },
+            { label: 'Blocked channels', value: loading ? '--' : blockedChannels, detail: 'Connector or verification work', tone: blockedChannels ? 'text-amber' : 'text-white' },
+            { label: 'Marketplace rows', value: loading ? '--' : marketplaceTotals.rows, detail: 'Shopee, TikTok, Lazada' },
+            { label: 'Ready drafts', value: loading ? '--' : marketplaceTotals.ready, detail: 'Validated, not necessarily live', tone: 'text-blue' },
+            { label: 'Incomplete rows', value: loading ? '--' : marketplaceTotals.incomplete, detail: 'Missing listing data', tone: marketplaceTotals.incomplete ? 'text-crimson' : 'text-white' },
+          ]} />
 
-      <section data-tour="channel-connectors" className="space-y-3">
-        <SectionHeading title="Channel evidence and next action" description="Connection truth, catalog preparation, and the next safe operational step for each income channel." count={CHANNELS.length} />
-        <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
-          <div className="hidden grid-cols-[minmax(220px,1.4fr)_130px_minmax(220px,1fr)_220px] gap-4 border-b border-adm-line bg-white/[0.025] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.09em] text-white/35 lg:grid">
-            <span>Channel</span><span>State</span><span>Catalog evidence</span><span className="text-right">Next action</span>
-          </div>
-          <div className="divide-y divide-adm-line">
-            {CHANNELS.map(channel => {
-              const connection = connections[channel.key]
-              const live = connection?.status === 'live'
-              const degraded = connection?.status === 'degraded'
-              const failed = connection?.status === 'error'
-              const channelStats = stats[channel.key] || { total: 0, ready: 0, incomplete: 0, published: 0 }
-              const lastEvent = connection?.last_event_at ? new Date(connection.last_event_at).toLocaleString() : 'No reconciled event'
-              return (
-                <article key={channel.key} className="grid gap-3 px-4 py-4 transition-colors duration-150 hover:bg-white/[0.025] lg:grid-cols-[minmax(220px,1.4fr)_130px_minmax(220px,1fr)_220px] lg:items-center lg:gap-4">
-                  <div className="flex min-w-0 items-start gap-3">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-adm-sm border border-white/10 text-white" style={{ backgroundColor: channel.color }}><GlobeIcon size={17} /></span>
-                    <div className="min-w-0"><h3 className="text-sm font-semibold text-white">{channel.name}</h3><p className="mt-0.5 text-xs leading-relaxed text-white/45">{channel.description}</p></div>
-                  </div>
-                  <div><StatusPill tone={live ? 'success' : failed ? 'danger' : degraded ? 'warning' : 'neutral'}>{live ? 'Operational' : failed ? 'Connector error' : degraded ? 'Events only' : 'Not connected'}</StatusPill></div>
-                  <div>
-                    {channel.internal ? (
-                      <><p className="text-xs font-medium text-white/65">{lastEvent}</p><p className="mt-1 text-xs text-white/35">{connection?.note || 'Internal intake requires reconciliation.'}</p></>
-                    ) : (
-                      <><div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs tabular-nums"><span className="text-white/65">{channelStats.total} rows</span><span className="text-blue">{channelStats.ready} ready</span><span className={channelStats.incomplete ? 'text-crimson' : 'text-white/45'}>{channelStats.incomplete} incomplete</span></div><p className="mt-1 text-xs text-white/35">{live ? `Last reconciled event ${lastEvent}` : degraded ? connection?.note : 'Seller Center remains the Step 1 fallback.'}</p></>
-                    )}
-                  </div>
-                  <div className="flex lg:justify-end">
-                    {channel.internal && !live ? <button onClick={() => setVerify(channel)} className={`${secondaryButton} border-forest/35 bg-forest/10 text-forest`}>Verify real event</button> : !channel.internal ? <button onClick={() => setGuide(channel)} className={live ? secondaryButton : primaryButton}>Connector checklist</button> : <span className="text-xs text-white/35">Monitor real events</span>}
-                  </div>
-                </article>
-              )
-            })}
-          </div>
-        </div>
-      </section>
+          {error && <StateBanner tone="warning">{error}. Apply the launch-core migration to enable readiness reporting.</StateBanner>}
+          {!secure && <StateBanner tone="warning">Transitional staff database path. The signed channel boundary remains inactive until coordinated cutover.</StateBanner>}
 
-      <StateBanner tone="info"><strong className="font-semibold text-white/80">Operating rule:</strong> External marketplaces are not connected. Prepare channel titles, prices, images, and identifiers as drafts. Do not mark a marketplace row published or include it in synchronized stock until a real connector returns success. Marketplace Seller Centers remain the manual fallback during Step 1.</StateBanner>
+          <section data-tour="channel-connectors" className="space-y-3">
+            <SectionHeading title="Channel evidence and next action" description="Connection truth, catalog preparation, and the next safe operational step for each income channel." count={CHANNELS.length} />
+            <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
+              <div className="hidden grid-cols-[minmax(220px,1.4fr)_130px_minmax(220px,1fr)_220px] gap-4 border-b border-adm-line bg-white/[0.025] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.09em] text-white/35 lg:grid">
+                <span>Channel</span><span>State</span><span>Catalog evidence</span><span className="text-right">Next action</span>
+              </div>
+              <div className="divide-y divide-adm-line">
+                {CHANNELS.map(channel => {
+                  const connection = connections[channel.key]
+                  const live = connection?.status === 'live'
+                  const degraded = connection?.status === 'degraded'
+                  const failed = connection?.status === 'error'
+                  const channelStats = stats[channel.key] || { total: 0, ready: 0, incomplete: 0, published: 0 }
+                  const lastEvent = connection?.last_event_at ? new Date(connection.last_event_at).toLocaleString() : 'No reconciled event'
+                  return (
+                    <article key={channel.key} className="grid gap-3 px-4 py-4 transition-colors duration-150 hover:bg-white/[0.025] lg:grid-cols-[minmax(220px,1.4fr)_130px_minmax(220px,1fr)_220px] lg:items-center lg:gap-4">
+                      <div className="flex min-w-0 items-start gap-3">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-adm-sm border border-white/10 text-white" style={{ backgroundColor: channel.color }}><GlobeIcon size={17} /></span>
+                        <div className="min-w-0"><h3 className="text-sm font-semibold text-white">{channel.name}</h3><p className="mt-0.5 text-xs leading-relaxed text-white/45">{channel.description}</p></div>
+                      </div>
+                      <div><StatusPill tone={live ? 'success' : failed ? 'danger' : degraded ? 'warning' : 'neutral'}>{live ? 'Operational' : failed ? 'Connector error' : degraded ? 'Events only' : 'Not connected'}</StatusPill></div>
+                      <div>
+                        {channel.internal ? (
+                          <><p className="text-xs font-medium text-white/65">{lastEvent}</p><p className="mt-1 text-xs text-white/35">{connection?.note || 'Internal intake requires reconciliation.'}</p></>
+                        ) : (
+                          <><div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs tabular-nums"><span className="text-white/65">{channelStats.total} rows</span><span className="text-blue">{channelStats.ready} ready</span><span className={channelStats.incomplete ? 'text-crimson' : 'text-white/45'}>{channelStats.incomplete} incomplete</span></div><p className="mt-1 text-xs text-white/35">{live ? `Last reconciled event ${lastEvent}` : degraded ? connection?.note : 'Seller Center remains the Step 1 fallback.'}</p></>
+                        )}
+                      </div>
+                      <div className="flex lg:justify-end">
+                        {channel.internal && !live ? <button onClick={() => setVerify(channel)} className={`${secondaryButton} border-forest/35 bg-forest/10 text-forest`}>Verify real event</button> : !channel.internal ? <button onClick={() => setGuide(channel)} className={live ? secondaryButton : primaryButton}>Connector checklist</button> : <span className="text-xs text-white/35">Monitor real events</span>}
+                      </div>
+                    </article>
+                  )
+                })}
+              </div>
+            </div>
+          </section>
 
-      {guide && <ConnectorGuide channel={guide} onClose={() => setGuide(null)} />}
-      {verify && <InternalVerification secure={secure} channel={verify} onClose={() => setVerify(null)} onVerified={async () => { setVerify(null); await load() }} />}
+          <StateBanner tone="info"><strong className="font-semibold text-white/80">Operating rule:</strong> External marketplaces are not connected. Prepare channel titles, prices, images, and identifiers as drafts. Do not mark a marketplace row published or include it in synchronized stock until a real connector returns success. Marketplace Seller Centers remain the manual fallback during Step 1.</StateBanner>
+
+          {guide && <ConnectorGuide channel={guide} onClose={() => setGuide(null)} />}
+          {verify && <InternalVerification secure={secure} channel={verify} onClose={() => setVerify(null)} onVerified={async () => { setVerify(null); await load() }} />}
+        </>
+      )}
     </div>
   )
 }

@@ -1,5 +1,14 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260917-01: accepted Multi-Shop Channel Allocation & Custody Transfer Engine, merged into MAP-026. Code locally verified.**
+Owner authorized autonomous implementation of Multi-Shop Channel Allocation and Custody Transfer Engine (Package 1):
+1. Pure allocation calculation engine (`src/lib/channelAllocationEngine.js`): deterministic 2-unit target coverage per shop account (`Covered`, `Thin`, `Skipped`, `Out`, `Needs review`), priority-based scarcity resolution, and marketplace outbox sync deltas. Master Inventory is preserved as the physical truth across warehouse lots and never shrinks when stock is allocated.
+2. Custody transfer engine (`src/lib/custodyTransferEngine.js`): physical stock custody movement state machine implementing staff-request -> admin-approval -> receiver-acceptance workflow. Fails closed on insufficient unreserved lot stock, enforces admin role for review, and records actor, timestamp, and reasons.
+3. Database migration & rollback (`supabase/migrations/20260917_multi_shop_allocation_and_transfers.sql` and rollback): creates `public.channel_shop_allocations`, `public.inventory_transfer_requests`, stock projection view `v_multi_shop_stock_projection`, and stored procedures `rebalance_shop_allocations_v1`, `request_inventory_transfer`, `review_inventory_transfer`. Fully guarded for blank PostgreSQL instances.
+4. Local PostgreSQL 17 test harness (`scripts/rehearse-multi-shop-transfers-portable.mjs` / `npm run rehearse:shop-transfers`): validates migration replay, 2-unit distribution, scarcity priority, custody request, fail-closed lot validation, admin approval, and clean rollback.
+5. Staff Admin BOS interface (`src/views/admin/ShopAllocationManager.jsx`): mounts Channel Allocation Matrix and Custody Transfers workspaces within `ChannelIntegrations.jsx`, adhering strictly to the 12px font floor, `min-h-11` touch targets, clean SVG icons, and zero raw emojis.
+6. Verification & Budgets: Playwright contract tests (`tests/multi-shop-allocation-contract.spec.js`) 4/4 PASS; `npm run prebuild` clean across 1,393 files; Admin BOS bundle passes at 196.06 kB / 300.00 kB minified; Storefront bundle passes at 149.89 kB / 150.50 kB gzip.
+
 **IDEA-20260916-08 — accepted Universal Guided Walkthrough System across all Admin BOS workflows, merged into MAP-021.**
 Owner requested a button across the Workflow Guide that activates an interactive step-by-step guide mode for any chosen workflow (inventory intake, metrics discovery, inventory scanning, delivery mode fulfillment, flight consignments, monthly counts). Audit gate:
 1. In `MasterWorkflowGraph.jsx` and `WorkflowDetailDrawer.jsx`, mount an unmistakable primary `[▶ Play Guided Walkthrough]` action button for every active workflow.
