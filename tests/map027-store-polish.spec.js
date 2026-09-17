@@ -1252,3 +1252,44 @@ test('virtual-store messages have one signed customer-visible path into Admin', 
   expect(inbox).toContain('Send to website customer')
   expect(inbox).toContain('Replies appear in the customer’s website chat')
 })
+
+test('storefront provides a unified live chat drawer across 2D and 3D experiences', async () => {
+  const storeContext = await read('../src/context/StoreContext.jsx')
+  const storefrontApp = await read('../src/StorefrontApp.jsx')
+  const app = await read('../src/App.jsx')
+  const drawer = await read('../src/components/shop/StoreChatDrawer.jsx')
+  const button = await read('../src/components/shop/StorefrontChatButton.jsx')
+  const contact = await read('../src/views/Contact.jsx')
+  const guestMessages = await read('../src/views/GuestMessages.jsx')
+
+  // Context exposes unified chat controls and seeds without navigation
+  expect(storeContext).toContain('chatOpen')
+  expect(storeContext).toContain('setChatOpen')
+  expect(storeContext).toContain('chatSeed')
+  expect(storeContext).toContain('openStoreChat')
+  expect(storeContext).toContain('closeStoreChat')
+  expect(storeContext).toContain('setChatSeed(payload)')
+  expect(storeContext).toContain('setChatOpen(true)')
+  expect(storeContext).not.toContain("askStaffAboutProduct = ({ sku = '', productName = '', question = '', origin = 'product-page' } = {}) => {\n    const trimmed = String(question || '').trim()\n    if (!trimmed) return\n    const reference = sku ? `${productName || 'Product'} (SKU: ${sku})` : productName || 'Product'\n    setProductQuestionPrefill({\n      sku,\n      productName,\n      origin,\n      message: `About ${reference}\\n\\n${trimmed}`,\n    })\n    go('messages')")
+
+  // Both entry shells mount the unified drawer and floating trigger
+  expect(storefrontApp).toContain('StoreChatDrawer')
+  expect(storefrontApp).toContain('StorefrontChatButton')
+  expect(app).toContain('StoreChatDrawer')
+  expect(app).toContain('StorefrontChatButton')
+
+  // Drawer accessibility & structure
+  expect(drawer).toContain('role="dialog"')
+  expect(drawer).toContain('aria-modal="true"')
+  expect(drawer).toContain('StoreChatPanel')
+  expect(drawer).toContain('Tricolor')
+
+  // Button accessibility & active conversation dot
+  expect(button).toContain('k2-store-chat-convo-id')
+  expect(button).toContain('Chat with K2')
+  expect(button).toContain('Resume Chat')
+
+  // Contact and GuestMessages link directly into the live chat drawer
+  expect(contact).toContain("openChat({ origin: 'contact_page' })")
+  expect(guestMessages).toContain("openChat({ origin: 'messages_page' })")
+})

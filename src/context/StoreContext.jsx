@@ -66,6 +66,8 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   const [productId, setProductId] = useState(initialLoc.productId)
   const [pasabuyPrefill, setPasabuyPrefill] = useState(null)
   const [productQuestionPrefill, setProductQuestionPrefill] = useState(null)
+  const [chatOpen, setChatOpen] = useState(false)
+  const [chatSeed, setChatSeed] = useState(null)
   
   const [cart, setCart] = useState(() => {
     if (typeof window === 'undefined') return []
@@ -497,21 +499,40 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     setPasabuyPrefill(null)
   }
 
-  // MAP-027: hand a product question to the canonical guest conversation
-  // boundary. Bounded context only — SKU, public product name, originating
-  // surface, and the customer's own question. No conversation history, no
-  // identity, no private evidence, and no response-time promise.
+  // MAP-027: hand a product question to the unified live chat drawer.
+  // Bounded context only — SKU, public product name, originating surface,
+  // and the customer's question. Customer stays in the catalog/shop with the
+  // drawer open rather than being ejected to a separate page.
   const askStaffAboutProduct = ({ sku = '', productName = '', question = '', origin = 'product-page' } = {}) => {
     const trimmed = String(question || '').trim()
     if (!trimmed) return
     const reference = sku ? `${productName || 'Product'} (SKU: ${sku})` : productName || 'Product'
-    setProductQuestionPrefill({
+    const payload = {
       sku,
       productName,
       origin,
       message: `About ${reference}\n\n${trimmed}`,
-    })
-    go('messages')
+    }
+    setProductQuestionPrefill(payload)
+    setChatSeed(payload)
+    setChatOpen(true)
+  }
+
+  const openStoreChat = ({ question = '', seed = null, origin = 'storefront' } = {}) => {
+    if (seed) {
+      setChatSeed(seed)
+    } else if (question) {
+      setChatSeed({ origin, message: String(question).trim() })
+    }
+    setChatOpen(true)
+  }
+
+  const closeStoreChat = () => {
+    setChatOpen(false)
+  }
+
+  const clearChatSeed = () => {
+    setChatSeed(null)
   }
 
   const clearProductQuestionPrefill = () => {
@@ -839,9 +860,18 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     productQuestionPrefill,
     askStaffAboutProduct,
     clearProductQuestionPrefill,
+    chatOpen,
+    setChatOpen,
+    chatSeed,
+    setChatSeed,
+    openStoreChat,
+    closeStoreChat,
+    clearChatSeed,
+    openChat: openStoreChat,
+    closeChat: closeStoreChat,
     ...totals,
     lines: checkoutLines || totals.lines,
-  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, sortBy, requests, conversations, inboxState, products, listedProducts, loading, catalogStale, catalogFailed, totals, isDark, appliedCoupon, claimedVouchers, pasabuyPrefill, productQuestionPrefill, pendingCheckout, checkoutLines])
+  }), [view, productId, cart, cartOpen, isWholesale, isAdmin, authReady, user, order, query, category, sortBy, requests, conversations, inboxState, products, listedProducts, loading, catalogStale, catalogFailed, totals, isDark, appliedCoupon, claimedVouchers, pasabuyPrefill, productQuestionPrefill, pendingCheckout, checkoutLines, chatOpen, chatSeed])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

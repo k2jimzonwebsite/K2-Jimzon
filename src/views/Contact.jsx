@@ -80,7 +80,7 @@ function ContactRow({ label, children }) {
 }
 
 export default function Contact() {
-  const { go } = useStore()
+  const { go, openChat } = useStore()
   const secureMessaging = guestBffEnabled()
 
   return (
@@ -97,7 +97,33 @@ export default function Contact() {
             <StartConversationForm onCreated={() => go('messages')} />
             <button type="button" onClick={() => go('messages')} className="mt-3 min-h-11 text-sm font-bold text-crimson underline decoration-crimson/35 underline-offset-4 cursor-pointer">Open your existing K2 messages</button>
           </div>
-        ) : <EmailDraftForm />}
+        ) : (
+          <div className="space-y-6">
+            <TuscanCard className="overflow-hidden p-5 sm:p-6">
+              <div className="flex items-start gap-3.5">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-crimson/10 text-crimson">
+                  <ChatIcon size={20} />
+                </span>
+                <div className="space-y-2">
+                  <h2 className="font-serif text-xl font-semibold text-navy">Live store chat</h2>
+                  <p className="text-sm leading-relaxed text-navy-soft">
+                    Chat directly with K2 staff while you browse. A person answers here during Manila business hours.
+                  </p>
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => openChat({ origin: 'contact_page' })}
+                      className="flex min-h-11 items-center justify-center rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-transform duration-150 active:scale-[0.98] cursor-pointer"
+                    >
+                      Open live chat drawer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </TuscanCard>
+            <EmailDraftForm />
+          </div>
+        )}
 
         <aside aria-label="K2 contact channels" className="lg:pt-2">
           <h2 className="font-serif text-2xl font-semibold text-navy">Contact channels</h2>

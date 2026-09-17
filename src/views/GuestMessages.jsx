@@ -191,7 +191,7 @@ function Conversation({ conversation, onReply }) {
 }
 
 export default function GuestMessages() {
-  const { go } = useStore()
+  const { go, openChat } = useStore()
   const [conversations, setConversations] = useState([])
   const [state, setState] = useState({ loading: true, refreshing: false, error: '', errorCode: '', refreshError: '', notice: '' })
 
@@ -283,12 +283,27 @@ export default function GuestMessages() {
         {state.loading && <TuscanCard className="p-6 text-sm text-navy-soft" role="status">Loading conversations…</TuscanCard>}
         {!state.loading && state.error && (
           <TuscanCard className="p-6">
-            <p role="alert" className="text-sm leading-relaxed text-crimson">{state.error}</p>
-            <p className="mt-2 text-sm leading-relaxed text-navy-soft">Refresh to retry. Orders and Pasabuy requests remain available separately.</p>
-            <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-              <GhostButton onClick={() => go('catalog')}>Browse catalog</GhostButton>
-              <GhostButton onClick={() => go('pasabuy')}>Start Pasabuy</GhostButton>
-              <GhostButton onClick={() => go('contact')}>Contact us by email</GhostButton>
+            <div className="space-y-4">
+              <div>
+                <h2 className="font-serif text-lg font-semibold text-navy">Live store chat is available</h2>
+                <p className="mt-1 text-sm leading-relaxed text-navy-soft">
+                  You can chat live with K2 staff in real time using our live chat drawer. A person answers here during Manila business hours.
+                </p>
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    onClick={() => openChat({ origin: 'messages_page' })}
+                    className="flex min-h-11 items-center justify-center rounded-lg bg-crimson px-5 text-sm font-bold text-white transition-transform duration-150 active:scale-[0.98] cursor-pointer"
+                  >
+                    Open live chat drawer
+                  </button>
+                </div>
+              </div>
+              <div className="border-t border-line pt-4 flex flex-col gap-2 sm:flex-row">
+                <GhostButton onClick={() => go('catalog')}>Browse catalog</GhostButton>
+                <GhostButton onClick={() => go('pasabuy')}>Start Pasabuy</GhostButton>
+                <GhostButton onClick={() => go('contact')}>Contact us by email</GhostButton>
+              </div>
             </div>
           </TuscanCard>
         )}

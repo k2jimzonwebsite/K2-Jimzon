@@ -247,7 +247,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
         p_customer_contact: form.email.trim() || form.phone.trim() || '',
         p_message: content,
         p_conversation_id: convoId,
-        p_origin: 'virtual_store',
+        p_origin: seed?.origin || 'virtual_store',
       })
       setSending(false)
 

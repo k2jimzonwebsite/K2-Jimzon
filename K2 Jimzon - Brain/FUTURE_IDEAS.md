@@ -1,5 +1,13 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260917-06: accepted Storefront-Wide Unified Live Chat Drawer & Experience Parity, merged into MAP-027. Code locally verified.**
+Owner requested unifying the chat logic across both store surfaces (the 2D shop/catalog and the 3D store) so they share one single live chat logic, state, and drawer experience:
+1. Architectural & UX Parity: The only difference between the 2D shop and 3D store should be the visual/spatial experience, not the operational capabilities. Both surfaces share the direct Supabase P2P chat logic, live Realtime subscriptions, and `sessionStorage` conversation continuity (`k2-store-chat-convo-id`).
+2. Global Slide-Over Chat Drawer: Mount `<StoreChatDrawer />` wrapping `<StoreChatPanel />` globally across the storefront (similar to `<CartDrawer />`), accessible via `chatOpen` state in `StoreContext`.
+3. Seamless Product Questions: Clicking "Ask staff about this product" on a product detail page (`MasterProduct.jsx`) seeds the chat drawer with the product SKU/title and opens it immediately, keeping the customer on the product page instead of navigating them to a blank `/messages` screen.
+4. Omnipresent Store Concierge: Provide a floating "Chat with K2" concierge trigger button on the 2D catalog and home pages, matching the luxury wood aesthetic with clean SVG icons, active conversation indicators, and $\ge 44\times 44$px touch targets.
+5. Verification & Quality: Maintain strict compliance with the 4 design skills (`ui-ux-pro-max`, `impeccable`, `design-taste-frontend`, `emil-design-eng`), $\ge 12$px font floor, zero raw emojis, zero secret leaks, 100% prebuild security passing, and Storefront $\le 150.50$ kB gzip bundle budget.
+
 **IDEA-20260917-05: accepted Live 2-Way Peer-to-Peer Storefront to Admin BOS Chat, merged into MAP-027. Database applied live on Supabase (`pixplcjqivlfflickobf`), code locally verified.**
 Owner requested making the storefront live chat operational immediately without requiring manual typing or third-party bot blockers:
 1. Operational Truth & P2P Live Messaging: When a customer visits the storefront and opens "Chat with K2" (`StoreChatPanel.jsx`), they can enter their name, contact (mobile/email), and message, and hit "Send to K2". The message directly writes to canonical `public.conversations` and `public.messages` in Supabase via `submit_storefront_chat_v1`.

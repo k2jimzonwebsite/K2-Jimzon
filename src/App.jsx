@@ -18,6 +18,8 @@ const Admin = lazy(() => import('./views/admin/Admin'))
 const MasterProduct = lazy(() => import('./views/MasterProduct'))
 const Catalog = lazy(() => import('./views/Catalog'))
 const GuestMessages = lazy(() => import('./views/GuestMessages'))
+const StoreChatDrawer = lazy(() => import('./components/shop/StoreChatDrawer'))
+const StorefrontChatButton = lazy(() => import('./components/shop/StorefrontChatButton'))
 const Contact = lazy(() => import('./views/Contact'))
 const CustomerAccount = lazy(() => import('./views/CustomerAccount'))
 const NotFound = lazy(() => import('./views/NotFound'))
@@ -50,7 +52,7 @@ const VIEWS = {
 const STOREFRONT = new Set(['home', 'master_product', 'catalog', 'pasabuy', 'wholesale', 'checkout', 'confirmation', 'messages', 'contact', 'not_found'])
 
 function Shell() {
-  const { view, setView } = useStore()
+  const { view, setView, chatOpen } = useStore()
   const path = typeof window !== 'undefined' ? window.location.pathname : ''
   const hostname = typeof window !== 'undefined' ? window.location.hostname : ''
   
@@ -81,6 +83,14 @@ function Shell() {
       {isStorefront && (
         <>
           <CartDrawer />
+          {chatOpen && (
+            <Suspense fallback={null}>
+              <StoreChatDrawer />
+            </Suspense>
+          )}
+          <Suspense fallback={null}>
+            <StorefrontChatButton />
+          </Suspense>
         </>
       )}
       {isStorefront && <Footer />}
