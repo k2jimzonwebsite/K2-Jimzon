@@ -14,7 +14,14 @@ function run(name, args, input, options = {}) {
   const result = spawnSync(executable(name), args, {
     cwd: root, env, input, encoding: 'utf8', windowsHide: true, ...options,
   })
-  if (result.error || result.status !== 0) throw new Error(`${name}: ${result.error?.message || result.stderr || result.stdout}`)
+  if (result.error || result.status !== 0) {
+    let detail = String(result.error?.message || result.stderr || result.stdout || '').trim()
+    const logPath = path.join(root, '.tools/payment-recovery-pg.log')
+    if (!detail && fs.existsSync(logPath)) {
+      try { detail = fs.readFileSync(logPath, 'utf8').trim() } catch {}
+    }
+    throw new Error(`${name}: ${detail || 'unknown'}`)
+  }
   return result.stdout
 }
 function sql(input) { return run('psql', ['-X', '-v', 'ON_ERROR_STOP=1'], input) }
@@ -38,7 +45,8 @@ try {
   const status = spawnSync(executable('pg_ctl'), ['-D', data, 'status'], { env, encoding: 'utf8', windowsHide: true })
   if (status.error) throw status.error
   if (status.status !== 0) {
-    run('pg_ctl', ['-D', data, '-l', path.join(root, '.tools/payment-recovery-pg.log'), '-o', '-p 55441 -h 127.0.0.1', '-w', 'start'], undefined, { stdio: 'ignore' })
+    const socketOpt = process.platform === 'win32' ? '' : `-k "${data}" `
+    run('pg_ctl', ['-D', data, '-l', path.join(root, '.tools/payment-recovery-pg.log'), '-o', `${socketOpt}-p 55441 -h 127.0.0.1`, '-w', 'start'], undefined, { stdio: 'ignore' })
     started = true
   }
   // This fixed database belongs exclusively to this fixture on its dedicated port.

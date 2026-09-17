@@ -1,5 +1,10 @@
 # K2 Jimzon Master Action Plan
 
+**17 September GitHub Actions CI fix and PostgreSQL portable runtime socket configuration (code locally verified):**
+Fixed two root causes in remote CI test and rehearsal execution:
+- **Store Overlay Collision Test Isolation:** Added `'store-overlay-collision.spec.js'` to `testIgnore` in `playwright.config.js` and asserted its inclusion in `tests/release-ci-contract.spec.js`.
+- **PostgreSQL 17 Linux Socket Permissions & Startup Diagnostics:** Added socket permissions step in `.github/workflows/ci.yml`, added `-k "${dataDir}"` socket flags in `scripts/rehearse-purchase-time-reservation.mjs`, `scripts/rehearse-payment-recovery.mjs`, and `scripts/rehearse-final-admin-concurrency.mjs`, inspected log files on startup error, and retained `{ stdio: 'ignore' }` to prevent Windows `spawnSync` hangs.
+- **Local Verification Evidence:** `npm run rehearse:purchase-hold` (48/48 properties held); `npm run rehearse:payment-recovery` (exit 0); `npm run rehearse:final-admin` (exit 0); `tests/release-ci-contract.spec.js` (9/9 passed); `npm run prebuild` clean (1386 files, 0 leaks, 0 boundary gaps); `npm run build:storefront` (JS 149.88 kB / 150.50 kB gzip; CSS 29.26 kB / 30.00 kB gzip); `npm run build:admin` (196.06 kB / 300.00 kB minified).
 
 **16 September Admin BOS Inventory Intake Chooser & Staff Quick Tools Overhaul (IDEA-20260916-07, MAP-021, code locally verified):**
 Completed inventory intake selection and staff quick tools UI/UX overhaul in Admin BOS:

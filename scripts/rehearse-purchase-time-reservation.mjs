@@ -58,8 +58,13 @@ function run(executable, args, label, env, options = {}) {
     cwd: rootDir, env, encoding: 'utf8', windowsHide: true, ...options,
   })
   if (result.error || result.status !== 0) {
-    const detail = String(result.stderr || result.stdout || result.error?.message || 'unknown').trim()
-    throw new Error(`${label} failed: ${detail}`)
+    let detail = String(result.stderr || result.stdout || result.error?.message || '').trim()
+    if (!detail && config?.logPath && fs.existsSync(config.logPath)) {
+      try {
+        detail = fs.readFileSync(config.logPath, 'utf8').trim()
+      } catch {}
+    }
+    throw new Error(`${label} failed: ${detail || 'unknown'}`)
   }
   return String(result.stdout || '').trim()
 }
@@ -286,8 +291,9 @@ async function main() {
       cwd: rootDir, env, encoding: 'utf8', windowsHide: true,
     })
     if (status.status !== 0) {
+      const socketOpt = process.platform === 'win32' ? '' : `-k "${config.dataDir}" `
       run(executable['pg_ctl.exe'],
-        ['-D', config.dataDir, '-l', config.logPath, '-o', `-p ${config.port} -h 127.0.0.1`, '-w', 'start'],
+        ['-D', config.dataDir, '-l', config.logPath, '-o', `${socketOpt}-p ${config.port} -h 127.0.0.1`, '-w', 'start'],
         'portable PostgreSQL startup', env, { stdio: 'ignore' })
       startedHere = true
     }

@@ -81,6 +81,7 @@ test('the shared Playwright server cannot be reused by a CI run', async () => {
   expect(config).toContain("'owner-count-close-ui.spec.js'")
   expect(config).toContain("'payment-recovery-ui.spec.js'")
   expect(config).toContain("'coupon-recovery-ui.spec.js'")
+  expect(config).toContain("'store-overlay-collision.spec.js'")
 })
 
 test('selling fixtures wait for the observed slow CSS transform before starting browser assertions', async () => {

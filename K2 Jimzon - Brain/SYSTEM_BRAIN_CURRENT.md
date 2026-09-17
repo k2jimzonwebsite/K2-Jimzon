@@ -1,5 +1,18 @@
 # K2 Jimzon — System Brain (Current State)
 
+**17 September GitHub Actions CI fix and PostgreSQL portable runtime socket configuration (code locally verified):**
+Fixed two root causes in remote CI test and rehearsal execution:
+1. **Store Overlay Collision Test Isolation:** `tests/store-overlay-collision.spec.js` was omitted from `testIgnore` in `playwright.config.js`, causing `npm run test:base` in `build-and-smoke` to run against the unconfigured dev server on port 5173 where catalog items failed to mount. Added `'store-overlay-collision.spec.js'` to `testIgnore` in `playwright.config.js` and asserted its inclusion in `tests/release-ci-contract.spec.js`. Dedicated fixture runner (`playwright.store-orientation.config.js`) continues to run it against configured backend.
+2. **PostgreSQL 17 Linux Socket Permissions & Startup Diagnostics:** The Ubuntu 24.04 CI runner defaulted to `/var/run/postgresql` which lacked write permissions for non-root runner user. Added `sudo mkdir -p /var/run/postgresql && sudo chmod 777 /var/run/postgresql` in `.github/workflows/ci.yml`. Updated rehearsal scripts (`rehearse-purchase-time-reservation.mjs`, `rehearse-payment-recovery.mjs`, `rehearse-final-admin-concurrency.mjs`) to pass `-k "${dataDir}"` on non-Windows platforms, read `logPath` on startup failure, and maintain `{ stdio: 'ignore' }` on `pg_ctl start` so Windows `spawnSync` does not hang on inherited child process pipe handles.
+3. **Local Verification Evidence:**
+   - `npm run rehearse:purchase-hold` passed with 48/48 properties held.
+   - `npm run rehearse:payment-recovery` passed with exit code 0.
+   - `npm run rehearse:final-admin` passed with exit code 0.
+   - `tests/release-ci-contract.spec.js` passed 9/9 in 4.6s.
+   - `npm run prebuild` passed with 1386 files checked, 0 secrets, and 0 boundary gaps.
+   - `npm run build:storefront` passed: JS 149.88 kB / 150.50 kB gzip; CSS 29.26 kB / 30.00 kB gzip.
+   - `npm run build:admin` passed: 196.06 kB / 300.00 kB minified (103.94 kB headroom).
+
 **16 September Universal Guided Walkthrough System across all 8 operational lifecycles (IDEA-20260916-08, MAP-021, code locally verified):**
 Completed the Universal Guided Walkthrough System across all 8 operational lifecycles in K2 Jimzon Admin BOS, giving staff an interactive guide that highlights real buttons, explains exact warehouse and store procedures in plain words, and allows dual-advance navigation:
 1. **Dual-Advance Architecture (Option A):** Replaced blocking full-screen SVG overlays with a 4-panel shaded surround backdrop around active target elements. This leaves the spotlighted interface element completely clickable so staff can perform real operations in the live UI or press [Next Step →] / [N] to rehearse.

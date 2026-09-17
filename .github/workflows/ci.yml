@@ -123,6 +123,7 @@ jobs:
         env:
           K2_TEST_PG_BIN: /usr/lib/postgresql/17/bin
         run: |
+          sudo mkdir -p /var/run/postgresql && sudo chmod 777 /var/run/postgresql
           npm run rehearse:purchase-hold
           npm run rehearse:payment-recovery
           npm run rehearse:final-admin
