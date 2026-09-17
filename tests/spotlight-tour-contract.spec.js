@@ -210,4 +210,21 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
       expect(match, `Found emoji in ${file}: ${match ? match[0] : ''}`).toBeNull()
     }
   })
+
+  test('SpotlightTourOverlay contract enforces Option A dual-advance 4-panel surround backdrop and cross-section indicator', async () => {
+    const overlayFile = await readFile(path.join(process.cwd(), 'src/components/admin/tour/SpotlightTourOverlay.jsx'), 'utf8')
+    // Option A 4-panel surround backdrop structure
+    expect(overlayFile).toContain('Top backdrop panel')
+    expect(overlayFile).toContain('Bottom backdrop panel')
+    expect(overlayFile).toContain('Left backdrop panel')
+    expect(overlayFile).toContain('Right backdrop panel')
+    // Target highlight frame must not intercept pointer events
+    expect(overlayFile).toContain('className="fixed pointer-events-none rounded-xl')
+    // Cross-section workspace indicator
+    expect(overlayFile).toContain('Switching workspace to')
+    // Safe keyboard handlers
+    expect(overlayFile).toContain("e.key === 'Escape'")
+    expect(overlayFile).toContain("e.key === 'n'")
+    expect(overlayFile).toContain("e.key === 'p'")
+  })
 })
