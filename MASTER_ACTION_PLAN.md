@@ -98,7 +98,7 @@ Executed a full-scope project audit across Live Database (`pixplcjqivlfflickobf`
   8. `K-10 (Confirmation Copy - Resolved Locally)`: Synchronized `src/views/Confirmation.jsx` copy with automated and quoted delivery review (`tests/storefront-copy-contract.spec.js` 3/3 PASS).
 - **Evidence Baseline:** 659/659 contract and browser tests PASS (651 contract + 8 selling surfaces); `npm run prebuild` PASS with 0 leaks and 0 boundary gaps; Storefront (149.89 kB / 150.50 kB gzip) and Admin (191.12 kB / 300.00 kB minified) builds PASS. See detailed audit matrix under Section K.
 
-**17 September Live 2-Way Peer-to-Peer Storefront to Admin BOS Chat (IDEA-20260917-05, MAP-027, database live on Supabase / code locally verified):**
+**17 September Live 2-Way Peer-to-Peer Storefront to Admin BOS Chat (IDEA-20260917-05, MAP-027, database live on Supabase / code deployed and verified live on GitHub & Vercel):**
 Activated direct two-way live person-to-person chat between storefront customers and staff in Admin BOS without third-party bot roadblocks or serverless proxies:
 - **Production Supabase Database Execution (`pixplcjqivlfflickobf`):** Permanently applied migration `20260917_live_p2p_storefront_chat.sql` defining:
   1. `public.append_website_customer_reply_v1(p_conversation_id uuid, p_content text)`: Staff-only RPC function that inserts an outbound `'Admin'` message into `public.messages`, marks `public.conversations.status = 'Pending'`, and logs a `customer_reply_sent` event in `public.conversation_events`.
@@ -111,7 +111,7 @@ Activated direct two-way live person-to-person chat between storefront customers
   2. Maintained `sessionStorage` conversation ID persistence (`k2-store-chat-convo-id`) so customers can navigate across pages or refresh without losing their conversation thread.
   3. Subscribed to live Supabase Realtime changes (`storefront:live_chat` on `public.messages`) with 8-second slow polling fallback (`POLL_MS = 8000`).
   4. In Admin BOS (`src/views/admin/Inbox.jsx`), staff receive Realtime change events on incoming customer messages and can reply with 1 click via "Send to website customer".
-- **Evidence & Verification:** 150/150 contract tests PASS (`map027-store-polish`, `turnstile-wiring`, `admin-bff`, `guest-conversation-seed`); `npm run prebuild:storefront` clean (0 leaks, 0 boundary gaps, 16 expected anon functions); Storefront bundle passes at 149.89 kB / 150.50 kB gzip; Admin bundle passes at 196.06 kB / 300.00 kB minified.
+- **Evidence & Verification:** 150/150 contract tests PASS (`map027-store-polish`, `turnstile-wiring`, `admin-bff`, `guest-conversation-seed`); `npm run prebuild:storefront` clean (0 leaks, 0 boundary gaps, 16 expected anon functions); Storefront bundle passes at 149.89 kB / 150.50 kB gzip; Admin bundle passes at 196.06 kB / 300.00 kB minified; GitHub commit `e699811` pushed and verified on GitHub Actions CI run `35220162090` (all jobs green); production deployments verified live on `www.k2jimzon.com` and `admin.k2jimzon.com`.
 
 **17 September J&T VIP Fulfillment Parity, Bulk Template Integration, and Checkout Persona Audit (IDEA-20260917-03 / IDEA-20260917-04, MAP-023, code locally verified):**
 Verified complete J&T Express VIP courier fulfillment parity and audited buyer information flows across logging in (`CustomerAccount.jsx`), returning buyers, and guest checkouts (`Checkout.jsx`):
