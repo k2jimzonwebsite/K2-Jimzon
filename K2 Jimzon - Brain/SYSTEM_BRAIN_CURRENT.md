@@ -1,5 +1,28 @@
 # K2 Jimzon — System Brain (Current State)
 
+**17 September J&T VIP Mobile & Desktop Courier Booking & Waybill Dispatch Suite (IDEA-20260917-02, MAP-023, code locally verified):**
+Delivered pure J&T VIP bulk CSV generation calculation engine, mobile & desktop dispatch assistant modal, single-warehouse website fulfillment boundary, storefront brand trust indicators, and contract test suites:
+1. **J&T VIP Bulk CSV & Address Recognition Engine (`src/lib/jntVipBulkEngine.js`):**
+   - Implements J&T VIP Philippines bulk order specification with exact 13 contractual headers (`Item Name`, `Weight`, `Receiver Name`, `Receiver Phone`, `Receiver Province`, `Receiver City`, `Receiver District`, `Detailed Address`, `COD Amount`, `Declared Value`, `Express Type`, `Remark`, `Number of Goods`).
+   - Standardizes Philippine mobile numbers (`normalizePhilippinePhone`) into canonical `09xxxxxxxxx` format required by J&T auto-assignment.
+   - Formats smart recognition addresses (`formatJntSmartAddress`) enabling 1-click paste into J&T VIP's single waybill address parser.
+   - Generates RFC 4180 compliant CSV batches with UTF-8 Byte Order Mark (`\uFEFF`) and proper quoting for quotes, commas, and newlines.
+   - Validates J&T tracking numbers (`validateJntTrackingNumber`) accepting official `PH...` barcodes and 10 to 16 digit numerical codes.
+2. **Storefront Single-Warehouse Brand & Trust Boundary (`Checkout.jsx` & `CartDrawer.jsx`):**
+   - User sees "Fulfilled by K2 Jimzon (Manila Hub Dispatch)" across Checkout delivery option cards and "Fulfilled by K2 Jimzon · Manila Warehouse Dispatch" in the Cart Drawer.
+   - Respects single warehouse boundary (`MANILA_MAIN` backs the website while marketplace channels manage separate warehouse reservations).
+   - Removed raw emojis and em dashes, enforcing accessible font floors ($\ge 12$px) across all badges and helper copy.
+3. **Staff Admin BOS J&T VIP Dispatch Modal (`src/views/admin/JntVipDispatchModal.jsx` & `OmniOperationsHub.jsx`):**
+   - Mounted in `OmniOperationsHub.jsx` for single orders ("J&T VIP Book" in Confirmation Queue and Packing Station) and batch exports ("J&T VIP Batch (.csv)" action header).
+   - Single Order tab: provides 1-tap Smart Address copy for J&T VIP single waybill parser, breakdown copy chips (Weight, Value, COD, Remarks), portal shortcut, and physical barcode scanner input that updates order status to handed over.
+   - Bulk Batch tab: lists ready-to-pack website orders, 1-tap CSV download, and a 3-step visual guide matching the real J&T VIP portal upload interface (`JWORLDBASKETPH ONLINE STORE`, Bulacan/SJDM default sender).
+   - Full `<AdminDialog>` compliance, $\ge 44\times 44$px touch targets (`min-h-11`), strictly $\ge 12$px typography, and zero raw emojis.
+4. **Automated Contracts & Budgets:**
+   - Contract test suites `tests/jnt-vip-dispatch-contract.spec.js` (8/8 PASS) and `tests/admin-dialog-contract.spec.js` (7/7 PASS) passed.
+   - `npm run prebuild` passed with 0 secret leaks and 0 boundary gaps.
+   - Admin BOS bundle passed at 196.06 kB / 300.00 kB minified (103.94 kB headroom).
+   - Storefront bundle passed at JS 149.89 kB / 150.50 kB gzip, CSS 29.37 kB / 30.00 kB gzip.
+
 **17 September Multi-Shop Channel Allocation & Custody Transfer Engine (IDEA-20260917-01, MAP-026, code locally verified):**
 Delivered pure multi-shop inventory projection calculation engine, physical custody transfer state machine, PostgreSQL schema and stored procedures, migration rehearsal harness, and Admin BOS staff interfaces:
 1. **Multi-Shop Channel Allocation Calculation Engine (`src/lib/channelAllocationEngine.js`):**

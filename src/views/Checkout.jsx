@@ -223,7 +223,7 @@ export default function Checkout() {
                 >
                   {PHILIPPINES_REGIONS.map((region) => (
                     <option key={region.id} value={region.id}>
-                      {region.name} — {region.description}
+                      {region.name} · {region.description}
                     </option>
                   ))}
                 </select>
@@ -242,11 +242,17 @@ export default function Checkout() {
 
                   {/* Delivery Options Selector (Shopee/Lazada style: Metro Manila delivery, Courier delivery, Pickup) */}
                   <fieldset className="block pt-2">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <legend className="text-sm font-semibold text-navy">Delivery options</legend>
-                      <span className="rounded-full border border-line bg-surface px-2.5 py-0.5 text-xs font-medium text-navy-soft">
-                        📦 {shippingData.formattedWeight} · {shippingData.parcelCount} pkg
-                      </span>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1 rounded-full border border-forest/20 bg-forest/5 px-2.5 py-0.5 text-xs font-semibold text-forest">
+                          <CheckIcon size={12} />
+                          <span>Fulfilled by K2 Jimzon (Manila Hub Dispatch)</span>
+                        </span>
+                        <span className="rounded-full border border-line bg-surface px-2.5 py-0.5 text-xs font-medium text-navy-soft">
+                          {shippingData.formattedWeight} · {shippingData.parcelCount} pkg
+                        </span>
+                      </div>
                     </div>
 
                     <div className="mt-2.5 space-y-2.5">
@@ -275,7 +281,7 @@ export default function Checkout() {
                                   <span className="text-sm font-bold text-navy">{option.methodName}</span>
                                   {option.badge && (
                                     <span
-                                      className={`rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                                      className={`rounded px-1.5 py-0.5 text-xs font-bold uppercase tracking-wider ${
                                         option.badge === 'Free'
                                           ? 'bg-forest/10 text-forest'
                                           : option.badge === 'Fastest'
@@ -288,7 +294,7 @@ export default function Checkout() {
                                   )}
                                 </div>
                                 <p className="mt-0.5 text-xs text-navy-soft">{option.courierHint}</p>
-                                <p className="mt-0.5 text-[11px] font-medium text-navy/70">Estimated: {option.eta}</p>
+                                <p className="mt-0.5 text-xs font-medium text-navy/70">Estimated: {option.eta}</p>
                               </div>
                             </div>
                             <div className="text-right">

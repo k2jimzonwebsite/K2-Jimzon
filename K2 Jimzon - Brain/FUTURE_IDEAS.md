@@ -1,5 +1,14 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260917-02: accepted J&T VIP Mobile & Desktop Courier Booking & Waybill Dispatch Suite, merged into MAP-023. Code locally verified.**
+Owner requested automating courier waybill creation and dispatch for the single Manila master warehouse (`MANILA_MAIN`) backing the website (Package 2):
+1. User sees "Fulfilled by K2 Jimzon (Manila Hub Dispatch)" on storefront and checkout (`Checkout.jsx` and `CartDrawer.jsx`), reinforcing operational truth and brand trust while maintaining the single warehouse stock boundary.
+2. Sister / warehouse manager can 1-tap/1-click copy ("Ctrl+V") customer details into J&T VIP (`My Order > Create Waybill`) using the Smart Recognition Address text parser, with 1-tap copy buttons for weight, declared value, COD amount, and order reference remarks.
+3. J&T VIP Bulk CSV batch export engine (`src/lib/jntVipBulkEngine.js`): supports bulk booking matching J&T VIP's exact 13-column `Create Waybills In Bulk` specification (`Item Name`, `Weight`, `Receiver Name`, `Receiver Phone`, `Receiver Province`, `Receiver City`, `Receiver District`, `Detailed Address`, `COD Amount`, `Declared Value`, `Express Type`, `Remark`, `Number of Goods`). Formats UTF-8 BOM, standardizes Philippine mobile numbers to `09xxxxxxxxx`, and sets sender defaults according to J&T VIP requirements (`JWORLDBASKETPH ONLINE STORE`, Bulacan/SJDM).
+4. Staff Admin BOS mobile & desktop dispatch modal (`src/views/admin/JntVipDispatchModal.jsx`): `<AdminDialog>`-compliant modal providing both Single Order 1-tap copy and Bulk Batch CSV download with visual 3-step upload instructions, direct portal links, barcode input/scanner support, and automated order status handover.
+5. Strict UI quality compliance: touch targets $\ge 44\times 44$px (`min-h-11`), font floor strictly $\ge 12$px, zero raw emojis (clean SVG icons only), and zero em dashes in code or UI copy.
+6. Verification & Budgets: Playwright contract tests (`tests/jnt-vip-dispatch-contract.spec.js` and `tests/admin-dialog-contract.spec.js`) 15/15 PASS; `npm run prebuild` clean (0 secrets, 0 boundary gaps); Admin BOS bundle passes at 196.06 kB / 300.00 kB minified; Storefront bundle passes at 149.89 kB / 150.50 kB gzip.
+
 **IDEA-20260917-01: accepted Multi-Shop Channel Allocation & Custody Transfer Engine, merged into MAP-026. Code locally verified.**
 Owner authorized autonomous implementation of Multi-Shop Channel Allocation and Custody Transfer Engine (Package 1):
 1. Pure allocation calculation engine (`src/lib/channelAllocationEngine.js`): deterministic 2-unit target coverage per shop account (`Covered`, `Thin`, `Skipped`, `Out`, `Needs review`), priority-based scarcity resolution, and marketplace outbox sync deltas. Master Inventory is preserved as the physical truth across warehouse lots and never shrinks when stock is allocated.

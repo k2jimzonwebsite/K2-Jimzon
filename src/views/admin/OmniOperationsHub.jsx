@@ -4,8 +4,9 @@ import { peso } from '../../data/products'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { channelMeta } from '../../lib/channelMeta'
 import { safeUiError } from '../../lib/safeUiError'
-import { BarcodeIcon, BoxIcon, CheckIcon, MapIcon, UserIcon } from '../../components/ui/icons'
+import { BarcodeIcon, BoxIcon, CheckIcon, MapIcon, UploadIcon, UserIcon } from '../../components/ui/icons'
 import PackingSlipModal from './PackingSlipModal'
+import JntVipDispatchModal from './JntVipDispatchModal'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import FulfillmentWorkflowDiagram from '../../components/admin/guides/FulfillmentWorkflowDiagram'
 import CustodyWorkflowDiagram from '../../components/admin/guides/CustodyWorkflowDiagram'
@@ -80,6 +81,8 @@ function OmniOperationsWorkspace() {
   const [packedCount, setPackedCount] = useState(0)
   const [printSlipOrder, setPrintSlipOrder] = useState(null)
   const [deliveryOrder, setDeliveryOrder] = useState(null)
+  const [jntDispatchOrder, setJntDispatchOrder] = useState(null)
+  const [showJntBatchModal, setShowJntBatchModal] = useState(false)
   const [paymentOrder, setPaymentOrder] = useState(null)
   const [handoverOrder, setHandoverOrder] = useState(null)
   const [actionReview, setActionReview] = useState(null)
@@ -512,11 +515,25 @@ function OmniOperationsWorkspace() {
             </form>
             {secureAdmin && <PackingLotProof allocations={selectedPackingOrder?.allocations || []} value={packingReservation} confirmed={packingLotConfirmed}
               disabled={packingBusy || Boolean(packingPending.current)} onSelect={value => { setPackingReservation(value); setPackingLotConfirmed(false) }} onConfirm={setPackingLotConfirmed} />}
-            {selectedPackingOrder && <div className="flex flex-col gap-3 rounded-adm-sm border border-blue/25 bg-blue/[0.04] p-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-mono text-xs font-bold text-blue">{selectedPackingOrder.publicReference}</p><p className="mt-1 text-xs text-white/50">Delivery: {String(selectedPackingOrder.shippingQuoteStatus).replaceAll('_', ' ')} · Payment: {String(selectedPackingOrder.paymentStatus).replaceAll('_', ' ')}</p></div><div className="flex flex-wrap gap-2"><button type="button" onClick={() => setDeliveryOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Delivery & waybill</button><button type="button" onClick={() => setPaymentOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Payment evidence</button><button type="button" onClick={() => setHandoverOrder(selectedPackingOrder)} disabled={selectedPackingOrder.status !== 'Packed' || selectedPackingOrder.paymentStatus !== 'verified' || !['platform_charged', 'customer_confirmed', 'waived'].includes(selectedPackingOrder.shippingQuoteStatus)} className={`${primaryButton} adm-btn-sm disabled:opacity-35`}>Handover to courier</button></div></div>}
+            {selectedPackingOrder && <div className="flex flex-col gap-3 rounded-adm-sm border border-blue/25 bg-blue/[0.04] p-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-mono text-xs font-bold text-blue">{selectedPackingOrder.publicReference}</p><p className="mt-1 text-xs text-white/50">Delivery: {String(selectedPackingOrder.shippingQuoteStatus).replaceAll('_', ' ')} · Payment: {String(selectedPackingOrder.paymentStatus).replaceAll('_', ' ')}</p></div><div className="flex flex-wrap gap-2"><button type="button" onClick={() => setJntDispatchOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm border-crimson/40 bg-crimson/10 text-crimson hover:bg-crimson/20`}>J&T VIP Book</button><button type="button" onClick={() => setDeliveryOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Delivery & waybill</button><button type="button" onClick={() => setPaymentOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Payment evidence</button><button type="button" onClick={() => setHandoverOrder(selectedPackingOrder)} disabled={selectedPackingOrder.status !== 'Packed' || selectedPackingOrder.paymentStatus !== 'verified' || !['platform_charged', 'customer_confirmed', 'waived'].includes(selectedPackingOrder.shippingQuoteStatus)} className={`${primaryButton} adm-btn-sm disabled:opacity-35`}>Handover to courier</button></div></div>}
           </section>
 
           <section data-tour="fulfillment-queue" className="space-y-3">
-            <SectionHeading title="Confirmation queue" description="Review customer contact, item quantities, and stock before creating reservations and packing lines." count={orderRequests.length} />
+            <SectionHeading
+              title="Confirmation queue"
+              description="Review customer contact, item quantities, and stock before creating reservations and packing lines."
+              count={orderRequests.length}
+              action={
+                <button
+                  type="button"
+                  onClick={() => setShowJntBatchModal(true)}
+                  className={`${primaryButton} adm-btn-sm min-h-11 bg-crimson hover:bg-crimson/90`}
+                >
+                  <UploadIcon size={14} className="mr-1 inline" />
+                  <span>J&T VIP Batch (.csv)</span>
+                </button>
+              }
+            />
             {orderRequests.length === 0 ? <EmptyState title="No submitted website requests" description="New requests appear here without reserving stock." /> : (
               <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
                 <div className="divide-y divide-adm-line">
@@ -533,7 +550,11 @@ function OmniOperationsWorkspace() {
                         )}
                         <p className="mt-1 text-xs text-amber">Payment not assumed</p>
                       </div>
-                      <div className="grid gap-2"><button onClick={() => setDeliveryOrder(request)} className={`${secondaryButton} w-full`}>{request.shipping_quote_status === 'customer_confirmed' ? 'Delivery confirmed' : 'Set delivery quote'}</button><button data-tour="pack-ship-btn" onClick={() => confirmOrderRequest(request)} className={`${primaryButton} w-full`}>Confirm and reserve</button></div>
+                      <div className="grid gap-2">
+                        <button onClick={() => setDeliveryOrder(request)} className={`${secondaryButton} w-full`}>{request.shipping_quote_status === 'customer_confirmed' ? 'Delivery confirmed' : 'Set delivery quote'}</button>
+                        <button onClick={() => setJntDispatchOrder(request)} className={`${secondaryButton} w-full border-crimson/30 text-crimson hover:bg-crimson/10`}>J&T VIP Book</button>
+                        <button data-tour="pack-ship-btn" onClick={() => confirmOrderRequest(request)} className={`${primaryButton} w-full`}>Confirm and reserve</button>
+                      </div>
                     </article>
                   ))}
                 </div>
@@ -631,6 +652,49 @@ function OmniOperationsWorkspace() {
         }
         return { ok: true }
       }} />}
+      {(jntDispatchOrder || showJntBatchModal) && (
+        <JntVipDispatchModal
+          order={jntDispatchOrder}
+          allOrders={[...orderRequests, ...orders]}
+          onClose={() => {
+            setJntDispatchOrder(null)
+            setShowJntBatchModal(false)
+          }}
+          onSaveWaybill={async (payload) => {
+            const deliveryPayload = {
+              orderRequestId: payload.orderId,
+              shippingAmount: Number(jntDispatchOrder?.shippingAmount ?? jntDispatchOrder?.shipping_amount ?? 0),
+              courierName: payload.courierName || 'J&T Express',
+              trackingNumber: payload.trackingNumber,
+              waybillUrl: null,
+              customerConfirmed: true,
+              note: 'Booked via J&T VIP Dispatch Assistant',
+            }
+            if (secureAdmin) {
+              const result = await updateDeliveryBff(deliveryPayload)
+              if (!result.ok) return result
+              await fetchSecureSnapshot()
+            } else {
+              const { error } = await supabase.rpc('set_order_delivery_details', {
+                p_order_request_id: deliveryPayload.orderRequestId,
+                p_shipping_amount: deliveryPayload.shippingAmount,
+                p_courier_name: deliveryPayload.courierName,
+                p_tracking_number: deliveryPayload.trackingNumber || null,
+                p_waybill_url: deliveryPayload.waybillUrl || null,
+                p_customer_confirmed: deliveryPayload.customerConfirmed,
+                p_note: deliveryPayload.note,
+              })
+              if (error) throw error
+              await Promise.all([fetchOrderRequests(), fetchLiveOrders()])
+            }
+            setScanMessage({
+              success: true,
+              text: `Saved J&T tracking ${payload.trackingNumber} for ${jntDispatchOrder?.publicReference || jntDispatchOrder?.public_reference || 'order'}.`,
+            })
+            return { ok: true }
+          }}
+        />
+      )}
       {paymentOrder && <PaymentStatusModal key={paymentOrder.id} secure={secureAdmin} order={paymentOrder} onClose={() => setPaymentOrder(null)} onSave={async (target, note, evidence) => {
         const result = await updatePayment(paymentOrder, target, note, evidence)
         if (result?.ok) setPaymentOrder(null)

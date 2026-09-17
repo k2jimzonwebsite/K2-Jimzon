@@ -12,7 +12,7 @@ async function modalFiles() {
 test('every Admin modal uses the shared dialog primitive', async () => {
   const files = await modalFiles()
 
-  expect(files).toHaveLength(18)
+  expect(files).toHaveLength(19)
 
   for (const file of files) {
     const source = await readFile(new URL(file, adminViews), 'utf8')

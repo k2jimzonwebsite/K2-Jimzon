@@ -94,12 +94,12 @@ export default function CartDrawer() {
                   <div className="py-4 my-2 rounded-lg bg-shell/60 p-3.5 text-xs text-navy-soft border border-line/60">
                     <div className="flex items-center gap-1.5 font-semibold text-navy mb-1.5">
                       <ShieldCheckIcon size={14} className="text-forest" />
-                      <span>How order requests work</span>
+                      <span>Fulfilled by K2 Jimzon · Manila Warehouse Dispatch</span>
                     </div>
-                    <ol className="space-y-1 pl-4 list-decimal text-[11px] leading-relaxed text-navy-soft">
+                    <ol className="space-y-1 pl-4 list-decimal text-xs leading-relaxed text-navy-soft">
                       <li>Submit your request with no upfront payment</li>
                       <li>Our staff checks current Manila stock</li>
-                      <li>We arrange delivery with a courier</li>
+                      <li>We arrange delivery with our verified courier</li>
                       <li>Pay as agreed with our staff after confirmation</li>
                     </ol>
                   </div>
@@ -126,7 +126,7 @@ export default function CartDrawer() {
                 Review order request
               </CrimsonButton>
               <p className="mt-2.5 text-center text-xs leading-relaxed text-navy-faint">
-                We check stock in Manila before confirming your order.
+                Fulfilled by K2 Jimzon · Manila stock verified before confirmation.
               </p>
             </footer>
           </motion.aside>
