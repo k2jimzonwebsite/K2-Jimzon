@@ -178,6 +178,7 @@ async function installSupabaseFixture(page) {
 
 test.describe('admin command center redesign', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 })
     await page.addInitScript(() => {
       window.turnstile = {
         render: (_, options) => { options.callback('verified-admin-test-token'); return 1 },

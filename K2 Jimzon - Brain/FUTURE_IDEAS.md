@@ -1,5 +1,13 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260916-08 — accepted Universal Guided Walkthrough System across all Admin BOS workflows, merged into MAP-021.**
+Owner requested a button across the Workflow Guide that activates an interactive step-by-step guide mode for any chosen workflow (inventory intake, metrics discovery, inventory scanning, delivery mode fulfillment, flight consignments, monthly counts). Audit gate:
+1. In `MasterWorkflowGraph.jsx` and `WorkflowDetailDrawer.jsx`, mount an unmistakable primary `[▶ Play Guided Walkthrough]` action button for every active workflow.
+2. In `tourData.js` and `SpotlightTourOverlay.jsx`, expand the spotlight tour engine to support all 8 operational lifecycles, pulling steps from `actionGuide` and humanized plain-language instructions without jargon or AI buzzwords.
+3. In `Admin.jsx` and `SpotlightTourOverlay.jsx`, implement hybrid cross-screen navigation: when advancing to a step located in a different Admin section (e.g. from Workflow Graph to Flight Consignments or Fulfillment Hub), automatically transition the workspace and display a smooth breadcrumb banner (`"Navigating to [Screen]..."`).
+4. Support flexible advancement: staff can click the highlighted live UI element to perform real work, or click `[Next Step →]` / press `[N]` on keyboard to rehearse without mutating data.
+5. Strict quality compliance: $\ge 12$px font floor, $\ge 44\times 44$px touch targets, zero emojis (clean SVG icons only), and Admin bundle budget $\le 300.00$ kB minified.
+
 **IDEA-20260916-07 — accepted Add Inventory intake chooser and Settings / Ease of Use menu fix, merged into MAP-021.**
 Owner requests fixing the settings and ease of use menu, and providing a direct "+ Add Inventory" action where clicking it asks whether to add inventory automatically (Barcode Scan & FEFO Lot Intake) or manually (ChatGPT Studio & Smart Paste / New SKU). Audit gate:
 1. In `InventoryGrid.jsx`, mount a prominent primary `[+ Add Inventory]` action button that opens an "Add Inventory Intake Method" modal presenting two clear cards: Automatic (barcode scan + batch lot FEFO intake) vs Manual (ChatGPT prompt studio + Smart Paste JSON / manual spec). Each card provides direct tool launch ("Intake Now") and guided walkthrough tour launch ("Start Guided Tour").

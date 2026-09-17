@@ -4,25 +4,38 @@ import path from 'node:path'
 import { SPOTLIGHT_TOURS, CHATGPT_PROMPT_TEMPLATES, generateChatGPTListingPrompt } from '../src/components/admin/tour/tourData.js'
 
 test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
-  test('SPOTLIGHT_TOURS defines both manual and automatic intake workflows', () => {
-    expect(SPOTLIGHT_TOURS).toHaveProperty('manual_inventory')
-    expect(SPOTLIGHT_TOURS).toHaveProperty('auto_inventory')
+  test('SPOTLIGHT_TOURS defines all 8 operational lifecycles', () => {
+    const requiredKeys = [
+      'manual_inventory',
+      'auto_inventory',
+      'cross_border_lifecycle',
+      'inventory_handover',
+      'monthly_count',
+      'new_order',
+      'pasabuy_lifecycle',
+      'channel_integration_lifecycle',
+    ]
 
-    const manual = SPOTLIGHT_TOURS.manual_inventory
-    const auto = SPOTLIGHT_TOURS.auto_inventory
-
-    expect(manual.id).toBe('manual_inventory')
-    expect(manual.title).toContain('Manual')
-    expect(manual.theme).toBe('rose')
-    expect(manual.steps.length).toBeGreaterThanOrEqual(5)
-
-    expect(auto.id).toBe('auto_inventory')
-    expect(auto.title).toContain('Automatic')
-    expect(auto.theme).toBe('emerald')
-    expect(auto.steps.length).toBeGreaterThanOrEqual(5)
+    requiredKeys.forEach((key) => {
+      expect(SPOTLIGHT_TOURS, `SPOTLIGHT_TOURS must define ${key}`).toHaveProperty(key)
+      const tour = SPOTLIGHT_TOURS[key]
+      expect(tour.title.trim().length).toBeGreaterThan(5)
+      expect(tour.theme.trim().length).toBeGreaterThan(2)
+      expect(tour.steps.length).toBeGreaterThanOrEqual(3)
+    })
   })
 
-  test('All tour steps define valid directives and explanations', () => {
+  test('All tour steps define valid directives, explanations, and registered sections', () => {
+    const validSections = [
+      'inventory',
+      'consignments',
+      'fulfillment',
+      'owner_count_close',
+      'pasabuy',
+      'channel_integrations',
+      'hub',
+    ]
+
     Object.values(SPOTLIGHT_TOURS).forEach((tour) => {
       tour.steps.forEach((step, idx) => {
         expect(step.stepNumber).toBe(idx + 1)
@@ -34,7 +47,7 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
         if (step.targetSelector) {
           expect(step.targetSelector).toMatch(/^\[data-tour="[a-z0-9-]+"]$/)
         }
-        expect(step.targetSection).toBe('inventory')
+        expect(validSections, `Step ${step.id} has valid section`).toContain(step.targetSection)
       })
     })
   })
@@ -150,19 +163,48 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
     }
   })
 
-  test('Anti-emoji policy strictly enforced in tour and widget files', async () => {
-    const tourFiles = [
+  test('Humanizer rules strictly enforced: no em dashes and no AI buzzwords in tour data', async () => {
+    const tourDataContent = await readFile(path.join(process.cwd(), 'src/components/admin/tour/tourData.js'), 'utf8')
+    
+    // Zero em dashes or en dashes
+    expect(tourDataContent).not.toContain('—')
+    expect(tourDataContent).not.toContain('–')
+
+    // Zero forbidden AI buzzwords
+    const forbiddenBuzzwords = [
+      'seamless',
+      'pivotal',
+      'crucial',
+      'vital',
+      'delve',
+      'tapestry',
+      'landscape',
+      'testament',
+      'foster',
+      'enhance',
+    ]
+    forbiddenBuzzwords.forEach((word) => {
+      const regex = new RegExp(`\\b${word}\\b`, 'i')
+      expect(tourDataContent, `tourData.js must not contain AI buzzword '${word}'`).not.toMatch(regex)
+    })
+  })
+
+  test('Anti-emoji policy strictly enforced across tours, widgets, and updated admin views', async () => {
+    const checkedFiles = [
       'src/components/admin/tour/SpotlightTourOverlay.jsx',
       'src/components/admin/tour/TourSelectionModal.jsx',
       'src/components/admin/tour/AddInventoryChooserModal.jsx',
       'src/components/admin/tour/tourData.js',
       'src/views/admin/AdminToolsWidget.jsx',
+      'src/views/admin/ConsignmentManager.jsx',
+      'src/views/admin/OmniOperationsHub.jsx',
+      'src/views/admin/PasabuyManager.jsx',
     ]
 
     // Common unicode emojis range
     const emojiRegex = /[\u{1F300}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E0}-\u{1F1FF}]/u
 
-    for (const file of tourFiles) {
+    for (const file of checkedFiles) {
       const content = await readFile(path.join(process.cwd(), file), 'utf8')
       const match = content.match(emojiRegex)
       expect(match, `Found emoji in ${file}: ${match ? match[0] : ''}`).toBeNull()

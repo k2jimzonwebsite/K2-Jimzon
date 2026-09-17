@@ -4,7 +4,7 @@ import { peso } from '../../data/products'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { channelMeta } from '../../lib/channelMeta'
 import { safeUiError } from '../../lib/safeUiError'
-import { BarcodeIcon, BoxIcon, CheckIcon, UserIcon } from '../../components/ui/icons'
+import { BarcodeIcon, BoxIcon, CheckIcon, MapIcon, UserIcon } from '../../components/ui/icons'
 import PackingSlipModal from './PackingSlipModal'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import FulfillmentWorkflowDiagram from '../../components/admin/guides/FulfillmentWorkflowDiagram'
@@ -472,7 +472,8 @@ function OmniOperationsWorkspace() {
           onClick={() => setShowFulfillmentGuide((v) => !v)}
           className="flex items-center gap-1.5 rounded-adm-sm border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-bold text-purple-400 hover:bg-purple-500/20"
         >
-          <span>{showFulfillmentGuide ? 'Hide Fulfillment Map ▴' : '🗺️ View Packing & Custody Workflow Map ▸'}</span>
+          <MapIcon size={14} />
+          <span>{showFulfillmentGuide ? 'Hide Fulfillment Map ▴' : 'View Packing & Custody Workflow Map ▸'}</span>
         </button>
       </div>
 
@@ -493,7 +494,7 @@ function OmniOperationsWorkspace() {
 
       {scanMessage && <StateBanner tone={scanMessage.success ? 'success' : 'danger'}>{scanMessage.text}</StateBanner>}
 
-      <nav className="flex max-w-full gap-1 overflow-x-auto rounded-adm-sm border border-adm-line bg-adm-surface p-1" aria-label="Fulfillment work modes">
+      <nav data-tour="handover-mode-tabs" className="flex max-w-full gap-1 overflow-x-auto rounded-adm-sm border border-adm-line bg-adm-surface p-1" aria-label="Fulfillment work modes">
         {MODES.map(mode => {
           const count = mode.id === 'manila_warehouse' ? orderRequests.length + orders.length : mode.id === 'box_handover' ? staffBoxes.length : null
           return <button key={mode.id} onClick={() => setActiveRole(mode.id)} aria-current={activeRole === mode.id ? 'page' : undefined} className={`min-h-11 shrink-0 rounded-adm-sm px-4 text-sm font-semibold transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${activeRole === mode.id ? 'bg-blue text-white' : 'text-white/50 hover:bg-white/[0.05] hover:text-white'}`}>{mode.label}{count !== null ? ` (${count})` : ''}</button>
@@ -514,7 +515,7 @@ function OmniOperationsWorkspace() {
             {selectedPackingOrder && <div className="flex flex-col gap-3 rounded-adm-sm border border-blue/25 bg-blue/[0.04] p-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-mono text-xs font-bold text-blue">{selectedPackingOrder.publicReference}</p><p className="mt-1 text-xs text-white/50">Delivery: {String(selectedPackingOrder.shippingQuoteStatus).replaceAll('_', ' ')} · Payment: {String(selectedPackingOrder.paymentStatus).replaceAll('_', ' ')}</p></div><div className="flex flex-wrap gap-2"><button type="button" onClick={() => setDeliveryOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Delivery & waybill</button><button type="button" onClick={() => setPaymentOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Payment evidence</button><button type="button" onClick={() => setHandoverOrder(selectedPackingOrder)} disabled={selectedPackingOrder.status !== 'Packed' || selectedPackingOrder.paymentStatus !== 'verified' || !['platform_charged', 'customer_confirmed', 'waived'].includes(selectedPackingOrder.shippingQuoteStatus)} className={`${primaryButton} adm-btn-sm disabled:opacity-35`}>Handover to courier</button></div></div>}
           </section>
 
-          <section className="space-y-3">
+          <section data-tour="fulfillment-queue" className="space-y-3">
             <SectionHeading title="Confirmation queue" description="Review customer contact, item quantities, and stock before creating reservations and packing lines." count={orderRequests.length} />
             {orderRequests.length === 0 ? <EmptyState title="No submitted website requests" description="New requests appear here without reserving stock." /> : (
               <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
@@ -532,7 +533,7 @@ function OmniOperationsWorkspace() {
                         )}
                         <p className="mt-1 text-xs text-amber">Payment not assumed</p>
                       </div>
-                      <div className="grid gap-2"><button onClick={() => setDeliveryOrder(request)} className={`${secondaryButton} w-full`}>{request.shipping_quote_status === 'customer_confirmed' ? 'Delivery confirmed' : 'Set delivery quote'}</button><button onClick={() => confirmOrderRequest(request)} className={`${primaryButton} w-full`}>Confirm and reserve</button></div>
+                      <div className="grid gap-2"><button onClick={() => setDeliveryOrder(request)} className={`${secondaryButton} w-full`}>{request.shipping_quote_status === 'customer_confirmed' ? 'Delivery confirmed' : 'Set delivery quote'}</button><button data-tour="pack-ship-btn" onClick={() => confirmOrderRequest(request)} className={`${primaryButton} w-full`}>Confirm and reserve</button></div>
                     </article>
                   ))}
                 </div>
@@ -589,14 +590,14 @@ function OmniOperationsWorkspace() {
       )}
 
       {activeRole === 'box_handover' && (
-        <section className="space-y-3">
+        <section data-tour="custody-handover-panel" className="space-y-3">
           <SectionHeading title="Italy box handover" description={`Assign every box to a custodian. Signed-in operator: ${activeStaff || 'unavailable'}.`} count={cargoBoxes.length} />
           {loadingBoxes ? <div className="h-52 animate-pulse rounded-adm border border-adm-line bg-adm-surface" role="status" /> : cargoBoxes.length === 0 ? <EmptyState icon={BoxIcon} title="No custody boxes recorded" description="Record received batches with a box code in Inventory before handover." /> : (
             <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
               <div className="divide-y divide-adm-line">{cargoBoxes.map(box => {
                 const isAssignedToActive = box.assigned_staff === activeStaff
                 const total = box.items.reduce((sum, item) => sum + (Number(item.qty) || 0), 0)
-                return <article key={box.box_code} className={`grid gap-3 px-4 py-4 lg:grid-cols-[180px_minmax(260px,1.5fr)_220px_170px] lg:items-center ${isAssignedToActive ? 'bg-blue/[0.045]' : ''}`}><div><p className="font-mono text-xs font-semibold text-blue">{box.box_code}</p><p className="mt-1 text-xs text-white/40">{box.location || 'Location unassigned'} / {total} units</p></div><div className="flex flex-wrap gap-1.5">{box.items.map(item => <span key={`${box.box_code}-${item.sku}`} className="rounded-adm-sm border border-adm-line bg-white/[0.035] px-2 py-1 text-xs text-white/55">{item.title} <strong className="font-mono text-white">x{item.qty}</strong></span>)}</div><label className="text-xs font-semibold text-white/50">Custodian<select value={box.assigned_staff} onChange={event => handleReassignBoxStaff(box.box_code, event.target.value)} className="adm-input mt-1 min-h-11 text-base sm:text-sm"><option value="">Unassigned</option>{Array.from(new Set([box.assigned_staff, ...staffList])).filter(Boolean).map(name => <option key={name} value={name}>{name}</option>)}</select></label><div className="flex lg:justify-end">{isAssignedToActive ? <StatusPill tone="success"><CheckIcon size={13} className="mr-1" /> In my custody</StatusPill> : <button onClick={() => handleClaimBoxCustody(box.box_code)} disabled={!activeStaff || box.box_code === 'No box code'} className={secondaryButton}>Claim to me</button>}</div></article>
+                return <article key={box.box_code} className={`grid gap-3 px-4 py-4 lg:grid-cols-[180px_minmax(260px,1.5fr)_220px_170px] lg:items-center ${isAssignedToActive ? 'bg-blue/[0.045]' : ''}`}><div><p className="font-mono text-xs font-semibold text-blue">{box.box_code}</p><p className="mt-1 text-xs text-white/40">{box.location || 'Location unassigned'} / {total} units</p></div><div className="flex flex-wrap gap-1.5">{box.items.map(item => <span key={`${box.box_code}-${item.sku}`} className="rounded-adm-sm border border-adm-line bg-white/[0.035] px-2 py-1 text-xs text-white/55">{item.title} <strong className="font-mono text-white">x{item.qty}</strong></span>)}</div><label className="text-xs font-semibold text-white/50">Custodian<select value={box.assigned_staff} onChange={event => handleReassignBoxStaff(box.box_code, event.target.value)} className="adm-input mt-1 min-h-11 text-base sm:text-sm"><option value="">Unassigned</option>{Array.from(new Set([box.assigned_staff, ...staffList])).filter(Boolean).map(name => <option key={name} value={name}>{name}</option>)}</select></label><div className="flex lg:justify-end">{isAssignedToActive ? <StatusPill tone="success"><CheckIcon size={13} className="mr-1" /> In my custody</StatusPill> : <button data-tour="handover-confirm-btn" onClick={() => handleClaimBoxCustody(box.box_code)} disabled={!activeStaff || box.box_code === 'No box code'} className={secondaryButton}>Claim to me</button>}</div></article>
               })}</div>
             </div>
           )}
@@ -604,11 +605,11 @@ function OmniOperationsWorkspace() {
       )}
 
       {activeRole === 'inter_staff_transfer' && (
-        <section className="max-w-3xl space-y-3">
+        <section data-tour="custody-handover-panel" className="max-w-3xl space-y-3">
           <SectionHeading title="Transfer exact lot custody" description="Choose the physical lot and quantity. Reserved units cannot be moved, and partial transfers preserve the parent lot history." />
           <form onSubmit={handleTransfer} className="space-y-4 rounded-adm border border-adm-line bg-adm-surface p-4 sm:p-5">
             <div className="grid gap-4 sm:grid-cols-3"><label className="text-xs font-semibold text-white/60">Physical lot<select value={transferBatchId} onChange={event => setTransferBatchId(event.target.value)} required className="adm-input mt-1.5 min-h-11 text-base sm:text-sm"><option value="">Select box and lot</option>{custodyLots.map(item => <option key={item.id} value={item.id}>{item.box_code || 'No box'} · {item.batch_code || 'No lot'} · {nameFor(item.sku)} · {Math.max(Number(item.quantity || 0) - Number(item.reserved_quantity || 0), 0)} movable</option>)}</select></label><label className="text-xs font-semibold text-white/60">Quantity<input type="number" min="1" value={transferQuantity} onChange={event => setTransferQuantity(event.target.value)} required className="adm-input mt-1.5 min-h-11 text-base sm:text-sm" /></label><label className="text-xs font-semibold text-white/60">Move to<select value={transferTo} onChange={event => setTransferTo(event.target.value)} required className="adm-input mt-1.5 min-h-11 text-base sm:text-sm"><option value="">Select staff</option>{staffList.map(name => <option key={name} value={name}>{name}</option>)}</select></label></div>
-            <div className="flex flex-col gap-3 border-t border-adm-line pt-4 sm:flex-row sm:items-center sm:justify-between"><p className="flex items-center gap-2 text-xs text-white/40"><UserIcon size={15} /> The signed-in operator remains the audit actor.</p><button type="submit" disabled={!transferBatchId || !transferTo || Number(transferQuantity) < 1} className={primaryButton}>Move exact quantity</button></div>
+            <div className="flex flex-col gap-3 border-t border-adm-line pt-4 sm:flex-row sm:items-center sm:justify-between"><p className="flex items-center gap-2 text-xs text-white/40"><UserIcon size={15} /> The signed-in operator remains the audit actor.</p><button data-tour="handover-confirm-btn" type="submit" disabled={!transferBatchId || !transferTo || Number(transferQuantity) < 1} className={primaryButton}>Move exact quantity</button></div>
           </form>
         </section>
       )}

@@ -9,12 +9,24 @@ import {
   BoxIcon,
   UploadIcon,
   BarcodeIcon,
+  PlayIcon,
 } from '../../ui/icons'
+
+const THEME_PALETTES = {
+  rose: { accent: '#f43f5e', wash: 'rgba(244, 63, 94, 0.12)', border: 'rgba(244, 63, 94, 0.35)', text: '#fda4af', glow: 'rgba(244, 63, 94, 0.45)' },
+  emerald: { accent: '#10b981', wash: 'rgba(16, 185, 129, 0.12)', border: 'rgba(16, 185, 129, 0.35)', text: '#6ee7b7', glow: 'rgba(16, 185, 129, 0.45)' },
+  sky: { accent: '#0ea5e9', wash: 'rgba(14, 165, 233, 0.12)', border: 'rgba(14, 165, 233, 0.35)', text: '#7dd3fc', glow: 'rgba(14, 165, 233, 0.45)' },
+  amber: { accent: '#f59e0b', wash: 'rgba(245, 158, 11, 0.12)', border: 'rgba(245, 158, 11, 0.35)', text: '#fcd34d', glow: 'rgba(245, 158, 11, 0.45)' },
+  purple: { accent: '#a855f7', wash: 'rgba(168, 85, 247, 0.12)', border: 'rgba(168, 85, 247, 0.35)', text: '#d8b4fe', glow: 'rgba(168, 85, 247, 0.45)' },
+  indigo: { accent: '#6366f1', wash: 'rgba(99, 102, 241, 0.12)', border: 'rgba(99, 102, 241, 0.35)', text: '#a5b4fc', glow: 'rgba(99, 102, 241, 0.45)' },
+  teal: { accent: '#14b8a6', wash: 'rgba(20, 184, 166, 0.12)', border: 'rgba(20, 184, 166, 0.35)', text: '#5eead4', glow: 'rgba(20, 184, 166, 0.45)' },
+  slate: { accent: '#94a3b8', wash: 'rgba(148, 163, 184, 0.12)', border: 'rgba(148, 163, 184, 0.35)', text: '#cbd5e1', glow: 'rgba(148, 163, 184, 0.45)' },
+}
 
 /**
  * SpotlightTourOverlay
  * Interactive guided walkthrough engine that dims the screen, spotlights specific
- * Admin BOS widgets/buttons, and provides step-by-step directives including 1-click
+ * Admin BOS widgets or buttons, and provides step-by-step directives including 1-click
  * ChatGPT prompt copying.
  */
 export default function SpotlightTourOverlay({
@@ -175,11 +187,7 @@ export default function SpotlightTourOverlay({
 
   if (!isOpen) return null
 
-  const isRose = tour.theme === 'rose'
-  const accentBorder = isRose ? 'border-rose-500/40' : 'border-emerald-500/40'
-  const accentBg = isRose ? 'bg-rose-500/10' : 'bg-emerald-500/10'
-  const accentText = isRose ? 'text-rose-400' : 'text-emerald-400'
-  const ringColor = isRose ? 'ring-rose-400/80' : 'ring-emerald-400/80'
+  const theme = THEME_PALETTES[tour.theme] || THEME_PALETTES.emerald
 
   return (
     <div
@@ -188,59 +196,84 @@ export default function SpotlightTourOverlay({
       aria-label={`${tour.title} - Step ${stepIndex + 1}`}
       className="fixed inset-0 z-[100] select-none"
     >
-      {/* ── SVG Spotlight Backdrop Mask ── */}
-      <svg
-        className="fixed inset-0 h-full w-full pointer-events-auto"
-        style={{ zIndex: 101 }}
-      >
-        <defs>
-          <mask id="spotlight-tour-mask">
-            <rect x="0" y="0" width="100%" height="100%" fill="white" />
-            {targetRect && (
-              <rect
-                x={targetRect.left - 6}
-                y={targetRect.top - 6}
-                width={targetRect.width + 12}
-                height={targetRect.height + 12}
-                rx="10"
-                fill="black"
-              />
-            )}
-          </mask>
-        </defs>
-        <rect
-          x="0"
-          y="0"
-          width="100%"
-          height="100%"
-          fill="rgba(2, 6, 23, 0.82)"
-          mask="url(#spotlight-tour-mask)"
+      {/* ── Option A Dual-Advance Shaded Backdrop (4 Panels Surrounding Target) ── */}
+      {targetRect ? (
+        <>
+          {/* Top backdrop panel */}
+          <div
+            className="fixed bg-[#020617]/82 pointer-events-auto"
+            style={{
+              zIndex: 101,
+              top: 0,
+              left: 0,
+              right: 0,
+              height: `${Math.max(0, targetRect.top - 6)}px`,
+            }}
+          />
+          {/* Bottom backdrop panel */}
+          <div
+            className="fixed bg-[#020617]/82 pointer-events-auto"
+            style={{
+              zIndex: 101,
+              top: `${targetRect.bottom + 6}px`,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+          />
+          {/* Left backdrop panel */}
+          <div
+            className="fixed bg-[#020617]/82 pointer-events-auto"
+            style={{
+              zIndex: 101,
+              top: `${Math.max(0, targetRect.top - 6)}px`,
+              left: 0,
+              width: `${Math.max(0, targetRect.left - 6)}px`,
+              height: `${targetRect.height + 12}px`,
+            }}
+          />
+          {/* Right backdrop panel */}
+          <div
+            className="fixed bg-[#020617]/82 pointer-events-auto"
+            style={{
+              zIndex: 101,
+              top: `${Math.max(0, targetRect.top - 6)}px`,
+              left: `${targetRect.right + 6}px`,
+              right: 0,
+              height: `${targetRect.height + 12}px`,
+            }}
+          />
+        </>
+      ) : (
+        /* Fullscreen backdrop when no specific target is active */
+        <div
+          className="fixed inset-0 bg-[#020617]/82 pointer-events-auto"
+          style={{ zIndex: 101 }}
         />
-      </svg>
+      )}
 
       {/* ── Spotlight Target Highlight Frame ── */}
       {targetRect && (
         <div
-          className={`fixed pointer-events-none rounded-xl ring-4 ${ringColor} shadow-[0_0_35px_rgba(56,189,248,0.35)] transition-all duration-200`}
+          className="fixed pointer-events-none rounded-xl transition-all duration-200"
           style={{
             zIndex: 102,
             top: `${targetRect.top - 6}px`,
             left: `${targetRect.left - 6}px`,
             width: `${targetRect.width + 12}px`,
             height: `${targetRect.height + 12}px`,
+            boxShadow: `0 0 0 4px ${theme.glow}, 0 0 35px ${theme.glow}`,
           }}
         >
           {/* Pulsating Target Radar Dot */}
           <span className="absolute -top-2 -right-2 flex h-4 w-4">
             <span
-              className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                isRose ? 'bg-rose-400' : 'bg-emerald-400'
-              }`}
+              className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+              style={{ backgroundColor: theme.accent }}
             />
             <span
-              className={`relative inline-flex rounded-full h-4 w-4 ${
-                isRose ? 'bg-rose-500' : 'bg-emerald-500'
-              }`}
+              className="relative inline-flex rounded-full h-4 w-4"
+              style={{ backgroundColor: theme.accent }}
             />
           </span>
         </div>
@@ -256,9 +289,14 @@ export default function SpotlightTourOverlay({
         <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
           <div className="flex items-center gap-2.5">
             <span
-              className={`flex h-8 w-8 items-center justify-center rounded-lg ${accentBg} ${accentText} border ${accentBorder}`}
+              style={{
+                backgroundColor: theme.wash,
+                color: theme.text,
+                borderColor: theme.border,
+              }}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border"
             >
-              {isRose ? <SparkleIcon size={16} /> : <BoxIcon size={16} />}
+              {tour.theme === 'rose' ? <SparkleIcon size={16} /> : <BoxIcon size={16} />}
             </span>
             <div>
               <div className="flex items-center gap-2">
@@ -266,9 +304,17 @@ export default function SpotlightTourOverlay({
                   {tour.shortTitle}
                 </span>
                 <span
-                  className={`rounded-full px-2 py-0.5 text-xs font-bold ${accentBg} ${accentText}`}
+                  style={{
+                    backgroundColor: theme.wash,
+                    color: theme.text,
+                    borderColor: theme.border,
+                  }}
+                  className="rounded-full border px-2 py-0.5 text-xs font-bold"
                 >
                   Step {stepIndex + 1} of {steps.length}
+                </span>
+                <span className="hidden sm:inline-block rounded bg-white/10 px-2 py-0.5 text-xs text-white/60 font-mono">
+                  {currentSection}
                 </span>
               </div>
               <h3 className="font-serif text-base font-bold text-white sm:text-lg leading-snug mt-0.5">
@@ -285,6 +331,25 @@ export default function SpotlightTourOverlay({
             <XIcon size={18} />
           </button>
         </div>
+
+        {/* Cross-Screen Transition Breadcrumb Indicator */}
+        {currentStep.targetSection && currentStep.targetSection !== currentSection && (
+          <div className="mt-3 flex items-center justify-between rounded-xl border border-sky-500/30 bg-sky-950/40 p-3 text-xs text-sky-200">
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-sky-400 animate-ping" />
+              <span>
+                Switching workspace to <strong>{currentStep.targetSection}</strong>
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigate(currentStep.targetSection)}
+              className="flex min-h-11 items-center rounded-lg bg-sky-600 px-3 py-1 text-xs font-bold text-white hover:bg-sky-500 cursor-pointer"
+            >
+              Go to {currentStep.targetSection}
+            </button>
+          </div>
+        )}
 
         {/* Action Directive Banner */}
         <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.04] p-3.5">
@@ -412,9 +477,12 @@ export default function SpotlightTourOverlay({
                 type="button"
                 onClick={() => setStepIndex(i)}
                 aria-label={`Jump to Step ${i + 1}`}
+                style={{
+                  backgroundColor: i === stepIndex ? theme.accent : undefined,
+                }}
                 className={`h-2.5 rounded-full transition-all cursor-pointer ${
                   i === stepIndex
-                    ? `w-6 ${isRose ? 'bg-rose-500' : 'bg-emerald-500'}`
+                    ? 'w-6'
                     : 'w-2.5 bg-white/20 hover:bg-white/40'
                 }`}
               />
@@ -446,11 +514,10 @@ export default function SpotlightTourOverlay({
               <button
                 type="button"
                 onClick={() => setStepIndex((prev) => prev + 1)}
-                className={`flex min-h-11 items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold text-white transition-all cursor-pointer active:scale-[0.98] shadow-md ${
-                  isRose
-                    ? 'bg-rose-600 hover:bg-rose-500 shadow-rose-900/40'
-                    : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/40'
-                }`}
+                style={{
+                  backgroundColor: theme.accent,
+                }}
+                className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold text-white transition-all cursor-pointer hover:opacity-90 active:scale-[0.98] shadow-md shadow-black/40"
               >
                 <span>Next Step →</span>
               </button>

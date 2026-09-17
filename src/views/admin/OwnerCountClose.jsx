@@ -968,7 +968,7 @@ export default function OwnerCountClose() {
   if (loading) return <div className="mx-auto max-w-[1600px] space-y-4" aria-label="Loading close workspace"><div className="h-24 animate-pulse rounded-adm border border-adm-line bg-adm-surface" /><div className="h-12 animate-pulse rounded-adm border border-adm-line bg-adm-surface" /><div className="h-80 animate-pulse rounded-adm border border-adm-line bg-adm-surface" /></div>
 
   return (
-    <div className="mx-auto max-w-[1600px] space-y-5 pb-12">
+    <div data-tour="cycle-count-board" className="mx-auto max-w-[1600px] space-y-5 pb-12">
       <WorkspaceIntro eyebrow="Owner operations" title="Owner Count & Close" description="Stage exact-shop exports, review product identity, then hand verified facts to the existing canonical sales, inventory, Pasabuy, and bookkeeping workflows." status={session ? `Saved · version ${session.version}` : 'Not started'} statusTone={session ? 'success' : 'neutral'} />
       <StepRail currentStep={currentStep} />
       {!secure && <StateBanner tone="warning">This workflow is prepared only for the secure Admin BFF. No import or close action is available in the legacy browser database path.</StateBanner>}

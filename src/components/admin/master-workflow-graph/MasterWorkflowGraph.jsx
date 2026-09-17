@@ -7,7 +7,7 @@ import {
   ALL_NODES, ENTRY_NODE_ID, GRAPH_STATS, getDownstream, getNode, getTerminalNodes,
   getUpstream, tracePaths,
 } from './workflowGraph'
-import { MapIcon, SearchIcon, CheckIcon, PlaneIcon, BoxIcon, ShieldIcon, BagIcon, SparkleIcon } from '../../ui/icons'
+import { MapIcon, SearchIcon, CheckIcon, PlaneIcon, BoxIcon, ShieldIcon, BagIcon, SparkleIcon, PlayIcon } from '../../ui/icons'
 
 /**
  * MasterWorkflowGraph
@@ -403,11 +403,11 @@ export default function MasterWorkflowGraph({
             {onStartTour && (
               <button
                 type="button"
-                onClick={() => onStartTour(activeWorkflowId === 'cross_border_lifecycle' || activeWorkflowId.includes('intake') ? 'manual_inventory' : 'auto_inventory')}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-amber-400/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 hover:border-amber-400 text-xs font-bold transition-colors min-h-11 shadow-sm"
+                onClick={() => onStartTour(activeWorkflowId)}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg border border-amber-400/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 hover:border-amber-400 text-xs font-bold transition-all min-h-11 shadow-sm cursor-pointer active:scale-[0.98]"
               >
-                <SparkleIcon size={14} />
-                <span>Start Interactive Spotlight Tour</span>
+                <PlayIcon size={14} />
+                <span>Play Guided Walkthrough</span>
               </button>
             )}
           </div>

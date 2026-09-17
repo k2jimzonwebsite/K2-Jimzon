@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { getDownstream, getUpstream } from './workflowGraph'
 import WorkflowRecords from './WorkflowRecords'
-import { CheckIcon, CopyIcon, SparkleIcon } from '../../ui/icons'
+import { CheckIcon, CopyIcon, SparkleIcon, PlayIcon } from '../../ui/icons'
 
 /**
  * WorkflowDetailDrawer
@@ -121,6 +121,17 @@ export default function WorkflowDetailDrawer({
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-sky-500/30 bg-sky-500/15 px-4 py-2 text-xs font-bold text-sky-300 transition-[transform,background-color,color] hover:bg-sky-500/25 hover:text-white active:scale-[0.98] cursor-pointer"
             >
               <span>{node.jumpLabel || 'Open real Admin screen'}</span>
+            </button>
+          )}
+
+          {onStartTour && (
+            <button
+              type="button"
+              onClick={() => onStartTour(workflow?.id)}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-amber-400/40 bg-amber-500/15 px-4 py-2 text-xs font-bold text-amber-300 transition-[transform,background-color,color] hover:bg-amber-500/25 hover:text-white active:scale-[0.98] cursor-pointer"
+            >
+              <PlayIcon size={14} />
+              <span>Play Guided Walkthrough</span>
             </button>
           )}
         </div>

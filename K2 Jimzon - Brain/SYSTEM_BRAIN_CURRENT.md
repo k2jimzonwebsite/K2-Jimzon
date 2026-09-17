@@ -1,5 +1,29 @@
 # K2 Jimzon — System Brain (Current State)
 
+**16 September Universal Guided Walkthrough System across all 8 operational lifecycles (IDEA-20260916-08, MAP-021, code locally verified):**
+Completed the Universal Guided Walkthrough System across all 8 operational lifecycles in K2 Jimzon Admin BOS, giving staff an interactive guide that highlights real buttons, explains exact warehouse and store procedures in plain words, and allows dual-advance navigation:
+1. **Dual-Advance Architecture (Option A):** Replaced blocking full-screen SVG overlays with a 4-panel shaded surround backdrop around active target elements. This leaves the spotlighted interface element completely clickable so staff can perform real operations in the live UI or press [Next Step →] / [N] to rehearse.
+2. **Cross-Section Workspace Transitions (Option 3):** When a tour step targets another workspace tab, the tour card shows an active breadcrumb banner ("Switching workspace to [section]...") with a direct action button to change sections.
+3. **All 8 Operational Lifecycles Supported:**
+   - *New Product Intake:* 5 steps guiding staff through AI prompt copying, ChatGPT photo parsing, Smart Paste JSON validation, and catalog listing.
+   - *Existing Stock Intake:* 5 steps guiding physical barcode scanning, expiration date checks, shelf bin placement, and FEFO lot storage.
+   - *Cross-Border Supply Chain:* 4 steps guiding flight manifest checks, Milan dispatch verification, and Manila customs arrival.
+   - *Inventory Handover & Dispatch:* 4 steps guiding courier handover mode selection, packing slip printing, and custody transfers.
+   - *Monthly Physical Count & Close:* 4 steps guiding physical shelf counts, discrepancy reviews, and reconciliation commits.
+   - *Customer Order Fulfillment:* 4 steps guiding new order review, courier booking, pick-and-pack, and handover sign-off.
+   - *Pasabuy Concierge:* 4 steps guiding customer sourcing review, Italian retail pricing, landed quotes, and customer updates.
+   - *Multi-Channel Integrations:* 3 steps guiding Shopee and TikTok sync health, inventory limits, and channel status checks.
+4. **Visual Design & Performance Budget Integrity:**
+   - Designed with theme palettes using clean inline styles and hex/rgba tokens to keep shared stylesheets small and protect the storefront budget.
+   - Replaced legacy emojis in ConsignmentManager, OmniOperationsHub, and PasabuyManager with clean SVG MapIcon components.
+   - Strict minimum 44px touch target (min-h-11) and minimum 12px text floor across all walkthrough cards and buttons.
+5. **Verification Evidence:**
+   - Playwright contract tests in tests/spotlight-tour-contract.spec.js (11/11 PASS), asserting all 8 tours, valid sections, humanizer compliance, and anti-emoji invariants.
+   - Playwright admin command center redesign test suite in tests/admin-dashboard-redesign.spec.js (27/27 PASS), including deep-linking, URL synchronization, and browser history.
+   - Full prebuild passed (1386 files checked, 0 secrets, 0 boundary gaps).
+   - Admin bundle passed at 196.06 kB / 300.00 kB minified.
+   - Storefront bundle passed at 149.88 kB / 150.50 kB gzip JS, and 29.26 kB / 30.00 kB gzip CSS.
+
 **16 September Admin BOS Inventory Intake Chooser & Staff Quick Tools Overhaul (IDEA-20260916-07, MAP-021, code locally verified):**
 Completed inventory intake selection and staff quick tools UI/UX overhaul in Admin BOS:
 1. **Inventory Intake Chooser Modal (`AddInventoryChooserModal.jsx`):** High-contrast modal dialog presented whenever staff initiates inventory creation via the top header action button or the `InventoryGrid` intro button. Distinguishes two distinct operational paths:

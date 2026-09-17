@@ -128,7 +128,7 @@ export default function ChannelIntegrations({ secureMode }) {
       {error && <StateBanner tone="warning">{error}. Apply the launch-core migration to enable readiness reporting.</StateBanner>}
       {!secure && <StateBanner tone="warning">Transitional staff database path. The signed channel boundary remains inactive until coordinated cutover.</StateBanner>}
 
-      <section className="space-y-3">
+      <section data-tour="channel-connectors" className="space-y-3">
         <SectionHeading title="Channel evidence and next action" description="Connection truth, catalog preparation, and the next safe operational step for each income channel." count={CHANNELS.length} />
         <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
           <div className="hidden grid-cols-[minmax(220px,1.4fr)_130px_minmax(220px,1fr)_220px] gap-4 border-b border-adm-line bg-white/[0.025] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.09em] text-white/35 lg:grid">
