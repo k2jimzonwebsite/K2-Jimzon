@@ -1,13 +1,20 @@
 # K2 Jimzon — System Brain (Current State)
 
-**17 September GitHub Actions CI fix and PostgreSQL portable runtime socket configuration (code locally verified):**
-Fixed two root causes in remote CI test and rehearsal execution:
-1. **Store Overlay Collision Test Isolation:** `tests/store-overlay-collision.spec.js` was omitted from `testIgnore` in `playwright.config.js`, causing `npm run test:base` in `build-and-smoke` to run against the unconfigured dev server on port 5173 where catalog items failed to mount. Added `'store-overlay-collision.spec.js'` to `testIgnore` in `playwright.config.js` and asserted its inclusion in `tests/release-ci-contract.spec.js`. Dedicated fixture runner (`playwright.store-orientation.config.js`) continues to run it against configured backend.
-2. **PostgreSQL 17 Linux Socket Permissions & Startup Diagnostics:** The Ubuntu 24.04 CI runner defaulted to `/var/run/postgresql` which lacked write permissions for non-root runner user. Added `sudo mkdir -p /var/run/postgresql && sudo chmod 777 /var/run/postgresql` in `.github/workflows/ci.yml`. Updated rehearsal scripts (`rehearse-purchase-time-reservation.mjs`, `rehearse-payment-recovery.mjs`, `rehearse-final-admin-concurrency.mjs`) to pass `-k "${dataDir}"` on non-Windows platforms, read `logPath` on startup failure, and maintain `{ stdio: 'ignore' }` on `pg_ctl start` so Windows `spawnSync` does not hang on inherited child process pipe handles.
+**17 September GitHub Actions CI fix, PostgreSQL portable runtime lifecycle, and Store Overlay Clearance (code locally verified):**
+Resolved root causes in remote CI test and rehearsal execution across Linux and Windows:
+1. **Store Overlay Collision Test Isolation & Mobile Layout Clearance:**
+   - `tests/store-overlay-collision.spec.js` was omitted from `testIgnore` in `playwright.config.js`, causing `npm run test:base` in `build-and-smoke` to run against the unconfigured dev server on port 5173 where catalog items failed to mount. Added `'store-overlay-collision.spec.js'` to `testIgnore` in `playwright.config.js` and asserted its inclusion in `tests/release-ci-contract.spec.js`.
+   - In `tests/store-overlay-collision.spec.js` (test 5: reduced motion fallback 375x812), the flat scene card vertically centered with desktop padding, touching the floating basket dock. On Linux with slightly taller font metrics, the bounding boxes collided. Added mobile rules in `src/interactive-store.css` under `@media (max-width: 900px)` for `.k2-store-flat-scene` (`padding: 0.75rem 1rem 5.5rem; justify-content: flex-start;`) and `.k2-store-flat-scene-card` (`padding: 0.75rem 1rem; border-radius: 1rem;`), giving generous 50px vertical clearance above the basket dock. Verified all 5/5 tests in `npm run test:store-orientation` pass cleanly.
+2. **PostgreSQL 17 Linux Socket Permissions, Port Deconfliction & Clean Shutdown:**
+   - The Ubuntu 24.04 CI runner defaulted to `/var/run/postgresql` which lacked write permissions for non-root runner user. Added `sudo mkdir -p /var/run/postgresql && sudo chmod 777 /var/run/postgresql` in `.github/workflows/ci.yml`.
+   - Updated rehearsal scripts (`rehearse-purchase-time-reservation.mjs`, `rehearse-payment-recovery.mjs`, `rehearse-final-admin-concurrency.mjs`) to pass `-k "${dataDir}"` on non-Windows platforms, read `logPath` on startup failure, and maintain `{ stdio: 'ignore' }` on `pg_ctl start` so Windows `spawnSync` does not hang on inherited child process pipe handles.
+   - Replaced hardcoded `path.join(config.binDir, 'pg_ctl.exe')` with `executable['pg_ctl.exe']` in `finally` blocks so PostgreSQL server instances actually shut down on Linux.
+   - Changed `rehearse-final-admin-concurrency.mjs` port from `54331` to `54332`, completely eliminating port collisions with `rehearse-purchase-time-reservation.mjs`.
 3. **Local Verification Evidence:**
    - `npm run rehearse:purchase-hold` passed with 48/48 properties held.
    - `npm run rehearse:payment-recovery` passed with exit code 0.
    - `npm run rehearse:final-admin` passed with exit code 0.
+   - `npm run test:store-orientation` passed 5/5 tests in 3.1m.
    - `tests/release-ci-contract.spec.js` passed 9/9 in 4.6s.
    - `npm run prebuild` passed with 1386 files checked, 0 secrets, and 0 boundary gaps.
    - `npm run build:storefront` passed: JS 149.88 kB / 150.50 kB gzip; CSS 29.26 kB / 30.00 kB gzip.

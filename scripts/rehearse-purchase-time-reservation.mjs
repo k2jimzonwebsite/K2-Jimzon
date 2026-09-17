@@ -1327,7 +1327,7 @@ async function main() {
     console.log('Purchase-time reservation rehearsal passed. Nothing was applied to production.')
   } finally {
     if (startedHere) {
-      spawnSync(path.join(config.binDir, 'pg_ctl.exe'), ['-D', config.dataDir, '-w', '-m', 'fast', 'stop'], {
+      spawnSync(executable['pg_ctl.exe'], ['-D', config.dataDir, '-w', '-m', 'fast', 'stop'], {
         cwd: rootDir, env, encoding: 'utf8', windowsHide: true, stdio: 'ignore',
       })
     }

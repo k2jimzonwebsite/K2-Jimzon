@@ -28,7 +28,7 @@ const config = {
   binDir: process.env.K2_TEST_PG_BIN || path.join(rootDir, '.tools', 'postgresql-17.11', 'runtime', 'pgsql', 'bin'),
   dataDir: path.join(rootDir, '.tools', 'final-admin-pg-data'),
   logPath: path.join(rootDir, '.tools', 'final-admin-pg.log'),
-  port: 54331,
+  port: 54332,
   database: 'k2_final_admin_rehearsal',
 }
 
@@ -211,9 +211,9 @@ async function main() {
     console.log('[pass] MAP-028 H-014 final-Admin concurrency rehearsal')
   } finally {
     if (startedHere) {
-      spawnSync(path.join(config.binDir, 'pg_ctl.exe'), ['-D', config.dataDir, '-m', 'fast', 'stop'], {
+      spawnSync(executable['pg_ctl.exe'], ['-D', config.dataDir, '-w', '-m', 'fast', 'stop'], {
         cwd: rootDir, env: { ...process.env, PGHOST: '127.0.0.1', PGPORT: String(config.port), PGUSER: 'postgres' },
-        encoding: 'utf8', windowsHide: true,
+        encoding: 'utf8', windowsHide: true, stdio: 'ignore',
       })
     }
   }
