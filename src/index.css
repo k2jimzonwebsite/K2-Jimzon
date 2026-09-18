@@ -681,7 +681,7 @@
   .adm-btn:disabled { opacity: 0.5; }
 
   /* Dense variant for toolbars and table row actions. */
-  .adm-btn-sm { min-height: 2.25rem; padding: 0 0.75rem; font-size: 0.875rem; }
+  .adm-btn-sm { min-height: 2.75rem; padding: 0 0.75rem; font-size: 0.875rem; }
 
   .adm-label {
     display: block;

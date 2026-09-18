@@ -53,7 +53,7 @@ export default function CatalogGrid() {
         <div className="min-w-0">
           {catalogStale && !catalogFailed && (
             <p role="status" className="mb-4 rounded-lg border border-amber/30 bg-amber/10 px-4 py-2.5 text-sm font-semibold text-navy">
-              Showing the last updated list — stock may differ.
+              Showing the last updated list. Stock may differ.
             </p>
           )}
           <div className="mb-7 flex flex-col gap-3 border-b border-[var(--store-surface-border)] pb-5 sm:flex-row sm:items-center">
@@ -102,7 +102,7 @@ export default function CatalogGrid() {
                 {loading
                   ? 'Loading the Manila cabinet…'
                   : catalogFailed
-                    ? 'The catalog could not be loaded. Check your connection and try again — nothing here means empty.'
+                    ? 'The catalog could not be loaded. Check your connection and try again: nothing here means empty.'
                     : query.trim()
                       ? `We do not have "${query.trim()}" in our Manila stock right now, but we can source it for you from Italy.`
                       : 'No products found matching these filters.'}

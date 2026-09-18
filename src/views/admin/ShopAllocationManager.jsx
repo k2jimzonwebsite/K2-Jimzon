@@ -121,7 +121,7 @@ export default function ShopAllocationManager({ secureMode }) {
       <WorkspaceIntro
         eyebrow="Channel allocation and custody"
         title="Multi-shop inventory and custody"
-        description="Two sellable units per active shop account is the planning target. Master Inventory remains the physical ground truth in Manila. Physical movement requires staff request and admin approval."
+        description="Plan two sellable units per active shop. The Manila stock count is the physical truth. Moving stock needs a staff request plus admin approval."
         status={loading ? 'Reading shop allocations...' : `${shops.length} active shops`}
         statusTone="info"
         actions={
@@ -274,7 +274,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
     <section className="space-y-4">
       <SectionHeading
         title="Product shop allocation matrix"
-        description="Availability target is 2 units per shop. When inventory is scarce, units are allocated by sales priority. Skipped shops do not generate low stock alerts."
+        description="When stock is scarce, units go by sales priority. Skipped shops raise no low-stock alerts."
         count={filteredProducts.length}
         action={
           <input
@@ -288,7 +288,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
       />
 
       <div className="overflow-x-auto rounded-adm border border-adm-line bg-adm-surface">
-        <table className="w-full text-left text-xs text-white">
+        <table className="w-full min-w-[720px] text-left text-xs text-white">
           <thead className="border-b border-adm-line bg-white/[0.025] text-white/40 uppercase tracking-wider">
             <tr>
               <th className="px-4 py-3 font-semibold">SKU and product</th>
@@ -377,6 +377,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
 
 function CustodyTransferSection({ transfers, onReload }) {
   const [busyId, setBusyId] = useState(null)
+  const [approveId, setApproveId] = useState(null)
   const [rejectId, setRejectId] = useState(null)
   const [rejectionReason, setRejectionReason] = useState('')
   const [error, setError] = useState('')
@@ -398,6 +399,7 @@ function CustodyTransferSection({ transfers, onReload }) {
       setError(e.message || 'Failed to approve transfer.')
     } finally {
       setBusyId(null)
+      setApproveId(null)
     }
   }
 
@@ -429,7 +431,7 @@ function CustodyTransferSection({ transfers, onReload }) {
     <section className="space-y-4">
       <SectionHeading
         title="Physical inventory transfer requests"
-        description="Custody movements between warehouse hubs, staff custodians, or dedicated shop allocations. Every move requires admin review."
+        description="Stock moves between hubs, holders, or shop allocations. Every move needs admin review."
         count={transfers.length}
       />
 
@@ -463,8 +465,8 @@ function CustodyTransferSection({ transfers, onReload }) {
                     </div>
                     <p className="text-xs text-white/70">
                       Quantity: <strong className="text-white font-mono">{t.quantity} units</strong> from{' '}
-                      <span className="text-blue">{t.source_hub}</span> to{' '}
-                      <span className="text-forest">{t.destination_hub}</span>
+                      <span className="text-white/75">{t.source_hub}</span> to{' '}
+                      <span className="text-white/75">{t.destination_hub}</span>
                     </p>
                     <p className="text-xs text-white/40 italic">
                       "{t.reason}"
@@ -478,20 +480,42 @@ function CustodyTransferSection({ transfers, onReload }) {
 
                   {isPending && (
                     <div className="flex items-center gap-2 shrink-0">
-                      <button
-                        onClick={() => handleApprove(t.id)}
-                        disabled={busyId === t.id}
-                        className={`${primaryButton} bg-forest min-h-11 px-4 text-xs font-semibold`}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => { setRejectId(t.id); setRejectionReason('') }}
-                        disabled={busyId === t.id}
-                        className={`${secondaryButton} border-crimson/40 text-crimson min-h-11 px-4 text-xs hover:bg-crimson/10`}
-                      >
-                        Reject
-                      </button>
+                      {approveId === t.id ? (
+                        <>
+                          <span className="text-xs text-white/65">Approve {t.quantity} units?</span>
+                          <button
+                            onClick={() => handleApprove(t.id)}
+                            disabled={busyId === t.id}
+                            className={`${primaryButton} min-h-11 px-4 text-xs font-semibold`}
+                          >
+                            {busyId === t.id ? 'Approving…' : 'Confirm approve'}
+                          </button>
+                          <button
+                            onClick={() => setApproveId(null)}
+                            disabled={busyId === t.id}
+                            className={`${secondaryButton} min-h-11 px-4 text-xs`}
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => setApproveId(t.id)}
+                            disabled={busyId === t.id}
+                            className={`${primaryButton} min-h-11 px-4 text-xs font-semibold`}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => { setApproveId(null); setRejectId(t.id); setRejectionReason('') }}
+                            disabled={busyId === t.id}
+                            className={`${secondaryButton} border-crimson/40 text-crimson min-h-11 px-4 text-xs hover:bg-crimson/10`}
+                          >
+                            Reject
+                          </button>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
@@ -585,22 +609,23 @@ function RebalanceModal({ product, shops, allocations, onClose, onCommitted }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" role="presentation">
-      <div className="w-full max-w-2xl rounded-adm border border-adm-line bg-adm-surface p-6 space-y-5 text-white max-h-[90vh] overflow-y-auto">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-blue">2-unit target allocation</p>
-            <h2 className="text-xl font-bold mt-1">Rebalance {product.name}</h2>
-            <p className="text-xs font-mono text-white/50">{product.sku}</p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" role="presentation" onMouseDown={e => e.target === e.currentTarget && onClose()}>
+      <AdminDialog onClose={onClose} closeDisabled={busy} labelledBy="rebalance-modal-title">
+        <div className="w-full max-w-2xl rounded-adm border border-adm-line bg-adm-surface p-6 space-y-5 text-white max-h-[calc(100dvh-1.5rem)] overflow-y-auto" onMouseDown={e => e.stopPropagation()}>
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-blue">2-unit target allocation</p>
+              <h2 id="rebalance-modal-title" className="text-xl font-bold mt-1">Rebalance {product.name}</h2>
+              <p className="text-xs font-mono text-white/50">{product.sku}</p>
+            </div>
+            <button
+              onClick={onClose}
+              aria-label="Close modal"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm border border-adm-line text-white/60 hover:text-white"
+            >
+              <XIcon size={18} />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            aria-label="Close modal"
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm border border-adm-line text-white/60 hover:text-white"
-          >
-            <XIcon size={18} />
-          </button>
-        </div>
 
         <div className="grid grid-cols-3 gap-3 bg-adm-sunken p-4 rounded-adm-sm border border-adm-line">
           <div>
@@ -672,6 +697,7 @@ function RebalanceModal({ product, shops, allocations, onClose, onCommitted }) {
           </button>
         </div>
       </div>
+      </AdminDialog>
     </div>
   )
 }
@@ -717,22 +743,23 @@ function CreateTransferModal({ products, shops, onClose, onCreated }) {
   const inputClass = "w-full min-h-11 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-xs text-white outline-none focus:border-blue"
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" role="presentation">
-      <form onSubmit={handleSubmit} className="w-full max-w-lg rounded-adm border border-adm-line bg-adm-surface p-6 space-y-4 text-white">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-blue">Physical stock movement</p>
-            <h2 className="text-xl font-bold mt-1">Request custody transfer</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" role="presentation" onMouseDown={e => e.target === e.currentTarget && onClose()}>
+      <AdminDialog onClose={onClose} closeDisabled={busy} labelledBy="create-transfer-title">
+        <form onSubmit={handleSubmit} className="w-full max-w-lg rounded-adm border border-adm-line bg-adm-surface p-6 space-y-4 text-white max-h-[calc(100dvh-1.5rem)] overflow-y-auto" onMouseDown={e => e.stopPropagation()}>
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-blue">Physical stock movement</p>
+              <h2 id="create-transfer-title" className="text-xl font-bold mt-1">Request custody transfer</h2>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close modal"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm border border-adm-line text-white/60 hover:text-white"
+            >
+              <XIcon size={18} />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close modal"
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm border border-adm-line text-white/60 hover:text-white"
-          >
-            <XIcon size={18} />
-          </button>
-        </div>
 
         <div>
           <label className="block text-xs font-semibold text-white/60 mb-1">Product SKU</label>
@@ -804,6 +831,7 @@ function CreateTransferModal({ products, shops, onClose, onCreated }) {
           </button>
         </div>
       </form>
+      </AdminDialog>
     </div>
   )
 }

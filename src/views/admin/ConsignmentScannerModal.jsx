@@ -117,7 +117,7 @@ export default function ConsignmentScannerModal({ isOpen, stage, items, onScan, 
     <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-black p-3">
       <div id={readerId} className="h-full max-h-[440px] w-full max-w-2xl overflow-hidden rounded-adm border border-adm-line" />
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center"><div className={`flex h-44 w-72 items-end justify-center rounded-adm border-2 border-dashed p-3 ${accentBorder}`}><span className="rounded bg-black/75 px-2 py-1 text-xs font-bold uppercase tracking-wider text-white/70">Align one barcode</span></div></div>
-      <p className="absolute left-4 top-4 rounded-adm-sm bg-black/75 px-2 py-1 text-xs text-white/60">{cameraNote}</p>
+      <p aria-live="polite" className="absolute left-4 top-4 rounded-adm-sm bg-black/75 px-2 py-1 text-xs text-white/60">{cameraNote}</p>
       {lastScanned && <div className={`absolute inset-x-4 bottom-4 flex items-center justify-between gap-3 rounded-adm border bg-adm-surface/95 p-3 shadow-adm-float ${accentPanelBorder}`}><div className="flex min-w-0 items-center gap-2"><CheckIcon size={17} className={`shrink-0 ${accentText}`} /><div className="min-w-0"><p className="text-xs font-bold uppercase tracking-wider text-white/40">Recorded</p><p className="truncate text-sm font-semibold">{lastScanned.name || lastScanned.sku}</p></div></div><p className="shrink-0 font-mono text-sm font-bold">{isMilan ? lastScanned.italy_packed_qty : lastScanned.manila_scanned_qty} / {isMilan ? lastScanned.expected_qty : lastScanned.italy_packed_qty}</p></div>}
     </div>
 

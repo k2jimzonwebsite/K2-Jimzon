@@ -5,6 +5,7 @@ import FefoWorkflowDiagram from './FefoWorkflowDiagram'
 import FulfillmentWorkflowDiagram from './FulfillmentWorkflowDiagram'
 import PasabuyWorkflowDiagram from './PasabuyWorkflowDiagram'
 import { STAFF_GUIDE_META } from '../../../views/admin/staffProcedureRegistry'
+import { useBodyScrollLock } from '../../ui/useBodyScrollLock'
 import { MapIcon, PlaneIcon, ShieldIcon, ClockIcon, BoxIcon, GlobeIcon } from '../../ui/icons'
 
 const MasterWorkflowGraph = lazy(() => import('../master-workflow-graph/MasterWorkflowGraph'))
@@ -31,6 +32,7 @@ export default function WorkflowGuideModal({
   onStartTour = null,
 }) {
   const [activeTab, setActiveTab] = useState(defaultTab)
+  useBodyScrollLock(isOpen)
 
   useEffect(() => {
     if (defaultTab) setActiveTab(defaultTab)

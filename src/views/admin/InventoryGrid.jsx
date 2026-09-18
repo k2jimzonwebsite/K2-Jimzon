@@ -34,7 +34,7 @@ const STATUS_OPTIONS = [
   { value: 'Draft',        label: 'Draft',        hint: 'Invisible to customers' },
   { value: 'Under Review', label: 'Review',       hint: 'Awaiting an administrator publication decision' },
   { value: 'Live',         label: 'Live',         hint: 'In the catalogue, browsable and buyable' },
-  { value: 'Unlisted',     label: 'Unlisted',     hint: 'Hidden from browse — direct link still works' },
+  { value: 'Unlisted',     label: 'Unlisted',     hint: 'Hidden from browse: direct link still works' },
   { value: 'Discontinued', label: 'Discontinued', hint: 'Permanently removed from sale, with history retained' },
 ]
 
@@ -136,25 +136,25 @@ function StatusDecisionDialog({ decision, busy, onCancel, onConfirm }) {
 }
 
 // ── Shared input/textarea styles ──────────────────────────────────────────────
-const inp = 'w-full rounded-adm-sm border border-white/20 bg-adm-raised px-3.5 py-2.5 text-base text-white font-semibold focus:border-gold outline-none transition-colors shadow-sm'
+const inp = 'w-full rounded-adm-sm border border-white/20 bg-adm-raised px-3.5 py-2.5 text-base text-white font-semibold focus:border-blue outline-none transition-colors shadow-sm'
 const ta  = `${inp} resize-none`
 
 function Label({ children }) {
-  return <label className="block text-sm font-extrabold uppercase tracking-wider text-gold mb-1.5">{children}</label>
+  return <label className="block text-sm font-extrabold uppercase tracking-wider text-white/70 mb-1.5">{children}</label>
 }
 
 function Section({ color = 'blue', title, children }) {
   const colors = {
     blue:   'text-white border-blue',
-    amber:  'text-gold border-gold',
+    amber:  'text-white border-white/30',
     forest: 'text-white border-blue',
-    purple: 'text-gold border-gold',
+    purple: 'text-white border-white/30',
     crimson:'text-crimson border-crimson',
     slate:  'text-white border-white/30',
   }
   return (
-    <div className={`border-l-4 pl-4 space-y-3 ${colors[color] || colors.blue}`}>
-      <p className="text-sm font-extrabold uppercase tracking-wider text-gold">{title}</p>
+    <div className={`border-l border-white/15 pl-4 space-y-3 ${colors[color] || colors.blue}`}>
+      <p className="text-sm font-extrabold uppercase tracking-wider text-white/70">{title}</p>
       {children}
     </div>
   )
@@ -512,7 +512,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
       <WorkspaceIntro
         eyebrow="Catalog and stock control"
         title="Inventory exception board"
-        description="Search the product master, isolate stock and FEFO risks, then open the exact SKU or batch that needs action. Stock metrics use persisted product and batch records only."
+        description="Search products, filter down to stock and expiry risks, then open the exact SKU or batch. Stock numbers come only from saved product and batch records."
         status={loading ? 'Loading inventory evidence' : `${products.length} SKUs loaded`}
         statusTone={inventoryMetrics.out || inventoryMetrics.expiryRisk || inventoryMetrics.unresolved ? 'warning' : 'success'}
         actions={(
@@ -691,7 +691,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                       </div>
                       <div>
                         <p className="text-white/60 uppercase text-sm font-bold tracking-wider mb-0.5">Retail SRP</p>
-                        <p className="font-extrabold text-lg text-gold tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</p>
+                        <p className="font-extrabold text-lg text-white tabular-nums">₱{Number(p.srp || 0).toLocaleString('en-PH')}</p>
                       </div>
                     </div>
 
@@ -730,7 +730,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
 
                     <button
                       onClick={() => setEnrichProduct(p)}
-                      className="w-full text-sm font-sans font-bold bg-gold/15 hover:bg-gold/25 text-gold py-2 rounded-adm-sm border border-gold/30 transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
+                      className="w-full text-sm font-sans font-bold bg-blue/10 hover:bg-blue/20 text-blue py-2 rounded-adm-sm border border-blue/30 transition-colors text-center flex items-center justify-center gap-1.5"
                     >
                       Enrich product specs
                     </button>
@@ -1043,10 +1043,10 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                     <div>
                       <Label>Status</Label>
                       <select disabled={secure} value={normalizeStatus(editingProduct.status)} onChange={e => set('status', e.target.value)} className={`${inp} cursor-pointer disabled:opacity-60`}>
-                        <option value="Live">Live — in the catalogue</option>
-                        <option value="Unlisted">Unlisted — direct link only</option>
-                        <option value="Draft">Draft — hidden</option>
-                        <option value="Discontinued">Discontinued — retired</option>
+                        <option value="Live">Live: in the catalogue</option>
+                        <option value="Unlisted">Unlisted: direct link only</option>
+                        <option value="Draft">Draft: hidden</option>
+                        <option value="Discontinued">Discontinued: retired</option>
                       </select>
                       <p className="mt-1.5 text-xs text-white/45 leading-snug">
                         {secure ? 'Use the reasoned status action on the product card or selected-products bar.' : (STATUS_OPTIONS.find(o => o.value === normalizeStatus(editingProduct.status))?.hint

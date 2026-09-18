@@ -50,7 +50,7 @@ function WebsiteChatHeader({ enabled }) {
           </p>
         </div>
       </div>
-      <span className="shrink-0 text-right text-[11px] leading-4 text-[#E9DCC7]">
+      <span className="shrink-0 text-right text-[12px] leading-4 text-[#E9DCC7]">
         {enabled ? 'Replies refresh automatically' : 'Nothing will be sent'}
       </span>
     </div>
@@ -420,7 +420,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
                 value={form.customerName}
                 onChange={update('customerName')}
                 autoComplete="name"
-                className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#E4DCD1] bg-white px-4 text-sm text-[#2B2B2B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+                className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#E4DCD1] bg-white px-4 text-base text-[#2B2B2B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
               />
             </label>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -432,7 +432,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
                   value={form.email}
                   onChange={update('email')}
                   autoComplete="email"
-                  className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#E4DCD1] bg-white px-4 text-sm text-[#2B2B2B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+                  className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#E4DCD1] bg-white px-4 text-base text-[#2B2B2B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
                 />
               </label>
               <label htmlFor="store-chat-phone" className="block text-[13px] font-semibold text-[#5C5449]">
@@ -443,7 +443,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
                   value={form.phone}
                   onChange={update('phone')}
                   autoComplete="tel"
-                  className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#E4DCD1] bg-white px-4 text-sm text-[#2B2B2B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+                  className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#E4DCD1] bg-white px-4 text-base text-[#2B2B2B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
                 />
               </label>
             </div>
@@ -463,7 +463,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
             maxLength={2000}
             rows={conversation ? 3 : 5}
             placeholder="Ask about an item, a size, or when the next shipment lands"
-            className="mt-1.5 w-full resize-y rounded-xl border border-[#E4DCD1] bg-white px-4 py-3 text-sm leading-6 text-[#2B2B2B] placeholder:text-navy-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+            className="mt-1.5 w-full resize-y rounded-xl border border-[#E4DCD1] bg-white px-4 py-3 text-base leading-6 text-[#2B2B2B] placeholder:text-navy-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
             required
           />
         </label>

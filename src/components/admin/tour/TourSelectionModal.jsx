@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useBodyScrollLock } from '../../ui/useBodyScrollLock'
 import { getAvailableTours } from './tourData'
 import {
   SparkleIcon,
@@ -105,6 +106,7 @@ export default function TourSelectionModal({
   onSelectTour = () => {},
 }) {
   const [activeCategory, setActiveCategory] = useState('all')
+  useBodyScrollLock(isOpen)
 
   useEffect(() => {
     if (!isOpen) return

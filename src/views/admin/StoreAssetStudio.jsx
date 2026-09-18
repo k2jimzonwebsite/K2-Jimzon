@@ -404,14 +404,14 @@ export default function StoreAssetStudio() {
                             <button
                               type="button"
                               onClick={() => approve(key)}
-                              className="min-h-[36px] rounded-lg bg-emerald-600 px-3 text-sm font-semibold text-white"
+                              className="min-h-11 rounded-lg bg-emerald-600 px-3 text-sm font-semibold text-white"
                             >
                               Approve
                             </button>
                             <button
                               type="button"
                               onClick={() => reject(key)}
-                              className="min-h-[36px] rounded-lg border border-adm-line px-3 text-sm font-semibold text-white/70"
+                              className="min-h-11 rounded-lg border border-adm-line px-3 text-sm font-semibold text-white/70"
                             >
                               Discard
                             </button>

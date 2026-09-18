@@ -18,7 +18,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }) {
             <h2 id="shortcut-title" className="text-base font-semibold">Keyboard shortcuts</h2>
             <p className="mt-1 text-sm text-white/50">Shortcuts pause while you type in a field. They never skip a confirmation or server rule.</p>
           </div>
-          <button onClick={onClose} aria-label="Close shortcuts" className="flex h-10 w-10 items-center justify-center rounded-adm-sm text-white/50 hover:bg-white/5 hover:text-white">
+          <button onClick={onClose} aria-label="Close shortcuts" className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm text-white/50 hover:bg-white/5 hover:text-white">
             <XIcon size={18} />
           </button>
         </header>

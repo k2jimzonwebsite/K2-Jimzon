@@ -1,4 +1,5 @@
 import { cloneElement, isValidElement, useCallback, useEffect, useRef } from 'react'
+import { useBodyScrollLock } from './useBodyScrollLock'
 
 const FOCUSABLE = [
   'a[href]',
@@ -41,6 +42,7 @@ export function AdminDialog({
   closeDisabledRef.current = closeDisabled
 
   const childRef = isValidElement(children) ? children.props.ref : null
+  useBodyScrollLock(true)
   const setDialogRef = useCallback((node) => {
     dialogRef.current = node
     assignRef(childRef, node)

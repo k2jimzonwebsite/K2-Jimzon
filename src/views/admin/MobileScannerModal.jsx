@@ -25,7 +25,21 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
   const [manualCode, setManualCode] = useState('')
   const [lastScanned, setLastScanned] = useState(null)
   const [scanFlash, setScanFlash] = useState(false)
+  const [finishArmed, setFinishArmed] = useState(false)
   const scannerRef = useRef(null)
+
+  useEffect(() => {
+    if (!isOpen) setFinishArmed(false)
+  }, [isOpen])
+
+  const handleFinish = () => {
+    if (totalScanned < totalPacked && !finishArmed) {
+      setFinishArmed(true)
+      return
+    }
+    setFinishArmed(false)
+    onFinishScanning()
+  }
 
   useEffect(() => {
     if (!isOpen) return
@@ -97,7 +111,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
         </div>
         <button
           onClick={onClose}
-          className="rounded-adm-sm bg-white/10 px-3 py-1.5 text-sm font-semibold text-neutral-300 hover:bg-white/20 transition-all"
+          className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-adm-sm bg-white/10 px-3.5 text-sm font-semibold text-neutral-300 hover:bg-white/20 transition-all"
         >
           Close
         </button>
@@ -112,12 +126,12 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            onClick={onFinishScanning}
-            className="bg-forest hover:bg-forest/90 text-white px-4 py-2 rounded-adm-sm font-bold text-sm shadow-lg shadow-forest/20 transition-all"
-          >
-            Review Discrepancies & Sync →
-          </button>
+            <button
+              onClick={handleFinish}
+              className="min-h-[44px] inline-flex items-center justify-center bg-forest hover:bg-forest/90 text-white px-4 rounded-adm-sm font-bold text-sm shadow-lg shadow-forest/20 transition-all"
+            >
+              {finishArmed ? `Finish with ${totalScanned} of ${totalPacked} scanned?` : 'Review Discrepancies & Sync →'}
+            </button>
         </div>
       </div>
 
@@ -161,13 +175,14 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
           <input
             type="text"
             value={manualCode}
+            aria-label="Manual SKU or barcode"
             onChange={(e) => setManualCode(e.target.value)}
             placeholder="Manual SKU or Barcode entry (+1)..."
-            className="flex-1 rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-forest"
+            className="min-h-[44px] flex-1 rounded-adm-sm border border-adm-line bg-white/5 px-3.5 text-base sm:text-sm text-white placeholder-white/30 outline-none focus:border-forest"
           />
           <button
             type="submit"
-            className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-adm-sm text-sm font-bold"
+            className="min-h-[44px] inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white px-4 rounded-adm-sm text-sm font-bold"
           >
             +1 Scan
           </button>
@@ -181,7 +196,8 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
               <button
                 key={item.sku}
                 onClick={() => handleIncrement(item.sku)}
-                className="shrink-0 bg-white/5 border border-adm-line hover:border-forest p-2 rounded-adm-sm text-left transition-all active:scale-95"
+                aria-label={`Scan one more ${item.sku}`}
+                className="min-h-[44px] shrink-0 bg-white/5 border border-adm-line hover:border-forest px-3 py-2 rounded-adm-sm text-left transition-all active:scale-95"
               >
                 <p className="text-sm font-semibold text-neutral-200 truncate max-w-[120px]">{item.sku}</p>
                 <p className="text-xs text-white/50">

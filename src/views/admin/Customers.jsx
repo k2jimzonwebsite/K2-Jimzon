@@ -136,7 +136,7 @@ export default function Customers() {
     {reviewing&&<WholesaleReviewDialog inquiry={reviewing} status={reviewStatus} setStatus={setReviewStatus} reason={reviewReason} setReason={setReviewReason} error={reviewError} returnFocusRef={reviewOpenerRef} onClose={()=>setReviewing(null)} onSubmit={saveReview} />}
 
     <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
-      <div className="p-4"><SectionHeading title="Identity directory" description="This is an operational identity view, not a marketing broadcast list. Contact and channel provenance remains attributable." count={customers.length} /></div>
+      <div className="p-4"><SectionHeading title="Identity directory" description="Staff working view, not a marketing list. Every contact keeps its source." count={customers.length} /></div>
       {loading ? <div className="space-y-2 border-t border-adm-line p-4" role="status" aria-label="Loading customers">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-20 rounded-adm-sm bg-white/[0.04]" />)}</div> : customers.length === 0 ? <EmptyState icon={UserIcon} title="No customer identities yet" description={mode === 'canonical' ? 'Guest, account, and channel identities will appear after their first verified interaction.' : 'No registered Customer or VIP profiles exist in the current account directory.'} /> : <>
         <div className="space-y-3 border-t border-adm-line p-3 sm:hidden">{customers.map(customer => <CustomerCard key={customer.id} customer={customer} metricsAvailable={metricsAvailable} />)}</div>
         <div className="hidden overflow-x-auto sm:block"><table className="w-full min-w-[900px] text-left text-sm">

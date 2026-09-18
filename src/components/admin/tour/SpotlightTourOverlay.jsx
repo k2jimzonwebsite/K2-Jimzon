@@ -67,9 +67,16 @@ export default function SpotlightTourOverlay({
     }
     const el = document.querySelector(currentStep.targetSelector)
     if (el) {
-      const rect = el.getBoundingClientRect()
+      const before = el.getBoundingClientRect()
       // Only set if visible on screen
-      if (rect.width > 0 && rect.height > 0) {
+      if (before.width > 0 && before.height > 0) {
+        // Move the page only when the target is actually outside the viewport.
+        // Instant (no smooth animation) so the tour never fights staff scrolling.
+        const outsideViewport =
+          before.top < 0 || before.left < 0 ||
+          before.bottom > window.innerHeight || before.right > window.innerWidth
+        if (outsideViewport) el.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+        const rect = el.getBoundingClientRect()
         setTargetRect({
           top: rect.top,
           left: rect.left,
@@ -78,8 +85,6 @@ export default function SpotlightTourOverlay({
           bottom: rect.bottom,
           right: rect.right,
         })
-        // Ensure element is visible in viewport
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
         return
       }
     }

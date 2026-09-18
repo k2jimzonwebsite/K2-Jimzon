@@ -453,7 +453,7 @@ function OmniOperationsWorkspace() {
         <WorkspaceIntro
           eyebrow="Fulfillment control"
           title="Order, packing, and custody desk"
-          description="Confirm website requests before reserving stock, scan confirmed order lines, and keep every Italy box assigned to a real custodian. Payment evidence remains a separate verification state."
+          description="Confirm website requests before holding stock, scan packed order lines, and keep every Italy box with a named holder. Payment proof stays a separate check."
           status={activeStaff ? `Station: ${activeStaff}` : 'Staff identity unavailable'}
           statusTone={activeStaff ? 'success' : 'danger'}
         />
@@ -473,7 +473,7 @@ function OmniOperationsWorkspace() {
         <button
           type="button"
           onClick={() => setShowFulfillmentGuide((v) => !v)}
-          className="flex items-center gap-1.5 rounded-adm-sm border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-bold text-purple-400 hover:bg-purple-500/20"
+          className="flex items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 py-1.5 text-xs font-bold text-white/65 hover:bg-white/[0.06] hover:text-white"
         >
           <MapIcon size={14} />
           <span>{showFulfillmentGuide ? 'Hide Fulfillment Map ▴' : 'View Packing & Custody Workflow Map ▸'}</span>
@@ -507,7 +507,7 @@ function OmniOperationsWorkspace() {
       {activeRole === 'manila_warehouse' && (
         <div className="space-y-6">
           <section className="space-y-3">
-            <SectionHeading title="Scan station" description={`Operator ${activeStaff || 'not identified'} / scan only items already present in the pending pick queue.`} action={<StatusPill tone="success">{packedCount} packed</StatusPill>} />
+            <SectionHeading title="Scan station" description={`Signed in as ${activeStaff || 'not identified'}. Scan only items already in the pending pick queue.`} action={<StatusPill tone="success">{packedCount} packed</StatusPill>} />
             <form onSubmit={handleVerifyScan} className="flex flex-col gap-2 rounded-adm border border-adm-line bg-adm-surface p-3 sm:flex-row">
               <label className="min-w-0 sm:w-72"><span className="sr-only">Selected order</span><select disabled={packingBusy || Boolean(packingPending.current)} value={selectedOrderId} onChange={event => { setSelectedOrderId(event.target.value); setPackingReservation(''); setPackingLotConfirmed(false) }} required className="adm-input min-h-11 w-full text-base sm:text-sm"><option value="">Choose exact order</option>{orders.filter(order => order.status !== 'Packed').map(order => <option key={order.id} value={order.id}>{order.publicReference} · {order.customer}</option>)}</select></label>
               <label className="relative min-w-0 flex-1"><span className="sr-only">Barcode or SKU</span><BarcodeIcon size={17} className="pointer-events-none absolute left-3 top-3.5 text-white/35" /><input type="text" disabled={packingBusy || Boolean(packingPending.current)} value={scanBarcode} onChange={event => setScanBarcode(event.target.value)} placeholder="Scan barcode or enter SKU" className="adm-input min-h-11 pl-10 font-mono text-base" /></label>
@@ -546,9 +546,9 @@ function OmniOperationsWorkspace() {
                         {request.shipping_quote_status === 'customer_confirmed' ? (
                           <p className="mt-0.5 text-xs text-forest">Delivery: {Number(request.shipping_amount) > 0 ? peso(request.shipping_amount) : 'Free'}</p>
                         ) : (
-                          <p className="mt-0.5 text-xs text-white/40">Delivery unquoted</p>
+                          <p className="mt-0.5 text-xs text-white/40">Delivery not quoted yet</p>
                         )}
-                        <p className="mt-1 text-xs text-amber">Payment not assumed</p>
+                        <p className="mt-1 text-xs text-amber">Payment not verified yet</p>
                       </div>
                       <div className="grid gap-2">
                         <button onClick={() => setDeliveryOrder(request)} className={`${secondaryButton} w-full`}>{request.shipping_quote_status === 'customer_confirmed' ? 'Delivery confirmed' : 'Set delivery quote'}</button>

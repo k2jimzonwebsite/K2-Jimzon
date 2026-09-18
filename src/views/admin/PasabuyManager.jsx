@@ -266,7 +266,7 @@ export default function PasabuyManager() {
       <WorkspaceIntro
         eyebrow="Pasabuy operations"
         title="Request and quote control"
-        description="Review customer requests, version every estimate, retain FX evidence, and advance only through valid operational states. Saving or copying a quote does not mark it sent or paid."
+        description="Read customer requests, save every price version with its FX proof, and move each case only to a valid next state. Saving or copying a quote never marks it sent or paid."
         status={loading ? 'Loading request evidence' : `${openRequests.length} open cases`}
         statusTone={openRequests.length ? 'warning' : 'success'}
       />
@@ -275,7 +275,7 @@ export default function PasabuyManager() {
         <button
           type="button"
           onClick={() => setShowPasabuyGuide((v) => !v)}
-          className="flex items-center gap-1.5 rounded-adm-sm border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-bold text-cyan-400 hover:bg-cyan-500/20"
+          className="flex items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.04] px-3 py-1.5 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white"
         >
           <span className="inline-flex items-center gap-1.5">{showPasabuyGuide ? 'Hide Sourcing Map ▴' : <><MapIcon size={14} /> View Pasabuy Sourcing & Quoting Map ▸</>}</span>
         </button>
@@ -308,9 +308,9 @@ export default function PasabuyManager() {
 
       <div className="grid gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
         <section data-tour="pasabuy-table" className="min-w-0 space-y-3" aria-label="Pasabuy request queue">
-          <SectionHeading title="Priority queue" description="Filter by the work that must happen next." count={filtered.length} />
+          <SectionHeading title="Priority queue" count={filtered.length} />
           <div className="grid grid-cols-2 gap-1 rounded-adm-sm border border-adm-line bg-adm-surface p-1 sm:grid-cols-5 xl:grid-cols-2" aria-label="Filter Pasabuy requests">
-            {['open', 'review', 'sourcing', 'closed', 'all'].map(value => <button key={value} onClick={() => setFilter(value)} aria-pressed={filter === value} className={`min-h-10 rounded-adm-sm px-3 text-xs font-semibold capitalize transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${filter === value ? 'bg-blue text-white' : 'text-white/50 hover:bg-white/[0.05] hover:text-white'}`}>{value}</button>)}
+            {['open', 'review', 'sourcing', 'closed', 'all'].map(value => <button key={value} onClick={() => setFilter(value)} aria-pressed={filter === value} className={`min-h-11 rounded-adm-sm px-3 text-xs font-semibold capitalize transition-[transform,background-color,color] duration-150 active:scale-[0.97] ${filter === value ? 'bg-blue text-white' : 'text-white/50 hover:bg-white/[0.05] hover:text-white'}`}>{value}</button>)}
           </div>
           <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
             {loading && <div className="space-y-2 p-3" role="status">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-20 animate-pulse rounded-adm-sm bg-white/[0.05]" />)}</div>}
@@ -379,7 +379,7 @@ export default function PasabuyManager() {
 
               <div className="flex flex-col justify-between gap-3 border-t border-adm-line pt-4 sm:flex-row sm:items-center">
                 <p className="text-xs text-white/45">Suggested {peso(suggested)} / Latest saved {latestQuote ? `version ${latestQuote.version}` : 'none'} / Saving does not send</p>
-                <div className="flex flex-col gap-2 sm:flex-row"><button data-tour="pasabuy-quote-btn" onClick={saveQuote} disabled={saving} className={`${primaryButton} bg-amber text-navy hover:bg-amber/90`}>{saving ? 'Saving...' : 'Save new quote version'}</button><button onClick={copyQuote} disabled={!latestQuote} className={`${secondaryButton} border-forest/35 text-forest`}>Copy saved quote message</button></div>
+                <div className="flex flex-col gap-2 sm:flex-row"><button data-tour="pasabuy-quote-btn" onClick={saveQuote} disabled={saving} className={`${primaryButton}`}>{saving ? 'Saving...' : 'Save new quote version'}</button><button onClick={copyQuote} disabled={!latestQuote} className={`${secondaryButton} border-forest/35 text-forest`}>Copy saved quote message</button></div>
               </div>
             </fieldset>
           )}

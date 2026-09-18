@@ -42,13 +42,13 @@ export default function AutomaticIntakePanel({ session, isOnline, onContent, onB
     <p className="text-white/80">Prepare content from registered package evidence. Review fields first, then request each image separately. No stock, pricing or publication is created.</p>
     <button type="button" className={button} disabled={busy || !isOnline} onClick={() => act('read')}>Check readiness / Recover saved results</button>
     {busy && <p role="status" className="text-white/80">Checking the saved job. Keep this intake open.</p>}
-    {error && <p role="alert" className="text-amber-200">{error}</p>}
+    {error && <p role="alert" className="text-crimson">{error}</p>}
     {state && <>
       <p role="status">{state.readiness.ready ? 'Configured for deliberate paid requests.' : 'Automatic requests unavailable.'}</p>
-      {!state.readiness.ready && <ul className="list-disc pl-5 text-amber-200">{state.readiness.missing.map(message => <li key={message}>{message}</li>)}</ul>}
+      {!state.readiness.ready && <ul className="list-disc pl-5 text-amber">{state.readiness.missing.map(message => <li key={message}>{message}</li>)}</ul>}
       <p className="text-white/80">Reserved this session: {money(state.budget.sessionReserved)} / {money(state.budget.perSessionCap)}. Month: {money(state.budget.monthReserved)} / {money(state.budget.monthlyCap)}. Reservations include uncertain outcomes; these are not invoice totals.</p>
       <label className="flex min-h-[44px] items-center gap-3"><input type="checkbox" checked={confirmed} disabled={busy} onChange={event => setConfirmed(event.target.checked)} />I confirm one paid request using package evidence only.</label>
-      {!content && !session.product_id && <button type="button" className={button} disabled={busy || !isOnline || !confirmed || !state.readiness.ready} onClick={() => act('start', { kind: 'content', confirmation: 'CONFIRM_PAID_INTAKE' })}>Prepare content — reserve {money(state.readiness.reservations.content)}</button>}
+      {!content && !session.product_id && <button type="button" className={button} disabled={busy || !isOnline || !confirmed || !state.readiness.ready} onClick={() => act('start', { kind: 'content', confirmation: 'CONFIRM_PAID_INTAKE' })}>Prepare content (reserve {money(state.readiness.reservations.content)})</button>}
       {content && <div className="space-y-2">
         <p>Content: {content.status === 'dispatched' ? 'Started; outcome not yet confirmed. Recover results; do not start again.' : content.status === 'failed' ? `Unavailable (${content.failure}). Use the manual path.` : 'Draft ready for field review.'}</p>
         {content.result?.content && <button type="button" className={button} disabled={busy || !isOnline || Boolean(session.product_id)} onClick={loadContent}>Load content into field review</button>}
@@ -61,7 +61,7 @@ export default function AutomaticIntakePanel({ session, isOnline, onContent, onB
             <label className="block" htmlFor={`ai-brief-${kind}`}>Reviewed composition brief</label>
             <textarea id={`ai-brief-${kind}`} value={briefs[kind]} maxLength={1500} disabled={busy} onChange={event => setBriefs(current => ({ ...current, [kind]: event.target.value }))} className="min-h-[88px] w-full rounded-lg border border-white/20 bg-black/20 p-3 text-white" />
             {!reviewed && <p className="text-white/80">Save the field review with the product name accepted before requesting images.</p>}
-            <button type="button" className={button} disabled={busy || !isOnline || !confirmed || !state.readiness.ready || !reviewed || briefs[kind].trim().length < 8 || Boolean(session.product_id)} onClick={() => act('start', { kind, brief: briefs[kind], confirmation: 'CONFIRM_PAID_INTAKE' })}>Prepare {kind} — reserve {money(state.readiness.reservations[kind])}</button>
+            <button type="button" className={button} disabled={busy || !isOnline || !confirmed || !state.readiness.ready || !reviewed || briefs[kind].trim().length < 8 || Boolean(session.product_id)} onClick={() => act('start', { kind, brief: briefs[kind], confirmation: 'CONFIRM_PAID_INTAKE' })}>Prepare {kind} (reserve {money(state.readiness.reservations[kind])})</button>
           </>}
           {job && <p>{job.status === 'dispatched' ? 'Started; outcome unconfirmed. Recover results or continue manually.' : `${job.status}${job.decision ? ` · ${job.decision}` : ' · review pending'}`}</p>}
           {job?.status === 'completed' && <button type="button" className={button} disabled={busy || !isOnline} onClick={() => act('candidate', { jobId: job.id })}>Load {kind} candidate for review</button>}
@@ -72,7 +72,7 @@ export default function AutomaticIntakePanel({ session, isOnline, onContent, onB
               {session.product_id && !job.attachment_result && <button type="button" className={button} disabled={busy || !isOnline} onClick={() => act('attach', { jobId: job.id })}>Attach reviewed {kind} to Draft</button>}
             </>}
             {!job.decision && <>
-              <label htmlFor={`ai-review-${kind}`} className="block">Review reason — package fidelity, truth, rights and composition</label>
+              <label htmlFor={`ai-review-${kind}`} className="block">Review reason: package fidelity, truth, rights and composition</label>
               <input id={`ai-review-${kind}`} value={reasons[kind] || ''} maxLength={500} onChange={event => setReasons(current => ({ ...current, [kind]: event.target.value }))} className="min-h-[44px] w-full rounded-lg border border-white/20 bg-black/20 p-3" />
               <div className="flex flex-wrap gap-2">{['accepted', 'rejected'].map(decision => <button type="button" key={decision} className={button} disabled={busy || !isOnline || (reasons[kind] || '').trim().length < 8} onClick={() => act('review', { jobId: job.id, decision, reason: reasons[kind] })}>{decision === 'accepted' ? 'Accept candidate' : 'Reject candidate'}</button>)}</div>
             </>}

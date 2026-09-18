@@ -76,7 +76,7 @@ const REFERENCE_TOPICS = [
     id: 'fulfillment', section: 'omni_hub', category: 'Orders', title: 'Order packing and fulfillment',
     keywords: ['pack order', 'fulfillment', 'fulfilment', 'ship', 'waybill', 'courier', 'wrong item', 'pick order'],
     what: 'Packing is order-first. Staff opens or scans one exact order, marketplace waybill, or K2 packing QR, then records one immutable scan for every required unit.',
-    how: ['Confirm and reserve the request first.', 'Open the exact order before product scanning.', 'Scan quantity five five times unless an authorized audited bulk count exists.', 'Complete only after every expected line reconciles.'],
+    how: ['Confirm and reserve the request first.', 'Open the exact order before product scanning.', 'Scan every unit one by one. A line of five needs five scans, unless an authorized audited bulk count exists.', 'Complete only after every expected line reconciles.'],
     where: 'Sidebar → Fulfillment Hub.', source: `${RULEBOOK} §12–14`,
     more: 'A product scan alone never chooses an order globally. Direct website orders use a K2 packing QR until courier booking creates a real waybill.',
   },
@@ -93,6 +93,7 @@ const REFERENCE_TOPICS = [
     what: 'Pasabuy is a request-and-sourcing case, not ordinary cart checkout. The system may show cost components, but the owner chooses each final price based on the specific case.',
     how: ['Record the customer request and missing information.', 'Research the exact item and costs.', 'Save a versioned quote and owner rationale.', 'Record customer acceptance before purchase.', 'Track purchase, flight, receipt, allocation, and delivery as separate facts.'],
     where: 'Sidebar → Pasabuy Quotes.', source: `${RULEBOOK} §8, §17`,
+    more: 'Customer-free means the boxing view hides names and contacts. Staff work from the public request reference only.',
   },
   {
     id: 'channels', section: 'integrations', category: 'Channels', title: 'Marketplace channel readiness',
@@ -105,7 +106,7 @@ const REFERENCE_TOPICS = [
   {
     id: 'channel-connect-marketplace', section: 'integrations', category: 'Channels', title: 'Connecting a marketplace shop, step by step',
     keywords: ['connect', 'shopee', 'lazada', 'tiktok', 'seller center', 'credentials', 'secrets', 'webhook', 'onboarding', 'partner', 'open platform'],
-    what: 'Bringing a marketplace shop online is four things in order: an approved developer app, server-side secrets, a verified ingress path, and a SKU-to-listing mapping. Only Shopee has an ingress path today; Lazada and TikTok Shop have no adapter, so they are operated entirely from their Seller Centers.',
+    what: 'Bringing a marketplace shop online is four things in order: an approved developer app, server-side secrets, a verified ingress path, and a SKU-to-listing mapping. Exact-shop means one specific shop account, for example one Shopee shop, never every shop on a marketplace. Only Shopee has an ingress path today; Lazada and TikTok Shop have no adapter, so they are operated entirely from their Seller Centers.',
     how: [
       'Register the K2 app on the marketplace open platform and record the exact shop ID for every K2 shop there, not just the first.',
       'Set the named secrets in Supabase function settings only. A marketplace key in a VITE_ variable is compiled into the public bundle and is a leak.',
@@ -120,7 +121,7 @@ const REFERENCE_TOPICS = [
   {
     id: 'channel-inventory-readiness', section: 'integrations', category: 'Channels', title: 'Before a channel can receive inventory',
     keywords: ['inventory', 'stock', 'oversell', 'allocation', 'channel source', 'listing', 'sync', 'master inventory', 'reservation'],
-    what: 'The receiving tables exist — channel listings map SKUs to external items, and the batch ledger holds custody and reservations. Two things must be settled before a connector writes real rows: one agreed spelling for each channel, and one rule for how two channels share the same stock.',
+    what: 'The receiving tables exist: channel listings map SKUs to external items, and the batch ledger holds custody and reservations. Two things must be settled before a connector writes real rows: one agreed spelling for each channel, and one rule for how two channels share the same stock.',
     how: [
       'Confirm the channel name used by the writer is the exact string the reader filters on. A mismatch returns an empty result, not an error.',
       'Confirm shop identity can be recorded on an order before the first marketplace order arrives; it cannot be inferred afterwards.',
@@ -132,7 +133,7 @@ const REFERENCE_TOPICS = [
     more: 'Master Inventory is the Philippines-wide sum of everything K2 holds, including stock physically held by shop staff. Allocating stock to a shop changes the holder, never the total.',
   },
   {
-    id: 'channel-social-messaging', section: 'integrations', category: 'Channels', title: 'Social and messaging channels — what is not connected',
+    id: 'channel-social-messaging', section: 'integrations', category: 'Channels', title: 'Social and messaging channels: what is not connected',
     keywords: ['facebook', 'messenger', 'instagram', 'whatsapp', 'viber', 'tiktok message', 'social', 'dm', 'not connected'],
     what: 'The unified inbox understands Messenger, Instagram, WhatsApp, Viber, and TikTok, and will display them correctly the moment rows exist. No adapter delivers messages into it. A customer messaging K2 on any of these platforms today reaches no K2 system.',
     how: [
@@ -250,13 +251,13 @@ export const TOPICS = Object.freeze([
 ])
 
 export const DAILY_FLOW = [
-  { title: 'Sign in securely', body: 'Use an invited staff account. Permissions remain server-enforced.', section: 'staff_permissions' },
-  { title: 'Check the Command center', body: 'Review verified activity and operational exception queues.', section: 'overview' },
-  { title: 'Clear alerts', body: 'Review expiring stock and work waiting for attention.', section: null },
-  { title: 'Receive arrived boxes', body: 'Select the exact flight and box, then independently scan each unit in Manila and reconcile differences.', section: 'consignment', more: 'Accepted inventory is finalized exactly once. Questionable units stay in an exception or quarantine path.' },
+  { title: 'Sign in securely', body: 'Sign in with your invited staff account. The server still checks what you may do.', section: 'staff_permissions' },
+  { title: 'Check the Command center', body: 'Open the Command center and handle what needs attention first.', section: 'overview' },
+  { title: 'Clear alerts', body: 'Look at stock about to expire and jobs waiting on you.', section: null },
+  { title: 'Receive arrived boxes', body: 'Select the exact flight and box, then independently scan each unit in Manila and reconcile differences.', section: 'consignment', more: 'You finalize accepted stock one single time. Units with problems stay in exceptions or quarantine.' },
   { title: 'Pack confirmed orders', body: 'Open the exact order first, then scan every physical unit and reconcile its expected lines.', section: 'omni_hub' },
-  { title: 'Review inventory risks', body: 'Work through out-of-stock, low-stock, expiry, and draft product exceptions.', section: 'inventory' },
-  { title: 'Review messages', body: 'Use persisted conversation records and verified external channels until channel messaging APIs are connected.', section: 'inbox' },
+  { title: 'Review inventory risks', body: 'Go through out-of-stock, low-stock, expiring, and draft items.', section: 'inventory' },
+  { title: 'Review messages', body: 'Read the saved conversations and use the channels that work until the chat apps connect.', section: 'inbox' },
   { title: 'Process Pasabuy cases', body: 'Keep request, quote, owner-selected price, purchase, shipment, receipt, and settlement facts separate.', section: 'pasabuy_manager' },
 ]
 

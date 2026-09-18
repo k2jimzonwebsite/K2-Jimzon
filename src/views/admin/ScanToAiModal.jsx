@@ -130,7 +130,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           {step === 'scan' && (
             <button
               onClick={() => setStep('manual')}
-              className="text-sm font-semibold text-white/50 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full transition-colors"
+              className="min-h-11 text-sm font-semibold text-white/50 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full transition-colors"
             >
               Type manually
             </button>
@@ -138,12 +138,12 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
           {step === 'manual' && (
             <button
               onClick={() => setStep('scan')}
-              className="text-sm font-semibold text-white/50 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full transition-colors"
+              className="min-h-11 text-sm font-semibold text-white/50 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full transition-colors"
             >
               Use camera
             </button>
           )}
-          <button onClick={onClose} aria-label="Close modal" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors">
+          <button onClick={onClose} aria-label="Close modal" className="flex min-h-11 min-w-11 items-center justify-center rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -256,7 +256,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
                   <span className="text-sm font-bold text-white/50 uppercase tracking-widest">Evidence-first prompt</span>
                   <span className="text-xs font-bold bg-blue/20 text-blue px-2 py-0.5 rounded-full border border-blue/30">Human review required</span>
                 </div>
-                <span className="text-xs font-bold bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">EDITABLE</span>
+                <span className="text-xs font-bold bg-white/10 text-white/60 px-2 py-0.5 rounded-full border border-white/20">EDITABLE</span>
               </div>
               <textarea
                 value={promptText}

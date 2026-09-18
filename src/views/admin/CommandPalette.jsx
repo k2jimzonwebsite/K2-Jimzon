@@ -146,6 +146,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenSc
               <input
                 ref={inputRef}
                 type="text"
+                aria-label="Search products or commands"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}

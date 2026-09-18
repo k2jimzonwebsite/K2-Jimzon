@@ -217,8 +217,8 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
       {/* Invite */}
       <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-3">
-          <InboxIcon size={19} className="text-gold" aria-hidden="true" />
-          <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Invite a staff member</h2>
+          <InboxIcon size={19} className="text-white/50" aria-hidden="true" />
+          <h2 className="text-sm font-bold uppercase tracking-wider text-white/70">Invite a staff member</h2>
         </div>
         {!invitationAvailable && <p role="status" className="mb-3 rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-sm text-amber">Invitations are unavailable until the reason-bound Edge receipt and server forwarding configuration are active. Existing access can still be reviewed.</p>}
         <form onSubmit={sendInvite} className="space-y-3">
@@ -247,8 +247,8 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
       {/* Delete PIN */}
       <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-1">
-          <ShieldIcon size={19} className="text-gold" aria-hidden="true" />
-          <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Your delete PIN</h2>
+          <ShieldIcon size={19} className="text-white/50" aria-hidden="true" />
+          <h2 className="text-sm font-bold uppercase tracking-wider text-white/70">Your delete PIN</h2>
           {hasPin !== null && (
             <span className={`ml-auto px-2 py-0.5 rounded-full text-xs font-bold border ${
               hasPin ? 'bg-forest/20 text-forest border-forest/40' : 'bg-amber/20 text-amber border-amber/40'
@@ -298,8 +298,8 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
       <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <UserIcon size={19} className="text-gold" aria-hidden="true" />
-            <h2 className="text-sm font-bold uppercase tracking-wider text-gold">People with access</h2>
+            <UserIcon size={19} className="text-white/50" aria-hidden="true" />
+            <h2 className="text-sm font-bold uppercase tracking-wider text-white/70">People with access</h2>
           </div>
           {!loading && <span className="text-xs text-white/40">{rows.length}</span>}
         </div>
@@ -359,8 +359,8 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
       {/* Your 2FA */}
       <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-1">
-          <CheckIcon size={19} className="text-gold" aria-hidden="true" />
-          <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Your two-factor security</h2>
+          <CheckIcon size={19} className="text-white/50" aria-hidden="true" />
+          <h2 className="text-sm font-bold uppercase tracking-wider text-white/70">Your two-factor security</h2>
           {mfaStatus !== 'checking' && (
             <span className={`ml-auto px-2 py-0.5 rounded-full text-xs font-bold border ${
               mfaStatus === 'verified'
@@ -499,8 +499,8 @@ function PaidAiSpendControls({ secure, isSuperAdmin, controls, status, onSaved, 
   const display = normalizeAiSpendControls(controls || {})
   return <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
     <div className="flex items-center gap-2 mb-1">
-      <ShieldIcon size={19} className="text-gold" aria-hidden="true" />
-      <h2 className="text-sm font-bold uppercase tracking-wider text-gold">Paid AI intake spending controls</h2>
+      <ShieldIcon size={19} className="text-white/50" aria-hidden="true" />
+      <h2 className="text-sm font-bold uppercase tracking-wider text-white/70">Paid AI intake spending controls</h2>
       <span className="ml-auto rounded-full border border-amber/40 bg-amber/15 px-2 py-0.5 text-xs font-bold text-amber">
         {status === 'available' && display.paidPathEnabled ? 'Enabled by SuperAdmin' : 'Fail-closed'}
       </span>
@@ -591,7 +591,7 @@ function MfaReplacementDialog({ onClose, onStart, onComplete, onSuccess }) {
         className="max-h-[92dvh] w-full overflow-y-auto rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-gold">Credential change</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-white/70">Credential change</p>
             <h2 id="mfa-replacement-title" className="mt-1 text-xl font-bold">Replace authenticator</h2>
             <p className="mt-2 text-sm leading-relaxed text-white/55">
               Keep your current authenticator until this replacement succeeds. The old factor is retired only after the new code verifies.
@@ -656,7 +656,7 @@ function RoleChangeDialog({ change, onCancel, onConfirm }) {
   return <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 sm:items-center sm:p-4" role="presentation">
     <AdminDialog onClose={onCancel} closeDisabled={busy} initialFocusRef={closeRef} labelledBy="role-change-title">
       <form onSubmit={async event => { event.preventDefault(); setBusy(true); await onConfirm(change.profile.id, change.role, reason.trim()); setBusy(false) }} className="w-full space-y-4 rounded-t-adm border border-adm-line bg-adm-surface p-5 text-white sm:max-w-md sm:rounded-adm">
-        <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-wider text-gold">Privilege change</p><h2 id="role-change-title" className="mt-1 text-xl font-bold">Change role to {change.role}</h2><p className="mt-2 break-all text-sm text-white/55">This changes Admin access for {label}. The database still protects the final Admin.</p></div><button ref={closeRef} type="button" onClick={onCancel} disabled={busy} aria-label="Close role change dialog" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line disabled:opacity-40">×</button></div>
+        <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-wider text-white/70">Privilege change</p><h2 id="role-change-title" className="mt-1 text-xl font-bold">Change role to {change.role}</h2><p className="mt-2 break-all text-sm text-white/55">This changes Admin access for {label}. The database still protects the final Admin.</p></div><button ref={closeRef} type="button" onClick={onCancel} disabled={busy} aria-label="Close role change dialog" className="grid h-11 w-11 shrink-0 place-items-center rounded-adm-sm border border-adm-line disabled:opacity-40">×</button></div>
         <label className="block text-sm font-semibold text-white/70">Reason for this access change<textarea required minLength={3} maxLength={500} value={reason} onChange={event => setReason(event.target.value)} className={`${inputCls} mt-1 min-h-24 resize-y`} /></label>
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" onClick={onCancel} disabled={busy} className="min-h-11 rounded-adm-sm border border-adm-line px-4 font-semibold disabled:opacity-40">Cancel</button><button type="submit" disabled={busy || reason.trim().length < 3} className="min-h-11 rounded-adm-sm bg-crimson px-4 font-bold text-white disabled:opacity-50">{busy ? 'Changing…' : `Change to ${change.role}`}</button></div>
       </form>

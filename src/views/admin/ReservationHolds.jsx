@@ -114,7 +114,7 @@ export default function ReservationHolds() {
         detail: overdue ? 'Stock still counted as held' : 'Nothing past its deadline',
       },
       {
-        label: 'Lapsing within 10 min',
+        label: 'Expiring within 10 min',
         value: String(rows.filter((r) => !r.is_overdue && Number(r.minutes_remaining) <= 10).length),
       },
       { label: 'Default hold', value: `${RESERVATION_POLICY.defaultHoldMinutes} min` },
@@ -170,9 +170,8 @@ export default function ReservationHolds() {
   return (
     <div className="space-y-5">
       <WorkspaceIntro
-        eyebrow="MAP-023"
         title="Stock holds"
-        description="A cart holds nothing. Clicking purchase holds the exact lots for 30 minutes. Confirmation deducts them; an expired hold returns them to the sellable pool."
+        description="A cart holds nothing. Tapping buy holds the exact lots for 30 minutes. Confirming takes them off the shelf. An expired hold goes back to the sellable pool."
         status={loadFailed || !data
           ? 'Hold status unavailable'
           : overdue ? `${overdue} overdue` : 'None overdue'}
@@ -201,7 +200,7 @@ export default function ReservationHolds() {
       <SectionHeading
         title="Active holds"
         count={rows.length}
-        description="Soonest to lapse first."
+        description="Soonest to expire first."
         action={
           <button type="button" className={primaryButton} onClick={runRelease} disabled={working || !overdue}>
             {working ? 'Working…' : `Release ${overdue} expired`}

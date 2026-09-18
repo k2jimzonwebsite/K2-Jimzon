@@ -225,7 +225,7 @@ function OrderImport({ shops, session, status, onStage, onResume, onAdvance, bus
   const blocked = Number(status?.conflicts || 0) > 0 || unresolved > 0
   return (
     <section className="space-y-4">
-      <SectionHeading title="4. Deduplicate and reconcile sales/order facts" description="Stage one customer-free order export for one exact shop. Exact duplicates remain evidence; changed payloads and unknown marketplace SKUs block progress." />
+      <SectionHeading title="4. Deduplicate and reconcile sales/order facts" description="Bring in one order export with names removed, for one exact shop. Exact duplicates stay as evidence. Changed data and unknown shop SKUs stop you here." />
       <StateBanner tone="info">Order facts are reconciliation evidence only. Staging them does not reserve, deduct, create, or reconcile canonical inventory.</StateBanner>
       {!status ? (
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
@@ -321,7 +321,7 @@ function FeeEstimate({ session, fees, onSave, onAdvance, busy, offline }) {
   }
   return (
     <section className="space-y-4">
-      <SectionHeading title="5. Calculate versioned marketplace fee estimates" description="Use one named, manually reviewed policy per exact shop. K2 derives the estimate only from accepted, linked, deduplicated order facts." />
+      <SectionHeading title="5. Calculate versioned marketplace fee estimates" description="Use one named policy per exact shop, reviewed by a person first. K2 computes the estimate only from accepted, linked, deduplicated order facts." />
       <StateBanner tone="warning">Estimated commission, payment charges, and withholding are planning evidence only. They are not provider settlement, official books, a tax filing, payout, or actual profit.</StateBanner>
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
         <form className="grid gap-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:grid-cols-2 sm:p-4" onSubmit={(event) => { event.preventDefault(); submit() }}>
@@ -392,7 +392,7 @@ function StockCount({ session, stock, onReview, onAdvance, busy, offline }) {
   if (!items.length) return <section className="space-y-3"><SectionHeading title="6. Compare expected stock with physical and canonical stock" description="No product aliases are ready for count review." /><StateBanner tone="warning">Resolve and link at least one exact marketplace product before counting. K2 will not invent a zero-stock product set.</StateBanner></section>
   return (
     <section className="space-y-4">
-      <SectionHeading title="6. Compare expected stock with physical and canonical stock" description="Count one exact canonical lot at a time. Marketplace observations and accepted sales remain context; neither is silently converted into physical inventory." />
+      <SectionHeading title="6. Compare expected stock with physical and canonical stock" description="Count one exact lot at a time. Shop observations and accepted sales stay context. Neither becomes physical stock silently." />
       <StateBanner tone="info">Marketplace-reported availability is observation only. Canonical lot quantity is the system expectation; the physical count is what you actually find.</StateBanner>
       <Field label="Product to count"><select className={fieldClass} value={productId} onChange={(event) => setProductId(event.target.value)} disabled={busy}>{items.map((entry) => <option key={entry.productId} value={entry.productId}>{entry.sku} · {entry.name}</option>)}</select></Field>
       {item && <>
@@ -445,7 +445,7 @@ function CoverageReview({ session, coverage, onOverride, onAdvance, busy, offlin
   })
   return (
     <section className="space-y-4">
-      <SectionHeading title="8. Review flexible per-shop coverage and low/zero warnings" description={`Target ${coverage?.targetPerShop || 2} eligible units per individual shop. Scarcity ranks verified sales unless the owner sets a reasoned priority, thin, or skip decision.`} />
+      <SectionHeading title="8. Review flexible per-shop coverage and low/zero warnings" description={`Aim for ${coverage?.targetPerShop || 2} sellable units per shop. When short, best-selling shops come first unless the owner picks a priority, thin, or skip decision with a reason.`} />
       <StateBanner tone="info">Proposal only. Provider write: No. Custody transfer: No. Actual movement still requires exact-lot transfer, approval, and receiver acceptance.</StateBanner>
       {Number(alerts.criticalMasterZero || 0) > 0 && <StateBanner tone="danger">Critical: {alerts.criticalMasterZero} product{alerts.criticalMasterZero === 1 ? '' : 's'} have zero canonical eligible Master Inventory.</StateBanner>}
       <MetricRail columns="sm:grid-cols-5" items={[
@@ -487,9 +487,9 @@ function PasabuyBoxing({ session, pasabuy, onReview, onAdvance, busy, offline })
   const labels = { ready: 'Ready', not_ready: 'Not ready', not_applicable: 'Not applicable' }
   return (
     <section className="space-y-4">
-      <SectionHeading title="9. Check customer-minimized Pasabuy boxing readiness" description="Review only the public request reference, item, quantity, and operational state needed for boxing. Customer identity stays in the canonical Pasabuy workspace." />
+      <SectionHeading title="9. Check customer-minimized Pasabuy boxing readiness" description="Check only the public reference, item, quantity, and state needed for boxing. Names stay in the Pasabuy workspace." />
       <StateBanner tone="info">Readiness only. Canonical Pasabuy status changed: No. Continue any quote, payment, or request-state work in the existing Pasabuy Manager.</StateBanner>
-      {requests.length === 0 ? <EmptyState title="No open Pasabuy requests in this close period" description="The server returned an explicit customer-minimized zero-result checkpoint; no boxing review rows are required." icon={CheckIcon} /> : (
+      {requests.length === 0 ? <EmptyState title="No open Pasabuy requests in this close period" description="Nothing to box right now." icon={CheckIcon} /> : (
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
           <div className="divide-y divide-adm-line overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
             {requests.map((request) => { const review = reviews.get(request.id); return <button type="button" key={request.id} onClick={() => setRequestId(request.id)} className={`flex min-h-[68px] w-full items-center justify-between gap-3 px-3 py-3 text-left sm:px-4 ${requestId === request.id ? 'bg-blue/10' : 'hover:bg-white/[0.025]'}`}><div className="min-w-0"><p className="truncate text-sm font-semibold text-white">{request.publicReference} · {request.itemTitle}</p><p className="mt-1 text-xs text-white/45">Quantity {request.quantity} · canonical state {String(request.status).replaceAll('_', ' ')}</p></div><StatusPill tone={review ? tones[review.readiness] : 'warning'}>{review ? labels[review.readiness] : 'Review'}</StatusPill></button> })}
@@ -525,7 +525,7 @@ function BookkeepingHandoff({ session, handoff, onComplete, busy, offline }) {
   }
   return (
     <section className="space-y-4">
-      <SectionHeading title="10. Prepare the customer-free bookkeeping handoff" description="The server derives one fixed-schema operational extract from the latest reviewed exact-shop imports, fee estimates, physical counts, coverage decisions, and Pasabuy readiness." />
+      <SectionHeading title="10. Prepare the customer-free bookkeeping handoff" description="The server builds one fixed extract from the reviewed imports, fees, counts, coverage, and Pasabuy readiness." />
       <StateBanner tone="warning">Estimate-only operational handoff. It is not official books, a tax filing, provider payout settlement, or actual profit.</StateBanner>
       {blockers.length > 0 && <div className="rounded-adm border border-crimson/30 bg-crimson/5 p-3 sm:p-4"><p className="text-sm font-semibold text-crimson">Close blockers</p><ul className="mt-2 space-y-1 text-xs text-white/65">{blockers.map((blocker) => <li key={blocker.code}>{String(blocker.code).replaceAll('_', ' ')} · {blocker.count}</li>)}</ul></div>}
       <MetricRail columns="sm:grid-cols-3" items={[
@@ -969,7 +969,7 @@ export default function OwnerCountClose() {
 
   return (
     <div data-tour="cycle-count-board" className="mx-auto max-w-[1600px] space-y-5 pb-12">
-      <WorkspaceIntro eyebrow="Owner operations" title="Owner Count & Close" description="Stage exact-shop exports, review product identity, then hand verified facts to the existing canonical sales, inventory, Pasabuy, and bookkeeping workflows." status={session ? `Saved · version ${session.version}` : 'Not started'} statusTone={session ? 'success' : 'neutral'} />
+      <WorkspaceIntro eyebrow="Owner operations" title="Owner Count & Close" description="Bring in one shop export at a time, review product identity, then hand checked facts to sales, inventory, Pasabuy, and bookkeeping." status={session ? `Saved · version ${session.version}` : 'Not started'} statusTone={session ? 'success' : 'neutral'} />
       <StepRail currentStep={currentStep} />
       {!secure && <StateBanner tone="warning">This workflow is prepared only for the secure Admin BFF. No import or close action is available in the legacy browser database path.</StateBanner>}
       {offline && <StateBanner tone="warning" role="alert">Offline. Saved evidence remains on the server, but imports and decisions are blocked until this device reconnects.</StateBanner>}

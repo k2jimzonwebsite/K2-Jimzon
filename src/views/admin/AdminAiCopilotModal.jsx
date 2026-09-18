@@ -58,11 +58,11 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-adm-sm border border-blue/30 bg-blue/10 text-blue"><BookIcon size={18} /></span>
             <div>
               <h2 id="operations-guide-title" className="text-base font-semibold">K2 operations guide</h2>
-              <p className="mt-0.5 text-xs text-white/50">Grounded retrieval from the K2 rulebook—not a live external AI</p>
+              <p className="mt-0.5 text-xs text-white/50">Grounded retrieval from the K2 rulebook (not a live external AI)</p>
               <p className="mt-1 text-xs font-semibold text-amber">{STAFF_GUIDE_META.approvalStatus} · {STAFF_GUIDE_META.version}</p>
             </div>
           </div>
-          <button onClick={onClose} aria-label="Close operations guide" className="flex h-10 w-10 items-center justify-center rounded-adm-sm text-white/50 hover:bg-white/5 hover:text-white"><XIcon size={18} /></button>
+          <button onClick={onClose} aria-label="Close operations guide" className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm text-white/50 hover:bg-white/5 hover:text-white"><XIcon size={18} /></button>
         </header>
 
         <div className="flex shrink-0 gap-2 overflow-x-auto border-b border-adm-line bg-adm-sunken/50 p-3 scrollbar-none">
@@ -116,10 +116,10 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
                           <p><span className="font-semibold text-white/80">Validations / blockers:</span> {topic.procedure.validationsAndBlockers.join(' · ')}</p>
                           <p><span className="font-semibold text-white/80">Forbidden shortcuts:</span> {topic.procedure.forbiddenShortcuts.join(' · ')}</p>
                           <p><span className="font-semibold text-white/80">Failure / recovery:</span> {topic.procedure.recovery.join(' · ')}</p>
-                          {topic.procedure.blocker && <p className="rounded-adm-sm border border-red-500/25 bg-red-500/10 p-2 text-red-200"><span className="font-semibold">Unavailable:</span> {topic.procedure.blocker}</p>}
+                          {topic.procedure.blocker && <p className="rounded-adm-sm border border-crimson/40 bg-crimson/10 p-2 text-crimson"><span className="font-semibold">Unavailable:</span> {topic.procedure.blocker}</p>}
                         </div>
                       )}
-                      {topic.more && <p className="mt-3 border-l-2 border-amber/40 pl-3 text-xs leading-relaxed text-white/50">{topic.more}</p>}
+                      {topic.more && <p className="mt-3 border-l-2 border-white/20 pl-3 text-xs leading-relaxed text-white/50">{topic.more}</p>}
                       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-adm-line pt-3">
                         <span className="text-xs text-white/35">Source: {topic.source}</span>
                         {topic.section && <button onClick={() => jump(topic.section)} className="min-h-11 rounded-adm-sm bg-blue px-3 text-xs font-semibold text-white hover:bg-blue-deep">Open workspace →</button>}
@@ -128,7 +128,7 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
                   ))}
                 </div>
               ) : (
-                <p className="rounded-adm-sm border border-amber/25 bg-amber/10 p-3 text-sm leading-relaxed text-amber">{message.text}</p>
+                <p className="rounded-adm-sm border border-adm-line bg-white/[0.04] p-3 text-sm leading-relaxed text-white/70">{message.text}</p>
               )}
             </div>
           ))}

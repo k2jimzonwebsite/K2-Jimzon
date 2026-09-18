@@ -135,7 +135,7 @@ export default function Wholesale() {
       `Target items: ${formData.targetItems.trim() || 'Not specified'}`,
       `Notes: ${formData.notes.trim() || 'None'}`,
     ].join('\n')
-    window.location.href = `mailto:${WHOLESALE_EMAIL}?subject=${encodeURIComponent(`Wholesale inquiry — ${receipt.organization}`)}&body=${encodeURIComponent(body)}`
+    window.location.href = `mailto:${WHOLESALE_EMAIL}?subject=${encodeURIComponent(`Wholesale inquiry: ${receipt.organization}`)}&body=${encodeURIComponent(body)}`
     setSubmitting(false)
     setSubmittedReceipt({...receipt,recorded:false})
   }

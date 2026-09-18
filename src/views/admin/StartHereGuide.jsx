@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from 'react'
+import { useBodyScrollLock } from '../../components/ui/useBodyScrollLock'
 import { DAILY_FLOW } from './adminGuide'
 
 const WorkflowGuideModal = lazy(() => import('../../components/admin/guides/WorkflowGuideModal'))
@@ -8,6 +9,7 @@ const WorkflowGuideModal = lazy(() => import('../../components/admin/guides/Work
 export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOperationsGuide }) {
   const [open, setOpen] = useState({})
   const [guideModalTab, setGuideModalTab] = useState(null)
+  useBodyScrollLock(isOpen)
 
   if (!isOpen) return null
 
@@ -30,7 +32,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOper
           </div>
 
           {/* Quick Visual Guide Banner */}
-          <div className="border-b border-white/10 bg-gradient-to-r from-sky-500/10 via-amber-500/10 to-emerald-500/10 px-6 py-3">
+          <div className="border-b border-adm-line bg-adm-sunken px-6 py-3">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-xs text-white/80">
                 <span className="text-sm">🗺️</span>
@@ -38,7 +40,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOper
               </div>
               <button
                 onClick={() => setGuideModalTab('master_graph')}
-                className="shrink-0 rounded-md border border-sky-500/30 bg-sky-500/15 px-2.5 py-1 text-xs font-bold text-sky-400 hover:bg-sky-500/25 cursor-pointer"
+                className="shrink-0 rounded-md border border-adm-line bg-white/[0.04] px-2.5 py-1 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
               >
                 Open SVG Map →
               </button>
@@ -78,7 +80,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOper
                       {s.section === 'consignment' && (
                         <button
                           onClick={() => setGuideModalTab('flights')}
-                          className="shrink-0 rounded-adm-sm border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-xs font-bold text-sky-400 hover:bg-sky-500/20 cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.04] px-2 py-1 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
                         >
                           Diagram 🗺️
                         </button>
@@ -86,7 +88,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOper
                       {s.section === 'inventory' && (
                         <button
                           onClick={() => setGuideModalTab('custody')}
-                          className="shrink-0 rounded-adm-sm border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-xs font-bold text-amber-400 hover:bg-amber-500/20 cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.04] px-2 py-1 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
                         >
                           Diagram 🗺️
                         </button>
@@ -94,7 +96,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOper
                       {s.section === 'omni_hub' && (
                         <button
                           onClick={() => setGuideModalTab('fulfillment')}
-                          className="shrink-0 rounded-adm-sm border border-purple-500/20 bg-purple-500/10 px-2 py-1 text-xs font-bold text-purple-400 hover:bg-purple-500/20 cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.04] px-2 py-1 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
                         >
                           Diagram 🗺️
                         </button>

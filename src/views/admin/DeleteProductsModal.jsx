@@ -131,7 +131,7 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
 
     if (!supabase) {
       setBusy(false)
-      return setError('No database connection — cannot delete.')
+      return setError('No database connection: cannot delete.')
     }
 
     const { data, error: rpcError } = await supabase.rpc('delete_products_with_pin_v2', {
@@ -213,8 +213,8 @@ export default function DeleteProductsModal({ products = [], onClose, onDeleted 
           )}
 
           {error && (
-            <div className="rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm text-crimson font-semibold leading-snug">
-              ⚠️ {error}
+            <div role="alert" className="rounded-adm-sm border border-crimson/40 bg-crimson/10 p-3 text-sm text-crimson font-semibold leading-snug">
+              {error}
             </div>
           )}
 

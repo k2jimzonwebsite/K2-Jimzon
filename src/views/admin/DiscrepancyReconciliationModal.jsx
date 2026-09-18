@@ -71,13 +71,13 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
             <table className="w-full text-left text-sm border-collapse min-w-[500px]">
             <thead>
               <tr className="border-b border-adm-line text-white/60 uppercase tracking-wider font-mono">
-                <th className="py-2.5 px-3">SKU & Item Details</th>
-                <th className="py-2.5 px-3 text-center">Batch Code</th>
-                <th className="py-2.5 px-3 text-center">Best Before</th>
-                <th className="py-2.5 px-3 text-center">Italy Packed</th>
-                <th className="py-2.5 px-3 text-center">Manila Scanned</th>
-                <th className="py-2.5 px-3 text-center">Variance</th>
-                <th className="py-2.5 px-3 text-right">Status</th>
+                <th scope="col" className="py-2.5 px-3">SKU & Item Details</th>
+                <th scope="col" className="py-2.5 px-3 text-center">Batch Code</th>
+                <th scope="col" className="py-2.5 px-3 text-center">Best Before</th>
+                <th scope="col" className="py-2.5 px-3 text-center">Italy Packed</th>
+                <th scope="col" className="py-2.5 px-3 text-center">Manila Scanned</th>
+                <th scope="col" className="py-2.5 px-3 text-center">Variance</th>
+                <th scope="col" className="py-2.5 px-3 text-right">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">

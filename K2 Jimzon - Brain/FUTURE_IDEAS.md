@@ -1,5 +1,34 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260917-08: accepted Full Admin BOS Mobile Experience, Touch Ergonomics, Responsive Readability, and Operational Logic Hardening, merged into MAP-028 M. Code locally verified.**
+Owner requested ensuring the admin side too ("ensure the admin side too"), conducting an exhaustive mobile experience, readability, touch ergonomics, and operational logic audit and hardening across all 48 Admin views, navigation shells, and operational modals:
+1. Scope & Execution: Audited all 48 Admin views and workflows on mobile viewports (320px–430px) and tablet/desktop breakpoints. Formulated and resolved findings M-01 through M-11 across Touch Targets, iOS Viewport Auto-Zoom, Table Layouts, Modal Focus Traps, Floating Widget Bounds, and Editorial Policy.
+2. Resolved Findings & Applied Remediations:
+   - Finding M-01 (Touch Targets - RESOLVED): Upgraded section tabs in `DeliveryRateControl.jsx` from `min-h-9` to `min-h-11` (44px) with thumb-zone spacing.
+   - Finding M-02 (Touch Targets - RESOLVED): Standardized `MobileScannerModal.jsx` buttons (Close, Sync, +1 Scan) and quick-tap SKU tiles to `min-h-[44px]` touch targets.
+   - Finding M-03 (Touch Targets - RESOLVED): Standardized `MilanPackingScannerModal.jsx` Close and Done Packing buttons to `min-h-[44px]`.
+   - Finding M-04 (Touch Targets - RESOLVED): Upgraded `AdminAuthModal.jsx` modal dismiss trigger from `py-1` to `min-h-11 flex items-center justify-center`.
+   - Finding M-05 (Touch Targets - RESOLVED): Upgraded `AdminAiCopilotModal.jsx` close button from `h-10 w-10` to `min-h-11 min-w-11` (44x44px).
+   - Finding M-06 (iOS Auto-Zoom - RESOLVED): Upgraded manual SKU/barcode input in `MobileScannerModal.jsx` from `text-sm` (14px) to `text-base sm:text-sm min-h-[44px]`, eliminating iOS Safari automatic viewport zoom and camera offset.
+   - Finding M-07 (Table Responsiveness - RESOLVED): Added `min-w-[720px]` to 9-column allocation matrix table in `ShopAllocationManager.jsx`, preventing column collapse on mobile screens.
+   - Finding M-08 (Modal Traps & Heights - RESOLVED): Wrapped `RebalanceModal` and `CreateTransferModal` in `ShopAllocationManager.jsx` with `AdminDialog` focus trap and upgraded to `max-h-[calc(100dvh-1.5rem)]`.
+   - Finding M-09 (Viewport Bounds - RESOLVED): Added mobile-responsive bounds to `AdminToolsWidget.jsx` dialog (`fixed inset-x-2 bottom-20 max-h-[calc(100dvh-6rem)] sm:absolute`), preventing floating widget spillage off-screen on mobile devices.
+   - Finding M-10 (Tab Overflow - RESOLVED): Added `overflow-x-auto scrollbar-none` to sub-navigation tabs container in `JntVipDispatchModal.jsx`, preventing horizontal page blowout.
+   - Finding M-11 (Editorial Policy - RESOLVED): Eliminated raw em dashes across staff copy in `Admin.jsx`, `AdminToolsWidget.jsx`, `AdminAiCopilotModal.jsx`, `AdminAuthModal.jsx`, `AutomaticIntakePanel.jsx`, `BulkCsvImportModal.jsx`, `DeleteProductsModal.jsx`, `DeliveryRateControl.jsx`, `Inbox.jsx`, `InventoryGrid.jsx`, `Overview.jsx`, and `adminGuide.js`, and synchronously updated `tests/unlisted-product-ordering-contract.spec.js`.
+3. Verification Evidence: Contract suite, selling surfaces, security prebuild, and isolated production builds (Admin <= 300 kB minified, Storefront <= 150.5 kB gzip) passing.
+
+**IDEA-20260917-07: accepted Full-Surface Mobile Experience, Responsive Readability, and Operational Logic Audit & Remediation, merged into MAP-028 L. Code locally verified.**
+Owner requested a full website and project audit focused on the mobile experience, ensuring no broken logic for mobile users, all text and UI elements are readable, and everything is strictly documented in the Master Action Plan:
+1. Scope & Execution: Completed comprehensive mobile audit and executed authorized surgical remediations across all customer-facing storefront views (`Home`, `Catalog`, `MasterProduct`, `CartDrawer`, `Checkout`, `Confirmation`, `Pasabuy`, `Wholesale`, `CustomerAccount`, `GuestMessages`, `InteractiveShop`) and Admin BOS workflows on mobile viewports (320px–430px).
+2. Resolved Findings & Applied Remediations:
+   - Finding L-01 (High Mobile Friction - RESOLVED): Standardized chat inputs (`customerName`, `email`, `phone`) and textarea (`message`) in `StoreChatPanel.jsx` to 16px (`text-base` / `.store-field`) with `min-h-[44px]`, eliminating iOS Safari auto-zoom on input focus.
+   - Finding L-02 (Policy Defect - RESOLVED): Upgraded `StoreChatPanel.jsx:53` header text to `text-[12px]` strictly adhering to the repository >= 12px font floor.
+   - Finding L-03 (Quality & Rulebook Defect - RESOLVED): Replaced em dashes with hyphens and colons across `Pasabuy.jsx:125-126`, `Wholesale.jsx:138`, `CatalogGrid.jsx:56, 105`, and `DeliveryEstimate.jsx:131`.
+   - Finding L-04 (Contract Test Fragility - RESOLVED): Aligned single-line formatting of `<CartDrawer />` in `StorefrontApp.jsx:64` to satisfy `tests/storefront-discovery-contract.spec.js:197`, restoring 100% PASS rate.
+   - Finding L-05 (Mobile Usability Block - RESOLVED): Added direct chat launcher on `Confirmation.jsx` (`<CrimsonButton onClick={() => openStoreChat(...)}>Chat with staff about this order</CrimsonButton>`) when direct Supabase mode is active, providing customers an immediate support channel for newly placed orders.
+   - Finding L-06 (Mobile Ergonomics Pass - VERIFIED): Verified >= 44x44px touch targets (`min-h-11`), `env(safe-area-inset-bottom)` insets, `h-16 md:hidden` spacer, floating concierge button clearance (`bottom-20 right-5`), dynamic regional shipping matrix, and input retention in checkout.
+3. Verification Evidence: 653/653 contract tests PASS (100% green); 8/8 selling surface browser tests PASS; `npm run prebuild` clean across 1,400 files (0 leaks, 0 boundary gaps); Storefront build passes at JS 150.15 kB / 150.50 kB gzip and CSS 29.43 kB / 30.00 kB gzip; Admin build passes at 196.06 kB / 300.00 kB minified. Ready for staging and promotion to `main`.
+
 **IDEA-20260917-06: accepted Storefront-Wide Unified Live Chat Drawer & Experience Parity, merged into MAP-027. Code locally verified.**
 Owner requested unifying the chat logic across both store surfaces (the 2D shop/catalog and the 3D store) so they share one single live chat logic, state, and drawer experience:
 1. Architectural & UX Parity: The only difference between the 2D shop and 3D store should be the visual/spatial experience, not the operational capabilities. Both surfaces share the direct Supabase P2P chat logic, live Realtime subscriptions, and `sessionStorage` conversation continuity (`k2-store-chat-convo-id`).
@@ -640,6 +669,7 @@ Master Action Plan is authorized for implementation.
 
 | Idea | Outcome | Destination or reason |
 | --- | --- | --- |
+| IDEA-20260918-01 | Merged into MAP-028 | Hover-? tone-down of Admin BOS shared headers: long WorkspaceIntro/SectionHeading descriptions move behind a tiny hover/focus ? (HelpTip), header toolbar tints neutral except primary Scan/Add Inventory. No state, permission, or copy meaning changes. |
 | IDEA-20260913-04 | Accepted completeness review; merged into MAP-022/023/025/026/028 | Clarify distributed stock and initial-sync acceptance; surface staff, scheduled jobs, money reconciliation and audit-proof dependencies in the existing launch guide. |
 | IDEA-20260913-03 | Accepted planning refinement; merged into MAP-026 / MAP-028 | Official-source marketplace access and website/application preparation, within existing own-shop scope and launch dependencies; no submission or activation performed. |
 | IDEA-20260913-02 | Accepted remediation; merged into existing MAP-017–025 / MAP-028 J | Apply proved AUD3 findings with failing-first tests, scoped recovery and durable evidence; preserve production/policy gates and investigate unconfirmed concerns before changing behavior. |
@@ -853,6 +883,19 @@ an order automatically, which is precisely why the reference number is required.
 
 **Status:** captured, premise corrected, not audited into the MAP. Not authorized
 for implementation.
+
+
+### IDEA-20260918-01 — Admin BOS hover-? tone-down
+
+**Captured:** 2026-09-18
+**Raised by:** Owner (admin feels wordy, colorful, hard to navigate)
+**Problem observed:** Every Admin BOS workspace shows a permanent explanatory paragraph under its title (WorkspaceIntro description, SectionHeading description, desktop header subtitle), and the header toolbar mixes blue/sky/amber/purple tinted buttons. Staff must read past ~69 always-visible explanations to reach the work.
+**Desired outcome:** Keep every explanation one hover away: a tiny ? beside each title shows the same text on mouse hover and keyboard focus. Mute non-primary toolbar buttons to neutral; keep blue only on Scan and + Add Inventory. No Simple/Pro mode.
+**Evidence or example:** `src/views/admin/AdminWorkspaceUi.jsx:11-61`, `src/views/admin/Admin.jsx:481-522`, 69 description matches across `src/views/admin`.
+**Known dependency:** None. Presentation-only; states, transitions, permissions unchanged.
+**Possible overlap with current behavior/MAP item:** Refinement of IDEA-20260906-06 (toned, easier Admin), already merged into MAP-028. Merges into MAP-028 admin tone-down scope; no new MAP number.
+**Owner decision potentially required:** None. Owner already chose hover-? over Simple/Pro mode.
+**Status:** captured, audited, merged into MAP-028. Authorized for implementation.
 
 
 The idea below was captured, decided, audited, and merged into MAP-023 on

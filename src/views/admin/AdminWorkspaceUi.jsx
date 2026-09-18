@@ -1,4 +1,5 @@
 import { AlertIcon, CheckIcon, ClockIcon, InboxIcon } from '../../components/ui/icons'
+import HelpTip from './HelpTip'
 
 const TONES = {
   neutral: 'border-white/12 bg-white/[0.045] text-white/60',
@@ -13,9 +14,11 @@ export function WorkspaceIntro({ eyebrow, title, description, status, statusTone
     <header className="border-b border-adm-line pb-5">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div className="min-w-0">
-          {eyebrow && <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue">{eyebrow}</p>}
-          <h2 className="mt-1 text-xl font-semibold tracking-[-0.02em] text-white sm:text-2xl">{title}</h2>
-          {description && <p className="mt-1.5 max-w-3xl text-sm leading-relaxed text-white/50">{description}</p>}
+          {eyebrow && <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/45">{eyebrow}</p>}
+          <div className="mt-1 flex items-center gap-2">
+            <h2 className="text-xl font-semibold tracking-[-0.02em] text-white sm:text-2xl">{title}</h2>
+            <HelpTip label={title} text={description} />
+          </div>
         </div>
         {(status || actions) && (
           <div className="flex shrink-0 flex-wrap items-center gap-2">
@@ -52,8 +55,8 @@ export function SectionHeading({ title, description, count, action }) {
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-semibold text-white">{title}</h3>
           {count !== undefined && <span className="font-mono text-xs text-white/40">{count}</span>}
+          <HelpTip label={title} text={description} />
         </div>
-        {description && <p className="mt-1 text-xs leading-relaxed text-white/45">{description}</p>}
       </div>
       {action}
     </div>

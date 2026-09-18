@@ -122,7 +122,7 @@ export default function ChannelIntegrations({ secureMode }) {
           }`}
         >
           <GlobeIcon size={16} />
-          <span>Channel readiness & connectors</span>
+          <span>Readiness</span>
         </button>
         <button
           onClick={() => setSubTab('allocations')}
@@ -133,7 +133,7 @@ export default function ChannelIntegrations({ secureMode }) {
           }`}
         >
           <BoxIcon size={16} />
-          <span>Multi-shop stock allocation & custody</span>
+          <span>Stock allocation</span>
         </button>
       </nav>
 
@@ -144,7 +144,7 @@ export default function ChannelIntegrations({ secureMode }) {
           <WorkspaceIntro
             eyebrow="Multichannel control"
             title="Channel readiness board"
-            description="One product master feeds the Website, Shopee, TikTok Shop, and Lazada. Pasabuy remains a request-and-quote channel. Operational means a real event was reconciled; it is never a manual test toggle."
+            description="One product list feeds the Website, Shopee, TikTok Shop, and Lazada. Pasabuy stays request-and-quote. A channel counts as live only after a real recorded event. A manual test switch does not count."
             status={loading ? 'Checking channel evidence' : `${liveCount} of ${CHANNELS.length} operational`}
             statusTone={liveCount === CHANNELS.length ? 'success' : 'warning'}
           />
@@ -161,7 +161,7 @@ export default function ChannelIntegrations({ secureMode }) {
           {!secure && <StateBanner tone="warning">Transitional staff database path. The signed channel boundary remains inactive until coordinated cutover.</StateBanner>}
 
           <section data-tour="channel-connectors" className="space-y-3">
-            <SectionHeading title="Channel evidence and next action" description="Connection truth, catalog preparation, and the next safe operational step for each income channel." count={CHANNELS.length} />
+            <SectionHeading title="Channel evidence and next action" description="What each channel proved, how ready its catalog is, and the next safe step." count={CHANNELS.length} />
             <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
               <div className="hidden grid-cols-[minmax(220px,1.4fr)_130px_minmax(220px,1fr)_220px] gap-4 border-b border-adm-line bg-white/[0.025] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.09em] text-white/35 lg:grid">
                 <span>Channel</span><span>State</span><span>Catalog evidence</span><span className="text-right">Next action</span>

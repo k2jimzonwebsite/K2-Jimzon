@@ -120,12 +120,16 @@ export default function JntVipDispatchModal({
     setTrackingError('')
     setIsSaving(true)
     try {
-      await onSaveWaybill({
+      const result = await onSaveWaybill({
         orderId: order.id,
         trackingNumber: validation.normalized,
         courierName: 'J&T Express',
         deliveryStatus: 'handed_over',
       })
+      if (result && result.ok === false) {
+        setTrackingError(result.error || 'Failed to save tracking number')
+        return
+      }
       onClose()
     } catch (err) {
       setTrackingError(err.message || 'Failed to save tracking number')
@@ -171,12 +175,12 @@ export default function JntVipDispatchModal({
           </div>
 
           {/* Sub-Navigation Tabs */}
-          <div className="mt-4 flex border-b border-adm-line">
+          <div className="mt-4 flex overflow-x-auto scrollbar-none border-b border-adm-line">
             {order && (
               <button
                 type="button"
                 onClick={() => setActiveTab('single')}
-                className={`flex min-h-11 items-center gap-2 border-b-2 px-4 text-xs font-semibold uppercase tracking-wider transition-colors ${
+                className={`flex shrink-0 min-h-11 items-center gap-2 border-b-2 px-4 text-xs font-semibold uppercase tracking-wider transition-colors ${
                   activeTab === 'single'
                     ? 'border-blue text-white'
                     : 'border-transparent text-white/50 hover:text-white'
@@ -189,7 +193,7 @@ export default function JntVipDispatchModal({
             <button
               type="button"
               onClick={() => setActiveTab('bulk')}
-              className={`flex min-h-11 items-center gap-2 border-b-2 px-4 text-xs font-semibold uppercase tracking-wider transition-colors ${
+              className={`flex shrink-0 min-h-11 items-center gap-2 border-b-2 px-4 text-xs font-semibold uppercase tracking-wider transition-colors ${
                 activeTab === 'bulk'
                   ? 'border-blue text-white'
                   : 'border-transparent text-white/50 hover:text-white'
@@ -328,7 +332,7 @@ export default function JntVipDispatchModal({
                       </div>
 
                       <div className="rounded border border-white/10 bg-white/[0.02] p-3 text-xs text-white/70 space-y-1.5">
-                        <p className="font-semibold text-white">Instructions for Staff / Sister:</p>
+                        <p className="font-semibold text-white">Instructions for Staff / Manila receiver:</p>
                         <p>1. Click the blue copy button above to copy recipient tokens to your clipboard.</p>
                         <p>2. In your J&T VIP tab (<strong>My Order &gt; Create Waybill</strong>), click inside the address auto-recognition box.</p>
                         <p>3. Press <strong>Ctrl + V</strong> (or tap Paste). Receiver Name, Phone, Province, City, and Barangay will fill automatically.</p>
@@ -429,7 +433,7 @@ export default function JntVipDispatchModal({
                       </div>
 
                       <div className="rounded border border-white/10 bg-white/[0.02] p-3 text-xs text-white/70 space-y-1">
-                        <p className="font-semibold text-white">Directive for Staff / Sister:</p>
+                        <p className="font-semibold text-white">Directive for Staff / Manila receiver:</p>
                         <p>After pasting these fields in J&T VIP, click the red <strong>Order</strong> button at the bottom of J&T VIP to generate and print the waybill.</p>
                       </div>
 
@@ -579,7 +583,7 @@ export default function JntVipDispatchModal({
                           <button
                             type="button"
                             onClick={() => copyToClipboard(singleDetails.itemWeight, 'weight')}
-                            className="text-xs text-blue hover:underline"
+                            className="min-h-11 min-w-11 px-2 text-xs font-semibold text-blue hover:underline"
                           >
                             {copiedKey === 'weight' ? 'Copied' : 'Copy'}
                           </button>
@@ -595,7 +599,7 @@ export default function JntVipDispatchModal({
                           <button
                             type="button"
                             onClick={() => copyToClipboard(singleDetails.itemValue, 'value')}
-                            className="text-xs text-blue hover:underline"
+                            className="min-h-11 min-w-11 px-2 text-xs font-semibold text-blue hover:underline"
                           >
                             {copiedKey === 'value' ? 'Copied' : 'Copy'}
                           </button>
@@ -611,7 +615,7 @@ export default function JntVipDispatchModal({
                           <button
                             type="button"
                             onClick={() => copyToClipboard(singleDetails.codAmount, 'cod')}
-                            className="text-xs text-blue hover:underline"
+                            className="min-h-11 min-w-11 px-2 text-xs font-semibold text-blue hover:underline"
                           >
                             {copiedKey === 'cod' ? 'Copied' : 'Copy'}
                           </button>

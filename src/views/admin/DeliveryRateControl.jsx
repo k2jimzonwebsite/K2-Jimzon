@@ -290,9 +290,8 @@ export default function DeliveryRateControl() {
   return (
     <div className="space-y-5">
       <WorkspaceIntro
-        eyebrow="MAP-023"
         title="Delivery rates & couriers"
-        description="The owner-approved controlled pilot. A fee is only ever produced for an exact approved locality with a current, complete, approved cost on every selectable courier. Everything else routes to a manual courier quote — no regional fallback exists."
+        description="The owner-approved delivery test. A fee appears only for an exact approved place with a current, complete, approved cost on every courier you can pick. Everything else goes to a manual courier quote. There is no regional fallback."
         status={secure ? 'Signed admin commands' : 'BFF required'}
         statusTone={secure ? 'success' : 'danger'}
         actions={
@@ -317,7 +316,7 @@ export default function DeliveryRateControl() {
             aria-selected={tab === id}
             onClick={() => setTab(id)}
             className={
-              'adm-btn min-h-9 px-3 text-sm transition-[background-color,color] duration-150 ' +
+              'adm-btn min-h-11 px-3.5 text-sm transition-[background-color,color] duration-150 ' +
               (tab === id
                 ? 'bg-blue/12 font-semibold text-white'
                 : 'text-white/50 hover:bg-white/[0.04] hover:text-white')
@@ -333,7 +332,7 @@ export default function DeliveryRateControl() {
         <section className="space-y-4">
           <SectionHeading
             title="Quote tester"
-            description="Resolve one order the way the storefront will. Nothing is saved and no customer is charged until you communicate the result."
+            description="Try one order the way the storefront prices it. Nothing is saved and no customer is charged."
           />
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
             <div className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-4">
@@ -362,7 +361,7 @@ export default function DeliveryRateControl() {
                     <option value="">Select an approved locality…</option>
                     {quotableLocalities.map((rule) => (
                       <option key={rule.localityId} value={rule.localityId}>
-                        {rule.cityMunicipality} — {rule.barangay}
+                        {rule.cityMunicipality} / {rule.barangay}
                       </option>
                     ))}
                   </select>
@@ -394,7 +393,7 @@ export default function DeliveryRateControl() {
 
               <fieldset className="rounded-adm-sm border border-adm-line p-3">
                 <legend className="px-1 text-xs font-semibold uppercase tracking-[0.08em] text-white/40">
-                  Exceptions — each must be answered
+                  Exceptions: answer each one below
                 </legend>
                 <div className="grid gap-2 sm:grid-cols-3">
                   {[
@@ -558,7 +557,7 @@ export default function DeliveryRateControl() {
               {(tables?.costRows || []).map((row) => {
                 const rule = (tables.localityRules || []).find((l) => l.localityId === row.localityId)
                 const option = (tables.courierOptions || []).find((o) => o.optionId === row.optionId)
-                const localityLabel = rule ? `${rule.cityMunicipality} — ${rule.barangay}` : row.localityId
+                const localityLabel = rule ? `${rule.cityMunicipality} / ${rule.barangay}` : row.localityId
                 const optionLabel = option ? `${option.providerName} ${option.serviceName}` : row.optionId
                 const live = row.status === 'ACTIVE_APPROVED' && !row.effectiveTo
                 return (
@@ -618,7 +617,7 @@ export default function DeliveryRateControl() {
           <SectionHeading
             title="Courier options"
             count={(tables?.courierOptions || []).length}
-            description="The list K2 quotes against. The fee charged is the highest cost across every selectable courier on the route, so making one selectable without a current cost for a route removes automatic quoting there rather than under-charging."
+            description="The list K2 quotes from. The fee charged is the highest cost among the couriers you can pick on that route. A courier with no current cost on a route stops automatic quoting there instead of undercharging."
           />
           <StateBanner tone="info">
             Adding a courier here does not book anything. Booking, waybills, and tracking remain manual until a provider account and its fee schedule are supplied.
@@ -685,7 +684,7 @@ export default function DeliveryRateControl() {
           <SectionHeading
             title="Destinations"
             count={(tables?.localityRules || []).length}
-            description="Only an exact approved locality can price an order. Macro-area values are recorded for planning and can never be quoted."
+            description="Only an exact approved place can price an order. Wider-area values are for planning only and are never quoted."
           />
           <DataTable
             caption="Locality rules"

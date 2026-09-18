@@ -61,11 +61,9 @@ function StorefrontShell() {
       </ErrorBoundary>
       {showStorefrontChrome && (
         <>
-          {cartOpen && (
-            <Suspense fallback={null}>
-              <CartDrawer />
-            </Suspense>
-          )}
+          {cartOpen && <Suspense fallback={null}>
+            <CartDrawer />
+          </Suspense>}
           {chatOpen && (
             <Suspense fallback={null}>
               <StoreChatDrawer />

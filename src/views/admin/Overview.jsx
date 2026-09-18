@@ -28,6 +28,7 @@ import {
 } from '../../components/ui/icons'
 
 import { DASHBOARD_WIDGETS } from './dashboardWidgets'
+import HelpTip from './HelpTip'
 
 const RANGE_OPTIONS = [7, 30, 90]
 const SALES_RECORD_FILTERS = [
@@ -40,6 +41,11 @@ const SALES_RECORD_FILTERS = [
   { id: 'other', label: 'Neither exact state' },
 ]
 const SALES_RECORD_LIMIT = 25
+const MONEY_LENSES = [
+  { id: 'metrics', label: 'Channels' },
+  { id: 'sales', label: 'Sales' },
+  { id: 'revenue', label: 'Revenue' },
+]
 const ACTIVE_PASABUY = new Set([
   'request_received', 'researching', 'quoted', 'approved', 'purchasing',
   'purchased', 'in_transit', 'arrived',
@@ -209,8 +215,10 @@ function PanelHeading({ icon: Icon, title, description, action }) {
           <Icon size={17} />
         </span>
         <div className="min-w-0">
-          <h3 className="text-sm font-semibold text-white">{title}</h3>
-          <p className="mt-0.5 text-xs leading-relaxed text-white/65">{description}</p>
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-white">{title}</h3>
+            <HelpTip label={title} text={description} />
+          </div>
         </div>
       </div>
       {action}
@@ -255,7 +263,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
         setData({ ...EMPTY_DATA, ...result.data })
         const unavailable = result.unavailable.map((item) => OVERVIEW_LABELS[item.key] || item.key)
         setError(unavailable.length
-          ? `Some analytics are unavailable — ${unavailable.join(' · ')}`
+          ? `Some analytics are unavailable: ${unavailable.join(' · ')}`
           : '')
         setLastUpdated(new Date())
         return
@@ -441,6 +449,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
   const SEVERITY_RANK = { critical: 0, high: 1, normal: 2 }
   const widgetSources = { sales: ['orders'], revenue: ['orders'], priority: ['orderBacklog', 'conversations', 'pasabuy', 'products', 'batches', 'listings'], inbox: ['conversations'], pasabuy: ['pasabuy'], stock: ['products', 'batches'] }
   const widgetUnavailable = missing(widgetSources[widget] || [])
+  const moneyLens = MONEY_LENSES.some(lens => lens.id === widget) ? widget : null
 
   const metrics = [
     { source: 'orders', label: 'Verified payments', value: peso(analytics.verifiedRevenue), detail: `${reportingRange}-day payment-verified total`, change: analytics.revenueChange },
@@ -482,14 +491,14 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
 
   return (
     <div className="mx-auto w-full max-w-[1600px] space-y-4 pb-6">
-      <section className="flex flex-col gap-4 border-b border-adm-line pb-4 xl:flex-row xl:items-end xl:justify-between">
-        <div>
+      <section className="border-b border-adm-line pb-4">
+        <div className="flex items-center gap-2">
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">Operations command center</h2>
-          <p className="mt-1 max-w-3xl text-sm leading-relaxed text-white/65">
-            Choose a widget from the left panel. Each view keeps its own records and operational meaning.
-          </p>
+          <HelpTip label="Operations command center" text="Choose a widget from the left panel. Each view keeps its own records and operational meaning." />
         </div>
+      </section>
 
+      <div className="sticky top-0 z-20 border-b border-adm-line bg-adm-bg py-2">
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex min-h-11 items-center rounded-adm-sm border border-adm-line bg-adm-sunken p-1" aria-label="Reporting period">
             {RANGE_OPTIONS.map(option => (
@@ -511,12 +520,14 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
             <SyncIcon size={15} className={refreshing ? 'animate-spin' : ''} />
             {refreshing ? 'Refreshing' : 'Refresh'}
           </button>
+          <p className="ml-auto text-xs tabular-nums text-white/65" aria-label="Current totals">
+            Verified {loading ? '—' : peso(analytics.verifiedRevenue)} · Unread {loading ? '—' : analytics.unread} · Open Pasabuy {loading ? '—' : analytics.openPasabuy.length}
+          </p>
         </div>
-      </section>
-
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-white/65">
-        <span>{lastUpdated ? `Updated ${lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Waiting for the first data refresh'}</span>
-        <span>{stale ? `Refresh failed — showing the last retrieved ${reportingRange}-day snapshot.` : 'Internal K2 records · external channel feeds are separate'}</span>
+        <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2 text-xs text-white/65">
+          <span>{lastUpdated ? `Updated ${lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Waiting for the first data refresh'}</span>
+          <span>{stale ? `Refresh failed: showing the last retrieved ${reportingRange}-day snapshot.` : 'Internal K2 records · external channel feeds are separate'}</span>
+        </div>
       </div>
 
       {error && (
@@ -532,9 +543,29 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
           {DASHBOARD_WIDGETS.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
         </select>
       </div>
-      <div><h3 className="text-lg font-semibold text-white">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.label}</h3><p className="mt-1 text-sm text-white/65">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.description}</p></div>
+      <div><div className="flex items-center gap-2"><h3 className="text-lg font-semibold text-white">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.label}</h3><HelpTip label={DASHBOARD_WIDGETS.find(item => item.id === widget)?.label} text={DASHBOARD_WIDGETS.find(item => item.id === widget)?.description} /></div></div>
       {widgetUnavailable && <p role="status" className="rounded-adm border border-adm-line p-5 text-sm text-white/75">{loading ? 'Loading this widget’s records…' : 'This widget is unavailable because its records could not be retrieved. Refresh to retry or choose another widget.'}</p>}
-      <section hidden={widget !== 'metrics'} aria-label="Key performance indicators" className={`${panelClass} [&[hidden]]:hidden grid overflow-hidden grid-cols-1 sm:grid-cols-2 xl:grid-cols-3`}>
+      <div hidden={moneyLens === null} className={`${panelClass} overflow-hidden`}>
+        <div className="flex flex-wrap items-center gap-2 px-4 py-2.5 sm:px-5">
+          <div className="hidden min-h-11 items-center gap-1 rounded-adm-sm border border-adm-line bg-adm-sunken p-1 sm:flex" role="group" aria-label="Money views">
+            {MONEY_LENSES.map(lens => (
+              <button
+                key={lens.id}
+                type="button"
+                onClick={() => onWidget?.(lens.id)}
+                aria-pressed={moneyLens === lens.id}
+                className={`${actionClass} min-h-9 rounded-adm-sm px-3 text-xs font-semibold ${moneyLens === lens.id ? 'bg-adm-raised text-white shadow-adm' : 'text-white/65 hover:text-white'}`}
+              >
+                {lens.label}
+              </button>
+            ))}
+          </div>
+          <select value={moneyLens || 'metrics'} onChange={event => onWidget?.(event.target.value)} aria-label="Money view" className="min-h-11 rounded-adm-sm border border-adm-line bg-adm-sunken px-3 text-sm text-white sm:hidden">
+            {MONEY_LENSES.map(lens => <option key={lens.id} value={lens.id}>{lens.label}</option>)}
+          </select>
+          <span className="ml-auto hidden text-xs text-white/45 sm:inline">{reportingRange}-day Asia/Manila figures</span>
+        </div>
+      <section hidden={moneyLens !== 'metrics'} aria-label="Key performance indicators" className="[&[hidden]]:hidden grid overflow-hidden grid-cols-1 border-t border-adm-line sm:grid-cols-2 xl:grid-cols-3">
         {metrics.map((metric, index) => (
           <div key={metric.label} className="min-w-0 border-b border-adm-line p-4">
             <p className="text-xs font-medium text-white/65">{metric.label}</p>
@@ -549,7 +580,56 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
         ))}
       </section>
 
-      <section hidden={widget !== 'sales' || widgetUnavailable} aria-label="Sales computation summary" className={`${panelClass} [&[hidden]]:hidden`}>
+      <section hidden={moneyLens !== 'metrics'} className="[&[hidden]]:hidden min-w-0 border-t border-adm-line">
+          <PanelHeading
+            icon={GlobeIcon}
+            title="Channel performance and readiness"
+            description="Selected-period K2 order records and current listing states. Connection records do not verify a working API feed."
+            action={<button onClick={() => setSection('integrations')} className={`${actionClass} hidden min-h-9 items-center gap-1.5 rounded-adm-sm px-2 text-xs font-semibold text-blue hover:bg-blue/10 sm:flex`}>Manage <ArrowIcon size={13} /></button>}
+          />
+          <div className="divide-y divide-adm-line">
+            <div className="hidden grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] gap-3 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white/65 md:grid">
+              <span>Channel</span><span>Status</span><span>Requests</span><span>Verified revenue</span><span>Listings</span>
+            </div>
+            {analytics.channelRows.map(channel => (
+              <div key={channel.id} role="group" aria-label={`${channel.label} metrics`} className="grid grid-cols-2 gap-x-4 gap-y-3 px-4 py-3.5 md:grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] md:items-center md:gap-3 md:px-5">
+                <div className="col-span-2 min-w-0 md:col-span-1">
+                  <p className="text-xs font-semibold text-white">{channel.label}</p>
+                  <p className="mt-0.5 text-xs text-white/65">{channel.description}</p>
+                </div>
+                <div>
+                  <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${channel.status === 'live' ? 'text-emerald-400' : 'text-white/65'}`}>
+                    <span className={`h-1.5 w-1.5 rounded-full ${channel.status === 'live' ? 'bg-emerald-400' : 'bg-white/25'}`} />
+                    {display('connections', channel.id === 'other' ? 'Unmapped source' : channel.status === 'live' ? 'Recorded as live' : readableStatus(channel.status))}
+                  </span>
+                </div>
+                <div className="text-right md:text-left">
+                  <span className="md:hidden text-xs uppercase tracking-wider text-white/65">Requests </span>
+                  <span className="font-mono text-xs font-semibold tabular-nums text-white/75">{display('orders', channel.orders)}</span>
+                </div>
+                <div>
+                  <span className="md:hidden block text-xs uppercase tracking-wider text-white/65">Verified revenue</span>
+                  <span className="font-mono text-xs font-semibold tabular-nums text-white/75">{display('orders', peso(channel.revenue))}</span>
+                </div>
+                <div className="text-right md:text-left">
+                  <span className="md:hidden block text-xs uppercase tracking-wider text-white/65">Listings</span>
+                  <span className={`font-mono text-xs font-semibold tabular-nums ${channel.issues > 0 ? 'text-crimson' : channel.ready > 0 ? 'text-amber' : 'text-white/65'}`}>
+                    {display('listings', `${channel.published} published · ${channel.ready} ready${channel.issues > 0 ? ` · ${channel.issues} blocked` : ''}`)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="border-t border-adm-line px-4 py-4 text-sm text-white/75 sm:px-5">
+            <h4 className="font-semibold text-white">Metric coverage</h4>
+            <dl className="mt-3 space-y-3">
+              <div><dt>Traffic, conversion and ad spend</dt><dd className="text-white/65">Unavailable: no verified analytics or advertising feed.</dd></div>
+              <div><dt>Settled payouts and actual profit</dt><dd className="text-white/65">Unavailable: settlement and exact-lot cost records are required.</dd></div>
+            </dl>
+            <p className="mt-3 text-xs leading-relaxed text-white/65">Zero means K2 has no matching internal record. It does not measure activity inside an external shop.</p>
+          </div>
+        </section>
+      <section hidden={moneyLens !== 'sales' || widgetUnavailable} aria-label="Sales computation summary" className="[&[hidden]]:hidden min-w-0 border-t border-adm-line">
         <PanelHeading
           icon={TrendIcon}
           title="Sales computation summary"
@@ -584,7 +664,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
         <div className="border-t border-adm-line">
           <div className="px-4 py-3 sm:px-5">
             <h4 className="text-sm font-semibold text-white">Payment × fulfillment reconciliation</h4>
-            <p className="mt-1 text-xs leading-relaxed text-white/65">Four mutually exclusive buckets reproduce every request and peso in the selected period. Select one to review its exact records.</p>
+            <p className="mt-1 text-xs leading-relaxed text-white/65">Each request appears once below. Choose a group to review its records.</p>
           </div>
           <div className="grid border-t border-adm-line sm:grid-cols-2 xl:grid-cols-4">
             {[
@@ -608,7 +688,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
             ))}
           </div>
           <p className="border-t border-adm-line px-4 py-3 text-xs leading-relaxed text-white/65 sm:px-5">
-            Payment not verified means only that the exact verified state is absent. It does not mean unpaid, missing, failed, or lost.
+            Payment not verified means there is no verified-payment record. It does not prove the order is unpaid.
           </p>
         </div>
         {salesRecordsOpen && (
@@ -689,13 +769,15 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
         )}
       </section>
 
-      <div className="contents">
-        <section hidden={widget !== 'revenue' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
+      <section hidden={moneyLens !== 'revenue' || widgetUnavailable} className="[&[hidden]]:hidden min-w-0 border-t border-adm-line">
           <PanelHeading icon={TrendIcon} title="Verified revenue trend" description={`Payment-verified request value grouped by order creation day in the retrieved ${reportingRange}-day Asia/Manila window; not payment receipt dates or settled revenue.`} />
           <div className="p-3 sm:p-5">
             {loading ? <div className="h-56 animate-pulse rounded-adm-sm bg-white/[0.04]" /> : <RevenueChart points={analytics.revenueSeries} />}
           </div>
         </section>
+      </div>
+
+      <div className="contents">
 
         <section hidden={widget !== 'priority' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
           <PanelHeading icon={AlertIcon} title="Priority queue" description="Current recorded work ordered by severity, then count. Inventory totals combine SKU and batch flags and may overlap." />
@@ -727,56 +809,6 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
       </div>
 
       <div className="contents">
-        <section hidden={widget !== 'metrics'} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading
-            icon={GlobeIcon}
-            title="Channel performance and readiness"
-            description="Selected-period K2 order records and current listing states. Connection records do not verify a working API feed."
-            action={<button onClick={() => setSection('integrations')} className={`${actionClass} hidden min-h-9 items-center gap-1.5 rounded-adm-sm px-2 text-xs font-semibold text-blue hover:bg-blue/10 sm:flex`}>Manage <ArrowIcon size={13} /></button>}
-          />
-          <div className="divide-y divide-adm-line">
-            <div className="hidden grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] gap-3 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white/65 md:grid">
-              <span>Channel</span><span>Status</span><span>Requests</span><span>Verified revenue</span><span>Listings</span>
-            </div>
-            {analytics.channelRows.map(channel => (
-              <div key={channel.id} role="group" aria-label={`${channel.label} metrics`} className="grid grid-cols-2 gap-x-4 gap-y-3 px-4 py-3.5 md:grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] md:items-center md:gap-3 md:px-5">
-                <div className="col-span-2 min-w-0 md:col-span-1">
-                  <p className="text-xs font-semibold text-white">{channel.label}</p>
-                  <p className="mt-0.5 text-xs text-white/65">{channel.description}</p>
-                </div>
-                <div>
-                  <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${channel.status === 'live' ? 'text-emerald-400' : 'text-white/65'}`}>
-                    <span className={`h-1.5 w-1.5 rounded-full ${channel.status === 'live' ? 'bg-emerald-400' : 'bg-white/25'}`} />
-                    {display('connections', channel.id === 'other' ? 'Unmapped source' : channel.status === 'live' ? 'Recorded as live' : readableStatus(channel.status))}
-                  </span>
-                </div>
-                <div className="text-right md:text-left">
-                  <span className="md:hidden text-xs uppercase tracking-wider text-white/65">Requests </span>
-                  <span className="font-mono text-xs font-semibold tabular-nums text-white/75">{display('orders', channel.orders)}</span>
-                </div>
-                <div>
-                  <span className="md:hidden block text-xs uppercase tracking-wider text-white/65">Verified revenue</span>
-                  <span className="font-mono text-xs font-semibold tabular-nums text-white/75">{display('orders', peso(channel.revenue))}</span>
-                </div>
-                <div className="text-right md:text-left">
-                  <span className="md:hidden block text-xs uppercase tracking-wider text-white/65">Listings</span>
-                  <span className={`font-mono text-xs font-semibold tabular-nums ${channel.issues > 0 ? 'text-crimson' : channel.ready > 0 ? 'text-amber' : 'text-white/65'}`}>
-                    {display('listings', `${channel.published} published · ${channel.ready} ready${channel.issues > 0 ? ` · ${channel.issues} blocked` : ''}`)}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="border-t border-adm-line px-4 py-4 text-sm text-white/75 sm:px-5">
-            <h4 className="font-semibold text-white">Metric coverage</h4>
-            <dl className="mt-3 space-y-3">
-              <div><dt>Traffic, conversion and ad spend</dt><dd className="text-white/65">Unavailable — no verified analytics or advertising feed.</dd></div>
-              <div><dt>Settled payouts and actual profit</dt><dd className="text-white/65">Unavailable — settlement and exact-lot cost records are required.</dd></div>
-            </dl>
-            <p className="mt-3 text-xs leading-relaxed text-white/65">Zero means no matching internal records were returned. It does not mean zero activity in an external shop. Use the other widgets for sales reconciliation, inbox, sourcing and stock detail.</p>
-          </div>
-        </section>
-
         <section hidden={widget !== 'inbox' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
           <PanelHeading icon={InboxIcon} title="Inbox workload" description="Current open-conversation pressure and response risk." />
           <div className="grid grid-cols-2">

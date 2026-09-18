@@ -74,7 +74,7 @@ export default function ProductMediaCleanupModal({ onClose }) {
       <div className="flex max-h-[100dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-adm border border-adm-line bg-adm-surface text-white shadow-2xl sm:max-h-[90dvh] sm:rounded-adm">
         <header className="flex items-start justify-between gap-4 border-b border-adm-line bg-black/35 px-4 py-4 sm:px-5">
           <div>
-            <p className="font-mono text-xs text-blue">ADMIN MEDIA MAINTENANCE</p>
+            <p className="font-mono text-xs text-white/45">ADMIN MEDIA MAINTENANCE</p>
             <h2 id="media-cleanup-title" className="mt-1 text-xl font-semibold">Unused verified uploads</h2>
             <p id="media-cleanup-help" className="mt-1 text-sm leading-5 text-white/60">Only receipt-backed files older than one hour and unreferenced by every product are shown. References are checked again before removal.</p>
           </div>

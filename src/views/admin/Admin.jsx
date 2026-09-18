@@ -17,6 +17,7 @@ import StartHereGuide from './StartHereGuide'
 import KeyboardShortcutsModal from './KeyboardShortcutsModal'
 import UniversalScanLauncher from './UniversalScanLauncher'
 import AdminToolsWidget from './AdminToolsWidget'
+import HelpTip from './HelpTip'
 import { GO_TO_SHORTCUTS, isTextEntryTarget } from './adminOperations'
 import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
 import { DASHBOARD_WIDGETS } from './dashboardWidgets'
@@ -48,24 +49,24 @@ const TourSelectionModal = lazy(() => import('../../components/admin/tour/TourSe
 
 // Single source of truth for every section: nav label, page title, subtitle, icon.
 const SECTIONS = {
-  overview:          { label: 'Command center',      icon: GridIcon,    title: 'Command center',                desc: 'Verified performance, channel readiness, and priority operations.' },
-  owner_close:       { label: 'Count & Close',       icon: BookIcon,    title: 'Owner Count & Close',           desc: 'Resume exact-shop imports, product review, counts, and close handoffs.', adminOnly: true },
-  workflow_graph:    { label: 'Workflow Graph',      icon: MapIcon,     title: 'Master Operations Workflow Graph', desc: 'Interactive SVG flowcharts, shift checklists, safeguards, and AI prompt engineering.' },
-  kanban:            { label: 'Purchasing',           icon: BagIcon,     title: 'Italy Purchasing',               desc: 'Supplier commitments and purchasing work before consolidation.' },
-  consignment:       { label: 'Flight Consignments',  icon: PlaneIcon,   title: 'Italy Flight Consignments',      desc: 'Scan-count every expected unit in Milan, recount it in Manila, then reconcile inventory.' },
-  pasabuy_manager:   { label: 'Pasabuy Quotes',      icon: BagIcon,     title: 'Custom Pasabuy Quotes',         desc: 'Process shopper requests and calculate Italy landed costs.' },
-  suppliers:         { label: 'Suppliers',           icon: GlobeIcon,   title: 'Suppliers & Purchase Orders',   desc: 'Manage vendor relationships and purchase order deliveries.' },
-  inventory:         { label: 'Inventory',           icon: BoxIcon,     title: 'Product Catalog & Stock',       desc: 'Master inventory across all channels.' },
-  omni_hub:          { label: 'Fulfillment Hub',     icon: BarcodeIcon, title: 'Fulfillment & Staff Stations',  desc: 'Barcode pack-to-ship and Italy cargo box custody claims.' },
-  inbox:             { label: 'Messages',            icon: InboxIcon,   title: 'Conversation Records',          desc: 'Persisted internal records; external messaging connectors are deferred.' },
-  wholesale:         { label: 'Customers',           icon: UserIcon,    title: 'Registered Customer Profiles',  desc: 'Database-backed customer identities; wholesale pricing and broadcasts are deferred.' },
-  reservations:      { label: 'Stock Holds',         icon: ClockIcon,   title: 'Stock Holds',                   desc: 'Which units are held for a customer, how long is left, and what has already lapsed.' },
-  delivery:          { label: 'Delivery Rates',      icon: PlaneIcon,   title: 'Delivery Rates & Couriers',     desc: 'The owner-approved courier pilot: exact localities, versioned rates, and the quote tester.', adminOnly: true },
-  coupons:           { label: 'Coupons',             icon: StarIcon,    title: 'Coupons & Vouchers',             desc: 'Controlled discount codes, schedules, limits, and voucher-hunt campaigns.' },
-  staff_permissions: { label: 'Staff & Roles',       icon: ShieldIcon,  title: 'Staff Roles & Permissions',     desc: 'Manage authenticated staff roles and access permissions.' },
-  integrations:      { label: 'Channel Readiness',   icon: GlobeIcon,   title: 'Sales Channel Readiness',        desc: 'Catalog preparation and real connector status for Website, Shopee, TikTok, Lazada, and Pasabuy.' },
-  store_assets:      { label: 'Store Assets',        icon: StarIcon,    title: 'Virtual Store Assets',           desc: 'Products whose shelf panel is still empty, and the drafted copy waiting on staff approval.' },
-  globe:             { label: 'Globe Display',        icon: EyeIcon,     title: '3D Globe Map Settings',         desc: 'Control which products appear on the interactive 3D map.' },
+  overview:          { label: 'Command center',      icon: GridIcon,    title: 'Command center',                desc: 'Website activity, channel status, and the jobs that need you first.' },
+  owner_close:       { label: 'Count & Close',       icon: BookIcon,    title: 'Owner Count & Close',           desc: 'Pick up a shop import where you left off: review products, count stock, finish the close.', adminOnly: true },
+  workflow_graph:    { label: 'Workflow Graph',      icon: MapIcon,     title: 'Master Operations Workflow Graph', desc: 'Picture guides for every shift, with checklists, safety checks, and prompts you can copy.' },
+  kanban:            { label: 'Purchasing',           icon: BagIcon,     title: 'Italy Purchasing',               desc: 'Supplier orders and buying work before the stock is packed for its flight.' },
+  consignment:       { label: 'Flight Consignments',  icon: PlaneIcon,   title: 'Italy Flight Consignments',      desc: 'Scan and count every expected unit in Milan, count it again in Manila, then settle the differences.' },
+  pasabuy_manager:   { label: 'Pasabuy Quotes',      icon: BagIcon,     title: 'Custom Pasabuy Quotes',         desc: 'Handle shopper requests and price each one with its full cost from Italy.' },
+  suppliers:         { label: 'Suppliers',           icon: GlobeIcon,   title: 'Suppliers & Purchase Orders',   desc: 'The suppliers you buy from and the purchase orders you placed.' },
+  inventory:         { label: 'Inventory',           icon: BoxIcon,     title: 'Product Catalog & Stock',       desc: 'Every product and the Manila stock behind it, in one place.' },
+  omni_hub:          { label: 'Fulfillment Hub',     icon: BarcodeIcon, title: 'Fulfillment & Staff Stations',  desc: 'Pack website orders with the scanner and record who holds each Italy box.' },
+  inbox:             { label: 'Messages',            icon: InboxIcon,   title: 'Conversation Records',          desc: 'Saved conversations and notes. Links to Shopee, Lazada, and the chat apps are not connected yet.' },
+  wholesale:         { label: 'Customers',           icon: UserIcon,    title: 'Registered Customer Profiles',  desc: 'Saved customer profiles. Special wholesale prices and bulk messages are still switched off.' },
+  reservations:      { label: 'Stock Holds',         icon: ClockIcon,   title: 'Stock Holds',                   desc: 'Stock held for a customer, time left on each hold, and holds that already expired.' },
+  delivery:          { label: 'Delivery Rates',      icon: PlaneIcon,   title: 'Delivery Rates & Couriers',     desc: 'The owner-approved delivery test: which places have fixed rates, and a tester to try a quote.', adminOnly: true },
+  coupons:           { label: 'Coupons',             icon: StarIcon,    title: 'Coupons & Vouchers',             desc: 'Discount codes you control: start dates, spending limits, and promo campaigns.' },
+  staff_permissions: { label: 'Staff & Roles',       icon: ShieldIcon,  title: 'Staff Roles & Permissions',     desc: 'Who may sign in, and what each role is allowed to do.' },
+  integrations:      { label: 'Channel Readiness',   icon: GlobeIcon,   title: 'Sales Channel Readiness',        desc: 'Get the catalog ready and see the true connection status of each sales channel.' },
+  store_assets:      { label: 'Store Assets',        icon: StarIcon,    title: 'Virtual Store Assets',           desc: 'Products still missing shelf content, and draft text waiting for your approval.' },
+  globe:             { label: 'Globe Display',        icon: EyeIcon,     title: '3D Globe Map Settings',         desc: 'Choose which products show on the 3D globe.' },
 }
 
 const SECTION_ALIASES = {
@@ -321,7 +322,7 @@ export default function Admin() {
     if (focusHeading && typeof window !== 'undefined') {
       requestAnimationFrame(() => {
         const heading = window.innerWidth >= 1024 ? desktopHeadingRef.current : mobileHeadingRef.current
-        heading?.focus()
+        heading?.focus({ preventScroll: true })
       })
     }
   }
@@ -480,8 +481,10 @@ export default function Admin() {
 
         <header className="flex min-h-[72px] items-center gap-2 border-b border-adm-line bg-adm-bg px-3 py-2 lg:gap-4 lg:px-6">
           <div className="hidden lg:block shrink-0 min-w-[220px]">
-            <h1 ref={desktopHeadingRef} tabIndex={-1} className="text-lg font-semibold tracking-tight text-white truncate focus:outline-none">{meta.title}</h1>
-            <p className="text-sm text-white/60 mt-0.5 truncate">{meta.desc}</p>
+            <div className="flex items-center gap-2">
+              <h1 ref={desktopHeadingRef} tabIndex={-1} className="text-lg font-semibold tracking-tight text-white truncate focus:outline-none">{meta.title}</h1>
+              <HelpTip label={meta.title} text={meta.desc} />
+            </div>
           </div>
           <div className="ml-auto flex min-w-0 items-center gap-2 overflow-x-auto scrollbar-none">
             <button
@@ -496,7 +499,7 @@ export default function Admin() {
 
             <button
               onClick={() => setShowWorkflowGuide(true)}
-              className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-sky-400 transition-[transform,background-color,color,border-color] duration-150 hover:border-sky-500/40 hover:bg-sky-500/10 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/70"
+              className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
               title="View visual workflow maps for all shifts"
             >
               <MapIcon size={16} />
@@ -505,7 +508,7 @@ export default function Admin() {
 
             <button
               onClick={() => setShowTourChooser(true)}
-              className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-amber-500/30 bg-amber-500/10 px-3 text-sm font-medium text-amber-300 transition-[transform,background-color,color,border-color] duration-150 hover:border-amber-400 hover:bg-amber-500/20 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/70"
+              className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
               title="Launch interactive guided walkthrough tour (Manual vs Auto Intake)"
             >
               <SparkleIcon size={15} />
@@ -515,7 +518,7 @@ export default function Admin() {
             <button
               onClick={() => setShowStartHere(true)}
               className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
-              title="How to use this dashboard — start here"
+              title="How to use this dashboard: start here"
             >
               <BookIcon size={15} />
               <span className="hidden sm:inline">Start here</span>

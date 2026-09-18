@@ -128,7 +128,7 @@ export default function DeliveryEstimate({ lines, subtotalMinor, onQuote }) {
       )}
       {!localityId && (
         <p className="text-xs leading-relaxed text-navy-soft">
-          Not listed? We deliver nationwide — your delivery is quoted for your approval before
+          Not listed? We deliver nationwide: your delivery is quoted for your approval before
           anything is sent.
         </p>
       )}

@@ -95,6 +95,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
   if (pos.x == null) return null
 
   // Panel opens toward screen centre so it stays on-screen
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640
   const openUp = pos.y > window.innerHeight / 2
   const openLeft = pos.x > window.innerWidth / 2
 
@@ -113,8 +114,8 @@ export default function AdminToolsWidget({ onOpenGuide }) {
             role="dialog"
             aria-modal="true"
             aria-label="Staff Tools and Margin Planner"
-            className="absolute w-[min(28rem,calc(100vw-1rem))] overflow-hidden rounded-2xl border border-white/15 bg-adm-surface shadow-2xl backdrop-blur-md"
-            style={{
+            className="fixed inset-x-2 bottom-20 max-h-[calc(100dvh-6rem)] sm:absolute sm:inset-x-auto sm:bottom-auto sm:max-h-none sm:w-[min(28rem,calc(100vw-1rem))] overflow-hidden rounded-2xl border border-white/15 bg-adm-surface shadow-2xl backdrop-blur-md flex flex-col"
+            style={isMobile ? undefined : {
               [openUp ? 'bottom' : 'top']: 60,
               [openLeft ? 'right' : 'left']: 0,
               maxHeight: openUp ? Math.max(260, pos.y - 70) : Math.max(260, window.innerHeight - pos.y - 70),
@@ -148,7 +149,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
                 className="w-full flex min-h-11 items-center gap-2 border-b border-adm-line bg-blue/15 px-3.5 py-2.5 text-sm font-semibold text-blue hover:bg-blue/25 transition-colors cursor-pointer"
               >
                 <MapIcon size={16} />
-                <span>Dashboard guide — what does this do?</span>
+                <span>Dashboard guide: what does this do?</span>
               </button>
             )}
 
@@ -468,7 +469,7 @@ function TargetQuantityPlanner() {
           <Stat label="Total planned costs" value={php(result.totalCosts)} />
           <Stat label="Planned gross profit" value={php(result.grossProfit)} tone="good" />
           <Stat label="Achieved gross margin" value={percent(result.achievedMarginPercent)} />
-          <div className="col-span-2"><Stat label={`At ${result.previousQuantity.toLocaleString('en-PH')} units`} value={`${php(result.previousQuantityProfit)} — below target`} /></div>
+          <div className="col-span-2"><Stat label={`At ${result.previousQuantity.toLocaleString('en-PH')} units`} value={`${php(result.previousQuantityProfit)} (below target)`} /></div>
         </div>
       )}
       {result.ok && <PlanningSummaryCopy mode="quantity" input={values} result={result} />}
@@ -654,7 +655,7 @@ function Stat({ label, value, tone }) {
   return (
     <div className="rounded-adm-sm bg-black/30 px-2 py-2 text-center">
       <p className="text-xs uppercase tracking-wide text-white/40">{label}</p>
-      <p className={'mt-0.5 text-sm font-semibold tabular-nums ' + (tone === 'good' ? 'text-gold' : tone === 'bad' ? 'text-crimson' : tone === 'warn' ? 'text-amber' : 'text-white')}>{value}</p>
+      <p className={'mt-0.5 text-sm font-semibold tabular-nums ' + (tone === 'good' ? 'text-forest' : tone === 'bad' ? 'text-crimson' : tone === 'warn' ? 'text-amber' : 'text-white')}>{value}</p>
     </div>
   )
 }

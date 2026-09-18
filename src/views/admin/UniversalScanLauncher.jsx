@@ -33,7 +33,7 @@ export default function UniversalScanLauncher({ isOpen, onClose, onNavigate, onI
             <h2 id="scan-center-title" className="text-lg font-semibold">What are you scanning?</h2>
             <p className="mt-1 max-w-xl text-sm leading-relaxed text-white/50">The scan center sends you to the correct guarded workflow. Select the order, flight, or box before unit scans can change operational records.</p>
           </div>
-          <button onClick={onClose} aria-label="Close scan center" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-adm-sm text-white/50 hover:bg-white/5 hover:text-white"><XIcon size={18} /></button>
+          <button onClick={onClose} aria-label="Close scan center" className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-adm-sm text-white/50 hover:bg-white/5 hover:text-white"><XIcon size={18} /></button>
         </header>
 
         <div className="grid max-h-[68vh] gap-2 overflow-y-auto p-4 custom-scrollbar sm:grid-cols-2">

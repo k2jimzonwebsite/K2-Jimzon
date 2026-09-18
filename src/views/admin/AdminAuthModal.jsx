@@ -221,7 +221,7 @@ export function AdminAuthForm({ isOpen, onClose, runtime }) {
                 {loading ? 'Opening Google…' : 'Continue with Google'}
               </button>
               <p className="text-xs text-white/40 text-center mt-3">
-                No account? Ask your super admin to invite you — accounts are created by invite only.
+                No account? Ask your super admin to invite you: accounts are created by invite only.
               </p>
             </div>
 
@@ -232,7 +232,7 @@ export function AdminAuthForm({ isOpen, onClose, runtime }) {
             )}
 
             <button type="button" onClick={onClose}
-              className="w-full text-sm font-semibold text-white/45 hover:text-white transition-colors py-1">
+              className="w-full min-h-11 flex items-center justify-center text-sm font-semibold text-white/45 hover:text-white transition-colors">
               ← Back to store
             </button>
           </form>

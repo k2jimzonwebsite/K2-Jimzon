@@ -326,9 +326,9 @@ export default function Sheet({ canManageProducts = false }) {
   }
 
   const DOMAIN_TONE = {
-    Product: 'bg-gold text-navy',
-    Content: 'bg-gold text-navy',
-    Pricing: 'bg-gold text-navy',
+    Product: 'bg-white/15 text-white border border-white/20',
+    Content: 'bg-white/15 text-white border border-white/20',
+    Pricing: 'bg-white/15 text-white border border-white/20',
     Inventory: 'bg-blue text-white',
     Website: 'bg-white/15 text-white border border-white/20',
     Media: 'bg-white/15 text-white border border-white/20',
@@ -339,7 +339,7 @@ export default function Sheet({ canManageProducts = false }) {
     <div className="flex flex-col h-full bg-adm-sunken">
       <div className="shrink-0 border-b border-adm-line bg-adm-surface">
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none px-3 py-2 lg:px-6 lg:py-3">
-          <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-adm-sm bg-forest text-white px-3.5 min-h-[44px] text-sm font-bold transition hover:bg-forest/90">
+          <button onClick={handleAddRow} className="flex shrink-0 items-center gap-2 rounded-adm-sm bg-blue text-white px-3.5 min-h-[44px] text-sm font-bold transition hover:bg-blue-deep">
             <span className="text-lg leading-none">+</span> Phone Intake
           </button>
           <button onClick={() => setShowCsvImport(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
@@ -364,14 +364,14 @@ export default function Sheet({ canManageProducts = false }) {
           <button
             onClick={() => visibleRows.length > 0 && setEnrichProduct(visibleRows[0])}
             disabled={visibleRows.length === 0}
-            className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-amber/30 bg-amber/10 px-3 min-h-[44px] text-sm font-medium text-amber transition hover:bg-amber/20 disabled:opacity-40"
+            className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-blue/30 bg-blue/10 px-3 min-h-[44px] text-sm font-medium text-blue transition hover:bg-blue/20 disabled:opacity-40"
           >
             <span>✨</span> AI Spec Enricher
           </button>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 border-t border-adm-line px-3 py-2 lg:px-6">
-          <label className="shrink-0 text-xs font-mono font-extrabold uppercase text-gold hidden lg:inline" htmlFor="sheet-lens-search">Lens:</label>
+          <label className="shrink-0 text-xs font-mono font-extrabold uppercase text-white/60 hidden lg:inline" htmlFor="sheet-lens-search">Lens:</label>
           <input
             id="sheet-lens-search"
             type="search"
@@ -420,7 +420,7 @@ export default function Sheet({ canManageProducts = false }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 border-t border-adm-line px-3 py-2 lg:px-6">
-          <span className="shrink-0 text-xs font-mono font-extrabold uppercase text-gold hidden lg:inline">Handled by:</span>
+          <span className="shrink-0 text-xs font-mono font-extrabold uppercase text-white/60 hidden lg:inline">Handled by:</span>
           {FIXTURE_CUSTODIANS.map(name => {
             const active = lensCustodians.includes(name)
             return (
@@ -451,7 +451,7 @@ export default function Sheet({ canManageProducts = false }) {
         </p>
 
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none border-t border-adm-line px-3 py-2 lg:px-6">
-          <span className="shrink-0 text-xs font-mono font-extrabold uppercase text-gold hidden lg:inline">Jump:</span>
+          <span className="shrink-0 text-xs font-mono font-extrabold uppercase text-white/60 hidden lg:inline">Jump:</span>
           {DOMAINS.map(d => (
             <button
               key={d.name}
@@ -476,7 +476,7 @@ export default function Sheet({ canManageProducts = false }) {
           <table className="w-max min-w-full border-collapse text-base bg-adm-surface">
             <thead className="sticky top-0 z-30">
               <tr className="bg-adm-sunken text-sm text-white">
-                <th className="hidden sm:table-cell w-10 min-w-10 border border-adm-line py-2.5 font-bold sticky left-0 z-40 bg-adm-sunken text-gold">#</th>
+                <th className="hidden sm:table-cell w-10 min-w-10 border border-adm-line py-2.5 font-bold sticky left-0 z-40 bg-adm-sunken text-white/60">#</th>
                 {DOMAINS.map((d) => (
                   <th
                     key={d.name}
@@ -487,24 +487,24 @@ export default function Sheet({ canManageProducts = false }) {
                     {d.name}
                   </th>
                 ))}
-                <th className="w-20 border border-adm-line py-2.5 font-bold text-xs text-gold">Action</th>
+                <th className="w-20 border border-adm-line py-2.5 font-bold text-xs text-white/60">Action</th>
               </tr>
               <tr className="bg-adm-raised text-left text-sm font-bold text-white">
-                <th className="hidden sm:table-cell w-10 min-w-10 border border-adm-line px-2 py-2.5 text-center sticky left-0 z-40 bg-adm-raised text-gold">#</th>
+                <th className="hidden sm:table-cell w-10 min-w-10 border border-adm-line px-2 py-2.5 text-center sticky left-0 z-40 bg-adm-raised text-white/60">#</th>
                 {ALL_COLS.map((h) => (
                   <th
                     key={h}
                     className={`border border-adm-line px-3 py-2.5 whitespace-nowrap font-mono text-xs font-extrabold ${
                       h === 'SKU'
-                        ? 'sticky left-0 sm:left-10 z-40 bg-adm-raised text-gold shadow-[2px_0_6px_rgba(0,0,0,0.6)]'
+                        ? 'sticky left-0 sm:left-10 z-40 bg-adm-raised text-white/60 shadow-[2px_0_6px_rgba(0,0,0,0.6)]'
                         : 'text-white'
                     }`}
                   >
                     {h}
                   </th>
                 ))}
-                <th className="border border-adm-line px-3 py-2.5 text-center text-gold">Shop</th>
-                <th className="border border-adm-line px-3 py-2.5 text-center text-gold">Action</th>
+                <th className="border border-adm-line px-3 py-2.5 text-center text-white/60">Shop</th>
+                <th className="border border-adm-line px-3 py-2.5 text-center text-white/60">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -526,6 +526,7 @@ export default function Sheet({ canManageProducts = false }) {
                           <Cell key={colIdx} onSelect={() => setSelected({ row: i, col: colIdx })} selected={selected.row === i && selected.col === colIdx} className="text-center p-0 min-w-[100px]">
                             <select 
                               value={r.status || 'draft'}
+                              aria-label={`Status for ${r.sku || 'row'} `}
                               onChange={(e) => updateField(i, col, e.target.value)}
                               className={`w-full h-full bg-transparent px-2 py-1.5 text-sm outline-none cursor-pointer appearance-none text-center font-bold ${
                                 r.status === 'draft' ? 'text-amber'
@@ -603,6 +604,7 @@ export default function Sheet({ canManageProducts = false }) {
                         >
                           <input
                             type={typeof val === 'number' ? 'number' : 'text'}
+                            aria-label={`${col} for ${r.sku || 'row'}`}
                             data-k2-cell={`${position}:${colIdx}`}
                             value={displayVal}
                             disabled={col === 'SKU'}

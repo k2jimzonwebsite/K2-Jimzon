@@ -41,7 +41,7 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
           </div>
 
           <table className="mt-4 w-full border-collapse text-left text-sm">
-            <thead><tr className="border-b border-slate-300 bg-slate-100"><th className="p-2">SKU</th><th className="p-2">Product</th><th className="p-2 text-center">Qty</th><th className="p-2 text-right">Packing state</th></tr></thead>
+            <thead><tr className="border-b border-slate-300 bg-slate-100"><th scope="col" className="p-2">SKU</th><th scope="col" className="p-2">Product</th><th scope="col" className="p-2 text-center">Qty</th><th scope="col" className="p-2 text-right">Packing state</th></tr></thead>
             <tbody>{(order.items || []).map((item) => <tr key={item.sku} className="border-b border-slate-200"><td className="p-2 font-bold">{item.sku}</td><td className="p-2">{item.title}</td><td className="p-2 text-center font-bold">{item.qty}</td><td className="p-2 text-right font-bold">{packed ? 'Packed' : 'Pending scan'}</td></tr>)}</tbody>
           </table>
 

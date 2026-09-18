@@ -21,7 +21,7 @@ test('storefront catalogue query includes Live, Active, and Unlisted statuses', 
 test('admin inventory status options explicitly state direct link works for Unlisted', async () => {
   const code = await readFile(INVENTORY_GRID, 'utf8')
   expect(code).toMatch(/value:\s*'Unlisted'/)
-  expect(code).toContain('Hidden from browse — direct link still works')
+  expect(code).toContain('Hidden from browse: direct link still works')
 })
 
 test('submit_order_request_v2 migration allows Live, Active, and Unlisted products', async () => {

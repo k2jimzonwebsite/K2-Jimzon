@@ -92,6 +92,20 @@ additional chart dependency. Source checkpoint and before image live under
 under `docs/evidence/20260906-admin-widgets/`. Screenshots establish layout, not
 measured staff efficiency or production availability.
 
+### 18 September Admin copy and help refinement
+
+| Before | After | Why |
+| --- | --- | --- |
+| Workspace and panel explanations stayed visible below most headings. | The heading keeps a quiet `?`; hover or keyboard focus reveals the explanation. | Staff scan the work first and open context only when needed. |
+| The `?` control was 28px and its 256px phone tooltip could widen the page. | The target is 44px; phone help opens inside a viewport-bound bottom panel. | Preserve touch access and prevent horizontal overflow. |
+| Channel/payment guidance used phrases such as “mutually exclusive buckets” and sentence-length channel tabs. | Plain staff wording explains that each request appears once; tabs read `Readiness` and `Stock allocation`. | Keep the operational distinction while reducing reading load. |
+
+This is presentation-only. Status meaning, permissions, records, filters,
+recovery behavior and server authority do not change. Local evidence: focused
+browser cases 3/3, Admin UI 33/35 with two documented baseline failures, and
+Admin build 198.22 kB / 300.00 kB. Real staff comprehension and physical-device
+acceptance remain unverified.
+
 Automatic intake preparation (IDEA-20260906-05) preserves this product register:
 Manual ChatGPT Projects and Automatic API remain visibly separate within the
 existing modal. Automatic controls use current neutral Admin surfaces, readable

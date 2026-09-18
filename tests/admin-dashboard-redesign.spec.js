@@ -177,6 +177,49 @@ async function installSupabaseFixture(page) {
 }
 
 test.describe('admin command center redesign', () => {
+  test('keeps shared Admin help tips keyboard-readable and inside a 375px viewport', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    await page.evaluate(async () => {
+      const [reactModule, reactDomClientModule, helpTipModule] = await Promise.all([
+        import('/@id/react'),
+        import('/@id/react-dom/client'),
+        import('/src/views/admin/HelpTip.jsx'),
+      ])
+      const React = reactModule.default || reactModule
+      const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
+      const app = document.getElementById('root')
+      if (app) app.style.display = 'none'
+      const fixture = document.createElement('div')
+      fixture.style.padding = '16px'
+      document.body.appendChild(fixture)
+      createRoot(fixture).render(React.createElement(helpTipModule.default, {
+        label: 'Inbox',
+        text: 'Saved conversations and notes. Chat apps are not connected yet.',
+      }))
+    })
+
+    const trigger = page.getByRole('button', { name: 'About: Inbox' })
+    await expect(trigger).toBeVisible()
+    const size = await trigger.evaluate(element => {
+      const box = element.getBoundingClientRect()
+      return { width: box.width, height: box.height }
+    })
+    expect(size.width).toBeGreaterThanOrEqual(44)
+    expect(size.height).toBeGreaterThanOrEqual(44)
+
+    await trigger.focus()
+    await expect(page.getByRole('tooltip')).toBeVisible()
+    const tooltipBounds = await page.getByRole('tooltip').evaluate(element => {
+      const box = element.getBoundingClientRect()
+      return { left: box.left, right: box.right }
+    })
+    expect(tooltipBounds.left).toBeGreaterThanOrEqual(0)
+    expect(tooltipBounds.right).toBeLessThanOrEqual(375)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
+  })
+
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 })
     await page.addInitScript(() => {
@@ -205,6 +248,18 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByRole('heading', { name: 'Channel performance and readiness' })).toBeVisible()
     await expect(page.getByText('Traffic, conversion and ad spend')).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
+  })
+
+  test('uses short staff language for channel and payment context', async ({ page }) => {
+    await page.goto('/admin-portal-k2-secure')
+    const widgets = page.getByRole('navigation', { name: 'Dashboard widgets' })
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
+    await expect(page.getByText('Zero means K2 has no matching internal record. It does not measure activity inside an external shop.', { exact: true })).toBeVisible()
+
+    await widgets.getByRole('button', { name: 'Sales & records', exact: true }).click()
+    await expect(page.getByText('Each request appears once below. Choose a group to review its records.', { exact: true })).toBeVisible()
+    await expect(page.getByText('Payment not verified means there is no verified-payment record. It does not prove the order is unpaid.', { exact: true })).toBeVisible()
+    await expect(page.getByText('Four mutually exclusive buckets reproduce every request and peso', { exact: false })).toHaveCount(0)
   })
 
   test('widget source failures stay unavailable and recover without inventing zero totals', async ({ page }) => {
@@ -236,7 +291,7 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByRole('group', { name: 'Other / unrecognized metrics', exact: true })).toBeVisible({ timeout: 90000 })
     await expect(page.getByRole('group', { name: 'Other / unrecognized metrics', exact: true })).toContainText('₱321')
     await expect(page.getByRole('group', { name: 'Website metrics', exact: true })).toContainText('₱0')
-    await expect(page.getByText('Zero means no matching internal records were returned.', { exact: false })).toBeVisible()
+    await expect(page.getByText('Zero means K2 has no matching internal record.', { exact: false })).toBeVisible()
   })
 
   test('phone metrics and navigation stay readable and incomplete totals cannot be exported', async ({ page }) => {
@@ -309,7 +364,7 @@ test.describe('admin command center redesign', () => {
       supabase.from = () => { throw new Error('fixture interrupted refresh') }
     })
     await page.getByRole('button', { name: '7D', exact: true }).click()
-    await expect(page.getByText('Refresh failed — showing the last retrieved 30-day snapshot.')).toBeVisible()
+    await expect(page.getByText('Refresh failed: showing the last retrieved 30-day snapshot.')).toBeVisible()
     await page.getByRole('navigation', { name: 'Dashboard widgets' }).getByRole('button', { name: 'Sales & records', exact: true }).click()
     await page.getByRole('button', { name: 'Review records', exact: true }).click()
     await expect(page.getByText('Read-only order requests in the retrieved 30-day period.', { exact: false })).toBeVisible()
@@ -543,7 +598,7 @@ test.describe('admin command center redesign', () => {
     await expect(unitsResult).toContainText('₱1,095.00')
     await expect(unitsResult).toContainText('37.8%')
     await expect(unitsResult).toContainText('At 11 units')
-    await expect(unitsResult).toContainText('₱985.00 — below target')
+    await expect(unitsResult).toContainText('₱985.00 (below target)')
     await expect(page.getByText(/planning target, not a sales quota or order/)).toBeVisible()
     await unitsResult.scrollIntoViewIfNeeded()
     await page.screenshot({ path: 'C:/tmp/k2-admin-target-units-mobile.png', fullPage: true })
@@ -711,7 +766,17 @@ test.describe('admin command center redesign', () => {
     await expect(dialog.getByRole('button', { name: 'Close verification dialog' })).toBeFocused()
     await page.keyboard.press('Escape')
     await expect(dialog).toBeHidden()
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
+    const overflowState = await page.evaluate(() => ({
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      elements: [...document.querySelectorAll('body *')]
+        .map(element => {
+          const bounds = element.getBoundingClientRect()
+          return { tag: element.tagName, text: element.textContent?.trim().slice(0, 80), left: bounds.left, right: bounds.right, width: bounds.width }
+        })
+        .filter(item => item.right > document.documentElement.clientWidth + 1 || item.left < -1)
+        .slice(0, 8),
+    }))
+    expect(overflowState.overflow, JSON.stringify(overflowState.elements)).toBeLessThanOrEqual(1)
     await page.screenshot({ path: 'C:/tmp/k2-admin-channel-boundary-mobile.png', fullPage: true })
   })
 
@@ -1333,4 +1398,3 @@ test.describe('admin command center redesign', () => {
     expect(page.url()).toContain('section=inbox')
   })
 })
-

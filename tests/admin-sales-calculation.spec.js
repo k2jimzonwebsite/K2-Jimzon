@@ -201,7 +201,7 @@ test('planning summaries preserve each valid mode assumptions and results withou
       mode: 'quantity',
       input: { unitPrice: '250', unitCost: '120', discount: '100', otherCosts: '75', fixedFees: '50', channelFeePercent: '8', targetProfit: '1000' },
       result: calculateTargetSalesQuantity({ unitPrice: '250', unitCost: '120', discount: '100', otherCosts: '75', fixedFees: '50', channelFeePercent: '8', targetProfit: '1000' }),
-      expected: ['Mode: Find units needed', 'Minimum whole units: 12', 'At 11 units: PHP 985.00 — below target'],
+      expected: ['Mode: Find units needed', 'Minimum whole units: 12', 'At 11 units: PHP 985.00 (below target)'],
     },
   ]
 

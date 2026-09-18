@@ -290,7 +290,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
             tabIndex={reviewLocked ? -1 : 0}
             aria-disabled={reviewLocked}
             aria-label="Select a catalog CSV file"
-            className={`border-2 border-dashed border-white/20 rounded-adm-sm p-10 text-center transition-colors flex flex-col items-center justify-center ${reviewLocked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:border-purple-500 hover:bg-white/5'}`}
+            className={`border-2 border-dashed border-white/20 rounded-adm-sm p-10 text-center transition-colors flex flex-col items-center justify-center ${reviewLocked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:border-blue hover:bg-white/5'}`}
           >
             <input 
               type="file" 
@@ -318,7 +318,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
               <h4 className="text-base font-semibold text-blue">Warehouse for this file</h4>
               <p className="mt-1 text-sm text-white/60">
                 Every one of these {parsedData.length} rows is stored at the warehouse you pick here.
-                Channel exports carry no warehouse column, so this is set per upload — import one file per location.
+                Channel exports carry no warehouse column, so this is set per upload: import one file per location.
               </p>
               <div className="mt-3 max-w-sm">
                 <ReferenceSelectCell

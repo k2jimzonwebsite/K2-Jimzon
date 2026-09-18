@@ -114,7 +114,7 @@ function EventHistoryBody({ status, history, onRetry, staff = [] }) {
     )
   }
   if (history.length === 0) {
-    return <p className="text-xs leading-relaxed text-white/40">No Phase 2 workflow events recorded yet.</p>
+    return <p className="text-xs leading-relaxed text-white/40">No workflow events recorded yet.</p>
   }
   return (
     <div className="space-y-3">
@@ -580,7 +580,7 @@ function InboxWorkspace({ store, database }) {
       <WorkspaceIntro
         eyebrow="Customer workload"
         title="Unified message control"
-        description="Website live chat is customer-visible here; external sending is not connected for marketplace channels, which still use copied replies through their verified source."
+        description="Website live chat appears here and customers see your replies. Shopee, Lazada, and TikTok still need copied replies from their Seller Centers."
         status={inboxState.websiteReplyReady ? 'Website chat connected' : 'Website reply migration pending'}
         statusTone={inboxState.websiteReplyReady ? 'success' : 'warning'}
       />
@@ -600,7 +600,7 @@ function InboxWorkspace({ store, database }) {
       {queueTruncated && (
         <StateBanner tone="neutral" role="status">
           Showing the {inboxState.completeness.conversations.returned} most recently active conversations.
-          Older ones exist beyond this page — search or resolve threads to bring them into view.
+          Older ones exist beyond this page: search or resolve threads to bring them into view.
         </StateBanner>
       )}
 

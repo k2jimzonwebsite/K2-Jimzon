@@ -17,7 +17,7 @@ function receiptOrder(saved) {
 }
 
 export default function Confirmation() {
-  const { order, go } = useStore()
+  const { order, go, openStoreChat } = useStore()
   const [restoredOrder, setRestoredOrder] = useState(order)
   const [restoreState, setRestoreState] = useState(order ? 'ready' : 'loading')
 
@@ -106,7 +106,13 @@ export default function Confirmation() {
       </div>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-        {guestBffEnabled() && <CrimsonButton onClick={() => go('messages')}>View your messages</CrimsonButton>}
+        {guestBffEnabled() ? (
+          <CrimsonButton onClick={() => go('messages')}>View your messages</CrimsonButton>
+        ) : (
+          <CrimsonButton onClick={() => openStoreChat?.({ origin: 'order_confirmation', question: currentOrder?.id ? `Hi K2, I have a question regarding my order ${currentOrder.id}.` : 'Hi K2, I have a question regarding my order.' })}>
+            Chat with staff about this order
+          </CrimsonButton>
+        )}
         <GhostButton onClick={() => go('home')}>Continue shopping</GhostButton>
         <GhostButton onClick={() => go('pasabuy')}>Request an item from Italy</GhostButton>
       </div>

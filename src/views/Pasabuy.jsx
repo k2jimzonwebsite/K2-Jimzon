@@ -122,8 +122,8 @@ export default function Pasabuy() {
               </label>
               <label className="block text-sm font-semibold text-navy">Shipping preference
                 <select className={`${field} mt-1.5`} value={form.shipping} onChange={update('shipping')}>
-                  <option value="sea">Sea freight (Economical — timing quoted per request)</option>
-                  <option value="air">Air cargo (Faster — timing quoted per request)</option>
+                  <option value="sea">Sea freight (Economical - timing quoted per request)</option>
+                  <option value="air">Air cargo (Faster - timing quoted per request)</option>
                 </select>
               </label>
             </div>

@@ -31,6 +31,7 @@ export default function MilanPackingScannerModal({
   const [lastPacked, setLastPacked] = useState(null)
   const [scanFlash, setScanFlash] = useState(false)
   const [unrecognizedCode, setUnrecognizedCode] = useState(null)
+  const [instantArmed, setInstantArmed] = useState(false)
 
   // Quick creation form states
   const [quickTitle, setQuickTitle] = useState('')
@@ -104,6 +105,10 @@ export default function MilanPackingScannerModal({
 
   const handleInstantDraftPack = () => {
     if (!unrecognizedCode) return
+    if (!instantArmed) {
+      setInstantArmed(true)
+      return
+    }
     const code = unrecognizedCode
     const newSku = `IT-${code.slice(-6).toUpperCase()}`
     
@@ -122,6 +127,7 @@ export default function MilanPackingScannerModal({
 
     setLastPacked({ sku: newSku, name: `Draft Italian Item (${code})`, count: 1 })
     setUnrecognizedCode(null)
+    setInstantArmed(false)
   }
 
   const handleQuickSubmit = (e) => {
@@ -141,6 +147,7 @@ export default function MilanPackingScannerModal({
 
     setLastPacked({ sku: newSku, name: quickTitle, count: 1 })
     setUnrecognizedCode(null)
+    setInstantArmed(false)
     setQuickTitle('')
   }
 
@@ -166,7 +173,7 @@ export default function MilanPackingScannerModal({
         <button
           onClick={onClose}
           aria-label="Close Milan Packing Scanner"
-          className="rounded-adm-sm bg-white/10 px-3 py-1.5 text-sm font-semibold text-neutral-300 hover:bg-white/20 transition-all"
+          className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-adm-sm bg-white/10 px-3.5 text-sm font-semibold text-neutral-300 hover:bg-white/20 transition-all"
         >
           Close
         </button>
@@ -183,7 +190,7 @@ export default function MilanPackingScannerModal({
         <button
           onClick={onClose}
           aria-label="Close Milan Packing Scanner"
-          className="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-adm-sm font-bold text-sm shadow-lg shadow-crimson/20 transition-all"
+          className="min-h-[44px] inline-flex items-center justify-center bg-crimson hover:bg-crimson/90 text-white px-4 rounded-adm-sm font-bold text-sm shadow-lg shadow-crimson/20 transition-all"
         >
           Done Packing Box ✓
         </button>
@@ -229,13 +236,14 @@ export default function MilanPackingScannerModal({
           <input
             type="text"
             value={manualCode}
+            aria-label="Milan barcode or SKU"
             onChange={(e) => setManualCode(e.target.value)}
             placeholder="Milan Barcode / SKU entry (+1)..."
-            className="flex-1 rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-crimson"
+            className="min-h-[44px] flex-1 rounded-adm-sm border border-adm-line bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-crimson"
           />
           <button
             type="submit"
-            className="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-adm-sm text-sm font-bold shadow-md shadow-crimson/20"
+            className="min-h-[44px] inline-flex items-center bg-crimson hover:bg-crimson/90 text-white px-4 py-2 rounded-adm-sm text-sm font-bold shadow-md shadow-crimson/20"
           >
             +1 Pack
           </button>
@@ -249,7 +257,8 @@ export default function MilanPackingScannerModal({
               <button
                 key={item.sku}
                 onClick={() => handleProcessScan(item.sku)}
-                className="shrink-0 bg-white/5 border border-adm-line hover:border-crimson p-2 rounded-adm-sm text-left transition-all active:scale-95"
+                aria-label={`Pack one more ${item.sku}`}
+                className="min-h-[44px] shrink-0 bg-white/5 border border-adm-line hover:border-crimson px-3 py-2 rounded-adm-sm text-left transition-all active:scale-95"
               >
                 <p className="text-sm font-semibold text-neutral-200 truncate max-w-[120px]">{item.sku}</p>
                 <p className="text-xs text-white/50">
@@ -282,21 +291,22 @@ export default function MilanPackingScannerModal({
 
             {/* Actions Grid */}
             <div className="space-y-3 pt-2">
-              {/* PRIMARY 1-TAP ULTRA-FAST DRAFT BUTTON */}
-              <button
-                onClick={handleInstantDraftPack}
-                className="w-full flex items-center justify-between p-4 rounded-adm-sm bg-crimson hover:bg-crimson/90 text-white font-bold text-base shadow-xl shadow-crimson/30 transition-all transform active:scale-98"
-              >
-                <div className="text-left">
-                  <p className="font-extrabold text-base text-white flex items-center gap-1.5">
-                    ⚡ Instant 1-Tap Draft & Pack (+1)
-                  </p>
-                  <p className="text-xs text-neutral-300 font-normal mt-0.5">
-                    Registers SKU in inventory immediately & packs box (+1) without stopping scanner
-                  </p>
-                </div>
-                <span className="text-xl">🚀</span>
-              </button>
+                  {/* PRIMARY 1-TAP ULTRA-FAST DRAFT BUTTON */}
+                  <button
+                    onClick={handleInstantDraftPack}
+                    className="w-full flex items-center justify-between p-4 rounded-adm-sm bg-crimson hover:bg-crimson/90 text-white font-bold text-base shadow-xl shadow-crimson/30 transition-all transform active:scale-98"
+                  >
+                    <div className="text-left">
+                      <p className="font-extrabold text-base text-white flex items-center gap-1.5">
+                        {instantArmed ? `Tap again to create ${`IT-${unrecognizedCode.slice(-6).toUpperCase()}`} at SRP ${quickSrp}` : 'Instant 1-Tap Draft & Pack (+1)'}
+                      </p>
+                      <p className="text-xs text-neutral-300 font-normal mt-0.5">
+                        {instantArmed
+                          ? `SKU ${`IT-${unrecognizedCode.slice(-6).toUpperCase()}`} · batch ${quickBatch} · best before ${quickBestBefore}. Nothing is written until you tap again.`
+                          : 'Registers SKU in inventory immediately & packs box (+1) without stopping scanner'}
+                      </p>
+                    </div>
+                  </button>
 
               <button
                 onClick={() => {
@@ -306,8 +316,8 @@ export default function MilanPackingScannerModal({
                 }}
                 className="w-full flex items-center justify-between p-3.5 rounded-adm-sm bg-blue/10 border border-blue/30 text-blue font-bold text-sm hover:bg-blue/20 transition-all text-left group"
               >
-                <div>
-                  <p className="font-bold text-base text-white group-hover:text-blue">📷 Use AI Scan Box / Smart Paste</p>
+                    <div>
+                      <p className="font-bold text-base text-white group-hover:text-blue">Use AI Scan Box / Smart Paste</p>
                   <p className="text-xs text-white/50 font-normal mt-0.5">Stream packaging photos to AI vision model to generate full product JSON & specs</p>
                 </div>
                 <span className="text-xl">→</span>
@@ -315,7 +325,7 @@ export default function MilanPackingScannerModal({
 
               {/* Quick Entry Form */}
               <div className="bg-white/5 border border-adm-line rounded-adm-sm p-4 space-y-3">
-                <p className="text-sm font-bold text-white uppercase tracking-wider font-mono">📝 Quick Create Italian Product</p>
+                <p className="text-sm font-bold text-white uppercase tracking-wider font-mono">Quick Create Italian Product</p>
 
                 <form onSubmit={handleQuickSubmit} className="space-y-2.5">
                   <div>
@@ -361,13 +371,13 @@ export default function MilanPackingScannerModal({
                   </div>
 
                   <div className="pt-2 flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setUnrecognizedCode(null)}
-                      className="flex-1 py-2 text-sm font-semibold text-white/60 bg-white/5 rounded-adm-sm"
-                    >
-                      Cancel
-                    </button>
+                        <button
+                          type="button"
+                          onClick={() => { setUnrecognizedCode(null); setInstantArmed(false) }}
+                          className="flex-1 py-2 text-sm font-semibold text-white/60 bg-white/5 rounded-adm-sm"
+                        >
+                          Cancel
+                        </button>
                     <button
                       type="submit"
                       className="flex-1 py-2 text-sm font-bold text-white bg-crimson rounded-adm-sm shadow-lg shadow-crimson/20"
