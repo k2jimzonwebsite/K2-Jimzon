@@ -7,6 +7,24 @@ import { createStorefrontServerSupabase, mapBoundaryResult } from '../../server/
 
 import { strictNumeric } from '../../server/shared-numeric.js'
 
+// The exact note marker Checkout writes for Cash on Delivery. Kept identical
+// to the storefront copy and the database trigger by contract; a forged note
+// claiming COD is refused below while the admin switch is off.
+const COD_NOTE_MARKER = 'cash on delivery'
+
+async function codAvailable(client) {
+  try {
+    const { data } = await client
+      .from('payment_method_availability')
+      .select('cod_available')
+      .eq('method', 'cod')
+      .maybeSingle()
+    return data?.cod_available === true
+  } catch {
+    return false
+  }
+}
+
 const FULFILLMENT = new Set([
   'Metro Manila delivery',
   'Courier delivery',
@@ -83,6 +101,9 @@ export default async function handler(req, res) {
       return safeJson(res, 403, { error: { code: 'BOT_CHALLENGE_REQUIRED' } })
     }
     const client = createStorefrontServerSupabase()
+    if (String(payload.note || '').toLowerCase().includes(COD_NOTE_MARKER) && !(await codAvailable(client))) {
+      return safeJson(res, 409, { error: { code: 'COD_UNAVAILABLE' } })
+    }
     const { data, error } = await client.rpc('submit_guest_order_v1', signedRpcArguments(req, 'order', payload))
     // K2STK is raised by reserve_order_request_lots_v1 when the units are
     // already held by someone else. That is a normal, expected outcome of two

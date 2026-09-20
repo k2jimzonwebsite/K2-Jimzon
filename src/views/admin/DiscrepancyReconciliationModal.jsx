@@ -90,7 +90,7 @@ export default function DiscrepancyReconciliationModal({ isOpen, onClose, consig
                   <tr key={item.id || `${item.sku}-${item.box_code}-${item.batch_code}`} className="hover:bg-white/5 transition-colors">
                     <td className="py-3 px-3">
                       <p className="font-bold text-white">{item.sku}</p>
-                      <p className="text-xs text-white/50">{item.name || 'Authentic Italian Product'}</p>
+                      <p className="text-xs text-white/50">{item.name || 'Name not recorded'}</p>
                     </td>
                     <td className="py-3 px-3 text-center font-mono text-neutral-300">{item.batch_code}</td>
                     <td className="py-3 px-3 text-center font-mono text-neutral-300">{item.best_before_date}</td>

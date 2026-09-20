@@ -62,15 +62,45 @@ test('keeps secure Product Master edit, lifecycle, and delete decisions usable a
     if (app) app.style.display = 'none'
     const fixture = document.createElement('main')
     fixture.id = 'product-master-browser-fixture'
+    fixture.className = 'admin-ui min-h-screen bg-adm-bg p-4 text-white/80 font-sans'
     document.body.appendChild(fixture)
     createRoot(fixture).render(React.createElement(inventoryModule.default, { canManageProducts: true }))
   })
 
-  await expect(page.getByRole('heading', { name: 'Inventory exception board' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Inventory & stock checks' })).toBeVisible()
   await page.getByRole('button', { name: 'Edit', exact: true }).click()
   const editor = page.getByRole('dialog', { name: 'Edit Product' })
   await expect(editor).toBeVisible()
   await expect(editor.getByText('Reason for this change')).toBeVisible()
+  for (const width of [375, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    const descriptionToggle = editor.getByRole('button', { name: 'Product description' })
+    const useToggle = editor.getByRole('button', { name: 'Use & ingredients' })
+    await expect(descriptionToggle).toHaveAttribute('aria-expanded', 'false')
+    await expect(useToggle).toHaveAttribute('aria-expanded', 'false')
+    await descriptionToggle.focus()
+    await page.keyboard.press('Enter')
+    const description = editor.locator('textarea').first()
+    await description.fill('Staff draft retained across sections.')
+    await descriptionToggle.click()
+    await useToggle.click()
+    const instructions = editor.locator('textarea').first()
+    await instructions.fill('Cook in boiling water.')
+    await useToggle.click()
+    await editor.getByRole('button', { name: 'Pricing & stock', exact: true }).click()
+    await expect(editor.getByRole('button', { name: 'Website settings' })).toBeVisible()
+    await expect(editor.getByRole('button', { name: 'Status & staff notes' })).toBeVisible()
+    await editor.getByRole('button', { name: 'Details', exact: true }).click()
+    await descriptionToggle.click()
+    await expect(description).toHaveValue('Staff draft retained across sections.')
+    await descriptionToggle.click()
+    await useToggle.click()
+    await expect(instructions).toHaveValue('Cook in boiling water.')
+    await useToggle.click()
+    expect(await editor.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1)
+    await page.screenshot({ path: `docs/evidence/20260920-admin-plain-words/inventory-${width}.png`, fullPage: false })
+  }
+  await page.setViewportSize({ width: 375, height: 812 })
   expect(await editor.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1)
   await page.screenshot({ path: 'C:/tmp/k2-admin-product-master-edit-mobile.png', fullPage: true })
   await editor.getByRole('button', { name: 'Close product editor' }).click()
@@ -129,6 +159,7 @@ test('an unconfirmed deletion freezes the form and retries the same identity', a
     if (app) app.style.display = 'none'
     const fixture = document.createElement('main')
     fixture.id = 'product-master-browser-fixture'
+    fixture.className = 'admin-ui min-h-screen bg-adm-bg p-4 text-white/80 font-sans'
     document.body.appendChild(fixture)
     createRoot(fixture).render(React.createElement(inventoryModule.default, { canManageProducts: true }))
   })

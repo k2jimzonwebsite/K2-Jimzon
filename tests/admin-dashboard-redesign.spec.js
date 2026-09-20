@@ -728,6 +728,7 @@ test.describe('admin command center redesign', () => {
     })
     await expect(page.getByRole('heading', { name: 'Suppliers & purchase orders' })).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Verified Italia Supplier' })).toBeVisible()
+    await page.getByRole('tab', { name: 'Purchase orders' }).click()
     await expect(page.getByText('Creation and batch-aware receiving remain unavailable.')).toBeVisible()
     await page.getByRole('button', { name: 'Add supplier' }).click()
     const dialog = page.getByRole('dialog', { name: 'Add verified supplier' })
@@ -801,7 +802,7 @@ test.describe('admin command center redesign', () => {
       const app = document.getElementById('root'); if (app) app.style.display = 'none'
       const mount = document.createElement('main'); mount.className = 'min-h-[100dvh] bg-adm-bg p-3 text-white'; document.body.appendChild(mount)
       createRoot(mount).render(React.createElement(staffModule.default, { secureMode: true, runtime: {
-        user: { id: '8b185c31-66f7-49fd-81d0-4f36a38b9812' },
+        user: { id: '8b185c31-66f7-49fd-81d0-4f36a38b9812', role: 'Admin' },
         inviteStaff: async (email, role, reason) => {
           window.__staffInvite = { email, role, reason }
           return { ok: true, note: `Invite sent to ${email}; the ${role} role was assigned.` }
@@ -974,6 +975,7 @@ test.describe('admin command center redesign', () => {
         },
       } }))
     }, user.id)
+    await page.getByRole('tab', { name: 'Security' }).click()
     await page.getByRole('button', { name: 'Replace authenticator' }).click()
     const dialog = page.getByRole('dialog', { name: 'Replace authenticator' })
     await expect(dialog.getByRole('button', { name: 'Close authenticator replacement' })).toBeFocused()
@@ -1204,7 +1206,7 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 15000 })
 
     const workspaces = [
-      ['Inventory', 'Inventory exception board', 'inventory'],
+      ['Inventory', 'Inventory & stock checks', 'inventory'],
       ['Pasabuy Quotes', 'Request and quote control', 'pasabuy'],
       ['Fulfillment Hub', 'Order, packing, and custody desk', 'fulfillment'],
       ['Messages', 'Unified message control', 'inbox'],
@@ -1261,7 +1263,7 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 15000 })
 
     await page.getByRole('button', { name: 'Inventory', exact: true }).last().click()
-    await expect(page.getByRole('heading', { name: 'Inventory exception board' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Inventory & stock checks' })).toBeVisible()
     await expect(page.getByLabel('Search inventory')).toBeVisible()
     await page.screenshot({ path: 'C:/tmp/k2-admin-inventory-mobile.png' })
 

@@ -447,6 +447,58 @@ function OmniOperationsWorkspace() {
   const custodyLots = cargoBoxes.flatMap(box => box.items)
   const selectedPackingOrder = orders.find(order => order.id === selectedOrderId) || null
 
+  const [codAvailable, setCodAvailable] = useState(false)
+  const [codState, setCodState] = useState('loading')
+  const [codWorking, setCodWorking] = useState(false)
+  const [codMessage, setCodMessage] = useState('')
+
+  useEffect(() => {
+    let active = true
+    if (!supabase) {
+      setCodState('missing')
+      return undefined
+    }
+    supabase
+      .from('payment_method_availability')
+      .select('cod_available')
+      .eq('method', 'cod')
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (!active) return
+        if (error) {
+          setCodState('missing')
+          return
+        }
+        setCodAvailable(data?.cod_available === true)
+        setCodState('ready')
+      })
+      .catch(() => {
+        if (active) setCodState('missing')
+      })
+    return () => { active = false }
+  }, [])
+
+  const toggleCod = async () => {
+    if (codState !== 'ready' || codWorking) return
+    setCodWorking(true)
+    setCodMessage('')
+    try {
+      if (!supabase) throw new Error('missing')
+      const { data: { user } } = await supabase.auth.getUser()
+      const { error } = await supabase
+        .from('payment_method_availability')
+        .update({ cod_available: !codAvailable, updated_at: new Date().toISOString(), updated_by: user?.id || null })
+        .eq('method', 'cod')
+      if (error) throw error
+      setCodAvailable(!codAvailable)
+      setCodMessage(!codAvailable ? 'Cash on Delivery is now offered at checkout.' : 'Cash on Delivery is now hidden at checkout.')
+    } catch {
+      setCodMessage('Could not save. The payment-methods update may not be applied yet.')
+    } finally {
+      setCodWorking(false)
+    }
+  }
+
   return (
     <div className="mx-auto max-w-[1600px] space-y-5 pb-12 text-white">
       <div className="flex items-center justify-between">
@@ -494,6 +546,35 @@ function OmniOperationsWorkspace() {
         { label: 'Custody boxes', value: loadingBoxes ? '--' : cargoBoxes.length, detail: `${boxUnits} recorded units` },
         { label: 'Custody exceptions', value: loadingBoxes ? '--' : unassignedBoxes, detail: 'Unassigned or missing box code', tone: unassignedBoxes ? 'text-crimson' : 'text-white' },
       ]} />
+
+      <section aria-label="Payment methods" className="rounded-adm border border-adm-line bg-adm-surface p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="text-sm font-semibold text-white">Cash on Delivery</h3>
+            <p className="mt-1 text-xs leading-relaxed text-white/60">
+              {codState === 'missing'
+                ? 'Cash on Delivery controls arrive with the payment-methods database update. Checkout offers prepaid only until then.'
+                : codAvailable
+                  ? 'Offered at checkout. Switch off to stop new Cash on Delivery orders.'
+                  : 'Hidden at checkout. Switch on to offer Cash on Delivery again.'}
+            </p>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={codAvailable}
+            aria-label="Cash on Delivery"
+            disabled={codState !== 'ready' || codWorking}
+            onClick={toggleCod}
+            className="flex min-h-11 min-w-11 items-center justify-center disabled:opacity-40"
+          >
+            <span className={'relative inline-block h-5 w-9 rounded-full transition-colors ' + (codAvailable ? 'bg-blue' : 'bg-white/20')}>
+              <span className={'absolute left-0 top-0.5 inline-block h-4 w-4 transform rounded-full bg-white transition-transform ' + (codAvailable ? 'translate-x-4' : 'translate-x-0.5')} />
+            </span>
+          </button>
+        </div>
+        {codMessage && <p role="status" className="mt-2 text-xs text-white/60">{codMessage}</p>}
+      </section>
 
       {scanMessage && <StateBanner tone={scanMessage.success ? 'success' : 'danger'}>{scanMessage.text}</StateBanner>}
 

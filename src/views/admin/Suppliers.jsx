@@ -6,7 +6,7 @@ import { peso } from '../../data/products'
 import { adminBffEnabled, createSupplierBff, getAdminProcurementBff } from '../../services/adminBffService'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { useRetainedFulfillmentCommand } from './useRetainedFulfillmentCommand'
-import { StateBanner } from './AdminWorkspaceUi'
+import { StateBanner, WorkspaceTabs } from './AdminWorkspaceUi'
 
 const INPUT = 'min-h-[44px] w-full rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/30'
 
@@ -17,6 +17,7 @@ export default function Suppliers({ canCreateSupplier = false, secureMode }) {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [showForm, setShowForm] = useState(false)
+  const [supplierTab, setSupplierTab] = useState('directory')
   const addSupplierBtnRef = useRef(null)
 
   const load = useCallback(async (signal) => {
@@ -60,8 +61,12 @@ export default function Suppliers({ canCreateSupplier = false, secureMode }) {
     <header className="rounded-adm border border-adm-line bg-adm-surface p-5"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-xs font-semibold uppercase tracking-wider text-white/45">Italy purchasing records</p><h2 className="mt-1 font-sans text-2xl font-bold text-white">Suppliers & purchase orders</h2><p className="mt-1 max-w-2xl text-sm text-white/55">Verified supplier records and saved commitments only. Live price scraping, purchase-order creation, and receiving are not enabled here.</p></div><button ref={addSupplierBtnRef} disabled={!canCreateSupplier} onClick={() => setShowForm(true)} className="min-h-[44px] rounded-adm-sm bg-blue px-5 text-sm font-bold text-white disabled:opacity-50">Add supplier</button></div></header>
     {!secure && <div className="rounded-adm-sm border border-gold/35 bg-gold/10 p-3 text-sm text-gold">Transitional staff database path. The named server boundary remains inactive until coordinated cutover.</div>}
     {(error || notice) && <div role={error ? 'alert' : 'status'} className={`flex items-start gap-2 rounded-adm-sm border p-3 text-sm ${error ? 'border-crimson/40 bg-crimson/10 text-crimson' : 'border-forest/40 bg-forest/10 text-forest'}`}>{error ? <AlertIcon size={17} /> : <CheckIcon size={17} />}<span>{error || notice}</span></div>}
-    <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface" aria-labelledby="supplier-directory-title"><div className="border-b border-adm-line bg-adm-sunken px-4 py-3"><h2 id="supplier-directory-title" className="text-sm font-semibold text-white">Supplier directory</h2></div>{loading ? <Loading /> : procurement.suppliers.length === 0 ? <Empty icon title="No suppliers recorded" body="Add a verified supplier with an attributable source before creating a purchase order." /> : <SupplierList rows={procurement.suppliers} />}</section>
-    <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface" aria-labelledby="purchase-orders-title"><div className="border-b border-adm-line bg-adm-sunken px-4 py-3"><h2 id="purchase-orders-title" className="text-sm font-semibold text-white">Purchase orders</h2><p className="mt-1 text-xs text-white/45">Creation and batch-aware receiving remain unavailable.</p></div>{loading ? <Loading /> : procurement.purchaseOrders.length === 0 ? <Empty title="No purchase orders recorded" body="No supplier commitment has been saved in the canonical register." /> : <PurchaseOrderList rows={procurement.purchaseOrders} />}</section>
+    <WorkspaceTabs label="Supplier workspace views" active={supplierTab} onChange={setSupplierTab} tabs={[
+      { id: 'directory', label: 'Suppliers', count: loading ? '…' : procurement.suppliers.length },
+      { id: 'orders', label: 'Purchase orders', count: loading ? '…' : procurement.purchaseOrders.length },
+    ]} />
+    {supplierTab === 'directory' && (<section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface" aria-labelledby="supplier-directory-title"><div className="border-b border-adm-line bg-adm-sunken px-4 py-3"><h2 id="supplier-directory-title" className="text-sm font-semibold text-white">Supplier directory</h2></div>{loading ? <Loading /> : procurement.suppliers.length === 0 ? <Empty icon title="No suppliers recorded" body="Add a verified supplier with an attributable source before creating a purchase order." /> : <SupplierList rows={procurement.suppliers} />}</section>)}
+    {supplierTab === 'orders' && (<section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface" aria-labelledby="purchase-orders-title"><div className="border-b border-adm-line bg-adm-sunken px-4 py-3"><h2 id="purchase-orders-title" className="text-sm font-semibold text-white">Purchase orders</h2><p className="mt-1 text-xs text-white/45">Creation and batch-aware receiving remain unavailable.</p></div>{loading ? <Loading /> : procurement.purchaseOrders.length === 0 ? <Empty title="No purchase orders recorded" body="No supplier commitment has been saved in the canonical register." /> : <PurchaseOrderList rows={procurement.purchaseOrders} />}</section>)}
     {showForm && <SupplierDialog retrySafe={secure} onCancel={() => setShowForm(false)} onSave={createSupplier} returnFocusRef={addSupplierBtnRef} />}
   </div>
 }

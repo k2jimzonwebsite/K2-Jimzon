@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { supabase } from '../lib/supabaseClient'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 import ProductVisual from '../components/ProductVisual'
@@ -27,7 +28,7 @@ export default function Checkout() {
         barangay: pendingCheckout.barangay || '',
         city: pendingCheckout.city || '',
         address: pendingCheckout.address || '',
-        paymentMethod: pendingCheckout.paymentMethod || 'cod',
+        paymentMethod: pendingCheckout.paymentMethod || 'prepaid',
         note: pendingCheckout.note || '',
       }
     : {
@@ -38,7 +39,7 @@ export default function Checkout() {
         barangay: '',
         city: '',
         address: '',
-        paymentMethod: 'cod',
+        paymentMethod: 'prepaid',
         note: '',
       }))
 
@@ -51,6 +52,30 @@ export default function Checkout() {
   const [error, setError] = useState('')
   const [botToken, setBotToken] = useState('')
   const [challengeKey, setChallengeKey] = useState(0)
+  // Cash on Delivery stays hidden until an Admin switches it on. A missing
+  // or unreadable switch row means off, so customers can never be offered
+  // a payment method the store has not approved.
+  const [codAvailable, setCodAvailable] = useState(false)
+
+  useEffect(() => {
+    let active = true
+    if (!supabase) return undefined
+    supabase
+      .from('payment_method_availability')
+      .select('cod_available')
+      .eq('method', 'cod')
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!active) return
+        const on = data?.cod_available === true
+        setCodAvailable(on)
+        if (!on) {
+          setForm((current) => (current.paymentMethod === 'cod' ? { ...current, paymentMethod: 'prepaid' } : current))
+        }
+      })
+      .catch(() => {})
+    return () => { active = false }
+  }, [])
 
   // Dynamic package & shipping fee calculation based on cart lines and destination region
   const shippingData = useMemo(() => calculateCartShipping(lines, regionId), [lines, regionId])
@@ -83,6 +108,11 @@ export default function Checkout() {
   const submit = async (event) => {
     event.preventDefault()
     setError('')
+
+    if (form.paymentMethod === 'cod' && !codAvailable) {
+      setError('Cash on Delivery is not available right now.')
+      return
+    }
 
     if (!form.name.trim()) {
       setError('Please enter your full name for the package recipient label.')
@@ -383,7 +413,7 @@ export default function Checkout() {
                   Choose how you want to pay when your package arrives or before dispatch.
                 </p>
                 <div className="mt-2.5 grid gap-3 sm:grid-cols-2">
-                  <label
+                  {codAvailable && (<label
                     className={`flex min-h-[4rem] cursor-pointer items-start justify-between rounded-xl border p-3.5 transition-all duration-150 ${
                       form.paymentMethod === 'cod'
                         ? 'border-crimson bg-crimson/[0.03] shadow-sm'
@@ -412,7 +442,7 @@ export default function Checkout() {
                         <CheckIcon size={12} />
                       </span>
                     )}
-                  </label>
+                  </label>)}
 
                   <label
                     className={`flex min-h-[4rem] cursor-pointer items-start justify-between rounded-xl border p-3.5 transition-all duration-150 ${

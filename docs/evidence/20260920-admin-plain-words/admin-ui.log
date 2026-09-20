@@ -1,0 +1,50 @@
+
+> k2-jimzon-prototype@0.1.0 test:admin-ui
+> playwright test --config=playwright.admin.config.js tests/admin.spec.js tests/admin-dashboard-redesign.spec.js
+
+[WebServer] (node:24436) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 35 tests using 1 worker
+
+(node:16168) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › tests\admin-dashboard-redesign.spec.js:180:3 › admin command center redesign › keeps shared Admin help tips keyboard-readable and inside a 375px viewport (1.5m)
+  ok  2 [chromium] › tests\admin-dashboard-redesign.spec.js:234:3 › admin command center redesign › left-panel widgets show one workspace and preserve every dashboard destination (45.7s)
+  ok  3 [chromium] › tests\admin-dashboard-redesign.spec.js:253:3 › admin command center redesign › uses short staff language for channel and payment context (21.4s)
+  ok  4 [chromium] › tests\admin-dashboard-redesign.spec.js:265:3 › admin command center redesign › widget source failures stay unavailable and recover without inventing zero totals (5.5s)
+  ok  5 [chromium] › tests\admin-dashboard-redesign.spec.js:286:3 › admin command center redesign › unknown channels remain separate and empty records are not marketplace analytics (4.3s)
+  ok  6 [chromium] › tests\admin-dashboard-redesign.spec.js:297:3 › admin command center redesign › phone metrics and navigation stay readable and incomplete totals cannot be exported (2.2s)
+  ok  7 [chromium] › tests\admin-dashboard-redesign.spec.js:331:3 › admin command center redesign › malformed stock source stays unavailable and new stock reflects on visibility refresh (1.8s)
+  ok  8 [chromium] › tests\admin-dashboard-redesign.spec.js:359:3 › admin command center redesign › failed period refresh preserves and labels the prior snapshot and export period (1.7s)
+  ok  9 [chromium] › tests\admin-dashboard-redesign.spec.js:376:3 › admin command center redesign › renders multichannel analytics without desktop overflow (3.8s)
+  ok 10 [chromium] › tests\admin-dashboard-redesign.spec.js:469:3 › admin command center redesign › computes a bounded sales plan without presenting it as recorded finance truth (3.7s)
+  ok 11 [chromium] › tests\admin-dashboard-redesign.spec.js:612:3 › admin command center redesign › collapses safely for mobile operations (1.6s)
+  ok 12 [chromium] › tests\admin-dashboard-redesign.spec.js:637:3 › admin command center redesign › keeps Wholesale inquiry triage honest and usable at 375px (1.1s)
+  ok 13 [chromium] › tests\admin-dashboard-redesign.spec.js:674:3 › admin command center redesign › keeps Globe review evidence and publication controls usable at 375px (1.1s)
+  ok 14 [chromium] › tests\admin-dashboard-redesign.spec.js:715:3 › admin command center redesign › keeps supplier evidence and unavailable procurement powers clear at 375px (977ms)
+  ok 15 [chromium] › tests\admin-dashboard-redesign.spec.js:743:3 › admin command center redesign › keeps signed channel evidence and connector truth usable at 375px (1.0s)
+  ok 16 [chromium] › tests\admin-dashboard-redesign.spec.js:784:3 › admin command center redesign › keeps staff privilege changes reasoned and recoverable at 375px (978ms)
+  ok 17 [chromium] › tests\admin-dashboard-redesign.spec.js:831:3 › admin command center redesign › lets an invited staff account enroll an authenticator through the secure pending session at 375px (929ms)
+  ok 18 [chromium] › tests\admin-dashboard-redesign.spec.js:883:3 › admin command center redesign › requests and completes staff password recovery without account enumeration at 375px (1.1s)
+  ok 19 [chromium] › tests\admin-dashboard-redesign.spec.js:941:3 › admin command center redesign › replaces an active Admin authenticator with a reason and keeps recovery honest at 375px (1.0s)
+  ok 20 [chromium] › tests\admin-dashboard-redesign.spec.js:998:3 › admin command center redesign › keeps protected system readiness boolean-only and recoverable at 375px (810ms)
+  ok 21 [chromium] › tests\admin-dashboard-redesign.spec.js:1027:3 › admin command center redesign › keeps product-media validation and recovery usable at 375px (1.4s)
+  ok 22 [chromium] › tests\admin-dashboard-redesign.spec.js:1101:3 › admin command center redesign › keeps phone product intake usable, truthful, and recoverable at 375px (1.7s)
+  ok 23 [chromium] › tests\admin-dashboard-redesign.spec.js:1203:3 › admin command center redesign › keeps the five operational workspaces readable and overflow-safe (5.3s)
+  ok 24 [chromium] › tests\admin-dashboard-redesign.spec.js:1225:3 › admin command center redesign › the store asset queue mounts and offers a real publish path (1.5s)
+  ok 25 [chromium] › tests\admin-dashboard-redesign.spec.js:1243:3 › admin command center redesign › the workflow map exposes the channels section and names what is not connected (2.0s)
+  ok 26 [chromium] › tests\admin-dashboard-redesign.spec.js:1259:3 › admin command center redesign › keeps high-frequency workspace controls usable on mobile (3.8s)
+  ok 27 [chromium] › tests\admin-dashboard-redesign.spec.js:1291:3 › admin command center redesign › renders the complete connected workflow graph with traceable routes (3.4s)
+  ok 28 [chromium] › tests\admin-dashboard-redesign.spec.js:1339:3 › admin command center redesign › shows the complete paid-API blocker and manual fallback in the phone guide (763ms)
+  ok 29 [chromium] › tests\admin-dashboard-redesign.spec.js:1367:3 › admin command center redesign › synchronizes work context with URL, deep links directly, and supports browser back and forward (2.7s)
+  ok 30 [chromium] › tests\admin.spec.js:8:1 › Google admin OAuth returns to the guarded admin route (6ms)
+  ok 31 [chromium] › tests\admin.spec.js:26:1 › Google callback exposes the authenticator step instead of returning to login (6ms)
+  ok 32 [chromium] › tests\admin.spec.js:45:1 › OAuth credentials are removed from the Admin callback URL (6ms)
+  ok 33 [chromium] › tests\admin.spec.js:80:3 › admin access boundary › guarded path works and requires real Supabase authentication (742ms)
+  ok 34 [chromium] › tests\admin.spec.js:89:3 › admin access boundary › legacy localStorage flag cannot bypass the auth gate (732ms)
+  ok 35 [chromium] › tests\admin.spec.js:96:3 › admin access boundary › backend-not-configured sign-in fails clearly (1.0s)
+
+  35 passed (3.7m)

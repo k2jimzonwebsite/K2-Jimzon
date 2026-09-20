@@ -119,10 +119,10 @@ export default function ShopAllocationManager({ secureMode }) {
   return (
     <div className="space-y-6">
       <WorkspaceIntro
-        eyebrow="Shop stock"
-        title="Shop stock & transfers"
+        eyebrow="Channel allocation and custody"
+        title="Multi-shop inventory and custody"
         description="Plan two sellable units per active shop. The Manila stock count is the physical truth. Moving stock needs a staff request plus admin approval."
-        status={loading ? 'Loading shop stock...' : `${shops.length} active shops`}
+        status={loading ? 'Reading shop allocations...' : `${shops.length} active shops`}
         statusTone="info"
         actions={
           <div className="flex flex-wrap items-center gap-2">
@@ -150,21 +150,21 @@ export default function ShopAllocationManager({ secureMode }) {
         columns="lg:grid-cols-4"
         items={[
           {
-            label: 'Active shops',
+            label: 'Active seller accounts',
             value: shops.length,
             detail: 'Shopee, TikTok, Lazada',
             tone: 'text-white',
           },
           {
-            label: 'Sellable warehouse stock',
+            label: 'Master sellable units',
             value: totalMasterUnits,
             detail: 'Warehouse A (Manila Main)',
             tone: 'text-forest',
           },
           {
-            label: 'Stock assigned to shops',
+            label: 'Allocated shop units',
             value: totalAllocatedUnits,
-            detail: 'Planned shop availability',
+            detail: 'Availability projections',
             tone: 'text-blue',
           },
           {
@@ -189,7 +189,7 @@ export default function ShopAllocationManager({ secureMode }) {
           }`}
         >
           <GlobeIcon size={16} />
-          <span>Stock by shop</span>
+          <span>Shop allocation matrix</span>
         </button>
         <button
           onClick={() => setActiveTab('transfers')}
@@ -200,7 +200,7 @@ export default function ShopAllocationManager({ secureMode }) {
           }`}
         >
           <BoxIcon size={16} />
-          <span>Stock transfers ({transfers.length})</span>
+          <span>Custody transfers ({transfers.length})</span>
           {pendingTransferCount > 0 && (
             <span className="ml-1 rounded-full bg-amber/20 px-2 py-0.5 text-xs text-amber">
               {pendingTransferCount}
@@ -273,7 +273,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
   return (
     <section className="space-y-4">
       <SectionHeading
-        title="Stock by product"
+        title="Product shop allocation matrix"
         description="When stock is scarce, units go by sales priority. Skipped shops raise no low-stock alerts."
         count={filteredProducts.length}
         action={
@@ -292,7 +292,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
           <thead className="border-b border-adm-line bg-white/[0.025] text-white/40 uppercase tracking-wider">
             <tr>
               <th className="px-4 py-3 font-semibold">SKU and product</th>
-              <th className="px-4 py-3 font-semibold text-center">Warehouse stock</th>
+              <th className="px-4 py-3 font-semibold text-center">Master stock</th>
               {shops.map(s => (
                 <th key={s.id} className="px-3 py-3 font-semibold text-center">
                   <div className="truncate max-w-[120px]" title={s.display_name}>
@@ -361,7 +361,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
                         onClick={() => onRebalance(prod)}
                         className={`${secondaryButton} min-h-11 px-3 text-xs hover:border-blue`}
                       >
-                        Review stock split
+                        Rebalance
                       </button>
                     </td>
                   </tr>
@@ -430,7 +430,7 @@ function CustodyTransferSection({ transfers, onReload }) {
   return (
     <section className="space-y-4">
       <SectionHeading
-        title="Stock transfer requests"
+        title="Physical inventory transfer requests"
         description="Stock moves between hubs, holders, or shop allocations. Every move needs admin review."
         count={transfers.length}
       />
@@ -531,7 +531,7 @@ function CustodyTransferSection({ transfers, onReload }) {
           <form onSubmit={handleRejectSubmit} className="w-full max-w-md rounded-adm border border-adm-line bg-adm-surface p-6 space-y-4">
             <h3 className="text-lg font-semibold text-white">Reject stock transfer</h3>
             <p className="text-xs text-white/60">
-              Explain why this stock transfer should be rejected.
+              Provide an explicit operational reason for refusing this custody transfer.
             </p>
             <textarea
               value={rejectionReason}
@@ -614,8 +614,8 @@ function RebalanceModal({ product, shops, allocations, onClose, onCommitted }) {
         <div className="w-full max-w-2xl rounded-adm border border-adm-line bg-adm-surface p-6 space-y-5 text-white max-h-[calc(100dvh-1.5rem)] overflow-y-auto" onMouseDown={e => e.stopPropagation()}>
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-blue">Target: 2 units per shop</p>
-              <h2 id="rebalance-modal-title" className="text-xl font-bold mt-1">Review stock split: {product.name}</h2>
+              <p className="text-xs font-semibold uppercase tracking-wider text-blue">2-unit target allocation</p>
+              <h2 id="rebalance-modal-title" className="text-xl font-bold mt-1">Rebalance {product.name}</h2>
               <p className="text-xs font-mono text-white/50">{product.sku}</p>
             </div>
             <button
@@ -629,7 +629,7 @@ function RebalanceModal({ product, shops, allocations, onClose, onCommitted }) {
 
         <div className="grid grid-cols-3 gap-3 bg-adm-sunken p-4 rounded-adm-sm border border-adm-line">
           <div>
-            <span className="text-xs uppercase text-white/40 font-semibold block">Warehouse stock</span>
+            <span className="text-xs uppercase text-white/40 font-semibold block">Master stock</span>
             <span className="font-mono text-lg font-bold text-forest">{proposal.masterStock}</span>
           </div>
           <div>
@@ -644,12 +644,12 @@ function RebalanceModal({ product, shops, allocations, onClose, onCommitted }) {
 
         {proposal.scarcityWarning && (
           <StateBanner tone="warning">
-            Only {proposal.masterStock} units are available. All shops need {proposal.activeShopsCount * proposal.targetUnitsPerShop} units to reach 2 each. This plan assigns stock by sales priority.
+            Inventory is scarce: {proposal.masterStock} units available, but {proposal.activeShopsCount * proposal.targetUnitsPerShop} units required for full 2-unit coverage across all shops. Units were distributed in sales priority order.
           </StateBanner>
         )}
 
         <div className="space-y-2">
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wider">Proposed stock by shop</h4>
+          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wider">Proposed shop breakdown</h4>
           <div className="divide-y divide-adm-line border border-adm-line rounded-adm-sm overflow-hidden">
             {proposal.breakdown.map(item => (
               <div key={item.shopCode} className="px-4 py-2.5 flex items-center justify-between text-xs hover:bg-white/[0.02]">
@@ -693,7 +693,7 @@ function RebalanceModal({ product, shops, allocations, onClose, onCommitted }) {
             disabled={busy}
             className={`${primaryButton} flex-1 min-h-11 bg-blue font-bold`}
           >
-            {busy ? 'Saving...' : 'Save stock split'}
+            {busy ? 'Saving...' : 'Apply rebalance'}
           </button>
         </div>
       </div>
@@ -749,7 +749,7 @@ function CreateTransferModal({ products, shops, onClose, onCreated }) {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-blue">Physical stock movement</p>
-              <h2 id="create-transfer-title" className="text-xl font-bold mt-1">Request stock transfer</h2>
+              <h2 id="create-transfer-title" className="text-xl font-bold mt-1">Request custody transfer</h2>
             </div>
             <button
               type="button"
@@ -800,21 +800,21 @@ function CreateTransferModal({ products, shops, onClose, onCreated }) {
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-white/60 mb-1">From hub</label>
+            <label className="block text-xs font-semibold text-white/60 mb-1">Source hub</label>
             <input type="text" value={sourceHub} onChange={e => setSourceHub(e.target.value)} className={inputClass} required />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-white/60 mb-1">To hub</label>
+            <label className="block text-xs font-semibold text-white/60 mb-1">Destination hub</label>
             <input type="text" value={destinationHub} onChange={e => setDestinationHub(e.target.value)} className={inputClass} required />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-white/60 mb-1">Reason for transfer</label>
+          <label className="block text-xs font-semibold text-white/60 mb-1">Operational reason</label>
           <textarea
             value={reason}
             onChange={e => setReason(e.target.value)}
-            placeholder="Why does this stock need to move?"
+            placeholder="Explain why this physical movement is required..."
             required
             className={`${inputClass} min-h-20`}
           />
@@ -827,7 +827,7 @@ function CreateTransferModal({ products, shops, onClose, onCreated }) {
             Cancel
           </button>
           <button type="submit" disabled={busy || !reason.trim()} className={`${primaryButton} flex-1 min-h-11 bg-blue font-bold`}>
-            {busy ? 'Submitting...' : 'Request transfer'}
+            {busy ? 'Submitting...' : 'Submit transfer request'}
           </button>
         </div>
       </form>

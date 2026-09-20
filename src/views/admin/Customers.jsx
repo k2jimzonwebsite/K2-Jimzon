@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BriefcaseIcon, UserIcon } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
 import { adminBffEnabled, getAdminCustomers, getAdminWholesaleInquiries, reviewAdminWholesaleInquiry } from '../../services/adminBffService'
-import { EmptyState, MetricRail, SectionHeading, StateBanner, StatusPill, WorkspaceIntro } from './AdminWorkspaceUi'
+import { EmptyState, MetricRail, SectionHeading, StateBanner, StatusPill, WorkspaceIntro, WorkspaceTabs } from './AdminWorkspaceUi'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { useRetainedFulfillmentCommand } from './useRetainedFulfillmentCommand'
 
@@ -57,6 +57,7 @@ export default function Customers() {
   const [reviewReason, setReviewReason] = useState('')
   const [reviewError, setReviewError] = useState('')
   const reviewOpenerRef = useRef(null)
+  const [customerTab, setCustomerTab] = useState('directory')
 
   const openReview = inquiry => {
     if (reviewing) return
@@ -132,10 +133,15 @@ export default function Customers() {
       { label: metricsAvailable ? 'Unread messages' : 'Operational totals', value: metricsAvailable ? metrics.unread : 'Unavailable' },
     ]} />
 
-    <WholesaleInquirySection secure={secure} inquiryError={inquiryError} loading={loading} inquiries={inquiries} onReview={openReview} />
+    <WorkspaceTabs label="Customer workspace views" active={customerTab} onChange={setCustomerTab} tabs={[
+      { id: 'directory', label: 'Customer directory', count: loading ? '…' : customers.length },
+      { id: 'wholesale', label: 'Wholesale inquiries', count: secure && !inquiryError ? inquiries.length : null },
+    ]} />
+
+    {customerTab === 'wholesale' && (<WholesaleInquirySection secure={secure} inquiryError={inquiryError} loading={loading} inquiries={inquiries} onReview={openReview} />)}
     {reviewing&&<WholesaleReviewDialog inquiry={reviewing} status={reviewStatus} setStatus={setReviewStatus} reason={reviewReason} setReason={setReviewReason} error={reviewError} returnFocusRef={reviewOpenerRef} onClose={()=>setReviewing(null)} onSubmit={saveReview} />}
 
-    <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
+    {customerTab === 'directory' && (<section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
       <div className="p-4"><SectionHeading title="Identity directory" description="Staff working view, not a marketing list. Every contact keeps its source." count={customers.length} /></div>
       {loading ? <div className="space-y-2 border-t border-adm-line p-4" role="status" aria-label="Loading customers">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-20 rounded-adm-sm bg-white/[0.04]" />)}</div> : customers.length === 0 ? <EmptyState icon={UserIcon} title="No customer identities yet" description={mode === 'canonical' ? 'Guest, account, and channel identities will appear after their first verified interaction.' : 'No registered Customer or VIP profiles exist in the current account directory.'} /> : <>
         <div className="space-y-3 border-t border-adm-line p-3 sm:hidden">{customers.map(customer => <CustomerCard key={customer.id} customer={customer} metricsAvailable={metricsAvailable} />)}</div>
@@ -144,7 +150,7 @@ export default function Customers() {
           <tbody className="divide-y divide-adm-line">{customers.map(customer => <CustomerRow key={customer.id} customer={customer} metricsAvailable={metricsAvailable} />)}</tbody>
         </table></div>
       </>}
-    </section>
+    </section>)}
   </div>
 }
 

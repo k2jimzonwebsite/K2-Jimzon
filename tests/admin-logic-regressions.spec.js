@@ -180,7 +180,7 @@ test('inventory product editing routes every photo assignment through the dedica
   expect(source).toContain("commandAdminProductMasterBff('status'")
   expect(source).toContain("value: 'Under Review'")
   expect(source).toContain("value: 'Discontinued'")
-  expect(source).toContain('reasoned status action')
+  expect(source).toContain('Change status from the product card or selection bar and give a reason.')
   expect(source).toContain('<ProductIntakeSessionModal')
 })
 
@@ -268,5 +268,4 @@ test('inventory grid separates unknown stock from out-of-stock without zero coer
   expect(metrics.units).toBe(33)
   expect(metrics.drafts).toBe(1)
 })
-
 

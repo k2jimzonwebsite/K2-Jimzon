@@ -1,0 +1,157 @@
+
+> k2-jimzon-prototype@0.1.0 prebuild:storefront
+> npm run prebuild
+
+
+> k2-jimzon-prototype@0.1.0 prebuild
+> npm run security:test && npm run security:test-env-contract && npm run security:test-files && npm run security:files && npm run security:test-env-source && npm run security:env-source && npm run security:dependency-policy && npm run security:surfaces && npm run security:secrets && node scripts/check-imports.mjs
+
+
+> k2-jimzon-prototype@0.1.0 security:test
+> node scripts/test-secret-scan.mjs
+
+Secret scanner tests passed (fabricated values only).
+
+> k2-jimzon-prototype@0.1.0 security:test-env-contract
+> node scripts/verify-deployment-environment-contract.mjs --self-test
+
+Deployment environment contract self-test passed (5 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:test-files
+> node scripts/test-sensitive-file-policy.mjs
+
+Sensitive-file policy tests passed (13 blocked, 4 allowed, and the source inventory).
+
+> k2-jimzon-prototype@0.1.0 security:files
+> node scripts/verify-tracked-sensitive-files.mjs
+
+Sensitive-file policy passed in git mode (1407 files checked).
+
+> k2-jimzon-prototype@0.1.0 security:test-env-source
+> node scripts/test-environment-source-boundary.mjs
+
+Environment source-boundary tests passed (8 fixtures).
+
+> k2-jimzon-prototype@0.1.0 security:env-source
+> node scripts/verify-environment-source-boundary.mjs
+
+Environment source boundary passed (217 browser and 163 server/Edge files checked).
+
+> k2-jimzon-prototype@0.1.0 security:dependency-policy
+> node scripts/verify-dependency-policy.mjs
+
+Dependency policy passed (18 direct, 278 locked packages, 3 reviewed install scripts).
+Reviewed licenses: 0BSD=2, Apache-2.0=25, Apache-2.0 AND LGPL-3.0-or-later=3, Apache-2.0 AND LGPL-3.0-or-later AND MIT=1, BSD-3-Clause=2, CC-BY-4.0=1, ISC=11, LGPL-3.0-or-later=10, MIT=210, MPL-2.0=12, UNKNOWN=1
+
+> k2-jimzon-prototype@0.1.0 security:surfaces
+> node scripts/audit-security-surfaces.mjs --fail-on-gaps
+
+# MAP-020 Security Surface Inventory
+
+Generated: 2026-09-20T15:07:03.844Z
+
+- Prepared Admin routes: 92
+- Prepared Storefront routes: 15
+- Supabase Edge Functions: 2 (invite-staff, shopee-webhook)
+- api_request: 55 source operations
+- auth: 38 source operations
+- realtime: 13 source operations
+- rpc: 121 source operations
+- storage: 16 source operations
+- table: 130 source operations
+- SQL functionDefinitionOccurrences: 216
+- SQL uniqueFunctionSignatures: 165
+- SQL functionGrantEvents: 159
+- SQL functionRevokeEvents: 223
+- SQL functionSearchPathHardeningEvents: 6
+- SQL effectiveSecurityDefinerWithoutFixedSearchPath: 0
+- SQL effectiveFunctionsWithPublicExecute: 0
+- SQL effectiveFunctionsWithAnonExecute: 16
+- SQL effectiveFunctionsWithAuthenticatedExecute: 89
+- SQL effectiveFunctionsWithServiceRoleExecute: 13
+- SQL scheduledJobs: 0
+- SQL publicationChanges: 16
+- SQL policyDefinitions: 156
+- SQL storagePolicyDefinitions: 15
+- Dynamic operations requiring explicit review: 0
+- Exact expected anonymous function grants: 16
+- Unexpected PUBLIC function grants: 0
+- Unexpected anonymous function grants: 0
+- Missing expected anonymous function grants: 0
+- BFF route-control classification gaps: 0
+- Wildcard CORS production sources: 0
+
+This is a source inventory, not deployment or authorization evidence.
+
+> k2-jimzon-prototype@0.1.0 security:secrets
+> node scripts/scan-secrets.mjs
+
+warning: unable to access 'C:\Users\jerze/.config/git/ignore': Permission denied
+Secret scan passed (1427 files checked; secret values are never printed).
+✓ Import-integrity check passed — all hooks and supabase usages are imported.
+
+> k2-jimzon-prototype@0.1.0 build:storefront
+> vite build --mode storefront --configLoader runner && node scripts/emit-static-404.mjs storefront && node scripts/emit-storefront-sitemap.mjs && node scripts/verify-build-boundary.mjs storefront && node scripts/verify-bundle-budgets.mjs storefront && node scripts/scan-secrets.mjs dist
+
+vite v6.4.3 building for storefront...
+transforming...
+✓ 1137 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/k2-build-target.json                        0.03 kB │ gzip:   0.05 kB
+dist/manifest.json                               0.74 kB │ gzip:   0.30 kB
+dist/index.html                                  2.90 kB │ gzip:   0.98 kB
+dist/.vite/manifest.json                        10.46 kB │ gzip:   1.51 kB
+dist/assets/Home-Cb_2kCwY.css                    1.49 kB │ gzip:   0.63 kB
+dist/assets/InteractiveShop-BoaKCoOs.css        26.53 kB │ gzip:   5.95 kB
+dist/assets/index-CC7jI20x.css                 194.04 kB │ gzip:  28.71 kB
+dist/assets/imageFallback-hAkI1eqm.js            0.22 kB │ gzip:   0.18 kB
+dist/assets/guestCommerceService-BUTnJ2hj.js     0.25 kB │ gzip:   0.17 kB
+dist/assets/supabaseClient-B0NkNPxj.js           0.59 kB │ gzip:   0.43 kB
+dist/assets/NotFound-iF6FLmTm.js                 0.92 kB │ gzip:   0.52 kB
+dist/assets/TurnstileChallenge-CI7gdREP.js       1.13 kB │ gzip:   0.65 kB
+dist/assets/StorefrontChatButton-uUeLjwpS.js     1.39 kB │ gzip:   0.77 kB
+dist/assets/HeroVideo-DEYr9JuR.js                1.61 kB │ gzip:   0.70 kB
+dist/assets/site-DOKMVlzm.js                     2.02 kB │ gzip:   1.16 kB
+dist/assets/ProductVisual-BIGsgKJD.js            2.24 kB │ gzip:   1.05 kB
+dist/assets/StoreChatDrawer-DHGZdoxk.js          2.78 kB │ gzip:   1.27 kB
+dist/assets/Footer-BsquWG5P.js                   3.50 kB │ gzip:   1.32 kB
+dist/assets/Confirmation-GgwSiClk.js             3.58 kB │ gzip:   1.48 kB
+dist/assets/productDimensions-D-dgrbVH.js        3.87 kB │ gzip:   1.54 kB
+dist/assets/CartDrawer-R5xqsuJH.js               6.01 kB │ gzip:   2.21 kB
+dist/assets/Contact-Bad08HgC.js                  6.96 kB │ gzip:   2.30 kB
+dist/assets/Catalog-BOWLQk4Q.js                  8.16 kB │ gzip:   2.93 kB
+dist/assets/Policy-4NbgA1E8.js                   8.62 kB │ gzip:   3.44 kB
+dist/assets/Pasabuy-DwJI01US.js                  8.76 kB │ gzip:   3.03 kB
+dist/assets/ProductCard-C0DCRE_D.js              8.82 kB │ gzip:   2.71 kB
+dist/assets/GuestMessages-Pl8SI3oX.js           10.95 kB │ gzip:   3.73 kB
+dist/assets/StoreChatPanel-Bwov5m-x.js          12.02 kB │ gzip:   3.99 kB
+dist/assets/GlobeSection-CdwR3YpN.js            12.90 kB │ gzip:   5.05 kB
+dist/assets/Wholesale--SBarhjE.js               18.38 kB │ gzip:   5.14 kB
+dist/assets/Checkout-CShjwt5q.js                19.00 kB │ gzip:   5.93 kB
+dist/assets/CustomerAccount-CH06vIce.js         20.99 kB │ gzip:   6.08 kB
+dist/assets/MasterProduct-DEO3DtMi.js           24.51 kB │ gzip:   7.02 kB
+dist/assets/Home-Ctwg-HMf.js                    27.66 kB │ gzip:   8.35 kB
+dist/assets/InteractiveShop-B7sz9YR1.js         45.74 kB │ gzip:  13.85 kB
+dist/assets/index-M2G8hGPy.js                   96.47 kB │ gzip:  33.92 kB
+dist/assets/ShelfScene3D-BL4VnmAl.js           124.67 kB │ gzip:  38.03 kB
+dist/assets/vendor-motion-CTd0zmVj.js          128.88 kB │ gzip:  42.38 kB
+dist/assets/vendor-react-C4FUtlfE.js           193.89 kB │ gzip:  60.58 kB
+dist/assets/vendor-supabase-kPbh7bwL.js        215.54 kB │ gzip:  55.86 kB
+dist/assets/react-three-fiber.esm-BeDnU7Sm.js  894.12 kB │ gzip: 241.21 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 9.91s
+Emitted storefront static 404 recovery page.
+[sitemap] dist/sitemap.xml written with 2 stable routes and 0 product URLs
+[metadata] 1 product page prerendered
+[sitemap] NOTE: the pre-launch indexing gate is ON, so no product URL is
+[sitemap] listed and /product/* is served noindex. This is deliberate while
+[sitemap] products have no photographs or descriptions. To launch product
+[sitemap] pages into search, follow docs/PRELAUNCH_INDEXING.md.
+Verified storefront production boundary (35 manifest modules, no source maps/dev markers, and one reviewed Supabase localhost library marker).
+Storefront landing budget passed: JS 150.15 kB/150.50 kB gzip; CSS 29.34 kB/30.00 kB gzip.
+Secret scan passed (73 files checked; secret values are never printed).

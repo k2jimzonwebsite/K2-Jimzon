@@ -130,7 +130,7 @@ export default function MobileScannerModal({ isOpen, onClose, items, onScanItem,
               onClick={handleFinish}
               className="min-h-[44px] inline-flex items-center justify-center bg-forest hover:bg-forest/90 text-white px-4 rounded-adm-sm font-bold text-sm shadow-lg shadow-forest/20 transition-all"
             >
-              {finishArmed ? `Finish with ${totalScanned} of ${totalPacked} scanned?` : 'Review Discrepancies & Sync →'}
+              {finishArmed ? `Finish with ${totalScanned} of ${totalPacked} scanned?` : 'Review differences & sync'}
             </button>
         </div>
       </div>

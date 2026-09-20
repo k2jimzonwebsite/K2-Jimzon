@@ -1347,7 +1347,7 @@ export const WORKFLOWS = {
           'Record any owner-approved payment or reservation deadline for this order; do not invent a standard deadline.',
         ],
         rules: [
-          'No items are packed or dispatched until payment is 100% verified or COD is approved.',
+          'No items are packed or dispatched until payment is 100% verified or COD is approved (only when Cash on Delivery is switched on).',
         ],
         simulation: {
           testBarcode: 'MSG-QUOTE-SENT',

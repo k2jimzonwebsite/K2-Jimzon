@@ -25,7 +25,7 @@ export default function PackingSlipModal({ isOpen, onClose, order }) {
           </div>
         </div>
 
-        <div className="rounded border-2 border-slate-900 p-5 font-mono text-sm">
+        <div className="k2-print-slip rounded border-2 border-slate-900 p-5 font-mono text-sm">
           <div className="flex flex-col justify-between gap-3 border-b-2 border-slate-900 pb-4 sm:flex-row">
             <div><p className="text-xs font-bold uppercase text-slate-500">K2 Jimzon internal packing record</p><p className="mt-1 text-lg font-bold">{reference}</p></div>
             <div className="sm:text-right"><p className="text-xs font-bold uppercase text-slate-500">Source</p><p className="font-bold">{order.channel || 'Not recorded'}</p></div>

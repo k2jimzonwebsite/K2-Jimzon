@@ -19,7 +19,7 @@ export default function HelpTip({ label, text, className = '' }) {
       <span
         role="tooltip"
         id={tipId}
-        className="invisible fixed inset-x-4 bottom-4 z-30 rounded-adm-sm border border-adm-line bg-adm-sunken p-2.5 text-xs font-normal leading-relaxed text-white/70 opacity-0 shadow-adm-float transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-full sm:mt-1 sm:w-64 sm:max-w-[calc(100vw-2rem)]"
+        className="invisible fixed inset-x-4 bottom-[calc(70px+env(safe-area-inset-bottom))] z-50 rounded-adm-sm border border-adm-line bg-adm-sunken p-2.5 text-xs font-normal leading-relaxed text-white/70 opacity-0 shadow-adm-float transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-full sm:mt-1 sm:w-64 sm:max-w-[calc(100vw-2rem)]"
       >
         {text}
       </span>

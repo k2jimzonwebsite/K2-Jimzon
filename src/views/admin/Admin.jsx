@@ -18,6 +18,8 @@ import KeyboardShortcutsModal from './KeyboardShortcutsModal'
 import UniversalScanLauncher from './UniversalScanLauncher'
 import AdminToolsWidget from './AdminToolsWidget'
 import HelpTip from './HelpTip'
+import { AdminDialog } from '../../components/ui/AdminDialog'
+import { useIdleLock } from './useIdleLock'
 import { GO_TO_SHORTCUTS, isTextEntryTarget } from './adminOperations'
 import { adminBffEnabled, getAdminOverview } from '../../services/adminBffService'
 import { DASHBOARD_WIDGETS } from './dashboardWidgets'
@@ -179,6 +181,10 @@ export default function Admin() {
   const [activeTourId, setActiveTourId] = useState(null)
   const [guideQuery, setGuideQuery] = useState('')
   const [inventoryTool, setInventoryTool] = useState(null)
+  const { idleWarning, staySignedIn } = useIdleLock({
+    enabled: isAdmin && authReady,
+    onIdle: () => { logoutAdmin() },
+  })
   const goChordRef = useRef(null)
   const desktopHeadingRef = useRef(null)
   const mobileHeadingRef = useRef(null)
@@ -385,10 +391,25 @@ export default function Admin() {
 
   return (
     <div className="admin-ui flex min-h-screen bg-adm-bg pb-20 text-white/80 md:pb-0 font-sans selection:bg-blue/30 selection:text-white">
+      {idleWarning && (
+        <div className="fixed inset-0 z-[130] flex items-end justify-center bg-black/70 p-4 sm:items-center" role="presentation">
+          <AdminDialog onClose={staySignedIn} labelledBy="idle-lock-title">
+            <div className="w-full max-w-sm rounded-adm border border-adm-line bg-adm-surface p-5">
+              <h2 id="idle-lock-title" className="text-lg font-semibold text-white">Still there?</h2>
+              <p className="mt-1 text-sm leading-relaxed text-white/60">Nothing has moved for a while. Sign-in ends in about 2 minutes to protect the store.</p>
+              <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
+                <button type="button" onClick={() => { logoutAdmin() }} className="min-h-11 rounded-adm-sm border border-adm-line px-4 text-sm font-semibold text-white/70">Sign out now</button>
+                <button type="button" onClick={staySignedIn} className="min-h-11 rounded-adm-sm bg-blue px-4 text-sm font-bold text-white">Stay signed in</button>
+              </div>
+            </div>
+          </AdminDialog>
+        </div>
+      )}
       <CommandPalette
         isOpen={paletteOpen}
         setIsOpen={setPaletteOpen}
         setSection={selectSection}
+        canManageStaff={canManageStaff}
         onOpenScan={() => setShowScanCenter(true)}
         onOpenGuide={(query = '') => { setGuideQuery(query); setShowAiCopilot(true) }}
         onOpenShortcuts={() => setShowShortcuts(true)}
@@ -574,10 +595,13 @@ export default function Admin() {
                   <button
                     role="switch"
                     aria-checked={sheetMode}
+                    aria-label="Sheet mode"
                     onClick={() => setSheetMode((s) => !s)}
-                    className={'relative h-5 w-9 rounded-full transition-colors ' + (sheetMode ? 'bg-blue' : 'bg-white/20')}
+                    className="flex min-h-11 min-w-11 items-center justify-center"
                   >
-                    <span className={'inline-block h-4 w-4 transform rounded-full bg-white transition-transform ' + (sheetMode ? 'translate-x-4' : 'translate-x-0.5')} />
+                    <span className={'relative inline-block h-5 w-9 rounded-full transition-colors ' + (sheetMode ? 'bg-blue' : 'bg-white/20')}>
+                      <span className={'absolute left-0 top-0.5 inline-block h-4 w-4 transform rounded-full bg-white transition-transform ' + (sheetMode ? 'translate-x-4' : 'translate-x-0.5')} />
+                    </span>
                   </button>
                 </div>
               </div>

@@ -512,8 +512,8 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     <div className="relative mx-auto min-h-full max-w-[1600px] space-y-5 pb-12">
       <WorkspaceIntro
         eyebrow="Catalog and stock control"
-        title="Inventory & stock checks"
-        description="Find a product or batch and check stock or expiry. Counts come from saved records."
+        title="Inventory exception board"
+        description="Search products, filter down to stock and expiry risks, then open the exact SKU or batch. Stock numbers come only from saved product and batch records."
         status={loading ? 'Loading inventory evidence' : `${products.length} SKUs loaded`}
         statusTone={inventoryMetrics.out || inventoryMetrics.expiryRisk || inventoryMetrics.unresolved ? 'warning' : 'success'}
         actions={(
@@ -576,7 +576,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
       {notice && <StateBanner tone={notice.error ? 'danger' : 'success'}>{notice.text}</StateBanner>}
 
       <section className="space-y-3">
-        <SectionHeading title="Products" description="Filters change the list. Bulk actions show how many products you selected." count={visibleProducts.length} />
+        <SectionHeading title="Product master" description="Filters change the working set only; bulk actions still show their exact selection count." count={visibleProducts.length} />
         <div className="flex flex-col gap-2 rounded-adm-sm border border-adm-line bg-adm-surface p-2 sm:flex-row sm:items-center">
           <label className="relative min-w-0 flex-1">
             <span className="sr-only">Search inventory</span>
@@ -627,7 +627,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
           {Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-64 animate-pulse rounded-adm border border-adm-line bg-adm-surface" />)}
         </div>
       ) : visibleProducts.length === 0 ? (
-        <EmptyState icon={BoxIcon} title="No products match this view" description="Clear the search or change the stock filter to see more products." />
+        <EmptyState icon={BoxIcon} title="No products match this view" description="Clear the search or switch the exception filter to return to the full product master." />
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {visibleProducts.map(p => {
@@ -889,14 +889,14 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                     </Section>
                   )}
 
-                  <Section color="blue" title="Product basics">
+                  <Section color="blue" title="Product Identity">
                     <div>
-                      <Label>Product name</Label>
+                      <Label>Full Product Name</Label>
                       <input type="text" value={editingProduct.name || ''} onChange={e => set('name', e.target.value)} className={inp} required />
                     </div>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
-                        <Label>Short name for product cards</Label>
+                        <Label>Short Name (UI Card)</Label>
                         <input type="text" value={editingProduct.short || ''} onChange={e => set('short', e.target.value)} className={inp} />
                       </div>
                       <div>
@@ -920,7 +920,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                         <input type="text" value={editingProduct.package_type || ''} onChange={e => set('package_type', e.target.value)} className={inp} placeholder="e.g. Glass Jar" />
                       </div>
                       <div>
-                        <Label>Pack size</Label>
+                        <Label>Size / Display Size</Label>
                         <input type="text" value={editingProduct.size || ''} onChange={e => set('size', e.target.value)} className={inp} placeholder="e.g. 400g jar" />
                       </div>
                       <div>
@@ -931,28 +931,25 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                     </div>
                   </Section>
 
-                  <DetailBlock title="Product description">
+                  <DetailBlock title="Content & Copywriting">
                     <div>
-                      <Label>Description (3 sentences)</Label>
+                      <Label>Description (3 elegant sentences)</Label>
                       <textarea rows={3} value={editingProduct.description || ''} onChange={e => set('description', e.target.value)} className={ta} />
                     </div>
                     <div>
-                      <Label>Why buy this? (max 18 words)</Label>
+                      <Label>Why Buy (max 18 words)</Label>
                       <textarea rows={2} value={editingProduct.why_buy || ''} onChange={e => set('why_buy', e.target.value)} className={ta} />
                     </div>
                     <div>
-                      <Label>Why is it hard to find in the Philippines?</Label>
+                      <Label>Why Rare in PH</Label>
                       <textarea rows={2} value={editingProduct.why_rare || ''} onChange={e => set('why_rare', e.target.value)} className={ta} />
                     </div>
-                  </DetailBlock>
-
-                  <DetailBlock title="Use & ingredients">
                     <div>
-                      <Label>How to use</Label>
+                      <Label>Usage Instructions</Label>
                       <textarea rows={2} value={editingProduct.usage_instructions || ''} onChange={e => set('usage_instructions', e.target.value)} className={ta} />
                     </div>
                     <div>
-                      <Label>How to store</Label>
+                      <Label>Storage Instructions</Label>
                       <textarea rows={2} value={editingProduct.storage_instructions || ''} onChange={e => set('storage_instructions', e.target.value)} className={ta} />
                     </div>
                     <div>
@@ -965,7 +962,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                         <input type="text" value={editingProduct.allergens || ''} onChange={e => set('allergens', e.target.value)} className={inp} />
                       </div>
                       <div>
-                        <Label>Prepared result</Label>
+                        <Label>Finished Product</Label>
                         <input type="text" value={editingProduct.finished_product_details || ''} onChange={e => set('finished_product_details', e.target.value)} className={inp} placeholder="e.g. Cooked pasta dish" />
                       </div>
                     </div>
@@ -1016,13 +1013,13 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                     </div>
                   </Section>
 
-                  <DetailBlock title="Website settings">
+                  <DetailBlock title="Website & SEO">
                     <div>
-                      <Label>Page address (slug)</Label>
+                      <Label>Slug</Label>
                       <input type="text" value={editingProduct.slug || ''} onChange={e => set('slug', e.target.value)} className={`${inp} font-mono`} placeholder="e.g. mutti-polpa-400g" />
                     </div>
                     <div>
-                      <Label>Search keywords (separate with commas)</Label>
+                      <Label>SEO Keywords (comma-separated)</Label>
                       <input type="text"
                         value={Array.isArray(editingProduct.seo_keywords) ? editingProduct.seo_keywords.join(', ') : (editingProduct.seo_keywords || '')}
                         onChange={e => set('seo_keywords', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
@@ -1043,7 +1040,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                       </div>
                    </DetailBlock>
 
-                   <DetailBlock title="Status & staff notes">
+                   <DetailBlock title="Management">
                     <div>
                       <Label>Status</Label>
                       <select disabled={secure} value={normalizeStatus(editingProduct.status)} onChange={e => set('status', e.target.value)} className={`${inp} cursor-pointer disabled:opacity-60`}>
@@ -1053,7 +1050,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                         <option value="Discontinued">Discontinued: retired</option>
                       </select>
                       <p className="mt-1.5 text-xs text-white/45 leading-snug">
-                        {secure ? 'Change status from the product card or selection bar and give a reason.' : (STATUS_OPTIONS.find(o => o.value === normalizeStatus(editingProduct.status))?.hint
+                        {secure ? 'Use the reasoned status action on the product card or selected-products bar.' : (STATUS_OPTIONS.find(o => o.value === normalizeStatus(editingProduct.status))?.hint
                           || 'Retired product, kept for order history.')}
                       </p>
                     </div>
@@ -1072,7 +1069,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                 {editError && <StateBanner tone="danger">{editError}</StateBanner>}
                 {secure && <label className="block text-sm font-semibold text-white/70">Reason for this change
                   <textarea value={editReason} onChange={(event) => { setEditReason(event.target.value.slice(0, 500)); editOperationKey.current = null }} minLength={8} maxLength={500} required className="mt-1 min-h-[88px] w-full resize-y rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-base text-white outline-none focus:border-blue focus:ring-2 focus:ring-blue/25" />
-                      <span className="mt-1 block text-xs font-normal text-white/45">Saved permanently in this product's change history.</span>
+                  <span className="mt-1 block text-xs font-normal text-white/45">Required for the immutable product-change record.</span>
                 </label>}
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                   <button type="button" onClick={() => { setEditingProduct(null); setIsAdding(false); setEditError('') }}

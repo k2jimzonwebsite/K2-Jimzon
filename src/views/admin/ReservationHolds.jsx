@@ -218,7 +218,7 @@ export default function ReservationHolds() {
                 type="button"
                 onClick={() => setExtend({ ...extend, minutes })}
                 className={
-                  'adm-btn min-h-9 px-3 text-sm ' +
+                  'adm-btn min-h-11 px-3 text-sm ' +
                   (extend.minutes === minutes
                     ? 'bg-blue/20 font-semibold text-white'
                     : 'border border-adm-line text-white/60 hover:text-white')

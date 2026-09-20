@@ -1,5 +1,67 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260920-14 - Plain staff wording and smaller product detail groups. Accepted into MAP-028 I-012.**
+Owner requests continued Admin simplification using humanizer, without losing logic.
+Audit: Inventory still uses Product master, Copywriting and SEO; shop stock uses
+custody and matrix. The product content disclosure combines sales text and product
+use/ingredients. Merge into the existing calm-Admin scope, with no new MAP item.
+Smallest change: plain labels in Inventory and shop allocation/transfer forms;
+split optional product description from use/ingredients using existing DetailBlock.
+Keep all fields, IDs, values, approvals, warnings, requests and save boundaries.
+No provider dependency for local work; deployed/staff acceptance stays in I-012/MAP-025.
+Verification: existing contracts, Admin build, phone/desktop disclosure and retained
+draft browser checks. Recovery: scoped pre-edit sources in
+docs/design-checkpoints/20260920-admin-plain-words; evidence in the matching evidence directory.
+
+
+**IDEA-20260920-12 — accepted Cash on Delivery admin switch (default off), merged into MAP-023. Code locally verified, uncommitted.**
+Owner does not take COD yet and wants it switchable. Audit gate:
+1. Real problem: checkout offers and defaults to COD (`Checkout.jsx:30,41,385-415`) with no switch anywhere; payment travels inside the order note (`[Payment: Cash on Delivery (COD)]`), which the J&T engine also parses, so hiding the button alone leaves forged notes working.
+2. Outcome: customers see prepaid only until an Admin switches COD on; the switch persists in the database with an audit identity; forged COD notes are refused at every layer.
+3. Why existing behavior does not solve it: no settings table, no BFF validation, and no RPC guard mention payment method at all.
+4. Dependencies: none for code; the prepared migration applies in the MAP-017 window, and until then the code default keeps COD hidden (fail-secure, matching owner policy).
+5. Records/state/permissions/recovery: new `public.payment_method_availability` table (anon read, staff-only write, seeded off); additive trigger on `order_requests` that refuses only newly claimed COD notes and never touches existing rows; no publication, pricing, or stock change.
+6. Smallest scope: Checkout gating plus prepaid default plus submit guard; BFF `COD_UNAVAILABLE` rejection; Admin switch in the fulfillment hub with a missing-table pending state; one-line guide qualifier; migration plus rollback plus portable rehearsal.
+7. Completion checks: new spec green, `test:contracts` green, prebuild clean, both builds within budget, rehearsal exit 0.
+8. Destinations: MAP-023 payment scope, System Brain, runbook note that COD stays off until the owner switches it on.
+
+**IDEA-20260920-11 — accepted Client-side role mirroring on staff-access mutations, merged into MAP-020. Code locally verified, uncommitted.**
+Staff-role users see disabled privileged controls with the named reason instead of enabled controls the server would only refuse; own PIN, own MFA, and the directory stay available, and server checks remain the authority.
+
+**IDEA-20260920-10 — accepted Packing-slip print stylesheet, merged into MAP-023. Code locally verified, uncommitted.**
+The slip prints alone via `k2-print-slip` plus `@media print`; screen rendering untouched.
+
+**IDEA-20260920-08 — accepted Idle lock for shared staff devices, merged into MAP-019. Code locally verified, uncommitted.**
+Thirty-minute idle window with a two-minute plain-words warning, then sign-out through the existing logout path; activity resets the timer. Complements the prepared BFF server expiry at cutover.
+
+**IDEA-20260920-07 — accepted Mobile Admin audit slice (staff-on-phone experience), merged into MAP-028. Code locally verified, uncommitted.**
+HelpTip phone help floats above the tab bar with safe-area clearance; WorkspaceTabs signals off-screen tabs with an edge fade; sub-tab counts stay honest while loading. Sheet keeps no code coverage and stays an explicit real-device acceptance task under MAP-025.
+
+**IDEA-20260920-06 — accepted Strict Admin audit slice 5 (emoji, touch targets, accent leftovers), merged into MAP-028. Code locally verified, uncommitted.**
+Zero raw emoji in Admin (family icons or plain words; ✓/× text feedback explicitly allowed); every listed touch target meets 44px including the padded Sheet-mode switch and the labeled StartHere close; one accent holds (Overview emerald normalized to forest; StoreAsset emerald approval flow exempt as a single-hue tool theme).
+
+**IDEA-20260920-05 — accepted Sub-categorized workspaces (1 widget = 1 job), merged into MAP-028. Code locally verified, uncommitted.**
+Owner asks that every Admin frame show one job with named sub-categories inside, so each staff action is intentional instead of facing a wall of logic. Category map audit 20 September (all 47 Admin files extracted: blocks, sub-tabs, cross-links, overlays):
+1. Real problem and evidence: two workspaces stack unrelated jobs with no sub-navigation. `Customers.jsx` renders the identity directory and wholesale triage in one frame; `StaffPermissionManager.jsx` stacks Invite, delete PIN, People, AI spending, and 2FA in one frame. Everything else already gates: Omni modes, ShopAllocation tabs, J&T tabs, DeliveryRateControl tabs, Kanban 2-tab, OwnerCountClose rail, Overview lenses, Inbox master-detail.
+2. Outcome: one job per frame; secondary jobs sit behind named sub-tabs with counts.
+3. Why existing behavior does not solve it: five bespoke tab implementations exist but no shared primitive, and the two target surfaces have no sub-navigation at all.
+4. Dependencies: none. Local presentation only; no migration, provider, permission, or record change.
+5. Records/state/permissions/recovery: untouched. Banners, dialogs, and error states stay mounted outside the tab panels; default tabs keep the primary job first (directory, people).
+6. Smallest scope: one shared `WorkspaceTabs` sub-nav in `AdminWorkspaceUi.jsx`; Customers split (`Customer directory` | `Wholesale inquiries`); StaffPermissions split (`People` | `Security` | `AI spending`); one failing-first contract spec registered in `test:contracts`. Suppliers, Pasabuy detail, and Sheet stay sequenced follow-ups, not this slice.
+7. Completion checks: new spec green, `test:contracts` green, `npm run prebuild` clean, `build:admin` within 300.00 kB minified.
+8. Destinations: verified behavior to System Brain and the MAP-028 tone-down entry; no rulebook change (queues and blockers were already visible and stay so).
+
+**IDEA-20260920-01 — accepted Quiet Admin workspace logic (progressive disclosure + plain staff words), merged into MAP-028. Code locally verified, uncommitted.**
+Owner reports Admin BOS is still hard to look at: workspaces render every block immediately instead of offering details on demand, and remaining copy still carries internal jargon. Audit gate:
+1. Real problem and evidence: owner report 20 September 2026 plus deep-dive audit `docs/evidence/20260918-admin-bos-deep-dive/README.md` §1 (help sprawl, per-area color dialects, §1.6 jargon remainder). Slice 1 (HelpTip, one-accent, 18 header descriptions) changed headers and colors but not the immediate-render layout: the Inventory edit modal still opens ~20 fields across 7 stacked sections at once.
+2. Outcome: each workspace shows status plus the primary action first; secondary blocks sit behind an explicit `Show` control; copy uses warehouse plain words with facts unchanged.
+3. Why existing behavior does not solve it: Overview lens switching, Omni mode tabs, ShopAllocation tabs, and StartHere More/Less already gate top-level panels, but blocks *inside* a visible surface have no shared disclosure pattern, and Slice C (structural merges) was deferred without visual verification.
+4. Dependencies: none. Local presentation and copy only; no migration, provider, permission, or record change.
+5. Records/state/permissions/recovery: untouched. Operational queues, blockers, empty states, and error banners never collapse; only secondary detail blocks start closed. Collapsed form blocks hold no required fields.
+6. Smallest scope: one shared `DetailBlock` disclosure in `AdminWorkspaceUi.jsx`; apply to the Inventory edit-modal secondary sections (`Content & Copywriting`, `Website & SEO`, `Management`, default closed); plain-words pass on the §1.6 remainder (guarded workflow, POV, ultra-fast, 1-tap booking assistant, Bulk Batch redundancy, Discrepancies, fabricated product-name fallback); one failing-first contract spec registered in `test:contracts`.
+7. Completion checks: new spec green, `test:contracts` green, `test:admin-ui` with no new failures, `npm run prebuild` clean, `build:admin` within 300.00 kB minified.
+8. Destinations: verified behavior to System Brain and the MAP-028 tone-down entry; no rulebook change (the visible-blockers rule already governs).
+
 **IDEA-20260917-08: accepted Full Admin BOS Mobile Experience, Touch Ergonomics, Responsive Readability, and Operational Logic Hardening, merged into MAP-028 M. Code locally verified.**
 Owner requested ensuring the admin side too ("ensure the admin side too"), conducting an exhaustive mobile experience, readability, touch ergonomics, and operational logic audit and hardening across all 48 Admin views, navigation shells, and operational modals:
 1. Scope & Execution: Audited all 48 Admin views and workflows on mobile viewports (320px–430px) and tablet/desktop breakpoints. Formulated and resolved findings M-01 through M-11 across Touch Targets, iOS Viewport Auto-Zoom, Table Layouts, Modal Focus Traps, Floating Widget Bounds, and Editorial Policy.
@@ -282,7 +344,7 @@ a competing implementation backlog.
 
 **Active implementation authority:** `../MASTER_ACTION_PLAN.md`
 
-**Current pending intake:** IDEA-20260902-04, IDEA-20260902-05, IDEA-20260902-06
+**Current pending intake:** IDEA-20260902-04, IDEA-20260902-05, IDEA-20260902-06, IDEA-20260920-02, IDEA-20260920-03, IDEA-20260920-04, IDEA-20260920-09, IDEA-20260920-13
 
 This is not a roadmap or backlog. An idea stays here only until it is audited
 against the operations rulebook, current System Brain, actual code/data,
@@ -669,6 +731,16 @@ Master Action Plan is authorized for implementation.
 
 | Idea | Outcome | Destination or reason |
 | --- | --- | --- |
+| IDEA-20260920-12 | Merged into MAP-023 | Cash on Delivery admin switch, default off; layered note-claim guards; migration prepared for the MAP-017 window. |
+| IDEA-20260920-14 | Merged into MAP-028 I-012 | Plain Inventory and shop-stock wording; smaller product description/use groups with existing operational controls preserved. |
+| IDEA-20260920-11 | Merged into MAP-020 | Client-side role mirror on staff-access mutations; server checks remain the authority. |
+| IDEA-20260920-10 | Merged into MAP-023 | Packing-slip print isolation; screen rendering untouched. |
+| IDEA-20260920-09 | Deferred to MAP-017 window | Action-history read UI needs role-gated RLS only a production migration can provide. |
+| IDEA-20260920-08 | Merged into MAP-019 | Idle lock (30-minute window, 2-minute warning, sign-out); complements prepared BFF expiry. |
+| IDEA-20260920-07 | Merged into MAP-028 | Mobile audit fixes: HelpTip above the tab bar, WorkspaceTabs edge fade, honest loading counts. Sheet stays a real-device acceptance task under MAP-025. |
+| IDEA-20260920-06 | Merged into MAP-028 | Strict audit fixes: zero raw emoji, 44px touch floor, one accent (emerald to forest; StoreAsset flow exempt). ✓/× text feedback explicitly allowed. |
+| IDEA-20260920-05 | Merged into MAP-028 | Sub-categorized workspaces: shared WorkspaceTabs sub-nav, Customers split (directory / wholesale), StaffPermissions split (people / security / AI spending). Banners, dialogs, and records untouched; Suppliers, Pasabuy detail, Sheet sequenced later. |
+| IDEA-20260920-01 | Merged into MAP-028 | Quiet Admin workspace logic: shared DetailBlock disclosure, Inventory edit-modal secondary sections start closed, §1.6 plain-words remainder. Queues, blockers, and error states never collapse; no logic, permission, or record change. |
 | IDEA-20260918-01 | Merged into MAP-028 | Hover-? tone-down of Admin BOS shared headers: long WorkspaceIntro/SectionHeading descriptions move behind a tiny hover/focus ? (HelpTip), header toolbar tints neutral except primary Scan/Add Inventory. No state, permission, or copy meaning changes. |
 | IDEA-20260913-04 | Accepted completeness review; merged into MAP-022/023/025/026/028 | Clarify distributed stock and initial-sync acceptance; surface staff, scheduled jobs, money reconciliation and audit-proof dependencies in the existing launch guide. |
 | IDEA-20260913-03 | Accepted planning refinement; merged into MAP-026 / MAP-028 | Official-source marketplace access and website/application preparation, within existing own-shop scope and launch dependencies; no submission or activation performed. |
@@ -721,6 +793,51 @@ Master Action Plan is authorized for implementation.
 | IDEA-20260902-02 | Merged | MAP-023 replaces the earlier single-courier customer-fee basis with a carrier-agnostic `K2-arranged delivery` rule: for one exact origin, destination, packed profile, and owner-approved route-qualified courier/service set, quote the PHP 5 ceiling of the maximum complete current outbound courier cost; missing or stale eligible-option evidence routes to manual quotation, integrity conflicts hard-stop, current J&T-only routes remain automatic only when J&T is explicitly the sole eligible option, and MAP-019/MAP-020 own the future Admin activation and independently validated import/snapshot boundary |
 
 ## Pending idea intake
+
+### IDEA-20260920-13 - Staff delivery-quote lowering with reason
+
+**Captured:** 2026-09-20
+**Raised by:** Owner (sister needs to lower quotes later)
+
+**Desired outcome:** when the J&T VIP ceiling quote overshoots the real courier charge, staff can lower the customer-confirmed fee to the true cost with a written reason. Never upward: the matrix stays the ceiling, and the lowered figure plus reason persist on the order for settlement review.
+
+**Status:** captured, not audited. Needs MAP audit (BFF revalidation must accept the lowered figure, RPC `submit_order_request_v2` total math must follow, J&T column stays at the recorded total) before implementation.
+
+### IDEA-20260920-09 - Staff-visible attributable action history
+
+**Captured:** 2026-09-20
+**Raised by:** 007 security audit (repudiation gap)
+
+**Problem:** every financial/inventory/role decision is recorded in database audit tables, but no Admin surface shows who confirmed, changed, or verified what. Disputes and reconciliations currently require database access. The data exists; only a read UI with role-gated RLS is missing.
+
+**Status:** captured and audited, sequenced behind the MAP-017 database window (read UI needs role-gated RLS that only a production migration can provide). Not built in this slice.
+
+### IDEA-20260920-04 - Stable-IA commitment with a staff changelog
+
+**Captured:** 2026-09-20
+**Raised by:** Benchmark audit (TikTok lesson)
+
+**Desired outcome:** the Admin nav order never changes silently. Any reorder, rename, or regroup ships with a one-line "What changed" note in the workspace it affects, so stale screenshots and verbal training survive updates. TikTok's September 2026 nav reorg caused documented workflow paralysis for sellers with stale SOPs; K2 trains verbally, so the exposure is worse.
+
+**Status:** captured, not audited. Needs MAP audit before implementation.
+
+### IDEA-20260920-03 - Role-based landing and attention-first block order
+
+**Captured:** 2026-09-20
+**Raised by:** Benchmark audit (Shopify lesson)
+
+**Desired outcome:** staff land where their job lives (packer on the fulfillment desk, receiver on consignments) instead of everyone landing on the Command center, and every workspace orders its blocks by "needs you first". Shopify merchants' most upvoted ask is "open the app, see instantly if anything needs attention". The rulebook already requires blockers to stay visible; this makes that rule the layout order.
+
+**Status:** captured, not audited. Needs an owner decision (role-to-landing map) and MAP audit before implementation.
+
+### IDEA-20260920-02 - Pinnable nav favorites and saved workspace views
+
+**Captured:** 2026-09-20
+**Raised by:** Benchmark audit (Shopify/Woo lesson)
+
+**Desired outcome:** staff pin their 3 to 5 daily sections to the top of the nav and save filter presets inside a workspace (e.g. InventoryGrid search + status), mirroring Shopify's pinnable sidebar/saved views and Woo's hideable widgets. Occasional users stop re-learning the nav on every visit.
+
+**Status:** captured, not audited. Needs an owner decision (per-staff vs shared pins, browser vs database storage) and MAP audit before implementation. No record or permission change either way.
 
 ### IDEA-20260902-06 - Shop-scoped staff permissions, and a shop lens on inventory
 

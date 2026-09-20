@@ -843,3 +843,20 @@
 .admin-ui .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(59, 130, 246, 0.58);
 }
+
+/* Packing slip prints alone on paper: hide the admin chrome and the dialog
+   backdrop, then pin the slip to the top of the page. Screen rendering is
+   untouched; only the printed page changes. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .k2-print-slip,
+  .k2-print-slip * {
+    visibility: visible;
+  }
+  .k2-print-slip {
+    position: absolute;
+    inset: 0;
+  }
+}

@@ -356,17 +356,17 @@ export default function Sheet({ canManageProducts = false }) {
             </button>
           )}
           <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
-            <span>⌂</span> Scan Box
+            <BarcodeIcon size={14} /> Scan Box
           </button>
           <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-blue/30 bg-blue/10 px-3 min-h-[44px] text-sm font-medium text-blue transition hover:bg-blue/20">
-            <span>✨</span> Smart Paste AI
+            <SparkleIcon size={14} /> Smart Paste AI
           </button>
           <button
             onClick={() => visibleRows.length > 0 && setEnrichProduct(visibleRows[0])}
             disabled={visibleRows.length === 0}
             className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-blue/30 bg-blue/10 px-3 min-h-[44px] text-sm font-medium text-blue transition hover:bg-blue/20 disabled:opacity-40"
           >
-            <span>✨</span> AI Spec Enricher
+            <SparkleIcon size={14} /> AI Spec Enricher
           </button>
         </div>
 

@@ -730,7 +730,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         // A server-confirmed rejection proves the request did not commit.
         // Clear the held state so the customer can correct their cart, coupon, or contact details.
         if (result.code?.endsWith('_INVALID') ||
-          ['INSUFFICIENT_STOCK', 'CONTACT_REQUIRED', 'BOT_CHALLENGE_REQUIRED', 'INVALID_REQUEST', 'RATE_LIMITED', 'INVALID_OR_INELIGIBLE'].includes(result.code)) {
+          ['INSUFFICIENT_STOCK', 'CONTACT_REQUIRED', 'BOT_CHALLENGE_REQUIRED', 'INVALID_REQUEST', 'RATE_LIMITED', 'INVALID_OR_INELIGIBLE', 'COD_UNAVAILABLE'].includes(result.code)) {
           resetPendingCheckout()
         }
         return result

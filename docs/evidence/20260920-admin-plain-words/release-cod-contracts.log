@@ -1,0 +1,30 @@
+
+Running 23 tests using 1 worker
+
+(node:9616) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\guest-commerce-bff-contract.spec.js:26:1 › cart inventory commands reject zero, unknown, repeated, stale, and partial bundle additions (17ms)
+  ok  2 tests\guest-commerce-bff-contract.spec.js:57:1 › storefront public copy does not claim unverified stock sync or a Pasabuy response SLA (5ms)
+  ok  3 tests\guest-commerce-bff-contract.spec.js:68:1 › production Storefront excludes the prototype VIP direct-auth rail (5ms)
+  ok  4 tests\guest-commerce-bff-contract.spec.js:107:1 › single-function Storefront router allowlists every prepared endpoint and rejects unknown paths (14ms)
+  ok  5 tests\guest-commerce-bff-contract.spec.js:153:1 › guest order status is read only through the scoped browser grant (11ms)
+  ok  6 tests\guest-commerce-bff-contract.spec.js:176:1 › wholesale inquiry is exact, bot-gated, signed, and structurally unable to grant commercial authority (20ms)
+  ok  7 tests\guest-commerce-bff-contract.spec.js:191:1 › account continuity routes require customer auth and do not depend on the revoked guest grant (8ms)
+  ok  8 tests\guest-commerce-bff-contract.spec.js:213:1 › account continuity projection is owner-scoped, bounded, and excludes internal messages (8ms)
+  ok  9 tests\guest-commerce-bff-contract.spec.js:231:1 › customer account UI is independently gated, passwordless, honest, and keeps account outside primary mobile navigation (13ms)
+  ok 10 tests\guest-commerce-bff-contract.spec.js:264:1 › account claim requires exact origin, customer bearer auth, and a bounded payload (11ms)
+  ok 11 tests\guest-commerce-bff-contract.spec.js:288:1 › prepared account claim is verified-contact, guest-scoped, conflict-safe, one-time, and auditable (10ms)
+  ok 12 tests\guest-commerce-bff-contract.spec.js:310:1 › deployable Storefront entrypoint remains unavailable until its independent server switch is enabled (2ms)
+  ok 13 tests\guest-commerce-bff-contract.spec.js:328:1 › storefront boundary fails closed on wrong artifact, method, and origin (3ms)
+  ok 14 tests\guest-commerce-bff-contract.spec.js:345:1 › storefront validation rejects unknown fields before a database call (5ms)
+  ok 15 tests\guest-commerce-bff-contract.spec.js:369:1 › starting a conversation fails closed on method and origin (1ms)
+  ok 16 tests\guest-commerce-bff-contract.spec.js:379:1 › guest conversation listing is unavailable on the wrong production artifact (1ms)
+  ok 17 tests\guest-commerce-bff-contract.spec.js:386:1 › customer numerics reject booleans and null while accepting canonical numbers (4ms)
+  ok 18 tests\payment-method-availability-contract.spec.js:6:1 › migration creates a default-off COD switch with anon read and staff-only write (5ms)
+  ok 19 tests\payment-method-availability-contract.spec.js:17:1 › checkout hides Cash on Delivery unless switched on and defaults to prepaid (4ms)
+  ok 20 tests\payment-method-availability-contract.spec.js:25:1 › storefront BFF refuses COD notes while the switch is off (2ms)
+  ok 21 tests\payment-method-availability-contract.spec.js:31:1 › fulfillment hub carries the Cash on Delivery switch (3ms)
+  ok 22 tests\payment-method-availability-contract.spec.js:38:1 › workflow guide names the switch as the COD precondition (7ms)
+  ok 23 tests\payment-method-availability-contract.spec.js:43:1 › every note-reading layer detects the same COD note marker (3ms)
+
+  23 passed (1.8s)

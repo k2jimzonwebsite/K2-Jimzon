@@ -554,7 +554,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
                 type="button"
                 onClick={() => onWidget?.(lens.id)}
                 aria-pressed={moneyLens === lens.id}
-                className={`${actionClass} min-h-9 rounded-adm-sm px-3 text-xs font-semibold ${moneyLens === lens.id ? 'bg-adm-raised text-white shadow-adm' : 'text-white/65 hover:text-white'}`}
+                className={`${actionClass} min-h-11 rounded-adm-sm px-3 text-xs font-semibold ${moneyLens === lens.id ? 'bg-adm-raised text-white shadow-adm' : 'text-white/65 hover:text-white'}`}
               >
                 {lens.label}
               </button>
@@ -574,7 +574,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
             </p>
             <p className="mt-1.5 min-h-8 text-xs leading-relaxed text-white/65">{missing(metric.source) ? 'This source could not be retrieved.' : metric.detail}</p>
             {!loading && !missing(metric.source) && metric.change && (
-              <p className={`mt-1 text-xs font-medium ${metric.change.positive ? 'text-emerald-400' : 'text-crimson'}`}>{metric.change.label}</p>
+              <p className={`mt-1 text-xs font-medium ${metric.change.positive ? 'text-forest' : 'text-crimson'}`}>{metric.change.label}</p>
             )}
           </div>
         ))}
@@ -585,7 +585,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
             icon={GlobeIcon}
             title="Channel performance and readiness"
             description="Selected-period K2 order records and current listing states. Connection records do not verify a working API feed."
-            action={<button onClick={() => setSection('integrations')} className={`${actionClass} hidden min-h-9 items-center gap-1.5 rounded-adm-sm px-2 text-xs font-semibold text-blue hover:bg-blue/10 sm:flex`}>Manage <ArrowIcon size={13} /></button>}
+            action={<button onClick={() => setSection('integrations')} className={`${actionClass} hidden min-h-11 items-center gap-1.5 rounded-adm-sm px-2 text-xs font-semibold text-blue hover:bg-blue/10 sm:flex`}>Manage <ArrowIcon size={13} /></button>}
           />
           <div className="divide-y divide-adm-line">
             <div className="hidden grid-cols-[minmax(160px,1.5fr)_1fr_.7fr_1fr_1fr] gap-3 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white/65 md:grid">
@@ -598,8 +598,8 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
                   <p className="mt-0.5 text-xs text-white/65">{channel.description}</p>
                 </div>
                 <div>
-                  <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${channel.status === 'live' ? 'text-emerald-400' : 'text-white/65'}`}>
-                    <span className={`h-1.5 w-1.5 rounded-full ${channel.status === 'live' ? 'bg-emerald-400' : 'bg-white/25'}`} />
+                  <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${channel.status === 'live' ? 'text-forest' : 'text-white/65'}`}>
+                    <span className={`h-1.5 w-1.5 rounded-full ${channel.status === 'live' ? 'bg-forest' : 'bg-white/25'}`} />
                     {display('connections', channel.id === 'other' ? 'Unmapped source' : channel.status === 'live' ? 'Recorded as live' : readableStatus(channel.status))}
                   </span>
                 </div>
@@ -746,7 +746,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
                   </div>
                   <div><span className="md:hidden text-white/65">Channel · </span><span className="capitalize text-white/70">{normalizeChannel(order.channel_source)}</span></div>
                   <div><span className="md:hidden text-white/65">Order · </span><span className="capitalize text-white/70">{readableStatus(order.status)}</span></div>
-                  <div><span className="md:hidden text-white/65">Payment · </span><span className={order.payment_status === 'verified' ? 'capitalize text-emerald-400' : 'capitalize text-amber'}>{readableStatus(order.payment_status)}</span></div>
+                  <div><span className="md:hidden text-white/65">Payment · </span><span className={order.payment_status === 'verified' ? 'capitalize text-forest' : 'capitalize text-amber'}>{readableStatus(order.payment_status)}</span></div>
                   <div className="flex items-center justify-between gap-4 md:block md:text-right">
                     <span className="text-white/65 md:hidden">Request value</span>
                     <span className="font-mono font-semibold tabular-nums text-white">{peso(safeOrderValue(order.total_amount))}</span>
@@ -883,7 +883,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
 
       <section className="flex flex-col gap-3 border-t border-adm-line pt-4 text-xs leading-relaxed text-white/65 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex max-w-4xl items-start gap-2">
-          <CheckIcon size={15} className="mt-0.5 shrink-0 text-emerald-400" />
+          <CheckIcon size={15} className="mt-0.5 shrink-0 text-forest" />
           <p>Revenue includes only payment-verified order requests. Marketplace connectors and online payment remain deferred; channel figures are internal records, not marketplace analytics. Missing sources are marked unavailable.</p>
         </div>
         {pending == null

@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from 'react'
+import { XIcon } from '../../components/ui/icons'
 import { useBodyScrollLock } from '../../components/ui/useBodyScrollLock'
 import { DAILY_FLOW } from './adminGuide'
 
@@ -23,24 +24,22 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOper
           <div className="flex shrink-0 items-start justify-between border-b border-adm-line bg-adm-sunken px-6 py-4">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-base">📋</span>
-                <h2 className="text-lg font-semibold text-white">Start here — your daily workflow</h2>
+                <h2 className="text-lg font-semibold text-white">Start here: your daily workflow</h2>
               </div>
               <p className="mt-0.5 text-sm text-white/50">Read top to bottom, then follow each procedure's role, evidence, blocker, and recovery checks.</p>
             </div>
-            <button onClick={onClose} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-adm-sm bg-white/5 text-white/50 hover:bg-white/10 hover:text-white cursor-pointer">✕</button>
+            <button onClick={onClose} aria-label="Close guide" className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-adm-sm bg-white/5 text-white/50 hover:bg-white/10 hover:text-white cursor-pointer"><XIcon size={18} /></button>
           </div>
 
           {/* Quick Visual Guide Banner */}
           <div className="border-b border-adm-line bg-adm-sunken px-6 py-3">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-xs text-white/80">
-                <span className="text-sm">🗺️</span>
                 <span>Interactive SVG Master Workflow Graph & AI Prompt Studio</span>
               </div>
               <button
                 onClick={() => setGuideModalTab('master_graph')}
-                className="shrink-0 rounded-md border border-adm-line bg-white/[0.04] px-2.5 py-1 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
+                className="shrink-0 rounded-md border border-adm-line bg-white/[0.04] min-h-11 px-3 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
               >
                 Open SVG Map →
               </button>
@@ -73,40 +72,40 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOper
                     <div className="flex shrink-0 flex-col items-end gap-1.5">
                       <button
                         onClick={() => jump(s.section)}
-                        className="shrink-0 rounded-adm-sm border border-adm-line bg-adm-elevated px-2.5 py-1 text-xs font-medium text-white hover:bg-white/10 cursor-pointer"
+                        className="shrink-0 rounded-adm-sm border border-adm-line bg-adm-elevated min-h-11 px-3 text-xs font-medium text-white hover:bg-white/10 cursor-pointer"
                       >
                         Go →
                       </button>
                       {s.section === 'consignment' && (
                         <button
                           onClick={() => setGuideModalTab('flights')}
-                          className="shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.04] px-2 py-1 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.04] min-h-11 px-3 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
                         >
-                          Diagram 🗺️
+                          Diagram
                         </button>
                       )}
                       {s.section === 'inventory' && (
                         <button
                           onClick={() => setGuideModalTab('custody')}
-                          className="shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.04] px-2 py-1 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.04] min-h-11 px-3 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
                         >
-                          Diagram 🗺️
+                          Diagram
                         </button>
                       )}
                       {s.section === 'omni_hub' && (
                         <button
                           onClick={() => setGuideModalTab('fulfillment')}
-                          className="shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.04] px-2 py-1 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.04] min-h-11 px-3 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
                         >
-                          Diagram 🗺️
+                          Diagram
                         </button>
                       )}
                       {s.section === 'pasabuy_manager' && (
                         <button
                           onClick={() => setGuideModalTab('pasabuy')}
-                          className="shrink-0 rounded-adm-sm border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-xs font-bold text-cyan-400 hover:bg-cyan-500/20 cursor-pointer"
+                          className="shrink-0 rounded-adm-sm border border-adm-line bg-white/[0.04] min-h-11 px-3 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
                         >
-                          Diagram 🗺️
+                          Diagram
                         </button>
                       )}
                     </div>

@@ -31,7 +31,7 @@ export default function UniversalScanLauncher({ isOpen, onClose, onNavigate, onI
           <div>
             <div className="mb-2 flex items-center gap-2 text-blue"><BarcodeIcon size={17} /><span className="text-xs font-semibold uppercase tracking-[0.12em]">Scan center</span></div>
             <h2 id="scan-center-title" className="text-lg font-semibold">What are you scanning?</h2>
-            <p className="mt-1 max-w-xl text-sm leading-relaxed text-white/50">The scan center sends you to the correct guarded workflow. Select the order, flight, or box before unit scans can change operational records.</p>
+            <p className="mt-1 max-w-xl text-sm leading-relaxed text-white/50">The scan center sends you to the right step-by-step screen. Select the order, flight, or box before unit scans can change records.</p>
           </div>
           <button onClick={onClose} aria-label="Close scan center" className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-adm-sm text-white/50 hover:bg-white/5 hover:text-white"><XIcon size={18} /></button>
         </header>

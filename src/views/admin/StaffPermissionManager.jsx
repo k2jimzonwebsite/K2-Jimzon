@@ -9,6 +9,7 @@ import {
 } from '../../lib/aiSpendControls.js'
 import { CheckIcon, InboxIcon, ShieldIcon, UserIcon, XIcon } from '../../components/ui/icons'
 import { AdminDialog } from '../../components/ui/AdminDialog'
+import { WorkspaceTabs } from './AdminWorkspaceUi'
 
 // Real staff & roles. Reads user_profiles (admins see all), lets the super admin
 // invite people + set roles, and lets an admin turn on their own 2FA.
@@ -44,6 +45,7 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
   const [loading, setLoading] = useState(true)
   const [err, setErr] = useState('')
   const [notice, setNotice] = useState('')
+  const [staffTab, setStaffTab] = useState('people')
 
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteRole, setInviteRole] = useState('Staff')
@@ -67,6 +69,7 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
   const [aiSpendControls, setAiSpendControls] = useState(null)
   const [aiSpendControlsStatus, setAiSpendControlsStatus] = useState('checking')
   const isSuperAdmin = user?.role === 'SuperAdmin'
+  const canManage = user?.role === 'Admin' || user?.role === 'SuperAdmin'
 
   const load = useCallback(async (signal) => {
     if (secure) {
@@ -214,38 +217,45 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
       {err && <div role="alert" className="p-3.5 rounded-adm-sm border border-crimson/40 bg-crimson/10 text-crimson text-sm font-semibold">{err}</div>}
       {notice && <div role="status" aria-live="polite" className="p-3.5 rounded-adm-sm border border-forest/40 bg-forest/10 text-forest text-sm font-semibold">{notice}</div>}
 
+      <WorkspaceTabs label="Staff workspace views" active={staffTab} onChange={setStaffTab} tabs={[
+        { id: 'people', label: 'People', count: loading ? '…' : rows.length },
+        { id: 'security', label: 'Security' },
+        { id: 'spending', label: 'AI spending' },
+      ]} />
+
       {/* Invite */}
-      <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
+      {staffTab === 'people' && (<section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-3">
           <InboxIcon size={19} className="text-white/50" aria-hidden="true" />
           <h2 className="text-sm font-bold uppercase tracking-wider text-white/70">Invite a staff member</h2>
         </div>
         {!invitationAvailable && <p role="status" className="mb-3 rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-sm text-amber">Invitations are unavailable until the reason-bound Edge receipt and server forwarding configuration are active. Existing access can still be reviewed.</p>}
+        {!canManage && <p role="status" className="mb-3 rounded-adm-sm border border-white/15 bg-white/5 p-3 text-sm text-white/60">Only Admins can change roles or invite staff. You can review the directory and manage your own PIN and two-factor sign-in.</p>}
         <form onSubmit={sendInvite} className="space-y-3">
-          <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Email address<input type="email" required disabled={!invitationAvailable} value={inviteEmail} onChange={e => setInviteEmail(e.target.value)}
+          <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Email address<input type="email" required disabled={!canManage || !invitationAvailable} value={inviteEmail} onChange={e => setInviteEmail(e.target.value)}
             placeholder="name@example.com" className={inputCls} />
           </label>
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-white/45 mb-1.5">Their role</label>
-            <select disabled={!invitationAvailable} value={inviteRole} onChange={e => setInviteRole(e.target.value)}
+            <select disabled={!canManage || !invitationAvailable} value={inviteRole} onChange={e => setInviteRole(e.target.value)}
               className={`${inputCls} cursor-pointer appearance-none`}>
               {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
             <p className="text-xs text-white/45 mt-1.5 leading-relaxed">{ROLE_BLURB[inviteRole]}</p>
           </div>
           {secure && <label className="block text-xs font-bold uppercase tracking-wider text-white/45">Reason for this invitation
-            <textarea required minLength={3} maxLength={500} disabled={!invitationAvailable} value={inviteReason} onChange={e => setInviteReason(e.target.value)}
+            <textarea required minLength={3} maxLength={500} disabled={!canManage || !invitationAvailable} value={inviteReason} onChange={e => setInviteReason(e.target.value)}
               placeholder="Why does this person need access?" className={`${inputCls} mt-1.5 min-h-24 resize-y`} />
           </label>}
-          <button type="submit" disabled={inviting || !invitationAvailable || (secure && inviteReason.trim().length < 3)}
+          <button type="submit" disabled={inviting || !canManage || !invitationAvailable || (secure && inviteReason.trim().length < 3)}
             className="w-full rounded-adm-sm bg-blue hover:bg-blue-deep text-white font-bold min-h-12 py-3 disabled:opacity-50 transition-[background-color,opacity,transform] active:scale-[.99] motion-reduce:transition-none">
             {inviting ? 'Sending…' : 'Send invite'}
           </button>
         </form>
-      </section>
+      </section>)}
 
       {/* Delete PIN */}
-      <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
+      {staffTab === 'security' && (<section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-1">
           <ShieldIcon size={19} className="text-white/50" aria-hidden="true" />
           <h2 className="text-sm font-bold uppercase tracking-wider text-white/70">Your delete PIN</h2>
@@ -292,10 +302,10 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
             {pinBusy ? 'Saving…' : hasPin ? 'Change PIN' : 'Set PIN'}
           </button>
         </form>
-      </section>
+      </section>)}
 
       {/* People */}
-      <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
+      {staffTab === 'people' && (<section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <UserIcon size={19} className="text-white/50" aria-hidden="true" />
@@ -329,7 +339,7 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
                   </div>
                   <label className="block mt-3">
                     <span className="block text-xs font-bold uppercase tracking-wider text-white/40 mb-1">Change role</span>
-                    <select value={role} disabled={role === 'SuperAdmin'} onChange={e => { if (e.target.value !== role) setRoleChange({ profile: r, role: e.target.value }) }}
+                      <select value={role} disabled={role === 'SuperAdmin' || !canManage} title={!canManage ? 'Only Admins can change roles.' : undefined} onChange={e => { if (e.target.value !== role) setRoleChange({ profile: r, role: e.target.value }) }}
                       className="w-full rounded-adm-sm border border-white/20 bg-adm-surface px-3 min-h-11 py-2.5 text-base text-white focus:border-blue outline-none cursor-pointer appearance-none">
                       {role === 'SuperAdmin' && <option value="SuperAdmin">SuperAdmin (owner controlled)</option>}
                       {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
@@ -340,10 +350,10 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
             })}
           </div>
         )}
-      </section>
+      </section>)}
       {roleChange && <RoleChangeDialog change={roleChange} onCancel={() => setRoleChange(null)} onConfirm={changeRole} />}
 
-      <PaidAiSpendControls
+      {staffTab === 'spending' && (<PaidAiSpendControls
         secure={secure}
         isSuperAdmin={isSuperAdmin}
         controls={aiSpendControls}
@@ -354,10 +364,10 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
           setNotice('Paid AI spending controls saved with an attributable reason. Provider activation remains separately gated.')
         }}
         onError={message => setErr(message)}
-      />
+      />)}
 
       {/* Your 2FA */}
-      <section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
+      {staffTab === 'security' && (<section className="bg-adm-surface border border-adm-line rounded-adm p-4 sm:p-5 shadow-lg">
         <div className="flex items-center gap-2 mb-1">
           <CheckIcon size={19} className="text-white/50" aria-hidden="true" />
           <h2 className="text-sm font-bold uppercase tracking-wider text-white/70">Your two-factor security</h2>
@@ -429,7 +439,7 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
             </div>
           </form>
         )}
-      </section>
+      </section>)}
       {mfaReplacementOpen && <MfaReplacementDialog
         onClose={() => setMfaReplacementOpen(false)}
         onStart={startMfaReplacement}

@@ -1,0 +1,39 @@
+
+> k2-jimzon-prototype@0.1.0 test:admin-product-master-ui
+> playwright test --config=playwright.product-master.config.js tests/admin-product-master-ui.spec.js
+
+[WebServer] (node:15112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:14556) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chromium] › tests\admin-product-master-ui.spec.js:27:1 › keeps secure Product Master edit, lifecycle, and delete decisions usable at 375px (2.0m)
+(node:9348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 [chromium] › tests\admin-product-master-ui.spec.js:128:1 › an unconfirmed deletion freezes the form and retries the same identity (36.1s)
+
+
+  1) [chromium] › tests\admin-product-master-ui.spec.js:27:1 › keeps secure Product Master edit, lifecycle, and delete decisions usable at 375px 
+
+    Test timeout of 120000ms exceeded.
+
+    Error: page.evaluate: Test timeout of 120000ms exceeded.
+
+      53 |
+      54 |   await page.goto('/', { waitUntil: 'domcontentloaded' })
+    > 55 |   await page.evaluate(async () => {
+         |              ^
+      56 |     const [reactModule, reactDomClientModule, inventoryModule] = await Promise.all([
+      57 |       import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/InventoryGrid.jsx'),
+      58 |     ])
+        at C:\Users\jerze\K2 JImzon\tests\admin-product-master-ui.spec.js:55:14
+
+    Error Context: test-results\admin-product-master-ui-ke-a143d-e-decisions-usable-at-375px-chromium\error-context.md
+
+  1 failed
+    [chromium] › tests\admin-product-master-ui.spec.js:27:1 › keeps secure Product Master edit, lifecycle, and delete decisions usable at 375px 
+  1 passed (2.7m)

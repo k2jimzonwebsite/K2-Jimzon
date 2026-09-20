@@ -162,7 +162,7 @@ export default function JntVipDispatchModal({
                 </h2>
               </div>
               <p className="mt-1 text-xs text-white/60">
-                1-tap booking assistant and bulk waybill generation for J&T Express Philippines.
+                Copy details to book one J&T delivery, or prepare a bulk upload for many.
               </p>
             </div>
             <button
@@ -200,7 +200,7 @@ export default function JntVipDispatchModal({
               }`}
             >
               <UploadIcon size={16} />
-              <span>Bulk Batch Upload ({eligibleBulkOrders.length} Ready)</span>
+              <span>Bulk Upload ({eligibleBulkOrders.length} Ready)</span>
             </button>
           </div>
 

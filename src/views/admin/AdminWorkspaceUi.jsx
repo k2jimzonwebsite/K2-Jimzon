@@ -1,4 +1,5 @@
-import { AlertIcon, CheckIcon, ClockIcon, InboxIcon } from '../../components/ui/icons'
+import { useId, useState } from 'react'
+import { AlertIcon, CheckIcon, ClockIcon, InboxIcon, MinusIcon, PlusIcon } from '../../components/ui/icons'
 import HelpTip from './HelpTip'
 
 const TONES = {
@@ -59,6 +60,54 @@ export function SectionHeading({ title, description, count, action }) {
         </div>
       </div>
       {action}
+    </div>
+  )
+}
+
+export function DetailBlock({ title, count, defaultOpen = false, children }) {
+  const [open, setOpen] = useState(defaultOpen)
+  const panelId = useId()
+  const ToggleIcon = open ? MinusIcon : PlusIcon
+  return (
+    <div className="border-l border-white/15 pl-4">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        aria-expanded={open}
+        aria-controls={panelId}
+        className="flex min-h-11 w-full items-center gap-2 py-1.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
+      >
+        <ToggleIcon size={15} className="shrink-0 text-white/50" />
+        <span className="text-sm font-extrabold uppercase tracking-wider text-white/70">{title}</span>
+        {count !== undefined && <span className="font-mono text-xs text-white/40">{count}</span>}
+        <span className="ml-auto shrink-0 text-xs font-semibold text-blue">{open ? 'Hide' : 'Show'}</span>
+      </button>
+      {open && <div id={panelId} className="space-y-3 pt-1">{children}</div>}
+    </div>
+  )
+}
+
+export function WorkspaceTabs({ label, tabs, active, onChange }) {
+  return (
+    <div className="flex gap-1 overflow-x-auto scrollbar-none border-b border-adm-line [mask-image:linear-gradient(to_right,black_88%,transparent_100%)]" role="tablist" aria-label={label}>
+      {tabs.map(tab => {
+        const on = active === tab.id
+        return (
+          <button
+            key={tab.id}
+            type="button"
+            role="tab"
+            aria-selected={on}
+            onClick={() => onChange(tab.id)}
+            className={`flex min-h-11 shrink-0 items-center gap-2 border-b-2 px-4 text-xs font-semibold uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70 ${on ? 'border-blue text-white' : 'border-transparent text-white/50 hover:text-white'}`}
+          >
+            {tab.label}
+            {tab.count !== undefined && tab.count !== null && (
+              <span className="font-mono text-xs opacity-70">{tab.count}</span>
+            )}
+          </button>
+        )
+      })}
     </div>
   )
 }

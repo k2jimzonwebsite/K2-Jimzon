@@ -65,6 +65,18 @@ components:
 
 # Design System: K2 Jimzon
 
+### 20 September plain Admin words (IDEA-20260920-14)
+
+Inventory uses Product basics, Product description, Use & ingredients, Website
+settings, and Status & staff notes. Description and use each open independently
+through the existing instant, 44px DetailBlock. Draft values remain in the parent
+editor when either group closes. Shop stock keeps two views, now named Stock by
+shop and Stock transfers; Review stock split opens the proposal and Save stock
+split performs the existing save. Keep exact quantities, approvals and warnings.
+No palette, typography or motion changes. Before/after rationale, local evidence,
+acceptance limits and scoped recovery: `docs/evidence/20260920-admin-plain-words/`.
+
+
 The remote review globe distinguishes an empty published-review register from
 an unavailable review source (IDEA-20260914-02). Its product display can remain
 interactive without filling the missing feedback with demo testimonials. These

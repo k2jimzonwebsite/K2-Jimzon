@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { searchGuide } from './adminGuide'
 
-export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenScan, onOpenGuide, onOpenShortcuts }) {
+export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenScan, onOpenGuide, onOpenShortcuts, canManageStaff = false }) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -22,6 +22,15 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenSc
     { id: 'nav-pasabuy-mgr', type: 'Navigation', label: 'Manage Pasabuy Requests & Quotations', action: () => setSection('pasabuy_manager') },
     { id: 'nav-integrations', type: 'Navigation', label: 'Review Website, Pasabuy, Shopee, TikTok Shop, and Lazada readiness', action: () => setSection('integrations') },
     { id: 'nav-suppliers', type: 'Navigation', label: 'Manage Our Suppliers', action: () => setSection('suppliers') },
+    { id: 'nav-consignment', type: 'Navigation', label: 'Open Flight Consignments', action: () => setSection('consignment') },
+    { id: 'nav-reservations', type: 'Navigation', label: 'Review Stock Holds', action: () => setSection('reservations') },
+    { id: 'nav-coupons', type: 'Navigation', label: 'Manage Coupons & Vouchers', action: () => setSection('coupons') },
+    { id: 'nav-store-assets', type: 'Navigation', label: 'Review Virtual Store Assets', action: () => setSection('store_assets') },
+    { id: 'nav-globe', type: 'Navigation', label: 'Change 3D Globe Display', action: () => setSection('globe') },
+    { id: 'nav-workflow', type: 'Navigation', label: 'Open Workflow Graph', action: () => setSection('workflow_graph') },
+    { id: 'nav-owner-close', type: 'Navigation', label: 'Open Owner Count & Close', adminOnly: true, action: () => setSection('owner_close') },
+    { id: 'nav-delivery', type: 'Navigation', label: 'Manage Delivery Rates', adminOnly: true, action: () => setSection('delivery') },
+    { id: 'nav-staff', type: 'Navigation', label: 'Manage Staff & Roles', adminOnly: true, action: () => setSection('staff_permissions') },
     { id: 'nav-pos', type: 'Navigation', label: 'View Incoming Deliveries', action: () => setSection('kanban') },
     { id: 'nav-storefront', type: 'Navigation', label: 'View Live Storefront', action: () => go('home') },
     { id: 'action-scan', type: 'Action', label: 'Open Scan Center', sub: 'Alt S', action: onOpenScan },
@@ -51,17 +60,21 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenSc
     }
   }, [isOpen])
 
+  // Admin-only destinations stay hidden from Staff roles, mirroring the sidebar.
+  // The section shell still falls back to overview for direct navigation.
+  const visibleCommands = canManageStaff ? COMMANDS : COMMANDS.filter(c => !c.adminOnly)
+
   // Perform search (debounced theoretically, but fast enough for local/small DB)
   useEffect(() => {
     const search = async () => {
       const q = query.toLowerCase()
       if (!q) {
-        setResults(COMMANDS)
+        setResults(visibleCommands)
         return
       }
 
       // Filter static commands
-      const staticMatches = COMMANDS.filter(c => c.label.toLowerCase().includes(q) || c.type.toLowerCase().includes(q))
+      const staticMatches = visibleCommands.filter(c => c.label.toLowerCase().includes(q) || c.type.toLowerCase().includes(q))
       
       // If query is short, don't spam DB
       if (q.length < 2) {

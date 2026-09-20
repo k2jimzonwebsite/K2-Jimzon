@@ -164,7 +164,7 @@ export default function MilanPackingScannerModal({
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono font-bold uppercase tracking-widest bg-crimson/20 text-crimson px-2 py-0.5 rounded border border-crimson/30">
-              Milan Packing POV
+              Milan Packing View
             </span>
             <span className="text-sm text-white/50">Milan, Italy</span>
           </div>
@@ -285,13 +285,13 @@ export default function MilanPackingScannerModal({
             <div>
               <h3 className="font-sans font-bold text-xl text-white">Unknown Barcode Detected</h3>
               <p className="text-sm text-white/60 mt-1">
-                Barcode <span className="font-mono text-amber font-bold">{unrecognizedCode}</span> is not in master catalog. Tap below for ultra-fast packing:
+                Barcode <span className="font-mono text-amber font-bold">{unrecognizedCode}</span> is not in master catalog. Tap below to pack it now:
               </p>
             </div>
 
             {/* Actions Grid */}
             <div className="space-y-3 pt-2">
-                  {/* PRIMARY 1-TAP ULTRA-FAST DRAFT BUTTON */}
+                  {/* PRIMARY INSTANT DRAFT BUTTON */}
                   <button
                     onClick={handleInstantDraftPack}
                     className="w-full flex items-center justify-between p-4 rounded-adm-sm bg-crimson hover:bg-crimson/90 text-white font-bold text-base shadow-xl shadow-crimson/30 transition-all transform active:scale-98"
