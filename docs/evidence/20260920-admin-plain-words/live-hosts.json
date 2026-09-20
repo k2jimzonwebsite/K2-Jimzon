@@ -1,0 +1,26 @@
+[
+  {
+    "url": "https://admin.k2jimzon.com/",
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "title": "K2 Jimzon Admin"
+  },
+  {
+    "url": "https://admin.k2jimzon.com/k2-build-target.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "target": "{\n  \"target\": \"admin\"\n}\n"
+  },
+  {
+    "url": "https://www.k2jimzon.com/",
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "title": "K2 Jimzon — Italian imports, direct to the Philippines"
+  },
+  {
+    "url": "https://www.k2jimzon.com/k2-build-target.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "target": "{\n  \"target\": \"storefront\"\n}\n"
+  }
+]

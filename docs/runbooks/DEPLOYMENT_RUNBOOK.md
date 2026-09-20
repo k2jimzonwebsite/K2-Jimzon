@@ -1,5 +1,22 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+**20 September owner-authorized production release:** GitHub main eb38d22
+contains the Admin simplification/hardening and prepared COD-off bundle. Vercel
+reports production READY for Admin dpl_8CRccKAJD3o1MPJ6PQ6QVLPbeVVF and Storefront
+dpl_8EwLdF5oM6kZd12YAFL8GxQdQcQi, both with exact SHA
+eb38d22f7d7ccbc2cba5f0bbfe9bf1e534442b0c. Canonical domains return HTTP 200 and
+the correct admin/storefront target markers; the live Admin sign-in rendered.
+Local evidence: 692 contracts, 8 selling, 35 Admin, 2 editor checks; both builds.
+COD BFF field spelling was aligned with cod_available before release (23 focused
+checks). No migration or feature switch was applied. Unrelated GlobeOverlay
+edits were excluded. Receipts: docs/evidence/20260920-admin-plain-words/.
+GitHub CI run 35518698570 passed 930 base tests and failed one stale calculator
+summary punctuation expectation; the expectation is corrected without changing
+math, and test:sales passes 14/14. Follow-up CI remains distinct from Vercel READY.
+Rollback Admin to dpl_EcFsvYmGywTrX6JcNPKaAYAecXu6 if needed; storefront can use
+its previous production deployment at commit 0ecdfcb. Preserve unapplied SQL and
+operational records. Authenticated staff/physical-device acceptance stays MAP-025.
+
 **14 September prepared discovery changes (IDEA-20260914-02):** Vercel now has
 an explicit permanent `/wholesale` to `/trade` redirect; canonical and social
 metadata use `/trade` even on the development alias. Account/messages/checkout/

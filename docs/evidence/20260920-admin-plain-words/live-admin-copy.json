@@ -1,0 +1,25 @@
+{
+  "asset": "https://admin.k2jimzon.com/assets/InventoryGrid-CJ1TUVph.js",
+  "labels": [
+    {
+      "text": "Inventory & stock checks",
+      "present": true
+    },
+    {
+      "text": "Product description",
+      "present": true
+    },
+    {
+      "text": "Use & ingredients",
+      "present": true
+    },
+    {
+      "text": "Website settings",
+      "present": true
+    },
+    {
+      "text": "Status & staff notes",
+      "present": true
+    }
+  ]
+}

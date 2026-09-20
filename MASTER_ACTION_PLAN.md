@@ -456,14 +456,17 @@ staff comprehension. Recovery: reverse only this slice's labels/disclosure split
 against `docs/design-checkpoints/20260920-admin-plain-words/`, preserving later
 changes and existing safety controls. Promotion follows the existing release gates.
 
-**20 September owner-authorized release in progress (MAP-024 / I-012):** owner
+**20 September release acceptance remainder (MAP-024 / I-012):** owner
 requests GitHub and Vercel production promotion of the verified Admin work bundle.
 Both named K2 projects and GitHub main baseline 0ecdfcb are verified. Include
 existing Admin simplification/hardening and COD-off code; leave unrelated
 GlobeOverlay edits local. Prepared COD BFF read corrected to cod_available to
 match the migration/UI (23 focused contracts pass). No migration, environment
-switch or provider integration activation. Next: commit/push reviewed files,
-verify both exact deployment SHAs, aliases and assets, and record CI status.
+switch or provider integration activation. Both production projects are READY
+at eb38d22; canonical HTTP/target markers and Admin sign-in verified. CI run
+35518698570 failed one stale calculator punctuation expectation after 930 passes.
+The test-only correction passes test:sales 14/14. Next: check follow-up remote
+CI and retain representative authenticated staff/physical-device acceptance.
 Recovery: previous production deployments plus scoped source checkpoints;
 release receipts belong in the deployment runbook and plain-words evidence.
 

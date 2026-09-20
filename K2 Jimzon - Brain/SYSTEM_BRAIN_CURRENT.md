@@ -1,5 +1,13 @@
 # K2 Jimzon — System Brain (Current State)
 
+**20 September production promotion:** eb38d22 is pushed to GitHub and both
+Vercel production projects are READY at that SHA. Canonical Admin/storefront
+domains return 200 and their correct build markers; Admin sign-in rendered.
+Deployment IDs, rollback and CI limitations are in DEPLOYMENT_RUNBOOK.md.
+No database migrations or feature switches were applied. Staff workflow acceptance
+remains separate. CI's stale calculator punctuation assertion was corrected;
+14/14 calculator checks pass and the follow-up remote run must be checked.
+
 **20 September Admin plain words (IDEA-20260920-14, MAP-028 I-012, local code):**
 Inventory now uses plain group names and separates Product description from Use
 & ingredients. Website settings and Status & staff notes remain optional groups.
