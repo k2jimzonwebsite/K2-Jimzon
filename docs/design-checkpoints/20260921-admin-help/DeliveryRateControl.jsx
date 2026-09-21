@@ -291,7 +291,7 @@ export default function DeliveryRateControl() {
     <div className="space-y-5">
       <WorkspaceIntro
         title="Delivery rates & couriers"
-        description="Test delivery fees for an approved place. Every available courier needs a current, complete, approved cost. Otherwise, get a manual quote; a wider-area rate cannot replace it."
+        description="The owner-approved delivery test. A fee appears only for an exact approved place with a current, complete, approved cost on every courier you can pick. Everything else goes to a manual courier quote. There is no regional fallback."
         status={secure ? 'Signed admin commands' : 'BFF required'}
         statusTone={secure ? 'success' : 'danger'}
         actions={
@@ -489,7 +489,7 @@ export default function DeliveryRateControl() {
           <SectionHeading
             title="Active rates"
             count={(tables?.costRows || []).length}
-            description="See courier costs by approved route. Price changes create a new rate and keep the old one, so earlier quotes can still be checked."
+            description="What each courier costs K2 on each approved route. Raising a price never edits a row: it closes the current one and publishes a new one, so an accepted quote can always be explained."
           />
           {priceEdit && (
             <div className="space-y-3 rounded-adm border border-blue/40 bg-blue/[0.06] p-4">
@@ -617,7 +617,7 @@ export default function DeliveryRateControl() {
           <SectionHeading
             title="Courier options"
             count={(tables?.courierOptions || []).length}
-            description="The delivery fee uses the highest cost among available couriers on the route. If any courier lacks a current cost, get a manual quote."
+            description="The list K2 quotes from. The fee charged is the highest cost among the couriers you can pick on that route. A courier with no current cost on a route stops automatic quoting there instead of undercharging."
           />
           <StateBanner tone="info">
             Adding a courier here does not book anything. Booking, waybills, and tracking remain manual until a provider account and its fee schedule are supplied.
@@ -728,7 +728,7 @@ export default function DeliveryRateControl() {
           <SectionHeading
             title="Rate evidence"
             count={(tables?.sources || []).length}
-            description="Each cost keeps its source. If the source is out of date, staff must get a manual quote for that route."
+            description="Every cost points at the evidence it came from. A source that is no longer current stops pricing orders automatically and routes those routes to a manual quote."
           />
           <DataTable
             caption="Rate sources"

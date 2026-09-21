@@ -53,7 +53,7 @@ const TourSelectionModal = lazy(() => import('../../components/admin/tour/TourSe
 const SECTIONS = {
   overview:          { label: 'Command center',      icon: GridIcon,    title: 'Command center',                desc: 'Website activity, channel status, and the jobs that need you first.' },
   owner_close:       { label: 'Count & Close',       icon: BookIcon,    title: 'Owner Count & Close',           desc: 'Pick up a shop import where you left off: review products, count stock, finish the close.', adminOnly: true },
-  workflow_graph:    { label: 'Workflow Graph',      icon: MapIcon,     title: 'Workflow map', desc: 'Picture guides for every shift, with checklists, safety checks, and prompts you can copy.' },
+  workflow_graph:    { label: 'Workflow Graph',      icon: MapIcon,     title: 'Master Operations Workflow Graph', desc: 'Picture guides for every shift, with checklists, safety checks, and prompts you can copy.' },
   kanban:            { label: 'Purchasing',           icon: BagIcon,     title: 'Italy Purchasing',               desc: 'Supplier orders and buying work before the stock is packed for its flight.' },
   consignment:       { label: 'Flight Consignments',  icon: PlaneIcon,   title: 'Italy Flight Consignments',      desc: 'Scan and count every expected unit in Milan, count it again in Manila, then settle the differences.' },
   pasabuy_manager:   { label: 'Pasabuy Quotes',      icon: BagIcon,     title: 'Custom Pasabuy Quotes',         desc: 'Handle shopper requests and price each one with its full cost from Italy.' },

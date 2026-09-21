@@ -1296,14 +1296,17 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
 
     await page.getByRole('button', { name: 'Workflow Graph', exact: true }).click()
-    await expect(page.getByRole('heading', { name: 'Master Operations Workflow Graph' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Workflow map', exact: true }).last()).toBeVisible()
     await expect(page.getByText(/Version 2026-08-30-draft\.1 · DRAFT — NOT LOCKED/)).toBeVisible()
-    await expect(page.getByRole('note')).toContainText('not an operations terminal')
+    await expect(page.getByRole('note')).toContainText('Complete real work in the named Admin screen')
     await expect(page.getByText(/does not write or verify a real record/)).toBeVisible()
     await expect(page.getByRole('button', { name: 'Mark guide step reviewed' })).toBeVisible()
 
     const canvas = page.getByRole('region', { name: 'Connected operations workflow canvas' })
     await expect(canvas).toBeVisible()
+    await page.getByRole('button', { name: 'About: Using the workflow map', exact: true }).focus()
+    await expect(page.getByRole('tooltip').filter({ hasText: 'map checkmarks do not save business records' })).toBeVisible()
+    await page.getByRole('button', { name: 'About: Using the workflow map', exact: true }).blur()
     await expect(canvas.locator('[data-node-id]')).toHaveCount(49)
     await expect(canvas.locator('[data-edge-kind="branch"]')).toHaveCount(16)
     await expect(canvas.locator('[data-edge-kind="converge"]')).toHaveCount(7)
@@ -1313,7 +1316,7 @@ test.describe('admin command center redesign', () => {
 
     await expect(page.getByText('Where did this come from?', { exact: true })).toBeVisible()
     await expect(page.getByText('What can you do here?', { exact: true })).toBeVisible()
-    await expect(page.getByText('Grounding evidence', { exact: true })).toBeVisible()
+    await expect(page.getByText('Supporting records', { exact: true })).toBeVisible()
 
     const zoomValue = canvas.getByText('72%', { exact: true })
     await expect(zoomValue).toBeVisible()

@@ -156,7 +156,7 @@ function SnapshotImport({ shops, session, importStatus, onStage, onResumeImport,
 
   return (
     <section className="space-y-4">
-      <SectionHeading title="2. Import one shop export" description="Import one shop file for review. Original rows, duplicates, conflicts, and the file fingerprint are kept for checking." />
+      <SectionHeading title="2. Import one shop export" description="CSV is transport only. The original rows, duplicates, conflicts, and source hash remain review evidence." />
       <StateBanner tone="info">Reported quantity is observation evidence. This import does not change physical inventory, lots, custody, reservations, or marketplace availability.</StateBanner>
       {!importStatus ? (
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
@@ -225,7 +225,7 @@ function OrderImport({ shops, session, status, onStage, onResume, onAdvance, bus
   const blocked = Number(status?.conflicts || 0) > 0 || unresolved > 0
   return (
     <section className="space-y-4">
-      <SectionHeading title="4. Check sales and duplicate orders" description="Bring in one order export with names removed, for one exact shop. Exact duplicates stay as evidence. Changed data and unknown shop SKUs stop you here." />
+      <SectionHeading title="4. Deduplicate and reconcile sales/order facts" description="Bring in one order export with names removed, for one exact shop. Exact duplicates stay as evidence. Changed data and unknown shop SKUs stop you here." />
       <StateBanner tone="info">Order facts are reconciliation evidence only. Staging them does not reserve, deduct, create, or reconcile canonical inventory.</StateBanner>
       {!status ? (
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
@@ -321,7 +321,7 @@ function FeeEstimate({ session, fees, onSave, onAdvance, busy, offline }) {
   }
   return (
     <section className="space-y-4">
-      <SectionHeading title="5. Estimate marketplace fees" description="Choose a reviewed fee policy for this shop. Estimates use accepted orders linked to products, with duplicates removed." />
+      <SectionHeading title="5. Calculate versioned marketplace fee estimates" description="Use one named policy per exact shop, reviewed by a person first. K2 computes the estimate only from accepted, linked, deduplicated order facts." />
       <StateBanner tone="warning">Estimated commission, payment charges, and withholding are planning evidence only. They are not provider settlement, official books, a tax filing, payout, or actual profit.</StateBanner>
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
         <form className="grid gap-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:grid-cols-2 sm:p-4" onSubmit={(event) => { event.preventDefault(); submit() }}>
@@ -389,10 +389,10 @@ function StockCount({ session, stock, onReview, onAdvance, busy, offline }) {
       await onReview({ localError: error?.message })
     }
   }
-  if (!items.length) return <section className="space-y-3"><SectionHeading title="6. Compare recorded and counted stock" description="No matched products are ready to count." /><StateBanner tone="warning">Resolve and link at least one exact marketplace product before counting. K2 will not invent a zero-stock product set.</StateBanner></section>
+  if (!items.length) return <section className="space-y-3"><SectionHeading title="6. Compare expected stock with physical and canonical stock" description="No product aliases are ready for count review." /><StateBanner tone="warning">Resolve and link at least one exact marketplace product before counting. K2 will not invent a zero-stock product set.</StateBanner></section>
   return (
     <section className="space-y-4">
-      <SectionHeading title="6. Compare recorded and counted stock" description="Count one batch at a time. Shop figures and sales help you compare; they do not change the physical count." />
+      <SectionHeading title="6. Compare expected stock with physical and canonical stock" description="Count one exact lot at a time. Shop observations and accepted sales stay context. Neither becomes physical stock silently." />
       <StateBanner tone="info">Marketplace-reported availability is observation only. Canonical lot quantity is the system expectation; the physical count is what you actually find.</StateBanner>
       <Field label="Product to count"><select className={fieldClass} value={productId} onChange={(event) => setProductId(event.target.value)} disabled={busy}>{items.map((entry) => <option key={entry.productId} value={entry.productId}>{entry.sku} · {entry.name}</option>)}</select></Field>
       {item && <>
@@ -445,7 +445,7 @@ function CoverageReview({ session, coverage, onOverride, onAdvance, busy, offlin
   })
   return (
     <section className="space-y-4">
-      <SectionHeading title="8. Check stock by shop" description={`Aim for ${coverage?.targetPerShop || 2} sellable units per shop. When short, best-selling shops come first unless the owner picks a priority, thin, or skip decision with a reason.`} />
+      <SectionHeading title="8. Review flexible per-shop coverage and low/zero warnings" description={`Aim for ${coverage?.targetPerShop || 2} sellable units per shop. When short, best-selling shops come first unless the owner picks a priority, thin, or skip decision with a reason.`} />
       <StateBanner tone="info">Proposal only. Provider write: No. Custody transfer: No. Actual movement still requires exact-lot transfer, approval, and receiver acceptance.</StateBanner>
       {Number(alerts.criticalMasterZero || 0) > 0 && <StateBanner tone="danger">Critical: {alerts.criticalMasterZero} product{alerts.criticalMasterZero === 1 ? '' : 's'} have zero canonical eligible Master Inventory.</StateBanner>}
       <MetricRail columns="sm:grid-cols-5" items={[
@@ -487,7 +487,7 @@ function PasabuyBoxing({ session, pasabuy, onReview, onAdvance, busy, offline })
   const labels = { ready: 'Ready', not_ready: 'Not ready', not_applicable: 'Not applicable' }
   return (
     <section className="space-y-4">
-      <SectionHeading title="9. Check Pasabuy packing readiness" description="Check only the public reference, item, quantity, and state needed for boxing. Names stay in the Pasabuy workspace." />
+      <SectionHeading title="9. Check customer-minimized Pasabuy boxing readiness" description="Check only the public reference, item, quantity, and state needed for boxing. Names stay in the Pasabuy workspace." />
       <StateBanner tone="info">Readiness only. Canonical Pasabuy status changed: No. Continue any quote, payment, or request-state work in the existing Pasabuy Manager.</StateBanner>
       {requests.length === 0 ? <EmptyState title="No open Pasabuy requests in this close period" description="Nothing to box right now." icon={CheckIcon} /> : (
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
@@ -525,7 +525,7 @@ function BookkeepingHandoff({ session, handoff, onComplete, busy, offline }) {
   }
   return (
     <section className="space-y-4">
-      <SectionHeading title="10. Prepare the bookkeeping handoff" description="Download a fixed summary of the reviewed imports, fees, counts, shop stock, and Pasabuy packing checks." />
+      <SectionHeading title="10. Prepare the customer-free bookkeeping handoff" description="The server builds one fixed extract from the reviewed imports, fees, counts, coverage, and Pasabuy readiness." />
       <StateBanner tone="warning">Estimate-only operational handoff. It is not official books, a tax filing, provider payout settlement, or actual profit.</StateBanner>
       {blockers.length > 0 && <div className="rounded-adm border border-crimson/30 bg-crimson/5 p-3 sm:p-4"><p className="text-sm font-semibold text-crimson">Close blockers</p><ul className="mt-2 space-y-1 text-xs text-white/65">{blockers.map((blocker) => <li key={blocker.code}>{String(blocker.code).replaceAll('_', ' ')} · {blocker.count}</li>)}</ul></div>}
       <MetricRail columns="sm:grid-cols-3" items={[
@@ -562,7 +562,7 @@ function ProductDecision({ row, busy, offline, onDecide }) {
   )
   return (
     <section className="space-y-4">
-      <SectionHeading title="3. Review product matches" description="Check each suggested product match. Codes and names are clues only. Resolve variant conflicts before approval." />
+      <SectionHeading title="3. Make one human product decision" description="SKU, barcode, and normalized name produce suggestions only. Variant conflicts cannot be approved." />
       <div className="grid gap-4 xl:grid-cols-[minmax(0,0.8fr)_minmax(360px,1.2fr)]">
         <div className="rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4">
           <div className="flex flex-wrap items-start justify-between gap-2">
@@ -969,14 +969,14 @@ export default function OwnerCountClose() {
 
   return (
     <div data-tour="cycle-count-board" className="mx-auto max-w-[1600px] space-y-5 pb-12">
-      <WorkspaceIntro eyebrow="Owner operations" title="Owner Count & Close" description="Import one shop file at a time. Check product matches, sales, fees, and stock before preparing the handoff." status={session ? `Saved · version ${session.version}` : 'Not started'} statusTone={session ? 'success' : 'neutral'} />
+      <WorkspaceIntro eyebrow="Owner operations" title="Owner Count & Close" description="Bring in one shop export at a time, review product identity, then hand checked facts to sales, inventory, Pasabuy, and bookkeeping." status={session ? `Saved · version ${session.version}` : 'Not started'} statusTone={session ? 'success' : 'neutral'} />
       <StepRail currentStep={currentStep} />
-      {!secure && <StateBanner tone="warning">Count & Close is not available yet. Secure setup must be completed before you can import files or close a period. Ask the administrator responsible for setup.</StateBanner>}
+      {!secure && <StateBanner tone="warning">This workflow is prepared only for the secure Admin BFF. No import or close action is available in the legacy browser database path.</StateBanner>}
       {offline && <StateBanner tone="warning" role="alert">Offline. Saved evidence remains on the server, but imports and decisions are blocked until this device reconnects.</StateBanner>}
       {error && <StateBanner tone="danger" role="alert"><span>{error.includes('another session') ? 'This close session changed in another session. Refresh before saving again.' : error}</span><button type="button" className={`${secondaryButton} ml-3`} onClick={() => loadWorkspace(session?.sessionId || '')}>Try again</button></StateBanner>}
       {(stageRetry || decisionRetry || orderRetry || feeRetry || stockRetry || coverageRetry || pasabuyRetry || bookkeepingRetry) && error && <button type="button" className={secondaryButton} disabled={busy || offline} onClick={() => stageRetry ? runStage(stageRetry) : decisionRetry ? runDecision(decisionRetry) : orderRetry ? runOrderStage(orderRetry) : feeRetry ? runFeeSave(feeRetry) : stockRetry ? runStockReview(stockRetry) : coverageRetry ? runCoverageOverride(coverageRetry) : pasabuyRetry ? runPasabuyReview(pasabuyRetry) : runBookkeepingCompletion(bookkeepingRetry)}>Retry the same protected operation</button>}
 
-      {secure && shops.length === 0 ? <EmptyState title="No marketplace shops are available" description="Ask your administrator to finish shop setup and add each seller account before starting a close." icon={AlertIcon} /> : secure && (
+      {secure && shops.length === 0 ? <EmptyState title="No marketplace shops are available" description="Apply the reviewed channel-shop foundation and add each exact seller account before starting a close." icon={AlertIcon} /> : secure && (
         <>
           {!session && (
             <form className="flex flex-col gap-2 rounded-adm border border-adm-line bg-adm-surface p-3 sm:flex-row sm:items-end" onSubmit={(event) => { event.preventDefault(); loadWorkspace(resumeSessionId) }}>
@@ -988,7 +988,7 @@ export default function OwnerCountClose() {
           {session && <SnapshotImport shops={shops} session={session} importStatus={importStatus} onStage={stageSnapshot} onResumeImport={loadImport} busy={busy} offline={offline} />}
           {importStatus && pendingRow && <ProductDecision row={pendingRow} busy={busy} offline={offline} onDecide={decideRow} />}
           {importStatus && !pendingRow && (
-            <section className="space-y-3"><SectionHeading title="Product review checkpoint" description="Every accepted row has been reviewed. Duplicate and conflicting rows remain in the record." />
+            <section className="space-y-3"><SectionHeading title="Product review checkpoint" description="All accepted rows have an explicit human outcome. Duplicate and conflict evidence remains preserved." />
               <StateBanner tone={summary.conflicts ? 'warning' : 'success'}>{summary.conflicts ? `${summary.conflicts} changed-payload conflict row${summary.conflicts === 1 ? '' : 's'} still require source investigation. Product decisions are saved, but the close is not complete.` : 'Product decisions are saved. Continue only to the next canonical reconciliation boundary.'}</StateBanner>
               {currentStepIndex < salesStepIndex ? <div className="space-y-3 rounded-adm border border-adm-line bg-adm-surface p-3 sm:p-4"><Field label="Match checkpoint reason" hint="10–500 characters"><textarea className={textareaClass} value={matchReason} onChange={(event) => setMatchReason(event.target.value)} maxLength={500} /></Field><button type="button" className={`${primaryButton} w-full`} disabled={busy || offline || summary.conflicts > 0 || matchReason.trim().length < 10} onClick={() => saveAtStep('sales_reconciliation', matchReason.trim())}>Continue to sales reconciliation</button></div> : <StatusPill tone="success">Match checkpoint saved</StatusPill>}
             </section>
@@ -1000,9 +1000,9 @@ export default function OwnerCountClose() {
           {session && currentStepIndex >= pasabuyStepIndex && pasabuyStatus && <PasabuyBoxing session={session} pasabuy={pasabuyStatus} onReview={savePasabuyReview} onAdvance={(reason) => saveAtStep('bookkeeping_handoff', reason)} busy={busy} offline={offline} />}
           {session && currentStepIndex >= bookkeepingStepIndex && bookkeepingStatus && <BookkeepingHandoff session={session} handoff={bookkeepingStatus} onComplete={completeBookkeeping} busy={busy} offline={offline} />}
           {!importStatus && session && <EmptyState title="No staged import yet" description="Choose one saved exact shop and stage its bounded CSV. Existing inventory remains unchanged." icon={UploadIcon} />}
-          {OWNER_CLOSE_STEPS.some((step) => !step.available) && <section className="space-y-3"><SectionHeading title="Remaining close handoffs" description="These steps still need setup before you can use them." />
+          {OWNER_CLOSE_STEPS.some((step) => !step.available) && <section className="space-y-3"><SectionHeading title="Remaining close handoffs" description="These steps stay visible without pretending they are integrated or complete." />
             <div className="divide-y divide-adm-line overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
-              {OWNER_CLOSE_STEPS.filter((step) => !step.available).map((step) => <div key={step.id} className="flex min-h-[56px] items-center justify-between gap-3 px-3 py-2.5 sm:px-4"><div><p className="text-sm font-semibold text-white/75">{step.label}</p><p className="mt-0.5 text-xs text-white/40">This step is awaiting setup. Use the existing Admin screen for the task.</p></div><StatusPill tone="warning">Not available</StatusPill></div>)}
+              {OWNER_CLOSE_STEPS.filter((step) => !step.available).map((step) => <div key={step.id} className="flex min-h-[56px] items-center justify-between gap-3 px-3 py-2.5 sm:px-4"><div><p className="text-sm font-semibold text-white/75">{step.label}</p><p className="mt-0.5 text-xs text-white/40">Pending MAP-023/MAP-026 composition with the existing canonical tool.</p></div><StatusPill tone="warning">Not available</StatusPill></div>)}
             </div>
           </section>}
           <StateBanner tone="warning">Commission and tax remain estimates. This close is not official books, a tax filing, payout settlement, or actual profit.</StateBanner>

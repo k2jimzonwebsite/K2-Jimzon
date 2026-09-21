@@ -1,5 +1,7 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+**Admin help wording (21 September, IDEA-20260921-01):** Help names the staff action and required checks in plain words. A workflow-map checkmark records only temporary guide review; real work requires the named Admin screen and saved-result verification. Setup warnings must explain the unavailable action without exposing implementation jargon. This wording refinement changes no operational approval, hold, count, payment or delivery rule.
+
 **20 September staff wording (IDEA-20260920-14):** use short task names in Admin
 labels. Optional product description and usage/ingredients may open separately;
 closing a group or switching editor tabs must preserve the entered draft. Keep

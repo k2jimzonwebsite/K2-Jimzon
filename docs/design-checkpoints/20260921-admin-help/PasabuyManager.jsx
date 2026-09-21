@@ -266,7 +266,7 @@ export default function PasabuyManager() {
       <WorkspaceIntro
         eyebrow="Pasabuy operations"
         title="Request and quote control"
-        description="Review requests and save quotes with their exchange-rate source. Saving or copying a quote does not mark it sent or paid."
+        description="Read customer requests, save every price version with its FX proof, and move each case only to a valid next state. Saving or copying a quote never marks it sent or paid."
         status={loading ? 'Loading request evidence' : `${openRequests.length} open cases`}
         statusTone={openRequests.length ? 'warning' : 'success'}
       />
@@ -349,7 +349,7 @@ export default function PasabuyManager() {
               </div>
 
               <section className="space-y-3">
-                <SectionHeading title="Quote assumptions" description="These are estimates. Each saved quote keeps its exchange-rate source and time." />
+                <SectionHeading title="Quote assumptions" description="Estimated inputs only. FX source and capture time are stored with every saved version." />
                 <div className="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4">
                   <Field label="Item cost (EUR)"><input className={input} type="number" min="0" step="0.01" value={quote.itemCost} onChange={q('itemCost')} /></Field>
                   <Field label="EUR/PHP rate"><input className={input} type="number" min="0.01" step="0.01" value={quote.fxRate} onChange={q('fxRate')} /></Field>

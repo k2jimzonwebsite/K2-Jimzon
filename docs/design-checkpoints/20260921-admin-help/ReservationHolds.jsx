@@ -171,7 +171,7 @@ export default function ReservationHolds() {
     <div className="space-y-5">
       <WorkspaceIntro
         title="Stock holds"
-        description="Adding to cart does not hold stock. Submitting a purchase holds specific batches for 30 minutes. Confirmation commits those units to the order. Expired holds become available again."
+        description="A cart holds nothing. Tapping buy holds the exact lots for 30 minutes. Confirming takes them off the shelf. An expired hold goes back to the sellable pool."
         status={loadFailed || !data
           ? 'Hold status unavailable'
           : overdue ? `${overdue} overdue` : 'None overdue'}

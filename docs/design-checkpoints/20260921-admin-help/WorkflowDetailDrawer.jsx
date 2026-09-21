@@ -147,7 +147,7 @@ export default function WorkflowDetailDrawer({
         </p>
       </div>
 
-      {/* Staff Action Directive: Follow these steps */}
+      {/* Staff Action Directive: What to Click & Do Next */}
       <section aria-label="Staff Action Directive" className="mt-6 rounded-2xl border border-sky-500/30 bg-gradient-to-br from-[#0e1a30] via-[#0d1526] to-[#090e18] p-5 shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/10 pb-4">
           <div>
@@ -156,11 +156,11 @@ export default function WorkflowDetailDrawer({
                 <SparkleIcon size={13} />
               </span>
               <span className="text-xs font-bold uppercase tracking-wider text-sky-400">
-                What to do
+                Staff Operational Directive
               </span>
             </div>
             <h4 className="mt-1 font-sans text-lg font-bold text-white">
-              {'Follow these steps'}
+              {'What to Click & Do Next'}
             </h4>
           </div>
 
@@ -228,7 +228,7 @@ export default function WorkflowDetailDrawer({
               </button>
             ) : (
               <span className="min-h-11 inline-flex items-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-300">
-                End of this flow
+                Terminal outcome reached
               </span>
             )}
           </div>
@@ -245,7 +245,7 @@ export default function WorkflowDetailDrawer({
           {/* Target Screen & What to Click */}
           <div className="rounded-xl border border-sky-500/20 bg-black/30 p-4">
             <span className="block text-xs font-bold uppercase tracking-wider text-sky-400">
-              {'1. Open the right screen'}
+              {'1. Target Admin Screen & Click Target'}
             </span>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <span className="rounded-md border border-sky-400/30 bg-sky-400/10 px-2.5 py-1 text-xs font-semibold text-sky-300">
@@ -286,13 +286,13 @@ export default function WorkflowDetailDrawer({
           <div className="rounded-xl border border-white/10 bg-black/30 p-4">
             <div className="flex items-center justify-between gap-2 mb-1">
               <span className="block text-xs font-bold uppercase tracking-wider text-white/50">
-                {'2. Do the work'}
+                {'2. Operational SOP & Physical Directive'}
               </span>
               <button
                 type="button"
                 onClick={() => handleCopy('actionDirective', node.actionGuide?.actionDirective || node.summary)}
                 className="min-h-11 inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-sky-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
-                title="Copy instructions"
+                title="Copy directive to clipboard"
               >
                 {copiedField === 'actionDirective' ? (
                   <>
@@ -315,7 +315,7 @@ export default function WorkflowDetailDrawer({
           {/* Next Action & 1-Click Advance */}
           <div className="rounded-xl border border-white/10 bg-black/30 p-4">
             <span className="block text-xs font-bold uppercase tracking-wider text-white/50">
-              {'3. Next step'}
+              {'3. Next Action & Operational Follow-Through'}
             </span>
             <p className="mt-2 text-xs leading-relaxed text-white/90">
               {node.actionGuide?.nextAction || 'Advance to downstream operational stage once verified.'}
@@ -341,7 +341,7 @@ export default function WorkflowDetailDrawer({
           {/* Step Exit Criteria */}
           <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-4">
             <span className="block text-xs font-bold uppercase tracking-wider text-emerald-400">
-              4. Before moving on
+              4. Step Exit Criteria (Server Verification Gate)
             </span>
             <p className="mt-2 text-xs leading-relaxed text-emerald-200/90">
               {node.actionGuide?.exitCriteria || 'Confirm record created or updated on server before proceeding.'}
@@ -356,7 +356,7 @@ export default function WorkflowDetailDrawer({
         <GraphContextList title="Where did this come from?" items={upstream} onSelectNode={onSelectNode} empty="This is the single graph entry." />
         <GraphContextList title="What can you do here?" items={downstream} onSelectNode={onSelectNode} empty="This is a terminal operational outcome." />
         <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-300">Supporting records</h4>
+          <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-300">Grounding evidence</h4>
           <ul className="mt-3 space-y-2">
             {(node.grounding || []).map((evidence) => (
               <li key={`${evidence.kind}:${evidence.ref}`} className="rounded-lg border border-white/8 bg-white/[0.03] px-3 py-2">
@@ -463,7 +463,7 @@ export default function WorkflowDetailDrawer({
       {node.rules && node.rules.length > 0 && (
         <div className="mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
           <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
-            Rules to follow
+            Rulebook Invariants & Safeguards
           </h4>
           <ul className="mt-2 space-y-1.5 text-xs leading-relaxed text-amber-200/80">
             {node.rules.map((rule, idx) => (

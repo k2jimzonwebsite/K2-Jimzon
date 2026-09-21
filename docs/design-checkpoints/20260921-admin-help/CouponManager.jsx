@@ -203,7 +203,7 @@ export default function CouponManager({ secureMode } = {}) {
     ]} />
 
     <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
-      <div className="p-4"><SectionHeading title="Promotion register" description="You can turn a code on or off. Archive old codes to keep their history." count={coupons.length} /></div>
+      <div className="p-4"><SectionHeading title="Promotion register" description="Activation is reversible; archive replaces deletion so historical codes remain auditable." count={coupons.length} /></div>
       {loading && coupons.length === 0 ? <div className="space-y-2 border-t border-adm-line p-4" role="status" aria-label="Loading coupons">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-20 rounded-adm-sm bg-white/[0.04]" />)}</div> : coupons.length === 0 ? <EmptyState icon={StarIcon} title="No production coupons yet" description="Create an inactive draft first, review its limits and dates, then activate it deliberately." /> : <>
         <div className="space-y-3 border-t border-adm-line p-3 sm:hidden">{coupons.map(coupon => <CouponCard key={coupon.id} coupon={coupon} working={working} decideDisabled={!couponAdmin} onAction={openAction} />)}</div>
         <div className="hidden overflow-x-auto sm:block"><table className="w-full min-w-[900px] text-left text-sm">

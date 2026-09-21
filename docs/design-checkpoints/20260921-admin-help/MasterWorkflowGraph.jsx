@@ -1,4 +1,3 @@
-import HelpTip from '../../../views/admin/HelpTip'
 import React, { useState, useMemo, useEffect } from 'react'
 import { WORKFLOW_GUIDE_META, WORKFLOWS, WORKFLOW_SECTIONS } from './workflowData'
 import WorkflowSvgCanvas from './WorkflowSvgCanvas'
@@ -181,12 +180,11 @@ export default function MasterWorkflowGraph({
                 <MapIcon size={18} />
               </span>
               <h2 className="font-sans text-2xl font-bold tracking-tight sm:text-3xl text-white">
-                Workflow map
+                Master Operations Workflow Graph
               </h2>
-              <HelpTip label="Using the workflow map" text="Choose a work area or search for a task. Select a step to read its instructions. Open its Admin screen to do the work; map checkmarks do not save business records." />
             </div>
             <p className="mt-1 text-xs text-white/60 sm:text-sm">
-              Choose a work area, then a step to see what to do and where to do it.
+              One connected operational system from Admin entry through supply, stock, custody, orders, counts, and terminal outcomes.
             </p>
             <p className="mt-2 text-xs text-white/55">
               Version {WORKFLOW_GUIDE_META.version} · {WORKFLOW_GUIDE_META.approvalStatus} · Authority: {WORKFLOW_GUIDE_META.authority}
@@ -325,7 +323,7 @@ export default function MasterWorkflowGraph({
       </div>
 
       <div role="note" className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm leading-6 text-amber-100">
-        This map is a guide. Checkmarks only track your review while it is open. Complete real work in the named Admin screen and check that it saved.
+        This is a versioned guide and rehearsal surface, not an operations terminal. Guide checkmarks stay in this browser only and never prove that inventory, money, customer communication, publication, or provider work occurred. Use each step’s named Admin screen and verify its server result.
       </div>
 
       {/* Workflow header with local guide rehearsal state */}
@@ -351,7 +349,7 @@ export default function MasterWorkflowGraph({
         <div className="flex flex-wrap items-center gap-4 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-xs">
           <div>
             <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-wider text-white/40 mb-1">
-              <span className="inline-flex items-center gap-1">Guide rehearsal<HelpTip label="Guide rehearsal" text="Checkmarks track steps you reviewed while this map is open. They reset when you leave and do not confirm that real work is complete." /></span>
+              <span>Guide rehearsal</span>
               <span className="font-bold text-emerald-400">{progressPercent}%</span>
             </div>
             <div className="h-1.5 w-32 overflow-hidden rounded-full bg-white/10">
@@ -399,7 +397,7 @@ export default function MasterWorkflowGraph({
                 <SparkleIcon size={14} />
               </span>
               <h4 className="text-xs font-bold uppercase tracking-wider text-sky-300">
-                Goal and completion checks
+                Workflow Objective & Operational Definition of Done
               </h4>
             </div>
             {onStartTour && (
@@ -432,7 +430,7 @@ export default function MasterWorkflowGraph({
             </div>
             <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] p-3.5">
               <span className="block text-xs font-bold uppercase tracking-wider text-emerald-400">
-                Before finishing
+                Completion Criteria (Exit Gate)
               </span>
               <p className="mt-1.5 text-xs leading-relaxed text-white/90">
                 {activeWorkflow.completionCriteria || 'Server state permanently verified.'}
@@ -445,10 +443,10 @@ export default function MasterWorkflowGraph({
         <div className="border-t border-white/10 pt-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-white/60">
-              Steps and handoffs ({activeWorkflow.nodes.length} Steps)
+              Step Sequence & Staff Handoffs ({activeWorkflow.nodes.length} Steps)
             </h4>
             <span className="text-xs text-white/40">
-              Select a step for instructions and its Admin screen.
+              Click any step to view target Admin screen, click targets, and next-action directive
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -519,7 +517,7 @@ export default function MasterWorkflowGraph({
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <h3 className="text-sm font-bold text-white">Trace a route</h3>
-            <p className="mt-1 max-w-2xl text-xs leading-5 text-white/50">Choose a start and finish to highlight one route. Return steps remain on the full map but are left out of this route.</p>
+            <p className="mt-1 max-w-2xl text-xs leading-5 text-white/50">Walk a real forward path through decisions and convergence. Recovery loopbacks stay visible on the canvas but are excluded from finite traces.</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-[minmax(12rem,1fr)_minmax(12rem,1fr)_auto]">
             <label className="text-xs font-bold uppercase tracking-wider text-white/45">From
@@ -543,7 +541,7 @@ export default function MasterWorkflowGraph({
                 {tracedPath.map((edge) => <React.Fragment key={`${edge.from}->${edge.to}`}><span className="text-sky-300">→</span><button type="button" onClick={() => handleSelectNode(edge.to)} className="min-h-9 rounded-lg border border-white/10 bg-white/5 px-3 font-semibold text-white/80">{getNode(edge.to)?.title}</button></React.Fragment>)}
                 {tracedPaths.length > 1 && <span className="ml-2 text-white/45">Showing one of {tracedPaths.length} valid paths</span>}
               </div>
-            ) : <p className="text-xs text-amber-300">No route connects these steps. Choose a different start or finish.</p>}
+            ) : <p className="text-xs text-amber-300">No forward route reaches that terminal from the selected node.</p>}
           </div>
         )}
       </section>
@@ -552,7 +550,7 @@ export default function MasterWorkflowGraph({
       <div>
         <div className="mb-2 flex items-center justify-between">
           <span className="text-xs font-bold uppercase tracking-wider text-white/50">
-            Full map · {GRAPH_STATS.nodeCount} steps · {GRAPH_STATS.edgeCount} connections
+            Connected visual flow map · {GRAPH_STATS.nodeCount} nodes · {GRAPH_STATS.edgeCount} typed edges
           </span>
           <span className="text-xs text-sky-400 font-medium">
             Current: {currentNode?.title}

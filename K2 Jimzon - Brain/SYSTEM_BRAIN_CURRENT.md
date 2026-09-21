@@ -1,5 +1,7 @@
 # K2 Jimzon — System Brain (Current State)
 
+**21 September Admin help clarity (IDEA-20260921-01 / MAP-028 I-012/I-016):** Locally prepared plain tooltip copy across Count & Close, delivery, customers, coupons, Pasabuy, holds, fulfillment and dashboard panels; shorter workflow-map headings/category descriptions plus two orientation help tips. Existing logic and setup gates unchanged. 692 contracts and 3 focused browser checks passed; Admin build 201.18/300 kB. Detailed evidence and pending release/acceptance: docs/evidence/20260921-admin-help/README.md. No live operational claim.
+
 **20 September production promotion:** eb38d22 is pushed to GitHub and both
 Vercel production projects are READY at that SHA. Canonical Admin/storefront
 domains return 200 and their correct build markers; Admin sign-in rendered.

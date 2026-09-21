@@ -81,7 +81,7 @@ test('raising a price opens a new row instead of editing the current one', async
   const source = await readFile('src/views/admin/DeliveryRateControl.jsx', 'utf8')
 
   // Append-only is what keeps an accepted quote explainable.
-  expect(source).toContain('Raising a price never edits a row')
+  expect(source).toContain('Price changes create a new rate and keep the old one')
   expect(source).toContain('Orders already quoted keep the fee they were given')
   expect(source).toContain('publishDeliveryCostBff')
   expect(source).not.toMatch(/updateDeliveryCost|editDeliveryCost|patchDeliveryCost/)

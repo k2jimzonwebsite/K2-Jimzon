@@ -18,27 +18,27 @@ export const WORKFLOW_SECTIONS = [
   {
     id: 'all',
     label: 'All Workflows',
-    description: 'Follow the steps for buying, stock, orders, and customer requests.',
+    description: 'Complete operational blueprint across all business domains.',
   },
   {
     id: 'cross_border',
     label: 'Italy & Cross-Border',
-    description: 'Buy in Milan, label and pack boxes, then track their journey to Manila.',
+    description: 'Milan sourcing by cousin, pre-tagging, flight cargo boxes, and international transit.',
   },
   {
     id: 'intake_branching',
     label: 'Manila Intake & Catalog',
-    description: 'Receive boxes, check quality, then add stock or create a new product.',
+    description: 'PH receiving, box opening, QC check, and branching between Existing Stock vs New SKU Creation.',
   },
   {
     id: 'warehouse_custody',
     label: 'Warehouse & Custody',
-    description: 'Store batches, use the earliest expiry first, confirm handovers, and count stock monthly.',
+    description: 'FEFO batch lots, shelf placement, two-party handshakes, and monthly cycle audits.',
   },
   {
     id: 'orders_fulfillment',
     label: 'Orders & Fulfillment',
-    description: 'Verify payment, scan the order and item, pack, and hand over to the courier.',
+    description: 'Customer payment verification, 2-factor picking, secure packing, and courier dispatch.',
   },
   {
     id: 'channel_intake',
@@ -54,12 +54,12 @@ export const WORKFLOWS = {
   cross_border_lifecycle: {
     id: 'cross_border_lifecycle',
     sectionId: 'cross_border',
-    title: 'Buying in Italy to receiving in Manila',
+    title: 'Italy Sourcing to Manila Intake Lifecycle',
     iconName: 'PlaneIcon',
     badge: 'Cross-Border Supply Chain',
     category: 'Italy & Cross-Border',
     description:
-      'Buy in Milan, pack and record flight boxes, then receive and check them in Manila. Add stock to an existing product or create a new one.',
+      'Complete journey of Italian provisions: Sourced by cousin in Milan, pre-inventoried into flight cargo boxes, air transit to Manila (PH), physical box opening, QC checking, and branching into new vs added inventory.',
     color: '#0284c7',
     accentColor: '#38bdf8',
     stats: { steps: 7, scansRequired: 3, roles: ['Milan Cousin / Buyer', 'Manila Intake Staff', 'Hub Manager'], estTime: '3-7 days transit' },

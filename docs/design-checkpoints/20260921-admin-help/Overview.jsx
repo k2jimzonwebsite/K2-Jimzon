@@ -494,7 +494,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
       <section className="border-b border-adm-line pb-4">
         <div className="flex items-center gap-2">
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">Operations command center</h2>
-          <HelpTip label="Operations command center" text="Choose a view from the left panel to see its figures and tasks." />
+          <HelpTip label="Operations command center" text="Choose a widget from the left panel. Each view keeps its own records and operational meaning." />
         </div>
       </section>
 
@@ -770,7 +770,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
       </section>
 
       <section hidden={moneyLens !== 'revenue' || widgetUnavailable} className="[&[hidden]]:hidden min-w-0 border-t border-adm-line">
-          <PanelHeading icon={TrendIcon} title="Verified revenue trend" description={`Value of orders with verified payment, grouped by order date over ${reportingRange} days (Manila time). These are not payment receipt dates or settled revenue.`} />
+          <PanelHeading icon={TrendIcon} title="Verified revenue trend" description={`Payment-verified request value grouped by order creation day in the retrieved ${reportingRange}-day Asia/Manila window; not payment receipt dates or settled revenue.`} />
           <div className="p-3 sm:p-5">
             {loading ? <div className="h-56 animate-pulse rounded-adm-sm bg-white/[0.04]" /> : <RevenueChart points={analytics.revenueSeries} />}
           </div>
@@ -780,7 +780,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
       <div className="contents">
 
         <section hidden={widget !== 'priority' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading icon={AlertIcon} title="Priority queue" description="Urgent work appears first, then larger counts. Product and batch alerts can overlap." />
+          <PanelHeading icon={AlertIcon} title="Priority queue" description="Current recorded work ordered by severity, then count. Inventory totals combine SKU and batch flags and may overlap." />
           <div className="divide-y divide-adm-line">
             {queues.map(queue => {
               const Icon = queue.icon
@@ -810,7 +810,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
 
       <div className="contents">
         <section hidden={widget !== 'inbox' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading icon={InboxIcon} title="Inbox workload" description="Open conversations and replies that need attention." />
+          <PanelHeading icon={InboxIcon} title="Inbox workload" description="Current open-conversation pressure and response risk." />
           <div className="grid grid-cols-2">
             {[
               { label: 'Unread', value: analytics.unread, tone: analytics.unread > 0 ? 'text-amber' : 'text-white' },
@@ -834,7 +834,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
 
       <div className="contents">
         <section hidden={widget !== 'pasabuy' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading icon={BagIcon} title="Pasabuy pipeline" description="Open requests grouped by their next step." />
+          <PanelHeading icon={BagIcon} title="Pasabuy pipeline" description="Open requests by the next operational milestone." />
           <div className="space-y-3 p-4 sm:p-5">
             {analytics.pasabuyStages.map(stage => {
               const total = Math.max(analytics.openPasabuy.length, 1)
@@ -859,7 +859,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
         </section>
 
         <section hidden={widget !== 'stock' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading icon={BoxIcon} title="Inventory health" description="Check available products and batches nearing expiry. Use the earliest-expiring sellable batch first." />
+          <PanelHeading icon={BoxIcon} title="Inventory health" description="SKU availability and FEFO batch risk requiring staff review." />
           <div className="divide-y divide-adm-line px-4 sm:px-5">
             {[
               { label: 'Catalog SKUs', value: data.products.length, detail: 'Current product records', tone: 'text-white' },

@@ -27,7 +27,7 @@ test('the canvas renders model edges and the detail surface exposes graph contex
   expect(canvas).toContain('Reset view')
   expect(detail).toContain('Where did this come from?')
   expect(detail).toContain('What can you do here?')
-  expect(detail).toContain('Grounding evidence')
+  expect(detail).toContain('Supporting records')
   expect(master).toContain('tracePaths(')
   expect(master).toContain('Trace a route')
 })

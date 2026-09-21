@@ -1,5 +1,8 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260921-01 - Staff tooltip and workflow-map clarity. Accepted into MAP-028 I-012/I-016.**
+Owner requests plain, concise help beside Admin headings and clearer workflow instructions. Audit: existing help exposes technical language; the map repeats long instructions. Decision: merge into existing staff clarity scope. Preserve all routes, rules, permissions and real-action boundaries. Verify contracts, Admin build and browser help/map checks; record staff acceptance separately.
+
 **IDEA-20260920-14 - Plain staff wording and smaller product detail groups. Accepted into MAP-028 I-012.**
 Owner requests continued Admin simplification using humanizer, without losing logic.
 Audit: Inventory still uses Product master, Copywriting and SEO; shop stock uses
@@ -732,6 +735,7 @@ Master Action Plan is authorized for implementation.
 | Idea | Outcome | Destination or reason |
 | --- | --- | --- |
 | IDEA-20260920-12 | Merged into MAP-023 | Cash on Delivery admin switch, default off; layered note-claim guards; migration prepared for the MAP-017 window. |
+| IDEA-20260921-01 | Merged into MAP-028 I-012/I-016 | Plain tooltip copy, map instructions and setup warnings; no operational rule changes. |
 | IDEA-20260920-14 | Merged into MAP-028 I-012 | Plain Inventory and shop-stock wording; smaller product description/use groups with existing operational controls preserved. |
 | IDEA-20260920-11 | Merged into MAP-020 | Client-side role mirror on staff-access mutations; server checks remain the authority. |
 | IDEA-20260920-10 | Merged into MAP-023 | Packing-slip print isolation; screen rendering untouched. |

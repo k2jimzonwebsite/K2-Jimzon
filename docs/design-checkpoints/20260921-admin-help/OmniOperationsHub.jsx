@@ -505,7 +505,7 @@ function OmniOperationsWorkspace() {
         <WorkspaceIntro
           eyebrow="Fulfillment control"
           title="Order, packing, and custody desk"
-          description="Review website requests, scan items for packing, and record who holds each Italy box. Check payment separately."
+          description="Confirm website requests before holding stock, scan packed order lines, and keep every Italy box with a named holder. Payment proof stays a separate check."
           status={activeStaff ? `Station: ${activeStaff}` : 'Staff identity unavailable'}
           statusTone={activeStaff ? 'success' : 'danger'}
         />
@@ -602,7 +602,7 @@ function OmniOperationsWorkspace() {
           <section data-tour="fulfillment-queue" className="space-y-3">
             <SectionHeading
               title="Confirmation queue"
-              description="Check customer contact, quantities, and stock before confirming the request and preparing packing lines."
+              description="Review customer contact, item quantities, and stock before creating reservations and packing lines."
               count={orderRequests.length}
               action={
                 <button
@@ -615,7 +615,7 @@ function OmniOperationsWorkspace() {
                 </button>
               }
             />
-            {orderRequests.length === 0 ? <EmptyState title="No submitted website requests" description="New website requests appear here for review." /> : (
+            {orderRequests.length === 0 ? <EmptyState title="No submitted website requests" description="New requests appear here without reserving stock." /> : (
               <div className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
                 <div className="divide-y divide-adm-line">
                   {orderRequests.map(request => (
