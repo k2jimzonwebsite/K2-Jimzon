@@ -1,5 +1,29 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+**21 September owner-authorized Admin clarity, Globe editing, and chat continuity release:**
+GitHub `main` commit `36bbfa461f2e967239e0950dbdd8e4f30603d769` contains
+IDEA-20260921-02 through IDEA-20260921-07, including the user-added anti-slop
+skills. CI run `35586397300` passed both `critical-sql-behavior` and
+`build-and-smoke`. Vercel reported successful production deployments for
+Storefront receipt `8V5FqtDHy7gTAQ5jRwYVsCHnJU9S` and Admin receipt
+`BoZDuR1Um1NzkADnZEDrrffpZtTa`. The canonical Storefront and Admin routes and
+both `/k2-build-target.json` markers returned HTTP 200 with the correct targets.
+The deployed Admin entry resolves `Admin-DJowKeex.js`; it contains the Workflow
+map release, and its `GlobeCms-84oew4KK.js` chunk contains the direct
+`execute_admin_globe_review_direct_v1` transport. The deployed Storefront entry
+resolves `StoreChatPanel-DC4wbNN7.js`, which contains the same-browser
+`localStorage` conversation key and compatibility path. Local release evidence:
+1,129/1,129 top-level tests, Storefront 150.16/150.50 kB gzip JS and
+29.34/30.00 kB gzip CSS, Admin 211.67/300.00 kB, clean production boundaries,
+and clean secret scans. Production Supabase already carried the additive Globe
+RPC before this code release; this deployment did not apply another migration.
+Authenticated Admin save/reload, Staff denial, representative staff
+comprehension, and physical-device checks remain owned by MAP-020/MAP-025.
+Recovery: revert `36bbfa4` and redeploy both Git-linked projects; if the direct
+Globe RPC itself must also be removed, separately run
+`supabase/rollbacks/20260921_admin_globe_direct_rpc_rollback.sql` after reviewing
+its production impact.
+
 **20 September owner-authorized production release:** GitHub main eb38d22
 contains the Admin simplification/hardening and prepared COD-off bundle. Vercel
 reports production READY for Admin dpl_8CRccKAJD3o1MPJ6PQ6QVLPbeVVF and Storefront

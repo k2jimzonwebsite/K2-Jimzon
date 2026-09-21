@@ -51,11 +51,14 @@ the final uninterrupted top-level run passed all 1,129 checks.
 
 ## Limits and next action
 
-This is local automated evidence. It does not prove representative staff
-comprehension, physical phone behavior, or deployed production behavior. MAP-025
-still requires a Staff-role and Admin-role reviewer to open one map step, locate
-the named control without coaching, explain the next action in their own words,
-and complete the allowed task without choosing the wrong record.
+Production release `36bbfa4` passed GitHub CI run `35586397300`; both Vercel
+projects succeeded, both canonical build markers returned the correct target,
+and the live Admin bundle contains the Workflow map release. This does not prove
+representative staff comprehension, physical phone behavior, or authenticated
+write behavior. MAP-025 still requires a Staff-role and Admin-role reviewer to
+open one map step, locate the named control without coaching, explain the next
+action in their own words, and complete the allowed task without choosing the
+wrong record.
 
 ## Recovery
 

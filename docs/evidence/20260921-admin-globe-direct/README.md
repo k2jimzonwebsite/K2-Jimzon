@@ -4,7 +4,7 @@
 
 IDEA-20260921-02 / MAP-020 restores a usable Globe Display command path while
 the Admin BFF browser switch is off. Production Supabase has the additive direct
-RPC. Admin UI transport code is local and awaits deployment.
+RPC. Admin UI transport code is deployed in production release `36bbfa4`.
 
 ## Production database evidence
 
@@ -29,17 +29,28 @@ RPC. Admin UI transport code is local and awaits deployment.
 - Focused Globe BFF contract: 1/1 pass.
 - `npm run verify:admin-bff`: pass.
 - `npm run build:admin`: pass; Admin application 201.18/300.00 kB minified.
+- Combined release candidate: uninterrupted `npm test` passed 1,129/1,129 and
+  the final Admin build passed at 211.67/300.00 kB.
 - `git diff --check`: no whitespace errors; only existing CRLF conversion
   warnings on the two planning records.
+
+## Production UI evidence
+
+- GitHub CI run `35586397300`: `critical-sql-behavior` and `build-and-smoke`
+  both passed for exact commit `36bbfa461f2e967239e0950dbdd8e4f30603d769`.
+- Admin Vercel receipt `BoZDuR1Um1NzkADnZEDrrffpZtTa`: successful.
+- `https://admin.k2jimzon.com/admin-portal-k2-secure` and the Admin build marker
+  returned HTTP 200; the marker identified `admin`.
+- The live Admin entry resolves `GlobeCms-84oew4KK.js`, which returned HTTP 200
+  and contains `execute_admin_globe_review_direct_v1`.
 
 ## Remaining acceptance
 
 The focused 375px browser case timed out before mounting Global Display because
 its prerequisite `Operations command center` heading did not appear. It does
-not test or disprove this change. Deploy the Admin UI code, then sign in as an
-AAL2 Admin and verify load, one reasoned visibility save and reload on the exact
-Admin host. Confirm a Staff account is denied. The live review register remains
-empty.
+not test or disprove this change. Sign in as an AAL2 Admin and verify load, one
+reasoned visibility save and reload on the exact Admin host. Confirm a Staff
+account is denied. The live review register remains empty.
 
 ## Recovery
 
