@@ -16,7 +16,7 @@ export default function FlightWorkflowDiagram({ activeStep = null, onSelectStep 
       location: 'Milan Hub (MXP)',
       tag: 'Origin Verification',
       color: '#38bdf8', // sky
-      short: 'Scan each item into designated flight cargo box.',
+      short: 'Scan each item into its assigned flight cargo box.',
       rules: [
         'Staff scan manufacturer barcode or K2 internal SKU for every single physical unit.',
         'Items are placed into a numbered, trackable cargo box (e.g. BOX-2026-08-A).',
@@ -63,7 +63,7 @@ export default function FlightWorkflowDiagram({ activeStep = null, onSelectStep 
       color: '#10b981', // emerald
       short: 'Classify variances and accept verified stock into inventory lots.',
       rules: [
-        'Overages, shortages, and damages are classified into immutable exception records.',
+        'Extra, missing, and damaged units are saved in permanent exception records.',
         'Verified units are written to product_batches with expiry, hub, custodian, and box ID.',
         'Consignment is marked Finalized and available stock updates across Storefront/Admin.',
       ],
@@ -85,7 +85,7 @@ export default function FlightWorkflowDiagram({ activeStep = null, onSelectStep 
             </h3>
           </div>
           <p className="text-xs text-white/60">
-            Operations Rulebook §7, §9 — Milan Packing to Manila Hub Reconciliation
+            Operations rulebook §7 and §9 · Milan packing to Manila receiving
           </p>
         </div>
         <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-white/70">

@@ -143,7 +143,7 @@ export default function WorkflowDetailDrawer({
           {node.summary}
         </p>
         <p className="mt-3 rounded-adm-sm border border-amber-500/25 bg-amber-500/10 p-3 text-xs leading-5 text-amber-200">
-          Guide only: checking or rehearsing this step does not write or verify a real record. Complete the action in the named Admin screen and confirm the server result there.
+          Guide only: checking this step does not save or verify real work. Use the named Admin screen and confirm the saved record there.
         </p>
       </div>
 
@@ -277,7 +277,7 @@ export default function WorkflowDetailDrawer({
                 </button>
               </div>
               <p className="text-xs font-mono font-medium text-white/95 break-words">
-                {node.actionGuide?.whatToClick || node.jumpLabel || 'Select the action control in the designated screen.'}
+                {node.actionGuide?.whatToClick || node.jumpLabel || 'Open the named screen and follow its visible action.'}
               </p>
             </div>
           </div>
@@ -318,7 +318,7 @@ export default function WorkflowDetailDrawer({
               {'3. Next step'}
             </span>
             <p className="mt-2 text-xs leading-relaxed text-white/90">
-              {node.actionGuide?.nextAction || 'Advance to downstream operational stage once verified.'}
+              {node.actionGuide?.nextAction || 'Move to the next step after you confirm the saved record.'}
             </p>
             {nextStepNode && onSelectNode && (
               <button
@@ -344,7 +344,7 @@ export default function WorkflowDetailDrawer({
               4. Before moving on
             </span>
             <p className="mt-2 text-xs leading-relaxed text-emerald-200/90">
-              {node.actionGuide?.exitCriteria || 'Confirm record created or updated on server before proceeding.'}
+              {node.actionGuide?.exitCriteria || 'Confirm the saved record before moving on.'}
             </p>
           </div>
         </div>
@@ -401,7 +401,7 @@ export default function WorkflowDetailDrawer({
               <button
                 type="button"
                 onClick={() => handleCopy('testBarcode', node.simulation.testBarcode)}
-                className="min-h-9 inline-flex items-center gap-1 rounded-md border border-purple-400/30 bg-purple-500/10 px-2 py-1 text-xs font-semibold text-purple-200 hover:bg-purple-500/20 active:scale-[0.98] cursor-pointer"
+                    className="min-h-11 inline-flex items-center gap-1 rounded-md border border-purple-400/30 bg-purple-500/10 px-2 py-1 text-xs font-semibold text-purple-200 hover:bg-purple-500/20 active:scale-[0.98] cursor-pointer"
                 title="Copy barcode to clipboard"
               >
                 {copiedField === 'testBarcode' ? (
@@ -507,7 +507,7 @@ export default function WorkflowDetailDrawer({
           type="button"
           onClick={onPrevNode}
           disabled={isFirst}
-          className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+            className="flex min-h-11 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
         >
           ← Previous Step
         </button>
@@ -520,7 +520,7 @@ export default function WorkflowDetailDrawer({
           type="button"
           onClick={onNextNode}
           disabled={isLast}
-          className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+            className="flex min-h-11 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
         >
           Next Step →
         </button>

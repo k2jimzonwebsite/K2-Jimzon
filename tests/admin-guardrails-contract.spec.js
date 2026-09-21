@@ -14,10 +14,12 @@ test('J&T tracking save surfaces a server refusal instead of closing silently', 
   expect(src).toContain('result.ok === false')
 })
 
-test('Milan instant draft requires an arming tap that names the SKU first', async () => {
+test('Milan instant draft writes on one tap and names the created SKU in the receipt', async () => {
   const src = await read('../src/views/admin/MilanPackingScannerModal.jsx')
-  expect(src).toContain('instantArmed')
-  expect(src).toContain('Tap again to create')
+  expect(src).not.toContain('instantArmed')
+  expect(src).toContain('Instant 1-Tap Draft & Pack (+1)')
+  expect(src).toContain('setLastPacked({ sku: newSku')
+  expect(src).toContain('{lastPacked.name}')
 })
 
 test('Manila finish requires confirmation when the count is short', async () => {

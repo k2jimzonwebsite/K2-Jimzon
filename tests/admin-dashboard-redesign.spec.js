@@ -694,12 +694,17 @@ test.describe('admin command center redesign', () => {
       const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
       const app = document.getElementById('root'); if (app) app.style.display = 'none'
       const mount = document.createElement('main'); mount.className = 'min-h-[100dvh] bg-adm-bg p-3 text-white'; document.body.appendChild(mount)
-      createRoot(mount).render(React.createElement(globeModule.GlobeCmsWorkspace, { canManagePublicClaims: true, secureMode: true }))
+      const cms = {
+        globeProducts: [{ productId: 'rio-mare', enabled: true, heroImage: null, displayOrder: 0, version: 1 }],
+        reviews: [{ id: '00000000-0000-4000-8000-000000000071', productId: 'rio-mare', name: 'Verified buyer', channel: 'Shopee · verified', stars: 5, text: 'The package arrived safely and matched the listing.', item: 'Rio Mare tuna', reviewDate: '2026-08-20', status: 'draft', sourceKind: 'verified_marketplace', sourceReference: 'SHOPEE-ORDER-1042', rightsBasis: 'marketplace_publication', version: 1 }],
+      }
+      const transport = { read: async () => ({ ok: true, cms }), command: async () => ({ ok: true, result: {} }) }
+      createRoot(mount).render(React.createElement(globeModule.GlobeCmsWorkspace, { canManagePublicClaims: true, secureMode: true, transport }))
     })
     await expect(page.getByRole('heading', { name: 'Public claim control' })).toBeVisible()
     await page.getByRole('tab', { name: 'Review claims' }).click()
     await expect(page.getByText('SHOPEE-ORDER-1042')).toBeVisible()
-    await page.getByRole('button', { name: 'Add attributable draft' }).click()
+    await page.getByRole('button', { name: 'Add review draft' }).click()
     await expect(page.getByText('Saving never publishes')).toBeVisible()
     await expect(page.getByLabel('Private source reference')).toBeVisible()
     await page.getByRole('button', { name: 'Cancel' }).click()
@@ -729,7 +734,7 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByRole('heading', { name: 'Suppliers & purchase orders' })).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Verified Italia Supplier' })).toBeVisible()
     await page.getByRole('tab', { name: 'Purchase orders' }).click()
-    await expect(page.getByText('Creation and batch-aware receiving remain unavailable.')).toBeVisible()
+    await expect(page.getByText('Creating an order and receiving its batches are not available here yet.')).toBeVisible()
     await page.getByRole('button', { name: 'Add supplier' }).click()
     const dialog = page.getByRole('dialog', { name: 'Add verified supplier' })
     await expect(dialog).toBeVisible()
@@ -823,7 +828,7 @@ test.describe('admin command center redesign', () => {
     await expect(dialog.getByRole('button', { name: 'Close role change dialog' })).toBeFocused()
     await dialog.getByLabel('Reason for this access change').fill('Limit this account to daily operations.')
     await dialog.getByRole('button', { name: 'Change to Staff' }).click()
-    await expect(page.getByText('Role updated with an attributable reason.')).toBeVisible()
+    await expect(page.getByText('Role updated with the reason you entered.')).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
     await page.screenshot({ path: 'C:/tmp/k2-admin-staff-access-mobile.png', fullPage: true })
   })
@@ -1245,7 +1250,7 @@ test.describe('admin command center redesign', () => {
     await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 15000 })
 
-    await page.getByRole('button', { name: 'Workflow Graph', exact: true }).click()
+    await page.getByRole('button', { name: 'Workflow map', exact: true }).click()
     await page.getByRole('button', { name: /Channels & Integrations/ }).first().click()
 
     // Staff must be able to see, on the map itself, that these channels have no
@@ -1295,11 +1300,11 @@ test.describe('admin command center redesign', () => {
     await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
 
-    await page.getByRole('button', { name: 'Workflow Graph', exact: true }).click()
+    await page.getByRole('button', { name: 'Workflow map', exact: true }).click()
     await expect(page.getByRole('heading', { name: 'Workflow map', exact: true }).last()).toBeVisible()
-    await expect(page.getByText(/Version 2026-08-30-draft\.1 · DRAFT — NOT LOCKED/)).toBeVisible()
+    await expect(page.getByText(/Draft guide · Version 2026-08-30-draft\.1/)).toBeVisible()
     await expect(page.getByRole('note')).toContainText('Complete real work in the named Admin screen')
-    await expect(page.getByText(/does not write or verify a real record/)).toBeVisible()
+    await expect(page.getByText(/does not save or verify real work/)).toBeVisible()
     await expect(page.getByRole('button', { name: 'Mark guide step reviewed' })).toBeVisible()
 
     const canvas = page.getByRole('region', { name: 'Connected operations workflow canvas' })

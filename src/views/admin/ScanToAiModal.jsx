@@ -277,7 +277,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
               ].map(([title, body], i) => (
                 <div key={i} className="flex gap-3 items-start">
                   <span className="w-5 h-5 rounded-full bg-blue/20 text-blue text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
-                  <p className="text-sm text-white/50"><span className="text-neutral-300 font-semibold">{title}</span> — {body}</p>
+                  <p className="text-sm text-white/50"><span className="text-neutral-300 font-semibold">{title}</span>: {body}</p>
                 </div>
               ))}
             </div>

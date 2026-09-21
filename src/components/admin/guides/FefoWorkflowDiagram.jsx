@@ -52,7 +52,7 @@ export default function FefoWorkflowDiagram({ activeTier = null, onSelectTier = 
         'Locked from order reservation to prevent accidental shipping to customers.',
         'Requires immediate physical pull, disposal audit, or authorized staff write-off.',
       ],
-      action: 'Move to Quarantine Bin immediately; record immutable disposal reason.',
+      action: 'Move it to the quarantine bin at once and save the disposal reason.',
     },
   ]
 

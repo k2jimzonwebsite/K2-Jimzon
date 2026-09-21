@@ -65,6 +65,7 @@
     "verify:map018-intake": "node scripts/verify-map018-intake-contract.mjs",
     "verify:map018-cleanup-portable": "node scripts/rehearse-map018-cleanup-portable.mjs",
     "verify:admin-bff": "node scripts/verify-admin-bff.mjs",
+    "rehearse:admin-globe-direct": "node scripts/rehearse-admin-globe-direct.mjs",
     "audit:security-surfaces": "node scripts/audit-security-surfaces.mjs",
     "security:surfaces": "node scripts/audit-security-surfaces.mjs --fail-on-gaps",
     "verify:map019-identity": "node scripts/verify-map019-identity.mjs",

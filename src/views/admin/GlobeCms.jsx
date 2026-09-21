@@ -4,6 +4,8 @@ import { products } from '../../data/products'
 import { StarIcon } from '../../components/ui/icons'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { adminBffEnabled, commandAdminGlobeCmsBff, getAdminGlobeCmsBff } from '../../services/adminBffService'
+import { createAdminGlobeCmsTransport } from '../../services/adminGlobeCmsService'
+import { supabase } from '../../lib/supabaseClient'
 import { applyImageFallback } from '../../lib/imageFallback'
 
 const SOURCES = [['verified_marketplace', 'Verified marketplace'], ['website_customer', 'Website customer'], ['wholesale_customer', 'Wholesale customer'], ['pasabuy_customer', 'Pasabuy customer'], ['owner_record', 'Owner record']]
@@ -24,8 +26,12 @@ export default function GlobeCms({ canManagePublicClaims = false }) {
   return <GlobeCmsWorkspace canManagePublicClaims={canManagePublicClaims} />
 }
 
-export function GlobeCmsWorkspace({ canManagePublicClaims = false, secureMode = adminBffEnabled() }) {
+export function GlobeCmsWorkspace({ canManagePublicClaims = false, secureMode = true, transport: transportOverride = null }) {
   const legacy = useGlobeCms()
+  const transport = useMemo(() => transportOverride || createAdminGlobeCmsTransport({
+    client: supabase, bffEnabled: adminBffEnabled(),
+    bffRead: getAdminGlobeCmsBff, bffCommand: commandAdminGlobeCmsBff,
+  }), [transportOverride])
   const [tab, setTab] = useState('products')
   const [state, setState] = useState({ status: secureMode ? 'loading' : 'ready', cms: null, message: '' })
   const [dialog, setDialog] = useState(null)
@@ -33,7 +39,7 @@ export function GlobeCmsWorkspace({ canManagePublicClaims = false, secureMode = 
   async function load(signal) {
     if (!secureMode || !canManagePublicClaims) return
     setState((current) => ({ ...current, status: 'loading', message: '' }))
-    const response = await getAdminGlobeCmsBff(signal)
+    const response = await transport.read(signal)
     if (response.aborted) return
     setState(response.ok ? { status: 'ready', cms: response.cms, message: '' } : { status: 'error', cms: null, message: response.error || 'Globe CMS could not be loaded.' })
   }
@@ -47,7 +53,7 @@ export function GlobeCmsWorkspace({ canManagePublicClaims = false, secureMode = 
 
   async function command(action, payload) {
     setState((current) => ({ ...current, status: 'working', message: '' }))
-    const response = await commandAdminGlobeCmsBff(action, payload)
+    const response = await transport.command(action, payload)
     if (!response.ok) {
       setState((current) => ({ ...current, status: 'error', message: response.error || 'The change was not saved.' }))
       return false
@@ -116,7 +122,7 @@ function ReviewsPanel({ rows, disabled, secureMode, command }) {
     return ok
   }
   return <div>
-    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"><div><h3 className="font-sans text-xl font-semibold">Review claims</h3><p className="text-base text-white/45">{counts.published || 0} published · {counts.draft || 0} draft · {counts.withdrawn || 0} withdrawn</p></div><button type="button" disabled={disabled || !secureMode} onClick={() => setEditing({})} className="min-h-[44px] rounded-adm-sm bg-crimson px-4 text-base font-semibold text-white disabled:opacity-50">Add attributable draft</button></div>
+    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"><div><h3 className="font-sans text-xl font-semibold">Review claims</h3><p className="text-base text-white/45">{counts.published || 0} published · {counts.draft || 0} draft · {counts.withdrawn || 0} withdrawn</p></div><button type="button" disabled={disabled || !secureMode} onClick={() => setEditing({})} className="min-h-[44px] rounded-adm-sm bg-crimson px-4 text-base font-semibold text-white disabled:opacity-50">Add review draft</button></div>
     {editing && <ReviewForm initial={editing.id ? editing : null} disabled={disabled} onCancel={() => setEditing(null)} onSave={save} />}
     {!rows.length ? <Empty title="No review claims" body="Create a draft only when its source and publication rights can be recorded." /> : <div className="space-y-3">{rows.map((review) => <article key={review.id} className="rounded-adm-sm border border-adm-line bg-adm-surface p-4"><div className="flex flex-col gap-3 sm:flex-row sm:justify-between"><div className="min-w-0 flex-1">
       <div className="flex flex-wrap items-center gap-2"><Status status={review.status} /><span className="text-sm text-white/45">v{review.version || 1} · {review.reviewDate || review.date}</span></div>
@@ -132,7 +138,7 @@ function ReviewForm({ initial, disabled, onSave, onCancel }) {
   const [value, setValue] = useState(() => blankReview(initial))
   const update = (key) => (event) => setValue((current) => ({ ...current, [key]: event.target.value }))
   return <form onSubmit={(event) => { event.preventDefault(); onSave({ ...value, stars: Number(value.stars), productId: value.productId || null }) }} className="mb-5 space-y-4 rounded-adm-sm border border-blue/30 bg-blue/10 p-4 sm:p-5">
-    <div><h4 className="font-semibold">{initial ? 'Correct review draft' : 'New attributable draft'}</h4><p className="mt-1 text-sm text-white/55">Saving never publishes. A published claim returns to draft when corrected.</p></div>
+    <div><h4 className="font-semibold">{initial ? 'Correct review draft' : 'New review draft'}</h4><p className="mt-1 text-sm text-white/55">Saving never publishes. A published claim returns to draft when corrected.</p></div>
     <div className="grid gap-4 sm:grid-cols-2"><Field label="Reviewer display name"><input required minLength={2} maxLength={80} value={value.name} onChange={update('name')} className={CONTROL} /></Field><Field label="Channel"><input required minLength={2} maxLength={80} value={value.channel} onChange={update('channel')} placeholder="Shopee · verified" className={CONTROL} /></Field><Field label="Product"><select value={value.productId || ''} onChange={update('productId')} className={CONTROL}><option value="">General review</option>{products.map((product) => <option key={product.id} value={product.id}>{product.short || product.name}</option>)}</select></Field><Field label="Item label"><input required minLength={2} maxLength={120} value={value.item} onChange={update('item')} className={CONTROL} /></Field><Field label="Review date"><input required type="date" max={new Date().toISOString().slice(0, 10)} value={value.reviewDate} onChange={update('reviewDate')} className={CONTROL} /></Field><Field label="Rating"><select value={value.stars} onChange={update('stars')} className={CONTROL}>{[5, 4, 3, 2, 1].map((stars) => <option key={stars} value={stars}>{stars} stars</option>)}</select></Field></div>
     <Field label="Review text"><textarea required minLength={10} maxLength={1200} rows={4} value={value.text} onChange={update('text')} className={`${CONTROL} min-h-[112px] resize-y py-3`} /></Field>
     <div className="grid gap-4 border-t border-adm-line pt-4 sm:grid-cols-2"><Field label="Source type"><select value={value.sourceKind} onChange={update('sourceKind')} className={CONTROL}>{SOURCES.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></Field><Field label="Rights basis"><select value={value.rightsBasis} onChange={update('rightsBasis')} className={CONTROL}>{RIGHTS.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></Field></div>

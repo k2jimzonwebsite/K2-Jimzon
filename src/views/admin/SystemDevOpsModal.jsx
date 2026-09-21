@@ -84,7 +84,7 @@ export default function SystemDevOpsModal({ isOpen, onClose, secureMode }) {
             <span className="flex h-10 w-10 items-center justify-center rounded-adm-sm bg-blue/15 text-blue"><ShieldIcon size={21} /></span>
             <div>
               <h2 id="system-tools-title" className="text-lg font-bold">System readiness</h2>
-              <p className="text-sm text-white/55">Observed checks only—no simulated throughput or security claims.</p>
+              <p className="text-sm text-white/55">These are real checks. Missing results stay marked as unavailable.</p>
             </div>
           </div>
           <button ref={closeRef} onClick={onClose} aria-label="Close system readiness" className="flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm bg-white/5 text-white/60 hover:text-white"><XIcon size={19} /></button>
@@ -110,17 +110,16 @@ export default function SystemDevOpsModal({ isOpen, onClose, secureMode }) {
           {state.notice && <div role="alert" className="rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-sm text-amber">{state.notice}</div>}
 
           <section className="rounded-adm-sm border border-adm-line bg-adm-raised p-5">
-            <h3 className="text-sm font-semibold">Diagnostic logging boundary</h3>
+            <h3 className="text-sm font-semibold">What this screen does not show</h3>
             <p className="mt-2 text-xs leading-relaxed text-white/50">
-              Raw client error rows are deliberately not readable or rendered here. The protected
-              readiness response contains booleans only; security-event review stays on its separate,
-              bounded Admin route. Provider text, request URLs, and arbitrary diagnostic payloads never
-              enter this browser surface.
+              Raw browser errors are hidden here. This check returns only available or unavailable.
+              Review security events in their own protected screen. Messages from outside services,
+              request links, and extra diagnostic details are not shown here.
             </p>
           </section>
 
           <div className="rounded-adm-sm border border-blue/25 bg-blue/[0.06] p-4 text-sm leading-relaxed text-white/60">
-            Marketplace secrets belong server-side. These checks do not prove encryption-at-rest, WAF rules, provider uptime, connector health, deployment correctness, latency, throughput, or production activation; those remain deliberately unreported here.
+            Marketplace secrets stay on the server. These checks do not prove storage encryption, firewall rules, outside service uptime, connection health, release status, speed, capacity, or production activation. This screen leaves those items unreported.
           </div>
         </div>
 

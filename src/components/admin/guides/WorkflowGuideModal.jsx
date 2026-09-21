@@ -11,7 +11,7 @@ import { MapIcon, PlaneIcon, ShieldIcon, ClockIcon, BoxIcon, GlobeIcon } from '.
 const MasterWorkflowGraph = lazy(() => import('../master-workflow-graph/MasterWorkflowGraph'))
 
 const TABS = [
-  { id: 'master_graph', label: 'Master Graph (SVG)', icon: MapIcon, section: 'inventory', workspaceLabel: 'Inventory' },
+  { id: 'master_graph', label: 'Full workflow map', icon: MapIcon, section: 'inventory', workspaceLabel: 'Inventory' },
   { id: 'flights', label: 'Flights & Cargo', icon: PlaneIcon, section: 'consignment', workspaceLabel: 'Consignments' },
   { id: 'custody', label: 'Lot Custody', icon: ShieldIcon, section: 'inventory', workspaceLabel: 'Custody' },
   { id: 'fefo', label: 'FEFO & Expiry', icon: ClockIcon, section: 'inventory', workspaceLabel: 'FEFO Stock' },
@@ -62,13 +62,13 @@ export default function WorkflowGuideModal({
             </span>
             <div>
               <h2 className="text-base font-bold text-white sm:text-lg">
-                K2 Operations Visual Workflow Guide
+                K2 staff workflow guide
               </h2>
               <p className="text-xs text-white/50">
-                Draft procedures, scan requirements, safeguards &amp; AI prompt handoffs.
+                Step-by-step procedures, required checks, and safe handoffs.
               </p>
               <p className="mt-1 text-xs font-semibold text-amber-300">
-                {STAFF_GUIDE_META.approvalStatus} · {STAFF_GUIDE_META.version}
+                Draft guide · Version {STAFF_GUIDE_META.version}
               </p>
             </div>
           </div>

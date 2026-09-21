@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, Suspense, lazy } from 'react'
 import {
   BoxIcon, GlobeIcon, GridIcon, UserIcon, InboxIcon,
   PlaneIcon, BagIcon, ShieldIcon, BarcodeIcon, EyeIcon,
-  BellIcon, BookIcon, MenuIcon, SearchIcon, StarIcon, UploadIcon, XIcon, MapIcon, ClockIcon, SparkleIcon,
+  BellIcon, BookIcon, MenuIcon, SearchIcon, TagIcon, UploadIcon, XIcon, MapIcon, ClockIcon, PlayIcon, CameraIcon,
   PlusIcon,
 } from '../../components/ui/icons'
 import { supabase } from '../../lib/supabaseClient'
@@ -53,8 +53,8 @@ const TourSelectionModal = lazy(() => import('../../components/admin/tour/TourSe
 const SECTIONS = {
   overview:          { label: 'Command center',      icon: GridIcon,    title: 'Command center',                desc: 'Website activity, channel status, and the jobs that need you first.' },
   owner_close:       { label: 'Count & Close',       icon: BookIcon,    title: 'Owner Count & Close',           desc: 'Pick up a shop import where you left off: review products, count stock, finish the close.', adminOnly: true },
-  workflow_graph:    { label: 'Workflow Graph',      icon: MapIcon,     title: 'Workflow map', desc: 'Picture guides for every shift, with checklists, safety checks, and prompts you can copy.' },
-  kanban:            { label: 'Purchasing',           icon: BagIcon,     title: 'Italy Purchasing',               desc: 'Supplier orders and buying work before the stock is packed for its flight.' },
+  workflow_graph:    { label: 'Workflow map',        icon: MapIcon,     title: 'Workflow map', desc: 'Picture guides for every shift, with checklists, safety checks, and prompts you can copy.' },
+  kanban:            { label: 'Purchasing',           icon: BagIcon,     title: 'Italy Purchasing',               desc: 'Purchase orders are supplier commitments. Consignments are the Italy flight, boxes, and Milan and Manila scans.' },
   consignment:       { label: 'Flight Consignments',  icon: PlaneIcon,   title: 'Italy Flight Consignments',      desc: 'Scan and count every expected unit in Milan, count it again in Manila, then settle the differences.' },
   pasabuy_manager:   { label: 'Pasabuy Quotes',      icon: BagIcon,     title: 'Custom Pasabuy Quotes',         desc: 'Handle shopper requests and price each one with its full cost from Italy.' },
   suppliers:         { label: 'Suppliers',           icon: GlobeIcon,   title: 'Suppliers & Purchase Orders',   desc: 'The suppliers you buy from and the purchase orders you placed.' },
@@ -64,10 +64,10 @@ const SECTIONS = {
   wholesale:         { label: 'Customers',           icon: UserIcon,    title: 'Registered Customer Profiles',  desc: 'Saved customer profiles. Special wholesale prices and bulk messages are still switched off.' },
   reservations:      { label: 'Stock Holds',         icon: ClockIcon,   title: 'Stock Holds',                   desc: 'Stock held for a customer, time left on each hold, and holds that already expired.' },
   delivery:          { label: 'Delivery Rates',      icon: PlaneIcon,   title: 'Delivery Rates & Couriers',     desc: 'The owner-approved delivery test: which places have fixed rates, and a tester to try a quote.', adminOnly: true },
-  coupons:           { label: 'Coupons',             icon: StarIcon,    title: 'Coupons & Vouchers',             desc: 'Discount codes you control: start dates, spending limits, and promo campaigns.' },
+  coupons:           { label: 'Coupons',             icon: TagIcon,     title: 'Coupons & Vouchers',             desc: 'Discount codes you control: start dates, spending limits, and promo campaigns.' },
   staff_permissions: { label: 'Staff & Roles',       icon: ShieldIcon,  title: 'Staff Roles & Permissions',     desc: 'Who may sign in, and what each role is allowed to do.' },
   integrations:      { label: 'Channel Readiness',   icon: GlobeIcon,   title: 'Sales Channel Readiness',        desc: 'Get the catalog ready and see the true connection status of each sales channel.' },
-  store_assets:      { label: 'Store Assets',        icon: StarIcon,    title: 'Virtual Store Assets',           desc: 'Products still missing shelf content, and draft text waiting for your approval.' },
+  store_assets:      { label: 'Store Assets',        icon: CameraIcon,  title: 'Virtual Store Assets',           desc: 'Products still missing shelf content, and draft text waiting for your approval.' },
   globe:             { label: 'Globe Display',        icon: EyeIcon,     title: '3D Globe Map Settings',         desc: 'Choose which products show on the 3D globe.' },
 }
 
@@ -532,7 +532,7 @@ export default function Admin() {
               className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.035] px-3 text-sm font-medium text-white/65 transition-[transform,background-color,color,border-color] duration-150 hover:border-adm-line-strong hover:bg-white/[0.06] hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
               title="Launch interactive guided walkthrough tour (Manual vs Auto Intake)"
             >
-              <SparkleIcon size={15} />
+              <PlayIcon size={15} />
               <span className="hidden sm:inline">Guided Tours</span>
             </button>
 

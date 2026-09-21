@@ -50,7 +50,7 @@ export default function FulfillmentWorkflowDiagram({ activeStep = null, onSelect
       rules: [
         'Direct website orders receive an internal K2 packing QR until courier booking.',
         'Shopee/Lazada/TikTok orders attach verified marketplace waybills.',
-        'Tracking number and courier carrier (Lalamove, J&T, LBC, Grab) are persisted.',
+        'The tracking number and courier (Lalamove, J&T, LBC, or Grab) are saved.',
       ],
       caution: 'Never mark an order Shipped before the courier waybill is physically attached.',
     },
@@ -64,7 +64,7 @@ export default function FulfillmentWorkflowDiagram({ activeStep = null, onSelect
       short: 'Package is handed to courier rider and tracking link is sent to customer.',
       rules: [
         'Rider signs manifest or handover receipt is documented.',
-        'Order state transitions from Packed -> Dispatched in canonical records.',
+        'The main order record changes from Packed to Dispatched.',
         'Customer receives automated tracking notification with live courier link.',
       ],
       caution: 'Handover is final; any transit failure enters the Exception Resolution queue.',

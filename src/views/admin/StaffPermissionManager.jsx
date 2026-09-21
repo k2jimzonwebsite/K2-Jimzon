@@ -18,9 +18,9 @@ import { WorkspaceTabs } from './AdminWorkspaceUi'
 const ROLES = ['Admin', 'Staff', 'Customer']
 const DISPLAY_ROLES = [...ROLES, 'SuperAdmin']
 const ROLE_BLURB = {
-  Admin: 'Full access — everything, including staff & financials.',
+  Admin: 'Full access to everything, including staff and financials.',
   Staff: 'Day-to-day operations. No staff management or financials.',
-  Customer: 'Storefront only — no admin access.',
+  Customer: 'Storefront only. No admin access.',
   SuperAdmin: 'Owner-controlled access, including paid AI spending controls.',
 }
 const roleChip = (r) =>
@@ -129,13 +129,13 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
       ? await commandAdminStaffAccessBff('staff_role_change', { targetUserId: id, role, reason })
       : await supabase.rpc('set_user_role', { p_user_id: id, p_role: role })
     if ((secure && !result.ok) || (!secure && result.error)) return setErr(secure ? (result.error || 'The role was not changed.') : safeUiError('STAFF_ROLE_FAILED'))
-    setRoleChange(null); setNotice('Role updated with an attributable reason.'); setRows(prev => prev.map(r => r.id === id ? { ...r, role } : r))
+    setRoleChange(null); setNotice('Role updated with the reason you entered.'); setRows(prev => prev.map(r => r.id === id ? { ...r, role } : r))
   }
 
   const sendInvite = async (e) => {
     e.preventDefault()
     if (!invitationAvailable) { setErr('Staff invitations remain unavailable until the reason-bound Edge receipt and server forwarding configuration are active.'); return }
-    if (secure && inviteReason.trim().length < 3) { setErr('Enter an attributable reason for this invitation.'); return }
+    if (secure && inviteReason.trim().length < 3) { setErr('Enter a reason for this invitation.'); return }
     setErr(''); setNotice(''); setInviting(true)
     const res = await inviteStaff(inviteEmail.trim(), inviteRole, inviteReason.trim())
     setInviting(false)
@@ -199,7 +199,7 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
     }
 
     setPin(''); setPinConfirm(''); setPinReason(''); setHasPin(true)
-    setNotice('Delete PIN saved with an attributable reason. You will need it to delete products.')
+    setNotice('Delete PIN saved with the reason you entered. You will need it to delete products.')
   }
 
   return (
@@ -209,7 +209,7 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
       <div className="pt-1">
         <h2 className="font-sans text-lg sm:text-2xl font-bold text-white">Staff &amp; roles</h2>
         <p className="text-sm text-white/55 mt-1 leading-relaxed">
-          {secure ? 'Review authenticated access, make attributable role changes, and protect privileged deletion. Invitations require a durable reason-bound receipt.' : 'Invite people, choose what they can access, and protect your own login with 2FA. Accounts are invite-only — each person sets their own password.'}
+          {secure ? 'Review staff access, change roles with a written reason, and protect product deletion. Each invitation saves its reason and result.' : 'Invite people, choose what they can access, and protect your own login with 2FA. Accounts are invite-only. Each person sets their own password.'}
         </p>
       </div>
 
@@ -268,7 +268,7 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
           )}
         </div>
         <p className="text-xs text-white/45 mb-3 leading-relaxed">
-          Required to delete products. It is yours alone — every deletion is logged
+          Required to delete products. It is yours alone. Every deletion is logged
           against the signed-in admin. It is stored as a one-way bcrypt hash and is never sent back to the browser.
         </p>
         <form onSubmit={savePin} className="space-y-3">
@@ -361,7 +361,7 @@ export default function StaffPermissionManager({ secureMode, runtime }) {
         onSaved={next => {
           setAiSpendControls(normalizeAiSpendControls(next))
           setAiSpendControlsStatus('available')
-          setNotice('Paid AI spending controls saved with an attributable reason. Provider activation remains separately gated.')
+          setNotice('Paid AI spending controls saved with the reason you entered. Service activation still requires a separate approval.')
         }}
         onError={message => setErr(message)}
       />)}
@@ -520,7 +520,7 @@ function PaidAiSpendControls({ secure, isSuperAdmin, controls, status, onSaved, 
     </p>
     {!secure || status !== 'available' ? (
       <div role="status" className="rounded-adm-sm border border-amber/35 bg-amber/10 p-3 text-sm leading-relaxed text-amber">
-        Prepared — not active. The provider boundary, owner-approved model, retention decision, and hard caps must be verified before this control can be changed. Use the manual K2 Product Content → Smart Paste → K2 Product Image Studio workflow meanwhile.
+        Prepared, not active. The provider boundary, owner-approved model, retention decision, and hard caps must be verified before this control can be changed. Use the manual K2 Product Content → Smart Paste → K2 Product Image Studio workflow meanwhile.
       </div>
     ) : !isSuperAdmin ? (
       <div role="status" className="rounded-adm-sm border border-white/15 bg-white/5 p-3 text-sm leading-relaxed text-white/60">

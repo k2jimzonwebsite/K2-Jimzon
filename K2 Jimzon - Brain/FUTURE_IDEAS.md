@@ -1,5 +1,11 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260921-03 - Full Admin plain-language and workflow-guide acceptance audit. Accepted into MAP-028 I-012/I-016 and MAP-025.**
+Owner requests a complete Admin verification focused on simple staff wording, consistent humanized copy, understandable screens, and a working workflow map guide. Audit gate: this extends the active Admin clarity and guide-to-action work rather than creating a new product scope. Acceptance requires an inventory of every Admin section and guide destination; source and rendered checks for implementation jargon, AI-style phrasing, unexplained abbreviations, misleading completion language and complex instructions; exact mapping from guide steps to real sections and controls; preservation of permissions, records, quantities, reasons, approvals, warnings and save boundaries; responsive and keyboard checks; and the full Admin contract/build gates. Local automated evidence does not replace representative staff or physical-device acceptance, which remains in MAP-025.
+
+**IDEA-20260921-02 - Restore Admin editing of Globe Display without requiring the inactive Admin BFF. Accepted into MAP-020.**
+Owner reports that an Admin cannot edit Globe Display and requests a role-based direct path. Audit: the Admin build mounts an inert Globe provider; the browser BFF switch is off; production has the protected Globe/review schema applied, which revokes direct table writes. Decision: provide a direct authenticated Supabase RPC path for Globe configuration and review commands while preserving database-enforced Admin/AAL2, version, evidence, draft/publication, idempotency and audit rules. Do not restore direct table mutation or permit Staff-role writes. Local implementation and tests precede any production migration or exact-host claim; MAP-020 owns activation and recovery.
+
 **IDEA-20260921-01 - Staff tooltip and workflow-map clarity. Accepted into MAP-028 I-012/I-016.**
 Owner requests plain, concise help beside Admin headings and clearer workflow instructions. Audit: existing help exposes technical language; the map repeats long instructions. Decision: merge into existing staff clarity scope. Preserve all routes, rules, permissions and real-action boundaries. Verify contracts, Admin build and browser help/map checks; record staff acceptance separately.
 
@@ -734,6 +740,8 @@ Master Action Plan is authorized for implementation.
 
 | Idea | Outcome | Destination or reason |
 | --- | --- | --- |
+| IDEA-20260921-03 | Merged into MAP-028 I-012/I-016 and MAP-025 | Full Admin copy, simplicity and workflow-guide acceptance audit; preserve operational truth and record real staff acceptance separately. |
+| IDEA-20260921-02 | Merged into MAP-020 | Restore Globe Display editing through an authenticated Admin/AAL2 database RPC while the BFF switch is off; keep table writes closed and retain audit/evidence rules. |
 | IDEA-20260920-12 | Merged into MAP-023 | Cash on Delivery admin switch, default off; layered note-claim guards; migration prepared for the MAP-017 window. |
 | IDEA-20260921-01 | Merged into MAP-028 I-012/I-016 | Plain tooltip copy, map instructions and setup warnings; no operational rule changes. |
 | IDEA-20260920-14 | Merged into MAP-028 I-012 | Plain Inventory and shop-stock wording; smaller product description/use groups with existing operational controls preserved. |
@@ -1027,6 +1035,57 @@ None.
 
 When the owner raises an idea, add it here immediately using the next dated ID.
 Do not wait for the audit before capturing it.
+
+### IDEA-20260921-04 — Admin readability: bigger fonts, fixed help tooltip, purchasing vs consignment clarity
+
+**Captured:** 2026-09-21
+**Raised by:** Owner (Italy Purchasing screenshot: help text clipped/unreadable, fonts too small, purchasing vs flight consignment unclear)
+**Problem observed:** Help `?` shows overlapping/clipped help near `Italy Purchasing` (native title plus custom tooltip, right-aligned tooltip runs into the sidebar and clips). Body copy uses 12px `text-xs` with `text-white/40-50` low contrast, hard to read. Purchasing, Flight Consignments, and Suppliers overlap: Kanban `Italy Purchasing` defaults to the consignment tab while a separate Flight Consignments section mounts the same manager.
+**Desired outcome:** One readable help tooltip, minimum 14px help/body text with stronger contrast, no clipped tooltip near the left edge, and plain copy that says purchase orders are supplier commitments (who, how many, cost) while consignments are Italy-to-Manila movement (flight, boxes, Milan/Manila scans, receipt).
+**Evidence or example:** admin.k2jimzon.com `?section=kanban` screenshot 2026-09-21; `src/views/admin/HelpTip.jsx:14-22`, `src/views/admin/Admin.jsx:57-58`, `src/views/admin/Kanban.jsx:10-11`.
+**Known dependency:** None. Presentation and copy only; no schema, permission, state, or transition change.
+**Possible overlap with current behavior/MAP item:** Follow-up to IDEA-20260921-01/03 (Admin help clarity) in MAP-028 I-012/I-016. Merges there; no new MAP number.
+**Owner decision potentially required:** None for readability fix. Keep 12px floor elsewhere unless owner asks for a wider type-scale pass.
+**Status:** captured, audited, merged into MAP-028 I-012/I-016. Authorized for implementation.
+**Follow-up (same day):** Owner asks the distinction to live permanently in the tool so staff stop confusing the two, noting all supplies today fly Italy to Manila but the same steps must cover future suppliers. Decision: persistent always-visible strip on the Purchasing screen stating both definitions plus the single-lane note. No new MAP item; same presentation-only scope. Changed file: `src/views/admin/Kanban.jsx`.
+**Follow-up sweep (same day):** Owner screenshot shows the same clip-plus-double on the Command center Inbox metrics `?` and asks for every case, not one. Finding: `HelpTip.jsx` is the only custom tooltip in Admin; the sweep of all 8 call sites plus every shared `WorkspaceIntro`/`SectionHeading` caller shows all triggers are left-aligned in normal flow with no `overflow-hidden` modal/table ancestor, so the left-aligned single tooltip covers every case. Native `title` elsewhere is either standalone (header buttons) or the correct truncated-text pattern (`MetricRail`), neither doubled. Locked with a new contract test (left alignment, no native title). Production still serves the old build, so the screenshot bug persists live until owner-ordered deploy. Evidence: 58/58 contracts, prebuild clean, `build:admin` 211.67/300.00 kB.
+
+### IDEA-20260921-05 — Staff AI question-handler in Admin tools
+
+**Captured:** 2026-09-21
+**Raised by:** Owner (wants an AI agent in the setting tools gear so staff can ask what screens are for, inventory questions, and most admin-side questions)
+**Problem observed:** Staff confusion about screens and stock must currently be answered by a person. The existing Operations Guide (`AdminAiCopilotModal.jsx`) only retrieves pre-written approved procedures by keyword and states it is not a live external AI; it cannot answer live-data questions (stock levels, record states) or anything outside its written topics.
+**Desired outcome:** A question handler reachable from the Admin tools gear that answers what things are for, inventory questions, and most admin-side questions.
+**Evidence or example:** `src/views/admin/AdminToolsWidget.jsx:48,146-148` (gear already opens the guide); `src/views/admin/AdminAiCopilotModal.jsx:61` (grounded retrieval, not live AI); `src/views/admin/adminGuide.js:3`.
+**Known dependency:** If real external AI: provider key, owner-approved spend controls (MAP-018 pattern), and a rulebook boundary for what the agent may read/say (never assigns stock, quantity, SKU, price, cost, expiry, custody, approval, publication). If grounded only: expanded written topics plus read-only live data projections.
+**Possible overlap with current behavior/MAP item:** Extends the Operations Guide / staff clarity scope (MAP-028 I-012/I-016, MAP-021 guides) and the paid-AI spend-control pattern (MAP-018). No MAP merge decided yet; pending owner answer on external AI vs grounded helper.
+**Owner decision potentially required:** YES. Real external AI (paid, off-site data, needs key and spend cap) vs smarter built-in helper (free, on-device retrieval, no live AI). Also which live data, if any, it may read.
+**Status:** captured, audited, merged into MAP-028 I-012/I-016. Owner chose no external AI: extend the built-in guide instead. Implemented locally as 18 searchable glossary entries (one per Admin screen: definition, used-for, scenario) in `src/views/admin/adminGuide.js`, reusing the existing topic shape so search, the Operations Guide, and the command palette need no changes. No schema, permission, state, or provider change.
+**Follow-up (same day):** Owner asks for a humanizer pass: simpler words, no redundancy, staff-learnable. Applied: copula-first openers, one-breath definitions, concrete K2 scenarios, added purchase-vs-consignment keywords. Ranking pins (`manila_scanning`, `waybills` first) preserved by keeping collision words out of glossary keywords.
+
+### IDEA-20260921-06 — Install anti-slop agent skills and audit staff copy
+
+**Captured:** 2026-09-21
+**Raised by:** Owner (install https://github.com/miqdadbadjuber/anti-slop, then report what it says about our staff side)
+**Problem observed:** Staff-facing copy is written by AI assistance with no standing filter; slop patterns (fake precision, hype, emoji bullets, generic cards) can slip into Admin text.
+**Desired outcome:** Anti-slop skills installed in the repo following `.agents/skills/` convention, then an After-mode audit of staff Admin copy with a numbered findings list for owner approval before any fix.
+**Evidence or example:** Upstream repo (MIT, 38 rules R-01 to R-38, skills: core, ui, copywriting, human, layoutmobile, code); install routes include `npx antislop-ai` and skills.sh.
+**Known dependency:** None for the audit. Install via file copy only: no remote code execution (`npx` installer and plugin routes not used). Markdown-only payload; no package.json change, no provider, no migration.
+**Possible overlap with current behavior/MAP item:** Complements the humanizer pass (IDEA-20260921-05) and Admin clarity scope (MAP-028 I-012/I-016). Skill install merges into the existing tooling surface; audit findings return here for approval per the skill's own After-mode.
+**Owner decision potentially required:** Which findings to fix after the audit report. Install route approved as file-copy only.
+**Status:** captured, audited, installed as file-copy only (6 folders under `.agents/skills/antislop*`, hashes verified against upstream clone; the two `.py` helpers were copied but never executed). After-audit of staff Admin copy complete with core R-01 to R-38 plus the copywriting skill. Owner approved all fixes. F1 to F6 implemented locally (uncommitted): em dashes replaced in 10 rendered strings; Kicker-Hierarchy reason written in `DESIGN.md`; Guided Tours sparkle to play, Coupons star to tag, Store Assets star to camera; flagged microcopy raised to `text-white/60`; glossary passives rewritten in active voice; Milan instant draft is true one-tap with the SKU-naming receipt kept, and the guardrail contract updated to the owner-approved behavior. The `DRAFT — NOT LOCKED` status stamp stays because pinned tests require that exact string. Evidence: 57/57 contracts, prebuild clean, `build:admin` 211.67/300.00 kB. Deploy and staff acceptance still pending.
+
+### IDEA-20260921-07 — Guest chat thread survives tab close (same browser)
+
+**Captured:** 2026-09-21
+**Raised by:** Owner (guest chat thread dies with the tab; UUID is bearer-style)
+**Problem observed:** `StoreChatPanel.jsx` keeps the conversation id in `sessionStorage`, so closing the tab orphans the thread and the next visit starts a new conversation. Staff then juggle duplicates.
+**Desired outcome:** Same-browser resume: keep the thread id in `localStorage` (read local first, fall back to the old session key once, write both), so a closed tab or restart returns to the same thread. No login, no migration, no RPC change. Reference-code reclaim on any device explicitly deferred.
+**Evidence or example:** `src/components/shop/StoreChatPanel.jsx:113,261` (`k2-store-chat-convo-id`); signed-in resume already works via claimed history (`CustomerAccount.jsx`).
+**Known dependency:** None. Client-only. Bearer-UUID property unchanged (same exposure as today, strictly fewer orphan threads).
+**Possible overlap with current behavior/MAP item:** Guest commerce / storefront chat scope (MAP-027). Merges there; no new MAP number.
+**Owner decision potentially required:** None. Scope chosen by owner: same-browser resume now, reference codes later.
+**Status:** captured, audited, merged into MAP-027, implemented locally (uncommitted). Thread id now persists in `localStorage` with one-time `sessionStorage` fallback/migration in `StoreChatPanel.jsx` and `StorefrontChatButton.jsx`. Evidence: map027-store-polish + turnstile-wiring 79/79, prebuild clean, `build:storefront` JS 150.16/150.50 kB gzip. Deploy and real-browser resume acceptance still pending.
 
 ### New idea template
 

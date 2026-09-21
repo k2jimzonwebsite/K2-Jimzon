@@ -1034,6 +1034,8 @@ The light-mode storefront must retain `public/wood-bg.jpg` as its continuous pag
 
 **The Admin One-Family Rule.** The operations dashboard uses Source Sans 3 for headings, descriptions, controls, metrics, and tables. Monospace is reserved for editable code, secrets, raw prompts, and machine identifiers; ordinary numbers use tabular Source Sans 3.
 
+**The Kicker-Hierarchy Rule.** Uppercase tracked kickers mark section hierarchy in dense operational screens so staff can scan past secondary blocks. They repeat what the heading already states and never carry new information.
+
 **Universal Stock Slot.** Every catalog card reserves the same stock row immediately above its price and action footer. The wording and color may reflect healthy, low, or sold-out inventory, but the placement never moves with title or description length.
 
 ## 4. Elevation
@@ -1153,3 +1155,18 @@ empty/full basket, keeper/chat and keyboard together in portrait and landscape.
 The 8 September screenshots establish earlier orientation only; click-only zoom
 tests do not establish camera movement or actual iOS/Android touch acceptance.
 Review and coverage: `docs/evidence/20260909-map-truth-audit/README.md`.
+### 21 September Admin clarity and workflow guide audit
+
+| Before | After | Why |
+| --- | --- | --- |
+| Staff entry points alternated between `Workflow Graph`, `Master Graph`, and `Workflow map`. | All visible entry points use `Workflow map`. | One name is easier to find and remember. |
+| Most guide steps named controls that were absent from the target screen. | Quoted actions match real labels; unavailable work is stated plainly. | A visual guide must be trustworthy before it can be useful. |
+| Custody, count, and stock-allocation steps opened broad Inventory screens. | Those steps open Fulfillment Hub, Owner Count & Close, and Channel Readiness. | The first jump should place staff where the work is owned. |
+| Help fallbacks and status messages exposed implementation terms. | Copy uses visible actions and saved-record language. | Staff need the action, evidence, and next check in familiar words. |
+
+The visual system remains unchanged: Source Sans, existing Admin colors, dense
+flat work surfaces, restrained status accents, reduced-motion support, and 44px
+touch targets. The audit changes wording, routing, and a few undersized controls;
+it does not change operational permissions or record behavior. Automated local
+evidence is in `docs/evidence/20260921-admin-clarity-audit/`. Representative
+staff and physical-device acceptance remain under MAP-025.

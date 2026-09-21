@@ -7,12 +7,20 @@ export default function StorefrontChatButton() {
   const [hasConversation, setHasConversation] = useState(false)
 
   useEffect(() => {
+    let convoId = null
     try {
-      const convoId = sessionStorage.getItem('k2-store-chat-convo-id')
-      if (convoId) setHasConversation(true)
+      convoId = localStorage.getItem('k2-store-chat-convo-id')
     } catch {
-      // Storage unavailable
+      // Private-mode storage: fall through to session
     }
+    if (!convoId) {
+      try {
+        convoId = sessionStorage.getItem('k2-store-chat-convo-id')
+      } catch {
+        // Storage unavailable
+      }
+    }
+    if (convoId) setHasConversation(true)
   }, [chatOpen])
 
   if (chatOpen) return null

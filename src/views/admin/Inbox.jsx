@@ -522,7 +522,7 @@ function InboxWorkspace({ store, database }) {
     }
     setUncertainCommand(null)
     setWorkflow(current => current === submittedWorkflow ? { ...current, reason: '' } : current)
-    setNotice('Workflow updated and added to the immutable event history.')
+    setNotice('Workflow updated and added to the permanent activity history.')
     loadHistory(chat.id)
   }
 
@@ -548,7 +548,7 @@ function InboxWorkspace({ store, database }) {
   if (inboxState.loading && conversations.length === 0) {
     return (
       <div className="flex h-[60vh] items-center justify-center rounded-adm border border-adm-line bg-adm-bg text-sm text-white/55" role="status">
-        Loading persisted conversations…
+        Loading saved conversations…
       </div>
     )
   }
@@ -558,7 +558,7 @@ function InboxWorkspace({ store, database }) {
       <section className="rounded-adm border border-adm-line bg-adm-bg p-6 text-center">
         {inboxState.error && <p role="alert" className="mb-4 rounded-adm-sm border border-amber/40 bg-amber/10 p-3 text-sm text-amber">{inboxState.error}</p>}
         <InboxIcon size={30} className="mx-auto text-white/40" />
-        <h2 className="mt-3 text-base font-semibold text-white">No persisted conversations</h2>
+        <h2 className="mt-3 text-base font-semibold text-white">No saved conversations</h2>
         <p className="mx-auto mt-1 max-w-md text-sm leading-relaxed text-white/50">
           This queue stays empty until a real conversation row reaches Supabase. External channel connectors are not configured.
         </p>
@@ -587,7 +587,7 @@ function InboxWorkspace({ store, database }) {
       <MetricRail columns="lg:grid-cols-6" items={[
         { label: 'Active', value: activeCount, detail: `Open or waiting on customer${windowNote}` },
         { label: 'Live web', value: liveWebsiteCount, detail: `Customer-visible website threads${windowNote}`, tone: liveWebsiteCount ? 'text-forest' : 'text-white' },
-        { label: 'Unread', value: unreadCount, detail: `Persisted unread messages${windowNote}`, tone: unreadCount ? 'text-blue' : 'text-white' },
+        { label: 'Unread', value: unreadCount, detail: `Saved unread messages${windowNote}`, tone: unreadCount ? 'text-blue' : 'text-white' },
         { label: 'Overdue', value: overdueCount, detail: `Response deadline passed${windowNote}`, tone: overdueCount ? 'text-crimson' : 'text-white' },
         { label: 'Unassigned', value: unassignedCount, detail: `Active without an owner${windowNote}`, tone: unassignedCount ? 'text-amber' : 'text-white' },
         { label: 'Urgent', value: urgentCount, detail: `Active urgent priority${windowNote}`, tone: urgentCount ? 'text-crimson' : 'text-white' },

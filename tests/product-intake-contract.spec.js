@@ -80,7 +80,7 @@ test('product intake cannot fabricate browser-side product, lot, or publication 
   expect(modal).toContain('accept="image/jpeg,image/png,image/webp"')
   expect(modal).not.toContain('image/avif')
   expect(modal).toContain('URL.revokeObjectURL')
-  expect(modal).toContain('Supplier receipt remains pending until the canonical purchasing and receiving workflow is activated.')
+  expect(modal).toContain('Supplier receipt remains unavailable until the approved purchasing and receiving steps are active.')
   expect(modal).toContain("import { CANONICAL_CUSTODIANS, CANONICAL_HUBS } from '../../data/canonicalIdentities'")
   expect(modal).toContain('<select')
   expect(modal).toContain('custodian.hub_id === hubLocation')

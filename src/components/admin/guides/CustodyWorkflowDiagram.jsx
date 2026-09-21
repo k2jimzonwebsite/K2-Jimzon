@@ -35,7 +35,7 @@ export default function CustodyWorkflowDiagram({ activeStep = null, onSelectStep
       rules: [
         'The transferred quantity is immediately deducted from sender sellable stock.',
         'Stock remains locked to prevent double-reservation while in transit between hubs.',
-        'Transfer operation key and timestamp are logged to immutable custody audit ledger.',
+        'The transfer number and time are saved in the permanent custody history.',
       ],
       caution: 'Neither sender nor receiver can sell units while in in_transfer status.',
     },
@@ -63,7 +63,7 @@ export default function CustodyWorkflowDiagram({ activeStep = null, onSelectStep
       color: '#10b981', // emerald
       short: 'Receiver explicitly accepts (custody updates) or rejects (returns to sender).',
       rules: [
-        'Accept: units update custodian and hub in product_batches with immutable event.',
+        'Accept: the saved lot records the new custodian and location, with a permanent history entry.',
         'Reject: units return to sender custody with required discrepancy reason.',
         'System guarantees zero stranded units and absolute custody accountability.',
       ],
@@ -85,7 +85,7 @@ export default function CustodyWorkflowDiagram({ activeStep = null, onSelectStep
             </h3>
           </div>
           <p className="text-xs text-white/60">
-            Operations Rulebook §10 — Two-Party Handshake & Immutable Physical Custody
+            Operations rulebook §10 · Two-person physical custody handoff
           </p>
         </div>
         <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-white/70">

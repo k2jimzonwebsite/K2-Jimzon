@@ -27,7 +27,7 @@ export default function CommandPalette({ isOpen, setIsOpen, setSection, onOpenSc
     { id: 'nav-coupons', type: 'Navigation', label: 'Manage Coupons & Vouchers', action: () => setSection('coupons') },
     { id: 'nav-store-assets', type: 'Navigation', label: 'Review Virtual Store Assets', action: () => setSection('store_assets') },
     { id: 'nav-globe', type: 'Navigation', label: 'Change 3D Globe Display', action: () => setSection('globe') },
-    { id: 'nav-workflow', type: 'Navigation', label: 'Open Workflow Graph', action: () => setSection('workflow_graph') },
+    { id: 'nav-workflow', type: 'Navigation', label: 'Open workflow map', action: () => setSection('workflow_graph') },
     { id: 'nav-owner-close', type: 'Navigation', label: 'Open Owner Count & Close', adminOnly: true, action: () => setSection('owner_close') },
     { id: 'nav-delivery', type: 'Navigation', label: 'Manage Delivery Rates', adminOnly: true, action: () => setSection('delivery') },
     { id: 'nav-staff', type: 'Navigation', label: 'Manage Staff & Roles', adminOnly: true, action: () => setSection('staff_permissions') },

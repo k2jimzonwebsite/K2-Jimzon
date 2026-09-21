@@ -193,7 +193,7 @@ export default function PasabuyManager() {
     if (secureAdmin ? !result.ok : result.error) {
       if (secureAdmin && commandOutcomeIsUncertain(result)) {
         setUncertain(true)
-        setNotice('The transition did not confirm. It may already be saved — reload the case and reconcile before sending it again.')
+        setNotice('The transition did not confirm. It may already be saved. Reload the case and reconcile before sending it again.')
         await load()
         return
       }
@@ -234,7 +234,7 @@ export default function PasabuyManager() {
     if (secureAdmin ? !result.ok : result.error) {
       if (secureAdmin && commandOutcomeIsUncertain(result)) {
         setUncertain(true)
-        setNotice('The quote save did not confirm. It may already be saved — reload the case and reconcile before sending it again.')
+        setNotice('The quote save did not confirm. It may already be saved. Reload the case and reconcile before sending it again.')
         await load()
         return
       }

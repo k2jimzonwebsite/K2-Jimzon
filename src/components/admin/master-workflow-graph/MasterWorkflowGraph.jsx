@@ -189,7 +189,7 @@ export default function MasterWorkflowGraph({
               Choose a work area, then a step to see what to do and where to do it.
             </p>
             <p className="mt-2 text-xs text-white/55">
-              Version {WORKFLOW_GUIDE_META.version} · {WORKFLOW_GUIDE_META.approvalStatus} · Authority: {WORKFLOW_GUIDE_META.authority}
+              Draft guide · Version {WORKFLOW_GUIDE_META.version} · Source: K2 operations rulebook
             </p>
           </div>
 

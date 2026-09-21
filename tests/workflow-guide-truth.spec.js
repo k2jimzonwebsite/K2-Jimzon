@@ -37,9 +37,9 @@ test('the guide exposes a version, approval state, and authoritative operational
 
 test('the guide routes every action to an actual Admin section', () => {
   const validSections = new Set([
-    'overview', 'workflow_graph', 'kanban', 'consignment', 'pasabuy_manager',
+    'overview', 'owner_close', 'workflow_graph', 'kanban', 'consignment', 'pasabuy_manager',
     'suppliers', 'inventory', 'omni_hub', 'inbox', 'wholesale', 'coupons',
-    'staff_permissions', 'integrations', 'store_assets', 'globe',
+    'reservations', 'delivery', 'staff_permissions', 'integrations', 'store_assets', 'globe',
   ])
 
   for (const workflow of Object.values(WORKFLOWS)) {
@@ -51,6 +51,41 @@ test('the guide routes every action to an actual Admin section', () => {
   }
 })
 
+test('every quoted guide control is a real staff-facing label', async () => {
+  const sourceFiles = [
+    '../src/views/admin/Kanban.jsx',
+    '../src/views/admin/PurchaseOrders.jsx',
+    '../src/views/admin/ConsignmentManager.jsx',
+    '../src/views/admin/InventoryGrid.jsx',
+    '../src/views/admin/OwnerCountClose.jsx',
+    '../src/views/admin/OmniOperationsHub.jsx',
+    '../src/views/admin/Inbox.jsx',
+    '../src/views/admin/PasabuyManager.jsx',
+    '../src/views/admin/ChannelIntegrations.jsx',
+  ]
+  const adminLabels = (await Promise.all(sourceFiles.map(read))).join('\n')
+
+  for (const workflow of Object.values(WORKFLOWS)) {
+    for (const node of workflow.nodes) {
+      const clickText = node.actionGuide.whatToClick
+      if (clickText.startsWith('No Admin control yet.')) continue
+      const labels = [...clickText.matchAll(/"([^"]+)"/g)].map(match => match[1])
+      expect(labels.length, `${node.id} must name a real control or state that no Admin control exists`).toBeGreaterThan(0)
+      for (const label of labels) {
+        expect(adminLabels.includes(label), `${node.id} names missing control "${label}"`).toBe(true)
+      }
+    }
+  }
+})
+
+test('workflow guide uses plain staff language for fallback instructions', async () => {
+  const detail = await read('../src/components/admin/master-workflow-graph/WorkflowDetailDrawer.jsx')
+  expect(detail).not.toContain('designated screen')
+  expect(detail).not.toContain('downstream operational stage')
+  expect(detail).not.toContain('server result')
+  expect(detail).toContain('saved record')
+})
+
 test('guide rehearsal state cannot be presented as a real operational completion', async () => {
   const master = await read('../src/components/admin/master-workflow-graph/MasterWorkflowGraph.jsx')
   const detail = await read('../src/components/admin/master-workflow-graph/WorkflowDetailDrawer.jsx')
@@ -58,7 +93,7 @@ test('guide rehearsal state cannot be presented as a real operational completion
   expect(master).toContain('Guide rehearsal')
   expect(master).not.toContain('Shift Progress')
   expect(detail).toContain('Training example')
-  expect(detail).toContain('does not write or verify a real record')
+  expect(detail).toContain('does not save or verify real work')
   expect(detail).not.toContain('automatically toggle step complete')
   expect(detail).not.toContain('setTimeout(() =>')
   expect(detail).not.toContain('Laser Barcode & Step Simulator')

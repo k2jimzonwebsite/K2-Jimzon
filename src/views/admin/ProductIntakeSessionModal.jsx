@@ -1098,7 +1098,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 ))}
               </div>
               <p id="supplier-receipt-pending" className="text-white/50">
-                Supplier receipt remains pending until the canonical purchasing and receiving workflow is activated.
+                Supplier receipt remains unavailable until the approved purchasing and receiving steps are active.
               </p>
 
               {inventorySource === 'flight' && (

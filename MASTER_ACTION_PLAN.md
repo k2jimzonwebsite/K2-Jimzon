@@ -452,6 +452,18 @@ after its behavior and evidence are preserved in System Brain/design/runbooks.
 review the Inventory description/use groups and shop-stock wording on the exact
 preview and physical devices (MAP-025). Confirm they locate the right group,
 understand review versus save, and retain drafts without wrong-record actions.
+For IDEA-20260921-03, the same Staff-role and Admin-role reviewers must open one
+workflow-map step, locate its named control without coaching, explain the next
+action in their own words, and complete the permitted task without choosing the
+wrong record. Local source, browser, and build evidence is recorded in
+`docs/evidence/20260921-admin-clarity-audit/`; it does not establish staff
+comprehension or physical-device acceptance.
+For IDEA-20260921-04 through -06, reviewers must also open help beside a left-edge
+heading without clipping or duplicate native text, explain purchase order versus
+consignment in their own words, find one unfamiliar screen through glossary
+search, and verify the Milan one-tap receipt names the created SKU/item before
+continuing. Preserve the owner-approved single action and its visible recovery
+receipt; do not generalize it to other stock-moving commands.
 Local implementation/evidence is recorded in System Brain, DESIGN and
 `docs/evidence/20260920-admin-plain-words/`; it does not establish deployment or
 staff comprehension. Recovery: reverse only this slice's labels/disclosure split
@@ -4115,6 +4127,8 @@ scoped guest grant, account-claim, and channel-identity rules are recorded in
 **Status:** Queued — local preparation exists; production activation/evidence
 depends on MAP-017 and MAP-019
 
+**21 September Globe Display editing recovery (IDEA-20260921-02, active):** Owner reports that Admin cannot edit the Globe. Root cause: the Admin artifact mounts an inert Globe provider while `VITE_ADMIN_BFF_ENABLED` is off, and production correctly revokes direct table writes, leaving no usable edit path. `execute_admin_globe_review_direct_v1` is now applied to production Supabase. Live postflight confirms authenticated execute, anonymous denial and no authenticated update/insert grants on the Globe tables. Local UI uses this RPC when the BFF switch is off and retains the BFF transport for a future coordinated cutover. Database enforcement keeps Admin/AAL2, exact version, reason, evidence, draft/publication, idempotency and immutable audit behavior. Isolated PostgreSQL rehearsal passes Admin save, retry, changed-payload rejection, draft, publish, Staff/AAL1 denial and audit uniqueness; 21 focused contracts, the focused boundary contract, Admin BFF verifier and Admin build pass (201.18/300.00 kB). The focused browser test timed out before the Globe fixture mounted because its prerequisite Admin shell heading did not appear. Remaining before closure: deploy the UI code, then perform one authenticated exact-host read/save/reload check and a Staff denial check. Recovery drops only the new RPC or leaves the UI undeployed, restoring prior read-only behavior without reopening direct table writes or deleting records. Evidence: `docs/evidence/20260921-admin-globe-direct/README.md`.
+
 **20 September client role mirror, local code (IDEA-20260920-11).** Staff-role users no longer face fully enabled privileged controls that only fail server-side: `StaffPermissionManager.jsx` now computes `canManage` from the staff record and disables invite, role-change, and AI-adjacent privileged inputs for non-Admin roles with the named reason `Only Admins can change roles or invite staff`. Own PIN, own MFA, and the read-only directory stay available to all staff. Server checks remain the authority; this removes the confusion and the wasted refused calls, not the enforcement. Covered by `tests/admin-hardening-followup-contract.spec.js`; the staff privilege browser test fixture now carries its Admin role explicitly.
 
 **2 September 2026 release-gate incident — dependency audit locally repaired,
@@ -7750,7 +7764,9 @@ idempotency, concurrency, provider-failure, and exact-host acceptance suites.
 
 ### MAP-027 — AI-assisted verified product knowledge and optional Interactive Shop
 
-**20 September pre-existing regression found during MAP-023 verification (not caused there).** `tests/smoke.spec.js` MAP-027 case `requests the Interactive Shop payload only after deliberate store entry` fails identically on clean main: `/src/components/shop/StorefrontChatButton.jsx` is requested on non-store pages, so the globally mounted chat button pulls a `components/shop` chunk before any store visit. Either the button chunk splits lazily or the test expectation moves with the unified-chat design; MAP-027 owns the call. Unrelated slices must not absorb it.
+**21 September guest chat continuity (IDEA-20260921-07, local):** The scoped guest conversation ID now uses same-browser `localStorage`, accepts and copies forward the old `sessionStorage` value, and continues writing both during the transition. This preserves one thread after tab close or browser restart on the same browser. It does not prove identity or provide cross-device recovery. Before closure, verify a real guest thread resumes after tab close on the exact Storefront host and that a new browser profile cannot read it. Recovery is the scoped two-component storage change; no RPC or database rollback is required.
+
+**20 September Interactive Shop request-test mismatch resolved locally:** the lazy-load test now classifies only the `InteractiveShop`/`ShelfScene3D` payloads, rather than the globally mounted lightweight chat button. Separate orientation tests retain the WebGL and accessible flat-scene assertions. Exact-current-tree release gates and deployed-host evidence remain required.
 
 **Owner-requested clerk and workflow enhancement — 5 September 2026
 (IDEA-20260905-01). Status: Active, owner confirmed the direction and requested

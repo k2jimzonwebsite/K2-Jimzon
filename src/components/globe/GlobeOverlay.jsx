@@ -134,17 +134,17 @@ export default function GlobeOverlay({ product, onClose }) {
                         <StarIcon key={idx} size={13} />
                       ))}
                     </div>
-                    {r.verified && (
+                    {(r.verified || /verified/i.test(r.channel || '')) && (
                       <span className="flex items-center gap-1 text-[10px] font-bold text-forest">
                         <CheckIcon size={12} /> Verified purchase
                       </span>
                     )}
                   </div>
                   <p className="font-serif text-sm leading-relaxed text-navy italic">
-                    &ldquo;{r.comment || r.body}&rdquo;
+                    &ldquo;{r.text || r.comment || r.body}&rdquo;
                   </p>
                   <p className="mt-2 text-[11px] font-semibold text-navy-faint">
-                    by {r.author || 'Verified Manila Customer'} {r.location ? `(${r.location})` : ''}
+                    by {r.name || r.author || 'Verified Manila Customer'} {r.channel || r.location ? `(${r.channel || r.location})` : ''}
                   </p>
                 </blockquote>
               ))}

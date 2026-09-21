@@ -13,6 +13,7 @@ async function setup(page, command) {
   await page.route('**/api/admin/wholesale-inquiries**', route => route.request().method() === 'GET'
     ? route.fulfill({ json: { ok: true, data: { inquiries: [inquiry] } } }) : command(route))
   await page.goto('/tests/fixtures/payment-harness.html?wholesale=1')
+  await page.getByRole('tab', { name: /Wholesale inquiries/ }).click()
   const opener = page.getByRole('button', { name: /^(Review|Review inquiry)$/ }).filter({ visible: true })
   await opener.click()
   const dialog = page.getByRole('dialog')
@@ -90,6 +91,7 @@ test('wholesale actor change prevents an old response closing the new review', a
   await expect.poll(() => sent).toBe(true)
   await page.evaluate(() => window.switchActor())
   await expect(dialog).toHaveCount(0)
+  await page.getByRole('tab', { name: /Wholesale inquiries/ }).click()
   await opener.click()
   const response = page.waitForResponse('**/api/admin/wholesale-inquiries/review')
   release()

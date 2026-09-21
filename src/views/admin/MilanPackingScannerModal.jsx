@@ -31,7 +31,6 @@ export default function MilanPackingScannerModal({
   const [lastPacked, setLastPacked] = useState(null)
   const [scanFlash, setScanFlash] = useState(false)
   const [unrecognizedCode, setUnrecognizedCode] = useState(null)
-  const [instantArmed, setInstantArmed] = useState(false)
 
   // Quick creation form states
   const [quickTitle, setQuickTitle] = useState('')
@@ -105,10 +104,6 @@ export default function MilanPackingScannerModal({
 
   const handleInstantDraftPack = () => {
     if (!unrecognizedCode) return
-    if (!instantArmed) {
-      setInstantArmed(true)
-      return
-    }
     const code = unrecognizedCode
     const newSku = `IT-${code.slice(-6).toUpperCase()}`
     
@@ -127,7 +122,6 @@ export default function MilanPackingScannerModal({
 
     setLastPacked({ sku: newSku, name: `Draft Italian Item (${code})`, count: 1 })
     setUnrecognizedCode(null)
-    setInstantArmed(false)
   }
 
   const handleQuickSubmit = (e) => {
@@ -147,7 +141,6 @@ export default function MilanPackingScannerModal({
 
     setLastPacked({ sku: newSku, name: quickTitle, count: 1 })
     setUnrecognizedCode(null)
-    setInstantArmed(false)
     setQuickTitle('')
   }
 
@@ -298,12 +291,10 @@ export default function MilanPackingScannerModal({
                   >
                     <div className="text-left">
                       <p className="font-extrabold text-base text-white flex items-center gap-1.5">
-                        {instantArmed ? `Tap again to create ${`IT-${unrecognizedCode.slice(-6).toUpperCase()}`} at SRP ${quickSrp}` : 'Instant 1-Tap Draft & Pack (+1)'}
+                        Instant 1-Tap Draft & Pack (+1)
                       </p>
                       <p className="text-xs text-neutral-300 font-normal mt-0.5">
-                        {instantArmed
-                          ? `SKU ${`IT-${unrecognizedCode.slice(-6).toUpperCase()}`} · batch ${quickBatch} · best before ${quickBestBefore}. Nothing is written until you tap again.`
-                          : 'Registers SKU in inventory immediately & packs box (+1) without stopping scanner'}
+                        One tap creates the draft and packs the box. The receipt below names what was written so a wrong scan can be fixed at once.
                       </p>
                     </div>
                   </button>
@@ -373,7 +364,7 @@ export default function MilanPackingScannerModal({
                   <div className="pt-2 flex gap-2">
                         <button
                           type="button"
-                          onClick={() => { setUnrecognizedCode(null); setInstantArmed(false) }}
+                          onClick={() => { setUnrecognizedCode(null) }}
                           className="flex-1 py-2 text-sm font-semibold text-white/60 bg-white/5 rounded-adm-sm"
                         >
                           Cancel

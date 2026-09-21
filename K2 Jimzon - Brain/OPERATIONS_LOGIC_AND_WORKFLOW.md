@@ -1,5 +1,16 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+**Staff help and continuity rules (21 September, IDEA-20260921-04 through -07):** Admin help must use one readable tooltip and one plain screen name. The built-in guide may explain approved procedures and screen purpose, but it must not invent live data or perform work. Purchase orders record supplier commitments; consignments record movement from Italy through Manila receipt. An unrecognized Milan code may use the owner-approved one-tap Draft-and-Pack action only when the result immediately names the created SKU and item so staff can correct a wrong scan. Guest chat may retain its scoped conversation ID in same-browser storage for resume after tab close; it does not establish identity or cross-device ownership.
+
+**Admin workflow guide truth (21 September, IDEA-20260921-03):** Staff-facing
+guide steps must use the same plain name as the target Admin screen and may quote
+only controls that exist on that screen. When no Admin control exists, the guide
+must say `No Admin control yet.` and name the approved manual boundary without
+claiming a saved result. Guide review never completes real work. Staff must use
+the named screen and confirm the saved record before moving on. Plain wording
+must preserve record identity, permissions, quantities, reasons, approvals,
+warnings, and separate save boundaries.
+
 **Admin help wording (21 September, IDEA-20260921-01):** Help names the staff action and required checks in plain words. A workflow-map checkmark records only temporary guide review; real work requires the named Admin screen and saved-result verification. Setup warnings must explain the unavailable action without exposing implementation jargon. This wording refinement changes no operational approval, hold, count, payment or delivery rule.
 
 **20 September staff wording (IDEA-20260920-14):** use short task names in Admin
@@ -643,6 +654,11 @@ withdrawn -> published  only after evidence and copy are reviewed again
   check do not prove consent, attribution, publication, or live-host visibility.
 - Globe-product visibility is a separate reasoned, version-checked Admin command;
   enabling a product on the Globe does not publish a review or prove any claim.
+- An authenticated AAL2 Admin may perform these Globe commands through the
+  database RPC while the Admin BFF is inactive. Role checks remain server-side;
+  Staff cannot create, correct, publish, withdraw or change Globe visibility.
+  The direct transport never grants browser table mutation and retains the same
+  reason, version, evidence, receipt and audit requirements.
 
 The mobile interface uses one focused step at a time, visible progress and
 blockers, persistent save/resume, a sticky primary action, 44px or larger touch
@@ -819,6 +835,10 @@ Side states: `on_hold`, `delayed`, `cancelled`.
 - Support rapid scans, debounce, sound/vibration, camera, and typed scanner input.
 - Similar variants rely on barcode/internal code, not eyesight.
 - Unexpected codes create exceptions; they never silently attach elsewhere.
+- The owner-approved one-tap Draft-and-Pack path may turn an unexpected code
+  into one Draft item and one Milan packed unit. The same action must show an
+  immediate receipt naming the generated SKU and item; it does not publish the
+  product or make stock sellable, and staff must correct a wrong scan at once.
 - Sealing requires acknowledgement of shortages, overages, and replacements.
 - A protected scan command carries both the actual scanned code and the selected
   manifest line. The server proves that the code is that line's SKU or active

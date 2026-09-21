@@ -383,7 +383,7 @@ export default function StoreAssetStudio() {
                   {openDraft && Object.keys(openDraft.fields).length > 0 && (
                     <div className="space-y-3">
                       <h3 className="text-xs font-semibold uppercase tracking-wide text-white/45">
-                        Awaiting your decision — not visible to customers
+                        Waiting for your decision. Customers cannot see this yet.
                       </h3>
                       {Object.entries(openDraft.fields).map(([key, record]) => (
                         <div key={key} className="rounded-xl border border-amber-500/25 bg-amber-500/5 p-3">

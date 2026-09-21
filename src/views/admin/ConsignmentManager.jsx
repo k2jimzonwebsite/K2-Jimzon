@@ -224,7 +224,7 @@ export default function ConsignmentManager() {
   return <div className="mx-auto max-w-7xl space-y-5 text-white">
     <div className="rounded-adm border border-adm-line bg-adm-surface p-5">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-wider text-white/45">Italy to Philippines custody</p>
+        <p className="text-[13px] font-semibold uppercase tracking-wider text-white/60">Italy to Philippines custody</p>
         <button
           onClick={() => setShowGuide((v) => !v)}
           className="flex min-h-11 items-center gap-1.5 rounded-adm-sm border border-adm-line bg-white/[0.04] px-3 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white"
@@ -236,7 +236,7 @@ export default function ConsignmentManager() {
       <div className="mt-2 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <h2 className="font-sans text-2xl font-bold">Consignment receiving</h2>
-          <p className="mt-1 max-w-2xl text-sm text-white/55">Every flight, box, lot, and unit scan remains identifiable from Milan packing through Manila recount.</p>
+          <p className="mt-1 max-w-[65ch] text-[15px] leading-relaxed text-white/75">Movement only: every flight, box, lot, and unit scan stays identifiable from Milan packing through Manila recount. Buying terms stay on the purchase order.</p>
         </div>
         <button onClick={() => setShowCreate(true)} className="min-h-11 rounded-adm-sm bg-blue px-5 text-sm font-bold">Create manifest</button>
       </div>
@@ -251,7 +251,7 @@ export default function ConsignmentManager() {
 
     {(error || notice) && <div role={error ? 'alert' : 'status'} className={`flex items-start gap-2 rounded-adm-sm border p-3 text-sm ${error ? 'border-crimson/40 bg-crimson/10 text-crimson' : 'border-forest/40 bg-forest/10 text-forest'}`}>{error ? <AlertIcon size={17} /> : <CheckIcon size={17} />}<span>{error || notice}</span></div>}
 
-    {!manifest ? <div className="rounded-adm border border-dashed border-adm-line bg-adm-surface p-12 text-center"><PlaneIcon size={28} className="mx-auto text-white/35" /><p className="mt-3 text-sm font-semibold">No consignment manifests found</p><p className="mt-1 text-xs text-white/45">Create a real manifest when the next packing cycle begins.</p></div> : <>
+    {!manifest ? <div className="rounded-adm border border-dashed border-adm-line bg-adm-surface p-12 text-center"><PlaneIcon size={28} className="mx-auto text-white/35" /><p className="mt-3 text-[15px] font-semibold text-white/85">No consignment manifests found</p><p className="mt-1 text-sm leading-relaxed text-white/65">Create a real manifest when the next packing cycle begins.</p></div> : <>
       <section data-tour="flight-manifest" className="rounded-adm border border-adm-line bg-adm-surface p-5">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start"><div><p className="font-mono text-xs font-bold text-white">{manifest.manifest_code}</p><h2 className="mt-1 font-sans text-xl font-bold">{manifest.flight_number}</h2><p className="mt-1 text-sm text-white/50">{manifest.departure_city} → {manifest.destination_city}</p></div><span className="w-fit rounded-full border border-blue/30 bg-blue/10 px-3 py-1.5 text-xs font-semibold text-blue">{manifest.status.replaceAll('_', ' ')}</span></div>
         <div className="mt-5 grid gap-3 sm:grid-cols-3"><Metric label="Milan packed" value={packed} /><Metric label="Manila scanned" value={scanned} /><Metric label="Difference" value={missing} warn={missing > 0} /></div>

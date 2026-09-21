@@ -193,7 +193,7 @@ export default function ReservationHolds() {
           automation it does not have. Saying so is cheaper than a staff member
           assuming stock frees itself overnight. */}
       <StateBanner tone="warning">
-        Expired holds are <strong>not</strong> released automatically — K2 has no scheduled jobs yet.
+        Expired holds are <strong>not</strong> released automatically. K2 has no scheduled jobs yet.
         Until that exists, someone has to run the release below, or those units stay counted as held.
       </StateBanner>
 

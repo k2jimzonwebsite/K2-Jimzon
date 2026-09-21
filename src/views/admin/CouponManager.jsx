@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { providerErrorIncludes } from '../../lib/safeUiError'
-import { PlusIcon, StarIcon, XIcon } from '../../components/ui/icons'
+import { PlusIcon, TagIcon, XIcon } from '../../components/ui/icons'
 import {
   adminBffEnabled, archiveCouponBff, createCouponBff, getAdminCoupons, setCouponStateBff,
 } from '../../services/adminBffService'
@@ -204,7 +204,7 @@ export default function CouponManager({ secureMode } = {}) {
 
     <section className="overflow-hidden rounded-adm border border-adm-line bg-adm-surface">
       <div className="p-4"><SectionHeading title="Promotion register" description="You can turn a code on or off. Archive old codes to keep their history." count={coupons.length} /></div>
-      {loading && coupons.length === 0 ? <div className="space-y-2 border-t border-adm-line p-4" role="status" aria-label="Loading coupons">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-20 rounded-adm-sm bg-white/[0.04]" />)}</div> : coupons.length === 0 ? <EmptyState icon={StarIcon} title="No production coupons yet" description="Create an inactive draft first, review its limits and dates, then activate it deliberately." /> : <>
+      {loading && coupons.length === 0 ? <div className="space-y-2 border-t border-adm-line p-4" role="status" aria-label="Loading coupons">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-20 rounded-adm-sm bg-white/[0.04]" />)}</div> : coupons.length === 0 ? <EmptyState icon={TagIcon} title="No production coupons yet" description="Create an inactive draft first, review its limits and dates, then activate it deliberately." /> : <>
         <div className="space-y-3 border-t border-adm-line p-3 sm:hidden">{coupons.map(coupon => <CouponCard key={coupon.id} coupon={coupon} working={working} decideDisabled={!couponAdmin} onAction={openAction} />)}</div>
         <div className="hidden overflow-x-auto sm:block"><table className="w-full min-w-[900px] text-left text-sm">
           <thead className="border-y border-adm-line bg-adm-sunken text-xs uppercase tracking-wider text-white/55"><tr><th className="px-4 py-3">Code</th><th className="px-4 py-3">Rule</th><th className="px-4 py-3">Window</th><th className="px-4 py-3">Usage</th><th className="px-4 py-3">State</th><th className="px-4 py-3 text-right">Actions</th></tr></thead>

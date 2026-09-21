@@ -596,7 +596,7 @@ function ProductDecision({ row, busy, offline, onDecide }) {
               {(row.suggestions || []).length ? row.suggestions.map((suggestion) => (
                 <label key={suggestion.productId} className={`flex min-h-[52px] items-start gap-3 rounded-adm-sm border p-3 ${suggestion.eligible && !suggestion.variantConflict ? 'cursor-pointer border-adm-line' : 'cursor-not-allowed border-crimson/25 bg-crimson/5'}`}>
                   <input type="radio" name="product-suggestion" className="mt-0.5 h-5 w-5 accent-blue" disabled={!suggestion.eligible || suggestion.variantConflict} checked={productId === suggestion.productId} onChange={() => setProductId(suggestion.productId)} />
-                  <span className="min-w-0"><span className="block text-sm font-semibold text-white">{suggestion.sku} · {suggestion.name}</span><span className="mt-0.5 block text-xs text-white/45">Evidence: {(suggestion.reasons || []).join(', ') || 'Unavailable'}{suggestion.variantConflict ? ' · Variant conflict — cannot link' : ''}</span></span>
+                  <span className="min-w-0"><span className="block text-sm font-semibold text-white">{suggestion.sku} · {suggestion.name}</span><span className="mt-0.5 block text-xs text-white/60">Evidence: {(suggestion.reasons || []).join(', ') || 'Unavailable'}{suggestion.variantConflict ? ' · Variant conflict: cannot link' : ''}</span></span>
                 </label>
               )) : <StateBanner tone="warning">No eligible suggestion exists. Create a reviewed Draft or leave this row unresolved.</StateBanner>}
             </fieldset>

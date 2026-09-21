@@ -94,6 +94,15 @@ test('help panel floats above the phone tab bar', async () => {
   expect(src).toContain('safe-area-inset-bottom')
 })
 
+test('help tooltip opens into the workspace without a doubled native title', async () => {
+  const src = await read('../src/views/admin/HelpTip.jsx')
+  // Left-aligned so a trigger near the sidebar never clips; the native title
+  // is gone so the browser cannot render a second overlapping tooltip.
+  expect(src).toContain('sm:left-0')
+  expect(src).not.toContain('sm:right-0')
+  expect(src).not.toMatch(/title=\{/)
+})
+
 test('workspace sub-nav signals off-screen tabs', async () => {
   const src = await read('../src/views/admin/AdminWorkspaceUi.jsx')
   expect(src).toContain('mask-image')
@@ -109,4 +118,38 @@ test('sub-tab counts stay honest while loading', async () => {
   for (const file of ['../src/views/admin/Customers.jsx', '../src/views/admin/Suppliers.jsx', '../src/views/admin/StaffPermissionManager.jsx']) {
     expect(await read(file)).toContain("'…'")
   }
+})
+
+test('staff-facing status messages use plain words', async () => {
+  const files = [
+    '../src/views/admin/Suppliers.jsx',
+    '../src/views/admin/Inbox.jsx',
+    '../src/views/admin/GlobeCms.jsx',
+    '../src/views/admin/SystemDevOpsModal.jsx',
+    '../src/views/admin/StaffPermissionManager.jsx',
+  ]
+  const text = (await Promise.all(files.map(read))).join('\n')
+  for (const jargon of [
+    'attributable reason',
+    'persisted conversations',
+    'immutable event history',
+    'canonical register',
+    'bounded Admin route',
+    'diagnostic payloads',
+    'durable reason-bound receipt',
+  ]) expect(text).not.toContain(jargon)
+})
+
+test('workflow entry points use one plain name', async () => {
+  const files = [
+    '../src/views/admin/Admin.jsx',
+    '../src/views/admin/CommandPalette.jsx',
+    '../src/views/admin/StartHereGuide.jsx',
+    '../src/views/admin/adminGuide.js',
+  ]
+  const text = (await Promise.all(files.map(read))).join('\n')
+  expect(text).not.toContain('Workflow Graph')
+  expect(text).not.toContain('Master Workflow Graph')
+  expect(text).not.toContain('SVG Map')
+  expect(text).toContain('Workflow map')
 })

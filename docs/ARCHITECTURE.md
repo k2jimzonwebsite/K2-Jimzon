@@ -6,6 +6,22 @@ configuration. StorefrontMetadata and the four explicit Vercel scoped-route
 header rules exclude account/messages/checkout/confirmation from indexing;
 authorization continues to be enforced by the existing server boundaries.
 
+While the Admin BFF browser switch is off, Globe Display reads through
+`read_admin_globe_cms_v1` and writes through
+`execute_admin_globe_review_direct_v1` using the authenticated Supabase session.
+The direct RPC is a database command boundary, not direct table access: it
+requires an Admin role plus AAL2 and preserves versions, draft/publication
+separation, evidence checks, idempotent receipts and private audit events.
+Authenticated table writes remain revoked. If the Admin BFF switch is enabled,
+the same UI returns to the signed BFF transport.
+
+Guest Storefront chat keeps the scoped conversation UUID under
+`k2-store-chat-convo-id` in same-browser `localStorage`. It reads the former
+`sessionStorage` key as a one-time compatibility fallback and writes both while
+older tabs may still exist. This changes browser continuity only: the UUID stays
+a bearer-style reference, does not become an account identity, and does not add
+cross-device recovery, an RPC, or a database migration.
+
 IDEA-20260914-02 keeps uncertain guest-order identity and its immutable payload
 inside StoreProvider; Checkout and CartDrawer share that pending state. The bot
 token is renewed independently of the business request. This is mounted-session

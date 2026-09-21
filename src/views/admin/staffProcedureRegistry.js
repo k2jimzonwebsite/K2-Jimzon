@@ -229,7 +229,7 @@ export const STAFF_PROCEDURES = Object.freeze([
     covers: ['channel.readiness'], status: PROCEDURE_STATUS.PREPARED,
     authorizedRoles: ['Owner/Admin for credentials and activation; operations staff for reconciliation evidence'],
     prerequisites: ['Approved provider app/shop ID/scopes', 'Server-only secrets, exact channel vocabulary, listing mappings, stock allocation rule, and test plan'],
-    entryPoint: 'Sidebar → Channel Readiness and Workflow Graph → Channels & Integrations',
+    entryPoint: 'Sidebar → Channel Readiness and Workflow map → Channels & Integrations',
     steps: ['Assess credentials, ingress, orders, listings, stock, messages, waybills, and health separately.', 'Enable only one approved capability.', 'Run one real signed/provider operation and reconcile its canonical records.', 'Mark only that capability ready after failure/retry evidence.'],
     validationsAndBlockers: ['One webhook does not make an entire channel live.', 'Two shops require separate credentials and listing rows while sharing canonical inventory truth.'],
     expectedState: 'Each capability has truthful ready/manual/unavailable state and provider/canonical evidence; no independent stock or order truth is created.',

@@ -114,7 +114,7 @@ const REFERENCE_TOPICS = [
       'Map each SKU to its external item ID in channel listings, one row per shop, before expecting any event to find a product.',
       'Mark the channel operational only after a real event has been observed end to end.',
     ],
-    where: 'Sidebar → Workflow Graph → Channels & Integrations, then Sidebar → Channel Readiness.',
+    where: 'Sidebar → Workflow map → Channels & Integrations, then Sidebar → Channel Readiness.',
     source: `${RULEBOOK} §11`,
     more: 'Two K2 shops on one marketplace are two credential sets and two listing rows; they share nothing. Rotate any credential that has ever appeared in a chat, a ticket, or a screenshot.',
   },
@@ -128,7 +128,7 @@ const REFERENCE_TOPICS = [
       'Confirm whether a marketplace sale decrements the same pool the website sells from, or whether each shop holds a reserved allocation.',
       'Decide, in advance, what happens when both channels sell the last unit.',
     ],
-    where: 'Sidebar → Inventory, and Sidebar → Workflow Graph → Channels & Integrations.',
+    where: 'Sidebar → Inventory, and Sidebar → Workflow map → Channels & Integrations.',
     source: `${RULEBOOK} §11`,
     more: 'Master Inventory is the Philippines-wide sum of everything K2 holds, including stock physically held by shop staff. Allocating stock to a shop changes the holder, never the total.',
   },
@@ -231,6 +231,139 @@ const REFERENCE_TOPICS = [
   },
 ]
 
+// Staff glossary: one searchable entry per Admin screen. Each entry states what
+// the screen is, what it is used for, and one scenario, so new staff can learn
+// the tool by typing words. Entries reuse the topic shape, so search, the
+// Operations Guide, and the command palette need no changes.
+const GLOSSARY = [
+  {
+    id: 'glossary-command-center', section: 'overview', category: 'Glossary', title: 'Command center screen',
+    keywords: ['what is command center', 'command center screen', 'home screen', 'dashboard screen', 'start shift', 'overview screen'],
+    what: 'The Command center is the first screen of a shift. It shows website activity, channel status, and the jobs that need staff first.',
+    how: ['Used for: picking the most urgent job at sign-in.', 'Scenario: you just signed in. Read this screen before opening anything else.'],
+    where: 'Sidebar → Command center.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-count-close', section: 'owner_close', category: 'Glossary', title: 'Count and Close screen',
+    keywords: ['what is count and close', 'count close screen', 'stock count screen', 'monthly count screen', 'finish the close'],
+    what: 'Count and Close finishes a shop import: review the products, count the stock, close it out.',
+    how: ['Used for: the monthly physical count and close.', 'Scenario: it is month end. Count the shelves here and reconcile the differences.'],
+    where: 'Sidebar → Count and Close.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-workflow-map', section: 'workflow_graph', category: 'Glossary', title: 'Workflow map screen',
+    keywords: ['what is workflow map', 'workflow map screen', 'picture guides', 'shift guide', 'how to screen', 'sop screen'],
+    what: 'The Workflow map is the picture guide for every shift: checklists, safety checks, and prompts staff can copy. Reading a guide does not do the work. Do the steps on the real screen after.',
+    how: ['Used for: rehearsing a procedure before touching real records.', 'Scenario: your first flight receiving. Walk the steps in the map, then open Flight Consignments and do it for real.'],
+    where: 'Sidebar → Workflow map.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-purchasing', section: 'kanban', category: 'Glossary', title: 'Purchasing screen',
+    keywords: ['what is purchasing', 'purchasing screen', 'italy purchasing', 'buying screen', 'kanban screen', 'purchase orders tab', 'consignments tab', 'what to buy', 'purchase vs consignment', 'difference purchase consignment'],
+    what: 'Purchasing tracks two separate facts. A purchase order is a supplier commitment: what K2 agreed to buy, how many, at what cost. A consignment is Italy to Manila movement: flight, boxes, Milan scans, Manila scans, and receipt. Today everything flies Italy to Manila. These same two steps cover new suppliers later.',
+    how: ['Used for: recording what was bought, then following how it travels.', 'Scenario: a supplier confirms 40 units. Save the commitment under Purchase orders, then watch the boxes under Consignments.'],
+    where: 'Sidebar → Purchasing.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-flight-consignments', section: 'consignment', category: 'Glossary', title: 'Flight Consignments screen',
+    keywords: ['what are flight consignments', 'flight screen', 'cargo screen', 'manifest screen', 'italy boxes screen'],
+    what: 'Flight Consignments follows stock from Milan packing to the Manila recount. Every flight, box, lot, and unit scan stays identifiable. Settle the differences before the stock becomes sellable.',
+    how: ['Used for: border crossings with a full paper trail.', 'Scenario: boxes land in Manila. Select the flight and recount every unit before finalizing the receipt.'],
+    where: 'Sidebar → Flight Consignments.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-pasabuy', section: 'pasabuy_manager', category: 'Glossary', title: 'Pasabuy Quotes screen',
+    keywords: ['what is pasabuy', 'pasabuy screen', 'custom request screen', 'quote screen', 'sourcing screen'],
+    what: 'Pasabuy Quotes is custom sourcing from Italy. Staff price each shopper request at its full cost and track it from request through quote, purchase, flight, receipt, and delivery.',
+    how: ['Used for: one-off requests that never touch ordinary checkout.', 'Scenario: a customer names an item with no catalog listing. Record the request, then build the quote.'],
+    where: 'Sidebar → Pasabuy Quotes.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-suppliers', section: 'suppliers', category: 'Glossary', title: 'Suppliers screen',
+    keywords: ['what are suppliers', 'supplier screen', 'vendor screen', 'who do we buy from'],
+    what: 'Suppliers is the list of everyone K2 buys from, plus the purchase orders placed with them.',
+    how: ['Used for: knowing who supplies what before money moves.', 'Scenario: a new Italian supplier is approved. Add the supplier first, then record the first purchase order.'],
+    where: 'Sidebar → Suppliers.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-inventory', section: 'inventory', category: 'Glossary', title: 'Inventory screen',
+    keywords: ['what is inventory', 'inventory screen', 'catalog screen', 'stock screen', 'products screen', 'sku screen'],
+    what: 'Inventory is the catalog plus the Manila stock behind it: one stable master record per variant, with lots that carry batch, expiry, location, owner, and custodian.',
+    how: ['Used for: checking what exists and whether it can be sold.', 'Scenario: a customer asks if an item is available. Search the SKU and check eligible lots before promising anything.'],
+    where: 'Sidebar → Inventory.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-store-assets', section: 'store_assets', category: 'Glossary', title: 'Store Assets screen',
+    keywords: ['what are store assets', 'store assets screen', 'shelf content screen', 'missing content'],
+    what: 'Store Assets is the fix-up list for the virtual store: products missing shelf content and drafts waiting for approval.',
+    how: ['Used for: finishing presentation before customers see it.', 'Scenario: new products arrived but their shelf pages look empty. Work down this list and approve each draft.'],
+    where: 'Sidebar → Store Assets.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-fulfillment', section: 'omni_hub', category: 'Glossary', title: 'Fulfillment Hub screen',
+    keywords: ['what is fulfillment hub', 'fulfillment screen', 'packing screen', 'pack orders screen', 'handover screen'],
+    what: 'The Fulfillment Hub turns confirmed website orders into packed parcels with the scanner, and records who holds each Italy box through handover and delivery.',
+    how: ['Used for: packing, scanning, and handing over.', 'Scenario: an order is confirmed. Open that exact order, scan every unit, then hand the parcel to the courier.'],
+    where: 'Sidebar → Fulfillment Hub.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-messages', section: 'inbox', category: 'Glossary', title: 'Messages screen',
+    keywords: ['what are messages', 'messages screen', 'inbox screen', 'conversations screen', 'chat records'],
+    what: 'Messages is the saved record of conversations and notes. Shopee, Lazada, and the chat apps are not connected yet, so external replies still happen in their own apps.',
+    how: ['Used for: reviewing what was said and recording the decision.', 'Scenario: a customer disputes an order. Read the saved thread, then attach the decision to the order record.'],
+    where: 'Sidebar → Messages.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-customers', section: 'wholesale', category: 'Glossary', title: 'Customers screen',
+    keywords: ['what are customers', 'customers screen', 'customer directory', 'profiles screen', 'wholesale customers'],
+    what: 'Customers is the directory of saved buyer profiles. Wholesale prices and bulk messages stay off for now.',
+    how: ['Used for: confirming who a buyer is across channels.', 'Scenario: a repeat buyer writes in. Search the directory to confirm the identity before linking records.'],
+    where: 'Sidebar → Customers.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-stock-holds', section: 'reservations', category: 'Glossary', title: 'Stock Holds screen',
+    keywords: ['what are stock holds', 'holds screen', 'reserved stock screen', 'hold expiry'],
+    what: 'Stock Holds is the list of customer holds: what is held, time left on each, and what already expired.',
+    how: ['Used for: seeing promised stock and what freed up.', 'Scenario: a customer asks for more time. Check the remaining time on the hold before deciding.'],
+    where: 'Sidebar → Stock Holds.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-delivery', section: 'delivery', category: 'Glossary', title: 'Delivery Rates screen',
+    keywords: ['what are delivery rates', 'delivery screen', 'courier rates', 'shipping rates', 'delivery tester'],
+    what: 'Delivery Rates is the owner-approved rate list plus a tester: fixed rates per place, and a way to try a quote.',
+    how: ['Used for: quoting delivery before dispatch.', 'Scenario: a customer asks what delivery costs. Run the tester instead of guessing the rate.'],
+    where: 'Sidebar → Delivery Rates.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-coupons', section: 'coupons', category: 'Glossary', title: 'Coupons screen',
+    keywords: ['what are coupons', 'coupons screen', 'vouchers screen', 'discount codes', 'promo codes'],
+    what: 'Coupons is where discount codes live: start dates, spending limits, campaigns.',
+    how: ['Used for: promotions with hard limits.', 'Scenario: a weekend sale needs a capped code. Create it here with dates and a spending limit.'],
+    where: 'Sidebar → Coupons.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-staff', section: 'staff_permissions', category: 'Glossary', title: 'Staff and Roles screen',
+    keywords: ['what are staff roles', 'staff screen', 'roles screen', 'permissions screen', 'invite staff', 'user access'],
+    what: 'Staff and Roles is access control: who may sign in and what each role can do.',
+    how: ['Used for: granting and removing access.', 'Scenario: a new team member starts. Invite the identity and assign the smallest role that covers the job.'],
+    where: 'Sidebar → Staff and Roles.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-channels', section: 'integrations', category: 'Glossary', title: 'Channel Readiness screen',
+    keywords: ['what is channel readiness', 'channels screen', 'shopee setup', 'lazada setup', 'tiktok setup', 'marketplace connection'],
+    what: 'Channel Readiness prepares the catalog and shows the true connection status of each sales channel. Only a verified live connection counts as connected.',
+    how: ['Used for: listings prep and connection truth.', 'Scenario: someone claims a shop is live. Confirm here that staff reconciled a real operation.'],
+    where: 'Sidebar → Channel Readiness.', source: 'Admin glossary',
+  },
+  {
+    id: 'glossary-globe', section: 'globe', category: 'Glossary', title: 'Globe Display screen',
+    keywords: ['what is globe display', 'globe screen', '3d globe screen', 'featured products display'],
+    what: 'Globe Display picks which products show on the 3D globe. Presentation only. It never changes stock or availability.',
+    how: ['Used for: curating the public globe.', 'Scenario: a seasonal product should be featured. Choose it here, then check the public globe.'],
+    where: 'Sidebar → Globe Display.', source: 'Admin glossary',
+  },
+]
+
 const procedureTopic = procedure => ({
   id: `procedure-${procedure.id}`,
   section: procedure.section,
@@ -248,6 +381,7 @@ const procedureTopic = procedure => ({
 export const TOPICS = Object.freeze([
   ...STAFF_PROCEDURES.map(procedureTopic),
   ...REFERENCE_TOPICS,
+  ...GLOSSARY,
 ])
 
 export const DAILY_FLOW = [

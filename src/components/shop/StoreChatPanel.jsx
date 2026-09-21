@@ -28,6 +28,26 @@ import { supabase, isSupabaseConfigured } from '../../lib/supabaseClient'
 /** Inside the guest-read allowance while feeling current in an open chat. */
 const POLL_MS = 8000
 
+const THREAD_KEY = 'k2-store-chat-convo-id'
+
+// The thread id lives in localStorage so a closed tab or browser restart
+// returns to the same conversation on this browser. sessionStorage is read
+// once as a fallback so threads started before this change are not orphaned.
+function readStoredConvoId() {
+  try {
+    const local = localStorage.getItem(THREAD_KEY)
+    if (local) return local
+  } catch { /* private-mode storage: fall through to session */ }
+  try {
+    return sessionStorage.getItem(THREAD_KEY)
+  } catch { return null }
+}
+
+function persistStoredConvoId(id) {
+  try { localStorage.setItem(THREAD_KEY, id) } catch { /* private-mode storage */ }
+  try { sessionStorage.setItem(THREAD_KEY, id) } catch { /* storage fallback */ }
+}
+
 function formatTime(value) {
   if (!value) return ''
   const date = new Date(value)
@@ -110,7 +130,8 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
   // Load existing conversation from sessionStorage if present in direct mode
   useEffect(() => {
     try {
-      const savedConvoId = sessionStorage.getItem('k2-store-chat-convo-id')
+      const savedConvoId = readStoredConvoId()
+      if (savedConvoId) persistStoredConvoId(savedConvoId)
       if (savedConvoId && !conversation && directEnabled && !bffEnabled && supabase) {
         supabase.rpc('get_storefront_chat_v1', { p_conversation_id: savedConvoId })
           .then(({ data, error: rpcErr }) => {
@@ -257,9 +278,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
       }
 
       try {
-        if (data.conversation_id) {
-          sessionStorage.setItem('k2-store-chat-convo-id', data.conversation_id)
-        }
+        if (data.conversation_id) persistStoredConvoId(data.conversation_id)
       } catch { /* storage fallback */ }
 
       setConversation((current) => ({

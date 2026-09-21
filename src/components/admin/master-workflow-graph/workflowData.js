@@ -105,8 +105,8 @@ export const WORKFLOWS = {
         adminJump: 'kanban',
         jumpLabel: 'Open Italy Purchasing',
         actionGuide: {
-          targetScreen: "Italy Purchasing Kanban",
-          whatToClick: "Select purchase card and click \"Log Store Purchase\"",
+          targetScreen: "Purchasing",
+          whatToClick: "No Admin control yet. Open \"Purchase orders\" to review saved commitments; record new purchases through the approved manual process.",
           actionDirective:
             "Purchase authentic Italian goods in Milan bottegas/supermarkets. Verify packaging condition and at least 4-6 months shelf life. Photograph and upload official store receipt (Scontrino Fiscale) in EUR (€).",
           nextAction:
@@ -145,7 +145,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Create Flight Manifest',
         actionGuide: {
           targetScreen: "Flight Consignments",
-          whatToClick: "Click \"+ Create Flight Manifest\" or open active Flight Cargo Box",
+          whatToClick: "Select \"Create manifest\" or choose an existing item under \"Current manifest\".",
           actionDirective:
             "Pack items into heavy-duty cargo boxes. Enter item quantities and scan EAN barcodes into the Flight Consignment Manifest. Affix numbered security tape and record seal serial number.",
           nextAction:
@@ -182,7 +182,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Track Flight Consignments',
         actionGuide: {
           targetScreen: "Flight Consignments",
-          whatToClick: "Select flight in Consignment Manager to view Master Air Waybill (MAWB)",
+          whatToClick: "Choose the shipment under \"Current manifest\". Track the carrier reference outside Admin.",
           actionDirective:
             "Monitor flight transit from Milan (MXP) to Manila (NAIA). Confirm MAWB tracking status and monitor terminal customs clearance.",
           nextAction:
@@ -220,7 +220,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Verify Inbound Box',
         actionGuide: {
           targetScreen: "Flight Consignments",
-          whatToClick: "Click \"Verify Inbound Box\" on the arriving consignment",
+          whatToClick: "Select \"Mark arrived in Manila\" after checking the physical box and shipment evidence.",
           actionDirective:
             "Receive physical cargo box at Manila dock. Scan outer box barcode and verify the tamper-evident security seal serial number matches the Milan manifest before opening.",
           nextAction:
@@ -254,11 +254,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Shortage (fewer units in box than manifest)', fix: 'Record the counted shortage and evidence in the receipt workflow, then notify the Milan buyer through the approved staff channel. Admin BOS does not send that notice automatically.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'consignment',
         jumpLabel: 'Open Inventory Intake',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Open Inventory Intake\" under Consignments / Receiving",
+          targetScreen: "Flight Consignments",
+          whatToClick: "Select \"Start Manila recount\" and scan each physical unit.",
           actionDirective:
             "Cut seal and unpack items onto sanitized stainless steel bench. Perform 100% item recount against manifest. Inspect glass lid vacuum seals, oil leaks, and expiry dates. Move damaged units to Quarantine.",
           nextAction:
@@ -296,7 +296,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Product Catalog Lookup',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Product Catalog Lookup\" or scan item with barcode scanner",
+          whatToClick: "In Inventory, use \"Search SKU, product, barcode, or origin\". Select \"Add product\" only when no matching product exists.",
           actionDirective:
             "Scan manufacturer EAN-13 barcode. If catalog match is found, route to Existing Stock Intake (Branch A). If no match or new item, route to New Product Intake (Branch B).",
           nextAction:
@@ -334,7 +334,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Verify Inventory Record',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Verify Inventory Record\" on the finalized consignment receipt",
+          whatToClick: "Select \"Review and finalize\", then check the saved lots in Inventory.",
           actionDirective:
             "Hub Manager reviews the verified recount, finalizes the receipt, and checks the resulting batch lots, physical quantities, and sellable stock in MANILA_MAIN warehouse.",
           nextAction:
@@ -402,7 +402,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Inventory Scan',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Open Inventory Scan\" or focus barcode input in Quick Intake",
+          whatToClick: "Use \"Search SKU, product, barcode, or origin\" to find the existing product.",
           actionDirective:
             "Scan manufacturer EAN-13 barcode. Verify loaded product matches physical packaging size and net weight (e.g. 260g vs 330g).",
           nextAction:
@@ -440,7 +440,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Batch Lot Manager',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Batch Lot Manager\" on the selected product",
+          whatToClick: "Open the product and select \"Batches\".",
           actionDirective:
             "Enter printed expiration date in YYYY-MM-DD format. Input verified physical intake quantity and reviewed PHP unit cost. Ensure lots with distinct expiry dates are saved separately.",
           nextAction:
@@ -477,7 +477,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Batch Records',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Open Batch Records\" to view saved lot identifier",
+          whatToClick: "Open the product and select \"Batches\" to read the saved box and lot codes.",
           actionDirective:
             "Prepare a clear physical label with SKU, lot ID, best-before date, and storage requirements. Affix to carton case or bin without obscuring manufacturer allergen panel.",
           nextAction:
@@ -515,7 +515,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Shelf Locations',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Shelf Locations\" to confirm assigned bin code",
+          whatToClick: "Open the product and select \"Batches\" to review its saved location and custodian.",
           actionDirective:
             "Bring labeled items to assigned shelf bin. Position the newly arrived batch behind existing older-expiring batches so order pickers retrieve earliest-expiring units first.",
           nextAction:
@@ -552,7 +552,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Verify Lot Balances',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Verify Lot Balances\" in Product Batches",
+          whatToClick: "Open the product and select \"Batches\" to compare physical, reserved, and sellable totals.",
           actionDirective:
             "Hub Manager reviews the intake count and checks that Inventory reflects the updated physical and sellable quantities for MANILA_MAIN.",
           nextAction:
@@ -622,7 +622,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Add Product',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"+ Add Product\" button in upper right of Catalog",
+          whatToClick: "Select \"Add product\" in Inventory.",
           actionDirective:
             "Enter official Italian brand name, authentic Italian title, English culinary subtitle, net weight, packaging type, and verified Italian region of origin. Scan printed EAN-13 barcode.",
           nextAction:
@@ -660,7 +660,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Configure Pricing',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Configure Pricing\" in the product draft editor",
+          whatToClick: "Select \"Edit\", then open \"Pricing & stock\".",
           actionDirective:
             "Review source purchase receipt (€) and landed cost calculation. Pricing lead or owner enters PHP retail price and records written pricing rationale. Price must remain above landed cost.",
           nextAction:
@@ -702,7 +702,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Smart Scan',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Open Smart Scan\" in product editor",
+          whatToClick: "Select \"Smart paste\" after the approved content project returns one reviewed product object.",
           actionDirective:
             "Use Smart Scan to prepare the versioned prompt. Attach real packaging photos to private \"K2 Product Content\" ChatGPT Project. Paste returned JSON into Smart Paste and accept or reject fields. Then run separate PRIMARY and AFTER requests in private \"K2 Product Image Studio\" ChatGPT Project.",
           nextAction:
@@ -740,7 +740,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Product Photos',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Open Product Photos\" in Product Media Manager",
+          whatToClick: "Select \"Photos\" on the product card.",
           actionDirective:
             "Upload approved sealed package shot to the PRIMARY slot and unboxed/served presentation to the AFTER slot (JPEG/PNG/WebP under 4 MB). Preview the interactive slider.",
           nextAction:
@@ -778,7 +778,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Product Editor',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Open Product Editor\" and navigate to Specifications tab",
+          whatToClick: "Select \"Edit\", then open \"Details\" and the product description and ingredient fields.",
           actionDirective:
             "Enter certified ingredients from physical packaging. Bold mandatory allergens (Wheat/Gluten, Milk, Nuts, Soy, Eggs). Write authentic Italian culinary pairing notes and preparation tips.",
           nextAction:
@@ -816,7 +816,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Review Publication',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Review Publication\" and toggle status to \"Live\"",
+          whatToClick: "Review the product, then use the status control to select \"Live\".",
           actionDirective:
             "Inspect mobile and desktop preview. Verify search tags, SEO title, and pricing display. Toggle product status from Draft to Active/Live and save. Verify the live product URL.",
           nextAction:
@@ -881,11 +881,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Recipient staff not listed', fix: 'Verify recipient is active in Staff & Roles permissions table with Custodian capability.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'omni_hub',
         jumpLabel: 'Initiate Transfer',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Initiate Transfer\" in Custody Transfers tab",
+          targetScreen: "Fulfillment Hub",
+          whatToClick: "Select \"Custody transfer\", then choose the exact lot, quantity, and receiving staff member.",
           actionDirective:
             "Select batch lot, quantity, source hub, destination hub, and designated recipient staff member. Generate unique Transfer Manifest ID.",
           nextAction:
@@ -919,11 +919,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Missing or broken seal before dispatch', fix: 'Discard broken seal; apply new seal and update serial number in transfer record.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'omni_hub',
         jumpLabel: 'View Custody Manifest',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"View Custody Manifest\" to print or display transfer sheet",
+          targetScreen: "Fulfillment Hub",
+          whatToClick: "No Admin control yet. Count and seal the transfer using the approved manual handoff record.",
           actionDirective:
             "Count units one-by-one into transfer container. Affix numbered tamper-evident security seal. Record seal serial number on manifest and attach printed transfer sheet.",
           nextAction:
@@ -956,11 +956,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Transit delay > 1 hour', fix: 'Transporter must notify receiving hub; check temperature indicator upon arrival.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'omni_hub',
         jumpLabel: 'Track Open Transfers',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Track Open Transfers\" to monitor transit status",
+          targetScreen: "Fulfillment Hub",
+          whatToClick: "No Admin control yet. Keep the approved handoff record with the physical transfer.",
           actionDirective:
             "Transport container between hubs under secure, temperature-controlled conditions. Log departure timestamp and driver identity.",
           nextAction:
@@ -995,11 +995,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Unit count shortage (e.g. 11/12 scanned)', fix: 'Do not sign standard handshake; select "Partial Receipt with Exception" to log sender discrepancy.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'omni_hub',
         jumpLabel: 'Scan Received Crate',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Scan Received Crate\" in Inbound Transfers queue",
+          targetScreen: "Fulfillment Hub",
+          whatToClick: "No Admin control yet. The receiver must recount the physical units before any saved custody change.",
           actionDirective:
             "Inspect security seal number against manifest. Break seal, unpack container, and independently scan every unit barcode into the receiving screen. Flag any variance immediately.",
           nextAction:
@@ -1033,11 +1033,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Session PIN forgotten', fix: 'Use TOTP Authenticator 2-Factor code or request supervisor identity verification.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'omni_hub',
         jumpLabel: 'Custody History Log',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Custody History Log\" and sign the Electronic Handshake",
+          targetScreen: "Fulfillment Hub",
+          whatToClick: "No Admin control yet. Do not claim an electronic acceptance until a receiving control is available.",
           actionDirective:
             "Review verified count. Recipient enters staff authentication credentials to sign acceptance. System logs immutable custody transfer in ledger.",
           nextAction:
@@ -1098,11 +1098,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'An urgent order needs a scoped item', fix: 'Finish and record that exact lot’s count before moving it, or stop and restart the lot after the movement. Do not pretend the earlier count remained valid.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'owner_close',
         jumpLabel: 'Schedule Cycle Count',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Schedule Cycle Count\" in Cycle Count tab",
+          targetScreen: "Owner Count & Close",
+          whatToClick: "No Admin control yet. Agree the count area and movement pause with the owner before starting.",
           actionDirective:
             "Define shelves, categories, or lots to be audited. Coordinate with warehouse staff to pause movements (picking, receiving, transfers) on scoped bins during count.",
           nextAction:
@@ -1136,11 +1136,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Dusty barcode / scanner misread', fix: 'Wipe barcode label with dry microfiber cloth; use manual 13-digit EAN entry as fallback.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'owner_close',
         jumpLabel: 'Launch Blind Scanner',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Launch Blind Scanner\" or open physical count sheet",
+          targetScreen: "Owner Count & Close",
+          whatToClick: "Open \"Compare recorded and counted stock\" and enter the physical count for each matched product.",
           actionDirective:
             "Scan every physical unit systematically shelf-by-shelf. Record SKU, batch lot, and expiry date. Complete physical count before viewing expected system quantities.",
           nextAction:
@@ -1174,11 +1174,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'Overage detected (more units than system)', fix: 'Check if an intake batch was physically placed on shelf before being committed in Admin BOS.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'owner_close',
         jumpLabel: 'Review Variance Report',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Review Variance Report\" in Audit Management",
+          targetScreen: "Owner Count & Close",
+          whatToClick: "Use \"Compare recorded and counted stock\" to compare the saved shop figure with the physical count.",
           actionDirective:
             "Review variance summary comparing physical counts against database balances. SKUs with zero variance require no action; SKUs with variance > 0 are flagged for secondary recount.",
           nextAction:
@@ -1212,11 +1212,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'A unit remains unexplained after the second count', fix: 'Preserve the discrepancy and available physical, packing, order, and custody evidence for manager investigation. Do not invent a cause or claim camera evidence exists.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'owner_close',
         jumpLabel: 'Classify Discrepancies',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Classify Discrepancies\" on flagged variance rows",
+          targetScreen: "Owner Count & Close",
+          whatToClick: "For a difference, select \"Reconcile exact lots & record review\" and enter the evidence and reason.",
           actionDirective:
             "A second staff member recounts flagged items. If variance persists, assign authoritative reason code (Breakage, Expiry Discard, Shrinkage) and attach photo evidence.",
           nextAction:
@@ -1250,11 +1250,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'The command rejects the reconciliation', fix: 'Keep the original ledger unchanged. Resolve omitted lots, stale versions, reservation conflicts, permissions, or invalid quantities, then retry with the same reviewed evidence.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'owner_close',
         jumpLabel: 'Approve Audit Adjustments',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Approve Audit Adjustments\" with Manager credentials",
+          targetScreen: "Owner Count & Close",
+          whatToClick: "After every product is reviewed, select \"Save count progress\".",
           actionDirective:
             "Hub Manager reviews net financial impact and reasons. Submit authorized reconciliation command to update lot balances, then notify staff that movement pause has ended.",
           nextAction:
@@ -1322,7 +1322,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Omni-Hub Orders',
         actionGuide: {
           targetScreen: "Omni-Operations Hub",
-          whatToClick: "Click \"Open Omni-Hub Orders\" and select unconfirmed order row",
+          whatToClick: "In \"Confirmation queue\", review the request and select \"Confirm and reserve\".",
           actionDirective:
             "Review submitted customer details, delivery address, ordered items, and customer-confirmed delivery fee. Verify inventory reservation status is healthy.",
           nextAction:
@@ -1360,7 +1360,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Customer Messages',
         actionGuide: {
           targetScreen: "Customer Messages Inbox",
-          whatToClick: "Click \"Open Customer Messages\" on the customer conversation thread",
+          whatToClick: "Open \"Unified message control\" and select the saved conversation.",
           actionDirective:
             "Contact customer via chat or messaging to confirm delivery details, special handling requests, or provide official K2 payment account details (GCash/Maya/Bank Transfer).",
           nextAction:
@@ -1398,7 +1398,7 @@ export const WORKFLOWS = {
         jumpLabel: 'View Packing Queue',
         actionGuide: {
           targetScreen: "Omni-Operations Hub",
-          whatToClick: "Click \"Payment Status\" button on the order card to open Payment Modal",
+          whatToClick: "Select the order, then select \"Payment evidence\".",
           actionDirective:
             "Review structured payment evidence (method, amount, payer name, reference number). Confirm funds in merchant account. Enforce separation of duties: verifying staff must be distinct from submitter. Confirm order to commit stock.",
           nextAction:
@@ -1437,7 +1437,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Packing Station Scanner',
         actionGuide: {
           targetScreen: "Omni-Operations Hub",
-          whatToClick: "Click \"Packing Station Scanner\" or print Pick List",
+          whatToClick: "Select the order with \"Select\", scan the item, then select \"Record one unit\".",
           actionDirective:
             "Take pick list to warehouse shelves. Pick the specific oldest-expiring FEFO batch lots indicated. Bring units to packing station and scan barcodes to verify 100% SKU match.",
           nextAction:
@@ -1475,7 +1475,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Packing Record',
         actionGuide: {
           targetScreen: "Omni-Operations Hub",
-          whatToClick: "Click \"Open Packing Record\" on verified order",
+          whatToClick: "Select \"Packing record\" to review the packed lines, then use \"Delivery & waybill\" for the courier details.",
           actionDirective:
             "Pack items with protective bubble wrap, cushioning, and cold packs if chocolates. Include K2 care card. Book courier in delivery portal (Lalamove, Grab, J&T) and print courier waybill.",
           nextAction:
@@ -1513,7 +1513,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Dispatch Ledger',
         actionGuide: {
           targetScreen: "Omni-Operations Hub",
-          whatToClick: "Click \"Dispatch Ledger\" or \"Mark Dispatched\" on the order",
+          whatToClick: "After packing, payment, and delivery checks pass, select \"Handover to courier\".",
           actionDirective:
             "Verify courier rider name and plate number against booking. Hand over package. Record tracking number and courier in Admin BOS. Send tracking link to customer in chat.",
           nextAction:
@@ -1579,7 +1579,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Pasabuy Queue',
         actionGuide: {
           targetScreen: "Pasabuy Manager",
-          whatToClick: "Click \"Open Pasabuy Queue\" and select pending request",
+          whatToClick: "In \"Priority queue\", select the request that needs review.",
           actionDirective:
             "Review requested Italian product, reference photo, packaging size, customer target budget, and shipping preference. Verify items are non-perishable and allowed for air cargo.",
           nextAction:
@@ -1617,7 +1617,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Cost Calculator',
         actionGuide: {
           targetScreen: "Pasabuy Manager",
-          whatToClick: "Click \"Open Cost Calculator\" on the request card",
+          whatToClick: "Open the request and complete \"Quote assumptions\".",
           actionDirective:
             "Milan buyer checks physical stock in Italian stores. Input retail price in EUR, local Italian VAT, and weight. Compute landed cost floor in PHP including air cargo share.",
           nextAction:
@@ -1655,7 +1655,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Issue Quote',
         actionGuide: {
           targetScreen: "Pasabuy Manager",
-          whatToClick: "Click \"Issue Quote\" button in Pasabuy card",
+          whatToClick: "Review the final price and owner reason, then select \"Save new quote version\".",
           actionDirective:
             "Review itemized quote breakdown (item cost, air cargo, customs share, concierge fee). Set validity terms and send formal quote to customer via messaging thread.",
           nextAction:
@@ -1693,7 +1693,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Confirm Deposit',
         actionGuide: {
           targetScreen: "Pasabuy Manager",
-          whatToClick: "Click \"Confirm Deposit\" in payment status section",
+          whatToClick: "No Admin control yet. Record payment evidence through the approved payment process before changing the request state.",
           actionDirective:
             "Record customer quote acceptance. Verify downpayment deposit in merchant bank account. Advance request to \"Purchasing Queue (Milan)\" to notify Milan buyer.",
           nextAction:
@@ -1731,7 +1731,7 @@ export const WORKFLOWS = {
         jumpLabel: 'View Flight Box Manifest',
         actionGuide: {
           targetScreen: "Flight Consignments",
-          whatToClick: "Click \"View Flight Box Manifest\" in Consignment Manager",
+          whatToClick: "In Flight Consignments, select \"Create manifest\" or open the matching \"Current manifest\".",
           actionDirective:
             "Milan buyer purchases item in store, photographs receipt, applies Pasabuy tracking tag, and scans item into the active scheduled flight cargo box manifest.",
           nextAction:
@@ -1769,7 +1769,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Finalize Pasabuy Delivery',
         actionGuide: {
           targetScreen: "Pasabuy Manager",
-          whatToClick: "Click \"Finalize Pasabuy Delivery\" on the arriving request",
+          whatToClick: "No Admin control yet. Keep receipt, remaining payment, courier, and delivery facts in the approved records.",
           actionDirective:
             "Scan Pasabuy reference barcode upon unboxing flight cargo. Collect remaining balance if applicable, book courier directly to customer, and record tracking number.",
           nextAction:
@@ -1849,7 +1849,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Channel Readiness',
         actionGuide: {
           targetScreen: "Marketplace Integrations",
-          whatToClick: "Click \"Open Channel Readiness\" to inspect channel credential checklist",
+          whatToClick: "On the channel row, select \"Connector checklist\".",
           actionDirective:
             "Apply for developer partner access in marketplace open platform (Shopee, Lazada, TikTok Shop). Record exact shop IDs and approved API scopes for each K2 storefront.",
           nextAction:
@@ -1884,7 +1884,7 @@ export const WORKFLOWS = {
         jumpLabel: 'View Required Secrets',
         actionGuide: {
           targetScreen: "Marketplace Integrations",
-          whatToClick: "Click \"View Required Secrets\" in Channel Readiness",
+          whatToClick: "Select \"Connector checklist\" to read the required setup. Store secrets outside the browser.",
           actionDirective:
             "Configure marketplace partner keys in Supabase Edge Function settings. Never put keys in frontend environment variables or Admin UI. Run prebuild scan to verify zero leaks.",
           nextAction:
@@ -1920,7 +1920,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Check Channel Status',
         actionGuide: {
           targetScreen: "Marketplace Integrations",
-          whatToClick: "Click \"Check Channel Status\" in Webhook Monitor",
+          whatToClick: "Select \"Connector checklist\". A real signed event must be verified outside this screen before the channel is called connected.",
           actionDirective:
             "Test incoming webhook signature validation in Edge Function. Verify request body limits (256 KiB), replay window defense, and atomic event capture in database.",
           nextAction:
@@ -1955,7 +1955,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Inventory',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Open Inventory\" to review channel schema constraints",
+          whatToClick: "No Admin control yet. The owner must approve the shared channel names before connector work continues.",
           actionDirective:
             "Enforce one canonical spelling for each channel across all tables. Standardize shop identity fields so reports and order queues read the exact same string.",
           nextAction:
@@ -1990,7 +1990,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Channel Listings',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Click \"Open Channel Listings\" in Master Inventory",
+          whatToClick: "No Admin control yet. Keep listing IDs in the approved marketplace record until editing is available here.",
           actionDirective:
             "Map each K2 Master SKU to its external marketplace item ID and SKU ID. Record per-channel pricing if different from website retail SRP.",
           nextAction:
@@ -2021,11 +2021,11 @@ export const WORKFLOWS = {
         troubleshooting: [
           { issue: 'A marketplace order cannot be fulfilled because the unit was sold on the website', fix: 'This is the race, not a data error. Cancel through the marketplace flow, record the cause, and treat repeat occurrences as a signal the allocation rule is wrong.' },
         ],
-        adminJump: 'inventory',
+        adminJump: 'integrations',
         jumpLabel: 'Open Master Inventory',
         actionGuide: {
-          targetScreen: "Inventory Management",
-          whatToClick: "Click \"Open Master Inventory\" to configure stock allocation",
+          targetScreen: "Channel Readiness",
+          whatToClick: "Open \"Stock allocation\" to review stock by product and shop.",
           actionDirective:
             "Formally decide stock allocation strategy between website and marketplace: single shared pool vs reserved shop allocation. Establish oversell rule before two channels go live.",
           nextAction:
@@ -2059,7 +2059,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Unified Inbox',
         actionGuide: {
           targetScreen: "Customer Messages Inbox",
-          whatToClick: "Click \"Open Unified Inbox\" to review active messaging sources",
+          whatToClick: "Open \"Unified message control\" to review saved conversations. External chat apps remain separate.",
           actionDirective:
             "Note that social platform messaging (Instagram, Messenger, WhatsApp) has no automated ingestion today. Instruct staff to continue responding in native apps and logging order notes manually.",
           nextAction:
@@ -2094,7 +2094,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Channel Readiness',
         actionGuide: {
           targetScreen: "Marketplace Integrations",
-          whatToClick: "Click \"Open Channel Readiness\" to review operational verification",
+          whatToClick: "Use \"Verify real event\" only for an internal channel with checked evidence; use \"Connector checklist\" for marketplaces.",
           actionDirective:
             "Mark channel as Operational only after observing a real order event through the full pipeline from ingress to fulfillment. Keep unverified channels in Not Connected status.",
           nextAction:

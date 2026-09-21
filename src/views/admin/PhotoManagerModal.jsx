@@ -108,7 +108,7 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
           <fieldset disabled={locked} className="space-y-6">
           <ImageUploadDropzone onUploadingChange={busy => uploadState("primary", busy)} label="Primary storefront photo" existingUrls={primary ? [primary.url] : []} onMediaChange={change(setPrimary)} />
           <ImageUploadDropzone onUploadingChange={busy => uploadState("lifestyle", busy)} label="After-use photo" existingUrls={afterUse ? [afterUse.url] : []} onMediaChange={change(setAfterUse)} />
-          <ImageUploadDropzone onUploadingChange={busy => uploadState("secondary", busy)} label="Supporting photos — up to 5" multiple maxFiles={5} existingUrls={samples.map((item) => item.url)} onMediaChange={change(setSamples)} />
+          <ImageUploadDropzone onUploadingChange={busy => uploadState("secondary", busy)} label="Supporting photos (up to 5)" multiple maxFiles={5} existingUrls={samples.map((item) => item.url)} onMediaChange={change(setSamples)} />
 
           {secureMode && (
             <label className="block text-sm font-semibold text-white/75">

@@ -83,6 +83,6 @@ test('browser system readiness cannot read or render raw diagnostic rows', async
   expect(source).not.toContain("from('error_reports')")
   expect(source).not.toContain('item.message')
   expect(source).not.toContain('item.url')
-  expect(source).toContain('Diagnostic logging boundary')
+  expect(source).toContain('What this screen does not show')
   expect(source).toContain("safeUiError('ADMIN_HEALTH_FAILED')")
 })

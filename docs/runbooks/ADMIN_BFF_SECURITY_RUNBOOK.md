@@ -748,6 +748,17 @@ event per accepted command, and exact retry without a duplicate event. Verify
 the storefront shows only the intended published copy before enabling the
 browser switch; a seeded string or local UI render is not publication proof.
 
+**Transitional Globe direct transport (21 September 2026):**
+`20260921_admin_globe_direct_rpc.sql` is applied in production so the Admin
+Globe screen can write while the global Admin BFF switch remains off. The UI
+calls `read_admin_globe_cms_v1` and `execute_admin_globe_review_direct_v1`
+through the authenticated Supabase client. Verify `authenticated` has execute
+on the direct RPC, `anon` does not, and neither Globe table grants authenticated
+insert/update/delete. Run `npm run rehearse:admin-globe-direct` for isolated
+role, AAL, draft, publish, retry and audit checks. Recovery is
+`supabase/rollbacks/20260921_admin_globe_direct_rpc_rollback.sql`; this restores
+the prior read-only Admin behavior and does not remove reviews or audit history.
+
 Run `npm run verify:admin-bff` for the local foundation contract. A passing
 source contract is not deployment or end-to-end session evidence.
 # Local cookie containment evidence — 5 September 2026

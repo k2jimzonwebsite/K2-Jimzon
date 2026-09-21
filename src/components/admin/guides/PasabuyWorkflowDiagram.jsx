@@ -49,7 +49,7 @@ export default function PasabuyWorkflowDiagram({ activeStep = null, onSelectStep
       short: 'Owner reviews rarity, supplier difficulty, and sets final PHP quote with validity date.',
       rules: [
         'Owner sets final PHP price (must be >= computed landed cost) with documented rationale.',
-        'Quote version is locked with an immutable expiration window (typically 3–7 days).',
+        'The saved quote keeps its expiry date, usually 3 to 7 days.',
         'Clear delivery estimate and cancellation/substitution terms are attached.',
       ],
       caution: 'Browser/staff cannot auto-quote Pasabuy—only the owner sets the authoritative price.',

@@ -26,7 +26,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOper
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-semibold text-white">Start here: your daily workflow</h2>
               </div>
-              <p className="mt-0.5 text-sm text-white/50">Read top to bottom, then follow each procedure's role, evidence, blocker, and recovery checks.</p>
+              <p className="mt-0.5 text-sm text-white/50">Read from top to bottom. Each step tells you where to go and what to check.</p>
             </div>
             <button onClick={onClose} aria-label="Close guide" className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-adm-sm bg-white/5 text-white/50 hover:bg-white/10 hover:text-white cursor-pointer"><XIcon size={18} /></button>
           </div>
@@ -35,13 +35,13 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOper
           <div className="border-b border-adm-line bg-adm-sunken px-6 py-3">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-xs text-white/80">
-                <span>Interactive SVG Master Workflow Graph & AI Prompt Studio</span>
+                <span>Interactive workflow map and staff instructions</span>
               </div>
               <button
                 onClick={() => setGuideModalTab('master_graph')}
                 className="shrink-0 rounded-md border border-adm-line bg-white/[0.04] min-h-11 px-3 text-xs font-bold text-white/70 hover:bg-white/[0.08] hover:text-white cursor-pointer"
               >
-                Open SVG Map →
+                Open workflow map →
               </button>
             </div>
           </div>
@@ -58,7 +58,7 @@ export default function StartHereGuide({ isOpen, onClose, onNavigate, onOpenOper
                       <p className="mt-1 text-sm leading-relaxed text-white/65">{s.body}</p>
                       {s.more && (
                         <div className="mt-1.5">
-                          <button onClick={() => setOpen((o) => ({ ...o, [i]: !o[i] }))} className="text-xs font-medium text-blue hover:underline cursor-pointer">
+                          <button onClick={() => setOpen((o) => ({ ...o, [i]: !o[i] }))} className="inline-flex min-h-11 items-center text-xs font-medium text-blue hover:underline cursor-pointer">
                             {open[i] ? 'Less ▴' : 'More info ▸'}
                           </button>
                           {open[i] && (

@@ -162,7 +162,7 @@ test.describe('Phase 2 unified inbox contract', () => {
   test('admin inbox labels internal notes and disconnected delivery truthfully', async () => {
     const source = await readFile(new URL('../src/views/admin/Inbox.jsx', import.meta.url), 'utf8')
 
-    expect(source).toContain('external sending is not connected')
+    expect(source).toContain('Not sent externally')
     expect(source).toContain('Internal only, not sent')
     expect(source).toContain('Copy for external reply')
     expect(source).toContain('Save workflow')
@@ -179,7 +179,7 @@ test.describe('Phase 2 inbox interactions', () => {
     await expect(page.getByRole('heading', { name: 'Unified message control' })).toBeVisible()
     await expect(page.getByText('Maria Santos').first()).toBeVisible()
     await expect(page.getByText(/overdue$/).first()).toBeVisible()
-    await expect(page.getByText(/external sending is not connected/i)).toBeVisible()
+    await expect(page.getByText('Not sent externally')).toBeVisible()
 
     const note = page.getByLabel('Internal note or response draft')
     await note.fill('Staff verified the request details; external response still pending.')
@@ -192,7 +192,7 @@ test.describe('Phase 2 inbox interactions', () => {
     await workflow.getByLabel('Status').selectOption('Resolved')
     await workflow.getByLabel('Reason (required)').fill('Customer question was completed through the verified channel.')
     await workflow.getByRole('button', { name: 'Save workflow' }).click()
-    await expect(page.getByText('Workflow updated and added to the immutable event history.')).toBeVisible()
+    await expect(page.getByText('Workflow updated and added to the permanent activity history.')).toBeVisible()
     const chatHeader = page.getByRole('heading', { name: 'Maria Santos' }).locator('..')
     await expect(chatHeader.getByText('Resolved', { exact: true })).toBeVisible()
   })
