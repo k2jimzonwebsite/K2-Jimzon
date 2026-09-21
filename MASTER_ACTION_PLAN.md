@@ -1,6 +1,6 @@
 # K2 Jimzon Master Action Plan
 
-**MAP-028 I-012/I-016, IDEA-20260921-01 acceptance remainder:** Local copy changes, 692 contracts, 3 help/map browser checks, complete Count & Close phone flow and Admin build passed. Evidence: docs/evidence/20260921-admin-help/README.md. Next: verify release assets and have staff follow a map step and explain the help in their own words. Authenticated production writes are not proven by fixtures. Recovery: revert the scoped release; no database rollback.
+**MAP-028 I-012/I-016, IDEA-20260921-01 acceptance remainder:** Local copy changes, 692 contracts, 3 help/map browser checks, complete Count & Close phone flow and Admin build passed. Evidence: docs/evidence/20260921-admin-help/README.md. Release a1a8507 assets verified on production. Next: have staff follow a map step and explain the help in their own words. Authenticated production writes are not proven by fixtures. Recovery: revert the scoped release; no database rollback.
 
 **20 September local verification sweep (MAP-027 / MAP-026 / MAP-023, code locally verified, no code changed):**
 Verification-only run over the working tree; no commit, push, migration, or deployment performed:

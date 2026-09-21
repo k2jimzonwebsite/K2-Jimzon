@@ -1,0 +1,19 @@
+{
+  "verifiedAt": "2026-09-21T02:59:26.125Z",
+  "commit": "a1a8507e70732ecf98a4279354ada8f280b2a53c",
+  "origin": "https://admin.k2jimzon.com",
+  "checks": [
+    {
+      "asset": "OwnerCountClose-BfI66e6y.js",
+      "status": 200,
+      "phrase": "Count & Close is not available yet.",
+      "found": true
+    },
+    {
+      "asset": "MasterWorkflowGraph-Cka3CanR.js",
+      "status": 200,
+      "phrase": "Choose a work area, then a step to see what to do and where to do it.",
+      "found": true
+    }
+  ]
+}
