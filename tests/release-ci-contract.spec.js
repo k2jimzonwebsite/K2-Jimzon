@@ -92,6 +92,18 @@ test('selling fixtures wait for the observed slow CSS transform before starting 
   expect(config.timeout).toBe(120000)
 })
 
+test('storefront fixture runners finish the cold CSS transform before browser assertions', async () => {
+  const [{ default: map027 }, accountRunner] = await Promise.all([
+    import('../playwright.map027.config.js'),
+    read('scripts/test-customer-account-ui.mjs'),
+  ])
+  expect(map027.webServer.url).toBe(`${map027.use.baseURL}/src/index.css`)
+  expect(map027.webServer.reuseExistingServer).toBe(false)
+  expect(map027.webServer.timeout).toBe(240000)
+  expect(accountRunner).toContain("const readinessUrl = `http://127.0.0.1:${port}/src/index.css`")
+  expect(accountRunner).toContain('await fetch(readinessUrl,')
+})
+
 test('protected recovery journeys run only in their dedicated fixture environment', async () => {
   const [{ default: base }, { default: recovery }] = await Promise.all([
     import('../playwright.config.js'),

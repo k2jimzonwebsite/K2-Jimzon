@@ -16,7 +16,7 @@ test.describe('Pasabuy and wholesale truthfulness', () => {
   test('wholesale page has no demo credential bypass', async ({ page }) => {
     await page.goto('/')
     await page.getByRole('navigation', { name: 'Storefront' }).getByRole('button', { name: 'Wholesale', exact: true }).click()
-    await expect(page.getByRole('heading', { name: /Start a traceable business-supply inquiry/i })).toBeVisible({ timeout: 60000 })
+    await expect(page.getByRole('heading', { name: /Tell us what you need to order/i })).toBeVisible({ timeout: 60000 })
     await expect(page.locator('input[type="password"]')).toHaveCount(0)
     await expect(page.getByText(/any credentials work/i)).toHaveCount(0)
   })

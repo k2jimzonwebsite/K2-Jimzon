@@ -10,7 +10,7 @@ test('secure wholesale inquiry returns only a server receipt and no commercial a
   await page.goto('/',{waitUntil:'domcontentloaded'})
   await expect(page.getByRole('main')).toBeVisible({timeout:30000})
   await page.getByRole('navigation',{name:'Mobile storefront'}).getByRole('button',{name:'Wholesale'}).click()
-  await expect(page.getByRole('heading',{name:/Start a traceable business-supply inquiry/i})).toBeVisible({timeout:15000})
+  await expect(page.getByRole('heading',{name:/Tell us what you need to order/i})).toBeVisible({timeout:15000})
   await page.getByLabel(/Registered Company Name/i).fill('Launch Test Cafe')
   await page.getByLabel(/Contact Person Full Name/i).fill('Maria Buyer')
   await page.getByLabel(/Work Email/i).fill('buyer@example.com')

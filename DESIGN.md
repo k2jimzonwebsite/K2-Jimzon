@@ -65,6 +65,20 @@ components:
 
 # Design System: K2 Jimzon
 
+### Admin quick tools (IDEA-20260922-01)
+
+Use visible short tool names, a compact three-column picker and a scrolling panel for small screens. Quick actions open existing workspaces; calculators remain separate planning aids. Reuse AdminDialog for focus containment and return. Keep the draggable trigger reachable after viewport changes. Use 16px fields, named inputs and stronger secondary-text contrast on the existing dark Admin surface. Add no decorative animation or new palette. The scratchpad clearly names its same-browser storage boundary.
+
+### Whole-Storefront reading contract (IDEA-20260921-09)
+
+The shared customer surface uses 14px minimum compact labels/metadata, 16px body prose and form fields, and the existing 17px product names. Root font size respects the browser default. Short editorial headings retain Fraunces; controls retain Source Sans. Red/green/blue reading colors are separate from solid fills so text stays legible on light wood and dark surfaces. Payment/account buttons with solid red fills keep white text in either theme. Basket product names wrap, policy prose is limited to 70ch, and wholesale instructions use body size. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1 for these repairs; existing brand imagery and navigation remain. No new motion or decorative assets.
+
+### 21 September Storefront readability (IDEA-20260921-08)
+
+Keep Fraunces for editorial display and the wood room; use Source Sans 3 with Segoe UI/system fallbacks for product names, controls and forms. Shelf names use 17px/1.45, metadata at least 14px, chat fields 16px/1.6. Pair warm light surfaces with dark ink and dark store surfaces with cream ink; subdued text must remain readable. Theme hover states must preserve contrast rather than introduce white beneath cream text. Footer copy and navigation use 16px.
+
+On phones, hide scene side arrows and show “Swipe left or right to browse. Pinch to zoom.” Retain category tabs as direct navigation. Label camera buttons Zoom in, Zoom out and Reset view with 44px minimum targets. Reserve space for guidance, product rail, keeper and basket; open keeper must not overlap the basket. Pinching must continue from the current camera distance, and browser Ctrl/Meta-wheel zoom stays available. No new decorative animation. Reduced-motion flat navigation remains usable. Local evidence and before/after rationale: `docs/evidence/20260921-store-readability/README.md`; deployed/device acceptance remains in MAP-027.
+
 ### 20 September plain Admin words (IDEA-20260920-14)
 
 Inventory uses Product basics, Product description, Use & ingredients, Website

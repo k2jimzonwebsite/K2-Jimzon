@@ -1,5 +1,11 @@
 # K2 Jimzon — Project Directory Map
 
+IDEA-20260922-01 keeps staff utilities in `src/views/admin/AdminToolsWidget.jsx`, with local styles in `AdminToolsWidget.css` and navigation callbacks from `Admin.jsx`. Focus/resize/expiry/scratchpad/navigation acceptance lives in `tests/admin-dashboard-redesign.spec.js`; evidence/checkpoint directories are `20260922-admin-quick-tools`.
+
+`tests/storefront-readiness-ui.spec.js` extends `test:selling-surfaces` with phone/desktop, light/dark customer-route contrast/form/reflow checks and the manual checkout wording journey. IDEA-20260921-09 evidence/checkpoint directories use `20260921-storefront-readiness`; MAP-028 I-015 / MAP-025 own unfinished human acceptance.
+
+IDEA-20260921-08 adds `src/components/shop/StoreChatPanel.css`, imported by the shared chat panel, and `tests/store-readability-ui.spec.js`, run through `playwright.store-orientation.config.js`. Tests cover phone/desktop theme contrast, chat/FAQ, 200% root text, scene swipe/pinch/reset and the shared footer. Evidence and pre-edit sources are in the matching `20260921-store-readability` evidence and design-checkpoint directories.
+
 IDEA-20260914-02 adds `tests/master-audit-recovery.spec.js` for cookie/history
 boundaries and `tests/storefront-recovery-ui.spec.js` with
 `playwright.storefront-recovery.config.js` for synthetic guest retry and product

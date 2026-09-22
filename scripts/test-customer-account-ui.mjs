@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { spawn, spawnSync } from 'node:child_process'
-import net from 'node:net'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -31,16 +30,20 @@ const server = spawn(process.execPath, [path.join(root,'node_modules','vite','bi
   cwd: root, env, windowsHide: true, stdio: 'ignore',
 })
 
+const readinessUrl = `http://127.0.0.1:${port}/src/index.css`
 const ready = () => new Promise((resolve, reject) => {
   let attempts = 0
-  const probe = () => {
-    const socket = net.createConnection({ host: '127.0.0.1', port })
-    socket.once('connect', () => { socket.destroy(); resolve() })
-    socket.once('error', () => {
-      socket.destroy(); attempts += 1
+  const probe = async () => {
+    try {
+      const response = await fetch(readinessUrl, { signal: AbortSignal.timeout(240000) })
+      if (!response.ok) throw new Error(`Readiness returned ${response.status}`)
+      await response.text()
+      resolve()
+    } catch {
+      attempts += 1
       if (attempts >= 80) reject(new Error('Customer-account test server did not start.'))
       else setTimeout(probe, 100)
-    })
+    }
   }
   probe()
 })

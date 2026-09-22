@@ -16,9 +16,11 @@ export default defineConfig({
   },
   webServer: {
     command: 'npx vite --mode storefront --port 5192 --strictPort --configLoader runner',
-    url: 'http://localhost:5192',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
+    // The HTML shell is available before Vite finishes the cold Tailwind
+    // transform. Wait for the stylesheet so the first journey owns no startup work.
+    url: 'http://localhost:5192/src/index.css',
+    reuseExistingServer: false,
+    timeout: 240000,
     env: {
       VITE_SUPABASE_URL: '',
       VITE_SUPABASE_PUBLISHABLE_KEY: '',

@@ -1,6 +1,6 @@
 import { defineConfig } from '@playwright/test'
 export default defineConfig({
-  testDir: './tests', testMatch: /(store-orientation-ui|store-overlay-collision)\.spec\.js/, workers: 1,
+  testDir: './tests', testMatch: /(store-orientation-ui|store-overlay-collision|store-readability-ui)\.spec\.js/, workers: 1,
   timeout: 120000, reporter: 'list', forbidOnly: !!process.env.CI,
   use: { baseURL: 'http://127.0.0.1:5298' },
   webServer: {

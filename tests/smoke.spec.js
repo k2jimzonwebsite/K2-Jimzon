@@ -136,7 +136,7 @@ test.describe('launch-critical storefront', () => {
     await page.setViewportSize({ width: 375, height: 812 })
     await openStorefront(page)
     await page.getByRole('navigation', { name: 'Storefront' }).getByRole('button', { name: 'Wholesale' }).click()
-    await expect(page.getByRole('heading', { name: /Start a traceable business-supply inquiry/i })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('heading', { name: /Tell us what you need to order/i })).toBeVisible({ timeout: 15000 })
     await page.getByLabel(/Registered Company Name/i).fill('Launch Test Cafe')
     await page.getByLabel(/Contact Person Full Name/i).fill('Maria Test')
     await page.getByLabel(/Work Email/i).fill('buyer@example.com')
@@ -461,16 +461,9 @@ test.describe('MAP-027 virtual store acceptance', () => {
 
     const shelfNav = store.getByRole('navigation', { name: 'Shelves' })
     await shelfNav.getByRole('button', { name: 'Coffee' }).click()
-    const [flatCardBox, shelfStepsBox, productRailBox] = await Promise.all([
-      store.locator('.k2-store-flat-scene-card').boundingBox(),
-      store.locator('.k2-store-steps').boundingBox(),
-      store.locator('.k2-store-rail').boundingBox(),
-    ])
-    expect(flatCardBox).not.toBeNull()
-    expect(shelfStepsBox).not.toBeNull()
-    expect(productRailBox).not.toBeNull()
-    expect(flatCardBox.y + flatCardBox.height).toBeLessThanOrEqual(shelfStepsBox.y)
-    expect(shelfStepsBox.y + shelfStepsBox.height).toBeLessThanOrEqual(productRailBox.y)
+    await expect(shelfNav.getByRole('button', { name: 'Coffee' })).toHaveAttribute('aria-current', 'true')
+    await expect(store.locator('.k2-store-steps')).toBeHidden()
+    await expect(store.locator('.k2-store-flat-scene-card')).toBeVisible()
     const firstProduct = store.locator('.k2-store-rail button').first()
     await expect(firstProduct).toBeVisible()
     await firstProduct.click()

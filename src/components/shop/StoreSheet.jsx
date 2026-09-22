@@ -96,18 +96,18 @@ export default function StoreSheet({ open, onClose, title, subtitle, children, f
             <h2
               ref={headingRef}
               tabIndex={-1}
-              className="font-serif text-xl font-semibold text-[#2B2B2B] focus:outline-none"
+              className="font-sans text-xl font-semibold text-[var(--k2-ink)] focus:outline-none"
             >
               {title}
             </h2>
             {subtitle && (
-              <p className="mt-1 text-[13px] leading-6 text-navy-faint">{subtitle}</p>
+              <p className="mt-1 text-base leading-6 text-[var(--k2-muted)]">{subtitle}</p>
             )}
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="min-h-[44px] shrink-0 rounded-full border border-[#E4DCD1] px-4 text-sm font-semibold text-[#2B2B2B] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+            className="k2-store-action shrink-0 px-4"
           >
             Close
           </button>

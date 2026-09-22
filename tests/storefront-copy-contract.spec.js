@@ -36,4 +36,9 @@ test('storefront promises reconcile with manual launch facts without false SLAs 
   expect(confirmation).toContain('No payment was charged')
   expect(confirmation).toContain('Saved for staff review')
   expect(confirmation).toContain('There is no self-service cancellation or return')
+
+  const checkout = await readFile(new URL('../src/views/Checkout.jsx', import.meta.url), 'utf8')
+  expect(checkout).not.toContain('GCash / Maya / Bank')
+  expect(checkout).toContain('Pay after staff confirmation')
+  expect(checkout).toContain('Nothing is charged here.')
 })

@@ -1,0 +1,7 @@
+.admin-quick-tools { color-scheme: dark; }
+.admin-quick-tools :is(.text-white\/30, .text-white\/40, .text-white\/45, .text-white\/50, .text-white\/60) { color: #CBD5E1; }
+.admin-quick-tools :is(input, textarea, select) { font-size: 1rem; }
+.admin-quick-tools :is(input, textarea)::placeholder { color: #CBD5E1; opacity: 1; }
+.admin-quick-tools :is(button, input, textarea, select):focus-visible { outline: 2px solid #93C5FD; outline-offset: 2px; }
+.admin-quick-tools .text-crimson { color: #FDA4AF; }
+.admin-quick-tools .text-forest { color: #BBF7D0; }

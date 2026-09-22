@@ -730,7 +730,13 @@ export default function Admin() {
 
       <KeyboardShortcutsModal isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
 
-      <AdminToolsWidget onOpenGuide={() => setShowAiCopilot(true)} />
+      <AdminToolsWidget
+        onOpenGuide={() => setShowAiCopilot(true)}
+        onNavigate={selectSection}
+        onOpenSearch={() => setPaletteOpen(true)}
+        onOpenScan={() => setShowScanCenter(true)}
+        onOpenShortcuts={() => setShowShortcuts(true)}
+      />
 
       {showTourChooser && (
         <Suspense fallback={null}>

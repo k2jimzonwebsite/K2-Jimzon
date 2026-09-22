@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { AdminDialog } from '../../components/ui/AdminDialog'
+import './AdminToolsWidget.css'
 import { calculateMaximumSalesDiscount, calculateSalesPlan, calculateTargetSalesPrice, calculateTargetSalesQuantity, createSalesPlanningSummary } from '../../lib/salesCalculations'
 import {
   SettingsIcon,
@@ -32,6 +34,7 @@ const load = (k, fb) => { try { const v = localStorage.getItem(k); return v == n
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
 
 const TOOLS = [
+  { id: 'shortcuts', label: 'Quick actions', icon: MapIcon },
   { id: 'sales', label: 'Sales planner', icon: BagIcon },
   { id: 'calc', label: 'Calculator', icon: CalculatorIcon },
   { id: 'margin', label: 'Margin', icon: TrendIcon },
@@ -42,40 +45,40 @@ const TOOLS = [
   { id: 'notes', label: 'Scratchpad', icon: BookIcon },
 ]
 
-const field = 'min-h-11 w-full rounded-adm-sm border border-adm-line bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 focus:border-blue outline-none'
-const lbl = 'text-xs font-medium uppercase tracking-wide text-white/45'
+const field = 'min-h-11 w-full rounded-adm-sm border border-adm-line bg-black/30 px-3 py-2 text-base text-white placeholder:text-white/70 focus:border-blue outline-none'
+const lbl = 'text-sm font-medium text-white/80'
 
-export default function AdminToolsWidget({ onOpenGuide }) {
+export default function AdminToolsWidget({ onOpenGuide, onNavigate, onOpenSearch, onOpenScan, onOpenShortcuts }) {
   const [open, setOpen] = useState(false)
   const [pos, setPos] = useState(() => load(LS.pos, { x: null, y: null }))
-  const [tool, setTool] = useState(() => load(LS.tool, 'sales'))
+  const [tool, setTool] = useState(() => {
+    const saved = load(LS.tool, 'shortcuts')
+    return TOOLS.some(item => item.id === saved) ? saved : 'shortcuts'
+  })
   const gearRef = useRef(null)
   const drag = useRef({ active: false, moved: false, dx: 0, dy: 0 })
 
   // Default position bottom-right if never dragged, or reset if stuck in top header
   useEffect(() => {
-    if (pos.x == null || pos.y < 80) {
-      setPos({ x: Math.max(16, window.innerWidth - 76), y: Math.max(100, window.innerHeight - 150) })
-    }
-  }, []) // eslint-disable-line
+    const fit = () => setPos(current => ({
+      x: Math.max(6, Math.min(Number.isFinite(current.x) ? current.x : window.innerWidth - 76, window.innerWidth - 58)),
+      y: Math.max(80, Math.min(Number.isFinite(current.y) ? current.y : window.innerHeight - 150, window.innerHeight - 130)),
+    }))
+    fit()
+    window.addEventListener('resize', fit)
+    return () => window.removeEventListener('resize', fit)
+  }, [])
 
   useEffect(() => { if (pos.x != null) save(LS.pos, pos) }, [pos])
   useEffect(() => save(LS.tool, tool), [tool])
 
-  useEffect(() => {
-    if (!open) return
-    const onKeyDown = (e) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [open])
-
   const onDown = (e) => {
+    if (e.button !== 0) return
     const r = gearRef.current.getBoundingClientRect()
     drag.current = { active: true, moved: false, dx: e.clientX - r.left, dy: e.clientY - r.top }
     window.addEventListener('pointermove', onMove)
     window.addEventListener('pointerup', onUp)
+    window.addEventListener('pointercancel', onUp)
   }
   const onMove = useCallback((e) => {
     if (!drag.current.active) return
@@ -88,7 +91,10 @@ export default function AdminToolsWidget({ onOpenGuide }) {
     drag.current.active = false
     window.removeEventListener('pointermove', onMove)
     window.removeEventListener('pointerup', onUp)
+    window.removeEventListener('pointercancel', onUp)
   }, [onMove])
+
+  useEffect(() => () => onUp(), [onUp])
 
   const handleClick = () => { if (!drag.current.moved) setOpen((o) => !o) }
 
@@ -110,11 +116,12 @@ export default function AdminToolsWidget({ onOpenGuide }) {
       )}
       <div className="fixed z-[70]" style={{ left: pos.x, top: pos.y }}>
         {open && (
+          <AdminDialog onClose={() => setOpen(false)} returnFocusRef={gearRef}>
           <div
             role="dialog"
             aria-modal="true"
             aria-label="Staff Tools and Margin Planner"
-            className="fixed inset-x-2 bottom-20 max-h-[calc(100dvh-6rem)] sm:absolute sm:inset-x-auto sm:bottom-auto sm:max-h-none sm:w-[min(28rem,calc(100vw-1rem))] overflow-hidden rounded-2xl border border-white/15 bg-adm-surface shadow-2xl backdrop-blur-md flex flex-col"
+            className="admin-quick-tools fixed inset-x-2 bottom-20 max-h-[calc(100dvh-6rem)] sm:absolute sm:inset-x-auto sm:bottom-auto sm:max-h-none sm:w-[min(28rem,calc(100vw-1rem))] overflow-y-auto rounded-2xl border border-white/15 bg-adm-surface shadow-2xl flex flex-col"
             style={isMobile ? undefined : {
               [openUp ? 'bottom' : 'top']: 60,
               [openLeft ? 'right' : 'left']: 0,
@@ -129,7 +136,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
                 </span>
                 <div>
                   <h3 className="text-sm font-bold text-white leading-none">Staff Quick Tools</h3>
-                  <p className="mt-1 text-xs text-white/50 leading-none">Calculators, margin planner & currency</p>
+                  <p className="mt-1 text-sm text-white/70">Shortcuts and planning calculators</p>
                 </div>
               </div>
               <button
@@ -149,7 +156,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
                 className="w-full flex min-h-11 items-center gap-2 border-b border-adm-line bg-blue/15 px-3.5 py-2.5 text-sm font-semibold text-blue hover:bg-blue/25 transition-colors cursor-pointer"
               >
                 <MapIcon size={16} />
-                <span>Dashboard guide: what does this do?</span>
+                <span>Help with this screen</span>
               </button>
             )}
 
@@ -157,7 +164,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
             <ClockRate />
 
             {/* Tool picker */}
-            <div className="flex flex-wrap gap-1.5 border-b border-adm-line bg-black/20 px-3 py-2">
+            <div className="grid grid-cols-3 shrink-0 gap-1.5 border-b border-adm-line bg-black/20 px-3 py-2" aria-label="Choose a staff tool">
               {TOOLS.map((t) => {
                 const IconComponent = t.icon
                 return (
@@ -167,17 +174,34 @@ export default function AdminToolsWidget({ onOpenGuide }) {
                     title={t.label}
                     aria-label={t.label}
                     aria-pressed={tool === t.id}
-                    className={'flex h-11 w-11 items-center justify-center rounded-adm-sm transition-colors cursor-pointer ' +
+                    className={'flex min-h-11 items-center justify-center gap-1.5 rounded-adm-sm px-1 text-xs transition-colors cursor-pointer ' +
                       (tool === t.id ? 'bg-blue text-white shadow-sm' : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white')}
                   >
                     <IconComponent size={18} />
+                    <span>{t.label}</span>
                   </button>
                 )
               })}
             </div>
 
             {/* Active tool with custom scrollbar */}
-            <div className="p-3.5 max-h-[calc(100vh-320px)] overflow-y-auto custom-scrollbar">
+            <div className="p-3.5 shrink-0">
+              {tool === 'shortcuts' && (
+                <div className="space-y-2">
+                  <p className="text-sm text-white/70">Open a workspace. Review and save changes there.</p>
+                  {[
+                    ['Find a product or page', onOpenSearch],
+                    ['Scan a barcode', onOpenScan],
+                    ['Products and stock', onNavigate && (() => onNavigate('inventory'))],
+                    ['Orders and packing', onNavigate && (() => onNavigate('omni_hub'))],
+                    ['Customer messages', onNavigate && (() => onNavigate('inbox'))],
+                    ['Workflow map', onNavigate && (() => onNavigate('workflow_graph'))],
+                    ['Keyboard shortcuts', onOpenShortcuts],
+                  ].filter(([, action]) => action).map(([label, action]) => (
+                    <button key={label} type="button" onClick={() => { setOpen(false); action() }} className="min-h-11 w-full rounded-adm-sm border border-adm-line px-3 py-2 text-left text-sm font-semibold text-white hover:bg-white/10">{label}</button>
+                  ))}
+                </div>
+              )}
               {tool === 'sales' && <SalesPlanner />}
               {tool === 'calc' && <Calculator />}
               {tool === 'margin' && <Margin />}
@@ -188,6 +212,7 @@ export default function AdminToolsWidget({ onOpenGuide }) {
               {tool === 'notes' && <Scratchpad />}
             </div>
           </div>
+          </AdminDialog>
         )}
 
         {/* Draggable gear */}
@@ -197,6 +222,8 @@ export default function AdminToolsWidget({ onOpenGuide }) {
           onClick={handleClick}
           title="Staff Tools & Margin Planner (drag to move)"
           aria-label="Open Admin tools"
+          aria-expanded={open}
+          aria-haspopup="dialog"
           className="flex h-12 w-12 items-center justify-center rounded-full bg-adm-surface border border-white/20 text-white shadow-xl hover:bg-adm-raised active:scale-95 cursor-grab active:cursor-grabbing touch-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
         >
           <SettingsIcon size={20} className="text-white/80" />
@@ -226,9 +253,9 @@ function ClockRate() {
       </div>
       <div className="flex items-center gap-2">
         <span className="text-white/60 text-sm shrink-0" title="Manual planning rate; not a live FX feed">Manual €1 = ₱</span>
-        <input value={rate} onChange={(e) => setRate(e.target.value)} inputMode="decimal"
+        <input aria-label="Manual PHP per euro rate" value={rate} onChange={(e) => setRate(e.target.value)} inputMode="decimal"
           className="min-h-11 w-20 rounded-adm-sm border border-adm-line bg-black/40 px-2 py-1 text-sm text-white tabular-nums outline-none focus:border-gold" />
-        <input value={eur} onChange={(e) => setEur(e.target.value)} inputMode="decimal" placeholder="€ amount"
+        <input aria-label="Euro amount to convert" value={eur} onChange={(e) => setEur(e.target.value)} inputMode="decimal" placeholder="€ amount"
           className="min-h-11 flex-1 min-w-0 rounded-adm-sm border border-adm-line bg-black/40 px-2 py-1 text-sm text-white placeholder:text-white/30 outline-none focus:border-gold" />
         <span className="text-gold text-sm font-semibold tabular-nums shrink-0">{php != null ? '₱' + php.toLocaleString(undefined, { maximumFractionDigits: 2 }) : '—'}</span>
       </div>
@@ -518,8 +545,8 @@ function Margin() {
   const markup = c ? (profit / c) * 100 : 0
   return (
     <div className="space-y-3 text-white">
-      <div><p className={lbl}>Cost (₱)</p><input className={field} inputMode="decimal" value={cost} onChange={(e) => setCost(e.target.value)} placeholder="0" /></div>
-      <div><p className={lbl}>Selling price (₱)</p><input className={field} inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="0" /></div>
+      <div><label htmlFor="tools-cost" className={lbl}>Cost (₱)</label><input id="tools-cost" className={field} inputMode="decimal" value={cost} onChange={(e) => setCost(e.target.value)} placeholder="0" /></div>
+      <div><label htmlFor="tools-price" className={lbl}>Selling price (₱)</label><input id="tools-price" className={field} inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="0" /></div>
       <div className="grid grid-cols-3 gap-2 pt-1">
         <Stat label="Gross difference" value={'₱' + profit.toLocaleString(undefined, { maximumFractionDigits: 2 })} tone={profit >= 0 ? 'good' : 'bad'} />
         <Stat label="Gross margin" value={margin.toFixed(1) + '%'} />
@@ -539,13 +566,13 @@ function Cargo() {
     <div className="space-y-3 text-white">
       <p className={lbl}>Box size (cm)</p>
       <div className="grid grid-cols-3 gap-2">
-        <input className={field} inputMode="decimal" value={l} onChange={(e) => setL(e.target.value)} placeholder="L" />
-        <input className={field} inputMode="decimal" value={w} onChange={(e) => setW(e.target.value)} placeholder="W" />
-        <input className={field} inputMode="decimal" value={h} onChange={(e) => setH(e.target.value)} placeholder="H" />
+        <input aria-label="Box length in centimetres" className={field} inputMode="decimal" value={l} onChange={(e) => setL(e.target.value)} placeholder="Length" />
+        <input aria-label="Box width in centimetres" className={field} inputMode="decimal" value={w} onChange={(e) => setW(e.target.value)} placeholder="Width" />
+        <input aria-label="Box height in centimetres" className={field} inputMode="decimal" value={h} onChange={(e) => setH(e.target.value)} placeholder="Height" />
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <div><p className={lbl}>Actual kg</p><input className={field} inputMode="decimal" value={actual} onChange={(e) => setActual(e.target.value)} placeholder="0" /></div>
-        <div><p className={lbl}>Divisor</p><input className={field} inputMode="decimal" value={divisor} onChange={(e) => setDivisor(e.target.value)} /></div>
+        <div><label htmlFor="tools-weight" className={lbl}>Actual kg</label><input id="tools-weight" className={field} inputMode="decimal" value={actual} onChange={(e) => setActual(e.target.value)} placeholder="0" /></div>
+        <div><label htmlFor="tools-divisor" className={lbl}>Courier divisor</label><input id="tools-divisor" className={field} inputMode="decimal" value={divisor} onChange={(e) => setDivisor(e.target.value)} /></div>
       </div>
       <div className="grid grid-cols-2 gap-2 pt-1">
         <Stat label="Volumetric" value={vol.toFixed(2) + ' kg'} />
@@ -575,8 +602,8 @@ function Units() {
         ))}
       </div>
       <div className="flex gap-2">
-        <input className={field + ' flex-1'} inputMode="decimal" value={val} onChange={(e) => setVal(e.target.value)} />
-        <select value={from} onChange={(e) => setFrom(e.target.value)} className="rounded-adm-sm border border-adm-line bg-black/40 px-2 text-sm text-white outline-none">
+        <input aria-label="Amount to convert" className={field + ' flex-1'} inputMode="decimal" value={val} onChange={(e) => setVal(e.target.value)} />
+        <select aria-label="Convert from unit" value={from} onChange={(e) => setFrom(e.target.value)} className="rounded-adm-sm border border-adm-line bg-black/40 px-2 text-sm text-white outline-none">
           {Object.keys(units).map((u) => <option key={u} value={u}>{u}</option>)}
         </select>
       </div>
@@ -606,7 +633,8 @@ function Vat() {
         <button onClick={() => setMode('add')} className={'flex-1 rounded-adm-sm py-1.5 text-sm font-medium ' + (mode === 'add' ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>Add VAT</button>
         <button onClick={() => setMode('remove')} className={'flex-1 rounded-adm-sm py-1.5 text-sm font-medium ' + (mode === 'remove' ? 'bg-blue text-white' : 'bg-white/5 hover:bg-white/10')}>Remove VAT</button>
       </div>
-      <div><p className={lbl}>{mode === 'add' ? 'Net amount (₱)' : 'Gross amount (₱)'}</p><input className={field} inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" /></div>
+      <div><label htmlFor="tools-vat-amount" className={lbl}>{mode === 'add' ? 'Net amount (₱)' : 'Gross amount (₱)'}</label><input id="tools-vat-amount" className={field} inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" /></div>
+      <p className="text-sm text-white/70">12% arithmetic only. Confirm the applicable tax treatment before using this in an invoice.</p>
       <div className="grid grid-cols-3 gap-2 pt-1">
         <Stat label="Net" value={'₱' + net.toLocaleString(undefined, { maximumFractionDigits: 2 })} />
         <Stat label="VAT 12%" value={'₱' + vat.toLocaleString(undefined, { maximumFractionDigits: 2 })} />
@@ -624,12 +652,13 @@ function Expiry() {
     const d = new Date(date + 'T00:00:00')
     days = Math.ceil((d - new Date().setHours(0, 0, 0, 0)) / 86400000)
     if (days < 0) { tone = 'bad'; text = `Expired ${-days} day${-days === 1 ? '' : 's'} ago` }
-    else if (days <= 30) { tone = 'warn'; text = `${days} day${days === 1 ? '' : 's'} left · sell first (FEFO)` }
-    else { tone = 'good'; text = `${days} days left · fresh` }
+    else if (days < 90) { tone = 'warn'; text = `${days} days left. Below the 90-day arrival rule; check quarantine with staff.` }
+    else { tone = 'good'; text = `${days} days left. Meets the 90-day date threshold only; check condition and stock status.` }
   }
   return (
     <div className="space-y-3 text-white">
-      <div><p className={lbl}>Expiry date</p><input type="date" className={field + ' [color-scheme:dark]'} value={date} onChange={(e) => setDate(e.target.value)} /></div>
+      <div><label htmlFor="tools-expiry-date" className={lbl}>Expiry date</label><input id="tools-expiry-date" type="date" className={field + ' [color-scheme:dark]'} value={date} onChange={(e) => setDate(e.target.value)} /></div>
+      <p className="text-sm text-white/70">Date estimate only. This does not release stock from quarantine or change its sellable status.</p>
       {days != null && (
         <div className={'rounded-adm-sm px-3 py-3 text-center text-sm font-semibold ' +
           (tone === 'bad' ? 'bg-crimson/15 text-crimson' : tone === 'warn' ? 'bg-amber/15 text-amber' : 'bg-blue/15 text-blue')}>
@@ -645,8 +674,8 @@ function Scratchpad() {
   const [notes, setNotes] = useState(() => load(LS.notes, ''))
   useEffect(() => save(LS.notes, notes), [notes])
   return (
-    <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Quick notes for your shift… (saved automatically)"
-      className="h-44 w-full resize-none rounded-adm-sm border border-adm-line bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none focus:border-blue" />
+    <div className="space-y-2"><p className="text-sm text-white/70">Saved only in this browser. Not shared with your team. Keep customer details and passwords out of these notes.</p><textarea aria-label="Private browser scratchpad" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Quick notes for your shift…"
+      className="h-44 w-full resize-y rounded-adm-sm border border-adm-line bg-black/30 px-3 py-2 text-base text-white placeholder:text-white/70 outline-none focus:border-blue" /></div>
   )
 }
 

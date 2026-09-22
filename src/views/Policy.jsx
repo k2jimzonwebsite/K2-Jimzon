@@ -77,7 +77,7 @@ export default function Policy() {
             <h3 className="font-serif text-lg font-semibold text-navy">
               {section.heading}
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-navy-soft whitespace-pre-line">
+            <p className="mt-3 max-w-[70ch] text-base leading-relaxed text-navy-soft whitespace-pre-line">
               {section.content}
             </p>
           </section>
@@ -97,7 +97,7 @@ export default function Policy() {
           </button>
           <button
             onClick={() => go('messages')}
-            className="min-h-11 rounded-lg border border-line bg-shell px-5 text-xs font-bold text-navy hover:bg-white transition-colors"
+            className="min-h-11 rounded-lg border border-line bg-shell px-5 text-xs font-bold text-navy hover:bg-paper transition-colors"
           >
             Guest Messages
           </button>

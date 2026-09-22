@@ -195,18 +195,19 @@ function AisleCamera({ activeIndex, bayCount, onShelfChange, height, fov, zoomRe
     const width = () => el.clientWidth || 1
 
     const down = (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return
       pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
+      el.setPointerCapture?.(event.pointerId)
       if (pointers.current.size === 2) {
         // A second finger starts a pinch, and cancels the drag so the aisle
         // does not slide sideways while the customer is zooming.
         drag.current.active = false
         drag.current.offset = 0
-        pinchStart.current = pinchDistance() / zoom.current
+        pinchStart.current = pinchDistance() * zoom.current
         return
       }
       drag.current.active = true
       drag.current.startX = event.clientX
-      el.setPointerCapture?.(event.pointerId)
     }
 
     const pinchDistance = () => {
@@ -239,14 +240,17 @@ function AisleCamera({ activeIndex, bayCount, onShelfChange, height, fov, zoomRe
 
     const up = (event) => {
       pointers.current.delete(event.pointerId)
+      if (el.hasPointerCapture?.(event.pointerId)) el.releasePointerCapture(event.pointerId)
       if (pointers.current.size < 2) pinchStart.current = 0
       if (!drag.current.active) return
       drag.current.active = false
-      const target = Math.round(settled.current + drag.current.offset)
+      const distance = drag.current.offset * width() / 1.15
+      const step = event.type !== 'pointercancel' && Math.abs(distance) >= Math.min(80, width() * 0.2)
+        ? Math.sign(distance) : 0
+      const target = settled.current + step
       drag.current.offset = 0
       const clamped = Math.max(0, Math.min(bayCount - 1, target))
       if (clamped !== settled.current) onShelfChange(clamped)
-      el.releasePointerCapture?.(event.pointerId)
     }
 
     /**
@@ -283,6 +287,7 @@ function AisleCamera({ activeIndex, bayCount, onShelfChange, height, fov, zoomRe
     }
 
     const wheel = (event) => {
+      if (event.ctrlKey || event.metaKey) return
       // The store owns the viewport, so the page has nothing to scroll; without
       // this the gesture would fall through to the browser.
       event.preventDefault()

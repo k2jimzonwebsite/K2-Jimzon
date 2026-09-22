@@ -50,7 +50,7 @@ export default function ShelfProductPanel({ product, cartQuantity = 0, basketErr
       aria-label={`Selected product: ${product?.name || 'product'}`}
     >
       <div className="flex items-start justify-between gap-4">
-        <h2 className="font-serif text-2xl font-semibold leading-tight text-navy">{product?.name}</h2>
+        <h2 className="font-sans text-xl font-semibold leading-snug text-navy">{product?.name}</h2>
         <button
           type="button"
           onClick={onClose}
@@ -75,7 +75,7 @@ export default function ShelfProductPanel({ product, cartQuantity = 0, basketErr
         </div>
         {sku && (
           <div className="flex items-baseline justify-between gap-4">
-            <dt className="font-semibold text-navy-soft">SKU</dt>
+            <dt className="font-semibold text-navy-soft">Product code</dt>
             <dd className="font-mono text-[13px] text-navy">{sku}</dd>
           </div>
         )}

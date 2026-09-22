@@ -1,5 +1,9 @@
 # K2 Jimzon — System Architecture
 
+Admin quick tools call the existing Admin shell callbacks for command search, scanner, section navigation and keyboard help. The widget uses shared AdminDialog and a separately imported Admin-only stylesheet. It adds no service/RPC path and retains the local-storage-only rate, position, selected tool and notes.
+
+Store readability stays within the Storefront artifact: `interactive-store.css` owns room theme tokens and responsive controls; `StoreChatPanel.css` travels with the lazy shared chat panel so the global chat drawer receives the same readable form styling. Camera pointer changes live in `ShelfScene3D`; they do not modify commerce state or provider access. Admin boundaries remain separate.
+
 The remote Globe CMS never falls back to the development testimonial seed.
 Its review availability state is separate from the product-globe display
 configuration. StorefrontMetadata and the four explicit Vercel scoped-route

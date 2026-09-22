@@ -184,16 +184,16 @@ export default function Wholesale() {
               <span>Manual Commercial Review</span>
             </div>
             <p className="mt-4 text-base leading-7 text-navy-soft">
-              Wholesale pricing is staff-assigned and tied to a reviewed business need. The browser cannot approve pricing, stock, credit, or delivery terms.
+              Tell us what your business needs. Our staff will confirm prices, available stock and delivery terms with you.
             </p>
             <dl className="mt-7 grid gap-5 border-t border-[var(--store-surface-border)] pt-6 sm:grid-cols-2">
               {[
                 ['Reviewed per order', 'Batch, Manila availability, and terms are confirmed by staff before acceptance.'],
-                ['No automatic pricing', 'Quotes are versioned and issued by a person, never generated at checkout.'],
+                ['A quote from our team', 'Staff send a quote for your review. Prices are not approved at checkout.'],
               ].map(([term, detail]) => (
                 <div key={term}>
                   <dt className="text-sm font-bold text-navy">{term}</dt>
-                  <dd className="mt-1.5 text-sm leading-6 text-navy-soft">{detail}</dd>
+                  <dd className="mt-1.5 text-base leading-6 text-navy-soft">{detail}</dd>
                 </div>
               ))}
             </dl>
@@ -205,9 +205,9 @@ export default function Wholesale() {
       <section id="application-form" className="store-section py-14 md:py-20">
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <div>
-            <Kicker>Business Onboarding</Kicker>
+            <Kicker>Wholesale inquiry</Kicker>
             <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight md:text-4xl">
-              Start a traceable business-supply inquiry.
+              Tell us what you need to order.
             </h2>
             <p className="mt-4 text-sm leading-7 text-navy-soft">
               Prepare a business-supply inquiry with your expected volume. K2 reviews it manually; eligibility, pricing, delivery, and any commercial terms are confirmed only in a later staff response.
@@ -217,7 +217,7 @@ export default function Wholesale() {
               <h3 className="text-xs font-bold uppercase tracking-wider text-crimson">
                 What Happens Next:
               </h3>
-              <ol className="mt-3 space-y-2.5 text-xs leading-relaxed text-navy-soft">
+              <ol className="mt-3 space-y-2.5 text-base leading-relaxed text-navy-soft">
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-navy">1.</span>
                   <span>{secureInquiry ? 'K2 records the inquiry and its Website conversation for manual review of business need and expected volume.' : 'K2 reviews the business need and expected volume after the email is actually sent.'}</span>
@@ -228,7 +228,7 @@ export default function Wholesale() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-bold text-navy">3.</span>
-                  <span>Any eligibility, stock, pricing, delivery, or commercial proposal is confirmed separately and remains version-specific.</span>
+                  <span>Staff confirm eligibility, stock, prices and delivery terms in a separate quote. Check its date and terms before accepting.</span>
                 </li>
               </ol>
             </div>
@@ -471,7 +471,7 @@ export default function Wholesale() {
 
                 {/* Terms Checkbox */}
                 <div className="pt-2">
-                  <label className="flex items-start gap-2.5 cursor-pointer text-xs leading-relaxed text-navy-soft">
+                  <label className="flex items-start gap-2.5 cursor-pointer text-base leading-relaxed text-navy-soft">
                     <input
                       type="checkbox"
                       checked={formData.agreedToTerms}

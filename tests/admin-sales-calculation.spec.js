@@ -260,5 +260,5 @@ test('sales CSV exports the exact filter without customer data or spreadsheet fo
 test('the sales planner is mounted in the authenticated Admin shell', async () => {
   const admin = await readFile(new URL('../src/views/admin/Admin.jsx', import.meta.url), 'utf8')
   expect(admin).toContain("import AdminToolsWidget from './AdminToolsWidget'")
-  expect(admin).toContain('<AdminToolsWidget onOpenGuide=')
+  expect(admin).toMatch(/<AdminToolsWidget\s+onOpenGuide=/)
 })

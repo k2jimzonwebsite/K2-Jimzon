@@ -4,6 +4,7 @@ import {
   guestBffEnabled, listGuestConversations, replyToGuestConversation, startGuestConversation,
 } from '../../services/guestCommerceService'
 import { supabase, isSupabaseConfigured } from '../../lib/supabaseClient'
+import './StoreChatPanel.css'
 
 /**
  * MAP-027 — talking to staff without leaving the store.
@@ -58,20 +59,17 @@ function formatTime(value) {
 
 function WebsiteChatHeader({ enabled }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#B78A45]/35 bg-[linear-gradient(135deg,#2B2118,#443222)] px-4 py-3 text-[#FFF8EC] shadow-[0_14px_34px_rgba(55,35,18,0.16)]">
+    <div className="k2-store-chat-status flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#B78A45]/35 bg-[#2B2118] px-4 py-3 text-[#FFF8EC]">
       <div className="flex min-w-0 items-center gap-3">
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#E0C48A]/45 bg-[#E0C48A]/10" aria-hidden="true">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#E0C48A] shadow-[0_0_0_4px_rgba(224,196,138,0.12)]" />
-        </span>
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold">Website conversation</p>
-          <p className="text-[12px] text-[#E9DCC7]">
-            {enabled ? 'Messages reach the K2 staff inbox · replies are not instant' : 'Preview mode · messaging not active'}
+          <p className="text-base font-semibold">Chat with the K2 team</p>
+          <p className="text-sm text-[#E9DCC7]">
+            {enabled ? 'Our staff will reply here. Replies may take some time.' : 'Messaging is not available yet.'}
           </p>
         </div>
       </div>
-      <span className="shrink-0 text-right text-[12px] leading-4 text-[#E9DCC7]">
-        {enabled ? 'Replies refresh automatically' : 'Nothing will be sent'}
+      <span className="text-sm leading-5 text-[#E9DCC7]">
+        {enabled ? 'New replies appear automatically.' : 'Nothing will be sent'}
       </span>
     </div>
   )
@@ -379,13 +377,13 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
   const messages = conversation?.messages || []
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-4">
+    <div className="k2-store-chat flex min-h-0 flex-1 flex-col gap-4">
       <WebsiteChatHeader enabled />
 
       {conversation && (
         <div
           ref={threadRef}
-          className="min-h-0 flex-1 space-y-3 overflow-y-auto rounded-2xl border border-[#E4DCD1] bg-[#FBF9F6] p-4"
+          className="k2-store-chat-thread min-h-0 flex-1 space-y-3 overflow-y-auto rounded-xl border p-4"
           aria-live="polite"
           aria-label="Conversation with K2 staff"
         >
@@ -404,11 +402,11 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
                   className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     fromCustomer
                       ? 'rounded-br-sm bg-crimson text-white'
-                      : 'rounded-bl-sm border border-[#E4DCD1] bg-white text-[#2B2B2B]'
+                      : 'k2-store-chat-reply rounded-bl-sm border'
                   }`}
                 >
                   <p className="whitespace-pre-wrap break-words">{item.content}</p>
-                  <p className={`mt-1.5 text-[12px] ${fromCustomer ? 'text-white/75' : 'text-navy-faint'}`}>
+                  <p className={`mt-1.5 text-sm ${fromCustomer ? 'text-white' : 'text-[var(--k2-muted)]'}`}>
                     {formatTime(item.created_at)}
                   </p>
                 </div>
@@ -431,7 +429,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
         )}
         {!conversation && (
           <div className="grid gap-3">
-            <label htmlFor="store-chat-name" className="block text-[13px] font-semibold text-[#5C5449]">
+            <label htmlFor="store-chat-name" className="block text-base font-semibold text-[var(--k2-ink)]">
               Your name
               <input
                 id="store-chat-name"
@@ -439,11 +437,11 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
                 value={form.customerName}
                 onChange={update('customerName')}
                 autoComplete="name"
-                className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#E4DCD1] bg-white px-4 text-base text-[#2B2B2B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+                className="k2-store-chat-input mt-1.5 min-h-[44px] w-full rounded-xl border px-4 text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
               />
             </label>
             <div className="grid gap-3 sm:grid-cols-2">
-              <label htmlFor="store-chat-email" className="block text-[13px] font-semibold text-[#5C5449]">
+              <label htmlFor="store-chat-email" className="block text-base font-semibold text-[var(--k2-ink)]">
                 Email
                 <input
                   id="store-chat-email"
@@ -451,10 +449,10 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
                   value={form.email}
                   onChange={update('email')}
                   autoComplete="email"
-                  className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#E4DCD1] bg-white px-4 text-base text-[#2B2B2B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+                  className="k2-store-chat-input mt-1.5 min-h-[44px] w-full rounded-xl border px-4 text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
                 />
               </label>
-              <label htmlFor="store-chat-phone" className="block text-[13px] font-semibold text-[#5C5449]">
+              <label htmlFor="store-chat-phone" className="block text-base font-semibold text-[var(--k2-ink)]">
                 Mobile
                 <input
                   id="store-chat-phone"
@@ -462,18 +460,18 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
                   value={form.phone}
                   onChange={update('phone')}
                   autoComplete="tel"
-                  className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#E4DCD1] bg-white px-4 text-base text-[#2B2B2B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+                  className="k2-store-chat-input mt-1.5 min-h-[44px] w-full rounded-xl border px-4 text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
                 />
               </label>
             </div>
-            <p className="text-[12px] leading-5 text-navy-faint">
-              One contact method is enough. It identifies the conversation and does not replace
-              this browser&rsquo;s private access to it.
+            <p className="text-sm leading-6 text-[var(--k2-muted)]">
+              Enter either your email or mobile number so we can identify your conversation.
+              Use this browser to return to your chat.
             </p>
           </div>
         )}
 
-        <label htmlFor="store-chat-message" className="block text-[13px] font-semibold text-[#5C5449]">
+        <label htmlFor="store-chat-message" className="block text-base font-semibold text-[var(--k2-ink)]">
           {conversation ? 'Reply to K2' : 'Your message'}
           <textarea
             id="store-chat-message"
@@ -482,7 +480,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
             maxLength={2000}
             rows={conversation ? 3 : 5}
             placeholder="Ask about an item, a size, or when the next shipment lands"
-            className="mt-1.5 w-full resize-y rounded-xl border border-[#E4DCD1] bg-white px-4 py-3 text-base leading-6 text-[#2B2B2B] placeholder:text-navy-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+            className="k2-store-chat-input mt-1.5 w-full resize-y rounded-xl border px-4 py-3 text-base leading-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
             required
           />
         </label>
@@ -505,7 +503,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
           {sending ? 'Sending…' : conversation ? 'Send reply' : 'Send to K2'}
         </button>
 
-        <p className="text-[12px] leading-5 text-navy-faint" role="status">
+        <p className="text-sm leading-6 text-[var(--k2-muted)]" role="status">
           {notice || 'A real person answers. Messages are reviewed during Manila business hours.'}
         </p>
       </form>

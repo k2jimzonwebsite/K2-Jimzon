@@ -16,7 +16,9 @@ Two secondary audiences share the same storefront but enter with different inten
 
 ## Product Purpose
 
-K2 Jimzon sells authentic Italian products that the company buys itself from Italian retail and wholesale suppliers and flies to Manila on its own monthly consignment. Every listing shows batch and best-before dates and live stock synced across channels. Success is a first-time visitor trusting the store enough to buy direct instead of defaulting back to a marketplace seller — and coming back next month knowing the stock count on screen is real.
+Current launch boundary (21 September 2026): the brand direction below is an aspiration, not evidence of active integrations. Website availability comes from K2 inventory; Lazada/TikTok stock synchronization is not connected. Checkout submits an order request and does not collect payment. Staff confirm stock, total and approved manual payment instructions. Only approved real reviews, product facts and photographs may appear as proof. Missing receiving details, physical stock acceptance and provider access remain in MASTER_ACTION_PLAN.md.
+
+K2 Jimzon sells Italian products sourced by the company from Italian retail and wholesale suppliers and brought to Manila through its consignment workflow. Listings should show reviewed product facts, applicable batch and best-before dates, and availability from K2 inventory. Success is a first-time visitor trusting the store enough to buy direct and returning because the information is reliable.
 
 ## Positioning
 

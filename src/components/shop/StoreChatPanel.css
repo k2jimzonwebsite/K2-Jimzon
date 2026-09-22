@@ -1,0 +1,30 @@
+.k2-store-chat {
+  --k2-ink: var(--color-navy);
+  --k2-muted: var(--color-navy-soft);
+  --chat-surface: var(--color-paper);
+  --chat-border: #8A7C6C;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--k2-ink);
+}
+
+.dark .k2-store-chat { --chat-border: #9C8B77; }
+.k2-store .k2-store-chat { --chat-surface: var(--k2-surface-solid); }
+
+.k2-store-chat-input,
+.k2-store-chat-reply,
+.k2-store-chat-thread {
+  border-color: var(--chat-border);
+  background: var(--chat-surface);
+  color: var(--k2-ink);
+}
+
+.k2-store-chat-input {
+  font-weight: 400;
+  scroll-margin-block: 1.5rem;
+}
+
+.k2-store-chat-input::placeholder { color: var(--k2-muted); opacity: 1; }
+.k2-store-chat-status > div { flex: 1 1 15rem; }
+.k2-store-chat-status p { line-height: 1.5; }

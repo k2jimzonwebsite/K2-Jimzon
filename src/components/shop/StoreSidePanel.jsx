@@ -29,7 +29,7 @@ export default function StoreSidePanel({
   return (
     <div className="k2-store-side-console" data-inspecting={Boolean(product)}>
       <header className="k2-store-side-intro">
-        <p className="k2-store-side-eyebrow">Shelf concierge</p>
+        <p className="k2-store-side-eyebrow">Browse the store</p>
         <p className="k2-store-side-location">Now browsing</p>
         <h2>{activeShelf?.name || 'The store'}</h2>
         <p>{activeShelf?.blurb || 'Choose a shelf to begin.'}</p>
@@ -76,8 +76,8 @@ export default function StoreSidePanel({
       ) : (
         <section className="k2-store-side-section" aria-labelledby="shelf-highlights-heading">
           <div className="k2-store-side-section-heading">
-            <p id="shelf-highlights-heading">Shelf highlights</p>
-            <span>Choose to inspect</span>
+            <p id="shelf-highlights-heading">On this shelf</p>
+            <span>Tap for details</span>
           </div>
           <div className="k2-store-side-products">
             {shelfProducts.slice(0, 4).map(product => {
@@ -106,7 +106,7 @@ export default function StoreSidePanel({
             })}
           </div>
           {shelfProducts.length > 4 && (
-            <p className="k2-store-side-more">More items are available on the shelf and in the product strip below the room.</p>
+            <p className="k2-store-side-more">Swipe the product names below the room to see more items.</p>
           )}
         </section>
       )}
@@ -114,12 +114,12 @@ export default function StoreSidePanel({
       <div className="k2-store-side-service" aria-label="Store help">
         <button type="button" onClick={onFaq} className="k2-store-side-service-button">
           <span aria-hidden="true">?</span>
-          <span><strong>Ordering questions</strong><small>Read the store FAQs</small></span>
+          <span><strong>Ordering questions</strong><small>Delivery, payment and returns</small></span>
         </button>
       </div>
 
       <p className="k2-store-side-note">
-        Browse, choose your goods, then review your basket at checkout. Nothing is ordered until you submit your request.
+        Add items to your basket, then review them at checkout. Your order is sent only when you submit it.
       </p>
     </div>
   )

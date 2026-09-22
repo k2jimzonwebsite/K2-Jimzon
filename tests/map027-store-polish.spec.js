@@ -1064,9 +1064,9 @@ test('the right rail is an actionable shelf concierge before a product is select
   const css = await read('../src/interactive-store.css')
 
   expect(shop).toContain('StoreSidePanel')
-  expect(panel).toContain('Shelf concierge')
+  expect(panel).toContain('Browse the store')
   expect(panel).toContain('Now browsing')
-  expect(panel).toContain('Shelf highlights')
+  expect(panel).toContain('On this shelf')
   expect(panel).toContain('onSelect(product)')
   expect(panel).toContain('onShelfChange(index)')
   expect(css).toContain('.k2-store-side-console')
@@ -1215,9 +1215,9 @@ test('the in-store chat reads as an automatically refreshing website conversatio
   const chatCode = await readCode('../src/components/shop/StoreChatPanel.jsx')
 
   expect(chat).toContain('const POLL_MS = 8000')
-  expect(chat).toContain('Website conversation')
-  expect(chat).toContain('replies are not instant')
-  expect(chat).toContain('Replies refresh automatically')
+  expect(chat).toContain('Chat with the K2 team')
+  expect(chat).toContain('Replies may take some time')
+  expect(chat).toContain('New replies appear automatically')
   expect(chatCode).not.toMatch(/online now|staff online|is typing|connected to K2 staff inbox/i)
 })
 

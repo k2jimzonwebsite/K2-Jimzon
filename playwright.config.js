@@ -10,6 +10,8 @@ export default defineConfig({
   testIgnore: [
     'storefront-recovery-ui.spec.js',
     'store-orientation-ui.spec.js',
+    'store-readability-ui.spec.js',
+    'storefront-readiness-ui.spec.js',
     'store-overlay-collision.spec.js',
     'admin.spec.js',
     'admin-dashboard-redesign.spec.js',

@@ -700,6 +700,10 @@ the restricted sandbox could not launch Chromium; no real-host claim follows.
 
 ### Owner-only promotion requirements (consolidated; not a second backlog)
 
+**22 September Admin quick tools (IDEA-20260922-01, MAP-028 I-012 / MAP-025): production promotion and staff acceptance pending.** Local implementation adds named shortcuts through existing Admin callbacks, a readable tool picker, focus/resize recovery and expiry guidance consistent with the 90-day rule. Phone/desktop tools, Escape/focus return, shortcut navigation, expiry guidance and the sales planner passed browser checks; the uninterrupted 1,143-check release suite and Admin build pass. Calculators remain planning-only and scratchpad remains this-browser notes; no new write authority. Next: promote the separate Admin candidate through the release workflow, then have representative staff complete search, scan, stock, order and message tasks on physical phones and desktop. Evidence/recovery: `docs/evidence/20260922-admin-quick-tools/README.md` and `docs/design-checkpoints/20260922-admin-quick-tools/`.
+
+**21–22 September whole-Storefront readiness follow-up (IDEA-20260921-09, MAP-028 I-015 / MAP-025): production promotion and human acceptance pending.** Local reading/wording repairs pass 15 customer browser checks, the uninterrupted 1,143-check release suite, inventory/payment rehearsals and Storefront build. Evidence/recovery: `docs/evidence/20260921-storefront-readiness/README.md` and `docs/design-checkpoints/20260921-storefront-readiness/`. Next: promote the separate candidate artifacts through the release workflow, then run representative customer and staff tasks on physical devices, including authenticated account states, actual font loading, browser zoom, real stock and payment verification. No new provider activation is claimed. Existing database activation, owner payment details, real product/count publication and TikTok/Lazada access/adapter requirements remain in MAP-017/018/019/023/026; do not mark those complete from synthetic UI evidence.
+
 These are human/provider inputs and acceptance actions within the existing MAPs.
 They are not a claim that only these tasks remain: engineering remediation below
 must also pass before promotion. Update this table as gates are evidenced.
@@ -1504,6 +1508,8 @@ environment plus owner authorization; and any marketplace connector, since no
 partner credentials or approved partner documentation exist.
 
 ### Queue item 15 — MAP-027 — the Interactive Shop's remaining defects
+
+**21 September, IDEA-20260921-08: deployment and device acceptance pending.** Readability/gesture changes pass 109 focused contracts, 12 store browser checks and the Storefront production build locally. Evidence and recovery: `docs/evidence/20260921-store-readability/README.md`; pre-edit files: `docs/design-checkpoints/20260921-store-readability/`. No database/provider work. Next action: promote the reviewed Storefront artifact through the release workflow, then verify dark/light shelf and chat readability, short swipe, pinch after button zoom, reset, portrait/landscape and browser zoom on physical Android/iOS devices at the exact host. Confirm real stock/chat separately; synthetic browser fixtures do not establish live service behavior. Keep these acceptance requirements open until receipts exist.
 
 **5 September update — IDEA-20260905-01:** the owner-approved enhancement is
 implemented locally with an original articulated cartoon clerk, shared activity

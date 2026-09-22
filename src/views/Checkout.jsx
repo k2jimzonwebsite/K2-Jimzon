@@ -145,7 +145,7 @@ export default function Checkout() {
       : form.address.trim()
 
     // Prefix payment preference cleanly to customer note
-    const paymentLabel = form.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'Prepaid (GCash / Maya / Bank Transfer)'
+    const paymentLabel = form.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'Prepaid (method confirmed by staff)'
     const combinedNote = form.note?.trim()
       ? `[Payment: ${paymentLabel}] ${form.note.trim()}`
       : `[Payment: ${paymentLabel}]`
@@ -462,10 +462,9 @@ export default function Checkout() {
                       />
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-sm font-bold text-navy">GCash / Maya / Bank</span>
-                          <span className="rounded bg-blue-600/10 px-1.5 py-0.5 text-xs font-bold uppercase text-blue-700">Online</span>
+                          <span className="text-base font-bold text-navy">Pay after staff confirmation</span>
                         </div>
-                        <p className="mt-1 text-xs text-navy-soft">Staff sends verified QR code or account details before dispatch.</p>
+                        <p className="mt-1 text-base text-navy-soft">Nothing is charged here. Wait for staff to confirm your order total and approved payment instructions.</p>
                       </div>
                     </div>
                     {form.paymentMethod === 'prepaid' && (

@@ -11,7 +11,7 @@
 @layer base {
   :root {
     --bg-blend: multiply;
-    font-size: 16px;
+    font-size: 100%;
     line-height: 1.6;
     letter-spacing: 0;
     font-kerning: normal;
@@ -213,7 +213,7 @@
   --product-img-bg: #F3EDE0;   /* warm ivory in light */
 
   /* Component typography: Source Sans 3 carries facts; Fraunces stays display-only. */
-  --text-store-meta: 0.8125rem;
+  --text-store-meta: 0.875rem;
   --text-store-body: 1rem;
   --text-store-lead: 1.125rem;
   --store-card-title-size: 1.0625rem;
@@ -244,8 +244,8 @@
 }
 
 /* Readable storefront ramp. Tiny labels remain compact, but never microscopic. */
-.storefront-ui :is(.text-\[9px\], .text-\[10px\], .text-\[11px\]) {
-  font-size: 0.75rem;
+.storefront-ui :is(.text-\[9px\], .text-\[10px\], .text-\[11px\], .text-\[12px\], .text-\[13px\], .text-xs) {
+  font-size: var(--text-store-meta);
   line-height: 1.45;
 }
 
@@ -257,6 +257,29 @@
 .storefront-ui p.text-sm {
   font-size: var(--text-store-body);
   line-height: 1.6;
+}
+
+.storefront-ui :is(li.text-sm, ul.text-sm, dd.text-sm),
+.storefront-ui .text-sm > p:not([class*='text-']) {
+  font-size: var(--text-store-body);
+  line-height: 1.6;
+}
+
+.storefront-ui :is(input:not([type='checkbox']):not([type='radio']), textarea, select) {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Reading colors are separate from solid button fills in dark mode. */
+:root:not(.dark) .storefront-ui .text-crimson { color: #982C29; }
+:root:not(.dark) .storefront-ui .text-forest { color: #28523B; }
+.dark .storefront-ui .text-crimson { color: #FFB6A5; }
+.dark .storefront-ui .text-forest { color: #B7D5A1; }
+.dark .storefront-ui .text-blue { color: #ACCFF0; }
+.storefront-ui .bg-crimson.text-paper,
+.storefront-ui .bg-crimson .text-paper\/75 { color: #FFFFFF; }
+@media (hover: hover) {
+  .dark .storefront-ui .hover\:text-crimson:hover { color: #FFB6A5; }
 }
 
 .storefront-ui .uppercase {
@@ -601,6 +624,13 @@
 
 .footer-link { transition: color 150ms ease; }
 .footer-link:hover { color: var(--color-crimson); }
+
+.storefront-ui .footer-link,
+.storefront-ui .footer-copy { font-size: 1rem; }
+
+/* Accent ink needs a lighter shade on dark surfaces; action fills keep their identity. */
+.dark .storefront-ui footer .text-crimson,
+.dark .storefront-ui .footer-link:hover { color: #FFB6A5; }
 
 @keyframes store-spin { to { transform: rotate(360deg); } }
 

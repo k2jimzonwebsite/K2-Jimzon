@@ -145,7 +145,7 @@ function CartLine({ line }) {
     <div className="flex gap-3 py-4">
       <ProductVisual product={product} className="h-16 w-16 shrink-0 rounded-md border border-[var(--store-surface-border)]" pad="p-1" />
       <div className="min-w-0 flex-1">
-        <p className="truncate font-serif text-base font-medium leading-tight text-navy">{product.name}</p>
+        <p className="break-words font-sans text-base font-semibold leading-snug text-navy">{product.name}</p>
         <p className="mt-0.5 text-xs text-navy-soft">{product.size}</p>
         <div className="mt-2 flex items-center justify-between">
           {pendingCheckout ? (

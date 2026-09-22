@@ -100,7 +100,7 @@ export function StartConversationForm({ onCreated }) {
             <input id="message-phone" className="store-field mt-1.5 w-full px-4 py-3 text-base" type="tel" value={form.phone} onChange={update('phone')} autoComplete="tel" />
           </label>
         </div>
-        <p className="text-xs leading-relaxed text-navy-soft">Enter at least one contact method. It identifies this conversation but does not replace this browser's private access.</p>
+        <p className="text-sm leading-relaxed text-navy-soft">Enter your email or mobile number so we can identify your conversation. Use this browser to return to your messages.</p>
         <label htmlFor="message-body" className="block text-sm font-semibold text-navy">How can we help?
           <textarea id="message-body" className="store-field mt-1.5 min-h-32 w-full resize-y px-4 py-3 text-base" value={form.message} onChange={update('message')} maxLength={2000} placeholder="Write your question or the details K2 should review" required />
         </label>
@@ -161,7 +161,7 @@ function Conversation({ conversation, onReply }) {
             <div key={`${item.created_at || index}-${index}`} className={`flex ${customer ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${customer ? 'rounded-br-sm bg-crimson text-white' : 'rounded-bl-sm border border-line bg-paper text-navy'}`}>
                 <p className="whitespace-pre-wrap break-words">{item.content}</p>
-                <p className={`mt-1.5 text-xs ${customer ? 'text-white/75' : 'text-navy-faint'}`}>{formatTime(item.created_at)}</p>
+                <p className={`mt-1.5 text-xs ${customer ? 'text-white' : 'text-navy-faint'}`}>{formatTime(item.created_at)}</p>
               </div>
             </div>
           )

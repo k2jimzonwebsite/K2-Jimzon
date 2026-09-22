@@ -105,7 +105,14 @@ export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActi
             </p>
           )}
 
-          <form onSubmit={handleAsk} className="k2-store-guide-form">
+          <form
+            onSubmit={handleAsk}
+            className="k2-store-guide-form"
+            onFocus={() => onQuestionActivity?.(true)}
+            onBlur={event => {
+              if (!event.currentTarget.contains(event.relatedTarget)) onQuestionActivity?.(false)
+            }}
+          >
             <label htmlFor="keeper-question">
               {question && draftOrigin.current?.name
                 ? `Ask about ${draftOrigin.current.name}`
@@ -117,8 +124,6 @@ export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActi
                 type="text"
                 value={question}
                 maxLength={2000}
-                onFocus={() => onQuestionActivity?.(true)}
-                onBlur={() => onQuestionActivity?.(false)}
                 onChange={event => {
                   const value = event.target.value
                   if (!question.trim() && value.trim()) {

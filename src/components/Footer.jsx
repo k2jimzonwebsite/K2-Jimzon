@@ -24,7 +24,7 @@ export default function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.45fr_0.8fr_0.8fr_1fr]">
           <div className="sm:col-span-2 lg:col-span-1">
             <Wordmark />
-            <p className="mt-5 max-w-sm text-sm leading-7 text-navy-soft">A multi-channel Italy-sourced catalog and Pasabuy operation serving Philippine customers and businesses.</p>
+            <p className="mt-5 max-w-sm text-sm leading-7 text-navy-soft">Italian goods for homes and businesses in the Philippines. Shop what is in stock or ask us to source something from Italy.</p>
             <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-crimson">Website · Shopee · TikTok Shop · Lazada · Pasabuy</p>
           </div>
 
@@ -33,10 +33,10 @@ export default function Footer() {
           </FooterColumn>
 
           <FooterColumn title="Services">
-            <FooterButton onClick={() => go('pasabuy')}>Pasabuy sourcing</FooterButton>
-            <FooterButton onClick={() => go('wholesale')}>Business supply</FooterButton>
-            <FooterButton onClick={() => go('catalog')}>Current catalog</FooterButton>
-            <FooterButton onClick={() => go('checkout')}>Order request</FooterButton>
+            <FooterButton onClick={() => go('pasabuy')}>Request from Italy</FooterButton>
+            <FooterButton onClick={() => go('wholesale')}>Wholesale orders</FooterButton>
+            <FooterButton onClick={() => go('catalog')}>Browse products</FooterButton>
+            <FooterButton onClick={() => go('checkout')}>Review your basket</FooterButton>
           </FooterColumn>
 
           <FooterColumn title="Contact">
@@ -48,7 +48,7 @@ export default function Footer() {
           </FooterColumn>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-x-6 border-t border-[var(--store-surface-border)] pt-2 text-xs font-semibold text-navy-soft">
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 border-t border-[var(--store-surface-border)] pt-2 text-sm font-semibold text-navy-soft">
           <button onClick={() => go('privacy')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Privacy &amp; Data</button>
           <button onClick={() => go('terms')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Terms of Service</button>
           <button onClick={() => go('returns')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Returns &amp; Replacements</button>
@@ -65,7 +65,7 @@ export default function Footer() {
 }
 
 function FooterColumn({ title, children }) {
-  return <div><h3 className="text-xs font-bold uppercase tracking-[0.18em] text-crimson">{title}</h3><ul className="mt-4 space-y-1">{children}</ul></div>
+  return <div><h3 className="text-base font-semibold text-navy">{title}</h3><ul className="mt-4 space-y-1">{children}</ul></div>
 }
 
 function FooterButton({ children, onClick }) {

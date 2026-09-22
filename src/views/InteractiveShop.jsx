@@ -400,7 +400,7 @@ export default function InteractiveShop() {
 
       {!loading && activeShelf && (
         <div className="k2-store-body">
-          <div className="k2-store-scene" data-moment={storeMoment.id}>
+          <div className="k2-store-scene" data-moment={storeMoment.id} data-interactive={Boolean(sceneReady)}>
             <div className="k2-store-ambient" aria-hidden="true">
               <span className="k2-store-ambient-orb k2-store-ambient-orb-a" />
               <span className="k2-store-ambient-orb k2-store-ambient-orb-b" />
@@ -461,15 +461,22 @@ export default function InteractiveShop() {
             {sceneReady && (
               <div className="k2-store-zoom" role="group" aria-label="Zoom the store view">
                 <button type="button" onClick={() => zoomBy('in')} className="k2-store-zoom-btn" aria-label="Zoom in">
-                  <span aria-hidden="true">+</span>
+                  <span aria-hidden="true">+</span><span className="k2-store-zoom-label">Zoom in</span>
                 </button>
                 <button type="button" onClick={resetZoom} className="k2-store-zoom-btn k2-store-zoom-reset">
-                  Reset
+                  Reset view
                 </button>
                 <button type="button" onClick={() => zoomBy('out')} className="k2-store-zoom-btn" aria-label="Zoom out">
-                  <span aria-hidden="true">−</span>
+                  <span aria-hidden="true">−</span><span className="k2-store-zoom-label">Zoom out</span>
                 </button>
               </div>
+            )}
+
+            {sceneReady && (
+              <p className="k2-store-gesture-hint">
+                <span className="k2-store-touch-hint">Swipe left or right to browse. Pinch to zoom.</span>
+                <span className="k2-store-mouse-hint">Drag to browse. Scroll to zoom.</span>
+              </p>
             )}
 
             {/* Previous / Next Shelf. Concept §18 requires obvious navigation
