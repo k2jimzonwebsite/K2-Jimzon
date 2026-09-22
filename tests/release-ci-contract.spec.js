@@ -23,6 +23,24 @@ test('CI executes stock payment and final-Admin behavior in PostgreSQL', async (
   expect(workflow).toContain('K2_TEST_PG_BIN: /usr/lib/postgresql/17/bin')
 })
 
+test('development verification stays separate from the intentional release gate', async () => {
+  const [workflow, packageSource, agentRules] = await Promise.all([
+    read('.github/workflows/ci.yml'),
+    read('package.json'),
+    read('AGENTS.md'),
+  ])
+  const { scripts } = JSON.parse(packageSource)
+
+  expect(workflow).toContain('paths-ignore:')
+  expect(workflow).toContain("- '**/*.md'")
+  expect(scripts['verify:development']).toBe('npm run prebuild')
+  expect(scripts['verify:release']).toContain('npm test')
+  expect(scripts['verify:release']).toContain('npm run build:storefront')
+  expect(scripts['verify:release']).toContain('npm run build:admin')
+  expect(agentRules).toContain('Run the complete release gate once')
+  expect(agentRules).toContain('Documentation-only changes do not require')
+})
+
 test('CI authorization runner receives the same isolated database as the migration runner', async () => {
   const workflow = await read('.github/workflows/ci.yml')
   const migrationTarget = workflow.match(/K2_MAP017_REHEARSAL_URL:\s*(\S+)/)?.[1]

@@ -313,6 +313,28 @@ provider-session registry check.
 
 ## 3. Build & Artifact Boundary Verification
 
+### Development versus release verification
+
+K2 is still in active development, so verification is proportional until the
+owner explicitly requests a live promotion:
+
+1. During implementation, run only the tests or rehearsal that cover the changed
+   surface. After the final code edit in the batch, run
+   `npm run verify:development` once for import, security and boundary checks.
+2. Before a requested live promotion, run `npm run verify:release` once. It owns
+   the complete acceptance suite and both isolated production builds. Fix a
+   failure with focused evidence before restarting that complete gate.
+3. Push or merge to the production-linked `main` branch only for the requested
+   promotion. Verify the Storefront and Admin artifacts, then report the live
+   result immediately.
+4. A receipt-only Markdown follow-up does not require browser suites, database
+   rehearsals, artifact builds or another deployment. GitHub CI ignores
+   Markdown-only changes. Record any later provider receipt without treating it
+   as another product release.
+
+This cadence changes repetition, not release safety. Every intentional live
+promotion still requires the complete gate and separate Storefront/Admin proof.
+
 Before any deployment, execute local production builds and verification:
 ```powershell
 npm run build:storefront; npm run build:admin

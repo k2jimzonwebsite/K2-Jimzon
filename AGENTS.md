@@ -91,6 +91,22 @@ The product goal is a user-ready storefront plus a user-ready staff Admin BOS
 that owns canonical operations and can accept future channel adapters without
 forking inventory, orders, customers, or reporting truth.
 
+## Verification cadence and release efficiency
+
+- During development, run the smallest test or rehearsal that proves the changed
+  behavior. Run `npm run verify:development` once after the final code edit in a
+  batch. Do not rerun a passing unaffected suite after documentation edits.
+- Run the complete release gate once, immediately before an owner-requested live
+  promotion: `npm run verify:release`. A failed focused check may be rerun after
+  its fix; do not restart the complete gate until focused evidence is green.
+- Documentation-only changes do not require application builds, browser suites,
+  database rehearsals, or a new production deployment. Add the final release
+  receipt without waiting on or repeatedly polling a redundant application run.
+- Work on a feature branch while the product is in development. Push or merge to
+  the production-linked `main` branch only when the owner explicitly requests a
+  live release. Report a successful live promotion as soon as both production
+  artifacts are verified; track any later receipt-only work separately.
+
 ## Mandatory design-skill combination
 
 For every task that changes or reviews visible UI, interaction, responsive
