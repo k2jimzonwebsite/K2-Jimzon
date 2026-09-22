@@ -1,5 +1,26 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+**22 September owner-authorized Storefront readability and Admin quick-tools release:**
+GitHub `main` commit `8a1548f9a00666ba620a6f49f89677a0a1f45548` contains
+IDEA-20260921-08, IDEA-20260921-09 and IDEA-20260922-01. CI run
+`35703351371` passed both `build-and-smoke` and `critical-sql-behavior` for that
+exact SHA. GitHub/Vercel production deployment receipts are `6586254193`
+(Storefront, `k2-jimzon-pg0je7jx2-k2-jimzon.vercel.app`) and `6586265432`
+(Admin, `k2-jimzon-admin-7gpk5yoru-k2-jimzon.vercel.app`), both successful.
+The canonical `www.k2jimzon.com` and `admin.k2jimzon.com` entries and their
+`/k2-build-target.json` markers returned HTTP 200 with `storefront` and `admin`.
+Deployed chunks `InteractiveShop-CcKP66VQ.js`, `Checkout-Bg9U2MUi.js` and
+`Admin-BI-2GHLQ.js` contain the new swipe/pinch guidance, staff-confirmed
+payment wording, product search and Workflow map shortcuts. One uninterrupted
+local release suite passed 1,143 checks. Storefront passed at 150.17/150.50 kB
+gzip JS and 29.41/30.00 kB gzip CSS; Admin passed at 214.07/300.00 kB minified.
+No SQL, provider flag, payment method, real inventory, Lazada or TikTok adapter
+was activated. Representative staff/customer comprehension, physical-device
+zoom/gesture/font checks and live stock/payment journeys remain in MAP-025 and
+the existing MAP-017/018/019/023/026 gates. Recovery: promote the immediately
+preceding production deployment separately in each Vercel project, or revert
+`8a1548f` and redeploy both Git-linked projects. No database rollback applies.
+
 **21 September owner-authorized Admin clarity, Globe editing, and chat continuity release:**
 GitHub `main` commit `36bbfa461f2e967239e0950dbdd8e4f30603d769` contains
 IDEA-20260921-02 through IDEA-20260921-07, including the user-added anti-slop
