@@ -6,6 +6,8 @@
 
 **23 September local verification status:** The focused 4/4 moderation/mobile/PWA contracts, isolated PostgreSQL rehearsal, `npm run verify:development`, and both target-specific production builds pass after review. An attempted `npm run verify:release` printed all 945 base cases as passing but hung without a phase summary and was interrupted; the aggregate release gate is not passed and no push/deploy is authorized by this evidence. Re-run/diagnose that gate before any live promotion.
 
+**23 September local branch integration:** `codex/proportionate-release-checks` was the only listed local branch with commits absent from `main`; older branch tips were ancestors and contributed no additional changes. After review and focused verification, local `main` fast-forwarded through `06ef52d`, `c78bd94`, and `bde1f12`. Post-merge focused contracts pass 4/4. `origin/main` has not been pushed; no provider migration, flag flip, or deployment occurred. The release gate/cutover and real-device acceptance above remain active.
+
 **MAP-028 I-012/I-016, IDEA-20260921-01 acceptance remainder:** Local copy changes, 692 contracts, 3 help/map browser checks, complete Count & Close phone flow and Admin build passed. Evidence: docs/evidence/20260921-admin-help/README.md. Release a1a8507 assets verified on production. Next: have staff follow a map step and explain the help in their own words. Authenticated production writes are not proven by fixtures. Recovery: revert the scoped release; no database rollback.
 
 **20 September local verification sweep (MAP-027 / MAP-026 / MAP-023, code locally verified, no code changed):**

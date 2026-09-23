@@ -34,6 +34,9 @@ and Admin production builds also pass after the review fixes. The attempted
 `npm run verify:release` printed 945 passing base cases but did not exit that
 phase after several minutes; it was interrupted, so the aggregate release gate
 is **not** claimed as passed. Do not push or deploy on that evidence.
+Local `main` fast-forwarded through `bde1f12` from the only branch with unique
+commits, followed by this documentation receipt. `origin/main` was not pushed;
+no provider state changed. The post-merge focused suite passed 4/4.
 
 - Focused contract: `4 passed` in
   `tests/mobile-store-moderation-pwa-contract.spec.js`.
