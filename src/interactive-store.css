@@ -7,24 +7,24 @@
   z-index: 50;
   display: flex;
   flex-direction: column;
-  background-color: var(--k2-wall, #F4ECE0);
+  background-color: var(--k2-wall, #D5D5D5);
   background-image: url('/wood-bg.jpg');
   background-size: cover;
   background-position: center;
-  color: var(--k2-ink, #2B2B2B);
+  color: var(--k2-ink, #111111);
   overflow: hidden;
 }
 
 .k2-store {
-  --k2-ink: #2B2B2B;
-  --k2-muted: #5C5449;
-  --k2-control-line: #8A7C6C;
-  --k2-line: #E4DCD1;
-  --k2-line-soft: #EDE6DC;
-  --k2-bar: rgba(251, 249, 246, 0.88);
-  --k2-sheet: #FAF6F0;
-  --k2-surface-solid: #FFF9EF;
-  --k2-scrim: rgba(20, 14, 8, 0.45);
+  --k2-ink: #111111;
+  --k2-muted: #444444;
+  --k2-control-line: #B3B3B3;
+  --k2-line: #B3B3B3;
+  --k2-line-soft: #C7C7C7;
+  --k2-bar: rgba(219, 219, 219, 0.92);
+  --k2-sheet: #D5D5D5;
+  --k2-surface-solid: #DBDBDB;
+  --k2-scrim: rgba(17, 17, 17, 0.50);
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.6;
@@ -183,9 +183,9 @@
   width: 100%;
   padding: 1.5rem 2rem;
   border-radius: 1.5rem;
-  border: 1px solid rgba(228, 220, 209, 0.8);
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 12px 32px rgba(43, 43, 43, 0.08);
+  border: 1px solid var(--k2-line);
+  background: var(--k2-surface-solid);
+  box-shadow: 0 12px 32px rgba(17, 17, 17, 0.08);
   text-align: center;
   backdrop-filter: blur(8px);
 }
@@ -438,8 +438,8 @@
   flex: 1;
 }
 
-.k2-store-side-product-copy small[data-tone='in'] { color: #557044; }
-.k2-store-side-product-copy small[data-tone='low'] { color: #A44735; }
+.k2-store-side-product-copy small[data-tone='in'] { color: #38522B; }
+.k2-store-side-product-copy small[data-tone='low'] { color: #8F3625; }
 
 .k2-store-side-shelf:hover,
 .k2-store-side-product:hover {
@@ -542,7 +542,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1.25rem;
-  background: linear-gradient(to top, rgba(244, 236, 224, 0.95) 60%, transparent);
+  background: linear-gradient(to top, rgba(213, 213, 213, 0.95) 60%, transparent);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -709,8 +709,8 @@
   border: 1px solid rgba(198, 168, 103, 0.65);
   border-radius: 1.35rem;
   padding: 0.2rem 0.7rem 0.2rem 0.15rem;
-  background: linear-gradient(135deg, #FFFDF8, #F4ECE0);
-  color: #2B2B2B;
+  background: linear-gradient(135deg, #DBDBDB, #D5D5D5);
+  color: #111111;
   text-align: left;
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 10px 30px rgba(43, 31, 18, 0.16);
   pointer-events: auto;
@@ -796,7 +796,7 @@
   border: 1px solid rgba(198, 168, 103, 0.42);
   border-radius: 0 0 1.35rem 1.35rem;
   padding: 1.25rem 0.85rem 0.85rem;
-  background: #FFFDF8;
+  background: #DBDBDB;
   box-shadow: 0 18px 35px rgba(43, 31, 18, 0.16);
   pointer-events: auto;
   animation: k2-store-guide-panel 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -805,7 +805,7 @@
 .k2-store-guide-speech {
   border-left: 3px solid #C6A867;
   padding-left: 0.8rem;
-  color: #302A24;
+  color: #111111;
   font-size: 0.875rem;
   line-height: 1.55;
   overflow-wrap: break-word;
@@ -814,24 +814,24 @@
 
 .k2-store-guide-pairing {
   margin-top: 0.7rem;
-  color: #5C5449;
+  color: #444444;
   font-size: 0.8125rem;
   line-height: 1.5;
 }
 
 .k2-store-guide-pairing span {
-  color: #2B2B2B;
+  color: #111111;
   font-weight: 700;
 }
 
 .k2-store-guide-form {
   margin-top: 0.8rem;
-  border-top: 1px solid #E4DCD1;
+  border-top: 1px solid #B3B3B3;
   padding-top: 0.75rem;
 }
 
 .k2-store-guide-form label {
-  color: #5C5449;
+  color: #444444;
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -846,11 +846,11 @@
   min-width: 0;
   min-height: 44px;
   flex: 1;
-  border: 1px solid #CFC4B6;
+  border: 1px solid #B3B3B3;
   border-radius: 0.75rem;
-  background: #FFFFFF;
+  background: #D5D5D5;
   padding: 0 0.7rem;
-  color: #2B2B2B;
+  color: #111111;
   font-size: 0.8125rem;
 }
 
@@ -939,8 +939,8 @@
   border: 1px solid rgba(198, 168, 103, 0.62);
   border-radius: 1.25rem;
   padding: 0.55rem 0.65rem;
-  background: linear-gradient(145deg, #FFFDF8, #EBDCC6);
-  color: #2B2B2B;
+  background: linear-gradient(145deg, #DBDBDB, #D5D5D5);
+  color: #111111;
   box-shadow: 0 16px 34px rgba(55, 35, 17, 0.22), inset 0 1px rgba(255, 255, 255, 0.82);
 }
 
@@ -1227,7 +1227,7 @@
     min-height: 48px;
     border-radius: 999px;
     padding: 0.3rem 0.55rem 0.3rem 0.65rem;
-    background: linear-gradient(145deg, #FFFDF8, #EBDCC6);
+    background: linear-gradient(145deg, #DBDBDB, #D5D5D5);
     box-shadow: 0 10px 26px rgba(45, 28, 13, 0.24), inset 0 1px rgba(255, 255, 255, 0.85);
   }
 
@@ -1424,7 +1424,7 @@
 }
 
 .k2-store-sheet-foot {
-  border-top: 1px solid #EDE6DC;
+  border-top: 1px solid var(--k2-line-soft);
   padding: 1rem 1.25rem;
 }
 

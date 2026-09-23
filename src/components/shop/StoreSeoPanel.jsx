@@ -86,7 +86,7 @@ export default function StoreSeoPanel({ product }) {
 
   return (
     <section
-      className="rounded-2xl border border-[#E4DCD1] bg-white p-5"
+      className="rounded-2xl border border-[var(--k2-line)] bg-[var(--k2-surface-solid)] p-5"
       aria-label={`Product details for ${product.name}`}
     >
       <h2 className="text-[13px] font-semibold uppercase tracking-[0.12em] text-navy-faint">
@@ -96,7 +96,7 @@ export default function StoreSeoPanel({ product }) {
         {rows.map(([label, value]) => (
           <div key={label} className="flex items-baseline justify-between gap-4 text-sm">
             <dt className="shrink-0 text-navy-faint">{label}</dt>
-            <dd className="text-right font-medium text-[#2B2B2B]">{value}</dd>
+            <dd className="text-right font-medium text-[var(--k2-ink)]">{value}</dd>
           </div>
         ))}
       </dl>

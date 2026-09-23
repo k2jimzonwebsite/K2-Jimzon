@@ -325,7 +325,7 @@ export default function InteractiveShop() {
           <h1
             ref={storeHeadingRef}
             tabIndex={-1}
-            className="font-serif text-xl font-semibold text-[#2B2B2B] focus:outline-none"
+            className="font-serif text-xl font-semibold text-[var(--k2-ink)] focus:outline-none"
           >
             The store
           </h1>
@@ -339,8 +339,8 @@ export default function InteractiveShop() {
               aria-current={index === activeIndex ? 'true' : undefined}
               className={`min-h-[44px] whitespace-nowrap rounded-full px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson ${
                 index === activeIndex
-                  ? 'bg-[#2B2B2B] text-white shadow-xs'
-                  : 'border border-[#E4DCD1] bg-white/70 text-[#5C5449] hover:border-[#C6A867]'
+                  ? 'bg-[var(--k2-ink)] text-[var(--k2-surface-solid)] shadow-xs'
+                  : 'border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 text-[var(--k2-muted)] hover:border-[#C6A867]'
               }`}
             >
               {shelf.name}
@@ -351,14 +351,14 @@ export default function InteractiveShop() {
           type="button"
           onClick={toggleDarkMode}
           aria-pressed={isDark}
-          className="k2-store-theme min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-white/70 px-4 text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+          className="k2-store-theme min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 px-4 text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
         >
           {isDark ? 'Lights on' : 'Lights low'}
         </button>
         <button
           type="button"
           onClick={leaveStore}
-          className="k2-store-leave min-h-[44px] shrink-0 rounded-full border border-[#E4DCD1] bg-white/70 px-5 text-sm font-semibold text-[#2B2B2B] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+          className="k2-store-leave min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 px-5 text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
         >
           Leave the store
         </button>
@@ -371,10 +371,10 @@ export default function InteractiveShop() {
       {!loading && shelves.length === 0 && (
         <div className="flex flex-1 items-center justify-center p-8">
           <div className="max-w-md text-center">
-            <h2 className="font-serif text-2xl font-semibold text-[#2B2B2B]">
+            <h2 className="font-serif text-2xl font-semibold text-[var(--k2-ink)]">
               The shelves are empty right now.
             </h2>
-            <p className="mt-3 text-sm leading-7 text-[#5C5449]">
+            <p className="mt-3 text-sm leading-7 text-[var(--k2-muted)]">
               No products are published yet. When this month's consignment is checked in and
               published, it appears here and in the catalog at the same time.
             </p>
@@ -389,7 +389,7 @@ export default function InteractiveShop() {
               <button
                 type="button"
                 onClick={() => go('catalog')}
-                className="min-h-[44px] rounded-full border border-[#E4DCD1] px-5 text-sm font-semibold text-[#2B2B2B]"
+                className="min-h-[44px] rounded-full border border-[var(--k2-line)] px-5 text-sm font-semibold text-[var(--k2-ink)]"
               >
                 Back to the catalog
               </button>
@@ -445,10 +445,10 @@ export default function InteractiveShop() {
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-navy-faint">
                     You are at
                   </p>
-                  <h2 className="mt-2 font-serif text-3xl font-semibold text-[#2B2B2B]">
+                  <h2 className="mt-2 font-serif text-3xl font-semibold text-[var(--k2-ink)]">
                     {activeShelf.name}
                   </h2>
-                  <p className="mt-3 max-w-md text-sm leading-7 text-[#5C5449]">
+                  <p className="mt-3 max-w-md text-sm leading-7 text-[var(--k2-muted)]">
                     {activeShelf.blurb}
                   </p>
                 </div>
@@ -517,8 +517,8 @@ export default function InteractiveShop() {
                       aria-pressed={selectedSku === id}
                       className={`min-h-[44px] rounded-full border px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson ${
                         selectedSku === id
-                          ? 'border-crimson bg-white text-crimson shadow-xs'
-                          : 'border-[#E4DCD1] bg-white/85 text-[#2B2B2B] hover:border-[#C6A867]'
+                          ? 'border-crimson bg-[var(--k2-surface-solid)] text-crimson shadow-xs'
+                          : 'border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/85 text-[var(--k2-ink)] hover:border-[#C6A867]'
                       }`}
                     >
                       {product?.name}

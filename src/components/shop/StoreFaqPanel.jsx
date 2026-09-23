@@ -68,12 +68,12 @@ export default function StoreFaqPanel({ products = [], focusSku = '' }) {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="delivery, pasabuy, storage…"
-          className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#E4DCD1] bg-white px-4 text-sm text-[#2B2B2B] placeholder:text-navy-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+          className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[var(--k2-line)] bg-[var(--k2-surface-solid)] px-4 text-sm text-[var(--k2-ink)] placeholder:text-[var(--k2-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
         />
       </label>
 
       {empty && (
-        <p className="rounded-2xl border border-[#E4DCD1] bg-[#FBF9F6] p-5 text-sm leading-7 text-[#5C5449]">
+        <p className="rounded-2xl border border-[var(--k2-line)] bg-[var(--k2-surface-solid)] p-5 text-sm leading-7 text-[var(--k2-muted)]">
           Nothing matches &ldquo;{query.trim()}&rdquo;. Ask K2 directly and a person will answer.
         </p>
       )}
@@ -86,7 +86,7 @@ export default function StoreFaqPanel({ products = [], focusSku = '' }) {
           >
             How the shop works
           </h3>
-          <div className="mt-3 divide-y divide-[#E4DCD1] border-y border-[#E4DCD1]">
+          <div className="mt-3 divide-y divide-[var(--k2-line)] border-y border-[var(--k2-line)]">
             {shopFaqs.map((faq) => (
               <Answer key={faq.q} question={faq.q} answer={faq.a} defaultOpen={Boolean(needle)} />
             ))}
@@ -107,7 +107,7 @@ export default function StoreFaqPanel({ products = [], focusSku = '' }) {
               </span>
             )}
           </h3>
-          <div className="mt-3 divide-y divide-[#E4DCD1] border-y border-[#E4DCD1]">
+          <div className="mt-3 divide-y divide-[var(--k2-line)] border-y border-[var(--k2-line)]">
             {group.faqs.map((faq) => (
               <Answer
                 key={faq.question}
@@ -139,7 +139,7 @@ export default function StoreFaqPanel({ products = [], focusSku = '' }) {
 function Answer({ question, answer, defaultOpen = false }) {
   return (
     <details key={String(defaultOpen)} open={defaultOpen} className="group py-1">
-      <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-[#2B2B2B] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-crimson">
+      <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-[var(--k2-ink)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-crimson">
         {question}
         <span
           aria-hidden="true"
@@ -148,7 +148,7 @@ function Answer({ question, answer, defaultOpen = false }) {
           ▾
         </span>
       </summary>
-      <p className="pb-3 pr-6 text-sm leading-7 text-[#5C5449]">{answer}</p>
+      <p className="pb-3 pr-6 text-sm leading-7 text-[var(--k2-muted)]">{answer}</p>
     </details>
   )
 }

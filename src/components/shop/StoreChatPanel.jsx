@@ -85,8 +85,8 @@ function MessagingOffline({ seededMessage }) {
   return (
     <div className="space-y-4">
       <WebsiteChatHeader enabled={false} />
-      <div className="rounded-2xl border border-[#E4DCD1] bg-white p-5">
-        <p className="text-sm leading-7 text-[#2B2B2B]">
+      <div className="rounded-2xl border border-[var(--chat-border)] bg-[var(--chat-surface)] p-5">
+        <p className="text-sm leading-7 text-[var(--k2-ink)]">
           Messaging is not active in this build yet, so this note cannot be sent from here.
         </p>
         <p className="mt-3 text-[13px] leading-6 text-navy-faint">
@@ -94,7 +94,7 @@ function MessagingOffline({ seededMessage }) {
           and your question is kept below so you can copy it.
         </p>
         {seededMessage && (
-          <p className="mt-4 whitespace-pre-wrap rounded-xl border border-[#E4DCD1] bg-[#FBF9F6] p-3 text-sm leading-6 text-[#5C5449]">
+          <p className="mt-4 whitespace-pre-wrap rounded-xl border border-[var(--chat-border)] bg-[var(--chat-surface)] p-3 text-sm leading-6 text-[var(--k2-muted)]">
             {seededMessage}
           </p>
         )}
@@ -429,12 +429,12 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
 
       <form onSubmit={send} className="space-y-3">
         {seed?.message && message && seed.message !== message && (
-          <div className="rounded-xl border border-[#E4DCD1] bg-[#FBF9F6] p-4 text-sm text-[#2B2B2B]" role="status">
+          <div className="rounded-xl border border-[var(--chat-border)] bg-[var(--chat-surface)] p-4 text-sm text-[var(--k2-ink)]" role="status">
             <p>You already have an unsent draft. This new shelf question is ready below.</p>
             <p className="mt-2 whitespace-pre-wrap">{seed.message}</p>
             <div className="mt-3 flex flex-wrap gap-2">
-              <button type="button" className="min-h-[44px] rounded-lg border border-[#E4DCD1] px-3" onClick={() => { setMessage(seed.message); onSeedConsumed?.() }}>Replace draft with this question</button>
-              <button type="button" className="min-h-[44px] rounded-lg border border-[#E4DCD1] px-3" onClick={() => onSeedConsumed?.()}>Keep current draft</button>
+              <button type="button" className="min-h-[44px] rounded-lg border border-[var(--chat-border)] px-3" onClick={() => { setMessage(seed.message); onSeedConsumed?.() }}>Replace draft with this question</button>
+              <button type="button" className="min-h-[44px] rounded-lg border border-[var(--chat-border)] px-3" onClick={() => onSeedConsumed?.()}>Keep current draft</button>
             </div>
           </div>
         )}

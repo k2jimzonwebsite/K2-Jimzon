@@ -2,15 +2,15 @@
 name: K2 Jimzon
 description: Premium Italian import store
 colors:
-  cream: "#FAF8F4"
-  paper: "#FFF9EF"
-  shell: "#F2EEE8"
-  navy: "#2B2B2B"
-  navy-soft: "#525252"
+  cream: "#D5D5D5"
+  paper: "#DBDBDB"
+  shell: "#D5D5D5"
+  navy: "#111111"
+  navy-soft: "#333333"
   crimson: "#B84E3A"
   forest: "#6E7F52"
   amber: "#9A6A45"
-  line: "#E5DDD2"
+  line: "#B3B3B3"
 typography:
   display:
     fontFamily: "Fraunces, Georgia, serif"
@@ -64,6 +64,10 @@ components:
 ---
 
 # Design System: K2 Jimzon
+
+### Storefront light mode 4-color soft white palette (IDEA-20260923-01)
+
+The storefront light mode adopts a 4-color soft white palette: `#DBDBDB` (lightest neutral / card surface / paper), `#D5D5D5` (soft concrete gray / base canvas / secondary shell), `#B3B3B3` (mid neutral line / divider / control border), and `#111111` (deep carbon black ink). The natural wood background texture (`url('/wood-bg.jpg')`) with its warm ambient radial gradients is preserved on `:root:not(.dark) body` and `.k2-store`. Dark mode obsidian palette remains untouched. Contrast ratio for `#111111` against `#DBDBDB` is 13.5:1 and against `#D5D5D5` is 12.5:1, exceeding WCAG AAA standards.
 
 ### Admin quick tools (IDEA-20260922-01)
 
