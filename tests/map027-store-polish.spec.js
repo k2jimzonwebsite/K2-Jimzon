@@ -624,12 +624,10 @@ test('the face cannot be buried by the hair again', async () => {
   expect(keeper).toMatch(/HEAD_R \* 1\.012/)
 })
 
-test('zoom is reachable without a wheel', async () => {
+test('zoom is gesture-driven and bounded', async () => {
   const shop = await read('../src/views/InteractiveShop.jsx')
-  // A wheel gesture is neither discoverable nor keyboard-reachable, so the
-  // buttons are the real control.
-  expect(shop).toContain('Zoom in')
-  expect(shop).toContain('Zoom out')
+  expect(shop).toContain('Pinch to zoom')
+  expect(shop).toContain('Scroll to zoom')
   expect(shop).toContain('zoomRequest')
 })
 
@@ -1058,19 +1056,16 @@ test('the clerk stands behind the counter, not off the edge of its shot', async 
   expect(counterZ).toBeLessThan(1.4 - cm(COUNTER.depthCm) / 2)
 })
 
-test('the right rail is an actionable shelf concierge before a product is selected', async () => {
+test('the store renders product details in a bottom pop-up card when selected', async () => {
   const shop = await read('../src/views/InteractiveShop.jsx')
   const panel = await read('../src/components/shop/StoreSidePanel.jsx')
   const css = await read('../src/interactive-store.css')
 
   expect(shop).toContain('StoreSidePanel')
-  expect(panel).toContain('Browse the store')
-  expect(panel).toContain('Now browsing')
-  expect(panel).toContain('On this shelf')
-  expect(panel).toContain('onSelect(product)')
-  expect(panel).toContain('onShelfChange(index)')
-  expect(css).toContain('.k2-store-side-console')
-  expect(css).toContain('.k2-store-side-product')
+  expect(panel).toContain('k2-store-product-popup')
+  expect(panel).toContain('ShelfProductPanel')
+  expect(css).toContain('.k2-store-product-popup')
+  expect(css).toContain('.k2-store-rail')
 })
 
 test('the clerk dwells in a real gap between shelf bays and follows the camera travel rate', async () => {

@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises'
 
 const read = path => readFile(new URL(path, import.meta.url), 'utf8')
 
-test('mobile store minimizes the Shopkeeper behind sheets and uses a compact camera toolbar', async () => {
+test('mobile store minimizes the Shopkeeper behind sheets and supports bottom product popup', async () => {
   const shop = await read('../src/views/InteractiveShop.jsx')
   const keeper = await read('../src/components/shop/StoreKeeper.jsx')
   const css = await read('../src/interactive-store.css')
@@ -12,8 +12,7 @@ test('mobile store minimizes the Shopkeeper behind sheets and uses a compact cam
   expect(keeper).toContain('forceCollapsed = false')
   expect(css).toMatch(/@media \(max-width: 900px\)[\s\S]*?\.k2-store-guide\[data-open='false'\][\s\S]*?width:\s*3\.5rem/)
   expect(css).toMatch(/@media \(max-width: 900px\)\s*\{[\s\S]*?\.k2-store-guide\[data-open="false"\]\s*\{\s*width:\s*3\.5rem;\s*z-index:\s*19;/)
-  expect(css).toMatch(/\.k2-store-camera-toolbar/)
-  expect(css).toMatch(/@media \(max-width: 900px\)[\s\S]*?\.k2-store-zoom\s*\{[\s\S]*?flex-direction:\s*row/)
+  expect(css).toMatch(/\.k2-store-product-popup/)
 })
 
 test('footer exposes the six owner-approved marketplace destinations as real links', async () => {

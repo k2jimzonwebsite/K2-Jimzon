@@ -151,12 +151,18 @@ export default function InteractiveShop() {
       // guard covers the case where the event arrives anyway: closing a panel
       // must never be what walks the customer out of the store.
       if (sheet) return
+      if (selectedSku) {
+        setSelectedSku(null)
+        setBasketError('')
+        event.preventDefault()
+        return
+      }
       event.preventDefault()
       leaveStore()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [leaveStore, sheet])
+  }, [leaveStore, sheet, selectedSku])
 
   // Concept §3: K2 reacts when something goes in the basket. A short
   // acknowledgement, not a persistent animation on a frequent action.
@@ -349,6 +355,13 @@ export default function InteractiveShop() {
         </nav>
         <button
           type="button"
+          onClick={() => setSheet('faq')}
+          className="k2-store-faq min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 px-4 text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+        >
+          Ordering questions
+        </button>
+        <button
+          type="button"
           onClick={toggleDarkMode}
           aria-pressed={isDark}
           className="k2-store-theme min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 px-4 text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
@@ -455,23 +468,6 @@ export default function InteractiveShop() {
               </div>
             )}
 
-            {/* Zoom. The wheel and pinch both work, but neither is discoverable
-                and neither is reachable from a keyboard, so the buttons are the
-                real control and the gestures are the shortcut. */}
-            {sceneReady && (
-              <div className="k2-store-zoom k2-store-camera-toolbar" role="group" aria-label="Store camera controls">
-                <button type="button" onClick={() => zoomBy('in')} className="k2-store-zoom-btn" aria-label="Zoom in">
-                  <span aria-hidden="true">+</span><span className="k2-store-zoom-label">Zoom in</span>
-                </button>
-                <button type="button" onClick={resetZoom} className="k2-store-zoom-btn k2-store-zoom-reset" aria-label="Reset store view">
-                  <svg className="k2-store-zoom-reset-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 11a8 8 0 1 1 2.35 5.65M4 11V5m0 6h6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  <span className="k2-store-zoom-label">Reset view</span>
-                </button>
-                <button type="button" onClick={() => zoomBy('out')} className="k2-store-zoom-btn" aria-label="Zoom out">
-                  <span aria-hidden="true">−</span><span className="k2-store-zoom-label">Zoom out</span>
-                </button>
-              </div>
-            )}
 
             {sceneReady && (
               <p className="k2-store-gesture-hint">
@@ -518,7 +514,7 @@ export default function InteractiveShop() {
                       className={`min-h-[44px] rounded-full border px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson ${
                         selectedSku === id
                           ? 'border-crimson bg-[var(--k2-surface-solid)] text-crimson shadow-xs'
-                          : 'border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/85 text-[var(--k2-ink)] hover:border-[#C6A867]'
+                          : 'border-[var(--k2-line)] bg-[var(--k2-surface-solid)] text-[var(--k2-ink)] hover:border-[#C6A867]'
                       }`}
                     >
                       {product?.name}
@@ -533,10 +529,13 @@ export default function InteractiveShop() {
               moment={storeMoment}
               shelf={activeShelf}
               product={selectedProduct}
-                  onAskStaff={openChat}
-                  onQuestionActivity={setQuestionActive}
-                  forceCollapsed={Boolean(sheet)}
-                />
+              onAskStaff={openChat}
+              onQuestionActivity={setQuestionActive}
+              forceCollapsed={Boolean(sheet)}
+              onToggle={open => {
+                if (open) setSelectedSku(null)
+              }}
+            />
 
             <StoreBasketDock
               lines={lines}
@@ -545,31 +544,19 @@ export default function InteractiveShop() {
               pulse={basketPulse}
               onCheckout={() => go('checkout')}
             />
-          </div>
 
-          {/* The rail is the store's one complementary landmark. The selected
-              product inside it is a named region, not a second complementary:
-              nesting the same landmark type twice makes it harder, not easier,
-              for a screen reader to move around the shelf. */}
-          <aside className="k2-store-side" aria-label="Shelf concierge">
+            {/* Product details: toggleable bottom pop-up card when a product is selected */}
             <StoreSidePanel
-              shelves={shelves}
-              activeShelf={activeShelf}
-              activeIndex={activeIndex}
               product={selectedProduct}
               cartQuantity={selectedSku ? (lines.find(line => line.id === selectedSku)?.qty ?? 0) : 0}
-              onShelfChange={goToShelf}
-              onSelect={handleSelect}
-              onFaq={() => setSheet('faq')}
               onAddToCart={handleAddToCart}
               onOpenProduct={openProduct}
               onAskPasabuy={handleAskPasabuy}
+              onFaq={() => setSheet('faq')}
               onCloseProduct={() => { setSelectedSku(null); setBasketError('') }}
               basketError={basketError}
             />
-
-            <StoreSeoPanel product={selectedProduct} />
-          </aside>
+          </div>
         </div>
       )}
 

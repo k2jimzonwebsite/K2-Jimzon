@@ -16,7 +16,7 @@ import StoreKeeperAvatar from './StoreKeeperAvatar'
  * response-time promise, and no invented product facts.
  */
 
-export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActivity, moment, forceCollapsed = false }) {
+export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActivity, moment, forceCollapsed = false, onToggle }) {
   const [question, setQuestion] = useState('')
   const [sent, setSent] = useState(false)
   const [open, setOpen] = useState(false)
@@ -83,7 +83,14 @@ export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActi
         aria-expanded={visibleOpen}
         aria-controls="k2-store-guide-panel"
         aria-label={visibleOpen ? 'Minimize K2 shopkeeper' : 'Open K2 shopkeeper'}
-        onClick={() => { setOpen(value => !value); onQuestionActivity?.(false) }}
+        onClick={() => {
+          setOpen(value => {
+            const next = !value
+            onToggle?.(next)
+            return next
+          })
+          onQuestionActivity?.(false)
+        }}
       >
         <StoreKeeperAvatar
           expression={expression}
@@ -94,7 +101,7 @@ export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActi
           <strong>K2 shopkeeper</strong>
           <span>{visibleOpen ? 'Tuck me away' : 'Need a hand?'}</span>
         </span>
-        <span className="k2-store-guide-toggle-icon" aria-hidden="true">{visibleOpen ? '‹' : '›'}</span>
+        <span className="k2-store-guide-toggle-icon" aria-hidden="true">{visibleOpen ? '▾' : '▴'}</span>
       </button>
 
       {visibleOpen && (

@@ -28,7 +28,7 @@ test('fallback keeps room controls usable in portrait and landscape', async ({ p
   }
   await page.setViewportSize({ width: 844, height: 390 })
   expect((await store.locator('.k2-store-bar').boundingBox()).height).toBeLessThanOrEqual(80)
-  expect((await store.locator('.k2-store-side-intro').boundingBox()).height).toBeLessThanOrEqual(115)
+  await expect(store.locator('.k2-store-flat-scene-card')).toBeVisible()
   await page.setViewportSize({ width: 390, height: 844 })
   await expect(store.locator('.k2-store-basket-dock[data-filled="false"]')).toBeHidden()
 })
@@ -43,7 +43,7 @@ test('3D room renders in desktop, portrait and landscape', async ({ page }) => {
     await page.screenshot({ path: `docs/evidence/20260908-store-orientation/3d-${name}-after.png`, fullPage: false })
   }
   await store.getByRole('navigation', { name: 'Shelves', exact: true }).getByRole('button', { name: 'Coffee & Drinks' }).click()
-  await store.locator('.k2-store-side-product').filter({ hasText: product.name }).click()
+  await store.locator('.k2-store-rail button').filter({ hasText: product.name }).click()
   await store.getByRole('button', { name: 'Add to basket', exact: true }).click()
   for (const [name, width, height] of [['portrait', 390, 844], ['landscape', 844, 390], ['desktop', 1440, 900]]) {
     await page.setViewportSize({ width, height })
@@ -54,8 +54,7 @@ test('3D room renders in desktop, portrait and landscape', async ({ page }) => {
     await expect(store.getByRole('button', { name: 'Review basket' })).toBeInViewport()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     await page.screenshot({ path: `docs/evidence/20260908-store-orientation/3d-${name}-basket.png` })
-    await store.getByRole('button', { name: 'Zoom in', exact: true }).click()
-    await store.getByRole('button', { name: 'Zoom out', exact: true }).click()
+    await expect(store.locator('.k2-store-zoom')).toBeHidden()
   }
   await store.getByRole('button', { name: 'Open K2 shopkeeper' }).click()
   await store.locator('#keeper-question').fill('Does this come in a smaller bag?')

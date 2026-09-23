@@ -51,23 +51,21 @@ test.describe('Mobile store overlay collision prevention', () => {
 
     // 1. Counter view with empty basket
     const keeperToggle = store.locator('.k2-store-guide')
-    const zoomControls = store.locator('.k2-store-zoom')
     const emptyBasket = store.locator('.k2-store-basket-dock[data-filled="false"]')
-    const counterHeading = store.locator('.k2-store-side-intro h2')
 
     await expect(keeperToggle).toBeVisible()
-    await expect(zoomControls).toBeVisible()
+    await expect(store.locator('.k2-store-zoom')).toBeHidden()
     await expect(emptyBasket).toBeHidden()
-    await expect(counterHeading).toBeVisible()
 
     const keeperBox = await keeperToggle.boundingBox()
-    const zoomBox = await zoomControls.boundingBox()
-    expect(doBoxesIntersect(keeperBox, zoomBox)).toBe(false)
+    expect(keeperBox.width).toBeGreaterThan(0)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
 
     // 2. Navigate to Coffee & Drinks shelf and add item to basket
     await store.getByRole('navigation', { name: 'Shelves', exact: true }).getByRole('button', { name: 'Coffee & Drinks' }).click()
-    await store.locator('.k2-store-side-product').filter({ hasText: product.name }).click()
+    await store.locator('.k2-store-rail button').filter({ hasText: product.name }).click()
+    const productPopup = store.locator('.k2-store-product-popup')
+    await expect(productPopup).toBeVisible()
     await store.getByRole('button', { name: 'Add to basket', exact: true }).click()
 
     // 3. Basket dock is now filled and docked at bottom right above the rail
@@ -78,11 +76,9 @@ test.describe('Mobile store overlay collision prevention', () => {
 
     const filledBasketBox = await filledBasket.boundingBox()
     const updatedKeeperBox = await keeperToggle.boundingBox()
-    const updatedZoomBox = await zoomControls.boundingBox()
 
-    // Assert zero overlay collision between the 3 main floating utilities
+    // Assert zero overlay collision between floating utilities
     expect(doBoxesIntersect(filledBasketBox, updatedKeeperBox)).toBe(false)
-    expect(doBoxesIntersect(filledBasketBox, updatedZoomBox)).toBe(false)
 
     // Verify touch targets: review basket button is at least 44x44
     const reviewBtn = filledBasket.getByRole('button', { name: 'Review basket' })
@@ -129,22 +125,19 @@ test.describe('Mobile store overlay collision prevention', () => {
     await expect(store).toBeVisible({ timeout: 60000 })
 
     await store.getByRole('navigation', { name: 'Shelves', exact: true }).getByRole('button', { name: 'Coffee & Drinks' }).click()
-    await store.locator('.k2-store-side-product').filter({ hasText: product.name }).click()
+    await store.locator('.k2-store-rail button').filter({ hasText: product.name }).click()
     await store.getByRole('button', { name: 'Add to basket', exact: true }).click()
 
     const filledBasket = store.locator('.k2-store-basket-dock[data-filled="true"]')
-    const zoomControls = store.locator('.k2-store-zoom')
     const keeperToggle = store.locator('.k2-store-guide')
 
     await expect(filledBasket).toBeVisible()
-    await expect(zoomControls).toBeVisible()
+    await expect(store.locator('.k2-store-zoom')).toBeHidden()
     await expect(keeperToggle).toBeVisible()
 
     const filledBasketBox = await filledBasket.boundingBox()
-    const zoomBox = await zoomControls.boundingBox()
     const keeperBox = await keeperToggle.boundingBox()
 
-    expect(doBoxesIntersect(filledBasketBox, zoomBox)).toBe(false)
     expect(doBoxesIntersect(filledBasketBox, keeperBox)).toBe(false)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
 
@@ -160,7 +153,7 @@ test.describe('Mobile store overlay collision prevention', () => {
     await expect(store).toBeVisible({ timeout: 60000 })
 
     await store.getByRole('navigation', { name: 'Shelves', exact: true }).getByRole('button', { name: 'Coffee & Drinks' }).click()
-    await store.locator('.k2-store-side-product').filter({ hasText: product.name }).click()
+    await store.locator('.k2-store-rail button').filter({ hasText: product.name }).click()
     await store.getByRole('button', { name: 'Add to basket', exact: true }).click()
 
     const flatCard = store.locator('.k2-store-flat-scene-card')
