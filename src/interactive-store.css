@@ -565,26 +565,35 @@
 @media (max-width: 900px) {
   .k2-store-bar {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto auto;
-    gap: 0.55rem;
-    padding: 0.65rem 0.75rem;
+    grid-template-columns: 1fr auto auto auto;
+    align-items: center;
+    gap: 0.35rem 0.45rem;
+    padding: 0.45rem 0.75rem;
   }
 
   .k2-store-bar > div:first-child {
     grid-column: 1;
+    grid-row: 1;
     min-width: 0;
+    white-space: nowrap;
   }
 
   .k2-store-faq {
     grid-column: 2;
+    grid-row: 1;
+    white-space: nowrap;
   }
 
   .k2-store-theme {
     grid-column: 3;
+    grid-row: 1;
+    white-space: nowrap;
   }
 
   .k2-store-leave {
     grid-column: 4;
+    grid-row: 1;
+    white-space: nowrap;
   }
 
   .k2-store-shelfnav {
@@ -592,6 +601,8 @@
     grid-row: 2;
     width: 100%;
     min-width: 0;
+    gap: 0.35rem;
+    padding: 0.1rem 0;
   }
 
   .k2-store-body {

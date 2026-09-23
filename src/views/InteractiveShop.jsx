@@ -324,14 +324,14 @@ export default function InteractiveShop() {
   return (
     <main className="k2-store" aria-label="K2 virtual store">
       <header className="k2-store-bar">
-        <div>
-          <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-navy-faint">
+        <div className="shrink-0 min-w-0">
+          <p className="text-xs sm:text-[13px] font-semibold uppercase tracking-[0.14em] text-navy-faint whitespace-nowrap leading-tight">
             K2 Jimzon
           </p>
           <h1
             ref={storeHeadingRef}
             tabIndex={-1}
-            className="font-serif text-xl font-semibold text-[var(--k2-ink)] focus:outline-none"
+            className="font-serif text-base sm:text-xl font-semibold text-[var(--k2-ink)] focus:outline-none whitespace-nowrap leading-tight mt-0.5"
           >
             The store
           </h1>
@@ -343,7 +343,7 @@ export default function InteractiveShop() {
               type="button"
               onClick={() => goToShelf(index)}
               aria-current={index === activeIndex ? 'true' : undefined}
-              className={`min-h-[44px] whitespace-nowrap rounded-full px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson ${
+              className={`min-h-[44px] whitespace-nowrap rounded-full px-3 sm:px-4 text-xs sm:text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson cursor-pointer ${
                 index === activeIndex
                   ? 'bg-[var(--k2-ink)] text-[var(--k2-surface-solid)] shadow-xs'
                   : 'border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 text-[var(--k2-muted)] hover:border-[#C6A867]'
@@ -356,24 +356,30 @@ export default function InteractiveShop() {
         <button
           type="button"
           onClick={() => setSheet('faq')}
-          className="k2-store-faq min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 px-4 text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+          aria-label="Ordering questions"
+          className="k2-store-faq min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 px-2.5 sm:px-4 text-xs sm:text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson cursor-pointer whitespace-nowrap"
         >
-          Ordering questions
+          <span className="hidden sm:inline">Ordering questions</span>
+          <span className="sm:hidden">FAQ</span>
         </button>
         <button
           type="button"
           onClick={toggleDarkMode}
           aria-pressed={isDark}
-          className="k2-store-theme min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 px-4 text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+          aria-label={isDark ? 'Lights on' : 'Lights low'}
+          className="k2-store-theme min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 px-2.5 sm:px-4 text-xs sm:text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson cursor-pointer whitespace-nowrap"
         >
-          {isDark ? 'Lights on' : 'Lights low'}
+          <span className="hidden sm:inline">{isDark ? 'Lights on' : 'Lights low'}</span>
+          <span className="sm:hidden">{isDark ? 'Lights' : 'Dark'}</span>
         </button>
         <button
           type="button"
           onClick={leaveStore}
-          className="k2-store-leave min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 px-5 text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+          aria-label="Leave the store"
+          className="k2-store-leave min-h-[44px] shrink-0 rounded-full border border-[var(--k2-line)] bg-[var(--k2-surface-solid)]/80 px-3 sm:px-5 text-xs sm:text-sm font-semibold text-[var(--k2-ink)] transition-colors hover:border-[#C6A867] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson cursor-pointer whitespace-nowrap"
         >
-          Leave the store
+          <span className="hidden sm:inline">Leave the store</span>
+          <span className="sm:hidden">Exit</span>
         </button>
       </header>
 
