@@ -98,14 +98,23 @@ export default function MasterProduct() {
     <main className="store-section max-w-6xl pb-24 pt-6 md:pb-20 md:pt-10">
       
       {/* Breadcrumbs / Back */}
-      <div className="mb-8 flex items-center justify-between border-b border-line pb-5">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-5">
         <nav className="flex flex-wrap items-center gap-2 text-sm text-navy-faint font-medium">
           <button className="inline-flex min-h-11 min-w-11 shrink-0 items-center hover:text-navy transition-colors cursor-pointer" onClick={() => go('home')}>Home</button>
+          <span>/</span>
+          <button className="inline-flex min-h-11 min-w-11 shrink-0 items-center hover:text-navy transition-colors cursor-pointer" onClick={() => go('store')}>3D Store</button>
           <span>/</span>
           <button className="inline-flex min-h-11 min-w-11 shrink-0 items-center hover:text-navy transition-colors cursor-pointer" onClick={() => go('catalog')}>Catalog</button>
           <span>/</span>
           <span className="text-navy">{product.name}</span>
         </nav>
+        <button
+          type="button"
+          onClick={() => go('store')}
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line bg-shell/50 px-3.5 py-1.5 text-xs font-semibold text-crimson hover:bg-shell hover:border-crimson/40 transition-colors cursor-pointer"
+        >
+          <span aria-hidden="true">←</span> Back to 3D Store
+        </button>
       </div>
 
       <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">

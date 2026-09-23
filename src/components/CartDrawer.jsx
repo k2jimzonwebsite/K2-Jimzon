@@ -77,12 +77,20 @@ export default function CartDrawer() {
                   <p className="mt-1 max-w-xs text-sm leading-relaxed text-navy-soft">
                     Browse our Italian catalog and add items to your order request.
                   </p>
-                  <button
-                    onClick={() => { setCartOpen(false); go('catalog') }}
-                    className="mt-5 min-h-11 rounded-lg border border-[var(--store-surface-border)] px-4 text-sm font-bold hover:border-navy/30 text-navy bg-[var(--store-surface-bg)] cursor-pointer"
-                  >
-                    Browse catalog
-                  </button>
+                  <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                    <button
+                      onClick={() => { setCartOpen(false); go('store') }}
+                      className="min-h-11 rounded-lg bg-crimson px-4 text-sm font-bold text-white shadow-sm hover:bg-crimson-deep transition-colors cursor-pointer"
+                    >
+                      Shop 3D Store
+                    </button>
+                    <button
+                      onClick={() => { setCartOpen(false); go('catalog') }}
+                      className="min-h-11 rounded-lg border border-[var(--store-surface-border)] px-4 text-sm font-bold hover:border-navy/30 text-navy bg-[var(--store-surface-bg)] cursor-pointer"
+                    >
+                      Browse catalog
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="divide-y divide-[var(--store-surface-border)]">
@@ -125,7 +133,24 @@ export default function CartDrawer() {
               >
                 Review order request
               </CrimsonButton>
-              <p className="mt-2.5 text-center text-xs leading-relaxed text-navy-faint">
+              <div className="mt-2.5 flex items-center justify-center gap-3 text-xs font-semibold text-navy-soft">
+                <button
+                  type="button"
+                  onClick={() => { setCartOpen(false); go('store') }}
+                  className="hover:text-crimson transition-colors cursor-pointer"
+                >
+                  Continue shopping in 3D Store
+                </button>
+                <span aria-hidden="true">·</span>
+                <button
+                  type="button"
+                  onClick={() => { setCartOpen(false); go('catalog') }}
+                  className="hover:text-navy transition-colors cursor-pointer"
+                >
+                  Browse catalog
+                </button>
+              </div>
+              <p className="mt-2 text-center text-xs leading-relaxed text-navy-faint">
                 Fulfilled by K2 Jimzon · Manila stock verified before confirmation.
               </p>
             </footer>

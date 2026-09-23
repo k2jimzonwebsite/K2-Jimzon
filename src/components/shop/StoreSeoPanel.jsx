@@ -1,42 +1,22 @@
 import { useEffect, useMemo } from 'react'
 import { getProductKnowledge } from '../../lib/productKnowledge'
 import { useProductKnowledgeVersion } from '../../lib/useProductKnowledgeVersion'
-import { describeMeasurement } from './productDimensions'
 import {
   buildFaqStructuredData, buildProductStructuredData, writeJsonLd,
 } from '../../lib/productStructuredData'
 import { resolveStorefrontMetadataOrigin } from '../../lib/storefrontMetadataOrigin'
 
 /**
- * MAP-027 — the store's indexable layer.
+ * MAP-027 / IDEA-20260923-03 — the store's indexable layer.
  *
  * A 3D canvas is invisible to a crawler. Everything a search engine could learn
  * from watching someone shop here has to be stated in the document, which is
- * what this does: readable specifics for the customer, and the matching
- * structured data in the head for the crawler, built from the same values.
+ * what this does: structured data in the head for the crawler, built from the
+ * same canonical catalog projections.
  *
- * The rule that keeps it honest is that both halves read the same projections
- * the rest of the store reads. There is no SEO-only description, no keyword
- * block, and no claim — rating, review count, GTIN, availability — that the
- * catalog has not established. Markup that overstates the page is a manual
- * action, not a growth tactic.
- *
- * Derived pack dimensions are labelled as approximate and only shown when they
- * were actually derived from a declared quantity, never when assumed.
+ * The component operates headlessly to prevent rendering redundant, space-eating
+ * container boxes inside the 3D scene while keeping full JSON-LD crawlability.
  */
-
-/** Facts worth stating, in the order a shopper scans them. */
-function detailRows(product) {
-  const measurement = describeMeasurement(product)
-  return [
-    ['Brand', product?.brand_id],
-    ['Origin', product?.country_of_origin || product?.origin],
-    ['Pack size', product?.size || product?.net_weight],
-    ['Pack dimensions', measurement],
-    ['Barcode', product?.barcode],
-  ].filter(([, value]) => Boolean(value))
-}
-
 export default function StoreSeoPanel({ product }) {
   const sku = product?.sku || product?.id || ''
   const knowledgeVersion = useProductKnowledgeVersion()
@@ -79,33 +59,6 @@ export default function StoreSeoPanel({ product }) {
     }
   }, [product, sku, knowledge])
 
-  if (!product) return null
-
-  const rows = detailRows(product)
-  if (rows.length === 0) return null
-
-  return (
-    <section
-      className="rounded-2xl border border-[var(--k2-line)] bg-[var(--k2-surface-solid)] p-5"
-      aria-label={`Product details for ${product.name}`}
-    >
-      <h2 className="text-[13px] font-semibold uppercase tracking-[0.12em] text-navy-faint">
-        Product details
-      </h2>
-      <dl className="mt-3 space-y-2">
-        {rows.map(([label, value]) => (
-          <div key={label} className="flex items-baseline justify-between gap-4 text-sm">
-            <dt className="shrink-0 text-navy-faint">{label}</dt>
-            <dd className="text-right font-medium text-[var(--k2-ink)]">{value}</dd>
-          </div>
-        ))}
-      </dl>
-      {describeMeasurement(product) && (
-        <p className="mt-3 text-[12px] leading-5 text-navy-faint">
-          Pack dimensions are calculated from the declared pack size to show scale on the shelf.
-          They are approximate and not a specification.
-        </p>
-      )}
-    </section>
-  )
+  return null
 }
+

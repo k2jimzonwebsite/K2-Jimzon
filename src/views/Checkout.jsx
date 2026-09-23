@@ -185,6 +185,24 @@ export default function Checkout() {
 
   return (
     <main className="store-section max-w-6xl pb-24 pt-10 font-sans md:pb-20 md:pt-14">
+      {/* Return-to-store navigation */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-4 text-sm font-medium">
+        <button
+          type="button"
+          onClick={() => go('store')}
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line bg-shell/50 px-4 py-2 font-semibold text-crimson hover:bg-shell hover:border-crimson/40 transition-colors cursor-pointer"
+        >
+          <span aria-hidden="true">←</span> Back to 3D Store
+        </button>
+        <button
+          type="button"
+          onClick={() => go('catalog')}
+          className="inline-flex min-h-11 items-center gap-1.5 text-navy-soft hover:text-navy transition-colors cursor-pointer"
+        >
+          Continue browsing catalog
+        </button>
+      </div>
+
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-crimson">Final review</p>
       <h1 className="mt-2 font-serif text-4xl font-semibold tracking-tight">Review order request</h1>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-navy-soft">
