@@ -17,6 +17,11 @@ physical phone chat before closing MAP-025/027/028. Recovery before applying
 production SQL is to leave the current deployments and direct chat unchanged;
 after an authorized apply, use the reviewed moderation rollback only within
 that change window and restore prior separate Vercel artifacts.
+The same-day prerequisite recheck found that production's eleven-argument,
+defaulted order RPC was rejected by the old guest-boundary preflight. An
+isolated regression fixture reproduced and corrected that preflight; it does
+not establish full current-schema migration compatibility or satisfy the
+provider-secret, Turnstile and preview gates.
 
 **22 September owner-authorized Storefront readability and Admin quick-tools release:**
 GitHub `main` commit `8a1548f9a00666ba620a6f49f89677a0a1f45548` contains

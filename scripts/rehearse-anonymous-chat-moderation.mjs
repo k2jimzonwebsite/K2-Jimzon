@@ -43,6 +43,8 @@ try {
   run('createdb', [db], 'create isolated database')
   env.PGDATABASE = db
   psql(path.join(root, 'supabase/tests/map019_account_claim_bootstrap.sql'), 'bootstrap')
+  psql(path.join(root, 'supabase/tests/map020_guest_boundary_preflight_fixture.sql'), 'current order signature fixture')
+  psql(path.join(root, 'supabase/map020_guest_boundary_preflight.sql'), 'guest boundary preflight')
   psql(path.join(root, 'supabase/tests/anonymous_chat_moderation_fixture.sql'), 'fixture')
   psql(path.join(root, 'supabase/migrations/20260922_anonymous_chat_moderation.sql'), 'migration')
   const result = psql(path.join(root, 'supabase/tests/anonymous_chat_moderation_assertions.sql'), 'behavior')

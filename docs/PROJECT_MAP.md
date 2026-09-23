@@ -2,6 +2,13 @@
 
 IDEA-20260922-03 through -06 use `StoreKeeper.jsx`, `InteractiveShop.jsx` and `interactive-store.css` for the mobile obstruction fix; `Footer.jsx` for the six marketplace destinations; `AdminInstallButton.jsx`, `admin-sw.js` and the Admin-only Vite emit plugin for installability; and `20260922_anonymous_chat_moderation.sql` plus its rollback for private hash/block/receipt state. Admin moderation travels through three prepared Inbox routes, `server/admin-bff/inbox.js`, `useAdminInboxRuntime.js` and `Inbox.jsx`. `tests/mobile-store-moderation-pwa-contract.spec.js` owns the focused source/security contract; evidence is in `docs/evidence/20260922-mobile-chat-moderation/README.md`.
 
+The guest-boundary preflight compatibility regression uses
+`supabase/tests/map020_guest_boundary_preflight_fixture.sql` inside
+`scripts/rehearse-anonymous-chat-moderation.mjs`; it exercises production's
+defaulted eleven-argument order signature before the isolated moderation
+apply/behavior/rollback sequence. The production migration chain and provider
+activation remain governed by the guest BFF runbook and MAP-019/020.
+
 IDEA-20260922-01 keeps staff utilities in `src/views/admin/AdminToolsWidget.jsx`, with local styles in `AdminToolsWidget.css` and navigation callbacks from `Admin.jsx`. Focus/resize/expiry/scratchpad/navigation acceptance lives in `tests/admin-dashboard-redesign.spec.js`; evidence/checkpoint directories are `20260922-admin-quick-tools`.
 
 `tests/storefront-readiness-ui.spec.js` extends `test:selling-surfaces` with phone/desktop, light/dark customer-route contrast/form/reflow checks and the manual checkout wording journey. IDEA-20260921-09 evidence/checkpoint directories use `20260921-storefront-readiness`; MAP-028 I-015 / MAP-025 own unfinished human acceptance.

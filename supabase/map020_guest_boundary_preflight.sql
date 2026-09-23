@@ -8,8 +8,16 @@ begin
      or to_regclass('public.guest_access_grant_scopes') is null then
     raise exception 'MAP020_PREFLIGHT: apply MAP019 identity migration first';
   end if;
-  if to_regprocedure('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text)') is null
-     or to_regprocedure('public.submit_pasabuy_request(text,text,text,text,text,integer,numeric,text,boolean,text)') is null then
+  -- The 16 September delivery change extended this function to 11 arguments,
+  -- with defaults on the final three. The guest boundary still calls nine.
+  if not (
+    to_regprocedure('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text)') is not null
+    or exists (
+      select 1 from pg_proc p
+      where p.oid = to_regprocedure('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text)')
+        and p.pronargdefaults >= 2
+    )
+  ) or to_regprocedure('public.submit_pasabuy_request(text,text,text,text,text,integer,numeric,text,boolean,text)') is null then
     raise exception 'MAP020_PREFLIGHT: live guest source commands are missing';
   end if;
   if not exists (select 1 from information_schema.columns

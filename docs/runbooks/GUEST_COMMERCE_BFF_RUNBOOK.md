@@ -386,6 +386,18 @@ optional for verified history and cross-device continuity.
 
 ## Current state
 
+23 September compatibility note: production still has no MAP-019 identity or
+MAP-020 guest boundary migration, so the moderation migration cannot run
+there. Production `submit_order_request_v2` is the eleven-argument delivery
+version with three trailing defaults; `map020_guest_boundary_preflight.sql`
+now recognizes that valid nine-argument call shape, and an isolated fixture
+proved the previous rejection and current pass. This fixes only the preflight
+check. Before step 3 below, rehearse the exact dependency chain against the
+current production schema inside a rollback-only window; do not infer
+compatibility from this fixture. Keep direct chat and both BFF flags off until
+the matching secrets, Turnstile, preview denials, and coordinated release
+window are ready.
+
 The BFF code, identity migration, signed guest-boundary migration, cutover
 migration, rollback evidence, and feature-gated guest inbox exist locally. None
 is active in production. The storefront still calls the transitional direct
