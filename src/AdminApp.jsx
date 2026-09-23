@@ -3,6 +3,7 @@ import { GlobeCmsProvider } from './data/globeCms'
 import ErrorBoundary from './components/ui/ErrorBoundary'
 import { AdminStoreProvider } from './context/AdminStoreContext'
 import { adminBffEnabled } from './services/adminBffService'
+import AdminInstallButton from './components/admin/AdminInstallButton'
 
 const Admin = lazy(() => import('./views/admin/Admin'))
 
@@ -22,6 +23,7 @@ export default function AdminApp() {
   return (
     <ErrorBoundary>
       <AdminRuntime />
+      <AdminInstallButton />
     </ErrorBoundary>
   )
 }

@@ -10,6 +10,25 @@ const CATEGORY_LINKS = [
   ['Skin Care', 'Skin care'],
 ]
 
+const MARKETPLACE_SHOPS = [
+  {
+    name: 'Pasabuy Italy by K2',
+    links: [
+      ['Lazada', 'https://s.lazada.com.ph/s.Z777zD?c=x'],
+      ['Shopee', 'https://s.shopee.ph/9V1fXWQ0gK'],
+      ['TikTok', 'https://vt.tiktok.com/ZS9Afhgs231Wm-Zj3hN/'],
+    ],
+  },
+  {
+    name: 'Jworldbasket',
+    links: [
+      ['Lazada', 'https://s.lazada.com.ph/s.Z77ieU?c=x'],
+      ['Shopee', 'https://s.shopee.ph/5fowyVvX1R'],
+      ['TikTok', 'https://vt.tiktok.com/ZS9AfhVYjAJUb-HhBEF/'],
+    ],
+  },
+]
+
 export default function Footer() {
   const { go, setCategory, setQuery } = useStore()
   const jump = (category) => {
@@ -47,6 +66,27 @@ export default function Footer() {
             <li><span className="footer-copy">Manila, Philippines</span></li>
           </FooterColumn>
         </div>
+
+        <section className="mt-10 border-t border-[var(--store-surface-border)] pt-8" aria-labelledby="footer-marketplaces-title">
+          <h3 id="footer-marketplaces-title" className="text-base font-semibold text-navy">Find our shops</h3>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-navy-soft">These links open our marketplace shops. Stock and messages there stay in each marketplace until a connector is approved.</p>
+          <div className="mt-5 grid gap-6 sm:grid-cols-2">
+            {MARKETPLACE_SHOPS.map(shop => (
+              <div key={shop.name}>
+                <p className="text-base font-semibold text-navy">{shop.name}</p>
+                <ul className="mt-2 flex flex-wrap gap-2">
+                  {shop.links.map(([channel, href]) => (
+                    <li key={channel}>
+                      <a className="footer-link min-h-11 rounded-xl border border-[var(--store-surface-border)] px-3" href={href} target="_blank" rel="noreferrer">
+                        {channel}<ArrowIcon size={13} />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <div className="mt-8 flex flex-wrap items-center gap-x-6 border-t border-[var(--store-surface-border)] pt-2 text-sm font-semibold text-navy-soft">
           <button onClick={() => go('privacy')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Privacy &amp; Data</button>

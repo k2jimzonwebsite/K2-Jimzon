@@ -459,12 +459,13 @@ export default function InteractiveShop() {
                 and neither is reachable from a keyboard, so the buttons are the
                 real control and the gestures are the shortcut. */}
             {sceneReady && (
-              <div className="k2-store-zoom" role="group" aria-label="Zoom the store view">
+              <div className="k2-store-zoom k2-store-camera-toolbar" role="group" aria-label="Store camera controls">
                 <button type="button" onClick={() => zoomBy('in')} className="k2-store-zoom-btn" aria-label="Zoom in">
                   <span aria-hidden="true">+</span><span className="k2-store-zoom-label">Zoom in</span>
                 </button>
-                <button type="button" onClick={resetZoom} className="k2-store-zoom-btn k2-store-zoom-reset">
-                  Reset view
+                <button type="button" onClick={resetZoom} className="k2-store-zoom-btn k2-store-zoom-reset" aria-label="Reset store view">
+                  <svg className="k2-store-zoom-reset-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 11a8 8 0 1 1 2.35 5.65M4 11V5m0 6h6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span className="k2-store-zoom-label">Reset view</span>
                 </button>
                 <button type="button" onClick={() => zoomBy('out')} className="k2-store-zoom-btn" aria-label="Zoom out">
                   <span aria-hidden="true">−</span><span className="k2-store-zoom-label">Zoom out</span>
@@ -532,9 +533,10 @@ export default function InteractiveShop() {
               moment={storeMoment}
               shelf={activeShelf}
               product={selectedProduct}
-              onAskStaff={openChat}
-              onQuestionActivity={setQuestionActive}
-            />
+                  onAskStaff={openChat}
+                  onQuestionActivity={setQuestionActive}
+                  forceCollapsed={Boolean(sheet)}
+                />
 
             <StoreBasketDock
               lines={lines}

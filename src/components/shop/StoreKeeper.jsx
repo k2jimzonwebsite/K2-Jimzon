@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getProductKnowledge } from '../../lib/productKnowledge'
 import { useProductKnowledgeVersion } from '../../lib/useProductKnowledgeVersion'
 import StoreKeeperAvatar from './StoreKeeperAvatar'
@@ -16,13 +16,21 @@ import StoreKeeperAvatar from './StoreKeeperAvatar'
  * response-time promise, and no invented product facts.
  */
 
-export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActivity, moment }) {
+export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActivity, moment, forceCollapsed = false }) {
   const [question, setQuestion] = useState('')
   const [sent, setSent] = useState(false)
   const [open, setOpen] = useState(false)
   const draftOrigin = useRef(null)
   useProductKnowledgeVersion()
   const acknowledged = ['added', 'unavailable', 'listening', 'reading', 'handoff'].includes(moment?.id)
+  const visibleOpen = open && !forceCollapsed
+
+  useEffect(() => {
+    if (forceCollapsed) {
+      setOpen(false)
+      onQuestionActivity?.(false)
+    }
+  }, [forceCollapsed, onQuestionActivity])
 
   const knowledge = product ? getProductKnowledge(product.sku || product.id) : null
   const count = shelf?.products?.length ?? 0
@@ -66,30 +74,30 @@ export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActi
   return (
     <section
       className="k2-store-guide flex flex-col gap-4" aria-label="K2 shopkeeper"
-      data-open={open ? 'true' : 'false'}
+      data-open={visibleOpen ? 'true' : 'false'}
       data-moment={moment?.id || 'idle'}
     >
       <button
         type="button"
         className="k2-store-guide-toggle"
-        aria-expanded={open}
+        aria-expanded={visibleOpen}
         aria-controls="k2-store-guide-panel"
-        aria-label={open ? 'Minimize K2 shopkeeper' : 'Open K2 shopkeeper'}
+        aria-label={visibleOpen ? 'Minimize K2 shopkeeper' : 'Open K2 shopkeeper'}
         onClick={() => { setOpen(value => !value); onQuestionActivity?.(false) }}
       >
         <StoreKeeperAvatar
           expression={expression}
           waving={moment?.gesture === 'wave' || moment?.gesture === 'celebrate'}
-          size={open ? 150 : 92}
+          size={visibleOpen ? 150 : 72}
         />
         <span className="k2-store-guide-toggle-copy">
           <strong>K2 shopkeeper</strong>
-          <span>{open ? 'Tuck me away' : 'Need a hand?'}</span>
+          <span>{visibleOpen ? 'Tuck me away' : 'Need a hand?'}</span>
         </span>
-        <span className="k2-store-guide-toggle-icon" aria-hidden="true">{open ? '‹' : '›'}</span>
+        <span className="k2-store-guide-toggle-icon" aria-hidden="true">{visibleOpen ? '‹' : '›'}</span>
       </button>
 
-      {open && (
+      {visibleOpen && (
         <div id="k2-store-guide-panel" className="k2-store-guide-panel">
           <p
             className="k2-store-guide-speech"

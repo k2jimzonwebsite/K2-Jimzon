@@ -17,6 +17,9 @@ export function mapBoundaryResult(data) {
   if (result.error_code === 'RATE_LIMITED') {
     return { ok: false, status: 429, code: 'RATE_LIMITED', retryAfter: Number(result.retry_after_seconds || 60) }
   }
+  if (result.error_code === 'CHAT_BLOCKED') {
+    return { ok: false, status: 403, code: 'CHAT_BLOCKED' }
+  }
   if (result.error_code === 'IDEMPOTENCY_CONFLICT') {
     return { ok: false, status: 409, code: 'REQUEST_CONFLICT' }
   }

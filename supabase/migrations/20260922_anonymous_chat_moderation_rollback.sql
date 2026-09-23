@@ -1,0 +1,15 @@
+begin;
+drop function if exists public.execute_admin_chat_moderation_v1(text,bigint,uuid,uuid,text,text);
+drop function if exists public.list_anonymous_chat_moderation_v1();
+drop function if exists public.start_guest_conversation_v1(bigint,uuid,text,text,text,text);
+drop function if exists public.append_guest_message_v1(bigint,uuid,text,text,text,text);
+alter function public.start_guest_conversation_without_moderation_v1(bigint,uuid,text,text,text,text) rename to start_guest_conversation_v1;
+alter function public.append_guest_message_without_moderation_v1(bigint,uuid,text,text,text,text) rename to append_guest_message_v1;
+grant execute on function public.start_guest_conversation_v1(bigint,uuid,text,text,text,text) to anon;
+grant execute on function public.append_guest_message_v1(bigint,uuid,text,text,text,text) to anon;
+drop table if exists k2_private.anonymous_chat_moderation_events;
+drop table if exists k2_private.anonymous_chat_deletion_receipts;
+drop table if exists k2_private.anonymous_chat_blocks;
+drop table if exists k2_private.anonymous_chat_principals;
+notify pgrst,'reload schema';
+commit;

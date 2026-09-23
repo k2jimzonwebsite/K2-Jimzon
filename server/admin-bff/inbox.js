@@ -25,6 +25,14 @@ function uuid(value, { nullable = false } = {}) {
 }
 
 export function validateInboxCommand(action, body) {
+  if (action === 'inbox_delete_anonymous' || action === 'inbox_block_anonymous') {
+    exactObject(body, ['conversationId', 'reason'])
+    return { conversationId: uuid(body.conversationId), reason: boundedText(body.reason, { required: true, max: 500 }) }
+  }
+  if (action === 'inbox_unblock_anonymous') {
+    exactObject(body, ['blockId', 'reason'])
+    return { blockId: uuid(body.blockId), reason: boundedText(body.reason, { required: true, max: 500 }) }
+  }
   if (action === 'inbox_internal_note' || action === 'inbox_send_reply') {
     exactObject(body, ['conversationId', 'content'])
     return { conversationId: uuid(body.conversationId), content: boundedText(body.content, { required: true }) }
@@ -82,12 +90,13 @@ export async function readAdminInbox(client) {
   if (conversationsResult.error) throw new Error('INBOX_UNAVAILABLE')
   const conversations = conversationsResult.data || []
   const ids = conversations.map((item) => item.id)
-  const [messagesResult, staffResult, websiteReplyResult] = await Promise.all([
+  const [messagesResult, staffResult, websiteReplyResult, moderationResult] = await Promise.all([
     ids.length
       ? client.from('messages').select('id,conversation_id,sender_type,content,is_draft,delivery_status,sent_at,failure_reason,created_at').in('conversation_id', ids).order('created_at', { ascending: false }).limit(INBOX_READ_LIMITS.messages)
       : Promise.resolve({ data: [], error: null }),
     client.from('user_profiles').select('id,full_name,email,role').in('role', ['Admin', 'Staff', 'SuperAdmin']).order('full_name'),
     client.rpc('website_reply_capability_v1'),
+    client.rpc('list_anonymous_chat_moderation_v1'),
   ])
   if (messagesResult.error || staffResult.error) throw new Error('INBOX_UNAVAILABLE')
   const messageRows = messagesResult.data || []
@@ -117,6 +126,7 @@ export async function readAdminInbox(client) {
       truncated: messageRows.length >= INBOX_READ_LIMITS.messages || sampledConversations.size > 0,
     },
   }
+  const moderation = moderationResult.error ? { conversations: {}, activeBlocks: [] } : (moderationResult.data || {})
   return {
     completeness,
     conversations: conversations.map((conversation) => ({
@@ -130,6 +140,7 @@ export async function readAdminInbox(client) {
       messages: messagesByConversation.get(conversation.id) || [],
       // True when this thread has older messages the projection did not carry.
       messagesTruncated: sampledConversations.has(conversation.id),
+      anonymousModeration: moderation.conversations?.[conversation.id] || null,
     })),
     staff: (staffResult.data || []).map((profile) => ({
       id: profile.id, fullName: profile.full_name,
@@ -137,6 +148,8 @@ export async function readAdminInbox(client) {
       role: profile.role,
     })),
     websiteReplyReady: !websiteReplyResult.error && websiteReplyResult.data === true,
+    moderationReady: !moderationResult.error,
+    activeBlocks: moderation.activeBlocks || [],
   }
 }
 
@@ -161,14 +174,23 @@ export async function handleInboxCommand(req, res, action) {
     // Both database functions are named literally at the call site. A computed
     // name would read the same here but would disappear from the security
     // surface inventory, which can only classify a call it can see statically.
+    const moderationAction = action === 'inbox_delete_anonymous'
+      || action === 'inbox_block_anonymous'
+      || action === 'inbox_unblock_anonymous'
     const { data, error } = action === 'inbox_send_reply'
       ? await authorized.client.rpc('execute_admin_website_reply_v1', signed)
-      : await authorized.client.rpc('execute_admin_inbox_command_v1', signed)
+      : moderationAction
+        ? await authorized.client.rpc('execute_admin_chat_moderation_v1', signed)
+        : await authorized.client.rpc('execute_admin_inbox_command_v1', signed)
     if (error) {
       const providerCode = String(error.message || '')
       if (providerCode.includes('K2_ADMIN_RATE_LIMITED')) return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': '60' })
       if (providerCode.includes('K2_ADMIN_IDEMPOTENCY_CONFLICT')) return safeJson(res, 409, { error: { code: 'IDEMPOTENCY_CONFLICT' } })
       if (providerCode.includes('K2_ADMIN_COMMAND_IN_PROGRESS')) return safeJson(res, 409, { error: { code: 'COMMAND_IN_PROGRESS' } }, { 'Retry-After': '1' })
+      if (providerCode.includes('K2_ADMIN_REQUIRED')) return safeJson(res, 403, { error: { code: 'ADMIN_REQUIRED' } })
+      if (providerCode.includes('K2_ANONYMOUS_CHAT_REQUIRED')) return safeJson(res, 409, { error: { code: 'ANONYMOUS_CHAT_REQUIRED' } })
+      if (providerCode.includes('K2_CHAT_PRINCIPAL_UNAVAILABLE')) return safeJson(res, 409, { error: { code: 'CHAT_PRINCIPAL_UNAVAILABLE' } })
+      if (providerCode.includes('K2_CHAT_BLOCK_NOT_FOUND')) return safeJson(res, 404, { error: { code: 'CHAT_BLOCK_NOT_FOUND' } })
       return safeJson(res, 503, { error: { code: 'INBOX_COMMAND_UNAVAILABLE' } })
     }
     return safeJson(res, 200, { ok: true, result: data })

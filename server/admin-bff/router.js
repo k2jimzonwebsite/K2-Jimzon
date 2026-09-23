@@ -28,6 +28,9 @@ import inboxInternalNote from '../../prepared-api/admin/inbox/internal-note.js'
 import inboxSendReply from '../../prepared-api/admin/inbox/send-reply.js'
 import inboxMarkRead from '../../prepared-api/admin/inbox/mark-read.js'
 import inboxWorkflow from '../../prepared-api/admin/inbox/workflow.js'
+import inboxDeleteAnonymous from '../../prepared-api/admin/inbox/delete-anonymous.js'
+import inboxBlockAnonymous from '../../prepared-api/admin/inbox/block-anonymous.js'
+import inboxUnblockAnonymous from '../../prepared-api/admin/inbox/unblock-anonymous.js'
 import productKnowledgeSave from '../../prepared-api/admin/product-knowledge/save.js'
 import pasabuy from '../../prepared-api/admin/pasabuy.js'
 import pasabuyQuote from '../../prepared-api/admin/pasabuy/quote.js'
@@ -131,6 +134,9 @@ const ROUTES = new Map([
   ['inbox/send-reply', inboxSendReply],
   ['inbox/mark-read', inboxMarkRead],
   ['inbox/workflow', inboxWorkflow],
+  ['inbox/delete-anonymous', inboxDeleteAnonymous],
+  ['inbox/block-anonymous', inboxBlockAnonymous],
+  ['inbox/unblock-anonymous', inboxUnblockAnonymous],
   ['product-knowledge/save', productKnowledgeSave],
   ['pasabuy', pasabuy],
   ['pasabuy/quote', pasabuyQuote],
@@ -205,6 +211,7 @@ const ADMIN_POST_ROUTES = new Set([
   'fulfillment/fulfill', 'fulfillment/packing-scan', 'fulfillment/payment',
   'fulfillment/transfer-lot',
   'inbox/internal-note', 'inbox/send-reply', 'inbox/mark-read', 'inbox/workflow',
+  'inbox/delete-anonymous', 'inbox/block-anonymous', 'inbox/unblock-anonymous',
   'product-knowledge/save',
   'pasabuy/quote', 'pasabuy/transition',
   'product-intake/draft', 'product-intake/evidence', 'product-intake/evidence-cleanup', 'product-intake/inventory',

@@ -6,6 +6,7 @@ import { AlertIcon, CheckIcon, InboxIcon, SearchIcon } from '../../components/ui
 import { MetricRail, StateBanner, WorkspaceIntro } from './AdminWorkspaceUi'
 import { STALE_QUEUE_NOTICE } from '../../context/adminInboxPolling'
 import { UNCERTAIN_COMMAND_NOTICE } from '../../services/adminBffService'
+import { AdminDialog } from '../../components/ui/AdminDialog'
 
 /**
  * Conversations started at a shelf in the virtual store.
@@ -231,6 +232,9 @@ function InboxWorkspace({ store, database }) {
     inboxStaff,
     inboxUsesBff,
     loadConversationHistory,
+    deleteAnonymousConversation,
+    blockAnonymousChat,
+    unblockAnonymousChat,
     user,
   } = store
   const [activeId, setActiveId] = useState(() => conversations[0]?.id || null)
@@ -260,6 +264,9 @@ function InboxWorkspace({ store, database }) {
   const [savingNote, setSavingNote] = useState(false)
   const [sendingReply, setSendingReply] = useState(false)
   const [savingWorkflow, setSavingWorkflow] = useState(false)
+  const [moderationDialog, setModerationDialog] = useState(null)
+  const [moderationReason, setModerationReason] = useState('')
+  const [moderating, setModerating] = useState(false)
   const [directStaff, setDirectStaff] = useState([])
   const [history, setHistory] = useState([])
   // 'idle' | 'loading' | 'ready' | 'error' — an unreadable timeline must never
@@ -536,6 +543,30 @@ function InboxWorkspace({ store, database }) {
     else handleWorkflowSave(uncertainCommand.workflow)
   }
 
+  const canModerateAnonymous = ['Admin', 'SuperAdmin'].includes(user?.role)
+  const openModeration = (kind, target) => {
+    setModerationReason('')
+    setSaveError('')
+    setModerationDialog({ kind, target })
+  }
+  const submitModeration = async (event) => {
+    event.preventDefault()
+    if (!moderationDialog || moderationReason.trim().length < 3 || moderating) return
+    setModerating(true)
+    const { kind, target } = moderationDialog
+    const result = kind === 'delete'
+      ? await deleteAnonymousConversation(target, moderationReason.trim())
+      : kind === 'block'
+        ? await blockAnonymousChat(target, moderationReason.trim())
+        : await unblockAnonymousChat(target, moderationReason.trim())
+    setModerating(false)
+    if (!result?.ok) { setSaveError(result?.error || 'The moderation action could not be completed.'); return }
+    setModerationDialog(null)
+    setModerationReason('')
+    setNotice(kind === 'delete' ? 'Anonymous conversation deleted from both views.' : kind === 'block' ? 'Anonymous chat source blocked.' : 'Anonymous chat source unblocked.')
+    if (kind === 'delete') setMobileView('list')
+  }
+
   const activeCount = conversations.filter(conversation => conversation.status !== 'Resolved').length
   const unreadCount = conversations.reduce((sum, conversation) => sum + conversation.unreadCount, 0)
   const overdueCount = conversations.filter(conversation => deadlineState(conversation.responseDueAt, conversation.status)?.overdue).length
@@ -602,6 +633,20 @@ function InboxWorkspace({ store, database }) {
           Showing the {inboxState.completeness.conversations.returned} most recently active conversations.
           Older ones exist beyond this page: search or resolve threads to bring them into view.
         </StateBanner>
+      )}
+
+      {canModerateAnonymous && inboxState.moderationReady && inboxState.activeBlocks?.length > 0 && (
+        <section className="rounded-adm border border-adm-line bg-adm-bg p-4" aria-labelledby="blocked-chat-title">
+          <h2 id="blocked-chat-title" className="text-sm font-semibold text-white">Blocked anonymous chats</h2>
+          <p className="mt-1 text-xs text-white/50">Only non-reversible IP hashes are stored. Unblocking is always manual.</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {inboxState.activeBlocks.map(block => (
+              <button key={block.id} type="button" onClick={() => openModeration('unblock', block.id)} className="adm-btn min-h-11 border border-adm-line bg-adm-raised px-3 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80">
+                Unblock anonymous chat{block.lastConversationReference ? ` · ${block.lastConversationReference}` : ''}
+              </button>
+            ))}
+          </div>
+        </section>
       )}
 
       <div className="flex h-[calc(100dvh-390px)] min-h-[560px] overflow-hidden rounded-adm border border-adm-line bg-adm-bg">
@@ -726,6 +771,12 @@ function InboxWorkspace({ store, database }) {
                   Replies appear in the customer’s website chat
                 </p>
               )}
+              {canModerateAnonymous && inboxState.moderationReady && chat.anonymousModerationEligible && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <button type="button" onClick={() => openModeration('delete', chat.id)} className="min-h-11 rounded-adm-sm border border-crimson/45 bg-crimson/10 px-3 text-xs font-semibold text-crimson focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80">Delete anonymous conversation</button>
+                  <button type="button" onClick={() => openModeration('block', chat.id)} disabled={!chat.anonymousBlockAvailable || chat.anonymousChatBlocked} className="min-h-11 rounded-adm-sm border border-amber/45 bg-amber/10 px-3 text-xs font-semibold text-amber focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed disabled:opacity-45">Block anonymous chat</button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -838,6 +889,25 @@ function InboxWorkspace({ store, database }) {
           </div>
         </aside>
       </div>
+      {moderationDialog && (
+        <div className="fixed inset-0 z-50 grid place-items-end bg-black/75 sm:place-items-center sm:p-6" role="presentation" onMouseDown={event => event.target === event.currentTarget && !moderating && setModerationDialog(null)}>
+          <AdminDialog onClose={() => setModerationDialog(null)} closeDisabled={moderating} labelledBy="chat-moderation-title">
+            <section className="w-full max-w-lg rounded-t-adm border border-adm-line bg-adm-surface p-5 shadow-2xl sm:rounded-adm">
+              <h2 id="chat-moderation-title" className="text-xl font-bold text-white">{moderationDialog.kind === 'delete' ? 'Delete anonymous conversation' : moderationDialog.kind === 'block' ? 'Block anonymous chat' : 'Unblock anonymous chat'}</h2>
+              <p className="mt-2 text-sm leading-6 text-white/60">{moderationDialog.kind === 'delete' ? 'This permanently removes the anonymous thread for staff and the guest. Account-linked threads are protected.' : 'This changes chat access only. Store browsing and checkout are not blocked.'}</p>
+              <form className="mt-5 space-y-4" onSubmit={submitModeration}>
+                <label className="block text-sm font-semibold text-white" htmlFor="chat-moderation-reason">Reason
+                  <textarea id="chat-moderation-reason" required minLength={3} maxLength={500} rows={4} value={moderationReason} onChange={event => setModerationReason(event.target.value)} disabled={moderating} className="adm-input mt-2 w-full resize-y text-base sm:text-sm" placeholder="Record the abuse, scam, or reason for this action" />
+                </label>
+                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                  <button type="button" onClick={() => setModerationDialog(null)} disabled={moderating} className="adm-btn min-h-11 border border-adm-line px-4 text-white">Cancel</button>
+                  <button type="submit" disabled={moderating || moderationReason.trim().length < 3} className="adm-btn min-h-11 bg-blue px-4 font-semibold text-white disabled:opacity-45">{moderating ? 'Recording…' : 'Confirm action'}</button>
+                </div>
+              </form>
+            </section>
+          </AdminDialog>
+        </div>
+      )}
     </section>
   )
 }

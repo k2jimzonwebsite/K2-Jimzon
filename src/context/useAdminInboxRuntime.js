@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabaseClient'
 import {
   adminBffEnabled, getAdminInbox, getAdminInboxHistory, markConversationReadBff,
   createInboxCommandSession, updateConversationWorkflowBff,
+  deleteAnonymousConversationBff, blockAnonymousChatBff, unblockAnonymousChatBff,
   commandOutcomeIsUncertain, UNCERTAIN_COMMAND_NOTICE,
 } from '../services/adminBffService'
 import { normalizeAdminConversation } from '../lib/adminInboxNormalization'
@@ -41,6 +42,7 @@ export function useAdminInboxRuntime({ enabled, actorId }) {
   const [inboxState, setInboxState] = useState({
     loading: true, refreshing: false, stale: false, error: '', phase2Ready: true,
     websiteReplyReady: false, completeness: null,
+    moderationReady: false, activeBlocks: [],
   })
   const secureInbox = adminBffEnabled()
 
@@ -106,6 +108,8 @@ export function useAdminInboxRuntime({ enabled, actorId }) {
           websiteReplyReady: result.data?.websiteReplyReady === true,
           // What this page of the queue left out, so the view can say so.
           completeness: result.data?.completeness || null,
+          moderationReady: result.data?.moderationReady === true,
+          activeBlocks: result.data?.activeBlocks || [],
         })
         return
       }
@@ -142,6 +146,7 @@ export function useAdminInboxRuntime({ enabled, actorId }) {
         loading: false, refreshing: false, stale: false, error: warning, phase2Ready,
         websiteReplyReady: !websiteCapability.error && websiteCapability.data === true,
         completeness: null,
+        moderationReady: false, activeBlocks: [],
       })
     } catch {
       if (!isCurrentGeneration(requestGeneration, generation.current)) return
@@ -161,7 +166,7 @@ export function useAdminInboxRuntime({ enabled, actorId }) {
     if (!enabled || (!secureInbox && !supabase)) {
       readAbort.current?.abort()
       commitConversations([])
-      setInboxState({ loading: false, refreshing: false, stale: false, error: '', phase2Ready: true, websiteReplyReady: false })
+      setInboxState({ loading: false, refreshing: false, stale: false, error: '', phase2Ready: true, websiteReplyReady: false, moderationReady: false, activeBlocks: [] })
       return undefined
     }
     fetchConversations()
@@ -276,9 +281,25 @@ export function useAdminInboxRuntime({ enabled, actorId }) {
     return { ok: result.ok, events: result.ok ? result.events : [] }
   }
 
+  const runModeration = async (kind, identifier, reason) => {
+    if (!secureInbox || !commandSession.current) return { ok: false, error: 'Secure Admin chat moderation is unavailable.' }
+    const command = kind === 'delete'
+      ? deleteAnonymousConversationBff(identifier, reason, commandSession.current)
+      : kind === 'block'
+        ? blockAnonymousChatBff(identifier, reason, commandSession.current)
+        : unblockAnonymousChatBff(identifier, reason, commandSession.current)
+    const result = await command
+    if (!result.ok) return commandFailure(result, result.error || 'The moderation action could not be completed.')
+    await fetchConversations({ background: true })
+    return { ok: true }
+  }
+
   return {
     conversations, inboxState, inboxStaff, inboxUsesBff: secureInbox,
     loadConversationHistory, sendMessage, sendCustomerReply,
     markConversationRead, updateConversationWorkflow,
+    deleteAnonymousConversation: (conversationId, reason) => runModeration('delete', conversationId, reason),
+    blockAnonymousChat: (conversationId, reason) => runModeration('block', conversationId, reason),
+    unblockAnonymousChat: (blockId, reason) => runModeration('unblock', blockId, reason),
   }
 }

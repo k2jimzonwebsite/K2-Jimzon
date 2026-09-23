@@ -1,4 +1,5 @@
 import { defineConfig, loadEnv } from 'vite'
+import { readFileSync } from 'node:fs'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -91,6 +92,20 @@ function deploymentBoundaryPlugin(target) {
   }
 }
 
+function adminServiceWorkerPlugin(target) {
+  return {
+    name: 'k2-admin-service-worker',
+    generateBundle() {
+      if (target !== 'admin') return
+      this.emitFile({
+        type: 'asset',
+        fileName: 'admin-sw.js',
+        source: readFileSync(new URL('./src/admin-sw.js', import.meta.url), 'utf8'),
+      })
+    },
+  }
+}
+
 export default defineConfig(({ command, mode }) => {
   // Never use an empty prefix here. It imports every server secret from
   // `.env.local` into Vite's resolved config, where `vite --debug` prints it.
@@ -129,7 +144,7 @@ export default defineConfig(({ command, mode }) => {
     // pre-bundled Three.js dependencies, producing 504 "Outdated Optimize Dep"
     // responses and a blank storefront. Keep each deployment cache isolated.
     cacheDir: `${projectRoot}/node_modules/.vite-${target}`,
-    plugins: [react(), tailwindcss(), deploymentBoundaryPlugin(target)],
+    plugins: [react(), tailwindcss(), deploymentBoundaryPlugin(target), adminServiceWorkerPlugin(target)],
     resolve: {
       alias: {
         '@k2-app-entry': `${projectRoot}/${entryFile}`,

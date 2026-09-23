@@ -6,7 +6,7 @@ export function adminBffEnabled() {
 
 const ADMIN_COMMAND_ROUTES = Object.freeze({
   fulfillment: new Set(['confirm', 'packing-scan', 'payment', 'delivery', 'fulfill', 'transfer-lot', 'assign-box']),
-  inbox: new Set(['internal-note', 'send-reply', 'mark-read', 'workflow']),
+  inbox: new Set(['internal-note', 'send-reply', 'mark-read', 'workflow', 'delete-anonymous', 'block-anonymous', 'unblock-anonymous']),
   pasabuy: new Set(['transition', 'quote']),
   'product-intake': new Set(['session', 'step', 'draft', 'inventory', 'publication']),
   'product-knowledge': new Set(['save']),
@@ -479,6 +479,15 @@ export const markConversationReadBff = (conversationId, session) => session
 export const updateConversationWorkflowBff = (payload, session) => session
   ? session.run('workflow', payload)
   : inboxCommand('workflow', payload)
+export const deleteAnonymousConversationBff = (conversationId, reason, session) => session
+  ? session.run('delete-anonymous', { conversationId, reason })
+  : inboxCommand('delete-anonymous', { conversationId, reason })
+export const blockAnonymousChatBff = (conversationId, reason, session) => session
+  ? session.run('block-anonymous', { conversationId, reason })
+  : inboxCommand('block-anonymous', { conversationId, reason })
+export const unblockAnonymousChatBff = (blockId, reason, session) => session
+  ? session.run('unblock-anonymous', { blockId, reason })
+  : inboxCommand('unblock-anonymous', { blockId, reason })
 
 /**
  * Publish a product's reviewed knowledge.

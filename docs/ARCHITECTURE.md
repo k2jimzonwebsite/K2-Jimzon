@@ -1,5 +1,9 @@
 # K2 Jimzon — System Architecture
 
+Anonymous chat blocking is enforced around the signed guest start/reply RPCs. The Storefront BFF already derives a keyed SHA-256 digest from the request IP; the database stores that 32-byte digest in private principal/block tables and never receives a raw address. Admin reads only eligibility and content-free block metadata through an authenticated RPC. Admin/SuperAdmin mutations use the signed Admin BFF/idempotency boundary; deletion refuses active account links and records a content-free receipt before cascading the anonymous conversation. The paired rollback restores the original guest RPC names and grants.
+
+Admin installability remains inside the separate Admin artifact. The Admin build alone emits `admin-sw.js`; its fetch handler is network-only and never opens, matches, or writes a cache. The browser install prompt is optional progressive enhancement, not an APK or offline operations layer. Storefront mobile sheets force the Shopkeeper into its compact state without changing conversation or commerce state.
+
 Admin quick tools call the existing Admin shell callbacks for command search, scanner, section navigation and keyboard help. The widget uses shared AdminDialog and a separately imported Admin-only stylesheet. It adds no service/RPC path and retains the local-storage-only rate, position, selected tool and notes.
 
 Store readability stays within the Storefront artifact: `interactive-store.css` owns room theme tokens and responsive controls; `StoreChatPanel.css` travels with the lazy shared chat panel so the global chat drawer receives the same readable form styling. Camera pointer changes live in `ShelfScene3D`; they do not modify commerce state or provider access. Admin boundaries remain separate.
