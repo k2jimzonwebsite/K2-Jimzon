@@ -457,6 +457,14 @@ the Storefront artifact contains only its intended function.
    subjects, denial persistence, cleanup, and replay rejection before enabling
    any customer Auth route. It reuses the Storefront request secret and creates
    no browser-readable table access.
+   For the separate anonymous-chat moderation slice
+   (`20260922_anonymous_chat_moderation.sql`), do not apply its revocation of
+   `submit_storefront_chat_v1` while the Storefront still uses direct chat.
+   Prepare and verify the signed guest and Admin BFF paths first, schedule a
+   controlled chat cutover, switch the browser path in the same window, and
+   prove direct-RPC denial plus blocked start/reply before reopening chat.
+   On failure use its reviewed rollback under the MAP-017 backup procedure
+   and restore the prior artifacts. This does not change order/Pasabuy cutover.
 7. Generate two independent random 32-byte values outside the repository. Store
    the first as base64 in Storefront Vercel `K2_GUEST_BFF_SECRET`; store only its
    decoded bytes plus the second contact-HMAC key in the private database table.

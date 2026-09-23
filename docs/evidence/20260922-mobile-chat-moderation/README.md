@@ -15,6 +15,26 @@ MAP-019/020/024/027/028. This record covers locally prepared behavior only.
 
 ## Evidence
 
+23 September branch review found seven gaps and corrected them locally: the
+append-only event cascade, guest scope cleanup, missing-role metadata denial,
+Admin verifier action allowlist, legacy direct-chat bypass, all account-linked
+customer protection, and the open store chat's deleted-thread reset. The
+focused 4/4 contract suite now runs in the regular `npm test` gate. A passing
+source contract is not PostgreSQL execution or real-host acceptance; both
+remain pending in the owning MAP item.
+The isolated `node scripts/rehearse-anonymous-chat-moderation.mjs` run passed
+against portable PostgreSQL 17.11 after catching and correcting two SQL syntax
+defects. It applied the migration, denied missing-role metadata access,
+deleted an anonymous thread with append-only events and grant scopes,
+blocked/unblocked a hashed principal, refused a revoked account-linked
+customer deletion, and applied the rollback. This fixture does not prove
+production schema compatibility, deployed behavior, or a real browser session.
+`npm run verify:development`, focused 4/4 contracts, and separate Storefront
+and Admin production builds also pass after the review fixes. The attempted
+`npm run verify:release` printed 945 passing base cases but did not exit that
+phase after several minutes; it was interrupted, so the aggregate release gate
+is **not** claimed as passed. Do not push or deploy on that evidence.
+
 - Focused contract: `4 passed` in
   `tests/mobile-store-moderation-pwa-contract.spec.js`.
 - `npm run build`: passed Storefront build and security/source-boundary checks.
@@ -35,6 +55,14 @@ SuperAdmin positive cases, Staff denial, account-linked deletion refusal,
 anonymous delete visibility on both sides, blocked start/reply, manual unblock,
 and Android/iOS chat usability require the authorized database/deployment window
 and representative acceptance.
+
+The migration deliberately removes the legacy direct chat writer's client
+grant, because it has no trusted IP and would bypass blocks. Current production
+uses direct mode. Never apply this migration alone: prepare and verify the
+signed guest/Admin BFFs, announce a controlled chat cutover window, switch
+the Storefront browser path, then prove blocked start/reply and direct-RPC
+denial on the real host. If that sequence cannot be executed safely, keep the
+migration unapplied and direct chat unchanged.
 
 ## Recovery
 

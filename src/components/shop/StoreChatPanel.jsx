@@ -49,6 +49,11 @@ function persistStoredConvoId(id) {
   try { sessionStorage.setItem(THREAD_KEY, id) } catch { /* storage fallback */ }
 }
 
+function clearStoredConvoId() {
+  try { localStorage.removeItem(THREAD_KEY) } catch { /* private-mode storage */ }
+  try { sessionStorage.removeItem(THREAD_KEY) } catch { /* storage fallback */ }
+}
+
 function formatTime(value) {
   if (!value) return ''
   const date = new Date(value)
@@ -141,6 +146,8 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
                 status: data.status,
                 messages: data.messages || [],
               })
+            } else if (!rpcErr && data?.ok === false) {
+              clearStoredConvoId()
             }
           })
           .catch(() => {})
@@ -207,6 +214,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
         (item) => item.conversation_reference === conversation.conversation_reference,
       )
       if (match) setConversation(match)
+      else setConversation(null)
     } else if (directEnabled && supabase) {
       const convoId = conversation?.id || conversation?.conversation_reference
       if (!convoId) return
@@ -217,6 +225,9 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
           status: data.status,
           messages: data.messages || [],
         }))
+      } else if (!rpcErr && data?.ok === false) {
+        clearStoredConvoId()
+        setConversation(null)
       }
     }
   }, [enabled, bffEnabled, directEnabled, conversation?.id, conversation?.conversation_reference])

@@ -50,6 +50,7 @@ test('anonymous chat moderation is hash-only, role-gated, auditable and separate
   const rollback = await read('../supabase/migrations/20260922_anonymous_chat_moderation_rollback.sql')
   const inbox = await read('../server/admin-bff/inbox.js')
   const view = await read('../src/views/admin/Inbox.jsx')
+  const storeChat = await read('../src/components/shop/StoreChatPanel.jsx')
 
   expect(migration).toContain('k2_private.anonymous_chat_principals')
   expect(migration).toContain('k2_private.anonymous_chat_blocks')
@@ -58,8 +59,19 @@ test('anonymous chat moderation is hash-only, role-gated, auditable and separate
   expect(migration).not.toMatch(/inet\b|raw_ip|ip_address/)
   expect(migration).toContain("in ('Admin','SuperAdmin')")
   expect(migration).toContain('customer_accounts')
+  // Inbox event history is append-only. A normal ON DELETE CASCADE throws, so
+  // moderation must authorize this exact transaction and remove grant scopes.
+  expect(migration).toContain('anonymous_chat_delete_authorizations')
+  expect(migration).toContain('create or replace function public.prevent_conversation_event_mutation()')
+  expect(migration).toContain("scope_kind='conversation'")
+  expect(migration).not.toContain("a.status='active'")
+  expect(migration).toContain('from public.customers where id=v_conversation.customer_id for update')
   expect(migration).toContain("source_kind not in ('website_message','virtual_store_message')")
   expect(migration).toContain("'CHAT_BLOCKED'")
+  expect(migration).toContain('revoke all on function public.submit_storefront_chat_v1')
+  expect(migration).toContain("coalesce(v_role,'') not in ('Admin','SuperAdmin')")
+  expect(migration).toContain("'inbox_delete_anonymous', 'inbox_block_anonymous', 'inbox_unblock_anonymous'")
+  expect(rollback).toContain('grant execute on function public.submit_storefront_chat_v1')
   expect(rollback).toContain('drop table if exists k2_private.anonymous_chat_blocks')
 
   expect(inbox).toContain("action === 'inbox_delete_anonymous'")
@@ -68,4 +80,6 @@ test('anonymous chat moderation is hash-only, role-gated, auditable and separate
   expect(view).toContain('Delete anonymous conversation')
   expect(view).toContain('Block anonymous chat')
   expect(view).toContain('Unblock anonymous chat')
+  expect(storeChat).toContain('clearStoredConvoId()')
+  expect(storeChat).toContain('else setConversation(null)')
 })

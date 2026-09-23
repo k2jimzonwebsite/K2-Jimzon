@@ -43,10 +43,34 @@ create table if not exists k2_private.anonymous_chat_moderation_events (
   created_at timestamptz not null default now()
 );
 
+-- The existing conversation_events trigger rejects every delete, including a
+-- foreign-key cascade. This marker admits only the one reviewed moderation
+-- transaction, and is removed before that transaction commits.
+create table if not exists k2_private.anonymous_chat_delete_authorizations (
+  conversation_id uuid primary key,
+  transaction_id bigint not null,
+  actor_id uuid not null references auth.users(id) on delete restrict
+);
+
 revoke all on table k2_private.anonymous_chat_principals from public, anon, authenticated;
 revoke all on table k2_private.anonymous_chat_blocks from public, anon, authenticated;
 revoke all on table k2_private.anonymous_chat_deletion_receipts from public, anon, authenticated;
 revoke all on table k2_private.anonymous_chat_moderation_events from public, anon, authenticated;
+revoke all on table k2_private.anonymous_chat_delete_authorizations from public, anon, authenticated;
+
+create or replace function public.prevent_conversation_event_mutation()
+returns trigger language plpgsql security definer set search_path = '' as $$
+begin
+  if tg_op='DELETE' and exists (
+    select 1 from k2_private.anonymous_chat_delete_authorizations delete_auth
+    where delete_auth.conversation_id=old.conversation_id
+      and delete_auth.transaction_id=txid_current()
+      and delete_auth.actor_id=auth.uid()
+  ) then return old; end if;
+  raise exception 'Conversation event history is append-only';
+end;
+$$;
+revoke all on function public.prevent_conversation_event_mutation() from public,anon,authenticated;
 
 -- Keep the already-reviewed guest implementations intact and place a block
 -- check plus hash association around them. The originals are no longer callable
@@ -57,6 +81,9 @@ alter function public.append_guest_message_v1(bigint,uuid,text,text,text,text)
   rename to append_guest_message_without_moderation_v1;
 revoke all on function public.start_guest_conversation_without_moderation_v1(bigint,uuid,text,text,text,text) from public, anon, authenticated;
 revoke all on function public.append_guest_message_without_moderation_v1(bigint,uuid,text,text,text,text) from public, anon, authenticated;
+-- The pre-BFF direct storefront writer cannot identify a trusted IP. Remove
+-- its client grants at the coordinated BFF cutover or blocks are bypassable.
+revoke all on function public.submit_storefront_chat_v1(text,text,text,uuid,text) from public,anon,authenticated;
 
 create function public.start_guest_conversation_v1(
   p_timestamp bigint, p_nonce uuid, p_payload_text text, p_ip_hash text,
@@ -126,11 +153,11 @@ returns jsonb language plpgsql security definer set search_path = '' as $$
 declare v_role text;
 begin
   select role into v_role from public.user_profiles where id=auth.uid();
-  if v_role not in ('Admin','SuperAdmin') then raise exception 'K2_ADMIN_REQUIRED'; end if;
+  if coalesce(v_role,'') not in ('Admin','SuperAdmin') then raise exception 'K2_ADMIN_REQUIRED'; end if;
   return jsonb_build_object(
     'conversations',coalesce((select jsonb_object_agg(c.id::text,jsonb_build_object(
       'eligible', c.source_kind in ('website_message','virtual_store_message')
-        and not exists(select 1 from public.customer_accounts a where a.customer_id=c.customer_id and a.status='active'),
+        and not exists(select 1 from public.customer_accounts a where a.customer_id=c.customer_id),
       'hasPrincipal',exists(select 1 from k2_private.anonymous_chat_principals p where p.conversation_id=c.id),
       'isBlocked',exists(select 1 from k2_private.anonymous_chat_principals p join k2_private.anonymous_chat_blocks b using(ip_hash) where p.conversation_id=c.id)
     )) from public.conversations c where c.source_kind in ('website_message','virtual_store_message')),'{}'::jsonb),
@@ -144,6 +171,112 @@ $$;
 revoke all on function public.list_anonymous_chat_moderation_v1() from public,anon,authenticated;
 grant execute on function public.list_anonymous_chat_moderation_v1() to authenticated;
 
+create or replace function k2_private.verify_admin_bff_request(
+  p_action text,
+  p_timestamp bigint,
+  p_nonce uuid,
+  p_idempotency_key uuid,
+  p_payload_text text,
+  p_signature text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path=''
+as $$
+declare
+  v_actor uuid := auth.uid();
+  v_secret bytea;
+  v_payload_hash text;
+  v_expected text;
+  v_message text;
+  v_bucket_start timestamptz;
+  v_actor_hits integer;
+  v_global_hits integer;
+begin
+  if v_actor is null or not public.is_staff() then
+    raise exception using errcode='42501',message='K2_ADMIN_ACCESS_REQUIRED';
+  end if;
+  if coalesce(auth.jwt()->>'aal','')<>'aal2' then
+    raise exception using errcode='42501',message='K2_ADMIN_AAL2_REQUIRED';
+  end if;
+  if p_action not in (
+    'confirm_order', 'packing_scan', 'payment_status', 'delivery_details',
+    'fulfill_order', 'transfer_lot', 'assign_box',
+    'inbox_internal_note', 'inbox_mark_read', 'inbox_workflow',
+    'inbox_delete_anonymous', 'inbox_block_anonymous', 'inbox_unblock_anonymous',
+    'pasabuy_transition', 'pasabuy_quote',
+    'intake_session_create', 'intake_session_step', 'intake_draft',
+    'intake_inventory', 'intake_publication', 'intake_evidence_register',
+    'consignment_create', 'consignment_add_line', 'consignment_scan',
+    'consignment_advance', 'consignment_finalize',
+    'lots_reconcile', 'lot_clearance',
+    'coupon_create', 'coupon_state', 'coupon_archive',
+    'admin_session_register', 'admin_session_validate',
+    'admin_session_revoke_current', 'admin_session_revoke_one', 'admin_session_revoke_all',
+    'admin_session_list', 'catalog_import_chunk', 'wholesale_inquiry_review',
+    'admin_mfa_replacement_requested', 'admin_mfa_replacement_completed',
+    'product_media_upload', 'product_media_assign', 'product_media_cleanup_complete',
+    'product_media_orphan_cleanup', 'product_media_orphan_cleanup_complete',
+    'globe_config_update', 'review_create', 'review_update', 'review_publish', 'review_withdraw',
+    'supplier_create', 'channel_internal_event_verify',
+    'staff_role_change', 'admin_delete_pin_set',
+    'product_master_update', 'product_master_status', 'product_master_delete',
+    'inbox_send_reply', 'product_knowledge_save', 'ai_spend_controls_update',
+    'marketplace_snapshot_stage', 'marketplace_order_fact_stage', 'marketplace_match_decision',
+    'marketplace_coverage_override', 'marketplace_fee_estimate_save',
+    'owner_close_stock_review_save', 'owner_close_pasabuy_review_save',
+    'owner_close_bookkeeping_handoff_save',
+    'owner_close_session_save'
+  ) then
+    raise exception using errcode='22023',message='K2_ADMIN_ACTION_INVALID';
+  end if;
+  if p_payload_text is null or octet_length(convert_to(p_payload_text,'UTF8')) >
+       (case when p_action in ('marketplace_snapshot_stage','marketplace_order_fact_stage') then 4194304
+             when p_action='catalog_import_chunk' then 1048576 else 65536 end)
+     or p_signature !~ '^[0-9a-f]{64}$' then
+    raise exception using errcode='22023',message='K2_ADMIN_REQUEST_INVALID';
+  end if;
+  if abs(extract(epoch from clock_timestamp())::bigint-p_timestamp)>300 then
+    raise exception using errcode='28000',message='K2_ADMIN_SIGNATURE_EXPIRED';
+  end if;
+  select request_secret into v_secret
+  from k2_private.admin_bff_secrets where singleton=true;
+  if v_secret is null then
+    raise exception using errcode='55000',message='K2_ADMIN_BOUNDARY_NOT_CONFIGURED';
+  end if;
+  v_payload_hash:=encode(extensions.digest(convert_to(p_payload_text,'UTF8'),'sha256'),'hex');
+  v_message:=p_action||E'\n'||p_timestamp::text||E'\n'||p_nonce::text||E'\n'
+    ||v_actor::text||E'\n'||p_idempotency_key::text||E'\n'||v_payload_hash;
+  v_expected:=encode(extensions.hmac(convert_to(v_message,'UTF8'),v_secret,'sha256'),'hex');
+  if extensions.digest(convert_to(v_expected,'UTF8'),'sha256')
+     <>extensions.digest(convert_to(p_signature,'UTF8'),'sha256') then
+    raise exception using errcode='28000',message='K2_ADMIN_SIGNATURE_INVALID';
+  end if;
+  v_bucket_start:=date_trunc('minute',clock_timestamp());
+  delete from k2_private.admin_request_rate_buckets
+  where bucket_start<v_bucket_start-interval '1 day';
+  insert into k2_private.admin_request_rate_buckets(scope,subject,bucket_start,hit_count)
+  values('actor',v_actor::text,v_bucket_start,1)
+  on conflict(scope,subject,bucket_start) do update
+    set hit_count=k2_private.admin_request_rate_buckets.hit_count+1
+  returning hit_count into v_actor_hits;
+  if v_actor_hits>360 then raise exception using errcode='54000',message='K2_ADMIN_RATE_LIMITED'; end if;
+  insert into k2_private.admin_request_rate_buckets(scope,subject,bucket_start,hit_count)
+  values('global','all_admin_requests',v_bucket_start,1)
+  on conflict(scope,subject,bucket_start) do update
+    set hit_count=k2_private.admin_request_rate_buckets.hit_count+1
+  returning hit_count into v_global_hits;
+  if v_global_hits>6000 then raise exception using errcode='54000',message='K2_ADMIN_RATE_LIMITED'; end if;
+  delete from k2_private.admin_request_nonces where expires_at<=now();
+  insert into k2_private.admin_request_nonces(actor_id,action,nonce,expires_at)
+  values(v_actor,p_action,p_nonce,now()+interval '10 minutes') on conflict do nothing;
+  return found;
+end;
+$$;
+revoke all on function k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)
+  from public,anon,authenticated;
+
 create function public.execute_admin_chat_moderation_v1(
   p_action text,p_timestamp bigint,p_nonce uuid,p_idempotency_key uuid,p_payload_text text,p_signature text
 )
@@ -155,7 +288,7 @@ begin
   if not k2_private.verify_admin_bff_request(p_action,p_timestamp,p_nonce,p_idempotency_key,p_payload_text,p_signature)
     then raise exception 'K2_ADMIN_REQUEST_REPLAYED'; end if;
   select role into v_role from public.user_profiles where id=v_actor;
-  if v_role not in ('Admin','SuperAdmin') then raise exception 'K2_ADMIN_REQUIRED'; end if;
+  if coalesce(v_role,'') not in ('Admin','SuperAdmin') then raise exception 'K2_ADMIN_REQUIRED'; end if;
   if p_action not in ('inbox_delete_anonymous','inbox_block_anonymous','inbox_unblock_anonymous') then raise exception 'K2_ADMIN_ACTION_INVALID'; end if;
   v_payload:=p_payload_text::jsonb; v_reason:=trim(coalesce(v_payload->>'reason',''));
   if length(v_reason) not between 1 and 500 then raise exception 'K2_ADMIN_PAYLOAD_INVALID'; end if;
@@ -179,8 +312,11 @@ begin
   else
     select * into v_conversation from public.conversations where id=(v_payload->>'conversationId')::uuid for update;
     if not found then raise exception 'K2_CONVERSATION_NOT_FOUND'; end if;
+    -- Account claim links a customer, not a conversation. Serialize against
+    -- that FK insert before checking whether this is still anonymous.
+    perform 1 from public.customers where id=v_conversation.customer_id for update;
     if v_conversation.source_kind not in ('website_message','virtual_store_message')
-       or exists(select 1 from public.customer_accounts a where a.customer_id=v_conversation.customer_id and a.status='active')
+       or exists(select 1 from public.customer_accounts a where a.customer_id=v_conversation.customer_id)
       then raise exception 'K2_ANONYMOUS_CHAT_REQUIRED'; end if;
     if p_action='inbox_block_anonymous' then
       for v_block in select p.ip_hash from k2_private.anonymous_chat_principals p where p.conversation_id=v_conversation.id loop
@@ -199,7 +335,13 @@ begin
       insert into k2_private.anonymous_chat_deletion_receipts(
         conversation_id,guest_reference,source_kind,message_count,reason,deleted_by
       ) values(v_conversation.id,v_conversation.guest_reference,v_conversation.source_kind,v_count,v_reason,v_actor);
+      insert into k2_private.anonymous_chat_delete_authorizations(conversation_id,transaction_id,actor_id)
+        values(v_conversation.id,txid_current(),v_actor);
+      delete from public.guest_access_grant_scopes
+        where scope_kind='conversation' and scope_id=v_conversation.id;
       delete from public.conversations where id=v_conversation.id;
+      delete from k2_private.anonymous_chat_delete_authorizations
+        where conversation_id=v_conversation.id;
       v_result:=jsonb_build_object('conversationId',v_conversation.id,'deleted',true,'messageCount',v_count);
     end if;
   end if;
