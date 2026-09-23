@@ -15,6 +15,25 @@ MAP-019/020/024/027/028. This record covers locally prepared behavior only.
 
 ## Evidence
 
+23 September final local release-gate recheck: `npm run verify:release`
+exited 0 with 1,152/1,152 tests and both separate production builds passing
+their security, source-boundary, secret-scan and bundle-budget gates. The prior
+base-suite stall was Playwright web-server teardown denied by the Windows
+sandbox; the full browser run exited with permitted local process control.
+The only source adjustments in this recheck were test fixtures: the Store
+reset button's actual accessible name, an isolated Admin HelpTip mount for
+the cold-load test, and a 240-second budget for the complete Owner Count &
+Close phone journey (it passed in 1.7 minutes inside the full gate). This is
+local verification, not proof of production migration or live chat moderation.
+Read-only Vercel inspection now identifies both K2 projects and their latest
+production deployments at the previous GitHub SHA; neither has this slice.
+Read-only production Supabase inspection still shows the guest-start/reply
+prerequisites absent and the direct chat writer present, so the moderation
+migration cannot be applied safely as-is. MAP-019/020 prerequisite
+reconciliation, MAP-017 authorized coordinated cutover, real-role/guest
+acceptance, and physical phone checks remain open. No push, provider write,
+flag flip, or deployment occurred in this recheck.
+
 23 September release recheck: a regression contract failed before the collapsed
 Shopkeeper was moved below the landscape chat sheet, then the focused
 MAP-027/moderation/security suite passed 85/85. Prepared Admin route counts in

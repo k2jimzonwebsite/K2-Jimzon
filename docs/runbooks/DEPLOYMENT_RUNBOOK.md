@@ -1,5 +1,23 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+**23 September mobile-chat moderation release check — local gate green, production hold:**
+The current local `main` passed `npm run verify:release` (1,152/1,152 tests;
+separate Storefront/Admin builds, security/source boundaries, secret scans and
+budgets passed). Read-only Vercel inspection found both K2 projects, whose
+latest production deployments still use prior SHA
+`3f018432d786f2f9b15d9f6d80d68ba4a2a40522`. No push or deployment was
+made. Production Supabase lacks the guest-start/reply RPC and table
+prerequisites required by `20260922_anonymous_chat_moderation.sql`; its legacy
+direct chat writer is still granted. Do not apply the moderation migration
+alone, flip guest mode, or advertise delete/IP blocking as live. Resolve and
+rehearse the MAP-019/020 guest boundary first, then use the owner-authorized
+MAP-017 backup/change-window and rollback process for a coordinated database,
+Storefront and Admin cutover. Verify real Admin/SuperAdmin/guest cases and
+physical phone chat before closing MAP-025/027/028. Recovery before applying
+production SQL is to leave the current deployments and direct chat unchanged;
+after an authorized apply, use the reviewed moderation rollback only within
+that change window and restore prior separate Vercel artifacts.
+
 **22 September owner-authorized Storefront readability and Admin quick-tools release:**
 GitHub `main` commit `8a1548f9a00666ba620a6f49f89677a0a1f45548` contains
 IDEA-20260921-08, IDEA-20260921-09 and IDEA-20260922-01. CI run

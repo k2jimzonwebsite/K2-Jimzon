@@ -180,8 +180,14 @@ test.describe('admin command center redesign', () => {
   test('keeps shared Admin help tips keyboard-readable and inside a 375px viewport', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.setViewportSize({ width: 375, height: 812 })
-    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    // Mount only this component; the full Admin shell can block a cold fixture load.
+    await page.goto('/robots.txt', { waitUntil: 'domcontentloaded' })
+    await page.addStyleTag({ url: '/src/index.css' })
     await page.evaluate(async () => {
+      const { injectIntoGlobalHook } = await import('/@react-refresh')
+      injectIntoGlobalHook(window)
+      window.$RefreshReg$ = () => {}
+      window.$RefreshSig$ = () => type => type
       const [reactModule, reactDomClientModule, helpTipModule] = await Promise.all([
         import('/@id/react'),
         import('/@id/react-dom/client'),

@@ -3,7 +3,9 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
-  timeout: 120000,
+  // This phone journey completes the entire multi-stage close, including each
+  // protected save and its follow-up read; cold dev-server runs can exceed 2m.
+  timeout: 240000,
   forbidOnly: !!process.env.CI,
   workers: 1,
   reporter: 'list',

@@ -101,9 +101,9 @@ test('short mobile drag changes shelf; zoom controls and hint leave room to brow
   await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 140, y, id: 1 }, { x: 260, y, id: 2 }] })
   await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
   await expect.poll(cameraDistance).toBeLessThan(zoomedDistance * 0.92)
-  await page.getByRole('button', { name: 'Reset view', exact: true }).click()
+  await page.getByRole('button', { name: 'Reset store view', exact: true }).click()
   await expect.poll(cameraDistance).toBeGreaterThan(originalDistance * 0.98)
-  for (const name of ['Zoom in', 'Zoom out', 'Reset view']) {
+  for (const name of ['Zoom in', 'Zoom out', 'Reset store view']) {
     const button = page.getByRole('button', { name, exact: true })
     await expect(button).toBeInViewport()
     expect((await button.boundingBox()).height).toBeGreaterThanOrEqual(44)
