@@ -11,6 +11,7 @@ test('mobile store minimizes the Shopkeeper behind sheets and uses a compact cam
   expect(shop).toContain('forceCollapsed={Boolean(sheet)}')
   expect(keeper).toContain('forceCollapsed = false')
   expect(css).toMatch(/@media \(max-width: 900px\)[\s\S]*?\.k2-store-guide\[data-open='false'\][\s\S]*?width:\s*3\.5rem/)
+  expect(css).toMatch(/@media \(max-width: 900px\)\s*\{[\s\S]*?\.k2-store-guide\[data-open="false"\]\s*\{\s*width:\s*3\.5rem;\s*z-index:\s*19;/)
   expect(css).toMatch(/\.k2-store-camera-toolbar/)
   expect(css).toMatch(/@media \(max-width: 900px\)[\s\S]*?\.k2-store-zoom\s*\{[\s\S]*?flex-direction:\s*row/)
 })

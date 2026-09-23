@@ -639,7 +639,7 @@ test('the portrait leads a functional pop-out guide', async () => {
 
   // The portrait is now the control that opens and tucks away the guide.
   expect(panel).toContain('k2-store-guide-toggle')
-  expect(panel).toContain('aria-expanded={open}')
+  expect(panel).toContain('aria-expanded={visibleOpen}')
   expect(panel).toContain('k2-store-guide-panel')
 
   // Large enough to read as a portrait, and shaded rather than flat.
@@ -932,7 +932,7 @@ test('the pop-out guide and visual basket are functional scene overlays', async 
   expect(shop).toContain('basketCount={basketCount}')
   expect(shop).toContain('subtotal={subtotal}')
   expect(guide).toContain('k2-store-guide')
-  expect(guide).toContain('aria-expanded={open}')
+  expect(guide).toContain('aria-expanded={visibleOpen}')
   expect(basket).toContain('aria-label="Your basket"')
   expect(basket).toContain('k2-store-parcel')
   expect(css).toContain('.k2-store-guide')
@@ -1239,7 +1239,7 @@ test('virtual-store messages have one signed customer-visible path into Admin', 
   expect(migration).toContain('website_reply_capability_v1')
   expect(adminServer).toContain("action === 'inbox_send_reply'")
   expect(adminServer).toContain("'execute_admin_website_reply_v1'")
-  expect(adminService).toContain("inbox: new Set(['internal-note', 'send-reply', 'mark-read', 'workflow'])")
+  expect(adminService).toContain("inbox: new Set(['internal-note', 'send-reply', 'mark-read', 'workflow', 'delete-anonymous', 'block-anonymous', 'unblock-anonymous'])")
   expect(adminService).toContain('sendWebsiteReplyBff')
   expect(runtime).toContain('sendCustomerReply')
   expect(runtime).toContain("supabase.rpc('append_website_customer_reply_v1'")

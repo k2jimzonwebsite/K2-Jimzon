@@ -15,6 +15,22 @@ MAP-019/020/024/027/028. This record covers locally prepared behavior only.
 
 ## Evidence
 
+23 September release recheck: a regression contract failed before the collapsed
+Shopkeeper was moved below the landscape chat sheet, then the focused
+MAP-027/moderation/security suite passed 85/85. Prepared Admin route counts in
+both architecture references now match the 95-route registry; Storefront remains
+15. A fresh `npm run verify:release` printed 945 base passes but again stalled
+before that phase returned, and was interrupted. This is not a full release
+pass. Read-only live Supabase metadata showed no `start_guest_conversation_v1`
+or moderation RPC and retained anonymous access to `submit_storefront_chat_v1`.
+The prepared migration's unconditional guest-RPC rename would fail against that
+schema; it remains unapplied. No GitHub push or live provider change followed.
+The exact next action is MAP-019/020 guest-boundary reconciliation, release
+runner teardown diagnosis, full gate and real-role/landscape acceptance, then
+MAP-017-governed coordinated cutover. Revert the local source slice before any
+database application if abandoning it; after application use the reviewed
+rollback only inside that controlled window.
+
 23 September branch review found seven gaps and corrected them locally: the
 append-only event cascade, guest scope cleanup, missing-role metadata denial,
 Admin verifier action allowlist, legacy direct-chat bypass, all account-linked
