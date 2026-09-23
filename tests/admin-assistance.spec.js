@@ -59,7 +59,7 @@ test('image project has unified primary rules and product-specific handoff promp
   }
 
   expect(K2_PRODUCT_IMAGE_PROJECT_INSTRUCTIONS).toContain('PRIMARY_REJECTED')
-  expect(K2_PRODUCT_IMAGE_PROJECT_INSTRUCTIONS).toContain('#F3EDE0')
+  expect(K2_PRODUCT_IMAGE_PROJECT_INSTRUCTIONS).toContain('#D5D5D5')
   expect(K2_PRODUCT_IMAGE_PROJECT_INSTRUCTIONS).toContain('never a collage')
   expect(buildPrimaryImagePrompt(product, media)).toContain('Keep the complete package visible.')
   expect(buildAfterImagePrompt(product, media)).toContain('Do not show a larger package')

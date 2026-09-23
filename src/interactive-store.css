@@ -1631,7 +1631,7 @@
   .k2-store-basket-checkout { font-size: 0.875rem; }
   .k2-store-sheet-body { padding-bottom: max(1.25rem, env(safe-area-inset-bottom)); }
   .k2-store-basket-dock[data-filled="false"] { display: none; }
-  .k2-store-guide[data-open="false"] { width: 3.5rem; z-index: 30; }
+  .k2-store-guide[data-open="false"] { width: 3.5rem; z-index: 19; }
   .k2-store-guide[data-open="true"] { z-index: 35; }
   .k2-store-guide[data-open="false"] .k2-store-guide-toggle {
     grid-template-columns: 1fr;
