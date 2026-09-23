@@ -114,7 +114,7 @@ REQUIRED INPUT
 UNIVERSAL K2 PRIMARY STYLE
 - Output one portrait 4:5 image.
 - Use the real sealed package as the only subject. Keep it upright, fully visible, centered, and comfortably framed with consistent breathing room.
-- Prefer a transparent background. If transparency is unavailable, use the K2 warm-ivory product-tray color #F3EDE0.
+- Prefer a transparent background. If transparency is unavailable, use the K2 neutral product-tray color #D5D5D5.
 - Use soft, diffused natural light and a restrained contact shadow that does not hide the package.
 - Keep the presentation clean and editorial. Do not place the storefront wood grain inside the image; the website supplies that atmosphere.
 - Add no props, scenery, hands, ingredients, flags, badges, borders, stickers, decorative typography, watermarks, or extra products.

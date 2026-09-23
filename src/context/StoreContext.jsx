@@ -245,7 +245,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       const theme = isDark ? 'dark' : 'light'
       document.documentElement.classList.toggle('dark', isDark)
       document.documentElement.style.colorScheme = theme
-      document.querySelector('#theme-color')?.setAttribute('content', isDark ? '#090C15' : '#FAF7F2')
+      document.querySelector('#theme-color')?.setAttribute('content', isDark ? '#090C15' : '#D5D5D5')
       localStorage.setItem('theme', theme)
     } catch (e) {
       // Ignore localStorage errors in restricted browsers

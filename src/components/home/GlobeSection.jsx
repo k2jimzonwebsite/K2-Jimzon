@@ -32,8 +32,8 @@ export default function GlobeSection() {
 
         {/* Globe stage — deliberately large on phones so it's usable */}
         <div className="relative h-[62vh] min-h-[420px] w-full overflow-hidden rounded-2xl border border-line bg-shell/45 sm:h-[500px] md:h-[560px]">
-          {/* Warm ground shadow */}
-          <div className="pointer-events-none absolute top-[82%] left-1/2 z-0 h-[50px] w-[70%] -translate-x-1/2 rounded-full bg-[#9A6A45]/20 blur-2xl" />
+          {/* Ambient ground shadow */}
+          <div className="pointer-events-none absolute top-[82%] left-1/2 z-0 h-[50px] w-[70%] -translate-x-1/2 rounded-full bg-[#111111]/15 blur-2xl" />
 
           {hasProducts ? (
             <div className="absolute inset-0 z-10">
