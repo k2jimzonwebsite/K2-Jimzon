@@ -1,24 +1,31 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
-**24 September owner-authorized scoped code promotion - live content verified; aggregate release gate incomplete:**
+**24 September owner-authorized scoped code promotion - production and CI confirmed; local aggregate release gate incomplete:**
 Commit `5494b2bf71f7ecf30422e2b8c5bfc246b895bc9f` was pushed from
 `codex/manual-qr-payments` to GitHub `main` at the owner's request. The live
 Storefront and Admin target markers returned HTTP 200 with `storefront` and
 `admin`. `www.k2jimzon.com/pasabuy` served the new title and description;
 `Checkout-D3LnWQvx.js` contains the MariBank QR option and both public QR image
 URLs returned HTTP 200; `Admin-DnjF-ocB.js` contains the new phone navigation.
-This confirms current production content on both hosts. The configured Vercel
-connector exposed only an unrelated team, so no Vercel project API was used and
-exact deployment IDs/READY receipts were not captured. GitHub commit status
-returned no checks.
+This confirms current production content on both hosts. GitHub deployment
+receipts `6630128794` (Storefront) and `6630134932` (Admin) both report
+`success` for this exact SHA. Their Vercel artifact URLs are
+`https://k2-jimzon-eptvuc3mv-k2-jimzon.vercel.app` and
+`https://k2-jimzon-admin-fwv45qh1n-k2-jimzon.vercel.app`. GitHub CI run
+`35955278280` passed `build-and-smoke` and `critical-sql-behavior` for the
+same SHA. A narrow live check returned HTTP 200 with expected content types
+for the Storefront home, Pasabuy page, sitemap, both QR images, and the Admin
+entry. The configured Vercel connector exposed only an unrelated team, so no
+Vercel project API was used.
 
 The owner requested a fast check and directed that testing stop. In the single
 `npm run verify:release` attempt, all 947 `test:base` cases emitted passing
 results, then the process stopped producing output and accumulated over
-113,000 handles; it was interrupted. The aggregate release gate is **not
-verified green**. A focused source-contract run passed 59/59. Do not treat this
+113,000 handles; it was interrupted. The local aggregate release gate remains
+**incomplete**, while remote CI passed. A focused source-contract run passed
+59/59. Do not treat this
 as proof of a real order, real funds, staff acceptance, search indexing, or a
-Vercel provider receipt. No database migration, provider switch, payment
+real payment receipt. No database migration, provider switch, payment
 verification, or production order was changed or recorded.
 
 Recovery: revert `5494b2b` on `main` and allow both Git-linked Vercel projects
