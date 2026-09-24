@@ -14,7 +14,8 @@ Owner request: make the Admin simpler and more human for staff on phones, reduce
 - Focused Admin source contracts passed 41/41. `npm run verify:development` passed. `npm run build:admin` passed the target boundary, secret scan and 217.34/300.00 kB minified Admin entry budget.
 - The rendered 360px audit passed across all 18 sections. The complete Admin browser run passed 38/39; its sole failure was a test locator matching both a visible phone `h1` and hidden desktop `h1`, while the page snapshot showed the correct mobile label and Add inventory button. The corrected selector passed in an isolated rerun (1/1). No unaffected browser case was rerun.
 - `navigation.png` and `inventory-actions.png` are local fabricated-data Chromium screenshots. They prove the rendered layout, not real staff comprehension, authorized record writes, or physical-device behavior.
-- No production Admin artifact, provider state, database row, role grant or order was changed. Representative staff should find a product, process an order, open a Pasabuy request and return to the same record on actual phones before MAP-025 acceptance.
+- **Live snapshot, 24 September:** commit `5494b2bf71f7ecf30422e2b8c5bfc246b895bc9f` is on GitHub `main`. `admin.k2jimzon.com` returned the `admin` target marker and served `Admin-DnjF-ocB.js` containing `Buying & shipments`. Exact Vercel deployment IDs were not captured. No provider state, database row, role grant or order changed. Representative staff should find a product, process an order, open a Pasabuy request and return to the same record on actual phones before MAP-025 acceptance.
+- The owner-requested `npm run verify:release` did not finish; its first 947 base tests printed passing results, then the runner stalled and was interrupted. The full release gate is not recorded as green. Earlier focused Admin evidence above is unchanged.
 
 ## Recovery
 

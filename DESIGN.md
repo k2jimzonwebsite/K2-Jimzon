@@ -65,7 +65,7 @@ components:
 
 # Design System: K2 Jimzon
 
-### Admin phone work areas and text fit (IDEA-20260924-03, local)
+### Admin phone work areas and text fit (IDEA-20260924-03, production content verified; staff acceptance pending)
 
 The Admin stays a dense Source Sans work tool with its existing dark neutral surfaces and blue action color. Phone navigation opens on the current work area. Buttons and content labels wrap when the viewport narrows; state and record facts remain visible. Staff tools are secondary and closed until requested. No decorative motion is added.
 
