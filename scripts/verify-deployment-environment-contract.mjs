@@ -29,7 +29,7 @@ const ALLOWED = Object.freeze({
     'SUPABASE_URL', 'SUPABASE_PUBLISHABLE_KEY', 'K2_SESSION_COOKIE_KEY',
     'K2_ADMIN_BFF_REQUEST_SECRET', 'K2_ADMIN_ORIGINS', 'K2_COOKIE_SECURE',
     'K2_STAFF_INVITATIONS_ENABLED', 'K2_MFA_REPLACEMENT_ENABLED', 'K2_AI_SPEND_CONTROLS_ENABLED',
-    'K2_INTAKE_AI_ENABLED', 'OPENAI_API_KEY', 'K2_AI_CONTENT_MODEL', 'K2_AI_IMAGE_MODEL', 'K2_AI_RETENTION_REVIEWED', 'K2_AI_PRICING_REVIEWED',
+    'K2_INTAKE_AI_ENABLED', 'OPENAI_API_KEY', 'GEMINI_API_KEY', 'K2_AI_CONTENT_MODEL', 'K2_AI_IMAGE_MODEL', 'K2_AI_RETENTION_REVIEWED', 'K2_AI_PRICING_REVIEWED',
     'K2_ADMIN_PASSWORD_RECOVERY_ENABLED', 'K2_ADMIN_PASSWORD_RECOVERY_CALLBACK_URL',
     'K2_TURNSTILE_SECRET_KEY',
   ]),
@@ -45,7 +45,7 @@ const EXPLICITLY_FORBIDDEN = new Set([
   'SUPABASE_SERVICE_ROLE_KEY', 'SUPABASE_SECRET_KEY', 'SUPABASE_SECRET_KEYS',
   'ENCRYPTION_SECRET', 'GOOGLE_CLIENT_SECRET', 'FACEBOOK_APP_SECRET',
   'WHATSAPP_ACCESS_TOKEN', 'VIBER_BOT_TOKEN', 'SHOPEE_PARTNER_KEY',
-  'LAZADA_APP_SECRET', 'TIKTOK_APP_SECRET', 'GEMINI_API_KEY',
+  'LAZADA_APP_SECRET', 'TIKTOK_APP_SECRET',
 ])
 
 const BROWSER_SECRET_PATTERN = /^VITE_.*(?:SECRET|SERVICE_ROLE|TOKEN|PASSWORD|PRIVATE|PARTNER_KEY|APP_SECRET)/i
@@ -78,7 +78,7 @@ export function validateInventory(inventory, { activationTargets = [] } = {}) {
     for (const name of unique) {
       if (!VALID_NAME_PATTERN.test(name)) errors.push(`${target}: invalid variable name ${JSON.stringify(name)}`)
       if (BROWSER_SECRET_PATTERN.test(name)) errors.push(`${target}: browser-exposed secret-shaped name ${name}`)
-      if (EXPLICITLY_FORBIDDEN.has(name)) errors.push(`${target}: provider secret ${name} does not belong in Vercel`)
+      if (EXPLICITLY_FORBIDDEN.has(name) || (target === 'storefront' && name === 'GEMINI_API_KEY')) errors.push(`${target}: provider secret ${name} does not belong in Vercel`)
       if (!ALLOWED[target].has(name)) errors.push(`${target}: unapproved custom variable ${name}`)
     }
 

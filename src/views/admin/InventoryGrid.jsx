@@ -549,6 +549,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
 
       {showIntakeChooser && (
         <AddInventoryChooserModal
+          secure={secure}
           isOpen={showIntakeChooser}
           onClose={() => setShowIntakeChooser(false)}
           onSelectAutomaticQuick={() => setShowAiScanner(true)}

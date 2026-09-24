@@ -65,6 +65,13 @@ components:
 
 # Design System: K2 Jimzon
 
+### Product listing chooser clarity (MAP-018, local fixture check)
+
+| Before | After | Why |
+| --- | --- | --- |
+| Protected Admin presented preview-only Smart Paste as the main new-product action and called phone intake a Manual Form. | The main new-product action opens protected phone intake; the secondary action says Review JSON. | Staff reach barcode lookup, evidence, manual or enabled automatic content, field review and Draft in one sequence. |
+| The chooser implied a generic manual editor fallback in protected Admin. | The protected copy describes staff photos, reviewed fields and Draft status. | The text matches the available protected workflow and does not promise a direct editor or automatic publication. |
+
 ### Admin phone work areas and text fit (IDEA-20260924-03, production content verified; staff acceptance pending)
 
 The Admin stays a dense Source Sans work tool with its existing dark neutral surfaces and blue action color. Phone navigation opens on the current work area. Buttons and content labels wrap when the viewport narrows; state and record facts remain visible. Staff tools are secondary and closed until requested. No decorative motion is added.

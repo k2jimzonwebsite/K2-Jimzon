@@ -38,6 +38,8 @@ import pasabuyTransition from '../../prepared-api/admin/pasabuy/transition.js'
 import intakeConsignments from '../../prepared-api/admin/product-intake/consignments.js'
 import intakeDraft from '../../prepared-api/admin/product-intake/draft.js'
 import intakeDuplicates from '../../prepared-api/admin/product-intake/duplicates.js'
+import intakeBarcodeLookup from '../../prepared-api/admin/product-intake/barcode-lookup.js'
+import intakePublicSeoDraft from '../../prepared-api/admin/product-intake/public-seo-draft.js'
 import intakeEvidence from '../../prepared-api/admin/product-intake/evidence.js'
 import intakeEvidenceCleanup from '../../prepared-api/admin/product-intake/evidence-cleanup.js'
 import intakeInventory from '../../prepared-api/admin/product-intake/inventory.js'
@@ -144,6 +146,8 @@ const ROUTES = new Map([
   ['product-intake/consignments', intakeConsignments],
   ['product-intake/draft', intakeDraft],
   ['product-intake/duplicates', intakeDuplicates],
+  ['product-intake/barcode-lookup', intakeBarcodeLookup],
+  ['product-intake/public-seo-draft', intakePublicSeoDraft],
   ['product-intake/evidence', intakeEvidence],
   ['product-intake/evidence-cleanup', intakeEvidenceCleanup],
   ['product-intake/inventory', intakeInventory],
@@ -202,6 +206,7 @@ const ROUTES = new Map([
 
 const ADMIN_POST_ROUTES = new Set([
   'product-intake/ai',
+  'product-intake/public-seo-draft',
   'auth/login', 'auth/logout', 'auth/mfa',
   'auth/password-recovery/request', 'auth/password-recovery/complete',
   'product-media', 'product-media/assign', 'product-media/orphans',

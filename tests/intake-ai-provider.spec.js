@@ -44,6 +44,22 @@ test('structured output uses fixed endpoint, bounded normalized evidence and no 
   expect(result.providerId).toBe('resp_fixture'); expect(result.usage.total_tokens).toBe(300)
 })
 
+test('free Gemini key never receives private package evidence', async () => {
+  const image = await evidence()
+  const withGemini = { ...configured, GEMINI_API_KEY: 'test' }
+  const urls = []
+  await generateIntakeContent({ images: [image] }, {
+    env: withGemini,
+    fetchImpl: async url => { urls.push(url); return response() },
+  })
+  expect(urls).toEqual(['https://api.openai.com/v1/responses'])
+  await expect(generateIntakeContent({ images: [image] }, {
+    env: { ...withGemini, OPENAI_API_KEY: '' },
+    fetchImpl: async url => { urls.push(url); return response() },
+  })).rejects.toThrow('AI_NOT_CONFIGURED')
+  expect(urls).toHaveLength(1)
+})
+
 test('invalid evidence fails before dispatch', async () => {
   const image = await evidence(); let calls = 0
   const cases = [[], [null], [{ ...image, slot: 'AFTER' }], [image, image], [{ ...image, slot: 'BACK' }], [{ ...image, mime: 'image/jpeg' }], [{ ...image, data: Buffer.from('bad') }], [{ ...image, data: Buffer.alloc(4 * 1024 * 1024 + 1) }], [{ ...image, data: await png(12001, 1) }]]

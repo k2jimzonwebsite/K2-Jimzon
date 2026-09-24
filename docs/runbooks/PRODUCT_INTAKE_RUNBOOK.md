@@ -1,5 +1,9 @@
 # Product Intake and First-Source Runbook
 
+## Barcode lookup and manual photo path (IDEA-20260924-08/09)
+
+The protected Admin barcode route proposes public grocery identity after K2 duplicate search. Staff compare the exact product and size, confirm or reject, and continue with private package evidence. Missing match, invalid code, wrong catalog identity and provider outage leave manual product review available. Public catalog images are never imported. A confirmed match may request a Gemini free-tier SEO suggestion using public barcode, name, brand and quantity only; it is unsaved review text. If the identity changes, scan and review again. After saving a Draft, staff open Photos on the product row to upload their own primary, after-use and supporting storefront images. Evidence images remain private and are not published automatically. AI images are optional. Paid photo-grounded generation and live BFF use require MAP-017/020 and OWNER-007 decisions. For uncertain upload or assignment, use the exact retry/reconciliation action instead of creating a second Draft. Roll back the code release by reverting its commit; no database migration belongs to this slice.
+
 **15 September evidence upload (IDEA-20260914-02, local):** keep the original
 file and use “Retry exact evidence upload” while uncertain. Session, slot, bytes,
 filename and key stay fixed. Preview appears only after the canonical evidence

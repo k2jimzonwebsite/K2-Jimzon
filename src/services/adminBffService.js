@@ -79,6 +79,15 @@ const ERROR_MESSAGES = {
   PRODUCT_COMMAND_UNAVAILABLE: 'The product change could not be recorded safely. Refresh and try again.',
   PRODUCT_VERSION_CONFLICT: 'This product changed after you opened it. Refresh and review the latest record.',
   PRODUCT_NOT_FOUND: 'That product is no longer available. Refresh the inventory register.',
+  BARCODE_INVALID: 'Scan the package barcode or enter a valid EAN, UPC, or GTIN.',
+  CATALOG_MISMATCH: 'The catalog returned a different barcode. Use the package photos and manual path.',
+  CATALOG_UNAVAILABLE: 'The public product catalog is unavailable. Continue with package photos and manual entry.',
+  GEMINI_NOT_CONFIGURED: 'The public SEO draft is not configured. Continue with manual product review.',
+  PUBLIC_CATALOG_REQUIRED: 'No public catalog match is available for this barcode. Continue manually.',
+  GEMINI_TIMEOUT: 'The public SEO draft timed out. Continue manually or try again later.',
+  GEMINI_UNAVAILABLE: 'The public SEO draft is unavailable. Continue manually.',
+  GEMINI_OUTPUT_INVALID: 'The draft could not be checked. Continue manually.',
+  PUBLIC_DRAFT_UNAVAILABLE: 'The public SEO draft is unavailable. Continue manually.',
   PUBLICATION_NOT_READY: 'This product is missing required content, price, photo, or human-review evidence.',
   PUBLICATION_TRANSITION_INVALID: 'That publication change is not allowed from the product’s current state.',
   FULFILLMENT_UNAVAILABLE: 'Fulfillment records are temporarily unavailable.',
@@ -310,6 +319,10 @@ export function intakeAiBff(body, idempotencyKey) {
   return adminRequest('/api/admin/product-intake/ai', { method: 'POST', body, csrf: true, idempotency: true, idempotencyKey, timeoutMs: body.action === 'start' ? 125000 : 15000 })
 }
 
+export function publicSeoDraftBff(barcode) {
+  return adminRequest('/api/admin/product-intake/public-seo-draft', { method: 'POST', body: { barcode }, csrf: true, timeoutMs: 30000 })
+}
+
 export function challengeAdminMfaBff(code) {
   return adminRequest('/api/admin/auth/mfa', { method: 'POST', body: { code } })
 }
@@ -532,6 +545,10 @@ export function getProductIntakeSessionBff(sessionId, signal) {
 
 export function searchProductIntakeDuplicatesBff(query, signal) {
   return adminRequest(`/api/admin/product-intake/duplicates?query=${encodeURIComponent(query)}`, { signal })
+}
+
+export function lookupProductBarcodeBff(barcode, signal) {
+  return adminRequest(`/api/admin/product-intake/barcode-lookup?barcode=${encodeURIComponent(barcode)}`, { signal })
 }
 
 export function listProductIntakeConsignmentsBff(signal) {

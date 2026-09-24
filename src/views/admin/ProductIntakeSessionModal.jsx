@@ -33,7 +33,7 @@ import { AdminDialog } from '../../components/ui/AdminDialog'
 import { CANONICAL_CUSTODIANS, CANONICAL_HUBS } from '../../data/canonicalIdentities'
 import AutomaticIntakePanel from './AutomaticIntakePanel'
 import { useRetainedIntakeCommand } from './useRetainedIntakeCommand'
-import { adminBffEnabled } from '../../services/adminBffService'
+import { adminBffEnabled, lookupProductBarcodeBff, publicSeoDraftBff } from '../../services/adminBffService'
 
 export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct }) {
   const closeButtonRef = useRef(null)
@@ -55,6 +55,13 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
   const [duplicateResult, setDuplicateResult] = useState(null)
   const [distinctVariantConfirmed, setDistinctVariantConfirmed] = useState(false)
   const [distinctVariantReason, setDistinctVariantReason] = useState('')
+  const [catalogResult, setCatalogResult] = useState(null)
+  const [catalogMessage, setCatalogMessage] = useState('')
+  const [catalogDecision, setCatalogDecision] = useState('')
+  const [publicSeoDraft, setPublicSeoDraft] = useState(null)
+  const [publicSeoBusy, setPublicSeoBusy] = useState(false)
+  const [publicSeoError, setPublicSeoError] = useState('')
+  const catalogGeneration = useRef(0)
 
   // Step 2 states
   const [packagingImages, setPackagingImages] = useState({
@@ -189,6 +196,13 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       setDuplicateResult(null)
       setDistinctVariantConfirmed(false)
       setDistinctVariantReason('')
+      catalogGeneration.current++
+      setSearching(false)
+      setCatalogResult(null)
+      setCatalogMessage('')
+      setCatalogDecision('')
+      setPublicSeoDraft(null)
+      setPublicSeoError('')
     }
     try {
       if (adminBffEnabled()) {
@@ -226,23 +240,66 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
       setOperationError('You are offline. Reconnect before checking for duplicate products.')
       return
     }
+    const lookup = ++catalogGeneration.current
+    const barcode = query.trim()
     setSearching(true)
     setDuplicateResult(null)
+    setCatalogResult(null)
+    setCatalogMessage('')
+    setCatalogDecision('')
+    setPublicSeoDraft(null)
+    setPublicSeoError('')
     setOperationError('')
     try {
-      const res = await searchIdentityDuplicates(query.trim())
+      const res = await searchIdentityDuplicates(barcode)
+      if (lookup !== catalogGeneration.current) return
       setDuplicateResult(res)
+      if (res.matchType !== 'none' || !/^(?:\d{8}|\d{12}|\d{13}|\d{14})$/.test(barcode)) return
+      if (!adminBffEnabled()) {
+        setCatalogMessage('Automatic barcode lookup is not active yet. Continue with package photos and manual product review.')
+        return
+      }
+      const catalog = await lookupProductBarcodeBff(barcode)
+      if (lookup !== catalogGeneration.current) return
+      if (catalog.ok) {
+        setCatalogResult(catalog.data)
+        if (catalog.data?.status === 'not_found') setCatalogMessage('No public catalog match. Continue with package photos and manual product review.')
+      } else {
+        setCatalogMessage(catalog.code === 'BARCODE_INVALID'
+          ? 'The package barcode failed its check digit. Check the printed number or continue manually.'
+          : catalog.code === 'CATALOG_MISMATCH'
+            ? 'The public catalog returned a different barcode. Continue with package photos and manual product review.'
+            : 'The public catalog is unavailable. Your intake is unchanged; continue with package photos and manual product review.')
+      }
     } catch (error) {
-      setOperationError(error.userMessage || 'The duplicate check could not be completed.')
+      if (lookup === catalogGeneration.current) setOperationError(error.userMessage || 'The duplicate check could not be completed.')
     } finally {
-      setSearching(false)
+      if (lookup === catalogGeneration.current) setSearching(false)
     }
+  }
+
+  const handlePublicSeoDraft = async () => {
+    if (publicSeoBusy || !isOnline || catalogDecision !== 'confirmed' || catalogResult?.status !== 'found') return
+    const token = catalogGeneration.current
+    setPublicSeoBusy(true)
+    setPublicSeoError('')
+    try {
+      const result = await publicSeoDraftBff(catalogResult.barcode)
+      if (token !== catalogGeneration.current) return
+      if (!result.ok) throw new Error(result.error)
+      if (['barcode', 'name', 'brand', 'quantity'].some(field => result.data?.catalog?.[field] !== catalogResult[field])) {
+        throw new Error('The public catalog changed. Check the package and scan again before using this draft.')
+      }
+      setPublicSeoDraft(result.data.draft)
+    } catch (error) {
+      if (token === catalogGeneration.current) setPublicSeoError(error.message || 'Public SEO draft is unavailable. Continue manually.')
+    } finally { setPublicSeoBusy(false) }
   }
 
   const handleCopyPrompt = async () => {
     const prompt = buildProductJsonPrompt({
       barcode: query || 'N/A',
-      productName: query || '',
+      productName: catalogDecision === 'confirmed' ? catalogResult?.name : query || '',
       researchMode: 'complete',
     })
     try {
@@ -334,10 +391,12 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
   const canAdvance = (() => {
     if (intakeCommand.locked) return false
+    if (searching) return false
     if (aiBusy) return false
     if (sessionLoading || !session?.id || evidenceCleanup) return false
     if (step === 1) {
-      return duplicateResult?.matchType === 'none'
+      return (duplicateResult?.matchType === 'none'
+          && (catalogResult?.status !== 'found' || Boolean(catalogDecision)))
         || (duplicateResult?.matchType === 'ambiguous'
           && distinctVariantConfirmed
           && distinctVariantReason.trim().length >= 10)
@@ -375,7 +434,22 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   decided_at: new Date().toISOString(),
                 },
               }
-            : {},
+            : catalogResult?.status === 'found' && catalogDecision
+              ? {
+                  barcode_catalog: {
+                    barcode: catalogResult.barcode,
+                    source: catalogResult.source,
+                    source_url: catalogResult.sourceUrl,
+                    license: catalogResult.license,
+                    looked_up_at: catalogResult.lookedUpAt,
+                    name: catalogResult.name,
+                    brand: catalogResult.brand,
+                    quantity: catalogResult.quantity,
+                    staff_confirmed: catalogDecision === 'confirmed',
+                    reviewed_at: new Date().toISOString(),
+                  },
+                }
+              : {},
         }
       } else if (step === 2) {
         requestedStep = 'research_handoff'
@@ -703,7 +777,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
               <div>
                 <h4 className="text-base font-medium">Step 1: Scan or Type Product Identity</h4>
                 <p className="text-xs text-white/60">
-                  Search barcode, SKU, or name candidate before creating a new SKU to prevent duplicates.
+                  Scan the package EAN, UPC, or GTIN to check K2 first, then request a public product suggestion. An internal K2 SKU or name checks K2 only.
                 </p>
               </div>
 
@@ -720,6 +794,11 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                       setDuplicateResult(null)
                       setDistinctVariantConfirmed(false)
                       setDistinctVariantReason('')
+                      catalogGeneration.current++
+                      setSearching(false)
+                      setCatalogResult(null)
+                      setCatalogMessage('')
+                      setCatalogDecision('')
                     }}
                     placeholder="Scan barcode (e.g. 800123456789) or type name..."
                     className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-white/30"
@@ -796,6 +875,33 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                       Verified New Product Candidate. Safe to proceed with server SKU intake.
                     </div>
                   )}
+                  {catalogResult?.status === 'found' && duplicateResult.matchType === 'none' && (
+                    <section aria-label="Public catalog suggestion" className="min-w-0 space-y-2 rounded-lg border border-white/15 bg-white/5 p-3.5 text-sm text-white/80">
+                      <p className="font-semibold text-white">Open Food Facts suggestion</p>
+                      <p className="break-words">{catalogResult.name}{catalogResult.brand ? ` · ${catalogResult.brand}` : ''}{catalogResult.quantity ? ` · ${catalogResult.quantity}` : ''}</p>
+                      <p>Compare the exact product, flavor, and size with the physical package. This suggestion does not supply stock, price, or an approved image.</p>
+                      <label className="flex min-h-11 items-start gap-3 py-2">
+                        <input type="checkbox" checked={catalogDecision === 'confirmed'} onChange={event => { catalogGeneration.current++; setCatalogDecision(event.target.checked ? 'confirmed' : ''); setPublicSeoDraft(null); setPublicSeoError('') }} className="mt-1 accent-amber-400" />
+                        <span>This matches the exact product and size on the package.</span>
+                      </label>
+                      <button type="button" className="min-h-11 rounded-lg border border-white/20 px-3 py-2 text-sm text-white hover:bg-white/10" onClick={() => { catalogGeneration.current++; setCatalogDecision('rejected'); setPublicSeoDraft(null); setPublicSeoError('') }}>This is a different product; continue manually</button>
+                      {catalogDecision === 'rejected' && <p role="status">The public suggestion will be recorded as rejected. Use the package photos for the new Draft.</p>}
+                      {catalogDecision === 'confirmed' && <div className="space-y-2 border-t border-white/10 pt-3">
+                        <button type="button" className="min-h-11 rounded-lg border border-white/20 px-3 py-2 font-semibold text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400 disabled:opacity-50" disabled={!isOnline || publicSeoBusy} onClick={handlePublicSeoDraft}>{publicSeoBusy ? 'Preparing public SEO draft…' : 'Suggest SEO from public details'}</button>
+                        <p>Gemini sees only the public barcode, name, brand and size. It does not see package photos or K2 records. Check every suggestion against the package before using it.</p>
+                        {publicSeoError && <p role="alert" className="text-rose-200 break-words">{publicSeoError}</p>}
+                        {publicSeoDraft && <div role="status" className="space-y-2 rounded-lg border border-white/15 p-3 break-words">
+                          <p className="font-semibold text-white">Draft for staff review</p>
+                          <p><strong>Product card:</strong> {publicSeoDraft.card_description}</p>
+                          <p><strong>Search title:</strong> {publicSeoDraft.seo_title}</p>
+                          <p><strong>Search description:</strong> {publicSeoDraft.meta_description}</p>
+                          <p><strong>Search phrases:</strong> {publicSeoDraft.search_keywords.join(', ')}</p>
+                          <p>Suggestion only. No product field was saved.</p>
+                        </div>}
+                      </div>}
+                    </section>
+                  )}
+                  {catalogMessage && duplicateResult.matchType === 'none' && <p role="status" className="rounded-lg border border-amber-400/30 bg-amber-400/10 p-3 text-sm text-amber-100">{catalogMessage}</p>}
                 </div>
               )}
             </div>
@@ -908,6 +1014,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <p className="pt-1 text-white/50">
                   Each accepted photo is stored in the private intake-evidence bucket. It remains evidence only and is never published automatically.
                 </p>
+                <p className="text-white/70">After saving the Draft, open Photos in the product register to upload your own storefront photos. AI images are optional.</p>
                 <p className="text-white/50">If camera access is unavailable or denied, choose an existing package photo from this device.</p>
               </div>
             </div>

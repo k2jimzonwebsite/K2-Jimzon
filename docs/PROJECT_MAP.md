@@ -1,5 +1,7 @@
 # K2 Jimzon — Project Directory Map
 
+Barcode-assisted Admin intake uses `server/admin-bff/barcode-catalog.js`, `prepared-api/admin/product-intake/barcode-lookup.js`, `src/services/adminBffService.js` and `src/views/admin/ProductIntakeSessionModal.jsx`. The separate public-only Gemini suggestion uses `server/admin-bff/gemini-public-draft.js` and `prepared-api/admin/product-intake/public-seo-draft.js`. `tests/barcode-catalog-lookup.spec.js`, `tests/gemini-public-draft.spec.js`, `tests/intake-ai-provider.spec.js` and `tests/intake-ai-ui.spec.js` cover its bounded local paths. Design, evidence, activation and rollback are in `docs/design/BARCODE_ASSISTED_PRODUCT_LISTING.md`, `docs/evidence/20260924-barcode-listing/README.md` and MAP-018.
+
 IDEA-20260922-03 through -06 use `StoreKeeper.jsx`, `InteractiveShop.jsx` and `interactive-store.css` for the mobile obstruction fix; `Footer.jsx` for the six marketplace destinations; `AdminInstallButton.jsx`, `admin-sw.js` and the Admin-only Vite emit plugin for installability; and `20260922_anonymous_chat_moderation.sql` plus its rollback for private hash/block/receipt state. Admin moderation travels through three prepared Inbox routes, `server/admin-bff/inbox.js`, `useAdminInboxRuntime.js` and `Inbox.jsx`. `tests/mobile-store-moderation-pwa-contract.spec.js` owns the focused source/security contract; evidence is in `docs/evidence/20260922-mobile-chat-moderation/README.md`.
 
 The guest-boundary preflight compatibility regression uses
@@ -119,7 +121,7 @@ recovery are under `docs/evidence/20260909-catalog-import-retry/` and
 `docs/design-checkpoints/20260909-catalog-import-retry/`; product-intake and
 target-host acceptance remain in I-002.
 
-- Prepared Admin routes: 95
+- Prepared Admin routes: 97
 - Prepared Storefront routes: 15
 
 These are source registry counts, checked by

@@ -16,6 +16,7 @@ import {
  */
 export default function AddInventoryChooserModal({
   isOpen = false,
+  secure = false,
   onClose = () => {},
   onSelectAutomaticQuick = () => {},
   onSelectAutomaticTour = () => {},
@@ -60,7 +61,7 @@ export default function AddInventoryChooserModal({
               How would you like to add inventory?
             </h2>
             <p className="mt-1 text-xs text-white/60 leading-relaxed">
-              Choose your intake method based on whether this Italian provision already exists in the master catalog or is brand-new.
+              Choose an existing catalog SKU to restock, or start a reviewed listing for a new product.
             </p>
           </div>
           <button
@@ -142,27 +143,27 @@ export default function AddInventoryChooserModal({
                   <SparkleIcon size={20} />
                 </span>
                 <span className="rounded-full bg-rose-500/20 border border-rose-500/30 px-2.5 py-0.5 text-xs font-bold text-rose-300">
-                  Brand-New Italian Item
+                  New Product
                 </span>
               </div>
               <h3 className="mt-4 font-serif text-lg font-bold text-white">
-                Manually via ChatGPT Studio
+                {secure ? 'Create a reviewed listing' : 'Manually via ChatGPT Studio'}
               </h3>
               <p className="mt-2 text-xs leading-relaxed text-white/70">
-                Onboard brand-new Italian provisions without an existing SKU. Use our ChatGPT prompt formula to draft specs in seconds, then paste JSON into Smart Paste.
+                {secure ? 'Scan the barcode, check the package, and upload evidence. Use manual product JSON or an enabled paid content provider, then review every field before saving a Draft.' : 'Use our ChatGPT prompt formula to draft specs, then paste JSON into Smart Paste.'}
               </p>
               <ul className="mt-3 space-y-1.5 text-xs text-white/60">
                 <li className="flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
-                  <span>Interactive ChatGPT prompt formula</span>
+                  <span>{secure ? 'Barcode lookup with manual fallback' : 'Interactive ChatGPT prompt formula'}</span>
                 </li>
                 <li className="flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
-                  <span>Smart Paste JSON schema ingestion</span>
+                  <span>{secure ? 'Staff photos and field review' : 'Smart Paste JSON schema ingestion'}</span>
                 </li>
                 <li className="flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
-                  <span>Standard manual editor fallback</span>
+                  <span>{secure ? 'Draft before stock or publication' : 'Standard manual editor fallback'}</span>
                 </li>
               </ul>
             </div>
@@ -172,23 +173,25 @@ export default function AddInventoryChooserModal({
                 type="button"
                 onClick={() => {
                   onClose()
-                  onSelectManualSmartPaste()
+                  if (secure) onSelectManualForm()
+                  else onSelectManualSmartPaste()
                 }}
                 className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-xs font-bold text-white transition-all hover:bg-rose-500 active:scale-[0.98] cursor-pointer shadow-lg shadow-rose-950/50"
               >
                 <UploadIcon size={16} />
-                <span>Smart Paste JSON →</span>
+                <span>{secure ? 'Start New Product →' : 'Smart Paste JSON →'}</span>
               </button>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => {
                     onClose()
-                    onSelectManualForm()
+                    if (secure) onSelectManualSmartPaste()
+                    else onSelectManualForm()
                   }}
                   className="flex-1 min-h-11 rounded-xl border border-white/10 bg-white/5 px-2 py-1.5 text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white transition-colors cursor-pointer text-center"
                 >
-                  Manual Form
+                  {secure ? 'Review JSON' : 'Manual Form'}
                 </button>
                 <button
                   type="button"

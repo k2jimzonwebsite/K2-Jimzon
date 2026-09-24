@@ -2,6 +2,35 @@ import { test, expect } from '@playwright/test'
 import sharp from 'sharp'
 import { PRODUCT_RESEARCH_TEMPLATE } from '../src/views/admin/productResearchContract.js'
 
+test('barcode scan shows a public catalog suggestion and saves only staff-confirmed provenance', async ({ page }) => {
+  const barcode = '3017620422003'
+  const session = { id: 'e74a4161-72ca-4d72-8f59-37aa690e1869', request_id: 'c32fcf68-b8fd-45cf-bc56-ac461349ba23', checklist_step: 'identify', scanned_identity: '', packaging_images: [], field_decisions: {}, field_provenance: {}, draft_payload: {} }
+  let saved
+  await page.route('**/api/admin/product-intake/**', async route => {
+    const path = new URL(route.request().url()).pathname.split('/').at(-1)
+    if (path === 'session') return route.fulfill({ json: { ok: true, data: { session } } })
+    if (path === 'duplicates') return route.fulfill({ json: { ok: true, data: { matchType: 'none', candidates: [] } } })
+    if (path === 'barcode-lookup') return route.fulfill({ json: { ok: true, data: { status: 'found', barcode, name: 'Hazelnut spread', brand: 'Ferrero', quantity: '400 g', source: 'Open Food Facts', sourceUrl: `https://world.openfoodfacts.org/product/${barcode}`, license: 'Open Database License (ODbL)', lookedUpAt: '2026-09-24T00:00:00.000Z' } } })
+    if (path === 'step') {
+      saved = route.request().postDataJSON()
+      session.checklist_step = 'packaging_evidence'
+      session.field_provenance = saved.patch.fieldProvenance
+      return route.fulfill({ json: { ok: true, result: { sessionId: session.id, step: 'packaging_evidence', updatedAt: '2026-09-24T00:00:00Z' } } })
+    }
+    throw new Error(`Unexpected fixture request: ${path}`)
+  })
+  await page.goto('/tests/fixtures/intake-ai-harness.html?modal')
+  await page.getByLabel('Product barcode, SKU, or name').fill(barcode)
+  await page.getByRole('button', { name: 'Check Duplicate' }).click()
+  await expect(page.getByText('Open Food Facts suggestion')).toBeVisible()
+  await expect(page.getByText('Hazelnut spread')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled()
+  await page.getByRole('checkbox', { name: /matches the exact product and size/i }).check()
+  await page.getByRole('button', { name: 'Next', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Step 2: Capture Packaging Evidence' })).toBeVisible()
+  expect(saved.patch.fieldProvenance.barcode_catalog).toMatchObject({ barcode, source: 'Open Food Facts', name: 'Hazelnut spread', staff_confirmed: true })
+})
+
 test('an incomplete resume read never authorizes a new intake session', async ({ page }) => {
   let reads = 0
   let creates = 0
@@ -21,6 +50,26 @@ test('an incomplete resume read never authorizes a new intake session', async ({
   await page.getByRole('button', { name: 'Retry session setup', exact: true }).click()
   await expect(page.getByLabel('Product barcode, SKU, or name')).toHaveValue('Existing fixture session')
   expect(creates).toBe(0)
+})
+
+test('fresh public SEO data must still match the product staff confirmed', async ({ page }) => {
+  const barcode = '3017620422003'
+  const session = { id: 'e74a4161-72ca-4d72-8f59-37aa690e1869', request_id: 'c32fcf68-b8fd-45cf-bc56-ac461349ba23', checklist_step: 'identify', scanned_identity: '', packaging_images: [], field_decisions: {}, field_provenance: {}, draft_payload: {} }
+  await page.route('**/api/admin/product-intake/**', async route => {
+    const path = new URL(route.request().url()).pathname.split('/').at(-1)
+    if (path === 'session') return route.fulfill({ json: { ok: true, data: { session } } })
+    if (path === 'duplicates') return route.fulfill({ json: { ok: true, data: { matchType: 'none', candidates: [] } } })
+    if (path === 'barcode-lookup') return route.fulfill({ json: { ok: true, data: { status: 'found', barcode, name: 'Hazelnut spread', brand: 'Ferrero', quantity: '400 g', source: 'Open Food Facts' } } })
+    if (path === 'public-seo-draft') return route.fulfill({ json: { ok: true, data: { catalog: { barcode, name: 'Hazelnut spread', brand: 'Ferrero', quantity: '750 g' }, draft: { card_description: 'Wrong size.', seo_title: 'Wrong size', meta_description: 'Wrong size.', search_keywords: ['wrong size'] } } } })
+    throw new Error(`Unexpected fixture request: ${path}`)
+  })
+  await page.goto('/tests/fixtures/intake-ai-harness.html?modal')
+  await page.getByLabel('Product barcode, SKU, or name').fill(barcode)
+  await page.getByRole('button', { name: 'Check Duplicate' }).click()
+  await page.getByRole('checkbox', { name: /matches the exact product and size/i }).check()
+  await page.getByRole('button', { name: 'Suggest SEO from public details' }).click()
+  await expect(page.getByRole('alert')).toContainText('public catalog changed')
+  await expect(page.getByText('Wrong size.', { exact: true })).toHaveCount(0)
 })
 
 for (const failure of ['response loss', 'refresh failure', 'incomplete receipt', 'stale record']) {
@@ -210,6 +259,7 @@ test('uncertain intake step freezes its reviewed payload and retries the same ou
     const path = new URL(route.request().url()).pathname.split('/').at(-1)
     if (path === 'session') return route.fulfill({ json: { ok: true, data: { session } } })
     if (path === 'duplicates') return route.fulfill({ json: { ok: true, data: { matchType: 'none', candidates: [] } } })
+    if (path === 'barcode-lookup') return route.fulfill({ json: { ok: true, data: { status: 'not_found', barcode: '8001234567890' } } })
     if (path === 'step') {
       stepCalls.push({ body: route.request().postDataJSON(), key: route.request().headers()['x-k2-idempotency-key'] })
       if (stepCalls.length === 1) return route.fulfill({ status: 503, json: { error: { code: 'ADMIN_SERVICE_UNAVAILABLE' } } })
@@ -425,6 +475,59 @@ test('real modal persists automatic field-review transition before saving review
   expect(drafts).toBe(1)
 })
 
+test('manual product JSON creates a reviewed Draft without calling the automatic provider', async ({ page }) => {
+  const session = { id: 'e74a4161-72ca-4d72-8f59-37aa690e1869', request_id: 'c32fcf68-b8fd-45cf-bc56-ac461349ba23', checklist_step: 'research_handoff', scanned_identity: 'Fixture Pasta', packaging_images: [], field_decisions: {}, draft_payload: {} }
+  const content = structuredClone(PRODUCT_RESEARCH_TEMPLATE)
+  Object.assign(content.product, { name: 'Fixture Pasta', short_name: 'Pasta', brand_name: 'Fixture', variant: '500g', category: 'Pasta', subcategory: 'Dry Pasta' })
+  Object.assign(content.copy, { card_description: 'Pasta package.', full_description: 'Dry pasta in the supplied package.', key_highlights: ['Dry pasta', '500g package'], why_buy: 'Packaged pasta.' })
+  Object.assign(content.seo, { seo_title: 'Pasta', meta_description: 'Dry pasta.', page_heading: 'Pasta', supporting_heading: 'Dry pasta package', search_keywords: ['dry pasta', 'pasta 500g', 'fixture pasta'] })
+  Object.assign(content.media, { primary_alt_text: 'Package', primary_composition: 'Exact package', after_alt_text: 'Prepared pasta', after_scene: 'Cooked pasta' })
+  content.usage.use_cases = []; content.usage.instructions = []
+  const steps = []
+  let drafts = 0
+  let automaticCalls = 0
+  await page.route('**/api/admin/product-intake/**', async route => {
+    const path = new URL(route.request().url()).pathname.split('/').at(-1)
+    const body = route.request().method() === 'POST' ? route.request().postDataJSON() : {}
+    if (path === 'session') return route.fulfill({ json: { ok: true, data: { session } } })
+    if (path === 'ai') {
+      if (body.action !== 'read') automaticCalls++
+      return route.fulfill({ json: { ok: true, data: { jobs: [], readiness: { ready: false, missing: ['Paid automation is disabled.'], reservations: {} }, budget: {} } } })
+    }
+    if (path === 'step') {
+      steps.push(body.step)
+      session.checklist_step = body.step
+      if (body.step === 'draft_saved') {
+        expect(body.patch.fieldDecisions.name).toBe('accepted')
+        session.draft_payload = body.patch.draftPayload
+        session.field_decisions = body.patch.fieldDecisions
+      }
+      return route.fulfill({ json: { ok: true, result: { sessionId: session.id, step: body.step, updatedAt: '2026-09-24T00:00:00Z' } } })
+    }
+    if (path === 'draft') {
+      expect(body.reviewedPayload.product.name).toBe('Fixture Pasta')
+      drafts++
+      Object.assign(session, { product_id: 'fixture-product', assigned_sku: 'FIXTURE-SKU', checklist_step: 'first_inventory' })
+      return route.fulfill({ json: { ok: true, result: { success: true, product_id: session.product_id, sku: session.assigned_sku } } })
+    }
+    if (path === 'consignments') return route.fulfill({ json: { ok: true, data: { consignments: [] } } })
+    throw new Error(`Unexpected fixture request: ${path}`)
+  })
+  await page.goto('/tests/fixtures/intake-ai-harness.html?modal')
+  await expect(page.getByRole('heading', { name: 'Step 3: Manual ChatGPT Projects' })).toBeVisible()
+  await page.getByRole('button', { name: 'Next', exact: true }).click()
+  await page.getByLabel('Product research JSON').fill(JSON.stringify(content))
+  await page.getByRole('button', { name: 'Validate & Review Fields' }).click()
+  await expect(page.getByText(/Schema validated:/)).toBeVisible()
+  await page.getByRole('checkbox', { name: /^name: Fixture Pasta$/ }).check()
+  await page.getByRole('button', { name: 'Next', exact: true }).click()
+  await page.getByRole('button', { name: 'Assign SKU & Save Product Draft' }).click()
+  await expect(page.getByRole('heading', { name: /Step 6:/ })).toBeVisible()
+  expect(steps).toEqual(['field_review', 'draft_saved'])
+  expect(drafts).toBe(1)
+  expect(automaticCalls).toBe(0)
+})
+
 test('phone recovery, missing configuration, reviewed image and canonical attachment remain deliberate', async ({ page }) => {
   const jobs = [{ id: 'ccd54646-8a4b-4b5c-a5f4-ad8f11a9d98e', kind: 'PRIMARY', status: 'completed', result: {} }]
   const image = (await sharp({ create: { width: 1024, height: 1024, channels: 3, background: '#ccc' } }).png().toBuffer()).toString('base64')
@@ -458,4 +561,42 @@ test('phone recovery, missing configuration, reviewed image and canonical attach
   expect(actions.filter(action => action === 'attach')).toHaveLength(1)
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
   await page.screenshot({ path: 'docs/evidence/20260906-intake-ai/phone.png', fullPage: true })
+})
+
+test('confirmed barcode catalog allows Gemini SEO draft request and shows staff review text', async ({ page }) => {
+  const barcode = '3017620422003'
+  const session = { id: 'e74a4161-72ca-4d72-8f59-37aa690e1869', request_id: 'c32fcf68-b8fd-45cf-bc56-ac461349ba23', checklist_step: 'identify', scanned_identity: '', packaging_images: [], field_decisions: {}, field_provenance: {}, draft_payload: {} }
+  const draft = {
+    card_description: 'Ferrero hazelnut spread in a 400 g jar.',
+    seo_title: 'Ferrero Hazelnut Spread 400 g',
+    meta_description: 'Explore Ferrero hazelnut spread in a 400 g jar.',
+    search_keywords: ['Ferrero hazelnut spread', 'hazelnut spread 400 g', 'Ferrero spread'],
+  }
+  let draftCalled = 0
+  await page.route('**/api/admin/product-intake/**', async route => {
+    const path = new URL(route.request().url()).pathname.split('/').at(-1)
+    if (path === 'session') return route.fulfill({ json: { ok: true, data: { session } } })
+    if (path === 'duplicates') return route.fulfill({ json: { ok: true, data: { matchType: 'none', candidates: [] } } })
+    if (path === 'barcode-lookup') return route.fulfill({ json: { ok: true, data: { status: 'found', barcode, name: 'Hazelnut spread', brand: 'Ferrero', quantity: '400 g', source: 'Open Food Facts', sourceUrl: `https://world.openfoodfacts.org/product/${barcode}`, license: 'Open Database License (ODbL)', lookedUpAt: '2026-09-24T00:00:00.000Z' } } })
+    if (path === 'public-seo-draft') {
+      draftCalled++
+      const body = route.request().postDataJSON()
+      expect(body.barcode).toBe(barcode)
+      return route.fulfill({ json: { ok: true, data: { catalog: { barcode, name: 'Hazelnut spread', brand: 'Ferrero', quantity: '400 g' }, draft } } })
+    }
+    throw new Error(`Unexpected fixture request: ${path}`)
+  })
+  await page.goto('/tests/fixtures/intake-ai-harness.html?modal')
+  await page.getByLabel('Product barcode, SKU, or name').fill(barcode)
+  await page.getByRole('button', { name: 'Check Duplicate' }).click()
+  await expect(page.getByText('Open Food Facts suggestion')).toBeVisible()
+  await page.getByRole('checkbox', { name: /matches the exact product and size/i }).check()
+  const suggestBtn = page.getByRole('button', { name: 'Suggest SEO from public details' })
+  await expect(suggestBtn).toBeVisible()
+  await suggestBtn.click()
+  await expect(page.getByText('Draft for staff review')).toBeVisible()
+  await expect(page.getByText(/^Product card: Ferrero hazelnut spread/)).toBeVisible()
+  await expect(page.getByText(/^Search title: Ferrero Hazelnut Spread/)).toBeVisible()
+  await expect(page.getByText('Suggestion only. No product field was saved.')).toBeVisible()
+  expect(draftCalled).toBe(1)
 })

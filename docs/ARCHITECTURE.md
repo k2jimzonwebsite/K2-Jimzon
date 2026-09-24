@@ -1,5 +1,7 @@
 # K2 Jimzon — System Architecture
 
+The prepared Admin barcode route validates a package barcode and returns bounded public grocery identity fields after K2 duplicate search. A separate authenticated route rechecks the public catalog and sends only its barcode, name, brand and quantity to Gemini free tier for unsaved SEO suggestions. Neither route imports a catalog image or sends private package evidence. The protected phone intake records the staff source decision; the paid photo-grounded job boundary remains inactive. See `docs/design/BARCODE_ASSISTED_PRODUCT_LISTING.md`.
+
 Anonymous chat blocking is enforced around the signed guest start/reply RPCs. The Storefront BFF already derives a keyed SHA-256 digest from the request IP; the database stores that 32-byte digest in private principal/block tables and never receives a raw address. Admin reads only eligibility and content-free block metadata through an authenticated RPC. Admin/SuperAdmin mutations use the signed Admin BFF/idempotency boundary; deletion refuses active account links and records a content-free receipt before cascading the anonymous conversation. The paired rollback restores the original guest RPC names and grants.
 
 Admin installability remains inside the separate Admin artifact. The Admin build alone emits `admin-sw.js`; its fetch handler is network-only and never opens, matches, or writes a cache. The browser install prompt is optional progressive enhancement, not an APK or offline operations layer. Storefront mobile sheets force the Shopkeeper into its compact state without changing conversation or commerce state.
@@ -94,7 +96,7 @@ existing callers retain the active-element fallback. No endpoint, schema or
 production artifact boundary changes. Local evidence is in
 `docs/evidence/20260908-coupon-retry/README.md` (MAP-028 I-002).
 
-- Prepared Admin routes: 95
+- Prepared Admin routes: 97
 - Prepared Storefront routes: 15
 
 These are source registry counts, checked by

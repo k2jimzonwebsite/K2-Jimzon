@@ -96,7 +96,7 @@ export default function PhotoManagerModal({ product, onClose, onSave }) {
           <div className="min-w-0">
             <p className="font-mono text-xs text-blue">SKU {product.sku}</p>
             <h2 id="photo-manager-title" className="mt-1 text-xl font-semibold">Product photos</h2>
-            <p id="photo-manager-help" className="mt-1 text-sm leading-5 text-white/60">Choose the storefront primary, after-use, and supporting photos.</p>
+            <p id="photo-manager-help" className="mt-1 text-sm leading-5 text-white/60">Upload your own storefront photos for the primary, after-use, and supporting slots. AI images are optional.</p>
           </div>
           <button ref={closeButtonRef} type="button" disabled={closeDisabled} onClick={requestClose} aria-label="Close product photos" className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-adm-sm border border-adm-line text-white/70 transition-[background-color,color,transform] duration-150 hover:bg-white/5 hover:text-white active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue">
             <svg aria-hidden="true" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
