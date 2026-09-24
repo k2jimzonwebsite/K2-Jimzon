@@ -122,7 +122,10 @@ Then confirm the sitemap lists products:
 curl -s https://www.k2jimzon.com/sitemap.xml | grep -c "<loc>"
 ```
 
-Expect more than 2. Two means only the stable routes are listed.
+Expect more than 4. Four means only the stable Home, Catalog, Pasabuy and Trade
+routes are listed. Refresh the reviewed catalog projection with real product
+descriptions before rebuilding; the prerenderer reads those fields from that
+projection.
 
 Finally, in Google Search Console, submit `sitemap.xml` again and use **URL
 Inspection → Request indexing** on a few product pages. Removing `noindex` does

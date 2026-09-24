@@ -429,9 +429,9 @@ local CI change as fully reverified.
    `node scripts/map024-evidence/generate-sitemap.mjs --input=<reviewed-catalog-projection.json> --output=<named-output.xml>`
    only with a reviewed, read-only production projection (a top-level JSON
    array of product rows). The generator is
-   pinned to `https://www.k2jimzon.com`, includes home/catalog and published
+   pinned to `https://www.k2jimzon.com`, includes Home/Catalog/Pasabuy/Trade and published
    customer-visible `Live`/`Active` products only, and fails closed on missing
-   SKU/image data, unsafe or legacy-host images, duplicate SKUs, or a
+   SKU data, unsafe or legacy-host supplied images, duplicate SKUs, or a
    non-canonical origin.
    It does not query Supabase or read environment files. Do not generate or
    deploy `public/sitemap.xml` from local fallback products, fixtures, or an
@@ -444,7 +444,9 @@ local CI change as fully reverified.
     unrelated staging origins for local verification, while mapping the apex or
     Vercel preview hosts back to the canonical Storefront origin. The Storefront
     build also prerenders product-specific raw HTML from the exact reviewed
-    sitemap projection. Vercel's higher-level rewrites check the filesystem
+    sitemap projection. Catalog, Pasabuy and Trade also receive distinct
+    initial-response metadata from `generate-marketing-pages.mjs` and
+    `src/lib/storefrontSeoPages.js`. Vercel's higher-level rewrites check the filesystem
     first, so a generated product page wins; `/product/:sku` falls back to the
     client entry only for a missing/unpublished SKU. There is no global SPA catch-all.
     Unmatched paths are expected to retain a host 404 and use the target-specific,

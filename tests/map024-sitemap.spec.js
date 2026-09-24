@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test'
 import { generateSitemap, K2_STOREFRONT_ORIGIN } from '../scripts/map024-evidence/generate-sitemap.mjs'
 import { generateProductPages } from '../scripts/map024-evidence/generate-product-pages.mjs'
+import { generateMarketingPages } from '../scripts/map024-evidence/generate-marketing-pages.mjs'
+import { auditProjection } from '../scripts/map024-evidence/read-published-catalog.mjs'
 
 const visibleProducts = [
   {
@@ -28,6 +30,8 @@ test('MAP-024 sitemap emits only canonical visible product URLs', () => {
   expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')
   expect(xml).toContain(`<loc>${K2_STOREFRONT_ORIGIN}/</loc>`)
   expect(xml).toContain(`<loc>${K2_STOREFRONT_ORIGIN}/catalog</loc>`)
+  expect(xml).toContain(`<loc>${K2_STOREFRONT_ORIGIN}/pasabuy</loc>`)
+  expect(xml).toContain(`<loc>${K2_STOREFRONT_ORIGIN}/trade</loc>`)
   expect(xml).toContain(`${K2_STOREFRONT_ORIGIN}/product/K2%20%26%20Cream`)
   expect(xml).toContain(`${K2_STOREFRONT_ORIGIN}/product/Z-Coffee`)
   expect(xml).toContain('https://cdn.example.test/z.jpg?width=600&amp;format=webp')
@@ -36,6 +40,38 @@ test('MAP-024 sitemap emits only canonical visible product URLs', () => {
   expect(xml).not.toContain('DRAFT')
   expect(xml).not.toContain('private field')
   expect(xml.indexOf('/product/K2%20%26%20Cream')).toBeLessThan(xml.indexOf('/product/Z-Coffee'))
+})
+
+test('MAP-024 marketing routes have distinct initial-response metadata', () => {
+  const template = `<!doctype html><html><head>
+    <title>Home title</title>
+    <meta name="description" content="Home description" />
+    <link rel="canonical" href="https://www.k2jimzon.com/" />
+    <meta property="og:title" content="Home title" />
+    <meta property="og:description" content="Home description" />
+    <meta property="og:url" content="https://www.k2jimzon.com/" />
+    <meta name="twitter:title" content="Home title" />
+    <meta name="twitter:description" content="Home description" />
+  </head><body><div id="root"></div></body></html>`
+  const pages = generateMarketingPages({ template })
+
+  expect([...pages.keys()]).toEqual(['catalog', 'pasabuy', 'trade'])
+  expect(pages.get('pasabuy')).toContain('<title>Pasabuy from Italy to the Philippines | K2 Jimzon</title>')
+  expect(pages.get('pasabuy')).toContain('<link rel="canonical" href="https://www.k2jimzon.com/pasabuy"')
+  expect(pages.get('trade')).toContain('Italian Grocery Wholesale')
+  expect(pages.get('catalog')).toContain('Italian Imported Goods in Manila')
+  expect(pages.get('pasabuy')).not.toContain('Home description')
+})
+
+test('MAP-024 catalog projection reports product content readiness', async () => {
+  const { readFile } = await import('node:fs/promises')
+  const source = await readFile(new URL('../scripts/map024-evidence/read-published-catalog.mjs', import.meta.url), 'utf8')
+  expect(source).toContain("'description'")
+  expect(source).toContain("'short_description'")
+  expect(auditProjection([
+    { sku: 'READY', description: 'Specific product description', primary_image_url: 'https://example.test/a.jpg' },
+    { sku: 'MISSING', description: '  ', short_description: null },
+  ])).toMatchObject({ total: 2, missingDescription: 1, missingImage: 1 })
 })
 
 test('MAP-024 sitemap refuses non-canonical hosts and incomplete visible rows', () => {

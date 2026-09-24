@@ -22,6 +22,8 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { generateSitemap, K2_STOREFRONT_ORIGIN } from './map024-evidence/generate-sitemap.mjs'
 import { generateProductPages } from './map024-evidence/generate-product-pages.mjs'
+import { generateMarketingPages } from './map024-evidence/generate-marketing-pages.mjs'
+import { STOREFRONT_SEO_PAGES } from '../src/lib/storefrontSeoPages.js'
 import { productUrlsAllowedInSitemap, PRELAUNCH_PRODUCT_NOINDEX } from './prelaunch-indexing.mjs'
 
 const rootDir = fileURLToPath(new URL('..', import.meta.url))
@@ -67,6 +69,12 @@ export function emitSitemap({ target = resolveTarget(), origin = K2_STOREFRONT_O
   const xml = generateSitemap({ products, origin })
   fs.writeFileSync(path.join(distDir, 'sitemap.xml'), xml, 'utf8')
   const template = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8')
+  const marketingPages = generateMarketingPages({ template, origin })
+  for (const [segment, html] of marketingPages) {
+    const directory = path.join(distDir, segment)
+    fs.mkdirSync(directory, { recursive: true })
+    fs.writeFileSync(path.join(directory, 'index.html'), html, 'utf8')
+  }
   // Prerendered from the full catalog regardless of the gate. These pages are
   // what a person sees when they open or share a product link; withholding them
   // from search is a crawler instruction, not a reason to stop serving them.
@@ -79,8 +87,8 @@ export function emitSitemap({ target = resolveTarget(), origin = K2_STOREFRONT_O
 
   // Count what actually made it in, so the build log states the truth rather
   // than implying the whole catalog was published.
-  const productUrls = (xml.match(/<loc>/g) || []).length - 2
-  return { written: true, products: products.length, productUrls, productPages: pages.size }
+  const productUrls = (xml.match(/<loc>/g) || []).length - Object.keys(STOREFRONT_SEO_PAGES).length
+  return { written: true, products: products.length, productUrls, productPages: pages.size, marketingPages: marketingPages.size }
 }
 
 if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith('emit-storefront-sitemap.mjs')) {
@@ -90,6 +98,7 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   } else {
     console.log(`[sitemap] dist/sitemap.xml written with ${productUrlLabel(result)}`)
     console.log(`[metadata] ${result.productPages} product page${result.productPages === 1 ? '' : 's'} prerendered`)
+    console.log(`[metadata] ${result.marketingPages} marketing pages prerendered`)
     if (PRELAUNCH_PRODUCT_NOINDEX) {
       // Said unconditionally, because a sitemap with no product URLs otherwise
       // reads as a broken catalog projection rather than a deliberate gate.
@@ -107,5 +116,5 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
 
 function productUrlLabel(result) {
   const count = result.productUrls
-  return `2 stable routes and ${count} product ${count === 1 ? 'URL' : 'URLs'}`
+  return `${Object.keys(STOREFRONT_SEO_PAGES).length} stable routes and ${count} product ${count === 1 ? 'URL' : 'URLs'}`
 }

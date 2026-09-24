@@ -1,5 +1,9 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+**Admin phone workspace hierarchy (24 September, IDEA-20260924-03):** Staff phone navigation groups the existing authorized destinations by work area. The current group opens first; other groups and staff tools are explicit disclosures with readable labels and 44px controls. The phone top bar uses the short section name, and the workspace keeps its task heading. Overview widget choices remain available through the page selector and the navigation group. Inventory keeps one visible primary Add inventory action in its workspace; CSV import and spreadsheet mode are available from Staff tools. Desktop route IDs, role gates, signed commands, record truth and audit behavior do not change. Long labels, status text, numbers and button copy must wrap inside their containers instead of clipping or forcing a page-wide horizontal scroll. Every route still needs real staff and device acceptance before calling the navigation ready for operations.
+
+**24 September manual GCash/MariBank receiving choice (IDEA-20260924-01):** The customer may choose one of the owner-supplied receiving QR methods for a website order. Order request submission remains unpaid; staff first confirms eligible stock, final total and payment instructions. A QR view or buyer-supplied receipt never marks the order paid. Staff records structured manual evidence (GCash as `gcash`, MariBank as `bank_transfer`), and a different authorized reviewer confirms the exact amount arrived in the receiving account before setting `verified` or releasing the payment-gated packing/dispatch path. A synthetic test is not evidence of a real transfer.
+
 **Anonymous website-chat moderation and mobile access (22 September, IDEA-20260922-03 through -06):** On phone viewports the Store Shopkeeper must collapse to one 56px control and must remain collapsed behind every store sheet, including chat; camera controls remain three 44px horizontal targets. Anonymous chat moderation is chat-only and separates deletion from blocking. Only Admin and SuperAdmin may delete an anonymous website/virtual-store conversation, block its keyed 32-byte IP hash, or manually unblock it. A conversation linked to an active `customer_accounts` row must never be deleted by the anonymous command. Deletion removes the thread for staff and the guest but leaves a content-free receipt (conversation identifier, source, message count, actor, reason, time); it must not retain message/contact/IP content. Raw IP addresses must never be stored or shown. The Admin install experience is a separate Admin-target PWA using network-only authenticated requests and makes no offline-operation promise. Footer marketplace links are destinations only and must not imply connected inventory, order, or message adapters.
 
 **Admin quick tools (22 September, IDEA-20260922-01):** Shortcuts open the existing authorized workspace; they do not perform inventory, order or payment commands. Calculators are estimates, not saved financial records, live FX rates, invoices or courier quotes. The expiry helper may compare dates to the 90-day arrival rule but must not declare goods fresh or release quarantine. Scratchpad notes are stored only in the current browser and are not a shared shift record.
@@ -489,13 +493,19 @@ live | unlisted -> discontinued
   sitemap, and product structured-data URLs must resolve to that origin; preview
   and apex hosts may redirect or normalize to it, while local verification may
   preserve its local origin.
-- Only customer-visible `Live`/`Active` products with a stable SKU and a valid
-  HTTPS primary image may enter a generated sitemap. The sitemap is derived from
+- Only customer-visible `Live`/`Active` products with a stable SKU may enter a
+  generated sitemap after the product noindex gate is deliberately lifted. A
+  supplied primary image must be valid HTTPS; an absent image omits the sitemap
+  image element. The sitemap is derived from
   a reviewed production catalog projection, never fixtures, fallback products,
   private fields, or an unverified database snapshot.
 - Price, stock, availability, batch, and best-before remain live canonical
   projections used by product JSON-LD and the storefront. They are not duplicated
   into a static sitemap or used to create a second catalog truth.
+- Home, Catalog, Pasabuy and Trade have distinct truthful search metadata and
+  canonical URLs in both initial HTML and client navigation. Their sitemap entries
+  do not imply that product pages are ready to index. Product descriptions and
+  genuine media require staff review before the product indexing gate opens.
 - Admin routes remain excluded from indexing and share previews. A crawler file,
   canonical tag, or ownership record is not considered live until the exact
   production host returns the intended content type and an end-to-end check is

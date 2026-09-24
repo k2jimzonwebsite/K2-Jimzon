@@ -28,8 +28,8 @@ export default function Checkout() {
         barangay: pendingCheckout.barangay || '',
         city: pendingCheckout.city || '',
         address: pendingCheckout.address || '',
-        paymentMethod: pendingCheckout.paymentMethod || 'prepaid',
-        note: pendingCheckout.note || '',
+        paymentMethod: pendingCheckout.paymentMethod || 'gcash',
+        note: (pendingCheckout.note || '').replace(/^\[Payment: [^\]]+\]\s*/, ''),
       }
     : {
         name: '',
@@ -39,7 +39,7 @@ export default function Checkout() {
         barangay: '',
         city: '',
         address: '',
-        paymentMethod: 'prepaid',
+        paymentMethod: 'gcash',
         note: '',
       }))
 
@@ -70,7 +70,7 @@ export default function Checkout() {
         const on = data?.cod_available === true
         setCodAvailable(on)
         if (!on) {
-          setForm((current) => (current.paymentMethod === 'cod' ? { ...current, paymentMethod: 'prepaid' } : current))
+          setForm((current) => (current.paymentMethod === 'cod' ? { ...current, paymentMethod: 'gcash' } : current))
         }
       })
       .catch(() => {})
@@ -145,7 +145,7 @@ export default function Checkout() {
       : form.address.trim()
 
     // Prefix payment preference cleanly to customer note
-    const paymentLabel = form.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'Prepaid (method confirmed by staff)'
+    const paymentLabel = form.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : form.paymentMethod === 'maribank' ? 'MariBank QR transfer' : 'GCash QR transfer'
     const combinedNote = form.note?.trim()
       ? `[Payment: ${paymentLabel}] ${form.note.trim()}`
       : `[Payment: ${paymentLabel}]`
@@ -462,9 +462,13 @@ export default function Checkout() {
                     )}
                   </label>)}
 
-                  <label
-                    className={`flex min-h-[4rem] cursor-pointer items-start justify-between rounded-xl border p-3.5 transition-all duration-150 ${
-                      form.paymentMethod === 'prepaid'
+                  {[
+                    ['gcash', 'GCash', 'Pay by scanning the GCash QR after staff confirms your order.'],
+                    ['maribank', 'MariBank', 'Pay by scanning the MariBank QR after staff confirms your order.'],
+                  ].map(([method, name, description]) => <label
+                    key={method}
+                    className={`flex min-h-[4rem] cursor-pointer items-start justify-between rounded-xl border p-3.5 transition-colors duration-150 ${
+                      form.paymentMethod === method
                         ? 'border-crimson bg-crimson/[0.03] shadow-sm'
                         : 'border-line bg-surface hover:border-line-dark hover:bg-black/[0.01]'
                     }`}
@@ -473,24 +477,24 @@ export default function Checkout() {
                       <input
                         type="radio"
                         name="payment-preference"
-                        value="prepaid"
-                        checked={form.paymentMethod === 'prepaid'}
-                        onChange={() => setForm((curr) => ({ ...curr, paymentMethod: 'prepaid' }))}
+                        value={method}
+                        checked={form.paymentMethod === method}
+                        onChange={() => setForm((curr) => ({ ...curr, paymentMethod: method }))}
                         className="mt-1 h-4 w-4 accent-crimson"
                       />
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-base font-bold text-navy">Pay after staff confirmation</span>
+                          <span className="text-base font-bold text-navy">{name}</span>
                         </div>
-                        <p className="mt-1 text-base text-navy-soft">Nothing is charged here. Wait for staff to confirm your order total and approved payment instructions.</p>
+                        <p className="mt-1 text-base text-navy-soft">{description}</p>
                       </div>
                     </div>
-                    {form.paymentMethod === 'prepaid' && (
+                    {form.paymentMethod === method && (
                       <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-crimson text-white">
                         <CheckIcon size={12} />
                       </span>
                     )}
-                  </label>
+                  </label>)}
                 </div>
               </fieldset>
 

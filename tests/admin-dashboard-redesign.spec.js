@@ -237,6 +237,70 @@ test.describe('admin command center redesign', () => {
     await installSupabaseFixture(page)
   })
 
+  test('groups phone navigation around the active staff workspace', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/admin-portal-k2-secure')
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
+    await page.getByRole('button', { name: 'Open navigation menu' }).click()
+
+    const drawer = page.getByRole('dialog', { name: 'Admin navigation' })
+    await expect(drawer).toBeVisible()
+    await expect(drawer.getByRole('button', { name: 'Home & guides' })).toHaveAttribute('aria-expanded', 'true')
+    await expect(drawer.getByRole('button', { name: 'Dashboard views' })).toHaveAttribute('aria-expanded', 'false')
+    await expect(drawer.getByRole('button', { name: 'Staff tools' })).toHaveAttribute('aria-expanded', 'false')
+    await expect(drawer.getByRole('button', { name: 'Buying & shipments' })).toHaveAttribute('aria-expanded', 'false')
+    await expect(drawer.getByRole('button', { name: 'Flight Consignments' })).toBeHidden()
+    await drawer.getByRole('button', { name: 'Buying & shipments' }).click()
+    await expect(drawer.getByRole('button', { name: 'Flight Consignments' })).toBeVisible()
+    await page.screenshot({ path: 'docs/evidence/20260924-admin-mobile/navigation.png', animations: 'disabled' })
+    await drawer.getByRole('button', { name: 'Flight Consignments' }).click()
+    await expect(page.getByRole('heading', { name: 'Flight Consignments' })).toBeVisible()
+    await expect(drawer).toBeHidden()
+
+    await page.getByRole('button', { name: 'Open navigation menu' }).click()
+    await expect(drawer.getByRole('button', { name: 'Buying & shipments' })).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  test('keeps the phone inventory action visible without a hidden toolbar', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 })
+    await page.goto('/admin-portal-k2-secure')
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
+    await page.getByRole('navigation').getByRole('button', { name: 'Inventory', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Inventory & stock checks' })).toBeVisible({ timeout: 20000 })
+    await expect(page.locator('[data-tour="add-inventory-btn"]')).toBeInViewport()
+    await expect(page.getByRole('heading', { name: 'Inventory', exact: true })).toBeVisible()
+    await page.screenshot({ path: 'docs/evidence/20260924-admin-mobile/inventory-actions.png', animations: 'disabled' })
+    await page.getByRole('button', { name: 'Open navigation menu' }).click()
+    const drawer = page.getByRole('dialog', { name: 'Admin navigation' })
+    await drawer.getByRole('button', { name: 'Staff tools' }).click()
+    await expect(drawer.getByRole('button', { name: 'Upload CSV' })).toBeVisible()
+    await expect(drawer.getByRole('button', { name: 'Use spreadsheet' })).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
+  })
+
+  test('keeps every Admin workspace within a phone viewport', async ({ page }) => {
+    test.setTimeout(240000)
+    await page.setViewportSize({ width: 360, height: 780 })
+    await page.goto('/admin-portal-k2-secure')
+    await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
+    for (const section of [
+      'overview', 'owner_close', 'workflow_graph', 'kanban', 'consignment',
+      'pasabuy_manager', 'suppliers', 'inventory', 'omni_hub', 'inbox',
+      'wholesale', 'reservations', 'delivery', 'coupons', 'staff_permissions',
+      'integrations', 'store_assets', 'globe',
+    ]) {
+      await page.evaluate(id => {
+        const url = new URL(window.location.href)
+        url.searchParams.set('section', id)
+        window.history.pushState({}, '', url)
+        window.dispatchEvent(new PopStateEvent('popstate'))
+      }, section)
+      await expect(page.getByLabel('Loading workspace')).toBeHidden({ timeout: 20000 })
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+      expect(overflow, `${section} extended the page beyond 360px`).toBeLessThanOrEqual(1)
+    }
+  })
+
   test('left-panel widgets show one workspace and preserve every dashboard destination', async ({ page }) => {
     await page.goto('/admin-portal-k2-secure')
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 60000 })
@@ -312,6 +376,7 @@ test.describe('admin command center redesign', () => {
     await expect(chooser).toBeFocused()
     await page.screenshot({ path: 'docs/evidence/20260906-admin-widgets/mobile-metrics.png', fullPage: true })
     await page.getByRole('button', { name: 'More', exact: true }).click()
+    await page.getByRole('dialog', { name: 'Admin navigation' }).getByRole('button', { name: 'Dashboard views' }).click()
     await page.getByRole('navigation', { name: 'Dashboard widgets' }).getByRole('button', { name: 'Stock metrics', exact: true }).click()
     await expect(chooser).toHaveValue('stock')
     await expect(page.getByRole('heading', { name: 'Inventory health' })).toBeVisible()
@@ -1330,10 +1395,12 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByLabel('Search conversations')).toBeVisible()
 
     await page.getByRole('button', { name: 'More', exact: true }).click()
+    await page.getByRole('dialog', { name: 'Admin navigation' }).getByRole('button', { name: 'Buying & shipments' }).click()
     await page.getByRole('button', { name: 'Pasabuy Quotes', exact: true }).click()
     await expect(page.getByRole('heading', { name: 'Request and quote control' })).toBeVisible()
 
     await page.getByRole('button', { name: 'More', exact: true }).click()
+    await page.getByRole('dialog', { name: 'Admin navigation' }).getByRole('button', { name: 'Channels & access' }).click()
     await page.getByRole('button', { name: 'Channel Readiness', exact: true }).click()
     await expect(page.getByRole('heading', { name: 'Channel readiness board' })).toBeVisible()
     await page.screenshot({ path: 'C:/tmp/k2-admin-channels-mobile.png' })

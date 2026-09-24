@@ -4,6 +4,10 @@ This file contains only actions and business decisions that require the owner.
 It is not an engineering backlog; implementation remains exclusively in
 `MASTER_ACTION_PLAN.md`.
 
+## 24 September manual receiving choice — owner supplied
+
+The owner supplied MariBank and GCash receiving QR screenshots and requested both as temporary buyer choices (IDEA-20260924-01). This authorizes local implementation of those choices. It does not attest that either QR scans to the intended account, that a test transfer arrived, or that a staff verifier is assigned. Before publishing payment instructions or using real funds, the owner needs to scan each exact QR on another device, confirm its displayed recipient against the actual receiving account, and name the evidence submitter and separate account verifier for the test order. The real-transfer result must be recorded against MAP-023/MAP-025.
+
 ## Owner action priority
 
 | Priority | Owner item | Needed before | Current action |

@@ -224,6 +224,7 @@ npm run build:admin
   - Zero `service_role` keys or server-only credentials.
 - **Admin BOS Artifact**:
   - Contains the complete operational suite (`Overview`, `InventoryGrid`, `Sheet`, `ConsignmentManager`, `PasabuyManager`, `Inbox`, `StaffPermissionManager`, `ProductIntakeSessionModal`, etc.).
+  - `src/views/admin/Admin.jsx` owns the same section registry for desktop navigation and the phone disclosure drawer. `AdminWorkspaceUi.jsx` and the scoped `.admin-ui` rules in `src/index.css` own shared text and container geometry; presentation never supplies a second permission or data boundary.
   - Uses same-origin Admin BFF routes when the secure mode is enabled; the
     current flag-off compatibility path still uses browser Supabase.
 
@@ -255,7 +256,10 @@ tune matching functions; they are not treated as exclusion manifests.
   `src/lib/storefrontMetadataOrigin.js`: localhost and unrelated staging hosts
   stay local for verification, while the apex and Vercel preview hosts map to
   the canonical public Storefront origin.
-- `index.html` carries only absolute home discovery fields. Product-specific
+- `index.html` carries absolute home discovery fields. The shared
+  `src/lib/storefrontSeoPages.js` registry supplies route metadata for Catalog,
+  Pasabuy and Trade to the client, sitemap and static initial-response HTML via
+  `generate-marketing-pages.mjs`. Product-specific
   initial-response metadata and `sitemap.xml` require the same reviewed
   production catalog projection and remain separate from the browser bundle.
   `scripts/map024-evidence/generate-sitemap.mjs` owns the single visible-product

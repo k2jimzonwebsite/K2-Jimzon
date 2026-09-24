@@ -2,6 +2,14 @@
 
 **Owner:** MAP-018 / MAP-023 / MAP-028 I-016
 
+## 24 September owner QR assets (IDEA-20260924-01; local preparation)
+
+The owner supplied original MariBank and GCash receiving QR screenshots for a temporary manual payment method. The local Storefront now offers those two choices and frames the matching unchanged screenshot pixels on the order receipt. The MariBank screenshot visibly names MARIA KAIBA PRIETO and masks the account ending 8278; the GCash screenshot masks the recipient and mobile number. These are owner-supplied receiving assets, not independently scanned or account-verified by engineering. The checkout note records `MariBank QR transfer` or `GCash QR transfer`; Admin evidence must use `bank_transfer` or `gcash` respectively. The browser only remembers its own choice for restoring the receipt. The QR remains public artwork, so the owner must verify the actual recipient and scan result on a second device before any real transfer or publication.
+
+For a real order: submit request → staff confirm eligible stock and exact total → staff contact buyer → buyer scans chosen QR and sends transfer reference/receipt → one staff member records structured evidence → a different authorized reviewer checks the receiving account, amount and reference → only then mark payment `verified` and continue packing. A screenshot or buyer report cannot satisfy the account check. If the selected receiving account differs from the evidence method, or the transfer cannot be found, hold payment for reconciliation; do not infer success.
+
+This slice creates no payment gateway, instruction-delivery receipt, database migration, or production activation. The older decision list below remains open for formal instruction records, evidence retention, verifier assignment and real-host acceptance. The owner-provided images answer only the method/QR candidate portion of that list.
+
 **Current state, 16 September 2026 (AUD-OPS-001, MAP-023 §16, MAP-019, local):**
 The Admin fulfillment surface and database layer are locally prepared and
 rehearsed for structured manual payment evidence and distinct staff verification.

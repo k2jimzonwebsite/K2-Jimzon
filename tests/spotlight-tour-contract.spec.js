@@ -116,7 +116,7 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
     expect(toolsSource).toContain('CalculatorIcon')
   })
 
-  test('Admin.jsx mounts SpotlightTourOverlay, TourSelectionModal, and + Add Inventory button', async () => {
+  test('Admin.jsx mounts SpotlightTourOverlay, TourSelectionModal, and Add inventory action', async () => {
     const adminSource = await readFile(path.join(process.cwd(), 'src/views/admin/Admin.jsx'), 'utf8')
     expect(adminSource).toContain('SpotlightTourOverlay')
     expect(adminSource).toContain('TourSelectionModal')

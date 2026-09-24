@@ -524,7 +524,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
               className="flex min-h-11 items-center gap-2 rounded-adm-sm bg-blue px-4 py-2 text-sm font-bold text-white shadow-lg shadow-blue/20 hover:bg-blue-deep active:scale-[0.98] transition-all cursor-pointer"
             >
               <PlusIcon size={16} />
-              <span>+ Add Inventory</span>
+              <span>Add inventory</span>
             </button>
             <button data-tour="scan-box-btn" onClick={() => setShowAiScanner(true)} className={secondaryButton}><BoxIcon size={16} /> Scan box</button>
             <button data-tour="smart-paste-btn" onClick={() => setShowSmartPaste(true)} className={secondaryButton}><UploadIcon size={16} /> Smart paste</button>

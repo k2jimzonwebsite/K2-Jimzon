@@ -24,6 +24,8 @@ const SITEMAP_STATUSES = ['Live', 'Active']
 const PROJECTION_COLUMNS = [
   'sku',
   'name',
+  'description',
+  'short_description',
   'status',
   'published',
   'primary_image_url',
@@ -107,6 +109,7 @@ export function auditProjection(rows) {
     total: rows.length,
     publishedFalse: rows.filter(row => row.published === false).length,
     missingImage: rows.filter(row => firstImage(row) === null).length,
+    missingDescription: rows.filter(row => !String(row.description || row.short_description || '').trim()).length,
     missingSku: rows.filter(row => !String(row.sku ?? '').trim()).length,
   }
 }
@@ -127,6 +130,7 @@ export function runCli(args = process.argv.slice(2)) {
       console.log(`  rows read                 : ${audit.total}`)
       console.log(`  published === false       : ${audit.publishedFalse}`)
       console.log(`  no image on any column    : ${audit.missingImage}`)
+      console.log(`  no product description    : ${audit.missingDescription}`)
       console.log(`  missing SKU               : ${audit.missingSku}`)
       if (audit.publishedFalse) {
         console.log(`\n${audit.publishedFalse} of ${audit.total} row(s) have published=false and are excluded`)

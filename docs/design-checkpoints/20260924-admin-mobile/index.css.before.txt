@@ -704,10 +704,7 @@
     font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
-    white-space: normal;
-    text-align: center;
-    overflow-wrap: anywhere;
-    min-width: 0;
+    white-space: nowrap;
     transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
   }
   .adm-btn:active { transform: scale(0.99); }
@@ -793,8 +790,6 @@
 
   /* Anything explicitly marked as decorative is dropped on small screens. */
   .admin-ui .adm-desktop-only { display: none !important; }
-
-  .admin-ui :is(.adm-card, .adm-card-sunken, .adm-row) { min-width: 0; }
 }
 
 /* Horizontal scrollers (toolbars, tab rails) without a visible scrollbar. */

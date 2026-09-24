@@ -16,13 +16,13 @@ export function WorkspaceIntro({ eyebrow, title, description, status, statusTone
       <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div className="min-w-0">
           {eyebrow && <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/45">{eyebrow}</p>}
-          <div className="mt-1 flex min-w-0 items-start gap-2">
-            <h2 className="min-w-0 break-words text-xl font-semibold tracking-[-0.02em] text-white sm:text-2xl">{title}</h2>
+          <div className="mt-1 flex items-center gap-2">
+            <h2 className="text-xl font-semibold tracking-[-0.02em] text-white sm:text-2xl">{title}</h2>
             <HelpTip label={title} text={description} />
           </div>
         </div>
         {(status || actions) && (
-          <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
             {status && <StatusPill tone={statusTone}>{status}</StatusPill>}
             {actions}
           </div>
@@ -37,12 +37,12 @@ export function MetricRail({ items, columns = 'lg:grid-cols-4' }) {
     <dl className={`grid grid-cols-2 overflow-hidden rounded-adm border border-adm-line bg-adm-surface ${columns}`}>
       {items.map((item, index) => (
         <div key={item.label} className={`min-w-0 border-adm-line px-3 py-3 sm:px-4 sm:py-3.5 ${index >= 2 ? 'border-t' : ''} ${index % 2 ? 'border-l' : ''} ${index ? 'lg:border-l' : 'lg:border-l-0'} lg:border-t-0`}>
-          <dt className="flex min-w-0 flex-wrap items-center gap-2 break-words text-xs font-semibold uppercase tracking-[0.08em] text-white/40">
+          <dt className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-white/40">
             {item.label}
             {item.flag && <span className={`h-1.5 w-1.5 rounded-full ${item.flag}`} aria-hidden="true" />}
           </dt>
-          <dd className={`mt-1 min-w-0 break-words font-mono text-xl font-semibold tabular-nums tracking-tight ${item.tone || 'text-white'}`}>{item.value}</dd>
-          {item.detail && <p className="mt-1 break-words text-xs text-white/40">{item.detail}</p>}
+          <dd className={`mt-1 font-mono text-xl font-semibold tabular-nums tracking-tight ${item.tone || 'text-white'}`}>{item.value}</dd>
+          {item.detail && <p className="mt-1 truncate text-xs text-white/40" title={item.detail}>{item.detail}</p>}
         </div>
       ))}
     </dl>
@@ -52,9 +52,9 @@ export function MetricRail({ items, columns = 'lg:grid-cols-4' }) {
 export function SectionHeading({ title, description, count, action }) {
   return (
     <div className="flex flex-col gap-2 border-b border-adm-line pb-3 sm:flex-row sm:items-end sm:justify-between">
-      <div className="min-w-0">
-        <div className="flex min-w-0 items-start gap-2">
-          <h3 className="min-w-0 break-words text-sm font-semibold text-white">{title}</h3>
+      <div>
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-white">{title}</h3>
           {count !== undefined && <span className="font-mono text-xs text-white/40">{count}</span>}
           <HelpTip label={title} text={description} />
         </div>
@@ -78,7 +78,7 @@ export function DetailBlock({ title, count, defaultOpen = false, children }) {
         className="flex min-h-11 w-full items-center gap-2 py-1.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/70"
       >
         <ToggleIcon size={15} className="shrink-0 text-white/50" />
-        <span className="min-w-0 break-words text-sm font-semibold text-white/70">{title}</span>
+        <span className="text-sm font-extrabold uppercase tracking-wider text-white/70">{title}</span>
         {count !== undefined && <span className="font-mono text-xs text-white/40">{count}</span>}
         <span className="ml-auto shrink-0 text-xs font-semibold text-blue">{open ? 'Hide' : 'Show'}</span>
       </button>
@@ -113,7 +113,7 @@ export function WorkspaceTabs({ label, tabs, active, onChange }) {
 }
 
 export function StatusPill({ tone = 'neutral', children, className = '' }) {
-  return <span className={`inline-flex min-h-7 max-w-full items-center break-words rounded-full border px-2.5 text-xs font-semibold ${TONES[tone] || TONES.neutral} ${className}`}>{children}</span>
+  return <span className={`inline-flex min-h-7 items-center rounded-full border px-2.5 text-xs font-semibold ${TONES[tone] || TONES.neutral} ${className}`}>{children}</span>
 }
 
 export function StateBanner({ tone = 'neutral', children, role }) {
@@ -121,7 +121,7 @@ export function StateBanner({ tone = 'neutral', children, role }) {
   return (
     <div role={role || (tone === 'danger' ? 'alert' : 'status')} className={`flex items-start gap-2.5 rounded-adm-sm border p-3 text-sm leading-relaxed ${TONES[tone] || TONES.neutral}`}>
       <Icon size={16} className="mt-0.5 shrink-0" />
-      <span className="min-w-0 break-words">{children}</span>
+      <span>{children}</span>
     </div>
   )
 }

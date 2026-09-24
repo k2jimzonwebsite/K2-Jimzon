@@ -6,9 +6,10 @@ import {
 } from '../lib/productStructuredData'
 import { getProductKnowledge } from '../lib/productKnowledge'
 import { useProductKnowledgeVersion } from '../lib/useProductKnowledgeVersion'
+import { STOREFRONT_SEO_PAGES } from '../lib/storefrontSeoPages'
 
-const DEFAULT_TITLE = 'K2 Jimzon — Italian imports, direct to the Philippines'
-const DEFAULT_DESCRIPTION = 'Authentic Italian products sourced in Italy and fulfilled in Manila, with availability confirmed by K2 staff.'
+const DEFAULT_TITLE = STOREFRONT_SEO_PAGES.home.title
+const DEFAULT_DESCRIPTION = STOREFRONT_SEO_PAGES.home.description
 
 function setMeta(attribute, name, content) {
   let element = document.head.querySelector(`meta[${attribute}="${name}"]`)
@@ -57,17 +58,18 @@ export default function StorefrontMetadata() {
 
   useEffect(() => {
     const origin = metadataOrigin()
-    const canonicalUrl = new URL(view === 'wholesale' ? '/trade' : window.location.pathname, origin).href
+    const seoPage = STOREFRONT_SEO_PAGES[view]
+    const canonicalUrl = new URL(seoPage?.path || window.location.pathname, origin).href
     const title = product
       ? `${product.name} — K2 Jimzon`
       : view === 'not_found'
         ? 'Page not found — K2 Jimzon'
         : unavailableSurface
           ? 'Product unavailable — K2 Jimzon'
-          : DEFAULT_TITLE
+          : seoPage?.title || DEFAULT_TITLE
     const description = product
       ? product.description || product.short_description || `${product.name}, sourced in Italy and fulfilled in Manila by K2 Jimzon.`
-      : DEFAULT_DESCRIPTION
+      : seoPage?.description || DEFAULT_DESCRIPTION
     // Falls through to SOCIAL_FALLBACK inside absoluteUrl when the product has
     // no photograph, which today is every product.
     const image = absoluteUrl(product?.img || product?.primary_image_url, origin)

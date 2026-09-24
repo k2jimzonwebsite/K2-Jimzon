@@ -253,7 +253,7 @@ c:\Users\jerze\K2 JImzon\
 │   │   ├── disabledLazySupabaseClient.js # Admin target no-client alias
 │   │   └── supabaseClient.js    # Singleton browser Supabase implementation
 │   └── views/                   # Full-page views
-│       ├── admin/               # 40+ Admin views, modals, procedure registry, and management tools
+│       ├── admin/               # Admin shell/phone work-area menu, shared workspace UI, views and tools
 │       ├── Home.jsx             # Luxury Wood showcase & consignment hero
 │       ├── Catalog.jsx          # Public catalog grid with batch-stock derivation
 │       ├── InteractiveShop.jsx  # Optional room over canonical catalog/basket/conversation boundaries
@@ -272,6 +272,7 @@ c:\Users\jerze\K2 JImzon\
 ├── scripts/                     # CI/CD, verification, security scanning & rehearsal tools
 │   ├── build-anime-clerk.py      # Reproducible original K2 Blender model, exported named articulation
 │   ├── emit-static-404.mjs       # Target-specific script-free noindex host recovery document
+│   ├── emit-storefront-sitemap.mjs # Storefront sitemap and marketing/product HTML emission
 │   ├── verify-bundle-budgets.mjs# Hard Storefront/Admin production route budgets
 │   └── map024-evidence/         # Redacted hostname/discovery tools and prepared Vercel selector engine
 ├── playwright.map027.config.js  # Strict self-starting Interactive Shop browser acceptance harness

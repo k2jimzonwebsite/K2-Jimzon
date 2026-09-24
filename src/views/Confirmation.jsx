@@ -6,6 +6,8 @@ import { CheckIcon, InboxIcon } from '../components/ui/icons'
 import { guestBffEnabled, listGuestOrders } from '../services/guestCommerceService'
 
 function receiptOrder(saved) {
+  let paymentMethod = null
+  try { paymentMethod = window.localStorage.getItem(`k2-payment-choice:${saved.public_reference}`) } catch { /* browser storage may be unavailable */ }
   return {
     id: saved.public_reference,
     total: Number(saved.total_amount || 0),
@@ -13,6 +15,7 @@ function receiptOrder(saved) {
     wholesale: false,
     status: saved.status,
     paymentStatus: saved.payment_status,
+    paymentMethod,
   }
 }
 
@@ -47,6 +50,11 @@ export default function Confirmation() {
   }, [order])
 
   const currentOrder = order || restoredOrder
+  const [chosenMethod, setChosenMethod] = useState(order?.paymentMethod || 'gcash')
+
+  useEffect(() => {
+    if (currentOrder?.paymentMethod) setChosenMethod(currentOrder.paymentMethod)
+  }, [currentOrder?.paymentMethod])
 
   if (!currentOrder) {
     return (
@@ -83,7 +91,7 @@ export default function Confirmation() {
           <InboxIcon size={16} /> Saved for staff review
         </p>
         <p className="mt-2 text-sm leading-relaxed text-navy-soft">
-          No payment was charged. Our staff will verify inventory in Manila, review order and delivery details, and contact you with payment instructions.
+          No payment was charged. Our staff will verify inventory in Manila, review your order and total, and contact you before you transfer.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-navy-soft">
           There is no self-service cancellation or return. Message K2 staff; each request is reviewed case by case.
@@ -104,6 +112,26 @@ export default function Confirmation() {
           ))}
         </ol>
       </div>
+
+      {currentOrder.paymentStatus !== 'verified' && currentOrder.paymentMethod !== 'cod' && (
+        <section aria-labelledby="payment-qr-title" className="mt-6 rounded-2xl border border-line bg-paper p-5 text-left shadow-sm sm:p-7">
+          <h2 id="payment-qr-title" className="font-serif text-xl font-semibold">Pay by QR transfer</h2>
+          <p className="mt-2 text-base text-navy-soft">Wait for K2 staff to confirm your order and exact total before sending money. Include reference <strong className="text-navy">{currentOrder.id}</strong> when you send your receipt to staff.</p>
+          <fieldset className="mt-5">
+            <legend className="text-sm font-semibold">Choose where to pay</legend>
+            <div className="mt-2 grid grid-cols-2 gap-3">
+              {[['gcash', 'GCash'], ['maribank', 'MariBank']].map(([method, label]) => (
+                <label key={method} className={`flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-base font-semibold ${chosenMethod === method ? 'border-crimson bg-crimson/[0.03]' : 'border-line'}`}>
+                  <input type="radio" name="payment-qr" value={method} checked={chosenMethod === method} onChange={() => setChosenMethod(method)} className="accent-crimson" />{label}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <div className={`mx-auto mt-5 aspect-square w-full max-w-[360px] overflow-hidden rounded-xl border border-line bg-white ${chosenMethod === 'maribank' ? 'payment-qr-maribank' : 'payment-qr-gcash'}`} role="img" aria-label={`${chosenMethod === 'maribank' ? 'MariBank' : 'GCash'} receiving QR code`} />
+          <a className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-crimson underline underline-offset-4" href={`/payment/${chosenMethod === 'maribank' ? 'maribank' : 'gcash'}-receive.png`} target="_blank" rel="noopener noreferrer">Open original QR image</a>
+          <p className="mt-3 text-sm text-navy-soft">After transferring, send your payment reference and receipt to K2 staff. Payment remains pending until a separate staff reviewer confirms the funds in the receiving account.</p>
+        </section>
+      )}
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
         {guestBffEnabled() ? (

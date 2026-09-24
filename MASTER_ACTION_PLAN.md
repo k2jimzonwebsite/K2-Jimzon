@@ -367,6 +367,8 @@ stage unrelated changes. The authorized code release does not waive those gates.
 
 ## Admin ease-of-use strategy — IDEA-20260906-06
 
+**24 September phone-first Admin follow-up (IDEA-20260924-03; local engineering prepared).** Owner requests clearer staff words, less box nesting, grouped phone navigation and removal of overflowing or oversized text across the Admin. The phone drawer now uses accessible named work-area and Staff tools disclosures; the active area opens first. A short mobile title replaces long top-bar text, the hidden horizontal toolbar is desktop-only, and Inventory keeps its existing visible Add inventory action while CSV/spreadsheet tools remain in the drawer. Shared containers let headings, metrics and buttons wrap. All 18 registered sections stayed within a 360px viewport in the rendered fixture audit; 41 focused contracts, `npm run verify:development` and the Admin build passed (217.34/300.00 kB entry). The complete Admin browser run passed 38/39; its sole failure was a test selector that matched the hidden desktop heading along with the visible mobile heading. The corrected case passed alone (1/1); unaffected cases were not rerun. Pending: owner-approved promotion, representative Staff/Admin task timing and physical-device acceptance under MAP-025, plus real-host check after release. Recovery: restore only this presentation slice from `docs/design-checkpoints/20260924-admin-mobile/`; `docs/evidence/20260924-admin-mobile/README.md` names results and files. No database/provider action.
+
 **Widget refinement — IDEA-20260906-07, remaining promotion/acceptance:** local
 implementation and evidence are recorded in System Brain and
 `docs/evidence/20260906-admin-widgets/README.md`. No production deployment or
@@ -1991,6 +1993,8 @@ holds the view; browser back returns to the previous view; both builds and the
 full test suite stay green.
 
 ### Queue item 6 — MAP-024 — robots.txt, sitemap, JSON-LD, and share metadata
+
+**24 September SEO readiness slice (IDEA-20260924-02; locally prepared).** Distinct Catalog, Pasabuy and Trade metadata and static initial-response HTML now derive from one route registry, and all three join Home in the canonical sitemap. The read-only product projection carries description fields and reports missing descriptions. Product noindex and sitemap exclusion stay ON. Final focused contracts passed 14/14 and `npm run verify:development` passed; the storefront build passed with four stable URLs, zero product URLs, three marketing prerenders, and JS/CSS budget 150.48/150.50 and 29.58/30.00 kB gzip. Pending: approved real product content under MAP-018; exact-host deployment, Search Console sitemap/URL inspection and customer search acceptance under MAP-025. `docs/evidence/20260924-seo-readiness/README.md` records files and recovery. Recovery: revert this scoped feature-branch slice; no indexing switch or provider state was changed.
 
 **Database read delivered 28 August 2026; sitemap generation is blocked on data,
 not on access.** The recorded blocker — "obtain the owner-authenticated K2
@@ -5322,6 +5326,8 @@ rulebook, and System Brain.
 
 **Status:** Active — the reservation policy gate is resolved and its local
 implementation has landed; production activation still depends on MAP-017.
+
+**24 September manual QR choice (IDEA-20260924-01; local preparation).** Owner supplied GCash and MariBank receiving QR screenshots. Checkout records an explicit choice in the order note and the receipt frames the matching original QR, with a staff-confirmation warning before transfer. The existing Admin evidence and independent merchant-account verification remain the sole paid transition. Local evidence: 9/9 focused payment/copy contracts; browser order submission with MariBank selection, matching QR and receipt reload passed; mobile checkout selection of both methods passed; isolated signed payment evidence/verification/packing rehearsal exited 0; `npm run verify:development` exited 0; storefront build and 150.26/150.50 kB JS, 29.58/30.00 kB CSS budgets passed. These tests use synthetic order and payment facts, in separate fixtures; they do not prove a single real transfer or deployed QR flow. Public storefront is reachable but still runs the older deployed artifact. Pending: second-device scans and recipient checks for both QRs; real stock/total confirmation, transfer, evidence entry, independent account verification and staff acceptance; complete release gate and owner-requested promotion before production. Recovery: revert the scoped checkout/receipt/asset slice on `codex/manual-qr-payments`; no provider or database mutation belongs to this preparation. Evidence: `docs/evidence/20260924-manual-qr-payment/README.md`.
 
 **20 September packing-slip print isolation, local code (IDEA-20260920-10).** `window.print()` from `PackingSlipModal.jsx` no longer prints the Admin chrome and dialog backdrop: the slip content carries `k2-print-slip` and `src/index.css` hides everything else on paper via `@media print`, pinning the slip to the page top. Screen rendering is untouched. Covered by `tests/admin-hardening-followup-contract.spec.js`.
 

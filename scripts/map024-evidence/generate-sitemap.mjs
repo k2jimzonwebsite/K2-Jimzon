@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
+import { STOREFRONT_SEO_PAGES } from '../../src/lib/storefrontSeoPages.js'
 
 /**
  * MAP-024 prepared sitemap generator.
@@ -161,8 +162,7 @@ export function generateSitemap({ products = [], origin = K2_STOREFRONT_ORIGIN }
   const visible = selectVisibleProducts({ products, origin: canonical })
 
   const entries = [
-    urlEntry({ loc: `${canonical}/` }),
-    urlEntry({ loc: `${canonical}/catalog` }),
+    ...Object.values(STOREFRONT_SEO_PAGES).map(page => urlEntry({ loc: `${canonical}${page.path}` })),
     ...visible.map(urlEntry),
   ]
 

@@ -14,10 +14,10 @@ test('migration creates a default-off COD switch with anon read and staff-only w
   expect(rollback).toContain('payment_method_availability')
 })
 
-test('checkout hides Cash on Delivery unless switched on and defaults to prepaid', async () => {
+test('checkout hides Cash on Delivery unless switched on and defaults to GCash', async () => {
   const src = await read('../src/views/Checkout.jsx')
   expect(src).toContain('codAvailable')
-  expect(src).toContain("paymentMethod: 'prepaid'")
+  expect(src).toContain("paymentMethod: 'gcash'")
   expect(src).toContain('Cash on Delivery is not available right now')
   expect(src).toContain('{codAvailable && (<label')
 })

@@ -65,6 +65,22 @@ components:
 
 # Design System: K2 Jimzon
 
+### Admin phone work areas and text fit (IDEA-20260924-03, local)
+
+The Admin stays a dense Source Sans work tool with its existing dark neutral surfaces and blue action color. Phone navigation opens on the current work area. Buttons and content labels wrap when the viewport narrows; state and record facts remain visible. Staff tools are secondary and closed until requested. No decorative motion is added.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Phone drawer listed every dashboard widget and every section in one long list. | Work areas and Staff tools use named, 44px disclosure controls; the active work area opens first. | Staff see a short list of choices and keep every destination. |
+| A second phone header hid Inventory actions beyond a horizontal scroll. | The phone header uses a short section name; the workspace owns Add inventory, while CSV and spreadsheet choices live in Staff tools. | One visible primary action and a predictable place for occasional tools. |
+| Shared headings, metric details and buttons could truncate or hold a one-line width. | Text and actions wrap inside the existing flat containers. | Long staff labels and values stay readable at phone widths. |
+
+Source checkpoint: `docs/design-checkpoints/20260924-admin-mobile/`. Rendered phone evidence: `docs/evidence/20260924-admin-mobile/`. Staff task and physical-device acceptance remain MAP-025 work.
+
+### Manual QR receipt choice (IDEA-20260924-01)
+
+The checkout uses the existing warm surfaces, readable Source Sans controls and two full-width radio choices for GCash and MariBank. The receipt uses the same contained card shape and a square QR frame with unchanged source pixels. The staff-confirmation warning precedes the QR, and the account-review requirement follows it. The controls remain at least 44px high and no payment state is conveyed through color or motion alone. This design is locally prepared; real-device QR scanning and recipient validation remain pending under MAP-023/MAP-025.
+
 ### Storefront light mode 4-color soft white palette (IDEA-20260923-01)
 
 The storefront light mode adopts a 4-color soft white palette: `#DBDBDB` (lightest neutral / card surface / paper), `#D5D5D5` (soft concrete gray / base canvas / secondary shell), `#B3B3B3` (mid neutral line / divider / control border), and `#111111` (deep carbon black ink). The natural wood background texture (`url('/wood-bg.jpg')`) with its warm ambient radial gradients is preserved on `:root:not(.dark) body` and `.k2-store`. Dark mode obsidian palette remains untouched. Contrast ratio for `#111111` against `#DBDBDB` is 13.5:1 and against `#D5D5D5` is 12.5:1, exceeding WCAG AAA standards.

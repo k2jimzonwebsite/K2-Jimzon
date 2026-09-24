@@ -39,6 +39,6 @@ test('storefront promises reconcile with manual launch facts without false SLAs 
 
   const checkout = await readFile(new URL('../src/views/Checkout.jsx', import.meta.url), 'utf8')
   expect(checkout).not.toContain('GCash / Maya / Bank')
-  expect(checkout).toContain('Pay after staff confirmation')
-  expect(checkout).toContain('Nothing is charged here.')
+  expect(checkout).toContain('GCash QR after staff confirms your order')
+  expect(checkout).toContain('MariBank QR after staff confirms your order')
 })

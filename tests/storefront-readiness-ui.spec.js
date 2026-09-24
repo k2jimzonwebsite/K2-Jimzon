@@ -58,12 +58,15 @@ for (const width of [390, 1440]) for (const dark of [false, true]) {
   })
 }
 
-test('checkout explains manual payment without advertising unapproved providers', async ({ page }) => {
+test('checkout offers the two approved QR methods after staff confirmation', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 900 })
   await page.goto(`/product/${product.sku}`, { waitUntil: 'domcontentloaded' })
   await page.getByRole('button', { name: /Add to cart/ }).click()
   await page.getByRole('button', { name: 'Review order request', exact: true }).click()
-  await expect(page.getByText('Pay after staff confirmation', { exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Review order request', exact: true })).toBeVisible({ timeout: 60000 })
+  await expect(page.getByRole('radio', { name: /GCash/ })).toBeChecked()
+  await page.getByRole('radio', { name: /MariBank/ }).check()
+  await expect(page.getByRole('radio', { name: /MariBank/ })).toBeChecked()
   await expect(page.getByText('GCash / Maya / Bank', { exact: true })).toHaveCount(0)
   await expect(page.getByRole('button', { name: 'Submit order request', exact: true })).toBeVisible()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)

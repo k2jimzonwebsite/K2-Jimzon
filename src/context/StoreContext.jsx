@@ -718,7 +718,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         : {}),
     }
     checkoutPayloadRef.current = payload
-    setPendingCheckout(payload)
+    setPendingCheckout({ ...payload, paymentMethod: customerDetails.paymentMethod })
     if (!recovering) setCheckoutLines(totals.lines)
 
     if (guestBffEnabled()) {
@@ -770,6 +770,9 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   const finishOrder = (saved) => {
     syncLocation('confirmation')
     const finish = () => {
+      const paymentMethod = checkoutPayloadRef.current?.note?.includes('MariBank QR transfer') ? 'maribank'
+        : checkoutPayloadRef.current?.note?.includes('GCash QR transfer') ? 'gcash' : 'cod'
+      try { window.localStorage.setItem(`k2-payment-choice:${saved.public_reference}`, paymentMethod) } catch { /* browser storage may be unavailable */ }
       setOrder({
         id: saved.public_reference,
         total: Number(saved.total_amount ?? ((totals.finalTotal ?? totals.subtotal) + (Number(checkoutPayloadRef.current?.shippingAmount) || 0))),
@@ -777,6 +780,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         wholesale: false,
         status: saved.status,
         paymentStatus: saved.payment_status,
+        paymentMethod,
         shippingAmount: Number(saved.shipping_amount ?? checkoutPayloadRef.current?.shippingAmount ?? 0),
         fulfillmentMethod: saved.fulfillment_method ?? checkoutPayloadRef.current?.fulfillmentMethod,
       })

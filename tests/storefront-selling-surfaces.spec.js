@@ -160,6 +160,7 @@ test('guest message start and reply paths preserve scoped behavioral receipts', 
 
 test('order confirmation explains the staff-reviewed exception path without an SLA promise', async ({ page }) => {
   let statusReads = 0
+  let submittedNote = ''
   await page.setViewportSize({ width: 375, height: 812 })
   await page.addInitScript(() => {
     window.turnstile = {
@@ -185,7 +186,9 @@ test('order confirmation explains the staff-reviewed exception path without an S
     }
     return route.fulfill({ status: 200, contentType: 'application/json', body: '[]' })
   })
-  await page.route('**/api/storefront/order', (route) => route.fulfill({
+  await page.route('**/api/storefront/order', (route) => {
+    submittedNote = route.request().postDataJSON().note
+    return route.fulfill({
     status: 201,
     contentType: 'application/json',
     body: JSON.stringify({ ok: true, receipt: {
@@ -194,7 +197,8 @@ test('order confirmation explains the staff-reviewed exception path without an S
       status: 'Submitted',
       payment_status: 'Unpaid',
     } }),
-  }))
+    })
+  })
   await page.route('**/api/storefront/order/status', (route) => {
     statusReads += 1
     return route.fulfill({
@@ -216,6 +220,7 @@ test('order confirmation explains the staff-reviewed exception path without an S
   await page.getByRole('button', { name: 'Add to cart · ₱735' }).click()
   await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: 'Review order request' }).click()
   await expect(page.getByRole('heading', { name: 'Review order request', exact: true })).toBeVisible({ timeout: 60000 })
+  await page.getByRole('radio', { name: /MariBank/ }).check()
   await expect(page.getByText('Quoted after review', { exact: true })).toBeVisible()
   await expect(page.getByText('Products total', { exact: true })).toBeVisible()
   await expect(page.getByText('Order total', { exact: true })).toHaveCount(0)
@@ -228,10 +233,13 @@ test('order confirmation explains the staff-reviewed exception path without an S
   await page.getByRole('button', { name: 'Submit order request' }).click()
 
   await expect(page.getByRole('heading', { name: 'Order request received' })).toBeVisible({ timeout: 60000 })
+  expect(submittedNote).toContain('[Payment: MariBank QR transfer]')
+  await expect(page.getByRole('img', { name: 'MariBank receiving QR code' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Open original QR image' })).toHaveAttribute('href', '/payment/maribank-receive.png')
   await expect(page).toHaveURL(/\/confirmation$/)
   await page.reload({ waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('heading', { name: 'Order request received' })).toBeVisible({ timeout: 60000 })
-  await expect(page.getByText(/WEB-0123456789ABCDEF/)).toBeVisible()
+  await expect(page.getByText(/WEB-0123456789ABCDEF/).first()).toBeVisible()
   expect(statusReads).toBeGreaterThan(0)
   await expect(page.getByText(/There is no self-service cancellation or return/i)).toBeVisible()
   await expect(page.getByText(/each request is reviewed case by case/i)).toBeVisible()
@@ -242,7 +250,7 @@ test('order confirmation explains the staff-reviewed exception path without an S
   await expect(page.getByRole('heading', { name: 'Your cart is empty' })).toBeVisible()
   await page.goForward({ waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('heading', { name: 'Order request received' })).toBeVisible()
-  await expect(page.getByText(/WEB-0123456789ABCDEF/)).toBeVisible()
+  await expect(page.getByText(/WEB-0123456789ABCDEF/).first()).toBeVisible()
 })
 
 test('cold confirmation handles an expired guest grant with a useful recovery state', async ({ page }) => {
