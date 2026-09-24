@@ -1,5 +1,7 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+**24 September barcode-listing code promotion:** Owner-authorized commit `c0b3e77614c58615b4b406f75be47f3b59370b5d` fast-forwarded GitHub `main` from `2d6f7cf`. GitHub deployment receipts `6640661798` (Storefront) and `6640674255` (Admin) both report success for that SHA. The canonical `www.k2jimzon.com` and `admin.k2jimzon.com` build markers returned HTTP 200 with their separate `storefront` and `admin` targets. Live Admin chunks `ProductIntakeSessionModal-Cvdl44oG.js` and `InventoryGrid-Cd1V2XhV.js` returned HTTP 200 and contained the released SEO review and new-product chooser text. The isolated release checkout passed `npm run verify:release`, including 954 base tests, 23 intake UI tests and both production builds. No database migration, BFF switch, paid AI activation or real product publication occurred. Rollback: revert `c0b3e77` on `main` and allow both Git-linked Vercel projects to rebuild; no database rollback belongs to this slice. Real-host authenticated intake and stock acceptance remain MAP-018/020. Evidence: `docs/evidence/20260924-barcode-listing/README.md`.
+
 **24 September owner-authorized scoped code promotion - production and CI confirmed; local aggregate release gate incomplete:**
 Commit `5494b2bf71f7ecf30422e2b8c5bfc246b895bc9f` was pushed from
 `codex/manual-qr-payments` to GitHub `main` at the owner's request. The live

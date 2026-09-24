@@ -534,6 +534,7 @@ Approved real product-media and wider ecommerce design acceptance remain MAP-027
 
 **MAP-018 / MAP-028 I-016 — key-later preparation (IDEA-20260906-05), in progress.**
 IDEA-20260924-08/09 adds a locally prepared public barcode suggestion and a public-only Gemini SEO review. Manual JSON and simulated automatic content each reached field review and one Draft request in phone fixtures; staff photo upload waited before assignment. The protected intake chooser now opens phone intake for a new product. The Admin BFF remains off on the production host, and paid generation remains off under OWNER-007. Next: after MAP-017/020 cutover, check representative real K2 barcodes, create a real staff-reviewed Draft, upload and reload an approved product photo, then verify stock, price and publication with physical owner acceptance. Recovery: leave BFF/paid flags off and revert this release commit if its prepared UI or routes regress. Evidence: `docs/evidence/20260924-barcode-listing/README.md`.
+Code promotion `c0b3e77614c58615b4b406f75be47f3b59370b5d` reached both production Vercel projects and the live Admin asset check. This is deployed preparation only. The BFF, paid generation and real staff/stock acceptance remain open; do not close MAP-018.
 Owner confirms the automatic intake design described in this session. Use the
 existing intake session and strict k2.product-content.v3 contract. Assumptions:
 small staff workload, one bounded operation at a time per session; server-only
