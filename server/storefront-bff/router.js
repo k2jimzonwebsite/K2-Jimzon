@@ -1,6 +1,8 @@
 import accountClaim from '../../prepared-api/storefront/account/claim.js'
 import accountHistory from '../../prepared-api/storefront/account/history.js'
 import accountMessage from '../../prepared-api/storefront/account/message.js'
+import accountSettings from '../../prepared-api/storefront/account/settings.js'
+import accountNotifications from '../../prepared-api/storefront/account/notifications.js'
 import accountAuthEmail from '../../prepared-api/storefront/account/auth/email.js'
 import accountAuthPhone from '../../prepared-api/storefront/account/auth/phone.js'
 import accountAuthVerify from '../../prepared-api/storefront/account/auth/verify.js'
@@ -21,6 +23,8 @@ const ROUTES = new Map([
   ['account/claim', accountClaim],
   ['account/history', accountHistory],
   ['account/message', accountMessage],
+  ['account/settings', accountSettings],
+  ['account/notifications', accountNotifications],
   ['account/auth/email', accountAuthEmail],
   ['account/auth/phone', accountAuthPhone],
   ['account/auth/verify', accountAuthVerify],
@@ -40,6 +44,8 @@ export const STOREFRONT_BFF_ROUTE_CONTROLS = Object.freeze({
   'account/claim': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'required', accountAuth: 'required', idempotency: true }),
   'account/history': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'none', accountAuth: 'required', idempotency: false }),
   'account/message': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'none', accountAuth: 'required', idempotency: true }),
+  'account/settings': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'none', accountAuth: 'required', idempotency: true }),
+  'account/notifications': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'none', accountAuth: 'required', idempotency: true }),
   'account/auth/email': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: true, guestGrant: 'none', accountAuth: 'preauth', idempotency: false }),
   'account/auth/phone': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: true, guestGrant: 'none', accountAuth: 'preauth', idempotency: false }),
   'account/auth/verify': Object.freeze({ method: 'POST', origin: true, signed: true, databaseRateLimit: true, bot: false, guestGrant: 'none', accountAuth: 'preauth', idempotency: false }),

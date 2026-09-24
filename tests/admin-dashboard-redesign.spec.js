@@ -333,6 +333,7 @@ test.describe('admin command center redesign', () => {
   })
 
   test('widget source failures stay unavailable and recover without inventing zero totals', async ({ page }) => {
+    // Source errors remain visible independently of the contextual help panel.
     let fail = true
     await page.route('**/rest/v1/order_requests*', route => fail
       ? route.fulfill({ status: 403, json: { message: 'fixture source unavailable' } })
@@ -397,6 +398,83 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByRole('button', { name: /Download CSV/ })).toBeHidden()
     releaseRead()
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
+  })
+
+  test('task guide teaches intake and opens inline guidance without claiming saved work', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/admin-portal-k2-secure')
+    await page.getByRole('button', { name: 'Open navigation menu' }).click()
+    const navigation = page.getByRole('dialog', { name: 'Admin navigation' })
+    await navigation.getByRole('button', { name: 'Staff tools' }).click()
+    await navigation.getByRole('button', { name: 'Operations guide', exact: true }).click()
+    await page.getByText('Learn this task', { exact: true }).click()
+    await expect(page.getByText('1. Identify the exact product', { exact: true })).toBeVisible()
+    await page.getByRole('button', { name: 'Guide me through product intake', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Inventory & stock checks' })).toBeVisible({ timeout: 20000 })
+    const dialog = page.getByRole('dialog', { name: 'Phone-First Product Intake' })
+    await expect(dialog).toBeVisible({ timeout: 20000 })
+    const guide = dialog.getByRole('region', { name: 'Current intake guidance' })
+    await expect(guide).toContainText('Identify the exact product')
+    await expect(guide).toContainText('does not save or verify')
+    await guide.getByRole('button', { name: 'Focus this step’s control' }).click()
+    await expect(dialog.getByLabel('Product barcode, SKU, or name')).toBeFocused()
+    const identity = dialog.getByLabel('Product barcode, SKU, or name')
+    for (const state of ['aria-disabled', 'disabled', 'inert', 'hidden', 'visibility']) {
+      await identity.evaluate((element, state) => {
+        if (state === 'visibility') element.style.visibility = 'hidden'
+        else element.setAttribute(state, state === 'aria-disabled' ? 'true' : '')
+      }, state)
+      await guide.getByRole('button', { name: 'Focus this step’s control' }).click()
+      await expect(guide.getByRole('alert')).toContainText('no action was performed')
+      await expect(identity).not.toBeFocused()
+      await identity.evaluate((element, state) => {
+        if (state === 'visibility') element.style.removeProperty('visibility')
+        else element.removeAttribute(state)
+      }, state)
+      await guide.getByRole('button', { name: 'Focus this step’s control' }).click()
+      await expect(identity).toBeFocused()
+      await expect(guide.getByRole('alert')).toBeHidden()
+    }
+    await dialog.getByLabel('Product barcode, SKU, or name').evaluate(element => { element.id = 'fixture-missing-target' })
+    await guide.getByRole('button', { name: 'Focus this step’s control' }).click()
+    await expect(guide.getByRole('alert')).toContainText('no action was performed')
+    expect(await dialog.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1)
+    await page.screenshot({ path: 'docs/evidence/20260907-guided-intake/mobile.png' })
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    await page.screenshot({ path: 'docs/evidence/20260907-guided-intake/desktop.png' })
+  })
+
+  test('widget help is optional, contextual and keyboard recoverable on phone', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/admin-portal-k2-secure')
+    const help = page.getByRole('button', { name: 'Help with this widget', exact: true })
+    await expect(help).toHaveAttribute('aria-expanded', 'false')
+    await expect(page.getByText('Traffic, conversion and ad spend', { exact: true })).toBeVisible()
+    await help.click()
+    const panel = page.getByRole('complementary', { name: 'Widget help' })
+    await expect(panel).toContainText('How to read this')
+    await expect(panel).toContainText('Shop & channel metrics')
+    await panel.press('Escape')
+    await expect(help).toBeFocused()
+    await expect(panel).toBeHidden()
+    await help.click()
+    for (const widget of ['stock', 'inbox', 'pasabuy']) {
+      await page.getByLabel('Dashboard widget', { exact: true }).selectOption(widget)
+      await expect(panel).toBeHidden()
+      await expect(help).toBeHidden()
+    }
+    for (const [widget, explanation] of [
+      ['sales', 'without double-counting'],
+      ['priority', 'can overlap'],
+      ['revenue', 'not payment receipt date'],
+    ]) {
+      await page.getByLabel('Dashboard widget', { exact: true }).selectOption(widget)
+      await expect(help).toHaveAttribute('aria-expanded', 'false')
+      await help.click()
+      await expect(panel).toContainText(explanation)
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
+    await page.screenshot({ path: 'docs/evidence/20260907-widget-help/mobile.png' })
   })
 
   test('malformed stock source stays unavailable and new stock reflects on visibility refresh', async ({ page }) => {
@@ -1254,6 +1332,11 @@ test.describe('admin command center redesign', () => {
     await expect(dialog).toBeVisible()
     await expect(page.getByRole('button', { name: 'Close product intake' })).toBeFocused()
     await expect(page.getByLabel('Product barcode, SKU, or name')).toBeVisible()
+    await dialog.getByRole('button', { name: 'Show step guidance' }).click()
+    const stepGuide = dialog.getByRole('region', { name: 'Current intake guidance' })
+    await expect(stepGuide).toContainText('Identify the exact product')
+    await stepGuide.getByRole('button', { name: 'Focus this step’s control' }).click()
+    await expect(page.getByLabel('Product barcode, SKU, or name')).toBeFocused()
     const overflow = await dialog.evaluate((element) => element.scrollWidth - element.clientWidth)
     expect(overflow).toBeLessThanOrEqual(1)
 
@@ -1276,6 +1359,8 @@ test.describe('admin command center redesign', () => {
     await expect(dialog.getByText('Verified New Product Candidate', { exact: false })).toBeVisible()
     await dialog.getByRole('button', { name: 'Next' }).click()
     await expect(dialog.getByText('If camera access is unavailable or denied', { exact: false })).toBeVisible()
+    await expect(stepGuide).toContainText('Capture packaging evidence')
+    await expect(stepGuide).toContainText('does not save or verify')
 
     await page.route('**/storage/v1/object/**', route => route.fulfill({
       status: 503,

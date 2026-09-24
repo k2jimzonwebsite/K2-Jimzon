@@ -118,6 +118,35 @@ export function buildExpectedRepositorySchema() {
     // requirements. Most are transitional direct staff mutations that MAP-019/
     // MAP-020 will replace with Admin BFF commands and may then revoke.
     functionAuthorizationContracts: {
+      'public.read_admin_globe_cms_v1()': {
+        securityDefiner: true, anonCallable: false, searchPathSafe: true,
+        authorizationGuard: 'is_admin', aal2Required: true,
+        stateMutation: false, ownershipScope: 'admin_globe_cms',
+        idempotency: 'read_only', safeFailure: 'explicit_exception',
+        disposition: 'retain_behind_admin_bff',
+      },
+      'public.execute_admin_globe_review_command_v1(text,bigint,uuid,uuid,text,text)': {
+        ...adminAal2Mutation, authorizationGuard: 'is_admin',
+        ownershipScope: 'admin_globe_cms', idempotency: 'request_id_and_payload_hash',
+        disposition: 'retain_behind_admin_bff',
+      },
+      'public.execute_admin_globe_review_direct_v1(text,uuid,text)': {
+        ...adminAal2Mutation, authorizationGuard: 'is_admin',
+        ownershipScope: 'admin_globe_cms', idempotency: 'request_id_and_payload_hash',
+        disposition: 'revoke_after_admin_bff_cutover',
+      },
+      'public.website_reply_capability_v1()': {
+        securityDefiner: true, anonCallable: false, searchPathSafe: true,
+        authorizationGuard: 'is_staff', aal2Required: false,
+        stateMutation: false, ownershipScope: 'website_staff_reply',
+        idempotency: 'read_only', safeFailure: 'false_result',
+        disposition: 'retain_until_admin_bff_cutover',
+      },
+      'public.append_website_customer_reply_v1(uuid,text)': {
+        ...staffMutation, ownershipScope: 'website_staff_reply',
+        idempotency: 'not_guaranteed_by_direct_rpc',
+        disposition: 'revoke_after_admin_bff_cutover',
+      },
       'public.has_delete_pin()': {
         securityDefiner: true, returns: 'boolean', anonCallable: false, searchPathSafe: true,
         authorizationGuard: 'admin_role', stateMutation: false,

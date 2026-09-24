@@ -4,7 +4,6 @@ import { GlobeCmsProvider } from './data/globeCms'
 import MobileNavBar from './components/nav/MobileNavBar'
 import StoreHeader from './components/StoreHeader'
 import ErrorBoundary from './components/ui/ErrorBoundary'
-import StorefrontMetadata from './components/StorefrontMetadata'
 
 const Home = lazy(() => import('./views/Home'))
 const Pasabuy = lazy(() => import('./views/Pasabuy'))
@@ -21,6 +20,8 @@ const CartDrawer = lazy(() => import('./components/CartDrawer'))
 const StoreChatDrawer = lazy(() => import('./components/shop/StoreChatDrawer'))
 const StorefrontChatButton = lazy(() => import('./components/shop/StorefrontChatButton'))
 const Footer = lazy(() => import('./components/Footer'))
+const StorefrontMetadata = lazy(() => import('./components/StorefrontMetadata'))
+const CustomerAccountProvider = lazy(() => import('./context/CustomerAccountProvider'))
 // MAP-027: the Interactive Shop is opt-in. Lazy so its scene never loads on
 // landing, catalog, or product paths.
 const InteractiveShop = lazy(() => import('./views/InteractiveShop'))
@@ -83,13 +84,18 @@ function StorefrontShell() {
   )
 }
 
+function StorefrontCustomerRuntime({ children }) {
+  if (import.meta.env.VITE_CUSTOMER_ACCOUNT_ENABLED !== 'true' || import.meta.env.VITE_GUEST_BFF_ENABLED !== 'true') return children
+  return <Suspense fallback={<div className="min-h-[70vh]" aria-busy="true" />}><CustomerAccountProvider>{children}</CustomerAccountProvider></Suspense>
+}
+
 export default function StorefrontApp() {
   return (
     <ErrorBoundary>
       <GlobeCmsProvider>
         <StoreProvider>
-          <StorefrontMetadata />
-          <StorefrontShell />
+          <Suspense fallback={null}><StorefrontMetadata /></Suspense>
+          <StorefrontCustomerRuntime><StorefrontShell /></StorefrontCustomerRuntime>
         </StoreProvider>
       </GlobeCmsProvider>
     </ErrorBoundary>

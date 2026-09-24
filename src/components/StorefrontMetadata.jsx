@@ -39,25 +39,17 @@ function absoluteUrl(value, origin) {
   }
 }
 
-function metadataOrigin() {
-  return resolveStorefrontMetadataOrigin({
-    origin: window.location.origin,
-    hostname: window.location.hostname,
-    isDev: import.meta.env.DEV,
-  })
-}
-
 export default function StorefrontMetadata() {
   const { view, productId, getProduct, loading } = useStore()
   const product = view === 'master_product' ? getProduct(productId) : null
   const unavailableSurface = view === 'not_found' || (view === 'master_product' && !loading && !product)
-  const scopedSurface = ['account', 'messages', 'checkout', 'confirmation'].includes(view)
+  const scopedSurface = /^(account|messages|checkout|confirmation)$/.test(view)
   // Approved knowledge arrives after the catalog, so the FAQ markup has to be
   // rewritten when it lands rather than computed once on first render.
   const knowledgeVersion = useProductKnowledgeVersion()
 
   useEffect(() => {
-    const origin = metadataOrigin()
+    const origin = resolveStorefrontMetadataOrigin({ origin: window.location.origin, hostname: window.location.hostname, isDev: import.meta.env.DEV })
     const seoPage = STOREFRONT_SEO_PAGES[view]
     const canonicalUrl = new URL(seoPage?.path || window.location.pathname, origin).href
     const title = product
@@ -84,7 +76,7 @@ export default function StorefrontMetadata() {
     canonical.setAttribute('href', canonicalUrl)
 
     setMeta('name', 'description', description)
-    setMeta('name', 'robots', unavailableSurface || scopedSurface ? 'noindex, nofollow' : 'index, follow')
+    setMeta('name', 'robots', unavailableSurface || scopedSurface || (view === 'master_product' && __K2_PRODUCT_NOINDEX__) ? 'noindex, nofollow' : 'index, follow')
     setMeta('property', 'og:type', product ? 'product' : 'website')
     setMeta('property', 'og:site_name', 'K2 Jimzon')
     setMeta('property', 'og:title', title)

@@ -5,6 +5,20 @@ import { WORKFLOW_GUIDE_META, WORKFLOWS } from '../src/components/admin/master-w
 const read = path => readFile(new URL(path, import.meta.url), 'utf8')
 const guideText = () => JSON.stringify(WORKFLOWS)
 
+test('manual intake teaching contracts cover real stages without operational completion state', async () => {
+  const { STAFF_PROCEDURES } = await import('../src/views/admin/staffProcedureRegistry.js')
+  const procedure = STAFF_PROCEDURES.find(item => item.id === 'product-intake-manual')
+  expect(procedure.walkthrough).toHaveLength(7)
+  const targets = new Set()
+  for (const step of procedure.walkthrough) {
+    for (const field of ['title', 'instruction', 'evidence', 'expected', 'recovery', 'targetId']) expect(step[field]).toBeTruthy()
+    expect(step.actionKind).toBe('focus')
+    expect(targets.has(step.targetId)).toBe(false)
+    targets.add(step.targetId)
+    expect(step).not.toHaveProperty('completed')
+  }
+})
+
 test('the staff workflow guide does not claim unavailable automation or integrations', () => {
   const text = guideText()
 

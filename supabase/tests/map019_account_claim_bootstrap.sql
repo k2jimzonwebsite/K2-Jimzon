@@ -221,13 +221,13 @@ create table public.order_requests (
   id uuid primary key default extensions.gen_random_uuid(), public_reference text not null unique,
   customer_id uuid references public.customers(id), status text not null,
   payment_status text not null, total_amount numeric not null default 0,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(), updated_at timestamptz not null default now()
 );
 create table public.pasabuy_requests (
   id uuid primary key default extensions.gen_random_uuid(), public_reference text not null unique,
   customer_id uuid references public.customers(id), status text not null,
   item_title text not null, quantity integer not null,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(), updated_at timestamptz not null default now()
 );
 create table public.conversations (
   id uuid primary key default extensions.gen_random_uuid(), customer_id uuid references public.customers(id),

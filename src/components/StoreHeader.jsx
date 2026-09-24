@@ -1,4 +1,6 @@
+import { useContext } from 'react'
 import { useStore } from '../context/StoreContext'
+import { CustomerAccountContext } from '../context/customerAccountContextValue'
 import { Wordmark } from './ui/bits'
 import { BagIcon, SearchIcon, MoonIcon, SunIcon, UserIcon } from './ui/icons'
 import { customerAccountEnabled } from '../services/customerAccountService'
@@ -27,6 +29,8 @@ function SearchBox({ className = '' }) {
 
 export default function StoreHeader() {
   const { go, view, count, setCartOpen, isDark, toggleDarkMode } = useStore()
+  const account = useContext(CustomerAccountContext)
+  const unreadNotifications = account?.settingsState?.notifications?.filter(item => !item.read_at).length || 0
   const active = view === 'master_product' ? 'catalog' : view
   const nav = [
     ['home', 'Home'],
@@ -68,9 +72,9 @@ export default function StoreHeader() {
         {customerAccountEnabled() && <button
           onClick={() => go('account')}
           className={`flex min-h-11 min-w-11 items-center justify-center rounded-lg border bg-[var(--store-surface-bg)] text-navy transition-[transform,border-color,background-color] duration-150 active:scale-[0.97] ${view === 'account' ? 'border-crimson text-crimson' : 'border-[var(--store-surface-border)] hover:border-navy/25'}`}
-          aria-label="Customer account"
+          aria-label={unreadNotifications ? `Customer account, ${unreadNotifications} unread notification${unreadNotifications === 1 ? '' : 's'}` : 'Customer account'}
           aria-current={view === 'account' ? 'page' : undefined}
-        ><UserIcon size={19} /></button>}
+        ><UserIcon size={19} />{unreadNotifications > 0 && <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-crimson px-1 text-xs font-bold text-white" aria-hidden="true">{unreadNotifications > 9 ? '9+' : unreadNotifications}</span>}</button>}
 
         <button
           onClick={() => setCartOpen(true)}

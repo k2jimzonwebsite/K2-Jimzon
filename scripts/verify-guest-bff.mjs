@@ -11,8 +11,8 @@ process.env.K2_GUEST_BFF_SECRET = Buffer.alloc(32, 17).toString('base64')
 
 const security = await import('../server/storefront-bff/security.js')
 const router = await import('../server/storefront-bff/router.js')
-assert.equal(router.STOREFRONT_BFF_ROUTES.length, 15)
-assert.equal(new Set(router.STOREFRONT_BFF_ROUTES).size, 15)
+assert.ok(router.STOREFRONT_BFF_ROUTES.length > 0)
+assert.equal(new Set(router.STOREFRONT_BFF_ROUTES).size, router.STOREFRONT_BFF_ROUTES.length)
 const preparedStorefrontRoot = fileURLToPath(new URL('../prepared-api/storefront', import.meta.url))
 async function preparedRoutes(directory = preparedStorefrontRoot) {
   const entries = await readdir(directory, { withFileTypes: true })
@@ -53,6 +53,8 @@ const files = [
   'prepared-api/storefront/account/claim.js',
   'prepared-api/storefront/account/history.js',
   'prepared-api/storefront/account/message.js',
+  'prepared-api/storefront/account/settings.js',
+  'prepared-api/storefront/account/notifications.js',
   'prepared-api/storefront/account/auth/email.js',
   'prepared-api/storefront/account/auth/phone.js',
   'prepared-api/storefront/account/auth/verify.js',
@@ -82,6 +84,7 @@ const wholesaleInquiry = await readFile(new URL('../supabase/migrations/20260822
 const customerAuthRate = await readFile(new URL('../supabase/migrations/20260825_storefront_customer_auth_boundary.sql', import.meta.url), 'utf8')
 const customerAuthPostflight = await readFile(new URL('../supabase/map020_storefront_auth_rate_postflight.sql', import.meta.url), 'utf8')
 const cutover = await readFile(new URL('../supabase/migrations/20260812_guest_submission_cutover.sql', import.meta.url), 'utf8')
+const cutoverPostflight = await readFile(new URL('../supabase/map020_guest_cutover_postflight.sql', import.meta.url), 'utf8')
 const postflight = await readFile(new URL('../supabase/map020_guest_boundary_postflight.sql', import.meta.url), 'utf8')
 assert.match(migration, /k2_private\.verify_guest_bff_request/)
 assert.match(migration, /guest_request_nonces/)
@@ -97,6 +100,10 @@ assert.match(wholesaleInquiry, /submit_wholesale_inquiry_v1/)
 assert.match(wholesaleInquiry, /wholesale_inquiry_receipts/)
 assert.doesNotMatch(wholesaleInquiry, /price_list_id|credit_limit|pricing_approved|terms_approved/)
 assert.match(cutover, /grant execute on function public\.start_guest_conversation_v1/)
+assert.match(cutover, /p\.proname = 'submit_order_request_v2'/)
+assert.match(cutover, /unexpected order command overload/)
+assert.match(cutover, /revoke execute on function public\.submit_order_request_v2\(text,text,text,text,text,text,jsonb,text,text,numeric,text\) from public, anon, authenticated/)
+assert.match(cutoverPostflight, /p\.proname in \('submit_order_request','submit_order_request_v2','submit_pasabuy_request','validate_coupon'\)/)
 assert.match(postflight, /start_guest_conversation_v1/)
 assert.match(postflight, /guest_conversation_receipts/)
 assert.match(migration, /returns table\([\s\S]*guest_grant_token text/)

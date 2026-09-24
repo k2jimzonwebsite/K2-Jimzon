@@ -44,6 +44,7 @@ try {
     path.join(root,'supabase/migrations/20260822_admin_product_master_boundary.sql'),
     path.join(root,'supabase/migrations/20260822_guest_account_claim_boundary.sql'),
     path.join(root,'supabase/migrations/20260822_wholesale_inquiry_boundary.sql'),
+    path.join(root,'supabase/migrations/20260924_customer_account_settings_notifications.sql'),
   ]
   const postflight=path.join(root,'supabase/map019_account_claim_postflight.sql')
   const wholesalePostflight=path.join(root,'supabase/map019_wholesale_inquiry_postflight.sql')
@@ -56,6 +57,7 @@ try {
   const productMasterPostflight=path.join(root,'supabase/map020_product_master_postflight.sql')
   const productMasterAssertions=path.join(root,'supabase/tests/map020_product_master_assertions.sql')
   const assertions=path.join(root,'supabase/tests/map019_account_claim_assertions.sql')
+  const settingsAssertions=path.join(root,'supabase/tests/customer_account_settings_assertions.sql')
   psql(['-f',bootstrap],'bootstrap')
   const migrationSql=migrations.map(file=>fs.readFileSync(file,'utf8').replace(/^\s*(?:--[^\n]*\n)+\s*begin\s*;/i,'').replace(/commit\s*;\s*$/i,'')).join('\n')
   const postflightSql=[postflight,wholesalePostflight,mediaPostflight,globeReviewPostflight,procurementPostflight,channelPostflight,staffAccessPostflight,systemReadinessPostflight,productMasterPostflight].map(file=>fs.readFileSync(file,'utf8').replace(/^\\set[^\n]*\n/i,'')).join('\n')
@@ -75,6 +77,8 @@ try {
   psql(['-f',systemReadinessPostflight],'system readiness postflight')
   const output=psql(['-f',assertions],'behavior assertions')
   if(!output.includes('MAP019_ACCOUNT_CLAIM_ASSERTIONS_PASSED')) throw new Error('behavior success marker missing')
+  const settingsOutput=psql(['-f',settingsAssertions],'customer settings and notification assertions')
+  if(!settingsOutput.includes('CUSTOMER_ACCOUNT_SETTINGS_ASSERTIONS_PASSED')) throw new Error('settings success marker missing')
   psql(['-f',productMasterAssertions],'product master behavior assertions')
   for(const migration of migrations) psql(['-f',migration],`migration replay ${path.basename(migration)}`)
   psql(['-f',postflight],'replay postflight')

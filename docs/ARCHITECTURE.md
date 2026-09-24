@@ -1,6 +1,10 @@
-# K2 Jimzon — System Architecture
+# K2 Jimzon  -  System Architecture
 
-The prepared Admin barcode route validates a package barcode and returns bounded public grocery identity fields after K2 duplicate search. A separate authenticated route rechecks the public catalog and sends only its barcode, name, brand and quantity to Gemini free tier for unsaved SEO suggestions. Neither route imports a catalog image or sends private package evidence. The protected phone intake records the staff source decision; the paid photo-grounded job boundary remains inactive. See `docs/design/BARCODE_ASSISTED_PRODUCT_LISTING.md`.
+The prepared Admin barcode lookup is a staff/AAL2 authenticated read route. It validates a package barcode, then asks Open Food Facts for bounded grocery identity fields after the existing K2 duplicate check. The route returns no catalog image. Staff confirm or reject the exact variant in the intake modal; the source, lookup time and decision travel in the existing `field_provenance` object. A missing match or provider failure leaves manual intake available. Paid SEO/image generation continues through the separate, currently inactive Admin AI job boundary. This is local source, not deployed or live provider evidence. See `docs/design/BARCODE_ASSISTED_PRODUCT_LISTING.md`.
+
+The prepared Gemini public draft is a separate authenticated Admin route. It rechecks the barcode with Open Food Facts and sends only public barcode, name, brand and quantity to Gemini free tier. Its bounded response is an unsaved staff review suggestion. Package photos remain outside this route. The paid photo-grounded OpenAI job boundary is separate and inactive; the Gemini key alone cannot activate it.
+
+The optional customer account runtime is lazy loaded only when both the account and guest BFF feature flags are active. One account provider supplies settings and notification state to the account page, header unread badge and checkout prefill. Settings and read acknowledgements travel through authenticated Storefront BFF routes and signed RPCs; private tables are keyed by the verified Auth user, and event triggers enqueue reference-only notifications from canonical staff replies, order/Pasabuy status and verified payment. The receipt renders its recorded method only. Product `noindex` is shared by build-time and hydrated metadata gates. This architecture is prepared source, not production database or provider state.
 
 Anonymous chat blocking is enforced around the signed guest start/reply RPCs. The Storefront BFF already derives a keyed SHA-256 digest from the request IP; the database stores that 32-byte digest in private principal/block tables and never receives a raw address. Admin reads only eligibility and content-free block metadata through an authenticated RPC. Admin/SuperAdmin mutations use the signed Admin BFF/idempotency boundary; deletion refuses active account links and records a content-free receipt before cascading the anonymous conversation. The paired rollback restores the original guest RPC names and grants.
 
@@ -97,7 +101,7 @@ production artifact boundary changes. Local evidence is in
 `docs/evidence/20260908-coupon-retry/README.md` (MAP-028 I-002).
 
 - Prepared Admin routes: 97
-- Prepared Storefront routes: 15
+- Prepared Storefront routes: 17
 
 These are source registry counts, checked by
 `tests/security-surface-inventory.spec.js` in the contract and CI suites.
@@ -198,7 +202,7 @@ The K2 Jimzon architecture is engineered around the principles of **defense-in-d
 │                              SUPABASE POSTGRESQL & EDGE RUNTIME                          │
 ├──────────────────────────────────────────────────────────────────────────────────────────┤
 │  • Public Schema: 42 RLS Tables, 9 Security-Invoker Views, 53 Hardened RPC Functions     │
-│    (historical bootstrap counts; live exports report more — see MAP-017 evidence)          │
+│    (historical bootstrap counts; live exports report more  -  see MAP-017 evidence)          │
 │  • k2_private Schema: Session Registry, Rate Limit Buckets, Audit Ledgers, Nonces        │
 │  • Storage Buckets: private 'intake-evidence' vs public 'product-media'                  │
 │  • Edge Functions: 'invite-staff' (AAL2-enforced), 'shopee-webhook' (Bounded Ingress)    │
@@ -339,8 +343,8 @@ and Storefront BFF activation order is complete.
   identity per attempt.
 
 - `server/admin-bff/evidence-cleanup-policy.js` decides when intake evidence may
-  be deleted. Removal is irreversible, so it requires two proofs — that nothing
-  registered, and that the request created the object — and the evidence upload
+  be deleted. Removal is irreversible, so it requires two proofs  -  that nothing
+  registered, and that the request created the object  -  and the evidence upload
   refuses to overwrite so the second proof exists at all.
 
 - `k2_private.lock_privileged_membership()` is the single transactional guard for
@@ -349,8 +353,8 @@ and Storefront BFF activation order is complete.
   counting. Prepared, not yet applied.
 
 - `src/lib/manilaReportingWindow.js` is the only definition of a reporting
-  period. Every producer and consumer of a range — the overview API, the
-  dashboard, and any export built from them — takes its boundaries from there, so
+  period. Every producer and consumer of a range  -  the overview API, the
+  dashboard, and any export built from them  -  takes its boundaries from there, so
   a browser's own time zone cannot decide which Manila day a sale belongs to.
 
 - `src/lib/overviewAvailability.js` keeps "unknown" and "zero" apart on the
@@ -360,9 +364,9 @@ and Storefront BFF activation order is complete.
   where that rule is enforced rather than repeated per tile.
 
 - `src/context/adminInboxPolling.js` holds the Inbox refresh ownership rules as
-  pure functions — poll gating on visibility and in-flight reads, the response
+  pure functions  -  poll gating on visibility and in-flight reads, the response
   generation guard, stale-queue retention on background failure, and
-  receipt-time-bound unread clearing — so those decisions are testable without a
+  receipt-time-bound unread clearing  -  so those decisions are testable without a
   browser and cannot drift into the hook's effect bodies.
 
 - `src/lib/lazySupabaseClient.js` defers the Storefront Supabase SDK until a

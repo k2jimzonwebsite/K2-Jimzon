@@ -13,6 +13,10 @@ const postflight = readFileSync(
   new URL("../supabase/map017_public_write_boundary_postflight.sql", import.meta.url),
   "utf8",
 )
+const stockPublicGrantVerification = readFileSync(
+  new URL("../supabase/map017_stock_public_grant_verification.sql", import.meta.url),
+  "utf8",
+)
 
 for (const relation of [
   "brands",
@@ -42,6 +46,8 @@ assert.match(postflight, /unsafe public default privileges remain/)
 assert.match(postflight, /legacy products_old remains exposed/)
 assert.match(postflight, /public stock projection boundary is incorrect/)
 assert.match(postflight, /public stock projection function is not hardened/)
+assert.match(stockPublicGrantVerification, /stock_public_execute_absent/)
+assert.match(stockPublicGrantVerification, /a\.grantee = 0/)
 assert.match(migration, /drop policy if exists "Anyone can upload" on storage\.objects/)
 assert.match(migration, /file_size_limit = 10485760/)
 assert.match(migration, /'image\/jpeg', 'image\/png', 'image\/webp', 'image\/avif'/)

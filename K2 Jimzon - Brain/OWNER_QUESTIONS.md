@@ -4,15 +4,15 @@ This file contains only actions and business decisions that require the owner.
 It is not an engineering backlog; implementation remains exclusively in
 `MASTER_ACTION_PLAN.md`.
 
-## 24 September manual receiving choice — owner supplied
+## 24 September manual receiving choice  -  owner supplied
 
-The owner supplied MariBank and GCash receiving QR screenshots and requested both as temporary buyer choices (IDEA-20260924-01). This authorizes local implementation of those choices. It does not attest that either QR scans to the intended account, that a test transfer arrived, or that a staff verifier is assigned. Before publishing payment instructions or using real funds, the owner needs to scan each exact QR on another device, confirm its displayed recipient against the actual receiving account, and name the evidence submitter and separate account verifier for the test order. The real-transfer result must be recorded against MAP-023/MAP-025.
+The owner supplied MariBank and GCash receiving QR screenshots and requested both as temporary buyer choices (IDEA-20260924-01). The choices and QR assets are now deployed under the 24 September scoped release; this does not attest that either QR scans to the intended account, that a test transfer arrived, or that a staff verifier is assigned. Before staff directs a customer to transfer real funds, the owner needs to scan each exact QR on another device, confirm its displayed recipient against the actual receiving account, and name the evidence submitter and separate account verifier for the test order. Record the real-transfer result against MAP-023/MAP-025.
 
 ## Owner action priority
 
 | Priority | Owner item | Needed before | Current action |
 | --- | --- | --- | --- |
-| **Immediate** | `OWNER-005` remaining database permission gates | MAP-017 remediation of ten remaining findings | Phase one and follow-up are applied/verified. Coordinate guest cutover and provider-owned default corrections under MAP-017; do not repeat either applied correction. |
+| **Immediate** | `OWNER-005` remaining database permission gates | MAP-017 reconciliation of 13 current critical findings | Phase one and follow-up are applied/verified. Coordinate guest cutover, current backup/restore and provider-owned default corrections under MAP-017; do not repeat either applied correction. |
 | Early | `OWNER-002` reservation holds | MAP-023 reservation activation | Answered 2 September; implement and verify the recorded lifecycle in MAP-023. |
 | Early | `OWNER-003` wholesale and response claims | MAP-019/MAP-023 commercial activation | Choose eligibility, pricing, credit, minimums, and any SLA |
 | Early | `OWNER-006` customer retention and deletion | MAP-019 privacy workflow | Approve record-specific retention, legal holds, anonymization, and request ownership |
@@ -20,7 +20,7 @@ The owner supplied MariBank and GCash receiving QR screenshots and requested bot
 | Early | `OWNER-004` public contact channels | Public Contact page activation | Answered 2 September; use the recorded channels and verify the customer path. |
 | Before domains | `OWNER-001` domain and DNS | MAP-024 activation | Resolved 27 August 2026: authenticated Hostinger access proved authority; the pre-cutover zone had no MX/TXT records |
 
-## OWNER-005 — Authorize the public-write-boundary production migration
+## OWNER-005  -  Authorize the public-write-boundary production migration
 
 **13 September owner authorization fulfilled:** “yes proceed” authorized the
 reviewed follow-up `20260909023000`, exact artifact
@@ -54,7 +54,7 @@ phone are current.
 
 This closes the gate honestly but note what it is: an **owner attestation**, not a
 machine-measured check. Software cannot see inside a password manager or a drawer.
-The measured half was already recorded on 30 August 2026 — that workstation
+The measured half was already recorded on 30 August 2026  -  that workstation
 retrieved the exact named envelope from Drive and decrypted it with the retained
 passphrase, proving the key works. What the owner has now added is that the key
 survives the loss of this laptop, which was the real exposure: until today the
@@ -249,7 +249,7 @@ Engineering must not apply production DDL without that authorization.
 
 **Related decision surfaced at the same time:** `products_old` is a legacy table
 that is still anonymously writable, still published in the realtime feed, and
-confirmed on 22 August to be anonymously **readable** — all 14 of its rows are
+confirmed on 22 August to be anonymously **readable**  -  all 14 of its rows are
 returned to an unauthenticated caller. Whether it is retired, archived, or
 retained is a data-retention decision, not a purely technical one. It is recorded
 here rather than assumed.
@@ -275,7 +275,7 @@ preflight/migration/postflight payload at SHA-256
 `D1E1EAA0696F12BF467584016A5013B655BB074D44D2A52AFF3951B335EBDB62`. This
 correction does not waive the named backup and verified-restore gate.
 
-**Scope note — this decision covers one migration, not the queue behind it.**
+**Scope note  -  this decision covers one migration, not the queue behind it.**
 Five further migrations are prepared and unapplied. Four are safe to apply once
 authorized, but `20260822_catalog_spreadsheet_commit` must **not** be applied yet:
 it revokes direct write access to the products table from staff sessions, and
@@ -302,7 +302,7 @@ review recorded as repeated "permission denied for view" errors. Restoring that
 grant is part of the same MAP-017 remediation, so authorizing it fixes a real
 customer-facing accuracy problem as well as closing the write exposure.
 
-## OWNER-001 — Production domain and DNS control
+## OWNER-001  -  Production domain and DNS control
 
 **Needed for:** `MAP-024` custom-domain activation only. Other local and platform
 hardening can continue without this answer.
@@ -346,7 +346,7 @@ practices are recorded in `SYSTEM_BRAIN_CURRENT.md`. Add another question here
 only when the owner must make a new business-policy decision that cannot be
 answered by the Brain or handled safely as configurable system behavior.
 
-## OWNER-002 — Reservation hold and release policy
+## OWNER-002  -  Reservation hold and release policy
 
 **Decision:** Answered 2 September 2026. **Resolved, with one clarification the
 owner confirmed the stock lifecycle on read-back 2 September 2026.**
@@ -354,7 +354,7 @@ owner confirmed the stock lifecycle on read-back 2 September 2026.**
 The owner's answers separate two things that had been conflated in the original
 question. A saved cart and a stock reservation are different mechanisms:
 
-1. **Cart — permanent, and holds no stock.** The cart persists like Shopee's:
+1. **Cart  -  permanent, and holds no stock.** The cart persists like Shopee's:
    a customer can leave items in it indefinitely and find them later. It is a
    saved shopping list, **not** a claim on inventory. *Confirmed by the owner
    2 September 2026: "stock only deducts after a purchase has been made."* This is
@@ -362,9 +362,9 @@ question. A saved cart and a stock reservation are different mechanisms:
    carts would lock inventory forever and the catalog would show sold-out for
    goods K2 still holds. Availability is therefore re-checked at purchase, which
    is the behavior customers already expect from Shopee.
-2. **Reservation — 30 minutes, starting when the customer clicks purchase.**
+2. **Reservation  -  30 minutes, starting when the customer clicks purchase.**
    That is the window in which the exact units are held for them.
-3. **Staff extension — minimum 30 minutes, maximum 7 days.** An extension must
+3. **Staff extension  -  minimum 30 minutes, maximum 7 days.** An extension must
    be attributed to the staff member and carry a reason.
 4. **Pasabuy and wholesale do not use a hold at all.** They are conversation-led
    and run through live chat, so each commitment becomes a durable **history
@@ -395,7 +395,7 @@ when the item entered the cart.
   revalidation (MAP-028 G-005/G-009) is load-bearing, not optional.
 - The 30-minute reservation needs an explicit deadline per reservation, a staff
   warning before expiry, and idempotent release of the exact lots at expiry.
-- Pasabuy/wholesale history widgets are scoped by customer role — see OWNER-003.
+- Pasabuy/wholesale history widgets are scoped by customer role  -  see OWNER-003.
 
 
 **Needed for:** MAP-023 production activation of confirmed-order and wholesale
@@ -418,24 +418,24 @@ temporary reservation forever.
 **Why the owner must answer:** the system can enforce and audit a configurable
 policy, but engineering cannot invent how long K2 promises stock to a customer.
 
-## OWNER-003 — Wholesale commercial policy and public response-time claims
+## OWNER-003  -  Wholesale commercial policy and public response-time claims
 
 **Decision:** Partially answered 2 September 2026. **Two of four resolved; one
 deferred by the owner; one accepted in principle but still missing its value.**
 
-1. **Eligibility — answered as an identity model, not a criteria list.**
+1. **Eligibility  -  answered as an identity model, not a criteria list.**
    Wholesale and Pasabuy are **roles granted to signed-in customers**. The
    Pasabuy history and wholesale history widgets are scoped to the customers
    holding those roles. What business evidence staff must review before granting
    a role is not yet defined; until it is, granting stays a manual staff decision
    with an audit record, which is safe.
-2. **Pricing — not yet determined.** Wholesale therefore remains **manual quote
+2. **Pricing  -  not yet determined.** Wholesale therefore remains **manual quote
    only**. No account price list, tier table, or minimum-order rule is activated.
-3. **Payment terms and credit — not yet determined.** The owner records this as
+3. **Payment terms and credit  -  not yet determined.** The owner records this as
    easy to add later and explicitly not urgent. **No credit is offered**, and no
    credit-limit code path activates. This is the safe default: credit risk is the
    one item here that can cost real money if guessed.
-4. **Public response-time promise — the owner wants one**, so customers are not
+4. **Public response-time promise  -  the owner wants one**, so customers are not
    left waiting without knowing when to expect a reply. **The value is still
    missing.** A promise cannot be published as "we reply quickly"; it needs an
    exact number of hours and the exact business hours it is measured against
@@ -470,7 +470,7 @@ hard-coded 24-hour Pasabuy promise unless K2 adopts and measures it.
 **Why the owner must answer:** eligibility, prices, credit risk, minimums, and a
 public SLA are commercial promises, not safe engineering defaults.
 
-## OWNER-006 — Customer-data retention and deletion policy
+## OWNER-006  -  Customer-data retention and deletion policy
 
 **Decision:** **Deferred by the owner on 2 September 2026** as too complex to
 answer now. This is a legitimate deferral, not an oversight, and it is recorded
@@ -512,7 +512,7 @@ let backup copies age out under the documented backup schedule.
 promise erasure while K2 still needs a record for fulfillment, disputes,
 accounting, security, or recovery.
 
-## OWNER-004 — Public phone, Viber, and WhatsApp details
+## OWNER-004  -  Public phone, Viber, and WhatsApp details
 
 **Decision:** Answered 2 September 2026. **Resolved.**
 
@@ -546,7 +546,7 @@ before launch.
 **Why the owner must answer:** engineering must not invent or expose a private
 number, and a configured channel name does not prove the account is monitored.
 
-## OWNER-007 — Paid AI product-intake controls
+## OWNER-007  -  Paid AI product-intake controls
 
 **Measured cost model recorded 2 September 2026** at the owner's request, so the
 caps below are chosen against real numbers rather than a guess. Prices read from
@@ -565,9 +565,11 @@ and 1,500 output tokens), plus two generated 1024x1024 images.
 
 PHP figures use an approximate rate of PHP 58 to USD 1 and are indicative only.
 
-**Model note — time-sensitive.** `gpt-image-1` is retired on **23 October 2026**.
+**Model note  -  time-sensitive.** `gpt-image-1` is retired on **23 October 2026**.
 Do not name it as the approved snapshot; use `gpt-image-1.5`, whose 1024x1024
 output prices are $0.009 low, $0.034 medium, $0.133 high per image.
+
+**24 September source refresh:** The owner suggested GPT-6 Luna for listing text and chose image candidates generated from K2 package photos. [Official OpenAI models](https://developers.openai.com/api/docs/models) list `gpt-6-luna` for image input and text output. [Image guidance](https://developers.openai.com/api/docs/guides/image-generation) now lists GPT Image 2.5 Flare and Sunburst for new generation/editing work; [deprecations](https://developers.openai.com/api/docs/deprecations) schedule `gpt-image-1.5` removal on 1 December 2026. The older price table and `gpt-image-1.5` sentence above are dated evidence, not a current activation instruction. Select exact text/image models, verify account access and pricing, then update caps and the prepared adapter together before paid enablement. No API key or paid model was activated by this review.
 
 **Recommended caps, derived from the middle row.** These carry roughly double the
 expected cost so a retry or a longer description cannot trip the cap mid-intake:
@@ -576,7 +578,7 @@ expected cost so a retry or a longer description cannot trip the cap mid-intake:
 - **Per intake session: $3.00** (about PHP 175, roughly 40 products)
 - **Per month: $20.00** (about PHP 1,160, roughly 275 products)
 
-**Owner decision recorded 2 September 2026 — caps approved.** The owner selected
+**Owner decision recorded 2 September 2026  -  caps approved.** The owner selected
 the **Premium** configuration and a **USD 100 monthly ceiling**. Derived caps,
 each carrying retry headroom above the expected premium cost of ~$0.285:
 
@@ -592,9 +594,9 @@ describe a budget.
 
 **Caps are editable, in two independent places, and both should be set:**
 
-1. **The K2 SuperAdmin control screen** — changes these three numbers. Fail-closed:
+1. **The K2 SuperAdmin control screen**  -  changes these three numbers. Fail-closed:
    when a cap is reached the paid path stops and the free manual path remains.
-2. **The OpenAI account's own billing limit** — a hard ceiling at the provider.
+2. **The OpenAI account's own billing limit**  -  a hard ceiling at the provider.
 
 Set both. K2's cap protects the workflow; OpenAI's protects the card if anything
 ever bypasses K2's cap. A cap that lives only inside the application it governs is
@@ -630,12 +632,12 @@ Please confirm:
 
 1. The approved OpenAI model snapshot(s) for structured product content and
    image generation/editing, and whether the same provider account is used for
-   both stages. **Use `gpt-image-1.5`; `gpt-image-1` retires 23 October 2026.**
+   both stages. The 24 September source refresh above supersedes the earlier `gpt-image-1.5` recommendation; exact image model remains an owner decision.
 2. ~~The maximum spend per product, per intake session, and monthly owner budget
-   cap~~ **Answered 2 September 2026 — see the approved caps above.**
+   cap~~ **Answered 2 September 2026  -  see the approved caps above.**
 3. **Owner direction recorded 30 August 2026:** use the two-confirmation
-   boundary—one confirmation before the paid content call and a second before
-   any image calls—with the UI showing the priced scope and current remaining
+   boundary - one confirmation before the paid content call and a second before
+   any image calls - with the UI showing the priced scope and current remaining
    cap each time. The control screen itself additionally requires the typed
    `ENABLE_PAID_AI` confirmation when enabling.
 4. Provider retention/training settings and the evidence classes that may be

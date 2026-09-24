@@ -2,9 +2,12 @@
 
 **State:** named production application-database and Storage object-byte backups,
 both isolated local restores, owner-only Google Drive upload, all eight
-independent retrieval checks, and whole-archive reassembly verified by 28 August
-2026. Owner recovery access, Vault, bucket-policy/provider configuration, and
-live Storage re-upload remain unverified.
+independent retrieval checks for the August set, and whole-archive reassembly
+verified. A fresh 24 September set also passed local database and Storage restores
+and owner-only upload. Its database envelope passed independent download and
+SHA-256 comparison; new Storage-part retrieval remains open.
+Owner recovery access, Vault, bucket-policy/provider configuration, and live
+Storage re-upload remain unverified.
 
 The MAP-017 executor reads backup verification and owner recovery access as two
 separate gates. A verified backup never implies verified account recovery; the
@@ -233,6 +236,59 @@ capability are therefore evidenced on the current recovery workstation. This
 does not by itself prove password-manager/offline-copy custody or current Google
 2-Step Verification recovery email/phone; those owner confirmations remain the
 only MAP-017 recovery-access gate.
+
+## Fresh current-schema backup, 24 September
+
+Use `npm run backup:current-production` for a new encrypted production application
+database snapshot before the MAP-017/019/020 cutover. It reads the existing
+non-committed `.env.local` values in process, validates the production project,
+TLS and PostgreSQL version, and writes only an encrypted envelope and redacted
+manifest under an explicitly named destination. `npm run
+verify:current-production-restore` accepts only a dedicated empty loopback
+database and records a separate restore receipt. Keep the passphrase out of
+commands, logs, source and Drive.
+
+The 24 September database backup ID is
+`current-pixplcjqivlfflickobf-2026-09-24T094715954Z-883ee90e72a2`. Its
+824,951-byte encrypted envelope has SHA-256
+`883ee90e72a2e84215ca455d30bc6d59591a6208566620cc480b4183056c961d`.
+The isolated restore into `k2_current_restore_20260924` passed with 51 public
+relations, migration ledger `20260921033348`, matching 14-row legacy fingerprint,
+and ten excluded managed Vault entries. The redacted manifest says
+`restoreVerification: Pending`; use the adjacent separately generated restore
+receipt for the passed local check. The restored application schema passed one
+ordered MAP-019/020 rollback-only migration and postflight rehearsal, returning
+to its baseline afterward. A second local restore included the archived ACLs
+after creating non-login placeholders for missing Supabase-managed roles. The
+same rollback-only chain then passed named direct-RPC denials and signed guest
+grant assertions. Both local databases returned to their baselines. These
+checks do not recreate managed role memberships, Vault or provider settings;
+the exact commands and limits are in the 24 September account evidence record.
+
+The companion Storage backup ID is
+`map017-storage-pixplcjqivlfflickobf-2026-09-24T094916953Z-d325b1360c7f`.
+Its encrypted envelope SHA-256 is
+`d325b1360c7f47aa34ce4ede8a99448e6092dcb43c543da2143a21a936107e06`.
+All 36 public `product-images` objects, 115,573,916 source bytes, passed an
+isolated file restore and full checksum comparison. The 115,580,694-byte
+envelope was split into 67,108,864-byte and 48,471,830-byte transport parts;
+local reassembly reproduced the envelope SHA-256.
+
+Both encrypted envelopes, redacted manifests, restore receipts and Storage
+parts manifest were uploaded as eight files to the existing owner-only Drive
+folder `K2 Production Backups` under `k2jimzonwebsite@gmail.com`. A metadata
+readback confirmed each file's parent, exact local size, `shared: false` and
+owner-only permission. The new database envelope was independently fetched and
+its 824,951 bytes matched SHA-256
+`883ee90e72a2e84215ca455d30bc6d59591a6208566620cc480b4183056c961d`.
+The new Storage transport parts have not yet been independently downloaded and
+hashed. The current ignored local
+artifacts and receipts are under `.tools/current-production-backups/`. For an
+actual recovery, retrieve the new envelope and both Storage parts from Drive,
+verify each against its parts manifest and reassemble before decrypting. Check
+the database and Storage restore receipts in the same directory. This section
+does not establish independent owner account recovery, managed Vault recovery,
+bucket policy recreation or live Storage re-upload.
 
 ## Production procedure before activation
 

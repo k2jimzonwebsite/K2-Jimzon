@@ -749,6 +749,7 @@ export default function Admin() {
         onNavigate={selectSection}
         currentSection={section}
         initialQuery={guideQuery}
+        onStartIntake={() => { setShowAiCopilot(false); launchInventoryTool('guided-intake') }}
       />
 
       <SystemDevOpsModal

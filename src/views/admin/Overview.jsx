@@ -27,7 +27,7 @@ import {
   TrendIcon,
 } from '../../components/ui/icons'
 
-import { DASHBOARD_WIDGETS } from './dashboardWidgets'
+import { DASHBOARD_WIDGETS, DASHBOARD_WIDGET_HELP } from './dashboardWidgets'
 import HelpTip from './HelpTip'
 
 const RANGE_OPTIONS = [7, 30, 90]
@@ -227,6 +227,11 @@ function PanelHeading({ icon: Icon, title, description, action }) {
 }
 
 export default function Overview({ setSection, pending = null, widget = 'metrics', onWidget }) {
+  const [helpOpen, setHelpOpen] = useState(false)
+  const helpButtonRef = useRef(null)
+  const widgetHelp = DASHBOARD_WIDGET_HELP[widget]
+  const closeHelp = () => { setHelpOpen(false); helpButtonRef.current?.focus() }
+  useEffect(() => { setHelpOpen(false) }, [widget])
   const requestSequence = useRef(0)
   const [unavailable, setUnavailable] = useState(Object.keys(EMPTY_DATA))
   const [stale, setStale] = useState(false)
@@ -543,7 +548,17 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
           {DASHBOARD_WIDGETS.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
         </select>
       </div>
-      <div><div className="flex items-center gap-2"><h3 className="text-lg font-semibold text-white">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.label}</h3><HelpTip label={DASHBOARD_WIDGETS.find(item => item.id === widget)?.label} text={DASHBOARD_WIDGETS.find(item => item.id === widget)?.description} /></div></div>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2"><h3 className="text-lg font-semibold text-white">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.label}</h3><HelpTip label={DASHBOARD_WIDGETS.find(item => item.id === widget)?.label} text={DASHBOARD_WIDGETS.find(item => item.id === widget)?.description} /></div>
+        {widgetHelp && <button ref={helpButtonRef} type="button" aria-label="Help with this widget" aria-expanded={helpOpen} aria-controls="dashboard-widget-help" onClick={() => setHelpOpen(value => !value)} className={`${actionClass} min-h-11 shrink-0 rounded-adm-sm border border-adm-line px-4 text-sm font-medium text-white/80 hover:bg-white/5`}>Help</button>}
+      </div>
+      {helpOpen && widgetHelp && <aside id="dashboard-widget-help" aria-label="Widget help" tabIndex={-1} onKeyDown={event => { if (event.key === 'Escape') { event.stopPropagation(); closeHelp() } }} className="rounded-adm border border-adm-line bg-adm-sunken p-4 text-sm leading-relaxed text-white/80">
+        <div className="flex items-center justify-between gap-3"><h4 className="font-semibold text-white">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.label}</h4><button type="button" onClick={closeHelp} className={`${actionClass} min-h-11 px-3 text-sm text-white/80`}>Close help</button></div>
+        <p>{DASHBOARD_WIDGETS.find(item => item.id === widget)?.description}</p>
+        <p className="mt-3"><strong className="text-white">How to read this:</strong> {widgetHelp.read}</p>
+        <p className="mt-3"><strong className="text-white">What to do next:</strong> {widgetHelp.next}</p>
+        <p className="mt-3 text-xs text-white/65">Zero means no matching retrieved records, not zero activity in an external shop. Failed or incomplete sources stay unavailable. Help never changes records.</p>
+      </aside>}
       {widgetUnavailable && <p role="status" className="rounded-adm border border-adm-line p-5 text-sm text-white/75">{loading ? 'Loading this widget’s records…' : 'This widget is unavailable because its records could not be retrieved. Refresh to retry or choose another widget.'}</p>}
       <div hidden={moneyLens === null} className={`${panelClass} overflow-hidden`}>
         <div className="flex flex-wrap items-center gap-2 px-4 py-2.5 sm:px-5">

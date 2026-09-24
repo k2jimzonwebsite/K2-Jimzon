@@ -24,6 +24,48 @@ test.beforeEach(async ({ page }) => {
   }))
 })
 
+test('a verified new customer can save profile settings and read a scoped notification before ordering', async ({ page }) => {
+  test.setTimeout(120000)
+  const accessToken = fakeJwt()
+  await page.addInitScript(({ key, token }) => {
+    localStorage.setItem(key, JSON.stringify({
+      access_token: token, refresh_token: 'test-refresh-token', token_type: 'bearer',
+      expires_in: 3600, expires_at: Math.floor(Date.now() / 1000) + 3600,
+      user: { id: '10000000-0000-4000-8000-000000000001', aud: 'authenticated', role: 'authenticated',
+        email: 'buyer@example.com', email_confirmed_at: new Date().toISOString(), app_metadata: {}, user_metadata: {}, created_at: new Date().toISOString() },
+    }))
+  }, { key: AUTH_STORAGE_KEY, token: accessToken })
+  await page.route('**/api/storefront/account/history', route => route.fulfill({ status: 409, contentType: 'application/json', body: JSON.stringify({ error: { code: 'ACCOUNT_NOT_LINKED' } }) }))
+  let saved = null
+  const notificationId = '10000000-0000-4000-8000-000000000099'
+  await page.route('**/api/storefront/account/settings', route => {
+    expect(route.request().headers().authorization).toBe(`Bearer ${accessToken}`)
+    const body = route.request().postDataJSON()
+    if (Object.keys(body).length) saved = body
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true,
+      settings: saved || { displayName: '', deliveryAddress: '', notifyInApp: true },
+      notifications: [{ id: notificationId, event_kind: 'staff_reply', public_reference: 'CV-0123456789ABCDEF', created_at: '2026-09-24T00:00:00Z', read_at: null }],
+    }) })
+  })
+  let readId = null
+  await page.route('**/api/storefront/account/notifications', route => {
+    readId = route.request().postDataJSON().notificationId
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, receipt: { read: true } }) })
+  })
+  await page.goto('/account', { waitUntil: 'domcontentloaded' })
+  await expect(page.getByRole('heading', { name: 'Your account settings' })).toBeVisible({ timeout: 30000 })
+  await expect(page.getByRole('button', { name: 'Customer account, 1 unread notification' })).toBeVisible()
+  await page.getByLabel('Your name').fill('Maria Prieto')
+  await page.getByLabel('Saved delivery address').fill('Manila, Philippines')
+  await page.getByRole('button', { name: 'Save settings' }).click()
+  await expect.poll(() => saved?.displayName).toBe('Maria Prieto')
+  expect(saved.deliveryAddress).toBe('Manila, Philippines')
+  await page.getByRole('button', { name: 'Mark notification read' }).click()
+  await expect.poll(() => readId).toBe(notificationId)
+  await expect(page.getByRole('button', { name: 'Customer account', exact: true })).toBeVisible()
+  await expect(page.getByText('You can start shopping before linking guest records.')).toBeVisible()
+})
+
 test('customer account entry is phone-safe, passwordless, recoverable, and keeps primary mobile navigation at five', async ({ page, context }, testInfo) => {
   test.setTimeout(180000)
   await page.route('https://challenges.cloudflare.com/turnstile/v0/api.js**', route => route.fulfill({

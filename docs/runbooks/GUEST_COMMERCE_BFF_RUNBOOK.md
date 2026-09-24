@@ -386,6 +386,8 @@ optional for verified history and cross-device continuity.
 
 ## Current state
 
+24 September practice run: the isolated account apply/rollback, behavior and replay, customer Auth rate, permission, and guest moderation checks passed. Read-only production metadata confirmed the absent identity/guest prerequisites and the current eleven-argument order command with three defaults. A complete read-only catalog export initially produced 18 MAP-017 audit findings. Five authenticated functions were reviewed against live Staff or Admin/AAL2 guards and added to the contract; the same export now reports 13 critical and 0 high. The remaining function grants need the scoped stock correction or the coordinated signed guest cutover. A separate read-only stock ACL check was added without changing the historical MAP-017 payload hash; the portable MAP-017 rehearsal passed after an interim hash-changing edit was reverted. Six `supabase_admin` future-object default groups need a provider-supported correction. A later ordered chain passed in a rollback-only transaction on the fresh restored current application schema, including identity, signed guest submission, account claim, customer Auth, order status, settings/notifications and direct-RPC cutover postflights. A second local restore included archived ACLs using non-login placeholders for missing managed role names; the same chain passed named direct-RPC denials, signed guest grants and unchanged chat-read assertions before rolling back. Managed role memberships, provider defaults, preview routes and chat continuity are not proven. Do not enable sign-up, apply the guest/moderation SQL, or revoke direct-chat grants on this evidence alone. The full evidence and next gate are in `docs/evidence/20260924-account-migration-rehearsal/README.md` and MAP-017/019/020/022.
+
 23 September compatibility note: production still has no MAP-019 identity or
 MAP-020 guest boundary migration, so the moderation migration cannot run
 there. Production `submit_order_request_v2` is the eleven-argument delivery
@@ -393,8 +395,9 @@ version with three trailing defaults; `map020_guest_boundary_preflight.sql`
 now recognizes that valid nine-argument call shape, and an isolated fixture
 proved the previous rejection and current pass. This fixes only the preflight
 check. Before step 3 below, rehearse the exact dependency chain against the
-current production schema inside a rollback-only window; do not infer
-compatibility from this fixture. Keep direct chat and both BFF flags off until
+current production schema inside a rollback-only window; the 24 September
+restored-schema rehearsal supplies SQL and named archived-ACL grant checks
+but not provider role equivalence. Keep direct chat and both BFF flags off until
 the matching secrets, Turnstile, preview denials, and coordinated release
 window are ready.
 
@@ -402,6 +405,15 @@ The BFF code, identity migration, signed guest-boundary migration, cutover
 migration, rollback evidence, and feature-gated guest inbox exist locally. None
 is active in production. The storefront still calls the transitional direct
 RPCs while `VITE_GUEST_BFF_ENABLED=false`.
+
+The unapplied cutover now handles the nine- and eleven-argument
+`submit_order_request_v2` signatures. It refuses an unexpected overload inside
+the transaction and the isolated fixture proves both known direct paths lose
+browser execution while the signed guest entry points retain it. Keep the live
+direct grants until the signed preview and browser switch are ready. The legacy
+`get_storefront_chat_v1` read also needs a reviewed continuity path for existing
+threads before its anonymous grant is revoked. See MAP-017/020 and the 24
+September account migration rehearsal evidence.
 
 The isolated production Storefront does not expose the workstation `DemoRail`.
 Appending `#demo` cannot reveal its direct-password VIP prototype or claim that

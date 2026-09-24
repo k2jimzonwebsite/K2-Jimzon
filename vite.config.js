@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import { readFileSync } from 'node:fs'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { PRELAUNCH_PRODUCT_NOINDEX } from './scripts/prelaunch-indexing.mjs'
 
 const projectRoot = process.cwd().replaceAll('\\', '/')
 const BROWSER_ENV_KEYS = [
@@ -158,6 +159,7 @@ export default defineConfig(({ command, mode }) => {
       // This compile-time constant lets Rollup remove Admin-only telemetry
       // transport (including its route string) from the Storefront artifact.
       __K2_ADMIN_BUILD__: JSON.stringify(target !== 'storefront'),
+      __K2_PRODUCT_NOINDEX__: JSON.stringify(PRELAUNCH_PRODUCT_NOINDEX),
     },
     build: {
       manifest: true,

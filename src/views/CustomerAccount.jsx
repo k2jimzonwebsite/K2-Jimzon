@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useStore } from '../context/StoreContext'
-import { useCustomerAccount } from '../hooks/useCustomerAccount'
+import { CustomerAccountContext } from '../context/customerAccountContextValue'
 import {
   requestCustomerEmailLink, requestCustomerPhoneCode, verifyCustomerPhoneCode,
 } from '../services/customerAccountService'
@@ -76,8 +76,8 @@ function SignInForm({ offline }) {
   }
 
   return <section aria-labelledby="account-sign-in-title" className="rounded-2xl border border-line bg-paper p-5 sm:p-7">
-    <h2 id="account-sign-in-title" className="font-serif text-2xl font-semibold text-navy">Sign in without a password</h2>
-    <p className="mt-2 max-w-[58ch] text-sm leading-6 text-navy-soft">Use a verified email link or mobile code. Signing in does not grant wholesale pricing or change an order.</p>
+    <h2 id="account-sign-in-title" className="font-serif text-2xl font-semibold text-navy">Create an account or sign in</h2>
+    <p className="mt-2 max-w-[58ch] text-sm leading-6 text-navy-soft">Use a verified email link or mobile code. Your first successful verification creates an account; later visits sign you in. An account does not grant wholesale pricing or change an order.</p>
     <div className="mt-6 grid grid-cols-2 gap-2 rounded-xl bg-shell p-1" role="tablist" aria-label="Sign-in method">
       {['email','phone'].map(item => <button key={item} type="button" role="tab" aria-selected={method === item} onClick={() => { setMethod(item); setStage('entry'); setError(''); resetChallenge() }} className={`min-h-11 rounded-lg px-3 text-sm font-bold transition-colors duration-150 ${method === item ? 'bg-paper text-crimson' : 'text-navy-soft hover:text-navy'}`}>{item === 'email' ? 'Email link' : 'Text code'}</button>)}
     </div>
@@ -119,6 +119,74 @@ function Conversation({ conversation, onReply, pending, offline }) {
   </article>
 }
 
+function AccountSettings({ account, offline }) {
+  const { settingsState, refreshSettings, saveSettings } = account
+  const [name, setName] = useState('')
+  const [address, setAddress] = useState('')
+  const [notifyInApp, setNotifyInApp] = useState(true)
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState('')
+  const [saved, setSaved] = useState(false)
+  useEffect(() => {
+    if (settingsState.status !== 'ready' || !settingsState.settings) return
+    setName(settingsState.settings.displayName || '')
+    setAddress(settingsState.settings.deliveryAddress || '')
+    setNotifyInApp(settingsState.settings.notifyInApp !== false)
+  }, [settingsState.status, settingsState.settings])
+  const submit = async (event) => {
+    event.preventDefault(); setError(''); setSaved(false)
+    if (!name.trim()) return setError('Enter your name before saving.')
+    if (offline) return setError('Reconnect before saving settings.')
+    setPending(true)
+    const result = await saveSettings(name.trim(), address.trim(), notifyInApp)
+    setPending(false)
+    if (result.ok) setSaved(true)
+    else setError(result.error || 'Settings could not be saved. Try again.')
+  }
+  return <section aria-labelledby="account-settings-title" className="border-t border-line py-8">
+    <h2 id="account-settings-title" className="font-serif text-2xl font-semibold text-navy">Your account settings</h2>
+    <p className="mt-2 text-sm leading-6 text-navy-soft">These details help you prepare future requests. Saving an address does not change an order already submitted.</p>
+    {settingsState.status === 'loading' && <p className="mt-4 text-sm text-navy-soft" role="status">Loading settings…</p>}
+    {settingsState.status === 'error' && <div className="mt-4" role="alert"><p className="text-sm text-crimson">{settingsState.error}</p><button type="button" className={`${secondary} mt-2`} onClick={() => refreshSettings()} disabled={offline}>Try again</button></div>}
+    {settingsState.status === 'ready' && <form onSubmit={submit} className="mt-5 grid gap-4 sm:grid-cols-2">
+      <label className="block text-sm font-bold text-navy" htmlFor="account-profile-name">Your name<input id="account-profile-name" className={field} maxLength={140} autoComplete="name" value={name} onChange={event => { setName(event.target.value); setSaved(false) }} required /></label>
+      <label className="block text-sm font-bold text-navy sm:col-span-2" htmlFor="account-profile-address">Saved delivery address<textarea id="account-profile-address" className={`${field} min-h-24 resize-y`} maxLength={500} autoComplete="street-address" value={address} onChange={event => { setAddress(event.target.value); setSaved(false) }} /></label>
+      <label className="flex min-h-11 items-center gap-3 text-sm font-semibold text-navy sm:col-span-2"><input type="checkbox" checked={notifyInApp} onChange={event => { setNotifyInApp(event.target.checked); setSaved(false) }} className="h-5 w-5 accent-crimson" />Show account notifications</label>
+      <div className="sm:col-span-2">{error && <p className="mb-3 text-sm font-semibold text-crimson" role="alert">{error}</p>}{saved && <p className="mb-3 text-sm font-semibold text-forest" role="status">Settings saved.</p>}<button className={primary} disabled={pending || offline}>{pending ? 'Saving…' : 'Save settings'}</button></div>
+    </form>}
+  </section>
+}
+
+const notificationLabels = {
+  staff_reply: 'K2 replied to your Website conversation',
+  order_updated: 'Your order request was updated',
+  payment_verified: 'K2 verified your payment',
+  pasabuy_updated: 'Your Pasabuy request was updated',
+}
+
+function AccountNotifications({ account, offline }) {
+  const { settingsState, markNotificationRead } = account
+  const [pendingId, setPendingId] = useState('')
+  const [error, setError] = useState('')
+  const markRead = async (id) => {
+    setError(''); setPendingId(id)
+    const result = await markNotificationRead(id)
+    setPendingId('')
+    if (!result.ok) setError(result.error || 'The notification could not be marked read.')
+  }
+  return <section aria-labelledby="account-notifications-title" className="border-t border-line py-8">
+    <h2 id="account-notifications-title" className="font-serif text-2xl font-semibold text-navy">Notifications</h2>
+    <p className="mt-2 text-sm leading-6 text-navy-soft">Updates recorded for this verified account. Staff replies and payment checks may take time.</p>
+    {error && <p className="mt-3 text-sm font-semibold text-crimson" role="alert">{error}</p>}
+    {settingsState.status === 'ready' && <div className="mt-4 divide-y divide-line border-y border-line" aria-live="polite">
+      {settingsState.notifications.length ? settingsState.notifications.map(item => <div key={item.id} className="flex flex-wrap items-center justify-between gap-3 py-4">
+        <div><p className="font-semibold text-navy">{notificationLabels[item.event_kind] || 'K2 updated your request'}</p><p className="mt-1 break-all text-sm text-navy-soft">{item.public_reference} · {formatDate(item.created_at)}</p></div>
+        {item.read_at ? <span className="text-sm text-navy-soft">Read</span> : <button type="button" className={secondary} onClick={() => markRead(item.id)} disabled={offline || pendingId === item.id}>{pendingId === item.id ? 'Saving…' : 'Mark notification read'}</button>}
+      </div>) : <p className="py-6 text-sm text-navy-soft">No account notifications yet.</p>}
+    </div>}
+  </section>
+}
+
 function LinkedAccount({ account, offline }) {
   const { history, historyState, error, refreshHistory, reply, signOut } = account
   const [replyPending, setReplyPending] = useState(false)
@@ -126,6 +194,8 @@ function LinkedAccount({ account, offline }) {
   return <main className="store-atmosphere min-h-[70vh] px-4 py-10 sm:py-14">
     <div className="mx-auto max-w-6xl"><div className="flex flex-col gap-5 border-b border-line pb-8 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-sm font-bold text-crimson">Verified customer account</p><h1 className="mt-2 max-w-2xl text-balance font-serif text-4xl font-semibold leading-tight text-navy sm:text-5xl">Your K2 records, in one place.</h1><p className="mt-3 max-w-[65ch] leading-7 text-navy-soft">Only deliberately linked orders, Pasabuy requests, and customer-visible Website messages appear here.</p></div><div className="flex flex-wrap gap-2"><button className={secondary} onClick={() => refreshHistory()} disabled={historyState === 'loading' || offline}><SyncIcon size={16} />{historyState === 'loading' ? 'Refreshing…' : 'Refresh'}</button><button className={secondary} onClick={signOut}>Sign out</button></div></div>
       {error && <div className="mt-6 rounded-xl border border-crimson/30 bg-crimson/10 p-4" role="alert"><p className="font-bold text-crimson">Account records are unavailable</p><p className="mt-1 text-sm leading-6 text-navy-soft">{error}</p><button className={`${secondary} mt-3`} onClick={() => refreshHistory()} disabled={offline}>Try again</button></div>}
+      <AccountSettings account={account} offline={offline} />
+      <AccountNotifications account={account} offline={offline} />
       {history && <div className="grid gap-10 py-10 lg:grid-cols-[0.85fr_1.15fr]"><div className="space-y-10"><section aria-labelledby="orders-title"><div className="flex items-end justify-between gap-3"><h2 id="orders-title" className="font-serif text-2xl font-semibold text-navy">Order requests</h2><span className="text-sm font-bold text-navy-soft">{history.orders.length}</span></div><div className="mt-4 divide-y divide-line border-y border-line">{history.orders.length ? history.orders.map(order => <div key={order.public_reference} className="py-4"><div className="flex flex-wrap justify-between gap-3"><p className="font-mono text-sm font-bold text-navy">{order.public_reference}</p><p className="font-bold text-navy">{peso(order.total_amount)}</p></div><p className="mt-2 text-sm text-navy-soft">{order.status} · Payment {order.payment_status.replaceAll('_',' ')} · {formatDate(order.created_at)}</p></div>) : <p className="py-6 text-sm leading-6 text-navy-soft">No linked order requests yet. Guest checkout still works without signing in.</p>}</div></section>
         <section aria-labelledby="pasabuy-title"><div className="flex items-end justify-between gap-3"><h2 id="pasabuy-title" className="font-serif text-2xl font-semibold text-navy">Pasabuy requests</h2><span className="text-sm font-bold text-navy-soft">{history.pasabuy_requests.length}</span></div><div className="mt-4 divide-y divide-line border-y border-line">{history.pasabuy_requests.length ? history.pasabuy_requests.map(request => <div key={request.public_reference} className="py-4"><p className="font-mono text-sm font-bold text-navy">{request.public_reference}</p><p className="mt-1 font-semibold text-navy">{request.item_title} · Qty {request.quantity}</p><p className="mt-1 text-sm text-navy-soft">{request.status} · {formatDate(request.created_at)}</p></div>) : <p className="py-6 text-sm leading-6 text-navy-soft">No linked Pasabuy requests yet.</p>}</div></section></div>
         <section aria-labelledby="account-messages-title"><div className="flex items-center gap-3"><ChatIcon size={22} className="text-crimson" /><h2 id="account-messages-title" className="font-serif text-2xl font-semibold text-navy">Website messages</h2></div><div className="mt-5 rounded-2xl border border-line bg-paper p-5 sm:p-7">{history.conversations.length ? history.conversations.map(conversation => <Conversation key={conversation.conversation_reference} conversation={conversation} onReply={handleReply} pending={replyPending} offline={offline} />) : <div className="py-8 text-center"><ChatIcon size={28} className="mx-auto text-navy-soft" /><p className="mt-3 font-bold text-navy">No linked conversations yet</p><p className="mt-1 text-sm leading-6 text-navy-soft">Message K2 from Contact us. An account is never required to start.</p></div>}</div></section></div>}
@@ -135,7 +205,7 @@ function LinkedAccount({ account, offline }) {
 
 export default function CustomerAccount() {
   const { go } = useStore()
-  const account = useCustomerAccount()
+  const account = useContext(CustomerAccountContext) || { enabled: false, session: null, ready: true }
   const [offline, setOffline] = useState(() => !navigator.onLine)
   const [claimPending, setClaimPending] = useState(false)
   const [claimError, setClaimError] = useState('')
@@ -163,5 +233,5 @@ export default function CustomerAccount() {
 
   return <main className="store-atmosphere min-h-[70vh] px-4 py-10 sm:py-16"><div className="mx-auto max-w-5xl"><div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-start"><section className="md:sticky md:top-36"><p className="text-sm font-bold text-crimson">Optional customer account</p><h1 className="mt-3 text-balance font-serif text-4xl font-semibold leading-tight text-navy sm:text-5xl">Keep verified K2 history across devices.</h1><p className="mt-5 max-w-[58ch] text-base leading-7 text-navy-soft">Guest checkout and messaging remain available. An account adds continuity only after K2 verifies that the guest records belong to the same contact.</p><ul className="mt-7 space-y-4 text-sm leading-6 text-navy-soft">{['No password to remember.','No automatic identity merge from matching text.','No VIP or wholesale pricing promise.'].map(item => <li key={item} className="flex gap-3"><CheckIcon size={18} className="mt-1 shrink-0 text-forest" /><span>{item}</span></li>)}</ul></section>
       {!account.session ? <SignInForm offline={offline} /> : <section className="rounded-2xl border border-line bg-paper p-5 sm:p-7" aria-labelledby="claim-title"><div className="flex items-start gap-3"><UserIcon size={24} className="mt-1 shrink-0 text-crimson" /><div><p className="text-sm font-bold text-forest">Verified sign-in</p><h2 id="claim-title" className="mt-1 font-serif text-2xl font-semibold text-navy">Link this browser’s guest records</h2><p className="mt-2 break-all text-sm text-navy-soft">{account.session.user.email || account.session.user.phone || 'Verified customer session'}</p></div></div><p className="mt-6 text-sm leading-6 text-navy-soft">K2 will match only the confirmed contact inside this account with the customer owned by this browser’s private guest grant. Conflicts stop for staff review.</p>{contactKinds.length > 1 && <fieldset className="mt-5"><legend className="text-sm font-bold text-navy">Confirmed contact to match</legend><div className="mt-2 flex gap-2">{contactKinds.map(kind => <label key={kind} className={`flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border px-4 text-sm font-bold ${contactKind === kind ? 'border-crimson bg-crimson/10 text-crimson' : 'border-line text-navy-soft'}`}><input type="radio" name="claim-contact-kind" value={kind} checked={contactKind === kind} onChange={() => setContactKind(kind)} />{kind === 'email' ? 'Email' : 'Phone'}</label>)}</div></fieldset>}{account.historyState === 'loading' && <p className="mt-5 flex items-center gap-2 text-sm font-semibold text-navy-soft" role="status"><SyncIcon size={17} />Checking linked records…</p>}{account.historyState === 'error' && account.code !== 'ACCOUNT_NOT_LINKED' && <p className="mt-5 rounded-xl border border-crimson/30 bg-crimson/10 p-3 text-sm font-semibold text-crimson" role="alert">{account.error}</p>}{claimError && <p className="mt-5 rounded-xl border border-crimson/30 bg-crimson/10 p-3 text-sm font-semibold text-crimson" role="alert">{claimError}</p>}<button className={`${primary} mt-6 w-full`} onClick={doClaim} disabled={claimPending || offline || !contactKinds.length || account.historyState === 'loading'}>{claimPending ? 'Linking verified records…' : 'Link verified guest records'}<ArrowIcon size={17} /></button><div className="mt-3 flex flex-wrap justify-between gap-2"><button className={secondary} onClick={() => account.refreshHistory()} disabled={offline}>Check existing link</button><button className={secondary} onClick={account.signOut}>Sign out</button></div></section>}
-    </div>{offline && <p className="mt-8 rounded-xl border border-amber/35 bg-amber/10 p-4 text-sm font-semibold text-navy" role="status">You are offline. Existing information stays visible, but sign-in, linking, refresh, and replies wait for reconnection.</p>}</div></main>
+    </div>{account.session && <div className="mt-8"><p className="text-sm leading-6 text-navy-soft">You can start shopping before linking guest records.</p><AccountSettings account={account} offline={offline} /><AccountNotifications account={account} offline={offline} /></div>}{offline && <p className="mt-8 rounded-xl border border-amber/35 bg-amber/10 p-4 text-sm font-semibold text-navy" role="status">You are offline. Existing information stays visible, but sign-in, linking, refresh, and replies wait for reconnection.</p>}</div></main>
 }

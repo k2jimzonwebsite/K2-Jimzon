@@ -50,11 +50,8 @@ export default function Confirmation() {
   }, [order])
 
   const currentOrder = order || restoredOrder
-  const [chosenMethod, setChosenMethod] = useState(order?.paymentMethod || 'gcash')
-
-  useEffect(() => {
-    if (currentOrder?.paymentMethod) setChosenMethod(currentOrder.paymentMethod)
-  }, [currentOrder?.paymentMethod])
+  const paymentMethod = currentOrder?.paymentMethod
+  const hasReceivingMethod = paymentMethod === 'gcash' || paymentMethod === 'maribank'
 
   if (!currentOrder) {
     return (
@@ -117,18 +114,11 @@ export default function Confirmation() {
         <section aria-labelledby="payment-qr-title" className="mt-6 rounded-2xl border border-line bg-paper p-5 text-left shadow-sm sm:p-7">
           <h2 id="payment-qr-title" className="font-serif text-xl font-semibold">Pay by QR transfer</h2>
           <p className="mt-2 text-base text-navy-soft">Wait for K2 staff to confirm your order and exact total before sending money. Include reference <strong className="text-navy">{currentOrder.id}</strong> when you send your receipt to staff.</p>
-          <fieldset className="mt-5">
-            <legend className="text-sm font-semibold">Choose where to pay</legend>
-            <div className="mt-2 grid grid-cols-2 gap-3">
-              {[['gcash', 'GCash'], ['maribank', 'MariBank']].map(([method, label]) => (
-                <label key={method} className={`flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-base font-semibold ${chosenMethod === method ? 'border-crimson bg-crimson/[0.03]' : 'border-line'}`}>
-                  <input type="radio" name="payment-qr" value={method} checked={chosenMethod === method} onChange={() => setChosenMethod(method)} className="accent-crimson" />{label}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          <div className={`mx-auto mt-5 aspect-square w-full max-w-[360px] overflow-hidden rounded-xl border border-line bg-white ${chosenMethod === 'maribank' ? 'payment-qr-maribank' : 'payment-qr-gcash'}`} role="img" aria-label={`${chosenMethod === 'maribank' ? 'MariBank' : 'GCash'} receiving QR code`} />
-          <a className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-crimson underline underline-offset-4" href={`/payment/${chosenMethod === 'maribank' ? 'maribank' : 'gcash'}-receive.png`} target="_blank" rel="noopener noreferrer">Open original QR image</a>
+          {hasReceivingMethod ? <>
+            <p className="mt-5 text-sm font-semibold text-navy">Selected at checkout: {paymentMethod === 'maribank' ? 'MariBank' : 'GCash'}</p>
+            <div className={`mx-auto mt-5 aspect-square w-full max-w-[360px] overflow-hidden rounded-xl border border-line bg-white ${paymentMethod === 'maribank' ? 'payment-qr-maribank' : 'payment-qr-gcash'}`} role="img" aria-label={`${paymentMethod === 'maribank' ? 'MariBank' : 'GCash'} receiving QR code`} />
+            <a className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-crimson underline underline-offset-4" href={`/payment/${paymentMethod}-receive.png`} target="_blank" rel="noopener noreferrer">Open original QR image</a>
+          </> : <p className="mt-5 rounded-xl border border-amber-600/30 bg-amber-50 p-4 text-sm leading-6 text-navy" role="status"><strong>Payment method unavailable.</strong> Ask K2 staff to confirm the receiving account before transferring. Your order request is still saved.</p>}
           <p className="mt-3 text-sm text-navy-soft">After transferring, send your payment reference and receipt to K2 staff. Payment remains pending until a separate staff reviewer confirms the funds in the receiving account.</p>
         </section>
       )}

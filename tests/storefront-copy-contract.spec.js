@@ -42,3 +42,25 @@ test('storefront promises reconcile with manual launch facts without false SLAs 
   expect(checkout).toContain('GCash QR after staff confirms your order')
   expect(checkout).toContain('MariBank QR after staff confirms your order')
 })
+
+test('the receipt never offers a QR that differs from the recorded checkout method', async () => {
+  const confirmation = await readFile(new URL('../src/views/Confirmation.jsx', import.meta.url), 'utf8')
+  expect(confirmation).not.toContain('setChosenMethod')
+  expect(confirmation).not.toContain('name="payment-qr"')
+  expect(confirmation).toContain('currentOrder?.paymentMethod')
+  expect(confirmation).toContain('Payment method unavailable')
+})
+
+test('public payment copy describes the current manual QR options', async () => {
+  const site = await readFile(new URL('../src/data/site.js', import.meta.url), 'utf8')
+  const policies = await readFile(new URL('../src/data/policies.js', import.meta.url), 'utf8')
+  expect(site).not.toContain('planned for launch')
+  expect(policies).not.toContain('planned for launch')
+  expect(site).toContain('MariBank')
+  expect(policies).toContain('MariBank')
+})
+
+test('product allergen notice does not add a second Contains prefix', async () => {
+  const product = await readFile(new URL('../src/views/MasterProduct.jsx', import.meta.url), 'utf8')
+  expect(product).not.toContain('Contains {product.allergens}')
+})

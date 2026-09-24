@@ -32,15 +32,18 @@ import { applyImageFallback } from '../../lib/imageFallback'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { CANONICAL_CUSTODIANS, CANONICAL_HUBS } from '../../data/canonicalIdentities'
 import AutomaticIntakePanel from './AutomaticIntakePanel'
+import IntakeStepGuide from './IntakeStepGuide'
 import { useRetainedIntakeCommand } from './useRetainedIntakeCommand'
 import { adminBffEnabled, lookupProductBarcodeBff, publicSeoDraftBff } from '../../services/adminBffService'
 
-export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct }) {
+export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct, guided = false }) {
   const closeButtonRef = useRef(null)
   const errorRef = useRef(null)
   const copiedPromptTimerRef = useRef(null)
   const previewUrlsRef = useRef(new Map())
   const [step, setStep] = useState(1)
+  const [showStepGuide, setShowStepGuide] = useState(guided)
+  useEffect(() => { if (guided && isOpen) setShowStepGuide(true) }, [guided, isOpen])
   const [session, setSession] = useState(null)
   const [sessionLoading, setSessionLoading] = useState(false)
   const [aiBusy, setAiBusy] = useState(false)
@@ -708,6 +711,10 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
         {/* Body Content */}
         <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
+          <button type="button" aria-expanded={showStepGuide} onClick={() => setShowStepGuide(value => !value)} className="min-h-11 rounded-adm-sm border border-adm-line px-3 text-sm text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue">
+            {showStepGuide ? 'Hide step guidance' : 'Show step guidance'}
+          </button>
+          {showStepGuide && <IntakeStepGuide key={step} step={step} />}
           {sessionLoading && (
             <div role="status" aria-live="polite" className="rounded-lg border border-white/10 bg-white/5 p-3.5 text-sm text-white/70">
               Restoring saved server progress…
@@ -952,7 +959,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                         className="mx-auto h-20 w-16 rounded object-cover border border-white/10"
                       />
                     )}
-                    <label className={`min-h-11 px-3 py-2 bg-white/10 text-xs rounded-lg hover:bg-white/20 text-amber-300 inline-flex items-center justify-center cursor-pointer ${evidenceUploading[s.slot] ? 'opacity-60 pointer-events-none' : ''}`}>
+                    <label id={`intake-evidence-${s.slot}`} tabIndex={0} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.currentTarget.querySelector('input[type="file"]')?.click() } }} className={`min-h-11 px-3 py-2 bg-white/10 text-xs rounded-lg hover:bg-white/20 text-amber-300 inline-flex items-center justify-center cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue ${evidenceUploading[s.slot] ? 'opacity-60 pointer-events-none' : ''}`}>
                       {evidenceUploading[s.slot]
                         ? 'Checking & uploading…'
                         : packagingImages[s.slot]?.upload_status === 'uploaded'
@@ -1057,6 +1064,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   <span className="font-mono text-amber-400 text-xs">Contract: k2.product-content.v3</span>
                   <button
                     type="button"
+                    id="intake-copy-prompt"
                     onClick={handleCopyPrompt}
                     className="min-h-11 px-3 py-2 bg-amber-400 text-black font-semibold rounded text-xs flex items-center gap-1 hover:bg-amber-300"
                   >
@@ -1153,9 +1161,10 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <p className="text-white/70">
                   Product Name: <strong className="text-white">{parsedPayload?.product?.name || query || 'New Product'}</strong>
                 </p>
-                <button
-                  type="button"
-                  onClick={handleSaveDraft}
+                  <button
+                    type="button"
+                    id="intake-save-draft"
+                    onClick={handleSaveDraft}
                   disabled={sessionLoading || creatingDraft || aiBusy || intakeCommand.locked}
                   className="w-full min-h-11 py-3 bg-amber-400 text-black font-bold rounded-lg hover:bg-amber-300 transition-colors flex items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-60"
                 >
@@ -1186,6 +1195,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 ].map(src => (
                   <button
                     type="button"
+                    id={`intake-source-${src.id}`}
                     key={src.id}
                     onClick={() => {
                       if (src.disabled) return

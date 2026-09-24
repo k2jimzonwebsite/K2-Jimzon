@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useStore } from '../context/StoreContext'
+import { CustomerAccountContext } from '../context/customerAccountContextValue'
 import { peso } from '../data/products'
 import ProductVisual from '../components/ProductVisual'
 import { CrimsonButton, GhostButton, TuscanCard } from '../components/ui/bits'
@@ -14,6 +15,7 @@ import {
 } from '../lib/cartShippingCalculator'
 
 export default function Checkout() {
+  const account = useContext(CustomerAccountContext)
   const {
     lines, placeOrder, pendingCheckout, resetPendingCheckout,
     go, applyCoupon, removeCoupon, appliedCoupon, couponDiscount,
@@ -56,6 +58,18 @@ export default function Checkout() {
   // or unreadable switch row means off, so customers can never be offered
   // a payment method the store has not approved.
   const [codAvailable, setCodAvailable] = useState(false)
+
+  useEffect(() => {
+    const settings = account?.settingsState?.settings
+    if (!settings || pendingCheckout) return
+    setForm(current => ({
+      ...current,
+      name: current.name || settings.displayName || '',
+      address: current.address || settings.deliveryAddress || '',
+      email: current.email || account.session?.user?.email || '',
+      phone: current.phone || account.session?.user?.phone || '',
+    }))
+  }, [account?.settingsState?.settings, account?.session?.user?.email, account?.session?.user?.phone, pendingCheckout])
 
   useEffect(() => {
     let active = true

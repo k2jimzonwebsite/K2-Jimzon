@@ -1,6 +1,14 @@
-# K2 Jimzon — Project Directory Map
+# K2 Jimzon  -  Project Directory Map
 
-Barcode-assisted Admin intake uses `server/admin-bff/barcode-catalog.js`, `prepared-api/admin/product-intake/barcode-lookup.js`, `src/services/adminBffService.js` and `src/views/admin/ProductIntakeSessionModal.jsx`. The separate public-only Gemini suggestion uses `server/admin-bff/gemini-public-draft.js` and `prepared-api/admin/product-intake/public-seo-draft.js`. `tests/barcode-catalog-lookup.spec.js`, `tests/gemini-public-draft.spec.js`, `tests/intake-ai-provider.spec.js` and `tests/intake-ai-ui.spec.js` cover its bounded local paths. Design, evidence, activation and rollback are in `docs/design/BARCODE_ASSISTED_PRODUCT_LISTING.md`, `docs/evidence/20260924-barcode-listing/README.md` and MAP-018.
+The guided intake pilot keeps versioned teaching in `src/views/admin/staffProcedureRegistry.js`, renders it through `IntakeStepGuide.jsx` in the canonical `ProductIntakeSessionModal.jsx`, and launches it from the Operations guide through `InventoryGrid.jsx`. It introduces no second progress store or provider command. Optional dashboard explanations live in `dashboardWidgets.js` and `Overview.jsx`; the current UI contract is `tests/admin-dashboard-redesign.spec.js`.
+
+The root `MASTER_ACTION_PLAN.md` is the only current work queue. The earlier detailed snapshot is in `K2 Jimzon - Brain/MASTER_ACTION_PLAN_HISTORY_2026-09-24.md` for dated decisions and evidence; it does not assign work. Required behavior stays in the Brain operations rulebook, verified state in the System Brain, owner decisions in `OWNER_QUESTIONS.md`, and idea decisions in `FUTURE_IDEAS.md`.
+
+IDEA-20260924-08's locally prepared barcode lookup uses `server/admin-bff/barcode-catalog.js`, the protected `prepared-api/admin/product-intake/barcode-lookup.js` route, `src/services/adminBffService.js`, and step 1 of `src/views/admin/ProductIntakeSessionModal.jsx`. The public identity suggestion is reviewed and recorded in the existing intake session; it does not copy images or replace the prepared paid AI path. The source contract and rendered fixture are `tests/barcode-catalog-lookup.spec.js` and `tests/intake-ai-ui.spec.js`. Design and activation limits are in `docs/design/BARCODE_ASSISTED_PRODUCT_LISTING.md` and MAP-018.
+
+IDEA-20260924-09's optional Gemini public SEO suggestion uses `server/admin-bff/gemini-public-draft.js` and `prepared-api/admin/product-intake/public-seo-draft.js`. The server fetches the barcode anew and sends only public fields. `tests/gemini-public-draft.spec.js` and `tests/intake-ai-provider.spec.js` guard the key boundary and exclusion of private package photos. The Admin Vercel Secret exists, but the BFF and real-host flow are not active.
+
+IDEA-20260924-04 account settings and notifications use `src/hooks/useCustomerAccount.js`, `src/context/CustomerAccountProvider.jsx`, `src/views/CustomerAccount.jsx`, `src/components/StoreHeader.jsx` and `src/views/Checkout.jsx` behind the existing account/guest BFF flags. Prepared server routes are `prepared-api/storefront/account/settings.js` and `notifications.js`; the private schema and signed RPCs are in `supabase/migrations/20260924_customer_account_settings_notifications.sql`. The focused account browser, BFF contract and isolated database rehearsal are listed in `docs/evidence/20260924-storefront-audit-fixes/README.md`. Receipt, policy, product label and robots fixes are in their existing Storefront components and data files. Production activation remains in MAP-019/020/025.
 
 IDEA-20260922-03 through -06 use `StoreKeeper.jsx`, `InteractiveShop.jsx` and `interactive-store.css` for the mobile obstruction fix; `Footer.jsx` for the six marketplace destinations; `AdminInstallButton.jsx`, `admin-sw.js` and the Admin-only Vite emit plugin for installability; and `20260922_anonymous_chat_moderation.sql` plus its rollback for private hash/block/receipt state. Admin moderation travels through three prepared Inbox routes, `server/admin-bff/inbox.js`, `useAdminInboxRuntime.js` and `Inbox.jsx`. `tests/mobile-store-moderation-pwa-contract.spec.js` owns the focused source/security contract; evidence is in `docs/evidence/20260922-mobile-chat-moderation/README.md`.
 
@@ -10,6 +18,13 @@ The guest-boundary preflight compatibility regression uses
 defaulted eleven-argument order signature before the isolated moderation
 apply/behavior/rollback sequence. The production migration chain and provider
 activation remain governed by the guest BFF runbook and MAP-019/020.
+The same isolated runner now applies the prepared guest cutover against both
+nine- and eleven-argument order fixtures, with direct-denial assertions in
+`supabase/tests/map020_cutover_overloads_assertions.sql`. This is local evidence,
+not a production grant change.
+`scripts/verify-guest-bff.mjs` compares the prepared Storefront route files with
+the router inventory, checks uniqueness, and scans both account settings and
+notification handlers for forbidden secret/browser boundaries.
 
 IDEA-20260922-01 keeps staff utilities in `src/views/admin/AdminToolsWidget.jsx`, with local styles in `AdminToolsWidget.css` and navigation callbacks from `Admin.jsx`. Focus/resize/expiry/scratchpad/navigation acceptance lives in `tests/admin-dashboard-redesign.spec.js`; evidence/checkpoint directories are `20260922-admin-quick-tools`.
 
@@ -122,7 +137,7 @@ recovery are under `docs/evidence/20260909-catalog-import-retry/` and
 target-host acceptance remain in I-002.
 
 - Prepared Admin routes: 97
-- Prepared Storefront routes: 15
+- Prepared Storefront routes: 17
 
 These are source registry counts, checked by
 `tests/security-surface-inventory.spec.js` in the contract and CI suites.

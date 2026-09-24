@@ -103,7 +103,7 @@ async function accountRequest(path, body, accessToken) {
     const code = result?.error?.code || 'SERVICE_UNAVAILABLE'
     return { ok: false, code, error: ACCOUNT_ERRORS[code] || 'The account request could not be completed. Try again.' }
   }
-  return { ok: true, data: result.history || result.receipt }
+  return { ok: true, data: result.history || result.settings || result.receipt, notifications: result.notifications || [] }
 }
 
 export const loadCustomerHistory = (accessToken) => accountRequest('account/history', {}, accessToken)
@@ -111,3 +111,8 @@ export const claimGuestCustomer = (accessToken, contactKind, idempotencyKey) =>
   accountRequest('account/claim', { contactKind, idempotencyKey }, accessToken)
 export const replyAsCustomerAccount = (accessToken, conversationReference, message, idempotencyKey) =>
   accountRequest('account/message', { conversationReference, message, idempotencyKey }, accessToken)
+export const loadCustomerSettings = (accessToken) => accountRequest('account/settings', {}, accessToken)
+export const saveCustomerSettings = (accessToken, displayName, deliveryAddress, notifyInApp) =>
+  accountRequest('account/settings', { displayName, deliveryAddress, notifyInApp }, accessToken)
+export const markCustomerNotificationRead = (accessToken, notificationId) =>
+  accountRequest('account/notifications', { notificationId }, accessToken)

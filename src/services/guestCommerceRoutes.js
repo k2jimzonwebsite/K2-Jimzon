@@ -2,6 +2,8 @@ const GUEST_ENDPOINTS = Object.freeze({
   'account/claim': '/api/storefront/account/claim',
   'account/history': '/api/storefront/account/history',
   'account/message': '/api/storefront/account/message',
+  'account/settings': '/api/storefront/account/settings',
+  'account/notifications': '/api/storefront/account/notifications',
   'account/auth/email': '/api/storefront/account/auth/email',
   'account/auth/phone': '/api/storefront/account/auth/phone',
   'account/auth/verify': '/api/storefront/account/auth/verify',

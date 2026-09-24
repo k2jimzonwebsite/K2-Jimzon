@@ -1,6 +1,14 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
-**Barcode-assisted listing and public Gemini rule (24 September, IDEA-20260924-08/09):** A new product starts with K2 duplicate search. A valid package barcode may receive bounded public grocery identity details; staff compare the exact name, brand and size with the physical label and record confirmation or rejection. A missing match leaves the manual path available. Gemini free tier may receive only the freshly fetched public barcode, name, brand and quantity after confirmation. Its SEO text is an unsaved suggestion, never a Draft or payment, stock, media or publication approval. A changed public identity requires another scan and package check. Withdrawing confirmation discards an in-flight suggestion. Private package evidence and K2 records never go to Gemini free tier. Staff may upload their own storefront photos after Draft; generated images are optional and require separate paid-provider approval.
+**Guided staff tasks and widget help (IDEA-20260907-03/04):** Staff guidance is advisory. Learn mode explains required evidence, expected saved result and recovery. Guided mode follows the canonical intake form's current step. A focus shortcut must reject hidden, disabled, inert, ARIA-disabled or unfocusable controls and report the blocker; it never clicks, submits or marks completion. Draft creation, first inventory and publication remain separate decisions. Dashboard Help is offered only for calculations or source rules that need explanation; failed, stale and unavailable data must stay visible without opening Help. Neither aid changes records or metric truth.
+
+**Public Gemini draft rule (24 September, IDEA-20260924-09):** Staff may request a Gemini free-tier SEO suggestion only after an exact package-barcode match from a fresh public Open Food Facts lookup. The server sends only the public barcode, product name, brand and quantity. It never sends staff package photos, internal stock, costs, customer data or notes to Gemini free tier. The response is an unsaved suggestion for staff comparison with the physical label; it cannot create a Draft, set stock, approve media or publish a product. The paid photo-grounded intake remains a separate inactive path under OWNER-007.
+
+The returned public catalog identity must still match the barcode, name, brand and quantity staff confirmed. A changed identity requires another package check and scan. If staff withdraws or rejects confirmation while a suggestion is loading, the response must be discarded.
+
+**Agile documentation flow (24 September, IDEA-20260924-05):** `MASTER_ACTION_PLAN.md` is the only active queue. Each MAP item names a useful outcome, its next small slice, evidence needed to accept it, and any blocker. Work in dependency order and update the item as facts change. The Brain history file is a superseded snapshot for audit traceability, not a second list of work. Put lasting operating rules here and verified current state in the System Brain. Close a slice only after its evidence is recorded; remove a full MAP item only after its entire outcome is verified. Keep locally prepared, provider-applied, deployed and real-host states distinct.
+
+**Customer account, notifications and payment receipt rule (24 September, IDEA-20260924-04; prepared):** Verified passwordless sign-in creates the optional customer Auth identity on first use; browsing and checkout remain available without one. A signed-in customer may save a display name, delivery address and in-app update preference, and saved values fill only empty checkout fields. Verified account notifications are private, content-free references to staff replies, canonical order/Pasabuy changes and staff-verified payment; the order or payment record remains the source of truth. A QR receipt displays only the payment method selected for that order and never confirms receipt of funds. Product pages remain noindexed until the approved publication gate is lifted. These account/notification rules require the MAP-019/020 database and BFF cutover before they operate live.
 
 **Admin phone workspace hierarchy (24 September, IDEA-20260924-03):** Staff phone navigation groups the existing authorized destinations by work area. The current group opens first; other groups and staff tools are explicit disclosures with readable labels and 44px controls. The phone top bar uses the short section name, and the workspace keeps its task heading. Overview widget choices remain available through the page selector and the navigation group. Inventory keeps one visible primary Add inventory action in its workspace; CSV import and spreadsheet mode are available from Staff tools. Desktop route IDs, role gates, signed commands, record truth and audit behavior do not change. Long labels, status text, numbers and button copy must wrap inside their containers instead of clipping or forcing a page-wide horizontal scroll. Every route still needs real staff and device acceptance before calling the navigation ready for operations.
 
@@ -40,7 +48,7 @@ labels never merge product publication, warehouse stock and shop allocation.
 Staff onboarding, standard operating procedures, and operational rehearsal across all 8 business lifecycles (New Product Intake, Existing Stock Intake, Cross-Border Supply Chain, Inventory Handover & Dispatch, Monthly Physical Count & Close, Customer Order Fulfillment, Pasabuy Concierge, and Multi-Channel Integrations) use the non-blocking dual-advance Spotlight Tour Overlay (`src/components/admin/tour/SpotlightTourOverlay.jsx`). Overlays must use 4-panel shaded surround geometry (`top`, `bottom`, `left`, `right`) around active targets rather than click-intercepting full-screen masks, ensuring staff can perform real warehouse/store operations in the live interface or press `[Next Step →]` / `[N]` to rehearse. Walkthrough text must follow warehouse plain English (zero em dashes, zero AI buzzwords, active voice, copulas) and enforce strict accessibility standards ($\ge 12$px typography floor, $\ge 44\times 44$px touch targets (`min-h-11`), zero raw emojis). Cross-section transitions must display an explicit workspace indicator banner with a direct navigation action button, and all styling must use isolated inline tokens (`THEME_PALETTES`) to prevent CSS bloat in shared storefront bundles.
 
 **16 September automated delivery quotation and checkout parity (IDEA-20260916-01, MAP-023 / MAP-018):**
-Automated Shopee/Lazada-style delivery pricing at checkout (`src/lib/cartShippingCalculator.js`) eliminates manual pre-order quoting friction while keeping carrier fulfillment commitment with K2 Jimzon. Real-time rates calculate from cart items' packed weight and customer-selected Philippine delivery region (NCR: Standard ₱95 / Express ₱150; Greater Luzon: ₱85; Visayas: ₱100; Mindanao: ₱105; Pickup: ₱0 free; overweight scaling: +₱35/kg over 3kg). Storefront BFF (`prepared-api/storefront/order.js`) revalidates `shippingAmount` via `strictNumeric` (0–100,000) and `shippingQuoteStatus = 'customer_confirmed'`. Database RPC `submit_order_request_v2` (live in production on Supabase) and companion `submit_guest_order_v1` (`supabase/migrations/20260916_automated_delivery_quotation.sql`) persist `shipping_amount`, set `shipping_quote_status = 'customer_confirmed'`, set initial `delivery_status = 'ready_to_pack'`, calculate `total_amount = subtotal - discount + shipping_amount`, and record the delivery breakdown in events and conversation thread. The customer chooses their service tier; staff fulfill dispatch with courier of choice, with Admin BOS (`OmniOperationsHub.jsx`) rendering the customer-confirmed delivery fee and pre-filling courier dispatch recommendations in `DeliveryDetailsModal`.
+Automated Shopee/Lazada-style delivery pricing at checkout (`src/lib/cartShippingCalculator.js`) eliminates manual pre-order quoting friction while keeping carrier fulfillment commitment with K2 Jimzon. Real-time rates calculate from cart items' packed weight and customer-selected Philippine delivery region (NCR: Standard ₱95 / Express ₱150; Greater Luzon: ₱85; Visayas: ₱100; Mindanao: ₱105; Pickup: ₱0 free; overweight scaling: +₱35/kg over 3kg). Storefront BFF (`prepared-api/storefront/order.js`) revalidates `shippingAmount` via `strictNumeric` (0-100,000) and `shippingQuoteStatus = 'customer_confirmed'`. Database RPC `submit_order_request_v2` (live in production on Supabase) and companion `submit_guest_order_v1` (`supabase/migrations/20260916_automated_delivery_quotation.sql`) persist `shipping_amount`, set `shipping_quote_status = 'customer_confirmed'`, set initial `delivery_status = 'ready_to_pack'`, calculate `total_amount = subtotal - discount + shipping_amount`, and record the delivery breakdown in events and conversation thread. The customer chooses their service tier; staff fulfill dispatch with courier of choice, with Admin BOS (`OmniOperationsHub.jsx`) rendering the customer-confirmed delivery fee and pre-filling courier dispatch recommendations in `DeliveryDetailsModal`.
 
 **20 September delivery rates as J&T VIP ceiling (owner policy):**
 No carrier API exists, so the matrix above is deliberately set at average-to-maximum J&T VIP rates, not at cost. Every fee rounds up (`ceilingToStep` to the nearest 5 or 10 pesos, overweight brackets round up, unweighed items default to 500 grams with container tare), so the quoted fee never lands below what the courier charges. Rates move in one direction only: a future staff override may lower a quote with a reason, never raise one above the matrix. That override does not exist yet and arrives as its own audited slice; until then the matrix is the ceiling and staff fulfill at or below it out of margin, never above it at the customer.
@@ -161,6 +169,7 @@ Refresh uses the existing authorized read boundary, including visible-tab pollin
 and return-to-tab refresh; mock records belong only in isolated tests.
 
 **Automatic intake boundary (IDEA-20260906-05; prepared, not activated):**
+For IDEA-20260924-08, a package EAN/UPC/GTIN may receive a public grocery-catalog identity suggestion after K2's duplicate check. The public suggestion is untrusted: staff compare the exact variant and size with the physical package and record accept/reject provenance. Private package photos may support paid AI listing text, SEO and optional image candidates after the provider gate. Staff can instead upload their own primary, after-use and supporting storefront photos through the product's Photos action. Intake evidence is never published automatically. Missing catalog data, a mismatch or outage preserves manual intake. No catalog image is copied. K2 internal SKUs cannot be used as global barcodes; no suggestion changes stock, price, batch, expiry or publication. This lookup and review are locally prepared, not activated on the live Admin host.
 Manual ChatGPT Projects remains a separate usable path. Automatic requests use
 only registered package evidence, require staff+AAL2 and exact session ownership,
 and reserve owner-approved budget before a single provider dispatch. Signed jobs
@@ -286,12 +295,12 @@ This file defines how K2 must work. It does not claim every rule is already impl
 
 Use project documents in this order:
 
-1. **Master Business Blueprint** — K2's vision, customers, and direction.
-2. **This rulebook** — required operational behavior and safeguards.
-3. **System Brain Current** — what is implemented and live now.
-4. **Admin Operations Audit** — what is backed, partial, broken, deferred, or unsafe.
-5. **Future Ideas** — proposals that are not yet live.
-6. **Owner Questions** — only unresolved business-policy decisions.
+1. **Master Business Blueprint**  -  K2's vision, customers, and direction.
+2. **This rulebook**  -  required operational behavior and safeguards.
+3. **System Brain Current**  -  what is implemented and live now.
+4. **Admin Operations Audit**  -  what is backed, partial, broken, deferred, or unsafe.
+5. **Future Ideas**  -  proposals that are not yet live.
+6. **Owner Questions**  -  only unresolved business-policy decisions.
 
 If documents conflict, use this rulebook for target behavior and the System Brain for current status. Never describe a target as live until schema, code, permissions, and tests verify it. Older workflow, system-logic, and connector blueprints are historical when they conflict with this file.
 
@@ -423,13 +432,13 @@ available = on_hand
 - FEFO selects the earliest **eligible** lot.
 - Pins may attract attention but never override eligibility or FEFO.
 - Ordinary sale requires at least 90 calendar days remaining by default.
-- 31–89 days requires an approved, clearly disclosed clearance path.
-- 0–30 days is not sellable.
+- 31-89 days requires an approved, clearly disclosed clearance path.
+- 0-30 days is not sellable.
 - Expired lots are not sellable.
 - Expiry-tracked stock with an unknown date is not sellable until corrected.
 - Categories may raise the 90-day minimum.
 - Expired, damaged, quarantined, unavailable, wrong-location, and wrong-custody lots cannot be reserved or fulfilled.
-- A 31–89 day clearance decision records actor, time, and a specific reason and
+- A 31-89 day clearance decision records actor, time, and a specific reason and
   is reversible with a second reason. Changing expiry or moving the lot into a
   non-available disposition invalidates the prior clearance approval.
 - A physical recount cannot reduce a lot below its active reservations. Resolve
@@ -1036,7 +1045,7 @@ sale. Customer identity/contact/address fields are outside this contract.
 Marketplace fee estimates use only accepted, product-linked, deduplicated facts
 from the latest reviewed immutable import for one exact selected shop. Older
 imports remain evidence; a later clean export may supersede them for the close
-without deleting duplicate/conflict history. Every saved estimate names a 3–120 character
+without deleting duplicate/conflict history. Every saved estimate names a 3-120 character
 policy version, PHP currency, commission/payment/withholding basis points, fixed
 minor-unit fee per distinct accepted order, reason, actor, and monotonic
 shop/session estimate version. K2 recomputes aggregate gross and each rounded
@@ -1118,11 +1127,11 @@ server activation switch is enabled. A disabled form or prepared endpoint is not
 invitation capability or delivery evidence.
 
 Replacing an active Admin authenticator is a credential change, not a recovery
-bypass. It requires a current Admin/AAL2 session, a 3–500 character reason, a
+bypass. It requires a current Admin/AAL2 session, a 3-500 character reason, a
 signed private requested receipt, and one exact replacement operation. The old
 verified factor remains active while the new QR/manual-key setup is pending and
 is retired only after the exact new factor verifies. Requested and completed
-events retain reason and hashed—not raw—factor identifiers. Multiple existing
+events retain reason and hashed - not raw - factor identifiers. Multiple existing
 verified factors fail closed. Lost-factor recovery must use a separately
 approved owner/provider identity process and may never be simulated by disabling
 MFA, trusting email alone, or exposing provider tokens to browser code.
@@ -1169,7 +1178,7 @@ allowlisted Admin callback and a custom provider template that sends the
 single-use token hash to the server boundary; provider sessions and refresh
 tokens never enter the URL or browser JavaScript. After server verification, a
 ten-minute encrypted recovery cookie plus separately bound CSRF token may change
-one password that is 12–128 characters. Completion rechecks the current staff
+one password that is 12-128 characters. Completion rechecks the current staff
 role, closes all provider sessions, clears the recovery cookies, and requires a
 fresh password-plus-authenticator sign-in. A used, expired, altered, non-staff,
 unverified-email, wrong-origin, or replayed recovery fails closed. Password
@@ -1276,7 +1285,7 @@ kept distinct so that "reserved" and "sold" are never confused:
   live customer's hold.
 - **Pasabuy and wholesale take no hold at all.** Those flows are conversation-led
   through live chat, so each commitment becomes a durable history record on the
-  customer — a Pasabuy history and a wholesale history — rather than an expiring
+  customer  -  a Pasabuy history and a wholesale history  -  rather than an expiring
   claim on inventory. The purpose is continuity of contact inside live chat and
   never losing track of a request.
 - Cart commands accept only a canonical product with known positive sellable
@@ -1400,7 +1409,7 @@ all other orders -> manual_courier_quote -> communicated -> customer_confirmed
   submitting the form never claims to book a courier. Validation, failure, retry,
   cancel, and focus return remain inline in the shared Admin dialog; blocking
   browser `alert`, `prompt`, and `confirm` are not operational controls.
-- Before booking, use the K2 packing QR—not a fake courier label.
+- Before booking, use the K2 packing QR - not a fake courier label.
 
 ## 14. Packing and fulfillment
 
@@ -1522,7 +1531,7 @@ landed_cost = purchase_cost
   divided by net sales after total discount and applies a percentage payment or
   channel fee to gross sales before discount. The minimum unit price is solved
   algebraically, rounded upward to the nearest cent, and fully recomputed from
-  that rounded price. Margin and fee rates each stay within 0–99.99% and their
+  that rounded price. Margin and fee rates each stay within 0-99.99% and their
   sum must remain below 100%. The recommendation never changes canonical price
   or represents price approval, landed cost, tax, payout, or actual profit.
 - Maximum-discount planning uses the same gross-margin and fee definitions but
@@ -1530,7 +1539,7 @@ landed_cost = purchase_cost
   that preserves the target margin, rounds that allowance downward to the
   nearest cent, and fully recomputes the achieved scenario. If the chosen price
   misses the target even at zero discount, the tool must refuse a discount
-  result. The total allowance—not a rounded per-unit display—is the ceiling.
+  result. The total allowance - not a rounded per-unit display - is the ceiling.
   The result never creates or approves a promotion, changes canonical price,
   writes an order, or represents landed cost, tax, payout, settlement,
   accounting, or actual profit.
@@ -1654,7 +1663,7 @@ Each record page shows identity/state, next action/blocker, owner, linked record
   are derived only from the owning workflow's canonical evidence. The guide
   must label manual evidence review separately and must never convert a click,
   copied prompt, pasted answer, or opened screen into a completed operation.
-- An external-tool step is visibly `MANUAL — EXTERNAL STEP` and names the
+- An external-tool step is visibly `MANUAL  -  EXTERNAL STEP` and names the
   approved private tool or Project, allowed evidence, exact prompt/payload,
   expected return format, prohibited data, return destination, validation, and
   fallback. K2 may offer a customer-free `Copy approved prompt` action, but it
@@ -1888,8 +1897,8 @@ A workflow is done only when state/ownership are unambiguous; transitions are se
 ### Store orientation - IDEA-20260908-02
 The 3D shopping room at `/store` must adapt to portrait and landscape without a forced orientation lock. Rotation retains the canonical basket, selected goods and unsent shopkeeper question. Phone controls must reserve separate space for zoom and basket; an empty decorative basket may be hidden. Catalog/shop remains a separate surface. Reduced-motion fallback acceptance does not establish 3D rendering acceptance.
 
-### Bounded chunk recovery and target-neutral error boundary — IDEA-20260908-01 / I-010
+### Bounded chunk recovery and target-neutral error boundary  -  IDEA-20260908-01 / I-010
 Preload and chunk recovery errors are explicit, user-initiated actions and must never trigger an automatic unconstrained reload loop. Error boundary copy on shared surfaces (`ErrorBoundary.jsx`) must be target-neutral, referencing the general shop or section rather than "Reload Admin" or leaking administrative surfaces. Touch targets for retry and reload buttons must meet the `>= 44px` minimum (`min-h-11`).
 
-### Customer-facing policy and recovery entry points — IDEA-20260908-01 / I-011
+### Customer-facing policy and recovery entry points  -  IDEA-20260908-01 / I-011
 Customer data collection on checkout, contact, pasabuy, and wholesale forms must offer reachable, clear disclosures of data collection and usage policies. The storefront must publish dedicated SPA routes (`/privacy`, `/terms`, `/returns`, `/policies`) and footer entry points for Privacy & Data, Terms of Service, and Returns & Replacements. The returns policy must accurately communicate the manual, case-by-case 48-hour inspection workflow without creating automated refund entitlements or false response SLAs. Touch targets on policy links and tab selectors must satisfy the `>= 44px` minimum.

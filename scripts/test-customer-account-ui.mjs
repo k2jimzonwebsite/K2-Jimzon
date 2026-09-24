@@ -53,6 +53,7 @@ try {
   const result = spawnSync(process.execPath, [
     path.join(root,'node_modules','@playwright','test','cli.js'), 'test',
     '--config=playwright.account.config.js', 'tests/customer-account-ui.spec.js', 'tests/wholesale-inquiry-ui.spec.js',
+    ...process.argv.slice(2),
   ], { cwd: root, env, encoding: 'utf8', windowsHide: true, stdio: 'inherit' })
   if (result.error || result.status !== 0) process.exitCode = result.status || 2
 } finally {

@@ -194,6 +194,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
   const [showSmartPaste, setShowSmartPaste] = useState(false)
   const [showMediaCleanup, setShowMediaCleanup] = useState(false)
   const [showPhoneIntake, setShowPhoneIntake] = useState(false)
+  const [guidedIntake, setGuidedIntake] = useState(false)
   const [showIntakeChooser, setShowIntakeChooser] = useState(false)
 
   useEffect(() => {
@@ -201,6 +202,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     if (launchTool.id === 'scan-product') setShowAiScanner(true)
     if (launchTool.id === 'smart-paste') setShowSmartPaste(true)
     if (launchTool.id === 'add-inventory') setShowIntakeChooser(true)
+    if (launchTool.id === 'guided-intake') { setGuidedIntake(true); setShowPhoneIntake(true) }
     onLaunchToolHandled?.(launchTool.token)
   }, [launchTool, onLaunchToolHandled])
   const [enrichProduct, setEnrichProduct] = useState(null)
@@ -569,9 +571,10 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
       )}
       <ProductIntakeSessionModal
         isOpen={showPhoneIntake}
-        onClose={() => setShowPhoneIntake(false)}
-        onProductCreated={() => { fetchProducts(); setShowPhoneIntake(false) }}
-        onExistingProduct={() => { setShowPhoneIntake(false); flash('That product already exists. Find it in the inventory register.') }}
+        guided={guidedIntake}
+        onClose={() => { setShowPhoneIntake(false); setGuidedIntake(false) }}
+        onProductCreated={() => { fetchProducts(); setShowPhoneIntake(false); setGuidedIntake(false) }}
+        onExistingProduct={() => { setShowPhoneIntake(false); setGuidedIntake(false); flash('That product already exists. Find it in the inventory register.') }}
       />
 
       {notice && <StateBanner tone={notice.error ? 'danger' : 'success'}>{notice.text}</StateBanner>}

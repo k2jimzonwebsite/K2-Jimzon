@@ -94,7 +94,7 @@ export const FAQS = [
   },
   {
     q: 'How do I pay?',
-    a: 'No payment is collected when you submit a request. Manual GCash or QR payment is planned for launch. Wait for K2 staff to confirm your stock, delivery charge, total, and approved receiving details before paying. Your payment must then be checked by staff.',
+    a: 'No payment is collected when you submit a request. You can choose a GCash or MariBank receiving QR for manual transfer. Wait for K2 staff to confirm your stock, delivery charge, total, and approved receiving details before paying. Your payment must then be checked by staff.',
   },
   {
     q: 'I run a café, restaurant, or store. Can I get wholesale prices?',

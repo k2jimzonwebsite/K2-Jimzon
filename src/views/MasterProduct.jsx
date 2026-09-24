@@ -205,7 +205,7 @@ export default function MasterProduct() {
           {product.allergens && (
             <div className="mt-4 flex items-center gap-2 rounded-lg border border-amber-600/30 bg-amber-50 dark:bg-amber-950/20 px-3.5 py-2.5 text-xs font-medium text-amber-900 dark:text-amber-200" role="alert">
               <span className="shrink-0 font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">Allergen Notice:</span>
-              <span>Contains {product.allergens}</span>
+              <span>{/^contains\b/i.test(String(product.allergens).trim()) ? product.allergens : `Contains ${product.allergens}`}</span>
             </div>
           )}
 

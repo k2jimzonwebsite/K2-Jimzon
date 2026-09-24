@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { answerQuestion } from './adminGuide'
-import { STAFF_GUIDE_META } from './staffProcedureRegistry'
+import { STAFF_GUIDE_META, STAFF_PROCEDURES } from './staffProcedureRegistry'
 import { BookIcon, SearchIcon, XIcon } from '../../components/ui/icons'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 
@@ -11,7 +11,8 @@ const EXAMPLES = [
   'What shortcuts can I use?',
 ]
 
-export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, currentSection, initialQuery = '' }) {
+export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, onStartIntake, currentSection, initialQuery = '' }) {
+  const intake = STAFF_PROCEDURES.find(item => item.id === 'product-intake-manual')
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const inputRef = useRef(null)
@@ -72,10 +73,26 @@ export default function AdminAiCopilotModal({ isOpen, onClose, onNavigate, curre
         </div>
 
         <div className="flex-1 space-y-4 overflow-y-auto p-4 custom-scrollbar" aria-live="polite">
+          <section aria-label="Guided tasks" className="border-b border-adm-line pb-4 text-sm leading-relaxed text-white/80">
+            <h3 className="font-semibold text-white">Help me do a task</h3>
+            <p className="mt-1">Add a product from its packaging</p>
+            <p className="mt-1 text-xs text-white/65">Manual intake pilot. Guided instructions stay in the intake form and follow its current step. Other procedures remain reference-only.</p>
+            <details className="mt-2">
+              <summary className="min-h-11 cursor-pointer py-3 font-medium text-white">Learn this task</summary>
+              <p><strong>Who:</strong> {intake.authorizedRoles.join('; ')}</p>
+              <p className="mt-2"><strong>Before you start:</strong> {intake.prerequisites.join('; ')}</p>
+              <ol className="mt-3 space-y-3">
+                {intake.walkthrough.map((item, index) => <li key={item.targetId}><h4 className="font-medium text-white">{index + 1}. {item.title}</h4><p>{item.instruction}</p><p className="mt-1 text-xs text-white/65">Expected: {item.expected}</p></li>)}
+              </ol>
+              <p className="mt-3 text-xs text-white/65">Source: {intake.sources.join(' · ')} · {intake.walkthroughVersion}. Learning is not operational completion.</p>
+            </details>
+            {onStartIntake ? <button type="button" onClick={onStartIntake} className="mt-2 min-h-11 rounded-adm-sm bg-blue px-3 font-semibold text-white hover:bg-blue-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">Guide me through product intake</button>
+              : <p className="mt-2">Guided intake cannot open from this view. Return to the Admin operations guide.</p>}
+          </section>
           {messages.length === 0 && (
             <div className="rounded-adm-sm border border-adm-line bg-white/[0.025] p-4">
               <p className="text-sm font-semibold text-white">Ask about any K2 operation</p>
-              <p className="mt-1.5 text-sm leading-relaxed text-white/55">I retrieve the closest approved procedures and show their source. I do not read live records, contact customers, or change operational state.</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-white/65">Search the draft procedure reference below. I do not read live records, contact customers, or change operational state.</p>
             </div>
           )}
 

@@ -381,10 +381,10 @@ test('MAP-017 dry-run reports the recorded authorization without contradicting i
 
 test('MAP-017 authoritative records pin the exact current SQL payload hash', async () => {
   const authoritativeRecords = await Promise.all([
-    readFile(new URL('../MASTER_ACTION_PLAN.md', import.meta.url), 'utf8'),
     readFile(new URL('../K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md', import.meta.url), 'utf8'),
     readFile(new URL('../K2 Jimzon - Brain/OWNER_QUESTIONS.md', import.meta.url), 'utf8'),
     readFile(new URL('../scripts/map017-evidence/README.md', import.meta.url), 'utf8'),
+    readFile(new URL('../docs/runbooks/DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md', import.meta.url), 'utf8'),
     readFile(new URL('../docs/evidence/MAP_017_EXHAUSTIVE_AUTHORIZATION_AUDIT_2026-08-22.md', import.meta.url), 'utf8'),
   ])
 

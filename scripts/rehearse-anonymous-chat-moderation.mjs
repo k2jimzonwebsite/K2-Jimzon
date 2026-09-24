@@ -54,7 +54,13 @@ try {
     "select has_function_privilege('anon','public.submit_storefront_chat_v1(text,text,text,uuid,text)','EXECUTE')"],
   'rollback direct-chat grant')
   if (grant !== 't') throw new Error('rollback did not restore the prior direct-chat grant')
+  psql(path.join(root, 'supabase/tests/map020_cutover_overloads_fixture.sql'), 'cutover overload fixture')
+  psql(path.join(root, 'supabase/migrations/20260812_guest_submission_cutover.sql'), 'guest cutover')
+  psql(path.join(root, 'supabase/map020_guest_cutover_postflight.sql'), 'guest cutover postflight')
+  const cutover = psql(path.join(root, 'supabase/tests/map020_cutover_overloads_assertions.sql'), 'cutover overload denials')
+  if (!cutover.includes('MAP020_CUTOVER_OVERLOADS_PASSED')) throw new Error('cutover overload marker missing')
   console.log('Anonymous chat moderation: migration, behavior, and rollback passed in isolated PostgreSQL.')
+  console.log('Guest cutover: nine- and eleven-argument direct order overloads denied in isolated PostgreSQL.')
 } finally {
   if (fs.existsSync(path.join(data, 'PG_VERSION'))) {
     spawnSync(executable('pg_ctl'), ['-D', data, '-m', 'fast', '-w', 'stop'], {

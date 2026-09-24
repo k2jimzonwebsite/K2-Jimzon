@@ -4,7 +4,7 @@
  * - Direct Italian import verification.
  * - Manual order request model (no upfront charge).
  * - Staff stock confirmation & courier delivery quotation.
- * - Planned manual GCash/QR payment instructions upon review.
+ * - Manual GCash/MariBank QR payment instructions after staff review.
  * - Case-by-case inspection & resolution for damaged/incorrect items within 48 hours.
  * - Zero selling or sharing of customer data with advertisers or data brokers.
  */
@@ -12,16 +12,16 @@
 export const PRIVACY_POLICY = {
   id: 'privacy',
   title: 'Privacy & Data Protection',
-  lastUpdated: '15 September 2026',
-  summary: 'We collect customer contact and delivery details strictly to verify Manila stock, quote delivery, and deliver orders. We never sell or share customer data with advertisers.',
+  lastUpdated: '24 September 2026',
+  summary: 'We use customer contact, delivery, and optional account details to manage requests, orders, and service updates. We never sell or share customer data with advertisers.',
   sections: [
     {
       heading: 'Information We Collect',
-      content: 'When you submit an order request, Pasabuy sourcing request, wholesale inquiry, or customer service message, we collect your name, email address, Philippine mobile number, delivery address, and any optional delivery notes you provide. When browsing our catalog, anonymous session state may be retained locally in your browser to remember your shopping cart.',
+      content: 'When you submit an order request, Pasabuy sourcing request, wholesale inquiry, or customer service message, we collect your name, email address, Philippine mobile number, delivery address, and any optional delivery notes you provide. If you create a verified customer account, we also store the name, delivery address, and in-app notification preference you save, plus private references to service updates and whether you have read them. Anonymous session state may be retained locally in your browser to remember your shopping cart.',
     },
     {
       heading: 'How Your Information Is Used',
-      content: 'Your information is used exclusively by K2 Jimzon staff to: (1) check physical inventory in Manila; (2) calculate courier delivery rates for your exact address; (3) contact you directly with stock availability, payment details, and order status; and (4) label physical packages for dispatch.',
+      content: 'Your information is used to check physical inventory in Manila, calculate delivery rates, contact you about stock, payment and order status, and label parcels for dispatch. Saved account details can fill empty checkout fields. In-app updates show verified account holders references to staff replies, order or Pasabuy status changes, and confirmed payment; they do not replace staff payment verification.',
     },
     {
       heading: 'Zero Third-Party Data Selling or Advertising',
@@ -54,7 +54,7 @@ export const TERMS_POLICY = {
     },
     {
       heading: 'Payment Instructions',
-      content: 'Manual GCash or QR payment is planned for launch. Do not send payment until K2 staff contacts you with confirmed stock availability, exact courier delivery fees, and verified recipient account details. Submitted payments are manually verified by staff.',
+      content: 'You may choose GCash or MariBank QR transfer for an order request. Do not send payment until K2 staff contacts you with confirmed stock availability, exact courier delivery fees, and verified recipient account details. Submitted payments are manually verified by staff.',
     },
     {
       heading: 'Courier Delivery & Timelines',

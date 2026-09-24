@@ -52,6 +52,14 @@ test.describe('pre-launch indexing gate', () => {
     expect(emitter).toContain('products: allProducts')
   })
 
+  test('hydrated product metadata follows the same prelaunch switch', () => {
+    const metadata = readFileSync('src/components/StorefrontMetadata.jsx', 'utf8')
+    const config = readFileSync('vite.config.js', 'utf8')
+    expect(config).toContain("import { PRELAUNCH_PRODUCT_NOINDEX } from './scripts/prelaunch-indexing.mjs'")
+    expect(config).toContain('__K2_PRODUCT_NOINDEX__: JSON.stringify(PRELAUNCH_PRODUCT_NOINDEX)')
+    expect(metadata).toContain("view === 'master_product' && __K2_PRODUCT_NOINDEX__")
+  })
+
   test('robots.txt still allows crawling so the header can be read', () => {
     // A Disallow here would hide the noindex header from the crawler that needs
     // to read it, and blocked URLs can still surface as bare links. This is the
