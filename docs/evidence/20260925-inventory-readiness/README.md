@@ -48,8 +48,25 @@ provider-owned defaults need Supabase's supported correction path.
 The production Admin host `https://admin.k2jimzon.com/admin-portal-k2-secure`
 accepted the owner's Google sign-in choice and reached its required six-digit
 authenticator challenge. The owner was asked to enter the code directly in the
-browser. Authenticated staff intake, upload, and inventory actions remain
-unverified pending that step. No code or recovery secret was requested in chat.
+browser. At that point authenticated staff intake, upload, and inventory
+actions were unverified. No code or recovery secret was requested in chat.
+
+At approximately 06:05 UTC the owner reported that the browser is already
+signed in. Codex computer use returned `Browsers: Error: User unavailable`, so
+the signed-in page and AAL2 claim could not be inspected from this task. A fresh
+Supabase migration-list read still ended at `20260921033348`
+(`admin_globe_direct_rpc`). A fresh read-only SQL probe returned no
+`public.product_intake_sessions` relation and zero functions named
+`create_product_draft_server`, `create_product_first_inventory_server`, or
+`transition_product_publication_server`. The complete
+`supabase/map018_product_intake_preflight.sql` executed on production without
+error; it made no schema or data change. This establishes compatibility of its
+checked prerequisites only. The MAP-017 activation gate and exact-host staff
+acceptance remain open. A fresh stock ACL read returned explicit `anon` and
+`authenticated` execute, anonymous stock-view select, and the extra `PUBLIC`
+execute unchanged. The prepared correction file still hashes to
+`3A1E23629325D0620F0CF4BC7E5CF0F929FF3851DBD562CFDAE0933FC8C04BBC`.
+No production write SQL was applied.
 
 ## Fresh recovery point
 
