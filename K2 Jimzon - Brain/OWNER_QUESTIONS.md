@@ -31,6 +31,24 @@ is satisfied; do not ask for the same authorization again. Separate guest cutove
 and provider-owned default work remains MAP-017, not covered by this payload.
 Evidence: `docs/evidence/20260913-audit-remediation/map017-applied-receipt.json`.
 
+**25 September separate stock-grant correction decision — Pending.** The owner
+has been asked whether to apply only
+`supabase/migrations/20260925_map017_stock_public_execute.sql` to production
+project `pixplcjqivlfflickobf`. Its SHA-256 is
+`3A1E23629325D0620F0CF4BC7E5CF0F929FF3851DBD562CFDAE0933FC8C04BBC`.
+The paired recovery SQL SHA-256 is
+`119C639621FDA17E1FA70C2EE41236C7DD9A0EEEDEB68018AFEBD612B92B994F`.
+The correction removes only PostgreSQL `PUBLIC` execute on
+`get_public_product_stock()` while retaining explicit `anon` and
+`authenticated` grants. Fresh encrypted database/Storage backups, isolated
+restores, all eight offsite retrieval/hash checks, a live ACL read and a
+grant-preserving local correction/recovery rehearsal are recorded in
+`docs/evidence/20260925-inventory-readiness/README.md`. The existing 2 September
+owner recovery attestation remains Verified. The 13 September authorization
+above does not cover this new payload. Do not apply it until this separate
+decision is explicitly recorded as Authorized and the final live preflight
+still matches. This change alone does not activate MAP-018 intake.
+
 **Current disposition, reconciled 9 September:** System Brain/MAP-017 record
 phase one `20260824143000` as `APPLIED_AND_VERIFIED` on 8 September with 14/14
 anonymous read checks. The authorization fields below retain that exact contract;

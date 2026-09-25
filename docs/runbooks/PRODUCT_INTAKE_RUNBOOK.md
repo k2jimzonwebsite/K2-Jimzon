@@ -324,6 +324,20 @@ orphans with existing media controls. Roll back code with scoped Git changes.
    duplicate retry, flight manifest, admin reconciliation, publication denial,
    and valid publication using non-production or reviewed rehearsal records.
 
+The browser intake service has a direct authenticated Supabase path while
+`VITE_ADMIN_BFF_ENABLED` is false. The signed Admin BFF path is a separate
+MAP-020 cutover: `20260812_admin_product_intake_bff_boundary.sql` requires the
+Admin BFF receipt table and `k2_private.verify_admin_bff_request()` from
+`20260812_admin_fulfillment_bff_boundary.sql` in addition to the MAP-018 intake
+objects. The later `20260822_admin_session_registry.sql` adds the production
+session and revocation boundary.
+Do not enable the BFF switch merely because steps 3–6 pass. Verify the signed
+wrapper, its configured server secrets and route inventory under MAP-020 first.
+On 25 September the MAP-018 preflight, foundation, cleanup migration and
+postflight passed on an isolated restore; the BFF wrapper was not part of that
+rehearsal or applied in production. See
+`docs/evidence/20260925-inventory-readiness/README.md`.
+
 Rollback-only compatibility proof from 12 August 2026 is recorded in
 `MAP_018_LIVE_SCHEMA_AUDIT_2026-08-12.md`. That proof is not deployment evidence.
 
