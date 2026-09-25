@@ -1175,7 +1175,20 @@ Do not wait for the audit before capturing it.
 **Owner decision potentially required:** Only physical stock and receiving QR confirmation plus real payment verification by distinct authorized people for the later live acceptance. This audit makes no such transaction.
 **Status:** Audit complete; full order-to-fulfillment acceptance open in MAP-023/025.
 
+### IDEA-20260925-06  -  Check live delivery rates and payment workflow
+
+**Captured:** 2026-09-25
+**Raised by:** Owner (asks whether staff can change delivery rates and whether delivery and payment workflow already work)
+**Problem observed:** Checkout, staff cost editor, per-order delivery update and payment evidence use different activation and authority boundaries.
+**Desired outcome:** One trusted customer delivery fee, an authorized versioned Admin rate workflow, and a verifiable two-person manual payment cycle.
+**Evidence or example:** `docs/evidence/20260925-delivery-payment-workflow-audit/README.md` records exact live checkout, source, production function/table metadata and 70 focused tests.
+**Known dependency:** MAP-017/020 migration and signed Admin cutover; MAP-023 rate policy and real payment; MAP-025 staff/buyer acceptance.
+**Possible overlap with current behavior/MAP item:** Accepted and merged into MAP-023/025; no separate roadmap.
+**Owner decision potentially required:** Confirm customer-facing rate policy (regional/weight matrix versus exact-locality approved costs) and the authorized rate approvers. Owner/staff must verify receiving QRs and real carrier/physical evidence later.
+**Status:** Audit complete; rate publishing and full payment/delivery acceptance remain open in MAP-023/025.
+
 ### New idea template
+
 
 
 ```markdown

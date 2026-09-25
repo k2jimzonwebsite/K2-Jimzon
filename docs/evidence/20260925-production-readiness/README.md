@@ -2,6 +2,8 @@
 
 **Decision:** K2 has live Storefront and Admin sites, but the full owner/staff/customer operating release is **not accepted**. This is a read-only readiness audit, not a new roadmap or authorization to deploy, change provider settings, take payment, or apply the remaining migrations. `MASTER_ACTION_PLAN.md` remains the only active queue. This receipt separates observed live behavior, source preparation, provider state, and missing real-world acceptance.
 
+**Later focused finding, 25 September:** `docs/evidence/20260925-delivery-payment-workflow-audit/README.md` found that the live Admin rate tables/command are absent, checkout delivery fees are browser-generated and not independently checked by the live order RPC, the per-order staff RPC can alter an accepted fee, and the deployed Admin direct payment call does not match the live function's argument count. MAP-023/025 now record these blockers; the table below remains a broad snapshot, not an assertion that delivery or payment works.
+
 ## Fresh checks (25 September, about 11:33 UTC)
 
 - Supabase project `pixplcjqivlfflickobf` reported `ACTIVE_HEALTHY`, PostgreSQL 17.6.1.155. Its migration ledger ends at `20260925111537 map017_stock_public_grant_revocation_20260925`; the prepared guest/account chain is absent. Independent read-only SQL reconfirmed owner `postgres`, `PUBLIC` execute false, and `anon`/`authenticated` execute true for `get_public_product_stock()`.
