@@ -51,9 +51,17 @@ export function rehearseStockGrantRevocation() {
     fs.mkdirSync(DATA_DIR, { recursive: true })
     runBinary(binary('initdb.exe'), ['-D', DATA_DIR, '-U', 'postgres', '--auth=trust', '--encoding=UTF8'], 'rehearsal initdb', env)
   }
-  const status = spawnSync(binary('pg_ctl.exe'), ['-D', DATA_DIR, 'status'], { cwd: rootDir, env, encoding: 'utf8', windowsHide: true })
+  // Windows sandboxing can hide a running postmaster from pg_ctl status.
+  // Confirm the connected local server uses this runner's data directory.
+  const probe = spawnSync(psql, ['-h', '127.0.0.1', '-p', String(PORT), '-U', 'postgres', '-d', 'postgres', '-At', '-c', 'show data_directory'], {
+    cwd: rootDir, env, encoding: 'utf8', windowsHide: true,
+  })
+  const runningDirectory = String(probe.stdout || '').trim()
+  if (probe.status === 0 && path.resolve(runningDirectory).toLowerCase() !== path.resolve(DATA_DIR).toLowerCase()) {
+    throw new Error(`SECURITY_REFUSAL: port ${PORT} belongs to a different PostgreSQL data directory`)
+  }
   let startedByRunner = false
-  if (status.status !== 0) {
+  if (probe.status !== 0) {
     runBinary(
       binary('pg_ctl.exe'),
       ['-D', DATA_DIR, '-l', LOG_PATH, '-o', `-p ${PORT} -h 127.0.0.1`, '-w', 'start'],
