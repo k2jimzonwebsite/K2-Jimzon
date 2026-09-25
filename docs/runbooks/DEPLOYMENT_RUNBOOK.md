@@ -334,10 +334,19 @@ browser `VITE_*_BFF_ENABLED` switch only after server denial/allowance tests pas
 **25 September Preview check:** Draft PR #13 reached both Vercel projects, but
 each Preview deployment failed while compiling `vercel.ts` because
 `K2_DEPLOYMENT_TARGET` was absent. The selector correctly refused to guess a
-target. Before relying on Preview for a release, verify each exact Vercel
-project ID and set its nonsecret Preview-scoped target to `storefront` or `admin`
-respectively; then obtain successful separate exact-commit preview receipts.
-This finding changed no Production variable or deployment. MAP-024 owns it.
+target. In the owner-authenticated Vercel browser, the IDs matched the reviewed
+mapping: Storefront `prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL`, Admin
+`prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x`. Preview-only Config variables were added:
+`storefront` in `k2-jimzon`, `admin` in `k2-jimzon-admin`. Both failed PR #13
+deployments were redeployed without existing build cache at commit `fde7e20`.
+Storefront deployment `2N9GPYtJmEGERnLJNiwiSEvKLhSh` and Admin deployment
+`Ftn3upkDGgFsZWyuSUi1HLPTq2PE` report Ready. Their exact Preview URLs rendered
+the Storefront home and Admin staff sign-in. No Production setting or deployment
+changed. This verifies the config/build and entrypoint only; authenticated
+flows and production database work retain their MAP gates. If a future Preview
+fails this guard, inspect its project ID and Preview variable scope/value, then
+redeploy the exact source commit with latest settings. MAP-024 owns ongoing
+Preview configuration; receipt: `docs/evidence/20260925-map017-stock-grant/README.md`.
 
 The pure selector at
 `scripts/map024-evidence/select-vercel-deployment-config.mjs` checks an explicit

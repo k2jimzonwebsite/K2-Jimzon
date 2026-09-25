@@ -64,6 +64,27 @@ this workstation had no CLI session; the installed Vercel connector supplied
 the two build logs. MAP-024 and the deployment runbook own the provider fix and
 subsequent Preview verification. The Production deployments were not changed.
 
+**25 September MAP-024 Preview correction (owner-authenticated browser):** Vercel
+General settings showed `k2-jimzon` ID `prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL`
+and `k2-jimzon-admin` ID `prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x`, matching the
+`vercel.ts` allowlist. Environment Variables showed an existing Production
+`K2_DEPLOYMENT_TARGET` in each project and no Preview counterpart. Added a
+nonsecret Config entry scoped only to Preview in each project: `storefront` for
+Storefront and `admin` for Admin. Vercel confirmed each save and required a new
+deployment. Redeployed the failed PR #13 source at exact commit `fde7e20` with
+the Preview environment and no existing build cache:
+
+- [Storefront deployment](https://vercel.com/k2-jimzon/k2-jimzon/2N9GPYtJmEGERnLJNiwiSEvKLhSh): Ready; [exact Preview URL](https://k2-jimzon-jkccggjnk-k2-jimzon.vercel.app/) rendered the public home and catalog entrypoint.
+- [Admin deployment](https://vercel.com/k2-jimzon/k2-jimzon-admin/Ftn3upkDGgFsZWyuSUi1HLPTq2PE): Ready; [exact Preview URL](https://k2-jimzon-admin-pbycid1ee-k2-jimzon.vercel.app/) rendered the staff sign-in screen.
+
+This is provider-applied Preview configuration plus build and entrypoint
+evidence. No authenticated transaction, staff workflow, real customer journey,
+production database grant, Production variable or Production deployment was
+changed or verified by it. For recovery, remove the two newly added Preview
+entries if the mapping must be reversed; the prior failed deployments and
+existing Production entries remain available. MAP-024 retains exact-host
+discovery and later Preview acceptance; MAP-017 retains live ACL apply/postflight.
+
 No production permission was changed. The 24 September export, not a fresh
 apply-time ACL, is the current starting evidence. MAP-017 still owns a fresh
 read-only live ACL export, grant-preserving current-schema rehearsal with the
