@@ -267,9 +267,12 @@ envelope and 36-object Storage envelope were created, locally restored, and
 uploaded as eight encrypted/redacted files to the owner-only Drive folder. The
 Drive metadata confirms exact lengths, folder parent, `shared: false`, and only
 the K2 owner account in permissions. Independent remote retrieval/hash remains
-open. The isolated database restore excluded 10 managed entries and did not
-replay grants; it cannot substitute for the required grant-preserving stock ACL
-rehearsal. Storage restore is file-level, not bucket-policy or provider recovery.
+open. The first isolated database restore excluded 10 managed entries and did
+not replay grants. A second isolated restore of the same authenticated archive
+did replay archived ACLs after using existing non-login placeholders for six
+missing Supabase-managed role names. The exact stock correction and recovery
+passed on that clone, but provider memberships/defaults and Vault remain
+unproven. Storage restore is file-level, not bucket-policy or provider recovery.
 Use the backup IDs, checksums, Drive file IDs, commands and exact next actions in
 `docs/evidence/20260925-inventory-readiness/README.md`. The prior 24 September
 checkpoint remains historical evidence, not a current pre-apply receipt.

@@ -26,6 +26,25 @@ In the owner-authenticated Supabase SQL Editor for project
   MAP-018's intake migration is not production state. A staff sign-in cannot
   safely create a new canonical product through that prepared path yet.
 
+At approximately 05:33 UTC, the repository's read-only live exporter also
+captured the complete current structural metadata to the ignored local file
+`.tools/current-production-backups/live-schema-metadata-20260925.json`.
+The command below exited 0 and wrote the ignored local report
+`live-schema-audit-20260925.json`:
+
+```powershell
+node scripts/schema-truth-audit.mjs --export=.tools/current-production-backups/live-schema-metadata-20260925.json --json --allow-findings --output=.tools/current-production-backups/live-schema-audit-20260925.json
+```
+
+It reports **13 critical, 0 high** findings: the stock function's `PUBLIC`
+execute grant; anonymous execution of `get_storefront_chat_v1`,
+`submit_storefront_chat_v1`, `validate_coupon`, `submit_order_request`,
+`submit_order_request_v2`, and `submit_pasabuy_request`; and six
+`supabase_admin` default-privilege groups for future functions, tables and
+sequences. The audit is metadata evidence, not a change or runtime-role test.
+The six transitional grants need the signed guest replacement; the six
+provider-owned defaults need Supabase's supported correction path.
+
 The production Admin host `https://admin.k2jimzon.com/admin-portal-k2-secure`
 accepted the owner's Google sign-in choice and reached its required six-digit
 authenticator challenge. The owner was asked to enter the code directly in the
@@ -59,8 +78,40 @@ The database backup ID is
 `scripts/verify-current-production-restore.mjs` restored it to a dedicated
 empty local PostgreSQL 17 database and exited 0: 51 public relations, latest
 migration `20260921033348`, with 10 managed entries excluded. That restore
-omits ACL replay, Vault, Storage objects, and provider settings; it is not a
-grant-preserving rehearsal of the stock correction.
+omits ACL replay, Vault, Storage objects, and provider settings.
+
+## Current-schema local migration rehearsals, 25 September
+
+The encrypted database archive was also authenticated and decrypted in memory
+for a second, separate restore into `k2_current_acl_restore_20260925`. This
+restore kept archived privileges and excluded only the same 10 managed Vault
+entries. The already present non-login local placeholders for six missing
+Supabase-managed role names allowed the archive ACLs to load. The baseline had
+51 public relations, ledger version `20260921033348`, and the stock function ACL
+`{=X/postgres,postgres=X/postgres,service_role=X/postgres,anon=X/postgres,authenticated=X/postgres}`.
+
+Applying `20260925_map017_stock_public_execute.sql` on that isolated clone exited
+0. The resulting ACL removed `=X/postgres` while preserving explicit `anon`,
+`authenticated`, and `service_role` grants; `dashboard_user` lost inherited
+execute. Both `anon` and `authenticated` read all 21 current stock-view rows
+under their own local roles. Applying the paired recovery SQL exited 0 and
+restored the original ACL, 51 public relations, and ledger version. The
+placeholder roles do not reproduce Supabase role membership, provider defaults,
+or Vault behavior; this is current application-schema and archived-ACL
+compatibility evidence, not a production permission change.
+
+On the independent `k2_current_restore_20260925` clone,
+`map018_product_intake_preflight.sql`, the full
+`20260811_product_intake_and_sku_gate.sql` migration, the full
+`20260824_map018_intake_evidence_cleanup_boundary.sql` migration, and
+`map018_product_intake_postflight.sql` each exited 0 in order. The postflight
+checks intake table/RLS, browser role boundaries, three server command grants,
+private evidence bucket/policies, and publication status wiring. This clone
+now contains local rehearsal changes; the encrypted source backup remains
+unchanged. No production migration was applied, and this local check does not
+prove provider Storage behavior, exact-host staff access, or a real listing.
+The isolated PostgreSQL server was stopped after these checks;
+`pg_isready -h 127.0.0.1 -p 55432` returned no response.
 
 The Storage backup ID is
 `map017-storage-pixplcjqivlfflickobf-2026-09-25T051032028Z-db3adda45dfd`.
@@ -75,11 +126,11 @@ Drive connector limit.
 
 ## Next action and recovery
 
-MAP-017 owns a grant-preserving current-schema rehearsal, managed-role limits,
-owner recovery/access check, exact change authorization, controlled stock ACL
-apply, and live postflight. The separate six provider-owned defaults still need
-Supabase's supported answer. MAP-018 then owns its exact preflight, coordinated
-intake migration and cleanup-boundary apply, postflight, and a real staff phone
+MAP-017 owns managed-role/provider review, owner recovery/access check, exact
+change authorization, controlled stock ACL apply, and live postflight. The
+separate six provider-owned defaults still need
+Supabase's supported answer. MAP-018 then owns its live preflight, coordinated
+intake migration and cleanup-boundary apply, live postflight, and a real staff phone
 journey with physical label, photos, opening count, cost, and owner publication
 decision. Do not insert rows into `products`, batches, or Storage through the SQL
 Editor as a substitute for those workflows.
@@ -91,3 +142,8 @@ manifest, reassemble the encrypted Storage envelope, then follow
 `docs/runbooks/DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md` in an isolated target.
 The passphrase stays outside the repository and chat. Owner account recovery and
 an independent remote download/hash check are still separate gates.
+
+The Chrome computer-use bridge timed out three times around 05:30 UTC. The last
+observed Admin state was the six-digit authenticator challenge, not a verified
+sign-in. Recheck the browser when control returns; do not infer that the owner
+completed MFA from the tool timeout.
