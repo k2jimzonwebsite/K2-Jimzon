@@ -12,7 +12,7 @@ import {
 } from './productResearchPrompt'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 
-export default function ScanToAiModal({ onClose, onOpenSmartPaste, onExistingProduct }) {
+export default function ScanToAiModal({ onClose, onOpenSmartPaste }) {
   const [step, setStep]               = useState('scan')   // 'scan' | 'manual' | 'result'
   const [barcode, setBarcode]         = useState('')
   const [manualBarcode, setManualBarcode] = useState('')
@@ -64,12 +64,7 @@ export default function ScanToAiModal({ onClose, onOpenSmartPaste, onExistingPro
         const result = await searchIdentityDuplicates(code)
         const existing = result?.matchType === 'exact' ? result.product : null
         if (existing) {
-          if (onExistingProduct) {
-            onClose()
-            onExistingProduct(existing)
-          } else {
-            setCheckError(`Barcode ${code} already belongs to SKU ${existing.sku}. Open that product instead of creating a duplicate.`)
-          }
+          setCheckError(`Barcode ${code} already belongs to SKU ${existing.sku}. Open that product instead of creating a duplicate.`)
           setChecking(false)
           return
         }
