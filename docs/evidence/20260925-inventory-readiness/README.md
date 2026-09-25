@@ -4,9 +4,10 @@
 
 The owner asked to finish the accessible browser/computer work so staff can start
 inventory listing. This is an operational check under MAP-017 and MAP-018, not a
-new queue item. Real new-product intake is **not ready** on the production
-database. No production schema, grant, inventory row, product, or Storage object
-was changed during this check.
+new queue item. The newer MAP-018 new-product intake is **not ready** on the
+production database. This does not establish that the owner's existing intake
+workflow has stopped working. No production schema, grant, inventory row,
+product, or Storage object was changed during this check.
 
 ## Live read-only findings
 
@@ -81,18 +82,28 @@ SQL confirms `authenticated` still has `products` INSERT, guarded by the
 `products_staff_insert` policy (`is_staff()`); this is permission metadata,
 not proof that a particular staff insert now succeeds.
 
-The newer `ProductIntakeSessionModal` starts a canonical intake session as
-soon as it opens, before its scan field can advance. With the production Admin
-BFF switch off, its direct path queries/inserts `product_intake_sessions`,
-which is absent in production. Its manual ChatGPT path and `AutomaticIntakePanel`
-share that session. Automatic API additionally refuses to run while the Admin
-BFF switch is off, and paid AI activation remains under OWNER-007. The
-25 September source release added a guided entry into this newer modal but
-did not apply MAP-018 SQL. These facts explain why the newer path cannot
-complete now; they do not establish which exact control the owner previously
-used or whether the older Smart Paste path has regressed. The Codex browser
-service still returns `User unavailable`, so no real-host interaction was
-observed in this audit.
+The authoritative rulebook says the user-facing sequence is scan/identity
+check, package evidence, then manual ChatGPT or optional paid API content,
+followed by human field review, one server-assigned Draft SKU, separately
+recorded stock, and separately approved publication. The newer
+`ProductIntakeSessionModal` displays scan as Step 1 and offers both AI choices
+after evidence. It initializes the resumable server session when opened;
+that technical setup is not a competing user-facing intake step. With the
+production Admin BFF switch off, its direct path queries/inserts
+`product_intake_sessions`, which is absent in production. Automatic API
+additionally refuses to run while the Admin BFF switch is off, and paid AI
+activation remains under OWNER-007. The 25 September source release added a
+guided entry into this newer modal but did not apply MAP-018 SQL.
+
+The older chooser groups “automatic” as existing-SKU barcode restock and
+“manual” as new-product ChatGPT/Smart Paste. That grouping and its “Scan &
+Intake Now” promise do not match the rulebook's single scan-first product
+intake with a later manual/API content choice. This is a source/UX discrepancy,
+not evidence that the owner's existing workflow has failed. Codex computer
+use still returns `User unavailable`, so no real-host interaction was observed.
+The owner clarified that there is no specific failed control or error to
+report; the claim that a formerly working intake action had broken was the
+agent's unsupported inference. Existing intake behavior remains unverified.
 
 ## Fresh recovery point
 
