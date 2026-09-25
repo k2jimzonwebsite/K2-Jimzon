@@ -262,6 +262,18 @@ only MAP-017 recovery-access gate.
 
 ## Fresh current-schema backup, 24 September
 
+**25 September inventory-readiness checkpoint:** A fresh application database
+envelope and 36-object Storage envelope were created, locally restored, and
+uploaded as eight encrypted/redacted files to the owner-only Drive folder. The
+Drive metadata confirms exact lengths, folder parent, `shared: false`, and only
+the K2 owner account in permissions. Independent remote retrieval/hash remains
+open. The isolated database restore excluded 10 managed entries and did not
+replay grants; it cannot substitute for the required grant-preserving stock ACL
+rehearsal. Storage restore is file-level, not bucket-policy or provider recovery.
+Use the backup IDs, checksums, Drive file IDs, commands and exact next actions in
+`docs/evidence/20260925-inventory-readiness/README.md`. The prior 24 September
+checkpoint remains historical evidence, not a current pre-apply receipt.
+
 Use `npm run backup:current-production` for a new encrypted production application
 database snapshot before the MAP-017/019/020 cutover. It reads the existing
 non-committed `.env.local` values in process, validates the production project,
