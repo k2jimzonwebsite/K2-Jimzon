@@ -702,7 +702,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Smart Scan',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "Select \"Scan box\" to start intake; after the content project returns JSON, continue from the scan result to review it.",
+          whatToClick: "Select \"Smart paste\" after the approved content project returns one reviewed product object.",
           actionDirective:
             "Use Smart Scan to prepare the versioned prompt. Attach real packaging photos to private \"K2 Product Content\" ChatGPT Project. Paste returned JSON into Smart Paste and accept or reject fields. Then run separate PRIMARY and AFTER requests in private \"K2 Product Image Studio\" ChatGPT Project.",
           nextAction:
