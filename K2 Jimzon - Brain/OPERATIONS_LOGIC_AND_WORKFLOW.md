@@ -1,6 +1,6 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
-**Delivery policy reconciliation required (25 September, IDEA-20260925-06):** The 16/20 September region/weight checkout matrix and the older exact-locality pilot in §13 describe different customer-fee policies. Current production checkout uses the fixed region/weight matrix; the exact-locality Admin rate editor is not active and cannot change customer prices. Until the owner resolves the policy and the server enforces one trusted fee, do not treat a staff cost-row edit or a per-order delivery edit as approval to raise an accepted customer charge. The current direct order function does not independently verify the browser's delivery amount, and the legacy per-order staff RPC does not cap changes at the accepted amount. MAP-023 owns the correction and proof; `docs/evidence/20260925-delivery-payment-workflow-audit/README.md` records the current state.
+**Delivery policy reconciliation (25 September, IDEA-20260925-06):** The owner confirmed that customer delivery pricing uses J&T-based rates for now and wants a separate standard-rate policy available later. The live Storefront currently calculates a fixed region/weight J&T-based matrix; §13's exact-locality J&T pilot and the prepared Admin editor are not live customer pricing. Treat their fee rows as prepared carrier evidence, not an activated customer-rate switch. Do not silently switch checkout to manual quoting or activate an invented flat standard amount. Before staff can change customer rates, the server must independently validate the current J&T delivery option, destination, weight basis, fee and rate version; a later standard-rate mode needs its own owner-approved version, effective date, audit receipt and explicit activation. Existing accepted order charges stay frozen. Staff may record a revised quote only through an explicit new customer acceptance path; a cost-row edit or per-order edit alone cannot raise an accepted charge. The current direct order function trusts the browser amount, and the legacy per-order staff RPC does not cap increases. MAP-023 owns the corrections and proof; `docs/evidence/20260925-delivery-payment-workflow-audit/README.md` records live and prepared states.
 
 **Two-site operating launch and channel stock source (IDEA-20260925-04):** Launch acceptance requires both the customer Storefront and separate staff Admin to work end to end. Existing marketplace-channel quantity exports may be used as reconciliation evidence, but no import may create physical stock merely by copying or summing listing numbers. First match each source line to the canonical SKU/variant and shop, compare with current live lots, and obtain the owner/staff verified physical count. Establish any missing on-hand balance only through the approved receiving or authorized opening-balance path with reason and custody evidence. Shop offer allocations remain bounded by that master sellable stock. Codex may prepare and execute the technical upload after these checks; staff/owner retain quantity and discrepancy decisions.
 
@@ -1606,6 +1606,19 @@ landed_cost = purchase_cost
   identity within the acting staff session, just as message retries do. A
   replayed read receipt does not prove that later inbound messages were read;
   the current canonical unread state must be reconciled separately.
+- Message records and event histories are append-only audit trails protected by
+  database Row-Level Security. Individual messages cannot be deleted or mutated
+  by client apps to prevent covert tampering with customer dispute records.
+  If an inappropriate or accidental staff message occurs, retraction requires
+  authorized owner/admin SQL execution in Supabase SQL Editor. The Admin Inbox
+  exposes prefilled SQL commands and moderation status directly in the header.
+- Conversations normalize channel origin (Storefront, Virtual Store Shelf,
+  Messenger, WhatsApp, Shopee, Lazada, TikTok) and inquiry purpose (Wholesale/Bulk,
+  Pasabuy/Sourcing, Order/Delivery Support, Product/Shelf, General) to ensure
+  high-priority volume inquiries and sourcing requests are not lost in the queue.
+- The Admin Inbox supports viewport maximization and collapsible workflow panels
+  to allow high-density message reading (7-10 bubbles visible) without manual
+  scrolling during peak triage.
 
 ## 20. Admin organization
 

@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testDir: './tests',
-  testMatch: 'inbox-phase2.spec.js',
+  testMatch: /inbox-(phase2|categorization-viewport)\.spec\.js/,
   fullyParallel: false,
   timeout: 120000,
   forbidOnly: Boolean(process.env.CI),

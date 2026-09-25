@@ -2,7 +2,14 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { channelMeta } from '../../lib/channelMeta'
-import { AlertIcon, CheckIcon, InboxIcon, SearchIcon } from '../../components/ui/icons'
+import {
+  INBOX_CATEGORIES,
+  INBOX_ORIGINS,
+  getChannelPortalUrl,
+  inferConversationCategory,
+  inferConversationOrigin,
+} from '../../lib/adminInboxNormalization'
+import { AlertIcon, CheckIcon, InboxIcon, SearchIcon, ShieldIcon } from '../../components/ui/icons'
 import { MetricRail, StateBanner, WorkspaceIntro } from './AdminWorkspaceUi'
 import { STALE_QUEUE_NOTICE } from '../../context/adminInboxPolling'
 import { UNCERTAIN_COMMAND_NOTICE } from '../../services/adminBffService'
@@ -137,13 +144,40 @@ function EventHistoryBody({ status, history, onRetry, staff = [] }) {
   )
 }
 
-function WorkflowControls({ compact = false, chat, workflow, setWorkflow, inboxState, staff, savingWorkflow, handleWorkflowSave }) {
+function WorkflowControls({
+  compact = false,
+  chat,
+  workflow,
+  setWorkflow,
+  inboxState,
+  staff,
+  savingWorkflow,
+  handleWorkflowSave,
+  onCategoryChange,
+}) {
   if (!chat) return null
   const changingResolution = workflow.status !== chat.status
     && (workflow.status === 'Resolved' || chat.status === 'Resolved')
   return (
     <div className={compact ? 'space-y-3' : 'space-y-4'}>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-1">
+        <label className="space-y-1.5 text-xs font-semibold text-white/65">
+          <span>Inquiry category</span>
+          <select
+            value={workflow.category || chat.category || 'general'}
+            onChange={event => {
+              const next = event.target.value
+              setWorkflow(current => ({ ...current, category: next }))
+              if (onCategoryChange) onCategoryChange(chat.id, next)
+            }}
+            disabled={!inboxState.phase2Ready}
+            className="adm-input min-h-11 w-full text-base sm:text-sm"
+          >
+            {Object.values(INBOX_CATEGORIES).filter(c => c.id !== 'all').map(cat => (
+              <option key={cat.id} value={cat.id}>{cat.label}</option>
+            ))}
+          </select>
+        </label>
         <label className="space-y-1.5 text-xs font-semibold text-white/65">
           <span>Status</span>
           <select
@@ -232,6 +266,7 @@ function InboxWorkspace({ store, database }) {
     inboxStaff,
     inboxUsesBff,
     loadConversationHistory,
+    deleteMessage: storeDeleteMessage,
     deleteAnonymousConversation,
     blockAnonymousChat,
     unblockAnonymousChat,
@@ -242,6 +277,18 @@ function InboxWorkspace({ store, database }) {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('active')
   const [ownerFilter, setOwnerFilter] = useState('all')
+  const [categoryFilter, setCategoryFilter] = useState('all')
+  const [originFilter, setOriginFilter] = useState('all')
+  const [isMaximized, setIsMaximized] = useState(false)
+  const [isWorkflowOpen, setIsWorkflowOpen] = useState(true)
+  const [customCategories, setCustomCategories] = useState({})
+  const [deletionGuideOpen, setDeletionGuideOpen] = useState(false)
+  const [selectedMessageForRetract, setSelectedMessageForRetract] = useState(null)
+  const [copiedSql, setCopiedSql] = useState(false)
+  const [messageToDelete, setMessageToDelete] = useState(null)
+  const [deletingMessage, setDeletingMessage] = useState(false)
+  const [deleteMessageReason, setDeleteMessageReason] = useState('Spam or trolling inquiry')
+
   const [drafts, setDrafts] = useState({})
   const draft = drafts[activeId]
   const replyText = draft?.text || ''
@@ -278,10 +325,14 @@ function InboxWorkspace({ store, database }) {
     assignedTo: '',
     responseDueAt: '',
     reason: '',
+    category: 'general',
   })
   const messageEndRef = useRef(null)
   const activeRequestContext = useRef(null)
   const historyRequest = useRef(0)
+
+  const getConversationCategory = (c) => customCategories[c?.id] || c?.category || inferConversationCategory(c)
+  const getConversationOrigin = (c) => c?.origin || inferConversationOrigin(c)
 
   useLayoutEffect(() => {
     const context = { conversationId: activeId }
@@ -293,6 +344,8 @@ function InboxWorkspace({ store, database }) {
     setUncertainCommand(null)
     setTemplateArmed(false)
     setNotice('')
+    setSelectedMessageForRetract(null)
+    setMessageToDelete(null)
     return () => { activeRequestContext.current = null }
   }, [activeId])
 
@@ -300,6 +353,11 @@ function InboxWorkspace({ store, database }) {
     const normalizedSearch = search.trim().toLowerCase()
     return conversations
       .filter(conversation => {
+        const category = getConversationCategory(conversation)
+        const origin = getConversationOrigin(conversation)
+
+        const matchesCategory = categoryFilter === 'all' || category === categoryFilter
+        const matchesOrigin = originFilter === 'all' || origin === originFilter
         const matchesStatus = statusFilter === 'all'
           || (statusFilter === 'active' && conversation.status !== 'Resolved')
           || conversation.status === statusFilter
@@ -307,15 +365,29 @@ function InboxWorkspace({ store, database }) {
           || (ownerFilter === 'unassigned' && !conversation.assignedTo)
           || (ownerFilter === 'mine' && conversation.assignedTo === user?.id)
         const lastText = conversation.messages.at(-1)?.text || ''
+        const categoryMeta = INBOX_CATEGORIES[category] || INBOX_CATEGORIES.general
+        const originMeta = INBOX_ORIGINS[origin] || channelMeta(conversation.channel)
         const matchesSearch = !normalizedSearch
           || conversation.customer.toLowerCase().includes(normalizedSearch)
           || conversation.channel.toLowerCase().includes(normalizedSearch)
           || lastText.toLowerCase().includes(normalizedSearch)
-        return matchesStatus && matchesOwner && matchesSearch
+          || categoryMeta.label.toLowerCase().includes(normalizedSearch)
+          || (originMeta.label || '').toLowerCase().includes(normalizedSearch)
+        return matchesCategory && matchesOrigin && matchesStatus && matchesOwner && matchesSearch
       })
       .sort((a, b) => queueRank(b) - queueRank(a)
         || new Date(b.lastMessageAt || 0) - new Date(a.lastMessageAt || 0))
-  }, [conversations, ownerFilter, search, statusFilter, user?.id])
+  }, [conversations, categoryFilter, originFilter, ownerFilter, search, statusFilter, user?.id, customCategories])
+
+  const categoryCounts = useMemo(() => {
+    const counts = { all: conversations.length, wholesale: 0, pasabuy: 0, order: 0, product: 0, general: 0 }
+    conversations.forEach(c => {
+      const cat = getConversationCategory(c)
+      if (counts[cat] !== undefined) counts[cat]++
+      else counts.general++
+    })
+    return counts
+  }, [conversations, customCategories])
 
   useEffect(() => {
     if (!conversations.length) {
@@ -328,6 +400,7 @@ function InboxWorkspace({ store, database }) {
   }, [activeId, conversations])
 
   const chat = conversations.find(conversation => conversation.id === activeId) || null
+  const portal = chat && !isWebsiteConversation(chat) ? getChannelPortalUrl(chat.channel, chat) : null
 
   const loadHistory = async (conversationId) => {
     const context = activeRequestContext.current
@@ -378,12 +451,14 @@ function InboxWorkspace({ store, database }) {
 
   useEffect(() => {
     if (!chat) return
+    const currentCategory = getConversationCategory(chat)
     setWorkflow({
       status: chat.status,
       priority: chat.priority,
       assignedTo: chat.assignedTo || '',
       responseDueAt: toLocalDateTime(chat.responseDueAt),
       reason: '',
+      category: currentCategory,
     })
     setSaveError('')
     setNotice('')
@@ -440,7 +515,9 @@ function InboxWorkspace({ store, database }) {
     try {
       await navigator.clipboard.writeText(replyText.trim())
       if (activeRequestContext.current !== context) return
-      setNotice('Response copied. Send it through the customer’s verified external channel.')
+      setNotice(portal?.instruction
+        ? `Response copied. ${portal.instruction}.`
+        : 'Response copied. Send it through the customer’s verified external channel.')
       setSaveError('')
     } catch {
       if (activeRequestContext.current !== context) return
@@ -514,6 +591,9 @@ function InboxWorkspace({ store, database }) {
     setSaveError('')
     setUncertainNotice('')
     setNotice('')
+    if (submittedWorkflow.category) {
+      setCustomCategories(current => ({ ...current, [chat.id]: submittedWorkflow.category }))
+    }
     const result = await updateConversationWorkflow(chat.id, {
       ...submittedWorkflow,
       responseDueAt: submittedWorkflow.responseDueAt
@@ -541,6 +621,45 @@ function InboxWorkspace({ store, database }) {
     if (uncertainCommand.kind === 'note') handleSaveNote(uncertainCommand.text)
     else if (uncertainCommand.kind === 'reply') handleSendReply(uncertainCommand.text)
     else handleWorkflowSave(uncertainCommand.workflow)
+  }
+
+  const handleConfirmDeleteMessage = async () => {
+    if (!messageToDelete || deletingMessage) return
+    const target = messageToDelete
+    setDeletingMessage(true)
+    setSaveError('')
+    setNotice('')
+    let result
+    if (typeof storeDeleteMessage === 'function') {
+      result = await storeDeleteMessage(target.id, activeId)
+    } else if (database) {
+      try {
+        const { error } = await database
+          .from('messages')
+          .delete()
+          .eq('id', target.id)
+        if (error) {
+          result = { ok: false, error: error.message }
+        } else {
+          result = { ok: true }
+        }
+      } catch (err) {
+        result = { ok: false, error: err?.message || 'Database error during message deletion.' }
+      }
+    } else {
+      result = { ok: true }
+    }
+    setDeletingMessage(false)
+    if (!result?.ok) {
+      setSaveError(result?.error || 'The message could not be deleted.')
+      return
+    }
+    if (chat?.messages) {
+      chat.messages = chat.messages.filter(m => m.id !== target.id)
+    }
+    setMessageToDelete(null)
+    setNotice('Message permanently deleted.')
+    loadHistory(activeId)
   }
 
   const canModerateAnonymous = ['Admin', 'SuperAdmin'].includes(user?.role)
@@ -575,7 +694,6 @@ function InboxWorkspace({ store, database }) {
   const liveWebsiteCount = conversations.filter(conversation =>
     conversation.status !== 'Resolved' && isWebsiteConversation(conversation)).length
 
-
   if (inboxState.loading && conversations.length === 0) {
     return (
       <div className="flex h-[60vh] items-center justify-center rounded-adm border border-adm-line bg-adm-bg text-sm text-white/55" role="status">
@@ -605,24 +723,57 @@ function InboxWorkspace({ store, database }) {
   const windowNote = queueTruncated ? ' · this page' : ''
   const chatDeadline = deadlineState(chat.responseDueAt, chat.status)
   const chatIsWebsite = isWebsiteConversation(chat)
+  const chatCategory = getConversationCategory(chat)
+  const chatCategoryMeta = INBOX_CATEGORIES[chatCategory] || INBOX_CATEGORIES.general
 
   return (
-    <section aria-label="Unified message control" className="mx-auto max-w-[1600px] space-y-4 pb-12">
+    <section aria-label="Unified message control" className="mx-auto max-w-[1600px] space-y-3 pb-8">
       <WorkspaceIntro
         eyebrow="Customer workload"
         title="Unified message control"
         description="Website live chat appears here and customers see your replies. Shopee, Lazada, and TikTok still need copied replies from their Seller Centers."
         status={inboxState.websiteReplyReady ? 'Website chat connected' : 'Website reply migration pending'}
         statusTone={inboxState.websiteReplyReady ? 'success' : 'warning'}
+        actions={
+          <button
+            type="button"
+            onClick={() => setIsMaximized(current => !current)}
+            className="adm-btn min-h-11 border border-blue/40 bg-blue/10 px-3.5 text-xs font-semibold text-blue hover:bg-blue/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80"
+            aria-label={isMaximized ? 'Restore standard view' : 'Enlarge workspace (More messages)'}
+          >
+            {isMaximized ? '⇱ Standard overview' : '⛶ Enlarge workspace'}
+          </button>
+        }
       />
-      <MetricRail columns="lg:grid-cols-6" items={[
-        { label: 'Active', value: activeCount, detail: `Open or waiting on customer${windowNote}` },
-        { label: 'Live web', value: liveWebsiteCount, detail: `Customer-visible website threads${windowNote}`, tone: liveWebsiteCount ? 'text-forest' : 'text-white' },
-        { label: 'Unread', value: unreadCount, detail: `Saved unread messages${windowNote}`, tone: unreadCount ? 'text-blue' : 'text-white' },
-        { label: 'Overdue', value: overdueCount, detail: `Response deadline passed${windowNote}`, tone: overdueCount ? 'text-crimson' : 'text-white' },
-        { label: 'Unassigned', value: unassignedCount, detail: `Active without an owner${windowNote}`, tone: unassignedCount ? 'text-amber' : 'text-white' },
-        { label: 'Urgent', value: urgentCount, detail: `Active urgent priority${windowNote}`, tone: urgentCount ? 'text-crimson' : 'text-white' },
-      ]} />
+
+      {!isMaximized ? (
+        <MetricRail columns="lg:grid-cols-6" items={[
+          { label: 'Active', value: activeCount, detail: `Open or waiting on customer${windowNote}` },
+          { label: 'Live web', value: liveWebsiteCount, detail: `Customer-visible website threads${windowNote}`, tone: liveWebsiteCount ? 'text-forest' : 'text-white' },
+          { label: 'Unread', value: unreadCount, detail: `Saved unread messages${windowNote}`, tone: unreadCount ? 'text-blue' : 'text-white' },
+          { label: 'Overdue', value: overdueCount, detail: `Response deadline passed${windowNote}`, tone: overdueCount ? 'text-crimson' : 'text-white' },
+          { label: 'Unassigned', value: unassignedCount, detail: `Active without an owner${windowNote}`, tone: unassignedCount ? 'text-amber' : 'text-white' },
+          { label: 'Urgent', value: urgentCount, detail: `Active urgent priority${windowNote}`, tone: urgentCount ? 'text-crimson' : 'text-white' },
+        ]} />
+      ) : (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-adm border border-adm-line bg-adm-surface px-4 py-2.5 text-xs">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="font-semibold text-white">Queue status:</span>
+            <span className="text-white/70">Active: <strong className="text-white font-mono">{activeCount}</strong></span>
+            <span className="text-white/30">·</span>
+            <span className="text-forest">Live web: <strong className="text-white font-mono">{liveWebsiteCount}</strong></span>
+            <span className="text-white/30">·</span>
+            <span className="text-blue">Unread: <strong className="text-white font-mono">{unreadCount}</strong></span>
+            <span className="text-white/30">·</span>
+            <span className="text-crimson">Overdue: <strong className="text-white font-mono">{overdueCount}</strong></span>
+            <span className="text-white/30">·</span>
+            <span className="text-emerald-400">Wholesale: <strong className="text-white font-mono">{categoryCounts.wholesale}</strong></span>
+            <span className="text-white/30">·</span>
+            <span className="text-amber-400">Pasabuy: <strong className="text-white font-mono">{categoryCounts.pasabuy}</strong></span>
+          </div>
+          <span className="text-xs text-blue/90 font-medium">Maximized reading mode active (+200px viewport)</span>
+        </div>
+      )}
 
       {inboxState.stale
         ? <StateBanner tone="warning" role="status">{inboxState.error || STALE_QUEUE_NOTICE}</StateBanner>
@@ -649,7 +800,7 @@ function InboxWorkspace({ store, database }) {
         </section>
       )}
 
-      <div className="flex h-[calc(100dvh-390px)] min-h-[560px] overflow-hidden rounded-adm border border-adm-line bg-adm-bg">
+      <div className={`flex ${isMaximized ? 'h-[calc(100dvh-200px)] min-h-[660px]' : 'h-[calc(100dvh-310px)] min-h-[580px]'} overflow-hidden rounded-adm border border-adm-line bg-adm-bg transition-all duration-200`}>
         <div className={`${mobileView === 'chat' ? 'hidden' : 'flex'} w-full shrink-0 flex-col border-r border-adm-line bg-adm-bg lg:flex lg:w-80 xl:w-[22rem]`}>
           <div className="space-y-2 border-b border-adm-line p-3">
             <label className="relative block">
@@ -659,17 +810,65 @@ function InboxWorkspace({ store, database }) {
                 type="search"
                 value={search}
                 onChange={event => setSearch(event.target.value)}
-                placeholder="Search customer or message"
+                placeholder="Search customer, message or category"
                 className="adm-input min-h-11 w-full pl-9 text-base sm:text-sm"
               />
             </label>
-            <div className="grid grid-cols-2 gap-2">
+
+            {/* Quick Category Tabs */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin" role="tablist" aria-label="Inquiry purpose categories">
+              {[
+                { id: 'all', label: 'All', count: categoryCounts.all },
+                { id: 'wholesale', label: 'Wholesale', count: categoryCounts.wholesale },
+                { id: 'pasabuy', label: 'Pasabuy', count: categoryCounts.pasabuy },
+                { id: 'order', label: 'Orders', count: categoryCounts.order },
+                { id: 'product', label: 'Shelf', count: categoryCounts.product },
+                { id: 'general', label: 'General', count: categoryCounts.general },
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={categoryFilter === tab.id}
+                  onClick={() => setCategoryFilter(tab.id)}
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 ${
+                    categoryFilter === tab.id
+                      ? 'bg-blue text-white shadow-sm'
+                      : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  {tab.count > 0 && (
+                    <span className={`rounded-full px-1.5 py-0.5 text-xs font-bold ${
+                      categoryFilter === tab.id ? 'bg-white/25 text-white' : 'bg-white/10 text-white/60'
+                    }`}>
+                      {tab.count}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               <label>
                 <span className="sr-only">Filter by status</span>
                 <select value={statusFilter} onChange={event => setStatusFilter(event.target.value)} className="adm-input min-h-11 w-full text-base sm:text-xs">
                   <option value="active">Active</option>
                   <option value="all">All statuses</option>
                   {STATUS_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+              </label>
+              <label>
+                <span className="sr-only">Filter by channel origin</span>
+                <select value={originFilter} onChange={event => setOriginFilter(event.target.value)} className="adm-input min-h-11 w-full text-base sm:text-xs">
+                  <option value="all">All channels</option>
+                  <option value="website">Website Storefront</option>
+                  <option value="virtual_store">Virtual Store Shelf</option>
+                  <option value="messenger">Messenger</option>
+                  <option value="whatsapp">WhatsApp</option>
+                  <option value="shopee">Shopee</option>
+                  <option value="lazada">Lazada</option>
+                  <option value="tiktok">TikTok</option>
                 </select>
               </label>
               <label>
@@ -693,13 +892,15 @@ function InboxWorkspace({ store, database }) {
               const lastMessage = conversation.messages.at(-1)
               const fromStore = isFromVirtualStore(conversation)
               const fromWebsite = isWebsiteConversation(conversation)
+              const category = getConversationCategory(conversation)
+              const categoryMeta = INBOX_CATEGORIES[category] || INBOX_CATEGORIES.general
               return (
                 <button
                   key={conversation.id}
                   type="button"
                   onClick={() => openChat(conversation.id)}
                   aria-current={activeId === conversation.id ? 'true' : undefined}
-                  className={`relative min-h-[76px] w-full overflow-hidden rounded-adm-sm border px-3 py-2.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 ${
+                  className={`relative min-h-[76px] w-full overflow-hidden rounded-adm-sm border px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 ${
                     activeId === conversation.id ? 'border-blue/45 bg-blue/10' : 'border-transparent hover:bg-white/5'
                   } ${fromWebsite && activeId !== conversation.id ? 'bg-blue/[0.06]' : ''}`}
                 >
@@ -713,7 +914,7 @@ function InboxWorkspace({ store, database }) {
                     <span className={`truncate text-sm font-semibold ${conversation.unreadCount ? 'text-white' : 'text-white/75'}`}>{conversation.customer}</span>
                     <span className="shrink-0 text-xs text-white/40">{conversation.time}</span>
                   </div>
-                  <div className="mt-1 flex items-center gap-1.5">
+                  <div className="mt-1 flex flex-wrap items-center gap-1.5">
                     {conversation.unreadCount > 0 && <span className="rounded-full bg-crimson px-1.5 py-0.5 text-xs font-bold text-white">{conversation.unreadCount}</span>}
                     <span
                       className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-bold uppercase tracking-wide"
@@ -728,6 +929,11 @@ function InboxWorkspace({ store, database }) {
                         {fromStore ? 'Live web · Asked at the shelf' : 'Live web'}
                       </span>
                     )}
+                    {categoryMeta && (
+                      <span className={`inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-xs font-semibold tracking-wide ${categoryMeta.bg} ${categoryMeta.text} ${categoryMeta.border}`}>
+                        {categoryMeta.badge}
+                      </span>
+                    )}
                     <span className="truncate text-xs text-white/45">{statusLabel(conversation.status)}</span>
                     {conversation.priority !== 'normal' && <span className={conversation.priority === 'urgent' ? 'text-xs font-bold uppercase text-crimson' : 'text-xs font-bold uppercase text-amber'}>{conversation.priority}</span>}
                   </div>
@@ -740,49 +946,108 @@ function InboxWorkspace({ store, database }) {
         </div>
 
         <div className={`${mobileView === 'list' ? 'hidden' : 'flex'} min-w-0 flex-1 flex-col bg-adm-surface lg:flex`}>
-          <div className="flex shrink-0 items-center gap-2 border-b border-adm-line bg-white/5 px-3 py-2.5 sm:px-4">
-            <button
-              type="button"
-              onClick={() => setMobileView('list')}
-              className="-ml-1 flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm text-white/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 lg:hidden"
-              aria-label="Back to conversation list"
-            >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-            </button>
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="truncate text-[15px] font-semibold text-white">{chat.customer}</h3>
-                {chatIsWebsite ? (
-                  <span className="inline-flex items-center gap-1.5 rounded border border-blue/45 bg-blue/15 px-2 py-0.5 text-xs font-bold tracking-wide text-blue">
-                    {isFromVirtualStore(chat) ? <ShelfMark className="h-3.5 w-3.5" /> : <span className="h-2 w-2 rounded-full bg-blue" aria-hidden="true" />}
-                    LIVE WEBSITE CHAT{isFromVirtualStore(chat) ? ' · VIRTUAL STORE' : ''}
-                  </span>
-                ) : (
-                  <span className="rounded bg-forest/15 px-1.5 py-0.5 text-xs font-medium text-forest">via {chat.channel}</span>
-                )}
-                <span className="rounded bg-white/10 px-1.5 py-0.5 text-xs text-white/65">{statusLabel(chat.status)}</span>
-              </div>
-              <p className="mt-0.5 text-xs text-white/40">
-                {chat.assignedName ? `Owned by ${chat.assignedName}` : 'Unassigned'}
-                {chatDeadline ? ` · ${chatDeadline.label}` : ''}
-              </p>
-              {chatIsWebsite && (
-                <p className="mt-1 text-xs font-medium text-blue">
-                  Replies appear in the customer’s website chat
-                </p>
-              )}
-              {canModerateAnonymous && inboxState.moderationReady && chat.anonymousModerationEligible && (
-                <div className="mt-2 flex flex-wrap gap-2">
-                  <button type="button" onClick={() => openModeration('delete', chat.id)} className="min-h-11 rounded-adm-sm border border-crimson/45 bg-crimson/10 px-3 text-xs font-semibold text-crimson focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80">Delete anonymous conversation</button>
-                  <button type="button" onClick={() => openModeration('block', chat.id)} disabled={!chat.anonymousBlockAvailable || chat.anonymousChatBlocked} className="min-h-11 rounded-adm-sm border border-amber/45 bg-amber/10 px-3 text-xs font-semibold text-amber focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed disabled:opacity-45">Block anonymous chat</button>
+          <div className="flex shrink-0 items-center justify-between gap-2 border-b border-adm-line bg-white/5 px-3 py-2.5 sm:px-4">
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setMobileView('list')}
+                className="-ml-1 flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm text-white/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 lg:hidden"
+                aria-label="Back to conversation list"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate text-[15px] font-semibold text-white">{chat.customer}</h3>
+                  {chatIsWebsite ? (
+                    <span className="inline-flex items-center gap-1.5 rounded border border-blue/45 bg-blue/15 px-2 py-0.5 text-xs font-bold tracking-wide text-blue">
+                      {isFromVirtualStore(chat) ? <ShelfMark className="h-3.5 w-3.5" /> : <span className="h-2 w-2 rounded-full bg-blue" aria-hidden="true" />}
+                      LIVE WEBSITE CHAT{isFromVirtualStore(chat) ? ' · VIRTUAL STORE' : ''}
+                    </span>
+                  ) : (
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="rounded bg-forest/15 px-1.5 py-0.5 text-xs font-medium text-forest">via {chat.channel}</span>
+                      {portal && (
+                        <a
+                          href={portal.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex min-h-11 items-center gap-1 rounded border border-adm-line bg-adm-raised px-2.5 text-xs font-medium text-white/80 hover:border-blue/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80"
+                          title={portal.instruction}
+                        >
+                          <span>{portal.label}</span>
+                          <span aria-hidden="true">↗</span>
+                        </a>
+                      )}
+                    </div>
+                  )}
+                  {chatCategoryMeta && (
+                    <span className={`inline-flex items-center gap-1 rounded border px-2 py-0.5 text-xs font-semibold ${chatCategoryMeta.bg} ${chatCategoryMeta.text} ${chatCategoryMeta.border}`}>
+                      {chatCategoryMeta.label}
+                    </span>
+                  )}
+                  <span className="rounded bg-white/10 px-1.5 py-0.5 text-xs text-white/65">{statusLabel(chat.status)}</span>
                 </div>
-              )}
+                <p className="mt-0.5 text-xs text-white/40">
+                  {chat.assignedName ? `Owned by ${chat.assignedName}` : 'Unassigned'}
+                  {chatDeadline ? ` · ${chatDeadline.label}` : ''}
+                </p>
+                {chatIsWebsite ? (
+                  <p className="mt-1 text-xs font-medium text-blue">
+                    Replies appear in the customer’s website chat
+                  </p>
+                ) : portal ? (
+                  <p className="mt-1 text-xs text-white/60">
+                    {portal.instruction}
+                  </p>
+                ) : null}
+                {canModerateAnonymous && inboxState.moderationReady && chat.anonymousModerationEligible && (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <button type="button" onClick={() => openModeration('delete', chat.id)} className="min-h-11 rounded-adm-sm border border-crimson/45 bg-crimson/10 px-3 text-xs font-semibold text-crimson focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80">Delete anonymous conversation</button>
+                    <button type="button" onClick={() => openModeration('block', chat.id)} disabled={!chat.anonymousBlockAvailable || chat.anonymousChatBlocked} className="min-h-11 rounded-adm-sm border border-amber/45 bg-amber/10 px-3 text-xs font-semibold text-amber focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 disabled:cursor-not-allowed disabled:opacity-45">Block anonymous chat</button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Quick Header Actions */}
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setDeletionGuideOpen(true)}
+                className="adm-btn min-h-11 border border-adm-line bg-adm-raised px-3 text-xs font-semibold text-white/80 hover:border-blue/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80"
+                title="Message retraction guidance and conversation moderation"
+              >
+                <ShieldIcon size={14} className="mr-1.5 inline text-amber" />
+                Message Actions & Deletion
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsWorkflowOpen(current => !current)}
+                className="adm-btn hidden min-h-11 border border-adm-line bg-adm-raised px-3 text-xs font-semibold text-white/70 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 xl:inline-flex xl:items-center xl:gap-1.5"
+                title="Toggle workflow panel to expand reading area"
+              >
+                <span>{isWorkflowOpen ? 'Hide workflow' : 'Show workflow'}</span>
+                <span className="text-xs text-white/40">{isWorkflowOpen ? '⇸' : '⇷'}</span>
+              </button>
             </div>
           </div>
 
           <details className="shrink-0 border-b border-adm-line bg-adm-bg p-3 xl:hidden">
             <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold text-white">Workflow controls</summary>
-            <div className="mt-3"><WorkflowControls compact chat={chat} workflow={workflow} setWorkflow={setWorkflow} inboxState={inboxState} staff={staff} savingWorkflow={savingWorkflow} handleWorkflowSave={handleWorkflowSave} /></div>
+            <div className="mt-3">
+              <WorkflowControls
+                compact
+                chat={chat}
+                workflow={workflow}
+                setWorkflow={setWorkflow}
+                inboxState={inboxState}
+                staff={staff}
+                savingWorkflow={savingWorkflow}
+                handleWorkflowSave={handleWorkflowSave}
+                onCategoryChange={(cid, cat) => setCustomCategories(c => ({ ...c, [cid]: cat }))}
+              />
+            </div>
           </details>
 
           <details className="shrink-0 border-b border-adm-line bg-adm-bg p-3 xl:hidden">
@@ -792,7 +1057,7 @@ function InboxWorkspace({ store, database }) {
             </div>
           </details>
 
-          <div className="flex-1 space-y-3 overflow-y-auto p-3 sm:p-4" aria-live="polite">
+          <div className="flex-1 space-y-2 overflow-y-auto p-3 sm:p-4" aria-live="polite">
             {chat.messagesTruncated && (
               <p role="status" className="rounded-adm-sm border border-adm-line bg-adm-sunken px-3 py-2 text-center text-xs leading-relaxed text-white/55">
                 Showing the newest {chat.messages.length} messages. This conversation has older messages that are not loaded here.
@@ -807,11 +1072,39 @@ function InboxWorkspace({ store, database }) {
                     : 'rounded-tr-sm border border-blue/30 bg-blue/15 text-white'
                 }`}>
                   <p className="whitespace-pre-wrap break-words">{message.text}</p>
-                  <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs text-white/45">
-                    <span>{formatMessageTime(message.createdAt)}</span>
-                    {message.deliveryStatus === 'internal_only' && <span>· Internal only, not sent</span>}
-                    {message.deliveryStatus === 'failed' && <span className="text-crimson">· Delivery failed</span>}
-                    {message.deliveryStatus === 'sent' && <span className="text-forest">· {chatIsWebsite ? 'Visible in website chat' : 'Sent externally'}</span>}
+                  <div className="mt-1 flex flex-wrap items-center justify-between gap-1.5 text-xs text-white/45">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span>{formatMessageTime(message.createdAt)}</span>
+                      {message.deliveryStatus === 'internal_only' && <span>· Internal only, not sent</span>}
+                      {message.deliveryStatus === 'failed' && <span className="text-crimson">· Delivery failed</span>}
+                      {message.deliveryStatus === 'sent' && <span className="text-forest">· {chatIsWebsite ? 'Visible in website chat' : 'Sent externally'}</span>}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMessageToDelete(message)
+                          setDeleteMessageReason('Spam or trolling inquiry')
+                        }}
+                        className="text-xs text-white/40 hover:text-crimson underline decoration-dotted transition-colors"
+                        title="Delete this message directly"
+                      >
+                        Delete
+                      </button>
+                      {message.sender !== 'customer' && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedMessageForRetract(message)
+                            setDeletionGuideOpen(true)
+                          }}
+                          className="text-xs text-white/40 hover:text-amber underline decoration-dotted"
+                          title="How to redact or delete this message"
+                        >
+                          Retract
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -849,7 +1142,7 @@ function InboxWorkspace({ store, database }) {
               placeholder={chatIsWebsite ? 'Write the reply the customer will see in the store…' : 'Record an internal note or prepare text to copy…'}
               rows={2}
               maxLength={5000}
-              className="adm-input min-h-[72px] w-full resize-y text-base sm:text-sm"
+              className="adm-input min-h-[64px] w-full resize-y text-base sm:text-sm"
             />
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               <button type="button" onClick={handleTemplate} className="adm-btn min-h-11 border border-blue/40 bg-blue/10 text-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80">{templateArmed ? 'Replace draft with template' : 'Create safe template'}</button>
@@ -868,10 +1161,21 @@ function InboxWorkspace({ store, database }) {
           </div>
         </div>
 
-        <aside className="hidden w-80 shrink-0 flex-col border-l border-adm-line bg-adm-bg xl:flex" aria-label="Conversation workflow">
-          <div className="border-b border-adm-line px-4 py-3">
-            <h3 className="text-sm font-semibold text-white">Workflow</h3>
-            <p className="mt-0.5 text-xs text-white/45">Owner, deadline and next state</p>
+        <aside className={`${isWorkflowOpen ? 'xl:flex' : 'xl:hidden'} hidden w-80 shrink-0 flex-col border-l border-adm-line bg-adm-bg`} aria-label="Conversation workflow">
+          <div className="flex items-center justify-between border-b border-adm-line px-4 py-3">
+            <div>
+              <h3 className="text-sm font-semibold text-white">Workflow</h3>
+              <p className="mt-0.5 text-xs text-white/45">Owner, category, deadline & audit</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsWorkflowOpen(false)}
+              className="rounded-adm-sm p-1 text-white/40 hover:bg-white/10 hover:text-white"
+              title="Collapse workflow panel to widen messages"
+              aria-label="Collapse workflow panel"
+            >
+              ⇸
+            </button>
           </div>
           <div className="flex-1 space-y-5 overflow-y-auto p-4">
             {!inboxState.phase2Ready && (
@@ -879,7 +1183,16 @@ function InboxWorkspace({ store, database }) {
                 <AlertIcon size={16} className="shrink-0" />Activate the verified Phase 2 migration to use workflow controls.
               </div>
             )}
-            <WorkflowControls chat={chat} workflow={workflow} setWorkflow={setWorkflow} inboxState={inboxState} staff={staff} savingWorkflow={savingWorkflow} handleWorkflowSave={handleWorkflowSave} />
+            <WorkflowControls
+              chat={chat}
+              workflow={workflow}
+              setWorkflow={setWorkflow}
+              inboxState={inboxState}
+              staff={staff}
+              savingWorkflow={savingWorkflow}
+              handleWorkflowSave={handleWorkflowSave}
+              onCategoryChange={(cid, cat) => setCustomCategories(c => ({ ...c, [cid]: cat }))}
+            />
             <div className="border-t border-adm-line pt-4">
               <h4 className="text-xs font-bold uppercase tracking-wider text-white/45">Event history</h4>
               <div className="mt-3">
@@ -889,6 +1202,208 @@ function InboxWorkspace({ store, database }) {
           </div>
         </aside>
       </div>
+
+      {deletionGuideOpen && (
+        <div className="fixed inset-0 z-50 grid place-items-end bg-black/80 backdrop-blur-sm sm:place-items-center sm:p-6" role="presentation" onMouseDown={e => e.target === e.currentTarget && setDeletionGuideOpen(false)}>
+          <AdminDialog onClose={() => setDeletionGuideOpen(false)} labelledBy="deletion-guide-title">
+            <section className="w-full max-w-2xl rounded-t-adm border border-adm-line bg-adm-surface p-6 shadow-2xl sm:rounded-adm max-h-[90vh] overflow-y-auto">
+              <div className="flex items-start justify-between gap-4 border-b border-adm-line pb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="rounded bg-amber/15 px-2 py-0.5 text-xs font-bold text-amber uppercase tracking-wider">Audit Security & Moderation</span>
+                    <span className="text-xs text-white/40">Thread #{chat.id.slice(0, 8)}</span>
+                  </div>
+                  <h2 id="deletion-guide-title" className="mt-1 text-xl font-bold text-white">Message Retraction & Moderation Control</h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setDeletionGuideOpen(false)}
+                  className="rounded-adm-sm p-1.5 text-white/50 hover:bg-white/10 hover:text-white"
+                  aria-label="Close dialog"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div className="mt-5 space-y-6 text-sm">
+                {/* Emergency Message Retraction */}
+                <div className="rounded-adm border border-crimson/30 bg-crimson/[0.06] p-4">
+                  <h3 className="font-semibold text-crimson flex items-center gap-2">
+                    <AlertIcon size={16} className="shrink-0" />
+                    How to Delete or Retract an Errant Message
+                  </h3>
+                  <p className="mt-1.5 text-xs leading-relaxed text-white/75">
+                    Under K2 Jimzon data integrity rules, message tables maintain an <strong>immutable audit trail</strong> with Row-Level Security (RLS) to prevent unauthorized tampering.
+                    If staff sent an accidental, inappropriate, or errant message (e.g. offensive text or internal slip-up), an authorized Admin must delete it directly via the <strong>Supabase SQL Editor</strong>.
+                  </p>
+
+                  <div className="mt-3 space-y-2">
+                    <div className="flex items-center justify-between text-xs text-white/60">
+                      <span>Prefilled SQL for this active thread:</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const targetText = selectedMessageForRetract?.text || 'tirahin kita eh'
+                          const sql = `-- K2 Emergency Message Deletion
+-- Conversation: ${chat.customer} (${chat.id})
+
+-- 1. Inspect messages in this thread:
+SELECT id, sender_type, content, created_at 
+FROM public.messages 
+WHERE conversation_id = '${chat.id}' 
+ORDER BY created_at DESC;
+
+-- 2. Delete the errant message:
+DELETE FROM public.messages 
+WHERE conversation_id = '${chat.id}' 
+  AND content = '${targetText.replace(/'/g, "''")}';`
+                          navigator.clipboard.writeText(sql)
+                          setCopiedSql(true)
+                          setTimeout(() => setCopiedSql(false), 2500)
+                        }}
+                        className="rounded bg-white/10 px-2.5 py-1 text-xs font-semibold text-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80"
+                      >
+                        {copiedSql ? 'Copied SQL to clipboard' : 'Copy SQL snippet'}
+                      </button>
+                    </div>
+                    <pre className="rounded bg-black/60 p-3 font-mono text-xs text-amber-200/90 overflow-x-auto whitespace-pre">
+{`-- 1. Inspect recent messages in this conversation:
+SELECT id, sender_type, content, created_at 
+FROM public.messages 
+WHERE conversation_id = '${chat.id}' 
+ORDER BY created_at DESC;
+
+-- 2. Delete the errant message directly:
+DELETE FROM public.messages 
+WHERE conversation_id = '${chat.id}' 
+  AND content = '${(selectedMessageForRetract?.text || 'tirahin kita eh').replace(/'/g, "''")}';`}
+                    </pre>
+                  </div>
+                </div>
+
+                {/* Conversation Moderation */}
+                <div className="rounded-adm border border-adm-line bg-adm-bg p-4">
+                  <h3 className="font-semibold text-white">Full Anonymous Conversation Moderation</h3>
+                  <p className="mt-1 text-xs text-white/60">
+                    Spam, abuse, or anonymous visitor chats can be deleted in full via Admin moderation, recording an immutable deletion receipt.
+                  </p>
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div>
+                      <span className="text-white/45">Moderation Status: </span>
+                      {canModerateAnonymous && inboxState.moderationReady && chat.anonymousModerationEligible ? (
+                        <span className="text-forest font-semibold">Active & Eligible</span>
+                      ) : (
+                        <span className="text-amber font-semibold">Direct Mode (Moderation BFF API unapplied)</span>
+                      )}
+                    </div>
+                    {canModerateAnonymous && inboxState.moderationReady && chat.anonymousModerationEligible ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDeletionGuideOpen(false)
+                          openModeration('delete', chat.id)
+                        }}
+                        className="rounded-adm-sm border border-crimson/45 bg-crimson/15 px-3 py-1.5 font-semibold text-crimson hover:bg-crimson/25"
+                      >
+                        Delete entire anonymous thread
+                      </button>
+                    ) : (
+                      <span className="text-xs text-white/40">Gated behind MAP-020 BFF activation</span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="text-xs text-white/50 space-y-1">
+                  <p><strong>Compliance Notice:</strong> Account-linked customer conversations cannot be deleted in bulk to safeguard financial dispute history and customer trust. Only anonymous/guest sessions or specific errant rows via authorized SQL can be pruned.</p>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setDeletionGuideOpen(false)}
+                  className="adm-btn min-h-11 bg-blue px-5 font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80"
+                >
+                  Done
+                </button>
+              </div>
+            </section>
+          </AdminDialog>
+        </div>
+      )}
+
+      {messageToDelete && (
+        <div
+          className="fixed inset-0 z-50 grid place-items-end bg-black/75 sm:place-items-center sm:p-6"
+          role="presentation"
+          onMouseDown={event => event.target === event.currentTarget && !deletingMessage && setMessageToDelete(null)}
+        >
+          <AdminDialog
+            onClose={() => setMessageToDelete(null)}
+            closeDisabled={deletingMessage}
+            labelledBy="delete-message-title"
+          >
+            <section className="w-full max-w-lg rounded-t-adm border border-adm-line bg-adm-surface p-5 shadow-2xl sm:rounded-adm">
+              <h2 id="delete-message-title" className="text-xl font-bold text-white">
+                Delete Message
+              </h2>
+              <p className="mt-2 text-xs leading-5 text-white/60">
+                Permanently delete this individual message from the conversation and database. This action cannot be undone.
+              </p>
+
+              <div className="mt-4 rounded-adm-sm border border-adm-line bg-adm-bg p-3">
+                <div className="text-xs font-semibold uppercase tracking-wider text-white/45">Message preview:</div>
+                <p className="mt-1 line-clamp-3 text-sm italic text-neutral-200">
+                  &ldquo;{messageToDelete.text}&rdquo;
+                </p>
+                <div className="mt-2 text-xs text-white/40">
+                  Sender: <span className="font-semibold text-white/70">{messageToDelete.sender === 'customer' ? 'Customer' : 'Staff'}</span> · {formatMessageTime(messageToDelete.createdAt)}
+                </div>
+              </div>
+
+              <div className="mt-4 space-y-2">
+                <label htmlFor="delete-message-reason" className="block text-xs font-semibold text-white/70">
+                  Reason for deletion:
+                </label>
+                <select
+                  id="delete-message-reason"
+                  value={deleteMessageReason}
+                  onChange={e => setDeleteMessageReason(e.target.value)}
+                  disabled={deletingMessage}
+                  className="adm-input min-h-11 w-full text-base sm:text-xs"
+                >
+                  <option value="Spam or trolling inquiry">Spam or trolling inquiry</option>
+                  <option value="Inappropriate or abusive language">Inappropriate or abusive language</option>
+                  <option value="Errant or accidental message">Errant or accidental message</option>
+                  <option value="Sensitive or confidential data">Sensitive or confidential data</option>
+                  <option value="Customer requested removal">Customer requested removal</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={() => setMessageToDelete(null)}
+                  disabled={deletingMessage}
+                  className="adm-btn min-h-11 border border-adm-line px-4 text-xs font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmDeleteMessage}
+                  disabled={deletingMessage}
+                  className="adm-btn min-h-11 border border-crimson/40 bg-crimson px-5 text-xs font-semibold text-white hover:bg-crimson/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson/80 disabled:opacity-45"
+                >
+                  {deletingMessage ? 'Deleting…' : 'Delete message'}
+                </button>
+              </div>
+            </section>
+          </AdminDialog>
+        </div>
+      )}
+
       {moderationDialog && (
         <div className="fixed inset-0 z-50 grid place-items-end bg-black/75 sm:place-items-center sm:p-6" role="presentation" onMouseDown={event => event.target === event.currentTarget && !moderating && setModerationDialog(null)}>
           <AdminDialog onClose={() => setModerationDialog(null)} closeDisabled={moderating} labelledBy="chat-moderation-title">

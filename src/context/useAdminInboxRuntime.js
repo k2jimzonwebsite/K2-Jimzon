@@ -294,10 +294,36 @@ export function useAdminInboxRuntime({ enabled, actorId }) {
     return { ok: true }
   }
 
+  const deleteMessage = async (messageId, conversationId) => {
+    if (!messageId) return { ok: false, error: 'Message ID is required.' }
+    if (supabase) {
+      try {
+        const { error } = await supabase
+          .from('messages')
+          .delete()
+          .eq('id', messageId)
+        if (error) {
+          return { ok: false, error: error.message }
+        }
+      } catch (err) {
+        return { ok: false, error: err?.message || 'Database error during message deletion.' }
+      }
+    }
+    setConversations(current => current.map(conv => {
+      if (conv.id !== conversationId && !conv.messages.some(m => m.id === messageId)) return conv
+      return {
+        ...conv,
+        messages: conv.messages.filter(m => m.id !== messageId),
+      }
+    }))
+    return { ok: true }
+  }
+
   return {
     conversations, inboxState, inboxStaff, inboxUsesBff: secureInbox,
     loadConversationHistory, sendMessage, sendCustomerReply,
     markConversationRead, updateConversationWorkflow,
+    deleteMessage,
     deleteAnonymousConversation: (conversationId, reason) => runModeration('delete', conversationId, reason),
     blockAnonymousChat: (conversationId, reason) => runModeration('block', conversationId, reason),
     unblockAnonymousChat: (blockId, reason) => runModeration('unblock', blockId, reason),

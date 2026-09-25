@@ -204,6 +204,20 @@ function Harness() {
         : conversation))
       return { ok: true }
     },
+    deleteMessage: async (messageId, conversationId) => {
+      setConversations(current => current.map(conversation => {
+        if (conversation.id !== conversationId && !conversation.messages.some(m => m.id === messageId)) return conversation
+        return {
+          ...conversation,
+          messages: conversation.messages.filter(m => m.id !== messageId),
+        }
+      }))
+      return { ok: true }
+    },
+    deleteAnonymousConversation: async (conversationId) => {
+      setConversations(current => current.filter(c => c.id !== conversationId))
+      return { ok: true }
+    },
   }
 
   return (
