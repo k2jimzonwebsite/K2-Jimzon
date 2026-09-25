@@ -1,5 +1,10 @@
 # Product Intake and First-Source Runbook
 
+## Current scan-first handoff (IDEA-20260925-01 candidate)
+
+Inventory and Sheet launch controls now enter through a scan. On the production flag-off path, staff scan or type the barcode, check for an exact existing SKU, gather package photos, use the manual K2 Product Content ChatGPT Project, and open Smart Paste from the scan result for JSON review. An exact match opens the product's lot review; merely scanning never changes stock. The Sheet scanner-to-Smart-Paste handoff was missing and is connected in this feature branch. On the prepared Admin BFF path, the same launch opens the seven-step resumable intake with private evidence and manual or deliberately enabled API content. Do not merge the secure path into production until MAP-017/018/020 database/server gates and real staff acceptance pass; OWNER-007 still gates paid AI. These source changes are not proof of live staff behavior. The prior UI and recovery map are in `../../archive/2026-09-25-intake-and-unused-ui/README.md`.
+
+
 ## Barcode lookup preparation (IDEA-20260924-08)
 
 The new protected Admin barcode read proposes Open Food Facts grocery identity after the canonical duplicate check. It uses a fixed public endpoint, a five-second timeout, a ten-request-per-minute process shield, and a custom User-Agent. This shield is per process; confirm representative provider rate behavior before live activation. No-match, invalid code, wrong returned code and provider outage have distinct staff messages and preserve the manual package-photo path. Staff confirm the exact variant before source provenance is saved. The public API image is never imported. Existing paid AI jobs for SEO copy and generated image candidates remain disabled until OWNER-007, MAP-017/020, controlled activation and real-host acceptance. Roll back this prepared slice by reverting the barcode route/helper, its Admin client and step-1 UI while retaining the canonical intake session and manual path.

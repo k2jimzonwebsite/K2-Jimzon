@@ -14,7 +14,7 @@ import DeleteProductsModal from './DeleteProductsModal'
 import ProductIntakeSessionModal from './ProductIntakeSessionModal'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import Barcode from 'react-barcode'
-import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
+import { EyeIcon, BarcodeIcon, XIcon, SparkleIcon } from '../../components/ui/icons'
 import {
   adminBffEnabled, downloadCatalogCsvBff, getAdminProducts,
 } from '../../services/adminBffService'
@@ -79,7 +79,6 @@ export default function Sheet({ canManageProducts = false }) {
   const [showSmartPaste, setShowSmartPaste] = useState(false)
   const [showCsvImport, setShowCsvImport] = useState(false)
   const [showPhoneIntake, setShowPhoneIntake] = useState(false)
-  const openIntake = () => secureCatalog ? setShowPhoneIntake(true) : setShowAiScanner(true)
   const [showBarcode, setShowBarcode] = useState(null)
   const [batchProduct, setBatchProduct] = useState(null)
   const [enrichProduct, setEnrichProduct] = useState(null)
@@ -293,7 +292,7 @@ export default function Sheet({ canManageProducts = false }) {
   const [deleteTargets, setDeleteTargets] = useState(null)
 
   const handleAddRow = () => {
-    openIntake()
+    setShowPhoneIntake(true)
   }
 
   const handleCatalogExport = async () => {
@@ -356,8 +355,11 @@ export default function Sheet({ canManageProducts = false }) {
               {exporting ? 'Preparing CSV…' : 'Download catalog CSV'}
             </button>
           )}
-          <button onClick={openIntake} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
-            <BarcodeIcon size={14} /> Start intake
+          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
+            <BarcodeIcon size={14} /> Scan Box
+          </button>
+          <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-blue/30 bg-blue/10 px-3 min-h-[44px] text-sm font-medium text-blue transition hover:bg-blue/20">
+            <SparkleIcon size={14} /> Smart Paste AI
           </button>
           <button
             onClick={() => visibleRows.length > 0 && setEnrichProduct(visibleRows[0])}
@@ -690,10 +692,8 @@ export default function Sheet({ canManageProducts = false }) {
         />
       )}
 
-      {showAiScanner && <ScanToAiModal onClose={() => setShowAiScanner(false)}
-        onOpenSmartPaste={() => { setShowAiScanner(false); setShowSmartPaste(true) }}
-        onExistingProduct={(product) => { setShowAiScanner(false); setBatchProduct(product) }} />}
-      {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} onProductAdded={() => { fetchProducts({ background: true }); setShowSmartPaste(false) }} />}
+      {showAiScanner && <ScanToAiModal onClose={() => setShowAiScanner(false)} />}
+      {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} />}
       {showCsvImport && <BulkCsvImportModal onClose={() => setShowCsvImport(false)} />}
       
       {showBarcode && (

@@ -79,7 +79,6 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
       'data-tour="inventory-actions"',
       'data-tour="add-inventory-btn"',
       'data-tour="scan-box-btn"',
-      'data-tour="smart-paste-btn"',
       'data-tour="add-product-btn"',
       'data-tour="search-input"',
     ]
@@ -88,15 +87,15 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
     })
   })
 
-  test('AddInventoryChooserModal provides both automatic and manual intake options', async () => {
-    const chooserSource = await readFile(path.join(process.cwd(), 'src/components/admin/tour/AddInventoryChooserModal.jsx'), 'utf8')
-    expect(chooserSource).toContain('Automatically via Barcode')
-    expect(chooserSource).toContain('Manually via ChatGPT Studio')
-    expect(chooserSource).toContain('onSelectAutomaticQuick')
-    expect(chooserSource).toContain('onSelectAutomaticTour')
-    expect(chooserSource).toContain('onSelectManualSmartPaste')
-    expect(chooserSource).toContain('onSelectManualForm')
-    expect(chooserSource).toContain('onSelectManualTour')
+  test('Inventory intake entry points start with a scan in both catalog modes', async () => {
+    const inventory = await readFile(path.join(process.cwd(), 'src/views/admin/InventoryGrid.jsx'), 'utf8')
+    const sheet = await readFile(path.join(process.cwd(), 'src/views/admin/Sheet.jsx'), 'utf8')
+    const scanner = await readFile(path.join(process.cwd(), 'src/views/admin/ScanToAiModal.jsx'), 'utf8')
+    expect(inventory).toContain('onClick={openIntake}')
+    expect(sheet).toContain('onClick={openIntake}')
+    expect(inventory).toContain('onOpenSmartPaste=')
+    expect(sheet).toContain('onOpenSmartPaste=')
+    expect(scanner).toContain('onExistingProduct(existing)')
   })
 
   test('AdminToolsWidget enforces clean SVG icons, backdrop overlay, and close button', async () => {
@@ -131,7 +130,6 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
     const tourFiles = [
       'src/components/admin/tour/SpotlightTourOverlay.jsx',
       'src/components/admin/tour/TourSelectionModal.jsx',
-      'src/components/admin/tour/AddInventoryChooserModal.jsx',
       'src/components/admin/tour/tourData.js',
       'src/views/admin/AdminToolsWidget.jsx',
     ]
@@ -148,7 +146,6 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
     const tourFiles = [
       'src/components/admin/tour/SpotlightTourOverlay.jsx',
       'src/components/admin/tour/TourSelectionModal.jsx',
-      'src/components/admin/tour/AddInventoryChooserModal.jsx',
     ]
 
     for (const file of tourFiles) {
@@ -193,7 +190,6 @@ test.describe('Admin BOS Interactive Spotlight Tour Contract Suite', () => {
     const checkedFiles = [
       'src/components/admin/tour/SpotlightTourOverlay.jsx',
       'src/components/admin/tour/TourSelectionModal.jsx',
-      'src/components/admin/tour/AddInventoryChooserModal.jsx',
       'src/components/admin/tour/tourData.js',
       'src/views/admin/AdminToolsWidget.jsx',
       'src/views/admin/ConsignmentManager.jsx',

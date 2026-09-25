@@ -696,7 +696,7 @@ export default function Admin() {
                : section === 'suppliers' ? <Suppliers key={`${user?.id || 'signed-out'}:${user?.role || ''}`} canCreateSupplier={canManageStaff} />
                : section === 'consignment' ? <ConsignmentManager />
                : showSheet ? <Sheet key={`${user?.id || 'signed-out'}:${user?.role || ''}`} canManageProducts={canManageStaff} />
-               : showGrid ? <InventoryGrid key={`${user?.id || 'signed-out'}:${user?.role || ''}`} launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} canManageMediaCleanup={canManageStaff} canManageProducts={canManageStaff} />
+               : showGrid ? <InventoryGrid key={`${user?.id || 'signed-out'}:${user?.role || ''}`} launchTool={inventoryTool} onLaunchToolHandled={() => setInventoryTool(null)} canManageMediaCleanup={canManageStaff} canManageProducts={canManageStaff} onStartTour={handleStartTour} />
                : section === 'overview' ? <Overview widget={widget} onWidget={setWidget} setSection={selectSection} pending={pendingOrders} />
                : <Kanban />}
             </Suspense>

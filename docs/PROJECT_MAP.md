@@ -1,5 +1,7 @@
 # K2 Jimzon  -  Project Directory Map
 
+IDEA-20260925-01's intake cleanup candidate routes Inventory and Sheet launch controls through one scan-first entry per catalog mode. The previous chooser and unused `adminKit.jsx` are preserved in `archive/2026-09-25-intake-and-unused-ui/`; that archive records hashes, pre-change source snapshots, restoration and the ten-file reachability audit. The current legacy scan hands reviewed JSON to Smart Paste; the prepared secure session stays behind MAP-017/018/020. `tests/spotlight-tour-contract.spec.js` and `tests/admin-logic-regressions.spec.js` guard the launch/handoff contract. This branch is not a production activation.
+
 The guided intake pilot keeps versioned teaching in `src/views/admin/staffProcedureRegistry.js`, renders it through `IntakeStepGuide.jsx` in the canonical `ProductIntakeSessionModal.jsx`, and launches it from the Operations guide through `InventoryGrid.jsx`. It introduces no second progress store or provider command. Optional dashboard explanations live in `dashboardWidgets.js` and `Overview.jsx`; the current UI contract is `tests/admin-dashboard-redesign.spec.js`.
 
 The root `MASTER_ACTION_PLAN.md` is the only current work queue. The earlier detailed snapshot is in `K2 Jimzon - Brain/MASTER_ACTION_PLAN_HISTORY_2026-09-24.md` for dated decisions and evidence; it does not assign work. Required behavior stays in the Brain operations rulebook, verified state in the System Brain, owner decisions in `OWNER_QUESTIONS.md`, and idea decisions in `FUTURE_IDEAS.md`.
