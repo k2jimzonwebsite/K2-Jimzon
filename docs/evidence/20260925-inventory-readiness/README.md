@@ -159,7 +159,7 @@ attestation and all eight offsite retrieval checks are recorded. Supabase
 provider settings, managed-role membership, Vault and live Storage re-upload
 remain outside these backup checks.
 
-The Chrome computer-use bridge timed out three times around 05:30 UTC. The last
-observed Admin state was the six-digit authenticator challenge, not a verified
-sign-in. Recheck the browser when control returns; do not infer that the owner
-completed MFA from the tool timeout.
+The Chrome computer-use bridge timed out three times around 05:30 UTC and later
+reported `User unavailable` with no browser inventory. The last observed Admin
+state was the six-digit authenticator challenge, not a verified sign-in. Recheck
+the browser when control returns; do not infer that the owner completed MFA.
