@@ -1902,3 +1902,7 @@ Preload and chunk recovery errors are explicit, user-initiated actions and must 
 
 ### Customer-facing policy and recovery entry points  -  IDEA-20260908-01 / I-011
 Customer data collection on checkout, contact, pasabuy, and wholesale forms must offer reachable, clear disclosures of data collection and usage policies. The storefront must publish dedicated SPA routes (`/privacy`, `/terms`, `/returns`, `/policies`) and footer entry points for Privacy & Data, Terms of Service, and Returns & Replacements. The returns policy must accurately communicate the manual, case-by-case 48-hour inspection workflow without creating automated refund entitlements or false response SLAs. Touch targets on policy links and tab selectors must satisfy the `>= 44px` minimum.
+
+## Public stock permission rule (MAP-017, applied 25 September 2026)
+
+`public.get_public_product_stock()` must remain callable through the explicit `anon` and `authenticated` grants used for catalog availability. PostgreSQL `PUBLIC` must not have implicit `EXECUTE` on this function. A future stock-function change must preserve this exact access boundary and verify anonymous catalog reads after deployment. Production migration `20260925111537` removed only the broad grant; it did not change stock values or function logic. The remaining MAP-017 guest-function and provider-default findings are separate.
