@@ -1,5 +1,28 @@
 # Database Backup and Restore Runbook
 
+## Prepared MAP-017 stock function ACL correction
+
+`supabase/migrations/20260925_map017_stock_public_execute.sql` is a separate,
+transactional correction for the extra PostgreSQL `PUBLIC` execute grant on
+`public.get_public_product_stock()`. It refuses to run unless that exact grant
+and direct `anon` and `authenticated` execute grants are present. It revokes
+only `PUBLIC` and checks the required public stock view remains readable.
+`supabase/rollbacks/20260925_map017_stock_public_execute_rollback.sql` restores
+the observed broad grant only when reversing this specific correction. Neither
+script changes function definitions, table data, role membership or provider
+default privileges. Do not put the rollback in the normal migration sequence.
+
+Before a production apply, refresh the live function ACL and migration ledger;
+rehearse both scripts on the current grant-preserving restore; verify the
+fresh database and Storage recovery point and the owner recovery path; and
+record a controlled authorization for this exact SQL. Stop if any reviewed ACL
+differs. After apply, run `supabase/map017_stock_public_grant_verification.sql`,
+verify anonymous and authenticated catalog reads on the exact host, and re-run
+the live schema audit. If those checks fail, use the named rollback in a
+controlled window, then confirm the original ACL and catalog behavior. The
+portable fixture result and remaining production gates are recorded in
+`docs/evidence/20260925-map017-stock-grant/README.md` and MAP-017.
+
 **State:** named production application-database and Storage object-byte backups,
 both isolated local restores, owner-only Google Drive upload, all eight
 independent retrieval checks for the August set, and whole-archive reassembly

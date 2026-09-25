@@ -1,0 +1,69 @@
+# MAP-017 public stock grant preparation, 25 September 2026
+
+## Request and observed starting point
+
+The owner asked to proceed with MAP-017's next engineering slice and document
+the work. The 24 September read-only production schema export reports an extra
+PostgreSQL `PUBLIC` execute grant on `public.get_public_product_stock()` while
+explicit `anon` and `authenticated` grants already exist. The stock projection
+must remain available to both callers. This slice prepared source and local
+rehearsal only; it did not connect to production or apply a provider change.
+
+## Changed artifacts and reason
+
+| Artifact | Change |
+| --- | --- |
+| `supabase/migrations/20260925_map017_stock_public_execute.sql` | Transactional preflight, narrow `PUBLIC` revoke and postflight; direct caller grants must already exist. |
+| `supabase/rollbacks/20260925_map017_stock_public_execute_rollback.sql` | Separate recovery that restores the observed broad grant only when reversing this correction. |
+| `supabase/tests/map017_stock_public_grant_rehearsal.sql` | Isolated ACL finding, caller and unrelated-role assertions, stock-view reads and rollback restoration. |
+| `scripts/rehearse-map017-portable.mjs` | Runs that SQL within the existing loopback-only PostgreSQL suite and checks two refusal cases. |
+| Operations rulebook, System Brain, active MAP, project map and database runbook | Record required behavior, prepared state, ownership, recovery and remaining gate. |
+
+The historical hash-bound MAP-017 migration and postflight were not edited.
+The new correction changes no function definition, data, table grant, role
+membership or provider default privilege. The rollback lives outside the
+ordinary migration directory so a normal forward migration scan cannot apply
+it as a new change.
+
+## Local evidence
+
+`node scripts/rehearse-map017-portable.mjs` first failed after the new test was
+introduced because the correction file did not yet exist. After the SQL was
+added, the isolated PostgreSQL 17.11 run exited 0. It recreated the observed
+`PUBLIC` grant on the phase-one fixture; applied the correction; verified the
+unrelated `supabase_admin` fixture role lost inherited execute; preserved direct
+`anon`, `authenticated` and `service_role` execute; read the stock view under
+anonymous and authenticated roles; ran the rollback; and verified the original
+grant. A second apply attempt refused the already-absent `PUBLIC` grant, and a
+fixture lacking explicit `authenticated` execute refused the correction. The
+runner then restored its hardened fixture state and continued to pass all 12
+existing authorization groups, function lockdown, encrypted backup and isolated
+restore. The portable server stopped after the run.
+
+The first restricted-sandbox run could not start the local PostgreSQL process.
+The loopback-only rerun under the approved local process permission produced the
+SQL result above. This was an environment startup limit, not a failed database
+assertion. After the final code edit, `npm run verify:development` exited 0,
+including the source security inventory, secret scan and import check.
+`npm run verify:map017-artifacts` exited 0 for the historical hash-bound
+phase-one artifacts and fabricated parser fixture; those checks do not prove
+this new live ACL correction. `git diff --check` reported no whitespace errors.
+`pg_ctl status` returned `no server running` after the portable rehearsal.
+
+## Remaining gate and recovery
+
+No production permission was changed. The 24 September export, not a fresh
+apply-time ACL, is the current starting evidence. MAP-017 still owns a fresh
+read-only live ACL export, grant-preserving current-schema rehearsal with the
+managed-role limits called out, a fresh verified database and Storage recovery
+point, controlled authorization for this exact correction, and exact-host
+anonymous/authenticated catalog reads after any apply. The separate six
+provider-owned `supabase_admin` default-privilege findings await Supabase's
+supported answer. Guest BFF, direct-RPC cutover, Auth and browser flags remain
+outside this narrow change.
+
+For local recovery, discard this feature branch or revert its source commit;
+there is no provider state to undo. For an authorized later production apply,
+the named rollback restores the previously observed `PUBLIC` execute grant and
+requires a post-rollback ACL and catalog check. Do not run it as an ordinary
+forward migration.

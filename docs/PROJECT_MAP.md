@@ -84,6 +84,13 @@ runner and consumes `supabase/tests/map017_function_lockdown_{setup,assertions}.
 It verifies actual SQL roles and repository function bodies in a disposable
 transaction. No browser/API route or production apply entrypoint is added.
 
+The later, narrow stock ACL correction is
+`supabase/migrations/20260925_map017_stock_public_execute.sql`, with recovery in
+`supabase/rollbacks/20260925_map017_stock_public_execute_rollback.sql`.
+`supabase/tests/map017_stock_public_grant_rehearsal.sql` runs through the same
+portable runner. It changes only function execute grants in a local fixture;
+production apply remains gated by MAP-017 and the database runbook.
+
 Operational readiness verification uses
 `scripts/rehearse-map023-last-unit-concurrency.mjs` and
 `supabase/tests/operational_readiness_{bootstrap,assertions}.sql` to execute
