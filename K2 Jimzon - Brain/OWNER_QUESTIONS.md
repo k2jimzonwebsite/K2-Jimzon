@@ -4,6 +4,8 @@ This file contains only actions and business decisions that require the owner.
 It is not an engineering backlog; implementation remains exclusively in
 `MASTER_ACTION_PLAN.md`.
 
+**25 September readiness audit:** The stock permission correction and its three-file backup package require no further owner step. Full operating acceptance remains open. The owner-only actions are physical stock/product/media approval, both receiving QR recipient checks and a real transfer with a separate account verifier, OWNER-003 wholesale policy, OWNER-006 retention/deletion policy, OWNER-007 paid-AI controls if that optional path is wanted, and any provider identity/recovery challenge that only the account holder can complete. Codex owns code, SQL preparation, backups, tests, deployment verification and the remaining MAP-017 technical follow-up. See `docs/evidence/20260925-production-readiness/README.md` for the cross-MAP evidence.
+
 ## 24 September manual receiving choice  -  owner supplied
 
 The owner supplied MariBank and GCash receiving QR screenshots and requested both as temporary buyer choices (IDEA-20260924-01). The choices and QR assets are now deployed under the 24 September scoped release; this does not attest that either QR scans to the intended account, that a test transfer arrived, or that a staff verifier is assigned. Before staff directs a customer to transfer real funds, the owner needs to scan each exact QR on another device, confirm its displayed recipient against the actual receiving account, and name the evidence submitter and separate account verifier for the test order. Record the real-transfer result against MAP-023/MAP-025.

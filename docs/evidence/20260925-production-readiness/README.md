@@ -1,0 +1,38 @@
+# Production readiness audit — 25 September 2026
+
+**Decision:** K2 has live Storefront and Admin sites, but the full owner/staff/customer operating release is **not accepted**. This is a read-only readiness audit, not a new roadmap or authorization to deploy, change provider settings, take payment, or apply the remaining migrations. `MASTER_ACTION_PLAN.md` remains the only active queue. This receipt separates observed live behavior, source preparation, provider state, and missing real-world acceptance.
+
+## Fresh checks (25 September, about 11:33 UTC)
+
+- Supabase project `pixplcjqivlfflickobf` reported `ACTIVE_HEALTHY`, PostgreSQL 17.6.1.155. Its migration ledger ends at `20260925111537 map017_stock_public_grant_revocation_20260925`; the prepared guest/account chain is absent. Independent read-only SQL reconfirmed owner `postgres`, `PUBLIC` execute false, and `anon`/`authenticated` execute true for `get_public_product_stock()`.
+- The post-stock full schema export/audit in `docs/evidence/20260925-map017-stock-apply/schema-audit-after.md` reports **12 critical, 0 high**: six transitional direct guest RPC grants and six provider-owned `supabase_admin` default-privilege groups. Supabase's separate security advisor currently reports seven `RLS enabled no policy` informational findings, seven anonymous and 39 authenticated executable `SECURITY DEFINER` warnings, and one leaked-password-protection warning. Advisor warnings overlap or require individual classification; they are not 54 additional proven vulnerabilities and must not be silently called closed.
+- The live `https://www.k2jimzon.com/catalog` rendered 22 products. Pringles showed 30 available and Barilla Spaghetti showed 120; the Rana listing showed **Stock check pending** and disabled purchase. This proves a public catalog read, not physical stock accuracy or checkout completion.
+- The live `https://admin.k2jimzon.com/` rendered the staff sign-in screen. No staff authentication, role-restricted operation, intake or save was exercised in this audit.
+- Vercel lists **two separate production projects**, `k2-jimzon` and `k2-jimzon-admin`. Both latest `target=production` deployments are `READY` for documentation commit `57604cdcf17362bb9601d61c4140f717bc421e53` on `main` (Storefront deployment `dpl_7tKbCHjK3hQPAL1nkPW4WQtJ2Z2a`; Admin `dpl_3qDvw6uNAKfdS41GXc2ShaWzeFd2`). The preceding source release is `f625381ccd25dba84a1e2279bc6b9a72f0eac742`; GitHub CI run [36027662677](https://github.com/k2jimzonwebsite/K2-Jimzon/actions/runs/36027662677) is now `completed/success`. The later documentation commit carries `[skip ci]`; its ready deployment does not constitute a second source release test.
+- The working checkout is the feature branch `chore/intake-docs-cleanup-20260925`; its newer prepared changes and these audit records are not implied to be on production `main`. A new source promotion would require its own release gate and deployment receipt.
+- Google Drive metadata readback confirms the MAP-017 encrypted database envelope, redacted manifest and restore receipt still exist in the same unshared owner-only `K2 Production Backups` folder. IDs and independent retrieval/hash evidence are in `docs/evidence/20260925-map017-stock-apply/README.md`. Application data was restored in isolation before the stock correction. Managed Vault, Storage retrieval, provider configuration and owner-held recovery capability are separate incomplete recovery checks.
+
+## Readiness by existing MAP item
+
+| Item | Verified now | Still required before full acceptance |
+| --- | --- | --- |
+| MAP-017 database permissions | Scoped stock grant corrected live; named public readers and catalog retained | Six direct guest RPC grants require signed BFF/preview continuity before cutover; six `supabase_admin` defaults await a supported provider answer and proof |
+| MAP-018 product and stock | Public catalog renders stock projections; prepared intake source has local checks | Staff reconcile physical count, labels, variant, expiry, price, media rights and publication on real products; prove a real protected intake |
+| MAP-019 accounts | Account/settings/notification source prepared locally | Production migrations and feature flags remain off; prove first/returning identity, privacy, recovery and second-device continuity after controlled activation |
+| MAP-020 API boundaries | Local signed route and rollback rehearsals recorded | Prove signed guest chat/order on preview, preserve existing conversations, then cut over grants and flags without outage; verify protected Admin writes |
+| MAP-021 browser/security | Prior source release gate and CI passed | Recheck exact current release candidate's headers, CSP, safe errors, dependency/security gate and measured phone performance when promoting the next code release |
+| MAP-022 recovery | Database/Storage snapshots restored locally; current stock database package offsite and read back | Retrieve Storage parts, rehearse managed configuration and owner recovery access, define backup schedule/alerts and timed whole-service recovery |
+| MAP-023 real commerce | Live catalog and earlier invalid-checkout rehearsal; QR choices are deployed | Owner verifies both QR recipients; counted stock, one real order/transfer, independent account review, packing, dispatch, exception and reconciliation evidence remain absent |
+| MAP-024 hosts/discovery | Separate live hosts and earlier DNS/sitemap checks; current catalog/Admin entry rendered | Exact-host search/callback checks, Search Console property/indexing, analytics/consent and approved product indexing remain open |
+| MAP-025 human acceptance | No full real buyer/staff journey has been recorded | Representative phone/desktop buyer and staff tasks, accessibility/recovery, exact release receipts and owner sign-off |
+| MAP-026 marketplaces | Public links are navigation only | Owner chooses launch scope; connectors need provider scopes, canonical stock/order/fee reconciliation and one-shop pilot if in scope |
+| MAP-027 Interactive Shop | Optional Store source and some responsive work deployed | Real device, reviewed product facts/media and clerk/fallback acceptance |
+| MAP-028 cross-surface audit | Source release CI is successful; stock receipt is durable | Track remaining findings to the owning items, correct stale receipts, verify release/human outcomes before closure |
+
+## Exact next ownership
+
+Codex can continue independent preparation and checks under MAP-017/019/020: signed guest preview continuity, current-schema rehearsal, provider support follow-up, and closure evidence. The owner alone must verify physical stock and publication facts, both receiving QR recipients, actual bank receipt with a separate verifier, and business policy choices recorded as OWNER-003/006/007. A GitHub identity challenge or owner-held recovery credential check also requires the owner to complete that specific provider step; Codex handles subsequent technical verification. None of these is a request to perform SQL, upload backup files, or debug code manually.
+
+## Scope limits and recovery
+
+This audit made no provider/database/feature-flag/deployment changes and no payment or order. The prior isolated rollback practice applies only to the stock-grant migration; do not use it to represent full guest/account cutover recovery. The scoped emergency SQL and encrypted backup IDs are in the MAP-017 stock receipt and database recovery runbook. Before the next live promotion, use the release runbook's complete gate and exact-host rollback checks on that candidate, then record real operating acceptance in MAP-025.
