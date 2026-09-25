@@ -59,8 +59,21 @@ them. The encrypted files are local ignored artifacts under
 folder `K2 Production Backups` (`1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo`). The
 Drive connector profile was `k2jimzonwebsite@gmail.com`. For every uploaded
 file, Drive metadata reported the intended parent, the exact local byte length,
-`shared: false`, and only that account as owner. This metadata check is not an
-independent download-and-hash of the remote bytes.
+`shared: false`, and only that account as owner. At 05:39 UTC, the newly
+uploaded database envelope was independently fetched as raw bytes through the
+Drive connector. A SHA-256 implementation checked against the known empty and
+`abc` test vectors hashed the returned 828,633 bytes to
+`6a323d697f234665122959a2c06220ad4c99ae49b706dff059d3c78019f58f62`,
+exactly matching the local encrypted envelope. The two large Storage transport
+parts and five redacted manifests/receipts were then independently downloaded
+through short-lived Drive file references into the ignored local directory
+`.tools/current-production-backups/remote-verify-20260925/`. All seven files
+matched their local sources in byte length and SHA-256. The repository's
+`verifyEncryptedBackupParts` checked the two downloaded parts against the
+downloaded manifest and reassembled the encrypted Storage envelope to SHA-256
+`db3adda45dfd67f1ae4e19d53df14eab637012b162109cb1beb6a905d9067341`.
+Thus all eight uploaded files passed independent retrieval and checksum checks.
+This does not include a live Supabase project restore or provider configuration.
 
 | Artifact | Evidence | Drive file ID |
 | --- | --- | --- |
@@ -126,11 +139,12 @@ Drive connector limit.
 
 ## Next action and recovery
 
-MAP-017 owns managed-role/provider review, owner recovery/access check, exact
-change authorization, controlled stock ACL apply, and live postflight. The
-separate six provider-owned defaults still need
-Supabase's supported answer. MAP-018 then owns its live preflight, coordinated
-intake migration and cleanup-boundary apply, live postflight, and a real staff phone
+MAP-017 owns managed-role/provider review, exact change authorization for this
+stock SQL, controlled stock ACL apply, and live postflight. OWNER-005 already
+records `Owner recovery access: Verified` from the 2 September attestation. The
+separate six provider-owned defaults still need Supabase's supported answer.
+MAP-018 then owns its live preflight, coordinated intake migration and
+cleanup-boundary apply, live postflight, and a real staff phone
 journey with physical label, photos, opening count, cost, and owner publication
 decision. Do not insert rows into `products`, batches, or Storage through the SQL
 Editor as a substitute for those workflows.
@@ -140,8 +154,10 @@ commit. No production change needs rollback from this check. To recover files,
 retrieve the owner-only Drive artifacts, verify each checksum and the parts
 manifest, reassemble the encrypted Storage envelope, then follow
 `docs/runbooks/DATABASE_BACKUP_AND_RESTORE_RUNBOOK.md` in an isolated target.
-The passphrase stays outside the repository and chat. Owner account recovery and
-an independent remote download/hash check are still separate gates.
+The passphrase stays outside the repository and chat. The owner recovery
+attestation and all eight offsite retrieval checks are recorded. Supabase
+provider settings, managed-role membership, Vault and live Storage re-upload
+remain outside these backup checks.
 
 The Chrome computer-use bridge timed out three times around 05:30 UTC. The last
 observed Admin state was the six-digit authenticator challenge, not a verified

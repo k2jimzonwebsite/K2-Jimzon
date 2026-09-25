@@ -266,8 +266,11 @@ only MAP-017 recovery-access gate.
 envelope and 36-object Storage envelope were created, locally restored, and
 uploaded as eight encrypted/redacted files to the owner-only Drive folder. The
 Drive metadata confirms exact lengths, folder parent, `shared: false`, and only
-the K2 owner account in permissions. Independent remote retrieval/hash remains
-open. The first isolated database restore excluded 10 managed entries and did
+the K2 owner account in permissions. All eight uploaded artifacts were fetched
+independently and matched local byte lengths and SHA-256 hashes. The two
+downloaded Storage parts reassembled to the encrypted source digest. The first
+isolated database restore excluded 10
+managed entries and did
 not replay grants. A second isolated restore of the same authenticated archive
 did replay archived ACLs after using existing non-login placeholders for six
 missing Supabase-managed role names. The exact stock correction and recovery
