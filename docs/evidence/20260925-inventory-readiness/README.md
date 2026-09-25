@@ -68,6 +68,32 @@ execute unchanged. The prepared correction file still hashes to
 `3A1E23629325D0620F0CF4BC7E5CF0F929FF3851DBD562CFDAE0933FC8C04BBC`.
 No production write SQL was applied.
 
+## Intake route audit after owner clarification
+
+At approximately 06:31 UTC the owner clarified the intended workflow: scan
+first, then choose manual AI copy/paste or automatic API assistance. Source at
+the deployed `f625381` release has two different intake implementations. The
+older `Add inventory` chooser's “Scan & Intake Now” button opens
+`ScanToAiModal`, which checks duplicates, prepares a ChatGPT prompt and links
+to `SmartPasteModal`; it has no stock-saving command. The chooser's manual
+button opens Smart Paste when the Admin BFF switch is off. Read-only production
+SQL confirms `authenticated` still has `products` INSERT, guarded by the
+`products_staff_insert` policy (`is_staff()`); this is permission metadata,
+not proof that a particular staff insert now succeeds.
+
+The newer `ProductIntakeSessionModal` starts a canonical intake session as
+soon as it opens, before its scan field can advance. With the production Admin
+BFF switch off, its direct path queries/inserts `product_intake_sessions`,
+which is absent in production. Its manual ChatGPT path and `AutomaticIntakePanel`
+share that session. Automatic API additionally refuses to run while the Admin
+BFF switch is off, and paid AI activation remains under OWNER-007. The
+25 September source release added a guided entry into this newer modal but
+did not apply MAP-018 SQL. These facts explain why the newer path cannot
+complete now; they do not establish which exact control the owner previously
+used or whether the older Smart Paste path has regressed. The Codex browser
+service still returns `User unavailable`, so no real-host interaction was
+observed in this audit.
+
 ## Fresh recovery point
 
 The existing `.env.local` credentials were used in process without printing
