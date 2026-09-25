@@ -4,6 +4,8 @@
 
 **IDEA-20260925-02 owner disposition, later 25 September:** the owner replied “Defer the stock correction.” The prepared grant change remains unapplied; MAP-017 retains the live finding. Do not infer authorization from earlier approvals, the rehearsal or the verified backup, and do not re-request this decision unless the owner reopens it.
 
+**IDEA-20260925-02 later reopening:** the owner replied “bro fix it,” reopening the scoped stock correction. Live and restored-schema checks passed, but automatic approval review blocked offsite upload of the fresh encrypted backup until the owner explicitly authorizes the named Drive destination. MAP-017 and OWNER-005 retain this recovery gate; production SQL remains unchanged.
+
 **IDEA-20260907-04 — accepted, merged into MAP-028 / MAP-021.** Owner requested calmer dashboard wording and optional help for complex widgets. The current Admin candidate adds contextual explanations for source, date and overlap rules while preserving visible errors and metric calculations. Simple Inbox, Pasabuy and Stock views keep their short visible labels. This is a UI aid, not new reporting truth.
 
 **IDEA-20260907-03 — accepted, merged into MAP-028 / MAP-023.** Owner approved task-first Learn / Guide me help, beginning with manual product intake. The current Admin candidate uses the existing procedure registry and the intake screen's step state. Guidance can focus an available control but cannot submit, approve or mark work complete. Later operational walkthroughs remain in the owning MAP items.

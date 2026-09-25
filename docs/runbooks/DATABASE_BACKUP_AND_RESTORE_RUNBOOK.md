@@ -239,6 +239,8 @@ only MAP-017 recovery-access gate.
 
 ## Fresh current-schema backup, 24 September
 
+**25 September scoped stock-grant attempt:** A new encrypted application-database envelope `current-pixplcjqivlfflickobf-2026-09-25T100842718Z-dde4432c4355` is stored locally at ignored `.tools/map017-stock-liveapply-20260925.k2backup` (825,060 bytes; SHA-256 `DDE4432C4355A6462D52A8FBDC875A71EB7831298270EEB5CD9C21C5DBA99F9B`). Its adjacent redacted restore receipt confirms 51 public relations, ledger `20260921033348`, and ten excluded managed Vault entries. The exact stock migration and emergency rollback passed against the disposable restored application schema with 21 stock rows before/after; that database was removed. Automatic approval review rejected uploading this sensitive envelope to the existing unshared K2 Drive backup folder because the destination lacked explicit trusted user authorization. Do not use another upload route to bypass that rejection. Wait for the owner's explicit destination approval, verify the resulting Drive file metadata and independent retrieval/hash, then recheck the live schema before any scoped production apply. No live SQL changed.
+
 Use `npm run backup:current-production` for a new encrypted production application
 database snapshot before the MAP-017/019/020 cutover. It reads the existing
 non-committed `.env.local` values in process, validates the production project,
