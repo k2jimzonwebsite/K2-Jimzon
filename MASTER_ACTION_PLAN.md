@@ -10,6 +10,8 @@ An item is ready when it has an idea ID, a clear outcome, known dependencies and
 
 ## Current iteration
 
+**Owner launch scope, 25 September (IDEA-20260925-04):** Full operation of the separate customer Storefront and staff Admin is the acceptance target. Existing marketplace-channel stock numbers are a proposed input for Codex-assisted reconciliation; they are not automatically physical on-hand or an approved live connector. Sister/cousin staff will do QR and real-world checks. MAP-018/023/025/026 retain the required source, count, role and end-to-end evidence.
+
 1. Reconcile MAP-017's 12 remaining critical permission findings and the MAP-019/020 signed guest and account migrations with the current production schema. Rehearse apply and rollback. Do not repeat the applied MAP-017 corrections.
 2. Prepare real product and stock acceptance under MAP-018/023. The owner must verify physical counts, product facts, media rights and receiving accounts before a real payment cycle can pass.
 3. Check raw and hydrated search signals on the exact Storefront host under MAP-024. Run the MAP-025 customer and staff phone journeys after account and order paths are active.
@@ -56,6 +58,8 @@ Independent local fixes may continue while an owner or provider gate is open. Th
 **Block:** the remaining guest cutover needs MAP-019/020 and signed preview continuity. Supabase support has logged a request from the K2 account for the supported correction of provider-owned defaults, with project support access off; its answer is pending. The 25 September encrypted application-database backup and both companions were uploaded and independently verified for the scoped stock apply, but a fresh backup/preflight is required before any later guest cutover. An ordered MAP-019/020 rollback-only SQL chain passed on the earlier current schema both without and with archived ACLs; named direct-RPC denials and signed guest grants passed, then the baseline returned. The local grant-preserving restore needed non-login placeholders for missing managed roles and still excluded Vault, so provider role behavior is not fully reproduced. Storage-part retrieval, provider recovery, signed preview continuity and owner recovery-access checks remain open. Evidence: `docs/evidence/20260913-audit-remediation/`, `docs/evidence/20260924-account-migration-rehearsal/`, `docs/evidence/20260925-map017-stock-apply/` and the database recovery runbook.
 
 ### MAP-018: Verify products, intake and inventory
+
+**25 September owner stock-transfer request:** Codex will handle the technical import/reconciliation after receiving the real channel export. No matching source CSV or sheet exists in the repository; the marketplace CSVs found here are synthetic test fixtures. Compare SKU/barcode/shop and existing live lots before proposing any opening balance, so current stock is not added twice. Product CSV import creates/updates product facts only; a verified physical count and the approved receiving/opening-balance path establish canonical stock. Staff/owner decide the true quantities and approve discrepancies; Codex owns the mechanics. IDEA-20260925-04; no production stock write in this step.
 
 **25 September public catalog check:** The exact live catalog rendered 22 products. One Rana listing showed `Stock check pending` with purchase disabled while Pringles showed 30 and Barilla Spaghetti 120 available. Treat all displayed quantities as database projections until physical counts and publication facts are reviewed. Evidence: `docs/evidence/20260925-production-readiness/README.md`.
 
@@ -137,6 +141,8 @@ Independent local fixes may continue while an owner or provider gate is open. Th
 
 ### MAP-025: Run final human and release acceptance
 
+**Owner scope and staff, 25 September:** Acceptance requires both `www.k2jimzon.com` for customers and `admin.k2jimzon.com` for staff to work end to end. The owner's sister and cousins will take part in checking the receiving QRs and real stock/payment workflow; exact authorized staff roles and the two distinct payment-review actors still need to be recorded in the test receipt. A green catalog or Admin sign-in page alone is insufficient. IDEA-20260925-04.
+
 **25 September full-readiness audit (IDEA-20260925-03):** `docs/evidence/20260925-production-readiness/README.md` records the fresh Supabase ACL/migration and advisor reads, the rendered Storefront/Admin entry states, separate Vercel production deployments, now-successful source CI, backup metadata, and each MAP item's evidence gap. Overall full production acceptance remains open; this receipt makes no provider change and does not substitute for the real buyer/staff cycle.
 
 **24 September rehearsal limit:** The live browser path reached checkout on mobile and desktop with no horizontal overflow, but did not create an order or verify a delivery. The native desktop browser controller was unavailable; an isolated Chromium browser visited the exact production host. See `docs/evidence/20260924-live-buyer-journey/README.md`. Keep the real buyer, staff, payment and dispatch cycle open.
@@ -150,6 +156,8 @@ Independent local fixes may continue while an owner or provider gate is open. Th
 **Block:** MAP-017 through MAP-024, real stock and transfer, staff enrollment and open owner decisions.
 
 ### MAP-026: Connect K2 shop accounts without splitting stock truth
+
+**25 September channel-stock clarification:** The owner has existing channel stock figures and wants Codex to move the verified values into the operating model. The proposed source has not yet been supplied or matched to canonical SKU/lot/shop records. Fresh read-only production SQL found 30 product rows, 21 batch rows and 29 balance rows; `channel_shops`, `channel_shop_allocations` and `inventory_transfer_requests` are absent. The multi-shop allocation/transfer migration and authenticated behavior remain locally prepared, not production applied. Channel listing quantities must not be summed as new physical stock; reconcile one master physical count, then decide approved per-shop offer amounts within that stock. IDEA-20260925-04.
 
 **Status:** Queued, with some allocation and custody work prepared. K2 operates multiple accounts on Shopee, TikTok Shop and Lazada; the count must not be hardcoded.
 
