@@ -692,7 +692,8 @@ export default function Sheet({ canManageProducts = false }) {
         />
       )}
 
-      {showAiScanner && <ScanToAiModal onClose={() => setShowAiScanner(false)} />}
+      {showAiScanner && <ScanToAiModal onClose={() => setShowAiScanner(false)}
+        onOpenSmartPaste={() => { setShowAiScanner(false); setShowSmartPaste(true) }} />}
       {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} />}
       {showCsvImport && <BulkCsvImportModal onClose={() => setShowCsvImport(false)} />}
       

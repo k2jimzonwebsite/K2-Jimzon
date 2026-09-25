@@ -1139,6 +1139,18 @@ Do not wait for the audit before capturing it.
 **Owner decision potentially required:** None. Scope chosen by owner: same-browser resume now, reference codes later.
 **Status:** captured, audited, merged into MAP-027, implemented locally (uncommitted). Thread id now persists in `localStorage` with one-time `sessionStorage` fallback/migration in `StoreChatPanel.jsx` and `StorefrontChatButton.jsx`. Evidence: map027-store-polish + turnstile-wiring 79/79, prebuild clean, `build:storefront` JS 150.16/150.50 kB gzip. Deploy and real-browser resume acceptance still pending.
 
+### IDEA-20260925-01  -  Single-logic intake cleanup (docs first, code later)
+
+**Captured:** 2026-09-25
+**Raised by:** Owner (multiple intake doors confuse staff; keep one phone-scan logic; archive, do not delete)
+**Problem observed:** `InventoryGrid.jsx:523-534` exposes Add inventory, Scan box, Smart paste and Add product; `Sheet.jsx:342-370` exposes Phone Intake, Scan Box, Smart Paste AI and AI Spec Enricher. Wording across `docs/specs/` still describes Scan-to-AI vs Smart Paste as competing paths. `docs/evidence/` root holds 18 flat August audit papers that duplicate dated subfolder evidence. The legacy non-secure Add product path builds a browser `MANUAL-xxxx` SKU (`InventoryGrid.jsx:534,560`), contrary to the server-assigned SKU rule.
+**Desired outcome:** One canonical intake (phone scan `ProductIntakeSessionModal.jsx`, server-assigned SKU) in docs and UI wording. Read-only audit of dead-code candidates with import evidence. Superseded docs moved to a dated in-repo archive with a restore note, never deleted. Source reroute (Inventory/Sheet side doors into phone-first flow, removal of the browser SKU path) as a separate code slice with focused contracts.
+**Evidence or example:** Import grep 2026-09-25: `ScanToAiModal.jsx`/`SmartPasteModal.jsx` are still imported by both Inventory and Sheet and pinned by `tests/spotlight-tour-contract.spec.js:81-82`, so they are not dead files. `Sheet.jsx:695` renders `ScanToAiModal` without `onOpenSmartPaste`, so its JSON handoff is a dead end there. `docs/evidence/MAP_017_EXHAUSTIVE_AUTHORIZATION_AUDIT_2026-08-22.md` is pinned by `tests/schema-truth-tool.spec.js:388`; `docs/evidence/20260909-map017-followup.md` is cited by the Brain, owner record and runbook; both stay in place.
+**Known dependency:** MAP-017 gates database activation; MAP-018 owns real intake acceptance. Docs-only slice needs no build or provider change.
+**Possible overlap with current behavior/MAP item:** Merges into MAP-028 docs/audit scope; code reroute slice stays behind MAP-018/MAP-028 I-002 acceptance.
+**Owner decision potentially required:** Confirm the single entry wording per surface before the code reroute slice.
+**Status:** captured, audited, accepted. Branch `chore/intake-docs-cleanup-20260925`. Slice 1 done: 18 papers archived, spec note added. Slice 2 done: `docs/README.md` rewritten as the full compilation. Slice 3 done: one-line Sheet scanner handoff fix (`Sheet.jsx`, same `onOpenSmartPaste` Inventory has); 39/39 focused contracts plus `verify:development` green. Deliberately kept with reasons in `docs/evidence/20260925-intake-cleanup/README.md`: scanner/paste/chooser/tour files (used + test-pinned), 2 pinned evidence papers, legacy browser-SKU fallback (live path while Admin BFF is off; removal waits on MAP-018/020). No provider, database, or deployment change.
+
 ### New idea template
 
 ```markdown

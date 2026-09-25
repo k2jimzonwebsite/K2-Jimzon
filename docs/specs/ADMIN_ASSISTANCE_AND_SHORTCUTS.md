@@ -80,6 +80,13 @@ Scan-to-AI result screen and Smart Paste image handoff.
 
 ### Current implementation boundary
 
+> 2026-09-25 (IDEA-20260925-01): the single canonical intake is the phone-scan
+> `ProductIntakeSessionModal.jsx` with server-assigned SKU. Scan-to-AI output,
+> Smart Paste review, and automatic/manual content are steps inside that flow,
+> not competing entries. The paragraphs below describe the older multi-door
+> state and are kept for audit traceability; do not add new doors. Activation
+> and staff acceptance remain MAP-018; the source reroute is a later code slice.
+
 This is a useful research foundation, not yet the approved end-to-end SKU intake:
 
 - Scan to AI and Smart Paste are separate modals and do not preserve one intake
