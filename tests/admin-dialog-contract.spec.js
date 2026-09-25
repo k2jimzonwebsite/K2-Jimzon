@@ -27,8 +27,8 @@ test('every Admin modal uses the shared dialog primitive', async () => {
 })
 
 test('the obsolete modal shell cannot become a competing primitive', async () => {
-  const adminKit = await readFile(new URL('../src/components/ui/adminKit.jsx', import.meta.url), 'utf8')
-  expect(adminKit).not.toContain('ModalShell')
+  const activeUi = await readFile(new URL('../src/views/admin/AdminWorkspaceUi.jsx', import.meta.url), 'utf8')
+  expect(activeUi).not.toContain('ModalShell')
 })
 
 test('the shared dialog owns the complete keyboard and focus lifecycle', async () => {

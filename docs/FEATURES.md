@@ -37,7 +37,7 @@ This document inventories all major functional features across the K2 Jimzon pla
 | **FEFO Inventory Grid** | Batch-aware inventory table with shelf-life badges, stock filters, and custodian allocation. | `InventoryGrid.jsx` | `STABLE` |
 | **Sheet Mode Editor** | High-density keyboard-navigable tabular inventory and pricing editor. | `Sheet.jsx` | `STABLE` |
 | **Phone-First Product Intake** | Mobile-first camera evidence capture (front/back/barcode), AI prompt assistant, server SKU gate. | `ProductIntakeSessionModal` | `ACTIVE DEVELOPMENT` (MAP-018) |
-| **Milan Packing Scanner** | Barcode scanning wizard for assembling physical cargo boxes in Italy. | `MilanPackingScannerModal` | `STABLE` |
+| **Milan Packing Scanner** | Preserved barcode wizard for physical cargo boxes; no active runtime importer was found in the 25 September reachability audit. | `MilanPackingScannerModal` | `PREPARED / UNMOUNTED` (MAP-021 review) |
 | **Manila Receiving Scanner** | Receiving verification and discrepancy reconciliation for landed cargo flights. | `DiscrepancyReconciliation` | `STABLE` |
 | **Consignment Manager** | Flight manifest tracking, box weight/dimensions, line item allocation. | `ConsignmentManager.jsx` | `STABLE` |
 | **Universal Inbox** | Multi-channel messaging hub for responding to guest inquiries, Pasabuy chats, and orders. | `Inbox.jsx` | `STABLE` |

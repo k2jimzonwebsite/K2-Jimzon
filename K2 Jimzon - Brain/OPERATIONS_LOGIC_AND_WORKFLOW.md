@@ -543,6 +543,12 @@ live | unlisted -> discontinued
 
 The default new-product workflow must work on a phone and remain resumable when
 staff switch to ChatGPT, the camera, or another app.
+Every Inventory or Sheet new-product launch starts at identity scan or typed-code
+fallback. Staff choose manual ChatGPT handoff or an owner-enabled automatic API
+only after identity and package evidence are checked; that content choice is
+never a choice between stock creation and product creation. An exact existing
+SKU opens its product for separate lot/custody review. A scan alone does not
+create stock, a Draft, or a published listing.
 
 ```mermaid
 flowchart TD
