@@ -52,6 +52,18 @@ this new live ACL correction. `git diff --check` reported no whitespace errors.
 
 ## Remaining gate and recovery
 
+Draft PR [#13](https://github.com/k2jimzonwebsite/K2-Jimzon/pull/13) points at
+feature commit `88ae0ad37ebb1ffff0c588b05a8fe7fe09fa0eb4`. Its initial
+GitHub CI run `36094229418` was still in progress at inspection time. Both
+Vercel Preview deployments failed at config compilation, before an app build:
+the Storefront and Admin logs each report
+`MAP024_VERCEL_CONFIG_REFUSAL: K2_DEPLOYMENT_TARGET is required`. The exact
+reviewed project mapping in `vercel.ts` remains intact; the Preview-scoped
+target variable was absent. Vercel CLI log inspection was unavailable because
+this workstation had no CLI session; the installed Vercel connector supplied
+the two build logs. MAP-024 and the deployment runbook own the provider fix and
+subsequent Preview verification. The Production deployments were not changed.
+
 No production permission was changed. The 24 September export, not a fresh
 apply-time ACL, is the current starting evidence. MAP-017 still owns a fresh
 read-only live ACL export, grant-preserving current-schema rehearsal with the

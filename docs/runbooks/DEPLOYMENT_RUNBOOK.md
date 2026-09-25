@@ -331,6 +331,14 @@ browser `VITE_*_BFF_ENABLED` switch only after server denial/allowance tests pas
 
 ### Repository-owned config selector — prepared, not deployed
 
+**25 September Preview check:** Draft PR #13 reached both Vercel projects, but
+each Preview deployment failed while compiling `vercel.ts` because
+`K2_DEPLOYMENT_TARGET` was absent. The selector correctly refused to guess a
+target. Before relying on Preview for a release, verify each exact Vercel
+project ID and set its nonsecret Preview-scoped target to `storefront` or `admin`
+respectively; then obtain successful separate exact-commit preview receipts.
+This finding changed no Production variable or deployment. MAP-024 owns it.
+
 The pure selector at
 `scripts/map024-evidence/select-vercel-deployment-config.mjs` checks an explicit
 `K2_DEPLOYMENT_TARGET` against the current `VERCEL_PROJECT_ID` and a reviewed
