@@ -1163,7 +1163,20 @@ Do not wait for the audit before capturing it.
 **Owner decision potentially required:** Confirm the single entry wording per surface before the code reroute slice.
 **Status:** captured, audited, accepted. Branch `chore/intake-docs-cleanup-20260925`. Slice 1 done: 18 papers archived, spec note added. Slice 2 done: `docs/README.md` rewritten as the full compilation. Slice 3 done: one-line Sheet scanner handoff fix (`Sheet.jsx`, same `onOpenSmartPaste` Inventory has); 39/39 focused contracts plus `verify:development` green. Slice 4 done (MAP-017 next slice, prepared/unapplied): scoped `get_public_product_stock()` PUBLIC-revoke migration + emergency rollback, isolated rehearsal green (revoke, replay, read-only check, rollback), `tests/map017-stock-grant-contract.spec.js` 4/4 green and registered in `test:contracts`, MAP-017 updated, `verify:development` green again. Deliberately kept with reasons in `docs/evidence/20260925-intake-cleanup/README.md`: scanner/paste/chooser/tour files (used + test-pinned), 2 pinned evidence papers, legacy browser-SKU fallback (live path while Admin BFF is off; removal waits on MAP-018/020). No provider, database, or deployment change.
 
+### IDEA-20260925-05  -  Verify complete customer ordering before production acceptance
+
+**Captured:** 2026-09-25
+**Raised by:** Owner (asks if the full user-ordering logic works before full production readiness)
+**Problem observed:** A reachable checkout and local simulations had not established a real buyer-to-staff-to-payment-to-dispatch cycle.
+**Desired outcome:** A durable, plain-language audit of each ordering boundary and exact outstanding acceptance work.
+**Evidence or example:** `docs/evidence/20260925-ordering-flow-audit/README.md` records the live cart/checkout, read-only database state, focused test results and gaps.
+**Known dependency:** MAP-017/019/020 signed guest cutover, MAP-018 counted stock, MAP-023 payment/fulfillment, MAP-025 human acceptance.
+**Possible overlap with current behavior/MAP item:** Accepted and merged into MAP-023 and MAP-025; no separate queue.
+**Owner decision potentially required:** Only physical stock and receiving QR confirmation plus real payment verification by distinct authorized people for the later live acceptance. This audit makes no such transaction.
+**Status:** Audit complete; full order-to-fulfillment acceptance open in MAP-023/025.
+
 ### New idea template
+
 
 ```markdown
 ### <IDEA-YYYYMMDD-NN>  -  Short name

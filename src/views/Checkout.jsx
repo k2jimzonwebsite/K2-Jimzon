@@ -442,7 +442,7 @@ export default function Checkout() {
               <fieldset className="block pt-2">
                 <legend className="text-sm font-semibold text-navy">Payment preference</legend>
                 <p className="mt-0.5 text-xs text-navy-soft">
-                  Choose how you want to pay when your package arrives or before dispatch.
+                  Select a preferred method. K2 staff will confirm the order and tell you when to pay.
                 </p>
                 <div className="mt-2.5 grid gap-3 sm:grid-cols-2">
                   {codAvailable && (<label
