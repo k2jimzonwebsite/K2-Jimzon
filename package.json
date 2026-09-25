@@ -126,7 +126,7 @@
     "react-dom": "^19.1.0",
     "react-helmet-async": "^3.0.0",
     "sharp": "^0.35.4",
-    "three": "^0.185.1"
+    "three": "^0.186.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",
