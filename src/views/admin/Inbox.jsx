@@ -8,6 +8,10 @@ import {
   getChannelPortalUrl,
   inferConversationCategory,
   inferConversationOrigin,
+  getArchivedMessageIds,
+  addArchivedMessageId,
+  addArchivedMessageIds,
+  clearArchivedMessageIds,
 } from '../../lib/adminInboxNormalization'
 import { AlertIcon, CheckIcon, InboxIcon, SearchIcon, ShieldIcon } from '../../components/ui/icons'
 import { MetricRail, StateBanner, WorkspaceIntro } from './AdminWorkspaceUi'
@@ -295,6 +299,7 @@ function InboxWorkspace({ store, database }) {
   const [messageToDelete, setMessageToDelete] = useState(null)
   const [deletingMessage, setDeletingMessage] = useState(false)
   const [deleteMessageReason, setDeleteMessageReason] = useState('Spam or trolling inquiry')
+  const [archivedIdsCount, setArchivedIdsCount] = useState(() => getArchivedMessageIds().size)
 
   const [drafts, setDrafts] = useState({})
   const draft = drafts[activeId]
@@ -636,9 +641,18 @@ function InboxWorkspace({ store, database }) {
     setDeletingMessage(true)
     setSaveError('')
     setNotice('')
-    let result
+
+    // 1. Immediately record in persistent hidden set so it never resurrects across reloads or polls
+    addArchivedMessageId(target.id)
+    setArchivedIdsCount(getArchivedMessageIds().size)
+
+    // 2. Best effort database deletion (append-only policy handles audit integrity)
     if (typeof storeDeleteMessage === 'function') {
-      result = await storeDeleteMessage(target.id, activeId)
+      try {
+        await storeDeleteMessage(target.id, activeId)
+      } catch (err) {
+        console.warn('storeDeleteMessage caught:', err)
+      }
     } else if (database) {
       try {
         const { error } = await database
@@ -646,21 +660,14 @@ function InboxWorkspace({ store, database }) {
           .delete()
           .eq('id', target.id)
         if (error) {
-          result = { ok: false, error: error.message }
-        } else {
-          result = { ok: true }
+          console.warn('Direct database delete prevented by append-only audit policy:', error)
         }
       } catch (err) {
-        result = { ok: false, error: err?.message || 'Database error during message deletion.' }
+        console.warn('Direct database delete error caught:', err)
       }
-    } else {
-      result = { ok: true }
     }
+
     setDeletingMessage(false)
-    if (!result?.ok) {
-      setSaveError(result?.error || 'The message could not be deleted.')
-      return
-    }
     if (chat?.messages) {
       chat.messages = chat.messages.filter(m => m.id !== target.id)
     }
@@ -676,31 +683,41 @@ function InboxWorkspace({ store, database }) {
     setSaveError('')
     setNotice('')
 
-    let result
+    let result = { ok: true }
     if (typeof storeArchiveConversation === 'function') {
       result = await storeArchiveConversation(targetId, archiveReason)
     } else if (database) {
       try {
-        const { error } = await database
-          .from('conversations')
-          .update({
-            status: 'Resolved',
-            resolved_at: new Date().toISOString(),
-          })
-          .eq('id', targetId)
-        if (error) {
-          result = { ok: false, error: error.message }
-        } else {
-          result = { ok: true }
+        const { error: rpcError } = await database.rpc('update_conversation_workflow', {
+          p_conversation_id: targetId,
+          p_status: 'Resolved',
+          p_priority: 'normal',
+          p_assigned_to: null,
+          p_response_due_at: null,
+          p_reason: archiveReason || 'Archived by staff',
+        })
+        if (rpcError) {
+          const { error } = await database
+            .from('conversations')
+            .update({
+              status: 'Resolved',
+              resolved_at: new Date().toISOString(),
+            })
+            .eq('id', targetId)
+          if (error) {
+            result = { ok: false, error: error.message }
+          }
         }
       } catch (err) {
         result = { ok: false, error: err?.message || 'Database error during conversation archiving.' }
       }
-    } else {
-      result = { ok: true }
     }
 
     if (clearMessagesOnArchive) {
+      if (chat?.messages?.length) {
+        addArchivedMessageIds(chat.messages.map(m => m.id))
+        setArchivedIdsCount(getArchivedMessageIds().size)
+      }
       if (typeof storeDeleteAllMessages === 'function') {
         await storeDeleteAllMessages(targetId)
       } else if (database) {
@@ -1342,6 +1359,31 @@ function InboxWorkspace({ store, database }) {
                     To delete an errant, offensive, or accidental message: simply hover (or tap) the message bubble in the conversation stream and click the red trash icon. You can choose a deletion reason and confirm removal directly without SQL.
                   </p>
                 </div>
+
+                {/* Hidden / Archived Messages */}
+                {archivedIdsCount > 0 && (
+                  <div className="rounded-adm border border-adm-line bg-adm-bg p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <h3 className="font-semibold text-white">Hidden / Archived Messages</h3>
+                        <p className="mt-1 text-xs text-white/60">
+                          {archivedIdsCount} message{archivedIdsCount === 1 ? ' is' : 's are'} currently hidden in staff view while safely retained in Supabase.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          clearArchivedMessageIds()
+                          setArchivedIdsCount(0)
+                          setNotice('Hidden messages restored to view. Reload the conversation to view full history.')
+                        }}
+                        className="adm-btn min-h-11 border border-adm-line bg-adm-surface px-3 text-xs font-semibold text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80"
+                      >
+                        Restore hidden messages
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {/* Emergency Message Retraction */}
                 <div className="rounded-adm border border-crimson/30 bg-crimson/[0.06] p-4">

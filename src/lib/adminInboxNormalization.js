@@ -5,6 +5,49 @@
  * Shopee, etc.) and purpose categorization (Wholesale, Pasabuy, Order & Delivery, Product & Shelf, General).
  */
 
+const HIDDEN_MESSAGES_KEY = 'k2_admin_hidden_messages'
+
+export function getArchivedMessageIds() {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') return new Set()
+  try {
+    const raw = localStorage.getItem(HIDDEN_MESSAGES_KEY)
+    return new Set(raw ? JSON.parse(raw) : [])
+  } catch {
+    return new Set()
+  }
+}
+
+export function addArchivedMessageId(messageId) {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined' || !messageId) return
+  try {
+    const set = getArchivedMessageIds()
+    set.add(messageId)
+    localStorage.setItem(HIDDEN_MESSAGES_KEY, JSON.stringify([...set]))
+  } catch {
+    // ignore
+  }
+}
+
+export function addArchivedMessageIds(messageIds = []) {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined' || !messageIds?.length) return
+  try {
+    const set = getArchivedMessageIds()
+    messageIds.forEach((id) => id && set.add(id))
+    localStorage.setItem(HIDDEN_MESSAGES_KEY, JSON.stringify([...set]))
+  } catch {
+    // ignore
+  }
+}
+
+export function clearArchivedMessageIds() {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') return
+  try {
+    localStorage.removeItem(HIDDEN_MESSAGES_KEY)
+  } catch {
+    // ignore
+  }
+}
+
 export const INBOX_ORIGINS = {
   all: { id: 'all', label: 'All channels', badge: 'All' },
   website: { id: 'website', label: 'Website Storefront', badge: 'Storefront', color: '#2563EB' },
@@ -206,6 +249,11 @@ export function normalizeAdminConversation(conversation) {
   const unreadCount = normalizeUnreadCount(conversation.unreadCount ?? conversation.unread_count)
   const origin = inferConversationOrigin(conversation)
   const category = inferConversationCategory(conversation)
+  const archivedMsgIds = getArchivedMessageIds()
+  const rawMessages = conversation.messages || []
+  const visibleMessages = archivedMsgIds.size > 0
+    ? rawMessages.filter((m) => !archivedMsgIds.has(m.id))
+    : rawMessages
 
   return {
     id: conversation.id,
@@ -233,7 +281,7 @@ export function normalizeAdminConversation(conversation) {
     time: (conversation.lastMessageAt ?? conversation.last_message_at)
       ? new Date(conversation.lastMessageAt ?? conversation.last_message_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
       : 'No activity',
-    messages: (conversation.messages || []).map((message) => ({
+    messages: visibleMessages.map((message) => ({
       id: message.id,
       sender: (message.senderType ?? message.sender_type) === 'Customer' ? 'customer' : (message.senderType ?? message.sender_type) === 'AI' ? 'ai' : 'agent',
       senderType: message.senderType ?? message.sender_type,

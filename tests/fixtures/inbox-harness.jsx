@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { InboxView } from '../../src/views/admin/Inbox'
 import { STALE_QUEUE_NOTICE } from '../../src/context/adminInboxPolling'
 import { UNCERTAIN_COMMAND_NOTICE } from '../../src/services/adminBffService'
+import { clearArchivedMessageIds } from '../../src/lib/adminInboxNormalization'
 import '../../src/index.css'
 
 const now = Date.now()
@@ -88,6 +89,7 @@ const INITIAL_CONVERSATIONS = [
 ]
 
 function Harness() {
+  useState(() => { clearArchivedMessageIds() })
   const [conversations, setConversations] = useState(INITIAL_CONVERSATIONS)
   const [actorId, setActorId] = useState('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')
   const [historyReleased, setHistoryReleased] = useState(false)

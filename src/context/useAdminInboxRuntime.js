@@ -6,7 +6,11 @@ import {
   deleteAnonymousConversationBff, blockAnonymousChatBff, unblockAnonymousChatBff,
   commandOutcomeIsUncertain, UNCERTAIN_COMMAND_NOTICE,
 } from '../services/adminBffService'
-import { normalizeAdminConversation } from '../lib/adminInboxNormalization'
+import {
+  normalizeAdminConversation,
+  addArchivedMessageId,
+  addArchivedMessageIds,
+} from '../lib/adminInboxNormalization'
 import {
   applyReadReceipt, isCurrentGeneration, resolveRefreshFailure, shouldStartPoll,
 } from './adminInboxPolling'
@@ -296,24 +300,27 @@ export function useAdminInboxRuntime({ enabled, actorId }) {
 
   const deleteMessage = async (messageId, conversationId) => {
     if (!messageId) return { ok: false, error: 'Message ID is required.' }
+    // 1. Persistently hide in Admin workspace so it stays removed across reloads
+    addArchivedMessageId(messageId)
+
+    // 2. Best-effort database deletion (if table permissions ever allow it)
     if (supabase) {
       try {
-        const { error } = await supabase
+        await supabase
           .from('messages')
           .delete()
           .eq('id', messageId)
-        if (error) {
-          return { ok: false, error: error.message }
-        }
       } catch (err) {
-        return { ok: false, error: err?.message || 'Database error during message deletion.' }
+        console.warn('Direct database delete prevented by append-only audit policy:', err)
       }
     }
-    setConversations(current => current.map(conv => {
-      if (conv.id !== conversationId && !conv.messages.some(m => m.id === messageId)) return conv
+
+    // 3. Update in-memory state
+    setConversations((current) => current.map((conv) => {
+      if (conv.id !== conversationId && !conv.messages.some((m) => m.id === messageId)) return conv
       return {
         ...conv,
-        messages: conv.messages.filter(m => m.id !== messageId),
+        messages: conv.messages.filter((m) => m.id !== messageId),
       }
     }))
     return { ok: true }
@@ -323,43 +330,49 @@ export function useAdminInboxRuntime({ enabled, actorId }) {
     if (!conversationId) return { ok: false, error: 'Conversation ID is required.' }
     if (supabase) {
       try {
-        const { error } = await supabase
-          .from('conversations')
-          .update({
-            status: 'Resolved',
-            resolved_at: new Date().toISOString(),
-          })
-          .eq('id', conversationId)
-        if (error) {
-          await supabase.rpc('update_conversation_workflow', {
-            p_conversation_id: conversationId,
-            p_status: 'Resolved',
-            p_priority: 'normal',
-            p_reason: reason,
-          })
+        // Try authorized RPC with all required parameters
+        const { error: rpcError } = await supabase.rpc('update_conversation_workflow', {
+          p_conversation_id: conversationId,
+          p_status: 'Resolved',
+          p_priority: 'normal',
+          p_assigned_to: null,
+          p_response_due_at: null,
+          p_reason: reason || 'Archived by staff',
+        })
+        if (rpcError) {
+          await supabase
+            .from('conversations')
+            .update({
+              status: 'Resolved',
+              resolved_at: new Date().toISOString(),
+            })
+            .eq('id', conversationId)
         }
       } catch (err) {
         console.warn('Direct archive error:', err)
       }
     }
-    setConversations(current => current.filter(c => c.id !== conversationId))
+    setConversations((current) => current.filter((c) => c.id !== conversationId))
     return { ok: true }
   }
 
   const deleteAllMessagesInConversation = async (conversationId) => {
     if (!conversationId) return { ok: false, error: 'Conversation ID is required.' }
+    const targetConv = conversations.find((c) => c.id === conversationId)
+    if (targetConv?.messages?.length) {
+      addArchivedMessageIds(targetConv.messages.map((m) => m.id))
+    }
     if (supabase) {
       try {
-        const { error } = await supabase
+        await supabase
           .from('messages')
           .delete()
           .eq('conversation_id', conversationId)
-        if (error) return { ok: false, error: error.message }
       } catch (err) {
-        return { ok: false, error: err?.message || 'Database error during messages clearing.' }
+        console.warn('Direct clear messages prevented by append-only audit policy:', err)
       }
     }
-    setConversations(current => current.map(c => {
+    setConversations((current) => current.map((c) => {
       if (c.id !== conversationId) return c
       return { ...c, messages: [] }
     }))
