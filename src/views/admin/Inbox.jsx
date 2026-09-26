@@ -267,6 +267,8 @@ function InboxWorkspace({ store, database }) {
     inboxUsesBff,
     loadConversationHistory,
     deleteMessage: storeDeleteMessage,
+    archiveConversation: storeArchiveConversation,
+    deleteAllMessagesInConversation: storeDeleteAllMessages,
     deleteAnonymousConversation,
     blockAnonymousChat,
     unblockAnonymousChat,
@@ -283,6 +285,11 @@ function InboxWorkspace({ store, database }) {
   const [isWorkflowOpen, setIsWorkflowOpen] = useState(true)
   const [customCategories, setCustomCategories] = useState({})
   const [deletionGuideOpen, setDeletionGuideOpen] = useState(false)
+  const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
+  const [archiveNotice, setArchiveNotice] = useState('')
+  const [archiveReason, setArchiveReason] = useState('Resolved / Customer assisted')
+  const [archiving, setArchiving] = useState(false)
+  const [clearMessagesOnArchive, setClearMessagesOnArchive] = useState(false)
   const [selectedMessageForRetract, setSelectedMessageForRetract] = useState(null)
   const [copiedSql, setCopiedSql] = useState(false)
   const [messageToDelete, setMessageToDelete] = useState(null)
@@ -662,6 +669,66 @@ function InboxWorkspace({ store, database }) {
     loadHistory(activeId)
   }
 
+  const handleArchiveConversation = async () => {
+    if (!chat || archiving) return
+    const targetId = chat.id
+    setArchiving(true)
+    setSaveError('')
+    setNotice('')
+
+    let result
+    if (typeof storeArchiveConversation === 'function') {
+      result = await storeArchiveConversation(targetId, archiveReason)
+    } else if (database) {
+      try {
+        const { error } = await database
+          .from('conversations')
+          .update({
+            status: 'Resolved',
+            resolved_at: new Date().toISOString(),
+          })
+          .eq('id', targetId)
+        if (error) {
+          result = { ok: false, error: error.message }
+        } else {
+          result = { ok: true }
+        }
+      } catch (err) {
+        result = { ok: false, error: err?.message || 'Database error during conversation archiving.' }
+      }
+    } else {
+      result = { ok: true }
+    }
+
+    if (clearMessagesOnArchive) {
+      if (typeof storeDeleteAllMessages === 'function') {
+        await storeDeleteAllMessages(targetId)
+      } else if (database) {
+        try {
+          await database.from('messages').delete().eq('conversation_id', targetId)
+        } catch (err) {
+          console.warn('Failed clearing messages:', err)
+        }
+      }
+    }
+
+    setArchiving(false)
+    if (!result?.ok) {
+      setSaveError(result?.error || 'Conversation could not be archived.')
+      return
+    }
+
+    setArchiveDialogOpen(false)
+    setDeletionGuideOpen(false)
+    setArchiveNotice('Conversation marked Resolved and archived from active view.')
+    setNotice('Conversation marked Resolved and archived from active view.')
+    setMobileView('list')
+    const remaining = conversations.filter(c => c.id !== targetId && c.status !== 'Resolved')
+    if (remaining.length > 0) {
+      setActiveId(remaining[0].id)
+    }
+  }
+
   const canModerateAnonymous = ['Admin', 'SuperAdmin'].includes(user?.role)
   const openModeration = (kind, target) => {
     setModerationReason('')
@@ -727,7 +794,7 @@ function InboxWorkspace({ store, database }) {
   const chatCategoryMeta = INBOX_CATEGORIES[chatCategory] || INBOX_CATEGORIES.general
 
   return (
-    <section aria-label="Unified message control" className="mx-auto max-w-[1600px] space-y-3 pb-8">
+    <section aria-label="Unified message control" className="flex flex-1 min-h-0 flex-col w-full max-w-[1600px] mx-auto space-y-2">
       <WorkspaceIntro
         eyebrow="Customer workload"
         title="Unified message control"
@@ -786,6 +853,12 @@ function InboxWorkspace({ store, database }) {
         </StateBanner>
       )}
 
+      {archiveNotice && (
+        <StateBanner tone="success" role="status">
+          {archiveNotice}
+        </StateBanner>
+      )}
+
       {canModerateAnonymous && inboxState.moderationReady && inboxState.activeBlocks?.length > 0 && (
         <section className="rounded-adm border border-adm-line bg-adm-bg p-4" aria-labelledby="blocked-chat-title">
           <h2 id="blocked-chat-title" className="text-sm font-semibold text-white">Blocked anonymous chats</h2>
@@ -800,7 +873,7 @@ function InboxWorkspace({ store, database }) {
         </section>
       )}
 
-      <div className={`flex ${isMaximized ? 'h-[calc(100dvh-200px)] min-h-[660px]' : 'h-[calc(100dvh-310px)] min-h-[580px]'} overflow-hidden rounded-adm border border-adm-line bg-adm-bg transition-all duration-200`}>
+      <div className="flex flex-1 min-h-0 overflow-hidden rounded-adm border border-adm-line bg-adm-bg transition-all duration-200">
         <div className={`${mobileView === 'chat' ? 'hidden' : 'flex'} w-full shrink-0 flex-col border-r border-adm-line bg-adm-bg lg:flex lg:w-80 xl:w-[22rem]`}>
           <div className="space-y-2 border-b border-adm-line p-3">
             <label className="relative block">
@@ -946,12 +1019,12 @@ function InboxWorkspace({ store, database }) {
         </div>
 
         <div className={`${mobileView === 'list' ? 'hidden' : 'flex'} min-w-0 flex-1 flex-col bg-adm-surface lg:flex`}>
-          <div className="flex shrink-0 items-center justify-between gap-2 border-b border-adm-line bg-white/5 px-3 py-2.5 sm:px-4">
+          <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-adm-line bg-white/5 px-3 py-2 sm:flex-nowrap sm:px-4">
             <div className="flex min-w-0 flex-1 items-center gap-2">
               <button
                 type="button"
                 onClick={() => setMobileView('list')}
-                className="-ml-1 flex min-h-11 min-w-11 items-center justify-center rounded-adm-sm text-white/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 lg:hidden"
+                className="-ml-1 flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-adm-sm text-white/60 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80 lg:hidden"
                 aria-label="Back to conversation list"
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
@@ -1012,6 +1085,15 @@ function InboxWorkspace({ store, database }) {
 
             {/* Quick Header Actions */}
             <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setArchiveDialogOpen(true)}
+                className="adm-btn min-h-11 border border-forest/40 bg-forest/10 px-3 text-xs font-semibold text-forest hover:bg-forest/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/80"
+                title="Archive conversation as Resolved and remove from active staff view"
+              >
+                <CheckIcon size={14} className="mr-1.5 inline text-forest" />
+                Archive / Remove Thread
+              </button>
               <button
                 type="button"
                 onClick={() => setDeletionGuideOpen(true)}
@@ -1226,6 +1308,41 @@ function InboxWorkspace({ store, database }) {
               </div>
 
               <div className="mt-5 space-y-6 text-sm">
+                {/* 1-Click Archive & Remove from Inbox (Staff Recommended) */}
+                <div className="rounded-adm border border-forest/40 bg-forest/[0.08] p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="font-semibold text-forest flex items-center gap-2">
+                        <CheckIcon size={16} className="shrink-0" />
+                        1-Click Archive &amp; Remove from Active Inbox
+                      </h3>
+                      <p className="mt-1 text-xs leading-relaxed text-white/80">
+                        The easiest way to remove this thread from staff space. Marks status as <strong>Resolved</strong> so it instantly disappears from your active queue. The conversation remains safely recorded in Supabase for audit, financial, or dispute compliance.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDeletionGuideOpen(false)
+                        setArchiveDialogOpen(true)
+                      }}
+                      className="adm-btn min-h-11 border border-forest/50 bg-forest px-4 text-xs font-semibold text-white hover:bg-forest/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/80"
+                    >
+                      Archive &amp; Remove This Thread
+                    </button>
+                  </div>
+                </div>
+
+                {/* Single Message Deletion Guidance */}
+                <div className="rounded-adm border border-adm-line bg-adm-bg p-4">
+                  <h3 className="font-semibold text-white">Delete Individual Messages (1-Click)</h3>
+                  <p className="mt-1 text-xs leading-relaxed text-white/70">
+                    To delete an errant, offensive, or accidental message: simply hover (or tap) the message bubble in the conversation stream and click the red trash icon. You can choose a deletion reason and confirm removal directly without SQL.
+                  </p>
+                </div>
+
                 {/* Emergency Message Retraction */}
                 <div className="rounded-adm border border-crimson/30 bg-crimson/[0.06] p-4">
                   <h3 className="font-semibold text-crimson flex items-center gap-2">
@@ -1325,6 +1442,86 @@ WHERE conversation_id = '${chat.id}'
                   className="adm-btn min-h-11 bg-blue px-5 font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80"
                 >
                   Done
+                </button>
+              </div>
+            </section>
+          </AdminDialog>
+        </div>
+      )}
+
+      {archiveDialogOpen && (
+        <div
+          className="fixed inset-0 z-50 grid place-items-end bg-black/75 sm:place-items-center sm:p-6"
+          role="presentation"
+          onMouseDown={event => event.target === event.currentTarget && !archiving && setArchiveDialogOpen(false)}
+        >
+          <AdminDialog
+            onClose={() => setArchiveDialogOpen(false)}
+            closeDisabled={archiving}
+            labelledBy="archive-conversation-title"
+          >
+            <section className="w-full max-w-lg rounded-t-adm border border-adm-line bg-adm-surface p-5 shadow-2xl sm:rounded-adm">
+              <h2 id="archive-conversation-title" className="text-xl font-bold text-white">
+                Archive &amp; Remove Thread
+              </h2>
+              <p className="mt-2 text-xs leading-5 text-white/60">
+                Mark this conversation as <strong>Resolved</strong> and remove it from the active staff queue.
+                The thread history remains safely preserved in Supabase for audit and reference.
+              </p>
+
+              <div className="mt-4 rounded-adm-sm border border-adm-line bg-adm-bg p-3">
+                <div className="text-xs text-white/50">Conversation:</div>
+                <div className="mt-1 font-semibold text-white">{chat.customer} ({chat.channel})</div>
+                <div className="mt-0.5 text-xs text-white/40">Status will update to <span className="text-forest font-semibold">Resolved</span></div>
+              </div>
+
+              <div className="mt-4 space-y-3">
+                <label className="block text-xs font-semibold text-white/70">
+                  Reason for archiving:
+                  <select
+                    value={archiveReason}
+                    onChange={e => setArchiveReason(e.target.value)}
+                    disabled={archiving}
+                    className="adm-input mt-1.5 min-h-11 w-full text-base sm:text-xs"
+                  >
+                    <option value="Resolved / Customer assisted">Resolved / Customer assisted</option>
+                    <option value="Spam / Trolling / Fooling inquiry">Spam / Trolling / Fooling inquiry</option>
+                    <option value="Errant or accidental test thread">Errant or accidental test thread</option>
+                    <option value="No response from customer">No response from customer</option>
+                    <option value="Other staff action">Other staff action</option>
+                  </select>
+                </label>
+
+                <label className="flex items-start gap-2.5 rounded-adm-sm border border-adm-line bg-adm-bg/60 p-2.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={clearMessagesOnArchive}
+                    onChange={e => setClearMessagesOnArchive(e.target.checked)}
+                    disabled={archiving}
+                    className="mt-0.5 h-4 w-4 rounded border-adm-line bg-adm-surface text-blue focus:ring-blue"
+                  />
+                  <span className="text-xs text-white/70">
+                    <strong>Also clear all messages in this thread</strong> (useful if caller was fooling/trolling with offensive text)
+                  </span>
+                </label>
+              </div>
+
+              <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={() => setArchiveDialogOpen(false)}
+                  disabled={archiving}
+                  className="adm-btn min-h-11 border border-adm-line px-4 text-xs font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/80"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleArchiveConversation}
+                  disabled={archiving}
+                  className="adm-btn min-h-11 border border-forest/40 bg-forest px-5 text-xs font-semibold text-white hover:bg-forest/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/80 disabled:opacity-45"
+                >
+                  {archiving ? 'Archiving…' : 'Archive & Remove from Active'}
                 </button>
               </div>
             </section>

@@ -319,11 +319,58 @@ export function useAdminInboxRuntime({ enabled, actorId }) {
     return { ok: true }
   }
 
+  const archiveConversation = async (conversationId, reason = 'Archived by staff') => {
+    if (!conversationId) return { ok: false, error: 'Conversation ID is required.' }
+    if (supabase) {
+      try {
+        const { error } = await supabase
+          .from('conversations')
+          .update({
+            status: 'Resolved',
+            resolved_at: new Date().toISOString(),
+          })
+          .eq('id', conversationId)
+        if (error) {
+          await supabase.rpc('update_conversation_workflow', {
+            p_conversation_id: conversationId,
+            p_status: 'Resolved',
+            p_priority: 'normal',
+            p_reason: reason,
+          })
+        }
+      } catch (err) {
+        console.warn('Direct archive error:', err)
+      }
+    }
+    setConversations(current => current.filter(c => c.id !== conversationId))
+    return { ok: true }
+  }
+
+  const deleteAllMessagesInConversation = async (conversationId) => {
+    if (!conversationId) return { ok: false, error: 'Conversation ID is required.' }
+    if (supabase) {
+      try {
+        const { error } = await supabase
+          .from('messages')
+          .delete()
+          .eq('conversation_id', conversationId)
+        if (error) return { ok: false, error: error.message }
+      } catch (err) {
+        return { ok: false, error: err?.message || 'Database error during messages clearing.' }
+      }
+    }
+    setConversations(current => current.map(c => {
+      if (c.id !== conversationId) return c
+      return { ...c, messages: [] }
+    }))
+    return { ok: true }
+  }
+
   return {
     conversations, inboxState, inboxStaff, inboxUsesBff: secureInbox,
     loadConversationHistory, sendMessage, sendCustomerReply,
     markConversationRead, updateConversationWorkflow,
-    deleteMessage,
+    deleteMessage, archiveConversation, deleteAllMessagesInConversation,
     deleteAnonymousConversation: (conversationId, reason) => runModeration('delete', conversationId, reason),
     blockAnonymousChat: (conversationId, reason) => runModeration('block', conversationId, reason),
     unblockAnonymousChat: (blockId, reason) => runModeration('unblock', blockId, reason),

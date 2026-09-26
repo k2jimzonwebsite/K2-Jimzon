@@ -218,6 +218,14 @@ function Harness() {
       setConversations(current => current.filter(c => c.id !== conversationId))
       return { ok: true }
     },
+    archiveConversation: async (conversationId) => {
+      setConversations(current => current.filter(c => c.id !== conversationId))
+      return { ok: true }
+    },
+    deleteAllMessagesInConversation: async (conversationId) => {
+      setConversations(current => current.map(c => c.id === conversationId ? { ...c, messages: [] } : c))
+      return { ok: true }
+    },
   }
 
   return (

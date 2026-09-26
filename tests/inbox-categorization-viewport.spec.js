@@ -212,4 +212,32 @@ test.describe('Inbox Viewport & UI Interactions', () => {
     // The other message remains in the thread
     await expect(page.locator('.whitespace-pre-wrap', { hasText: 'I need delivery in Quezon City this Friday.' })).toBeVisible()
   })
+
+  test('staff can 1-click archive and remove a thread from active view', async ({ page }) => {
+    await page.goto('/tests/fixtures/inbox-harness.html')
+
+    // Maria Santos is active
+    await expect(page.getByRole('heading', { name: 'Maria Santos' })).toBeVisible()
+
+    // Click "Archive / Remove Thread" in conversation header
+    const archiveBtn = page.getByRole('button', { name: /Archive \/ Remove Thread/i })
+    await expect(archiveBtn).toBeVisible()
+    await archiveBtn.click()
+
+    // Archive confirmation dialog opens
+    const dialog = page.getByRole('dialog')
+    await expect(dialog.getByRole('heading', { name: 'Archive & Remove Thread' })).toBeVisible()
+    await expect(dialog.getByText('Mark this conversation as Resolved and remove it from the active staff queue.')).toBeVisible()
+
+    // Confirm archive
+    const confirmBtn = dialog.getByRole('button', { name: 'Archive & Remove from Active' })
+    await expect(confirmBtn).toBeVisible()
+    await confirmBtn.click()
+
+    // Notice appears and Maria Santos is removed from active list
+    await expect(dialog).not.toBeVisible()
+    await expect(page.getByText('Conversation marked Resolved and archived from active view.')).toBeVisible()
+    await expect(page.getByRole('button', { name: /Maria Santos/ })).not.toBeVisible()
+  })
 })
+

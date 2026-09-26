@@ -666,7 +666,7 @@ export default function Admin() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-3 pb-24 sm:p-4 sm:pb-24 lg:p-6 lg:pb-6 custom-scrollbar">
+        <div className={section === 'inbox' ? 'flex-1 min-h-0 flex flex-col overflow-hidden p-2 sm:p-3 lg:p-4 pb-16 lg:pb-2' : 'flex-1 overflow-y-auto p-3 pb-24 sm:p-4 sm:pb-24 lg:p-6 lg:pb-6 custom-scrollbar'}>
           <ErrorBoundary key={section}>
             <Suspense fallback={
               <div className="mx-auto w-full max-w-[1600px] animate-pulse space-y-4" aria-label="Loading workspace">
