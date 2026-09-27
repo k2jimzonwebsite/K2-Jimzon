@@ -92,7 +92,7 @@ export function StartConversationForm({ onCreated }) {
         <label htmlFor="message-name" className="block text-sm font-semibold text-navy">Full name
           <input id="message-name" className="store-field mt-1.5 w-full px-4 py-3 text-base" value={form.customerName} onChange={update('customerName')} autoComplete="name" required />
         </label>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <label htmlFor="message-email" className="block text-sm font-semibold text-navy">Email
             <input id="message-email" className="store-field mt-1.5 w-full px-4 py-3 text-base" type="email" value={form.email} onChange={update('email')} autoComplete="email" />
           </label>

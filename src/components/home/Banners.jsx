@@ -30,7 +30,7 @@ function WholesaleStrip() {
   const { go } = useStore()
   return (
     <section className="store-section pb-6">
-      <div className="grid gap-6 border-y border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-1 py-8 sm:px-6 md:grid-cols-[auto_1fr_auto] md:items-center md:gap-8">
+      <div className="grid grid-cols-1 gap-6 border-y border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] px-1 py-8 sm:px-6 md:grid-cols-[auto_1fr_auto] md:items-center md:gap-8">
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-wash text-blue"><BriefcaseIcon size={20} /></span>
         <div>
           <Kicker className="text-blue">Wholesale & Food Service</Kicker>

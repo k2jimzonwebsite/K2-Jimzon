@@ -223,7 +223,7 @@ export default function Checkout() {
         No upfront payment is required. We will verify our Manila stock, review order and delivery details, and send payment instructions directly to you.
       </p>
 
-      <form onSubmit={submit} className="mt-9 grid gap-6 md:grid-cols-[1fr_0.86fr] md:gap-10">
+      <form onSubmit={submit} className="mt-9 grid grid-cols-1 gap-6 md:grid-cols-[1fr_0.86fr] md:gap-10">
         {/* Order Summary Column */}
         <TuscanCard className="p-5 md:order-2 md:sticky md:top-28 md:h-fit md:p-7">
           <h2 className="font-serif text-lg font-semibold">Order summary</h2>
@@ -317,7 +317,7 @@ export default function Checkout() {
                 <input className={`${fieldClass} mt-1.5`} value={form.name} onChange={update('name')} autoComplete="name" required />
               </label>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <label className="block text-sm font-semibold">Email address
                   <input className={`${fieldClass} mt-1.5`} type="email" value={form.email} onChange={update('email')} autoComplete="email" />
                 </label>
@@ -444,7 +444,7 @@ export default function Checkout() {
                 <p className="mt-0.5 text-xs text-navy-soft">
                   Select a preferred method. K2 staff will confirm the order and tell you when to pay.
                 </p>
-                <div className="mt-2.5 grid gap-3 sm:grid-cols-2">
+                <div className="mt-2.5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {codAvailable && (<label
                     className={`flex min-h-[4rem] cursor-pointer items-start justify-between rounded-xl border p-3.5 transition-all duration-150 ${
                       form.paymentMethod === 'cod'

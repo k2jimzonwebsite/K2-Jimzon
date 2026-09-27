@@ -145,7 +145,7 @@ export default function Wholesale() {
       {/* Hero Section */}
       <HeroVideo name="wholesale" label="Cases being packed for consolidation beside Italian stock" />
       <section className="border-b border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] overflow-hidden text-navy">
-        <div className="store-section grid gap-10 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-16 lg:gap-16">
+        <div className="store-section grid grid-cols-1 gap-10 py-12 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-16 lg:gap-16">
           <div>
             <Kicker className="flex items-center gap-2 text-crimson">
               <BriefcaseIcon size={14} /> Business & Wholesale Supply
@@ -203,7 +203,7 @@ export default function Wholesale() {
 
       {/* Application & Form Section */}
       <section id="application-form" className="store-section py-14 md:py-20">
-        <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <div>
             <Kicker>Wholesale inquiry</Kicker>
             <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight md:text-4xl">
@@ -338,7 +338,7 @@ export default function Wholesale() {
                 <p className="text-xs leading-5 text-navy-soft">Do not send registration documents, tax numbers, payment details, passwords, or one-time codes in this first inquiry. Staff will request only the evidence needed for a later review.</p>
 
                 {/* Business Type & Volume Tier */}
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="wholesale-business-type" className="mb-1 block text-xs font-semibold text-navy">
                       Business Type *
@@ -376,7 +376,7 @@ export default function Wholesale() {
                 </div>
 
                 {/* Contact Person & Role */}
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="wholesale-contact-name" className="mb-1 block text-xs font-semibold text-navy">
                       Contact Person Full Name *
@@ -407,7 +407,7 @@ export default function Wholesale() {
                 </div>
 
                 {/* Email & Phone */}
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="wholesale-email" className="mb-1 block text-xs font-semibold text-navy">
                       Work Email *
@@ -516,7 +516,7 @@ export default function Wholesale() {
             Information K2 staff reviews before confirming product handling, stock, batch, expiry, and delivery requirements for a business buyer.
           </p>
 
-          <ol className="mt-8 grid gap-6 md:grid-cols-3">
+          <ol className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
             {REQUIREMENTS.map(([title, body], index) => (
               <li key={title} className="rounded-xl border border-line bg-paper p-5">
                 <span className="font-serif text-2xl font-bold text-crimson">0{index + 1}</span>

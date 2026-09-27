@@ -40,7 +40,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] pb-28 pt-14 text-navy md:pb-12 md:pt-16">
       <div className="store-section">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.45fr_0.8fr_0.8fr_1fr]">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.45fr_0.8fr_0.8fr_1fr]">
           <div className="sm:col-span-2 lg:col-span-1">
             <Wordmark />
             <p className="mt-5 max-w-sm text-sm leading-7 text-navy-soft">Italian goods for homes and businesses in the Philippines. Shop what is in stock or ask us to source something from Italy.</p>
@@ -70,7 +70,7 @@ export default function Footer() {
         <section className="mt-10 border-t border-[var(--store-surface-border)] pt-8" aria-labelledby="footer-marketplaces-title">
           <h3 id="footer-marketplaces-title" className="text-base font-semibold text-navy">Find our shops</h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-navy-soft">These links open our marketplace shops. Stock and messages there stay in each marketplace until a connector is approved.</p>
-          <div className="mt-5 grid gap-6 sm:grid-cols-2">
+          <div className="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {MARKETPLACE_SHOPS.map(shop => (
               <div key={shop.name}>
                 <p className="text-base font-semibold text-navy">{shop.name}</p>
@@ -94,7 +94,7 @@ export default function Footer() {
           <button onClick={() => go('returns')} className="min-h-11 inline-flex items-center hover:text-crimson transition-colors">Returns &amp; Replacements</button>
         </div>
 
-        <div className="mt-4 grid gap-3 border-t border-[var(--store-surface-border)]/60 pt-4 text-xs leading-relaxed text-navy-faint md:grid-cols-[1fr_auto] md:items-end">
+        <div className="mt-4 grid grid-cols-1 gap-3 border-t border-[var(--store-surface-border)]/60 pt-4 text-xs leading-relaxed text-navy-faint md:grid-cols-[1fr_auto] md:items-end">
           <p>Submitting a Website or Pasabuy request does not collect payment. K2 staff confirms availability, delivery, and payment instructions directly.</p>
           <p className="md:text-right">© 2026 K2 Jimzon · Direct Italian imports</p>
           {import.meta.env.DEV && <p className="md:col-span-2">Development preview: fallback products and reviews are illustrative. Production displays database-backed published records.</p>}

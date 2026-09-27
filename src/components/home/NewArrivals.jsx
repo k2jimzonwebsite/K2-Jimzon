@@ -49,7 +49,7 @@ export default function NewArrivals() {
               {catalogStale && (
                 <p role="status" className="mb-4 text-sm font-semibold text-navy-soft">Showing the last updated arrivals — current stock may differ.</p>
               )}
-              <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.25fr_0.75fr]">
             {/* Main Featured Arrival */}
             <div className="min-h-[28rem]">
               <AnimatePresence mode="wait">

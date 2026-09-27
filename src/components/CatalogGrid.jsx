@@ -34,14 +34,14 @@ export default function CatalogGrid() {
 
   return (
     <section className="store-section py-8 md:py-12" id="catalog">
-      <div className="grid gap-8 lg:grid-cols-[14rem_1fr] lg:gap-10">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[14rem_1fr] lg:gap-10">
         <aside className="min-w-0 lg:border-r lg:border-[var(--store-surface-border)] lg:pr-7">
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-navy-faint">Shop by category</p>
           <div className="flex gap-1 overflow-x-auto pb-2 lg:block lg:space-y-0.5 lg:overflow-visible lg:pb-0">
             {CATEGORIES.map((item) => {
               const selected = category === item
               return (
-                <button key={item} onClick={() => setCategory(item)} aria-pressed={selected} className={`min-h-11 shrink-0 border-b-2 px-3 text-left text-sm transition-colors duration-150 cursor-pointer lg:flex lg:w-full lg:items-center lg:justify-between lg:border-b-0 lg:border-l-2 lg:px-3 ${selected ? 'border-crimson font-bold text-crimson' : 'border-transparent text-navy-soft hover:text-navy'}`}>
+                <button key={item} onClick={() => setCategory(item)} aria-pressed={selected} className={`min-h-11 min-w-11 shrink-0 border-b-2 px-3 text-left text-sm transition-colors duration-150 cursor-pointer lg:flex lg:w-full lg:items-center lg:justify-between lg:border-b-0 lg:border-l-2 lg:px-3 ${selected ? 'border-crimson font-bold text-crimson' : 'border-transparent text-navy-soft hover:text-navy'}`}>
                   <span>{item}</span>
                   {selected && <span className="hidden h-1.5 w-1.5 rounded-full bg-crimson lg:block" />}
                 </button>
@@ -81,7 +81,7 @@ export default function CatalogGrid() {
               {filteredProducts.map((product, index) => (
                 <motion.div
                   key={product.id || product.sku}
-                  layout
+                  layout={reducedMotion ? false : true}
                   initial={reducedMotion ? { opacity: 0 } : { opacity: 0, transform: 'translateY(8px)' }}
                   animate={{ opacity: 1, transform: 'translateY(0)' }}
                   exit={{ opacity: 0 }}

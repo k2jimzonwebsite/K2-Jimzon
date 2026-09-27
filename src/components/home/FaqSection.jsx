@@ -8,7 +8,7 @@ export default function FaqSection() {
 
   return (
     <section className="store-section py-16 md:py-24">
-      <div className="grid gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20">
         <div>
           <Kicker>Good to know</Kicker>
           <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight text-navy md:text-4xl">Questions, answered honestly.</h2>

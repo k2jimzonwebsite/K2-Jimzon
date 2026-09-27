@@ -447,6 +447,24 @@
 }
 
 /* Storefront motion language: one composed entrance, then tactile feedback. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(root) { animation-name: store-route-out; }
+::view-transition-new(root) { animation-name: store-route-in; }
+
+@keyframes store-route-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes store-route-in { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.01ms;
+  }
+}
 .category-tile {
   isolation: isolate;
   transition: background-color 180ms var(--ease-out-quart), box-shadow 180ms var(--ease-out-quart), transform 160ms var(--ease-out-quart);
@@ -895,15 +913,17 @@
     inset: 0;
   }
 }
-/* Keep the owner-supplied payment QR pixels intact while framing out app chrome. */
+/* Crop the supplied screenshots without changing QR modules or recipient text. */
 .payment-qr-maribank {
+  aspect-ratio: 5 / 6;
   background-image: url('/payment/maribank-receive.png');
-  background-size: 195% auto;
-  background-position: 50% 30.6%;
+  background-size: 130% auto;
+  background-position: 43% 26.4%;
 }
 
 .payment-qr-gcash {
+  aspect-ratio: 2 / 3;
   background-image: url('/payment/gcash-receive.png');
-  background-size: 247% auto;
-  background-position: 50% 26.4%;
+  background-size: 175% auto;
+  background-position: 47% 30%;
 }

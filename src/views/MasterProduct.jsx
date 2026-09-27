@@ -117,7 +117,7 @@ export default function MasterProduct() {
         </button>
       </div>
 
-      <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
         
         {/* Left Column: Image Gallery & Product Tabs */}
         <div className="flex flex-col w-full gap-8">

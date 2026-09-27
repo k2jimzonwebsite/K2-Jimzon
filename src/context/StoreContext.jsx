@@ -437,32 +437,55 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     } catch {}
   }
 
+  const pendingRouteFocus = useRef(null)
   const focusRouteDestination = (focusSelector = '') => {
-    // Screen-reader and keyboard users land where sighted users look.
-    const target = (focusSelector && document.querySelector(focusSelector))
-      || document.querySelector('main h1,main')
-    if (!target) return
-    if (target.tabIndex < 0) target.tabIndex = -1
-    target.focus({ preventScroll: true })
+    // Lazy routes can show the Suspense fallback after the view state changes.
+    const focus = () => {
+      const target = focusSelector
+        ? document.querySelector(focusSelector)
+        : document.querySelector('main h1') || document.querySelector('main')
+      if (!target) return false
+      if (target.tabIndex < 0) target.tabIndex = -1
+      target.focus({ preventScroll: true })
+      return true
+    }
+    if (focus()) return
+    const observer = new MutationObserver(() => {
+      if (focus()) {
+        observer.disconnect()
+        if (pendingRouteFocus.current === observer) pendingRouteFocus.current = null
+      }
+    })
+    observer.observe(document.getElementById('root') || document.body, { childList: true, subtree: true })
+    pendingRouteFocus.current = observer
+  }
+
+  // Route changes use the View Transition API for a brief crossfade. The
+  // ::view-transition rules in index.css keep it to a 180ms opacity fade,
+  // collapsing to near-instant under prefers-reduced-motion. Focus moves
+  // after the new view renders, including the first load of a lazy route.
+  const runStoreTransition = (update, { sync = false, focusSelector } = {}) => {
+    pendingRouteFocus.current?.disconnect()
+    pendingRouteFocus.current = null
+    const apply = () => {
+      flushSync(update)
+      if (focusSelector !== undefined) focusRouteDestination(focusSelector)
+    }
+    if (typeof document === 'undefined' || !document.startViewTransition) {
+      if (sync) apply()
+      else update()
+      return
+    }
+    document.startViewTransition(apply)
   }
 
   const openProduct = (id) => {
     syncLocation('master_product', id)
-    if (!document.startViewTransition) {
+    runStoreTransition(() => {
       setProductId(id)
       setView('master_product')
       window.scrollTo(0, 0)
-      focusRouteDestination()
-      return
-    }
-    document.startViewTransition(() => {
-      flushSync(() => {
-        setProductId(id)
-        setView('master_product')
-        window.scrollTo(0, 0)
-      })
-      focusRouteDestination()
-    })
+    }, { sync: true, focusSelector: '' })
   }
 
   const go = (v, { focusSelector = '' } = {}) => {
@@ -472,22 +495,11 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       setCartOpen(false)
       window.scrollTo(0, 0)
     }
-    const focusDestination = () => {
-      focusRouteDestination(focusSelector)
-    }
-    if (!document.startViewTransition) {
-      if (focusSelector) {
-        flushSync(updateView)
-        focusDestination()
-      } else {
-        updateView()
-      }
+    if (focusSelector) {
+      runStoreTransition(updateView, { sync: true, focusSelector })
       return
     }
-    document.startViewTransition(() => {
-      flushSync(updateView)
-      focusDestination()
-    })
+    runStoreTransition(updateView)
   }
 
   const requestPasabuyItem = ({ item = '', url = '', notes = '', qty = 1 } = {}) => {
@@ -794,11 +806,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       window.scrollTo(0, 0)
     }
 
-    if (document.startViewTransition) {
-      document.startViewTransition(() => flushSync(finish))
-    } else {
-      finish()
-    }
+    runStoreTransition(finish)
     return { ok: true, order: saved }
   }
 

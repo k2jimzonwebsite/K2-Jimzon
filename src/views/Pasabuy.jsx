@@ -75,7 +75,7 @@ export default function Pasabuy() {
           against the video's bottom edge — worst on a phone, where the band is
           proportionally taller and the line sits right on the boundary. The
           band ends where it ends; the copy starts below it. */}
-      <div className="store-section grid gap-10 pt-10 md:pt-14 lg:grid-cols-[1.16fr_0.84fr] lg:gap-16">
+      <div className="store-section grid grid-cols-1 gap-10 pt-10 md:pt-14 lg:grid-cols-[1.16fr_0.84fr] lg:gap-16">
         <div>
           <Kicker className="flex items-center gap-2"><PlaneIcon size={14} /> Personal Shopping from Italy</Kicker>
           <h1 className="mt-3 font-serif text-3xl font-semibold leading-[1.06] tracking-tight text-navy sm:text-4xl md:text-5xl">
@@ -90,7 +90,7 @@ export default function Pasabuy() {
               <h2 className="font-serif text-xl font-semibold text-navy">What would you like us to find?</h2>
               <p className="mt-1 text-sm text-navy-soft">The brand, product name, and size help us locate the exact item in Italy.</p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <label className="block text-sm font-semibold text-navy">Full name
                 <input className={`${field} mt-1.5`} value={form.customerName} onChange={update('customerName')} autoComplete="name" required />
               </label>

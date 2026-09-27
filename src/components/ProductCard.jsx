@@ -28,7 +28,7 @@ export default function ProductCard({ product, compact = false, featured = false
 
   if (featured) {
     return (
-      <article data-testid="product-card" className="grid h-full overflow-hidden rounded-2xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-[var(--store-surface-shadow)] md:grid-cols-[1.18fr_0.82fr]">
+      <article data-testid="product-card" className="grid h-full grid-cols-1 overflow-hidden rounded-2xl border border-[var(--store-surface-border)] bg-[var(--store-surface-bg)] shadow-[var(--store-surface-shadow)] md:grid-cols-[1.18fr_0.82fr]">
         <div className="product-img-surface relative min-h-64 overflow-hidden md:min-h-0">
           {product.afterImage ? (
             <InteractiveReveal beforeImage={product.img} afterImage={product.afterImage} />

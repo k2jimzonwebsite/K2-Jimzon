@@ -48,7 +48,7 @@ function EmailDraftForm() {
         <label htmlFor="contact-name" className="block text-sm font-semibold text-navy">Full name
           <input id="contact-name" className="store-field mt-1.5 w-full px-4 py-3" value={form.name} onChange={update('name')} autoComplete="name" required />
         </label>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <label htmlFor="contact-email" className="block text-sm font-semibold text-navy">Email address
             <input id="contact-email" className="store-field mt-1.5 w-full px-4 py-3" type="email" value={form.email} onChange={update('email')} autoComplete="email" />
           </label>
@@ -72,7 +72,7 @@ function EmailDraftForm() {
 
 function ContactRow({ label, children }) {
   return (
-    <div className="grid gap-1 border-t border-line py-4 sm:grid-cols-[8rem_1fr] sm:gap-4">
+    <div className="grid grid-cols-1 gap-1 border-t border-line py-4 sm:grid-cols-[8rem_1fr] sm:gap-4">
       <dt className="text-sm font-semibold text-navy-soft">{label}</dt>
       <dd className="min-w-0 break-words text-sm font-semibold text-navy">{children}</dd>
     </div>
@@ -91,7 +91,7 @@ export default function Contact() {
         <p className="mt-4 max-w-2xl text-base leading-7 text-navy-soft">Questions about products, Pasabuy sourcing from Italy, or business supply are welcome. No account required.</p>
       </div>
 
-      <div className="mt-9 grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] lg:gap-12">
+      <div className="mt-9 grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] lg:gap-12">
         {secureMessaging ? (
           <div>
             <StartConversationForm onCreated={() => go('messages')} />

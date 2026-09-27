@@ -22,7 +22,7 @@ export default function StorySection() {
 
   return (
     <section className="store-section py-16 md:py-24">
-      <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
         <div className="lg:sticky lg:top-32 lg:h-fit">
           <Kicker>How it works</Kicker>
           <h2 className="mt-3 max-w-lg font-serif text-4xl font-semibold leading-[1.02] tracking-tight text-navy md:text-5xl">

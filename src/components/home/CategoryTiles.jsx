@@ -102,7 +102,7 @@ export default function CategoryTiles() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={{ visible: { transition: { staggerChildren: 0.04 } } }}
-        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+        className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
       >
         {CABINET_SECTIONS.map((section) => {
           const { title, subtitle, icon: CategoryIcon, isPasabuy } = section

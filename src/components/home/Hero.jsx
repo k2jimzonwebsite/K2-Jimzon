@@ -16,7 +16,7 @@ function Hero() {
 
   return (
     <section className="store-atmosphere relative overflow-hidden border-b border-line">
-      <div className="store-section grid min-h-[36rem] items-center gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:py-20 lg:min-h-[42rem] lg:gap-16">
+      <div className="store-section grid min-h-[36rem] grid-cols-1 items-center gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:py-20 lg:min-h-[42rem] lg:gap-16">
         <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.06 } } }} className="max-w-2xl">
           <motion.div variants={reveal}>
             <Kicker className="flex items-center gap-2">

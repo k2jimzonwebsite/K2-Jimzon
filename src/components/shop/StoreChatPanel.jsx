@@ -439,7 +439,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
           </div>
         )}
         {!conversation && (
-          <div className="grid gap-3">
+          <div className="grid grid-cols-1 gap-3">
             <label htmlFor="store-chat-name" className="block text-base font-semibold text-[var(--k2-ink)]">
               Your name
               <input
@@ -451,7 +451,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
                 className="k2-store-chat-input mt-1.5 min-h-[44px] w-full rounded-xl border px-4 text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
               />
             </label>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label htmlFor="store-chat-email" className="block text-base font-semibold text-[var(--k2-ink)]">
                 Email
                 <input

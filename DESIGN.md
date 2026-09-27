@@ -86,7 +86,7 @@ Source checkpoint: `docs/design-checkpoints/20260924-admin-mobile/`. Rendered ph
 
 ### Manual QR receipt choice (IDEA-20260924-01)
 
-The checkout uses the existing warm surfaces, readable Source Sans controls and two full-width radio choices for GCash and MariBank. The receipt uses the same contained card shape and a square QR frame with unchanged source pixels. The staff-confirmation warning precedes the QR, and the account-review requirement follows it. The controls remain at least 44px high and no payment state is conveyed through color or motion alone. This design is locally prepared; real-device QR scanning and recipient validation remain pending under MAP-023/MAP-025.
+The checkout uses the existing warm surfaces, readable Source Sans controls and two full-width radio choices for GCash and MariBank. The receipt uses the same contained card shape and method-specific portrait frames. Each frame shows the full QR, its white quiet zone and the recipient details from the exact owner-supplied screenshot pixels while omitting phone chrome and app action controls; the full-size source remains available as a link. The staff-confirmation warning precedes the QR, and the account-review requirement follows it. The controls remain at least 44px high and no payment state is conveyed through color or motion alone. The crop is locally prepared; real-device QR scanning and recipient validation remain pending under MAP-023/MAP-025.
 
 ### Storefront light mode 4-color soft white palette (IDEA-20260923-01)
 

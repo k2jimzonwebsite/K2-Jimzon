@@ -1,6 +1,18 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('storefront interaction language', () => {
+  test('route transitions focus the destination after its content renders', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    await page.getByRole('button', { name: 'Explore all arrivals' }).click()
+    await expect(page.locator('#catalog-heading')).toBeVisible({ timeout: 60000 })
+    await expect(page.locator('#catalog-heading')).toBeFocused()
+
+    await page.getByTestId('product-image-btn').first().click()
+    await expect(page.locator('#catalog-heading')).toHaveCount(0, { timeout: 60000 })
+    await expect(page.locator('main h1')).toBeVisible({ timeout: 60000 })
+    await expect(page.locator('main h1')).toBeFocused()
+  })
+
   test('interactive surfaces respond without changing the editorial layout', async ({ page }) => {
     test.setTimeout(90000)
     await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 60000 })
