@@ -4,6 +4,8 @@
 **Owning items:** MAP-023 (receiving QR and payment acceptance), MAP-028 (pending Storefront presentation review).
 **Decision:** IDEA-20260927-01 is merged into those active items.
 
+**27 September release request:** After the feature-branch commit, the owner asked to review other branches and promote ready work to live GitHub and Vercel. Draft PRs [#14](https://github.com/k2jimzonwebsite/K2-Jimzon/pull/14) and [#13](https://github.com/k2jimzonwebsite/K2-Jimzon/pull/13) conflict with current `main` and have separate MAP dependencies; neither is required for this QR presentation release. Four Dependabot PRs have failing build checks. They remain separate rather than being bundled into the payment release.
+
 ## Change and reason
 
 - `Confirmation.jsx` gives the two receiving methods their own frame while keeping the existing staff-confirmation warning and full-size source link.
@@ -27,7 +29,10 @@ The image above is an isolated CSS render for visual inspection, not a scan or a
 | `npm run build:storefront` | Passed; landing JS 149.16/150.50 kB and CSS 29.99/30.00 kB gzip; secret scan passed | Local production build, not deployment |
 | `npm run build:admin` | Passed; Admin chunk 224.80/300.00 kB; secret scan passed | Separate local Admin artifact, not deployment |
 | `git diff --check` and corrected Count & Close evidence links | No whitespace errors; four relative targets exist | Does not revalidate prior production/provider claims |
+| `npm run verify:release` on the reviewed feature candidate | Exited 0 with 1,202 tests; separate Storefront/Admin builds, boundaries, budgets and secret scans passed | Local release evidence; browser fixtures do not prove real funds or recipient ownership |
+
+The first aggregate gate stalled during Windows Playwright-managed Vite teardown. With a separately started combined Vite server, the gate exited but six Inbox browser cases could not launch Chromium inside the sandbox (`spawn EPERM`). The focused Inbox run passed 9/9 with process permission. The complete gate then exited 0 with the same permission. A stale source assertion was updated to match the heading-first lazy-route focus already exercised by the browser test. Experimental Vite configuration changes were removed; `playwright.config.js` and `vite.config.js` remain as before. The successful gate log is local under `.tools/release-gate-20260927-escalated.log` and is not a production receipt.
 
 ## Remaining acceptance and recovery
 
-The feature branch is source preparation only. The owner or staff must scan both QR codes on representative devices and confirm the recipient in each receiving account before treating either as accepted. An independent reviewer must still confirm any real transfer in the merchant account; local UI checks do not satisfy MAP-023/025 payment acceptance. No live release was requested. To revert the crop, restore the prior `Confirmation.jsx` frame and `index.css` payment selectors; to revert route focus, restore the prior `StoreContext.jsx` navigation helper. The two source screenshots are unchanged.
+The feature branch is locally verified and awaiting production promotion evidence. The owner or staff must scan both QR codes on representative devices and confirm the recipient in each receiving account before treating either as accepted. An independent reviewer must still confirm any real transfer in the merchant account; local UI checks do not satisfy MAP-023/025 payment acceptance. To revert the crop, restore the prior `Confirmation.jsx` frame and `index.css` payment selectors; to revert route focus, restore the prior `StoreContext.jsx` navigation helper. The two source screenshots are unchanged.

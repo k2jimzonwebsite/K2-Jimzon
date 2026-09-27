@@ -25,7 +25,8 @@ test('a failed catalog load never reads as empty and a stale list says so', asyn
 
 test('route changes move screen-reader and keyboard focus to the destination', async () => {  const context = await readFile(new URL('../src/context/StoreContext.jsx', import.meta.url), 'utf8')
   expect(context).toContain('focusRouteDestination')
-  expect(context).toContain("document.querySelector('main h1,main')")
+  expect(context).toContain("document.querySelector('main h1')")
+  expect(context).toContain('new MutationObserver')
   const drawer = await readFile(new URL('../src/components/CartDrawer.jsx', import.meta.url), 'utf8')
   expect(drawer).toContain('headingRef')
   expect(drawer).toContain('openerRef')
