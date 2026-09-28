@@ -14,4 +14,8 @@ export const EXPECTED_ANON_FUNCTIONS = Object.freeze([
   'public.submit_guest_pasabuy_v1(bigint,uuid,text,text,text,text)',
   'public.submit_wholesale_inquiry_v1(bigint,uuid,text,text,text,text)',
   'public.get_storefront_chat_v1(uuid)',
+  // Direct checkout holds a per-order high-entropy key until MAP-020 BFF cutover.
+  'public.get_order_conversation_v1(uuid,text)',
+  'public.submit_order_message_v1(uuid,text,text,uuid)',
+  'public.submit_order_payment_receipt_v1(uuid,text,text,text,text,uuid)',
 ])

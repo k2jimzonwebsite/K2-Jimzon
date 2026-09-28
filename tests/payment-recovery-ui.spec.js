@@ -80,6 +80,25 @@ test('independent verification displays submitted evidence and enforces merchant
   await expect(page.getByRole('status')).toContainText('verified: Reconciled with merchant GCash account statement')
 })
 
+test('authorized staff can retrieve the buyer e-receipt from the order payment review', async ({ page }) => {
+  await page.route('**/rest/v1/rpc/list_order_payment_receipts_v1', route => route.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify([{ id: 'ead6eb3c-e59d-4f80-8dc8-e3ef1846ef16', payment_reference: 'GC-123456', media_type: 'image/png', byte_size: 12345, submitted_at: '2026-09-28T07:00:00Z' }]),
+  }))
+  await page.route('**/rest/v1/rpc/get_order_payment_receipt_v1', route => route.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({ ok: true, media_type: 'image/png', contents_base64: 'iVBORw0KGgo=', sha256: 'a'.repeat(64), payment_reference: 'GC-123456' }),
+  }))
+  await page.goto('/tests/fixtures/payment-harness.html?state=evidence_submitted&evidence=1')
+  await page.getByRole('button', { name: 'Review local payment' }).click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog.getByText('GC-123456', { exact: true })).toBeVisible()
+  const download = page.waitForEvent('download')
+  await dialog.getByRole('button', { name: 'Download buyer receipt GC-123456' }).click()
+  expect((await download).suggestedFilename()).toMatch(/GC-123456.*\.png$/)
+  await expect(dialog).toContainText('buyer-submitted proof')
+})
+
 test('physical lot selection resets confirmation and blocks missing identity on phone', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 })
   await page.goto('/tests/fixtures/payment-harness.html?packing=1')

@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
+import { fileURLToPath } from 'node:url'
+import sharp from 'sharp'
 
 // MAP-019 F-019-003: customer-facing copy must describe the path the customer
 // is actually on. The recorded BFF inquiry path is not an email draft, and no
@@ -50,6 +53,22 @@ test('the receipt never offers a QR that differs from the recorded checkout meth
   expect(confirmation).toContain('currentOrder?.paymentMethod')
   expect(confirmation).toContain('Payment method unavailable')
 })
+
+for (const [method, rectangle] of Object.entries({
+  gcash: { left: 191, top: 371, width: 541, height: 811 },
+  maribank: { left: 90, top: 319, width: 699, height: 840 },
+})) {
+  test(`${method} receiving crop preserves the supplied QR and recipient pixels`, async () => {
+    const source = fileURLToPath(new URL(`../public/payment/${method}-receive.png`, import.meta.url))
+    const crop = fileURLToPath(new URL(`../public/payment/${method}-receive-crop.png`, import.meta.url))
+    const expected = await sharp(source).extract(rectangle).ensureAlpha().raw().toBuffer()
+    const actual = await sharp(crop).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
+    expect(actual.info.width).toBe(rectangle.width)
+    expect(actual.info.height).toBe(rectangle.height)
+    expect(createHash('sha256').update(actual.data).digest('hex'))
+      .toBe(createHash('sha256').update(expected).digest('hex'))
+  })
+}
 
 test('public payment copy describes the current manual QR options', async () => {
   const site = await readFile(new URL('../src/data/site.js', import.meta.url), 'utf8')

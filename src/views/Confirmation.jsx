@@ -4,6 +4,8 @@ import { peso } from '../data/products'
 import { CrimsonButton, GhostButton, TrustBadge } from '../components/ui/bits'
 import { CheckIcon, InboxIcon } from '../components/ui/icons'
 import { guestBffEnabled, listGuestOrders } from '../services/guestCommerceService'
+import { readOrderReceiptAccess } from '../services/orderReceiptService'
+import OrderConversation from '../components/shop/OrderConversation'
 
 function receiptOrder(saved) {
   let paymentMethod = null
@@ -23,6 +25,7 @@ export default function Confirmation() {
   const { order, go, openStoreChat } = useStore()
   const [restoredOrder, setRestoredOrder] = useState(order)
   const [restoreState, setRestoreState] = useState(order ? 'ready' : 'loading')
+  const [remotePaymentStatus, setRemotePaymentStatus] = useState(null)
 
   useEffect(() => {
     if (order) {
@@ -31,7 +34,13 @@ export default function Confirmation() {
       return undefined
     }
     if (!guestBffEnabled()) {
-      setRestoreState('unavailable')
+      const saved = readOrderReceiptAccess()
+      if (saved) {
+        setRestoredOrder({ id: saved.reference, orderId: saved.id, accessKey: saved.accessKey,
+          total: saved.total, count: saved.count, status: saved.status,
+          paymentStatus: saved.paymentStatus, paymentMethod: saved.paymentMethod })
+        setRestoreState('ready')
+      } else setRestoreState('unavailable')
       return undefined
     }
 
@@ -50,8 +59,13 @@ export default function Confirmation() {
   }, [order])
 
   const currentOrder = order || restoredOrder
+  const paymentStatus = remotePaymentStatus || currentOrder?.paymentStatus
   const paymentMethod = currentOrder?.paymentMethod
   const hasReceivingMethod = paymentMethod === 'gcash' || paymentMethod === 'maribank'
+  const savedAccess = readOrderReceiptAccess()
+  const orderAccess = currentOrder?.orderId && currentOrder?.accessKey
+    ? { id: currentOrder.orderId, accessKey: currentOrder.accessKey, paymentMethod }
+    : savedAccess?.reference === currentOrder?.id ? savedAccess : null
 
   if (!currentOrder) {
     return (
@@ -110,27 +124,29 @@ export default function Confirmation() {
         </ol>
       </div>
 
-      {currentOrder.paymentStatus !== 'verified' && currentOrder.paymentMethod !== 'cod' && (
+      {paymentStatus !== 'verified' && currentOrder.paymentMethod !== 'cod' && (
         <section aria-labelledby="payment-qr-title" className="mt-6 rounded-2xl border border-line bg-paper p-5 text-left shadow-sm sm:p-7">
           <h2 id="payment-qr-title" className="font-serif text-xl font-semibold">Pay by QR transfer</h2>
           <p className="mt-2 text-base text-navy-soft">Wait for K2 staff to confirm your order and exact total before sending money. Include reference <strong className="text-navy">{currentOrder.id}</strong> when you send your receipt to staff.</p>
           {hasReceivingMethod ? <>
             <p className="mt-5 text-sm font-semibold text-navy">Selected at checkout: {paymentMethod === 'maribank' ? 'MariBank' : 'GCash'}</p>
-            <div className={`mx-auto mt-5 w-full max-w-[360px] overflow-hidden rounded-xl border border-line bg-white ${paymentMethod === 'maribank' ? 'payment-qr-maribank' : 'payment-qr-gcash'}`} role="img" aria-label={`${paymentMethod === 'maribank' ? 'MariBank' : 'GCash'} receiving QR code and account details`} />
-            <a className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-crimson underline underline-offset-4" href={`/payment/${paymentMethod}-receive.png`} target="_blank" rel="noopener noreferrer">Open original QR image</a>
+            <img className="mx-auto mt-5 h-auto w-full max-w-[360px] rounded-xl border border-line bg-white" src={`/payment/${paymentMethod}-receive-crop.png`} alt={`${paymentMethod === 'maribank' ? 'MariBank' : 'GCash'} receiving QR code and account details`} width={paymentMethod === 'maribank' ? 699 : 541} height={paymentMethod === 'maribank' ? 840 : 811} />
+            <a className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-crimson underline underline-offset-4" href={`/payment/${paymentMethod}-receive-crop.png`} target="_blank" rel="noopener noreferrer">Open larger QR image</a>
           </> : <p className="mt-5 rounded-xl border border-amber-600/30 bg-amber-50 p-4 text-sm leading-6 text-navy" role="status"><strong>Payment method unavailable.</strong> Ask K2 staff to confirm the receiving account before transferring. Your order request is still saved.</p>}
-          <p className="mt-3 text-sm text-navy-soft">After transferring, send your payment reference and receipt to K2 staff. Payment remains pending until a separate staff reviewer confirms the funds in the receiving account.</p>
+          <p className="mt-3 text-sm text-navy-soft">After transferring, upload your e-receipt and payment reference below. Payment remains pending until a separate staff reviewer confirms the funds in the receiving account.</p>
         </section>
       )}
+
+      {orderAccess && !guestBffEnabled() && <OrderConversation access={orderAccess} onPaymentStatus={setRemotePaymentStatus} />}
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
         {guestBffEnabled() ? (
           <CrimsonButton onClick={() => go('messages')}>View your messages</CrimsonButton>
-        ) : (
+        ) : !orderAccess ? (
           <CrimsonButton onClick={() => openStoreChat?.({ origin: 'order_confirmation', question: currentOrder?.id ? `Hi K2, I have a question regarding my order ${currentOrder.id}.` : 'Hi K2, I have a question regarding my order.' })}>
             Chat with staff about this order
           </CrimsonButton>
-        )}
+        ) : null}
         <GhostButton onClick={() => go('home')}>Continue shopping</GhostButton>
         <GhostButton onClick={() => go('pasabuy')}>Request an item from Italy</GhostButton>
       </div>

@@ -1,0 +1,29 @@
+# Order chat continuity and buyer e-receipt
+
+**Owner request:** After checkout, show the existing order conversation with a ready message box, avoid asking for identity twice, accept an e-receipt, and release the corrected QR images to GitHub/Vercel. **Authority:** IDEA-20260928-02, MAP-020/023/025/028.
+
+## Cause and implementation
+
+The deployed direct `submit_order_request_v2` already creates an order-linked conversation from checkout identity. The confirmation button opened the separate general chat, whose start form asks for name/contact again. No private buyer proof upload existed; Admin's optional proof reference was text only. The prepared direct path now saves the returned order ID and checkout key in same-browser storage, displays the existing thread and composer on confirmation, and submits a bounded private receipt with a transaction reference. Admin payment review lists and downloads the buyer file for authorized AAL2 staff. Proof submission adds a staff-visible inbound message but leaves payment status unchanged. The selected GCash/MariBank QR uses the exact pixel crop in both inline and larger views; see the companion QR evidence folder.
+
+The additive SQL validates order ID plus high-entropy key, eligible order state, file size (16 bytes to 3 MB), PNG/JPEG/PDF signature, receipt count (three per order), and idempotency. Private bytes are stored in `k2_private.order_payment_receipts`; browser roles have no table access. Staff RPCs require Auth identity, staff membership and AAL2. A public reference alone is insufficient to read a thread. The signed guest BFF/account flags remain off. Legacy orders that lack a saved key still require assisted recovery.
+
+## Local evidence and backup
+
+| Check | Result | Limit |
+| --- | --- | --- |
+| 375px direct checkout, seeded thread, message, receipt upload, reload after verified status | Playwright 1/1 passed | Synthetic RPC responses, no real order or funds. |
+| Authorized staff receipt list/download in payment review | Playwright 1/1 passed | Synthetic AAL2 boundary response; no authenticated real staff. |
+| New SQL on current production schema in a transaction | `ROLLBACK_ONLY_ORDER_RECEIPT_REHEARSAL_PASS`; no persistent schema/data change | Production provider application remains pending. |
+| Encrypted application-database backup restored in isolated PostgreSQL | 51 public relations and 14-row fingerprint matched; new migration exercised and rolled back | Does not restore Storage/Vault/provider configuration. |
+| `npm run verify:development` after last code edit | Passed with no unexpected anonymous or PUBLIC grants; secret/source/import checks passed | Development source checks only. |
+| Full `npm run verify:release` | Owner stopped the prolonged run after base 977/977, mobile 4/4, orientation 12/12, Storefront 32/32, recovery 14/14 and Admin 41/41 passed; the run later reached the Admin product recovery suite but did not exit 0. | The complete release gate is unverified. Focused buyer and staff receipt tests passed separately. |
+| `npm run build:storefront` and `npm run build:admin` | Both exited 0 with target boundaries, bundle budgets and secret scans passing. | Builds are local, before GitHub/Vercel promotion. |
+
+Backup ID `map017-pixplcjqivlfflickobf-20260928T080942.305Z-948f7096fae3`, encrypted SHA-256 `948f7096fae3c5adb60a29b32c36b2533a3a8b423c699958d530f9cc73a2066f`. The owner explicitly approved uploading the encrypted database envelope, manifest and redacted restore verification to the existing owner-only `K2 Production Backups` Google Drive folder. Uploaded file IDs: envelope `1b2hZ9jFxihiNLJbCVnhGSBygKFWiA8kH`, manifest `1Ouiek_FL7qfnjjEARlQxWVznrFdQNFQj`, restore verification `17ynXeG5eWFcp4iduICy4xOQRqUC0sIaI`. Drive metadata confirmed the expected parent and sizes (827369, 779, 438 bytes). A prior automatic approval review had rejected the sensitive upload until the owner explicitly authorized it; the later authorized upload succeeded.
+
+## Release and recovery state
+
+Supabase migration `20260928092634 order_payment_receipt_chat_20260928` was applied after the owner stopped the long release runner. Postflight confirmed all six functions/table, expected anonymous buyer grants, denial of anonymous proof-table SELECT and staff download, and zero submitted proofs. The full release gate remains incomplete; the focused UI checks, rollback-only rehearsal, security/development checks and both production builds passed. At this evidence stage, the combined source is not pushed and neither production artifact is verified on the exact hosts. Push the reviewed source to `main`, verify separate Storefront and Admin deployments plus canonical-host QR bytes, and check the customer-visible receipt path. Do not create a real payment merely for a synthetic smoke test.
+
+If source behavior fails after promotion, restore the prior successful Storefront/Admin Vercel artifacts. If buyer RPC exposure must be stopped, run `supabase/migrations/20260928_order_payment_receipt_chat_rollback.sql` only after restoring the old source. It revokes buyer entry points and deliberately preserves private proof and staff retrieval for reconciliation. Do not drop receipt bytes as a rollback. The owner/staff still need a real QR scan, recipient confirmation, real buyer proof review, independent funds check and representative phone acceptance under MAP-023/025.

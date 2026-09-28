@@ -5,6 +5,7 @@ import { products as localProducts } from '../data/products'
 import { guestBffEnabled, postGuestCommerce } from '../services/guestCommerceService'
 import { customerAccountEnabled } from '../services/customerAccountService'
 import { loadProductKnowledge } from '../lib/productKnowledgeSource'
+import { saveOrderReceiptAccess } from '../services/orderReceiptService'
 import { addCartItems, productStock, validateCartForSubmission } from '../lib/cartInventory'
 import { STOREFRONT_PATH_TO_VIEW, STOREFRONT_VIEW_TO_PATH } from '../lib/storefrontRoutes'
 
@@ -785,6 +786,17 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       const paymentMethod = checkoutPayloadRef.current?.note?.includes('MariBank QR transfer') ? 'maribank'
         : checkoutPayloadRef.current?.note?.includes('GCash QR transfer') ? 'gcash' : 'cod'
       try { window.localStorage.setItem(`k2-payment-choice:${saved.public_reference}`, paymentMethod) } catch { /* browser storage may be unavailable */ }
+      const orderAccess = saved.id && checkoutPayloadRef.current?.idempotencyKey ? {
+        id: saved.id,
+        accessKey: checkoutPayloadRef.current.idempotencyKey,
+        reference: saved.public_reference,
+        paymentMethod,
+        total: Number(saved.total_amount || 0),
+        count: checkoutPayloadRef.current.items.reduce((sum, item) => sum + item.quantity, 0),
+        status: saved.status,
+        paymentStatus: saved.payment_status,
+      } : null
+      if (orderAccess) saveOrderReceiptAccess(orderAccess)
       setOrder({
         id: saved.public_reference,
         total: Number(saved.total_amount ?? ((totals.finalTotal ?? totals.subtotal) + (Number(checkoutPayloadRef.current?.shippingAmount) || 0))),
@@ -793,6 +805,8 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         status: saved.status,
         paymentStatus: saved.payment_status,
         paymentMethod,
+        orderId: orderAccess?.id,
+        accessKey: orderAccess?.accessKey,
         shippingAmount: Number(saved.shipping_amount ?? checkoutPayloadRef.current?.shippingAmount ?? 0),
         fulfillmentMethod: saved.fulfillment_method ?? checkoutPayloadRef.current?.fulfillmentMethod,
       })

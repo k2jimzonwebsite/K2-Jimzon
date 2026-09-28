@@ -29,6 +29,7 @@ export default defineConfig({
     'storefront-mobile.spec.js',
     'storefront-motion.spec.js',
     'storefront-selling-surfaces.spec.js',
+    'order-receipt-direct-ui.spec.js',
     'hero-enhancement.spec.js',
     'workflow-api-ui.spec.js',
     'intake-ai-ui.spec.js',

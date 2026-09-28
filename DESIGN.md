@@ -65,6 +65,10 @@ components:
 
 # Design System: K2 Jimzon
 
+### Order conversation and buyer proof (IDEA-20260928-02, locally prepared)
+
+The confirmation page retains the K2 paper card, serif section headings and readable sans-serif form controls. The order thread sits directly below the selected receiving QR. Its message composer opens with the existing order, so the buyer can type without re-entering a name. The upload form labels payment reference and e-receipt separately, states the private file limits, and says staff must confirm funds. Verified payment removes the transfer and upload prompts. At 375px the focused synthetic buyer journey passed without a second identity form; staff proof download passed its focused modal test. Real-device and exact-host behavior remain open in MAP-025.
+
 ### Product listing chooser clarity (MAP-018, local fixture check)
 
 | Before | After | Why |
@@ -86,7 +90,7 @@ Source checkpoint: `docs/design-checkpoints/20260924-admin-mobile/`. Rendered ph
 
 ### Manual QR receipt choice (IDEA-20260924-01)
 
-The checkout uses the existing warm surfaces, readable Source Sans controls and two full-width radio choices for GCash and MariBank. The receipt uses the same contained card shape and method-specific portrait frames. Each frame shows the full QR, its white quiet zone and the recipient details from the exact owner-supplied screenshot pixels while omitting phone chrome and app action controls; the full-size source remains available as a link. The staff-confirmation warning precedes the QR, and the account-review requirement follows it. The controls remain at least 44px high and no payment state is conveyed through color or motion alone. The crop is locally prepared; real-device QR scanning and recipient validation remain pending under MAP-023/MAP-025.
+The checkout uses the existing warm surfaces, readable Source Sans controls and two full-width radio choices for GCash and MariBank. The receipt uses the same contained card shape and method-specific portrait images. Each image is an exact pixel crop of the owner-supplied screenshot, showing the full QR, its white quiet zone and recipient details while omitting phone chrome and app action controls. The larger-view link opens that same cropped PNG at native resolution; the uncropped screenshots remain recovery sources. The staff-confirmation warning precedes the QR, and the account-review requirement follows it. The controls remain at least 44px high and no payment state is conveyed through color or motion alone. The exact-asset correction is locally prepared; real-host asset verification, real-device QR scanning and recipient validation remain pending under MAP-023/MAP-025.
 
 ### Storefront light mode 4-color soft white palette (IDEA-20260923-01)
 

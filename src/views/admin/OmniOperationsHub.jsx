@@ -937,6 +937,10 @@ export function PackingLotProof({ allocations, value, confirmed, disabled, onSel
 
 export function PaymentStatusModal({ order, onClose, onSave, secure, returnFocusRef }) {
   const isSecure = Boolean(secure)
+  const [buyerReceipts, setBuyerReceipts] = useState([])
+  const [receiptLoadError, setReceiptLoadError] = useState('')
+  const [receiptDownloadError, setReceiptDownloadError] = useState('')
+  const [downloadingReceipt, setDownloadingReceipt] = useState('')
   const [target, setTarget] = useState('')
   const [note, setNote] = useState('')
   const [method, setMethod] = useState('gcash')
@@ -959,6 +963,40 @@ export function PaymentStatusModal({ order, onClose, onSave, secure, returnFocus
     verified: ['refunded'],
     failed: isSecure && versionAvailable ? ['evidence_submitted'] : [], refunded: [],
   }[current] || []
+
+  useEffect(() => {
+    if (!supabase || !order?.id) return undefined
+    let active = true
+    supabase.rpc('list_order_payment_receipts_v1', { p_order_id: order.id })
+      .then(({ data, error: rpcError }) => {
+        if (!active) return
+        if (rpcError || !Array.isArray(data)) setReceiptLoadError('Buyer receipts could not be loaded. Refresh this order and try again.')
+        else { setBuyerReceipts(data); setReceiptLoadError('') }
+      })
+      .catch(() => { if (active) setReceiptLoadError('Buyer receipts could not be loaded. Refresh this order and try again.') })
+    return () => { active = false }
+  }, [order?.id])
+
+  const downloadBuyerReceipt = async (receipt) => {
+    if (!supabase || downloadingReceipt) return
+    setDownloadingReceipt(receipt.id)
+    setReceiptDownloadError('')
+    try {
+      const { data, error: rpcError } = await supabase.rpc('get_order_payment_receipt_v1', { p_receipt_id: receipt.id })
+      if (rpcError || !data?.ok || !data.contents_base64) throw new Error('DOWNLOAD_FAILED')
+      const bytes = Uint8Array.from(atob(data.contents_base64), char => char.charCodeAt(0))
+      const blob = new Blob([bytes], { type: data.media_type })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${String(receipt.payment_reference || 'payment-receipt').replace(/[^a-zA-Z0-9_-]/g, '-')}-${receipt.id}.${data.media_type === 'application/pdf' ? 'pdf' : data.media_type === 'image/jpeg' ? 'jpg' : 'png'}`
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.setTimeout(() => URL.revokeObjectURL(url), 60000)
+    } catch { setReceiptDownloadError('Buyer receipt could not be downloaded. Try again after refreshing this order.') }
+    finally { setDownloadingReceipt('') }
+  }
 
   useEffect(() => {
     setTarget(choices[0] || '')
@@ -1034,6 +1072,20 @@ export function PaymentStatusModal({ order, onClose, onSave, secure, returnFocus
         </div>
         {current === 'failed' && <p className="text-sm text-white/80">The rejected attempt stays in history. Submit corrected evidence for a different staff member to verify against the receiving account.</p>}
         {isSecure && !versionAvailable && <StateBanner tone="warning">Refresh this order to load its review version before recording payment evidence.</StateBanner>}
+        {buyerReceipts.length > 0 && <section aria-label="Buyer e-receipts" className="space-y-3 rounded-adm border border-adm-line bg-adm-surface-2/40 p-3">
+          <h3 className="text-sm font-semibold text-white">Buyer e-receipts</h3>
+          <p className="text-xs leading-5 text-white/70">These are buyer-submitted proof files. Check the receiving account independently before recording or verifying payment.</p>
+          {buyerReceipts.map(receipt => <div key={receipt.id} className="rounded-adm-sm border border-adm-line p-3 text-xs">
+            <p className="break-all font-mono text-blue">{receipt.payment_reference}</p>
+            <p className="mt-1 text-white/60">{receipt.media_type.replace('image/', '').toUpperCase()} · {Math.ceil(receipt.byte_size / 1024)} KB · {new Date(receipt.submitted_at).toLocaleString()}</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button type="button" disabled={Boolean(downloadingReceipt)} onClick={() => downloadBuyerReceipt(receipt)} className={`${secondaryButton} adm-btn-sm`}>Download buyer receipt {receipt.payment_reference}</button>
+              {target === 'evidence_submitted' && <button type="button" onClick={() => { setProofAssetRef(`k2-receipt:${receipt.id}`); setPaymentReference(receipt.payment_reference) }} className={`${secondaryButton} adm-btn-sm`}>Use as proof reference</button>}
+            </div>
+          </div>)}
+        </section>}
+        {receiptLoadError && <StateBanner tone="warning">{receiptLoadError}</StateBanner>}
+        {receiptDownloadError && <StateBanner tone="warning">{receiptDownloadError}</StateBanner>}
         {choices.length ? <>
           <label className="block text-xs font-semibold text-white/80">Next valid state
             <select disabled={busy || uncertain} value={target} onChange={event => setTarget(event.target.value)} className="adm-input mt-1.5 min-h-11 text-base">

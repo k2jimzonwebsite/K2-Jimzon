@@ -913,17 +913,3 @@
     inset: 0;
   }
 }
-/* Crop the supplied screenshots without changing QR modules or recipient text. */
-.payment-qr-maribank {
-  aspect-ratio: 5 / 6;
-  background-image: url('/payment/maribank-receive.png');
-  background-size: 130% auto;
-  background-position: 43% 26.4%;
-}
-
-.payment-qr-gcash {
-  aspect-ratio: 2 / 3;
-  background-image: url('/payment/gcash-receive.png');
-  background-size: 175% auto;
-  background-position: 47% 30%;
-}

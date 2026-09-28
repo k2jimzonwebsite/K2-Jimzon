@@ -158,7 +158,11 @@ test('guest message start and reply paths preserve scoped behavioral receipts', 
 })
 
 
-test('order confirmation explains the staff-reviewed exception path without an SLA promise', async ({ page }) => {
+for (const method of [
+  { label: 'MariBank', key: 'maribank', width: 699 },
+  { label: 'GCash', key: 'gcash', width: 541 },
+]) {
+test(`order confirmation explains the staff-reviewed exception path for ${method.label}`, async ({ page }) => {
   let statusReads = 0
   let submittedNote = ''
   await page.setViewportSize({ width: 375, height: 812 })
@@ -220,7 +224,7 @@ test('order confirmation explains the staff-reviewed exception path without an S
   await page.getByRole('button', { name: 'Add to cart · ₱735' }).click()
   await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: 'Review order request' }).click()
   await expect(page.getByRole('heading', { name: 'Review order request', exact: true })).toBeVisible({ timeout: 60000 })
-  await page.getByRole('radio', { name: /MariBank/ }).check()
+  await page.getByRole('radio', { name: method.label }).check()
   await expect(page.getByText('Quoted after review', { exact: true })).toBeVisible()
   await expect(page.getByText('Products total', { exact: true })).toBeVisible()
   await expect(page.getByText('Order total', { exact: true })).toHaveCount(0)
@@ -233,9 +237,12 @@ test('order confirmation explains the staff-reviewed exception path without an S
   await page.getByRole('button', { name: 'Submit order request' }).click()
 
   await expect(page.getByRole('heading', { name: 'Order request received' })).toBeVisible({ timeout: 60000 })
-  expect(submittedNote).toContain('[Payment: MariBank QR transfer]')
-  await expect(page.getByRole('img', { name: 'MariBank receiving QR code' })).toBeVisible()
-  await expect(page.getByRole('link', { name: 'Open original QR image' })).toHaveAttribute('href', '/payment/maribank-receive.png')
+  expect(submittedNote).toContain(`[Payment: ${method.label} QR transfer]`)
+  const image = page.getByRole('img', { name: `${method.label} receiving QR code and account details` })
+  await expect(image).toBeVisible()
+  await expect(image).toHaveAttribute('src', `/payment/${method.key}-receive-crop.png`)
+  await expect.poll(() => image.evaluate((element) => element.naturalWidth)).toBe(method.width)
+  await expect(page.getByRole('link', { name: 'Open larger QR image' })).toHaveAttribute('href', `/payment/${method.key}-receive-crop.png`)
   await expect(page).toHaveURL(/\/confirmation$/)
   await page.reload({ waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('heading', { name: 'Order request received' })).toBeVisible({ timeout: 60000 })
@@ -252,6 +259,7 @@ test('order confirmation explains the staff-reviewed exception path without an S
   await expect(page.getByRole('heading', { name: 'Order request received' })).toBeVisible()
   await expect(page.getByText(/WEB-0123456789ABCDEF/).first()).toBeVisible()
 })
+}
 
 test('cold confirmation handles an expired guest grant with a useful recovery state', async ({ page }) => {
   await page.route('**/rest/v1/**', (route) => route.fulfill({
