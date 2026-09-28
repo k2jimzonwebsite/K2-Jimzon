@@ -249,6 +249,27 @@ only the unrelated Supabase `ScoutIT` project and denies K2 ref
 `pixplcjqivlfflickobf`; do not run K2 SQL, migrations, or Auth changes through
 that session.
 
+**K2 Supabase identity preflight (IDEA-20260928-03):** Before any K2 provider
+or database change, load the owner-controlled K2 `.env.local` into the process
+and run `npm run preflight:k2-project`. This read-only check refuses a ScoutIT
+URL, a token that cannot list K2 project `pixplcjqivlfflickobf`, and provider
+errors without printing credentials. The focused contract is
+`npm run security:test-k2-project` and runs in development verification. A
+passing identity preflight does not replace a fresh backup, exact migration
+review, rollback rehearsal, or owner authorization for consequential writes.
+
+**Vercel API packaging candidate (MAP-020/024):** The feature branch selects
+one `@vercel/node` API entrypoint per project with a `@vercel/static-build`
+static app entry. Vercel's `builds` syntax is legacy but provides an explicit
+output allowlist under the current shared repository root; the former
+`functions` map set duration without excluding the sibling API entrypoint.
+Before promotion, inspect a new Admin and Storefront Preview Resources list:
+each must contain only its own API function, the expected static app, and its
+180/10 second function bound. Check the own API route and wrong-target 404 on
+each Preview. If Vercel rejects the builder or changes the duration/routing,
+revert the two selected configs and entrypoint exports on the feature branch;
+keep Production `main`, both BFF flags and the Admin edge gate unchanged.
+
 A read-only connector refresh on 28 August 2026 returned the same unrelated
 Vercel team and Supabase `ScoutIT` project; the K2 Vercel projects and Supabase
 ref remain unavailable through this session. No provider or database write was

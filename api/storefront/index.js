@@ -1,6 +1,8 @@
 import storefrontBffRouter from '../../server/storefront-bff/router.js'
 import { safeJson } from '../../server/storefront-bff/security.js'
 
+export const maxDuration = 10
+
 function storefrontBoundaryEnabled() {
   return process.env.K2_DEPLOYMENT_TARGET === 'storefront'
     && process.env.K2_STOREFRONT_BFF_ENABLED === 'true'

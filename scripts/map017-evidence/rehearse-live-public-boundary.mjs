@@ -3,6 +3,7 @@
 // A separate read-only query then proves sampled vulnerable baseline state was
 // restored. No credential values or row data are printed.
 import fs from 'node:fs'
+import { verifyK2SupabaseProject } from '../verify-k2-supabase-project.mjs'
 
 if (!process.argv.includes('--confirm-rollback-only')) {
   console.error('REFUSED: pass --confirm-rollback-only to run the production rollback rehearsal')
@@ -20,6 +21,8 @@ if (!accessToken) {
   console.error('REFUSED: SUPABASE_ACCESS_TOKEN is missing from .env.local')
   process.exit(2)
 }
+
+await verifyK2SupabaseProject({ accessToken, supabaseUrl: env.VITE_SUPABASE_URL })
 
 const projectRef = 'pixplcjqivlfflickobf'
 const endpoint = `https://api.supabase.com/v1/projects/${projectRef}/database/query`

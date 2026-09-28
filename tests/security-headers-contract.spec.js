@@ -230,6 +230,23 @@ test('the provider-supported root vercel.ts selects a complete target config', (
   }
 })
 
+test('each selected Vercel artifact builds only its own API function', () => {
+  for (const entry of [
+    { target: 'storefront', projectId: 'prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL', own: 'api/storefront/index.js', other: 'api/admin/index.js' },
+    { target: 'admin', projectId: 'prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x', own: 'api/admin/index.js', other: 'api/storefront/index.js' },
+  ]) {
+    const result = runRootVercelConfig(entry)
+    expect(result.status, result.stderr).toBe(0)
+    const config = JSON.parse(result.stdout)
+    expect(config.functions).toBeUndefined()
+    expect(config.builds).toEqual([
+      { src: 'package.json', use: '@vercel/static-build', config: { distDir: 'dist' } },
+      { src: entry.own, use: '@vercel/node' },
+    ])
+    expect(JSON.stringify(config.builds)).not.toContain(entry.other)
+  }
+})
+
 test('separate production artifacts declare baseline headers and report-only CSP', async () => {
   const configs = await Promise.all([
     readJson('../vercel.storefront.json'),
@@ -361,13 +378,13 @@ test('each Vercel artifact declares one exact consolidated BFF entrypoint and on
   // HTML before higher-level rewrites; the product rule recovers only a
   // missing/unpublished SKU in the client. There is deliberately no global
   // catch-all: other unmatched requests retain a host 404.
-  expect(Object.keys(storefront.functions)).toEqual(['api/storefront/index.js'])
+  expect(storefront.builds.filter(({ use }) => use === '@vercel/node').map(({ src }) => src)).toEqual(['api/storefront/index.js'])
   expect(storefront.rewrites).toEqual([
     { source: '/api/storefront/:route*', destination: '/api/storefront?route=:route*' },
     { source: '/product/:sku', destination: '/index.html' },
     ...STOREFRONT_SPA_PATHS.map(source => ({ source, destination: '/index.html' })),
   ])
-  expect(Object.keys(admin.functions)).toEqual(['api/admin/index.js'])
+  expect(admin.builds.filter(({ use }) => use === '@vercel/node').map(({ src }) => src)).toEqual(['api/admin/index.js'])
   expect(admin.rewrites).toEqual([
     { source: '/api/admin/:route*', destination: '/api/admin?route=:route*' },
     { source: '/admin-portal-k2-secure', destination: '/index.html' },
