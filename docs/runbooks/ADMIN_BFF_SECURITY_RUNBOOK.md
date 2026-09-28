@@ -472,13 +472,14 @@ both flags remain false, the edge 404 gate remains enabled, and MAP-017/018/020
 still govern preview and live activation. Recovery is to keep those gates closed
 and leave the widget unused until the coordinated release is ready.
 
-**Owner handoff completed later 28 September:** The owner saved the paired
+**Owner handoff completed later 28 September:** The owner saved
 `K2_TURNSTILE_SECRET_KEY` as an Admin Production Secret and redeployed. Vercel
 shows deployment `dpl_JPEbAG3GEuYkWPgYB4jLoKjF9Khn` Ready and Current on
 `admin.k2jimzon.com`; the value was not revealed. Its source is still `main`
 `f95e384`, and Resources still shows both `/api/admin/index` and the wrong-target
 `/api/storefront/index`. The Admin edge 404 gate and both BFF flags remain off.
-The prerequisite key pair is present in the new deployment, while live challenge
+Both required variable names are present in the new deployment; the secret value
+was not independently matched to the site key. Live challenge
 behavior and intake remain unverified. Keep the edge gate until wrong-target
 packaging, preview route/denial, and MAP-017 recovery checks pass.
 
