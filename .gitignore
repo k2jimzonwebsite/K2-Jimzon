@@ -81,3 +81,5 @@ outputs/
 # them if more clips follow.
 assets/*.mp4
 assets/3d/*.blend1
+.tools/published-review-guard-pg-data/
+.tools/published-review-guard-pg.log

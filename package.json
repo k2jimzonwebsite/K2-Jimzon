@@ -48,6 +48,7 @@
     "audit:schema-truth": "node scripts/schema-truth-audit.mjs",
     "preflight:map017": "node scripts/apply-map017-migration.mjs --dry-run",
     "rehearse:map017-local": "node scripts/rehearse-local-migration.mjs",
+    "rehearse:published-review-guard": "node scripts/rehearse-published-review-guard.mjs",
     "rehearse:catalog-spreadsheet": "node scripts/rehearse-catalog-spreadsheet.mjs",
     "rehearse:channel-vocabulary": "node scripts/rehearse-channel-vocabulary-portable.mjs",
     "rehearse:shop-transfers": "node scripts/rehearse-multi-shop-transfers-portable.mjs",

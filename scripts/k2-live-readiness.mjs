@@ -15,6 +15,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { verifyK2SupabaseProject, K2_SUPABASE_REF } from './verify-k2-supabase-project.mjs'
+import { EXPECTED_ANON_FUNCTIONS } from './security-surface-policy.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 
@@ -42,6 +43,13 @@ function assertReadOnly(sql) {
 }
 
 async function query(sql) {
+  const rows = await queryRows(sql)
+  return Array.isArray(rows) ? rows[0] : rows
+}
+
+// Same guard and transport, but returns every row. Needed wherever the gate
+// enumerates a set rather than reading one aggregate.
+async function queryRows(sql) {
   assertReadOnly(sql)
   const response = await fetch(`https://api.supabase.com/v1/projects/${K2_SUPABASE_REF}/database/query`, {
     method: 'POST',
@@ -51,8 +59,7 @@ async function query(sql) {
   if (response.status !== 200 && response.status !== 201) {
     throw new Error(`read-only query failed: HTTP ${response.status} ${(await response.text()).slice(0, 200)}`)
   }
-  const body = await response.json()
-  return Array.isArray(body) ? body[0] : body
+  return response.json()
 }
 
 const gates = []
@@ -121,21 +128,67 @@ gate(
   channelAbsent ? 'channel tables absent' : 'channel tables already exist',
 )
 
-// 4. Anonymous execute surface. Recorded as a number for the owner to compare
-//    against the 18 expected grants, never asserted as acceptable here.
-const grants = await query(
-  `select count(*)::int as anon_execute
+// 4. Anonymous execute surface, classified rather than merely counted.
+//
+//    A raw "10 live versus 18 expected" reads as an unexplained security gap. It
+//    is not. The live set is the sum of two deliberate states: the functions the
+//    current policy expects, and the legacy transitional RPCs that the prepared
+//    MAP-019/020 signed-guest chain is designed to replace. The expected set that
+//    is absent is the unapplied portion of that chain. Naming all three makes the
+//    revocation list explicit instead of leaving a number to be interpreted.
+//
+//    Nothing here asserts the transitional grants are acceptable. They are routed
+//    to the owner for the cutover decision and are never counted as a pass.
+const liveAnon = await queryRows(
+  `select p.proname || '(' || pg_get_function_identity_arguments(p.oid) || ')' as signature
      from pg_proc p
      join pg_namespace n on n.oid = p.pronamespace
     where n.nspname = 'public'
-      and has_function_privilege('anon', p.oid, 'EXECUTE')`,
+      and has_function_privilege('anon', p.oid, 'EXECUTE')
+    order by 1`,
+)
+// The policy list is written as `public.name(arg,arg)` while a live signature
+// carries full argument types. Overload identity is not in question here, so
+// both sides are reduced to `public.name` before comparison.
+const normalize = (signature) => {
+  const withoutArgs = String(signature).replace(/\(.*\)\s*$/, '').trim()
+  return withoutArgs.includes('.') ? withoutArgs : `public.${withoutArgs}`
+}
+const liveSignatures = liveAnon.map((row) => row.signature)
+const expected = new Set(EXPECTED_ANON_FUNCTIONS.map(normalize))
+const liveKeys = new Set(liveSignatures.map(normalize))
+const liveAndExpected = [...liveKeys].filter((s) => expected.has(s)).sort()
+const transitional = [...liveKeys].filter((s) => !expected.has(s)).sort()
+const notYetApplied = [...expected].filter((f) => !liveKeys.has(f)).sort()
+const grants = { anon_execute: liveSignatures.length }
+
+// PUBLIC must hold no implicit execute in the public schema. The 25 September
+// stock-grant correction removed it; this proves it is still gone.
+const publicLeak = await query(
+  `select count(*)::int as public_execute
+     from pg_proc p
+     join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public'
+      and has_function_privilege('public', p.oid, 'EXECUTE')
+      and not has_function_privilege('anon', p.oid, 'EXECUTE')`,
 )
 gate(
-  'anon-execute-surface',
-  'owner',
-  'owner',
-  `${grants.anon_execute} anon-executable public functions; source expects 18`,
+  'public-has-no-execute',
+  'none',
+  publicLeak.public_execute === 0 ? 'verified' : 'blocked',
+  publicLeak.public_execute === 0
+    ? 'no implicit PUBLIC execute in the public schema'
+    : `${publicLeak.public_execute} functions still reachable through PUBLIC`,
 )
+gate(
+  'anon-execute-classified',
+  'owner',
+  'owner',
+  `${liveAndExpected.length} expected and live, ${transitional.length} legacy transitional,`
+    + ` ${notYetApplied.length} expected but not yet applied`,
+)
+for (const signature of transitional) console.log(`           transitional: ${signature}`)
+for (const signature of notYetApplied) console.log(`           pending apply: ${signature}`)
 
 // 5. Product and lot facts. Counts only. These are projections, never proof of
 //    physical stock, which is why the gate routes to the owner.

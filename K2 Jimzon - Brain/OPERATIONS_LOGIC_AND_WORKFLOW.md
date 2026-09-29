@@ -1957,3 +1957,17 @@ A foreign key is not a label. `products.brand_id` and `products.category_id` ide
 A product listing is not a listing. A product needs a resolvable brand and category, at least one image with the media rights to sell it, a description, a price and a barcode before it is presented as purchasable. A lot ledger with complete expiry, custodian, location and status, but a product with no image, no brand and no description, is inventory that cannot be listed.
 
 Stock has one canonical source. `products.stock_available`, the batch view and `inventory_balances` are three different answers and must not be summed or presented as independent facts. Until MAP-026 decides which is canonical, no displayed quantity may be described as a physical count.
+
+## Classifying the anonymous execute surface (IDEA-20260929-05)
+
+A count of anonymous-executable functions is not a finding. Classify it before reporting it. Every anonymous-executable function in `public` belongs to exactly one of three classes: **expected and live**, meaning the current policy grants it and it is applied; **legacy transitional**, meaning it is anon-reachable but outside current policy because the prepared replacement is not yet applied; or **expected but not yet applied**, meaning policy intends it and a prepared migration carries it. A live count and an expected count that differ without all three classes being named is an unexplained residue and must be treated as a finding until classified.
+
+A legacy transitional grant is not automatically a vulnerability, and it is not automatically acceptable either. It is a named revocation candidate for the cutover that replaces it, and the replacement must be applied and proven before the old grant is revoked. Revoking first breaks the storefront.
+
+`PUBLIC` must hold no implicit execute on any function in the public schema, and `anon` must hold no table-level privilege there. Both are asserted on every readiness run. A verified public read path is granted to named roles explicitly and is not the same thing as a `PUBLIC` grant.
+
+## The publication gate is the flag the storefront reads (IDEA-20260929-05)
+
+The customer storefront filters on `published`. Therefore a review rule enforced only on a status transition does not protect customers. Any path that sets `published = true` on a product that has not been human-reviewed is a defect, including a direct table update from an unreviewed application surface.
+
+The database guard is authoritative and is a check constraint added `NOT VALID`, so it can land while rows that predate the rule remain readable. Adding it constrains every future write, which is what closes a bypass held by any writer. The consequence must be stated before the migration is applied: once it lands, rows that are already published without review cannot be edited at all until each is reviewed or unpublished. Unpublishing must remain permitted under the same constraint, or the finding becomes unfixable.
