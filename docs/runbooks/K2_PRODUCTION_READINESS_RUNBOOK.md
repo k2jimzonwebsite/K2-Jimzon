@@ -18,9 +18,9 @@ decision left, not the re-derivation of whether the step is allowed.
 | Supabase management API, read | available | `SUPABASE_ACCESS_TOKEN` in the owner-controlled `.env.local` |
 | Supabase management API, production SQL write | **technically available, not authorized** | The token can execute arbitrary SQL against K2. Capability is not permission. |
 | GitHub | available | `gh` is authenticated to `EdgerzXc` with `repo` and `workflow` |
-| Vercel | **not available** | `VERCEL_OIDC_TOKEN` is an OIDC JWT; the REST API answers `403 Not authorized`. No CLI, no MCP. |
-| Cloudflare | **not available** | No connector, CLI or MCP. |
-| Supabase security advisor | **not available** | Needs a signed-in dashboard session. |
+| Vercel | available in signed-in browser; not in this script | REST API token is invalid; Admin and Storefront dashboards can be inspected in the browser. |
+| Cloudflare | available in signed-in browser; not in this script | K2 Turnstile widget can be inspected; the account has no managed K2 domain zone. |
+| Supabase security advisor | available in signed-in browser; not in this script | K2 Security Advisor displayed 0 errors, 56 warnings and 7 suggestions on 29 September; findings need MAP-017/018 classification. |
 | Local PostgreSQL 17.11 | available | `.tools/postgresql-17.11/runtime/pgsql/bin` for isolated restore and rehearsal |
 
 The K2/ScoutIT distinction still holds: the installed token lists only
@@ -62,7 +62,7 @@ A single `FAIL` means no production step may start.
 | `stock-facts` | Routed to the owner. Reports product, live-product and lot counts. These are database projections and never prove physical stock. |
 | `backup-freshness` | The newest local encrypted envelope is dated on or after the newest applied migration. |
 | `backup-restore-proof` | An isolated restore receipt sits beside that envelope. Local presence only; it is not owner-held custody. |
-| `vercel-preview`, `cloudflare-gate`, `provider-advisor` | Always `CONNECTOR` here. They exist so a receipt never implies a Preview, edge rule or advisor finding was seen. |
+| `vercel-preview`, `vercel-edge-gate`, `provider-advisor` | Always `CONNECTOR` in this script. The Admin route gate is a Vercel routing rule; browser observations must be recorded separately before a cutover. |
 | `release-branch` | Whether the working branch is ahead of its upstream, so a "pushed" claim is checkable. |
 
 ## Ordered production step, once the owner authorizes

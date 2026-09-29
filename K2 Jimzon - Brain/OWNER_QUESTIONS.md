@@ -4,6 +4,23 @@ This file contains only actions and business decisions that require the owner.
 It is not an engineering backlog; implementation remains exclusively in
 `MASTER_ACTION_PLAN.md`.
 
+**29 September decisions pending (MAP-018/020/024):** The signed-in provider
+checks leave three owner choices. (1) Keep the extra public Storefront alias
+`k2-jimzon-vert.vercel.app`, or retire it after a host traffic/redirect check;
+it is an alias of the current Storefront deployment, not a third project.
+(2) For the 22 currently published products with no human review, choose
+unpublish pending real review or record a temporary exception; do not mark them
+reviewed without inspecting actual labels, allergens, storage, price and rights.
+(3) Authorize private retention and removal of the nine debug/third-party
+screenshots from public `product-images`, or leave them public pending a rights
+decision. Codex owns the technical steps after each decision. The owner must
+also authorize the exact MAP-018 intake migration chain before a production
+apply and provide real package facts and physical counts before sellable stock
+or a first real listing can be accepted. Synthetic CSV checks already cover
+importer mechanics and do not establish those facts.
+
+**29 September Preview publication approval fulfilled (MAP-020):** Automatic approval review blocked pushing local branch `codex/connector-handoff-20260929` to the configured GitHub repository `k2jimzonwebsite/K2-Jimzon`. Read-only GitHub verification confirms that exact repository and WRITE access for signed-in `EdgerzXc`, but the user's broad instruction to continue did not specifically authorize exporting the branch. The owner explicitly approved this exact feature-branch push to trigger separate Vercel Previews for verification. Codex owns the push and provider checks. Production `main` and the BFF remain unchanged until their separate release gates.
+
 **25 September launch clarification (IDEA-20260925-04):** The owner selected full operation of two separate websites: customer Storefront and staff Admin. Existing channel stock numbers are available and Codex should handle the technical transfer; the source export/location is still needed. Sister/cousin staff will check payment QRs and real-world operations, and the owner says a separate payment verifier is available. The owner controls approved quantities, but marketplace listing numbers are not proof of physical on-hand. Codex will compare the source with live SKU/lot balances and prepare an exact reconciliation before any write. No manual SQL, CSV preparation, or row-by-row entry is assigned to the owner; providing the source file and confirming actual quantities/discrepancies are the remaining owner/staff inputs.
 
 **25 September readiness audit:** The stock permission correction and its three-file backup package require no further owner step. Full operating acceptance remains open. The owner-only actions are physical stock/product/media approval, both receiving QR recipient checks and a real transfer with a separate account verifier, OWNER-003 wholesale policy, OWNER-006 retention/deletion policy, OWNER-007 paid-AI controls if that optional path is wanted, and any provider identity/recovery challenge that only the account holder can complete. Codex owns code, SQL preparation, backups, tests, deployment verification and the remaining MAP-017 technical follow-up. See `docs/evidence/20260925-production-readiness/README.md` for the cross-MAP evidence.

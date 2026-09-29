@@ -45,7 +45,7 @@ test('every SQL template literal is a SELECT with no write verb', () => {
 
 test('the gate reports provider surfaces as blocked instead of assuming them', () => {
   assert.match(source, /'vercel-preview', 'connector', 'connector'/)
-  assert.match(source, /'cloudflare-gate', 'connector', 'connector'/)
+  assert.match(source, /'vercel-edge-gate', 'connector', 'connector'/)
   assert.match(source, /proves preconditions only/)
 })
 

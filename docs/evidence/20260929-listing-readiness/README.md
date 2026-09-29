@@ -90,6 +90,8 @@ empty.
 
 ### 2. `published` had no review guard
 
+**29 September correction, IDEA-20260929-07:** The statement below describes the current query, not the owner's complete visibility rule. The owner requires an explicit Website channel assignment as an additional gate. `published=true` alone must not be called a Website tag. The current Storefront query has no Website assignment filter, and the Admin channel board does not assign one. MAP-018/026 own implementation and SKU-by-SKU reconciliation of the 22 already-published rows before any visibility-changing release.
+
 The database blocks a status change to `Live` with `K2_PUBLICATION_NOT_READY`
 in three functions. The storefront's real gate is `published = true`, written by
 a direct `update` at `Sheet.jsx:282` with no review check. All 22 published
@@ -123,10 +125,12 @@ reports `PUBLISH_REVIEW_REQUIRED`. This closes the admin path only.
 6. **Intake is unappliable** until `product_intake_sessions` and `k2_sku_seq`
    exist. Owner authorization is the only missing input; see
    `docs/runbooks/K2_PRODUCTION_READINESS_RUNBOOK.md`.
-7. **Staff cannot sign in on the exact host.** The Admin BFF is off and the edge
-   gate returns 404 for `/api/admin/session`, so none of the above can be
-   human-verified on production. Vercel and Cloudflare are unreachable from this
-   harness.
+7. **Protected Admin intake is not active on the exact host.** The Admin BFF is
+   off and the edge gate returns 404 for `/api/admin/session`. This does not
+   block or test the deployed direct Supabase login path, which still includes
+   authenticator MFA for enrolled staff accounts. The direct path and legacy
+   inventory listing need their own signed-in acceptance check; the protected
+   new intake cannot be human-verified on production yet.
 8. **Pre-existing, unrelated to this work:** `tests/storefront-selling-surfaces.spec.js`
    fails under `playwright.api.config.js` because that config has no `baseURL`
    for its relative `page.goto`, and its intended `playwright.selling.config.js`
@@ -165,14 +169,7 @@ kind:** 2 usable photos, both of the same single SKU. **Zero of the other 29
 products have a photograph.** The 11 Twinings images are of a product K2 does not
 sell, and 9 are screenshots that were uploaded to the wrong place entirely.
 
-**A third production surface was found this way.** Two of those screenshots show
-`k2-jimzon-vert.vercel.app` running a "Smart Paste AI Import" flow that writes to
-`public.products` and has been failing on a missing `after_image_url` column and
-a `bellarom` uuid cast. That host currently answers **HTTP 200** and serves the
-customer storefront, and it appears in no runbook, no `vercel.*.json` and no MAP
-entry. It is a third writer to the canonical product table, outside the two
-artifacts `AGENTS.md` describes. This outranks every remaining listing task and
-is the first item in `docs/runbooks/CONNECTOR_SESSION_HANDOFF.md`.
+**Provider correction, 29 September:** The July screenshots show historical Smart Paste AI Import failures, but current signed-in Vercel evidence identifies `k2-jimzon-vert.vercel.app` as an alias of the existing `k2-jimzon` Storefront project. It shares the Ready Production deployment `CDHSSMBpvySmc82qzMQUVAJdWSkx` with `www.k2jimzon.com`, from `main` SHA `f95e384`, created by `k2jimzonwebsite`. There is no evidence of a third current project or independent writer. The owner will decide whether to keep or retire the extra hostname after a traffic/redirect check. This correction does not resolve the public-bucket media rights, the 22 published unreviewed rows, or the missing photographs for 29 products.
 
 No production state changed. No object was deleted, no link was written, and the
 bucket was only read.
