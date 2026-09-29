@@ -2,6 +2,8 @@
 
 **28 September order chat/receipt source release (IDEA-20260928-02):** A current-schema rollback-only rehearsal and isolated restore/migration rehearsal passed. The owner approved upload of the fresh encrypted application-database envelope plus redacted verification companions to the existing owner-only backup folder; exact IDs/SHA are in `docs/evidence/20260928-order-chat-receipt/README.md`. Supabase migration `20260928092634` is applied; postflight confirmed private table/functions, grants, denials and zero proofs. GitHub `main` advanced `24f99ed` to `f1645530d47c67262a86adfc8ba4ab74aa60b9f7`; separate Vercel production deployments `dpl_H5PZLaDZ2y1wAkA9yiVQhRh5biL8` (Storefront) and `dpl_Gw7BHSvC1JkHDzq1SJfqrEZDkEzr` (Admin) are READY on that SHA. Canonical hosts returned target-correct markers; both GCash/MariBank crop URL bytes match the committed assets. The owner stopped the prolonged full release run before aggregate completion; focused buyer/staff tests, security checks and both local target builds passed. GitHub CI `36403917479` was still running at receipt time. The paired emergency rollback revokes buyer RPC entry while preserving private proofs/staff read access; restore prior separate Vercel artifacts before using it. A real buyer/staff order chat, proof retrieval, QR scan, recipient check and transfer remain MAP-023/025 acceptance, not verified live behavior.
 
+**29 September owner-authorized provider preparation:** The K2 Admin BOS Cloudflare Turnstile widget now allows the exact inventory-branch Admin Preview hostname as well as `admin.k2jimzon.com`; Managed mode and no pre-clearance were retained. The signed-in Vercel dashboard's project Function Max Duration input enforces a 300-second step, so the authorized Admin 180-second value failed native form validation and did not save. Storefront 10 was not submitted. The two Preview functions remain reported at 300 seconds, and no production deployment or BFF/edge gate changed. Vercel documents that `functions` cannot combine with the legacy `builds` allowlist used to isolate the target API. Prove a supported one-function-per-project and 180/10-second configuration on fresh Previews before promotion. Exact receipt: `docs/evidence/20260929-inventory-readiness/README.md`.
+
 **27 September owner-authorized QR and Storefront presentation release:** The owner explicitly approved pushing the named public GitHub destination after automatic approval review held the first attempt. GitHub `main` advanced `1b6df79` to `02b91f331c5b96d3a43d7257d22572bbdf756fba` through the QR crop, Storefront review, and release-evidence commits. The complete local `npm run verify:release` exited 0 with 1,202 tests; Storefront landing JS passed at 149.16/150.50 kB gzip and CSS at 29.99/30.00 kB gzip; Admin passed at 224.80/300.00 kB minified. Separate GitHub/Vercel production deployment receipts `6694358883` (Storefront, `https://k2-jimzon-9d9a7jjls-k2-jimzon.vercel.app`) and `6694351996` (Admin, `https://k2-jimzon-admin-rmqxtsj26-k2-jimzon.vercel.app`) both report success for the exact SHA. Canonical `www` and `admin` hosts returned HTTP 200 with target-correct `/k2-build-target.json` markers. The deployed Storefront CSS includes the GCash and MariBank QR crop selectors; both unchanged source QR images returned HTTP 200. GitHub CI run `36330983202` had passed `critical-sql-behavior` and was still running `build-and-smoke` at receipt time. This is source/deployment evidence, not real-device QR scanning, recipient/account validation, funds confirmation, authenticated staff use or full launch acceptance. No Supabase migration, provider flag or payment state changed. Recovery: review a revert of `38a4221`/`fcc2c37` and restore the prior successful Storefront and Admin Vercel deployments; no database rollback applies. Remaining work is in MAP-023/025/028 and `docs/evidence/20260927-payment-qr-crop/README.md`.
 
 **25 September readiness receipt refresh:** Both Vercel production projects list their latest `target=production` deployments as `READY` on later documentation commit `57604cdcf17362bb9601d61c4140f717bc421e53` (`[skip ci]`). The underlying application source release remains `f625381ccd25dba84a1e2279bc6b9a72f0eac742`; GitHub CI run `36027662677` subsequently completed successfully. The later documentation deployment is not a new application validation or live operational acceptance. See `docs/evidence/20260925-production-readiness/README.md` and MAP-025/028 for remaining release gates.
@@ -248,6 +250,37 @@ deployment or setting was changed through it. The same connector context exposes
 only the unrelated Supabase `ScoutIT` project and denies K2 ref
 `pixplcjqivlfflickobf`; do not run K2 SQL, migrations, or Auth changes through
 that session.
+
+**K2 Supabase identity preflight (IDEA-20260928-03):** Before any K2 provider
+or database change, load the owner-controlled K2 `.env.local` into the process
+and run `npm run preflight:k2-project`. This read-only check refuses a ScoutIT
+URL, a token that cannot list K2 project `pixplcjqivlfflickobf`, and provider
+errors without printing credentials. The focused contract is
+`npm run security:test-k2-project` and runs in development verification. A
+passing identity preflight does not replace a fresh backup, exact migration
+review, rollback rehearsal, or owner authorization for consequential writes.
+
+**Vercel API packaging candidate (MAP-020/024, 29 September):** The feature
+branch now generates separate Build Output v3 artifacts from the Admin and
+Storefront target builds. Each artifact has one target `.func`, static output,
+own-API routing, wrong-target 404, and a per-function `.vc-config.json` with
+Admin 180 or Storefront 10 seconds. The Admin function bundles native Sharp;
+the build must run on Vercel Linux so its native package matches that host.
+`vercel.ts` still refuses a missing or mismatched target/project identity.
+The Vercel source configs retain customer/staff page rewrites and security
+headers; the Build Output builder converts those rules. The package release
+gate includes `npm run test:vercel-output`. Local artifact and config tests
+passed, but local CLI `vercel build` stopped at `spawn cmd.exe ENOENT` on
+Windows before producing provider output. Inspect fresh Linux-built Admin and
+Storefront Previews separately: each Resources list must show only its own API
+function at 180/10 seconds. Verify own route, wrong-target 404, static marker,
+security headers, Admin Turnstile and authenticated AAL2 behavior with the
+correct scoped Preview variables. SSO redirects alone are insufficient.
+Until that proof, keep Production `main`, both BFF flags and the Admin edge
+gate unchanged. If the candidate fails, restore the prior separate Vercel
+deployments and revert the candidate configs/build script on the feature
+branch. The older `75cdd32` Previews had one function but 300 seconds;
+the project-default duration form rejected 180 with `step=300`.
 
 A read-only connector refresh on 28 August 2026 returned the same unrelated
 Vercel team and Supabase `ScoutIT` project; the K2 Vercel projects and Supabase

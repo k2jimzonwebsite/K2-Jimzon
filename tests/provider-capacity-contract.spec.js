@@ -27,13 +27,13 @@ test('K2 payload caps stay below provider ceilings and agree across evidence bou
   expect(adminClient).toContain('no larger than 4 MB')
 })
 
-test('separate Vercel projects cap Storefront at ten seconds and Admin at bounded intake duration', async () => {
-  const configs = await Promise.all([
-    source('vercel.storefront.json').then(JSON.parse),
-    source('vercel.admin.json').then(JSON.parse),
+test('API entrypoints declare the reviewed Storefront and Admin duration targets', async () => {
+  const [storefront, admin] = await Promise.all([
+    import('../api/storefront/index.js'),
+    import('../api/admin/index.js'),
   ])
-  expect(configs[0].functions['api/storefront/index.js'].maxDuration).toBe(10)
-  expect(configs[1].functions['api/admin/index.js'].maxDuration).toBe(180)
+  expect(storefront.maxDuration).toBe(10)
+  expect(admin.maxDuration).toBe(180)
 })
 
 test('all browser and server ingress boundaries declare bounded payload or time limits', async () => {

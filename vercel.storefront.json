@@ -1,16 +1,8 @@
 {
-  "buildCommand": "K2_DEPLOYMENT_TARGET=storefront npm run build:storefront",
-  "outputDirectory": "dist",
-  "functions": {
-    "api/storefront/index.js": {
-      "maxDuration": 10
-    }
-  },
+  "framework": null,
+  "buildCommand": "npm run build:vercel-output:storefront",
+  "outputDirectory": null,
   "rewrites": [
-    {
-      "source": "/api/storefront/:route*",
-      "destination": "/api/storefront?route=:route*"
-    },
     {
       "source": "/product/:sku",
       "destination": "/index.html"

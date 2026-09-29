@@ -6,6 +6,14 @@ preview, signed commit, durable status, and redacted result report are present.
 The database migrations and rollback are rehearsed on isolated PostgreSQL 17;
 no spreadsheet boundary is live.
 
+**29 September synthetic checkpoint:** The separate transitional direct CSV
+uploader now emits the schema's literal `Draft` status. A rollback-only insert
+against the restored current K2 schema rejected lowercase `draft` and accepted
+`Draft`. Protected catalog spreadsheet contracts, isolated SQL rehearsal and
+browser recovery checks passed locally. This does not activate its production
+BFF, approve dummy content, or establish stock. See
+`../evidence/20260929-csv-import-readiness/README.md`.
+
 ## Purpose and boundary
 
 The workbook is an Excel-compatible CSV bulk editor for approved product

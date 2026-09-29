@@ -1,5 +1,9 @@
 # Database Backup and Restore Runbook
 
+**29 September current-schema backup checkpoint:** Encrypted application-database envelope `current-pixplcjqivlfflickobf-2026-09-29T034842871Z-ade8520855d3` was created after the K2 identity preflight and passed an isolated PostgreSQL restore. The restore receipt records 51 public relations, latest migration `20260928092634`, matching legacy archive fingerprint and ten excluded managed Vault entries. Local NOLOGIN placeholders were needed for missing Supabase-managed role names before a fresh empty-target restore passed. The 847,770-byte envelope has SHA-256 `ade8520855d32206ef0a1c414bcb8ef50b1bb753337084380c092570c029304f` and is still **local only** under ignored `.tools/current-production-backups/`. Obtain exact owner-only Drive upload approval, then verify parent/owner/private metadata and independent download/hash before treating it as off-device recovery. This checkpoint does not restore Storage objects, managed Vault, provider settings or owner account access. Full receipt: `docs/evidence/20260929-inventory-readiness/README.md`.
+
+**29 September owner-authorized transport follow-up (supersedes local-only wording above):** The envelope and two redacted companions were uploaded to the existing unshared `K2 Production Backups` folder. All three metadata records show the correct folder, owner-only access and exact size. Independent raw Drive download of the envelope matched its SHA-256; both companion JSON files were fetched and parsed against the backup ID and restore receipt. Owner retrieval/decryption of this new artifact, managed Vault, Storage objects, provider settings and live recovery remain separate gates. Drive IDs and exact readback evidence: `docs/evidence/20260929-inventory-readiness/README.md`.
+
 **State:** named production application-database and Storage object-byte backups,
 both isolated local restores, owner-only Google Drive upload, all eight
 independent retrieval checks for the August set, and whole-archive reassembly
@@ -295,6 +299,16 @@ verify each against its parts manifest and reassemble before decrypting. Check
 the database and Storage restore receipts in the same directory. This section
 does not establish independent owner account recovery, managed Vault recovery,
 bucket policy recreation or live Storage re-upload.
+
+## MAP-018 intake recovery decision before permanent apply
+
+The 29 September restored-schema rehearsal applied the intake and evidence-cleanup migrations inside one transaction and rolled it back successfully. That does not provide a safe post-commit down migration. `20260811_product_intake_and_sku_gate.sql` changes the existing `products` status constraint and publication trigger, adds `product_batches` fields, creates a sequence, intake table, signed functions and a Storage bucket/policies; `20260824_map018_intake_evidence_cleanup_boundary.sql` adds a private cleanup ledger and signed functions. A later intake session, lot or Storage object could depend on any of them.
+
+For a failed **uncommitted** apply, stop on the first SQL error, roll back the entire transaction, and verify the exact prior migration ledger, product constraint/trigger, function grants, bucket metadata and representative product/stock rows before resuming the existing direct path. Do not report success from a partial client log.
+
+For a **committed** apply with an application or provider failure, keep `K2_ADMIN_BFF_ENABLED=false`, `VITE_ADMIN_BFF_ENABLED=false` and the Admin edge 404 gate closed; retain the prior separate Admin/Storefront deployment references. Do not drop intake tables, cleanup events, sequence, new lot fields, bucket/policies or uploaded object bytes while any session, lot, cleanup receipt or evidence object may exist. Capture the post-failure state and compare it with the pre-apply encrypted database/Storage manifests, current ledger and exact failed postflight. Prepare and rehearse a scoped **forward repair** against an isolated restore, preserving committed intake, lot and evidence records; require a fresh K2 identity preflight, backup and reviewed apply before using it in production. If the provider problem prevents a scoped repair, coordinate an owner-led recovery using both the application-database and Storage backups plus managed Vault/provider settings; the application dump alone cannot restore those surfaces. Existing direct catalog operation may continue only after its exact-host read and authorization checks pass. Keep publication and sellable quantity unchanged until real staff and owner acceptance.
+
+This is the forward-recovery decision required by MAP-018; it does **not** certify a future permanent apply or an emergency inverse SQL payload. MAP-017/019/020 Preview and managed-role gates, Storage/provider recovery, and a fresh pre-apply rehearsal remain required. Current backup and rollback-only evidence: `docs/evidence/20260929-inventory-readiness/README.md`.
 
 ## Production procedure before activation
 

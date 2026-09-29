@@ -83,6 +83,14 @@ unverified, and where the next required action lives.
 Never describe a rulebook target, mock, fixture, external connector, message,
 payment, metric, or deployment as live without end-to-end evidence.
 
+Before any K2 Supabase provider or database change, run the read-only
+`preflight:k2-project` command with the owner-controlled K2 environment. It
+must confirm project `pixplcjqivlfflickobf` and the exact K2 Supabase URL.
+The installed Supabase connector currently exposes only unrelated ScoutIT
+`yyixsuaimdzyiocswcgc`; never use that connector for K2 SQL, migrations,
+Auth, storage, or settings. A passing local preflight confirms identity only;
+it does not authorize a write or replace backup, migration, and rollback gates.
+
 Keep the admin and storefront as separate production artifacts and Vercel
 projects. Never place service-role keys, marketplace secrets, or refresh tokens
 in browser code or `VITE_` variables.
