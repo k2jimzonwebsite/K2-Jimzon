@@ -112,3 +112,47 @@ npm run readiness:k2-live
 npm run security:test-live-readiness
 npm run verify:development
 ```
+
+## Branch ownership, 29 September 2026
+
+Multiple branches and worktrees had accumulated, which is how the same logical
+change ended up under two names and two lineages. `main` is now the single
+authority for this session's work. Recorded so a later session does not
+re-derive this or re-apply a superseded variant.
+
+**Verified: `main` contains everything this session produced.** Commits
+`e805747` (Vercel Build Output packaging, K2 project identity preflight, CSV
+`Draft` fix) and `3e17ff2` (readiness gate, runbook, records). Nothing is
+pushed; `main` is ahead of `origin/main` by two.
+
+**Removed as pure duplicates, safe because the content is provably on `main`:**
+
+| Branch | Why it was a duplicate |
+| --- | --- |
+| `codex/csv-import-readiness-20260929` | Its single commit is an ancestor of `main`; `git branch -d` confirmed full merge. |
+| `codex/real-inventory-listing-20260928` | `git diff --diff-filter=A main <branch>` returned **zero** files present in the branch and absent from `main`. Its nine commits restate work `main` already holds under a different SHA lineage. Worktree removed; the worktree was clean first. |
+
+**Deliberately kept, each with a distinct reason:**
+
+| Branch | Why it is not a duplicate |
+| --- | --- |
+| `codex/intake-cleanup` | Real unmerged refactor: routes product intake through scan, archives the legacy Admin UI, and carries `archive/2026-09-25-intake-and-unused-ui/` originals. Has a worktree and an open PR. Needs an owner decision, not deletion. |
+| `codex/map017-stock-grant` | Holds the **older naming and weaker variant** of a change `main` already has in a better form. The branch has `20260925_map017_stock_public_execute.sql` (checks `PUBLIC` via `aclexplode`); `main` has `20260925_map017_stock_public_grant_revocation.sql`, which additionally asserts `anon` and `authenticated` still hold EXECUTE before revoking. Same function, same intent, stricter checks, and `main`'s is the deployed lineage (`20260925111537`). Superseded, not unique. |
+| `codex/human-testing-release`, `codex/listing-release`, `codex/staff-session-seven-days`, `codex/automatic-intake-release`, `codex/automatic-intake-preparation` | Each is pinned to a live worktree and cannot be deleted until that worktree is removed. All are already merged into `main`. |
+
+**Also merged into `main` and safe to delete, 9 branches:**
+`chore/intake-docs-cleanup-20260925`, `codex/cashout-qr-polish-20260927`,
+`codex/count-close-activation-readiness`, `codex/hero-additive-release`,
+`codex/manual-qr-payments`, `codex/proportionate-release-checks`,
+`codex/step-1-launch-core`, `feature/pim-schema`,
+`fix/inbox-viewport-and-archiving`.
+
+**Remote branches were not touched.** Deleting on `origin` is an outward-facing
+push and is not implied by having the work on `main`. `origin/main` still points
+at `f95e384`, so the public repository does not yet carry this work.
+
+**The 75 modified tracked evidence PNGs were left as found.** They are not part
+of this session's work, the Master Action Plan explicitly excludes pre-existing
+modified evidence PNGs from commits, and they are byte-different from the index
+rather than timestamp noise. A dirty `main` on those paths is therefore the
+documented expected state, not lost work.
