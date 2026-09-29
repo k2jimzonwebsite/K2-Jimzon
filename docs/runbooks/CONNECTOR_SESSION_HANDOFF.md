@@ -311,6 +311,17 @@ push the verified fix on this authorized feature branch, and inspect new
 function/duration Resources and exact routes. Production `main` remains on
 `f95e384` until the separate release gate and promotion decision.
 
+**Later Preview checkpoint:** Fix commit `8634192` was pushed on that feature
+branch. Admin Preview `GdnYFfCnq9dEdXFKvp78GtNMCjcv` and Storefront Preview
+`3zsgEfm6AE9Pch69bGCtEeZc7aDU` are both Ready, but each Resources page
+still lists three functions, including the wrong target API. The Linux import
+failure is closed; isolation and duration proof remain open. The authorized
+Cloudflare `K2 Admin BOS` widget now has the exact current Admin branch hostname
+alongside Production and the earlier inventory Preview host, with Managed mode
+and no pre-clearance. The next action is the specifically requested Vercel
+build/output settings alignment and a fresh Preview deployment; leave both
+Production artifacts, BFF flags and the Admin edge rule alone.
+
 ## Host status as measured, 29 September 2026
 
 | Host | Result |
