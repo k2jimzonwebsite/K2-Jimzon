@@ -289,6 +289,18 @@ broad public `product-images` listing policy; several visible warnings concern
 callable `SECURITY DEFINER` functions. The advisor count is a triage input for
 MAP-017/018, not proof that every warning is a vulnerability or fixed.
 
+**Preview branch dispatch status:** Feature branch
+`codex/connector-handoff-20260929` contains the nine local commits ahead of
+`origin/main`, including the Build Output source and these corrections. The
+configured remote is `https://github.com/k2jimzonwebsite/K2-Jimzon`; a
+read-only `gh repo view` returned that exact repository with WRITE permission
+for the signed-in `EdgerzXc` account. Automatic approval review initially rejected the feature-branch push because
+exporting repository contents lacked specific user authorization. The owner
+subsequently approved pushing this exact branch to this exact K2 repository
+for separate Vercel Preview verification. At this checkpoint the push is still
+pending; after it lands, inspect both provider builds and continue MAP-020. Production `main` stays on
+`f95e384` in Vercel until the separate release gate and promotion decision.
+
 ## Host status as measured, 29 September 2026
 
 | Host | Result |
