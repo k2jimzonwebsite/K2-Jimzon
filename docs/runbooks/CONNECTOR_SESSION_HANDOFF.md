@@ -282,6 +282,12 @@ Managed mode and no pre-clearance. Turnstile can run without proxying site
 traffic through Cloudflare. The Admin route gate belongs to Vercel per the
 earlier provider inspection recorded in MAP-018 and the System Brain. The
 current Vercel rule state still needs direct reinspection before any cutover.
+The Admin Vercel Firewall overview shows 0 custom firewall rules; that does
+not inspect the separate routing rule. The K2 Supabase Security Advisor browser
+now displays 0 errors, 56 warnings and 7 suggestions. One warning names the
+broad public `product-images` listing policy; several visible warnings concern
+callable `SECURITY DEFINER` functions. The advisor count is a triage input for
+MAP-017/018, not proof that every warning is a vulnerability or fixed.
 
 ## Host status as measured, 29 September 2026
 

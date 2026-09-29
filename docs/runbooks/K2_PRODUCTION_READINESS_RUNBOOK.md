@@ -20,7 +20,7 @@ decision left, not the re-derivation of whether the step is allowed.
 | GitHub | available | `gh` is authenticated to `EdgerzXc` with `repo` and `workflow` |
 | Vercel | available in signed-in browser; not in this script | REST API token is invalid; Admin and Storefront dashboards can be inspected in the browser. |
 | Cloudflare | available in signed-in browser; not in this script | K2 Turnstile widget can be inspected; the account has no managed K2 domain zone. |
-| Supabase security advisor | **not available** | Needs a signed-in dashboard session. |
+| Supabase security advisor | available in signed-in browser; not in this script | K2 Security Advisor displayed 0 errors, 56 warnings and 7 suggestions on 29 September; findings need MAP-017/018 classification. |
 | Local PostgreSQL 17.11 | available | `.tools/postgresql-17.11/runtime/pgsql/bin` for isolated restore and rehearsal |
 
 The K2/ScoutIT distinction still holds: the installed token lists only
