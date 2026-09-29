@@ -245,7 +245,7 @@ gate(
 // 7. Provider surfaces this harness cannot reach. Recorded as blocked rather
 //    than assumed, so no report can imply a Preview or duration was seen.
 gate('vercel-preview', 'connector', 'connector', 'no Vercel API token or CLI in this harness')
-gate('cloudflare-gate', 'connector', 'connector', 'Admin edge gate state not readable from here')
+gate('vercel-edge-gate', 'connector', 'connector', 'Admin Vercel edge routing rule state not readable from this script')
 gate('provider-advisor', 'connector', 'connector', 'Supabase advisor findings need a signed-in session')
 
 // 8. GitHub. The release path must be a real push, not a claim.

@@ -19,6 +19,24 @@ Two rules govern everything here.
 
 Current gate receipt: **8 verified, 2 owner, 3 connector, 0 blocked.**
 
+**Later session checkpoint, 29 September:** Local `main` reached `dd33ce1`, seven
+commits ahead of `origin/main`; this handoff correction is on feature branch
+`codex/connector-handoff-20260929`. The six-commit list below is a dated snapshot.
+An initial sandbox run refused before SQL because the owner environment or
+network was unavailable. With `.env.local` and normal network access, the
+read-only identity preflight passed for `pixplcjqivlfflickobf`, followed by a
+fresh `readiness:k2-live` exit 0: **8 verified, 2 owner, 3 connector, 0 blocked**.
+Its receipt is ignored `.tools/current-production-backups/live-readiness.json`.
+The readiness script's provider gate was corrected from `cloudflare-gate` to
+`vercel-edge-gate` because the route rule belongs to Vercel. The focused
+readiness contract passed 5/5 and `verify:development` exited 0. A fresh
+read-only live gate after the correction exited 0 with **8 verified, 2 owner,
+3 connector, 0 blocked** and emitted the corrected name. The sandbox-only
+attempt first refused identity before SQL; normal network access completed the
+check. The signed-in K2 Supabase browser independently showed the exact project
+and `https://pixplcjqivlfflickobf.supabase.co`. No K2 row or provider setting
+changed. See the STOP 1 alias correction below.
+
 ## State of `main`
 
 ```
@@ -61,43 +79,37 @@ to the production-linked branch. That gate has never been run on this state.
   publish an unreviewed product. Both are on `main`, both have 7/7 contract
   tests, `verify:development` exit 0.
 
-## STOP 1 — a third production surface exists and is undocumented
+## STOP 1 — extra Storefront hostname identified; owner alias decision pending
 
-`https://k2-jimzon-vert.vercel.app` returns **HTTP 200** and serves the customer
-storefront, titled `K2 Jimzon — Italian imports, direct to the Philippines`. It
-appears in no runbook, no `vercel.*.json`, and no Master Action Plan entry.
+**29 September provider correction:** The signed-in K2 Vercel dashboard lists
+`k2-jimzon-vert.vercel.app` and `www.k2jimzon.com` together under project
+`k2-jimzon` (`prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL`) on the same Ready Production
+deployment `CDHSSMBpvySmc82qzMQUVAJdWSkx`, Git branch `main`, SHA `f95e384`,
+created by `k2jimzonwebsite`. The K2 team lists only the separate Storefront
+and Admin projects. The extra hostname itself serves the current customer
+Storefront. It is an alias, **not evidence of a third current Vercel project or
+independent product writer**. The earlier third-writer conclusion was
+an inference from July screenshots and is superseded by this provider view.
 
-Two screenshots uploaded to the public `product-images` bucket on 20 July 2026
-show that this deployment has a **"✨ Smart Paste AI Import"** flow which:
-
-- writes to the same `public.products` table, and
-- errored with `Could not find the 'after_image_url' column of 'products' in the
-  schema cache`, and
-- errored with `invalid input syntax for type uuid: "bellarom"`.
-
-`after_image_url` is not a column on `products`. So this surface has been
-failing, and it is a **third writer to the canonical product table** outside the
-two artifacts `AGENTS.md` knows about.
-
-**Do first, in this order:**
-
-1. Identify the Vercel project behind that hostname, its owner, its linked git
-   branch and its last deployment SHA.
-2. Decide with the owner whether it is retired, a preview, or in scope. Do not
-   delete it unilaterally.
-3. If in scope, read its environment variables. If it holds a service-role or
-   anon key with write access, that is the first thing to rotate, because it
-   bypasses every Admin BFF flag and edge gate this repository relies on.
-4. Add it to `AGENTS.md`, the deployment runbook and the MAP as a third surface
-   with its own gates.
-
-This single item outranks everything else below.
+The 20 July screenshots still record an old “Smart Paste AI Import” failure on
+`after_image_url` and a `bellarom` UUID cast. They warrant a historical source
+and grant review, but do not prove the current deployment exposes that flow.
+No key rotation, third-project registration or deletion follows from them.
+The owner should decide whether the extra public alias remains or is retired
+after a traffic/redirect check. Keep both production artifacts unchanged while
+that choice is pending. Current media and publication risks remain in STOP 2/3.
+Vercel Hobby observability showed 195 aggregate Storefront CDN requests over
+the prior six hours, but its visible summary did not break them down by host;
+this does not establish demand for the alias.
 
 ## STOP 2 — the public product bucket contains third-party content
 
 `product-images` is a **public** bucket with 36 objects, uploaded 19–20 July
 2026. Only **7 are unique**; 15 are byte-identical copies of one file. Content
 audit:
+
+The signed-in K2 Supabase dashboard confirmed the exact K2 project and a fresh
+read-only `storage.objects` count of **36** for this bucket on 29 September.
 
 | Copies | Content | Verdict |
 | --- | --- | --- |
@@ -137,6 +149,9 @@ true` and customer-visible right now**. The database blocks a status change to
 `Live` without review, but nothing guarded the `published` flag, so a direct
 `update` published them. The admin sheet is now guarded on `main`, and the
 database guard is **prepared and rehearsed**:
+
+A fresh read-only query in the signed-in K2 dashboard returned **30 total,
+22 published, 22 published-and-unreviewed** on 29 September. No row was changed.
 
 ```bash
 npm run rehearse:published-review-guard   # passes; rerun to confirm
@@ -182,19 +197,22 @@ and recovery: `docs/runbooks/K2_PRODUCTION_READINESS_RUNBOOK.md`.
 
 ## STOP 5 — the two provider-blocked items, and the guest revocation list
 
-These need Vercel or Cloudflare and cannot be closed from a tokenless harness.
-They are reported as `CONNECTOR` on every gate run so no receipt can imply they
-were observed.
+These need Vercel and Cloudflare provider checks. The local readiness gate
+reports them as `CONNECTOR` because it cannot inspect dashboards; the signed-in
+browser has since verified the Cloudflare Turnstile hosts, but the fresh Build
+Output Preview and Vercel edge-rule cutover remain unverified.
 
-1. **MAP-020 Build Output proof.** Build `main` on Vercel Linux for both separate
+1. **MAP-020 Build Output proof.** Build the reviewed feature source on Vercel Linux for both separate
    projects. Confirm exactly one function each, 180/10-second Resources values,
    own-route behavior, wrong-target 404, and Admin Turnstile on the Preview
    hostname. `VERCEL_OIDC_TOKEN` in `.env.local` is an OIDC JWT — the REST API
    answers `403 Not authorized`. A real API token or the CLI is required.
-2. **The Admin edge gate.** `https://admin.k2jimzon.com/api/admin/session` returns
+2. **The Admin Vercel edge gate.** `https://admin.k2jimzon.com/api/admin/session` returns
    **404** with the gate closed, so staff cannot sign in and no human acceptance
-   is possible. Removal must be coordinated with the BFF flag switch, never done
-   first. Needs Cloudflare access.
+   is possible. The previously observed enabled Vercel routing rule `K2 Admin BFF
+   disabled gate` matches `/api/admin/:path*` and sets HTTP 404. Reinspect that
+   rule in the Admin Vercel project before coordinating its removal with the BFF
+   switch. Cloudflare is the Turnstile provider here, not the route-gate owner.
 
 ### Revocation list for the MAP-019 signed-guest cutover
 
@@ -254,6 +272,17 @@ with a working Vite server before promoting.
 its own isolated cluster. If a rehearsal script is claimed as blocked here, check
 whether it follows that pattern before assuming the toolchain is unavailable.
 
+## Provider boundary checked in signed-in browser, 29 September 2026
+
+Cloudflare's K2 account Domains overview displayed **No data available**: no K2
+zone was listed. Its `K2 Admin BOS` Turnstile widget has two hostnames,
+`admin.k2jimzon.com` and
+`k2-jimzon-admin-git-codex-real-inventory-listi-4792fa-k2-jimzon.vercel.app`,
+Managed mode and no pre-clearance. Turnstile can run without proxying site
+traffic through Cloudflare. The Admin route gate belongs to Vercel per the
+earlier provider inspection recorded in MAP-018 and the System Brain. The
+current Vercel rule state still needs direct reinspection before any cutover.
+
 ## Host status as measured, 29 September 2026
 
 | Host | Result |
@@ -262,7 +291,7 @@ whether it follows that pattern before assuming the toolchain is unavailable.
 | `k2jimzon.com` | 308 redirect |
 | `admin.k2jimzon.com` | 200 |
 | `admin.k2jimzon.com/api/admin/session` | **404 — edge gate closed, staff cannot sign in** |
-| `k2-jimzon-vert.vercel.app` | **200 — third undocumented surface, see STOP 1** |
+| `k2-jimzon-vert.vercel.app` | **200 — alias of the existing Storefront Production deployment, see STOP 1** |
 
 ## Recovery at every stop
 

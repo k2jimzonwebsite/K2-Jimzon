@@ -165,14 +165,7 @@ kind:** 2 usable photos, both of the same single SKU. **Zero of the other 29
 products have a photograph.** The 11 Twinings images are of a product K2 does not
 sell, and 9 are screenshots that were uploaded to the wrong place entirely.
 
-**A third production surface was found this way.** Two of those screenshots show
-`k2-jimzon-vert.vercel.app` running a "Smart Paste AI Import" flow that writes to
-`public.products` and has been failing on a missing `after_image_url` column and
-a `bellarom` uuid cast. That host currently answers **HTTP 200** and serves the
-customer storefront, and it appears in no runbook, no `vercel.*.json` and no MAP
-entry. It is a third writer to the canonical product table, outside the two
-artifacts `AGENTS.md` describes. This outranks every remaining listing task and
-is the first item in `docs/runbooks/CONNECTOR_SESSION_HANDOFF.md`.
+**Provider correction, 29 September:** The July screenshots show historical Smart Paste AI Import failures, but current signed-in Vercel evidence identifies `k2-jimzon-vert.vercel.app` as an alias of the existing `k2-jimzon` Storefront project. It shares the Ready Production deployment `CDHSSMBpvySmc82qzMQUVAJdWSkx` with `www.k2jimzon.com`, from `main` SHA `f95e384`, created by `k2jimzonwebsite`. There is no evidence of a third current project or independent writer. The owner will decide whether to keep or retire the extra hostname after a traffic/redirect check. This correction does not resolve the public-bucket media rights, the 22 published unreviewed rows, or the missing photographs for 29 products.
 
 No production state changed. No object was deleted, no link was written, and the
 bucket was only read.
