@@ -140,3 +140,39 @@ No production state changed, so there is nothing to recover. The source change i
 one commit on `main`, reversible with `git revert`. Standing recovery is
 unchanged: both BFF flags off, Admin edge gate closed, previous separate Vercel
 deployments retained.
+
+## Follow-up: the product-images bucket audit (same day)
+
+An earlier line in this file said 1 of 30 products has an image, implying the
+photos were simply missing. Checking the bucket changed the picture.
+
+`product-images` is a **public** Supabase bucket holding 36 objects uploaded
+19-20 July 2026. Only **7 are unique**; 15 objects are byte-identical copies of a
+single file. Downloading and hashing them, then reading each unique image:
+
+| Copies | Content | Verdict |
+| --- | --- | --- |
+| 15 | Bellarom Cappuccino tin, clean composite | Real photo, already linked to `bellarom-cappuccino` |
+| 1 | Bellarom Cappuccino tin, styled editorial shot | Real photo, **unlinked**, and better than the linked one |
+| 6 | Twinings Green Tea & Lemon box on a desk beside a keyboard, dented | Desk snapshot, damaged, and Twinings is not in the catalogue |
+| 5 | Twinings Green Tea & Lemon, box torn open | Torn packaging, not in the catalogue |
+| 4 | Screenshot of a TikTok video, Melophile "Banyuhay" | **Third-party copyrighted content in a public bucket** |
+| 4 | Screenshot of `after_image_url` schema error | Debug screenshot in a product bucket |
+| 1 | Screenshot of `invalid input syntax for type uuid: "bellarom"` | Debug screenshot in a product bucket |
+
+**So the real media position is worse than "1 of 30", and also different in
+kind:** 2 usable photos, both of the same single SKU. **Zero of the other 29
+products have a photograph.** The 11 Twinings images are of a product K2 does not
+sell, and 9 are screenshots that were uploaded to the wrong place entirely.
+
+**A third production surface was found this way.** Two of those screenshots show
+`k2-jimzon-vert.vercel.app` running a "Smart Paste AI Import" flow that writes to
+`public.products` and has been failing on a missing `after_image_url` column and
+a `bellarom` uuid cast. That host currently answers **HTTP 200** and serves the
+customer storefront, and it appears in no runbook, no `vercel.*.json` and no MAP
+entry. It is a third writer to the canonical product table, outside the two
+artifacts `AGENTS.md` describes. This outranks every remaining listing task and
+is the first item in `docs/runbooks/CONNECTOR_SESSION_HANDOFF.md`.
+
+No production state changed. No object was deleted, no link was written, and the
+bucket was only read.
