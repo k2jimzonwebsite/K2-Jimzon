@@ -90,6 +90,8 @@ empty.
 
 ### 2. `published` had no review guard
 
+**29 September correction, IDEA-20260929-07:** The statement below describes the current query, not the owner's complete visibility rule. The owner requires an explicit Website channel assignment as an additional gate. `published=true` alone must not be called a Website tag. The current Storefront query has no Website assignment filter, and the Admin channel board does not assign one. MAP-018/026 own implementation and SKU-by-SKU reconciliation of the 22 already-published rows before any visibility-changing release.
+
 The database blocks a status change to `Live` with `K2_PUBLICATION_NOT_READY`
 in three functions. The storefront's real gate is `published = true`, written by
 a direct `update` at `Sheet.jsx:282` with no review check. All 22 published

@@ -1,5 +1,7 @@
 # Handoff for a connector-equipped session
 
+**29 September owner correction, IDEA-20260929-07 / MAP-018 / MAP-026:** Admin is the master inventory for every K2 channel. The public website may show and accept orders only for products explicitly assigned to Website, in addition to review/publication rules. Current `StoreContext.fetchProducts` checks only status and `published`; Admin's channel board reports readiness but has no product Website assignment action. Thus the existing 22 published rows are not evidence of 22 Website assignments. Before a visibility-changing release, read actual Website listing rows and reconcile those 22 SKUs with staff, implement an explicit assignment control plus fail-closed catalog/order gate, test non-Website products stay in Admin and off Website, then verify exact hosts. Do not bulk-tag, bulk-unpublish, infer channel assignment from `published`, or copy channel offer quantities into physical stock. This correction supersedes any statement below that treats `published=true` alone as the owner's Website selection. No production data or deployment changed for this correction.
+
 **Written:** 29 September 2026, on `main` at `059d54f`, nothing pushed.
 **For:** a model or operator with Supabase, Vercel, Cloudflare and GitHub access.
 **Why it exists:** the session that wrote this had Supabase read **and write**,
