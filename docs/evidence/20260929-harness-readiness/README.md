@@ -174,12 +174,15 @@ state is:
   current receipt are tracked in
   `docs/evidence/20260929-channel-listing-slices/README.md`.
 - `codex/map017-stock-grant` still has 11 commits not in `main` on an older
-  base. It was deliberately not merged wholesale: its
+  base. All 11 commits and 14 changed files were audited. Its
   `20260925_map017_stock_public_execute.sql` is the weaker variant, while
-  `main` already contains the stricter deployed
-  `20260925_map017_stock_public_grant_revocation.sql` lineage. Do not replay
-  the superseded migration. Keep the branch for audit; review any separate
-  MAP-017 delta only when that item reaches it.
+  `main` contains the stricter applied
+  `20260925_map017_stock_public_grant_revocation.sql` lineage. Its other
+  changes are dated 25 September receipts superseded by later 29 September
+  readiness/production evidence and MAP state; its owner-register delta would
+  erase newer pending 29 September decisions. Do not replay the migration or
+  merge stale docs wholesale. Keep the branch for audit; no separate current
+  MAP-017 requirement is missing from the newer records.
 - The other local branches not listed above are already ancestors of `main`.
   No local branch was deleted, and no remote branch, PR, or deployment was
   modified. Local `main` remains unpushed.
