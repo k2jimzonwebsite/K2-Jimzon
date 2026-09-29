@@ -7,6 +7,11 @@ import { createRequire } from 'node:module'
 const root = path.resolve(import.meta.dirname, '..')
 const work = path.join(root, '.tools', 'vercel-build-output-test')
 
+test('the Storefront sitemap dependency imports in Node ESM', async () => {
+  const { buildProductStructuredData } = await import('../src/lib/productStructuredData.js')
+  assert.equal(typeof buildProductStructuredData, 'function')
+})
+
 test('Build Output candidate isolates each API and preserves static/security routes', async () => {
   const { buildTargetArtifact } = await import('../scripts/build-vercel-output.mjs')
   fs.mkdirSync(work, { recursive: true })

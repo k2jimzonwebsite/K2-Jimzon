@@ -13,7 +13,7 @@
  * field is a false claim about a real product.
  */
 
-import { displayBrand } from './productIdentity'
+import { displayBrand } from './productIdentity.js'
 
 /** Schema.org will reject a key with an undefined value, so they are stripped. */
 function compact(record) {

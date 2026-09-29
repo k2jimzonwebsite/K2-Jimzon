@@ -297,9 +297,19 @@ read-only `gh repo view` returned that exact repository with WRITE permission
 for the signed-in `EdgerzXc` account. Automatic approval review initially rejected the feature-branch push because
 exporting repository contents lacked specific user authorization. The owner
 subsequently approved pushing this exact branch to this exact K2 repository
-for separate Vercel Preview verification. At this checkpoint the push is still
-pending; after it lands, inspect both provider builds and continue MAP-020. Production `main` stays on
-`f95e384` in Vercel until the separate release gate and promotion decision.
+for separate Vercel Preview verification. The push succeeded at `5e5860f`.
+Admin Preview `8ZENLHpGyfjqaHqgo6BkQSu4a4gP` is Ready but its Resources list
+three functions, including the Storefront API; isolation is not proved.
+Storefront Preview `9eQYXHbGaPHqmVBT8xd1ChHQkEf2` failed on a Linux Node ESM
+import of extensionless `./productIdentity` from `productStructuredData.js`.
+The import is corrected locally to `./productIdentity.js`; a focused regression
+passed, the full Build Output test passed 3/3 with normal filesystem access,
+`npm run build:storefront` and `npm run verify:development` passed. Both Vercel
+projects still display Vite, their old target build commands and a `dist`
+output override. Next: align target-specific Build Output project settings,
+push the verified fix on this authorized feature branch, and inspect new
+function/duration Resources and exact routes. Production `main` remains on
+`f95e384` until the separate release gate and promotion decision.
 
 ## Host status as measured, 29 September 2026
 
