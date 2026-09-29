@@ -405,3 +405,25 @@ of the identical loopback-only command passed. This does not activate the
 migration or route and does not prove authenticated real-provider recovery.
 Detailed evidence and scoped rollback are in
 `docs/evidence/20260909-h013-evidence-cleanup/README.md`.
+
+## Publication and product-fact gate (IDEA-20260929-03)
+
+Before a product may be published, staff confirm against the real package:
+
+1. Brand and category resolve to a human name, not a `brand_id` or
+   `category_id`. Both reference tables must contain the row first; a customer
+   surface must never print a UUID.
+2. At least one product image exists and the media rights to sell it are
+   confirmed.
+3. A description, a price and a barcode are present.
+4. Storage instructions and allergens are read from the label, and the allergen
+   value is stored unprefixed. The storefront adds the `Contains` wording.
+5. The product is marked human-reviewed, and only then may `published` be set.
+
+The admin sheet refuses step 5 for an unreviewed product and reports
+`PUBLISH_REVIEW_REQUIRED`. The database guard behind it is still owed; treat any
+other writer of the `published` column as a defect until that migration lands.
+
+Measured live on 29 September 2026, none of steps 1 to 4 is satisfied for 29 of
+30 products, and all 22 published products are unreviewed. Evidence and recovery:
+`../evidence/20260929-listing-readiness/README.md`.

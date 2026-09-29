@@ -10,6 +10,7 @@ import { ArrowIcon } from '../components/ui/icons'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 import { productStock } from '../lib/cartInventory'
+import { displayBrand, displayCategory } from '../lib/productIdentity'
 import { applyImageFallback } from '../lib/imageFallback'
 
 export default function MasterProduct() {
@@ -58,6 +59,10 @@ export default function MasterProduct() {
   const remaining = Math.max(0, totalStock - inCart)
   const canAdd = !availabilityUnknown && remaining > 0
   const isOutOfStock = !availabilityUnknown && totalStock <= 0
+  // A bare brand_id/category_id is a foreign key, not a label. Resolve the human
+  // name or render nothing, so a UUID can never reach the customer.
+  const brandLabel = displayBrand(product)
+  const categoryLabel = displayCategory(product)
 
   // Construct image gallery
   const gallery = (() => {
@@ -178,9 +183,9 @@ export default function MasterProduct() {
               <TrustBadge>Origin: {product.country_of_origin || product.origin}</TrustBadge>
             )}
             <StockPill stock={product.stock_available ?? product.stock} />
-            {(product.subcategory || product.category_id) && (
+            {(categoryLabel) && (
               <span className="rounded-full bg-shell border border-line/50 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-navy-soft">
-                {product.subcategory || product.category_id}
+                {categoryLabel}
               </span>
             )}
           </div>
@@ -285,13 +290,13 @@ export default function MasterProduct() {
               {product.storage_instructions && (
                 <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Storage</span><span className="w-2/3">{product.storage_instructions}</span></div>
               )}
-              {product.brand_id && (
-                <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Brand</span><span className="w-2/3">{product.brand_id}</span></div>
+              {brandLabel && (
+                <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Brand</span><span className="w-2/3">{brandLabel}</span></div>
               )}
               {product.barcode && (
                 <div className="p-3.5 flex gap-4"><span className="w-1/3 font-semibold text-navy">Barcode</span><span className="w-2/3">{product.barcode}</span></div>
               )}
-              {!product.ingredients && !product.net_weight && !product.brand_id && (
+              {!product.ingredients && !product.net_weight && !brandLabel && (
                 <div className="p-3.5 text-center text-navy-faint italic">Product specifications are not available yet.</div>
               )}
             </div>

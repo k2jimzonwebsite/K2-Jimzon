@@ -1947,3 +1947,13 @@ Required behavior for any K2 production step:
 6. Keep prepared, applied, deployed and human-accepted as four separate states in every record.
 
 A failed or ambiguous gate means the sequence stops in the fail-closed state: both BFF flags off, the Admin edge gate closed, and the previous separate Vercel deployments retained. Procedure: `docs/runbooks/K2_PRODUCTION_READINESS_RUNBOOK.md`.
+
+## Product fact completeness and the publication gate (IDEA-20260929-03)
+
+A foreign key is not a label. `products.brand_id` and `products.category_id` identify rows in the `brands` and `categories` tables. Customer-facing surfaces, including schema.org `Brand.name`, must render a resolved human name or nothing. Printing a raw UUID is invalid structured data and a false claim about a product. `src/lib/productIdentity.js` is the single place that decides this.
+
+`published` is the flag the customer storefront filters on. A status change to `Live` is already blocked in the database unless the product is human-reviewed. Publishing must be treated the same way: a product whose `is_human_reviewed` is false must not be published by any path, and staff must review the actual label, allergens, storage, price and media rights before it goes live. The admin sheet refuses the action; the database guard is still owed and is a migration.
+
+A product listing is not a listing. A product needs a resolvable brand and category, at least one image with the media rights to sell it, a description, a price and a barcode before it is presented as purchasable. A lot ledger with complete expiry, custodian, location and status, but a product with no image, no brand and no description, is inventory that cannot be listed.
+
+Stock has one canonical source. `products.stock_available`, the batch view and `inventory_balances` are three different answers and must not be summed or presented as independent facts. Until MAP-026 decides which is canonical, no displayed quantity may be described as a physical count.

@@ -257,6 +257,16 @@ export default function Sheet({ canManageProducts = false }) {
       setOperationError('Secure Sheet Mode edits require a reviewed server command. Export the catalog CSV and use diff review instead.')
       return false
     }
+    // `published` is the flag the customer storefront actually filters on, and
+    // the database only gates a status change to Live behind K2_PUBLICATION_NOT_READY.
+    // Nothing guarded the published flag, so ticking it here exposed a product
+    // nobody had reviewed. Refuse it in the UI and leave the row untouched. The
+    // database-level gap behind this is recorded in the Master Action Plan and
+    // still needs its own migration; this closes the admin path only.
+    if (field === 'published' && value === true && !product.is_human_reviewed) {
+      setOperationError(safeUiError('PUBLISH_REVIEW_REQUIRED'))
+      return false
+    }
     let finalValue = value
     
     // Numbers

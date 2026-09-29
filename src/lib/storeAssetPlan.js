@@ -31,6 +31,7 @@
  */
 
 import { KNOWLEDGE_STATUS } from './productKnowledge.js'
+import { displayBrand } from './productIdentity.js'
 import { PRODUCT_RESEARCH_SCHEMA_VERSION } from '../views/admin/productResearchContract.js'
 
 /**
@@ -186,7 +187,8 @@ export function buildAssetRequest(planItem) {
     hasShelfImage: hasShelfImage(product),
     facts: {
       name: text(product.name),
-      brand_name: text(product.brand_id),
+      // A bare foreign key is not a fact a shopper can read, so it is left empty.
+      brand_name: displayBrand(product) || '',
       barcode: text(product.barcode),
       net_weight: text(product.net_weight || product.size),
       package_type: text(product.package_type),
