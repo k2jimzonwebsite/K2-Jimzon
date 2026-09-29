@@ -1932,3 +1932,18 @@ Customer data collection on checkout, contact, pasabuy, and wholesale forms must
 ## Public stock permission rule (MAP-017, applied 25 September 2026)
 
 `public.get_public_product_stock()` must remain callable through the explicit `anon` and `authenticated` grants used for catalog availability. PostgreSQL `PUBLIC` must not have implicit `EXECUTE` on this function. A future stock-function change must preserve this exact access boundary and verify anonymous catalog reads after deployment. Production migration `20260925111537` removed only the broad grant; it did not change stock values or function logic. The remaining MAP-017 guest-function and provider-default findings are separate.
+
+## Production capability is not production permission (IDEA-20260929-02)
+
+A harness that holds a K2 management token, a GitHub token or a Vercel credential holds a capability. It does not hold a permission. Presence of a credential in the owner-controlled `.env.local` must never be read, implied or recorded as owner authorization, and no session may infer authorization from a prior session's approval.
+
+Required behavior for any K2 production step:
+
+1. Run `npm run preflight:k2-project` and confirm `K2_PROJECT_IDENTITY_OK project=pixplcjqivlfflickobf`. A ScoutIT URL or a token that cannot list K2 is refused before any query is sent.
+2. Run `npm run readiness:k2-live` and require zero failed gates. Each gate is verified, owner-decided, connector-blocked or failed.
+3. Treat `OWNER` gates as open regardless of value. A live anonymous-execute count and product, live-product and lot counts are facts for the owner to classify; a database projection is never a physical count, a receiving record or an approved listing.
+4. Treat `CONNECTOR` gates as unread, not as passed. A surface that was not reached may not be described as observed, and no receipt may imply a Preview, function-duration value, edge-rule state or provider advisor finding was seen.
+5. Require an owner authorization that names the exact chain, then apply, then run postflight, then record the receipt. Steps 1 to 4 do not authorize a write.
+6. Keep prepared, applied, deployed and human-accepted as four separate states in every record.
+
+A failed or ambiguous gate means the sequence stops in the fail-closed state: both BFF flags off, the Admin edge gate closed, and the previous separate Vercel deployments retained. Procedure: `docs/runbooks/K2_PRODUCTION_READINESS_RUNBOOK.md`.

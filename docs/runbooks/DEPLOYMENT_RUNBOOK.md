@@ -260,6 +260,27 @@ errors without printing credentials. The focused contract is
 passing identity preflight does not replace a fresh backup, exact migration
 review, rollback rehearsal, or owner authorization for consequential writes.
 
+**K2 live readiness gate (IDEA-20260929-02):** After the identity preflight and
+before any owner-authorized production step, run `npm run readiness:k2-live`.
+It is the executable form of the ordered MAP apply packets: read-only `SELECT`
+only, `read_only: true`, refusing a non-`SELECT` string before the request is
+built, and exiting before any query if identity fails. It reports each gate as
+verified, owner-decided, connector-blocked or failed, and any failure stops the
+sequence. `OWNER` rows are never self-satisfying: the live anonymous-execute
+count and the product, live-product and lot counts are routed to the owner
+because a database projection is not a physical count. `CONNECTOR` rows record
+that Vercel, Cloudflare and the Supabase advisor were not reached, so no receipt
+can imply a Preview, edge rule or advisor finding was seen. The contract is
+`npm run security:test-live-readiness` and runs in development verification. Full
+procedure, gate meanings and recovery: `K2_PRODUCTION_READINESS_RUNBOOK.md`;
+receipt: `../evidence/20260929-harness-readiness/README.md`.
+
+**Capability is not authorization (IDEA-20260929-02):** A harness holding a K2
+management token can technically write to the production database. The token
+existing in `.env.local` is a capability, never a permission. Production writes
+still require the owner authorization named in `MASTER_ACTION_PLAN.md`, and
+every apply session must state which authorization it is acting under.
+
 **Vercel API packaging candidate (MAP-020/024, 29 September):** The feature
 branch now generates separate Build Output v3 artifacts from the Admin and
 Storefront target builds. Each artifact has one target `.func`, static output,
