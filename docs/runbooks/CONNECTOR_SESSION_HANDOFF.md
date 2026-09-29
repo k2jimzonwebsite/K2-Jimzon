@@ -208,8 +208,11 @@ Output Preview and Vercel edge-rule cutover remain unverified.
    hostname. `VERCEL_OIDC_TOKEN` in `.env.local` is an OIDC JWT — the REST API
    answers `403 Not authorized`. A real API token or the CLI is required.
 2. **The Admin Vercel edge gate.** `https://admin.k2jimzon.com/api/admin/session` returns
-   **404** with the gate closed, so staff cannot sign in and no human acceptance
-   is possible. The previously observed enabled Vercel routing rule `K2 Admin BFF
+   **404** with the new BFF route closed. The deployed Admin still has a direct
+   Supabase sign-in path with authenticator MFA when enrolled; this 404 does not
+   establish whether an existing staff account can sign in through that path.
+   Protected BFF intake acceptance remains impossible until its route is opened
+   and verified. The previously observed enabled Vercel routing rule `K2 Admin BFF
    disabled gate` matches `/api/admin/:path*` and sets HTTP 404. Reinspect that
    rule in the Admin Vercel project before coordinating its removal with the BFF
    switch. Cloudflare is the Turnstile provider here, not the route-gate owner.
@@ -329,7 +332,7 @@ Production artifacts, BFF flags and the Admin edge rule alone.
 | `www.k2jimzon.com` | 200 |
 | `k2jimzon.com` | 308 redirect |
 | `admin.k2jimzon.com` | 200 |
-| `admin.k2jimzon.com/api/admin/session` | **404 — edge gate closed, staff cannot sign in** |
+| `admin.k2jimzon.com/api/admin/session` | **404 — new BFF route closed; legacy direct Supabase sign-in is separate and untested here** |
 | `k2-jimzon-vert.vercel.app` | **200 — alias of the existing Storefront Production deployment, see STOP 1** |
 
 ## Recovery at every stop

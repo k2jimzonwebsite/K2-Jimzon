@@ -123,10 +123,12 @@ reports `PUBLISH_REVIEW_REQUIRED`. This closes the admin path only.
 6. **Intake is unappliable** until `product_intake_sessions` and `k2_sku_seq`
    exist. Owner authorization is the only missing input; see
    `docs/runbooks/K2_PRODUCTION_READINESS_RUNBOOK.md`.
-7. **Staff cannot sign in on the exact host.** The Admin BFF is off and the edge
-   gate returns 404 for `/api/admin/session`, so none of the above can be
-   human-verified on production. Vercel and Cloudflare are unreachable from this
-   harness.
+7. **Protected Admin intake is not active on the exact host.** The Admin BFF is
+   off and the edge gate returns 404 for `/api/admin/session`. This does not
+   block or test the deployed direct Supabase login path, which still includes
+   authenticator MFA for enrolled staff accounts. The direct path and legacy
+   inventory listing need their own signed-in acceptance check; the protected
+   new intake cannot be human-verified on production yet.
 8. **Pre-existing, unrelated to this work:** `tests/storefront-selling-surfaces.spec.js`
    fails under `playwright.api.config.js` because that config has no `baseURL`
    for its relative `page.goto`, and its intended `playwright.selling.config.js`
