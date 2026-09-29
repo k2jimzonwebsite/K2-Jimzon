@@ -91,7 +91,7 @@ export function validateLotCommand(action, body) {
 export async function readLotData(client, requestedSku = '') {
   const sku = text(requestedSku, { max: 120 })
   let query = client.from('product_batches')
-    .select('id,sku,box_code,batch_code,quantity,quantity_available,reserved_quantity,expiry_date,best_before_date,landed_date,hub,custodian,channel,is_pinned,inventory_status,clearance_approved_at,clearance_approved_by,created_at,updated_at')
+    .select('id,sku,box_code,batch_code,quantity,quantity_available,reserved_quantity,net_weight_g,expiry_date,best_before_date,landed_date,hub,custodian,channel,is_pinned,inventory_status,clearance_approved_at,clearance_approved_by,created_at,updated_at')
     .order('expiry_date', { ascending: true, nullsFirst: false }).limit(sku ? 200 : 500)
   if (sku) query = query.eq('sku', sku)
   const { data, error } = await query

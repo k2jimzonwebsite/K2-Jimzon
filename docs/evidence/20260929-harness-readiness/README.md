@@ -156,3 +156,39 @@ of this session's work, the Master Action Plan explicitly excludes pre-existing
 modified evidence PNGs from commits, and they are byte-different from the index
 rather than timestamp noise. A dirty `main` on those paths is therefore the
 documented expected state, not lost work.
+
+## Branch follow-up, 30 September 2026
+
+This dated follow-up supersedes the 29 September branch status above. The old
+section records the earlier checkpoint; the current branch and local-readiness
+state is:
+
+- `codex/connector-handoff-20260929` was merged into local `main` as `cedfc5d`.
+- The two unique commits on `codex/intake-cleanup` were cherry-picked to local
+  `main` as `09c8b52` and `e662892`. Their content is integrated, but the
+  original branch ref remains and is not ancestry-merged. Its old worktree and
+  remote ref were not deleted or changed by this follow-up.
+- `codex/channel-slices-20260929` points to an ancestor of `main`. The
+  uncommitted channel-slice working state was restored and integrated on local
+  `main`; its migrations, source, rehearsals, contract tests, apply packet and
+  current receipt are tracked in
+  `docs/evidence/20260929-channel-listing-slices/README.md`.
+- `codex/map017-stock-grant` still has 11 commits not in `main` on an older
+  base. It was deliberately not merged wholesale: its
+  `20260925_map017_stock_public_execute.sql` is the weaker variant, while
+  `main` already contains the stricter deployed
+  `20260925_map017_stock_public_grant_revocation.sql` lineage. Do not replay
+  the superseded migration. Keep the branch for audit; review any separate
+  MAP-017 delta only when that item reaches it.
+- The other local branches not listed above are already ancestors of `main`.
+  No local branch was deleted, and no remote branch, PR, or deployment was
+  modified. Local `main` remains unpushed.
+
+The read-only K2 preflight passed with explicit `.env.local` loading and
+confirmed `pixplcjqivlfflickobf`. The subsequent live-readiness receipt reported
+8 verified, 2 owner, 3 connector, 0 failed. It did not apply anything. The
+latest ledger remained `20260928092634`; the channel migration remained
+unapplied. See the channel-slice receipt for exact commands, focused test
+results, outstanding writer/order gates and recovery instructions. The live
+readiness JSON under `.tools/current-production-backups/` is ignored and is not
+a committed evidence artifact.

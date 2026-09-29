@@ -1,5 +1,22 @@
 # K2 Jimzon  -  Project Directory Map
 
+IDEA-20260925-01's scan-first cleanup is integrated locally: Inventory and
+Sheet entry points live in `src/views/admin/InventoryGrid.jsx` and
+`src/views/admin/Sheet.jsx`; `ScanToAiModal.jsx` opens exact existing SKUs in
+lot review; `SmartPasteModal.jsx` is a review-and-copy surface with no product
+writer. Protected new Draft creation remains in
+`src/views/admin/ProductIntakeSessionModal.jsx` behind MAP-017/018/020. The
+retired chooser, unused Admin UI kit, pre-change source snapshots, hashes and
+restore directions are in `archive/2026-09-25-intake-and-unused-ui/`.
+
+IDEA-20260929-06's channel-slice files are `supabase/migrations/20260929_channel_listing_slices.sql`,
+its paired rollback, `server/admin-bff/lots.js`, `src/context/StoreContext.jsx`,
+and `src/views/admin/Sheet.jsx`. The SQL rehearsal and apply receipt are in
+`docs/evidence/20260929-channel-listing-slices/`; `docs/runbooks/CHANNEL_SLICES_APPLY_PACKET.md`
+owns the ordered provider procedure. The narrow Storefront view and lot display
+are locally prepared; Website assignment UI/writer and order-side membership
+enforcement remain open in MAP-018.
+
 IDEA-20260928-02 uses `src/context/StoreContext.jsx` and `src/services/orderReceiptService.js` for order-held access, `src/views/Confirmation.jsx` and `src/components/shop/OrderConversation.jsx` for the direct buyer thread and proof form, and `src/views/admin/OmniOperationsHub.jsx` for authorized staff retrieval. `supabase/migrations/20260928_order_payment_receipt_chat.sql` creates the private proof table and scoped RPCs; its paired rollback revokes buyer RPC entry while preserving submitted proof for staff reconciliation. `tests/order-receipt-direct-ui.spec.js` and the buyer receipt case in `tests/payment-recovery-ui.spec.js` cover the browser surfaces. See MAP-020/023/025 and `docs/evidence/20260928-order-chat-receipt/README.md` for provider and exact-host state.
 
 The guided intake pilot keeps versioned teaching in `src/views/admin/staffProcedureRegistry.js`, renders it through `IntakeStepGuide.jsx` in the canonical `ProductIntakeSessionModal.jsx`, and launches it from the Operations guide through `InventoryGrid.jsx`. It introduces no second progress store or provider command. Optional dashboard explanations live in `dashboardWidgets.js` and `Overview.jsx`; the current UI contract is `tests/admin-dashboard-redesign.spec.js`.

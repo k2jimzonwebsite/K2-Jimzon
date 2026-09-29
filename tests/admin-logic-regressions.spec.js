@@ -123,14 +123,14 @@ test('product sheet rolls back failed edits and routes new rows through scan-fir
   expect(addRow).not.toContain('setRows(prev => [newRow')
 })
 
-test('Smart Paste remains review-only after secure Admin cutover', async () => {
+test('Smart Paste stays a review-only clipboard handoff in every Admin mode', async () => {
   const source = await readFile(new URL('../src/views/admin/SmartPasteModal.jsx', import.meta.url), 'utf8')
-  const save = source.match(/const handleSave[\s\S]*?return \(/)?.[0] || ''
 
-  expect(source).toContain('adminBffEnabled()')
-  expect(save).toContain('if (secure)')
-  expect(save.indexOf('if (secure)')).toBeLessThan(save.indexOf("supabase.from('products')"))
-  expect(source).toContain('use phone-first intake for the server-created, attributable Draft')
+  expect(source).not.toContain("from('products')")
+  expect(source).not.toContain('adminBffEnabled()')
+  expect(source).not.toContain('const handleSave')
+  expect(source).toContain('copyReviewedJson')
+  expect(source).toContain('no product or inventory record is created here')
 })
 
 test('shared Admin navigation reuses authorized projections in secure mode', async () => {

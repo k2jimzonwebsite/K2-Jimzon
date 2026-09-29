@@ -88,7 +88,11 @@ Before any K2 Supabase provider or database change, run the read-only
 must confirm project `pixplcjqivlfflickobf` and the exact K2 Supabase URL.
 The installed Supabase connector exposes only unrelated ScoutIT
 `yyixsuaimdzyiocswcgc`; never use that connector for K2 SQL, migrations,
-Auth, storage, or settings. The owner-controlled `.env.local` management token
+Auth, storage, or settings, and do not list, inspect, or query ScoutIT for
+any reason. It is a different project and fully out of scope. Work stays
+linear: one MAP item in progress, in MAP dependency order, with no duplicate
+or second implementation of the same logic and no side work outside the MAP.
+The owner-controlled `.env.local` management token
 is a separate surface that does reach K2 `pixplcjqivlfflickobf`, and it can
 technically execute production SQL. It must still never be used for a write
 without the owner authorization named in the Master Action Plan. A passing local preflight confirms identity only;

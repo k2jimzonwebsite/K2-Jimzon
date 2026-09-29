@@ -1964,7 +1964,7 @@ A foreign key is not a label. `products.brand_id` and `products.category_id` ide
 
 A product listing is not a listing. A product needs a resolvable brand and category, at least one image with the media rights to sell it, a description, a price and a barcode before it is presented as purchasable. A lot ledger with complete expiry, custodian, location and status, but a product with no image, no brand and no description, is inventory that cannot be listed.
 
-Stock has one canonical source. `products.stock_available`, the batch view and `inventory_balances` are three different answers and must not be summed or presented as independent facts. Until MAP-026 decides which is canonical, no displayed quantity may be described as a physical count.
+One SKU holds one master stock: the sum of its warehouse slices. The storefront counts only the website-labeled slice (website warehouse 10 of master 20 shows 10). Every slice is real stock. A staff shelf count settles the numbers; until it happens, no screen quantity is claimed as counted.
 
 ## Classifying the anonymous execute surface (IDEA-20260929-05)
 
@@ -1979,3 +1979,35 @@ A legacy transitional grant is not automatically a vulnerability, and it is not 
 The customer storefront filters on `published`. Therefore a review rule enforced only on a status transition does not protect customers. Any path that sets `published = true` on a product that has not been human-reviewed is a defect, including a direct table update from an unreviewed application surface.
 
 The database guard is authoritative and is a check constraint added `NOT VALID`, so it can land while rows that predate the rule remain readable. Adding it constrains every future write, which is what closes a bypass held by any writer. The consequence must be stated before the migration is applied: once it lands, rows that are already published without review cannot be edited at all until each is reviewed or unpublished. Unpublishing must remain permitted under the same constraint, or the finding becomes unfixable.
+
+## Single master inventory, Website-as-channel, expandable lot detail (IDEA-20260929-06)
+
+There is one Supabase project (`pixplcjqivlfflickobf`) and one Master Inventory. Admin owns stock truth and operations for the Website and every marketplace shop. No session may build a second stock logic or a second catalog truth for the storefront. ScoutIT is a different project: never list, inspect, query, or use it for anything. Work stays linear: one MAP item at a time in dependency order, no duplicate implementations, nothing outside the MAP.
+
+1. Website is one channel toggle on the same per-SKU record. A SKU appears in the storefront when it is Live and listed for Website, even with zero sellable stock; with no sellable stock the action flips from Add to cart to Request. Allocations to Shopee, Lazada or TikTok shops stay Admin-visible and never publish to the storefront.
+2. One SKU is one sellable variant and combines all channels into one total; the storefront counts only the website-labeled slice. An expiry, warehouse, or channel split never creates a SKU. A marketplace shop SKU is a per-shop alias to one exact shop listing, never a K2 product identity, and similarity never auto-merges.
+3. Lots (sub-SKU rows) carry warehouse/location, custodian, expiry, quantity, unit gram/weight where it differs, and condition. Warehouse means the storage place plus the holder. Channel allocations reference the master stock and are capped by available sellable quantity; the sum of shop offers must not exceed it. Oversell refusal must be server-enforced; the migration is still owed.
+4. Product import and CSV quantities never create stock. Only receiving, recount, disposition, reservation, fulfillment, and custody events change on-hand.
+5. Both inventory surfaces show one row per SKU: the default card grid (`InventoryGrid.jsx`) and Sheet mode share one read path. Expanding a row reveals lot sub-rows (warehouse, expiry, quantity, eligibility) and channel allocation chips. Price is website-only for now; no per-shop prices yet. Other rare per-channel content differences are overrides on the same SKU and render only where present.
+6. Footer marketplace links (`Pasabuy Italy by K2`, `Jworldbasket`) are destinations only. They are not the shop registry and not adapters. The Admin shop table is the registry; the shop count must not be hardcoded.
+
+The public Storefront projection may expose only the SKU of a published,
+Website-listed product with an eligible status. Live/Active SKUs appear in
+browse; Unlisted direct-link behavior is described below. Grant
+`anon`/`authenticated` access only to that narrow view; keep `channel_listings`
+staff-only. `products.published` is not Website assignment. The view does not
+create assignment rows or enforce Website order eligibility by itself: a
+protected Admin writer and a server-side order check must use the existing
+channel model. Until both are verified, do not call a product publicly listed
+or claim the local projection is live.
+
+Unlisted products stay out of browse, but the existing direct-link behavior may
+remain for a published Unlisted SKU that is explicitly assigned to Website.
+The public SKU projection may carry that member for direct lookup; the Storefront
+must still exclude it from browse, and the server-side order check must require
+Website membership. Unlisted status never bypasses the channel assignment gate.
+
+The prepared shop guard serializes allocations per SKU and rejects a physical
+master-balance reduction that would leave shop offers above available stock.
+Lower offers first, then record the corrected physical count. A successful
+local rehearsal does not apply the migration or establish a physical count.
