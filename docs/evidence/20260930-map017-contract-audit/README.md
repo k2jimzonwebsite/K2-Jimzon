@@ -107,6 +107,19 @@ provider setting, or deployment configuration was changed by the check.
 
 ## 30 September fresh readiness and Preview connection check
 
+### Supabase support-status lookup
+
+The project-specific Dashboard URL
+`https://supabase.com/dashboard/project/pixplcjqivlfflickobf/support` returned
+404. Supabase's Dashboard support form at
+`https://supabase.com/dashboard/support/new` loaded as a blank new-request
+form; it did not expose the existing request's status or history. No
+organization/project was selected, and no form was submitted. The existing
+request remains recorded as pending from earlier evidence, but no provider
+reply or ticket ID was verified in this check. Find the original K2 request or
+acknowledgement before sending a follow-up, to avoid creating a duplicate.
+No project permission, provider, or database state changed.
+
 The owner-authorized one-record chat test remains pending. On the local
 MAP-017 audit branch, fresh `npm run preflight:k2-project` exited 0 and
 confirmed the exact K2 project reference `pixplcjqivlfflickobf`. Fresh

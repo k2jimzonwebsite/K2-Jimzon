@@ -4388,6 +4388,12 @@ The architecture page now labels the deployed legacy direct-RPC chat path and
 the prepared signed-BFF candidate separately, including the unapplied-function
 and Preview-configuration blockers.
 
+A read-only Supabase support check found that the project-specific support URL
+returns 404 and the Dashboard's new-request form does not show existing case
+history. No form was submitted; no provider reply or ticket ID was verified.
+MAP-017 records that the original K2 request must be located before a
+follow-up is sent.
+
 MAP-017 remains first: reconcile the live chat-read grant, finish the
 provider-default follow-up, and close its permission and recovery gates. The
 one authorized test conversation remains pending until the signed guest
