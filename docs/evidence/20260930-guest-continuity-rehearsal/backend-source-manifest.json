@@ -1,13 +1,13 @@
 {
-  "observed_at_utc": "2026-09-30T10:15:00.7519575Z",
-  "source_baseline": "41b2c3940da61d1dc066486982888aed87222fd5",
+  "observed_at_utc": "2026-09-30T10:48:21.1189273Z",
+  "source_baseline": "df83afc3e416923f53d4473e11d0cacd7c35ee59",
   "correction_source": "23ef44228a2c0d570c77ea9c588dcd1099668245",
   "owning_map_items": [
     "MAP-017",
     "MAP-019",
     "MAP-020"
   ],
-  "state": "source inventory with locally verified IDEA-20260930-05 correction on baseline; current target existing K2; not executable application order or provider approval",
+  "state": "source inventory including locally verified IDEA-20260930-05/-06; existing K2 target; local receipt records 18-step order; not provider apply approval or recovery package",
   "secret_values_included": false,
   "entries": [
     {
@@ -27,8 +27,8 @@
     },
     {
       "path": "docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs",
-      "bytes": 12204,
-      "sha256": "64997c89914714b368193ed39570625d34e2303ea31eab38a611dbb371997e20"
+      "bytes": 21158,
+      "sha256": "11b540d57077e848c419e1e85afbf880cb8e33facd1768bc705c75e901b14c16"
     },
     {
       "path": "prepared-api/storefront/account/auth/email.js",
@@ -242,8 +242,8 @@
     },
     {
       "path": "supabase/migrations/20260916_automated_delivery_quotation.sql",
-      "bytes": 7611,
-      "sha256": "94577e17c43b7b8ea99537c0fe55fac1562934cf757be109a58c338e71f154df"
+      "bytes": 8357,
+      "sha256": "7479db3149b1bb5cd059b4fa84c44e72a08a0f3063858fd397f92593ce54f198"
     },
     {
       "path": "supabase/migrations/20260922_anonymous_chat_moderation_rollback.sql",

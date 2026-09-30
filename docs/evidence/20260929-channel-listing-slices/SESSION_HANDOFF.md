@@ -1,5 +1,22 @@
 # Session handoff — channel listings and inventory
 
+**Latest local dependency evidence, IDEA-20260930-06:** On feature branch
+`codex/map017-guest-chat-preview`, the latest unapplied delivery order replacement
+now matches K2's identity result, message status/event columns, single canonical
+seed and order/conversation scopes. The existing witness's
+`--with-dependencies --preserve-legacy` mode composes 18 sources without
+moderation/direct-writer cutover. At 10:44:01 UTC it passed all 16 route grants and
+search paths, preserved legacy ACLs/history, actual signed order/replay/single
+seed/fresh grant and scoped history/thread recovery/denial, then rolled back.
+Development verification exited 0 and the local server was stopped. The fresh
+10:48:17 UTC metadata-only receipt still shows all 16 absent from live K2. Changed
+source and receipts are in the 30 September guest-continuity directory. Local
+recovery is a scoped source revert preserving receipts; do not use it as provider
+recovery. Next action remains MAP-017/019/020: complete exact existing-K2 backup,
+apply/recovery and branch-only connection/configuration review. Shipping
+validation and Website membership remain MAP-018/023; all-route and exact-host
+acceptance remain open. No live setting, grant, key or record changed.
+
 **30 September latest steering and correction:** The owner questioned the need
 for another project; Codex withdrew that optional path. Its approved $0 attempt
 had failed for free-project quota, and readback confirmed no new project and

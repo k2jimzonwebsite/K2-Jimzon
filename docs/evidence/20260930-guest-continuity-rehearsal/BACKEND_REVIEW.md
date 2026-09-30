@@ -10,6 +10,18 @@ and require their exact payload review/approval. The historical-reference
 backfill must preserve the owner's excluded UUID-only test-history decision.
 Current unfinished actions live only in MAP-017/019/020.
 
+**Latest local compatibility evidence (IDEA-20260930-06):** The 18-step source
+order is captured in `local-dependencies-receipt.json`. It installs the 16 route
+RPCs locally without direct-writer cutover/moderation, preserves legacy ACLs and
+excluded history, and proves signed order replay, single seed, grant issuance,
+scoped order/thread recovery and denial before rollback. The latest unapplied
+order definition was corrected to match K2's identity result, message status,
+event columns, seed keys and grant scopes. The fresh metadata-only provider
+receipt still shows all 16 absent from live K2. Installation compatibility is
+not full route or activation readiness. Shipping validation, Website membership,
+fresh backup, exact apply/recovery and branch-only connection/configuration
+remain MAP gates; no live payload approval is requested from this partial record.
+
 Creation scope approved; provider rejected the attempt for free-project quota.
 No new resource exists on readback. Schema/hosting scope remains prepared only.
 This record is not an executable migration bundle or another backlog. Remaining

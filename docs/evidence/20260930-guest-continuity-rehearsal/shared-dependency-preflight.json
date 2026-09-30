@@ -1,0 +1,28 @@
+{
+  "project_id": "pixplcjqivlfflickobf",
+  "source": "authenticated Supabase connector; metadata-only SELECT; no business-row reads or provider mutations",
+  "database": "postgres",
+  "captured_at_utc": "2026-09-30T10:48:17.007878",
+  "route_rpc_presence": {
+    "submit_guest_order_v1": false,
+    "append_guest_message_v1": false,
+    "preview_guest_coupon_v1": false,
+    "quote_guest_delivery_v1": false,
+    "submit_guest_pasabuy_v1": false,
+    "read_guest_order_status_v1": false,
+    "list_guest_conversations_v1": false,
+    "start_guest_conversation_v1": false,
+    "submit_wholesale_inquiry_v1": false,
+    "claim_guest_customer_account_v1": false,
+    "list_customer_account_history_v1": false,
+    "read_customer_account_settings_v1": false,
+    "save_customer_account_settings_v1": false,
+    "append_customer_account_message_v1": false,
+    "read_customer_account_notification_v1": false,
+    "consume_storefront_customer_auth_rate_v1": false
+  },
+  "identity_table_present": false,
+  "wholesale_table_present": false,
+  "admin_foundation_present": true,
+  "delivery_control_table_present": false
+}

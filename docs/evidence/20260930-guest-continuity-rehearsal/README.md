@@ -5,6 +5,56 @@ record also in MAP-027. The full production and inventory goal remains active.
 IDEA-20260930-01/-02/-03 were audited and merged into those existing MAP items
 before their corrections. This folder is evidence, not another backlog.
 
+## Complete dependency rehearsal, IDEA-20260930-06
+
+The current target is existing K2. `shared-dependency-preflight.json` records the
+metadata-only provider read at 10:48:17 UTC: all 16 public RPCs used by the 17
+prepared routes are absent; Admin verification/command receipts and `is_staff`
+exist; identity, wholesale and delivery control tables are absent. No business
+rows were read or changed by that query.
+
+The existing local witness now has `--with-dependencies`. It composes the 18
+ordered sources and hashes in `local-dependencies-receipt.json`, including
+wholesale, delivery control/quote, account settings, origin and the latest order
+replacements. Source transaction/psql wrappers are removed inside one local
+transaction. This mode excludes direct-writer cutover and moderation; combining
+the installation mode with moderation is refused. It preserves the original
+legacy order/Pasabuy/coupon/chat function ACLs exactly.
+
+Actual signed order submission first failed on `messages_delivery_status_check`
+(the replacement used unsupported `delivered`), then exposed nonexistent event
+columns. The replacement also read nonexistent `guest_grant_token` from the
+identity helper, omitted order/conversation scopes and used a duplicate seed
+key. The unapplied `20260916_automated_delivery_quotation.sql` now uses the actual
+event columns, `received`, the canonical/legacy seed guards, helper
+`raw_grant_token`, and scoped order/read plus conversation/read/reply access.
+Its existing shipping policy is unchanged; server shipping validation and
+Website order membership remain MAP-018/023 acceptance gates.
+
+```powershell
+node docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs --with-dependencies --preserve-legacy
+npm run verify:development
+```
+
+The final SQL rehearsal passed at 10:44:01 UTC: all 16 route-function grants and
+fixed search paths, legacy ACL preservation, actual anonymous order submission
+and identical replay, one seeded message, fresh order grant issuance, same-grant
+order/thread recovery, missing/different order-grant denial, prior chat
+start/reuse/reopen/denial, unchanged excluded history and rollback. Development
+verification exited 0; the 1,677-file secret scan and import check passed. The
+local server was stopped and status returned `no server running`.
+
+These receipts prove installation compatibility and the stated local behaviors,
+not all 17 functional routes, PostgREST/browser/Turnstile, provider recovery or
+activation readiness. The 53-entry source inventory is refreshed on baseline
+`df83afc3e416923f53d4473e11d0cacd7c35ee59`; it is not an approved live bundle.
+Parent review compared the corrected definition with the actual restored
+writer, identity helper and constraints; independent review remains unavailable.
+Local recovery is a scoped feature-source revert preserving these receipts.
+The exact shared-K2 backup/apply/recovery and branch-only connection package
+remains in MAP-017/019/020. No live schema, grant, key, row, environment or routing
+change occurred; the single authorized live conversation is unused.
+
 ## Request and current boundary
 
 Continue the channel-listing handoff in dependency order, preserving current
@@ -188,15 +238,14 @@ proposal scope, not provider Test Rules, installed dependencies or live chat.
 MAP-017 now consolidates current findings, dependencies and exact next actions;
 older preparation/build/support history remains in these permanent receipts.
 This documentation/proposal batch requires no repeat application test/build or
-release gate. Capacity resolution or an exact alternative is the next owner
-decision. Retry the same approved empty resource only after a real capacity
-change and a quote/inventory check; no duplicate approval is needed if its scope
-and $0 price remain unchanged. Schema/hosting activation remains a later exact
-payload review. No pause, deletion, membership change or upgrade was performed.
+release gate. The resource approach is withdrawn; its approval does not authorize
+a retry under current owner steering. Schema/hosting activation remains a later
+exact payload review for existing K2. No pause, deletion, membership change or
+upgrade was performed.
 
 The next required action stays in MAP-017/019/020: review the corrected exact
-dependency payload and choose/authorize the backend boundary before any provider
-apply or Preview connection. Supabase's supported procedure for six internal-
+dependency, backup and recovery payload against existing K2 before its specific
+SQL/Preview connection approval. Supabase's supported procedure for six internal-
 role defaults and the nine anonymous-grant contracts remain open. Live export
 truth is still **15 critical, 0 high**; these fixes did not change its ACLs.
 Then prove one authorized conversation on the exact approved host: start,

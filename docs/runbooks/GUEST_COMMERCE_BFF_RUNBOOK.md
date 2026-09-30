@@ -1,5 +1,19 @@
 # Guest Commerce BFF Activation Runbook
 
+**Latest installation compatibility, IDEA-20260930-06:** Run the existing
+`docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs` with
+`--with-dependencies --preserve-legacy` only against its guarded local restore.
+Its 18-source order includes wholesale/delivery and latest replacements and
+excludes moderation/direct-writer cutover. All 16 RPC role grants/search paths,
+legacy ACL retention, signed order replay/single seed, fresh grant, order/thread
+recovery/denial and historical preservation pass before rollback. Receipt:
+`local-dependencies-receipt.json`. The latest unapplied order replacement now
+matches actual identity/message/event/seed/scope contracts. The fresh provider
+metadata receipt still shows the 16 absent on K2. A complete local install is
+not approval or proof of all routes, shipping validation, Website membership,
+backup recovery or live activation. Prepare the exact existing-K2 apply/recovery
+and branch-only connection package in MAP-017/019/020 before requesting approval.
+
 **Current 30 September direction:** The extra-project path below is historical
 and withdrawn after owner feedback. Prepare the existing canonical K2 project's
 exact signed guest apply/backup/recovery review; do not retry provisioning or
@@ -21,7 +35,7 @@ cost confirmation succeeded, but the provider rejected creation for the account'
 two-active-free-project quota. Fresh inventory has no candidate and K2 remains
 healthy/Free. Do not retry unchanged capacity or pause/upgrade K2. Branching
 requires Pro; the hourly quote alone is not eligibility or upgrade approval.
-Capacity resolution stays in MAP-017/019/020. Its source manifest
+That resource path is withdrawn; no capacity action is requested. Its source manifest
 is an inventory, not an executable bootstrap. Before any later activation,
 reconcile all 17 route dependencies, preserve origin-before-moderation order,
 use fresh private keys and pair browser/server references on the exact branch.

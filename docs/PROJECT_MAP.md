@@ -1,5 +1,15 @@
 # K2 Jimzon  -  Project Directory Map
 
+IDEA-20260930-06 corrects the unapplied
+`supabase/migrations/20260916_automated_delivery_quotation.sql` compatibility with
+canonical identity results, message/event columns, seed keys and guest scopes.
+The existing `rehearse-local.mjs --with-dependencies --preserve-legacy` records an
+18-source installation order and actual order continuity/denial plus legacy ACL
+and history retention in `local-dependencies-receipt.json`. The metadata-only
+`shared-dependency-preflight.json` records missing live route dependencies.
+Both are in the 30 September guest-continuity evidence directory; exact shared-K2
+apply/backup/recovery and activation remain in MAP-017/019/020.
+
 IDEA-20260930-05 changes only the unapplied guest boundary's reference backfill
 and adds `--preserve-legacy` to the existing local rollback witness in the
 30 September guest-continuity directory. `local-legacy-receipt.json` records

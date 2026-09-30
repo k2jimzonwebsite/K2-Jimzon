@@ -143,25 +143,40 @@ begin
     'Order ' || v_order.public_reference || ' received through the website. '
       || 'Delivery option: ' || coalesce(v_order.fulfillment_method, 'Standard') || ' (₱' || v_order.shipping_amount::text || '). '
       || 'Total: ₱' || v_order.total_amount::text || '. Staff verify Manila stock and contact with payment details.',
-    false, 'delivered', 'order_seed_' || v_order.id::text, 'inbound'
+    false, 'received', 'guest-order-seed:' || v_order.id::text, 'inbound'
   where not exists (
     select 1 from public.messages
     where conversation_id = v_conversation_id
-      and provider_event_key = 'order_seed_' || v_order.id::text
+      and (provider_event_key in ('guest-order-seed:' || v_order.id::text, 'order_seed_' || v_order.id::text)
+        or external_message_id in ('guest-order-seed:' || v_order.id::text, 'order_seed_' || v_order.id::text))
   )
   returning id into v_message_id;
 
   insert into public.conversation_events(
-    conversation_id, event_type, to_status, to_assigned_staff, reason, created_by
+    conversation_id, event_type, reason, metadata
   )
-  select v_conversation_id, 'inbound_message', 'open', null,
-    'Seeded customer conversation from order submission ' || v_order.public_reference, null
+  select v_conversation_id, 'inbound_message',
+    'Seeded customer conversation from order submission ' || v_order.public_reference,
+    jsonb_build_object('order_id',v_order.id,'public_reference',v_order.public_reference,'source_kind','order_request')
   where v_message_id is not null;
+
+  if v_message_id is not null then
+    update public.conversations
+    set unread_count=1,last_inbound_at=now(),response_due_at=now()+interval '4 hours',
+      last_message_at=now(),updated_at=now()
+    where id=v_conversation_id;
+  end if;
+
+  insert into public.guest_access_grant_scopes(grant_id,scope_kind,scope_id,permissions)
+  values
+    (v_identity.grant_id,'order_request',v_order.id,array['read']::text[]),
+    (v_identity.grant_id,'conversation',v_conversation_id,array['read','reply']::text[])
+  on conflict do nothing;
 
   return query select true, null::text, 0, v_order.public_reference, v_order.status,
     v_order.subtotal, v_order.discount_amount, v_order.total_amount,
     v_order.shipping_quote_status, v_order.delivery_status, v_order.created_at,
-    encode(v_identity.guest_grant_token, 'hex');
+    v_identity.raw_grant_token;
 end;
 $$;
 

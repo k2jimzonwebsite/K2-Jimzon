@@ -10,17 +10,28 @@ new signed start/reuse/read/denial plus rollback. This does not apply SQL or
 activate the shared-K2 Preview connection. Exact payload/recovery remains
 MAP-017/019/020 work; evidence is the 30 September local legacy receipt.
 
-The prepared isolated Preview uses a separate backend reference for both browser
-and server, branch-scoped hosting inputs and fresh private keys. Its proposed
+The current signed Preview preparation targets existing K2 after exact shared
+connection review, with branch-scoped hosting inputs and fresh private keys. Its proposed
 host exception belongs to Vercel's project-level routing layer, which executes
 before runtime `vercel.ts` routes. Keep the existing API 404 on other hosts.
 The exact exported candidate, source manifest, quote and recovery boundary are
 in `docs/evidence/20260930-guest-continuity-rehearsal/BACKEND_REVIEW.md`.
 Empty-resource creation was approved and cost-confirmed, but Supabase rejected
 the attempt for account free-project quota; fresh inventory has no new project.
-Schema bootstrap and provider activation remain unapproved/unperformed. Capacity
-resolution and the exact next action stay in MAP-017/019/020; the empty-resource
+Schema bootstrap and provider activation remain unapproved/unperformed. The
+resource path is withdrawn; exact next actions stay in MAP-017/019/020. The empty-resource
 approval does not establish operating routes or authorize a paid-plan upgrade.
+
+The 18-source local installation rehearsal now includes wholesale/delivery and
+latest order replacements while preserving original direct-writer ACLs. The
+corrected latest order function retains actual identity result, canonical single
+seed and order/conversation grant scopes. All 16 route RPCs compile with checked
+grants/search paths; signed order replay, recovery/denial and unchanged historical
+rows pass before rollback. Live metadata still has none of the 16. Installation,
+signing-key configuration and coordinated moderation/direct-writer cutover are
+separate operations. Exact recovery and server shipping/Website enforcement
+remain open. Evidence: `local-dependencies-receipt.json` and
+`shared-dependency-preflight.json` in the 30 September guest-continuity directory.
 
 The locally corrected signed chat boundary propagates the SHA-256 hash of a
 valid HttpOnly grant for `guest_start`, allowing the database to reuse its
