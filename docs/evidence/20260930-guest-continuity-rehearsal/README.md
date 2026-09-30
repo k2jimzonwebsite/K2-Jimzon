@@ -108,6 +108,38 @@ appended the quoted automatic acknowledgment. The thread has two messages and
 no human guidance at readback. The reply requests guidance only and explicitly
 prohibits project changes/support access under this authorization.
 
+## Feature transport and backend availability
+
+The installed `git-pushing` script committed and pushed this batch as
+`23ef44228a2c0d570c77ea9c588dcd1099668245` on
+`codex/map017-guest-chat-preview`. Explicit `.backups/` exclusion was supplied
+only for this push, without changing global Git configuration. Readback showed
+HEAD and upstream identical, a clean worktree and no backup paths in the commit.
+Authenticated GitHub comparison independently returned identical for that SHA
+and the remote branch. No main branch was merged or pushed.
+
+At 08:50 UTC, separate Vercel Preview builds for this exact source were READY:
+
+| Artifact | Deployment | URL |
+| --- | --- | --- |
+| Storefront | `dpl_517CgyYwenzvFfXWrLWWTnKsrWfP` | `https://k2-jimzon-i7w7r0qrb-k2-jimzon.vercel.app/` |
+| Admin | `dpl_2q9exPE5oQcoW8q4tYbipzgE4rYh` | `https://k2-jimzon-admin-1juuljaq1-k2-jimzon.vercel.app/` |
+
+The provider returned Preview target (`target:null`) and matching feature
+ref/SHA. READY is build evidence only; no interaction was exercised on these
+new hosts. It does not establish a backend connection or live chat continuity.
+
+Read-only Supabase inventory exposed only K2 production
+`pixplcjqivlfflickobf`; `list_branches` returned an empty list. There is no
+existing isolated provider backend to adopt. The owner was asked which setup
+to prepare for exact review: an isolated test backend or a shared-K2 Preview
+cutover. That preference request authorizes no creation, cost, SQL, data copy,
+secret/environment change or shared connection. An isolated branch's successful
+schema replay is not assumed: manual/history drift must be checked, production
+data/private signing keys must not be copied, and any new provider resource
+requires its specific organization, quoted cost and exact scope authorization.
+All remaining actions and recovery ownership stay in MAP-017/019/020.
+
 ## Remaining work and recovery
 
 The next required action stays in MAP-017/019/020: review the corrected exact

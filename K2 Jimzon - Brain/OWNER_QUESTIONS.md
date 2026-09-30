@@ -3,6 +3,9 @@
 **30 September continuation:** The owner authorized the exact prepared SU-483740 reply. It was sent from `k2jimzonwebsite@gmail.com` to `support@supabase.com` at `2026-09-30T08:29:58Z`; readback confirmed message `1a0f16f4e8f70d9f` in the original thread. Human guidance is still pending. The authorization requests guidance only and does not authorize support access or SQL. Exact body and redacted receipt: `docs/evidence/20260930-guest-continuity-rehearsal/`. Local guest-start signing, both identity-provenance definitions, and origin enum compatibility now have actual anonymous-function behavior and rollback evidence. Preview-to-shared-K2 connection, provider migration/flag changes and production promotion still require their separate decisions under MAP-017/019/020. The exactly one authorized K2 test conversation remains unused; local rollback fixtures do not consume it.
 
 This file contains only actions and business decisions that require the owner.
+
+**30 September backend preference pending (MAP-017/019/020):** Read-only provider inventory found only production K2 and no development branch. The owner was asked which exact setup Codex should prepare for review: an isolated test backend or a shared-K2 Preview cutover. This choice requests preparation only; any new resource must separately identify its organization, quoted cost and exact provider/dependency/Preview scope. The approved one-record test does not cover those changes. Existing source corrections are pushed as `23ef442` and both separate Preview builds are READY, with new-host interaction still unverified. The next implementation/recovery action stays in the MAP.
+
 It is not an engineering backlog; implementation remains exclusively in
 `MASTER_ACTION_PLAN.md`.
 
