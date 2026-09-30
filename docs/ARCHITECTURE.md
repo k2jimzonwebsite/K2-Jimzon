@@ -31,12 +31,23 @@ separation, evidence checks, idempotent receipts and private audit events.
 Authenticated table writes remain revoked. If the Admin BFF switch is enabled,
 the same UI returns to the signed BFF transport.
 
-Guest Storefront chat keeps the scoped conversation UUID under
-`k2-store-chat-convo-id` in same-browser `localStorage`. It reads the former
-`sessionStorage` key as a one-time compatibility fallback and writes both while
-older tabs may still exist. This changes browser continuity only: the UUID stays
-a bearer-style reference, does not become an account identity, and does not add
-cross-device recovery, an RPC, or a database migration.
+The deployed Storefront still uses the legacy direct chat RPCs and retains the
+scoped conversation UUID under `k2-store-chat-convo-id` in same-browser
+`localStorage`, with a one-time `sessionStorage` compatibility fallback. Keep
+this path intact until a coordinated signed-chat cutover. The owner classified
+the existing UUID-only conversations as test data to leave out; their historical
+server rows remain untouched.
+
+The prepared candidate on `codex/map017-guest-chat-preview` clears the legacy
+browser pointer and removes direct browser calls to `get_storefront_chat_v1`
+and `submit_storefront_chat_v1`. It uses the signed guest BFF and may retain an
+opaque `CV-…` reference only as a lookup hint; the messages route must return
+that exact reference under the current HttpOnly guest grant before reopening
+the conversation. This candidate is not the deployed production behavior: the
+signed start function remains unapplied, and the latest Storefront Preview
+lacks the server-side Supabase settings required by the BFF. See MAP-017 and
+`docs/evidence/20260930-map017-contract-audit/README.md` for readiness and
+Preview evidence.
 
 IDEA-20260914-02 keeps uncertain guest-order identity and its immutable payload
 inside StoreProvider; Checkout and CartDrawer share that pending state. The bot

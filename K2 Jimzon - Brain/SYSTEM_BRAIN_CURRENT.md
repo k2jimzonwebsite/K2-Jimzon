@@ -4384,6 +4384,10 @@ locally at `.tools/current-production-backups/live-readiness.json`; the durable
 receipt and next actions are in
 `docs/evidence/20260930-map017-contract-audit/README.md`.
 
+The architecture page now labels the deployed legacy direct-RPC chat path and
+the prepared signed-BFF candidate separately, including the unapplied-function
+and Preview-configuration blockers.
+
 MAP-017 remains first: reconcile the live chat-read grant, finish the
 provider-default follow-up, and close its permission and recovery gates. The
 one authorized test conversation remains pending until the signed guest
