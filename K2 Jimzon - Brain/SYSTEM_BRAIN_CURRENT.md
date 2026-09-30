@@ -4364,18 +4364,23 @@ recorded. The Storefront chat button is visible; chat-open and signed-route
 behavior remain unverified.
 
 **30 September K2 permission and Preview recheck:** The owner authorized exactly
-one new K2 test conversation record, subject to the ordered gates. Targeted
-read-only SQL on project `pixplcjqivlfflickobf` confirmed ten direct anonymous
-EXECUTE grants on SECURITY DEFINER functions (all also executable by
-`authenticated`, none directly granted to `PUBLIC`), six unsafe
-`supabase_admin` default groups in `public`, and two authenticated-only
-payment-receipt read functions. The saved metadata export's current audit
-reports 15 critical and 2 high; its `get_storefront_chat_v1` classification
-conflicts with MAP-017's expected-transition note and needs reconciliation. The
-older `live-readiness.json` names the test-only branch, and its referenced npm
-commands do not exist in this checkout. The repository full-export attempt was
-blocked by network `EACCES`, so the old 11 critical/0 high and 8/2/3 results are
-not current-branch proof. No ACL or provider state changed.
+one new K2 test conversation record, subject to the ordered gates. A complete
+metadata-only export from exact project `pixplcjqivlfflickobf` was captured
+through the authenticated Supabase SQL connector at
+`2026-09-30T06:51:31.19553Z`, SHA-256
+`F4B780E68CDF79CFE2C2F34E90AC44EE44351A18B0FE1B1AA69C2F87876DB849`. After
+explicitly modeling the two authenticated staff/AAL2 receipt readers, its
+schema-truth audit reports **15 critical, 0 high**: nine anonymous SECURITY
+DEFINER grants without reviewed contracts and six unsafe `supabase_admin`
+default groups in `public`. The export confirms ten direct anonymous EXECUTE
+grants (all also granted to `authenticated`, none directly to `PUBLIC`). The
+source allowlist's `get_storefront_chat_v1` entry does not establish guest
+ownership; its critical finding remains open. The repository exporter still
+hits network `EACCES`, but the full export was obtained with the equivalent
+repository-owned metadata SELECT through MCP. The old readiness receipt remains
+branch-mismatched and its npm commands are absent. No ACL, provider default,
+schema, or business row changed. Exact export, route reconciliation, and
+remaining actions: `docs/evidence/20260930-map017-contract-audit/README.md`.
 
 The same one-record authorization is still pending its prerequisites: the
 signed-chat start function is unapplied and Preview lacks server-side Supabase

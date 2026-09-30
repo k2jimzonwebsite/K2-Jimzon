@@ -118,6 +118,20 @@ export function buildExpectedRepositorySchema() {
     // requirements. Most are transitional direct staff mutations that MAP-019/
     // MAP-020 will replace with Admin BFF commands and may then revoke.
     functionAuthorizationContracts: {
+      'public.list_order_payment_receipts_v1(uuid)': {
+        securityDefiner: true, anonCallable: false, searchPathSafe: true,
+        authorizationGuard: 'is_staff', aal2Required: true,
+        stateMutation: false, ownershipScope: 'payment_receipt_review',
+        idempotency: 'read_only', safeFailure: 'explicit_exception',
+        disposition: 'retain_until_admin_bff_cutover',
+      },
+      'public.get_order_payment_receipt_v1(uuid)': {
+        securityDefiner: true, anonCallable: false, searchPathSafe: true,
+        authorizationGuard: 'is_staff', aal2Required: true,
+        stateMutation: false, ownershipScope: 'payment_receipt_review',
+        idempotency: 'read_only', safeFailure: 'explicit_exception',
+        disposition: 'retain_until_admin_bff_cutover',
+      },
       'public.read_admin_globe_cms_v1()': {
         securityDefiner: true, anonCallable: false, searchPathSafe: true,
         authorizationGuard: 'is_admin', aal2Required: true,

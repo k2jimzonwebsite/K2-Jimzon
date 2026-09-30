@@ -17,7 +17,11 @@
   support reply or remediation was sent or applied.
 - Fresh targeted read-only K2 SQL confirmed ten direct anonymous RPC grants,
   six public `supabase_admin` default-privilege groups, and two authenticated-
-  only receipt readers. The saved export audit reports 15 critical and 2 high.
+  only receipt readers. A complete metadata-only export was captured through
+  the authenticated Supabase SQL connector on 30 September; after adding
+  explicit staff/AAL2 contracts for the two receipt readers, its schema-truth
+  audit reports 15 critical and 0 high (nine anonymous grant findings and six
+  provider-default findings remain).
   The prior 11/0 and 8/2/3 readiness claims are unverified on this branch: the
   local readiness receipt names a different branch, and its npm commands are
   absent from the current manifest. See the MAP-017 evidence for details.
@@ -99,11 +103,11 @@ recovery instructions.
 
 ## Exact next action
 
-Reconcile MAP-017's current permission audit and finish its live permission
-gates before continuing through the signed guest prerequisites in MAP order.
-The full-export refresh is still open: the stored file audit differs from the
-older readiness claim, its receipt names another branch, and the local exporter
-is network-blocked. Reply only in
+Resolve the nine anonymous SECURITY DEFINER findings and six provider-owned
+default-privilege groups recorded by MAP-017 before continuing through the
+signed guest prerequisites in MAP order. The full export is complete, while
+the old readiness receipt remains branch-mismatched and local exporter access
+still hits network `EACCES`. Reply only in
 existing ticket `SU-483740` after the owner explicitly authorizes the specific
 message; do not create a duplicate request or change provider defaults. When
 `start_guest_conversation_v1` is ready, obtain the separate owner decision to

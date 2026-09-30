@@ -23,23 +23,30 @@ has not been created.
 
 ## Live read-only MAP-017 evidence
 
-The saved read-only metadata export has timestamp `2026-09-29T17:04:07.280841`
-(the source field has no timezone suffix) and SHA-256
-`52DE2F3D6F4A8C02C815ECE331CEC411751C738013D025395625781868AEB484`. Auditing
-that file on 30 September with
-`node scripts/schema-truth-audit.mjs --export=.tools/current-production-backups/live-schema-metadata-20260930-contracts.json`
-reported **17 findings: 15 critical and 2 high**, not 11 critical and 0 high.
-The findings comprise nine anonymous SECURITY DEFINER grants not covered by
-the current code contracts, six unsafe `supabase_admin` default groups in
-`public`, and two authenticated-only payment-receipt readers without explicit
-audit contracts. The audit classifies `get_storefront_chat_v1` as unreviewed,
-while MAP-017 describes it as an expected transitional guest read; that
-classification still needs an explicit, behavior-backed contract.
+The local Management API exporter was blocked by network `EACCES`. I then ran
+the same repository-owned `supabase/export-schema-metadata.sql` query through
+the authenticated Supabase SQL connector, scoped only to project
+`pixplcjqivlfflickobf`. The query is a metadata-only `WITH`/`SELECT`; it reads
+no business rows and changes no database state. The full export is preserved
+locally, ignored by Git, at
+`.tools/current-production-backups/live-schema-metadata-20260930-mcp.json`.
+Its timestamp is `2026-09-30T06:51:31.19553` UTC (the query emits no timezone
+suffix), and its SHA-256 is
+`F4B780E68CDF79CFE2C2F34E90AC44EE44351A18B0FE1B1AA69C2F87876DB849`. It
+contains 11 schemas, 100 tables, 167 functions, and 10 ledger entries; the
+latest migration is `20260928092634`.
 
-Fresh targeted `SELECT` queries through the signed Supabase connector on 30
-September, scoped to project `pixplcjqivlfflickobf`, confirmed ten direct
-`anon` EXECUTE grants on public SECURITY DEFINER functions. All ten also grant
-`authenticated`; none has a direct `PUBLIC` grant. The live signatures are:
+After adding explicit schema-truth contracts for the two authenticated receipt
+readers below, the fresh export audit
+`node scripts/schema-truth-audit.mjs --export=.tools/current-production-backups/live-schema-metadata-20260930-mcp.json --allow-findings`
+reports **15 critical and 0 high**. Nine critical findings are anonymous
+SECURITY DEFINER grants without a reviewed MAP-017 contract; six are unsafe
+`supabase_admin` default-privilege groups in `public`. Earlier 11/0 and 15/2
+reports are superseded by this current export and contract set.
+
+The export confirms ten direct `anon` EXECUTE grants on public SECURITY
+DEFINER functions. All ten also grant `authenticated`; none has a direct
+`PUBLIC` grant. The live signatures are:
 
 - `public.get_order_conversation_v1(uuid, text)`
 - `public.get_public_product_stock()`
@@ -55,23 +62,56 @@ September, scoped to project `pixplcjqivlfflickobf`, confirmed ten direct
 The current public-schema
 `supabase_admin` defaults grant anonymous and authenticated privileges on
 future functions, tables, and sequences, yielding six unsafe groups. Separate
-live reads confirmed `get_order_payment_receipt_v1(uuid)` and
+export reads show `get_order_payment_receipt_v1(uuid)` and
 `list_order_payment_receipts_v1(uuid)` are SECURITY DEFINER, executable by
-`authenticated` but not `anon`.
+`authenticated` but not `anon`, with live `auth.uid()`, `is_staff()`, and AAL2
+signals. I added explicit staff/AAL2 contracts for those two functions in
+`scripts/schema-truth-core.mjs`; the core now verifies the live staff and AAL2
+signals. Their two HIGH findings are cleared from the audit. The focused
+contract test and `npm run verify:development` passed. The Admin UI still calls
+these reads directly (`src/views/admin/OmniOperationsHub.jsx:970,985`); no
+Admin BFF deployment is inferred.
 
-The ignored `.tools/current-production-backups/live-readiness.json` is not a
-current-branch receipt: its `release-branch` field names
-`codex/map017-guest-chat-test-only`, while this checkout is
-`codex/map017-guest-chat-preview`. The referenced `npm run
-preflight:k2-project` and `npm run readiness:k2-live` scripts are absent from
-the current `package.json`. The repository's read-only full exporter was
-attempted again on 30 September but its Management API request failed with
-network `EACCES`; no output file was refreshed. Therefore its earlier **8
-verified, 2 owner, 3 connector, 0 failed** result and the prior **11 critical,
-0 high** summary are unverified for this checkout. The saved export and audit
-JSON remain ignored local evidence because they contain environment-specific
-metadata. No K2 SQL write, provider change, ACL change, or feature-flag change
-occurred during these reads.
+The current export shows only `USAGE`, not `CREATE`, on `public` for
+`public`, `anon`, and `authenticated`. That supports schema-truth's fixed
+`search_path=public` assumption. It does not resolve unreviewed authorization
+for guest functions.
+
+## Source-route reconciliation
+
+This is a source-to-live-grant map, not an exact-host interaction test. The
+metadata export deliberately records non-sensitive guard signals, not
+function bodies. Local migrations are supporting source evidence; they do not
+prove the current live body byte-for-byte.
+
+| Live function(s) | Current caller or source finding | MAP-017 disposition |
+| --- | --- | --- |
+| `get_public_product_stock()` | Storefront and Admin read `v_product_stock_from_batches` (`src/context/StoreContext.jsx:306`, `src/context/AdminStoreContext.jsx:52`). The schema-truth core has an explicit anonymous contract for this public stock projection. | Expected public read; retain the narrow `anon`/`authenticated` grants. |
+| `get_storefront_chat_v1(uuid)` | Production still has the legacy chat path. The current Preview candidate removes direct calls. `security-surface-policy.mjs` lists this as a transitional anonymous read, but the schema-truth core has no guest-ownership contract. Live metadata says SECURITY DEFINER, `search_path=public`, and no `auth.uid()`/staff guard. The 17 September migration source selects a thread by conversation UUID; the export omits its body. | Keep critical. The separate allowlist is not a safety proof. Require signed same-browser reopen plus missing/cross-browser denial before retiring this route. |
+| `submit_storefront_chat_v1(text,text,text,uuid,text)` | The Preview candidate removes direct calls; Production has not received that cutover. Live metadata says SECURITY DEFINER, `search_path=public`, and no `auth.uid()`/staff guard. The 17 September source accepts an optional conversation UUID and writes to that conversation without a guest ownership token. | Keep critical until signed guest continuity is verified and the coordinated cutover can revoke the direct writer. Historical chat rows stay untouched. |
+| `get_order_conversation_v1(uuid,text)`, `submit_order_message_v1(uuid,text,text,uuid)`, `submit_order_payment_receipt_v1(uuid,text,text,text,text,uuid)` | `src/services/orderReceiptService.js:22,32,66` calls these with the order ID and saved `accessKey`. The 28 September migration source checks the matching order ID/idempotency key. Live metadata reports fixed empty `search_path` and direct `anon` grants. The separate security-surface policy lists these, but the schema-truth core does not yet model the guest key boundary. | Keep critical until the anonymous key-boundary contract is explicitly modeled and the signed/BFF replacement is verified. |
+| `submit_order_request_v2(...)`, `submit_pasabuy_request(...)`, `validate_coupon(...)` | Direct fallback calls in `src/context/StoreContext.jsx:206,626,757` run when `VITE_GUEST_BFF_ENABLED` is false. Live metadata reports SECURITY DEFINER with `search_path=public` and no `auth.uid()`/staff signal. Signed guest replacements are absent from the live function list. | Keep critical until the signed routes are live and the direct grants/callers are cut over in MAP-020 order. |
+| `submit_order_request(...)` | Live anonymous grant remains, but no direct RPC call was found in the current `src`, `server`, or `api` source search; the current type metadata still names it. Live metadata reports SECURITY DEFINER with `search_path=public`. | Treat as an unused legacy public entry point; verify deployed-client compatibility before revocation. |
+| `get_order_payment_receipt_v1(uuid)`, `list_order_payment_receipts_v1(uuid)` | Staff UI calls these reads directly (`src/views/admin/OmniOperationsHub.jsx:970,985`). The live export shows authenticated-only grants with `auth.uid()`, `is_staff()`, and AAL2 signals. | Explicit staff/AAL2 schema-truth contracts added. Audit HIGH findings cleared; Admin BFF and exact-host staff flow remain unverified. |
+
+The static source inventory
+`node scripts/audit-security-surfaces.mjs` (also run by
+`npm run verify:development`) reports 18 expected grants, 18 effective grants
+from the cumulative local migration tree, and zero unexpected or missing
+grants. This is **not live database evidence**. Five source-policy entries
+overlap the ten current live grants. Thirteen expected signed-guest grants
+are absent live, while five live legacy direct entries are not in the current
+expected list: the two order-submit overloads, Pasabuy submit, direct
+Storefront chat submit, and coupon validation.
+
+The ignored `.tools/current-production-backups/live-readiness.json` remains a
+stale receipt: it names `codex/map017-guest-chat-test-only`, while this checkout
+is `codex/map017-guest-chat-preview`; its named npm scripts are absent from
+`package.json`. The full schema export has now been refreshed and audited via
+MCP, so local Node network access no longer blocks that evidence step. Do not
+reuse its old **8 verified, 2 owner, 3 connector, 0 failed** result as current
+branch readiness. No K2 SQL write, provider change, ACL change, feature-flag
+change, or chat row write occurred.
 
 ## Source change and local verification
 
@@ -94,6 +134,16 @@ contract failed before their behavior was implemented. Afterward:
 | `git diff --check` | Passed |
 
 No exact-host Preview check was included in these local results.
+
+The audit-contract update adds authenticated-only AAL2 contracts for
+`list_order_payment_receipts_v1(uuid)` and
+`get_order_payment_receipt_v1(uuid)` in `scripts/schema-truth-core.mjs`, with
+a focused regression case in `tests/schema-truth-tool.spec.js`. The focused
+case first failed because both functions were unreviewed, then passed after
+the contract addition. `npm run verify:development` exited 0. Re-auditing the
+fresh K2 export then returned **15 critical, 0 high**; the nine anonymous
+function findings and six provider-owned default groups remain open. This was
+an audit-model update only: no application deployment or Supabase change.
 
 ## Isolated Preview branch
 
@@ -200,25 +250,25 @@ row to clean up or roll back.
 ## Remaining work and recovery
 
 1. Keep production `main` unchanged while the ordered gates remain open.
-2. Reconcile the `get_storefront_chat_v1` audit-contract discrepancy and
-   classify the other eight unreviewed anonymous grants against current route
-   usage. Capture a current full K2 metadata export and rerun schema truth;
-   the local exporter is read-only but its network call was blocked. The
-   previous readiness receipt is branch-mismatched.
-3. Send a reply in ticket `SU-483740` only after the owner authorizes the
-   specific message. Do not change provider-owned defaults while their
-   supported remediation is unknown.
-4. Continue in MAP order through signed guest prerequisites. The one test
-   record is authorized but cannot be created while
-   `start_guest_conversation_v1` is unapplied and Preview's server-side
-   Supabase environment is absent.
+2. Resolve the nine anonymous SECURITY DEFINER findings against the route map
+   above. Keep the unguarded legacy chat read/write paths critical; replace or
+   retire direct checkout and Pasabuy paths only in the reviewed MAP-019/020
+   cutover. The current full export is captured and audited; the old readiness
+   receipt remains branch-mismatched.
+3. Reply in ticket `SU-483740` only after the owner authorizes the specific
+   message. Do not change provider-owned defaults while their supported
+   remediation is unknown.
+4. Continue through signed guest prerequisites in MAP order. Thirteen expected
+   signed-guest grants/functions remain absent live, including
+   `start_guest_conversation_v1`; Preview also lacks server-side Supabase
+   settings. The one test record remains pending.
 5. Once those prerequisites are ready, obtain the separate owner decision to
    connect Storefront Preview server functions to shared K2, or identify an
    approved isolated test backend. Do not add production database access to
    Preview based only on the one-row authorization.
-4. Then prove one fresh signed-chat start, same-browser reopen, and denial with
+6. Then prove one fresh signed-chat start, same-browser reopen, and denial with
    a missing or different browser grant. Do not use the legacy direct chat RPC.
-5. Continue MAP-018 only after its dependencies clear. Its current gaps include
+7. Continue MAP-018 only after its dependencies clear. Its current gaps include
    protected Website assignment, server-side order-membership enforcement,
    reviewed Website membership for the 22 published products, physical counts,
    and real-host product acceptance. Never auto-assign the 22 products.

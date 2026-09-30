@@ -74,6 +74,37 @@ test('schema-truth engine parses fabricated clean fixture and confirms zero crit
   expect(report).not.toContain('[REDACTED]')
 })
 
+test('schema-truth explicitly reviews AAL2 staff-only payment receipt readers', async () => {
+  const cleanJson = await readFile(
+    new URL('./fixtures/schema-truth-exports/fabricated-clean-sample.json', import.meta.url),
+    'utf8',
+  )
+  const sample = JSON.parse(cleanJson)
+  for (const signature of [
+    'public.list_order_payment_receipts_v1(uuid)',
+    'public.get_order_payment_receipt_v1(uuid)',
+  ]) {
+    sample.functions[signature] = {
+      schema_name: 'public',
+      signature,
+      security_definer: true,
+      search_path_config: 'search_path=""',
+      references_auth_uid: true,
+      references_is_staff: true,
+      references_aal2: true,
+      grants: [{ grantee: 'authenticated', privilege: 'EXECUTE' }],
+    }
+  }
+
+  const result = compareSchemaTruth(parseSchemaExport(sample), buildExpectedRepositorySchema())
+  for (const signature of [
+    'public.list_order_payment_receipts_v1(uuid)',
+    'public.get_order_payment_receipt_v1(uuid)',
+  ]) {
+    expect(result.issues.filter(issue => issue.target === signature)).toEqual([])
+  }
+})
+
 test('schema-truth engine detects anon DML grants, blanket policies, and storage flaws in fabricated vulnerable fixture', async () => {
   const vulnerableJson = await readFile(
     new URL('./fixtures/schema-truth-exports/fabricated-vulnerable-sample.json', import.meta.url),
