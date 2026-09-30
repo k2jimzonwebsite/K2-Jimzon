@@ -87,6 +87,41 @@ Existing tests in tests/guest-commerce-bff-contract.spec.js and tests/storefront
 **Fresh read-only checks:** npm run preflight:k2-project confirmed project pixplcjqivlfflickobf; npm run readiness:k2-live returned 8 verified / 2 owner / 3 connector / 0 failed. No tests were run because this follow-up changed documentation only. No K2 database/provider write, feature-flag change, deployment, or push occurred. The documentation update is committed locally on codex/map017-guest-chat-continuity-audit, based on main 4e03016. The branch has not been pushed, and main remains untouched by this follow-up.
 
 Changed records: MASTER_ACTION_PLAN.md (MAP-017/019/020), K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md, K2 Jimzon - Brain/OWNER_QUESTIONS.md, docs/runbooks/GUEST_COMMERCE_BFF_RUNBOOK.md, docs/evidence/20260929-channel-listing-slices/SESSION_HANDOFF.md, and this receipt. Recovery is to revert this documentation-only branch commit; no provider/database recovery is required.
+
+## 30 September owner decision and local source follow-up
+
+The owner confirmed all current UUID-only Storefront chats are test data and may
+be left out. Do not restore or transfer them into a new guest grant, and do not
+delete their historical server rows under this decision.
+
+The local feature branch `codex/map017-guest-chat-test-only` now clears the old
+`k2-store-chat-convo-id` browser pointer and removes direct browser calls to
+`get_storefront_chat_v1` and `submit_storefront_chat_v1`. New messages use the
+signed guest BFF only. The source stores a new opaque `CV-…` reference as a
+lookup pointer and reopens it only after the grant-scoped messages route returns
+that exact reference. The reference is not authorization; the HttpOnly guest
+grant remains required. The floating launcher no longer displays “Resume Chat”
+based on an old UUID. With the BFF flag off, this source shows the unavailable
+state and sends nothing.
+
+Two focused regressions were observed failing before implementation, for the
+legacy UUID/launcher behavior and for secure opaque-reference reopen. The
+related local chat contracts then passed 4/4 using
+`playwright.api.config.js`; guest-commerce BFF and Turnstile contracts passed
+19/19, and `npm run verify:development` passed. No exact-host Preview was run.
+The deployed source still uses its current
+direct path; no K2 grants, flags, database rows, provider settings, deployment,
+inventory or remote branch changed.
+
+Changed source/tests: `src/components/shop/StoreChatPanel.jsx`,
+`src/components/shop/StorefrontChatButton.jsx`, and
+`tests/map027-store-polish.spec.js`. Changed records: the Master Action Plan
+(MAP-017/019/020), owner decision register, operations rulebook, System Brain,
+guest-commerce runbook, 29 September session handoff, and this receipt.
+Source recovery is to revert the local feature-branch commit; no server data
+rollback is required. Preview, exact final grant classification, provider
+support response, and owner-authorized cutover remain open.
+
 ## Exact next action
 
-Keep MAP-017 active. Resolve the legacy chat UUID recovery and exact direct-read grant disposition, obtain the pending Supabase support response for the six provider-owned defaults, prove signed guest continuity on Preview, and obtain the specific owner authorization named by MAP-019/020 before any apply. Re-run the documented preflight and readiness gate, require zero failed gates, refresh and verify the required backup, and follow the ordered rollback packet. MAP-018 Website assignment and production inventory listing remain downstream: live Website membership was not enumerated, the channel chain is unapplied, and the 30 product/21 lot projections do not establish physical quantities. Do not auto-assign the 22 published products.
+Keep MAP-017 active. The owner recovery policy is resolved; next prove fresh signed chat start, same-browser reopen and missing/cross-browser grant denial on Preview, then reconcile the direct-read grant disposition with the live audit and signed cutover. Obtain the pending Supabase support response for the six provider-owned defaults and the specific owner authorization named by MAP-019/020 before any apply. Re-run the documented preflight and readiness gate, require zero failed gates, refresh and verify the required backup, and follow the ordered rollback packet. MAP-018 Website assignment and production inventory listing remain downstream: live Website membership was not enumerated, the channel chain is unapplied, and the 30 product/21 lot projections do not establish physical quantities. Do not auto-assign the 22 published products.

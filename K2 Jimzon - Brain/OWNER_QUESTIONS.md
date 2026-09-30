@@ -19,21 +19,16 @@ apply and provide real package facts and physical counts before sellable stock
 or a first real listing can be accepted. Synthetic CSV checks already cover
 importer mechanics and do not establish those facts.
 
-**30 September guest-chat recovery decision pending (MAP-017/019/020):** The old
-Storefront saved UUID cannot be treated as proof of buyer ownership; the prepared
-signed BFF creates new grant-scoped CV references and has no transfer path for
-legacy threads. Which customer outcome should be supported before direct chat is
-retired?
-
-- Secure transfer after a separately reviewed buyer-proof method.
-- Staff-mediated recovery under a reviewed verification procedure.
-- No restoration of pre-BFF threads, with a clear customer message and a fresh
-  signed conversation.
-
-These are policy options only; none authorizes cutover or an unreviewed claim.
-Codex owns technical design, tests and Preview evidence after the owner choice.
-MAP-017/020 retain the cutover gates; no grant, flag or production behavior
-changes.
+**30 September guest-chat decision resolved (MAP-017/019/020):** The owner
+confirmed all current Storefront conversations are test conversations and may be
+left out. Do not restore or migrate legacy UUID-only threads, and do not delete
+their historical server rows as part of this decision. New conversations use
+the signed guest BFF. A newly issued opaque `CV-…` reference may be stored only
+as a browser lookup pointer; every read/reply still requires the server to
+validate the HttpOnly guest grant. This resolves the recovery policy, but does
+not authorize a database grant change, feature-flag change, deployment, or
+production write. MAP-017/019/020 still own exact-host Preview proof and the
+coordinated cutover gates.
 
 
 **29 September Preview publication approval fulfilled (MAP-020):** Automatic approval review blocked pushing local branch `codex/connector-handoff-20260929` to the configured GitHub repository `k2jimzonwebsite/K2-Jimzon`. Read-only GitHub verification confirms that exact repository and WRITE access for signed-in `EdgerzXc`, but the user's broad instruction to continue did not specifically authorize exporting the branch. The owner explicitly approved this exact feature-branch push to trigger separate Vercel Previews for verification. Codex owns the push and provider checks. Production `main` and the BFF remain unchanged until their separate release gates.
@@ -50,7 +45,7 @@ The owner supplied MariBank and GCash receiving QR screenshots and requested bot
 
 | Priority | Owner item | Needed before | Current action |
 | --- | --- | --- | --- |
-| **Provider follow-up** | `OWNER-005` remaining database permission gates | MAP-017 reconciliation of 12 current critical findings | The scoped stock correction and owner-authorized backup upload are complete. Codex owns the six transitional guest-grant cutover after preview continuity; Supabase support's answer is pending for six provider-owned defaults. No repeat stock approval or owner file handling is needed. |
+| **Provider follow-up** | `OWNER-005` remaining database permission gates | MAP-017 reconciliation of 11 current critical findings | The scoped stock correction and owner-authorized backup upload are complete. Codex owns the signed guest cutover preparation: five legacy anonymous grants are transitional, while the old direct chat-read grant is tracked separately for cutover disposition. Supabase support's answer is pending for six provider-owned defaults. No repeat stock approval or owner file handling is needed. |
 | Early | `OWNER-002` reservation holds | MAP-023 reservation activation | Answered 2 September; implement and verify the recorded lifecycle in MAP-023. |
 | Early | `OWNER-003` wholesale and response claims | MAP-019/MAP-023 commercial activation | Choose eligibility, pricing, credit, minimums, and any SLA |
 | Early | `OWNER-006` customer retention and deletion | MAP-019 privacy workflow | Approve record-specific retention, legal holds, anonymization, and request ownership |

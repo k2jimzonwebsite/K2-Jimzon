@@ -1254,6 +1254,8 @@ test('storefront provides a unified live chat drawer across 2D and 3D experience
   const app = await read('../src/App.jsx')
   const drawer = await read('../src/components/shop/StoreChatDrawer.jsx')
   const button = await read('../src/components/shop/StorefrontChatButton.jsx')
+  const chat = await read('../src/components/shop/StoreChatPanel.jsx')
+  const chatCode = await readCode('../src/components/shop/StoreChatPanel.jsx')
   const contact = await read('../src/views/Contact.jsx')
   const guestMessages = await read('../src/views/GuestMessages.jsx')
 
@@ -1279,12 +1281,28 @@ test('storefront provides a unified live chat drawer across 2D and 3D experience
   expect(drawer).toContain('StoreChatPanel')
   expect(drawer).toContain('Tricolor')
 
-  // Button accessibility & active conversation dot
-  expect(button).toContain('k2-store-chat-convo-id')
+  // A test-only UUID is not proof of an active guest conversation.
   expect(button).toContain('Chat with K2')
-  expect(button).toContain('Resume Chat')
+  expect(button).not.toContain('k2-store-chat-convo-id')
+  expect(button).not.toContain('Resume Chat')
+  expect(chatCode).toContain('discardLegacyStoredConvoId')
+  expect(chatCode).toContain('const enabled = bffEnabled')
+  expect(chatCode).not.toMatch(/get_storefront_chat_v1|submit_storefront_chat_v1/)
+  expect(chat).toContain('startGuestConversation')
+  expect(chat).toContain('replyToGuestConversation')
 
   // Contact and GuestMessages link directly into the live chat drawer
   expect(contact).toContain("openChat({ origin: 'contact_page' })")
   expect(guestMessages).toContain("openChat({ origin: 'messages_page' })")
+})
+
+test('a new store chat resumes only its opaque reference after the guest grant validates it', async () => {
+  const chat = await readCode('../src/components/shop/StoreChatPanel.jsx')
+
+  expect(chat).toContain("const GUEST_REFERENCE_KEY = 'k2-store-chat-guest-reference'")
+  expect(chat).toContain('isGuestConversationReference')
+  expect(chat).toContain('persistGuestConversationReference(result.data?.conversation_reference)')
+  expect(chat).toMatch(/listGuestConversations\(\)[\s\S]*?savedReference/)
+  expect(chat).toContain('item.conversation_reference === savedReference')
+  expect(chat).not.toMatch(/get_storefront_chat_v1|submit_storefront_chat_v1/)
 })

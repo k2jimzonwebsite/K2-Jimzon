@@ -1619,6 +1619,14 @@ landed_cost = purchase_cost
 - A guest reply is accepted only through the scoped BFF grant for that exact
   conversation. A public reference, contact value, URL ID, or local-storage flag
   never grants read or reply permission.
+- Storefront chat may retain a new opaque `CV-…` reference as a browser lookup
+  pointer, but it may render that thread only after the signed messages route
+  returns the exact reference under the current HttpOnly guest grant. The old
+  direct UUID key must never select, read, or reply to a guest thread; UUID-only
+  history is not transferred into a different grant. The owner's 30 September
+  decision classifies current UUID-only chats as test data to leave out, not
+  records to delete. If real legacy history is encountered later, matching an
+  ID, name, or contact still does not authorize recovery.
 - Unresolved workflow and mark-read retries retain their payload-bound operation
   identity within the acting staff session, just as message retries do. A
   replayed read receipt does not prove that later inbound messages were read;

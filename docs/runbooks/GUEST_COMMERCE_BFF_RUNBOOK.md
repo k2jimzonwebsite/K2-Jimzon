@@ -573,3 +573,39 @@ the Storefront artifact contains only its intended function.
 If any step fails before cutover, keep the old storefront path and fix forward.
 If cutover fails, roll back only the cutover grants immediately; do not delete
 identity, request, conversation, grant, replay, or rate records.
+
+## Storefront chat UUID retirement — 30 September 2026
+
+The owner confirmed that current UUID-only Storefront chats are test
+conversations and may be left out. Do not restore or transfer those threads to a
+new guest grant, and do not delete their server records under this decision.
+
+The local Storefront source removes direct browser calls to
+`get_storefront_chat_v1` and `submit_storefront_chat_v1`. On opening the chat it
+clears the old `k2-store-chat-convo-id` browser pointer. A new chat starts and
+replies through the signed guest BFF only. The browser may retain the resulting
+opaque `CV-…` reference as a lookup hint; on reopen, the UI requests the
+grant-scoped messages list and shows only the exact stored reference returned
+under the current HttpOnly guest grant. The reference does not authorize access
+by itself. The launcher always offers a new chat and never infers “Resume Chat”
+from an old UUID.
+
+This source is prepared on `codex/map017-guest-chat-test-only`, not deployed.
+With `VITE_GUEST_BFF_ENABLED=false`, the changed component deliberately shows
+the unavailable state and sends nothing; coordinate any deployment with the
+signed BFF route and browser/server flag gates rather than shipping this source
+with chat disabled. Current production still has its existing direct paths and
+grants. The live read audit classifies `get_storefront_chat_v1` as expected and
+`submit_storefront_chat_v1` as one of five transitional grants; reconcile the
+read function's final disposition before a cutover.
+
+Focused browser-contract evidence: the legacy UUID/launcher contract and the
+opaque-reference resume contract failed before their respective behavior was
+implemented, then the related chat tests passed 4/4 using
+`playwright.api.config.js`; the guest-commerce BFF and Turnstile contracts passed
+19/19, and `npm run verify:development` passed. Exact-host Preview proof remains
+required; no K2 database/provider write, historical-row deletion, feature-flag
+change, deployment, push or production cutover occurred. To recover
+the source behavior, revert the local feature-branch commit; no data rollback is
+needed. MAP-017/019/020 retain the ordered Preview, backup, authorization and
+grant-cutover gates.
