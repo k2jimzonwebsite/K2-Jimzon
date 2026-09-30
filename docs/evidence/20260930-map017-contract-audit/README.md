@@ -122,6 +122,26 @@ Source recovery is to revert the local feature-branch commit; no server data
 rollback is required. Preview, exact final grant classification, provider
 support response, and owner-authorized cutover remain open.
 
+## 30 September isolated Preview candidate
+
+The local source branch `codex/map017-guest-chat-test-only` is based on local
+`main`, which is 23 commits ahead of GitHub `main`. To keep unrelated commits
+out of Preview publication, local branch `codex/map017-guest-chat-preview` was
+created directly from GitHub `main` at `f95e384eefaebf372f5e8037bd8fd1819118dc17`.
+Its single local commit `1e7b818` changes only
+`src/components/shop/StoreChatPanel.jsx`,
+`src/components/shop/StorefrontChatButton.jsx`, and
+`tests/map027-store-polish.spec.js`.
+
+On this baseline, the focused chat contracts passed 4/4, the guest-commerce BFF
+and Turnstile contracts passed 19/19, `npm run verify:development` passed, and
+`git diff --check` passed. This proves local compatibility with the remote-main
+source baseline only. No Preview was built, no GitHub branch was created, and no
+production/provider state changed. The candidate can be discarded without a
+data rollback. Exact next action: obtain owner authorization to publish this
+specific isolated branch, then verify new-chat start, same-browser reopen, and
+missing/cross-browser grant denial on the resulting Preview.
+
 ## Exact next action
 
-Keep MAP-017 active. The owner recovery policy is resolved; next prove fresh signed chat start, same-browser reopen and missing/cross-browser grant denial on Preview, then reconcile the direct-read grant disposition with the live audit and signed cutover. Obtain the pending Supabase support response for the six provider-owned defaults and the specific owner authorization named by MAP-019/020 before any apply. Re-run the documented preflight and readiness gate, require zero failed gates, refresh and verify the required backup, and follow the ordered rollback packet. MAP-018 Website assignment and production inventory listing remain downstream: live Website membership was not enumerated, the channel chain is unapplied, and the 30 product/21 lot projections do not establish physical quantities. Do not auto-assign the 22 published products.
+Keep MAP-017 active. The owner recovery policy is resolved; obtain authorization to publish `codex/map017-guest-chat-preview`, then prove fresh signed chat start, same-browser reopen and missing/cross-browser grant denial on Preview. Reconcile the direct-read grant disposition with the live audit and signed cutover. Obtain the pending Supabase support response for the six provider-owned defaults and the specific owner authorization named by MAP-019/020 before any apply. Re-run the documented preflight and readiness gate, require zero failed gates, refresh and verify the required backup, and follow the ordered rollback packet. MAP-018 Website assignment and production inventory listing remain downstream: live Website membership was not enumerated, the channel chain is unapplied, and the 30 product/21 lot projections do not establish physical quantities. Do not auto-assign the 22 published products.

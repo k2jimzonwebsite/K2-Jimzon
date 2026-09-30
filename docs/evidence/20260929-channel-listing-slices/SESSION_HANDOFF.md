@@ -53,8 +53,14 @@ then passed 4/4 with `playwright.api.config.js`; guest-commerce BFF and Turnstil
 contracts passed 19/19, and `npm run verify:development` passed. Preview
 behavior, the live direct-read grant disposition, and provider-owned defaults
 remain open.
-The branch has not been pushed; production source, database grants, flags,
-provider settings, deployments and inventory remain unchanged.
+The full local source branch has not been pushed. Its 23 commits beyond GitHub
+`main` made it a poor Preview transport, so a minimal local candidate was
+prepared from GitHub `main` `f95e384eefaebf372f5e8037bd8fd1819118dc17`:
+`codex/map017-guest-chat-preview` at commit `1e7b818`, containing only the three
+chat source/test files. On that baseline, the 4/4 chat contracts, 19/19 guest
+BFF/Turnstile contracts, `npm run verify:development`, and `git diff --check`
+passed. The candidate has not been published; production source, database
+grants, flags, provider settings, deployments and inventory remain unchanged.
 
 Changed files: `src/components/shop/StoreChatPanel.jsx`,
 `src/components/shop/StorefrontChatButton.jsx`,

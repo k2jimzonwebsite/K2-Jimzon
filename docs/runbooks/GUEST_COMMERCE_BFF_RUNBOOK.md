@@ -599,6 +599,15 @@ grants. The live read audit classifies `get_storefront_chat_v1` as expected and
 `submit_storefront_chat_v1` as one of five transitional grants; reconcile the
 read function's final disposition before a cutover.
 
+A minimal code-only Preview candidate is prepared locally as
+`codex/map017-guest-chat-preview` at `1e7b818`, directly on GitHub `main`
+`f95e384eefaebf372f5e8037bd8fd1819118dc17`. It contains only the chat panel,
+launcher, and contract-test changes, avoiding the original branch's 23
+unpublished ancestors. The focused chat set passed 4/4, guest-commerce BFF and
+Turnstile contracts passed 19/19, and `npm run verify:development` passed on
+that baseline. The candidate is not published or deployed; obtain owner approval
+before publishing it to trigger Preview builds.
+
 Focused browser-contract evidence: the legacy UUID/launcher contract and the
 opaque-reference resume contract failed before their respective behavior was
 implemented, then the related chat tests passed 4/4 using
