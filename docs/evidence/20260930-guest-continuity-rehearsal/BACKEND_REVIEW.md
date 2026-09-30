@@ -1,8 +1,19 @@
 # MAP-017/019/020 backend proposal for review
 
-Prepared only. This record freezes known targets and candidate scope; it is not
-an applied provider configuration, an executable migration bundle or another
-backlog. Remaining actions and decisions live in the owning MAP items.
+**Current direction after owner feedback:** The extra-project approach is
+withdrawn. Prepare the exact guest dependency, backup and recovery payload
+against existing canonical K2 `pixplcjqivlfflickobf`. No resource retry or paid
+upgrade will proceed. The capacity-choice question is superseded. The sections
+below preserve the earlier review and failed attempt; they are not current
+provisioning instructions. Shared-K2 SQL/Preview connection remain unapplied
+and require their exact payload review/approval. The historical-reference
+backfill must preserve the owner's excluded UUID-only test-history decision.
+Current unfinished actions live only in MAP-017/019/020.
+
+Creation scope approved; provider rejected the attempt for free-project quota.
+No new resource exists on readback. Schema/hosting scope remains prepared only.
+This record is not an executable migration bundle or another backlog. Remaining
+actions and decisions live in the owning MAP items.
 
 ## Verified baseline
 
@@ -35,16 +46,31 @@ At 09:18:43 UTC on 30 September, the authenticated cost tool returned:
 | Resource | Account-specific quote | Proposed disposition |
 | --- | --- | --- |
 | Separate project | $0 per month | Recommended for an empty isolated test backend |
-| Development branch | $0.01344 per hour | Alternative; no paid branch proposed for creation |
+| Development branch | $0.01344 per hour | Requires Pro per current docs; K2jimzon is Free, no upgrade/branch approval |
 
 The exact proposed creation is one empty separate project named
 `k2-guest-preview-20260930`, in K2jimzon, Singapore (`ap-southeast-1`), using
 the $0/month quote. It copies no production database rows, Storage objects,
 Auth users, private keys, provider settings or integrations. No resource has
 been created. Its eventual reference cannot be filled in before provisioning.
-`resource-quotes.json` preserves the tool inputs/results and the owner's
-quote-only scope. Creation requires explicit approval plus the cost tool's
-confirmation; if a different charge or plan is required, stop for a new decision.
+`resource-quotes.json` preserves the original tool inputs/results and scope.
+The owner subsequently answered "Authorize empty project at $0/month" for
+this exact name, organization and region. Cost confirmation succeeded, then
+`create_project` returned `BadRequestException`: an organization owner/admin
+has reached the two-active-free-project limit. It returned no new reference.
+Fresh project inventory exposes only original K2 as `ACTIVE_HEALTHY`, with no
+candidate project; the organization remains Free. The attempt changed no K2
+SQL, rows, settings, flags, plan, routing or resource status. Detailed outcome:
+`resource-provisioning-receipt.json`.
+
+[Supabase billing](https://supabase.com/docs/guides/platform/billing-on-supabase#free-plan)
+counts two active free projects across organizations in which each member is
+Owner/Administrator; paused projects do not count. The connector does not expose
+the other counted project. Do not pause production K2 or infer that another
+project is unused. The extra-project approach is now withdrawn after owner feedback; do not retry
+it or upgrade a plan under current steering. [Deployment documentation](https://supabase.com/docs/guides/deployment)
+places branching on Pro; the hourly quote alone is not eligibility and does
+not authorize upgrading K2jimzon.
 
 Creation approval covers only this empty resource. It does not authorize the
 still-unprepared schema bootstrap, Vercel variables/routing, Turnstile settings,
@@ -177,6 +203,6 @@ fails, inspect the returned resource reference before retrying to prevent a
 duplicate. Keep an initialized resource isolated and unused while its payload
 is prepared. Do not delete it or enroll it in a paid plan under creation-only
 approval. Production apply still requires fresh backup/preflight and its own
-reviewed migration-specific recovery. The resource approval/ref, final full
+reviewed migration-specific recovery. Free-slot capacity/resource ref, final full
 dependency/recovery payload, Turnstile configuration, provider Test Rules,
 real-host behavior and independent review stay in MAP-017/019/020.

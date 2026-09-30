@@ -1,13 +1,13 @@
 {
-  "observed_at_utc": "2026-09-30T09:33:20.2112831Z",
-  "source_baseline": "ee705f1aa71440a37d43271efd9ad87a8667363f",
+  "observed_at_utc": "2026-09-30T10:15:00.7519575Z",
+  "source_baseline": "41b2c3940da61d1dc066486982888aed87222fd5",
   "correction_source": "23ef44228a2c0d570c77ea9c588dcd1099668245",
   "owning_map_items": [
     "MAP-017",
     "MAP-019",
     "MAP-020"
   ],
-  "state": "source inventory only; not an executable bootstrap, application order, complete dependency graph or approval",
+  "state": "source inventory with locally verified IDEA-20260930-05 correction on baseline; current target existing K2; not executable application order or provider approval",
   "secret_values_included": false,
   "entries": [
     {
@@ -24,6 +24,11 @@
       "path": "docs/evidence/20260930-guest-continuity-rehearsal/preview-routing-rule-proposed.json",
       "bytes": 261,
       "sha256": "fa41db0ae22ef0ede7aed33bf63d092baf8b91d62eac50bb2f7dd88fd8e3caa2"
+    },
+    {
+      "path": "docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs",
+      "bytes": 12204,
+      "sha256": "64997c89914714b368193ed39570625d34e2303ea31eab38a611dbb371997e20"
     },
     {
       "path": "prepared-api/storefront/account/auth/email.js",
@@ -182,8 +187,8 @@
     },
     {
       "path": "supabase/migrations/20260812_guest_submission_boundary.sql",
-      "bytes": 33166,
-      "sha256": "7b266dc69cc63a53b3751c5bbb155ac98dee4963d046f72d89a193a8f2b92dca"
+      "bytes": 33094,
+      "sha256": "806f816412bb086ec068f203632879202f91561f2ab25f984361ce4022f679d2"
     },
     {
       "path": "supabase/migrations/20260812_guest_submission_cutover.sql",

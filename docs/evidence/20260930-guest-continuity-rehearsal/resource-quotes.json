@@ -15,9 +15,10 @@
     "name": "k2-guest-preview-20260930",
     "region": "ap-southeast-1",
     "contents": "empty, no production data or configuration copy",
-    "status": "prepared, not authorized or created"
+    "status": "historical approved attempt rejected for quota; no resource created; extra-project approach withdrawn by Codex after owner feedback"
   },
-  "cost_confirmation_id": null,
+  "cost_confirmation_received": true,
+  "cost_confirmation_id": "not retained in durable evidence",
   "created_project_ref": null,
   "owning_map_items": ["MAP-017", "MAP-019", "MAP-020"]
 }

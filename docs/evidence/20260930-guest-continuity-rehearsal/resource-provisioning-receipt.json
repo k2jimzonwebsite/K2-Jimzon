@@ -1,0 +1,38 @@
+{
+  "recorded_on_utc": "2026-09-30",
+  "owning_map_items": ["MAP-017", "MAP-019", "MAP-020"],
+  "owner_authorization": "Authorize empty project at $0/month",
+  "approved_scope": {
+    "organization_id": "dstfobgqgtklmbclhlgb",
+    "organization_name": "K2jimzon",
+    "project_name": "k2-guest-preview-20260930",
+    "region": "ap-southeast-1",
+    "type": "project",
+    "amount": 0,
+    "recurrence": "monthly",
+    "contents": "empty resource only"
+  },
+  "cost_confirmation_succeeded": true,
+  "creation_attempts": 1,
+  "create_project_result": {
+    "error_name": "BadRequestException",
+    "reason": "An organization owner/administrator has reached the two-active-free-project limit across organizations",
+    "new_project_reference_returned": false
+  },
+  "readback": {
+    "source": "authenticated Supabase list_projects and get_organization after rejection",
+    "candidate_present": false,
+    "visible_project_refs": ["pixplcjqivlfflickobf"],
+    "production_k2_status": "ACTIVE_HEALTHY",
+    "organization_plan": "free",
+    "other_counted_project_exposed": false
+  },
+  "provider_mutations_applied": false,
+  "database_or_business_rows_changed": false,
+  "one_authorized_conversation_consumed": false,
+  "recovery": "No new resource exists to roll back. Preserve original K2. Do not pause, delete, upgrade or change membership to resolve quota without exact authorization.",
+  "subsequent_direction": "Owner questioned the need for another project. Codex withdrew that optional approach; prepare the existing canonical K2 guest migration/backup/recovery review instead. Capacity-choice question is superseded.",
+  "next_action": "Do not retry extra-project creation or upgrade a plan under current steering. Keep exact shared-K2 SQL and Preview connection approval gates in MAP-017/019/020.",
+  "primary_policy_source": "https://supabase.com/docs/guides/platform/billing-on-supabase#free-plan",
+  "branch_plan_source": "https://supabase.com/docs/guides/deployment"
+}

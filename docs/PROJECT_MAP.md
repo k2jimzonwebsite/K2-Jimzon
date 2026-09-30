@@ -1,9 +1,17 @@
 # K2 Jimzon  -  Project Directory Map
 
+IDEA-20260930-05 changes only the unapplied guest boundary's reference backfill
+and adds `--preserve-legacy` to the existing local rollback witness in the
+30 September guest-continuity directory. `local-legacy-receipt.json` records
+actual unchanged old-row values/location, new signed grant behavior and rollback.
+The extra-project attempt is historical/withdrawn; current execution targets
+the existing canonical K2 review under MAP-017/019/020.
+
 IDEA-20260930-04's prepared backend/provider review is
 `docs/evidence/20260930-guest-continuity-rehearsal/BACKEND_REVIEW.md`.
 The same directory holds current/proposed routing-rule exports, account-specific
-resource quotes, candidate source hashes and local preparation checks. These
+resource quotes, candidate source hashes, local preparation checks and the
+owner-approved creation attempt's provider quota rejection/readback. These
 are evidence/review artifacts; they are not runtime `vercel.ts` configuration,
 an executable SQL bootstrap or another backlog. Execution remains MAP-017/019/020.
 

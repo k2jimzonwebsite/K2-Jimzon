@@ -15,6 +15,8 @@ if (hash !== '18F9D58BA00797461FA19FE0BC0C0DF4AF0B9F2B3506023BAC8E1485DC7F741B')
 if (!/rollback;\s*$/i.test(assembly)) throw new Error('ROLLBACK_MARKER_MISSING')
 const boundary = fs.readFileSync(path.join(root,'supabase/migrations/20260812_guest_submission_boundary.sql'),'utf8')
 const boundaryHash = createHash('sha256').update(boundary).digest('hex')
+const preserveLegacy = process.argv.includes('--preserve-legacy')
+const legacyConversation = randomUUID()
 const withModeration = process.argv.includes('--with-moderation')
 const withOrigin = withModeration || process.argv.includes('--with-origin')
 const origin = withOrigin ? fs.readFileSync(path.join(root,'supabase/migrations/20260828_store_conversation_origin.sql'),'utf8') : ''
@@ -44,6 +46,14 @@ const rpc = (name, action, payload, cookie) => {
 const validCookie = `k2_guest_access=${token}`
 const otherRead = rpc('list_guest_conversations_v1','guest_read',{},'').replace(/,null\)$/,",(select hash from active_fixture_hash))")
 const expectedDataDirectory = path.join(root,'.tools/current-restore-20260929-pg-data').replaceAll('\\','/')
+const legacyFixture = preserveLegacy ? `
+insert into public.conversations(id,customer_name,customer_email,platform,status,source_kind,unread_count)
+values('${legacyConversation}','Excluded local history','excluded@example.test','Website','Open','website_message',1);
+create temp table excluded_legacy_baseline as
+select id,ctid::text as row_location,to_jsonb(c) as row_values
+from public.conversations c where id='${legacyConversation}';
+` : ''
+const candidateWithFixture = preserveLegacy ? candidate.replace(/^begin;/i, 'begin;'+legacyFixture) : candidate
 const sql = `do $target$
 begin
   if current_database()<>${sqlLiteral(database)}
@@ -51,9 +61,17 @@ begin
     raise exception 'LOCAL_RESTORE_TARGET_MISMATCH';
   end if;
 end $target$;
-${candidate.replace(/rollback;\s*$/i, '')}
+${candidateWithFixture.replace(/rollback;\s*$/i, '')}
 ${origin}
 ${moderationBody}
+${preserveLegacy ? `do $legacy$
+begin
+  if not exists (
+    select 1 from public.conversations c join excluded_legacy_baseline b using(id)
+    where c.guest_reference is null and c.customer_id is null
+      and c.ctid::text=b.row_location and b.row_values <@ to_jsonb(c)
+  ) then raise exception 'EXCLUDED_LEGACY_CONVERSATION_CHANGED'; end if;
+end $legacy$;` : ''}
 insert into k2_private.guest_bff_secrets(singleton,request_secret,contact_secret)
 values(true,decode('${key.toString('hex')}','hex'),decode('${randomBytes(32).toString('hex')}','hex'))
 on conflict(singleton) do update set request_secret=excluded.request_secret,contact_secret=excluded.contact_secret;
@@ -127,6 +145,7 @@ select 'LOCAL_GUEST_GRANT_CONTINUITY_PASS';
 rollback;
 select case when to_regprocedure('public.start_guest_conversation_v1(bigint,uuid,text,text,text,text)') is null
   and not exists(select 1 from public.conversations where customer_id='${fakeCustomer}')
+  ${preserveLegacy ? `and not exists(select 1 from public.conversations where id='${legacyConversation}')` : ''}
   then 'LOCAL_GUEST_GRANT_ROLLBACK_PASS' else 'LOCAL_GUEST_GRANT_ROLLBACK_FAILED' end;
 `
 const result = spawnSync(psql, ['-X','--no-psqlrc','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p','54388','-U','postgres','-d',database], {
@@ -140,7 +159,8 @@ const receipt = { capturedAt: new Date().toISOString(), target: `127.0.0.1:54388
   candidateModerationSha256: moderationHash, moderationWrapperRetained: withModeration,
   actualAnonStartAndRead: true, existingGrantReused: true, conversationOriginPreserved: true,
   freshGuestStarted: true, validIdentityProvenance: true, bothConversationsReopened: true,
+  ...(preserveLegacy ? { excludedLegacyRowUnchanged: true, excludedLegacyStillUnclaimed: true } : {}),
   missingAndDifferentGrantDenied: true, otherActiveGrantExcluded: true, rollbackConfirmed: true,
   boundary: 'Isolated restored application schema; no PostgREST, browser, Turnstile, managed-role or production proof.' }
-fs.writeFileSync(path.join(root,`.tools/current-production-backups/guest-grant-continuity${withModeration ? '-moderation' : withOrigin ? '-origin' : ''}-20260930.json`),JSON.stringify(receipt,null,2)+'\n')
+fs.writeFileSync(path.join(root,`.tools/current-production-backups/guest-grant-continuity${withModeration ? '-moderation' : withOrigin ? '-origin' : ''}${preserveLegacy ? '-legacy' : ''}-20260930.json`),JSON.stringify(receipt,null,2)+'\n')
 console.log(JSON.stringify(receipt,null,2))

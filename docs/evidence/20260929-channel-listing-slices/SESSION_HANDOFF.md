@@ -1,5 +1,23 @@
 # Session handoff — channel listings and inventory
 
+**30 September latest steering and correction:** The owner questioned the need
+for another project; Codex withdrew that optional path. Its approved $0 attempt
+had failed for free-project quota, and readback confirmed no new project and
+original K2 healthy/Free. Do not retry provisioning, pause a project or upgrade
+a plan. Current target is existing K2's exact guest apply/backup/recovery review.
+IDEA-20260930-05 corrects the unapplied boundary so excluded UUID-only test rows
+receive no backfill; a local real-row preservation regression failed before the
+fix, then the base/origin/moderation chain passed old-row value/location retention,
+new signed guest start/reuse/reopen/denial and rollback. Development verification
+exited 0. Changed source: `20260812_guest_submission_boundary.sql` and the existing
+local witness; receipt/hashes/limits: the 30 September guest-continuity directory.
+Recovery is a scoped source revert; no provider rollback applies. Exact next
+action remains MAP-017/019/020: complete the shared-K2 dependency/recovery payload,
+then obtain its specific SQL/connection/configuration approval. The one live
+conversation remains unused. MAP-018 still needs protected Website enforcement,
+source export, physical counts and publication facts/media approval; the full
+two-site launch goal is active.
+
 **30 September continuation:** Remote main was revalidated as `f95e384` through
 GitHub. The owner authorized the exact Supabase follow-up; message
 `1a0f16f4e8f70d9f` was sent/read back at 08:29:58 UTC in SU-483740; guidance is

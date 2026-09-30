@@ -1,10 +1,27 @@
 # Guest Commerce BFF Activation Runbook
 
+**Current 30 September direction:** The extra-project path below is historical
+and withdrawn after owner feedback. Prepare the existing canonical K2 project's
+exact signed guest apply/backup/recovery review; do not retry provisioning or
+upgrade a plan. IDEA-20260930-05 removes the unapplied base migration's historical
+reference backfill/NOT NULL requirement. Legacy UUID-only rows stay unclaimed
+with NULL reference, while new rows receive the unique opaque default. A real
+local before/after row-value/location check first failed on the original backfill,
+then passed with the corrected base followed by origin and moderation. Signed
+fresh start/reuse/reopen/denial and rollback still pass. Receipt:
+`docs/evidence/20260930-guest-continuity-rehearsal/local-legacy-receipt.json`.
+This is local application-schema evidence; shared-K2 SQL, keys, Preview connection
+and activation remain unapplied and require exact reviewed authorization.
+
 The 30 September isolated-backend scope is prepared in
 `docs/evidence/20260930-guest-continuity-rehearsal/BACKEND_REVIEW.md`.
 K2jimzon's actual quotes are $0/month for a separate project and $0.01344/hour
-for a branch; the owner authorized quoting only. The proposed empty Singapore
-project still needs resource approval/cost confirmation. Its source manifest
+for a branch. The owner subsequently approved the exact empty Singapore project;
+cost confirmation succeeded, but the provider rejected creation for the account's
+two-active-free-project quota. Fresh inventory has no candidate and K2 remains
+healthy/Free. Do not retry unchanged capacity or pause/upgrade K2. Branching
+requires Pro; the hourly quote alone is not eligibility or upgrade approval.
+Capacity resolution stays in MAP-017/019/020. Its source manifest
 is an inventory, not an executable bootstrap. Before any later activation,
 reconcile all 17 route dependencies, preserve origin-before-moderation order,
 use fresh private keys and pair browser/server references on the exact branch.

@@ -1,13 +1,26 @@
 # K2 Jimzon  -  System Architecture
 
+Current preparation targets the existing canonical K2 backend after the owner
+questioned the extra-project approach; that optional resource path is withdrawn.
+The unapplied guest boundary now leaves existing UUID-only rows unchanged and
+unclaimed with NULL reference. It sets the opaque unique reference default only
+for future rows; grant-scoped authorization remains unchanged. The full local
+base/origin/moderation rehearsal proves old row values/location unchanged and
+new signed start/reuse/read/denial plus rollback. This does not apply SQL or
+activate the shared-K2 Preview connection. Exact payload/recovery remains
+MAP-017/019/020 work; evidence is the 30 September local legacy receipt.
+
 The prepared isolated Preview uses a separate backend reference for both browser
 and server, branch-scoped hosting inputs and fresh private keys. Its proposed
 host exception belongs to Vercel's project-level routing layer, which executes
 before runtime `vercel.ts` routes. Keep the existing API 404 on other hosts.
 The exact exported candidate, source manifest, quote and recovery boundary are
 in `docs/evidence/20260930-guest-continuity-rehearsal/BACKEND_REVIEW.md`.
-Provisioning, schema bootstrap and provider activation remain unapproved and
-unperformed; the empty-resource proposal does not establish operating routes.
+Empty-resource creation was approved and cost-confirmed, but Supabase rejected
+the attempt for account free-project quota; fresh inventory has no new project.
+Schema bootstrap and provider activation remain unapproved/unperformed. Capacity
+resolution and the exact next action stay in MAP-017/019/020; the empty-resource
+approval does not establish operating routes or authorize a paid-plan upgrade.
 
 The locally corrected signed chat boundary propagates the SHA-256 hash of a
 valid HttpOnly grant for `guest_start`, allowing the database to reuse its

@@ -142,11 +142,45 @@ All remaining actions and recovery ownership stay in MAP-017/019/020.
 
 ## Remaining work and recovery
 
+**Current owner steering:** The extra-project approach is withdrawn after the
+owner questioned its need. No resource retry, pause or upgrade will proceed;
+the capacity-choice question is superseded. Existing K2 is the exact guest
+dependency/backup/recovery review target. Provisioning notes below are historical
+evidence of the approved but quota-rejected attempt.
+
+**IDEA-20260930-05, local preservation:** The existing witness's new
+`--preserve-legacy` mode inserts a synthetic UUID-only conversation before the
+dependency chain and checks its original values/physical row location stay
+unchanged, customer/reference stay NULL, and the fixture disappears on rollback.
+The old migration failed at `EXCLUDED_LEGACY_CONVERSATION_CHANGED`. Removing only
+the historical reference backfill/NOT NULL requirement fixes that defect; future
+rows retain the unique opaque default and grant authorization is unchanged.
+
+```powershell
+node docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs --with-moderation --preserve-legacy
+npm run verify:development
+```
+
+The full base/origin/moderation rehearsal passed at 10:06:09 UTC. Fresh anonymous
+start, same-grant reuse/two-thread reopen, missing/different/other active grant
+denial and rollback also pass. `local-legacy-receipt.json` records the new source
+hashes; earlier receipts remain historical. Development verification exited 0
+with 1,677 files scanned; the local server was stopped. No live K2 row, key,
+grant, flag or setting changed. PostgREST/browser/Turnstile/managed-provider proof
+and independent review remain unverified; the single live conversation is unused.
+The refreshed source manifest is an inventory, not a complete executable order
+or approval. Recovery is a scoped source revert while retaining these receipts.
+
 The later read-only provider/routing investigation is frozen in
 `BACKEND_REVIEW.md`, with `resource-quotes.json`, current/proposed routing-rule
 exports and `backend-source-manifest.json`. The owner selected K2jimzon for
-quotes only: separate project $0/month, branch $0.01344/hour. The proposed empty
-Singapore project has not been approved or created. The Vercel path-only API
+quotes: separate project $0/month, branch $0.01344/hour. The owner then approved
+the exact empty Singapore project and cost confirmation succeeded, but one
+creation attempt was rejected for the two-active-free-project limit. Fresh
+inventory has no candidate and original K2 is healthy/Free. The other counted
+project is not exposed; `resource-provisioning-receipt.json` records the outcome.
+Branching requires Pro, so that hourly quote alone is not plan eligibility.
+The Vercel path-only API
 404 gate is verified; its proposed exact feature-host exception was exported
 from an unsaved form, canceled and read back unchanged. Local source/hash and
 hostname checks are in `backend-preparation-receipt.json`; they establish only
@@ -154,8 +188,11 @@ proposal scope, not provider Test Rules, installed dependencies or live chat.
 MAP-017 now consolidates current findings, dependencies and exact next actions;
 older preparation/build/support history remains in these permanent receipts.
 This documentation/proposal batch requires no repeat application test/build or
-release gate. Resource creation/cost confirmation is the next owner decision;
-schema/hosting activation remains a later exact payload review.
+release gate. Capacity resolution or an exact alternative is the next owner
+decision. Retry the same approved empty resource only after a real capacity
+change and a quote/inventory check; no duplicate approval is needed if its scope
+and $0 price remain unchanged. Schema/hosting activation remains a later exact
+payload review. No pause, deletion, membership change or upgrade was performed.
 
 The next required action stays in MAP-017/019/020: review the corrected exact
 dependency payload and choose/authorize the backend boundary before any provider

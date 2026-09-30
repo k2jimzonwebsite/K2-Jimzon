@@ -46,12 +46,10 @@ create table if not exists k2_private.guest_conversation_receipts (
 revoke all on table k2_private.guest_conversation_receipts from public, anon, authenticated;
 
 alter table public.conversations add column if not exists guest_reference text;
-update public.conversations
-set guest_reference = 'CV-' || upper(substr(replace(gen_random_uuid()::text,'-',''),1,16))
-where guest_reference is null;
+-- Existing UUID-only history stays untouched and unclaimed. New rows receive
+-- an opaque reference; possession of it alone never grants history access.
 alter table public.conversations alter column guest_reference set default
   ('CV-' || upper(substr(replace(gen_random_uuid()::text,'-',''),1,16)));
-alter table public.conversations alter column guest_reference set not null;
 create unique index if not exists conversations_guest_reference_uidx
   on public.conversations(guest_reference);
 create unique index if not exists messages_guest_idempotency_uidx
