@@ -1,0 +1,14 @@
+{
+  "routes": [
+    {
+      "src": "/api/storefront/:path*",
+      "missing": [
+        {
+          "type": "host",
+          "value": "^k2-jimzon-git-codex-map017-guest-chat-preview-k2-jimzon\\.vercel\\.app$"
+        }
+      ],
+      "status": 404
+    }
+  ]
+}

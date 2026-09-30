@@ -1,0 +1,274 @@
+{
+  "observed_at_utc": "2026-09-30T09:33:20.2112831Z",
+  "source_baseline": "ee705f1aa71440a37d43271efd9ad87a8667363f",
+  "correction_source": "23ef44228a2c0d570c77ea9c588dcd1099668245",
+  "owning_map_items": [
+    "MAP-017",
+    "MAP-019",
+    "MAP-020"
+  ],
+  "state": "source inventory only; not an executable bootstrap, application order, complete dependency graph or approval",
+  "secret_values_included": false,
+  "entries": [
+    {
+      "path": "api/storefront/index.js",
+      "bytes": 507,
+      "sha256": "e67777e63d91351c2a217ef347c15fc57b329ed72e57eec75ab4fa648565ec48"
+    },
+    {
+      "path": "docs/evidence/20260930-guest-continuity-rehearsal/preview-routing-rule-current.json",
+      "bytes": 93,
+      "sha256": "9565a186af6ed92abe614b819feb0ee9637aeb5ccffe94f3632334adc08c8cb4"
+    },
+    {
+      "path": "docs/evidence/20260930-guest-continuity-rehearsal/preview-routing-rule-proposed.json",
+      "bytes": 261,
+      "sha256": "fa41db0ae22ef0ede7aed33bf63d092baf8b91d62eac50bb2f7dd88fd8e3caa2"
+    },
+    {
+      "path": "prepared-api/storefront/account/auth/email.js",
+      "bytes": 149,
+      "sha256": "022e597913c11232ae480545c33ed4e7e9fc71bbfb22ecad23cf4935c84ade26"
+    },
+    {
+      "path": "prepared-api/storefront/account/auth/phone.js",
+      "bytes": 149,
+      "sha256": "93156915df5aed7cb213a3064833cf23efc98c761f06e34d2815b32dd22276f7"
+    },
+    {
+      "path": "prepared-api/storefront/account/auth/verify.js",
+      "bytes": 153,
+      "sha256": "97852c6258284f6df9ea32bb27b7e4dbe7416dbc50775b8bebcdb37cd099845b"
+    },
+    {
+      "path": "prepared-api/storefront/account/claim.js",
+      "bytes": 2512,
+      "sha256": "7567aecfed99ecc7ad84a3e9f33c787ef5d6009b6ca3fe0b23e9d2fae401a1f9"
+    },
+    {
+      "path": "prepared-api/storefront/account/history.js",
+      "bytes": 1859,
+      "sha256": "bd93af0570d552d3d93ef7122ad5f4bbc42513d43dcea402113711a2c6b7848d"
+    },
+    {
+      "path": "prepared-api/storefront/account/message.js",
+      "bytes": 2562,
+      "sha256": "a3ef0011b165f3544fbeaa1d3a61bd545a5c15fe8340a21b243f2ecba38186d1"
+    },
+    {
+      "path": "prepared-api/storefront/account/notifications.js",
+      "bytes": 2175,
+      "sha256": "1125ac0d97cc8f1fce42c916110dfa363735292adbacc088b3bc6a1b63b7178c"
+    },
+    {
+      "path": "prepared-api/storefront/account/settings.js",
+      "bytes": 2800,
+      "sha256": "b09749103c429a5659ac9571b0e586f16bcd4e23deee4bedf29ef6324f78299f"
+    },
+    {
+      "path": "prepared-api/storefront/conversation.js",
+      "bytes": 3002,
+      "sha256": "0047df938dd8494f60a97f5b64851c8d7a02616092386f6e520620f7ca26fc0f"
+    },
+    {
+      "path": "prepared-api/storefront/coupon.js",
+      "bytes": 1963,
+      "sha256": "da6986f0edb477d48c21e83f1d97174cdd33113102ce732e0bcf0065df42eb81"
+    },
+    {
+      "path": "prepared-api/storefront/delivery/quote.js",
+      "bytes": 4133,
+      "sha256": "4458e31079d09c16eaf0912334b9608ad35dcce5923738e670ddfd7650d507b1"
+    },
+    {
+      "path": "prepared-api/storefront/message.js",
+      "bytes": 2130,
+      "sha256": "4883737bcb94aeb8f9b60561933d22b0b0ca6123d53e5f17dc999c43e20c3d86"
+    },
+    {
+      "path": "prepared-api/storefront/messages.js",
+      "bytes": 1292,
+      "sha256": "50ea7d2c095be5628e85433f097ac51cb8fd8f6531d66e8b22c80bb1bf66786d"
+    },
+    {
+      "path": "prepared-api/storefront/order.js",
+      "bytes": 6089,
+      "sha256": "2c515e75376a5cf7b17d7fddb939486bbe03c477c6d5c71d9a7ce810594a0508"
+    },
+    {
+      "path": "prepared-api/storefront/order/status.js",
+      "bytes": 1309,
+      "sha256": "aca8b10b427c49fe4dc5c8aac716249d4a2b6a3aa04cd1ed7cdf34239eaabf66"
+    },
+    {
+      "path": "prepared-api/storefront/pasabuy.js",
+      "bytes": 3394,
+      "sha256": "9274fcb19c997ce1602922f97eb24a344c1895686658aadad7f8991d4807087c"
+    },
+    {
+      "path": "prepared-api/storefront/wholesale.js",
+      "bytes": 3338,
+      "sha256": "49cc3333ff93556d987ad987ded0ad359506d673b92e6d169f7490e4d9e63a1c"
+    },
+    {
+      "path": "server/storefront-bff/customer-auth.js",
+      "bytes": 5570,
+      "sha256": "b1ebb10d7685e30835ee99b726043b3ce59d50c6ba43d0067b184852f3cdcfd7"
+    },
+    {
+      "path": "server/storefront-bff/preauth-rate.js",
+      "bytes": 2280,
+      "sha256": "690b49349511aa47419d14066222271a8a07bf3740d7d0aef3f8060767851371"
+    },
+    {
+      "path": "server/storefront-bff/router.js",
+      "bytes": 6395,
+      "sha256": "f885276cdc8907d018ff17a7b8006c97acbe60b3b4eb057c8fc8405d0d2f281a"
+    },
+    {
+      "path": "server/storefront-bff/security.js",
+      "bytes": 7980,
+      "sha256": "399fa033ed9c3678d0d6d31e7f90074925777aa7ef1c72194dfe2bc2ed06beb1"
+    },
+    {
+      "path": "server/storefront-bff/supabase.js",
+      "bytes": 2073,
+      "sha256": "739fd2853bf30b0bbe780099063450a5c1527202a5dca5aca189a4b3a276e94e"
+    },
+    {
+      "path": "supabase/map019_account_claim_postflight.sql",
+      "bytes": 1944,
+      "sha256": "3316152b9f61bd854fd384868b38617999f109926fd46926a400ac2f9c29a7b4"
+    },
+    {
+      "path": "supabase/map019_identity_postflight.sql",
+      "bytes": 4388,
+      "sha256": "e4391b70a7afe721de11a7d80dc32b3bdc33a09d1d165b47acf6d44699347724"
+    },
+    {
+      "path": "supabase/map019_identity_preflight.sql",
+      "bytes": 1253,
+      "sha256": "d57d1bcd9b5d68be7a9e7301365a5b6ddd62ae4dc45f13dc09a8b325d4556916"
+    },
+    {
+      "path": "supabase/map019_wholesale_inquiry_postflight.sql",
+      "bytes": 1557,
+      "sha256": "f74be8125f4af25f105d6d6e77089b5cb104c61414c352a15ed45776cd7b1d04"
+    },
+    {
+      "path": "supabase/map020_guest_boundary_postflight.sql",
+      "bytes": 2339,
+      "sha256": "edc1702f7a786f50e94d5b26be6f655e704e24adaf03d3d1fc276beedcfb087c"
+    },
+    {
+      "path": "supabase/map020_guest_boundary_preflight.sql",
+      "bytes": 1557,
+      "sha256": "31a243fd32391a794032b8bdb697e88a1e60cf28045c1e071a02023599350498"
+    },
+    {
+      "path": "supabase/map020_guest_cutover_postflight.sql",
+      "bytes": 571,
+      "sha256": "80b519a74595967b9a26203542ead12b911e8f8fba560cccbae312ddccfb1071"
+    },
+    {
+      "path": "supabase/map020_storefront_auth_rate_postflight.sql",
+      "bytes": 2017,
+      "sha256": "1d861e1252809f005dc400b253eb0fd7a024b1f70c2bc22c8a1897284bc77e1b"
+    },
+    {
+      "path": "supabase/migrations/20260812_guest_account_identity_and_messaging.sql",
+      "bytes": 17283,
+      "sha256": "c4dae76b080924e2f36e0ec98eb0a78a400ffa0e082e106d88fc895590d6f2ea"
+    },
+    {
+      "path": "supabase/migrations/20260812_guest_submission_boundary.sql",
+      "bytes": 33166,
+      "sha256": "7b266dc69cc63a53b3751c5bbb155ac98dee4963d046f72d89a193a8f2b92dca"
+    },
+    {
+      "path": "supabase/migrations/20260812_guest_submission_cutover.sql",
+      "bytes": 2554,
+      "sha256": "da736ead16fcd57b8533e0953b1b588234bd5cb4fa838a60d3044addc6d2a8f6"
+    },
+    {
+      "path": "supabase/migrations/20260822_guest_account_claim_boundary.sql",
+      "bytes": 18696,
+      "sha256": "17d68e071ab60ddd417498adb68cd1f8d4964826c13ac6413c406f8300b77384"
+    },
+    {
+      "path": "supabase/migrations/20260822_wholesale_inquiry_boundary.sql",
+      "bytes": 16223,
+      "sha256": "ca1cac80e82915352b61805a6824338dcca4f8533ef33e2be4d7ad94af752cb7"
+    },
+    {
+      "path": "supabase/migrations/20260825_storefront_customer_auth_boundary.sql",
+      "bytes": 9415,
+      "sha256": "32459123f96b5bd3af893c7acadfa0b5bcaa0bb46e5acc8f16cedc600dc55984"
+    },
+    {
+      "path": "supabase/migrations/20260828_store_conversation_origin.sql",
+      "bytes": 6668,
+      "sha256": "d4cacca73bb10b3d22e3605aabf1bdfd4dbacd1a769307275e2462b85fef5539"
+    },
+    {
+      "path": "supabase/migrations/20260831_guest_order_status_boundary.sql",
+      "bytes": 2835,
+      "sha256": "065d1a0c557fa9aa8a10382a97c6ea8a14621ee0e4d5f9f41976263825e8be71"
+    },
+    {
+      "path": "supabase/migrations/20260902_delivery_guest_quote_boundary.sql",
+      "bytes": 7638,
+      "sha256": "768a4ed385a65f0dcf33ad5e6dcca8c37204fe240512c1374e081b76e0e4647e"
+    },
+    {
+      "path": "supabase/migrations/20260902_delivery_quote_control.sql",
+      "bytes": 18283,
+      "sha256": "5fac3d9739da51a271dcae733369eb161a9147c59b2353342aa1396fa81a86f9"
+    },
+    {
+      "path": "supabase/migrations/20260912_guest_order_conversation_seed.sql",
+      "bytes": 12711,
+      "sha256": "d84424b870230ef30835406af65b44e6a96f381b584874b3f6aa25caa8f72514"
+    },
+    {
+      "path": "supabase/migrations/20260916_automated_delivery_quotation_rollback.sql",
+      "bytes": 6256,
+      "sha256": "e335b9ef11bdbbb6de5dbc4b015eae38a87bdfb2c507586b03f2bcf605e952cf"
+    },
+    {
+      "path": "supabase/migrations/20260916_automated_delivery_quotation.sql",
+      "bytes": 7611,
+      "sha256": "94577e17c43b7b8ea99537c0fe55fac1562934cf757be109a58c338e71f154df"
+    },
+    {
+      "path": "supabase/migrations/20260922_anonymous_chat_moderation_rollback.sql",
+      "bytes": 6917,
+      "sha256": "39838b0a72634ff49e2095ba46d16a5ac577b27bcab19c16300e360682d7c035"
+    },
+    {
+      "path": "supabase/migrations/20260922_anonymous_chat_moderation.sql",
+      "bytes": 20390,
+      "sha256": "8748a21f9e59543a9e363c88d07ca6f9bcd56f0c0e27b96eabfbf1f3b6349869"
+    },
+    {
+      "path": "supabase/migrations/20260924_customer_account_settings_notifications.sql",
+      "bytes": 13806,
+      "sha256": "4d62feafd16916e05ce794a8301c2a4b7fef05ae089c6441c065478634860799"
+    },
+    {
+      "path": "vercel.admin.json",
+      "bytes": 2354,
+      "sha256": "59e83c75ca7897c42bc1c1848e043b8759ae35bc1dc227eff1f715504fad285f"
+    },
+    {
+      "path": "vercel.storefront.json",
+      "bytes": 4381,
+      "sha256": "49cfef2fed5616143e0b9f097172cc5afe5c833bffa0cd10e4cd93bd2613a106"
+    },
+    {
+      "path": "vercel.ts",
+      "bytes": 596,
+      "sha256": "e470526615c21fefec3677b49e5a6deaf51412176ba9527cc77b848d10b81259"
+    }
+  ]
+}

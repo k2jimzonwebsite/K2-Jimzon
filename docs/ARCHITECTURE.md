@@ -1,5 +1,14 @@
 # K2 Jimzon  -  System Architecture
 
+The prepared isolated Preview uses a separate backend reference for both browser
+and server, branch-scoped hosting inputs and fresh private keys. Its proposed
+host exception belongs to Vercel's project-level routing layer, which executes
+before runtime `vercel.ts` routes. Keep the existing API 404 on other hosts.
+The exact exported candidate, source manifest, quote and recovery boundary are
+in `docs/evidence/20260930-guest-continuity-rehearsal/BACKEND_REVIEW.md`.
+Provisioning, schema bootstrap and provider activation remain unapproved and
+unperformed; the empty-resource proposal does not establish operating routes.
+
 The locally corrected signed chat boundary propagates the SHA-256 hash of a
 valid HttpOnly grant for `guest_start`, allowing the database to reuse its
 customer/grant scopes. Identity provenance is `website_guest`; the canonical

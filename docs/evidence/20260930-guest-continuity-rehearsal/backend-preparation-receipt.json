@@ -1,0 +1,55 @@
+{
+  "observed_at_utc": "2026-09-30T09:38:00.5941335Z",
+  "owning_map_items": [
+    "MAP-017",
+    "MAP-019",
+    "MAP-020"
+  ],
+  "local_only": true,
+  "route_shape_preserved": true,
+  "exact_host_regex": "^k2-jimzon-git-codex-map017-guest-chat-preview-k2-jimzon\\.vercel\\.app$",
+  "host_cases": [
+    {
+      "host": "k2-jimzon-git-codex-map017-guest-chat-preview-k2-jimzon.vercel.app",
+      "gate_matches": false
+    },
+    {
+      "host": "www.k2jimzon.com",
+      "gate_matches": true
+    },
+    {
+      "host": "k2jimzon.com",
+      "gate_matches": true
+    },
+    {
+      "host": "admin.k2jimzon.com",
+      "gate_matches": true
+    },
+    {
+      "host": "k2-jimzon-i7w7r0qrb-k2-jimzon.vercel.app",
+      "gate_matches": true
+    },
+    {
+      "host": "k2-jimzon-git-another-branch-k2-jimzon.vercel.app",
+      "gate_matches": true
+    },
+    {
+      "host": "k2-jimzon-git-codex-map017-guest-chat-preview-k2-jimzon.vercel.app.example.test",
+      "gate_matches": true
+    },
+    {
+      "host": "prefix-k2-jimzon-git-codex-map017-guest-chat-preview-k2-jimzon.vercel.app",
+      "gate_matches": true
+    }
+  ],
+  "source_entries_verified": 52,
+  "source_bytes_and_sha256_match": true,
+  "provider_unsaved_edit_discarded": true,
+  "provider_readback": "Original path-only 404 condition, no Host predicate, Save disabled; browser readback after Cancel",
+  "provider_rule_id": "2a20bd66-2ecc-4893-98c4-2b5c3f3c5cfd",
+  "provider_test_rules_performed": false,
+  "provider_save_or_publish_performed": false,
+  "resource_created": false,
+  "full_bootstrap_verified": false,
+  "one_authorized_conversation_consumed": false
+}

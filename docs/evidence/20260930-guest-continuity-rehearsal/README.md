@@ -142,6 +142,21 @@ All remaining actions and recovery ownership stay in MAP-017/019/020.
 
 ## Remaining work and recovery
 
+The later read-only provider/routing investigation is frozen in
+`BACKEND_REVIEW.md`, with `resource-quotes.json`, current/proposed routing-rule
+exports and `backend-source-manifest.json`. The owner selected K2jimzon for
+quotes only: separate project $0/month, branch $0.01344/hour. The proposed empty
+Singapore project has not been approved or created. The Vercel path-only API
+404 gate is verified; its proposed exact feature-host exception was exported
+from an unsaved form, canceled and read back unchanged. Local source/hash and
+hostname checks are in `backend-preparation-receipt.json`; they establish only
+proposal scope, not provider Test Rules, installed dependencies or live chat.
+MAP-017 now consolidates current findings, dependencies and exact next actions;
+older preparation/build/support history remains in these permanent receipts.
+This documentation/proposal batch requires no repeat application test/build or
+release gate. Resource creation/cost confirmation is the next owner decision;
+schema/hosting activation remains a later exact payload review.
+
 The next required action stays in MAP-017/019/020: review the corrected exact
 dependency payload and choose/authorize the backend boundary before any provider
 apply or Preview connection. Supabase's supported procedure for six internal-

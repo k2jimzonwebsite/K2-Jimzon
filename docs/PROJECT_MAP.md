@@ -1,5 +1,12 @@
 # K2 Jimzon  -  Project Directory Map
 
+IDEA-20260930-04's prepared backend/provider review is
+`docs/evidence/20260930-guest-continuity-rehearsal/BACKEND_REVIEW.md`.
+The same directory holds current/proposed routing-rule exports, account-specific
+resource quotes, candidate source hashes and local preparation checks. These
+are evidence/review artifacts; they are not runtime `vercel.ts` configuration,
+an executable SQL bootstrap or another backlog. Execution remains MAP-017/019/020.
+
 IDEA-20260930-01/-02/-03 correct `server/storefront-bff/security.js`,
 `supabase/migrations/20260812_guest_submission_boundary.sql` and its later
 `20260828_store_conversation_origin.sql` replacement. Contract regressions are

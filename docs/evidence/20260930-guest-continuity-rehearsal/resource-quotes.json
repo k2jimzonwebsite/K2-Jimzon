@@ -1,0 +1,23 @@
+{
+  "observed_at_utc": "2026-09-30T09:18:43Z",
+  "organization": {
+    "name": "K2jimzon",
+    "id": "dstfobgqgtklmbclhlgb",
+    "owner_selection_scope": "quote only"
+  },
+  "source": "authenticated Supabase get_cost connector",
+  "quotes": [
+    { "input_type": "branch", "result": { "type": "branch", "recurrence": "hourly", "amount": 0.01344 } },
+    { "input_type": "project", "result": { "type": "project", "recurrence": "monthly", "amount": 0 } }
+  ],
+  "proposed_resource": {
+    "type": "project",
+    "name": "k2-guest-preview-20260930",
+    "region": "ap-southeast-1",
+    "contents": "empty, no production data or configuration copy",
+    "status": "prepared, not authorized or created"
+  },
+  "cost_confirmation_id": null,
+  "created_project_ref": null,
+  "owning_map_items": ["MAP-017", "MAP-019", "MAP-020"]
+}

@@ -1,5 +1,19 @@
 # Guest Commerce BFF Activation Runbook
 
+The 30 September isolated-backend scope is prepared in
+`docs/evidence/20260930-guest-continuity-rehearsal/BACKEND_REVIEW.md`.
+K2jimzon's actual quotes are $0/month for a separate project and $0.01344/hour
+for a branch; the owner authorized quoting only. The proposed empty Singapore
+project still needs resource approval/cost confirmation. Its source manifest
+is an inventory, not an executable bootstrap. Before any later activation,
+reconcile all 17 route dependencies, preserve origin-before-moderation order,
+use fresh private keys and pair browser/server references on the exact branch.
+The existing project-level API 404 gate requires a separately approved exact
+Preview-host exception; provider Test Rules and real-host signed proof remain
+unperformed. The single authorized conversation is still unused. Resource,
+schema and hosting recovery boundaries are in the review; pending execution
+stays in MAP-017/019/020.
+
 **14 September browser recovery (IDEA-20260914-02, locally prepared):** an
 uncertain checkout holds its original payload/key and renews the bot challenge.
 Use “Retry order request” to recover that request; changing contact/cart/coupon
