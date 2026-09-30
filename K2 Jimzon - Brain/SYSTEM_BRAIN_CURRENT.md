@@ -4344,3 +4344,29 @@ real-device/accessibility, and RUM gates remain open.
   `SYSTEM_LOGIC_BLUEPRINT.md`, this file.
 - Authoritative operations rulebook:
   `K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md`.
+
+## 30 September 2026 — guest-chat source and MAP handoff
+
+The owner confirmed current UUID-only Storefront conversations are test data
+and may be left out. The local source change clears the old browser UUID,
+removes direct browser chat RPC calls, and uses the signed guest BFF. A new
+opaque `CV-…` reference is only a lookup hint; the current HttpOnly guest grant
+must return the exact reference before the UI reopens it. Existing server rows
+were not migrated or deleted.
+
+Focused chat contracts passed 4/4; guest-commerce BFF and Turnstile contracts
+passed 19/19; `npm run verify:development` passed on GitHub `main` baseline
+`f95e384`. The minimal candidate is `codex/map017-guest-chat-preview` at
+`1e7b818`, with three source/test files. The owner authorized publishing this
+feature branch to trigger separate Storefront and Admin Previews. Until the
+remote push and exact-host checks are evidenced, treat preview behavior as
+unverified. No production source, grants, flags, provider settings, deployment,
+or inventory changed.
+
+MAP-017 remains first: publish and verify the isolated Preview, prove fresh
+signed-chat start/reopen/denial, reconcile the live chat-read grant, and close
+the provider-default and owner-authorized recovery gates. Then MAP-018 owns
+protected Website assignment/order membership and the verified production
+listing. Do not infer Website membership from publication or assume the 22
+already-published products should be assigned. Staff counts, product facts,
+media rights, owner membership decisions, and real-host acceptance remain open.

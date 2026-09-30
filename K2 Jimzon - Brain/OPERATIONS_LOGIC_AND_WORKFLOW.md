@@ -1606,6 +1606,12 @@ landed_cost = purchase_cost
 - A guest reply is accepted only through the scoped BFF grant for that exact
   conversation. A public reference, contact value, URL ID, or local-storage flag
   never grants read or reply permission.
+- The owner confirmed current UUID-only Storefront conversations are test data
+  and may be left out. Do not transfer them to a new grant or delete their
+  historical server rows under this decision. The retired UUID browser pointer
+  cannot select a thread; a new opaque `CV-…` value is only a lookup hint and
+  may be displayed after the current HttpOnly guest grant returns that exact
+  conversation from the signed messages route.
 - Unresolved workflow and mark-read retries retain their payload-bound operation
   identity within the acting staff session, just as message retries do. A
   replayed read receipt does not prove that later inbound messages were read;

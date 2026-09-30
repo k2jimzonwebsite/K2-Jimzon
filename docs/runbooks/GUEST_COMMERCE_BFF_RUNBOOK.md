@@ -566,3 +566,35 @@ the Storefront artifact contains only its intended function.
 If any step fails before cutover, keep the old storefront path and fix forward.
 If cutover fails, roll back only the cutover grants immediately; do not delete
 identity, request, conversation, grant, replay, or rate records.
+
+## Storefront chat UUID retirement — 30 September 2026
+
+The owner confirmed current UUID-only Storefront conversations are test data
+and may be left out. Do not transfer them to a new guest grant or delete their
+historical server rows under this decision.
+
+The prepared Storefront source clears the old `k2-store-chat-convo-id` browser
+pointer and removes direct browser calls to `get_storefront_chat_v1` and
+`submit_storefront_chat_v1`. New messages use the signed guest BFF only. A new
+opaque `CV-…` reference may be retained as a lookup hint; on reopen, show that
+conversation only after the messages route returns the exact reference under
+the current HttpOnly guest grant. The reference itself is not authorization.
+The launcher no longer infers “Resume Chat” from an old UUID.
+
+The change is prepared on `codex/map017-guest-chat-preview` at `1e7b818`, based
+on GitHub `main` `f95e384eefaebf372f5e8037bd8fd1819118dc17`. The owner authorized
+publishing this isolated branch for Preview builds. It is source preparation,
+not a production deployment. With `VITE_GUEST_BFF_ENABLED=false`, the source
+shows the unavailable state and sends nothing. Coordinate any activation with
+the signed server route and the preview-first gates above.
+
+The focused chat contracts passed 4/4; guest-commerce BFF and Turnstile
+contracts passed 19/19; `npm run verify:development` passed on the candidate
+baseline. Exact-host Preview proof remains required: new-chat start,
+same-browser reopen, and missing/cross-browser grant denial. The 30 September
+read-only audit classifies `get_storefront_chat_v1` separately from five
+remaining transitional anonymous grants; reconcile its final disposition before
+cutover. No historical rows, K2 database/provider state, feature flags, or
+production deployment changed. Recovery is to revert the source commit; no
+server-data rollback is required. See MAP-017/019/020 in
+`MASTER_ACTION_PLAN.md`.
