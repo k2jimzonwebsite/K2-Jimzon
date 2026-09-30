@@ -69,6 +69,28 @@ raw_functions as (
     (p.prosrc ~* 'public[.]is_admin[[:space:]]*[(][[:space:]]*[)]') as references_is_admin,
     (p.prosrc ~* 'role(::text)?[[:space:]]*=[[:space:]]*''Admin''') as references_admin_role,
     (p.prosrc ~* 'auth[.]jwt[[:space:]]*[(]' and p.prosrc ~* 'aal2') as references_aal2,
+    (p.prosrc ~* 'where[[:space:]]+id[[:space:]]*=[[:space:]]*p_conversation_id') as references_conversation_id_scope,
+    exists (
+      select 1
+      from pg_attribute conversation_id
+      join pg_class conversations on conversations.oid = conversation_id.attrelid
+      join pg_namespace conversation_schema on conversation_schema.oid = conversations.relnamespace
+      join pg_attrdef conversation_default
+        on conversation_default.adrelid = conversation_id.attrelid
+       and conversation_default.adnum = conversation_id.attnum
+      where conversation_schema.nspname = 'public'
+        and conversations.relname = 'conversations'
+        and conversation_id.attname = 'id'
+        and pg_get_expr(conversation_default.adbin, conversation_default.adrelid)
+          ~* '^(extensions[.])?gen_random_uuid[(][)]$'
+    ) as conversation_id_uses_random_default,
+    (p.prosrc ~* 'where[[:space:]]+id[[:space:]]*=[[:space:]]*p_order_id[[:space:]]+and[[:space:]]+idempotency_key[[:space:]]*=[[:space:]]*p_order_key') as references_order_key_scope,
+    (p.prosrc ~* 'length[[:space:]]*[(][[:space:]]*p_order_key[[:space:]]*[)][[:space:]]+not[[:space:]]+between[[:space:]]+32[[:space:]]+and[[:space:]]+100') as references_order_key_length_guard,
+    (p.prosrc ~* 'delivery_status[[:space:]]*<>[[:space:]]*''internal_only''') as filters_internal_messages,
+    (p.prosrc ~* 'provider_event_key[[:space:]]*=[[:space:]]*v_event_key' and p.prosrc ~* 'p_request_key') as references_request_key_replay_guard,
+    (p.prosrc ~* 'order_id[[:space:]]*=[[:space:]]*p_order_id[[:space:]]+and[[:space:]]+request_key[[:space:]]*=[[:space:]]*p_request_key') as references_payment_receipt_request_key,
+    (p.prosrc ~* 'insert into k2_private[.]order_payment_receipts') as writes_private_payment_receipt,
+    not (p.prosrc ~* 'contents_base64') as returns_no_payment_receipt_bytes,
     (p.prosrc ~* 'raise[[:space:]]+exception') as raises_exception,
     -- pg_get_function_result gives the SQL type name ("boolean"); pg_type.typname
     -- gives the internal name ("bool") and never matches a reviewed contract.

@@ -1,7 +1,8 @@
 # K2 Production Readiness Runbook
 
 **Scope:** the read-only gate every owner-authorized K2 production step must
-pass first. **Current state:** the gate exists and runs. It authorizes nothing.
+pass first. **Current state (30 September 2026):** the gate exists and runs. It
+authorizes nothing.
 
 ## Why this exists
 
@@ -11,7 +12,7 @@ changes between sessions, so prose packets silently rot. This runbook makes the
 preconditions executable and repeatable so the step after the gate is the only
 decision left, not the re-derivation of whether the step is allowed.
 
-## Capability, stated as of 29 September 2026
+## Capability, stated as of 30 September 2026
 
 | Surface | This harness | Notes |
 | --- | --- | --- |
@@ -29,15 +30,22 @@ The K2/ScoutIT distinction still holds: the installed token lists only
 ## The gate
 
 ```bash
+npm run preflight:k2-project
 npm run readiness:k2-live
 ```
 
-It sends only `SELECT` statements with `read_only: true` through the Supabase
-management API, refuses a non-`SELECT` string before the request is built, and
-exits before any query if the K2 project identity check fails. It writes a
-receipt to `.tools/current-production-backups/live-readiness.json` and nothing
-else. `tests/k2-live-readiness-contract.test.mjs` asserts those properties
-against the script source and runs in `prebuild`.
+Both package commands load the owner-controlled `.env.local` directly. The
+preflight confirms project identity without a query; the readiness script then
+uses only bounded `SELECT` statements with `read_only: true`. A credential in
+that file is capability, never write authorization.
+
+The readiness script sends only `SELECT` statements with `read_only: true`
+through the Supabase management API, refuses a non-`SELECT` string before the
+request is built, and exits before any query if the K2 project identity check
+fails. It writes a receipt to
+`.tools/current-production-backups/live-readiness.json` and nothing else.
+`tests/k2-live-readiness-contract.test.mjs` asserts those properties against
+the script source and runs in `prebuild`.
 
 ### Gate states
 
@@ -58,12 +66,28 @@ A single `FAIL` means no production step may start.
 | `migration-ledger` | Latest applied version, for comparing against a fresh backup. |
 | `intake-chain-unapplied` | `product_intake_sessions` and `k2_sku_seq` are still absent, so the prepared MAP-018 migration is a first apply and not a re-apply. |
 | `channel-chain-unapplied` | `channels` and `channel_shops` are absent, so the MAP-026 chain is still separable from the intake chain. |
-| `anon-execute-surface` | Routed to the owner. Reports the live anonymous execute count for comparison with the 18 expected source grants. A mismatch is a finding, not a pass. |
+| `anon-execute-surface` | Classifies live anon EXECUTE as expected and live, legacy transitional, or expected but unapplied; it does not treat a raw count as sufficient authorization evidence. |
 | `stock-facts` | Routed to the owner. Reports product, live-product and lot counts. These are database projections and never prove physical stock. |
 | `backup-freshness` | The newest local encrypted envelope is dated on or after the newest applied migration. |
 | `backup-restore-proof` | An isolated restore receipt sits beside that envelope. Local presence only; it is not owner-held custody. |
 | `vercel-preview`, `vercel-edge-gate`, `provider-advisor` | Always `CONNECTOR` in this script. The Admin route gate is a Vercel routing rule; browser observations must be recorded separately before a cutover. |
 | `release-branch` | Whether the working branch is ahead of its upstream, so a "pushed" claim is checkable. |
+
+### MAP-017 metadata baseline, 30 September 2026
+
+The fresh read-only schema export audit reports **11 critical, 0 high**:
+five live legacy anonymous RPC grants and six `supabase_admin` future-object
+default-privilege groups. The five legacy functions are
+`submit_order_request`, `submit_order_request_v2`, `submit_pasabuy_request`,
+`submit_storefront_chat_v1`, and `validate_coupon`. Four expected guest
+capabilities and two authenticated AAL2 receipt readers now have explicit
+live-checked contracts. The readiness receipt separately classifies five
+expected and five legacy anon-executable functions as live, with 13 expected
+signed-guest grants prepared but unapplied. These checks narrow the inventory;
+they do not close the five legacy grants, the six provider defaults, or
+authorize a write. See
+`docs/evidence/20260930-map017-contract-audit/README.md` for the receipt and
+hashes.
 
 ## Ordered production step, once the owner authorizes
 

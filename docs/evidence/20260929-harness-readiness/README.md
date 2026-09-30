@@ -183,15 +183,24 @@ state is:
   erase newer pending 29 September decisions. Do not replay the migration or
   merge stale docs wholesale. Keep the branch for audit; no separate current
   MAP-017 requirement is missing from the newer records.
+- The remote-only `origin/codex/real-inventory-listing-20260928` has eight
+  commits not in `main` by ancestry. Its K2 identity/preflight, apply gate,
+  rehearsal and identity test are represented on `main`; its older Vercel
+  `builds`/target-command configuration and dated provider notes are superseded
+  by the newer Build Output candidate and later receipts. Do not merge that
+  historical tree wholesale. It remains a remote ref and was not changed.
 - The other local branches not listed above are already ancestors of `main`.
   No local branch was deleted, and no remote branch, PR, or deployment was
   modified. Local `main` remains unpushed.
 
-The read-only K2 preflight passed with explicit `.env.local` loading and
-confirmed `pixplcjqivlfflickobf`. The subsequent live-readiness receipt reported
-8 verified, 2 owner, 3 connector, 0 failed. It did not apply anything. The
-latest ledger remained `20260928092634`; the channel migration remained
-unapplied. See the channel-slice receipt for exact commands, focused test
-results, outstanding writer/order gates and recovery instructions. The live
-readiness JSON under `.tools/current-production-backups/` is ignored and is not
-a committed evidence artifact.
+The read-only K2 package preflight and live-readiness commands passed after the
+scripts were corrected to load `.env.local` themselves; identity confirmed
+`pixplcjqivlfflickobf`, and readiness reported 8 verified, 2 owner, 3
+connector, 0 failed. It did not apply anything. The latest ledger remained
+`20260928092634`; the channel migration remained unapplied. The fresh 30
+September schema-contract audit reports 11 critical, 0 high and is documented
+at `docs/evidence/20260930-map017-contract-audit/README.md`. See the
+channel-slice receipt for exact commands, focused test results, outstanding
+writer/order gates and recovery instructions. Live export/readiness JSON under
+`.tools/current-production-backups/` is ignored and is not a committed
+evidence artifact.

@@ -54,3 +54,15 @@ test('the gate refuses to send a query before identity passes', () => {
   const firstQueryIndex = source.indexOf('await query(')
   assert.ok(identityIndex > 0 && firstQueryIndex > identityIndex)
 })
+
+test('documented K2 gates load the owner-controlled local environment file', () => {
+  const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))
+  assert.equal(
+    packageJson.scripts['preflight:k2-project'],
+    'node --env-file=.env.local scripts/verify-k2-supabase-project.mjs',
+  )
+  assert.equal(
+    packageJson.scripts['readiness:k2-live'],
+    'node --env-file=.env.local scripts/k2-live-readiness.mjs',
+  )
+})

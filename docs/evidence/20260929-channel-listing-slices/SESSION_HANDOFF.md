@@ -1,7 +1,7 @@
 # Session handoff - channel slices and branch integration
 
 - **Updated:** 30 September 2026
-- **Owning work:** IDEA-20260929-06; MAP-018 is the active listing/intake item and MAP-026 owns later multi-shop reconciliation.
+- **Owning work:** IDEA-20260929-06; MAP-017's permission and recovery gates come first, MAP-018 owns Website membership/listing, and MAP-026 owns later multi-shop reconciliation.
 - **State:** The original 29 September work is now integrated on local `main` and locally verified. It remains unpushed, unapplied, undeployed, and unaccepted on real hosts.
 
 This file replaces the first branch-only handoff. The durable evidence and the exact ordered next actions are in [`README.md`](README.md), [`MASTER_ACTION_PLAN.md`](../../../MASTER_ACTION_PLAN.md), and [`CHANNEL_SLICES_APPLY_PACKET.md`](../../runbooks/CHANNEL_SLICES_APPLY_PACKET.md). The Master Action Plan remains the only active backlog.
@@ -21,7 +21,7 @@ This file replaces the first branch-only handoff. The durable evidence and the e
 - Connector handoff branch merged as `cedfc5d`; intake branch's two unique commits were cherry-picked as `09c8b52` and `e662892`. The complete channel snapshot was restored onto `main` after those integrations.
 - Focused source/security checks, current-schema/rollback rehearsals, and development verification passed; details and limits are in the evidence README.
 
-The older `codex/map017-stock-grant` ref was excluded because it contains a superseded weaker ACL migration variant. No branch was deleted and no remote branch was changed.
+The older `codex/map017-stock-grant` ref was excluded because it contains a superseded weaker ACL migration variant. The remote-only `origin/codex/real-inventory-listing-20260928` has eight commits not in `main` by ancestry, but its identity/apply/rehearsal code is represented on `main`; its older Vercel configuration and dated provider notes are superseded. Neither stale branch was merged wholesale. No branch was deleted and no remote branch was changed. MAP-017's 30 September audit is recorded in [`the follow-up receipt`](../20260930-map017-contract-audit/README.md).
 
 ## What remains open
 
@@ -33,6 +33,6 @@ The older `codex/map017-stock-grant` ref was excluded because it contains a supe
 
 ## Exact next action
 
-Continue the ordered MAP-017/MAP-018 work in `MASTER_ACTION_PLAN.md`. Before any K2 database/provider write, run the read-only identity preflight with the owner-controlled K2 environment, then the live-readiness gate and require zero failed gates. Obtain the precise owner authorization required by the MAP item, refresh and verify the backup, and follow the stop sequence in `CHANNEL_SLICES_APPLY_PACKET.md`. In parallel with read-only preparation, implement the protected Website assignment command and prove server-side order allow/deny behavior. Keep production fail-closed until those pieces and their prerequisites pass.
+Continue MAP-017 first in `MASTER_ACTION_PLAN.md`: follow up the pending Supabase support response for the six provider-owned defaults, prepare and prove the signed guest replacement/Preview continuity for the five legacy grants, and obtain the explicit owner authorization named by MAP-019/020 before any write. Then rerun K2 preflight and readiness, require zero failed gates, refresh and verify the backup, and follow the stop sequence in `CHANNEL_SLICES_APPLY_PACKET.md`. After MAP-017 clears, proceed to MAP-018's protected Website assignment writer and server-side order allow/deny gate, then measure intended Website membership and verify physical stock. Keep production fail-closed until each ordered prerequisite passes.
 
 For the complete local and readiness receipts, commands, branch state, and recovery steps, see [`README.md`](README.md).
