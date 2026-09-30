@@ -10,6 +10,11 @@
   blocked: Preview has no server-side Supabase settings, and the live signed-chat
   start function is unapplied. No test row was created. Full production listing
   and inventory acceptance remain open.
+- The 30 September read-only follow-up found existing Supabase ticket
+  `SU-483740`; its 24 September message is an automatic acknowledgment with no
+  human reply. The current K2 Security Advisor shows 0 errors, 56 warnings, and
+  7 suggestions; individual linter findings still need classification. No
+  support reply or remediation was sent or applied.
 
 The only active backlog is [`MASTER_ACTION_PLAN.md`](../../../MASTER_ACTION_PLAN.md).
 Guest-chat evidence is in the [MAP-017 receipt](../20260930-map017-contract-audit/README.md).
@@ -85,7 +90,9 @@ recovery instructions.
 ## Exact next action
 
 Finish MAP-017's live permission reconciliation and provider follow-up, then
-continue through the signed guest prerequisites in MAP order. When
+continue through the signed guest prerequisites in MAP order. Reply only in
+existing ticket `SU-483740` after the owner explicitly authorizes the specific
+message; do not create a duplicate request or change provider defaults. When
 `start_guest_conversation_v1` is ready, obtain the separate owner decision to
 connect Preview's server BFF to shared K2 or name the approved isolated backend.
 Then create exactly one authorized test conversation and prove same-browser
