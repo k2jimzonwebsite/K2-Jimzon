@@ -33,6 +33,7 @@ The documented `npm run readiness:k2-live` gate passed with **8 verified, 2 owne
 - `package.json` makes both documented K2 gates load `.env.local`; `tests/k2-live-readiness-contract.test.mjs` protects that invocation.
 - `docs/runbooks/K2_PRODUCTION_READINESS_RUNBOOK.md` records the current anonymous-execute classification, audit baseline, and package command behavior.
 - `tests/schema-truth-tool.spec.js` verifies the guest and staff contracts and confirms `validate_coupon` remains an unreviewed critical grant.
+- `MASTER_ACTION_PLAN.md`, `K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md`, this receipt, the channel-listing README and session handoff, and the harness-readiness receipt record the current status, branch decisions, evidence, recovery and ordered next action.
 
 | Verification | Result |
 | --- | --- |
@@ -43,6 +44,23 @@ The documented `npm run readiness:k2-live` gate passed with **8 verified, 2 owne
 | `npm run readiness:k2-live` | 8 verified / 2 owner / 3 connector / 0 failed |
 
 The complete release gate was not run because no live promotion was requested. The code and evidence are local on `main`; this receipt does not claim a push, provider apply, deployment, Website assignment, or physical stock verification.
+
+## Commit receipt
+
+The audit, authorization contracts, gate-wrapper fix and associated records were committed to local `main` as `7d2ac23c5bef85bc69dd5198f1954e36b139694b` (`reconcile MAP-017 contract audit before channel listing`). It changed these 12 files:
+
+| File | Change |
+| --- | --- |
+| `scripts/schema-truth-core.mjs`, `supabase/export-schema-metadata.sql` | Add six explicit authorization contracts and boolean-only live guard signals. |
+| `package.json`, `tests/k2-live-readiness-contract.test.mjs` | Load `.env.local` in the documented gates and protect that invocation. |
+| `tests/schema-truth-tool.spec.js` | Check guest/staff contract signals and keep the legacy coupon grant critical. |
+| `MASTER_ACTION_PLAN.md`, `K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md` | Record current MAP-017 findings and status. |
+| `docs/runbooks/K2_PRODUCTION_READINESS_RUNBOOK.md` | Correct the gate invocation and current anonymous-execute interpretation. |
+| `docs/evidence/20260929-channel-listing-slices/README.md`, `docs/evidence/20260929-channel-listing-slices/SESSION_HANDOFF.md` | Correct readiness and branch notes; preserve MAP-017-before-MAP-018 order. |
+| `docs/evidence/20260929-harness-readiness/README.md` | Reconcile current local/remote branch and readiness status. |
+| `docs/evidence/20260930-map017-contract-audit/README.md` | Capture export, verification, recovery, exact next action and this commit receipt. |
+
+Post-commit verification showed a clean worktree, `main` 22 commits ahead of `origin/main`, and `git diff --check HEAD^ HEAD` with no findings. This was a local commit only; no push or remote branch update occurred.
 
 ## Branch reconciliation
 

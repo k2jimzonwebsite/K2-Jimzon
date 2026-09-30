@@ -1,6 +1,6 @@
 # K2 Jimzon Master Action Plan
 
-Updated 29 September 2026. This is the only active backlog. The older plan is preserved in `K2 Jimzon - Brain/MASTER_ACTION_PLAN_HISTORY_2026-09-24.md` for dated findings and receipts. Its old pending lines are historical context, not current instructions. Required behavior lives in the operations rulebook. Verified current behavior lives in the System Brain.
+Updated 30 September 2026. This is the only active backlog. The older plan is preserved in `K2 Jimzon - Brain/MASTER_ACTION_PLAN_HISTORY_2026-09-24.md` for dated findings and receipts. Its old pending lines are historical context, not current instructions. Required behavior lives in the operations rulebook. Verified current behavior lives in the System Brain.
 
 **Entry point for the next session:** `docs/runbooks/CONNECTOR_SESSION_HANDOFF.md` holds the ordered list of what a Supabase/Vercel/Cloudflare/GitHub-equipped session must do, and what the 29 September session already closed so it is not repeated. Read that alongside this plan.
 
@@ -22,7 +22,7 @@ An item is ready when it has an idea ID, a clear outcome, known dependencies and
 
 Independent local fixes may continue while an owner or provider gate is open. This iteration does not by itself authorize a production database write, flag change or deployment.
 
-**Where the iteration stands, 30 September (IDEA-20260929-06):** Connector handoff corrections and the two unique intake-cleanup commits are integrated on local `main`; the channel-slice snapshot is also integrated and verified locally. None of this follow-up is pushed, applied to K2, or deployed. The read-only K2 readiness receipt reports 8 verified, 2 owner, 3 connector, 0 failed. The release gate has not been run on this final candidate; `AGENTS.md` requires `npm run verify:release` once immediately before an owner-requested live promotion. See `docs/evidence/20260929-channel-listing-slices/README.md` for the exact branch and verification receipt.
+**Where the iteration stands, 30 September (IDEA-20260929-06):** Connector handoff corrections and the two unique intake-cleanup commits are integrated on local `main`; the channel-slice snapshot is also integrated and verified locally. The MAP-017 contract audit, gate-wrapper correction, and readiness-runbook update are committed in `7d2ac23`; the post-commit receipt is in `docs/evidence/20260930-map017-contract-audit/README.md`. None of this follow-up is pushed, applied to K2, or deployed. The read-only K2 readiness receipt reports 8 verified, 2 owner, 3 connector, 0 failed. The release gate has not been run on this final candidate; `AGENTS.md` requires `npm run verify:release` once immediately before an owner-requested live promotion. See `docs/evidence/20260929-channel-listing-slices/README.md` for the exact branch and verification receipt.
 
 What the 29 September session closed, so no session repeats it:
 
