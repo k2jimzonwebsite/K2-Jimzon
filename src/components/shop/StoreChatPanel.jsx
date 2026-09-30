@@ -3,7 +3,6 @@ import TurnstileChallenge from '../security/TurnstileChallenge'
 import {
   guestBffEnabled, listGuestConversations, replyToGuestConversation, startGuestConversation,
 } from '../../services/guestCommerceService'
-import { supabase, isSupabaseConfigured } from '../../lib/supabaseClient'
 import './StoreChatPanel.css'
 
 /**
@@ -29,29 +28,38 @@ import './StoreChatPanel.css'
 /** Inside the guest-read allowance while feeling current in an open chat. */
 const POLL_MS = 8000
 
-const THREAD_KEY = 'k2-store-chat-convo-id'
+const LEGACY_THREAD_KEY = 'k2-store-chat-convo-id'
+const GUEST_REFERENCE_KEY = 'k2-store-chat-guest-reference'
 
-// The thread id lives in localStorage so a closed tab or browser restart
-// returns to the same conversation on this browser. sessionStorage is read
-// once as a fallback so threads started before this change are not orphaned.
-function readStoredConvoId() {
+function isGuestConversationReference(value) {
+  return /^CV-[0-9A-F]{16}$/.test(String(value || ''))
+}
+
+function readStoredGuestConversationReference() {
   try {
-    const local = localStorage.getItem(THREAD_KEY)
-    if (local) return local
+    const local = localStorage.getItem(GUEST_REFERENCE_KEY)
+    if (isGuestConversationReference(local)) return local
   } catch { /* private-mode storage: fall through to session */ }
   try {
-    return sessionStorage.getItem(THREAD_KEY)
+    const session = sessionStorage.getItem(GUEST_REFERENCE_KEY)
+    return isGuestConversationReference(session) ? session : null
   } catch { return null }
 }
 
-function persistStoredConvoId(id) {
-  try { localStorage.setItem(THREAD_KEY, id) } catch { /* private-mode storage */ }
-  try { sessionStorage.setItem(THREAD_KEY, id) } catch { /* storage fallback */ }
+function persistGuestConversationReference(reference) {
+  if (!isGuestConversationReference(reference)) return
+  try { localStorage.setItem(GUEST_REFERENCE_KEY, reference) } catch { /* private-mode storage */ }
+  try { sessionStorage.setItem(GUEST_REFERENCE_KEY, reference) } catch { /* storage fallback */ }
 }
 
-function clearStoredConvoId() {
-  try { localStorage.removeItem(THREAD_KEY) } catch { /* private-mode storage */ }
-  try { sessionStorage.removeItem(THREAD_KEY) } catch { /* storage fallback */ }
+function clearGuestConversationReference() {
+  try { localStorage.removeItem(GUEST_REFERENCE_KEY) } catch { /* private-mode storage */ }
+  try { sessionStorage.removeItem(GUEST_REFERENCE_KEY) } catch { /* storage fallback */ }
+}
+
+function discardLegacyStoredConvoId() {
+  try { localStorage.removeItem(LEGACY_THREAD_KEY) } catch { /* private-mode storage */ }
+  try { sessionStorage.removeItem(LEGACY_THREAD_KEY) } catch { /* storage fallback */ }
 }
 
 function formatTime(value) {
@@ -105,8 +113,7 @@ function MessagingOffline({ seededMessage }) {
 
 export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) {
   const bffEnabled = guestBffEnabled()
-  const directEnabled = isSupabaseConfigured
-  const enabled = bffEnabled || directEnabled
+  const enabled = bffEnabled
 
   const [form, setForm] = useState({ customerName: '', email: '', phone: '' })
   // An unsent draft survives sheet close, Escape, and remounts within this
@@ -130,68 +137,27 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
   const threadRef = useRef(null)
   useEffect(() => { if (!active) setBotToken('') }, [active])
 
-  // Load existing conversation from sessionStorage if present in direct mode
+  // Discard test-era UUID pointers. Restore a new opaque reference only after
+  // the guest-grant-scoped list confirms this browser still has access.
   useEffect(() => {
-    try {
-      const savedConvoId = readStoredConvoId()
-      if (savedConvoId) persistStoredConvoId(savedConvoId)
-      if (savedConvoId && !conversation && directEnabled && !bffEnabled && supabase) {
-        supabase.rpc('get_storefront_chat_v1', { p_conversation_id: savedConvoId })
-          .then(({ data, error: rpcErr }) => {
-            if (!rpcErr && data?.ok) {
-              setConversation({
-                id: data.conversation_id,
-                conversation_reference: data.conversation_id,
-                customerName: data.customer_name,
-                status: data.status,
-                messages: data.messages || [],
-              })
-            } else if (!rpcErr && data?.ok === false) {
-              clearStoredConvoId()
-            }
-          })
-          .catch(() => {})
-      }
-    } catch { /* storage fallback */ }
-  }, [directEnabled, bffEnabled, conversation])
+    discardLegacyStoredConvoId()
+    if (!bffEnabled) return undefined
 
-  // Subscribe to live postgres_changes when conversation exists
-  useEffect(() => {
-    const convoId = conversation?.id || conversation?.conversation_reference
-    if (!active || !convoId || bffEnabled || !directEnabled || !supabase) return undefined
+    const savedReference = readStoredGuestConversationReference()
+    if (!savedReference) return undefined
 
-    const channel = supabase.channel('storefront:live_chat')
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'messages',
-        filter: `conversation_id=eq.${convoId}`,
-      }, (payload) => {
-        if (payload?.new) {
-          const newMsg = payload.new
-          setConversation((current) => {
-            if (!current) return current
-            if (current.messages?.some((m) => m.id === newMsg.id)) return current
-            return {
-              ...current,
-              messages: [...(current.messages || []), {
-                id: newMsg.id,
-                direction: newMsg.direction || (newMsg.sender_type === 'Customer' ? 'inbound' : 'outbound'),
-                content: newMsg.content,
-                delivery_status: newMsg.delivery_status || 'received',
-                created_at: newMsg.created_at || new Date().toISOString(),
-                sender_type: newMsg.sender_type,
-              }],
-            }
-          })
-        }
-      })
-      .subscribe()
+    let cancelled = false
+    listGuestConversations().then((result) => {
+      if (cancelled || !result.ok || !Array.isArray(result.data)) return
+      const match = result.data.find(
+        (item) => item.conversation_reference === savedReference,
+      )
+      if (match) setConversation(match)
+      else clearGuestConversationReference()
+    }).catch(() => {})
 
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [active, conversation?.id, conversation?.conversation_reference, bffEnabled, directEnabled])
+    return () => { cancelled = true }
+  }, [bffEnabled])
 
   // A question asked at the shelf arrives as bounded product context. It seeds
   // the box once and is then the customer's to edit or delete — it is never
@@ -205,32 +171,18 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
   }, [seed, onSeedConsumed, message])
 
   const refresh = useCallback(async () => {
-    if (!enabled) return
-    if (bffEnabled) {
-      if (!conversation?.conversation_reference) return
-      const result = await listGuestConversations()
-      if (!result.ok || !Array.isArray(result.data)) return
-      const match = result.data.find(
-        (item) => item.conversation_reference === conversation.conversation_reference,
-      )
-      if (match) setConversation(match)
-      else setConversation(null)
-    } else if (directEnabled && supabase) {
-      const convoId = conversation?.id || conversation?.conversation_reference
-      if (!convoId) return
-      const { data, error: rpcErr } = await supabase.rpc('get_storefront_chat_v1', { p_conversation_id: convoId })
-      if (!rpcErr && data?.ok) {
-        setConversation((current) => ({
-          ...current,
-          status: data.status,
-          messages: data.messages || [],
-        }))
-      } else if (!rpcErr && data?.ok === false) {
-        clearStoredConvoId()
-        setConversation(null)
-      }
+    if (!bffEnabled || !conversation?.conversation_reference) return
+    const result = await listGuestConversations()
+    if (!result.ok || !Array.isArray(result.data)) return
+    const match = result.data.find(
+      (item) => item.conversation_reference === conversation.conversation_reference,
+    )
+    if (match) setConversation(match)
+    else {
+      clearGuestConversationReference()
+      setConversation(null)
     }
-  }, [enabled, bffEnabled, directEnabled, conversation?.id, conversation?.conversation_reference])
+  }, [bffEnabled, conversation?.conversation_reference])
 
   // Poll only while there is a conversation to poll for.
   useEffect(() => {
@@ -257,59 +209,8 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
     const content = message.trim()
     if (!content || sending) return
 
-    // Direct Supabase mode (when BFF is not active)
-    if (!bffEnabled && directEnabled && supabase) {
-      const convoId = conversation?.id || conversation?.conversation_reference || null
-      if (!convoId) {
-        if (!form.customerName.trim()) {
-          setError('Add a name so K2 knows who they are replying to.')
-          return
-        }
-        if (!form.email.trim() && !form.phone.trim()) {
-          setError('Enter an email address or mobile number so K2 can identify the conversation.')
-          return
-        }
-      }
-
-      setSending(true)
-      const { data, error: rpcErr } = await supabase.rpc('submit_storefront_chat_v1', {
-        p_customer_name: form.customerName.trim() || 'Website Customer',
-        p_customer_contact: form.email.trim() || form.phone.trim() || '',
-        p_message: content,
-        p_conversation_id: convoId,
-        p_origin: seed?.origin || 'virtual_store',
-      })
-      setSending(false)
-
-      if (rpcErr || !data?.ok) {
-        setError(rpcErr?.message || 'Message could not be sent. Please retry.')
-        return
-      }
-
-      try {
-        if (data.conversation_id) persistStoredConvoId(data.conversation_id)
-      } catch { /* storage fallback */ }
-
-      setConversation((current) => ({
-        id: data.conversation_id,
-        conversation_reference: data.conversation_id,
-        status: 'Open',
-        messages: [...(current?.messages || []), {
-          id: data.message_id,
-          direction: 'inbound',
-          content,
-          delivery_status: 'received',
-          created_at: data.created_at || new Date().toISOString(),
-          sender_type: 'Customer',
-        }],
-      }))
-      setMessage('')
-      setNotice('Sent. A person answers here during Manila business hours.')
-      return
-    }
-
-    // An existing thread just takes the reply; a new one needs identity and a
-    // bot check, exactly as the messages page requires.
+    // An existing guest-grant-scoped thread takes the reply; a new one needs
+    // identity and a bot check, exactly as the messages page requires.
     if (conversation?.conversation_reference) {
       if (!requestKey.current.key) requestKey.current = { fingerprint: content, key: crypto.randomUUID() }
       setSending(true)
@@ -372,6 +273,7 @@ export default function StoreChatPanel({ seed, onSeedConsumed, active = true }) 
     }
 
     requestKey.current = { fingerprint: '', key: '' }
+    persistGuestConversationReference(result.data?.conversation_reference)
     setConversation({
       ...result.data,
       messages: [{
