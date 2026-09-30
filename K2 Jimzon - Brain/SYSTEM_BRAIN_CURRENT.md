@@ -4392,9 +4392,10 @@ Read-only search in the K2 mailbox `k2jimzonwebsite@gmail.com` verified
 Supabase ticket `SU-483740`, acknowledged 24 September at 6:04 PM for the
 supported correction of provider-owned `supabase_admin` defaults. Its thread
 contains only the automatic receipt, with no human reply; the Free plan notice
-says support is best-effort. No follow-up or duplicate request was sent. The
-next action is an owner-authorized reply in that ticket asking for the
-supported remediation procedure.
+says support is best-effort. No follow-up or duplicate request was sent. Reply
+only after the owner explicitly authorizes the specific follow-up message; if
+authorized, ask for the supported remediation procedure in this existing
+ticket.
 
 The signed-in Security Advisor page for K2 project `pixplcjqivlfflickobf`
 showed **0 errors, 56 warnings, and 7 suggestions** on 30 September. Visible

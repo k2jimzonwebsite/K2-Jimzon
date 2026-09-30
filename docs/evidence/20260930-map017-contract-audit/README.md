@@ -114,8 +114,9 @@ ticket `SU-483740`, acknowledged 24 September at 6:04 PM for the supported
 correction of provider-owned `supabase_admin` defaults. The thread contains
 only the automatic receipt and no human reply. The Free plan notice says
 support is best-effort with no guaranteed response. No follow-up was sent and
-no duplicate request was created. The owner-authorized next action is to reply
-in this ticket and ask for the supported remediation procedure. The earlier
+no duplicate request was created. A follow-up requires explicit owner
+authorization; if granted, reply in this ticket and ask for the supported
+remediation procedure. The earlier
 project-specific Dashboard support URL returned 404; the Dashboard new-request
 form did not expose existing history. No permission, provider, or database
 state changed.
