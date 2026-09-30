@@ -4,17 +4,22 @@
 - **Owning work:** MAP-017 first; MAP-019 and MAP-020 own the guest/account and
   coordinated route cutover gates. MAP-018 Website assignment and production
   listing remain downstream.
-- **State:** Owner recovery choice resolved; source and local checks prepared.
-  The owner authorized publication of the isolated Preview branch. Exact-host
-  behavior, production cutover, and listing acceptance are not verified here.
+- **State:** The guest-history decision and one-record test authorization are
+  recorded. The isolated Preview branch is pushed and its page loads are
+  verified; signed-chat behavior is blocked by missing Preview server settings
+  and an unapplied K2 function. Production cutover and listing acceptance remain
+  open.
 
 ## Owner decision
 
 The owner confirmed current UUID-only Storefront conversations are test data
 and may be left out. Do not migrate those conversations into a new grant and do
-not delete their historical server rows under this decision. This does not
-authorize a database/grant change, feature flag, provider setting, deployment,
-or production release.
+not delete their historical server rows under this decision. The owner later
+authorized exactly one new K2 guest-chat test conversation record, after the
+required gates pass. This narrow authorization does not authorize a
+database-schema/grant change, feature flag, provider setting, Preview-to-K2
+server connection, deployment change, or production release. The one record
+has not been created.
 
 ## Live read-only MAP-017 evidence
 
@@ -100,18 +105,55 @@ interaction limitation, not as proof the application button is broken. No
 guest chat was submitted, no grant was issued, and no database row, flag,
 provider setting, or deployment configuration was changed by the check.
 
+## 30 September fresh readiness and Preview connection check
+
+The owner-authorized one-record chat test remains pending. On the local
+MAP-017 audit branch, fresh `npm run preflight:k2-project` exited 0 and
+confirmed the exact K2 project reference `pixplcjqivlfflickobf`. Fresh
+`npm run readiness:k2-live` exited 0 with **8 verified, 2 owner, 3 connector,
+0 blocked**. Its owner gate classifies five expected and live anonymous
+functions, five legacy transitional functions, and 13 expected signed-guest
+grants not yet applied, including `public.start_guest_conversation_v1`. The
+latest ledger is `20260928092634`. Backup freshness and the isolated local
+restore receipt passed; the 29 September envelope's owner-only Drive upload,
+independent hash readback and redacted-companion checks are recorded in
+`docs/evidence/20260929-inventory-readiness/README.md`. The gate wrote its local
+receipt to the ignored `.tools/current-production-backups/live-readiness.json`.
+
+The latest Storefront Preview is `dpl_FR5MuYXCvxEbk3ZUwXp39McoC7pu`, Ready at
+`b0be083ca816d4f0aadddc36e0a67b41b3ea7d38`, URL
+`https://k2-jimzon-3388zdrkc-k2-jimzon.vercel.app/`. The browser loaded the
+homepage and catalog. The public client bundle contains the exact host
+`https://pixplcjqivlfflickobf.supabase.co`. A read-only Vercel environment
+settings check showed Preview-targeted `VITE_SUPABASE_URL` and
+`VITE_SUPABASE_PUBLISHABLE_KEY`; server-side `SUPABASE_URL` and
+`SUPABASE_PUBLISHABLE_KEY` are Production-only. The latter server pair is what
+`server/storefront-bff/supabase.js` reads, and that helper throws
+`SUPABASE_SERVER_CONFIG_MISSING` if either value is absent. No chat route was
+invoked. In addition to the missing Preview server configuration, the K2
+signed-chat start function remains unapplied. Therefore this Preview cannot
+currently create a signed K2 conversation. The one-record authorization does
+not authorize adding Preview server access to the shared production database.
+
+No chat submission, K2 row, environment setting, grant, migration, flag,
+deployment target, or production release changed during these checks. The
+previously authorized local/Drive backup remains available; there is no test
+row to clean up or roll back.
+
 ## Remaining work and recovery
 
 1. Keep production `main` unchanged while the ordered gates remain open.
-2. Establish a reliable exact-host interaction check and confirm the Preview's
-   data target before creating a conversation. If it uses K2, follow the owner
-   authorization, preflight, readiness, and backup gates before any test write;
-   otherwise confirm the isolated test backend.
-3. On the exact Storefront Preview, prove fresh signed-chat start,
-   same-browser reopen, and denial with a missing or different browser grant.
-4. Reconcile the separate live chat-read grant, receive the pending Supabase
-   support response for provider-owned defaults, and follow the MAP-017/019/020
-   readiness, backup, and exact owner-authorization gates before any cutover.
+2. Finish MAP-017's live permission reconciliation and pending Supabase support
+   follow-up for provider-owned defaults; continue in MAP dependency order
+   through the signed guest prerequisites. The one test record is authorized
+   but cannot be created while `start_guest_conversation_v1` is unapplied and
+   the Preview's server-side Supabase environment is absent.
+3. Once those prerequisites are ready, obtain the separate owner decision to
+   connect Storefront Preview server functions to shared K2, or identify an
+   approved isolated test backend. Do not add production database access to
+   Preview based only on the one-row authorization.
+4. Then prove one fresh signed-chat start, same-browser reopen, and denial with
+   a missing or different browser grant. Do not use the legacy direct chat RPC.
 5. Continue MAP-018 only after its dependencies clear. Its current gaps include
    protected Website assignment, server-side order-membership enforcement,
    reviewed Website membership for the 22 published products, physical counts,

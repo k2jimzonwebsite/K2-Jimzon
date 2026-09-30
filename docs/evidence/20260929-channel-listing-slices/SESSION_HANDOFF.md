@@ -4,18 +4,22 @@
 - **Owning work:** MAP-017 permission/recovery and signed guest gates first;
   MAP-018 owns Website membership and production listing; MAP-026 owns later
   multi-shop reconciliation.
-- **State:** The guest-chat owner decision is recorded and source checks pass
-  locally. The isolated chat Preview branch is pushed and both builds are Ready;
-  exact-host chat interaction remains unverified. Full production listing and
-  inventory acceptance remain open.
+- **State:** The guest-chat owner decisions are recorded and source checks pass
+  locally. The isolated chat Preview branch is pushed and both builds are Ready.
+  The owner authorized one K2 test conversation, but the exact-host write is
+  blocked: Preview has no server-side Supabase settings, and the live signed-chat
+  start function is unapplied. No test row was created. Full production listing
+  and inventory acceptance remain open.
 
 The only active backlog is [`MASTER_ACTION_PLAN.md`](../../../MASTER_ACTION_PLAN.md).
 Guest-chat evidence is in the [MAP-017 receipt](../20260930-map017-contract-audit/README.md).
 Guest route procedures are in
 [`GUEST_COMMERCE_BFF_RUNBOOK.md`](../../runbooks/GUEST_COMMERCE_BFF_RUNBOOK.md).
-No database, provider, or production change is authorized by this handoff;
-complete MAP-017's current preflight, readiness, backup, and owner-authorization
-gates before any production step.
+The owner authorized exactly one new K2 test conversation record after its
+required gates pass. No other database write, schema/grant change, provider
+setting, Preview-to-production connection, or production release is authorized
+by that decision. Current check results and blockers are recorded in the
+MAP-017 receipt; complete the remaining MAP-017/019/020 dependencies first.
 
 ## Owner-confirmed listing behavior
 
@@ -46,6 +50,17 @@ gates before any production step.
   exact-host acceptance, and staff/customer acceptance remain open.
 - No stock, product, publication, channel-assignment, provider, flag, or
   production deployment change was made in this work.
+- Fresh K2 preflight passed; readiness returned 8 verified, 2 owner, 3
+  connector, and 0 blocked. The 29 September backup freshness and local restore
+  gates passed, with offsite hash evidence recorded in the inventory-readiness
+  receipt.
+- The compiled Storefront Preview client identifies K2. Vercel Preview
+  environment settings have the `VITE_` Supabase variables; the signed server
+  BFF requires `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, which are
+  configured only for Production. Live K2 readiness also reports
+  `start_guest_conversation_v1` unapplied. The one test row is authorized but
+  cannot be created through this Preview yet. No Vercel setting, chat request,
+  or database row was changed.
 
 ## Guest-chat source slice
 
@@ -69,16 +84,16 @@ recovery instructions.
 
 ## Exact next action
 
-Establish a reliable exact-host interaction check and confirm the Preview data
-target before creating a chat; if it can write through to K2, follow the
-MAP-017/019/020 owner authorization and readiness gates before any test write.
-Then prove fresh signed-chat start, same-browser reopen, and missing/cross-
-browser grant denial. Reconcile the separate `get_storefront_chat_v1` grant and
-provider-owned defaults. After MAP-017 clears, proceed in MAP order to MAP-018:
-implement and verify protected Website assignment and the server-side Website
-order gate, review intended product membership and product facts/media,
-reconcile real physical counts, and verify exact-host listing and purchase
-behavior. Keep production fail-closed until those gates pass.
+Finish MAP-017's live permission reconciliation and provider follow-up, then
+continue through the signed guest prerequisites in MAP order. When
+`start_guest_conversation_v1` is ready, obtain the separate owner decision to
+connect Preview's server BFF to shared K2 or name the approved isolated backend.
+Then create exactly one authorized test conversation and prove same-browser
+reopen and missing/cross-browser grant denial. After MAP-017 clears, proceed in
+MAP order to MAP-018: implement and verify protected Website assignment and the
+server-side Website order gate, review intended product membership and product
+facts/media, reconcile real physical counts, and verify exact-host listing and
+purchase behavior. Keep production fail-closed until those gates pass.
 
 To recover the source change, revert commit `1e7b818` from the feature branch.
 No database data change or production rollback is needed. `main` remains

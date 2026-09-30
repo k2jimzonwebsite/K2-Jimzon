@@ -4358,18 +4358,37 @@ Focused chat contracts passed 4/4; guest-commerce BFF and Turnstile contracts
 passed 19/19; `npm run verify:development` passed on GitHub `main` baseline
 `f95e384`. The minimal candidate is `codex/map017-guest-chat-preview` at
 `1e7b818`, with three source/test files. The owner authorized publishing this
-feature branch to trigger separate Storefront and Admin Previews. Until the
-remote push, both Ready build receipts, and signed-browser page loads are
-evidenced, treat preview behavior as unverified. The Storefront chat button is
-visible, but browser-control clicks did not change page state, so chat-open and
-signed-route behavior remain unverified. No chat was submitted or login
-performed; no production source, grants, flags, provider settings, or inventory
-changed.
+feature branch to trigger separate Storefront and Admin Previews. The remote
+push, Ready build receipts, and signed-browser home/catalog loads are now
+recorded. The Storefront chat button is visible; chat-open and signed-route
+behavior remain unverified.
 
-MAP-017 remains first: establish reliable exact-host interaction and safe
-Preview data-target proof, then prove fresh signed-chat start/reopen/denial,
-reconcile the live chat-read grant, and close
-the provider-default and owner-authorized recovery gates. Then MAP-018 owns
+**30 September K2 readiness and Preview connection check:** The owner later
+authorized exactly one new K2 test conversation record, subject to the ordered
+gates. Fresh `npm run preflight:k2-project` confirmed
+`pixplcjqivlfflickobf`. Fresh `npm run readiness:k2-live` passed with 8
+verified, 2 owner, 3 connector, and 0 blocked gates. The live readiness still
+classifies `public.start_guest_conversation_v1` among unapplied signed-guest
+functions. The latest Storefront Preview is Ready at commit `b0be083`, and its
+compiled public client URL identifies the K2 Supabase project. Vercel's
+read-only environment page shows `VITE_SUPABASE_URL` and
+`VITE_SUPABASE_PUBLISHABLE_KEY` targeted to Preview, while server variables
+`SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` are Production-only. The signed
+Storefront BFF requires the latter pair and throws
+`SUPABASE_SERVER_CONFIG_MISSING` when absent. Thus the Preview cannot perform
+the signed start against K2 yet. No chat request or K2 data write was made, and
+no Vercel setting, migration, grant, flag, production release, or inventory
+state changed. The one-record authorization does not authorize adding
+production database access to Preview. The readiness output is preserved
+locally at `.tools/current-production-backups/live-readiness.json`; the durable
+receipt and next actions are in
+`docs/evidence/20260930-map017-contract-audit/README.md`.
+
+MAP-017 remains first: reconcile the live chat-read grant, finish the
+provider-default follow-up, and close its permission and recovery gates. The
+one authorized test conversation remains pending until the signed guest
+function is applied through its reviewed sequence and the owner separately
+decides whether Preview may connect to shared K2. Then MAP-018 owns
 protected Website assignment/order membership and the verified production
 listing. Do not infer Website membership from publication or assume the 22
 already-published products should be assigned. Staff counts, product facts,
