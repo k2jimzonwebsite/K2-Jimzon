@@ -4381,6 +4381,13 @@ repository-owned metadata SELECT through MCP. The old readiness receipt remains
 branch-mismatched and its npm commands are absent. No ACL, provider default,
 schema, or business row changed. Exact export, route reconciliation, and
 remaining actions: `docs/evidence/20260930-map017-contract-audit/README.md`.
+Current [Supabase API-security guidance](https://supabase.com/docs/guides/api/securing-your-api)
+attributes automatic Data API defaults to internal `supabase_admin`, while its
+published [revocation steps](https://supabase.com/docs/guides/deployment/branching/working-with-branches#revoke-default-privileges)
+target defaults for `postgres`. That does not demonstrate a supported way to
+change these six live internal-role groups; use existing support ticket
+`SU-483740` for the procedure and do not run a generic `FOR ROLE postgres`
+revoke as if it covered them.
 
 The same one-record authorization is still pending its prerequisites: the
 signed-chat start function is unapplied and Preview lacks server-side Supabase

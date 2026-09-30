@@ -77,6 +77,17 @@ The current export shows only `USAGE`, not `CREATE`, on `public` for
 `search_path=public` assumption. It does not resolve unreviewed authorization
 for guest functions.
 
+Provider procedure remains unresolved. Current [Supabase API-security
+guidance](https://supabase.com/docs/guides/api/securing-your-api) describes
+these default API grants as coming from the internal `supabase_admin` role;
+the published [default-privilege revocation
+steps](https://supabase.com/docs/guides/deployment/branching/working-with-branches#revoke-default-privileges)
+show `ALTER DEFAULT PRIVILEGES FOR ROLE postgres`, which is a different owner
+from the six live groups reported here. These docs do not establish that a
+standard project migration can alter the provider-owned defaults. Keep the
+existing support ticket `SU-483740` as the procedure question; no provider ACL
+change has been attempted.
+
 ## Source-route reconciliation
 
 This is a source-to-live-grant map, not an exact-host interaction test. The
