@@ -36,6 +36,70 @@ setting, Preview-to-production connection, or production release is authorized
 by that decision. Current check results and blockers are recorded in the
 MAP-017 receipt; complete the remaining MAP-017/019/020 dependencies first.
 
+## 30 September recovery and source-file recheck
+
+The 29 September backup/rehearsal receipt was preserved on local branch
+`codex/channel-slices-20260929` at commit
+`dd33ce174c005d607a23826548ea01abe39a3b4c`; its relevant evidence is
+summarized here because its former path,
+`docs/evidence/20260929-inventory-readiness/README.md`, is not present in this
+checkout. The ignored local encrypted envelope is
+`.tools/current-production-backups/current-20260929-pre-intake.k2backup`,
+backup ID
+`current-pixplcjqivlfflickobf-2026-09-29T034842871Z-ade8520855d3`, size
+847,770 bytes, SHA-256
+`ADE8520855D32206EF0A1C414BCB8EF50B1BB753337084380C092570C029304F`. Its
+redacted restore receipt says the isolated restore had 51 public relations,
+latest migration `20260928092634`, and ten excluded managed Vault entries.
+The restore does not cover Storage bytes or provider configuration; owner
+retrieval/decryption of this exact envelope has not been exercised.
+
+The signed-in Drive profile was rechecked as `k2jimzonwebsite@gmail.com` at
+`2026-09-30 07:29 UTC`. Metadata-only reads confirmed all three known backup
+files remain `shared: false` under the existing owner-only folder
+`1mQuU8Jj6eWhDr-lpZV3YJDtaEwfAh8yo`: envelope
+`1XBBjX6mLSb87VxkdO33wlvL3o8NlD7eH` (847,770 bytes), redacted manifest
+`13zZxeA8c_K135_aPBV7RaQPnpLqEDFcC` (686 bytes), and restore receipt
+`1LPKIeJnM4xSotlYtGB65OijQuvVcBUoY` (395 bytes). The earlier receipt on
+`dd33ce1` records an independent download/hash match for the envelope and
+readback of both companion files; this 30 September check refreshed metadata,
+not file contents.
+
+That prior receipt also records rollback-only rehearsals on the isolated
+restore: MAP-018 intake plus cleanup, ordered MAP-019/020 guest/account
+cutover, and the combined chain. The three preserved SQL assemblies still
+match their recorded hashes: MAP-018
+`13A0B9EB3D12F5402C54071C1ABE536F7CA20F83FBBC33B82E23048D79186EA0`, guest
+cutover
+`18F9D58BA00797461FA19FE0BC0C0DF4AF0B9F2B3506023BAC8E1485DC7F741B`, and
+combined
+`A68B6CCD83F1F601CFE08851D12941498CD55A1A5FB739681BFCCE2EC9E5E65F`. Those
+results establish local application-schema compatibility only; managed role,
+Vault, Storage, provider, live-apply, exact-host behavior, real physical count,
+and owner/staff acceptance remain open.
+
+Both the Drive and Gmail profiles returned `k2jimzonwebsite@gmail.com`. The
+Drive document searches for `inventory`, `stock count`, `physical inventory`,
+`product batch`, and `SKU stock reconciliation` returned no results. Gmail
+searches for stock-count/physical-count attachments in the last 90 days,
+`inventory` in the last year, `"channel stock"`, and `SKU` in the last year
+also returned no results. No channel export surfaced in those searches; they
+do not prove that no source exists elsewhere or outside search indexing.
+**Next owner input:** provide the channel export or its exact Drive location
+and confirm the physical quantities/discrepancies. Codex will then compare
+SKU/barcode/shop/lot balances and prepare the proposed reconciliation; no
+stock or publication write is authorized by this search.
+
+The latest audit-contract update is pushed on
+`codex/map017-guest-chat-preview` at
+`2fc1645b3f809d8dfdd0457dcb4ab116e9204c8c`. It changed
+`scripts/schema-truth-core.mjs`, `tests/schema-truth-tool.spec.js`,
+`MASTER_ACTION_PLAN.md`, `K2 Jimzon - Brain/OWNER_QUESTIONS.md`,
+`K2 Jimzon - Brain/SYSTEM_BRAIN_CURRENT.md`, and the two 29/30 September
+evidence records. The focused test passed 1/1, `npm run verify:development`
+exited 0, and `git diff --check` passed. No production or `main` change
+occurred.
+
 ## Owner-confirmed listing behavior
 
 1. One SKU is one master product and one physical stock pool. Warehouse and
@@ -69,9 +133,9 @@ MAP-017 receipt; complete the remaining MAP-017/019/020 dependencies first.
   `20260928092634`, and absence of signed start/reply functions. The saved
   readiness receipt's 8/2/3 result is not current-branch evidence: it names
   `codex/map017-guest-chat-test-only`, and its npm commands are absent from the
-  current manifest. The 29 September backup freshness and local restore gates
-  passed, with offsite hash evidence recorded in the inventory-readiness
-  receipt.
+  current manifest. Backup freshness and local restore evidence are summarized
+  below; the older branch referenced an inventory-readiness receipt that was
+  absent from this checkout.
 - The compiled Storefront Preview client identifies K2. Vercel Preview
   environment settings have the `VITE_` Supabase variables; the signed server
   BFF requires `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, which are

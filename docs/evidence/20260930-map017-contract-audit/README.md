@@ -222,10 +222,9 @@ record. The previous readiness receipt's **8 verified, 2 owner, 3 connector**
 and 13-unapplied-grant summary is not reproducible from this checkout: the
 ignored receipt names `codex/map017-guest-chat-test-only`, and the current
 `package.json` has no `preflight:k2-project` or `readiness:k2-live` script. Do
-not use that receipt as current branch evidence. Backup freshness and the
-isolated local restore receipt passed; the 29 September envelope's owner-only
-Drive upload, independent hash readback and redacted-companion checks are
-recorded in `docs/evidence/20260929-inventory-readiness/README.md`.
+not use that receipt as current branch evidence. Backup freshness, isolated
+restore, current Drive metadata, and the prior independent hash readback are
+recorded in `docs/evidence/20260929-channel-listing-slices/SESSION_HANDOFF.md`.
 
 The latest Storefront Preview is `dpl_FR5MuYXCvxEbk3ZUwXp39McoC7pu`, Ready at
 `b0be083ca816d4f0aadddc36e0a67b41b3ea7d38`, URL
