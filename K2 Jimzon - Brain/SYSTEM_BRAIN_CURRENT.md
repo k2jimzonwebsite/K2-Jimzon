@@ -4359,12 +4359,16 @@ passed 19/19; `npm run verify:development` passed on GitHub `main` baseline
 `f95e384`. The minimal candidate is `codex/map017-guest-chat-preview` at
 `1e7b818`, with three source/test files. The owner authorized publishing this
 feature branch to trigger separate Storefront and Admin Previews. Until the
-remote push and exact-host checks are evidenced, treat preview behavior as
-unverified. No production source, grants, flags, provider settings, deployment,
-or inventory changed.
+remote push, both Ready build receipts, and signed-browser page loads are
+evidenced, treat preview behavior as unverified. The Storefront chat button is
+visible, but browser-control clicks did not change page state, so chat-open and
+signed-route behavior remain unverified. No chat was submitted or login
+performed; no production source, grants, flags, provider settings, or inventory
+changed.
 
-MAP-017 remains first: publish and verify the isolated Preview, prove fresh
-signed-chat start/reopen/denial, reconcile the live chat-read grant, and close
+MAP-017 remains first: establish reliable exact-host interaction and safe
+Preview data-target proof, then prove fresh signed-chat start/reopen/denial,
+reconcile the live chat-read grant, and close
 the provider-default and owner-authorized recovery gates. Then MAP-018 owns
 protected Website assignment/order membership and the verified production
 listing. Do not infer Website membership from publication or assume the 22

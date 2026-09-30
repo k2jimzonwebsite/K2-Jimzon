@@ -581,17 +581,22 @@ conversation only after the messages route returns the exact reference under
 the current HttpOnly guest grant. The reference itself is not authorization.
 The launcher no longer infers “Resume Chat” from an old UUID.
 
-The change is prepared on `codex/map017-guest-chat-preview` at `1e7b818`, based
-on GitHub `main` `f95e384eefaebf372f5e8037bd8fd1819118dc17`. The owner authorized
-publishing this isolated branch for Preview builds. It is source preparation,
-not a production deployment. With `VITE_GUEST_BFF_ENABLED=false`, the source
-shows the unavailable state and sends nothing. Coordinate any activation with
-the signed server route and the preview-first gates above.
+The change is on `codex/map017-guest-chat-preview` at code commit `1e7b818`, based
+on GitHub `main` `f95e384eefaebf372f5e8037bd8fd1819118dc17`. The owner
+authorized publishing this isolated branch; Storefront and Admin Preview builds
+both reached Ready. This is not a production deployment. With
+`VITE_GUEST_BFF_ENABLED=false`, the source shows the unavailable state and sends
+nothing. Coordinate any activation with the signed server route and the
+preview-first gates above.
 
 The focused chat contracts passed 4/4; guest-commerce BFF and Turnstile
 contracts passed 19/19; `npm run verify:development` passed on the candidate
-baseline. Exact-host Preview proof remains required: new-chat start,
-same-browser reopen, and missing/cross-browser grant denial. The 30 September
+baseline. Signed-browser reads loaded the Storefront catalog and Admin
+sign-in. The Storefront chat button was visible, but browser-control clicks did
+not change UI state; no chat-open or signed-route behavior is verified. Do not
+submit a new chat until the Preview data target and applicable owner/readiness
+gate are confirmed, because it may write through to K2. Then prove new-chat
+start, same-browser reopen, and missing/cross-browser grant denial. The 30 September
 read-only audit classifies `get_storefront_chat_v1` separately from five
 remaining transitional anonymous grants; reconcile its final disposition before
 cutover. No historical rows, K2 database/provider state, feature flags, or

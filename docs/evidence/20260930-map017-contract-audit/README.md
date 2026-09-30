@@ -75,16 +75,38 @@ limited to:
 - `tests/map027-store-polish.spec.js`
 
 The same focused checks and development verification passed on that baseline.
-The owner authorized publishing this isolated branch for Preview builds. Record
-the remote push and exact-host Storefront/Admin results here before claiming
-Preview continuity.
+The owner authorized publishing this isolated branch. The branch was pushed to
+`origin/codex/map017-guest-chat-preview` at
+`31ffbb47fbd2181bad950829b3cfb963372d8da0` (source commit `1e7b818`, followed
+by documentation commit `31ffbb4`).
+
+## Preview publication and exact-host page receipt
+
+Both projects created Preview deployments from branch commit `31ffbb4` and
+reached **Ready**:
+
+| Artifact | Deployment | Preview URL | Result |
+| --- | --- | --- | --- |
+| Storefront (`prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL`) | `dpl_Dgt1aow6VPFphFPSATnWHDWB46zG` | `https://k2-jimzon-70i11vdb2-k2-jimzon.vercel.app/` | Ready; signed browser loaded storefront and catalog |
+| Admin (`prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x`) | `dpl_HPj2QDLRH4tAXqabNXMURjxZQVvF` | `https://k2-jimzon-admin-csr0cbmwe-k2-jimzon.vercel.app/` | Ready; signed browser loaded staff sign-in |
+
+The unauthenticated page fetch encountered Vercel Preview protection; the
+signed in-app browser could read both roots. It showed the Storefront catalog
+and the `Chat with K2 staff` button. The Admin showed its staff email/password
+sign-in form; no credentials were entered. Browser-control clicks did not change
+the page state for the chat button or safe Storefront controls, so the chat
+drawer and any signed route are **not verified**. Treat this as a browser
+interaction limitation, not as proof the application button is broken. No
+guest chat was submitted, no grant was issued, and no database row, flag,
+provider setting, or deployment configuration was changed by the check.
 
 ## Remaining work and recovery
 
-1. Publish only `codex/map017-guest-chat-preview`; leave production `main`
-   unchanged.
-2. Confirm both Preview artifacts are ready and have the expected separate
-   Storefront/Admin routes and configuration.
+1. Keep production `main` unchanged while the ordered gates remain open.
+2. Establish a reliable exact-host interaction check and confirm the Preview's
+   data target before creating a conversation. If it uses K2, follow the owner
+   authorization, preflight, readiness, and backup gates before any test write;
+   otherwise confirm the isolated test backend.
 3. On the exact Storefront Preview, prove fresh signed-chat start,
    same-browser reopen, and denial with a missing or different browser grant.
 4. Reconcile the separate live chat-read grant, receive the pending Supabase

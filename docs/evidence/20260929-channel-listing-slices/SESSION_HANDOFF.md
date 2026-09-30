@@ -5,8 +5,9 @@
   MAP-018 owns Website membership and production listing; MAP-026 owns later
   multi-shop reconciliation.
 - **State:** The guest-chat owner decision is recorded and source checks pass
-  locally. The isolated chat Preview branch is owner-approved for publication.
-  Full production listing and inventory acceptance remain open.
+  locally. The isolated chat Preview branch is pushed and both builds are Ready;
+  exact-host chat interaction remains unverified. Full production listing and
+  inventory acceptance remain open.
 
 The only active backlog is [`MASTER_ACTION_PLAN.md`](../../../MASTER_ACTION_PLAN.md).
 Guest-chat evidence is in the [MAP-017 receipt](../20260930-map017-contract-audit/README.md).
@@ -58,22 +59,26 @@ no access.
 The focused chat contracts passed 4/4, guest-commerce BFF and Turnstile
 contracts passed 19/19, and `npm run verify:development` passed on the isolated
 GitHub `main` baseline. The code candidate is `codex/map017-guest-chat-preview`
-at `1e7b818`; the owner authorized pushing this branch for separate Storefront
-and Admin Preview builds. The remote push and exact-host Preview proof remain
-separate receipts. See the MAP-017 evidence for the exact changed files,
-verification, audit identity, and recovery instructions.
+at `1e7b818`; it was pushed with handoff records at `31ffbb4`. Separate
+Storefront and Admin Preview builds reached Ready, and signed-browser reads
+loaded the Storefront catalog and Admin sign-in screen. The chat button was
+visible, but browser-control clicks did not change page state; chat-open and
+signed-route behavior remain unverified. No login or chat was submitted. See
+the MAP-017 evidence for deployment IDs, exact URLs, verification limits, and
+recovery instructions.
 
 ## Exact next action
 
-Publish only the authorized `codex/map017-guest-chat-preview` branch, confirm
-both Preview builds are ready, and prove fresh signed-chat start, same-browser
-reopen, and missing/cross-browser grant denial. Reconcile the separate
-`get_storefront_chat_v1` grant and provider-owned defaults; complete MAP-017's
-readiness/backup/owner-authorization gates before any cutover. Then proceed in
-MAP order to MAP-018: implement and verify protected Website assignment and the
-server-side Website order gate, review intended product membership and product
-facts/media, reconcile real physical counts, and verify exact-host listing and
-purchase behavior. Keep production fail-closed until those gates pass.
+Establish a reliable exact-host interaction check and confirm the Preview data
+target before creating a chat; if it can write through to K2, follow the
+MAP-017/019/020 owner authorization and readiness gates before any test write.
+Then prove fresh signed-chat start, same-browser reopen, and missing/cross-
+browser grant denial. Reconcile the separate `get_storefront_chat_v1` grant and
+provider-owned defaults. After MAP-017 clears, proceed in MAP order to MAP-018:
+implement and verify protected Website assignment and the server-side Website
+order gate, review intended product membership and product facts/media,
+reconcile real physical counts, and verify exact-host listing and purchase
+behavior. Keep production fail-closed until those gates pass.
 
 To recover the source change, revert commit `1e7b818` from the feature branch.
 No database data change or production rollback is needed. `main` remains
