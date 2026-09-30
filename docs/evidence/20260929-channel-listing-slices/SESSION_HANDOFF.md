@@ -1,5 +1,25 @@
 # Session handoff — channel listings and inventory
 
+**Latest existing-K2 recovery, IDEA-20260930-07/-08/-09:** The exact guarded
+18-source installer and data-retaining deactivation are prepared; scope is
+33 functions, 24 new tables and three hooks. Actual local recovery passed retained
+records/browser denial/drift and target refusal/rollback at 11:39:25 UTC; the
+live installer refused the local target. Fresh encrypted read-only database
+backup passed a new empty UTF8 local restore at 11:37:47 UTC. Bounded successful
+Windows input handling and explicit UTF8 fixed real failures, retaining integrity
+gates. Two focused contracts, affected SQL witnesses and development verification
+passed; PostgreSQL is stopped. Independent source review found no actionable
+findings with read-only assertions only. Exact hashes/evidence/limits/recovery:
+`docs/evidence/20260930-guest-continuity-rehearsal/INSTALLATION_REVIEW.md`.
+Account/key recovery remains Verified by the 2 September attestation. Exact next
+action in MAP-017/019/020/022: new-envelope off-site upload/retrieval and branch-only
+configuration preparation before specific authorization. Provider recovery must
+use actual same-target captures; never use the local sample. Existing K2 is the
+only target and the extra-project approach must not be retried. No live SQL/
+grant/key/setting/flag/connection/conversation changed; main was not promoted.
+Shipping/Website enforcement, source/count inputs and full route/host/inventory
+acceptance remain open under the original goal.
+
 **Latest local dependency evidence, IDEA-20260930-06:** On feature branch
 `codex/map017-guest-chat-preview`, the latest unapplied delivery order replacement
 now matches K2's identity result, message status/event columns, single canonical

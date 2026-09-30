@@ -1,20 +1,7 @@
 {
-  "capturedAt": "2026-09-30T11:39:21.059Z",
+  "capturedAt": "2026-09-30T11:39:25.631Z",
   "target": "127.0.0.1:54388/k2_current_restore_20260929",
-  "assemblySha256": "18F9D58BA00797461FA19FE0BC0C0DF4AF0B9F2B3506023BAC8E1485DC7F741B",
-  "candidateBoundarySha256": "806f816412bb086ec068f203632879202f91561f2ab25f984361ce4022f679d2",
-  "candidateOriginSha256": "d4cacca73bb10b3d22e3605aabf1bdfd4dbacd1a769307275e2462b85fef5539",
-  "candidateModerationSha256": null,
-  "moderationWrapperRetained": false,
-  "actualAnonStartAndRead": true,
-  "existingGrantReused": true,
-  "conversationOriginPreserved": true,
-  "freshGuestStarted": true,
-  "validIdentityProvenance": true,
-  "bothConversationsReopened": true,
-  "excludedLegacyRowUnchanged": true,
-  "excludedLegacyStillUnclaimed": true,
-  "dependencyManifest": [
+  "orderedSources": [
     {
       "path": "supabase/migrations/20260812_guest_account_identity_and_messaging.sql",
       "sha256": "c4dae76b080924e2f36e0ec98eb0a78a400ffa0e082e106d88fc895590d6f2ea"
@@ -88,16 +75,18 @@
       "sha256": "7479db3149b1bb5cd059b4fa84c44e72a08a0f3063858fd397f92593ce54f198"
     }
   ],
-  "all16RouteRpcGrantsAndHardening": true,
-  "legacyRpcAclPreserved": true,
-  "signedOrderAndReplay": true,
-  "freshOrderGrantIssued": true,
-  "singleOrderSeed": true,
-  "sameGrantOrderAndThreadRecovery": true,
-  "missingAndDifferentOrderGrantDenied": true,
-  "directWriterCutoverApplied": false,
-  "missingAndDifferentGrantDenied": true,
-  "otherActiveGrantExcluded": true,
-  "rollbackConfirmed": true,
-  "boundary": "Isolated restored application schema; no PostgREST, browser, Turnstile, managed-role or production proof."
+  "functionsCaptured": 33,
+  "tablesCaptured": 24,
+  "notificationHooksRemoved": 3,
+  "canonicalCustomerGrantConversationMessageAndScopeRetained": true,
+  "newFunctionTableAndColumnAccessClosed": true,
+  "actualAnonCommandDenied": true,
+  "laterFunctionTableColumnAndTriggerDriftRefused": true,
+  "wrongDatabaseRefused": true,
+  "wrongClusterRefused": true,
+  "exactLiveInstallationPayloadRefusedOnLocalRestore": true,
+  "reviewedInstallationSha256": "c2642a0fefd8142d0393f50ded41576b4f63dd416a154740f70a4970054cacf3",
+  "outerRollbackConfirmed": true,
+  "recoverySha256": "5d70a2a5fe895377645c8343db579dc501d631d25eb327b0f1752e6dae08b884",
+  "boundary": "Local capture-bound deactivation only; leaves schema/data intact; not provider apply, backup restore, managed-role or activation acceptance."
 }

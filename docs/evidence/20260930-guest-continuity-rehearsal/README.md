@@ -1,5 +1,38 @@
 # 30 September guest continuity and support receipt
 
+## Current existing-K2 recovery evidence, IDEA-20260930-07/-08/-09
+
+`INSTALLATION_REVIEW.md` records the exact guarded installer, metadata capture
+and data-retaining deactivation for 33 functions, 24 new tables and three hooks.
+The actual local recovery witness passed retained records, browser denial,
+drift/wrong-target refusal and rollback at 11:39:25 UTC. Two focused contracts
+passed after red/green verification; independent source review found no actionable
+findings with read-only scope/refusal/stdin assertions. Full captures and sample
+SQL stay private/ignored, and the local sample must never be used on K2.
+
+The fresh encrypted read-only production backup passed a new empty UTF8 local
+restore at 11:37:47 UTC, including 51 public relations, current ledger and the
+exact 14-row archive fingerprint. Real Windows input-closure/encoding failures
+were fixed with successful supplied-input handling and explicit UTF8 transport;
+integrity gates remain required. The complete dependency witness passed again
+at 11:39:21 UTC. Final development verification exited zero, including the
+1,684-file secret scan and import checks; PostgreSQL is stopped.
+
+```powershell
+npx playwright test tests/guest-install-recovery.spec.js
+node docs/evidence/20260930-guest-continuity-rehearsal/rehearse-install-recovery.mjs
+node docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs --with-dependencies --preserve-legacy
+```
+
+Redacted receipts: `local-install-recovery-receipt.json`,
+`local-dependencies-receipt.json`, `current-backup-manifest.json` and
+`current-backup-restore-receipt.json`. Account/key recovery remains attested
+Verified on 2 September; new-envelope off-site upload/retrieval is pending.
+Recovery retains installed schema/data; provider recovery requires actual
+same-target captures after an approved install. No live SQL/grant/key/setting/
+flag/routing/connection/conversation changed. The extra-project path is withdrawn.
+Exact next action and remaining configuration/acceptance gates live in MAP-017/019/020/022.
+
 Owning work: MAP-017 / MAP-019 / MAP-020, with the Store origin compatibility
 record also in MAP-027. The full production and inventory goal remains active.
 IDEA-20260930-01/-02/-03 were audited and merged into those existing MAP items
@@ -46,8 +79,9 @@ local server was stopped and status returned `no server running`.
 
 These receipts prove installation compatibility and the stated local behaviors,
 not all 17 functional routes, PostgREST/browser/Turnstile, provider recovery or
-activation readiness. The 53-entry source inventory is refreshed on baseline
-`df83afc3e416923f53d4473e11d0cacd7c35ee59`; it is not an approved live bundle.
+activation readiness. The source inventory is now refreshed to 60 entries on
+baseline `e6c828f5b71e4ed08a327d4505055adc8ff7b082`, including the newer recovery/
+backup tools; it is not an approved live bundle.
 Parent review compared the corrected definition with the actual restored
 writer, identity helper and constraints; independent review remains unavailable.
 Local recovery is a scoped feature-source revert preserving these receipts.

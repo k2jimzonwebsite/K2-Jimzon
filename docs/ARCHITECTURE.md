@@ -1,5 +1,14 @@
 # K2 Jimzon  -  System Architecture
 
+Existing-K2 guest installation is now composed as an exact guarded 18-source
+transaction body. Recovery captures 33 functions, 24 new tables and three hooks
+before/after apply, binds the same target, refuses drift and closes added browser
+entry while preserving schema/data. Local rollback evidence is separate from
+provider installation and actual provider captures. Backup/restore transport is
+explicitly UTF8; early Windows input closure is accepted only with supplied input
+and successful exit, retaining integrity gates. Exact hashes/limits are in the
+30 September `INSTALLATION_REVIEW.md`; execution remains MAP-017/019/020/022.
+
 Current preparation targets the existing canonical K2 backend after the owner
 questioned the extra-project approach; that optional resource path is withdrawn.
 The unapplied guest boundary now leaves existing UUID-only rows unchanged and

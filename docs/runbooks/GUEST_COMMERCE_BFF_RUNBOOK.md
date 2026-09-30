@@ -1,5 +1,16 @@
 # Guest Commerce BFF Activation Runbook
 
+**Current existing-K2 recovery, IDEA-20260930-07/-08/-09:** Follow the exact
+installer/capture review in the 30 September `INSTALLATION_REVIEW.md`. Generate
+deactivation only from complete same-target before and actual after captures.
+It refuses drift, closes new function/table/column browser access and removes
+three notification hooks, retaining schema/data. The local witness passed retained
+records/denial/refusal/rollback; never use its local sample on K2. Fresh encrypted
+backup restore passed on an empty UTF8 local target. New-envelope off-site
+upload/retrieval, branch-only configuration, specific authorization and all-route/
+host acceptance remain MAP-017/019/020/022 gates. Owner recovery attestation is
+already Verified on 2 September. No extra project/retry/upgrade applies.
+
 **Latest installation compatibility, IDEA-20260930-06:** Run the existing
 `docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs` with
 `--with-dependencies --preserve-legacy` only against its guarded local restore.

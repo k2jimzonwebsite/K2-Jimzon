@@ -1,5 +1,14 @@
 # K2 Jimzon  -  Project Directory Map
 
+IDEA-20260930-07 adds `supabase/guest_install_state_capture.sql`,
+`scripts/guest-install-recovery.mjs`, its focused contract and the local
+`rehearse-install-recovery.mjs` in the 30 September guest-continuity directory.
+That directory freezes scope, installation review and redacted recovery/backup
+receipts; full captures/encrypted bytes stay private/ignored. IDEA-20260930-08/-09
+correct bounded Windows input closure and UTF8 transport in the current backup/
+restore tools and local witnesses. Provider apply/configuration and new-envelope
+off-site retrieval remain MAP-017/019/020/022 work.
+
 IDEA-20260930-06 corrects the unapplied
 `supabase/migrations/20260916_automated_delivery_quotation.sql` compatibility with
 canonical identity results, message/event columns, seed keys and guest scopes.

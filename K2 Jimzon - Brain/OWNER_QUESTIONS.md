@@ -1,5 +1,14 @@
 # K2 Jimzon Master Owner Actions and Questions
 
+**30 September recovery clarification:** Account/key recovery remains Verified
+by the 2 September attestation below; no known relevant change requires repeating
+it. The fresh current database envelope passed an isolated UTF8 restore; its
+off-site upload/retrieval is separate engineering work in MAP-017/022. The exact
+existing-K2 installer/deactivation is locally prepared/rehearsed with independent
+source review. Branch configuration and live payload approval remain preparation
+gates. No extra resource or new approval is requested from this partial record.
+Evidence: the 30 September `INSTALLATION_REVIEW.md`.
+
 **30 September existing-K2 preparation:** No extra project is required or being
 created. The local complete dependency rehearsal now passes signed order
 continuity after a compatibility correction; live K2 still lacks the 16 route

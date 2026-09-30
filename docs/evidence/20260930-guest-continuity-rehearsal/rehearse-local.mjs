@@ -250,7 +250,7 @@ select case when to_regprocedure('public.start_guest_conversation_v1(bigint,uuid
   then 'LOCAL_GUEST_GRANT_ROLLBACK_PASS' else 'LOCAL_GUEST_GRANT_ROLLBACK_FAILED' end;
 `
 const result = spawnSync(psql, ['-X','--no-psqlrc','-v','ON_ERROR_STOP=1','-h','127.0.0.1','-p','54388','-U','postgres','-d',database], {
-  cwd: root, env: { ...process.env, PGSSLMODE: 'disable' }, input: sql,
+  cwd: root, env: { ...process.env, PGSSLMODE: 'disable', PGCLIENTENCODING: 'UTF8' }, input: sql,
   encoding: 'utf8', windowsHide: true, timeout: 60000, maxBuffer: 4*1024*1024,
 })
 if (result.error || result.status !== 0) throw new Error(String(result.stderr || result.error?.message).slice(-1500))

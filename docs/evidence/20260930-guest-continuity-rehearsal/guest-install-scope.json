@@ -1,0 +1,77 @@
+{
+  "tables": [
+    "k2_private.customer_account_notifications",
+    "k2_private.customer_account_settings",
+    "k2_private.guest_account_claim_events",
+    "k2_private.guest_bff_secrets",
+    "k2_private.guest_conversation_receipts",
+    "k2_private.guest_rate_buckets",
+    "k2_private.guest_request_nonces",
+    "k2_private.storefront_auth_rate_buckets",
+    "k2_private.storefront_auth_rate_nonces",
+    "k2_private.wholesale_inquiry_events",
+    "k2_private.wholesale_inquiry_receipts",
+    "public.channel_identities",
+    "public.customer_accounts",
+    "public.customer_claim_requests",
+    "public.customer_contact_points",
+    "public.customers",
+    "public.delivery_cost_rows",
+    "public.delivery_courier_options",
+    "public.delivery_locality_rules",
+    "public.delivery_quote_snapshots",
+    "public.delivery_rate_sources",
+    "public.guest_access_grant_scopes",
+    "public.guest_access_grants",
+    "public.wholesale_inquiries"
+  ],
+  "functions": [
+    "k2_private.consume_guest_rate",
+    "k2_private.contact_hash",
+    "k2_private.enqueue_customer_account_notification",
+    "k2_private.notify_customer_order_change",
+    "k2_private.notify_customer_pasabuy_change",
+    "k2_private.notify_customer_staff_reply",
+    "k2_private.resolve_guest_identity",
+    "k2_private.verify_guest_bff_request",
+    "public.append_customer_account_message_v1",
+    "public.append_guest_message_v1",
+    "public.claim_guest_customer_account_v1",
+    "public.consume_storefront_customer_auth_rate_v1",
+    "public.customer_record_owned_by_current_user",
+    "public.execute_admin_wholesale_inquiry_command_v1",
+    "public.list_admin_wholesale_inquiries_v1",
+    "public.list_customer_account_history_v1",
+    "public.list_guest_conversations_v1",
+    "public.preview_guest_coupon_v1",
+    "public.quote_guest_delivery_v1",
+    "public.read_customer_account_notification_v1",
+    "public.read_customer_account_settings_v1",
+    "public.read_delivery_control_v1",
+    "public.read_delivery_pilot_localities_v1",
+    "public.read_guest_order_status_v1",
+    "public.save_customer_account_settings_v1",
+    "public.start_guest_conversation_v1",
+    "public.submit_guest_order_v1",
+    "public.submit_guest_pasabuy_v1",
+    "public.submit_wholesale_inquiry_v1",
+    "public.validate_customer_account_link",
+    "public.validate_customer_claim_request",
+    "public.validate_guest_access_grant",
+    "public.validate_guest_access_scope"
+  ],
+  "triggers": [
+    {
+      "table": "public.order_requests",
+      "name": "trg_customer_order_notification"
+    },
+    {
+      "table": "public.pasabuy_requests",
+      "name": "trg_customer_pasabuy_notification"
+    },
+    {
+      "table": "public.messages",
+      "name": "trg_customer_staff_reply_notification"
+    }
+  ]
+}

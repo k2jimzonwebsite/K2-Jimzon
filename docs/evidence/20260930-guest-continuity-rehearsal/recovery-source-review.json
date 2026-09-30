@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-30",
+  "sourceBaseline": "e6c828f5b71e4ed08a327d4505055adc8ff7b082",
+  "reviewer": "/root/guest_recovery_review",
+  "state": "Independent read-only source review; no actionable findings",
+  "scope": [
+    "scripts/guest-install-recovery.mjs",
+    "supabase/guest_install_state_capture.sql",
+    "tests/guest-install-recovery.spec.js",
+    "docs/evidence/20260930-guest-continuity-rehearsal/guest-install-scope.json",
+    "docs/evidence/20260930-guest-continuity-rehearsal/rehearse-install-recovery.mjs",
+    "scripts/verify-current-production-restore.mjs",
+    "scripts/create-map017-production-backup.mjs",
+    "docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs"
+  ],
+  "freshReadOnlyAssertions": [
+    "Exact 33-function/24-table/3-hook scope matches the 18-source manifest",
+    "Incomplete/partial/wrong-target capture refusal",
+    "Supplied-input exit-zero EOF/EPIPE accepted; other errors/statuses refused"
+  ],
+  "sqlOrPlaywrightRerun": false,
+  "secretOrProviderAccess": false,
+  "boundary": "Source/tooling review only; live captures, managed roles, all-route and exact-host acceptance and specific live authorization remain MAP gates. Owner account/key attestation is already Verified separately."
+}

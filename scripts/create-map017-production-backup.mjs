@@ -53,6 +53,7 @@ function databaseEnvironment(databaseUrl) {
     PGDATABASE: decodeURIComponent(parsed.pathname.replace(/^\//, '')),
     PGSSLMODE: parsed.searchParams.get('sslmode'),
     PGTZ: 'UTC',
+    PGCLIENTENCODING: 'UTF8',
   }
 }
 

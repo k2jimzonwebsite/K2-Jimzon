@@ -6,8 +6,18 @@ independent retrieval checks for the August set, and whole-archive reassembly
 verified. A fresh 24 September set also passed local database and Storage restores
 and owner-only upload. Its database envelope passed independent download and
 SHA-256 comparison; new Storage-part retrieval remains open.
-Owner recovery access, Vault, bucket-policy/provider configuration, and live
-Storage re-upload remain unverified.
+Owner account/key recovery access remains attested Verified on 2 September, absent
+a relevant rotation/workstation/contact change. Vault, bucket-policy/provider
+configuration and live Storage re-upload remain unverified.
+
+**30 September fresh database evidence, IDEA-20260930-08/-09:** The 11:25:39 UTC
+encrypted envelope passed a new empty UTF8 local restore at 11:37:47 UTC, with
+51 public relations, current ledger and exact 14-row archive fingerprint.
+Redacted receipts/limits are in the 30 September `INSTALLATION_REVIEW.md`.
+Its off-site upload/independent retrieval remains pending. Pin UTF8 transport;
+accept early stdin EOF/EPIPE only with supplied input and exit zero. Nonzero/null
+status, other errors and all checksum/archive/health/fingerprint gates still
+refuse. This is application-database evidence, not managed/provider/live recovery.
 
 The MAP-017 executor reads backup verification and owner recovery access as two
 separate gates. A verified backup never implies verified account recovery; the
@@ -37,8 +47,9 @@ permanent apply remains unavailable until `OWNER_QUESTIONS.md` explicitly record
 These are target controls, not an enabled schedule. Google Drive is the selected
 off-site provider, using the owner-only, unshared `K2 Production Backups` folder
 under `k2jimzonwebsite@gmail.com`. Connector write access, restricted sharing,
-and exact provider byte sizes are verified. MFA, independent recovery access,
-retention capacity, and the schedule mechanism remain pending.
+and exact provider byte sizes are verified for the named earlier sets. MFA and
+account/key recovery were attested on 2 September. Verify independent retrieval
+for each new set; retention capacity and the schedule mechanism remain pending.
 
 ## Verified isolated database rehearsal
 

@@ -1,19 +1,25 @@
 {
-  "observed_at_utc": "2026-09-30T10:48:21.1189273Z",
-  "source_baseline": "df83afc3e416923f53d4473e11d0cacd7c35ee59",
+  "observed_at_utc": "2026-09-30T12:00:43.9898544Z",
+  "source_baseline": "e6c828f5b71e4ed08a327d4505055adc8ff7b082",
   "correction_source": "23ef44228a2c0d570c77ea9c588dcd1099668245",
   "owning_map_items": [
     "MAP-017",
     "MAP-019",
-    "MAP-020"
+    "MAP-020",
+    "MAP-022"
   ],
-  "state": "source inventory including locally verified IDEA-20260930-05/-06; existing K2 target; local receipt records 18-step order; not provider apply approval or recovery package",
+  "state": "source inventory including locally verified IDEA-20260930-07/-08/-09; exact existing-K2 installer reviewed locally; not live apply or activation approval",
   "secret_values_included": false,
   "entries": [
     {
       "path": "api/storefront/index.js",
       "bytes": 507,
       "sha256": "e67777e63d91351c2a217ef347c15fc57b329ed72e57eec75ab4fa648565ec48"
+    },
+    {
+      "path": "docs/evidence/20260930-guest-continuity-rehearsal/guest-install-scope.json",
+      "bytes": 2773,
+      "sha256": "a6cc35393f3b26eb160cc4e2a0c8d373a7bb15fa1aa8287813e439a58d1ef257"
     },
     {
       "path": "docs/evidence/20260930-guest-continuity-rehearsal/preview-routing-rule-current.json",
@@ -26,9 +32,14 @@
       "sha256": "fa41db0ae22ef0ede7aed33bf63d092baf8b91d62eac50bb2f7dd88fd8e3caa2"
     },
     {
+      "path": "docs/evidence/20260930-guest-continuity-rehearsal/rehearse-install-recovery.mjs",
+      "bytes": 8564,
+      "sha256": "f00986f76490492c3289f8a218f3f97a04beef6da6c84fba31f4449a09103acf"
+    },
+    {
       "path": "docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs",
-      "bytes": 21158,
-      "sha256": "11b540d57077e848c419e1e85afbf880cb8e33facd1768bc705c75e901b14c16"
+      "bytes": 21184,
+      "sha256": "6d0c047a06b05da0ce98fdc7950ebcec466d22c7329859d135d9b8f816f79355"
     },
     {
       "path": "prepared-api/storefront/account/auth/email.js",
@@ -116,6 +127,21 @@
       "sha256": "49cc3333ff93556d987ad987ded0ad359506d673b92e6d169f7490e4d9e63a1c"
     },
     {
+      "path": "scripts/create-map017-production-backup.mjs",
+      "bytes": 12296,
+      "sha256": "73bab255eec1e5673eb289bfd802d496fb3a5596d65475e1515ff9bf9b516d00"
+    },
+    {
+      "path": "scripts/guest-install-recovery.mjs",
+      "bytes": 5464,
+      "sha256": "756c580fc8f69b3765bdbc047a069182bc51d17c936ba1218d4009a31882917c"
+    },
+    {
+      "path": "scripts/verify-current-production-restore.mjs",
+      "bytes": 7656,
+      "sha256": "1214f15afcb3055c5fb6fe34cec709188191d213bc6f4f84f82e3382b14c45a0"
+    },
+    {
       "path": "server/storefront-bff/customer-auth.js",
       "bytes": 5570,
       "sha256": "b1ebb10d7685e30835ee99b726043b3ce59d50c6ba43d0067b184852f3cdcfd7"
@@ -139,6 +165,11 @@
       "path": "server/storefront-bff/supabase.js",
       "bytes": 2073,
       "sha256": "739fd2853bf30b0bbe780099063450a5c1527202a5dca5aca189a4b3a276e94e"
+    },
+    {
+      "path": "supabase/guest_install_state_capture.sql",
+      "bytes": 4735,
+      "sha256": "595a9dfdfe42b06d0bd206e4b9e3437d5efc57a11b86640b3820bf2503d47814"
     },
     {
       "path": "supabase/map019_account_claim_postflight.sql",
@@ -259,6 +290,11 @@
       "path": "supabase/migrations/20260924_customer_account_settings_notifications.sql",
       "bytes": 13806,
       "sha256": "4d62feafd16916e05ce794a8301c2a4b7fef05ae089c6441c065478634860799"
+    },
+    {
+      "path": "tests/guest-install-recovery.spec.js",
+      "bytes": 2182,
+      "sha256": "3d9cd9e7f377514782a7fbc325ad6b22b74248afb34efc5af20e06b72add6eee"
     },
     {
       "path": "vercel.admin.json",

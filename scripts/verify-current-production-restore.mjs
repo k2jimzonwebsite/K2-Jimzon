@@ -23,7 +23,11 @@ function run(executable, args, env, label, options = {}) {
   const result = spawnSync(executable, args, {
     env, windowsHide: true, maxBuffer: 1024 * 1024 * 1024, ...options,
   })
-  if (result.error || result.status !== 0) throw new Error(`CURRENT_RESTORE_REFUSAL: ${label}`)
+  // Windows may report a stdin-pump EOF after pg_restore successfully closes
+  // input early (listing/filtering need not consume every archived data block).
+  const inputClosedAfterSuccess = options.input && result.status === 0
+    && ['EOF', 'EPIPE'].includes(result.error?.code)
+  if ((result.error && !inputClosedAfterSuccess) || result.status !== 0) throw new Error(`CURRENT_RESTORE_REFUSAL: ${label}`)
   return result.stdout
 }
 
@@ -66,6 +70,7 @@ export async function verifyCurrentProductionRestore({ envelopePath, passphrase,
     PGDATABASE: database,
     PGSSLMODE: 'disable',
     PGTZ: 'UTC',
+    PGCLIENTENCODING: 'UTF8',
   }
   const psql = process.env.K2_PSQL_BIN || path.join(postgresBin, 'psql.exe')
   const pgRestore = process.env.K2_PG_RESTORE_BIN || path.join(postgresBin, 'pg_restore.exe')
