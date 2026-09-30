@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-30",
+  "sourceCommit": "fccf6ad508f7190cfedfbf3a9fa0376b9015b155",
+  "projectId": "prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL",
+  "teamId": "team_C3Wf3dVUBjUqGQ4rndMTCchz",
+  "branch": "codex/map017-guest-chat-preview",
+  "origin": "https://k2-jimzon-git-codex-map017-guest-chat-preview-k2-jimzon.vercel.app",
+  "globalPreviewVariableNames": ["K2_DEPLOYMENT_TARGET", "VITE_SUPABASE_PUBLISHABLE_KEY", "VITE_SUPABASE_URL"],
+  "productionOnlyGuestServerVariableNames": ["K2_GUEST_BFF_SECRET", "K2_COOKIE_SECURE", "K2_STOREFRONT_ORIGINS", "K2_STOREFRONT_BFF_ENABLED", "SUPABASE_PUBLISHABLE_KEY", "SUPABASE_URL"],
+  "turnstileVariableNamesPresent": false,
+  "secretValuesRevealed": false,
+  "exactBranchVisibleAndSelectable": true,
+  "productionInitiallyRemainsSelectedWithBranch": true,
+  "finalUnsavedScope": {"branchOnly": true, "production": false, "globalPreview": false, "development": false},
+  "emptyFormClosedWithoutSave": true,
+  "environmentListUnchangedOnReadback": true,
+  "modernPublishableKeyId": "628ef935-6697-46bb-96fb-580fd0157ecb",
+  "modernPublishableKeyEnabled": true,
+  "legacyAnonKeyDisabled": true,
+  "cloudflarePage": "https://dash.cloudflare.com/login",
+  "cloudflareAccountOrWidgetVerified": false,
+  "boundary": "Read-only provider metadata and discarded empty-form scope inspection. No environment, key, routing, database, stock or listing change; not activation acceptance."
+}

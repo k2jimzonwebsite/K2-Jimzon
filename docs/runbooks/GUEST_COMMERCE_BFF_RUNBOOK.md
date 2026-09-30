@@ -1,5 +1,17 @@
 # Guest Commerce BFF Activation Runbook
 
+**Current branch-only provider review:** The 30 September
+`PREVIEW_CONFIGURATION_REVIEW.md` records the 14 slots, enabled modern K2 key,
+exact branch/host and current recovery limits. In Vercel's Add form, selecting
+the branch leaves Production checked: explicitly remove Production and verify
+global Preview/Development are unchecked before a separately approved Save.
+The empty inspected form was discarded. Real Turnstile account/widget/hostname
+binding and backup upload/retrieval are pending owner inputs, not passing gates.
+The server flag opens all 17 routes; do not activate from chat-only evidence.
+The zero-Website-listing preflight means protected assignment and reviewed
+membership must precede strict catalog/order filtering. Server shipping and
+all-route/host evidence remain open in MAP-017/018/019/020/023.
+
 **Current existing-K2 recovery, IDEA-20260930-07/-08/-09:** Follow the exact
 installer/capture review in the 30 September `INSTALLATION_REVIEW.md`. Generate
 deactivation only from complete same-target before and actual after captures.

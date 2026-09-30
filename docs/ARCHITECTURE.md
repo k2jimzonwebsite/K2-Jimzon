@@ -1,5 +1,13 @@
 # K2 Jimzon  -  System Architecture
 
+The Storefront entrypoint's one server flag gates all 17 routes. Branch-scoped
+environment values and an exact edge-host exception are separate controls;
+neither replaces route authorization, real bot validation or commerce gates.
+The 30 September read-only audit found no Website assignments among 22 published
+products. Protected canonical assignment must precede strict public catalog/order
+membership so the release does not silently remove the current catalog. Exact
+provider scope/evidence remains in `PREVIEW_CONFIGURATION_REVIEW.md` and MAP-017/018/020.
+
 Existing-K2 guest installation is now composed as an exact guarded 18-source
 transaction body. Recovery captures 33 functions, 24 new tables and three hooks
 before/after apply, binds the same target, refuses drift and closes added browser

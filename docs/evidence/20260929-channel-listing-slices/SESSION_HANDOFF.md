@@ -1,5 +1,22 @@
 # Session handoff — channel listings and inventory
 
+**Latest branch/provider and membership preflight:** On existing K2, the enabled
+modern publishable key is selected by ID; legacy anon is disabled. Vercel's empty
+Add form proved exact branch selection retains Production by default; Production
+was removed, branch-only scope verified, and the empty form discarded without
+Save. Neither Turnstile key appears in project variables and Cloudflare is at
+sign-in. The owner has been asked for existing Turnstile access and the specific
+three-file backup upload/retrieval approval; do not repeat pending questions.
+Fresh aggregate SQL found 30 products/22 published/zero Website listings and no
+canonical channel/shop tables. Protected assignment/review must precede strict
+filtering or the current 22 would be excluded; no automatic tagging/unpublication
+is authorized. Source-only order metadata and bounded client-fee acceptance are
+not behavioral membership/fee proof. Evidence, exact scope, recovery and pending
+bindings: the 30 September `PREVIEW_CONFIGURATION_REVIEW.md`,
+`BACKUP_UPLOAD_REVIEW.md` and preflight JSON files. No code or provider/database/
+stock/listing/connection/flag/live-conversation change occurred. This docs-only
+review repeats no application suite. Exact next action lives in MAP-017/018/019/020/022/023.
+
 **Latest existing-K2 recovery, IDEA-20260930-07/-08/-09:** The exact guarded
 18-source installer and data-retaining deactivation are prepared; scope is
 33 functions, 24 new tables and three hooks. Actual local recovery passed retained

@@ -1,5 +1,30 @@
 # 30 September guest continuity and support receipt
 
+## Current branch/provider and Website preflight
+
+`PREVIEW_CONFIGURATION_REVIEW.md` records the current existing-K2 scope and
+14 branch-only slots. The signed-in empty Vercel form proved that selecting the
+branch keeps Production checked until explicitly removed; the verified branch-
+only form was then closed without values or Save, and the list stayed unchanged.
+The enabled modern publishable key is selected by ID; legacy anon is disabled.
+No Turnstile key appears in Vercel; Cloudflare is at sign-in. Its real widget/
+hostname binding remains pending owner access. These observations are in
+`preview-configuration-preflight.json`, not provider activation evidence.
+
+Fresh aggregate SQL found 30 products, 22 published and zero Website listings
+across canonical/legacy spellings; canonical channel/shop tables are absent.
+`website-membership-preflight.json` retains the query and source-metadata limits.
+Strict filtering would currently exclude all 22, so protected assignment and
+reviewed membership precede release. No auto-tagging, bulk-unpublication or stock
+write occurred. Server shipping/membership and all-route acceptance remain open.
+
+`BACKUP_UPLOAD_REVIEW.md` prepares exactly the encrypted envelope and two redacted
+companions for the existing private K2 folder. Profile/folder permissions and
+all three local byte sizes/hashes were verified; specific upload/retrieval
+authorization is pending. No schema, environment, key, flag, routing, connection
+or live conversation changed. No code changed in this review, so application
+suites/builds were not repeated. The owning MAP items hold the exact next actions.
+
 ## Current existing-K2 recovery evidence, IDEA-20260930-07/-08/-09
 
 `INSTALLATION_REVIEW.md` records the exact guarded installer, metadata capture

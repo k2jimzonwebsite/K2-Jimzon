@@ -1,5 +1,13 @@
 # Database Backup and Restore Runbook
 
+The current new-envelope destination and exact three file names/sizes/hashes
+are reviewed in `docs/evidence/20260930-guest-continuity-rehearsal/BACKUP_UPLOAD_REVIEW.md`.
+The K2 Drive profile and existing owner-only/unshared folder were read back.
+Specific upload approval is pending; no upload or sharing change was executed.
+After approval verify all new IDs, parent, owner, sizes, unshared permissions
+and independent download hashes. Retain originals/partial IDs on failure and
+keep MAP-017/022's recovery gate open; cleanup requires separate authorization.
+
 **State:** named production application-database and Storage object-byte backups,
 both isolated local restores, owner-only Google Drive upload, all eight
 independent retrieval checks for the August set, and whole-archive reassembly

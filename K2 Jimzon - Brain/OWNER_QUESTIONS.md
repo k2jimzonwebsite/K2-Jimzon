@@ -1,5 +1,7 @@
 # K2 Jimzon Master Owner Actions and Questions
 
+**30 September current pending inputs:** The exact new encrypted backup and two redacted companions are prepared for the existing private K2 Production Backups folder; specific three-file upload/retrieval authorization is pending (`BACKUP_UPLOAD_REVIEW.md`). The owner has also been asked to sign in to K2's Cloudflare account or identify its existing Turnstile setup because no keys appear in Vercel and the dashboard is signed out. Do not repeat those pending questions or infer approval from silence. Fresh read-only SQL found zero Website assignments among the 22 published products; Codex must implement protected assignment after MAP-017 and prepare the membership proposal from real product/source/count evidence. No automatic bulk assignment/unpublication is authorized. Engineering execution remains solely in the MAP.
+
 **30 September recovery clarification:** Account/key recovery remains Verified
 by the 2 September attestation below; no known relevant change requires repeating
 it. The fresh current database envelope passed an isolated UTF8 restore; its

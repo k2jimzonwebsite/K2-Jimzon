@@ -1,5 +1,11 @@
 # K2 Jimzon  -  Project Directory Map
 
+Current provider/membership review records are `PREVIEW_CONFIGURATION_REVIEW.md`,
+`preview-configuration-preflight.json`, `website-membership-preflight.json` and
+`BACKUP_UPLOAD_REVIEW.md` in the 30 September guest-continuity directory. They
+record exact branch scope, key IDs, aggregate assignments and pending recovery/
+bot bindings without secret values or a second backlog. Current execution is MAP-only.
+
 IDEA-20260930-07 adds `supabase/guest_install_state_capture.sql`,
 `scripts/guest-install-recovery.mjs`, its focused contract and the local
 `rehearse-install-recovery.mjs` in the 30 September guest-continuity directory.

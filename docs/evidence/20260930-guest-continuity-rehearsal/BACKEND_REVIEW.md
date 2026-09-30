@@ -1,5 +1,12 @@
 # MAP-017/019/020 backend proposal for review
 
+Current existing-K2 branch/provider scope replaces the historical isolated-resource
+table below: see `PREVIEW_CONFIGURATION_REVIEW.md` and its redacted UI/key receipt.
+The exact-branch form inspection was discarded without Save. Both real Turnstile
+bindings and the new-envelope upload authorization remain pending; no activation
+is ready from this record. Fresh Website aggregate evidence is in
+`website-membership-preflight.json` and remains a MAP-018 assignment/order gate.
+
 **Current direction after owner feedback:** The extra-project approach is
 withdrawn. Prepare the exact guest dependency, backup and recovery payload
 against existing canonical K2 `pixplcjqivlfflickobf`. No resource retry or paid

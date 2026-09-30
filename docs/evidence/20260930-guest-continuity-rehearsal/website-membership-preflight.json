@@ -1,0 +1,23 @@
+{
+  "observedAtUtc": "2026-09-30 12:23:10 UTC",
+  "projectRef": "pixplcjqivlfflickobf",
+  "scope": "Read-only aggregate Website assignment and order-source metadata; no customer rows, stock or assignments changed",
+  "result": {
+    "productCount": 30,
+    "liveOrderWriters": [
+      {
+        "signature": "submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text)",
+        "referencesPublished": false,
+        "referencesShippingAmount": true,
+        "referencesChannelListings": false
+      }
+    ],
+    "websiteListingStates": [],
+    "publishedProductCount": 22,
+    "canonicalShopTablePresent": false,
+    "canonicalChannelTablePresent": false,
+    "duplicateNormalizedWebsiteSkus": 0,
+    "publishedWithAnyWebsiteListing": 0
+  },
+  "query": "select jsonb_build_object(\n 'productCount',(select count(*) from public.products),\n 'publishedProductCount',(select count(*) from public.products where published is true),\n 'publishedWithAnyWebsiteListing',(select count(*) from public.products p where p.published is true and exists(select 1 from public.channel_listings l where l.sku=p.sku and l.channel_source in ('website','website_retail','website_vip'))),\n 'websiteListingStates',coalesce((select jsonb_agg(x) from (select channel_source,status,publication_status,count(*) as listing_count from public.channel_listings where channel_source in ('website','website_retail','website_vip') group by channel_source,status,publication_status order by channel_source,status,publication_status) x),'[]'::jsonb),\n 'duplicateNormalizedWebsiteSkus',(select count(*) from (select sku from public.channel_listings where channel_source in ('website','website_retail','website_vip') group by sku having count(*)>1) x),\n 'canonicalChannelTablePresent',to_regclass('public.channels') is not null,\n 'canonicalShopTablePresent',to_regclass('public.channel_shops') is not null,\n 'liveOrderWriters',coalesce((select jsonb_agg(jsonb_build_object('signature',p.oid::regprocedure::text,'referencesChannelListings',pg_get_functiondef(p.oid) ilike '%channel_listings%','referencesPublished',pg_get_functiondef(p.oid) ilike '%published%','referencesShippingAmount',pg_get_functiondef(p.oid) ilike '%shipping_amount%')) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname in ('submit_order_request_v2','submit_guest_order_v1')),'[]'::jsonb)\n) as website_membership_preflight;"
+}
