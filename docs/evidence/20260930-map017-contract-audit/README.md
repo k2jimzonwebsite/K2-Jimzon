@@ -109,16 +109,30 @@ provider setting, or deployment configuration was changed by the check.
 
 ### Supabase support-status lookup
 
-The project-specific Dashboard URL
-`https://supabase.com/dashboard/project/pixplcjqivlfflickobf/support` returned
-404. Supabase's Dashboard support form at
-`https://supabase.com/dashboard/support/new` loaded as a blank new-request
-form; it did not expose the existing request's status or history. No
-organization/project was selected, and no form was submitted. The existing
-request remains recorded as pending from earlier evidence, but no provider
-reply or ticket ID was verified in this check. Find the original K2 request or
-acknowledgement before sending a follow-up, to avoid creating a duplicate.
-No project permission, provider, or database state changed.
+Read-only search in the K2 mailbox `k2jimzonwebsite@gmail.com` found Supabase
+ticket `SU-483740`, acknowledged 24 September at 6:04 PM for the supported
+correction of provider-owned `supabase_admin` defaults. The thread contains
+only the automatic receipt and no human reply. The Free plan notice says
+support is best-effort with no guaranteed response. No follow-up was sent and
+no duplicate request was created. The owner-authorized next action is to reply
+in this ticket and ask for the supported remediation procedure. The earlier
+project-specific Dashboard support URL returned 404; the Dashboard new-request
+form did not expose existing history. No permission, provider, or database
+state changed.
+
+### 30 September Security Advisor snapshot
+
+On the exact K2 project `pixplcjqivlfflickobf`, the signed-in Dashboard's
+Security Advisor showed **0 errors, 56 warnings, and 7 suggestions**. Visible
+warning classes included public listing on `storage.product-images`, public
+and signed-in execution of `SECURITY DEFINER` functions (including
+`get_storefront_chat_v1` and `submit_storefront_chat_v1`), and disabled
+leaked-password protection. Treat this as a provider-side linter snapshot, not
+a finding-by-finding vulnerability verdict. Reconcile each finding against
+current grants, policies, function guards, and intended exposure before
+changing anything. No advisor action, setting, ACL, storage policy, flag,
+provider, or database state changed. The list still requires full
+finding-by-finding classification.
 
 The owner-authorized one-record chat test remains pending. On the local
 MAP-017 audit branch, fresh `npm run preflight:k2-project` exited 0 and

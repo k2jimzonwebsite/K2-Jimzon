@@ -4388,11 +4388,23 @@ The architecture page now labels the deployed legacy direct-RPC chat path and
 the prepared signed-BFF candidate separately, including the unapplied-function
 and Preview-configuration blockers.
 
-A read-only Supabase support check found that the project-specific support URL
-returns 404 and the Dashboard's new-request form does not show existing case
-history. No form was submitted; no provider reply or ticket ID was verified.
-MAP-017 records that the original K2 request must be located before a
-follow-up is sent.
+Read-only search in the K2 mailbox `k2jimzonwebsite@gmail.com` verified
+Supabase ticket `SU-483740`, acknowledged 24 September at 6:04 PM for the
+supported correction of provider-owned `supabase_admin` defaults. Its thread
+contains only the automatic receipt, with no human reply; the Free plan notice
+says support is best-effort. No follow-up or duplicate request was sent. The
+next action is an owner-authorized reply in that ticket asking for the
+supported remediation procedure.
+
+The signed-in Security Advisor page for K2 project `pixplcjqivlfflickobf`
+showed **0 errors, 56 warnings, and 7 suggestions** on 30 September. Visible
+classes included public listing on `storage.product-images`, public and
+signed-in callable `SECURITY DEFINER` functions (including the legacy chat
+read/write RPCs), and disabled leaked-password protection. These linter results
+still require classification against live grants, policies, and intended
+guards; they are not a verified vulnerability count. No advisor remediation,
+ACL, storage, provider, flag, or database change occurred. The 25 September
+advisor counts remain historical evidence.
 
 MAP-017 remains first: reconcile the live chat-read grant, finish the
 provider-default follow-up, and close its permission and recovery gates. The
