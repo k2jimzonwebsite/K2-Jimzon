@@ -470,7 +470,8 @@ test('a conversation started at a shelf is tagged as such end to end', async () 
 
   // And the database constrains it again rather than trusting its caller.
   expect(migration).toContain("v_origin not in ('storefront','virtual_store')")
-  expect(migration).toContain("v_platform := 'Virtual Store'")
+  expect(migration).toContain("v_source_kind := 'virtual_store_message'")
+  expect(migration).toContain("v_platform public.chat_platform := 'Website'::public.chat_platform")
 
   // The signature is unchanged, so no grant has to be dropped and re-added.
   expect(migration).toContain('p_guest_grant_hash text default null')

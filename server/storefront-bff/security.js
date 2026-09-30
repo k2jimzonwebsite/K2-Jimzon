@@ -119,7 +119,7 @@ export function signedRpcArguments(req, action, payload) {
     ? createHash('sha256').update(guestToken).digest('hex')
     : null
   const guestGrantActions = new Set([
-    'order', 'pasabuy', 'conversation', 'wholesale_inquiry', 'guest_read', 'guest_reply', 'account_claim',
+    'order', 'pasabuy', 'guest_start', 'wholesale_inquiry', 'guest_read', 'guest_reply', 'account_claim',
   ])
   return {
     p_timestamp: timestamp,

@@ -1,0 +1,134 @@
+# 30 September guest continuity and support receipt
+
+Owning work: MAP-017 / MAP-019 / MAP-020, with the Store origin compatibility
+record also in MAP-027. The full production and inventory goal remains active.
+IDEA-20260930-01/-02/-03 were audited and merged into those existing MAP items
+before their corrections. This folder is evidence, not another backlog.
+
+## Request and current boundary
+
+Continue the channel-listing handoff in dependency order, preserving current
+guest-chat ownership and the separate Storefront/Admin artifacts. The feature
+branch is `codex/map017-guest-chat-preview`, based on remote main `f95e384`.
+Before this batch it was at `8097bd8`. GitHub's authenticated comparison
+reconfirmed remote main identical to the full `f95e384` SHA; the shell network
+read failed, so no successful fetch is claimed. The prior inventory-source
+question has no new owner export or physical-count answer. No listing, stock,
+channel allocation, provider setting, live schema, flag or K2 test row changed.
+
+## Behavior found and corrected locally
+
+1. `prepared-api/storefront/conversation.js` signs `guest_start`. The signing
+   helper instead included a returning browser's grant only for unused action
+   `conversation`. The minimal `server/storefront-bff/security.js` correction
+   hashes the valid HttpOnly cookie for `guest_start`. Raw cookie tokens never
+   enter RPC arguments. Missing/malformed cookies pass a null grant hash.
+2. The base signed start function passed `website_message` into guest identity
+   resolution. Actual SQL execution rejected it against customer/contact
+   provenance constraints. Both the base boundary and the later origin
+   replacement now use `website_guest` for identity; conversation source kinds
+   remain separate. Order/wholesale identity already follows this vocabulary.
+3. The later origin replacement additionally used a text variable for the
+   `public.chat_platform` enum and selected absent member `Virtual Store`.
+   Actual execution reproduced the text-to-enum failure. It now uses typed
+   `Website`, matching the existing direct Website writer; the signed origin
+   still selects `website_message` or `virtual_store_message`. No enum or
+   historical row changed.
+
+The corrected migrations are unapplied. The later origin function must run
+before the moderation wrapper; replacing the public start function afterward
+would bypass that wrapper. This order is now explicit in the guest runbook.
+The archived 29 September structural assembly stays byte-for-byte intact and
+its earlier receipt is not re-labelled as behavior evidence for these changes.
+
+## Verification
+
+- Red: two new signing tests failed before the helper change (undefined hash
+  versus exact SHA-256/null). Green: the focused contracts passed afterward.
+- Red: actual anonymous signed start rejected invalid identity provenance.
+  After its correction, the later origin function exposed the enum insert
+  failure. The older static shelf test also required the invalid enum value;
+  its expectation now checks the surface source kind and canonical typed channel.
+- Final focused command, exit 0, **30/30**:
+
+  ```powershell
+  npx playwright test --config=playwright.api.config.js tests/guest-commerce-bff-contract.spec.js tests/master-audit-recovery.spec.js tests/guest-conversation-seed-contract.spec.js tests/turnstile-wiring-contract.spec.js tests/map027-store-polish.spec.js --grep 'guest conversation|guest|signed|a conversation started at a shelf|an older client that sends no origin' --reporter=line
+  ```
+
+- Actual PostgreSQL 17.11 calls as `anon` passed in all three variants below.
+  Each proved fresh issuance, reuse of the existing grant without a replacement
+  token, both conversations visible under that grant, empty/denied history for
+  missing/invalid grant, and isolation from a different active guest grant.
+  The origin variant additionally proves Store source provenance on the same
+  Website channel/customer. The final variant proves the moderation wrapper
+  records all three local starts and its internal original is not anonymous-
+  executable. It does not claim a full moderation command/block test.
+
+  ```powershell
+  node docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs
+  node docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs --with-origin
+  node docs/evidence/20260930-guest-continuity-rehearsal/rehearse-local.mjs --with-moderation
+  ```
+
+  Redacted receipts: `local-receipt.json`, `local-origin-receipt.json`, and
+  `local-moderation-receipt.json` (08:37:48–49 UTC). All confirm rollback and
+  absence of the temporary start function/customer conversations afterward.
+  The runner refuses a different database/data directory and checks the
+  immutable historical assembly SHA before inserting current source candidates.
+- Final code-batch `npm run verify:development`: exit 0, source/security
+  controls and import integrity passed; secret scan covered 1,667 files.
+  No release gate, full browser suite or production build is claimed.
+- Requested independent review could not run because the agent hit its usage
+  limit. Parent review traced the handler, all start-function replacements,
+  identity constraints, live-restored enum and wrapper order. Independent
+  review remains unverified; passing tests do not imply it occurred.
+
+The runner uses only synthetic keys/contacts and rollback-only transactions on
+`127.0.0.1:54388/k2_current_restore_20260929`. It requires the existing isolated
+restore and `.tools/current-production-backups/guest-current-20260929-rollback.sql`
+with SHA-256 `18F9D58BA00797461FA19FE0BC0C0DF4AF0B9F2B3506023BAC8E1485DC7F741B`.
+It creates no second migration bundle or managed recovery artifact. The local
+server was stopped after the receipts. Historical assembly/backup files were
+not modified or staged; `.backups/` stays excluded from the feature push.
+
+This proves application-schema SQL behavior only. PostgREST, browser cookies,
+Turnstile, managed role memberships, Storage, Vault, provider configuration,
+production/exact-host continuity and owner recovery access remain unverified.
+The exactly one authorized K2 conversation record is still unused.
+
+## Authorized support follow-up
+
+Both Google profiles were reverified as `k2jimzonwebsite@gmail.com`. The owner
+then authorized the exact prepared message in `SUPPORT_REPLY_REVIEW.md`.
+Gmail sent it to `support@supabase.com` in SU-483740 at 08:29:58 UTC; independent
+thread readback matched sender, recipient, subject, approved opening body and
+SENT label. Message `1a0f16f4e8f70d9f`, thread `1a0d2dfb9d2f1162`.
+`support-receipt.json` records this without private inbox headers. The connector
+appended the quoted automatic acknowledgment. The thread has two messages and
+no human guidance at readback. The reply requests guidance only and explicitly
+prohibits project changes/support access under this authorization.
+
+## Remaining work and recovery
+
+The next required action stays in MAP-017/019/020: review the corrected exact
+dependency payload and choose/authorize the backend boundary before any provider
+apply or Preview connection. Supabase's supported procedure for six internal-
+role defaults and the nine anonymous-grant contracts remain open. Live export
+truth is still **15 critical, 0 high**; these fixes did not change its ACLs.
+Then prove one authorized conversation on the exact approved host: start,
+same-browser reopen and missing/different grant denial. Broader multi-start
+live evidence would require additional record authorization.
+
+MAP-018 retains protected Website assignment, server order-membership enforcement
+and real inventory acceptance after its dependencies. Owner source export and
+confirmed physical quantities/media rights remain missing. Do not infer physical
+on-hand from marketplace quantities or auto-publish the current 22 products.
+Main promotion still requires the owner's release request and the complete
+release gate immediately before that promotion.
+
+Local recovery is a scoped source revert of this feature batch. The rehearsal
+rolls back all its temporary SQL state; no production rollback has been used or
+is justified by this work. Preserve this receipt and the sent-message evidence
+if reverting code. On a later provider apply, use the reviewed migration-specific
+recovery and backup procedure recorded in the owning MAP/runbook, not the local
+witness as production permission.

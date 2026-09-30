@@ -386,6 +386,21 @@ optional for verified history and cross-device continuity.
 
 ## Current state
 
+30 September behavioral continuation: the actual signed start path exposed
+missing grant propagation, invalid customer/contact provenance in both start
+definitions, and the later origin replacement's invalid enum insert. The
+unapplied source now hashes the valid cookie for `guest_start`, resolves
+identity as `website_guest`, and retains typed canonical `Website` while
+distinguishing the two message sources. Actual anonymous start/read/reuse/
+isolation and rollback pass for base, origin and origin-then-moderation variants
+on the isolated application-schema restore. Final focused tests passed 30/30;
+the code-batch development gate passed. Independent review could not run due
+to agent quota. These findings supersede structural-only confidence for these
+paths, not production state. No K2 test row was created and no provider change
+was made. Exact-host/PostgREST/Turnstile, managed roles and recovery gates remain
+open in MAP-017/019/020. Receipts and scoped recovery:
+`docs/evidence/20260930-guest-continuity-rehearsal/README.md`.
+
 24 September practice run: the isolated account apply/rollback, behavior and replay, customer Auth rate, permission, and guest moderation checks passed. Read-only production metadata confirmed the absent identity/guest prerequisites and the current eleven-argument order command with three defaults. A complete read-only catalog export initially produced 18 MAP-017 audit findings. Five authenticated functions were reviewed against live Staff or Admin/AAL2 guards and added to the contract; the same export now reports 13 critical and 0 high. The remaining function grants need the scoped stock correction or the coordinated signed guest cutover. A separate read-only stock ACL check was added without changing the historical MAP-017 payload hash; the portable MAP-017 rehearsal passed after an interim hash-changing edit was reverted. Six `supabase_admin` future-object default groups need a provider-supported correction. A later ordered chain passed in a rollback-only transaction on the fresh restored current application schema, including identity, signed guest submission, account claim, customer Auth, order status, settings/notifications and direct-RPC cutover postflights. A second local restore included archived ACLs using non-login placeholders for missing managed role names; the same chain passed named direct-RPC denials, signed guest grants and unchanged chat-read assertions before rolling back. Managed role memberships, provider defaults, preview routes and chat continuity are not proven. Do not enable sign-up, apply the guest/moderation SQL, or revoke direct-chat grants on this evidence alone. The full evidence and next gate are in `docs/evidence/20260924-account-migration-rehearsal/README.md` and MAP-017/019/020/022.
 
 23 September compatibility note: production still has no MAP-019 identity or
@@ -471,6 +486,15 @@ the Storefront artifact contains only its intended function.
 3. Apply and postflight `20260812_guest_account_identity_and_messaging.sql`.
 4. Apply and postflight `20260812_guest_submission_boundary.sql`. Do not apply
    the cutover migration yet.
+   Review the corrected identity provenance in both this base and
+   `20260828_store_conversation_origin.sql`. Apply the origin replacement after
+   the base and before `20260922_anonymous_chat_moderation.sql`; applying it
+   after moderation would replace the public wrapper and bypass blocking.
+   Both surfaces stay on the existing `Website` enum channel and guest identity
+   source, while `source_kind` distinguishes their origin. Rehearse actual
+   starts/read/reuse/denial plus final wrapper retention on the approved backend.
+   Structural postflights alone are insufficient. The local 30 September witness
+   is not authorization to apply this chain or connect Preview to shared K2.
 5. Apply and postflight `20260822_guest_account_claim_boundary.sql`. Its account
    command must remain unreachable until the customer Auth flow and active guest
    grant cookie are both available on the same preview host.

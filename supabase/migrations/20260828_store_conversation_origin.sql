@@ -51,7 +51,7 @@ declare
   v_email text;
   v_phone text;
   v_origin text;
-  v_platform text;
+  v_platform public.chat_platform := 'Website'::public.chat_platform;
   v_source_kind text;
 begin
   if not k2_private.verify_guest_bff_request('guest_start',p_timestamp,p_nonce,p_payload_text,p_ip_hash,p_signature) then
@@ -76,10 +76,8 @@ begin
     return query select false,'REQUEST_INVALID',0,null::text,null::text,null::timestamptz,null::text; return;
   end if;
   if v_origin = 'virtual_store' then
-    v_platform := 'Virtual Store';
     v_source_kind := 'virtual_store_message';
   else
-    v_platform := 'Website';
     v_source_kind := 'website_message';
   end if;
 
@@ -112,10 +110,10 @@ begin
     return;
   end if;
 
-  -- Identity resolution keeps the original kind so a customer who writes from
-  -- the store and from the contact form is still one person, not two.
+  -- Both surfaces use valid Website guest identity provenance. Conversation
+  -- source_kind separately records which surface the customer wrote from.
   select * into v_identity from k2_private.resolve_guest_identity(
-    v_payload,'website_message',v_existing_hash
+    v_payload,'website_guest',v_existing_hash
   );
   insert into public.conversations(
     customer_id,customer_name,customer_email,customer_phone,platform,status,

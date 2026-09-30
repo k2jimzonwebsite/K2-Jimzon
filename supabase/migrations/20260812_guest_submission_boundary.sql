@@ -602,7 +602,7 @@ begin
   end if;
 
   select * into v_identity from k2_private.resolve_guest_identity(
-    v_payload,'website_message',v_existing_hash
+    v_payload,'website_guest',v_existing_hash
   );
   insert into public.conversations(
     customer_id,customer_name,customer_email,customer_phone,platform,status,

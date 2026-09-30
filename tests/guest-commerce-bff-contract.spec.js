@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
 import accountClaimHandler, { validateAccountClaim } from '../prepared-api/storefront/account/claim.js'
 import accountHistoryHandler from '../prepared-api/storefront/account/history.js'
 import accountMessageHandler, { validateAccountMessage } from '../prepared-api/storefront/account/message.js'
@@ -186,6 +187,26 @@ test('wholesale inquiry is exact, bot-gated, signed, and structurally unable to 
   for(const required of ['verifyBotChallenge','submit_wholesale_inquiry_v1','pricing_approved:false','credit_approved:false','terms_approved:false']) expect(handler).toContain(required)
   for(const required of ['force row level security','wholesale_inquiry_receipts','IDEMPOTENCY_CONFLICT',"response_due_at)","'wholesale_inquiry'"]) expect(migration).toContain(required)
   expect(migration).not.toMatch(/price_list_id|credit_limit|pricing_approved|terms_approved/)
+})
+
+test('starting another guest conversation carries the existing browser grant hash', () => {
+  const token = 'a'.repeat(64)
+  const req = request()
+  req.headers.cookie = `k2_guest_access=${token}`
+  const args = signedRpcArguments(req, 'guest_start', {
+    customerName: 'Fixture guest', email: 'guest@example.test', phone: '',
+    message: 'A second conversation.', idempotencyKey: crypto.randomUUID(), origin: 'storefront',
+  })
+  expect(args.p_guest_grant_hash).toBe(createHash('sha256').update(token).digest('hex'))
+  expect(JSON.stringify(args)).not.toContain(token)
+})
+
+test('guest conversation start passes no grant for missing or malformed cookies', () => {
+  for (const cookie of ['', 'k2_guest_access=%', 'k2_guest_access=not-a-grant', `k2_guest_access=${'a'.repeat(63)}`]) {
+    const req = request()
+    req.headers.cookie = cookie
+    expect(signedRpcArguments(req, 'guest_start', {}).p_guest_grant_hash).toBeNull()
+  }
 })
 
 test('account continuity routes require customer auth and do not depend on the revoked guest grant', async () => {

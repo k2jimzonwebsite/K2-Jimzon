@@ -1,0 +1,19 @@
+{
+  "capturedAt": "2026-09-30T08:37:49.840Z",
+  "target": "127.0.0.1:54388/k2_current_restore_20260929",
+  "assemblySha256": "18F9D58BA00797461FA19FE0BC0C0DF4AF0B9F2B3506023BAC8E1485DC7F741B",
+  "candidateBoundarySha256": "7b266dc69cc63a53b3751c5bbb155ac98dee4963d046f72d89a193a8f2b92dca",
+  "candidateOriginSha256": "d4cacca73bb10b3d22e3605aabf1bdfd4dbacd1a769307275e2462b85fef5539",
+  "candidateModerationSha256": "8748a21f9e59543a9e363c88d07ca6f9bcd56f0c0e27b96eabfbf1f3b6349869",
+  "moderationWrapperRetained": true,
+  "actualAnonStartAndRead": true,
+  "existingGrantReused": true,
+  "conversationOriginPreserved": true,
+  "freshGuestStarted": true,
+  "validIdentityProvenance": true,
+  "bothConversationsReopened": true,
+  "missingAndDifferentGrantDenied": true,
+  "otherActiveGrantExcluded": true,
+  "rollbackConfirmed": true,
+  "boundary": "Isolated restored application schema; no PostgREST, browser, Turnstile, managed-role or production proof."
+}

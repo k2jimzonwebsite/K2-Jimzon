@@ -1,5 +1,7 @@
 # K2 Jimzon Master Owner Actions and Questions
 
+**30 September continuation:** The owner authorized the exact prepared SU-483740 reply. It was sent from `k2jimzonwebsite@gmail.com` to `support@supabase.com` at `2026-09-30T08:29:58Z`; readback confirmed message `1a0f16f4e8f70d9f` in the original thread. Human guidance is still pending. The authorization requests guidance only and does not authorize support access or SQL. Exact body and redacted receipt: `docs/evidence/20260930-guest-continuity-rehearsal/`. Local guest-start signing, both identity-provenance definitions, and origin enum compatibility now have actual anonymous-function behavior and rollback evidence. Preview-to-shared-K2 connection, provider migration/flag changes and production promotion still require their separate decisions under MAP-017/019/020. The exactly one authorized K2 test conversation remains unused; local rollback fixtures do not consume it.
+
 This file contains only actions and business decisions that require the owner.
 It is not an engineering backlog; implementation remains exclusively in
 `MASTER_ACTION_PLAN.md`.

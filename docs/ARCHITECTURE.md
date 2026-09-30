@@ -1,5 +1,16 @@
 # K2 Jimzon  -  System Architecture
 
+The locally corrected signed chat boundary propagates the SHA-256 hash of a
+valid HttpOnly grant for `guest_start`, allowing the database to reuse its
+customer/grant scopes. Identity provenance is `website_guest`; the canonical
+channel is typed `Website` for both surfaces, while conversation `source_kind`
+records Storefront versus Store. The origin replacement must precede the
+moderation wrapper so replacing a public function cannot remove block checks.
+Actual anonymous SQL and rollback evidence is in
+`docs/evidence/20260930-guest-continuity-rehearsal/`; it is neither a provider
+apply nor browser/PostgREST/exact-host proof. Provider/backend authorization and
+activation remain MAP-017/019/020 responsibilities.
+
 The direct-order confirmation path carries the saved order ID and high-entropy checkout idempotency key as same-browser access proof. `OrderConversation` reads the already seeded order thread and sends order-scoped messages through limited anonymous RPCs; the buyer receipt RPC validates order state, type, signature, size and retry key before writing bytes to `k2_private.order_payment_receipts` and appending a staff-visible inbound message. Admin payment review lists metadata and retrieves bytes through AAL2 staff-only RPCs. The receipt never advances payment status; the existing structured evidence and independent merchant-account verification remain separate. Supabase migration `20260928092634` is applied, and matching UI source SHA `f164553` is deployed to both production artifacts; actual buyer/staff proof remains unverified. The signed guest BFF/account cutover remains inactive under MAP-020.
 
 The prepared Admin barcode lookup is a staff/AAL2 authenticated read route. It validates a package barcode, then asks Open Food Facts for bounded grocery identity fields after the existing K2 duplicate check. The route returns no catalog image. Staff confirm or reject the exact variant in the intake modal; the source, lookup time and decision travel in the existing `field_provenance` object. A missing match or provider failure leaves manual intake available. Paid SEO/image generation continues through the separate, currently inactive Admin AI job boundary. This is local source, not deployed or live provider evidence. See `docs/design/BARCODE_ASSISTED_PRODUCT_LISTING.md`.

@@ -1,5 +1,14 @@
 # K2 Jimzon  -  Project Directory Map
 
+IDEA-20260930-01/-02/-03 correct `server/storefront-bff/security.js`,
+`supabase/migrations/20260812_guest_submission_boundary.sql` and its later
+`20260828_store_conversation_origin.sql` replacement. Contract regressions are
+in `tests/guest-commerce-bff-contract.spec.js` and the existing shelf-origin
+case in `tests/map027-store-polish.spec.js`. The actual rollback-only restored-
+schema witness, redacted receipts, sent support message and recovery limits
+live in `docs/evidence/20260930-guest-continuity-rehearsal/`. Migration/wrapper
+order remains in the guest BFF runbook; unfinished work belongs to MAP-017/019/020.
+
 IDEA-20260928-02 uses `src/context/StoreContext.jsx` and `src/services/orderReceiptService.js` for order-held access, `src/views/Confirmation.jsx` and `src/components/shop/OrderConversation.jsx` for the direct buyer thread and proof form, and `src/views/admin/OmniOperationsHub.jsx` for authorized staff retrieval. `supabase/migrations/20260928_order_payment_receipt_chat.sql` creates the private proof table and scoped RPCs; its paired rollback revokes buyer RPC entry while preserving submitted proof for staff reconciliation. `tests/order-receipt-direct-ui.spec.js` and the buyer receipt case in `tests/payment-recovery-ui.spec.js` cover the browser surfaces. See MAP-020/023/025 and `docs/evidence/20260928-order-chat-receipt/README.md` for provider and exact-host state.
 
 The guided intake pilot keeps versioned teaching in `src/views/admin/staffProcedureRegistry.js`, renders it through `IntakeStepGuide.jsx` in the canonical `ProductIntakeSessionModal.jsx`, and launches it from the Operations guide through `InventoryGrid.jsx`. It introduces no second progress store or provider command. Optional dashboard explanations live in `dashboardWidgets.js` and `Overview.jsx`; the current UI contract is `tests/admin-dashboard-redesign.spec.js`.

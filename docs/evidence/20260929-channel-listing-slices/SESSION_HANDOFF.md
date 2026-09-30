@@ -1,5 +1,21 @@
 # Session handoff — channel listings and inventory
 
+**30 September continuation:** Remote main was revalidated as `f95e384` through
+GitHub. The owner authorized the exact Supabase follow-up; message
+`1a0f16f4e8f70d9f` was sent/read back at 08:29:58 UTC in SU-483740; guidance is
+pending and support access/project changes remain unauthorized. Three local
+guest prerequisites were corrected and behaviorally verified: cookie-grant
+propagation, identity provenance in both function versions, and canonical
+Website enum compatibility. Base/origin/origin-then-moderation rollback
+witnesses and the 30 focused contracts passed, as did the final development
+gate. Independent agent review could not run. Evidence/limits/recovery and
+the next MAP-017/019/020 gate are in
+`docs/evidence/20260930-guest-continuity-rehearsal/README.md`.
+The one authorized K2 test conversation remains unused; no provider, production,
+stock or listing change occurred. The inventory export/physical-count input
+still has no new owner answer. This update preserves the full release and
+inventory goal and the original dated receipts below.
+
 - **Updated:** 30 September 2026
 - **Owning work:** MAP-017 permission/recovery and signed guest gates first;
   MAP-018 owns Website membership and production listing; MAP-026 owns later
