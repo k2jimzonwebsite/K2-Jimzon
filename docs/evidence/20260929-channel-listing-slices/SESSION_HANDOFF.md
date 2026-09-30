@@ -10,6 +10,12 @@
   blocked: Preview has no server-side Supabase settings, and the live signed-chat
   start function is unapplied. No test row was created. Full production listing
   and inventory acceptance remain open.
+- **Branch/promotion state:** `origin/main` is `f95e384`; local `main` is
+  `4e03016`, 23 commits ahead and not pushed. The separate remote
+  `origin/codex/real-inventory-listing-20260928` is eight commits ahead of
+  `origin/main`, while the owner-authorized chat Preview branch is synced at
+  `8ec65c8`. No feature branches were integrated into or pushed to production
+  `main`; MAP release gates remain open.
 - The 30 September read-only follow-up found existing Supabase ticket
   `SU-483740`; its 24 September message is an automatic acknowledgment with no
   human reply. The current K2 Security Advisor shows 0 errors, 56 warnings, and
