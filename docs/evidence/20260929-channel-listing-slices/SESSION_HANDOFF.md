@@ -15,6 +15,12 @@
   human reply. The current K2 Security Advisor shows 0 errors, 56 warnings, and
   7 suggestions; individual linter findings still need classification. No
   support reply or remediation was sent or applied.
+- Fresh targeted read-only K2 SQL confirmed ten direct anonymous RPC grants,
+  six public `supabase_admin` default-privilege groups, and two authenticated-
+  only receipt readers. The saved export audit reports 15 critical and 2 high.
+  The prior 11/0 and 8/2/3 readiness claims are unverified on this branch: the
+  local readiness receipt names a different branch, and its npm commands are
+  absent from the current manifest. See the MAP-017 evidence for details.
 
 The only active backlog is [`MASTER_ACTION_PLAN.md`](../../../MASTER_ACTION_PLAN.md).
 Guest-chat evidence is in the [MAP-017 receipt](../20260930-map017-contract-audit/README.md).
@@ -55,16 +61,20 @@ MAP-017 receipt; complete the remaining MAP-017/019/020 dependencies first.
   exact-host acceptance, and staff/customer acceptance remain open.
 - No stock, product, publication, channel-assignment, provider, flag, or
   production deployment change was made in this work.
-- Fresh K2 preflight passed; readiness returned 8 verified, 2 owner, 3
-  connector, and 0 blocked. The 29 September backup freshness and local restore
-  gates passed, with offsite hash evidence recorded in the inventory-readiness
+- Fresh exact-project SQL on 30 September confirmed ten migration rows, latest
+  `20260928092634`, and absence of signed start/reply functions. The saved
+  readiness receipt's 8/2/3 result is not current-branch evidence: it names
+  `codex/map017-guest-chat-test-only`, and its npm commands are absent from the
+  current manifest. The 29 September backup freshness and local restore gates
+  passed, with offsite hash evidence recorded in the inventory-readiness
   receipt.
 - The compiled Storefront Preview client identifies K2. Vercel Preview
   environment settings have the `VITE_` Supabase variables; the signed server
   BFF requires `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, which are
-  configured only for Production. Live K2 readiness also reports
-  `start_guest_conversation_v1` unapplied. The one test row is authorized but
-  cannot be created through this Preview yet. No Vercel setting, chat request,
+  configured only for Production. Live K2 SQL confirms
+  `start_guest_conversation_v1` and `append_guest_message_v1` are absent. The
+  one test row is authorized but cannot be created through this Preview yet.
+  No Vercel setting, chat request,
   or database row was changed.
 
 ## Guest-chat source slice
@@ -89,8 +99,11 @@ recovery instructions.
 
 ## Exact next action
 
-Finish MAP-017's live permission reconciliation and provider follow-up, then
-continue through the signed guest prerequisites in MAP order. Reply only in
+Reconcile MAP-017's current permission audit and finish its live permission
+gates before continuing through the signed guest prerequisites in MAP order.
+The full-export refresh is still open: the stored file audit differs from the
+older readiness claim, its receipt names another branch, and the local exporter
+is network-blocked. Reply only in
 existing ticket `SU-483740` after the owner explicitly authorizes the specific
 message; do not create a duplicate request or change provider defaults. When
 `start_guest_conversation_v1` is ready, obtain the separate owner decision to

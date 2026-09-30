@@ -4363,26 +4363,31 @@ push, Ready build receipts, and signed-browser home/catalog loads are now
 recorded. The Storefront chat button is visible; chat-open and signed-route
 behavior remain unverified.
 
-**30 September K2 readiness and Preview connection check:** The owner later
-authorized exactly one new K2 test conversation record, subject to the ordered
-gates. Fresh `npm run preflight:k2-project` confirmed
-`pixplcjqivlfflickobf`. Fresh `npm run readiness:k2-live` passed with 8
-verified, 2 owner, 3 connector, and 0 blocked gates. The live readiness still
-classifies `public.start_guest_conversation_v1` among unapplied signed-guest
-functions. The latest Storefront Preview is Ready at commit `b0be083`, and its
-compiled public client URL identifies the K2 Supabase project. Vercel's
-read-only environment page shows `VITE_SUPABASE_URL` and
-`VITE_SUPABASE_PUBLISHABLE_KEY` targeted to Preview, while server variables
+**30 September K2 permission and Preview recheck:** The owner authorized exactly
+one new K2 test conversation record, subject to the ordered gates. Targeted
+read-only SQL on project `pixplcjqivlfflickobf` confirmed ten direct anonymous
+EXECUTE grants on SECURITY DEFINER functions (all also executable by
+`authenticated`, none directly granted to `PUBLIC`), six unsafe
+`supabase_admin` default groups in `public`, and two authenticated-only
+payment-receipt read functions. The saved metadata export's current audit
+reports 15 critical and 2 high; its `get_storefront_chat_v1` classification
+conflicts with MAP-017's expected-transition note and needs reconciliation. The
+older `live-readiness.json` names the test-only branch, and its referenced npm
+commands do not exist in this checkout. The repository full-export attempt was
+blocked by network `EACCES`, so the old 11 critical/0 high and 8/2/3 results are
+not current-branch proof. No ACL or provider state changed.
+
+The same one-record authorization is still pending its prerequisites: the
+signed-chat start function is unapplied and Preview lacks server-side Supabase
+settings. Preview is Ready at commit `b0be083`; its compiled client URL
+identifies K2. Vercel's read-only environment page shows `VITE_SUPABASE_URL`
+and `VITE_SUPABASE_PUBLISHABLE_KEY` targeted to Preview, while server
 `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` are Production-only. The signed
-Storefront BFF requires the latter pair and throws
-`SUPABASE_SERVER_CONFIG_MISSING` when absent. Thus the Preview cannot perform
-the signed start against K2 yet. No chat request or K2 data write was made, and
-no Vercel setting, migration, grant, flag, production release, or inventory
-state changed. The one-record authorization does not authorize adding
-production database access to Preview. The readiness output is preserved
-locally at `.tools/current-production-backups/live-readiness.json`; the durable
-receipt and next actions are in
-`docs/evidence/20260930-map017-contract-audit/README.md`.
+Storefront BFF fails closed with `SUPABASE_SERVER_CONFIG_MISSING` when either
+server value is absent. No chat request or K2 data write was made. The one-row
+authorization does not authorize adding Preview access to the shared production
+database. See `docs/evidence/20260930-map017-contract-audit/README.md` for the
+saved export audit, live query scope, and next action.
 
 The architecture page now labels the deployed legacy direct-RPC chat path and
 the prepared signed-BFF candidate separately, including the unapplied-function

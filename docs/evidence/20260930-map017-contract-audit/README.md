@@ -23,27 +23,55 @@ has not been created.
 
 ## Live read-only MAP-017 evidence
 
-The read-only 30 September audit on the local source branch reported **11
-critical, 0 high**. The owner-controlled `npm run preflight:k2-project`
-confirmed K2 project `pixplcjqivlfflickobf`. The read-only export was produced
-there with `node scripts/map017-evidence/export-live-schema-metadata.mjs
-.tools/current-production-backups/live-schema-metadata-20260930-contracts.json`;
-that audit helper is not part of this minimal Preview candidate. It classified
-five remaining legacy anonymous RPC grants
-and six `supabase_admin` default-privilege groups. `get_storefront_chat_v1` is
-separately classified as an expected contracted guest read; its disposition
-must be reconciled with the signed cutover before revocation. No ACL was
-changed. The read-only `npm run readiness:k2-live` result on the source branch
-was **8 verified, 2 owner, 3 connector, 0 failed**. The gate did not apply
-migrations or write rows.
+The saved read-only metadata export has timestamp `2026-09-29T17:04:07.280841`
+(the source field has no timezone suffix) and SHA-256
+`52DE2F3D6F4A8C02C815ECE331CEC411751C738013D025395625781868AEB484`. Auditing
+that file on 30 September with
+`node scripts/schema-truth-audit.mjs --export=.tools/current-production-backups/live-schema-metadata-20260930-contracts.json`
+reported **17 findings: 15 critical and 2 high**, not 11 critical and 0 high.
+The findings comprise nine anonymous SECURITY DEFINER grants not covered by
+the current code contracts, six unsafe `supabase_admin` default groups in
+`public`, and two authenticated-only payment-receipt readers without explicit
+audit contracts. The audit classifies `get_storefront_chat_v1` as unreviewed,
+while MAP-017 describes it as an expected transitional guest read; that
+classification still needs an explicit, behavior-backed contract.
 
-Export timestamp: `2026-09-29T17:04:07.280841` (the source field has no
-timezone suffix); export SHA-256:
-`52DE2F3D6F4A8C02C815ECE331CEC411751C738013D025395625781868AEB484`. The full
-export and audit JSON remain in the ignored local evidence directory and are
-not committed because they contain environment-specific metadata. The source
-branch audit receipt records the full command and classifications. No K2 SQL,
-provider, grant, or feature-flag write occurred.
+Fresh targeted `SELECT` queries through the signed Supabase connector on 30
+September, scoped to project `pixplcjqivlfflickobf`, confirmed ten direct
+`anon` EXECUTE grants on public SECURITY DEFINER functions. All ten also grant
+`authenticated`; none has a direct `PUBLIC` grant. The live signatures are:
+
+- `public.get_order_conversation_v1(uuid, text)`
+- `public.get_public_product_stock()`
+- `public.get_storefront_chat_v1(uuid)`
+- `public.submit_order_message_v1(uuid, text, text, uuid)`
+- `public.submit_order_payment_receipt_v1(uuid, text, text, text, text, uuid)`
+- `public.submit_order_request_v2(text, text, text, text, text, text, jsonb, text, text, numeric, text)`
+- `public.submit_order_request(text, text, text, text, text, text, jsonb, text)`
+- `public.submit_pasabuy_request(text, text, text, text, text, integer, numeric, text, boolean, text)`
+- `public.submit_storefront_chat_v1(text, text, text, uuid, text)`
+- `public.validate_coupon(text, numeric)`
+
+The current public-schema
+`supabase_admin` defaults grant anonymous and authenticated privileges on
+future functions, tables, and sequences, yielding six unsafe groups. Separate
+live reads confirmed `get_order_payment_receipt_v1(uuid)` and
+`list_order_payment_receipts_v1(uuid)` are SECURITY DEFINER, executable by
+`authenticated` but not `anon`.
+
+The ignored `.tools/current-production-backups/live-readiness.json` is not a
+current-branch receipt: its `release-branch` field names
+`codex/map017-guest-chat-test-only`, while this checkout is
+`codex/map017-guest-chat-preview`. The referenced `npm run
+preflight:k2-project` and `npm run readiness:k2-live` scripts are absent from
+the current `package.json`. The repository's read-only full exporter was
+attempted again on 30 September but its Management API request failed with
+network `EACCES`; no output file was refreshed. Therefore its earlier **8
+verified, 2 owner, 3 connector, 0 failed** result and the prior **11 critical,
+0 high** summary are unverified for this checkout. The saved export and audit
+JSON remain ignored local evidence because they contain environment-specific
+metadata. No K2 SQL write, provider change, ACL change, or feature-flag change
+occurred during these reads.
 
 ## Source change and local verification
 
@@ -135,18 +163,19 @@ changing anything. No advisor action, setting, ACL, storage policy, flag,
 provider, or database state changed. The list still requires full
 finding-by-finding classification.
 
-The owner-authorized one-record chat test remains pending. On the local
-MAP-017 audit branch, fresh `npm run preflight:k2-project` exited 0 and
-confirmed the exact K2 project reference `pixplcjqivlfflickobf`. Fresh
-`npm run readiness:k2-live` exited 0 with **8 verified, 2 owner, 3 connector,
-0 blocked**. Its owner gate classifies five expected and live anonymous
-functions, five legacy transitional functions, and 13 expected signed-guest
-grants not yet applied, including `public.start_guest_conversation_v1`. The
-latest ledger is `20260928092634`. Backup freshness and the isolated local
-restore receipt passed; the 29 September envelope's owner-only Drive upload,
-independent hash readback and redacted-companion checks are recorded in
-`docs/evidence/20260929-inventory-readiness/README.md`. The gate wrote its local
-receipt to the ignored `.tools/current-production-backups/live-readiness.json`.
+The owner-authorized one-record chat test remains pending. A fresh exact-project
+read-only SQL check on 30 September found ten migration rows, latest
+`20260928092634`, and no public functions named
+`start_guest_conversation_v1` or `append_guest_message_v1`. These missing signed
+guest functions and the absent Preview server configuration block the test
+record. The previous readiness receipt's **8 verified, 2 owner, 3 connector**
+and 13-unapplied-grant summary is not reproducible from this checkout: the
+ignored receipt names `codex/map017-guest-chat-test-only`, and the current
+`package.json` has no `preflight:k2-project` or `readiness:k2-live` script. Do
+not use that receipt as current branch evidence. Backup freshness and the
+isolated local restore receipt passed; the 29 September envelope's owner-only
+Drive upload, independent hash readback and redacted-companion checks are
+recorded in `docs/evidence/20260929-inventory-readiness/README.md`.
 
 The latest Storefront Preview is `dpl_FR5MuYXCvxEbk3ZUwXp39McoC7pu`, Ready at
 `b0be083ca816d4f0aadddc36e0a67b41b3ea7d38`, URL
@@ -171,12 +200,19 @@ row to clean up or roll back.
 ## Remaining work and recovery
 
 1. Keep production `main` unchanged while the ordered gates remain open.
-2. Finish MAP-017's live permission reconciliation and pending Supabase support
-   follow-up for provider-owned defaults; continue in MAP dependency order
-   through the signed guest prerequisites. The one test record is authorized
-   but cannot be created while `start_guest_conversation_v1` is unapplied and
-   the Preview's server-side Supabase environment is absent.
-3. Once those prerequisites are ready, obtain the separate owner decision to
+2. Reconcile the `get_storefront_chat_v1` audit-contract discrepancy and
+   classify the other eight unreviewed anonymous grants against current route
+   usage. Capture a current full K2 metadata export and rerun schema truth;
+   the local exporter is read-only but its network call was blocked. The
+   previous readiness receipt is branch-mismatched.
+3. Send a reply in ticket `SU-483740` only after the owner authorizes the
+   specific message. Do not change provider-owned defaults while their
+   supported remediation is unknown.
+4. Continue in MAP order through signed guest prerequisites. The one test
+   record is authorized but cannot be created while
+   `start_guest_conversation_v1` is unapplied and Preview's server-side
+   Supabase environment is absent.
+5. Once those prerequisites are ready, obtain the separate owner decision to
    connect Storefront Preview server functions to shared K2, or identify an
    approved isolated test backend. Do not add production database access to
    Preview based only on the one-row authorization.
