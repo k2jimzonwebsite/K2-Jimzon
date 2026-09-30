@@ -19,6 +19,23 @@ apply and provide real package facts and physical counts before sellable stock
 or a first real listing can be accepted. Synthetic CSV checks already cover
 importer mechanics and do not establish those facts.
 
+**30 September guest-chat recovery decision pending (MAP-017/019/020):** The old
+Storefront saved UUID cannot be treated as proof of buyer ownership; the prepared
+signed BFF creates new grant-scoped CV references and has no transfer path for
+legacy threads. Which customer outcome should be supported before direct chat is
+retired?
+
+- Secure transfer after a separately reviewed buyer-proof method.
+- Staff-mediated recovery under a reviewed verification procedure.
+- No restoration of pre-BFF threads, with a clear customer message and a fresh
+  signed conversation.
+
+These are policy options only; none authorizes cutover or an unreviewed claim.
+Codex owns technical design, tests and Preview evidence after the owner choice.
+MAP-017/020 retain the cutover gates; no grant, flag or production behavior
+changes.
+
+
 **29 September Preview publication approval fulfilled (MAP-020):** Automatic approval review blocked pushing local branch `codex/connector-handoff-20260929` to the configured GitHub repository `k2jimzonwebsite/K2-Jimzon`. Read-only GitHub verification confirms that exact repository and WRITE access for signed-in `EdgerzXc`, but the user's broad instruction to continue did not specifically authorize exporting the branch. The owner explicitly approved this exact feature-branch push to trigger separate Vercel Previews for verification. Codex owns the push and provider checks. Production `main` and the BFF remain unchanged until their separate release gates.
 
 **25 September launch clarification (IDEA-20260925-04):** The owner selected full operation of two separate websites: customer Storefront and staff Admin. Existing channel stock numbers are available and Codex should handle the technical transfer; the source export/location is still needed. Sister/cousin staff will check payment QRs and real-world operations, and the owner says a separate payment verifier is available. The owner controls approved quantities, but marketplace listing numbers are not proof of physical on-hand. Codex will compare the source with live SKU/lot balances and prepare an exact reconciliation before any write. No manual SQL, CSV preparation, or row-by-row entry is assigned to the owner; providing the source file and confirming actual quantities/discrepancies are the remaining owner/staff inputs.

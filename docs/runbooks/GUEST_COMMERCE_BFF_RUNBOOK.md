@@ -410,10 +410,17 @@ The unapplied cutover now handles the nine- and eleven-argument
 `submit_order_request_v2` signatures. It refuses an unexpected overload inside
 the transaction and the isolated fixture proves both known direct paths lose
 browser execution while the signed guest entry points retain it. Keep the live
-direct grants until the signed preview and browser switch are ready. The legacy
-`get_storefront_chat_v1` read also needs a reviewed continuity path for existing
-threads before its anonymous grant is revoked. See MAP-017/020 and the 24
-September account migration rehearsal evidence.
+direct grants until the signed preview and browser switch are ready.
+The legacy get_storefront_chat_v1 read also needs a reviewed continuity path for
+existing threads before its anonymous grant is revoked. The 30 September source audit found
+that the direct client resumes a stored UUID while the prepared signed BFF creates
+a new grant-scoped CV reference; no transfer route connects them. Keep the old
+thread and direct grants intact until the owner-reviewed recovery behavior is
+implemented and same-buyer continuity plus cross-buyer denial pass on Preview.
+Reconcile the live read grant classification with the MAP-020 revoke packet before
+cutover. See the MAP-017/019/020 continuity audit in
+docs/evidence/20260930-map017-contract-audit/README.md and the 24 September
+account migration rehearsal evidence.
 
 The isolated production Storefront does not expose the workstation `DemoRail`.
 Appending `#demo` cannot reveal its direct-password VIP prototype or claim that
