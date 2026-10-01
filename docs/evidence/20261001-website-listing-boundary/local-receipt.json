@@ -1,0 +1,108 @@
+{
+  "capturedAt": "2026-10-01T06:25:06.831Z",
+  "target": "127.0.0.1:54388/k2_current_restore_20260929",
+  "scope": "Isolated rollback-only full guest dependency chain plus Website assignment; not live acceptance",
+  "dependencyManifest": [
+    {
+      "path": "supabase/migrations/20260829_channel_vocabulary_and_shops.sql",
+      "sha256": "0053b6ee78e415125f17d1c7938059aa6310f90021ac4598acb1e572846e767f"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_channel_readiness_boundary.sql",
+      "sha256": "bcd9544fada9b8d9921825261b35cdabe2897da581eebd06df48dcdd3d418a93"
+    },
+    {
+      "path": "supabase/migrations/20260812_guest_account_identity_and_messaging.sql",
+      "sha256": "c4dae76b080924e2f36e0ec98eb0a78a400ffa0e082e106d88fc895590d6f2ea"
+    },
+    {
+      "path": "supabase/map019_identity_postflight.sql",
+      "sha256": "e4391b70a7afe721de11a7d80dc32b3bdc33a09d1d165b47acf6d44699347724"
+    },
+    {
+      "path": "supabase/map020_guest_boundary_preflight.sql",
+      "sha256": "31a243fd32391a794032b8bdb697e88a1e60cf28045c1e071a02023599350498"
+    },
+    {
+      "path": "supabase/migrations/20260812_guest_submission_boundary.sql",
+      "sha256": "806f816412bb086ec068f203632879202f91561f2ab25f984361ce4022f679d2"
+    },
+    {
+      "path": "supabase/map020_guest_boundary_postflight.sql",
+      "sha256": "edc1702f7a786f50e94d5b26be6f655e704e24adaf03d3d1fc276beedcfb087c"
+    },
+    {
+      "path": "supabase/migrations/20260822_guest_account_claim_boundary.sql",
+      "sha256": "17d68e071ab60ddd417498adb68cd1f8d4964826c13ac6413c406f8300b77384"
+    },
+    {
+      "path": "supabase/map019_account_claim_postflight.sql",
+      "sha256": "3316152b9f61bd854fd384868b38617999f109926fd46926a400ac2f9c29a7b4"
+    },
+    {
+      "path": "supabase/migrations/20260825_storefront_customer_auth_boundary.sql",
+      "sha256": "32459123f96b5bd3af893c7acadfa0b5bcaa0bb46e5acc8f16cedc600dc55984"
+    },
+    {
+      "path": "supabase/map020_storefront_auth_rate_postflight.sql",
+      "sha256": "1d861e1252809f005dc400b253eb0fd7a024b1f70c2bc22c8a1897284bc77e1b"
+    },
+    {
+      "path": "supabase/migrations/20260831_guest_order_status_boundary.sql",
+      "sha256": "065d1a0c557fa9aa8a10382a97c6ea8a14621ee0e4d5f9f41976263825e8be71"
+    },
+    {
+      "path": "supabase/migrations/20260924_customer_account_settings_notifications.sql",
+      "sha256": "4d62feafd16916e05ce794a8301c2a4b7fef05ae089c6441c065478634860799"
+    },
+    {
+      "path": "supabase/migrations/20260828_store_conversation_origin.sql",
+      "sha256": "d4cacca73bb10b3d22e3605aabf1bdfd4dbacd1a769307275e2462b85fef5539"
+    },
+    {
+      "path": "supabase/migrations/20260822_wholesale_inquiry_boundary.sql",
+      "sha256": "ca1cac80e82915352b61805a6824338dcca4f8533ef33e2be4d7ad94af752cb7"
+    },
+    {
+      "path": "supabase/map019_wholesale_inquiry_postflight.sql",
+      "sha256": "f74be8125f4af25f105d6d6e77089b5cb104c61414c352a15ed45776cd7b1d04"
+    },
+    {
+      "path": "supabase/migrations/20260902_delivery_quote_control.sql",
+      "sha256": "5fac3d9739da51a271dcae733369eb161a9147c59b2353342aa1396fa81a86f9"
+    },
+    {
+      "path": "supabase/migrations/20260902_delivery_guest_quote_boundary.sql",
+      "sha256": "768a4ed385a65f0dcf33ad5e6dcca8c37204fe240512c1374e081b76e0e4647e"
+    },
+    {
+      "path": "supabase/migrations/20260912_guest_order_conversation_seed.sql",
+      "sha256": "d84424b870230ef30835406af65b44e6a96f381b584874b3f6aa25caa8f72514"
+    },
+    {
+      "path": "supabase/migrations/20260916_automated_delivery_quotation.sql",
+      "sha256": "df56a54e8b28eb610f79fe1a3d296363e24181caa17d57487b6fec3fc484ce86"
+    }
+  ],
+  "laterVerifierReplacements": [
+    {
+      "path": "supabase/migrations/20260830_paid_ai_spend_controls.sql",
+      "sha256": "4d605349d38670abf5106bd7de9114adeb5e6d2980e4372b211bea3c5442bd77"
+    },
+    {
+      "path": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "sha256": "d28b76f50f6e28d9e3ebf09bce2ac3f9d71d26ce6ccfa0e525b069cac06965ee"
+    }
+  ],
+  "adminAllow": true,
+  "staffAndAal1Deny": true,
+  "replayAndConflict": true,
+  "staleVersionDenied": true,
+  "missingAndPausedAssignmentDenied": true,
+  "unpublishedAndUnreviewedDenied": true,
+  "unlistedDirectLinkAllowed": true,
+  "signedOrderDeniedBeforeIdentity": true,
+  "signedOrderAllowed": true,
+  "browserDirectWriteDenied": true,
+  "rollback": true
+}

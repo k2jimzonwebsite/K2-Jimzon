@@ -3,6 +3,22 @@ import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
 import { isAdminRole } from './supabase.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+const TIMESTAMP = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$/
+
+export function validateWebsiteAssignment(body) {
+  const keys = ['action', 'sku', 'assigned', 'expectedUpdatedAt', 'reason']
+  if (!body || typeof body !== 'object' || Array.isArray(body)
+      || Object.keys(body).length !== keys.length || !keys.every(key => Object.hasOwn(body, key))
+      || body.action !== 'website_listing_set' || typeof body.sku !== 'string'
+      || typeof body.assigned !== 'boolean' || typeof body.reason !== 'string') throw new Error('REQUEST_INVALID')
+  const sku = body.sku.trim()
+  const reason = body.reason.trim()
+  const expectedUpdatedAt = body.expectedUpdatedAt
+  if (!/^[A-Za-z0-9._/-]{1,80}$/.test(sku) || reason.length < 3 || reason.length > 500
+      || (expectedUpdatedAt !== null && (typeof expectedUpdatedAt !== 'string'
+        || !TIMESTAMP.test(expectedUpdatedAt) || !Number.isFinite(Date.parse(expectedUpdatedAt))))) throw new Error('REQUEST_INVALID')
+  return { sku, assigned: body.assigned, expectedUpdatedAt, reason }
+}
 
 export function validateInternalChannelVerification(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)
@@ -24,6 +40,9 @@ function commandError(res, error) {
   if (raw.includes('K2_ADMIN_CHANNEL_REFERENCE_NOT_FOUND')) return safeJson(res, 404, { error: { code: 'CHANNEL_REFERENCE_NOT_FOUND' } })
   if (raw.includes('K2_ADMIN_CHANNEL_NOT_FOUND')) return safeJson(res, 404, { error: { code: 'CHANNEL_NOT_FOUND' } })
   if (raw.includes('K2_ADMIN_CHANNEL_INVALID')) return safeJson(res, 400, { error: { code: 'CHANNEL_VERIFICATION_INVALID' } })
+  if (raw.includes('K2_WEBSITE_LISTING_STALE')) return safeJson(res, 409, { error: { code: 'WEBSITE_LISTING_STALE' } })
+  if (raw.includes('K2_WEBSITE_LISTING_INVALID')) return safeJson(res, 400, { error: { code: 'WEBSITE_LISTING_INVALID' } })
+  if (raw.includes('K2_WEBSITE_PRODUCT_NOT_FOUND')) return safeJson(res, 404, { error: { code: 'PRODUCT_NOT_FOUND' } })
   return safeJson(res, 503, { error: { code: 'CHANNEL_COMMAND_UNAVAILABLE' } })
 }
 
@@ -40,9 +59,13 @@ export default async function handleChannels(req, res) {
   }
   if (!isAdminRole(authorized.identity.role)) return safeJson(res, 403, { error: { code: 'CHANNEL_ADMIN_REQUIRED' } })
   try {
-    const payload = validateInternalChannelVerification(await readJson(req))
-    const signed = signedAdminCommandArguments('channel_internal_event_verify', authorized.identity.userId, idempotencyKey, payload)
-    const { data, error } = await authorized.client.rpc('execute_admin_channel_command_v1', signed)
+    const body = await readJson(req)
+    const websiteAssignment = body?.action === 'website_listing_set'
+    const payload = websiteAssignment ? validateWebsiteAssignment(body) : validateInternalChannelVerification(body)
+    const signed = signedAdminCommandArguments(websiteAssignment ? 'website_listing_set' : 'channel_internal_event_verify', authorized.identity.userId, idempotencyKey, payload)
+    const { data, error } = websiteAssignment
+      ? await authorized.client.rpc('execute_admin_website_listing_command_v1', signed)
+      : await authorized.client.rpc('execute_admin_channel_command_v1', signed)
     if (error) return commandError(res, error)
     return safeJson(res, 200, { ok: true, result: data })
   } catch (error) {

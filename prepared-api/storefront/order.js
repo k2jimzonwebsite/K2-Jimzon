@@ -114,6 +114,9 @@ export default async function handler(req, res) {
     if (error?.code === 'K2STK') {
       return safeJson(res, 409, { error: { code: 'INSUFFICIENT_STOCK' } })
     }
+    if (error?.code === 'K2WEB') {
+      return safeJson(res, 409, { error: { code: 'PRODUCT_NOT_AVAILABLE' } })
+    }
     if (error) return safeJson(res, 503, { error: { code: 'ORDER_SERVICE_UNAVAILABLE' } })
     const mapped = mapBoundaryResult(data)
     if (!mapped.ok) return safeJson(res, mapped.status, { error: { code: mapped.code } },

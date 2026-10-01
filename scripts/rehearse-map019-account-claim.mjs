@@ -38,6 +38,7 @@ try {
     path.join(root,'supabase/migrations/20260822_admin_product_media_boundary.sql'),
     path.join(root,'supabase/migrations/20260822_admin_globe_review_boundary.sql'),
     path.join(root,'supabase/migrations/20260822_admin_procurement_boundary.sql'),
+    path.join(root,'supabase/migrations/20260829_channel_vocabulary_and_shops.sql'),
     path.join(root,'supabase/migrations/20260822_admin_channel_readiness_boundary.sql'),
     path.join(root,'supabase/migrations/20260822_admin_staff_access_boundary.sql'),
     path.join(root,'supabase/migrations/20260822_admin_system_readiness_boundary.sql'),

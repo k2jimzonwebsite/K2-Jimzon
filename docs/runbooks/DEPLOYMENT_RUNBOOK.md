@@ -1,5 +1,7 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+**1 October activation hold after local Website preparation:** Do not reuse the frozen 30 September installer/recovery captures: assignment prerequisites, functions, audit tables and browser grants changed in source. Recompose and rehearse the exact same-target package and deactivation, refresh backup/preflight, and retain excluded history before specific apply/configuration authorization. Current local evidence proves sequential assignment/eligibility and rollback, not shipping authority, shared signature repair, concurrent purchase holds, staff workflow, actual reviewed catalog or real-host behavior. Those gates remain MAP-017/018/020/023; private branch values, actual Turnstile and the exact routing exception remain separately controlled. No production change was made. Receipt: `docs/evidence/20261001-website-listing-boundary/README.md`.
+
 **30 September prepared Preview routing exception:** Storefront CDN rule
 `2a20bd66-2ecc-4893-98c4-2b5c3f3c5cfd` returns 404 for
 `/api/storefront/:path*` before deployment routes. The review candidate adds a
@@ -254,20 +256,25 @@ K2 Jimzon ships as **two separate Vercel production projects** built from the si
 | **Storefront** | `K2_DEPLOYMENT_TARGET=storefront` | `www.<owner-domain>` | Public editorial catalog, Pasabuy, guest checkout, universal messaging |
 | **Admin BOS** | `K2_DEPLOYMENT_TARGET=admin` | `admin.<owner-domain>` | Central staff BOS: intake, consignments, inventory, lots, orders, fulfillment |
 
-Provider-account boundary: use only the owner-authenticated Vercel team that
-contains `k2-jimzon` and `k2-jimzon-admin`. A connector session that lists an
-unrelated team or projects is not K2 evidence and must not be used to deploy,
-change environment variables, or edit domains. The continuation on 27 August
-2026 encountered team `edgerzxcs-projects` with unrelated projects; no K2
-deployment or setting was changed through it. The same connector context exposes
-only the unrelated Supabase `ScoutIT` project and denies K2 ref
-`pixplcjqivlfflickobf`; do not run K2 SQL, migrations, or Auth changes through
-that session.
+Provider-account boundary: use the dedicated `k2jimzonwebsite@gmail.com` account
+and verify Vercel team `team_C3Wf3dVUBjUqGQ4rndMTCchz`, Storefront project
+`prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL`, Admin project
+`prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x`, and Supabase ref
+`pixplcjqivlfflickobf` in organization `dstfobgqgtklmbclhlgb` before changes.
+Check both the browser account/role and connector resource inventory; these
+sessions are independent. A session listing unrelated resources cannot be used
+for K2 deployment, environment, domain, SQL, migration or Auth changes.
 
-A read-only connector refresh on 28 August 2026 returned the same unrelated
-Vercel team and Supabase `ScoutIT` project; the K2 Vercel projects and Supabase
-ref remain unavailable through this session. No provider or database write was
-attempted.
+Historical 27/28 August connector sessions exposed only the unrelated Vercel
+team `edgerzxcs-projects` and Supabase `ScoutIT` project and denied the K2 ref;
+no write was attempted. The 1 October 2026 read-only refresh now lists the exact
+canonical K2 resources, and both dashboards display the dedicated email as
+Owner. See `docs/evidence/20261001-provider-account-access/README.md`.
+Vercel's project-detail connector has a documented-input validation defect;
+use project listing and the K2 dashboard as the current fallback. Supabase's
+owner row reports MFA Disabled; keep this separate from the prior recovery
+attestation and track enrollment/readback in MAP-022. This access check does
+not authorize a transfer, new grant, security change or production promotion.
 
 A read-only Hostinger refresh on 28 August 2026 confirmed the Active,
 privacy-protected, transfer-locked `k2jimzon.com` registration and the exact

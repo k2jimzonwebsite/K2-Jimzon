@@ -41,6 +41,7 @@ import procurementHandler from '../prepared-api/admin/procurement.js'
 import { validateSupplierCreate } from '../server/admin-bff/procurement.js'
 import channelsHandler from '../prepared-api/admin/channels.js'
 import { validateInternalChannelVerification } from '../server/admin-bff/channels.js'
+import * as channelBoundary from '../server/admin-bff/channels.js'
 import staffAccessHandler from '../prepared-api/admin/staff-access.js'
 import { validateStaffAccessCommand } from '../server/admin-bff/staff-access.js'
 import staffInvitationHandler from '../prepared-api/admin/staff-access/invite.js'
@@ -1458,6 +1459,25 @@ test('procurement reads are fixed and supplier creation is Admin-only, reasoned,
   expect(ui).toContain('Live price scraping, purchase-order creation, and receiving are not enabled here.')
   expect(ui).toContain('Reason and source')
   expect(ui).not.toMatch(/Math\.random|alert\(|prompt\(/)
+})
+
+test('Website assignment accepts only a reviewed SKU, boolean, reason and exact prior version', () => {
+  expect(typeof channelBoundary.validateWebsiteAssignment).toBe('function')
+  const payload = { action: 'website_listing_set', sku: 'K2/PASTA-1', assigned: true,
+    expectedUpdatedAt: null, reason: 'Reviewed Website product selection.' }
+  expect(channelBoundary.validateWebsiteAssignment(payload)).toEqual({
+    sku: 'K2/PASTA-1', assigned: true, expectedUpdatedAt: null, reason: payload.reason,
+  })
+  for (const change of [
+    { assigned: 'true' }, { assigned: 1 }, { assigned: null }, { sku: '' },
+    { sku: '../private key' }, { reason: '' }, { expectedUpdatedAt: '' },
+    { expectedUpdatedAt: 'yesterday' }, { action: 'publish_all' }, { published: true },
+  ]) {
+    expect(() => channelBoundary.validateWebsiteAssignment({ ...payload, ...change })).toThrow('REQUEST_INVALID')
+  }
+  expect(channelBoundary.validateWebsiteAssignment({ ...payload,
+    expectedUpdatedAt: '2026-10-01T05:36:23.123456+00:00', assigned: false,
+  })).toMatchObject({ assigned: false, expectedUpdatedAt: '2026-10-01T05:36:23.123456+00:00' })
 })
 
 test('channel readiness is aggregated and internal verification is signed, reasoned, and Admin-only', async () => {

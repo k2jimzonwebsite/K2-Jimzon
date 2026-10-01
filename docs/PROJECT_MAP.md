@@ -1,5 +1,12 @@
 # K2 Jimzon  -  Project Directory Map
 
+The 1 October Website boundary receipt is `docs/evidence/20261001-website-listing-boundary/README.md`. Code lives in the existing Admin channels handler, Admin channel migration and latest signed-order replacement; `scripts/rehearse-website-listings.mjs` runs guarded rollback-only assertions on the exact local restore. `supabase/map020_channel_readiness_postflight.sql` also checks assignment privileges/audit. The affected account-claim runner now installs canonical channels first. The September installer must be recomposed before any provider approval. Remaining work belongs to MAP-017/018/020/023.
+
+The read-only dedicated provider account/role/resource receipt is
+`docs/evidence/20261001-provider-account-access/README.md` (IDEA-20261001-02).
+It supersedes old unrelated-connector observations for the checked session;
+current MFA/tooling follow-up remains in MAP-022.
+
 Current provider/membership review records are `PREVIEW_CONFIGURATION_REVIEW.md`,
 `preview-configuration-preflight.json`, `website-membership-preflight.json` and
 `BACKUP_UPLOAD_REVIEW.md` in the 30 September guest-continuity directory. They

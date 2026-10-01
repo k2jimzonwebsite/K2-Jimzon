@@ -408,7 +408,7 @@ begin
     'product_media_upload', 'product_media_assign', 'product_media_cleanup_complete',
     'product_media_orphan_cleanup', 'product_media_orphan_cleanup_complete',
     'globe_config_update', 'review_create', 'review_update', 'review_publish', 'review_withdraw',
-    'supplier_create', 'channel_internal_event_verify',
+    'supplier_create', 'channel_internal_event_verify', 'website_listing_set',
     'staff_role_change', 'admin_delete_pin_set',
     'product_master_update', 'product_master_status', 'product_master_delete',
     'inbox_send_reply', 'product_knowledge_save', 'ai_spend_controls_update',

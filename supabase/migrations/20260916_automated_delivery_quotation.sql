@@ -16,8 +16,37 @@ begin
   if to_regprocedure('public.submit_guest_order_v1(bigint,uuid,text,text,text,text)') is null then
     raise exception 'PREFLIGHT_FAILED: public.submit_guest_order_v1 must exist';
   end if;
+  if to_regclass('public.channels') is null or to_regclass('public.channel_shops') is null
+     or to_regprocedure('public.execute_admin_website_listing_command_v1(text,bigint,uuid,uuid,text,text)') is null then
+    raise exception 'PREFLIGHT_FAILED: protected canonical Website assignment must exist';
+  end if;
 end
 $preflight$;
+
+create or replace function k2_private.require_website_order_items(p_items jsonb)
+returns void language plpgsql security definer set search_path='' as $$
+declare v_sku text; v_product public.products%rowtype;
+begin
+  if jsonb_typeof(p_items) is distinct from 'array' or jsonb_array_length(p_items) not between 1 and 50 then
+    raise exception using errcode='K2WEB',message='K2_PRODUCT_NOT_OFFERED_ON_WEBSITE';
+  end if;
+  for v_sku in select distinct item->>'sku' from jsonb_array_elements(p_items) item order by 1 loop
+    -- Match Admin lock order and avoid a later stock-trigger lock upgrade.
+    select * into v_product from public.products where sku=v_sku for update;
+    if not found or v_product.is_human_reviewed is distinct from true
+       or nullif(trim(v_product.name),'') is null or nullif(trim(v_product.primary_image_url),'') is null
+       or coalesce(v_product.srp,v_product.retail_price,0)<=0
+       or (v_product.status::text='Unlisted'
+         or (v_product.status::text in ('Live','Active') and v_product.published is true)) is distinct from true then
+      raise exception using errcode='K2WEB',message='K2_PRODUCT_NOT_OFFERED_ON_WEBSITE';
+    end if;
+    perform 1 from public.channel_listings where sku=v_sku and channel_source='website' and shop_id is null
+      and status='Active' and publication_status in ('ready','published')
+      and validation_errors='[]'::jsonb for share;
+    if not found then raise exception using errcode='K2WEB',message='K2_PRODUCT_NOT_OFFERED_ON_WEBSITE'; end if;
+  end loop;
+end $$;
+revoke all on function k2_private.require_website_order_items(jsonb) from public,anon,authenticated;
 
 create or replace function public.submit_guest_order_v1(
   p_timestamp bigint,
@@ -88,6 +117,7 @@ begin
     return;
   end if;
 
+  perform k2_private.require_website_order_items(v_payload->'items');
   select * into v_identity from k2_private.resolve_guest_identity(
     v_payload, 'website_guest', v_existing_hash
   );

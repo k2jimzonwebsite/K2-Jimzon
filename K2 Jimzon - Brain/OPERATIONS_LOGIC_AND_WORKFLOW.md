@@ -1,5 +1,7 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+**Website assignment/order rule (1 October, IDEA-20261001-03, target behavior):** Website membership is an explicit reasoned Admin/AAL2 signed command with an exact prior version, idempotent receipt and private actor/before/after audit. Browser table/column writes cannot replace that command. Membership does not publish a product or create stock. A new signed order must verify current canonical Website assignment, reviewed eligibility, name/image and positive price before identity/order creation. Live/Active requires global publication; approved Unlisted remains direct-link eligible with publication false. Missing/paused/draft/error/unreviewed offers fail closed without leaking internal details. Reconcile product/balance/lot lock order across all writers and prove concurrent behavior before combining prepared purchase holds. All signing inputs must explicitly reject NULL before HMAC/age/replay checks (IDEA-20261001-04). Local sequential evidence is not applied state; MAP-017/018/020/023 own the remaining activation and integration work.
+
 **Branch and catalog activation rule (30 September configuration review):** A Vercel branch selection is insufficient if Production or global Preview remains selected. Verify only the exact approved branch before any save, keep private values in Secret entries, and capture prior IDs/scopes/recovery references. The Storefront server switch opens the complete 17-route surface, so all-route authorization and commerce controls must precede activation. Use the enabled modern limited K2 publishable key consistently; never fall back to a disabled legacy key or bypass Turnstile. Website filtering/order membership must follow protected staff assignment and reviewed product selection; zero assignments do not authorize automatic tagging or bulk unpublication. Publication alone is not Website membership, and a bounded client fee is not a server-verified quotation. Required behavior remains MAP-017/018/019/020/023; read-only/prepared evidence does not establish activation.
 
 **Guest installation/recovery rule (30 September, IDEA-20260930-07/-08/-09):** Use existing canonical K2 under current owner steering. Reviewed installation must be atomic and bound to exact target, legacy definitions/security metadata, ledger and historical-row preflight. Capture complete scoped metadata privately before and after apply; generate recovery from actual same-target captures before keys or Preview connection. Incomplete/partial captures and later definition/security/hook drift must refuse. Scoped deactivation closes added browser function/table/column access and removes only new notification hooks while retaining schema/data/relationships; it does not restore the original schema or resolve legacy ACLs. Pin UTF8 client transport and accept early stdin EOF/EPIPE only with supplied input and exit zero, retaining all integrity gates. Preserve verified owner account/key attestation absent a relevant recorded change, while independently checking each new off-site backup. Local evidence authorizes no provider apply/activation; execution remains MAP-017/019/020/022.
@@ -1768,6 +1770,14 @@ never official books, a tax filing, payout settlement, or actual profit.
 
 ## 22. Roles and security
 
+- Provider work must use the dedicated owner account `k2jimzonwebsite@gmail.com`
+  and verify the canonical resource IDs before writes: Vercel team
+  `team_C3Wf3dVUBjUqGQ4rndMTCchz`, separate `k2-jimzon` / `k2-jimzon-admin`
+  projects, and Supabase project `pixplcjqivlfflickobf` in organization
+  `dstfobgqgtklmbclhlgb`. Dashboard sign-in and connector access are separate
+  checks. A correct account name alone does not authorize resource transfer,
+  new access grants, security changes or production activation. Preserve
+  existing recovery evidence and record any current MFA discrepancy separately.
 - Use real Supabase sessions and server-enforced roles.
 - Keep admin/storefront access separate.
 - Shared Admin navigation, badges, and search reuse authorized fixed

@@ -105,6 +105,42 @@ test.beforeEach(() => {
   process.env.K2_GUEST_BFF_SECRET = Buffer.alloc(32, 21).toString('base64')
 })
 
+test('Website eligibility rejection returns a safe conflict without exposing database details', async () => {
+  const savedFetch = globalThis.fetch
+  const saved = Object.fromEntries(['SUPABASE_URL', 'SUPABASE_PUBLISHABLE_KEY', 'K2_TURNSTILE_SECRET_KEY',
+    'K2_TURNSTILE_ALLOW_UNCONFIGURED'].map(key => [key, process.env[key]]))
+  const calls = []
+  process.env.SUPABASE_URL = 'https://website-fixture.supabase.co'
+  process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_fixture'
+  delete process.env.K2_TURNSTILE_SECRET_KEY
+  process.env.K2_TURNSTILE_ALLOW_UNCONFIGURED = 'true'
+  globalThis.fetch = async (url, init) => {
+    expect(String(url)).toBe('https://website-fixture.supabase.co/rest/v1/rpc/submit_guest_order_v1')
+    calls.push(JSON.parse(init.body))
+    return new Response(JSON.stringify({ code: 'K2WEB', message: 'Private database SKU details',
+      details: 'Never expose internal product state', hint: null }),
+    { status: 400, headers: { 'content-type': 'application/json' } })
+  }
+  try {
+    const res = response()
+    await orderHandler({ ...request(), body: { customerName: 'Website fixture', email: 'buyer@example.test',
+      address: 'Fixture-only delivery address', fulfillmentMethod: 'Courier delivery',
+      items: [{ sku: 'LOCAL-WEBSITE-OFFER', quantity: 1 }],
+      idempotencyKey: '41000000-0000-4000-8000-000000000003' } }, res)
+    expect(res.statusCode).toBe(409)
+    expect(JSON.parse(res.body)).toEqual({ error: { code: 'PRODUCT_NOT_AVAILABLE' } })
+    expect(calls).toHaveLength(1)
+    expect(calls[0].p_signature).toMatch(/^[0-9a-f]{64}$/)
+    expect(res.headers.has('set-cookie')).toBe(false)
+  } finally {
+    globalThis.fetch = savedFetch
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key]
+      else process.env[key] = value
+    }
+  }
+})
+
 test('single-function Storefront router allowlists every prepared endpoint and rejects unknown paths', async () => {
   expect(STOREFRONT_BFF_ROUTES.length).toBeGreaterThan(0)
   expect(new Set(STOREFRONT_BFF_ROUTES).size).toBe(STOREFRONT_BFF_ROUTES.length)

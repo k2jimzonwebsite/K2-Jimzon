@@ -1,5 +1,7 @@
 # K2 Jimzon  -  System Architecture
 
+The 1 October prepared Website command belongs to the Admin channel boundary after canonical channels. It retains channel assignment independently of product publication and stock, with signed Admin/AAL2 receipts/private audit. Signed order eligibility locks current products/listings before identity writes; approved Unlisted remains direct-link eligible. This preparation is not installed. The frozen 30 September 18-source installer/recovery scope below is historical and stale after these edits; the new local witness composes 20 sources plus two extracted later verifier bodies. Shared NULL-signing guards and product/balance/lot lock-order integration remain MAP-017/020/023 work before activation. Evidence: `docs/evidence/20261001-website-listing-boundary/README.md`.
+
 The Storefront entrypoint's one server flag gates all 17 routes. Branch-scoped
 environment values and an exact edge-host exception are separate controls;
 neither replaces route authorization, real bot validation or commerce gates.
