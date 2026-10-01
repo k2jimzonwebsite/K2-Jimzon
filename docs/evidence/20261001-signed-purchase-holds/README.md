@@ -35,14 +35,15 @@ shipping amount/status remains insufficient authority for activation.
 | Command or check | Result and scope |
 | --- | --- |
 | Full stock command before compatibility edit | Exit 1 at the missing old-writer prerequisite; owned clone removed and original fingerprint unchanged. |
-| `node scripts/rehearse-website-stock-locks.mjs --signed-holds` | Exit 0, 36/36 checks; timestamp and 29-entry source manifest in `local-receipt.json`. |
+| `node scripts/rehearse-website-stock-locks.mjs --signed-holds --before-key-lock` | Expected exit 1 at 14:05:03 UTC, 37 recorded assertions including the reproduced mixed deadlock; `before-key-lock-receipt.json` identifies the clone-only omitted statement and original/variant hashes. |
+| `node scripts/rehearse-website-stock-locks.mjs --signed-holds` | Exit 0 at 14:06:40 UTC, 42/42 checks including both mixed entry orders; timestamp, witness hash and 29-entry source manifest in `local-receipt.json`. |
 | `node scripts/rehearse-purchase-time-reservation.mjs` | Exit 0, 48/48 properties on the separate synthetic legacy fixture; not a current-production installation receipt. |
 | `node scripts/rehearse-website-listings.mjs` | Exit 0; refreshed 21-source restored-schema assignment/eligibility rollback receipt in the Website evidence folder. This command does not install the stock chain. |
-| `npm run verify:development` | Exit 0 after the final code edit, 08:20:02 UTC. Documentation-only receipt edits do not repeat this gate. |
-| Independent read-only source review | No Critical or Important defect; the concurrency evidence limit below was identified and retained. Reviewer did not repeat SQL or provider tests. |
-| Local PostgreSQL status after verification | Both current-restore and legacy purchase-hold servers report no server running. |
-| Receipt source integrity after documentation | All 52 entries across the current 29-entry stock manifest and Website dependency/later-verifier manifests match source SHA-256. Historical IDEA-20261001-05 hashes retain their earlier scope. |
-| Final staged scope/security checks | `git diff --cached --check` passes; sensitive-file policy passes for 1,712 tracked files and secret scan for 1,713 files. The owner Gemini row and `.backups/` are excluded from this batch. |
+| `npm run verify:development` | Exit 0 after the final witness code edit; security-surface report timestamp 14:06:34 UTC. Documentation-only receipt edits do not repeat this gate. |
+| Independent read-only source review | Initial diagnostic signature and complete-definition capture defects were corrected before the recorded red/green runs. Final review has no remaining Important witness defect; reviewer checked receipts/source but did not repeat SQL or provider tests. |
+| Local PostgreSQL shutdown | Process-visible check found PID 21720; clean fast stop exited 0, the PID file is absent, and actual loopback connections to 54388 and 54331 refuse. `runtime-receipt.json` supersedes the earlier sandboxed status-only shutdown claim. |
+| Receipt source integrity after documentation | Both 29-entry red/green stock manifests, the 21 Website dependencies and two later-verifier entries match source SHA-256. Both witness pins and 42/37 assertion counts match. Historical IDEA-20261001-05 hashes retain their earlier scope. |
+| Final staged scope/security checks | `git diff --cached --check` exits 0; sensitive-file policy passes for 1,714 tracked files and secret scan for 1,715 files. The owner Gemini row and `.backups/` remain outside this batch. |
 
 The signed-holds mode installs all 21 guest/Website sources plus eight stock
 entries on an owned disposable clone of `k2_current_restore_20260929` at
@@ -64,10 +65,23 @@ recount, signed Admin pause, opposite basket ordering and missing-balance cases
 also pass. Direct `anon` and `authenticated` helper execution is denied.
 Metadata preservation, replay and four invalid-target refusals pass.
 
-The same-key concurrency case shares a contact rate bucket, which is locked
-before the new advisory key. It proves concurrent retry behavior; it does not
-isolate that key lock or prove the mixed canonical-direct/signed same-key cycle.
-That specific interleaving remains in MAP-023 with other writer/coupon acceptance.
+The original signed/signed same-key case shares a contact rate bucket, which is
+locked before the advisory key. The added mixed canonical-direct/signed cases
+instead inspect the exact granted/waiting advisory key in `pg_locks`, in both
+entry orders, while a controller holds the product row. Each current case
+preserves one order, one hold, the accepted fixture shipping amount and one
+conversation. Signed-first returns the same reference on direct retry.
+Canonical-first returns `IDEMPOTENCY_CONFLICT` to the signed caller, with no
+guest token or order grant; the signed path cannot claim a direct-created order.
+
+The controlled regression removes only the signed entry's pre-inventory advisory
+statement on its owned clone and reproduces the mixed deadlock. The repository
+SQL remains unchanged. Both receipts pin witness SHA-256
+`24df6aeef0c8fd266519cb6bbabdaa7a20a25ea9b28d0d6d3331aa515e7dfa4a`;
+the regression receipt additionally pins the extracted definition and variant.
+The 48/48 legacy and 21-source Website receipts above are the earlier unchanged
+SQL evidence; they were not repeated for this witness-only follow-up.
+
 The receipt's `canonicalSignedHoldIntegration=true` describes this local mode
 only. Managed role membership, PostgREST, bot/cookie behavior, authoritative
 shipping, full payment/commitment and real-host acceptance remain unverified.
@@ -93,9 +107,18 @@ pre-existing clone. Local source recovery is a scoped revert of IDEA-20261001-06
 while retaining this receipt and the earlier shared-signing guard. No production
 rollback was exercised or made ready.
 
+A sandboxed `pg_ctl status` alone previously reported no server while SQL could
+reach the existing postmaster. Do not delete its PID file or restart that server.
+Verify the exact data directory/port with a connection and process-visible status.
+For future local startup, keep the log outside the data directory to avoid a
+Windows log sharing violation during recovery. The interrupted startup was
+allowed to finish recovery before these runs; final shutdown is independently
+recorded in `runtime-receipt.json`.
+
 MAP-023 next owns server-authoritative validation of the owner's current J&T
-region/weight policy and accepted-charge preservation, then complete current
-writer/coupon/lifecycle coverage including the mixed same-key interleaving.
+region/weight policy, the owner-retained separate NCR Lalamove/Grab express
+option, and accepted-charge preservation, then complete current
+writer/coupon/lifecycle coverage beyond the two verified mixed interleavings.
 MAP-017/020 must recompose the stale installer and same-target captures/recovery
 to include the modified existing 11-argument writer, private signer and expanded
 stock objects before backup/preflight and exact apply/configuration review.

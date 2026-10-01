@@ -13,6 +13,8 @@ const database = 'k2_website_stock_locks_20261001'
 const dataDirectory = path.join(root, '.tools/current-restore-20260929-pg-data').replaceAll('\\', '/')
 const bin = path.join(root, '.tools/postgresql-17.11/runtime/pgsql/bin')
 const signedHolds = process.argv.includes('--signed-holds')
+const beforeKeyLock = process.argv.includes('--before-key-lock')
+if (beforeKeyLock && !signedHolds) throw new Error('KEY_LOCK_REGRESSION_REQUIRES_SIGNED_HOLDS')
 const evidence = path.join(root, signedHolds ? 'docs/evidence/20261001-signed-purchase-holds' : 'docs/evidence/20261001-website-stock-locks')
 const beforeFix = process.argv.includes('--before-fix')
 const actor = '42000000-0000-4000-8000-000000000001'
@@ -96,6 +98,15 @@ async function waitFor(sql, label) {
 const blockedBy = (waiter, blocker) => `select exists(select 1 from pg_stat_activity a
  where a.application_name=${literal(waiter)} and exists(select 1 from pg_stat_activity b
  where b.application_name=${literal(blocker)} and b.pid=any(pg_blocking_pids(a.pid))));`
+const waitsForOrderKey = (waiter, blocker, key) => `select exists(
+ select 1 from pg_stat_activity a join pg_locks w on w.pid=a.pid
+ join pg_stat_activity b on b.application_name=${literal(blocker)}
+ join pg_locks h on h.pid=b.pid and h.locktype=w.locktype and h.classid=w.classid
+  and h.objid=w.objid and h.objsubid=w.objsubid
+ where a.application_name=${literal(waiter)} and w.locktype='advisory' and not w.granted and h.granted
+ and w.objsubid=1 and w.classid::bigint=((hashtextextended('k2.website-order:'||${literal(key)},0)>>32)&4294967295::bigint)
+ and w.objid::bigint=(hashtextextended('k2.website-order:'||${literal(key)},0)&4294967295::bigint)
+ and b.pid=any(pg_blocking_pids(a.pid)));`
 async function controller(extraLock = '') {
   const name = `k2_stock_gate_${randomUUID()}`
   const child = spawn(path.join(bin, 'psql.exe'), args(database),
@@ -165,6 +176,9 @@ function guestCall(payload,ip='192.0.2.10') {
   return `public.submit_guest_order_v1(${['p_timestamp','p_nonce','p_payload_text','p_ip_hash','p_signature']
     .map(key=>literal(a[key])).join(',')},null)`
 }
+const canonicalCall = p => `public.submit_order_request_v2(${[
+ p.customerName,p.email,null,p.address,p.fulfillmentMethod,p.note,JSON.stringify(p.items),p.idempotencyKey,p.couponCode,
+].map((x,i)=>x===null?'null':`${literal(x)}${i===6?'::jsonb':''}`).join(',')},95::numeric,'customer_confirmed')`
 const records = () => value(`select jsonb_build_object(
  'orders',(select count(*) from public.order_requests),'items',(select count(*) from public.order_request_items),
  'customers',(select count(*) from public.customers),'grants',(select count(*) from public.guest_access_grants),
@@ -176,7 +190,7 @@ const records = () => value(`select jsonb_build_object(
 const controls = () => value(`select jsonb_build_object('nonces',(select count(*) from k2_private.guest_request_nonces),
  'rate_rows',(select count(*) from k2_private.guest_rate_buckets),'rate_hits',(select coalesce(sum(hit_count),0) from k2_private.guest_rate_buckets))::text;`)
 
-let created = false; let templateBefore; let runError
+let created = false; let templateBefore; let runError; let keyLockRegression
 try {
   sync(template, targetGuard(template))
   templateBefore = baselineState()
@@ -418,6 +432,56 @@ try {
       check('concurrent same-key signed requests return one canonical result',keyResults.every(r=>r.status===0)
         && invariant(keyRace)==='1/1|1/1|0|1'
         && value(`select count(*)=1 from public.order_requests where idempotency_key=${literal(keyPayload.idempotencyKey)};`)==='t')
+
+      if(beforeKeyLock) {
+        // Controlled diagnostic variant on this clone only; repository SQL stays intact.
+        const signature='public.submit_guest_order_v1(bigint,uuid,text,text,text,text)'
+        const current=sync(database,`select pg_get_functiondef(${literal(signature)}::regprocedure);`)
+        const statement="  perform pg_advisory_xact_lock(hashtextextended('k2.website-order:'||trim(v_payload->>'idempotencyKey'),0));"
+        if(current.split(statement).length!==2) throw new Error('SIGNED_KEY_REGRESSION_SHAPE_CHANGED')
+        const changed=current.replace(statement,'  -- Local regression: signed key lock deliberately omitted.')
+        sync(database,changed)
+        keyLockRegression={ scope:'Controlled local signed-entry variant: only its pre-inventory advisory statement omitted',
+          originalSha256:createHash('sha256').update(current).digest('hex'),
+          variantSha256:createHash('sha256').update(changed).digest('hex') }
+      }
+      for(const first of ['signed','canonical']) {
+        const mixed=fixture(`mixed-${first}`,1)
+        const mixedPayload=guestPayload(mixed,{shippingAmount:95,shippingQuoteStatus:'customer_confirmed'})
+        const mixedGate=await controller(`select sku from public.products where sku=${literal(mixed.sku)} for update;`)
+        const firstName=`k2_mixed_${first}_first`; const secondName=`k2_mixed_${first}_second`
+        const signedSql=`select row_to_json(r)::text from ${guestCall(mixedPayload,first==='signed'?'192.0.2.40':'192.0.2.41')} r;`
+        const canonicalSql=`select row_to_json(r)::text from ${canonicalCall(mixedPayload)} r;`
+        const firstResult=session(firstName,`set role anon; ${first==='signed'?signedSql:canonicalSql}`)
+        await waitFor(blockedBy(firstName,mixedGate.name),'first mixed path owns balance and waits for product')
+        const secondResult=session(secondName,`set role anon; ${first==='signed'?canonicalSql:signedSql}`)
+        await waitFor(blockedBy(secondName,firstName),'second mixed path waits for first')
+        const exactKey=value(waitsForOrderKey(secondName,firstName,mixedPayload.idempotencyKey))==='t'
+        if(!beforeKeyLock) check(`${first}-first mixed retry waits on the exact advisory order key`,exactKey)
+        await mixedGate.release()
+        const mixedResults=await Promise.all([firstResult,secondResult])
+        completed.delete(firstName); completed.delete(secondName)
+        if(beforeKeyLock) {
+          check('omitted signed key reproduces the mixed canonical/signed deadlock',!exactKey
+            && mixedResults.some(r=>r.status!==0 && /deadlock detected/.test(r.stderr)))
+          break
+        }
+        check(`${first}-first mixed retry commits with one order, hold and conversation`,mixedResults.every(r=>r.status===0)
+          && invariant(mixed)==='1/1|1/1|0|1'
+          && value(`select count(*)=1 and bool_and(shipping_amount=95 and total_amount=195)
+           and (select count(*) from public.conversations c join public.order_requests o on o.id=c.source_id
+            where c.source_kind='order_request' and o.idempotency_key=${literal(mixedPayload.idempotencyKey)})=1
+           from public.order_requests where idempotency_key=${literal(mixedPayload.idempotencyKey)};`)==='t')
+        const signedResult=JSON.parse(mixedResults[first==='signed'?0:1].stdout.trim().split('\n').at(-1))
+        const directResult=JSON.parse(mixedResults[first==='signed'?1:0].stdout.trim().split('\n').at(-1))
+        check(`${first}-first mixed retry preserves guest ownership`,first==='signed'
+          ? signedResult.ok===true && typeof signedResult.guest_grant_token==='string'
+            && signedResult.public_reference===directResult.public_reference
+          : signedResult.ok===false && signedResult.error_code==='IDEMPOTENCY_CONFLICT'
+            && signedResult.guest_grant_token===null
+            && value(`select count(*)=0 from public.guest_access_grant_scopes s join public.order_requests o on o.id=s.scope_id
+              where s.scope_kind='order_request' and o.idempotency_key=${literal(mixedPayload.idempotencyKey)};`)==='t')
+      }
     } else {
     for (let i=0;i<2;i+=1) {
       const payload={ customerName:'Local signed gap',email:`gap${i}@example.test`,phone:'',address:'Local test address',
@@ -454,10 +518,12 @@ finally {
 }
 if(runError) throw runError
 fs.mkdirSync(evidence,{recursive:true})
-fs.writeFileSync(path.join(evidence,beforeFix?'before-fix-receipt.json':'local-receipt.json'),`${JSON.stringify({
+fs.writeFileSync(path.join(evidence,beforeKeyLock?'before-key-lock-receipt.json':beforeFix?'before-fix-receipt.json':'local-receipt.json'),`${JSON.stringify({
  capturedAt:new Date().toISOString(),target:`127.0.0.1:54388/${database}`,template,
  scope:signedHolds ? 'Full prepared purchase-hold migration plus actual signed purchase/last-unit/retry on disposable restored-schema clone; no provider or all-writer acceptance'
   : 'Actual prepared function bodies on disposable restored-schema clone; not full migration installation or signed purchase-hold acceptance',
- beforeFix,manifest,checks,providerWrites:false,canonicalSignedHoldIntegration: signedHolds,
+ beforeFix,beforeKeyLock,keyLockRegression,witnessSha256:createHash('sha256').update(fs.readFileSync(fileURLToPath(import.meta.url))).digest('hex'),
+ manifest,checks,providerWrites:false,canonicalSignedHoldIntegration: signedHolds && !beforeKeyLock,
  templateUnchanged:true,cloneRemoved:true },null,2)}\n`)
 if(beforeFix) { console.error('EXPECTED_BEFORE_FIX_FAILURE: Website/inventory deadlock reproduced'); process.exitCode=1 }
+if(beforeKeyLock) { console.error('EXPECTED_BEFORE_KEY_LOCK_FAILURE: mixed canonical/signed deadlock reproduced'); process.exitCode=1 }

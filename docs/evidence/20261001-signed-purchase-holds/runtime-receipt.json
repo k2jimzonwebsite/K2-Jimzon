@@ -1,0 +1,27 @@
+{
+  "capturedAt": "2026-10-01T14:13:13.812Z",
+  "scope": "Local PostgreSQL shutdown only; no provider state",
+  "providerWrites": false,
+  "currentRestore": {
+    "priorProcessId": 21720,
+    "processVisibleRunningCheck": true,
+    "cleanStopExitCode": 0,
+    "shutdownLogAt": "2026-10-01T14:09:19.537Z",
+    "pidFilePresent": false
+  },
+  "connections": [
+    {
+      "host": "127.0.0.1",
+      "port": 54388,
+      "queryExitCode": 2,
+      "connectionRefused": true
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 54331,
+      "queryExitCode": 2,
+      "connectionRefused": true
+    }
+  ],
+  "correction": "Earlier sandboxed pg_ctl status alone could not prove shutdown. Current receipt combines process-visible clean stop, removed PID file and actual connection refusal."
+}

@@ -31,6 +31,8 @@ The 16/20 September region/weight checkout matrix and the older §13 exact-local
 
 The current Metro Manila **express** option names Lalamove/Grab, so it is an exception to the J&T basis and needs its own explicit carrier policy before being called J&T-priced. `STANDARD_FEE` in the prepared quote engine names a successful J&T-pilot outcome; it is not the owner's future store-controlled standard-rate mode.
 
+**Owner clarification, 1 October 2026:** In response to the MAP-023 policy question, the owner selected “Keep express as a separate Lalamove/Grab option.” Retain that NCR option alongside J&T standard delivery, using its current ₱150 plus ₱40 for each started kilogram above 5 kg and the existing ₱10 ceiling step. This answers the carrier-policy question above. It does not activate the exact-locality pilot, future standard-rate mode or a new rate, and it is not evidence of a carrier booking or measured parcel. Server destination/service/weight/version/fee validation and accepted-charge preservation remain MAP-023 work. No provider or shipping source changed when recording this answer.
+
 ## Required workflow and repair order
 
 1. **Preserve the owner policy:** J&T-based customer rates remain active now. Store any future standard-rate policy separately, inactive until a specific owner-approved version, amount and effective date exist. Do not use a carrier-cost edit as automatic customer-price approval.

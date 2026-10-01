@@ -1,10 +1,15 @@
 {
-  "capturedAt": "2026-10-01T14:06:40.959Z",
+  "capturedAt": "2026-10-01T14:05:03.280Z",
   "target": "127.0.0.1:54388/k2_website_stock_locks_20261001",
   "template": "k2_current_restore_20260929",
   "scope": "Full prepared purchase-hold migration plus actual signed purchase/last-unit/retry on disposable restored-schema clone; no provider or all-writer acceptance",
   "beforeFix": false,
-  "beforeKeyLock": false,
+  "beforeKeyLock": true,
+  "keyLockRegression": {
+    "scope": "Controlled local signed-entry variant: only its pre-inventory advisory statement omitted",
+    "originalSha256": "7794760177d5f0393b561c64aa6654d1dea6f0acfa8cd3f36066b63a082418e1",
+    "variantSha256": "e0b25d7334f4534f7df99d0d9517242b9fbbbfdcd36d00a4f84d802966d1808a"
+  },
   "witnessSha256": "24df6aeef0c8fd266519cb6bbabdaa7a20a25ea9b28d0d6d3331aa515e7dfa4a",
   "manifest": [
     {
@@ -325,32 +330,7 @@
       "detail": ""
     },
     {
-      "name": "signed-first mixed retry waits on the exact advisory order key",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "signed-first mixed retry commits with one order, hold and conversation",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "signed-first mixed retry preserves guest ownership",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "canonical-first mixed retry waits on the exact advisory order key",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "canonical-first mixed retry commits with one order, hold and conversation",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "canonical-first mixed retry preserves guest ownership",
+      "name": "omitted signed key reproduces the mixed canonical/signed deadlock",
       "passed": true,
       "detail": ""
     },
@@ -366,7 +346,7 @@
     }
   ],
   "providerWrites": false,
-  "canonicalSignedHoldIntegration": true,
+  "canonicalSignedHoldIntegration": false,
   "templateUnchanged": true,
   "cloneRemoved": true
 }
