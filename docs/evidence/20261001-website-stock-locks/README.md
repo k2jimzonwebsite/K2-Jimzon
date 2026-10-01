@@ -1,5 +1,15 @@
 # Website and inventory lock compatibility — 1 October 2026
 
+**Historical scope clarification:** This receipt and its manifests describe the
+IDEA-20261001-05 source state. Later IDEA-20261001-06 changed the source and adds
+`--signed-holds`, which installs the whole purchase migration on the current
+writer and verifies actual signed holds. Its current evidence is in
+`../20261001-signed-purchase-holds/README.md`. The no-hold diagnosis and exact
+next action below are preserved as the findings that prompted that correction;
+they are superseded for the new scoped local chain only. Old manifest hashes
+are not expected to match the later source. Full provider/all-writer/shipping
+acceptance remains open in the same MAP items.
+
 IDEA-20261001-05; owning item MAP-023, with MAP-018 eligibility and
 MAP-017/020 installation/recovery dependencies. Branch:
 `codex/map017-guest-chat-preview`. Prepared and locally verified only.

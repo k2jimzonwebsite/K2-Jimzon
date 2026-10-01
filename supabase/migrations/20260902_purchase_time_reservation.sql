@@ -53,8 +53,14 @@ begin
   end if;
 
   if to_regprocedure('public.confirm_order_request(uuid,text)') is null
-     or to_regprocedure('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text)') is null then
+     or num_nonnulls(
+       to_regprocedure('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text)'),
+       to_regprocedure('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text)')) <> 1 then
     raise exception 'MAP-023 purchase-time reservation: the order functions this migration replaces are missing';
+  end if;
+  if to_regprocedure('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text)') is not null
+     and to_regprocedure('k2_private.require_website_order_items(jsonb)') is null then
+    raise exception 'MAP-023 purchase-time reservation: protected Website eligibility is required for the current writer';
   end if;
 end
 $preflight$;
@@ -176,6 +182,14 @@ revoke all on function public.reserve_order_request_lots_v1(uuid,text) from publ
 -- Only the reservation call is new. Every other statement is unchanged from
 -- 20260809 so the diff a reviewer must trust stays small.
 
+do $submit_compatibility$
+declare
+  v_target regprocedure:=to_regprocedure('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text)');
+  v_definition text; v_expected text; v_old text; v_new text; v_metadata jsonb; v_after_metadata jsonb;
+begin
+  if v_target is null then
+    -- Keep the original legacy preparation without creating a second overload.
+    execute $legacy_submit$
 create or replace function public.submit_order_request_v2(
   p_customer_name text,
   p_customer_email text,
@@ -281,6 +295,53 @@ begin
   return v_order;
 end;
 $$;
+$legacy_submit$;
+  else
+    select pg_get_functiondef(p.oid),jsonb_build_object('owner',p.proowner,'acl',p.proacl,
+      'config',p.proconfig,'definer',p.prosecdef,'returns',p.prorettype,'defaults',p.proargdefaults::text)
+    into v_definition,v_metadata from pg_proc p where p.oid=v_target;
+    if (v_metadata->>'definer')::boolean is distinct from true
+       or (v_metadata->>'returns')::oid is distinct from 'public.order_requests'::regtype::oid
+       or v_metadata->'config' is distinct from '["search_path=public"]'::jsonb then
+      raise exception 'MAP-023 current order writer security metadata changed; review before patching';
+    end if;
+    if position('K2_CURRENT_WRITER_PURCHASE_HOLD_V1' in v_definition)>0 then
+      if position('perform k2_private.require_website_order_items(p_items);' in v_definition)=0
+         or position('perform public.reserve_order_request_lots_v1(v_order.id, ''purchase'');' in v_definition)=0
+         or position('k2.website-order:' in v_definition)=0 then
+        raise exception 'MAP-023 current order hold marker changed; review before replay';
+      end if;
+    else
+      v_expected:=v_definition;
+      v_old:='  select * into v_order from public.order_requests where idempotency_key = trim(p_idempotency_key);';
+      v_new:=E'  -- K2_CURRENT_WRITER_PURCHASE_HOLD_V1\n  perform pg_advisory_xact_lock(hashtextextended(''k2.website-order:''||trim(p_idempotency_key),0));\n'||v_old;
+      if (length(v_expected)-length(replace(v_expected,v_old,'')))/length(v_old)<>1 then
+        raise exception 'MAP-023 current order idempotency shape changed; review before patching';
+      end if;
+      v_expected:=replace(v_expected,v_old,v_new);
+      v_old:='  insert into public.order_requests (';
+      if (length(v_expected)-length(replace(v_expected,v_old,'')))/length(v_old)<>1 then
+        raise exception 'MAP-023 current order insertion shape changed; review before patching';
+      end if;
+      v_expected:=replace(v_expected,v_old,E'  perform k2_private.require_website_order_items(p_items);\n\n'||v_old);
+      v_old:='  if nullif(upper(trim(coalesce(p_coupon_code, ''''))), '''') is not null then';
+      if (length(v_expected)-length(replace(v_expected,v_old,'')))/length(v_old)<>1 then
+        raise exception 'MAP-023 current order coupon shape changed; review before patching';
+      end if;
+      v_expected:=replace(v_expected,v_old,E'  perform public.reserve_order_request_lots_v1(v_order.id, ''purchase'');\n\n'||v_old);
+      execute v_expected;
+      if pg_get_functiondef(v_target) is distinct from v_expected then
+        raise exception 'MAP-023 current order definition preservation failed';
+      end if;
+    end if;
+    select jsonb_build_object('owner',p.proowner,'acl',p.proacl,'config',p.proconfig,
+      'definer',p.prosecdef,'returns',p.prorettype,'defaults',p.proargdefaults::text)
+    into v_after_metadata from pg_proc p where p.oid=v_target;
+    if v_after_metadata is distinct from v_metadata then
+      raise exception 'MAP-023 current order metadata preservation failed';
+    end if;
+  end if;
+end $submit_compatibility$;
 
 -- No grant is restated here, deliberately. `create or replace function` keeps
 -- the existing ACL, and 20260812_guest_submission_cutover.sql revoked anon

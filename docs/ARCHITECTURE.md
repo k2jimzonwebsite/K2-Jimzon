@@ -1,6 +1,6 @@
 # K2 Jimzon  -  System Architecture
 
-Website eligibility now takes all SKU-ordered Manila balances before products/listings (IDEA-20261001-05, prepared). An absent balance derives from canonical physical/reserved lots, never display stock. The actual-body clone witness verifies cancellation/expiry/recount, last-unit, assignment pause, opposite baskets and missing-balance behavior, but the 11-argument canonical signed writer still accepts orders without holds and the old migration expects an absent 9-argument signature. That integration and all-writer/coupon acceptance remain MAP-023; the stale provider installer/recovery remains MAP-017/020. Scope and recovery: `docs/evidence/20261001-website-stock-locks/README.md`.
+Website eligibility takes all SKU-ordered Manila balances before products/listings (IDEA-20261001-05/-06, prepared); absent balances derive from canonical physical/reserved lots. The current 11-argument writer is now patched at guarded points without replacing its body/security metadata or creating another overload, and actual signed local checkout creates the 30-minute hold with last-unit refusal/retry/rollback. Both entry paths acquire the same key before inventory locks. The 29-entry witness includes the whole purchase migration but extracted recount scope; same-key signed concurrency may first wait on a contact rate bucket and does not isolate mixed canonical-direct/signed locking. Complete writer/coupon, authoritative shipping and real-host acceptance remain MAP-023. Exact provider installer/capture/recovery remains stale under MAP-017/020. Evidence and recovery: `docs/evidence/20261001-signed-purchase-holds/README.md`.
 
 The 1 October prepared Website command belongs to the Admin channel boundary after canonical channels. It retains channel assignment independently of product publication and stock, with signed Admin/AAL2 receipts/private audit. Signed order eligibility locks current products/listings before identity writes; approved Unlisted remains direct-link eligible. This preparation is not installed. The frozen 30 September 18-source installer/recovery scope below is stale; the current Website witness composes 21 sources plus two extracted later verifier bodies, including the forward six-input Admin signing guard. The installed verifier and six extracted variants pass independent local signing/control checks; later replacements retain the guard. Exact provider capture/apply/recovery remains MAP-017/020, and product/balance/lot lock-order integration remains MAP-023. Evidence: `docs/evidence/20261001-website-listing-boundary/README.md` and `docs/evidence/20261001-admin-signing/README.md`.
 
@@ -12,8 +12,8 @@ products. Protected canonical assignment must precede strict public catalog/orde
 membership so the release does not silently remove the current catalog. Exact
 provider scope/evidence remains in `PREVIEW_CONFIGURATION_REVIEW.md` and MAP-017/018/020.
 
-Existing-K2 guest installation is now composed as an exact guarded 18-source
-transaction body. Recovery captures 33 functions, 24 new tables and three hooks
+The historical 30 September guest installer composed an exact guarded 18-source
+transaction body. Its recovery captured 33 functions, 24 new tables and three hooks
 before/after apply, binds the same target, refuses drift and closes added browser
 entry while preserving schema/data. Local rollback evidence is separate from
 provider installation and actual provider captures. Backup/restore transport is

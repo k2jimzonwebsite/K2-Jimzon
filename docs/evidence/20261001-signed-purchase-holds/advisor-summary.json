@@ -1,0 +1,39 @@
+{
+  "capturedAt": "2026-10-01T08:20:31.600Z",
+  "projectRef": "pixplcjqivlfflickobf",
+  "type": "security",
+  "readOnly": true,
+  "providerWrites": false,
+  "totalFindings": 62,
+  "byLevel": {
+    "INFO": 7,
+    "WARN": 55
+  },
+  "groups": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 7,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "anon_security_definer_function_executable",
+      "level": "WARN",
+      "count": 10,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable"
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "level": "WARN",
+      "count": 44,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
+  ],
+  "scope": "Read-only notices for existing live state; does not validate the unapplied signed-hold source chain or replace MAP-017 custom privilege preflight."
+}

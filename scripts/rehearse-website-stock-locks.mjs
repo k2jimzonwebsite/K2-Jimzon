@@ -12,7 +12,8 @@ const template = 'k2_current_restore_20260929'
 const database = 'k2_website_stock_locks_20261001'
 const dataDirectory = path.join(root, '.tools/current-restore-20260929-pg-data').replaceAll('\\', '/')
 const bin = path.join(root, '.tools/postgresql-17.11/runtime/pgsql/bin')
-const evidence = path.join(root, 'docs/evidence/20261001-website-stock-locks')
+const signedHolds = process.argv.includes('--signed-holds')
+const evidence = path.join(root, signedHolds ? 'docs/evidence/20261001-signed-purchase-holds' : 'docs/evidence/20261001-website-stock-locks')
 const beforeFix = process.argv.includes('--before-fix')
 const actor = '42000000-0000-4000-8000-000000000001'
 const marker = randomUUID()
@@ -156,6 +157,24 @@ const invariant = f => value(`select concat_ws('|',
  (select stock_available from public.products where sku=${literal(f.sku)}),
  (select coalesce(sum(quantity),0) from public.inventory_reservations where sku=${literal(f.sku)} and status='active'));`)
 const reserveOld = f => sync(database, `${staff} select public.reserve_order_request_lots_v1('${f.oldOrder}','Local prior hold');`)
+const guestPayload = (f,extra={}) => ({ customerName:'Local signed hold',email:`hold-${randomUUID()}@example.test`,
+  phone:'',address:'Local test address',fulfillmentMethod:'Pickup',note:'',
+  items:[{sku:f.sku,quantity:1}],idempotencyKey:randomUUID(),couponCode:'',...extra })
+function guestCall(payload,ip='192.0.2.10') {
+  const a=signedRpcArguments({headers:{},socket:{remoteAddress:ip}},'order',payload)
+  return `public.submit_guest_order_v1(${['p_timestamp','p_nonce','p_payload_text','p_ip_hash','p_signature']
+    .map(key=>literal(a[key])).join(',')},null)`
+}
+const records = () => value(`select jsonb_build_object(
+ 'orders',(select count(*) from public.order_requests),'items',(select count(*) from public.order_request_items),
+ 'customers',(select count(*) from public.customers),'grants',(select count(*) from public.guest_access_grants),
+ 'contacts',(select count(*) from public.customer_contact_points),'identities',(select count(*) from public.channel_identities),
+ 'scopes',(select count(*) from public.guest_access_grant_scopes),'conversations',(select count(*) from public.conversations),
+ 'messages',(select count(*) from public.messages),'allocations',(select count(*) from public.inventory_reservations),
+ 'order_events',(select count(*) from public.order_request_events),'conversation_events',(select count(*) from public.conversation_events),
+ 'inventory_events',(select count(*) from public.inventory_events))::text;`)
+const controls = () => value(`select jsonb_build_object('nonces',(select count(*) from k2_private.guest_request_nonces),
+ 'rate_rows',(select count(*) from k2_private.guest_rate_buckets),'rate_hits',(select coalesce(sum(hit_count),0) from k2_private.guest_rate_buckets))::text;`)
 
 let created = false; let templateBefore; let runError
 try {
@@ -179,13 +198,17 @@ try {
       || guestSources.some(file=>!/^supabase\/[a-zA-Z0-9_/-]+\.sql$/.test(file))) throw new Error('GUEST_SOURCE_ORDER_INVALID')
   sync(database, `begin; ${guestSources.map(file => withoutTransaction(source(file))).join('\n')} commit;`)
   const stock = [source('supabase/migrations/20260902_reservation_expiry_policy.sql'),
-    source('supabase/migrations/20260902_purchase_time_reservation.sql','public.reserve_order_request_lots_v1'),
+    source('supabase/migrations/20260902_purchase_time_reservation.sql',signedHolds ? null : 'public.reserve_order_request_lots_v1'),
     source('supabase/migrations/20260906_reservation_coverage_guard.sql'),
     source('supabase/migrations/20260908_purchase_hold_lock_order.sql'),
     source('supabase/migrations/20260905_purchase_hold_cancellation.sql'),
     source('supabase/migrations/20260906_atomic_order_hold_expiry.sql'),
     source('supabase/migrations/20260809_operations_hardening.sql','public.reconcile_product_batches'),
     source('supabase/migrations/20260908_reconciliation_lock_order.sql')]
+  const canonicalMetadataSql=`select jsonb_build_object('owner',p.proowner,'acl',p.proacl,'config',p.proconfig,
+    'definer',p.prosecdef,'returns',p.prorettype,'defaults',p.proargdefaults::text)::text from pg_proc p
+    where p.oid='public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text)'::regprocedure;`
+  const canonicalBefore=value(canonicalMetadataSql)
   sync(database, `begin; ${stock.map(withoutTransaction).join('\n')} commit;
    insert into auth.users(id) values('${actor}');
    insert into public.user_profiles(id,role) values('${actor}','Admin') on conflict(id) do update set role=excluded.role;
@@ -199,6 +222,36 @@ try {
     return new; end $$;
    create trigger local_balance_barrier before update on public.inventory_balances
     for each row execute function k2_stock_fixture.balance_barrier();`)
+  if(signedHolds) {
+    check('current writer owner/ACL/settings/defaults preserved by full installation',value(canonicalMetadataSql)===canonicalBefore)
+    for(const role of ['anon','authenticated']) {
+      const denied=await session(`k2_hold_direct_${role}`,`set role ${role}; select public.reserve_order_request_lots_v1(gen_random_uuid(),'Local direct denial');`)
+      completed.delete(`k2_hold_direct_${role}`)
+      check(`internal hold helper denies direct ${role} execution`,denied.status!==0 && /permission denied for function reserve_order_request_lots_v1/.test(denied.stderr))
+    }
+    const installed=value(`select md5(pg_get_functiondef('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text)'::regprocedure));`)
+    sync(database,`begin; ${stock.slice(0,6).map(withoutTransaction).join('\n')} commit;`)
+    check('full hold/coverage/cancel/expiry preparation replays without replacing current behavior',
+      value(canonicalMetadataSql)===canonicalBefore && value(`select md5(pg_get_functiondef('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text)'::regprocedure));`)===installed)
+    const badConfigurations=[
+      `drop function public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text);`,
+      `alter function public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text) set search_path='public,pg_temp';`,
+      `create function public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text)
+        returns public.order_requests language sql as 'select null::public.order_requests';`,
+      `create or replace function public.submit_order_request_v2(p_customer_name text,p_customer_email text,p_customer_phone text,
+       p_delivery_address text,p_fulfillment_method text,p_customer_note text,p_items jsonb,p_idempotency_key text,
+       p_coupon_code text default null::text,p_shipping_amount numeric default 0,p_shipping_quote_status text default null::text)
+       returns public.order_requests language plpgsql security definer set search_path=public as $$ begin return null; end $$;`
+    ]
+    for(let i=0;i<badConfigurations.length;i+=1) {
+      let refused=false
+      try { sync(database,`begin; ${badConfigurations[i]} ${withoutTransaction(stock[1])} rollback;`) }
+      catch(error) { refused=/MAP-023/.test(error.message) }
+      check(`hold preparation refuses invalid target variant ${i+1} and rolls back`,refused
+        && value(canonicalMetadataSql)===canonicalBefore
+        && value(`select md5(pg_get_functiondef('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text)'::regprocedure));`)===installed)
+    }
+  }
 
   for (const kind of ['cancel','expiry','recount']) {
     const f = fixture(kind); reserveOld(f)
@@ -294,6 +347,78 @@ try {
       value(`select to_regprocedure('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text)') is null
        and to_regprocedure('public.submit_order_request_v2(text,text,text,text,text,text,jsonb,text,text,numeric,text)') is not null;`)==='t')
     const gap = fixture('signed-gap',1)
+    if(signedHolds) {
+      const payload=guestPayload(gap,{shippingAmount:95,shippingQuoteStatus:'customer_confirmed'})
+      const response=JSON.parse(value(`set role anon; select row_to_json(r)::text from ${guestCall(payload)} r;`))
+      check('actual signed purchase succeeds and returns its grant',response.ok===true && typeof response.guest_grant_token==='string')
+      check('signed purchase creates the exact 30-minute last-unit hold',invariant(gap)==='1/1|1/1|0|1'
+        && value(`select count(*)=1 from public.inventory_reservations r join public.order_requests o on o.id=r.order_request_id
+          where o.idempotency_key=${literal(payload.idempotencyKey)} and r.status='active'
+          and r.hold_minutes=30 and r.expires_at>clock_timestamp()+interval '25 minutes'
+          and r.expires_at<=clock_timestamp()+interval '31 minutes';`)==='t',invariant(gap))
+      const continuity=JSON.parse(value(`select jsonb_build_object('subtotal',o.subtotal,'shipping',o.shipping_amount,
+         'total',o.total_amount,'quote',o.shipping_quote_status,'customer',o.customer_id is not null,
+         'conversations',(select count(*) from public.conversations c where c.source_kind='order_request' and c.source_id=o.id),
+         'messages',(select count(*) from public.messages m join public.conversations c on c.id=m.conversation_id
+           where c.source_kind='order_request' and c.source_id=o.id),
+         'scopes',(select count(*) from public.guest_access_grant_scopes s where s.scope_kind='order_request' and s.scope_id=o.id))::text
+         from public.order_requests o where o.idempotency_key=${literal(payload.idempotencyKey)};`))
+      check('canonical totals and single linked conversation seed are preserved',
+        continuity.subtotal===100 && continuity.shipping===95 && continuity.total===195
+        && continuity.quote==='customer_confirmed' && continuity.customer===true
+        && continuity.conversations===1 && continuity.messages===1 && continuity.scopes===1,JSON.stringify(continuity))
+      const afterWinner=records()
+      const controlsAfterWinner=controls()
+      const refused=await session('k2_signed_refused',`set role anon; select * from ${guestCall(guestPayload(gap),'192.0.2.11')};`)
+      completed.delete('k2_signed_refused')
+      check('second actual signed last-unit purchase is refused with full record rollback',
+        refused.status!==0 && /Insufficient sellable lot stock/.test(refused.stderr)
+        && records()===afterWinner && controls()===controlsAfterWinner && invariant(gap)==='1/1|1/1|0|1')
+      const replay=JSON.parse(value(`set role anon; select row_to_json(r)::text from ${guestCall(payload)} r;`))
+      check('exact signed retry returns the same order without duplicate effects',
+        replay.ok===true && replay.public_reference===response.public_reference && replay.guest_grant_token===null && records()===afterWinner)
+      const conflict=JSON.parse(value(`set role anon; select row_to_json(r)::text from ${guestCall({...payload,note:'Changed payload'})} r;`))
+      check('same key with changed signed payload is refused without records',conflict.ok===false && conflict.error_code==='IDEMPOTENCY_CONFLICT' && records()===afterWinner)
+
+      const partialA=fixture('partial-A',1); const partialB=fixture('partial-B',0)
+      const beforePartial=records()
+      const controlsBeforePartial=controls()
+      const partial=await session('k2_signed_partial',`set role anon; select * from ${guestCall(guestPayload(partialA,
+        {items:[{sku:partialA.sku,quantity:1},{sku:partialB.sku,quantity:1}]}),'192.0.2.12')};`)
+      completed.delete('k2_signed_partial')
+      check('later-item stock failure rolls back earlier hold and all new records',partial.status!==0
+        && /Insufficient sellable lot stock/.test(partial.stderr) && records()===beforePartial && controls()===controlsBeforePartial
+        && invariant(partialA)==='1/0|1/0|1|0' && invariant(partialB)==='0/0|0/0|0|0')
+
+      const race=fixture('signed-race',1); const raceGate=await controller()
+      const raceOnePayload=guestPayload(race); const raceTwoPayload=guestPayload(race)
+      const one=session('k2_signed_winner',`begin; set local role anon;
+        select * from ${guestCall(raceOnePayload,'192.0.2.20')}; select pg_advisory_xact_lock(61001,5); commit;`)
+      await waitFor(blockedBy('k2_signed_winner',raceGate.name),'signed winner holds its unit')
+      const two=session('k2_signed_loser',`set role anon; select * from ${guestCall(raceTwoPayload,'192.0.2.21')};`)
+      await waitFor(blockedBy('k2_signed_loser','k2_signed_winner'),'independent signed buyer waits for stock')
+      await raceGate.release()
+      const raceResults=await Promise.all([one,two])
+      completed.delete('k2_signed_winner'); completed.delete('k2_signed_loser')
+      check('concurrent actual signed buyers preserve one winner and refuse the loser',raceResults[0].status===0
+        && raceResults[1].status!==0 && /Insufficient sellable lot stock/.test(raceResults[1].stderr)
+        && invariant(race)==='1/1|1/1|0|1'
+        && value(`select count(*)=1 from public.order_requests where idempotency_key in
+         (${literal(raceOnePayload.idempotencyKey)},${literal(raceTwoPayload.idempotencyKey)});`)==='t')
+
+      const keyRace=fixture('same-key',1); const keyPayload=guestPayload(keyRace); const keyGate=await controller()
+      const keyOne=session('k2_signed_key_one',`begin; set local role anon; select * from ${guestCall(keyPayload,'192.0.2.30')};
+        select pg_advisory_xact_lock(61001,5); commit;`)
+      await waitFor(blockedBy('k2_signed_key_one',keyGate.name),'same-key first request holds result')
+      const keyTwo=session('k2_signed_key_two',`set role anon; select * from ${guestCall(keyPayload,'192.0.2.31')};`)
+      await waitFor(blockedBy('k2_signed_key_two','k2_signed_key_one'),'same-key second request waits')
+      await keyGate.release()
+      const keyResults=await Promise.all([keyOne,keyTwo])
+      completed.delete('k2_signed_key_one'); completed.delete('k2_signed_key_two')
+      check('concurrent same-key signed requests return one canonical result',keyResults.every(r=>r.status===0)
+        && invariant(keyRace)==='1/1|1/1|0|1'
+        && value(`select count(*)=1 from public.order_requests where idempotency_key=${literal(keyPayload.idempotencyKey)};`)==='t')
+    } else {
     for (let i=0;i<2;i+=1) {
       const payload={ customerName:'Local signed gap',email:`gap${i}@example.test`,phone:'',address:'Local test address',
         fulfillmentMethod:'Pickup',note:'',items:[{sku:gap.sku,quantity:1}],idempotencyKey:randomUUID(),couponCode:'' }
@@ -305,6 +430,7 @@ try {
     check('remaining signed-purchase gap is reproduced: zero holds for two accepted orders',
       value(`select count(*)=0 from public.inventory_reservations where sku=${literal(gap.sku)};`)==='t'
       && invariant(gap)==='1/0|1/0|1|0',invariant(gap))
+    }
   }
 } catch(error) { runError=error }
 finally {
@@ -330,7 +456,8 @@ if(runError) throw runError
 fs.mkdirSync(evidence,{recursive:true})
 fs.writeFileSync(path.join(evidence,beforeFix?'before-fix-receipt.json':'local-receipt.json'),`${JSON.stringify({
  capturedAt:new Date().toISOString(),target:`127.0.0.1:54388/${database}`,template,
- scope:'Actual prepared function bodies on disposable restored-schema clone; not full migration installation or signed purchase-hold acceptance',
- beforeFix,manifest,checks,providerWrites:false,canonicalSignedHoldIntegration: false,
+ scope:signedHolds ? 'Full prepared purchase-hold migration plus actual signed purchase/last-unit/retry on disposable restored-schema clone; no provider or all-writer acceptance'
+  : 'Actual prepared function bodies on disposable restored-schema clone; not full migration installation or signed purchase-hold acceptance',
+ beforeFix,manifest,checks,providerWrites:false,canonicalSignedHoldIntegration: signedHolds,
  templateUnchanged:true,cloneRemoved:true },null,2)}\n`)
 if(beforeFix) { console.error('EXPECTED_BEFORE_FIX_FAILURE: Website/inventory deadlock reproduced'); process.exitCode=1 }

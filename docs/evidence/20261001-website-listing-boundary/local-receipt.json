@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-01T07:45:46.376Z",
+  "capturedAt": "2026-10-01T08:14:36.699Z",
   "target": "127.0.0.1:54388/k2_current_restore_20260929",
   "scope": "Isolated rollback-only full guest dependency chain plus Website assignment; not live acceptance",
   "dependencyManifest": [
@@ -81,7 +81,7 @@
     },
     {
       "path": "supabase/migrations/20260916_automated_delivery_quotation.sql",
-      "sha256": "b9640617587a07f1fae80804caadb05843b48f9c4051106823d55345cc6d08da"
+      "sha256": "77d5dce6eb546cf96416d6c31b370110758ee3c2c45d8ae5d6e70053287c6c55"
     },
     {
       "path": "supabase/migrations/20261001065252_admin_signing_null_inputs.sql",

@@ -4,6 +4,13 @@ IDEA-20261001-03; owning work MAP-018, with MAP-017/020 activation and
 MAP-023 inventory integration dependencies. Branch: `codex/map017-guest-chat-preview`.
 This is local preparation, not an applied migration, deployment or real-host acceptance.
 
+The refreshed 21-source receipt also passes after IDEA-20261001-06's signed
+key-order and shipping-column correction. It does not install the stock chain
+or prove actual purchase holds. The separate 29-entry full-hold witness and
+current-writer preservation evidence are in
+`../20261001-signed-purchase-holds/README.md`; complete writer/coupon/shipping,
+provider installation/recovery and real-host acceptance remain open.
+
 The original Website source/evidence batch is local commit `b2b0c4d`; no remote push or
 live promotion occurred. The owner's pre-existing Gemini idea and `.backups/`
 remain outside that commit. Use this commit as the scoped source-recovery

@@ -115,6 +115,8 @@ begin
     return;
   end if;
 
+  -- Match the canonical writer: serialize the key before inventory/FK locks.
+  perform pg_advisory_xact_lock(hashtextextended('k2.website-order:'||trim(v_payload->>'idempotencyKey'),0));
   select * into v_order from public.order_requests
   where idempotency_key = v_payload->>'idempotencyKey';
   if found then
@@ -144,14 +146,14 @@ begin
     begin
       v_shipping_num := (v_payload->>'shippingAmount')::numeric;
       if v_shipping_num >= 0 and v_shipping_num <= 100000 then
-        update public.order_requests
+        update public.order_requests as o
         set shipping_amount = v_shipping_num,
             shipping_quote_status = coalesce(nullif(v_payload->>'shippingQuoteStatus',''), 'customer_confirmed'),
-            total_amount = subtotal - discount_amount + v_shipping_num,
+            total_amount = o.subtotal - o.discount_amount + v_shipping_num,
             customer_delivery_confirmed_at = now(),
             updated_at = now()
-        where id = v_order.id
-        returning * into v_order;
+        where o.id = v_order.id
+        returning o.* into v_order;
       end if;
     exception when others then
       -- Fall back cleanly to unpriced order request on invalid numeric
