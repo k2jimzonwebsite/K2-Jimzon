@@ -65,6 +65,20 @@ components:
 
 # Design System: K2 Jimzon
 
+### Delivery authority and recovery candidate — 1 October 2026
+
+IDEA-20260925-06 / MAP-023; prepared design only, peer review APPROVED and owner
+approach acceptance pending. Preserve the wood canvas, Fraunces/Source Sans and
+44px keyboard/touch controls. The candidate derives delivery area from reachable
+PSA locality choices, keeps pickup usable without an address, labels estimated
+weight separately from the accepted fee and shows recoverable quote states.
+An uncertain order retains its reviewed details/key; accepted staff fees and
+approval indicators are read-only while tracking/waybill details remain editable.
+No unsupported ETA, shipment-weight or actual-parcel claim is introduced.
+Source/design/decision evidence: `docs/specs/SHIPPING_AND_COURIER_LOGIC_SPEC.md`
+and `docs/evidence/20261001-authoritative-delivery/README.md`. Nothing in this
+candidate is rendered or deployed; remaining actions live only in MAP-023.
+
 ### Order conversation and buyer proof (IDEA-20260928-02, source deployed; human acceptance open)
 
 The confirmation page retains the K2 paper card, serif section headings and readable sans-serif form controls. The order thread sits directly below the selected receiving QR. Its message composer opens with the existing order, so the buyer can type without re-entering a name. The upload form labels payment reference and e-receipt separately, states the private file limits, and says staff must confirm funds. Verified payment removes the transfer and upload prompts. At 375px the focused synthetic buyer journey passed without a second identity form; staff proof download passed its focused modal test. Real-device and exact-host behavior remain open in MAP-025.

@@ -851,6 +851,7 @@ Master Action Plan is authorized for implementation.
 
 | Idea | Outcome | Destination or reason |
 | --- | --- | --- |
+| IDEA-20260925-06 | Accepted into MAP-023/025; current regional correction candidate prepared | Preserve owner-confirmed J&T-based matrix and separate NCR Lalamove/Grab express, with future standard inactive. The server recomputation/locality/accepted-charge/recovery candidate passed peer arbitration; owner approach acceptance/implementation remain pending; no provider or price activation. Evidence: 1 October authoritative-delivery receipt. |
 | IDEA-20261001-06 | Accepted into MAP-023 / MAP-017 / MAP-020; scoped local correction verified | Current writer/metadata and legacy compatibility retained; 42/42 scoped signed-hold checks, 48/48 legacy properties and development gate pass. Complete writer/coupon/shipping, broader concurrency and provider install/recovery/apply gates remain open; see signed-purchase-holds evidence. |
 | IDEA-20261001-05 | Local lock correction verified; signed hold integration remains MAP-023 / MAP-018 | Real selected-body races pass; signed no-hold/overload blocker reproduced. Complete installer, all writers, shipping and provider/recovery gates remain in their MAP items. |
 | IDEA-20261001-04 | Local forward correction verified; live gates in MAP-017 / MAP-020 | Seven signer variants and Website integration pass; exact provider capture/apply/recovery and activation remain pending. |
@@ -1251,7 +1252,8 @@ Do not wait for the audit before capturing it.
 **Known dependency:** MAP-017/020 migration and signed Admin cutover; MAP-023 rate policy and real payment; MAP-025 staff/buyer acceptance.
 **Possible overlap with current behavior/MAP item:** Accepted and merged into MAP-023/025; no separate roadmap.
 **Owner decision and audit outcome:** On 25 September the owner chose current J&T-based customer rates with a separate inactive future standard-rate policy. On 1 October the owner confirmed keeping NCR express as separate Lalamove/Grab alongside J&T standard, preserving the current express matrix. These choices merge into the existing MAP-023 delivery slice; no new queue or provider activation. Authorized rate approval/effective-date evidence, receiving QR confirmation and real carrier/physical acceptance remain in MAP-023/025. See the delivery/payment audit for the exact answer and live/prepared limits.
-**Status:** Audit complete; rate publishing and full payment/delivery acceptance remain open in MAP-023/025.
+**1 October design preparation:** The existing shipping spec now carries a regional-matrix correction candidate with database recomputation, pinned PSA locality provenance and immutable accepted-charge intent. Its structured reviewer/arbiter log is `docs/evidence/20261001-authoritative-delivery/README.md`; peer review is APPROVED, while owner approach acceptance and runtime implementation remain pending in MAP-023. Source acquisition does not establish an imported locality dataset, measured product weights or applied pricing guard.
+**Status:** Peer design review complete; owner approach acceptance, runtime implementation, rate publishing and full payment/delivery acceptance remain open in MAP-023/025.
 
 ### IDEA-20260925-07  -  Admin Inbox Categorization, Viewport Maximization, and Deletion Discovery
 

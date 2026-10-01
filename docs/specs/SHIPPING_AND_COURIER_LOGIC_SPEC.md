@@ -1,5 +1,290 @@
 # K2 Jimzon - Shipping, Waybill, and Tracking Logic Spec
 
+## Current regional checkout correction — 1 October 2026
+
+**Design candidate, not implemented or activated.** IDEA-20260925-06 / MAP-023
+owns this correction. The sections below this reconciliation retain the older
+exact-locality carrier-cost pilot. That pilot is prepared evidence and does not
+replace the owner's current customer matrix. Remaining actions live only in MAP.
+Owner policy and the separate NCR express choice are confirmed; this candidate's
+implementation approach still needs owner acceptance. Sequential peer review
+and arbitration are complete: APPROVED for that owner gate, not implementation
+or activation evidence.
+
+### Intent and assumptions
+
+- Give buyers a delivery fee that the server can validate before creating an order.
+- Preserve all current regional prices and separate NCR Lalamove/Grab express.
+- Use canonical K2 product facts and a structured Philippine destination.
+- Keep accepted customer charges stable through staff edits and rate revisions.
+- Keep future standard pricing inactive and carrier costs separate.
+- Preserve the existing guest ownership, conversation, coupon and stock contracts.
+
+Assume the existing 50-line / 99-units-per-line request limits remain. Quote and
+order operations use indexed local database reads with no external provider call;
+target additional database work below 500 ms at the current 30-product scale,
+subject to measurement. Failures preserve entered fields and prevent submission
+with stale fees. No customer address goes to PSA or a geocoder. Keep the K2 wood
+canvas, typography, mobile controls, keyboard access and reduced-motion behavior.
+Maintain one tariff formula in the database, with client/server parity evidence.
+
+### Approach and alternatives
+
+**Recommended: recompute on submission and freeze the accepted snapshot.** The
+existing signed delivery route returns a preview calculated from canonical SKUs,
+quantities, locality and service. It returns the immutable rate version, weight
+basis/fingerprint and PHP fee. The signed order transaction recomputes under the
+existing ordered inventory/product locks and requires these exact displayed
+values. A mismatch stops for a new review; it never silently increases the fee.
+The same transaction records the accepted delivery snapshot with the order.
+
+A persisted expiring pre-order quote could also bind these inputs, but adds
+expiry, single-use and abandoned-record handling before a reservation exists.
+Recomputing only in the BFF would be smaller but would leave a race between its
+read and the database transaction. The recommended approach keeps pricing
+authority with canonical inventory/order data without an extra quote store.
+
+### Submission recovery
+
+A definitive stale-quote refusal must be a distinct, classified no-business-commit
+result. Only that result releases StoreContext's retained stale quote/key, keeps
+the buyer's fields, fetches a fresh preview and requires reviewing it before a
+new submission identity. A timeout, malformed response or lost response is
+uncertain: retain the exact payload/key and retry it. That retry first resolves
+the saved order and ownership under the key lock, even after rate or weight
+changes. It cannot refresh the quote or create another order/hold/seed until the
+original outcome is known. Preview responses also carry an input identity;
+responses for older cart/destination/service selections cannot replace the
+current preview. Security nonce/rate records are separate from business writes.
+
+On recovery, a bot/origin/rate/shape refusal before canonical key resolution
+proves only that the retry did not run; it cannot prove an earlier lost-response
+attempt did not commit. Keep the original payload/key and reviewed fee/context
+while resolving that uncertainty, including after a fresh challenge or rate
+wait. Do not offer an edit action that silently abandons the unresolved key and
+starts another order. Correction becomes available after the original transaction
+is definitively refused; otherwise retry or ask staff to resolve the original
+request. Bot tokens/nonces are fresh transport controls, outside the retained
+business fingerprint. Prove this with a successful-but-lost first response
+followed by a denied retry and then a successful exact-key retry.
+
+### Preview eligibility and projection
+
+Preview uses a read-only form of the existing reviewed Website-offer predicate:
+current active assignment, approved facts/name/image/positive price, published
+Live/Active or approved direct-link Unlisted. Guessed, paused, unassigned or
+ineligible SKUs receive a generic refusal without canonical weight facts.
+The response allowlist contains service/area, PHP fee, version/input identity,
+total packed weight and measured/estimated basis needed for buyer review; it
+contains no costs, stock lots or private product evidence. Preview must not
+invoke the order helper wholesale because that helper initializes balances and
+takes write locks. Only existing security nonce/rate controls may write.
+
+### Customer tariff
+
+| Service / area | Base PHP | Included weight | Each started kg above it | PHP ceiling step |
+| --- | ---: | ---: | ---: | ---: |
+| J&T standard / NCR | 95 | 3 kg | 30 | 5 |
+| J&T standard / Greater Luzon | 85 | 3 kg | 35 | 5 |
+| J&T standard / Visayas | 100 | 3 kg | 40 | 5 |
+| J&T standard / Mindanao | 105 | 3 kg | 45 | 5 |
+| Lalamove/Grab express / NCR only | 150 | 5 kg | 40 | 10 |
+| K2 pickup | 0 | — | — | — |
+
+Store one immutable, owner-evidence-linked version of this customer matrix; a
+future standard-rate policy has no active amount or automatic switch. These are
+K2 customer prices, not a verified carrier tariff or booking guarantee.
+
+### Weight evidence and grammar
+
+Prefer positive canonical `shipping_weight_g` when warehouse measurement exists.
+Otherwise preserve the current owner-authorized estimate: parse canonical net
+quantity/size, add the existing 220 g jar/bottle or 80 g other tare, and use 500 g
+when quantity is unknown. Persist the estimator version and each SKU's basis as
+estimated; never write these values into measured shipping columns. Existing
+volume-as-weight behavior is explicitly an estimate, not a density measurement.
+The estimator is versioned independently from the shelf-display parser, whose
+unsigned substring matching is not safe shipping validation. Precedence is
+measured field, then `net_weight`, then `size`, then unknown-quantity fallback.
+A NULL/missing measured field permits estimation; a present invalid measured
+field stops. An unknown descriptive quantity permits the next field/fallback;
+a recognized but malformed numeric quantity stops rather than searching for a
+cheaper later value. Supported quantity units are g, kg, ml, l and cl, with
+positive decimal-dot values or unambiguous decimal-comma values (one or two
+fractional digits), optionally one positive integer multipack factor joined by
+x, × or *. Ordinary package words and a trailing piece count may accompany one
+quantity expression. Signed values, exponent notation, ambiguous three-digit
+comma groups, conflicting quantity expressions and nonfinite products stop.
+Examples: `2 x 80 g` => 160 g before tare; `304 g - 22 pcs` => 304 g before tare;
+`-500 g` and `1,000 g` are invalid; `jar` is unknown and can use the fallback.
+
+### Arithmetic bounds
+
+Proposed engineering bounds are 1–100,000 g per packed unit, at most 4,950 units
+from the existing line/quantity limits, finite integer cart weight up to
+495,000,000 g and a final customer fee within the existing PHP 0–100,000 envelope
+(zero only for pickup). These are arithmetic/request safety bounds, not carrier
+weight/coverage promises. Invalid or excessive facts stop for staff correction;
+no overflowing value silently becomes 500 g. Exact boundary and multipack tests
+must prove current parity for valid facts. The old measured-only pilot remains
+separate. Real package and carrier evidence still belongs to staff acceptance.
+
+### Destination reference
+
+Pin the official PSA 30 June 2026 PSGC publication with attribution and checksum.
+Validate the complete region/province/city-or-municipality/barangay hierarchy;
+retain Manila submunicipal units and special geographic groups without inventing
+a province. Derive the matrix area from this trusted hierarchy, including NIR
+as Visayas. Unknown, mismatched or stale locality codes cannot become Mindanao
+or a cheaper region. Reference geography alone proves neither carrier coverage
+nor that a house/street physically exists; staff still confirms the actual route.
+
+### Destination and pickup flow
+
+Use dependent destination selectors plus a retained house/street field. Derive
+the region display; do not ask the buyer to guess a tariff area. Loading/error
+states keep entered values, clear the current fee immediately and offer retry.
+Reset descendants after a parent changes. Pickup needs no delivery locality.
+Show server-calculated service fees before submission; preserve separate express
+carrier wording. An estimated weight must be labelled as estimated. Legacy saved
+free-text addresses need an explicit locality selection rather than guessed
+parsing. A stale quote requires reviewing the new fee before another submission.
+
+Require only real hierarchy levels: province-less HUCs and NCR must not require
+an invented province, and Manila submunicipalities/Isabela/SGA groups must have
+reachable labelled paths. Retain the original free-text address as visible
+reference with a plain instruction to select its locality. If a parent change
+makes express incompatible, clear that selection and ask the buyer to choose
+an available service; do not silently switch carriers. Pickup bypasses all
+delivery-locality and street validation, including empty client address fields;
+the server supplies the approved pickup identity/address for the canonical
+writer. Navigation/remount preserves the original pending destination, service,
+weight basis and fee while its submission is uncertain.
+
+### Customer fee presentation
+
+Present the K2 delivery fee as the amount the buyer accepts, alongside separately
+labelled weight evidence. If any SKU uses estimation, say `Estimated packed
+weight`; recorded per-unit weights do not prove the final shipment was weighed.
+Do not show an inferred parcel count as actual parcels. Remove unsupported fixed
+ETA and air/sea/dispatch promises from this flow; state that staff confirms the
+route and dispatch timing. Separate NCR Lalamove/Grab express remains visible.
+Pending/failed preview clears the payable delivery and grand-total figures.
+Explain the next action: retry a temporary lookup failure, correct an invalid
+locality, or contact staff for unavailable product/pricing facts. Do not expose
+private eligibility evidence or describe a stale total as payable.
+
+### Order authority and replay
+
+Signed SQL validates item limits, locality/service compatibility, canonical weight
+basis and the exact version/fee shown. Reject browser `waived`, `platform_charged`
+or a zero courier fee. Derive pickup identity/zero server-side. Preserve one
+canonical writer overload, grant scopes, coupon behavior, FEFO holds and seeded
+conversation. Keep key-before-balance-before-product lock order. An existing
+exact-key replay returns the saved order before any new rate lookup; changed
+payload conflicts. Refusals leave no identity, order, hold or business event.
+
+### Accepted-charge guard
+
+Persist accepted amount/version/destination/service/weight facts in one private,
+immutable acceptance row keyed to the canonical order. It stores locality codes
+and weight/pricing evidence, not another copy of the customer's street/contact
+details. No browser table access or runtime update/delete privilege is granted.
+An order-update guard enforces the recorded amount and acceptance indicators
+across all writers. Ledger mutation/erasure is separately denied. The legacy
+staff RPC must preserve those indicators on same-amount tracking/waybill edits;
+its checkbox cannot replace acceptance or update the original acceptance time.
+Raw changes to shipping amount, acceptance status/time or snapshot are refused.
+New acceptance insertion and staff edits serialize on the canonical order row;
+the ledger is evidence, not a second order or pricing authority.
+
+After activation, every accepted insert/transition must commit exactly one
+matching acceptance row atomically; a guard cannot depend on optional evidence
+that a writer can omit. Enforce this at transaction commit across all accepted
+writers. The initial manual staff confirmation path remains available with its
+existing authorization and communication-note policy and records staff-reported
+acceptance without inventing a server tariff or verified buyer receipt. It cannot
+replace prior acceptance. Concurrent initial confirmation/edit takes the same
+order lock, and a late failure rolls back both order and evidence. Missing
+evidence, evidence drift, clearing/reconfirmation or a changed charge refuses;
+idempotent replay creates no second row. Controlled provider recovery must retain
+accepted-charge protection while suspending new intake until its boundary works.
+
+### Staff acceptance display
+
+For confirmed, platform-charged and zero-waived accepted orders, show the frozen
+fee and acceptance indicators as read-only, including the original timestamp
+when one exists. Do not synthesize `via storefront checkout` for unknown legacy
+or manually recorded provenance. Courier/tracking/waybill metadata stays
+editable with the existing required communication note. Same-amount saves
+preserve the acceptance fields; guard conflicts retain typed metadata and explain
+that the accepted charge cannot be changed here. Initial unaccepted manual
+confirmation retains its existing authorization/communication requirements.
+
+### Historical acceptance preflight
+
+Installation preflight classifies existing orders and their recorded delivery
+events before activating this guard:
+
+- `customer_confirmed` or `platform_charged`, with a valid existing finite
+  nonnegative amount: protect that exact amount as legacy recorded acceptance.
+- `waived` with amount zero: protect the zero legacy charge.
+- Accepted status with a NULL timestamp: preserve the exact amount and NULL
+  timestamp with a legacy-status-only evidence label; never invent a date,
+  locality, tariff version or verified buyer/provider receipt.
+- Timestamp-only acceptance, positive `waived` amounts, invalid amounts,
+  contradictory accepted event/current values, or previously accepted event
+  history followed by cleared indicators: unresolved historical ambiguity.
+- Unaccepted status with no timestamp or contrary accepted history: remains
+  unaccepted; a positive quoted amount alone is not acceptance.
+
+Any unresolved ambiguity refuses installation/activation before business
+changes. Resolve it with actual owner/staff/customer evidence under MAP-023;
+never leave ambiguous accepted charges unprotected or silently recalculate them.
+Recognized legacy acceptance is frozen without asserting that its old browser
+fee was server-validated. A future re-quote is a separate explicit acceptance.
+Exceptional re-quotes need a distinct communicated proposal and explicit buyer
+acceptance; the legacy staff checkbox cannot authorize an increase. That future
+path is not enabled by this correction.
+
+### Verification and activation limits
+
+Require tests that reject tampered fee/region/service/weight/version, unknown
+localities, zero delivery, stale facts and acceptance-clearing attempts. Prove
+every tariff boundary, pickup, express restriction, unknown-weight labelling,
+all PSGC parent cases, current coupons, same-key retry and failure rollback.
+Run the actual corrected SQL on an owned restore clone, including concurrent
+price/weight/assignment edits and accepted-order metadata updates. Verify public
+denial/private ACLs and preserve original restore fingerprints. Phone/desktop
+and keyboard fixtures cover dependent fields, pending/error/stale states and
+same-request recovery. No mock establishes provider or physical acceptance.
+
+No provider write, feature flag or release is authorized by this design.
+MAP-017/020 must include the expanded functions, columns and hooks in exact
+capture/backup/recovery and coordinate retirement of the browser-trusted direct
+writer. A partly installed correction must remain inactive. MAP-018 retains
+reviewed real product facts, media, membership and physical counts; MAP-023/025
+retains real booking, QR/funds, payment and fulfillment acceptance.
+
+### Decision log
+
+| Decision | Alternative and reason | State |
+| --- | --- | --- |
+| D1 Preserve matrix plus separate NCR express | Exact-locality pilot replacement would change the owner-confirmed customer policy | Owner policy confirmed |
+| D2 Database recomputation plus accepted snapshot | Pre-order quote store adds lifecycle work; BFF-only recomputation leaves a transaction race. S1 separates definite stale refusal from uncertain commit/replay; C2 bounds preview eligibility and disclosure | Recommended, design acceptance pending |
+| D3 Preserve labelled canonical estimates | Measured-only checkout would change the current authorized fallback; invented measurements are forbidden. S3 adds an independent strict grammar and finite bounds | Proposed interpretation of current estimate policy |
+| D4 Pin PSA hierarchy and derive area | Browser region selection cannot validate a destination; runtime PSA/geocoding adds dependency/privacy cost | Recommended, design acceptance pending |
+| D5 Freeze across all accepted-charge writers | A guard in only one RPC can be bypassed by another writer or confirmation clearing. S2 adds private immutable evidence/historical classification; C1 makes matching evidence mandatory at commit across writers | Existing MAP requirement; revised details pending review |
+| D6 No automatic price activation | Current cost rows and future standard pricing have different authority | Owner policy confirmed |
+
+Structured reviewer objections and their resolutions are recorded in
+`docs/evidence/20261001-authoritative-delivery/README.md`. This design is not
+owner-accepted until the pending approach gate is resolved. The Arbiter approved
+the revised peer design with all material objections incorporated; no runtime
+evidence is implied.
+
+---
+
 **Status:** `IDEA-20260901-01` was audited on 1 September 2026 and merged into
 `MAP-023`, with downstream system boundaries owned by `MAP-019`, `MAP-020`, and
 `MAP-026`. The owner-approved target is a controlled manual-pilot workbook for
