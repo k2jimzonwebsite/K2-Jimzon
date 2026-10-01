@@ -1,5 +1,7 @@
 # Guest Commerce BFF Activation Runbook
 
+**1 October Website stock gate (IDEA-20261001-05, locally prepared):** The latest order helper takes every SKU-ordered Manila balance before product/listing locks and derives missing balances only from canonical physical/reserved lots. Selected actual cancellation/expiry/recount, last-unit, signed Admin pause, opposite-basket and missing-balance cases pass on an owned disposable clone; the refreshed 21-source Website rollback witness also passes. Current signed checkout still accepts two one-unit orders without holds, and the old purchase migration requires a 9-argument signature absent from the current 11-argument writer. MAP-023 retains compatible signed hold/replay/failure, all-writer/coupon and authoritative shipping acceptance. Recompose the exact provider installer/captures/backup/recovery under MAP-017/020 before authorization or activation. Commands, scope, evidence and recovery: `docs/evidence/20261001-website-stock-locks/README.md`.
+
 **Current branch-only provider review:** The 30 September
 `PREVIEW_CONFIGURATION_REVIEW.md` records the 14 slots, enabled modern K2 key,
 exact branch/host and current recovery limits. In Vercel's Add form, selecting

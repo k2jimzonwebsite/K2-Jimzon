@@ -67,12 +67,16 @@ seven variants in `docs/evidence/20261001-admin-signing/README.md`. The refreshe
 Website witness includes it. No live repair or exploit test is claimed;
 IDEA-20261001-04 / MAP-017/020 retains exact provider capture/apply/recovery.
 
-The helper takes product locks before later stock work. Prepared purchase-hold
-cancel/expiry/reconcile paths lock balances/lots before updating products.
-Those hold RPCs are absent from the restored baseline; concurrent integration
-remains a MAP-023 gate. Reconcile one lock order and prove all writers together
-before activating those prepared paths with this helper. Sequential local
-success is not a concurrency claim.
+IDEA-20261001-05 subsequently reproduced the product/balance deadlock and
+corrected the unapplied helper to derive absent balances from canonical lots and
+take all SKU-ordered Manila balances before product/listing locks. Selected
+actual-body cancellation, expiry, recount, last-unit, assignment, opposite-basket
+and missing-balance checks pass; this original 21-source witness was refreshed
+and still passes. It remains a rollback-only eligibility/assignment witness.
+The stock clone separately reproduces the current 11-argument signed writer's
+zero holds and missing 9-argument old-migration prerequisite. Complete signed
+hold installation and all-writer/coupon acceptance remain MAP-023. Evidence:
+`docs/evidence/20261001-website-stock-locks/README.md`.
 
 The 30 September frozen 18-source installer and its recovery captures are stale
 after these source edits. Before any provider approval, recompose canonical

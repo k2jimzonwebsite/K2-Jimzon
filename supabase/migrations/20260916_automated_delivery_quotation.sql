@@ -30,8 +30,20 @@ begin
   if jsonb_typeof(p_items) is distinct from 'array' or jsonb_array_length(p_items) not between 1 and 50 then
     raise exception using errcode='K2WEB',message='K2_PRODUCT_NOT_OFFERED_ON_WEBSITE';
   end if;
+  -- Inventory writers take balances before lots and product projections. Take
+  -- every basket balance in that same SKU order before any product/listing lock.
+  -- A missing balance derives only from canonical lots, never a display count.
+  insert into public.inventory_balances(sku,location_code,on_hand,reserved)
+  select p.sku,'MANILA_MAIN',coalesce(sum(b.quantity),0)::integer,
+    coalesce(sum(b.reserved_quantity),0)::integer
+  from public.products p left join public.product_batches b on b.sku=p.sku
+  where p.sku in (select item->>'sku' from jsonb_array_elements(p_items) item)
+  group by p.sku order by p.sku on conflict(sku,location_code) do nothing;
+  perform 1 from public.inventory_balances b where b.location_code='MANILA_MAIN'
+    and b.sku in (select item->>'sku' from jsonb_array_elements(p_items) item)
+    order by b.sku for update;
   for v_sku in select distinct item->>'sku' from jsonb_array_elements(p_items) item order by 1 loop
-    -- Match Admin lock order and avoid a later stock-trigger lock upgrade.
+    -- The assignment command takes product then listing; it never takes stock.
     select * into v_product from public.products where sku=v_sku for update;
     if not found or v_product.is_human_reviewed is distinct from true
        or nullif(trim(v_product.name),'') is null or nullif(trim(v_product.primary_image_url),'') is null
