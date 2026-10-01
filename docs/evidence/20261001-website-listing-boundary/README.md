@@ -4,6 +4,11 @@ IDEA-20261001-03; owning work MAP-018, with MAP-017/020 activation and
 MAP-023 inventory integration dependencies. Branch: `codex/map017-guest-chat-preview`.
 This is local preparation, not an applied migration, deployment or real-host acceptance.
 
+The verified source/evidence batch is local commit `b2b0c4d`; no remote push or
+live promotion occurred. The owner's pre-existing Gemini idea and `.backups/`
+remain outside that commit. Use this commit as the scoped source-recovery
+reference while preserving provider receipts and any later work.
+
 The full production-listing goal requires a reviewed Website offer independent
 of global publication. Read-only production evidence on 30 September found 30
 products, 22 published and zero Website assignments; these records remain unchanged.
