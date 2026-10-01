@@ -1,4 +1,7 @@
 -- Rollback for 20260912_confirmation_stock_commitment.sql (prepared only).
+-- Historical isolated recovery only: NOT APPROVED for the current composed
+-- ordered/coverage chain. MAP-017/020 requires reviewed exact snapshots or
+-- controlled deactivation/roll-forward before any provider use.
 --
 -- Restores the hold-migration confirmation body and the pre-commitment sweep
 -- body by re-applying their own replayable migrations verbatim, then drops
@@ -8,6 +11,9 @@
 -- may already carry committed_at audit facts, and dropping the columns would
 -- erase that history. A future cleanup may drop them only after verifying no
 -- released row references commitment evidence.
+-- Keep the extended inventory_events event vocabulary too: stock_committed
+-- events are durable audit facts. Restoring the old check would reject retained
+-- history. This recovery deactivates callers without deleting those events.
 --
 -- Run from the repository root against the target database owner session:
 --   psql -f supabase/confirmation_stock_commitment_rollback.sql

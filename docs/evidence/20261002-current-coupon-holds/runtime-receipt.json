@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-10-01T16:29:30.2543815Z",
+  "scope": "Process-visible clean local shutdown after coupon/confirmation rehearsal; no provider action",
+  "postmasterPid": 14500,
+  "targetVerified": true,
+  "cloneAbsentBeforeStop": true,
+  "cleanFastStopExitCode": 0,
+  "stoppedAt": "2026-10-01T16:29:30.2517617Z",
+  "pidFileAbsent": true,
+  "postmasterProcessAbsent": true,
+  "connections": [
+    {
+      "exitCode": 2,
+      "connectionRefused": true,
+      "port": 54388,
+      "host": "127.0.0.1"
+    },
+    {
+      "exitCode": 2,
+      "connectionRefused": true,
+      "port": 54331,
+      "host": "127.0.0.1"
+    }
+  ]
+}

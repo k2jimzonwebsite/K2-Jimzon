@@ -13,9 +13,18 @@ const database = 'k2_website_stock_locks_20261001'
 const dataDirectory = path.join(root, '.tools/current-restore-20260929-pg-data').replaceAll('\\', '/')
 const bin = path.join(root, '.tools/postgresql-17.11/runtime/pgsql/bin')
 const signedHolds = process.argv.includes('--signed-holds')
+const couponLifecycle = process.argv.includes('--coupon-lifecycle')
+const beforeCommitment = process.argv.includes('--before-commitment')
+const beforeEventType = process.argv.includes('--before-event-type')
 const beforeKeyLock = process.argv.includes('--before-key-lock')
 if (beforeKeyLock && !signedHolds) throw new Error('KEY_LOCK_REGRESSION_REQUIRES_SIGNED_HOLDS')
-const evidence = path.join(root, signedHolds ? 'docs/evidence/20261001-signed-purchase-holds' : 'docs/evidence/20261001-website-stock-locks')
+if ((couponLifecycle && !signedHolds) || (beforeCommitment && !couponLifecycle)
+    || (beforeEventType && (!couponLifecycle || beforeCommitment))
+    || (couponLifecycle && (beforeKeyLock || process.argv.includes('--before-fix')))) {
+  throw new Error('COUPON_LIFECYCLE_MODE_INVALID')
+}
+const evidence = path.join(root, couponLifecycle ? 'docs/evidence/20261002-current-coupon-holds'
+  : signedHolds ? 'docs/evidence/20261001-signed-purchase-holds' : 'docs/evidence/20261001-website-stock-locks')
 const beforeFix = process.argv.includes('--before-fix')
 const actor = '42000000-0000-4000-8000-000000000001'
 const marker = randomUUID()
@@ -136,7 +145,10 @@ async function controller(extraLock = '') {
 }
 const checks = []
 function check(name, condition, detail = '') {
-  if (!condition) throw new Error(`ASSERTION_FAILED: ${name} ${detail}`)
+  if (!condition) {
+    if (couponLifecycle) checks.push({ name, passed: false, detail })
+    throw new Error(`ASSERTION_FAILED: ${name} ${detail}`)
+  }
   checks.push({ name, passed: true, detail })
   console.log(`[pass] ${name}${detail ? ` — ${detail}` : ''}`)
 }
@@ -189,6 +201,247 @@ const records = () => value(`select jsonb_build_object(
  'inventory_events',(select count(*) from public.inventory_events))::text;`)
 const controls = () => value(`select jsonb_build_object('nonces',(select count(*) from k2_private.guest_request_nonces),
  'rate_rows',(select count(*) from k2_private.guest_rate_buckets),'rate_hits',(select coalesce(sum(hit_count),0) from k2_private.guest_rate_buckets))::text;`)
+
+async function rehearseCouponLifecycle() {
+  const confirmationMetadata = () => value(`select jsonb_build_object('owner',proowner,'acl',proacl,
+    'config',proconfig,'definer',prosecdef,'returns',prorettype,'defaults',proargdefaults::text)::text
+    from pg_proc where oid='public.confirm_order_request(uuid,text)'::regprocedure;`)
+  const metadataBefore = confirmationMetadata()
+  let commitmentMigration
+  const eventConstraint = value(`select pg_get_constraintdef(oid) from pg_constraint
+    where conrelid='public.inventory_events'::regclass and conname='inventory_events_event_type_check';`)
+  if (!beforeCommitment) {
+    const migration = source('supabase/migrations/20260912_confirmation_stock_commitment.sql')
+    commitmentMigration = migration
+    sync(database, migration)
+    sync(database, migration)
+    check('whole confirmation commitment migration installs and replays with metadata preserved',
+      confirmationMetadata() === metadataBefore)
+    if (beforeEventType) sync(database, `alter table public.inventory_events drop constraint inventory_events_event_type_check;
+      alter table public.inventory_events add constraint inventory_events_event_type_check ${eventConstraint};`)
+    else {
+      const reviewed = value(`select pg_get_constraintdef(oid) from pg_constraint
+        where conrelid='public.inventory_events'::regclass and conname='inventory_events_event_type_check';`)
+      let literalDriftRefused = false
+      try { sync(database, `begin; alter table public.inventory_events drop constraint inventory_events_event_type_check;
+        alter table public.inventory_events add constraint inventory_events_event_type_check
+          ${reviewed.replace("'stock_committed'", "'stock_committed '")};
+        ${withoutTransaction(migration)} rollback;`) }
+      catch (error) { literalDriftRefused = /MAP-023 stock commitment: unfamiliar inventory event constraint/.test(error.message) }
+      check('quoted event-name whitespace drift refuses rather than normalizing away', literalDriftRefused)
+
+      // Queue owner DDL ahead of installation behind an existing writer lock.
+      // Inspection must occur only after the owner replacement is committed.
+      const ddlGate = await controller('lock table public.inventory_events in row exclusive mode;')
+      const replacement = session('k2_event_constraint_owner', `begin;
+        alter table public.inventory_events drop constraint inventory_events_event_type_check;
+        alter table public.inventory_events add constraint inventory_events_event_type_check check(event_type<>'LOCAL_FORBIDDEN'); commit;`)
+      await waitFor(blockedBy('k2_event_constraint_owner', ddlGate.name), 'owner DDL waits behind current writer')
+      const installation = session('k2_event_constraint_install', `begin; ${withoutTransaction(migration)} commit;`)
+      await waitFor(blockedBy('k2_event_constraint_install', 'k2_event_constraint_owner'), 'installation queues behind owner DDL')
+      await ddlGate.release()
+      const ddlResults = await Promise.all([replacement, installation])
+      completed.delete('k2_event_constraint_owner'); completed.delete('k2_event_constraint_install')
+      const changed = value(`select pg_get_constraintdef(oid) from pg_constraint
+        where conrelid='public.inventory_events'::regclass and conname='inventory_events_event_type_check';`)
+      check('queued installation refuses the newly committed unfamiliar constraint without overwriting it',
+        ddlResults[0].status === 0 && ddlResults[1].status !== 0
+        && /MAP-023 stock commitment: unfamiliar inventory event constraint/.test(ddlResults[1].stderr)
+        && changed.includes('LOCAL_FORBIDDEN') && confirmationMetadata() === metadataBefore)
+      sync(database, `alter table public.inventory_events drop constraint inventory_events_event_type_check;
+        alter table public.inventory_events add constraint inventory_events_event_type_check ${reviewed};`)
+    }
+  }
+  const coupon = (suffix, columns = '', values = '') => {
+    const code = `LOCAL-${suffix}`
+    const id = randomUUID()
+    sync(database, `insert into public.coupons(id,code,discount_type,discount_value,is_active${columns})
+      values('${id}',${literal(code)},'fixed',10,true${values});`)
+    return { id, code }
+  }
+  // Independent fixture buyers use documentation-range IPs so accumulated
+  // successful cases do not accidentally test the existing IP rate limit.
+  let requestIp = 100
+  const request = payload => guestCall(payload, `192.0.2.${requestIp++}`)
+  const submit = (f, c, extra = {}) => {
+    const payload = guestPayload(f, { couponCode: c.code, shippingAmount: 95,
+      shippingQuoteStatus: 'customer_confirmed', ...extra })
+    const result = JSON.parse(value(`set role anon; select json_build_object('ok',ok,'code',error_code)::text from ${request(payload)};`))
+    check(`signed coupon submission accepts ${c.code}`, result.ok === true, result.code ?? '')
+    return { payload, id: value(`select id from public.order_requests where idempotency_key=${literal(payload.idempotencyKey)};`) }
+  }
+  const confirm = id => sync(database, `${staff} select public.confirm_order_request('${id}','Local coupon lifecycle');`)
+  const snapshot = id => value(`select jsonb_build_object('order',to_jsonb(o),
+    'allocations',(select jsonb_agg(to_jsonb(r) order by r.id) from public.inventory_reservations r where r.order_request_id=o.id),
+    'legacy_orders',(select count(*) from public.orders where order_request_id=o.id),
+    'redemptions',(select jsonb_agg(to_jsonb(c) order by c.id) from public.coupon_redemptions c where c.order_request_id=o.id),
+    'coupon_count',(select redemption_count from public.coupons where id=o.coupon_id),
+    'events',(select count(*) from public.inventory_events where reference_id=o.id),
+    'order_events',(select count(*) from public.order_request_events where order_request_id=o.id))::text
+    from public.order_requests o where o.id='${id}';`)
+  const f = fixture('coupon-fixed', 2); const c = coupon('FIXED')
+  const order = submit(f, c)
+  check('current writer snapshots fixed discount and existing shipping without early redemption', value(`select
+    subtotal=100 and discount_amount=10 and shipping_amount=95 and total_amount=185
+    and coupon_id='${c.id}' and coupon_code=${literal(c.code)}
+    and (select redemption_count from public.coupons where id='${c.id}')=0
+    and not exists(select 1 from public.coupon_redemptions where order_request_id=o.id)
+    from public.order_requests o where id='${order.id}';`) === 't' && invariant(f) === '2/1|2/1|1|1')
+  const beforeRetry = snapshot(order.id); const beforeRecords = records()
+  check('signed coupon replay returns the accepted snapshot without another hold',
+    value(`set role anon; select ok from ${request(order.payload)};`) === 't'
+    && snapshot(order.id) === beforeRetry && records() === beforeRecords)
+  const beforeConfirmation = snapshot(order.id)
+  const confirmation = await session('k2_coupon_first_confirmation', `select public.confirm_order_request('${order.id}','Local coupon confirmation');`)
+  completed.delete('k2_coupon_first_confirmation')
+  if (confirmation.status !== 0) check('refused constrained confirmation leaves the whole accepted order untouched',
+    snapshot(order.id) === beforeConfirmation)
+  check('current coupon confirmation commits without a constrained event refusal', confirmation.status === 0,
+    confirmation.status === 0 ? '' : confirmation.stderr)
+  check('confirmation redeems and commits the exact hold once while preserving physical custody', value(`select
+    status='confirmed' and total_amount=185 and shipping_amount=95
+    and (select redemption_count from public.coupons where id='${c.id}')=1
+    and (select count(*) from public.coupon_redemptions where order_request_id=o.id and status='reserved')=1
+    and (select count(*) from public.inventory_reservations r where r.order_request_id=o.id
+      and to_jsonb(r)->>'committed_at' is not null and to_jsonb(r)->>'commit_cause'='confirmation'
+      and to_jsonb(r)->>'committed_by'='${actor}')=1
+    and (select count(*) from public.inventory_events where reference_id=o.id and event_type='stock_committed')=1
+    from public.order_requests o where id='${order.id}';`) === 't' && invariant(f) === '2/1|2/1|1|1')
+  const confirmed = snapshot(order.id)
+  confirm(order.id)
+  check('confirmation replay preserves coupon, commitment attribution and events exactly', snapshot(order.id) === confirmed)
+  if (!beforeCommitment) {
+    for (const role of ['anon', 'authenticated']) {
+      const name = `k2_commit_denial_${role}`
+      const result = await session(name, `set role ${role}; select public.commit_order_request_stock_v1('${order.id}','confirmation','Local denial');`)
+      completed.delete(name)
+      check(`commitment helper denies direct ${role} execution`, result.status !== 0
+        && /permission denied for function commit_order_request_stock_v1/.test(result.stderr))
+    }
+  }
+  sync(database, `update public.inventory_reservations set expires_at=now()-interval '1 minute' where order_request_id='${order.id}';
+    update public.order_requests set status='submitted',payment_status='not_requested' where id='${order.id}';`)
+  sync(database, `${staff} select * from public.release_expired_reservations_v1(500);`)
+  check('committed allocation survives the temporary sweep even with a submitted shell', invariant(f) === '2/1|2/1|1|1')
+  sync(database, `${staff} select public.cancel_order_request('${order.id}','Local committed cancellation');`)
+  check('cancellation releases commitment and coupon once while retaining attribution', value(`select
+    (select status='cancelled' from public.order_requests where id='${order.id}')
+    and (select redemption_count=0 from public.coupons where id='${c.id}')
+    and (select count(*)=1 from public.coupon_redemptions where order_request_id='${order.id}' and status='released')
+    and count(*)=1 and bool_and(status='released' and release_cause='cancelled' and committed_at is not null)
+    from public.inventory_reservations where order_request_id='${order.id}';`) === 't' && invariant(f) === '2/0|2/0|2|0')
+  const cancelled = snapshot(order.id)
+  sync(database, `${staff} select public.cancel_order_request('${order.id}','Local cancellation replay');`)
+  check('cancellation replay retains all history without another coupon release', snapshot(order.id) === cancelled)
+
+  const eventCheck = () => value(`select pg_get_constraintdef(oid) from pg_constraint
+    where conrelid='public.inventory_events'::regclass and conname='inventory_events_event_type_check';`)
+  const reviewedEventCheck = eventCheck()
+  check('extended vocabulary preserves all eight existing inventory event types', value(`with accepted as (
+    insert into public.inventory_events(sku,location_code,event_type,quantity,reference_type,reference_id)
+      select ${literal(f.sku)},'MANILA_MAIN',event_type,1,'local_fixture','${randomUUID()}'::uuid
+      from unnest(array['received','reserved','reservation_released','fulfilled','damaged','expired','reconciled','transferred']) event_type
+      returning id) select count(*)=8 from accepted;`) === 't')
+  for (const [name, constraint] of [
+    ['unfamiliar', "check(event_type<>'LOCAL_FORBIDDEN')"],
+    ['unvalidated', `${reviewedEventCheck} not valid`]
+  ]) {
+    let refused = false
+    try { sync(database, `begin; alter table public.inventory_events drop constraint inventory_events_event_type_check;
+      alter table public.inventory_events add constraint inventory_events_event_type_check ${constraint};
+      ${withoutTransaction(commitmentMigration)} rollback;`) }
+    catch (error) { refused = /MAP-023 stock commitment: unfamiliar inventory event constraint/.test(error.message) }
+    check(`${name} event constraint refuses whole migration and rolls back`, refused
+      && eventCheck() === reviewedEventCheck && snapshot(order.id) === cancelled)
+  }
+  const invalidEvent = await session('k2_unknown_inventory_event', `insert into public.inventory_events
+    (sku,location_code,event_type,quantity,reference_type,reference_id)
+    values(${literal(f.sku)},'MANILA_MAIN','LOCAL_UNREVIEWED',1,'order_request','${order.id}');`)
+  completed.delete('k2_unknown_inventory_event')
+  check('extended event vocabulary still refuses unknown events without side effects', invalidEvent.status !== 0
+    && /inventory_events_event_type_check/.test(invalidEvent.stderr) && snapshot(order.id) === cancelled)
+
+  for (const [suffix, type, amount, discount, total] of [
+    ['PERCENT', 'percentage', 33.33, 33.33, 161.67], ['CAPPED', 'fixed', 200, 100, 95]
+  ]) {
+    const discountCoupon = coupon(suffix)
+    sync(database, `update public.coupons set discount_type=${literal(type)},discount_value=${amount} where id='${discountCoupon.id}';`)
+    const discountOrder = submit(fixture(`coupon-${suffix}`), discountCoupon)
+    check(`${type} coupon uses canonical subtotal and preserves shipping`, value(`select subtotal=100
+      and discount_amount=${discount} and shipping_amount=95 and total_amount=${total}
+      from public.order_requests where id='${discountOrder.id}';`) === 't')
+  }
+
+  for (const [suffix, columns, values, error] of [
+    ['MISSING', null, null, /Coupon is invalid/],
+    ['INACTIVE', '', '', /Coupon is invalid/],
+    ['ARCHIVED', ',archived_at', ',now()', /Coupon is invalid/],
+    ['FUTURE', ',starts_at', ",now()+interval '1 day'", /Coupon is invalid/],
+    ['EXPIRED', ',starts_at,ends_at', ",now()-interval '2 days',now()-interval '1 day'", /Coupon is invalid/],
+    ['EXHAUSTED', ',max_redemptions,redemption_count', ',1,1', /Coupon is invalid/],
+    ['MINIMUM', ',min_spend', ',101', /Coupon minimum spend/]
+  ]) {
+    const rejectedCoupon = columns === null ? { code: 'LOCAL-MISSING' } : coupon(suffix, columns, values)
+    if (suffix === 'INACTIVE') sync(database, `update public.coupons set is_active=false where id='${rejectedCoupon.id}';`)
+    const rejectedFixture = fixture(`coupon-${suffix}`)
+    const businessBefore = records(); const controlBefore = controls()
+    const name = `k2_coupon_${suffix}`
+    const result = await session(name, `set role anon; select * from ${request(guestPayload(rejectedFixture,
+      { couponCode: rejectedCoupon.code }))};`)
+    completed.delete(name)
+    check(`${suffix.toLowerCase()} coupon refusal rolls back business, holds and request controls`, result.status !== 0
+      && error.test(result.stderr) && records() === businessBefore && controls() === controlBefore
+      && invariant(rejectedFixture) === '2/0|2/0|2|0', result.status === 0 ? 'unexpected acceptance' : '')
+  }
+
+  const raceCoupon = coupon('LIMIT', ',max_redemptions', ',1')
+  const raceOne = submit(fixture('coupon-limit-one'), raceCoupon)
+  const raceTwo = submit(fixture('coupon-limit-two'), raceCoupon)
+  const gate = await controller()
+  const winner = session('k2_coupon_limit_one', `begin; select public.confirm_order_request('${raceOne.id}','Local limit winner');
+    select pg_advisory_xact_lock(61001,5); commit;`)
+  await waitFor(blockedBy('k2_coupon_limit_one', gate.name), 'coupon winner holds redemption')
+  const loserBefore = snapshot(raceTwo.id)
+  const loser = session('k2_coupon_limit_two', `select public.confirm_order_request('${raceTwo.id}','Local limit loser');`)
+  await waitFor(blockedBy('k2_coupon_limit_two', 'k2_coupon_limit_one'), 'second confirmation waits for coupon')
+  await gate.release()
+  const results = await Promise.all([winner, loser])
+  completed.delete('k2_coupon_limit_one'); completed.delete('k2_coupon_limit_two')
+  // The coupon counter belongs to both orders; compare the losing order separately.
+  const stripCouponCount = text => { const result = JSON.parse(text); delete result.coupon_count; return JSON.stringify(result) }
+  check('concurrent confirmations redeem the final coupon once and roll back the loser', results[0].status === 0
+    && results[1].status !== 0 && /coupon is no longer available/.test(results[1].stderr)
+    && stripCouponCount(snapshot(raceTwo.id)) === stripCouponCount(loserBefore)
+    && value(`select redemption_count=1 and (select count(*) from public.coupon_redemptions where coupon_id='${raceCoupon.id}')=1
+      from public.coupons where id='${raceCoupon.id}';`) === 't')
+
+  const atomic = fixture('coupon-atomic', 1)
+  sync(database, `insert into public.product_batches(sku,box_code,batch_code,quantity,quantity_available,reserved_quantity,
+    inventory_status,expiry_date,best_before_date) values(${literal(atomic.sku)},'LOCAL','LOCAL-LATE',1,1,0,'available',current_date+190,current_date+190);
+    update public.inventory_balances set on_hand=2 where sku=${literal(atomic.sku)};
+    select set_config('k2.allow_stock_write','on',false); update public.products set stock_available=2 where sku=${literal(atomic.sku)};`)
+  const atomicCoupon = coupon('ATOMIC')
+  const atomicOrder = submit(atomic, atomicCoupon, { items: [{ sku: atomic.sku, quantity: 2 }] })
+  sync(database, `create function k2_stock_fixture.commitment_fault() returns trigger language plpgsql as $$ begin
+    if new.reference_id='${atomicOrder.id}'::uuid and new.event_type='stock_committed'
+      and exists(select 1 from public.inventory_events where reference_id=new.reference_id and event_type='stock_committed')
+    then raise exception 'LOCAL_SECOND_COMMITMENT_FAILURE'; end if; return new; end $$;
+    create trigger local_commitment_fault before insert on public.inventory_events
+      for each row execute function k2_stock_fixture.commitment_fault();`)
+  const atomicBefore = snapshot(atomicOrder.id)
+  const failed = await session('k2_coupon_atomic', `select public.confirm_order_request('${atomicOrder.id}','Local atomic failure');`)
+  completed.delete('k2_coupon_atomic')
+  check('second-lot commitment fault rolls back confirmation, coupon, legacy rows and events', failed.status !== 0
+    && /LOCAL_SECOND_COMMITMENT_FAILURE/.test(failed.stderr) && snapshot(atomicOrder.id) === atomicBefore)
+  sync(database, 'drop trigger local_commitment_fault on public.inventory_events;')
+  confirm(atomicOrder.id); const atomicAccepted = snapshot(atomicOrder.id); confirm(atomicOrder.id)
+  check('same-order recovery commits both lots and redeems once without changing the accepted charge',
+    snapshot(atomicOrder.id) === atomicAccepted && value(`select status='confirmed' and shipping_amount=95 and total_amount=285
+      and (select redemption_count from public.coupons where id='${atomicCoupon.id}')=1
+      and (select count(*) from public.inventory_reservations where order_request_id=o.id and committed_at is not null)=2
+      and (select count(*) from public.inventory_events where reference_id=o.id and event_type='stock_committed')=2
+      from public.order_requests o where id='${atomicOrder.id}';`) === 't')
+}
 
 let created = false; let templateBefore; let runError; let keyLockRegression
 try {
@@ -496,6 +749,7 @@ try {
       && invariant(gap)==='1/0|1/0|1|0',invariant(gap))
     }
   }
+  if (couponLifecycle) await rehearseCouponLifecycle()
 } catch(error) { runError=error }
 finally {
   for(const child of sessions) child.kill()
@@ -516,14 +770,19 @@ finally {
     catch(error) { runError ??=error }
   }
 }
-if(runError) throw runError
+if(runError && !couponLifecycle) throw runError
 fs.mkdirSync(evidence,{recursive:true})
-fs.writeFileSync(path.join(evidence,beforeKeyLock?'before-key-lock-receipt.json':beforeFix?'before-fix-receipt.json':'local-receipt.json'),`${JSON.stringify({
+fs.writeFileSync(path.join(evidence,beforeEventType?'before-event-type-receipt.json':beforeCommitment?'before-commitment-receipt.json':beforeKeyLock?'before-key-lock-receipt.json':beforeFix?'before-fix-receipt.json':'local-receipt.json'),`${JSON.stringify({
  capturedAt:new Date().toISOString(),target:`127.0.0.1:54388/${database}`,template,
- scope:signedHolds ? 'Full prepared purchase-hold migration plus actual signed purchase/last-unit/retry on disposable restored-schema clone; no provider or all-writer acceptance'
+ scope:couponLifecycle ? 'Current signed coupons and prepared confirmation commitment on disposable restored-schema clone; excludes payment/handover, shipping authority and all-writer/provider acceptance'
+  : signedHolds ? 'Full prepared purchase-hold migration plus actual signed purchase/last-unit/retry on disposable restored-schema clone; no provider or all-writer acceptance'
   : 'Actual prepared function bodies on disposable restored-schema clone; not full migration installation or signed purchase-hold acceptance',
- beforeFix,beforeKeyLock,keyLockRegression,witnessSha256:createHash('sha256').update(fs.readFileSync(fileURLToPath(import.meta.url))).digest('hex'),
+ beforeFix,beforeKeyLock,keyLockRegression,...(couponLifecycle ? {beforeCommitment,beforeEventType,error:runError?.message ?? null} : {}),
+ witnessSha256:createHash('sha256').update(fs.readFileSync(fileURLToPath(import.meta.url))).digest('hex'),
  manifest,checks,providerWrites:false,canonicalSignedHoldIntegration: signedHolds && !beforeKeyLock,
- templateUnchanged:true,cloneRemoved:true },null,2)}\n`)
+ ...(couponLifecycle ? {couponConfirmationIntegration:!runError && !beforeCommitment && !beforeEventType} : {}),
+ templateUnchanged:checks.some(c=>c.name==='original restore counts and function/ACL fingerprint unchanged' && c.passed),
+ cloneRemoved:checks.some(c=>c.name==='owned disposable clone removed' && c.passed) },null,2)}\n`)
+if(runError) throw runError
 if(beforeFix) { console.error('EXPECTED_BEFORE_FIX_FAILURE: Website/inventory deadlock reproduced'); process.exitCode=1 }
 if(beforeKeyLock) { console.error('EXPECTED_BEFORE_KEY_LOCK_FAILURE: mixed canonical/signed deadlock reproduced'); process.exitCode=1 }

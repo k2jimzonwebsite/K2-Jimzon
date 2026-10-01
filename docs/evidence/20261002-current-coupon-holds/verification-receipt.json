@@ -1,0 +1,51 @@
+{
+  "recordedAt": "2026-10-01T16:35:17.2292473Z",
+  "scope": "Parent-attested final local command outputs; later edits are documentation only",
+  "commands": [
+    {
+      "command": "node scripts/rehearse-purchase-time-reservation.mjs",
+      "failed": 0,
+      "passed": 48,
+      "exitCode": 0,
+      "scope": "Separate synthetic legacy fixture"
+    },
+    {
+      "command": "npx playwright test --config=playwright.api.config.js tests/confirmation-commitment-contract.spec.js tests/purchase-time-reservation.spec.js",
+      "failed": 0,
+      "passed": 20,
+      "exitCode": 0
+    },
+    {
+      "secretScanFiles": 1721,
+      "command": "npm run verify:development",
+      "securitySurfaceGeneratedAt": "2026-10-01T16:25:09.465Z",
+      "importIntegrityPassed": true,
+      "exitCode": 0
+    }
+  ],
+  "source": {
+    "witness": "c5b6ace947f5e762c935de7b02bc904054b9dc965127a7b3adf63ba5c946ed75",
+    "confirmation": "ce149700884acfb38a168e9f0c68119782e9dca6058985d6ca1428f46b08872a"
+  },
+  "independentReview": {
+    "resolved": 2,
+    "remainingActionableFindings": 0,
+    "importantFindings": 2,
+    "sqlRepeatedByReviewer": false
+  },
+  "providerWrites": false,
+  "releaseGateRun": false,
+  "stagedVerification": {
+    "recordedAt": "2026-10-01T16:37:58.9574703Z",
+    "diffCheckExitCode": 0,
+    "sensitiveFilePolicyExitCode": 0,
+    "sensitiveFiles": 1723,
+    "secretScanExitCode": 0,
+    "secretScanFiles": 1724,
+    "finalWitnessPinsMatch": true,
+    "currentManifestEntriesMatched": 89,
+    "ownerGeminiRowExcluded": true,
+    "ownerWorkingFileBytePreserved": true,
+    "backupsExcluded": true
+  }
+}

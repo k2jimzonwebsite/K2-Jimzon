@@ -376,6 +376,10 @@ flag restores the original cancellation definition in the disposable fixture.
 
 ### Historical confirmation-only slice (12 September 2026, prepared only)
 
+**2 October current-schema reconciliation (IDEA-20261002-01, local):** The whole confirmation migration now prepares the missing `stock_committed` event-type dependency under an exact validated vocabulary guard and relation lock. The current signed coupon/confirmation witness passes 77/77, including unknown/literal/concurrent-DDL refusal, redemption contention, atomic failure/recovery and committed cancellation/expiry. Final legacy 48/48, contracts 20/20 and development verification pass; no provider state changed. Source pins and controlled failures: `docs/evidence/20261002-current-coupon-holds/README.md`.
+
+**Current recovery boundary:** The historical broad `confirmation_stock_commitment_rollback.sql` below is not approved for the current ordered/coverage/composed chain. Transaction rollback tests do not execute or approve that installer. MAP-017/020 must capture/rehearse exact current function/ACL and constraint recovery before activation. Retain commitment columns, events and the extended check; restoring the old vocabulary would reject retained history. Use guarded exact snapshots or controlled deactivation/roll-forward, preserving later hold and sweep guards.
+
 MAP-023 / MAP-028 I-001 owns `20260912_confirmation_stock_commitment.sql`.
 First confirmation now deducts owned stock exactly once through the internal
 `commit_order_request_stock_v1` helper: commitment actor/time/cause persist on

@@ -20,8 +20,9 @@
 -- verified allocations without commitment evidence stay unresolved: no
 -- timestamp is invented and no retrospective sale event is written.
 --
--- Additive and replayable. No column is dropped, no constraint is loosened,
--- no existing row changes meaning. The payment-verification caller and the
+-- Additive and replayable. No column is dropped or existing row rewritten.
+-- The reviewed event vocabulary gains only stock_committed; other checks stay
+-- intact. The payment-verification caller and the
 -- handover coverage gate stay open in I-001; this change wires confirmation
 -- only and never invents a payment fact.
 --
@@ -58,6 +59,35 @@ begin
   end if;
 end
 $preflight$;
+
+-- The current application schema constrains inventory event types. The old
+-- synthetic rehearsal had no equivalent check, so it missed this dependency.
+-- Accept only the original or this extended vocabulary; never erase an
+-- unfamiliar owner/provider constraint. Validate existing history atomically.
+do $event_vocabulary$
+declare
+  v_definition text;
+  v_validated boolean;
+  v_legacy text := 'CHECK ((event_type = ANY (ARRAY[''received''::text, ''reserved''::text, ''reservation_released''::text, ''fulfilled''::text, ''damaged''::text, ''expired''::text, ''reconciled''::text, ''transferred''::text])))';
+  v_current text;
+begin
+  v_current := replace(v_legacy, '''transferred''::text', '''transferred''::text, ''stock_committed''::text');
+  -- Protect the inspected definition from queued owner DDL until commit.
+  lock table public.inventory_events in access exclusive mode;
+  select pg_get_constraintdef(oid), convalidated into v_definition, v_validated
+    from pg_constraint where conrelid='public.inventory_events'::regclass
+      and conname='inventory_events_event_type_check';
+  if found and (not v_validated or v_definition not in (v_legacy, v_current)) then
+    raise exception 'MAP-023 stock commitment: unfamiliar inventory event constraint';
+  end if;
+  if v_definition is null or v_definition=v_legacy then
+    if v_definition is not null then
+      alter table public.inventory_events drop constraint inventory_events_event_type_check;
+    end if;
+    execute 'alter table public.inventory_events add constraint inventory_events_event_type_check ' || v_current;
+  end if;
+end
+$event_vocabulary$;
 
 -- ---------------------------------------------------------------------------
 -- Commitment evidence lives on the exact active allocations.
