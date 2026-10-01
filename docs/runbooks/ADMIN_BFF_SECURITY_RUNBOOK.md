@@ -1,5 +1,7 @@
 # Admin BOS Same-Origin BFF Security Runbook
 
+**1 October shared signer correction (IDEA-20261001-04, prepared):** `20261001065252_admin_signing_null_inputs.sql` guards six required inputs after staff/AAL2 checks while preserving the installed definition/security metadata and controls. Four later replacement/recovery definitions retain it. Rehearse with `node scripts/rehearse-admin-signing.mjs` on the exact loopback restore; seven independent variants and current Globe/prepared fulfillment caller denials pass. This is neither applied state nor full business-path proof. Before apply, capture the same-target helper's definition/owner/ACL/settings and ledger, refresh backup/preflight and include it in the reviewed package. Refuse unknown shape. Recovery must keep the guard by controlled Admin deactivation or reviewed roll-forward, never restore the bypass. Evidence and limits: `docs/evidence/20261001-admin-signing/README.md`; execution remains MAP-017/020.
+
 **13 September production correction:** MAP-017 follow-up `20260909023000` is
 applied and independently verified on K2. Do not rerun it. Seven internal function
 browser/PUBLIC ACLs and browser error-report writes are closed; required receiving

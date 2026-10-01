@@ -1,5 +1,7 @@
 # K2 Jimzon — Supabase Remote Migration & Vercel Deployment Handoff Runbook
 
+**1 October current signing gate:** The forward private-verifier guard `20261001065252_admin_signing_null_inputs.sql` is locally prepared, not applied. Its seven-variant witness passes and later prepared replacements retain it. Include the private definition/security metadata in fresh same-target capture and reviewed recovery; keep the guard after activation through deactivation/roll-forward. Historical execution statements below do not authorize this apply or a main promotion. MAP-017/020 and `docs/evidence/20261001-admin-signing/README.md` govern the remaining exact payload/backup/activation gates.
+
 **Audience:** Secondary AI agent, system administrator, or developer executing remote Supabase database migrations and verifying production Vercel deployments.  
 **Created:** 16 September 2026  
 **Governing Rule:** `AGENTS.md` and `K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md`. Zero unverified claims; all migrations must have preflight checks, idempotent replay capability, postflight verification, and rollback scripts.

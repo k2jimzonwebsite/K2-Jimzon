@@ -13,8 +13,9 @@ const prior = JSON.parse(fs.readFileSync(path.join(root,
   'docs/evidence/20260930-guest-continuity-rehearsal/local-dependencies-receipt.json'), 'utf8'))
 const sources = ['supabase/migrations/20260829_channel_vocabulary_and_shops.sql',
   'supabase/migrations/20260822_admin_channel_readiness_boundary.sql',
-  ...prior.dependencyManifest.map(item => item.path)]
-if (sources.length !== 20 || new Set(sources).size !== 20
+  ...prior.dependencyManifest.map(item => item.path),
+  'supabase/migrations/20261001065252_admin_signing_null_inputs.sql']
+if (sources.length !== 21 || new Set(sources).size !== 21
     || sources.some(file => !/^supabase\/[a-zA-Z0-9_/-]+\.sql$/.test(file))) throw new Error('INSTALLATION_ORDER_INVALID')
 const manifest = sources.map(file => {
   const sql = fs.readFileSync(path.join(root, file), 'utf8')

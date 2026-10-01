@@ -1,0 +1,25 @@
+{
+  "projectId": "pixplcjqivlfflickobf",
+  "scope": "Read-only named verifier/caller metadata; no HMAC secret, invocation, mutation or live exploit test",
+  "query": "pg_proc names/identity arguments/effective schema plus function execution privileges; exact named verifier or body references to k2_private.verify_admin_bff_request",
+  "rows": [
+    {
+      "captured_at": "2026-10-01 07:03:54.609447+00",
+      "schema": "k2_private",
+      "function": "verify_admin_bff_request",
+      "arguments": "p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text",
+      "security_definer": true,
+      "anon_can_execute": false,
+      "authenticated_can_execute": false
+    },
+    {
+      "captured_at": "2026-10-01 07:03:54.609469+00",
+      "schema": "public",
+      "function": "execute_admin_globe_review_command_v1",
+      "arguments": "p_action text, p_timestamp bigint, p_nonce uuid, p_idempotency_key uuid, p_payload_text text, p_signature text",
+      "security_definer": true,
+      "anon_can_execute": false,
+      "authenticated_can_execute": true
+    }
+  ]
+}

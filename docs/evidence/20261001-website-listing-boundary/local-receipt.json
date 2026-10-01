@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-01T06:25:06.831Z",
+  "capturedAt": "2026-10-01T07:00:42.502Z",
   "target": "127.0.0.1:54388/k2_current_restore_20260929",
   "scope": "Isolated rollback-only full guest dependency chain plus Website assignment; not live acceptance",
   "dependencyManifest": [
@@ -82,16 +82,20 @@
     {
       "path": "supabase/migrations/20260916_automated_delivery_quotation.sql",
       "sha256": "df56a54e8b28eb610f79fe1a3d296363e24181caa17d57487b6fec3fc484ce86"
+    },
+    {
+      "path": "supabase/migrations/20261001065252_admin_signing_null_inputs.sql",
+      "sha256": "1872825ad8981eeace740b54cc44458bcfab48a5effc08138acaf8bc1b488462"
     }
   ],
   "laterVerifierReplacements": [
     {
       "path": "supabase/migrations/20260830_paid_ai_spend_controls.sql",
-      "sha256": "4d605349d38670abf5106bd7de9114adeb5e6d2980e4372b211bea3c5442bd77"
+      "sha256": "1fa49a9bf36e49f1b97d0d98a4705464985bb820dfdb644135b5f51b3f3b61b3"
     },
     {
       "path": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
-      "sha256": "d28b76f50f6e28d9e3ebf09bce2ac3f9d71d26ce6ccfa0e525b069cac06965ee"
+      "sha256": "2d6490d522e89fb68bdb875a1350a2d46f85a3b0ceb21b8257b1f19523f78d19"
     }
   ],
   "adminAllow": true,

@@ -4,7 +4,7 @@ IDEA-20261001-03; owning work MAP-018, with MAP-017/020 activation and
 MAP-023 inventory integration dependencies. Branch: `codex/map017-guest-chat-preview`.
 This is local preparation, not an applied migration, deployment or real-host acceptance.
 
-The verified source/evidence batch is local commit `b2b0c4d`; no remote push or
+The original Website source/evidence batch is local commit `b2b0c4d`; no remote push or
 live promotion occurred. The owner's pre-existing Gemini idea and `.backups/`
 remain outside that commit. Use this commit as the scoped source-recovery
 reference while preserving provider receipts and any later work.
@@ -48,7 +48,8 @@ with the canonical writers.
 | Independent code review | Read-only reviewer found the NULL-signature bypass, later verifier compatibility and account rehearsal dependency regression; corrected and locally verified. It did not rerun SQL or provider checks. |
 
 `local-receipt.json` contains the passing timestamp and exact ordered source
-hashes. The witness installs 20 sources in one rollback-only transaction against
+hashes. The original witness installed 20 sources; its refreshed receipt now installs
+21, adding the forward shared signing guard, in one rollback-only transaction against
 the exact loopback restored application database at `127.0.0.1:54388`. It also
 executes the exact verifier bodies extracted from two later unapplied Admin
 migrations sequentially; behavioral assertions exercise the final marketplace
@@ -61,9 +62,10 @@ were not reproduced.
 
 ## Review limits and required recovery
 
-The existing shared Admin verifier has source-level NULL handling weaknesses.
-The new RPC denies these inputs explicitly, but no global verifier repair or
-live exploit test is claimed. IDEA-20261001-04 / MAP-017/020 owns the broader fix.
+The shared Admin six-input guard is now prepared and independently verified across
+seven variants in `docs/evidence/20261001-admin-signing/README.md`. The refreshed
+Website witness includes it. No live repair or exploit test is claimed;
+IDEA-20261001-04 / MAP-017/020 retains exact provider capture/apply/recovery.
 
 The helper takes product locks before later stock work. Prepared purchase-hold
 cancel/expiry/reconcile paths lock balances/lots before updating products.
@@ -101,6 +103,6 @@ now match the authoritative records. No new palette, font or motion was chosen.
 | --- | --- | --- |
 | Cached cream metadata and 125% root-size narrative predated current records. | Cache reads the approved gray canvas and browser-default root-size records, with a DESIGN.md hash. | Keep tool previews from reintroducing superseded assumptions. |
 
-Exact next action: address MAP-017/020's shared signing input guards, then the
-MAP-023 lock-order/fee controls and refreshed installation recovery; keep the
+Exact next action: address MAP-023 lock-order/fee controls, then refresh the
+MAP-017/020 installation/capture/recovery with the prepared shared guard; keep the
 remaining staff/catalog/real-host work in their owning MAP items.

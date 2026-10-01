@@ -1,0 +1,58 @@
+{
+  "capturedAt": "2026-10-01T07:04:31.705Z",
+  "target": "127.0.0.1:54388/k2_current_restore_20260929",
+  "scope": "Isolated restore and six extracted verifier definitions; later four tested before forward guard; rollback-only, no live exploit or full migration acceptance",
+  "migration": {
+    "path": "supabase/migrations/20261001065252_admin_signing_null_inputs.sql",
+    "sha256": "1872825ad8981eeace740b54cc44458bcfab48a5effc08138acaf8bc1b488462"
+  },
+  "variants": [
+    {
+      "path": "installed restore definition",
+      "normalLimit": 16384
+    },
+    {
+      "path": "supabase/migrations/20260812_admin_fulfillment_bff_boundary.sql",
+      "sha256": "7c486fdc59f9413981a037ee4650e195544a1792b579f6d6e1c702015bccdebf",
+      "normalLimit": 16384
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_session_registry.sql",
+      "sha256": "977615f5480c2874bef48566e45f3120b800e2d41789e53fcddc273e454ae1bd",
+      "normalLimit": 16384
+    },
+    {
+      "path": "supabase/migrations/20260830_paid_ai_spend_controls.sql",
+      "sha256": "1fa49a9bf36e49f1b97d0d98a4705464985bb820dfdb644135b5f51b3f3b61b3",
+      "normalLimit": 16384
+    },
+    {
+      "path": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "sha256": "2d6490d522e89fb68bdb875a1350a2d46f85a3b0ceb21b8257b1f19523f78d19",
+      "normalLimit": 65536
+    },
+    {
+      "path": "supabase/migrations/20260922_anonymous_chat_moderation.sql",
+      "sha256": "572ce72bc5fffbe7bd4c3c27f0d792cea4189b1b60fae2586cc4b2771a492af3",
+      "normalLimit": 65536
+    },
+    {
+      "path": "supabase/migrations/20260922_anonymous_chat_moderation_rollback.sql",
+      "sha256": "4aa796e4c3d8c6a200f15b154e04ff4b9ee3847a2c3bf4294f89c97151d0034c",
+      "normalLimit": 65536
+    }
+  ],
+  "installedDefinitionSha256": "b15944705f9e4892a7766a2b6eb07ee7464f98a6af49eb874906b6e57187c3aa",
+  "nodeSignerAllowed": true,
+  "nullInputsDenied": 6,
+  "malformedForgedAndExpiredDenied": true,
+  "nonceReplayDenied": true,
+  "publicCallerNullDenied": true,
+  "rolesAndAalDenied": true,
+  "existingActionsAndByteCapsPreserved": true,
+  "existingRateLimitsPreserved": true,
+  "forwardMigrationReplay": true,
+  "unknownAndMissingVerifierRefused": true,
+  "metadataPreserved": true,
+  "rollback": true
+}

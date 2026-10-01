@@ -1,0 +1,121 @@
+{
+  "scope": "Source inspection only; not public caller behavior acceptance",
+  "callers": [
+    {
+      "path": "supabase/migrations/20260812_admin_consignments_bff_boundary.sql",
+      "function": "public.execute_admin_consignment_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260812_admin_coupons_bff_boundary.sql",
+      "function": "public.execute_admin_coupon_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260812_admin_fulfillment_bff_boundary.sql",
+      "function": "public.execute_admin_fulfillment_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260812_admin_inbox_bff_boundary.sql",
+      "function": "public.execute_admin_inbox_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260812_admin_lots_bff_boundary.sql",
+      "function": "public.execute_admin_lot_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260812_admin_pasabuy_bff_boundary.sql",
+      "function": "public.execute_admin_pasabuy_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260812_admin_product_intake_bff_boundary.sql",
+      "function": "public.execute_admin_product_intake_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_channel_readiness_boundary.sql",
+      "function": "public.execute_admin_channel_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_channel_readiness_boundary.sql",
+      "function": "public.execute_admin_website_listing_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_globe_review_boundary.sql",
+      "function": "public.execute_admin_globe_review_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_procurement_boundary.sql",
+      "function": "public.execute_admin_supplier_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_product_master_boundary.sql",
+      "function": "public.execute_admin_product_master_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "function": "public.execute_admin_product_media_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "function": "public.execute_admin_product_media_assignment_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "function": "public.complete_admin_product_media_cleanup_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "function": "public.prepare_admin_product_media_orphan_cleanup_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_product_media_boundary.sql",
+      "function": "public.complete_admin_product_media_orphan_cleanup_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_session_registry.sql",
+      "function": "public.execute_admin_session_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_admin_staff_access_boundary.sql",
+      "function": "public.execute_admin_staff_access_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_catalog_spreadsheet_commit.sql",
+      "function": "public.execute_admin_catalog_import_v1"
+    },
+    {
+      "path": "supabase/migrations/20260822_wholesale_inquiry_boundary.sql",
+      "function": "public.execute_admin_wholesale_inquiry_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260824_admin_mfa_replacement_boundary.sql",
+      "function": "public.record_admin_mfa_replacement_event_v1"
+    },
+    {
+      "path": "supabase/migrations/20260828_product_knowledge_boundary.sql",
+      "function": "public.execute_admin_product_knowledge_v1"
+    },
+    {
+      "path": "supabase/migrations/20260828_virtual_store_live_chat.sql",
+      "function": "public.execute_admin_website_reply_v1"
+    },
+    {
+      "path": "supabase/migrations/20260830_paid_ai_spend_controls.sql",
+      "function": "public.execute_admin_ai_spend_controls_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260831_marketplace_snapshot_staging.sql",
+      "function": "public.execute_admin_marketplace_snapshot_v1"
+    },
+    {
+      "path": "supabase/migrations/20260902_delivery_quote_admin_command.sql",
+      "function": "public.execute_admin_delivery_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260905_privileged_membership_serialization.sql",
+      "function": "public.execute_admin_staff_access_command_v1"
+    },
+    {
+      "path": "supabase/migrations/20260922_anonymous_chat_moderation.sql",
+      "function": "public.execute_admin_chat_moderation_v1"
+    }
+  ]
+}

@@ -28,6 +28,10 @@ begin
   if coalesce(auth.jwt()->>'aal','')<>'aal2' then
     raise exception using errcode='42501',message='K2_ADMIN_AAL2_REQUIRED';
   end if;
+  if p_action is null or p_timestamp is null or p_nonce is null
+     or p_idempotency_key is null or p_payload_text is null or p_signature is null then
+    raise exception using errcode='22023',message='K2_ADMIN_REQUEST_INVALID';
+  end if;
   if p_action not in (
     'confirm_order', 'packing_scan', 'payment_status', 'delivery_details',
     'fulfill_order', 'transfer_lot', 'assign_box',
