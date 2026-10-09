@@ -8,7 +8,7 @@ export default (environment) => {
     server: { watch: null },
     optimizeDeps: {
       noDiscovery: true,
-      include: ['react', 'react-dom/client', 'react-helmet-async', '@supabase/supabase-js'],
+      include: ['react', 'react-dom/client', 'react-helmet-async', '@supabase/supabase-js', '@react-three/fiber', '@react-three/drei', 'motion/react'],
     },
   }
 }
