@@ -966,6 +966,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                           ? 'Verified · Replace'
                           : 'Capture / Select'}
                       <input
+                        id={`intake-evidence-${s.slot}`}
                         type="file"
                         accept="image/jpeg,image/png,image/webp"
                         capture="environment"
@@ -1063,6 +1064,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-amber-400 text-xs">Contract: k2.product-content.v3</span>
                   <button
+                    id="intake-copy-prompt"
                     type="button"
                     id="intake-copy-prompt"
                     onClick={handleCopyPrompt}
@@ -1194,6 +1196,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   { id: 'reconciliation', label: 'Opening Balance' }
                 ].map(src => (
                   <button
+                    id={`intake-source-${src.id}`}
                     type="button"
                     id={`intake-source-${src.id}`}
                     key={src.id}

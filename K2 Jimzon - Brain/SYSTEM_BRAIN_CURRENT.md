@@ -2056,6 +2056,40 @@ security/access-control mutation. No DDL or provider state changed in that
 preflight. The later owner-approved apply superseded this blocker; phase one
 must not be repeated. Current follow-up scope is recorded separately above.
 
+Launch-check continuation, 7 September (MAP-017 / MAP-028 C4): the local
+anonymous-read evidence tool now refuses unknown counts, failed privileged
+baselines and non-authorization HTTP failures; empty private sources are qualified.
+46 focused tests pass; fresh production reads still fail 2/14 (legacy exposure
+and inaccessible public stock). No production security remediation is claimed.
+Vercel connector now reaches K2, whose team reports Hobby. Ready Admin deployment
+dpl_4HZP5AxDY6hVqn5Evw2vmXGtMLf5 reports two Node functions; exact inventory is
+unverified and build-log access returned 401. Routing remains MAP-028 C4.
+See docs/evidence/20260907-launch-checks/README.md. Prior Admin preparation remains.
+
+Widget-help preparation (IDEA-20260907-04; local, not deployed): Overview now
+offers Help only for channel metrics, sales reconciliation, revenue dates and
+overlapping priority counts; Inbox, Pasabuy and Stock have no Help button.
+The inline panel explains how to read
+it and what to do next; changing widgets closes it, and Escape/Close restores
+focus to Help. Routine copy is shorter; source/financial limitations remain
+visible. No metric calculation or operational command changed. Evidence lives
+in docs/evidence/20260907-widget-help/README.md; owning MAP-028 I-012 / MAP-021.
+
+**Guided intake pilot, 7 September — IDEA-20260907-03 (local, not deployed):**
+Focus guidance now checks disabled, hidden, inert and ARIA-disabled targets plus
+actual focus acquisition. The identity-stage browser test exercises five blocked
+states and successful recovery; this is not all-stage or real-staff acceptance.
+Operations guide offers Learn this task / Guide me through product intake.
+The guided launch opens the existing intake, with contextual instruction,
+required evidence, expected result and recovery attached to its real UI step.
+Focus-only targets never click controls or mark completion. Missing/disabled
+targets show an explicit error. The seven-stage pilot distinguishes the Draft
+endpoint from optional authorized first inventory and publication. Guide text
+is versioned in staffProcedureRegistry; no second progress store exists.
+33 Admin browser tests, 6 guide contracts and isolated Admin build/security
+passed locally. Full staff, all-stage target and real-host acceptance remain
+MAP-028 I-016 / MAP-023. See docs/evidence/20260907-guided-intake/README.md.
+
 **Dashboard truth follow-up, 7 September (IDEA-20260907-02; code deployed):**
 Overview rejects malformed source bodies, invalid backlog counts and unknown/
 invalid stock or monetary values rather than presenting valid zero totals.

@@ -35,7 +35,13 @@ async function count(table, key, bearer = key) {
     headers: { apikey: key, Authorization: `Bearer ${bearer}`, Prefer: 'count=exact', Range: '0-0' },
   })
   const cr = r.headers.get('content-range')
-  return { status: r.status, count: cr ? Number(cr.split('/')[1]) : null }
+  const total = /^(?:\d+-\d+|\*)\/(\d+)$/.exec(cr ?? '')?.[1]
+  const parsed = total === undefined ? null : Number(total)
+  return { status: r.status, count: Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : null }
+}
+
+function validRead(result) {
+  return result.status >= 200 && result.status < 300 && result.count !== null
 }
 
 const results = []
@@ -53,8 +59,8 @@ for (const table of EXPECT_READABLE) {
   // Access is proven by the request being permitted, not by rows coming back.
   // An empty table legitimately returns zero rows, so requiring count > 0 would
   // fail a correctly-granted table that simply has no data yet.
-  const ok = anon.status < 300
-  const empty = (truth.count ?? 0) === 0 ? '  (table empty — grant proven, visibility not)' : ''
+  const ok = validRead(anon) && validRead(truth)
+  const empty = ok && truth.count === 0 ? '  (table empty — grant proven, visibility not)' : ''
   record(`anon can read ${table}`, ok, `anon=${anon.status}/${anon.count ?? '-'} actual=${truth.count ?? '-'}${empty}`)
 }
 
@@ -62,10 +68,14 @@ console.log('\nPrivate data — anon MUST NOT be able to read any row:')
 for (const table of EXPECT_PRIVATE) {
   const anon = await count(table, ANON)
   const truth = await count(table, SECRET)
-  const exposed = anon.status < 300 && (anon.count ?? 0) > 0
+  const exposed = validRead(anon) && anon.count > 0
+  const denied = anon.status === 401 || anon.status === 403
+  const ok = validRead(truth) && (denied || (validRead(anon) && anon.count === 0))
   const detail = `anon=${anon.status}/${anon.count ?? '-'} actual=${truth.count ?? '-'}` +
-    (exposed ? '  <-- EXPOSED' : '')
-  record(`anon cannot read ${table}`, !exposed, detail)
+    (exposed ? '  <-- EXPOSED' : '') +
+    (ok && !denied && truth.count === 0 ? '  (empty source; row isolation unproven)' : '') +
+    (!ok && !exposed ? '  (unavailable or inconclusive evidence)' : '')
+  record(`anon cannot read ${table}`, ok, detail)
 }
 
 const passed = results.filter((r) => r.pass).length

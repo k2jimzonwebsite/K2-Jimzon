@@ -977,6 +977,11 @@ The later, narrow stock ACL correction is
 portable runner. It changes only function execute grants in a local fixture;
 production apply remains gated by MAP-017 and the database runbook.
 
+Guided intake: staffProcedureRegistry owns the versioned seven-stage teaching
+contract. IntakeStepGuide renders it within ProductIntakeSessionModal; the
+Operations guide launches it through the existing InventoryGrid tool boundary.
+It adds no data-write or provider endpoint and no operational progress store.
+
 Operational readiness verification uses
 `scripts/rehearse-map023-last-unit-concurrency.mjs` and
 `supabase/tests/operational_readiness_{bootstrap,assertions}.sql` to execute
