@@ -249,7 +249,7 @@ begin
     v_created_at := to_timestamp((v_payload->>'createdAt')::double precision / 1000.0);
     v_expires_at := to_timestamp((v_payload->>'expiresAt')::double precision / 1000.0);
     if abs(extract(epoch from (clock_timestamp() - v_created_at))) > 300
-       or v_expires_at <> v_created_at + interval '8 hours' then
+       or v_expires_at <> v_created_at + interval '7 days' then
       raise exception using errcode='22023', message='K2_ADMIN_SESSION_LIFETIME_INVALID';
     end if;
     if v_provider_session_id is null or not exists (

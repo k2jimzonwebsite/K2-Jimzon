@@ -1415,3 +1415,5 @@ only three exact delivery review/acceptance/immutable-charge errors to safe409
 responses (synthetic routed tests3/3), keeping private snapshot/address data out.
 Manual express acceptance, legacy remediation and deployed UI remain unfinished;
 do not enable this correction independently. Receipt: authoritative-delivery README.
+
+**Integrated owner-approved seven-day staff sessions (IDEA-20260929-01):** Existing recognized browser staff session is capped at seven days from sign-in; idle sign-out/warning removed. Explicit sign-out, role/AAL2 enforcement and provider revocation remain. Maintained browser lifetime helper and contract tests merged from original staff-session branch. This is source integration pending final release verification; prepared registry SQL is not applied by a GitHub push. No fingerprint/cross-device trust claim. MAP-020/025 owns exact-host/provider acceptance.

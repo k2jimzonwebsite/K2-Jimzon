@@ -17,13 +17,9 @@ test('staff without an admin role see disabled privileged controls with a reason
   expect(src).toContain('Only Admins can change roles or invite staff')
 })
 
-test('idle staff sessions end with a warning first', async () => {
-  const hook = await read('../src/views/admin/useIdleLock.js')
-  expect(hook).toContain('IDLE_TIMEOUT_MS')
-  expect(hook).toContain('pointerdown')
-  expect(hook).toContain('keydown')
+test('staff sessions do not sign out merely because the Admin tab is idle', async () => {
   const shell = await read('../src/views/admin/Admin.jsx')
-  expect(shell).toContain('useIdleLock')
-  expect(shell).toContain('idleWarning')
-  expect(shell).toContain('Stay signed in')
+  expect(shell).not.toContain('useIdleLock')
+  expect(shell).not.toContain('idleWarning')
+  expect(shell).not.toContain('Stay signed in')
 })
