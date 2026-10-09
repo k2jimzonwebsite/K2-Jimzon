@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { supabase, supabasePublicKey } from '../lib/supabaseClient'
 import { fetchWithTimeout, isRequestTimeoutError } from '../lib/fetchWithTimeout.js'
 import {
+  clearAdminBrowserSession, getOrStartAdminBrowserSession, resetAdminBrowserSession,
+} from '../lib/adminSessionLifetime.js'
+import {
   ADMIN_ROUTE, buildAdminOAuthRedirectUrl, clearAdminOAuthReturn,
   clearAdminOAuthCredentialsFromUrl, consumeAdminOAuthReturn, rememberAdminOAuthReturn,
 } from '../lib/adminAuthRedirect'
@@ -83,6 +86,13 @@ export function useAdminAuthRuntime() {
         if (returnTo === ADMIN_ROUTE && window.location.pathname !== ADMIN_ROUTE) window.location.replace(returnTo)
       }
       if (isStaffRole(role) && mfaSatisfied) {
+        if (getOrStartAdminBrowserSession(window.localStorage, currentUser.id).expired) {
+          await supabase.auth.signOut()
+          setIsAdmin(false)
+          setUser(null)
+          setAuthError('Your seven-day staff session ended. Sign in again to continue.')
+          return
+        }
         setMfaRequired(false)
         setAuthError('')
         setIsAdmin(true)
@@ -133,6 +143,7 @@ export function useAdminAuthRuntime() {
     setAuthError('')
     setMfaRequired(false)
     rememberAdminOAuthReturn()
+    clearAdminBrowserSession(window.localStorage)
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google', options: { redirectTo: buildAdminOAuthRedirectUrl() },
@@ -157,6 +168,7 @@ export function useAdminAuthRuntime() {
     setMfaRequired(false)
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error || !data?.user) return { ok: false, error: 'Invalid email or password.' }
+    resetAdminBrowserSession(window.localStorage, data.user.id)
     try {
       const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
       if (aal?.nextLevel === 'aal2' && aal.nextLevel !== aal.currentLevel) {
@@ -194,6 +206,7 @@ export function useAdminAuthRuntime() {
       await supabase.auth.signOut()
       return { ok: false, error: 'This account has no admin access.' }
     }
+    resetAdminBrowserSession(window.localStorage, data.user.id)
     applyAdminSession(data.user, role)
     return { ok: true }
   }
@@ -316,9 +329,30 @@ export function useAdminAuthRuntime() {
     setUser(null)
     setMfaRequired(false)
     setAuthError('')
+    clearAdminBrowserSession(window.localStorage)
     if (adminBffEnabled()) await logoutAdminBff()
     else if (supabase) await supabase.auth.signOut()
   }
+
+  useEffect(() => {
+    if (!isAdmin || !user?.id || adminBffEnabled()) return undefined
+    const checkExpiry = () => {
+      if (getOrStartAdminBrowserSession(window.localStorage, user.id).expired) logoutAdmin()
+    }
+    const session = getOrStartAdminBrowserSession(window.localStorage, user.id)
+    if (session.expired) {
+      logoutAdmin()
+      return undefined
+    }
+    const timer = window.setTimeout(checkExpiry, Math.max(0, session.expiresAt - Date.now()))
+    window.addEventListener('focus', checkExpiry)
+    document.addEventListener('visibilitychange', checkExpiry)
+    return () => {
+      window.clearTimeout(timer)
+      window.removeEventListener('focus', checkExpiry)
+      document.removeEventListener('visibilitychange', checkExpiry)
+    }
+  }, [isAdmin, user?.id])
 
   return {
     user, isAdmin, authReady, mfaRequired, authError,

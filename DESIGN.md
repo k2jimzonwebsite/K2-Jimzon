@@ -65,6 +65,10 @@ components:
 
 # Design System: K2 Jimzon
 
+### Admin sign-in continuity (IDEA-20260929-01, prepared)
+
+The Admin shell no longer interrupts staff with a two-minute idle warning or signs them out after 30 minutes of inactivity. The existing explicit Sign out action stays visible, and an expired seven-day browser session returns staff to the existing sign-in surface with plain wording. This changes interaction timing only; it does not change Admin colors, typography, navigation or command permissions. Real staff/browser acceptance remains in MAP-025.
+
 ### Order conversation and buyer proof (IDEA-20260928-02, source deployed; human acceptance open)
 
 The confirmation page retains the K2 paper card, serif section headings and readable sans-serif form controls. The order thread sits directly below the selected receiving QR. Its message composer opens with the existing order, so the buyer can type without re-entering a name. The upload form labels payment reference and e-receipt separately, states the private file limits, and says staff must confirm funds. Verified payment removes the transfer and upload prompts. At 375px the focused synthetic buyer journey passed without a second identity form; staff proof download passed its focused modal test. Real-device and exact-host behavior remain open in MAP-025.

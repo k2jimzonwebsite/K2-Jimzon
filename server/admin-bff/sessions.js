@@ -34,7 +34,7 @@ export function validateAdminSessionCommand(action, payload) {
         || !Number.isSafeInteger(payload.createdAt)
         || !Number.isSafeInteger(payload.expiresAt)
         || payload.expiresAt <= payload.createdAt
-        || payload.expiresAt - payload.createdAt !== 8 * 60 * 60 * 1000) {
+        || payload.expiresAt - payload.createdAt !== 7 * 24 * 60 * 60 * 1000) {
       throw new Error('SESSION_REQUEST_INVALID')
     }
     return payload

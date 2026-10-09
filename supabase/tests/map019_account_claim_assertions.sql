@@ -151,7 +151,7 @@ begin
   exception when insufficient_privilege then null; end;
   perform set_config('request.jwt.claims',jsonb_build_object('aal','aal2','is_staff',true,'session_id',v_provider_session)::text,true);
   v_created_ms:=floor(extract(epoch from clock_timestamp())*1000)::bigint;
-  v_command:=jsonb_build_object('createdAt',v_created_ms,'expiresAt',v_created_ms+28800000,'sessionId',v_admin_session)::text;
+  v_command:=jsonb_build_object('createdAt',v_created_ms,'expiresAt',v_created_ms+604800000,'sessionId',v_admin_session)::text;
   v_key:=extensions.gen_random_uuid(); v_nonce:=extensions.gen_random_uuid(); v_ts:=extract(epoch from clock_timestamp())::bigint;
   v_command_result:=public.execute_admin_session_command_v1(
     'admin_session_register',v_ts,v_nonce,v_key,v_command,

@@ -1,5 +1,7 @@
 # Admin BOS Same-Origin BFF Security Runbook
 
+**29 September seven-day staff continuity (IDEA-20260929-01, local feature branch):** The Admin idle hook and warning were removed; the direct Supabase client keeps its authenticated same-browser session and records a seven-day UX clock. The prepared encrypted BFF cookie and private session-registry registration now use seven days with no idle expiry. Manual logout, current staff role/AAL2, provider-session binding/revocation, and ten-minute pending/recovery cookies remain. Focused Admin BFF/cookie/continuity contracts passed 76/76, `npm run verify:development` exited 0, a nonsecret Admin Vite compile exited 0, and the isolated `npm run rehearse:map019-account-claim` rollback/apply/behavior/replay sequence passed. This has not been applied to K2 Supabase, deployed, or verified with a real staff session. The direct browser clock can be reset by clearing local storage; it is not a hardware trust or server security control. MAP-020 owns Preview auth/event-race proof and MAP-017 backup/migration gates before BFF activation; MAP-025 owns exact-host staff acceptance. Recovery: restore the prior Admin source/deployment, keep BFF flags and edge gate closed, and use the paired database recovery process if the prepared registry migration is ever applied.
+
 **13 September production correction:** MAP-017 follow-up `20260909023000` is
 applied and independently verified on K2. Do not rerun it. Seven internal function
 browser/PUBLIC ACLs and browser error-report writes are closed; required receiving
@@ -277,10 +279,10 @@ separation remain unimplemented.
 
 The prepared encrypted session payload is versioned and validated field by
 field before use. Every completed authentication receives a new opaque UUID
-session identity and fresh CSRF token; subsequent inactivity refreshes preserve
-that identity and the original eight-hour absolute-lifetime anchor while
+session identity and fresh CSRF token; subsequent session refreshes preserve
+that identity and the seven-day absolute-lifetime anchor while
 rotating the encrypted cookie and provider tokens. Invalid roles, identities,
-hashes, timestamps, token shapes, altered ciphertext, expired idle windows, and
+hashes, timestamps, token shapes, altered ciphertext, and
 expired hard windows fail closed. An additive private registry migration and
 signed session-command boundary are now prepared locally: cookies are issued
 only after durable registration, protected requests validate/touch the owned
@@ -369,7 +371,7 @@ bundle boundary separately proves that admin modules are not in customer JS.
 | `/api/admin/auth/password-recovery/verify` | GET | Email callback with no Origin assumption; accepts only an exact 64-hex token hash and `recovery` type, consumes a signed durable HMAC-only IP/token/global budget before provider verification, rechecks verified email and current staff role, then redirects with no provider token after setting ten-minute encrypted recovery/CSRF cookies |
 | `/api/admin/auth/password-recovery/complete` | POST | Exact-origin and recovery-CSRF protected; consumes a signed durable HMAC-only IP/recovery-session/global budget before provider restoration, then rechecks the single-use recovery session and current staff role, accepts one matching 12–128 character password, changes it, globally signs out provider sessions, and clears recovery cookies |
 | `/api/admin/staff-access/mfa-replacement` | POST | Separately gated Admin/AAL2/CSRF/idempotency boundary; exact start/complete schemas, private signed reason receipts, one-active-factor precondition, bounded replacement QR/key, exact new-factor verification, old-factor retirement only after success, and rotated provider tokens kept in the encrypted cookie |
-| `/api/admin/session` | GET | Decrypts session, enforces 30-minute inactivity and 8-hour maximum, restores/refreshes with Supabase, rechecks user/role/AAL2, rotates cookies |
+| `/api/admin/session` | GET | Decrypts session, enforces the seven-day maximum, restores/refreshes with Supabase, rechecks user/role/AAL2, rotates cookies |
 | `/api/admin/sessions` | GET | Lists at most 20 unexpired, unrevoked sessions owned by the current AAL2 staff identity; exposes only session ID, current marker, and lifecycle timestamps |
 | `/api/admin/sessions/revoke` | POST | CSRF-protected, reasoned, payload-bound idempotent revocation of one owned session or all sessions owned by the current staff identity |
 | `/api/admin/auth/logout` | POST | Exact-origin and CSRF checks, durable current-session revocation attempt before provider sign-out, unconditional local cookie removal, and explicit uncertainty on registry failure |
@@ -479,7 +481,7 @@ support messages.
 - Every restored session is checked against Auth, the current `user_profiles`
   role, and AAL2. Removed staff, signed-out users, revoked/expired refresh tokens,
   and downgraded assurance are rejected.
-- Inactivity is 30 minutes and absolute lifetime is 8 hours. Session checks
+- There is no inactivity sign-out. Absolute lifetime is seven days. Session checks
   rotate the encrypted cookie and CSRF binding without extending the absolute
   lifetime.
 - Logout clears local cookies even if durable revocation or provider sign-out is

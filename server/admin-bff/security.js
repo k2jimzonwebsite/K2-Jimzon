@@ -6,8 +6,7 @@ const CSRF_COOKIE = 'k2_admin_csrf'
 const RECOVERY_COOKIE = 'k2_admin_recovery'
 const RECOVERY_CSRF_COOKIE = 'k2_admin_recovery_csrf'
 const MAX_BODY_BYTES = 16 * 1024
-const MAX_SESSION_MS = 8 * 60 * 60 * 1000
-const IDLE_SESSION_MS = 30 * 60 * 1000
+const MAX_SESSION_MS = 7 * 24 * 60 * 60 * 1000
 const loginAttempts = new Map()
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const TOKEN_HASH = /^[A-Za-z0-9_-]{43}$/
@@ -409,8 +408,7 @@ export function refreshActiveSessionCookie(res, authSession, session) {
 export function readActiveSession(req) {
   const session = decrypt(parseCookies(req)[SESSION_COOKIE])
   const now = Date.now()
-  if (!validActiveSession(session) || session.expiresHardAt <= now
-      || session.lastSeenAt + IDLE_SESSION_MS <= now) return null
+  if (!validActiveSession(session) || session.expiresHardAt <= now) return null
   return session
 }
 
