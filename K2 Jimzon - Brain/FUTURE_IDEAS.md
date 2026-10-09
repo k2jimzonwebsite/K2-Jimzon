@@ -1,5 +1,17 @@
 # K2 Jimzon Future Ideas Intake
 
+**IDEA-20260907-04 — accepted, merged into MAP-028 I-012 / MAP-021.**
+Owner requests calmer dashboard wording and a side help button for widgets.
+Use on-demand contextual explanations; retain visible errors, freshness and
+financial/provider limitations. No metric, permission or workflow changes.
+
+**IDEA-20260907-03 — accepted, merged into MAP-028 I-016 / MAP-023.**
+Owner approved a task-first Learn / Guide me experience, beginning with manual
+product intake. Reuse the versioned procedure registry and the intake screen's
+real step state. Inline guidance remains with the form; focus-only links cannot
+submit or claim completion. Preserve maps as reference. No provider, SQL or
+permission changes; later receiving/packing walkthroughs remain in the MAP.
+
 **IDEA-20260907-02 — accepted refinement, merged into MAP-028 I-012 / MAP-021.**
 Owner requests another dashboard truth audit with fabricated test records proving
 that later real data updates the widgets. Reuse the existing overview boundary;

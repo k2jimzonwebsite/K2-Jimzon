@@ -25,7 +25,7 @@ import {
   TrendIcon,
 } from '../../components/ui/icons'
 
-import { DASHBOARD_WIDGETS } from './dashboardWidgets'
+import { DASHBOARD_WIDGETS, DASHBOARD_WIDGET_HELP } from './dashboardWidgets'
 
 const RANGE_OPTIONS = [7, 30, 90]
 const SALES_RECORD_FILTERS = [
@@ -227,6 +227,11 @@ function PanelHeading({ icon: Icon, title, description, action }) {
 }
 
 export default function Overview({ setSection, pending = null, widget = 'metrics', onWidget }) {
+  const [helpOpen, setHelpOpen] = useState(false)
+  const helpButtonRef = useRef(null)
+  const widgetHelp = DASHBOARD_WIDGET_HELP[widget]
+  const closeHelp = () => { setHelpOpen(false); helpButtonRef.current?.focus() }
+  useEffect(() => { setHelpOpen(false) }, [widget])
   const requestSequence = useRef(0)
   const [unavailable, setUnavailable] = useState(Object.keys(EMPTY_DATA))
   const [stale, setStale] = useState(false)
@@ -485,7 +490,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
         <div>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">Operations command center</h2>
           <p className="mt-1 max-w-3xl text-sm leading-relaxed text-white/65">
-            Choose a widget from the left panel. Each view keeps its own records and operational meaning.
+            Choose a view. Help explains complex metrics where needed.
           </p>
         </div>
 
@@ -531,7 +536,17 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
           {DASHBOARD_WIDGETS.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
         </select>
       </div>
-      <div><h3 className="text-lg font-semibold text-white">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.label}</h3><p className="mt-1 text-sm text-white/65">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.description}</p></div>
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="text-lg font-semibold text-white">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.label}</h3>
+        {widgetHelp && <button ref={helpButtonRef} type="button" aria-label="Help with this widget" aria-expanded={helpOpen} aria-controls="dashboard-widget-help" onClick={() => setHelpOpen(value => !value)} className={`${actionClass} min-h-11 shrink-0 rounded-adm-sm border border-adm-line px-4 text-sm font-medium text-white/80 hover:bg-white/5`}>Help</button>}
+      </div>
+      {helpOpen && widgetHelp && <aside id="dashboard-widget-help" aria-label="Widget help" tabIndex={-1} onKeyDown={event => { if (event.key === 'Escape') { event.stopPropagation(); closeHelp() } }} className="rounded-adm border border-adm-line bg-adm-sunken p-4 text-sm leading-relaxed text-white/80">
+        <div className="flex items-center justify-between gap-3"><h4 className="font-semibold text-white">{DASHBOARD_WIDGETS.find(item => item.id === widget)?.label}</h4><button type="button" onClick={closeHelp} className={`${actionClass} min-h-11 px-3 text-sm text-white/80`}>Close help</button></div>
+        <p>{DASHBOARD_WIDGETS.find(item => item.id === widget)?.description}</p>
+        <p className="mt-3"><strong className="text-white">How to read this:</strong> {widgetHelp?.read}</p>
+        <p className="mt-3"><strong className="text-white">What to do next:</strong> {widgetHelp?.next}</p>
+        <p className="mt-3 text-xs text-white/65">Zero means no matching retrieved records, not zero activity in an external shop. Failed or incomplete sources stay unavailable. Help never changes records.</p>
+      </aside>}
       {widgetUnavailable && <p role="status" className="rounded-adm border border-adm-line p-5 text-sm text-white/75">{loading ? 'Loading this widget’s records…' : 'This widget is unavailable because its records could not be retrieved. Refresh to retry or choose another widget.'}</p>}
       <section hidden={widget !== 'metrics'} aria-label="Key performance indicators" className={`${panelClass} [&[hidden]]:hidden grid overflow-hidden grid-cols-1 sm:grid-cols-2 xl:grid-cols-3`}>
         {metrics.map((metric, index) => (
@@ -771,12 +786,12 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
               <div><dt>Traffic, conversion and ad spend</dt><dd className="text-white/65">Unavailable — no verified analytics or advertising feed.</dd></div>
               <div><dt>Settled payouts and actual profit</dt><dd className="text-white/65">Unavailable — settlement and exact-lot cost records are required.</dd></div>
             </dl>
-            <p className="mt-3 text-xs leading-relaxed text-white/65">Zero means no matching internal records were returned. It does not mean zero activity in an external shop. Use the other widgets for sales reconciliation, inbox, sourcing and stock detail.</p>
+            <p className="mt-3 text-xs leading-relaxed text-white/65">Zero means no matching internal records were returned. Not external-shop activity.</p>
           </div>
         </section>
 
         <section hidden={widget !== 'inbox' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading icon={InboxIcon} title="Inbox workload" description="Current open-conversation pressure and response risk." />
+          <PanelHeading icon={InboxIcon} title="Inbox workload" description="Open messages and recorded deadlines." />
           <div className="grid grid-cols-2">
             {[
               { label: 'Unread', value: analytics.unread, tone: analytics.unread > 0 ? 'text-amber' : 'text-white' },
@@ -800,7 +815,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
 
       <div className="contents">
         <section hidden={widget !== 'pasabuy' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading icon={BagIcon} title="Pasabuy pipeline" description="Open requests by the next operational milestone." />
+          <PanelHeading icon={BagIcon} title="Pasabuy pipeline" description="Open requests by stage." />
           <div className="space-y-3 p-4 sm:p-5">
             {analytics.pasabuyStages.map(stage => {
               const total = Math.max(analytics.openPasabuy.length, 1)
@@ -825,7 +840,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
         </section>
 
         <section hidden={widget !== 'stock' || widgetUnavailable} className={`${panelClass} [&[hidden]]:hidden min-w-0`}>
-          <PanelHeading icon={BoxIcon} title="Inventory health" description="SKU availability and FEFO batch risk requiring staff review." />
+          <PanelHeading icon={BoxIcon} title="Inventory health" description="Stock levels and expiry alerts." />
           <div className="divide-y divide-adm-line px-4 sm:px-5">
             {[
               { label: 'Catalog SKUs', value: data.products.length, detail: 'Current product records', tone: 'text-white' },

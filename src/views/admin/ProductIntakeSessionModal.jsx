@@ -32,8 +32,11 @@ import { applyImageFallback } from '../../lib/imageFallback'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import { CANONICAL_CUSTODIANS, CANONICAL_HUBS } from '../../data/canonicalIdentities'
 import AutomaticIntakePanel from './AutomaticIntakePanel'
+import IntakeStepGuide from './IntakeStepGuide'
 
-export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct }) {
+export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCreated, onExistingProduct, guided = false }) {
+  const [showStepGuide, setShowStepGuide] = useState(guided)
+  useEffect(() => { if (guided && isOpen) setShowStepGuide(true) }, [guided, isOpen])
   const closeButtonRef = useRef(null)
   const errorRef = useRef(null)
   const copiedPromptTimerRef = useRef(null)
@@ -551,6 +554,10 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
 
         {/* Body Content */}
         <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
+          <button type="button" aria-expanded={showStepGuide} onClick={() => setShowStepGuide(value => !value)} className="min-h-11 rounded-adm-sm border border-adm-line px-3 text-sm text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue">
+            {showStepGuide ? 'Hide step guidance' : 'Show step guidance'}
+          </button>
+          {showStepGuide && <IntakeStepGuide key={step} step={step} />}
           {sessionLoading && (
             <div role="status" aria-live="polite" className="rounded-lg border border-white/10 bg-white/5 p-3.5 text-sm text-white/70">
               Restoring saved server progress…
@@ -752,6 +759,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                           ? 'Verified · Replace'
                           : 'Capture / Select'}
                       <input
+                        id={`intake-evidence-${s.slot}`}
                         type="file"
                         accept="image/jpeg,image/png,image/webp"
                         capture="environment"
@@ -838,6 +846,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-amber-400 text-xs">Contract: k2.product-content.v3</span>
                   <button
+                    id="intake-copy-prompt"
                     type="button"
                     onClick={handleCopyPrompt}
                     className="min-h-11 px-3 py-2 bg-amber-400 text-black font-semibold rounded text-xs flex items-center gap-1 hover:bg-amber-300"
@@ -936,6 +945,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   Product Name: <strong className="text-white">{parsedPayload?.product?.name || query || 'New Product'}</strong>
                 </p>
                 <button
+                  id="intake-save-draft"
                   type="button"
                   onClick={handleSaveDraft}
                   disabled={sessionLoading || creatingDraft || aiBusy}
@@ -965,6 +975,7 @@ export default function ProductIntakeSessionModal({ isOpen, onClose, onProductCr
                   { id: 'reconciliation', label: 'Opening Balance' }
                 ].map(src => (
                   <button
+                    id={`intake-source-${src.id}`}
                     type="button"
                     key={src.id}
                     onClick={() => {

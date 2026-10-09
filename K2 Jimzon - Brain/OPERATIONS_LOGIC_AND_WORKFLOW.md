@@ -1,5 +1,28 @@
 # K2 Jimzon Operations Logic and Workflow Rulebook
 
+Launch evidence (MAP-017): unavailable sources, malformed/missing counts and
+failed privileged baselines must never count as authorization success. Explicit
+denial and confirmed zero visibility have different meanings; an empty private
+source cannot prove row isolation. Passing local checks never activates SQL.
+
+Widget help (IDEA-20260907-04): offer Help only for non-obvious calculation,
+date, overlap or source rules. Straightforward Inbox, Pasabuy and Stock views
+keep short visible labels without an extra Help button.
+Source failures, stale state, zero-data meaning
+and unavailable financial/provider coverage remain visible without opening help.
+Help is explanatory only and never changes records or implies verification.
+
+**Guided staff tasks (IDEA-20260907-03):** teaching is advisory. Learn mode
+must respect hidden, disabled and inactive controls, including ARIA state; a
+focus shortcut must report a blocker when focus cannot be acquired. It never
+bypasses the form's availability rules. The guide
+explains the outcome; guided mode stays in the canonical form and follows its
+current stage. Each instruction names evidence, expected result and recovery.
+Guide targets may focus a control but never click, submit, grant permission or
+establish completion. Unavailable targets fail visibly. Draft creation, first
+inventory and publication are separate decisions; staff may stop at Draft.
+External ChatGPT handoffs remain manual and are never monitored by the guide.
+
 **IDEA-20260907-01 current implementation boundary (7 September 2026):** the
 rulebook requirements below remain the target contract. Local tracing confirms
 that the prepared Admin payment route currently records only the existing

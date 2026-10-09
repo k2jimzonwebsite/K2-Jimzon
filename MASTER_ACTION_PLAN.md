@@ -1,5 +1,58 @@
 # K2 Jimzon Master Action Plan
 
+**Launch evidence follow-up, 7 September — MAP-017 / MAP-024 / MAP-028 C1/C4:**
+Owner requested continued investigation and documentation, preserving Admin help.
+The anonymous-read checker incorrectly counted HTTP outages/missing routes as
+private-boundary passes and unknown baseline counts as empty tables. Locally
+fixed with exact-count parsing, successful privileged-baseline requirement and
+explicit 401/403 denial or confirmed zero visibility. Empty private sources are
+qualified as row-isolation-unproven. Eleven regressions are in test:contracts;
+46 focused checker/schema/authorization tests pass. Fresh read-only production
+run still fails 2/14: products_old exposes 14 rows; public stock returns 401.
+This is evidence-tool repair, not remediation of production grants.
+
+Remaining activation blockers: phase-one SQL is not the full 55-finding fix;
+provider-owned defaults and legacy public RPC cutovers remain coordinated work.
+Live Admin session routes return Vercel NOT_FOUND, not application JSON. Vercel
+connector now reaches the K2 team (older wrong-account claims are superseded);
+team reports Hobby. Deployment dpl_4HZP5AxDY6hVqn5Evw2vmXGtMLf5 is Ready for
+3211624 on admin.k2jimzon.com and reports two Node functions in metadata, not an
+exact function inventory. Build-log endpoint denied access (401). Next: inspect
+the exact function/output-route inventory through authorized project access,
+resolve handler routing and project separation in preview, then prove disabled,
+deny and authorized paths before any activation. CSP remains report-only without
+a report destination in the inspected headers; review violations and delivery
+before enforcement. No production SQL, deployment, flags or paid calls changed.
+Evidence, commands and scoped recovery: docs/evidence/20260907-launch-checks/README.md.
+
+**Widget help — IDEA-20260907-04 / MAP-028 I-012 / MAP-021:**
+Local implementation verified: 34 Admin browser tests and Admin build/security
+pass; diff check clean. Evidence: docs/evidence/20260907-widget-help/README.md.
+Remaining: reviewed release and real-staff wording acceptance; not deployed.
+Help is limited to channel metrics, sales reconciliation, revenue dates and
+overlapping priority counts. Inbox, Pasabuy and Stock have no Help button.
+Keep plain-language guidance for non-obvious rules, not obvious labels. Collapse explanations, not source
+errors or business limitations. Verify keyboard/phone, widget switching and
+unchanged metric states. Preserve the uncommitted guided-intake pilot.
+
+**Guided staff tasks — IDEA-20260907-03 / MAP-028 I-016 / MAP-023:**
+Continuation: focus guidance now rejects disabled, hidden, inert and ARIA-disabled
+targets and checks actual focus before scrolling. Identity-stage browser coverage
+checks five unavailable states and recovery; all-stage coverage remains open.
+Fresh continuation evidence: 34/34 Admin browser tests, 6/6 guide contracts,
+Admin build/security and diff check passed; see the owning evidence README.
+Local pilot implemented; 33 Admin browser tests, 6 guide contracts and Admin
+build/security pass. Evidence: docs/evidence/20260907-guided-intake/README.md.
+Next: all-stage focus/denied-state coverage, exact image-workflow return targets,
+representative staff acceptance and reviewed release. This is not deployed.
+Approved pilot: manual product intake Learn / Guide me, using one versioned
+procedure authority and the existing saved intake flow, not a second progress
+store. Inline guide shows current instruction, evidence, expected result and
+recovery; target links focus only. Validate missing target, keyboard/phone,
+resume, offline and blocked states. No record/paid action executes through help.
+Retain existing reference/search/maps. Receiving, packing, exact target coverage
+for other procedures and representative staff acceptance remain subsequent work.
+
 **Dashboard truth follow-up — IDEA-20260907-02 / MAP-028 I-012 / MAP-021:**
 Continuation release checkpoint: the approval-service usage error was not an
 account usage limit; account status showed available allowance. The explicitly
