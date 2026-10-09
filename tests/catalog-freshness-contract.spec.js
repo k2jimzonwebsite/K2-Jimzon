@@ -34,9 +34,9 @@ test('catalog refresh is overlap-safe and degrades safely without the stock proj
   expect(source).toContain('catalogRefreshInFlightRef.current = true')
   expect(source).toContain('catalogRefreshInFlightRef.current = false')
 
-  // The catalog publishes on a successful product read alone. The stock
-  // projection is an enhancement, not a precondition for rendering.
-  expect(source).toContain('if (!productsResult.error && productsResult.data) {')
+  // Public products require the canonical Website assignment. Stock projection
+  // failure still preserves those products with unknown stock.
+  expect(source).toContain('if (!productsResult.error && productsResult.data && !websiteResult.error && websiteResult.data) {')
 
   // A failed stock read must not be silently coerced into an empty map, which
   // would report every product as zero stock rather than as unknown.

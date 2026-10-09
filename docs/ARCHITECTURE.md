@@ -1021,8 +1021,8 @@ existing callers retain the active-element fallback. No endpoint, schema or
 production artifact boundary changes. Local evidence is in
 `docs/evidence/20260908-coupon-retry/README.md` (MAP-028 I-002).
 
-- Prepared Admin routes: 97
-- Prepared Storefront routes: 18
+- Prepared Admin routes: 100
+- Prepared Storefront routes: 20
 
 These are source registry counts, checked by
 `tests/security-surface-inventory.spec.js` in the contract and CI suites.

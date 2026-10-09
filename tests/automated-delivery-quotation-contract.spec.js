@@ -9,7 +9,7 @@ test.describe('Automated delivery quotation contracts', () => {
     expect(sql).toContain('v_payload->>\'shippingAmount\'')
     expect(sql).toContain('v_shipping_num := (v_payload->>\'shippingAmount\')::numeric;')
     expect(sql).toContain('customer_delivery_confirmed_at = now()')
-    expect(sql).toContain('total_amount = subtotal - discount_amount + v_shipping_num')
+    expect(sql).toContain('total_amount = o.subtotal - o.discount_amount + v_shipping_num')
     expect(sql).toContain('grant execute on function public.submit_guest_order_v1(bigint,uuid,text,text,text,text) to anon')
   })
 

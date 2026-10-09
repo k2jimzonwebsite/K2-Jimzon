@@ -154,17 +154,16 @@ test('guestCommerceService preserves result.quote and matches DeliveryEstimate e
   const serviceSource = await readFile('src/services/guestCommerceService.js', 'utf8')
   const estimateSource = await readFile('src/components/DeliveryEstimate.jsx', 'utf8')
 
-  // DeliveryEstimate depends on result.ok and result.quote?.customerVisible
-  expect(estimateSource).toContain('result.ok && result.quote?.customerVisible')
+  // The reviewed national quote must match the requested service.
+  expect(estimateSource).toContain('result.ok && result.quote?.service === service')
 
   // guestCommerceService must preserve result.quote on success
   expect(serviceSource).toContain('quote: result.quote')
 })
 
-test('DeliveryEstimate clears previous quote from parent state when checking or unquotable', async () => {
+test('DeliveryEstimate invalidates parent review and ignores quotes for stale inputs', async () => {
   const estimateSource = await readFile('src/components/DeliveryEstimate.jsx', 'utf8')
-  // Clearing quote when checking prevents parent state from showing stale amounts
-  expect(estimateSource).toMatch(/if\s*\(!quotable\s*\|\|\s*!localityId\)\s*\{\s*setQuote\(null\);\s*onQuote\?.\(null\);/)
-  expect(estimateSource).toMatch(/setChecking\(true\)\s*setQuote\(null\)\s*onQuote\?.\(null\)/)
+  expect(estimateSource).toContain('onReview(null)')
+  expect(estimateSource).toContain('quoteState?.key === requestKey ? quoteState.quote : null')
+  expect(estimateSource).toContain('if (!active) return')
 })
-

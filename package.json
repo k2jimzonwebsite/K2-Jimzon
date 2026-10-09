@@ -106,13 +106,13 @@
     "test:storefront-recovery": "playwright test --config=playwright.storefront-recovery.config.js",
     "test:workflow-api": "playwright test --config=playwright.workflow.config.js && npm run test:workflow-map",
     "test:workflow-map": "playwright test --config=playwright.workflow-map.config.js",
-    "test:clearance-rehearsal": "node --test tests/clearance-evidence-safety.checks.mjs tests/clearance-history-integrity.checks.mjs",
+    "test:clearance-rehearsal": "node --test tests/clearance-evidence-safety.checks.mjs",
     "test:receiving-purchase-rehearsal": "node --test tests/receiving-purchase-evidence.checks.mjs tests/receiving-purchase-controls.checks.mjs",
     "test:rehearsal-archive-safety": "node --test tests/rehearsal-archive-safety.checks.mjs",
     "test:receiving-exact-controls": "node --test tests/receiving-exact-controls.checks.mjs",
     "test:release-exact-replay": "node --test tests/release-exact-replay.checks.mjs",
     "test:release-current-chain": "node --test tests/release-current-chain.checks.mjs",
-    "test:base": "node tests/intake-calendar-generation.checks.mjs && node tests/intake-flight-cost.checks.mjs && node tests/intake-audit-compatibility.checks.mjs && node tests/intake-lifecycle.checks.mjs && node tests/intake-dependencies.checks.mjs && node tests/intake-publication-composition.checks.mjs && node tests/intake-catalog-read-parity.checks.mjs && node tests/intake-candidate-bodies.checks.mjs && node tests/intake-policy-role-set.checks.mjs && node tests/intake-restored-storage.checks.mjs && node tests/intake-foundation.checks.mjs && node tests/intake-foundation-data.checks.mjs && node tests/intake-foundation-schema.checks.mjs && node tests/catalog-current-products.checks.mjs && node tests/catalog-current-chain.checks.mjs && node tests/catalog-completeness.checks.mjs && npm run test:release-current-chain && npm run test:release-exact-replay && npm run test:receiving-exact-controls && npm run test:rehearsal-archive-safety && npm run test:clearance-rehearsal && npm run test:receiving-purchase-rehearsal && npm run test:clearance-recount-rehearsal && playwright test --config=playwright.config.js",
+    "test:base": "node tests/intake-calendar-generation.checks.mjs && node tests/intake-flight-cost.checks.mjs && node tests/intake-audit-compatibility.checks.mjs && node tests/intake-lifecycle.checks.mjs && node tests/intake-dependencies.checks.mjs && node tests/intake-publication-composition.checks.mjs && node tests/intake-candidate-bodies.checks.mjs && node tests/intake-policy-role-set.checks.mjs && node tests/intake-foundation-data.checks.mjs && node tests/intake-foundation-schema.checks.mjs && node tests/catalog-current-products.checks.mjs && node tests/catalog-current-chain.checks.mjs && node tests/catalog-completeness.checks.mjs && npm run test:release-current-chain && npm run test:release-exact-replay && npm run test:receiving-exact-controls && npm run test:rehearsal-archive-safety && npm run test:clearance-rehearsal && npm run test:receiving-purchase-rehearsal && npm run test:clearance-recount-rehearsal && playwright test --config=playwright.config.js",
     "test:smoke": "playwright test tests/smoke.spec.js",
     "test:map027-smoke": "playwright test --config=playwright.map027.config.js tests/smoke.spec.js",
     "test:storefront-ui": "playwright test --config=playwright.map027.config.js tests/smoke.spec.js tests/buyer.spec.js tests/storefront-mobile.spec.js tests/storefront-motion.spec.js tests/storefront-theme.spec.js",
@@ -132,7 +132,8 @@
     "rehearse:intake-ai": "node scripts/rehearse-intake-ai-portable.mjs",
     "rehearse:stock-grant": "node scripts/rehearse-stock-grant-revocation.mjs",
     "rehearse:public-stock": "node scripts/rehearse-public-eligible-stock.mjs",
-    "test:clearance-recount-rehearsal": "node --test tests/clearance-recount-evidence.checks.mjs tests/clearance-notice.checks.mjs tests/clearance-edges-mode.checks.mjs"
+    "test:clearance-recount-rehearsal": "node --test tests/clearance-recount-evidence.checks.mjs tests/clearance-notice.checks.mjs tests/clearance-edges-mode.checks.mjs",
+    "test:local-evidence": "node --test tests/intake-catalog-read-parity.checks.mjs tests/intake-restored-storage.checks.mjs tests/intake-foundation.checks.mjs tests/clearance-history-integrity.checks.mjs && node tests/provider-cutover-barrier.test.mjs && node tests/provider-psgc-seed.test.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

@@ -10,7 +10,7 @@ test('calendar generator preserves the complete literal date regex without dupli
  try{
   fs.mkdirSync(path.join(root,'supabase/migrations'),{recursive:true});fs.mkdirSync(path.join(root,'docs/evidence/20261003-catalog-current-chain/foundation-13'),{recursive:true})
   fs.copyFileSync('supabase/migrations/20261003221500_intake_flight_cost_propagation.sql',path.join(root,'supabase/migrations/20261003221500_intake_flight_cost_propagation.sql'))
-  const r=spawnSync(process.execPath,[fileURLToPath(new URL('../docs/evidence/20261003-catalog-current-chain/foundation-13/prepare-calendar-migration.mjs',import.meta.url))],{cwd:root,encoding:'utf8',windowsHide:true})
+  const r=spawnSync(process.execPath,[fileURLToPath(new URL('../scripts/prepare-intake-calendar-migration.mjs',import.meta.url))],{cwd:root,encoding:'utf8',windowsHide:true})
   assert.equal(r.status,0,r.stderr)
   const sql=fs.readFileSync(path.join(root,'supabase/migrations/20261003233500_intake_flight_calendar.sql'),'utf8'),body=sql.split('$candidate$')[1]
   assert.ok(body.includes("!~ '^\\d{4}-\\d{2}-\\d{2}$'"),'date regex dollar anchor must remain literal SQL')

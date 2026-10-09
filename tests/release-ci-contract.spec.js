@@ -9,7 +9,8 @@ test('deployment configurations select the separately gated artifact scripts', a
   const { scripts } = JSON.parse(await read('package.json'))
   for (const target of ['admin', 'storefront']) {
     const config = JSON.parse(await read(`vercel.${target}.json`))
-    expect(config.buildCommand).toBe(`K2_DEPLOYMENT_TARGET=${target} npm run build:${target}`)
+    expect(config.buildCommand).toBe(`npm run build:vercel-output:${target}`)
+    expect(scripts[`build:vercel-output:${target}`]).toContain(`npm run build:${target}`)
     expect(scripts[`build:${target}`]).toContain(`verify-bundle-budgets.mjs ${target}`)
   }
   expect(scripts['build:admin']).toContain('emit-admin-head.mjs admin')

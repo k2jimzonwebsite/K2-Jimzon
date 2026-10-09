@@ -52,7 +52,7 @@ test('provenance claims render only from recorded origin evidence', async () => 
 
 test('checkout offers the server-accepted fulfillment methods instead of hardcoding one', async () => {
   const checkout = await readFile(new URL('../src/views/Checkout.jsx', import.meta.url), 'utf8')
-  for (const method of ['Metro Manila delivery', 'Courier delivery', 'Pickup']) {
+  for (const method of ['Metro Manila Express Dispatch', 'Standard Courier Delivery', 'K2 Warehouse Pickup']) {
     expect(checkout).toContain(method)
   }
   expect(checkout).toContain('name="fulfillment-method"')

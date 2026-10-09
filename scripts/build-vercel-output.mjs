@@ -21,6 +21,9 @@ function copyNativeSharp(functionDir) {
   const packages = ['sharp', 'detect-libc', 'semver', '@img']
   for (const name of packages) {
     const source = path.join(root, 'node_modules', name)
+    // npm can retain a compatible dependency inside Sharp rather than hoisting
+    // it. Copying Sharp already includes that nested package.
+    if (!fs.existsSync(source) && fs.existsSync(path.join(root, 'node_modules', 'sharp', 'node_modules', name))) continue
     if (!fs.existsSync(source)) throw new Error(`Missing installed native dependency: ${name}`)
     fs.cpSync(source, path.join(functionDir, 'node_modules', name), { recursive: true })
   }

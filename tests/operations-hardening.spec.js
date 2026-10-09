@@ -38,23 +38,21 @@ test('consignment scanning distinguishes flight, box, lot, and manifest line', a
 test('storefront coupon and delivery totals are server-backed and never browser-authored', async () => {
   const store = await read('../src/context/StoreContext.jsx')
   const checkout = await read('../src/views/Checkout.jsx')
-  // The prepared delivery pilot may read only a server-visible rate. Checkout
-  // keeps manual quoting until an immutable quote is carried by the saved order.
+  // Checkout displays the server quote tied to the current basket. Express
+  // remains unpriced until staff quote and the customer accepts.
   const deliveryEstimate = await read('../src/components/DeliveryEstimate.jsx')
 
   expect(store).not.toContain("localStorage.getItem('k2_coupons')")
   expect(store).not.toContain("localStorage.setItem('k2_coupons'")
   expect(store).toContain("rpc('validate_coupon'")
   expect(store).toContain("rpc('submit_order_request_v2'")
-  expect(deliveryEstimate).toContain('Quoted after review')
-  // The only priced path is a server quote the server marked customer-visible.
+  expect(deliveryEstimate).toContain('No final total or payment is due yet.')
   expect(deliveryEstimate).toContain('quoteGuestDelivery')
-  expect(deliveryEstimate).toContain('result.quote?.customerVisible')
+  expect(deliveryEstimate).toContain('result.quote?.service === service')
   expect(checkout).not.toContain('const SHIPPING =')
-  // A quote not carried by the order payload cannot become a final total.
-  expect(checkout).not.toContain('deliveryQuote.feeMinor')
-  expect(checkout).not.toContain('<DeliveryEstimate')
-  expect(checkout).toContain('Quoted after review')
+  expect(checkout).toContain('deliveryReview?.baseKey === deliveryKey')
+  expect(checkout).toContain('pendingCheckout?.deliveryPreview || currentReview?.quote')
+  expect(checkout).toContain('<DeliveryEstimate')
   expect(checkout).not.toContain('Your delivery charge above is final')
   expect(deliveryEstimate).not.toContain('const SHIPPING =')
 })

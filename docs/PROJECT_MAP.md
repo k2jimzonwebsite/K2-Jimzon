@@ -1034,8 +1034,8 @@ recovery are under `docs/evidence/20260909-catalog-import-retry/` and
 `docs/design-checkpoints/20260909-catalog-import-retry/`; product-intake and
 target-host acceptance remain in I-002.
 
-- Prepared Admin routes: 97
-- Prepared Storefront routes: 18
+- Prepared Admin routes: 100
+- Prepared Storefront routes: 20
 
 These are source registry counts, checked by
 `tests/security-surface-inventory.spec.js` in the contract and CI suites.

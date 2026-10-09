@@ -34,7 +34,7 @@ Checkmarks and Training examples only track guide review in the open component. 
 | WorkflowDetailDrawer.jsx | Complete step instructions, implementation notes, local examples and graph context. |
 | workflowData.js / workflowGraph.js | Versioned teaching data and unchanged relationship identities; never operational authority. |
 | workflowMap.css | Admin-scoped reading contrast, input text and responsive tooltip containment. |
-| AiPromptStudioCard.jsx | Existing manually used prompt studio mounted in the guide; approved Projects remain the new-product teaching path. |
+| `AiPromptStudioCard.jsx` | Existing manually used prompt studio mounted in the guide; approved Projects remain the new-product teaching path. |
 
 ## Verification and recovery
 

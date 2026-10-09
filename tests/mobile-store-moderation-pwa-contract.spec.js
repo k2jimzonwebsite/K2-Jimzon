@@ -80,6 +80,6 @@ test('anonymous chat moderation is hash-only, role-gated, auditable and separate
   expect(view).toContain('Delete anonymous conversation')
   expect(view).toContain('Block anonymous chat')
   expect(view).toContain('Unblock anonymous chat')
-  expect(storeChat).toContain('clearStoredConvoId()')
-  expect(storeChat).toContain('else setConversation(null)')
+  expect(storeChat).toContain('clearGuestConversationReference()')
+  expect(storeChat).toMatch(/clearGuestConversationReference\(\)\s+setConversation\(null\)/)
 })

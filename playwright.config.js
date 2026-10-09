@@ -4,6 +4,8 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173';
 
 export default defineConfig({
   testDir: './tests',
+  // Node contract tests and private native witnesses have separate runners.
+  testMatch: '**/*.spec.js',
   // These journeys require environment contracts that intentionally conflict
   // with the shared combined server. `npm test` runs each one through its
   // dedicated config after this base suite completes.
@@ -36,6 +38,9 @@ export default defineConfig({
     'storefront-theme.spec.js',
     'wholesale-inquiry-ui.spec.js',
     'product-led-evidence.spec.js',
+    'catalog-import-legacy-ui.spec.js',
+    'shop-stock-ui.spec.js',
+    'workflow-map-ui.spec.js',
   ],
   fullyParallel: false,
   // A cold combined-mode Vite transform can take about a minute on the Windows

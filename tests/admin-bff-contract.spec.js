@@ -2317,7 +2317,7 @@ test('customer BFF is session-gated and keeps canonical identities separate', as
       customer_contact_points: [{ contact_kind: 'email', contact_value: 'guest@example.test', verification_status: 'unverified', source: 'website_guest' }],
       customer_accounts: [], channel_identities: [{ channel: 'website', link_status: 'unlinked' }],
     }], error: null },
-    order_requests: { data: [{ id: 'o1', customer_id: 'c1', total_amount: 1500, status: 'submitted' }], error: null },
+    order_requests: { data: [{ id: 'o1', customer_id: 'c1', total_amount: 1500, shipping_quote_status: 'customer_confirmed', status: 'submitted' }], error: null },
     pasabuy_requests: { data: [], error: null },
     conversations: { data: [{ id: 'x1', customer_id: 'c1', status: 'open', unread_count: 2 }], error: null },
   }
