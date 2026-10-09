@@ -187,7 +187,9 @@ export default defineConfig(({ command, mode }) => {
             const path = id.replace(/\\/g, '/')
             if (/\/node_modules\/(react|react-dom|scheduler)\//.test(path)) return 'vendor-react'
             if (path.includes('/node_modules/@supabase/')) return 'vendor-supabase'
-            if (/\/node_modules\/(motion|motion-dom|motion-utils|framer-motion)\//.test(path)) return 'vendor-motion'
+            // Motion 13's scene and gesture dependencies must follow their
+            // dynamic importers instead of joining the landing vendor chunk.
+            if (target === 'admin' && /\/node_modules\/(motion|motion-dom|motion-utils|framer-motion)\//.test(path)) return 'vendor-motion'
             return undefined
           },
         },

@@ -1,5 +1,6 @@
 import { useId, useState } from 'react'
-import { useReducedMotion, motion, AnimatePresence } from 'motion/react'
+import * as motion from 'motion/react-m'
+import { useReducedMotion, AnimatePresence } from 'motion/react'
 
 const WAYPOINTS = {
   milano: {

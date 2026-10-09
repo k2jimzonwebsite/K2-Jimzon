@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { motion, useReducedMotion } from 'motion/react'
+import * as motion from 'motion/react-m'
+import { useReducedMotion } from 'motion/react'
 import { useStore } from '../../context/StoreContext'
 import { BoxIcon, CupIcon, HeartIcon, PlaneIcon, SparkleIcon, StarIcon, ArrowIcon } from '../ui/icons'
 

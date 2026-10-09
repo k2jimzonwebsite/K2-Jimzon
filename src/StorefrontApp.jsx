@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import { LazyMotion, domAnimation } from 'motion/react'
 import { StoreProvider, useStore } from './context/StoreContext'
 import { GlobeCmsProvider } from './data/globeCms'
 import MobileNavBar from './components/nav/MobileNavBar'
@@ -92,12 +93,14 @@ function StorefrontCustomerRuntime({ children }) {
 export default function StorefrontApp() {
   return (
     <ErrorBoundary>
-      <GlobeCmsProvider>
-        <StoreProvider>
-          <Suspense fallback={null}><StorefrontMetadata /></Suspense>
-          <StorefrontCustomerRuntime><StorefrontShell /></StorefrontCustomerRuntime>
-        </StoreProvider>
-      </GlobeCmsProvider>
+      <LazyMotion features={domAnimation}>
+        <GlobeCmsProvider>
+          <StoreProvider>
+            <Suspense fallback={null}><StorefrontMetadata /></Suspense>
+            <StorefrontCustomerRuntime><StorefrontShell /></StorefrontCustomerRuntime>
+          </StoreProvider>
+        </GlobeCmsProvider>
+      </LazyMotion>
     </ErrorBoundary>
   )
 }

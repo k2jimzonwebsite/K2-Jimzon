@@ -1,4 +1,4 @@
-import { motion } from 'motion/react'
+import * as motion from 'motion/react-m'
 import { useStore } from '../../context/StoreContext'
 import { RedButton, GhostButton, Kicker } from '../ui/bits'
 import { ArrowIcon, CheckIcon, PlaneIcon, ShieldIcon, GridIcon } from '../ui/icons'

@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { motion, useReducedMotion } from 'motion/react'
+import * as motion from 'motion/react-m'
+import { useReducedMotion } from 'motion/react'
 import { LIFESTYLE } from '../../data/site'
 import { Kicker } from '../ui/bits'
 

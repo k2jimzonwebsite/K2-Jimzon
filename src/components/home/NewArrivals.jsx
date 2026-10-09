@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import * as motion from 'motion/react-m'
+import { AnimatePresence, useReducedMotion } from 'motion/react'
 import { useStore } from '../../context/StoreContext'
 import ProductCard from '../ProductCard'
 import ProductVisual from '../ProductVisual'
