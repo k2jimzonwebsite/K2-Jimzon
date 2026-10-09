@@ -324,7 +324,11 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         // Website-assigned Unlisted SKUs so existing direct links can work;
         // listedProducts still keeps them out of browse. The required view
         // fails closed when absent, so marketplace-only SKUs stay hidden.
-        supabase.from('v_storefront_visible_skus').select('sku'),
+        // Canonical channel filtering activates with the qualified commerce
+        // BFF. A source-only promotion must preserve the existing catalog while
+        // its database view and protected listing writers are still prepared.
+        guestBffEnabled() ? supabase.from('v_storefront_visible_skus').select('sku')
+          : Promise.resolve({ data: [], error: null }),
       ])
 
       // The catalog renders whenever the product read succeeds. These two reads
@@ -333,7 +337,8 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       // entire storefront — which is exactly what a revoked anon grant on
       // v_product_stock_from_batches did in production.
       if (!productsResult.error && productsResult.data && !websiteResult.error && websiteResult.data) {
-        const websiteSkus = new Set(websiteResult.data.map(row => row.sku).filter(Boolean))
+        const websiteSkus = new Set((guestBffEnabled() ? websiteResult.data : productsResult.data)
+          .map(row => row.sku).filter(Boolean))
         const stockAvailable = !stockResult.error && stockResult.data
           ? Object.fromEntries(stockResult.data.map(r => [r.sku, r.stock_from_batches]))
           : null

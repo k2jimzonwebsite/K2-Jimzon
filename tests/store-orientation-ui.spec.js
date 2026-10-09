@@ -10,6 +10,7 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/rest/v1/**', route => {
     const table = new URL(route.request().url()).pathname.split('/').pop()
     return route.fulfill({ json: table === 'products' ? [product]
+      : table === 'v_storefront_visible_skus' ? [{ sku: product.sku }]
       : table === 'v_product_stock_from_batches' ? [{ sku: product.sku, stock_from_batches: 8 }] : [] })
   })
 })

@@ -54,9 +54,9 @@ export async function handleCustomerDeliveryRates(req, res) {
       ? signedAdminCommandArguments('delivery_customer_rates_publish', authorized.identity.userId, idempotencyKey,
         validateCustomerDeliveryRates(await readJson(req)))
       : undefined
-    const { data, error } = await authorized.client.rpc(
-      writing ? 'execute_customer_delivery_rates_v1' : 'read_customer_delivery_rates_v1', args,
-    )
+    const { data, error } = writing
+      ? await authorized.client.rpc('execute_customer_delivery_rates_v1', args)
+      : await authorized.client.rpc('read_customer_delivery_rates_v1', args)
     if (error) {
       if (error.code === '40001') return safeJson(res, 409, { error: { code: 'CUSTOMER_TARIFF_VERSION_STALE' } })
       if (String(error.message).includes('K2_ADMIN_IDEMPOTENCY_CONFLICT')) return safeJson(res, 409, { error: { code: 'IDEMPOTENCY_CONFLICT' } })

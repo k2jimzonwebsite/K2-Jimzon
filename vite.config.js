@@ -18,6 +18,7 @@ const BROWSER_ENV_KEYS = [
 ]
 const VITE_CONFIG_ENV_KEYS = [
   'K2_DEPLOYMENT_TARGET',
+  'K2_ACCEPTANCE_NO_WATCH',
   'SUPABASE_PUBLISHABLE_KEY',
   ...BROWSER_ENV_KEYS,
 ]
@@ -145,6 +146,12 @@ export default defineConfig(({ command, mode }) => {
     // pre-bundled Three.js dependencies, producing 504 "Outdated Optimize Dep"
     // responses and a blank storefront. Keep each deployment cache isolated.
     cacheDir: `${projectRoot}/node_modules/.vite-${target}`,
+    // Opt-in Windows acceptance mode avoids crawling private rehearsal/skill
+    // archives. Production builds and ordinary development keep their defaults.
+    ...(command === 'serve' && process.env.K2_ACCEPTANCE_NO_WATCH === 'true' ? {
+      server: { watch: null },
+      optimizeDeps: { noDiscovery: true, include: ['react', 'react-dom/client', '@supabase/supabase-js', 'react-helmet-async', 'react-barcode', 'papaparse', 'html5-qrcode', '@react-three/fiber', '@react-three/drei', 'motion/react'] },
+    } : {}),
     plugins: [react(), tailwindcss(), deploymentBoundaryPlugin(target), adminServiceWorkerPlugin(target)],
     resolve: {
       alias: {

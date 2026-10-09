@@ -11,6 +11,7 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/rest/v1/**', route => {
     const table = new URL(route.request().url()).pathname.split('/').pop()
     return route.fulfill({ json: table === 'products' ? [product]
+      : table === 'v_storefront_visible_skus' ? [{ sku: product.sku }]
       : table === 'v_product_stock_from_batches' ? [{ sku: product.sku, stock_from_batches: 8 }] : [] })
   })
 })
@@ -77,18 +78,21 @@ test('short mobile drag changes shelf; zoom controls and hint leave room to brow
   await expect(canvas).toBeVisible({ timeout: 60000 })
   await expect(page.locator('.k2-store-touch-hint')).toBeVisible()
   await expect(page.locator('.k2-store-steps')).toBeHidden()
+  const cameraDistance = (property = 'distance') => page.evaluate(async property => {
+    const moduleUrl = performance.getEntriesByType('resource').map(entry => entry.name)
+      .find(url => url.includes('/@react-three_fiber.js'))
+    const { _roots } = await import(moduleUrl)
+    const state = _roots.get(document.querySelector('.k2-store-scene canvas')).store.getState()
+    return property === 'ready' ? state.scene.children.length : state.camera.position.z
+  }, property)
+  // Canvas mounts before the suspended room and its gesture listeners.
+  await expect.poll(() => cameraDistance('ready'), { timeout: 60000 }).toBeGreaterThan(0)
   const box = await canvas.boundingBox()
   await page.mouse.move(box.x + box.width * 0.65, box.y + box.height * 0.65)
   await page.mouse.down()
   await page.mouse.move(box.x + box.width * 0.65 - 90, box.y + box.height * 0.65, { steps: 8 })
   await page.mouse.up()
   await expect(page.getByRole('navigation', { name: 'Shelves', exact: true }).getByRole('button', { name: 'Coffee & Drinks' })).toHaveAttribute('aria-current', 'true')
-  const cameraDistance = () => page.evaluate(async () => {
-    const moduleUrl = performance.getEntriesByType('resource').map(entry => entry.name)
-      .find(url => url.includes('/@react-three_fiber.js'))
-    const { _roots } = await import(moduleUrl)
-    return _roots.get(document.querySelector('.k2-store-scene canvas')).store.getState().camera.position.z
-  })
   let lastDistance = await cameraDistance()
   await expect.poll(async () => {
     const current = await cameraDistance()

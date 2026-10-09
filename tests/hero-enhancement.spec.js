@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
   await page.route('https://**/*', route => route.abort())
   await page.route('**/rest/v1/**', route => {
     const table = new URL(route.request().url()).pathname.split('/').pop()
-    return route.fulfill({ json: table === 'products' ? products : table === 'v_product_stock_from_batches' ? products.map(p => ({ sku: p.sku, stock_from_batches: 5 })) : [] })
+    return route.fulfill({ json: table === 'products' ? products : table === 'v_storefront_visible_skus' ? products.map(p => ({ sku: p.sku })) : table === 'v_product_stock_from_batches' ? products.map(p => ({ sku: p.sku, stock_from_batches: 5 })) : [] })
   })
 })
 

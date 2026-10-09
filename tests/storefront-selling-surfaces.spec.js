@@ -33,6 +33,7 @@ test('product detail renders canonical price and stock, then enforces the cart l
     if (table === 'products') {
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([product]) })
     }
+    if (table === 'v_storefront_visible_skus') return route.fulfill({ json: [{ sku: product.sku }] })
     if (table === 'v_product_stock_from_batches') {
       return route.fulfill({
         status: 200,
@@ -181,6 +182,7 @@ test(`order confirmation explains the staff-reviewed exception path for ${method
     if (table === 'products') {
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([product]) })
     }
+    if (table === 'v_storefront_visible_skus') return route.fulfill({ json: [{ sku: product.sku }] })
     if (table === 'v_product_stock_from_batches') {
       return route.fulfill({
         status: 200,

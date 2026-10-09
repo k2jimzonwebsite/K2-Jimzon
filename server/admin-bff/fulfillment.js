@@ -165,8 +165,9 @@ async function executeFulfillmentCommand(req, res, action) {
       return safeJson(res, 403, { error: { code: 'PAYMENT_VERDICT_ADMIN_REQUIRED' } })
     }
     const signed = signedAdminCommandArguments(action, authorized.identity.userId, idempotencyKey, payload)
-    const { data, error } = await authorized.client.rpc(action === 'cancel_order'
-      ? 'execute_admin_order_cancellation_v1' : 'execute_admin_fulfillment_command_v1', signed)
+    const { data, error } = action === 'cancel_order'
+      ? await authorized.client.rpc('execute_admin_order_cancellation_v1', signed)
+      : await authorized.client.rpc('execute_admin_fulfillment_command_v1', signed)
     if (error) {
       const providerCode = String(error.message || '')
       if (action === 'cancel_order') {

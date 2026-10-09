@@ -6,6 +6,6 @@ export default defineConfig({
   webServer: {
     command: 'npx vite --mode storefront --host 127.0.0.1 --port 5298 --strictPort --configLoader runner',
     url: 'http://127.0.0.1:5298/src/index.css', reuseExistingServer: !process.env.CI, timeout: 240000,
-    env: { VITE_SUPABASE_URL: 'https://fixture.supabase.co', VITE_SUPABASE_PUBLISHABLE_KEY: 'fixture-publishable-key' },
+    env: { VITE_SUPABASE_URL: 'https://fixture.supabase.co', VITE_SUPABASE_PUBLISHABLE_KEY: 'fixture-publishable-key', VITE_GUEST_BFF_ENABLED: 'true' },
   },
 })

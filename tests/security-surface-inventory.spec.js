@@ -101,4 +101,5 @@ test('production security audit rejects wildcard CORS templates', () => {
   ], { encoding: 'utf8' })
   const report = JSON.parse(output)
   expect(report.wildcardCors).toEqual([])
+  expect(report.routeControlGaps).toEqual([])
 })

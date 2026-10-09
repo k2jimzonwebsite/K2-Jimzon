@@ -84,11 +84,9 @@ export default function StoreKeeper({ shelf, product, onAskStaff, onQuestionActi
         aria-controls="k2-store-guide-panel"
         aria-label={visibleOpen ? 'Minimize K2 shopkeeper' : 'Open K2 shopkeeper'}
         onClick={() => {
-          setOpen(value => {
-            const next = !value
-            onToggle?.(next)
-            return next
-          })
+          const next = !open
+          setOpen(next)
+          onToggle?.(next)
           onQuestionActivity?.(false)
         }}
       >

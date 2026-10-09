@@ -24,6 +24,7 @@ test('direct saved order conversation accepts a private receipt after fresh inst
     const endpoint = new URL(route.request().url()).pathname.split('/').pop()
     const data = route.request().postDataJSON?.() || {}
     if (endpoint === 'products') return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([product]) })
+    if (endpoint === 'v_storefront_visible_skus') return route.fulfill({ json: [{ sku: product.sku }] })
     if (endpoint === 'v_product_stock_from_batches') return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([{ sku: product.sku, stock_from_batches: 2 }]) })
     if (endpoint === 'submit_order_request_v2') return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ id: orderId, public_reference: reference, total_amount: 735, status: 'submitted', payment_status: 'not_requested' }) })
     if (endpoint === 'get_order_conversation_v1') return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, public_reference: reference, order_status: 'submitted', payment_status: paymentStatus, shipping_quote_status: 'customer_confirmed', total_amount: 735, delivery_review_required: false, messages: [{ direction: 'inbound', content: `Order ${reference} received through the website.`, created_at: '2026-09-28T07:00:00Z' }] }) })

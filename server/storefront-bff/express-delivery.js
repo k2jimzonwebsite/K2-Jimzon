@@ -18,7 +18,9 @@ export async function handleExpressAcceptance(req, res, { account = false } = {}
     }
     const action = account ? 'account_delivery_accept' : 'guest_delivery_accept'
     const args = signedRpcArguments(req, action, payload)
-    const { data, error } = await client.rpc(account ? 'accept_account_express_delivery_v1' : 'accept_guest_express_delivery_v1', args)
+    const { data, error } = account
+      ? await client.rpc('accept_account_express_delivery_v1', args)
+      : await client.rpc('accept_guest_express_delivery_v1', args)
     if (error) {
       const [status, code] = expressDeliveryFailure(error)
       return safeJson(res, status, { error: { code } }, status === 429 ? { 'Retry-After': '60' } : {})

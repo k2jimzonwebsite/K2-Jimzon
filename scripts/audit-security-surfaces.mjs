@@ -108,6 +108,12 @@ for (const route of ADMIN_BFF_ROUTES) {
 for (const route of STOREFRONT_BFF_ROUTES) {
   const control = STOREFRONT_BFF_ROUTE_CONTROLS[route]
   if (!control) routeControlGaps.push(`storefront:${route}:missing-control`)
+  else if (route === 'delivery/locations' && control.publicStaticReference === true) {
+    // This exact route returns bounded public PSGC geography, with no customer
+    // data or mutation authority. The router's rate shield still applies.
+    if (control.method !== 'GET' || control.guestGrant !== 'none' || control.idempotency !== false
+      || control.accountAuth || control.bot) routeControlGaps.push(`storefront:${route}:invalid-public-reference-control`)
+  }
   else {
     if (control.method !== 'POST') routeControlGaps.push(`storefront:${route}:method-not-post`)
     if (!control.origin) routeControlGaps.push(`storefront:${route}:missing-origin`)

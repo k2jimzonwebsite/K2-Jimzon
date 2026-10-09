@@ -115,7 +115,7 @@ test('express buyer malformed recovery refuses before sending approval', async (
   expect(await page.evaluate(ref => localStorage.getItem(`k2-express-acceptance-v1:${ref}`), reference)).toBe('{invalid')
 })
 
-async function catalog(page, { sku = 'audit-product', stock = 5, stockReadFails = false } = {}) {
+async function catalog(page, { sku = 'audit-product', stock = 5, stockReadFails = false, websiteReadFails = false, websiteEmpty = false } = {}) {
   let gallery = ['/images/placeholder.svg?second']
   await page.route('**/*', async route => {
     const url = new URL(route.request().url())
@@ -138,12 +138,15 @@ async function catalog(page, { sku = 'audit-product', stock = 5, stockReadFails 
     }
     if (url.pathname.startsWith('/rest/v1/')) {
       const table = url.pathname.split('/').pop()
+      if (table === 'v_storefront_visible_skus' && websiteReadFails) {
+        return route.fulfill({ status: 404, json: { code: 'PGRST205', message: 'synthetic missing Website view' } })
+      }
       if (table === 'v_product_stock_from_batches' && stockReadFails) {
         return route.fulfill({ status: 403, contentType: 'application/json', body: JSON.stringify({ message: 'synthetic projection unavailable' }) })
       }
       const body = table === 'products' ? [{ sku, name: 'Audit pantry item', status: 'Live', published: true,
         srp: 735, stock_available: 47, primary_image_url: '/images/placeholder.svg', secondary_images: gallery, country_of_origin: 'Italy', description: 'Synthetic product.' }]
-        : table === 'v_product_stock_from_batches' ? [{ sku, stock_from_batches: stock }] : []
+        : table === 'v_storefront_visible_skus' ? (websiteEmpty ? [] : [{ sku }]) : table === 'v_product_stock_from_batches' ? [{ sku, stock_from_batches: stock }] : []
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
     }
     return route.continue()
@@ -153,13 +156,19 @@ async function catalog(page, { sku = 'audit-product', stock = 5, stockReadFails 
     window.turnstile = { render: (_, options) => { queueMicrotask(() => options.callback(`synthetic-token-${++token}`)); return token }, remove: () => {} }
   })
   await page.goto(`/product/${sku}`, { waitUntil: 'domcontentloaded' })
-  await expect(page.getByRole('heading', { level: 1, name: 'Audit pantry item' })).toBeVisible({ timeout: 90000 })
+  if (!websiteReadFails && !websiteEmpty) await expect(page.getByRole('heading', { level: 1, name: 'Audit pantry item' })).toBeVisible({ timeout: 90000 })
   return {
     shrink() { gallery = [] },
     failStock() { stockReadFails = true },
     restoreStock() { stockReadFails = false },
   }
 }
+
+for (const failure of ['missing', 'unassigned']) test(`activated commerce hides a published product with ${failure} Website membership`, async ({ page }) => {
+  await catalog(page, { websiteReadFails: failure === 'missing', websiteEmpty: failure === 'unassigned' })
+  await expect(page.getByRole('heading', { level: 1, name: 'Product unavailable' })).toBeVisible({ timeout: 30000 })
+  await expect(page.getByRole('heading', { level: 1, name: 'Audit pantry item' })).toHaveCount(0)
+})
 
 async function acceptStandardDelivery(page) {
   await page.getByLabel('Region', { exact: true }).selectOption('1300000000')
