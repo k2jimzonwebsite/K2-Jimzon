@@ -209,6 +209,20 @@ test('a failed batch-stock read keeps the product visible but hides the stale ro
   }
 })
 
+test('reviewed delivery still requires contact before any order transport', async ({ page }) => {
+  await catalog(page)
+  const submissions = []
+  page.on('request', request => { if (new URL(request.url()).pathname === '/api/storefront/order') submissions.push(request) })
+  await page.getByRole('button', { name: /Add to cart/ }).click()
+  await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /checkout|review|request/i }).last().click()
+  await page.getByLabel('Full name', { exact: true }).fill('Synthetic Customer')
+  await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic Manila address')
+  await acceptStandardDelivery(page)
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText(/email address or mobile number/i)
+  expect(submissions).toHaveLength(0)
+})
+
 test('uncertain checkout freezes details and retries the same payload with a fresh challenge', async ({ page }) => {
   await catalog(page)
   const submissions = []

@@ -120,15 +120,15 @@ test.describe('launch-critical storefront', () => {
     await expect(page.getByText(/Confirm payment|Scan with any QR/i)).toHaveCount(0)
   })
 
-  test('checkout requires a contact channel before submission', async ({ page }) => {
+  test('checkout cannot submit while qualified commerce is inactive', async ({ page }) => {
     await openStorefront(page)
     await page.getByRole('button', { name: /Inventory & Catalog/i }).first().click()
     await page.locator('button[aria-label^="Add "]:not([disabled])').first().click()
     await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /Review order request/i }).click()
     await page.getByLabel('Full name').fill('Launch Test')
     await page.getByLabel('Delivery address').fill('Makati City, Metro Manila')
-    await page.getByRole('button', { name: /Submit order request/i }).click()
-    await expect(page.getByRole('alert')).toContainText(/email address or mobile number/i)
+    await expect(page.getByRole('button', { name: /Submit order request/i })).toBeDisabled()
+    await expect(page.getByText('Order requests are not active yet. Contact K2 for help.')).toBeVisible()
   })
 
   test('wholesale inquiry never fabricates a receipt, approval, or response promise', async ({ page }) => {

@@ -163,7 +163,7 @@ for (const method of [
   { label: 'MariBank', key: 'maribank', width: 699 },
   { label: 'GCash', key: 'gcash', width: 541 },
 ]) {
-test(`order confirmation explains the staff-reviewed exception path for ${method.label}`, async ({ page }) => {
+test(`recorded pickup instructions show the matching ${method.label} QR`, async ({ page }) => {
   let statusReads = 0
   let submittedNote = ''
   await page.setViewportSize({ width: 375, height: 812 })
@@ -192,6 +192,7 @@ test(`order confirmation explains the staff-reviewed exception path for ${method
     }
     return route.fulfill({ status: 200, contentType: 'application/json', body: '[]' })
   })
+  await page.route('**/api/storefront/delivery/quote', route => route.fulfill({ json: { ok: true, quote: { service: 'pickup', status: 'customer_confirmed', feeMinor: 0, currency: 'PHP', inputFingerprint: 'a'.repeat(64), rateVersion: null, weightG: null, weightBasis: 'not_applicable', area: null, sourceVersion: null } } }))
   await page.route('**/api/storefront/order', (route) => {
     submittedNote = route.request().postDataJSON().note
     return route.fulfill({
@@ -200,8 +201,9 @@ test(`order confirmation explains the staff-reviewed exception path for ${method
     body: JSON.stringify({ ok: true, receipt: {
       public_reference: 'WEB-0123456789ABCDEF',
       total_amount: 735,
-      status: 'Submitted',
-      payment_status: 'Unpaid',
+      status: 'submitted',
+      payment_status: 'awaiting_instructions',
+      shipping_quote_status: 'customer_confirmed', delivery_review_required: false,
     } }),
     })
   })
@@ -215,7 +217,8 @@ test(`order confirmation explains the staff-reviewed exception path for ${method
         total_amount: 735,
         item_count: 1,
         status: 'submitted',
-        payment_status: 'not_requested',
+        payment_status: 'awaiting_instructions',
+        shipping_quote_status: 'customer_confirmed', delivery_review_required: false,
         created_at: '2026-08-31T08:00:00Z',
       }] }),
     })
@@ -227,14 +230,15 @@ test(`order confirmation explains the staff-reviewed exception path for ${method
   await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: 'Review order request' }).click()
   await expect(page.getByRole('heading', { name: 'Review order request', exact: true })).toBeVisible({ timeout: 60000 })
   await page.getByRole('radio', { name: method.label }).check()
-  await expect(page.getByText('Quoted after review', { exact: true })).toBeVisible()
+  await page.getByRole('radio', { name: /K2 Warehouse Pickup/ }).check()
+  await page.getByRole('checkbox', { name: /I accept the .* delivery charge/ }).check()
   await expect(page.getByText('Products total', { exact: true })).toBeVisible()
-  await expect(page.getByText('Order total', { exact: true })).toHaveCount(0)
+  await expect(page.getByText('Total amount', { exact: true })).toBeVisible()
   await expect(page.getByLabel('Delivery destination', { exact: true })).toHaveCount(0)
   await expect(page.locator('main')).not.toContainText('Your delivery charge above is final')
   await page.getByLabel('Full name').fill('Ariane Cruz')
   await page.getByLabel('Email address').fill('ariane@example.test')
-  await page.getByLabel('Delivery address').fill('Makati City, Metro Manila')
+  await expect(page.getByLabel('Delivery address')).toBeDisabled()
   await page.waitForFunction(() => window.__orderTurnstileRendered === true)
   await page.getByRole('button', { name: 'Submit order request' }).click()
 
