@@ -783,7 +783,7 @@ export default function Sheet({ canManageProducts = false }) {
       {showAiScanner && <ScanToAiModal onClose={() => setShowAiScanner(false)}
         onOpenSmartPaste={() => { setShowAiScanner(false); setShowSmartPaste(true) }}
         onExistingProduct={(product) => { setShowAiScanner(false); setBatchProduct(product) }} />}
-      {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} />}
+      {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} onProductAdded={() => { fetchProducts({ background: true }); setShowSmartPaste(false) }} />}
       {showCsvImport && <BulkCsvImportModal onClose={() => setShowCsvImport(false)} />}
       
       {showBarcode && (
