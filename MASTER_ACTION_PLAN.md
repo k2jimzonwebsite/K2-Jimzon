@@ -1818,3 +1818,6 @@ Before provider or database changes, follow the owning runbook's backup, preflig
 
 **IDEA-20261009-10 recovery fixture continuation:** Final-04 base1095/0, mobile4/0, orientation12/0 and Storefront32/0 passed; recovery27/2 stopped at a Vite8 fixture optimizer override omitting lazy 3D dependencies. The isolated recovery fixture now explicitly optimizes fiber/drei/motion; both empty/unavailable review-source cases pass2/0, preserving no fabricated reviews and no seed writes. Application source remains99e3978. Next: final aggregate and two builds, then authorized main push and exact-host receipts; no repeat native/provider rehearsal or database activation.
 
+
+**IDEA-20261009-10 cold registration check:** Final-05 base1095/0 and mobile4/0 passed; orientation11/1 stopped at the test reading fiber root before registration. Readiness polling now treats absent root as not ready; actual cold drag and pinch focused1/0 pass. Application source remains99e3978. Check remaining integrated suites for concrete failures before the final aggregate; preserve prior evidence and full provider/listing activation limits.
+

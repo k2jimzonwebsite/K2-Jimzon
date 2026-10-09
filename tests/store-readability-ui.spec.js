@@ -81,8 +81,11 @@ test('short mobile drag changes shelf; zoom controls and hint leave room to brow
   const cameraDistance = (property = 'distance') => page.evaluate(async property => {
     const moduleUrl = performance.getEntriesByType('resource').map(entry => entry.name)
       .find(url => url.includes('/@react-three_fiber.js'))
+    if (!moduleUrl && property === 'ready') return 0
     const { _roots } = await import(moduleUrl)
-    const state = _roots.get(document.querySelector('.k2-store-scene canvas')).store.getState()
+    const root = _roots.get(document.querySelector('.k2-store-scene canvas'))
+    if (!root && property === 'ready') return 0
+    const state = root.store.getState()
     return property === 'ready' ? state.scene.children.length : state.camera.position.z
   }, property)
   // Canvas mounts before the suspended room and its gesture listeners.
