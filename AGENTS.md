@@ -83,6 +83,30 @@ unverified, and where the next required action lives.
 Never describe a rulebook target, mock, fixture, external connector, message,
 payment, metric, or deployment as live without end-to-end evidence.
 
+Before any K2 Supabase provider or database change, run the read-only
+`preflight:k2-project` command with the owner-controlled K2 environment. It
+must confirm project `pixplcjqivlfflickobf` and the exact K2 Supabase URL.
+The installed Supabase connector exposes only unrelated ScoutIT
+`yyixsuaimdzyiocswcgc`; never use that connector for K2 SQL, migrations,
+Auth, storage, or settings, and do not list, inspect, or query ScoutIT for
+any reason. It is a different project and fully out of scope. Work stays
+linear: one MAP item in progress, in MAP dependency order, with no duplicate
+or second implementation of the same logic and no side work outside the MAP.
+The owner-controlled `.env.local` management token
+is a separate surface that does reach K2 `pixplcjqivlfflickobf`, and it can
+technically execute production SQL. It must still never be used for a write
+without the owner authorization named in the Master Action Plan. A passing local preflight confirms identity only;
+it does not authorize a write or replace backup, migration, and rollback gates.
+
+Then run the read-only `readiness:k2-live` gate and require zero failed gates
+before any owner-authorized production step. It reports each precondition as
+verified, owner-decided, connector-blocked, or failed, and replaces the prose
+apply packets with a repeatable receipt. A credential present in the K2
+environment is a capability, never an authorization: never infer owner approval
+from a credential's presence or from a prior session. A `CONNECTOR` surface that
+was not reached may never be described as observed. Procedure:
+`docs/runbooks/K2_PRODUCTION_READINESS_RUNBOOK.md`.
+
 Keep the admin and storefront as separate production artifacts and Vercel
 projects. Never place service-role keys, marketplace secrets, or refresh tokens
 in browser code or `VITE_` variables.

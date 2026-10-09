@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
-import { adminBffEnabled } from '../../services/adminBffService'
 import ImageUploadDropzone from '../../components/ui/ImageUploadDropzone'
 import { parseProductResearchPaste } from './productResearchContract.js'
 import {
@@ -11,70 +9,13 @@ import {
 } from './productResearchPrompt.js'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 
-// Field mapping: reviewed Product Content output to current Supabase columns.
-function mapAiToDb(p, images, contractInfo) {
-  // Combine after-use + gallery into lifestyle_images array
-  // after image goes first so the product page can use index 0 as the "after" slot
-  const lifestyleArr = [
-    images.after || null,
-    ...images.gallery.filter(Boolean)
-  ].filter(Boolean)
-
-  const researchNotes = contractInfo && !contractInfo.legacy
-    ? [
-        `ChatGPT content contract: ${contractInfo.schemaVersion}`,
-        p.card_description ? `Card description: ${p.card_description}` : null,
-        p.key_highlights?.length ? `Key highlights: ${p.key_highlights.join(' | ')}` : null,
-        p.seo_title ? `SEO title: ${p.seo_title}` : null,
-        p.meta_description ? `Meta description: ${p.meta_description}` : null,
-        p.page_heading ? `Page heading: ${p.page_heading}` : null,
-        p.supporting_heading ? `Supporting heading: ${p.supporting_heading}` : null,
-        contractInfo.media?.primary_alt_text ? `Primary alt text: ${contractInfo.media.primary_alt_text}` : null,
-        contractInfo.media?.after_alt_text ? `After alt text: ${contractInfo.media.after_alt_text}` : null,
-        contractInfo.unknownFields?.length ? `Unknown fields: ${contractInfo.unknownFields.join(', ')}` : null,
-        contractInfo.reviewNotes?.length ? `Review notes: ${contractInfo.reviewNotes.join(' | ')}` : null,
-        p.source_urls?.length ? `Evidence URLs: ${p.source_urls.join(' | ')}` : null,
-      ].filter(Boolean).join('\n')
-    : null
-
-  return {
-    sku:                      p.id || p.sku || null,
-    barcode:                  p.barcode || null,
-    name:                     p.name || p.product_name || '',
-    short:                    p.short || null,
-    // brand_id and category_id are UUID FK columns — set manually in PIM Sheet after saving
-    origin:                   p.origin || null,
-    net_weight:               p.net_weight || null,
-    package_type:             p.package_type || null,
-    size:                     p.size || null,
-    subcategory:              p.subcategory || p.category || null,
-    description:              p.inside || p.description || '',
-    why_buy:                  p.whyBuy || p.why_buy || '',
-    why_rare:                 p.whyRare || p.why_rare || null,
-    usage_instructions:       p.usage_instructions || p.usage || '',
-    storage_instructions:     p.storage_instructions || p.storage || '',
-    ingredients:              p.ingredients || '',
-    allergens:                p.allergens || '',
-    finished_product_details: p.finished_product_details || p.finished_product || '',
-    pairings:                 Array.isArray(p.pairings) ? p.pairings : [],
-    seo_keywords:             Array.isArray(p.seo_keywords) ? p.seo_keywords : [],
-    primary_image_url:        images.primary || null,
-    lifestyle_images:         lifestyleArr,
-    internal_notes:           researchNotes,
-    is_ai_generated:          true,
-    status:                   'Draft',
-  }
-}
-
-export default function SmartPasteModal({ onClose, onProductAdded }) {
-  const secure = adminBffEnabled()
+export default function SmartPasteModal({ onClose }) {
   const [stage, setStage]               = useState('json')    // 'json' | 'review'
   const [pasteJson, setPasteJson]       = useState('')
   const [parsedProduct, setParsedProduct] = useState(null)
   const [contractInfo, setContractInfo]   = useState(null)
   const [parseWarnings, setParseWarnings] = useState([])
   const [error, setError]               = useState('')
-  const [saving, setSaving]             = useState(false)
   const [copiedImageItem, setCopiedImageItem] = useState('')
   const [copyError, setCopyError]       = useState('')
 
@@ -117,39 +58,11 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
     }
   }
 
-  // ── Save to Supabase ─────────────────────────────────────────────────────────
-  const handleSave = async () => {
-    if (!parsedProduct) return
-    setError('')
-    if (secure) {
-      setError('Secure mode keeps this as a review-only handoff. Close it and use phone-first intake to create the attributable Draft.')
-      return
-    }
-    const dbRow = mapAiToDb(parsedProduct, { primary: primaryUrl, after: afterUrl, gallery: galleryUrls }, contractInfo)
-    if (!dbRow.sku) {
-      setError('Please fill in the Product ID field before saving.')
-      return
-    }
-    setSaving(true)
-    const { data: existing } = await supabase.from('products').select('sku').eq('sku', dbRow.sku).single()
-    if (existing) {
-      setError(`ID "${dbRow.sku}" already exists. Please change it.`)
-      setSaving(false)
-      return
-    }
-    const { error: insertError } = await supabase.from('products').insert([dbRow])
-    if (insertError) {
-      setError(safeUiError('PRODUCT_SAVE_FAILED'))
-      setSaving(false)
-      return
-    }
-    if (onProductAdded) onProductAdded(dbRow.sku)
-    onClose()
-  }
+  const copyReviewedJson = () => copyImageItem(pasteJson.trim(), 'product-json')
 
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-adm-sunken/95 text-white sm:p-4 md:p-8">
-      <AdminDialog onClose={onClose} closeDisabled={saving} labelledBy="product-json-review-title">
+      <AdminDialog onClose={onClose} labelledBy="product-json-review-title">
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col bg-adm-surface border border-adm-line rounded-adm overflow-hidden shadow-2xl">
 
         {/* Header */}
@@ -512,16 +425,19 @@ export default function SmartPasteModal({ onClose, onProductAdded }) {
                 </div>
               </div>
 
-              {/* Save */}
+              {/* Review-only handoff */}
               <div className="pt-8 pb-4 flex flex-col items-center border-t border-adm-line">
-                <p className="mb-4 text-base text-white/60">{secure ? 'Review and copy the approved content here, then use phone-first intake for the server-created, attributable Draft.' : 'This saves a product Draft. Pricing review, publication, and physical inventory remain separate controlled steps.'}</p>
-                {error && <p role="alert" className="mb-4 w-full max-w-2xl rounded-adm-sm border border-amber/40 bg-amber/10 px-4 py-3 text-sm text-amber">{error}</p>}
+                <p className="mb-4 max-w-2xl text-center text-base text-white/60">This panel reviews content only. Copy the approved JSON for protected phone-first intake; no product or inventory record is created here.</p>
+                <p className="mb-4 min-h-5 text-center text-sm text-white/55" role="status" aria-live="polite">
+                  {copiedImageItem === 'product-json' ? 'Reviewed JSON copied. No product record was written.' : ''}
+                </p>
                 <button
-                  onClick={handleSave}
-                  disabled={saving}
-                  className="w-full max-w-sm bg-forest text-navy font-bold py-4 rounded-adm-sm transition-[transform,opacity] duration-150 active:scale-[0.99] disabled:opacity-50 flex justify-center items-center gap-2"
+                  type="button"
+                  onClick={copyReviewedJson}
+                  disabled={!parsedProduct}
+                  className="min-h-11 w-full max-w-sm rounded-adm-sm bg-forest px-5 py-3 font-bold text-navy transition-[transform,opacity] duration-150 active:scale-[0.99] disabled:opacity-50"
                 >
-                  {saving ? 'Saving Draft…' : secure ? 'Use phone-first intake to save' : 'Save product Draft'}
+                  {copiedImageItem === 'product-json' ? 'Copy reviewed JSON again' : 'Copy reviewed JSON'}
                 </button>
               </div>
             </div>

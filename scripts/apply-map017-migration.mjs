@@ -12,6 +12,7 @@ import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { verifyK2SupabaseProject } from './verify-k2-supabase-project.mjs'
 
 const rootDir = fileURLToPath(new URL('..', import.meta.url))
 const EXPECTED_PROJECT = 'pixplcjqivlfflickobf'
@@ -465,8 +466,10 @@ async function main() {
     process.exit(1)
   }
 
-  const accessToken = parseEnvFile().SUPABASE_ACCESS_TOKEN
+  const env = parseEnvFile()
+  const accessToken = env.SUPABASE_ACCESS_TOKEN
   try {
+    await verifyK2SupabaseProject({ accessToken, supabaseUrl: env.VITE_SUPABASE_URL })
     const result = await executeMap017PermanentApply({
       options,
       contract,

@@ -25,6 +25,11 @@ supabase/functions/.env
 *.k2storage.parts.json
 k2_map017_storage_restore_verification_*/
 k2_map017_drive_download_verification_*/
+# Local backup workspace. The individual *.k2backup / *.k2storage envelopes and
+# manifests are ignored above, but not the directories holding them: .backups/
+# held 332 MB of production database and product-images copies. Back up there
+# and upload the owner-only Drive envelope; never version the bytes.
+.backups/
 security-scan-report.*
 
 .vercel
@@ -76,3 +81,5 @@ outputs/
 # them if more clips follow.
 assets/*.mp4
 assets/3d/*.blend1
+.tools/published-review-guard-pg-data/
+.tools/published-review-guard-pg.log

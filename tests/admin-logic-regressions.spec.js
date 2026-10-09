@@ -111,25 +111,26 @@ test('globe CMS relies on the existing protected admin boundary', async () => {
   expect(source).not.toContain('signInAdmin')
 })
 
-test('product sheet rolls back failed edits and routes new rows through protected intake', async () => {
+test('product sheet rolls back failed edits and routes new rows through scan-first intake', async () => {
   const source = await readFile(new URL('../src/views/admin/Sheet.jsx', import.meta.url), 'utf8')
   const addRow = source.match(/const handleAddRow[\s\S]*?const tableContainerRef/)?.[0] || ''
 
   expect(source).toContain('const previousValue = product[field]')
   expect(source).toContain('[field]: previousValue')
-  expect(addRow).toContain('setShowPhoneIntake(true)')
+  expect(addRow).toContain('openIntake()')
+  expect(source).toContain('secureCatalog ? setShowPhoneIntake(true) : setShowAiScanner(true)')
   expect(addRow).not.toContain("supabase.from('products').insert")
   expect(addRow).not.toContain('setRows(prev => [newRow')
 })
 
-test('Smart Paste remains review-only after secure Admin cutover', async () => {
+test('Smart Paste stays a review-only clipboard handoff in every Admin mode', async () => {
   const source = await readFile(new URL('../src/views/admin/SmartPasteModal.jsx', import.meta.url), 'utf8')
-  const save = source.match(/const handleSave[\s\S]*?return \(/)?.[0] || ''
 
-  expect(source).toContain('adminBffEnabled()')
-  expect(save).toContain('if (secure)')
-  expect(save.indexOf('if (secure)')).toBeLessThan(save.indexOf("supabase.from('products')"))
-  expect(source).toContain('use phone-first intake for the server-created, attributable Draft')
+  expect(source).not.toContain("from('products')")
+  expect(source).not.toContain('adminBffEnabled()')
+  expect(source).not.toContain('const handleSave')
+  expect(source).toContain('copyReviewedJson')
+  expect(source).toContain('no product or inventory record is created here')
 })
 
 test('shared Admin navigation reuses authorized projections in secure mode', async () => {
@@ -175,7 +176,7 @@ test('inventory product editing routes every photo assignment through the dedica
   expect(source).toContain('getAdminProducts()')
   expect(source).toContain("document.visibilityState === 'visible'")
   expect(source).toContain('if (secure)')
-  expect(source).toContain('Use phone-first intake to create an attributable product Draft.')
+  expect(source).not.toContain("supabase.from('products').insert")
   expect(source).toContain("commandAdminProductMasterBff('update'")
   expect(source).toContain("commandAdminProductMasterBff('status'")
   expect(source).toContain("value: 'Under Review'")

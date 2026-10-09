@@ -189,7 +189,7 @@ The system operates as **one codebase with two distinct faces**:
 
 1. **Dual Register Cohesion:**
    - **Storefront:** Luxury Wood canvas (`public/wood-bg.jpg`), cream/parchment surfaces (`#FAF7F2`), gold accents (`#C5A880`), dark navy-slate (`#090C15`).
-   - **Admin BOS:** High-density `#161922` dark surface, slate background (`#080b11`), hairline borders, `#3B82F6` accents, `adminKit.jsx` primitives.
+   - **Admin BOS:** High-density `#161922` dark surface, slate background (`#080b11`), hairline borders, `#3B82F6` accents. The earlier `adminKit.jsx` claim was superseded by `AdminWorkspaceUi.jsx` and `AdminDialog.jsx`; see the 25 September archive.
 2. **Honesty Principle:** Zero fake "in stock" claims, zero fake "Connected" channel badges, and zero fake courier tracking numbers before courier booking.
 3. **Staff Enablement:** Visual SVG workflow diagrams (`WorkflowGuideModal.jsx`), onboarding guide (`StartHereGuide.jsx`), and non-blocking draggable tool suite (`AdminToolsWidget.jsx`).
 
@@ -223,7 +223,7 @@ The system operates as **one codebase with two distinct faces**:
 
 ## 14. Visual Consistency Findings
 
-1. **Design Primitives:** `src/components/ui/adminKit.jsx` successfully standardizes cards, buttons, section headers, badges, and alerts across all 13 Admin BOS modules.
+1. **Design Primitives:** `src/views/admin/AdminWorkspaceUi.jsx` and `src/components/ui/AdminDialog.jsx` serve the current Admin workspace and dialog contracts. The old unimported `adminKit.jsx` is preserved in `archive/2026-09-25-intake-and-unused-ui/`.
 2. **Iconography:** Unified stroke icon library (`src/components/ui/icons.jsx`) used consistently across navigation and status displays.
 
 ---

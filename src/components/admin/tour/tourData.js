@@ -243,14 +243,14 @@ const crossBorderTour = {
 // ── 2. AUTOMATIC INVENTORY RESTOCKING TOUR ─────────────────────────────────
 const existingStockTour = {
   id: 'existing_stock_intake',
-  title: 'Automatically Adding Stock to Existing SKU',
-  shortTitle: 'Automatic Stock Intake',
+  title: 'Reviewing Stock for an Existing SKU',
+  shortTitle: 'Known SKU Stock Review',
   category: 'Stock Replenishment',
   badge: 'Existing Catalog SKU',
   accentColor: '#059669',
   theme: 'emerald',
   description:
-    'Fast scanning procedure for items already in our catalog: scan barcodes, record expiration dates, and bin units on warehouse shelves.',
+    'Scan the barcode, confirm the existing SKU, then separately review counted units, expiry and stock custody.',
   steps: [
     {
       id: 'auto_1',
@@ -314,7 +314,7 @@ const existingStockTour = {
       directive: 'Check Updated Stock in Inventory Table',
       whatToClick: 'Search product to confirm added inventory count',
       sopAction:
-        'Look up the product in the table. The available count should reflect your added units. Customers can now buy these items online.',
+        'Look up the product in the table and confirm any saved lot and available balance. A barcode match alone does not add stock or publish a product.',
       exitCriteria: 'Warehouse inventory balance updated and verified on server.',
     },
   ],
@@ -330,7 +330,7 @@ const newProductTour = {
   accentColor: '#e11d48',
   theme: 'rose',
   description:
-    'Step-by-step guide for creating brand new Italian products: generate details with ChatGPT, paste into Smart Paste, set prices, and publish.',
+    'Scan first, collect package evidence, use ChatGPT for draft content, then review the Draft. Stock and publication are separate decisions.',
   steps: [
     {
       id: 'man_1',
@@ -339,24 +339,24 @@ const newProductTour = {
       targetSelector: '[data-tour="inventory-actions"]',
       fallbackPosition: 'bottom',
       title: 'Step 1: Open Inventory Workspace and Find Action Bar',
-      directive: 'Locate New Product Buttons in Action Toolbar',
-      whatToClick: 'Find "+ Add Product" and "Smart Paste" in top toolbar',
+      directive: 'Locate the Intake Action',
+      whatToClick: 'Find "Add inventory" or "Scan box" in the toolbar',
       sopAction:
-        'When an Italian item arrives that is not yet in our catalog, we create a new master product. Look at the top toolbar for "+ Add Product" and "Smart Paste".',
+        'Start by scanning the package barcode or typing it when the camera is unavailable. The scan checks whether this item already has a master SKU.',
       exitCriteria: 'Staff identifies where new catalog entries begin.',
     },
     {
       id: 'man_2',
       stepNumber: 2,
       targetSection: 'inventory',
-      targetSelector: '[data-tour="smart-paste-btn"]',
+      targetSelector: '[data-tour="scan-box-btn"]',
       fallbackPosition: 'bottom',
-      title: 'Step 2: Choose Smart Paste for Quick Data Entry',
-      directive: 'Open Smart Paste to Avoid Manual Typing',
-      whatToClick: 'Click "Smart Paste" to open the import window',
+      title: 'Step 2: Scan and Check Product Identity',
+      directive: 'Check the Scanned Barcode',
+      whatToClick: 'Click "Scan box" and scan or type the barcode',
       sopAction:
-        'Instead of typing Italian ingredients, allergens, descriptions, and storage notes by hand, our ChatGPT prompt creates all of it in seconds.',
-      exitCriteria: 'Staff understands Smart Paste reads JSON to fill all fields automatically.',
+        'If the barcode belongs to an existing SKU, inspect that product and handle stock separately. For a new item, gather clear front, back, label and barcode photos before requesting draft content.',
+      exitCriteria: 'Existing SKU or new-product route has been identified.',
     },
     {
       id: 'man_3',
@@ -380,13 +380,13 @@ const newProductTour = {
       id: 'man_4',
       stepNumber: 4,
       targetSection: 'inventory',
-      targetSelector: '[data-tour="smart-paste-btn"]',
+      targetSelector: '[data-tour="scan-box-btn"]',
       fallbackPosition: 'bottom',
       title: 'Step 4: Paste JSON into Smart Paste and Review',
       directive: 'Paste the Output and Check Product Fields',
-      whatToClick: 'Click "Smart Paste", paste JSON, and click "Validate & Preview"',
+      whatToClick: 'Return to the scan result, open JSON review, then validate the paste',
       sopAction:
-        '1. Copy the JSON response from ChatGPT.\n2. Open Smart Paste in the toolbar.\n3. Paste the text and click "Validate & Preview".\n4. Review the product name, weight, ingredients, and allergen warnings.\n5. Click "Import Product" to save the draft.',
+        '1. Copy the JSON response from ChatGPT.\n2. In the scan result, open JSON review.\n3. Paste the text and validate it.\n4. Check the physical label against name, weight, ingredients and allergens.\n5. Save a Draft only after staff review.',
       exitCriteria: 'Product draft created with zero formatting errors.',
     },
     {
@@ -399,7 +399,7 @@ const newProductTour = {
       directive: 'Search for New Item and Set Retail Price',
       whatToClick: 'Type product name in search bar to find new draft',
       sopAction:
-        'The new product is saved as a Draft, hidden from shoppers. Search for it in the table below, open the editor, verify the Philippine Peso selling price, and upload packaging photos. Switch to Live when ready to sell.',
+        'Search for the reviewed Draft in the table. Pricing, physical stock and publication each require their own review and confirmation.',
       exitCriteria: 'New product verified in table with unique SKU and correct details.',
     },
   ],

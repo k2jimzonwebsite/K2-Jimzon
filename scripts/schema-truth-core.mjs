@@ -197,6 +197,63 @@ export function buildExpectedRepositorySchema() {
       'public.save_pasabuy_quote(uuid,numeric,numeric,text,timestampwithtimezone,numeric,text,numeric,numeric,numeric,numeric,numeric,timestampwithtimezone)': { ...staffMutation, idempotency: 'required_at_bff' },
       'public.transition_pasabuy_request(uuid,text,text)': { ...staffMutation, idempotency: 'state_transition_guarded' },
       'public.verify_internal_channel_event(text,text,text)': { ...staffMutation, idempotency: 'required_at_bff' },
+      // These are intentional direct guest capabilities with explicit, reviewed
+      // scope. Their live boolean signals are exported without function bodies.
+      'public.get_storefront_chat_v1(uuid)': {
+        securityDefiner: true, anonCallable: true, authenticatedCallable: true, searchPathSafe: true,
+        stateMutation: false, ownershipScope: 'server_generated_conversation_uuid',
+        requiredLiveSignals: [
+          'references_conversation_id_scope', 'conversation_id_uses_random_default',
+          'filters_internal_messages',
+        ],
+        idempotency: 'read_only', safeFailure: 'not_found_result',
+        disposition: 'replace_at_signed_guest_chat_cutover',
+      },
+      'public.get_order_conversation_v1(uuid,text)': {
+        securityDefiner: true, anonCallable: true, authenticatedCallable: true, searchPathSafe: true,
+        stateMutation: false, ownershipScope: 'order_id_and_checkout_key',
+        requiredLiveSignals: [
+          'references_order_key_scope', 'references_order_key_length_guard',
+          'filters_internal_messages',
+        ],
+        idempotency: 'read_only', safeFailure: 'explicit_result',
+        disposition: 'replace_at_signed_guest_order_cutover',
+      },
+      'public.submit_order_message_v1(uuid,text,text,uuid)': {
+        securityDefiner: true, anonCallable: true, authenticatedCallable: true, searchPathSafe: true,
+        stateMutation: true, ownershipScope: 'order_id_and_checkout_key',
+        requiredLiveSignals: [
+          'references_order_key_scope', 'references_order_key_length_guard',
+          'references_request_key_replay_guard',
+        ],
+        idempotency: 'request_uuid', safeFailure: 'explicit_result',
+        disposition: 'replace_at_signed_guest_order_cutover',
+      },
+      'public.submit_order_payment_receipt_v1(uuid,text,text,text,text,uuid)': {
+        securityDefiner: true, anonCallable: true, authenticatedCallable: true, searchPathSafe: true,
+        stateMutation: true, ownershipScope: 'order_id_and_checkout_key',
+        requiredLiveSignals: [
+          'references_order_key_scope', 'references_order_key_length_guard',
+          'references_payment_receipt_request_key', 'writes_private_payment_receipt',
+          'returns_no_payment_receipt_bytes',
+        ],
+        idempotency: 'request_uuid_and_content_hash', safeFailure: 'explicit_result',
+        disposition: 'replace_at_signed_guest_order_cutover',
+      },
+      'public.get_order_payment_receipt_v1(uuid)': {
+        securityDefiner: true, anonCallable: false, authenticatedCallable: true, searchPathSafe: true,
+        authorizationGuard: 'is_staff', aal2Required: true, stateMutation: false,
+        ownershipScope: 'order_payment_receipt', idempotency: 'read_only',
+        requiredLiveSignals: ['references_auth_uid'],
+        safeFailure: 'explicit_exception', disposition: 'retain_for_aal2_staff_receipt_review',
+      },
+      'public.list_order_payment_receipts_v1(uuid)': {
+        securityDefiner: true, anonCallable: false, authenticatedCallable: true, searchPathSafe: true,
+        authorizationGuard: 'is_staff', aal2Required: true, stateMutation: false,
+        ownershipScope: 'order_payment_receipt', idempotency: 'read_only',
+        requiredLiveSignals: ['references_auth_uid'],
+        safeFailure: 'explicit_exception', disposition: 'retain_for_aal2_staff_receipt_review',
+      },
     },
     deprecatedFunctionsRevoked: [
       'decrement_stock',
@@ -520,6 +577,56 @@ export function auditExposedAuthorization(liveExport, expectedSchema = buildExpe
       String(grant.grantee || '').toLowerCase() === 'authenticated'
       && ['EXECUTE', 'ALL'].includes(String(grant.privilege || '').toUpperCase()),
     )
+    if (typeof contract?.anonCallable === 'boolean' && contract.anonCallable !== anonExecute) {
+      issues.push({
+        type: contract.anonCallable ? 'FUNCTION_ANON_EXECUTE_MISSING' : 'FUNCTION_ANON_EXECUTE_GRANTED',
+        severity: contract.anonCallable ? SEVERITY.MEDIUM : SEVERITY.CRITICAL,
+        target: signature,
+        message: contract.anonCallable
+          ? `Reviewed public function ${signature} lacks its expected anonymous EXECUTE grant.`
+          : `Sensitive function ${signature} is executable by an anonymous role despite its reviewed contract.`,
+      })
+    }
+    if (typeof contract?.authenticatedCallable === 'boolean' && contract.authenticatedCallable !== authenticatedExecute) {
+      issues.push({
+        type: contract.authenticatedCallable ? 'FUNCTION_AUTHENTICATED_EXECUTE_MISSING' : 'FUNCTION_AUTHENTICATED_EXECUTE_GRANTED',
+        severity: contract.authenticatedCallable ? SEVERITY.MEDIUM : SEVERITY.HIGH,
+        target: signature,
+        message: contract.authenticatedCallable
+          ? `Reviewed function ${signature} lacks its expected authenticated EXECUTE grant.`
+          : `Function ${signature} is executable by authenticated users despite its reviewed contract.`,
+      })
+    }
+    const securityDefiner = fn.securityDefiner ?? fn.security_definer
+    if (contract?.securityDefiner === true && securityDefiner !== true) {
+      issues.push({
+        type: 'FUNCTION_SECURITY_DEFINER_MISMATCH', severity: SEVERITY.HIGH,
+        target: signature,
+        message: `Reviewed function ${signature} is not marked SECURITY DEFINER as expected.`,
+      })
+    }
+    if (contract?.searchPathSafe === true && !hasSafeFixedSearchPath(fn)) {
+      issues.push({
+        type: 'FUNCTION_SEARCH_PATH_UNSAFE', severity: SEVERITY.CRITICAL,
+        target: signature,
+        message: `Reviewed SECURITY DEFINER function ${signature} lacks its fixed safe search_path.`,
+      })
+    }
+    for (const signal of contract?.requiredLiveSignals || []) {
+      if (typeof fn[signal] !== 'boolean') {
+        issues.push({
+          type: 'FUNCTION_CONTRACT_SIGNAL_EVIDENCE_MISSING', severity: SEVERITY.HIGH,
+          target: signature,
+          message: `Reviewed function ${signature} requires a live ${signal} signal, but the metadata export lacks a boolean result.`,
+        })
+      } else if (!fn[signal]) {
+        issues.push({
+          type: 'FUNCTION_CONTRACT_SIGNAL_GUARD_MISSING', severity: SEVERITY.CRITICAL,
+          target: signature,
+          message: `Live function ${signature} does not satisfy its reviewed ${signal} contract signal.`,
+        })
+      }
+    }
     if (publicExecute) {
       issues.push({
         type: 'FUNCTION_PUBLIC_EXECUTE_GRANTED', severity: SEVERITY.CRITICAL,
@@ -577,7 +684,6 @@ export function auditExposedAuthorization(liveExport, expectedSchema = buildExpe
         })
       }
     }
-    const securityDefiner = fn.securityDefiner ?? fn.security_definer
     if (!contract && securityDefiner === true && !hasSafeFixedSearchPath(fn)) {
       issues.push({
         type: 'FUNCTION_SEARCH_PATH_UNSAFE', severity: SEVERITY.HIGH,

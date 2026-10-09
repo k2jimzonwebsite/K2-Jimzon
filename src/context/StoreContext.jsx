@@ -135,6 +135,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     conversations, inboxState, sendMessage, markConversationRead, updateConversationWorkflow,
   } = adminInbox
   const [dbProducts, setDbProducts] = useState([])
+  const [websiteVisibleSkus, setWebsiteVisibleSkus] = useState(null)
   const [loading, setLoading] = useState(true)
   // A failed refresh must never read as an empty store, and a retained
   // snapshot must never read as current. `catalogFailed` means no usable
@@ -311,7 +312,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     try {
       const supabase = await getSupabaseClient()
       if (!supabase) return
-      const [productsResult, stockResult] = await Promise.all([
+      const [productsResult, stockResult, websiteResult] = await Promise.all([
         // `published` is the staff-controlled publication flag, set from the
         // Published toggle in Sheet.jsx and guarded by PhotoManagerModal's
         // primary-photo requirement. Honouring it here is what keeps unpublished
@@ -319,6 +320,11 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         // publication decision.
         supabase.from('products').select('*').in('status', ['Live', 'Active', 'Unlisted']).eq('published', true).order('created_at', { ascending: false }),
         supabase.from('v_product_stock_from_batches').select('sku, stock_from_batches'),
+        // Website membership is channel-specific. The view also carries
+        // Website-assigned Unlisted SKUs so existing direct links can work;
+        // listedProducts still keeps them out of browse. The required view
+        // fails closed when absent, so marketplace-only SKUs stay hidden.
+        supabase.from('v_storefront_visible_skus').select('sku'),
       ])
 
       // The catalog renders whenever the product read succeeds. These two reads
@@ -326,10 +332,12 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       // stock view discarded a perfectly good product list and blanked the
       // entire storefront — which is exactly what a revoked anon grant on
       // v_product_stock_from_batches did in production.
-      if (!productsResult.error && productsResult.data) {
+      if (!productsResult.error && productsResult.data && !websiteResult.error && websiteResult.data) {
+        const websiteSkus = new Set(websiteResult.data.map(row => row.sku).filter(Boolean))
         const stockAvailable = !stockResult.error && stockResult.data
           ? Object.fromEntries(stockResult.data.map(r => [r.sku, r.stock_from_batches]))
           : null
+        setWebsiteVisibleSkus(websiteSkus)
         hadCatalogRef.current = true
         setCatalogFailed(false)
         setCatalogStale(stockAvailable === null)
@@ -430,12 +438,19 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     })
   }, [dbProducts])
 
+  const localCatalog = dbProducts.length === 0 && import.meta.env.DEV
   const listedProducts = useMemo(
-    () => products.filter(p => p.status !== 'Unlisted'),
-    [products]
+    () => localCatalog
+      ? products.filter(p => p.status !== 'Unlisted')
+      : products.filter(p => p.status !== 'Unlisted' && websiteVisibleSkus?.has(p.sku)),
+    [products, localCatalog, websiteVisibleSkus]
   )
 
-  const getProduct = (id) => products.find(p => p.id === id || p.sku === id)
+  const getProduct = (id) => {
+    const product = products.find(p => p.id === id || p.sku === id)
+    if (!product || localCatalog) return product
+    return websiteVisibleSkus?.has(product.sku) ? product : undefined
+  }
 
   const syncLocation = (nextView, nextProductId = null) => {
     if (typeof window === 'undefined') return

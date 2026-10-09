@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Fragment } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
 import { isReferenceField } from './referenceTables'
@@ -14,9 +14,9 @@ import DeleteProductsModal from './DeleteProductsModal'
 import ProductIntakeSessionModal from './ProductIntakeSessionModal'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import Barcode from 'react-barcode'
-import { EyeIcon, BarcodeIcon, XIcon, SparkleIcon } from '../../components/ui/icons'
+import { EyeIcon, BarcodeIcon, XIcon } from '../../components/ui/icons'
 import {
-  adminBffEnabled, downloadCatalogCsvBff, getAdminProducts,
+  adminBffEnabled, downloadCatalogCsvBff, getAdminLots, getAdminProducts,
 } from '../../services/adminBffService'
 // TEMPORARY: sample shop/custodian assignments. See the deletion note at the
 // top of sheetShopLensFixture.js — this import is one of the two removal points.
@@ -79,6 +79,7 @@ export default function Sheet({ canManageProducts = false }) {
   const [showSmartPaste, setShowSmartPaste] = useState(false)
   const [showCsvImport, setShowCsvImport] = useState(false)
   const [showPhoneIntake, setShowPhoneIntake] = useState(false)
+  const openIntake = () => secureCatalog ? setShowPhoneIntake(true) : setShowAiScanner(true)
   const [showBarcode, setShowBarcode] = useState(null)
   const [batchProduct, setBatchProduct] = useState(null)
   const [enrichProduct, setEnrichProduct] = useState(null)
@@ -257,6 +258,16 @@ export default function Sheet({ canManageProducts = false }) {
       setOperationError('Secure Sheet Mode edits require a reviewed server command. Export the catalog CSV and use diff review instead.')
       return false
     }
+    // `published` is the flag the customer storefront actually filters on, and
+    // the database only gates a status change to Live behind K2_PUBLICATION_NOT_READY.
+    // Nothing guarded the published flag, so ticking it here exposed a product
+    // nobody had reviewed. Refuse it in the UI and leave the row untouched. The
+    // database-level gap behind this is recorded in the Master Action Plan and
+    // still needs its own migration; this closes the admin path only.
+    if (field === 'published' && value === true && !product.is_human_reviewed) {
+      setOperationError(safeUiError('PUBLISH_REVIEW_REQUIRED'))
+      return false
+    }
     let finalValue = value
     
     // Numbers
@@ -290,9 +301,47 @@ export default function Sheet({ canManageProducts = false }) {
   }
 
   const [deleteTargets, setDeleteTargets] = useState(null)
+  // Sub-SKU detail (IDEA-20260929-06): one row per SKU in the grid, warehouse
+  // and expiry rows only when a row is opened. Lots come from the same read
+  // path the card grid uses (`getAdminLots`), loaded lazily per SKU and cached.
+  const [expandedSku, setExpandedSku] = useState(null)
+  const [lotCache, setLotCache] = useState({})
+
+  const loadLotDetail = async (sku, retry = false) => {
+    if (!sku) return
+    if (lotCache[sku]?.loading) return
+    if (!retry && lotCache[sku] && !lotCache[sku].error) return
+    setLotCache(prev => ({ ...prev, [sku]: { loading: true, lots: [] } }))
+    try {
+      let lots = []
+      if (secureCatalog) {
+        const result = await getAdminLots(sku)
+        if (!result.ok || !Array.isArray(result.data?.lots)) throw new Error(result.error || 'LOTS_LOAD_FAILED')
+        lots = result.data.lots.filter(lot => lot.sku === sku)
+      } else if (supabase) {
+        const { data, error } = await supabase.from('product_batches')
+          .select('sku, quantity, hub, custodian, channel, expiry_date, reserved_quantity, net_weight_g')
+          .eq('sku', sku)
+        if (error) throw error
+        lots = data || []
+      } else {
+        throw new Error('Supabase is not configured.')
+      }
+      setLotCache(prev => ({ ...prev, [sku]: { loading: false, lots } }))
+    } catch {
+      setLotCache(prev => ({ ...prev, [sku]: { loading: false, lots: [], error: safeUiError('LOTS_LOAD_FAILED') } }))
+    }
+  }
+
+  const toggleLotDetail = (sku) => {
+    if (!sku) return
+    if (expandedSku === sku) { setExpandedSku(null); return }
+    setExpandedSku(sku)
+    void loadLotDetail(sku)
+  }
 
   const handleAddRow = () => {
-    setShowPhoneIntake(true)
+    openIntake()
   }
 
   const handleCatalogExport = async () => {
@@ -355,11 +404,8 @@ export default function Sheet({ canManageProducts = false }) {
               {exporting ? 'Preparing CSV…' : 'Download catalog CSV'}
             </button>
           )}
-          <button onClick={() => setShowAiScanner(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
-            <BarcodeIcon size={14} /> Scan Box
-          </button>
-          <button onClick={() => setShowSmartPaste(true)} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-blue/30 bg-blue/10 px-3 min-h-[44px] text-sm font-medium text-blue transition hover:bg-blue/20">
-            <SparkleIcon size={14} /> Smart Paste AI
+          <button onClick={openIntake} className="flex shrink-0 items-center gap-2 rounded-adm-sm border border-adm-line px-3 min-h-[44px] text-sm font-medium text-neutral-300 transition hover:bg-white/5 hover:text-white">
+            <BarcodeIcon size={14} /> Start intake
           </button>
           <button
             onClick={() => visibleRows.length > 0 && setEnrichProduct(visibleRows[0])}
@@ -509,8 +555,10 @@ export default function Sheet({ canManageProducts = false }) {
             </thead>
             <tbody>
               {visibleRows.map(({ row: r, index: i, shops }, position) => {
+                const lotsOpen = expandedSku === r.sku
                 return (
-                  <tr key={r.sku} className="hover:bg-blue/10 transition-colors group">
+                  <Fragment key={r.sku}>
+                  <tr className="hover:bg-blue/10 transition-colors group">
                     <td className="hidden sm:table-cell w-10 min-w-10 border border-adm-line bg-adm-surface px-2 py-1.5 text-center text-xs text-white/50 font-mono sticky left-0 z-20">
                       {position + 1}
                     </td>
@@ -636,6 +684,9 @@ export default function Sheet({ canManageProducts = false }) {
                     </td>
                     <td className="border border-adm-line px-2 text-center bg-adm-surface group-hover:bg-blue/10">
                       <div className="flex items-center justify-center gap-0.5">
+                        <button onClick={() => toggleLotDetail(r.sku)} aria-expanded={lotsOpen} title="Warehouse and expiry detail" aria-label={`Warehouse and expiry detail for ${r.sku || 'row'}`} className="text-blue/80 hover:text-blue hover:bg-blue/10 rounded-adm-sm min-w-11 min-h-11 px-2 flex items-center justify-center transition-colors text-xs font-bold">
+                          Lots
+                        </button>
                         <button onClick={() => setEnrichProduct(r)} className="text-amber/70 hover:text-amber hover:bg-amber/10 rounded-adm-sm w-11 h-11 flex items-center justify-center transition-colors text-sm font-bold" title="Enrich Product Specs with AI" aria-label="Enrich Product Specs with AI">
                           <SparkleIcon size={16} />
                         </button>
@@ -649,6 +700,43 @@ export default function Sheet({ canManageProducts = false }) {
                       </div>
                     </td>
                   </tr>
+                  {lotsOpen && (
+                    <tr key={`${r.sku}-lots`}>
+                      <td colSpan={ALL_COLS.length + 3} className="border border-adm-line bg-adm-sunken px-4 py-3">
+                        {(() => {
+                          const cache = lotCache[r.sku] || {}
+                          if (cache.loading) return <p className="text-sm text-white/60">Loading warehouse lots…</p>
+                          if (cache.error) return (
+                            <div className="flex flex-wrap items-center gap-3">
+                              <p role="alert" className="text-sm text-crimson">{cache.error}</p>
+                              <button type="button" onClick={() => loadLotDetail(r.sku, true)} disabled={cache.loading} className="min-h-11 rounded-adm-sm border border-adm-line px-3 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue disabled:cursor-wait disabled:opacity-50">
+                                Retry lot details
+                              </button>
+                            </div>
+                          )
+                          const lots = cache.lots || []
+                          if (lots.length === 0) return <p className="text-sm text-white/60">No warehouse lots recorded for {r.sku}.</p>
+                          const total = lots.reduce((sum, lot) => sum + (Number(lot.quantity) || 0), 0)
+                          return (
+                            <div>
+                              <p className="text-xs font-bold uppercase tracking-wider text-white/40">{total} pcs in {lots.length} lot{lots.length !== 1 ? 's' : ''} · {r.sku}</p>
+                              <ul className="mt-2 space-y-1">
+                                {lots.map((lot, lotIdx) => (
+                                  <li key={lot.id || lotIdx} className="text-sm text-neutral-200">
+                                    {lot.hub || 'Unassigned'} · {lot.custodian || 'Unassigned'} · {Number(lot.quantity) || 0} pcs on hand · {Number(lot.reserved_quantity) || 0} reserved
+                                    {Number.isFinite(Number(lot.net_weight_g)) && Number(lot.net_weight_g) > 0 ? ` · ${Number(lot.net_weight_g)} g` : ' · weight not recorded'}
+                                    {lot.expiry_date ? ` · exp ${lot.expiry_date}` : ' · no expiry'}
+                                    {lot.channel ? ` · ${lot.channel}` : ''}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )
+                        })()}
+                      </td>
+                    </tr>
+                  )}
+                  </Fragment>
                 )
               })}
               {visibleRows.length === 0 && (
@@ -693,7 +781,8 @@ export default function Sheet({ canManageProducts = false }) {
       )}
 
       {showAiScanner && <ScanToAiModal onClose={() => setShowAiScanner(false)}
-        onOpenSmartPaste={() => { setShowAiScanner(false); setShowSmartPaste(true) }} />}
+        onOpenSmartPaste={() => { setShowAiScanner(false); setShowSmartPaste(true) }}
+        onExistingProduct={(product) => { setShowAiScanner(false); setBatchProduct(product) }} />}
       {showSmartPaste && <SmartPasteModal onClose={() => setShowSmartPaste(false)} />}
       {showCsvImport && <BulkCsvImportModal onClose={() => setShowCsvImport(false)} />}
       

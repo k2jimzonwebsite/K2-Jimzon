@@ -2,11 +2,13 @@ import { test, expect } from '@playwright/test'
 import {
   parseSchemaExport,
   buildExpectedRepositorySchema,
+  auditExposedAuthorization,
   compareSchemaTruth,
   sanitizeSchemaText,
   formatSchemaTruthReport,
   SEVERITY,
 } from '../scripts/schema-truth-core.mjs'
+import { EXPECTED_ANON_FUNCTIONS } from '../scripts/security-surface-policy.mjs'
 import {
   generateSafeRecoverySql,
   validateGeneratedRecoverySql,
@@ -224,6 +226,94 @@ test('schema-truth exhaustively audits unlisted exposed relations, functions, sc
   expect(issueTypes).toContain('UNSAFE_DEFAULT_PRIVILEGE')
   expect(result.summary.exposedTablesAudited).toBe(14)
   expect(result.summary.exposedViewsAudited).toBe(5)
+})
+
+test('MAP-017 guest capability and staff receipt contracts require live authorization evidence', () => {
+  const expected = buildExpectedRepositorySchema()
+  const contracts = expected.functionAuthorizationContracts
+  const anonymousSignatures = [
+    'public.get_storefront_chat_v1(uuid)',
+    'public.get_order_conversation_v1(uuid,text)',
+    'public.submit_order_message_v1(uuid,text,text,uuid)',
+    'public.submit_order_payment_receipt_v1(uuid,text,text,text,text,uuid)',
+  ]
+  const staffReceiptSignatures = [
+    'public.get_order_payment_receipt_v1(uuid)',
+    'public.list_order_payment_receipts_v1(uuid)',
+  ]
+  const expectedAnon = new Set(EXPECTED_ANON_FUNCTIONS.map((signature) => signature.replace(/\s/g, '')))
+
+  for (const signature of anonymousSignatures) {
+    const contract = contracts[signature]
+    expect(contract, `${signature} needs an explicit MAP-017 contract`).toBeTruthy()
+    expect(expectedAnon.has(signature.replace(/\s/g, ''))).toBe(true)
+    expect(contract.anonCallable).toBe(true)
+    expect(contract.requiredLiveSignals?.length).toBeGreaterThan(0)
+  }
+  for (const signature of staffReceiptSignatures) {
+    const contract = contracts[signature]
+    expect(contract, `${signature} needs an explicit MAP-017 contract`).toBeTruthy()
+    expect(contract.authorizationGuard).toBe('is_staff')
+    expect(contract.aal2Required).toBe(true)
+    expect(contract.requiredLiveSignals).toContain('references_auth_uid')
+  }
+  expect(contracts['public.validate_coupon(text,numeric)']).toBeUndefined()
+
+  const signatures = [...anonymousSignatures, ...staffReceiptSignatures]
+  const liveFunctions = Object.fromEntries(signatures.map((signature) => {
+    const contract = contracts[signature]
+    const grants = []
+    if (contract.anonCallable) grants.push({ grantee: 'anon', privilege: 'EXECUTE' })
+    if (contract.authenticatedCallable) grants.push({ grantee: 'authenticated', privilege: 'EXECUTE' })
+    const details = {
+      signature,
+      grants,
+      security_definer: true,
+      search_path_config: 'search_path=""',
+      references_auth_uid: false,
+      references_is_staff: false,
+      references_aal2: false,
+    }
+    for (const signal of contract.requiredLiveSignals || []) details[signal] = true
+    if (contract.authorizationGuard === 'is_staff') details.references_is_staff = true
+    if (contract.aal2Required) details.references_aal2 = true
+    return [signature, details]
+  }))
+
+  const auditIssues = (functions) => auditExposedAuthorization({ functions }, expected).issues
+  const cleanIssues = auditIssues(liveFunctions)
+  expect(cleanIssues.filter((issue) => signatures.includes(issue.target))).toEqual([])
+
+  const falseProof = structuredClone(liveFunctions)
+  falseProof['public.submit_order_message_v1(uuid,text,text,uuid)'].references_order_key_scope = false
+  expect(auditIssues(falseProof)).toContainEqual(expect.objectContaining({
+    type: 'FUNCTION_CONTRACT_SIGNAL_GUARD_MISSING',
+    severity: SEVERITY.CRITICAL,
+    target: 'public.submit_order_message_v1(uuid,text,text,uuid)',
+  }))
+
+  const missingProof = structuredClone(liveFunctions)
+  delete missingProof['public.submit_order_payment_receipt_v1(uuid,text,text,text,text,uuid)'].references_payment_receipt_request_key
+  expect(auditIssues(missingProof)).toContainEqual(expect.objectContaining({
+    type: 'FUNCTION_CONTRACT_SIGNAL_EVIDENCE_MISSING',
+    severity: SEVERITY.HIGH,
+    target: 'public.submit_order_payment_receipt_v1(uuid,text,text,text,text,uuid)',
+  }))
+
+  const legacyFunctions = {
+    ...liveFunctions,
+    'public.validate_coupon(text,numeric)': {
+      signature: 'public.validate_coupon(text,numeric)',
+      grants: [{ grantee: 'anon', privilege: 'EXECUTE' }],
+      security_definer: true,
+      search_path_config: 'search_path=public',
+    },
+  }
+  expect(auditIssues(legacyFunctions)).toContainEqual(expect.objectContaining({
+    type: 'FUNCTION_ANON_EXECUTE_UNREVIEWED',
+    severity: SEVERITY.CRITICAL,
+    target: 'public.validate_coupon(text,numeric)',
+  }))
 })
 
 test('migration ledger matching tolerates the real CLI shape without hiding a genuine absence', async () => {

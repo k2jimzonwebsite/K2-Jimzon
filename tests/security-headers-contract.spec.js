@@ -212,7 +212,7 @@ test('the provider-supported root vercel.ts selects a complete target config', (
     expect(result.status, result.stderr).toBe(0)
     const config = JSON.parse(result.stdout)
     const sources = config.rewrites.map((rule) => rule.source)
-    expect(sources).toContain(entry.apiRoute)
+    expect(sources).not.toContain(entry.apiRoute)
     expect(sources).toContain(entry.appRoute)
     expect(sources).not.toContain('/(.*)')
 
@@ -227,6 +227,23 @@ test('the provider-supported root vercel.ts selects a complete target config', (
 
     const assets = config.headers.find((rule) => rule.source === '/assets/(.*)')
     expect(assets.headers[0].value).toBe('public, max-age=31536000, immutable')
+  }
+})
+
+test('each selected Vercel artifact builds only its own API function', () => {
+  for (const entry of [
+    { target: 'storefront', projectId: 'prj_ULQ5zbR7zDaFCMlXVjlrZxj9sXsL', own: 'api/storefront/index.js', other: 'api/admin/index.js' },
+    { target: 'admin', projectId: 'prj_hPWQKCjIQRuKB3LLlbCmlGNHjL3x', own: 'api/admin/index.js', other: 'api/storefront/index.js' },
+  ]) {
+    const result = runRootVercelConfig(entry)
+    expect(result.status, result.stderr).toBe(0)
+    const config = JSON.parse(result.stdout)
+    expect(config.functions).toBeUndefined()
+    expect(config.builds).toBeUndefined()
+    expect(config.framework).toBeNull()
+    expect(config.outputDirectory).toBeNull()
+    expect(config.buildCommand).toBe(`npm run build:vercel-output:${entry.target}`)
+    expect(JSON.stringify(config)).not.toContain(entry.other)
   }
 })
 
@@ -361,15 +378,13 @@ test('each Vercel artifact declares one exact consolidated BFF entrypoint and on
   // HTML before higher-level rewrites; the product rule recovers only a
   // missing/unpublished SKU in the client. There is deliberately no global
   // catch-all: other unmatched requests retain a host 404.
-  expect(Object.keys(storefront.functions)).toEqual(['api/storefront/index.js'])
+  expect(storefront.builds).toBeUndefined()
   expect(storefront.rewrites).toEqual([
-    { source: '/api/storefront/:route*', destination: '/api/storefront?route=:route*' },
     { source: '/product/:sku', destination: '/index.html' },
     ...STOREFRONT_SPA_PATHS.map(source => ({ source, destination: '/index.html' })),
   ])
-  expect(Object.keys(admin.functions)).toEqual(['api/admin/index.js'])
+  expect(admin.builds).toBeUndefined()
   expect(admin.rewrites).toEqual([
-    { source: '/api/admin/:route*', destination: '/api/admin?route=:route*' },
     { source: '/admin-portal-k2-secure', destination: '/index.html' },
   ])
 

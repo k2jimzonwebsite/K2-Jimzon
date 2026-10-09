@@ -7,8 +7,7 @@ import SmartPasteModal from './SmartPasteModal'
 import BatchExpiryManagerModal, { getExpiryHealth } from './BatchExpiryManagerModal'
 import ProductAiEnrichmentModal from './ProductAiEnrichmentModal'
 import DeleteProductsModal from './DeleteProductsModal'
-import { BoxIcon, SearchIcon, UploadIcon, PlusIcon } from '../../components/ui/icons'
-import AddInventoryChooserModal from '../../components/admin/tour/AddInventoryChooserModal'
+import { BoxIcon, SearchIcon, PlusIcon } from '../../components/ui/icons'
 import PhotoManagerModal from './PhotoManagerModal'
 import ProductMediaCleanupModal from './ProductMediaCleanupModal'
 import ProductIntakeSessionModal from './ProductIntakeSessionModal'
@@ -179,7 +178,7 @@ function BreakdownRow({ label, data }) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function InventoryGrid({ launchTool, onLaunchToolHandled, canManageMediaCleanup = false, canManageProducts = false, onStartTour = null }) {
+export default function InventoryGrid({ launchTool, onLaunchToolHandled, canManageMediaCleanup = false, canManageProducts = false }) {
   const secure = adminBffEnabled()
   const [products, setProducts]       = useState([])
   const [batchMap, setBatchMap]       = useState({})
@@ -188,23 +187,20 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
   const [photoProduct, setPhotoProduct] = useState(null)
   const [editTab, setEditTab] = useState('details')
   const [batchProduct, setBatchProduct]   = useState(null)
-  const [isAdding, setIsAdding]       = useState(false)
   const [saving, setSaving]           = useState(false)
   const [showAiScanner, setShowAiScanner] = useState(false)
   const [showSmartPaste, setShowSmartPaste] = useState(false)
   const [showMediaCleanup, setShowMediaCleanup] = useState(false)
   const [showPhoneIntake, setShowPhoneIntake] = useState(false)
   const [guidedIntake, setGuidedIntake] = useState(false)
-  const [showIntakeChooser, setShowIntakeChooser] = useState(false)
+  const openIntake = () => secure ? setShowPhoneIntake(true) : setShowAiScanner(true)
 
   useEffect(() => {
     if (!launchTool?.id) return
-    if (launchTool.id === 'scan-product') setShowAiScanner(true)
-    if (launchTool.id === 'smart-paste') setShowSmartPaste(true)
-    if (launchTool.id === 'add-inventory') setShowIntakeChooser(true)
+    if (['scan-product', 'smart-paste', 'add-inventory'].includes(launchTool.id)) openIntake()
     if (launchTool.id === 'guided-intake') { setGuidedIntake(true); setShowPhoneIntake(true) }
     onLaunchToolHandled?.(launchTool.token)
-  }, [launchTool, onLaunchToolHandled])
+  }, [launchTool, onLaunchToolHandled, secure])
   const [enrichProduct, setEnrichProduct] = useState(null)
   const [selected, setSelected] = useState(() => new Set())
   const [deleteTargets, setDeleteTargets] = useState(null)
@@ -371,7 +367,6 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
 
   const openProductEditor = async (product) => {
     setEditTab('details')
-    setIsAdding(false)
     setEditReason('')
     setEditError('')
     setProductTaxonomyReview(null)
@@ -388,7 +383,6 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     e.preventDefault()
     setEditError('')
     if (secure) {
-      if (isAdding) { setEditError('Use phone-first intake to create an attributable product Draft.'); return }
       if (editReason.trim().length < 8) { setEditError('Enter a specific save reason of at least 8 characters.'); return }
       if (productTaxonomyReview?.status === 'eligible'
           && (!editingProduct.brand_id || !editingProduct.category_id)) {
@@ -425,18 +419,11 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     setSaving(true)
     const payload = buildPayload(editingProduct)
 
-    if (isAdding) {
-      if (!editingProduct.sku) { setEditError('SKU is required.'); setSaving(false); return }
-      const { error } = await supabase.from('products').insert([{ sku: editingProduct.sku, ...payload }])
-      if (error) { setEditError(safeUiError('CATALOG_SAVE_FAILED')); setSaving(false); return }
-    } else {
-      const { error } = await supabase.from('products').update(payload).eq('sku', editingProduct.sku)
-      if (error) { setEditError(safeUiError('CATALOG_SAVE_FAILED')); setSaving(false); return }
-    }
+    const { error } = await supabase.from('products').update(payload).eq('sku', editingProduct.sku)
+    if (error) { setEditError(safeUiError('CATALOG_SAVE_FAILED')); setSaving(false); return }
 
     await fetchProducts()
     setEditingProduct(null)
-    setIsAdding(false)
     setSaving(false)
   }
 
@@ -539,16 +526,15 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
           <div data-tour="inventory-actions" className="flex flex-wrap gap-2">
             <button
               data-tour="add-inventory-btn"
-              onClick={() => setShowIntakeChooser(true)}
+              onClick={openIntake}
               className="flex min-h-11 items-center gap-2 rounded-adm-sm bg-blue px-4 py-2 text-sm font-bold text-white shadow-lg shadow-blue/20 hover:bg-blue-deep active:scale-[0.98] transition-all cursor-pointer"
             >
               <PlusIcon size={16} />
               <span>Add inventory</span>
             </button>
-            <button data-tour="scan-box-btn" onClick={() => setShowAiScanner(true)} className={secondaryButton}><BoxIcon size={16} /> Scan box</button>
-            <button data-tour="smart-paste-btn" onClick={() => setShowSmartPaste(true)} className={secondaryButton}><UploadIcon size={16} /> Smart paste</button>
+            <button data-tour="scan-box-btn" onClick={openIntake} className={secondaryButton}><BoxIcon size={16} /> Scan box</button>
             {canManageMediaCleanup && adminBffEnabled() && <button onClick={() => setShowMediaCleanup(true)} className={secondaryButton}>Unused uploads</button>}
-            <button data-tour="add-product-btn" onClick={() => secure ? setShowPhoneIntake(true) : (setIsAdding(true), setEditTab('details'), setEditError(''), setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }))} className={secondaryButton}>Add product</button>
+            <button data-tour="add-product-btn" onClick={openIntake} className={secondaryButton}>Add product</button>
           </div>
         )}
       />
@@ -566,21 +552,10 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
         { label: 'Expiry risk', value: loading ? '--' : inventoryMetrics.expiryRisk, detail: 'Expired or within 90 days', tone: inventoryMetrics.expiryRisk ? 'text-amber' : 'text-white' },
       ]} />
 
-      {showIntakeChooser && (
-        <AddInventoryChooserModal
-          secure={secure}
-          isOpen={showIntakeChooser}
-          onClose={() => setShowIntakeChooser(false)}
-          onSelectAutomaticQuick={() => setShowAiScanner(true)}
-          onSelectAutomaticTour={() => onStartTour?.('auto_inventory')}
-          onSelectManualSmartPaste={() => setShowSmartPaste(true)}
-          onSelectManualForm={() => secure ? setShowPhoneIntake(true) : (setIsAdding(true), setEditTab('details'), setEditError(''), setEditingProduct({ sku: `MANUAL-${Math.floor(Math.random() * 10000)}`, status: 'Draft', srp: 0, wholesale_price: 0, stock_available: 0 }))}
-          onSelectManualTour={() => onStartTour?.('manual_inventory')}
-        />
-      )}
       {showAiScanner && (
         <ScanToAiModal onClose={() => setShowAiScanner(false)}
-          onOpenSmartPaste={() => { setShowAiScanner(false); setShowSmartPaste(true) }} />
+          onOpenSmartPaste={() => { setShowAiScanner(false); setShowSmartPaste(true) }}
+          onExistingProduct={(product) => { setShowAiScanner(false); setBatchProduct(product) }} />
       )}
       {showSmartPaste && (
         <SmartPasteModal onClose={() => setShowSmartPaste(false)}
@@ -866,7 +841,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
       {editingProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-2 md:p-4 animate-in fade-in">
           <AdminDialog
-            onClose={() => { setEditingProduct(null); setIsAdding(false); setEditError('') }}
+            onClose={() => { setEditingProduct(null); setEditError('') }}
             closeDisabled={saving}
             labelledBy="product-editor-title"
           >
@@ -875,10 +850,10 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
             {/* Header */}
             <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-adm-line bg-white/5">
               <div>
-                <h3 id="product-editor-title" className="font-sans text-xl font-semibold text-white">{isAdding ? 'Add New Product' : 'Edit Product'}</h3>
+                <h3 id="product-editor-title" className="font-sans text-xl font-semibold text-white">Edit Product</h3>
                 <p className="text-sm text-white/60 font-mono mt-0.5">{editingProduct.sku}</p>
               </div>
-              <button onClick={() => { setEditingProduct(null); setIsAdding(false); setEditError('') }} disabled={saving} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10 disabled:opacity-50" aria-label="Close product editor">
+              <button onClick={() => { setEditingProduct(null); setEditError('') }} disabled={saving} className="text-white/60 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-adm-sm hover:bg-white/10 disabled:opacity-50" aria-label="Close product editor">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -899,16 +874,6 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
 
                 {/* ── Details tab: Identity + Content ──────────────────── */}
                 <div className={editTab === 'details' ? 'space-y-6' : 'hidden'}>
-
-                  {isAdding && (
-                    <Section color="blue" title="SKU">
-                      <div>
-                        <Label>SKU / Product ID (kebab-case)</Label>
-                        <input type="text" value={editingProduct.sku || ''} onChange={e => set('sku', e.target.value)}
-                          className={`${inp} font-mono`} placeholder="e.g. mutti-polpa-400g" required />
-                      </div>
-                    </Section>
-                  )}
 
                   <Section color="blue" title="Product basics">
                     <div>
@@ -1066,7 +1031,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                             return Number.isFinite(stock) ? stock : 'Unknown'
                           })()}
                         </div>
-                        <button type="button" disabled={isAdding} onClick={() => setBatchProduct(editingProduct)} className="mt-2 min-h-11 w-full rounded-adm-sm border border-blue/35 bg-blue/10 px-3 text-xs font-semibold text-blue disabled:opacity-40">{isAdding ? 'Save the draft before adding batches' : 'Reconcile batches and stock'}</button>
+                        <button type="button" onClick={() => setBatchProduct(editingProduct)} className="mt-2 min-h-11 w-full rounded-adm-sm border border-blue/35 bg-blue/10 px-3 text-xs font-semibold text-blue">Reconcile batches and stock</button>
                       </div>
                       <div>
                         <Label>Reorder Level</Label>
@@ -1134,14 +1099,14 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                       <span className="mt-1 block text-xs font-normal text-white/45">Saved permanently in this product's change history.</span>
                 </label>}
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-                  <button type="button" onClick={() => { setEditingProduct(null); setIsAdding(false); setEditError('') }}
+                  <button type="button" onClick={() => { setEditingProduct(null); setEditError('') }}
                     className="min-h-11 rounded-adm-sm px-4 py-2 text-base font-semibold text-white/60 transition-colors hover:text-white">
                     Cancel
                   </button>
                   <button type="submit" disabled={saving || (secure && editReason.trim().length < 8)}
                     className="flex min-h-11 items-center justify-center gap-2 rounded-adm-sm bg-blue px-6 py-2 text-base font-semibold text-white transition-[background-color,transform] duration-150 hover:bg-blue/90 active:scale-[0.98] disabled:opacity-50">
                     {saving && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
-                    {saving ? 'Saving…' : (isAdding ? 'Create Product' : 'Save Changes')}
+                    {saving ? 'Saving…' : 'Save Changes'}
                   </button>
                 </div>
               </div>

@@ -695,3 +695,24 @@ publication.
 **Why the owner must answer:** willingness to pay is not an unbounded budget or
 provider/privacy authorization, and the confirmation design changes the staff
 workflow and audit evidence.
+
+
+## Historical branch decision record retained during integration
+
+**29 September decisions pending (MAP-018/020/024):** The signed-in provider
+checks leave three owner choices. (1) Keep the extra public Storefront alias
+`k2-jimzon-vert.vercel.app`, or retire it after a host traffic/redirect check;
+it is an alias of the current Storefront deployment, not a third project.
+(2) For the 22 currently published products with no human review, choose
+unpublish pending real review or record a temporary exception; do not mark them
+reviewed without inspecting actual labels, allergens, storage, price and rights.
+(3) Authorize private retention and removal of the nine debug/third-party
+screenshots from public `product-images`, or leave them public pending a rights
+decision. Codex owns the technical steps after each decision. The owner must
+also authorize the exact MAP-018 intake migration chain before a production
+apply and provide real package facts and physical counts before sellable stock
+or a first real listing can be accepted. Synthetic CSV checks already cover
+importer mechanics and do not establish those facts.
+
+**29 September Preview publication approval fulfilled (MAP-020):** Automatic approval review blocked pushing local branch `codex/connector-handoff-20260929` to the configured GitHub repository `k2jimzonwebsite/K2-Jimzon`. Read-only GitHub verification confirms that exact repository and WRITE access for signed-in `EdgerzXc`, but the user's broad instruction to continue did not specifically authorize exporting the branch. The owner explicitly approved this exact feature-branch push to trigger separate Vercel Previews for verification. Codex owns the push and provider checks. Production `main` and the BFF remain unchanged until their separate release gates.
+

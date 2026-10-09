@@ -1,16 +1,8 @@
 {
-  "buildCommand": "K2_DEPLOYMENT_TARGET=admin npm run build:admin",
-  "outputDirectory": "dist",
-  "functions": {
-    "api/admin/index.js": {
-      "maxDuration": 180
-    }
-  },
+  "framework": null,
+  "buildCommand": "npm run build:vercel-output:admin",
+  "outputDirectory": null,
   "rewrites": [
-    {
-      "source": "/api/admin/:route*",
-      "destination": "/api/admin?route=:route*"
-    },
     {
       "source": "/admin-portal-k2-secure",
       "destination": "/index.html"

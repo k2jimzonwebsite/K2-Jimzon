@@ -13,6 +13,8 @@
  * field is a false claim about a real product.
  */
 
+import { displayBrand } from './productIdentity.js'
+
 /** Schema.org will reject a key with an undefined value, so they are stripped. */
 function compact(record) {
   return Object.fromEntries(
@@ -48,6 +50,7 @@ export function buildProductStructuredData({ product, description, image, url })
 
   const price = Number(product.srp ?? product.retail)
   const sku = product.sku || product.id
+  const brandName = displayBrand(product)
 
   return compact({
     '@context': 'https://schema.org',
@@ -56,7 +59,10 @@ export function buildProductStructuredData({ product, description, image, url })
     sku,
     description,
     image: image ? [image] : undefined,
-    brand: product.brand_id ? { '@type': 'Brand', name: product.brand_id } : undefined,
+    // A bare `brand_id` is a foreign key. Emitting a UUID as schema.org
+    // `brand.name` is invalid markup, so the brand is omitted unless a human
+    // name is actually known.
+    brand: brandName ? { '@type': 'Brand', name: brandName } : undefined,
     countryOfOrigin: product.country_of_origin || undefined,
     // `gtin13` is only emitted for a barcode that is actually thirteen digits.
     // A malformed GTIN invalidates the whole offer in Search Console.

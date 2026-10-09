@@ -123,7 +123,7 @@ export default function BulkCsvImportModal({ onClose, onImportComplete }) {
         usage_instructions: row.usage_instructions || '',
         srp: Number(row.srp || row['Price']) || 0,
         wholesale_price: Number(row.wholesale_price) || 0,
-        status: 'draft',
+        status: 'Draft',
         published: false,
         // One warehouse for the whole file. Channel exports carry no warehouse
         // column, so the location is a fact about the upload — "this is the

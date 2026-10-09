@@ -523,6 +523,30 @@ Do not set the session key or future marketplace/provider secrets in `VITE_*`.
 Do not copy production values into `.env.example`, GitHub, screenshots, logs, or
 support messages.
 
+**28 September provider state:** Cloudflare account Turnstile has a Managed
+`K2 Admin BOS` widget restricted to `admin.k2jimzon.com`, with pre-clearance off.
+The public site key is saved as `VITE_TURNSTILE_SITE_KEY` in the separate Admin
+Vercel Production project; Vercel requires a new deployment for it to take
+effect. The paired `K2_TURNSTILE_SECRET_KEY` is not yet saved. Its Production
+Secret variable form is prepared in the owner's Vercel browser tab. The owner
+must copy the private value directly from the Cloudflare widget into that form
+and save it; never paste it into chat, source, or screenshots. Verify presence
+without revealing value. This preparation does not enable Admin BFF login:
+both flags remain false, the edge 404 gate remains enabled, and MAP-017/018/020
+still govern preview and live activation. Recovery is to keep those gates closed
+and leave the widget unused until the coordinated release is ready.
+
+**Owner handoff completed later 28 September:** The owner saved
+`K2_TURNSTILE_SECRET_KEY` as an Admin Production Secret and redeployed. Vercel
+shows deployment `dpl_JPEbAG3GEuYkWPgYB4jLoKjF9Khn` Ready and Current on
+`admin.k2jimzon.com`; the value was not revealed. Its source is still `main`
+`f95e384`, and Resources still shows both `/api/admin/index` and the wrong-target
+`/api/storefront/index`. The Admin edge 404 gate and both BFF flags remain off.
+Both required variable names are present in the new deployment; the secret value
+was not independently matched to the site key. Live challenge
+behavior and intake remain unverified. Keep the edge gate until wrong-target
+packaging, preview route/denial, and MAP-017 recovery checks pass.
+
 ## Session behavior
 
 - Login responses use stable error codes and never return provider messages or

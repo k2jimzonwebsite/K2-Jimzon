@@ -23,6 +23,7 @@ const SAFE_UI_ERRORS = Object.freeze({
   PAYMENT_STATE_FAILED: 'The payment evidence state was not changed. Refresh the order and try again.',
   PRODUCT_JSON_INVALID: 'The product JSON could not be accepted. Copy the complete reviewed PRODUCT_JSON response and try again.',
   PRODUCT_SAVE_FAILED: 'The product Draft was not saved. Review the record and try again.',
+  PUBLISH_REVIEW_REQUIRED: 'This product cannot be published until a staff member marks it reviewed. Confirm the label, allergens, storage, price and media rights first.',
   RECEIPT_FINALIZE_FAILED: 'The receipt was not finalized and no inventory change was confirmed. Review the counts and try again.',
   SHEET_LOAD_FAILED: 'Product records could not be loaded. Refresh before editing.',
   SHEET_SAVE_FAILED: 'The cell change was not saved and has been reverted. Refresh and try again.',
