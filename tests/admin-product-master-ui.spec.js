@@ -234,7 +234,7 @@ test('express staff identity switch keeps the previous unknown command isolated'
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).key, pendingExpressKey)).toBe(writes[0].key)
   await page.evaluate(() => [...document.querySelectorAll('button')].find(button => button.textContent === 'Switch synthetic staff').click())
   await page.getByRole('button', { name: 'Retry pending quotation' }).click()
-  await expect(page.getByRole('status')).toContainText('published')
+  await expect(page.getByRole('status').filter({ hasText: 'published' })).toBeVisible()
   expect(writes[1]).toEqual(writes[0])
 })
 
@@ -297,7 +297,7 @@ test('customer rates Staff editor retains one publication across reload permissi
   await expect(page.getByRole('alert')).toContainText('two-factor')
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).key, pendingRateKey)).toBe(writes[0].key)
   await page.getByRole('button', { name: 'Retry pending rate change' }).click()
-  await expect(page.getByRole('status')).toContainText('published as version 3')
+  await expect(page.getByRole('status').filter({ hasText: 'published as version 3' })).toBeVisible()
   expect(writes).toHaveLength(3)
   expect(writes[1]).toEqual(writes[0])
   expect(writes[2]).toEqual(writes[0])

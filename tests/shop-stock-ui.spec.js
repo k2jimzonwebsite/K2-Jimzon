@@ -15,7 +15,7 @@ async function mount(page, secureMode = false) {
     window.$RefreshSig$ = () => type => type
     window.__vite_plugin_react_preamble_installed__ = true
     const [react, dom, view] = await Promise.all([
-      import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/ShopAllocationManager.jsx'),
+      (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime, import('/src/views/admin/ShopAllocationManager.jsx'),
     ])
     document.getElementById('root').style.display = 'none'
     const fixture = document.createElement('main')

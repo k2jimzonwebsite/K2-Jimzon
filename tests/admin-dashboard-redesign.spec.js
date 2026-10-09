@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { STAFF_GUIDE_META } from '../src/views/admin/staffProcedureRegistry.js'
+import { WORKFLOW_GUIDE_META } from '../src/components/admin/master-workflow-graph/workflowData.js'
 
 // Keep the visual acceptance fixture hermetic and identical in CI. The Admin
 // Playwright server uses this same fabricated origin and every request is
@@ -48,6 +49,7 @@ const orders = [
   status,
   payment_status,
   total_amount,
+  shipping_quote_status: 'customer_confirmed',
   created_at: daysAgo(days),
 }))
 
@@ -189,8 +191,8 @@ test.describe('admin command center redesign', () => {
       window.$RefreshReg$ = () => {}
       window.$RefreshSig$ = () => type => type
       const [reactModule, reactDomClientModule, helpTipModule] = await Promise.all([
-        import('/@id/react'),
-        import('/@id/react-dom/client'),
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime,
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime,
         import('/src/views/admin/HelpTip.jsx'),
       ])
       const React = reactModule.default || reactModule
@@ -834,7 +836,7 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
     await page.evaluate(async () => {
       const [reactModule,reactDomClientModule,wholesaleModule]=await Promise.all([
-        import('/@id/react'),import('/@id/react-dom/client'),import('/src/views/admin/Customers.jsx'),
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime,(await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime,import('/src/views/admin/Customers.jsx'),
       ])
       const React=reactModule.default||reactModule
       const createRoot=reactDomClientModule.createRoot||reactDomClientModule.default?.createRoot
@@ -880,7 +882,7 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
     await page.evaluate(async () => {
       const [reactModule, reactDomClientModule, globeModule] = await Promise.all([
-        import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/GlobeCms.jsx'),
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime, import('/src/views/admin/GlobeCms.jsx'),
       ])
       const React = reactModule.default || reactModule
       const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
@@ -917,7 +919,7 @@ test.describe('admin command center redesign', () => {
     await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
     await page.evaluate(async () => {
-      const [reactModule, reactDomClientModule, supplierModule] = await Promise.all([import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/Suppliers.jsx')])
+      const [reactModule, reactDomClientModule, supplierModule] = await Promise.all([(await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime, import('/src/views/admin/Suppliers.jsx')])
       const React = reactModule.default || reactModule; const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
       const app = document.getElementById('root'); if (app) app.style.display = 'none'
       const mount = document.createElement('main'); mount.className = 'min-h-[100dvh] bg-adm-bg p-3 text-white'; document.body.appendChild(mount)
@@ -950,7 +952,7 @@ test.describe('admin command center redesign', () => {
     await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
     await page.evaluate(async () => {
-      const [reactModule, reactDomClientModule, channelModule] = await Promise.all([import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/ChannelIntegrations.jsx')])
+      const [reactModule, reactDomClientModule, channelModule] = await Promise.all([(await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime, import('/src/views/admin/ChannelIntegrations.jsx')])
       const React = reactModule.default || reactModule; const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
       const app = document.getElementById('root'); if (app) app.style.display = 'none'
       const mount = document.createElement('main'); mount.className = 'min-h-[100dvh] bg-adm-bg p-3 text-white'; document.body.appendChild(mount)
@@ -994,7 +996,7 @@ test.describe('admin command center redesign', () => {
     })
     await page.goto('/', { waitUntil: 'domcontentloaded' })
     await page.evaluate(async () => {
-      const [reactModule, reactDomClientModule, staffModule] = await Promise.all([import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/StaffPermissionManager.jsx')])
+      const [reactModule, reactDomClientModule, staffModule] = await Promise.all([(await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime, import('/src/views/admin/StaffPermissionManager.jsx')])
       const React = reactModule.default || reactModule; const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
       const app = document.getElementById('root'); if (app) app.style.display = 'none'
       const mount = document.createElement('main'); mount.className = 'min-h-[100dvh] bg-adm-bg p-3 text-white'; document.body.appendChild(mount)
@@ -1032,7 +1034,7 @@ test.describe('admin command center redesign', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
     await page.evaluate(async () => {
       const [reactModule, reactDomClientModule, authModule] = await Promise.all([
-        import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/AdminAuthModal.jsx'),
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime, import('/src/views/admin/AdminAuthModal.jsx'),
       ])
       const React = reactModule.default || reactModule
       const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
@@ -1085,7 +1087,7 @@ test.describe('admin command center redesign', () => {
     await page.evaluate(async () => {
       window.history.replaceState({}, '', '/?recovery=invalid')
       const [reactModule, reactDomClientModule, authModule] = await Promise.all([
-        import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/AdminAuthModal.jsx'),
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime, import('/src/views/admin/AdminAuthModal.jsx'),
       ])
       const React = reactModule.default || reactModule
       const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
@@ -1148,7 +1150,7 @@ test.describe('admin command center redesign', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
     await page.evaluate(async userId => {
       const [reactModule, reactDomClientModule, staffModule] = await Promise.all([
-        import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/StaffPermissionManager.jsx'),
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime, import('/src/views/admin/StaffPermissionManager.jsx'),
       ])
       const React = reactModule.default || reactModule
       const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
@@ -1203,7 +1205,7 @@ test.describe('admin command center redesign', () => {
     } }) }))
     await page.goto('/', { waitUntil: 'domcontentloaded' })
     await page.evaluate(async () => {
-      const [reactModule, reactDomClientModule, readinessModule] = await Promise.all([import('/@id/react'), import('/@id/react-dom/client'), import('/src/views/admin/SystemDevOpsModal.jsx')])
+      const [reactModule, reactDomClientModule, readinessModule] = await Promise.all([(await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime, import('/src/views/admin/SystemDevOpsModal.jsx')])
       const React = reactModule.default || reactModule; const createRoot = reactDomClientModule.createRoot || reactDomClientModule.default?.createRoot
       const app = document.getElementById('root'); if (app) app.style.display = 'none'
       const mount = document.createElement('main'); mount.className = 'min-h-[100dvh] bg-adm-bg text-white'; document.body.appendChild(mount)
@@ -1229,7 +1231,7 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByRole('heading', { name: 'Operations command center' })).toBeVisible({ timeout: 45000 })
     await page.evaluate(async () => {
       const [reactModule, reactDomClientModule, mediaModule] = await Promise.all([
-        import('/@id/react'), import('/@id/react-dom/client'),
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime,
         import('/src/views/admin/PhotoManagerModal.jsx'),
       ])
       const React = reactModule.default || reactModule
@@ -1275,7 +1277,7 @@ test.describe('admin command center redesign', () => {
     })
     await page.evaluate(async () => {
       const [reactModule, reactDomClientModule, cleanupModule] = await Promise.all([
-        import('/@id/react'), import('/@id/react-dom/client'),
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime,
         import('/src/views/admin/ProductMediaCleanupModal.jsx'),
       ])
       const React = reactModule.default || reactModule
@@ -1302,8 +1304,8 @@ test.describe('admin command center redesign', () => {
     await page.goto('/admin-portal-k2-secure', { waitUntil: 'domcontentloaded' })
     await page.evaluate(async () => {
       const [reactModule, reactDomClientModule, { default: ProductIntakeSessionModal }] = await Promise.all([
-        import('/@id/react'),
-        import('/@id/react-dom/client'),
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime,
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime,
         import('/src/views/admin/ProductIntakeSessionModal.jsx'),
       ])
       const React = reactModule.default || reactModule
@@ -1503,7 +1505,7 @@ test.describe('admin command center redesign', () => {
 
     await page.getByRole('button', { name: 'Workflow map', exact: true }).click()
     await expect(page.getByRole('heading', { name: 'Workflow map', exact: true }).last()).toBeVisible()
-    await expect(page.getByText(/Draft guide · Version 2026-08-30-draft\.1/)).toBeVisible()
+    await expect(page.getByText(`Draft guide · Version ${WORKFLOW_GUIDE_META.version}`, { exact: false })).toBeVisible()
     await expect(page.getByRole('note')).toContainText('Complete real work in the named Admin screen')
     await expect(page.getByText(/does not save or verify real work/)).toBeVisible()
     await expect(page.getByRole('button', { name: 'Mark guide step reviewed' })).toBeVisible()
@@ -1513,6 +1515,7 @@ test.describe('admin command center redesign', () => {
     await page.getByRole('button', { name: 'About: Using the workflow map', exact: true }).focus()
     await expect(page.getByRole('tooltip').filter({ hasText: 'map checkmarks do not save business records' })).toBeVisible()
     await page.getByRole('button', { name: 'About: Using the workflow map', exact: true }).blur()
+    await page.getByRole('button', { name: 'Full map', exact: true }).click()
     await expect(canvas.locator('[data-node-id]')).toHaveCount(49)
     await expect(canvas.locator('[data-edge-kind="branch"]')).toHaveCount(16)
     await expect(canvas.locator('[data-edge-kind="converge"]')).toHaveCount(7)
@@ -1524,15 +1527,15 @@ test.describe('admin command center redesign', () => {
     await expect(page.getByText('What can you do here?', { exact: true })).toBeVisible()
     await expect(page.getByText('Supporting records', { exact: true })).toBeVisible()
 
-    const zoomValue = canvas.getByText('72%', { exact: true })
+    const zoomValue = canvas.getByText('100%', { exact: true })
     await expect(zoomValue).toBeVisible()
     await canvas.getByRole('button', { name: 'Zoom out' }).click()
-    await expect(canvas.getByText('62%', { exact: true })).toBeVisible()
+    await expect(canvas.getByText('90%', { exact: true })).toBeVisible()
     await canvas.getByRole('button', { name: 'Reset view' }).click()
     await expect(zoomValue).toBeVisible()
 
     await page.getByRole('button', { name: 'Trace path' }).click()
-    const tracedRoute = page.getByRole('status')
+    const tracedRoute = page.getByRole('region', { name: 'Workflow path tracer' }).getByRole('status')
     await expect(tracedRoute).toBeVisible()
     expect(await tracedRoute.getByRole('button').count()).toBeGreaterThan(2)
     await page.screenshot({ path: 'C:/tmp/k2-admin-workflow-graph-desktop.png', fullPage: true })
@@ -1551,7 +1554,7 @@ test.describe('admin command center redesign', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
     await page.evaluate(async () => {
       const [reactModule, reactDomClientModule, guideModule] = await Promise.all([
-        import('/@id/react'), import('/@id/react-dom/client'),
+        (await import('/tests/fixtures/loaded-react-runtime.js')).ReactRuntime, (await import('/tests/fixtures/loaded-react-runtime.js')).ReactDomRuntime,
         import('/src/views/admin/AdminAiCopilotModal.jsx'),
       ])
       const React = reactModule.default || reactModule

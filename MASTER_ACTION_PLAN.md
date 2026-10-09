@@ -1821,3 +1821,6 @@ Before provider or database changes, follow the owning runbook's backup, preflig
 
 **IDEA-20261009-10 cold registration check:** Final-05 base1095/0 and mobile4/0 passed; orientation11/1 stopped at the test reading fiber root before registration. Readiness polling now treats absent root as not ready; actual cold drag and pinch focused1/0 pass. Application source remains99e3978. Check remaining integrated suites for concrete failures before the final aggregate; preserve prior evidence and full provider/listing activation limits.
 
+
+**IDEA-20261009-10 Admin fixture qualification:** Maintained Admin41/0 and protected shop-stock8/0 pass after Vite-resolved shared React harness imports, explicit customer-confirmed dummy order values, current workflow metadata/full-map100%/trace-status assertions. Payment recovery42/0 plus separate legacy CSV1/0 pass; legacy fixture keeps BFF=false while secure recovery remains BFF=true. Inbox acceptance passes. Product Master publication selectors distinguish success receipts from simultaneous loading notices without weakening exact retry keys/actor assertions. Remaining later suites/final aggregate/builds and authorized live promotion stay open. Source99e3978/native/provider evidence reused unchanged; no live writes or activation.
+

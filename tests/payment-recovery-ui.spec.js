@@ -99,7 +99,7 @@ test('independent verification displays submitted evidence and enforces merchant
   await dialog.getByLabel('Reconciliation note').fill('Reconciled with merchant GCash account statement')
   await dialog.getByRole('button', { name: 'Record transition' }).click()
   await page.evaluate(() => window.finishPayment())
-  await expect(page.getByRole('status')).toContainText('verified: Reconciled with merchant GCash account statement')
+  await expect(page.getByRole('status').filter({ hasText: 'verified: Reconciled with merchant GCash account statement' })).toBeVisible()
 })
 
 test('authorized staff can retrieve the buyer e-receipt from the order payment review', async ({ page }) => {
