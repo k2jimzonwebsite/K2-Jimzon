@@ -1,5 +1,17 @@
 # Owner action handoff — things Claude cannot do from this workstation
 
+**Latest dummy-testing status,9October:** Source release is deployed separately to
+Storefront/Admin. Full operational database activation is still unverified. A
+phone role-selector defect is fixed locally;11 focused tests and development checks
+pass. Native isolated permission-race testing found an owner permission change can
+pass after the installer final check; original records and authority recovered,
+guest stopped, no live writes. Codex retains provider safety and complete connected
+workflow work in MAP-018/023/025. Owner confirms imported products require the same
+packaging/photo/detail reviews; this supersedes the earlier unanswered scope
+question. Existing-Draft design choice is pending in the named design receipt.
+Full human testing remains conditional; do not ask for real counts to finish these
+software tasks or imply a dummy payment proves received funds.
+
 **Current clarification, 9 October:** No real stock counts are requested for software
 readiness. The local copy now has the captured database permissions and retains its
 data. A full migration rehearsal stops because this local PostgreSQL lacks a Supabase

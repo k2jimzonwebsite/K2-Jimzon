@@ -1,5 +1,13 @@
 # Product Intake and First-Source Runbook
 
+**9October owner review decision:** Spreadsheet imports must use the same packaging,
+photo and product-detail review as manual products before stock intake. An imported
+Draft currently lacks protected session continuation; do not attach product_id
+early or manufacture a duplicate to bypass it. IDEA-20261007-01/MAP-018 owns the
+reviewed connection and complete dummy product-to-listing acceptance. Concrete
+design review: docs/design/IMPORTED_DRAFT_CONTINUATION.md. Real counts are not a
+software-development prerequisite; they remain necessary before actual selling.
+
 **5 October guarded operating-layer installation/replay locally verified (MAP-018 / IDEA-20261002-05):** Native final06 terminal0:141/0; primary556/0,103 pins/43 capture pairs. Single-transaction UUID/loopback/owner package takes exclusive maintenance entry before complete logical contract inspection; current and recreated schemas each fresh-apply and exact-replay. Synthetic populated config replay preserves132 maps; nine body/ACL/path/RLS/constraint/trigger/column/object/marker drift controls refuse3/full rollback. Contracts retain232 functions/153 relations/324 types, exact bigint text and two pinned CHECK serialization variants. All clones removed/original88 unchanged/runtime4428stop0/noPID/process/listener/launcher79453terminal0. Full prerequisite installation/populated deactivation/all-writer/provider/real acceptance remains open. Evidence/recovery/next MAP-018 action: `docs/evidence/20261004-category-shelf-life/OPERATING_INSTALL_REPLAY.md`.
 
 **5 October qualified operating-layer installation locally verified (MAP-018 / IDEA-20261002-05):** Native final09 terminal0:110/0; primary461/0,99 pins/17 capture pairs. Twenty fragments install with empty search path on populated current and template0-recreated canonical schemas; changed OIDs retain177 logical function contracts, current128 row maps unchanged/cold132 tables empty. Separate portable signed-command revision normalizes CRLF pairs only; native CRLF accepted/source drift and lone CR refused/full rollback. Accepted originals retained. Clones removed/original88 unchanged/final18052stop0/noPID/process/listener/launcher74383terminal0. Full prerequisite installer/replay/populated recovery/all-writer/provider/real acceptance remains open. Evidence/recovery/next MAP-018 action: `docs/evidence/20261004-category-shelf-life/QUALIFIED_SCHEMA_INSTALLATION.md`.

@@ -99,6 +99,15 @@ test('phone exploration has readable details and no document overflow', async ({
   await page.getByRole('region', { name: 'Connected operations workflow canvas' }).screenshot({ path: 'docs/evidence/20261002-workflow-map/map-phone.png' })
 })
 
+test('phone role filter fits wider native control text and remains usable', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.addStyleTag({ content: '.workflow-map { font-family: Arial !important; } .workflow-map select { font-size: 18px !important; }' })
+  const roles = page.getByRole('combobox', { name: 'Staff Role:' })
+  await roles.selectOption('Inventory Manager / Owner')
+  await expect(roles).toHaveValue('Inventory Manager / Owner')
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+})
+
 test('enlarged text retains full instructions and landscape stays contained', async ({ page }) => {
   await page.setViewportSize({ width: 812, height: 375 })
   await page.emulateMedia({ reducedMotion: 'reduce' })

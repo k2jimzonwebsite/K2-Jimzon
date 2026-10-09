@@ -3116,3 +3116,18 @@ The canonical product/SKU and physical lots own stock. Website, Shopee, Lazada, 
 **Source promotion versus canonical commerce activation (IDEA-20261009-10):** Preserve the already deployed published catalog during a source-only release while the commerce BFF remains disabled. Canonical Website membership filtering and protected listing writers activate together only after their qualified database setup and exact-host acceptance. When enabled, missing or absent Website membership must never expose a product. This staged compatibility behavior does not satisfy full inventory/listing activation and does not weaken the required single-master-inventory target.
 
 **9 October source state (IDEA-20261009-10):** Prepared single-inventory/listing/delivery/recovery and seven-day browser staff-session software is now source-deployed on both canonical artifacts9a9b9e6. No prepared database payload or commerce activation switch was applied. Existing published catalog remains visible under the staged compatibility rule; target canonical Website membership and protected writers still require qualified activation and real operational acceptance. Do not describe this source release as full inventory/order/payment production acceptance. Exact evidence and recovery are in the System Brain and Deployment Runbook.
+# Imported-product review decision — 9 October 2026
+
+Owner confirms spreadsheet-imported Drafts must complete the same packaging,
+photo and product-detail review steps as manually added products before stock
+intake. Existing SKU/history must survive continuation. Selecting an imported
+Draft is not reviewed association, stock receipt, publication or Website listing.
+The protected session association remains implementation work in MAP-018 /
+IDEA-20261007-01; design receipt docs/design/IMPORTED_DRAFT_CONTINUATION.md.
+
+Dummy acceptance cannot become full human acceptance while the connected product
+workflow or provider installation safety is unqualified.9October native permission
+diagnostic05 shows platform table AccessShareLock does not protect against an
+authorized owner changing ACLs after the final check. Do not activate by claiming
+that lock provides unrestricted authority stability. MAP-023/018 owns qualified
+protection/recovery; local records are retained and no provider state changed.

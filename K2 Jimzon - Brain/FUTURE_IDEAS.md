@@ -1936,12 +1936,7 @@ Drafts into the genuine intake/inventory/publication chain while preserving SKU
 and history. Accept design/preparation within MAP-018, downstream of MAP-017
 activation; do not create another backlog or authorize provider/real-stock writes.
 
-**Understanding remains open:** The owner then selected "Correct the scope
-before design" when asked whether staff should create a genuine session,
-complete packaging/field-review gates and link the existing Draft after review.
-The exact correction is requested and pending. No design or SQL/BFF/UI
-implementation is approved by that rejected summary. Do not infer waived review
-gates, role changes, or a link point from elapsed time or the initial authorization.
+**Scope correction received,9October:** Owner explicitly confirms spreadsheet imports use the same packaging, photo and product-detail review steps as manual products before stock intake. This supersedes the earlier unanswered review-gate question. Preserve SKU/history and existing roles; no review waiver or early association. Concrete design choice is pending: extend existing intake and link only after reviewed gates, or a separate review-and-link action. Proposed assumptions retain existing request limits, AAL2/roles, server authority, audit/version/retry protection and one product per intake; no new taxonomy, stocked-product reassignment or provider activation. Design receipt: docs/design/IMPORTED_DRAFT_CONTINUATION.md. Implementation waits for the design choice, not for real stock counts.
 
 **Source finding:** `intake_session_create` currently has no existing-product
 payload. `create_product_draft_server` returns early when the session already
@@ -1950,7 +1945,7 @@ review-aware continuation would bypass those checks. `intake_inventory` requires
 an associated active session at `first_inventory`; protected publication also
 requires the real session. Existing taxonomy commands do not supply this link.
 
-**Decision register:** Accepted preparation intent; corrected scope/design
+**Decision register:** Accepted preparation intent and same-review scope; design approach
 pending owner input. Owning active item: MAP-018. No adoption, fabricated session,
 stock, publication, migration, deployment or release occurred. Exact next action
 and remaining/recovery records belong only in MAP-018.
@@ -2104,6 +2099,10 @@ read-only real-project predicate accepts exact settings and refuses deliberate
 expected-contract drift. Scoped review approved; source/evidence pins and three
 stopped runtimes verified c30343. Settings proof does not establish hook execution,
 whole installer/recovery or deployment; those remain in MAP-023/018.
+### IDEA-20261009-11 — Qualify the remaining dummy workflow before human acceptance
+
+Owner requests complete dummy-data testing and progression to human testing only when working. Accepted into existing MAP-018/023/025: reuse valid release/native evidence, diagnose release CI failure37941316559, repair reproduced responsive control overflow, and qualify missing connected product/listing/order/payment/dispatch and recovery boundaries. No competing backlog, fabricated human/payment facts or automatic database activation. Local phone375/Arial18px selector probe reproduces397px document width; retain a strict failing regression before sizing repair. Human full-workflow acceptance awaits connected runtime/provider readiness and named authorized actors; already working surfaces may support limited usability testing.
+
 ### IDEA-20261009-10 — Integrate K2 branches and promote the reviewed source release
 
 Owner explicitly requests committing and merging all K2 branches and pushing GitHub/Vercel. Accepted release batch in MAP-025/018/023: inspect last ten K2 sessions, reuse valid local evidence, preserve private raw captures/backups and other worktree changes, commit maintained source/tests/SQL/documentation, integrate every branch after conflict/dependency review, run the required release gate once for the final candidate, push main without force and verify separate Storefront/Admin production artifacts. Actual-host EdgerzXc GitHub permission is write/push. Source promotion does not imply applying unqualified database payloads or inventing inventory facts; record exact remaining activation/acceptance gaps and rollback.

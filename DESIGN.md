@@ -1,5 +1,13 @@
 ---
 
+Workflow-map phone correction,9October (IDEA-20261009-11): preserve the current
+Admin type, colors and44px controls. Native Staff Role select may shrink within
+its bounded flex container; wider control text no longer grows the document.
+375px Arial18px regression fails before correction and passes after; all11 map
+browser cases pass.375/1440 captures inspected and document widths match viewports.
+No new motion or hidden functionality. Four required design skills applied.
+Local source only; complete Admin/physical touch/hosted acceptance remains MAP-025.
+
 M customer charge review,8October (MAP-023/018): preserve the wood canvas, current
 type,44px controls and existing messages/reference navigation. No new motion.
 Phone375/desktop1280 rendered review captures inspected, no horizontal overflow;
