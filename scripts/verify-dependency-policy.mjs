@@ -23,7 +23,6 @@ const allowedLicenses = new Set([
 ])
 const allowedInstallScripts = new Set([
   'node_modules/esbuild',
-  'node_modules/fsevents',
   'node_modules/vite/node_modules/fsevents',
 ])
 const licenseCounts = new Map()
