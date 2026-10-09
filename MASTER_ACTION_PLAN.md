@@ -1,14 +1,479 @@
 # K2 Jimzon Master Action Plan
 
+**Owner-requested live source release, IDEA-20261009-10 / MAP-025/018/023:** Owner now explicitly authorizes commit/branch integration/main push and Vercel promotion. Ten recent K2 sessions inspected: substantial locally verified receiving/stock/payment/install/recovery work is reused, not reset. Actual-host gh authenticates EdgerzXc; exact repo permission write/push=true. Connector Vercel scope lacks K2 team access; use existing GitHub integration and verify exact separate hosts/deployments. Current checkout has85 tracked changes plus maintained untracked source/tests/preparedSQL and large private evidence. Preserve backups/raw provider captures and unfinished05 diagnostic; do not publish them or apply database SQL as part of source push. Integrate unique branch changes carefully, retain other worktree changes, run final verify:release once before promotion, fix focused failures, then push/verify. Full product/provider/inventory activation acceptance remains open unless exact evidence proves it.
+
+**IDEA-20261009-07 ACL diagnostic05, accepted/preparing:** Test owner revocation of only postgres SELECT grant option on protected auth.schema_migrations after final check while explicit Access Share remains held. Read back committed grant-option absence before releasing installer; restore exact owner grant and require complete catalog/rows/global/managed recovery. Preserve unchanged production SQL and prior03/04. No provider writes. Source/terminal pins required; next global/managed/connector/product/owner boundaries remain active.
+
+
+**IDEA-20261009-07 observed RLS boundary protected locally:** Diagnostic04/session68381 terminal0/PID23032 absent; serialee4b2782.... Exact local copy adds only seven-table Access Share before unchanged db0cb4d1 DO and diagnostic advisory pause after final check. Actual granted auth.schema_migrations AccessShareLock observed; independent owner RLS drift times out/exit3, installer commits/exit0. Original88-table/two-sequence projectionbc485716..., full recovered after-catalogabb347eb... and global/managed witness pass. verify-postcheck-lock.mjs03 fails expected prior counterexample;04 passes including exact source-difference check.04 candidate-scope/existing runtime receipt retain pins and recovery. Production package and privileges unchanged; no provider writes. Completed RLS diagnostic slice removed from MAP. Next MAP-023/018: independent protected-table ACL mutation and global/managed authority qualification through commit, then full package/provider transport/product/hosted/owner gates; do not infer unrestricted immunity from this passing RLS case.
+**IDEA-20261009-07 lock-capacity investigation, read-only:** Actual intended-provider postgres/non-superuser170006 has SELECT on all seven omitted platform tables; auth.schema_migrations, storage.migrations, storage.buckets_vectors and storage.vector_indexes lack INSERT/UPDATE/DELETE/TRUNCATE/MAINTAIN. PostgreSQL17.6 LockTableAclCheck permits Access Share for SELECT; upstream policy commands acquire Access Exclusive, making explicit retained Access Share a candidate against observed RLS/policy drift. This is source-backed inference only; grants, global roles and managed settings remain unprotected/unqualified. QuerySHA76bb9392..., sanitized readbackSHA51223ad6... in workspace-maintenance/provider-lock-capacity*. No provider LOCK/DDL/write or production package change. Next MAP-023/018: isolated native post-check experiment with explicit seven-table Access Share before checks, actual owner drift timeout/installer commit/row/catalog/authority recovery evidence, then independent ACL/global/managed qualification; no grants, SU or maintenance-only assumption.
+**IDEA-20261009-07 post-final-check counterexample, verified locally:** Diagnostic03/session40489 terminal0/PID12780 absent; serialce119a53.... Separate copy of unchanged db0cb4d1 adds only an advisory wait after final postcondition/before success+commit. Independent owner protected RLS drift and non-superuser installer both exit0/commit, contradicting unrestricted immunity. Exact original projectionbc485716..., recovered calibrated after catalogabb347eb... and global/managed witness pass; independent verify-postcheck03.mjs confirms inserted-wait-only source difference. Failed01 pager/forced stop and02 wrong recovery caller retained.03 candidate-scope/existing runtime receipt own pins/recovery. Next MAP-023/018: investigate captured permission-compatible protection of untouched platform metadata and global/managed authority through commit; require genuine independent-session proof without grant/SU/guard relaxation or unapproved maintenance assumptions. Connector semantics/full product/hosted/owner gates remain. No provider writes.
+**IDEA08 read-only reconciliation locally prepared/provider-read verified:** provider-history-readback.sql safely returns targeted version/name/idempotency key and ordered statement byte hashes without raw SQL. Actual provider columns inspected. provider-reconciliation.sql compares complete preserved catalog fingerprint and targeted history in one statement; actual project pixplcjqivlfflickobf returns unchanged3cf931f5.../88 tables/145 functions and no matching receipt. Readback866c6dd4.../queryc2c3d0d6... retain scope. This closes query preparation/current-state readback only. Next: independently qualify global/managed/rows plus future exact payload-bound history and ambiguous-result decision semantics; statement-array hashes cannot be assumed equal to request SHA. Transport size/transaction atomicity, privileged boundary, live owner and full product/hosted gates remain. No automatic retry/provider write.
+
+**Connector transport audit (IDEA-20261009-08/MAP-023/018):** Official supabase/mcp commit8a265089... API platform binds path ref and forwards name/query to POST database/migrations; tool wrapper returns success:true and deliberately discards SQL output. Management API reference publishes empty200 response, not inner BEGIN/COMMIT/history atomicity or8,134,914-byte limits. Public source is not a deployed-connector version proof. provider-transport-audit.json pins three source hashes/URLs/findings; provider-request-review.json now names transport/receipt gates explicitly. No provider call/write. Next: establish actual transport limits/transaction/history semantics and independent read-only unknown-outcome reconciliation, retaining no-auto-retry. Privileged post-final-check/full product/hosted/owner gates stay active; do not claim native psql timing qualifies API execution.
+
+**Exact connector request prepared (IDEA-20261009-08):** provider-request.mjs constructs the actual Supabase apply_migration argument shape for only tested SQL SHA256db0cb4d188a743bbadd29cc337e329573ab5405f83e30dc9ae6de554a92036ff, intended healthy project pixplcjqivlfflickobf and exact17.6.1.155. Eight real-package focused cases pass after red evidence; changed SQL/project/version/binding/acceptance claims refuse. provider-request-review.json references existing private12 guarded-package.sql property (8134914bytes), preserving bytes without another SQL copy. Preparation only: no network/dispatch/approval/execution. This closes request-shape preparation, not live binding/transaction transport acceptance. MAP-023/018 next: qualify privileged post-final-check and actual tool payload/transaction/unknown-outcome receipt semantics, current full preflight/backup/recovery and consolidated owner live gate, then full product/rendered/hosted acceptance.
+**Captured envelope12, verified local recovery (IDEA-20261009-08):** Session77104 terminal0/PID19112 independently absent; serial5b090637.... Same installerdb0cb4d1/fixturee727b604 as11. Full guarded fresh3592.826ms/replay391.125ms under unchanged10s/2s, exact fresh/cold baseline/locale, all43768 references and original88-table/two-sequence committed projection bc485716... pass. New separate actual postgres/non-superuser read-only post-cold witness compares every captured role/membership/event and eight managed settings exactly; marker once, querySHAda1ab048.... Independent verify-envelope12.mjs checks exact serial/canonical transfer/calibrated14 before/cold87941b6c.../afterabb347eb... bytes. Original sources/archive and prior failures retained.12 candidate-scope and existing runtime receipt own pins/recovery. Remaining MAP-023/018: unrestricted privileged post-final-check qualification, actual connector project binding and full product/rendered/hosted gates. No provider write/release.
+**IDEA-20261009-07 / MAP-023/018 authority-compatible barrier candidate, in progress:** Native08/session62410 terminal0/stopped, serial ca27145d... proves actual concurrent protected-metadata change during ungranted AccessShareLock wait on public.products is refused by K2_PROVIDER_CUTOVER_CONTRACT_CHANGED before payload. Exact RLS restoration/catalog03a3cc9f... and subsequent fresh/replay/original88-table/two-sequence projection bc485716.../43768 references/cold recovery pass under unchanged10s/2s, envelope afe6c38a... and main fixture eeed748a.... Source containment/refusal/default conservation pass. Failed06/07 coordination/mode assumptions and source pins retained;08 candidate-scope pins actual lock JSON and all fixtures. Next required action: qualify the unrestricted privileged post-final-check boundary and actual provider physical/locale/project identity; do not infer it from this observed race. Full product/rendered/hosted scope and owner gates remain active. Existing runtime receipt owns immutable proof and recovery.
+
+
+**IDEA-20261009-06 / MAP-023/018 full guarded envelope, in progress:** Historical03 refuses schema_migrations table lock; optional qualified07 candidate04 now passes exact31 roles/22 memberships/six event bindings/eight managed settings, local before/after guards, fresh/exact replay and cold archive recovery under original10s. Default03 package remains unchanged. Keep protected platform metadata in full checks. Committed original-row conservation is now proven by05 for every original column/88 tables/two sequences with accepted named bucket exclusion, exact hash bc485716.... Observed concurrent protected-metadata drift refusal and exact recovery now pass in08; unrestricted privileged post-final-check concurrency remains unqualified. Next required evidence: that remaining boundary, actual provider physical/locale/project and full rendered/hosted product acceptance under owner gates. Receipt/01–04 packages and original failed/supplemental transfer results retain provenance; guest stopped, no live writes. Do not collapse local RAM calibration into provider qualification.
+
+
+
+
+
+
+
+
+
 Updated 2 October 2026. This is the only active backlog. The older plan is preserved in `K2 Jimzon - Brain/MASTER_ACTION_PLAN_HISTORY_2026-09-24.md` for dated findings and receipts. Its old pending lines are historical context, not current instructions. Required behavior lives in the operations rulebook. Verified current behavior lives in the System Brain.
 
 ## Working rhythm
+
+
+**Last-session continuation, MAP-023/018:** Bounded01 terminal0/session42829 now qualifies complete7c7e96cc content under original10s/captured non-superuser: all43768 exact reference rows, all3 original88-row markers, after-catalog equals accepted diagnostic04 ed54c21b, raw rollback matches before03a3cc9f, clean shutdown. Longest3010.016ms. Use explicit boundedReferenceSeed:true with captured-permission options; historical default8997b078 preserved. Existing official-runtime-execution-20261009.md and bounded01/candidate-scope.json own full pins/failures/recovery/independent verification. Next: compose complete guarded provider envelope with qualified7c7e96cc, calibrate exact after-state, prove exact replay/cold data recovery, managed-event/physical/locale and full rendered/hosted product chain. Reuse accepted content/rows/hook evidence; no live writes/deployment. Draft decision and consolidated approval gates unchanged.
+
+
+
+**Current essential work — MAP-023/018 (9 October):** Reuse accepted native/HTTP/authority evidence. Genuine Supabase17.6/supautils managed04 terminal0 c86c89 verifies captured31 roles/22 memberships/eight settings, direct non-superuser/nonowner policy/drop-trigger operations and all equivalent unlisted refusals with metadata retained. Reviewed official-image alias correction preserves exact guards. Foundation01 terminal0 bbf83e restores the original archive and matches all88 rows before/after full captured permission reconstruction; independent3cd677 verifies stopped guest. Exact source/pins/failures/recovery: provider evidence/official-runtime-execution-20261009.md. Remaining essential: complete managed-extension/event/physical-column and locale qualification (genuine Vault dummy roundtrip locally verified); complete guarded installer envelope/after-state/replay/cold data recovery (bounded content under10s locally qualified); full rendered imported Draft-to-listing with dummy data; separate Storefront/Admin deployment and hosted acceptance. No live writes/deployment. Owner gates: pending Draft scope correction and one consolidated reviewable live approval; real facts gate actual stocking/selling only. Do not request real counts for readiness. Optional polish/redundant checks remain deferred; full production scope is unchanged.
+
+**Workstation recovery / native acceptance, 9 October:** C now reports about4.7GB free; reviewed local shell execution recovered. Normal sandbox launcher remains unavailable; application build capacity is unverified.
+All322 provider evidence files remain hash-verified through the D junction; retained
+C originals and D copies must not be deleted. Auto-review rejected duplicate cleanup;
+do not bypass it. Exact paths/recovery remain storage-recovery-note.md.
+A private stopped PG17.11 mirror now permits native work on D:54391. All3602 source
+files and all88 table rows match; originals remain unchanged. focused-writer-boundaries04
+terminal0 b73729 verifies historical no-hold reservation refusal and committed native
+receipt refusal before instructions/pending charge, with every row/metadata unchanged.
+Two dummy orders hold once each: physical6/reserved2/proofs0. Clone removed/mirror and
+original stopped. Scoped review04 approved; exact hashes, failed attempts and recovery:
+provider-admission-20261008/native-writer-boundaries-20261009.md. This closes those
+three native states only; provider/recovery/maintained HTTP/rendered full-chain work
+remains. No real facts or live changes required now. Owner may free at least2GB
+outside K2 for remaining C-dependent tools; native D work can continue independently.
+
+**Next essential N/product work (MAP-023/018):** Reuse native121/0 and reviewed04.
+HTTP lifecycle01 now26/0 terminal0 4a38df: maintained Admin instructions/confirm/
+evidence, Staff verify403, independent dummy Admin verify, packing/handover/retry.
+Physical6→5/reserved2→1/one ownership event; clone removed/original3602 unchanged/
+mirror stopped. Source review no Critical/Important issue; independent receipt read
+blocked by full disk, primary readback verified. Pins/recovery: native-writer-boundaries-20261009.md.
+Full rendered/imported-Draft chain, real identity/host and exact provider installer/
+admission/replay/data recovery remain. Draft scope correction still unanswered:
+same packaging/photo/field-review gates before intake, or specify differences.
+Do not infer rejected design/review waiver/link point. No real counts needed now.
+
+All facts/actors/media are explicit dummy data; no real stock/payment/provider/live
+write/main promotion/deployment approval inferred. Codex can continue independently.
+
+Lifecycle capacity recoverye25b6a preserves all397 new archive names/bytes/hashes,
+compressing54 large files only; no older evidence changed/deleted. Readback/recovery
+in delivery README, free339836928bytes, runtime confirmed stopped. Check capacity
+before the next installer/native witness; preserve accepted evidence.
+
+**Remaining N lifecycle work (IDEA-20261008-02, MAP-023/018):** Native financial
+verdict authority is now locally corrected: existing owned-clone/payment rehearsal
+probe04 reproduced a valid signed Staff failure; correction03 terminal0 f8311f
+passes110/0, with two body-only changes, exact replay/drift refusal, Admin failure/
+refund evidence and recorded107 retained, one event/receipt per retry, and current
+role required before saved receipt/same-status return. Clone removed/original88
+unchanged; runtime stoppedad3a79. These historical dummy orders have no stock holds;
+do not infer a complete held-stock lifecycle or maintained HTTP/hosted identity.
+Exact source/hash/commands/diagnostics/recovery: delivery README and payment runbook.
+The following joined lifecycle proof supersedes the earlier no-hold limitation for
+its specific tested paths: correction02 local121/0. Compose both N fragments into
+the exact provider installer/recovery, obtain scoped source review, cover remaining
+writer/host acceptance, then complete rendered product chain and live approval.
+No real facts or live writes required now. This focused correction does not close
+MAP-023/018. Disk capacity must be checked before another large native witness;
+preserve accepted archives, using only lossless storage recovery if needed.
+
+N capacity recovery is verifieda46edc: only62 large new N archive files compressed;
+all429 original names/bytes/hashes retained, no older archive changed/deleted.
+Readback in delivery README; free380829696bytes, native runtime confirmed stopped.
+
+**Next essential batch (IDEA-20261008-02, MAP-023/018):** Verify controlled failure/
+refund and every fulfillment writer on historical Website orders, preserving recorded
+charges, payment evidence/history and inventory conservation; close any reproduced
+authorization or stock defect. Existing customer-charge correction M now has native/
+maintained HTTP107/0 and composed current/empty installer92/0, exact replay/row
+preservation/drift refusal, both clones removed/original88 unchanged/runtime stopped
+f697dd. Reuse those proofs and focused customer UI evidence; exact source/package
+pins, failed diagnostics and recovery are in delivery README. M's original source
+review found only a corrected witness-IP issue; follow-up correction/composer review
+could not run because reviewer hit usage limit. Obtain that scoped review before
+release readiness, without repeating passing unaffected suites. Provider-target
+admission/same-target recovery, complete rendered product chain and pending Draft
+scope correction remain essential before one consolidated live approval. Dummy data
+suffices now. No live writes/main push/deployment authorized; no broad parked gate.
+Immutable new M diagnostics retain every filename/byte through local storage
+sharing/compression; readbacks/recovery in delivery README. Preserve them unchanged.
+Optional cosmetics, mobile timeline polish and redundant evidence remain deferred
+outside the launch queue; full requested production scope is unchanged. MAP-023/018
+remain active until complete hosted/real acceptance, not merely local preparation.
+
+**Remaining essential legacy launch work (IDEA-20261008-02, MAP-023/018):**
+Customer-facing historical charge authority is locally corrected and installation
+verified in M; deployment remains pending. Verify controlled failure/refund and
+all-writer fulfillment, and prepare
+exact provider admission/recovery plus complete rendered acceptance before live
+approval. Preserve original facts, safe tracking/cancellation and accepted L07/current-
+empty installer evidence; do not invent snapshots, owner approval or account links.
+Completed L implementation/diagnostic substeps are removed from this active queue;
+durable history, exact commands/source pins and recovery live in delivery README
+and shipping spec. No broad parked security/development/release rerun authorized.
+
+**Remaining recovery and activation launch work (MAP-018/023):** Connected
+config deactivation/roll-forward is now locally verified on the composed populated
+delivery/K chain, including maintained HTTP checkout, fail-closed public availability,
+saved receipts and one-hold recovery/retry. Durable evidence/failed diagnostics:
+delivery README and backup runbook (connected-config-recovery03). Reuse this and
+populated backup recovery04; no redundant rerun. Essential next actions remain
+historical unsnapshotted charge remediation/controlled payment closure, exact
+provider installer admission and same-target recovery preparation, full rendered
+product chain after pending Draft scope correction, and consolidated live approval.
+Do not infer all-writer/provider/real identity/bot/media/host acceptance from the
+fixture; its bot bypass is explicit and local only. Existing runtime is stopped;
+no live database/deployment or real inventory facts required for preparation.
+
+**Populated local delivery recovery verified (MAP-018/023, 8 October):**
+Existing rehearsal now backs up the populated dummy database using the existing
+authenticated encrypted archive helper, restores into a uniquely marked owned
+local clone, and compares every table row, logical authority and sequence counter.
+recovery01/02 retain passing row/authority/sequence evidence and cleanup; diagnostic
+receipt checks exposed rehearsal-only JSON field-order and native-versus-HTTP reply
+shape errors. Original captured command bytes and exact native reply shape now fix
+those assertions without changing production guards. recovery03 refused local
+connection before any database action under sandbox; focused recovery04 uses the
+authorized owned-local runtime. recovery04 terminal0 chunk7791dd passes55/0:
+all139 tables' rows, logical authority and all9 sequence counters retained;
+authenticated archive/tamper refusal, exact saved cancellation/buyer receipts,
+cancelled order250/fee150/payment awaiting_instructions and physical4/reserved2
+retained. Retry transactions roll back all metadata/row changes; source unchanged.
+Both clones and temporary archive removed, original88 unchanged, runtime stopped
+011315. Scoped correction review approved, no Critical/Important findings.
+No provider/deployment/real-stock authorization. Exact evidence/recovery command:
+docs/evidence/20261001-authoritative-delivery/README.md. Next essential independent
+work: exact provider installer admission and data-retaining activation/roll-forward;
+complete rendered product-to-listing chain after pending Draft scope correction.
+Provider/offsite recovery and storage media remain unverified. Keep MAP-018/023
+active for their full outcomes; this scoped proof does not authorize live changes.
+
+**8 October owner clarification:** Dummy products, counts and orders are sufficient
+for software readiness and isolated workflow rehearsals now. Real product facts,
+physical counts, expiry and custody are required only before actual inventory is
+made available for live sales. They do not block independent local implementation
+or release preparation. Do not repeat the premature real-inventory request.
+Prepare exact production changes, verification and recovery before one consolidated
+live approval; this clarification does not authorize live writes or deployment.
+
+**Owner execution correction, 5 October (IDEA-20261005-06):** Complete the full production-readiness and inventory-listing objective through coherent implementation batches in MASTER_ACTION_PLAN dependency order. Implement the connected changes first, review the complete combined result, then run one consolidated set of meaningful verification checks for the batch. Do not create a new test suite, native archive, verifier or multi-record receipt for every small edit. Reuse applicable passing evidence; after failures fix the cause and rerun affected checks only, expanding verification only for changed contracts or unresolved risks. Keep in-progress discoveries and recovery instructions in the owning MAP item; consolidate authoritative documentation at the batch boundary. Necessary target/identity/data-preservation checks before database mutations and existing provider/release authorization remain required. This owner instruction supersedes skill-prescribed per-edit test-first cadence. It does not waive final verification, data integrity, full acceptance criteria or external authorization. verify:development remains owner-parked; do not restart it unless the owner lifts that instruction. When unparked, run it once after final code edits in the batch. verify:release runs once immediately before an explicitly requested live promotion. Preserve existing work and parked security/provider/private-cleanup blockers; no premature activation/deployment/real-stock/completion claims.
 
 Work in short, reviewable slices. Take the highest priority item whose dependencies are ready. Define the behavior and evidence, implement or rehearse it, verify the changed paths, then update the rulebook, System Brain, runbooks and this plan. Keep one major item in progress unless work is independent. A local fix, prepared migration, provider apply, deployment and real-host acceptance are separate states.
 
 An item is ready when it has an idea ID, a clear outcome, known dependencies and a test that does not invent stock, payment or provider access. A slice is finished when valid, invalid, duplicate, permission, failure and recovery paths pass; phone and desktop are checked where relevant; and its evidence is recorded. Remove a completed slice from this plan after those records are updated. Remove a MAP item only when its full outcome is verified. Git history and the Brain retain the completion record.
 
+**Owner execution instruction, 2 October (IDEA-20261002-12):** Codex must carry out available technical work before asking the owner to test real operations. Use dummy CSVs, synthetic products/counts/orders, isolated application-schema restores and controlled failure simulations to implement and verify safe preparation now. Missing real source/counts, account enrollment, phone scans or payment transfers block their dependent acceptance step only. Never describe an entire MAP item as waiting on the owner while an independent source fix, test, installer/capture/recovery preparation or review remains executable. Do not repeat requests already pending. Record locally verified versus prepared-only, applied/deployed and real-host verified state separately. Keep all unfinished actions, exact commands, dependencies, failures and recovery inside the owning item; completed evidence belongs in the Brain/runbooks. This instruction preserves exact provider-write authorization, production-linked main/live-release and real-stock gates.
+
+**8 October pending-reader correction I (MAP-023, scoped locally verified):**
+Shared charge-state projection hides provisional totals/shipping in guest/account
+and Admin readers; pending bills stay in queues. Customer account, confirmation
+and staff views distinguish pending from accepted totals. Positive payment choices
+and direct receipt upload require final charge/instruction state; refunds remain.
+Source review corrected unknown Delivery: Free label and found no remaining
+Critical/Important issue. Existing guest/account/Admin/export API proof is retained.
+Native reader rehearsal green01 passes15/0, preserves every business row on apply,
+rejects other-account access/invalid signing/drift, removes its clone and preserves
+all88 original tables. Local PostgreSQL runtime stopped. This proves focused
+signed guest/account projection, not canonical E composition or conversation calls.
+Nine distinct payment browser cases pass on final application source: run85626
+had8passes and one ambiguous desktop status-selector failure; corrected selector
+plus phone/desktop pending captures pass3/3 chunkab154c.375/1280 screens inspected,
+no overflow. Account claim/history/reply journey passes1/1 chunk17561a with accepted
+1234.50 and pending735 hidden. Existing fixture launchers avoid full workspace
+watching; papaparse prebundle fixes confirmed missing-export blank-screen failure.
+Previous runners50478/5604 explicitly stopped only verified local test processes;
+no live handles remain. Exact reader SQL prepared/unapplied10142bytes SHA256
+8f78f0374f0f7c260ce3a252529af7303f1122b6467bf01afa1bf6d1a4b2771c;
+accepted E unchanged. No provider/deployment/real inventory claim. Remaining:
+conversation/direct receipt and canonical E/legacy/combined install-recovery proof,
+manual express quotation and explicit buyer acceptance, then authorized release.
+Activation remains closed; recover by data-retaining roll-forward. No broad rollback
+or inferred historic acceptance. Dummy readiness continues; real facts only at
+actual launch acceptance. MAP-023 remains active for its complete outcome.
+
+**Manual express J in progress (MAP-023):** Shipping-spec design approved by
+sequential Skeptic/Guardian/Advocate/Arbiter; objections resolved. Exact quote/
+buyer acceptance validators and signed Admin/guest/account prepared callers are
+implemented; staff quote and guest/account acceptance routes are registered in
+their separate local prepared routers. Native quote/acceptance,
+append-only history, current scope/role locks, receipt-first retries and E charge
+extension are implemented/prepared. Native J05 passes56/0: dummy100+delivery150
+becomes250 only after explicit guest approval; account acceptance300, payment
+instruction preparation after acceptance, stale/expired/scope/nonce/private and
+frozen-money refusals, actual expired-grant order-lock wait and unchanged stock.
+Focused reader J01 passes25/0 on final49060-byte SQL SHA256
+25a8c1f290e7d70ea7c512475b36d32324c937dd9d4428db769392c9d37e3c47:
+AAL2 staff facts/version, composed conversation projection/wrong-key denial,
+explicit zero-fee acceptance and actual deferred orphan-COMMIT rollback. Both
+clones removed/original88 tables preserved; runtime stopped. Existing API suite
+staff endpoint test1/1 chunkea272c passes actual session/origin/CSRF/signing and
+allowlisted synthetic read/receipt, malformed data/role/input refusal. Source
+review no Critical/Important; accepted E/I bytes unchanged. Earlier J01–04 fixture/
+syntax/preservation-comparison failures remain in their archives and README.
+Customer confirmation/account approval screens are locally implemented with a
+review checkbox, explicit full total and exact uncertain command persisted before
+HTTP under a browser lock. Guest lost-response/reload/accepted-refresh recovery
+and corrupt-storage refusal pass2/2 (controller52340 terminal0 chunka6415e);
+375/1280 screenshots inspected without overflow. API transport/client-route parity
+passes4/4 chunkcf6fdb. Account history now clears on identity change and ignores
+late responses from another account; existing account/settings/wholesale runner
+17401 terminal0 chunkf9b103 passes4/4. Follow-up review found an account-switch
+response race: the history updater now checks its committed session identity;
+auth callbacks update identity immediately, clear old history/settings and guard
+late save/notification results. Two-account held-response browser proof passes1/1
+chunk7cd586; initial fixture JWT encoding failure d2ba75 corrected. These are
+synthetic browser/API proofs, not native HTTP or host acceptance. Final scoped
+correction review approved with no remaining Critical/Important finding;
+the general account suite alone did not prove express recovery. Added authenticated
+express screen cases now pass2/2 terminal0 chunk459928: already accepted lost reply
+then reload/exact retry, and a late zero-fee acceptance stays with its original
+account across a switch. Initial whole-peso display expectations failed df3e8a;
+test expectations corrected, exact numeric receipts retained. Delivery README owns
+the scoped evidence and recovery limits.
+Staff form is now locally connected through OmniOperationsHub for pending express
+orders. No default courier/fee/time/facts; Manila-time quotation/expiry, reviewed
+route/package/availability/evidence/note, exact actor/order persistence and Web Lock
+precede publication. Staff browser proof3/3 controller61672 terminal0 chunk8f3fc8:
+lost reply/reload/permission refusal exact retry, stale version renewed review and
+isolated staff switch. Corrupt saved quotation refusal1/1 chunkbfab63; no HTTP.
+API actual-handler/router controls2/2 controller76459 terminal0 chunkf8134b;
+source review no Critical/Important.375/1440 screens inspected, no horizontal
+overflow. First browser selector timeout307887 was corrected to role=combobox;
+runner3600 explicitly interrupted terminal1 chunkf10d64 before the focused rerun.
+Four UI skills preserve existing Admin design. Accepted native E/I/J proof reused;
+no live installation or deployment. Existing delivery README records exact sources,
+commands and data-retaining recovery. This completes the scoped staff connection,
+not the full MAP outcome.
+Combined real-loopback HTTP→maintained API/SDK→native quote/acceptance/payment
+rehearsal now passes26/0 j02 controller41192 terminal0 chunk1998bf. Staff registry
+registration/validation and observed quotes are native; payment before acceptance
+refuses503 without changing state, guest accepts250/account explicit zero fee100,
+then native staff instructions200 and exact buyer retry after payment state. Stock
+remains physical4/reserved3/available1; contexts clear. Clone removed/original88
+preserved/runtime stopped44478b. Auth user/token is explicitly synthetic; this is
+not provider identity, one rendered cross-surface journey or host proof. First j01
+missing-session-function failure stays archived/clone removed. Rehearsal installs
+canonical session prerequisite while preserving the accepted J verifier; final
+correction source review approved with no Critical/Important finding. Production
+installer integration remains open.
+**Next essential action:** verify populated data-retaining recovery of the combined
+package, continue the complete dummy product-to-listing workflow and prepare provider
+installation/legacy handling and authorized release. Preserve scoped passing
+evidence; do not rerun unaffected proof.
+Populated recovery continuation under existing IDEA-20261008-01/MAP-018/023:
+extend existing checkout/HTTP runner with optional backup/restore callback after
+dummy quote/acceptance/payment/cancellation. Full custom dump encrypted/decrypted
+through existing authenticated envelope helper, temporary files outside repository,
+owned marked isolated restore with all rows/sequences/logical authority compared.
+Allow only documented dump CRLF/check-text variants, retain raw contracts. Native
+saved cancellation/buyer retries on restore roll back nonce/activity and preserve
+complete restored state. No production restoration or package activation; provider
+backup/restore and full rendered product chain remain. Preserve accepted HTTP04.
+Recovery01 terminal1 chunk66c823: full139-table rows/logicalauthority/all9 sequences
+restore exactly, crypto tamper refusal passes. Restored cancellation retry refuses
+IDEMPOTENCY_CONFLICT because fixture reconstructed JSON in pg_jsonb key order rather
+than actual BFF validator order. Captured command169/nativeHTTP args prove difference;
+preserve guard, replay exact original signed payload text, no runtime weakening.
+Both clones removed/original unchanged/tempdump removed. Affected recovery02 follows.
+K installer batch underway under existing IDEA-20261008-01: append exact accepted
+post-J cancellation SQL to existing guarded current/cold package; pin native K
+proof/core/builder, calibrate final complete contract, preserve original business
+rows, require fresh installation then exact full-map replay and cancellation-owner
+drift refusal. Existing local-target guard and closed activation remain. No new
+business policy or provider writes; joined HTTP and populated recovery remain.
+Extended installer locally passes92/0 terminal0 chunk5bbae1, both clones removed
+and original restore unchanged. Joined cancellation HTTP continuation now extends
+the existing loopback express fixture with --with-cancellation: exact accepted K,
+native session/authorization, discarded successful response then saved-key retry,
+version/key/current-authority refusal, one release and unchanged money/history.
+Synthetic Auth identity remains explicit; no provider/host/rendered full-chain claim.
+HTTP diagnostic01 terminal1 chunk7f0332 stopped before HTTP in fixture row-capture
+setup (rows-37.json absent); rowMaps requires immediate fingerprint. Clone removed,
+original unchanged. Correct both before/after capture call sites; rerun affected
+HTTP only. Reviewed witness column/order_id, actual metadata property and legitimate
+session activity projection corrected before first execution, no runtime change.
+HTTP02 terminal1 chunk12b7b2 reaches stale cancellation but expects409 and sees
+adapter mismatch. Read-only psql error probe645361 confirms parsed Windows message
+retains trailingCR, so exact maintained native-code mapping fails. Trim only local
+SQL-to-HTTP adapter message (match real PostgREST shape); retain wire/calls immediately
+for partial diagnostics. Clone removed/original unchanged; affected HTTP03 follows.
+HTTP03 terminal1 chunk45332e proves real stale409 but refusal projection fails.
+Compared actual before/after row captures85/94: only session/nonce/rate buckets
+change. Native verifier adds actor+global rate hits for session validation. Extend
+explicit activity proof with all prior bucket identities/fields retained, nonnegative
+changes only current actor/global and exactly one hit each (zero for role denial);
+do not mask business rows or weakening runtime limits. HTTP04 follows, original
+restore/clones preserved. This is transport bookkeeping proof, not business rollback.
+K combined installer/HTTP batch locally verified: installer cancellation01 passes
+92/0 terminal0 chunk5bbae1, original populated and empty88-schema copies preserve
+business data, reach exact calibrated final contract and repeat full-map no-op;
+cancellation RPC owner drift refuses atomically. Package17,946,844bytes SHA256
+dbba3d09b53405f6a7ab9f20bbb8bf5e8656e2c6cac9b6508cafd9ec83085a9e.
+Local-target guards still refuse production. Joined cancellation HTTP04 passes40/0
+terminal0 chunkb672c5: actual router/SDK/native session/signing/command, discarded
+successful response then same-key retry, one release physical4/reserved2/Website2,
+retained250/150/payment/history, stale409/keyconflict409/current-role403 refusal,
+buyer historical approval retry and restored-staff receipt. Session last-seen/nonce/
+actor+global rate activity is explicitly bounded, other rows/metadata unchanged.
+Source/correction reviews APPROVED, no Critical/Important. All clones removed/
+original88 unchanged; owned runtime stopped056077. Diagnostics01–03 remain in delivery README, no application
+or native policy changed for their fixture fixes. Synthetic Auth is not provider
+identity; full rendered inventory chain/populated recovery/provider/host remain.
+Cancellation connection preparation owns IDEA-20261008-01: dedicated signed
+RPC and maintained BFF/client action, current Staff/Admin+AAL2 authority, reason/
+reviewed order timestamp/status and receipt-first exact retry. Existing canonical
+stock release/payment history behavior is reused, no refund inferred. Design and
+decision log live in existing shipping spec; local-only native/API proof follows.
+UI/package/provider/host remain open. Preserve E/I/J and accepted race evidence.
+K backend now implemented/prepared: dedicated signed RPC, maintained fulfillment/cancel
+route and bounded client command under existing deadline/session/origin/CSRF. Shared
+entry/current Staff/Admin+AAL2 precede saved receipt access; exact actor/key/payload
+replay precedes fresh order status/timestamp/policy. Design and source reviews approve
+without Critical/Important. API2/2 terminal0 chunk81cf28; native cancellation02 33/0
+terminal0 chunk197507: accepted250/fee150/history retained, physical4/reserved2/Website2,
+missing-config exact replay, role/signature/version/key refusal and injected canonical
+audit-failure full rollback. Clone removed/original88 unchanged/runtime stopped452481.
+Diagnostic01 role-fixture guard refusal retained; privileged fixture moved before
+staff claims, no authority weakening. Post-J guarded SQL17864bytes SHA256
+de0bd74406f410022024f6f15f12a456bfd525add91550da06e488c14530db52.
+No automatic refund/joined native HTTP/provider installation. Remaining essential:
+coordinated current/cold installation/retained-data
+recovery and HTTP/host acceptance. Sources/commands/recovery: delivery README.
+K UI now locally implemented under IDEA-20261008-01: submitted/confirmed Admin
+actions, explicit reason/version review and current-actor Pending cancellations
+panel; exact command remains reachable after queue disappearance/close/reload.
+Existing browser fixture final run38965 passes4/5; held actor fixture failed because
+forced click hit protected overlay. Corrected external-session DOM switch rerun
+passes1/1 chunk30d9a6. Five distinct cases green on final application: lost reply/
+missing queue/403 exact retry, queued lock no fresh fallback, late actor receipt,
+stale rereview and corrupt saved record refusal.375/1440 captures inspected without
+overflow; keyboard Escape closes resolved dialog. Earlier3/3 e2d3ef superseded by
+final scoped evidence. Source review pending; backend/native proofs reused, no
+application changes after final run. Recovery preserves unresolved local records,
+restores original staff and retries exact key; never clear from queue absence.
+Review identified malformed success receipts could erase uncertainty. Corrected
+nonblank/bounded reference and exact payment-status validation; three malformed200
+receipts retain exact command. Final six-case run16851 terminal0 chunk88f146 passes
+6/6 on corrected application. Scoped correction review APPROVED, no Critical/Important.
+This supersedes earlier browser proof/source-review-pending status; diagnostics
+remain recorded in README. No live write/deployment. Coordinated installer/native HTTP/host/full inventory
+chain remain essential; source, diagnostics and commands in delivery README.
+**Express/cancellation concurrency, 8 October (MAP-023, locally verified):** Existing
+express witness now supports --express-concurrency-only; concurrency02 passes36/0
+terminal0 chunka3fde2. Four actual concurrent command schedules observe an open first
+transaction and a blocked second connection: requote→guest approval refuses stale;
+account approval→requote refuses replacement; cancellation→guest approval refuses
+ineligible; guest approval→cancellation preserves260 and releases once. Saved approval
+retry after cancellation returns original receipt, repeated canonical cancellation
+preserves full row/metadata map, stock finishes physical4/reserved1/Website3/context0.
+Clone removed/original88 unchanged/runtime stopped1d5154. Review found no actionable
+Critical/Important issues; final fixture retains canonical2s lock/10s statement bounds.
+Diagnostic01 refused an artificially extended8s lock timeout with
+K2_CATEGORY_POLICY_DEADLINES_REQUIRED; shorten only synthetic hold to1s, no native
+admission weakening. E/I/J SQL unchanged. This is native authenticated staff
+cancel_order_request, not a maintained Admin route at that receipt. K above now
+prepares the API/client; the recoverable staff control remains essential
+MAP-023 work, followed by HTTP/rendered/host proof. Do not count native evidence as
+operational staff cancellation completion. Independent preparation continues while
+the earlier imported-Draft continuation scope correction remains pending (IDEA-20261007-01).
+**Combined delivery installation, 8 October (MAP-018/023, local only):** Existing
+full installer now has --delivery-composition-only. Exact accepted canonical,
+guest, C/D/E/I/J and session-prerequisite fragments compose atomically on original
+populated and schema-only copies. composition04 passes92/0 terminal0 chunk406c0a:
+business rows retained, exact schema, no stock/rates/quotes/acceptances/sessions
+seeded, repeat installation is a full-map no-op and owner drift refuses atomically.
+Clones removed/original88 unchanged; runtime stopped474003. Source review approves
+without Critical/Important findings. Diagnostic01–03 remain archived: cold legacy
+CRLF/LF byte mismatch, nested SQL delimiter collision, then volatile bucket timestamp
+comparison. Exact byte alignment and noncolliding delimiter fix installer composition;
+only accepted bucket configuration timestamps are omitted from its stable comparison.
+Prepared local-guarded package17916661bytes SHA256
+3491e3a7705be08e8e40474987c470d8d16fad024e783560a62bbfd3fd4efc01.
+This package deliberately refuses production targets. Provider-specific admission,
+retained operational recovery, legacy remediation, cancellation/requote concurrency,
+complete rendered product-to-listing and real-host release remain essential. No live
+approval requested; dummy preparation continues. Commands and recovery: delivery README.
+Verify changed behavior and remaining staff cancellation connection
+and retained-data recovery; compose exact current/cold installer/capture, legacy
+remediation and final host/release acceptance. Full production scope remains open.
+No real courier booking, live writes, main push, deployment or owner facts needed
+for this dummy preparation. Recovery keeps activation closed and data/history/
+guards retained for roll-forward. See authoritative-delivery README for commands
+and exact remaining recovery procedure; this entire MAP item is not complete.
+
 ## Current iteration
+
+**8 October owner execution direction — production readiness and inventory:**
+Current connected checkout batch F is implemented locally under MAP-023 and the
+existing delivery ideas. Prepared rendered checkout now uses canonical quote/location/order callers
+and pending-total confirmation together. Nine distinct changed screen journeys
+pass with synthetic HTTP replies; final review has no Critical/Important finding.
+Evidence and partial diagnostic outcomes: authoritative-delivery README. Review found an essential retry defect: pre-receipt bot,
+rate/COD/validation refusal and cart/coupon/edit actions could clear an uncertain
+request key after a lost successful response. The implemented fix preserves
+identity until an authoritative post-receipt no-commit outcome; contact navigation
+preserves it.
+Reuse E native53/0 and tariff/preview evidence. Existing recovery fixture proves
+standard/pickup acceptance, pending express/no QR, address re-review/coalescing,
+exact held retry, pre-receipt rate refusal, contact/stock-refusal recovery and
+held basket/key. No broad development/release gate was restarted. Native/host recovery, other order projections, staff express quotation and explicit
+buyer acceptance, legacy remediation, complete package installation/recovery and
+release remain essential; the in-app retry proof does not close those gates.
+Restart recovery G is implemented and scoped locally verified: bounded record
+before HTTP, same-origin submission lock, exact refresh/close/tab retry, durable
+allowlisted terminal receipt and failclosed invalid/unavailable persistence.
+Four focused existing-fixture journeys pass on final source (controller18846,
+exit0). Source review corrected asynchronous terminal cleanup, malformed display
+lines and a retry queued behind reconciliation; final review has no outstanding
+Critical/Important finding. Customer rate controls H are implemented and scoped locally verified: actual
+component reads/publishes the accepted customer tariff contract, no seeded values,
+actor-scoped exact uncertain publication and queued-retry recovery. Staff entry
+prepared; carrier-cost pilot stays Admin-only. Five synthetic browser journeys
+pass; final scoped review has no Critical/Important finding. Evidence and the two
+fixture selector failures are in authoritative-delivery README. Next essential
+technical action: pending-order projection I has focused native/API/browser proof
+recorded above. Complete manual express quotation/explicit buyer final-total
+acceptance; compose reader/conversation/direct receipt and legacy/install/recovery
+proof with the coordinated package. Preserve accepted E and scoped evidence. Full authenticated
+Admin navigation/native HTTP, real staff and production rates remain unverified.
+Full native/host and cross-device/browser-data-clear recovery,
+legacy remediation, coordinated installation and release remain essential.
+Existing ideas own this corrective continuation; no new backlog/provider change.
+Recovery remains closed activation/data-retaining roll-forward, never browser
+price restoration. This does not authorize provider changes.
+
+Complete software preparation with dummy products, counts, custody and orders;
+real product facts/counts are needed only for actual live inventory acceptance,
+not as a prerequisite for independent implementation or synthetic verification.
+Reuse accepted CSV38/0 and unaffected native/browser receipts. Consolidate connected
+fixes and verify changed behavior only. Preserve the full requested final scope.
+**Essential launch blockers:** known guest NULL-signing admission and composed
+invitation/legacy writer grants (MAP-017/020); supported existing imported-Draft
+continuation and the complete review/taxonomy/SKU → receiving or authorized opening
+balance → eligible stock → publication/Website → order/payment chain (MAP-018/023);
+combined install/data-retaining recovery, safe host/browser failure behavior and
+separate artifact boundaries (MAP-017–022/024); final live and human acceptance
+(MAP-025). Known authorization, secret, data-loss, double-counting, stock and payment
+defects remain essential. **Deferred within their owning items:** cosmetic polish,
+optional AI/Interactive Shop enhancements, hypothetical edge cases and redundant
+audits/checks; this sequencing does not delete requested acceptance or reduce the
+two-artifact product scope. Prepare the exact database/deployment/configuration
+changes, verification and recovery before one consolidated owner live approval.
+This prompt authorizes local preparation only; no unreviewed live writes.
+
+**Owner account clarification, 2 October:** Continue the production/inventory goal. All K2 Jimzon services belong to `k2jimzonwebsite`; the current Codex account is separate. Preserve existing K2 service sessions. This clarification does not authorize a live release, provider mutation or new stock.
 
 **Owner launch scope, 25 September (IDEA-20260925-04):** Full operation of the separate customer Storefront and staff Admin is the acceptance target. Existing marketplace-channel stock numbers are a proposed input for Codex-assisted reconciliation; they are not automatically physical on-hand or an approved live connector. Sister/cousin staff will do QR and real-world checks. MAP-018/023/025/026 retain the required source, count, role and end-to-end evidence.
 
@@ -35,9 +500,72 @@ Independent local fixes may continue while an owner or provider gate is open. Th
 | Parallel preparation | MAP-027 | Product knowledge and optional Store use verified facts | MAP-018/019/020/021/023 |
 | Cross-cutting | MAP-028 | Audit findings close with evidence or an accepted limit | Owning items above |
 
+## Execution responsibility for every remaining item
+
+These are the execution fields of the active backlog below, not a second queue. Perform the highest ready technical action; when its external step cannot proceed, continue an independent action in dependency order. Human acceptance is still required even after synthetic proof passes.
+
+| Item | Codex can prepare/verify without real owner data now | Exact external or real-world dependency |
+| --- | --- | --- |
+| MAP-017 | Recompose the current guarded installer, exact function/body/ACL/constraint captures, data-preserving deactivation/roll-forward and backup/preflight artifacts; rehearse apply/replay/drift/refusal/recovery against owned current/cold clones. Reconcile reviewed anonymous contracts and production defaults from existing evidence. | Supported procedure for provider-owned defaults; pending off-site artifact authorization/retrieval, real provider/bot configuration and exact apply authorization. Preserve pending questions and support thread. |
+| MAP-018 | CSV importing is accepted complete per owner direction; reuse the existing dummy-intake receipt and do not repeat importer tests. Continue from reviewed Draft/subcategory/SKU through receiving/opening-balance, eligible lot, and protected Website assignment/listing composition. Use synthetic quantities/expiry/custody, conflicting/repeated downstream rows, invalid variants/permissions and exact rollback snapshots; prove no CSV-created physical stock or double-counting against seeded stock. Fix IDEA10 below first. | Actual source export/schema mapping for real catalog reconciliation, product facts/media rights, physical counts/discrepancies, batch expiry/custody and final real-listing approval. |
+| MAP-019 | Complete synthetic guest/customer grant continuity, isolation, callback/session recovery, thread ownership, upload/readback and failure cases; prepare same-target Preview commands and recovery. Leave excluded old test chats unchanged. | Provider Auth/email/bot setup and exact Preview activation; human device/account and email-delivery acceptance. |
+| MAP-020 | Reconcile every route/action with actual role, AAL2, origin, signature, payload/rate/replay/idempotency and ownership contracts. Exercise local allow/deny/duplicate/failure paths and legacy-grant retirement on the complete current installer; prepare protected Admin uploads/commands. | Coordinated reviewed provider/backend activation and authenticated exact-host role/deny evidence. No isolated moderation or global-flag cutover. |
+| MAP-021 | Resolve actual source/dependency failures, verify safe errors/environment/secret/header contracts and separate builds; measure local browser performance and regressions when code changes justify them. | Exact-host headers/callbacks/device measurements after activation. Run `verify:release` once immediately before an owner-requested promotion. |
+| MAP-022 | Rehearse database/Storage restore and record/privilege comparisons locally, prepare schedules/alerts/content-safe incidents and simulate failure/recovery without sending alerts. Prepare owner retrieval/runbook steps. | Owner MFA/key-custody/retrieval, approved off-site writes/schedule activation and actual alert delivery/provider recovery. No MFA or human restore attestation from a fixture. |
+| MAP-023 | Complete writer concurrency and lifecycle/coupon/expiry/cancel/multi-SKU tests; implement already-decided server shipping authority, audited standard-rate editing and manual NCR express quote/buyer-acceptance/payment gates with synthetic orders; preserve accepted charges and test recovery. Apply the required design skills before any visible UI work. | Real package/route/weight facts, QR recipient/device scans, independent funds review, actual packing/custody/handover and customer/staff acceptance. Courier APIs require approved official capabilities/scopes/access before an adapter. |
+| MAP-024 | Check currently reachable hosts and raw/hydrated discovery signals read-only; prepare/verify sitemap, metadata, canonical and measurement source corrections with fixtures without inventing analytics. | Domain/DNS/provider activation authority and exact released-host discovery/measurement evidence. |
+| MAP-025 | Assemble acceptance cases/fixtures and run locally executable staff/customer/browser/device-size/accessibility/failure journeys after dependencies; prepare exact release and rollback receipt fields. | Complete technical gates, green exact-commit release/CI/separate deployments, enrolled real users/devices, real stock/payment/fulfillment and owner acceptance. |
+| MAP-026 | Complete protected shop reads/commands/pagination, staff/AAL2 gates, exact eligible-lot allocation and SKU-ordered locks; synthetic multi-shop request/approve/receive/contention/retry/cancel/disable/manual-path reconciliation. CSV import works independently of a marketplace API connector. | Native export mapping and actual canonical shop/count/custody approval; owner launch-scope decision and provider app/seller authorization/scopes/fees/sandbox access before connector enablement. |
+| MAP-027 | Prepare product-knowledge validation, provenance/approved-fact retrieval and optional Store contracts with synthetic records; test missing/contradictory facts and safe refusal. | Reviewed real product/media facts and existing owner decisions for optional Store behavior; downstream commerce/security gates. |
+| MAP-028 | Reconcile findings into these owning items, fix and verify reproducible local defects, check guide/source truth and document prepared/live/evidence limits. Remove only verified completed slices; keep unresolved risks and recovery visible. | Owning-item real-host evidence or explicit owner acceptance of an actual limit. A passing synthetic test never closes a provider/human finding. |
+
 ## Active backlog
 
 ### MAP-017: Finish database permission truth
+
+**8 October corrective batch locally verified — IDEA-20261007-04 / MAP-017/018/020:**
+Prepared forward migrations `20261008010000_guest_signing_null_inputs.sql` and
+`20261008011000_staff_invitation_execute_boundary.sql`; historical sources and
+accepted pins remain unchanged. The first admits only three exact recorded body
+variants/corrected replay states, rejects missing signing inputs/NULL action,
+compares signatures NULL-safely and preserves the delivery_quote action. The
+second restores the original three service-role-only invitation helper grants,
+with exact body and non-ACL metadata checks. Existing full-builder focused
+`--guest-signing-correction-only` mode reuses full05 installed fixtures. Correction03
+passed108/0 across six version/clone combinations, with maintained Node signatures,
+12 negative cases per combination, replay and drift refusal/full132-map rollback;
+clones removed/original88 unchanged/runtime stopped. Correction04 passes112/0:
+six verifier/clone combinations plus actual anon/authenticated invitation denial
+and service-role claim/complete/replay on both clones. The normal full installer
+appends both corrections after historical replacements. Full-launch-boundaries01
+passes121/0: fresh2/replay3/drift11/interrupted rollback. Its exact expected contract
+changes only the verifier definition and three invitation ACLs. Parent readbacks
+verify110/111 source pins; correction04 uses its frozen witness and hash-matched
+reconstructed pre-integration builder. Both runs remove clones/preserve original88
+and stop the runtime. Scoped independent batch review finds no actionable Critical
+or Important issue; provider/HTTP/populated recovery/full workflow are explicitly
+outside that verdict. Parent source audit initially compared correction04's old
+builder pin against the later changed default; hash-matched reconstruction/frozen
+executed witness resolves that evidence-location diagnostic without rerunning SQL.
+Correction01 sandbox loopback10013 and correction02 refusal
+made no clone; retained as environment failures, not security acceptance.
+**Exact next:** affected public caller/legacy cutover and
+populated data-retaining recovery integration, followed by the synthetic imported-
+Draft workflow. Public-caller HTTP/provider/full operating-chain acceptance remains
+false. Do not rerun CSV
+or unaffected evidence. Recovery keeps signing and invitation browser denials;
+deactivate callers or roll forward rather than restore vulnerable bodies/grants.
+No live SQL, stock, listing, main push or deployment. Owner existing-Draft workflow
+question remains pending; real counts are deferred to real acceptance, not software
+readiness. Existing broad-check parking and provider support/backup/host gates
+remain explicit until their applicable decisions are satisfied.
+
+**8 October provider support readback:** verified connected Gmail account is
+`k2jimzonwebsite@gmail.com`; read existing thread `1a0d2dfb9d2f1162` via sent message
+`1a0f16f4e8f70d9f`. It still contains only the acknowledgment and authorized
+30 September follow-up, no supported internal-defaults procedure. No email or
+provider change was made. Continue independent local preparation; do not resend
+or treat missing support guidance as permission to alter internal-role defaults.
 
 **Shared signing activation dependency, 1 October (IDEA-20261001-04):** The NULL-signature bypass was reproduced on the exact restore. Forward migration `20261001065252_admin_signing_null_inputs.sql` and four later prepared bodies now pass seven independent variants, six NULL/forged/expired/replay/role negatives, valid Node signatures, existing actions/byte/rate controls, metadata preservation, replay and refusal. Current Globe and prepared fulfillment caller denials pass locally. The 21-source Website witness and final development gate pass; server stopped and independent review has no actionable defect. Earlier history is unchanged. Read-only live metadata finds one current public Globe caller; no live exploit or apply occurred. **Remaining:** include the private verifier in fresh same-target installation/capture/recovery, refresh backup/preflight and obtain exact payload authorization before coordinated activation. Recovery must retain the guard, using controlled deactivation/roll-forward rather than restoring the vulnerable definition. Next safe code work is MAP-023 lock-order/shipping integration. Full MAP-017/020 and production-listing acceptance remain open. Evidence and recovery: `docs/evidence/20261001-admin-signing/README.md`.
 
@@ -70,13 +598,917 @@ Independent local fixes may continue while an owner or provider gate is open. Th
 
 **Accept when:** Live audit, reviewed anonymous allow/deny and ownership contracts, provider-default disposition, backup/restore/owner recovery evidence and an exact-host no-outage catalog read pass. Record each permanent receipt before deleting the full item. MAP-018 remains downstream; source export, physical counts, product facts/media rights, protected Website assignment and order membership remain open. Main was not promoted: remote `main` is `f95e384`; local `main` has 23 unpushed commits, the channel-slices history is included there and the separate real-inventory branch is not. Reconcile branch lineage only after release gates and owner live-promotion authorization.
 
-**Recovery:** Local corrections can be reverted as a scoped feature batch while preserving evidence. The SQL witness rolls back temporary state and is not production recovery. Routing recovery restores the same rule's path-only 404 export; later approved environment activation restores captured branch values/previous feature deployment. Inspect any returned resource reference before retrying provisioning; retain an isolated created resource until explicit cleanup authorization. Any later shared-K2/production change requires fresh backup/preflight and its reviewed exact migration recovery. The full outcome remains active under MAP-017/019/020.
+**Recovery:** MAP-017 guest installation uses its own same-target before/after captures and data-retaining deactivation described below; the reviewed local 33-function/24-table/three-hook proof is not provider-applied recovery. Preserve the frozen payload, encrypted backup/restore receipts and pending off-site/host authorization gates. No live guest installation has been applied. Exact scope: docs/evidence/20260930-guest-continuity-rehearsal/INSTALLATION_REVIEW.md. Catalog/intake recovery belongs only to MAP-018.
 
 **Captured installation recovery, locally verified (IDEA-20260930-07):** The exact existing-K2 transaction body is frozen at 204,529 bytes/SHA-256 `c2642a0fefd8142d0393f50ded41576b4f63dd416a154740f70a4970054cacf3`, with target, legacy metadata, ledger and unlinked-conversation guards. Capture/deactivation covers 33 functions, 24 new tables and three notification hooks. At 11:39:25 UTC the actual local witness retained customer/grant/conversation/message/scope records, closed new browser function/table/column privileges, denied an anonymous command, refused metadata drift/wrong targets and rolled back. The live installer refused the local target. Two focused contracts and final development verification passed; PostgreSQL is stopped. Independent source review found no actionable defect and passed read-only scope/refusal/stdin assertions; it did not repeat SQL/provider checks. Deactivation retains installed schema/data and does not resolve legacy ACL findings. Actual provider recovery must use complete same-target before/after captures before keys or Preview connection. Evidence/limits: `docs/evidence/20260930-guest-continuity-rehearsal/INSTALLATION_REVIEW.md`. No live apply is authorized.
 
 **Fresh recovery evidence (IDEA-20260930-08/-09):** The read-only 11:25:39 UTC encrypted backup is 848,023 bytes/SHA-256 `37846053a2188981fe2615367abaa4d7dcd218d605422d319c6fdae3639ebc23`. Its new empty UTF8 local restore passed at 11:37:47 UTC with 51 public relations, current ledger and the exact 14-row legacy fingerprint. Bounded Windows successful-input EOF/EPIPE handling and explicit UTF8 transport fixed real failed restores; nonzero/error, checksum, archive, health and fingerprint checks remain required. Affected complete guest/deactivation witnesses were rerun and passed. Owner account/key recovery remains Verified by the 2 September attestation, with no known relevant change; do not request it again. New-envelope off-site upload/independent retrieval remain pending. Exact next action: finish that evidence and the branch-only connection/configuration package, refresh backup/preflight immediately before a later approved apply, then obtain specific payload authorization. Shipping/Website and all-route/exact-host gates stay open. No extra project or live SQL/key/setting/flag/connection/conversation was created.
 
 ### MAP-018: Verify products, intake and inventory
+
+**8 October guest checkout corrective integration — IDEA-20261002-05, local:**
+Owner's current full readiness/ordering instruction authorizes local technical
+preparation using dummy data; real facts do not block it. Existing guest-first
+policy settles no-staff-login behavior, so the earlier skill-derived scope
+confirmation does not add a new owner business decision. No new policy/live
+approval is inferred. The regression is corrected in fresh-only prepared
+`supabase/prepared/category_shelf_life_guest_operations.sql`: signed nonce PID/root
+binding, private staff/guest context and NULL-safe clear, guest entry/resources,
+seven balance-before-product lifecycle corrections. Sequential design review and
+independent code review find no unresolved Critical/Important issue in this scope.
+Checkout05 proves a synthetic signed guest purchase through a savepoint: physical4,
+reserved1, Website3, one order/hold and zero context; saved retry without config,
+conflict, complete insufficient/NULL-signing rollback, private-helper denial and
+actual orphan COMMIT refusal. Original88 unchanged, owned clone removed/runtime
+stopped. Reuse CSV38/0 and unaffected evidence; development remains owner-parked.
+**8 October installation/cooperation batch:** default coordinated installer now
+includes the unchanged guest correction and an exact authored schema/function delta.
+Full integration02 qualifies current/cold fresh2, replay3, drift11 and interruption
+rollback (121/0,114 pins). Cooperation02 qualifies two real native waits using
+maintained signed lot/guest commands and staff cancellation: checkout refuses newly
+ineligible stock; cancellation releases its own hold and retains the other customer's.
+Old-root nonce and staff AAL1 refuse. Existing guarded configuration recovery scripts
+retain populated orders/holds/proofs, preserve saved cancelled receipts, refuse fresh
+purchases atomically, roll forward/replay exactly and allow correct new checkout
+(24/0,12 pins; recovered physical4/reserved2/Website2). Independent review finds no
+Critical/Important issue. Owned clones removed/original88 preserved/runtimes stopped.
+The standalone fragment is still fresh-only; combined package owns exact replay.
+**Exact next essential action:** complete remaining writer/admission and full
+retained-data recovery coverage plus the connected dummy product-to-listing/order/payment chain,
+legacy retirement and safe HTTP deadlines/errors. Imported-Draft owner scope
+correction remains pending; it blocks that dependent implementation only. Actual
+facts/counts and consolidated live approval belong to final real acceptance.
+Recovery now includes locally verified config-only deactivation/roll-forward on
+selected dummy orders/holds; broad populated operational/provider recovery is open.
+Prepared correction must not be applied standalone/live. Production recovery must retain the signing
+and invitation fixes, preserve proof/context integrity and data, close callers or
+roll forward; never open helpers or restore vulnerable signing. Exact commands,
+failed fixture diagnostics and scoped evidence: GUEST_CHECKOUT_PREPARATION.md.
+
+**7 October current staff preparation — IDEA-20261002-05:** Prepared overlay
+supabase/prepared/category_shelf_life_staff_operations.sql remains SHA
+2a6c8395084dc650e50a18638fd28429ea6b6f2e9ad538365e90f4f7d37d8895, outside
+activation migrations. Serial lifecycle02 native164/0 and primary271/0 remain
+accepted; source inventory69/0 and stock-read browser1/1/CSV38/0 are reused.
+Transactions02 is a failed whole run; named earlier phases prove root committed
+confirmation/payment/packing/handover, disconnect rollback, four actual resource
+waits and native55P03/57014 full rollback. Its two signed policy observations wait
+on transactionid/rate rows, so those observations do not prove advisory ordering. Box05
+terminal0/native239/0/primary1864/0 proves selected-box/new-SKU membership exclusion
+across genuine server minute buckets, exact original signing-key restoration,
+all132 original row multisets retained via native canonical per-row SHA256,
+metadata restored, owned clone removed/original88 unchanged. Runtime stopped0,
+PIDfile absent/listener54388 count0. The verifier holds actor/global minute-rate
+rows throughout a command; stage contention on genuine different buckets instead
+of rewriting clocks/rate rows or relaxing2s/10s. Earlier observer-cast/box timeout/
+key-preservation diagnostics remain durable evidence, not passing whole runs.
+Corrected policy-advisory01 terminal0/native248/0/primary1977/0 now proves actual
+writer-first ExclusiveLock/ShareLock and reader-first ShareLock/ExclusiveLock
+ordering on advisory key1261585232/1347374169 across genuine server minutes.
+Writer-first and subsequent stricter-policy packing refusals preserve full maps;
+the admitted reader commits before the later policy writer. All132 original row
+multisets and metadata retained; clone removed/original88 unchanged/runtime
+stopped0/noPID/listener0. Operating SQL unchanged; serial/partial/box receipts reused.
+
+**Exact next connected batch:** Preserve accepted actual advisory/root/resource/
+deadline/box/serial evidence; rerun affected schedules only. Complete
+remaining packing/payment/handover/custody command conflicts beyond the four proved schedules,
+full-request deadlines/actual midnight, maintenance exclusion and complete current/
+cold all-writer installer/drift/recovery before activation. Guest authority and
+IDEA-20261007-01 corrected scope remain pending; do not bypass either. Existing
+legacy PO permission closure remains MAP-017. No independent review/full HTTP/JWT/
+provider/real-stock/listing acceptance; development/security/private cleanup stay
+owner-parked. Product discovery/unknown-stock rendered fix is prepared, not deployed.
+
+**Current connected contention receipt:** Existing --remaining-only harness adds
+seven actual resource waits plus maintenance exclusive-policy exclusion. First
+remaining01 exited1/native121/0assertions at observation22P02 (empty UUID key),
+after completed confirmation/payment/handover waits. Its whole run remains failed.
+Corrected observation uses a valid absent synthetic UUID. Remaining02 with
+--resume-after-handover reran the five affected schedules only: terminal0/native
+256/0/primary1996/0,105 current pins. Combined named phases prove post-resource
+instant/cleared context, accepted195 charges and independent review, once-only
+handover/extension, cancellation/release physical conservation, custody split
+conservation and actual maintenance ExclusiveLock/ShareLock admission exclusion.
+All132 original row multisets retained in02, original key restored/metadata
+removed, clone removed/original88 unchanged/runtime stopped0/noPID/listener0.
+Operating overlay2a6c8395 and serial/partial/box05/policy-advisory01 receipts reused.
+This does not cover actual midnight, command-versus-command deadlock/oversell/
+reverse baskets or complete maintenance installer/activation. Exact next action
+is the connected conflicting lifecycle/multi-SKU command schedules above; retain
+the existing harness, source pins and guarded cleanup, without rerunning these
+unaffected passing schedules. Primary audit diagnostic corrected an absent
+derived-runner manifest assumption; no native rerun was needed.
+
+**Current actual-command conflict evidence:** Existing --conflicts-only mode
+retains SQL2a6c8395 and pinned serial/resource/box/policy evidence. Conflicts01
+exited1/native104/0assertions during new basket seed (missing required timers,
+55000) before any schedule; preserved as diagnostic. Fixture adds required2s/10s.
+Conflicts02 terminal0/native249/0/primary1990/0/105 current pins now proves four
+actual schedules: reversed two-SKU baskets over one physical unit each; both
+signed confirmations hold shared policy and distinct real minute buckets before
+inventory contention, winner owns both units/loser K2STK full-map rollback;
+cancellation before confirmation rejects without revival/full rollback;
+confirmation before cancellation releases committed ownership once; expiry sweep
+SKIP LOCKED while extension owns the order despite visible expired old deadline,
+then a fresh sweep preserves its once-extended1800s deadline. Charges295/195 and
+physical/reserved totals retained. All132 original row multisets retained/key
+restored/metadata removed/clone removed/original88 unchanged/runtime stopped0/
+noPID/listener0. No clock/verifier/rate-row/timer substitutions; no independent
+review or all-writer/full installer/deadlock-generalization/HTTP/provider proof.
+Next: remaining distinct lifecycle conflicts and complete current/cold guarded
+installer/replay/drift/populated recovery; reuse these four schedules unchanged.
+
+**Current connected installation evidence:** Existing qualified cold-prerequisite
+generator integrates staff as stage22 after taxonomy in the atomic package.
+First staff-package01 exited1/native105/1: unqualified composite argument
+product_batches could not resolve under empty search_path; its earlier generic
+body-drift refusal hit the wrong function and is withdrawn. Portable staff SQL
+44b39cf88ec605453521a6e2667abae46762bee9be70db4f986482c38a95f4ee qualifies only
+that captured identity as public.product_batches, preserving accepted2a6
+replacement bodies. Staff-package02 terminal0/native163/0/primary543/0 now proves
+65 prerequisites/current+original-schema cold,22 operating stages, exact13 staff
+compiled bodies/metadata, four exact edited-function body/security drift refusals
+with complete rollback, interruption before COMMIT, package repeat safe refusal,
+OID-independent logical equality, full132-table backup/restore and existing scoped
+catalog/policy config deactivation/roll-forward.109 current pins/57 capture pairs;
+232 functions/153 relations/324 types restored with only recorded CHECK deparse
+normalization. All three owned clones removed/original88 unchanged/temporary dump
+removed/runtime stopped0/noPID/listener0. No all-writer/guest/full populated
+operating recovery/HTTP/provider/real-stock acceptance follows. Next: genuine
+staff operating state across configuration deactivation/roll-forward, remaining
+lifecycle conflicts/request timing and full all-writer closure before activation.
+Use this same generator/package and preserve receipts; no unaffected reruns.
+
+**Current signed operating-config recovery evidence:** Existing qualified runner
+--staff-state-recovery reuses exact22-stage package02 controls; untouched drift/
+interruption/repeat/taxonomy schedules skipped and reported as reused. Necessary
+current/cold setup and database restore support a fixture seeded after restore.
+First01 native122/1 lacked seed SQL diagnostic;02 native122/1 captures23505
+user_profiles_pkey because real Auth trigger already creates the profile. Fixture
+role assignment now uses existing upsert, preserving the trigger. Final03
+terminal0/native145/0/primary209/0/110 current pins/31 capture pairs proves8 genuine
+signed calls: Staff confirmation/evidence, independent Admin funds verdict and
+packing, committed ownership/accepted195; config deactivation refuses fresh
+handover with complete rollback; historical packing retry returns the identical
+saved JSON in rollback-only transaction/full-map equality; exact roll-forward
+retains all paid/packed facts; one handover yields fulfilled/physical2→1/reserved
+1→0/balance1/0/contexts0/charge195. Native verifier validates generated signing
+secret, which is not archived. All three clones/temp dump removed/original88
+unchanged/runtime stopped0/noPID/listener0. No broad populated recovery/all-writer/
+HTTP/provider/real-stock claim. Exact next recovery action: put the paid/packed
+history before full backup, restore exact ownership/events/receipts/sequence and
+logical boundaries, then prove continuity/config recovery on the restored state.
+Reuse config03/package02 passing evidence; preserve guarded clone/temp cleanup.
+
+**Operating-history backup batch locally verified:** Existing --staff-history-backup
+history-backup01 terminal0/native147/0/primary355/0/110 source pins/31 captures proves
+paid/packed history before custom backup and restore without reseeding. All132 row
+maps/sequences exact; logical232 functions/153 relations/324 types match after only
+known courier CHECK deparse normalization (raw metadata hashes differ). Hash bags:
+2 inventory events/5 order events/1 packing event/5 signed receipts retained.
+Signed independent Staff/Admin payment verdict, committed ownership/accepted195,
+config-removal fresh-handover refusal/full rollback, historical rollback-only saved
+packing result, exact roll-forward and one physical handover all pass. Three clones/
+temp dump removed/original88 unchanged/runtime stop0/noPID/listener0. Native verifier
+validates unarchived generated key; primary audit is not independent/HMAC proof.
+Synthetic Draft has available1 fixture stock, unpublished/unreviewed. Identical
+package02 controls reused; no provider/real-stock/listing/complete chain claim.
+This closes the preceding pre-backup history evidence action, not MAP-018.
+The following decision-conflict batch closes the four targeted payment/packing
+schedules only. Remaining custody/deadline/midnight/all-writer coverage follows;
+reuse accepted recovery/advisory evidence. Pending corrected Draft/guest scope
+stays pending; no repeated request.
+
+**Decision-conflict batch locally verified:** --decisions-only staff-decisions01
+terminal0/native274/0/primary1045/0/105 source pins/15 capture pairs proves four
+actual order transaction-ID waits in distinct actual18:16–20 minute buckets.
+Opposing independent Admin payment verdicts in both orders keep the first decision;
+second refuses40001 K2_PAYMENT_VERSION_CONFLICT/full-map rollback. Packing→handover
+moves physical once; handover→late scan refuses23514 allocation/full-map rollback.
+Charge195/context0 retained; handover physical10→9/reserved1→0. All132 original row
+multisets/signing key/metadata retained; clone removed/original88 unchanged/runtime
+stop0/noPID/listener0. Nineteen fixture HMACs audited; primary is not independent.
+Payment preparation genuinely signed; packing fixtures preseed confirmed/verified,
+so not full operating-chain/funds proof. SQL2a6 unchanged; accepted serial/box/
+advisory/resource/previousconflict receipts reused, no new broad acceptance.
+The following custody receipt closes those four targeted contention schedules.
+Full-request deadline/actual midnight and remaining all-writer package qualification
+still follow; Draft scope correction/guest authority questions stay pending.
+
+**Custody-conflict batch locally verified:** Existing --custody-only custody02
+terminal0/native274/0/primary1027/0/105 pins/15 capture pairs proves four actual
+transaction-ID waits in separate18:33–37 minute buckets. Transfer9 before/after
+handover preserves original reserved lot ID, conserves all-lot physical/balance9,
+res0 and accepted195. Competing6 transfer refusesP0001/full-map rollback, leaving
+source4/res1+child6, balance10/res1. Box assignment to canonical Manila custodian
+preserves allocation through once-only handover. First01 terminal1/native136/0
+assertions fails box handover23514 because synthetic custody was unregistered;
+preserve diagnostic, not green eligible-destination evidence. Corrected fixture
+asserts canonical CUST-STAFF-MATTEO Manila link; unchanged SQL2a6. Harness360s
+covers real minute schedules/setup without changing command2s/10s. All132 original
+row multisets/key/metadata preserved; clone removed/original88 unchanged/runtime
+stop0/noPID/listener0; session16708 terminal0. Fifteen fixture HMACs audited; primary
+not independent. Preseeded confirmed/verified stock is not real funds/full-chain.
+Exact next connected batch: implement/verify one bounded Admin fulfillment request
+lifecycle across body read, Auth/session/role/AAL2 checks, telemetry and RPC, with
+safe timeout/late-result handling and recoverable same-idempotency outcomes. Source
+inspection finds no explicit request-wide deadline in authorize.js, fulfillment.js
+or createServerSupabase; SQL/harness limits do not establish HTTP request bounds.
+Trace all routed entry points before changing shared transport. Reuse unchanged
+native concurrency/recovery evidence; test delayed Auth/read/RPC/failure/valid paths
+without provider writes. Actual midnight/remaining all-writer qualification and
+pending Draft/guest decisions remain open; broad development/security/cleanup parked.
+
+**Request-deadline batch locally prepared/partially verified (IDEA-20261007-02):**
+Fixed30s handler-entry application budget wraps fulfillment read/seven commands;
+scoped Supabase Auth/PostgREST/telemetry cancellation and late response/status/cookie
+suppression. Final expiry503 REQUEST_TIMEOUT/no-store/Retry-After1 uses existing
+uncertain-outcome/retained-key contract. Cancellation is not rollback proof.
+New request-deadline.js plus supabase.js/fulfillment.js/prepared read integration;
+existing Admin contract suite72/72 before output-code correction; final affected
+SDK Auth/profile/RPC stalls/late result/no second transport/isolation5/5. Unchanged67
+checks reused; syntax/diff0. Expected SDK abort stderr retained, no provider/native
+runtime/deployment. Browser already retains keys; no UI source change. Other routes
+unaffected outside scope. Full deadline acceptance is not closed by helper tests.
+Exact next action: qualify native receipt continuity after an uncertain outcome.
+Inspect platform pre-entry body parsing/slow upload
+before claiming complete HTTP request bounds. Then actual midnight/remaining
+all-writer qualification; pending
+Draft/guest decisions and parked broad checks remain. No live writes authorized.
+
+**Current routed-deadline continuation (IDEA-20261007-02):** Existing contract suite
+adds thirteen actual api/admin/index→router→fulfillment/Auth SDK scenarios: valid,
+stalled Auth/profile/registry/RPC/read/denial telemetry, role/AAL2/body/revoked-session
+refusal, successful read and
+modeled late commit/same-key saved-result retry. Uses real encrypted active cookie,
+CSRF and signed command HMAC; synthetic JWT/provider responses are not real Auth/
+SQL receipts. Test clock scales the production30s callback to120ms; no wall-clock
+30s bound or live provider proof. Focused original10 terminal0/10passed (session31639);
+added role/revoked/read3 terminal0/3passed (session99666). No production source
+change in this continuation; passing core5 and67 unaffected contracts reused.
+Synthetic saved-result ledger does not prove native durable SQL idempotency.
+Exact next: native receipt continuity after timeout without a new command key.
+Local HTTP response/disconnect evidence is recorded below. Existing Draft correction
+remains pending; do not infer the rejected link timing. Parked broad/native
+checks remain reused. Recovery: revert only this fixture extension; no provider
+or database state changed.
+
+**HTTP continuation locally verified (IDEA-20261007-02):** Same fixture adds real
+loopback Node HTTP valid/timeout/late-result same-key retry/client-disconnect paths.
+First combined17 run session84700 terminal1:13 routed pass,3 HTTP connect EACCES
+before handler entry,disconnect fixture waits15s because it misclassified EACCES.
+Corrected fixture accepts only ECONNRESET as intentional disconnect. Normal-access
+focused4 terminal0/4passed; unscaled30s check session15604 terminal0/1passed(30.1s).
+Actual entry/router/Auth SDK/native ServerResponse produces503 REQUEST_TIMEOUT,
+no-store/Retry-After1, suppresses late end/header changes, retains original key/
+payload with fresh nonce and one modeled effect, and settles after client closes.
+All listeners bind127.0.0.1 port0 and close in finally; no production source change.
+Reuse13 routed/core/native evidence; no broad rerun. Local adapter
+parses body before entry; Vercel configuration maxDuration180 and current readJson
+consume parsed body, so neither establishes30s pre-entry/upload bound. Native and
+joined receipt qualifications below supersede this slice's former next action.
+Do not interpret abort as rollback. Provider
+Auth/upload/runtime/real-host acceptance remains open. Recovery: remove only HTTP
+fixture extension; all servers bind127.0.0.1 port0 and close connections/listener
+in finally. No provider call, deployment, stock write or broad gate authorized.
+
+**Native deadline receipt boundary (IDEA-20261007-02):** Final deadline02 native
+254/0 and primary241/0 replace interim01(252/0/235/0) with explicit database-settled
+before-timeout witnesses. Durable commands/facts/source pins/HMAC/captures and
+owned runtime shutdown are recorded in WRITER_INVENTORY.md and the final archive.
+Operating SQL unchanged; no provider/source activation. Joined qualification below
+supersedes the former missing-path gate for confirmation only. Remaining command,
+actual midnight/all-writer/provider/host/real gates remain there and in MAP-018.
+Pending Draft correction and broad parked checks remain; no repeated questions.
+Recovery: remove only deadline-only fixture/builder additions, retain archives and
+prior operating evidence. Runtime3560 stopped0/zero clones/noPID/process/listener.
+
+**Joined HTTP/native boundary (IDEA-20261007-02):** HTTP-native01 terminal0/native
+252/0/primary251/0 now proves confirmation dispatch from actual loopback entry/
+router/Auth SDK to unchanged signed native SQL. Saved and rolled-back original-key
+HTTP retries503→200 retain one allocation; source/payload/HMAC/capture/late-response
+checks and runtime9756 shutdown recorded in WRITER_INVENTORY.md/final archive.
+Operating SQL unchanged; Auth/registry and transport adapter remain synthetic.
+Success-path matrix below supersedes the remaining six-command gate. Next: refusal qualification for
+remaining six fulfillment commands and role/AAL2/body/idempotency boundaries,
+reusing passing confirmation/helper/HTTP/concurrency/recovery evidence. Then actual
+midnight/remaining all-writer/provider/host/real-listing gates. Do not mistake
+confirmation-only local translation for provider PostgREST/JWT acceptance. Existing
+Draft correction and broad parked checks remain pending; no repeated questions.
+Recovery: revert only HTTP-deadline fixture/builder additions and regenerate runner;
+preserve immutable archives. No provider/runtime/stock state to roll back.
+
+**Six-command HTTP/native boundary (IDEA-20261007-02):** Matrix01 terminal0/native
+344/0/primary741/0,113pins/15captures/28HMACs/36balance checks verifies twelve
+committed-response-loss/uncommitted-close cases; each original-key HTTP retry
+503→200 returns actual native result once. Action-specific outcome, stock/balance
+preservation, late response and owned28024 shutdown evidence recorded in
+WRITER_INVENTORY.md/archive. Operating13 SQL unchanged; confirmation01 reused.
+Next boundary, now recorded below: routed/native refusal matrix for roles/AAL2/origin/CSRF/body/signature/
+idempotency conflict and recoverable errors across all seven commands. Keep native
+verifier and original signing/receipt controls intact; no forced provider acceptance
+through synthetic Auth/registry/SQL adapter. Then remaining all-writer/actual
+midnight/provider/host/inventory-listing gates and pending Draft correction.
+Recovery removes only HTTP-matrix fixture/builder additions, regenerates runner,
+retains immutable archives. No runtime/provider/stock state remains to roll back.
+
+**Seven-command refusal boundary locally verified (IDEA-20261007-02):** Refusal02
+terminal0/native443/0/primary472/0 verifies63 fresh plus8 hash-bound reused cases:
+71 HTTP refusals across all seven commands;14 native signature/conflict denials
+and57 BFF gates dispatching no mutation. Exact safe status/code/no-store and full
+unchanged business/signing maps pass;113pins/15captures/23 valid HMACs inspected.
+Diagnostic01 terminal1/132pass1fail remains preserved: fixture expected the wrong
+native signature-error tag; actual28000 K2_ADMIN_SIGNATURE_INVALID, safe503 and
+unchanged maps were correct. Only expected tag corrected; eight unaffected
+confirmation gates reused under --resume-after-confirm-gates, not rerun.
+Seven signed native saved-result controls and two prerequisites are synthetic;
+Auth/registry/telemetry/SQL transport adapter are synthetic. Original132 multisets/
+original88 template preserved; clone removed; owned21180 stopped0; zero clones/
+other sessions before stop and noPID/process/listener after stop. Operating13 SQL
+unchanged. Existing client createRetainedOperationSession removes identity only
+on success, retaining it across all failed responses; narrow source audit found
+no retry-key deletion defect, so no client/UI change was made.
+**Routed business-error translation locally verified:** Final19 synthetic error
+cases pass terminal0/session85553, including12 payment/3 packing-reconciliation
+codes and four rate/in-progress/unavailable/transport recovery cases. Exact safe
+JSON/status/no-store/Retry-After, signed dispatch, original-key/payload/fresh-nonce
+retry and one modeled effect pass. Affected routed13 pass in earlier combined32
+session74025;19 rerun only after aligning error fixtures to their command routes.
+Syntax/scoped diff0. No production code/SQL/UI/provider/runtime change. Permanent
+receipt: category fulfillment-business-errors-receipt.json; Brain/WRITER record
+scope and recovery. Synthetic errors prove translation, not their native causes.
+**Native business-error boundary locally verified:** HTTP-business01 session93822
+terminal0/native271/0/primary404/0,113pins/15captures/14HMACs verifies five selected
+native error causes and their original-key repeats (10 routed409 denials): payment
+version/transition/same-submitter verdict, wrong packing allocation and missing
+handover commitment. Full business/signing maps unchanged; no poisoned receipt;
+exact native SQLSTATE/message and unchanged signed arguments recorded. Initial
+synthetic temporary handover allocation has no erased signed commitment. Original
+132 multisets/original88/signing key preserved; clone removed; owned22736 stopped0
+with zero clones/other clients before stop and noPID/process/listener afterward.
+Two offline readback failures corrected only whitespace/seed-index expectations;
+native run never failed or repeated. Passing71 generic refusal and routed19
+translation evidence reused. No production SQL/UI/provider change; other native
+business variants and successful corrected-state recovery remain unverified.
+**Maintenance recovery admission locally verified (IDEA-20261007-03):** Maintained
+--maintenance-only fixture/builder mode, maintenance01 session68102 terminal0/
+native259/0/primary362/0 verifies four actual advisory schedules plus recovery
+55P03 timeout. Both recovery scripts wait behind signed shared-admission roots;
+maintenance held first blocks staff before context. Roll-forward allows one packed
+unit; deactivation makes new confirmation refuse55000 K2_CATEGORY_POLICY_NOT_CONFIGURED
+with full business/signing rollback. Writer commits once before config changes
+alone; timeout and held writer rollback preserve complete maps. Five HMACs/115pins/
+15captures/original132 multisets/original88/key checked. Clone removed; owned23484
+stopped0, zero clones/other clients before stop, noPID/process/listener afterward.
+Archive's generic deadline flag is disqualified for this maintenance mode; builder
+report-only classification correction and focused byte check are documented in
+primary readback; operating13 SQL unchanged, native run reused without rerun.
+Current source fixes are locally native-qualified recovery admission, not full
+installation/all-writer/provider acceptance. Existing MAINTENANCE_ADMISSION_AUDIT
+is the earlier source-only receipt; latest native truth lives in maintenance01.
+Fresh-waits01 diagnostic session97480 terminal1/native109pass0fail before schedules:
+auth.users trigger already created the profile; seed's second plain profile INSERT
+raised23505. Cleanup masked it with SESSION_NOT_READY on the terminal seed session.
+Clones removed/original88 unchanged. Correct fixture to profile upsert and avoid
+querying a closed seed during cleanup; preserve source stderr. No gate/native
+claim. Rehearse affected mode in fresh-waits02 on same owned2884 runtime.
+Fresh-waits02 terminal1/native68pass0fail: local connection refused before clone
+creation; owned2884 process/listener absent with stale PID file. PostgreSQL recovery
+start succeeded and exact datadir/postgres/54388 check found zero clones/other
+clients. Preserve diagnostic02; fresh-waits03 affected run is current. Independent
+review attempt hit agent usage limit; no independent verdict is claimed for this
+mode. Parent review remains required; no broader gate closure.
+Fresh-barrier01 session3452 terminal0/native122/0 verifies both actual relation-lock orderings and same-key one-unit recovery. Archive retained; expand same fixture with both55P03 timeout directions and full fresh rollback before final qualification. Owned2744 remains for affected continuation only.
+**Corrected coordinated65+22 installation locally qualified (IDEA-20261007-03 / MAP-017/018):** Full05 session86226 terminal0/native115/0/primary555/0 verifies current/cold original88 calibration/fresh, three exact replays, eleven drift refusals, actual interrupted fresh rollback, effective2s/10s and changed-value/no-op/version rollback. Row03 session63606 terminal0/native96/0/primary494/0 verifies every original88 projected value/count/type and sequence, zero sample hubs/custodians and separately captured private intake bucket.103/104 pins and46/10 captures; raw65 preserved, three exact server data transformations recorded. Existing channels/AI control additions are explicit configuration, not real operational identity facts. Independent source/archive reviews: no Critical/Important/Minor. All clones removed/original template preserved; owned17904 stopped0 after zero clients/clones; noPID/process/listener. Earlier full04/row02 timestamp/sample-seed findings and all diagnostics remain archived in WRITER_INVENTORY; no completed corrective action remains queued here. **Exact next technical batch:** inventory/classify every writer and resource path in the current full05 before/after contracts, including direct/indirect functions, triggers, defaults/sequences, views, dynamic SQL and actual grants. Map each to its signed root/admission and canonical resource locks; then rehearse missing current-writer installation/recovery schedules using explicit synthetic fixture identities, preserving actual owner identity gates. Continue populated operational recovery afterward. Same-target provider capture/grants/install/recovery/HTTP and real-host/full inventory-listing acceptance remain open. Existing-Draft scope correction stays pending. Recovery reverses only exact authored transformations/derived modes after dependency review; preserve raw migrations/helpers/frozen evidence. Evidence/reproduction: full-coordinated05 and full-row-effects03 primary-readback/runtime-shutdown plus WRITER_INVENTORY.md.
+**7 October event binding guard integrated and locally qualified (IDEA-20261007-03 / MAP-017/018):** Normal full builder now supplies the exact global event-trigger binding guard by default; qualified native expectations are pinned, never silently rebaselined. Full-coordinated-event01 terminal2482/native121/0 and primary378/0 validate109 source pins/46 capture pairs,65 raw/server stages22 operating fragments, two fresh installations, three exact replays, eleven schema drift refusals, actual interruption/backend closure/full rollback, effective2s/10s and changed/no-op stock refresh. Guarded package bytes equal remaining01; every executed DDL fragment hash equals full05, retaining its original-row correction evidence/row03. Remaining01 terminal47987/native109/0/primary193/0 reuses prior116/0 cases and proves owner/ENABLE REPLICA/ENABLE ALWAYS refusal plus actual fresh-fragment binding drift reaching the post-DDL guard and whole rollback on both clones. Transactional synthetic owner role is absent afterward. Both runs remove clones/preserve original88; owned28036 stopped0 after zero clients/clones/fixture roles, noPID/process/listener. Independent source/archive review found no Critical/Important/Minor and verified109 source pins/46 captures; runtime shutdown is parent-verified. Historical row/writer modes still reuse their pinned unguarded packages; this is evidence reuse, not canonical installer guard omission. Current helper SHAa49694daae6e440c7eb640f183ef2e743b4128041b9194e72cf34a9326463837; derived witness SHA22ffc533c6c6f585bf33e332b2217115ac47aebc2b48fdb084aab7e299a23eaf. Privileged concurrent catalog DDL/all-writer/operator/native dispatch/populated recovery/provider/HTTP/real-host/full inventory-listing remain open. No provider/stock/listing/main/release change. Evidence: docs/evidence/20261004-category-shelf-life/foundation-qualified-schema-full-coordinated-event01/primary-readback.json, runtime-shutdown.json and foundation-qualified-schema-full-event-guard-remaining01/primary-readback.json. **Exact next connected batch:** classify native/catalog dependencies and every unresolved/dynamic/read/view/FK/operator/index path against its signed root/admission/resource locks, use the qualified native permission reconciliation, then rehearse missing current-writer and populated operational recovery schedules with explicit synthetic identities. The binding guard corrective action is complete locally and removed from the active queue; privileged concurrent catalogDDL remains explicitly unqualified. Same-target provider/grants/HTTP/real-host/owner source facts/counts/media/custody/listing gates remain open. Pending corrected Draft scope and owner-parked broad checks persist. Recovery reverses only reviewed optional helper/default integration/mode additions and regenerates the derived witness; preserve raw sources/helpers/frozen receipts.
+
+**Guest signing defect reproduced / IDEA-20261007-04 accepted into MAP-017/018/020:** Exact full05 private verifier accepts NULL signature, NULL timestamp plus forged signature, and NULL IP plus forged signature on both populated/cold owned clones. NonNULL forged signature denies28000; repeated nonce returns false. Probe01 session71066 terminal0/native88/0 and primary139/0 verify exact prior unguarded full05 bytes, full132 metadata/row rollback, both clones removed/original88 unchanged. This is successful defect reproduction, guestSigningSecure=false; no public caller/JWT/HTTP/provider exploit claim. Owned19716 stopped0 after zero clients/clones, noPID/process/listener. Source review34 ordinary candidates remains qualified only as source facts; invitation bodies rely on explicit service-role-only source ACLs whereas composed native snapshot exposes broader ACLs, so fix reviewed composition, not fabricated actor semantics. Latest guest action allowlist omits delivery_quote; legacy chat/order entry-point cutover remains required. **Exact next connected corrective batch:** prepare minimal fail-closed NULL validation/NULL-safe signature comparison across three authoritative guest verifier variants and a forward-only recovery-compatible replacement; preserve existing action/byte/clock/nonce/rate/key semantics. Prove maintained Node signed positive and NULL/forged/expired/replayed/payload/action negative cases on each composed variant with whole maps/key recovery; resolve delivery_quote compatibility and invitation ACL restoration, then requalify affected current full installer/caller/grant/recovery paths. Capture every new idea in permanent register first; IDEA04 accepted audit exists. Pending guest operational scope and Draft correction stay pending; no provider/main/stock/release authority. Recovery must retain signing correction via deactivation/roll-forward rather than restore vulnerable definition. Evidence: foundation-qualified-schema-guest-signing-null-probe01/primary-readback.json and current-ordinary-definer-review.json.
+
+**Current callable/dynamic/native classification batch in progress (IDEA-20261007-03):** Review of34 ordinary definer bodies is running. Scanner grant/revoke fixture failed then passed; corrected GRANT EXECUTE false positives reduce dynamic builders5→3 while extension DDL bindings/bodies stay classified.4565 offline checks/12pins remain green; current native/dynamic artifact records all49 C library/symbol bindings and three local DLL hashes/documented API families without binary implementation/provider acceptance. C-symbol observer initially assumed single quotes; actual captured dollar quotes were verified and extraction corrected, no source/native change. No runtime/provider/stock/release action. Owning next is review findings and focused caller/admission/resource execution; retain existing full/default/binding/ACL receipts.
+
+**7 October native ACL/resource reconciliation qualified offline (IDEA-20261007-03 / MAP-017/018):** Existing --current-full05 inventory now pins the native supplement and default guarded full target, verifies identical logical before/after states, and reconciles all function/schema/table/column/sequence predicates for anon/authenticated/service_role.4564 checks pass/12 source pins verified;435→696 function-role pairs and303→459 relation-role pairs, including column grants combined with table ACLs and distinct sequence privileges. Native RLS/forced-RLS and event/index/operator/support/incident-dependency captures are retained for classification. No anonymous direct table/column/sequence write ACL candidates occur in these snapshots; this does not establish function/RLS/body/HTTP authorization. After-state38 anonymous definer writer candidates divide into34 ordinary-return and4 trigger-return functions; they are not38 callable mutation endpoints.49 C bodies remain opaque, five functions contain dynamic SQL and all semantic/native execution/all-writer/provider acceptance remains false. Initial observer comparison failed because JSON property order differed; corrected structural comparison passes without an ACL mismatch. Independent review: zero Critical/Important/Minor. This batch performed no runtime/provider/stock/listing/main/release operation. Evidence: docs/evidence/20261004-category-shelf-life/current-full05-writer-resources.json and current-full05-writer-resources-readback.json. MAP-018 retains semantic/resource/admission and missing schedules/recovery/provider/real-host/source-facts acceptance. **Exact next technical batch:** classify34 ordinary definer candidates, four trigger returns, three dynamic builders and49 native C implementations; retain direct/indirect/view/policy/FK/operator/index/default/sequence edges and map admission/resource locks. Use source/manual and focused execution evidence; do not treat candidate closure/native ACL matches as callable authorization. Prove missing actual contention/recovery schedules, then populated operational recovery and same-target provider preparation under dependency order. Draft scope/guest authority/actual source facts/counts/media/custody/listing/owner acceptance remain pending. Recovery removes only this authored observer reconciliation after dependency review, preserving native/archive pins and historical default inventory; no provider rollback applies.
+
+**Current writer/resource inventory supplement qualified (IDEA-20261007-03):** Existing writer inventory opt-in `--current-full05` retains all145/232 function and101/153 relation identities;12 focused checks pass. Completeness is limited to these identities: full captured object/semantic/all-writer acceptance remains false. Explicit owner ACL revocation is respected. New `supabase/prepared/current_writer_resource_capture.sql` and full-builder `--writer-inventory-only` capture bounded read-only Repeatable Read native privileges, six enabled event triggers, indexes/operator support and incident catalog dependencies before/after exact qualified05 installation on populated/cold owned clones. Native92/0 and primary1290/0 validate105 source pins/18 capture pairs/four supplemental captures; all435 before/696 after role-function ACL predicates agree with the candidate model. Indexes238→340, operators134→139, support65→67, dependencies2941→4569 are captured per state; these counts are not semantic closure. Every read-only capture preserves full fingerprints. Source review has zero Critical/Important/Minor. Both clones removed/original88 retained; owned17448 stopped0 after zero clones/other clients, noPID/process/listener. Six event-trigger bindings were previously outside the guarded logical/metadata contract; their function bodies are already captured. Offline comparison confirms all six bindings/bodies unchanged on four states. Extension grant/placeholder branches and PostgREST notification branches are source-classified in event-trigger-classification.json; invocation/provider effects remain unverified. Their native capture does not yet add a binding drift guard. MAP-018 owns classification/guard disposition and missing execution/recovery schedules, followed by provider/HTTP/real-host/full inventory-listing acceptance. No provider, stock, listing, main or release change. Evidence: `docs/evidence/20261004-category-shelf-life/foundation-qualified-schema-full-writer-resources-01/primary-readback.json` and `runtime-shutdown.json`; reproduction/recovery in WRITER_INVENTORY.md. **Exact next connected batch:** classify native event-trigger bodies/tags, recorded dependencies, operator/index support and every unresolved/dynamic/read/view/FK candidate against signed roots/admission/resource locks. The exact binding guard is now qualified in normal full composition; remaining operator/catalog/dynamic/native paths still require disposition before provider preparation. Preserve raw migration sources and accepted full05/row03/other evidence; rehearse only affected guards and missing writer/recovery schedules with explicit synthetic identities. Then continue populated operational recovery and same-target provider preparation under MAP dependency order. Corrected existing-Draft scope is still pending owner detail; a clarification has been requested, with no dependent design/implementation. Recovery reverses only new opt-in inventory/helper/capture mode after dependency review, regenerates derived runner and preserves frozen archives; no provider rollback applies. Owner-parked broad gates remain parked.
+
+
+
+**Fresh table barrier bounded qualification (IDEA-20261007-03):** Changed helper
+fresh-only exact canonical table ACCESS EXCLUSIVE barrier drains legacy resource
+locks and revalidates complete before contract; installed replay branch unchanged.
+Fresh-barrier02 native125/0/primary202/0 verifies both packing/DDL relation waits,
+both55P03 directions/full rollback and original-key one-allocation recovery;
+110pins/24captures/7HMACs checked. Owned2744 stopped0/zero clones/clients/noPID/
+process/listener, both clones removed/original88 preserved. Parent archive/source
+review only; independent review remains unavailable due agent usage limit.
+Complete changed-helper and corrected full-package qualification is recorded above;
+next broaden canonical writer/resource coverage. Sequence-only and
+privileged concurrent schema admission remain unqualified. Keep full provider/
+HTTP/real-host/inventory gates. Recovery reverses only helper fresh barrier and
+builder timeout additions after dependency review; regenerate derived runner,
+preserve diagnostics/receipts and all prior dirty work.
+**Historical fresh installation contention diagnosis (IDEA-20261007-03):** Extend
+existing guarded22 builder with --fresh-install-waits using genuine canonical
+signed packing roots on pre22 current/cold states. Preserve exact uninstrumented
+schema contracts; fixture signing-key backup uses session-local temporary storage.
+Observe actual DDL/resource holder/waiter locks for writer-first and installer-first,
+then require exact stock/allocation effects or atomic refusal and same-key recovery.
+This diagnostic establishes the cutover behavior before choosing an admission fix;
+no gate waiver, provider apply or complete65 installer claim. New exclusive archive,
+terminal/readback/cleanup required. Recovery removes only this derived mode and
+regenerates witness; preserve prior fixtures, helper/fragments and all evidence.
+Fresh-waits03 reproduced missing exclusion: terminal1/native111pass0fail,
+diagnostic readback147/0/110pins/16captures. Old genuine signed packing completed
+its body with root uncommitted; installer simultaneously reached fresh success
+notice and ClientRead/open transaction/no blockers. Expected relation wait absent;
+installer-first/recovery not reached. Both clones removed/original88 unchanged,
+owned10696 stopped0 after zero clones/clients; PID/process/listener absent.
+Independent review unavailable due agent usage limit. Fresh table barrier now has bounded evidence above. Continue qualifying
+both orderings/timeout/retry and all affected writer paths; do not promote bare
+or current guarded package. A process pause alone is insufficient. Keep coherent65
+installer/provider/all-writer gates open. Preserve three diagnostics and recovery
+instructions in WRITER_INVENTORY; no provider rollback required.
+**Signed installer exact-replay admission locally verified (IDEA-20261007-03):**
+Archive install-waits01 native266/0/primary334/0; four actual signed shared versus
+installer exclusive waits cover both commit orderings and both55P03 rollback/
+retry directions. Original-key/payload recovery uses fresh nonce and one effect.
+Explicit fixture projection equals prior entire schema; exact instrumented gate,
+109 native pins/22captures/5HMACs/132 original table multisets checked. Runtime27128
+stopped0 after zero owned clones/other clients, no PID/process/listener; clones
+removed/original88/key/metadata preserved. Independent scoped review has no
+critical/important issues; report-only scope/pin correction verified without native
+rerun. This covers installed replay admission only, not fresh-DDL or all-writer
+concurrency. Exact commands/provenance/recovery in WRITER_INVENTORY.md.
+Pre22 source finding: guarded-install02 captured beforeContract has no policy lock
+helper and no function definition referencing either policy key or helper. Its
+three canonical signed fulfillment/lot/Product Master roots lack that admission.
+This is a source finding, not a reproduced unsafe provider write. Evidence:
+install-waits01/fresh-admission-audit.json (exact captured source/body hashes).
+Fresh exclusion cannot be inferred from installed shared/exclusive replay waits.
+Next must qualify actual pre22 native DDL/resource lock behavior and coordinated
+cutover admission, then implement only an evidenced gap in dependency order.
+Exact next: audit genuine canonical signed writer admission in the pre22/fresh
+installation state, then qualify the missing fresh-DDL contention boundary or fix
+an evidenced admission gap. Compose coordinated65-stage guarded installation in
+its owning dependency order; do not treat separate prerequisite setup as that gate.
+Recovery reverses only installContracts fixture/builder mode additions and
+regenerates derived witness, preserving frozen evidence/helpers/fragments.
+**Guarded22 local installation qualified (IDEA-20261007-03):** Archive02 native147/0,
+primary264/0; two current/cold fresh installs, three exact replays including
+populated config, eleven drift refusals and actual fresh-DDL interrupted rollback.
+108 source pins/50 capture pairs checked; original88 unchanged, both clones removed,
+owned23700 stopped0 with no PID/process/listener. Independent scoped review found
+no critical/important issues. Diagnostic01 native104/1 was a wrong requirement for
+CHECK serialization difference; exact contract equality is accepted before the
+existing pinned variant. No helper/fragment weakening or native rerun for the
+later offline audit-field correction. Receipt and recovery live in WRITER_INVENTORY.
+Installed exact-replay signed waits are recorded above. Fresh-DDL contention and
+coordinated full prerequisite installation remain unfinished. Reuse unchanged
+package02/state03/history01 evidence. The separate65-source prerequisite setup is
+not a coordinated65-stage provider installer. Full installer/all-writer/actual
+midnight/provider HTTP/host/real inventory-listing gates remain open. No bare22
+provider use or live release authority. Recovery reverses only derived builder/
+witness/generated local artifacts, preserving helpers/fragments and frozen evidence.
+Recovery removes only maintenance mode/fixture/report-classification additions and
+new gate hunks after dependency review; regenerate derived runner, preserving
+all historical records/prior safeguards. No provider/live/real-stock action.
+Exact next connected batch: audit pre22 canonical signed writer admission and
+qualify fresh-DDL installation contention; preserve the separate coordinated65
+installer gate. Replay waits and deactivation evidence are reused above. Reuse qualified staff-package02, state-recovery03 and history-backup01
+receipts; extend only gaps, preserving all-writer/actual-midnight/provider/host/
+real inventory-listing acceptance gates. No provider/live release authority.
+Recovery removes only business-mode additions from fixture/builder and regenerates
+runner; preserve operating SQL and immutable diagnostic/passing evidence. Exact
+reproduction and limits live in WRITER_INVENTORY.md.
+Existing-Draft scope correction stays pending; no repeated question or inferred
+adoption gate. Broad development/security/cleanup checks remain owner-parked.
+Recovery removes only refusal fixture/builder additions and regenerates derived
+runner, preserving diagnostic/passing archives and unchanged operating SQL.
+No provider/runtime/stock state remains to roll back.
+
+**Evidence and recovery:** docs/evidence/20261004-category-shelf-life/WRITER_INVENTORY.md
+contains sources, frozen receipts, exact commands, diagnostic dispositions and
+scope limits. Same derived rehearse-staff-operating-composition.mjs supports
+--staff-transactions/--box-only/--policy-only/--remaining-only/--conflicts-only/--decisions-only/--custody-only/--deadline-only/--http-deadline-only/--http-matrix-only/--http-refusal-only/--http-business-only/--maintenance-only;
+native fixture lives in staff-operating-transactions.mjs.
+Use a new exclusive foundation-complete-composition-staff-transactions-* suffix;
+owned UUID/data-directory/marker/zero-session disposal only. Retain immutable
+synthetic committed history until clone disposal; restore the original clone
+signing key and remove observation objects in success/failure cleanup. No provider
+key/action, production-linked main, release or real inventory write is authorized.
+
+**7 October owner continuation decision:** The owner authorized preparation of
+a signed existing-Draft continuation that adopts an eligible imported zero-stock
+Draft into a genuine intake session while preserving its SKU and history.
+Track as IDEA-20261007-01 within the existing MAP-018 chain; retain staff/AAL2,
+reason/version, idempotency, ownership and concurrency controls, and refuse
+existing inventory or conflicting session history. This authorizes local
+preparation, not provider installation, real stock, publication or release.
+Next: trace and prepare
+the existing-Draft session boundary and downstream complete-chain evidence.
+**Scope correction pending:** The owner rejected the proposed understanding
+that staff creates a genuine session, completes packaging/field-review gates
+and links the imported Draft after review. A free-text correction is pending;
+do not implement adoption or infer waived gates/roles/link timing. Source trace
+found `create_product_draft_server` returns early for an already-linked product
+before evidence/review checks, so early association must not be a silent bypass.
+IDEA-20261007-01 records the permanent intent/decision. Next dependent action:
+receive corrected scope, assess viable signed approaches, then document and
+verify the approved implementation. No continuation code exists to roll back.
+
+**7 October rendered stock failure/recovery locally verified:** The isolated
+fixture now passes 1/1, exit 0 (7.4s), for initial stock-view 403 → recovery to
+authoritative 5 → later 403, retaining the product and hiding compatibility 47,
+with disabled unknown-stock addition and no overflow at 390/1440px. Root causes:
+default Vite document timeout, then CommonJS Helmet dependency missing from
+explicit prebundles. Test-only Vite isolation/prebundles fixed the runner; no
+additional production source or UI change. Both screenshots inspected; scoped
+diff check passed. Reuse prior 4/4 source contracts and CSV 38/0. Broad checks
+remain parked; provider/deployment/real stock remain unverified. Receipt,
+changed files, commands, limits and recovery:
+`docs/evidence/20261007-storefront-stock-read/README.md`. Exact next:
+IDEA-20261007-01 signed existing-Draft continuation design/preparation and one
+connected genuine chain; preserve all remaining acceptance gates below.
+
+**Historical 7 October session handoff — superseded local browser gap:**
+`StoreContext.jsx` now locally exposes unknown stock when the authoritative
+batch-stock read fails, retaining product visibility without a stale product-row
+count. `catalog-freshness-contract.spec.js` passes 4/4 (exit 0). The new
+`storefront-recovery-ui.spec.js` regression remains unverified: sandbox Chromium
+failed `spawn EPERM`; the initial normal-access route timed out; the revised
+product-route/breadcrumb runner ended without a recoverable result. Exact next
+action: diagnose isolated fixture/Vite navigation and runner lifecycle, finish
+focused rendered failure/recovery evidence, and record it here before closure.
+Do not rerun accepted CSV or unaffected suites; owner-parked broad gates remain
+parked. No live/provider/deployment change. Preserve the dirty checkout; recovery
+is reversal of only the three new source/test hunks. Frozen goal/evidence/provider
+snapshot and next-session prompt:
+`docs/SESSION_HANDOFF_20261007_PRODUCTION_INVENTORY.md`. MAP remains authoritative.
+
+**Current handoff — 6 October 2026 (IDEA-20261005-07):** The owner-approved
+scope remains initial canonical brand/category assignment through the existing
+signed Admin Product Master, for an unpublished zero-stock Draft with no
+batch/balance/event history. Maintained source and UI add bounded canonical
+options, paired UUID validation, locked existing IDs, eligibility messaging,
+and the normal reasoned/versioned save; secure-mode expiry stays batch-owned.
+API contract evidence remains 67/67. The focused Admin Product Master browser
+suite now passes 2/2 with the isolated fixture Vite config (`optimizeDeps.noDiscovery`
+and a dedicated cache), run with normal filesystem access. The sandboxed run
+confirms this host restriction: esbuild cannot read the workspace parent and
+then cannot resolve dependency files. At 375px and 1440px the editor has no
+horizontal overflow; the signed paired-taxonomy payload includes the reason
+and omits expiry; the deletion retry identity case passes. This is fixture/API
+mock evidence, not live-host acceptance. Screenshots are isolated under ignored
+`test-results/`; earlier evidence screenshots were not overwritten.
+
+**6 October category-policy and interruption recovery locally verified:** The
+final-14 retry4 receipt passes **155/155** native checks; its primary audit
+passes **257/257**, with 106 source pins and 49 complete metadata/row capture
+pairs. On the restored synthetic category-policy fixture, guarded deactivation
+changes only `k2_private.category_policy_command_config`; a signed command
+fails closed without row changes; guarded roll-forward restores the exact
+captured row maps and the signed command succeeds again. On the 128-table cold
+clone, killing the client during the atomic operating install returns the full
+metadata and row-map fingerprint to its pre-install value. All UUID clones and
+the temporary dump were removed, the original template was unchanged, and the
+owned local runtime is stopped. This is narrow local recovery evidence;
+`populatedRecovery=false`, `exactReplay=false`, `allWriter=false`,
+`providerHTTP=false`, and `fullOperatingChain=false` remain correct. Evidence,
+commands, failed retry diagnostics, and cleanup are recorded in
+`docs/evidence/20261004-category-shelf-life/foundation-qualified-schema-taxonomy-final-14-policy-recovery-interruption-retry4/README.md`.
+
+**6 October in-app Supabase read-only refresh:** Re-ran the saved `SELECT` in
+the K2 project's SQL Editor (`pixplcjqivlfflickobf`); it returned
+`product_master_routines = NONE` and `brands=0; categories=0`. This confirms
+the local recovery work did not install or seed live taxonomy. No project
+setting or database row was changed.
+
+**6 October native clone rehearsal:** The exact owned restore lacked the MAP-020
+base Product Master function and event table. On one fresh UUID-marked clone,
+the pinned MAP-020 base migration (`6b0c0bba…f1979`) and prepared taxonomy
+overlay (`5988c415…5f084`) installed successfully. `native-10` passed 29/29:
+signed eligible Draft assignment; one reasoned `product_master_events` row and
+durable command receipt; consumed-nonce refusal; freshly signed same-key saved
+receipt retry; stale-version, existing-ID, non-Draft, published, raw-stock,
+batch, balance, and event-history refusals with complete row-map rollback. The
+clone was removed, every captured template schema/table row map was unchanged,
+and the owned PostgreSQL runtime stopped with no listener. Two synthetic
+brand/category options existed only in the clone. The corrupt raw-stock counter
+case used trigger-disabled clone-only fixture injection; it is a refusal test,
+not a normal inventory workflow. Earlier failed harness archives are retained.
+No provider write or production migration occurred.
+
+**6 October qualified taxonomy replay and drift update:** `foundation-qualified-schema-taxonomy-final-06/result.json` passes **118/118** checks across the owned current restore and template0-recreated cold schema. After the post-identity overlay is first composed on both clones, the overlay replays successfully as a no-op on each; complete metadata and row fingerprints match before and after. Separate current/cold body-drift controls both refuse with `K2_PRODUCT_TAXONOMY_SOURCE_DRIFT` and fully roll back. Both marked clones were removed and the original template remained unchanged. The final Product Master body pin is `4d8b12d8a123419b26a6fb4fbc4c59ad`; overlay SHA-256 is `6d56c032a1b33b9961654bcbbcde40e6376bd3105109573ee3d72bc1d8a55cdc`. `final-05` is retained as a diagnostic: a mistyped expected hash caused a safe refusal; its clone cleanup and template-preservation checks passed. Relative to `final-04`'s 110/110 qualified-composition checks, `final-06` adds eight current/cold taxonomy replay and drift/rollback checks. Full cold prerequisite installation, whole-package replay, and populated recovery remain unproven. The local PostgreSQL fixture was stopped and the PID/listener checks are clear. No provider write or production migration occurred.
+
+**6 October live K2 check:** In the in-app Supabase dashboard, project ref
+`pixplcjqivlfflickobf` is Healthy; its migration ledger lists
+`order_payment_receipt_chat_20260928` (`20260928092634`) as newest and a search
+for `admin_product_master_boundary` returns no results. Today's read-only SQL
+Editor query returned `product_master_routines = NONE` and zero rows in both
+`public.brands` and `public.categories`; the Database Backups page says the
+current Free Plan includes no project backups. The dashboard also reports no
+GitHub repository connected. This confirms the local taxonomy proof has not
+enabled live taxonomy editing. Details:
+`docs/evidence/20261006-initial-taxonomy-assignment/README.md` and
+`docs/evidence/20261006-account-alignment/README.md`.
+
+**5 October implementation baseline:** The owner’s “please proceed” instruction
+approved the approach. Focused API contract: 67/67. The Playwright editor test
+did not reach the application: sandbox Chromium launch returned EPERM, and the
+elevated retry timed out on `page.goto` because local Vite did not bind. The
+original preparation receipt remains at
+`docs/evidence/20261005-initial-taxonomy-assignment/README.md`.
+
+**6 October account alignment:** The Supabase dashboard’s open account menu
+verifies `k2jimzonwebsite@gmail.com` → organization `K2jimzon` → project
+`K2jimzon` / ref `pixplcjqivlfflickobf`; the project URL and region
+`ap-southeast-1` match the workspace configuration. The project is Healthy,
+reports **No backups**, and its dashboard says **GitHub — No repository
+connected**. The workspace `origin` is
+`github.com/k2jimzonwebsite/K2-Jimzon`. The GitHub connector identity is
+`EdgerzXc`; repository metadata identifies owner `k2jimzonwebsite` and grants
+the authenticated caller push permission. That access is separate from a
+Supabase GitHub integration, which is not connected. The available Supabase
+connector lists only organization ScoutIT / project
+`yyixsuaimdzyiocswcgc`; never use it for K2. Use the verified IAB account for
+K2 dashboard work and the GitHub connector only against the verified
+repository. No provider setting or data changed. Read-only evidence:
+`docs/evidence/20261006-account-alignment/README.md`.
+
+
+**6 October full cold prerequisite installation locally verified:** The
+previous cold target was schema-recreated only after all 65 prerequisites had
+run on the populated clone. `foundation-qualified-schema-taxonomy-final-07/result.json`
+now starts from a schema-only dump of the original 88-table restore and runs
+all 65 pinned prerequisite stages on both populated-current and cold-schema
+clones. Native result: **125/125**; primary audit: **196/196**, 101 source
+pins, 28 complete metadata/row capture pairs. The cold target reaches 128
+canonical tables with only source-defined reference seeds (channels 6, hubs 3,
+custodians 3, intake bucket 1, default AI-spend config 1); products, categories,
+listings, orders, and physical stock remain empty. The 20 operating fragments
+and separate taxonomy overlay install on both targets; the 128 cold row maps
+are preserved and four new policy tables stay empty. Taxonomy replay remains a
+no-op and appended-body drift refuses with full rollback on both. Both marked
+clones were removed, the original restore was unchanged, and the local runtime
+stopped cleanly. Evidence, commands, limits, and recovery:
+`docs/evidence/20261004-category-shelf-life/foundation-qualified-schema-taxonomy-final-07/README.md`.
+
+**6 October whole-package retry audit (IDEA-20261006-01 reassessed; MAP-018):** `foundation-qualified-schema-taxonomy-final-09-package-repeat-refusal` ran all 65 pinned prerequisite stages on current and original-schema cold clones, installed the 21-fragment package on each, then retried the complete package. Both retries exit 3 at the first `category_shelf_life_resolution` preflight with `K2_CATEGORY_FOUNDATION_ALREADY_PRESENT`; full metadata and row-map fingerprints are unchanged on both clones. Native 130/0; primary 207/0 with 101 source pins and 32 capture pairs. The SQL explicitly describes this foundation as fresh-only. The retry never reaches `master_identity`, so the suspected composed-body hash mismatch is not reproduced and no SQL change is justified. `acceptance.exactReplay=false`; the package’s duplicate refusal is locally verified, while exact full-package no-op replay and partial-install recovery remain open. No provider or inventory state changed. Receipt: `docs/evidence/20261004-category-shelf-life/foundation-qualified-schema-taxonomy-final-09-package-repeat-refusal/README.md`.
+
+**6 October full backup/restore and scoped data-retaining recovery verified:**
+`foundation-qualified-schema-taxonomy-final-12-backup-logical-restore` takes a
+temporary custom-format database backup of the installed 132-table current
+clone, restores it to an owned clone, and verifies all 132 table row maps, the
+OID-independent contract for 232 functions / 153 relations / 324 types, and 9
+sequence values plus `is_called` state. A synthetic zero-stock Draft is
+preserved. On the restored clone, catalog-import deactivation denies the
+authenticated RPC without changing any row map; roll-forward restores the
+exact schema contract, rows, and grant. Native 142/0; primary 230/0, 104
+source pins, 40 full capture pairs. The temporary backup and all clones were
+removed; the original restore is unchanged. `acceptance.databaseBackupRestore`
+and `catalogRecoveryOnFullInstall` are true; `acceptance.populatedRecovery`
+remains false because category-policy-specific recovery, actual inventory, and
+partial/interrupted install behavior are not qualified. Receipt:
+`docs/evidence/20261004-category-shelf-life/foundation-qualified-schema-taxonomy-final-12-backup-logical-restore/README.md`.
+
+**6 October category-policy rows retained across full backup/restore:**
+`foundation-qualified-schema-taxonomy-final-13-category-policy-backup-recovery`
+adds a synthetic category, 120-day policy, and immutable policy event to the
+full custom backup fixture. The source and restored clones each report exactly
+one of each and the resolver returns 120 days. All 132 row maps, the
+232-function/153-relation/324-type contract, and all 9 sequence states still
+match. Native 144/0; primary audit 230/0, 104 source pins, 40 full capture
+pairs. The same catalog-import permission deactivation/roll-forward preserves
+the populated rows. This qualifies category-policy data retention during full
+backup/restore, not policy-specific deactivation/roll-forward or interrupted
+installation; `acceptance.populatedRecovery=false` remains correct. The
+temporary dump/clones were removed; original restore unchanged; runtime cleanly
+stopped. The first auditor invocation was refused by its archive-name guard;
+the same receipt was renamed within the evidence directory and the final audit
+passed, recorded in `audit-name-guard.json`. Receipt:
+`docs/evidence/20261004-category-shelf-life/foundation-qualified-schema-taxonomy-final-13-category-policy-backup-recovery/README.md`.
+
+**Exact next action:** the narrow category-policy recovery and pre-COMMIT
+interruption checks are complete locally. Keep `acceptance.populatedRecovery=false`:
+the receipt does not establish broad populated recovery, hosted backups, or a
+provider rollback procedure. Preserve `acceptance.exactReplay=false`; the full
+package intentionally refuses duplicate application. Reuse the accepted CSV
+38/0 receipt and do not rerun importer schedules. Continue the signed imported
+Draft → canonical taxonomy → receiving against verified physical counts and
+custody → eligible lot → protected Website publication chain, together with
+remaining all-writer/resource and exact-host/provider acceptance. The live K2
+dashboard remains read-only evidence only. The 6 October SQL Editor snapshot
+reports newest migration `20260928092634`; products30 (22 marked Live/published,
+3 Draft/unpublished, 5 Discontinued/unpublished), product batches21, inventory
+balances29, inventory events0, product drafts0, channel listings0, and Globe
+CMS entries17. `globe_products` is the storefront sphere's separate CMS
+configuration, not channel-listing evidence. These aggregate counts do not
+prove current public availability or item-level sellability. Product Master routines and
+event table remain absent, brands/categories are empty, and the current Free
+Plan reports no project backups. Any provider apply requires a separate
+specific owner authorization.
+Runner review confirms that the current catalog, taxonomy, receiving,
+eligible-lot, and publication rehearsals use separate synthetic products or
+intake sessions; running them in the same disposable database does not prove
+one imported Draft crosses the complete chain. Keep
+`acceptance.fullOperatingChain=false`. The next local integration slice must
+connect those existing signed paths around one imported Draft without rerunning
+the accepted CSV schedule or inventing real stock/custody facts. Source trace
+shows CSV commit creates an unpublished Draft without a product-intake-session
+link; the maintained signed publication transition requires `p_session_id`,
+and its BFF action requires `sessionId`. The current intake-creation path does
+not adopt an imported product; `website_listing_set` records channel-listing
+state but does not perform publication. Resolve this signed continuation design
+under MAP-018 before connecting the chain; do not fabricate a session or write
+publication status directly.
+
+**Recovery:** no provider or application database state changed. Final-14
+removed all three marked clones and the transient system-temp backup, preserved
+the original template, and stopped the exact local PostgreSQL runtime. Its
+receipt records `pg_ctl` stop exit 0, no `postmaster.pid`, and a refused
+loopback connection on port 54388. Preserve final-09 through final-14, including
+the intermediate retry diagnostics. The two prepared deactivation/roll-forward
+scripts were exercised only against the disposable restore clone and leave no
+persistent database state. To reproduce, follow the archive README; for an
+interrupted clone, verify its exact UUID, owner/comment marker, zero sessions,
+and owned data directory before removing it. Do not change the fresh-only
+category foundation, accepted master-identity source, taxonomy source, provider
+state, or unrelated worktree changes.
+
+**5 October guarded operating-layer installation/replay locally verified (MAP-018 / IDEA-20261002-05):** Native final06 terminal0:141/0; primary556/0,103 pins/43 capture pairs. Single-transaction UUID/loopback/owner package takes exclusive maintenance entry before complete logical contract inspection; current and recreated schemas each fresh-apply and exact-replay. Synthetic populated config replay preserves132 maps; nine body/ACL/path/RLS/constraint/trigger/column/object/marker drift controls refuse3/full rollback. Contracts retain232 functions/153 relations/324 types, exact bigint text and two pinned CHECK serialization variants. All clones removed/original88 unchanged/runtime4428stop0/noPID/process/listener/launcher79453terminal0. Full prerequisite installation/populated deactivation/all-writer/provider/real acceptance remains open. Evidence/recovery/next MAP-018 action: `docs/evidence/20261004-category-shelf-life/OPERATING_INSTALL_REPLAY.md`. Exact next: complete prerequisite/current installation composition and populated data-retaining deactivation/roll-forward, then native signed/canonical/trigger writer/context coverage and all-writer maintenance exclusion. Operating-layer replay is no longer unexecuted; it does not establish complete cold prerequisite installation or populated recovery. Review historical stock-cache/timestamp and encoding/source deltas before separately authorized provider apply. Pending taxonomy/guest decisions, parked development/security/private cleanup and real source/count/facts/media/custody/host/human gates remain. No provider/main/release/real-stock/listing change. Source recovery removes only new replay-contract/package/witness/audit additions, preserving accepted original/portable fragments and receipts.
+
+**5 October qualified operating-layer installation locally verified (MAP-018 / IDEA-20261002-05):** Native final09 terminal0:110/0; primary461/0,99 pins/17 capture pairs. Twenty fragments install with empty search path on populated current and template0-recreated canonical schemas; changed OIDs retain177 logical function contracts, current128 row maps unchanged/cold132 tables empty. Separate portable signed-command revision normalizes CRLF pairs only; native CRLF accepted/source drift and lone CR refused/full rollback. Accepted originals retained. Clones removed/original88 unchanged/final18052stop0/noPID/process/listener/launcher74383terminal0. Full prerequisite installer/replay/populated recovery/all-writer/provider/real acceptance remains open. Evidence/recovery/next MAP-018 action: `docs/evidence/20261004-category-shelf-life/QUALIFIED_SCHEMA_INSTALLATION.md`. Exact next: prepare the complete prerequisite/current installation contract, guarded successful immediate replay/drift refusal and populated data-retaining deactivation/roll-forward, then full signed/canonical/trigger writer/context coverage. Provider preflight must assess source encoding and historical stock-cache/timestamp delta; do not apply the historical package unchanged or interpret schema-only recreation as complete cold migration evidence. Pending taxonomy/guest decisions and parked development/security/private cleanup remain. No provider/main/release/real stock or listing change. Source recovery removes only the portable revision and derivative artifacts/doc additions, retaining accepted originals.
+
+**5 October canonical original-record preservation locally verified (MAP-018 / IDEA-20261002-05):** Derivative native final03 terminal0:104/0; primary947/0,97 pins/nine capture pairs/four evidence controls. All519 original records/928 columns across88 tables retained, except the separately verified historical product timestamp refresh; stock/alias expectations equal original values in this restore. Exactly31 added columns and one source-defined intake evidence bucket; unique new catalog IDs/version1. All128 canonical row maps remain unchanged through20 policy fragments, final132 with four empty tables. All three clones removed/original unchanged/runtime14424stop0/noPID/process/listener/launcher22007terminal0. This closes the prior field-level local evidence action for this restore; qualified current/cold/replay/drift/populated recovery/all-writer/provider/real acceptance remains MAP-018. No operational SQL/provider/main/release/real-stock change. Evidence, limits, recovery and next action: `docs/evidence/20261004-category-shelf-life/CANONICAL_DATA_PRESERVATION.md`. Exact next: qualified-type current/cold installation, guarded successful replay and drift refusal, populated data-retaining deactivation/roll-forward, then full signed/canonical/trigger writer/context coverage. Assess the historical stock-cache/timestamp initialization against exact provider data before any authorized installation. Taxonomy/guest decisions and parked development/security/private cleanup remain pending. Recovery removes only derivative artifacts/doc additions, preserving prior evidence and overlays.
+
+**5 October broader canonical/category composition locally verified (IDEA-20261002-05 / -20261005-05/-06, MAP-018):** Full65 canonical source stages reproduce161 reference function bodies; twenty operating fragments apply atomically with all128 canonical row maps retained and four new policy/config/context tables empty, final132 tables. Native final04 terminal0:97/0; primary432/0 checks95 pins/nine full capturepairs and exact overload identities. Historical local read/handover/legacy closures are restored from pinned contracts; no provider grant claim. All four marked clones removed/original88 unchanged; owned8388stop0/noPID/process/listener/launcher17648terminal0. Field-level canonical backfills, complete current/cold replay/drift/populated recovery/all-writer/signed full-flow/host/real acceptance remain MAP-018. No operating SQL/provider/main/release/real-stock change. Exact source/evidence/recovery: `docs/evidence/20261004-category-shelf-life/BROADER_CANONICAL_COMPOSITION.md`. Exact next: prove individual canonical field/backfill preservation and qualified-type current/cold installation, exact successful replay/drift and populated guard-retaining deactivation/roll-forward, then complete native signed/canonical/trigger writer/context coverage using the broader image. Pending taxonomy/guest decisions and owner-parked development/security/private cleanup remain; do not treat canonical defaults or restored local grants as live authorization. Recovery removes only new builder/runner/auditor/doc additions, preserving overlays/frozen reference/branch work. No runtime remains.
+
+
+**5 October catalog cooperation batch and remaining schedules locally verified (IDEA-20261005-05/-06 / MAP-018):** Prior catalog247/native22/controls46 retained. New remaining-final01 terminal0:38/0 across six genuine signed Draft-first/import-second update+new, reversed two-row new+existing chunks, same-key fresh reviewed stale recovery and armed native lock/statement failures. Primary224/0 audits125 current pins/22 full capturepairs/11 HMACs. Full98 metadata/unrelated rows preserved; permitted duplicates remain; every imported/Draft product is zero-stock/unpublished/unreviewed. Counter1001false→1007true is seven committed synthetic creations, never sequence rollback. Clone removed/original88 unchanged; owned972stop0/PIDfilefalse/process0/listener0/launcher79698terminal0. No operational SQL change or provider/main/release/real-stock activation; independent review unavailable. Exact next MAP-018: imported-Draft canonical brand/category review design pending IDEA-20261005-07, then complete signed CSV→inventory→eligible lot→publication/Website chain. All-writer/current-cold/security/HTTP/browser/host/real-source/count/media/custody/human gates remain. Receipt/commands/recovery: `docs/evidence/20261004-category-shelf-life/CATALOG_IDENTITY_COOPERATION.md`. Recovery: scoped source removal of remaining witness/builder/auditor only, retaining earlier prepared overlays and frozen receipts; recreate only a new marked clone, never original/provider. Owner-parked development/security/private cleanup and guest clarification remain.
+
+**5 October full catalog-flow discovery in progress (IDEA-20261005-07):** CSV new rows lack canonical brand/category UUIDs; current signed master patch excludes those fields, so receiving/publication cannot complete for a genuinely imported Draft. Do not seed product UUIDs or attach a fixture intake session to force acceptance. Owner is asked once to confirm Admin-only initial taxonomy review via the existing signed master boundary; brainstorming design gate is pending, no operational implementation yet. Independent accepted importer reverse/new-row/multirow/timeout cases now pass38/0 under IDEA-20261005-05; prepared implementation is unchanged. Then prove maintained role-visible CSV → reviewed zero-stock Draft → canonical inventory → eligible lot → publication/Website. Future idea register contains purpose/assumptions/alternatives/decision state; full UI requires all four skills. Current branch/work preserved; no runtime now, no provider/release/real-stock authority. Exact next while waiting: full current/cold data-preservation/replay/recovery and writer integration from broader132-table image; carry forward catalog247/native22/controls46/remaining38 without repeating unaffected suites.
+
+**5 October catalog batch remaining work (IDEA-20261005-05/-06 / IDEA-20261002-05):** Accepted scoped catalog247/native22/controls46 and primary630/0/focused25/25 are archived in `docs/evidence/20261004-category-shelf-life/CATALOG_IDENTITY_COOPERATION.md`; do not repeat unchanged suites. No broad MAP item is complete. **Exact next:** compose current signed CSV/new Draft/SKU → reviewed canonical taxonomy/master → signed receiving/opening physical inventory → eligible lot → publication/Website chain, carrying forward remaining38/0; expand identity/resource/timer/recovery checks only for changed contracts or unresolved full-chain risks. Preserve unchanged master/Draft/receiving/publication evidence; whole all-writer/current-cold guarded install/replay/drift/populated recovery, security/provider/HTTP/browser/host/real-source/count/fact/media/custody and human acceptance stay open. Importer prepared body643ee1b9b7b584270d713b908729bfd3→20c3b123c2ead92943d28e0097a4276a and guarded data-retaining deactivate/rollforward remain outside activation migrations. Duplicate authorization retained; no provider/main/release/real-stock/listing activation. Runtime3168 is cleanly stopped0/noPIDfile/process/listener and launcher33982terminal0; all clones removed/original88 unchanged. Recovery: scoped batch source removal/restore preserving all earlier work and receipts; pinned disposable-clone recreation only, no provider populated-recovery claim. Owner-parked development/security/private cleanup, independent review limit and guest confirmation remain. Preserve all diagnostic archives; do not infer full readiness from scoped totals.
+
+
+**5 October master reverse ordering and armed identity timers locally verified (IDEA-20261005-05 / MAP-018):** Unchanged prepared master569f28150ed3f5f27d6cf50c019d70cd/Drafte0ae0726b5d19da69a023eb59bc98722 candidate; evidence only. Ordering final02terminal1/30nativechecks0assertionfail is explicitly partial:2 genuine signed Draft-first/Admin-second name-barcode reverse schedules complete with exact advisory wait, actual signer minute rollover/original2s10s, bothCOMMIT/exact7 own maps/full96 metadata/oneDraftSKU each and established later duplicate-edit authorization preserved. Two lock expiry55P03 and Admin10s statement expiry57014 also completed; final Draft disabled-lock-timer probe refuses55000 K2_CATEGORY_POLICY_DEADLINES_REQUIRED before wait. Do not call the whole ordering witness green. First final01terminal1/3checks0fail is generated frozen-authority path ENOENT diagnostic, corrected without SQL change. Corrected timer-only final01terminal0/19nativechecks0fail/4cases: Admin and Draft each actual exact identity wait; positive2slock/10sstatement produces55P03, positive2slock/1sstatement produces57014; all96 metadata/signing-canonical row maps and counter1001false unchanged,4victim3/2normal0. Statement1s is a valid shorter diagnostic bound, not10s/full HTTP request proof. Primary300/0 checks97/99sources and16/13capture pairs, genuine validators/HMAC/exact key/commit maps/timers, both frozen diagnostics and cleanup; selected2reverse cases accepted, wholepartialrunfalse. Source-pinned CATALOG_COOPERATION_PREREQUISITES.json classifies2missing identity columns/3functions/2tables/versiontrigger absent in current category-master clone; existing signer accepts catalog_import_chunk. Canonical identity+commit migrations require declared product identity/version/country initialization with every other field/non-product row/current function/ACL retained; catalog native composition not yet executed. Original88 unchanged/noSKU sequence; threeUUIDclonesremoved/runtime18840stop0/noPID-process-listener/startup55611terminal0. Exact next MAP-018: install/replay canonical catalog identity+commit on owned current category/master clone with full declared initialization/schema/RLS/ACL/function/row evidence, then genuine signed Draft/import name cooperation preserving current duplicate-edit policy; completeallwriter/current-cold guarded installer/drift/populated recovery after it. Evidence/recovery docs/evidence/20261004-category-shelf-life/MASTER_IDENTITY_ORDERING_AND_TIMERS.md. No global uniqueness/newSQL/application/provider/main/release/activation/realstock/listing changes. Development/scanner/security/private cleanup stay owner-parked, independentreview usage-limited/guest pending; security/provider/HTTP/browser/host/real-source/real-stock acceptance open. Recovery pinned disposable clone recreation/guarded removal/native stop only, not populated provider recovery.
+
+**5 October Admin master identity cooperation locally verified (IDEA-20261005-05 / MAP-018):** Prepared supabase/prepared/category_shelf_life_master_identity.sql changes exact category-aware master body82320eee518a85857015028dcee7ab53-to-569f28150ed3f5f27d6cf50c019d70cd with2 closed anchors: after original validation/version/product lock, acquire sorted distinct changed destination name/normalized nonblank barcode identity keys before original UPDATE. Existing master duplicates/field storage/role/AAL2/version/receipt/event and all nonbody metadata/ACL retained; unchanged fields acquire no identity key, cached receipt returns before keys. Wait final01terminal0/47nativechecks0fail/4name-barcode COMMIT-ROLLBACK schedules: exact bigint advisory wait on Admin owner after Draft Shared entry, master COMMIT causes23505/full refusal/noSKU and only5 master tables; master ROLLBACK allows zero-stock Draft/oneSKU and only6 Draft tables, all96 metadata/unrelated maps retained. Real native signing-minute rollover/original2s10s, no clock/verifier substitution. Control final02terminal0/35nativechecks0fail/6cases plus committed-seed retry/replay/2drifts: ordinary duplicate name+barcode edits allowed/two keys, short edit/blankbarcode removal/noidentity, stale40001/Staff42501/invalidemptyname22023 full96 subtransaction/root rollback/noSKU, genuine committed saved receipt stale-version retry retains product/event/result/noidentity/exact2 nonce-rate tables. First control01terminal1/28pass1fail is wrong expected3 retry-map witness diagnostic; exact2 verified and fixed without operational change. Exact overlay replay full96 no-op, body/anonACL drift refuses atomically. Primary326/0 validates91wait/89control sources and17/27full capture pairs, maintained validators/HMAC, closed bodies/every nonbody metadata, original red2schedules and diagnostic. Counters wait1001false-to1002true(2rollback-release Draft successes), control1001false unchanged; no sequence rollback claim. Original88 unchanged/noSKU; three UUID clones removed/runtime6536stop0/noPID-process-listener/startup43696terminal0. Recovery pinned clone recreation/guarded removal; no populated provider recovery. Receipt docs/evidence/20261004-category-shelf-life/MASTER_IDENTITY_COOPERATION.md. Exact next MAP-018: reverse Draft-first/master ordering and armed identity timeout/full rollback, then canonical catalog prerequisites/native identity cooperation, fullallwriter/current-cold guarded installer/replay/drift/populated recovery. No global uniqueness introduced/fullallwriter acceptance inferred. Prepared/unactivated; development acceptance unverified and verify:development/scanner/security/private cleanup stay owner-parked; independent review usage-limited/guest pending/security-provider-HTTP-browser-host-real-source-real-stock-listing gates open. No production source migration application/provider/main/release/stock/listing activation.
+
+**5 October Draft/Admin master identity race reproduced (IDEA-20261005-05 merged into IDEA-20261002-05 / MAP-018):** Native red02 intended terminal1/23checks0fail/2schedules and primary135/0/86current source entries/13full capture pairs prove genuinely signed Admin master name/barcode updates remain uncommitted while a genuinely signed Staff Draft accepts the same case-folded identity. Draft commits first, master commits second; both canonical rows survive with exact master before/after event, Draft association, zero physical stock and context0. Actual native minute rollover avoids shared signing bucket contention without clock/verifier changes; original2s/10s timeouts/AAL2/authenticated contracts retained. Draft holds Shared category and bigint identity keys; master holds no Draft identity keys. Canonical master event table prerequisite is copied exactly from its migration, creating96-table clone; first red01 terminal1/6checks0fail is missing-event-table42P01 dependency diagnostic, not race acceptance. Both successful schedules change only7 declared tables; full96 metadata and other row maps preserved, one SKU each/counter1001false-to1002true. Original88 unchanged/noSKU sequence; two UUID clones removed/runtime23392stop0/noPID-process-listener/startup19042terminal0. No operational SQL correction yet. Gate outcome: accept sorted identity-key cooperation into existing MAP-018, preserving authorized master/import edits and confirmed variants; do not impose new global name/barcode uniqueness. Exact next: prepare guarded master identity-lock overlay and prove master-first COMMIT/refusal, ROLLBACK/success, reverse ordering, ordinary duplicate edit semantics, stale-version/auth/retry/lock-timeout rollback; then compose catalog prerequisites/native cooperation and full all-writer/current-cold installer/replay/drift/populated recovery. Evidence/reproduction/recovery docs/evidence/20261004-category-shelf-life/DRAFT_MASTER_IDENTITY_RACE.md. Development/scanner/security/private cleanup remain owner-parked, independent review usage-limited and guest confirmation pending; broader security/provider/HTTP/browser/host/real-source/real-stock/listing gates stay open. No provider/main/release/activation/real inventory change. Recovery is pinned disposable clone recreation and guarded removal/native stop, not populated provider recovery.
+
+**5 October existing Draft isolation contract locally verified (IDEA-20261002-05 / MAP-018):** Unchanged normalized candidate/native entry helper already requires literal Read Committed at fresh command entry, before category/identity resources. Exploratory red01terminal1/8pass1fail stops at0A000 K2_CATEGORY_POLICY_ISOLATION_UNSUPPORTED beforeShared; no stale duplicate regression or operational fix. Direct contractfinal01terminal0/41nativechecks0fail/7cases; primary183/0/85sources/23fullcapturepairs. Genuine maintained signed Staff fresh Repeatable Read/Serializable/Read Uncommitted each refuse0A000/no category-identity locks/noSKU/all95 signing-control maps unchanged; Read Committed creates resolved unpublished/unreviewed zero-stock Draft/Shared/nameidentity/exact6 own tables, complete95 fixture-schema rollback. Separate genuine signed Read Committed seed COMMIT changes exact6 tables/oneSKU; missingconfig positively captured before all3 nondefault historical retries, obsolete review admitted/noentry/noidentity/exact3 signingcontrols/completeproduct-session preserved/noSKU, each95 metadata-row rollback. Explicit clone counter1001false-to1002true:1freshrolledback attempt+1committedseed; no sequence rollback claim. One nativebackend0/final95 fixturebaseline/original88 unchanged/noSKU sequence/twoUUIDclonesremoved/runtime15644stop0/noPID-process-listener/startup25291terminal0. Receipt commands/limits/recovery docs/evidence/20261004-category-shelf-life/DRAFT_ISOLATION_CONTRACT.md. **Exact next:** native Draft/Adminmaster/catalog identity cooperation under recorded authoritative semantics, then completeallwriter/current-cold guarded installer/replay/drift/populated recovery; compiled source inventory remains scoped. No production SQL/application/provider/main/release/realstock/listing change. Evidence-only no redundant prior36/application/release gate; development acceptance remains unverified while verify:development/scanner/security/privatecleanup owner-parked; guest pending/reviewer usage-limited; broader currentevent/clearance/signedpolicy/independentreview/HTTP/browser/provider/host open. Recovery exact pinned disposable clone recreation only/no populated provider recovery claim.
+
+**5 October Draft normalized barcode and identity-writer audit locally verified (IDEA-20261005-04 merged into IDEA-20261002-05 / MAP-018):** Whitespace red01terminal1/31pass9fail/6cases proves three padded incoming/stored/sessionfallback duplicate accepts with SKU/signing/canonical changes. supabase/prepared/category_shelf_life_draft_whitespace.sql exact closed47e8f63b086e417a460d18061dad626b-to-e0ae0726b5d19da69a023eb59bc98722 overlay follows draft_duplicates; six guarded anchors normalize barcode once(trim/blankNULL) for original duplicate query(existingtrim), identity lock and INSERT, retaining rawlength limit/roles/cachedchecks/legacyrows/metadata. Green01terminal0/43nativechecks0fail; primary183/0/83sources/23fullpairs. Three paddedduplicates23505/full95/noSKU; existingcasefoldrefusal, blankNULL/nameidentitylockonly and freshtrim/twolocks/zero stock remain; native replay/originalduplicate-body/ACLdrift atomic95metadata-row-counter preservation. Prior36 whitespace-matrixfinal01terminal0/216nativechecks0fail; primary518/0/79sources/89pairs preserves content/duplicatevariant/evidence/request/roles/saved retries/oldguardcontracts. Explicit clone counters green1001false-to1002true(2success), matrix1001false-to1008true(7success+auditfault); table rollback excludes values. Read-only PRODUCT_IDENTITY_WRITER_AUDIT.json pins7 sources/current compiled capture:13product-write candidates,2identitywriters(Draft/Adminmaster),1compatibility trigger; master edits name/barcode without Draftidentity keys, catalogimport source edits name/title/newproducts but is not compiled here. Native clone product table/column ACLs null/no grants; no global role-inheritance/provider security audit inferred. Original88 unchanged/noSKU sequence/threeUUIDclonesremoved/runtime22936stop0/noPID-process-listener/startup99643terminal0. Receipt commands/evidence/recovery docs/evidence/20261004-category-shelf-life/DRAFT_WHITESPACE_AND_WRITERS.md. **Exact next:** native stronger-isolation and Draft/Adminmaster/catalog cooperation with authoritative identity semantics, then fullallwriter/current-cold guarded installer/replay/drift/populated recovery. Sourceinventory is not exhaustive dynamic/privilegedwriter or cross-writer/nativehost proof. No new global uniqueness policy/provider/main/release/realstock/listing activation. Prepared/unactivated/development acceptance unverified while verify:development/scanner/security/privatecleanup owner-parked; guest pending/reviewer usage-limited; broader currentevent/clearance/signedpolicy/independentreview/provider/host open. Scoped pinned recreation only/no populated provider recovery claim.
+
+**5 October native Draft duplicate races corrected locally (IDEA-20261005-03 merged into IDEA-20261002-05 / MAP-018):** Red02intendedterminal1/23evidencechecks0fail proves two genuine signed actors commit duplicate case-folded names and barcodes across actual native minute buckets; no clock substitution/verifier override. Red01global-rate wait diagnostic6pass1fail precedes entry; separate actor buckets alone do not bypass shared global bucket. supabase/prepared/category_shelf_life_draft_duplicates.sql exact closed63c72ea27839da942e603e900e0767b0-to-47e8f63b086e417a460d18061dad626b overlay follows draft_evidence; sorted bigint case-folded name/barcode transaction identity locks precede original duplicate queries/SKU, preserve Shared category/cachedroles/evidence/content/confirmedvariant/fullnonbodymetadata. Green01terminal0/25nativechecks0fail/2actualrollover schedules; primary132/0/84sources/11fullcapturepairs. Second signed Admin waits on exact first Staff bigintidentity/key/PID with both categoryShared, then firstCOMMIT exposes duplicate and23505 name/barcode refusal/backend3; only first Draft/session/audit/signing survives/exact6 own tables/no secondSKU/physical-context0. Two native0/two victims3. Prior36matrix duplicatesfinal01terminal0/216nativechecks0fail; primary513/0/74sources/89pairs proves content/roles/evidence/request/duplicates/confirmeddistinctvariant/saved retries/validation and independently original-evidence-body/ACL/replay duplicateguards95metadata-row-counter preservation. Clone counters red1001false-to1004true(4committedDrafts), green1001false-to1002true(2firstcreators), matrix1001false-to1008true(7success+auditfault); no sequence rollback claim. Original88 unchanged/noSKU sequence/fourUUIDclonesremoved/runtime9020stop0/noPID-process-listener/startup22576terminal0; no runtime remains. Receipt commands/evidence/recovery docs/evidence/20261004-category-shelf-life/DRAFT_DUPLICATES.md. **Exact next:** Draft identity whitespace/stronger-isolation/other-writer coverage and full allwriter/current-cold guarded installer/replay/drift/populated recovery; this correction serializes cooperating fresh Drafts only. Manual native root COMMIT/rate-rollover is not HTTP/browser/deadline/provider/host/realstock proof; broader currentevent/clearance/signedpolicy/independentreview open. Prepared/unactivated/development acceptance unverified while verify:development/scanner/security/privatecleanup owner-parked; guest pending/reviewer usage-limited. No provider/main/release/realstock/listing activation; scoped pinned recreation only/no populated provider recovery claim.
+
+**5 October distinct Draft packaging and raw boundaries locally verified (IDEA-20261005-02 merged into IDEA-20261002-05 / MAP-018):** Boundary red01terminal1/83pass8fail/13cases proves genuine threePRIMARY/twoPRIMARYoneBACK Draft creation without required distinctslots. Six assertions reflect two true bypasses; two oversized error expectations corrected to existing outer K2_ADMIN_REQUEST_INVALID/atomic refusal. supabase/prepared/category_shelf_life_draft_evidence.sql exact closed35de7196052bd3c2d45799d68d84c057-to-63c72ea27839da942e603e900e0767b0 overlay follows draft_validation; adds distinct PRIMARY/BACK/BARCODE uploadedcount3 alongside existingtotal3, preserving extra-upload refusal/cachedroles-locks-content/fullnonbodymetadata. Boundary green01terminal0/94nativechecks0fail/13cases; primary263/0/73sources/37full capturepairs. Raw missing/null/oversized inputs, null schema/name decision and cached missing/null request refuse with complete95 maps/noSKU; valid control and genuine saved retry retained/exactownsigningcontrols. Native evidence replay/originalvalidated-body/ACLdrift atomic95metadata-row-counter preservation. Prior36matrix evidencefinal01terminal0/213nativechecks0fail; primary493/0/69sources/83pairs:7accepted29refused plus saved retries and validation guards, including extra uploaded packaging refusal. Explicit clone counters boundary1001false-to1002true(2success); matrix1001false-to1008true(7success+auditfault), table rollback excludes sequencevalues. All95 fixtures/schema rollback/original88 unchanged/noSKU sequence/threeUUIDclonesremoved/runtime24240stop0/noPID-process-listener/startup85628terminal0; no runtime remains. Receipt commands/scope/recovery docs/evidence/20261004-category-shelf-life/DRAFT_BOUNDARIES.md. **Exact next:** actual two-session Draft duplicate-name/barcode concurrency and strongest-resource integration, then completeallwriter/current-cold guarded installer/replay/drift/populated recovery. Uploadedflags are synthetic, no realbytes/HTTP/browser/deadline/provider/host/realstock proof; broader currentevent/clearance/signedpolicy/independentreview open. Prepared/unactivated/development acceptance unverified while verify:development/scanner/security/privatecleanup owner-parked; guest pending/reviewer usage-limited. No provider/main/release/realstock/listing activation; scoped pinned recreation only/no provider populated recovery claim.
+
+**5 October Draft matrix and required-field correction locally verified (IDEA-20261005-01 merged into IDEA-20261002-05 / MAP-018):** Baseline final01terminal1/189pass19fail/36cases proves genuine missing request/schema/accepted-name Draft acceptance with SKU allocation; missing product skips typed guard then safely refuses name. Six JSON-order content assertions and fresh config refusal were witness expectations, corrected; duplicate refusals pass. supabase/prepared/category_shelf_life_draft_validation.sql exact closed e05c6e32e5b80d22fa70d4c44da8d170-to-35de7196052bd3c2d45799d68d84c057 overlay follows category_shelf_life_draft.sql; seven guarded null-safe required-field edits including both fresh/cached request checks, atomic full nonbody metadata preservation. Corrected final02terminal0/213nativechecks0fail/36cases; fresh primary488/0/64sources/83full capturepairs.7initialsuccess/29refusal cover reviewed content/alias/lookup/duplicate resolution/role/evidence/request/name-barcode-shape/config/auditfault; saved receipt/business retries after configremoval, conflict/nonce rollback, completeproduct-session retained/no extraSKU/exactsigningcontrols. Everyfreshsuccess Shared/unpublished/unreviewed/physical0/context0/exact6own tables/oneactoraudit; all95 fixture-schema rollback. Eight explicit clone SKUallocations(7success+auditfault) persist1001false-to1008true; no counter rollback claim. Native replay/originalprepared-body/ACLdrift each95metadata-row-counter preservation. Original88 unchanged/noSKU sequence/bothUUIDclonesremoved/runtime13096stop0/noPID-process-listener/startup60786terminal0; no runtime remains. Receipt commands/evidence/recovery docs/evidence/20261004-category-shelf-life/DRAFT_MATRIX.md. **Exact next:** remaining Draft duplicate packaging-slot/cached missingrequest/null-oversized raw/duplicate-concurrency coverage, then completeallwriter/current-cold guarded installer/replay/drift/populated recovery. Selected36 matrix does not prove these boundaries or uploadedbytes/HTTP/browser/deadline/provider/host/realstock; broader currentevent/clearance/signedpolicy/independentreview gates open. Correction prepared/unactivated/development acceptance unverified while verify:development/scanner/security/privatecleanup owner-parked; guest pending/reviewer usage-limited. No provider/main/release/realstock/listing activation; scoped pinned recreation only/no populated provider recovery claim.
+
+**5 October native Draft contention locally verified (IDEA-20261002-05 / MAP-018):** Unchanged guarded Draft candidate final01terminal0/39nativechecks0fail/8schedules; fresh primary169/0/61sources/24full capturepairs. Actual maintained signed Staff/AAL2 fresh policy wait requestsShared before session/product row resources; session/categoryFK waits alreadyShared and release into resolved unpublished/unreviewed Draft physical0/context0. Genuine signed committed seed changes exact6 product/session/audit/signing tables. Missingconfig obsolete-review saved retry completes under heldexclusive with noentry/completeproduct-session preserved/noSKU. Concurrent saved association removal refuses55000 K2_DRAFT_RETRY_STATE_CHANGED; request replacement22023 K2_REQUEST_ID_MISMATCH; ownership revoke/abandonment42501 K2_INTAKE_SESSION_NOT_FOUND. Only owner session fixture survives/all95 signing maps rollback/noSKU. Three fresh rollbacks preserve95 tables/metadata but consume sequence values; plus seed counter1001false-to1004true; cached/refused noallocation. General fingerprints exclude counters; no sequence rollback claim. Original88 template unchanged/noSKU sequence, UUIDclone removed/4normalbackends0/4victims3/runtime21460 native-stop0/noPID-process-listener/startup76393terminal0. Default sandbox stop signal denied; reviewed elevation stopped same runtime/no restart. Receipt commands/scope/recovery docs/evidence/20261004-category-shelf-life/DRAFT_WAITS.md. **Exact next:** full Draft duplicate/evidence/request/role/content/sequence matrix, then completeallwriter/current-cold guarded installer/replay/drift/populated recovery. CategoryFK contention is not duplicate concurrency/HTTP deadline acceptance; broader currentevent/clearance/signedpolicy/independentreview/provider/host/realstock open. No operational SQL/application/provider/main/release/realstock/listing change; recovery pinned unactivated evidence recreation only. Development acceptance unverified while verify:development/scanner/security/privatecleanup owner-parked; guest pending/reviewer usage-limited; evidence-only no redundant app/release gate.
+
+**5 October native Draft regression and preparation (IDEA-20261002-05 / MAP-018):** Actual signed Staff freshDraft red01intendedterminal1/12evidencechecks0fail writes withoutentry. supabase/prepared/category_shelf_life_draft.sql exact closed effac58afd4dd09a0d5af207ed493326-to-e05c6e32e5b80d22fa70d4c44da8d170/full function-metadata guard adds freshShared entry before session/resources; existing category/brand firstassignment, no taxonomy/policy/existingstock mutation/no context. Authorized saved association probe reauthorizes/locks session/checks request; vanishedassociation refuses K2_DRAFT_RETRY_STATE_CHANGED/no late entry; original lockedfresh retry/gates preserved. Green01terminal0/19checks0fail; primary181/0/red50sources7pairs/green55sources16pairs. Resolved Draftunpublished/unreviewed/physical0/sessionfirstinventory/exact6 own product-session-audit-signing changes; obsolete-review/missingconfig savedretry noentry/exact3 signing changes/product-session preserved/no SKUallocation. Independent-original body/ACL drift and replay95 metadata/counter preservation. Fresh clone SKU001001 counter1001false-to1001true survives table rollback explicitly; general fingerprints excludecountervalues, no sequence rollback claim. All95 fixture/schema rollback/original88 tables-metadata unchanged/UUIDclones removed; originaltemplate has noSKUsequence(safeexistence receipt), candidate creates onlyclone. Runtime23724stop0/noPID-process-listener/startup84431terminal0; no runtime remains. Initial cleanup nonexistent-template-sequence read refusedbeforestop; same runtime stopped after safeexistence query/no restart. Receipt commands/scope/recovery docs/evidence/20261004-category-shelf-life/DRAFT_PREPARATION.md. **Exact next:** actual Draft policy/session/category-resource waits and saved request/state/ownership races, duplicate/evidence/request/role/content/sequence matrix, then completecurrent-cold allwriter installer/replay/drift/populated recovery. Sourceorder/heldlock not actual waitproof; full Draft/intake/currentevent/clearance/signedpolicy/review/provider/host/realstock gates remain open. Recovery unactivated fragment/evidence recreation only/no provider rollback. Development acceptance unverified while verify:development/scanner/security/private cleanup parked; guest pending/reviewer usage-limited; no release gate/provider/main/realstock/listing activation.
+
+**5 October full canonical publication matrix locally verified (IDEA-20261002-05 / MAP-018):** Unchanged guarded publication plus exact accepted20260811 canonical status projection trigger prerequisite missing from narrow restore. Final05terminal0/248nativechecks0fail/44cases; fresh primary622/0/43sources/93full capturepairs. All25 statuspairs(13allowed including5unchanged/12refused),7 exact readiness/detail refusals, retailpricefallback/Adminother-owner/completed-session relist, Staffownership/AAL1/anon/missing/unassociated/raw-target-reason/auditfault refusals, saved receipt/business retry and conflict/nonce rollback.17accepted/27refused; correct Live/published projection, actor/0-or1transition+1reasonaudit, freshshared/cachednoentry, exact6-or4 own publication-signing tables, protected product/session fields and no-op timestamps retained, physical0/context0. All44 fixture/schema95 rollback/original88 unchanged/UUIDclone removed/runtime18632stop0/noPID-process-listener/startup42012terminal0; no runtime remains. Witness01 insert-trigger timestamp,02 emptyname filledSKU,03 invalidpair diagnostics fixed without operational changes/disabledconstraints; focused04sixcases44/0 before fullfinal05. Receipt commands/scope/recovery docs/evidence/20261004-category-shelf-life/PUBLICATION_MATRIX.md. **Exact next:** native fresh Draft strongest-mode/category-first-assignment integration, authorized locked saved retry, duplicate/evidence/request/role refusals and sequence behavior; then full allwriter/current-cold guarded installer/replay/drift/populated recovery. Canonical local publication is not Website membership/sellable inventory/public-host/real listing acceptance. Broader currentevent/clearance/signedpolicy-intake/review/provider/host/realstock remain open. No operational SQL/application/provider/main/release/stock/listing change; scoped evidence recreation/no provider rollback. Development acceptance unverified while verify:development/scanner/security/privatecleanup parked; guestpending/reviewerusage-limited; no redundant app/release gate.
+
+**5 October native publication waits and retry races locally verified (IDEA-20261002-05 / MAP-018):** Unchanged preparation final02terminal0/25nativechecks0fail/6schedules; fresh primary117/0/43sources/18full capturepairs. Actual maintained signed Staff/AAL2 fresh wait on exact exclusive-policy PID/key requestsShareLock before session/product RowShare-RowExclusive resources; session/product waits already holdShared, release acceptsUnderReview/physical0/context0. Missing-config unchanged-status retry completes while exclusivepolicyheld with no entry requested. Concurrent cached productstatus UnderReview-toDraft refuses55000 K2_PUBLICATION_RETRY_STATE_CHANGED after locked reread; sessionownership Staff-toAdmin refuses42501 K2_INTAKE_PRODUCT_NOT_FOUND. Only ownerproduct/session fixture survives respectively; every95 signing/control map restored/metadataequal.4 normalbackends0/2expectedvictims3; full95 readerrollback/finalbaseline/original88 unchanged/UUIDcloneremoved/runtime1604stop0/noPID-process-listener/startup30466terminal0; no runtime remains. Diagnostic01 omitted expectedCode from exit snapshot, witness-only fixed. Receipt commands/scope/recovery docs/evidence/20261004-category-shelf-life/PUBLICATION_WAITS.md. **Exact next:** full publication status/readiness/role/refusal/retry matrix, then fresh Draft strongest-mode/category-first-assignment integration. Privileged cooperating policy/resource fixture is not signed Admin policy/HTTP authority. Full intake/allwriter/current-cold installer/populated recovery/independent review/provider/host/realstock remain open. No operational SQL/application/provider/main/release/stock/listing change; scoped evidence recreation/no provider rollback. Development acceptance unverified while verify:development/scanner/security/private cleanup parked; guest pending/reviewer usage-limited; evidence-only no redundant app/release gate.
+
+**5 October guarded publication prepared locally (IDEA-20261002-05 / MAP-018):** supabase/prepared/category_shelf_life_publication.sql changes only exact closed accepted publication body47b5f07d104fd7a5cc8d4a93123d62bc to925c568b148630f98249a6207f3ce25e, with single-anchor/full function-metadata guard. Fresh status mutations shared entry before original session/product locks; no taxonomy/policy or lot eligibility mutation/context. Authorized nonlocking unchanged-status probe reauthorizes/locks session and rereads locked product; changed status refuses K2_PUBLICATION_RETRY_STATE_CHANGED, no late entry. Native greenfinal02terminal0/17checks0fail; fresh primary83/0/37sources/16full capturepairs. Actual signed Staff fresh status holdsShareLock/exact5 product-audit-signing table changes; same-status retry missingconfig/noentry/productpreserved/exact4 audit-signing changes. Replay and independently original-body/ACL drift each atomic95-table/schema refusal. Allfixture95 rollback/original88 unchanged/UUIDclone removed/runtime9952stop0/noPID-process-listener/startup24579terminal0; no runtime remains. Green01 dollar-quote drift-probe syntax diagnostic fixed only in witness. Receipt commands/limits/recovery docs/evidence/20261004-category-shelf-life/PUBLICATION_PREPARATION.md. **Exact next:** actual publication policy/session/product waits, changed-state/authorization replay races and status-readiness-refusal matrix, then native fresh Draft strongest-mode/category first-assignment integration. Source order/finallock is not actual wait-order proof. Full intake/allwriter/current-cold installer/populated recovery/independent review/provider/host/realstock open; fragment/evidence recreation only/no provider rollback. Development acceptance unverified while verify:development/scanner/security/private cleanup parked; guest pending/reviewer usage-limited. No application/provider/main/release/stock/listing activation; no release gate.
+
+**5 October native signed publication missing-entry regression (IDEA-20261002-05 / MAP-018):** Final04 intendedterminal1/11evidencechecks0fail; fresh primary55/0/32sources/7capturepairs. Actual maintained validator/signer Staff AAL2 Draft-to-Under Review succeeds with no held category-policy lock after product write. Exact accepted20260905 closed publication body plus20260811 status prerequisite composed only in owned clone with green06 intake; narrow restore missing helper/status dependencies explicitly classified. Exact5 product/audit/signing table changes; already-publication_review session unchanged in same fixture transaction. All95-table/schema rollback/original88 unchanged/UUIDclone removed. Diagnostics01 wrong syntheticenv,02 missing status constraint,03 expected6 instead5 are witness/prerequisite errors, not operational fixes. Receipt commands/scope/recovery docs/evidence/20261004-category-shelf-life/PUBLICATION_ENTRY_RED.md. Runtime5896 identitychecked stop0/noPID/process/listener/startup12774terminal0; no runtime remains. **Exact next:** guarded publication/Draft earliest-mode entry before fresh resources with authorized locked historical/status retries, then native success/refusal/retry/policy/resource/context integration; first assignment versus stocked reassignment strongest-mode classification remains explicit. Full intake/allwriter/current-cold installer/populated recovery/independent review/provider/host/realstock open. No operational SQL/application/provider/main/release/stock/listing change; evidence recreation only/no provider rollback. Development/scanner/security/private cleanup parked; guest pending/reviewer usage-limited; no redundant app/release gate.
+
+**5 October composed flight matrix locally verified (IDEA-20261002-05 / MAP-018):** Unchanged intake+flight preparation and exact closed manifest helper: final02terminal0/115nativechecks0fail/23cases; fresh primary301/0/32sources/51full capturepairs. Actual maintained signed Staff/Admin today/ten-year-ceiling/future/quantity-cost bounds and Admin other-owner accepted with expected manifest values, packed/scanned0 and physical/product/balance/context0; exact6 manifest/session/audit/signing tables change. Sixteen initial date/ownership/role/gate/manifest/stored-SKU/raw invalid/cost-fault refusals preserve all95 maps. After manifest closes/config removed, receipt/business retries preserve saved line with only signing controls; conflict/duplicate/nonce3 refusals atomic. All23 fixture/schema95-table rollback, original88 unchanged/UUIDclone removed. Receipt commands/limits/recovery docs/evidence/20261004-category-shelf-life/INTAKE_FLIGHT_MATRIX.md. Default sandbox bind denied/runtime13672 exited/final01 connection-refused before clone; not business evidence. Reviewed runtime20464 identity checked native-stop0/noPID/process/listener/startup15650terminal0; no runtime remains. **Exact next:** native Draft/publication earliest-entry resource/context integration preserving cached retries/authority/guards. Genuine flight-midnight/currentevent/clearance/broader contention/full allwriter/current-cold installer/populated recovery/independent review/provider/host/realstock remain open. No operational SQL/application/provider/main/release/stock/listing change; scoped evidence recreation only, no provider rollback. Development/scanner/security/private cleanup parked; guest confirmation pending/reviewer usage-limited. Evidence-only no redundant application/release gate.
+**5 October flight product-FK calendar correction prepared (IDEA-20261002-05 / MAP-018):** Actual signed Staff native red02intentionalterminal1/24evidencechecks0fail proves BEFORE INSERT phase after date validation precedes observed productFK wait; session/manifest controls pass. supabase/prepared/category_shelf_life_intake_flight.sql exact prepared-body/closed metadata single-anchor overlay adds only productFORKEYSHARE/existence before flight clock, after manifest, following category_shelf_life_intake.sql. Final01terminal0/25checks0fail; primary157/0; red33sources12pairs/green34sources14pairs plus generatorpin. Everyphase now after observed resource release; original2s/10s, manifest expected4/packed-scanned0/cost2.5/date/physical0/context0 and complete96-table rollback intact; native replay3/full-state equal. Fourbackends0/original88 unchanged/UUIDclones removed. Receipt commands/limits/recovery docs/evidence/20261004-category-shelf-life/INTAKE_FLIGHT_PRODUCT_WAIT.md. Infrastructure red01 connection refused after environment removed startup15301/process21080, stalePID observed/no process-listener before PostgreSQL-owned restart; not business evidence or clean old shutdown. Restart11220 identitychecked stop0/noPID/process/listener/startup77638terminal0; no runtime remains. **Exact next:** flight overlay composition plus calendar/refusal/roles/ownership/retry/closed-manifest/cost acceptance, then Draft/publication entry; genuine currentevent/clearance/contention/full allwriter/current-cold installer/populated recovery/review/provider/host/realstock open. No clock override or actual flight midnight claim. Development acceptance unverified while verify:development parked; unchanged reconciliation suite not redundantly rerun. No provider/main/release/realstock/listing activation; guest/review/security parked-pending unchanged; recovery unactivated fragment recreation only.
+
+**5 October native intake matrix locally verified (IDEA-20261002-05 / MAP-018):** Unchanged preparation final01terminal0/156nativechecks0fail/30cases; fresh primary340/0/30sources/65full capturepairs.24signed requests(23maintained validator accepts plus explicit raw custody negative control rejected by validator/native SQL),6closed canonical owner calls. Under inherited150 day−1/0/30/31/89/90/149 unavailable,150/151 available; nonexpiry/foreign custody unavailable,finite9999 available, typed quantity/cost caps retained. Impossible date/Staff/AAL1/config/depth/null-cycle taxonomy/custody/existinglot refusals preserve all95 subtransaction maps. Direct null/infinity/BC unavailable,9999 eligible; reserved physical4/1=>eligible3 and physical0 refusal. Every20success exact final event/actor/context cleanup/cost where applicable,10refusals and30whole fixture/schema95-table rollback pass; original88 restore unchanged/UUIDclone removed/runtime13352stop0/noPID/process/listener/startup20567terminal0. Receipt commands/scope/recovery docs/evidence/20261004-category-shelf-life/INTAKE_MATRIX.md. **Exact next:** native flight/calendar and complete earliest resources including productFK waits after manifest, Draft/publication entry integration; currentevent/clearance/direct-nested contention/signedpolicy-intake/full current-cold installer/populated recovery/allwriter/review/provider/host/realstock remain open. No operational SQL/application/provider/main/release/realstock/listing change. Evidence-only no redundant app/release run; parked development/scanner/security and pending guest/review limits unchanged; scoped evidence recreation only.
+
+**5 October actual signed intake waits locally verified (IDEA-20261002-05 / MAP-018):** Unchanged prepared intake final03terminal0/32nativechecks0fail; fresh primary102/0/30sources/17full capturepairs. Six actual Admin AAL2 validator/signer schedules prove fresh shared entry before operational locks, policy fixture commit90→149physical/eligible4, session/balance/product waits then one post-release context under150→physical4/eligible0/cost2.5/exact event, all reader96-table metadata rollback. Actual signed seed changes exact10 synthetic tables; cached business retry completes under exclusive policy while requesting no entry/no context/inventory rewrite. Concurrent owner session abandonment makes cached reread refuse42501 with only owner session change surviving and all signing controls rolled back. Policy writer is privileged cooperating maintenance, not signed Admin mutation/provider authority. Original2s/10s retained; five native0/expected cached-denied3; no HTTP deadline/allwriter acceptance inferred. Diagnostics01 required policyversion and02 new-transaction product timestamp are fixture/witness-only. Receipt commands/scope/recovery docs/evidence/20261004-category-shelf-life/INTAKE_WAITS.md. Original88 restore unchanged/UUIDclone removed/runtime16164stop0/noPID/process/listener/startup26004terminal0; no runtime remains. **Exact next:** broad signed/canonical expiry-calendar-custody-source-config/refusal/current-event matrix, native flight and Draft/publication entry; signed policy/intake and broader cache-state/contention/full current-cold installer/populated recovery/allwriter/review/provider/host/realstock remain open. No operational SQL/application/provider/main/release/realstock/listing change. Parked development/scanner/security and pending guest confirmation/reviewer usage limit unchanged; scoped evidence recreation only.
+
+**5 October nested reconciliation prepared locally (IDEA-20261002-05 / MAP-018):** supabase/prepared/category_shelf_life_intake.sql replaces only exact closed canonical reconciliation and first-inventory bodies in one atomic DO with accepted fingerprint/function/ACL/path guards and complete non-body metadata preservation. Shared early entry; balance→product→all-lots matching signed recount; one post-lock owned/reused context; canonical date/predicate/events; caller cost/provenance/final-event refresh before cleanup. Historical pre-read retry reauthorizes under original session lock before fresh entry/config and refuses changed state; original locked second retry retained. Flight manifest-before-calendar edit is prepared but native flight acceptance open. Final06terminal0/32checks0fail; fresh primary65/0/25sources/4pairs. Actual signed Admin149/min150 physical4/eligible0/cost2.5/final event; missing-config receipt/business retries; fresh-config/event-fault/depth refusal full95-table rollback; direct150 physical4/eligible4/owned cleanup; replay/body/ACL second-function drift atomic preservation. Whole88 schema/rows rollback/templateunchanged/UUIDclonesremoved. Diagnostic01 unchanged zero-product row/count and02 claims JSON parsing are witness-only; archives03–05 preserve earlier passing scopes. Receipt commands/limits/recovery docs/evidence/20261004-category-shelf-life/INTAKE_NESTED_PREPARATION.md. Finalruntime7960stop0/noPID/process/listener/startup22204terminal0; earlier21296stop0/startup54470terminal0; no runtime remains. **Exact next:** actual intake policy/resource waits and cached-retry state races/broad eligibility-calendar-refusal/current-event matrix, then native flight/Draft/publication integration; full allwriter/current-cold installer/populated recovery/review/provider/host/realstock open. Development acceptance unverified while owner-parked verify:development remains parked; no release gate/provider/main/realinventory action. Guest confirmation pending/reviewer usage-limited/securitycleanup parked. Recovery unactivated fragment/evidence recreation from pins; no production populated recovery claimed.
+
+**5 October signed nested intake native regression (IDEA-20261002-05 / MAP-018):** Final02 intentionally terminal1/13evidencechecks0fail; fresh primary36/0/19pins/4capturepairs. Exact frozen accepted cost/calendar first-inventory, closed legacy reconciliation and authenticated signed intake dispatcher plus narrow schema prerequisite in joint candidate: actual maintained Admin AAL2 validator/signer149-day reconciliation reaches55000 K2_CATEGORY_CONTEXT_REQUIRED. Every95-table exception rollback and whole88-table schema/metadata rollback pass; original restore unchanged/UUIDclone removed. Final01 wrong96 expected count is a retained witness diagnostic, not an operational fix. Receipt commands/scope/dependency classification/recovery docs/evidence/20261004-category-shelf-life/INTAKE_NESTED_RED.md. Legacy balance→lots→product order, hard current_date30/90, caller cost/provenance writes after nested event and prewait flight clock require guarded nested composition; wrapper-only context patch is insufficient. **Exact next:** nested reconciliation earliest policy entry/compatible resources/post-lock caller-owned context/final cost-event parity with native success/refusal/direct-nested/receipt-business retry evidence, then flight/Draft/publication. Full installer/recovery/allwriter/independentreview/provider/host/realstock remain open. Runtime15688stop0/noPID/process/listener/startup22786terminal0, no runtime remains; intake-red-runtime-shutdown.json. No maintained operational source/provider/main/release change; scoped evidence recreation only. Parked scanner/security and pending guest confirmation unchanged.
+
+**4–5 October native taxonomy authority/order classified locally (IDEA-20261002-05):** Taxonomy final03 terminal0/44checks0fail, fresh primary162/0/42pins/39pairs;12native role DML refusals/full95-table rollback, required early parent/reassignment protocol and omitted/late negative controls with actual signed149-day recount. Native40P01 inversion victim3/survivor0/all-state recovery; no new taxonomy route/grant/operational correction. Frozen full Draft assigns existing category after session lock and lacks prepared entry. Receipt/commands/scope/recovery docs/evidence/20261004-category-shelf-life/TAXONOMY_NATIVE_PROTOCOL.md. Next complete nested signed/canonical Draft/first-inventory earliest policy-mode/context before operational resources, preserving retries/control/cost/calendar guards; mediated taxonomy app authority remains unresolved. Full installer/all-writer/review/host/real-stock and parked/pending owner gates remain. Both owned clones removed/original88 restore unchanged/runtime11276stop0/noPID/process/listener/startup shell87130terminal0; taxonomy-midnight-runtime-shutdown.json. Scoped evidence recreation only, no provider/main/release/real inventory change.
+
+**4–5 October actual Manila-midnight receiving verified locally (same IDEA-20261002-05 / MAP-018):** Final01 terminal0/16checks0fail, fresh primary68/0/49pins/5pairs. Actual signed Staff receiving starts4Oct23:59:59.206220, waits on exact consignment23:59:59.253904, releases5Oct00:00:00.000981, captures context00:00:00.018754. Original2s/10s timers/entry guards unchanged/no clock override; observed wait<2s. Previously150-day fixture ages149 under min150:physical/balance4,available/product0,landed5Oct,manifestCompleted,context0/exact receipt. Full95 rows/metadata rollback, clone removed/template88unchanged, runtime11276 stopped as above. Receipt/commands/limits/recovery docs/evidence/20261004-category-shelf-life/REAL_MIDNIGHT_RECEIVING.md. One actual receiving rollover does not close broader aging/clearance/public/commitment/all-writer/intake/installer/review/provider/host/real inventory gates; next integration remains nested intake entry/context above. Guest confirmation/scanner/security parked/pending unchanged; no maintained source/provider/main/release change.
+
+**4 October actual signed policy/inventory races locally verified (IDEA-20261002-05):** Final03 terminal0/129checks0fail proves eight actual maintained validator/signer Admin policy versus Staff recount/receiving schedules: same-minute exact rate-row transaction-ID queue and real minute rollover exact shared/exclusive entry-key queue, both writer-first/reader-first. No privileged policy UPDATE, clock/signer/body/grant/timer substitution. First completed transaction stays open for observed42–55s minute rollover; all28 signed native transaction starts keep lock2s/statement10s. Writer-first sees committed180/physical4/available0; reader-first completes150/4/4 before signed policy can commit, then fresh actual signed command sees180/4/0 and fully rolls back. Context post-release/cleared, event/current lot or receiving source/Manila date, saved receipts and exact monotonic Admin policy events/receipts through17 pass. Every95-table pair/final baseline only actual policy/event/receipt/nonce/rate survives Staff rollback; metadata and other inventory/manifest/reservation/publication/control/sample rows exact. Fresh primary186/0/46pins/29pairs plus strict budgets/HMAC/transcript review and syntax pass. All4 native sessions exit0; original88 restore unchanged/clone removed/runtime26252stop0/noPID/process/listener/shell66533terminal0. Diagnostics final01 role-guard fixture and final02 JSON-OID observation error retained; witness-only fixes, no operational correction. Receipt/commands/limits/recovery docs/evidence/20261004-category-shelf-life/SIGNED_POLICY_INVENTORY_RACES.md. **Exact next:** native taxonomy creation/reassignment/ancestor authority and earliest strongest-mode classification; event aging/Manila midnight; independent review/full current-cold guarded install/replay/drift/populated recovery/all-writer plus real taxonomy/cardinality/provider/host/stock acceptance. Long idle native schedules do not prove HTTP whole-request deadline or production capacity; clearance/commitment/broader isolation races remain open. Review usage-limited, scanner/security cleanup parked and guest confirmation unchanged. No maintained SQL/application/provider/main/release/real inventory change; scoped evidence recreation only.
+
+**4 October joint signed-policy/public local evidence (IDEA-20261002-05):** Guarded evidence assembly removes only exact synthetic command config, inserts frozen closed master/private mutation/signed commands before receiving preflight, and retains original receiving/lot/entry guards plus current clock/materialized public stock. Red01 terminal1/25pass/1 intended missing-dispatcher failure; final06 terminal0/43pass/0fail. Actual maintained validator/signer Admin set90/version6→publicordinary4, set180/version7→0, clearNULL/version8→4; genuine60 clearance3 throughout. Each96-table delta only policy/event/receipt/nonce/rate; complete metadata, physical/derived lot counters, inventory/reservations/publication/context unchanged. Historical fresh-nonce retry returns saved6 after8, only nonce/rate changes; stale/Staff outerAdmin/missing-config native3 full rollback. Fresh primary145/0/50pins/41pairs proves current/archive hashes, exact assembly reversibility and closed native helpers; syntax pass. Diagnostic final01–05 remain failed/incomplete with witness/generator-only corrections documented. Receipt/recovery/commands docs/evidence/20261004-category-shelf-life/PUBLIC_POLICY_JOINT.md. Original88-table restore unchanged/clone removed/runtime24044 stop0/noPID/process/listener/shell33067 terminal0. This is synthetic local evidence, not actual provider HTTP/JWT/host, real stock/listing or full current/cold installer/replay/drift/recovery. No maintained operational SQL/application/provider/main/release change. **Exact next:** prove actual signed Admin policy races against receiving/lot, resolve taxonomy creation/reassignment/parent authority and strongest mode, then aging/midnight, independent review, complete guarded installation/populated recovery/all-writer and real-source/provider/host acceptance. Review remains usage-limited; owner-parked scanner/security cleanup and guest confirmation unchanged. Recovery only scoped evidence recreation from pins; preserve prior sources/archives.
+
+**4 October taxonomy writer classification (IDEA-20261002-05 / MAP-018):** Source/current-local-capture audit17/0/12pins and actual validator prove legacySheet directcategory_id attempt versus securebranch refusal; dropdownname-only categoryinsert; JS/frozenSQLpatch both excludecategory_id; newDraft firstcanonicalFK assignment distinct from existingstocked reassignment. Local completeACL/columns/memberships showclosedbrowserDML metadata, not liveprivileges/nativeDML execution; categoryFKonlytriggers/productcompatnopolicyentry. Prepared signedpolicyset/clear alreadyexists separately (final06/86checks), but currentpublic/lotcandidate lacks signedmaster/privatepolicycore and its syntheticconfig cannot blindlyconcatenate with signedfreshinstaller (existingconfig refusal/defaultdifference). Receipt docs/evidence/20261004-category-shelf-life/TAXONOMY_WRITER_CLASSIFICATION.md. Exactnext jointreviewedsignedpolicy/currentreceiving-lot-public composition withoneauthoritativeconfig/Adminset-clear/retry/event/publicprojection/fullrefusal/replay/drift/recovery; separately resolvecategorycreation/reassignment/parentauthority/mode beforeaction/permissionexpansion. Allwriter/independentreview/current-coldinstaller/provider/host/realdepth-stock gates remain MAP-018; independentlyreviewusage-limited/guestconfirmationpending/ENOBUFSsecuritycleanup parked. No operational/UI/permission/provider/main/release/runtime/stock/listing change; recovery audit recreation only.
+
+
+**4 October public statement snapshot races (IDEA-20261002-05 / MAP-018):** Exact unchanged actual anonymous helper in four guarded native backends; final01 terminal0/44checks0fail. Uncommitted90 under150 publicordinary0/clearance3; afterCOMMIT ordinary4. Exact product_batches AccessShare relation wait observed againstresourcePID whilepolicy90→180 or180→90 commits; blockedstatement retainsold4/0 withclearance3, nextstatement sameREADCOMMITTEDtransaction seesnew0/4/laterstatementinstant. No helpers/testhooks/grants/context substituted; policywriterprivilegedfixture notsignedmutation. Complete96-table pairs/finalbaseline changeonlypolicyfixture/metadataequal/allfournativeexit0;40sourceentries/33pairs/fresh117/0/syntaxpass. Original88 restore unchanged/clone removed/runtime15232stop0/noPIDprocesslistener/shell45151exit0. Receipt docs/evidence/20261004-category-shelf-life/PUBLIC_SNAPSHOT_RACES.md. Next category/taxonomy writerclassification/concurrency, eventaging/midnight, independentreview, completecurrent/coldinstaller/replay/drift/refusal/populatedrecovery/allcaller plusrealdepth/cardinality/provider/host/stock acceptance remain MAP-018. Independentreview usage-limited/guestconfirmationpending/activationprohibited/ENOBUFSsecuritycleanup parked; no operational/provider/main/release/realstock/listing changes. Recovery evidence removal/recreation; no providerrollback.
+
+
+
+
+**4 October public query rescan correction (IDEA-20261002-05 / MAP-018):** Cost02 native red28/1 proves eligible_lots inlining causes subtree loops12/lot calls144 versus12 joined lots; min/resolver12 already once per product. Cost01 zero cumulative counters were a collector diagnostic, replaced by documented transaction-local stats. Smallest prepared source/generator edit MATERIALIZED eligible_lots; final03 terminal0/41checks0fail at synthetic10x1 and50x20/depth8 proves min/resolver12/52 once offered product, lot12/1002 once joined lot, correct80/8000fixtureunits, CTEloops1 and full96-table rollback. Warm local direct-body times6.615/123.293ms are observations, not host SLA/real cardinality.40 source entries/31pairs/primary48/0; affected current-source matrixfinal02 terminal0/79checks0fail/39pins83pairs/fresh209archivechecks0fail; syntaxpass. Original88 restore unchanged/allownedclonesremoved/runtime22476stop0/noPIDprocesslistener/shell87038exit0. Receipt docs/evidence/20261004-category-shelf-life/PUBLIC_CATEGORY_COST.md; earlier receipts retain frozen pre-materialization scope. Next concurrentpolicy/publicsnapshot/taxonomy, eventaging/midnight, independentreview, realdepth/cardinality/cost, completecurrent/coldinstaller/replay/drift/refusal/populatedrecovery/allcaller and provider/host/realstock acceptance remain MAP-018. Independentreview usage-limited/guestconfirmationpending/activationprohibited/developmentENOBUFSsecuritycleanup parked. No provider/main/release/realinventory/listing claim; recovery unactivated source/evidence recreation and data/guard-retaining controlledrollforward.
+
+
+**4 October public category acceptance matrix (IDEA-20261002-05 / MAP-018):** Unchanged prepared public candidate foundation-public-matrix-final-01 terminal0/79checks0fail:26 native cases/full rollback pairs prove ordinary min150 day−1/0/30/31/89/90/149 public0,150/151 public4, unknown/infinite/BC0/finite9999 future4, physical4 reserved1/4=>3/0, quarantine/foreignhub/custodian mismatch0, invalidWebsite/unreviewed/unpublishedLive absent, changed approvedexpiry invalidates event0, fresh actual signed31/89 approvals3 and60withdrawal0; depth1/cycle publictaxonomy refusal/native3/full rollback.39 source pins/83 capture pairs/96 candidate tables; primary45/0/syntaxpass and closedhelpers unchanged. Original88 restore unchanged/clone removed/runtime16164 stopped0/noPIDprocesslistener/shell11234exit0. Receipt docs/evidence/20261004-category-shelf-life/PUBLIC_CATEGORY_MATRIX.md. Synthetic claims/key/custody/reserved fixtures are not real stock/HTTP/order graph acceptance. Next query-cost/cardinality/concurrentpolicy/publicsnapshot, broaderevent/aging/midnight/visibility, independentreview, completecurrent/coldinstaller/drift/refusal/populatedrecovery and allwriter/policy/taxonomy/host gates remain MAP-018. Independentreview usage-limited/guestconfirmationpending/activationprohibited/scannersecuritycleanup parked. No operational/provider/main/release/realinventory/listing change; recovery evidence removal/recreation, no providerrollback.
+
+
+**4 October public category integration prepared (IDEA-20261002-05 / MAP-018):** supabase/prepared/category_shelf_life_public_stock.sql composes current category minimum once per offered product and an exact canonical eligibility-body derivative with closed stable postgres-only helpers/statement instant, unchanged public two-column view/grants and no stock/listing writes. Native red02 terminal1/10pass1requiredpublic0fail; final01 diagnostic18/1 targeted wrong leaf-policy fixture, corrected without implementation change. Final02 terminal0/25checks0fail proves149/min150 public0 versus physical4/derived0, signed60 clearance public3 same/fresh transaction; existing149 projection4/0/4/0 under90/180/NULL/150, clearance3 throughout. Complete96-table pairs prove only policy fixture changes; missing config55000/taxonomy23514/native3 full rollback, direct private anonymous denial, fresh-only replay refusal/full-state preservation.36 source entries plus generator pin/27 capture pairs/102 functions; fresh primary50/0 and three syntax checks pass. Original88 template unchanged/clone removed; owned20820stop0/noPIDprocesslistener/shell80738exit0. Receipt docs/evidence/20261004-category-shelf-life/PUBLIC_CATEGORY_PREPARATION.md. Prepared-only/no provider/activation/main/release/realstock/listing; independent review unverified after usage limit, scanner/security/private cleanup remain parked and guest confirmation pending. Next public date/current-event/custody/Website/reservation/taxonomy/concurrency/query-cost acceptance, independent source/security review, complete current/cold guarded installer/populated recovery and all writer/policy-mutation/host gates stay MAP-018. Privileged policy fixtures are not signed mutation evidence. Recovery remove/recreate unactivated artifacts; no provider rollback.
+
+
+**4 October public statement clock preparation (IDEA-20261002-05 / MAP-018):** Approved SK-05/spec already requires public statement instant. Fresh-only supabase/prepared/category_shelf_life_public_clock.sql changes exactly four clock references in reviewed stock body, no new helper/context/grant/view/stock rewrite. Expected same-transaction3 native red9/1; final foundation-public-clock-final-01 passes15/0 with signed60 approval/public3 same and fresh transaction, exact row/proc/view/column metadata preservation and repeated-install drift refusal/native3/full-state equality.32 current source pins and both syntax checks pass;12 capture pairs/96 assembled tables, original88 restore unchanged/clone removed; runtime16076 stopped0/noPIDprocesslistener/shell37201exit0. Witness intentionally exits1 because ordinary149/minimum150 public4 versus canonical0 remains unresolved; only clock component is locally verified. Receipt docs/evidence/20261004-category-shelf-life/PUBLIC_CLOCK_PREPARATION.md. Next guarded category public integration, existing-policy/current-epoch/aging/taxonomy/config/performance/installer/recovery/all-writer/host and independent review remain MAP-018; independent review unverified after usage limit. Prepared-only, no provider/activation/realstock/listing/main/release/guest authority change. Owner-parked development scanner/security/private cleanup unchanged. Recovery removal/recreation of unactivated fragment/evidence; no provider rollback.
+
+
+**4 October public category native regression (IDEA-20261002-05 / MAP-018):** Exact composed local public/category candidate reproduces anonymous ordinary149/minimum150 stock4 versus canonical available0, and signed60-day clearance same-transaction public0 versus fresh public3. Archive foundation-public-category-red-final-01 intentionally exits1: 11 evidence checks/0fail, acceptance flags false; 30 source entries, nine capture pairs, complete96-table assembly maps; fresh primary verification45/0 and syntax pass. Repeated reads preserve all rows/metadata; clone removed, original88-table restore unchanged, owned runtime18088 stopped with no process/PID/listener. Receipt docs/evidence/20261004-category-shelf-life/PUBLIC_CATEGORY_RED_REHEARSAL.md. Public parity remains unresolved; next prepare guarded integration after explicit authority/evaluation-time review and prove existing-policy/aging/current-epoch/taxonomy/replay/recovery behavior. Fixed31–89 clearance stays required. Synthetic ACL/Website fixtures are not provider/live listing evidence; no operational source/activation/provider/main/release changes. Guest confirmation pending, independent review unverified (reviewer usage limit), scanner/security/private cleanup remain parked. MAP-018 owns unfinished work and recovery.
+
+**4 October public category boundary — IDEA-20261002-05 / MAP-018:** Sourceaudit4/0/fourpins proves maintainedpreparedpublic get_public_product_stock still hard90 ordinary/no categorypredicate call; public72check evidence not categoryparity/listingacceptance. Publictransaction-start dates/approvalbounds differ from signedpostlock contextinstant; same-transaction approval exclusion is inference/nativeunverified. Evidence docs/evidence/20261004-category-shelf-life/PUBLIC_CATEGORY_BOUNDARY_AUDIT.md. Exact next compose exactpublic helper/view/ACL and reviewedcategorycandidate with syntheticreviewedWebsiteproductfixtures, native149under150 publicred and currentexistinglot/policychanges/samevsfreshclearanceclock/currentepoch/invalidation; then minimalguardedpublicintegration afterauthority/timingreview. No anonymousstaffcontext/expandedclearance. Recovery sourceauditonly; no runtime/operational/provider/realstock/main/release changes. Guestscopepending/independentreviewusage-limited/activationprohibited/scannersecuritycleanup parked.
+
+**4 October fixed-band policy races — IDEA-20261002-05 / MAP-018:** Final01 terminal0/43checks0fail eightactualsignedStaffAAL2commands:60clearance available3 under150/180/90/NULLdefault90;149ordinary available0/0/4/4. Initial150genuinepositive, threeclearancewaits exactexclusivepolicywriter thennewcommittedpolicy/version, singlecontext/event/markerinstants/actors, receipt1nonce1rates2/context0. EachsignedsuccessROLLBACK; all95finalmaps onlyfixturepolicy differs/metadataequal, retainedNULLversion4.28sourceentries/13fullcapturepairs; original88templateunchanged/clone removed; owned23280stop0/noPIDprocesslistener/shell61109exit0. Evidence/limits/recovery docs/evidence/20261004-category-shelf-life/FIXED_BAND_POLICY_RACES_PREPARATION.md; preserve120invaliddiagnosticcorrection. Independentreviewunverified afterusage limit. Exact next existingapprovedlot/currentpublicprojection/policywaittimers/signedmutation/allcaller/lifecycle/guest/installer/recovery/HTTP/host and fullwitnessreview remain MAP018. Privilegedpolicyfixtures notsignedmutation, freshordinarylots not existingprojection. Nooperational/provider/realstock/listing/main/release changes; guestscopepending/activationprohibited/ENOBFUSsecuritycleanup parked.
+
+**4 October clearance fixed-band correction — IDEA-20261002-05 / MAP-018:** Supersedes preceding policy-sensitive120day clearance interpretation. Ownercontract keeps clearance31–89 fixed; categoryminimum only ordinaryband. Unchangedactualsigned120day positive attempt correctlyrefuses23514K2_CLEARANCE_INELIGIBLE; diagnosticfinal01 terminal1/5pass1invalidexpectationfail, no operationaldefect. Previous20/0 remains wait/refusal/fullrollback evidence but cannot prove lowering/clear causedrefusal; invalid120day-under150 positive requirement withdrawn. Evidence/correction/recovery docs/evidence/20261004-category-shelf-life/CLEARANCE_FIXED_BAND_CORRECTION.md. Original88templateunchanged/clone removed/owned9428stop0/noPIDprocesslistener/shell60020exit0. Exact next valid60day clearance acrossordinarypolicy changes, separate90–149ordinary projection change, existingapproval/currentpublicprojection/policywaittimers/signedmutation/allcaller/lifecycle/installer/recovery/HTTP/host and independentreview remain MAP018. Guestdesignpending/activationprohibited/securityENOBUFScleanup parked; no operational/provider/realstock/listing/main/release changes.
+
+**4 October clearance lowering/override-clear refusals — IDEA-20261002-05 / MAP-018:** Nativefinal01 terminal0/20checks/0fail actualsigned120dayclearance waits exactexclusivepolicywriter then explicit90/version2 or retainedNULL/version4 effective90, refusesK2_CLEARANCE_INELIGIBLE23514/nativeexit3. PreCOMMITfull95maps onlypolicyfixture differs; postCOMMITbaseline equalsafterdisconnect/fullmetadata. Physical3/approvaltimestampNULL/events0/no controls/context/sample/receipt, finalonlypolicyfixture.30sourceentries/11fullcapturepairs; original88template unchanged/clone removed; owned6880stop0/noPIDprocesslistener/shell97790exit0. Evidence/limits/recovery docs/evidence/20261004-category-shelf-life/CLEARANCE_POLICY_REFUSALS_PREPARATION.md. Independent review unverified afterusage limit. Exact next positive120day-under150 control (not executed/inferred), existingapprovedlot transitions/currentprojection, policywaittimers/allcaller/lifecycle/guest/installer/recovery/HTTP/host and fullwitnessreview remain MAP-018. Privilegedexpiry/policy fixtures not signedmutation or live stock. No guestdesign/provider/listing/main/release change; guestscopepending/activationprohibited/ENOBUFSsecuritycleanup parked.
+
+**4 October signed policy-wait refusals — IDEA-20261002-05 / MAP-018:** Final02 terminal0/18checks/0fail actualsignedrecount waits exactexclusivepolicywriter then committedconfigdelete55000 or taxonomyNULL23514 nativeexit3/disconnectrollback. BlockedpreCOMMIT full95maps differ only intendedconfig/productfixture; postCOMMITbaseline equals afterrollback/fullmetadata; zero context/sample/receipt/nonce/rate/newlot. Configrestored, finalonlyproductfixture differs.28sourceentries/11fullcapturepairs; original88templateunchanged/clone removed; owned2500stop0/noPIDprocesslistener/shell16373exit0. Interim01 retained16/0, final02 strengthenspreCOMMITsnapshot withoutoperationalchange. Evidence/limits/recovery docs/evidence/20261004-category-shelf-life/SIGNED_POLICY_REFUSALS_PREPARATION.md. Independent review unverified afterusage limit; exact next fullwitness/capture/transcript review and clearance/lowering/absence/policywaittimers/signedmutation/alllifecycle/publicprojection/installer/recovery/HTTP/host gates remain MAP-018. Privilegedfixtures/syntheticnative authority only; no guestdesign/provider/realstock/listing/main/release acceptance. Guestscopepending/activationprohibited/ENOBUFSsecuritycleanup parked.
+
+**4 October signed recount policy races — IDEA-20261002-05 / MAP-018:** Final02 terminal0/24checks/0fail. Actual writer-first advisory wait sees newly committed180:physical4available0product0; actual reader-first signed productwait holds shared policy entry, exclusivewriter waits until commandtransactionROLLBACK, reader150:physical4available4product4; subsequentfresh180:physical4available0product0. Threecontext/event singleinstants/receipt1/context0; signed work rolledback, only fixturepolicy differs across95 rows, metadataequal.28sourceentries/eightfullcapturepairs; original88template unchanged/clone removed; owned5312stop0/noPIDprocesslistener/shell35518exit0. Final01 privatehelperauthenticated42501 fixturediagnostic retained/corrected with actualsignedcommand, no grants loosened. Evidence/limits/recovery: docs/evidence/20261004-category-shelf-life/SIGNED_LOT_POLICY_RACES_PREPARATION.md. Independentreview unverified after reviewerusage limit. Exact next review full witness/captures; clearance/lowering/absence/taxonomy/config races and policy-wait refusals, all lifecycle/publicprojection/installer/recovery/HTTP/host remain MAP-018. Privilegedfixturepolicy is not signedmutation, successROLLBACK not COMMIT, no wholepolicy/guest/security/provider/realstock/listing/release acceptance. Guestscope pending/activationprohibited/ENOBUFSsecuritycleanup parked.
+
+**4 October policy-race source boundary — IDEA-20261002-05 / MAP-018:** Source audit4/0 pins four prepared files: shared entry precedes config, both branches prelock ordered SKU lots and validate taxonomy before context; resolverSTABLE/entry+startVOLATILE. No native post-wait snapshot proof. Resource waits, historical retry and separate post-lock SELECT do not substitute for full fresh signed policy-race acceptance. Evidence: docs/evidence/20261004-category-shelf-life/SIGNED_LOT_POLICY_RACE_SOURCE_AUDIT.md. Exact next writer-first exclusive150to180 policyCOMMIT while fresh ordinary150 recount waits, require physical4available0product0/coherentcontext/events/cleanup; reader-first writer cannot overtake shared command then fresh command sees new policy; include full rollback/controls/template/disposal/runtime. Privileged fixture update is not signed policy mutation. Existing IDEA accepted evidence scope only; guest design pending, written waits review usage-limited, security/provider/scanner parked. No operational/provider/realstock/release changes.
+
+**4 October staff signed-lot resource waits — IDEA-20261002-05 / MAP-018:** Final02 terminal0/35checks/0fail verifies actual recount+clearance product/existing-lot blockers, one post-release context instant and event/clearance-marker equality, selected physical/reserved/available facts, context clear and complete95-table+metadata rollback. Armed lock2s/statement10s yields55P03; statement500ms/lock2s yields57014, timed native exit3 disconnect rollback complete. Success waits use explicit rollback, not COMMIT; observer zero committed rows is not absence of uncommitted state. Final01 deadline setup diagnostic retained; corrected only fixture settings. Exact final03 candidate/fixtures/pins/full captures retained, original88 template unchanged/clone removed; owned19624 stop0/noPIDprocesslistener/shell26424exit0. Evidence/limits/recovery: docs/evidence/20261004-category-shelf-life/SIGNED_LOT_WAITS_PREPARATION.md. Reviewer left independent-signed-lot-waits-review.mjs/.json; primary freshly reproduced 26/0 (exit0). Reviewer turn then failed at usage limit before its written receipt; complete independent review remains unverified. Exact next review action: read retained checker/full evidence and finish INDEPENDENT_SIGNED_LOT_WAITS_REVIEW.md after capacity returns; preserve this distinction. Guest scope answer still pending, no guest design or operational/provider/real-stock/listing/main/release change. Strongest policy races/all lifecycle/projection/installer/recovery/HTTP/host gates remain MAP-018; activation prohibited and ENOBUFS/security/private cleanup parked.
+
+**4 October independent signed-lot root evidence — IDEA-20261002-05:** Final01 terminal0/14checks/0fail. Actual signed recount rootCOMMIT physical4/available4/product4/receipt1/context0; separate60day clearance rootCOMMIT physical3/available3/product3/receipt2/marker-event equality/context0. Injected cloned eventfault command fails beforeCOMMIT exit3 and disconnectrollback preserves all94rowmaps/metadata. Historicalretry rootCOMMIT after privileged fixturepolicy180/configdelete returns exact oldresult, only nonce/rate rowschange; retained derived4 is historical, not currenteligibility.24sourceentries/eightfullcapturearchives, original88tabletemplate unchanged/clonesremoved; owned8088stop0/noPIDprocesslistener/shell49953exit0. Evidence/limits/recovery: docs/evidence/20261004-category-shelf-life/SIGNED_LOT_TRANSACTIONS_PREPARATION.md. Independent review: 22/0, freshly reproduced by primary; no unresolved P1/P2 within this bounded evidence slice. Guest scope confirmation stillpending, no guestdesign selected. Exact next existing staff signedlot separate-session waits/strongestpolicy races, all lifecycle/projection/installer/recovery/host gates; guest authority work resumes only after scope answer. No operational/BFF/provider/realstock/listing/main/release changes; ENOBUFS/security/privatecleanup parked.
+
+**4 October guest-context Understanding Lock — IDEA-20261002-05:** Native regression remains unfixed; brainstorm scope confirmation requested once and pending. Installed skill hard gate: no guest authority design/implementation until explicit intent confirmation; no repeat question or elapsed-time approval. Requirements/source observations: docs/evidence/20261004-category-shelf-life/GUEST_CONTEXT_UNDERSTANDING.md and five source pins. Preserve signed guest/noStaff-login checkout, existing staff role/AAL2, guest controls/retries, one postlockclock/cleanup and local-only preparation; no new policy/provider authorization. Fresh source reads show no category-specific timeout in order handler/client; entry helper validates timeout values only, not timer start/request-wide deadline.2s/10s remain targets, not host SLA. Exact next: record scope answer, review closed authority options/decision log, then green native guest integration and all existing lifecycle/timing/allwriter/installer/host gates. No runtime/operational/BFF/provider/stock/listing/main/release changes; ENOBUFS/security/privatecleanup parked. Other independent MAP-018 evidence preparation may continue without selecting guest design.
+
+**4 October native guest context red — IDEA-20261002-05:** Final03 terminal1 intentionally:11 evidencechecks/0fail, guest purchase acceptance false; no harness/disposal error. Maintained JS signature/anon absent JWT actor existingbehavior order1/physical4/reserved1; preparedcontext SQL55000 K2_CATEGORY_CONTEXT_REQUIRED through full guest/canonical/reserve/trigger/context trace and all120-table refusal maps unchanged.27pins/eightfullcapturearchives/native9baseline12contextmetadata;8exactfrozen bodies/selected explicitACL restoration checked, closedreserve/anonwrapper retained. Assembly-only defaultPUBLIC defect caught/corrected. Original88-table clone/template preserved/clonesremoved; owned21428stop0/noPIDfile/process/listener/shell76928exit0. Evidence/diagnostics/recovery: docs/evidence/20261004-category-shelf-life/GUEST_CONTEXT_RED_REHEARSAL.md. Independent24/0 freshly rerun/read by primary, no unresolved P1/P2 within evidence scope. Exact next reviewed closedguestauthority/completeouterpolicy/deadline/context then green guest allow/deny/retry/fullrollback plus staff lifecycle/waits/allwriter/installer/host gates. Compatibility unfixed/activation prohibited; no operational/BFF/provider/stock/listing/main/release change; ENOBUFS/security/cleanup parked.
+
+**4 October outer authority discovery — IDEA-20261002-05:** Source-only audit terminal0,25/0,nine source pins/eight maintained captures/fourteen frozen definitions proves maintained guest order handler uses publishable client without staff token and latest prepared signed anonymous wrapper delegates through canonical submit to closed reserve/batch trigger. Existing prepared context requires nonnull staff/AAL2 actor; it cannot be applied unchanged to guest allocation. No native guest-context acceptance or operational correction is claimed. Preserve staff gates, signed controls, historical retry/config independence and authorized ineligible release; no NULL bypass/invented staff/GUC/anonymous helper grant. Evidence/limits/recovery: docs/evidence/20261004-category-shelf-life/OUTER_AUTHORITY_AUDIT.md. Exact next: review closed internal guest authority and complete outer policy/deadline ownership before implementation, then native guest allow/deny/retry/full rollback and remaining staff lifecycle/waits/all-writer/installer/host gates. Independent17/0 freshly rerun/read by primary; no unresolved P1/P2 within corrected source scope; activation prohibited. No runtime/provider/stock/listing/main/release change; parked ENOBUFS/security/cleanup retained.
+
+**Signed lot-context preparation — IDEA-20261002-05 / MAP-018:** Final03 terminal0/native81/0/outer6/0 covers21signedcalls9success12full94-table refusal maps, one clock/clearance event timestamps, retained reserved1/category149/150/currentlot snapshots and historical retry after config removal/policy180. Missingcontext baseline25pass13fail and canonical taxonomy red03 77pass4fail retained; explicit malformed-category refusal added to both recount/clearance branches before mutation.17currentpins/eightfullcaptures verified, original88-table template preserved/clonesremoved. Owned8552/24156stop0/noPIDfile/process/listener;shell11879/41081exit0. Independent final32/0 freshly rerun/read by primary; no P1/P2 within corrected scope. Exact source/diagnostic/limits/recovery: docs/evidence/20261004-category-shelf-life/SIGNED_LOT_POLICY_PREPARATION.md. Next: compose reservation/fulfillment/payment/cancellation/expiry at complete outer operation boundaries with one context owner, preserving retries, ineligible-release authority and lock-before-FEFO qualification. Require signedlot separate-session COMMIT/waits/strongest-policy races and complete all-writer/public projections, taxonomy/depth/SuperAdmin, installer/replay/populated recovery, maintenance/vacuum, actual midnight/full request deadline/HTTP/host/realstock/listing before activation. Single outer transaction/fixture-heldlocks and saved reserved counter do not establish those requirements. Guarded source is fresh-only outside migrations; no UI/BFF/provider/main/release/realinventory changes. Parked ENOBUFS/security/private-cleanup preserved.
+
+
+**4 October continuation — IDEA-20261002-05:** Prior signed independent27/0 and root independent18/0 freshly reproduced/read by primary. Actual root final01 terminal0,13/0 and separate-session waits final03 terminal0,36/0 archived; waits independent25/0 freshly reproduced/read by primary, no P1/P2 within this bounded scope. Root signed receiving COMMIT/context0, actual uncleared COMMIT failure/full94-map rollback, same-backend fresh xid and five actual resource waits/one post-release instant plus armed55P03/57014/full95-map rollback are local prepared evidence. Owned20580 stopped0/no clones/PIDfile/process/listener/shell43489exit0; original template unchanged. Evidence/recovery: docs/evidence/20261004-category-shelf-life/TRANSACTION_AND_RECEIVING_WAITS_PREPARATION.md. Exact next: compose remaining signed lot/fulfillment/reservation/public projection writers in audited dependency order, preserving existing post-event refreshes, entry modes, durable retries and ineligible-release authority; prove coherent quantities/one clock/atomic controls. Whole guarded cold/current installer/replay/populated recovery, real taxonomy/depth/SuperAdmin, maintenance/vacuum, actual midnight/full request deadline and provider/host/realstock/listing remain before activation. Global context trigger activation prohibited. Security/provider/private cleanup/ENOBUFS stay owner-parked; no commit/push/main/live-release authorization.
+
+**Owner-requested new-session handoff resumed, 4 October — MAP-018 / IDEA-20261002-05:** Full production-readiness and inventory-listing goal persists in this session. Preserved branch codex/map017-guest-chat-preview, HEAD bf1d879f9175049ef3de7cad0edfa184076cd8f2 and all existing uncommitted changes. Former signed-review usage-limit handoff blocker is resolved by fresh independent27/0 and primary reproduction; new transaction and wait evidence/status/next action are recorded above. No runtime remains to resume. Do not substitute this local checkpoint for full-goal completion or restart parked scanner/security/provider/private cleanup. Exact future gates remain in this owning MAP item.
+
+**Signed receiving composition locally verified — IDEA-20261002-05 / MAP-018:** Existing exact frozen verifier/consignment dispatcher plus current prepared receiving/context and maintained consignment validator/JavaScript signer need no new operational implementation. Baseline signed red01 terminal1/native36pass2expectedfail (149-day disposition/projection); final01 terminal0/native41/0/outer6/0 proves14 authenticated native calls,11 exact94-table refusal rollbacks,3 matching nonce/two-rate deltas and immediate context cleanup, physical4/category149quarantine0/150available4/cost20/no clearance, received+shortage events, two exact durable receipts/audits, final audit-fault all-table rollback and unchanged historical retry after privileged fixture policy raise/config removal.16 current source pins/eight full captures/four native function bodies match prior authority, original88-table clone/template preserved; owned5240 stop0/no clones/PIDfile/process/listener/shell28634terminal0. Independent review receipt alongside docs/evidence/20261004-category-shelf-life/SIGNED_RECEIVING_POLICY_PREPARATION.md. Same outer transaction/advisory reuse, synthetic key/claims/config and selected cost prerequisites are explicit limits; no real HTTP/JWT/timing/all-writer/installer/provider/host acceptance. **Exact next:** prove actual root transaction COMMIT with cleared and uncleared context and fresh-xid separation, then native multi-session receiving resource waits with one post-lock instant; compose remaining signed lot/fulfillment/reservation/public projection callers in audited dependency order. Whole cold/current installer/replay/populated recovery, real taxonomy/depth and maintenance/host gates remain before activation. Parked development ENOBUFS/security/private cleanup stay untouched; no stock/listing/main/release action.
+
+**Trusted trigger-context preparation locally verified — IDEA-20261002-05:** Prepared `supabase/prepared/category_shelf_life_command_context.sql` composes actual receiving and batch trigger through closed backend/full-xid8/actor context, one post-existing-lock server instant, success clear and error rollback. Deferred closed constraint guard refuses uncleared rows using NEW backend/xid. Lifecycle red02 terminal1/native36pass1expectedfail; final02 terminal0/native37pass/outer6pass,13 current source pins/six compiled functions/eight full captures verified,11 successful receipts show contextRowsBeforeProbeRollback0. Owned8396 stopped0/no clones/PIDfile/process/listener. Receipt `docs/evidence/20261004-category-shelf-life/COMMAND_CONTEXT_POLICY_PREPARATION.md` and independent review retain exact limits. All other batch writers would fail closed without context; file remains outside activation migrations. **Next:** compose actual signed receiving dispatch and durable control receipts with the trusted context, then remaining writers/public projections in audited dependency order. Require real resource-wait/deadline/midnight evidence, actual COMMIT lifecycle evidence, real taxonomy/depth, vacuum/performance assessment, whole guarded cold/current installer/replay/data-retaining recovery and real-host acceptance before activation. Preserve owner-parked full-development ENOBUFS/security/provider blockers; no production/main/release action. Keep MAP-018 active.
+
+
+**Receiving core prepared — IDEA-20261002-05:** Guarded category_shelf_life_receiving.sql five exact private-core substitutions: shared entry before manifest, closed config bound, existing item/lot locks and one serverclock, finite canonical minimum arrival classification/categoryawareaggregate; native foundation-receiving-final-02 terminal0,18/0native6/0outer, fullrollback/template/88rowmaps/disposal verified. Evidence docs/evidence/20261004-category-shelf-life/RECEIVING_POLICY_PREPARATION.md. Primary independently reran receivingreview14/0, currentpins/5anchors/order/nativeoutcomes/captures inspected; independent receipt INDEPENDENT_RECEIVING_POLICY_REVIEW.md: no P1/P2 within bounded private-core preparation; primary read full receipt, independently reran14/0 and verified exact5source substitutions/pins/captures/native limits. Runtime21652stopped0/zero clones/noPIDfile/process/listener; shell45242exit0. No provider/operating policy/stock/listing activation. Exact next: compose trusted trigger clock/context (old trigger stilltransactionstart/fixed predicate and old lot quantity_available remains outside category-coherent proof), signed consignment branch shared boundary/deadline/native authenticated dispatcher acceptance, deliberate waits/midnight/atomic recovery and strongest complete locks, then full32writers/public projections/installer/replay/real-taxonomy/host acceptance. Restore template missingcostcolumns via exact fixture-onlyDDL—not fullinstaller acceptance; config fixture omits DEFAULT true but explicit inserts, depth10synthetic. ENOBUFS/full development and security pauses remain ownerparked/unverified.
+
+
+**Command context evidence — IDEA-20261002-05:** command-context-audit.mjs/checks terminal0; eight exact direct caller identities/thirteen lot-predicate call sites,166qualified candidates/2unresolved overload alternatives/34schema trigger bindings/zero prepared contextcalls. Receipt docs/evidence/20261004-category-shelf-life/COMMAND_CONTEXT_AUDIT.md retains full bodies/sourcepins and limits; independent review INDEPENDENT_COMMAND_CONTEXT_REVIEW.md accepted bounded frozen-source evidence after correcting omitted existing post-event refreshes; no unresolved P1/P2. Independent checker11/0 freshly rerun by primary, exact source/body/artifact pins and full findings inspected; no runtime active. New semantic findings: reserve FEFO eligibility precedes completion of SELECT FOR UPDATE locks and submit/confirm already lock outer resources; actual payment implementation is four-argument overload; release rechecks expires_at before final lot locks; signed lot command already reruns BEFORE trigger after event insertion in all three branches and finalizes its own event—preserve those refreshes and thread shared clock throughout (initial audit omission corrected after review/red assertion); receiving classification has independent fixed90. Exact next implementation: trusted one post-lock command instant propagated through trigger and final projections, complete strongest outer policy entry and deadline start, lock then requalify FEFO, preserve authorized ineligible release and completed durable retry, then native atomic/full derived-quantity acceptance and all32 writer/caller/global boundary closure. No operational/provider/data/runtime changes; no documentation gate rerun or ownerparkedENOBUFS restart.
+
+
+**Current category lot batch — IDEA-20261002-05:** Prepared closed read-only supabase/prepared/category_shelf_life_lot_eligibility.sql; final foundation-lot-final-01 terminal0,44native/6outer pass; full rollback/template/88table row-map preservation and clone removal verified. Frozen predicate/all callers unchanged. Receipt docs/evidence/20261004-category-shelf-life/LOT_POLICY_PREPARATION.md; independent review INDEPENDENT_LOT_POLICY_REVIEW.md: no P1/P2 within prepared scope; offline checker15/0 independently rerun by primary, complete frozen criteria/clearance subtree comparison and current source/archive pins verified. Runtime15320 stopped0, absent PIDfile/process/listener/zero clones; shell21511exit0. Full development gate remains owner-parked/unverified ENOBUFS. Exact next: compose strongest real caller entry, full request/native deadline and one server-derived post-lock instant before integrating this predicate into public eligibility and all32 writer/caller candidates; retain reviewed real-taxonomy bound, Draft canonical identity, signed intake dispatch, installer/replay/populated recovery and host/provider acceptance. Prepared-only helper does not change stock/listings or establish actual clock origin/deadline/entry order.
+
+
+**Category-raised shelf-life source finding (IDEA-20261002-05 / MAP-018/023/026):** Read-only 4October source/frozen-schema audit in docs/evidence/20261004-category-shelf-life/README.md finds fixed90 server predicates and no category policy field in restored categories(id,name,parent_id,created_at). The unused household60/browser-date helper is not authority. Owner confirmed highest-parent minimum with90floor/Manila/separate31–89clearance on4October. Proposed technical contract is docs/specs/CATEGORY_SHELF_LIFE_POLICY_SPEC.md; technical contract approved after sequential skeptic/constraint/user/arbiter review, with13 objections resolved and no code/schema/policy values applied; receipt docs/evidence/20261004-category-shelf-life/DESIGN_REVIEW.md. Source inventory completed in docs/evidence/20261004-category-shelf-life/WRITER_INVENTORY.md:161 unique final argument identities,32 conservatively selected writer/caller candidates after correcting canonical inventory_reservations/order_request_items names. Browser category insertion/Sheet category_id update attempts are outside the signed master allowlist; their execution authorization is unverified. BOUNDARY_AUDIT.md records6relations/7triggers including2outside-schema fixture dependencies,5lexical dynamic candidates, missing normalized column ACL and unproved view/effective-grant coverage. Original restored taxonomy is empty; synthetic category is not a measured real hierarchy. Fresh native frozen-predicate gap verified in docs/evidence/20261004-category-shelf-life/NATIVE_RED.md:4pass/1 intended failure,105/149 accepted against synthetic inherited150,150 accepted; captured metadata/all88table hashes and template unchanged, clone removed and owned21024 stopped0/noPIDfile/process/listener. No category policy installed; setup diagnostics are preserved separately. Independent offline evidence review19/0 reproduced terminal0, selector P2/authorization wording resolved and no unresolved P1/P2 within bounded evidence scope; individual past row outputs are not independently recomputed. Receipt INDEPENDENT_EVIDENCE_REVIEW.md. Private foundation prepared outside migration discovery in supabase/prepared/category_shelf_life_resolution.sql; final foundation-final-01 terminal0/7harness/34native cases pass, full captured metadata/all88 row maps match, clone removed/owned22752 stopped0. Preservation control-path regression red1/2 to green3/0 fixes wrong success on false disposal/template observations. No operational writer uses it and no production bound/values are selected. Fresh-only fragment is not replay-safe activation: signed mutation/atomic event attribution and populated guard-retaining recovery remain required. Independent foundation review14/0 reproduced terminal0, no unresolved P1/P2 in preparation; foundation development session48785 subsequently completed0/11,460files/import integrity; entry batch verification is separately tracked below. See FOUNDATION.md and INDEPENDENT_FOUNDATION_REVIEW.md. ENTRY_ORDER_AUDIT.md pins32 full bodies with25lock-token/3category-token/0direct prepared-policy references; independent entry verifier9/0 reproduced terminal0, no P1/P2 in frozen-source audit scope, not allwriter/current-maintained-source proof. Review INDEPENDENT_ENTRY_AUDIT_REVIEW.md. Draft locks its intake session before name-based category UUID selection; duplicate-name intent and signed action/nested boundary order are unverified. Private entry fragment supabase/prepared/category_shelf_life_entry_lock.sql is now prepared outside migration discovery with explicit mode, READ COMMITTED, configured deadline caps, transaction shared/exclusive locks, no shared-to-exclusive upgrade and closed private execution grants. Behavioral red34pass/7fail precedes final context green47/0; unsupported repeatable-read/serializable cases3/0 each. All runs terminal0/outer7/0 except the intended reds; captured metadata/full88 row maps unchanged, all UUID clones removed. Independent entry-lock checker35/0 reproduced terminal0, no unresolved P1/P2 within preparation; source/case/archive scope and recovery in ENTRY_LOCK_PREPARATION.md and INDEPENDENT_ENTRY_LOCK_REVIEW.md. Exact owned5696 stopped0/zero clones/noPIDfile/process/listener. Preceding foundation development48785 finished0/11,460files/import integrity, superseding its earlier pending status. Entry final development22595 subsequently finished0/11,716files/import integrity; its exact terminal output/exit are retained. Later mutation gate is separately recorded below. No operational caller/persistent policy/stock/listing change. Generated contention witness rehearse-entry-contention.mjs interim foundation-entry-contention-02 passed24/0; final foundation-entry-contention-03 terminal0/24pass/0fail additionally retains every synchronous command stdout, including exact0 probe-count results: distinct shared holders, exclusive waiting/resumption, prewait120 to separate postwait fresh150, later clock, active150ms lock/statement timers55P03/57014 and prior probe-write rollback after failed psql disconnect. This is not live caller error handling or a whole-command/request deadline. Diagnostic01 terminal1/15pass/0assertionfail misses the short wait observation with a newly launched observer; corrected persistent observer retains all cases, no candidate edit. Cross-session visibility required temporary clone-only committed candidate/category/policy/probe; explicit teardown restores captured original metadata/full88 row maps before guarded clone disposal, template preserved. This is neither signed staff policy/event mutation nor populated production recovery. Exact owned22044 and final18836 stopped0/zero clones/noPIDfile/process/listener; final receipt entry-contention-final-shutdown.json. Receipt ENTRY_CONTENTION.md; independent final source/raw checker20/0 reproduced by primary exit0, no unresolved P1/P2 in bounded primitive evidence; review INDEPENDENT_CONTENTION_REVIEW.md. Prior entry SQL remains unchanged; entry development22595 finished0/11,716files/import integrity. Later mutation gate is separately recorded below; no redundant restart after generated evidence/docs. Private mutation now prepared in supabase/prepared/category_shelf_life_mutation.sql: explicit set/clear, expectedVersion0 for absent row→first1, retained nullable clear/history, auth.uid-derived Admin/AAL2 actor/reason, exclusive before category/policy rows and atomic policy/event with one instant. Native red34pass/24fail precedes interim58/0 and final foundation-policy-mutation-final-03 terminal0/outer7/0/native65/0; exact captured metadata/full88 row maps/template preserved, clone removed/owned22020 stopped0/zero clones/noPIDfile/process/listener. Event fault preserves exact mutation before-state; timestamp/actor/reason/absent-clear/max-version/NULL/stale-clear cases pass. First expanded final fixture stops on absent SuperAdmin enum label, preserved setup diagnostic, no native aggregation/cloneAfter acceptance. Read-only policy-role-schema.json proves restored user_role labels Admin/VIP/Customer/Staff while is_admin text predicate also names SuperAdmin: genuine SuperAdmin execution remains unverified and needs actual role-schema prerequisite, not a synthetic enum change. Current private helper is closed to browser/service roles; no signed operational caller or public projection/stock/listing change. Central verifier currently rejects a new category-policy action via its closed allowlist; deliberately compose signed action/nonce/rate/receipt/BFF Admin authority, never bypass it. Independent final mutation source/raw checker16/0 reproduced by primary exit0, no unresolved P1/P2 within closed preparation; review INDEPENDENT_POLICY_MUTATION_REVIEW.md, evidence/recovery POLICY_MUTATION.md. Initial primary invocation without required archive argument refused EXPLICIT_FINAL_ARCHIVE_REQUIRED; corrected explicit final03 invocation passes, both outputs preserved. Entry development22595 finished0/11,716files/import integrity. Later mutation-development terminal1 before secret scanning: git file enumeration exceeds default maxBuffer with ENOBUFS. **PARKED OWNER security/verification tooling pause**: retain mutation-development-output.txt/exit; when resumed fix complete file enumeration without dropping files, prove focused enumeration, then rerun failed gate once; no repeated restart or development-success claim. Other category work continues. Signed-boundary source audit now pins exact final intake25 verifier/master/is_admin bodies and six current inputs in signed-boundary-audit.json/SIGNED_BOUNDARY_AUDIT.md. Final verifier already explicitly refuses NULL inputs (bodySHA2122886c341812fe0901b97c397680fe6317ec00ade82a7ed9c50d719af87385), preserves current HMAC/action/actor/payload/expiry/nonce/actor-global rate controls, but lacks category set/clear actions. Historical session-registry text is not the final hardened source; preserve exact final body/actions when extending, do not revive parked cleanup or restore an older verifier. Frozen master/current BFF lack category mutation; existing receipt/conflict/in-progress/rate/Admin controls are reusable only with new integration evidence. No explicit deadline tokens in product-master module is not proof of no upstream timeout. Generated audit terminal0; independent source/pin/control-order verifier8/0 reproduced by primary exit0, no unresolved P1/P2 in source scope (INDEPENDENT_SIGNED_BOUNDARY_REVIEW.md). Corrected minor stale NULL-guard-absence limit wording; final guards are present. This is not native/host acceptance. Native signed-action red now reproduced in foundation-signed-action-red-03 terminal1/outer5pass1expectedfail/native7pass3intendedfail. Exact final hardened intake25 verifier/master overlays and real synthetic Admin/AAL2 plus synthetic-key SQL HMAC prove known action acceptance, same nonce false/replayed (existing rate updates retained), corrupt signature28000 and category set/clear22023ACTIONINVALID/master category dispatch42501ADMINREQUIRED at its initial actiongate. Exception refusals preserve nonce/rate/receipts; replay is not an exception and not claimed unchanged. Category gates run before their HMAC validation, so this is valid envelope construction/knownaction positive plus missing-action proof, not executed category signature or full BFF payload proof. Final clear omits minimumDays; interim02 uses set-shaped clear envelope, retained separately. Initial diagnostic fails function-definition separator, no native cases/cloneAfter; corrected witness adds statement terminators only. Full final captured metadata/88row maps and template unchanged, clone removed; exact final13884 and prior14596 stopped0/zero clones/noPIDfile/process/listener. Evidence/source/recovery SIGNED_ACTION_RED.md; independent final source/nativearchive checker12/0 reproduced by primary exit0, no unresolved P1/P2 within missing-action red scope; receipt INDEPENDENT_SIGNED_ACTION_RED_REVIEW.md. No maintained operational source/provider/stock/listing change; ENOBUFS gate remains parked. Current unblocked BFF validation batch prepared (IDEA-20261002-05): maintained product-master validator now accepts strict category_policy_set/clear envelopes with canonical UUID, number integer minimum90..2147483647, precision-safe canonical bigint version text (safe numbers normalized), strict trimmed string reason8..500; clear forbids minimumDays including NULL. TDD actual validator red47pass/6expectedfail to green53/0 exit0, existing product-master API contract1/0 exit0; exact outputs/source pins/rollback BFF_VALIDATION.md. Auth/CSRF/Admin/idempotency/signing/RPC path unchanged; actual SQL still rejects actions. This is request validation only, not successful authorized mutation/host acceptance. Full development gate remains unverified and ENOBUFS ownerparked, no scanner restart. Independent scoped review found no P1/P2 within validation preparation and freshly reran53/0. Primary inspected exact diff/source pins, receipt and limits; review docs/evidence/20261004-category-shelf-life/INDEPENDENT_BFF_VALIDATION_REVIEW.md. Native/category signer/HTTP/database acceptance is still unverified. **Signed category command locally prepared, 4 October (IDEA-20261002-05 / MAP-018/023/026):** supabase/prepared/category_shelf_life_signed_commands.sql extends exact final hardened verifier/master through body and targeted authority-metadata guards plus narrow allowlist/dispatch patch. Closed strict Admin/AAL2 set/clear payload helper uses exact bigint version strings and returns/receipts version text. New private RLS command configuration is unseeded; fresh command refuses absent server-owned hierarchy bound, completed durable retry returns historical result. Final foundation-signed-command-final-06 terminal0/outer6/0/native86/0, including35 exact policy/event/nonce/rate/receipt refusal before-state checks, signed set/clear/history/attribution/retry/rates/NULLs/in-progress/stale/eventfault/wide+maximum versions/private closure and source/grant/path/security drift refusals. Full4 metadata/4x88rowmaps clone/template match, clones removed; exact initial22316 and final15004 stopped0/noPIDfile/process/listener. Review found definition-only harness inherited PUBLIC grants in prior final04; corrected explicit frozen grants and metadata guard, final06 captures postgres-only verifier/postgres+authenticated master. Preserve earlier diagnostic/interim archives; final04 is not authority-context acceptance. Source/pins/evidence/rollback/recovery docs/evidence/20261004-category-shelf-life/SIGNED_COMMAND_PREPARATION.md. Independent final offline checker25/0 reproduced by primary exit0 against explicit final06 source/archive; no unresolved P1/P2 within preparation. Receipt docs/evidence/20261004-category-shelf-life/INDEPENDENT_SIGNED_COMMAND_REVIEW.md. Exact body patches/frozen grants/config/86cases/35rollback predicates/full4captures recompute. Guards cover targeted owner/language/volatility/kind/security/config/ACL fields; exhaustive pg_proc equality, full dependency closure and separate owner/language/volatility/kind drift execution are not established. Prepared-only outside migrations, no permanent provider/schema/config/realstock/listing/UI/main/release change. Native SQL HMAC is not maintained JS signer/protected HTTP/browser/host evidence; full BFF mapping/deadline/clock/role/taxonomy/allwriter/public projection/installer/replay/recovery/real-source acceptance remain MAP-018. Prior development enumeration ENOBUFS and private cleanup stay PARKED OWNER; no redundant scanner/release gate. **Maintained JavaScript category signer bridge verified locally, 4 October (IDEA-20261002-05 / MAP-018/023/026):** Generated build-js-signer-cases.mjs calls actual maintained validator/signer with finally-restored synthetic key; exact signed envelopes execute prepared SQL as authenticated role. Final foundation-js-signer-01 terminal0/outer6/0/native21/0 proves set/clear/historical retry/wide text result+receipt, uppercase UUID/safe number/trimmed apostrophe-Unicode normalization, and six exact policy/event/nonce/rate/receipt refusal rollbacks for nonce/stale/payload/action/key/second genuine Admin actor binding. Full4metadata/4x88maps clone/template match, clone removed, owned19868 stopped0/noPIDfile/process/listener. Evidence/envelopes/input pins/source/recovery docs/evidence/20261004-category-shelf-life/JS_SIGNER_BRIDGE.md. Independent signer bridge offline checker23/0 reproduced by primary exit0, no unresolved P1/P2 within generated bridge scope. Receipt docs/evidence/20261004-category-shelf-life/INDEPENDENT_JS_SIGNER_REVIEW.md; exact envelopes/UTF8 HMAC/current sourcepins/authenticated outcomes/6rollback predicates/full4captures verified. Primary additionally confirms all four binding substitutions specifically raise K2_ADMIN_SIGNATURE_INVALID, not replay masking. No actual Supabase HTTP/browser/host acceptance follows. Synthetic injected native claims are not real Supabase session/JWT proof; protected HTTP origin/CSRF/registry/Admin/idempotency/error mapping/browser/host remains MAP-018. No maintained code edit/permanent provider/schema/config/realstock/listing/UI/main/release change; prepared SQL/current source unchanged. ENOBUFS development gate and private cleanup remain PARKED OWNER, no redundant restart. Production taxonomy/bound/SuperAdmin/deadline/clock/allwriter/public projection/installer/replay/populated recovery/real-source acceptance stays open. **Category handler responses prepared and locally checked, 4 October (IDEA-20261002-05 / MAP-018/023/026):** Maintained product-master commandError receives validated action; category-only version/taxonomy409/input400/exhaustion409/unconfigured503 and exact55P03/57014 busy503+Retry-After1 map to safe public codes. No automatic retry/raw SQL detail; other product/unknown/idempotency mappings preserved. Handler transport fixture executes actual SDK/encrypted cookie/origin/CSRF/Admin/AAL/registry/signing, stubbing only external provider fetch. Red22cases14pass8expectedfail to green75/0 (22handler+53validator), existing API compatibility1/0, diffcheck passes. Evidence/current pins/recovery docs/evidence/20261004-category-shelf-life/HANDLER_CONTRACT.md. Independent handler review found no P1/P2 and freshly reran75/0; primary inspected exact maintained diff/current hashes/receipt and limits. Receipt docs/evidence/20261004-category-shelf-life/INDEPENDENT_HANDLER_REVIEW.md. Transport contracts are not actual provider HTTP/host acceptance; historical binding negatives specifically returned signature-invalid. No real Supabase session/JWT/network HTTP/browser/host or native connection from this transport fixture; prior JS native21/0 and SQL86/0 remain archive-scoped, earlier BFF hash belongs to its pre-response stage. Validator/auth/signer/SQL unchanged; no redundant native rerun. Full development acceptance for this code batch unverified: ENOBUFS remains PARKED OWNER, no scanner/release restart. No provider/permanent schema/config/realstock/listing/UI/main/release change. MAP-018 retains actual provider HTTP plus deadline context/whole request/clock/strongest caller/allwriter/public eligibility/installer/replay/populated recovery/real-source acceptance. Rollback only new error branch/signature/call argument, preserve all prior preparation. Exact next acceptance: retain locally passing handler/signer/SQL contracts while preparing actual provider/host protected HTTP session/origin/CSRF/Admin/registry/idempotency and response acceptance; continue unblocked complete request/native deadline context, one coherent post-lock clock/date and strongest actual caller order; retain signed input/control/replay/atomic rollback and metadata guards (with signature/NULL/action/payload/nonce/rate/durable-replay controls), then prove caller error/rollback handling, complete request deadline, one coherent post-lock clock/date and strongest caller order, then resolve Draft canonical category identity and signed intake action dispatch, dynamic SQL/trigger/view/grant coverage and strongest boundary modes, prepare bounded hierarchy tests while retaining real-taxonomy preactivation validation, write native default/hierarchy/clearance/version/race cases, then implement canonical server-owned nullable ≥90 override/default90 with reviewed actor/reason/version and policy-update serialization; retain clearance31–89 without silently extending it into90-to-raised-minimum stock. Compose identical policy into public projection and every reservation/payment/packing/handover/release/receiving/reconciliation writer, proving boundaries/FEFO/replay/rollback and policy changes against commitments. No approved category values or physical stock invented. This requirement is open implementation, not a security blocker; continue it alongside full installer preparation.
+
+
+**Next complete installer/recovery action (IDEA-20261003-02 / MAP-017/018/020):** Local scoped current/cold metadata capture is complete and archived in foundation-21/22 (native17 drift+ANALYZE/independent12/development0, cold16/independent11/base88hashes/owned shutdown). Prepare and verify a coherent current/cold installer retaining the accepted cost then calendar bodies: public.create_product_first_inventory_server(uuid,uuid,text,jsonb)=1f8b31fa745a8ff858241f4bb8cf3a45 and k2_private.finalize_consignment_receipt_v1(uuid,text,text,text)=0df85cb01249dface47ded9d27f83212. Foundation-23 pins161 unique argument identities and the two actual differences between full publication and narrower AI archives, plus both maintained corrective sources; a later scoped run is not the full installation target. Compose ordered full guarded source steps and their coherent postflight before apply/replay/drift/refusal/populated deactivation/roll-forward on owned clones. Foundation-25 intake-25 completes final-state disabled AI after calendar/flight/populated recovery/publication: native771/0, primary12/0, boundary4/0, independent25/0, focused14/0, final development1265 terminal0 and owned shutdown. Reuse that final function image with both accepted inventory bodies; do not repeat the completed local AI composition. The next full-installation action is the coherent guarded current/cold installer and data-preserving recovery specified here. Reuse accepted scoped proofs; add full installer-specific metadata/column/default/schema/sequence ACL, auth/provider definition/settings, actual sequence-counter/private/cache/data and all-role RLS evidence without reviving unsafe grants or guard bodies. General captured-baseline recovery remains fail-closed; cold role bootstrap and interruption/pre-marker recovery remain unexecuted. Cleanup correction stays parked at owner direction; record its dependent installer/security acceptance as gated and continue independent work. No provider apply/main/release or real-stock approval follows. Exact supplier/warehouse source remains already requested; no repeated question or invented count/media.
+
+**Remaining intake acceptance (IDEA-20261003-02):** Completed scoped publication and disabled-AI source/native/review/development receipts are archived at foundation-16 and foundation-19; no pending local action remains for those slices. Cleanup correction is parked at owner direction below. Continue current/cold installer/default/column/sequence/cache/private captures and data-preserving recovery; verify all-role/global RLS and actual BFF/browser/host listing/CSV/order behavior after their dependencies. Canonical intake relist is locally verified; product-master status has different transition rules and no relist acceptance. Actual supplier/warehouse source location already requested remains pending; do not repeat the question or invent source/count/media acceptance. Synthetic lookup/Object metadata do not close the real gates. No provider/main/release action follows.
+
+**Cleanup correction parked; independent work continues, 4 October (owner instruction):** Owner says "skip the blockers continue on other things". Fresh native intake18 terminal1/519pass/1fail reproduces NULL timestamp/forged signature; clone removed/template unchanged. Forward migration 20261004014500_intake_cleanup_null_inputs.sql and maintained scripts/rehearse-intake-cleanup.mjs/root modes/startup tests are prepared; old body3eb156d5fceac826d50d3ab59407af69/new34757a507264b051206dbea7da6c09cc. Intake19 terminal1/519pass/1fail correctly refuses drift and preserves complete rows/functions; first schema equality fails only PostgreSQL rate-bucket reltuples10→12/relallvisible1→0 (independent diagnostic6/0). Correction installation/replay/native lifecycle/recovery are unreached; source review has no remaining P1/P2 but is not acceptance. Exact resumed action: normalize only volatile statistics while retaining complete structural/security captures, run latest helper including valid-hash cross-actor/nonstaff/STRICT/attempt-ceiling cases in a fresh exclusive archive, then focused evidence/development if code changes and independent final raw assessment. Guard-retaining recovery closes three public wrappers and keeps all ledger rows; no restore of vulnerable body. Frozen foundation18/INDEPENDENT_REVIEW.md retains commands, failures and source evidence. Owned runtime PID6404/loopback54388 was subsequently stopped after intake22; foundation19/shutdown-final.json verifies no process/listener/pid file and zero clones. Restart only the scoped owned runtime for a separately required native witness; no provider/Storage/main/release action.
+
+
+
+
+
+**Private cleanup signer correction required (IDEA-20261004-01):** Actual native17 terminal1/519pass/1fail demonstrates authenticated public pending-cleanup RPC accepts NULL timestamp and forged64-zero signature, adding exactly own cleanup event/nonce on a genuine signed lifecycle session. Full raw rows/functions/SQL retained in intake-17; original template unchanged/clone removed/owned18672 shutdown0/PIDfalse/process0/listener0. No Storage API/removal or provider action occurred. This is a demonstrated local source defect, not a live-provider exploit. Exact next: independently review raw proof and prepare smallest metadata/ACL/body-guarded cleanup signer NULL-input correction, prove all six arguments fail closed before writes, valid pending/replay/claim/completion and actor/AAL2/signature/nonce/refusal controls, full original rows/functions/schema and populated recovery. Shared signer/AI/cleanup have different control effects; do not blanket-exclude controls or fabricate signed evidence. No production apply or paid AI. Publication final development71409 terminal0/10584/import integrity passes; no rerun after these documentation-only receipts.
+
+**Current continuation (IDEA-20261003-02 / full intake/catalog):** Accepted scoped cost/calendar/publication/disabled-AI evidence remains in Brain/runbooks/foundation12/15/16/19; do not repeat it. Remaining: protected actual media upload/readback and BFF/browser/real-host master/publication acceptance; current/cold installer/default/column/sequence/cache/private capture/deactivation/roll-forward; all-role/global RLS and exact listing/CSV/order behavior. Preserve composed current signer, whole cost20261003221500 typmod guard and calendar20261003233500; older replacements must not overwrite them. Supplier/warehouse source is already requested, and missing source gates reconciliation only. Cleanup remains parked. No provider/real-stock/main/release writes authorized.
+
+
+
+**Remaining intake/catalog production acceptance (IDEA-20261003-02–06 / MAP-018/020):** Whole installation and native opening-balance/session/Draft/audit-input/replay/Under Review/refusal are locally verified and archived in Brain/runbooks/foundation10; do not repeat them as real stock acceptance. Cost correction native09/604pass, primary12/0, independent15/0 and final development0 is archived in foundation12. Flight calendar correction IDEA06 is locally verified intake12/646pass with independent18/0 and final development0; preserve exact source composition and receipt-first replay. Continue real media-upload/receipt/assignment and reviewed master prerequisites, Live/unlist/relist/noop/stale/fault recovery, evidence cleanup/disabled AI attachment lifecycle, exact controls/audits and full business preservation, full current/cold installer column/default/sequence privileges/cache/private capture/recovery, all-role/global RLS and BFF/browser/real-host listing/CSV/order acceptance. Scoped cost independent15/0 and calendar independent18/0 reviews are complete; final full installer/lifecycle/host independent assessment remains a gate. Provider authenticated INSERT/UPDATE remain observed state; no target activation/main/live release authorized. Owner-selected separate supplier/warehouse list location already requested/pending; reconcile actual SKU/quantity/lot/expiry/location/custody/facts/media and discrepancies when available. Missing source gates reconciliation only. Preserve frozen catalog01–08/intake01–06 and all failures; no dummy generator, Storage replacement, service-role export or old monolith substitution. Source/recovery foundation10/README.md.
+
+**Recovery:** Cost intake09/604pass and calendar intake12/646pass are terminal0; final development47034 terminal0, owned24320 stopped0/clone0/noPIDfile/process/listener and all7543 prior artifacts unchanged. Preserve frozen cost06/recovery07/normal08/fractional09/calendar-red10/malformed11/corrected12 and all source pins. Foundation12/15 capture whole guarded cost/calendar SQL, exact pre-change functions and populated data-retaining deactivation/roll-forward; deactivation reopens known defects and is not approved provider rollback. Cost recovery must precede calendar installation; preserve current signer/body/ACL composition. Fresh owned archive/runtime only for next native lifecycle slice; no provider/real-stock/main/release writes.
+
+
+
+**Remaining signed-clearance composition (IDEA10 / MAP-018/023/017/020):** Completed single-lot and multi-lot/existing/other-balance/concurrent resolved-SKU drift slices are archived at `docs/evidence/20261003-clearance-lock-order/README.md` and `docs/evidence/20261003-clearance-edges/README.md`. Do not repeat their accepted scenarios or overwrite original/intermediate/final archives. **Exact next executable:** preserve completed historical exact receiving/release and archive-safety receipts (P2-1/2/3 locally resolved within stated scope), then verify remaining current-chain reverse-input multi-SKU clearance/receiving/legacy/competing-coupon and fault schedules. Current-chain release/nonempty expiry/refusal local acceptance is archived at `docs/evidence/20261003-release-current-chain/README.md`; preserve its exact scope and unclean-stop recovery limit. Independent final archive review remains outstanding after reviewer usage limit. Protected catalog/CSV/current listing composition remains required; preserve locally verified exact role-visible catalog completeness at `docs/evidence/20261003-catalog-completeness/README.md` (28/0, existing9/0, independent review, development0). Count proof does not establish full production RLS visibility or real inventory. Full current/cold installer/grants/unsigned closure, stale-cache rebuild, private capture/backup/data-retaining deactivation/roll-forward, visible staff custody/confirmation/recovery and protected shop/CSV/current listing acceptance remain available work. Provider/source/count/facts/media/custody/real-host/live-release gates remain downstream. Local recovery uses latest receipt's scoped pre-source comparison after dependency review; old production clearance body reintroduces its known deadlock, not an accepted rollback. Drop only UUID-owned clone and stop only exact workspace runtime. No provider/real-stock/UI/release action follows.
+
+**Remaining receiving-finalizer acceptance (IDEA10):** The two single-SKU finalizer/recount schedules, stale-state rollback/refreshed same-key recovery, scoped source/archive review and owned cleanup are verified locally in `docs/evidence/20261003-receiving-finalizer/README.md`. Exact next executable: exercise post-candidate clearance/release/legacy/multi-SKU/competing-coupon schedules and remaining finalizer/purchase/fault combinations beyond the accepted two-SKU schedules; preserve complete forward before/after balance timestamps in each new witness. Audit older broad guest-control exclusions/own nonce/time/rate binding before reusing older receiving proof. Full installer/grants/rebuild/private backup/data-retaining recovery/provider/real acceptance and unresolved older receiving/release witness P2s remain active in MAP-018/023/017/020. No provider/real-stock/release change. Recovery restores only this slice archived pre-root/removes new finalizer module after checking subsequent dependencies; preserve all receipts and signing/count/history authority.
+
+
+
+**Remaining writer and listing acceptance (IDEA10):** Completed local four-schedule evidence and source recovery are archived at `docs/evidence/20261003-clearance-concurrency/README.md`; the hypothesized cache race was not reproduced and no production correction is justified. Do not repeat those completed schedules or overwrite their original/acceptance destinations. **Exact next executable:** follow the remaining signed-clearance composition above: retain completed older witness destination/control/replay P2 proofs, then remaining current-chain multi-SKU/writer/fault schedules. Accepted single/multiple-lot and identity-drift evidence is archived in `docs/evidence/20261003-clearance-lock-order/README.md` and `docs/evidence/20261003-clearance-edges/README.md`. Retain exact current catalogs, full physical/reserved/private eligibility, histories and attributable controls. Receiving/purchase two-SKU schedules and later-SKU receiving fault/recovery are locally accepted at `docs/evidence/20261003-receiving-purchase/README.md`; preserve their original/intermediate/final archives and source pins. Keep fresh-invalid clearance/conflicting receipt/recovery, clearance versus recount/release/legacy/competing-coupon and remaining multi-SKU schedules open separately. Current full installer/grants/cache rebuild/private capture/backup/data-retaining recovery, visible staff custody/confirmation/recovery adoption and protected shop/CSV/current-stock composition remain available technical work; follow MAP dependency order and all four design skills for visible changes. Provider activation/export/count/facts/media/custody/real-host gates remain MAP-017/020/018/023/026. Recovery uses the archived scoped source procedure after checking subsequent dependencies; drop only UUID-marked clones and stop only verified workspace runtime. No provider, real stock, UI or release action is authorized by this receipt.
+
+**Receiving continuation prepared; acceptance still in progress (IDEA10):** Final actual signed path392/0,59 report entries,13 installer drifts/later DDL rollback, three reverse-SKU multi-line command faults/recovery/retry, historical receipt/unsigned/auth/context/completed refusal, shortage/Draft/retained-hold initialization evidence is archived at `docs/evidence/20261002-current-receiving/README.md`. Counts are276 inherited before receiving,3 preparation before candidate,111 after,2 cleanup. Original287/5 and intermediate338/5 predicate/317/1 diagnostic failures stay retained with sources/cleanup. BFF regression1/1→2/0, contracts19/0, modes16/0, primary129/129 and development0 (2,931 scans, zero route gaps/import integrity) pass. Full24-table maps, publication membership, exact nonce/rate retry deltas, startup-loaded BFF/security, source/catalog/registry/audit captures persist;565 prior artifacts stay unchanged. Early review completed, interim registry finding fixed, then usage limit stopped reviewer: **whole-source review now performed; original P2-1/2/3 are locally resolved by later receiving/release exact-controls/archive-safety receipts; full current-chain acceptance remains open**, recorded in `docs/evidence/20261003-whole-receiving-release-review/REVIEW.md`. Runtime PID25436 stopped, startup handle76475/final witness92000 terminal0; zero clone/PID/process/listener. No provider/account/real-stock/release action. Recovery restores only this slice's archived root/BFF/reconstructed pre-slice contract file and removes receiving module/migration, preserving subsequent/prior work. **Latest calendar receipt:** `docs/evidence/20261002-receiving-calendar/README.md`: original288/2→prepared338/0 (276 inherited,1 setup before candidate,59 after,2 cleanup),9 contracts,13 mode refusals,15 installer drifts, four controlled clock groups, exact selected ahead/behind caller dates,24-table/catalog/control evidence, final development0/primary118/118 and owned cleanup pass;857 prior artifacts unchanged. Final scoped source review is separately recorded there; it does not close the older receiving review. The syntax-only helper6/0 proves its success path; before reusing that one-off artifact, harden marker-setup failure reporting/ownership recovery (unmarked clone `k2_calendar_drift_syntax_20261003` can remain without a durable receipt). **Exact next executable:** exercise unexecuted receiving-finalizer/purchase/multi-SKU/fault combinations and post-candidate clearance/release/legacy/multi-SKU/competing-coupon schedules; the scoped common-writer and two-order finalizer receipts do not close those gates. Obtain final source review when available before acceptance/activation. Current visible callers still send ID/notes: all-four-skill staff selection/confirmation/recovery/error adoption remains required. Full installer/grants/unsigned other-legacy closure/cache rebuild/private capture/backup/data-retaining recovery/provider and real-stock/facts/media/host gates remain active; this backend slice is not full receiving readiness.
+
+**Remaining IDEA10 acceptance and recovery:** Independent whole-source receiving/release review found concrete P2 witness gaps at `docs/evidence/20261003-whole-receiving-release-review/`: four archived-control corruptions (wrong fresh nonce UUID/time, extra zero-hit rate row, unrelated rate metadata) are falsely accepted by older receiving permittedRetry. Its business map excludes guest controls without an allowed guest action. Older release race replays exclude four admin/guest control maps, omit exact before/after replay controls and check only ok/error, not durable public result/reference. Offline13/0 proves those review observations, not production behavior or full acceptance. Preserve prior receipts and locally accepted receiving exact-controls/archive-safety receipts. Exact next executable: audit and verify full current-chain release/receiving/clearance composition with reverse-input multiple SKUs and nonempty registered-fixture expiry isolation/refusal; preserve prior historical proofs and fresh bounded archives. Final whole-source SQL/BFF review is performed with no demonstrated production P1/P2; `docs/evidence/20261003-whole-receiving-release-review/REVIEW.md` adds third P2: older receiving-parity/release-races/release-eligibility fixed destinations overwrite receipts. P2-3 is locally resolved for its three modes: exclusive fresh bounded selectors, actual startup focused33/0, independent24/0 plus supplemental18/0, development0 and 7,139 preceding archive hashes unchanged. Receipt: `docs/evidence/20261003-rehearsal-archive-safety/README.md`. P2-1 is locally resolved for the historical receiving-custody rapid no-pruning diagnostic in `docs/evidence/20261003-receiving-exact-controls/README.md`: root392/0,9 actual retained signed args/control pairs/59 reports, focused48/0, independent24/0+79/0, development0/8,578 scans, prior7,155 files unchanged and owned3264 shutdown0. Preserve those scope limits; latest calendar/retry/clearance full composition remains open. P2-2 is locally resolved for four historical rapid no-pruning release schedules in `docs/evidence/20261003-release-exact-replay/README.md`: root349/0, full27 release/recovery maps and25 guest business/Admin hashes, exact signed guest control/public result, focused61/0/independent37/0+74/0/development0/prior7,371 unchanged/owned19236 shutdown0. All original three witness P2s are now locally resolved; full latest-chain and real acceptance remain open. Scope/recovery stays here until fixed, not in a competing plan. Use current common-writer and retry source/recovery receipts at `docs/evidence/20261003-receiving-writers/README.md` and `docs/evidence/20261003-receiving-retry/README.md` for further composition; the retry's scoped159/159 and common-writer's scoped177/177 acceptance do not close the whole receiving/release review or real-host/provider gates. Whole-source receiving/release review is performed with its original three witness P2s locally resolved in subsequent scoped receipts; its named production sources have no demonstrated P1/P2, but current-chain acceptance and remaining grant/dependency/recovery gates are open. Nonempty registered-fixture expiry isolation/refusal remains unexecuted. Exact permitted guest nonce/rate replay deltas are proved only for the four historical rapid no-pruning schedules, not latest full-chain/pruning acceptance. Before wider current-chain composition, retain the now-verified historical9pair exact receiving controls and no-pruning scope; older archives are not retroactively strengthened. Candidates leave existing unsafe stale rows unchanged: prepare a reviewed installer cache rebuild preserving physical/reserved/history, with rollback/deactivation/recovery. Complete visible receiving callers and post-candidate clearance/legacy/multi-SKU/writer/release/competing-coupon schedules, untested controller faults, full cold/current installer/private capture/backup and data-retaining deactivation/roll-forward. Earlier21-table rollback maps were compared but not archived; new receiving24-table maps do not retroactively fill that historical review limit. Actual grants/unsigned other-legacy closure, shipping, protected shop/CSV/current stock composition, source/count/custody/facts/media/device/real-host and owner release gates remain; missing real counts block only dependent acceptance. No repeat permission question is needed for safe preparation. Use latest receiving source recovery only after checking subsequent dependencies; earlier scoped source recoveries are historical, not approved full-chain/provider rollback. Retain counts/audit/signing and review fresh same-target activation/deactivation. Commands/archives/limits/recovery: `docs/evidence/20261002-current-receiving/README.md` and prior frozen receipts.
+
+**Concurrency integration still required (IDEA-20261002-10):** Historical diagnostics at `docs/evidence/20261002-current-writer-concurrency/README.md` establish the defect; signed-only overlaps show verifier serialization rather than balance ownership. The later candidate above resolves only the three tested underlying-function overlaps locally. It does not close all writers or authenticated/provider exposure. Use its compiled capture/phase evidence for remaining schedules and edge cases, then full installation/recovery and exact provider-grant acceptance. Do not repeat completed diagnostic setup or claim older250/1 is the latest state.
+
+**Remaining complete inventory composition (MAP-018/023/017/020):** Local reservation and payment/handover corrections are archived in `docs/evidence/20261002-purchase-lot-parity/README.md` and `docs/evidence/20261002-payment-lot-parity/README.md`; completed implementation is removed here. Latest247/0 proves the executed post-payment-correction slice; first198 checks precede it, and earlier148 precede reservation eligibility. **Exact next:** prove all canonical writer concurrency/lock/eligibility/commitment behavior after these corrections, then recompose cold/current full installation, private capture, backup/recovery and deactivation; include actual provider metadata/grants and unsigned legacy writer closure before activation. Raised category thresholds, customer clearance disclosure, server shipping authority, catalog failure/membership behavior, protected shop allocation/receiving/pagination, real exports/counts/facts/media/custody and same-target authorization/real-host acceptance remain open. Local recovery restores IDEA09 source-before root and removes only its new module/migration, preserving IDEA08 and all prior work/receipts; historical defective recovery is not approved provider rollback. No live mutation or release occurred.
+
+**Remaining public catalog acceptance (MAP-018/026/017/020/023/025):** The locally verified public eligibility projection and subsequent complete lot composition are archived in `docs/evidence/20261002-public-eligible-stock/README.md` and the later inventory composition receipts; reservation and payment/handover corrections are linked above. Their earlier installation discoveries are historical findings, not instructions to repeat completed local composition. Current cold/full installation, all-writer concurrency after the latest corrections, exact same-target provider capture/grants/install/recovery/maintenance authorization and real-host acceptance remain open. Prove catalog failure/membership behavior, raised category thresholds, customer clearance disclosure and StoreContext's stale display-stock fallback; the CASE timestamp parser's malformed-JSON negative remains unexecuted. Reconcile actual exports, approved counts, facts/media and custody rather than treating registry examples or fixtures as real approval. No provider write, real inventory change or release occurred.
+
+**Remaining listing and shop-stock acceptance (MAP-018/026/017/020/023):** Reuse canonical `products.subcategory`, channel/shop separation, per-shop proposals and section-5 FEFO eligibility. The unused `shelfLifeGate.js` household-60/browser-date threshold is not operational authority. The completed Shop stock source/UI slice and its 8/8 component fixture cases plus 20/20 contracts are archived in `docs/evidence/20261002-listing-logic/README.md`; later eligible public projection and lot corrections supersede that receipt's original projection next action. Continue protected shop allocation, receiving and pagination, prove public failure/membership behavior and complete actual export or exact Drive source reconciliation across SKU/lot/location/shop, approved physical counts, facts/media and real-host publication acceptance. Do not auto-assign or bulk-unpublish the catalog or invent counts. Local evidence does not establish installed-provider behavior; no provider apply or release occurred.
 
 **1 October local preparation (IDEA-20261001-03):** Protected Website assignment and signed-order membership are prepared and locally verified; no live 22-product catalog change occurred. Canonical channels precede the Admin channel boundary. Real restored-schema rollback behavior, later verifier replacement compatibility, 87/87 API contracts, final 3/3 affected API cases and final development verification pass. The affected synthetic account runner passes rollback/apply/behavior/replay with its corrected prerequisite. Both local servers are stopped; independent review and limits are recorded in `docs/evidence/20261001-website-listing-boundary/README.md`. **Remaining and next:** reconcile product/balance/lot integration under MAP-023, implement staff assignment/recovery UI and public projection, review actual membership/facts/media/counts, and enforce authoritative shipping. The shared signing guard now passes locally; include it under MAP-017/020 in the recomposed exact installer and expanded private capture/deactivation scope before apply review. Complete backup/provider/branch/all-route/real-host gates in dependency order. Provider configuration remains unchanged; local recovery is a scoped source revert preserving receipts. The full MAP item and production-listing goal remain active.
 
@@ -156,7 +1588,97 @@ Independent local fixes may continue while an owner or provider gate is open. Th
 
 ### MAP-023: Finish real order, payment and fulfillment cycles
 
-**Current coupon/confirmation state, 2 October (IDEA-20261001-06 / IDEA-20261002-01):** The prepared 30-entry current-schema chain passes 77/77, including canonical discounts, invalid-coupon full rollback, final-redemption contention, confirmation commitment, second-lot fault recovery, cancellation and committed expiry exclusion. The event-vocabulary defect and both independent review guard defects failed first and are corrected; final legacy 48/48, focused contracts 20/20 and one development gate pass. Review has no remaining actionable defect; owned clones are removed, original fingerprints unchanged and exact process/connection evidence verifies local servers stopped. Durable evidence/recovery: `docs/evidence/20261002-current-coupon-holds/README.md`. **Remaining and exact next independent action:** compose and rehearse the current payment/handover and remaining writer definitions against these accepted holds/coupon facts, then expand same-target installer/captures to include the commitment objects and event constraint. The broad historical confirmation rollback is not approved for this composed chain; prepare exact function/ACL/constraint recovery or controlled deactivation/roll-forward preserving all history. Shipping implementation still awaits the already-pending owner approach answer. MAP-017/020 retains refreshed backup/preflight and exact provider authorization; MAP-018/025 retains real products, counts and human acceptance. No provider apply, shipping runtime, push or release.
+**8 October J native batch status/next (existing delivery ideas):** Prepared native
+express quote/guest-account acceptance and scoped staff/customer reader composition
+have J05 native56/0 + focused readerJ01 native25/0; synthetic actual-handler staff
+API1/1, final scoped review approved. Exact final artifact/evidence/recovery limits
+are in authoritative-delivery README and the Manual express J working-rhythm entry.
+Dummy100+delivery150 becomes250 after buyer acceptance and enables signed payment
+instructions without stock changes; real expired-grant lock wait is denied. Both
+clones removed/original88 tables preserved/local runtime stopped. E/I bytes retained.
+**Next:** connect existing staff delivery, confirmation and account screens with
+persisted exact uncertain commands/identity recovery; then coordinated router/native
+HTTP and cancellation/requote tests, exact current/cold install/capture and legacy
+charge remediation, populated data-retaining deactivation/roll-forward, host/release
+and real acceptance. Do not apply/deploy this partial batch or infer booking/real
+counts. Owner facts block final real acceptance only; independent work continues.
+
+**8 October active delivery batch (IDEA-20260925-06 / IDEA-20261002-03):**
+E1–E6 connected order design is APPROVED after sequential review. Fresh-only
+customer_order_delivery_core.sql/generated fragment and guarded builder are
+prepared and locally verified: customer-order-green06 passes53/0. Standard,
+pickup and pending express each save one snapshot/hold; physical4/reserved4 includes
+one synthetic historical hold, never double counts physical stock. New accepted
+and old priced receipts retry unchanged after tariff/weight changes; stale quote,
+fresh legacy price, generic charge/time/channel/ID/basket/reparenting/history and
+missing-snapshot attempts refuse with full maps. Actual Staff tracking preserves
+accepted charge/time; direct payment helper denies42501 and maintained signed
+Staff payment command denies pending express22023. Controller94279 exits0, clone
+removed/original unchanged/runtime stopped. API26/26 includes two new order cases;
+Admin409 translation3/3 passes. Final scoped independent review approves with no
+Critical/Important finding. Historical
+green01/02 signature-field and green03 SQL precedence failures remain archived;
+green04/05 staff fixture denied before the intended branch, corrected without
+granting access. No provider/native HTTP/rendered/manual-express acceptance claim.
+Native source/package readback: authoritative-delivery/customer-order-primary-readback.json.
+Preserve failed archives, all prior receipts and the worktree. Exact next is the
+usable rendered checkout/staff caller and manual express quote/buyer acceptance,
+with pending read/payment projections and historical remediation. Apply all four
+required design skills before visible UI work. Existing retry normalization is preserved;
+fresh legacy Website commands must not bypass the canonical contract. Rendered
+caller/manual express acceptance and full activation/recovery remain essential.
+Historical unsnapshotted Website charges remain outside the new snapshot guard;
+their acceptance/charge/payment remediation or controlled activation closure is
+an essential launch blocker, never proof of verified customer acceptance merely
+because the old row says customer_confirmed. Do not deploy this batch alone.
+Shipping-spec D1–D7 design is APPROVED. Canonical measured/estimated weight,
+checksum-pinned complete PSA destination hierarchy and signed server preview
+using the accepted tariff now pass the focused native dummy-data rehearsal:
+`foundation-qualified-schema-guest-checkout-customer-quote-green01/result.json`
+records79/0, clone removal and unchanged original database; controller exited0
+and the local runtime stopped. This is backend preview evidence only, not HTTP,
+rendered checkout, order acceptance, deployment or real inventory acceptance.
+Storefront quote BFF now signs only canonical identifiers; GET delivery/locations
+provides bounded public reference children through the existing cost shield.
+Focused API/router5/5 passes after fixing the review finding that valid slash
+SKUs were rejected; independent scoped review has no other Critical/Important
+finding. Native14 source pins and generated-package equality pass readback.
+These handler checks use synthetic PostgREST responses, not native HTTP acceptance.
+E1–E6 now prepares the recomputation/frozen snapshot; next connect rendered
+checkout/manual express under the four required design skills. Broader
+proof of actual measured product rows, source-row fidelity, bounded worst-case
+carts, observed cost and native rate refusal remains in this unfinished batch.
+Preserve existing54+12/0 tariff and3/3 API evidence; only new behavior is checked.
+The preview alone cannot close order fee trust, accepted-charge or payment gates;
+E1–E6 supplies local snapshot protection; the remaining integration must complete
+rendered/manual express/read/payment and legacy protection. Preparation and
+recovery remain this item and MAP-017/020; real counts are not a local blocker.
+
+Immutable customer tariff versions, signed Admin/Staff publication,
+expected-version/reason/evidence/audit controls, bounded staff GET/POST and private
+integer fee calculation are prepared and locally verified under shipping C1–C5.
+Sequential design APPROVED; native customer-rates-green02 54/0, overflow01 12/0,
+API/router3/3 and independent review with no Critical/Important defect pass.
+Actual same-key concurrency returns one version/receipt, old versions remain
+stable, invalid attempts restore full maps and bigint/final rounding limits refuse
+safely. Clones removed, original preserved, runtimes stopped. Reuse these scoped
+receipts; do not rerun them after documentation changes. Evidence/failed archives,
+source pins, exact commands and recovery are in authoritative-delivery README.
+This batch does not yet repair browser fee trust. **Exact next:** connect the
+locally verified canonical preview to rendered checkout and signed order under
+the current guest inventory contract, freeze reviewed accepted snapshots, then
+complete express quote acceptance and protected payment/instruction paths.
+Real facts/counts are deferred to real selling acceptance and do
+not block local readiness. No deployment/live database write is authorized.
+Preparation recovery: dispose only the marked owned clone; preserve current
+workspace and accepted receipts. Before live approval, compose/capture exact
+installer and caller deactivation/roll-forward recovery through MAP-017/020.
+
+**2 October owner handoff and revised delivery policy (IDEA-20261002-03):** Continue in the owner-requested new chat against this checkout/feature branch. Authorized Admin and Staff must be able to change delivery rates through a protected versioned/audited workflow, preserving accepted charges. Keep standard J&T-based delivery and pickup. NCR Lalamove/Grab express remains selectable, with a prominent do-not-pay-before-current-staff-confirmation warning; record a current route/time/package quote, availability and final total, and require buyer acceptance before payment instructions. No immediate dispatch/booking or fixed current express fee is promised. Treat unknown fees as pending, never free. The fixed-express part of the 1 October candidate and old pending all-service approach question are superseded. **Next delivery action:** revise/review the existing design for editable standard rates and manual express quotation/payment guards, then implement and verify within the established MAP dependency/activation gates. Investigate official courier quote/booking API capability separately; no integration is claimed. Authoritative target: operations rulebook and `docs/specs/SHIPPING_AND_COURIER_LOGIC_SPEC.md`.
+
+**Current payment activation and delivery dependency (IDEA-20261002-02/-03):** The local payment slice has a 148/148 current-schema receipt, exact-hash independent review, passing development gate, clone removal/original preservation and process-visible clean shutdown in `docs/evidence/20261002-current-payment-handover/README.md`. Base remains `bf1d879`, feature branch `codex/map017-guest-chat-preview`; the payment batch and records remain uncommitted. **Next independent source action:** revise/review the existing delivery design for protected Admin/Staff standard-rate editing and manually quoted NCR express, then implement server quote/accepted-charge/payment-prompt guards under the established design gate. The stale all-service approach question is superseded. **Remaining activation work:** reconcile remaining current writers; recompose the exact MAP-017/020 installer, full body/ACL/constraint captures and data-retaining deactivation/roll-forward with the new structured correction before refreshed backup/preflight and specific provider authorization. Physical counts, QR recipients and distinct real funds/handover acceptance remain MAP-018/025. Preserve red/history receipts, commitment/events and the signing guard; broad historical confirmation rollback is not approved. Do not push, merge, apply provider SQL/flags or release from this handoff. Keep the owner's Gemini Spark intake row and `.backups/` excluded. Revised shipping remains documented target only.
+
+**Coupon/confirmation activation dependency (IDEA-20261001-06 / IDEA-20261002-01):** Historical scoped receipts remain in `docs/evidence/20261002-current-coupon-holds/README.md`; current payment composition is covered by the receipt above. **Remaining:** compose remaining writer definitions against accepted holds/coupon facts and expand same-target installation/captures to include commitment objects and the event constraint. Prepare exact function/ACL/constraint recovery or data-retaining deactivation/roll-forward preserving all history; broad historical confirmation rollback is not approved. The 2 October manual-express/staff-rate revision supersedes the old shipping approach question. MAP-017/020 retains refreshed backup/preflight and specific provider authorization; MAP-018/025 retains real products, counts and human acceptance. No provider apply, shipping runtime, push or release.
 
 **1 October IDEA-20261001-06 review follow-up, locally verified:** The witness now runs actual direct canonical/signed same-key interleavings in both orders and inspects the exact `pg_locks` advisory key. A clone-only signed-entry variant omitting that lock reproduces the deadlock (expected exit 1, 37 assertions); the current witness exits 0 with 42/42, one order/hold/conversation and no guest ownership widening. Both receipts pin the final witness hash. Final development verification exits 0 and independent review has no remaining Important witness defect. Clones are removed and original restore fingerprints unchanged. Runtime shutdown is independently verified below. Recovery is a scoped witness-only revert retaining receipts. No provider change, push or release. The owner-confirmed shipping design is the next slice in this active item.
 
@@ -184,9 +1706,9 @@ Independent local fixes may continue while an owner or provider gate is open. Th
 
 **Owner policy correction, 25 September:** Use J&T-based customer delivery rates now; prepare a separate standard-rate policy for future explicit activation. The live regional J&T matrix stays the current customer behavior until a tested replacement is ready. The exact-locality J&T workbook is prepared evidence, not a live Admin-to-checkout rate control. No future standard amount was supplied. Do not replace current J&T checkout prices with manual quote or turn carrier cost rows into customer charges by assumption. This resolves the policy choice but does not resolve the browser-trust defect, staff edit cap, missing rate tables, or payment-function mismatch above.
 
-**Next executable delivery slice (Codex-owned):** (1) Model J&T customer rates and a separate inactive standard-rate mode as versioned server data, with owner approval/effective dates and no invented values. (2) Make order submission validate service, region/exact destination, packed-weight evidence, and selected fee on the server; invalid, unknown or stale inputs must stop or require an explicit quote. Prove a modified browser request cannot self-confirm ₱0 courier delivery. (3) Add a database guard so an accepted delivery charge cannot be increased by the legacy per-order staff RPC; define an explicit re-quote/customer-acceptance record for exceptions. (4) Reconcile and rehearse the delivery/Admin BFF migrations after MAP-017/020 cutover prerequisites, then prove Admin publish, Staff denial, rollback, quote parity and old-order price stability. (5) Apply the structured payment migration in dependency order and prove two distinct authorized people on a real transfer before calling the end-to-end cycle live. Keep each prepared, applied, deployed and live-verified state separate in this item.
+**Next executable delivery slice (Codex-owned, revised 2 October):** (1) Revise/review the existing design, then model J&T customer rates and a separate inactive future standard-rate policy as versioned server data without invented values. Authorized Admin and Staff can maintain customer rates through signed role/AAL2/version/reason/audit controls; prove both authorized roles succeed and unauthorized/unsigned/stale attempts refuse. (2) Validate standard service, destination, canonical weight basis, rate version and fee inside order submission; prove modified browser requests cannot self-confirm free courier delivery. Pickup remains free. (3) Keep NCR express selectable as a request with pending fee/total and prominent pre-payment warning; record the current staff quote/source/time/route/package/availability, require buyer final-total acceptance and hold instructions/transfer prompts until then. Requote expired/changed offers without inventing booking or immediate delivery. (4) Guard accepted charges across all writers, including the legacy per-order delivery RPC; separately record exceptional revised quotes and explicit renewed buyer acceptance. Prove uncertainty/retry, quote parity, protected rate edits and old-order price stability after the established MAP-017/020 prerequisites. (5) Refresh the exact composed installation/capture/recovery package before specific provider authorization, then separately prove real distinct-person funds/packing/handover acceptance. Keep prepared, applied, deployed and live-verified states separate. Official courier API investigation stays future work.
 
-**1 October delivery design preparation (IDEA-20260925-06):** The owner explicitly retained separate NCR Lalamove/Grab express alongside J&T standard. The current candidate in `docs/specs/SHIPPING_AND_COURIER_LOGIC_SPEC.md` preserves the complete existing matrix, recommends transaction-time canonical recomputation plus an immutable accepted snapshot, and derives tariff area from a pinned Philippine locality hierarchy. Official PSA 30 June 2026 workbook acquired and inspected: 43,768 unique codes, SHA-256 `31892bc2bdde3ea0682562d9412b5bab4d45a0be5e5a5b4f6c9d7714b94bca5d`; grouping rows and Manila submunicipalities require explicit handling. Read-only current K2 metadata still has no measured shipping columns or locality rules; estimates must not be called measured weights. Evidence and decision/reviewer log: `docs/evidence/20261001-authoritative-delivery/README.md`. **Peer review:** Skeptic, Constraint Guardian, User Advocate and Arbiter completed the required sequence; all S1–S3/C1–C2/U1–U4 objections were accepted and resolved, with formal APPROVED peer disposition. **Exact next action:** obtain owner acceptance of the concrete candidate approach required by brainstorming before shipping implementation. Then perform the focused failing-first implementation/rehearsal in the existing dependency order above. Candidate withdrawal is a documentation revert retaining source provenance. No source/schema/provider/fee/flag/release changed; existing provider capture/recovery is still stale and the full item remains active.
+**Delivery design dependency (IDEA-20260925-06 / IDEA-20261002-03):** The historical 1 October candidate and peer disposition remain in `docs/specs/SHIPPING_AND_COURIER_LOGIC_SPEC.md` and `docs/evidence/20261001-authoritative-delivery/README.md`; its fixed express/all-service approach and pending question are superseded by the owner's 2 October revision. Retain the official PSA source provenance (30 June 2026, 43,768 unique codes, SHA-256 `31892bc2bdde3ea0682562d9412b5bab4d45a0be5e5a5b4f6c9d7714b94bca5d`); grouping rows and Manila submunicipalities still need explicit handling. Current K2 metadata has no measured shipping columns/locality rules, so estimates cannot be called measured weights. **Next:** revise/review that candidate for authorized Admin/Staff rate editing, manual express quotes and explicit acceptance/payment guards before implementation. Historical approval does not approve the revised technical design. Runtime/source/schema/provider/fee/flag/release and provider captures remain unchanged by this design record.
 
 **25 September customer-order audit (IDEA-20260925-05):** Fresh live browser check reached cart and checkout with Barilla ₱149 + ₱95 Metro Manila delivery = ₱244, GCash/MariBank available and COD absent; an empty required name stopped submission. Local selling (13/13), payment UI (36/36), focused API contracts (49/49), and guest BFF source verification passed. Read-only live SQL found the current direct order function and three submitted requests, all payment-not-requested, but no signed guest order function. No valid order, payment, protected Admin handling or dispatch was performed. The live checkout payment sentence could imply COD while COD is off; corrected wording is prepared locally in `Checkout.jsx` (6/6 focused contract and `verify:development` pass) and requires a future authorized source release. Exact evidence and recovery limits: `docs/evidence/20260925-ordering-flow-audit/README.md`.
 
@@ -201,6 +1723,8 @@ Independent local fixes may continue while an owner or provider gate is open. Th
 **Block:** physical stock, named staff roles, recipient check, OWNER-003 wholesale terms and remaining policy choices. OWNER-002 reservations and OWNER-004 contact channels are answered. Evidence: `docs/evidence/20260924-manual-qr-payment/README.md`.
 
 ### MAP-024: Verify hosts, discovery and measurement
+
+**4 October public discovery receipt (IDEA-20260924-06 / MAP-024):** Maintained GET-only exact-host verifier terminal0 confirms HTTP200 home/robots/sitemap, canonical home/share metadata, valid directives and four canonical sitemap URLs. In-app browser DOM checks confirm completed hydrated home/catalog with exact self-canonical/og:url and index,follow. Both show0 JSON-LD scripts (no claim about all formats); no product path or Google property inspected, no actual indexing/analytics or full-site SEO acceptance. Initial sandbox network refusal is preserved; scoped public GET retry passes. No provider/source/release/account/stock change; temporary tab closed. Evidence/recovery: `docs/evidence/20261004-discovery-read-only/README.md`. **Remaining/next:** product structured-data/approved-fact acceptance and remaining route/header/reviewed-product discovery; home/catalog zero JSON-LD agrees with the inspected working-tree source null-product contract (no deployed commit equivalence claimed); retain existing Google-service authorization gate below. Do not repeat completed raw home/robots/sitemap or scoped hydrated home/catalog checks without a source/host change.
 
 **Status:** Active. Separate Storefront/Admin Vercel projects and the 24 September QR, SEO and Admin release are deployed. Product indexing is gated. On 24 September, Hostinger's four web DNS records matched the deployment runbook and Vercel marked the apex redirect, `www`, and `admin` domains Valid Configuration. The exact-host sitemap served HTTP 200 XML with Home, Catalog, Pasabuy and Trade; robots referenced it, all four routes returned 200, and sample product/account/Admin headers remained noindex. Search Console submission and actual indexing are still unverified.
 
@@ -230,6 +1754,8 @@ Independent local fixes may continue while an owner or provider gate is open. Th
 
 ### MAP-026: Connect K2 shop accounts without splitting stock truth
 
+**2 October source trace and safety correction (IDEA-20261002-04, scoped local correction verified):** Reuse `products.subcategory`, `channelMeta.js`, `channelAllocationEngine.js` and existing rulebook/SQL FEFO policy; no new taxonomy or stock pool. The prepared Shop stock screen blocks protected direct access, removes fabricated sample/fallback facts, refuses all failed/missing-count/truncated snapshots, marks missing balances/allocations Needs review and disables every initial mutation entry. Original rendered behavior fails first, separate count/transfer regressions fail first, and the final actual-component suite passes 8/8 with 375/1440 overflow checks; existing allocation/listing contracts pass 20/20 and final development verification passes. Independent review resolved the completeness/announcement findings. Evidence, exact hashes, limits and scoped source recovery: `docs/evidence/20261002-listing-logic/README.md`. More than 25 transfers intentionally refuses the entire transitional panel; protected pagination is unfinished. The unapplied `20260917_multi_shop_allocation_and_transfers.sql` rebalance still reads aggregate availability without exact eligible-lot selection/locks or explicit staff/AAL2 authorization; do not activate it as-is. **Exact next:** compose protected shop reads/commands, complete pagination, exact eligible lots and SKU-ordered inventory locks under MAP-017/020/023, then rehearse staff request, approval, receiving, contention and recovery before activation. Real export/count/shop/publication acceptance stays MAP-018/026 and eligible public projection stays MAP-018; no provider change or release occurred.
+
 **25 September channel-stock clarification:** The owner has existing channel stock figures and wants Codex to move the verified values into the operating model. The proposed source has not yet been supplied or matched to canonical SKU/lot/shop records. Fresh read-only production SQL found 30 product rows, 21 batch rows and 29 balance rows; `channel_shops`, `channel_shop_allocations` and `inventory_transfer_requests` are absent. The multi-shop allocation/transfer migration and authenticated behavior remain locally prepared, not production applied. Channel listing quantities must not be summed as new physical stock; reconcile one master physical count, then decide approved per-shop offer amounts within that stock. IDEA-20260925-04.
 
 **Status:** Queued, with some allocation and custody work prepared. K2 operates multiple accounts on Shopee, TikTok Shop and Lazada; the count must not be hardcoded.
@@ -253,6 +1779,8 @@ Independent local fixes may continue while an owner or provider gate is open. Th
 **Block:** MAP-018/019/020/021/023 and reviewed source content. Media rights and publication stay with MAP-018; exact-host SEO stays with MAP-024.
 
 ### MAP-028: Close the cross-surface audit
+
+**2 October workflow map (IDEA-20261002-06, local correction verified; acceptance remains):** Owner-requested readability/exploration/current-logic source work is verified and recorded at `docs/evidence/20261002-workflow-map/README.md`; no completed implementation action remains queued here. The 100% focused map, full-map option, readable filters/search, component-local keyboard focus, native scroll/touch and mouse/keyboard pan preserve 49 nodes / 60 relationships. Updated instructions distinguish canonical subcategory, eligible expiry/clearance, bounded per-shop offers versus physical custody, Website assignment, prepared holds/commitments, actual saved grand-total funds review and manually quoted express. Final checks: 10 actual-component browser cases, 20 guide/graph/procedure contracts and final development gate pass; review regressions and recovery checkpoint are retained. **Remaining/next action:** MAP-028/025 verify the complete Admin page and modal with real staff and physical touch hardware on the intended candidate host at standard/enlarged text, then assess an owner-requested release. MAP-018/026 still own actual inventory, source exports/counts/media/subcategories, Website membership and protected allocation/transfer acceptance; MAP-023/017/020 own complete current-writer/provider/payment/delivery activation. This guide correction does not satisfy those operational gates or authorize a live release. Recovery reverts only the named map UI/data/test slice to its source checkpoint, preserving prior SQL/listing/payment work; no provider rollback is needed.
 
 **28 September combined QR/chat release check:** The QR image and larger-view link share exact source-pixel cropped assets. Supabase migration `20260928092634` is applied, GitHub `main` has source SHA `f164553`, and both Vercel production projects report READY on it. The canonical hosts returned correct target markers; both canonical QR crops matched committed bytes. Focused UI/SQL checks and both builds passed. The owner stopped the prolonged full local release gate before completion; GitHub CI was still running at receipt time. Real order-thread, upload, staff retrieval, QR scan and funds acceptance remain MAP-023/025. See IDEA-20260928-01/-02 and their evidence folders.
 

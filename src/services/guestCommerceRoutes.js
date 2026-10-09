@@ -1,6 +1,7 @@
 const GUEST_ENDPOINTS = Object.freeze({
   'account/claim': '/api/storefront/account/claim',
   'account/history': '/api/storefront/account/history',
+  'account/delivery-accept': '/api/storefront/account/delivery-accept',
   'account/message': '/api/storefront/account/message',
   'account/settings': '/api/storefront/account/settings',
   'account/notifications': '/api/storefront/account/notifications',
@@ -10,10 +11,12 @@ const GUEST_ENDPOINTS = Object.freeze({
   conversation: '/api/storefront/conversation',
   coupon: '/api/storefront/coupon',
   'delivery/quote': '/api/storefront/delivery/quote',
+  'delivery/locations': '/api/storefront/delivery/locations',
   message: '/api/storefront/message',
   messages: '/api/storefront/messages',
   order: '/api/storefront/order',
   'order/status': '/api/storefront/order/status',
+  'order/delivery-accept': '/api/storefront/order/delivery-accept',
   pasabuy: '/api/storefront/pasabuy',
   wholesale: '/api/storefront/wholesale',
 })

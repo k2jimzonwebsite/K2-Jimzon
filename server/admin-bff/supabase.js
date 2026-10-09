@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { adminRequestFetch, currentAdminRequestSignal } from './request-deadline.js'
 
 const STAFF_ROLES = new Set(['Admin', 'Staff', 'SuperAdmin'])
 
@@ -10,8 +11,10 @@ export function createServerSupabase() {
   const url = process.env.SUPABASE_URL || ''
   const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY || ''
   if (!url || !publishableKey) throw new Error('SUPABASE_SERVER_CONFIG_MISSING')
+  const signal = currentAdminRequestSignal()
   return createClient(url, publishableKey, {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    ...(signal ? { global: { fetch: adminRequestFetch(signal) } } : {}),
   })
 }
 

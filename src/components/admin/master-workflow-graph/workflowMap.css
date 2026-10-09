@@ -1,0 +1,20 @@
+/* Admin reading contract: compact metadata stays legible without scaling the
+   rest of the Admin app. Canvas overview zoom is separate from browser zoom. */
+.workflow-map { font-family: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif; }
+.workflow-map .text-xs { font-size: .875rem; line-height: 1.5; }
+.workflow-map [class*="text-white/"] { color: #e2e8f0; }
+.workflow-map input, .workflow-map select { font-size: 1rem; }
+.workflow-map button, .workflow-map p, .workflow-map h3 { overflow-wrap: anywhere; }
+.workflow-map button { white-space: normal; }
+.workflow-map [aria-label="Map scope"] button[aria-pressed="true"],
+.workflow-map [aria-label="Step types"] button[aria-pressed="true"] {
+  background: #13233a; border-color: #7dd3fc; color: #fff;
+}
+.workflow-map [aria-label="Selected step details"] > div { min-width: 0; }
+@media (min-width: 640px) {
+  .workflow-map [role="tooltip"] { left: auto; right: 0; }
+}
+@media (max-width: 640px) {
+  .workflow-map [aria-label="Workflow path tracer"] select { max-width: 100%; }
+  .workflow-map [data-workflow-viewport] { height: 28rem; }
+}

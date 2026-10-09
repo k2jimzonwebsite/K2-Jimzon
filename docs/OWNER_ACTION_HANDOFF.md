@@ -1,5 +1,87 @@
 # Owner action handoff — things Claude cannot do from this workstation
 
+**Current clarification, 9 October:** No real stock counts are requested for software
+readiness. The local copy now has the captured database permissions and retains its
+data. A full migration rehearsal stops because this local PostgreSQL lacks a Supabase
+component used for Storage permissions; it rolls back safely. Production's read-only
+settings show the required permission is already provided there. Codex must finish
+the technical preparation, workflow verification and recovery procedure. A single
+live-change approval comes after a reviewable package is ready; actual stock facts
+are needed only before real selling. Neither deployment nor actual selling is verified.
+The prepared installer now also checks the exact Supabase permission settings.
+Read-only checks accept the current settings and reject a deliberate mismatch;
+scoped review approved. This closes that preparation step, while the complete
+installation/recovery and customer/staff workflow verification remain outstanding.
+
+C is full, but shell access recovered and a private D database copy allows native
+work. Reviewed dummy checks show old orders without holds require review; new orders
+hold stock once, and premature payment proofs are refused without saved changes.
+The test database is removed; originals remain unchanged. Limits/recovery:
+native-writer-boundaries-20261009.md in provider evidence. Remaining C-dependent
+tools may need space freed outside K2; preserve all project evidence.
+Dummy data is enough for software preparation. Real counts are needed only when
+listing real products for sale, so the website does not promise nonexistent stock.
+No stock record or live approval is requested now. Complete prepared database
+contents, including the reviewed payment-permission fix, install in the local
+captured-public-permission rehearsal. Actual provider authority/recovery and the
+rendered product workflow remain Codex's technical work in MAP-023/018. Both apps
+remain separate production artifacts; deployment and real-stock acceptance are
+still unverified. Exact evidence/limits/recovery are in delivery README.
+
+The concurrent payment-permission defect is corrected and reviewed locally using
+dummy accounts/orders. Both role-change orderings preserve current authority and
+history. The new correction is assembled into locally rehearsed public-permission
+contents; exact provider installation/recovery remains unverified and it has not
+been deployed. This requires Codex's technical
+preparation, not real product counts or an owner approval now. Details and recovery:
+delivery README/payment runbook; remaining work stays in MAP-023/018.
+
+No real stock information is required for the next software work. Joined local N
+installation/replay/data retention is verified. Read-only live inspection now
+identifies provider permission differences and an exact check accepts the captured
+state/refuses drift. Codex still needs to prepare/rehearse the provider installation
+and recovery and complete the rendered product workflow. These are independent
+technical actions; do not ask the owner to supply counts or authorize an incomplete
+release package. Live changes/deployment remain unauthorized until the consolidated
+reviewable package is ready. Details: delivery README; owning items MAP-023/018.
+
+Joined N dummy verification now also covers held-stock failures/refunds/cancellation
+and a new canonical100 order through payment review, packing and handover. Seven
+positive-writer guards are prepared/local-only, native121/0. Codex's next independent
+work is joined exact provider installer/admission/recovery, remaining writer/source
+review and rendered full product chain. Real stock/payment facts are unnecessary
+for that work. Production remains unchanged; exact consolidated approval comes
+after the prepared package/recovery and required launch facts are reviewable.
+
+N financial authority is prepared/local-only: native110/0 verifies Staff verdict
+refusal, Admin failure/refund with history retained, role-aware retries and atomic
+body-only installation. No owner facts are needed to continue dummy implementation.
+No live write/deployment approval is requested yet: Codex must finish full writers,
+held-stock/rendered chain, scoped review and exact production composition/recovery
+first, then present one consolidated approval. Evidence/recovery: delivery README
+and payment runbook; owning work remains MAP-023/018. Fixtures have no stock holds;
+do not treat this as a complete stock/payment workflow or actual transfer.
+
+M dummy readiness evidence now includes native/maintained HTTP107/0 and prepared
+current/empty installer92/0. This does not authorize live changes or establish actual
+stock/payment. Final review, lifecycle/provider/full chain remain in the MAP.
+
+M customer payment correction is local/prepared: old totals need review and cached/
+failed reads do not authorize payment; current dummy flows remain testable. No
+real inventory facts or approval missing for this implementation. Final exact
+production bundle/recovery and both separate deployment verifications must precede
+one consolidated live approval request. Remaining autonomous/fact-dependent actions
+are only in MAP-023/018; delivery README records present evidence limitations.
+
+8 October clarification: dummy products/counts/orders are sufficient for local
+software readiness. Do not request real inventory facts as a prerequisite for
+implementation. Actual product facts/counts/expiry/custody/media rights and exact
+consolidated live approval are needed only for actual selling/provider deployment.
+L07 legacy payment closure plus ordinary new checkout/approval/payment is locally
+verified; combined installer92/0 remains prepared/unapplied. Full remaining owner
+and autonomous work lives only in MASTER_ACTION_PLAN.md MAP-023/018; this is a
+decision reference, not another backlog. No live approval requested or inferred.
+
 Written 29 August 2026. This is the list of work that is **blocked on account
 access or on an owner decision**, separated from work that can be finished in
 the repository. It exists so the blocked items can be done in one sitting

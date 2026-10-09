@@ -1,23 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useStore } from '../context/StoreContext'
 import { peso } from '../data/products'
 import { CrimsonButton, GhostButton, TrustBadge } from '../components/ui/bits'
 import { CheckIcon, InboxIcon } from '../components/ui/icons'
-import { guestBffEnabled, listGuestOrders } from '../services/guestCommerceService'
+import { acceptGuestExpressDelivery, guestBffEnabled, listGuestOrders } from '../services/guestCommerceService'
 import { readOrderReceiptAccess } from '../services/orderReceiptService'
 import OrderConversation from '../components/shop/OrderConversation'
+import { hasFinalOrderCharge } from '../lib/orderChargeState'
+import ExpressDeliveryApproval from '../components/shop/ExpressDeliveryApproval'
 
 function receiptOrder(saved) {
   let paymentMethod = null
   try { paymentMethod = window.localStorage.getItem(`k2-payment-choice:${saved.public_reference}`) } catch { /* browser storage may be unavailable */ }
   return {
     id: saved.public_reference,
-    total: Number(saved.total_amount || 0),
+    total: hasFinalOrderCharge(saved) ? Number(saved.total_amount) : null,
+    shippingQuoteStatus: saved.shipping_quote_status,
+    deliveryReviewRequired: saved.delivery_review_required,
     count: Number(saved.item_count || 0),
     wholesale: false,
     status: saved.status,
     paymentStatus: saved.payment_status,
     paymentMethod,
+    expressQuote: saved.express_quote,
   }
 }
 
@@ -26,19 +31,39 @@ export default function Confirmation() {
   const [restoredOrder, setRestoredOrder] = useState(order)
   const [restoreState, setRestoreState] = useState(order ? 'ready' : 'loading')
   const [remotePaymentStatus, setRemotePaymentStatus] = useState(null)
+  const [refreshError, setRefreshError] = useState('')
+  const [chargeRead, setChargeRead] = useState(null)
+  const readSequence = useRef(0)
+  const refresh = useCallback(async () => {
+    const sequence = ++readSequence.current
+    setChargeRead(null)
+    const result = await listGuestOrders()
+    if (sequence !== readSequence.current) return
+    const rows = result.ok && Array.isArray(result.data) ? result.data : []
+    const ref = order?.id || restoredOrder?.id
+    const saved = ref ? rows.find(row => row.public_reference === ref) : rows[0]
+    if (!saved) { setRefreshError(result.error || 'This order could not be refreshed. Its saved reference is kept.'); return }
+    setRestoredOrder(current => ({ ...(current || order), ...receiptOrder(saved) }))
+    setChargeRead(saved.delivery_review_required === false ? saved.public_reference : null)
+    setRemotePaymentStatus(null); setRefreshError(''); setRestoreState('ready')
+  }, [order, restoredOrder?.id])
 
   useEffect(() => {
+    const sequence = ++readSequence.current
+    setChargeRead(null)
+    setRemotePaymentStatus(null)
+    setRefreshError('')
     if (order) {
       setRestoredOrder(order)
       setRestoreState('ready')
-      return undefined
     }
     if (!guestBffEnabled()) {
       const saved = readOrderReceiptAccess()
       if (saved) {
         setRestoredOrder({ id: saved.reference, orderId: saved.id, accessKey: saved.accessKey,
           total: saved.total, count: saved.count, status: saved.status,
-          paymentStatus: saved.paymentStatus, paymentMethod: saved.paymentMethod })
+          paymentStatus: saved.paymentStatus, paymentMethod: saved.paymentMethod,
+          shippingQuoteStatus: saved.shippingQuoteStatus })
         setRestoreState('ready')
       } else setRestoreState('unavailable')
       return undefined
@@ -46,22 +71,34 @@ export default function Confirmation() {
 
     let active = true
     listGuestOrders().then((result) => {
-      if (!active) return
-      const latest = result.ok && Array.isArray(result.data) ? result.data[0] : null
+      if (!active || sequence !== readSequence.current) return
+      const rows = result.ok && Array.isArray(result.data) ? result.data : []
+      const latest = order?.id ? rows.find(row => row.public_reference === order.id) : rows[0]
       if (latest?.public_reference) {
-        setRestoredOrder(receiptOrder(latest))
+        setRestoredOrder({ ...order, ...receiptOrder(latest) })
+        setChargeRead(latest.delivery_review_required === false ? latest.public_reference : null)
         setRestoreState('ready')
       } else {
-        setRestoreState(result.ok ? 'empty' : 'unavailable')
+        if (order) setRefreshError(result.error || 'This order could not be refreshed. Its saved reference is kept.')
+        if (!order) setRestoreState(result.ok ? 'empty' : 'unavailable')
       }
     })
-    return () => { active = false }
+    return () => { active = false; readSequence.current += 1 }
   }, [order])
 
-  const currentOrder = order || restoredOrder
+  const currentOrder = order && restoredOrder?.id !== order.id ? order : restoredOrder || order
   const paymentStatus = remotePaymentStatus || currentOrder?.paymentStatus
   const paymentMethod = currentOrder?.paymentMethod
   const hasReceivingMethod = paymentMethod === 'gcash' || paymentMethod === 'maribank'
+  const reviewRequired = currentOrder?.deliveryReviewRequired === true
+  const pendingDelivery = chargeRead !== currentOrder?.id || !hasFinalOrderCharge(currentOrder)
+  const readConversationCharge = useCallback(saved => {
+    if (!saved || saved.public_reference !== currentOrder?.id) { setChargeRead(null); return }
+    setRestoredOrder(current => ({ ...current, total: hasFinalOrderCharge(saved) ? Number(saved.total_amount) : null,
+      shippingQuoteStatus: saved.shipping_quote_status, deliveryReviewRequired: saved.delivery_review_required,
+      status: saved.order_status, paymentStatus: saved.payment_status }))
+    setChargeRead(saved.delivery_review_required === false ? saved.public_reference : null)
+  }, [currentOrder?.id])
   const savedAccess = readOrderReceiptAccess()
   const orderAccess = currentOrder?.orderId && currentOrder?.accessKey
     ? { id: currentOrder.orderId, accessKey: currentOrder.accessKey, paymentMethod }
@@ -94,15 +131,23 @@ export default function Confirmation() {
       <p className="mt-2 text-base text-navy-soft">
         Reference <span className="font-semibold text-navy">{currentOrder.id}</span>
         {currentOrder.count > 0 && <> · {currentOrder.count} {currentOrder.count === 1 ? 'item' : 'items'}</>}
-        {' '}· estimated {peso(currentOrder.total)}
+        {' '}· {reviewRequired ? 'Total needs staff review' : pendingDelivery ? 'Delivery quote pending — no final total yet' : `total ${peso(currentOrder.total)}`}
       </p>
+
+      {guestBffEnabled() && <><GhostButton className="mt-4" onClick={refresh}>Refresh order status</GhostButton>
+        {refreshError && <p className="mt-3 text-base text-crimson" role="alert">{refreshError}</p>}
+        {!reviewRequired && (currentOrder.expressQuote || currentOrder.shippingQuoteStatus === 'pending_quote') && <ExpressDeliveryApproval
+          key={currentOrder.id} reference={currentOrder.id} quote={currentOrder.expressQuote} identity="guest"
+          onSubmit={acceptGuestExpressDelivery} onRefresh={refresh}
+          onAccepted={receipt => { setRestoredOrder(current => ({ ...current, total: receipt.totalAmount, shippingQuoteStatus: receipt.shippingQuoteStatus })); return refresh() }} />}
+      </>}
 
       <div className="mt-8 rounded-2xl border border-line bg-paper p-6 text-left shadow-sm sm:p-7">
         <p className="flex items-center gap-2 text-sm font-semibold text-forest">
           <InboxIcon size={16} /> Saved for staff review
         </p>
         <p className="mt-2 text-sm leading-relaxed text-navy-soft">
-          No payment was charged. Our staff will verify inventory in Manila, review your order and total, and contact you before you transfer.
+          {reviewRequired ? 'This order needs staff review before its total can be confirmed. Your recorded payment history is kept. Message K2 staff before transferring money.' : 'No payment was charged. Our staff will verify inventory in Manila, review your order and total, and contact you before you transfer.'}
         </p>
         <p className="mt-3 text-sm leading-relaxed text-navy-soft">
           There is no self-service cancellation or return. Message K2 staff; each request is reviewed case by case.
@@ -124,7 +169,7 @@ export default function Confirmation() {
         </ol>
       </div>
 
-      {paymentStatus !== 'verified' && currentOrder.paymentMethod !== 'cod' && (
+      {!pendingDelivery && ['submitted', 'confirmed'].includes(currentOrder.status) && paymentStatus === 'awaiting_instructions' && currentOrder.paymentMethod !== 'cod' && (
         <section aria-labelledby="payment-qr-title" className="mt-6 rounded-2xl border border-line bg-paper p-5 text-left shadow-sm sm:p-7">
           <h2 id="payment-qr-title" className="font-serif text-xl font-semibold">Pay by QR transfer</h2>
           <p className="mt-2 text-base text-navy-soft">Wait for K2 staff to confirm your order and exact total before sending money. Include reference <strong className="text-navy">{currentOrder.id}</strong> when you send your receipt to staff.</p>
@@ -137,7 +182,7 @@ export default function Confirmation() {
         </section>
       )}
 
-      {orderAccess && !guestBffEnabled() && <OrderConversation access={orderAccess} onPaymentStatus={setRemotePaymentStatus} />}
+      {orderAccess && !guestBffEnabled() && <OrderConversation key={`${orderAccess.id}:${orderAccess.accessKey}`} access={orderAccess} chargeFinal={!pendingDelivery} onPaymentStatus={setRemotePaymentStatus} onChargeRead={readConversationCharge} />}
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
         {guestBffEnabled() ? (

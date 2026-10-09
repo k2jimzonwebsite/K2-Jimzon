@@ -1,5 +1,41 @@
 # K2 Jimzon Production Deployment and Domain Runbook
 
+**8 October order delivery release dependency:** Prepared order BFF now supports
+canonical acceptance; fresh-only customer_order_delivery.sql guards charges,
+baskets and pending-express payment. Locally verified53/0 plus API26+3 are not a
+release gate. Old rendered callers, read projections, manual express acceptance,
+historical unsnapshotted charges and populated installation/recovery still block
+coordinated promotion. Keep separate Storefront/Admin artifacts and do not release
+these fragments or source routes alone. Owner live approval remains unrequested.
+
+**8 October canonical preview activation warning:** Quote/locations BFF sources
+now use the new canonical schema/RPC. Current rendered pilot caller still has
+the old request contract. Neither deploy these routes alone nor apply the
+fresh-only quote fragment as a full checkout fix. Compose tariff/reference/quote,
+new caller, signed order charge snapshots and express/payment guards as the exact
+reviewed release; retain separate Storefront and Admin artifacts/projects. Native
+and synthetic API receipts establish preparation only. Required populated
+deactivation/roll-forward and consolidated owner live approval stay MAP-017/020/023.
+
+**8 October tariff preparation:** The customer-rates Admin route is source
+preparation, not a deployed control. Do not deploy it or apply the fresh-only
+customer_delivery_rates.sql fragment independently as a completed shipping fix.
+MAP-023 must connect canonical quote/order/express/payment behavior; MAP-017/020
+must compose exact installation/capture/recovery before consolidated live approval.
+Keep the separate Storefront/Admin artifacts and projects. Reuse local tariff
+evidence from authoritative-delivery README; verify:development remains parked
+under the owner instruction and verify:release is reserved for requested promotion.
+
+**8 October synthetic checkout evidence:** the local guest correction supports
+correct Website availability; default full integration02 qualifies installation/
+replay/drift/interruption. Cooperation02 qualifies two overlapping staff/guest waits
+and selected populated config recovery. Complete remaining writer/recovery and connected
+workflow/host checks before consolidated live approval. Dummy products continue to
+support software preparation; real facts/counts gate actual inventory listing only.
+No deployment, production-linked branch push or live write occurred in this batch.
+
+**8 October prepared boundary dependency:** both separate artifacts require the reviewed coordinated database package to retain 20261008010000_guest_signing_null_inputs.sql and 20261008011000_staff_invitation_execute_boundary.sql after all historical replacements. Local corrected behavior/full installation pass; no live deployment/flag/main push occurred. Prepare exact database/configuration/deployment/recovery and affected host checks before consolidated approval. Keep separate Storefront/Admin projects and existing accepted evidence.
+
 **1 October activation hold after local Website/signing/hold preparation:** Do not reuse the frozen September installer/captures. Assignment prerequisites, functions, audit tables, browser grants, private signer and the existing 11-argument canonical writer changed in source. Scoped actual signed purchase now creates a 30-minute hold with last-unit refusal/retry/rollback; this supersedes the old no-hold diagnostic locally. The listed chain does not prove full current-writer/coupon/lifecycle coverage beyond the two verified mixed interleavings, authoritative shipping or actual catalog/staff/real-host acceptance. Recompose/rehearse exact same-target installation/deactivation and expanded metadata, refresh backup/preflight and preserve excluded history before specific authorization. Recovery must retain the shared-signing guard. MAP-017/018/020/023 and separate branch/bot/routing gates remain open. No production change, push or release. Current receipt: `docs/evidence/20261001-signed-purchase-holds/README.md`; Website/signing/earlier stock receipts retain their stated scope.
 
 **30 September prepared Preview routing exception:** Storefront CDN rule
@@ -559,3 +595,6 @@ If a domain issue occurs:
    or verification records as part of a web rollback. A restore must be
    separately rehearsed and verified before it is treated as complete.
 2. TTL should be configured to 300s (5 minutes) during cutover windows to allow rapid propagation of rollbacks.
+
+
+**4 October public discovery read-only receipt (IDEA-20260924-06 / MAP-024):** www canonical home/robots/sitemap public GETs pass with4 canonical sitemap URLs; hydrated home/catalog canonical/og:url/index-follow metadata agrees. JSON-LD scripts0 on inspected pages; actual Google indexing, remaining routes/products and provider/analytics settings are unverified. No deployment or account change. Evidence/commands/scope/recovery: `docs/evidence/20261004-discovery-read-only/README.md`; exact remaining action and access gate stay MAP-024.

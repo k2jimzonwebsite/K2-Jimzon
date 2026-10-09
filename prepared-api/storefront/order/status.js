@@ -2,6 +2,7 @@ import {
   requireAllowedOrigin, requireStorefrontProject, safeJson, signedRpcArguments,
 } from '../../../server/storefront-bff/security.js'
 import { createStorefrontServerSupabase, mapBoundaryResult } from '../../../server/storefront-bff/supabase.js'
+import { projectOrderCharge } from '../../../src/lib/orderChargeState.js'
 
 export default async function handler(req, res) {
   if (!requireStorefrontProject()) return safeJson(res, 404, { error: { code: 'NOT_FOUND' } })
@@ -18,7 +19,7 @@ export default async function handler(req, res) {
       return safeJson(res, mapped.status, { error: { code: mapped.code } },
         mapped.retryAfter ? { 'Retry-After': mapped.retryAfter } : {})
     }
-    return safeJson(res, 200, { ok: true, orders: mapped.result.orders || [] })
+    return safeJson(res, 200, { ok: true, orders: (mapped.result.orders || []).map(projectOrderCharge) })
   } catch {
     return safeJson(res, 503, { error: { code: 'ORDER_STATUS_SERVICE_UNAVAILABLE' } })
   }

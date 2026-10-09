@@ -8,6 +8,16 @@ import {
   showMetric,
 } from '../src/lib/overviewAvailability.js'
 import { createSalesRecordCsv } from '../src/lib/salesCalculations.js'
+import { projectOrderCharge } from '../src/lib/orderChargeState.js'
+
+test('pending delivery export cannot label an unknown bill as zero', () => {
+  const csv = createSalesRecordCsv([
+    projectOrderCharge({ id: 'pending', total_amount: 735, shipping_quote_status: 'pending_quote' }),
+    projectOrderCharge({ id: 'pickup', total_amount: 0, shipping_quote_status: 'waived' }),
+  ])
+  expect(csv).toContain('"pending","other","","","Final total pending"')
+  expect(csv).toContain('"pickup","other","","","0.00"')
+})
 import {
   OVERVIEW_TIME_ZONE,
   overviewDateKey,

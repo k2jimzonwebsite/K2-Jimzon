@@ -52,7 +52,8 @@ function Harness() {
         id: 'local-order',
         publicReference: 'LOCAL-PAYMENT',
         paymentStatus: params.get('state') || 'failed',
-        total: 1250,
+        total: params.has('nullTotal') ? null : 1250,
+        shippingQuoteStatus: params.get('quote') || 'customer_confirmed',
         customer: 'Juan dela Cruz',
         updatedAt: '2026-09-06T00:00:00Z',
         paymentEvidence: params.has('evidence') ? {

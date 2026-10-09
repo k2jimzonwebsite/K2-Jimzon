@@ -3,10 +3,13 @@ import { supabase } from '../../lib/supabaseClient'
 import { peso } from '../../data/products'
 import { useAdminStore as useStore } from '../../context/AdminStoreContext'
 import { channelMeta } from '../../lib/channelMeta'
+import { hasFinalOrderCharge, projectOrderCharge } from '../../lib/orderChargeState'
 import { safeUiError } from '../../lib/safeUiError'
 import { BarcodeIcon, BoxIcon, CheckIcon, MapIcon, UploadIcon, UserIcon } from '../../components/ui/icons'
 import PackingSlipModal from './PackingSlipModal'
 import JntVipDispatchModal from './JntVipDispatchModal'
+import ExpressDeliveryQuote from './ExpressDeliveryQuote'
+import OrderCancellation, { PendingOrderCancellations } from './OrderCancellation'
 import { AdminDialog } from '../../components/ui/AdminDialog'
 import FulfillmentWorkflowDiagram from '../../components/admin/guides/FulfillmentWorkflowDiagram'
 import CustodyWorkflowDiagram from '../../components/admin/guides/CustodyWorkflowDiagram'
@@ -81,6 +84,9 @@ function OmniOperationsWorkspace() {
   const [packedCount, setPackedCount] = useState(0)
   const [printSlipOrder, setPrintSlipOrder] = useState(null)
   const [deliveryOrder, setDeliveryOrder] = useState(null)
+  const [cancellationOrder, setCancellationOrder] = useState(null)
+  const cancellationFocus = useRef(null)
+  const openCancellation = order => { cancellationFocus.current = document.activeElement; setCancellationOrder(order) }
   const [jntDispatchOrder, setJntDispatchOrder] = useState(null)
   const [showJntBatchModal, setShowJntBatchModal] = useState(false)
   const [paymentOrder, setPaymentOrder] = useState(null)
@@ -181,7 +187,7 @@ function OmniOperationsWorkspace() {
       .eq('status', 'submitted')
       .order('created_at', { ascending: true })
     if (error) setScanMessage({ success: false, text: safeUiError('FULFILLMENT_ACTION_FAILED') })
-    else setOrderRequests(data || [])
+    else setOrderRequests((data || []).map(projectOrderCharge))
   }
 
   const confirmOrderRequest = async request => {
@@ -217,7 +223,7 @@ function OmniOperationsWorkspace() {
       setLoadingOrders(false)
       return
     }
-    const formatted = (data || []).map(order => {
+    const formatted = (data || []).map(projectOrderCharge).map(order => {
       const reservations = order.inventory_reservations || []
       const items = (order.order_request_items || []).map(item => ({
         id: item.id,
@@ -375,6 +381,9 @@ function OmniOperationsWorkspace() {
   }
 
   const updatePayment = async (order, target, note, structuredEvidence) => {
+    if (['awaiting_instructions', 'evidence_submitted', 'verified'].includes(target) && !hasFinalOrderCharge(order)) {
+      return { ok: false, error: 'The delivery quote and final total need buyer acceptance before payment can advance.' }
+    }
     if (secureAdmin) {
       const payload = {
         orderRequestId: order.id, toStatus: target, evidenceNote: note || '',
@@ -511,6 +520,8 @@ function OmniOperationsWorkspace() {
         />
       </div>
 
+      {secureAdmin && ['Admin', 'Staff'].includes(user?.role) && <PendingOrderCancellations actorId={user?.id} onSelect={openCancellation} />}
+
       {completeness && (completeness.submitted?.truncated || completeness.confirmed?.truncated || completeness.lots?.truncated) && (
         <div role="alert" className="rounded-adm-sm border border-amber/40 bg-amber/10 p-3 text-sm text-amber">
           <strong>Fulfillment queue bounded:</strong> Older records exist beyond the current view limit ({[
@@ -599,6 +610,8 @@ function OmniOperationsWorkspace() {
             {selectedPackingOrder && <div className="flex flex-col gap-3 rounded-adm-sm border border-blue/25 bg-blue/[0.04] p-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-mono text-xs font-bold text-blue">{selectedPackingOrder.publicReference}</p><p className="mt-1 text-xs text-white/50">Delivery: {String(selectedPackingOrder.shippingQuoteStatus).replaceAll('_', ' ')} · Payment: {String(selectedPackingOrder.paymentStatus).replaceAll('_', ' ')}</p></div><div className="flex flex-wrap gap-2"><button type="button" onClick={() => setJntDispatchOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm border-crimson/40 bg-crimson/10 text-crimson hover:bg-crimson/20`}>J&T VIP Book</button><button type="button" onClick={() => setDeliveryOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Delivery & waybill</button><button type="button" onClick={() => setPaymentOrder(selectedPackingOrder)} className={`${secondaryButton} adm-btn-sm`}>Payment evidence</button><button type="button" onClick={() => setHandoverOrder(selectedPackingOrder)} disabled={selectedPackingOrder.status !== 'Packed' || selectedPackingOrder.paymentStatus !== 'verified' || !['platform_charged', 'customer_confirmed', 'waived'].includes(selectedPackingOrder.shippingQuoteStatus)} className={`${primaryButton} adm-btn-sm disabled:opacity-35`}>Handover to courier</button></div></div>}
           </section>
 
+          {secureAdmin && selectedPackingOrder && ['Admin', 'Staff'].includes(user?.role) && <button type="button" className={secondaryButton} onClick={() => openCancellation(selectedPackingOrder)}>Cancel selected order</button>}
+
           <section data-tour="fulfillment-queue" className="space-y-3">
             <SectionHeading
               title="Confirmation queue"
@@ -623,8 +636,8 @@ function OmniOperationsWorkspace() {
                       <div><p className="font-mono text-xs font-semibold text-blue">{request.public_reference}</p><p className="mt-1 text-sm font-semibold text-white">{request.customer_name}</p><p className="mt-0.5 truncate text-xs text-white/40">{request.customer_email || request.customer_phone}</p></div>
                       <div><ul className="space-y-1">{(request.order_request_items || []).map(item => <li key={item.sku} className="flex justify-between gap-3 text-xs text-white/60"><span className="truncate">{item.product_name}</span><span className="shrink-0 font-mono">Qty {item.quantity}</span></li>)}</ul><p className="mt-2 line-clamp-1 text-xs text-white/35">{request.delivery_address} / {request.fulfillment_method}</p></div>
                       <div>
-                        <p className="font-mono text-sm font-semibold text-white">{peso(request.total_amount)}</p>
-                        {request.shipping_quote_status === 'customer_confirmed' ? (
+                        <p className="font-mono text-sm font-semibold text-white">{hasFinalOrderCharge(request) ? peso(request.total_amount) : 'Final total pending'}</p>
+                        {hasFinalOrderCharge(request) ? (
                           <p className="mt-0.5 text-xs text-forest">Delivery: {Number(request.shipping_amount) > 0 ? peso(request.shipping_amount) : 'Free'}</p>
                         ) : (
                           <p className="mt-0.5 text-xs text-white/40">Delivery not quoted yet</p>
@@ -632,7 +645,8 @@ function OmniOperationsWorkspace() {
                         <p className="mt-1 text-xs text-amber">Payment not verified yet</p>
                       </div>
                       <div className="grid gap-2">
-                        <button onClick={() => setDeliveryOrder(request)} className={`${secondaryButton} w-full`}>{request.shipping_quote_status === 'customer_confirmed' ? 'Delivery confirmed' : 'Set delivery quote'}</button>
+                        <button onClick={() => setDeliveryOrder(request)} className={`${secondaryButton} w-full`}>{hasFinalOrderCharge(request) ? 'Delivery confirmed' : 'Set delivery quote'}</button>
+                        {secureAdmin && ['Admin', 'Staff'].includes(user?.role) && <button type="button" onClick={() => openCancellation(request)} className={`${secondaryButton} w-full`}>Cancel order</button>}
                         <button onClick={() => setJntDispatchOrder(request)} className={`${secondaryButton} w-full border-crimson/30 text-crimson hover:bg-crimson/10`}>J&T VIP Book</button>
                         <button data-tour="pack-ship-btn" onClick={() => confirmOrderRequest(request)} className={`${primaryButton} w-full`}>Confirm and reserve</button>
                       </div>
@@ -716,7 +730,12 @@ function OmniOperationsWorkspace() {
         </section>
       )}
 
-      {deliveryOrder && <DeliveryDetailsModal retrySafe={secureAdmin} key={deliveryOrder.id} order={deliveryOrder} onClose={() => setDeliveryOrder(null)} onSave={async (payload, key) => {
+      {cancellationOrder && <OrderCancellation key={`${user?.id}:${cancellationOrder.id}`} actorId={user?.id} order={cancellationOrder} returnFocusRef={cancellationFocus}
+        onClose={() => setCancellationOrder(null)} onSaved={fetchSecureSnapshot} />}
+      {deliveryOrder && ((deliveryOrder.fulfillmentMethod || deliveryOrder.fulfillment_method || '').toLowerCase().includes('express')
+        && !hasFinalOrderCharge(deliveryOrder)
+        ? <ExpressDeliveryQuote key={`${user?.id}:${deliveryOrder.id}`} actorId={user?.id} order={deliveryOrder} onClose={() => setDeliveryOrder(null)} onSaved={fetchSecureSnapshot} />
+        : <DeliveryDetailsModal retrySafe={secureAdmin} key={deliveryOrder.id} order={deliveryOrder} onClose={() => setDeliveryOrder(null)} onSave={async (payload, key) => {
         if (secureAdmin) {
           const result = await updateDeliveryBff(payload, key)
           if (!result.ok) return result
@@ -732,7 +751,7 @@ function OmniOperationsWorkspace() {
           await Promise.all([fetchOrderRequests(), fetchLiveOrders()])
         }
         return { ok: true }
-      }} />}
+      }} />)}
       {(jntDispatchOrder || showJntBatchModal) && (
         <JntVipDispatchModal
           order={jntDispatchOrder}
@@ -956,13 +975,14 @@ export function PaymentStatusModal({ order, onClose, onSave, secure, returnFocus
   const current = order?.paymentStatus || order?.payment_status
   const versionAvailable = Boolean(order?.updatedAt || order?.updated_at)
   const existingEvidence = order?.paymentEvidence || order?.payment_evidence || {}
-  const choices = {
+  const chargeFinal = hasFinalOrderCharge(order)
+  const choices = ({
     not_requested: ['awaiting_instructions'],
     awaiting_instructions: ['evidence_submitted', 'failed'],
     evidence_submitted: ['verified', 'failed'],
     verified: ['refunded'],
     failed: isSecure && versionAvailable ? ['evidence_submitted'] : [], refunded: [],
-  }[current] || []
+  }[current] || []).filter(choice => chargeFinal || !['awaiting_instructions', 'evidence_submitted', 'verified'].includes(choice))
 
   useEffect(() => {
     if (!supabase || !order?.id) return undefined
@@ -1071,6 +1091,7 @@ export function PaymentStatusModal({ order, onClose, onSave, secure, returnFocus
           <p className="mt-1 text-sm text-white/70">Current: {String(current || 'not recorded').replaceAll('_', ' ')}. This records evidence; it does not process payment.</p>
         </div>
         {current === 'failed' && <p className="text-sm text-white/80">The rejected attempt stays in history. Submit corrected evidence for a different staff member to verify against the receiving account.</p>}
+        {!chargeFinal && <StateBanner tone="warning">The delivery quote and final total need buyer acceptance. Payment instructions and positive payment steps are paused.</StateBanner>}
         {isSecure && !versionAvailable && <StateBanner tone="warning">Refresh this order to load its review version before recording payment evidence.</StateBanner>}
         {buyerReceipts.length > 0 && <section aria-label="Buyer e-receipts" className="space-y-3 rounded-adm border border-adm-line bg-adm-surface-2/40 p-3">
           <h3 className="text-sm font-semibold text-white">Buyer e-receipts</h3>

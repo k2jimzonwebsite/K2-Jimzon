@@ -13,7 +13,14 @@ const PUBLIC_MESSAGES = {
   CONVERSATION_NOT_AVAILABLE: 'That conversation is not available to this browser.',
   INVALID_OR_INELIGIBLE: 'That coupon is invalid or not eligible for this cart.',
   REQUEST_TIMEOUT: 'The request timed out. Check your connection, then retry the same request.',
-  DELIVERY_QUOTE_UNAVAILABLE: 'We could not calculate delivery right now. Your order will be quoted after review.',
+  DELIVERY_QUOTE_UNAVAILABLE: 'We could not calculate delivery right now. Retry the delivery check before submitting.',
+  DELIVERY_QUOTE_CHANGED: 'The delivery quote changed. Review the updated charge before submitting again.',
+  DELIVERY_REVIEW_REQUIRED: 'Please review delivery before submitting this order.',
+  DELIVERY_ACCEPTANCE_REQUIRED: 'Please accept the delivery quote before continuing.',
+  EXPRESS_QUOTE_STALE: 'The quote changed. Refresh the order and review the complete total again.',
+  EXPRESS_QUOTE_EXPIRED: 'This quote expired. Ask staff for a current quote, then refresh the order.',
+  EXPRESS_ORDER_INELIGIBLE: 'This order cannot accept another quote. Refresh its current status or contact K2.',
+  DELIVERY_ACCESS_REQUIRED: 'This browser no longer has access. Your saved approval is kept; contact K2 before starting another.',
   // Someone reached the last unit first. Said plainly, and while the customer
   // can still act on it, rather than after they have paid for it.
   INSUFFICIENT_STOCK: 'Someone else just took the last of one item in your cart. Nothing was charged. Review your cart and try again.',
@@ -29,6 +36,11 @@ export async function listGuestOrders() {
   return postGuestCommerce('order/status', {})
 }
 
+export async function acceptGuestExpressDelivery(body) {
+  if (!ENABLED) return { ok: false, error: 'Delivery approval is not active yet.' }
+  return postGuestCommerce('order/delivery-accept', body)
+}
+
 export async function replyToGuestConversation(conversationReference, message, idempotencyKey) {
   if (!ENABLED) return { ok: false, error: 'Guest messaging is not active yet.' }
   return postGuestCommerce('message', { conversationReference, message, idempotencyKey })
@@ -39,13 +51,30 @@ export async function startGuestConversation(payload) {
   return postGuestCommerce('conversation', payload)
 }
 
-// MAP-023. Returns a delivery charge only for an exact locality inside the
-// owner-approved pilot. Every other case — including an unreachable service —
-// leaves checkout on the existing quoted-after-review path, so a failure here
-// can never turn into a wrong number in front of a customer.
+// MAP-023. Identifiers only; canonical weights and customer tariffs stay server-side.
 export async function quoteGuestDelivery(payload) {
   if (!ENABLED) return { ok: false, error: 'Delivery quotation is not active yet.' }
   return postGuestCommerce('delivery/quote', payload)
+}
+
+export async function listDeliveryLocations(parent = null) {
+  if (!ENABLED) return { ok: false, error: 'Delivery selection is not active yet.' }
+  if (parent !== null && !/^[0-9]{10}$/.test(parent)) return { ok: false, error: 'Choose a delivery area again.' }
+  try {
+    const endpoint = guestBffEndpoint('delivery/locations')
+    const response = await fetchWithTimeout(`${endpoint}${parent ? `?parent=${parent}` : ''}`, {
+      method: 'GET', credentials: 'same-origin',
+    }, 15000)
+    const result = await response.json()
+    if (!response.ok || !result?.ok || result.sourceVersion !== 'psgc-2026-06-30'
+        || !Array.isArray(result.children) || result.children.length > 1000
+        || result.children.some(place => !/^[0-9]{10}$/.test(place.code || '')
+          || typeof place.name !== 'string' || !['Reg','Prov','Group','City','Mun','SubMun','Bgy'].includes(place.level)
+          || place.sourceVersion !== result.sourceVersion)) throw new Error('LOCATIONS_UNAVAILABLE')
+    return { ok: true, sourceVersion: result.sourceVersion, children: result.children }
+  } catch {
+    return { ok: false, error: 'We could not load delivery areas. Retry the area check.' }
+  }
 }
 
 export function guestBffEnabled() {

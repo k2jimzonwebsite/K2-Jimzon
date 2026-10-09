@@ -74,7 +74,7 @@ export default function WorkflowDetailDrawer({
     : downstream.find((item) => item.node && item.kind !== 'loopback')?.node || downstream.find((item) => item.node)?.node || null
 
   return (
-    <div className="flex flex-col rounded-2xl border border-white/10 bg-[#0d131f] p-6 text-white shadow-2xl">
+    <section aria-label="Selected step details" className="min-w-0 flex flex-col rounded-xl border border-white/15 bg-[#0d131f] p-4 sm:p-6 text-white">
       {/* Header */}
       <div className="flex flex-col gap-3 border-b border-white/10 pb-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
@@ -139,6 +139,7 @@ export default function WorkflowDetailDrawer({
 
       {/* Operational Summary */}
       <div className="mt-5">
+        {node.implementationNote && <p className="mb-3 text-base leading-6 text-sky-200">{node.implementationNote}</p>}
         <p className="text-sm leading-relaxed text-white/80">
           {node.summary}
         </p>
@@ -525,7 +526,7 @@ export default function WorkflowDetailDrawer({
           Next Step →
         </button>
       </div>
-    </div>
+    </section>
   )
 }
 

@@ -1,5 +1,956 @@
 # K2 Jimzon - Shipping, Waybill, and Tracking Logic Spec
 
+## N — Native financial verdict authority (local preparation)
+
+Joined lifecycle target: historical Website orders lacking their original canonical
+snapshot cannot obtain new stock ownership, packing, handover or collect new payment
+proof. Saved request-key receipt replay retains historical evidence under the same
+order key; it is not renewed payment permission. Native upload independently checks
+final charge and payable instruction state. Reserve-at-checkout may use the existing
+private original-INSERT construction context before snapshot; never grant it to a
+historical order. Preserve safe cancellation/tracking and controlled failure/refund.
+
+Joined local result: probe03 native85/0 reproduced four positive paths; correction02
+native121/0 verifies seven-body installation/data/metadata retention/replay/drift,
+historical saved receipt access, wrong-key refusal, held failure/refund/cancel
+conservation, and new canonical pickup100 through signed checkout/retry/instructions/
+receipt/confirmation/evidence/independent Admin verification/packing/handover.
+Physical6→5 and reserved4→3 with one ownership event. Original88 unchanged/clone
+removed/runtime stopped4b2928. Exact prepared positive fragment86788bytes SHA256
+5c17fbfda5a8488da6acd84f6e23c953b172168d6397167886b15707bacd6e7e.
+Existing AAL2 context already blocks non-MFA confirmation; retain it. All fixtures
+are synthetic. Joined provider installer/recovery, remaining writer and receipt
+states/source review/HTTP/host/rendered full product chain remain MAP-023/018.
+
+Local result8October: probe04 reproduced a valid signed Staff failure; prepared N
+correction03 terminal0 f8311f passes110/0. Exactly two function bodies change,
+metadata/every business row retained on installation; exact replay no-op and
+authority/body/helper drift refusal. Admin failure/refund keeps107/fee7/evidence,
+adds one event/receipt despite retry; demoted and same-status Staff refuse. Original
+88-table template unchanged/clone removed/runtime stoppedad3a79. These explicit
+historical fixtures have no stock holds. No full-stock lifecycle, maintained HTTP,
+provider or actual payment claim. Prepared SQL49193bytes SHA256
+d0d5ba4f6dc918d140132896a6525257704c53677229fbf67ceb15cd8849fbc2;
+not yet joined to the provider installer or source-reviewed for release.
+
+MAP-023/018, IDEA-20261008-02: Admin/SuperAdmin alone may verify, fail or refund
+payment. The maintained BFF already enforces this; the native signed boundary
+must independently enforce the current role before a saved verdict receipt, and
+the owner-only setter before its same-status return. Keep AAL2, signing, version
+and independent reviewer controls. Failed/refunded historical Website orders
+retain recorded charge/evidence/history and never manufacture a delivery snapshot
+or physical return. Reproduce with synthetic actors and an existing owned-clone
+rehearsal, then verify the exact correction/replay/drift and rolled-back facts.
+This focused boundary does not prove all fulfillment writers, hosted identity,
+real payment/inventory, provider recovery or deployment.
+
+## M — Historical customer charge projection correction (APPROVED locally)
+
+Implemented/native and customer-state proof8October: legacy-readers05 terminal0
+chunk1f0793/readbackdf38b7 passes107/0, clone removed/original88 unchanged. Three
+readers review-null legacy107 without erasing stored107/fee7/payment/receipt;
+current100/scope, native rate/identity and metadata controls retained. Maintained
+guest/account HTTP passes. Focused customer UI and375/1280 render evidence in
+delivery README/m-customer-ui-readback.json. Combined current/empty installer
+legacy-readers02 passes92/0, exact replay/row retention/drift refusal; both clones
+removed/runtime stoppedf697dd. Final correction/composer review remains MAP-owned;
+reviewer follow-up unavailable at usage limit. No provider
+application/deployment/full legacy lifecycle acceptance. Prior diagnostics retained.
+
+Same IDEA-20261008-02 / MAP-023/018 accepted essential legacy charge scope. Owner
+authorizes local dummy implementation; no facts/approval missing for preparation.
+Current three customer readers trust shipping labels alone, and Confirmation can
+show a stored final-looking charge before fresh scoped read. Preserve every stored
+charge/payment/history fact and original receipt; never invent historical approval.
+
+Decision: a separate exact post-J/L guarded prepared fragment updates only the
+three guest/account/order-conversation reader bodies. Website snapshot absence
+returns delivery_review_required=true and total_amount=null, retaining status and
+recorded payment state. Canonical current orders and external-channel behavior
+remain governed by their existing final-charge rules. Preserve all function
+metadata/signatures/ACLs and current identity, scope, signing and rate controls.
+Atomic maintenance entry; all-before/all-after replay; drift refuses without writes.
+No row backfill, new grants/network call/table or change to accepted L sources.
+
+Customer views use plain 'Total needs staff review' and explain to contact staff
+before transferring. Account history labels historical payment as recorded state;
+unreviewed orders offer no express approval or receipt/payment action. Confirmation
+withholds payment instructions until an existing authorized fresh order read succeeds;
+legacy direct conversation can supply its fresh charge projection to the parent.
+Failed refresh keeps messages/reference available and must not restore stored
+payment authority. Receipt upload requires the current conversation's final-charge
+projection as well as parent eligibility. Scope changes discard old charge authority.
+No new motion or styling; preserve storefront wood, typography,44px controls and
+mobile layout. All four required design skills apply to these existing states.
+
+Alternatives rejected: relabel old status as approved/fabricate snapshot; mutate
+recorded amount or payment history; blanket hide canonical accepted totals; trust
+local storage as payment authority; introduce a new review wizard or test framework.
+Assumptions: existing scoped reads/network latency, normal empty/loading/error
+states, indexed snapshot lookup per returned order; no new pricing/stock source.
+
+Verification: reproduce historical107 shown final by the three current native
+readers; install/replay/schema/row conservation and drift refusal; native guest/
+account/conversation become review-required/null while stored107/fee7/payment and
+receipts survive. Current accepted100 remains final and other identities stay
+excluded. Existing HTTP projections must retain review flag/null amount. Extend
+existing browser journeys for stale receipt before/failed/successful refresh,
+unreviewed account history and conversation upload gating; inspect phone/desktop
+together, one correction round only if necessary. Reuse L07/combined proofs.
+Sequential Skeptic/Guardian/Advocate/Arbiter all APPROVED, no unresolved objection;
+recorded alternatives rejected for their stated reasons. Code review before
+readiness claim. Provider/rendered full product-chain/lifecycle scope
+remains MAP-023/018. Recovery preserves guard closure, pause and forward-correct
+only; no vulnerable old-reader rollback approved for live use.
+
+## L — Controlled legacy Website payment closure (APPROVED locally)
+
+### L construction-boundary correction — APPROVED for local implementation
+
+Understanding/owner-authorized scope unchanged: preserve historical facts and safe
+tracking/cancellation while completing new canonical checkout. No missing owner
+facts for isolated implementation. Assumptions: at most50 item lines, one short
+native transaction, existing category maintenance lock, PostgreSQL private owner
+and revoked API grants; no new network dependency or durable customer truth.
+
+Decision: add a private ephemeral construction-context table keyed by order UUID,
+backend PID and xid8. A revoked private AFTER INSERT trigger registers only a
+new Website order; no callable start endpoint. A deferred AFTER INSERT trigger
+requires its final snapshot and deletes only that original order's marker. Existing
+deferred charge/snapshot validation remains. Rollback removes insertion and marker.
+Marker table is owner-only with RLS and no policies; install/replay guards require
+exact columns/PK/owner/ACL/RLS/no extra policies/triggers/rules and empty contents.
+Both new trigger functions and exact nondeferred/deferred bindings are pinned.
+
+The update guard always freezes identity/channel/shop/idempotency/address/service
+and refuses new positive payment without a snapshot. Only matching original INSERT
+context permits subtotal/discount/total/shipping/acceptance/fingerprint construction
+updates before snapshot; existing canonical snapshot checks then take over. An old
+order metadata edit cannot register context, even in the same transaction.
+
+Alternatives rejected: xmin/creation-time/GUC heuristics permit old-row metadata
+edits or forged caller state; blanket no-snapshot relaxation reopens the known gap;
+rewriting pricing/hold/core checkout ordering broadens accepted behavior needlessly.
+One private context table is justified by the reproduced multi-update construction
+path. Never commit construction authority, grant callers table access, bypass
+positive payment checks or delete historical evidence. Recovery retains guarded
+bodies, never reopens vulnerable payment; provider-specific pause/roll-forward
+preparation remains MAP-018/023.
+
+Focused witness must prove new checkout/approval/HTTP payment; old metadata-then-
+money bypass refusal and full rollback; context emptied after success and failure;
+direct anonymous/authenticated marker creation denied; context owner/ACL/trigger
+drift refusal and full-map preservation. Sequential Skeptic/Guardian/Advocate/
+Arbiter review completed sequentially: all APPROVED, no unresolved objection.
+Same IDEA-20261008-02, no new backlog. Original INSERT authority is accepted;
+heuristic bypasses and broader pricing rewrite are rejected for the reasons above.
+
+Implementation locally verified: original-INSERT construction boundary corrects
+legacy-review05's intermediate totals-update failure. L07 native/HTTP89/0 covers
+legacy closure and complete fresh checkout/own-grant approval/payment compatibility;
+combined current/empty installer92/0 covers atomic install/replay/preservation/drift.
+No provider application. Historical customer projection and complete failed/refund/
+all-writer/provider/rendered legacy readiness remain MAP-023/018. Exact evidence,
+cleanup, retained diagnostics and recovery: delivery README.
+
+IDEA-20261008-02 / MAP-023. Existing owner instruction authorizes local preparation
+and asks only genuinely missing facts; skill-only repeated design authorization
+does not require a new owner question for this essential guard.
+
+Understanding: legacy Website rows lack canonical snapshots. Their existing status
+does not prove server-validated price/customer acceptance. Preserve recorded facts
+and safe recovery while refusing fresh positive payment authority. Staff/customer
+review remains a separate future action requiring actual evidence.
+
+Sequential Skeptic/Guardian/User Advocate/Arbiter disposition: APPROVED. Immediate
+INSERT freeze rejected; private deferred validation selected to preserve new checkout.
+Source review found narrowed UPDATE OF binding bypass; admission now requires empty
+trigger column vectors and correct deferral. Legacy tracking helper explicitly
+preserves its existing acceptance time/status/total on metadata saves; never rewrite
+historic acceptance to the time of a new tracking edit.
+
+Design: guarded post-J/K correction retains all existing function metadata/triggers,
+private grants and new canonical behavior. Legacy Website order UPDATE freezes ID,
+channel/shop, receipt identity, address/fulfillment, monetary and acceptance fields;
+changed positive payment states refuse DELIVERY_REVIEW_REQUIRED. Same payment state,
+controlled failed/refunded transitions, same-value tracking and cancellation remain
+subject to existing authority/lifecycle guards. Freeze legacy Website order items
+against UPDATE/DELETE/reparenting/TRUNCATE in the existing BEFORE guard. A private
+deferred AFTER INSERT item check requires a Website parent's snapshot at commit:
+new checkout may insert items before its snapshot; appending to an old unreviewed
+Website basket refuses. Existing new-order deferred guard remains. Revoke all API
+execution on the new private trigger function. No backfill or synthetic snapshot.
+
+Assumptions: indexed parent/snapshot lookup per at-most50 checkout lines, same
+existing order-row locks, no new network/table/queue/price source. Native owner/ACL/
+settings/body/trigger drift and full-map
+rollback proofs; signed Staff/Admin controls unchanged. Existing focused harness
+will compare all rows on install/replay/refusal and exercise maintained HTTP payment.
+Tradeoff: controlled closure blocks old unreviewed payment rather than guessing
+historical tariff. Backfill rejected without facts; blanket restore of old bodies
+rejected because it reopens known defects. Full historical remediation, customer
+payment display, all-writer fulfillment/provider/full rendered proof remain open;
+this guard alone does not establish entire legacy launch readiness.
+
+Connected local recovery03 verifies existing config-only pause/restore on the
+populated delivery/K chain: original saved cancellation/approval survives, fresh
+checkout/public stock fail closed disabled, restoration creates one pending unpaid
+HTTP order/hold and exact retry adds none. Accepted amounts/history remain. Synthetic
+Auth/bot, no provider/full rendered/all-writer acceptance; MAP-018/023 stays open.
+
+Populated dummy database recovery04 locally verifies accepted250/delivery150,
+payment awaiting_instructions, cancellation/approval history and stock4/reserved2
+survive authenticated backup/restore; exact saved native retries retain receipts.
+All139 rows/authority/all9 sequences compared55/0, source/cleanup preserved.
+Provider/offsite/media, data-retaining activation/roll-forward and complete rendered
+product-to-listing acceptance remain MAP-018/023; no live behavior claim.
+
+K installation/HTTP continuation locally verified: exact accepted fragment joins
+existing guarded delivery package after J; current/cold fresh+exact replay92/0 and
+cancellation-owner drift refusal. Native loopback HTTP40/0 proves discarded reply/
+saved receipt, one release, preserved charges/payment/approval and current authority.
+Session last-seen/nonce/rate deltas explicitly verified separately from unchanged
+business rows/metadata. Source reviews approved. Synthetic identity, no provider
+or full rendered inventory-chain acceptance; populated recovery/host still open.
+
+K cancellation connection (IDEA-20261008-01/MAP-023), design under review:
+Owner's current goal explicitly authorizes local implementation/preparation; the
+instruction to ask only genuinely missing facts supersedes skill-only repeated
+understanding/design approval requests for this existing canonical workflow.
+Understanding: staff needs a maintained cancellation API; preserve native stock
+release, accepted charges, payment and approval history; require current Staff/Admin,
+AAL2, active session/origin/CSRF, explicit reason and reviewed timestamp/status;
+unknown-result retries return the same actor/key/payload receipt; no browser secrets,
+live writes, refunds or UI changes in this backend batch. No new owner facts needed.
+
+Assumptions: existing canonical cancellation policy remains authoritative (submitted/
+confirmed only; payment history unchanged and finance refunds separate); existing
+2s lock/10s database and BFF deadlines/admin rate limits remain required. Scale and
+ownership use the existing Admin BOS; no new service or framework. UI connection is
+an essential subsequent part of the same MAP item, not waived production scope.
+
+Options/decision: extend accepted fulfillment executor (avoids new RPC but changes
+accepted E/I/J prerequisites), dedicated signed cancellation RPC (recommended,
+preserves their bytes), or direct browser canonical RPC (rejected, lacks maintained
+session/signing boundary). Prepared fresh guarded fragment pins post-J private
+verifier/canonical cancel metadata and adds only cancel_order signing action plus
+dedicated authenticated command. No grants on private objects or service-role use.
+
+Flow: BFF validates exact order ID/status/ISO timestamp/reason and actor key; signs
+cancel_order under normal session/CSRF/deadline. Native wrapper enters the shared
+maintenance/policy advisory boundary before role, signing resources or order locks;
+it does not read fresh policy configuration until after saved-receipt lookup.
+Native verifier enforces signature,
+nonce/rate/AAL2; hold current role row and order; saved actor/key receipt wins before
+fresh timestamp/state checks, conflicting payload refuses. Fresh command serializes
+order, checks reviewed version, records one attributable receipt and invokes the
+unchanged canonical cancel root. No refund, payment status or accepted price write.
+Return only order ID/reference/cancelled status/payment status. Current authority
+also applies to saved receipt disclosure. Tests reuse existing API and native dummy
+fixtures for successful release, exact lost-result retry, key conflict, stale version,
+wrong role/AAL2/signature, complete refusal rollback and preserved price/history.
+Guarded fresh/replay installation composition and rendered/API-host acceptance remain
+separate; recover through closed activation and data-retaining roll-forward.
+K decision log: Skeptic REVISE accepted: explicit shared entry first avoids lock
+inversion with canonical cancellation/installation; canonical fresh helper reuses
+that entry and validates policy/deadline without blocking historical receipt lookup.
+K final disposition APPROVED: Guardian and Advocate approve current authority,
+atomic release/deadline/retry semantics and cancellation-versus-refund distinction;
+Arbiter approves the revised design, no rejected or unresolved objections. Implement
+local backend preparation only; native/API evidence and UI/installation remain required.
+K backend now locally prepared/verified: API2/2/native cancellation02 33/0, source
+review no Critical/Important. Retained250/150/history, one release, missing-config
+replay, revoked authority refusal and canonical audit-fault rollback observed.
+Post-J SQL17864bytes SHA256de0bd74406f410022024f6f15f12a456bfd525add91550da06e488c14530db52.
+Form/coordinated install/joined HTTP/provider/host remain open; delivery README owns
+source pins, diagnostic01 fixture correction and recovery.
+K staff UI continuation, same accepted idea/local authorization: existing Admin
+dialog/Source Sans/44px controls, submitted and confirmed order actions, explicit
+reason plus review; fresh bounded fulfillment read supplies native status/timestamp.
+Cancellation releases holds without refunding; show current payment status separately.
+No default reason or inferred stock count. Existing completed backend/native proofs
+are reused. All four required UI skills preserve the current Admin surface.
+
+Unknown outcomes are retained before HTTP as at most4KiB actor/order-scoped exact
+payload/key/reference, no tokens/auth facts. Web Lock serializes same-actor/order
+submission. Queued intended key cannot fall through to a new command. Receipt or
+post-receipt-lookup stale/ineligible refusal resolves the record; permission, timeout,
+network, malformed storage/output and refresh never erase uncertainty. Actor remount
+isolates state, late original-actor receipts resolve only their own record.
+
+Decision: dedicated Pending cancellations panel restores current-actor commands even
+when a successful lost-response cancellation removed the order from active queues.
+Alternatives: dialog-only retention loses that recovery entry; infer success from
+queue absence is unsafe because reads may be truncated/denied. Panel supplies only
+the saved reference/order ID; fresh commands still need current authoritative read.
+Single phone column, readable status/next action, close while pending allowed because
+the command persists; close blocked only while actively sending. No new animation,
+finance policy, provider, host or live write. Existing UI fixture proves reload/missing
+queue/403 exact retry, stale rereview, actor switch and corrupt record refusal plus
+phone/desktop behavior. Sequential scoped UI review disposition: APPROVED.
+Skeptic, Guardian and Advocate approved; Arbiter approved local implementation.
+No unresolved or rejected objections. Browser proof remains required, no live apply.
+K UI now locally implemented; five distinct existing-fixture browser cases green
+on final application across4/5 plus corrected held-session fixture1/1. Captures
+375/1440 inspected no overflow. Backend/native proof reused. Joined HTTP/installation/
+provider/host remain required. Review found malformed receipt clearing; bounded
+nonblank reference/exact payment-state validation corrected. Final six-case browser
+batch passes6/6 terminal0 chunk88f146; correction review APPROVED, no Critical/Important.
+README records exact commands and retained earlier fixture diagnostic.
+
+J implementation state: prepared native commands, append-only facts, verified
+transaction context, guarded effective charge, scoped guest/account/conversation
+proposal and AAL2 staff facts/version reader now implemented. J05 native56/0 plus
+focused readerJ01 native25/0 pass in exclusive dummy clones; original88 tables
+preserved/clones removed/runtime stopped. Signature/actor/scope/expiry/version/
+frozen money, exact retries, unchanged stock, signed payment-after-acceptance,
+zero-fee acceptance and actual expired-grant lock wait/orphan rollback exercised.
+Final fragment49060bytes SHA256
+25a8c1f290e7d70ea7c512475b36d32324c937dd9d4428db769392c9d37e3c47.
+Staff actual-handler synthetic API1/1 passes; scoped review no Critical/Important.
+Customer confirmation/account screens now connect explicit full-total approval
+and persisted exact-command retry. Guest lost-reply/reload and malformed-storage
+browser2/2; transport/route API4/4; account4/4 and held previous-actor response1/1
+pass with synthetic services. Final scoped source review no Critical/Important.
+Both Storefront acceptance routes and Admin quote registered locally. Staff quote
+form connects pending express entry with no assumed facts and actor/order exact
+recovery; browser3/3 plus corrupt-record1/1 and handler/router2/2 pass. Staff375/1440
+captures inspected without horizontal overflow; scoped review no Critical/Important.
+Authenticated express lost-reply/reload and late-account-switch receipt recovery2/2
+now pass. Actual loopback HTTP/maintained entrypoints/SDK/native composition26/0
+proves guest250/account zero-fee100, native registry/quotes/exact retry/payment
+refusal before approval and instructions after. Stock unchanged; original restore
+preserved/clone removed/runtime stopped. Auth user/token remains synthetic.
+Other concurrent writers
+and coordinated install/recovery/legacy/host proof remain MAP-023-owned.
+No booking, provider or deployment claim; exact evidence: delivery README.
+
+
+### Manual express J - connected implementation design, MAP-023
+
+Existing IDEA-20261002-03 / IDEA-20260925-06; owner authorized local readiness
+implementation, dummy rehearsal and preparation. This authority satisfies local
+understanding/implementation confirmation; it does not authorize live writes.
+
+Understanding: finish staff quote -> buyer review -> exact acceptance -> final
+bill -> payment eligibility for the existing requested NCR express order. Staff
+Admin/Staff AAL2 records current Lalamove/Grab price, evidence, expiry and note.
+Buyer accepts their own scoped order's exact quote/version; no staff checkbox
+can substitute. No booking, dispatch promise, assumed rates, new stock or changes
+to the accepted standard/pickup workflow. Preserve the original pending snapshot.
+
+Assumptions: integer centavos 0..10000000 (existing PHP100,000 envelope); actual courier Lalamove/Grab; staff
+explicit expiry in the next24hours (validation bound, not invented availability).
+Only the most recent unexpired quote may be accepted. A quote has no payable
+total until acceptance; review may display item subtotal, delivery fee and proposed
+complete total. Accepted exact quote remains frozen even after expiry. No
+requote after acceptance. Current basket/address/coupon facts are frozen by E;
+no new inventory operation or lock order. Existing Website order read history
+limits20 and signed rate limits apply. Browser/API do not own monetary truth.
+
+Decision J1: immutable private quote versions plus immutable one-per-order buyer
+acceptance. Alternatives: reuse generic staff confirmed checkbox rejected because
+it invents buyer approval; overwrite original E snapshot rejected because it loses
+accepted evidence. New records extend E rather than replacing its original row.
+
+Decision J2: staff signed quote command locks order, checks original E express
+snapshot and eligible order/payment state, and expected quote version. Required
+current quote fields include route summary (actual pickup/dropoff checked by
+staff), package description, quotation time, availability/proposed timing and
+source evidence; no assumed availability. Strings bounded1..500; quotation time
+must not be future or older than24hours, expiry after quotation and now and no
+later than24hours from now. Version binds all these facts and frozen order route.
+Use numeric arithmetic for subtotal/discount/fee, never overflowing JS/SQL integer. Actor/key/
+payload-hash receipt is read before fresh validation and again after the order
+lock; exact successful retries remain valid after expiry/state changes. Record
+quote version/courier/fee/expiry/evidence/actor under private verified command
+context. Bound all payloads and evidence; persist exact unknown browser command
+before HTTP and retain across reload, permission refusal and identity change.
+
+Decision J3: dedicated signed guest and signed authenticated-account acceptance
+commands. Input only order public reference, quote version and idempotency key.
+Native authority verifies signature, current guest read scope or current linked
+account ownership; serializes order, rechecks scope/expiry/current version/state,
+then stores immutable acceptance and final fee/total together, without starting
+payment or modifying stock. Same-scope saved receipt before fresh expiry checks;
+changed identity/version/key payload conflicts refuse. Guest grants remain read/
+reply; acceptance may act only on the matching readable order and native command.
+Private insert guards bind records to command context, never a spoofable GUC.
+Clear context before return/commit; deferred orphan guard refuses leftover context.
+
+Decision J4: extend E charge guard to derive effective final state from the
+immutable acceptance only for express. Still freeze order identity, basket,
+subtotal, discount, address and original snapshot. Native positive payment must
+require acceptance. Generic delivery editor cannot create or revise acceptance.
+Existing tracking may update only unchanged accepted fee/acceptance time. Failed/
+refunded recovery stays possible. Pending readers expose safe latest proposed
+quote (not evidence/customer/staff private details) and accepted final state.
+
+Decision J5: existing staff delivery area provides separate actual express quote
+form (no default courier/fee/approval), current version and uncertainty recovery.
+Existing confirmation/account order show proposed subtotal, delivery, full total,
+courier/expiry and explicit Accept final total; no QR until native receipt and
+payment awaiting instructions. Acceptance uncertainty holds exact command across
+reload; refresh/reconciliation cannot silently create a new key. Preserve existing
+Storefront wood identity and Admin tokens/density/accessibility. No new framework.
+
+Verification: use existing API/browser/native fixtures to prove scoped permissions,
+quotes0/positive, stale version/expiry, before/after acceptance payment refusal,
+exact lost-response retries, current actor changes, concurrency, cancellation,
+metadata/data preservation and data-retaining closed-activation recovery. Reuse
+accepted E/I proof; run changed contracts only. Final consolidated installer and
+real-host/real courier/stock/payment acceptance stay essential, unapplied.
+
+Review log: Skeptic REVISE accepted both objections: explicitly require current
+route/package/quotation time/availability timing and retain existing fee ceiling.
+No other Skeptic objection. Guardian APPROVED: current actor/scope must be
+checked before returning saved receipts, then replay may retain prior results
+after expiry; verify concurrency/context/private history and recovery. Advocate
+APPROVED: present courier/fee/complete proposed total/expiry together; expired/
+superseded quotes cannot be accepted; acceptance is not booking, uncertain or
+identity-paused commands stay held, confirmed acceptance shows frozen total plus
+actual payment-instruction state. Arbiter APPROVED for local implementation,
+all objections accepted/resolved, no rejected objection or live authority.
+Review condition satisfied before implementation. No required owner input for
+synthetic preparation. Exact commands, failed rehearsals and limits are in the
+authoritative-delivery README; accepted E/I bytes remain unchanged.
+
+
+**8 October pending-reader correction I (MAP-023, scoped locally verified):**
+Shared charge-state projection hides provisional totals/shipping in guest/account
+and Admin readers; pending bills stay in queues. Customer account, confirmation
+and staff views distinguish pending from accepted totals. Positive payment choices
+and direct receipt upload require final charge/instruction state; refunds remain.
+Source review corrected unknown Delivery: Free label and found no remaining
+Critical/Important issue. Existing guest/account/Admin/export API proof is retained.
+Native reader rehearsal green01 passes15/0, preserves every business row on apply,
+rejects other-account access/invalid signing/drift, removes its clone and preserves
+all88 original tables. Local PostgreSQL runtime stopped. This proves focused
+signed guest/account projection, not canonical E composition or conversation calls.
+Nine distinct payment browser cases pass on final application source: run85626
+had8passes and one ambiguous desktop status-selector failure; corrected selector
+plus phone/desktop pending captures pass3/3 chunkab154c.375/1280 screens inspected,
+no overflow. Account claim/history/reply journey passes1/1 chunk17561a with accepted
+1234.50 and pending735 hidden. Existing fixture launchers avoid full workspace
+watching; papaparse prebundle fixes confirmed missing-export blank-screen failure.
+Previous runners50478/5604 explicitly stopped only verified local test processes;
+no live handles remain. Exact reader SQL prepared/unapplied10142bytes SHA256
+8f78f0374f0f7c260ce3a252529af7303f1122b6467bf01afa1bf6d1a4b2771c;
+accepted E unchanged. No provider/deployment/real inventory claim. Remaining:
+conversation/direct receipt and canonical E/legacy/combined install-recovery proof,
+manual express quotation and explicit buyer acceptance, then authorized release.
+Activation remains closed; recover by data-retaining roll-forward. No broad rollback
+or inferred historic acceptance. Dummy readiness continues; real facts only at
+actual launch acceptance. MAP-023 remains active for its complete outcome.
+
+
+### Pending-order projections I — corrective implementation under MAP-023
+
+Existing IDEA-20261002-03 / IDEA-20260925-06. Root cause traced: guest/account
+handlers pass database order values through; account native projection lacks
+shipping status; Admin raw reads and payment choices use temporary totals.
+Existing required pending-express policy applies to every reader, without new
+pricing or authorization behavior. Blank/unknown/quoted-but-unaccepted status
+or invalid/null total cannot show a payable final total. Approved quote statuses
+retain their monetary values; legacy acceptance remediation remains essential.
+
+Smallest connected correction: one pure charge-state helper used by API/customer/
+staff projections, null unresolved total/shipping amount, plain pending labels,
+and no positive payment progression or receipt upload without final charge and
+actual payment instruction state. Failure/refund reconciliation remains possible.
+Fresh submission/native accepted-order invariants and current auth/grants unchanged.
+Prepare exact captured guest/account/conversation projection correction separately
+from accepted E; preserve admission/metadata, no write/stock/identity effects.
+No activation before native combined package proof. Existing fixtures cover raw
+pending numbers, quoted/unknown/null, normal/pickup values and blocked payment.
+No new framework, real products/staff, SQL/provider/deployment authorization.
+
+### Customer rate controls H — implemented and scoped locally verified
+
+MAP-023 / IDEA-20261002-03 and IDEA-20260925-06. Understanding is owner-authorized
+local preparation: an Admin/Staff operator reads saved customer rates, reviews
+four regional rows, enters reason/evidence, and publishes one version through the
+accepted signed BFF. Existing native tariff/accepted-order evidence is reused;
+no schema/provider/amount/staff facts are invented. The incumbent Admin product
+register, Source Sans/tokens and keyboard/mobile controls stay authoritative.
+
+Assumptions: four fixed regional rows; money edited in pesos, canonical integer
+centavos sent; included weight edited as integer grams; accepted orders unchanged;
+no future-standard activation or courier booking. Load only once/on explicit
+refresh. Blank no-current state requires all values, never assumed launch rates.
+Network failure blocks writes until safe read; late/unmounted replies ignored.
+Access to customer controls is Admin/Staff, while carrier-cost pilot stays behind
+its existing Admin-only boundary. Server identity/AAL2 remains authoritative.
+
+Chosen approach: additive customer-rate component inside the existing delivery
+page; keep old carrier-cost pilot as a separately labelled Admin view. Replacing
+pilot records would conflate different authorities; a new route/framework adds
+unnecessary navigation/dependencies. No decorative animation. Inputs stack on
+mobile; explicit saved version/current evidence and persistent errors/status.
+
+Unknown publish: persist one bounded actor-scoped pending record (exact key/body,
+no session credentials) before HTTP; use exclusive same-origin actor Web Lock.
+Reload/reopen or another tab restores and retries that exact publication. A latest
+head read alone cannot resolve it. All uncertain/pre-receipt permission/security
+refusals retain it. Only successful same-key receipt or native version-stale
+refusal after receipt lookup resolves it. A definitive stale refusal requires
+fresh read and deliberate review before creating another key. Storage/lock
+failure refuses before HTTP; corrupted pending record is preserved/failclosed.
+Scope records to the signed actor ID; component remounts on identity change.
+Capture intended retry key/body before waiting for the lock; if another tab
+resolved/removed it, stop and refresh without any new publication/key.
+Refresh does not clear pending state, and late replies cannot mutate another actor.
+No automatic expiry or destructive discard. Successful publication drops pending
+record under the lock after receipt readback; latest canonical read governs editing. Stale refusal
+requires refresh and deliberate renewed review, never automatic overwrite.
+No optimistic save. Publish success requires confirmed returned version, then
+load canonical head; failed read blocks further edits without undoing success.
+
+Verification: existing browser fixture/config adapted to render actual component;
+synthetic empty/current, Staff access, validation, lost reply/same key, stale
+version/refresh and failure states; desktop/mobile/no overflow/keyboard. Existing
+API/native permission and old-price evidence reused. Broad gates remain parked.
+Decision log: owner instruction authorizes local design/implementation and
+supersedes redundant approach confirmation; no missing facts block dummy UI.
+Sequential Skeptic, Guardian, Advocate, Arbiter review required before code.
+
+### Restart recovery G — implemented and scoped locally verified
+
+Existing MAP-023 and delivery ideas; the owner-authorized local corrective scope
+confirms F's no-duplicate retry policy. Preserve the current UI. Persist a bounded
+versioned same-origin browser record before sending: exact order payload/key,
+display lines/preview and payment preference; exclude bot tokens, grant tokens and
+provider secrets. Restore synchronously before permitting another submission.
+No timeout expiry may discard an unknown result. Invalid/unavailable persistence
+blocks submission instead of silently starting another key.
+
+Serialize same-origin submissions with a Web Lock, re-read the durable record
+inside it, and hold the lock through server result/persistence. Required APIs
+unavailable means refuse before HTTP. Resolve receipt or exact post-receipt
+no-commit outcomes durably before clearing the UI. Storage events reconcile tabs;
+successful receipts remain as a terminal marker so a stale tab cannot create a
+duplicate while it still holds the original request. This is browser persistence,
+not authority for product facts, stock, charges or payment.
+
+Alternatives: session-only storage cannot survive browser close; an automatic
+new-key fallback after unknown outcome risks duplicates. Chosen local persistent
+record plus browser lock closes the actual supported restart/tab workflow without
+a new framework. Clearing browser data, cross-device recovery and native/host
+acceptance still require their owning MAP work, never an invented guarantee.
+Verify reload/close/new-tab exact retry, pre-receipt denial, storage failure/corrupt
+record no HTTP, definitive refusal and terminal receipt using existing fixture.
+
+G decision log: Skeptic REVISE accepted. Observing a terminal receipt consumes
+the old request and clears its basket; a waiter cannot interpret it as permission
+to send a new key. Only after consuming that receipt and deliberately adding a
+new basket may this context replace the marker. Initial terminal read consumes it
+before fresh submission too. Delayed events re-read current storage under the
+same lock; identity checks prevent old events/completions clearing newer requests.
+Records are bounded to256KiB/50 lines and supported schema version. No destructive
+automatic expiry. Contact/address data is retained only while uncertain; terminal
+markers retain receipt/identity without contact payload or product facts.
+Guardian/User Advocate approved and Arbiter APPROVED, no unresolved objections.
+Scoped code review then required synchronous terminal cleanup under the Web Lock
+and validation of persisted display-line elements; both are implemented before
+final verification. Review also required capturing a retry's identity before
+waiting for the lock so prior reconciliation cannot turn its stale click into a
+fresh request; implemented and deterministically verified. Final scoped review
+has no outstanding Critical/Important finding. Existing recovery fixture passes
+four changed journeys, controller18846 exit0. No native/provider/host acceptance.
+
+### Connected rendered checkout — F (APPROVED for local implementation)
+
+MAP-023 / existing IDEA-20261002-03 and IDEA-20260925-06. Owner-authorized
+local dummy implementation confirms the existing delivery policy: customers must
+review canonical charges; pending express must never appear free or payable.
+Preserve the incumbent wood canvas, typography, form tokens and request model.
+Replace the browser tariff calculation with signed server quotes and bounded
+public PSA child lists. No real facts, identities, live writes or new frameworks.
+
+Assumptions: existing 50-SKU/99-unit limits and three-to-five-code destination
+paths; one child request per selection; late responses ignored; reference labels
+remain public and address text stays in the order request. Existing timeout retry
+holds the exact original payload/key, not a recalculated price. Definitive quote
+rejections unlock review. No payment instruction is shown for pending express.
+
+Decision: integrate the current checkout rather than retain incompatible pilot
+fees or replace its visual design. Select ancestors dynamically, including direct
+HUC, submunicipality and Group branches; clear descendants on changes. A quote
+is usable only for the current request key. Standard/pickup submit fingerprint
+and version; express submits no acceptance until its later manual workflow.
+Pending total is null through client receipt and confirmation. This does not
+complete staff express acceptance, other reader projections, legacy remediation,
+coordinated installation/recovery or deployment; those remain essential MAP work.
+
+Verification: existing browser recovery fixture with synthetic location/quote/
+order responses for standard, pickup, express, changed inputs, failure/retry and
+mobile/desktop layout; scoped source/contracts and independent code review.
+Reuse accepted native tariff/preview/order evidence, without new database runs.
+
+F decision log: Skeptic REVISE accepted. Pre-receipt challenge/rate/COD/validation
+errors on a held uncertain retry do not prove absence of a saved order. Preserve
+that payload/key; release only an authoritative post-receipt no-commit outcome.
+Fresh definitive rejections can unlock correction. Guardian and User Advocate
+approved; Arbiter APPROVED with no unresolved objections before implementation.
+Underlying cart/coupon edits and contact navigation preserve the held identity.
+Code review required coalescing address-triggered quote requests and replacing
+an old test that encoded unsafe timeout reset; both corrections are implemented.
+Final source review also required paused-effect dependencies for remounted
+recovery; corrected and verified by navigation → stock refusal → new review.
+Nine distinct rendered journeys pass on final application source (synthetic HTTP);
+partial diagnostics and exact commands are in authoritative-delivery README.
+Full reload/close persistence remains an essential next recovery action.
+
+## 8 October corrective implementation design — customer tariff authority
+
+### Connected order batch — E1–E6 (APPROVED for local implementation)
+
+Same accepted IDEA-20261002-03 / IDEA-20260925-06, owning MAP-023. Understanding:
+remove fresh Website browser-price trust; re-evaluate canonical shipping after
+the existing coupon/balance/product/listing/lot locks; require standard/pickup
+preview identity/version acceptance; save immutable order charge evidence;
+preserve exact old and new saved retries; prevent later generic writers changing
+accepted delivery or taking payment for pending express. Existing owner policy
+and current local implementation authorization confirm this intent; no new rate,
+physical fact, staff identity or live action is assumed. This is nonvisual work.
+
+Assumptions:50 distinct SKUs ×99 units,16KiB delivery input, existing signed order
+budgets and root context, local Read Committed transactions, one added indexed
+resolver read/snapshot insert under existing locks (target below500ms observed
+separately). No external address/quote call. Saved receipts are resolved before
+fresh delivery/configuration checks. Staff operational/history rows are preserved.
+The manual express quote/buyer-acceptance interface and rendered caller remain
+required immediately following integrations, not optional or removed scope.
+
+- E1: New order delivery object has service, source/path destination and acceptance
+  {inputFingerprint,rateVersion}; standard/pickup require exact current preview
+  identity/version; express requires no acceptance yet. Items come from the
+  top-level canonical order basket. Service must agree with fulfillment choice.
+  Reject fresh shippingAmount/shippingQuoteStatus and unexpected fields. Retain
+  legacy BFF request normalization solely so exact saved historical retries reach
+  the server receipt check; fresh legacy requests refuse with review required.
+- E2: Replace only the exact accepted submit_guest_order_v1 body, preserving
+  metadata/ACL/signature/budgets/nonce proof, idempotency, inventory locks/context,
+  identity/grants, coupon allocation and messages. Resolve delivery after existing
+  product/listing/lot locks and before identity/order side effects. An acceptance
+  mismatch refuses atomically; do not silently replace the reviewed quote.
+- E3: Add private immutable order_delivery_snapshots keyed by order ID: canonical
+  request, resolved quote and server acceptance timestamp (null for express).
+  Existing order columns keep numeric shipping_amount: express0 is the internal
+  unpriced placeholder, shipping_quote_status=pending_quote, never a free quote.
+  Standard/pickup set canonical fee, customer_confirmed and ready_to_pack. Freeze
+  address/fulfillment, accepted time, merchandise amounts and derived final total
+  against generic edits once recorded. Customer public projections use status to
+  distinguish unknown charge; unchanged schema columns cannot express null fee.
+- E4: Private order UPDATE guard enforces snapshot values for standard/pickup.
+  Pending express preserves pending/unaccepted monetary facts and refuses payment
+  beyond not_requested/unpaid/failed, with a specific delivery-review error.
+  Carrier/tracking, packing, stock/payment lifecycle and cancellation remain
+  available where their existing controls allow. History mutation/truncation is
+  denied. A deferred Website INSERT check requires its snapshot at commit, closing
+  fresh legacy direct-writer bypass; exact historical retries are unaffected.
+- E5: Signed BFF understands the new delivery object and safely maps stale quote /
+  required review / invalid service refusals; no secret/private snapshot is
+  returned. Preserve original idempotency payload on uncertain outcomes. No old
+  client activation without the coordinated rendered/schema/order contract.
+- E6: Existing guarded native witness proves signed standard/pickup/pending
+  express→order→one reservation, fee and total, snapshot and retry after rate/fact
+  changes; stale acceptance/full rollback, legacy-price refusal and generic staff
+  charge/payment mutation denial. Existing focused BFF tests prove normalization
+  and safe translation. Reuse tariff/preview proof without rerunning unaffected
+  suites; final integration/HTTP/UI and retained-data recovery remain MAP-owned.
+
+Decision log: Browser accepted fee alone rejected (untrusted); signed temporary
+quote storage rejected (abandoned state); canonical recomputation plus immutable
+order snapshot selected. Trigger protection selected over patching only known
+writers because generic staff commands must not rewrite accepted prices. Express
+placeholder retained to preserve existing NOT NULL monetary schema, with explicit
+pending/payment guards and required rendered status; no unknown-as-free claim.
+Fresh legacy Website creation is intentionally refused at commit until routed
+through the coordinated canonical order contract; historical rows are not changed.
+Initial sequential Skeptic/Guardian/User Advocate/Arbiter disposition was pending.
+Final disposition: APPROVED. Skeptic's original/final channel and OLD.id/basket
+clarifications and Guardian's both-parent item rule are accepted below; Guardian
+re-review, User Advocate and Arbiter approve. No unresolved objection, new owner
+fact or live authority. Implementation/native/BFF verification remains required.
+
+E4 clarification accepted during Skeptic review: deferred admission checks both
+original INSERT channel and persisted current row at commit. An UPDATE cannot
+convert an unprotected non-Website row to Website; protected channel/shop/order
+ID/key/request-fingerprint remain fixed, using OLD.id to find the snapshot. Freeze
+order item SKU/quantity/unit-price facts after snapshot so changing basket rows
+cannot bypass monetary protection. Existing set_order_delivery_details retains
+accepted confirmation time and delivery state for a protected unchanged-fee
+carrier/tracking update; arbitrary charge/acceptance changes still refuse.
+
+Guardian E4 clarification accepted: item UPDATE checks both OLD.order_request_id
+and NEW.order_request_id, rejecting movement into or out of any protected basket;
+INSERT/DELETE checks its corresponding parent. Preserve existing order→balance→
+product/listing→lot lock ordering; no snapshot guard acquires a reverse stock lock.
+
+E implementation is prepared/locally verified, not activated. Native green06
+passes53/0 after preserved builder and witness diagnostics. Three canonical
+orders/snapshots/holds and old priced retry are real native synthetic behavior;
+actual Staff tracking preserves accepted time and the signed payment dispatcher
+rejects pending express with full rollback. Pending submission total is masked
+null, including unpriced saved receipts; accepted priced retry amounts stay
+unchanged. Existing scoped API26/26 plus Admin translation3/3 pass; independent
+review approved. Other read projections, rendered caller/manual express acceptance,
+historical unsnapshotted charge remediation and coordinated installer/recovery/
+live acceptance remain essential MAP gates. Evidence: authoritative-delivery README.
+
+### Next connected quote batch — D1–D7
+
+Owning MAP-023 and the same accepted IDEA-20260925-06 / IDEA-20261002-03.
+Local corrective implementation is authorized by the current readiness request;
+real product measurements/counts and live approval are not prerequisites for
+synthetic proof. Intent: give the buyer a server quote using canonical Website
+products, truthful measured/estimated weight, verified destination hierarchy and
+the recorded customer tariff; keep pickup free and express pending. This batch
+implements the signed preview and its inputs. Order submission must subsequently
+recompute under its existing locks, freeze the reviewed snapshot and protect all
+charge/payment writers; a passing preview alone never closes that launch blocker.
+
+- D1: Quote input is only service (standard/pickup/express), canonical SKU/quantity
+  lines and destination source-version/path. Reject duplicate SKUs, unknown fields,
+  more than50 lines, noninteger quantities outside1–99 and client weight/price.
+  Read the reviewed Website-offer predicate without initializing balances or
+  taking stock write locks. A quote does not reserve or promise stock.
+- D2: Add only nullable canonical shipping_weight_g with1–100,000g integer
+  constraint; leave existing products unmeasured. The database estimator prefers
+  a valid measured field, then canonical net_weight, then size, then500g packed
+  fallback. Recognized malformed quantity must refuse instead of using a cheaper
+  later field. Parse one positive g/kg/ml/l/cl quantity, decimal dot or unambiguous
+  1–2 digit decimal comma, optional positive integer x/×/* multipack, ordinary
+  package words and trailing piece-count text. Reject signed/exponent/ambiguous/
+  conflicting quantities. Preserve220g jar/bottle/vasetto/glass and80g other tare
+  and nearest-gram rounding for valid estimates;500g fallback is the total packed
+  fallback, not500g plus tare. Volume conversion remains explicitly estimated.
+- D3: Transform the preserved checksum-pinned official PSA30June2026 workbook,
+  retaining all43,768 codes, labels and actual hierarchy levels. Derive region
+  roots, real provinces/groups, municipalities/cities,14 Manila submunicipalities
+  and barangays; do not label the two special groups as provinces or invent HUC
+  provinces. Fail on orphan/cycle/unknown level/region/type/count drift. Include
+  PSA attribution and source/dataset checksums. The source's18 regions map to the
+  four K2 tariff areas explicitly; NIR is Visayas and unknown regions refuse.
+- D4: Install a private, closed-write reference table and a bounded public static
+  child-list projection (code/name/level/sourceVersion). The inspected dataset's
+  maximum259 children fits a1000-row bound; never silently truncate. Courier
+  destination is a complete ordered root-to-barangay path under the exact current
+  source version, validated against every parent link. This proves geography,
+  not house/street accuracy, courier coverage, availability or booking.
+- D5: A private STABLE resolver reads canonical offers/weight and the immutable
+  tariff in one statement snapshot. Standard returns recorded rate version,
+  integer fee, weight/basis and opaque input fingerprint; no private costs, lot
+  details or product evidence. Pickup needs no destination or weight calculation
+  and returns0; malformed shipping facts cannot prevent collecting an eligible
+  item. NCR express returns pending_quote with null fee and explanatory code,
+  never a guaranteed tariff or dispatch. Non-NCR express refuses.
+- D6: Add a signed quote RPC using the maintained delivery_quote action and its
+  existing60-per900s IP rate limit, and connect the existing BFF delivery/quote
+  route to this canonical resolver. Preserve old carrier-cost pilot records and
+  its historical receipt; they are not customer prices. Only guest security
+  nonce/rate tables may change during a successful preview. Reject missing/forged
+  signatures and close all private helper/table browser privileges.
+- D7: Fingerprint normalized sorted SKU/quantity and canonical basis facts,
+  service and complete destination/source identity. Return the fingerprint and
+  rate version separately for the next order-validation batch. No customer
+  address goes to PSA/geocoders; calculation has no external call. Stale previews
+  must be reviewed again; uncertain order keys/payloads must remain intact when
+  the later submission integration is implemented. Read-only preview failures
+  do not establish any prior order outcome.
+
+Alternatives: retain browser estimates (rejected: untrusted data and guessed area);
+persist a temporary quote before reservation (rejected for now: unnecessary
+abandoned/expiry state); recompute from canonical database inputs (selected,
+consistent with the existing approved target). Assumptions: existing50×99 limits,
+30-product scale and16KiB signed payload; indexed offer/reference/version reads,
+no provider dependency; target added DB work below500ms subject to observation.
+Owner measurements remain nullable and synthetic measurements are clearly marked
+fixtures. Static PSA reference has no staff edit API. Default installer/replay,
+populated recovery, rendered Admin/Storefront and real acceptance remain separate
+MAP gates. There is no unresolved business-policy question in this preview scope.
+
+Verification: native signed synthetic SKU→official destination→current tariff
+quote, measured and estimated/multipack/invalid grammar, unknown or mismatched
+paths, NCR/NIR/HUC/Manila/Isabela/SGA selection, free pickup with bad shipping
+facts, pending express, closed writes/helpers, full business-map preservation,
+signature/rate refusals, projected response allowlist and BFF shape/boundary tests.
+Reuse accepted tariff controls/calculator54+12 evidence without rerunning it.
+Exact next work and recovery stay in MAP-023: guarded local clone disposal now;
+compose/capture/caller-deactivation/roll-forward before any provider approval.
+
+Native schema discovery: products.net_weight is numeric in the accepted composed
+schema, while size is text. A numeric net quantity is interpreted only with a
+supported explicit canonical unit_of_measure (g/kg/ml/l/cl); it is never assumed
+to be grams. With absent/unsupported unit, a positive bare numeric quantity is
+unknown for shipping and can use size/fallback. Nonpositive numeric weight
+refuses. Unit-bearing text remains supported by the pure compatibility parser.
+This is a schema compatibility clarification, not a new measured product fact.
+
+Sequential D1–D7 disposition: APPROVED for local preparation. Skeptic approves
+the design and numeric-field clarification; Guardian approves bounded snapshot
+reads/closed writes with required mutation/grammar/geography/cost evidence; User
+Advocate approves truthful estimates, pickup and pending express; Arbiter finds
+no unresolved objection. No live approval or connected order/payment acceptance
+is inferred. Red01 confirms missing quote RPC42883,5pass/1expected failure with
+safe clone removal/original preservation; it is not a passing implementation.
+
+Implementation readback: customer-quote-green01 native79/0 verifies the signed
+resolver on canonical synthetic offers, strict pure weight cases, special PSA
+paths, free pickup, pending express and no business-row mutation. Storefront
+quote/locations BFF and router focused5/5 pass using synthetic PostgREST replies.
+Independent review's only Important finding (valid slash SKU rejected by BFF)
+was fixed and the focused check passed; no other Critical/Important finding.
+This is prepared/local backend evidence, not rendered or native HTTP acceptance.
+Actual measured-row/worst-cart/source-row/cost/rate refusal evidence, protected
+order recomputation/snapshots, express acceptance/payment, UI and installer/
+recovery/live gates remain MAP-023/017/020. Receipt: authoritative-delivery README.
+
+IDEA-20260925-06 / IDEA-20261002-03, owning backlog MAP-023. The current owner
+readiness instruction authorizes local corrective implementation under the
+2 October policy; another technical-approach approval is not required. Live
+database changes/deployment and real operation acceptance remain separate gates.
+
+Understanding: preserve J&T customer pricing, free pickup and manually quoted NCR
+express; give Admin and Staff protected rate maintenance; calculate standard fees
+from canonical inputs inside order submission; retain saved-order retries and
+accepted prices; require express final-total acceptance before payment; prepare
+and verify with synthetic facts now. Existing carrier-cost pilot tables are not
+customer tariffs. Future standard pricing has no supplied amount or activation.
+
+The first implementation batch is the immutable customer tariff ledger and its
+server calculator. Subsequent connected checkout/express/payment work remains in
+MAP-023, not a separate backlog. This first batch alone cannot close browser fee
+trust or establish a usable delivery workflow.
+
+### Decisions C1–C5
+
+- C1: Store a complete four-area J&T matrix as an immutable version with actor,
+  server time, reason, evidence reference and exact payload hash. A separate head
+  points to its current version. Reject incomplete/extra areas and malformed or
+  excessive numeric values. Pickup and express cannot be assigned fixed rates
+  through this command. Alternative: reuse carrier-cost rows; rejected because
+  those amounts and approval rules describe a different operational fact.
+- C2: Publish through the existing signed Admin BFF protocol, explicit Admin/Staff
+  membership and AAL2. Add only the named customer-rate action to the exact current
+  verifier body; refuse unknown body drift. Serialize head changes, require the
+  displayed expected version, and save the existing actor/action/key receipt.
+  Exact retries return the saved version even after another publication; changed
+  payloads with that key refuse. Alternative: mutable rows; rejected because
+  accepted snapshots could no longer explain their rate source.
+- C3: The database calculator uses integer centavos, integer grams and the saved
+  version. Charge each started kg above the included weight, then round upward to
+  the configured centavo step. Missing versions, unknown areas, invalid weights
+  and fees beyond PHP100,000 refuse; they never fall back to another area. An
+  old version remains calculable after publication of a new one.
+- C4: Install an empty, inactive future-standard policy head and no invented
+  amounts. The current command publishes only jt_current. Do not seed production
+  rates, evidence or actor identities in this fragment. Synthetic matrices are
+  explicit local fixtures; activation will use the reviewed owner rate record.
+- C5: Use private tables with RLS, revoked browser/service table writes and a
+  mutation guard on version history. Expose only a bounded staff read projection
+  through the existing Admin BFF authorization. A ledger receipt alone does not
+  authorize an order charge or an express payment.
+
+Assumptions: at the current approximately 30-product scale, tariff work is one
+indexed head/version lookup with no external call; measure latency when checkout
+is connected. Version numbers are positive signed 32-bit integers, with expected
+zero for initial publication. Rates activate at successful commit, not at a
+browser-supplied/backdated time. The full matrix is small (four areas); existing
+16KiB signed payload and rate limits apply. Both role membership and AAL2 are
+checked in the database as well as the BFF. Loss of a response retains the same
+business key/payload. No physical count, courier booking, measured weight or
+real staff identity is inferred from fixtures.
+
+Verification: reuse the guarded owned-clone native witness and maintained signer.
+Prove Admin and Staff publication, stale-version/changed-key/unsigned/AAL1/customer
+refusal with full rollback, exact retry after later publication, old-version fee
+stability, current matrix rounding and missing/invalid tariff refusal. Direct
+table mutation/history rewrite must refuse. Freeze executed sources and preserve
+the original template. Recovery during preparation is disposal of the marked
+clone; production recovery will disable the new callers and preserve tariff and
+receipt history, never restore browser-authoritative charging. Exact composed
+installation/replay/drift and provider recovery still require MAP-017/020 work.
+
+Review log: Skeptic REVISE, accepted. Numeric rules are integer-only: base
+1–10,000,000 centavos, extra-kg 0–10,000,000, round step 1–10,000,000;
+included weight 1–100,000g; calculator input 1–495,000,000g. Apply the PHP100,000
+ceiling to the final rounded fee. Both heads are installed empty before use;
+publication never creates a missing head at runtime. Resolve actor/action/key
+receipt and payload conflict before current-version checks, acquire the existing
+head row lock, then recheck that receipt before comparing expected version. This
+also covers simultaneous requests using the same key. Bounds are engineering
+limits, not courier coverage. Guardian arithmetic objection accepted: intermediate
+fee multiplication/rounding uses bigint or exact numeric (permitted input can
+exceed int32 before final refusal); cast to integer only after the final ceiling.
+
+Final sequential disposition: APPROVED for local C1–C5 implementation. Skeptic
+and Guardian objections above are accepted/resolved; User Advocate approves the
+scoped backend preparation; Arbiter finds no unresolved objection. Required
+native concurrency and behavior evidence subsequently passes54/0; the separate
+maximum-arithmetic mode passes12/0 and focused API/router checks pass3/3. This
+review does not approve live writes or the remaining checkout/express/payment
+workflow. The missing-function native red witness is
+`foundation-qualified-schema-guest-checkout-customer-rates-red01/result.json`
+under category-shelf-life evidence; it preserves the original template and removes
+its marked clone. It proves missing behavior, not a passing tariff implementation.
+The green02/overflow01 receipts, source pins, preserved diagnostic archives,
+independent implementation review and recovery scope are recorded in
+`docs/evidence/20261001-authoritative-delivery/README.md`. No live or connected
+checkout/express/payment acceptance is established by the tariff backend.
+
+## Owner delivery revision — 2 October 2026
+
+**Required target, not implemented or activated.** IDEA-20261002-03 merges into
+MAP-023/020/025. This owner revision takes precedence over the fixed express
+tariff and all-service automatic quotation in the earlier candidate below.
+The previous pending implementation-approach question is superseded; the revised
+manual-express and staff-rate design still needs its applicable design/review
+and implementation evidence. Remaining actions live only in MAP.
+
+Authorized Admin and Staff must be able to maintain delivery rates in Admin.
+Enforce permissions on the server, record the reason/actor/effective version and
+audit receipt, and validate amounts before publication. New versions affect
+future unaccepted quotes; accepted order charges stay fixed unless a separately
+recorded revised quote is explicitly accepted by that buyer. Keep the existing
+J&T-based standard-rate policy and free pickup until an authorized rate change.
+
+Keep **NCR express — Lalamove/Grab** available as a delivery request option.
+The actual current courier charge and availability depend on route and time;
+the earlier ₱150 plus ₱40/kg above 5 kg is historical source behavior, not a
+guaranteed current express quote. Express selection must not promise an immediate
+delivery, dispatch time, available rider or booking. An unknown fee is pending,
+not zero/free, and cannot enter a payable final total as if confirmed.
+
+Display a prominent warning beside Express and retain it through the order
+review/confirmation while the quote is unresolved:
+
+> NCR Express fees and availability change with the route and time. Do not pay
+> until K2 staff confirms the current delivery fee, availability and final total.
+> Selecting Express does not book a rider or guarantee immediate delivery.
+
+The manual flow is: buyer requests Express → staff checks the current courier
+quote, route, package and availability/proposed timing → staff records the fee,
+source, quotation time and any known validity limit → buyer explicitly accepts
+the final total → staff sends payment instructions → the existing independent
+funds verification and packing/handover workflow continues. Before acceptance,
+hold transfer/QR payment prompts until the quote and total are confirmed. If the
+quote becomes stale or changes, obtain a new quote and buyer acceptance; a
+warning alone does not authorize collecting an unknown charge. Preserve uncertain
+submission keys and existing guest/order/conversation/stock contracts.
+
+Courier API quoting/booking is future work. Investigate official Lalamove/Grab
+capabilities and onboarding, credentials, region/service eligibility, costs,
+address consent/privacy, quotation validity, repricing, failure recovery and
+manual fallback before choosing an integration. Do not call a public website a
+pricing API or claim any quote/booking integration exists. Current API access
+and immediate delivery have not been established.
+
+No visible UI, rate, database, provider or payment flow was changed by this
+documentation. Preserve the earlier candidate and peer-review evidence below
+as historical preparation; revise it against this policy before implementation.
+
 ## Current regional checkout correction — 1 October 2026
 
 **Design candidate, not implemented or activated.** IDEA-20260925-06 / MAP-023
@@ -868,3 +1819,22 @@ the shared constants and vocabulary so one cannot change without the other.
 - Rate versions are immutable once used by a quote; corrections create a new version.
 - No carrier connector is enabled until the owner supplies the provider account, fee
   schedule, rate limits, and sandbox reconciliation evidence required by G-013.
+
+H decision log: Skeptic REVISE accepted: head read cannot resolve an interrupted
+publication, and pre-receipt permission denial cannot discard it. Revised bounded
+actor-scoped persistent record and serialized exact retry closes those paths.
+
+H Guardian REVISE accepted: queued retries capture intended identity before lock
+wait and stop/reload if another tab removed/resolved it; no fresh fallthrough.
+
+H Advocate APPROVED: explicit pesos/grams and distinguish successful publication
+from later read failure. Arbiter APPROVED: both objections accepted/resolved, none
+rejected or outstanding; dummy local preparation only, no live authorization.
+
+H final evidence: five distinct synthetic screen journeys pass across controller
+83350's two passing cases, corrected two-case chunk0f4bf9 exit0 and added identity
+chunkc1c552 exit0. Initial two failures were ambiguous notice/loading status
+selectors; narrowed assertions rerun only affected cases. Application source
+review approved without Critical/Important; four sources parse. Existing native
+54+12/API3 and E53/0 evidence reused.375/1440 screens inspected without overflow;
+no native HTTP/authenticated host/real staff/provider or deployment claim.

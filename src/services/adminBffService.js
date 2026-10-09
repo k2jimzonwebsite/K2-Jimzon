@@ -5,7 +5,7 @@ export function adminBffEnabled() {
 }
 
 const ADMIN_COMMAND_ROUTES = Object.freeze({
-  fulfillment: new Set(['confirm', 'packing-scan', 'payment', 'delivery', 'fulfill', 'transfer-lot', 'assign-box']),
+  fulfillment: new Set(['confirm', 'cancel', 'packing-scan', 'payment', 'delivery', 'fulfill', 'transfer-lot', 'assign-box']),
   inbox: new Set(['internal-note', 'send-reply', 'mark-read', 'workflow', 'delete-anonymous', 'block-anonymous', 'unblock-anonymous']),
   pasabuy: new Set(['transition', 'quote']),
   'product-intake': new Set(['session', 'step', 'draft', 'inventory', 'publication']),
@@ -13,7 +13,7 @@ const ADMIN_COMMAND_ROUTES = Object.freeze({
   consignments: new Set(['create', 'add-line', 'scan', 'advance', 'finalize']),
   lots: new Set(['reconcile', 'clearance']),
   coupons: new Set(['create', 'state', 'archive']),
-  delivery: new Set(['quote', 'courier', 'courier-state', 'locality', 'cost-publish', 'source-state']),
+  delivery: new Set(['quote', 'courier', 'courier-state', 'locality', 'cost-publish', 'source-state', 'customer-rates', 'express-quote']),
   reservations: new Set(['extend', 'release-expired']),
   'catalog-import': new Set(['commit']),
   'marketplace-snapshots': new Set(['stage', 'decision']),
@@ -55,6 +55,9 @@ const ERROR_MESSAGES = {
   SESSION_REVOKED: 'This admin session is no longer valid. Sign in again.',
   MFA_REQUIRED: 'Two-factor verification is required again.',
   STAFF_ACCESS_REQUIRED: 'This account no longer has staff access.',
+  CANCELLATION_ACCESS_REQUIRED: 'Current Staff or Admin access and two-factor verification are required to confirm this cancellation.',
+  CANCELLATION_VERSION_CONFLICT: 'This order changed after review. Refresh and review it again.',
+  CANCELLATION_ORDER_INELIGIBLE: 'This order no longer allows cancellation. Review its current history.',
   RESERVATIONS_UNAVAILABLE: 'Stock holds are temporarily unavailable.',
   RESERVATION_COMMAND_UNAVAILABLE: 'That hold could not be updated safely. Retry the same change.',
   RESERVATION_ALREADY_EXPIRED: 'This hold already expired and its stock returned to the sellable pool. Create a new reservation instead of extending it.',
@@ -63,6 +66,13 @@ const ERROR_MESSAGES = {
   RESERVATION_HAS_NO_DEADLINE: 'This hold has no deadline recorded, so it cannot be extended.',
   RESERVATION_NOT_FOUND: 'That hold no longer exists.',
   DELIVERY_CONTROL_UNAVAILABLE: 'Delivery rate control is temporarily unavailable.',
+  EXPRESS_QUOTE_STALE: 'Another quotation superseded this version.',
+  EXPRESS_ORDER_INELIGIBLE: 'This order cannot receive another quotation.',
+  EXPRESS_DELIVERY_UNAVAILABLE: 'The express quotation service is unavailable.',
+  DELIVERY_ACCESS_REQUIRED: 'Active staff access and two-factor verification are required.',
+  CUSTOMER_TARIFF_VERSION_STALE: 'Another staff member changed the customer rates. Refresh and review the latest version before publishing.',
+  CUSTOMER_TARIFF_STAFF_REQUIRED: 'An active Admin or Staff account with two-factor verification is required for customer delivery rates.',
+  CUSTOMER_TARIFF_UNAVAILABLE: 'Customer delivery rates are temporarily unavailable. Keep any pending change and retry it.',
   DELIVERY_COMMAND_UNAVAILABLE: 'The delivery rule could not be saved safely. Retry the same change.',
   DELIVERY_ADMIN_REQUIRED: 'Only an administrator can change what a customer is charged for delivery.',
   DELIVERY_EFFECTIVE_IN_PAST: 'A rate can only take effect today or later. Past orders keep the rate they were quoted.',
@@ -78,6 +88,7 @@ const ERROR_MESSAGES = {
   PRODUCT_COMMAND_INVALID: 'Review the product details and enter a specific reason before saving.',
   PRODUCT_COMMAND_UNAVAILABLE: 'The product change could not be recorded safely. Refresh and try again.',
   PRODUCT_VERSION_CONFLICT: 'This product changed after you opened it. Refresh and review the latest record.',
+  PRODUCT_TAXONOMY_INITIAL_ONLY: 'Brand and category can only be assigned once before stock or inventory history exists. Refresh and review the product state.',
   PRODUCT_NOT_FOUND: 'That product is no longer available. Refresh the inventory register.',
   BARCODE_INVALID: 'Scan the package barcode or enter a valid EAN, UPC, or GTIN.',
   CATALOG_MISMATCH: 'The catalog returned a different barcode. Use the package photos and manual path.',
@@ -399,6 +410,7 @@ function fulfillmentCommand(path, body, idempotencyKey) {
 }
 
 export const confirmOrderBff = (orderRequestId, reason, idempotencyKey) => fulfillmentCommand('confirm', { orderRequestId, reason }, idempotencyKey)
+export const cancelOrderBff = (payload, idempotencyKey) => fulfillmentCommand('cancel', payload, idempotencyKey)
 export const recordPackingScanBff = (payload, idempotencyKey) => fulfillmentCommand('packing-scan', payload, idempotencyKey)
 export const updatePaymentBff = (payload, idempotencyKey) => fulfillmentCommand('payment', payload, idempotencyKey)
 export const updateDeliveryBff = (payload, idempotencyKey) => fulfillmentCommand('delivery', payload, idempotencyKey)
@@ -639,6 +651,13 @@ export const archiveCouponBff = (payload, key) => couponCommand('archive', paylo
 export function getAdminDeliveryControlBff(signal) {
   return adminRequest('/api/admin/delivery', { signal })
 }
+
+export const getCustomerDeliveryRatesBff = (signal) => adminRequest('/api/admin/delivery/customer-rates', { signal })
+export const getExpressDeliveryQuoteBff = (orderRequestId) => adminRequest(`/api/admin/delivery/express-quote?orderRequestId=${encodeURIComponent(orderRequestId)}`)
+export const publishExpressDeliveryQuoteBff = (body, key) => adminRequest(boundedAdminCommandRoute('delivery', 'express-quote'), { method: 'POST', body, csrf: true, idempotencyKey: key })
+export const publishCustomerDeliveryRatesBff = (body, key) => adminRequest(
+  boundedAdminCommandRoute('delivery', 'customer-rates'), { method: 'POST', body, csrf: true, idempotencyKey: key },
+)
 
 const operationIdempotencyKey = () =>
   (typeof crypto?.randomUUID === 'function' ? crypto.randomUUID() : '')

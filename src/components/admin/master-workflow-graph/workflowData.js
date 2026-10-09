@@ -8,7 +8,7 @@
  */
 
 export const WORKFLOW_GUIDE_META = Object.freeze({
-  version: '2026-08-30-draft.1',
+  version: '2026-10-02-reviewed-source.1',
   approvalStatus: 'DRAFT — NOT LOCKED',
   effectiveDate: null,
   authority: 'K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md',
@@ -92,7 +92,7 @@ export const WORKFLOWS = {
           'Store purchases in climate-controlled staging area in Milan (18°C–20°C).',
         ],
         rules: [
-          'Never purchase products with less than 60 days before expiration date.',
+          'Plan sourcing and transit so Manila ordinary offers retain at least 90 calendar days; categories may require more. Shorter 31–89-day lots require approved disclosed clearance and are not ordinary stock.',
           'Always record unit purchase price in EUR (€) on store receipt.',
         ],
         simulation: {
@@ -112,7 +112,7 @@ export const WORKFLOWS = {
           nextAction:
             "Proceed to Step 2: Milan Box Packing & Manifest Pre-Tagging once goods are assembled at Milan staging hub.",
           exitCriteria:
-            "Store receipt photographed and uploaded with unit cost in EUR and minimum 60 days shelf life.",
+            "Store receipt and EUR unit cost recorded; printed expiry supports the Manila shelf-life gate after transit.",
         },
       },
       {
@@ -328,7 +328,7 @@ export const WORKFLOWS = {
           expectedResult: 'Expected record shape: finalized receipt plus canonical batch and inventory events. No marketplace sync is implied.',
         },
         troubleshooting: [
-          { issue: 'Storefront stock count differs from Inventory', fix: 'Do not edit product stock directly. Verify the lot is eligible, the product is Live, and the Storefront is using its server-backed catalog. Preserve the mismatch and escalate if those records agree.' },
+          { issue: 'Storefront stock count differs from Inventory', fix: 'Do not edit product stock directly. Verify eligible lots, reviewed product publication, explicit Website assignment and the actual server-backed catalog. A correct eligibility or membership exclusion is not a count error. Preserve unexplained mismatches and escalate.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Verify Inventory Record',
@@ -338,7 +338,7 @@ export const WORKFLOWS = {
           actionDirective:
             "Hub Manager reviews the verified recount, finalizes the receipt, and checks the resulting batch lots, physical quantities, and sellable stock in MANILA_MAIN warehouse.",
           nextAction:
-            "Stock is now ready for order picking in Omni-Operations Hub and visible for storefront ordering.",
+            "Receipt recorded: verify eligible stock and explicit Website assignment before offering it. Confirm the order has attributable allocation or commitment before picking in Omni-Operations Hub.",
           exitCriteria:
             "Consignment status finalized, batch lots created, and location inventory balances reconciled.",
         },
@@ -367,7 +367,7 @@ export const WORKFLOWS = {
       "Inventory Management > Quick Intake",
     completionCriteria: [
           "Barcode scanned and matched to active catalog Master SKU",
-          "New FEFO batch lot registered with valid DD/MM/YYYY expiry date (>90 days for sellable status)",
+          "Printed expiry saved as YYYY-MM-DD; ordinary offers retain at least 90 Manila calendar days or an eligible 31–89-day lot has approved disclosed clearance",
           "Physical lot identifier labeled and placed on storage bin",
           "New units positioned behind older expiring stock on warehouse shelf (physical FEFO)",
           "Hub Manager verifies lot quantity and sellable stock balance in MANILA_MAIN"
@@ -413,6 +413,7 @@ export const WORKFLOWS = {
       },
       {
         id: 'ext_2',
+        implementationNote: 'Prepared read-time eligibility passes local SQL checks. Complete writer parity, real custody/counts and provider activation remain open.',
         step: 2,
         title: 'New FEFO Batch Lot & Expiry Registration',
         actor: 'Intake Staff',
@@ -420,7 +421,7 @@ export const WORKFLOWS = {
         type: 'decision',
         short: 'Enter the printed best-before date, verified quantity, source, location, custodian, and documented cost.',
         summary:
-          'Use the canonical intake or receipt command for this shipment. Record the printed expiry, verified physical quantity, source, hub, custodian, and documented PHP unit cost. A product row never receives stock directly.',
+          'Use the canonical intake or receipt command. Record printed expiry, verified physical quantity, source, exact hub/custodian and documented PHP cost. Ordinary offer stock requires at least 90 Manila calendar days; 31–89 days requires reasoned approved clearance disclosed to the customer; 0–30, expired or unknown dates are unsellable. Derive physical minus reserved units only from available lots in approved custody. Categories may raise the threshold. A product row never receives stock directly.',
         checklist: [
           'Enter expiration date accurately in YYYY-MM-DD format from the physical packaging.',
           'Keep the source receipt with the purchase currency and amount; record only the reviewed PHP cost required by the canonical command.',
@@ -428,6 +429,7 @@ export const WORKFLOWS = {
         ],
         rules: [
           'Different expiry dates MUST be tracked as separate batch lots to enforce FEFO picking.',
+          'Expiry, best-before, disposition or reversal changes invalidate clearance even when old values return; obtain fresh approval. Unknown custody, damaged/quarantined lots and a pin cannot bypass eligibility.',
         ],
         simulation: {
           testBarcode: 'LOT-NEW-2027',
@@ -556,7 +558,7 @@ export const WORKFLOWS = {
           actionDirective:
             "Hub Manager reviews the intake count and checks that Inventory reflects the updated physical and sellable quantities for MANILA_MAIN.",
           nextAction:
-            "Intake complete. Added stock is now eligible for order fulfillment picking.",
+            "Receipt recorded. Verify lot eligibility, reservations and Website assignment separately before offering or picking stock.",
           exitCriteria:
             "Inventory balance reflects added units and batch lot status is verified.",
         },
@@ -589,7 +591,7 @@ export const WORKFLOWS = {
           "Evidence-backed product copy and image briefs reviewed via K2 Product Content and K2 Product Image Studio",
           "PRIMARY and AFTER unboxing comparison photos uploaded to Product Media Manager",
           "Mandatory allergen declarations and culinary pairing notes verified",
-          "Product status toggled to Active/Live and verified on Storefront"
+          "Reviewed status, canonical subcategory, rights-cleared media, explicit Website assignment and eligible stock verified separately; exact-host acceptance recorded"
     ],
     nodes: [
       {
@@ -789,28 +791,29 @@ export const WORKFLOWS = {
       },
       {
         id: 'np_6',
+        implementationNote: 'Prepared Website assignment and eligible stock projection are locally verified. Staff assignment UI, reviewed actual membership and provider/real-host activation remain open.',
         step: 6,
-        title: 'Review & Live Storefront Activation',
+        title: 'Review product and Website eligibility',
         actor: 'Catalog Lead / Manager',
         location: 'Admin BOS Terminal',
         type: 'complete',
-        short: 'Preview mobile layout, verify tags, and publish live to the Storefront.',
+        short: 'Review product facts, canonical subcategory, media, Website assignment and eligible stock separately.',
         summary:
-          'Inspect full product detail preview on mobile and desktop viewports. Check SEO title, category placement, and stock availability badge. Toggle product status from Draft to Active.',
+          'Review the exact product and variant, canonical category/subcategory, approved price, verified facts and rights-cleared primary media. Live/Active plus publication is separate from explicit Website assignment and eligible inventory. Prepared Website commands require reviewed membership; Unlisted remains a reviewed direct-link offer. No status change alone proves a public listing or marketplace synchronization.',
         checklist: [
           'Inspect mobile product page preview for typography alignment and image clarity.',
           'Verify search tags (e.g. #pasta #gragnano #artisanal).',
           'Save the reasoned Live status, then verify the server response. On a configured preview or production deployment, confirm the exact product route appears in the Storefront catalog.',
         ],
         rules: [
-          'Product will show "Out of Stock · Request via Pasabuy" until the first batch lot is received.',
+          'No automatic Website assignment or bulk publication is authorized. An unknown stock read is unavailable, not a known zero or a sellable offer.',
         ],
         simulation: {
           testBarcode: 'PUBLISH-LIVE-OK',
           expectedResult: 'Expected state: one reasoned Live product with its required primary media; deployed Storefront visibility is verified separately.',
         },
         troubleshooting: [
-          { issue: 'Product not showing in catalog', fix: 'Clear browser cache or verify category filter assignment.' },
+          { issue: 'Product not showing in catalog', fix: 'Check reviewed facts/media/price, canonical subcategory, publication, explicit Website assignment and eligible lots. Preserve any read failure; do not replace missing stock with a display quantity.' },
         ],
         adminJump: 'inventory',
         jumpLabel: 'Review Publication',
@@ -818,11 +821,11 @@ export const WORKFLOWS = {
           targetScreen: "Inventory Management",
           whatToClick: "Review the product, then use the status control to select \"Live\".",
           actionDirective:
-            "Inspect mobile and desktop preview. Verify search tags, SEO title, and pricing display. Toggle product status from Draft to Active/Live and save. Verify the live product URL.",
+            "Review facts, canonical subcategory, rights-cleared primary photo and approved price. Save only the authorized reasoned status change. Verify Website assignment and eligible lots separately; use the configured exact host to confirm the saved offer after activation.",
           nextAction:
-            "Product is published. Stock will display as \"Request via Pasabuy\" until batch inventory is received.",
+            "Complete protected Website assignment and inventory acceptance before exact-host listing verification. Keep unavailable or unreviewed offers closed.",
           exitCriteria:
-            "Product status saved as Active/Live and verified on Storefront catalog.",
+            "Saved product, explicit Website membership, eligible stock and exact-host behavior each have their own acceptance evidence.",
         },
       },
     ],
@@ -1295,17 +1298,18 @@ export const WORKFLOWS = {
     nodes: [
       {
         id: 'ord_1',
+        implementationNote: 'Prepared signed Website orders take 30-minute exact FEFO holds and pass local contention/retry checks. This does not prove deployed holds, complete writer parity or delivery authority.',
         step: 1,
         title: 'Order Intake & Stock Reservation',
         actor: 'System / Staff',
         location: 'Omni-Hub Dashboard',
         type: 'intake',
-        short: 'Order arrives from Storefront, Shopee, Lazada, or Wholesale channel.',
+        short: 'Review the saved request and exact eligible-lot hold; connectors remain manual until verified.',
         summary:
-          'A submitted website order is only a request and does not reserve stock. Authorized staff reviews the order and confirms it through the canonical command, which revalidates price, discount, customer details, and eligible inventory and then reserves exact FEFO lots atomically.',
+          'The prepared signed Website path verifies reviewed product and Website membership, then takes a 30-minute exact FEFO hold at submission with idempotency and last-unit refusal. A request is not payment or permanent stock commitment. Authorized confirmation or verified structured payment commits attributable eligible allocations; later packing/handover must preserve that commitment. These paths are locally verified preparation, not a claim about current live orders. Marketplace orders stay in their approved manual channel workflow until a real adapter passes end-to-end checks.',
         checklist: [
           'Review customer contact info, delivery address, and requested items.',
-          'Verify inventory reservation status is green with sufficient unallocated stock.',
+          'Verify the actual saved lot allocation, hold deadline and order state; a green guide example is not a reservation receipt.',
           'Check for special order notes (e.g. gift packaging, preferred delivery hours).',
         ],
         rules: [
@@ -1333,25 +1337,26 @@ export const WORKFLOWS = {
       },
       {
         id: 'ord_2',
+        implementationNote: 'Current owner delivery target: editable protected staff rates and manual NCR Express quote/acceptance before payment. The revised flow is not implemented or activated.',
         step: 2,
         title: 'Customer Contact & Total Confirmation',
         actor: 'Customer Care Staff',
         location: 'Admin Messaging Center',
         type: 'action',
-        short: 'Confirm delivery method, courier rates, and send payment details.',
+        short: 'Confirm the delivery fee and buyer acceptance before payment instructions.',
         summary:
-          'Reach out to customer via WhatsApp/Viber/SMS/Storefront Chat. Confirm final courier delivery rate (Lalamove, Grab, Borzo, or provincial air cargo) and provide official GCash/Maya/Bank Transfer details.',
+          'Owner target: authorized Admin/Staff maintain versioned standard rates without changing accepted charges. Keep standard delivery and free pickup. NCR Express through Lalamove/Grab is a request: staff must check a current route/time/package quote, availability and final total, then record buyer acceptance before payment instructions. Warn the buyer not to pay before staff confirmation. Selecting Express neither books a rider nor guarantees immediate delivery; unknown fees remain pending, never free. Use only an available approved conversation/channel and approved receiving account.',
         checklist: [
-          'Quote exact delivery fee based on customer address and package size/weight.',
+          'For NCR Express record the current quote source/time, route/package, availability and final total; obtain buyer acceptance before payment.',
           'Provide official K2 Jimzon payment account details (never personal staff accounts).',
-          'Record any owner-approved payment or reservation deadline for this order; do not invent a standard deadline.',
+          'Preserve accepted fees; recheck expired or changed quotes and obtain renewed acceptance. Prepared temporary holds have a 30-minute deadline; verify actual saved state.',
         ],
         rules: [
           'No items are packed or dispatched until payment is 100% verified or COD is approved (only when Cash on Delivery is switched on).',
         ],
         simulation: {
           testBarcode: 'MSG-QUOTE-SENT',
-          expectedResult: 'Quote Sent: Metro Manila Same-Day ₱180 (Total ₱1,620).',
+          expectedResult: 'Training example: NCR Express quote pending staff availability check and buyer acceptance; do not pay yet.',
         },
         troubleshooting: [
           { issue: 'Customer is unresponsive before an approved deadline', fix: 'Contact the customer through an available channel, then use the reasoned order exception workflow. The guide never releases reserved stock automatically.' },
@@ -1362,7 +1367,7 @@ export const WORKFLOWS = {
           targetScreen: "Customer Messages Inbox",
           whatToClick: "Open \"Unified message control\" and select the saved conversation.",
           actionDirective:
-            "Contact customer via chat or messaging to confirm delivery details, special handling requests, or provide official K2 payment account details (GCash/Maya/Bank Transfer).",
+            "Use the available conversation to confirm delivery details. For Express obtain a current staff quote and buyer acceptance before payment instructions; record the exact accepted total and approved receiving method.",
           nextAction:
             "Proceed to Step 3: Payment Verification & Release to Queue once payment proof is received.",
           exitCriteria:
@@ -1371,6 +1376,7 @@ export const WORKFLOWS = {
       },
       {
         id: 'ord_3',
+        implementationNote: 'Prepared structured payment, distinct review and commitment through signed packing/handover pass local SQL evidence; real funds and provider/real-host acceptance remain open.',
         step: 3,
         title: 'Payment Verification & Release to Queue',
         actor: 'Finance / Shift Lead',
@@ -1378,10 +1384,10 @@ export const WORKFLOWS = {
         type: 'decision',
         short: 'Verify transaction reference in bank/e-wallet and advance order status.',
         summary:
-          'Cross-reference customer payment screenshot with actual merchant bank ledger. Once confirmed, mark order status as Paid / Ready for Packing.',
+          'Review structured method, amount, payer and reference against actual receiving-account funds and the accepted total. The verifying staff member must differ from the submitter. Prepared verification/confirmation commits exact eligible allocations and retains first actor/time through packing and handover; expired temporary deadlines cannot release attributable commitments. A screenshot alone is not funds or a verified payment. Keep missing attribution or unknown commitment causes in reconciliation.',
         checklist: [
           'Verify transaction reference number matches bank statement.',
-          'Confirm received amount matches exact order total + quoted courier fee.',
+          'Confirm received amount matches the accepted saved grand total, with delivery included once.',
           'Advance order state to "Packing Queue" in Admin BOS.',
         ],
         rules: [
@@ -1924,7 +1930,7 @@ export const WORKFLOWS = {
           actionDirective:
             "Test incoming webhook signature validation in Edge Function. Verify request body limits (256 KiB), replay window defense, and atomic event capture in database.",
           nextAction:
-            "Proceed to Step 4: Agree the Channel Vocabulary — BLOCKING before writing order rows.",
+            "Proceed to Step 4: Verify the canonical channel and shop identity before writing order rows.",
           exitCriteria:
             "Webhook signature path verified with authenticated test event.",
         },
@@ -1932,15 +1938,15 @@ export const WORKFLOWS = {
       {
         id: 'ch_4',
         step: 4,
-        title: 'Agree the Channel Vocabulary — BLOCKING',
+        title: 'Verify canonical channel and shop identity',
         actor: 'Admin',
         location: 'Database schema',
         type: 'decision',
-        short: 'Three different spellings for the same channels exist today. Settle them before the first real row.',
+        short: 'Reuse the canonical sales channel and exact individual shop; messaging source stays separate.',
         summary:
-          'The same marketplace is currently named in several ways across the system: orders accept a fixed short list, an older type carries per-account names, and the channel listing table has no constraint at all. A connector writing one spelling while a report reads another produces silence, not an error. Fixing this while the tables hold no marketplace rows costs almost nothing; fixing it afterwards means rewriting live data.',
+          'Canonical channel vocabulary and individual shop identity already exist in source preparation. Reuse them across orders, listings, counts and reporting; social messaging is a separate source. Verify actual provider schema and real shop records before activation. Sample accounts are fixtures and cannot become operating evidence.',
         checklist: [
-          'Choose one canonical name per channel, and one way to express which K2 shop a row belongs to.',
+          'Use the existing canonical channel names and saved individual shop IDs; do not invent another vocabulary.',
           'Apply the vocabulary as a constraint on every table that carries a channel, including channel listings.',
           'Map or retire the older per-account type so only one vocabulary survives.',
         ],
@@ -1955,7 +1961,7 @@ export const WORKFLOWS = {
         jumpLabel: 'Open Inventory',
         actionGuide: {
           targetScreen: "Inventory Management",
-          whatToClick: "No Admin control yet. The owner must approve the shared channel names before connector work continues.",
+          whatToClick: "No Admin control yet. Verify the prepared canonical channel/shop schema and approved real accounts before connector activation.",
           actionDirective:
             "Enforce one canonical spelling for each channel across all tables. Standardize shop identity fields so reports and order queues read the exact same string.",
           nextAction:
@@ -1994,28 +2000,29 @@ export const WORKFLOWS = {
           actionDirective:
             "Map each K2 Master SKU to its external marketplace item ID and SKU ID. Record per-channel pricing if different from website retail SRP.",
           nextAction:
-            "Proceed to Step 6: Decide the Stock Pool and the Oversell Rule — BLOCKING FOR CHANNEL TWO.",
+            "Proceed to Step 6: Verify eligible stock and per-shop offers.",
           exitCriteria:
             "External listing IDs mapped to canonical Master SKUs in channel listings table.",
         },
       },
       {
         id: 'ch_6',
+        implementationNote: 'Existing allocation policy is established. Shop stock UI is locally verified read-only; protected eligible-lot allocation/locking, transfers and activation remain open.',
         step: 6,
-        title: 'Decide the Stock Pool and the Oversell Rule — BLOCKING FOR CHANNEL TWO',
+        title: 'Verify eligible stock and per-shop offers',
         actor: 'Owner / Admin',
         location: 'Policy decision, then schema',
         type: 'decision',
-        short: 'One pool, or per-shop allocation? Decide before two channels sell the same stock.',
+        short: 'One physical truth; bounded eligible offers per shop. Current Shop stock is read-only.',
         summary:
-          'Master Inventory is the Philippines-wide sum of everything K2 holds, including stock physically held by shop staff. The moment two channels can sell the same item, a race exists: a Shopee sale and a website sale can both succeed against the last unit. With one channel live this is invisible. With two it is the defining failure of multi-channel retail, and marketplace accounts are penalised for cancellations in ways that are slow and expensive to recover.',
+          'Master Inventory is the canonical physical total across approved locations/custodians. Channel figures are not extra physical units. The existing proposal gives two units per eligible individual shop in priority order, bounded by eligible master stock; physical minus reserved warehouse units alone do not prove expiry-approved offers. Use the 90-day/approved 31–89-day rule and exact custody before allocation. Shop stock is currently read-only preparation: protected commands, exact eligible-lot locks, transfer approval/receiving and complete snapshots must pass before activation.',
         checklist: [
-          'Decide whether a marketplace sale decrements the same pool the website sells from, or whether each shop holds a reserved allocation.',
-          'Decide the behaviour when the race is lost: oversell and apologise, or under-list and protect the account rating.',
-          'Write the decision down before any adapter is built against an assumption.',
+          'Reconcile real source counts to canonical SKU, lot, location, custodian and individual shop without duplicating units.',
+          'Review the existing two units per eligible shop proposal and priorities; offers must remain within eligible master availability.',
+          'Treat unknown/incomplete reads as Needs review. Protected allocation and transfers remain unavailable until their safety gates pass.',
         ],
         rules: [
-          'Allocating stock to a shop changes the holder, never the total. Master Inventory does not shrink.',
+          'Shop offer allocation does not change physical custody. Only a separately approved physical transfer changes the holder; the canonical physical total stays reconciled.',
           'Do not let two systems each believe they own the last unit.',
         ],
         troubleshooting: [
@@ -2027,11 +2034,11 @@ export const WORKFLOWS = {
           targetScreen: "Channel Readiness",
           whatToClick: "Open \"Stock allocation\" to review stock by product and shop.",
           actionDirective:
-            "Formally decide stock allocation strategy between website and marketplace: single shared pool vs reserved shop allocation. Establish oversell rule before two channels go live.",
+            "Review the existing canonical physical total and bounded eligible per-shop proposal. Reconcile actual counts and custody; keep this read-only screen from authorizing transfers or aggregate-only rebalance.",
           nextAction:
             "Proceed to Step 7: Social & Messaging Inboxes — NOT BUILT for customer communication protocol.",
           exitCriteria:
-            "Stock pool and oversell prevention policy documented and implemented in allocation logic.",
+            "Real inventory and shop identities accepted; exact eligible-lot allocation, concurrent last-unit refusal and protected transfer/receiving have separate verification receipts before activation.",
         },
       },
       {
@@ -2043,7 +2050,7 @@ export const WORKFLOWS = {
         type: 'decision',
         short: 'The unified inbox can display these platforms. Nothing delivers messages into it.',
         summary:
-          'The admin inbox already understands these platforms and will render them correctly the moment rows exist — each has its own label and colour so staff can recognise the source instantly. But no webhook, adapter, or capture command exists for any of them. A customer messaging K2 on Instagram today reaches no K2 system. Only the website and Virtual Store chat write real conversation rows, and those two are themselves gated behind an unapplied migration.',
+          'The inbox recognizes messaging sources, but a platform label is not ingestion evidence. No accepted Instagram, Messenger, WhatsApp, Viber or TikTok messaging adapter is established. Answer through the platform app until its connector passes end-to-end acceptance. Website/Virtual Store conversation source and guest continuity have prepared/deployed slices recorded separately; this guide does not prove current exact-host messages or full signed cutover.',
         checklist: [
           'Keep answering these platforms in their own apps until an adapter exists.',
           'Do not mark a social channel as connected on the readiness board because messages are being answered manually.',

@@ -43,10 +43,37 @@ test('the staff workflow guide does not claim unavailable automation or integrat
 })
 
 test('the guide exposes a version, approval state, and authoritative operational source', () => {
-  expect(WORKFLOW_GUIDE_META.version).toMatch(/^2026-08-30-draft\./)
+  expect(WORKFLOW_GUIDE_META.version).toBe('2026-10-02-reviewed-source.1')
   expect(WORKFLOW_GUIDE_META.approvalStatus).toBe('DRAFT — NOT LOCKED')
   expect(WORKFLOW_GUIDE_META.effectiveDate).toBeNull()
   expect(WORKFLOW_GUIDE_META.authority).toBe('K2 Jimzon - Brain/OPERATIONS_LOGIC_AND_WORKFLOW.md')
+})
+
+test('current guide distinguishes stock rules and prepared activation gates', () => {
+  const node = id => Object.values(WORKFLOWS).flatMap(workflow => workflow.nodes).find(item => item.id === id)
+  const allocation = JSON.stringify(node('ch_6'))
+  expect(allocation).toContain('two units')
+  expect(allocation).toContain('read-only')
+  expect(allocation).not.toContain('single shared pool vs reserved shop allocation')
+  const lot = JSON.stringify(node('ext_2'))
+  expect(lot).toContain('90')
+  expect(lot).toContain('31–89')
+  expect(lot).toContain('Manila')
+  expect(lot).toContain('fresh approval')
+  const publication = JSON.stringify(node('np_6'))
+  expect(publication).toContain('Website assignment')
+  expect(publication).toContain('subcategory')
+  expect(publication).toContain('Prepared')
+  expect(publication).not.toContain('Clear browser cache')
+  const order = JSON.stringify(node('ord_1'))
+  expect(order).toContain('30-minute')
+  expect(order).toContain('Prepared')
+  expect(order).not.toContain('does not reserve stock')
+  const delivery = JSON.stringify(node('ord_2'))
+  expect(delivery).toContain('NCR Express')
+  expect(delivery).toContain('before payment')
+  expect(delivery).toContain('buyer acceptance')
+  expect(delivery).toContain('target')
 })
 
 test('the guide routes every action to an actual Admin section', () => {
@@ -124,6 +151,24 @@ test('the new-product guide names the two approved manual ChatGPT Projects', () 
   expect(text).toContain('PRIMARY')
   expect(text).toContain('AFTER')
   expect(text).not.toMatch(/Midjourney|FLUX|DALL-E 3/i)
+})
+
+test('shop offers preserve custody and payment compares the saved delivery-inclusive grand total', () => {
+  const channel = Object.values(WORKFLOWS).flatMap(workflow => workflow.nodes).find(node => node.id === 'ch_6')
+  const payment = WORKFLOWS.new_order.nodes.find(node => node.id === 'ord_3')
+  expect(channel.rules.join(' ')).not.toContain('Allocating stock to a shop changes the holder')
+  expect(channel.rules.join(' ')).toContain('separately approved physical transfer')
+  expect(payment.checklist.join(' ')).not.toContain('order total +')
+  expect(payment.checklist.join(' ')).toContain('delivery included once')
+  const receipt = WORKFLOWS.cross_border_lifecycle.nodes.find(node => node.id === 'cb_7')
+  expect(receipt.actionGuide.nextAction).not.toContain('visible for storefront ordering')
+  expect(receipt.actionGuide.nextAction).toContain('Website assignment')
+})
+
+test('channel graph gates do not claim a real marketplace event was verified', async () => {
+  const graph = await read('../src/components/admin/master-workflow-graph/workflowGraph.js')
+  expect(graph).not.toContain('Shopee only today')
+  expect(graph).toContain('Locally prepared')
 })
 
 test('every workflow defines objective/goal/exit gates and all nodes provide complete staff action guides', async () => {

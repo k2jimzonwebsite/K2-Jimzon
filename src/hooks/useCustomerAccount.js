@@ -21,8 +21,8 @@ export function useCustomerAccount() {
     if (!session?.access_token) return { ok: false, code: 'ACCOUNT_AUTH_REQUIRED' }
     setState(current => ({ ...current, historyState: 'loading', error: '', code: '' }))
     const result = await loadCustomerHistory(session.access_token)
-    if (!activeRef.current) return result
-    setState(current => result.ok
+    if (!activeRef.current || sessionRef.current?.user?.id !== session.user?.id) return result
+    setState(current => current.session?.user?.id !== session.user?.id ? current : result.ok
       ? { ...current, history: result.data, historyState: 'ready', error: '', code: '' }
       : { ...current, history: null, historyState: result.code === 'ACCOUNT_NOT_LINKED' ? 'unlinked' : 'error', error: result.error, code: result.code })
     return result
@@ -64,12 +64,18 @@ export function useCustomerAccount() {
         const { data, error } = await client.auth.getSession()
         if (cancelled) return
         const session = error ? null : data?.session || null
+        sessionRef.current = session
         setState(current => ({ ...current, ready: true, session, error: error ? 'Your account session could not be checked. Refresh and try again.' : '' }))
         if (session) { refreshHistory(session); refreshSettings(session) }
 
         const { data: listener } = client.auth.onAuthStateChange((_event, nextSession) => {
           if (cancelled || !activeRef.current) return
-          setState(current => ({ ...current, ready: true, session: nextSession, history: nextSession ? current.history : null, historyState: nextSession ? current.historyState : 'idle', error: '', code: '' }))
+          const identityChanged = sessionRef.current?.user?.id !== nextSession?.user?.id
+          sessionRef.current = nextSession
+          setState(current => ({ ...current, ready: true, session: nextSession,
+            history: nextSession?.user?.id === current.session?.user?.id ? current.history : null,
+            historyState: nextSession?.user?.id === current.session?.user?.id ? current.historyState : 'idle', error: '', code: '' }))
+          if (identityChanged) setSettingsState({ status: 'idle', settings: null, notifications: [], error: '' })
           if (nextSession) window.setTimeout(() => { refreshHistory(nextSession); refreshSettings(nextSession) }, 0)
           else setSettingsState({ status: 'idle', settings: null, notifications: [], error: '' })
         })
@@ -90,18 +96,20 @@ export function useCustomerAccount() {
   }, [enabled, refreshHistory, refreshSettings])
 
   const saveSettings = useCallback(async (displayName, deliveryAddress, notifyInApp) => {
+    const actorId = state.session?.user?.id
     const token = state.session?.access_token
     if (!token) return { ok: false, error: 'Sign in before saving settings.' }
     const result = await saveCustomerSettings(token, displayName, deliveryAddress, notifyInApp)
-    if (result.ok && activeRef.current) setSettingsState(current => ({ ...current, settings: result.data, status: 'ready', error: '' }))
+    if (result.ok && activeRef.current && sessionRef.current?.user?.id === actorId) setSettingsState(current => ({ ...current, settings: result.data, status: 'ready', error: '' }))
     return result
   }, [state.session])
 
   const markNotificationRead = useCallback(async (notificationId) => {
+    const actorId = state.session?.user?.id
     const token = state.session?.access_token
     if (!token) return { ok: false, error: 'Sign in before reading notifications.' }
     const result = await markCustomerNotificationRead(token, notificationId)
-    if (result.ok && result.data?.read && activeRef.current) {
+    if (result.ok && result.data?.read && activeRef.current && sessionRef.current?.user?.id === actorId) {
       setSettingsState(current => ({ ...current, notifications: current.notifications.map(item =>
         item.id === notificationId ? { ...item, read_at: new Date().toISOString() } : item) }))
     }
@@ -123,6 +131,7 @@ export function useCustomerAccount() {
   }, [refreshHistory, state.session])
 
   const signOut = useCallback(async () => {
+    sessionRef.current = null
     if (clientRef.current) await clientRef.current.auth.signOut()
     setState({ ...initialState, ready: true })
     setSettingsState({ status: 'idle', settings: null, notifications: [], error: '' })

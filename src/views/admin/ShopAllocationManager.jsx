@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
+import { adminBffEnabled } from '../../services/adminBffService'
 import {
   AlertIcon,
   BoxIcon,
@@ -33,18 +34,24 @@ import {
   secondaryButton,
 } from './AdminWorkspaceUi'
 
-const DEFAULT_SHOPS = [
-  { id: '30000000-0000-4000-8000-000000000001', shop_code: 'shopee-01', channel_code: 'shopee', display_name: 'Shopee Main Shop', priority: 1 },
-  { id: '30000000-0000-4000-8000-000000000002', shop_code: 'shopee-02', channel_code: 'shopee', display_name: 'Shopee Outlet', priority: 2 },
-  { id: '30000000-0000-4000-8000-000000000003', shop_code: 'tiktok-01', channel_code: 'tiktok', display_name: 'TikTok Main Shop', priority: 3 },
-  { id: '30000000-0000-4000-8000-000000000004', shop_code: 'tiktok-02', channel_code: 'tiktok', display_name: 'TikTok Live Outlet', priority: 4 },
-  { id: '30000000-0000-4000-8000-000000000005', shop_code: 'lazada-01', channel_code: 'lazada', display_name: 'Lazada Flagship', priority: 5 },
-  { id: '30000000-0000-4000-8000-000000000006', shop_code: 'lazada-02', channel_code: 'lazada', display_name: 'Lazada Express', priority: 6 },
-]
-
 export default function ShopAllocationManager({ secureMode }) {
+  if (secureMode ?? adminBffEnabled()) {
+    return (
+      <section className="space-y-4">
+        <WorkspaceIntro title="Shop stock & transfers" description="Shop offers share canonical inventory and require eligible lots." status="Unavailable" statusTone="warning" />
+        <div>
+          <StateBanner tone="warning">Protected shop stock is not available yet.</StateBanner>
+          <p className="mt-3 text-sm text-white/75">Continue physical counts in Inventory. Shop stock changes require the protected allocation and transfer workflow.</p>
+        </div>
+      </section>
+    )
+  }
+  return <TransitionalShopAllocationManager />
+}
+
+function TransitionalShopAllocationManager() {
   const [activeTab, setActiveTab] = useState('matrix') // 'matrix' | 'transfers'
-  const [shops, setShops] = useState(DEFAULT_SHOPS)
+  const [shops, setShops] = useState([])
   const [products, setProducts] = useState([])
   const [allocations, setAllocations] = useState([])
   const [transfers, setTransfers] = useState([])
@@ -59,37 +66,43 @@ export default function ShopAllocationManager({ secureMode }) {
 
     try {
       if (!supabase) {
-        setLoading(false)
-        return
+        throw new Error('SHOP_STOCK_UNAVAILABLE')
       }
 
       const [shopsRes, productsRes, balancesRes, allocRes, transferRes] = await Promise.all([
-        supabase.from('channel_shops').select('*').order('sort_order', { ascending: true, nullsFirst: false }),
-        supabase.from('products').select('sku, name, status, stock_available').order('name'),
-        supabase.from('inventory_balances').select('*').eq('location_code', 'MANILA_MAIN'),
-        supabase.from('channel_shop_allocations').select('*'),
-        supabase.from('inventory_transfer_requests').select('*').order('requested_at', { ascending: false }).limit(25),
+        supabase.from('channel_shops').select('*', { count: 'exact' }).order('sort_order', { ascending: true, nullsFirst: false }).range(0, 1999),
+        supabase.from('products').select('sku, name, status, stock_available', { count: 'exact' }).order('name').range(0, 1999),
+        supabase.from('inventory_balances').select('*', { count: 'exact' }).eq('location_code', 'MANILA_MAIN').range(0, 1999),
+        supabase.from('channel_shop_allocations').select('*', { count: 'exact' }).range(0, 4999),
+        supabase.from('inventory_transfer_requests').select('*', { count: 'exact' }).order('requested_at', { ascending: false }).range(0, 24),
       ])
 
-      if (shopsRes.data && shopsRes.data.length > 0) {
-        setShops(shopsRes.data)
+      if ([shopsRes, productsRes, balancesRes, allocRes, transferRes].some(result => result.error || !Array.isArray(result.data)
+          || !Number.isSafeInteger(result.count) || result.count !== result.data.length)) {
+        throw new Error('SHOP_STOCK_UNAVAILABLE')
       }
+      setShops(shopsRes.data.filter(shop => shop.status === 'operational'))
 
       const balanceMap = new Map()
       for (const b of balancesRes.data || []) {
-        balanceMap.set(b.sku, b.available ?? b.on_hand ?? 0)
+        const available = b.available === null || b.available === undefined || b.available === '' ? NaN : Number(b.available)
+        balanceMap.set(b.sku, Number.isSafeInteger(available) && available >= 0 ? available : null)
       }
 
       const combinedProducts = (productsRes.data || []).map(p => ({
         ...p,
-        masterAvailable: balanceMap.has(p.sku) ? balanceMap.get(p.sku) : (p.stock_available || 0),
+        masterAvailable: balanceMap.get(p.sku) ?? null,
       }))
       setProducts(combinedProducts)
 
       setAllocations(allocRes.data || [])
       setTransfers(transferRes.data || [])
     } catch {
-      setError(safeUiError('FAILED_TO_LOAD_ALLOCATIONS'))
+      setShops([])
+      setProducts([])
+      setAllocations([])
+      setTransfers([])
+      setError(safeUiError('SHOP_STOCK_LOAD_FAILED'))
     } finally {
       setLoading(false)
     }
@@ -101,6 +114,7 @@ export default function ShopAllocationManager({ secureMode }) {
 
   // Compute metrics
   const totalMasterUnits = useMemo(() => {
+    if (products.some(product => product.masterAvailable === null)) return null
     return products.reduce((sum, p) => sum + (p.masterAvailable || 0), 0)
   }, [products])
 
@@ -122,12 +136,13 @@ export default function ShopAllocationManager({ secureMode }) {
         eyebrow="Shop stock"
         title="Shop stock & transfers"
         description="Plan two sellable units per active shop. The Manila stock count is the physical truth. Moving stock needs a staff request plus admin approval."
-        status={loading ? 'Loading shop stock...' : `${shops.length} active shops`}
+        status={loading ? 'Loading shop stock...' : error ? 'Shop stock unavailable' : `${shops.length} active shops`}
         statusTone="info"
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setShowTransferModal(true)}
+              disabled
               className={`${primaryButton} flex items-center gap-2 bg-blue font-bold min-h-11`}
             >
               <PlusIcon size={16} />
@@ -151,25 +166,25 @@ export default function ShopAllocationManager({ secureMode }) {
         items={[
           {
             label: 'Active shops',
-            value: shops.length,
+            value: loading || error ? '--' : shops.length,
             detail: 'Shopee, TikTok, Lazada',
             tone: 'text-white',
           },
           {
-            label: 'Sellable warehouse stock',
-            value: totalMasterUnits,
-            detail: 'Warehouse A (Manila Main)',
+            label: 'Unreserved warehouse units',
+            value: loading || error || totalMasterUnits === null ? '--' : totalMasterUnits,
+            detail: 'Manila Main; expiry eligibility still requires lot review',
             tone: 'text-forest',
           },
           {
             label: 'Stock assigned to shops',
-            value: totalAllocatedUnits,
+            value: loading || error ? '--' : totalAllocatedUnits,
             detail: 'Planned shop availability',
             tone: 'text-blue',
           },
           {
             label: 'Pending transfers',
-            value: pendingTransferCount,
+            value: loading || error ? '--' : pendingTransferCount,
             detail: 'Awaiting admin review',
             tone: pendingTransferCount > 0 ? 'text-amber' : 'text-white/60',
           },
@@ -177,6 +192,8 @@ export default function ShopAllocationManager({ secureMode }) {
       />
 
       {error && <StateBanner tone="danger">{error}</StateBanner>}
+      {!loading && !error && !shops.length && <StateBanner tone="info">No active shops have been configured.</StateBanner>}
+      {!loading && !error && shops.length > 0 && <StateBanner tone="warning">Read-only stock review. Stock splits and transfers require the protected workflow and eligible lot checks.</StateBanner>}
 
       {/* View Switcher Tabs */}
       <div className="flex border-b border-adm-line">
@@ -209,7 +226,7 @@ export default function ShopAllocationManager({ secureMode }) {
         </button>
       </div>
 
-      {activeTab === 'matrix' ? (
+      {!loading && !error && (activeTab === 'matrix' ? (
         <AllocationMatrixSection
           products={products}
           shops={shops}
@@ -221,7 +238,7 @@ export default function ShopAllocationManager({ secureMode }) {
           transfers={transfers}
           onReload={loadData}
         />
-      )}
+      ))}
 
       {/* Modals */}
       {rebalanceProduct && (
@@ -315,7 +332,8 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
               </tr>
             ) : (
               filteredProducts.map(prod => {
-                const isScarce = prod.masterAvailable < (shops.length * DEFAULT_TARGET_UNITS)
+                const unknown = prod.masterAvailable === null
+                const isScarce = !unknown && prod.masterAvailable < (shops.length * DEFAULT_TARGET_UNITS)
                 return (
                   <tr key={prod.sku} className="hover:bg-white/[0.02] transition-colors">
                     <td className="px-4 py-3 font-medium">
@@ -324,7 +342,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
                     </td>
                     <td className="px-4 py-3 text-center">
                       <span className="font-mono text-sm font-bold tabular-nums text-forest">
-                        {prod.masterAvailable}
+                        {unknown ? 'Needs review' : prod.masterAvailable}
                       </span>
                       {isScarce && (
                         <span className="block text-xs text-amber">
@@ -335,7 +353,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
                     {shops.map(s => {
                       const alloc = allocMap.get(`${prod.sku}::${s.id}`)
                       const units = alloc ? alloc.allocated_units : 0
-                      const status = alloc ? alloc.status : (prod.masterAvailable >= 2 ? COVERAGE_STATUS.COVERED : COVERAGE_STATUS.OUT)
+                      const status = unknown || !alloc ? COVERAGE_STATUS.NEEDS_REVIEW : alloc.status
 
                       return (
                         <td key={s.id} className="px-3 py-3 text-center">
@@ -359,6 +377,7 @@ function AllocationMatrixSection({ products, shops, allocations, onRebalance }) 
                     <td className="px-4 py-3 text-right">
                       <button
                         onClick={() => onRebalance(prod)}
+                        disabled
                         className={`${secondaryButton} min-h-11 px-3 text-xs hover:border-blue`}
                       >
                         Review stock split
@@ -502,14 +521,14 @@ function CustodyTransferSection({ transfers, onReload }) {
                         <>
                           <button
                             onClick={() => setApproveId(t.id)}
-                            disabled={busyId === t.id}
+                            disabled
                             className={`${primaryButton} min-h-11 px-4 text-xs font-semibold`}
                           >
                             Approve
                           </button>
                           <button
                             onClick={() => { setApproveId(null); setRejectId(t.id); setRejectionReason('') }}
-                            disabled={busyId === t.id}
+                            disabled
                             className={`${secondaryButton} border-crimson/40 text-crimson min-h-11 px-4 text-xs hover:bg-crimson/10`}
                           >
                             Reject

@@ -1,5 +1,6 @@
 import HelpTip from '../../../views/admin/HelpTip'
-import React, { useState, useMemo, useEffect } from 'react'
+import './workflowMap.css'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import { WORKFLOW_GUIDE_META, WORKFLOWS, WORKFLOW_SECTIONS } from './workflowData'
 import WorkflowSvgCanvas from './WorkflowSvgCanvas'
 import WorkflowDetailDrawer from './WorkflowDetailDrawer'
@@ -26,6 +27,7 @@ export default function MasterWorkflowGraph({
   isModal = false,
   onStartTour = null,
 }) {
+  const mapRootRef = useRef(null)
   const [selectedSection, setSelectedSection] = useState('all')
   const [activeWorkflowId, setActiveWorkflowId] = useState(initialWorkflowId)
   const activeWorkflow = WORKFLOWS[activeWorkflowId] || WORKFLOWS.cross_border_lifecycle
@@ -86,7 +88,8 @@ export default function MasterWorkflowGraph({
   // Keyboard navigation for fast staff progression
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return
+      if (e.defaultPrevented || ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)
+        || document.activeElement?.closest('[data-workflow-viewport]')) return
       if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') {
         const next = downstream.find((item) => item.node && item.kind !== 'loopback') || downstream.find((item) => item.node)
         if (next) handleSelectNode(next.node.id)
@@ -171,7 +174,7 @@ export default function MasterWorkflowGraph({
   const tracedEdgeIds = useMemo(() => new Set(tracedPath.map((edge) => `${edge.from}->${edge.to}`)), [tracedPath])
 
   return (
-    <div className="flex flex-col gap-6 text-white pb-12">
+    <div ref={mapRootRef} className="workflow-map min-w-0 flex flex-col gap-6 text-white pb-12">
       {/* Top Header & Search Bar */}
       <div className="flex flex-col gap-4 border-b border-white/10 pb-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -240,6 +243,7 @@ export default function MasterWorkflowGraph({
               <SearchIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
               <input
                 type="text"
+                aria-label="Search workflow steps"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search steps, barcodes, roles..."
@@ -503,8 +507,9 @@ export default function MasterWorkflowGraph({
 
       {/* Filter notice if search active */}
       {filteredNodes && (
-        <div className="rounded-xl border border-sky-500/20 bg-sky-500/5 px-4 py-2 text-xs text-sky-300 flex items-center justify-between">
-          <span>Found {filteredNodes.length} step(s) matching &quot;{searchQuery}&quot;</span>
+        <section aria-label="Matching workflow steps" className="rounded-xl border border-sky-500/30 bg-sky-500/5 p-4 text-sm text-slate-100">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+          <span role="status">Found {filteredNodes.length} step(s) matching &quot;{searchQuery}&quot;</span>
           <button
             type="button"
             onClick={() => setSearchQuery('')}
@@ -512,7 +517,18 @@ export default function MasterWorkflowGraph({
           >
             Show All Steps
           </button>
-        </div>
+          </div>
+          <ul className="mt-3 max-h-80 overflow-auto divide-y divide-white/15">
+            {filteredNodes.map(node => <li key={node.id}><button type="button"
+              onClick={() => {
+                setSearchQuery(''); setSelectedRole('All Roles'); setSelectedSection('all'); handleSelectNode(node.id)
+                requestAnimationFrame(() => mapRootRef.current?.querySelector(`[data-node-id="${node.id}"]`)?.focus({ preventScroll: true }))
+              }}
+              className="flex min-h-11 w-full flex-col gap-1 py-3 text-left text-base text-white hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-300">
+              <strong>{node.title}</strong><span className="text-sm text-slate-300">{node.workflowTitle || 'Map entry'} · {node.actor}</span>
+            </button></li>)}
+          </ul>
+        </section>
       )}
 
       <section aria-label="Workflow path tracer" className="rounded-2xl border border-white/10 bg-[#0c1422] p-4">
@@ -565,6 +581,7 @@ export default function MasterWorkflowGraph({
           completedSteps={completedSteps}
           tracedEdgeIds={tracedEdgeIds}
           highlightedNodeIds={highlightedNodeIds}
+          workflowId={activeWorkflowId}
         />
       </div>
 

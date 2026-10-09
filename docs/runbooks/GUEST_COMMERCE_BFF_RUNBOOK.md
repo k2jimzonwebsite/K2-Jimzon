@@ -1,5 +1,115 @@
 # Guest Commerce BFF Activation Runbook
 
+Native express/cancellation concurrency02 verifies stale-quote refusal, immutable
+approved terms, cancellation-before/after approval, exact saved retry after
+cancellation and one stock release. Staff canonical cancellation has no maintained
+Admin route/control yet: keep that essential MAP-023 launch gap open. Preserve
+approval history/uncertain command identities; never infer payment permission from
+a historical receipt on a cancelled order. Existing native evidence is reused for
+the later connection; delivery README contains command, diagnostic and recovery.
+
+**Combined local installation preparation, 8 October:** Existing full installer
+--delivery-composition-only now composes the canonical base, guest/C/D/E/I/J and
+session prerequisite under exact current/cold atomic admission. composition04
+passes92/0; source review approves. Local-target guards deliberately prevent provider
+application. Do not install this owned-local package on production or independently
+install the historical session verifier. Recovery retains data/history and keeps
+activation closed; provider-specific capture/admission, operational restore/legacy,
+concurrency and full host acceptance remain required. Exact receipt/command and
+diagnostics are in authoritative-delivery README.
+
+**Manual express J preparation (MAP-023):** New prepared quote and guest/account
+acceptance callers are prepared; guest/account routes now registered locally while
+Admin quote is also registered locally in its separate router. Staff form uses
+observed facts and reviewed version, persists exact actor/order command before
+HTTP and retains it across reload/permission refusal/staff changes. Native
+installation remains unapplied. Customer screens keep exact uncertain commands
+before HTTP and across reload/identity changes; invalid storage refuses submission.
+Retain records for current-authority exact retry; do not erase them after failed
+network/authentication or a refreshed accepted status. Customer synthetic proof
+and remaining staff/native HTTP/recovery gates: authoritative-delivery README.
+Native J is prepared/scoped locally verified on isolated dummy clones,
+with authenticated buyer recovery2/2 and joined actual loopback HTTP/native26/0
+recorded in delivery README. Test-only canonical session prerequisite preserves
+the accepted J verifier; production installation must compose that prerequisite
+explicitly, never replace signing with a historical migration body. Auth identity
+in that rehearsal is simulated. Preserve pending commands/history and closed
+activation for roll-forward; real provider/host and populated recovery remain open.
+J05/readerJ01 evidence is retained; permanent application is still pending. Staff GET/POST
+synthetic endpoint proof passes; no provider change. Activate only as a coordinated
+exact-admission package after remaining combined rendered/provider recovery,
+cancel/requote/writer/install/legacy/host proof pass. Native local proof does not
+establish courier booking or actual inventory/customer/staff acceptance.
+Recovery is closed activation and data-retaining roll-forward; retain original E
+snapshot plus quote/acceptance history, never infer historic buyer approval.
+Exact prepared source, commands and remaining recovery procedure are in
+docs/evidence/20261001-authoritative-delivery/README.md. Do not install J alone:
+it pins existing post-E/post-I bodies and metadata, adds verified nonce pid/xid
+columns and retains original order money/history rather than rewriting it.
+
+
+**8 October pending-reader correction I (MAP-023, scoped locally verified):**
+Shared charge-state projection hides provisional totals/shipping in guest/account
+and Admin readers; pending bills stay in queues. Customer account, confirmation
+and staff views distinguish pending from accepted totals. Positive payment choices
+and direct receipt upload require final charge/instruction state; refunds remain.
+Source review corrected unknown Delivery: Free label and found no remaining
+Critical/Important issue. Existing guest/account/Admin/export API proof is retained.
+Native reader rehearsal green01 passes15/0, preserves every business row on apply,
+rejects other-account access/invalid signing/drift, removes its clone and preserves
+all88 original tables. Local PostgreSQL runtime stopped. This proves focused
+signed guest/account projection, not canonical E composition or conversation calls.
+Nine distinct payment browser cases pass on final application source: run85626
+had8passes and one ambiguous desktop status-selector failure; corrected selector
+plus phone/desktop pending captures pass3/3 chunkab154c.375/1280 screens inspected,
+no overflow. Account claim/history/reply journey passes1/1 chunk17561a with accepted
+1234.50 and pending735 hidden. Existing fixture launchers avoid full workspace
+watching; papaparse prebundle fixes confirmed missing-export blank-screen failure.
+Previous runners50478/5604 explicitly stopped only verified local test processes;
+no live handles remain. Exact reader SQL prepared/unapplied10142bytes SHA256
+8f78f0374f0f7c260ce3a252529af7303f1122b6467bf01afa1bf6d1a4b2771c;
+accepted E unchanged. No provider/deployment/real inventory claim. Remaining:
+conversation/direct receipt and canonical E/legacy/combined install-recovery proof,
+manual express quotation and explicit buyer acceptance, then authorized release.
+Activation remains closed; recover by data-retaining roll-forward. No broad rollback
+or inferred historic acceptance. Dummy readiness continues; real facts only at
+actual launch acceptance. MAP-023 remains active for its complete outcome.
+
+
+**8 October canonical order contract, prepared only:** New delivery object carries
+service/path and reviewed fingerprint/version, not an amount. Existing vintage
+normalization is retained solely to reach saved receipt checks; fresh legacy
+Website creation refuses. Native fresh orders save closed immutable snapshots and
+mask pending submission total null. Apply neither this BFF nor its fresh-only
+customer_order_delivery.sql without the qualified tariff/preview, new rendered
+caller, required manual express/legacy/payment/read projection and coordinated
+installer/recovery work. Native53/0 and synthetic API26+3 establish local scope
+only. Exact sources/diagnostics/recovery: authoritative-delivery README, MAP-023.
+
+**8 October canonical delivery preview, prepared only:** POST delivery/quote now
+accepts service, SKU quantities and versioned PSA path; it calls the signed
+quote_customer_delivery_v1 RPC and excludes private fields. GET delivery/locations
+reads bounded public code/name/level/sourceVersion children, with the router's
+cost shield and no customer address upload. Fresh-only customer_delivery_quote.sql
+requires the prepared customer tariff fragment; both remain outside default
+activation. Do not enable/deploy these endpoints independently of their schema,
+new rendered caller and signed order/accepted-charge/express/payment integration.
+The current rendered pilot caller has the old payload. Native79/0 and scoped
+API5/5 do not close HTTP/browser/production acceptance. Preserve old pilot evidence.
+Exact integration and data-retaining recovery remain MAP-023/017/020; see the
+authoritative-delivery README and primary source-pin receipt.
+
+**8 October guest category integration, local only:** checkout05 proves signed
+anonymous order/savepoint, physical4/reserved1/Website3, saved retry without config,
+conflict, complete refusal rollback, helper denial and orphan COMMIT refusal. New
+fresh-only supabase/prepared/category_shelf_life_guest_operations.sql preserves
+signing controls/staff AAL2 and closes all private helpers. Do not activate it
+standalone: default installer/replay and two native concurrent schedules now pass,
+as does selected populated configuration recovery. Complete retained-data recovery,
+remaining writer/admission coverage and HTTP deadlines/errors/full workflow remain
+MAP-018 requirements. Exact source,
+commands and recovery: docs/evidence/20261004-category-shelf-life/GUEST_CHECKOUT_PREPARATION.md.
+
 **1 October Website stock gate (IDEA-20261001-05/-06, locally prepared):** The balance-first Website helper and guarded current 11-argument writer now pass the listed 29-entry chain including the whole purchase migration, actual signed 30-minute holds, last-unit refusal, retry/conflict, failed-write rollback, continuity and metadata/replay/refusal. Legacy compatibility passes 48/48 separately. No provider apply or release occurred. The 42-check witness now isolates exact-key waits in both canonical/signed interleavings and reproduces the omitted-key regression. Complete writer/coupon/lifecycle coverage, authoritative shipping and actual catalog/staff/real-host acceptance remain open. Recompose provider install/capture/deactivation with modified existing canonical writer and private signer plus expanded stock objects; historical captures are insufficient. Refresh same-target backup/preflight and obtain specific authorization before activation. Retain the shared-signing guard through recovery. Commands, limits and scoped source/clone recovery: `docs/evidence/20261001-signed-purchase-holds/README.md`.
 
 **Current branch-only provider review:** The 30 September
@@ -701,3 +811,79 @@ cutover. No historical rows, K2 database/provider state, feature flags, or
 production deployment changed. Recovery is to revert the source commit; no
 server-data rollback is required. See MAP-017/019/020 in
 `MASTER_ACTION_PLAN.md`.
+
+
+## Canonical checkout F — 8 October, locally prepared
+
+The rendered checkout now requests bounded public PSA children through GET
+`delivery/locations`, sends SKU quantities/service/path to signed `delivery/quote`,
+and submits delivery fingerprint/version acceptance through `order`. It no longer
+sends fresh browser shipping amounts. Standard/pickup require explicit review;
+express submission and confirmation show no final total or receiving QR.
+The display preview is held beside the retry payload and is never price authority.
+
+An unknown order result must retain its payload/key. Challenge/rate/COD/validation
+refusals before receipt lookup cannot authorize reset. Basket/coupon actions and
+contact navigation preserve held identity; only exact native post-receipt refusal
+permits correction. The delivery-area component remains mounted during submission
+so a definite refusal preserves selection. Address-triggered quotes coalesce.
+
+Nine distinct changed browser journeys pass on final application source using
+`playwright.storefront-recovery.config.js` and existing recovery tests; commands,
+controllers, partial failures and source-review outcome are in authoritative-
+delivery README. Full reload/close persistence remains essential; no new framework.
+Initial local run was blocked by sandbox realpath access; the approved local
+rerun exposed label association and selection-reset issues, corrected in source.
+No provider/native HTTP/deployment acceptance follows from synthetic replies.
+Recovery: do not activate this caller independently. Keep the BFF flags closed
+until the coordinated tariff/preview/order/express/legacy package and both
+production artifacts are approved. Preserve saved requests and accepted history;
+never roll back to browser-priced fresh orders. Exact next work is MAP-023.
+
+
+## Restart continuity G — 8 October, local preparation and recovery
+
+Before any order HTTP call, persist/read back the version1 bounded pending record
+under k2-checkout-recovery-v1. The exclusive k2-checkout-request-v1 Web Lock spans
+reread, submission and terminal consumption. Reload/reopen restores the original
+payload/key. Another tab's receipt resolves the same held request; stale queued
+Retry clicks cannot create another key. No automatic expiry/reset is permitted.
+If storage/lock APIs are unavailable or the record is corrupt, do not send;
+retain the page/record and seek authoritative order resolution before any reset.
+If terminal persistence fails after HTTP, keep the pending identity and retry it.
+Terminal receipt records omit contact payload, bot/grant tokens/provider secrets.
+
+Four focused synthetic browser journeys pass on final source, controller18846
+exit0; command and prior diagnostic outcomes are in authoritative-delivery README.
+This is not native-HTTP, browser-data-clear, cross-device or live-host recovery.
+Recover unpublished code by reverting the source changes together while flags
+remain closed; never clear uncertain records or revert to fresh browser pricing.
+For any later activated release use closed activation and data-retaining
+roll-forward, preserving unknown identities and accepted history. MAP-023 owns
+staff rate/express/buyer acceptance and reader integration; MAP-017/020 own the
+coordinated installer/recovery boundary. No database/provider change occurred.
+
+
+## Customer delivery rate controls H — local preparation
+
+In Admin Delivery Rates, customer controls read the current customer tariff head;
+Admin/Staff review all four regions and reason/evidence before signed publication.
+Carrier cost pilot remains a separate Admin-only tool. Never copy pilot rows into
+customer rates or invent initial amounts. Native expected version and receipt
+lookup preserve accepted historical charges; browser values are request inputs.
+
+A pending publication is stored under k2-customer-rates-pending-v1:<actor UUID>,
+bounded16KiB, without session credentials. Keep it on reload/permission/read error;
+retry exact key/body. Actor Web Lock spans reread/write/HTTP/terminal cleanup.
+Resolved-elsewhere queued retry stops and refreshes. A confirmed native stale
+refusal permits refreshed deliberate review; otherwise do not delete unknown
+records. Corrupt/unavailable persistence refuses before HTTP. Actor change
+unmounts the prior control; late reply preserves its pending record for that actor.
+
+Five scoped synthetic browser journeys pass; source review approved. No live
+rate publication, authenticated host/native HTTP or deployed behavior follows.
+Recovery before activation: revert H component/wrapper/navigation/service changes
+together; keep flags closed and unknown records intact. After approved activation,
+close new writes and use data-retaining roll-forward; never erase accepted tariff
+versions, order snapshots or command receipts. MAP-023 owns express/buyer/reader
+completion; MAP-017/020 owns exact coordinated activation/recovery.

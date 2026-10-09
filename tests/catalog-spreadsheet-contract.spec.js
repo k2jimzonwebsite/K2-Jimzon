@@ -73,7 +73,7 @@ test('catalog commit payload rechecks the file and allows only explicit New or C
   const fileSha256 = (await import('node:crypto')).createHash('sha256').update(csvText).digest('hex')
   const chain = {
     select() { return chain }, order() { return chain },
-    limit() { return Promise.resolve({ data: [product], error: null }) },
+    limit() { return Promise.resolve({ data: [product], count: 1, error: null }) },
   }
   const client = { from() { return chain } }
   const parsed = parseCatalogCsv(csvText)
@@ -137,7 +137,7 @@ test('catalog commit rejects non-numeric net weight before signing', async () =>
   const fileSha256 = (await import('node:crypto')).createHash('sha256').update(csvText).digest('hex')
   const chain = {
     select() { return chain }, order() { return chain },
-    limit() { return Promise.resolve({ data: [{ ...product, net_weight: '450' }], error: null }) },
+    limit() { return Promise.resolve({ data: [{ ...product, net_weight: '450' }], count: 1, error: null }) },
   }
   await expect(buildCatalogCommitPayload({ from() { return chain } }, {
     csvText, fileSha256, selectedRowNumbers: [2], reason: 'Reviewed package weight against supplier evidence.',

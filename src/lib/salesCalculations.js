@@ -135,7 +135,7 @@ export function createSalesRecordCsv(orders = [], filter = 'all') {
     normalizeSalesChannel(order?.channel_source),
     order?.status,
     order?.payment_status,
-    money(finiteNonNegative(order?.total_amount) ?? 0).toFixed(2),
+    order?.total_amount == null ? 'Final total pending' : money(finiteNonNegative(order?.total_amount) ?? 0).toFixed(2),
   ])
   return `\uFEFF${[headings, ...rows].map(row => row.map(csvCell).join(',')).join('\r\n')}\r\n`
 }

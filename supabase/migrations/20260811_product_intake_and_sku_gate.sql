@@ -396,8 +396,9 @@ begin
   insert into public.audit_logs (
     table_name, record_id, action, old_data, new_data, user_id
   ) values (
-    'products', v_product_id::text, 'CREATE_PRODUCT_DRAFT', null,
+    'products', v_product_id::text, 'INSERT', null,
     jsonb_build_object(
+      'operation', 'CREATE_PRODUCT_DRAFT',
       'sku', v_sku, 'status', 'Draft', 'intake_session_id', p_session_id,
       'brand_resolved', v_brand_id is not null,
       'category_resolved', v_category_id is not null
@@ -574,10 +575,12 @@ begin
   insert into public.audit_logs (
     table_name, record_id, action, old_data, new_data, user_id
   ) values (
-    'product_intake_sessions', p_session_id::text, 'CREATE_FIRST_INVENTORY_SOURCE',
+    'product_intake_sessions', p_session_id::text, 'UPDATE',
     null,
-    jsonb_build_object('product_id', v_session.product_id, 'sku', v_session.assigned_sku,
-      'source', p_source, 'result', v_result),
+    jsonb_build_object('operation', 'CREATE_FIRST_INVENTORY_SOURCE',
+      'product_id', v_session.product_id, 'sku', v_session.assigned_sku,
+      'source', p_source, 'inventory_request_id', p_request_id,
+      'inventory', p_inventory, 'result', v_result),
     auth.uid()
   );
   return v_result;
@@ -678,9 +681,10 @@ begin
   insert into public.audit_logs (
     table_name, record_id, action, old_data, new_data, user_id
   ) values (
-    'products', v_product.id::text, 'TRANSITION_PUBLICATION',
+    'products', v_product.id::text, 'UPDATE',
     jsonb_build_object('status', v_old_status),
-    jsonb_build_object('status', v_target, 'intake_session_id', p_session_id),
+    jsonb_build_object('operation', 'TRANSITION_PUBLICATION',
+      'status', v_target, 'intake_session_id', p_session_id),
     auth.uid()
   );
   return jsonb_build_object('success', true, 'product_id', v_product.id, 'status', v_target);

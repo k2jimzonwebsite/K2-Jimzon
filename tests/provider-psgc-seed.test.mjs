@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {providerDeliveryFragments} from '../docs/evidence/20261004-category-shelf-life/build-express-delivery.mjs';
+import {boundedPsgcSeedSql} from '../docs/evidence/20261004-category-shelf-life/bounded-psgc-seed.mjs';
+const options={isolateFunctionDefaults:true,preserveCapturedStockViewAcl:true,preserveCapturedHandoverAcl:true,preserveCapturedReleaseAcls:true,preserveCapturedCompatibilityTriggerAcl:true,preserveCapturedReceivingAcls:true,preserveCapturedStaffAcls:true,financialRoleLock:true};
+const original=providerDeliveryFragments(options).fragments.join('\n');
+assert.equal(createHash('sha256').update(original).digest('hex'),'8997b078cfafece4f3bb9ed7b3c51b586bba865471a631161447f518cfe5418f');
+const candidate=providerDeliveryFragments({...options,boundedReferenceSeed:true}).fragments.join('\n');
+const insertion=/insert into k2_private\.delivery_psgc_locations\(code,name,level,parent_code,region_code,area\)\nselect x->>0,x->>1,x->>2,x->>3,x->>4,x->>5 from jsonb_array_elements\(\$k2_psgc\$([\s\S]*?)\$k2_psgc\$::jsonb\) x;/g;
+const batches=[...candidate.matchAll(insertion)];
+assert.equal(batches.length,44,'reference installation must use44 bounded SQL statements');
+const expected=JSON.parse(fs.readFileSync('supabase/prepared/reference/psgc-2026-06-30.json')).rows;
+const rows=[];const available=new Set();
+for(const batch of batches){const current=JSON.parse(batch[1]);assert.ok(current.length<=1000);for(const row of current)available.add(row[0]);for(const row of current){assert.ok(row[3]===null||available.has(row[3]),'parent available in current/past batch');assert.ok(available.has(row[4]),'region available in current/past batch');}rows.push(...current);}
+assert.deepEqual(rows,expected,'all43768 rows and their original order must be identical');
+const originalMatch=[...original.matchAll(insertion)];assert.equal(originalMatch.length,1);
+const start=batches[0].index,end=batches.at(-1).index+batches.at(-1)[0].length;
+assert.equal(candidate.slice(0,start)+originalMatch[0][0]+candidate.slice(end),original,'every byte outside the reference insert must remain identical');
+assert.equal((candidate.match(/statement_timeout='10s'/g)||[]).length,(original.match(/statement_timeout='10s'/g)||[]).length);
+assert.throws(()=>boundedPsgcSeedSql(original.replace('jsonb_array_elements($k2_psgc$','jsonb_array_elements($changed$')),/EXACT_REFERENCE_INSERT_REQUIRED/);
+assert.throws(()=>boundedPsgcSeedSql(original+'\n'+originalMatch[0][0]),/EXACT_REFERENCE_INSERT_REQUIRED/);
+console.log('PASS:44 bounded statements,43768 exact ordered rows, prefix dependencies, unchanged surrounding SQL/default pin/10s guards');

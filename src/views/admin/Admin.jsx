@@ -63,7 +63,7 @@ const SECTIONS = {
   inbox:             { label: 'Messages',            icon: InboxIcon,   title: 'Conversation Records',          desc: 'Saved conversations and notes. Links to Shopee, Lazada, and the chat apps are not connected yet.' },
   wholesale:         { label: 'Customers',           icon: UserIcon,    title: 'Registered Customer Profiles',  desc: 'Saved customer profiles. Special wholesale prices and bulk messages are still switched off.' },
   reservations:      { label: 'Stock Holds',         icon: ClockIcon,   title: 'Stock Holds',                   desc: 'Stock held for a customer, time left on each hold, and holds that already expired.' },
-  delivery:          { label: 'Delivery Rates',      icon: PlaneIcon,   title: 'Delivery Rates & Couriers',     desc: 'The owner-approved delivery test: which places have fixed rates, and a tester to try a quote.', adminOnly: true },
+  delivery:          { label: 'Delivery Rates',      icon: PlaneIcon,   title: 'Customer Delivery Rates',       desc: 'Review and publish customer standard delivery rates with evidence; accepted orders keep their charges.' },
   coupons:           { label: 'Coupons',             icon: TagIcon,     title: 'Coupons & Vouchers',             desc: 'Discount codes you control: start dates, spending limits, and promo campaigns.' },
   staff_permissions: { label: 'Staff & Roles',       icon: ShieldIcon,  title: 'Staff Roles & Permissions',     desc: 'Who may sign in, and what each role is allowed to do.' },
   integrations:      { label: 'Channel Readiness',   icon: GlobeIcon,   title: 'Sales Channel Readiness',        desc: 'Get the catalog ready and see the true connection status of each sales channel.' },
@@ -684,7 +684,7 @@ export default function Admin() {
                : section === 'owner_close' && canManageStaff ? <OwnerCountClose />
                : section === 'workflow_graph' ? <MasterWorkflowGraph onNavigate={selectSection} onStartTour={handleStartTour} />
                : section === 'reservations' ? <ReservationHolds />
-               : section === 'delivery' && canManageStaff ? <DeliveryRateControl />
+               : section === 'delivery' ? <DeliveryRateControl key={`${user?.id}:${user?.role}`} actorId={user?.id} canManagePilot={canManageStaff} />
                : section === 'coupons' ? <CouponManager key={`${user?.id || 'signed-out'}:${user?.role || ''}`} />
                : section === 'omni_hub' ? <OmniOperationsHub />
                : section === 'pasabuy_manager' ? <PasabuyManager />

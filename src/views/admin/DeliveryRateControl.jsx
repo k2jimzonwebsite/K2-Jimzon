@@ -18,6 +18,7 @@ import {
   resolveDeliveryQuote,
 } from '../../lib/deliveryQuote'
 import { manilaToday, pesoInputToMinor } from './deliveryRateFormat'
+import CustomerDeliveryRates from './CustomerDeliveryRates'
 import {
   EmptyState, MetricRail, SectionHeading, StateBanner, StatusPill, WorkspaceIntro,
   primaryButton, secondaryButton,
@@ -98,7 +99,18 @@ function DataTable({ head, children, caption }) {
   )
 }
 
-export default function DeliveryRateControl() {
+export default function DeliveryRateControl({ actorId, canManagePilot = false }) {
+  const [pilot, setPilot] = useState(false)
+  return <div className="space-y-5">
+    {canManagePilot && <div className="flex flex-wrap gap-3">
+      <button type="button" className={secondaryButton} aria-pressed={!pilot} onClick={() => setPilot(false)}>Customer delivery rates</button>
+      <button type="button" className={secondaryButton} aria-pressed={pilot} onClick={() => setPilot(true)}>Carrier cost pilot</button>
+    </div>}
+    {pilot && canManagePilot ? <CarrierCostControl /> : <CustomerDeliveryRates key={actorId} actorId={actorId} />}
+  </div>
+}
+
+function CarrierCostControl() {
   const secure = adminBffEnabled()
   const [tables, setTables] = useState(null)
   const [loading, setLoading] = useState(true)

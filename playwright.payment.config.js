@@ -5,7 +5,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   use: { baseURL: 'http://127.0.0.1:5195', viewport: { width: 1280, height: 900 } },
   webServer: {
-    command: 'npx vite --mode combined --host 127.0.0.1 --port 5195 --strictPort --configLoader runner',
+    command: 'npx vite --config tests/fixtures/admin-product-master-vite.config.js --mode combined --host 127.0.0.1 --port 5195 --strictPort --configLoader runner',
     url: 'http://127.0.0.1:5195', reuseExistingServer: false,
     env: { VITE_SUPABASE_URL: 'https://fixture.supabase.co', VITE_ADMIN_BFF_ENABLED: 'true' },
   },

@@ -113,7 +113,8 @@ export const NODE_GROUNDING = {
   ],
   ch_6: [
     { kind: 'table', ref: 'inventory_reservations.packed_quantity' },
-    { kind: 'table', ref: 'product_batches.quantity_available' },
+    { kind: 'component', ref: 'src/lib/channelAllocationEngine.js' },
+    { kind: 'table', ref: 'product_batches.quantity' },
   ],
   ch_7: [
     { kind: 'screen', ref: 'src/views/admin/Inbox.jsx' },
@@ -241,15 +242,15 @@ export const EDGES = [
   { from: 'np_6', to: 'cb_7', kind: EDGE_KINDS.CONVERGE, label: 'New listing' },
 
   // --- What committed stock makes possible ----------------------------------
-  { from: 'cb_7', to: 'ord_1', kind: EDGE_KINDS.ENABLES, label: 'Sellable stock', condition: 'Orders can only reserve stock that is committed and live' },
+  { from: 'cb_7', to: 'ord_1', kind: EDGE_KINDS.ENABLES, label: 'Eligible offer stock', condition: 'Reviewed Website membership and eligible available lots are required; receiving physical stock alone does not create a sellable offer' },
   { from: 'cb_7', to: 'cnt_1', kind: EDGE_KINDS.ENABLES, label: 'Auditable stock', condition: 'A count audits committed batches' },
   { from: 'cb_7', to: 'hand_1', kind: EDGE_KINDS.ENABLES, label: 'Movable stock', condition: 'Custody transfers move committed batches between holders' },
 
   // --- Order fulfillment ----------------------------------------------------
   { from: 'ord_1', to: 'ord_2', kind: EDGE_KINDS.SEQUENCE },
   { from: 'ord_2', to: 'ord_3', kind: EDGE_KINDS.SEQUENCE },
-  { from: 'ord_3', to: 'ord_4', kind: EDGE_KINDS.BRANCH, label: 'Payment verified', condition: 'Funds confirmed against the order total' },
-  { from: 'ord_3', to: 'ord_2', kind: EDGE_KINDS.LOOPBACK, label: 'Not yet paid', condition: 'Return to the customer conversation; stock stays reserved, never picked' },
+  { from: 'ord_3', to: 'ord_4', kind: EDGE_KINDS.BRANCH, label: 'Payment verified', condition: 'Actual funds and accepted total verified by staff distinct from submitter; attributable exact stock commitment checked before picking' },
+  { from: 'ord_3', to: 'ord_2', kind: EDGE_KINDS.LOOPBACK, label: 'Payment or quote pending', condition: 'Return to the conversation; check actual hold/deadline and accepted quote. Never pick or release attributable committed stock from this guide' },
   { from: 'ord_4', to: 'ord_5', kind: EDGE_KINDS.SEQUENCE },
   { from: 'ord_5', to: 'ord_6', kind: EDGE_KINDS.SEQUENCE },
 
@@ -285,11 +286,11 @@ export const EDGES = [
   // Only Shopee has an ingress path. The other two marketplaces stop here and
   // stay in their Seller Centers, and the map says so rather than drawing a
   // connector that does not exist.
-  { from: 'ch_3', to: 'ch_4', kind: EDGE_KINDS.BRANCH, label: 'Ingress verified', condition: 'A signed marketplace push was captured end to end — Shopee only today' },
+  { from: 'ch_3', to: 'ch_4', kind: EDGE_KINDS.BRANCH, label: 'Ingress verification gate', condition: 'Locally prepared Shopee ingress: proceed only after a real signed marketplace push is verified end to end on the intended host; other adapters remain unavailable' },
   { from: 'ch_3', to: 'ch_8', kind: EDGE_KINDS.BRANCH, label: 'No adapter exists', condition: 'Lazada, TikTok Shop, and every social platform — record the channel as not connected and operate it from its own portal' },
   { from: 'ch_4', to: 'ch_5', kind: EDGE_KINDS.SEQUENCE },
   { from: 'ch_5', to: 'ch_6', kind: EDGE_KINDS.SEQUENCE },
-  { from: 'ch_6', to: 'ch_8', kind: EDGE_KINDS.CONVERGE, label: 'Stock rule agreed', condition: 'The pool and oversell behaviour are decided before a second channel sells' },
+  { from: 'ch_6', to: 'ch_8', kind: EDGE_KINDS.CONVERGE, label: 'Stock safety verified', condition: 'Canonical physical truth, bounded eligible per-shop offers and protected concurrent allocation/transfer acceptance pass before activation' },
   // Social messaging hangs off credential setup rather than the marketplace
   // ingress path: these platforms carry conversations, not orders.
   { from: 'ch_2', to: 'ch_7', kind: EDGE_KINDS.BRANCH, label: 'Messaging channel', condition: 'The channel carries customer conversations rather than orders' },

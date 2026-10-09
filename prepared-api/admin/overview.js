@@ -1,3 +1,4 @@
+import { projectOrderCharge } from '../../src/lib/orderChargeState.js'
 import { authorizeAdminRequest } from '../../server/admin-bff/authorize.js'
 import { requireAdminProject, safeJson } from '../../server/admin-bff/security.js'
 import { overviewUnavailable } from '../../src/lib/overviewAvailability.js'
@@ -12,7 +13,7 @@ function periodStart(days) {
 export async function readOverviewData(client, range) {
   const priorStart = periodStart(range)
   const results = await Promise.all([
-    client.from('order_requests').select('id,channel_source,status,payment_status,total_amount,created_at', { count: 'exact' }).gte('created_at', priorStart),
+    client.from('order_requests').select('id,channel_source,status,payment_status,total_amount,shipping_quote_status,created_at', { count: 'exact' }).gte('created_at', priorStart),
     client.from('order_requests').select('id', { count: 'exact', head: true }).eq('status', 'submitted'),
     client.from('pasabuy_requests').select('id,status,target_budget_php,assigned_to,created_at', { count: 'exact' }),
     client.from('product_batches').select('id,quantity,quantity_available,expiry_date,best_before_date', { count: 'exact' }),
@@ -25,7 +26,7 @@ export async function readOverviewData(client, range) {
   const unavailable = overviewUnavailable(results, keys)
   return {
     data: {
-      orders: Array.isArray(results[0].data) ? results[0].data.filter(row => row && typeof row === 'object') : [],
+      orders: Array.isArray(results[0].data) ? results[0].data.filter(row => row && typeof row === 'object').map(projectOrderCharge) : [],
       orderBacklog: results[1].error ? 0 : (results[1].count || 0),
       pasabuy: Array.isArray(results[2].data) ? results[2].data.filter(row => row && typeof row === 'object') : [],
       batches: Array.isArray(results[3].data) ? results[3].data.filter(row => row && typeof row === 'object') : [],

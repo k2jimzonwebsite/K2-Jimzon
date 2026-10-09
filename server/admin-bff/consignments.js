@@ -28,17 +28,23 @@ function uuid(value) {
   return result
 }
 
-function date(value) {
+function date(value, deferDateWindowToReceipt) {
   const result = text(value, { required: true, min: 10, max: 10 })
-  if (!DATE.test(result) || Number.isNaN(Date.parse(`${result}T00:00:00Z`))) throw new Error('REQUEST_INVALID')
+  if (!DATE.test(result) || result.startsWith('0000-') || Number.isNaN(Date.parse(`${result}T00:00:00Z`))) throw new Error('REQUEST_INVALID')
   if (new Date(`${result}T00:00:00Z`).toISOString().slice(0, 10) !== result) throw new Error('REQUEST_INVALID')
-  const today = new Date().toISOString().slice(0, 10)
-  const latest = new Date(); latest.setUTCFullYear(latest.getUTCFullYear() + 10)
-  if (result < today || result > latest.toISOString().slice(0, 10)) throw new Error('REQUEST_INVALID')
+  if (deferDateWindowToReceipt) return result
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Manila', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(new Date()).map(({ type, value }) => [type, value]))
+  const today = `${parts.year}-${parts.month}-${parts.day}`
+  // Preserve the existing ten-year rollover, including February 29 -> March 1.
+  const latest = new Date(Date.UTC(Number(parts.year) + 10, Number(parts.month) - 1, Number(parts.day)))
+    .toISOString().slice(0, 10)
+  if (result < today || result > latest) throw new Error('REQUEST_INVALID')
   return result
 }
 
-export function validateConsignmentCommand(action, body) {
+export function validateConsignmentCommand(action, body, { deferDateWindowToReceipt = false } = {}) {
   if (action === 'consignment_create') {
     exactObject(body, ['manifestCode', 'shipmentReference'])
     return {
@@ -54,7 +60,7 @@ export function validateConsignmentCommand(action, body) {
       consignmentId: uuid(body.consignmentId), sku: text(body.sku, { required: true, max: 120 }),
       batchCode: text(body.batchCode, { required: true, max: 120 }),
       boxCode: text(body.boxCode, { required: true, max: 120 }),
-      bestBeforeDate: date(body.bestBeforeDate), expectedQty,
+      bestBeforeDate: date(body.bestBeforeDate, deferDateWindowToReceipt), expectedQty,
     }
   }
   if (action === 'consignment_scan') {
@@ -76,11 +82,18 @@ export function validateConsignmentCommand(action, body) {
     }
   }
   if (action === 'consignment_finalize') {
-    exactObject(body, ['consignmentId', 'notes'])
-    return {
+    exactObject(body, ['consignmentId', 'notes', 'hub', 'custodian'])
+    const payload = {
       consignmentId: uuid(body.consignmentId),
       notes: text(body.notes, { required: true, min: 10, max: 1000 }),
     }
+    // Keep historical exact receipt payloads signable. The RPC refuses fresh
+    // missing-context requests after checking its durable receipt first.
+    if (Object.hasOwn(body, 'hub') || Object.hasOwn(body, 'custodian')) {
+      payload.hub = text(body.hub, { required: true, max: 120 })
+      payload.custodian = text(body.custodian, { required: true, max: 120 })
+    }
+    return payload
   }
   throw new Error('REQUEST_INVALID')
 }
@@ -110,13 +123,16 @@ export async function handleConsignmentCommand(req, res, action) {
   const authorized = await authorizeAdminRequest(req, res, { csrf: true })
   if (!authorized) return undefined
   try {
-    const payload = validateConsignmentCommand(action, await readJson(req))
+    // Only signed SQL can distinguish a historical exact receipt from fresh
+    // input. Its receipt lookup precedes the current Manila date window.
+    const payload = validateConsignmentCommand(action, await readJson(req), { deferDateWindowToReceipt: true })
     const signed = signedAdminCommandArguments(action, authorized.identity.userId, idempotencyKey, payload)
     const { data, error } = await authorized.client.rpc('execute_admin_consignment_command_v1', signed)
     if (error) {
       const providerCode = String(error.message || '')
       if (providerCode.includes('K2_ADMIN_RATE_LIMITED')) return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': '60' })
       if (providerCode.includes('K2_ADMIN_IDEMPOTENCY_CONFLICT')) return safeJson(res, 409, { error: { code: 'IDEMPOTENCY_CONFLICT' } })
+      if (providerCode.includes('K2_ADMIN_PAYLOAD_INVALID')) return safeJson(res, 400, { error: { code: 'REQUEST_INVALID' } })
       if (providerCode.includes('K2_ADMIN_COMMAND_IN_PROGRESS')) return safeJson(res, 409, { error: { code: 'COMMAND_IN_PROGRESS' } }, { 'Retry-After': '1' })
       if (providerCode.includes('K2_SCAN_CODE_MISMATCH')) return safeJson(res, 409, { error: { code: 'SCAN_CODE_MISMATCH' } })
       return safeJson(res, 503, { error: { code: 'CONSIGNMENT_COMMAND_UNAVAILABLE' } })

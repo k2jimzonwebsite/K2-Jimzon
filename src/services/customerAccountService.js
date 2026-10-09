@@ -18,6 +18,10 @@ const ACCOUNT_ERRORS = {
   RATE_LIMITED: 'Too many attempts. Wait a moment and try again.',
   BOT_CHALLENGE_REQUIRED: 'Complete the security check and try again.',
   REQUEST_TIMEOUT: 'The request timed out. Check your connection and retry.',
+  EXPRESS_QUOTE_STALE: 'The quote changed. Refresh the order and review the complete total again.',
+  EXPRESS_QUOTE_EXPIRED: 'This quote expired. Ask staff for a current quote, then refresh the order.',
+  EXPRESS_ORDER_INELIGIBLE: 'This order cannot accept another quote. Refresh its status or contact K2.',
+  DELIVERY_ACCESS_REQUIRED: 'This account no longer has access. Your saved approval is kept; contact K2 before starting another.',
 }
 
 export function customerAccountEnabled() {
@@ -107,6 +111,7 @@ async function accountRequest(path, body, accessToken) {
 }
 
 export const loadCustomerHistory = (accessToken) => accountRequest('account/history', {}, accessToken)
+export const acceptAccountExpressDelivery = (accessToken, body) => accountRequest('account/delivery-accept', body, accessToken)
 export const claimGuestCustomer = (accessToken, contactKind, idempotencyKey) =>
   accountRequest('account/claim', { contactKind, idempotencyKey }, accessToken)
 export const replyAsCustomerAccount = (accessToken, conversationReference, message, idempotencyKey) =>

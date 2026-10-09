@@ -1,8 +1,13 @@
 import { authorizeAdminRequest } from '../../server/admin-bff/authorize.js'
 import { readFulfillmentData } from '../../server/admin-bff/fulfillment.js'
 import { requireAdminProject, safeJson } from '../../server/admin-bff/security.js'
+import { withFulfillmentDeadline } from '../../server/admin-bff/request-deadline.js'
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
+  return withFulfillmentDeadline(res, guarded => readFulfillment(req, guarded))
+}
+
+async function readFulfillment(req, res) {
   if (!requireAdminProject(req)) return safeJson(res, 404, { error: { code: 'NOT_FOUND' } })
   if (req.method !== 'GET') return safeJson(res, 405, { error: { code: 'METHOD_NOT_ALLOWED' } }, { Allow: 'GET' })
   const authorized = await authorizeAdminRequest(req, res)

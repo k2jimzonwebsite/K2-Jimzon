@@ -42,12 +42,11 @@ test('catalog refresh is overlap-safe and degrades safely without the stock proj
   // would report every product as zero stock rather than as unknown.
   expect(source).not.toContain('(stockResult.data || [])')
 
-  // When the projection is missing, stock falls back to the product row's own
-  // persisted figure, including null/unknown. Zero must never be invented from
-  // a missing value because that would misreport an unavailable stock read as
-  // a verified sell-out.
-  expect(source).toContain('stock_available: dbP.stock_available')
-  expect(source).not.toContain('Number(p.stock_available) || 0')
+  // The compatibility stock_available column cannot stand in for the
+  // authoritative batch projection after a failed read. Preserve the product
+  // list but expose stock as unknown until the projection recovers.
+  expect(source).toMatch(/stock_available:\s*stockAvailable === null\s*\?\s*null\s*:/)
+  expect(source).not.toContain('Number(p.stock_available)')
 })
 
 test('storefront catalog is gated on the staff publication flag, not status alone', async () => {

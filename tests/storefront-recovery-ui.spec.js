@@ -1,14 +1,148 @@
 import { test, expect } from '@playwright/test'
 
-async function catalog(page, { sku = 'audit-product', stock = 5 } = {}) {
+test('legacy charge review withholds cached payment and survives failed or late refresh', async ({ page }) => {
+  await catalog(page)
+  const reference = 'SYNTHETIC-LEGACY-CHARGE'
+  const saved = { public_reference: reference, total_amount: 107, shipping_quote_status: 'customer_confirmed',
+    status: 'submitted', payment_status: 'awaiting_instructions', item_count: 1 }
+  let reads = 0, mode = 'initial', releaseOlder
+  const initialReads = []
+  await page.route('**/api/storefront/order/status', async route => {
+    reads += 1
+    const stage = mode
+    if (stage === 'initial') await new Promise(resolve => { initialReads.push(resolve) })
+    if (stage === 'older') await new Promise(resolve => { releaseOlder = resolve })
+    if (stage === 'failed') return route.abort('failed')
+    return route.fulfill({ status: 200, json: { ok: true, orders: [{ ...saved,
+      status: stage === 'cancelled' ? 'cancelled' : saved.status,
+      delivery_review_required: stage === 'initial', total_amount: stage === 'initial' ? null : 107 }] } })
+  })
+  await page.route('**/api/storefront/order', route => route.fulfill({ status: 201, json: { ok: true, receipt: saved } }))
+  await page.getByRole('button', { name: /Add to cart/ }).click()
+  await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /checkout|review|request/i }).last().click()
+  await page.getByLabel('Full name', { exact: true }).fill('Synthetic Customer')
+  await page.getByLabel('Email address', { exact: true }).fill('audit@example.test')
+  await page.getByRole('radio', { name: /K2 Warehouse Pickup/ }).check()
+  await page.getByRole('checkbox', { name: /I accept/ }).check()
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await expect.poll(() => initialReads.length).toBeGreaterThan(0)
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
+  initialReads.forEach(resolve => resolve())
+  await expect(page.getByText(/Total needs staff review/)).toBeVisible()
+  await expect(page.getByText(/Your recorded payment history is kept/)).toBeVisible()
+  await expect(page.getByRole('button', { name: 'View your messages' })).toBeVisible()
+  for (const width of [375, 1280]) {
+    await page.setViewportSize({ width, height: 900 })
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await page.screenshot({ path: `docs/evidence/20261001-authoritative-delivery/m-legacy-charge-review-${width}.png`, fullPage: true })
+  }
+  mode = 'canonical'
+  await page.getByRole('button', { name: 'Refresh order status' }).click()
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toBeVisible()
+  mode = 'older'
+  await page.getByRole('button', { name: 'Refresh order status' }).click()
+  await expect.poll(() => Boolean(releaseOlder)).toBe(true)
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
+  mode = 'failed'
+  await page.getByRole('button', { name: 'Refresh order status' }).click()
+  await expect(page.getByRole('alert')).toBeVisible()
+  releaseOlder()
+  expect(reads).toBeGreaterThanOrEqual(4)
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
+  await expect(page.getByRole('alert')).toBeVisible()
+  await expect(page.getByText(reference, { exact: true })).toBeVisible()
+  mode = 'cancelled'
+  await page.getByRole('button', { name: 'Refresh order status' }).click()
+  await expect(page.getByText(/total ₱107/)).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
+})
+
+test('express buyer approval keeps exact unknown request through reload and accepted refresh', async ({ page }) => {
+  await catalog(page)
+  const reference = 'WEB-DUMMYEXPRESS01', requests = []
+  let accepted = false
+  const quote = { quoteVersion: 1, courier: 'Lalamove', feeMinor: 15000, subtotal: 100, discountAmount: 0,
+    proposedTotal: 250, quotedAt: new Date(Date.now() - 60000).toISOString(), expiresAt: new Date(Date.now() + 3600000).toISOString(),
+    availabilityNote: 'Synthetic courier availability; no booking', accepted: false }
+  await page.route('**/api/storefront/order/status', route => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true,
+    orders: [{ public_reference: reference, status: 'submitted', payment_status: 'not_requested', shipping_quote_status: accepted ? 'customer_confirmed' : 'pending_quote',
+      total_amount: accepted ? 250 : null, item_count: 1, express_quote: { ...quote, accepted } }] }) }))
+  await page.route('**/api/storefront/order/delivery-accept', async route => {
+    requests.push(route.request().postDataJSON()); accepted = true
+    if (requests.length === 1) return route.abort('failed')
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, receipt: {
+      orderReference: reference, quoteVersion: 1, shippingQuoteStatus: 'customer_confirmed', totalAmount: 250, acceptedAt: '2026-10-08T05:00:00.000Z' } }) })
+  })
+  await page.goto('/confirmation')
+  const review = page.getByRole('region', { name: `Express delivery review for ${reference}` })
+  await expect(review.getByText('Complete total', { exact: true })).toBeVisible()
+  await expect(review.getByRole('button', { name: 'Accept final total' })).toBeDisabled()
+  await review.getByRole('checkbox').check()
+  for (const width of [375, 1280]) {
+    await page.setViewportSize({ width, height: 900 })
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await page.screenshot({ path: test.info().outputPath(`express-review-${width}.png`), fullPage: true })
+  }
+  await review.getByRole('button', { name: 'Accept final total' }).click()
+  await expect(review.getByRole('button', { name: 'Retry saved approval' })).toBeVisible()
+  const held = await page.evaluate(ref => JSON.parse(localStorage.getItem(`k2-express-acceptance-v1:${ref}`)), reference)
+  expect(held.state).toBe('pending'); expect(held.body).toEqual(requests[0]); expect(held.identity).toBe('guest')
+  await page.reload()
+  await expect(review.getByRole('button', { name: 'Retry saved approval' })).toBeVisible()
+  await review.getByRole('button', { name: 'Retry saved approval' }).click()
+  await expect(review.getByText(/Delivery accepted. Final total/)).toBeVisible()
+  expect(requests).toHaveLength(2); expect(requests[1]).toEqual(requests[0])
+  expect(Object.keys(requests[0]).sort()).toEqual(['idempotencyKey', 'orderReference', 'quoteVersion'])
+  const resolved = await page.evaluate(ref => JSON.parse(localStorage.getItem(`k2-express-acceptance-v1:${ref}`)), reference)
+  expect(resolved.state).toBe('resolved'); expect(resolved.receipt.totalAmount).toBe(250)
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
+})
+
+test('express buyer malformed recovery refuses before sending approval', async ({ page }) => {
+  await catalog(page)
+  const reference = 'WEB-DUMMYEXPRESS02'; let calls = 0
+  await page.route('**/api/storefront/order/status', route => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true,
+    orders: [{ public_reference: reference, status: 'submitted', payment_status: 'not_requested', shipping_quote_status: 'pending_quote', total_amount: null,
+      express_quote: { quoteVersion: 1, courier: 'Grab', feeMinor: 0, subtotal: 100, discountAmount: 0, proposedTotal: 100,
+        quotedAt: new Date(Date.now() - 60000).toISOString(), expiresAt: new Date(Date.now() + 3600000).toISOString(), availabilityNote: 'Synthetic zero-fee quote', accepted: false } }] }) }))
+  await page.route('**/api/storefront/order/delivery-accept', route => { calls++; return route.abort() })
+  await page.evaluate(ref => localStorage.setItem(`k2-express-acceptance-v1:${ref}`, '{invalid'), reference)
+  await page.goto('/confirmation')
+  const review = page.getByRole('region', { name: `Express delivery review for ${reference}` })
+  await expect(review.getByRole('alert')).toContainText('could not be restored safely')
+  await review.getByRole('checkbox').check(); await review.getByRole('button', { name: 'Accept final total' }).click()
+  await expect(review.getByRole('alert')).toContainText('could not be restored safely'); expect(calls).toBe(0)
+  expect(await page.evaluate(ref => localStorage.getItem(`k2-express-acceptance-v1:${ref}`), reference)).toBe('{invalid')
+})
+
+async function catalog(page, { sku = 'audit-product', stock = 5, stockReadFails = false } = {}) {
   let gallery = ['/images/placeholder.svg?second']
   await page.route('**/*', async route => {
     const url = new URL(route.request().url())
     if (!['127.0.0.1', 'localhost'].includes(url.hostname)) return route.abort()
+    if (url.pathname === '/api/storefront/delivery/locations') {
+      const sourceVersion = 'psgc-2026-06-30'
+      const parent = url.searchParams.get('parent')
+      const place = parent === null ? { code: '1300000000', name: 'Synthetic NCR', level: 'Reg' }
+        : parent === '1300000000' ? { code: '1380100000', name: 'Synthetic Caloocan', level: 'City' }
+          : { code: '1380100001', name: 'Synthetic Barangay', level: 'Bgy' }
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, sourceVersion, children: [{ ...place, sourceVersion }] }) })
+    }
+    if (url.pathname === '/api/storefront/delivery/quote') {
+      const { service } = route.request().postDataJSON()
+      const quote = { service, status: service === 'express' ? 'pending_quote' : 'customer_confirmed', feeMinor: service === 'express' ? null : service === 'pickup' ? 0 : 9500,
+        currency: 'PHP', inputFingerprint: 'a'.repeat(64), rateVersion: service === 'standard' ? 1 : null,
+        weightG: service === 'pickup' ? null : 500, weightBasis: service === 'pickup' ? 'not_applicable' : 'estimated',
+        area: service === 'pickup' ? null : 'NCR', sourceVersion: service === 'pickup' ? null : 'psgc-2026-06-30' }
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, quote }) })
+    }
     if (url.pathname.startsWith('/rest/v1/')) {
       const table = url.pathname.split('/').pop()
+      if (table === 'v_product_stock_from_batches' && stockReadFails) {
+        return route.fulfill({ status: 403, contentType: 'application/json', body: JSON.stringify({ message: 'synthetic projection unavailable' }) })
+      }
       const body = table === 'products' ? [{ sku, name: 'Audit pantry item', status: 'Live', published: true,
-        srp: 735, primary_image_url: '/images/placeholder.svg', secondary_images: gallery, country_of_origin: 'Italy', description: 'Synthetic product.' }]
+        srp: 735, stock_available: 47, primary_image_url: '/images/placeholder.svg', secondary_images: gallery, country_of_origin: 'Italy', description: 'Synthetic product.' }]
         : table === 'v_product_stock_from_batches' ? [{ sku, stock_from_batches: stock }] : []
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) })
     }
@@ -20,8 +154,51 @@ async function catalog(page, { sku = 'audit-product', stock = 5 } = {}) {
   })
   await page.goto(`/product/${sku}`, { waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('heading', { level: 1, name: 'Audit pantry item' })).toBeVisible({ timeout: 90000 })
-  return { shrink() { gallery = [] } }
+  return {
+    shrink() { gallery = [] },
+    failStock() { stockReadFails = true },
+    restoreStock() { stockReadFails = false },
+  }
 }
+
+async function acceptStandardDelivery(page) {
+  await page.getByLabel('Region', { exact: true }).selectOption('1300000000')
+  await page.getByLabel('City, municipality or area', { exact: true }).selectOption('1380100000')
+  await page.getByLabel('Barangay', { exact: true }).selectOption('1380100001')
+  await page.getByRole('checkbox', { name: /I accept/ }).check()
+}
+
+test('a failed batch-stock read keeps the product visible but hides the stale row count', async ({ page }) => {
+  page.on('pageerror', error => console.error(`Stock fixture browser error: ${error.message}`))
+  const fixture = await catalog(page, { sku: 'projection-failure', stockReadFails: true })
+  await page.getByRole('button', { name: 'Catalog', exact: true }).click()
+  await expect(page.getByRole('heading', { level: 1, name: 'Explore the Italian cabinet.' })).toBeVisible()
+
+  const card = page.getByTestId('product-card')
+  await expect(page.getByRole('heading', { level: 3, name: 'Audit pantry item' })).toBeVisible({ timeout: 90000 })
+  await expect(page.getByText('Showing the last updated list. Stock may differ.', { exact: true })).toBeVisible()
+  await expect(card.getByTestId('stock-count')).toHaveAttribute('aria-label', 'Stock check pending')
+  await expect(card.getByRole('button', { name: 'Stock check pending for Audit pantry item' })).toBeDisabled()
+  await expect(card.getByText('47 available', { exact: true })).toHaveCount(0)
+
+  fixture.restoreStock()
+  await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')))
+  await expect(card.getByRole('button', { name: 'Add Audit pantry item to cart' })).toBeEnabled()
+  await expect(card.getByTestId('stock-count')).toContainText('5')
+  await expect(page.getByText('Showing the last updated list. Stock may differ.', { exact: true })).toHaveCount(0)
+
+  fixture.failStock()
+  await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')))
+  await expect(card.getByTestId('stock-count')).toHaveAttribute('aria-label', 'Stock check pending')
+  await expect(card.getByRole('button', { name: 'Stock check pending for Audit pantry item' })).toBeDisabled()
+  await expect(card.getByText('47 available', { exact: true })).toHaveCount(0)
+
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await page.screenshot({ path: test.info().outputPath(`stock-read-failure-${width}.png`), fullPage: true })
+  }
+})
 
 test('uncertain checkout freezes details and retries the same payload with a fresh challenge', async ({ page }) => {
   await catalog(page)
@@ -36,6 +213,7 @@ test('uncertain checkout freezes details and retries the same payload with a fre
   await page.getByLabel('Full name', { exact: true }).fill('Synthetic Customer')
   await page.getByLabel('Email address', { exact: true }).fill('audit@example.test')
   await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic Manila address')
+  await acceptStandardDelivery(page)
   await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
   await expect(page.getByRole('alert')).toBeVisible()
   await expect(page.getByLabel('Full name', { exact: true })).toBeDisabled()
@@ -81,12 +259,14 @@ test('definite server rejection unlocks form and submits with fresh idempotency 
   await page.getByLabel('Full name', { exact: true }).fill('Synthetic Customer')
   await page.getByLabel('Email address', { exact: true }).fill('audit@example.test')
   await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic Manila address')
+  await acceptStandardDelivery(page)
   await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
 
   await expect(page.getByRole('alert')).toBeVisible()
   await expect(page.getByLabel('Full name', { exact: true })).toBeEnabled()
   await expect(page.getByLabel('Mobile number', { exact: true })).toBeEnabled()
   await page.getByLabel('Mobile number', { exact: true }).fill('+63 917 123 4567')
+  await page.getByRole('checkbox', { name: /I accept/ }).check()
 
   await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
   await expect(page.getByText('AUDIT-CONTACT-FIXED', { exact: false }).first()).toBeVisible({ timeout: 30000 })
@@ -96,47 +276,36 @@ test('definite server rejection unlocks form and submits with fresh idempotency 
   expect(submissions[1].idempotencyKey).not.toBe(submissions[0].idempotencyKey)
 })
 
-test('uncertain checkout allows modifying details, preserving entered form content and assigning fresh idempotency key', async ({ page }) => {
+test('uncertain checkout contact navigation preserves original request identity', async ({ page }) => {
   await catalog(page)
   const submissions = []
   await page.route('**/api/storefront/order', async route => {
     submissions.push(route.request().postDataJSON())
-    if (submissions.length === 1) {
-      return route.abort('failed')
-    }
-    return route.fulfill({
-      status: 201,
-      contentType: 'application/json',
-      body: JSON.stringify({ ok: true, receipt: { public_reference: 'AUDIT-MODIFIED', total_amount: 735, status: 'submitted' } }),
-    })
+    if (submissions.length === 1) return route.abort('failed')
+    if (submissions.length === 2) return route.fulfill({ status: 409, contentType: 'application/json', body: JSON.stringify({ error: { code: 'INSUFFICIENT_STOCK' } }) })
+    return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ ok: true, receipt: { public_reference: 'AUDIT-HELD', total_amount: 830, status: 'submitted', shipping_quote_status: 'customer_confirmed' } }) })
   })
   await page.getByRole('button', { name: /Add to cart/ }).click()
   await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /checkout|review|request/i }).last().click()
-  await page.getByLabel('Full name', { exact: true }).fill('Initial Name')
-  await page.getByLabel('Email address', { exact: true }).fill('initial@example.test')
-  await page.getByLabel('Delivery address', { exact: true }).fill('Original Manila address')
+  await page.getByLabel('Full name', { exact: true }).fill('Synthetic Customer')
+  await page.getByLabel('Email address', { exact: true }).fill('audit@example.test')
+  await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic Manila address')
+  await acceptStandardDelivery(page)
   await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
-
-  await expect(page.getByRole('alert')).toBeVisible()
-  await expect(page.getByLabel('Full name', { exact: true })).toBeDisabled()
   await expect(page.getByRole('button', { name: /Retry order request/ })).toBeVisible()
-
-  const modifyButton = page.getByRole('button', { name: /Edit order or contact details/i })
-  await expect(modifyButton).toBeVisible()
-  await modifyButton.click()
-
+  await page.getByRole('button', { name: 'Contact K2 about this request' }).click()
+  await expect(page.getByRole('heading', { name: 'Your K2 conversations' })).toBeVisible()
+  await page.goBack()
+  await expect(page.getByLabel('Full name', { exact: true })).toBeDisabled()
+  await page.getByRole('button', { name: /Retry order request/ }).click()
   await expect(page.getByLabel('Full name', { exact: true })).toBeEnabled()
-  expect(await page.getByLabel('Full name', { exact: true }).inputValue()).toBe('Initial Name')
-  expect(await page.getByLabel('Email address', { exact: true }).inputValue()).toBe('initial@example.test')
-  expect(await page.getByRole('textbox', { name: 'Delivery address' }).inputValue()).toBe('Original Manila address')
-
-  await page.getByRole('textbox', { name: 'Delivery address' }).fill('Updated Makati address')
+  await acceptStandardDelivery(page)
   await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
-  await expect(page.getByText('AUDIT-MODIFIED', { exact: false }).first()).toBeVisible({ timeout: 30000 })
-
-  expect(submissions).toHaveLength(2)
-  expect(submissions[1].address).toBe('Updated Makati address')
-  expect(submissions[1].idempotencyKey).not.toBe(submissions[0].idempotencyKey)
+  await expect(page.getByText('AUDIT-HELD', { exact: false }).first()).toBeVisible()
+  const { botToken: ignoredFirst, ...first } = submissions[0]
+  const { botToken: ignoredSecond, ...second } = submissions[1]
+  expect(second).toEqual(first)
+  expect(submissions[2].idempotencyKey).not.toBe(submissions[0].idempotencyKey)
 })
 
 test('server rejection on retry unlocks form for editing with fresh idempotency key', async ({ page }) => {
@@ -165,6 +334,7 @@ test('server rejection on retry unlocks form for editing with fresh idempotency 
   await page.getByLabel('Full name', { exact: true }).fill('Synthetic Customer')
   await page.getByLabel('Email address', { exact: true }).fill('audit@example.test')
   await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic Manila address')
+  await acceptStandardDelivery(page)
   await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
 
   await expect(page.getByRole('button', { name: /Retry order request/ })).toBeVisible()
@@ -173,6 +343,7 @@ test('server rejection on retry unlocks form for editing with fresh idempotency 
   await expect(page.getByRole('alert')).toContainText('Someone else just took the last of one item in your cart')
   await expect(page.getByLabel('Full name', { exact: true })).toBeEnabled()
   await expect(page.getByRole('button', { name: 'Submit order request', exact: true })).toBeVisible()
+  await page.getByRole('checkbox', { name: /I accept/ }).check()
 
   await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
   await expect(page.getByText('AUDIT-STOCK-RECOVERED', { exact: false }).first()).toBeVisible({ timeout: 30000 })
@@ -180,54 +351,33 @@ test('server rejection on retry unlocks form for editing with fresh idempotency 
   expect(submissions[2].idempotencyKey).not.toBe(submissions[0].idempotencyKey)
 })
 
-test('editing cart quantity after uncertain checkout updates order lines and generates fresh idempotency key', async ({ page }) => {
+test('held checkout blocks cart changes and retries the same basket and key', async ({ page }) => {
   await catalog(page, { stock: 10 })
   const submissions = []
   await page.route('**/api/storefront/order', async route => {
     submissions.push(route.request().postDataJSON())
-    if (submissions.length === 1) {
-      return route.abort('failed')
-    }
-    return route.fulfill({
-      status: 201,
-      contentType: 'application/json',
-      body: JSON.stringify({ ok: true, receipt: { public_reference: 'AUDIT-CART-EDITED', total_amount: 1470, status: 'submitted' } }),
-    })
+    if (submissions.length === 1) return route.abort('failed')
+    return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ ok: true, receipt: { public_reference: 'AUDIT-CART-HELD', total_amount: 830, status: 'submitted' } }) })
   })
   await page.getByRole('button', { name: /Add to cart/ }).click()
   await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /checkout|review|request/i }).last().click()
-  await page.getByLabel('Full name', { exact: true }).fill('Cart Edit Customer')
-  await page.getByLabel('Email address', { exact: true }).fill('cartedit@example.test')
-  await page.getByRole('textbox', { name: 'Delivery address' }).fill('Manila delivery address')
+  await page.getByLabel('Full name', { exact: true }).fill('Synthetic Customer')
+  await page.getByLabel('Email address', { exact: true }).fill('audit@example.test')
+  await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic Manila address')
+  await acceptStandardDelivery(page)
   await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
-
-  // 1st attempt fails with timeout
-  await expect(page.getByRole('alert')).toBeVisible()
   await expect(page.getByRole('button', { name: /Retry order request/ })).toBeVisible()
-
-  // Click edit details
-  const modifyButton = page.getByRole('button', { name: /Edit order or contact details/i })
-  await modifyButton.click()
-
-  // Open cart drawer from header and increase quantity to 2
   await page.getByRole('button', { name: /Open cart/i }).click()
   const cartDialog = page.getByRole('dialog', { name: 'Shopping cart' })
-  await expect(cartDialog).toBeVisible()
-  await cartDialog.getByRole('button', { name: /Increase quantity/i }).click()
-  // Close cart drawer or click proceed to checkout
+  await expect(cartDialog.getByText('Held for your pending order request')).toBeVisible()
+  await expect(cartDialog.getByRole('button', { name: 'Remove from cart' })).toBeDisabled()
+  await expect(cartDialog.getByRole('button', { name: /Increase quantity/i })).toHaveCount(0)
   await cartDialog.getByRole('button', { name: /checkout|review|request/i }).last().click()
-
-  // Verify updated products total in order summary (2 * 735 = 1470)
-  await expect(page.getByText('₱1,470').first()).toBeVisible()
-
-  // Submit order request with updated cart
-  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
-  await expect(page.getByText('AUDIT-CART-EDITED', { exact: false }).first()).toBeVisible({ timeout: 30000 })
-
+  await page.getByRole('button', { name: /Retry order request/ }).click()
+  await expect(page.getByText('AUDIT-CART-HELD', { exact: false }).first()).toBeVisible()
   expect(submissions).toHaveLength(2)
-  expect(submissions[0].items[0].quantity).toBe(1)
-  expect(submissions[1].items[0].quantity).toBe(2)
-  expect(submissions[1].idempotencyKey).not.toBe(submissions[0].idempotencyKey)
+  expect(submissions[1].items).toEqual(submissions[0].items)
+  expect(submissions[1].idempotencyKey).toBe(submissions[0].idempotencyKey)
 })
 
 for (const routeName of ['pasabuy', 'messages']) {
@@ -330,4 +480,245 @@ test('the wholesale alias publishes the established trade canonical', async ({ p
   await page.goto('/wholesale', { waitUntil: 'domcontentloaded' })
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/trade$/, { timeout: 30000 })
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', /\/trade$/)
+})
+
+
+test('canonical express stays unpriced through submission and confirmation with no payment QR', async ({ page }) => {
+  await catalog(page)
+  let submitted
+  await page.route('**/api/storefront/order', async route => {
+    submitted = route.request().postDataJSON()
+    return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ ok: true, receipt: {
+      public_reference: 'SYNTHETIC-EXPRESS', total_amount: null, shipping_quote_status: 'pending_quote', status: 'submitted', payment_status: 'not_requested' } }) })
+  })
+  await page.getByRole('button', { name: /Add to cart/ }).click()
+  await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /checkout|review|request/i }).last().click()
+  await page.getByLabel('Full name', { exact: true }).fill('Synthetic Customer')
+  await page.getByLabel('Email address', { exact: true }).fill('audit@example.test')
+  await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic Manila address')
+  await page.getByRole('radio', { name: /Metro Manila Express Dispatch/ }).check()
+  await page.getByLabel('Region', { exact: true }).selectOption('1300000000')
+  await page.getByLabel('City, municipality or area', { exact: true }).selectOption('1380100000')
+  await page.getByLabel('Barangay', { exact: true }).selectOption('1380100001')
+  await expect(page.getByText('Not final yet', { exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Submit order request', exact: true })).toBeEnabled()
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await page.screenshot({ path: test.info().outputPath(`canonical-express-${width}.png`), fullPage: true })
+  }
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await expect(page.getByText(/Delivery quote pending — no final total yet/)).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Pay by QR transfer' })).toHaveCount(0)
+  expect(submitted.delivery).toEqual({ service: 'express', destination: { sourceVersion: 'psgc-2026-06-30', path: ['1300000000','1380100000','1380100001'] }, acceptance: null })
+  expect(submitted).not.toHaveProperty('shippingAmount')
+})
+
+test('canonical pickup needs acceptance and no delivery address or browser price', async ({ page }) => {
+  await catalog(page)
+  let submitted
+  await page.route('**/api/storefront/order', async route => {
+    submitted = route.request().postDataJSON()
+    return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ ok: true, receipt: { public_reference: 'SYNTHETIC-PICKUP', total_amount: 735, shipping_quote_status: 'customer_confirmed', status: 'submitted' } }) })
+  })
+  await page.getByRole('button', { name: /Add to cart/ }).click()
+  await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /checkout|review|request/i }).last().click()
+  await page.getByLabel('Full name', { exact: true }).fill('Synthetic Customer')
+  await page.getByLabel('Email address', { exact: true }).fill('audit@example.test')
+  await page.getByRole('radio', { name: /K2 Warehouse Pickup/ }).check()
+  await expect(page.getByRole('button', { name: 'Submit order request', exact: true })).toBeDisabled()
+  await page.getByRole('checkbox', { name: /I accept/ }).check()
+  await expect(page.getByLabel('Delivery address', { exact: true })).toBeDisabled()
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await expect(page.getByText('SYNTHETIC-PICKUP', { exact: false }).first()).toBeVisible()
+  expect(submitted.delivery).toEqual({ service: 'pickup', destination: null, acceptance: { inputFingerprint: 'a'.repeat(64), rateVersion: null } })
+  expect(submitted).not.toHaveProperty('shippingAmount')
+})
+
+test('canonical changed address removes accepted quote until the new quote is reviewed', async ({ page }) => {
+  await catalog(page)
+  await page.getByRole('button', { name: /Add to cart/ }).click()
+  await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /checkout|review|request/i }).last().click()
+  await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic first address')
+  await acceptStandardDelivery(page)
+  await expect(page.getByRole('button', { name: 'Submit order request', exact: true })).toBeEnabled()
+  const quoteRequests = []
+  page.on('request', request => { if (new URL(request.url()).pathname === '/api/storefront/delivery/quote') quoteRequests.push(request) })
+  await page.getByRole('textbox', { name: 'Delivery address', exact: true }).pressSequentially(' Synthetic changed address with a long street and unit description', { delay: 10 })
+  await expect(page.getByRole('button', { name: 'Submit order request', exact: true })).toBeDisabled()
+  await expect(page.getByRole('checkbox', { name: /I accept/ })).not.toBeChecked()
+  expect(quoteRequests.length).toBeLessThanOrEqual(2)
+  await page.getByRole('checkbox', { name: /I accept/ }).check()
+  await expect(page.getByRole('button', { name: 'Submit order request', exact: true })).toBeEnabled()
+})
+
+test('lost order response then pre-receipt rate refusal preserves exact retry identity', async ({ page }) => {
+  await catalog(page)
+  const submissions = []
+  await page.route('**/api/storefront/order', async route => {
+    submissions.push(route.request().postDataJSON())
+    if (submissions.length === 1) return route.abort('failed')
+    if (submissions.length === 2) return route.fulfill({ status: 429, contentType: 'application/json', body: JSON.stringify({ error: { code: 'RATE_LIMITED' } }) })
+    return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ ok: true, receipt: { public_reference: 'SYNTHETIC-ORIGINAL', total_amount: 830, status: 'submitted', shipping_quote_status: 'customer_confirmed' } }) })
+  })
+  await page.getByRole('button', { name: /Add to cart/ }).click()
+  await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /checkout|review|request/i }).last().click()
+  await page.getByLabel('Full name', { exact: true }).fill('Synthetic Customer')
+  await page.getByLabel('Email address', { exact: true }).fill('audit@example.test')
+  await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic Manila address')
+  await acceptStandardDelivery(page)
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await page.getByRole('button', { name: /Retry order request/ }).click()
+  await expect(page.getByLabel('Full name', { exact: true })).toBeDisabled()
+  await page.getByRole('button', { name: /Retry order request/ }).click()
+  await expect(page.getByText('SYNTHETIC-ORIGINAL', { exact: false }).first()).toBeVisible()
+  expect(submissions).toHaveLength(3)
+  const withoutBot = ({ botToken, ...payload }) => payload
+  expect(submissions.map(withoutBot)).toEqual([withoutBot(submissions[0]), withoutBot(submissions[0]), withoutBot(submissions[0])])
+})
+
+
+async function readyRestartCheckout(page) {
+  await catalog(page)
+  await page.getByRole('button', { name: /Add to cart/ }).click()
+  await page.getByRole('dialog', { name: 'Shopping cart' }).getByRole('button', { name: /checkout|review|request/i }).last().click()
+  await page.getByLabel('Full name', { exact: true }).fill('Synthetic Restart Customer')
+  await page.getByLabel('Email address', { exact: true }).fill('restart@example.test')
+  await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic restart address')
+  await acceptStandardDelivery(page)
+}
+
+test('restart recovery refresh and reopened tabs retry one identity and consume terminal receipt', async ({ page, context }) => {
+  await readyRestartCheckout(page)
+  const submissions = []
+  const orderRoute = async route => {
+    submissions.push(route.request().postDataJSON())
+    if (submissions.length === 1) return route.abort('failed')
+    return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ ok: true, receipt: {
+      public_reference: 'SYNTHETIC-RESTART', total_amount: 830, shipping_quote_status: 'customer_confirmed', status: 'submitted' } }) })
+  }
+  await page.route('**/api/storefront/order', orderRoute)
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await expect(page.getByRole('button', { name: /Retry order request/ })).toBeVisible()
+  await page.reload()
+  await expect(page.getByRole('button', { name: /Retry order request/ })).toBeVisible()
+  await expect(page.getByLabel('Full name', { exact: true })).toHaveValue('Synthetic Restart Customer')
+  await page.close()
+  const reopened = await context.newPage()
+  await catalog(reopened)
+  await reopened.goto('/checkout')
+  await reopened.route('**/api/storefront/order', orderRoute)
+  const another = await context.newPage()
+  await catalog(another)
+  await another.goto('/checkout')
+  await another.route('**/api/storefront/order', orderRoute)
+  await expect(reopened.getByRole('button', { name: /Retry order request/ })).toBeVisible()
+  await expect(another.getByRole('button', { name: /Retry order request/ })).toBeVisible()
+  await Promise.all([
+    reopened.evaluate(() => document.querySelector('form').requestSubmit()),
+    another.evaluate(() => document.querySelector('form').requestSubmit()),
+  ])
+  await expect(reopened.getByText('SYNTHETIC-RESTART', { exact: false }).first()).toBeVisible()
+  await expect(another.getByText('SYNTHETIC-RESTART', { exact: false }).first()).toBeVisible()
+  expect(submissions).toHaveLength(2)
+  const payloadOnly = ({ botToken, ...payload }) => payload
+  expect(payloadOnly(submissions[1])).toEqual(payloadOnly(submissions[0]))
+  const record = await reopened.evaluate(() => JSON.parse(localStorage.getItem('k2-checkout-recovery-v1')))
+  expect(record.state).toBe('resolved')
+  expect(record).not.toHaveProperty('payload')
+  await another.reload()
+  await expect(another.getByText('SYNTHETIC-RESTART', { exact: false }).first()).toBeVisible()
+  expect(submissions).toHaveLength(2)
+})
+
+test('restart recovery queued retry consumes a receipt already reconciled by its tab', async ({ page }) => {
+  await readyRestartCheckout(page)
+  let sent = 0
+  await page.route('**/api/storefront/order', route => { sent += 1; return route.abort('failed') })
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await expect(page.getByRole('button', { name: /Retry order request/ })).toBeVisible()
+  await page.evaluate(() => new Promise(acquired => {
+    window.syntheticLock = navigator.locks.request('k2-checkout-request-v1', () => new Promise(release => {
+      window.syntheticRelease = release
+      acquired()
+    }))
+  }))
+  await page.evaluate(() => {
+    const key = 'k2-checkout-recovery-v1'
+    const pending = JSON.parse(localStorage.getItem(key))
+    localStorage.setItem(key, JSON.stringify({ version: 1, state: 'resolved', key: pending.key,
+      receipt: { public_reference: 'SYNTHETIC-QUEUED', total_amount: 830, shipping_quote_status: 'customer_confirmed', status: 'submitted' } }))
+    window.dispatchEvent(new StorageEvent('storage', { key }))
+    document.querySelector('form').requestSubmit()
+    window.syntheticRelease()
+  })
+  await expect(page.getByText('SYNTHETIC-QUEUED', { exact: false }).first()).toBeVisible()
+  await page.evaluate(() => navigator.locks.request('k2-checkout-request-v1', () => {}))
+  expect(sent).toBe(1)
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('k2-checkout-recovery-v1')).state)).toBe('resolved')
+})
+
+test('restart recovery refuses unavailable or corrupt persistence before HTTP', async ({ page }) => {
+  await readyRestartCheckout(page)
+  let sent = 0
+  await page.route('**/api/storefront/order', route => { sent += 1; return route.abort('failed') })
+  await page.evaluate(() => {
+    const original = Storage.prototype.setItem
+    Storage.prototype.setItem = function(key, value) {
+      if (key === 'k2-checkout-recovery-v1') throw new DOMException('Synthetic storage denial', 'QuotaExceededError')
+      return original.call(this, key, value)
+    }
+  })
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText('safely save or restore')
+  expect(sent).toBe(0)
+  await page.reload()
+  await page.getByLabel('Full name', { exact: true }).fill('Synthetic Restart Customer')
+  await page.getByLabel('Email address', { exact: true }).fill('restart@example.test')
+  await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic restart address')
+  await acceptStandardDelivery(page)
+  await page.evaluate(() => localStorage.setItem('k2-checkout-recovery-v1', '{synthetic-corrupt'))
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText('safely save or restore')
+  expect(sent).toBe(0)
+  await page.evaluate(() => localStorage.setItem('k2-checkout-recovery-v1', JSON.stringify({ version: 1, state: 'pending', key: '11111111-1111-4111-8111-111111111111', payload: { idempotencyKey: '11111111-1111-4111-8111-111111111111', items: [{ sku: 'audit-product', quantity: 1 }] }, lines: [null] })))
+  await page.reload()
+  await expect(page.getByRole('heading', { name: 'Review order request' })).toBeVisible()
+  await page.getByLabel('Full name', { exact: true }).fill('Synthetic Restart Customer')
+  await page.getByLabel('Email address', { exact: true }).fill('restart@example.test')
+  await page.getByLabel('Delivery address', { exact: true }).fill('Synthetic restart address')
+  await acceptStandardDelivery(page)
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText('safely save or restore')
+  expect(sent).toBe(0)
+})
+
+test('restart recovery terminal write failure retains pending request and excludes receipt secrets', async ({ page }) => {
+  await readyRestartCheckout(page)
+  const submissions = []
+  await page.route('**/api/storefront/order', route => {
+    submissions.push(route.request().postDataJSON())
+    return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ ok: true, receipt: {
+      public_reference: 'SYNTHETIC-TERMINAL', total_amount: 830, shipping_quote_status: 'customer_confirmed', status: 'submitted', guest_grant_token: 'synthetic-secret-must-not-persist' } }) })
+  })
+  await page.evaluate(() => {
+    window.syntheticTerminalFailure = true
+    const original = Storage.prototype.setItem
+    Storage.prototype.setItem = function(key, value) {
+      if (key === 'k2-checkout-recovery-v1' && JSON.parse(value).state === 'resolved' && window.syntheticTerminalFailure) throw new DOMException('Synthetic terminal denial', 'QuotaExceededError')
+      return original.call(this, key, value)
+    }
+  })
+  await page.getByRole('button', { name: 'Submit order request', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText('safely save or restore')
+  await expect(page.getByRole('button', { name: /Retry order request/ })).toBeVisible()
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('k2-checkout-recovery-v1')).state)).toBe('pending')
+  await page.evaluate(() => { window.syntheticTerminalFailure = false })
+  await page.getByRole('button', { name: /Retry order request/ }).click()
+  await expect(page.getByText('SYNTHETIC-TERMINAL', { exact: false }).first()).toBeVisible()
+  expect(submissions[1].idempotencyKey).toBe(submissions[0].idempotencyKey)
+  const raw = await page.evaluate(() => localStorage.getItem('k2-checkout-recovery-v1'))
+  expect(raw).not.toContain('guest_grant_token')
+  expect(raw).not.toContain('botToken')
+  expect(raw).not.toContain('restart@example.test')
 })

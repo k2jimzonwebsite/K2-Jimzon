@@ -3,6 +3,7 @@ import {
   safeJson, signedRpcArguments,
 } from '../../../server/storefront-bff/security.js'
 import { createStorefrontServerSupabase, mapBoundaryResult } from '../../../server/storefront-bff/supabase.js'
+import { projectOrderCharge } from '../../../src/lib/orderChargeState.js'
 
 export default async function handler(req, res) {
   if (!requireStorefrontProject()) return safeJson(res, 404, { error: { code: 'NOT_FOUND' } })
@@ -23,7 +24,7 @@ export default async function handler(req, res) {
       mapped.retryAfter ? { 'Retry-After': mapped.retryAfter } : {})
     return safeJson(res, 200, { ok: true, history: {
       linked_at: mapped.result.linked_at,
-      orders: mapped.result.orders || [],
+      orders: (mapped.result.orders || []).map(projectOrderCharge),
       pasabuy_requests: mapped.result.pasabuy_requests || [],
       conversations: mapped.result.conversations || [],
     } })

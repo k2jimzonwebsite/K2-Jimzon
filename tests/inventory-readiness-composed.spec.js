@@ -97,6 +97,24 @@ test('BFF consignment command validation rejects malformed actions, dates, and c
   })).toMatchObject({ consignmentId: validId })
 })
 
+test('receiving finalization validates explicit custody while preserving historical receipt payloads', () => {
+  const legacy = { consignmentId: '10000000-0000-4000-8000-000000000001', notes: 'Independent Manila count checked against the manifest.' }
+  expect(validateConsignmentCommand('consignment_finalize', legacy)).toEqual(legacy)
+  expect(validateConsignmentCommand('consignment_finalize', {
+    ...legacy, hub: ' HUB-MNL-CENTRAL ', custodian: ' CUST-STAFF-ELENA ',
+  })).toEqual({ ...legacy, hub: 'HUB-MNL-CENTRAL', custodian: 'CUST-STAFF-ELENA' })
+})
+
+test('receiving finalization refuses partial, empty, mistyped and extra custody facts', () => {
+  const legacy = { consignmentId: '10000000-0000-4000-8000-000000000001', notes: 'Independent Manila count checked against the manifest.' }
+  for (const context of [
+    { hub: 'HUB-MNL-CENTRAL' }, { custodian: 'CUST-STAFF-ELENA' },
+    { hub: '', custodian: 'CUST-STAFF-ELENA' }, { hub: 'HUB-MNL-CENTRAL', custodian: '' },
+    { hub: true, custodian: 'CUST-STAFF-ELENA' }, { hub: 'HUB-MNL-CENTRAL', custodian: null },
+    { hub: 'HUB-MNL-CENTRAL', custodian: 'CUST-STAFF-ELENA', quantity: 2 },
+  ]) expect(() => validateConsignmentCommand('consignment_finalize', { ...legacy, ...context })).toThrow('REQUEST_INVALID')
+})
+
 test('intake BFF rejects unverified quantities and supplier receipts before database execution', () => {
   const validId = '10000000-0000-4000-8000-000000000001'
 

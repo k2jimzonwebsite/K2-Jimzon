@@ -1,7 +1,9 @@
+import { projectOrderCharge } from '../../src/lib/orderChargeState.js'
 import { authorizeAdminRequest } from './authorize.js'
 import { readJson, safeJson, signedAdminCommandArguments } from './security.js'
 import { isAdminRole } from './supabase.js'
 import { strictNumeric } from '../shared-numeric.js'
+import { withFulfillmentDeadline } from './request-deadline.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const PAYMENT_STATES = new Set(['awaiting_instructions', 'evidence_submitted', 'verified', 'failed', 'refunded'])
@@ -28,6 +30,15 @@ function uuid(value) {
 }
 
 export function validateFulfillmentCommand(action, body) {
+  if (action === 'cancel_order') {
+    exactObject(body, ['orderRequestId', 'expectedStatus', 'expectedUpdatedAt', 'reason'])
+    if (!['submitted', 'confirmed'].includes(body.expectedStatus)
+      || typeof body.expectedUpdatedAt !== 'string'
+      || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$/.test(body.expectedUpdatedAt)
+      || !Number.isFinite(Date.parse(body.expectedUpdatedAt))) throw new Error('REQUEST_INVALID')
+    return { orderRequestId: uuid(body.orderRequestId), expectedStatus: body.expectedStatus,
+      expectedUpdatedAt: body.expectedUpdatedAt, reason: text(body.reason, { required: true }) }
+  }
   if (action === 'confirm_order') {
     exactObject(body, ['orderRequestId', 'reason'])
     return { orderRequestId: uuid(body.orderRequestId), reason: text(body.reason, { required: true }) }
@@ -135,7 +146,11 @@ export function requiresPaymentVerdictAdmin(action, toStatus) {
   return action === 'payment_status' && PAYMENT_VERDICT_STATES.has(toStatus)
 }
 
-export async function handleFulfillmentCommand(req, res, action) {
+export function handleFulfillmentCommand(req, res, action) {
+  return withFulfillmentDeadline(res, guarded => executeFulfillmentCommand(req, guarded, action))
+}
+
+async function executeFulfillmentCommand(req, res, action) {
   if (req.method !== 'POST') return safeJson(res, 405, { error: { code: 'METHOD_NOT_ALLOWED' } }, { Allow: 'POST' })
   const idempotencyKey = String(req.headers['x-k2-idempotency-key'] || '').trim()
   if (!UUID.test(idempotencyKey)) return safeJson(res, 400, { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } })
@@ -143,13 +158,25 @@ export async function handleFulfillmentCommand(req, res, action) {
   if (!authorized) return undefined
   try {
     const payload = validateFulfillmentCommand(action, await readJson(req))
+    if (action === 'cancel_order' && !['Admin', 'Staff'].includes(authorized.identity.role)) {
+      return safeJson(res, 403, { error: { code: 'CANCELLATION_ACCESS_REQUIRED' } })
+    }
     if (requiresPaymentVerdictAdmin(action, payload.toStatus) && !isAdminRole(authorized.identity.role)) {
       return safeJson(res, 403, { error: { code: 'PAYMENT_VERDICT_ADMIN_REQUIRED' } })
     }
     const signed = signedAdminCommandArguments(action, authorized.identity.userId, idempotencyKey, payload)
-    const { data, error } = await authorized.client.rpc('execute_admin_fulfillment_command_v1', signed)
+    const { data, error } = await authorized.client.rpc(action === 'cancel_order'
+      ? 'execute_admin_order_cancellation_v1' : 'execute_admin_fulfillment_command_v1', signed)
     if (error) {
       const providerCode = String(error.message || '')
+      if (action === 'cancel_order') {
+        if (['K2_CANCELLATION_VERSION_CONFLICT', 'K2_CANCELLATION_ORDER_INELIGIBLE'].includes(providerCode)) {
+          return safeJson(res, 409, { error: { code: providerCode.slice(3) } })
+        }
+        if (['K2_CANCELLATION_ACCESS_REQUIRED', 'K2_ADMIN_ACCESS_REQUIRED', 'K2_ADMIN_AAL2_REQUIRED'].includes(providerCode)) {
+          return safeJson(res, 403, { error: { code: 'CANCELLATION_ACCESS_REQUIRED' } })
+        }
+      }
       if (['K2_PACKING_ALLOCATION_INVALID', 'K2_PACKING_LOT_CONFIRMATION_REQUIRED', 'K2_RESERVATION_RECONCILIATION_REQUIRED'].includes(providerCode)) {
         return safeJson(res, 409, { error: { code: providerCode.slice(3) } })
       }
@@ -159,6 +186,9 @@ export async function handleFulfillmentCommand(req, res, action) {
         'METHOD_INVALID', 'AMOUNT_INVALID', 'CURRENCY_INVALID', 'PAYER_INVALID', 'REFERENCE_INVALID', 'PROOF_INVALID',
       ]
       const paymentError = paymentErrors.find(code => providerCode === `K2_PAYMENT_${code}`)
+      const deliveryError = ['ORDER_CHARGE_IMMUTABLE', 'DELIVERY_ACCEPTANCE_REQUIRED', 'DELIVERY_REVIEW_REQUIRED']
+        .find(code => providerCode === `K2_${code}`)
+      if (deliveryError) return safeJson(res, 409, { error: { code: deliveryError } })
       if (paymentError) return safeJson(res, 409, { error: { code: `PAYMENT_${paymentError}` } })
       if (providerCode.includes('K2_ADMIN_RATE_LIMITED')) {
         return safeJson(res, 429, { error: { code: 'RATE_LIMITED' } }, { 'Retry-After': '60' })
@@ -170,6 +200,15 @@ export async function handleFulfillmentCommand(req, res, action) {
         return safeJson(res, 409, { error: { code: 'COMMAND_IN_PROGRESS' } }, { 'Retry-After': '1' })
       }
       return safeJson(res, 503, { error: { code: 'FULFILLMENT_COMMAND_UNAVAILABLE' } })
+    }
+    if (action === 'cancel_order') {
+      if (!data || data.orderRequestId !== payload.orderRequestId || data.status !== 'cancelled'
+        || typeof data.publicReference !== 'string' || !data.publicReference || data.publicReference.length > 80
+        || !['not_requested', 'unpaid', ...PAYMENT_STATES].includes(data.paymentStatus)) {
+        return safeJson(res, 503, { error: { code: 'FULFILLMENT_COMMAND_UNAVAILABLE' } })
+      }
+      return safeJson(res, 200, { ok: true, result: Object.fromEntries(
+        ['orderRequestId', 'publicReference', 'status', 'paymentStatus'].map(field => [field, data[field]])) })
     }
     return safeJson(res, 200, { ok: true, result: data })
   } catch (error) {
@@ -210,8 +249,8 @@ export async function readFulfillmentData(client) {
   ])
   if ([submitted, confirmed, lots, staff].some((result) => result.error)) throw new Error('FULFILLMENT_UNAVAILABLE')
 
-  const submittedRows = submitted.data || []
-  const confirmedRows = confirmed.data || []
+  const submittedRows = (submitted.data || []).map(projectOrderCharge)
+  const confirmedRows = (confirmed.data || []).map(projectOrderCharge)
   const lotRows = lots.data || []
   const staffRows = staff.data || []
 

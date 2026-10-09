@@ -6,6 +6,7 @@ const SAFE_UI_ERRORS = Object.freeze({
   CATALOG_SAVE_FAILED: 'The product change was not saved. Refresh the record and try again.',
   CATALOG_STATUS_FAILED: 'The product status was not changed. Refresh and try again.',
   CHANNEL_LOAD_FAILED: 'Channel readiness could not be loaded. Refresh before relying on connection status.',
+  SHOP_STOCK_LOAD_FAILED: 'Shop stock could not be loaded. Refresh before making allocation or transfer decisions.',
   CSV_IMPORT_FAILED: 'The spreadsheet import was not completed. Review the file and try again.',
   CSV_PARSE_FAILED: 'The spreadsheet could not be read. Check the CSV format and try again.',
   GLOBE_LOAD_FAILED: 'The globe content could not be loaded. Refresh and try again.',

@@ -103,10 +103,23 @@ end $$;
 
 create or replace function k2_test.refuses(command text, expected_message text) returns void
 language plpgsql as $$ begin
-  execute command;
+  begin
+    execute command;
+  exception when others then
+    if sqlerrm not like '%' || expected_message || '%' then raise; end if;
+    return;
+  end;
   raise exception 'EXPECTED_REFUSAL_MISSING: %', expected_message;
-exception when others then
-  if sqlerrm not like '%' || expected_message || '%' then raise; end if;
+end $$;
+
+-- Regression: the refusal helper must reject a command that actually succeeds.
+do $$ begin
+  begin
+    perform k2_test.refuses('select 1', 'DUMMY_EXPECTED_REFUSAL');
+    raise exception 'REFUSAL_HELPER_ACCEPTED_SUCCESS';
+  exception when others then
+    if sqlerrm <> 'EXPECTED_REFUSAL_MISSING: DUMMY_EXPECTED_REFUSAL' then raise; end if;
+  end;
 end $$;
 
 create sequence if not exists public.k2_sku_seq start with 1001;
@@ -830,6 +843,11 @@ begin
   );
 
   -- 4. Direct products table stock writes without k2.allow_stock_write fail closed
+  -- Earlier receiving/reconciliation calls set this transaction-local flag.
+  -- Model a fresh direct-write request before testing the trigger boundary.
+  perform set_config('k2.allow_stock_write', 'off', true);
+  perform k2_test.assert_true(current_setting('k2.allow_stock_write') = 'off',
+    'direct stock-write refusal is tested without the authorized writer flag');
   perform k2_test.refuses(
     format('update public.products set stock_available = 999 where sku = %L', v_sku_1),
     'Stock changes must use batch reconciliation, receiving, reservation, or fulfillment'

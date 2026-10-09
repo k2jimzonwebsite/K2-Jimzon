@@ -8,16 +8,18 @@ import { CrimsonButton, GhostButton, TuscanCard } from '../components/ui/bits'
 import { CheckIcon, ShieldIcon } from '../components/ui/icons'
 import TurnstileChallenge from '../components/security/TurnstileChallenge'
 import { guestBffEnabled } from '../services/guestCommerceService'
-import {
-  calculateCartShipping,
-  DEFAULT_REGION_ID,
-  PHILIPPINES_REGIONS,
-} from '../lib/cartShippingCalculator'
+import DeliveryEstimate from '../components/DeliveryEstimate'
+
+const DELIVERY_OPTIONS = [
+  { id: 'standard', methodName: 'Standard Courier Delivery', hint: 'Delivery charge calculated for your basket and area.' },
+  { id: 'express', methodName: 'Metro Manila Express Dispatch', hint: 'NCR only. Staff quote the route and package; you approve before payment.' },
+  { id: 'pickup', methodName: 'K2 Warehouse Pickup', hint: 'No delivery charge. Arrange collection with K2 staff.' },
+]
 
 export default function Checkout() {
   const account = useContext(CustomerAccountContext)
   const {
-    lines, placeOrder, pendingCheckout, resetPendingCheckout,
+    lines, placeOrder, pendingCheckout,
     go, applyCoupon, removeCoupon, appliedCoupon, couponDiscount,
   } = useStore()
 
@@ -45,7 +47,8 @@ export default function Checkout() {
         note: '',
       }))
 
-  const [regionId, setRegionId] = useState(DEFAULT_REGION_ID)
+  const [deliveryReview, setDeliveryReview] = useState(null)
+  const [quoteRevision, setQuoteRevision] = useState(0)
   const [deliveryOptionId, setDeliveryOptionId] = useState('standard')
   const [couponCode, setCouponCode] = useState('')
   const [couponMessage, setCouponMessage] = useState('')
@@ -91,17 +94,13 @@ export default function Checkout() {
     return () => { active = false }
   }, [])
 
-  // Dynamic package & shipping fee calculation based on cart lines and destination region
-  const shippingData = useMemo(() => calculateCartShipping(lines, regionId), [lines, regionId])
-
-  // Ensure selected delivery option exists in current region's options
-  const selectedDeliveryOption = useMemo(() => {
-    const found = shippingData.options.find((opt) => opt.id === deliveryOptionId)
-    return found || shippingData.options[0] || { methodName: 'Standard Courier Delivery', fee: 95 }
-  }, [shippingData.options, deliveryOptionId])
-
-  const shippingFee = selectedDeliveryOption.fee
-  const isPickup = selectedDeliveryOption.id === 'pickup'
+  const selectedDeliveryOption = DELIVERY_OPTIONS.find(option => option.id === deliveryOptionId)
+  const deliveryItems = useMemo(() => lines.map(line => ({ sku: line.id || line.product.id, quantity: line.qty })), [lines])
+  const deliveryKey = JSON.stringify([deliveryOptionId, deliveryItems, form.address, quoteRevision])
+  const currentReview = deliveryReview?.baseKey === deliveryKey ? deliveryReview : null
+  const displayQuote = pendingCheckout?.deliveryPreview || currentReview?.quote
+  const shippingFee = displayQuote?.feeMinor == null ? null : displayQuote.feeMinor / 100
+  const isPickup = (pendingCheckout?.delivery?.service || deliveryOptionId) === 'pickup'
 
   if (lines.length === 0) {
     return (
@@ -115,13 +114,18 @@ export default function Checkout() {
 
   const requestSubtotal = lines.reduce((sum, line) => sum + (line.product.retail * line.qty), 0)
   const productsTotal = Math.max(requestSubtotal - couponDiscount, 0)
-  const grandTotal = productsTotal + shippingFee
+  const grandTotal = shippingFee === null ? null : productsTotal + shippingFee
 
   const update = (key) => (event) => setForm((current) => ({ ...current, [key]: event.target.value }))
 
   const submit = async (event) => {
     event.preventDefault()
     setError('')
+
+    if (!pendingCheckout && (!guestBffEnabled() || !currentReview?.ready)) {
+      setError('Please check delivery and accept the current charge before submitting.')
+      return
+    }
 
     if (form.paymentMethod === 'cod' && !codAvailable) {
       setError('Cash on Delivery is not available right now.')
@@ -172,12 +176,18 @@ export default function Checkout() {
         paymentMethod: form.paymentMethod,
         note: combinedNote,
         fulfillmentMethod: selectedDeliveryOption.methodName,
-        shippingAmount: shippingFee,
-        shippingQuoteStatus: 'customer_confirmed',
+        delivery: currentReview?.delivery,
+        deliveryPreview: currentReview?.quote,
         botToken,
       })
       if (result?.code === 'ALREADY_SUBMITTING') return
-      if (!result?.ok) setError(result?.error || 'The request could not be submitted. Please retry the same request.')
+      if (!result?.ok) {
+        setError(result?.error || 'The request could not be submitted. Please retry the same request.')
+        if (['DELIVERY_QUOTE_CHANGED', 'DELIVERY_REVIEW_REQUIRED', 'DELIVERY_ACCEPTANCE_REQUIRED'].includes(result?.code)) {
+          setDeliveryReview(null)
+          setQuoteRevision(value => value + 1)
+        }
+      }
     } catch {
       setError('The result could not be confirmed. Retry the same request before starting another order.')
     } finally {
@@ -254,15 +264,15 @@ export default function Checkout() {
             <div className="flex items-center justify-between border-t border-line/60 pt-2 text-navy-soft">
               <div>
                 <span className="font-medium text-navy">Delivery fee</span>
-                <p className="text-xs text-navy-soft">{selectedDeliveryOption.methodName}</p>
+                <p className="text-xs text-navy-soft">{pendingCheckout?.fulfillmentMethod || selectedDeliveryOption.methodName}</p>
               </div>
               <span className={`font-mono tabular-nums font-semibold ${shippingFee === 0 ? 'text-forest font-bold' : 'text-navy'}`}>
-                {shippingFee === 0 ? 'FREE' : peso(shippingFee)}
+                {shippingFee === null ? 'Awaiting quote' : shippingFee === 0 ? 'No charge' : peso(shippingFee)}
               </span>
             </div>
             <div className="flex justify-between border-t border-line pt-3 text-lg font-bold text-navy">
               <span>Total amount</span>
-              <span className="font-mono text-xl tabular-nums text-crimson">{peso(grandTotal)}</span>
+              <span className="font-mono text-xl tabular-nums text-crimson">{grandTotal === null ? 'Not final yet' : peso(grandTotal)}</span>
             </div>
           </div>
 
@@ -297,7 +307,7 @@ export default function Checkout() {
             )}
           </fieldset>
           <p className="mt-4 text-xs leading-relaxed text-navy-soft">
-            Delivery is calculated based on package weight and region. K2 guarantees transparent pricing with no surprise charges.
+            Standard delivery uses the current basket and selected area. Express needs a separate quote and your approval before payment.
           </p>
         </TuscanCard>
 
@@ -326,23 +336,6 @@ export default function Checkout() {
                 </label>
               </div>
 
-              {/* Destination Region Selector */}
-              <div>
-                <label htmlFor="checkout-region" className="block text-sm font-semibold">Destination region</label>
-                <select
-                  id="checkout-region"
-                  value={regionId}
-                  onChange={(e) => setRegionId(e.target.value)}
-                  className={`${fieldClass} mt-1.5`}
-                >
-                  {PHILIPPINES_REGIONS.map((region) => (
-                    <option key={region.id} value={region.id}>
-                      {region.name} · {region.description}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
               <div>
                 <label className="block text-sm font-semibold">Delivery address
                   <textarea
@@ -351,7 +344,8 @@ export default function Checkout() {
                     onChange={update('address')}
                     autoComplete="street-address"
                     placeholder="House/Unit #, Street, Barangay, City, Postal Code"
-                    required
+                    required={!isPickup}
+                    disabled={isPickup}
                   />
                 </label>
                 <p className="mt-1.5 text-xs text-navy-soft">
@@ -359,84 +353,19 @@ export default function Checkout() {
                 </p>
               </div>
 
-                  {/* Delivery Options Selector (Shopee/Lazada style: Metro Manila delivery, Courier delivery, Pickup) */}
-                  <fieldset className="block pt-2">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <legend className="text-sm font-semibold text-navy">Delivery options</legend>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center gap-1 rounded-full border border-forest/20 bg-forest/5 px-2.5 py-0.5 text-xs font-semibold text-forest">
-                          <CheckIcon size={12} />
-                          <span>Fulfilled by K2 Jimzon (Manila Hub Dispatch)</span>
-                        </span>
-                        <span className="rounded-full border border-line bg-surface px-2.5 py-0.5 text-xs font-medium text-navy-soft">
-                          {shippingData.formattedWeight} · {shippingData.parcelCount} pkg
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-2.5 space-y-2.5">
-                      {shippingData.options.map((option) => {
-                        const isSelected = selectedDeliveryOption.id === option.id
-                        return (
-                          <label
-                            key={option.id}
-                            className={`flex min-h-[4rem] cursor-pointer items-start justify-between rounded-xl border p-3.5 transition-all duration-150 ${
-                              isSelected
-                                ? 'border-crimson bg-crimson/[0.03] shadow-sm'
-                                : 'border-line bg-surface hover:border-line-dark hover:bg-black/[0.01]'
-                            }`}
-                          >
-                            <div className="flex items-start gap-3">
-                              <input
-                                type="radio"
-                                name="fulfillment-method"
-                                value={option.id}
-                                checked={isSelected}
-                                onChange={() => setDeliveryOptionId(option.id)}
-                                className="mt-1 h-4 w-4 accent-crimson"
-                              />
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-sm font-bold text-navy">{option.methodName}</span>
-                                  {option.badge && (
-                                    <span
-                                      className={`rounded px-1.5 py-0.5 text-xs font-bold uppercase tracking-wider ${
-                                        option.badge === 'Free'
-                                          ? 'bg-forest/10 text-forest'
-                                          : option.badge === 'Fastest'
-                                            ? 'bg-blue-600/10 text-blue-700'
-                                            : 'bg-amber-500/10 text-amber-700'
-                                      }`}
-                                    >
-                                      {option.badge}
-                                    </span>
-                                  )}
-                                </div>
-                                <p className="mt-0.5 text-xs text-navy-soft">{option.courierHint}</p>
-                                <p className="mt-0.5 text-xs font-medium text-navy/70">Estimated: {option.eta}</p>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <span className={`font-mono text-base font-bold tabular-nums ${option.fee === 0 ? 'text-forest' : 'text-navy'}`}>
-                                {option.fee === 0 ? 'FREE' : peso(option.fee)}
-                              </span>
-                              {isSelected && (
-                                <div className="mt-1 flex justify-end">
-                                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-crimson text-white">
-                                    <CheckIcon size={12} />
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          </label>
-                        )
-                      })}
-                    </div>
-                    <div className="mt-2 flex items-center justify-between text-xs text-navy-soft">
-                      <span>Special / out-of-zone cargo:</span>
-                      <span className="font-medium text-navy">Quoted after review</span>
-                    </div>
-                  </fieldset>
+              <fieldset className="space-y-3 pt-2">
+                <legend className="text-sm font-semibold">Delivery option</legend>
+                {DELIVERY_OPTIONS.map(option => <label key={option.id} className="flex min-h-11 items-start gap-3 rounded-xl border border-line p-3.5">
+                  <input type="radio" name="fulfillment-method" value={option.id} checked={deliveryOptionId === option.id}
+                    onChange={() => { setDeliveryReview(null); setDeliveryOptionId(option.id) }} className="mt-1 h-4 w-4 shrink-0 accent-crimson" />
+                  <span><span className="block text-sm font-semibold">{option.methodName}</span>
+                    <span className="block text-sm leading-relaxed text-navy-soft">{option.hint}</span></span>
+                </label>)}
+              </fieldset>
+              {pendingCheckout && <p role="status" className="text-sm text-navy-soft">Your original delivery terms are held for this retry.</p>}
+              <div hidden={Boolean(pendingCheckout)}>
+                <DeliveryEstimate items={deliveryItems} service={deliveryOptionId} baseKey={deliveryKey} onReview={setDeliveryReview} paused={Boolean(pendingCheckout)} />
+              </div>
 
               {/* Payment Preference Selector */}
               <fieldset className="block pt-2">
@@ -524,14 +453,14 @@ export default function Checkout() {
 
             {pendingCheckout && (
               <p role="status" className="mt-4 text-sm text-navy-soft">
-                Your original request details are held while we confirm its result. Retry this request before starting another order.
+                Your original request details are held while we confirm its result. Retry this request before starting another order. Basket and coupon changes are paused to prevent a duplicate order.
               </p>
             )}
             <TurnstileChallenge key={challengeKey} enabled={guestBffEnabled()} action="guest_order" onTokenChange={setBotToken} />
 
             {error && <p role="alert" className="mt-4 rounded-xl border border-crimson/25 bg-crimson/5 p-3 text-sm text-crimson">{error}</p>}
 
-            <CrimsonButton type="submit" className="mt-5 w-full py-4 text-base font-bold shadow-sm" disabled={submitting}>
+            <CrimsonButton type="submit" className="mt-5 w-full py-4 text-base font-bold shadow-sm" disabled={submitting || (!pendingCheckout && !currentReview?.ready)}>
               {submitting
                 ? 'Submitting request…'
                 : pendingCheckout
@@ -543,12 +472,11 @@ export default function Checkout() {
               <button
                 type="button"
                 onClick={() => {
-                  resetPendingCheckout()
-                  setError('')
+                  go('messages')
                 }}
                 className="mt-3 flex min-h-11 w-full items-center justify-center rounded-lg border border-line bg-[var(--store-surface-bg)] px-4 py-2.5 text-sm font-semibold text-navy transition hover:border-crimson hover:text-crimson focus-visible:outline focus-visible:outline-2 focus-visible:outline-crimson"
               >
-                Edit order or contact details
+                Contact K2 about this request
               </button>
             )}
             <p className="mt-3 text-center text-xs text-navy-soft">

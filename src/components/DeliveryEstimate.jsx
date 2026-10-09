@@ -1,137 +1,107 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { peso } from '../data/products'
-import { guestBffEnabled, quoteGuestDelivery } from '../services/guestCommerceService'
-import { getSupabaseClient } from '../lib/lazySupabaseClient'
+import { guestBffEnabled, listDeliveryLocations, quoteGuestDelivery } from '../services/guestCommerceService'
 
-// MAP-023 — the customer-facing delivery charge.
-//
-// This component shows a number in exactly one situation: the destination is one
-// of the owner-approved exact localities, every item in the cart has a measured
-// packed weight, and the server resolved a STANDARD_FEE. In every other case it
-// renders the existing "Quoted after review" line, unchanged. It never estimates,
-// never interpolates, and never falls back to a regional figure — a wrong number
-// here is a commercial commitment K2 would have to honour.
+const SOURCE = 'psgc-2026-06-30'
+const areaLabel = places => places.every(place => place.level === 'Reg') ? 'Region'
+  : places.every(place => place.level === 'Bgy') ? 'Barangay'
+    : places.every(place => place.level === 'SubMun') ? 'City district'
+      : places.every(place => place.level === 'Prov') ? 'Province' : 'City, municipality or area'
 
-const UNPRICED = { label: 'Quoted after review', fee: null }
-
-/**
- * Total packed weight, or null if any line is unweighed. products.net_weight is
- * display text and is deliberately not consulted: it describes the contents, not
- * the parcel, so using it would price an order from a label.
- */
-function packedWeightG(lines) {
-  let total = 0
-  for (const { product, qty } of lines) {
-    const each = product?.shipping_weight_g
-    if (!Number.isInteger(each) || each <= 0) return null
-    total += each * qty
-  }
-  return total > 0 ? total : null
-}
-
-export default function DeliveryEstimate({ lines, subtotalMinor, onQuote }) {
-  const [localities, setLocalities] = useState([])
-  const [localityId, setLocalityId] = useState('')
-  const [quote, setQuote] = useState(null)
-  const [checking, setChecking] = useState(false)
-
-  const weightG = useMemo(() => packedWeightG(lines), [lines])
-  const quotable = guestBffEnabled() && weightG !== null
+// The parent invalidates review synchronously using baseKey; effects ignore late replies.
+export default function DeliveryEstimate({ items, service, baseKey, onReview, paused }) {
+  const [path, setPath] = useState([])
+  const [levels, setLevels] = useState([])
+  const [areaState, setAreaState] = useState({ loading: false, error: '' })
+  const [retry, setRetry] = useState(0)
+  const [quoteState, setQuoteState] = useState(null)
+  const [accepted, setAccepted] = useState(false)
+  const leaf = path.at(-1)
+  const pathKey = path.map(place => place.code).join('/')
+  const complete = service === 'pickup' || leaf?.level === 'Bgy'
+  const requestKey = `${baseKey}/${pathKey}/${retry}`
+  const currentQuote = quoteState?.key === requestKey ? quoteState.quote : null
 
   useEffect(() => {
-    if (!quotable) return undefined
+    if (paused || service === 'pickup' || leaf?.level === 'Bgy' || !guestBffEnabled()) return undefined
     let active = true
-    ;(async () => {
-      const client = await getSupabaseClient()
-      if (!client) return
-      const { data, error } = await client.rpc('read_delivery_pilot_localities_v1')
-      // A destination list we cannot load simply means no picker; checkout keeps
-      // working on the request model it has always used.
-      if (active && !error && Array.isArray(data)) setLocalities(data)
-    })()
-    return () => { active = false }
-  }, [quotable])
-
-  useEffect(() => {
-    if (!quotable || !localityId) { setQuote(null); onQuote?.(null); return undefined }
-    let active = true
-    setChecking(true)
-    setQuote(null)
-    onQuote?.(null)
-    ;(async () => {
-      const result = await quoteGuestDelivery({
-        channel: 'Website',
-        service: 'K2 Standard Delivery',
-        localityId,
-        parcelCount: 1,
-        weightG,
-        merchandiseSubtotalMinor: subtotalMinor,
-        // The storefront cannot observe these, so it states the ordinary case.
-        // Staff review still catches a parcel that turns out to be an exception,
-        // and an accepted standard fee is K2's to absorb from that point on.
-        oversize: false,
-        remoteArea: false,
-        specialProtection: false,
-      })
+    setAreaState({ loading: true, error: '' })
+    listDeliveryLocations(leaf?.code || null).then(result => {
       if (!active) return
-      const resolved = result.ok && result.quote?.customerVisible ? result.quote : null
-      setQuote(resolved)
-      onQuote?.(resolved)
-      setChecking(false)
-    })()
+      if (result.ok && result.children.length) {
+        setLevels(current => [...current.slice(0, path.length), result.children])
+        setAreaState({ loading: false, error: '' })
+      } else setAreaState({ loading: false, error: result.error || 'No delivery areas were found. Choose the previous area again.' })
+    })
     return () => { active = false }
-  }, [quotable, localityId, weightG, subtotalMinor, onQuote])
+  }, [service, pathKey, leaf?.code, leaf?.level, path.length, retry, paused])
 
-  if (!quotable || localities.length === 0) {
-    return (
-      <p className="flex justify-between text-navy-soft">
-        <span>Courier delivery</span>
-        <span>{UNPRICED.label}</span>
-      </p>
-    )
+  useEffect(() => {
+    if (paused) return undefined
+    onReview(null)
+    setAccepted(false)
+    if (!complete || !guestBffEnabled()) return undefined
+    let active = true
+    setQuoteState({ key: requestKey, loading: true })
+    const destination = service === 'pickup' ? null : { sourceVersion: SOURCE, path: path.map(place => place.code) }
+    const timer = setTimeout(() => quoteGuestDelivery({ service, items, destination }).then(result => {
+      if (!active) return
+      const quote = result.ok && result.quote?.service === service ? result.quote : null
+      setQuoteState({ key: requestKey, quote, error: quote ? '' : result.error || 'We could not check delivery. Retry the delivery check.' })
+      if (quote) onReview({ baseKey, quote, ready: service === 'express', delivery: {
+        service, destination, acceptance: service === 'express' ? null
+          : { inputFingerprint: quote.inputFingerprint, rateVersion: quote.rateVersion },
+      } })
+    }), 350)
+    return () => { active = false; clearTimeout(timer) }
+    // items/path are represented by the request key. A held view starts no
+    // requests; definitive rejection unpauses lookup and requires new review.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requestKey, complete, service, onReview, paused])
+
+  const choose = (index, code) => {
+    const place = levels[index].find(candidate => candidate.code === code)
+    onReview(null)
+    setAccepted(false)
+    setPath(current => [...current.slice(0, index), ...(place ? [place] : [])])
+    setLevels(current => current.slice(0, index + 1))
   }
 
-  return (
-    <div className="space-y-2">
-      <label className="block">
-        <span className="text-sm font-semibold">Delivery destination</span>
-        <select
-          value={localityId}
-          onChange={(event) => setLocalityId(event.target.value)}
-          className="store-field mt-1.5 min-h-11 w-full px-3 text-base"
-        >
-          <option value="">Select your barangay for an exact fee…</option>
-          {localities.map((place) => (
-            <option key={place.localityId} value={place.localityId}>
-              {place.cityMunicipality} — {place.barangay}
-            </option>
-          ))}
+  if (!guestBffEnabled()) return <p role="status" className="text-sm text-navy-soft">Order requests are not active yet. Contact K2 for help.</p>
+  return <div className="space-y-3">
+    {service !== 'pickup' && <fieldset className="space-y-3">
+      <legend className="text-sm font-semibold">Delivery area</legend>
+      {levels.map((places, index) => <div key={`${index}-${places[0]?.code}`} className="text-sm font-semibold">
+        <label htmlFor={`delivery-area-${index}`}>{areaLabel(places)}</label>
+        <select id={`delivery-area-${index}`} className="store-field mt-1.5 min-h-11 w-full min-w-0 px-3 text-base"
+          value={path[index]?.code || ''} onChange={event => choose(index, event.target.value)}>
+          <option value="">Choose {areaLabel(places).toLowerCase()}</option>
+          {places.map(place => <option key={place.code} value={place.code}>{place.name}</option>)}
         </select>
-      </label>
-      <p className="flex justify-between text-navy-soft">
-        <span>Courier delivery</span>
-        <span>
-          {checking ? 'Checking…' : quote ? peso(quote.feeMinor / 100) : UNPRICED.label}
-        </span>
-      </p>
-      {localityId && !checking && !quote && (
-        <p className="text-xs leading-relaxed text-navy-soft">
-          We do not have a confirmed courier rate for this order yet, so we will quote it for your
-          approval before anything is sent.
-        </p>
-      )}
-      {quote && (
-        <p className="text-xs leading-relaxed text-forest">
-          This is your final delivery charge for this address. If the courier later charges us more,
-          we absorb the difference.
-        </p>
-      )}
-      {!localityId && (
-        <p className="text-xs leading-relaxed text-navy-soft">
-          Not listed? We deliver nationwide: your delivery is quoted for your approval before
-          anything is sent.
-        </p>
-      )}
+      </div>)}
+      {areaState.loading && <p role="status" className="text-sm text-navy-soft">Loading delivery areas…</p>}
+      {areaState.error && <p role="alert" className="text-sm text-crimson">{areaState.error}</p>}
+    </fieldset>}
+    <div aria-live="polite" className="text-sm leading-relaxed text-navy-soft">
+      {quoteState?.key === requestKey && quoteState.loading ? 'Checking delivery…'
+        : currentQuote ? service === 'express' ? 'Express delivery needs a staff quote and your approval. No final total or payment is due yet.'
+          : `Delivery charge: ${peso(currentQuote.feeMinor / 100)}.`
+            + (currentQuote.weightBasis === 'estimated' ? ' Package weight is estimated.' : '')
+          : 'Choose your complete delivery area to check the charge.'}
     </div>
-  )
+    {quoteState?.key === requestKey && quoteState.error && <p role="alert" className="text-sm text-crimson">{quoteState.error}</p>}
+    {(areaState.error || quoteState?.error) && <button type="button" onClick={() => { onReview(null); setRetry(value => value + 1) }}
+      className="min-h-11 rounded-lg border border-line px-3 text-sm font-semibold">Retry delivery check</button>}
+    {currentQuote && service !== 'express' && <label className="flex min-h-11 items-start gap-3 text-sm leading-relaxed">
+      <input type="checkbox" className="mt-1 h-4 w-4 shrink-0 accent-crimson" checked={accepted} onChange={event => {
+        const checked = event.target.checked
+        setAccepted(checked)
+        onReview({ baseKey, quote: currentQuote, ready: checked, delivery: {
+          service, destination: service === 'pickup' ? null : { sourceVersion: SOURCE, path: path.map(place => place.code) },
+          acceptance: { inputFingerprint: currentQuote.inputFingerprint, rateVersion: currentQuote.rateVersion },
+        } })
+      }} />
+      <span>I accept the {peso(currentQuote.feeMinor / 100)} delivery charge for this order{service === 'pickup' ? ' with warehouse pickup' : ' and selected area'}.</span>
+    </label>}
+  </div>
 }

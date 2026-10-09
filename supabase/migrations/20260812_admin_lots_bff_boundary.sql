@@ -338,10 +338,9 @@ revoke all on function public.execute_admin_lot_command_v1(text,bigint,uuid,uuid
 grant execute on function public.execute_admin_lot_command_v1(text,bigint,uuid,uuid,text,text)
   to authenticated;
 
-create or replace view public.v_product_stock_from_batches as
-select sku,coalesce(sum(quantity_available),0) as stock_from_batches
-from public.product_batches group by sku;
-alter view public.v_product_stock_from_batches set (security_invoker=true);
+-- Preserve the existing narrow public view/helper, including its grants and
+-- query-time Website eligibility. Internal compatibility caches below are
+-- lot-derived values, not Website publication or offer authority.
 
 create or replace view public.v_expiring_batches as
 select b.id,b.sku,coalesce(p.name,p.title::varchar,p.sku) as product_name,
@@ -359,11 +358,11 @@ alter view public.v_expiring_batches set (security_invoker=true);
 
 select set_config('k2.allow_stock_write','on',true);
 update public.products p set
-  stock_available=coalesce((select v.stock_from_batches from public.v_product_stock_from_batches v where v.sku=p.sku),0),
-  total_stock=coalesce((select v.stock_from_batches from public.v_product_stock_from_batches v where v.sku=p.sku),0);
+  stock_available=coalesce((select sum(b.quantity_available) from public.product_batches b where b.sku=p.sku),0),
+  total_stock=coalesce((select sum(b.quantity_available) from public.product_batches b where b.sku=p.sku),0);
 
-revoke execute on function public.reconcile_product_batches(text,jsonb,text) from authenticated;
-revoke execute on function public.set_batch_clearance_approval(uuid,boolean,text) from authenticated;
+revoke execute on function public.reconcile_product_batches(text,jsonb,text) from public,anon,authenticated;
+revoke execute on function public.set_batch_clearance_approval(uuid,boolean,text) from public,anon,authenticated;
 
 notify pgrst,'reload schema';
 commit;

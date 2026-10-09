@@ -1,114 +1,41 @@
 # K2 Jimzon — Master Operations Workflow Graph Specification
 
-**Status:** PRODUCTION INTEGRATED & ACCESSIBLE VIA ADMIN BOS  
-**Surface:** Admin Business Operating System (BOS)  
-**Primary Module:** `src/components/admin/master-workflow-graph/`  
-**Route / Section:** `workflow_graph` (Admin Navigation & Header Shortcut)  
-**Governance:** Operations Rulebook §1–§24, SYSTEM_BRAIN_CURRENT.md & K2 Pasabuy Commerce Operations  
+**Status:** revised source and local fixture verification, 2 October 2026; deployed-host acceptance unverified.
+**Surface:** Admin BOS `workflow_graph` and the existing guide modal.
+**Authority:** Operations rulebook and verified System Brain; MAP-028 owns readability/guide acceptance. MAP-018/023/026/017/020 own operational activation dependencies.
 
----
+## Reading and exploration
 
-## 1. Executive Summary & Operational Sections
+The 49-step / 60-connection graph preserves all existing node IDs and relationships. It has five operational sections and eight workflows: cross-border lifecycle, existing-stock intake, new-product intake, inventory handover, monthly count, order fulfillment, Pasabuy and channel readiness. The guide is versioned draft source, not owner-locked operational approval.
 
-The **Master Operations Workflow Graph** organizes K2 Jimzon's cross-border logistics and warehouse operations into 4 clear operational domains:
+Open at 100% with the selected workflow and the shared entry step. Full map shows all 49 steps. Type filters remove unrelated steps; they never dim words. Titles use 16px and supporting text 14px at ordinary browser size. Native scroll/touch, mouse background dragging and focused arrow-key panning support exploration. Selection centers against the actual viewport. Search offers selectable results and returns keyboard focus to the selected button within the same map instance. Full instructions remain in the Selected step details region below the canvas. Browser text enlargement reflows instructions; canvas zoom controls serve overview navigation.
 
-```
-┌──────────────────────────────────────────────────────────────────────────────────────────┐
-│                            Admin BOS Master Workflow Graph                               │
-│                                                                                          │
-│  [ All Workflows ] [ ✈️ Italy & Cross-Border ] [ 📥 Manila Intake ] [ 🏢 Warehouse ] [ 📦 Orders ] │
-└────────────────────────────────────────────┬─────────────────────────────────────────────┘
-                                             │
-      ┌──────────────────────────────────────┴──────────────────────────────────────┐
-      │                                                                             │
-      ▼                                                                             ▼
-┌───────────────────────────────┐                             ┌─────────────────────────────────┐
-│   Phase 1: Italy (Cousin)     │                             │    Phase 2: Air Cargo Transit   │
-│ - Milan Supermarkets / Bottega│                             │ - Malpensa (MXP) -> NAIA (MNL)  │
-│ - Save EUR store receipts (€) ├────────────────────────────►│ - Air Waybill Tracking         │
-│ - Pack Flight Cargo Box       │                             │ - Stock status: 'in_transit'    │
-│ - Apply Security Seal Tape    │                             └────────────────┬────────────────┘
-└───────────────────────────────┘                                              │
-                                                                               ▼
-┌───────────────────────────────────────────────────────────────────────────────────────────────┐
-│                               Phase 3: Manila Hub Arrival & Unboxing                          │
-│ - Scan box QR & verify tamper seal serial against Milan manifest                              │
-│ - Open box on stainless steel inspection bench & perform physical QC check                     │
-│ - Laser-scan printed manufacturer barcode (EAN-13) for catalog lookup                         │
-└──────────────────────────────────────────────┬────────────────────────────────────────────────┘
-                                               │
-                       ┌───────────────────────┴───────────────────────┐
-                       ▼                                               ▼
-         ┌───────────────────────────┐                   ┌───────────────────────────┐
-         │ Branch A: Existing SKU    │                   │ Branch B: New Product     │
-         │ - Instant catalog match   │                   │ - Uncataloged Italian SKU │
-         │ - Register FEFO batch lot │                   │ - Landed cost floor (€->₱)│
-         │ - Best Before Date (YYYY) │                   │ - AI Image Studio prompts │
-         │ - Landed cost floor (₱)   │                   │ - Ingredients & Allergens │
-         │ - Place on shelf (FEFO)   │                   │ - Master SKU creation     │
-         └─────────────┬─────────────┘                   └─────────────┬─────────────┘
-                       │                                               │
-                       └───────────────────────┬───────────────────────┘
-                                               ▼
-                                 ┌───────────────────────────┐
-                                 │ Phase 4: Commit & Sync    │
-                                 │ - Manager authorizes      │
-                                 │ - Live stock increments   │
-                                 │ - Storefront/Shopee/Lazada│
-                                 └───────────────────────────┘
-```
+## Current operational gates
 
----
+| Subject | Required guide distinction |
+| --- | --- |
+| Product intake | Preserve canonical subcategory and approved manual K2 Product Content / K2 Product Image Studio Projects. The AiPromptStudioCard remains a prompt helper; it does not call external image APIs or publish products. |
+| Receipt | Recording physical stock does not publish or authorize picking. Check eligible lots, explicit Website assignment and attributable order allocation/commitment. |
+| Eligible lots | Manila dates; 90-day ordinary band, reasoned current approval for 31–89-day clearance, no ordinary offer for 0–30/unknown. Relevant history invalidates clearance. Category rules may raise the threshold. |
+| Shop offers | One canonical physical truth; existing two-unit per-eligible-shop proposal bounded by eligible availability. Offer allocation does not change custody. Protected locks/transfer acceptance and complete snapshots remain required; current Shop stock is read-only. |
+| Website | Global publication and Website membership are separate. Review product/media/subcategory and eligible stock. Unlisted uses the reviewed direct-offer path. |
+| Orders/payment | Prepared 30-minute purchase holds are distinct from attributable commitments. Independent staff compare actual receiving-account funds against the accepted saved grand total, including delivery once. First attribution survives packing/handover; unknown causes reconcile. |
+| Express | Current owner target is staff-quoted NCR Lalamove/Grab express, availability and buyer acceptance before payment. Selecting Express books no rider; unknown fees remain pending. Protected editable/versioned rates are a target requiring implementation/acceptance. |
+| Channels | Local Shopee ingress preparation is not a verified real-provider event. Other marketplace/social adapters stay unavailable unless separately evidenced. |
 
-## 2. Operational Domains & Workflows
+Checkmarks and Training examples only track guide review in the open component. They do not save inventory, reserve stock, verify payment or establish real completion. Named existing screens perform real work; check saved records and receipts there.
 
-### ✈️ Section 1: Italy & Cross-Border (`cross_border`)
-- **`cross_border_lifecycle` (Italy Sourcing to Manila Intake Lifecycle):**
-  - Step 1: Milan Sourcing & Store Purchase by Cousin (Esselunga, Coop, Eataly, fiscal receipts).
-  - Step 2: Milan Box Packing & Manifest Pre-Tagging (Flight Box ID, unit counts, security seal).
-  - Step 3: Air Cargo International Transit (Flight AZ-784, tracking status `in_transit`).
-  - Step 4: Manila Airport Receipt & Seal Verification (Seal serial number cross-checked).
-  - Step 5: Physical Box Opening & Item Quality Check (Stainless steel bench inspection).
-  - Step 6: Decision Branch: Existing SKU vs New Product (Laser scan lookup).
-  - Step 7: Commit Stock & Multi-Channel Sync (Storefront, Shopee, Lazada).
+## Component boundaries
 
-### 📥 Section 2: Manila Intake & Catalog (`intake_branching`)
-- **`existing_stock_intake` (Quick Intake for Existing Catalog SKU):**
-  - Step 1: Barcode Scan & Existing SKU Match.
-  - Step 2: New FEFO Batch Lot & Expiry Registration (Best Before Date + Landed Cost).
-  - Step 3: Physical Lot Sticker Printing.
-  - Step 4: Shelf Bin Placement (Newer stock behind older stock).
-  - Step 5: Commit Added Stock to Live Channels.
-- **`new_product_intake` (New Product Intake & Catalog Creation):**
-  - Step 1: Master SKU Registration & Sourcing Passport.
-  - Step 2: Pricing Matrix & Landed Cost Floor (€ -> ₱ conversion).
-  - Step 3: ChatGPT & AI Studio Photorealistic Image Generation.
-  - Step 4: Before/After Unboxing Experience Setup.
-  - Step 5: Ingredients, Allergens & Preparation Guide.
-  - Step 6: Review & Live Storefront Activation.
+| File | Responsibility |
+| --- | --- |
+| MasterWorkflowGraph.jsx | Section/workflow selection, scoped search focus, route tracing and local guide marks. |
+| WorkflowSvgCanvas.jsx | Computed visible layers, actual model edges, native viewport exploration and immediate focus/zoom. No decorative camera animation. |
+| WorkflowDetailDrawer.jsx | Complete step instructions, implementation notes, local examples and graph context. |
+| workflowData.js / workflowGraph.js | Versioned teaching data and unchanged relationship identities; never operational authority. |
+| workflowMap.css | Admin-scoped reading contrast, input text and responsive tooltip containment. |
+| AiPromptStudioCard.jsx | Existing manually used prompt studio mounted in the guide; approved Projects remain the new-product teaching path. |
 
-### 🏢 Section 3: Warehouse & Custody (`warehouse_custody`)
-- **`inventory_handover` (Two-Party Inventory Custody Handshake):**
-  - Enforces Operations Rulebook §10: Sender creates transfer offer; receiver independently scans all units and signs with session PIN.
-- **`monthly_count` (Monthly Cycle Count & Inventory Audit):**
-  - Enforces Operations Rulebook §15: Warehouse zone freeze, blind barcode counting, automated variance detection, secondary recount with reason codes, and manager authorization.
+## Verification and recovery
 
-### 📦 Section 4: Orders & Fulfillment (`orders_fulfillment`)
-- **`new_order` (Order Fulfillment & Packing Workflow):**
-  - FEFO stock reservation, customer messaging, bank payment verification, 2-factor barcode scan at packing station, honeycomb packing, and courier handover.
-- **`pasabuy_lifecycle` (Pasabuy Custom Sourcing Workflow):**
-  - Custom shopper request triage, Milan store research, itemized quote approval, 50% deposit, Milan purchase, and Manila delivery.
-
----
-
-## 3. Component Architecture & File Layout
-
-All code and data definitions reside in `src/components/admin/master-workflow-graph/`:
-
-| File | Purpose & Responsibilities |
-| :--- | :--- |
-| **`MasterWorkflowGraph.jsx`** | Central orchestrator. Manages domain section tabs (`WORKFLOW_SECTIONS`), workflow selector pills, keyword search filter, shift progress tracker, and step navigation. |
-| **`WorkflowSvgCanvas.jsx`** | Dynamic SVG rendering engine. Dynamically measures DOM node coordinates with `ResizeObserver` and draws smooth Bezier curves, animated dashed pulse strokes, and directional arrow markers. |
-| **`WorkflowDetailDrawer.jsx`** | Granular step drill-down panel. Renders shift checklists, barcode simulation runner, failure recovery accordion, rulebook safety invariants, actor tags, location badges, and direct navigation jump triggers. |
-| **`AiPromptStudioCard.jsx`** | Dedicated prompt engineering studio. Generates luxury editorial prompts for ChatGPT (DALL-E 3), Midjourney v6, and FLUX.1 with category presets, negative prompts, and camera settings. |
-| **`workflowData.js`** | Single source of truth data dictionary containing complete node definitions, checklists, simulation fixtures, troubleshooting guides, and AI prompt templates. |
+`npm run test:workflow-map` exercises the actual components in a network-isolated local fixture. It is registered under the existing workflow test gate. Focused guide/graph/procedure contracts and the final development gate accompany the browser results. See `docs/evidence/20261002-workflow-map/README.md` for exact results/limits and `docs/design-checkpoints/20261002-workflow-map/README.md` for source recovery. No provider, database or production release is performed by this guide change. Actual staff, touch hardware and exact-host acceptance remain in MAP-028/025 and the operational MAP dependencies; no completed work is kept as an active queue item.

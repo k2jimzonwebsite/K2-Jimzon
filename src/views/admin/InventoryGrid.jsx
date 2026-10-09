@@ -140,8 +140,8 @@ function StatusDecisionDialog({ decision, busy, onCancel, onConfirm }) {
 const inp = 'w-full rounded-adm-sm border border-white/20 bg-adm-raised px-3.5 py-2.5 text-base text-white font-semibold focus:border-blue outline-none transition-colors shadow-sm'
 const ta  = `${inp} resize-none`
 
-function Label({ children }) {
-  return <label className="block text-sm font-extrabold uppercase tracking-wider text-white/70 mb-1.5">{children}</label>
+function Label({ children, htmlFor }) {
+  return <label htmlFor={htmlFor} className="block text-sm font-extrabold uppercase tracking-wider text-white/70 mb-1.5">{children}</label>
 }
 
 function Section({ color = 'blue', title, children }) {
@@ -211,6 +211,7 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
   const [statusBusy, setStatusBusy] = useState(null)
   const [statusDecision, setStatusDecision] = useState(null)
   const [editReason, setEditReason] = useState('')
+  const [productTaxonomyReview, setProductTaxonomyReview] = useState(null)
   const [editError, setEditError] = useState('')
   const editOperationKey = useRef(null)
   const [notice, setNotice] = useState(null)
@@ -373,12 +374,14 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     setIsAdding(false)
     setEditReason('')
     setEditError('')
+    setProductTaxonomyReview(null)
     editOperationKey.current = null
     if (!secure) { setEditingProduct(product); return }
     if (!canManageProducts) { flash('Only an administrator can change product-master records.', true); return }
     const result = await getAdminProductMasterBff(product.sku)
     if (!result.ok) { flash(result.error || 'The product record could not be loaded.', true); return }
     setEditingProduct(result.product)
+    setProductTaxonomyReview(result.taxonomyReview || null)
   }
 
   const handleSave = async (e) => {
@@ -387,11 +390,25 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
     if (secure) {
       if (isAdding) { setEditError('Use phone-first intake to create an attributable product Draft.'); return }
       if (editReason.trim().length < 8) { setEditError('Enter a specific save reason of at least 8 characters.'); return }
+      if (productTaxonomyReview?.status === 'eligible'
+          && (!editingProduct.brand_id || !editingProduct.category_id)) {
+        setEditTab('details')
+        setEditError('Choose an existing brand and category before saving this zero-stock Draft.')
+        return
+      }
       setSaving(true)
       const operationKey = editOperationKey.current || crypto.randomUUID()
       editOperationKey.current = operationKey
+      const patch = buildPayload(editingProduct)
+      // Expiry is a batch fact, not product-master data. The legacy direct-write
+      // editor still displays it, but the signed Product Master does not edit it.
+      delete patch.expiry_date
+      if (productTaxonomyReview?.status === 'eligible') {
+        patch.brand_id = editingProduct.brand_id
+        patch.category_id = editingProduct.category_id
+      }
       const result = await commandAdminProductMasterBff('update', {
-        sku: editingProduct.sku, patch: buildPayload(editingProduct),
+        sku: editingProduct.sku, patch,
         expectedUpdatedAt: editingProduct.updated_at, reason: editReason.trim(),
       }, operationKey)
       setSaving(false)
@@ -928,12 +945,50 @@ export default function InventoryGrid({ launchTool, onLaunchToolHandled, canMana
                         <input type="text" value={editingProduct.size || ''} onChange={e => set('size', e.target.value)} className={inp} placeholder="e.g. 400g jar" />
                       </div>
                       <div>
-                        <Label>Expiry Date</Label>
-                        <input type="date" value={editingProduct.expiry_date || ''} onChange={e => set('expiry_date', e.target.value)}
-                          className={`${inp} text-neutral-300`} />
+                        <Label htmlFor="product-expiry-date">Expiry Date</Label>
+                        <input id="product-expiry-date" type="date" value={editingProduct.expiry_date || ''} onChange={e => set('expiry_date', e.target.value)}
+                          disabled={secure} aria-describedby={secure ? 'product-expiry-help' : undefined}
+                          className={`${inp} text-neutral-300 disabled:cursor-not-allowed disabled:opacity-60`} />
+                        {secure && <p id="product-expiry-help" className="mt-1 text-xs text-white/45">Expiry is recorded on each batch during receiving.</p>}
                       </div>
                     </div>
                   </Section>
+
+                  {secure && productTaxonomyReview && (
+                    <Section color="blue" title="Initial brand and category">
+                      {productTaxonomyReview.status === 'eligible' ? (
+                        <>
+                          <p className="text-sm text-white/55">This unpublished Draft has no stock or inventory history. Assign existing canonical records before receiving begins. These IDs cannot be changed after assignment.</p>
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            <div>
+                              <Label htmlFor="product-initial-brand">Brand</Label>
+                              <select id="product-initial-brand" value={editingProduct.brand_id || ''}
+                                onChange={event => set('brand_id', event.target.value)}
+                                disabled={saving || Boolean(editingProduct.brand_id)}
+                                className={`${inp} min-h-11 disabled:cursor-not-allowed disabled:opacity-60`}>
+                                <option value="">Choose an existing brand</option>
+                                {productTaxonomyReview.brandOptions.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
+                              </select>
+                            </div>
+                            <div>
+                              <Label htmlFor="product-initial-category">Canonical category</Label>
+                              <select id="product-initial-category" value={editingProduct.category_id || ''}
+                                onChange={event => set('category_id', event.target.value)}
+                                disabled={saving || Boolean(editingProduct.category_id)}
+                                className={`${inp} min-h-11 disabled:cursor-not-allowed disabled:opacity-60`}>
+                                <option value="">Choose an existing category</option>
+                                {productTaxonomyReview.categoryOptions.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
+                              </select>
+                            </div>
+                          </div>
+                        </>
+                      ) : productTaxonomyReview.status === 'blocked' ? (
+                        <p role="status" className="text-sm text-white/55">Initial assignment is closed because this product has stock or inventory history. Ask an administrator to review the existing records.</p>
+                      ) : (
+                        <p role="status" className="text-sm text-white/55">Initial assignment eligibility or canonical choices could not be verified. Refresh later; no IDs can be entered manually.</p>
+                      )}
+                    </Section>
+                  )}
 
                   <DetailBlock title="Product description">
                     <div>

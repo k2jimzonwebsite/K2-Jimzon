@@ -3,6 +3,27 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/*', route => new URL(route.request().url()).hostname === '127.0.0.1' ? route.continue() : route.abort())
 })
 
+for (const query of ['quote=pending', 'quote=quoted', 'quote=unrecognized', 'nullTotal=1']) {
+  test(`pending final charge blocks positive payment steps: ${query}`, async ({ page }, testInfo) => {
+    if (query === 'quote=pending') await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto(`/tests/fixtures/payment-harness.html?${query}&state=not_requested`)
+    await page.getByRole('button', { name: 'Review local payment' }).click()
+    const dialog = page.getByRole('dialog')
+    await expect(dialog).toContainText('final total need buyer acceptance')
+    await expect(dialog.getByRole('button', { name: 'Record transition' })).toHaveCount(0)
+    await expect(dialog.getByLabel('Next valid state')).toHaveCount(0)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    if (query === 'quote=pending' || query === 'quote=unrecognized') await page.screenshot({ path: testInfo.outputPath('pending-payment.png'), fullPage: true })
+  })
+}
+
+test('pending final charge still permits refund recovery', async ({ page }) => {
+  await page.goto('/tests/fixtures/payment-harness.html?quote=pending&state=verified')
+  await page.getByRole('button', { name: 'Review local payment' }).click()
+  await expect(page.getByLabel('Next valid state')).toHaveValue('refunded')
+  await expect(page.getByLabel('Next valid state').locator('option')).toHaveCount(1)
+})
+
 for (const viewport of [{ width: 375, height: 812 }, { width: 844, height: 390 }, { width: 1280, height: 900 }]) {
   test(`correct rejected evidence safely at ${viewport.width}x${viewport.height}`, async ({ page }) => {
     await page.setViewportSize(viewport)
@@ -18,6 +39,7 @@ for (const viewport of [{ width: 375, height: 812 }, { width: 844, height: 390 }
     await expect(dialog).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     await page.evaluate(() => window.finishPayment())
+    await expect(dialog).not.toBeVisible()
     await expect(page.getByRole('status')).toContainText('evidence_submitted')
     await expect(page.getByRole('button', { name: 'Review local payment' })).toBeFocused()
   })

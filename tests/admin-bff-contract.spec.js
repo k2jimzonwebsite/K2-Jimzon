@@ -1,5 +1,22 @@
 import { expect, test } from '@playwright/test'
 import { createHash, createHmac } from 'node:crypto'
+import { validateExpressQuote } from '../server/express-delivery-contract.js'
+
+test('manual express quote requires actual route package time availability and bounded cents', () => {
+  const quote = { orderRequestId: '11111111-1111-4111-8111-111111111111', expectedVersion: 0,
+    courier: 'Lalamove', feeMinor: 9515, quotedAt: '2026-10-08T04:00:00.000Z', expiresAt: '2026-10-08T05:00:00.000Z',
+    route: 'Synthetic pickup to synthetic NCR destination', packageDescription: 'Synthetic sealed parcel',
+    availabilityNote: 'Synthetic availability check; not booking', evidenceRef: 'synthetic:quote', note: 'Synthetic review' }
+  expect(validateExpressQuote(quote)).toEqual(quote)
+  expect(validateExpressQuote({ ...quote, feeMinor: 0 }).feeMinor).toBe(0)
+  // Static transport validation cannot invalidate a saved successful retry by time.
+  expect(validateExpressQuote({ ...quote, quotedAt: '2020-01-01T00:00:00.000Z', expiresAt: '2020-01-01T01:00:00.000Z' }).feeMinor).toBe(9515)
+  for (const body of [ { ...quote, feeMinor: '9515' }, { ...quote, feeMinor: 10000001 }, { ...quote, feeMinor: -1 },
+    { ...quote, feeMinor: 0.5 }, { ...quote, expectedVersion: true }, { ...quote, courier: 'Unverified courier' },
+    { ...quote, quotedAt: '2026-02-30T04:00:00.000Z' }, { ...quote, expiresAt: quote.quotedAt },
+    { ...quote, orderRequestId: [quote.orderRequestId] }, { ...quote, route: '' }, { ...quote, packageDescription: '' }, { ...quote, availabilityNote: ' ' },
+    { ...quote, evidenceRef: '' }, { ...quote, customerConfirmed: true } ]) expect(() => validateExpressQuote(body)).toThrow('REQUEST_INVALID')
+})
 import loginHandler from '../prepared-api/admin/auth/login.js'
 import mfaHandler from '../prepared-api/admin/auth/mfa.js'
 import passwordRecoveryRequestHandler from '../prepared-api/admin/auth/password-recovery/request.js'
@@ -115,6 +132,178 @@ function request(method, overrides = {}) {
   }
 }
 
+test('customer tariff boundary validates a complete integer matrix', async () => {
+  const module = await import('../server/admin-bff/customer-delivery-rates.js').catch(error => {
+    if (error.code === 'ERR_MODULE_NOT_FOUND') return {}
+    throw error
+  })
+  expect(typeof module.validateCustomerDeliveryRates).toBe('function')
+  const { validateCustomerDeliveryRates } = module
+  const row = { baseMinor: 9500, includedWeightG: 3000, extraKgMinor: 3000, roundMinor: 500 }
+  const rates = Object.fromEntries(['NCR', 'Greater Luzon', 'Visayas', 'Mindanao'].map(area => [area, { ...row }]))
+  const payload = { expectedVersion: 0, reason: 'Synthetic correction', evidenceRef: 'synthetic:test', rates }
+  expect(validateCustomerDeliveryRates(payload)).toEqual(payload)
+  for (const invalid of [
+    { ...payload, rates: { NCR: row } },
+    { ...payload, expectedVersion: '0' },
+    { ...payload, reason: '' },
+    { ...payload, rates: { ...rates, NCR: { ...row, baseMinor: 0 } } },
+    { ...payload, rates: { ...rates, NCR: { ...row, roundMinor: 0 } } },
+    { ...payload, rates: { ...rates, NCR: { ...row, extraKgMinor: 1.5 } } },
+    { ...payload, activateFuture: true },
+  ]) expect(() => validateCustomerDeliveryRates(invalid)).toThrow('REQUEST_INVALID')
+})
+
+test('cancellation command validates reviewed status timestamp reason and exact fields', () => {
+  const payload = { orderRequestId: 'e9000000-0000-4000-8000-000000000201', expectedStatus: 'submitted',
+    expectedUpdatedAt: '2026-10-08T04:00:00.123456+00:00', reason: 'Staff reviewed cancellation' }
+  expect(validateFulfillmentCommand('cancel_order', payload)).toEqual(payload)
+  for (const changed of [{ reason: '' }, { expectedStatus: 'cancelled' }, { expectedUpdatedAt: 'today' },
+    { expectedUpdatedAt: 1 }, { expectedStatus: null }, { shippingAmount: 1 }]) {
+    expect(() => validateFulfillmentCommand('cancel_order', { ...payload, ...changed })).toThrow('REQUEST_INVALID')
+  }
+})
+
+test('cancellation staff route authenticates signs exact retries and bounds saved results', async () => {
+  const { prepareActiveSession, setPreparedActiveSessionCookies } = await import('../server/admin-bff/security.js')
+  const names = ['SUPABASE_URL', 'SUPABASE_PUBLISHABLE_KEY', 'K2_ADMIN_BFF_REQUEST_SECRET']
+  const priorEnv = Object.fromEntries(names.map(key => [key, process.env[key]])), priorFetch = globalThis.fetch
+  const actor = 'e9000000-0000-4000-8000-000000000010', order = 'e9000000-0000-4000-8000-000000000201', key = 'e9000000-0000-4000-8000-000000000099'
+  const now = Math.floor(Date.now() / 1000), encode = v => Buffer.from(JSON.stringify(v)).toString('base64url')
+  const token = encode({ alg: 'HS256', typ: 'JWT' }) + '.' + encode({ sub: actor, exp: now + 3600, iat: now, aal: 'aal2', amr: [] }) + '.c3ludGhldGlj'
+  const session = prepareActiveSession({ access_token: token, refresh_token: 'synthetic-refresh', expires_at: now + 3600 }, { userId: actor, role: 'Staff' })
+  const cookieRes = response(); setPreparedActiveSessionCookies(cookieRes, session)
+  const cookie = cookieRes.headers.get('set-cookie').map(v => v.split(';')[0]).join('; ')
+  const payload = { orderRequestId: order, expectedStatus: 'submitted', expectedUpdatedAt: '2026-10-08T04:00:00Z', reason: 'Synthetic reviewed cancellation' }
+  const saved = { orderRequestId: order, publicReference: 'SYN-CANCEL-01', status: 'cancelled', paymentStatus: 'not_requested' }
+  let scenario = 'valid'; const commands = []
+  const reply = (value, status = 200) => new Response(JSON.stringify(value), { status, headers: { 'Content-Type': 'application/json' } })
+  try {
+    process.env.SUPABASE_URL = 'https://synthetic.invalid'; process.env.SUPABASE_PUBLISHABLE_KEY = 'synthetic-key'
+    process.env.K2_ADMIN_BFF_REQUEST_SECRET = Buffer.alloc(32, 2).toString('base64')
+    globalThis.fetch = async (input, init = {}) => {
+      const url = new URL(String(input)), last = url.pathname.split('/').at(-1)
+      if (url.pathname.includes('/auth/')) return reply({ id: actor, factors: [], app_metadata: {}, user_metadata: {}, identities: [] })
+      if (last === 'user_profiles') return reply({ role: scenario === 'role' ? 'Customer' : 'Staff' })
+      if (last === 'execute_admin_session_command_v1') return reply({ active: true })
+      if (last === 'record_security_event_v1') return reply({ recorded: true })
+      expect(last).toBe('execute_admin_order_cancellation_v1')
+      const args = JSON.parse(init.body); commands.push(args)
+      expect(args.p_action).toBe('cancel_order'); expect(args.p_idempotency_key).toBe(key)
+      expect(JSON.parse(args.p_payload_text)).toEqual(payload)
+      const digest = createHash('sha256').update(args.p_payload_text).digest('hex')
+      expect(args.p_signature).toBe(createHmac('sha256', Buffer.alloc(32, 2)).update([args.p_action, args.p_timestamp, args.p_nonce, actor, key, digest].join('\n')).digest('hex'))
+      if (scenario === 'stale') return reply({ code: '40001', message: 'K2_CANCELLATION_VERSION_CONFLICT' }, 400)
+      if (scenario === 'rate') return reply({ code: '54000', message: 'K2_ADMIN_RATE_LIMITED' }, 400)
+      return reply({ ...saved, ...(scenario === 'malformed' ? { orderRequestId: actor } : {}), privateUnexpected: 'must not leave server' })
+    }
+    const run = async (body = payload, headers = {}, method = 'POST') => {
+      const res = response(); await adminBffRouter(request(method, { query: { route: 'fulfillment/cancel' }, body,
+        headers: { origin: 'https://admin.example.test', 'content-type': 'application/json', cookie, 'x-k2-csrf': session.csrf, 'x-k2-idempotency-key': key, ...headers } }), res); return res
+    }
+    expect(ADMIN_BFF_ROUTE_CONTROLS['fulfillment/cancel']).toMatchObject({ method: 'POST', identity: 'active-aal2-session', origin: true, csrf: true, idempotency: true, rateLimit: 'database' })
+    const first = await run(), repeated = await run()
+    expect(first.statusCode).toBe(200); expect(JSON.parse(repeated.body)).toEqual({ ok: true, result: saved })
+    expect(first.body).not.toContain('privateUnexpected'); expect(first.headers.get('cache-control')).toBe('no-store')
+    expect(commands).toHaveLength(2); expect(commands[0].p_payload_text).toBe(commands[1].p_payload_text)
+    expect(commands[0].p_nonce).not.toBe(commands[1].p_nonce)
+    scenario = 'stale'; expect((await run()).statusCode).toBe(409)
+    scenario = 'rate'; expect((await run()).statusCode).toBe(429)
+    scenario = 'malformed'; expect((await run()).statusCode).toBe(503)
+    const before = commands.length; scenario = 'role'; expect((await run()).statusCode).toBe(403)
+    scenario = 'valid'; expect((await run(payload, { 'x-k2-csrf': 'wrong' })).statusCode).toBe(403)
+    expect((await run(payload, { origin: 'https://other.example.test' })).statusCode).toBe(403)
+    expect((await run({ ...payload, shippingAmount: 1 })).statusCode).toBe(400)
+    expect((await run(payload, {}, 'GET')).statusCode).toBe(405); expect(commands).toHaveLength(before)
+  } finally {
+    globalThis.fetch = priorFetch
+    for (const name of names) if (priorEnv[name] === undefined) delete process.env[name]; else process.env[name] = priorEnv[name]
+  }
+})
+
+test('express staff endpoint authenticates reads and signs exact quotes without exposing extra fields', async () => {
+  const { handleExpressDeliveryQuote } = await import('../server/admin-bff/express-delivery.js')
+  const { prepareActiveSession, setPreparedActiveSessionCookies } = await import('../server/admin-bff/security.js')
+  const names = ['SUPABASE_URL', 'SUPABASE_PUBLISHABLE_KEY', 'K2_ADMIN_BFF_REQUEST_SECRET']
+  const priorEnv = Object.fromEntries(names.map(key => [key, process.env[key]])), priorFetch = globalThis.fetch
+  const actor = 'e9000000-0000-4000-8000-000000000010', order = 'e9000000-0000-4000-8000-000000000201', key = 'e9000000-0000-4000-8000-000000000099'
+  const now = Math.floor(Date.now() / 1000), encode = v => Buffer.from(JSON.stringify(v)).toString('base64url')
+  const token = encode({ alg: 'HS256', typ: 'JWT' }) + '.' + encode({ sub: actor, exp: now + 3600, iat: now, aal: 'aal2', amr: [] }) + '.c3ludGhldGlj'
+  const session = prepareActiveSession({ access_token: token, refresh_token: 'synthetic-refresh', expires_at: now + 3600 }, { userId: actor, role: 'Staff' })
+  const cookieRes = response(); setPreparedActiveSessionCookies(cookieRes, session)
+  const cookie = cookieRes.headers.get('set-cookie').map(v => v.split(';')[0]).join('; ')
+  const observed = { orderRequestId: order, expectedVersion: 0, courier: 'Grab', feeMinor: 15000,
+    quotedAt: '2026-10-08T04:00:00.000Z', expiresAt: '2026-10-08T05:00:00.000Z', route: 'Synthetic NCR route',
+    packageDescription: 'Synthetic parcel', availabilityNote: 'Synthetic availability', evidenceRef: 'synthetic:staff-quote', note: 'Synthetic review' }
+  let scenario = 'valid', rpcCalls = 0
+  const reply = value => new Response(JSON.stringify(value), { status: 200, headers: { 'Content-Type': 'application/json' } })
+  try {
+    process.env.SUPABASE_URL = 'https://synthetic.invalid'; process.env.SUPABASE_PUBLISHABLE_KEY = 'synthetic-key'
+    process.env.K2_ADMIN_BFF_REQUEST_SECRET = Buffer.alloc(32, 2).toString('base64')
+    globalThis.fetch = async (input, init = {}) => {
+      const url = new URL(String(input)), last = url.pathname.split('/').at(-1)
+      if (url.pathname.includes('/auth/')) return reply({ id: actor, email: 'synthetic@example.test', factors: [], app_metadata: {}, user_metadata: {}, identities: [] })
+      if (last === 'user_profiles') return reply({ role: scenario === 'role' ? 'Customer' : 'Staff' })
+      if (last === 'execute_admin_session_command_v1') return reply({ active: true })
+      if (last === 'record_security_event_v1') return reply({ recorded: true })
+      const args = JSON.parse(init.body); rpcCalls++
+      if (last === 'read_staff_express_delivery_v1') {
+        expect(args).toEqual({ p_order_id: order })
+        return reply({ ok: true, orderRequestId: order, currentVersion: 1, eligible: true,
+          quote: { ...observed, quoteVersion: 1, subtotal: 100, discountAmount: 0, proposedTotal: scenario === 'malformed' ? null : 250, accepted: false, privateUnexpected: 'must never leave BFF' } })
+      }
+      expect(last).toBe('execute_express_delivery_quote_v1'); expect(args.p_action).toBe('delivery_express_quote')
+      expect(args.p_idempotency_key).toBe(key); expect(JSON.parse(args.p_payload_text)).toEqual(observed)
+      const digest = createHash('sha256').update(args.p_payload_text).digest('hex')
+      expect(args.p_signature).toBe(createHmac('sha256', Buffer.alloc(32, 2)).update([args.p_action, args.p_timestamp, args.p_nonce, actor, key, digest].join('\n')).digest('hex'))
+      return reply({ ok: true, orderRequestId: order, quoteVersion: 1, privateUnexpected: 'must never leave BFF' })
+    }
+    const run = async (method = 'GET', query = { orderRequestId: order }, headers = {}) => {
+      const res = response(); await handleExpressDeliveryQuote(request(method, { query, body: observed,
+        headers: { origin: 'https://admin.example.test', 'content-type': 'application/json', cookie, 'x-k2-csrf': session.csrf, 'x-k2-idempotency-key': key, ...headers } }), res); return res
+    }
+    const read = await run(); expect(read.statusCode).toBe(200); expect(JSON.parse(read.body).quote.proposedTotal).toBe(250)
+    expect(read.body).not.toContain('privateUnexpected'); expect(read.body).not.toContain('expectedVersion'); expect(read.headers.get('cache-control')).toBe('no-store')
+    const posted = await run('POST'); expect(posted.statusCode).toBe(200)
+    expect(JSON.parse(posted.body)).toEqual({ ok: true, receipt: { orderRequestId: order, quoteVersion: 1 } })
+    scenario = 'malformed'; expect((await run()).statusCode).toBe(503)
+    const before = rpcCalls; scenario = 'role'; expect((await run()).statusCode).toBe(403); expect(rpcCalls).toBe(before)
+    scenario = 'valid'; expect((await run('GET', { orderRequestId: [order] })).statusCode).toBe(400); expect(rpcCalls).toBe(before)
+    expect((await run('POST', { orderRequestId: order }, { 'x-k2-csrf': 'wrong' })).statusCode).toBe(403); expect(rpcCalls).toBe(before)
+  } finally {
+    globalThis.fetch = priorFetch
+    for (const name of names) if (priorEnv[name] === undefined) delete process.env[name]; else process.env[name] = priorEnv[name]
+  }
+})
+
+test('customer tariff boundary refuses methods keys and unauthenticated access', async () => {
+  const module = await import('../prepared-api/admin/delivery/customer-rates.js').catch(error => {
+    if (error.code === 'ERR_MODULE_NOT_FOUND') return {}
+    throw error
+  })
+  expect(typeof module.default).toBe('function')
+  const customerDeliveryRatesHandler = module.default
+  const method = response()
+  await customerDeliveryRatesHandler(request('PUT'), method)
+  expect(method.statusCode).toBe(405)
+  expect(method.headers.get('allow')).toBe('GET, POST')
+  const key = response()
+  await customerDeliveryRatesHandler(request('POST'), key)
+  expect(key.statusCode).toBe(400)
+  expect(JSON.parse(key.body).error.code).toBe('IDEMPOTENCY_KEY_REQUIRED')
+  const unauthenticated = response()
+  await customerDeliveryRatesHandler(request('GET'), unauthenticated)
+  expect(unauthenticated.statusCode).toBe(401)
+  expect(ADMIN_BFF_ROUTE_CONTROLS['delivery/customer-rates']).toMatchObject({
+    method: 'GET', identity: 'active-aal2-session', origin: true,
+    additionalMethods: { POST: { csrf: true, idempotency: true, rateLimit: 'database' } },
+  })
+  const routed = response()
+  await adminBffRouter(request('POST', { query: { route: 'delivery/customer-rates' } }), routed)
+  expect(routed.statusCode).toBe(400)
+  expect(JSON.parse(routed.body).error.code).toBe('IDEMPOTENCY_KEY_REQUIRED')
+})
+
 test.beforeEach(() => {
   process.env.NODE_ENV = 'production'
   process.env.K2_DEPLOYMENT_TARGET = 'admin'
@@ -174,7 +363,7 @@ test('admin overview is fixed-schema, session-gated, and reports partial data sa
   expect(JSON.parse(noSession.body).error.code).toBe('SESSION_EXPIRED')
 
   const queued = [
-    { data: [{ id: 'order-1', total_amount: 25 }], error: null },
+    { data: [{ id: 'order-1', total_amount: 25, shipping_quote_status: 'customer_confirmed' }, { id: 'pending', total_amount: 735, shipping_quote_status: 'pending_quote' }], error: null },
     { data: null, count: 2, error: null },
     { data: [], error: null },
     { data: [], error: { message: 'private provider detail' } },
@@ -196,7 +385,10 @@ test('admin overview is fixed-schema, session-gated, and reports partial data sa
     },
   }
   const result = await readOverviewData(client, 30)
-  expect(result.data.orders).toEqual([{ id: 'order-1', total_amount: 25 }])
+  expect(result.data.orders).toEqual([
+    { id: 'order-1', total_amount: 25, shipping_quote_status: 'customer_confirmed', delivery_charge_pending: false, shipping_amount: undefined },
+    { id: 'pending', total_amount: null, shipping_quote_status: 'pending_quote', delivery_charge_pending: true, shipping_amount: null },
+  ])
   expect(result.data.orderBacklog).toBe(2)
   expect(result.unavailable).toEqual([{ key: 'batches', code: 'QUERY_UNAVAILABLE' }])
   expect(JSON.stringify(result)).not.toContain('private provider detail')
@@ -832,6 +1024,24 @@ test('fulfillment data read enforces read limits and returns completeness metada
     { table: 'product_batches', limit: 1000 },
     { table: 'user_profiles', limit: 50 },
   ])
+})
+
+test('fulfillment data masks pending totals without dropping the order or accepted bill', async () => {
+  const rows = [
+    { id: 'pending', total_amount: 735, shipping_amount: 0, shipping_quote_status: 'pending_quote' },
+    { id: 'accepted', total_amount: 830, shipping_amount: 95, shipping_quote_status: 'customer_confirmed' },
+  ]
+  const client = { from(table) {
+    const q = { select() { return q }, eq() { return q }, gt() { return q }, in() { return q }, order() { return q },
+      limit() { return Promise.resolve({ data: table === 'order_requests' ? rows : [], error: null }) } }
+    return q
+  } }
+  const result = await readFulfillmentData(client)
+  for (const key of ['submitted', 'confirmed']) {
+    expect(result[key].map(order => order.total_amount)).toEqual([null, 830])
+    expect(result[key].map(order => order.shipping_amount)).toEqual([null, 95])
+    expect(result.completeness[key].returned).toBe(2)
+  }
 })
 
 test('payment verdicts require the Admin role while warehouse commands stay with Staff', () => {
@@ -1630,12 +1840,35 @@ test('product-master commands are exact, reasoned, idempotent, and Admin-only', 
     action: 'update',
     payload: {
       sku: 'K2-MASTER-001',
-      patch: { name: 'Reviewed product', net_weight: 400, srp: 125, is_human_reviewed: true },
+      patch: {
+        name: 'Reviewed product', net_weight: 400, srp: 125, is_human_reviewed: true,
+        brand_id: 'f8c1e338-e2a4-4d09-858a-1cf223400001',
+        category_id: 'f8c1e338-e2a4-4d09-858a-1cf223400002',
+      },
       expectedUpdatedAt: '2026-08-22T00:00:00.000Z',
       reason: 'Correct verified catalogue details.',
     },
   })
   expect(update).toMatchObject({ action: 'product_master_update', payload: { sku: 'K2-MASTER-001' } })
+  expect(update.payload.patch).toMatchObject({
+    brand_id: 'f8c1e338-e2a4-4d09-858a-1cf223400001',
+    category_id: 'f8c1e338-e2a4-4d09-858a-1cf223400002',
+  })
+  expect(() => validateProductMasterCommand({
+    action: 'update',
+    payload: {
+      sku: 'K2-MASTER-001', patch: { brand_id: 'f8c1e338-e2a4-4d09-858a-1cf223400001' },
+      expectedUpdatedAt: '2026-08-22T00:00:00.000Z', reason: 'Initial brand assignment review.',
+    },
+  })).toThrow('REQUEST_INVALID')
+  expect(() => validateProductMasterCommand({
+    action: 'update',
+    payload: {
+      sku: 'K2-MASTER-001', patch: {
+        brand_id: 'not-a-uuid', category_id: 'f8c1e338-e2a4-4d09-858a-1cf223400002',
+      }, expectedUpdatedAt: '2026-08-22T00:00:00.000Z', reason: 'Invalid canonical taxonomy choice.',
+    },
+  })).toThrow('REQUEST_INVALID')
   expect(validateProductMasterCommand({
     action: 'status', payload: { skus: ['K2-MASTER-001'], status: 'Under Review', reason: 'Ready for publication review.' },
   }).action).toBe('product_master_status')
@@ -1659,10 +1892,11 @@ test('product-master commands are exact, reasoned, idempotent, and Admin-only', 
   await productMasterHandler(request('GET', { query: { sku: 'K2-MASTER-001' } }), noSession)
   expect(noSession.statusCode).toBe(401)
 
-  const [migration, inventory, deletion] = await Promise.all([
+  const [migration, inventory, deletion, taxonomyOverlay] = await Promise.all([
     readFile(new URL('../supabase/migrations/20260822_admin_product_master_boundary.sql', import.meta.url), 'utf8'),
     readFile(new URL('../src/views/admin/InventoryGrid.jsx', import.meta.url), 'utf8'),
     readFile(new URL('../src/views/admin/DeleteProductsModal.jsx', import.meta.url), 'utf8'),
+    readFile(new URL('../supabase/prepared/product_master_initial_taxonomy_assignment.sql', import.meta.url), 'utf8'),
   ])
   for (const required of [
     'k2_private.product_master_events', 'execute_admin_product_master_command_v1',
@@ -1673,6 +1907,14 @@ test('product-master commands are exact, reasoned, idempotent, and Admin-only', 
   expect(inventory).toContain("commandAdminProductMasterBff('update'")
   expect(inventory).toContain("commandAdminProductMasterBff('status'")
   expect(inventory).toContain('expectedUpdatedAt: editingProduct.updated_at')
+  expect(taxonomyOverlay).toContain('07a353c7e9dcb09e41e784bdfb096dbc0a12fbfce98fc59f0ff6ef6602e0368a')
+  expect(taxonomyOverlay).toContain("'brand_id','category_id'")
+  expect(taxonomyOverlay).toContain('K2_PRODUCT_TAXONOMY_INITIAL_ONLY')
+  expect(taxonomyOverlay).toContain('K2_PRODUCT_TAXONOMY_COLUMN_DRIFT')
+  expect(taxonomyOverlay).toContain('public.product_batches')
+  expect(taxonomyOverlay).toContain('public.inventory_balances')
+  expect(taxonomyOverlay).toContain('public.inventory_events')
+  expect(taxonomyOverlay).not.toMatch(/create\s+(table|extension|schema)/i)
   expect(deletion).toContain("commandAdminProductMasterBff('delete'")
 })
 
@@ -1727,6 +1969,10 @@ test('prepared Admin session registry is private, AAL2-bound, and fail-closed', 
 })
 
 test('single-function Admin router allowlists every prepared endpoint and rejects unknown paths', async () => {
+  expect(ADMIN_BFF_ROUTE_CONTROLS['delivery/express-quote']).toMatchObject({
+    method: 'GET', identity: 'active-aal2-session', origin: true, csrf: false, idempotency: false,
+    additionalMethods: { POST: { csrf: true, idempotency: true, rateLimit: 'database' } },
+  })
   expect(ADMIN_BFF_ROUTES.length).toBeGreaterThan(0)
   expect(new Set(ADMIN_BFF_ROUTES).size).toBe(ADMIN_BFF_ROUTES.length)
   expect(Object.keys(ADMIN_BFF_ROUTE_CONTROLS).sort()).toEqual([...ADMIN_BFF_ROUTES].sort())
@@ -2198,3 +2444,235 @@ test('prepared lot boundary derives sellable stock, preserves reservations, and 
   expect(alerts).toContain('getAdminLots')
   expect(alerts).not.toMatch(/[🔔✅📍🙋🛒]/u)
 })
+
+// IDEA-20261007-02 / MAP-018: real SDK transport, synthetic responses only.
+for (const stage of ['auth', 'profile', 'rpc']) {
+  test('fulfillment request deadline aborts SDK '+stage+' transport', async () => {
+    const { withFulfillmentDeadline } = await import('../server/admin-bff/request-deadline.js')
+    const { createServerSupabase } = await import('../server/admin-bff/supabase.js')
+    const priorFetch=globalThis.fetch, priorUrl=process.env.SUPABASE_URL, priorKey=process.env.SUPABASE_PUBLISHABLE_KEY
+    const res={headers:{},bodies:[],setHeader(k,v){this.headers[k]=v},end(v){this.bodies.push(JSON.parse(v))}}
+    let reached=false, cancelled=false
+    try {
+      process.env.SUPABASE_URL='https://synthetic.invalid';process.env.SUPABASE_PUBLISHABLE_KEY='synthetic-publishable'
+      globalThis.fetch=(_input,init)=>new Promise((_resolve,reject)=>{
+        reached=true
+        init.signal.addEventListener('abort',()=>{cancelled=true;reject(init.signal.reason)},{once:true})
+      })
+      await withFulfillmentDeadline(res,async()=>{
+        const client=createServerSupabase()
+        if(stage==='auth')await client.auth.getUser('synthetic-access')
+        else if(stage==='profile')await client.from('user_profiles').select('role')
+        else await client.rpc('execute_admin_fulfillment_command_v1',{p_idempotency_key:'original-key'})
+      },40)
+      expect(reached).toBe(true);expect(cancelled).toBe(true)
+      expect(res.statusCode).toBe(503);expect(res.bodies).toEqual([{error:{code:'REQUEST_TIMEOUT'}}])
+      expect(res.headers['Cache-Control']).toBe('no-store')
+    } finally {
+      globalThis.fetch=priorFetch
+      if(priorUrl===undefined)delete process.env.SUPABASE_URL;else process.env.SUPABASE_URL=priorUrl
+      if(priorKey===undefined)delete process.env.SUPABASE_PUBLISHABLE_KEY;else process.env.SUPABASE_PUBLISHABLE_KEY=priorKey
+    }
+  })
+}
+
+test('fulfillment request deadline suppresses late cookies and results and prevents another transport',async()=>{
+  const { withFulfillmentDeadline,adminRequestFetch,currentAdminRequestSignal }=await import('../server/admin-bff/request-deadline.js')
+  const { safeJson }=await import('../server/admin-bff/security.js')
+  const priorFetch=globalThis.fetch, res={headers:{},bodies:[],setHeader(k,v){this.headers[k]=v},end(v){this.bodies.push(JSON.parse(v))}}
+  let calls=0, finish
+  const late=new Promise(resolve=>{finish=resolve})
+  try {
+    globalThis.fetch=()=>{calls++;return late}
+    let settled
+    const completed=new Promise(resolve=>{settled=resolve})
+    await withFulfillmentDeadline(res,async guarded=>{
+      try {
+        const transport=adminRequestFetch(currentAdminRequestSignal())
+        await transport('https://synthetic.invalid/rpc')
+        guarded.setHeader('Set-Cookie','late-secret')
+        safeJson(guarded,200,{ok:true})
+        expect(()=>transport('https://synthetic.invalid/second')).toThrow()
+      } finally {settled()}
+    },25)
+    finish(new Response('{}'));await completed
+    expect(calls).toBe(1);expect(res.headers['Set-Cookie']).toBeUndefined()
+    expect(res.statusCode).toBe(503);expect(res.bodies).toEqual([{error:{code:'REQUEST_TIMEOUT'}}])
+  } finally {globalThis.fetch=priorFetch}
+})
+
+test('fulfillment request deadline isolates concurrent requests and preserves ordinary results',async()=>{
+  const { withFulfillmentDeadline,currentAdminRequestSignal }=await import('../server/admin-bff/request-deadline.js')
+  const { safeJson }=await import('../server/admin-bff/security.js')
+  const response=()=>({headers:{},bodies:[],setHeader(k,v){this.headers[k]=v},end(v){this.bodies.push(JSON.parse(v))}})
+  const slow=response(),healthy=response();let healthySignal
+  await Promise.all([
+    withFulfillmentDeadline(slow,()=>new Promise(()=>{}),20),
+    withFulfillmentDeadline(healthy,async res=>{healthySignal=currentAdminRequestSignal();await new Promise(r=>setTimeout(r,40));expect(healthySignal.aborted).toBe(false);safeJson(res,200,{ok:true})},200),
+  ])
+  expect(slow.statusCode).toBe(503);expect(healthy.statusCode).toBe(200)
+  expect(healthy.bodies).toEqual([{ok:true}]);expect(currentAdminRequestSignal()).toBeUndefined()
+})
+
+async function routedFulfillmentFixture(scenario, httpMode = false, businessFailure = null) {
+  const { default:entry }=await import('../api/admin/index.js')
+  const { prepareActiveSession,setPreparedActiveSessionCookies }=await import('../server/admin-bff/security.js')
+  const priorFetch=globalThis.fetch, priorTimer=globalThis.setTimeout
+  const names=['SUPABASE_URL','SUPABASE_PUBLISHABLE_KEY','K2_ADMIN_BFF_REQUEST_SECRET'], priorEnv=Object.fromEntries(names.map(k=>[k,process.env[k]]))
+  const actor='e9000000-0000-4000-8000-000000000010',key='e9000000-0000-4000-8000-000000000099'
+  const now=Math.floor(Date.now()/1000),encode=v=>Buffer.from(JSON.stringify(v)).toString('base64url')
+  const token=encode({alg:'HS256',typ:'JWT'})+'.'+encode({sub:actor,exp:now+3600,iat:now,aal:scenario==='aal'?'aal1':'aal2',amr:[]})+'.c3ludGhldGlj'
+  const prepared=prepareActiveSession({access_token:token,refresh_token:'synthetic-refresh-token',expires_at:now+3600},{userId:actor,role:'Admin'})
+  const cookieRes=response();setPreparedActiveSessionCookies(cookieRes,prepared)
+  const cookies=cookieRes.headers.get('set-cookie').map(v=>v.split(';')[0]).join('; ')
+  const stages=[],commands=[],responses=[];let cancelled=false,lateReply,effects=0,saved=null,budget=null,rpcReached
+  const reply=value=>new Response(JSON.stringify(value),{status:200,headers:{'Content-Type':'application/json'}})
+  try {
+    process.env.SUPABASE_URL='https://synthetic.invalid';process.env.SUPABASE_PUBLISHABLE_KEY='synthetic-key';process.env.K2_ADMIN_BFF_REQUEST_SECRET=Buffer.alloc(32,2).toString('base64')
+    // Exercise the production30s timer callback with a scaled local fault clock.
+    globalThis.setTimeout=(fn,ms,...args)=>{if(ms===30000){budget=ms;return priorTimer(fn,httpMode==='wall-clock'?ms:120,...args)}return priorTimer(fn,ms,...args)}
+    globalThis.fetch=async(input,init={})=>{
+      const url=new URL(String(input)),last=url.pathname.split('/').at(-1)
+      const phase=url.pathname.includes('/auth/')?'auth':last==='user_profiles'&&url.searchParams.get('select')==='role'?'profile':last==='execute_admin_session_command_v1'?'registry':last==='record_security_event_v1'?'telemetry':last==='execute_admin_fulfillment_command_v1'?'rpc':'read'
+      stages.push(phase)
+      if(phase==='rpc')rpcReached?.()
+      if(scenario===phase)return new Promise((_resolve,reject)=>init.signal.addEventListener('abort',()=>{cancelled=true;reject(init.signal.reason)},{once:true}))
+      if(phase==='auth')return reply({id:actor,email:'synthetic@example.invalid',factors:[],app_metadata:{},user_metadata:{},identities:[]})
+      if(phase==='profile')return reply({role:scenario==='role-denied'?'Customer':'Admin'})
+      if(phase==='registry')return reply({active:scenario!=='session-revoked'})
+      if(phase==='telemetry')return reply({recorded:true})
+      if(phase==='read')return reply([])
+      const args=JSON.parse(init.body);commands.push(args)
+      const digest=createHash('sha256').update(args.p_payload_text).digest('hex')
+      const message=[args.p_action,args.p_timestamp,args.p_nonce,actor,args.p_idempotency_key,digest].join('\n')
+      expect(args.p_signature).toBe(createHmac('sha256',Buffer.alloc(32,2)).update(message).digest('hex'))
+      expect(args.p_idempotency_key).toBe(key)
+      if(businessFailure && commands.length===1){
+        if(businessFailure.transport)throw new TypeError('Synthetic private transport failure')
+        return new Response(JSON.stringify({code:businessFailure.sqlstate||'23514',message:businessFailure.message,details:'Synthetic private database detail',hint:'Synthetic private database hint'}),{status:400,headers:{'Content-Type':'application/json'}})
+      }
+      if(!saved){effects++;saved={status:'confirmed',orderId:'e9000000-0000-4000-8000-000000000201',receipt:'synthetic-saved-result'}}
+      if(scenario==='retry'&&commands.length===1)return new Promise(resolve=>{lateReply=()=>resolve(reply(saved))})
+      return reply(saved)
+    }
+    const run=async()=>{
+      const res=response();let ends=0;const end=res.end.bind(res);res.end=v=>{ends++;end(v)}
+      const read=['read','valid-read'].includes(scenario),req=request(read?'GET':'POST',{query:{route:read?'fulfillment':'fulfillment/'+(businessFailure?.route||'confirm')},body:businessFailure?.payload||(scenario==='body'?{unexpected:true}:{orderRequestId:'e9000000-0000-4000-8000-000000000201',reason:'Synthetic routed deadline verification'})})
+      req.headers={...req.headers,cookie:cookies,'x-k2-csrf':prepared.csrf,'x-k2-idempotency-key':key}
+      if(scenario==='telemetry')req.headers.origin='https://wrong.example.invalid'
+      if(!httpMode){await entry(req,res);responses.push({res,ends:()=>ends});return res}
+      const http=await import('node:http')
+      let finished,handlerError,nativeRes,nativeEnds=0
+      const handled=new Promise(resolve=>{finished=resolve})
+      // This local adapter parses the body before handler entry, like the current
+      // parsed-body contract. It does not reproduce Vercel's upload processing.
+      const server=http.createServer(async(incoming,outgoing)=>{
+        nativeRes=outgoing;const nativeEnd=outgoing.end.bind(outgoing)
+        outgoing.end=(...args)=>{nativeEnds++;return nativeEnd(...args)}
+        try{
+          const chunks=[];for await(const chunk of incoming)chunks.push(chunk)
+          incoming.body=JSON.parse(Buffer.concat(chunks).toString());incoming.query=req.query
+          await entry(incoming,outgoing)
+        }catch(error){handlerError=error;outgoing.destroy(error)}finally{finished()}
+      })
+      try{
+        await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve)})
+        const wire=await new Promise((resolve,reject)=>{
+          const client=http.request({host:'127.0.0.1',port:server.address().port,path:'/api/admin/fulfillment/confirm',method:req.method,headers:req.headers,agent:false},incoming=>{
+            const chunks=[];incoming.on('data',chunk=>chunks.push(chunk))
+            incoming.on('error',reject);incoming.on('end',()=>resolve({statusCode:incoming.statusCode,headers:new Map(Object.entries(incoming.headers)),body:Buffer.concat(chunks).toString()}))
+          })
+          client.on('error',error=>httpMode==='disconnect'&&error.code==='ECONNRESET'?resolve({disconnected:error.code}):reject(error))
+          if(httpMode==='disconnect')rpcReached=()=>client.destroy()
+          client.end(JSON.stringify(req.body))
+        })
+        await handled;expect(handlerError).toBeUndefined()
+        responses.push({res:nativeRes,ends:()=>nativeEnds});return wire
+      }finally{rpcReached=undefined;server.closeAllConnections();await new Promise(resolve=>server.close(resolve))}
+    }
+    const started=performance.now(),first=await run()
+    if(httpMode==='wall-clock')expect(performance.now()-started).toBeGreaterThanOrEqual(29500)
+    if(httpMode==='disconnect'){
+      expect(first.disconnected).toBe('ECONNRESET');expect(cancelled).toBe(true)
+      expect(stages.filter(stage=>stage==='rpc')).toHaveLength(1);expect(budget).toBe(30000)
+      return
+    }
+    if(businessFailure){
+      expect(first.statusCode).toBe(businessFailure.status)
+      expect(JSON.parse(first.body)).toEqual({error:{code:businessFailure.code}})
+      expect(first.headers.get('cache-control')).toBe('no-store')
+      expect(first.headers.get('retry-after')).toBe(businessFailure.retryAfter)
+      expect(commands).toHaveLength(1);expect(effects).toBe(0)
+      expect(stages.slice(0,4)).toEqual(['auth','profile','registry','rpc'])
+      expect(responses[0].ends()).toBe(1)
+      if(businessFailure.retry){
+        const retried=await run()
+        expect(retried.statusCode).toBe(200);expect(JSON.parse(retried.body)).toEqual({ok:true,result:saved})
+        expect(commands).toHaveLength(2);expect(effects).toBe(1)
+        expect(commands[1].p_idempotency_key).toBe(commands[0].p_idempotency_key)
+        expect(commands[1].p_payload_text).toBe(commands[0].p_payload_text)
+        expect(commands[1].p_nonce).not.toBe(commands[0].p_nonce)
+        expect(responses[1].ends()).toBe(1)
+      }
+    }else if(['auth','profile','registry','rpc','read','telemetry','retry'].includes(scenario)){
+      expect(first.statusCode).toBe(503);expect(JSON.parse(first.body).error.code).toBe('REQUEST_TIMEOUT');expect(budget).toBe(30000)
+      expect(first.headers.get('cache-control')).toBe('no-store')
+      expect(first.headers.get('retry-after')).toBe('1')
+      if(scenario!=='retry')expect(cancelled).toBe(true)
+      if(['auth','profile','registry','telemetry'].includes(scenario))expect(commands).toHaveLength(0)
+    }else if(scenario==='aal'){expect(first.statusCode).toBe(401);expect(JSON.parse(first.body).error.code).toBe('MFA_REQUIRED');expect(commands).toHaveLength(0)}
+    else if(scenario==='role-denied'){expect(first.statusCode).toBe(403);expect(JSON.parse(first.body).error.code).toBe('STAFF_ACCESS_REQUIRED');expect(commands).toHaveLength(0)}
+    else if(scenario==='session-revoked'){expect(first.statusCode).toBe(401);expect(JSON.parse(first.body).error.code).toBe('SESSION_REVOKED');expect(commands).toHaveLength(0)}
+    else if(scenario==='valid-read'){expect(first.statusCode).toBe(200);expect(JSON.parse(first.body).ok).toBe(true);expect(stages).toContain('read');expect(commands).toHaveLength(0)}
+    else if(scenario==='body'){expect(first.statusCode).toBe(400);expect(commands).toHaveLength(0)}
+    else{expect(first.statusCode).toBe(200);expect(JSON.parse(first.body)).toEqual({ok:true,result:saved});expect(stages.slice(0,4)).toEqual(['auth','profile','registry','rpc'])}
+    if(scenario==='retry'){
+      const nativeHeaders=httpMode?responses[0].res.getHeaders():null
+      const before=first.body,cookie=first.headers.get('set-cookie');lateReply();await new Promise(r=>priorTimer(r,25))
+      expect(first.body).toBe(before);expect(first.headers.get('set-cookie')).toEqual(cookie);expect(responses[0].ends()).toBe(1)
+      if(httpMode)expect(responses[0].res.getHeaders()).toEqual(nativeHeaders)
+      const retried=await run();expect(retried.statusCode).toBe(200);expect(JSON.parse(retried.body).result).toEqual(saved)
+      expect(effects).toBe(1);expect(commands).toHaveLength(2)
+      expect(commands[0].p_nonce).not.toBe(commands[1].p_nonce)
+      expect(commands[0].p_payload_text).toBe(commands[1].p_payload_text)
+    }
+  } finally {
+    if(lateReply)lateReply()
+    globalThis.fetch=priorFetch;globalThis.setTimeout=priorTimer
+    for(const k of names)if(priorEnv[k]===undefined)delete process.env[k];else process.env[k]=priorEnv[k]
+  }
+}
+for(const scenario of ['valid','auth','profile','registry','rpc','read','telemetry','aal','body','retry','role-denied','session-revoked','valid-read']){
+  test('routed fulfillment deadline '+scenario,()=>routedFulfillmentFixture(scenario))
+}
+for(const scenario of ['valid','rpc','retry']){
+  test('HTTP fulfillment deadline '+scenario,()=>routedFulfillmentFixture(scenario,true))
+}
+test('HTTP fulfillment deadline client disconnect',()=>routedFulfillmentFixture('rpc','disconnect'))
+test('HTTP fulfillment deadline unscaled 30 second budget',async()=>{
+  test.setTimeout(45000)
+  await routedFulfillmentFixture('rpc','wall-clock')
+})
+
+// Response translation only: these PostgREST errors are synthetic, not native
+// business-rule witnesses. The native receiver refusals have separate evidence.
+const syntheticPaymentErrorPayload={orderRequestId:'e9000000-0000-4000-8000-000000000201',toStatus:'awaiting_instructions',evidenceNote:'Synthetic provider-error translation',expectedPaymentStatus:'not_requested',expectedUpdatedAt:'2026-10-07T00:00:00Z'}
+for(const code of ['ORDER_CHARGE_IMMUTABLE','DELIVERY_ACCEPTANCE_REQUIRED','DELIVERY_REVIEW_REQUIRED']){
+  test('routed fulfillment canonical delivery error '+code,()=>routedFulfillmentFixture('business-error',false,{route:'payment',payload:syntheticPaymentErrorPayload,message:'K2_'+code,sqlstate:'22023',status:409,code}))
+}
+for(const code of ['VERSION_CONFLICT','ORDER_INELIGIBLE','STOCK_INELIGIBLE','TRANSITION_INVALID','EVIDENCE_REQUIRED','INDEPENDENT_REVIEW_REQUIRED','METHOD_INVALID','AMOUNT_INVALID','CURRENCY_INVALID','PAYER_INVALID','REFERENCE_INVALID','PROOF_INVALID']){
+  test('routed fulfillment business error PAYMENT_'+code,()=>routedFulfillmentFixture('business-error',false,{route:'payment',payload:syntheticPaymentErrorPayload,message:'K2_PAYMENT_'+code,status:409,code:'PAYMENT_'+code}))
+}
+for(const code of ['PACKING_ALLOCATION_INVALID','PACKING_LOT_CONFIRMATION_REQUIRED','RESERVATION_RECONCILIATION_REQUIRED']){
+  const reconciliation=code==='RESERVATION_RECONCILIATION_REQUIRED'
+  const payload=reconciliation?{orderRequestId:syntheticPaymentErrorPayload.orderRequestId,handoverNote:'Synthetic provider-error translation'}:{orderRequestId:syntheticPaymentErrorPayload.orderRequestId,scannedCode:'SYNTHETIC-TXN-1',reservationId:'e9000000-0000-4000-8000-000000000401',lotConfirmed:true}
+  test('routed fulfillment business error '+code,()=>routedFulfillmentFixture('business-error',false,{route:reconciliation?'fulfill':'packing-scan',payload,message:'K2_'+code,status:409,code}))
+}
+for(const failure of [
+  {message:'K2_ADMIN_RATE_LIMITED',sqlstate:'54000',status:429,code:'RATE_LIMITED',retryAfter:'60',retry:true},
+  {message:'K2_ADMIN_COMMAND_IN_PROGRESS',sqlstate:'55000',status:409,code:'COMMAND_IN_PROGRESS',retryAfter:'1',retry:true},
+  {message:'Synthetic private unknown database error',status:503,code:'FULFILLMENT_COMMAND_UNAVAILABLE',retry:true},
+  {transport:true,status:503,code:'FULFILLMENT_COMMAND_UNAVAILABLE',retry:true},
+]){
+  test('routed fulfillment business error '+(failure.transport?'transport loss':failure.code),()=>routedFulfillmentFixture('business-error',false,failure))
+}

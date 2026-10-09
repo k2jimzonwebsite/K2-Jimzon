@@ -6,6 +6,7 @@ import { guestBffEnabled, postGuestCommerce } from '../services/guestCommerceSer
 import { customerAccountEnabled } from '../services/customerAccountService'
 import { loadProductKnowledge } from '../lib/productKnowledgeSource'
 import { saveOrderReceiptAccess } from '../services/orderReceiptService'
+import { CHECKOUT_RECOVERY_KEY, readCheckoutRecovery, writeCheckoutRecovery, pendingCheckoutRecord, resolvedCheckoutRecord, withCheckoutLock } from '../services/checkoutRecovery'
 import { addCartItems, productStock, validateCartForSubmission } from '../lib/cartInventory'
 import { STOREFRONT_PATH_TO_VIEW, STOREFRONT_VIEW_TO_PATH } from '../lib/storefrontRoutes'
 
@@ -144,11 +145,25 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   const catalogRefreshInFlightRef = useRef(false)
 
   const placingOrderRef = useRef(false)
-  const checkoutRequestKeyRef = useRef('')
-  const checkoutPayloadRef = useRef(null)
-  const [pendingCheckout, setPendingCheckout] = useState(null)
-  const [checkoutLines, setCheckoutLines] = useState(null)
+  const [initialRecovery] = useState(() => {
+    try { return readCheckoutRecovery() } catch { return null }
+  })
+  const initialPending = initialRecovery?.state === 'pending' ? initialRecovery : null
+  const consumedTerminalRef = useRef(null)
+  const checkoutRequestKeyRef = useRef(initialPending?.key || '')
+  const checkoutPayloadRef = useRef(initialPending?.payload || null)
+  const [pendingCheckout, setPendingCheckout] = useState(initialPending ? {
+    ...initialPending.payload, paymentMethod: initialPending.paymentMethod, deliveryPreview: initialPending.deliveryPreview,
+  } : null)
+  const [checkoutLines, setCheckoutLines] = useState(initialPending?.lines || null)
+  const adoptPendingCheckout = record => {
+    checkoutRequestKeyRef.current = record.key
+    checkoutPayloadRef.current = record.payload
+    setPendingCheckout({ ...record.payload, paymentMethod: record.paymentMethod, deliveryPreview: record.deliveryPreview })
+    setCheckoutLines(record.lines)
+  }
   const resetPendingCheckout = () => {
+    if (checkoutPayloadRef.current) writeCheckoutRecovery({ version: 1, state: 'rejected', key: checkoutRequestKeyRef.current })
     checkoutPayloadRef.current = null
     checkoutRequestKeyRef.current = ''
     setPendingCheckout(null)
@@ -180,7 +195,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   }, [claimedVouchers])
 
   const applyCoupon = async (codeStr) => {
-    if (checkoutPayloadRef.current) resetPendingCheckout()
+    if (checkoutPayloadRef.current) return { success: false, message: 'Retry your held order before changing its coupon.' }
     const cleanCode = codeStr.toUpperCase().trim()
     if (!cleanCode) return { success: false, message: 'Enter a coupon code.' }
     const currentSubtotal = cart.reduce((sum, line) => {
@@ -223,7 +238,7 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   }
 
   const removeCoupon = () => {
-    if (checkoutPayloadRef.current) resetPendingCheckout()
+    if (checkoutPayloadRef.current) return
     setAppliedCoupon(null)
   }
 
@@ -319,17 +334,14 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
         setCatalogFailed(false)
         setCatalogStale(stockAvailable === null)
 
-        // When the FEFO projection is unavailable, fall back to the product
-        // row's own stock figure rather than inventing one. Stock is never
-        // fabricated upward, so the catalogue cannot assert stock it cannot
-        // honour.
+        // The batch projection is the authority for public availability. If it
+        // fails, keep the product discoverable but expose stock as unknown;
+        // the compatibility figure on the product row may be stale.
         const merged = productsResult.data.map(p => ({
           ...p,
-          stock_available: stockAvailable
-            ? (Object.hasOwn(stockAvailable, p.sku) ? (stockAvailable[p.sku] == null ? null : Number(stockAvailable[p.sku])) : null)
-            : (p.stock_available === null || p.stock_available === undefined
-                ? null
-                : Number(p.stock_available)),
+          stock_available: stockAvailable === null
+            ? null
+            : (Object.hasOwn(stockAvailable, p.sku) ? (stockAvailable[p.sku] == null ? null : Number(stockAvailable[p.sku])) : null),
         }))
         setDbProducts(merged)
       } else {
@@ -553,21 +565,21 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
   }
 
   const addToCart = (id, qty = 1) => {
-    if (checkoutPayloadRef.current) resetPendingCheckout()
+    if (checkoutPayloadRef.current) return { ok: false, code: 'ORDER_RESULT_PENDING', error: 'Retry your held order before changing the basket.' }
     const result = addCartItems(cart, products, [{ id, qty }])
     if (result.ok) setCart(result.cart)
     return result
   }
 
   const addBundleToCart = (ids, qty = 1) => {
-    if (checkoutPayloadRef.current) resetPendingCheckout()
+    if (checkoutPayloadRef.current) return { ok: false, code: 'ORDER_RESULT_PENDING', error: 'Retry your held order before changing the basket.' }
     const result = addCartItems(cart, products, ids.map((id) => ({ id, qty })))
     if (result.ok) setCart(result.cart)
     return result
   }
 
   const setQty = (id, qty) => {
-    if (checkoutPayloadRef.current) resetPendingCheckout()
+    if (checkoutPayloadRef.current) return
     setCart((prev) =>
       qty <= 0
         ? prev.filter((line) => line.id !== id)
@@ -688,15 +700,38 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     // Returning a coded non-error keeps the UI in its submitting state
     // instead of alarming the customer with a bogus failure.
     if (placingOrderRef.current) return { ok: false, code: 'ALREADY_SUBMITTING' }
+    const retryKey = checkoutPayloadRef.current ? checkoutRequestKeyRef.current : ''
     placingOrderRef.current = true
     try {
-      return await runPlaceOrderRequest(customerDetails)
+      return await withCheckoutLock(async () => {
+        const recovery = readCheckoutRecovery()
+        if (retryKey && recovery?.key !== retryKey) {
+          return { ok: false, error: 'This request changed in another tab. Keep this page and contact K2 before starting another order.' }
+        }
+        if (recovery?.state === 'pending') adoptPendingCheckout(recovery)
+        else if (recovery?.state === 'resolved' && (consumedTerminalRef.current !== recovery.key || retryKey === recovery.key)) {
+          if (consumedTerminalRef.current === recovery.key) return { ok: true, order: recovery.receipt }
+          consumedTerminalRef.current = recovery.key
+          return finishOrder(recovery.receipt, recovery)
+        } else if (recovery?.state === 'rejected' && retryKey === recovery.key) {
+          // Another tab already received a definite no-commit outcome. This
+          // click corrects the held state; it does not silently start a new key.
+          checkoutPayloadRef.current = null
+          checkoutRequestKeyRef.current = ''
+          setPendingCheckout(null)
+          setCheckoutLines(null)
+          return { ok: false, error: 'Your previous request was not saved. Review the order before submitting again.' }
+        }
+        return runPlaceOrderRequest(customerDetails, recovery?.state === 'pending' ? recovery : null)
+      })
+    } catch {
+      return { ok: false, error: 'We could not safely save or restore this request in your browser. Keep this page and contact K2 before starting another order.' }
     } finally {
       placingOrderRef.current = false
     }
   }
 
-  const runPlaceOrderRequest = async (customerDetails) => {
+  const runPlaceOrderRequest = async (customerDetails, recovery = null) => {
     if (!guestBffEnabled() && !isSupabaseConfigured) {
       return { ok: false, error: 'Order requests are not configured yet. Please contact K2 Jimzon directly.' }
     }
@@ -723,15 +758,22 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       fulfillmentMethod: customerDetails.fulfillmentMethod || 'Metro Manila delivery',
       note: customerDetails.note, items, idempotencyKey: requestKey,
       couponCode: appliedCoupon?.code || '',
-      ...(Number.isFinite(Number(customerDetails.shippingAmount)) && Number(customerDetails.shippingAmount) >= 0
+      ...(customerDetails.delivery ? { delivery: customerDetails.delivery } : {}),
+      ...(!customerDetails.delivery && Number.isFinite(Number(customerDetails.shippingAmount)) && Number(customerDetails.shippingAmount) >= 0
         ? {
             shippingAmount: Number(customerDetails.shippingAmount),
             shippingQuoteStatus: customerDetails.shippingQuoteStatus || 'customer_confirmed',
           }
         : {}),
     }
+    const display = { paymentMethod: recovery?.paymentMethod || pendingCheckout?.paymentMethod || customerDetails.paymentMethod,
+      deliveryPreview: recovery?.deliveryPreview || pendingCheckout?.deliveryPreview || customerDetails.deliveryPreview }
+    const recoveryLines = recovery?.lines || checkoutLines || totals.lines
+    // Persist and read back before any request can leave this browser.
+    writeCheckoutRecovery(pendingCheckoutRecord(payload, recoveryLines, display))
     checkoutPayloadRef.current = payload
-    setPendingCheckout({ ...payload, paymentMethod: customerDetails.paymentMethod })
+    // Display-only preview is held beside the exact request; never sent as a price.
+    setPendingCheckout({ ...payload, ...display })
     if (!recovering) setCheckoutLines(totals.lines)
 
     if (guestBffEnabled()) {
@@ -742,14 +784,18 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       if (!result.ok) {
         // A server-confirmed rejection proves the request did not commit.
         // Clear the held state so the customer can correct their cart, coupon, or contact details.
-        if (result.code?.endsWith('_INVALID') ||
-          ['INSUFFICIENT_STOCK', 'CONTACT_REQUIRED', 'BOT_CHALLENGE_REQUIRED', 'INVALID_REQUEST', 'RATE_LIMITED', 'INVALID_OR_INELIGIBLE', 'COD_UNAVAILABLE'].includes(result.code)) {
+        const afterReceiptRefusal = ['INSUFFICIENT_STOCK', 'PRODUCT_NOT_AVAILABLE', 'DELIVERY_QUOTE_CHANGED', 'DELIVERY_REVIEW_REQUIRED', 'DELIVERY_ACCEPTANCE_REQUIRED'].includes(result.code)
+        if (afterReceiptRefusal || (!recovering && (result.code?.endsWith('_INVALID') ||
+          ['CONTACT_REQUIRED', 'BOT_CHALLENGE_REQUIRED', 'INVALID_REQUEST', 'RATE_LIMITED', 'INVALID_OR_INELIGIBLE', 'COD_UNAVAILABLE'].includes(result.code)))) {
           resetPendingCheckout()
         }
         return result
       }
       if (!result.data?.public_reference) return { ok: false, error: 'The server did not confirm the request. Retry the same request.' }
-      return finishOrder(result.data)
+      writeCheckoutRecovery(resolvedCheckoutRecord(payload.idempotencyKey, result.data, display,
+        payload.items.reduce((count, item) => count + item.quantity, 0)))
+      consumedTerminalRef.current = payload.idempotencyKey
+      return finishOrder(result.data, display)
     }
 
     const supabase = await getSupabaseClient().catch(() => null)
@@ -776,22 +822,33 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
     }
     const saved = Array.isArray(data) ? data[0] : data
     if (!saved?.public_reference) return { ok: false, error: 'The server did not confirm the request.' }
-
-    return finishOrder(saved)
+    writeCheckoutRecovery(resolvedCheckoutRecord(payload.idempotencyKey, saved, display,
+      payload.items.reduce((count, item) => count + item.quantity, 0)))
+    consumedTerminalRef.current = payload.idempotencyKey
+    return finishOrder(saved, display)
   }
 
-  const finishOrder = (saved) => {
-    syncLocation('confirmation')
+  const finishOrder = (saved, recovery = null) => {
+    const completedKey = recovery?.key || checkoutRequestKeyRef.current
     const finish = () => {
-      const paymentMethod = checkoutPayloadRef.current?.note?.includes('MariBank QR transfer') ? 'maribank'
+      // View transitions can defer this callback beyond the storage event that
+      // announced a later request. Never consume a newer pending basket.
+      if (checkoutRequestKeyRef.current && checkoutRequestKeyRef.current !== completedKey) return
+      syncLocation('confirmation')
+      const pendingDelivery = saved.shipping_quote_status === 'pending_quote'
+        || (saved.total_amount == null && checkoutPayloadRef.current?.delivery?.service === 'express')
+      const savedTotal = pendingDelivery ? null : Number(saved.total_amount)
+      const paymentMethod = recovery?.paymentMethod || (checkoutPayloadRef.current?.note?.includes('MariBank QR transfer') ? 'maribank'
         : checkoutPayloadRef.current?.note?.includes('GCash QR transfer') ? 'gcash' : 'cod'
+      )
       try { window.localStorage.setItem(`k2-payment-choice:${saved.public_reference}`, paymentMethod) } catch { /* browser storage may be unavailable */ }
       const orderAccess = saved.id && checkoutPayloadRef.current?.idempotencyKey ? {
         id: saved.id,
         accessKey: checkoutPayloadRef.current.idempotencyKey,
         reference: saved.public_reference,
         paymentMethod,
-        total: Number(saved.total_amount || 0),
+        total: savedTotal,
+        shippingQuoteStatus: saved.shipping_quote_status,
         count: checkoutPayloadRef.current.items.reduce((sum, item) => sum + item.quantity, 0),
         status: saved.status,
         paymentStatus: saved.payment_status,
@@ -799,15 +856,16 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       if (orderAccess) saveOrderReceiptAccess(orderAccess)
       setOrder({
         id: saved.public_reference,
-        total: Number(saved.total_amount ?? ((totals.finalTotal ?? totals.subtotal) + (Number(checkoutPayloadRef.current?.shippingAmount) || 0))),
-        count: checkoutPayloadRef.current?.items.reduce((sum, item) => sum + item.quantity, 0) ?? totals.count,
+        total: savedTotal,
+        shippingQuoteStatus: saved.shipping_quote_status,
+        count: saved.item_count ?? checkoutPayloadRef.current?.items.reduce((sum, item) => sum + item.quantity, 0) ?? totals.count,
         wholesale: false,
         status: saved.status,
         paymentStatus: saved.payment_status,
         paymentMethod,
         orderId: orderAccess?.id,
         accessKey: orderAccess?.accessKey,
-        shippingAmount: Number(saved.shipping_amount ?? checkoutPayloadRef.current?.shippingAmount ?? 0),
+        shippingAmount: pendingDelivery ? null : Number(saved.shipping_amount ?? checkoutPayloadRef.current?.shippingAmount ?? 0),
         fulfillmentMethod: saved.fulfillment_method ?? checkoutPayloadRef.current?.fulfillmentMethod,
       })
       setCart([])
@@ -820,9 +878,30 @@ export function StoreProvider({ children, enableAdminData = false, adminAuth = N
       window.scrollTo(0, 0)
     }
 
-    runStoreTransition(finish)
+    // Consume the terminal identity and basket before releasing the Web Lock.
+    // A deferred view transition would let an old callback clear a newer hold.
+    flushSync(finish)
     return { ok: true, order: saved }
   }
+
+  useEffect(() => {
+    const reconcile = () => {
+      withCheckoutLock(() => {
+        const recovery = readCheckoutRecovery()
+        if (recovery?.state === 'pending') adoptPendingCheckout(recovery)
+        else if (recovery?.state === 'resolved' && consumedTerminalRef.current !== recovery.key) {
+          consumedTerminalRef.current = recovery.key
+          finishOrder(recovery.receipt, recovery)
+        }
+      }).catch(() => { /* submission remains fail-closed; preserve unknown record */ })
+    }
+    const changed = event => { if (event.key === CHECKOUT_RECOVERY_KEY) reconcile() }
+    reconcile()
+    window.addEventListener('storage', changed)
+    return () => window.removeEventListener('storage', changed)
+    // The recovery record is authoritative, not a stale rendered closure.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const value = useMemo(() => ({
     view,

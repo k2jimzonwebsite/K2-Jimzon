@@ -1,5 +1,67 @@
 # Admin BOS Same-Origin BFF Security Runbook
 
+M customer projection now independently withholds historical payment display while
+retaining L staff closure and native identity/rate controls. Native/HTTP107/0 and
+composed current/empty92/0 are local only; runtime stopped. Final review and full
+lifecycle/provider acceptance remain MAP-023/018. Exact evidence: delivery README.
+
+Prepared L07 locally verifies maintained staff payment refusal409 for unreviewed
+legacy Website orders while retaining recorded money, same-value tracking and
+cancellation/one-hold release. New checkout uses private original-INSERT-only
+order/PID/xid8 construction authority, with revoked grants and deferred snapshot
+validation/cleanup; legacy edits cannot manufacture it and positive payment stays
+blocked before snapshot. Fresh own-grant approval100/staff payment passes. Source,
+authority drift, current/empty installer and exact replay evidence: delivery README.
+No provider/host acceptance; full failure/refund/fulfillment scope remains MAP-023/018.
+
+Connected local config recovery03 confirms current authorized staff can recover
+saved cancellation while fresh checkout/public stock is paused; buyer historical
+approval also survives. Same receipts never imply new payment permission. Config
+restore preserves all schema/current rows; synthetic Auth and explicit fixture bot
+bypass are not provider/real-host identity acceptance. See delivery README.
+
+Populated dummy recovery04 retains original signed-command receipts/authority and
+all stock/order/payment rows. Saved cancellation retry preserves original payload
+bytes/key, uses a fresh envelope/current AAL2 authority and returns original receipt;
+buyer retry retains full historical approval after cancellation. Local restore
+transactions roll back nonce/row changes. This is not provider identity or host
+acceptance; preserve pending browser commands for eventual exact recovery.
+
+K joined local HTTP40/0 verifies active native session/signing plus cancellation
+through maintained router/SDK, discarded successful reply and exact retry, current
+role refusal, one release and retained money/history. Synthetic identity is not
+provider authentication. Session validation may commit last-seen/nonce/actor-global
+rate activity even when business command refuses; all unrelated rows/metadata are
+checked. Provider/host remains MAP-023; preserve saved commands/receipts for recovery.
+
+Local K staff UI recovery: open Pending cancellations as the original staff member
+and retry the saved command after connection/access restoration. Do not delete local
+records or treat missing queue rows as success. Damaged records remain untouched;
+contact the administrator to reconcile against native actor/key receipts. Cancellation
+does not refund payments. Fresh attempts require current order version and explicit
+reason/review. Browser tests use synthetic API replies, separate from native/backend
+proof; joined host/installer acceptance remains MAP-023.
+
+K cancellation preparation: fulfillment/cancel POST retains active-AAL2-session,
+origin/CSRF/database-idempotency/rate/deadline controls. Dedicated signed cancel_order
+RPC holds shared entry/current Staff/Admin authority before historical receipt access,
+then fresh reviewed version/canonical release. Allowlisted result is a cancellation
+receipt, not a refund/current payment read. API/native scoped proof passes; form,
+installer and host remain MAP-023. Keep activation closed, retain history/receipts;
+exact source/verification/recovery: authoritative-delivery README.
+
+**8 October prepared customer tariff endpoint:** `/api/admin/delivery/customer-rates`
+uses the existing single-function Admin router. GET requires the same-origin
+active AAL2 session and explicit Admin/Staff membership; POST also requires CSRF,
+an idempotency UUID, bounded complete matrix/reason/evidence/expected version and
+the maintained signed database publication. Database repeats role/AAL2 validation;
+browser and service-role table writes/private calculator execution are revoked.
+Carrier-cost pilot commands retain their existing separate permissions. Source
+and focused API/native evidence are in authoritative-delivery README. This route
+is prepared, not deployed; do not activate it alone as a completed delivery flow.
+Stale versions return409; uncertain publication failures require the same key and
+payload. Exact integration/deactivation/roll-forward remains MAP-017/020/023.
+
 **1 October shared signer correction (IDEA-20261001-04, prepared):** `20261001065252_admin_signing_null_inputs.sql` guards six required inputs after staff/AAL2 checks while preserving the installed definition/security metadata and controls. Four later replacement/recovery definitions retain it. Rehearse with `node scripts/rehearse-admin-signing.mjs` on the exact loopback restore; seven independent variants and current Globe/prepared fulfillment caller denials pass. This is neither applied state nor full business-path proof. Before apply, capture the same-target helper's definition/owner/ACL/settings and ledger, refresh backup/preflight and include it in the reviewed package. Refuse unknown shape. Recovery must keep the guard by controlled Admin deactivation or reviewed roll-forward, never restore the bypass. Evidence and limits: `docs/evidence/20261001-admin-signing/README.md`; execution remains MAP-017/020.
 
 **13 September production correction:** MAP-017 follow-up `20260909023000` is
@@ -1318,3 +1380,14 @@ syntax now return `PRODUCT_MEDIA_ORPHAN_RANGE_INVALID`. Authorization and
 cleanup commands are unchanged. The exported validator is used by the actual
 GET handler; the failing-first range tests and 75 related BFF tests pass locally.
 No orphan listing, deletion, storage access or production query was performed.
+
+## Canonical delivery protection — 8 October, prepared only
+
+MAP-023's new private order snapshot guards refuse accepted charge/basket changes
+and pending express payment progression. Actual native Staff unchanged-fee
+tracking preserves accepted time/state; direct payment helper remains closed and
+the maintained signed dispatcher exercises the refusal. Admin fulfillment maps
+only three exact delivery review/acceptance/immutable-charge errors to safe409
+responses (synthetic routed tests3/3), keeping private snapshot/address data out.
+Manual express acceptance, legacy remediation and deployed UI remain unfinished;
+do not enable this correction independently. Receipt: authoritative-delivery README.

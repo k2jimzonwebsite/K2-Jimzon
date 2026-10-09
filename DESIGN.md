@@ -1,4 +1,61 @@
 ---
+
+M customer charge review,8October (MAP-023/018): preserve the wood canvas, current
+type,44px controls and existing messages/reference navigation. No new motion.
+Phone375/desktop1280 rendered review captures inspected, no horizontal overflow;
+existing mobile navigation overlays the scrollable timeline and remains optional
+polish outside this payment correction. Four required design skills applied.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Cached receipt could offer payment before current read | Fresh scoped final charge gates QR | Saved receipt is not current payment authority |
+| Historical label looked like a finalized bill | Total needs staff review; recorded payment remains visible | Preserve history without inventing approval |
+| Failed/older refresh could leave payment available | Payment withheld; reference/messages and retry remain | Keep uncertainty recoverable |
+| Direct upload trusted only parent state | Current conversation projection also required | Prevent stale receipt-upload authority |
+
+UI dummy proof: account3/3, guest related4/4 + final legacy1/1, direct saved
+conversation1/1 + fallback1/1. Native/installer and hosted completion remain MAP
+owned; these are synthetic local services, not deployed database/account evidence.
+
+K staff cancellation continuation8October: preserve Admin Source Sans/current
+dialog styles, protected focus,44px controls, single phone column and explicit
+cancellation-versus-refund text. Current-actor Pending cancellations remains outside
+active queues. No new motion.375/1440 rendered captures inspected without overflow;
+six dummy browser recovery cases green after malformed-receipt correction. Scoped
+source review APPROVED, no Critical/Important; host open.
+
+## Pending final-charge correction I - prepared, 8 October
+
+Manual express J customer continuation (MAP-023, local): the existing wood canvas
+and typography contain one readable proposal card with courier, items, discount,
+delivery, proposed full total and expiry. Explicit review precedes acceptance;
+status text explains uncertain retry or expired proposal, and refresh preserves
+the held command. Controls remain at least44px; no new motion or courier-booking
+promise. Guest375/1280 captures inspected without overflow; lost-response/reload
+and malformed persistence proof passes2/2 using synthetic services. Account screen
+uses the same card; authenticated express/identity recovery remains unfinished.
+Staff quotation now uses the existing protected Admin dialog and readable Source
+Sans controls. Blank courier/fee/facts, explicit Manila-time quote/expiry, observed
+route/package/availability/evidence/note and reviewed publication replace the
+pending-express generic approval checkbox. No new motion;44px controls and a
+single column on phone.375/1440 captures inspected without overflow. Synthetic
+lost-reply/reload/permission, stale-version, actor-switch and corrupt-record cases
+pass. Native HTTP and host composition remain open. Four required design skills applied; approved J design
+retained. No deployed/real-host claim. Exact sources/proof: delivery README.
+
+Required four design skills preserve existing identity and controls.
+
+| Surface | Before | Prepared behavior |
+| --- | --- | --- |
+| Order/customer/account | Provisional subtotal could look final | Pending label until final charge |
+| Staff payment | Positive choices without final bill | Withheld; failure/refund recovery retained |
+| Delivery/export | Unknown could look free/zero | Pending text rather than invented amount |
+
+Pending-payment phone375/desktop1280 captures inspected without overflow; nine
+distinct payment journeys and authenticated account journey pass on final source.
+Native signed guest/account proof passes15/0; fragment remains unapplied live.
+Conversation/direct receipt and canonical package proof remain MAP-023 owned.
+
 name: K2 Jimzon
 description: Premium Italian import store
 colors:
@@ -11,6 +68,13 @@ colors:
   forest: "#6E7F52"
   amber: "#9A6A45"
   line: "#B3B3B3"
+  admin-workflow-text: "#e2e8f0"
+  admin-workflow-selected: "#13233a"
+  admin-workflow-sequence: "#94a3b8"
+  admin-workflow-decision: "#fbbf24"
+  admin-workflow-converge: "#4ade80"
+  admin-workflow-enables: "#7dd3fc"
+  admin-workflow-recovery: "#fda4af"
 typography:
   display:
     fontFamily: "Fraunces, Georgia, serif"
@@ -64,6 +128,26 @@ components:
 ---
 
 # Design System: K2 Jimzon
+
+### Public stock-read failure/recovery evidence — 7 October 2026
+
+Existing pending-stock label, stale banner and disabled add behavior pass the
+focused rendered failure → authoritative recovery → later-failure test. Product
+discovery remains visible and stale product-row 47 never appears. Reduced-motion
+390/1440px checks show no document overflow; both screenshots inspected. No new
+styling/markup or design direction. This is synthetic local evidence, not
+deployed or physical-stock acceptance. Receipt and screenshots:
+`docs/evidence/20261007-storefront-stock-read/README.md`; remaining gates MAP-018.
+
+### Shop stock evidence and recoverable reads — 2 October 2026
+
+IDEA-20261002-04 retains the Admin product register, typography, dense metric rail and horizontally contained stock table. Protected mode explains the unavailable workflow before any direct database path mounts. Transitional failure uses the shared single alert and Refresh control, unknown totals use `--`, missing balances/allocations use Needs review and complete empty reads explicitly report no configured active shops. The metric says Unreserved warehouse units, with a visible read-only/eligible-lot warning and disabled initial mutation controls. Complete recovery displays only saved operational shops. Actual-component/CSS fixtures pass 8/8, including 375/1440 document-overflow checks; screenshots and original rendered regressions are in `docs/evidence/20261002-listing-logic/`. This is local verification of these states, not a full accessibility, staff transfer or protected-command acceptance claim.
+
+| Before | After | Operational reason |
+| --- | --- | --- |
+| Sample shops and borrowed display stock implied availability. | Exact saved rows, explicit unknown/empty/unavailable states. | Avoid invented operating facts. |
+| Suppressed errors and enabled transitional mutations. | Friendly Refresh recovery and visibly read-only controls. | Prevent decisions or stock movement from incomplete or ineligible evidence. |
+| Latest transfer window appeared to support a complete pending total. | Refuse any count mismatch, including more than 25 transfers. | Complete totals await protected pagination. |
 
 ### Delivery authority and recovery candidate — 1 October 2026
 
@@ -485,6 +569,15 @@ two-column density. Lifecycle state changes are separate reasoned decisions.
 Deletion keeps its PIN, exact product identity, history/stock refusal, and
 recovery copy visible and never presents refusal as success. All repeated actions
 remain at least 44px and motion is limited to direct progress feedback.
+
+For an eligible imported Draft, the same named dialog presents separate labeled
+brand and canonical-category selects populated from existing canonical records.
+Already assigned IDs stay disabled; no free-text taxonomy or creation shortcut is
+offered. The panel explains the zero-stock/no-history condition and has blocked
+and unavailable states. The existing reason and signed save remain visible; the
+two selects stack at 375px, keep 44px targets, and follow the same focus and
+reduced-motion contract. Expiry is per-batch during receiving and is read-only
+in the secure Product Master editor.
 
 ### Admin phone-intake interaction contract
 
@@ -1229,3 +1322,51 @@ touch targets. The audit changes wording, routing, and a few undersized controls
 it does not change operational permissions or record behavior. Automated local
 evidence is in `docs/evidence/20260921-admin-clarity-audit/`. Representative
 staff and physical-device acceptance remain under MAP-025.
+
+## Admin workflow map reading contract — 2 October 2026
+
+IDEA-20261002-06 preserves the Admin product register and Source Sans 3. The map opens at 100%, scopes to the selected workflow and keeps a Full map option. Titles use 16px, supporting text 14px at default browser text size. Filtering removes unrelated nodes instead of dimming their words. Search results select real graph steps; selection centers using the actual viewport. Native scroll/touch, mouse background dragging and arrow-key panning offer equivalent exploration. Full instructions remain outside the horizontally scrollable map.
+
+The admin-workflow-* tokens above are the existing semantic edge families lifted to readable contrast on dark Admin surfaces, with visible text labels. They do not change the storefront palette. Selection uses a border plus pressed state. No camera animation or decorative pulse slows repeated staff actions. Diagram scale controls are for overview; browser text enlargement retains reflowing full instructions. Scoped help tips align within the screen at larger text sizes.
+
+Source checkpoint and local browser evidence: docs/design-checkpoints/20261002-workflow-map/ and docs/evidence/20261002-workflow-map/. Remaining actual staff/touch-device and deployed-host acceptance stays in MAP-028/025. Simulated browser coverage is not full WCAG or real-device certification.
+
+
+## Canonical checkout interaction — 8 October 2026, local preparation
+
+MAP-023 preserves the existing wood canvas, Fraunces/Source Sans and store-field
+controls. No replacement theme, decorative motion or optional polish is added.
+All four required design skills applied to the connected delivery/retry batch.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Browser region/package calculator supplies fees. | Canonical server quote follows actual PSA ancestor selections. | The accepted charge must match server authority. |
+| Express appears as a fixed price. | Awaiting quote, no final total or receiving QR. | A current staff quote and buyer approval are still required. |
+| Unknown request can be reset by editing. | Held details, basket and coupon; same-key retry and contact navigation. | Prevent a second order after a lost successful response. |
+| Address typing can trigger a quote on every key. | Immediate review invalidation; coalesced requests. | Preserve correctness without exhausting the quote budget. |
+
+390px and1440px reduced-motion screenshots were inspected: no document overflow,
+labelled selectors and pending-total copy visible; incumbent page styling preserved.
+Synthetic screenshots are verification artifacts, not product or staff facts.
+Browser evidence finalization remains MAP-023; real-device/host acceptance is open.
+Optional Impeccable register/sidecar metadata refresh is deferred under the existing
+MAP design-polish disposition; the owner-required K2 register remains authoritative.
+
+
+## Customer-rate editor H — 8 October, local preparation
+
+All four design skills applied to the incumbent Admin Operate/product register;
+Source Sans, adm-input/button/state tokens, flat regional groups and keyboard
+controls preserved. No new font, library, decoration or motion. Inputs use explicit
+pesos/grams; one column at375px, four at1440px. Both synthetic screens inspected,
+no document overflow. Physical devices/authenticated whole-page acceptance remain.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Delivery page opens the carrier-cost pilot; Staff cannot enter. | Canonical customer-rate editor first; Admin-only pilot separate. | Customer charges and carrier costs have distinct authorities. |
+| No canonical publication screen. | Saved version, four regions, reason/evidence and explicit review. | Explain and protect each rate change. |
+| Lost publication reply has no durable UI workflow. | Actor-scoped same-key retry; frozen pending fields and clear next action. | Prevent accidental new publications after uncertainty. |
+| Success and read failure could be conflated. | Confirmed version notice retained while read error pauses editing. | A failed refresh does not undo a saved change. |
+
+Optional Impeccable register/sidecar metadata refresh remains deferred in the MAP;
+owner-required K2 records remain authoritative. No cosmetic follow-up expands H.

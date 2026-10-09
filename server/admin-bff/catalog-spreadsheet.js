@@ -113,12 +113,20 @@ export function serializeCatalogCsv(products, {
   return `\uFEFF${Papa.unparse(rows, { columns: CATALOG_COLUMNS, newline: '\r\n' })}`
 }
 
-export async function readCatalogExport(client) {
-  const { data, error } = await client.from('products').select(PRODUCT_PROJECTION)
+async function readCompleteCatalog(client, errorCode) {
+  const { data, error, count } = await client.from('products').select(PRODUCT_PROJECTION, { count: 'exact' })
     .order('sku', { ascending: true }).limit(MAX_CATALOG_ROWS + 1)
-  if (error) throw new Error('CATALOG_EXPORT_UNAVAILABLE')
-  if ((data || []).length > MAX_CATALOG_ROWS) throw new Error('CATALOG_EXPORT_ROW_LIMIT')
-  return data || []
+  if (error || !Array.isArray(data) || !Number.isInteger(count) || count < 0
+      || count > MAX_CATALOG_ROWS || data.length !== count
+      || data.some(row => !row || typeof row.sku !== 'string' || !row.sku.trim()
+        || typeof row.catalog_id !== 'string' || !UUID.test(row.catalog_id))
+      || new Set(data.map(row => row.sku)).size !== count
+      || new Set(data.map(row => row.catalog_id)).size !== count) throw new Error(errorCode)
+  return data
+}
+
+export async function readCatalogExport(client) {
+  return readCompleteCatalog(client, 'CATALOG_EXPORT_UNAVAILABLE')
 }
 
 export function parseCatalogCsv(csvText) {
@@ -273,11 +281,8 @@ export async function buildCatalogCommitPayload(client, body) {
 
 export async function previewCatalogImport(client, csvText) {
   const rows = parseCatalogCsv(csvText)
-  const { data, error } = await client.from('products').select(PRODUCT_PROJECTION)
-    .order('sku', { ascending: true }).limit(MAX_CATALOG_ROWS + 1)
-  if (error) throw new Error('CATALOG_PREVIEW_UNAVAILABLE')
-  if ((data || []).length > MAX_CATALOG_ROWS) throw new Error('CATALOG_PREVIEW_UNAVAILABLE')
-  const outcomes = classifyCatalogRows(rows, data || [])
+  const data = await readCompleteCatalog(client, 'CATALOG_PREVIEW_UNAVAILABLE')
+  const outcomes = classifyCatalogRows(rows, data)
   const counts = Object.fromEntries(['New', 'Changed', 'Unchanged', 'Invalid', 'Protected/Ignored', 'Duplicate', 'Stale/Conflict']
     .map((category) => [category, outcomes.filter((row) => row.category === category).length]))
   return {

@@ -26,7 +26,7 @@ const env = {
   K2_ACCOUNT_UI_AUTH_STORAGE_KEY: authStorageKey,
   PLAYWRIGHT_ACCOUNT_BASE_URL: `http://127.0.0.1:${port}`,
 }
-const server = spawn(process.execPath, [path.join(root,'node_modules','vite','bin','vite.js'),'--mode','storefront','--host','127.0.0.1','--port',String(port),'--configLoader','runner'], {
+const server = spawn(process.execPath, [path.join(root,'node_modules','vite','bin','vite.js'),'--config','tests/fixtures/storefront-recovery-vite.config.js','--mode','storefront','--host','127.0.0.1','--port',String(port),'--configLoader','runner'], {
   cwd: root, env, windowsHide: true, stdio: 'ignore',
 })
 

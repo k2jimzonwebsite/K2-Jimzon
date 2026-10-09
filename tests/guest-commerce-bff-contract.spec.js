@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto'
 import accountClaimHandler, { validateAccountClaim } from '../prepared-api/storefront/account/claim.js'
 import accountHistoryHandler from '../prepared-api/storefront/account/history.js'
 import accountMessageHandler, { validateAccountMessage } from '../prepared-api/storefront/account/message.js'
-import orderHandler from '../prepared-api/storefront/order.js'
+import orderHandler, { validateGuestOrder } from '../prepared-api/storefront/order.js'
 import orderStatusHandler from '../prepared-api/storefront/order/status.js'
 import pasabuyHandler from '../prepared-api/storefront/pasabuy.js'
 import couponHandler from '../prepared-api/storefront/coupon.js'
@@ -21,6 +21,101 @@ import {
 } from '../src/services/guestCommerceRoutes.js'
 import { authorizationBearer, signedRpcArguments } from '../server/storefront-bff/security.js'
 import { addCartItems, productStock, validateCartForSubmission } from '../src/lib/cartInventory.js'
+import { hasFinalOrderCharge, projectOrderCharge } from '../src/lib/orderChargeState.js'
+import { validateExpressAcceptance } from '../server/express-delivery-contract.js'
+import { handleExpressAcceptance } from '../server/storefront-bff/express-delivery.js'
+
+test('express acceptance transport signs exact version and rejects buyer-supplied amounts', async () => {
+  const body = { orderReference: 'WEB-SYNTHETIC01', quoteVersion: 1, idempotencyKey: '11111111-1111-4111-8111-111111111111' }
+  expect(validateExpressAcceptance(body)).toEqual(body)
+  for (const invalid of [{ ...body, feeMinor: 0 }, { ...body, totalAmount: 0 }, { ...body, customerConfirmed: true },
+    { ...body, quoteVersion: '1' }, { ...body, quoteVersion: 0 }, { ...body, idempotencyKey: 'new-key' }]) {
+    expect(() => validateExpressAcceptance(invalid)).toThrow('REQUEST_INVALID')
+  }
+  const savedFetch = globalThis.fetch, names = ['SUPABASE_URL', 'SUPABASE_PUBLISHABLE_KEY']
+  const saved = Object.fromEntries(names.map(key => [key, process.env[key]]))
+  process.env.SUPABASE_URL = 'https://express-fixture.supabase.co'
+  process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_fixture'
+  let calls = 0
+  const receipt = { ok: true, orderReference: body.orderReference, quoteVersion: 1, shippingQuoteStatus: 'customer_confirmed', totalAmount: 830.15, acceptedAt: '2026-10-08T04:00:00.000Z', privateEvidence: 'must not leak' }
+  try {
+    globalThis.fetch = async (url, init) => {
+      if (String(url).endsWith('/auth/v1/user')) return new Response(JSON.stringify({ id: '11111111-1111-4111-8111-111111111111' }), { status: 200 })
+      calls++
+      expect(String(url)).toMatch(/\/rpc\/accept_(guest|account)_express_delivery_v1$/)
+      const args = JSON.parse(init.body)
+      expect(JSON.parse(args.p_payload_text)).toEqual(body)
+      expect(args.p_signature).toMatch(/^[a-f0-9]{64}$/)
+      expect(Object.hasOwn(args, 'p_guest_grant_hash')).toBe(String(url).includes('accept_guest_'))
+      return new Response(JSON.stringify(receipt), { status: 200 })
+    }
+    const unauthorized = response()
+    await handleExpressAcceptance({ ...request(), body }, unauthorized, { account: true })
+    expect(unauthorized.statusCode).toBe(401)
+    expect(calls).toBe(0)
+    for (const account of [false, true]) {
+      const req = { ...request(), body }
+      if (account) req.headers.authorization = 'Bearer fixture-account-token'
+      const res = response()
+      await handleExpressAcceptance(req, res, { account })
+      expect(res.statusCode).toBe(200)
+      expect(JSON.parse(res.body).receipt.totalAmount).toBe(830.15)
+      expect(res.body).not.toContain('privateEvidence')
+    }
+    receipt.totalAmount = null
+    const unknown = response()
+    await handleExpressAcceptance({ ...request(), body }, unknown)
+    expect(unknown.statusCode).toBe(503)
+  } finally {
+    globalThis.fetch = savedFetch
+    for (const key of names) if (saved[key] === undefined) delete process.env[key]; else process.env[key] = saved[key]
+  }
+})
+
+test('pending delivery readers hide provisional bills while preserving accepted totals', async () => {
+  const savedFetch = globalThis.fetch
+  const names = ['SUPABASE_URL', 'SUPABASE_PUBLISHABLE_KEY']
+  const saved = Object.fromEntries(names.map(key => [key, process.env[key]]))
+  process.env.SUPABASE_URL = 'https://charge-fixture.supabase.co'
+  process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_fixture'
+  const orders = [
+    { id: 'pending', shipping_quote_status: 'pending', total_amount: 735, shipping_amount: 0 },
+    { id: 'quoted', shipping_quote_status: 'quoted', total_amount: 830, shipping_amount: 95 },
+    { id: 'unknown', total_amount: 735 },
+    { id: 'accepted', shipping_quote_status: 'customer_confirmed', total_amount: 830, shipping_amount: 95 },
+    { id: 'pickup', shipping_quote_status: 'waived', total_amount: 0, shipping_amount: 0 },
+    { id: 'missing', shipping_quote_status: 'customer_confirmed', total_amount: null },
+  ]
+  const expected = orders.map(projectOrderCharge)
+  expect(expected.map(order => order.total_amount)).toEqual([null, null, null, 830, 0, null])
+  for (const value of ['', ' ', -1, Infinity, true, {}, undefined]) {
+    expect(hasFinalOrderCharge({ shipping_quote_status: 'customer_confirmed', total_amount: value })).toBe(false)
+  }
+  try {
+    globalThis.fetch = async (url, init) => {
+      if (String(url).endsWith('/auth/v1/user')) {
+        expect(init.headers.get ? init.headers.get('Authorization') : init.headers.Authorization).toBe('Bearer fixture-account-token')
+        return new Response(JSON.stringify({ id: '11111111-1111-4111-8111-111111111111' }), { status: 200 })
+      }
+      expect(String(url)).toMatch(/\/rpc\/(read_guest_order_status_v1|list_customer_account_history_v1)$/)
+      expect(JSON.parse(init.body).p_signature).toMatch(/^[a-f0-9]{64}$/)
+      return new Response(JSON.stringify({ ok: true, orders, linked_at: '2026-10-08T00:00:00Z' }), { status: 200 })
+    }
+    const guest = response()
+    await orderStatusHandler(request(), guest)
+    expect(guest.statusCode).toBe(200)
+    expect(JSON.parse(guest.body).orders).toEqual(expected)
+    const account = response()
+    const req = request()
+    req.headers.authorization = 'Bearer fixture-account-token'
+    await accountHistoryHandler(req, account)
+    expect(account.statusCode).toBe(200)
+    expect(JSON.parse(account.body).history.orders).toEqual(expected)
+  } finally {
+    globalThis.fetch = savedFetch
+    for (const key of names) if (saved[key] === undefined) delete process.env[key]; else process.env[key] = saved[key]
+  }
+})
 
 const source = (path) => readFile(new URL(`../${path}`, import.meta.url), 'utf8')
 
@@ -145,7 +240,7 @@ test('single-function Storefront router allowlists every prepared endpoint and r
   expect(STOREFRONT_BFF_ROUTES.length).toBeGreaterThan(0)
   expect(new Set(STOREFRONT_BFF_ROUTES).size).toBe(STOREFRONT_BFF_ROUTES.length)
   expect(Object.keys(STOREFRONT_BFF_ROUTE_CONTROLS).sort()).toEqual([...STOREFRONT_BFF_ROUTES].sort())
-  expect(Object.values(STOREFRONT_BFF_ROUTE_CONTROLS).every((control) =>
+  expect(Object.entries(STOREFRONT_BFF_ROUTE_CONTROLS).filter(([route]) => route !== 'delivery/locations').every(([, control]) =>
     control.method === 'POST' && control.origin && control.signed && control.databaseRateLimit)).toBe(true)
   expect(Object.entries(STOREFRONT_BFF_ROUTE_CONTROLS)
     .filter(([, control]) => control.bot).map(([route]) => route).sort()).toEqual([
@@ -185,6 +280,74 @@ test('single-function Storefront router allowlists every prepared endpoint and r
   expect(guestBffEndpoint('account/claim')).toBe('/api/storefront/account/claim')
   expect(guestBffEndpoint('account/history')).toBe('/api/storefront/account/history')
   expect([...GUEST_BFF_CLIENT_ROUTES].sort()).toEqual([...STOREFRONT_BFF_ROUTES].sort())
+})
+
+test('canonical delivery boundary validates only SKU quantities and complete destination identifiers', async () => {
+  const module = await import('../prepared-api/storefront/delivery/quote.js')
+  expect(typeof module.validateCustomerDeliveryRequest).toBe('function')
+  const validate = module.validateCustomerDeliveryRequest
+  const body = {service:'standard',items:[{sku:'SYNTHETIC-A',quantity:2}],destination:{sourceVersion:'psgc-2026-06-30',path:['1300000000','1380100000','1380100001']}}
+  expect(validate(body)).toEqual(body)
+  expect(validate({...body,items:[{sku:'ABC/123',quantity:1}]}).items).toEqual([{sku:'ABC/123',quantity:1}])
+  expect(validate({service:'pickup',items:body.items})).toEqual({service:'pickup',items:body.items,destination:null})
+  for (const invalid of [ {...body,weightG:1}, {...body,feeMinor:0}, {...body,items:[...body.items,...body.items]}, {...body,items:[{sku:'SYNTHETIC-A',quantity:1.5}]}, {...body,items:[{sku:'SYNTHETIC-A',quantity:100}]}, {...body,items:[{sku:'A',quantity:1,weightG:1}]}, {...body,destination:{...body.destination,path:['1300000000','1380100000']}}, {...body,destination:{...body.destination,sourceVersion:'old'}}, {...body,destination:{...body.destination,area:'NCR'}} ]) expect(()=>validate(invalid)).toThrow('REQUEST_INVALID')
+})
+
+test('canonical order delivery preserves acceptance and historical retry normalization without accepting mixed price input', () => {
+  const body={customerName:'Synthetic accepted quote',email:'accepted@example.test',address:'Synthetic address only',fulfillmentMethod:'Standard Courier Delivery',items:[{sku:'ABC/123',quantity:1}],idempotencyKey:'41000000-0000-4000-8000-000000000017',delivery:{service:'standard',destination:{sourceVersion:'psgc-2026-06-30',path:['1300000000','1380100000','1380100001']},acceptance:{inputFingerprint:'a'.repeat(64),rateVersion:1}}}
+  expect(validateGuestOrder(body).payload.delivery).toEqual(body.delivery)
+  for(const bad of [{...body,shippingAmount:0},{...body,shippingQuoteStatus:'waived'},{...body,delivery:{...body.delivery,acceptance:{...body.delivery.acceptance,feeMinor:0}}},{...body,delivery:{...body.delivery,acceptance:{inputFingerprint:'a'.repeat(64),rateVersion:'1'}}},{...body,fulfillmentMethod:'Pickup'},{...body,delivery:{...body.delivery,acceptance:null}}])expect(()=>validateGuestOrder(bad)).toThrow('DELIVERY_INPUT_INVALID')
+  const legacy={...body,delivery:undefined,shippingAmount:7,shippingQuoteStatus:'customer_confirmed'}
+  const normalized=validateGuestOrder(legacy).payload
+  expect(normalized.delivery).toBeUndefined();expect(normalized.shippingAmount).toBe(7);expect(normalized.shippingQuoteStatus).toBe('customer_confirmed')
+  const express={...body,fulfillmentMethod:'Metro Manila Express Dispatch',delivery:{service:'express',destination:body.delivery.destination,acceptance:null}}
+  expect(validateGuestOrder(express).payload.delivery.acceptance).toBeNull()
+})
+
+test('canonical order delivery failures return a safe review refusal without an order receipt or guest cookie', async () => {
+  const savedFetch=globalThis.fetch,names=['SUPABASE_URL','SUPABASE_PUBLISHABLE_KEY','K2_TURNSTILE_SECRET_KEY','K2_TURNSTILE_ALLOW_UNCONFIGURED'],saved=Object.fromEntries(names.map(k=>[k,process.env[k]]))
+  process.env.SUPABASE_URL='https://delivery-fixture.supabase.co';process.env.SUPABASE_PUBLISHABLE_KEY='sb_publishable_fixture';delete process.env.K2_TURNSTILE_SECRET_KEY;process.env.K2_TURNSTILE_ALLOW_UNCONFIGURED='true'
+  const body={customerName:'Synthetic accepted quote',email:'accepted@example.test',address:'Synthetic address only',fulfillmentMethod:'Standard Courier Delivery',items:[{sku:'ABC/123',quantity:1}],idempotencyKey:'41000000-0000-4000-8000-000000000018',delivery:{service:'standard',destination:{sourceVersion:'psgc-2026-06-30',path:['1300000000','1380100000','1380100001']},acceptance:{inputFingerprint:'a'.repeat(64),rateVersion:1}}}
+  try{
+    for(const [message,status] of [['K2_DELIVERY_QUOTE_CHANGED',409],['K2_DELIVERY_REVIEW_REQUIRED',409],['K2_DELIVERY_ACCEPTANCE_REQUIRED',409],['K2_DELIVERY_INPUT_INVALID',400]]){
+      globalThis.fetch=async(url,init)=>{expect(String(url)).toBe('https://delivery-fixture.supabase.co/rest/v1/rpc/submit_guest_order_v1');const args=JSON.parse(init.body);expect(JSON.parse(args.p_payload_text).delivery).toEqual(body.delivery);expect(args.p_signature).toMatch(/^[a-f0-9]{64}$/);return new Response(JSON.stringify({code:'22023',message,details:'Private snapshot and address',hint:'Never expose this'}),{status:400,headers:{'content-type':'application/json'}})}
+      const res=response();await orderHandler({...request(),body},res);expect(res.statusCode).toBe(status);expect(JSON.parse(res.body)).toEqual({error:{code:message.slice(3)}});expect(res.headers.has('set-cookie')).toBe(false)
+    }
+  }finally{globalThis.fetch=savedFetch;for(const k of names)if(saved[k]===undefined)delete process.env[k];else process.env[k]=saved[k]}
+})
+
+test('canonical delivery boundary signs canonical input and exposes only the reviewed quote projection', async () => {
+  const handler = (await import('../prepared-api/storefront/delivery/quote.js')).default
+  const savedFetch=globalThis.fetch, names=['SUPABASE_URL','SUPABASE_PUBLISHABLE_KEY'],saved=Object.fromEntries(names.map(k=>[k,process.env[k]])),calls=[]
+  process.env.SUPABASE_URL='https://delivery-fixture.supabase.co';process.env.SUPABASE_PUBLISHABLE_KEY='sb_publishable_fixture'
+  const quote={service:'standard',status:'customer_confirmed',feeMinor:9500,currency:'PHP',rateVersion:1,weightG:500,weightBasis:'estimated',inputFingerprint:'a'.repeat(64),area:'NCR',sourceVersion:'psgc-2026-06-30',messageCode:'STANDARD_RATE'}
+  globalThis.fetch=async(url,init)=>{expect(String(url)).toBe('https://delivery-fixture.supabase.co/rest/v1/rpc/quote_customer_delivery_v1');calls.push(JSON.parse(init.body));return new Response(JSON.stringify({ok:true,quote:{...quote,privateCost:123,actorId:'private'}}),{headers:{'content-type':'application/json'}})}
+  try {
+    const body={service:'standard',items:[{sku:'SYNTHETIC-A',quantity:1}],destination:{sourceVersion:'psgc-2026-06-30',path:['1300000000','1380100000','1380100001']}}
+    const res=response();await handler({...request(),body},res)
+    expect(res.statusCode).toBe(200);expect(JSON.parse(res.body)).toEqual({ok:true,quote});expect(JSON.parse(calls[0].p_payload_text)).toEqual(body);expect(calls[0].p_signature).toMatch(/^[0-9a-f]{64}$/)
+    const bad=response();await handler({...request(),body:{...body,weightG:1}},bad);expect(bad.statusCode).toBe(400);expect(calls).toHaveLength(1)
+    const denied=response();await handler({...request('POST','https://untrusted.example.test'),body},denied);expect(denied.statusCode).toBe(403);expect(calls).toHaveLength(1)
+    for(const [result,status,code] of [[{ok:false,error_code:'RATE_LIMITED',retry_after_seconds:60},429,'RATE_LIMITED'],[{ok:false,error_code:'REQUEST_REPLAYED'},409,'REQUEST_REJECTED'],[{ok:true,quote:{...quote,feeMinor:null}},503,'DELIVERY_QUOTE_UNAVAILABLE']]){
+      globalThis.fetch=async()=>new Response(JSON.stringify(result),{headers:{'content-type':'application/json'}})
+      const failure=response();await handler({...request(),body},failure);expect(failure.statusCode).toBe(status);expect(JSON.parse(failure.body)).toEqual({error:{code}})
+    }
+  } finally {globalThis.fetch=savedFetch;for(const k of names)if(saved[k]===undefined)delete process.env[k];else process.env[k]=saved[k]}
+})
+
+test('canonical delivery locations route is a bounded public reference read with no signing or business writes', async () => {
+  expect(STOREFRONT_BFF_ROUTES).toContain('delivery/locations')
+  expect(STOREFRONT_BFF_ROUTE_CONTROLS['delivery/locations']).toMatchObject({method:'GET',signed:false,databaseRateLimit:false})
+  const handler=(await import('../prepared-api/storefront/delivery/locations.js')).default
+  const savedFetch=globalThis.fetch,names=['SUPABASE_URL','SUPABASE_PUBLISHABLE_KEY'],saved=Object.fromEntries(names.map(k=>[k,process.env[k]]));let calls=0
+  process.env.SUPABASE_URL='https://delivery-fixture.supabase.co';process.env.SUPABASE_PUBLISHABLE_KEY='sb_publishable_fixture'
+  const child={code:'1380601000',name:'Tondo',level:'SubMun',sourceVersion:'psgc-2026-06-30'}
+  globalThis.fetch=async(url,init)=>{calls++;expect(String(url)).toBe('https://delivery-fixture.supabase.co/rest/v1/rpc/read_delivery_locations_v1');expect(JSON.parse(init.body)).toEqual({p_parent_code:'1380600000'});return new Response(JSON.stringify({sourceVersion:'psgc-2026-06-30',children:[{...child,private:'hidden'}]}),{headers:{'content-type':'application/json'}})}
+  try {
+    const res=response();await handler({...request('GET'),query:{parent:'1380600000'}},res);expect(res.statusCode).toBe(200);expect(JSON.parse(res.body)).toEqual({ok:true,sourceVersion:'psgc-2026-06-30',children:[child]})
+    const bad=response();await handler({...request('GET'),query:{parent:['1380600000','1300000000']}},bad);expect(bad.statusCode).toBe(400);expect(calls).toBe(1)
+    const method=response();await handler(request('POST'),method);expect(method.statusCode).toBe(405);expect(calls).toBe(1)
+  } finally {globalThis.fetch=savedFetch;for(const k of names)if(saved[k]===undefined)delete process.env[k];else process.env[k]=saved[k]}
 })
 
 test('guest order status is read only through the scoped browser grant', async () => {

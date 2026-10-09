@@ -6,6 +6,7 @@ import {
 import { createStorefrontServerSupabase, mapBoundaryResult } from '../../server/storefront-bff/supabase.js'
 
 import { strictNumeric } from '../../server/shared-numeric.js'
+import { validateCustomerDeliveryRequest } from './delivery/quote.js'
 
 // The exact note marker Checkout writes for Cash on Delivery. Kept identical
 // to the storefront copy and the database trigger by contract; a forged note
@@ -37,10 +38,10 @@ const FULFILLMENT = new Set([
   'K2 Warehouse Pickup',
 ])
 
-function validate(body) {
+export function validateGuestOrder(body) {
   const allowed = new Set([
     'customerName','email','phone','address','fulfillmentMethod','note','items','idempotencyKey','couponCode','botToken',
-    'shippingAmount','shippingQuoteStatus',
+    'shippingAmount','shippingQuoteStatus','delivery',
   ])
   if (!body || typeof body !== 'object' || Array.isArray(body)
       || Object.keys(body).some((key) => !allowed.has(key))) throw new Error('REQUEST_INVALID')
@@ -85,6 +86,34 @@ function validate(body) {
   if (shippingAmount !== null) payload.shippingAmount = shippingAmount
   if (shippingQuoteStatus !== null) payload.shippingQuoteStatus = shippingQuoteStatus
 
+  if (body.delivery !== undefined) {
+    const delivery = body.delivery
+    if (shippingAmount !== null || shippingQuoteStatus !== null || !delivery || typeof delivery !== 'object'
+        || Array.isArray(delivery) || Object.keys(delivery).some(k => !['service','destination','acceptance'].includes(k))) {
+      throw new Error('DELIVERY_INPUT_INVALID')
+    }
+    const canonical = validateCustomerDeliveryRequest({service:delivery.service,items,destination:delivery.destination})
+    const methods = {standard:['Courier delivery','Standard Courier Delivery','Standard Courier Delivery (Luzon)','Standard Courier Delivery (Visayas)','Standard Courier Delivery (Mindanao)'],pickup:['Pickup','K2 Warehouse Pickup'],express:['Metro Manila Express Dispatch']}
+    if (!methods[canonical.service].includes(fulfillmentMethod)) throw new Error('DELIVERY_INPUT_INVALID')
+    let acceptance = null
+    if (canonical.service === 'express') {
+      if (delivery.acceptance != null) throw new Error('DELIVERY_INPUT_INVALID')
+    } else {
+      acceptance = delivery.acceptance
+      if (!acceptance || typeof acceptance !== 'object' || Array.isArray(acceptance)
+          || Object.keys(acceptance).sort().join(',') !== 'inputFingerprint,rateVersion'
+          || typeof acceptance.inputFingerprint !== 'string' || !/^[a-f0-9]{64}$/.test(acceptance.inputFingerprint)
+          || (canonical.service === 'pickup' ? acceptance.rateVersion !== null
+            : !Number.isInteger(acceptance.rateVersion) || acceptance.rateVersion < 1 || acceptance.rateVersion > 2147483647)) {
+        throw new Error('DELIVERY_INPUT_INVALID')
+      }
+      acceptance = {inputFingerprint:acceptance.inputFingerprint,rateVersion:acceptance.rateVersion}
+    }
+    payload.delivery = {service:canonical.service,destination:canonical.destination,acceptance}
+  }
+  // Vintage normalization is retained only to reach exact historical receipts.
+  // The coordinated native correction rejects every fresh legacy request.
+
   return {
     payload,
     botToken: body.botToken,
@@ -96,7 +125,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return safeJson(res, 405, { error: { code: 'METHOD_NOT_ALLOWED' } }, { Allow: 'POST' })
   if (!requireAllowedOrigin(req)) return safeJson(res, 403, { error: { code: 'ORIGIN_NOT_ALLOWED' } })
   try {
-    const { payload, botToken } = validate(await readJson(req))
+    const { payload, botToken } = validateGuestOrder(await readJson(req))
     if (!await verifyBotChallenge(botToken, requestIp(req), 'guest_order', { hostname: requestHostname(req) })) {
       return safeJson(res, 403, { error: { code: 'BOT_CHALLENGE_REQUIRED' } })
     }
@@ -116,6 +145,12 @@ export default async function handler(req, res) {
     }
     if (error?.code === 'K2WEB') {
       return safeJson(res, 409, { error: { code: 'PRODUCT_NOT_AVAILABLE' } })
+    }
+    if (error?.code === '22023' && ['K2_DELIVERY_QUOTE_CHANGED','K2_DELIVERY_REVIEW_REQUIRED','K2_DELIVERY_ACCEPTANCE_REQUIRED'].includes(error.message)) {
+      return safeJson(res, 409, { error: { code: error.message.slice(3) } })
+    }
+    if (error?.code === '22023' && error.message === 'K2_DELIVERY_INPUT_INVALID') {
+      return safeJson(res, 400, { error: { code: 'DELIVERY_INPUT_INVALID' } })
     }
     if (error) return safeJson(res, 503, { error: { code: 'ORDER_SERVICE_UNAVAILABLE' } })
     const mapped = mapBoundaryResult(data)

@@ -17,6 +17,7 @@ import customers from '../../prepared-api/admin/customers.js'
 import fulfillment from '../../prepared-api/admin/fulfillment.js'
 import fulfillmentAssignBox from '../../prepared-api/admin/fulfillment/assign-box.js'
 import fulfillmentConfirm from '../../prepared-api/admin/fulfillment/confirm.js'
+import fulfillmentCancel from '../../prepared-api/admin/fulfillment/cancel.js'
 import fulfillmentDelivery from '../../prepared-api/admin/fulfillment/delivery.js'
 import fulfillmentFulfill from '../../prepared-api/admin/fulfillment/fulfill.js'
 import fulfillmentPackingScan from '../../prepared-api/admin/fulfillment/packing-scan.js'
@@ -81,6 +82,8 @@ import reservations from '../../prepared-api/admin/reservations.js'
 import reservationExtend from '../../prepared-api/admin/reservations/extend.js'
 import reservationReleaseExpired from '../../prepared-api/admin/reservations/release-expired.js'
 import delivery from '../../prepared-api/admin/delivery.js'
+import customerDeliveryRates from '../../prepared-api/admin/delivery/customer-rates.js'
+import expressDeliveryQuote from '../../prepared-api/admin/delivery/express-quote.js'
 import deliveryQuote from '../../prepared-api/admin/delivery/quote.js'
 import deliveryCourier from '../../prepared-api/admin/delivery/courier.js'
 import deliveryCourierState from '../../prepared-api/admin/delivery/courier-state.js'
@@ -125,6 +128,7 @@ const ROUTES = new Map([
   ['fulfillment', fulfillment],
   ['fulfillment/assign-box', fulfillmentAssignBox],
   ['fulfillment/confirm', fulfillmentConfirm],
+  ['fulfillment/cancel', fulfillmentCancel],
   ['fulfillment/delivery', fulfillmentDelivery],
   ['fulfillment/fulfill', fulfillmentFulfill],
   ['fulfillment/packing-scan', fulfillmentPackingScan],
@@ -189,6 +193,8 @@ const ROUTES = new Map([
   ['reservations/extend', reservationExtend],
   ['reservations/release-expired', reservationReleaseExpired],
   ['delivery', delivery],
+  ['delivery/customer-rates', customerDeliveryRates],
+  ['delivery/express-quote', expressDeliveryQuote],
   ['delivery/quote', deliveryQuote],
   ['delivery/courier', deliveryCourier],
   ['delivery/courier-state', deliveryCourierState],
@@ -213,6 +219,7 @@ const ADMIN_POST_ROUTES = new Set([
   'product-master',
   'sessions/revoke',
   'fulfillment/assign-box', 'fulfillment/confirm', 'fulfillment/delivery',
+  'fulfillment/cancel',
   'fulfillment/fulfill', 'fulfillment/packing-scan', 'fulfillment/payment',
   'fulfillment/transfer-lot',
   'inbox/internal-note', 'inbox/send-reply', 'inbox/mark-read', 'inbox/workflow',
@@ -267,7 +274,7 @@ export const ADMIN_BFF_ROUTE_CONTROLS = Object.freeze(Object.fromEntries(
     const orphanMethods = route === 'product-media/orphans'
       ? Object.freeze({ GET: Object.freeze({ csrf: false, idempotency: false, rateLimit: 'database' }) })
       : undefined
-    const globeMethods = route === 'globe-cms'
+    const globeMethods = route === 'globe-cms' || route === 'delivery/customer-rates' || route === 'delivery/express-quote'
       ? Object.freeze({ POST: Object.freeze({ csrf: true, idempotency: true, rateLimit: 'database' }) })
       : undefined
     const procurementMethods = route === 'procurement'

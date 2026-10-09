@@ -103,9 +103,10 @@ begin
   insert into public.audit_logs (
     table_name, record_id, action, old_data, new_data, user_id
   ) values (
-    'products', v_product.id::text, 'TRANSITION_PUBLICATION',
+    'products', v_product.id::text, 'UPDATE',
     jsonb_build_object('status', v_old_status),
-    jsonb_build_object('status', v_target, 'intake_session_id', p_session_id),
+    jsonb_build_object('operation', 'TRANSITION_PUBLICATION',
+      'status', v_target, 'intake_session_id', p_session_id),
     auth.uid()
   );
   return jsonb_build_object('success', true, 'product_id', v_product.id, 'status', v_target);

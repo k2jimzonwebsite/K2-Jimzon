@@ -6,14 +6,156 @@ import { spawn, spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { signedAdminCommandArguments } from '../server/admin-bff/security.js'
 import { signedRpcArguments } from '../server/storefront-bff/security.js'
+import { rehearseCurrentPayment } from './rehearse-current-payment.mjs'
+import { rehearseEligibleLotComposition } from './rehearse-eligible-lot-composition.mjs'
+import { rehearsePaymentLotParity } from './rehearse-payment-lot-parity.mjs'
+import { rehearseCurrentWriterConcurrency, currentWriterWitnessSha256 } from './rehearse-current-writer-concurrency.mjs'
+import { rehearseCurrentReleaseConcurrency, releaseWitnessSha256 } from './rehearse-current-release-concurrency.mjs'
+import { rehearseCatalogCurrentChain, catalogCurrentChainWitnessSha256 } from './rehearse-catalog-current-chain.mjs'
+import { rehearseIntakeFoundation, intakeFoundationWitnessSha256 } from './rehearse-intake-foundation.mjs'
+import { rehearseIntakeDependencies, intakeDependenciesWitnessSha256 } from './rehearse-intake-dependencies.mjs'
+import { rehearseIntakeLifecycle, intakeLifecycleWitnessSha256 } from './rehearse-intake-lifecycle.mjs'
+import { rehearseIntakeFlight, intakeFlightWitnessSha256 } from './rehearse-intake-flight.mjs'
+import { rehearseIntakeFlightCost, intakeFlightCostWitnessSha256 } from './rehearse-intake-flight-cost.mjs'
+import { rehearseIntakeCalendar, intakeCalendarWitnessSha256 } from './rehearse-intake-calendar.mjs'
+import { rehearseIntakePublication, intakePublicationWitnessSha256 } from './rehearse-intake-publication.mjs'
+import { rehearseIntakeCleanup, intakeCleanupWitnessSha256 } from './rehearse-intake-cleanup.mjs'
+import { rehearseIntakeDisabledAi, intakeDisabledAiWitnessSha256 } from './rehearse-intake-disabled-ai.mjs'
+import { rehearseReleaseCurrentChain, releaseCurrentChainWitnessSha256 } from './rehearse-release-current-chain.mjs'
+import { rehearseReleaseLotParity, releaseLotWitnessSha256 } from './rehearse-release-lot-parity.mjs'
+import { rehearseLotCompatibility, lotCompatibilityWitnessSha256 } from './rehearse-lot-compatibility.mjs'
+import { rehearseCurrentReceiving, receivingWitnessSha256 } from './rehearse-current-receiving.mjs'
+import { rehearseReceivingCalendar, receivingCalendarWitnessSha256 } from './rehearse-receiving-calendar.mjs'
+import { rehearseReceivingRetry, receivingRetryWitnessSha256 } from './rehearse-receiving-retry.mjs'
+import { rehearseReceivingWriters, receivingWritersWitnessSha256 } from './rehearse-receiving-writers.mjs'
+import { rehearseClearanceConcurrency, clearanceConcurrencyWitnessSha256 } from './rehearse-clearance-concurrency.mjs'
+import { rehearseReceivingFinalizer, receivingFinalizerWitnessSha256 } from './rehearse-receiving-finalizer.mjs'
+import { rehearseReceivingPurchase, receivingPurchaseWitnessSha256 } from './rehearse-receiving-purchase.mjs'
+import { rehearseClearanceRecount, clearanceRecountWitnessSha256 } from './rehearse-clearance-recount.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
+const witnessBytes=fs.readFileSync(fileURLToPath(import.meta.url))
+const witnessSha256=createHash('sha256').update(witnessBytes).digest('hex')
+const paymentWitnessSha256=createHash('sha256').update(fs.readFileSync(path.join(root,'scripts/rehearse-current-payment.mjs'))).digest('hex')
 const template = 'k2_current_restore_20260929'
 const database = 'k2_website_stock_locks_20261001'
 const dataDirectory = path.join(root, '.tools/current-restore-20260929-pg-data').replaceAll('\\', '/')
 const bin = path.join(root, '.tools/postgresql-17.11/runtime/pgsql/bin')
 const signedHolds = process.argv.includes('--signed-holds')
 const couponLifecycle = process.argv.includes('--coupon-lifecycle')
+const paymentLifecycle = process.argv.includes('--payment-lifecycle')
+const eligibleLots = process.argv.includes('--eligible-lots')
+const paymentLotParity=process.argv.includes('--payment-lot-parity')
+const currentWriters=process.argv.includes('--current-writers')
+const releaseRaces=process.argv.includes('--release-races')
+const catalogCurrentChain=process.argv.includes('--catalog-current-chain')
+const catalogIntakeFoundation=process.argv.includes('--catalog-intake-foundation')
+const intakeLifecycle=process.argv.includes('--intake-lifecycle')
+const intakeFlight=process.argv.includes('--intake-flight')
+const intakeCalendar=process.argv.includes('--intake-calendar')
+const intakePublication=process.argv.includes('--intake-publication')
+const intakeCleanup=process.argv.includes('--intake-cleanup')
+const intakeDisabledAi=process.argv.includes('--intake-disabled-ai')
+if(intakeDisabledAi&&!intakeLifecycle)throw Error('INTAKE_DISABLED_AI_REQUIRES_NATIVE_LIFECYCLE')
+const beforeCleanupFix=process.argv.includes('--cleanup-null-baseline')
+if(intakeCleanup&&!intakeLifecycle)throw Error('INTAKE_CLEANUP_REQUIRES_NATIVE_LIFECYCLE')
+if(beforeCleanupFix&&!intakeCleanup)throw Error('CLEANUP_BASELINE_REQUIRES_CLEANUP')
+if(intakePublication&&!intakeLifecycle)throw Error('INTAKE_PUBLICATION_REQUIRES_NATIVE_LIFECYCLE')
+if(intakeCalendar&&!intakeFlight)throw Error('INTAKE_CALENDAR_REQUIRES_NATIVE_FLIGHT')
+if(intakeFlight&&!intakeLifecycle)throw Error('INTAKE_FLIGHT_REQUIRES_NATIVE_LIFECYCLE')
+if(intakeLifecycle&&!catalogIntakeFoundation)throw Error('INTAKE_LIFECYCLE_REQUIRES_FULL_FOUNDATION')
+if(catalogIntakeFoundation&&!catalogCurrentChain)throw Error('INTAKE_FOUNDATION_REQUIRES_CURRENT_CATALOG')
+if(catalogCurrentChain&&!process.argv.includes('--release-current-chain'))throw Error('CATALOG_CURRENT_CHAIN_REQUIRES_CURRENT_RELEASE')
+const releaseCurrentChain=process.argv.includes('--release-current-chain')
+if(releaseCurrentChain&&(!releaseRaces||process.argv.includes('--release-witness-failure')))throw new Error('RELEASE_CURRENT_CHAIN_REQUIRES_CORRECTED_RELEASE')
+const releaseWitnessFailure=process.argv.includes('--release-witness-failure')
+const releaseEligibility=process.argv.includes('--release-eligibility')
+const beforeReleaseLotFix=process.argv.includes('--before-release-eligible-fix')
+const lotCompatibility=process.argv.includes('--lot-compatibility')
+const beforeLotCompatFix=process.argv.includes('--before-lot-compat-fix')
+const receivingParity=process.argv.includes('--receiving-parity')
+const beforeReceivingFix=process.argv.includes('--before-receiving-fix')
+const receivingCalendar=process.argv.includes('--receiving-calendar')
+const beforeReceivingCalendarFix=process.argv.includes('--before-receiving-calendar-fix')
+const receivingRetry=process.argv.includes('--receiving-retry')
+const beforeReceivingRetryFix=process.argv.includes('--before-receiving-retry-fix')
+const writerReverse=process.argv.includes('--writer-reverse')
+const writerControllerFailure=process.argv.includes('--writer-controller-failure')
+const beforeControllerCleanup=process.argv.includes('--before-controller-cleanup')
+const recountInitialization=process.argv.includes('--recount-initialization')
+const beforeRecountLockFix=process.argv.includes('--before-recount-lock-fix')
+const writerWitnessFailure=process.argv.includes('--writer-witness-failure')
+const receivingWriters=process.argv.includes('--receiving-writers')
+const beforeClearanceLockFix=process.argv.includes('--before-clearance-lock-fix')
+const clearanceRecount=process.argv.includes('--clearance-recount')
+const clearanceEdges=process.argv.includes('--clearance-edges')
+if(clearanceEdges&&(!clearanceRecount||beforeClearanceLockFix))throw new Error('CLEARANCE_EDGES_REQUIRES_CORRECTED_CLEARANCE')
+if(beforeClearanceLockFix&&!clearanceRecount)throw new Error('CLEARANCE_LOCK_BASELINE_REQUIRES_CLEARANCE_RECOUNT')
+if(clearanceRecount&&(!currentWriters||!signedHolds||!couponLifecycle||!paymentLifecycle||!eligibleLots||!paymentLotParity
+  ||receivingWriters||process.argv.some(arg=>['--receiving-purchase','--receiving-finalizer','--clearance-concurrency','--receiving-retry','--receiving-calendar','--receiving-parity','--release-races','--release-eligibility','--lot-compatibility','--writer-reverse','--writer-controller-failure','--recount-initialization','--writer-witness-failure','--release-witness-failure'].includes(arg)||(arg.startsWith('--before-')&&arg!=='--before-clearance-lock-fix'))))throw new Error('CLEARANCE_RECOUNT_REQUIRES_CORRECTED_CURRENT_CHAIN')
+const receivingPurchase=process.argv.includes('--receiving-purchase')
+if(receivingPurchase&&(!currentWriters||!signedHolds||!couponLifecycle||!paymentLifecycle||!eligibleLots||!paymentLotParity
+  ||receivingWriters||process.argv.includes('--receiving-finalizer')||process.argv.includes('--clearance-concurrency')
+  ||receivingRetry||receivingCalendar||receivingParity||releaseRaces||releaseEligibility||lotCompatibility||writerReverse
+  ||writerControllerFailure||recountInitialization||writerWitnessFailure||releaseWitnessFailure
+  ||process.argv.some(arg=>arg.startsWith('--before-'))))throw new Error('RECEIVING_PURCHASE_REQUIRES_CORRECTED_CURRENT_CHAIN')
+const clearanceConcurrency=process.argv.includes('--clearance-concurrency')
+if(clearanceConcurrency&&(!currentWriters||!signedHolds||!couponLifecycle||!paymentLifecycle||!eligibleLots||!paymentLotParity
+  ||receivingWriters||process.argv.includes('--receiving-finalizer')||receivingRetry||receivingCalendar||receivingParity||releaseRaces||releaseEligibility||lotCompatibility
+  ||writerReverse||writerControllerFailure||recountInitialization||writerWitnessFailure||releaseWitnessFailure
+  ||process.argv.some(arg=>arg.startsWith('--before-'))))throw new Error('CLEARANCE_CONCURRENCY_REQUIRES_CORRECTED_CURRENT_CHAIN')
+const receivingFinalizer=process.argv.includes('--receiving-finalizer')
+if(receivingFinalizer&&(!currentWriters||!signedHolds||!couponLifecycle||!paymentLifecycle||!eligibleLots||!paymentLotParity
+  ||receivingWriters||receivingRetry||receivingCalendar||receivingParity||releaseRaces||releaseEligibility||lotCompatibility
+  ||writerReverse||writerControllerFailure||recountInitialization||writerWitnessFailure||releaseWitnessFailure
+  ||process.argv.some(arg=>arg.startsWith('--before-'))))throw new Error('RECEIVING_FINALIZER_REQUIRES_CORRECTED_CURRENT_CHAIN')
+if(receivingWriters&&(!currentWriters||!signedHolds||!couponLifecycle||!paymentLifecycle||!eligibleLots||!paymentLotParity
+  ||receivingRetry||receivingCalendar||receivingParity||releaseRaces||releaseEligibility||lotCompatibility
+  ||writerControllerFailure||recountInitialization||writerWitnessFailure||releaseWitnessFailure
+  ||process.argv.some(arg=>arg.startsWith('--before-'))))throw new Error('RECEIVING_WRITERS_REQUIRE_CORRECTED_CURRENT_CHAIN')
+if(receivingRetry&&(!currentWriters||receivingCalendar||receivingParity||releaseRaces||releaseEligibility||lotCompatibility
+  ||writerReverse||writerControllerFailure||recountInitialization||writerWitnessFailure||releaseWitnessFailure
+  ||process.argv.some(arg=>arg.startsWith('--before-')&&arg!=='--before-receiving-retry-fix'))
+  ||beforeReceivingRetryFix&&!receivingRetry)throw new Error('RECEIVING_RETRY_REQUIRES_CORRECTED_CURRENT_CHAIN')
+if(receivingCalendar&&(!currentWriters||receivingParity||releaseRaces||releaseEligibility||lotCompatibility||writerReverse||writerControllerFailure
+  ||recountInitialization||writerWitnessFailure||releaseWitnessFailure
+  ||process.argv.some(arg=>arg.startsWith('--before-')&&arg!=='--before-receiving-calendar-fix'))
+  ||beforeReceivingCalendarFix&&!receivingCalendar)throw new Error('RECEIVING_CALENDAR_REQUIRES_CORRECTED_CURRENT_CHAIN')
+if(receivingParity&&(!currentWriters||releaseRaces||releaseEligibility||lotCompatibility||writerReverse||writerControllerFailure
+  ||recountInitialization||writerWitnessFailure||releaseWitnessFailure
+  ||process.argv.some(arg=>arg.startsWith('--before-')&&arg!=='--before-receiving-fix'))
+  ||beforeReceivingFix&&!receivingParity)throw new Error('RECEIVING_REQUIRES_CORRECTED_CURRENT_CHAIN')
+if(lotCompatibility&&(!currentWriters||releaseRaces||releaseEligibility||writerReverse||writerControllerFailure
+  ||recountInitialization||writerWitnessFailure||releaseWitnessFailure
+  ||process.argv.some(arg=>arg.startsWith('--before-')&&arg!=='--before-lot-compat-fix'))
+  ||beforeLotCompatFix&&!lotCompatibility)throw new Error('LOT_COMPATIBILITY_REQUIRES_CORRECTED_CURRENT_CHAIN')
+if(releaseEligibility&&(!currentWriters||releaseRaces||writerReverse||writerControllerFailure||recountInitialization||writerWitnessFailure
+  ||process.argv.some(arg=>arg.startsWith('--before-')&&arg!=='--before-release-eligible-fix'))
+  ||beforeReleaseLotFix&&!releaseEligibility)throw new Error('RELEASE_ELIGIBILITY_REQUIRES_CORRECTED_CURRENT_CHAIN')
+if(releaseRaces&&(!currentWriters||writerReverse||writerControllerFailure||recountInitialization||beforeRecountLockFix||writerWitnessFailure
+  ||process.argv.some(arg=>arg.startsWith('--before-')))
+  ||releaseWitnessFailure&&!releaseRaces)throw new Error('RELEASE_RACES_REQUIRE_CORRECTED_CURRENT_WRITERS')
+if(currentWriters&&!paymentLotParity||(!currentWriters&&(beforeRecountLockFix||writerWitnessFailure)))
+  throw new Error('CURRENT_WRITERS_REQUIRES_PAYMENT_LOT_PARITY')
+if(recountInitialization&&(!currentWriters||writerWitnessFailure))throw new Error('RECOUNT_INITIALIZATION_MODE_INVALID')
+if((writerReverse||writerControllerFailure)&&(!currentWriters||recountInitialization||writerWitnessFailure)
+  ||(writerReverse&&writerControllerFailure)||(beforeControllerCleanup&&!writerControllerFailure))
+  throw new Error('WRITER_CONTINUATION_MODE_INVALID')
+const beforePaymentLotFix=process.argv.includes('--before-payment-lot-fix')
+if(beforePaymentLotFix && !paymentLotParity)throw new Error('PAYMENT_LOT_BASELINE_REQUIRES_PARITY_MODE')
+if(paymentLotParity && (!eligibleLots || process.argv.includes('--before-eligible-fix'))) throw new Error('PAYMENT_LOT_PARITY_REQUIRES_CORRECTED_ELIGIBILITY')
+const paymentLotWitnessSha256=createHash('sha256').update(fs.readFileSync(path.join(root,'scripts/rehearse-payment-lot-parity.mjs'))).digest('hex')
+const beforeEligibleFix = process.argv.includes('--before-eligible-fix')
+const runEligibleAdvisors=process.argv.includes('--advisors')
+if(runEligibleAdvisors && !eligibleLots) throw new Error('ADVISORS_REQUIRE_ELIGIBLE_CHAIN')
+const eligibleWitnessSha256=createHash('sha256').update(fs.readFileSync(path.join(root,'scripts/rehearse-eligible-lot-composition.mjs'))).digest('hex')
+if (eligibleLots && !paymentLifecycle) throw new Error('ELIGIBLE_LOTS_REQUIRES_CURRENT_PAYMENT_CHAIN')
+if (beforeEligibleFix && !eligibleLots) throw new Error('ELIGIBLE_BASELINE_REQUIRES_ELIGIBLE_CHAIN')
+const beforeStructuredCommitment = process.argv.includes('--before-structured-commitment')
+const beforePaymentBodyGuard = process.argv.includes('--before-payment-body-guard')
+if (beforePaymentBodyGuard && (!paymentLifecycle || beforeStructuredCommitment)) throw new Error('PAYMENT_BODY_BASELINE_REQUIRES_CORRECTED_PAYMENT_CHAIN')
+if (beforeStructuredCommitment && !paymentLifecycle) throw new Error('STRUCTURED_BASELINE_REQUIRES_PAYMENT_CHAIN')
+if (paymentLifecycle && !couponLifecycle) throw new Error('PAYMENT_LIFECYCLE_REQUIRES_COUPON_CHAIN')
 const beforeCommitment = process.argv.includes('--before-commitment')
 const beforeEventType = process.argv.includes('--before-event-type')
 const beforeKeyLock = process.argv.includes('--before-key-lock')
@@ -23,8 +165,45 @@ if ((couponLifecycle && !signedHolds) || (beforeCommitment && !couponLifecycle)
     || (couponLifecycle && (beforeKeyLock || process.argv.includes('--before-fix')))) {
   throw new Error('COUPON_LIFECYCLE_MODE_INVALID')
 }
-const evidence = path.join(root, couponLifecycle ? 'docs/evidence/20261002-current-coupon-holds'
+const clearanceRuns=process.argv.filter(arg=>arg.startsWith('--clearance-run='))
+const clearanceRun=clearanceRuns[0]?.slice('--clearance-run='.length)??'original'
+if(clearanceRuns.length>1||(!clearanceConcurrency&&!clearanceRecount&&clearanceRuns.length)
+  ||!/^[a-z][a-z0-9-]{0,79}$/.test(clearanceRun))throw new Error('CLEARANCE_EVIDENCE_RUN_INVALID')
+const purchaseRuns=process.argv.filter(arg=>arg.startsWith('--purchase-run='))
+const purchaseRun=purchaseRuns[0]?.slice('--purchase-run='.length)??'original'
+if(purchaseRuns.length>1||(!receivingPurchase&&purchaseRuns.length)
+  ||!/^[a-z][a-z0-9-]{0,79}$/.test(purchaseRun))throw new Error('PURCHASE_EVIDENCE_RUN_INVALID')
+const receivingRuns=process.argv.filter(arg=>arg.startsWith('--receiving-run='))
+const releaseRuns=process.argv.filter(arg=>arg.startsWith('--release-run='))
+const receivingRun=receivingRuns[0]?.slice('--receiving-run='.length)??(beforeReceivingFix?'before-fix':'after-fix')
+const releaseRun=releaseRuns[0]?.slice('--release-run='.length)??(beforeReleaseLotFix?'before-fix':releaseWitnessFailure?'witness-failure':'after-fix')
+if(receivingRuns.length>1||releaseRuns.length>1||(!receivingParity&&receivingRuns.length)
+  ||(!releaseRaces&&!releaseEligibility&&releaseRuns.length)
+  ||!/^[a-z][a-z0-9-]{0,79}$/.test(receivingRun)||!/^[a-z][a-z0-9-]{0,79}$/.test(releaseRun))throw new Error('REHEARSAL_EVIDENCE_RUN_INVALID')
+const evidence = path.join(root, clearanceRecount ? `docs/evidence/20261003-clearance-recount/${clearanceRun}` : receivingPurchase ? `docs/evidence/20261003-receiving-purchase/${purchaseRun}`
+  : clearanceConcurrency ? `docs/evidence/20261003-clearance-concurrency/${clearanceRun}`
+  : receivingFinalizer ? 'docs/evidence/20261003-receiving-finalizer/after-fix'
+  : receivingWriters ? `docs/evidence/20261003-receiving-writers/${writerReverse?'writer-first':'recount-first'}`
+  : receivingRetry ? `docs/evidence/20261003-receiving-retry/${beforeReceivingRetryFix?'before-fix':'after-fix'}`
+  : receivingCalendar ? `docs/evidence/20261002-receiving-calendar/${beforeReceivingCalendarFix?'before-fix':'after-fix'}`
+  : receivingParity ? `docs/evidence/20261002-current-receiving/${receivingRun}`
+  : lotCompatibility ? `docs/evidence/20261002-lot-compatibility/${beforeLotCompatFix?'before-fix':'after-fix'}`
+  : releaseEligibility ? `docs/evidence/20261002-release-lot-parity/${releaseRun}`
+  : releaseRaces ? `docs/evidence/20261002-current-release-races/${releaseRun}`
+  : writerControllerFailure ? `docs/evidence/20261002-recount-reverse/controller-${beforeControllerCleanup?'before-fix':'after-fix'}`
+  : writerReverse ? `docs/evidence/20261002-recount-reverse/${beforeRecountLockFix?'before-fix':'after-fix'}`
+  : recountInitialization ? `docs/evidence/20261002-recount-initialization/${beforeRecountLockFix?'before-fix':'after-fix'}` : currentWriters ? `docs/evidence/20261002-recount-lock-order/${writerWitnessFailure?'witness-failure':beforeRecountLockFix?'before-fix':'after-fix'}` : paymentLotParity ? 'docs/evidence/20261002-payment-lot-parity' : eligibleLots ? 'docs/evidence/20261002-purchase-lot-parity'
+  : paymentLifecycle ? 'docs/evidence/20261002-current-payment-handover'
+  : couponLifecycle ? 'docs/evidence/20261002-current-coupon-holds'
   : signedHolds ? 'docs/evidence/20261001-signed-purchase-holds' : 'docs/evidence/20261001-website-stock-locks')
+if(clearanceRecount||clearanceConcurrency||receivingPurchase||receivingParity||releaseRaces||releaseEligibility) {
+  fs.mkdirSync(path.dirname(evidence),{recursive:true})
+  try{fs.mkdirSync(evidence)}catch(error){
+    if(error.code==='EEXIST')throw new Error(receivingPurchase?'PURCHASE_EVIDENCE_ALREADY_EXISTS':clearanceRecount||clearanceConcurrency?'CLEARANCE_EVIDENCE_ALREADY_EXISTS':'REHEARSAL_EVIDENCE_ALREADY_EXISTS')
+    throw error
+  }
+}else fs.mkdirSync(evidence,{recursive:true})
+if(currentWriters)fs.writeFileSync(path.join(evidence,'executed-root.mjs'),witnessBytes)
 const beforeFix = process.argv.includes('--before-fix')
 const actor = '42000000-0000-4000-8000-000000000001'
 const marker = randomUUID()
@@ -37,6 +216,7 @@ const env = { ...process.env, PGHOST: '127.0.0.1', PGPORT: '54388', PGUSER: 'pos
   PGSSLMODE: 'disable', PGCLIENTENCODING: 'UTF8' }
 const args = db => ['-X', '--no-psqlrc', '-v', 'ON_ERROR_STOP=1', '-t', '-A', '-d', db]
 const manifest = []
+const advisors=[]
 function source(file, functionName) {
   const sql = fs.readFileSync(path.join(root, file), 'utf8')
   manifest.push({ path: file, sha256: createHash('sha256').update(sql).digest('hex'),
@@ -56,7 +236,13 @@ function sync(db, sql) {
   try {
     const r = spawnSync(path.join(bin, 'psql.exe'), [...args(db), '-f', file],
       { cwd: root, windowsHide: true, env, encoding: 'utf8', timeout: 30000, maxBuffer: 2 * 1024 * 1024 })
-    if (r.error || r.status !== 0) throw new Error(String(r.stderr || r.error?.message).slice(-3000))
+    if (r.error || r.status !== 0) {
+      const cause=String(r.stderr || r.error?.message)
+      if(clearanceRecount||receivingPurchase||clearanceConcurrency||receivingFinalizer||receivingWriters||receivingParity||receivingCalendar||receivingRetry)fs.writeFileSync(path.join(evidence,`sql-error-${randomUUID()}.txt`),cause)
+      throw new Error((receivingPurchase||clearanceConcurrency||receivingFinalizer||receivingWriters||receivingParity||receivingCalendar||receivingRetry)&&cause.length>3000
+        ?cause.slice(0,1400)+'\n[long SQL context omitted here; full cause archived]\n'+cause.slice(-1400)
+        :cause.slice(-3000))
+    }
     return r.stdout.trim()
   } finally { fs.unlinkSync(file) }
 }
@@ -67,6 +253,24 @@ const targetGuard = db => `do $$ begin
  if current_database() is distinct from ${literal(db)} or host(inet_server_addr()) is distinct from '127.0.0.1'
  or inet_server_port() is distinct from 54388 or replace(current_setting('data_directory'),chr(92),'/') is distinct from ${literal(dataDirectory)}
  then raise exception 'WRONG_LOCAL_TARGET'; end if; end $$;`
+function eligibleAdvisor(stage) {
+  if(!runEligibleAdvisors) return
+  sync(database,`${targetGuard(database)} do $$ begin
+    if (select marker from k2_stock_fixture.owner) is distinct from '${marker}'::uuid
+    then raise exception 'CLONE_OWNERSHIP_MISMATCH'; end if; end $$;`)
+  const cli=path.join(root,'.tools/complete-lot-cli/runtime/supabase.exe')
+  const cliSha256=createHash('sha256').update(fs.readFileSync(cli)).digest('hex')
+  if(cliSha256!=='971f439cc4b774f43181593551e0e34e29f399d5e82cbe3508e87537ec13e29f') throw new Error('LOCAL_CLI_HASH_CHANGED')
+  const cliDirectory=path.join(root,'.tools/public-stock-cli')
+  const result=spawnSync(cli,['db','advisors','--db-url',`postgresql://postgres@127.0.0.1:54388/${database}?sslmode=disable`,
+    '--type','all','--fail-on','none','--output','json','--workdir',cliDirectory],
+    {cwd:cliDirectory,windowsHide:true,env:{...env,SUPABASE_HOME:path.join(root,'.tools/listing-stock-cli-home'),
+      SUPABASE_TELEMETRY_DISABLED:'1'},encoding:'utf8',timeout:30000,maxBuffer:4*1024*1024})
+  const report={stage,cliSha256,status:result.status,error:result.error?.message,stdout:result.stdout,stderr:result.stderr}
+  fs.writeFileSync(path.join(evidence,`advisors-${stage}.json`),JSON.stringify(report,null,2)+'\n')
+  advisors.push({stage,status:result.status,report:path.relative(root,path.join(evidence,`advisors-${stage}.json`)).replaceAll('\\','/')})
+  if(result.error || result.status!==0) throw new Error('LOCAL_ADVISORS_FAILED_SEE_REPORT')
+}
 const baselineState = () => sync(template, `select json_build_object(
  'products',(select count(*) from public.products),'listings',(select count(*) from public.channel_listings),
  'orders',(select count(*) from public.order_requests),'lots',(select count(*) from public.product_batches),
@@ -88,6 +292,7 @@ function session(name, sql) {
     child.on('error', error => { resolve({ status: -1, stdout, stderr: error.message }) })
     child.on('close', status => { sessions.delete(child); completed.set(name,{status,stdout,stderr}); resolve({ status, stdout, stderr }) })
   })
+  result.peek=()=>({stdout,stderr})
   pending.add(result)
   result.finally(() => pending.delete(result))
   return result
@@ -116,12 +321,13 @@ const waitsForOrderKey = (waiter, blocker, key) => `select exists(
  and w.objsubid=1 and w.classid::bigint=((hashtextextended('k2.website-order:'||${literal(key)},0)>>32)&4294967295::bigint)
  and w.objid::bigint=(hashtextextended('k2.website-order:'||${literal(key)},0)&4294967295::bigint)
  and b.pid=any(pg_blocking_pids(a.pid)));`
-async function controller(extraLock = '') {
+async function controller(extraLock = '', injectSetupFailure = false) {
   const name = `k2_stock_gate_${randomUUID()}`
   const child = spawn(path.join(bin, 'psql.exe'), args(database),
     { cwd: root, windowsHide: true, env, stdio: ['pipe', 'pipe', 'pipe'] })
   sessions.add(child)
   let output = ''; let errors = ''
+  child.stdin.on('error',error => { errors += error.message })
   child.stdout.on('data', chunk => { output += chunk })
   child.stderr.on('data', chunk => { errors += chunk })
   const finished = new Promise(resolve => {
@@ -130,13 +336,26 @@ async function controller(extraLock = '') {
   })
   pending.add(finished)
   finished.finally(() => pending.delete(finished))
-  child.stdin.write(`\\set ON_ERROR_STOP on\nset application_name=${literal(name)}; begin;
-    select pg_advisory_xact_lock(61001,5); ${extraLock}\n\\echo GATE_HELD\n`)
-  await waitFor(`select exists(select 1 from pg_stat_activity where application_name=${literal(name)}
-   and state='idle in transaction');`, 'controller owns gate')
-  const echoDeadline = Date.now() + 1000
-  while (!output.includes('GATE_HELD') && Date.now() < echoDeadline) await sleep(10)
-  if (!output.includes('GATE_HELD')) throw new Error(`CONTROLLER_NOT_READY: ${errors}`)
+  try {
+    child.stdin.write(`\\set ON_ERROR_STOP on\nset application_name=${literal(name)}; begin;
+      select pg_advisory_xact_lock(61001,5); ${extraLock}\n\\echo GATE_HELD\n`)
+    await waitFor(`select exists(select 1 from pg_stat_activity where application_name=${literal(name)}
+     and state='idle in transaction');`, 'controller owns gate')
+    const echoDeadline = Date.now() + 1000
+    while (!output.includes('GATE_HELD') && Date.now() < echoDeadline) await sleep(10)
+    if (!output.includes('GATE_HELD')) throw new Error(`CONTROLLER_NOT_READY: ${errors}`)
+    if(injectSetupFailure)throw new Error('INJECTED_CONTROLLER_SETUP_FAILURE')
+  }catch(error) {
+    // Controlled red mode preserves the original setup leak only in this local witness.
+    if(beforeControllerCleanup)throw error
+    if(child.exitCode===null&&!child.stdin.destroyed) {
+      sync(database,`select pg_cancel_backend(pid) from pg_stat_activity where datname=current_database()
+        and application_name=${literal(name)};`)
+      child.stdin.end('rollback;\n\\q\n')
+    }
+    await finished
+    throw error
+  }
   return { name, release: async () => {
     child.stdin.end('commit;\n\\q\n')
     const r = await finished
@@ -144,6 +363,7 @@ async function controller(extraLock = '') {
   } }
 }
 const checks = []
+const fixtureSkus = new Set()
 function check(name, condition, detail = '') {
   if (!condition) {
     if (couponLifecycle) checks.push({ name, passed: false, detail })
@@ -170,6 +390,7 @@ function fixture(suffix, quantity = 2) {
      ('${newOrder}','${newOrder}','Local new','new@example.test','website','Pickup');
    insert into public.order_request_items(order_request_id,sku,product_name,quantity,unit_price,line_total)
     values('${oldOrder}',${literal(sku)},'Fixture',1,100,100),('${newOrder}',${literal(sku)},'Fixture',1,100,100); commit;`)
+  fixtureSkus.add(sku)
   return { sku, lot, oldOrder, newOrder, items: JSON.stringify([{ sku, quantity: 1 }]) }
 }
 const websiteReserve = f => `select k2_private.require_website_order_items(${literal(f.items)}::jsonb);
@@ -443,7 +664,7 @@ async function rehearseCouponLifecycle() {
       from public.order_requests o where id='${atomicOrder.id}';`) === 't')
 }
 
-let created = false; let templateBefore; let runError; let keyLockRegression
+let created = false; let templateBefore; let runError; let keyLockRegression; let preservedVerifierSha256; let verifierAclTransition; let paymentDiagnosticSha256
 try {
   sync(template, targetGuard(template))
   templateBefore = baselineState()
@@ -463,6 +684,32 @@ try {
     ...prior.dependencyManifest.map(item => item.path), 'supabase/migrations/20261001065252_admin_signing_null_inputs.sql']
   if (guestSources.length !== 21 || new Set(guestSources).size !== 21
       || guestSources.some(file=>!/^supabase\/[a-zA-Z0-9_/-]+\.sql$/.test(file))) throw new Error('GUEST_SOURCE_ORDER_INVALID')
+  if (paymentLifecycle) {
+    // Install the whole historical wrapper foundation without downgrading the
+    // actual restored shared verifier. Later guest/channel patches follow it.
+    const verifierSignature='k2_private.verify_admin_bff_request(text,bigint,uuid,uuid,text,text)'
+    const verifierDefinition=sync(database,`select replace(pg_get_functiondef('${verifierSignature}'::regprocedure),chr(13),'');`)
+    const verifierMetadata=()=>value(`select jsonb_build_object('owner',proowner,
+      'config',proconfig,'definer',prosecdef,'returns',prorettype,'defaults',proargdefaults::text)::text
+      from pg_proc where oid='${verifierSignature}'::regprocedure;`)
+    const verifierBefore=verifierMetadata()
+    const verifierAcl=()=>value(`select coalesce(proacl::text,'DEFAULT') from pg_proc
+      where oid='${verifierSignature}'::regprocedure;`)
+    const aclBefore=verifierAcl()
+    preservedVerifierSha256=createHash('sha256').update(verifierDefinition).digest('hex')
+    sync(database,`begin; ${withoutTransaction(source('supabase/migrations/20260812_admin_fulfillment_bff_boundary.sql'))}
+      ${verifierDefinition}; commit;`)
+    check('historical fulfillment foundation retains the captured current verifier body and non-ACL metadata',
+      sync(database,`select replace(pg_get_functiondef('${verifierSignature}'::regprocedure),chr(13),'');`)===verifierDefinition
+      && verifierMetadata()===verifierBefore,verifierMetadata()===verifierBefore?'':'security metadata differs')
+    verifierAclTransition={before:aclBefore,after:verifierAcl()}
+    check('foundation intentionally tightens verifier execute to its owner without restoring default grants',value(`select
+      proacl is not null and not exists(select 1 from aclexplode(proacl) a where a.grantee<>p.proowner)
+      and has_function_privilege(p.proowner,p.oid,'EXECUTE')
+      and not has_function_privilege('anon',p.oid,'EXECUTE')
+      and not has_function_privilege('authenticated',p.oid,'EXECUTE')
+      from pg_proc p where oid='${verifierSignature}'::regprocedure;`)==='t')
+  }
   sync(database, `begin; ${guestSources.map(file => withoutTransaction(source(file))).join('\n')} commit;`)
   const stock = [source('supabase/migrations/20260902_reservation_expiry_policy.sql'),
     source('supabase/migrations/20260902_purchase_time_reservation.sql',signedHolds ? null : 'public.reserve_order_request_lots_v1'),
@@ -750,6 +997,53 @@ try {
     }
   }
   if (couponLifecycle) await rehearseCouponLifecycle()
+  if (paymentLifecycle) await rehearseCurrentPayment({ sync:sql=>sync(database,sql),value,source,
+    check,fixture,guestPayload,guestCall,actor,literal,invariant,withoutTransaction,beforeStructuredCommitment,beforePaymentBodyGuard,
+    recordDiagnostic:sql=>{paymentDiagnosticSha256=createHash('sha256').update(sql).digest('hex')} })
+  if (eligibleLots) await rehearseEligibleLotComposition({sync:sql=>sync(database,sql),value,source,
+    check,fixture,guestPayload,guestCall,canonicalCall,actor,literal,staff,beforeEligibleFix,withoutTransaction,
+    captureMetadata:metadata=>fs.writeFileSync(path.join(evidence,'function-preflight.json'),metadata+'\n'),advisor:eligibleAdvisor,
+    captureDefinition:(name,sql)=>fs.writeFileSync(path.join(evidence,`${name}-before.sql`),sql+'\n')})
+  if(paymentLotParity) await rehearsePaymentLotParity({sync:sql=>sync(database,sql),value,check,fixture,
+    guestPayload,guestCall,actor,literal,source,withoutTransaction,beforePaymentLotFix,advisor:eligibleAdvisor,
+    captureMetadata:(name,metadata)=>fs.writeFileSync(path.join(evidence,`payment-metadata-${name}.json`),metadata+'\n'),
+    captureDefinition:(name,sql)=>fs.writeFileSync(path.join(evidence,`${name}-before.sql`),sql+'\n')})
+  if(currentWriters&&!receivingWriters&&!receivingFinalizer&&!clearanceConcurrency&&!receivingPurchase&&!clearanceRecount) await rehearseCurrentWriterConcurrency({sync:sql=>sync(database,sql),value,check,fixture,
+    guestPayload,guestCall,actor,literal,source,withoutTransaction,session,controller,blockedBy,waitFor,invariant,
+    completed,evidence,beforeRecountLockFix,writerWitnessFailure,recountInitialization,writerReverse,writerControllerFailure})
+  if(releaseCurrentChain)await rehearseReleaseCurrentChain({sync:sql=>sync(database,sql),value,check,literal,source,evidence})
+  if(releaseRaces)await rehearseCurrentReleaseConcurrency({sync:sql=>sync(database,sql),value,check,fixture,
+    guestPayload,guestCall,actor,literal,session,controller,blockedBy,waitFor,invariant,completed,evidence,releaseWitnessFailure,fixtureSkus,releaseCurrentChain})
+  if(catalogIntakeFoundation)await rehearseIntakeFoundation({sync:sql=>sync(database,sql),value,check,literal,source,evidence,marker,dataDirectory})
+  if(catalogIntakeFoundation)await rehearseIntakeDependencies({sync:sql=>sync(database,sql),value,check,literal,source,evidence,marker,dataDirectory})
+  if(catalogCurrentChain)await rehearseCatalogCurrentChain({sync:sql=>sync(database,sql),value,check,literal,source,evidence,fixture,actor})
+  const recoverFlightCost=intakeFlight?await rehearseIntakeFlightCost({sync:sql=>sync(database,sql),value,check,literal,source,evidence,marker,dataDirectory}):null
+  if(intakeLifecycle)await rehearseIntakeLifecycle({value,check,literal,evidence,actor,publication:intakePublication})
+  if(intakeCleanup)await rehearseIntakeCleanup({sync:sql=>sync(database,sql),value,check,literal,source,evidence,marker,dataDirectory,actor,beforeFix:beforeCleanupFix})
+  if(intakeCalendar&&recoverFlightCost)await recoverFlightCost()
+  const recoverIntakeCalendar=intakeCalendar?await rehearseIntakeCalendar({sync:sql=>sync(database,sql),value,check,literal,source,evidence,marker,dataDirectory}):null
+  if(intakeFlight)await rehearseIntakeFlight({value,check,literal,evidence,actor,calendar:intakeCalendar})
+  if(recoverFlightCost&&!intakeCalendar)await recoverFlightCost()
+  if(recoverIntakeCalendar)await recoverIntakeCalendar()
+  if(intakePublication)await rehearseIntakePublication({value,check,literal,evidence,actor})
+  if(intakeDisabledAi)await rehearseIntakeDisabledAi({value,check,literal,evidence,actor})
+  if(releaseEligibility)await rehearseReleaseLotParity({sync:sql=>sync(database,sql),value,check,fixture,
+    guestPayload,guestCall,actor,literal,source,withoutTransaction,evidence,beforeReleaseLotFix})
+  if(lotCompatibility)await rehearseLotCompatibility({sync:sql=>sync(database,sql),value,check,fixture,
+    guestPayload,guestCall,literal,source,withoutTransaction,evidence,beforeLotCompatFix})
+  if(receivingCalendar||receivingRetry)await rehearseReceivingCalendar({sync:sql=>sync(database,sql),value,check,fixture,
+    literal,source,withoutTransaction,evidence,beforeReceivingCalendarFix})
+  if(receivingRetry)await rehearseReceivingRetry({sync:sql=>sync(database,sql),value,check,fixture,
+    literal,evidence,beforeReceivingRetryFix})
+  if(receivingParity)await rehearseCurrentReceiving({sync:sql=>sync(database,sql),value,check,fixture,
+    literal,source,withoutTransaction,evidence,beforeReceivingFix,guestPayload,guestCall})
+  if(receivingWriters||receivingFinalizer||clearanceConcurrency||receivingPurchase||clearanceRecount) {
+    sync(database,source('supabase/migrations/20261002102000_signed_recount_balance_lock_order.sql'))
+    await rehearseReceivingCalendar({sync:sql=>sync(database,sql),value,check,fixture,literal,source,withoutTransaction,evidence})
+    await (clearanceRecount?rehearseClearanceRecount:receivingPurchase?rehearseReceivingPurchase:clearanceConcurrency?rehearseClearanceConcurrency:receivingFinalizer?rehearseReceivingFinalizer:rehearseReceivingWriters)({sync:sql=>sync(database,sql),value,check,fixture,
+      guestPayload,guestCall,actor,literal,source,withoutTransaction,session,controller,blockedBy,waitFor,invariant,
+      completed,evidence,writerReverse,beforeClearanceLockFix,clearanceEdges})
+  }
 } catch(error) { runError=error }
 finally {
   for(const child of sessions) child.kill()
@@ -772,15 +1066,30 @@ finally {
 }
 if(runError && !couponLifecycle) throw runError
 fs.mkdirSync(evidence,{recursive:true})
-fs.writeFileSync(path.join(evidence,beforeEventType?'before-event-type-receipt.json':beforeCommitment?'before-commitment-receipt.json':beforeKeyLock?'before-key-lock-receipt.json':beforeFix?'before-fix-receipt.json':'local-receipt.json'),`${JSON.stringify({
+fs.writeFileSync(path.join(evidence,beforePaymentBodyGuard?'before-payment-body-guard-receipt.json':beforeStructuredCommitment?'before-structured-commitment-receipt.json':beforeEventType?'before-event-type-receipt.json':beforeCommitment?'before-commitment-receipt.json':beforeKeyLock?'before-key-lock-receipt.json':beforeFix?'before-fix-receipt.json':'local-receipt.json'),`${JSON.stringify({
  capturedAt:new Date().toISOString(),target:`127.0.0.1:54388/${database}`,template,
- scope:couponLifecycle ? 'Current signed coupons and prepared confirmation commitment on disposable restored-schema clone; excludes payment/handover, shipping authority and all-writer/provider acceptance'
+ ...(currentWriters?{currentWriterIdea:'IDEA-20261002-10',currentWriters,beforeRecountLockFix,writerWitnessFailure,recountInitialization,
+   writerReverse,writerControllerFailure,beforeControllerCleanup,releaseRaces,releaseWitnessFailure,releaseWitnessSha256,releaseCurrentChain,releaseCurrentChainWitnessSha256,catalogCurrentChain,catalogCurrentChainWitnessSha256,catalogIntakeFoundation,intakeFoundationWitnessSha256,intakeDependenciesWitnessSha256,intakeLifecycle,intakeLifecycleWitnessSha256,intakeFlight,intakeFlightWitnessSha256,intakeFlightCostWitnessSha256,intakeCalendar,intakeCalendarWitnessSha256,intakePublication,intakePublicationWitnessSha256,intakeCleanup,beforeCleanupFix,intakeCleanupWitnessSha256,intakeDisabledAi,intakeDisabledAiWitnessSha256,
+   releaseEligibility,beforeReleaseLotFix,releaseLotWitnessSha256,lotCompatibility,beforeLotCompatFix,lotCompatibilityWitnessSha256,
+   receivingParity,beforeReceivingFix,receivingWitnessSha256,receivingCalendar,beforeReceivingCalendarFix,receivingCalendarWitnessSha256,
+   receivingRetry,beforeReceivingRetryFix,receivingRetryWitnessSha256,
+   receivingWriters,receivingWritersWitnessSha256,
+   receivingFinalizer,receivingFinalizerWitnessSha256,clearanceConcurrency,clearanceConcurrencyWitnessSha256,
+   receivingPurchase,receivingPurchaseWitnessSha256,clearanceRecount,clearanceRecountWitnessSha256,beforeClearanceLockFix,clearanceEdges,
+   currentWriterWitnessSha256}:{}),
+ ...(paymentLotParity ? {paymentLotParity,beforePaymentLotFix,paymentLotWitnessSha256,paymentLotIdea:'IDEA-20261002-09'} : {}),
+ ...(eligibleLots ? {idea:clearanceRecount||receivingPurchase||clearanceConcurrency||receivingFinalizer||receivingWriters||receivingRetry||receivingCalendar||receivingParity||lotCompatibility?'IDEA-20261002-10':paymentLotParity?'IDEA-20261002-09':'IDEA-20261002-08',eligibleLots,beforeEligibleFix,eligibleWitnessSha256,advisors,
+   passed:checks.filter(c=>c.passed).length,failed:checks.filter(c=>!c.passed).length} : {}),
+ scope:catalogIntakeFoundation ? 'Whole prepared intake/SKU/publication and signed boundary while preserving full existing restored storage, explicit local legacy ACL closure, current release and signed catalog CSV composition; excludes full cold installer, hosted storage/provider ownership/API, global production RLS, real inventory and live acceptance' : releaseCurrentChain ? 'Current prepared release/compatibility/receiving/calendar/clearance body composition with exact local legacy ACL overlay; two-SKU release/purchase/nonempty expiry isolation/refusal; excludes complete installer/provider/real acceptance' : releaseRaces ? 'Historical pre-release-eligibility cancellation/expiry versus signed two-SKU purchase; exact rapid no-pruning guest replay controls/durable result; excludes later receiving/calendar/clearance/full-chain, provider/BFF release reachability and real acceptance' : clearanceRecount ? 'Actual signed clearance/recount across real minute buckets; early product boundary diagnostic; excludes complete listing/production acceptance' : receivingPurchase ? 'Actual signed purchase versus owner-only receiving finalizer; two reverse-input SKUs and three source lines; both orders and contended later-SKU fault/recovery; excludes provider/browser/full acceptance' : clearanceConcurrency ? 'Actual signed clearance approval/reversal versus owner-only receiving finalizer; four single-SKU schedules on owned restore; excludes provider/browser/full acceptance' : receivingFinalizer ? 'Actual owner-only receiving finalizer versus signed recount after corrected receiving/calendar installation on owned restore; two single-SKU starting orders and stale-state recovery; excludes provider/browser reachability, remaining writers/full installer/real acceptance' : receivingWriters ? 'Actual payment/confirmation/handover versus signed recount after receiving/calendar installation on owned restore; excludes receiving-finalizer overlap, remaining writers, full installer/provider/real acceptance' : receivingRetry ? 'Actual protected handler/HMAC/consignment SQL cross-day receipt replay on owned restore with synthetic provider auth and controlled date clocks; excludes real-host/provider/full writer/installer acceptance' : receivingCalendar ? 'Actual signed receiving add-line Manila calendar after full prepared chain on owned restore; excludes UI/full writer/installer/provider/real acceptance' : receivingParity ? 'Actual signed receiving lifecycle after historical custody with prepared lot/release chain on owned restored-schema clone; excludes later calendar/retry/clearance composition, caller UI/full-writer/installer/provider/real acceptance' : lotCompatibility ? 'Actual release-corrected trigger and signed lot command compatibility/calendar/history on disposable restored-schema clone; excludes complete receiving, post-correction writers and provider/real acceptance' : paymentLotParity ? 'Actual signed newly-ineligible payment and confirmed packed handover after reservation eligibility installation; disposable restored-schema clone; excludes untested remaining writers, shipping and provider/human acceptance' : paymentLifecycle ? 'Current signed coupons, structured payment and exact packing/handover on disposable restored-schema clone; excludes shipping authority, remaining-writer and provider/human acceptance'
+  : couponLifecycle ? 'Current signed coupons and prepared confirmation commitment on disposable restored-schema clone; excludes payment/handover, shipping authority and all-writer/provider acceptance'
   : signedHolds ? 'Full prepared purchase-hold migration plus actual signed purchase/last-unit/retry on disposable restored-schema clone; no provider or all-writer acceptance'
   : 'Actual prepared function bodies on disposable restored-schema clone; not full migration installation or signed purchase-hold acceptance',
  beforeFix,beforeKeyLock,keyLockRegression,...(couponLifecycle ? {beforeCommitment,beforeEventType,error:runError?.message ?? null} : {}),
- witnessSha256:createHash('sha256').update(fs.readFileSync(fileURLToPath(import.meta.url))).digest('hex'),
+ witnessSha256,templateFingerprint:templateBefore ? JSON.parse(templateBefore) : null,
  manifest,checks,providerWrites:false,canonicalSignedHoldIntegration: signedHolds && !beforeKeyLock,
  ...(couponLifecycle ? {couponConfirmationIntegration:!runError && !beforeCommitment && !beforeEventType} : {}),
+ ...(paymentLifecycle ? {beforeStructuredCommitment,beforePaymentBodyGuard,preservedVerifierSha256,verifierAclTransition,paymentHandoverIntegration:!runError && !beforeStructuredCommitment && !beforePaymentBodyGuard,
+   paymentWitnessSha256,...(beforePaymentBodyGuard ? {paymentDiagnosticSha256} : {})} : {}),
  templateUnchanged:checks.some(c=>c.name==='original restore counts and function/ACL fingerprint unchanged' && c.passed),
  cloneRemoved:checks.some(c=>c.name==='owned disposable clone removed' && c.passed) },null,2)}\n`)
 if(runError) throw runError

@@ -1,0 +1,7 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import {foundationPreservesExistingSchema} from '../scripts/rehearse-intake-foundation.mjs'
+const before=[{table:'storage.objects',catalog:{relowner:'1',relacl:['staff'],relrowsecurity:true,relforcerowsecurity:false},columns:[{name:'id',type:'uuid'}],constraints:[{name:'pk',definition:'PRIMARY KEY (id)'}],indexes:['original'],triggers:[{definition:'CREATE TRIGGER original BEFORE DELETE',enabled:'O'}],policies:[{name:'original',qual:'staff'}]}]
+test('signed and ACL steps preserve exact definitions',()=>assert.equal(foundationPreservesExistingSchema(before,structuredClone(before),'signed'),true))
+for(const [name,change] of [['trigger',x=>x[0].triggers=[]],['policy',x=>x[0].policies=[]],['constraint',x=>x[0].constraints=[]],['RLS',x=>x[0].catalog.relrowsecurity=false],['grant',x=>x[0].catalog.relacl=[]],['index',x=>x[0].indexes=[]],['column',x=>x[0].columns[0].type='text'],['unknown table',x=>x.push({...x[0],table:'public.other'})]])test('intake refuses unrelated '+name,()=>{const after=structuredClone(before);change(after);assert.equal(foundationPreservesExistingSchema(before,after,'intake'),false)})
+test('only named intake storage policies may be added',()=>{const after=structuredClone(before);after[0].policies.push({name:'product_intake_evidence_staff_read',qual:'staff_owner'});assert.equal(foundationPreservesExistingSchema(before,after,'intake'),true);assert.equal(foundationPreservesExistingSchema(before,after,'signed'),false)})

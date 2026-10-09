@@ -2,13 +2,14 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   getOrderConversation, sendOrderMessage, submitOrderReceipt, validateReceipt,
 } from '../../services/orderReceiptService'
+import { hasFinalOrderCharge } from '../../lib/orderChargeState'
 
 function stamp(value) {
   const date = new Date(value)
   return Number.isNaN(date.getTime()) ? '' : date.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
 }
 
-export default function OrderConversation({ access, onPaymentStatus }) {
+export default function OrderConversation({ access, chargeFinal = false, onPaymentStatus, onChargeRead }) {
   const [conversation, setConversation] = useState(null)
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState('')
@@ -21,19 +22,36 @@ export default function OrderConversation({ access, onPaymentStatus }) {
   const [receiptNotice, setReceiptNotice] = useState('')
   const uploadKey = useRef('')
   const messageKey = useRef('')
+  const active = useRef(false)
+  const readSequence = useRef(0)
+  const [chargeRead, setChargeRead] = useState(false)
 
   const load = useCallback(async (background = false) => {
+    if (!active.current) return
+    const sequence = ++readSequence.current
     if (!background) setLoading(true)
     const result = await getOrderConversation(access)
+    if (!active.current || sequence !== readSequence.current) return
     if (result.ok) {
       setConversation(result.data)
+      setChargeRead(result.data.delivery_review_required === false && hasFinalOrderCharge(result.data))
+      onChargeRead?.(result.data)
       onPaymentStatus?.(result.data.payment_status || null)
       setLoadError('')
-    } else if (!background) setLoadError(result.error)
+    } else {
+      setChargeRead(false)
+      onChargeRead?.(null)
+      onPaymentStatus?.(null)
+      setLoadError(result.error)
+    }
     if (!background) setLoading(false)
-  }, [access?.id, access?.accessKey, onPaymentStatus])
+  }, [access?.id, access?.accessKey, onPaymentStatus, onChargeRead])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    active.current = true
+    load()
+    return () => { active.current = false; readSequence.current += 1 }
+  }, [load])
   useEffect(() => {
     if (!conversation) return undefined
     const timer = window.setInterval(() => { if (!document.hidden) load(true) }, 8000)
@@ -58,7 +76,7 @@ export default function OrderConversation({ access, onPaymentStatus }) {
 
   const upload = async (event) => {
     event.preventDefault()
-    if (uploading) return
+    if (uploading || !chargeFinal || !chargeRead || !['awaiting_instructions', 'evidence_submitted', 'failed'].includes(conversation?.payment_status)) return
     const validationError = validateReceipt(file, reference)
     if (validationError) { setReceiptNotice(validationError); return }
     if (!uploadKey.current) uploadKey.current = crypto.randomUUID()
@@ -94,7 +112,7 @@ export default function OrderConversation({ access, onPaymentStatus }) {
           {messageNotice && <p role="status" className="mt-2 text-sm text-navy-soft">{messageNotice}</p>}
         </form>
       </>}
-      {conversation && access.paymentMethod !== 'cod' && conversation.payment_status !== 'verified' && ['submitted', 'confirmed'].includes(conversation.order_status) && <form onSubmit={upload} className="mt-6 border-t border-line pt-5">
+      {conversation && chargeFinal && chargeRead && access.paymentMethod !== 'cod' && ['awaiting_instructions', 'evidence_submitted', 'failed'].includes(conversation.payment_status) && ['submitted', 'confirmed'].includes(conversation.order_status) && <form onSubmit={upload} className="mt-6 border-t border-line pt-5">
         <h3 className="font-serif text-lg font-semibold">Send your e-receipt</h3>
         <p className="mt-1 text-sm leading-6 text-navy-soft">Upload only after K2 staff confirm your exact total and you make the transfer. Your file goes to this order for staff review.</p>
         <label htmlFor="order-payment-reference" className="mt-4 block text-sm font-semibold">Payment reference</label>

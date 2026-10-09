@@ -18,9 +18,10 @@ export default defineConfig({
     use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } },
   }],
   webServer: {
-    command: 'npx vite --mode combined --port 5181 --configLoader runner',
+    command: 'npx vite --config tests/fixtures/admin-product-master-vite.config.js --mode admin --port 5181 --configLoader runner',
     env: {
       VITE_ADMIN_BFF_ENABLED: 'true',
+      VITE_SUPABASE_URL: 'https://fixture.supabase.co',
       VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
     },
     url: 'http://localhost:5181',

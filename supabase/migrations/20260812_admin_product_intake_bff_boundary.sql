@@ -295,8 +295,9 @@ begin
     );
     insert into public.audit_logs(table_name,record_id,action,old_data,new_data,user_id)
     values(
-      'products',v_result->>'product_id','PRODUCT_PUBLICATION_REASON',null,
+      'products',v_result->>'product_id','UPDATE',null,
       jsonb_build_object(
+        'operation', 'PRODUCT_PUBLICATION_REASON',
         'intake_session_id',v_payload->>'sessionId',
         'requested_status',v_payload->>'requestedStatus',
         'reason',trim(v_payload->>'reason')

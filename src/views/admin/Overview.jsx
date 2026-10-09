@@ -1,3 +1,4 @@
+import { hasFinalOrderCharge, projectOrderCharge } from '../../lib/orderChargeState.js'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { safeUiError } from '../../lib/safeUiError'
@@ -125,7 +126,7 @@ function safeOrderValue(value) {
 function buildRevenueSeries(orders, days) {
   const totals = new Map()
   orders
-    .filter(order => order.payment_status === 'verified')
+    .filter(order => order.payment_status === 'verified' && hasFinalOrderCharge(order))
     .forEach(order => {
       if (!Number.isFinite(new Date(order.created_at).getTime())) return
       const key = dateKey(order.created_at)
@@ -274,7 +275,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
         return
       }
       const results = await Promise.all([
-        supabase.from('order_requests').select('id,channel_source,status,payment_status,total_amount,created_at', { count: 'exact' }).gte('created_at', priorStart),
+        supabase.from('order_requests').select('id,channel_source,status,payment_status,total_amount,shipping_quote_status,created_at', { count: 'exact' }).gte('created_at', priorStart),
         supabase.from('order_requests').select('*', { count: 'exact', head: true }).eq('status', 'submitted'),
         supabase.from('pasabuy_requests').select('id,status,target_budget_php,assigned_to,created_at', { count: 'exact' }),
         supabase.from('product_batches').select('id,quantity,quantity_available,expiry_date,best_before_date', { count: 'exact' }),
@@ -291,7 +292,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
       setLoadedRange(range)
 
       setData({
-        orders: Array.isArray(results[0].data) ? results[0].data.filter(row => row && typeof row === 'object') : [],
+        orders: Array.isArray(results[0].data) ? results[0].data.filter(row => row && typeof row === 'object').map(projectOrderCharge) : [],
         orderBacklog: results[1].count || 0,
         pasabuy: Array.isArray(results[2].data) ? results[2].data.filter(row => row && typeof row === 'object') : [],
         batches: Array.isArray(results[3].data) ? results[3].data.filter(row => row && typeof row === 'object') : [],
@@ -363,8 +364,8 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
       const created = new Date(order.created_at).getTime()
       return created >= previousStart && created < currentStart
     })
-    const currentVerified = currentOrders.filter(order => order.payment_status === 'verified')
-    const previousVerified = previousOrders.filter(order => order.payment_status === 'verified')
+    const currentVerified = currentOrders.filter(order => order.payment_status === 'verified' && hasFinalOrderCharge(order))
+    const previousVerified = previousOrders.filter(order => order.payment_status === 'verified' && hasFinalOrderCharge(order))
     const sales = summarizeSalesOrders(currentOrders)
     const reconciliation = summarizeSalesReconciliation(currentOrders)
     const previousSales = summarizeSalesOrders(previousOrders)
@@ -399,7 +400,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
 
     const channelRows = CHANNELS.map(channel => {
       const orders = currentOrders.filter(order => normalizeChannel(order.channel_source) === channel.id)
-      const verified = orders.filter(order => order.payment_status === 'verified')
+      const verified = orders.filter(order => order.payment_status === 'verified' && hasFinalOrderCharge(order))
       const listings = data.listings.filter(listing => normalizeChannel(listing.channel_source) === channel.id)
       const connection = data.connections.find(item => item.channel === channel.id)
       return {
@@ -764,7 +765,7 @@ export default function Overview({ setSection, pending = null, widget = 'metrics
                   <div><span className="md:hidden text-white/65">Payment · </span><span className={order.payment_status === 'verified' ? 'capitalize text-forest' : 'capitalize text-amber'}>{readableStatus(order.payment_status)}</span></div>
                   <div className="flex items-center justify-between gap-4 md:block md:text-right">
                     <span className="text-white/65 md:hidden">Request value</span>
-                    <span className="font-mono font-semibold tabular-nums text-white">{peso(safeOrderValue(order.total_amount))}</span>
+                    <span className="font-mono font-semibold tabular-nums text-white">{hasFinalOrderCharge(order) ? peso(safeOrderValue(order.total_amount)) : 'Final total pending'}</span>
                   </div>
                 </div>
               ))}

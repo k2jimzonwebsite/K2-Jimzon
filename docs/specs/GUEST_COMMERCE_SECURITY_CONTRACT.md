@@ -1,5 +1,15 @@
 # K2 Jimzon Guest Commerce Security Contract
 
+**Prepared canonical delivery boundary, 8 October:** Public GET geography exposes
+only static code/name/level/source-version children (maximum1000, no truncation),
+using the shared router cost shield. Signed POST preview accepts no client
+weight/price and uses maintained nonce and60-per900s database IP controls. Private
+reference writes/helper execution remain closed. Success exposes only reviewed
+service/status/fee/currency/version/weight/basis/fingerprint/area/source/message
+fields. Neither endpoint reserves stock, stores customer addresses, proves
+coverage nor records buyer acceptance. Prepared only; coordinated caller/schema/
+order/payment activation and real-host evidence remain MAP-023/017/020.
+
 This is the accepted MAP-019/MAP-020 contract for guest checkout, Pasabuy, and
 future universal messaging. It is not a backlog and does not claim the target is
 live.
