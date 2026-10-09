@@ -145,6 +145,36 @@ export async function runPortableMap017Rehearsal(root = rootDir) {
       throw new Error(`PORTABLE_MAP017_AUTHORIZATION_FAILED: ${authorization.message}`)
     }
 
+    const stockGrantRehearsal = runBinary(
+      executable['psql.exe'],
+      ['-X', '--no-psqlrc', '-v', 'ON_ERROR_STOP=1', '-f', path.join(root, 'supabase', 'tests', 'map017_stock_public_grant_rehearsal.sql')],
+      'MAP-017 stock PUBLIC grant correction and rollback',
+      { ...env, PGDATABASE: config.database },
+    )
+    if (!stockGrantRehearsal.includes('MAP017_STOCK_PUBLIC_GRANT_REHEARSAL_PASSED')) {
+      throw new Error('MAP-017 stock PUBLIC grant rehearsal marker missing')
+    }
+    const stockMigrationPath = path.join(root, 'supabase', 'migrations', '20260925_map017_stock_public_execute.sql')
+    const expectStockPreflightFailure = (expectedMessage) => {
+      const result = spawnSync(executable['psql.exe'],
+        ['-X', '--no-psqlrc', '-v', 'ON_ERROR_STOP=1', '-f', stockMigrationPath],
+        { cwd: root, env: { ...env, PGDATABASE: config.database }, encoding: 'utf8', windowsHide: true })
+      if (result.error || result.status === 0 || !String(result.stderr).includes(expectedMessage)) {
+        throw new Error(`MAP-017 stock preflight did not refuse: ${expectedMessage}`)
+      }
+    }
+    expectStockPreflightFailure('PUBLIC execute is already absent')
+    runBinary(executable['psql.exe'],
+      ['-X', '--no-psqlrc', '-v', 'ON_ERROR_STOP=1', '-c',
+        'grant execute on function public.get_public_product_stock() to public; revoke execute on function public.get_public_product_stock() from authenticated;'],
+      'stock grant missing-caller fixture', { ...env, PGDATABASE: config.database })
+    expectStockPreflightFailure('required explicit caller grant is absent')
+    runBinary(executable['psql.exe'],
+      ['-X', '--no-psqlrc', '-v', 'ON_ERROR_STOP=1', '-c',
+        'grant execute on function public.get_public_product_stock() to authenticated; revoke execute on function public.get_public_product_stock() from public;'],
+      'stock grant negative fixture cleanup', { ...env, PGDATABASE: config.database })
+    console.log('MAP-017 stock PUBLIC grant correction, scoped caller access, and rollback passed.')
+
     runMap017FunctionLockdown({
       target: config.target,
       psql: executable['psql.exe'],
