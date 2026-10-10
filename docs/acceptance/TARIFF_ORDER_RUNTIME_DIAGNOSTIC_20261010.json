@@ -1,0 +1,119 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-tariff-order01",
+  "classification": "Failed first connected native attempt; setup error detail missing and full recovery unverified",
+  "preparationReceipt": "docs/acceptance/TARIFF_ORDER_FIXTURE_PREPARATION_20261010.json",
+  "sourceCommit": "72b32ba",
+  "session": 93860,
+  "command": "node .tools/run-connected-tariff-fixture.mjs",
+  "native": {
+    "pid": 22784,
+    "vmExit": 0,
+    "runnerExit": 1,
+    "timedOut": false,
+    "processStopped": true,
+    "guestSuccess": false,
+    "moduleGucs": false,
+    "postgresVersion": "17.6"
+  },
+  "host": {
+    "passed": false,
+    "completedChecks": 26,
+    "lastRoutedStage": "POST_auth_logout",
+    "lastRoutedResponse": {
+      "status": 403,
+      "code": "CSRF_DENIED"
+    },
+    "diagnosticError": {
+      "name": "AssertionError",
+      "stage": "assertion_or_transport_failure",
+      "code": "ERR_ASSERTION"
+    },
+    "setupDiagnosticCaptured": false,
+    "connectedEvidenceAbsent": true
+  },
+  "observed": {
+    "authEmbeddedMigratorZero": true,
+    "authHealth": true,
+    "postgrestHealth": true,
+    "realAdminMfa": true,
+    "driverFailure": true,
+    "publicationGuardRefused": true,
+    "originalArchiveRecoveryCompleted": false
+  },
+  "closure": {
+    "independentlyCheckedPid": 22784,
+    "processPresent": false,
+    "ports": [
+      54392,
+      54393,
+      54394,
+      54395,
+      54396
+    ],
+    "listeners": [],
+    "limitation": "PID/listener absence proves disposal only, not exact archive/schema/row recovery"
+  },
+  "retainedPins": [
+    {
+      "file": "executed-source.mjs",
+      "sha256": "1b60b846af2e173a4e0f5afe20b79ce35f6cbf12d6ba355a763f4ad97283137b"
+    },
+    {
+      "file": "runner-source.mjs",
+      "sha256": "c897f81cb44dbe12eeeb97b763dfb0869ba73139504bba4fd0d240fa66322906"
+    },
+    {
+      "file": "host-driver.mjs",
+      "sha256": "67861d8caeb6b077f7d8cdb42f410042ec03d02fc5c6957295c61160f959631d"
+    },
+    {
+      "file": "bff-helper.mjs",
+      "sha256": "9e77c687bfc1f6dd77887b8121a5e41a5627b6d0770fe6127be06d4151542248"
+    },
+    {
+      "file": "connected-order-probe.mjs",
+      "sha256": "d206e61499c17f9ae94f3240b3c95ca5167f7ed6b7440a4722ca58b326bac19b"
+    },
+    {
+      "file": "staging/k2/connected-fixture.sql",
+      "sha256": "d6ed535f1a2005dc074643ebedd8ab0225c004949414fa9153065ab1d27bbd1e"
+    },
+    {
+      "file": "execution01/result.json",
+      "sha256": "1d01e5858dfbc75a0b112822fd6ea06282f2f3fe09eeac36dbd2455086dcb4ae"
+    },
+    {
+      "file": "execution01/serial.log",
+      "sha256": "3d6d083173904bf6914cfd4c14dc25237e4325d8680382cbe4e9da0c4c3e8976"
+    },
+    {
+      "file": "execution01/stderr.log",
+      "sha256": "1a4bb419402342a1f1a7ebbeb36d45398ccb24ec04b1620863f7e27cd0631ddc"
+    },
+    {
+      "file": "host-driver-result.json",
+      "sha256": "94c28be05946b40a1d555027839811b72d2600ea240a3d0fb768764cbd87eb8a"
+    }
+  ],
+  "rootCause": "Unproven. Failure occurred after existing Admin/MFA/CSRF checks and before tariff publication. The retained assertion has no exact boundary or SQLSTATE; protected setup RPC assertion is a leading candidate, while preceding restored-client/session assertions must also be distinguished.",
+  "nextAction": "Preserve disposed01 unchanged. Prepare fresh owned02 with stage markers around restored-client/session validation and bounded setup RPC status/SQLSTATE/named error diagnostic; retain exact security/stock/quote/recovery guards. Review/pin once, reproduce and inspect genuine error before selecting a fix. Then verify connected orders and exact original recovery on a fresh successful successor.",
+  "providerWrites": false,
+  "productionSourceChanged": false,
+  "deployed": false,
+  "acceptance": false,
+  "limits": [
+    "No accepted quote/order result",
+    "No exact original archive recovery completion",
+    "No populated data-retaining recovery",
+    "No concurrent/provider/hosted acceptance"
+  ],
+  "recovery": "Failed guest stopped and RAM disposed; no production change. Preserve private01 and failure receipt, never reuse its execution. Exact original reconstruction evidence remains required on the next accepted successor.",
+  "review": {
+    "reviewer": "auth_migration_review",
+    "result": "No Critical/Important findings; all10 retained hashes and failure/no-recovery scope independently verified",
+    "closureLimit": "Host PID/listener closure is primary independently observed disposal only",
+    "minorResolved": "MAP execution01 absence labelled historical preparation evidence"
+  }
+}
