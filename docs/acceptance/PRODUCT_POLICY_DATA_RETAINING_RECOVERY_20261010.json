@@ -1,0 +1,257 @@
+{
+  "owningMap": "MAP-018",
+  "idea": "IDEA-20261010-08",
+  "case": "oci-imported08",
+  "nativeSession": 51503,
+  "providerWrites": false,
+  "deployed": false,
+  "native": {
+    "owningMap": "MAP-023/018",
+    "scope": "Complete guarded10s envelope/fresh/exact replay/cold archive recovery on actual local postgres target; provider physical/locale/project/host qualification separate",
+    "providerWrites": false,
+    "arguments": [
+      "-L",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+      "-machine",
+      "pc",
+      "-accel",
+      "whpx",
+      "-m",
+      "4096",
+      "-smp",
+      "1",
+      "-display",
+      "none",
+      "-serial",
+      "stdio",
+      "-monitor",
+      "none",
+      "-nic",
+      "none",
+      "-no-reboot",
+      "-kernel",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+      "-initrd",
+      "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported08\\initramfs.cpio",
+      "-append",
+      "console=ttyS0 rdinit=/bin/sh loglevel=3"
+    ],
+    "pid": 3200,
+    "exit": 0,
+    "timedOut": false,
+    "guestSuccess": true,
+    "serverModuleProbe": true,
+    "postgresVersion": "17.6",
+    "moduleGucs": true,
+    "catalogs": {
+      "before": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      },
+      "after": {
+        "sha256": "2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6",
+        "bytes": 2396732
+      },
+      "rollback": {
+        "sha256": "87941b6c79455be42391d9fb2b9a02eebc650f9ee6b1124b9aac2509526ff963",
+        "bytes": 1337443
+      }
+    },
+    "fullCatalogRollback": true,
+    "processStopped": true,
+    "serialSha256": "b5c9c469a48de82e7e584101404226b9127b26b6a3623b76c68ce437c9a08e96"
+  },
+  "sqlSha256": "d44df9c5a41ee8d31682038cc48147fa4593914997b98a075e1fccab4e667d45",
+  "payloadSha256": "d4600da2a995b983454f720fc3ad1622cc97aeef9b611f00c4accf5d618a0010",
+  "scope": "Exact revised full package, committed catalog ACL and category-policy config deactivation/roll-forward/replays, actual signed baseline/refusal/resume with populated synthetic policy/event rows, full schema/149 physical tables and sequences conservation, then original archive reconstruction. No HTTP/provider or whole installed union deactivation claim.",
+  "phases": {
+    "before": {
+      "schemaSha256": "2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6",
+      "allPhysicalRowsSequencesSha256": "709276136d74d9ad799a4222810d5b36c9c73b7acaf1a48d54cca62883d98d0b"
+    },
+    "catalog-off": {
+      "schemaSha256": "2aef9e5cc76017d72bb2d92fbdc673c954e14aeef1ec514a505b68529f711ea3",
+      "allPhysicalRowsSequencesSha256": "709276136d74d9ad799a4222810d5b36c9c73b7acaf1a48d54cca62883d98d0b"
+    },
+    "catalog-repeat": {
+      "schemaSha256": "2aef9e5cc76017d72bb2d92fbdc673c954e14aeef1ec514a505b68529f711ea3",
+      "allPhysicalRowsSequencesSha256": "709276136d74d9ad799a4222810d5b36c9c73b7acaf1a48d54cca62883d98d0b"
+    },
+    "catalog-denied": {
+      "schemaSha256": "2aef9e5cc76017d72bb2d92fbdc673c954e14aeef1ec514a505b68529f711ea3",
+      "allPhysicalRowsSequencesSha256": "709276136d74d9ad799a4222810d5b36c9c73b7acaf1a48d54cca62883d98d0b"
+    },
+    "catalog-restored": {
+      "schemaSha256": "2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6",
+      "allPhysicalRowsSequencesSha256": "709276136d74d9ad799a4222810d5b36c9c73b7acaf1a48d54cca62883d98d0b"
+    },
+    "deactivated": {
+      "schemaSha256": "2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6",
+      "allPhysicalRowsSequencesSha256": "46d32fab49efee00ce08afdd2c1d05f42f0db1d8a353aeb256f61d990e864845"
+    },
+    "repeat": {
+      "schemaSha256": "2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6",
+      "allPhysicalRowsSequencesSha256": "46d32fab49efee00ce08afdd2c1d05f42f0db1d8a353aeb256f61d990e864845"
+    },
+    "denied": {
+      "schemaSha256": "2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6",
+      "allPhysicalRowsSequencesSha256": "46d32fab49efee00ce08afdd2c1d05f42f0db1d8a353aeb256f61d990e864845"
+    },
+    "restored": {
+      "schemaSha256": "2a4098502a7ecdce4765e3bc5c042b8ad0aef54a6282e9d7f5df4093a5b824b6",
+      "allPhysicalRowsSequencesSha256": "709276136d74d9ad799a4222810d5b36c9c73b7acaf1a48d54cca62883d98d0b"
+    }
+  },
+  "physicalRelationCount": 149,
+  "configDeactivation": {
+    "onlyRowMapChanged": "k2_private.category_policy_command_config",
+    "rowsBefore": 1,
+    "rowsAfter": 0,
+    "allOtherRowsSequencesUnchanged": true,
+    "policyEventsPopulated": true
+  },
+  "signedPolicy": {
+    "baseline": {
+      "minimumDays": 150,
+      "version": "1",
+      "eventCount": 1
+    },
+    "deactivatedRefusal": "K2_CATEGORY_POLICY_NOT_CONFIGURED",
+    "resumed": {
+      "minimumDays": 180,
+      "version": "2",
+      "eventCount": 2
+    },
+    "ephemeralSecretPrintedOrArchived": false
+  },
+  "sourceLineage": {
+    "currentAndExecutedSourceSha256": "de222b18e484509f1eb86186bca8f9a3eab381e4cca32f61accd23910e8e933e",
+    "qualificationManifestSha256": "e7966e0be98402e5b16bfb18808a93526da92acd0d1231dea06e19dfbd9fb263",
+    "baseManifestSha256": "5ffb5120b052c06da10c4fffdcd00c8dad0680fe96f1c7679ef9a50ddbcd433c",
+    "baseSourceSha256": "5db881892977faa1ad8b4c9e7fb46bacde200dda9ce690e2bd9647b027fd10eb",
+    "snapshotSqlSha256": "435e684e4fe23684974903b619ca671fae48dbeaa40738b07ca3e5f93415c379",
+    "sourcePins": [
+      {
+        "file": "supabase/prepared/category_shelf_life_catalog_deactivate.sql",
+        "sha256": "cc550ef466249840212ae84ef9903c4280da76dc9ed9bc466350b72c8537e8e4"
+      },
+      {
+        "file": "supabase/prepared/category_shelf_life_catalog_rollforward.sql",
+        "sha256": "77f14769e8785ac089cad1857842e23970d5add5bd6f85902622a26e32428389"
+      },
+      {
+        "file": "supabase/prepared/category_shelf_life_policy_command_deactivate.sql",
+        "sha256": "c917a8063a8d10048e5b9355488e531609dde4e68e80d8250a29d16e746adc75"
+      },
+      {
+        "file": "supabase/prepared/category_shelf_life_policy_command_rollforward.sql",
+        "sha256": "a8b44ec7dde1bb3fd0584015fa53485a7031e9db9d3533633828aee7ecc75de3"
+      }
+    ],
+    "stagedFiles": {
+      "policy-recovery-category_shelf_life_catalog_deactivate.sql": "6ef3e6ab4eb1eea909e645cba51c176969d8a5bc777374d3da0c240b29fea26a",
+      "policy-recovery-category_shelf_life_catalog_rollforward.sql": "16e34e8be5d984f53e07fef83cffe6dd71f88dec87cc2b9bd4c5989bf8e4600a",
+      "policy-recovery-category_shelf_life_policy_command_deactivate.sql": "d70aa8b4b61162224e35ed4a9c00aa5d496b1221d4b0bbdd9ec341d135cec6a6",
+      "policy-recovery-category_shelf_life_policy_command_rollforward.sql": "d61f28f97afb1dbe8316b7166a2b0dbae4000373412645f9a6b1caae062e8ad8",
+      "policy-recovery-setup.sql": "d6596d32fd6d830435f6a251af3a19fbe27320d3d80f040570ee76751b23db9a",
+      "policy-recovery-baseline-command.sql": "7fe1c702f76a6b91e940f896f46aa7ca45ce84ad8322b655347e853fd379e822",
+      "policy-recovery-resume-command.sql": "07aabec0a66cbcb6440847a6a3cf6c9bcd1d4bdcbcd7414d17b45e851fba5d77",
+      "policy-recovery-baseline-check.sql": "ff5d02abd6f7babf5e2a5345e8d390abed646349b4405e978b4ac0d9d126d1df",
+      "policy-recovery-resumed-check.sql": "bc9efc77468cd3bbe4dc0a55af95e858d1003393763c88135b0c2607d7a1fe3b",
+      "policy-recovery-variables.sql": "80f3b9dcf728716feaa9666573a174181eaf3072ed5c23a1980613af58712042",
+      "policy-recovery-catalog-denied.sql": "df868e983f3d696264ade6744c311d595cf00a0263be22ab8f4df5dc03398777",
+      "policy-recovery-deactivated-check.sql": "76628178510473ed9aa91e736d6a64c064d90ce1ed18f5a14ecb7545d044e43d",
+      "init.sh": "f2ff07c2ba018243dba5697e6658d388e7978131a3e1fa4fc0f206c6cf29a8fd",
+      "image-probe.sh": "4f75835aab4e501476dcce4d7e62298f5f3207a7e7cb8ff134689b7d8b8774af"
+    },
+    "runnerSha256": "72f5eaa33a09243dfaafac82d7eb8a588dca85bb4b056af4b1473d5406c56447",
+    "finalInitramfsSha256": "6b16968396daa2bea0a27e1192642ca596a16960dc6292769b6adca7d85e4ec8",
+    "overlaySha256": "dbeab7d1a6d7bd3c4c370bf0cf821739da5e979b49749ae38d14450dc7a88600"
+  },
+  "diagnostics": {
+    "unexecutedCases": [
+      "oci-imported05",
+      "oci-imported06"
+    ],
+    "failedCase": "oci-imported07",
+    "failedNative": {
+      "owningMap": "MAP-023/018",
+      "scope": "Complete guarded10s envelope/fresh/exact replay/cold archive recovery on actual local postgres target; provider physical/locale/project/host qualification separate",
+      "providerWrites": false,
+      "arguments": [
+        "-L",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\qemu02\\share",
+        "-machine",
+        "pc",
+        "-accel",
+        "whpx",
+        "-m",
+        "4096",
+        "-smp",
+        "1",
+        "-display",
+        "none",
+        "-serial",
+        "stdio",
+        "-monitor",
+        "none",
+        "-nic",
+        "none",
+        "-no-reboot",
+        "-kernel",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\portable-linux-runner01\\linux02\\boot\\vmlinuz-virt",
+        "-initrd",
+        "D:\\K2-Jimzon-local-recovery-32c52df326424b5a8b845c327824f4bc\\oci-imported07\\initramfs.cpio",
+        "-append",
+        "console=ttyS0 rdinit=/bin/sh loglevel=3"
+      ],
+      "pid": 19196,
+      "exit": 0,
+      "timedOut": false,
+      "guestSuccess": false,
+      "serverModuleProbe": false,
+      "postgresVersion": "17.6",
+      "moduleGucs": false,
+      "processStopped": true,
+      "error": "GENUINE_RUNTIME_NOT_VERIFIED",
+      "serialSha256": "4372d3ec341a7a54fba124f3f4d58c0559eb7ca929217cbf528be7b87656ed30"
+    },
+    "failedResultSha256": "3e1d9a12d71437b2a3be62f640c3de3240cbf0d8014c801518278c9201e68f54",
+    "failure": "Captured Auth trigger precreated synthetic profile; explicit profile insert refused. Setup transaction aborted. No policy-control or original archive-recovery claim.",
+    "hostFinalCheck": {
+      "pid": 19196,
+      "pidAbsent": true,
+      "probeListenerCount": 0
+    }
+  },
+  "recovery": "After completed signed resume, original populated archive reconstructed; full catalog baseline and captured rows/sequences/locale plus two global/managed authority witnesses pass. Guest stopped. Revert only qualification helper while retaining receipts; future tests require a fresh owned case from exact retained private archive.",
+  "verification": {
+    "red": "node .tools/verify-policy-recovery-controls.mjs oci-imported04 exits1: populated policy recovery evidence absent",
+    "focusedCommand": "node .tools/verify-policy-recovery-controls.mjs oci-imported08",
+    "focusedExit": 0,
+    "receiptCommand": "node .tools/record-policy-recovery.mjs",
+    "development": {
+      "command": "npm run verify:development",
+      "session": 66144,
+      "exit": 0
+    },
+    "review": {
+      "agent": "auth_migration_review",
+      "critical": 0,
+      "important": 0,
+      "sourceStagedManifestSerialAndScopeReviewed": true
+    }
+  },
+  "remaining": [
+    "Authority through commit",
+    "Other16 actual HTTP business-conflict paths and tariff named-message mapping",
+    "Full product/listing, creation ownership, provider identity/readiness/backup/specific authorization, real-host and human acceptance"
+  ],
+  "limits": "Populated policy/event rows are explicit synthetic fixtures in the owned RAM guest. Catalog ACL recovery retains their row maps but adds no populated catalog-import history proof. No new HTTP/Auth session/BFF/browser evidence; no whole-union data-retaining deactivation. Native07 failed and stopped before archive reconstruction; memory disposal is not a passing restore witness.",
+  "hostFinalCheck": {
+    "surface": "Independent escalated read-only Get-Process/Get-NetTCPConnection after terminal0",
+    "pid": 3200,
+    "pidAbsent": true,
+    "probeListenerCount": 0
+  }
+}
