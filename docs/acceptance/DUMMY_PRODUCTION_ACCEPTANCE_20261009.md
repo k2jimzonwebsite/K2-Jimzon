@@ -2,6 +2,64 @@
 
 ## 10 October — combined imported installation and recovery
 
+### 10 October — effective captured-authority taxonomy
+
+MAP-018 / IDEA-20261009-11: `node scripts/rehearse-captured-taxonomy.mjs
+--case=oci-taxonomy01` finished session45071 **exit0**, native PostgreSQL17.6,
+no timeout, runtime5572 stopped and independently absent. The scoped RAM fixture
+reuses immutable oci-imported02 inputs and installs the identical ba15a5d8...
+package once. It does not rerun the prior fresh/replay/drift/cold recovery suite.
+No production SQL, taxonomy grant or business writer changed.
+
+`supabase/tests/captured_taxonomy_access.sql` creates two explicit synthetic
+auth/profile identities inside one transaction. Actual `authenticated` role and
+existing `is_staff()`/`is_admin()` predicates distinguish Staff and Admin. Staff
+has public schema USAGE and table/column SELECT; both profiles perform actual
+ordered `id,name` reads on brands/categories, insert explicit synthetic rows in
+both tables and read those identities back. RLS and captured grants admit all
+four inserts. The whole transaction rolls back, including synthetic users and
+profiles. These are synthetic native claim settings, not verified JWTs.
+
+Complete schema capture before/after has exact accepted after-catalog hash
+`e9ff18682ab3f3f65c43bf16eff7e6bad6bc77dc32f3f329ecb68d5b22e15460`.
+All original88-table/two-sequence projections before/after have exact hash
+`bc48571670111f349382b9d675f38025aa0e7df0d40063b3b5c1c4d49906cb3c`.
+Native byte comparisons pass before printing conservation success; unchanged
+original-column semantics exclude only the previously admitted evidence bucket.
+Separate non-superuser postgres checks compare every captured global role,
+membership, event binding and eight managed settings before/after, both pass.
+Primary independently verified source/staged SQL and probe hashes, terminal
+receipt/serial hash, exact marker counts, projection/catalog hash pairs and PID
+absence. The inherited `moduleGucs` report key is a scoped marker aggregate,
+not a new broad managed-extension guarantee.
+
+Private evidence remains in the explicit owned root's `oci-taxonomy01`:
+
+- Executed SQL SHA256 `76b93744de88bef4700de227f05523d8931080a9119960d54500e1d4248db41c`.
+- Executed orchestration SHA256 `0814041a4b4c39f2aed095ec84e89da9ab8b3e1928dbdafe1e7aeea3fbb7688a`.
+- Retained derived runner SHA256 `357e260da57af0658a28eab51b3a08fa85bee6e22d4dfa348b4a45c831d447e2`.
+- Terminal result SHA256 `e20f8016e0efe677478df938c881eeacc820e58680657bec37dca0f5aac3414b`.
+- Serial SHA256 `184d8c6ec3bf302c1776b026265a43e8acc78264dd47d089e29f184a6a6003cb`.
+
+Independent review confirms the native role/profile/statements, all88-table/two-sequence coverage, complete authority witness and stopped PID; no Critical/Important issue. The inherited marker-field naming limitation is preserved above.
+
+SQL is the native test, not an activation migration. Earlier owner-only PG17.11
+denials remain valid diagnostic evidence with different authority. Development
+session67317 exits0 after the final source edits; syntax and diff checks pass.
+No app/browser/release suite was repeated. RAM runtime is stopped; retain all
+immutable source images/archives/results and the exact original cold restore.
+Source revert recovers the witness; no inverse taxonomy SQL or provider cleanup
+is required. Publishing remains separately blocked by automatic review pending
+the owner's feature-branch push approval.
+
+**Exact next MAP-018 action:** qualify actual BFF/Auth taxonomy and signed
+imported product concurrency, then policy-clear/inherited-fallback and competing
+review/first-stock schedules against current composition. Native permission
+acceptance does not prove BFF serialization, real JWTs, all writers, provider
+activation, stock/listing readiness or real-host behavior. Through-commit ACL,
+management transport/unknown-outcome, current write authorization and complete
+real-host acceptance gates remain unchanged.
+
 **Publishing handoff, 10 October:** Verified captured-authority checkpoint171d832 is committed locally. Automatic approval review rejected `git push origin codex/dummy-production-acceptance`: it could not verify approved repository destination/exact code-disclosure authorization. Verified origin is https://github.com/k2jimzonwebsite/K2-Jimzon.git; remote feature branch remains8829f6e. No workaround or second push attempted. Owner approval for this exact feature-branch push is pending; local evidence and all remaining MAP-018 gates are preserved. Exact publishing action after approval: push the existing feature branch to that origin, then verify local/remote equality. This is separate from production activation/main promotion.
 
 ### 10 October — genuine captured-authority imported composition

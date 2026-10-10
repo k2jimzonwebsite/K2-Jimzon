@@ -107,6 +107,8 @@ hashes.
 
 ## Recovery
 
+Scoped captured-taxonomy witness: run `node scripts/rehearse-captured-taxonomy.mjs --case=oci-taxonomyNN` only with a fresh owned case and retained verified oci-imported02. Synthetic auth/profile/taxonomy writes share one rolled-back transaction; native complete metadata, original row/sequence and global/managed comparisons must pass. Preserve preparation, executed SQL/orchestrator/runner, serial and terminal result; stop confirmation is required. RAM-only fixture needs no production cleanup. Native permission acceptance does not replace actual Auth/BFF, provider authorization or host gates. Final01 receipt and next action remain in MAP-018 and DUMMY_PRODUCTION_ACCEPTANCE_20261009.md.
+
 MAP-018 captured-authority imported fixture: preparation and execution use the two `scripts/*-imported-provider-fixture.mjs` commands with a fresh `--case=oci-importedNN` in the explicit private owned D: root. Never overwrite an existing execution or reuse its RAM database as production. Keep its immutable preparer, runner, source pins, SQL package, serial, transferred catalogs and result beside all earlier backups. The original captured archive and exact cold restore remain recovery authority; rollback is not an inverse imported merge. A local native success does not satisfy provider identity/authorization, management transport or actual-host gates. Exact executed case, hashes, terminal result and next action: docs/acceptance/DUMMY_PRODUCTION_ACCEPTANCE_20261009.md; unresolved work stays MAP-018.
 
 Uncommitted transaction: `ROLLBACK` inside the rehearsed transaction. After
